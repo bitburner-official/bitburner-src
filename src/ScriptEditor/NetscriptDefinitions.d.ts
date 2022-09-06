@@ -6914,18 +6914,10 @@ export type NSEnums = {
  */
 export interface OfficeAPI {
   /**
-   * Assign an employee to a job.
-   * @param divisionName - Name of the division
-   * @param cityName - Name of the city
-   * @param employeeName - name of the employee
-   * @param job - Name of the job.
-   */
-  assignJob(divisionName: string, cityName: string, employeeName: string, job: string): void;
-  /**
    * Hire an employee.
    * @param divisionName - Name of the division
    * @param cityName - Name of the city
-   * @returns The newly hired employee, if any
+   * @returns True if an employee was hired, false otherwise
    */
   hireEmployee(divisionName: string, cityName: string): Employee | undefined;
   /**
@@ -6974,12 +6966,6 @@ export interface OfficeAPI {
    * @param cityName - Name of the city
    * @param employeeName - Name of the employee
    * @returns Employee data
-   */
-  getEmployee(divisionName: string, cityName: string, employeeName: string): Employee;
-  /**
-   * Get the cost to Hire AdVert
-   * @param divisionName - Name of the division
-   * @returns Cost
    */
   getHireAdVertCost(divisionName: string): number;
   /**
@@ -7437,37 +7423,6 @@ interface CorporationInfo {
 }
 
 /**
- * Employee in an office
- * @public
- */
-export interface Employee {
-  /** Name of the employee */
-  name: string;
-  /** Morale of the employee */
-  mor: number;
-  /** Happiness of the employee */
-  hap: number;
-  /** Energy of the employee */
-  ene: number;
-  /** Intelligence of the employee */
-  int: number;
-  /** Charisma of the employee */
-  cha: number;
-  /** Experience of the employee */
-  exp: number;
-  /** Creativity of the employee */
-  cre: number;
-  /** Efficiency of the employee */
-  eff: number;
-  /** Salary of the employee */
-  sal: number;
-  /** Current Location (city) */
-  loc: string;
-  /** Current job position */
-  pos: string;
-}
-
-/**
  * Product in a warehouse
  * @public
  */
@@ -7572,8 +7527,14 @@ export interface Office {
   minMor: number;
   /** Maximum morale of the employees */
   maxMor: number;
-  /** Name of all the employees */
-  employees: string[];
+  /** Amount of employees */
+  employees: number;
+  /** Average energy of the employees */
+  avgEne: number;
+  /** Average happiness of the employees */
+  avgHap: number;
+  /** Average morale of the employees */
+  avgMor: number;
   /** Production of the employees */
   employeeProd: EmployeeJobs;
   /** Positions of the employees */
