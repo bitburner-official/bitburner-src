@@ -142,7 +142,9 @@ function AutoManagement(props: IProps): React.ReactElement {
             <Typography>Avg Employee Experience:</Typography>
           </TableCell>
           <TableCell align="right">
-            <Typography>{numeralWrapper.format(props.office.totalExp / props.office.totalEmployees || 0, "0.000")}</Typography>
+            <Typography>
+              {numeralWrapper.format(props.office.totalExp / props.office.totalEmployees || 0, "0.000")}
+            </Typography>
           </TableCell>
         </TableRow>
         <TableRow>
