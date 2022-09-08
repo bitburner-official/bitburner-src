@@ -632,12 +632,14 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const office = getOffice(divisionName, cityName);
       return AutoAssignJob(office, job, amount);
     },
-    hireEmployee: (ctx) => (_divisionName, _cityName) => {
+    hireEmployee: (ctx) => (_divisionName, _cityName, _position?) => {
       checkAccess(ctx, 8);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
+      const position = _position === undefined ? EmployeePositions.Unassigned : helpers.string(ctx, "position", _position);
+      if (!checkEnum(EmployeePositions, position)) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: ${position}`);
       const office = getOffice(divisionName, cityName);
-      return office.hireRandomEmployee();
+      return office.hireRandomEmployee(position);
     },
     upgradeOfficeSize: (ctx) => (_divisionName, _cityName, _size) => {
       checkAccess(ctx, 8);
@@ -658,7 +660,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       if (costPerEmployee < 0) {
         throw new Error("Invalid value for Cost Per Employee field! Must be numeric and greater than 0");
       }
-
       const corporation = getCorporation();
       const office = getOffice(divisionName, cityName);
 
