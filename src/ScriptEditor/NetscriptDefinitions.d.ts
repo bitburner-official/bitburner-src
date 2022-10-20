@@ -6700,7 +6700,7 @@ export interface NS {
    * @param variant - Type of toast, must be one of success, info, warning, error. Defaults to success.
    * @param duration - Duration of toast in ms. Can also be `null` to create a persistent toast. Defaults to 2000
    */
-  toast(msg: string, variant?: ToastVariant, duration?: number | null): void;
+  toast(msg: string, variant?: ToastTypes | ToastVariant, duration?: number | null): void;
 
   /**
    * Download a file from the internet.
@@ -6899,21 +6899,38 @@ export interface NS {
   enums: NSEnums;
 }
 
+declare enum ToastVariant {
+  SUCCESS = "success",
+  WARNING = "warning",
+  ERROR = "error",
+  INFO = "info",
+}
 /** @public */
-declare const enums = {
-  toast: {
-    SUCCESS: "success",
-    WARNING: "warning",
-    ERROR: "error",
-    INFO: "info",
-  },
+export type ToastTypes = `${ToastVariant}`;
+
+declare enum CrimeType {
+  SHOPLIFT = "SHOPLIFT",
+  ROB_STORE = "ROBSTORE",
+  MUG = "MUG",
+  LARCENY = "LARCENY",
+  DRUGS = "DRUGS",
+  BOND_FORGERY = "BONDFORGERY",
+  TRAFFIC_ARMS = "TRAFFICKARMS",
+  HOMICIDE = "HOMICIDE",
+  GRAND_THEFT_AUTO = "GRANDTHEFTAUTO",
+  KIDNAP = "KIDNAP",
+  ASSASSINATION = "ASSASSINATION",
+  HEIST = "HEIST",
+}
+/** @public */
+type CrimeNames = `${CrimeType}`;
+
+/** @public */
+export type NSEnums = {
+  toast: typeof ToastVariant;
+  crimes: typeof CrimeType;
 };
 
-/** @public */
-type ToastVariant = ValuesFrom<typeof enums.toast>;
-
-/** @public */
-export type NSEnums = typeof enums;
 /**
  * Corporation Office API
  * @remarks
