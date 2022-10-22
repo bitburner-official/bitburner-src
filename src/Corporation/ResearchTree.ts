@@ -89,6 +89,9 @@ export class ResearchTree {
   // Root Node
   root: Node | null = null;
 
+  // Memoized helpers, cleared each cycle
+  helpers: Map<string, number> = new Map<string, any>();
+
   // Gets an array with the 'text' values of ALL Nodes in the Research Tree
   getAllNodes(): string[] {
     const res: string[] = [];
@@ -157,6 +160,10 @@ export class ResearchTree {
 
   // Helper function for all the multiplier getter fns
   getMultiplierHelper(propName: string): number {
+    if (this.helpers.has(propName)) {
+      return this.helpers.get(propName) || 1;
+    }
+
     let res = 1;
     if (this.root == null) {
       return res;
@@ -206,6 +213,7 @@ export class ResearchTree {
       }
     }
 
+    this.helpers.set(propName, res);
     return res;
   }
 
@@ -249,5 +257,10 @@ export class ResearchTree {
   // Set the tree's Root Node
   setRoot(root: Node): void {
     this.root = root;
+  }
+
+  // Clear helpers each cycle so they recalculate on the first use
+  clearHelpers(): void {
+    this.helpers = new Map<string, any>();
   }
 }

@@ -383,6 +383,11 @@ export class Industry {
   }
 
   process(marketCycles = 1, state: string, corporation: Corporation): void {
+    const researchTree = IndustryResearchTrees[this.type];
+    if (researchTree) {
+      researchTree.clearHelpers();
+    }
+
     this.state = state;
 
     //At the start of a cycle, store and reset revenue/expenses
