@@ -6873,6 +6873,20 @@ export interface NS {
 }
 
 /** @public */
+declare enum EmployeePositions {
+  Operations = "Operations",
+  Engineer = "Engineer",
+  Business = "Business",
+  Management = "Management",
+  RandD = "Research & Development",
+  Training = "Training",
+  Unassigned = "Unassigned",
+}
+
+/** @public */
+export type EmployeePosNames = `${EmployeePositions}`;
+
+/** @public */
 declare enum ToastVariant {
   SUCCESS = "success",
   WARNING = "warning",
@@ -6903,7 +6917,8 @@ type CrimeNames = `${CrimeType}`;
 /** @public */
 export type NSEnums = {
   toast: typeof ToastVariant;
-  crimes: typeof CrimeType;
+  CrimeType: typeof CrimeType;
+  corp?: { EmployeePositions: typeof EmployeePositions };
 };
 
 /**
@@ -6912,6 +6927,7 @@ export type NSEnums = {
  * requires the Office API upgrade from your corporation.
  * @public
  */
+
 export interface OfficeAPI {
   /**
    * Hire an employee.
@@ -6920,7 +6936,11 @@ export interface OfficeAPI {
    * @param employeePosition - Position to place into. Defaults to "Unassigned".
    * @returns True if an employee was hired, false otherwise
    */
-  hireEmployee(divisionName: string, cityName: string, employeePosition?: string): boolean;
+  hireEmployee(
+    divisionName: string,
+    cityName: string,
+    employeePosition?: EmployeePositions | EmployeePosNames,
+  ): boolean;
   /**
    * Upgrade office size.
    * @param divisionName - Name of the division
