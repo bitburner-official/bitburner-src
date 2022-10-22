@@ -217,7 +217,7 @@ export class OfficeSpace {
     this.employeeProd.total = total;
   }
 
-  hireRandomEmployee(position: string): boolean {
+  hireRandomEmployee(position: EmployeePositions): boolean {
     if (this.atCapacity()) return false;
     if (document.getElementById("cmpy-mgmt-hire-employee-popup") != null) return false;
 

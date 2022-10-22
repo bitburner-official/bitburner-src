@@ -9,10 +9,6 @@ import { Corporation } from "../Corporation/Corporation";
 
 import {
   Corporation as NSCorporation,
-  CorporationInfo,
-  Product as NSProduct,
-  Material as NSMaterial,
-  Warehouse as NSWarehouse,
   Division as NSDivision,
   WarehouseAPI,
   OfficeAPI,
@@ -636,8 +632,10 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx, 8);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
-      const position = _position === undefined ? EmployeePositions.Unassigned : helpers.string(ctx, "position", _position);
-      if (!checkEnum(EmployeePositions, position)) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: ${position}`);
+      const position = _position ? helpers.string(ctx, "position", _position) : EmployeePositions.Unassigned;
+      if (!checkEnum(EmployeePositions, position)) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: ${position}`);
+      }
       const office = getOffice(divisionName, cityName);
       return office.hireRandomEmployee(position);
     },
@@ -723,7 +721,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
           Unassigned: office.employeeJobs[EmployeePositions.Unassigned],
         },
       };
-  },
+    },
   };
 
   return {
