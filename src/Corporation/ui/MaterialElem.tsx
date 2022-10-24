@@ -125,7 +125,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
           <Tooltip
             title={
               <Typography>
-                Buy: {numeralWrapper.format(mat.buy, nfB)} <br />
+                Buy: {mat.buy >= 1e33 ? mat.buy.toExponential(3) : numeralWrapper.format(mat.buy, nfB)} <br />
                 Prod: {numeralWrapper.format(mat.prd, nfB)} <br />
                 Sell: {numeralWrapper.format(mat.sll, nfB)} <br />
                 Export: {numeralWrapper.format(mat.totalExp, nfB)} <br />
