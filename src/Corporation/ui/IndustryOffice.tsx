@@ -35,7 +35,7 @@ interface IProps {
 
 interface IAutoAssignProps {
   office: OfficeSpace;
-  job: string;
+  job: EmployeePositions;
   desc: string;
   rerender: () => void;
 }

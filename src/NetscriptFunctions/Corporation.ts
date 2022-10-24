@@ -702,24 +702,8 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         avgEne: office.avgEne,
         avgHap: office.avgHap,
         avgMor: office.avgMor,
-        employeeProd: {
-          Operations: office.employeeProd[EmployeePositions.Operations],
-          Engineer: office.employeeProd[EmployeePositions.Engineer],
-          Business: office.employeeProd[EmployeePositions.Business],
-          Management: office.employeeProd[EmployeePositions.Management],
-          "Research & Development": office.employeeProd[EmployeePositions.RandD],
-          Training: office.employeeProd[EmployeePositions.Training],
-          Unassigned: 0,
-        },
-        employeeJobs: {
-          Operations: office.employeeJobs[EmployeePositions.Operations],
-          Engineer: office.employeeJobs[EmployeePositions.Engineer],
-          Business: office.employeeJobs[EmployeePositions.Business],
-          Management: office.employeeJobs[EmployeePositions.Management],
-          "Research & Development": office.employeeJobs[EmployeePositions.RandD],
-          Training: office.employeeJobs[EmployeePositions.Training],
-          Unassigned: office.employeeJobs[EmployeePositions.Unassigned],
-        },
+        employeeProd: Object.assign({}, office.employeeProd),
+        employeeJobs: Object.assign({}, office.employeeJobs),
       };
     },
   };

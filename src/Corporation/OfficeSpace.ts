@@ -41,15 +41,17 @@ export class OfficeSpace {
   coffeeEmployees = 0;
   partyEmployees = 0;
 
-  employeeProd: { [key: string]: number } = {
+  employeeProd: Record<EmployeePositions | "total", number> = {
     [EmployeePositions.Operations]: 0,
     [EmployeePositions.Engineer]: 0,
     [EmployeePositions.Business]: 0,
     [EmployeePositions.Management]: 0,
     [EmployeePositions.RandD]: 0,
+    [EmployeePositions.Training]: 0,
+    [EmployeePositions.Unassigned]: 0,
     total: 0,
   };
-  employeeJobs: { [key: string]: number } = {
+  employeeJobs: Record<EmployeePositions, number> = {
     [EmployeePositions.Operations]: 0,
     [EmployeePositions.Engineer]: 0,
     [EmployeePositions.Business]: 0,
@@ -58,7 +60,7 @@ export class OfficeSpace {
     [EmployeePositions.Training]: 0,
     [EmployeePositions.Unassigned]: 0,
   };
-  employeeNextJobs: { [key: string]: number } = {
+  employeeNextJobs: Record<EmployeePositions, number> = {
     [EmployeePositions.Operations]: 0,
     [EmployeePositions.Engineer]: 0,
     [EmployeePositions.Business]: 0,
@@ -86,8 +88,8 @@ export class OfficeSpace {
     }
 
     // Update employee jobs and job counts
-    for (const name of Object.keys(this.employeeNextJobs)) {
-      this.employeeJobs[name] = this.employeeNextJobs[name];
+    for (const [pos, jobCount] of Object.entries(this.employeeNextJobs) as [EmployeePositions, number][]) {
+      this.employeeJobs[pos] = jobCount;
     }
 
     // Process Office properties
@@ -184,7 +186,7 @@ export class OfficeSpace {
 
     let total = 0;
     const exp = this.totalExp / this.totalEmployees || 0;
-    for (const name of Object.keys(this.employeeProd)) {
+    for (const [name, prod] of Object.entries(this.employeeProd) as [EmployeePositions | "total", number][]) {
       let prodMult = 0;
       switch (name) {
         case EmployeePositions.Operations:
@@ -232,7 +234,7 @@ export class OfficeSpace {
     return true;
   }
 
-  autoAssignJob(job: string, target: number): boolean {
+  autoAssignJob(job: EmployeePositions, target: number): boolean {
     const diff = target - this.employeeNextJobs[job];
 
     if (diff === 0) {
