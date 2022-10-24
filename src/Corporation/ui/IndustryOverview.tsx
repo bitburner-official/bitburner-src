@@ -33,10 +33,10 @@ function MakeProductButton(): React.ReactElement {
     return Object.keys(division.products).length === 0;
   }
 
-	function onButtonClick() {
-		if (hasMaxProducts) return;
-		setMakeOpen(true);
-	}
+  function onButtonClick() {
+    if (hasMaxProducts) return;
+    setMakeOpen(true);
+  }
 
   let createProductButtonText = "";
   switch (division.type) {
