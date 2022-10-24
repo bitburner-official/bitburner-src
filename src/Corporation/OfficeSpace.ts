@@ -186,7 +186,7 @@ export class OfficeSpace {
 
     let total = 0;
     const exp = this.totalExp / this.totalEmployees || 0;
-    for (const [name, prod] of Object.entries(this.employeeProd) as [EmployeePositions | "total", number][]) {
+    for (const name of Object.keys(this.employeeProd) as (EmployeePositions | "total")[]) {
       let prodMult = 0;
       switch (name) {
         case EmployeePositions.Operations:
