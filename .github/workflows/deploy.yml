@@ -1,0 +1,9 @@
+name: "Deploy to GH Pages"
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        type: branch
+        default: "dev"
+        required: true
