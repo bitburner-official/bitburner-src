@@ -3,7 +3,7 @@ import { CorporationConstants } from "./data/Constants";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { Industry } from "./Industry";
 import { Corporation } from "./Corporation";
-import { getRandomInt } from "../../utils/helpers/getRandomInt";
+import { getRandomInt } from "../utils/helpers/getRandomInt";
 
 interface IParams {
   loc?: string;
@@ -150,7 +150,7 @@ export class OfficeSpace {
       this.avgEne = Math.max(Math.min(this.avgEne, this.maxEne), this.minEne);
       this.avgMor = Math.max(Math.min(this.avgMor, this.maxMor), this.minMor);
       this.avgHap = Math.max(Math.min(this.avgHap, this.maxHap), this.minHap);
-      
+
       this.coffeeMult = 0;
       this.partyMult = 0;
       this.coffeeEmployees = 0;
@@ -227,17 +227,17 @@ export class OfficeSpace {
     ++this.totalEmployees;
     ++this.employeeJobs[position];
     ++this.employeeNextJobs[position];
-    
-    this.totalExp += getRandomInt(50,100);
-    
-    this.avgMor = (this.avgMor * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
-    this.avgHap = (this.avgHap * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
-    this.avgEne = (this.avgEne * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
-    
-    this.avgInt = (this.avgInt * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
-    this.avgCha = (this.avgCha * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
-    this.avgCre = (this.avgCre * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
-    this.avgEff = (this.avgEff * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
+
+    this.totalExp += getRandomInt(50, 100);
+
+    this.avgMor = (this.avgMor * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
+    this.avgHap = (this.avgHap * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
+    this.avgEne = (this.avgEne * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
+
+    this.avgInt = (this.avgInt * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
+    this.avgCha = (this.avgCha * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
+    this.avgCre = (this.avgCre * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
+    this.avgEff = (this.avgEff * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
     return true;
   }
 
