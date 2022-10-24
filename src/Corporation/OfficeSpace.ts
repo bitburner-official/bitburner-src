@@ -227,17 +227,16 @@ export class OfficeSpace {
     ++this.employeeJobs[position];
     ++this.employeeNextJobs[position];
     
-    const random = Math.floor(Math.random()*(100-50)+50)
-    this.totalExp += random;
+    this.totalExp += getRandomInt(50,100);
     
-    this.avgMor = (this.avgMor * this.totalEmployees + random) / (this.totalEmployees + 1);
-    this.avgHap = (this.avgHap * this.totalEmployees + random) / (this.totalEmployees + 1);
-    this.avgEne = (this.avgEne * this.totalEmployees + random) / (this.totalEmployees + 1);
+    this.avgMor = (this.avgMor * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
+    this.avgHap = (this.avgHap * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
+    this.avgEne = (this.avgEne * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
     
-    this.avgInt = (this.avgInt * this.totalEmployees + random) / (this.totalEmployees + 1);
-    this.avgCha = (this.avgCha * this.totalEmployees + random) / (this.totalEmployees + 1);
-    this.avgCre = (this.avgCre * this.totalEmployees + random) / (this.totalEmployees + 1);
-    this.avgEff = (this.avgEff * this.totalEmployees + random) / (this.totalEmployees + 1);
+    this.avgInt = (this.avgInt * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
+    this.avgCha = (this.avgCha * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
+    this.avgCre = (this.avgCre * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
+    this.avgEff = (this.avgEff * this.totalEmployees + getRandomInt(50,100)) / (this.totalEmployees + 1);
     return true;
   }
 
