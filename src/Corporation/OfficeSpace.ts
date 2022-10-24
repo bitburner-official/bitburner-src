@@ -226,11 +226,12 @@ export class OfficeSpace {
     ++this.totalEmployees;
     ++this.employeeJobs[position];
     ++this.employeeNextJobs[position];
-
-    this.totalExp += 75;
-    this.avgMor = (this.avgMor * this.totalEmployees + 75) / (this.totalEmployees + 1);
-    this.avgHap = (this.avgHap * this.totalEmployees + 75) / (this.totalEmployees + 1);
-    this.avgEne = (this.avgEne * this.totalEmployees + 75) / (this.totalEmployees + 1);
+    
+    const random = Math.floor(Math.random()*(80-70)+70)
+    this.totalExp += random;
+    this.avgMor = (this.avgMor * this.totalEmployees + random) / (this.totalEmployees + 1);
+    this.avgHap = (this.avgHap * this.totalEmployees + random) / (this.totalEmployees + 1);
+    this.avgEne = (this.avgEne * this.totalEmployees + random) / (this.totalEmployees + 1);
     return true;
   }
 
