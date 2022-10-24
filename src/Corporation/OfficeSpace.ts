@@ -149,7 +149,7 @@ export class OfficeSpace {
       this.avgEne = Math.max(Math.min(this.avgEne, this.maxEne), this.minEne);
       this.avgMor = Math.max(Math.min(this.avgMor, this.maxMor), this.minMor);
       this.avgHap = Math.max(Math.min(this.avgHap, this.maxHap), this.minHap);
-
+      
       this.coffeeMult = 0;
       this.partyMult = 0;
       this.coffeeEmployees = 0;
@@ -227,11 +227,17 @@ export class OfficeSpace {
     ++this.employeeJobs[position];
     ++this.employeeNextJobs[position];
     
-    const random = Math.floor(Math.random()*(80-70)+70)
+    const random = Math.floor(Math.random()*(100-50)+50)
     this.totalExp += random;
+    
     this.avgMor = (this.avgMor * this.totalEmployees + random) / (this.totalEmployees + 1);
     this.avgHap = (this.avgHap * this.totalEmployees + random) / (this.totalEmployees + 1);
     this.avgEne = (this.avgEne * this.totalEmployees + random) / (this.totalEmployees + 1);
+    
+    this.avgInt = (this.avgInt * this.totalEmployees + random) / (this.totalEmployees + 1);
+    this.avgCha = (this.avgCha * this.totalEmployees + random) / (this.totalEmployees + 1);
+    this.avgCre = (this.avgCre * this.totalEmployees + random) / (this.totalEmployees + 1);
+    this.avgEff = (this.avgEff * this.totalEmployees + random) / (this.totalEmployees + 1);
     return true;
   }
 
