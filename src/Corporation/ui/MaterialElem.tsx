@@ -61,7 +61,9 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
     division.newInd && Object.keys(division.reqMats).includes(mat.name) && mat.buy === 0 && mat.imp === 0;
 
   // Purchase material button
-  const purchaseButtonText = `Buy (${mat.buy >= 1e33 ? mat.buy.toExponential(3) : numeralWrapper.format(mat.buy, nfB)})`;
+  const purchaseButtonText = `Buy (${
+    mat.buy >= 1e33 ? mat.buy.toExponential(3) : numeralWrapper.format(mat.buy, nfB)
+  })`;
 
   // Sell material button
   let sellButtonText: JSX.Element;
@@ -138,7 +140,8 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
             }
           >
             <Typography>
-              {mat.name}: {numeralWrapper.format(mat.qty, nfB)} ({totalGain >= 1e33 ? totalGain.toExponential(3) : numeralWrapper.format(totalGain, nfB)}/s)
+              {mat.name}: {numeralWrapper.format(mat.qty, nfB)} (
+              {totalGain >= 1e33 ? totalGain.toExponential(3) : numeralWrapper.format(totalGain, nfB)}/s)
             </Typography>
           </Tooltip>
           <Tooltip
