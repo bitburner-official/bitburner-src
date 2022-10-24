@@ -3,6 +3,7 @@ import { CorporationConstants } from "./data/Constants";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { Industry } from "./Industry";
 import { Corporation } from "./Corporation";
+import { getRandomInt } from "../../utils/helpers/getRandomInt";
 
 interface IParams {
   loc?: string;
