@@ -714,6 +714,10 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx);
       return Object.values(IndustryType);
     },
+    getEmployeePositions: (ctx) => () => {
+      checkAccess(ctx);
+      return Object.values(EmployeePositions);
+    },
     getUnlockables: (ctx) => () => {
       checkAccess(ctx);
       return [...CorporationConstants.AllUnlocks];
