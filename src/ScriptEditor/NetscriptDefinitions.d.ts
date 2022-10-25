@@ -4625,10 +4625,10 @@ export interface NS {
    * security level. When `grow` completes, the money available on a target server will
    * be increased by a certain, fixed percentage. This percentage is determined by the
    * target server’s growth rate (which varies between servers) and security level. Generally,
-   * higher-level servers have higher growth rates. The getServerGrowth() function can be used
+   * higher-level servers have higher growth rates. The {@link NS.getServerGrowth | getServerGrowth} function can be used
    * to obtain a server’s growth rate.
    *
-   * Like hack, `grow` can be called on any server, regardless of where the script is running.
+   * Like {@link NS.hack | hack}, `grow` can be called on any server, regardless of where the script is running.
    * The grow() command requires root access to the target server, but there is no required hacking
    * level to run the command. It also raises the security level of the target server by 0.004.
    *
@@ -4659,7 +4659,7 @@ export interface NS {
    * The runtime for this function depends on your hacking level and the target server’s security
    * level when this function is called. This function lowers the security level of the target server by 0.05.
    *
-   * Like hack and grow, `weaken` can be called on any server, regardless of
+   * Like {@link NS.hack | hack} and {@link NS.grow| grow}, `weaken` can be called on any server, regardless of
    * where the script is running. This function requires root access to the target server, but
    * there is no required hacking level to run the function.
    *
@@ -6349,7 +6349,7 @@ export interface NS {
    * Returns a boolean indicating whether any instance of the specified script is running
    * on the target server, regardless of its arguments.
    *
-   * This is different than the isRunning function because it does not try to
+   * This is different than the {@link NS.isRunning | isRunning} function because it does not try to
    * identify a specific instance of a running script by its arguments.
    *
    * @example
@@ -6418,11 +6418,11 @@ export interface NS {
    * RAM cost: 0.05 GB
    *
    * When `hack` completes an amount of money is stolen depending on the player's skills.
-   * Returns the amount of time in milliseconds it takes to execute the hack Netscript function on the target server.
+   * Returns the amount of time in milliseconds it takes to execute the {@link NS.hack | hack} Netscript function on the target server.
    * The required time is increased by the security level of the target server and decreased by the player's hacking level.
    *
    * @param host - Hostname of target server.
-   * @returns Returns the amount of time in milliseconds it takes to execute the hack Netscript function.
+   * @returns Returns the amount of time in milliseconds it takes to execute the {@link NS.hack | hack} Netscript function.
    */
   getHackTime(host: string): number;
 
@@ -6444,11 +6444,11 @@ export interface NS {
    * @remarks
    * RAM cost: 0.05 GB
    *
-   * Returns the amount of time in milliseconds it takes to execute the weaken Netscript function on the target server.
+   * Returns the amount of time in milliseconds it takes to execute the {@link NS.weaken | weaken} Netscript function on the target server.
    * The required time is increased by the security level of the target server and decreased by the player's hacking level.
    *
    * @param host - Hostname of target server.
-   * @returns Returns the amount of time in milliseconds it takes to execute the weaken Netscript function.
+   * @returns Returns the amount of time in milliseconds it takes to execute the {@link NS.weaken | weaken} Netscript function.
    */
   getWeakenTime(host: string): number;
 
@@ -6691,7 +6691,7 @@ export interface NS {
    * successfully retrieved from the URL. Because the function is async and returns a Promise,
    * it is recommended you use wget in NetscriptJS (Netscript 2.0).
    *
-   * In NetscriptJS, you must preface any call to wget with the await keyword (like you would hack or sleep).
+   * In NetscriptJS, you must preface any call to wget with the await keyword (like you would {@link NS.hack | hack} or {@link NS.sleep | sleep}).
    * wget will still work in Netscript 1.0, but the function's execution will not be synchronous
    * (i.e. it may not execute when you expect/want it to).
    * Furthermore, since Promises are not supported in ES5,
