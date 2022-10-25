@@ -5918,12 +5918,12 @@ export interface NS {
   getServerRam(host: string): [number, number];
 
   /**
-   * Get the max RAM on a server.
+   * Get the maximum amount of RAM on a server.
    * @remarks
    * RAM cost: 0.05 GB
    *
    * @param host - Hostname of the target server.
-   * @returns max ram (GB)
+   * @returns The maximum amount of RAM (GB) a server can have.
    */
   getServerMaxRam(host: string): number;
   /**
@@ -5932,7 +5932,7 @@ export interface NS {
    * RAM cost: 0.05 GB
    *
    * @param host - Hostname of the target server.
-   * @returns used ram (GB)
+   * @returns The amount of used RAM (GB) on the specified server.
    */
   getServerUsedRam(host: string): number;
 
@@ -6151,7 +6151,7 @@ export interface NS {
    *
    * @param hostname - Hostname of the server to upgrade.
    * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns True if the upgrade succeeded.
+   * @returns True if the upgrade succeeded, and false otherwise.
    */
   upgradePurchasedServer(hostname: string, ram: number): boolean;
 
@@ -6162,7 +6162,7 @@ export interface NS {
    *
    * @param hostname - Current server hostname.
    * @param newName - New server hostname.
-   * @returns True if the upgrade succeeded.
+   * @returns True if the upgrade succeeded, and false otherwise.
    */
   renamePurchasedServer(hostname: string, newName: string): boolean;
 
@@ -6554,7 +6554,8 @@ export interface NS {
    * This uses the numeral.js library, so the formatters must be compatible with that.
    * This is the same function that the game itself uses to display numbers.
    *
-   * see: http://numeraljs.com/
+   * For more information, see: http://numeraljs.com/
+   *
    * @param n - Number to format.
    * @param format - Formatter.
    * @returns Formatted number.
