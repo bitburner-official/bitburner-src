@@ -103,7 +103,7 @@ export function SellMaterial(mat: Material, amt: string, price: string): void {
     throw new Error("Invalid value or expression for sell price field: " + e);
   }
 
-  if (temp == null || isNaN(parseFloat(temp)) || parseFloat(temp) < 0) {
+  if (temp == null || isNaN(parseFloat(temp))) {
     throw new Error("Invalid value or expression for sell price field");
   }
 
@@ -163,7 +163,7 @@ export function SellProduct(product: Product, city: string, amt: string, price: 
     } catch (e) {
       throw new Error("Invalid value or expression for sell price field: " + e);
     }
-    if (temp == null || isNaN(parseFloat(temp)) || parseFloat(temp) < 0) {
+    if (temp == null || isNaN(parseFloat(temp))) {
       throw new Error("Invalid value or expression for sell price field.");
     }
     product.sCost = price; //Use sanitized price
