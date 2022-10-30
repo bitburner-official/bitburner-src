@@ -1837,27 +1837,29 @@ export interface Singularity {
    *
    * This function will return true if you successfully start working for the specified faction, and false otherwise.
    *
-   * Note that when you are working for a faction, you will not actually receive your earnings (reputation, experience) until you FINISH the action.
-   *
    * @example
    * ```ts
-   * // NS1:
-   * //If you only want to work until you get 100,000 faction reputation. One small hack to get around this is to continuously restart the action to receive your earnings:
-   * while (getFactionRep(FACTION NAME) < VALUE) {
-   *    workForFaction(FACNAME, WORKTYPE);
-   *    sleep(60000);
+   * // NS1
+   * // If you only want to work until you get a certain amount of reputation,
+   * // then periodically check to see that you have at least that amount.  Quit
+   * // working as soon as you have the target amount of reputation.
+   * singularity.workForFaction(FACTION_NAME, WORK_TYPE);
+   * while (singularity.getFactionRep(FACTION_NAME) < VALUE) {
+   *     sleep(1000);
    * }
-   * //This way, your faction reputation will be updated every minute.
+   * singularity.stopAction();
    * ```
    * @example
    * ```ts
-   * // NS2:
-   * //If you only want to work until you get 100,000 faction reputation. One small hack to get around this is to continuously restart the action to receive your earnings:
-   * while (ns.getFactionRep(FACTION NAME) < VALUE) {
-   *    ns.workForFaction(FACNAME, WORKTYPE);
-   *    await ns.sleep(60000);
+   * // NS2
+   * // If you only want to work until you get a certain amount of reputation,
+   * // then periodically check to see that you have at least that amount.  Quit
+   * // working as soon as you have the target amount of reputation.
+   * ns.singularity.workForFaction(FACTION_NAME, WORK_TYPE);
+   * while (ns.singularity.getFactionRep(FACTION_NAME) < VALUE) {
+   *     await ns.sleep(1000);
    * }
-   * //This way, your faction reputation will be updated every minute.
+   * ns.singularity.stopAction();
    * ```
    * @param faction - Name of faction to work for.
    * @param workType - Type of work to perform for the faction.
