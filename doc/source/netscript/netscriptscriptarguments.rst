@@ -34,3 +34,16 @@ ns2 script:
 const args_obj = arguments[0]
 const argument1 = (args_obj.server.args[0])
 const argument2 = (args_obj.server.args[1])
+
+When using ns2, the main function takes as input the game's ns object
+containing the argument array you are trying to pass into the script,
+so the arguments can be referenced from it like this::
+
+    export async function main(ns) {
+	    if (ns.args[0]){ 
+		    while (true){
+			    await ns.hack(ns.args[0]);
+		    }
+	    }
+	    else{ns.print("No target given")}
+    }
