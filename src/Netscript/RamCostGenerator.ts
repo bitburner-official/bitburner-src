@@ -124,6 +124,7 @@ const stock = {
   has4SDataTIXAPI: 0.05,
   getSymbols: RamCostConstants.ScriptGetStockRamCost,
   getPrice: RamCostConstants.ScriptGetStockRamCost,
+  getOrganization: RamCostConstants.ScriptGetStockRamCost,
   getAskPrice: RamCostConstants.ScriptGetStockRamCost,
   getBidPrice: RamCostConstants.ScriptGetStockRamCost,
   getPosition: RamCostConstants.ScriptGetStockRamCost,
