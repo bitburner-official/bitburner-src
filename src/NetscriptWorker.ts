@@ -33,6 +33,7 @@ import { simple as walksimple } from "acorn-walk";
 import { areFilesEqual } from "./Terminal/DirectoryHelpers";
 import { Terminal } from "./Terminal";
 import { ScriptArg } from "./Netscript/ScriptArg";
+import { BasicObject } from "./Netscript/APIWrapper";
 import { handleUnknownError } from "./Netscript/NetscriptHelpers";
 
 export const NetscriptPorts: Map<number, IPort> = new Map();
@@ -79,9 +80,6 @@ async function startNetscript1Script(workerScript: WorkerScript): Promise<void> 
     throw `Error processing Imports in ${workerScript.name}@${workerScript.hostname}:\n\n${e}`;
   }
 
-  interface BasicObject {
-    [key: string]: any;
-  }
   function wrapNS1Layer(int: Interpreter, intLayer: unknown, nsLayer = workerScript.env.vars as BasicObject) {
     for (const [name, entry] of Object.entries(nsLayer)) {
       if (typeof entry === "function") {

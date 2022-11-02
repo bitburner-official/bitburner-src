@@ -120,6 +120,8 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
           const expectedRam = grabCost(ramLayer, newPath);
           it(`${fnName}()`, () => combinedRamCheck(val, newPath, expectedRam, extraLayerCost));
         }
+        //Skip enums layers
+        else if (key === "enums") return;
         //A layer should be the only other option.
         else testLayer(val, ramLayer[key] as RamLayer, newPath, 0);
       });
