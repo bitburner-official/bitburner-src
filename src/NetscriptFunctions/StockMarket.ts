@@ -403,5 +403,12 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       helpers.log(ctx, () => "Purchased TIX API");
       return true;
     },
+    getOrganization: (ctx) => (_symbol) => {
+      const symbol = helpers.string(ctx, "symbol", _symbol);
+      checkTixApiAccess(ctx);
+      const stock = getStockFromSymbol(ctx, symbol);
+
+      return stock.name;
+    },
   };
 }
