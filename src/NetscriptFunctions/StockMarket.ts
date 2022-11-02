@@ -60,6 +60,13 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
 
       return stock.price;
     },
+    getOrganization: (ctx) => (_symbol) => {
+      const symbol = helpers.string(ctx, "symbol", _symbol);
+      checkTixApiAccess(ctx);
+      const stock = getStockFromSymbol(ctx, symbol);
+
+      return stock.name;
+    },
     getAskPrice: (ctx) => (_symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       checkTixApiAccess(ctx);
@@ -402,13 +409,6 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       player.loseMoney(getStockMarketTixApiCost(), "stock");
       helpers.log(ctx, () => "Purchased TIX API");
       return true;
-    },
-    getOrganization: (ctx) => (_symbol) => {
-      const symbol = helpers.string(ctx, "symbol", _symbol);
-      checkTixApiAccess(ctx);
-      const stock = getStockFromSymbol(ctx, symbol);
-
-      return stock.name;
     },
   };
 }
