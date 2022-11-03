@@ -61,7 +61,7 @@ export function NetscriptPort(): IPort {
     },
 
     nextWrite: () => {
-      return new Promise(res => resolvers.push(res));
+      return new Promise((res) => resolvers.push(res));
     },
 
     full: () => {
