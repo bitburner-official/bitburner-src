@@ -33,12 +33,7 @@ export class SleeveCompanyWork extends Work {
 
   getGainRates(sleeve: Sleeve): WorkStats {
     const company = this.getCompany();
-    return calculateCompanyWorkStats(
-      sleeve,
-      this.getCompany(),
-      CompanyPositions[Player.jobs[company.name]],
-      company.favor,
-    );
+    return calculateCompanyWorkStats(sleeve, company, CompanyPositions[Player.jobs[company.name]], company.favor);
   }
 
   process(sleeve: Sleeve, cycles: number): number {

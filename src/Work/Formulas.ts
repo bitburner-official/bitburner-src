@@ -98,7 +98,10 @@ export function calculateClassEarnings(person: Person, type: ClassType, location
     ? hashManager.getTrainingMult()
     : hashManager.getStudyMult();
 
-  const earnings = scaleWorkStats(classs.earnings, (location.expMult / gameCPS) * hashMult, false);
+  const earnings = multWorkStats(
+    scaleWorkStats(classs.earnings, (location.expMult / gameCPS) * hashMult, false),
+    person.mults,
+  );
   earnings.money = calculateCost(classs, location) / gameCPS;
   return earnings;
 }
