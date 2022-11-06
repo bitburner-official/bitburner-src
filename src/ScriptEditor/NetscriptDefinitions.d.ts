@@ -37,7 +37,7 @@ type ScriptArg = string | number | boolean;
 type FilenameOrPID = number | string;
 
 /** @public */
-interface Player {
+interface Person {
   hp: HP;
   skills: Skills;
   exp: Skills;
@@ -3907,10 +3907,10 @@ export interface WorkStats {
  * @public
  */
 interface WorkFormulas {
-  crimeGains(crimeType: CrimeType | CrimeNames): WorkStats;
-  classGains(player: Player, classType: string, locationName: string): WorkStats;
-  factionGains(player: Player, workType: string, favor: number): WorkStats;
-  companyGains(player: Player, companyName: string): WorkStats;  
+  crimeGains(person: Person, crimeType: CrimeType | CrimeNames): WorkStats;
+  classGains(person: Person, classType: string, locationName: string): WorkStats;
+  factionGains(person: Person, workType: string, favor: number): WorkStats;
+  companyGains(person: Person, companyName: string, workType: string, favor: number): WorkStats;
 }
 
 /**
@@ -3937,7 +3937,7 @@ interface ReputationFormulas {
    * @param amount - Amount of money donated
    * @param player - Player info from {@link NS.getPlayer | getPlayer}
    */
-  repFromDonation(amount: number, player: Player): number;
+  repFromDonation(amount: number, player: Person): number;
 }
 
 /**
@@ -3952,7 +3952,7 @@ interface HackingFormulas {
    * @param player - Player info from {@link NS.getPlayer | getPlayer}
    * @returns The calculated hack chance.
    */
-  hackChance(server: Server, player: Player): number;
+  hackChance(server: Server, player: Person): number;
   /**
    * Calculate hack exp for one thread.
    * @remarks
@@ -3961,7 +3961,7 @@ interface HackingFormulas {
    * @param player - Player info from {@link NS.getPlayer | getPlayer}
    * @returns The calculated hack exp.
    */
-  hackExp(server: Server, player: Player): number;
+  hackExp(server: Server, player: Person): number;
   /**
    * Calculate hack percent for one thread.
    * (Ex: 0.25 would steal 25% of the server's current value.)
@@ -3971,7 +3971,7 @@ interface HackingFormulas {
    * @param player - Player info from {@link NS.getPlayer | getPlayer}
    * @returns The calculated hack percent.
    */
-  hackPercent(server: Server, player: Player): number;
+  hackPercent(server: Server, player: Person): number;
   /**
    * Calculate the percent a server would grow to.
    * (Ex: 3.0 would would grow the server to 300% of its current value.)
@@ -3981,28 +3981,28 @@ interface HackingFormulas {
    * @param cores - Number of cores on the computer that will execute grow.
    * @returns The calculated grow percent.
    */
-  growPercent(server: Server, threads: number, player: Player, cores?: number): number;
+  growPercent(server: Server, threads: number, player: Person, cores?: number): number;
   /**
    * Calculate hack time.
    * @param server - Server info from {@link NS.getServer | getServer}
    * @param player - Player info from {@link NS.getPlayer | getPlayer}
    * @returns The calculated hack time.
    */
-  hackTime(server: Server, player: Player): number;
+  hackTime(server: Server, player: Person): number;
   /**
    * Calculate grow time.
    * @param server - Server info from {@link NS.getServer | getServer}
    * @param player - Player info from {@link NS.getPlayer | getPlayer}
    * @returns The calculated grow time.
    */
-  growTime(server: Server, player: Player): number;
+  growTime(server: Server, player: Person): number;
   /**
    * Calculate weaken time.
    * @param server - Server info from {@link NS.getServer | getServer}
    * @param player - Player info from {@link NS.getPlayer | getPlayer}
    * @returns The calculated weaken time.
    */
-  weakenTime(server: Server, player: Player): number;
+  weakenTime(server: Server, player: Person): number;
 }
 
 /**
@@ -4183,7 +4183,7 @@ interface GangFormulas {
  */
 export interface Formulas {
   mockServer(): Server;
-  mockPlayer(): Player;
+  mockPlayer(): Person;
   /** Reputation formulas */
   reputation: ReputationFormulas;
   /** Skills formulas */
@@ -6759,7 +6759,7 @@ export interface NS {
    *
    * @returns Player info
    */
-  getPlayer(): Player;
+  getPlayer(): Person;
 
   /**
    * Get information about the sources of income for this run.

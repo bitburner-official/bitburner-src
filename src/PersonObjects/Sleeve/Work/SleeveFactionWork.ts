@@ -5,7 +5,7 @@ import { applySleeveGains, Work, WorkType } from "./Work";
 import { FactionWorkType } from "../../../Work/data/FactionWorkType";
 import { FactionNames } from "../../../Faction/data/FactionNames";
 import { Factions } from "../../../Faction/Factions";
-import { calculateFactionExp } from "../../../Work/formulas/Faction";
+import { calculateFactionExp } from "../../../Work/Formulas";
 import { Faction } from "../../../Faction/Faction";
 import {
   getFactionFieldWorkRepGain,
