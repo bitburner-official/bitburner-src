@@ -3816,9 +3816,14 @@ export interface WorkStats {
 interface WorkFormulas {
   crimeSuccessChance(person: Person, crimeType: CrimeType | CrimeNames): number;
   crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
-  classGains(person: Person, classType: string, locationName: string): WorkStats;
+  classGains(person: Person, classType: ClassType | `${ClassType}`, locationName: string): WorkStats;
   factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
-  companyGains(person: Person, companyName: string, workType: string, favor: number): WorkStats;
+  companyGains(
+    person: Person,
+    companyName: string,
+    workType: CompanyPosNames | `${CompanyPosNames}`,
+    favor: number,
+  ): WorkStats;
 }
 
 /**
@@ -6796,7 +6801,6 @@ export interface NS {
 }
 
 // BASE ENUMS
-
 /** @public */
 declare enum ToastVariant {
   SUCCESS = "success",
@@ -6828,8 +6832,63 @@ declare enum FactionWorkType {
   SECURITY = "SECURITY",
 }
 
-// CORP ENUMS
+// TODO: split ClassType enum into separate enums for gym and uni so they can actually be used for player input.
+/** @public */
+declare enum ClassType {
+  StudyComputerScience = "STUDYCOMPUTERSCIENCE",
+  DataStructures = "DATASTRUCTURES",
+  Networks = "NETWORKS",
+  Algorithms = "ALGORITHMS",
+  Management = "MANAGEMENT",
+  Leadership = "LEADERSHIP",
+  GymStrength = "GYMSTRENGTH",
+  GymDefense = "GYMDEFENSE",
+  GymDexterity = "GYMDEXTERITY",
+  GymAgility = "GYMAGILITY",
+}
 
+declare enum CompanyPosNames {
+  sw0 = "Software Engineering Intern",
+  sw1 = "Junior Software Engineer",
+  sw2 = "Senior Software Engineer",
+  sw3 = "Lead Software Developer",
+  sw4 = "Head of Software",
+  sw5 = "Head of Engineering",
+  sw6 = "Vice President of Technology",
+  sw7 = "Chief Technology Officer",
+  IT0 = "IT Intern",
+  IT1 = "IT Analyst",
+  IT2 = "IT Manager",
+  IT3 = "Systems Administrator",
+  secEng = "Security Engineer",
+  netEng0 = "Network Engineer",
+  netEng1 = "Network Administrator",
+  bus0 = "Business Intern",
+  bus1 = "Business Analyst",
+  bus2 = "Business Manager",
+  bus3 = "Operations Manager",
+  bus4 = "Chief Financial Officer",
+  bus5 = "Chief Executive Officer",
+  sec0 = "Police Officer",
+  sec1 = "Police Chief",
+  sec2 = "Security Guard",
+  sec3 = "Security Officer",
+  sec4 = "Security Supervisor",
+  sec5 = "Head of Security",
+  agent0 = "Field Agent",
+  agent1 = "Secret Agent",
+  agent2 = "Special Operative",
+  waiter = "Waiter",
+  employee = "Employee",
+  softCons0 = "Software Consultant",
+  softCons1 = "Senior Software Consultant",
+  busCons0 = "Business Consultant",
+  busCons1 = "Senior Business Consultant",
+  waiterPT = "Part-time Waiter",
+  employeePT = "Part-time Employee",
+}
+
+// CORP ENUMS
 /** @public */
 declare enum EmployeePositions {
   Operations = "Operations",
@@ -6864,6 +6923,8 @@ export type NSEnums = {
   toast: typeof ToastVariant;
   CrimeType: typeof CrimeType;
   FactionWorkType: typeof FactionWorkType;
+  ClassType: typeof ClassType;
+  CompanyPosNames: typeof CompanyPosNames;
 };
 
 /**

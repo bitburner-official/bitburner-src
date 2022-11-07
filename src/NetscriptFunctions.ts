@@ -77,14 +77,17 @@ import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
-import { CrimeType } from "./utils/WorkType";
+import { CompanyPosNames, CrimeType } from "./utils/WorkType";
 import { cloneDeep } from "lodash";
 import { FactionWorkType } from "./Work/data/FactionWorkType";
+import { ClassType } from "./Work/ClassWork";
 
 export const enums = {
   toast: ToastVariant,
   CrimeType,
   FactionWorkType,
+  ClassType,
+  CompanyPosNames,
 };
 
 export type NSFull = Readonly<NS & INetscriptExtra>;
