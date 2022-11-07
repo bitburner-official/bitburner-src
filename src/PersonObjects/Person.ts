@@ -5,10 +5,11 @@ import { calculateSkill } from "./formulas/skill";
 import { defaultMultipliers } from "./Multipliers";
 import { Skills } from "./Skills";
 import { HP } from "./HP";
+import { Person as IPerson } from "../ScriptEditor/NetscriptDefinitions";
 import { IReviverValue } from "../utils/JSONReviver";
 
 // Base class representing a person-like object
-export abstract class Person {
+export abstract class Person implements IPerson {
   hp: HP = { current: 10, max: 10 };
   skills: Skills = {
     hacking: 1,

@@ -21,7 +21,6 @@ import { CONSTANTS } from "../Constants";
 import { influenceStockThroughServerHack } from "../StockMarket/PlayerInfluencing";
 import { IPort, NetscriptPort } from "../NetscriptPort";
 import { NetscriptPorts } from "../NetscriptWorker";
-import { Person } from "../PersonObjects/Person";
 import { FormulaGang } from "../Gang/formulas/formulas";
 import { GangMember } from "../Gang/GangMember";
 import { GangMemberTask } from "../Gang/GangMemberTask";
@@ -29,7 +28,7 @@ import { RunningScript } from "../Script/RunningScript";
 import { toNative } from "../NetscriptFunctions/toNative";
 import { ScriptIdentifier } from "./ScriptIdentifier";
 import { findRunningScript, findRunningScriptByPid } from "../Script/ScriptHelpers";
-import { RunningScript as IRunningScript } from "../ScriptEditor/NetscriptDefinitions";
+import { RunningScript as IRunningScript, Person as IPerson } from "../ScriptEditor/NetscriptDefinitions";
 import { arrayToString } from "../utils/helpers/arrayToString";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
@@ -546,14 +545,15 @@ function getValidPort(ctx: NetscriptContext, port: number): IPort {
   return iport;
 }
 
-function person(ctx: NetscriptContext, p: unknown): Person {
+function person(ctx: NetscriptContext, p: unknown): IPerson {
   const fakePerson = {
     hp: undefined,
     exp: undefined,
     mults: undefined,
+    city: undefined,
   };
   if (!roughlyIs(fakePerson, p)) throw makeRuntimeErrorMsg(ctx, `person should be a Person.`, "TYPE");
-  return p as Person;
+  return p as IPerson;
 }
 
 function server(ctx: NetscriptContext, s: unknown): Server {

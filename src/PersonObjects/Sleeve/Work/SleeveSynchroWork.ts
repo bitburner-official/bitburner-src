@@ -2,7 +2,7 @@ import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { Work, WorkType } from "./Work";
-import { calculateIntelligenceBonus } from "../../../PersonObjects/formulas/intelligence";
+import { calculateIntelligenceBonus } from "../../formulas/intelligence";
 
 export const isSleeveSynchroWork = (w: Work | null): w is SleeveSynchroWork =>
   w !== null && w.type === WorkType.SYNCHRO;

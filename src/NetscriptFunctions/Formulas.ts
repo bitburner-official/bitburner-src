@@ -26,7 +26,7 @@ import {
   calculateWeakenTime,
 } from "../Hacking";
 import { Programs } from "../Programs/Programs";
-import { Formulas as IFormulas } from "../ScriptEditor/NetscriptDefinitions";
+import { Formulas as IFormulas, Player as IPlayer, Person as IPerson } from "../ScriptEditor/NetscriptDefinitions";
 import {
   calculateRespectGain,
   calculateWantedLevelGain,
@@ -87,26 +87,10 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       requiredHackingSkill: 0,
       serverGrowth: 0,
     }),
-    mockPlayer: () => () => ({
+    mockPlayer: () => (): IPlayer => ({
       hp: { current: 0, max: 0 },
-      skills: {
-        hacking: 0,
-        strength: 0,
-        defense: 0,
-        dexterity: 0,
-        agility: 0,
-        charisma: 0,
-        intelligence: 0,
-      },
-      exp: {
-        hacking: 0,
-        strength: 0,
-        defense: 0,
-        dexterity: 0,
-        agility: 0,
-        charisma: 0,
-        intelligence: 0,
-      },
+      skills: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
+      exp: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
       mults: defaultMultipliers(),
       numPeopleKilled: 0,
       money: 0,
@@ -118,10 +102,14 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       playtimeSinceLastBitnode: 0,
       jobs: {},
       factions: [],
-      tor: false,
-      hasCorporation: false,
-      inBladeburner: false,
       entropy: 0,
+    }),
+    mockPerson: () => (): IPerson => ({
+      hp: { current: 0, max: 0 },
+      skills: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
+      exp: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
+      mults: defaultMultipliers(),
+      city: "",
     }),
     reputation: {
       calculateFavorToRep: (ctx) => (_favor) => {

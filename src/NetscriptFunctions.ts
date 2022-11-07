@@ -123,6 +123,7 @@ const base: InternalAPI<NS> = {
     helpers.log(ctx, () => `returned ${server.serversOnNetwork.length} connections for ${server.hostname}`);
     return out;
   },
+  hasTorRouter: () => () => Player.hasTorRouter(),
   hack:
     (ctx) =>
     (_hostname, opts = {}) => {
@@ -1821,12 +1822,8 @@ const base: InternalAPI<NS> = {
       playtimeSinceLastBitnode: Player.playtimeSinceLastBitnode,
       jobs: cloneDeep(Player.jobs),
       factions: Player.factions.slice(),
-      tor: Player.hasTorRouter(),
-      inBladeburner: Player.inBladeburner(),
-      hasCorporation: Player.hasCorporation(),
       entropy: Player.entropy,
     };
-    Object.assign(data.jobs, Player.jobs);
     return data;
   },
   getMoneySources: () => () => ({
