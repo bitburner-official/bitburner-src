@@ -4,7 +4,7 @@ import { CityName } from "../Locations/data/CityNames";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { Augmentation } from "../Augmentation/Augmentation";
 
-import { Sleeve as ISleeve, SleeveSkills } from "../ScriptEditor/NetscriptDefinitions";
+import { sleeve } from "../ScriptEditor/NetscriptDefinitions";
 import { checkEnum } from "../utils/helpers/checkEnum";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
@@ -15,7 +15,7 @@ import { Crimes } from "../Crime/Crimes";
 import { CrimeType } from "../utils/WorkType";
 import { cloneDeep } from "lodash";
 
-export function NetscriptSleeve(): InternalAPI<ISleeve> {
+export function NetscriptSleeve(): InternalAPI<sleeve> {
   const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
     if (Player.bitNodeN !== 10 && !Player.sourceFileLvl(10)) {
       throw helpers.makeRuntimeErrorMsg(
@@ -31,21 +31,6 @@ export function NetscriptSleeve(): InternalAPI<ISleeve> {
       helpers.log(ctx, () => msg);
       throw helpers.makeRuntimeErrorMsg(ctx, msg);
     }
-  };
-
-  const getSleeveStats = function (sleeveNumber: number): SleeveSkills {
-    const sl = Player.sleeves[sleeveNumber];
-    return {
-      shock: 100 - sl.shock,
-      sync: sl.sync,
-      memory: sl.memory,
-      hacking: sl.skills.hacking,
-      strength: sl.skills.strength,
-      defense: sl.skills.defense,
-      dexterity: sl.skills.dexterity,
-      agility: sl.skills.agility,
-      charisma: sl.skills.charisma,
-    };
   };
 
   return {
@@ -154,12 +139,6 @@ export function NetscriptSleeve(): InternalAPI<ISleeve> {
 
       return Player.sleeves[sleeveNumber].workoutAtGym(gymName, stat);
     },
-    getSleeveStats: (ctx) => (_sleeveNumber) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      checkSleeveAPIAccess(ctx);
-      checkSleeveNumber(ctx, sleeveNumber);
-      return getSleeveStats(sleeveNumber);
-    },
     getTask: (ctx) => (_sleeveNumber) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
       checkSleeveAPIAccess(ctx);
@@ -170,7 +149,6 @@ export function NetscriptSleeve(): InternalAPI<ISleeve> {
       return sl.currentWork.APICopy();
     },
     getSleeve: (ctx) => (_sleeveNumber) => {
-
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
@@ -178,62 +156,17 @@ export function NetscriptSleeve(): InternalAPI<ISleeve> {
       const sl = Player.sleeves[sleeveNumber];
 
       const data = {
-        hp: JSON.parse(JSON.stringify(sl.hp)),
-        skills: JSON.parse(JSON.stringify(sl.skills)),
-        exp: JSON.parse(JSON.stringify(sl.exp)),
-        mults: JSON.parse(JSON.stringify(sl.mults)),
-        numPeopleKilled: 0,
-        money: 0,
-        city: sl.city,
-        location: "",
-        bitNodeN: 0,
-        totalPlaytime: 0,
-        playtimeSinceLastAug: 0,
-        playtimeSinceLastBitnode: 0,
-        jobs: {},
-        factions: [],
-        tor: false,
-        inBladeburner: false,
-        hasCorporation: false,
-        entropy: 0,
-      };
-      
-      return data;
-    },
-    getInformation: (ctx) => (_sleeveNumber) => {
-      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      checkSleeveAPIAccess(ctx);
-      checkSleeveNumber(ctx, sleeveNumber);
-
-      const sl = Player.sleeves[sleeveNumber];
-      return {
-        tor: false,
-        city: sl.city,
-        hp: sl.hp,
-        jobs: Object.keys(Player.jobs), // technically sleeves have the same jobs as the player.
-        jobTitle: Object.values(Player.jobs),
-
-        mult: {
-          agility: sl.mults.agility,
-          agilityExp: sl.mults.agility_exp,
-          charisma: sl.mults.charisma,
-          charismaExp: sl.mults.charisma_exp,
-          companyRep: sl.mults.company_rep,
-          crimeMoney: sl.mults.crime_money,
-          crimeSuccess: sl.mults.crime_success,
-          defense: sl.mults.defense,
-          defenseExp: sl.mults.defense_exp,
-          dexterity: sl.mults.dexterity,
-          dexterityExp: sl.mults.dexterity_exp,
-          factionRep: sl.mults.faction_rep,
-          hacking: sl.mults.hacking,
-          hackingExp: sl.mults.hacking_exp,
-          strength: sl.mults.strength,
-          strengthExp: sl.mults.strength_exp,
-          workMoney: sl.mults.work_money,
-        },
+        hp: cloneDeep(sl.hp),
         skills: cloneDeep(sl.skills),
+        exp: cloneDeep(sl.exp),
+        mults: cloneDeep(sl.mults),
+        city: sl.city,
+        shock: sl.shock,
+        sync: sl.sync,
+        memory: sl.memory,
       };
+
+      return data;
     },
     getSleeveAugmentations: (ctx) => (_sleeveNumber) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
@@ -269,7 +202,7 @@ export function NetscriptSleeve(): InternalAPI<ISleeve> {
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 
-      if (getSleeveStats(sleeveNumber).shock > 0) {
+      if (Player.sleeves[sleeveNumber].shock > 0) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Sleeve shock too high: Sleeve ${sleeveNumber}`);
       }
 

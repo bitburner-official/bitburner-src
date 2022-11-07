@@ -42,20 +42,31 @@ interface Person {
   skills: Skills;
   exp: Skills;
   mults: Multipliers;
-  numPeopleKilled: number;
-  money: number;
   city: string;
-  location: string;
+}
+
+/** @public */
+interface Player extends Person {
+  money: number;
+  numPeopleKilled: number;
+  entropy: number;
+  tor: boolean;
+  hasCorporation: boolean;
+  inBladeburner: boolean;
+  jobs: Record<string, string>;
+  factions: string[];
   bitNodeN: number;
   totalPlaytime: number;
   playtimeSinceLastAug: number;
   playtimeSinceLastBitnode: number;
-  jobs: Record<string, string>;
-  factions: string[];
-  tor: boolean;
-  hasCorporation: boolean;
-  inBladeburner: boolean;
-  entropy: number;
+  location: string;
+}
+
+/** @public */
+interface Sleeve extends Person {
+  shock: number;
+  sync: number;
+  memory: number;
 }
 
 /** @public */
@@ -259,7 +270,7 @@ export interface CodingAttemptOptions {
 }
 
 /**
- * Return value of {@link Sleeve.getSleevePurchasableAugs | getSleevePurchasableAugs}
+ * Return value of {@link sleeve.getSleevePurchasableAugs | getSleevePurchasableAugs}
  * @public
  */
 export interface AugmentPair {
@@ -867,52 +878,6 @@ export interface GangMemberAscension {
   agi: number;
   /** Charisma multiplier gained from ascending */
   cha: number;
-}
-
-/**
- * Object representing a sleeve stats.
- * @public
- */
-export interface SleeveSkills {
-  /** Current shock of the sleeve [0-100] */
-  shock: number;
-  /** Current sync of the sleeve [0-100] */
-  sync: number;
-  /** Current memory of the sleeve [1-100] */
-  memory: number;
-  /** Current hacking skill of the sleeve */
-  hacking: number;
-  /** Current strength of the sleeve */
-  strength: number;
-  /** Current defense of the sleeve */
-  defense: number;
-  /** Current dexterity of the sleeve */
-  dexterity: number;
-  /** Current agility of the sleeve */
-  agility: number;
-  /** Current charisma of the sleeve */
-  charisma: number;
-}
-
-/**
- * Object representing sleeve information.
- * @public
- */
-export interface SleeveInformation {
-  /** Location of the sleeve */
-  city: string;
-  /** hp of the sleeve */
-  hp: HP;
-  /** Jobs available to the sleeve */
-  jobs: string[];
-  /** Job titles available to the sleeve */
-  jobTitle: string[];
-  /** Does this sleeve have access to the tor router */
-  tor: boolean;
-  /** Sleeve multipliers */
-  mult: Multipliers;
-  /** Sleeve skills */
-  skills: Skills;
 }
 
 /**
@@ -3511,7 +3476,7 @@ export interface Gang {
  * If you are not in BitNode-10, then you must have Source-File 10 in order to use this API.
  * @public
  */
-export interface Sleeve {
+export interface sleeve {
   /**
    * Get the number of sleeves you own.
    * @remarks
@@ -3524,30 +3489,16 @@ export interface Sleeve {
   getNumSleeves(): number;
 
   /**
-   * Get the stats of a sleeve.
-   * @remarks
-   * RAM cost: 4 GB
-   *
-   * Return a structure containing the stats of the sleeve.
-   *
-   * @param sleeveNumber - Index of the sleeve to get stats of.
-   * @returns Object containing the stats of the sleeve.
-   */
-  getSleeveStats(sleeveNumber: number): SleeveSkills;
-
-  /**
    * Get information about a sleeve.
    * @remarks
    * RAM cost: 4 GB
    *
-   * Return a struct containing tons of information about this sleeve
+   * Return a person object for this sleeve
    *
    * @param sleeveNumber - Index of the sleeve to retrieve information.
-   * @returns Object containing tons of information about this sleeve.
+   * @returns Object containing information about this sleeve.
    */
-  getSleeve(sleeveNumber: number): Person;
-
-  getInformation(sleeveNumber: number): SleeveInformation;
+  getSleeve(sleeveNumber: number): Sleeve;
 
   /**
    * Get task of a sleeve.
@@ -4467,7 +4418,7 @@ export interface NS {
    * Namespace for sleeve functions.
    * @remarks RAM cost: 0 GB
    */
-  readonly sleeve: Sleeve;
+  readonly sleeve: sleeve;
 
   /**
    * Namespace for stock functions.
@@ -6707,7 +6658,7 @@ export interface NS {
    *
    * @returns Player info
    */
-  getPlayer(): Person;
+  getPlayer(): Player;
 
   /**
    * Get information about the sources of income for this run.
