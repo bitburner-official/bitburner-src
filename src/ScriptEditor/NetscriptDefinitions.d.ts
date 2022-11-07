@@ -3545,6 +3545,8 @@ export interface Sleeve {
    * @param sleeveNumber - Index of the sleeve to retrieve information.
    * @returns Object containing tons of information about this sleeve.
    */
+  getSleeve(sleeveNumber: number): Person;
+
   getInformation(sleeveNumber: number): SleeveInformation;
 
   /**

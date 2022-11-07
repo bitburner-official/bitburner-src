@@ -169,6 +169,37 @@ export function NetscriptSleeve(): InternalAPI<ISleeve> {
       if (sl.currentWork === null) return null;
       return sl.currentWork.APICopy();
     },
+    getSleeve: (ctx) => (_sleeveNumber) => {
+
+      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      checkSleeveAPIAccess(ctx);
+      checkSleeveNumber(ctx, sleeveNumber);
+
+      const sl = Player.sleeves[sleeveNumber];
+
+      const data = {
+        hp: JSON.parse(JSON.stringify(sl.hp)),
+        skills: JSON.parse(JSON.stringify(sl.skills)),
+        exp: JSON.parse(JSON.stringify(sl.exp)),
+        mults: JSON.parse(JSON.stringify(sl.mults)),
+        numPeopleKilled: 0,
+        money: 0,
+        city: sl.city,
+        location: "",
+        bitNodeN: 0,
+        totalPlaytime: 0,
+        playtimeSinceLastAug: 0,
+        playtimeSinceLastBitnode: 0,
+        jobs: {},
+        factions: [],
+        tor: false,
+        inBladeburner: false,
+        hasCorporation: false,
+        entropy: 0,
+      };
+      
+      return data;
+    },
     getInformation: (ctx) => (_sleeveNumber) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
       checkSleeveAPIAccess(ctx);
