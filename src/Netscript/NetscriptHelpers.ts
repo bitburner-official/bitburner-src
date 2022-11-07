@@ -53,7 +53,7 @@ export const helpers = {
   scriptIdentifier,
   hack,
   getValidPort,
-  player,
+  person,
   server,
   gang,
   gangMember,
@@ -546,26 +546,13 @@ function getValidPort(ctx: NetscriptContext, port: number): IPort {
   return iport;
 }
 
-function player(ctx: NetscriptContext, p: unknown): Person {
-  const fakePlayer = {
+function person(ctx: NetscriptContext, p: unknown): Person {
+  const fakePerson = {
     hp: undefined,
+    exp: undefined,
     mults: undefined,
-    numPeopleKilled: undefined,
-    money: undefined,
-    city: undefined,
-    location: undefined,
-    bitNodeN: undefined,
-    totalPlaytime: undefined,
-    playtimeSinceLastAug: undefined,
-    playtimeSinceLastBitnode: undefined,
-    jobs: undefined,
-    factions: undefined,
-    tor: undefined,
-    inBladeburner: undefined,
-    hasCorporation: undefined,
-    entropy: undefined,
   };
-  if (!roughlyIs(fakePlayer, p)) throw makeRuntimeErrorMsg(ctx, `player should be a Player.`, "TYPE");
+  if (!roughlyIs(fakePerson, p)) throw makeRuntimeErrorMsg(ctx, `person should be a Person.`, "TYPE");
   return p as Person;
 }
 

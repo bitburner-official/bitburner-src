@@ -2,7 +2,6 @@ import * as personMethods from "./PersonMethods";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { CityName } from "../Locations/data/CityNames";
 import { calculateSkill } from "./formulas/skill";
-import { calculateIntelligenceBonus } from "./formulas/intelligence";
 import { defaultMultipliers } from "./Multipliers";
 import { Skills } from "./Skills";
 import { HP } from "./HP";
@@ -56,10 +55,6 @@ export abstract class Person {
   /** Reset all multipliers to 1 */
   resetMultipliers() {
     this.mults = defaultMultipliers();
-  }
-
-  getIntelligenceBonus(weight: number): number {
-    return calculateIntelligenceBonus(this.skills.intelligence, weight);
   }
 
   abstract takeDamage(amt: number): boolean;

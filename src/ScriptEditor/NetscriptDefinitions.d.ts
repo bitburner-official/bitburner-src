@@ -3806,6 +3806,7 @@ export interface WorkStats {
  * @public
  */
 interface WorkFormulas {
+  crimeSuccessChance(person: Person, crimeType: CrimeType | CrimeNames): number;
   crimeGains(person: Person, crimeType: CrimeType | CrimeNames): WorkStats;
   classGains(person: Person, classType: string, locationName: string): WorkStats;
   factionGains(person: Person, workType: string, favor: number): WorkStats;

@@ -4,6 +4,7 @@ import { Person } from "../PersonObjects/Person";
 import { WorkerScript } from "../Netscript/WorkerScript";
 import { CrimeType } from "../utils/WorkType";
 import { CrimeWork } from "../Work/CrimeWork";
+import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
 
 interface IConstructorParams {
   hacking_success_weight?: number;
@@ -132,7 +133,7 @@ export class Crime {
     chance /= CONSTANTS.MaxSkillLevel;
     chance /= this.difficulty;
     chance *= p.mults.crime_success;
-    chance *= p.getIntelligenceBonus(1);
+    chance *= calculateIntelligenceBonus(p.skills.intelligence, 1);
 
     return Math.min(chance, 1);
   }
