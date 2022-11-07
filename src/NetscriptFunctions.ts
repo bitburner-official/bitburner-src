@@ -79,10 +79,12 @@ import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
 import { CrimeType } from "./utils/WorkType";
 import { cloneDeep } from "lodash";
+import { FactionWorkType } from "./Work/data/FactionWorkType";
 
 export const enums = {
   toast: ToastVariant,
   CrimeType,
+  FactionWorkType,
 };
 
 export type NSFull = Readonly<NS & INetscriptExtra>;

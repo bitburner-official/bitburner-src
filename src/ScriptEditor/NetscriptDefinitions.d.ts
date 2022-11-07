@@ -1768,7 +1768,7 @@ export interface Singularity {
    * @param focus - Acquire player focus on this work operation. Optional. Defaults to true.
    * @returns True if the player starts working, and false otherwise.
    */
-  workForFaction(faction: string, workType: "hacking" | "field" | "security", focus?: boolean): boolean;
+  workForFaction(faction: string, workType: FactionWorkType | `${FactionWorkType}`, focus?: boolean): boolean;
 
   /**
    * Get faction reputation.
@@ -3586,7 +3586,11 @@ export interface sleeve {
    * @param factionWorkType - Name of the action to perform for this faction.
    * @returns True if the sleeve started working on this faction, false otherwise, can also throw on errors
    */
-  setToFactionWork(sleeveNumber: number, factionName: string, factionWorkType: string): boolean | undefined;
+  setToFactionWork(
+    sleeveNumber: number,
+    factionName: string,
+    factionWorkType: FactionWorkType | `${FactionWorkType}`,
+  ): boolean | undefined;
 
   /**
    * Set a sleeve to work for a company.
@@ -3813,7 +3817,7 @@ interface WorkFormulas {
   crimeSuccessChance(person: Person, crimeType: CrimeType | CrimeNames): number;
   crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
   classGains(person: Person, classType: string, locationName: string): WorkStats;
-  factionGains(person: Person, workType: string, favor: number): WorkStats;
+  factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
   companyGains(person: Person, companyName: string, workType: string, favor: number): WorkStats;
 }
 
@@ -6791,6 +6795,41 @@ export interface NS {
   enums: NSEnums;
 }
 
+// BASE ENUMS
+
+/** @public */
+declare enum ToastVariant {
+  SUCCESS = "success",
+  WARNING = "warning",
+  ERROR = "error",
+  INFO = "info",
+}
+
+/** @public */
+declare enum CrimeType {
+  SHOPLIFT = "SHOPLIFT",
+  ROB_STORE = "ROBSTORE",
+  MUG = "MUG",
+  LARCENY = "LARCENY",
+  DRUGS = "DRUGS",
+  BOND_FORGERY = "BONDFORGERY",
+  TRAFFIC_ARMS = "TRAFFICKARMS",
+  HOMICIDE = "HOMICIDE",
+  GRAND_THEFT_AUTO = "GRANDTHEFTAUTO",
+  KIDNAP = "KIDNAP",
+  ASSASSINATION = "ASSASSINATION",
+  HEIST = "HEIST",
+}
+
+/** @public */
+declare enum FactionWorkType {
+  HACKING = "HACKING",
+  FIELD = "FIELD",
+  SECURITY = "SECURITY",
+}
+
+// CORP ENUMS
+
 /** @public */
 declare enum EmployeePositions {
   Operations = "Operations",
@@ -6821,33 +6860,10 @@ declare enum IndustryType {
 }
 
 /** @public */
-declare enum ToastVariant {
-  SUCCESS = "success",
-  WARNING = "warning",
-  ERROR = "error",
-  INFO = "info",
-}
-
-/** @public */
-declare enum CrimeType {
-  SHOPLIFT = "SHOPLIFT",
-  ROB_STORE = "ROBSTORE",
-  MUG = "MUG",
-  LARCENY = "LARCENY",
-  DRUGS = "DRUGS",
-  BOND_FORGERY = "BONDFORGERY",
-  TRAFFIC_ARMS = "TRAFFICKARMS",
-  HOMICIDE = "HOMICIDE",
-  GRAND_THEFT_AUTO = "GRANDTHEFTAUTO",
-  KIDNAP = "KIDNAP",
-  ASSASSINATION = "ASSASSINATION",
-  HEIST = "HEIST",
-}
-
-/** @public */
 export type NSEnums = {
   toast: typeof ToastVariant;
   CrimeType: typeof CrimeType;
+  FactionWorkType: typeof FactionWorkType;
 };
 
 /**
