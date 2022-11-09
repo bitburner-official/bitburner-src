@@ -143,7 +143,12 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
       it(`SF4.${lvl} check for x${lvlToMult[lvl]} costs`, () => {
         sf4.lvl = lvl;
         singObjects.forEach((obj) =>
-          combinedRamCheck(obj.fn, ["singularity", obj.name], obj.baseRam * lvlToMult[lvl], 0),
+          combinedRamCheck(
+            obj.fn as PotentiallyAsyncFunction,
+            ["singularity", obj.name],
+            obj.baseRam * lvlToMult[lvl],
+            0,
+          ),
         );
       });
     }

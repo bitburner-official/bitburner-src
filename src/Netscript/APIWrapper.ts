@@ -5,28 +5,37 @@ import { ScriptArg } from "./ScriptArg";
 import { NSFull } from "src/NetscriptFunctions";
 import { cloneDeep } from "lodash";
 
-type ExternalFunction = (...args: any[]) => void;
+/** Generic type for an enums object */
+type Enums = Record<string, Record<string, string>>;
+/** Permissive type for the documented API functions */
+type APIFn = (...args: any[]) => void;
+/** Type for the actual wrapped function given to the player */
+type WrappedFn = (...args: unknown[]) => unknown;
+/** Type for internal, unwrapped ctx function that produces an APIFunction */
+type InternalFn<F extends APIFn> = (ctx: NetscriptContext) => ((...args: unknown[]) => ReturnType<F>) & F;
+type Key<API> = keyof API & string;
 
-export type ExternalAPILayer = {
-  [key: string]: ExternalAPILayer | ExternalFunction | ScriptArg[] | Record<string, Record<string, string>>;
+export type ExternalAPI<API> = {
+  [key in keyof API]: API[key] extends Enums
+    ? Enums
+    : key extends "args"
+    ? ScriptArg[] // "args" required to be ScriptArg[]
+    : API[key] extends APIFn
+    ? WrappedFn
+    : ExternalAPI<API[key]>;
 };
-
-// TODO: figure out how to include real type safety in wrapper
-export type BasicObject = Record<string, any>;
-
-type InternalFunction<F extends ExternalFunction> = (
-  ctx: NetscriptContext,
-) => ((...args: unknown[]) => ReturnType<F>) & F;
 
 export type InternalAPI<API> = {
-  [Property in keyof API]: API[Property] extends ExternalFunction
-    ? InternalFunction<API[Property]>
-    : API[Property] extends Record<string, Record<string, string>> | ScriptArg[] // Don't wrap enums or args
-    ? API[Property]
-    : API[Property] extends object
-    ? InternalAPI<API[Property]>
-    : never;
+  [key in keyof API]: API[key] extends Enums
+    ? API[key] & Enums
+    : key extends "args"
+    ? ScriptArg[]
+    : API[key] extends APIFn
+    ? InternalFn<API[key]>
+    : InternalAPI<API[key]>;
 };
+/** Any of the possible values on a internal API layer */
+type InternalValues = Enums | ScriptArg[] | InternalFn<APIFn> | InternalAPI<unknown>;
 
 export type NetscriptContext = {
   workerScript: WorkerScript;
@@ -34,52 +43,36 @@ export type NetscriptContext = {
   functionPath: string;
 };
 
-function wrapFunction(
-  externalLayer: ExternalAPILayer,
-  workerScript: WorkerScript,
-  func: (_ctx: NetscriptContext) => (...args: unknown[]) => unknown,
-  tree: string[],
-  key: string,
-): void {
-  const arrayPath = [...tree, key];
-  const functionPath = arrayPath.join(".");
-  const ctx = {
-    workerScript,
-    function: key,
-    functionPath,
-  };
-  function wrappedFunction(...args: unknown[]): unknown {
-    helpers.checkEnvFlags(ctx);
-    helpers.updateDynamicRam(ctx, getRamCost(...tree, key));
-    return func(ctx)(...args);
-  }
-  externalLayer[key] = wrappedFunction;
-}
-
-export function wrapAPI(workerScript: WorkerScript, internalAPI: BasicObject, args: ScriptArg[]): NSFull {
-  const wrappedAPI = wrapAPILayer({ args }, workerScript, internalAPI);
-  return wrappedAPI as unknown as NSFull;
-}
-
-export function wrapAPILayer(
-  externalLayer: ExternalAPILayer,
-  workerScript: WorkerScript,
-  internalLayer: BasicObject,
-  tree: string[] = [],
-): ExternalAPILayer {
-  for (const [key, value] of Object.entries(internalLayer)) {
-    if (typeof value === "function") {
-      wrapFunction(externalLayer, workerScript, value, tree, key);
-    } else if (Array.isArray(value)) {
-      continue; // We already added args in wrapAPI
-    } else if (key === "enums") {
-      externalLayer[key] = cloneDeep(internalLayer[key]);
-    } else if (typeof value === "object") {
-      wrapAPILayer((externalLayer[key] = {} as ExternalAPILayer), workerScript, value, [...tree, key]);
-    } else {
-      console.warn(`Unexpected data while wrapping API.`, "tree:", tree, "key:", key, "value:", value);
-      throw new Error("Error while wrapping netscript API. See console.");
+export function wrapAPI(ws: WorkerScript, internalAPI: InternalAPI<NSFull>, args: ScriptArg[]): ExternalAPI<NSFull> {
+  function wrapAPILayer<API>(eLayer: ExternalAPI<API>, iLayer: InternalAPI<API>, tree: string[]): ExternalAPI<API> {
+    for (const [key, value] of Object.entries(iLayer) as [Key<API>, InternalValues][]) {
+      if (key === "enums") {
+        (eLayer[key] as Enums) = cloneDeep(value as Enums);
+      } else if (key === "args") continue;
+      // Args are added in wrapAPI function and should only exist at top level
+      else if (typeof value === "function") {
+        wrapFunction(eLayer, value as InternalFn<APIFn>, tree, key);
+      } else if (typeof value === "object") {
+        wrapAPILayer((eLayer[key] = {} as ExternalAPI<API>[Key<API>]), value, [...tree, key as string]);
+      } else {
+        console.warn(`Unexpected data while wrapping API.`, "tree:", tree, "key:", key, "value:", value);
+        throw new Error("Error while wrapping netscript API. See console.");
+      }
     }
+    return eLayer;
   }
-  return externalLayer;
+  function wrapFunction<API>(eLayer: ExternalAPI<API>, func: InternalFn<APIFn>, tree: string[], key: Key<API>) {
+    const arrayPath = [...tree, key];
+    const functionPath = arrayPath.join(".");
+    const ctx = { workerScript: ws, function: key, functionPath };
+    function wrappedFunction(...args: unknown[]): unknown {
+      helpers.checkEnvFlags(ctx);
+      helpers.updateDynamicRam(ctx, getRamCost(...tree, key));
+      return func(ctx)(...args);
+    }
+    (eLayer[key] as WrappedFn) = wrappedFunction;
+  }
+
+  const wrappedAPI = wrapAPILayer({ args } as ExternalAPI<NSFull>, internalAPI, []);
+  return wrappedAPI;
 }

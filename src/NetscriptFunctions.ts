@@ -61,7 +61,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript as IRecentScript, BasicHGWOptions, ProcessInfo } from "./ScriptEditor/NetscriptDefinitions";
+import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums } from "./ScriptEditor/NetscriptDefinitions";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
@@ -72,7 +72,7 @@ import { Flags } from "./NetscriptFunctions/Flags";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
-import { InternalAPI, wrapAPI } from "./Netscript/APIWrapper";
+import { ExternalAPI, InternalAPI, wrapAPI } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
@@ -82,7 +82,7 @@ import { cloneDeep } from "lodash";
 import { FactionWorkType } from "./Work/data/FactionWorkType";
 import { ClassType } from "./Work/ClassWork";
 
-export const enums = {
+export const enums: NSEnums = {
   toast: ToastVariant,
   CrimeType,
   FactionWorkType,
@@ -92,7 +92,7 @@ export const enums = {
 
 export type NSFull = Readonly<NS & INetscriptExtra>;
 
-export function NetscriptFunctions(workerScript: WorkerScript): NSFull {
+export function NetscriptFunctions(workerScript: WorkerScript): ExternalAPI<NSFull> {
   return wrapAPI(workerScript, ns, workerScript.args.slice());
 }
 
@@ -973,7 +973,7 @@ const base: InternalAPI<NS> = {
       allFiles.sort();
       return allFiles;
     },
-  getRecentScripts: () => (): IRecentScript[] => {
+  getRecentScripts: () => (): RecentScript[] => {
     return recentScripts.map((rs) => ({
       timeOfDeath: rs.timeOfDeath,
       ...helpers.createPublicRunningScript(rs.runningScript),
