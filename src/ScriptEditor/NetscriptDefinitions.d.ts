@@ -3816,9 +3816,13 @@ interface WorkFormulas {
   /** @returns The WorkStats gained when completing one instance of the specified crime. */
   crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by taking the specified gym class. */
-  gymGains(person: Person, classType: ClassType | `${ClassType}`, locationName: string): WorkStats;
+  gymGains(person: Person, gymType: GymType | `${GymType}`, locationName: string): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by taking the specified university class. */
-  universityGains(person: Person, classType: ClassType | `${ClassType}`, locationName: string): WorkStats;
+  universityGains(
+    person: Person,
+    classType: UniversityClassType | `${UniversityClassType}`,
+    locationName: string,
+  ): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified faction work. */
   factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified company work. */
@@ -6854,6 +6858,7 @@ declare enum GymType {
   agility = "agi",
 }
 
+/** @public */
 declare enum CompanyPosNames {
   sw0 = "Software Engineering Intern",
   sw1 = "Junior Software Engineer",
