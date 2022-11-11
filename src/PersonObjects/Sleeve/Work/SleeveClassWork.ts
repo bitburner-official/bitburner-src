@@ -4,7 +4,7 @@ import { ClassType } from "../../../Work/ClassWork";
 import { LocationName } from "../../../Locations/data/LocationNames";
 import { calculateClassEarnings } from "../../../Work/Formulas";
 import { Sleeve } from "../Sleeve";
-import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
+import { multWorkStats, scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 
 export const isSleeveClassWork = (w: Work | null): w is SleeveClassWork => w !== null && w.type === WorkType.CLASS;
 
@@ -33,11 +33,11 @@ export class SleeveClassWork extends Work {
     );
   }
 
-  process(sleeve: Sleeve, cycles: number): number {
+  process(sleeve: Sleeve, cycles: number) {
     const rate = this.calculateRates(sleeve);
     applySleeveGains(sleeve, rate, cycles);
-    return 0;
   }
+  
   APICopy(): Record<string, unknown> {
     return {
       type: this.type,
