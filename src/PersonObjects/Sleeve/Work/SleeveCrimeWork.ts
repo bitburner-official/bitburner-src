@@ -36,7 +36,7 @@ export class SleeveCrimeWork extends Work {
   process(sleeve: Sleeve, cycles: number) {
     this.cyclesWorked += cycles;
     if (this.cyclesWorked < this.cyclesNeeded()) return;
-    
+
     const crime = this.getCrime();
     const gains = this.getExp(sleeve);
     const success = Math.random() < crime.successRate(sleeve);
