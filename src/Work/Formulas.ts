@@ -63,6 +63,7 @@ export function calculateCrimeWorkStats(person: IPerson, crime: Crime): WorkStat
   return gains;
 }
 
+/** @returns faction rep rate per cycle */
 export const calculateFactionRep = (person: IPerson, type: FactionWorkType, favor: number): number => {
   const repFormulas = {
     [FactionWorkType.HACKING]: getHackingWorkRepGain,
