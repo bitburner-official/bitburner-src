@@ -301,7 +301,12 @@ function checkEnvFlags(ctx: NetscriptContext): void {
     log(ctx, () => "Failed to run due to script being killed.");
     throw new ScriptDeath(ws);
   }
-  if (ws.env.runningFn && ctx.function !== "asleep") {
+}
+
+/** Set a timeout for performing a task, mark the script as busy in the meantime. */
+function netscriptDelay(ctx: NetscriptContext, time: number): Promise<void> {
+  const ws = ctx.workerScript;
+  if (ws.delay) {
     ws.delayReject?.(new ScriptDeath(ws));
     ws.env.stopFlag = true;
     log(ctx, () => "Failed to run due to failed concurrency check.");
@@ -314,11 +319,6 @@ function checkEnvFlags(ctx: NetscriptContext): void {
       "CONCURRENCY",
     );
   }
-}
-
-/** Set a timeout for performing a task, mark the script as busy in the meantime. */
-function netscriptDelay(ctx: NetscriptContext, time: number): Promise<void> {
-  const ws = ctx.workerScript;
   return new Promise(function (resolve, reject) {
     ws.delay = window.setTimeout(() => {
       ws.delay = null;
