@@ -1,11 +1,11 @@
 /** @public */
-export interface HP {
+interface HP {
   current: number;
   max: number;
 }
 
 /** @public */
-export interface Skills {
+interface Skills {
   hacking: number;
   strength: number;
   defense: number;
@@ -16,7 +16,7 @@ export interface Skills {
 }
 
 /** @public */
-export interface PossibleInfiltrationLocation {
+interface PossibleInfiltrationLocation {
   city: string;
   name: string;
 }
@@ -96,7 +96,7 @@ interface MoneySources {
 }
 
 /** @public */
-export interface Multipliers {
+interface Multipliers {
   /** Multiplier to hacking skill */
   hacking: number;
   /** Multiplier to strength skill */
@@ -160,7 +160,7 @@ export interface Multipliers {
 }
 
 /** @public */
-export interface RunningScript {
+interface RunningScript {
   /** Arguments the script was called with */
   args: (string | number | boolean)[];
   /** Filename of the script */
@@ -193,7 +193,7 @@ export interface RunningScript {
 }
 
 /** @public */
-export interface RecentScript extends RunningScript {
+interface RecentScript extends RunningScript {
   /** Timestamp of when the script was killed */
   timeOfDeath: Date;
 }
@@ -202,7 +202,7 @@ export interface RecentScript extends RunningScript {
  * Data representing the internal values of a crime.
  * @public
  */
-export interface CrimeStats {
+interface CrimeStats {
   /** Number representing the difficulty of the crime. Used for success chance calculations */
   difficulty: number;
   /** Amount of karma lost for successfully committing this crime */
@@ -247,7 +247,7 @@ export interface CrimeStats {
  * Options to affect the behavior of {@link NS.hack | hack}, {@link NS.grow | grow}, and {@link NS.weaken | weaken}.
  * @public
  */
-export interface BasicHGWOptions {
+interface BasicHGWOptions {
   /** Number of threads to use for this function.
    * Must be less than or equal to the number of threads the script is running with. */
   threads?: number;
@@ -259,7 +259,7 @@ export interface BasicHGWOptions {
  * Options to affect the behavior of {@link CodingContract} attempt.
  * @public
  */
-export interface CodingAttemptOptions {
+interface CodingAttemptOptions {
   /** If truthy, then the function will return a string that states the contract’s reward when it is successfully solved. */
   returnReward: boolean;
 }
@@ -268,7 +268,7 @@ export interface CodingAttemptOptions {
  * Return value of {@link sleeve.getSleevePurchasableAugs | getSleevePurchasableAugs}
  * @public
  */
-export interface AugmentPair {
+interface AugmentPair {
   /** augmentation name */
   name: string;
   /** augmentation cost */
@@ -276,13 +276,13 @@ export interface AugmentPair {
 }
 
 /** @public */
-export enum PositionTypes {
+declare enum PositionTypes {
   Long = "L",
   Short = "S",
 }
 
 /** @public */
-export enum OrderTypes {
+declare enum OrderTypes {
   LimitBuy = "Limit Buy Order",
   LimitSell = "Limit Sell Order",
   StopBuy = "Stop Buy Order",
@@ -293,7 +293,7 @@ export enum OrderTypes {
  * Value in map of {@link StockOrder}
  * @public
  */
-export interface StockOrderObject {
+interface StockOrderObject {
   /** Number of shares */
   shares: number;
   /** Price per share */
@@ -310,7 +310,7 @@ export interface StockOrderObject {
  * Keys are stock symbols, properties are arrays of {@link StockOrderObject}
  * @public
  */
-export interface StockOrder {
+interface StockOrder {
   [key: string]: StockOrderObject[];
 }
 
@@ -318,7 +318,7 @@ export interface StockOrder {
  * A single process on a server.
  * @public
  */
-export interface ProcessInfo {
+interface ProcessInfo {
   /** Script name. */
   filename: string;
   /** Number of threads script is running with */
@@ -333,7 +333,7 @@ export interface ProcessInfo {
  * Hack related multipliers.
  * @public
  */
-export interface HackingMultipliers {
+interface HackingMultipliers {
   /** Player's hacking chance multiplier. */
   chance: number;
   /** Player's hacking speed multiplier. */
@@ -348,7 +348,7 @@ export interface HackingMultipliers {
  * Hacknet related multipliers.
  * @public
  */
-export interface HacknetMultipliers {
+interface HacknetMultipliers {
   /** Player's hacknet production multiplier */
   production: number;
   /** Player's hacknet purchase cost multiplier */
@@ -365,7 +365,7 @@ export interface HacknetMultipliers {
  * Hacknet node related constants
  * @public
  */
-export interface HacknetNodeConstants {
+interface HacknetNodeConstants {
   /** Amount of money gained per level */
   MoneyGainPerLevel: number;
   /** Base cost for a new node */
@@ -396,7 +396,7 @@ export interface HacknetNodeConstants {
  * Hacknet server related constants
  * @public
  */
-export interface HacknetServerConstants {
+interface HacknetServerConstants {
   /** Number of hashes calculated per level */
   HashesPerLevel: number;
   /** Base cost for a new server */
@@ -433,7 +433,7 @@ export interface HacknetServerConstants {
  * A single server.
  * @public
  */
-export interface Server {
+interface Server {
   /**
    * How many CPU cores this server has. Maximum of 8.
    * Affects magnitude of grow and weaken.
@@ -523,7 +523,7 @@ export interface Server {
  * All multipliers affecting the difficulty of the current challenge.
  * @public
  */
-export interface BitNodeMultipliers {
+interface BitNodeMultipliers {
   /** Influences how quickly the player's agility level (not exp) scales */
   AgilityLevelMultiplier: number;
   /** Influences the base cost to purchase an augmentation. */
@@ -624,7 +624,7 @@ export interface BitNodeMultipliers {
  * Object representing all the values related to a hacknet node.
  * @public
  */
-export interface NodeStats {
+interface NodeStats {
   /** Node's name */
   name: string;
   /** Node's level */
@@ -648,7 +648,7 @@ export interface NodeStats {
 }
 
 /** @public */
-export interface SourceFileLvl {
+interface SourceFileLvl {
   /** The number of the source file */
   n: number;
   /** The level of the source file */
@@ -659,7 +659,7 @@ export interface SourceFileLvl {
  * Bladeburner current action.
  * @public
  */
-export interface BladeburnerCurAction {
+interface BladeburnerCurAction {
   /** Type of Action */
   type: string;
   /** Name of Action */
@@ -670,7 +670,7 @@ export interface BladeburnerCurAction {
  * Gang general info.
  * @public
  */
-export interface GangGenInfo {
+interface GangGenInfo {
   /** Name of faction that the gang belongs to ("Slum Snakes", etc.) */
   faction: string;
   /** Indicating whether or not it's a hacking gang */
@@ -698,7 +698,7 @@ export interface GangGenInfo {
 }
 
 /** @public */
-export interface GangOtherInfoObject {
+interface GangOtherInfoObject {
   /** Gang power */
   power: number;
   /** Gang territory, in decimal form */
@@ -706,7 +706,7 @@ export interface GangOtherInfoObject {
 }
 
 /** @public */
-export interface GangOtherInfo {
+interface GangOtherInfo {
   [key: string]: GangOtherInfoObject;
 }
 
@@ -714,7 +714,7 @@ export interface GangOtherInfo {
  * Object representing data representing a gang member task.
  * @public
  */
-export interface GangTaskStats {
+interface GangTaskStats {
   /** Task name */
   name: string;
   /** Task Description */
@@ -751,7 +751,7 @@ export interface GangTaskStats {
  * Object representing data representing a gang member equipment.
  * @public
  */
-export interface EquipmentStats {
+interface EquipmentStats {
   /** Strength multiplier */
   str?: number;
   /** Defense multiplier */
@@ -767,7 +767,7 @@ export interface EquipmentStats {
 }
 
 /** @public */
-export interface GangTerritory {
+interface GangTerritory {
   /** Money gain impact on task scaling */
   money: number;
   /** Respect gain impact on task scaling */
@@ -777,7 +777,7 @@ export interface GangTerritory {
 }
 
 /** @public */
-export interface GangMemberInfo {
+interface GangMemberInfo {
   /** Name of the gang member */
   name: string;
   /** Currently assigned task */
@@ -858,7 +858,7 @@ export interface GangMemberInfo {
 }
 
 /** @public */
-export interface GangMemberAscension {
+interface GangMemberAscension {
   /** Amount of respect lost from ascending */
   respect: number;
   /** Hacking multiplier gained from ascending */
@@ -876,43 +876,43 @@ export interface GangMemberAscension {
 }
 
 /** @public */
-export type SleeveBladeburnerTask = {
+type SleeveBladeburnerTask = {
   type: "BLADEBURNER";
   actionType: "General" | "Contracts";
   actionName: string;
 };
 
 /** @public */
-export type SleeveClassTask = {
+type SleeveClassTask = {
   type: "CLASS";
   classType: UniversityClassType | GymType | `${UniversityClassType}` | `${GymType}`;
   location: LocationName | `${LocationName}`;
 };
 
 /** @public */
-export type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
+type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
 
 /** @public */
-export type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}` };
+type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}` };
 
 /** @public */
-export type SleeveFactionTask = {
+type SleeveFactionTask = {
   type: "FACTION";
   factionWorkType: FactionWorkType | `${FactionWorkType}`;
   factionName: string;
 };
 
 /** @public */
-export type SleeveInfiltrateTask = { type: "INFILTRATE" };
+type SleeveInfiltrateTask = { type: "INFILTRATE" };
 
 /** @public */
-export type SleeveRecoveryTask = { type: "RECOVERY" };
+type SleeveRecoveryTask = { type: "RECOVERY" };
 
 /** @public */
-export type SleeveSupportTask = { type: "SUPPORT" };
+type SleeveSupportTask = { type: "SUPPORT" };
 
 /** @public */
-export type SleeveSynchroTask = { type: "SYNCHRO" };
+type SleeveSynchroTask = { type: "SYNCHRO" };
 
 /** Object representing a sleeve current task.
  * @public */
@@ -931,7 +931,7 @@ export type SleeveTask =
  * Object representing a port. A port is a serialized queue.
  * @public
  */
-export interface NetscriptPort {
+interface NetscriptPort {
   /**
    * Write data to a port.
    * @remarks
@@ -3841,7 +3841,7 @@ interface SkillsFormulas {
 }
 
 /** @public */
-export interface WorkStats {
+interface WorkStats {
   money: number;
   reputation: number;
   hackExp: number;
@@ -4169,7 +4169,7 @@ export interface Formulas {
 }
 
 /** @public */
-export interface Fragment {
+interface Fragment {
   id: number;
   shape: boolean[][];
   type: number;
@@ -4178,7 +4178,7 @@ export interface Fragment {
 }
 
 /** @public */
-export interface ActiveFragment {
+interface ActiveFragment {
   id: number;
   highestCharge: number;
   numCharge: number;
@@ -4300,20 +4300,20 @@ interface Stanek {
 }
 
 /** @public */
-export interface InfiltrationReward {
+interface InfiltrationReward {
   tradeRep: number;
   sellCash: number;
   SoARep: number;
 }
 
 /** @public */
-export interface ILocation {
+interface ILocation {
   city: string;
   name: string;
 }
 
 /** @public */
-export interface InfiltrationLocation {
+interface InfiltrationLocation {
   location: ILocation;
   reward: InfiltrationReward;
   difficulty: number;
