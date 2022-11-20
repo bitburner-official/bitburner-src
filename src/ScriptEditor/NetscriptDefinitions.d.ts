@@ -875,11 +875,57 @@ export interface GangMemberAscension {
   cha: number;
 }
 
-/**
- * Object representing a sleeve current task.
- * @public
- */
-export type SleeveTask = any;
+/** @public */
+export type SleeveBladeburnerTask = {
+  type: "BLADEBURNER";
+  actionType: "General" | "Contracts";
+  actionName: string;
+};
+
+/** @public */
+export type SleeveClassTask = {
+  type: "CLASS";
+  classType: UniversityClassType | GymType | `${UniversityClassType}` | `${GymType}`;
+  location: LocationName | `${LocationName}`;
+};
+
+/** @public */
+export type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
+
+/** @public */
+export type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}` };
+
+/** @public */
+export type SleeveFactionTask = {
+  type: "FACTION";
+  factionWorkType: FactionWorkType | `${FactionWorkType}`;
+  factionName: string;
+};
+
+/** @public */
+export type SleeveInfiltrateTask = { type: "INFILTRATE" };
+
+/** @public */
+export type SleeveRecoveryTask = { type: "RECOVERY" };
+
+/** @public */
+export type SleeveSupportTask = { type: "SUPPORT" };
+
+/** @public */
+export type SleeveSynchroTask = { type: "SYNCHRO" };
+
+/** Object representing a sleeve current task.
+ * @public */
+export type SleeveTask =
+  | SleeveBladeburnerTask
+  | SleeveClassTask
+  | SleeveCompanyTask
+  | SleeveCrimeTask
+  | SleeveFactionTask
+  | SleeveInfiltrateTask
+  | SleeveRecoveryTask
+  | SleeveSupportTask
+  | SleeveSynchroTask;
 
 /**
  * Object representing a port. A port is a serialized queue.
@@ -6859,7 +6905,7 @@ declare enum GymType {
 }
 
 /** @public */
-declare enum CompanyPosNames {
+declare enum CompanyPosName {
   sw0 = "Software Engineering Intern",
   sw1 = "Junior Software Engineer",
   sw2 = "Senior Software Engineer",
@@ -6930,6 +6976,73 @@ declare enum IndustryType {
   RealEstate = "RealEstate",
 }
 
+/** Names of all locations */
+declare enum LocationName {
+  AevumAeroCorp = "AeroCorp",
+  AevumBachmanAndAssociates = "Bachman & Associates",
+  AevumClarkeIncorporated = "Clarke Incorporated",
+  AevumCrushFitnessGym = "Crush Fitness Gym",
+  AevumECorp = "ECorp",
+  AevumFulcrumTechnologies = "Fulcrum Technologies",
+  AevumGalacticCybersystems = "Galactic Cybersystems",
+  AevumNetLinkTechnologies = "NetLink Technologies",
+  AevumPolice = "Aevum Police Headquarters",
+  AevumRhoConstruction = "Rho Construction",
+  AevumSnapFitnessGym = "Snap Fitness Gym",
+  AevumSummitUniversity = "Summit University",
+  AevumWatchdogSecurity = "Watchdog Security",
+  AevumCasino = "Iker Molina Casino",
+
+  ChongqingKuaiGongInternational = "KuaiGong International",
+  ChongqingSolarisSpaceSystems = "Solaris Space Systems",
+  ChongqingChurchOfTheMachineGod = "Church of the Machine God",
+
+  Sector12AlphaEnterprises = "Alpha Enterprises",
+  Sector12BladeIndustries = "Blade Industries",
+  Sector12CIA = "Central Intelligence Agency",
+  Sector12CarmichaelSecurity = "Carmichael Security",
+  Sector12CityHall = "Sector-12 City Hall",
+  Sector12DeltaOne = "DeltaOne",
+  Sector12FoodNStuff = "FoodNStuff",
+  Sector12FourSigma = "Four Sigma",
+  Sector12IcarusMicrosystems = "Icarus Microsystems",
+  Sector12IronGym = "Iron Gym",
+  Sector12JoesGuns = "Joe's Guns",
+  Sector12MegaCorp = "MegaCorp",
+  Sector12NSA = "National Security Agency",
+  Sector12PowerhouseGym = "Powerhouse Gym",
+  Sector12RothmanUniversity = "Rothman University",
+  Sector12UniversalEnergy = "Universal Energy",
+
+  NewTokyoDefComm = "DefComm",
+  NewTokyoGlobalPharmaceuticals = "Global Pharmaceuticals",
+  NewTokyoNoodleBar = "Noodle Bar",
+  NewTokyoVitaLife = "VitaLife",
+  NewTokyoArcade = "Arcade",
+
+  IshimaNovaMedical = "Nova Medical",
+  IshimaOmegaSoftware = "Omega Software",
+  IshimaStormTechnologies = "Storm Technologies",
+  IshimaGlitch = "0x6C1",
+
+  VolhavenCompuTek = "CompuTek",
+  VolhavenHeliosLabs = "Helios Labs",
+  VolhavenLexoCorp = "LexoCorp",
+  VolhavenMilleniumFitnessGym = "Millenium Fitness Gym",
+  VolhavenNWO = "NWO",
+  VolhavenOmniTekIncorporated = "OmniTek Incorporated",
+  VolhavenOmniaCybersystems = "Omnia Cybersystems",
+  VolhavenSysCoreSecurities = "SysCore Securities",
+  VolhavenZBInstituteOfTechnology = "ZB Institute of Technology",
+
+  Hospital = "Hospital",
+  Slums = "The Slums",
+  TravelAgency = "Travel Agency",
+  WorldStockExchange = "World Stock Exchange",
+
+  Void = "The Void",
+}
+
 /** @public */
 export type NSEnums = {
   toast: typeof ToastVariant;
@@ -6937,7 +7050,8 @@ export type NSEnums = {
   FactionWorkType: typeof FactionWorkType;
   GymType: typeof GymType;
   UniversityClassType: typeof UniversityClassType;
-  CompanyPosNames: typeof CompanyPosNames;
+  CompanyPosName: typeof CompanyPosName;
+  LocationName: typeof LocationName;
 };
 
 /**
