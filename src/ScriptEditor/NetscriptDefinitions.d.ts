@@ -15,12 +15,7 @@ interface Skills {
   intelligence: number;
 }
 
-/** @public */
-interface PossibleInfiltrationLocation {
-  city: string;
-  name: string;
-}
-
+// TODO: provide same treatment to CodingContractData as for SleeveTask
 /**
  * Coding contract data will differ depending on coding contract.
  * @public
@@ -4331,7 +4326,7 @@ interface Infiltration {
    *
    * @returns all locations that can be infiltrated.
    */
-  getPossibleLocations(): PossibleInfiltrationLocation[];
+  getPossibleLocations(): ILocation[];
   /**
    * Get all infiltrations with difficulty, location and rewards.
    * @remarks
