@@ -3875,7 +3875,7 @@ interface WorkFormulas {
   companyGains(
     person: Person,
     companyName: string,
-    workType: CompanyPosNames | `${CompanyPosNames}`,
+    workType: CompanyPosName | `${CompanyPosName}`,
     favor: number,
   ): WorkStats;
 }
@@ -6976,7 +6976,8 @@ declare enum IndustryType {
   RealEstate = "RealEstate",
 }
 
-/** Names of all locations */
+/** Names of all locations
+ * @public */
 declare enum LocationName {
   AevumAeroCorp = "AeroCorp",
   AevumBachmanAndAssociates = "Bachman & Associates",
