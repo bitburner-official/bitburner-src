@@ -3558,7 +3558,7 @@ export interface sleeve {
    * @param sleeveNumber - Index of the sleeve to retrieve task from.
    * @returns Object containing information the current task that the sleeve is performing.
    */
-  getTask(sleeveNumber: number): SleeveTask;
+  getTask(sleeveNumber: number): SleeveTask | null;
 
   /**
    * Set a sleeve to shock recovery.
