@@ -8,7 +8,7 @@
 <b>Signature:</b>
 
 ```typescript
-export type SleeveBladeburnerTask = {
+type SleeveBladeburnerTask = {
   type: "BLADEBURNER";
   actionType: "General" | "Contracts";
   actionName: string;

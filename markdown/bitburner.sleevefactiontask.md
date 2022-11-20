@@ -8,7 +8,7 @@
 <b>Signature:</b>
 
 ```typescript
-export type SleeveFactionTask = {
+type SleeveFactionTask = {
   type: "FACTION";
   factionWorkType: FactionWorkType | `${FactionWorkType}`;
   factionName: string;

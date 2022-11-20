@@ -8,5 +8,5 @@
 <b>Signature:</b>
 
 ```typescript
-export type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
+type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
 ```

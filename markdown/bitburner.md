@@ -78,7 +78,6 @@
 |  [OfficeAPI](./bitburner.officeapi.md) | Corporation Office API |
 |  [Person](./bitburner.person.md) |  |
 |  [Player](./bitburner.player.md) |  |
-|  [PossibleInfiltrationLocation](./bitburner.possibleinfiltrationlocation.md) |  |
 |  [ProcessInfo](./bitburner.processinfo.md) | A single process on a server. |
 |  [Product](./bitburner.product.md) | Product in a warehouse |
 |  [RecentScript](./bitburner.recentscript.md) |  |

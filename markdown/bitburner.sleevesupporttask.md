@@ -8,5 +8,5 @@
 <b>Signature:</b>
 
 ```typescript
-export type SleeveSupportTask = { type: "SUPPORT" };
+type SleeveSupportTask = { type: "SUPPORT" };
 ```

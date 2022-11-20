@@ -8,5 +8,5 @@
 <b>Signature:</b>
 
 ```typescript
-export type SleeveRecoveryTask = { type: "RECOVERY" };
+type SleeveRecoveryTask = { type: "RECOVERY" };
 ```

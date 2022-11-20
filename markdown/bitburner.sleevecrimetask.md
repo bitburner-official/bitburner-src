@@ -8,7 +8,7 @@
 <b>Signature:</b>
 
 ```typescript
-export type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}` };
+type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}` };
 ```
 <b>References:</b> [CrimeType](./bitburner.crimetype.md)
 

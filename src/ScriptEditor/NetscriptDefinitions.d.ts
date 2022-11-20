@@ -922,18 +922,14 @@ export type SleeveTask =
   | SleeveSupportTask
   | SleeveSynchroTask;
 
-/**
- * Object representing a port. A port is a serialized queue.
- * @public
- */
+/** Object representing a port. A port is a serialized queue.
+ * @public */
 interface NetscriptPort {
-  /**
-   * Write data to a port.
+  /** Write data to a port.
    * @remarks
    * RAM cost: 0 GB
    *
-   * @returns The data popped off the queue if it was full.
-   */
+   * @returns The data popped off the queue if it was full. */
   write(value: string | number): PortData | null;
 
   /**
@@ -3548,10 +3544,11 @@ export interface sleeve {
    * @remarks
    * RAM cost: 4 GB
    *
-   * Return the current task that the sleeve is performing. type is set to “Idle” if the sleeve isn’t doing anything.
+   * Return the current task that the sleeve is performing, or null if the sleeve is idle. All tasks have a "type"
+   * property, and other available properties depend on the type of task.
    *
    * @param sleeveNumber - Index of the sleeve to retrieve task from.
-   * @returns Object containing information the current task that the sleeve is performing.
+   * @returns Object containing information for the current task that the sleeve is performing.
    */
   getTask(sleeveNumber: number): SleeveTask | null;
 

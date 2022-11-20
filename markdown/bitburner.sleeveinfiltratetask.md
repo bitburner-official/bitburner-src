@@ -8,5 +8,5 @@
 <b>Signature:</b>
 
 ```typescript
-export type SleeveInfiltrateTask = { type: "INFILTRATE" };
+type SleeveInfiltrateTask = { type: "INFILTRATE" };
 ```

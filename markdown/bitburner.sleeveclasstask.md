@@ -8,7 +8,7 @@
 <b>Signature:</b>
 
 ```typescript
-export type SleeveClassTask = {
+type SleeveClassTask = {
   type: "CLASS";
   classType: UniversityClassType | GymType | `${UniversityClassType}` | `${GymType}`;
   location: LocationName | `${LocationName}`;

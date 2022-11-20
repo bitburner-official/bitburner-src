@@ -8,5 +8,5 @@
 <b>Signature:</b>
 
 ```typescript
-export type SleeveSynchroTask = { type: "SYNCHRO" };
+type SleeveSynchroTask = { type: "SYNCHRO" };
 ```

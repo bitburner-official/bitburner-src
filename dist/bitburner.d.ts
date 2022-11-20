@@ -2427,7 +2427,7 @@ export declare interface Infiltration {
      *
      * @returns all locations that can be infiltrated.
      */
-    getPossibleLocations(): PossibleInfiltrationLocation[];
+    getPossibleLocations(): ILocation[];
     /**
      * Get all infiltrations with difficulty, location and rewards.
      * @remarks
@@ -5384,12 +5384,6 @@ export declare enum PositionTypes {
     Short = "S",
 }
 
-/** @public */
-export declare interface PossibleInfiltrationLocation {
-    city: string;
-    name: string;
-}
-
 /**
  * A single process on a server.
  * @public
@@ -6538,12 +6532,13 @@ export declare interface sleeve {
      * @remarks
      * RAM cost: 4 GB
      *
-     * Return the current task that the sleeve is performing. type is set to “Idle” if the sleeve isn’t doing anything.
+     * Return the current task that the sleeve is performing, or null if the sleeve is idle. All tasks have a "type"
+     * property, and other available properties depend on the type of task.
      *
      * @param sleeveNumber - Index of the sleeve to retrieve task from.
-     * @returns Object containing information the current task that the sleeve is performing.
+     * @returns Object containing information for the current task that the sleeve is performing.
      */
-    getTask(sleeveNumber: number): SleeveTask;
+    getTask(sleeveNumber: number): SleeveTask | null;
 
     /**
      * Set a sleeve to shock recovery.
