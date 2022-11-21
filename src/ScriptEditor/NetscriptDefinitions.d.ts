@@ -4535,51 +4535,35 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * Arguments passed into a script can be accessed as a normal
-   * array by using the `[]` operator (`args[0]`, `args[1]`, etc...). If your
-   * script expects a certain number of arguments, you should provide that
-   * number of arguments. Any additional arguments provided will be ignored. For
-   * example, suppose your script expects 3 arguments. If you provide only 2
-   * arguments, then the value of the third argument will be undefined.
-   * Providing 4 arguments will result in the fourth argument being ignored. Use
-   * `args.length` to get the number of arguments that was passed into a script.
-   *
-   * WARNING: Do not try to modify the `args` array. This will break the game.
+   * Arguments passed into a script can be accessed as a normal array by using the `[]` operator
+   * (`args[0]`, `args[1]`, etc...).
+   * Arguments can be string, number, or boolean.
+   * Use `args.length` to get the number of arguments that were passed into a script.
    *
    * @example
-   * ```ts
-   * // NS1
-   * // Save the code below in a script named "argue.script".
-   * var name = args[0];
-   * var howLong = args[1];
-   * tprint("Hello, " + name + ".");
-   * tprint("Welcome to the Argument Clinic.");
-   * tprint("You will argue for " + howLong + " minute(s).");
-   * tprint("Expected 2 arguments.");
-   * tprint("Received " + args.length + " argument(s).");
+   * `run example.script 7 text true`
    *
-   * // From the Terminal, run the command below. The script expects 2 arguments,
-   * // but the command provides 3.
-   * run argue.script Bruce 5 30
+   * ```js
+   * // NS1 - example.script
+   * tprint(args.length) // 3
+   * tprint(args[0]); // 7 (number)
+   * tprint(args[1]); // "text" (string)
+   * tprint(args[2]); // true (boolean)
+   * tprint(args[3]); // undefined, because only 3 arguments were provided
    * ```
    *
    * @example
-   * ```ts
-   * // NS2
-   * // Save the code below in a script named "argue.js".
-   * export async function main(ns) {
-   *     const name = ns.args[0];
-   *     const howLong = ns.args[1];
-   *     ns.tprint(`Hello, ${name}.`);
-   *     ns.tprint("Welcome to the Argument Clinic.");
-   *     ns.tprint(`You will argue for ${howLong} minute(s).`);
-   *     ns.tprint("Expected 2 arguments.");
-   *     ns.tprint(`Received ${ns.args.length} argument(s).`);
-   * }
+   * `run example.js 7 text true`
    *
-   * // From the Terminal, run the command below. The script expects 2 arguments,
-   * // but the command provides 3.
-   * run argue.js Bruce 5 30
+   * ```js
+   * // NS2 - example.js
+   * export async function main(ns) {
+   *   ns.tprint(ns.args.length) // 3
+   *   ns.tprint(ns.args[0]); // 7 (number)
+   *   ns.tprint(ns.args[1]); // "text" (string)
+   *   ns.tprint(ns.args[2]); // true (boolean)
+   *   ns.tprint(ns.args[3]); // undefined, because only 3 arguments were provided
+   * }
    * ```
    */
   readonly args: (string | number | boolean)[];
