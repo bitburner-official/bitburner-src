@@ -5,7 +5,7 @@ Netscript Script Arguments
 
 Arguments passed into a script can be accessed in Netscript using a
 special array called ``args``. The arguments can be accessed using a
-normal array using the [] operator (args[0], args[1], etc...).
+normal array using the ``[]`` operator (``args[0]``, ``args[1]``, etc...).
 These arguments can be string, number, or boolean.
 
 For example, let's say we want to make a generic script
