@@ -41,7 +41,6 @@ import { TextFile, getTextFile, createTextFile } from "./TextFile";
 import { runScriptFromScript } from "./NetscriptWorker";
 import { killWorkerScript } from "./Netscript/killWorkerScript";
 import { workerScripts } from "./Netscript/WorkerScripts";
-import { WorkerScript } from "./Netscript/WorkerScript";
 import { helpers, assertObjectType } from "./Netscript/NetscriptHelpers";
 import { numeralWrapper } from "./ui/numeralFormat";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
@@ -72,7 +71,7 @@ import { Flags } from "./NetscriptFunctions/Flags";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
-import { ExternalAPI, InternalAPI, wrapAPI } from "./Netscript/APIWrapper";
+import { InternalAPI, wrapAPI } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
@@ -92,10 +91,6 @@ export const enums: NSEnums = {
 };
 
 export type NSFull = Readonly<NS & INetscriptExtra>;
-
-export function NetscriptFunctions(workerScript: WorkerScript): ExternalAPI<NSFull> {
-  return wrapAPI(workerScript, ns, workerScript.args.slice());
-}
 
 const base: InternalAPI<NS> = {
   args: [],
@@ -1912,6 +1907,7 @@ export const ns = {
   ...base,
   ...NetscriptExtra(),
 };
+export const NetscriptFunctions = wrapAPI(ns);
 
 const possibleLogs = Object.fromEntries([...getFunctionNames(ns, "")].map((a) => [a, true]));
 /** Provides an array of all function names on a nested object */
