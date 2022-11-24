@@ -134,7 +134,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     const singObjects = singFunctions.map(([key, val]) => {
       return {
         name: key,
-        fn: val,
+        fn: val.bind(ns),
         baseRam: grabCost(RamCosts.singularity, ["singularity", key]),
       };
     });
