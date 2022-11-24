@@ -83,6 +83,11 @@ export function wrapAPI(ns: InternalAPI<NSFull>) {
       (eLayer[key] as WrappedFn) = wrappedFunction;
     }
   }
+  Object.defineProperty(WrappedAPI.prototype, "constructor", {
+    value: function () {
+      throw new Error("Can't create a new ns object. Sorry.");
+    },
+  });
   Object.assign(WrappedAPI.prototype, WrappedAPI.wrapAPILayer({} as ExternalAPI<NSFull>, ns, []));
   return (ws: WorkerScript) => new WrappedAPI(ws) as unknown as ExternalAPI<NSFull>;
 }
