@@ -2,7 +2,6 @@ import { getRamCost } from "./RamCostGenerator";
 import type { WorkerScript } from "./WorkerScript";
 import { helpers } from "./NetscriptHelpers";
 import { ScriptArg } from "./ScriptArg";
-import { ns, NSFull } from "../NetscriptFunctions";
 import { cloneDeep } from "lodash";
 
 /** Generic type for an enums object */
