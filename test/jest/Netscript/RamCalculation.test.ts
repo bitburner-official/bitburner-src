@@ -62,6 +62,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     expectedRamCost: number,
     extraLayerCost = 0,
   ) {
+    fn = fn.bind(ns);
     const code = `${fnPath.join(".")}();\n`.repeat(3);
     const fnName = fnPath[fnPath.length - 1];
 
@@ -134,7 +135,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     const singObjects = singFunctions.map(([key, val]) => {
       return {
         name: key,
-        fn: val.bind(ns),
+        fn: val,
         baseRam: grabCost(RamCosts.singularity, ["singularity", key]),
       };
     });
