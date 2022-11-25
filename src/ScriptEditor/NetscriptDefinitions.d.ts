@@ -3155,11 +3155,42 @@ export interface CodingContract {
    *
    * Attempts to solve the Coding Contract with the provided solution.
    *
+   * @example
+   * ```ts
+   * // NS1
+   * // The result is a string, the default behavior. The code is the same as this:
+   * // var result = codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
+   * var result = codingcontract.attempt(yourSolution, filename, hostname);
+   *
+   * // The result is a boolean.
+   * var result = codingcontract.attempt(yourSolution, filename, hostname, { returnReward: false });
+   * ```
+   * @example
+   * ```ts
+   * // NS2
+   * // The result is a string, the default behavior. The code is the same as this:
+   * // const result = ns.codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
+   * const result = codingcontract.attempt(yourSolution, filename, hostname);
+   *
+   * // The result is a boolean.
+   * const result = ns.codingcontract.attempt(yourSolution, filename, hostname, { returnReward: false });
+   * ```
+   *
    * @param answer - Solution for the contract.
    * @param filename - Filename of the contract.
-   * @param host - Hostname of the server containing the contract. Optional. Defaults to current server if not provided.
-   * @param opts - Optional parameters for configuring function behavior.
-   * @returns True if the solution was correct, false otherwise. If the returnReward option is configured, then the function will instead return a string. If the contract is successfully solved, the string will contain a description of the contract’s reward. Otherwise, it will be an empty string.
+   * @param host - Hostname of the server containing the contract. Optional. Defaults to
+   *     current server if not provided.
+   * @param opts - Optional parameters for configuring function behavior. Pass in an
+   *     object following the key/value format of
+   *     {@link CodingAttemptOptions | CodingAttemptOptions}. Default is
+   *     `{ returnReward: true }`. If this parameter is used, then you must also provide
+   *     a hostname for `host`.
+   * @returns A string if the parameter `opts` is omitted or `{ returnReward: true }` is
+   *     passed in as the value for `opts`. If the contract is successfully solved, the
+   *     string will contain a description of the contract's reward. Otherwise, it will
+   *     be an empty string. Returns a boolean if `{ returnReward: false }` is passed in
+   *     as the value for `opts`. In this case, the function returns true if the solution
+   *     is correct and false otherwise.
    */
   attempt(
     answer: string | number | any[],
