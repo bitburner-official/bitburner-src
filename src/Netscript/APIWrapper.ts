@@ -74,7 +74,9 @@ export function wrapAPILayer<API>(
 ): ExternalAPI<API> {
   for (const [key, value] of Object.entries(iLayer) as [Key<API>, InternalValues][]) {
     if (key === "enums") {
-      (eLayer[key] as Enums) = cloneDeep(value as Enums);
+      const enumObj = Object.freeze(cloneDeep(value as Enums));
+      for (const member of Object.values(enumObj)) Object.freeze(member);
+      (eLayer[key] as Enums) = enumObj;
     } else if (key === "args") continue;
     // Args only added on individual instances.
     else if (typeof value === "function") {

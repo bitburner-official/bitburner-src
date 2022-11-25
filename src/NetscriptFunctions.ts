@@ -1910,16 +1910,6 @@ export const ns = {
 };
 
 const wrappedNS = wrapAPILayer({} as ExternalAPI<NSFull>, ns, []);
-function freezeEnums(obj: object, isEnums = false) {
-  if (isEnums) Object.freeze(obj);
-  for (const [k, v] of Object.entries(obj)) {
-    if (isEnums) Object.freeze(v);
-    else if (typeof obj === "object") {
-      freezeEnums(v, k === "enums");
-    }
-  }
-}
-freezeEnums(wrappedNS);
 
 export function NetscriptFunctions(ws: WorkerScript): ExternalAPI<NSFull> {
   const instance = new StampedLayer(ws, wrappedNS) as any;
@@ -1932,7 +1922,7 @@ function stampLayers(ws: WorkerScript, stamped: any, unstamped: any) {
   for (const [k, v] of Object.entries(unstamped)) {
     if (typeof v === "object" && k !== "enums") {
       stamped[k] = new StampedLayer(ws, v);
-      stampLayers(ws, stamped[k], unstamped[k]);
+      stampLayers(ws, stamped[k], v);
     }
   }
 }
