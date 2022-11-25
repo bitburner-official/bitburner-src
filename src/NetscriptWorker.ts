@@ -88,7 +88,7 @@ async function startNetscript1Script(workerScript: WorkerScript): Promise<void> 
           try {
             // Sent a resolver function as an extra arg. See createAsyncFunction JSInterpreter.js:3209
             const callback = args.pop() as (value: unknown) => void;
-            const result = await entry(...args.map((arg) => int.pseudoToNative(arg)));
+            const result = await entry.bind(workerScript.env.vars)(...args.map((arg) => int.pseudoToNative(arg)));
             return callback(int.nativeToPseudo(result));
           } catch (e: unknown) {
             errorToThrow = e;

@@ -72,7 +72,7 @@ import { Flags } from "./NetscriptFunctions/Flags";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
-import { ExternalAPI, InternalAPI, wrapAPI } from "./Netscript/APIWrapper";
+import { ExternalAPI, InternalAPI, StampedLayer, wrapAPILayer } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
@@ -92,10 +92,6 @@ export const enums: NSEnums = {
 };
 
 export type NSFull = Readonly<NS & INetscriptExtra>;
-
-export function NetscriptFunctions(workerScript: WorkerScript): ExternalAPI<NSFull> {
-  return wrapAPI(workerScript, ns, workerScript.args.slice());
-}
 
 const base: InternalAPI<NS> = {
   args: [],
@@ -1912,6 +1908,34 @@ export const ns = {
   ...base,
   ...NetscriptExtra(),
 };
+
+const wrappedNS = wrapAPILayer({} as ExternalAPI<NSFull>, ns, []);
+function freezeEnums(obj: object, isEnums = false) {
+  if (isEnums) Object.freeze(obj);
+  for (const [k, v] of Object.entries(obj)) {
+    if (isEnums) Object.freeze(v);
+    else if (typeof obj === "object") {
+      freezeEnums(v, k === "enums");
+    }
+  }
+}
+freezeEnums(wrappedNS);
+
+export function NetscriptFunctions(ws: WorkerScript): ExternalAPI<NSFull> {
+  const instance = new StampedLayer(ws, wrappedNS) as any;
+  instance.args = ws.args.slice();
+  stampLayers(ws, instance, wrappedNS);
+  return instance;
+}
+
+function stampLayers(ws: WorkerScript, stamped: any, unstamped: any) {
+  for (const [k, v] of Object.entries(unstamped)) {
+    if (typeof v === "object" && k !== "enums") {
+      stamped[k] = new StampedLayer(ws, v);
+      stampLayers(ws, stamped[k], unstamped[k]);
+    }
+  }
+}
 
 const possibleLogs = Object.fromEntries([...getFunctionNames(ns, "")].map((a) => [a, true]));
 /** Provides an array of all function names on a nested object */
