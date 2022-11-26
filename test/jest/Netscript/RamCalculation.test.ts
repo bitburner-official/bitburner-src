@@ -1,5 +1,5 @@
 import { Player } from "../../../src/Player";
-import { NetscriptFunctions } from "../../../src/NetscriptFunctions";
+import { NetscriptFunctions, wrappedNS } from "../../../src/NetscriptFunctions";
 import { RamCosts, getRamCost, RamCostConstants } from "../../../src/Netscript/RamCostGenerator";
 import { Environment } from "../../../src/Netscript/Environment";
 import { RunningScript } from "../../../src/Script/RunningScript";
@@ -62,7 +62,6 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     expectedRamCost: number,
     extraLayerCost = 0,
   ) {
-    fn = fn.bind(ns);
     const code = `${fnPath.join(".")}();\n`.repeat(3);
     const fnName = fnPath[fnPath.length - 1];
 
@@ -100,11 +99,11 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
   }
 
   describe("ns", () => {
-    Object.entries(ns as unknown as NSLayer).forEach(([key, val]) => {
+    Object.entries(wrappedNS as unknown as NSLayer).forEach(([key, val]) => {
       if (key === "args" || key === "enums") return;
       if (typeof val === "function") {
         const expectedRam = grabCost(RamCosts, [key]);
-        it(`${key}()`, () => combinedRamCheck(val, [key], expectedRam));
+        it(`${key}()`, () => combinedRamCheck(val.bind(ns), [key], expectedRam));
       }
       //The only other option should be an NSLayer
       const extraLayerCost = { corporation: 1022.4, hacknet: 4 }[key] ?? 0;
@@ -113,13 +112,15 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
   });
 
   function testLayer(nsLayer: NSLayer, ramLayer: RamLayer, path: string[], extraLayerCost: number) {
+    // nsLayer is the layer on the main, unstamped wrappedNS object. The actualLayer is needed to check correct stamping.
+    const actualLayer = path.reduce((prev, curr) => prev[curr], ns as any); //todo: do this typesafely?
     describe(path[path.length - 1], () => {
       Object.entries(nsLayer).forEach(([key, val]) => {
         const newPath = [...path, key];
         if (typeof val === "function") {
           const fnName = newPath.join(".");
           const expectedRam = grabCost(ramLayer, newPath);
-          it(`${fnName}()`, () => combinedRamCheck(val, newPath, expectedRam, extraLayerCost));
+          it(`${fnName}()`, () => combinedRamCheck(val.bind(actualLayer), newPath, expectedRam, extraLayerCost));
         }
         //Skip enums layers
         else if (key === "enums") return;
@@ -131,11 +132,11 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
 
   describe("Singularity multiplier checks", () => {
     sf4.lvl = 3;
-    const singFunctions = Object.entries(ns.singularity).filter(([__, val]) => typeof val === "function");
+    const singFunctions = Object.entries(wrappedNS.singularity).filter(([__, val]) => typeof val === "function");
     const singObjects = singFunctions.map(([key, val]) => {
       return {
         name: key,
-        fn: val,
+        fn: val.bind(ns.singularity),
         baseRam: grabCost(RamCosts.singularity, ["singularity", key]),
       };
     });

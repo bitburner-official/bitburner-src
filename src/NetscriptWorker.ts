@@ -11,7 +11,7 @@ import { generateNextPid } from "./Netscript/Pid";
 
 import { CONSTANTS } from "./Constants";
 import { Interpreter } from "./ThirdParty/JSInterpreter";
-import { NetscriptFunctions } from "./NetscriptFunctions";
+import { NetscriptFunctions, wrappedNS } from "./NetscriptFunctions";
 import { compile, Node } from "./NetscriptJSEvaluator";
 import { IPort } from "./NetscriptPort";
 import { RunningScript } from "./Script/RunningScript";
@@ -81,7 +81,7 @@ async function startNetscript1Script(workerScript: WorkerScript): Promise<void> 
 
   //TODO: Make NS1 wrapping type safe instead of using BasicObject
   type BasicObject = Record<string, any>;
-  function wrapNS1Layer(int: Interpreter, intLayer: unknown, nsLayer = workerScript.env.vars as BasicObject) {
+  function wrapNS1Layer(int: Interpreter, intLayer: unknown, nsLayer = wrappedNS as BasicObject) {
     for (const [name, entry] of Object.entries(nsLayer)) {
       if (typeof entry === "function") {
         const wrapper = async (...args: unknown[]) => {

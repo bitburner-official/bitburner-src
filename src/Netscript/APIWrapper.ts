@@ -38,9 +38,9 @@ type InternalValues = Enums | ScriptArg[] | InternalFn<APIFn> | InternalAPI<unkn
 
 export class StampedLayer {
   #workerScript: WorkerScript;
-  constructor(ws: WorkerScript, obj: any) {
+  constructor(ws: WorkerScript, obj: ExternalAPI<unknown>) {
     this.#workerScript = ws;
-    Object.assign(this, obj);
+    Object.setPrototypeOf(this, obj);
   }
   static wrapFunction<API>(eLayer: ExternalAPI<API>, func: InternalFn<APIFn>, tree: string[], key: Key<API>) {
     const arrayPath = [...tree, key];
@@ -90,4 +90,3 @@ export function wrapAPILayer<API>(
   }
   return eLayer;
 }
-// single wrapped version of NS.

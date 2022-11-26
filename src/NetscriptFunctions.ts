@@ -1909,22 +1909,32 @@ export const ns = {
   ...NetscriptExtra(),
 };
 
-const wrappedNS = wrapAPILayer({} as ExternalAPI<NSFull>, ns, []);
+export const wrappedNS = wrapAPILayer({} as ExternalAPI<NSFull>, ns, []);
 
-export function NetscriptFunctions(ws: WorkerScript): ExternalAPI<NSFull> {
-  const instance = new StampedLayer(ws, wrappedNS) as any;
-  instance.args = ws.args.slice();
-  stampLayers(ws, instance, wrappedNS);
-  return instance;
-}
-
-function stampLayers(ws: WorkerScript, stamped: any, unstamped: any) {
-  for (const [k, v] of Object.entries(unstamped)) {
+// Figure out once which layers of ns have functions on them and will need to be stamped with a private workerscript field for API access
+const layerLocations: string[][] = [];
+function populateLayers(nsLayer: ExternalAPI<unknown>, currentLayers: string[] = []) {
+  for (const [k, v] of Object.entries(nsLayer)) {
     if (typeof v === "object" && k !== "enums") {
-      stamped[k] = new StampedLayer(ws, v);
-      stampLayers(ws, stamped[k], v);
+      if (Object.values(v as object).some((member) => typeof member === "function"))
+        layerLocations.push([...currentLayers, k]);
+      populateLayers(v as ExternalAPI<unknown>, [...currentLayers, k]);
     }
   }
+}
+populateLayers(wrappedNS);
+
+export function NetscriptFunctions(ws: WorkerScript): ExternalAPI<NSFull> {
+  //todo: better typing instead of relying on an any
+  const instance = new StampedLayer(ws, wrappedNS) as any;
+  for (const layerLocation of layerLocations) {
+    const key = layerLocation.pop() as string;
+    const obj = layerLocation.reduce((prev, curr) => prev[curr], instance);
+    layerLocation.push(key);
+    obj[key] = new StampedLayer(ws, obj[key]);
+  }
+  instance.args = ws.args.slice();
+  return instance;
 }
 
 const possibleLogs = Object.fromEntries([...getFunctionNames(ns, "")].map((a) => [a, true]));
