@@ -16,7 +16,7 @@ export interface CodingContract
 
 |  Method | Description |
 |  --- | --- |
-|  [attempt(answer, filename, host, opts)](./bitburner.codingcontract.attempt.md) | Attempts a coding contract. |
+|  [attempt(answer, filename, host, returnReward)](./bitburner.codingcontract.attempt.md) | Attempts a coding contract. |
 |  [createDummyContract(type)](./bitburner.codingcontract.createdummycontract.md) | Generate a dummy contract. |
 |  [getContractType(filename, host)](./bitburner.codingcontract.getcontracttype.md) | Get the type of a coding contract. |
 |  [getContractTypes()](./bitburner.codingcontract.getcontracttypes.md) | List all contract types. |

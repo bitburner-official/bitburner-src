@@ -13,7 +13,7 @@ attempt(
     answer: string | number | any[],
     filename: string,
     host?: string,
-    opts?: CodingAttemptOptions,
+    returnReward: boolean,
   ): boolean | string;
 ```
 
@@ -21,20 +21,38 @@ attempt(
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  answer | string \| number \| any\[\] | Solution for the contract. |
+|  answer | string \| number \| any\[\] | Attempted solution for the contract. |
 |  filename | string | Filename of the contract. |
 |  host | string | Hostname of the server containing the contract. Optional. Defaults to current server if not provided. |
-|  opts | [CodingAttemptOptions](./bitburner.codingattemptoptions.md) | Optional parameters for configuring function behavior. |
+|  returnReward | boolean | Optional boolean, default value is false. If true, return value of function will be a reward description string instead of a boolean. |
 
 <b>Returns:</b>
 
 boolean \| string
 
-True if the solution was correct, false otherwise. If the returnReward option is configured, then the function will instead return a string. If the contract is successfully solved, the string will contain a description of the contract’s reward. Otherwise, it will be an empty string.
+Normally, returns a boolean for whether the contract was successfully solved. If returnReward parameter is true, the return value is instead a reward description string on success, or an empty string on failure.
 
 ## Remarks
 
 RAM cost: 10 GB
 
 Attempts to solve the Coding Contract with the provided solution.
+
+## Example 1
+
+
+```js
+// NS1
+var booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
+var stringResult = codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
+```
+
+## Example 2
+
+
+```js
+// NS2
+const booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
+const stringResult = ns.codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
+```
 

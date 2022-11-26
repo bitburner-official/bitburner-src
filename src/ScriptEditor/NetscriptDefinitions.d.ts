@@ -251,15 +251,6 @@ interface BasicHGWOptions {
 }
 
 /**
- * Options to affect the behavior of {@link CodingContract} attempt.
- * @public
- */
-interface CodingAttemptOptions {
-  /** If truthy, then the function will return a string that states the contract’s reward when it is successfully solved. */
-  returnReward: boolean;
-}
-
-/**
  * Return value of {@link Sleeve.getSleevePurchasableAugs | getSleevePurchasableAugs}
  * @public
  */
@@ -3156,47 +3147,34 @@ export interface CodingContract {
    * Attempts to solve the Coding Contract with the provided solution.
    *
    * @example
-   * ```ts
+   * ```js
    * // NS1
-   * // The result is a string, the default behavior. The code is the same as this:
-   * // var result = codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
-   * var result = codingcontract.attempt(yourSolution, filename, hostname);
-   *
-   * // The result is a boolean.
-   * var result = codingcontract.attempt(yourSolution, filename, hostname, { returnReward: false });
+   * var booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
+   * var stringResult = codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
    * ```
    * @example
-   * ```ts
+   * ```js
    * // NS2
-   * // The result is a string, the default behavior. The code is the same as this:
-   * // const result = ns.codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
-   * const result = codingcontract.attempt(yourSolution, filename, hostname);
-   *
-   * // The result is a boolean.
-   * const result = ns.codingcontract.attempt(yourSolution, filename, hostname, { returnReward: false });
+   * const booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
+   * const stringResult = ns.codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
    * ```
    *
-   * @param answer - Solution for the contract.
+   * @param answer - Attempted solution for the contract.
    * @param filename - Filename of the contract.
    * @param host - Hostname of the server containing the contract. Optional. Defaults to
-   *     current server if not provided.
-   * @param opts - Optional parameters for configuring function behavior. Pass in an
-   *     object following the key/value format of
-   *     {@link CodingAttemptOptions | CodingAttemptOptions}. Default is
-   *     `{ returnReward: true }`. If this parameter is used, then you must also provide
-   *     a hostname for `host`.
-   * @returns A string if the parameter `opts` is omitted or `{ returnReward: true }` is
-   *     passed in as the value for `opts`. If the contract is successfully solved, the
-   *     string will contain a description of the contract's reward. Otherwise, it will
-   *     be an empty string. Returns a boolean if `{ returnReward: false }` is passed in
-   *     as the value for `opts`. In this case, the function returns true if the solution
-   *     is correct and false otherwise.
+   *   current server if not provided.
+   * @param returnReward - Optional boolean, default value is false. If true, return value of function will be a
+   *   reward description string instead of a boolean.
+   *
+   * @returns Normally, returns a boolean for whether the contract was successfully solved. If returnReward
+   *   parameter is true, the return value is instead a reward description string on success, or an empty
+   *   string on failure.
    */
   attempt(
     answer: string | number | any[],
     filename: string,
     host?: string,
-    opts?: CodingAttemptOptions,
+    returnReward: boolean,
   ): boolean | string;
 
   /**

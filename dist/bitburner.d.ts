@@ -652,15 +652,6 @@ export declare interface BladeburnerCurAction {
 }
 
 /**
- * Options to affect the behavior of {@link CodingContract} attempt.
- * @public
- */
-export declare interface CodingAttemptOptions {
-    /** If truthy, then the function will return a string that states the contract’s reward when it is successfully solved. */
-    returnReward: boolean;
-}
-
-/**
  * Coding Contract API
  * @public
  */
@@ -672,17 +663,35 @@ export declare interface CodingContract {
      *
      * Attempts to solve the Coding Contract with the provided solution.
      *
-     * @param answer - Solution for the contract.
+     * @example
+     * ```js
+     * // NS1
+     * var booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
+     * var stringResult = codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
+     * ```
+     * @example
+     * ```js
+     * // NS2
+     * const booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
+     * const stringResult = ns.codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
+     * ```
+     *
+     * @param answer - Attempted solution for the contract.
      * @param filename - Filename of the contract.
-     * @param host - Hostname of the server containing the contract. Optional. Defaults to current server if not provided.
-     * @param opts - Optional parameters for configuring function behavior.
-     * @returns True if the solution was correct, false otherwise. If the returnReward option is configured, then the function will instead return a string. If the contract is successfully solved, the string will contain a description of the contract’s reward. Otherwise, it will be an empty string.
+     * @param host - Hostname of the server containing the contract. Optional. Defaults to
+     *   current server if not provided.
+     * @param returnReward - Optional boolean, default value is false. If true, return value of function will be a
+     *   reward description string instead of a boolean.
+     *
+     * @returns Normally, returns a boolean for whether the contract was successfully solved. If returnReward
+     *   parameter is true, the return value is instead a reward description string on success, or an empty
+     *   string on failure.
      */
     attempt(
     answer: string | number | any[],
     filename: string,
     host?: string,
-    opts?: CodingAttemptOptions,
+    returnReward: boolean,
     ): boolean | string;
 
     /**
