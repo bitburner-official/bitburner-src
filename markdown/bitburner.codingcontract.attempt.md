@@ -44,7 +44,7 @@ Attempts to solve the Coding Contract with the provided solution.
 ```js
 // NS1
 var booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
-var stringResult = codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
+var stringResult = codingcontract.attempt(yourSolution, filename, hostname, true);
 ```
 
 ## Example 2
@@ -53,6 +53,6 @@ var stringResult = codingcontract.attempt(yourSolution, filename, hostname, { re
 ```js
 // NS2
 const booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
-const stringResult = ns.codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
+const stringResult = ns.codingcontract.attempt(yourSolution, filename, hostname, true);
 ```
 

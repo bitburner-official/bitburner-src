@@ -3150,13 +3150,13 @@ export interface CodingContract {
    * ```js
    * // NS1
    * var booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
-   * var stringResult = codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
+   * var stringResult = codingcontract.attempt(yourSolution, filename, hostname, true);
    * ```
    * @example
    * ```js
    * // NS2
    * const booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
-   * const stringResult = ns.codingcontract.attempt(yourSolution, filename, hostname, { returnReward: true });
+   * const stringResult = ns.codingcontract.attempt(yourSolution, filename, hostname, true);
    * ```
    *
    * @param answer - Attempted solution for the contract.
