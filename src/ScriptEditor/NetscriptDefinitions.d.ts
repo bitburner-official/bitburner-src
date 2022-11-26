@@ -3170,12 +3170,7 @@ export interface CodingContract {
    *   parameter is true, the return value is instead a reward description string on success, or an empty
    *   string on failure.
    */
-  attempt(
-    answer: string | number | any[],
-    filename: string,
-    host?: string,
-    returnReward: boolean,
-  ): boolean | string;
+  attempt(answer: string | number | any[], filename: string, host?: string, returnReward: boolean): boolean | string;
 
   /**
    * Get the type of a coding contract.
