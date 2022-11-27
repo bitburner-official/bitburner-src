@@ -9,12 +9,7 @@ Attempts a coding contract.
 <b>Signature:</b>
 
 ```typescript
-attempt(
-    answer: string | number | any[],
-    filename: string,
-    host?: string,
-    returnReward: boolean,
-  ): boolean | string;
+attempt(answer: string | number | any[], filename: string, host?: string): string;
 ```
 
 ## Parameters
@@ -24,13 +19,12 @@ attempt(
 |  answer | string \| number \| any\[\] | Attempted solution for the contract. |
 |  filename | string | Filename of the contract. |
 |  host | string | Hostname of the server containing the contract. Optional. Defaults to current server if not provided. |
-|  returnReward | boolean | Optional boolean, default value is false. If true, return value of function will be a reward description string instead of a boolean. |
 
 <b>Returns:</b>
 
-boolean \| string
+string
 
-Normally, returns a boolean for whether the contract was successfully solved. If returnReward parameter is true, the return value is instead a reward description string on success, or an empty string on failure.
+If the attempt was successful, a reward description string. If the attempt failed, an empty string is returned instead.
 
 ## Remarks
 
@@ -43,8 +37,10 @@ Attempts to solve the Coding Contract with the provided solution.
 
 ```js
 // NS1
-var booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
-var stringResult = codingcontract.attempt(yourSolution, filename, hostname, true);
+var reward = codingcontract.attempt(yourSolution, filename, hostname);
+if (reward) {
+  tprint("Contract solved successfully! Reward: " + reward)
+} else tprint("Failed to solve contract.")
 ```
 
 ## Example 2
@@ -52,7 +48,9 @@ var stringResult = codingcontract.attempt(yourSolution, filename, hostname, true
 
 ```js
 // NS2
-const booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
-const stringResult = ns.codingcontract.attempt(yourSolution, filename, hostname, true);
+const reward = codingcontract.attempt(yourSolution, filename, hostname);
+if (reward) {
+  ns.tprint(`Contract solved successfully! Reward: ${reward}`)
+} else ns.tprint("Failed to solve contract.")
 ```
 

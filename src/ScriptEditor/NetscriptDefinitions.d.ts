@@ -3149,28 +3149,28 @@ export interface CodingContract {
    * @example
    * ```js
    * // NS1
-   * var booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
-   * var stringResult = codingcontract.attempt(yourSolution, filename, hostname, true);
+   * var reward = codingcontract.attempt(yourSolution, filename, hostname);
+   * if (reward) {
+   *   tprint("Contract solved successfully! Reward: " + reward)
+   * } else tprint("Failed to solve contract.")
    * ```
    * @example
    * ```js
    * // NS2
-   * const booleanResult = codingcontract.attempt(yourSolution, filename, hostname);
-   * const stringResult = ns.codingcontract.attempt(yourSolution, filename, hostname, true);
+   * const reward = codingcontract.attempt(yourSolution, filename, hostname);
+   * if (reward) {
+   *   ns.tprint(`Contract solved successfully! Reward: ${reward}`)
+   * } else ns.tprint("Failed to solve contract.")
    * ```
    *
    * @param answer - Attempted solution for the contract.
    * @param filename - Filename of the contract.
-   * @param host - Hostname of the server containing the contract. Optional. Defaults to
-   *   current server if not provided.
-   * @param returnReward - Optional boolean, default value is false. If true, return value of function will be a
-   *   reward description string instead of a boolean.
-   *
-   * @returns Normally, returns a boolean for whether the contract was successfully solved. If returnReward
-   *   parameter is true, the return value is instead a reward description string on success, or an empty
-   *   string on failure.
+   * @param host - Hostname of the server containing the contract. Optional. Defaults to current server if not
+   *   provided.
+   * @returns If the attempt was successful, a reward description string. If the attempt failed, an empty string is
+   *   returned instead.
    */
-  attempt(answer: string | number | any[], filename: string, host?: string, returnReward: boolean): boolean | string;
+  attempt(answer: string | number | any[], filename: string, host?: string): string;
 
   /**
    * Get the type of a coding contract.
