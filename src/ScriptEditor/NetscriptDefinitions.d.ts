@@ -1142,7 +1142,7 @@ export interface TIX {
    * // organization associated with the corresponding stock symbol
    * var sym = stock.getSymbols()[0];
    * tprint("Stock symbol: " + sym);
-   * tprint("Stock price: " + stock.getOrganization(sym));
+   * tprint("Stock organization: " + stock.getOrganization(sym));
    * ```
    * @example
    * ```ts
