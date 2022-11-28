@@ -3140,7 +3140,7 @@ export interface Bladeburner {
  */
 export interface CodingContract {
   /**
-   * Attempts a coding contract.
+   * Attempts a coding contract, returning a reward string on success or empty string on failure.
    * @remarks
    * RAM cost: 10 GB
    *
@@ -3167,8 +3167,7 @@ export interface CodingContract {
    * @param filename - Filename of the contract.
    * @param host - Hostname of the server containing the contract. Optional. Defaults to current server if not
    *   provided.
-   * @returns If the attempt was successful, a reward description string. If the attempt failed, an empty string is
-   *   returned instead.
+   * @returns A reward description string on success, or an empty string on failure.
    */
   attempt(answer: string | number | any[], filename: string, host?: string): string;
 

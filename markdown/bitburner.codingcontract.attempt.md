@@ -4,7 +4,7 @@
 
 ## CodingContract.attempt() method
 
-Attempts a coding contract.
+Attempts a coding contract, returning a reward string on success or empty string on failure.
 
 <b>Signature:</b>
 
@@ -24,7 +24,7 @@ attempt(answer: string | number | any[], filename: string, host?: string): strin
 
 string
 
-If the attempt was successful, a reward description string. If the attempt failed, an empty string is returned instead.
+A reward description string on success, or an empty string on failure.
 
 ## Remarks
 
