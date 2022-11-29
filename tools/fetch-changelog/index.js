@@ -2,8 +2,8 @@
 import { Octokit } from "@octokit/rest";
 import commandLineArgs from "command-line-args";
 
-const owner = "danielyxie";
-const repo = "bitburner";
+const owner = "bitburner-official";
+const repo = "bitburner-src";
 
 const cliArgs = commandLineArgs([
   { name: "from", alias: "f", type: String },
