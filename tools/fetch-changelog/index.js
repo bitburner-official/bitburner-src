@@ -238,6 +238,11 @@ const sleep = async (wait) => {
   });
 };
 
+const token = process.env.GITHUB_API_TOKEN;
+if (!token) {
+  console.log("You need to set the env var GITHUB_API_TOKEN.");
+  process.exit(1);
+}
 const api = new MergeChangelog({ auth: process.env.GITHUB_API_TOKEN });
 if (!cliArgs.from) {
   console.error("USAGE: node index.js --from hash [--to hash]");
