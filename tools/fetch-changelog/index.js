@@ -7,7 +7,7 @@ const repo = "bitburner-src";
 
 const cliArgs = commandLineArgs([
   { name: "from", alias: "f", type: String },
-  { name: "to", alias: "t", type: String },
+  { name: "to", alias: "t", type: String, defaultValue: undefined },
 ]);
 
 class MergeChangelog {
@@ -81,12 +81,16 @@ class MergeChangelog {
           repo,
           pull_number: entry.number,
         })
-        .then((response) => ({
-          ...entry,
-          merge_commit_sha: response.data.merge_commit_sha,
-          head_commit_sha: response.data.head.sha,
-        }));
-      pulls.push(r);
+        .then((response) =>
+          pulls.push({
+            ...entry,
+            merge_commit_sha: response.data.merge_commit_sha,
+            head_commit_sha: response.data.head.sha,
+          }),
+        )
+        .catch((e) => {
+          console.warn(`Encountered error retrieving pull: ${e}`);
+        });
       await sleep(1000);
     }
     return pulls;
@@ -235,10 +239,11 @@ const sleep = async (wait) => {
 };
 
 const api = new MergeChangelog({ auth: process.env.GITHUB_API_TOKEN });
-if (!cliArgs.from || !cliArgs.to) {
-  console.error("USAGE: node index.js --from hash --to hash");
+if (!cliArgs.from) {
+  console.error("USAGE: node index.js --from hash [--to hash]");
   process.exit();
 }
+cliArgs.to ??= await api.getLastCommitByBranch("dev");
 api.getChangelog(cliArgs.from, cliArgs.to).then((data) => {
   console.log(data.log);
 });
