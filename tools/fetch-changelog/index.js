@@ -75,7 +75,7 @@ class MergeChangelog {
 
     const pulls = [];
     for (const entry of searchResults) {
-      const r = await this.octokit.rest.pulls
+      await this.octokit.rest.pulls
         .get({
           owner,
           repo,
