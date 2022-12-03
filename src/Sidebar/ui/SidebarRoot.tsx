@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { KEY } from "../../utils/helpers/keyCodes";
 import clsx from "clsx";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
@@ -10,7 +10,6 @@ import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
@@ -58,6 +57,7 @@ import { ProgramsSeen } from "../../Programs/ui/ProgramsRoot";
 import { InvitationsSeen } from "../../Faction/ui/FactionsRoot";
 import { hash } from "../../hash/hash";
 import { Locations } from "../../Locations/Locations";
+import { ListItemButton } from "@mui/material";
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: theme.spacing(31),
@@ -125,42 +125,59 @@ export function SidebarRoot(props: IProps): React.ReactElement {
   const [worldOpen, setWorldOpen] = useState(true);
   const [helpOpen, setHelpOpen] = useState(true);
 
-  const flashTerminal =
-    ITutorial.currStep === iTutorialSteps.CharacterGoToTerminalPage ||
-    ITutorial.currStep === iTutorialSteps.ActiveScriptsPage;
+  const flashTerminal = useMemo(
+    () =>
+      ITutorial.currStep === iTutorialSteps.CharacterGoToTerminalPage ||
+      ITutorial.currStep === iTutorialSteps.ActiveScriptsPage,
+    [ITutorial.currStep],
+  );
 
-  const flashStats = ITutorial.currStep === iTutorialSteps.GoToCharacterPage;
+  const flashStats = useMemo(() => ITutorial.currStep === iTutorialSteps.GoToCharacterPage, [ITutorial.currStep]);
 
-  const flashActiveScripts = ITutorial.currStep === iTutorialSteps.TerminalGoToActiveScriptsPage;
+  const flashActiveScripts = useMemo(
+    () => ITutorial.currStep === iTutorialSteps.TerminalGoToActiveScriptsPage,
+    [ITutorial.currStep],
+  );
 
-  const flashHacknet = ITutorial.currStep === iTutorialSteps.GoToHacknetNodesPage;
+  const flashHacknet = useMemo(() => ITutorial.currStep === iTutorialSteps.GoToHacknetNodesPage, [ITutorial.currStep]);
 
-  const flashCity = ITutorial.currStep === iTutorialSteps.HacknetNodesGoToWorldPage;
+  const flashCity = useMemo(
+    () => ITutorial.currStep === iTutorialSteps.HacknetNodesGoToWorldPage,
+    [ITutorial.currStep],
+  );
 
-  const flashTutorial = ITutorial.currStep === iTutorialSteps.WorldDescription;
+  const flashTutorial = useMemo(() => ITutorial.currStep === iTutorialSteps.WorldDescription, [ITutorial.currStep]);
 
   const augmentationCount = Player.queuedAugmentations.length;
   const invitationsCount = Player.factionInvitations.filter((f) => !InvitationsSeen.includes(f)).length;
   const programCount = getAvailableCreatePrograms().length - ProgramsSeen.length;
 
-  const canOpenFactions =
-    Player.factionInvitations.length > 0 ||
-    Player.factions.length > 0 ||
-    Player.augmentations.length > 0 ||
-    Player.queuedAugmentations.length > 0 ||
-    Player.sourceFiles.length > 0;
+  const canOpenFactions = useMemo(
+    () =>
+      Player.factionInvitations.length > 0 ||
+      Player.factions.length > 0 ||
+      Player.augmentations.length > 0 ||
+      Player.queuedAugmentations.length > 0 ||
+      Player.sourceFiles.length > 0,
+    [Player.factionInvitations, Player.factions, Player.augmentations, Player.queuedAugmentations, Player.sourceFiles],
+  );
 
-  const canOpenAugmentations =
-    Player.augmentations.length > 0 || Player.queuedAugmentations.length > 0 || Player.sourceFiles.length > 0;
+  const canOpenAugmentations = useMemo(
+    () => Player.augmentations.length > 0 || Player.queuedAugmentations.length > 0 || Player.sourceFiles.length > 0,
+    [Player.augmentations, Player.queuedAugmentations, Player.sourceFiles],
+  );
 
-  const canOpenSleeves = Player.sleeves.length > 0;
+  const canOpenSleeves = useMemo(() => Player.sleeves.length > 0, [Player.sleeves]);
 
-  const canCorporation = !!Player.corporation;
-  const canGang = !!Player.gang;
-  const canJob = Object.values(Player.jobs).length > 0;
-  const canStockMarket = Player.hasWseAccount;
-  const canBladeburner = !!Player.bladeburner;
-  const canStaneksGift = Player.augmentations.some((aug) => aug.name === AugmentationNames.StaneksGift1);
+  const canCorporation = useMemo(() => !!Player.corporation, [Player.corporation]);
+  const canGang = useMemo(() => !!Player.gang, [Player.gang]);
+  const canJob = useMemo(() => Object.values(Player.jobs).length > 0, [Player.jobs]);
+  const canStockMarket = useMemo(() => Player.hasWseAccount, [Player.hasWseAccount]);
+  const canBladeburner = useMemo(() => !!Player.bladeburner, [Player.bladeburner]);
+  const canStaneksGift = useMemo(
+    () => Player.augmentations.some((aug) => aug.name === AugmentationNames.StaneksGift1),
+    [Player.augmentations],
+  );
 
   function clickTerminal(): void {
     Router.toTerminal();
@@ -341,7 +358,7 @@ export function SidebarRoot(props: IProps): React.ReactElement {
 
   return (
     <Drawer open={open} anchor="left" variant="permanent">
-      <ListItem classes={{ root: classes.listitem }} button onClick={toggleDrawer}>
+      <ListItemButton classes={{ root: classes.listitem }} onClick={toggleDrawer}>
         <ListItemIcon>
           {!open ? <ChevronRightIcon color="primary" /> : <ChevronLeftIcon color="primary" />}
         </ListItemIcon>
@@ -352,10 +369,10 @@ export function SidebarRoot(props: IProps): React.ReactElement {
             </Tooltip>
           }
         />
-      </ListItem>
+      </ListItemButton>
       <Divider />
       <List>
-        <ListItem classes={{ root: classes.listitem }} button onClick={() => setHackingOpen((old) => !old)}>
+        <ListItemButton classes={{ root: classes.listitem }} onClick={() => setHackingOpen((old) => !old)}>
           <ListItemIcon>
             <Tooltip title={!open ? "Hacking" : ""}>
               <ComputerIcon color="primary" />
@@ -363,12 +380,11 @@ export function SidebarRoot(props: IProps): React.ReactElement {
           </ListItemIcon>
           <ListItemText primary={<Typography>Hacking</Typography>} />
           {hackingOpen ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
-        </ListItem>
+        </ListItemButton>
         <Collapse in={hackingOpen} timeout="auto" unmountOnExit>
           <List>
-            <ListItem
+            <ListItemButton
               classes={{ root: classes.listitem }}
-              button
               key={"Terminal"}
               className={clsx({
                 [classes.active]: props.page === Page.Terminal,
@@ -387,10 +403,9 @@ export function SidebarRoot(props: IProps): React.ReactElement {
                   Terminal
                 </Typography>
               </ListItemText>
-            </ListItem>
-            <ListItem
+            </ListItemButton>
+            <ListItemButton
               classes={{ root: classes.listitem }}
-              button
               key={"Script Editor"}
               className={clsx({
                 [classes.active]: props.page === Page.ScriptEditor,
@@ -407,10 +422,9 @@ export function SidebarRoot(props: IProps): React.ReactElement {
                   Script Editor
                 </Typography>
               </ListItemText>
-            </ListItem>
-            <ListItem
+            </ListItemButton>
+            <ListItemButton
               classes={{ root: classes.listitem }}
-              button
               key={"Active Scripts"}
               className={clsx({
                 [classes.active]: props.page === Page.ActiveScripts,
@@ -431,9 +445,8 @@ export function SidebarRoot(props: IProps): React.ReactElement {
                   Active Scripts
                 </Typography>
               </ListItemText>
-            </ListItem>
-            <ListItem
-              button
+            </ListItemButton>
+            <ListItemButton
               key={"Create Program"}
               className={clsx({
                 [classes.active]: props.page === Page.CreateProgram,
@@ -452,10 +465,9 @@ export function SidebarRoot(props: IProps): React.ReactElement {
                   Create Program
                 </Typography>
               </ListItemText>
-            </ListItem>
+            </ListItemButton>
             {canStaneksGift && (
-              <ListItem
-                button
+              <ListItemButton
                 key={"Staneks Gift"}
                 className={clsx({
                   [classes.active]: props.page === Page.StaneksGift,
@@ -472,13 +484,13 @@ export function SidebarRoot(props: IProps): React.ReactElement {
                     Stanek's Gift
                   </Typography>
                 </ListItemText>
-              </ListItem>
+              </ListItemButton>
             )}
           </List>
         </Collapse>
 
         <Divider />
-        <ListItem classes={{ root: classes.listitem }} button onClick={() => setCharacterOpen((old) => !old)}>
+        <ListItemButton classes={{ root: classes.listitem }} onClick={() => setCharacterOpen((old) => !old)}>
           <ListItemIcon>
             <Tooltip title={!open ? "Character" : ""}>
               <AccountBoxIcon color="primary" />
@@ -486,10 +498,9 @@ export function SidebarRoot(props: IProps): React.ReactElement {
           </ListItemIcon>
           <ListItemText primary={<Typography>Character</Typography>} />
           {characterOpen ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
-        </ListItem>
+        </ListItemButton>
         <Collapse in={characterOpen} timeout="auto" unmountOnExit>
-          <ListItem
-            button
+          <ListItemButton
             key={"Stats"}
             className={clsx({
               [classes.active]: props.page === Page.Stats,
@@ -506,11 +517,10 @@ export function SidebarRoot(props: IProps): React.ReactElement {
                 Stats
               </Typography>
             </ListItemText>
-          </ListItem>
+          </ListItemButton>
           {canOpenFactions && (
-            <ListItem
+            <ListItemButton
               classes={{ root: classes.listitem }}
-              button
               key={"Factions"}
               className={clsx({
                 [classes.active]: [Page.Factions, Page.Faction].includes(props.page),
@@ -531,12 +541,11 @@ export function SidebarRoot(props: IProps): React.ReactElement {
                   Factions
                 </Typography>
               </ListItemText>
-            </ListItem>
+            </ListItemButton>
           )}
           {canOpenAugmentations && (
-            <ListItem
+            <ListItemButton
               classes={{ root: classes.listitem }}
-              button
               key={"Augmentations"}
               className={clsx({
                 [classes.active]: props.page === Page.Augmentations,
@@ -558,10 +567,9 @@ export function SidebarRoot(props: IProps): React.ReactElement {
                   Augmentations
                 </Typography>
               </ListItemText>
-            </ListItem>
+            </ListItemButton>
           )}
-          <ListItem
-            button
+          <ListItemButton
             key={"Hacknet"}
             className={clsx({
               [classes.active]: props.page === Page.Hacknet,
@@ -580,11 +588,10 @@ export function SidebarRoot(props: IProps): React.ReactElement {
                 Hacknet
               </Typography>
             </ListItemText>
-          </ListItem>
+          </ListItemButton>
           {canOpenSleeves && (
-            <ListItem
+            <ListItemButton
               classes={{ root: classes.listitem }}
-              button
               key={"Sleeves"}
               className={clsx({
                 [classes.active]: props.page === Page.Sleeves,
@@ -599,12 +606,12 @@ export function SidebarRoot(props: IProps): React.ReactElement {
               <ListItemText>
                 <Typography color={props.page !== Page.Sleeves ? "secondary" : "primary"}>Sleeves</Typography>
               </ListItemText>
-            </ListItem>
+            </ListItemButton>
           )}
         </Collapse>
 
         <Divider />
-        <ListItem classes={{ root: classes.listitem }} button onClick={() => setWorldOpen((old) => !old)}>
+        <ListItemButton classes={{ root: classes.listitem }} onClick={() => setWorldOpen((old) => !old)}>
           <ListItemIcon>
             <Tooltip title={!open ? "World" : ""}>
               <PublicIcon color="primary" />
@@ -612,10 +619,9 @@ export function SidebarRoot(props: IProps): React.ReactElement {
           </ListItemIcon>
           <ListItemText primary={<Typography>World</Typography>} />
           {worldOpen ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
-        </ListItem>
+        </ListItemButton>
         <Collapse in={worldOpen} timeout="auto" unmountOnExit>
-          <ListItem
-            button
+          <ListItemButton
             key={"City"}
             className={clsx({
               [classes.active]:
@@ -633,9 +639,8 @@ export function SidebarRoot(props: IProps): React.ReactElement {
                 City
               </Typography>
             </ListItemText>
-          </ListItem>
-          <ListItem
-            button
+          </ListItemButton>
+          <ListItemButton
             key={"Travel"}
             className={clsx({
               [classes.active]: props.page === Page.Travel,
@@ -650,11 +655,10 @@ export function SidebarRoot(props: IProps): React.ReactElement {
             <ListItemText>
               <Typography color={props.page !== Page.Travel ? "secondary" : "primary"}>Travel</Typography>
             </ListItemText>
-          </ListItem>
+          </ListItemButton>
           {canJob && (
-            <ListItem
+            <ListItemButton
               classes={{ root: classes.listitem }}
-              button
               key={"Job"}
               className={clsx({
                 [classes.active]: props.page === Page.Job,
@@ -669,12 +673,11 @@ export function SidebarRoot(props: IProps): React.ReactElement {
               <ListItemText>
                 <Typography color={props.page !== Page.Job ? "secondary" : "primary"}>Job</Typography>
               </ListItemText>
-            </ListItem>
+            </ListItemButton>
           )}
           {canStockMarket && (
-            <ListItem
+            <ListItemButton
               classes={{ root: classes.listitem }}
-              button
               key={"Stock Market"}
               className={clsx({
                 [classes.active]: props.page === Page.StockMarket,
@@ -689,12 +692,11 @@ export function SidebarRoot(props: IProps): React.ReactElement {
               <ListItemText>
                 <Typography color={props.page !== Page.StockMarket ? "secondary" : "primary"}>Stock Market</Typography>
               </ListItemText>
-            </ListItem>
+            </ListItemButton>
           )}
           {canBladeburner && (
-            <ListItem
+            <ListItemButton
               classes={{ root: classes.listitem }}
-              button
               key={"Bladeburner"}
               className={clsx({
                 [classes.active]: props.page === Page.Bladeburner,
@@ -709,12 +711,11 @@ export function SidebarRoot(props: IProps): React.ReactElement {
               <ListItemText>
                 <Typography color={props.page !== Page.Bladeburner ? "secondary" : "primary"}>Bladeburner</Typography>
               </ListItemText>
-            </ListItem>
+            </ListItemButton>
           )}
           {canCorporation && (
-            <ListItem
+            <ListItemButton
               classes={{ root: classes.listitem }}
-              button
               key={"Corp"}
               className={clsx({
                 [classes.active]: props.page === Page.Corporation,
@@ -729,12 +730,11 @@ export function SidebarRoot(props: IProps): React.ReactElement {
               <ListItemText>
                 <Typography color={props.page !== Page.Corporation ? "secondary" : "primary"}>Corp</Typography>
               </ListItemText>
-            </ListItem>
+            </ListItemButton>
           )}
           {canGang && (
-            <ListItem
+            <ListItemButton
               classes={{ root: classes.listitem }}
-              button
               key={"Gang"}
               className={clsx({
                 [classes.active]: props.page === Page.Gang,
@@ -749,12 +749,12 @@ export function SidebarRoot(props: IProps): React.ReactElement {
               <ListItemText>
                 <Typography color={props.page !== Page.Gang ? "secondary" : "primary"}>Gang</Typography>
               </ListItemText>
-            </ListItem>
+            </ListItemButton>
           )}
         </Collapse>
 
         <Divider />
-        <ListItem classes={{ root: classes.listitem }} button onClick={() => setHelpOpen((old) => !old)}>
+        <ListItemButton classes={{ root: classes.listitem }} onClick={() => setHelpOpen((old) => !old)}>
           <ListItemIcon>
             <Tooltip title={!open ? "Help" : ""}>
               <LiveHelpIcon color="primary" />
@@ -762,10 +762,9 @@ export function SidebarRoot(props: IProps): React.ReactElement {
           </ListItemIcon>
           <ListItemText primary={<Typography>Help</Typography>} />
           {helpOpen ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
-        </ListItem>
+        </ListItemButton>
         <Collapse in={helpOpen} timeout="auto" unmountOnExit>
-          <ListItem
-            button
+          <ListItemButton
             key={"Milestones"}
             className={clsx({
               [classes.active]: props.page === Page.Milestones,
@@ -780,9 +779,8 @@ export function SidebarRoot(props: IProps): React.ReactElement {
             <ListItemText>
               <Typography color={props.page !== Page.Milestones ? "secondary" : "primary"}>Milestones</Typography>
             </ListItemText>
-          </ListItem>
-          <ListItem
-            button
+          </ListItemButton>
+          <ListItemButton
             key={"Tutorial"}
             className={clsx({
               [classes.active]: props.page === Page.Tutorial,
@@ -799,9 +797,8 @@ export function SidebarRoot(props: IProps): React.ReactElement {
                 Tutorial
               </Typography>
             </ListItemText>
-          </ListItem>
-          <ListItem
-            button
+          </ListItemButton>
+          <ListItemButton
             key={"Achievements"}
             className={clsx({
               [classes.active]: props.page === Page.Achievements,
@@ -816,9 +813,8 @@ export function SidebarRoot(props: IProps): React.ReactElement {
             <ListItemText>
               <Typography color={props.page !== Page.Achievements ? "secondary" : "primary"}>Achievements</Typography>
             </ListItemText>
-          </ListItem>
-          <ListItem
-            button
+          </ListItemButton>
+          <ListItemButton
             key={"Options"}
             className={clsx({
               [classes.active]: props.page === Page.Options,
@@ -833,11 +829,10 @@ export function SidebarRoot(props: IProps): React.ReactElement {
             <ListItemText>
               <Typography color={props.page !== Page.Options ? "secondary" : "primary"}>Options</Typography>
             </ListItemText>
-          </ListItem>
+          </ListItemButton>
           {process.env.NODE_ENV === "development" && (
-            <ListItem
+            <ListItemButton
               classes={{ root: classes.listitem }}
-              button
               key={"Dev"}
               className={clsx({
                 [classes.active]: props.page === Page.DevMenu,
@@ -852,7 +847,7 @@ export function SidebarRoot(props: IProps): React.ReactElement {
               <ListItemText>
                 <Typography color={props.page !== Page.DevMenu ? "secondary" : "primary"}>Dev</Typography>
               </ListItemText>
-            </ListItem>
+            </ListItemButton>
           )}
         </Collapse>
       </List>
