@@ -23,9 +23,15 @@ export interface IProps extends ICreateProps {
 }
 
 export const SidebarItem = memo(function (props: IProps): React.ReactElement {
-  // Obnoxious, because we can't modify props at all.
-  const icon = Object.assign({}, props.icon);
-  icon.props = Object.assign({ color: props.flash ? "error" : !props.active ? "secondary" : "primary" }, icon.props);
+  // Use icon as a template. (We can't modify props)
+  const icon: React.ReactElement = {
+    type: props.icon.type,
+    key: props.icon.key,
+    props: {
+      color: props.flash ? "error" : !props.active ? "secondary" : "primary",
+      ...props.icon.props,
+    },
+  };
   return (
     <ListItem
       classes={{ root: props.classes.listitem }}
