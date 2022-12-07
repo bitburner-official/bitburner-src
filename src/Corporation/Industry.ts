@@ -328,6 +328,7 @@ export class Industry {
 
               buyAmt = Math.min(buyAmt, maxAmt);
               if (buyAmt > 0) {
+                mat.qlt = (mat.qlt * mat.qty + 0 * buyAmt) / (mat.qty + buyAmt);
                 mat.qty += buyAmt;
                 expenses += buyAmt * mat.bCost;
               }
@@ -401,6 +402,7 @@ export class Industry {
             for (const [matName, buyAmt] of Object.entries(smartBuy)) {
               const mat = warehouse.materials[matName];
               if (buyAmt === undefined) throw new Error(`Somehow smartbuy matname is undefined`);
+              mat.qlt = (mat.qlt * mat.qty + 0 * buyAmt) / (mat.qty + buyAmt);
               mat.qty += buyAmt;
               expenses += buyAmt * mat.bCost;
             }
@@ -471,6 +473,7 @@ export class Industry {
 
               // Make our materials if they are producable
               if (producableFrac > 0 && prod > 0) {
+                let avgQlt = 0;
                 for (const reqMatName of Object.keys(this.reqMats)) {
                   const reqMat = this.reqMats[reqMatName];
                   if (reqMat === undefined) continue;
@@ -479,13 +482,17 @@ export class Industry {
                   warehouse.materials[reqMatName].prd = 0;
                   warehouse.materials[reqMatName].prd -=
                     reqMatQtyNeeded / (CorporationConstants.SecsPerMarketCycle * marketCycles);
+                  avgQlt += warehouse.materials[reqMatName].qlt;
                 }
+                avgQlt /= Object.keys(this.reqMats).length;
                 for (let j = 0; j < this.prodMats.length; ++j) {
                   warehouse.materials[this.prodMats[j]].qty += prod * producableFrac;
-                  warehouse.materials[this.prodMats[j]].qlt =
+                  warehouse.materials[this.prodMats[j]].qlt = Math.min(
+                    avgQlt,
                     office.employeeProd[EmployeePositions.Engineer] / 90 +
-                    Math.pow(this.sciResearch.qty, this.sciFac) +
-                    Math.pow(warehouse.materials["AICores"].qty, this.aiFac) / 10e3;
+                      Math.pow(this.sciResearch.qty, this.sciFac) +
+                      Math.pow(warehouse.materials["AICores"].qty, this.aiFac) / 10e3,
+                  );
                 }
               } else {
                 for (const reqMatName of Object.keys(this.reqMats)) {
@@ -689,8 +696,14 @@ export class Industry {
                       }
                       expWarehouse.materials[matName].imp +=
                         amt / (CorporationConstants.SecsPerMarketCycle * marketCycles);
+
+                      //Pretty sure this can cause some issues if there are multiple sources importing same material to same warehouse
+                      //but this will do for now
+                      expWarehouse.materials[matName].qlt =
+                        (expWarehouse.materials[matName].qlt * expWarehouse.materials[matName].qty + amt * mat.qlt) /
+                        (expWarehouse.materials[matName].qty + amt);
+
                       expWarehouse.materials[matName].qty += amt;
-                      expWarehouse.materials[matName].qlt = mat.qlt;
                       mat.qty -= amt;
                       mat.totalExp += amt;
                       expIndustry.updateWarehouseSizeUsed(expWarehouse);
@@ -822,14 +835,22 @@ export class Industry {
 
             //Make our Products if they are producable
             if (producableFrac > 0 && prod > 0) {
+              let avgQlt = 0;
               for (const reqMatName of Object.keys(product.reqMats)) {
                 if (product.reqMats.hasOwnProperty(reqMatName)) {
                   const reqMatQtyNeeded = product.reqMats[reqMatName] * prod * producableFrac;
                   warehouse.materials[reqMatName].qty -= reqMatQtyNeeded;
                   warehouse.materials[reqMatName].prd -=
                     reqMatQtyNeeded / (CorporationConstants.SecsPerMarketCycle * marketCycles);
+                  avgQlt += warehouse.materials[reqMatName].qlt;
                 }
               }
+              avgQlt /= Object.keys(product.reqMats).length;
+              const tempEffRat = Math.min(product.qlt, avgQlt * Math.log10(product.qlt));
+              //Effective Rating
+              product.data[city][3] =
+                (product.data[city][3] * product.data[city][0] + tempEffRat * prod * producableFrac) /
+                (product.data[city][0] + prod * producableFrac);
               //Quantity
               product.data[city][0] += prod * producableFrac;
             }
@@ -856,7 +877,7 @@ export class Industry {
             const marketFactor = this.getMarketFactor(product); //Competition + demand
 
             // Calculate Sale Cost (sCost), which could be dynamically evaluated
-            const markupLimit = product.rat / product.mku;
+            const markupLimit = Math.max(product.data[city][3], 0.1) / product.mku;
             let sCost;
             if (product.marketTa2) {
               const prod = product.data[city][1];

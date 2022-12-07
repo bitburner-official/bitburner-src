@@ -144,6 +144,8 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
+                  Effective rating is calculated from product rating and the quality of materials used <br />
+                  Rating: {numeralWrapper.format(product.rat, nf)} <br /> <br />
                   Quality: {numeralWrapper.format(product.qlt, nf)} <br />
                   Performance: {numeralWrapper.format(product.per, nf)} <br />
                   Durability: {numeralWrapper.format(product.dur, nf)} <br />
@@ -157,7 +159,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
                 </Typography>
               }
             >
-              <Typography>Rating: {numeralWrapper.format(product.rat, nf)}</Typography>
+              <Typography>Effective rating: {numeralWrapper.format(product.data[city][3], nf)}</Typography>
             </Tooltip>
           </Box>
           <Box display="flex">

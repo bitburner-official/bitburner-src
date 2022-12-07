@@ -538,7 +538,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         FactionWorkRepGain: 0.5,
 
         CorporationSoftcap: 0.9,
-        
+
         InfiltrationMoney: 3,
         StaneksGiftPowerMultiplier: 2,
         StaneksGiftExtraSize: -6,
@@ -807,7 +807,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         CorporationSoftcap: 0.9,
 
         BladeburnerRank: 0.8,
-        
+
         GangSoftcap: 0.9,
         GangUniqueAugs: 0.25,
 
@@ -847,7 +847,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         CorporationSoftcap: 0.9,
 
         GangUniqueAugs: 0.75,
-        
+
         WorldDaemonDifficulty: 1.5,
       });
     }
@@ -928,7 +928,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         DefenseLevelMultiplier: 0.7,
         DexterityLevelMultiplier: 0.7,
         AgilityLevelMultiplier: 0.7,
-        
+
         PurchasedServerSoftcap: 1.6,
 
         ServerMaxMoney: 0.45,
