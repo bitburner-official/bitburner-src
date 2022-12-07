@@ -490,7 +490,7 @@ export class Industry {
                     office.employeeProd[EmployeePositions.Engineer] / 90 +
                     Math.pow(this.sciResearch.qty, this.sciFac) +
                     Math.pow(warehouse.materials["AICores"].qty, this.aiFac) / 10e3;
-                  warehouse.materials[this.prodMats[j]].qlt = Math.min(tempQlt, avgQlt * Math.log10(tempQlt));
+                  tempQlt = Math.min(tempQlt, avgQlt * Math.log10(tempQlt));
                   warehouse.materials[this.prodMats[j]].qlt =
                     (warehouse.materials[this.prodMats[j]].qlt * warehouse.materials[this.prodMats[j]].qty +
                       tempQlt * prod * producableFrac) /
