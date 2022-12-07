@@ -486,13 +486,17 @@ export class Industry {
                 }
                 avgQlt /= Object.keys(this.reqMats).length;
                 for (let j = 0; j < this.prodMats.length; ++j) {
-                  warehouse.materials[this.prodMats[j]].qty += prod * producableFrac;
-                  warehouse.materials[this.prodMats[j]].qlt = Math.min(
-                    avgQlt,
+                  let tempQlt =
                     office.employeeProd[EmployeePositions.Engineer] / 90 +
-                      Math.pow(this.sciResearch.qty, this.sciFac) +
-                      Math.pow(warehouse.materials["AICores"].qty, this.aiFac) / 10e3,
-                  );
+                    Math.pow(this.sciResearch.qty, this.sciFac) +
+                    Math.pow(warehouse.materials["AICores"].qty, this.aiFac) / 10e3;
+                  warehouse.materials[this.prodMats[j]].qlt = Math.min(tempQlt, avgQlt * Math.log10(tempQlt));
+                  warehouse.materials[this.prodMats[j]].qlt =
+                    (warehouse.materials[this.prodMats[j]].qlt * warehouse.materials[this.prodMats[j]].qty +
+                      tempQlt * prod * producableFrac) /
+                    (warehouse.materials[this.prodMats[j]].qty + prod * producableFrac);
+
+                  warehouse.materials[this.prodMats[j]].qty += prod * producableFrac;
                 }
               } else {
                 for (const reqMatName of Object.keys(this.reqMats)) {
