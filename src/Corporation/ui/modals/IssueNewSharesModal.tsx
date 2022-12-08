@@ -19,7 +19,7 @@ function EffectText(props: IEffectTextProps): React.ReactElement {
   if (props.shares === null) return <></>;
   const newSharePrice = Math.round(corp.sharePrice * 0.9);
   const maxNewSharesUnrounded = Math.round(corp.totalShares * 0.2);
-  const maxNewShares = maxNewSharesUnrounded - (maxNewSharesUnrounded % 1e6);
+  const maxNewShares = maxNewSharesUnrounded - (maxNewSharesUnrounded % 10e6);
   let newShares = props.shares;
   if (isNaN(newShares)) {
     return <Typography>Invalid input</Typography>;
