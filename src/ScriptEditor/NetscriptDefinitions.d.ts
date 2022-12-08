@@ -7627,7 +7627,7 @@ interface Product {
   /** Production cost */
   pCost: number;
   /** Sell cost, can be "MP+5" */
-  sCost: string | number;
+  sCost: { [key: string]: any };
   /** Data refers to the production, sale, and quantity of the products
    * These values are specific to a city
    * For each city, the data is [qty, prod, sell, effRat] */
