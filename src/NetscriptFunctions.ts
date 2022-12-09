@@ -884,7 +884,7 @@ const base: InternalAPI<NS> = {
             continue;
           }
           destScript.code = sourceScript.code;
-          destScript.ramUsage = destScript.ramUsage;
+          destScript.ramUsage = 0;
           destScript.markUpdated();
           helpers.log(ctx, () => `WARNING: File '${file}' overwritten on '${destServer?.hostname}'`);
           continue;
@@ -893,11 +893,10 @@ const base: InternalAPI<NS> = {
         // Create new script if it does not already exist
         const newScript = new Script(file);
         newScript.code = sourceScript.code;
-        newScript.ramUsage = sourceScript.ramUsage;
+        newScript.ramUsage = 0;
         newScript.server = destServer.hostname;
         destServer.scripts.push(newScript);
         helpers.log(ctx, () => `File '${file}' copied over to '${destServer?.hostname}'.`);
-        newScript.updateRamUsage(destServer.scripts);
       }
 
       return noFailures;
@@ -1452,11 +1451,12 @@ const base: InternalAPI<NS> = {
         if (script == null) {
           // Create a new script
           script = new Script(fn, String(data), server.hostname, server.scripts);
+          script.ramUsage = 0;
           server.scripts.push(script);
-          return script.updateRamUsage(server.scripts);
         }
         mode === "w" ? (script.code = String(data)) : (script.code += data);
-        return script.updateRamUsage(server.scripts);
+        script.ramUsage = 0;
+        return script.markUpdated();
       } else {
         // Write to text file
         if (!fn.endsWith(".txt")) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filename: ${fn}`);
