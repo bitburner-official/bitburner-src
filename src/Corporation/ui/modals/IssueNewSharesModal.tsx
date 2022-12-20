@@ -56,7 +56,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
   const maxNewSharesUnrounded = Math.round(corp.totalShares * 0.2);
-  const maxNewShares = maxNewSharesUnrounded - (maxNewSharesUnrounded % 1e6);
+  const maxNewShares = maxNewSharesUnrounded - (maxNewSharesUnrounded % 10e6);
 
   const newShares = Math.round((shares || 0) / 10e6) * 10e6;
   const disabled = isNaN(shares) || isNaN(newShares) || newShares < 10e6 || newShares > maxNewShares;
@@ -79,7 +79,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
     // Round # of private shares to the nearest million
     const privateOwnedRatio = 1 - (corp.numShares + corp.issuedShares) / corp.totalShares;
     const maxPrivateShares = Math.round((newShares / 2) * privateOwnedRatio);
-    const privateShares = Math.round(getRandomInt(0, maxPrivateShares) / 1e6) * 1e6;
+    const privateShares = Math.round(getRandomInt(0, maxPrivateShares) / 10e6) * 10e6;
 
     corp.issuedShares += newShares - privateShares;
     corp.totalShares += newShares;
