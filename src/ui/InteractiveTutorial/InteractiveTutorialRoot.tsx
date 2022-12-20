@@ -264,7 +264,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography></Typography>
         </>
       ),
-      canNext: true,
+      canNext: false,
     },
     [iTutorialSteps.TerminalManualHack as number]: {
       content: (
@@ -523,8 +523,17 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <Typography>
           This page contains a lot of different documentation about the game's content and mechanics. I know it's a lot,
-          but I highly suggest you read (or at least skim) through this before you start playing . That's the end of the
-          tutorial. Hope you enjoy the game!
+          but I highly suggest you read (or at least skim) through this before you start playing.
+          <br />
+          <br />
+          The{" "}
+          <a href="https://bitburner.readthedocs.io/en/latest/guidesandtips/gettingstartedguideforbeginnerprogrammers.html">
+            Getting Started
+          </a>{" "}
+          contains the guide for new players, navigating you through most of early game.
+          <br />
+          <br />
+          That's the end of the tutorial. Hope you enjoy the game!
         </Typography>
       ),
       canNext: true,

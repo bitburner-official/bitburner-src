@@ -84,16 +84,16 @@ Enter the following code in the script editor:
     export async function main(ns) {
         // Defines the "target server", which is the server
         // that we're going to hack. In this case, it's "n00dles"
-        var target = "n00dles";
+        const target = "n00dles";
 
         // Defines how much money a server should have before we hack it
         // In this case, it is set to 75% of the server's max money
-        var moneyThresh = ns.getServerMaxMoney(target) * 0.75;
+        const moneyThresh = ns.getServerMaxMoney(target) * 0.75;
 
         // Defines the maximum security level the target server can
         // have. If the target's security level is higher than this,
         // we'll weaken it before doing anything else
-        var securityThresh = ns.getServerMinSecurityLevel(target) + 5;
+        const securityThresh = ns.getServerMinSecurityLevel(target) + 5;
 
         // If we have the BruteSSH.exe program, use it to open the SSH Port
         // on the target server
@@ -123,7 +123,7 @@ step-by-step anyways.
 
 .. code:: javascript
 
-    var target = "n00dles";
+    const target = "n00dles";
 
 This first command defines a string which contains our target server. That's the server
 that we're going to hack. For now, it's set to `n00dles` because that's the only
@@ -133,7 +133,7 @@ variable to be the hostname of another server.
 
 .. code:: javascript
 
-    var moneyThresh = ns.getServerMaxMoney(target) * 0.75;
+    const moneyThresh = ns.getServerMaxMoney(target) * 0.75;
 
 This second command defines a numerical value representing the minimum
 amount of money that must be available on the target server in order for our script
@@ -144,7 +144,7 @@ The :js:func:`getServerMaxMoney` Netscript function is used to find this value
 
 .. code:: javascript
 
-    var securityThresh = ns.getServerMinSecurityLevel(target) + 5;
+    const securityThresh = ns.getServerMinSecurityLevel(target) + 5;
 
 This third command defines a numerical value representing the maximum security level
 the target server can have. If the target server's security level is higher than
@@ -179,6 +179,12 @@ necessary for hacking. See :ref:`here for more details <gameplay_hacking>`.
 This is the main section that drives our script. It dictates the script's logic
 and carries out the hacking operations. The `while (true)` creates an infinite loop
 that will continuously run the hacking logic until the the script is killed.
+
+The await keyword is needed for `hack` / `grow` / `weaken` because these commands take 
+time to execute, unlike the others. If you forget to await these commands, you will get 
+an exception saying you tried to do multiple things at once, because your code will 
+immediately finish the function call without waiting for the operation to be done. Also 
+important is that await can only be used in functions marked async (which main() is).
 
 Running our Scripts
 -------------------
@@ -378,7 +384,7 @@ At the top of the script, change the `target` variable to be `joesguns`:
 
 .. code:: javascript
 
-    var target = "joesguns";
+    const target = "joesguns";
 
 Note that this will **NOT** affect any instances of the script that are already running.
 This will only affect instances of the script that are ran from this point forward.
@@ -411,10 +417,10 @@ Paste the following code into the script editor:
     export async function main(ns) {
         // How much RAM each purchased server will have. In this case, it'll
         // be 8GB.
-        var ram = 8;
+        const ram = 8;
 
         // Iterator we'll use for our loop
-        var i = 0;
+        let i = 0;
 
         // Continuously try to purchase servers until we've reached the maximum
         // amount of servers
@@ -426,7 +432,7 @@ Paste the following code into the script editor:
                 //  2. Copy our hacking script onto the newly-purchased server
                 //  3. Run our hacking script on the newly-purchased server with 3 threads
                 //  4. Increment our iterator to indicate that we've bought a new server
-                var hostname = ns.purchaseServer("pserv-" + i, ram);
+                let hostname = ns.purchaseServer("pserv-" + i, ram);
                 ns.scp("early-hack-template.script", hostname);
                 ns.exec("early-hack-template.script", hostname, 3);
                 ++i;
@@ -813,7 +819,7 @@ startup script. Feel free to adjust it to your liking.
     export async function main(ns) {
         // Array of all servers that don't need any ports opened
         // to gain root access. These have 16 GB of RAM
-        var servers0Port = ["sigma-cosmetics",
+        const servers0Port = ["sigma-cosmetics",
                             "joesguns",
                             "nectar-net",
                             "hong-fang-tea",
@@ -821,7 +827,7 @@ startup script. Feel free to adjust it to your liking.
 
         // Array of all servers that only need 1 port opened
         // to gain root access. These have 32 GB of RAM
-        var servers1Port = ["neo-net",
+        const servers1Port = ["neo-net",
                             "zer0",
                             "max-hardware",
                             "iron-gym"];
@@ -829,8 +835,8 @@ startup script. Feel free to adjust it to your liking.
         // Copy our scripts onto each server that requires 0 ports
         // to gain root access. Then use nuke() to gain admin access and
         // run the scripts.
-        for (var i = 0; i < servers0Port.length; ++i) {
-            var serv = servers0Port[i];
+        for (let i = 0; i < servers0Port.length; ++i) {
+            const serv = servers0Port[i];
 
             ns.scp("early-hack-template.script", serv);
             ns.nuke(serv);
@@ -845,8 +851,8 @@ startup script. Feel free to adjust it to your liking.
         // Copy our scripts onto each server that requires 1 port
         // to gain root access. Then use brutessh() and nuke()
         // to gain admin access and run the scripts.
-        for (var i = 0; i < servers1Port.length; ++i) {
-            var serv = servers1Port[i];
+        for (let i = 0; i < servers1Port.length; ++i) {
+            const serv = servers1Port[i];
 
             ns.scp("early-hack-template.script", serv);
             ns.brutessh(serv);
