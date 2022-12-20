@@ -7434,8 +7434,11 @@ export interface WarehouseAPI {
    */
   limitProductProduction(divisionName: string, cityName: string, productName: string, qty: number): void;
   /**
-   * Gets the cost to purchase a warehouse
-   * @returns cost
+   * Gets the cost to upgrade a warehouse to the next level
+   * @param divisionName - Name of the division
+   * @param cityName - Name of the city
+   * @param amt - amount of upgrades defaults to 1
+   * @returns cost to upgrade
    */
   getUpgradeWarehouseCost(adivisionName: string, acityName: string, amt?: number): number;
   /**
