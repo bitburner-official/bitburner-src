@@ -15,10 +15,10 @@ declare enum EmployeePositions
 
 |  Member | Value | Description |
 |  --- | --- | --- |
-|  Operations | <code>&quot;Operations&quot;</code> |  |
-|  Engineer | <code>&quot;Engineer&quot;</code> |  |
 |  Business | <code>&quot;Business&quot;</code> |  |
+|  Engineer | <code>&quot;Engineer&quot;</code> |  |
 |  Management | <code>&quot;Management&quot;</code> |  |
+|  Operations | <code>&quot;Operations&quot;</code> |  |
 |  RandD | <code>&quot;Research &amp; Development&quot;</code> |  |
 |  Training | <code>&quot;Training&quot;</code> |  |
 |  Unassigned | <code>&quot;Unassigned&quot;</code> |  |
