@@ -824,7 +824,10 @@ export const ns: InternalAPI<NSFull> = {
 
       let noFailures = true;
       //ts detects files as any[] here even though we would have thrown in the above loop if it wasn't string[]
-      for (const file of files as string[]) {
+      for (let file of files as string[]) {
+        // cut off the leading / for files in the root of the server; this assumes that the filename is somewhat normalized and doesn't look like `//file.js`
+        if (file.startsWith("/") && file.indexOf("/", 1) === -1) file = file.slice(1);
+
         // Scp for lit files
         if (file.endsWith(".lit")) {
           const sourceMessage = sourceServ.messages.find((message) => message === file);
