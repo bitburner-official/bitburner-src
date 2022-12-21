@@ -372,6 +372,7 @@ const corporation = {
   unlockUpgrade: 0,
   levelUpgrade: 0,
   issueDividends: 0,
+  issueNewShares: 0,
   buyBackShares: 0,
   sellShares: 0,
   getBonusTime: 0,

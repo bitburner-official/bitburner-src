@@ -21,6 +21,7 @@ import {
   UnlockUpgrade,
   LevelUpgrade,
   IssueDividends,
+  IssueNewShares,
   SellMaterial,
   SellProduct,
   SetSmartSupply,
@@ -771,6 +772,22 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const corporation = getCorporation();
       if (!corporation.public) throw helpers.makeRuntimeErrorMsg(ctx, `Your company has not gone public!`);
       IssueDividends(corporation, rate);
+    },
+    issueNewShares: (ctx) => (_amount) => {
+      checkAccess(ctx);
+      const corporation = getCorporation();
+      const maxNewSharesUnrounded = Math.round(corporation.totalShares * 0.2);
+      const maxNewShares = maxNewSharesUnrounded - (maxNewSharesUnrounded % 10e6);
+      if (_amount == undefined) _amount = maxNewShares;
+      const amount = helpers.number(ctx, "amount", _amount);
+      if (corporation.issueNewSharesCooldown > 0) throw new Error(`Can't issue new shares, action on cooldown.`);
+      if (amount < 10e6 || amount > maxNewShares)
+        throw new Error(
+          `Invalid value for amount field! Must be numeric, greater than 10m, and less than ${maxNewShares}`,
+        );
+      if (!corporation.public) throw helpers.makeRuntimeErrorMsg(ctx, `Your company has not gone public!`);
+      const funds = IssueNewShares(corporation, amount, maxNewShares);
+      return funds;
     },
     getDivision: (ctx) => (_divisionName) => {
       checkAccess(ctx);

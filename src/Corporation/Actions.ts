@@ -16,6 +16,7 @@ import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
 import { checkEnum } from "../utils/helpers/enum";
 import { CityName } from "../Locations/data/CityNames";
+import { getRandomInt } from "../utils/helpers/getRandomInt";
 
 export function NewIndustry(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.find(({ type }) => industry == type))
@@ -88,6 +89,27 @@ export function IssueDividends(corporation: Corporation, rate: number): void {
   }
 
   corporation.dividendRate = rate;
+}
+
+export function IssueNewShares(corporation: Corporation, amount: number, max: number): number {
+  if (isNaN(amount) || amount < 0 || amount > max) {
+    throw new Error(`Invalid value. Must be an number between 0 and ${max}`);
+  }
+
+  const newSharePrice = Math.round(corporation.sharePrice * 0.9);
+  const profit = amount * newSharePrice;
+  corporation.issueNewSharesCooldown = CorporationConstants.IssueNewSharesCooldown;
+
+  const privateOwnedRatio = 1 - (corporation.numShares + corporation.issuedShares) / corporation.totalShares;
+  const maxPrivateShares = Math.round((amount / 2) * privateOwnedRatio);
+  const privateShares = Math.round(getRandomInt(0, maxPrivateShares) / 1e6) * 1e6;
+
+  corporation.issuedShares += amount - privateShares;
+  corporation.totalShares += amount;
+  corporation.funds = corporation.funds + profit;
+  corporation.immediatelyUpdateSharePrice();
+
+  return profit;
 }
 
 export function SellMaterial(mat: Material, amt: string, price: string): void {
