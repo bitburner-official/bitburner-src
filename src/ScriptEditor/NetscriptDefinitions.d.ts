@@ -7602,36 +7602,34 @@ interface CorporationInfo {
  * @public
  */
 interface CorpConstants {
-  /** Name of the corporation */
+  /** Corporation cycle states */
   states: string[];
-  /** Funds available */
+  /** Unlockable upgrades */
   unlocks: string[];
-  /** Revenue per second this cycle */
+  /** Levelable upgrades */
   upgrades: string[];
-  /** Expenses per second this cycle */
+  /** Researches, product researches are only available to product making divisions */
   researches: Record<string, string[]>;
-  /** Indicating if the company is public */
-  jobs: string[];
-  /** Total number of shares issues by this corporation */
+  /** Amount of funds required to bribe for 1 reputation */
   bribeToRepRatio: number;
-  /** Amount of share owned */
+  /** Amount of products a division can have without researches */
   baseMaxProducts: number;
-  /** Cooldown until shares can be sold again */
+  /** Cost to expand to another city within a division */
   cityExpandCost: number;
-  /** Amount of acquirable shares. */
+  /** Cost to purchase a warehouse in a city */
   warehousePurchaseCost: number;
-  /** Price of the shares */
+  /** Cost of coffee per employee in an office */
   coffeeCost: number;
-  /** Fraction of profits issued as dividends */
+  /** Array of all material types */
   materials: Record<string, materialInfo>;
-  /** Tax applied on your earnings as a shareholder */
+  /** Array of all product types */
   products: Record<string, productInfo>;
-  /** Your earnings as a shareholder per second this cycle */
+  /** Array of all division types */
   divisions: Record<string, divisionInfo>;
 }
 
 /**
- * Corporation related constants
+ * Corporation material information
  * @public
  */
 interface materialInfo {
@@ -7644,7 +7642,7 @@ interface materialInfo {
 }
 
 /**
- * Corporation related constants
+ * Corporation product information
  * @public
  */
 interface productInfo {
@@ -7659,7 +7657,7 @@ interface productInfo {
 }
 
 /**
- * Corporation related constants
+ * Corporation division information
  * @public
  */
 interface divisionInfo {

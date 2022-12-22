@@ -763,7 +763,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       return {
         coffeeCost: 5e8,
         states: [...CorporationConstants.AllCorporationStates],
-        jobs: [...CorporationConstants.Cities],
         bribeToRepRatio: CorporationConstants.BribeToRepRatio,
         cityExpandCost: CorporationConstants.OfficeInitialCost,
         warehousePurchaseCost: CorporationConstants.WarehouseInitialCost,
