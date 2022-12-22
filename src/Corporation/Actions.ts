@@ -91,25 +91,31 @@ export function IssueDividends(corporation: Corporation, rate: number): void {
   corporation.dividendRate = rate;
 }
 
-export function IssueNewShares(corporation: Corporation, amount: number, max: number): number {
-  if (isNaN(amount) || amount < 0 || amount > max) {
-    throw new Error(`Invalid value. Must be an number between 0 and ${max}`);
+export function IssueNewShares(corporation: Corporation, amount: number): [number, number, number] {
+  const max = corporation.calculateMaxNewShares();
+
+  // Round to nearest ten-millionth
+  amount = Math.round(amount / 10e6) * 10e6;
+
+  if (isNaN(amount) || amount < 10e6 || amount > max) {
+    throw new Error(`Invalid value. Must be an number between 10m and ${max} (20% of total shares)`);
   }
 
   const newSharePrice = Math.round(corporation.sharePrice * 0.9);
+
   const profit = amount * newSharePrice;
   corporation.issueNewSharesCooldown = CorporationConstants.IssueNewSharesCooldown;
 
   const privateOwnedRatio = 1 - (corporation.numShares + corporation.issuedShares) / corporation.totalShares;
   const maxPrivateShares = Math.round((amount / 2) * privateOwnedRatio);
-  const privateShares = Math.round(getRandomInt(0, maxPrivateShares) / 1e6) * 1e6;
+  const privateShares = Math.round(getRandomInt(0, maxPrivateShares) / 10e6) * 10e6;
 
   corporation.issuedShares += amount - privateShares;
   corporation.totalShares += amount;
   corporation.funds = corporation.funds + profit;
   corporation.immediatelyUpdateSharePrice();
 
-  return profit;
+  return [profit, amount, privateShares];
 }
 
 export function SellMaterial(mat: Material, amt: string, price: string): void {
