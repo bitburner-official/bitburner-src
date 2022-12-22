@@ -104,9 +104,9 @@ function parseOnlyRamCalculate(otherScripts: Script[], code: string): RamCalcula
 
     // Finally, walk the reference map and generate a ram cost. The initial set of keys to scan
     // are those that start with __SPECIAL_INITIAL_MODULE__.
-    let ram = RamCostConstants.ScriptBaseRamCost;
+    let ram = RamCostConstants.Base;
     const detailedCosts: RamUsageEntry[] = [
-      { type: "misc", name: "baseCost", cost: RamCostConstants.ScriptBaseRamCost },
+      { type: "misc", name: "baseCost", cost: RamCostConstants.Base },
     ];
     const unresolvedRefs = Object.keys(dependencyMap).filter((s) => s.startsWith(initialModule));
     const resolvedRefs = new Set();
@@ -117,20 +117,16 @@ function parseOnlyRamCalculate(otherScripts: Script[], code: string): RamCalcula
 
       // Check if this is one of the special keys, and add the appropriate ram cost if so.
       if (ref === "hacknet" && !resolvedRefs.has("hacknet")) {
-        ram += RamCostConstants.ScriptHacknetNodesRamCost;
-        detailedCosts.push({ type: "ns", name: "hacknet", cost: RamCostConstants.ScriptHacknetNodesRamCost });
+        ram += RamCostConstants.HacknetNodes;
+        detailedCosts.push({ type: "ns", name: "hacknet", cost: RamCostConstants.HacknetNodes });
       }
       if (ref === "document" && !resolvedRefs.has("document")) {
-        ram += RamCostConstants.ScriptDomRamCost;
-        detailedCosts.push({ type: "dom", name: "document", cost: RamCostConstants.ScriptDomRamCost });
+        ram += RamCostConstants.Dom;
+        detailedCosts.push({ type: "dom", name: "document", cost: RamCostConstants.Dom });
       }
       if (ref === "window" && !resolvedRefs.has("window")) {
-        ram += RamCostConstants.ScriptDomRamCost;
-        detailedCosts.push({ type: "dom", name: "window", cost: RamCostConstants.ScriptDomRamCost });
-      }
-      if (ref === "corporation" && !resolvedRefs.has("corporation")) {
-        ram += RamCostConstants.ScriptCorporationRamCost;
-        detailedCosts.push({ type: "ns", name: "corporation", cost: RamCostConstants.ScriptCorporationRamCost });
+        ram += RamCostConstants.Dom;
+        detailedCosts.push({ type: "dom", name: "window", cost: RamCostConstants.Dom });
       }
 
       resolvedRefs.add(ref);
@@ -195,6 +191,10 @@ function parseOnlyRamCalculate(otherScripts: Script[], code: string): RamCalcula
         console.error(error);
         continue;
       }
+    }
+    if (ram > RamCostConstants.Max) {
+      ram = RamCostConstants.Max;
+      detailedCosts.push({type:"misc", name: "Max Ram Cap", cost: RamCostConstants.Max});
     }
     return { cost: ram, entries: detailedCosts.filter((e) => e.cost > 0) };
   } catch (error) {

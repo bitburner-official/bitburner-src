@@ -34,6 +34,7 @@ import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { checkEnum } from "../utils/helpers/enum";
+import { RamCostConstants } from "./RamCostGenerator";
 
 export const helpers = {
   string,
@@ -344,7 +345,7 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
     console.warn(`WorkerScript detected NaN for thread count for ${ws.name} on ${ws.hostname}`);
     threads = 1;
   }
-  ws.dynamicRamUsage += ramCost;
+  ws.dynamicRamUsage = Math.min(ws.dynamicRamUsage+ramCost, RamCostConstants.Max);
   if (ws.dynamicRamUsage > 1.01 * ws.ramUsage) {
     log(ctx, () => "Insufficient static ram available.");
     ws.env.stopFlag = true;

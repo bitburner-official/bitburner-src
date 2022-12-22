@@ -5775,7 +5775,7 @@ export interface NS {
   /**
    * Get hacking related multipliers.
    * @remarks
-   * RAM cost: 4 GB
+   * RAM cost: 0.25 GB
    *
    * Returns an object containing the Player’s hacking related multipliers.
    * These multipliers are returned in fractional forms, not percentages
@@ -5804,7 +5804,7 @@ export interface NS {
   /**
    * Get hacknet related multipliers.
    * @remarks
-   * RAM cost: 4 GB
+   * RAM cost: 0.25 GB
    *
    * Returns an object containing the Player’s hacknet related multipliers.
    * These multipliers are returned in fractional forms, not percentages

@@ -1178,6 +1178,9 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       (_nextBN, _callbackScript = "") => {
         helpers.checkSingularityAccess(ctx);
         const nextBN = helpers.number(ctx, "nextBN", _nextBN);
+        if (nextBN > 13 || nextBN < 1 || !Number.isInteger(nextBN)) {
+          throw new Error(`Invalid bitnode specified: ${_nextBN}`);
+        }
         const callbackScript = helpers.string(ctx, "callbackScript", _callbackScript);
 
         const wd = GetServer(SpecialServers.WorldDaemon);

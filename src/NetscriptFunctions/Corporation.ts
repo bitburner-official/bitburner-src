@@ -60,7 +60,7 @@ import { CorporationConstants } from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
 import { Factions } from "../Faction/Factions";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { assertEnumMember, helpers } from "../Netscript/NetscriptHelpers";
 import { checkEnum } from "../utils/helpers/enum";
 import { CityName } from "../Locations/data/CityNames";
@@ -751,7 +751,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     },
   };
 
-  return {
+  const corpFunctions: InternalAPI<NSCorporation> = {
     enums: {
       EmployeePositions,
       IndustryType,
@@ -926,4 +926,17 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       return Math.round(getCorporation().storedCycles / 5) * 1000;
     },
   };
+  Object.assign(corpFunctions, {
+    assignJob: removedFunction(
+      "v2.2.0",
+      "Corporation employees no longer exist as separate objects.\nUse corporation.setAutoJobAssignment instead to assign employees to jobs.",
+      true,
+    ),
+    getEmployee: removedFunction(
+      "v2.2.0",
+      "Corporation employees no longer exist as separate objects and this function no longer has a use.",
+      true,
+    ),
+  });
+  return corpFunctions;
 }
