@@ -710,18 +710,19 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     },
   };
 
+  // TODO 2.2: Add removed function error dialogs for all the functions removed/replaced by getConstants.
   const corpFunctions: InternalAPI<NSCorporation> = {
     ...warehouseAPI,
     ...officeAPI,
     hasCorporation: () => () => !!Player.corporation,
     getConstants: (ctx) => () => {
       checkAccess(ctx);
-      /* TODO: possibly just rework the whole corp constants structure to be more readable, and just use cloneDeep
-       *       to provide it directly to player.
-       * TODO: Roll product information into industriesData, there's no reason to look up a product separately */
+      /* TODO 2.2: possibly just rework the whole corp constants structure to be more readable, and just use cloneDeep
+       *           to provide it directly to player.
+       * TODO 2.2: Roll product information into industriesData, there's no reason to look up a product separately */
       return {
         industryNames: Object.values(IndustryType),
-        // Just give the player the actual internal IndustriesData. Restructure it so it's more understandable.
+        // TODO 2.2: restructure IndustriesData internally so it's more understandable / can just be provided directly.
         industriesData: cloneDeep(IndustriesData),
         employeeJobNames: Object.values(EmployeePositions),
         coffeeCostPerEmployee: CorporationConstants.CoffeeCostPerEmployee,

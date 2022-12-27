@@ -384,7 +384,7 @@ export class Industry {
               }
             }
 
-            // TODO: Change all these Object.keys where the value is also needed to Object.entries.
+            // TODO 2.2 probably: Change all these Object.keys where the value is also needed to Object.entries.
             // Use the materials already in the warehouse if the option is on.
             for (const matName of Object.keys(smartBuy)) {
               if (!warehouse.smartSupplyUseLeftovers[matName]) continue;

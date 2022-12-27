@@ -159,7 +159,7 @@ export class Bladeburner {
   }
 
   /** This function is only for the player. Sleeves use their own functions to perform blade work.
-   *  Todo: partial unification of methods? */
+   *  Todo: partial unification of player and sleeve methods? */
   startAction(actionId: ActionIdentifier): void {
     if (actionId == null) return;
     this.action = actionId;

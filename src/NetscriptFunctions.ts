@@ -130,7 +130,7 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_hostname, opts = {}) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
-      // Todo: better type safety rework for functions using assertObjectType, then remove function.
+      // TODO 2.2: better type safety rework for functions using assertObjectType, then remove function.
       const optsValidator: BasicHGWOptions = {};
       assertObjectType(ctx, "opts", opts, optsValidator);
       return helpers.hack(ctx, hostname, false, { threads: opts.threads, stock: opts.stock });
@@ -1918,7 +1918,7 @@ function populateLayers(nsLayer: ExternalAPI<unknown>, currentLayers: string[] =
 populateLayers(wrappedNS);
 
 export function NetscriptFunctions(ws: WorkerScript): ExternalAPI<NSFull> {
-  //todo: better typing instead of relying on an any
+  //TODO unplanned: better typing instead of relying on an any
   const instance = new StampedLayer(ws, wrappedNS) as any;
   for (const layerLocation of layerLocations) {
     const key = layerLocation.pop() as string;

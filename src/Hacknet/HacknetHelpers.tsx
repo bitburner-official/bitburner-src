@@ -6,7 +6,7 @@
  *  - Updating Hash Manager capacity
  *  - Purchasing hash upgrades
  *
- * TODO Should probably split the different types of functions into their own modules
+ * TODO unplanned Should probably split the different types of functions into their own modules
  */
 import { HacknetNode } from "./HacknetNode";
 import { calculateNodeCost } from "./formulas/HacknetNodes";
