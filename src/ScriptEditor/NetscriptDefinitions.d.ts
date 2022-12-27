@@ -7488,7 +7488,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
 
   /** Get corporation related constants
    * @returns corporation related constants */
-  constants(): CorpConstants;
+  getConstants(): CorpConstants;
 
   /** Accept investment based on you companies current valuation
    * @remarks
@@ -7640,7 +7640,7 @@ interface CorpConstants {
   /** Map of industry types to their data definitions */
   industriesData: Record<IndustryType, IndustryData>;
   /** Corporation cycle states */
-  states: string[];
+  states: CorporationState[];
   /** Unlockable upgrades */
   unlocks: string[];
   /** Levelable upgrades */
@@ -7656,12 +7656,15 @@ interface CorpConstants {
   /** Cost to purchase a warehouse in a city */
   warehousePurchaseCost: number;
   /** Cost of coffee per employee in an office */
-  coffeeCost: number;
+  coffeeCostPerEmployee: number;
   /** Array of all material types */
   materials: Record<string, materialInfo>;
   /** Array of all product types */
   products: Record<string, productInfo>;
 }
+/** @public */
+type CorporationState = "START" | "PURCHASE" | "PRODUCTION" | "SALE" | "EXPORT";
+
 
 /**
  * Corporation material information

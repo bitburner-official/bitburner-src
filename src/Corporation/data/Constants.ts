@@ -1,11 +1,13 @@
+import { CorporationState } from "../../ScriptEditor/NetscriptDefinitions";
 const CyclesPerMarketCycle = 50;
-type CorporationState = "START" | "PURCHASE" | "PRODUCTION" | "SALE" | "EXPORT";
 const AllCorporationStates: CorporationState[] = ["START", "PURCHASE", "PRODUCTION", "SALE", "EXPORT"];
 export const CorporationConstants = {
   INITIALSHARES: 1e9, //Total number of shares you have at your company
   SHARESPERPRICEUPDATE: 1e6, //When selling large number of shares, price is dynamically updated for every batch of this amount
   IssueNewSharesCooldown: 216e3, // 12 Hour in terms of game cycles
   SellSharesCooldown: 18e3, // 1 Hour in terms of game cycles
+
+  CoffeeCostPerEmployee: 500e3,
 
   CyclesPerMarketCycle: CyclesPerMarketCycle,
   CyclesPerIndustryStateCycle: CyclesPerMarketCycle / AllCorporationStates.length,

@@ -248,7 +248,7 @@ export class OfficeSpace {
   }
 
   getCoffeeCost(): number {
-    return 500e3 * this.totalEmployees;
+    return CorporationConstants.CoffeeCostPerEmployee * this.totalEmployees;
   }
 
   setCoffee(): boolean {

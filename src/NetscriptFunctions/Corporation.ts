@@ -740,14 +740,14 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     ...warehouseAPI,
     ...officeAPI,
     hasCorporation: () => () => !!Player.corporation,
-    constants: (ctx) => () => {
+    getConstants: (ctx) => () => {
       checkAccess(ctx);
       return {
         industryNames: Object.values(IndustryType),
         // Just give the player the actual internal IndustriesData.
         industriesData: cloneDeep(IndustriesData),
         // Why isn't this in corp constants
-        coffeeCost: 5e8,
+        coffeeCostPerEmployee: CorporationConstants.CoffeeCostPerEmployee,
         states: [...CorporationConstants.AllCorporationStates],
         bribeToRepRatio: CorporationConstants.BribeToRepRatio,
         cityExpandCost: CorporationConstants.OfficeInitialCost,
