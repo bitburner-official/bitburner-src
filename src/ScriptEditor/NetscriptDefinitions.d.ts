@@ -6984,35 +6984,34 @@ declare enum JobName {
   employeePT = "Part-time Employee",
 }
 
-// CORP ENUMS
+// CORP ENUMS - Changed to types
 /** @public */
-declare enum EmployeePositions {
-  Operations = "Operations",
-  Engineer = "Engineer",
-  Business = "Business",
-  Management = "Management",
-  RandD = "Research & Development",
-  Training = "Training",
-  Unassigned = "Unassigned",
-}
+type EmployeePosition =
+  | "Operations"
+  | "Engineer"
+  | "Business"
+  | "Management"
+  | "Research & Development"
+  | "Training"
+  | "Unassigned";
 
 /** @public */
-declare enum IndustryType {
-  Energy = "Energy",
-  Utilities = "Water Utilities",
-  Agriculture = "Agriculture",
-  Fishing = "Fishing",
-  Mining = "Mining",
-  Food = "Food",
-  Tobacco = "Tobacco",
-  Chemical = "Chemical",
-  Pharmaceutical = "Pharmaceutical",
-  Computers = "Computer Hardware",
-  Robotics = "Robotics",
-  Software = "Software",
-  Healthcare = "Healthcare",
-  RealEstate = "RealEstate",
-}
+type IndustryType =
+  | "Energy"
+  | "Water Utilities"
+  | "Agriculture"
+  | "Fishing"
+  | "Mining"
+  | "Food"
+  | "Tobacco"
+  | "Chemical"
+  | "Pharmaceutical"
+  | "Computer Hardware"
+  | "Robotics"
+  | "Software"
+  | "Healthcare"
+  // TODO: Fix missing space, but make sure it won't mess up save games.
+  | "RealEstate";
 
 /** Names of all cities
  * @public */
@@ -7120,11 +7119,7 @@ export interface OfficeAPI {
    * @param employeePosition - Position to place into. Defaults to "Unassigned".
    * @returns True if an employee was hired, false otherwise
    */
-  hireEmployee(
-    divisionName: string,
-    city: CityName | `${CityName}`,
-    employeePosition?: EmployeePositions | `${EmployeePositions}`,
-  ): boolean;
+  hireEmployee(divisionName: string, city: CityName | `${CityName}`, employeePosition?: EmployeePosition): boolean;
   /**
    * Upgrade office size.
    * @param divisionName - Name of the division
@@ -7446,12 +7441,6 @@ export interface WarehouseAPI {
  * @public
  */
 export interface Corporation extends WarehouseAPI, OfficeAPI {
-  /** Enums specific to the corporation game mechanic. */
-  enums: {
-    EmployeePositions: typeof EmployeePositions;
-    IndustryType: typeof IndustryType;
-  };
-
   /** Returns whether the player has a corporation. Does not require API access.
    * @returns whether the player has a corporation */
   hasCorporation(): boolean;
@@ -7519,7 +7508,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   /** Expand to a new industry
    * @param industryType - Name of the industry
    * @param divisionName - Name of the division */
-  expandIndustry(industryType: IndustryType | `${IndustryType}`, divisionName: string): void;
+  expandIndustry(industryType: IndustryType, divisionName: string): void;
 
   /** Expand to a new city
    * @param divisionName - Name of the division
@@ -7659,8 +7648,6 @@ interface CorpConstants {
   coffeeCostPerEmployee: number;
   /** Array of all material types */
   materials: Record<string, materialInfo>;
-  /** Array of all product types */
-  products: Record<string, productInfo>;
 }
 /** @public */
 type CorporationState = "START" | "PURCHASE" | "PRODUCTION" | "SALE" | "EXPORT";
@@ -7676,21 +7663,6 @@ interface materialInfo {
   size: number;
   /** Revenue per second this cycle */
   prodMult: boolean;
-}
-
-/**
- * Corporation product information
- * @public
- */
-interface productInfo {
-  /** Product type */
-  type?: string;
-  /** Size of the product */
-  size: number;
-  /** Materials required to make the product */
-  requiredMaterials: string[];
-  /** Division type which makes the product */
-  division: string;
 }
 
 /**
@@ -7828,9 +7800,9 @@ export interface Office {
   /** Average morale of the employees */
   avgMor: number;
   /** Production of the employees */
-  employeeProd: Record<`${EmployeePositions}`, number>;
+  employeeProd: Record<EmployeePosition, number>;
   /** Positions of the employees */
-  employeeJobs: Record<`${EmployeePositions}`, number>;
+  employeeJobs: Record<EmployeePosition, number>;
 }
 
 /**

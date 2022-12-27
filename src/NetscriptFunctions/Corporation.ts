@@ -9,7 +9,6 @@ import { Corporation } from "../Corporation/Corporation";
 import { cloneDeep } from "lodash";
 
 import {
-  productInfo as NSProduct,
   materialInfo as NSMaterial,
   Corporation as NSCorporation,
   Division as NSDivision,
@@ -284,26 +283,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       products: division.products === undefined ? [] : Object.keys(division.products),
       makesProducts: division.makesProducts,
     };
-  }
-
-  function getProductInfo(): Record<string, NSProduct> {
-    const prodsObject: Record<string, NSProduct> = {};
-    for (const [ind, type] of Object.entries(IndustryType)) {
-      if (typeof IndustriesData[type].product !== "undefined") {
-        prodsObject[ind] = {
-          requiredMaterials: Object.keys(IndustriesData[type].reqMats),
-          size: 0,
-          division: type,
-        };
-        prodsObject[ind].type = IndustriesData[type].product?.name;
-        let totSize = 0;
-        for (const mat of prodsObject[ind].requiredMaterials) {
-          totSize += MaterialInfo[mat][1];
-        }
-        prodsObject[ind].size = totSize;
-      }
-    }
-    return prodsObject;
   }
 
   function getMaterialInfo(): Record<string, NSMaterial> {
@@ -732,27 +711,25 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   };
 
   const corpFunctions: InternalAPI<NSCorporation> = {
-    enums: {
-      EmployeePositions,
-      IndustryType,
-    },
     ...warehouseAPI,
     ...officeAPI,
     hasCorporation: () => () => !!Player.corporation,
     getConstants: (ctx) => () => {
       checkAccess(ctx);
+      /* TODO: possibly just rework the whole corp constants structure to be more readable, and just use cloneDeep
+       *       to provide it directly to player.
+       * TODO: Roll product information into industriesData, there's no reason to look up a product separately */
       return {
         industryNames: Object.values(IndustryType),
-        // Just give the player the actual internal IndustriesData.
+        // Just give the player the actual internal IndustriesData. Restructure it so it's more understandable.
         industriesData: cloneDeep(IndustriesData),
-        // Why isn't this in corp constants
+        employeeJobNames: Object.values(EmployeePositions),
         coffeeCostPerEmployee: CorporationConstants.CoffeeCostPerEmployee,
         states: [...CorporationConstants.AllCorporationStates],
         bribeToRepRatio: CorporationConstants.BribeToRepRatio,
         cityExpandCost: CorporationConstants.OfficeInitialCost,
         warehousePurchaseCost: CorporationConstants.WarehouseInitialCost,
         baseMaxProducts: CorporationConstants.BaseMaxProducts,
-        products: getProductInfo(),
         materials: getMaterialInfo(),
         unlocks: [...CorporationConstants.AllUnlocks],
         upgrades: [...CorporationConstants.AllUpgrades],
