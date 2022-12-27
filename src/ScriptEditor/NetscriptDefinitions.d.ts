@@ -37,7 +37,7 @@ interface Person {
   skills: Skills;
   exp: Skills;
   mults: Multipliers;
-  city: string;
+  city: CityName;
 }
 
 /** @public */
@@ -1531,7 +1531,7 @@ export interface Singularity {
    * @param city - City to travel to.
    * @returns True if action is successful, false otherwise.
    */
-  travelToCity(city: string): boolean;
+  travelToCity(city: CityName | `${CityName}`): boolean;
 
   /**
    * Purchase the TOR router.
@@ -3039,10 +3039,10 @@ export interface Bladeburner {
    * Returns the estimated number of Synthoids in the specified city,
    * or -1 if an invalid city was specified.
    *
-   * @param cityName - Name of city. Case-sensitive
+   * @param city - Name of city. Case-sensitive
    * @returns Estimated number of Synthoids in the specified city.
    */
-  getCityEstimatedPopulation(name: string): number;
+  getCityEstimatedPopulation(city: CityName | `${CityName}`): number;
 
   /**
    * Get number of communities in a city.
@@ -3052,10 +3052,10 @@ export interface Bladeburner {
    * Returns the estimated number of Synthoid communities in the specified city,
    * or -1 if an invalid city was specified.
    *
-   * @param cityName - Name of city. Case-sensitive
+   * @param city - Name of city. Case-sensitive
    * @returns Number of Synthoids communities in the specified city.
    */
-  getCityCommunities(name: string): number;
+  getCityCommunities(city: CityName | `${CityName}`): number;
 
   /**
    * Get chaos of a city.
@@ -3065,10 +3065,10 @@ export interface Bladeburner {
    * Returns the chaos in the specified city,
    * or -1 if an invalid city was specified.
    *
-   * @param cityName - Name of city. Case-sensitive
+   * @param city - Name of city. Case-sensitive
    * @returns Chaos in the specified city.
    */
-  getCityChaos(name: string): number;
+  getCityChaos(city: CityName | `${CityName}`): number;
 
   /**
    * Get current city.
@@ -3079,7 +3079,7 @@ export interface Bladeburner {
    *
    * @returns City that the player is currently in (for Bladeburner).
    */
-  getCity(): string;
+  getCity(): CityName;
 
   /**
    * Travel to another city in bladeburner.
@@ -3089,10 +3089,10 @@ export interface Bladeburner {
    *
    * Returns true if successful, and false otherwise
    *
-   * @param cityName - Name of city. Case-sensitive
+   * @param city - Name of city. Case-sensitive
    * @returns true if successful, and false otherwise
    */
-  switchCity(name: string): boolean;
+  switchCity(city: CityName | `${CityName}`): boolean;
 
   /**
    * Get bladeburner stamina.
@@ -3720,10 +3720,10 @@ export interface Sleeve {
    * Return a boolean indicating whether or not the sleeve reached destination.
    *
    * @param sleeveNumber - Index of the sleeve to travel.
-   * @param cityName - Name of the destination city.
+   * @param city - Name of the destination city.
    * @returns True if the sleeve reached destination, false otherwise.
    */
-  travel(sleeveNumber: number, cityName: string): boolean;
+  travel(sleeveNumber: number, city: CityName | `${CityName}`): boolean;
 
   /**
    * Get augmentations installed on a sleeve.
@@ -3907,12 +3907,7 @@ interface WorkFormulas {
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified faction work. */
   factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified company work. */
-  companyGains(
-    person: Person,
-    companyName: string,
-    workType: JobName | `${JobName}`,
-    favor: number,
-  ): WorkStats;
+  companyGains(person: Person, companyName: string, workType: JobName | `${JobName}`, favor: number): WorkStats;
 }
 
 /**
@@ -4343,7 +4338,7 @@ interface InfiltrationReward {
 
 /** @public */
 interface ILocation {
-  city: string;
+  city: CityName;
   name: string;
 }
 
@@ -7141,37 +7136,37 @@ export interface OfficeAPI {
   /**
    * Hire an employee.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param employeePosition - Position to place into. Defaults to "Unassigned".
    * @returns True if an employee was hired, false otherwise
    */
   hireEmployee(
     divisionName: string,
-    cityName: string,
+    city: CityName | `${CityName}`,
     employeePosition?: EmployeePositions | `${EmployeePositions}`,
   ): boolean;
   /**
    * Upgrade office size.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param size - Amount of positions to open
    */
-  upgradeOfficeSize(divisionName: string, cityName: string, size: number): void;
+  upgradeOfficeSize(divisionName: string, city: CityName | `${CityName}`, size: number): void;
   /**
    * Throw a party for your employees
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param costPerEmployee - Amount to spend per employee.
    * @returns Multiplier for happiness and morale, or zero on failure
    */
-  throwParty(divisionName: string, cityName: string, costPerEmployee: number): number;
+  throwParty(divisionName: string, city: CityName | `${CityName}`, costPerEmployee: number): number;
   /**
    * Buy coffee for your employees
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @returns true if buying coffee was successful, false otherwise
    */
-  buyCoffee(divisionName: string, cityName: string): boolean;
+  buyCoffee(divisionName: string, city: CityName | `${CityName}`): boolean;
   /**
    * Hire AdVert.
    * @param divisionName - Name of the division
@@ -7186,10 +7181,10 @@ export interface OfficeAPI {
   /**
    * Get data about an office
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @returns Office data
    */
-  getOffice(divisionName: string, cityName: string): Office;
+  getOffice(divisionName: string, city: CityName | `${CityName}`): Office;
   /**
    * Get the cost to hire AdVert.
    * @param divisionName - Name of the division.
@@ -7219,20 +7214,20 @@ export interface OfficeAPI {
   /**
    * Set the auto job assignment for a job
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param job - Name of the job
    * @param amount - Number of employees to assign to that job
    * @returns true if the employee count reached the target amount, false if not
    */
-  setAutoJobAssignment(divisionName: string, cityName: string, job: string, amount: number): boolean;
+  setAutoJobAssignment(divisionName: string, city: CityName | `${CityName}`, job: string, amount: number): boolean;
   /**
    * Cost to Upgrade office size.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param size - Amount of positions to open
    * @returns Cost of upgrading the office
    */
-  getOfficeSizeUpgradeCost(divisionName: string, cityName: string, asize: number): number;
+  getOfficeSizeUpgradeCost(divisionName: string, city: CityName | `${CityName}`, asize: number): number;
 }
 
 /**
@@ -7245,16 +7240,16 @@ export interface WarehouseAPI {
   /**
    * Set material sell data.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @param amt - Amount to sell, can be "MAX"
    * @param price - Price to sell, can be "MP"
    */
-  sellMaterial(divisionName: string, cityName: string, materialName: string, amt: string, price: string): void;
+  sellMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: string, price: string): void;
   /**
    * Set product sell data.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param productName - Name of the product
    * @param amt - Amount to sell, can be "MAX"
    * @param price - Price to sell, can be "MP"
@@ -7262,7 +7257,7 @@ export interface WarehouseAPI {
    */
   sellProduct(
     divisionName: string,
-    cityName: string,
+    city: CityName | `${CityName}`,
     productName: string,
     amt: string,
     price: string,
@@ -7277,41 +7272,41 @@ export interface WarehouseAPI {
   /**
    * Set smart supply
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param enabled - smart supply enabled
    */
-  setSmartSupply(divisionName: string, cityName: string, enabled: boolean): void;
+  setSmartSupply(divisionName: string, city: CityName | `${CityName}`, enabled: boolean): void;
   /**
    * Set whether smart supply uses leftovers before buying
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @param enabled - smart supply use leftovers enabled
    */
-  setSmartSupplyUseLeftovers(divisionName: string, cityName: string, materialName: string, enabled: boolean): void;
+  setSmartSupplyUseLeftovers(divisionName: string, city: CityName | `${CityName}`, materialName: string, enabled: boolean): void;
   /**
    * Set material buy data
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @param amt - Amount of material to buy
    */
-  buyMaterial(divisionName: string, cityName: string, materialName: string, amt: number): void;
+  buyMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: number): void;
   /**
    * Set material to bulk buy
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @param amt - Amount of material to buy
    */
-  bulkPurchase(divisionName: string, cityName: string, materialName: string, amt: number): void;
+  bulkPurchase(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: number): void;
   /**
    * Get warehouse data
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @returns warehouse data
    */
-  getWarehouse(divisionName: string, cityName: string): Warehouse;
+  getWarehouse(divisionName: string, city: CityName | `${CityName}`): Warehouse;
   /**
    * Get product data
    * @param divisionName - Name of the division
@@ -7322,26 +7317,27 @@ export interface WarehouseAPI {
   /**
    * Get material data
    * @param divisionName - Name of the division
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @returns material data
    */
-  getMaterial(divisionName: string, cityName: string, materialName: string): Material;
+  getMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: string): Material;
   /**
    * Set market TA 1 for a material.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @param on - market ta enabled
    */
-  setMaterialMarketTA1(divisionName: string, cityName: string, materialName: string, on: boolean): void;
+  setMaterialMarketTA1(divisionName: string, city: CityName | `${CityName}`, materialName: string, on: boolean): void;
   /**
    * Set market TA 2 for a material.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @param on - market ta enabled
    */
-  setMaterialMarketTA2(divisionName: string, cityName: string, materialName: string, on: boolean): void;
+  setMaterialMarketTA2(divisionName: string, city: CityName | `${CityName}`, materialName: string, on: boolean): void;
   /**
    * Set market TA 1 for a product.
    * @param divisionName - Name of the division
@@ -7367,9 +7363,9 @@ export interface WarehouseAPI {
    */
   exportMaterial(
     sourceDivision: string,
-    sourceCity: string,
+    sourceCity: CityName | `${CityName}`,
     targetDivision: string,
-    targetCity: string,
+    targetCity: CityName | `${CityName}`,
     materialName: string,
     amt: number,
   ): void;
@@ -7384,36 +7380,36 @@ export interface WarehouseAPI {
    */
   cancelExportMaterial(
     sourceDivision: string,
-    sourceCity: string,
+    sourceCity: CityName | `${CityName}`,
     targetDivision: string,
-    targetCity: string,
+    targetCity: CityName | `${CityName}`,
     materialName: string,
     amt: number,
   ): void;
   /**
    * Purchase warehouse for a new city
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    */
-  purchaseWarehouse(divisionName: string, cityName: string): void;
+  purchaseWarehouse(divisionName: string, city: CityName | `${CityName}`): void;
   /**
    * Upgrade warehouse
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param amt - amount of upgrades defaults to 1
    */
-  upgradeWarehouse(divisionName: string, cityName: string, amt?: number): void;
+  upgradeWarehouse(divisionName: string, city: CityName | `${CityName}`, amt?: number): void;
   /**
    * Create a new product
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param productName - Name of the product
    * @param designInvest - Amount to invest for the design of the product.
    * @param marketingInvest - Amount to invest for the marketing of the product.
    */
   makeProduct(
     divisionName: string,
-    cityName: string,
+    city: CityName | `${CityName}`,
     productName: string,
     designInvest: number,
     marketingInvest: number,
@@ -7421,32 +7417,32 @@ export interface WarehouseAPI {
   /**
    * Limit Material Production.
    * @param divisionName - Name of the division.
-   * @param cityName - Name of the city.
+   * @param city - Name of the city.
    * @param materialName - Name of the material.
    * @param qty - Amount to limit to. Pass a negative value to remove the limit instead.
    */
-  limitMaterialProduction(divisionName: string, cityName: string, materialName: string, qty: number): void;
+  limitMaterialProduction(divisionName: string, city: CityName | `${CityName}`, materialName: string, qty: number): void;
   /**
    * Limit Product Production.
    * @param divisionName - Name of the division.
-   * @param cityName - Name of the city.
+   * @param city - Name of the city.
    * @param productName - Name of the product.
    * @param qty - Amount to limit to. Pass a negative value to remove the limit instead.
    */
-  limitProductProduction(divisionName: string, cityName: string, productName: string, qty: number): void;
+  limitProductProduction(divisionName: string, city: CityName | `${CityName}`, productName: string, qty: number): void;
   /**
    * Gets the cost to upgrade a warehouse to the next level
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
-   * @param amt - amount of upgrades defaults to 1
+   * @param city - Name of the city
+   * @param amt - amount of upgrades. Optional, defaults to 1
    * @returns cost to upgrade
    */
-  getUpgradeWarehouseCost(adivisionName: string, acityName: string, amt?: number): number;
+  getUpgradeWarehouseCost(divisionName: string, city: CityName | `${CityName}`, amt?: number): number;
   /**
    * Check if you have a warehouse in city
    * @returns true if warehouse is present, false if not
    */
-  hasWarehouse(adivisionName: string, acityName: string): boolean;
+  hasWarehouse(divisionName: string, city: CityName | `${CityName}`): boolean;
 }
 
 /**
@@ -7531,8 +7527,8 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
 
   /** Expand to a new city
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city */
-  expandCity(divisionName: string, cityName: string): void;
+   * @param city - Name of the city */
+  expandCity(divisionName: string, city: CityName | `${CityName}`): void;
 
   /** Unlock an upgrade
    * @param upgradeName - Name of the upgrade */
@@ -7705,7 +7701,7 @@ interface Product {
   /** Data refers to the production, sale, and quantity of the products
    * These values are specific to a city
    * For each city, the data is [qty, prod, sell] */
-  cityData: { [key: string]: number[] };
+  cityData: Record<CityName | `${CityName}`, number[]>;
   /** Creation progress - A number between 0-100 representing percentage */
   developmentProgress: number;
 }
@@ -7745,7 +7741,7 @@ interface Export {
   /** Division the material is being exported to */
   div: string;
   /** City the material is being exported to */
-  loc: string;
+  loc: CityName;
   /** Amount of material exported */
   amt: string;
 }
@@ -7758,7 +7754,7 @@ interface Warehouse {
   /** Amount of size upgrade bought */
   level: number;
   /** City in which the warehouse is located */
-  loc: string;
+  loc: CityName;
   /** Total space in the warehouse */
   size: number;
   /** Used space in the warehouse */
@@ -7773,7 +7769,7 @@ interface Warehouse {
  */
 export interface Office {
   /** City of the office */
-  loc: string;
+  loc: CityName;
   /** Maximum number of employee */
   size: number;
   /** Minimum amount of energy of the employees */
