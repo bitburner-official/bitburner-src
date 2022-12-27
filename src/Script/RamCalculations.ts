@@ -105,9 +105,7 @@ function parseOnlyRamCalculate(otherScripts: Script[], code: string): RamCalcula
     // Finally, walk the reference map and generate a ram cost. The initial set of keys to scan
     // are those that start with __SPECIAL_INITIAL_MODULE__.
     let ram = RamCostConstants.Base;
-    const detailedCosts: RamUsageEntry[] = [
-      { type: "misc", name: "baseCost", cost: RamCostConstants.Base },
-    ];
+    const detailedCosts: RamUsageEntry[] = [{ type: "misc", name: "baseCost", cost: RamCostConstants.Base }];
     const unresolvedRefs = Object.keys(dependencyMap).filter((s) => s.startsWith(initialModule));
     const resolvedRefs = new Set();
     const loadedFns: Record<string, boolean> = {};
@@ -194,7 +192,7 @@ function parseOnlyRamCalculate(otherScripts: Script[], code: string): RamCalcula
     }
     if (ram > RamCostConstants.Max) {
       ram = RamCostConstants.Max;
-      detailedCosts.push({type:"misc", name: "Max Ram Cap", cost: RamCostConstants.Max});
+      detailedCosts.push({ type: "misc", name: "Max Ram Cap", cost: RamCostConstants.Max });
     }
     return { cost: ram, entries: detailedCosts.filter((e) => e.cost > 0) };
   } catch (error) {

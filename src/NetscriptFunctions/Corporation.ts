@@ -11,7 +11,6 @@ import { cloneDeep } from "lodash";
 import {
   productInfo as NSProduct,
   materialInfo as NSMaterial,
-  IndustryData as NSIndustryData,
   Corporation as NSCorporation,
   Division as NSDivision,
   WarehouseAPI,

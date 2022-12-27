@@ -3621,7 +3621,7 @@ export interface Sleeve {
    * ```ts
    * // Assigns the first sleeve to Homicide.
    * ns.sleeve.setToCommitCrime(0, "Homicide");
-   * 
+   *
    * // Assigns the second sleeve to Grand Theft Auto, using enum
    * const crimes = ns.enums.CrimeType;
    * ns.sleeve.setToCommitCrime(1, crimes.grandTheftAuto)
@@ -7664,7 +7664,6 @@ interface CorpConstants {
 }
 /** @public */
 type CorporationState = "START" | "PURCHASE" | "PRODUCTION" | "SALE" | "EXPORT";
-
 
 /**
  * Corporation material information

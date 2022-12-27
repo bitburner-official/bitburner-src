@@ -345,7 +345,7 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
     console.warn(`WorkerScript detected NaN for thread count for ${ws.name} on ${ws.hostname}`);
     threads = 1;
   }
-  ws.dynamicRamUsage = Math.min(ws.dynamicRamUsage+ramCost, RamCostConstants.Max);
+  ws.dynamicRamUsage = Math.min(ws.dynamicRamUsage + ramCost, RamCostConstants.Max);
   if (ws.dynamicRamUsage > 1.01 * ws.ramUsage) {
     log(ctx, () => "Insufficient static ram available.");
     ws.env.stopFlag = true;
@@ -373,7 +373,8 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
 
 /** Validates the input v as being a CityName. Throws an error if it is not. */
 function city(ctx: NetscriptContext, argName: string, v: unknown): CityName {
-  if (typeof v !== "string" || !checkEnum(CityName, v)) throw makeRuntimeErrorMsg(ctx, `${argName} should be a city name.`);
+  if (typeof v !== "string" || !checkEnum(CityName, v))
+    throw makeRuntimeErrorMsg(ctx, `${argName} should be a city name.`);
   return v;
 }
 

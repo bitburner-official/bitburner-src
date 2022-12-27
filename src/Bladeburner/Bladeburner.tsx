@@ -102,7 +102,7 @@ export class Bladeburner {
 
   constructor() {
     this.cities = {} as Record<CityName, City>;
-    // This for loop ensures the above type is met for this.cities. 
+    // This for loop ensures the above type is met for this.cities.
     for (const city of Object.values(CityName)) this.cities[city] = new City(city);
 
     this.updateSkillMultipliers(); // Calls resetSkillMultipliers()
