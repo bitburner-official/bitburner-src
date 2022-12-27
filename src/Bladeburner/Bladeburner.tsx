@@ -35,6 +35,7 @@ import { KEY } from "../utils/helpers/keyCodes";
 import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfiltrateWork";
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
+import { CityName } from "../Enums";
 
 export interface BlackOpsAttempt {
   error?: string;
@@ -69,7 +70,7 @@ export class Bladeburner {
   });
 
   cities: Record<string, City> = {};
-  city: string = BladeburnerConstants.CityNames[2];
+  city: CityName = BladeburnerConstants.CityNames[2];
   skills: Record<string, number> = {};
   skillMultipliers: Record<string, number> = {};
   staminaBonus = 0;

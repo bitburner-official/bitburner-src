@@ -1,3 +1,6 @@
+/* TODO: remove ns1-specific documentation for all functions, and just create a basic doc somewhere that says how to
+ *       convert examples for use in .script files (e.g. no async/await, var instead of let/const, etc). */
+
 /** @public */
 interface HP {
   current: number;
@@ -15,7 +18,7 @@ interface Skills {
   intelligence: number;
 }
 
-// TODO: provide same treatment to CodingContractData as for SleeveTask
+// TODO: provide same treatment to CodingContractData as for SleeveTask (actual types)
 /**
  * Coding contract data will differ depending on coding contract.
  * @public
@@ -1035,20 +1038,8 @@ export interface TIX {
    * 1. TIX API Access
    *
    * @example
-   * ```ts
-   * // NS1
-   * stock.getPrice("FSIG");
-   *
-   * // Choose the first stock symbol from the array of stock symbols.  Get the price
-   * // of the corresponding stock.
-   * var sym = stock.getSymbols()[0];
-   * tprint("Stock symbol: " + sym);
-   * tprint("Stock price: " + stock.getPrice(sym));
-   * ```
-   * @example
-   * ```ts
-   * // NS2
-   * ns.stock.getPrice("FSIG");
+   * ```js
+   * const fourSigmaStockPrice = ns.stock.getPrice("FSIG");
    *
    * // Choose the first stock symbol from the array of stock symbols.  Get the price
    * // of the corresponding stock.
@@ -1947,7 +1938,7 @@ export interface Singularity {
    *
    * This function returns the number of milliseconds it takes to attempt the
    * specified crime (e.g It takes 60 seconds to attempt the ‘Rob Store’ crime,
-   * so running `commitCrime('ROBSTORE')` will return 60,000).
+   * so running `commitCrime('Rob Store')` will return 60,000).
    *
    * @param crime - Name of crime to attempt.
    * @param focus - Acquire player focus on this crime. Optional. Defaults to true.
@@ -3628,23 +3619,12 @@ export interface Sleeve {
    *
    * @example
    * ```ts
-   * // NS1
-   * // Assign the first 3 sleeves to commit various crimes.
-   * var crime = ["MUG", "ROBSTORE", "SHOPLIFT"];
-   * for (var i = 0; i < crime.length; i++) {
-   *     tprintf("Sleeve %d commits crime: %s", i, crime[i]);
-   *     sleeve.setToCommitCrime(i, crime[i]);
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2
-   * // Assign the first 3 sleeves to commit various crimes.
-   * const crime = ["MUG", "ROBSTORE", "SHOPLIFT"];
-   * for (let i = 0; i < crime.length; i++) {
-   *     ns.tprintf("Sleeve %d commits crime: %s", i, crime[i]);
-   *     ns.sleeve.setToCommitCrime(i, crime[i]);
-   * }
+   * // Assigns the first sleeve to Homicide.
+   * ns.sleeve.setToCommitCrime(0, "Homicide");
+   * 
+   * // Assigns the second sleeve to Grand Theft Auto, using enum
+   * const crimes = ns.enums.CrimeType;
+   * ns.sleeve.setToCommitCrime(1, crimes.grandTheftAuto)
    * ```
    *
    * @param sleeveNumber - Index of the sleeve to start committing crime. Sleeves are numbered starting from 0.
@@ -4339,7 +4319,7 @@ interface InfiltrationReward {
 /** @public */
 interface ILocation {
   city: CityName;
-  name: string;
+  name: LocationName;
 }
 
 /** @public */
@@ -7245,7 +7225,13 @@ export interface WarehouseAPI {
    * @param amt - Amount to sell, can be "MAX"
    * @param price - Price to sell, can be "MP"
    */
-  sellMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: string, price: string): void;
+  sellMaterial(
+    divisionName: string,
+    city: CityName | `${CityName}`,
+    materialName: string,
+    amt: string,
+    price: string,
+  ): void;
   /**
    * Set product sell data.
    * @param divisionName - Name of the division
@@ -7283,7 +7269,12 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @param enabled - smart supply use leftovers enabled
    */
-  setSmartSupplyUseLeftovers(divisionName: string, city: CityName | `${CityName}`, materialName: string, enabled: boolean): void;
+  setSmartSupplyUseLeftovers(
+    divisionName: string,
+    city: CityName | `${CityName}`,
+    materialName: string,
+    enabled: boolean,
+  ): void;
   /**
    * Set material buy data
    * @param divisionName - Name of the division
@@ -7421,7 +7412,12 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material.
    * @param qty - Amount to limit to. Pass a negative value to remove the limit instead.
    */
-  limitMaterialProduction(divisionName: string, city: CityName | `${CityName}`, materialName: string, qty: number): void;
+  limitMaterialProduction(
+    divisionName: string,
+    city: CityName | `${CityName}`,
+    materialName: string,
+    qty: number,
+  ): void;
   /**
    * Limit Product Production.
    * @param divisionName - Name of the division.

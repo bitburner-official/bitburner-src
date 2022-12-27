@@ -44,7 +44,7 @@ import { calculateCompanyWorkStats } from "../Work/Formulas";
 import { Companies } from "../Company/Companies";
 import { calculateClassEarnings } from "../Work/Formulas";
 import { calculateFactionExp, calculateFactionRep } from "../Work/Formulas";
-import { FactionWorkType, GymType, UniversityClassType, LocationName } from "../Enums";
+import { FactionWorkType, GymType, UniversityClassType, LocationName, CityName } from "../Enums";
 
 import { defaultMultipliers } from "../PersonObjects/Multipliers";
 import { checkEnum, findEnumMember } from "../utils/helpers/enum";
@@ -92,7 +92,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       mults: defaultMultipliers(),
       numPeopleKilled: 0,
       money: 0,
-      city: "",
+      city: CityName.Sector12,
       location: "",
       bitNodeN: 0,
       totalPlaytime: 0,
@@ -107,7 +107,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       skills: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
       exp: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
       mults: defaultMultipliers(),
-      city: "",
+      city: CityName.Sector12,
     }),
     reputation: {
       calculateFavorToRep: (ctx) => (_favor) => {

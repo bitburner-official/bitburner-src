@@ -4,14 +4,15 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../uti
 import { Industry } from "./Industry";
 import { Corporation } from "./Corporation";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { CityName } from "../Enums";
 
 interface IParams {
-  loc?: string;
+  loc?: CityName;
   size?: number;
 }
 
 export class OfficeSpace {
-  loc: string;
+  loc: CityName;
   size: number;
 
   minEne = 0;
@@ -70,7 +71,7 @@ export class OfficeSpace {
   };
 
   constructor(params: IParams = {}) {
-    this.loc = params.loc ? params.loc : "";
+    this.loc = params.loc ? params.loc : CityName.Sector12;
     this.size = params.size ? params.size : 1;
   }
 

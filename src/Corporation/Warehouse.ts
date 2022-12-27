@@ -4,11 +4,12 @@ import { Industry } from "./Industry";
 import { MaterialInfo } from "./MaterialInfo";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { CityName } from "../Enums";
 
 interface IConstructorParams {
   corp?: Corporation;
   industry?: Industry;
-  loc?: string;
+  loc?: CityName;
   size?: number;
 }
 
@@ -17,7 +18,7 @@ export class Warehouse {
   level = 1;
 
   // City that this Warehouse is in
-  loc: string;
+  loc: CityName;
 
   // Map of Materials held by this Warehouse
   materials: Record<string, Material>;
@@ -40,7 +41,7 @@ export class Warehouse {
   smartSupplyStore = 0;
 
   constructor(params: IConstructorParams = {}) {
-    this.loc = params.loc ? params.loc : "";
+    this.loc = params.loc ? params.loc : CityName.Sector12;
     this.size = params.size ? params.size : 0;
 
     this.materials = {
