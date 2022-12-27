@@ -3,6 +3,7 @@ import { ResearchTree } from "./ResearchTree";
 import { Corporation } from "./Corporation";
 import { getBaseResearchTreeCopy, getProductIndustryResearchTreeCopy } from "./data/BaseResearchTree";
 import { MoneyCost } from "./ui/MoneyCost";
+import { IndustryData } from "../ScriptEditor/NetscriptDefinitions";
 
 export enum IndustryType {
   Energy = "Energy",
@@ -20,38 +21,6 @@ export enum IndustryType {
   Healthcare = "Healthcare",
   RealEstate = "RealEstate",
 }
-
-export interface IProductRatingWeight {
-  Aesthetics?: number;
-  Durability?: number;
-  Features?: number;
-  Quality?: number;
-  Performance?: number;
-  Reliability?: number;
-}
-
-type IndustryData = {
-  startingCost: number;
-  description: string;
-  /** Product name for industry. Empty string for industries with no products. */
-  product?: { name: string; verb: string; desc: string };
-  ProductRatingWeights?: IProductRatingWeight;
-  recommendStarting: boolean;
-  reqMats: Record<string, number>;
-  /** Real estate factor */
-  reFac?: number;
-  /** Scientific research factor (affects quality) */
-  sciFac?: number;
-  /** Hardware factor */
-  hwFac?: number;
-  /** Robots factor */
-  robFac?: number;
-  /** AI Cores factor */
-  aiFac?: number;
-  /** Advertising factor (affects sales) */
-  advFac?: number;
-  prodMats?: string[];
-};
 
 export const IndustriesData: Record<IndustryType, IndustryData> = {
   [IndustryType.Agriculture]: {

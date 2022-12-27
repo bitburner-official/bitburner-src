@@ -1,7 +1,4 @@
-import { CityName } from "./../../Enums";
 export const BladeburnerConstants = {
-  /** Array of city names -TODO can probably be removed and replaced with references to actual CityName. */
-  CityNames: Object.values(CityName),
   CyclesPerSecond: 5, // Game cycle is 200 ms
 
   StaminaGainPerSecond: 0.0085,

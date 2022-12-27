@@ -1,6 +1,6 @@
-import { CityName } from "./../../Enums";
 const CyclesPerMarketCycle = 50;
-const AllCorporationStates = ["START", "PURCHASE", "PRODUCTION", "SALE", "EXPORT"];
+type CorporationState = "START" | "PURCHASE" | "PRODUCTION" | "SALE" | "EXPORT";
+const AllCorporationStates: CorporationState[] = ["START", "PURCHASE", "PRODUCTION", "SALE", "EXPORT"];
 export const CorporationConstants = {
   INITIALSHARES: 1e9, //Total number of shares you have at your company
   SHARESPERPRICEUPDATE: 1e6, //When selling large number of shares, price is dynamically updated for every batch of this amount
@@ -10,15 +10,6 @@ export const CorporationConstants = {
   CyclesPerMarketCycle: CyclesPerMarketCycle,
   CyclesPerIndustryStateCycle: CyclesPerMarketCycle / AllCorporationStates.length,
   SecsPerMarketCycle: CyclesPerMarketCycle / 5,
-
-  Cities: [
-    CityName.Aevum,
-    CityName.Chongqing,
-    CityName.Sector12,
-    CityName.NewTokyo,
-    CityName.Ishima,
-    CityName.Volhaven,
-  ],
 
   WarehouseInitialCost: 5e9, //Initial purchase cost of warehouse
   WarehouseInitialSize: 100,
@@ -40,7 +31,7 @@ export const CorporationConstants = {
   EmployeeRaiseAmount: 50, // Employee salary increases by this (additive)
 
   BaseMaxProducts: 3, // Initial value for maximum number of products allowed
-  AllCorporationStates: AllCorporationStates,
+  AllCorporationStates,
   AllMaterials: [
     "Water",
     "Energy",

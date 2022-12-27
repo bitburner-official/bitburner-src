@@ -481,12 +481,10 @@ export function Research(division: Industry, researchName: string): void {
   // whether research is done by script or UI. All other stats gets calculated in every cycle
   // Warehouse size gets updated only when something increases it.
   if (researchName == "Drones - Transport") {
-    for (let i = 0; i < CorporationConstants.Cities.length; ++i) {
-      const city = CorporationConstants.Cities[i];
+    for (const city of Object.values(CityName)) {
       const warehouse = division.warehouses[city];
-      if (!warehouse) {
-        continue;
-      }
+      if (!warehouse) continue;
+
       if (Player.corporation) {
         // Stores cycles in a "buffer". Processed separately using Engine Counters
         warehouse.updateSize(Player.corporation, division);

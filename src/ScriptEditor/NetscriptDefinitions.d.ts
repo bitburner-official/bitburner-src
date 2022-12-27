@@ -7488,7 +7488,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
 
   /** Get corporation related constants
    * @returns corporation related constants */
-  getConstants(): CorpConstants;
+  constants(): CorpConstants;
 
   /** Accept investment based on you companies current valuation
    * @remarks
@@ -7558,6 +7558,41 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   getBonusTime(): number;
 }
 
+/** Product rating information
+ *  @public */
+interface IProductRatingWeight {
+  Aesthetics?: number;
+  Durability?: number;
+  Features?: number;
+  Quality?: number;
+  Performance?: number;
+  Reliability?: number;
+}
+
+/** Data for an individual industry
+ *  @public */
+type IndustryData = {
+  startingCost: number;
+  description: string;
+  product?: { name: string; verb: string; desc: string };
+  ProductRatingWeights?: IProductRatingWeight;
+  recommendStarting: boolean;
+  reqMats: Record<string, number>;
+  /** Real estate factor */
+  reFac?: number;
+  /** Scientific research factor (affects quality) */
+  sciFac?: number;
+  /** Hardware factor */
+  hwFac?: number;
+  /** Robots factor */
+  robFac?: number;
+  /** AI Cores factor */
+  aiFac?: number;
+  /** Advertising factor (affects sales) */
+  advFac?: number;
+  prodMats?: string[];
+};
+
 /**
  * General info about a corporation
  * @public
@@ -7600,6 +7635,10 @@ interface CorporationInfo {
  * @public
  */
 interface CorpConstants {
+  /** Names of all availavle industries */
+  industryNames: IndustryType[];
+  /** Map of industry types to their data definitions */
+  industriesData: Record<IndustryType, IndustryData>;
   /** Corporation cycle states */
   states: string[];
   /** Unlockable upgrades */
@@ -7622,8 +7661,6 @@ interface CorpConstants {
   materials: Record<string, materialInfo>;
   /** Array of all product types */
   products: Record<string, productInfo>;
-  /** Array of all division types */
-  divisions: Record<string, divisionInfo>;
 }
 
 /**
@@ -7655,12 +7692,12 @@ interface productInfo {
 }
 
 /**
- * Corporation division information
+ * Corporation industry information
  * @public
  */
-interface divisionInfo {
-  /** Division type */
-  type: string;
+interface IndustryData {
+  /** Industry type */
+  type: IndustryType;
   /** Cost to expand to the division */
   cost: number;
   /** Materials required for production and their amounts */

@@ -137,8 +137,7 @@ export class Industry {
   //materials/products (such as quality, etc.)
   calculateProductionFactors(): void {
     let multSum = 0;
-    for (let i = 0; i < CorporationConstants.Cities.length; ++i) {
-      const city = CorporationConstants.Cities[i];
+    for (const city of Object.values(CityName)) {
       const warehouse = this.warehouses[city];
       if (!warehouse) continue;
 
@@ -244,12 +243,11 @@ export class Industry {
       prodMats = this.prodMats;
 
     //Only 'process the market' for materials that this industry deals with
-    for (let i = 0; i < CorporationConstants.Cities.length; ++i) {
+    for (const city of Object.values(CityName)) {
       //If this industry has a warehouse in this city, process the market
       //for every material this industry requires or produces
-      if (this.warehouses[CorporationConstants.Cities[i]]) {
-        const wh = this.warehouses[CorporationConstants.Cities[i]];
-        if (wh === 0) continue;
+      if (this.warehouses[city]) {
+        const wh = this.warehouses[city] as Warehouse; // Warehouse type is known due to if check above
         for (const name of Object.keys(reqMats)) {
           if (reqMats.hasOwnProperty(name)) {
             wh.materials[name].processMarket();
@@ -302,8 +300,7 @@ export class Industry {
       expenses = 0;
     this.calculateProductionFactors();
 
-    for (let i = 0; i < CorporationConstants.Cities.length; ++i) {
-      const city = CorporationConstants.Cities[i];
+    for (const city of Object.values(CityName)) {
       const office = this.offices[city];
       if (office === 0) continue;
 
@@ -768,8 +765,7 @@ export class Industry {
   //Processes FINISHED products
   processProduct(marketCycles = 1, product: Product, corporation: Corporation): number {
     let totalProfit = 0;
-    for (let i = 0; i < CorporationConstants.Cities.length; ++i) {
-      const city = CorporationConstants.Cities[i];
+    for (const city of Object.values(CityName)) {
       const office = this.offices[city];
       if (office === 0) continue;
       const warehouse = this.warehouses[city];
@@ -975,11 +971,9 @@ export class Industry {
   resetImports(state: string): void {
     //At the start of the export state, set the imports of everything to 0
     if (state === "EXPORT") {
-      for (let i = 0; i < CorporationConstants.Cities.length; ++i) {
-        const city = CorporationConstants.Cities[i];
-        if (!this.warehouses[city]) {
-          continue;
-        }
+      for (const city of Object.values(CityName)) {
+        if (!this.warehouses[city]) continue;
+
         const warehouse = this.warehouses[city];
         if (warehouse === 0) continue;
         for (const matName of Object.keys(warehouse.materials)) {

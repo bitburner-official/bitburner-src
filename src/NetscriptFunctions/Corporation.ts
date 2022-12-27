@@ -6,11 +6,12 @@ import { Material } from "../Corporation/Material";
 import { Warehouse } from "../Corporation/Warehouse";
 import { Industry } from "../Corporation/Industry";
 import { Corporation } from "../Corporation/Corporation";
+import { cloneDeep } from "lodash";
 
 import {
   productInfo as NSProduct,
   materialInfo as NSMaterial,
-  divisionInfo as NSDivisionInfo,
+  IndustryData as NSIndustryData,
   Corporation as NSCorporation,
   Division as NSDivision,
   WarehouseAPI,
@@ -284,26 +285,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       products: division.products === undefined ? [] : Object.keys(division.products),
       makesProducts: division.makesProducts,
     };
-  }
-
-  function getDivisionConstants(): Record<string, NSDivisionInfo> {
-    const divObject: Record<string, NSDivisionInfo> = {};
-    for (const [ind, type] of Object.entries(IndustryType)) {
-      divObject[ind] = {
-        type: type,
-        cost: IndustriesData[type].startingCost,
-        requiredMaterials: IndustriesData[type].reqMats,
-        makesMaterials: IndustriesData[type].prodMats ? true : false,
-        makesProducts: IndustriesData[type].product ? true : false,
-      };
-      if (divObject[ind].makesProducts) {
-        divObject[ind].productType = IndustriesData[type].product?.name;
-      }
-      if (divObject[ind].makesMaterials) {
-        divObject[ind].producedMaterials = IndustriesData[type].prodMats;
-      }
-    }
-    return divObject;
   }
 
   function getProductInfo(): Record<string, NSProduct> {
@@ -759,9 +740,13 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     ...warehouseAPI,
     ...officeAPI,
     hasCorporation: () => () => !!Player.corporation,
-    getConstants: (ctx) => () => {
+    constants: (ctx) => () => {
       checkAccess(ctx);
       return {
+        industryNames: Object.values(IndustryType),
+        // Just give the player the actual internal IndustriesData.
+        industriesData: cloneDeep(IndustriesData),
+        // Why isn't this in corp constants
         coffeeCost: 5e8,
         states: [...CorporationConstants.AllCorporationStates],
         bribeToRepRatio: CorporationConstants.BribeToRepRatio,
@@ -773,7 +758,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         unlocks: [...CorporationConstants.AllUnlocks],
         upgrades: [...CorporationConstants.AllUpgrades],
         researches: { base: [...CorporationConstants.BaseResearch], product: [...CorporationConstants.ProdResearch] },
-        divisions: getDivisionConstants(),
       };
     },
     expandIndustry: (ctx) => (_industryName, _divisionName) => {
@@ -790,7 +774,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
-      if (!CorporationConstants.Cities.includes(cityName)) throw new Error("Invalid city name");
       const corporation = getCorporation();
       const division = getDivision(divisionName);
       NewCity(corporation, division, cityName);

@@ -373,8 +373,7 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
 
 /** Validates the input v as being a CityName. Throws an error if it is not. */
 function city(ctx: NetscriptContext, argName: string, v: unknown): CityName {
-  if (typeof v !== "string") throw makeRuntimeErrorMsg(ctx, `${argName} should be a city name.`);
-  if (!checkEnum(CityName, v)) throw makeRuntimeErrorMsg(ctx, `${argName} should be a city name.`);
+  if (typeof v !== "string" || !checkEnum(CityName, v)) throw makeRuntimeErrorMsg(ctx, `${argName} should be a city name.`);
   return v;
 }
 
