@@ -1,7 +1,7 @@
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
 import { hasAugmentationPrereqs } from "../Faction/FactionHelpers";
-import { CityName } from "../Locations/data/CityNames";
+import { CityName } from "../Enums";
 import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
 import { getGraftingAvailableAugs, calculateGraftingTimeWithBonus } from "../PersonObjects/Grafting/GraftingHelpers";
 import { Player as player } from "../Player";

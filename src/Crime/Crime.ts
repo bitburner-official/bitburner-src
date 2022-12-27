@@ -2,7 +2,7 @@ import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
 import { Person as IPerson } from "../ScriptEditor/NetscriptDefinitions";
 import { WorkerScript } from "../Netscript/WorkerScript";
-import { CrimeType } from "../utils/enums";
+import { CrimeType } from "../Enums";
 import { CrimeWork } from "../Work/CrimeWork";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
 

@@ -12,7 +12,7 @@ import { HacknetNodeConstants, HacknetServerConstants } from "../Hacknet/data/Co
 import { hasHacknetServers } from "../Hacknet/HacknetHelpers";
 import { HacknetNode } from "../Hacknet/HacknetNode";
 import { HacknetServer } from "../Hacknet/HacknetServer";
-import { CityName } from "../Locations/data/CityNames";
+import { CityName } from "../Enums";
 import { Player } from "@player";
 import { Programs } from "../Programs/Programs";
 import { GetAllServers, GetServer } from "../Server/AllServers";

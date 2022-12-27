@@ -77,9 +77,9 @@ import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
-import { CompanyPosName, CrimeType, GymType, LocationName, UniversityClassType } from "./utils/enums";
+import { JobName, CrimeType, GymType, LocationName, UniversityClassType } from "./Enums";
 import { cloneDeep } from "lodash";
-import { FactionWorkType } from "./utils/enums";
+import { FactionWorkType } from "./Enums";
 
 export const enums: NSEnums = {
   toast: ToastVariant,
@@ -87,7 +87,7 @@ export const enums: NSEnums = {
   FactionWorkType,
   GymType,
   UniversityClassType,
-  CompanyPosName,
+  JobName,
   LocationName,
 };
 

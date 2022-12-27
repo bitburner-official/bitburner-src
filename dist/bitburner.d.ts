@@ -769,7 +769,7 @@ export declare interface CodingContract {
 export declare type CodingContractData = any;
 
 /** @public */
-export declare enum CompanyPosName {
+export declare enum JobName {
     sw0 = "Software Engineering Intern",
     sw1 = "Junior Software Engineer",
     sw2 = "Senior Software Engineer",
@@ -5222,7 +5222,7 @@ export declare type NSEnums = {
     FactionWorkType: typeof FactionWorkType;
     GymType: typeof GymType;
     UniversityClassType: typeof UniversityClassType;
-    CompanyPosName: typeof CompanyPosName;
+    JobName: typeof JobName;
     LocationName: typeof LocationName;
 };
 
@@ -7828,7 +7828,7 @@ export declare interface WorkFormulas {
     companyGains(
     person: Person,
     companyName: string,
-    workType: CompanyPosName | `${CompanyPosName}`,
+    workType: JobName | `${JobName}`,
     favor: number,
     ): WorkStats;
 }

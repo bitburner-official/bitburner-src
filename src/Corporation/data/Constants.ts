@@ -1,4 +1,4 @@
-import { CityName } from "./../../Locations/data/CityNames";
+import { CityName } from "./../../Enums";
 const CyclesPerMarketCycle = 50;
 const AllCorporationStates = ["START", "PURCHASE", "PRODUCTION", "SALE", "EXPORT"];
 export const CorporationConstants = {

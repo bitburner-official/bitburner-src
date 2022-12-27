@@ -7,7 +7,7 @@ import { createCityMap } from "../Locations/createCityMap";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { CityName } from "../Locations/data/CityNames";
+import { CityName } from "../Enums";
 
 interface IConstructorParams {
   name?: string;

@@ -5,7 +5,7 @@ import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
 import { numeralWrapper } from "../ui/numeralFormat";
 import { ScriptArg } from "./ScriptArg";
-import { CityName } from "../Locations/data/CityNames";
+import { CityName } from "../Enums";
 import { BasicHGWOptions } from "src/ScriptEditor/NetscriptDefinitions";
 import { Server } from "../Server/Server";
 import {

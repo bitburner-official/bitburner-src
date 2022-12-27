@@ -1,6 +1,6 @@
 import { Player } from "@player";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { CityName } from "../Locations/data/CityNames";
+import { CityName } from "../Enums";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { Augmentation } from "../Augmentation/Augmentation";
 

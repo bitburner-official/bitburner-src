@@ -3910,7 +3910,7 @@ interface WorkFormulas {
   companyGains(
     person: Person,
     companyName: string,
-    workType: CompanyPosName | `${CompanyPosName}`,
+    workType: JobName | `${JobName}`,
     favor: number,
   ): WorkStats;
 }
@@ -6968,43 +6968,43 @@ declare enum GymType {
 }
 
 /** @public */
-declare enum CompanyPosName {
-  sw0 = "Software Engineering Intern",
-  sw1 = "Junior Software Engineer",
-  sw2 = "Senior Software Engineer",
-  sw3 = "Lead Software Developer",
-  sw4 = "Head of Software",
-  sw5 = "Head of Engineering",
-  sw6 = "Vice President of Technology",
-  sw7 = "Chief Technology Officer",
+declare enum JobName {
+  software0 = "Software Engineering Intern",
+  software1 = "Junior Software Engineer",
+  software2 = "Senior Software Engineer",
+  software3 = "Lead Software Developer",
+  software4 = "Head of Software",
+  software5 = "Head of Engineering",
+  software6 = "Vice President of Technology",
+  software7 = "Chief Technology Officer",
   IT0 = "IT Intern",
   IT1 = "IT Analyst",
   IT2 = "IT Manager",
   IT3 = "Systems Administrator",
-  secEng = "Security Engineer",
-  netEng0 = "Network Engineer",
-  netEng1 = "Network Administrator",
-  bus0 = "Business Intern",
-  bus1 = "Business Analyst",
-  bus2 = "Business Manager",
-  bus3 = "Operations Manager",
-  bus4 = "Chief Financial Officer",
-  bus5 = "Chief Executive Officer",
-  sec0 = "Police Officer",
-  sec1 = "Police Chief",
-  sec2 = "Security Guard",
-  sec3 = "Security Officer",
-  sec4 = "Security Supervisor",
-  sec5 = "Head of Security",
+  securityEng = "Security Engineer",
+  networkEng0 = "Network Engineer",
+  networkEng1 = "Network Administrator",
+  business0 = "Business Intern",
+  business1 = "Business Analyst",
+  business2 = "Business Manager",
+  business3 = "Operations Manager",
+  business4 = "Chief Financial Officer",
+  business5 = "Chief Executive Officer",
+  security0 = "Police Officer",
+  security1 = "Police Chief",
+  security2 = "Security Guard",
+  security3 = "Security Officer",
+  security4 = "Security Supervisor",
+  security5 = "Head of Security",
   agent0 = "Field Agent",
   agent1 = "Secret Agent",
   agent2 = "Special Operative",
   waiter = "Waiter",
   employee = "Employee",
-  softCons0 = "Software Consultant",
-  softCons1 = "Senior Software Consultant",
-  busCons0 = "Business Consultant",
-  busCons1 = "Senior Business Consultant",
+  softwareConsult0 = "Software Consultant",
+  softwareConsult1 = "Senior Software Consultant",
+  businessConsult0 = "Business Consultant",
+  businessConsult1 = "Senior Business Consultant",
   waiterPT = "Part-time Waiter",
   employeePT = "Part-time Employee",
 }
@@ -7125,7 +7125,7 @@ export type NSEnums = {
   FactionWorkType: typeof FactionWorkType;
   GymType: typeof GymType;
   UniversityClassType: typeof UniversityClassType;
-  CompanyPosName: typeof CompanyPosName;
+  JobName: typeof JobName;
   LocationName: typeof LocationName;
 };
 

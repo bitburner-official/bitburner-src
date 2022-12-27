@@ -12,7 +12,7 @@ import { Player } from "@player";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { isString } from "../utils/helpers/isString";
-import { CityName } from "../Locations/data/CityNames";
+import { CityName } from "../Enums";
 
 interface IParams {
   name?: string;

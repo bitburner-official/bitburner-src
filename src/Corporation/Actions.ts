@@ -15,7 +15,7 @@ import { EmployeePositions } from "./EmployeePositions";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
 import { checkEnum } from "../utils/helpers/enum";
-import { CityName } from "../Locations/data/CityNames";
+import { CityName } from "../Enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 
 export function NewIndustry(corporation: Corporation, industry: IndustryType, name: string): void {
