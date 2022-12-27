@@ -7120,13 +7120,14 @@ declare enum LocationName {
 
 /** @public */
 export type NSEnums = {
-  toast: typeof ToastVariant;
+  CityName: typeof CityName;
   CrimeType: typeof CrimeType;
   FactionWorkType: typeof FactionWorkType;
   GymType: typeof GymType;
-  UniversityClassType: typeof UniversityClassType;
   JobName: typeof JobName;
   LocationName: typeof LocationName;
+  ToastVariant: typeof ToastVariant;
+  UniversityClassType: typeof UniversityClassType;
 };
 
 /**
