@@ -7,7 +7,7 @@ Netscript Miscellaneous
 
 Netscript Ports
 ---------------
-Netscript Ports are endpoints that can be used to communicate between scripts.
+Netscript Ports are endpoints that can be used to communicate between scripts and across servers.
 A port is implemented as a sort of serialized queue, where you can only write
 and read one element at a time from the port. When you read data from a port,
 the element that is read is removed from the port.
