@@ -284,7 +284,7 @@ export const IndustryDescriptions = (industry: IndustryType, corp: Corporation) 
   const data = IndustriesData[industry];
   return (
     <>
-      ${data.description}
+      {data.description}
       <br />
       <br />
       Starting cost: <MoneyCost money={data.startingCost} corp={corp} />
