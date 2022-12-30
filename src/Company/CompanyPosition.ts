@@ -1,4 +1,4 @@
-import { Person as IPerson } from "../ScriptEditor/NetscriptDefinitions";
+import { Person as IPerson } from "@nsdefs";
 import { CONSTANTS } from "../Constants";
 import * as names from "./data/JobTracks";
 import { JobName } from "../Enums";

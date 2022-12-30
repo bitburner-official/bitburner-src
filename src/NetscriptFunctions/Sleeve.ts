@@ -4,7 +4,7 @@ import { CityName } from "../Enums";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { Augmentation } from "../Augmentation/Augmentation";
 
-import { Sleeve } from "../ScriptEditor/NetscriptDefinitions";
+import { Sleeve } from "@nsdefs";
 import { checkEnum } from "../utils/helpers/enum";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";

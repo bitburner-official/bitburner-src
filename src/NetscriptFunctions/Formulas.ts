@@ -26,7 +26,7 @@ import {
   calculateWeakenTime,
 } from "../Hacking";
 import { Programs } from "../Programs/Programs";
-import { Formulas as IFormulas, Player as IPlayer, Person as IPerson } from "../ScriptEditor/NetscriptDefinitions";
+import { Formulas as IFormulas, Player as IPlayer, Person as IPerson } from "@nsdefs";
 import {
   calculateRespectGain,
   calculateWantedLevelGain,

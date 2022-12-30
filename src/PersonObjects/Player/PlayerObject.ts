@@ -26,7 +26,7 @@ import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { CONSTANTS } from "../../Constants";
 import { Work } from "src/Work/Work";
 import { Person } from "../Person";
-import { Player as IPlayer } from "../../ScriptEditor/NetscriptDefinitions";
+import { Player as IPlayer } from "@nsdefs";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties

@@ -1,7 +1,7 @@
 import { Player } from "@player";
 import { Bladeburner } from "../Bladeburner/Bladeburner";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { Bladeburner as INetscriptBladeburner } from "../ScriptEditor/NetscriptDefinitions";
+import { Bladeburner as INetscriptBladeburner } from "@nsdefs";
 import { Action } from "src/Bladeburner/Action";
 import { InternalAPI, NetscriptContext } from "src/Netscript/APIWrapper";
 import { BlackOperation } from "../Bladeburner/BlackOperation";

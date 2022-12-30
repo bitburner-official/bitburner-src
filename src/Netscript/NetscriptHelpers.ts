@@ -6,7 +6,7 @@ import { ScriptDeath } from "./ScriptDeath";
 import { numeralWrapper } from "../ui/numeralFormat";
 import { ScriptArg } from "./ScriptArg";
 import { CityName } from "../Enums";
-import { BasicHGWOptions } from "src/ScriptEditor/NetscriptDefinitions";
+import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson } from "@nsdefs";
 import { Server } from "../Server/Server";
 import {
   calculateHackingChance,
@@ -28,7 +28,6 @@ import { RunningScript } from "../Script/RunningScript";
 import { toNative } from "../NetscriptFunctions/toNative";
 import { ScriptIdentifier } from "./ScriptIdentifier";
 import { findRunningScript, findRunningScriptByPid } from "../Script/ScriptHelpers";
-import { RunningScript as IRunningScript, Person as IPerson } from "../ScriptEditor/NetscriptDefinitions";
 import { arrayToString } from "../utils/helpers/arrayToString";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
@@ -66,15 +65,15 @@ export const helpers = {
   failOnHacknetServer,
 };
 
-export function assertEnumMember<T extends string>(
+export function assertMember<T extends string>(
   ctx: NetscriptContext,
-  obj: Record<string, T>,
-  enumName: string,
+  obj: Record<string, T> | T[],
+  typeName: string,
   argName: string,
   v: unknown,
 ): asserts v is T {
   assertString(ctx, argName, v);
-  if (!checkEnum(obj, v)) throw makeRuntimeErrorMsg(ctx, `${argName}: ${v} is not a valid ${enumName}.`, "TYPE");
+  if (!checkEnum(obj, v)) throw makeRuntimeErrorMsg(ctx, `${argName}: ${v} is not a valid ${typeName}.`, "TYPE");
 }
 
 export function assertString(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {

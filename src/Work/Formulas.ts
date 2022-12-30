@@ -1,7 +1,7 @@
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Crime } from "../Crime/Crime";
 import { newWorkStats, scaleWorkStats, WorkStats, multWorkStats } from "./WorkStats";
-import { Person as IPerson } from "../ScriptEditor/NetscriptDefinitions";
+import { Person as IPerson } from "@nsdefs";
 import { CONSTANTS } from "../Constants";
 import { FactionWorkType, GymType } from "../Enums";
 import {

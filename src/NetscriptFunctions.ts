@@ -61,7 +61,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums } from "./ScriptEditor/NetscriptDefinitions";
+import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CorporationConstants } from "../data/Constants";
+import * as corpConstants from "../data/Constants";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { NewCity } from "../Actions";
 import { MoneyCost } from "./MoneyCost";
@@ -20,7 +20,7 @@ export function ExpandNewCity(props: IProps): React.ReactElement {
   const possibleCities = Object.values(CityName).filter((cityName) => division.offices[cityName] === 0);
   const [city, setCity] = useState(possibleCities[0]);
 
-  const disabled = corp.funds < CorporationConstants.OfficeInitialCost;
+  const disabled = corp.funds < corpConstants.officeInitialCost;
 
   function onCityChange(event: SelectChangeEvent<string>): void {
     setCity(event.target.value as CityName);
@@ -42,7 +42,7 @@ export function ExpandNewCity(props: IProps): React.ReactElement {
     <>
       <Typography>
         Would you like to expand into a new city by opening an office? This would cost{" "}
-        <MoneyCost money={CorporationConstants.OfficeInitialCost} corp={corp} />
+        <MoneyCost money={corpConstants.officeInitialCost} corp={corp} />
       </Typography>
       <Select
         endAdornment={

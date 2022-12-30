@@ -37,7 +37,7 @@ import { SleeveSupportWork } from "./Work/SleeveSupportWork";
 import { SleeveBladeburnerWork } from "./Work/SleeveBladeburnerWork";
 import { SleeveCrimeWork } from "./Work/SleeveCrimeWork";
 import * as sleeveMethods from "./SleeveMethods";
-import { SleevePerson } from "../../ScriptEditor/NetscriptDefinitions";
+import { SleevePerson } from "@nsdefs";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: Work | null = null;

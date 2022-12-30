@@ -5,7 +5,7 @@ import { CityName } from "../Enums";
 import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
 import { getGraftingAvailableAugs, calculateGraftingTimeWithBonus } from "../PersonObjects/Grafting/GraftingHelpers";
 import { Player as player } from "../Player";
-import { Grafting as IGrafting } from "../ScriptEditor/NetscriptDefinitions";
+import { Grafting as IGrafting } from "@nsdefs";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { GraftingWork } from "../Work/GraftingWork";

@@ -349,6 +349,8 @@ const grafting = {
 const corporation = {
   hasCorporation: 0, // This one is free
   getConstants: RamCostConstants.Corporation,
+  getIndustryData: RamCostConstants.Corporation,
+  getMaterialData: RamCostConstants.Corporation,
   issueNewShares: RamCostConstants.Corporation,
   createCorporation: RamCostConstants.Corporation,
   hasUnlockUpgrade: RamCostConstants.Corporation,

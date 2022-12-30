@@ -1,4 +1,4 @@
-import { Infiltration as IInfiltration, InfiltrationLocation } from "../ScriptEditor/NetscriptDefinitions";
+import { Infiltration as IInfiltration, InfiltrationLocation } from "@nsdefs";
 import { Location } from "../Locations/Location";
 import { Locations } from "../Locations/Locations";
 import { calculateDifficulty, calculateReward } from "../Infiltration/formulas/game";

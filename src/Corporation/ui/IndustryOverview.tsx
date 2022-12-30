@@ -207,7 +207,7 @@ export function IndustryOverview(props: IProps): React.ReactElement {
             </Typography>
           }
         >
-          <Typography>Scientific Research: {numeralWrapper.formatReallyBigNumber(division.sciResearch.qty)}</Typography>
+          <Typography>Scientific Research: {numeralWrapper.formatReallyBigNumber(division.sciResearch)}</Typography>
         </Tooltip>
         <Button sx={{ mx: 1 }} onClick={() => setResearchOpen(true)}>
           Research

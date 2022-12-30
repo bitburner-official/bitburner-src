@@ -6986,7 +6986,7 @@ declare enum JobName {
 
 // CORP ENUMS - Changed to types
 /** @public */
-type EmployeePosition =
+type CorpEmployeePosition =
   | "Operations"
   | "Engineer"
   | "Business"
@@ -6996,7 +6996,7 @@ type EmployeePosition =
   | "Unassigned";
 
 /** @public */
-type IndustryType =
+type CorpIndustryName =
   | "Energy"
   | "Water Utilities"
   | "Agriculture"
@@ -7010,8 +7010,7 @@ type IndustryType =
   | "Robotics"
   | "Software"
   | "Healthcare"
-  // TODO: Fix missing space, but make sure it won't mess up save games.
-  | "RealEstate";
+  | "Real Estate";
 
 /** Names of all cities
  * @public */
@@ -7119,7 +7118,11 @@ export interface OfficeAPI {
    * @param employeePosition - Position to place into. Defaults to "Unassigned".
    * @returns True if an employee was hired, false otherwise
    */
-  hireEmployee(divisionName: string, city: CityName | `${CityName}`, employeePosition?: EmployeePosition): boolean;
+  hireEmployee(
+    divisionName: string,
+    city: CityName | `${CityName}`,
+    employeePosition?: CorpEmployeePosition,
+  ): boolean;
   /**
    * Upgrade office size.
    * @param divisionName - Name of the division
@@ -7479,6 +7482,12 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @returns corporation related constants */
   getConstants(): CorpConstants;
 
+  /** Get constant industry definition data for a specific industry */
+  getIndustryData(industryName: CorpIndustryName): CorpIndustryData;
+
+  /** Get constant data for a specific material */
+  getMaterialData(materialName: CorpMaterialName): CorpMaterialConstantData;
+
   /** Accept investment based on you companies current valuation
    * @remarks
    * Is based on current valuation and will not honer a specific Offer
@@ -7508,7 +7517,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   /** Expand to a new industry
    * @param industryType - Name of the industry
    * @param divisionName - Name of the division */
-  expandIndustry(industryType: IndustryType, divisionName: string): void;
+  expandIndustry(industryType: CorpIndustryName, divisionName: string): void;
 
   /** Expand to a new city
    * @param divisionName - Name of the division
@@ -7549,37 +7558,45 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
 
 /** Product rating information
  *  @public */
-interface IProductRatingWeight {
-  Aesthetics?: number;
-  Durability?: number;
-  Features?: number;
-  Quality?: number;
-  Performance?: number;
-  Reliability?: number;
-}
+type CorpProductData = {
+  /** Name of the product */
+  name: string;
+  /** Verb used to describe creation of the product */
+  verb: string;
+  /** Description of product creation */
+  desc: string;
+  /** Weighting factors for product  */
+  ratingWeights: {
+    aesthetics?: number;
+    durability?: number;
+    features?: number;
+    quality?: number;
+    performance?: number;
+    reliability?: number;
+  };
+};
 
 /** Data for an individual industry
  *  @public */
-type IndustryData = {
+interface CorpIndustryData {
   startingCost: number;
   description: string;
-  product?: { name: string; verb: string; desc: string };
-  ProductRatingWeights?: IProductRatingWeight;
+  product?: CorpProductData;
   recommendStarting: boolean;
-  reqMats: Record<string, number>;
+  requiredMaterials: Partial<Record<CorpMaterialName, number>>;
   /** Real estate factor */
-  reFac?: number;
+  realEstateFactor?: number;
   /** Scientific research factor (affects quality) */
-  sciFac?: number;
+  scienceFactor?: number;
   /** Hardware factor */
-  hwFac?: number;
+  hardwareFactor?: number;
   /** Robots factor */
-  robFac?: number;
+  robotFactor?: number;
   /** AI Cores factor */
-  aiFac?: number;
+  aiCoreFactor?: number;
   /** Advertising factor (affects sales) */
-  advFac?: number;
-  prodMats?: string[];
+  advertisingFactor?: number;
+  producedMaterials?: CorpMaterialName[];
 };
 
 /**
@@ -7624,45 +7641,135 @@ interface CorporationInfo {
  * @public
  */
 interface CorpConstants {
-  /** Names of all availavle industries */
-  industryNames: IndustryType[];
-  /** Map of industry types to their data definitions */
-  industriesData: Record<IndustryType, IndustryData>;
-  /** Corporation cycle states */
-  states: CorporationState[];
-  /** Unlockable upgrades */
-  unlocks: string[];
-  /** Levelable upgrades */
-  upgrades: string[];
-  /** Researches, product researches are only available to product making divisions */
-  researches: Record<string, string[]>;
-  /** Amount of funds required to bribe for 1 reputation */
-  bribeToRepRatio: number;
-  /** Amount of products a division can have without researches */
-  baseMaxProducts: number;
-  /** Cost to expand to another city within a division */
-  cityExpandCost: number;
-  /** Cost to purchase a warehouse in a city */
-  warehousePurchaseCost: number;
-  /** Cost of coffee per employee in an office */
+  /** Names of all corporation game states */
+  stateNames: CorpStateName[];
+  /** Names of all industries */
+  industryNames: CorpIndustryName[];
+  /** Names of all materials */
+  materialNames: CorpMaterialName[];
+  /** Names of all one-time corporation-wide unlocks */
+  unlockNames: CorpUnlockName[];
+  /** Names of all corporation-wide upgrades */
+  upgradeNames: CorpUpgradeName[];
+  /** Names of all researches common to all industries */
+  researchNamesBase: CorpResearchName[];
+  /** Names of all researches only available to product industries */
+  researchNamesProductOnly: CorpResearchName[];
+  /** Names of all researches */
+  researchNames: CorpResearchName[];
+  initialShares: number;
+  /** When selling large number of shares, price is dynamically updated for every batch of this amount */
+  sharesPerPriceUpdate: number;
+  /** Cooldown for issue new shares cooldown in game cycles (1 game cycle = 200ms) */
+  issueNewSharesCooldown: number;
+  /** Cooldown for selling shares in game cycles (1 game cycle = 200ms) */
+  sellSharesCooldown: number;
   coffeeCostPerEmployee: number;
-  /** Array of all material types */
-  materials: Record<string, materialInfo>;
+  gameCyclesPerMarketCycle: number;
+  gameCyclesPerCorpStateCycle: number;
+  secondsPerMarketCycle: number;
+  warehouseInitialCost: number;
+  warehouseInitialSize: number;
+  warehouseSizeUpgradeCostBase: number;
+  officeInitialCost: number;
+  officeInitialSize: number;
+  officeSizeUpgradeCostBase: number;
+  bribeThreshold: number;
+  bribeAmountPerReputation: number;
+  baseProductProfitMult: number;
+  dividendMaxRate: number;
+  /** Conversion factor for employee stats to initial salary */
+  employeeSalaryMultiplier: number;
+  marketCyclesPerEmployeeRaise: number;
+  employeeRaiseAmount: number;
+  /** Max products for a division without upgrades */
+  maxProductsBase: number;
 }
 /** @public */
-type CorporationState = "START" | "PURCHASE" | "PRODUCTION" | "SALE" | "EXPORT";
+type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "SALE" | "EXPORT";
+
+/** @public */
+type CorpMaterialName =
+  | "Water"
+  | "Energy"
+  | "Food"
+  | "Plants"
+  | "Metal"
+  | "Hardware"
+  | "Chemicals"
+  | "Drugs"
+  | "Robots"
+  | "AI Cores"
+  | "Real Estate";
+
+/** @public */
+type CorpUnlockName =
+  | "Export"
+  | "Smart Supply"
+  | "Market Research - Demand"
+  | "Market Data - Competition"
+  | "VeChain"
+  | "Shady Accounting"
+  | "Government Partnership"
+  | "Warehouse API"
+  | "Office API";
+
+/** @public */
+type CorpUpgradeName =
+  | "Smart Factories"
+  | "Smart Storage"
+  | "DreamSense"
+  | "Wilson Analytics"
+  | "Nuoptimal Nootropic Injector Implants"
+  | "Speech Processor Implants"
+  | "Neural Accelerators"
+  | "FocusWires"
+  | "ABC SalesBots"
+  | "Project Insight";
+
+/** @public */
+type CorpResearchName =
+  | "Hi-Tech R&D Laboratory"
+  | "AutoBrew"
+  | "AutoPartyManager"
+  | "Automatic Drug Administration"
+  | "Bulk Purchasing"
+  | "CPH4 Injections"
+  | "Drones"
+  | "Drones - Assembly"
+  | "Drones - Transport"
+  | "Go-Juice"
+  | "HRBuddy-Recruitment"
+  | "HRBuddy-Training"
+  | "JoyWire"
+  | "Market-TA.I"
+  | "Market-TA.II"
+  | "Overclock"
+  | "Self-Correcting Assemblers"
+  | "Sti.mu"
+  | "uPgrade: Capacity.I"
+  | "uPgrade: Capacity.II"
+  | "uPgrade: Dashboard"
+  | "uPgrade: Fulcrum"
+  | "sudo.Assist";
 
 /**
  * Corporation material information
  * @public
  */
-interface materialInfo {
+interface CorpMaterialConstantData {
   /** Name of the material */
   name: string;
   /** Size of the material */
   size: number;
-  /** Revenue per second this cycle */
-  prodMult: boolean;
+  demandBase: number;
+  /** Min and max demand */
+  demandRange: [min: number, max: number];
+  competitionBase: number;
+  competitionRange: [min: number, max: number];
+  baseCost: number;
+  maxVolatility: number;
+  baseMarkup: number;
 }
 
 /**
@@ -7671,7 +7778,7 @@ interface materialInfo {
  */
 interface IndustryData {
   /** Industry type */
-  type: IndustryType;
+  type: CorpIndustryName;
   /** Cost to expand to the division */
   cost: number;
   /** Materials required for production and their amounts */
@@ -7719,7 +7826,7 @@ interface Product {
  */
 interface Material {
   /** Name of the material */
-  name: string;
+  name: CorpMaterialName;
   /** Amount of material  */
   qty: number;
   /** Quality of the material */
@@ -7800,9 +7907,9 @@ export interface Office {
   /** Average morale of the employees */
   avgMor: number;
   /** Production of the employees */
-  employeeProd: Record<EmployeePosition, number>;
+  employeeProd: Record<CorpEmployeePosition, number>;
   /** Positions of the employees */
-  employeeJobs: Record<EmployeePosition, number>;
+  employeeJobs: Record<CorpEmployeePosition, number>;
 }
 
 /**
@@ -7813,7 +7920,7 @@ interface Division {
   /** Name of the division */
   name: string;
   /** Type of division, like Agriculture */
-  type: string;
+  type: CorpIndustryName;
   /** Awareness of the division */
   awareness: number;
   /** Popularity of the division */
@@ -7833,7 +7940,7 @@ interface Division {
   /** All research bought */
   upgrades: number[];
   /** Cities in which this division has expanded */
-  cities: string[];
+  cities: CityName[];
   /** Products developed by this division */
   products: string[];
   /** Whether the industry this division is in is capable of making products */

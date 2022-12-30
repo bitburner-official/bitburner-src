@@ -1,5 +1,5 @@
 import { EmployeePositions } from "./EmployeePositions";
-import { CorporationConstants } from "./data/Constants";
+import * as corpConstants from "./data/Constants";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { Industry } from "./Industry";
 import { Corporation } from "./Corporation";
@@ -15,9 +15,9 @@ export class OfficeSpace {
   loc: CityName;
   size: number;
 
-  minEne = 0;
-  minHap = 0;
-  minMor = 0;
+  minEne = 5;
+  minHap = 5;
+  minMor = 5;
 
   maxEne = 100;
   maxHap = 100;
@@ -162,7 +162,7 @@ export class OfficeSpace {
       this.totalSalary = 0;
     } else {
       this.totalSalary =
-        CorporationConstants.EmployeeSalaryMultiplier *
+        corpConstants.employeeSalaryMultiplier *
         marketCycles *
         this.totalEmployees *
         (this.avgInt + this.avgCha + this.totalExp / this.totalEmployees + this.avgCre + this.avgEff);
@@ -248,7 +248,7 @@ export class OfficeSpace {
   }
 
   getCoffeeCost(): number {
-    return CorporationConstants.CoffeeCostPerEmployee * this.totalEmployees;
+    return corpConstants.coffeeCostPerEmployee * this.totalEmployees;
   }
 
   setCoffee(): boolean {

@@ -10,7 +10,7 @@ import { isString } from "../utils/helpers/isString";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";
 
-import { Singularity as ISingularity } from "../ScriptEditor/NetscriptDefinitions";
+import { Singularity as ISingularity } from "@nsdefs";
 
 import { findCrime } from "../Crime/CrimeHelpers";
 import { CompanyPositions } from "../Company/CompanyPositions";
