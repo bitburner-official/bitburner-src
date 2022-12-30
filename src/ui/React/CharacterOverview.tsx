@@ -7,7 +7,7 @@ import createStyles from "@mui/styles/createStyles";
 import { numeralWrapper } from "../numeralFormat";
 import { Reputation } from "./Reputation";
 import { KillScriptsModal } from "./KillScriptsModal";
-import { convertTimeMsToTimeElapsedString, formatNumber } from "../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -44,7 +44,7 @@ import { calculateSkillProgress } from "../../PersonObjects/formulas/skill";
 type SkillRowName = "Hack" | "Str" | "Def" | "Dex" | "Agi" | "Cha" | "Int";
 type RowName = SkillRowName | "HP" | "Money";
 
-// Todo: Type changes to make some of these converters not needed. Just getting it working again for now.
+// These values aren't displayed, they're just used for comparison to check if state has changed
 const valUpdaters: Record<RowName, () => any> = {
   HP: () => Player.hp.current + "|" + Player.hp.max, // This isn't displayed, it's just compared for updates.
   Money: () => Player.money,
@@ -57,7 +57,7 @@ const valUpdaters: Record<RowName, () => any> = {
   Int: () => Player.skills.intelligence,
 };
 
-//
+//These formattedVals functions don't take in a value because of the weirdness around HP.
 const formattedVals: Record<RowName, () => string> = {
   HP: () => `${numeralWrapper.formatHp(Player.hp.current)} / ${numeralWrapper.formatHp(Player.hp.max)}`,
   Money: () => numeralWrapper.formatMoney(Player.money),
@@ -169,12 +169,12 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
   const [hasIntelligence, setHasIntelligence] = useState(Player.skills.intelligence > 0);
   const [showBars, setShowBars] = useState(!Settings.DisableOverviewProgressBars);
   useEffect(() => {
-    const interval = setInterval(()=>{
+    const interval = setInterval(() => {
       //Todo: Consider making these event-based instead of requiring interval polling?
       setHasIntelligence(Player.skills.intelligence > 0);
       setShowBars(!Settings.DisableOverviewProgressBars);
     }, 1000);
-    return ()=>clearInterval(interval);
+    return () => clearInterval(interval);
   }, []);
   const classes = useStyles();
   const theme = useTheme();
