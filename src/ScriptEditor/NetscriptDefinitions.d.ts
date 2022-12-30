@@ -7118,11 +7118,7 @@ export interface OfficeAPI {
    * @param employeePosition - Position to place into. Defaults to "Unassigned".
    * @returns True if an employee was hired, false otherwise
    */
-  hireEmployee(
-    divisionName: string,
-    city: CityName | `${CityName}`,
-    employeePosition?: CorpEmployeePosition,
-  ): boolean;
+  hireEmployee(divisionName: string, city: CityName | `${CityName}`, employeePosition?: CorpEmployeePosition): boolean;
   /**
    * Upgrade office size.
    * @param divisionName - Name of the division
@@ -7597,7 +7593,7 @@ interface CorpIndustryData {
   /** Advertising factor (affects sales) */
   advertisingFactor?: number;
   producedMaterials?: CorpMaterialName[];
-};
+}
 
 /**
  * General info about a corporation

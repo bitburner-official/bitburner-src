@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
-import { IndustriesData} from "../../IndustryData";
+import { IndustriesData } from "../../IndustryData";
 import { IndustryType } from "../../data/Enums";
 import { MakeProduct } from "../../Actions";
 import { useCorporation, useDivision } from "../Context";

@@ -4,7 +4,7 @@ import { Corporation } from "./Corporation";
 import { getBaseResearchTreeCopy, getProductIndustryResearchTreeCopy } from "./data/BaseResearchTree";
 import { MoneyCost } from "./ui/MoneyCost";
 import { CorpIndustryData, CorpIndustryName } from "@nsdefs";
-import {IndustryType } from "./data/Enums";
+import { IndustryType } from "./data/Enums";
 
 export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
   [IndustryType.Agriculture]: {
