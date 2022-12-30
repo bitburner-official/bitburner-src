@@ -7,9 +7,8 @@ import {
   CorpUnlockName,
   CorpUpgradeName,
 } from "@nsdefs";
-import { IndustryType } from "../IndustryData";
-import { EmployeePositions } from "../EmployeePositions";
 import { CONSTANTS } from "../../Constants";
+import { IndustryType, EmployeePositions } from "./Enums";
 
 // For typed strings, we need runtime objects to do API typechecking against.
 

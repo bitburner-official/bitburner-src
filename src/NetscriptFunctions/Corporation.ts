@@ -54,8 +54,8 @@ import {
 } from "../Corporation/Actions";
 import { CorporationUnlockUpgrades } from "../Corporation/data/CorporationUnlockUpgrades";
 import { CorporationUpgrades } from "../Corporation/data/CorporationUpgrades";
-import { EmployeePositions } from "../Corporation/EmployeePositions";
-import { IndustriesData, IndustryResearchTrees, IndustryType } from "../Corporation/IndustryData";
+import { EmployeePositions, IndustryType } from "../Corporation/data/Enums";
+import { IndustriesData, IndustryResearchTrees } from "../Corporation/IndustryData";
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
 import { Factions } from "../Faction/Factions";

@@ -4,24 +4,7 @@ import { Corporation } from "./Corporation";
 import { getBaseResearchTreeCopy, getProductIndustryResearchTreeCopy } from "./data/BaseResearchTree";
 import { MoneyCost } from "./ui/MoneyCost";
 import { CorpIndustryData, CorpIndustryName } from "@nsdefs";
-
-// TODO: remove enum, use typed string to match rest of corp API
-export enum IndustryType {
-  Energy = "Energy",
-  Utilities = "Water Utilities",
-  Agriculture = "Agriculture",
-  Fishing = "Fishing",
-  Mining = "Mining",
-  Food = "Food",
-  Tobacco = "Tobacco",
-  Chemical = "Chemical",
-  Pharmaceutical = "Pharmaceutical",
-  Computers = "Computer Hardware",
-  Robotics = "Robotics",
-  Software = "Software",
-  Healthcare = "Healthcare",
-  RealEstate = "Real Estate",
-}
+import {IndustryType } from "./data/Enums";
 
 export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
   [IndustryType.Agriculture]: {

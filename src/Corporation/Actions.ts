@@ -1,7 +1,7 @@
 import { Player } from "@player";
 import { MaterialInfo } from "./MaterialInfo";
 import { Corporation } from "./Corporation";
-import { IndustryResearchTrees, IndustryType, IndustriesData } from "./IndustryData";
+import { IndustryResearchTrees, IndustriesData } from "./IndustryData";
 import { Industry } from "./Industry";
 import * as corpConstants from "./data/Constants";
 import { OfficeSpace } from "./OfficeSpace";
@@ -11,7 +11,7 @@ import { Warehouse } from "./Warehouse";
 import { CorporationUnlockUpgrade } from "./data/CorporationUnlockUpgrades";
 import { CorporationUpgrade } from "./data/CorporationUpgrades";
 import { Cities } from "../Locations/Cities";
-import { EmployeePositions } from "./EmployeePositions";
+import { EmployeePositions, IndustryType } from "./data/Enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
 import { checkEnum } from "../utils/helpers/enum";

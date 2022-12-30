@@ -1,8 +1,8 @@
 import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { CityName } from "../Enums";
-import { IndustryType, IndustryResearchTrees, IndustriesData } from "./IndustryData";
+import { IndustryResearchTrees, IndustriesData } from "./IndustryData";
 import * as corpConstants from "./data/Constants";
-import { EmployeePositions } from "./EmployeePositions";
+import { EmployeePositions, IndustryType } from "./data/Enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { calculateEffectWithFactors } from "../utils/calculateEffectWithFactors";
 import { OfficeSpace } from "./OfficeSpace";

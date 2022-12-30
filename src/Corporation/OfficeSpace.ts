@@ -1,4 +1,4 @@
-import { EmployeePositions } from "./EmployeePositions";
+import { EmployeePositions } from "./data/Enums";
 import * as corpConstants from "./data/Constants";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { Industry } from "./Industry";

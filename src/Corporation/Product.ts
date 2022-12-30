@@ -1,4 +1,4 @@
-import { EmployeePositions } from "./EmployeePositions";
+import { EmployeePositions } from "./data/Enums";
 import { MaterialInfo } from "./MaterialInfo";
 import { Industry } from "./Industry";
 import { IndustriesData } from "./IndustryData";
