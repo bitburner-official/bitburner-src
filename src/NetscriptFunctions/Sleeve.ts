@@ -162,6 +162,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
         shock: sl.shock,
         sync: sl.sync,
         memory: sl.memory,
+        bonusTime: Math.round(sl.storedCycles / 5) * 1000,
       };
 
       return data;
