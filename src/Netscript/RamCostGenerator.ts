@@ -546,6 +546,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   rainbow: 0,
   heart: { break: 0 },
   iKnowWhatImDoing: 0,
+  printRaw: 0,
 
   formulas: {
     mockServer: 0,

@@ -516,7 +516,7 @@ export const ns: InternalAPI<NSFull> = {
         return [] as string[];
       }
 
-      return runningScriptObj.logs.slice();
+      return runningScriptObj.logs.map((x) => "" + x);
     },
   tail:
     (ctx) =>

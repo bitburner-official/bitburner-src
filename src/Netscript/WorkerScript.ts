@@ -6,6 +6,7 @@
  * Instead, whenever the game is opened, WorkerScripts are re-created from
  * RunningScript objects
  */
+import type React from "react";
 import { Environment } from "./Environment";
 import { RamCostConstants } from "./RamCostGenerator";
 
@@ -180,7 +181,7 @@ export class WorkerScript {
     }
   }
 
-  print(txt: string): void {
+  print(txt: React.ReactNode): void {
     this.scriptRef.log(txt);
   }
 }

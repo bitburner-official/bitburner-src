@@ -385,9 +385,8 @@ function LogWindow(props: IProps): React.ReactElement {
             >
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {script.logs.map(
-                  (line: string, i: number): JSX.Element => (
-                    <ANSIITypography key={i} text={line} color={lineColor(line)} />
-                  ),
+                  (line: React.ReactNode, i: number): React.ReactNode =>
+                    typeof line !== "string" ? line : <ANSIITypography key={i} text={line} color={lineColor(line)} />,
                 )}
               </div>
             </Paper>

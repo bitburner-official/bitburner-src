@@ -703,7 +703,7 @@ function createPublicRunningScript(runningScript: RunningScript): IRunningScript
   return {
     args: runningScript.args.slice(),
     filename: runningScript.filename,
-    logs: runningScript.logs.slice(),
+    logs: runningScript.logs.map((x) => "" + x),
     offlineExpGained: runningScript.offlineExpGained,
     offlineMoneyMade: runningScript.offlineMoneyMade,
     offlineRunningTime: runningScript.offlineRunningTime,
