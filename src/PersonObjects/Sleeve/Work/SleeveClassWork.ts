@@ -1,12 +1,13 @@
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
 import { applySleeveGains, Work, WorkType } from "./Work";
-import { ClassType } from "../../../Work/ClassWork";
+import { Classes, ClassType } from "../../../Work/ClassWork";
 import { LocationName } from "../../../Enums";
 import { calculateClassEarnings } from "../../../Work/Formulas";
 import { Sleeve } from "../Sleeve";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 import { GymType, UniversityClassType } from "../../../Enums";
 import { checkEnum } from "../../../utils/helpers/enum";
+import { Locations } from "../../../Locations/Locations";
 
 export const isSleeveClassWork = (w: Work | null): w is SleeveClassWork => w !== null && w.type === WorkType.CLASS;
 
@@ -52,6 +53,8 @@ export class SleeveClassWork extends Work {
 
   /** Initializes a ClassWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveClassWork {
+    if (!(value.data.classType in Classes)) value.data.classType = "Computer Science";
+    if (!(value.data.location in Locations)) value.data.location = LocationName.Sector12RothmanUniversity;
     return Generic_fromJSON(SleeveClassWork, value.data);
   }
 }
