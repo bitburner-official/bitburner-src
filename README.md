@@ -6,7 +6,7 @@
 
 Bitburner is a programming-based [incremental game](https://en.wikipedia.org/wiki/Incremental_game)
 that revolves around hacking and cyberpunk themes.
-The game can be played at https://danielyxie.github.io/bitburner or installed through [Steam](https://store.steampowered.com/app/1812820/Bitburner/).
+The game can be played at https://bitburner-official.github.io/bitburner-src/ or installed through [Steam](https://store.steampowered.com/app/1812820/Bitburner/).
 
 See the [frequently asked questions](./doc/FAQ.md) for more information . To discuss the game or get help, join the [official Discord server](https://discord.gg/TFc3hKD).
 
@@ -36,4 +36,5 @@ publish, and distribute your contributions to the project. A formal
 Contributor's License Agreement will be drawn up in the future.
 
 If you would like to make significant contributions to the project as a
-collaborator, please reach out to @danielyxie to help coordinate the effort.
+collaborator, please reach out in #suggestions or #development on Discord to
+help coordinate the effort.
