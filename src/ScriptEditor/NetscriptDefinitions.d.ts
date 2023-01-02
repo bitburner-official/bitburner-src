@@ -4787,7 +4787,7 @@ export interface NS {
    * the amount of money available on the specified server by the specified amount.
    * The specified amount is multiplicative and is in decimal form, not percentage.
    *
-   * Due to limitations of mathematics, this function won't the true value, but an approximation.
+   * Due to limitations of mathematics, this function won't be the true value, but an approximation.
    *
    * Warning: The value returned by this function isn’t necessarily a whole number.
    *
