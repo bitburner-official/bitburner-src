@@ -62,6 +62,7 @@ interface SleevePerson extends Person {
   shock: number;
   sync: number;
   memory: number;
+  storedCycles: number;
 }
 
 /** @public */
