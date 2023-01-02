@@ -3568,10 +3568,6 @@ export interface Sleeve {
    *
    * Return a person object for this sleeve
    *
-   * “Bonus time” in milliseconds
-   * “Bonus time” is accumulated when the game is offline, inactive in the browser or the Sleeve is idle.
-   * “Bonus time” makes the Sleeve progress faster, up to 15x the normal speed.
-   *
    * @param sleeveNumber - Index of the sleeve to retrieve information.
    * @returns Object containing information about this sleeve.
    */
