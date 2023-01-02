@@ -82,6 +82,7 @@ async function startNetscript1Script(workerScript: WorkerScript): Promise<void> 
   //TODO unplanned: Make NS1 wrapping type safe instead of using BasicObject.
   type BasicObject = Record<string, any>;
   function wrapNS1Layer(int: Interpreter, intLayer: unknown, nsLayer = wrappedNS as BasicObject) {
+    if (nsLayer === wrappedNS) int.setProperty(intLayer, "args", int.nativeToPseudo(workerScript.args));
     for (const [name, entry] of Object.entries(nsLayer)) {
       if (typeof entry === "function") {
         const wrapper = async (...args: unknown[]) => {
