@@ -8,99 +8,88 @@ v2.2.0 - Jan 2 2023 Development Reboot
 
 Dev notes
 
-* The previous main developer, hydroflame, is stepping back from this project for the foreseeable future.
-  To facilitate this, we've moved the repo to a new location at https://github.com/bitburner-official/bitburner-src.
-* Sorry for the large number of API breaks in this version. To ease the pain here, attempting to use any of the
-  removed functions will provide an error guiding you to the new replacement function to use instead.
+* The previous main developer, hydroflame, is stepping back from this project for the foreseeable future. To facilitate this, we've moved the repo to a new location at https://github.com/bitburner-official/bitburner-src.
+* Sorry for the large number of API breaks in this version. To ease the pain here, attempting to use any of the removed functions will provide an error guiding you to the new replacement function to use instead.
 
 BREAKING API CHANGES:
 
-*  (ns2 only) ns functions use the 'this' value from ns: if you move the function to its own variable off of ns, it
-   needs to be bound to ns. e.g.:
-     const tprint1 = ns.tprint; // This doesn't work and will error out when calling tprint1();
-     const tprint = ns.tprint.bind(ns); // This works because the 'this' value is preserved.
-   The internal changes that make this necessary led to very large performance gains for running many scripts at once.
+* (ns2 only) ns functions use the 'this' value from ns: if you move the function to its own variable off of ns, it needs to be bound to ns. The internal changes that make this necessary led to very large performance gains for running many scripts at once. e.g.:
 
-*  ns.getPlayer no longer provides properties tor, inBladeburner, or hasCorporation. This information can be looked
-   up using standlone functions: ns.hasTorRouter(), ns.bladeburner.inBladeburner(), ns.corporation.hasCorporation().
+   const tprint1 = ns.tprint; // This doesn't work and will error out when calling tprint1();
+   
+   const tprint = ns.tprint.bind(ns); // This works because the 'this' value is preserved.
+* ns.getPlayer no longer provides properties tor, inBladeburner, or hasCorporation. This information can be looked up using standlone functions: ns.hasTorRouter(), ns.bladeburner.inBladeburner(), ns.corporation.hasCorporation().
+* Removed many functions, with replacement ways to get the same info.
+   * getServerRam: use getServerMaxRam and getServerUsedRam instead.
+   * corporation.assignJob: use setAutoJobAssignment instead.
+   * corporation.getEmployee: No longer available (employees are not individual objects).
+   * corporation.getExpandCityCost: use ns.corporation.getConstants().officeInitialCost
+   * corporation.getExpandIndustryCost: use getIndustryData instead.
+   * corporation.getIndustryTypes: use ns.corporation.getConstants().industryNames
+   * corporation.getMaterialNames: use ns.corporation.getConstants().materialNames
+   * corporation.getPurchaseWarehouseCost: use ns.corporation.getConstants().warehouseInitialCost
+   * corporation.getResearchNames: use ns.corporation.getConstants().researchNames
+   * corporation.getUnlockables: use ns.corporation.getConstants().unlockNames
+   * corporation.getUpgradeNames: use ns.corporation.getConstants().upgradeNames
+   * formulas.work.classGains: split into universityGains and gymGains
+   * singularity.getAugmentationCost: use getAugmentationPrice and getAugmentationRepReq instead
+   * sleeve.getSleeveStats: use getSleeve instead
+   * sleeve.getInformation: use getSleeve instead
 
-*  Removed many functions, with replacement ways to get the same info.
-   getServerRam: use getServerMaxRam and getServerUsedRam instead.
-   corporation.assignJob: use setAutoJobAssignment instead.
-   corporation.getEmployee: No longer available (employees are not individual objects).
-   corporation.getExpandCityCost: use ns.corporation.getConstants().officeInitialCost
-   corporation.getExpandIndustryCost: use getIndustryData instead.
-   corporation.getIndustryTypes: use ns.corporation.getConstants().industryNames
-   corporation.getMaterialNames: use ns.corporation.getConstants().materialNames
-   corporation.getPurchaseWarehouseCost: use ns.corporation.getConstants().warehouseInitialCost
-   corporation.getResearchNames: use ns.corporation.getConstants().researchNames
-   corporation.getUnlockables: use ns.corporation.getConstants().unlockNames
-   corporation.getUpgradeNames: use ns.corporation.getConstants().upgradeNames
-   formulas.work.classGains: split into universityGains and gymGains
-   singularity.getAugmentationCost: use getAugmentationPrice and getAugmentationRepReq instead
-   sleeve.getSleeveStats: use getSleeve instead
-   sleeve.getInformation: use getSleeve instead
+* An error dialog will inform the player of the above API changes if the player tries to use one of the removed functions above.
+* enums.toast was renamed ToastVariant to provide consistency with internal code.
 
-*  An error dialog will inform the player of the above API changes if the player tries to use one of the
-   removed functions above.
+* codingcontract.attempt always returns a string (empty string for a failed attempt). This may break player code if a direct boolean comparison (e.g. 'attemptResult === true') was being made. The string can be used directly as the conditional, because empty string evaluates to false as a boolean.
 
-*  enums.toast was renamed ToastVariant to provide consistency with internal code.
-
-*  codingcontract.attempt always returns a string (empty string for a failed attempt). This may break player code
-   if a direct boolean comparison (e.g. 'attemptResult === true') was being made. The string can be used directly as
-   the conditional, because empty string evaluates to false as a boolean.
-
-*  corporation.getCorporation().divisions now returns an array of division names, instead of division objects. Use
-   corporation.getDivision(name) to get the division info object.
+* corporation.getCorporation().divisions now returns an array of division names, instead of division objects. Use corporation.getDivision(name) to get the division info object.
 
 DEVELOPMENT
 
-*  Development repo moved to https://github.com/bitburner-official/bitburner-src
-*  Dev version available on web at https://bitburner-official.github.io/bitburner-src/
-*  Development is active again for non-bugfix.
-*  A bunch of fixes, setup, and assistance related to moving to a new repo (@hydroflame)
+* Development repo moved to https://github.com/bitburner-official/bitburner-src
+* Dev version available on web at https://bitburner-official.github.io/bitburner-src/
+* Development is active again for non-bugfix.
+* A bunch of fixes, setup, and assistance related to moving to a new repo (@hydroflame)
 
 TUTORIAL
 
-*  Removed NS1/NS2 selection. Tutorial now only references .js files (NS1 is essentially deprecated) (@Mughur)
-*  Fix Ram Text (by @jaculler)
+* Removed NS1/NS2 selection. Tutorial now only references .js files (NS1 is essentially deprecated) (@Mughur)
+* Fix Ram Text (by @jaculler)
 
 NETSCRIPT
-*  More enums and more types are exposed to the player instead of "magic strings"
-*  Added ns.pid property to access a script's PID without a function call. (@jeek)
-*  Much faster API wrapping on script launch. (@d0sboots) To support this, ns functions need to keep their "this"
-   value from their parent object.
-*  Expose more enums for player use under ns.enums (@Snarling)
-*  tFormat: Fix display for negative time
-*  ns.getPlayer: removed tor, inBladeburner, and hasCorporation properties
-*  Added ns.hasTorRouter() function.
-* CODING CONTRACT
-  *  ns.codingcontract.attempt always returns a string. (@Snarling)
-* CORPORATION
-  *  Removed ns.corporation.getEmployee and ns.corporation.assignJob, due to employees no longer being objects.
-  *  Added ns.corporation.hasCorporation();
-  *  Reworked how ram costs are applied for corporation.
-* FORMULAS
-  *  ns.formulas.work.classGains removed, replaced with ns.formulas.work.universityGains and
-     ns.formulas.work.gymGains (@Snarling)
-  *  Add ns.formulas.work.companyGains function (@AlexeyKozhemiakin)
-* PORTS
-  *  added portHandle.nextWrite() (@LJNeon)
-  *  Make ns.writePort synchronous (@Snarling)
-* SLEEVE
-  *  ns.sleeve.getSleeve added. getPlayer and getSleeve can both be used for formulas. (@Snarling)
-  *  getSleeve also includes storedCycles (i.e. bonusTime) (@zerbosh)
-* STOCK
-  *  ns.stock.getOrganization added for getting org from stock symbol (@SamuraiNinjaGuy)
+
+* Base NS API:
+   * More enums and more types are exposed to the player instead of "magic strings", as type documentation and on ns.enums.
+   * Added ns.pid property to access a script's PID without a function call. (@jeek)
+   * Much faster API wrapping on script launch. (@d0sboots) To support this, ns functions need to keep their "this" value from their parent object.
+   * tFormat: Fix display for negative time
+   * ns.getPlayer: removed tor, inBladeburner, and hasCorporation properties
+   * Added ns.hasTorRouter() function.
+* Coding Contract API
+   * ns.codingcontract.attempt always returns a string. (@Snarling)
+* Corporation API
+   *  Removed ns.corporation.getEmployee and ns.corporation.assignJob, due to employees no longer being objects.
+   *  Added ns.corporation.hasCorporation()
+   *  Reworked how ram costs are applied for corporation.
+* Formulas API
+   *  ns.formulas.work.classGains removed, replaced with ns.formulas.work.universityGains and ns.formulas.work.gymGains (@Snarling)
+   *  Add ns.formulas.work.companyGains function (@AlexeyKozhemiakin)
+* Ports
+   *  added portHandle.nextWrite() (@LJNeon)
+   *  Make ns.writePort synchronous (@Snarling)
+* Sleeve API
+   *  ns.sleeve.getSleeve added. getPlayer and getSleeve can both be used for formulas. (@Snarling)
+   *  getSleeve also includes storedCycles (i.e. bonusTime) (@zerbosh)
+* Stock API
+   *  ns.stock.getOrganization added for getting org from stock symbol (@SamuraiNinjaGuy)
 
 SCRIPTS
 
-*  Fixed bug where zombie scripts could be created after a soft reset (@Snarling)
-*  Scripts now have a maximum ram cost of 1024GB per thread.
+| *  Fixed bug where zombie scripts could be created after a soft reset (@Snarling)
+| *  Scripts now have a maximum ram cost of 1024GB per thread.
 
 SCRIPT LOGS
 
-*  Add ctrl-a support for selecting all text in tail window (@Snarling)
+| *  Add ctrl-a support for selecting all text in tail window (@Snarling)
 
 CORPORATION
 
@@ -160,7 +149,7 @@ STATS
 INFILTRATION
 
 *  Fix SlashGame scaling. (by @Snarling)
-  
+
 GANG
 
 * When starting a gang, any in progress work with that faction will end. (@G4mingJon4s) 
