@@ -67,88 +67,88 @@ NETSCRIPT
 * Coding Contract API
    * ns.codingcontract.attempt always returns a string. (@Snarling)
 * Corporation API
-   *  Removed ns.corporation.getEmployee and ns.corporation.assignJob, due to employees no longer being objects.
-   *  Added ns.corporation.hasCorporation()
-   *  Reworked how ram costs are applied for corporation.
+   * Removed ns.corporation.getEmployee and ns.corporation.assignJob, due to employees no longer being objects.
+   * Added ns.corporation.hasCorporation()
+   * Reworked how ram costs are applied for corporation.
 * Formulas API
-   *  ns.formulas.work.classGains removed, replaced with ns.formulas.work.universityGains and ns.formulas.work.gymGains (@Snarling)
-   *  Add ns.formulas.work.companyGains function (@AlexeyKozhemiakin)
+   * ns.formulas.work.classGains removed, replaced with ns.formulas.work.universityGains and ns.formulas.work.gymGains (@Snarling)
+   * Add ns.formulas.work.companyGains function (@AlexeyKozhemiakin)
 * Ports
-   *  added portHandle.nextWrite() (@LJNeon)
-   *  Make ns.writePort synchronous (@Snarling)
+   * added portHandle.nextWrite() (@LJNeon)
+   * Make ns.writePort synchronous (@Snarling)
 * Sleeve API
-   *  ns.sleeve.getSleeve added. getPlayer and getSleeve can both be used for formulas. (@Snarling)
-   *  getSleeve also includes storedCycles (i.e. bonusTime) (@zerbosh)
+   * ns.sleeve.getSleeve added. getPlayer and getSleeve can both be used for formulas. (@Snarling)
+   * getSleeve also includes storedCycles (i.e. bonusTime) (@zerbosh)
 * Stock API
-   *  ns.stock.getOrganization added for getting org from stock symbol (@SamuraiNinjaGuy)
+   * ns.stock.getOrganization added for getting org from stock symbol (@SamuraiNinjaGuy)
 
 SCRIPTS
 
-| *  Fixed bug where zombie scripts could be created after a soft reset (@Snarling)
-| *  Scripts now have a maximum ram cost of 1024GB per thread.
+* Fixed bug where zombie scripts could be created after a soft reset (@Snarling)
+* Scripts now have a maximum ram cost of 1024GB per thread.
 
 SCRIPT LOGS
 
-| *  Add ctrl-a support for selecting all text in tail window (@Snarling)
+* Add ctrl-a support for selecting all text in tail window (@Snarling)
 
 CORPORATION
 
-*  Remove corp employees as objects (by @Kelenius)
-*  API access is provided automatically if the player is in BN3. (@zerbosh)
-*  Happiness/Energy/Morale trend down even for productive corps (by @Snarling)
-*  Typo fixes in modals to sell materials and products (by @quacksouls)
-*  Reworked MP formula validation to prevent possible save corruption on invalid entry (by @Snarling)
-*  Internal reorganization of Industry data (by @Snarling)
-*  Added check to material buy amount (by @G4mingJon4s)
-*  Check there is room to make a new product before opening popup. (by @G4mingJon4s)
-*  Fix typos in research descriptions (by @quacksouls)
+* Remove corp employees as objects (by @Kelenius)
+* API access is provided automatically if the player is in BN3. (@zerbosh)
+* Happiness/Energy/Morale trend down even for productive corps (by @Snarling)
+* Typo fixes in modals to sell materials and products (by @quacksouls)
+* Reworked MP formula validation to prevent possible save corruption on invalid entry (by @Snarling)
+* Internal reorganization of Industry data (by @Snarling)
+* Added check to material buy amount (by @G4mingJon4s)
+* Check there is room to make a new product before opening popup. (by @G4mingJon4s)
+* Fix typos in research descriptions (by @quacksouls)
 
 SLEEVE
 
-*  Fixed inconsistencies in how sleeve work rewards are handled. (by @Snarling)
-*  Fix bug that prevented selecting some crimes from UI. (by @Snarling)
-*  Internally shock starts at 100 and lowers to 0. Previously this was backwards.
+* Fixed inconsistencies in how sleeve work rewards are handled. (by @Snarling)
+* Fix bug that prevented selecting some crimes from UI. (by @Snarling)
+* Internally shock starts at 100 and lowers to 0. Previously this was backwards.
 
 STOCKMARKET
 
-*  Fix broken initializer when manually buying WSE access (by @Snarling)
+* Fix broken initializer when manually buying WSE access (by @Snarling)
 
 TERMINAL
 
-*  Added changelog command to re-display the changelog dialog.
-*  Connect command will connect to player owned servers from anywhere. (by @Snarling)
+* Added changelog command to re-display the changelog dialog.
+* Connect command will connect to player owned servers from anywhere. (by @Snarling)
 
 UI
 
-*  Improve UI performance of sidebar and character overview using memoization (@d0sboots)
-*  Other UI additions / improvements (@Mughur, @d0sboots, probably others)
-*  Fixed spacing of text in Trade for reputation button after Infiltration (by @PyroGenesis)
-*  Fix spacing on ANSI background escape codes (by @Snarling)
-*  Fix several instances where newlines were not being displayed properly (by @quacksouls)
-*  SoftResetButton.tsx Tooltip changed to make more sense (by @rai68)
-*  GANG: Fix Gang UI to correctly report the bonus time multiplier as 25x (by @TheMas3212)
-*  Change formatting for skill levels to use localeStr (@G4mingJon4s)
+* Improve UI performance of sidebar and character overview using memoization (@d0sboots)
+* Other UI additions / improvements (@Mughur, @d0sboots, probably others)
+* Fixed spacing of text in Trade for reputation button after Infiltration (by @PyroGenesis)
+* Fix spacing on ANSI background escape codes (by @Snarling)
+* Fix several instances where newlines were not being displayed properly (by @quacksouls)
+* SoftResetButton.tsx Tooltip changed to make more sense (by @rai68)
+* GANG: Fix Gang UI to correctly report the bonus time multiplier as 25x (by @TheMas3212)
+* Change formatting for skill levels to use localeStr (@G4mingJon4s)
 
 DOC
 
-*  Fix incorrect examples for grow (by @quacksouls)
-*  Updated limitMaterialProduction() and limitProductProduction() documentation to mention removing limits. (by @PyroGenesis)
-*  Add ns documentation for possible sleeve tasks (by @Snarling)
-*  Update documentation for workForFaction and workForCompany (by @quacksouls)
-*  Improve CCT documentation for HammingCodes (by @quacksouls)
-*  cleanup in doc of Netscript functions (by @quacksouls)
-*  Various other doc fixes (by @quacksouls)
-*  Update documentation for ns.args (by @Snarling)
-*  De-uglify ns.print examples (by @LJNeon)
+* Fix incorrect examples for grow (by @quacksouls)
+* Updated limitMaterialProduction() and limitProductProduction() documentation to mention removing limits. (by @PyroGenesis)
+* Add ns documentation for possible sleeve tasks (by @Snarling)
+* Update documentation for workForFaction and workForCompany (by @quacksouls)
+* Improve CCT documentation for HammingCodes (by @quacksouls)
+* cleanup in doc of Netscript functions (by @quacksouls)
+* Various other doc fixes (by @quacksouls)
+* Update documentation for ns.args (by @Snarling)
+* De-uglify ns.print examples (by @LJNeon)
 
 STATS
 
-*  Fix logic for increasing HP based on defense skill levels (by @mattgarretson)
-*  Fix a bug where HP could be something other than max after a bitnode reset.
+* Fix logic for increasing HP based on defense skill levels (by @mattgarretson)
+* Fix a bug where HP could be something other than max after a bitnode reset.
 
 INFILTRATION
 
-*  Fix SlashGame scaling. (by @Snarling)
+* Fix SlashGame scaling. (by @Snarling)
 
 GANG
 
@@ -156,13 +156,13 @@ GANG
 
 MISC
 
-*  Lots of typesafety improvements with internal code
-*  Remove google analytics (@hydroflame)
-*  Some error handling streamlining (by @Snarling)
-*  fix: check both ts and js source now (by @Tanimodori)
-*  chore: sync version in package-lock.json (by @Tanimodori)
-*  Better safety when loading game for multiple save corruption issues (by @Snarling)
-*  Nerf Noodle bar
+* Lots of typesafety improvements with internal code
+* Remove google analytics (@hydroflame)
+* Some error handling streamlining (by @Snarling)
+* fix: check both ts and js source now (by @Tanimodori)
+* chore: sync version in package-lock.json (by @Tanimodori)
+* Better safety when loading game for multiple save corruption issues (by @Snarling)
+* Nerf Noodle bar
 
 
 v2.1.0 - 2022-09-23 Remote File API
