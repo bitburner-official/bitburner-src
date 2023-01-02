@@ -162,6 +162,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
         shock: sl.shock,
         sync: sl.sync,
         memory: sl.memory,
+        storedCycles: sl.storedCycles,
       };
 
       return data;
@@ -257,8 +258,8 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
   // Removed undocumented functions added using Object.assign because typescript.
   // TODO: Remove these at 3.0
   Object.assign(sleeveFunctions, {
-    getSleeveStats: removedFunction("2.2.0", "sleeve.getSleeve"),
-    getSleeveInformation: removedFunction("2.2.0", "sleeve.getSleeve"),
+    getSleeveStats: removedFunction("v2.2.0", "sleeve.getSleeve"),
+    getInformation: removedFunction("v2.2.0", "sleeve.getSleeve"),
   });
   return sleeveFunctions;
 }
