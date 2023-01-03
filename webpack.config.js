@@ -190,7 +190,7 @@ module.exports = (env, argv) => {
         "@player": path.resolve(__dirname, "src/Player"),
         "@nsdefs": path.resolve(__dirname, "src/ScriptEditor/NetscriptDefinitions.d.ts"),
       },
-      fallback: { "crypto": false },
+      fallback: { crypto: false },
     },
     stats: statsConfig,
   };
