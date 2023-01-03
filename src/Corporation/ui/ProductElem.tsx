@@ -76,9 +76,9 @@ export function ProductElem(props: IProductProps): React.ReactElement {
         {sellButtonText} @ <Money money={product.pCost + markupLimit} />
       </>
     );
-  } else if (product.sCost) {
-    if (isString(product.sCost)) {
-      const sCost = (product.sCost as string).replace(/MP/g, product.pCost + product.rat / product.mku + "");
+  } else if (product.sCost[city]) {
+    if (isString(product.sCost[city])) {
+      const sCost = (product.sCost[city] as string).replace(/MP/g, product.pCost + product.rat / product.mku + "");
       sellButtonText = (
         <>
           {sellButtonText} @ <Money money={eval(sCost)} />
@@ -87,7 +87,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
     } else {
       sellButtonText = (
         <>
-          {sellButtonText} @ <Money money={product.sCost} />
+          {sellButtonText} @ <Money money={product.sCost[city]} />
         </>
       );
     }
