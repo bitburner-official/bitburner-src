@@ -148,7 +148,7 @@ export function DataRow({ name, showBar, color, cellType }: DataRowProps): React
           <Val name={name} color={color} />
         </TableCell>
         <TableCell align="right" classes={{ root: classes[cellType] }}>
-          <Typography id={"overview-" + name + "-hook"} color={color}>
+          <Typography id={"overview-" + name.toLowerCase() + "-hook"} color={color}>
             {}
           </Typography>
         </TableCell>

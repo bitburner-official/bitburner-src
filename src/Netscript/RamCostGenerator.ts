@@ -369,7 +369,7 @@ const corporation = {
   issueDividends: RamCostConstants.Corporation,
   buyBackShares: RamCostConstants.Corporation,
   sellShares: RamCostConstants.Corporation,
-  getBonusTime: RamCostConstants.Corporation,
+  getBonusTime: 0,
   sellMaterial: RamCostConstants.Corporation,
   sellProduct: RamCostConstants.Corporation,
   discontinueProduct: RamCostConstants.Corporation,
