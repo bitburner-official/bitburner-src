@@ -239,6 +239,10 @@ export const CONSTANTS: {
   * Fixed an issue with sleeve HP calculation
   * Possible fix for MathJax "Typesetting Failed" errors
   * The Faction Work XP fix listed below was also added during hotfixes.
+  * There was an issue with Corporations decaying their employees to 0 stats, even though the minimum was supposed to
+    be 5. Moved the variable storing the min decay value to corporation constants, and raised it to 10.
+  * Regenerated documentation at https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md
+    due to corporation changes related to min decay stats.
 
   v2.2.0 - Jan 2 2023 Development Reboot
 
