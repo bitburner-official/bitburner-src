@@ -237,7 +237,8 @@ export const CONSTANTS: {
   * Fixed some issues with savegames failing to load, or causing the main engine loop to stall after load.
   * Fixed an issue where .script files were not receiving the correct args when ran
   * Fixed an issue with sleeve HP calculation
-  * Fixed an issue with faction XP gain being extremely high (may have been a longstanding issue)
+  * Possible fix for MathJax "Typesetting Failed" errors
+  * The Faction Work XP fix listed below was also added during hotfixes.
 
   v2.2.0 - Jan 2 2023 Development Reboot
 
@@ -289,6 +290,11 @@ export const CONSTANTS: {
   TUTORIAL
   *  Removed NS1/NS2 selection. Tutorial now only references .js files (NS1 is essentially deprecated) (@Mughur)
   *  Fix Ram Text (by @jaculler)
+
+  FACTION WORK
+  * Faction XP was unintentionally providing 20x the experience gain as it did prior to v2.0. This caused faction work
+    to exceed gym/university as the optimal way to gain experience. Values have been reduced to only about 2x what
+    they were prior to v2.0, and they are no longer better than gym/university.
 
   NETSCRIPT
   *  Added ns.pid property to access a script's PID without a function call. (@jeek)
