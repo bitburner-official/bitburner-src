@@ -10,7 +10,7 @@ import { purchaseRamForHomeComputer } from "../../Server/ServerPurchases";
 import { Money } from "../../ui/React/Money";
 import { numeralWrapper } from "../../ui/numeralFormat";
 
-import { MathJaxWrapper } from "../../MathJaxWrapper";
+import { MathJax } from "better-react-mathjax";
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 
 type IProps = {
@@ -35,7 +35,7 @@ export function RamButton(props: IProps): React.ReactElement {
   return (
     <Tooltip
       title={
-        <MathJaxWrapper>{`\\(\\large{cost = ram \\cdot 3.2 \\cdot 10^4 \\cdot 1.58^{log_2{(ram)}}} ${bnMult}\\)`}</MathJaxWrapper>
+        <MathJax>{`\\(\\large{cost = ram \\cdot 3.2 \\cdot 10^4 \\cdot 1.58^{log_2{(ram)}}} ${bnMult}\\)`}</MathJax>
       }
     >
       <span>

@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Player } from "@player";
 
 import { Money } from "../../ui/React/Money";
-import { MathJaxWrapper } from "../../MathJaxWrapper";
+import { MathJax } from "better-react-mathjax";
 
 type IProps = {
   rerender: () => void;
@@ -30,7 +30,7 @@ export function CoresButton(props: IProps): React.ReactElement {
   }
 
   return (
-    <Tooltip title={<MathJaxWrapper>{`\\(\\large{cost = 10^9 \\cdot 7.5 ^{\\text{cores}}}\\)`}</MathJaxWrapper>}>
+    <Tooltip title={<MathJax>{`\\(\\large{cost = 10^9 \\cdot 7.5 ^{\\text{cores}}}\\)`}</MathJax>}>
       <span>
         <br />
         <Typography>

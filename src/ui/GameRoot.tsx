@@ -76,6 +76,7 @@ import _functions from "lodash/functions";
 import { Apr1 } from "./Apr1";
 import { isFactionWork } from "../Work/FactionWork";
 import { V2Modal } from "../utils/V2Modal";
+import { MathJaxContext } from "better-react-mathjax";
 
 const htmlLocation = location;
 
@@ -427,7 +428,7 @@ export function GameRoot(): React.ReactElement {
   }
 
   return (
-    <>
+    <MathJaxContext version={3} src={"dist/ext/MathJax-3.2.2/es5/tex-chtml.js"}>
       <ErrorBoundary key={errorBoundaryKey} softReset={softReset}>
         <BypassWrapper content={bypassGame ? mainPage : null}>
           <SnackbarProvider>
@@ -467,6 +468,6 @@ export function GameRoot(): React.ReactElement {
         </BypassWrapper>
       </ErrorBoundary>
       <V2Modal />
-    </>
+    </MathJaxContext>
   );
 }
