@@ -7676,7 +7676,7 @@ interface Product {
   sCost: string | number;
   /** Data refers to the production, sale, and quantity of the products
    * These values are specific to a city
-   * For each city, the data is [qty, prod, sell] */
+   * For each city, the data is [qty, prod, sell, effRat] */
   cityData: Record<CityName | `${CityName}`, number[]>;
   /** Creation progress - A number between 0-100 representing percentage */
   developmentProgress: number;

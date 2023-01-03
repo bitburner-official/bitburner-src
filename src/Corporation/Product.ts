@@ -82,8 +82,8 @@ export class Product {
 
   // Data refers to the production, sale, and quantity of the products
   // These values are specific to a city
-  // For each city, the data is [qty, prod, sell]
-  data: Record<string, number[]> = createCityMap<number[]>([0, 0, 0]);
+  // For each city, the data is [qty, prod, sell, effRat]
+  data: Record<string, number[]> = createCityMap<number[]>([0, 0, 0, 0]);
 
   // Location of this Product
   // Only applies for location-based products like restaurants/hospitals
