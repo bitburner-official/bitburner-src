@@ -321,6 +321,7 @@ export class Industry {
 
               buyAmt = Math.min(buyAmt, maxAmt);
               if (buyAmt > 0) {
+                mat.qlt = Math.max(0.1, (mat.qlt * mat.qty + 1 * buyAmt) / (mat.qty + buyAmt));
                 mat.qty += buyAmt;
                 expenses += buyAmt * mat.bCost;
               }
@@ -393,6 +394,8 @@ export class Industry {
             for (const [matName, buyAmt] of Object.entries(smartBuy) as [CorpMaterialName, number][]) {
               const mat = warehouse.materials[matName];
               if (buyAmt === undefined) throw new Error(`Somehow smartbuy matname is undefined`);
+              if (mat.qty + buyAmt != 0) mat.qlt = (mat.qlt * mat.qty + 1 * buyAmt) / (mat.qty + buyAmt);
+              else mat.qlt = 1;
               mat.qty += buyAmt;
               expenses += buyAmt * mat.bCost;
             }
@@ -463,6 +466,8 @@ export class Industry {
 
               // Make our materials if they are producable
               if (producableFrac > 0 && prod > 0) {
+                let avgQlt = 0;
+                let divider = 0;
                 for (const reqMatName of Object.keys(this.reqMats) as CorpMaterialName[]) {
                   const reqMat = this.reqMats[reqMatName];
                   if (reqMat === undefined) continue;
@@ -471,13 +476,27 @@ export class Industry {
                   warehouse.materials[reqMatName].prd = 0;
                   warehouse.materials[reqMatName].prd -=
                     reqMatQtyNeeded / (corpConstants.secondsPerMarketCycle * marketCycles);
+
+                  //temporarily ignore energy in here, will be moved
+                  if (reqMatName == "Energy") continue;
+
+                  avgQlt += warehouse.materials[reqMatName].qlt;
+                  divider++;
                 }
+                avgQlt /= divider;
+                avgQlt = Math.max(avgQlt,1)
                 for (let j = 0; j < this.prodMats.length; ++j) {
-                  warehouse.materials[this.prodMats[j]].qty += prod * producableFrac;
-                  warehouse.materials[this.prodMats[j]].qlt =
+                  let tempQlt =
                     office.employeeProd[EmployeePositions.Engineer] / 90 +
                     Math.pow(this.sciResearch, this.sciFac) +
                     Math.pow(warehouse.materials["AI Cores"].qty, this.aiFac) / 10e3;
+                  const logQlt = Math.max(Math.log10(tempQlt), 1);
+                  tempQlt = Math.min(tempQlt, avgQlt * logQlt);
+                  warehouse.materials[this.prodMats[j]].qlt = Math.max(1,
+                    (warehouse.materials[this.prodMats[j]].qlt * warehouse.materials[this.prodMats[j]].qty +
+                      tempQlt * prod * producableFrac) /
+                    (warehouse.materials[this.prodMats[j]].qty + prod * producableFrac));
+                  warehouse.materials[this.prodMats[j]].qty += prod * producableFrac;
                 }
               } else {
                 for (const reqMatName of Object.keys(this.reqMats) as CorpMaterialName[]) {
@@ -610,6 +629,28 @@ export class Industry {
                   corporation.getSalesMultiplier() *
                   advertisingFactor *
                   this.getSalesMultiplier();
+                if (isString(mat.sllman[1])) {
+                  //Dynamically evaluated
+                  let tmp = (mat.sllman[1] as string).replace(/MAX/g, (mat.maxsll + "").toUpperCase());
+                  tmp = tmp.replace(/PROD/g, mat.prd + "");
+                  
+                  try {
+                    sellAmt = eval(tmp);
+                  } catch (e) {
+                    dialogBoxCreate(
+                      `Error evaluating your sell amount for material ${mat.name} in ${this.name}'s ${city} office. The sell amount is being set to zero, sellAmt is set to ${sellAmt}`,
+                    );
+                    sellAmt = 0;
+                  }
+                  sellAmt = Math.min(mat.maxsll, sellAmt);
+                  sellAmt = Math.max(sellAmt, 0);
+                } else if (mat.sllman[1] === -1) {
+                  //Backwards compatibility, -1 = MAX
+                  sellAmt = mat.maxsll;
+                } else {
+                  //Player's input value is just a number
+                  sellAmt = Math.min(mat.maxsll, mat.sllman[1] as number);
+                }
                 sellAmt = Math.min(mat.maxsll, sellAmt);
                 sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
                 sellAmt = Math.min(mat.qty, sellAmt);
@@ -636,10 +677,27 @@ export class Industry {
                 mat.totalExp = 0; //Reset export
                 for (let expI = 0; expI < mat.exp.length; ++expI) {
                   const exp = mat.exp[expI];
-                  const amtStr = exp.amt.replace(
+
+                  const expIndustry = corporation.divisions.find((div) => div.name === exp.ind);
+                  if (!expIndustry) {
+                    console.error(`Invalid export! ${exp.ind}`);
+                    continue;
+                  }
+                  const expWarehouse = expIndustry.warehouses[exp.city];
+                  if (!expWarehouse) {
+                    console.error(`Invalid export! ${expIndustry.name} ${exp.city}`);
+                    continue;
+                  }
+                  const tempMaterial = expWarehouse.materials[matName];
+
+                  let amtStr = exp.amt.replace(
                     /MAX/g,
                     (mat.qty / (corpConstants.secondsPerMarketCycle * marketCycles) + "").toUpperCase(),
                   );
+                  amtStr = amtStr.replace(/EPROD/g, mat.prd.toString());
+                  amtStr = amtStr.replace(/IPROD/g, tempMaterial.prd.toString());
+                  amtStr = amtStr.replace(/EINV/g, mat.qty.toString());
+                  amtStr = amtStr.replace(/IINV/g, tempMaterial.qty.toString());
                   let amt = 0;
                   try {
                     amt = eval(amtStr);
@@ -660,38 +718,33 @@ export class Industry {
                   if (mat.qty < amt) {
                     amt = mat.qty;
                   }
-                  if (amt === 0) {
-                    break; //None left
-                  }
-                  for (let foo = 0; foo < corporation.divisions.length; ++foo) {
-                    if (corporation.divisions[foo].name === exp.ind) {
-                      const expIndustry = corporation.divisions[foo];
-                      const expWarehouse = expIndustry.warehouses[exp.city];
-                      if (!expWarehouse) {
-                        console.error(`Invalid export! ${expIndustry.name} ${exp.city}`);
-                        break;
-                      }
 
-                      // Make sure theres enough space in warehouse
-                      if (expWarehouse.sizeUsed >= expWarehouse.size) {
-                        // Warehouse at capacity. Exporting doesn't
-                        // affect revenue so just return 0's
-                        return [0, 0];
-                      } else {
-                        const maxAmt = Math.floor(
-                          (expWarehouse.size - expWarehouse.sizeUsed) / MaterialInfo[matName].size,
-                        );
-                        amt = Math.min(maxAmt, amt);
-                      }
-                      expWarehouse.materials[matName].imp += amt / (corpConstants.secondsPerMarketCycle * marketCycles);
-                      expWarehouse.materials[matName].qty += amt;
-                      expWarehouse.materials[matName].qlt = mat.qlt;
-                      mat.qty -= amt;
-                      mat.totalExp += amt;
-                      expIndustry.updateWarehouseSizeUsed(expWarehouse);
-                      break;
-                    }
+                  // Make sure theres enough space in warehouse
+                  if (expWarehouse.sizeUsed >= expWarehouse.size) {
+                    // Warehouse at capacity. Exporting doesn't
+                    // affect revenue so just return 0's
+                    continue;
+                  } else {
+                    const maxAmt = Math.floor((expWarehouse.size - expWarehouse.sizeUsed) / MaterialInfo[matName].size);
+                    amt = Math.min(maxAmt, amt);
                   }
+                  if (amt <= 0) {
+                    continue;
+                  }
+                  expWarehouse.materials[matName].imp += amt / (corpConstants.secondsPerMarketCycle * marketCycles);
+
+                  //Pretty sure this can cause some issues if there are multiple sources importing same material to same warehouse
+                  //but this will do for now
+                  expWarehouse.materials[matName].qlt = Math.max(
+                    0.1,
+                    (expWarehouse.materials[matName].qlt * expWarehouse.materials[matName].qty + amt * mat.qlt) /
+                      (expWarehouse.materials[matName].qty + amt),
+                  );
+                  
+                  expWarehouse.materials[matName].qty += amt;
+                  mat.qty -= amt;
+                  mat.totalExp += amt;
+                  expIndustry.updateWarehouseSizeUsed(expWarehouse);
                 }
                 //totalExp should be per second
                 mat.totalExp /= corpConstants.secondsPerMarketCycle * marketCycles;
@@ -814,12 +867,20 @@ export class Industry {
 
             //Make our Products if they are producable
             if (producableFrac > 0 && prod > 0) {
+              let avgQlt = 1;
               for (const [reqMatName, reqQty] of Object.entries(product.reqMats) as [CorpMaterialName, number][]) {
                 const reqMatQtyNeeded = reqQty * prod * producableFrac;
                 warehouse.materials[reqMatName].qty -= reqMatQtyNeeded;
                 warehouse.materials[reqMatName].prd -=
                   reqMatQtyNeeded / (corpConstants.secondsPerMarketCycle * marketCycles);
+                avgQlt += warehouse.materials[reqMatName].qlt;
               }
+              avgQlt /= Object.keys(product.reqMats).length;
+              const tempEffRat = Math.min(product.rat, avgQlt * Math.log10(product.rat));
+              //Effective Rating
+              product.data[city][3] =
+                (product.data[city][3] * product.data[city][0] + tempEffRat * prod * producableFrac) /
+                (product.data[city][0] + prod * producableFrac);
               //Quantity
               product.data[city][0] += prod * producableFrac;
             }
@@ -874,7 +935,7 @@ export class Industry {
             }
 
             // Calculate Sale Cost (sCost), which could be dynamically evaluated
-            const markupLimit = product.rat / product.mku;
+            const markupLimit = Math.max(product.data[city][3], 0.001) / product.mku;
             let sCost;
             if (product.marketTa2) {
               // Reverse engineer the 'maxSell' formula
@@ -885,7 +946,7 @@ export class Industry {
               const sqrtNumerator = sellAmt;
               const sqrtDenominator =
                 0.5 *
-                Math.pow(product.rat, 0.65) *
+                Math.pow(product.data[city][3], 0.65) *
                 marketFactor *
                 corporation.getSalesMultiplier() *
                 businessFactor *
@@ -915,7 +976,7 @@ export class Industry {
                 console.error(`mku is zero, reverting to 1 to avoid Infinity`);
                 product.mku = 1;
               }
-              sCost = sCostString.replace(/MP/g, product.pCost + product.rat / product.mku + "");
+              sCost = sCostString.replace(/MP/g, product.pCost + "");
               sCost = Math.max(product.pCost, eval(sCost));
             } else {
               sCost = product.sCost;
@@ -930,7 +991,7 @@ export class Industry {
 
             product.maxsll =
               0.5 *
-              Math.pow(product.rat, 0.65) *
+              Math.pow(product.data[city][3], 0.65) *
               marketFactor *
               corporation.getSalesMultiplier() *
               Math.pow(markup, 2) *
