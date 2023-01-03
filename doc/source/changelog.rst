@@ -6,6 +6,13 @@ Changelog
 v2.2.0 - Jan 2 2023 Development Reboot
 --------------------------------------
 
+Hotfixes:
+
+* Fixed some issues with savegames failing to load, or causing the main engine loop to stall after load.
+* Fixed an issue where .script files were not receiving the correct args when ran
+* Fixed an issue with sleeve HP calculation
+* Fixed an issue with faction XP gain being extremely high (may have been a longstanding issue)
+
 Dev notes
 
 * The previous main developer, hydroflame, is stepping back from this project for the foreseeable future. To facilitate this, we've moved the repo to a new location at https://github.com/bitburner-official/bitburner-src.

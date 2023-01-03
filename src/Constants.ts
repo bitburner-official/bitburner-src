@@ -232,6 +232,13 @@ export const CONSTANTS: {
   Donations: 41,
 
   LatestUpdate: `
+  v2.2.0 Hotfixes:
+  
+  * Fixed some issues with savegames failing to load, or causing the main engine loop to stall after load.
+  * Fixed an issue where .script files were not receiving the correct args when ran
+  * Fixed an issue with sleeve HP calculation
+  * Fixed an issue with faction XP gain being extremely high (may have been a longstanding issue)
+
   v2.2.0 - Jan 2 2023 Development Reboot
 
   Dev notes
