@@ -23,7 +23,7 @@
     "acorn-walk": "^8.2.0",
     "arg": "^5.0.0",
     "bcryptjs": "^2.4.3",
-    "better-react-mathjax": "^1.0.3",
+    "better-react-mathjax": "^2.0.2",
     "clsx": "^1.1.1",
     "date-fns": "^2.25.0",
     "escodegen": "^1.11.0",
