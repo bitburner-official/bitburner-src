@@ -133,6 +133,10 @@ export class Sleeve extends Person implements SleevePerson {
 
   /** Called on every sleeve for a Source File Prestige */
   prestige(): void {
+    // Reset augs and multipliers
+    this.augmentations = [];
+    this.resetMultipliers();
+
     // Reset exp
     this.exp.hacking = 0;
     this.exp.strength = 0;
@@ -147,12 +151,7 @@ export class Sleeve extends Person implements SleevePerson {
     this.stopWork();
     this.shockRecovery();
 
-    // Reset augs and multipliers
-    this.augmentations = [];
-    this.resetMultipliers();
-
     // Reset Location
-
     this.city = CityName.Sector12;
 
     // Reset sleeve-related stats
@@ -470,6 +469,7 @@ export class Sleeve extends Person implements SleevePerson {
 
   /** Initializes a Sleeve object from a JSON save state. */
   static fromJSON(value: IReviverValue): Sleeve {
+    if (!value.data.hp?.current || !value.data.hp?.max) value.data.hp = { current: 10, max: 10 };
     return Generic_fromJSON(Sleeve, value.data);
   }
 }

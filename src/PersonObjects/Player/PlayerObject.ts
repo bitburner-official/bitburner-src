@@ -165,6 +165,7 @@ export class PlayerObject extends Person implements IPlayer {
 
   /** Initializes a PlayerObject object from a JSON save state. */
   static fromJSON(value: IReviverValue): PlayerObject {
+    if (!value.data.hp?.current || !value.data.hp?.max) value.data.hp = { current: 10, max: 10 };
     const player = Generic_fromJSON(PlayerObject, value.data);
     if (player.money === null) player.money = 0;
     return player;
