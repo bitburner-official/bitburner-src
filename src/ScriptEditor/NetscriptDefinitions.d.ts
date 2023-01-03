@@ -7643,6 +7643,8 @@ interface CorpConstants {
   employeeRaiseAmount: number;
   /** Max products for a division without upgrades */
   maxProductsBase: number;
+  /** The minimum decay value for happiness/morale/energy */
+  minEmployeeDecay: number;
 }
 /** @public */
 type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "SALE" | "EXPORT";
@@ -7845,16 +7847,10 @@ export interface Office {
   loc: CityName;
   /** Maximum number of employee */
   size: number;
-  /** Minimum amount of energy of the employees */
-  minEne: number;
   /** Maximum amount of energy of the employees */
   maxEne: number;
-  /** Minimum happiness of the employees */
-  minHap: number;
   /** Maximum happiness of the employees */
   maxHap: number;
-  /** Minimum morale of the employees */
-  minMor: number;
   /** Maximum morale of the employees */
   maxMor: number;
   /** Amount of employees */

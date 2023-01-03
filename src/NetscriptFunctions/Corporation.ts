@@ -675,11 +675,8 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       return {
         loc: office.loc,
         size: office.size,
-        minEne: office.minEne,
         maxEne: office.maxEne,
-        minHap: office.minHap,
         maxHap: office.maxHap,
-        minMor: office.minMor,
         maxMor: office.maxMor,
         employees: office.totalEmployees,
         avgEne: office.avgEne,

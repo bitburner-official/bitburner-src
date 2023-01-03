@@ -15,10 +15,6 @@ export class OfficeSpace {
   loc: CityName;
   size: number;
 
-  minEne = 5;
-  minHap = 5;
-  minMor = 5;
-
   maxEne = 100;
   maxHap = 100;
   maxMor = 100;
@@ -141,9 +137,9 @@ export class OfficeSpace {
         this.avgMor = (this.avgMor * perfMult + increase) * this.partyMult;
       }
 
-      this.avgEne = Math.max(Math.min(this.avgEne, this.maxEne), this.minEne);
-      this.avgMor = Math.max(Math.min(this.avgMor, this.maxMor), this.minMor);
-      this.avgHap = Math.max(Math.min(this.avgHap, this.maxHap), this.minHap);
+      this.avgEne = Math.max(Math.min(this.avgEne, this.maxEne), corpConstants.minEmployeeDecay);
+      this.avgMor = Math.max(Math.min(this.avgMor, this.maxMor), corpConstants.minEmployeeDecay);
+      this.avgHap = Math.max(Math.min(this.avgHap, this.maxHap), corpConstants.minEmployeeDecay);
 
       this.coffeePending = false;
       this.partyMult = 1;

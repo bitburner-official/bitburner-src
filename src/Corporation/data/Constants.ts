@@ -118,4 +118,6 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   maxProductsBase = 3,
   fundingRoundShares = [0.1, 0.35, 0.25, 0.2],
   fundingRoundMultiplier = [4, 3, 3, 2.5],
-  valuationLength = 5;
+  valuationLength = 5,
+  /** Minimum decay value for employee morale/happiness/energy */
+  minEmployeeDecay = 10;

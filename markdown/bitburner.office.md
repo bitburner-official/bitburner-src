@@ -26,8 +26,5 @@ export interface Office
 |  [maxEne](./bitburner.office.maxene.md) | number | Maximum amount of energy of the employees |
 |  [maxHap](./bitburner.office.maxhap.md) | number | Maximum happiness of the employees |
 |  [maxMor](./bitburner.office.maxmor.md) | number | Maximum morale of the employees |
-|  [minEne](./bitburner.office.minene.md) | number | Minimum amount of energy of the employees |
-|  [minHap](./bitburner.office.minhap.md) | number | Minimum happiness of the employees |
-|  [minMor](./bitburner.office.minmor.md) | number | Minimum morale of the employees |
 |  [size](./bitburner.office.size.md) | number | Maximum number of employee |
 

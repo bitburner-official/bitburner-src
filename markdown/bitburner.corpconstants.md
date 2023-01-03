@@ -31,6 +31,7 @@ interface CorpConstants
 |  [marketCyclesPerEmployeeRaise](./bitburner.corpconstants.marketcyclesperemployeeraise.md) | number |  |
 |  [materialNames](./bitburner.corpconstants.materialnames.md) | [CorpMaterialName](./bitburner.corpmaterialname.md)<!-- -->\[\] | Names of all materials |
 |  [maxProductsBase](./bitburner.corpconstants.maxproductsbase.md) | number | Max products for a division without upgrades |
+|  [minEmployeeDecay](./bitburner.corpconstants.minemployeedecay.md) | number | The minimum decay value for happiness/morale/energy |
 |  [officeInitialCost](./bitburner.corpconstants.officeinitialcost.md) | number |  |
 |  [officeInitialSize](./bitburner.corpconstants.officeinitialsize.md) | number |  |
 |  [officeSizeUpgradeCostBase](./bitburner.corpconstants.officesizeupgradecostbase.md) | number |  |

@@ -827,6 +827,8 @@ export declare interface CorpConstants {
     employeeRaiseAmount: number;
     /** Max products for a division without upgrades */
     maxProductsBase: number;
+    /** The minimum decay value for happiness/morale/energy */
+    minEmployeeDecay: number;
 }
 
 /** @public */
@@ -1928,6 +1930,7 @@ export declare interface HackingFormulas {
     hackPercent(server: Server, player: Person): number;
     /**
      * Calculate the percent a server would grow to.
+     * Not exact due to limitations of mathematics.
      * (Ex: 3.0 would would grow the server to 300% of its current value.)
      * @param server - Server info from {@link NS.getServer | getServer}
      * @param threads - Amount of thread.
@@ -3148,11 +3151,11 @@ export declare interface NS {
      *
      * Use your hacking skills to increase the amount of money available on a server.
      * The runtime for this command depends on your hacking level and the target server’s
-     * security level. When `grow` completes, the money available on a target server will
-     * be increased by a certain, fixed percentage. This percentage is determined by the
-     * target server’s growth rate (which varies between servers) and security level. Generally,
-     * higher-level servers have higher growth rates. The {@link NS.getServerGrowth | getServerGrowth} function can be used
-     * to obtain a server’s growth rate.
+     * security level. When `grow` completes, the money available on a target server will be increased
+     * by amount equal to the number of threads used and a certain, fixed percentage of current money on
+     * the server. This percentage is determined by the target server’s growth rate (which varies between servers)
+     * and security level. Generally, higher-level servers have higher growth rates.
+     * The {@link NS.getServerGrowth | getServerGrowth} function can be used to obtain a server’s growth rate.
      *
      * Like {@link NS.hack | hack}, `grow` can be called on any server, regardless of where the script is running.
      * The grow() command requires root access to the target server, but there is no required hacking
@@ -3305,6 +3308,8 @@ export declare interface NS {
      * This function returns the number of “growths” needed in order to increase
      * the amount of money available on the specified server by the specified amount.
      * The specified amount is multiplicative and is in decimal form, not percentage.
+     *
+     * Due to limitations of mathematics, this function won't be the true value, but an approximation.
      *
      * Warning: The value returned by this function isn’t necessarily a whole number.
      *
@@ -5406,16 +5411,10 @@ export declare interface Office {
     loc: CityName;
     /** Maximum number of employee */
     size: number;
-    /** Minimum amount of energy of the employees */
-    minEne: number;
     /** Maximum amount of energy of the employees */
     maxEne: number;
-    /** Minimum happiness of the employees */
-    minHap: number;
     /** Maximum happiness of the employees */
     maxHap: number;
-    /** Minimum morale of the employees */
-    minMor: number;
     /** Maximum morale of the employees */
     maxMor: number;
     /** Amount of employees */
