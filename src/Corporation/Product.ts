@@ -47,8 +47,8 @@ export class Product {
   // Production cost - estimation of how much money it costs to make this Product
   pCost = 0;
 
-  // Sell cost
-  sCost: string | number = 0;
+  // Sell costs
+  sCost: Record<string, any> = createCityMap<any>(0);
 
   // Variables for handling the creation process of this Product
   fin = false; // Whether this Product has finished being created

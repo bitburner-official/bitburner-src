@@ -194,13 +194,13 @@ export function SellProduct(product: Product, city: string, amt: string, price: 
     if (temp == null || isNaN(parseFloat(temp))) {
       throw new Error("Invalid value or expression for sell price field.");
     }
-    product.sCost = price; //Use sanitized price
+    product.sCost[city] = price; //Use sanitized price
   } else {
     const cost = parseFloat(price);
     if (isNaN(cost)) {
       throw new Error("Invalid value for sell price field");
     }
-    product.sCost = cost;
+    product.sCost[city] = cost;
   }
 
   // Array of all cities. Used later

@@ -970,8 +970,8 @@ export class Industry {
               sCost = optimalPrice;
             } else if (product.marketTa1) {
               sCost = product.pCost + markupLimit;
-            } else if (isString(product.sCost)) {
-              const sCostString = product.sCost as string;
+            } else if (isString(product.sCost[city])) {
+              const sCostString = product.sCost[city] as string;
               if (product.mku === 0) {
                 console.error(`mku is zero, reverting to 1 to avoid Infinity`);
                 product.mku = 1;
@@ -979,7 +979,7 @@ export class Industry {
               sCost = sCostString.replace(/MP/g, product.pCost + "");
               sCost = Math.max(product.pCost, eval(sCost));
             } else {
-              sCost = product.sCost;
+              sCost = product.sCost[city];
             }
 
             let markup = 1;

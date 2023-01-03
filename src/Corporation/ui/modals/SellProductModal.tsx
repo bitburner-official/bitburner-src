@@ -11,8 +11,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { KEY } from "../../../utils/helpers/keyCodes";
 
-function initialPrice(product: Product): string {
-  let val = product.sCost ? product.sCost + "" : "";
+function initialPrice(product: Product, city: string): string {
+  let val = product.sCost[city] ? product.sCost[city] + "" : "";
   if (product.marketTa2) {
     val += " (Market-TA.II)";
   } else if (product.marketTa1) {
@@ -34,7 +34,7 @@ export function SellProductModal(props: IProps): React.ReactElement {
   const [iQty, setQty] = useState<string>(
     props.product.sllman[props.city][1] ? props.product.sllman[props.city][1] : "",
   );
-  const [px, setPx] = useState<string>(initialPrice(props.product));
+  const [px, setPx] = useState<string>(initialPrice(props.product, props.city));
 
   function onCheckedChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setChecked(event.target.checked);
