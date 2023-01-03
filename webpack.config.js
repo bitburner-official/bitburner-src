@@ -28,8 +28,10 @@ module.exports = (env, argv) => {
   const devServerSettings = {
     hot: true,
     port: 8000,
-    publicPath: `/`,
-    stats: statsConfig,
+    devMiddleware: {
+      publicPath: `/`,
+      stats: statsConfig,
+    },
   };
 
   // By default, the webpack-dev-server is not exposed outside of localhost.
