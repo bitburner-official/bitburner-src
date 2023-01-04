@@ -1,5 +1,5 @@
 import { Player } from "../../../src/Player";
-import { NetscriptFunctions, wrappedNS } from "../../../src/NetscriptFunctions";
+import { NetscriptFunctions } from "../../../src/NetscriptFunctions";
 import { RamCosts, getRamCost, RamCostConstants } from "../../../src/Netscript/RamCostGenerator";
 import { Environment } from "../../../src/Netscript/Environment";
 import { RunningScript } from "../../../src/Script/RunningScript";
@@ -108,7 +108,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
   }
 
   describe("ns", () => {
-    Object.entries(wrappedNS as unknown as NSLayer).forEach(([key, val]) => {
+    Object.entries(NetscriptFunctions(workerScript) as unknown as NSLayer).forEach(([key, val]) => {
       if (key === "args" || key === "enums") return;
       if (typeof val === "function") {
         // Removed functions have no ram cost and should be skipped.
@@ -145,7 +145,9 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
 
   describe("Singularity multiplier checks", () => {
     sf4.lvl = 3;
-    const singFunctions = Object.entries(wrappedNS.singularity).filter(([__, val]) => typeof val === "function");
+    const singFunctions = Object.entries(NetscriptFunctions(workerScript).singularity).filter(
+      ([__, val]) => typeof val === "function",
+    );
     const singObjects = singFunctions
       .filter((fn) => !isRemovedFunction(fn))
       .map(([key, val]) => {

@@ -12,7 +12,6 @@ type APIFn = (...args: any[]) => void;
 type WrappedFn = (...args: unknown[]) => unknown;
 /** Type for internal, unwrapped ctx function that produces an APIFunction */
 type InternalFn<F extends APIFn> = (ctx: NetscriptContext) => ((...args: unknown[]) => ReturnType<F>) & F;
-type Key<API> = keyof API & string;
 
 export type ExternalAPI<API> = {
   [key in keyof API]: API[key] extends Enums
@@ -33,42 +32,6 @@ export type InternalAPI<API> = {
     ? InternalFn<API[key]>
     : InternalAPI<API[key]>;
 };
-/** Any of the possible values on a internal API layer */
-type InternalValues = Enums | ScriptArg[] | InternalFn<APIFn> | InternalAPI<unknown>;
-
-export class StampedLayer {
-  #workerScript: WorkerScript;
-  constructor(ws: WorkerScript, obj: ExternalAPI<unknown>) {
-    this.#workerScript = ws;
-    Object.setPrototypeOf(this, obj);
-  }
-  static wrapFunction<API>(eLayer: ExternalAPI<API>, internalFunc: InternalFn<APIFn>, tree: string[], key: Key<API>) {
-    const arrayPath = [...tree, key];
-    const functionPath = arrayPath.join(".");
-    function wrappedFunction(this: StampedLayer, ...args: unknown[]): unknown {
-      if (!this)
-        throw new Error(`
-ns.${functionPath} called with no this value.
-ns functions must be bound to ns if placed in a new
-variable. e.g.
-
-const ${key} = ns.${functionPath}.bind(ns);
-${key}(${JSON.stringify(args).replace(/^\[|\]$/g, "")});\n\n`);
-      const ctx = { workerScript: this.#workerScript, function: key, functionPath };
-      const func = internalFunc(ctx); //Allows throwing before ram chack
-      helpers.checkEnvFlags(ctx);
-      helpers.updateDynamicRam(ctx, getRamCost(...tree, key));
-      return func(...args);
-    }
-    Object.defineProperty(eLayer, key, { value: wrappedFunction, enumerable: true, writable: false });
-  }
-}
-Object.defineProperty(StampedLayer.prototype, "constructor", {
-  value: Object,
-  enumerable: false,
-  writable: false,
-  configurable: false,
-});
 
 export type NetscriptContext = {
   workerScript: WorkerScript;
@@ -76,28 +39,64 @@ export type NetscriptContext = {
   functionPath: string;
 };
 
-export function wrapAPILayer<API>(
-  eLayer: ExternalAPI<API>,
-  iLayer: InternalAPI<API>,
+export function NSProxy<API>(
+  ws: WorkerScript,
+  ns: InternalAPI<API>,
   tree: string[],
+  additionalData?: Record<string, unknown>,
 ): ExternalAPI<API> {
-  for (const [key, value] of Object.entries(iLayer) as [Key<API>, InternalValues][]) {
-    if (key === "enums") {
-      const enumObj = Object.freeze(cloneDeep(value as Enums));
-      for (const member of Object.values(enumObj)) Object.freeze(member);
-      (eLayer[key] as Enums) = enumObj;
-    } else if (key === "args") continue;
-    // Args only added on individual instances.
-    else if (typeof value === "function") {
-      StampedLayer.wrapFunction(eLayer, value as InternalFn<APIFn>, tree, key);
-    } else if (typeof value === "object") {
-      wrapAPILayer((eLayer[key] = {} as ExternalAPI<API>[Key<API>]), value, [...tree, key as string]);
-    } else {
-      console.warn(`Unexpected data while wrapping API.`, "tree:", tree, "key:", key, "value:", value);
+  const memoed: ExternalAPI<API> = Object.assign({} as ExternalAPI<API>, additionalData ?? {});
+
+  const handler = {
+    has(__target: unknown, key: string) {
+      return Reflect.has(ns, key);
+    },
+    ownKeys(__target: unknown) {
+      return Reflect.ownKeys(ns);
+    },
+    getOwnPropertyDescriptor(__target: unknown, key: string) {
+      if (!Reflect.has(ns, key)) return undefined;
+      return { value: this.get(__target, key, this), configurable: true, enumerable: true, writable: false };
+    },
+    defineProperty(__target: unknown, __key: unknown, __attrs: unknown) {
+      throw new TypeError("ns instances are not modifiable!");
+    },
+    get(__target: unknown, key: string, __receiver: any) {
+      const ours = memoed[key as keyof API];
+      if (ours) return ours;
+
+      const field = ns[key as keyof API];
+      if (!field) return field;
+
+      if (key === "enums") {
+        const enumObj = Object.freeze(cloneDeep(field as Enums));
+        for (const member of Object.values(enumObj)) Object.freeze(member);
+        return ((memoed[key as keyof API] as Enums) = enumObj);
+      }
+      if (typeof field === "function") {
+        const arrayPath = [...tree, key];
+        const functionPath = arrayPath.join(".");
+        const wrappedFunction = function (...args: unknown[]): unknown {
+          const ctx = { workerScript: ws, function: key, functionPath };
+          const func = field(ctx); //Allows throwing before ram chack
+          helpers.checkEnvFlags(ctx);
+          helpers.updateDynamicRam(ctx, getRamCost(...tree, key));
+          return func(...args);
+        };
+        return ((memoed[key as keyof API] as WrappedFn) = wrappedFunction);
+      }
+      if (typeof field === "object") {
+        // TODO unplanned: Make this work generically
+        return ((memoed[key as keyof API] as unknown) = NSProxy(ws, field as InternalAPI<unknown>, [...tree, key]));
+      }
+      console.warn(`Unexpected data while wrapping API.`, "tree:", tree, "key:", key, "field:", field);
       throw new Error("Error while wrapping netscript API. See console.");
-    }
-  }
-  return eLayer;
+    },
+  };
+
+  // We target an empty Object, so that unproxied methods don't do anything.
+  // We *can't* freeze the target, because it would break invariants on ownKeys.
+  return new Proxy({}, handler) as ExternalAPI<API>;
 }
 
 /** Specify when a function was removed from the game, and its replacement function. */
