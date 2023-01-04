@@ -91,11 +91,12 @@ export const enums: NSEnums = {
   ToastVariant,
   UniversityClassType,
 };
+for (const val of Object.values(enums)) Object.freeze(val);
+Object.freeze(enums);
 
-export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args">>;
+export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums">>;
 
 export const ns: InternalAPI<NSFull> = {
-  enums,
   singularity: NetscriptSingularity(),
   gang: NetscriptGang(),
   bladeburner: NetscriptBladeburner(),
@@ -1894,7 +1895,7 @@ Object.assign(ns, {
 });
 
 export function NetscriptFunctions(ws: WorkerScript): ExternalAPI<NSFull> {
-  return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid });
+  return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid, enums });
 }
 
 const possibleLogs = Object.fromEntries([...getFunctionNames(ns, "")].map((a) => [a, true]));

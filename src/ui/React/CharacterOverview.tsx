@@ -75,11 +75,11 @@ const formattedVals: Record<RowName, () => string> = {
 const skillMultUpdaters: Record<SkillRowName, () => number> = {
   //Used by skill bars to calculate the mult
   Hack: () => Player.mults.hacking * BitNodeMultipliers.HackingLevelMultiplier,
-  Str: () => Player.mults.hacking * BitNodeMultipliers.HackingLevelMultiplier,
-  Def: () => Player.mults.hacking * BitNodeMultipliers.HackingLevelMultiplier,
-  Dex: () => Player.mults.hacking * BitNodeMultipliers.HackingLevelMultiplier,
-  Agi: () => Player.mults.hacking * BitNodeMultipliers.HackingLevelMultiplier,
-  Cha: () => Player.mults.hacking * BitNodeMultipliers.HackingLevelMultiplier,
+  Str: () => Player.mults.strength * BitNodeMultipliers.StrengthLevelMultiplier,
+  Def: () => Player.mults.defense * BitNodeMultipliers.DefenseLevelMultiplier,
+  Dex: () => Player.mults.dexterity * BitNodeMultipliers.DexterityLevelMultiplier,
+  Agi: () => Player.mults.agility * BitNodeMultipliers.AgilityLevelMultiplier,
+  Cha: () => Player.mults.charisma * BitNodeMultipliers.CharismaLevelMultiplier,
   Int: () => 1,
 };
 

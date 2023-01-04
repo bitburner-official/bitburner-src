@@ -3,19 +3,24 @@
 Changelog
 =========
 
-v2.2.0 - Jan 2 2023 Development Reboot
---------------------------------------
+v2.2.1 Hotfixes
+---------------
 
-Hotfixes:
+Hotfix / bugfix:
 
+* (@d0sboots) Implemented a new API wrapping solution that prevents the need for binding functions to ns when placing them in a new variable, but maintains and perhaps improves upon the performance gains from the previous v2.2.0 changes.
 * Fixed some issues with savegames failing to load, or causing the main engine loop to stall after load.
 * Fixed an issue where .script files were not receiving the correct args when ran
 * Fixed an issue with sleeve HP calculation
 * Possible fix for MathJax "Typesetting Failed" errors
-* The Faction Work XP fix listed below was also added during hotfixes.
-* There was an issue with Corporations decaying their employees to 0 stats, even though the minimum was supposed to be 5. Fixed, and raised minimum to 10.
+* There was an issue with Corporations decaying their employees to 0 stats, even though the minimum was supposed to be 5. Moved the variable storing the min decay value to corporation constants, and raised it to 10.
 * Regenerated documentation at https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md due to corporation changes related to min decay stats.
+* Faction XP was unintentionally providing 20x the experience gain as it did prior to v2.0. This caused faction work to exceed gym/university as the optimal way to gain experience. Values have been reduced to only about 2x what they were prior to v2.0, and they are no longer better than gym/university.
+* Fixed an issue where the overview skill bars could be displayed inaccurately based on player multipliers.
 
+
+v2.2.0 - Jan 2 2023 Development Reboot
+--------------------------------------
 
 Dev notes
 
@@ -24,7 +29,7 @@ Dev notes
 
 BREAKING API CHANGES:
 
-* (ns2 only) ns functions use the 'this' value from ns: if you move the function to its own variable off of ns, it needs to be bound to ns. The internal changes that make this necessary led to very large performance gains for running many scripts at once. e.g.:
+* No longer applicable as of v2.2.1! (ns2 only) ns functions use the 'this' value from ns: if you move the function to its own variable off of ns, it needs to be bound to ns. The internal changes that make this necessary led to very large performance gains for running many scripts at once. e.g.:
 
    const tprint1 = ns.tprint; // This doesn't work and will error out when calling tprint1();
    
@@ -65,9 +70,6 @@ TUTORIAL
 
 * Removed NS1/NS2 selection. Tutorial now only references .js files (NS1 is essentially deprecated) (@Mughur)
 * Fix Ram Text (by @jaculler)
-
-FACTION WORK
-* Faction XP was unintentionally providing 20x the experience gain as it did prior to v2.0. This caused faction work to exceed gym/university as the optimal way to gain experience. Values have been reduced to only about 2x what they were prior to v2.0, and they are no longer better than gym/university.
 
 NETSCRIPT
 
