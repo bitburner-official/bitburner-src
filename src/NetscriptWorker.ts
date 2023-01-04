@@ -11,7 +11,7 @@ import { generateNextPid } from "./Netscript/Pid";
 
 import { CONSTANTS } from "./Constants";
 import { Interpreter } from "./ThirdParty/JSInterpreter";
-import { NetscriptFunctions, wrappedNS } from "./NetscriptFunctions";
+import { NetscriptFunctions } from "./NetscriptFunctions";
 import { compile, Node } from "./NetscriptJSEvaluator";
 import { IPort } from "./NetscriptPort";
 import { RunningScript } from "./Script/RunningScript";
@@ -81,15 +81,15 @@ async function startNetscript1Script(workerScript: WorkerScript): Promise<void> 
 
   //TODO unplanned: Make NS1 wrapping type safe instead of using BasicObject.
   type BasicObject = Record<string, any>;
+  const wrappedNS = NetscriptFunctions(workerScript);
   function wrapNS1Layer(int: Interpreter, intLayer: unknown, nsLayer = wrappedNS as BasicObject) {
-    if (nsLayer === wrappedNS) int.setProperty(intLayer, "args", int.nativeToPseudo(workerScript.args));
     for (const [name, entry] of Object.entries(nsLayer)) {
       if (typeof entry === "function") {
         const wrapper = async (...args: unknown[]) => {
           try {
             // Sent a resolver function as an extra arg. See createAsyncFunction JSInterpreter.js:3209
             const callback = args.pop() as (value: unknown) => void;
-            const result = await entry.bind(workerScript.env.vars)(...args.map((arg) => int.pseudoToNative(arg)));
+            const result = await entry(...args.map((arg) => int.pseudoToNative(arg)));
             return callback(int.nativeToPseudo(result));
           } catch (e: unknown) {
             errorToThrow = e;

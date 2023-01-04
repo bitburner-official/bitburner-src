@@ -72,7 +72,7 @@ import { Flags } from "./NetscriptFunctions/Flags";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
-import { ExternalAPI, InternalAPI, removedFunction, StampedLayer, wrapAPILayer } from "./Netscript/APIWrapper";
+import { ExternalAPI, InternalAPI, removedFunction, NSProxy } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
@@ -1893,34 +1893,8 @@ Object.assign(ns, {
   getServerRam: removedFunction("v2.2.0", "getServerMaxRam and getServerUsedRam"),
 });
 
-// add undocumented functions
-export const wrappedNS = wrapAPILayer({} as ExternalAPI<NSFull>, ns, []);
-
-// Figure out once which layers of ns have functions on them and will need to be stamped with a private workerscript field for API access
-const layerLocations: string[][] = [];
-function populateLayers(nsLayer: ExternalAPI<unknown>, currentLayers: string[] = []) {
-  for (const [k, v] of Object.entries(nsLayer)) {
-    if (typeof v === "object" && k !== "enums") {
-      if (Object.values(v as object).some((member) => typeof member === "function"))
-        layerLocations.push([...currentLayers, k]);
-      populateLayers(v as ExternalAPI<unknown>, [...currentLayers, k]);
-    }
-  }
-}
-populateLayers(wrappedNS);
-
 export function NetscriptFunctions(ws: WorkerScript): ExternalAPI<NSFull> {
-  //TODO unplanned: better typing instead of relying on an any
-  const instance = new StampedLayer(ws, wrappedNS) as any;
-  for (const layerLocation of layerLocations) {
-    const key = layerLocation.pop() as string;
-    const obj = layerLocation.reduce((prev, curr) => prev[curr], instance);
-    layerLocation.push(key);
-    obj[key] = new StampedLayer(ws, obj[key]);
-  }
-  instance.args = ws.args.slice();
-  instance.pid = ws.pid;
-  return instance;
+  return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid });
 }
 
 const possibleLogs = Object.fromEntries([...getFunctionNames(ns, "")].map((a) => [a, true]));
