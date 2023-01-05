@@ -73,6 +73,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
       setImportData(data);
       setImportSaveOpen(true);
     } catch (e: unknown) {
+      console.error(e);
       SnackbarEvents.emit(String(e), ToastVariants.ERROR, 5000);
     }
   }
