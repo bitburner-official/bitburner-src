@@ -72,7 +72,7 @@ import { Flags } from "./NetscriptFunctions/Flags";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
-import { ExternalAPI, InternalAPI, removedFunction, NSProxy } from "./Netscript/APIWrapper";
+import { InternalAPI, removedFunction, NSProxy } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
@@ -1894,7 +1894,7 @@ Object.assign(ns, {
   getServerRam: removedFunction("v2.2.0", "getServerMaxRam and getServerUsedRam"),
 });
 
-export function NetscriptFunctions(ws: WorkerScript): ExternalAPI<NSFull> {
+export function NetscriptFunctions(ws: WorkerScript): NSFull {
   return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid, enums });
 }
 

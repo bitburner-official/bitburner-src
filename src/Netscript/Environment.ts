@@ -1,5 +1,4 @@
 import { NSFull } from "../NetscriptFunctions";
-import { ExternalAPI } from "./APIWrapper";
 
 /**
  * The environment in which a script runs. The environment holds
@@ -14,5 +13,5 @@ export class Environment {
   runningFn = "";
 
   /** Environment variables (currently only Netscript functions) */
-  vars: ExternalAPI<NSFull> | null = null;
+  vars: NSFull | null = null;
 }

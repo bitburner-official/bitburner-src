@@ -15,7 +15,6 @@ import { GetServer } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
 import { ScriptDeath } from "./ScriptDeath";
 import { ScriptArg } from "./ScriptArg";
-import { ExternalAPI } from "./APIWrapper";
 import { NSFull } from "../NetscriptFunctions";
 
 export class WorkerScript {
@@ -83,11 +82,7 @@ export class WorkerScript {
   /** Function called when the script ends. */
   atExit?: () => void;
 
-  constructor(
-    runningScriptObj: RunningScript,
-    pid: number,
-    nsFuncsGenerator?: (ws: WorkerScript) => ExternalAPI<NSFull>,
-  ) {
+  constructor(runningScriptObj: RunningScript, pid: number, nsFuncsGenerator?: (ws: WorkerScript) => NSFull) {
     this.name = runningScriptObj.filename;
     this.hostname = runningScriptObj.server;
 
