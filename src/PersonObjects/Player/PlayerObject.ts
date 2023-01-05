@@ -10,7 +10,7 @@ import { Sleeve } from "../Sleeve/Sleeve";
 import { PlayerOwnedSourceFile } from "../../SourceFile/PlayerOwnedSourceFile";
 import { Exploit } from "../../Exploits/Exploit";
 
-import { LocationName } from "../../Enums";
+import { LocationNames } from "../../Enums";
 import { Corporation } from "../../Corporation/Corporation";
 import { Gang } from "../../Gang/Gang";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
@@ -26,7 +26,7 @@ import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { CONSTANTS } from "../../Constants";
 import { Work } from "src/Work/Work";
 import { Person } from "../Person";
-import { Player as IPlayer } from "@nsdefs";
+import { LocationName, Player as IPlayer } from "@nsdefs";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -46,7 +46,7 @@ export class PlayerObject extends Person implements IPlayer {
   jobs: Record<string, string> = {};
   karma = 0;
   numPeopleKilled = 0;
-  location = LocationName.TravelAgency;
+  location = LocationNames.TravelAgency as LocationName;
   money = 1000 + CONSTANTS.Donations;
   moneySourceA = new MoneySourceTracker();
   moneySourceB = new MoneySourceTracker();

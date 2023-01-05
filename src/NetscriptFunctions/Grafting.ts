@@ -1,7 +1,7 @@
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
 import { hasAugmentationPrereqs } from "../Faction/FactionHelpers";
-import { CityName } from "../Enums";
+import { CityNames } from "../Enums";
 import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
 import { getGraftingAvailableAugs, calculateGraftingTimeWithBonus } from "../PersonObjects/Grafting/GraftingHelpers";
 import { Player as player } from "../Player";
@@ -54,7 +54,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
         const augName = helpers.string(ctx, "augName", _augName);
         const focus = !!_focus;
         checkGraftingAPIAccess(ctx);
-        if (player.city !== CityName.NewTokyo) {
+        if (player.city !== CityNames.NewTokyo) {
           throw helpers.makeRuntimeErrorMsg(ctx, "You must be in New Tokyo to begin grafting an Augmentation.");
         }
         if (!getGraftingAvailableAugs().includes(augName) || !StaticAugmentations.hasOwnProperty(augName)) {

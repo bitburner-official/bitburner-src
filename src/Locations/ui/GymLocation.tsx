@@ -16,7 +16,7 @@ import { Page } from "../../ui/Router";
 import { Box } from "@mui/material";
 import { ClassWork, Classes } from "../../Work/ClassWork";
 import { calculateCost } from "../../Work/Formulas";
-import { GymType } from "../../Enums";
+import { GymType, GymTypes } from "../../Enums";
 
 type IProps = {
   loc: Location;
@@ -35,20 +35,20 @@ export function GymLocation(props: IProps): React.ReactElement {
     Router.toPage(Page.Work);
   }
 
-  const cost = calculateCost(Classes[GymType.strength], props.loc);
+  const cost = calculateCost(Classes[GymTypes.strength], props.loc);
 
   return (
     <Box sx={{ display: "grid", width: "fit-content" }}>
-      <Button onClick={() => train(GymType.strength)}>
+      <Button onClick={() => train(GymTypes.strength)}>
         Train Strength (<Money money={cost} forPurchase={true} /> / sec)
       </Button>
-      <Button onClick={() => train(GymType.defense)}>
+      <Button onClick={() => train(GymTypes.defense)}>
         Train Defense (<Money money={cost} forPurchase={true} /> / sec)
       </Button>
-      <Button onClick={() => train(GymType.dexterity)}>
+      <Button onClick={() => train(GymTypes.dexterity)}>
         Train Dexterity (<Money money={cost} forPurchase={true} /> / sec)
       </Button>
-      <Button onClick={() => train(GymType.agility)}>
+      <Button onClick={() => train(GymTypes.agility)}>
         Train Agility (<Money money={cost} forPurchase={true} /> / sec)
       </Button>
     </Box>

@@ -16,7 +16,7 @@ import Button from "@mui/material/Button";
 
 import { Location } from "../Location";
 import { CreateCorporationModal } from "../../Corporation/ui/modals/CreateCorporationModal";
-import { LocationName } from "../../Enums";
+import { LocationNames } from "../../Enums";
 import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { Factions } from "../../Faction/Factions";
 import { joinFaction } from "../../Faction/FactionHelpers";
@@ -26,7 +26,7 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
+import { SnackbarEvents, ToastVariants } from "../../ui/React/Snackbar";
 import { N00dles } from "../../utils/helpers/N00dles";
 import { Exploit } from "../../Exploits/Exploit";
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
@@ -91,7 +91,7 @@ export function SpecialLocation(props: IProps): React.ReactElement {
 
   function renderNoodleBar(): React.ReactElement {
     function EatNoodles(): void {
-      SnackbarEvents.emit("You ate some delicious noodles and feel refreshed", ToastVariant.SUCCESS, 2000);
+      SnackbarEvents.emit("You ate some delicious noodles and feel refreshed", ToastVariants.SUCCESS, 2000);
       N00dles(); // This is the true power of the noodles.
       if (Player.sourceFiles.length > 0) Player.giveExploit(Exploit.N00dles);
       if (Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) {
@@ -312,25 +312,25 @@ export function SpecialLocation(props: IProps): React.ReactElement {
   }
 
   switch (props.loc.name) {
-    case LocationName.NewTokyoVitaLife: {
+    case LocationNames.NewTokyoVitaLife: {
       return renderGrafting();
     }
-    case LocationName.Sector12CityHall: {
+    case LocationNames.Sector12CityHall: {
       return (BitNodeMultipliers.CorporationSoftcap < 0.15 && <></>) || <CreateCorporation />;
     }
-    case LocationName.Sector12NSA: {
+    case LocationNames.Sector12NSA: {
       return renderBladeburner();
     }
-    case LocationName.NewTokyoNoodleBar: {
+    case LocationNames.NewTokyoNoodleBar: {
       return renderNoodleBar();
     }
-    case LocationName.ChongqingChurchOfTheMachineGod: {
+    case LocationNames.ChongqingChurchOfTheMachineGod: {
       return renderCotMG();
     }
-    case LocationName.IshimaGlitch: {
+    case LocationNames.IshimaGlitch: {
       return renderGlitch();
     }
-    case LocationName.NewTokyoArcade: {
+    case LocationNames.NewTokyoArcade: {
       return <ArcadeRoot />;
     }
     default:

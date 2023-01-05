@@ -11,6 +11,7 @@ import { Settings } from "../Settings/Settings";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { FactionNames } from "../Faction/data/FactionNames";
 import { Server } from "../Server/Server";
+import { buildEnum } from "../utils/helpers/enum";
 
 //Sends message to player, including a pop up
 function sendMessage(msg: Message, forced = false): void {
@@ -20,7 +21,7 @@ function sendMessage(msg: Message, forced = false): void {
   addMessageToServer(msg);
 }
 
-function showMessage(name: MessageFilenames): void {
+function showMessage(name: MessageFilename): void {
   const msg = Messages[name];
   if (!(msg instanceof Message)) throw new Error("trying to display nonexistent message");
   dialogBoxCreate(
@@ -110,21 +111,24 @@ function checkForMessagesToSend(): void {
   }
 }
 
-export enum MessageFilenames {
-  Jumper0 = "j0.msg",
-  Jumper1 = "j1.msg",
-  Jumper2 = "j2.msg",
-  Jumper3 = "j3.msg",
-  Jumper4 = "j4.msg",
-  CyberSecTest = "csec-test.msg",
-  NiteSecTest = "nitesec-test.msg",
-  BitRunnersTest = "19dfj3l1nd.msg",
-  TruthGazer = "truthgazer.msg",
-  RedPill = "icarus.msg",
-}
+const messageFilenames = {
+  Jumper0: "j0.msg",
+  Jumper1: "j1.msg",
+  Jumper2: "j2.msg",
+  Jumper3: "j3.msg",
+  Jumper4: "j4.msg",
+  CyberSecTest: "csec-test.msg",
+  NiteSecTest: "nitesec-test.msg",
+  BitRunnersTest: "19dfj3l1nd.msg",
+  TruthGazer: "truthgazer.msg",
+  RedPill: "icarus.msg",
+} as const;
+
+export type MessageFilename = typeof messageFilenames[keyof typeof messageFilenames];
+export const MessageFilenames = buildEnum<typeof messageFilenames, MessageFilename>(messageFilenames);
 
 //Reset
-const Messages: Record<MessageFilenames, Message> = {
+const Messages: Record<MessageFilename, Message> = {
   //jump3R Messages
   [MessageFilenames.Jumper0]: new Message(
     MessageFilenames.Jumper0,

@@ -7,7 +7,7 @@ import { CityTabs } from "./CityTabs";
 import { Industry } from "../Industry";
 import { Context, useCorporation } from "./Context";
 
-import { CityName } from "../../Enums";
+import { CityNames } from "../../Enums";
 
 interface IProps {
   divisionName: string;
@@ -24,7 +24,7 @@ export function MainPanel(props: IProps): React.ReactElement {
   if (division === undefined) throw new Error("Cannot find division");
   return (
     <Context.Division.Provider value={division}>
-      <CityTabs rerender={props.rerender} city={CityName.Sector12} />
+      <CityTabs rerender={props.rerender} city={CityNames.Sector12} />
     </Context.Division.Provider>
   );
 }

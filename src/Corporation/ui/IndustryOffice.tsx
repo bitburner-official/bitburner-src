@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 import { OfficeSpace } from "../OfficeSpace";
-import { EmployeePositions } from "../data/Enums";
+import { EmployeePosition, EmployeePositions } from "../data/Enums";
 import { BuyCoffee } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
@@ -35,7 +35,7 @@ interface IProps {
 
 interface IAutoAssignProps {
   office: OfficeSpace;
-  job: EmployeePositions;
+  job: EmployeePosition;
   desc: string;
   rerender: () => void;
 }

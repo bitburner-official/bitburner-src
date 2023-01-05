@@ -202,8 +202,8 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
 
       if (filepath.endsWith(".lit")) {
         showLiterature(filepath);
-      } else if (filepath.endsWith(".msg")) {
-        showMessage(filepath as MessageFilenames);
+      } else if (filepath.endsWith(".msg") && MessageFilenames.has(filepath)) {
+        showMessage(filepath);
       }
     }
 

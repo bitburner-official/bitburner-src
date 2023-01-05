@@ -7,7 +7,7 @@ import * as React from "react";
 
 import { City } from "../City";
 import { Cities } from "../Cities";
-import { LocationName } from "../../Enums";
+import { LocationNames } from "../../Enums";
 import { Locations } from "../Locations";
 import { Location } from "../Location";
 import { Settings } from "../../Settings/Settings";
@@ -39,9 +39,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function toLocation(location: Location): void {
-  if (location.name === LocationName.TravelAgency) {
+  if (location.name === LocationNames.TravelAgency) {
     Router.toPage(Page.Travel);
-  } else if (location.name === LocationName.WorldStockExchange) {
+  } else if (location.name === LocationNames.WorldStockExchange) {
     Router.toPage(Page.StockMarket);
   } else {
     Router.toLocation(location);

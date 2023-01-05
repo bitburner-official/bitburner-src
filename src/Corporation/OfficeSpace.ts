@@ -1,10 +1,10 @@
-import { EmployeePositions } from "./data/Enums";
+import { EmployeePosition, EmployeePositions } from "./data/Enums";
 import * as corpConstants from "./data/Constants";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { Industry } from "./Industry";
 import { Corporation } from "./Corporation";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { CityName } from "../Enums";
+import { CityName, CityNames } from "../Enums";
 
 interface IParams {
   loc?: CityName;
@@ -37,7 +37,7 @@ export class OfficeSpace {
   coffeePending = false;
   partyMult = 1;
 
-  employeeProd: Record<EmployeePositions | "total", number> = {
+  employeeProd: Record<EmployeePosition | "total", number> = {
     [EmployeePositions.Operations]: 0,
     [EmployeePositions.Engineer]: 0,
     [EmployeePositions.Business]: 0,
@@ -47,7 +47,7 @@ export class OfficeSpace {
     [EmployeePositions.Unassigned]: 0,
     total: 0,
   };
-  employeeJobs: Record<EmployeePositions, number> = {
+  employeeJobs: Record<EmployeePosition, number> = {
     [EmployeePositions.Operations]: 0,
     [EmployeePositions.Engineer]: 0,
     [EmployeePositions.Business]: 0,
@@ -56,7 +56,7 @@ export class OfficeSpace {
     [EmployeePositions.Training]: 0,
     [EmployeePositions.Unassigned]: 0,
   };
-  employeeNextJobs: Record<EmployeePositions, number> = {
+  employeeNextJobs: Record<EmployeePosition, number> = {
     [EmployeePositions.Operations]: 0,
     [EmployeePositions.Engineer]: 0,
     [EmployeePositions.Business]: 0,
@@ -67,7 +67,7 @@ export class OfficeSpace {
   };
 
   constructor(params: IParams = {}) {
-    this.loc = params.loc ? params.loc : CityName.Sector12;
+    this.loc = params.loc ? params.loc : CityNames.Sector12;
     this.size = params.size ? params.size : 1;
   }
 
@@ -84,7 +84,7 @@ export class OfficeSpace {
     }
 
     // Update employee jobs and job counts
-    for (const [pos, jobCount] of Object.entries(this.employeeNextJobs) as [EmployeePositions, number][]) {
+    for (const [pos, jobCount] of Object.entries(this.employeeNextJobs) as [EmployeePosition, number][]) {
       this.employeeJobs[pos] = jobCount;
     }
 
@@ -175,7 +175,7 @@ export class OfficeSpace {
 
     let total = 0;
     const exp = this.totalExp / this.totalEmployees || 0;
-    for (const name of Object.keys(this.employeeProd) as (EmployeePositions | "total")[]) {
+    for (const name of Object.keys(this.employeeProd) as (EmployeePosition | "total")[]) {
       let prodMult = 0;
       switch (name) {
         case EmployeePositions.Operations:
@@ -208,7 +208,7 @@ export class OfficeSpace {
     this.employeeProd.total = total;
   }
 
-  hireRandomEmployee(position: EmployeePositions): boolean {
+  hireRandomEmployee(position: EmployeePosition): boolean {
     if (this.atCapacity()) return false;
     if (document.getElementById("cmpy-mgmt-hire-employee-popup") != null) return false;
 
@@ -229,7 +229,7 @@ export class OfficeSpace {
     return true;
   }
 
-  autoAssignJob(job: EmployeePositions, target: number): boolean {
+  autoAssignJob(job: EmployeePosition, target: number): boolean {
     const diff = target - this.employeeNextJobs[job];
 
     if (diff === 0) {

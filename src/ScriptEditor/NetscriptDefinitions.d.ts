@@ -879,20 +879,20 @@ type SleeveBladeburnerTask = {
 /** @public */
 type SleeveClassTask = {
   type: "CLASS";
-  classType: UniversityClassType | GymType | `${UniversityClassType}` | `${GymType}`;
-  location: LocationName | `${LocationName}`;
+  classType: UniversityClassType | GymType;
+  location: LocationName;
 };
 
 /** @public */
 type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
 
 /** @public */
-type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}` };
+type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType };
 
 /** @public */
 type SleeveFactionTask = {
   type: "FACTION";
-  factionWorkType: FactionWorkType | `${FactionWorkType}`;
+  factionWorkType: FactionWorkType;
   factionName: string;
 };
 
@@ -6656,7 +6656,7 @@ export interface NS {
    * @param variant - Type of toast. Must be one of success, info, warning, error. Defaults to success.
    * @param duration - Duration of toast in ms. Can also be `null` to create a persistent toast. Defaults to 2000.
    */
-  toast(msg: string, variant?: ToastVariant | `${ToastVariant}`, duration?: number | null): void;
+  toast(msg: string, variant?: ToastVariant, duration?: number | null): void;
 
   /**
    * Download a file from the internet.
@@ -6857,94 +6857,179 @@ export interface NS {
 
 // BASE ENUMS
 /** @public */
-declare enum ToastVariant {
-  SUCCESS = "success",
-  WARNING = "warning",
-  ERROR = "error",
-  INFO = "info",
+declare type ToastVariant = "success" | "warning" | "error" | "info";
+
+// BASE ENUMS
+/** @public */
+declare interface ToastVariants {
+  SUCCESS: "success";
+  WARNING: "warning";
+  ERROR: "error";
+  INFO: "info";
+
+  [Symbol.iterator]: () => IterableIterator<ToastVariant>;
 }
 
 /** @public */
-declare enum CrimeType {
-  shoplift = "Shoplift",
-  robStore = "Rob Store",
-  mug = "Mug",
-  larceny = "Larceny",
-  dealDrugs = "Deal Drugs",
-  bondForgery = "Bond Forgery",
-  traffickArms = "Traffick Arms",
-  homicide = "Homicide",
-  grandTheftAuto = "Grand Theft Auto",
-  kidnap = "Kidnap",
-  assassination = "Assassination",
-  heist = "Heist",
+declare type CrimeType =
+  | "Shoplift"
+  | "Rob Store"
+  | "Mug"
+  | "Larceny"
+  | "Deal Drugs"
+  | "Bond Forgery"
+  | "Traffick Arms"
+  | "Homicide"
+  | "Grand Theft Auto"
+  | "Kidnap"
+  | "Assassination"
+  | "Heist";
+
+/** @public */
+declare interface CrimeTypes {
+  shoplift: "Shoplift";
+  robStore: "Rob Store";
+  mug: "Mug";
+  larceny: "Larceny";
+  dealDrugs: "Deal Drugs";
+  bondForgery: "Bond Forgery";
+  traffickArms: "Traffick Arms";
+  homicide: "Homicide";
+  grandTheftAuto: "Grand Theft Auto";
+  kidnap: "Kidnap";
+  assassination: "Assassination";
+  heist: "Heist";
+
+  [Symbol.iterator]: () => IterableIterator<CrimeType>;
 }
 
 /** @public */
-declare enum FactionWorkType {
-  hacking = "hacking",
-  field = "field",
-  security = "security",
+declare type FactionWorkType = "hacking" | "field" | "security";
+
+/** @public */
+declare interface FactionWorkTypes {
+  hacking: "hacking";
+  field: "field";
+  security: "security";
+
+  [Symbol.iterator]: () => IterableIterator<FactionWorkType>;
 }
 
 /** @public */
-declare enum UniversityClassType {
-  computerScience = "Computer Science",
-  dataStructures = "Data Structures",
-  networks = "Networks",
-  algorithms = "Algorithms",
-  management = "Management",
-  leadership = "Leadership",
+declare type UniversityClassType =
+  | "Computer Science"
+  | "Data Structures"
+  | "Networks"
+  | "Algorithms"
+  | "Management"
+  | "Leadership";
+
+/** @public */
+declare interface UniversityClassTypes {
+  computerScience: "Computer Science";
+  dataStructures: "Data Structures";
+  networks: "Networks";
+  algorithms: "Algorithms";
+  management: "Management";
+  leadership: "Leadership";
+
+  [Symbol.iterator]: () => IterableIterator<UniversityClassType>;
 }
 
 /** @public */
-declare enum GymType {
-  strength = "str",
-  defense = "def",
-  dexterity = "dex",
-  agility = "agi",
+declare type GymType = "str" | "def" | "dex" | "agi";
+
+/** @public */
+declare interface GymTypes {
+  strength: "str";
+  defense: "def";
+  dexterity: "dex";
+  agility: "agi";
+
+  [Symbol.iterator]: () => IterableIterator<GymType>;
 }
 
 /** @public */
-declare enum JobName {
-  software0 = "Software Engineering Intern",
-  software1 = "Junior Software Engineer",
-  software2 = "Senior Software Engineer",
-  software3 = "Lead Software Developer",
-  software4 = "Head of Software",
-  software5 = "Head of Engineering",
-  software6 = "Vice President of Technology",
-  software7 = "Chief Technology Officer",
-  IT0 = "IT Intern",
-  IT1 = "IT Analyst",
-  IT2 = "IT Manager",
-  IT3 = "Systems Administrator",
-  securityEng = "Security Engineer",
-  networkEng0 = "Network Engineer",
-  networkEng1 = "Network Administrator",
-  business0 = "Business Intern",
-  business1 = "Business Analyst",
-  business2 = "Business Manager",
-  business3 = "Operations Manager",
-  business4 = "Chief Financial Officer",
-  business5 = "Chief Executive Officer",
-  security0 = "Police Officer",
-  security1 = "Police Chief",
-  security2 = "Security Guard",
-  security3 = "Security Officer",
-  security4 = "Security Supervisor",
-  security5 = "Head of Security",
-  agent0 = "Field Agent",
-  agent1 = "Secret Agent",
-  agent2 = "Special Operative",
-  waiter = "Waiter",
-  employee = "Employee",
-  softwareConsult0 = "Software Consultant",
-  softwareConsult1 = "Senior Software Consultant",
-  businessConsult0 = "Business Consultant",
-  businessConsult1 = "Senior Business Consultant",
-  waiterPT = "Part-time Waiter",
-  employeePT = "Part-time Employee",
+declare type JobName =
+  | "Software Engineering Intern"
+  | "Junior Software Engineer"
+  | "Senior Software Engineer"
+  | "Lead Software Developer"
+  | "Head of Software"
+  | "Head of Engineering"
+  | "Vice President of Technology"
+  | "Chief Technology Officer"
+  | "IT Intern"
+  | "IT Analyst"
+  | "IT Manager"
+  | "Systems Administrator"
+  | "Security Engineer"
+  | "Network Engineer"
+  | "Network Administrator"
+  | "Business Intern"
+  | "Business Analyst"
+  | "Business Manager"
+  | "Operations Manager"
+  | "Chief Financial Officer"
+  | "Chief Executive Officer"
+  | "Police Officer"
+  | "Police Chief"
+  | "Security Guard"
+  | "Security Officer"
+  | "Security Supervisor"
+  | "Head of Security"
+  | "Field Agent"
+  | "Secret Agent"
+  | "Special Operative"
+  | "Waiter"
+  | "Employee"
+  | "Software Consultant"
+  | "Senior Software Consultant"
+  | "Business Consultant"
+  | "Senior Business Consultant"
+  | "Part-time Waiter"
+  | "Part-time Employee";
+
+/** @public */
+declare interface JobNames {
+  software0: "Software Engineering Intern";
+  software1: "Junior Software Engineer";
+  software2: "Senior Software Engineer";
+  software3: "Lead Software Developer";
+  software4: "Head of Software";
+  software5: "Head of Engineering";
+  software6: "Vice President of Technology";
+  software7: "Chief Technology Officer";
+  IT0: "IT Intern";
+  IT1: "IT Analyst";
+  IT2: "IT Manager";
+  IT3: "Systems Administrator";
+  securityEng: "Security Engineer";
+  networkEng0: "Network Engineer";
+  networkEng1: "Network Administrator";
+  business0: "Business Intern";
+  business1: "Business Analyst";
+  business2: "Business Manager";
+  business3: "Operations Manager";
+  business4: "Chief Financial Officer";
+  business5: "Chief Executive Officer";
+  security0: "Police Officer";
+  security1: "Police Chief";
+  security2: "Security Guard";
+  security3: "Security Officer";
+  security4: "Security Supervisor";
+  security5: "Head of Security";
+  agent0: "Field Agent";
+  agent1: "Secret Agent";
+  agent2: "Special Operative";
+  waiter: "Waiter";
+  employee: "Employee";
+  softwareConsult0: "Software Consultant";
+  softwareConsult1: "Senior Software Consultant";
+  businessConsult0: "Business Consultant";
+  businessConsult1: "Senior Business Consultant";
+  waiterPT: "Part-time Waiter";
+  employeePT: "Part-time Employee";
 }
 
 // CORP ENUMS - Changed to types
@@ -6977,93 +7062,160 @@ type CorpIndustryName =
 
 /** Names of all cities
  * @public */
-declare enum CityName {
-  Aevum = "Aevum",
-  Chongqing = "Chongqing",
-  Sector12 = "Sector-12",
-  NewTokyo = "New Tokyo",
-  Ishima = "Ishima",
-  Volhaven = "Volhaven",
+declare type CityName = "Aevum" | "Chongqing" | "Sector-12" | "New Tokyo" | "Ishima" | "Volhaven";
+
+/** Names of all cities
+ * @public */
+declare interface CityNames {
+  Aevum: "Aevum";
+  Chongqing: "Chongqing";
+  Sector12: "Sector-12";
+  NewTokyo: "New Tokyo";
+  Ishima: "Ishima";
+  Volhaven: "Volhaven";
+  [Symbol.iterator]: () => IterableIterator<CityName>;
 }
 
 /** Names of all locations
  * @public */
-declare enum LocationName {
-  AevumAeroCorp = "AeroCorp",
-  AevumBachmanAndAssociates = "Bachman & Associates",
-  AevumClarkeIncorporated = "Clarke Incorporated",
-  AevumCrushFitnessGym = "Crush Fitness Gym",
-  AevumECorp = "ECorp",
-  AevumFulcrumTechnologies = "Fulcrum Technologies",
-  AevumGalacticCybersystems = "Galactic Cybersystems",
-  AevumNetLinkTechnologies = "NetLink Technologies",
-  AevumPolice = "Aevum Police Headquarters",
-  AevumRhoConstruction = "Rho Construction",
-  AevumSnapFitnessGym = "Snap Fitness Gym",
-  AevumSummitUniversity = "Summit University",
-  AevumWatchdogSecurity = "Watchdog Security",
-  AevumCasino = "Iker Molina Casino",
+declare type LocationName =
+  | "AeroCorp"
+  | "Bachman & Associates"
+  | "Clarke Incorporated"
+  | "Crush Fitness Gym"
+  | "ECorp"
+  | "Fulcrum Technologies"
+  | "Galactic Cybersystems"
+  | "NetLink Technologies"
+  | "Aevum Police Headquarters"
+  | "Rho Construction"
+  | "Snap Fitness Gym"
+  | "Summit University"
+  | "Watchdog Security"
+  | "Iker Molina Casino"
+  | "KuaiGong International"
+  | "Solaris Space Systems"
+  | "Church of the Machine God"
+  | "Alpha Enterprises"
+  | "Blade Industries"
+  | "Central Intelligence Agency"
+  | "Carmichael Security"
+  | "Sector-12 City Hall"
+  | "DeltaOne"
+  | "FoodNStuff"
+  | "Four Sigma"
+  | "Icarus Microsystems"
+  | "Iron Gym"
+  | "Joe's Guns"
+  | "MegaCorp"
+  | "National Security Agency"
+  | "Powerhouse Gym"
+  | "Rothman University"
+  | "Universal Energy"
+  | "DefComm"
+  | "Global Pharmaceuticals"
+  | "Noodle Bar"
+  | "VitaLife"
+  | "Arcade"
+  | "Nova Medical"
+  | "Omega Software"
+  | "Storm Technologies"
+  | "0x6C1"
+  | "CompuTek"
+  | "Helios Labs"
+  | "LexoCorp"
+  | "Millenium Fitness Gym"
+  | "NWO"
+  | "OmniTek Incorporated"
+  | "Omnia Cybersystems"
+  | "SysCore Securities"
+  | "ZB Institute of Technology"
+  | "Hospital"
+  | "The Slums"
+  | "Travel Agency"
+  | "World Stock Exchange"
+  | "The Void";
 
-  ChongqingKuaiGongInternational = "KuaiGong International",
-  ChongqingSolarisSpaceSystems = "Solaris Space Systems",
-  ChongqingChurchOfTheMachineGod = "Church of the Machine God",
+/** Names of all locations
+ * @public */
+declare interface LocationNames {
+  AevumAeroCorp: "AeroCorp";
+  AevumBachmanAndAssociates: "Bachman & Associates";
+  AevumClarkeIncorporated: "Clarke Incorporated";
+  AevumCrushFitnessGym: "Crush Fitness Gym";
+  AevumECorp: "ECorp";
+  AevumFulcrumTechnologies: "Fulcrum Technologies";
+  AevumGalacticCybersystems: "Galactic Cybersystems";
+  AevumNetLinkTechnologies: "NetLink Technologies";
+  AevumPolice: "Aevum Police Headquarters";
+  AevumRhoConstruction: "Rho Construction";
+  AevumSnapFitnessGym: "Snap Fitness Gym";
+  AevumSummitUniversity: "Summit University";
+  AevumWatchdogSecurity: "Watchdog Security";
+  AevumCasino: "Iker Molina Casino";
 
-  Sector12AlphaEnterprises = "Alpha Enterprises",
-  Sector12BladeIndustries = "Blade Industries",
-  Sector12CIA = "Central Intelligence Agency",
-  Sector12CarmichaelSecurity = "Carmichael Security",
-  Sector12CityHall = "Sector-12 City Hall",
-  Sector12DeltaOne = "DeltaOne",
-  Sector12FoodNStuff = "FoodNStuff",
-  Sector12FourSigma = "Four Sigma",
-  Sector12IcarusMicrosystems = "Icarus Microsystems",
-  Sector12IronGym = "Iron Gym",
-  Sector12JoesGuns = "Joe's Guns",
-  Sector12MegaCorp = "MegaCorp",
-  Sector12NSA = "National Security Agency",
-  Sector12PowerhouseGym = "Powerhouse Gym",
-  Sector12RothmanUniversity = "Rothman University",
-  Sector12UniversalEnergy = "Universal Energy",
+  ChongqingKuaiGongInternational: "KuaiGong International";
+  ChongqingSolarisSpaceSystems: "Solaris Space Systems";
+  ChongqingChurchOfTheMachineGod: "Church of the Machine God";
 
-  NewTokyoDefComm = "DefComm",
-  NewTokyoGlobalPharmaceuticals = "Global Pharmaceuticals",
-  NewTokyoNoodleBar = "Noodle Bar",
-  NewTokyoVitaLife = "VitaLife",
-  NewTokyoArcade = "Arcade",
+  Sector12AlphaEnterprises: "Alpha Enterprises";
+  Sector12BladeIndustries: "Blade Industries";
+  Sector12CIA: "Central Intelligence Agency";
+  Sector12CarmichaelSecurity: "Carmichael Security";
+  Sector12CityHall: "Sector-12 City Hall";
+  Sector12DeltaOne: "DeltaOne";
+  Sector12FoodNStuff: "FoodNStuff";
+  Sector12FourSigma: "Four Sigma";
+  Sector12IcarusMicrosystems: "Icarus Microsystems";
+  Sector12IronGym: "Iron Gym";
+  Sector12JoesGuns: "Joe's Guns";
+  Sector12MegaCorp: "MegaCorp";
+  Sector12NSA: "National Security Agency";
+  Sector12PowerhouseGym: "Powerhouse Gym";
+  Sector12RothmanUniversity: "Rothman University";
+  Sector12UniversalEnergy: "Universal Energy";
 
-  IshimaNovaMedical = "Nova Medical",
-  IshimaOmegaSoftware = "Omega Software",
-  IshimaStormTechnologies = "Storm Technologies",
-  IshimaGlitch = "0x6C1",
+  NewTokyoDefComm: "DefComm";
+  NewTokyoGlobalPharmaceuticals: "Global Pharmaceuticals";
+  NewTokyoNoodleBar: "Noodle Bar";
+  NewTokyoVitaLife: "VitaLife";
+  NewTokyoArcade: "Arcade";
 
-  VolhavenCompuTek = "CompuTek",
-  VolhavenHeliosLabs = "Helios Labs",
-  VolhavenLexoCorp = "LexoCorp",
-  VolhavenMilleniumFitnessGym = "Millenium Fitness Gym",
-  VolhavenNWO = "NWO",
-  VolhavenOmniTekIncorporated = "OmniTek Incorporated",
-  VolhavenOmniaCybersystems = "Omnia Cybersystems",
-  VolhavenSysCoreSecurities = "SysCore Securities",
-  VolhavenZBInstituteOfTechnology = "ZB Institute of Technology",
+  IshimaNovaMedical: "Nova Medical";
+  IshimaOmegaSoftware: "Omega Software";
+  IshimaStormTechnologies: "Storm Technologies";
+  IshimaGlitch: "0x6C1";
 
-  Hospital = "Hospital",
-  Slums = "The Slums",
-  TravelAgency = "Travel Agency",
-  WorldStockExchange = "World Stock Exchange",
+  VolhavenCompuTek: "CompuTek";
+  VolhavenHeliosLabs: "Helios Labs";
+  VolhavenLexoCorp: "LexoCorp";
+  VolhavenMilleniumFitnessGym: "Millenium Fitness Gym";
+  VolhavenNWO: "NWO";
+  VolhavenOmniTekIncorporated: "OmniTek Incorporated";
+  VolhavenOmniaCybersystems: "Omnia Cybersystems";
+  VolhavenSysCoreSecurities: "SysCore Securities";
+  VolhavenZBInstituteOfTechnology: "ZB Institute of Technology";
 
-  Void = "The Void",
+  Hospital: "Hospital";
+  Slums: "The Slums";
+  TravelAgency: "Travel Agency";
+  WorldStockExchange: "World Stock Exchange";
+
+  Void: "The Void";
+
+  [Symbol.iterator]: () => IterableIterator<LocationName>;
 }
 
 /** @public */
 export type NSEnums = {
-  CityName: typeof CityName;
-  CrimeType: typeof CrimeType;
-  FactionWorkType: typeof FactionWorkType;
-  GymType: typeof GymType;
-  JobName: typeof JobName;
-  LocationName: typeof LocationName;
-  ToastVariant: typeof ToastVariant;
-  UniversityClassType: typeof UniversityClassType;
+  CityName: CityNames;
+  CrimeType: CrimeTypes;
+  FactionWorkType: FactionWorkTypes;
+  GymType: GymTypes;
+  JobName: JobNames;
+  LocationName: LocationNames;
+  ToastVariant: ToastVariants;
+  UniversityClassType: UniversityClassTypes;
 };
 
 /**

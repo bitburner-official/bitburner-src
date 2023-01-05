@@ -3,7 +3,7 @@ import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { SkillNames } from "../Bladeburner/data/SkillNames";
 import { Skills } from "../Bladeburner/Skills";
 import { CONSTANTS } from "../Constants";
-import { IndustryType } from "../Corporation/data/Enums";
+import { IndustryTypes } from "../Corporation/data/Enums";
 import { Exploit } from "../Exploits/Exploit";
 import { Factions } from "../Faction/Factions";
 import { AllGangs } from "../Gang/AllGangs";
@@ -12,7 +12,7 @@ import { HacknetNodeConstants, HacknetServerConstants } from "../Hacknet/data/Co
 import { hasHacknetServers } from "../Hacknet/HacknetHelpers";
 import { HacknetNode } from "../Hacknet/HacknetNode";
 import { HacknetServer } from "../Hacknet/HacknetServer";
-import { CityName } from "../Enums";
+import { CityNames } from "../Enums";
 import { Player } from "@player";
 import { Programs } from "../Programs/Programs";
 import { GetAllServers, GetServer } from "../Server/AllServers";
@@ -391,7 +391,7 @@ export const achievements: Record<string, Achievement> = {
   TRAVEL: {
     ...achievementData["TRAVEL"],
     Icon: "TRAVEL",
-    Condition: () => Player.city !== CityName.Sector12,
+    Condition: () => Player.city !== CityNames.Sector12,
   },
   WORKOUT: {
     ...achievementData["WORKOUT"],
@@ -476,7 +476,7 @@ export const achievements: Record<string, Achievement> = {
     Description: "Expand to the Real Estate division.",
     Visible: () => hasAccessToSF(Player, 3),
     Condition: () =>
-      Player.corporation !== null && Player.corporation.divisions.some((d) => d.type === IndustryType.RealEstate),
+      Player.corporation !== null && Player.corporation.divisions.some((d) => d.type === IndustryTypes.RealEstate),
   },
   INTELLIGENCE_255: {
     ...achievementData["INTELLIGENCE_255"],

@@ -1,5 +1,5 @@
 import { FactionNames } from "./Faction/data/FactionNames";
-import { CityName } from "./Enums";
+import { CityNames } from "./Enums";
 import { StaticAugmentations } from "./Augmentation/StaticAugmentations";
 import { augmentationExists, initAugmentations } from "./Augmentation/AugmentationHelpers";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
@@ -272,7 +272,7 @@ export function prestigeSourceFile(flume: boolean): void {
   }
 
   if (Player.bitNodeN === 13) {
-    dialogBoxCreate(`Trouble is brewing in ${CityName.Chongqing}`);
+    dialogBoxCreate(`Trouble is brewing in ${CityNames.Chongqing}`);
   }
 
   // Reset Stock market, gang, and corporation

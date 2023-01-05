@@ -19,7 +19,7 @@ import { Factions } from "../../Faction/Factions";
 import { resetGangs } from "../../Gang/AllGangs";
 import { Cities } from "../../Locations/Cities";
 import { Locations } from "../../Locations/Locations";
-import { CityName, LocationName } from "../../Enums";
+import { CityName, CityNames, LocationName, LocationNames } from "../../Enums";
 import { Sleeve } from "../Sleeve/Sleeve";
 import { isSleeveCompanyWork } from "../Sleeve/Work/SleeveCompanyWork";
 import { calculateSkillProgress as calculateSkillProgressF, ISkillProgress } from "../formulas/skill";
@@ -38,7 +38,7 @@ import { numeralWrapper } from "../../ui/numeralFormat";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
-import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
+import { SnackbarEvents, ToastVariants } from "../../ui/React/Snackbar";
 import { achievements } from "../../Achievements/Achievements";
 import { FactionNames } from "../../Faction/data/FactionNames";
 
@@ -86,8 +86,8 @@ export function prestigeAugmentation(this: PlayerObject): void {
 
   this.money = 1000 + CONSTANTS.Donations;
 
-  this.city = CityName.Sector12;
-  this.location = LocationName.TravelAgency;
+  this.city = CityNames.Sector12;
+  this.location = LocationNames.TravelAgency;
 
   this.jobs = {};
 
@@ -257,7 +257,7 @@ export function takeDamage(this: PlayerObject, amt: number): boolean {
 
 export function hospitalize(this: PlayerObject): number {
   const cost = getHospitalizationCost();
-  SnackbarEvents.emit(`You've been Hospitalized for ${numeralWrapper.formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
+  SnackbarEvents.emit(`You've been Hospitalized for ${numeralWrapper.formatMoney(cost)}`, ToastVariants.SUCCESS, 2000);
 
   this.loseMoney(cost, "hospitalization");
   this.hp.current = this.hp.max;
@@ -688,7 +688,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !ecorpFac.isBanned &&
     !ecorpFac.isMember &&
     !ecorpFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.AevumECorp)
+    checkMegacorpRequirements(LocationNames.AevumECorp)
   ) {
     invitedFactions.push(ecorpFac);
   }
@@ -699,7 +699,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !megacorpFac.isBanned &&
     !megacorpFac.isMember &&
     !megacorpFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.Sector12MegaCorp)
+    checkMegacorpRequirements(LocationNames.Sector12MegaCorp)
   ) {
     invitedFactions.push(megacorpFac);
   }
@@ -710,7 +710,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !bachmanandassociatesFac.isBanned &&
     !bachmanandassociatesFac.isMember &&
     !bachmanandassociatesFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.AevumBachmanAndAssociates)
+    checkMegacorpRequirements(LocationNames.AevumBachmanAndAssociates)
   ) {
     invitedFactions.push(bachmanandassociatesFac);
   }
@@ -721,7 +721,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !bladeindustriesFac.isBanned &&
     !bladeindustriesFac.isMember &&
     !bladeindustriesFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.Sector12BladeIndustries)
+    checkMegacorpRequirements(LocationNames.Sector12BladeIndustries)
   ) {
     invitedFactions.push(bladeindustriesFac);
   }
@@ -732,7 +732,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !nwoFac.isBanned &&
     !nwoFac.isMember &&
     !nwoFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.VolhavenNWO)
+    checkMegacorpRequirements(LocationNames.VolhavenNWO)
   ) {
     invitedFactions.push(nwoFac);
   }
@@ -743,7 +743,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !clarkeincorporatedFac.isBanned &&
     !clarkeincorporatedFac.isMember &&
     !clarkeincorporatedFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.AevumClarkeIncorporated)
+    checkMegacorpRequirements(LocationNames.AevumClarkeIncorporated)
   ) {
     invitedFactions.push(clarkeincorporatedFac);
   }
@@ -754,7 +754,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !omnitekincorporatedFac.isBanned &&
     !omnitekincorporatedFac.isMember &&
     !omnitekincorporatedFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.VolhavenOmniTekIncorporated)
+    checkMegacorpRequirements(LocationNames.VolhavenOmniTekIncorporated)
   ) {
     invitedFactions.push(omnitekincorporatedFac);
   }
@@ -765,7 +765,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !foursigmaFac.isBanned &&
     !foursigmaFac.isMember &&
     !foursigmaFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.Sector12FourSigma)
+    checkMegacorpRequirements(LocationNames.Sector12FourSigma)
   ) {
     invitedFactions.push(foursigmaFac);
   }
@@ -776,7 +776,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !kuaigonginternationalFac.isBanned &&
     !kuaigonginternationalFac.isMember &&
     !kuaigonginternationalFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.ChongqingKuaiGongInternational)
+    checkMegacorpRequirements(LocationNames.ChongqingKuaiGongInternational)
   ) {
     invitedFactions.push(kuaigonginternationalFac);
   }
@@ -793,7 +793,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !fulcrumsecrettechonologiesFac.isMember &&
     !fulcrumsecrettechonologiesFac.alreadyInvited &&
     fulcrumSecretServer.backdoorInstalled &&
-    checkMegacorpRequirements(LocationName.AevumFulcrumTechnologies)
+    checkMegacorpRequirements(LocationNames.AevumFulcrumTechnologies)
   ) {
     invitedFactions.push(fulcrumsecrettechonologiesFac);
   }
@@ -851,7 +851,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !chongqingFac.isMember &&
     !chongqingFac.alreadyInvited &&
     this.money >= 20000000 &&
-    this.city == CityName.Chongqing
+    this.city == CityNames.Chongqing
   ) {
     invitedFactions.push(chongqingFac);
   }
@@ -863,7 +863,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !sector12Fac.isMember &&
     !sector12Fac.alreadyInvited &&
     this.money >= 15000000 &&
-    this.city == CityName.Sector12
+    this.city == CityNames.Sector12
   ) {
     invitedFactions.push(sector12Fac);
   }
@@ -875,7 +875,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !newtokyoFac.isMember &&
     !newtokyoFac.alreadyInvited &&
     this.money >= 20000000 &&
-    this.city == CityName.NewTokyo
+    this.city == CityNames.NewTokyo
   ) {
     invitedFactions.push(newtokyoFac);
   }
@@ -887,7 +887,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !aevumFac.isMember &&
     !aevumFac.alreadyInvited &&
     this.money >= 40000000 &&
-    this.city == CityName.Aevum
+    this.city == CityNames.Aevum
   ) {
     invitedFactions.push(aevumFac);
   }
@@ -899,7 +899,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !ishimaFac.isMember &&
     !ishimaFac.alreadyInvited &&
     this.money >= 30000000 &&
-    this.city == CityName.Ishima
+    this.city == CityNames.Ishima
   ) {
     invitedFactions.push(ishimaFac);
   }
@@ -911,7 +911,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !volhavenFac.isMember &&
     !volhavenFac.alreadyInvited &&
     this.money >= 50000000 &&
-    this.city == CityName.Volhaven
+    this.city == CityNames.Volhaven
   ) {
     invitedFactions.push(volhavenFac);
   }
@@ -929,8 +929,8 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     this.skills.agility >= 300 &&
     this.numPeopleKilled >= 30 &&
     this.karma <= -45 &&
-    !allCompanies.includes(LocationName.Sector12CIA) &&
-    !allCompanies.includes(LocationName.Sector12NSA)
+    !allCompanies.includes(LocationNames.Sector12CIA) &&
+    !allCompanies.includes(LocationNames.Sector12NSA)
   ) {
     invitedFactions.push(speakersforthedeadFac);
   }
@@ -946,11 +946,11 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     this.skills.defense >= 300 &&
     this.skills.dexterity >= 300 &&
     this.skills.agility >= 300 &&
-    this.city == CityName.Chongqing &&
+    this.city == CityNames.Chongqing &&
     this.numPeopleKilled >= 5 &&
     this.karma <= -45 &&
-    !allCompanies.includes(LocationName.Sector12CIA) &&
-    !allCompanies.includes(LocationName.Sector12NSA)
+    !allCompanies.includes(LocationNames.Sector12CIA) &&
+    !allCompanies.includes(LocationNames.Sector12NSA)
   ) {
     invitedFactions.push(thedarkarmyFac);
   }
@@ -966,11 +966,11 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     this.skills.defense >= 200 &&
     this.skills.dexterity >= 200 &&
     this.skills.agility >= 200 &&
-    (this.city == CityName.Aevum || this.city == CityName.Sector12) &&
+    (this.city == CityNames.Aevum || this.city == CityNames.Sector12) &&
     this.money >= 10000000 &&
     this.karma <= -90 &&
-    !allCompanies.includes(LocationName.Sector12CIA) &&
-    !allCompanies.includes(LocationName.Sector12NSA)
+    !allCompanies.includes(LocationNames.Sector12CIA) &&
+    !allCompanies.includes(LocationNames.Sector12NSA)
   ) {
     invitedFactions.push(thesyndicateFac);
   }
@@ -996,7 +996,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !tetradsFac.isBanned &&
     !tetradsFac.isMember &&
     !tetradsFac.alreadyInvited &&
-    (this.city == CityName.Chongqing || this.city == CityName.NewTokyo || this.city == CityName.Ishima) &&
+    (this.city == CityNames.Chongqing || this.city == CityNames.NewTokyo || this.city == CityNames.Ishima) &&
     this.skills.strength >= 75 &&
     this.skills.defense >= 75 &&
     this.skills.dexterity >= 75 &&
@@ -1062,7 +1062,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !tiandihuiFac.alreadyInvited &&
     this.money >= 1000000 &&
     this.skills.hacking >= 50 &&
-    (this.city == CityName.Chongqing || this.city == CityName.NewTokyo || this.city == CityName.Ishima)
+    (this.city == CityNames.Chongqing || this.city == CityNames.NewTokyo || this.city == CityNames.Ishima)
   ) {
     invitedFactions.push(tiandihuiFac);
   }
@@ -1197,7 +1197,7 @@ export function canAccessGrafting(this: PlayerObject): boolean {
 export function giveExploit(this: PlayerObject, exploit: Exploit): void {
   if (!this.exploits.includes(exploit)) {
     this.exploits.push(exploit);
-    SnackbarEvents.emit("SF -1 acquired!", ToastVariant.SUCCESS, 2000);
+    SnackbarEvents.emit("SF -1 acquired!", ToastVariants.SUCCESS, 2000);
   }
 }
 
@@ -1206,7 +1206,7 @@ export function giveAchievement(this: PlayerObject, achievementId: string): void
   if (!achievement) return;
   if (!this.achievements.map((a) => a.ID).includes(achievementId)) {
     this.achievements.push({ ID: achievementId, unlockedOn: new Date().getTime() });
-    SnackbarEvents.emit(`Unlocked Achievement: "${achievement.Name}"`, ToastVariant.SUCCESS, 2000);
+    SnackbarEvents.emit(`Unlocked Achievement: "${achievement.Name}"`, ToastVariants.SUCCESS, 2000);
   }
 }
 

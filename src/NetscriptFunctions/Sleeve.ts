@@ -1,11 +1,10 @@
 import { Player } from "@player";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { CityName } from "../Enums";
+import { CityNames } from "../Enums";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { Augmentation } from "../Augmentation/Augmentation";
 
 import { Sleeve } from "@nsdefs";
-import { checkEnum } from "../utils/helpers/enum";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
 import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
@@ -70,7 +69,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
       const cityName = helpers.string(ctx, "cityName", _cityName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
-      if (checkEnum(CityName, cityName)) {
+      if (CityNames.has(cityName)) {
         return Player.sleeves[sleeveNumber].travel(cityName);
       } else {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid city name: '${cityName}'.`);

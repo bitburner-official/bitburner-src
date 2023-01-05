@@ -54,16 +54,15 @@ import {
 } from "../Corporation/Actions";
 import { CorporationUnlockUpgrades } from "../Corporation/data/CorporationUnlockUpgrades";
 import { CorporationUpgrades } from "../Corporation/data/CorporationUpgrades";
-import { EmployeePositions, IndustryType } from "../Corporation/data/Enums";
+import { EmployeePositions, IndustryTypes } from "../Corporation/data/Enums";
 import { IndustriesData, IndustryResearchTrees } from "../Corporation/IndustryData";
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
 import { Factions } from "../Faction/Factions";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
-import { assertMember, helpers } from "../Netscript/NetscriptHelpers";
-import { checkEnum } from "../utils/helpers/enum";
-import { CityName } from "../Enums";
+import { assertEnum, helpers } from "../Netscript/NetscriptHelpers";
+import { CityName, CityNames } from "../Enums";
 import { MaterialInfo } from "../Corporation/MaterialInfo";
 
 export function NetscriptCorporation(): InternalAPI<NSCorporation> {
@@ -224,7 +223,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
 
   function getOffice(divisionName: string, cityName: string): OfficeSpace {
     const division = getDivision(divisionName);
-    if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city name '${cityName}'`);
+    if (!CityNames.has(cityName)) throw new Error(`Invalid city name '${cityName}'`);
     const office = division.offices[cityName];
     if (office === 0) throw new Error(`${division.name} has not expanded to '${cityName}'`);
     return office;
@@ -232,7 +231,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
 
   function getWarehouse(divisionName: string, cityName: string): Warehouse {
     const division = getDivision(divisionName);
-    if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city name '${cityName}'`);
+    if (!CityNames.has(cityName)) throw new Error(`Invalid city name '${cityName}'`);
     const warehouse = division.warehouses[cityName];
     if (warehouse === 0) throw new Error(`${division.name} does not have a warehouse in '${cityName}'`);
     return warehouse;
@@ -323,7 +322,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
-      assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
+      assertEnum(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
       const material = getMaterial(divisionName, cityName, materialName);
       const corporation = getCorporation();
       const exports = material.exp.map((e) => {
@@ -391,7 +390,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
-      assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
+      assertEnum(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
       const amt = helpers.string(ctx, "amt", _amt);
       const price = helpers.string(ctx, "price", _price);
       const material = getMaterial(divisionName, cityName, materialName);
@@ -430,7 +429,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
-      assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
+      assertEnum(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
       const enabled = !!_enabled;
       const warehouse = getWarehouse(divisionName, cityName);
       const material = getMaterial(divisionName, cityName, materialName);
@@ -442,7 +441,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
-      assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
+      assertEnum(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
       const amt = helpers.number(ctx, "amt", _amt);
       if (amt < 0 || !Number.isFinite(amt))
         throw new Error("Invalid value for amount field! Must be numeric and greater than 0");
@@ -456,7 +455,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         throw new Error(`You have not researched Bulk Purchasing in ${divisionName}`);
       const corporation = getCorporation();
       const cityName = helpers.city(ctx, "cityName", _cityName);
-      assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
+      assertEnum(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
       const amt = helpers.number(ctx, "amt", _amt);
       const warehouse = getWarehouse(divisionName, cityName);
       const material = getMaterial(divisionName, cityName, materialName);
@@ -487,10 +486,10 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       (_sourceDivision, sourceCity, _targetDivision, targetCity, materialName, _amt): void => {
         checkAccess(ctx, 7);
         const sourceDivision = helpers.string(ctx, "sourceDivision", _sourceDivision);
-        assertMember(ctx, CityName, "City", "sourceCity", sourceCity);
+        assertEnum(ctx, CityNames, "City", "sourceCity", sourceCity);
         const targetDivision = helpers.string(ctx, "targetDivision", _targetDivision);
-        assertMember(ctx, CityName, "City", "targetCity", targetCity);
-        assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
+        assertEnum(ctx, CityNames, "City", "targetCity", targetCity);
+        assertEnum(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
         const amt = helpers.string(ctx, "amt", _amt);
         ExportMaterial(
           targetDivision,
@@ -505,26 +504,26 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       (_sourceDivision, sourceCity, _targetDivision, targetCity, materialName, _amt): void => {
         checkAccess(ctx, 7);
         const sourceDivision = helpers.string(ctx, "sourceDivision", _sourceDivision);
-        assertMember(ctx, CityName, "City Name", "sourceCity", sourceCity);
+        assertEnum(ctx, CityNames, "City Name", "sourceCity", sourceCity);
         const targetDivision = helpers.string(ctx, "targetDivision", _targetDivision);
-        assertMember(ctx, CityName, "City Name", "targetCity", targetCity);
-        assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
+        assertEnum(ctx, CityNames, "City Name", "targetCity", targetCity);
+        assertEnum(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
         const amt = helpers.string(ctx, "amt", _amt);
         CancelExportMaterial(targetDivision, targetCity, getMaterial(sourceDivision, sourceCity, materialName), amt);
       },
     limitMaterialProduction: (ctx) => (_divisionName, cityName, materialName, _qty) => {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
-      assertMember(ctx, CityName, "City Name", "cityName", cityName);
-      assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
+      assertEnum(ctx, CityNames, "City Name", "cityName", cityName);
+      assertEnum(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
       const qty = helpers.number(ctx, "qty", _qty);
       LimitMaterialProduction(getMaterial(divisionName, cityName, materialName), qty);
     },
     setMaterialMarketTA1: (ctx) => (_divisionName, cityName, materialName, _on) => {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
-      assertMember(ctx, CityName, "City Name", "cityName", cityName);
-      assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
+      assertEnum(ctx, CityNames, "City Name", "cityName", cityName);
+      assertEnum(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
       const on = !!_on;
       if (!getDivision(divisionName).hasResearch("Market-TA.I"))
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not researched MarketTA.I for division: ${divisionName}`);
@@ -533,8 +532,8 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     setMaterialMarketTA2: (ctx) => (_divisionName, cityName, materialName, _on) => {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
-      assertMember(ctx, CityName, "City Name", "cityName", cityName);
-      assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
+      assertEnum(ctx, CityNames, "City Name", "cityName", cityName);
+      assertEnum(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
       const on = !!_on;
       if (!getDivision(divisionName).hasResearch("Market-TA.II"))
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not researched MarketTA.II for division: ${divisionName}`);
@@ -576,13 +575,13 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     getResearchCost: (ctx) => (_divisionName, researchName) => {
       checkAccess(ctx, 8);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
-      assertMember(ctx, corpConstants.researchNames, "Research Name", "researchName", researchName);
+      assertEnum(ctx, corpConstants.researchNames, "Research Name", "researchName", researchName);
       return getResearchCost(getDivision(divisionName), researchName);
     },
     hasResearched: (ctx) => (_divisionName, researchName) => {
       checkAccess(ctx, 8);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
-      assertMember(ctx, corpConstants.researchNames, "Research Name", "researchName", researchName);
+      assertEnum(ctx, corpConstants.researchNames, "Research Name", "researchName", researchName);
       return hasResearched(getDivision(divisionName), researchName);
     },
     getOfficeSizeUpgradeCost: (ctx) => (_divisionName, _cityName, _size) => {
@@ -607,7 +606,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const amount = helpers.number(ctx, "amount", _amount);
       const job = helpers.string(ctx, "job", _job);
 
-      if (!checkEnum(EmployeePositions, job)) throw new Error(`'${job}' is not a valid job.`);
+      if (!EmployeePositions.has(job)) throw new Error(`'${job}' is not a valid job.`);
       const office = getOffice(divisionName, cityName);
       return AutoAssignJob(office, job, amount);
     },
@@ -616,7 +615,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
       const position = _position ? helpers.string(ctx, "position", _position) : EmployeePositions.Unassigned;
-      if (!checkEnum(EmployeePositions, position)) {
+      if (!EmployeePositions.has(position)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: ${position}`);
       }
       const office = getOffice(divisionName, cityName);
@@ -664,7 +663,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     research: (ctx) => (_divisionName, researchName) => {
       checkAccess(ctx, 8);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
-      assertMember(ctx, corpConstants.researchNames, "Research Name", "reseatchName", researchName);
+      assertEnum(ctx, corpConstants.researchNames, "Research Name", "reseatchName", researchName);
       Research(getDivision(divisionName), researchName);
     },
     getOffice: (ctx) => (_divisionName, _cityName) => {
@@ -704,20 +703,20 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     getIndustryData: (ctx) => (_industryName) => {
       checkAccess(ctx);
       const industryName = helpers.string(ctx, "industryName", _industryName);
-      if (!checkEnum(IndustryType, industryName)) {
+      if (!IndustryTypes.has(industryName)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid industry: ${industryName}`);
       }
       return cloneDeep(IndustriesData[industryName]);
     },
     getMaterialData: (ctx) => (materialName) => {
       checkAccess(ctx);
-      assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
+      assertEnum(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
       return cloneDeep(MaterialInfo[materialName]);
     },
     expandIndustry: (ctx) => (_industryName, _divisionName) => {
       checkAccess(ctx);
       const industryName = helpers.string(ctx, "industryName", _industryName);
-      if (!checkEnum(IndustryType, industryName)) {
+      if (!IndustryTypes.has(industryName)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid industry: ${industryName}`);
       }
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);

@@ -19,7 +19,7 @@ import { StyleEditorButton } from "../../Themes/ui/StyleEditorButton";
 import { ThemeEditorButton } from "../../Themes/ui/ThemeEditorButton";
 import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
 import { DeleteGameButton } from "../../ui/React/DeleteGameButton";
-import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
+import { SnackbarEvents, ToastVariants } from "../../ui/React/Snackbar";
 import { SoftResetButton } from "../../ui/React/SoftResetButton";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
@@ -73,7 +73,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
       setImportData(data);
       setImportSaveOpen(true);
     } catch (e: unknown) {
-      SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
+      SnackbarEvents.emit(String(e), ToastVariants.ERROR, 5000);
     }
   }
 
@@ -83,7 +83,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
     try {
       await saveObject.importGame(importData.base64);
     } catch (e: unknown) {
-      SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
+      SnackbarEvents.emit(String(e), ToastVariants.ERROR, 5000);
     }
 
     setImportSaveOpen(false);

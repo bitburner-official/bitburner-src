@@ -5,7 +5,7 @@
  */
 import React, { useState, useEffect } from "react";
 
-import { CityName } from "../../Enums";
+import { CityName, CityNames } from "../../Enums";
 import { TravelConfirmationModal } from "./TravelConfirmationModal";
 
 import { CONSTANTS } from "../../Constants";
@@ -37,7 +37,7 @@ function travel(to: CityName): void {
 export function TravelAgencyRoot(): React.ReactElement {
   const setRerender = useState(false)[1];
   const [open, setOpen] = useState(false);
-  const [destination, setDestination] = useState(CityName.Sector12);
+  const [destination, setDestination] = useState(CityNames.Sector12 as CityName);
   function rerender(): void {
     setRerender((o) => !o);
   }
@@ -70,10 +70,10 @@ export function TravelAgencyRoot(): React.ReactElement {
         </Typography>
         {Settings.DisableASCIIArt ? (
           <>
-            {Object.values(CityName)
-              .filter((city: string) => city != Player.city)
-              .map((city: string) => {
-                const match = Object.entries(CityName).find((entry) => entry[1] === city);
+            {[...CityNames]
+              .filter((city) => city != Player.city)
+              .map((city) => {
+                const match = CityNames.getKey(city);
                 if (match === undefined) throw new Error(`could not find key for city '${city}'`);
                 return (
                   <React.Fragment key={city}>

@@ -5,7 +5,7 @@ import { uniqueId } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Companies } from "../Company/Companies";
 import { CONSTANTS } from "../Constants";
-import { LocationName } from "../Enums";
+import { FactionWorkTypes, LocationNames } from "../Enums";
 import { Locations } from "../Locations/Locations";
 import { Settings } from "../Settings/Settings";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
@@ -25,7 +25,6 @@ import { WorkStats } from "../Work/WorkStats";
 import { isCreateProgramWork } from "../Work/CreateProgramWork";
 import { isGraftingWork } from "../Work/GraftingWork";
 import { isFactionWork } from "../Work/FactionWork";
-import { FactionWorkType } from "../Enums";
 import { isCompanyWork } from "../Work/CompanyWork";
 
 const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
@@ -224,7 +223,7 @@ export function WorkInProgressRoot(): React.ReactElement {
     workInfo = {
       buttons: {
         cancel: () => {
-          Router.toLocation(Locations[LocationName.Slums]);
+          Router.toLocation(Locations[LocationNames.Slums]);
           Player.finishWork(true);
         },
         unfocus: () => {
@@ -395,9 +394,9 @@ export function WorkInProgressRoot(): React.ReactElement {
     }
 
     const description = {
-      [FactionWorkType.hacking]: "carrying out hacking contracts",
-      [FactionWorkType.field]: "carrying out field missions",
-      [FactionWorkType.security]: "performing security detail",
+      [FactionWorkTypes.hacking]: "carrying out hacking contracts",
+      [FactionWorkTypes.field]: "carrying out field missions",
+      [FactionWorkTypes.security]: "performing security detail",
     };
 
     const exp = Player.currentWork.getExpRates();

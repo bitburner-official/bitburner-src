@@ -3,7 +3,7 @@ import { Sleeve } from "../Sleeve";
 import { CONSTANTS } from "../../../Constants";
 import { Money } from "../../../ui/React/Money";
 import { WorldMap } from "../../../ui/React/WorldMap";
-import { CityName } from "../../../Enums";
+import { CityName, CityNames } from "../../../Enums";
 import { Settings } from "../../../Settings/Settings";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Player } from "@player";
@@ -39,7 +39,7 @@ export function TravelModal(props: IProps): React.ReactElement {
           also set your current sleeve task to idle.
         </Typography>
         {Settings.DisableASCIIArt ? (
-          Object.values(CityName).map((city: CityName) => (
+          [...CityNames].map((city: CityName) => (
             <Button key={city} onClick={() => travel(city)}>
               {city}
             </Button>

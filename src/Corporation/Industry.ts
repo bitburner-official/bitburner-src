@@ -1,8 +1,8 @@
 import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { CityName } from "../Enums";
+import { CityName, CityNames } from "../Enums";
 import { IndustryResearchTrees, IndustriesData } from "./IndustryData";
 import * as corpConstants from "./data/Constants";
-import { EmployeePositions, IndustryType } from "./data/Enums";
+import { EmployeePositions, IndustryType, IndustryTypes } from "./data/Enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { calculateEffectWithFactors } from "../utils/calculateEffectWithFactors";
 import { OfficeSpace } from "./OfficeSpace";
@@ -65,21 +65,21 @@ export class Industry {
 
   //Maps locations to offices. 0 if no office at that location
   offices: Record<CityName, OfficeSpace | 0> = {
-    [CityName.Aevum]: 0,
-    [CityName.Chongqing]: 0,
-    [CityName.Sector12]: new OfficeSpace({
-      loc: CityName.Sector12,
+    [CityNames.Aevum]: 0,
+    [CityNames.Chongqing]: 0,
+    [CityNames.Sector12]: new OfficeSpace({
+      loc: CityNames.Sector12,
       size: corpConstants.officeInitialSize,
     }),
-    [CityName.NewTokyo]: 0,
-    [CityName.Ishima]: 0,
-    [CityName.Volhaven]: 0,
+    [CityNames.NewTokyo]: 0,
+    [CityNames.Ishima]: 0,
+    [CityNames.Volhaven]: 0,
   };
 
   numAdVerts = 0;
 
   constructor(params: IParams = {}) {
-    this.type = params.type || IndustryType.Agriculture;
+    this.type = params.type || IndustryTypes.Agriculture;
     this.name = params.name ? params.name : "";
 
     //Financials
@@ -89,17 +89,17 @@ export class Industry {
     this.thisCycleExpenses = 0;
 
     this.warehouses = {
-      [CityName.Aevum]: 0,
-      [CityName.Chongqing]: 0,
-      [CityName.Sector12]: new Warehouse({
+      [CityNames.Aevum]: 0,
+      [CityNames.Chongqing]: 0,
+      [CityNames.Sector12]: new Warehouse({
         corp: params.corp,
         industry: this,
-        loc: CityName.Sector12,
+        loc: CityNames.Sector12,
         size: corpConstants.warehouseInitialSize,
       }),
-      [CityName.NewTokyo]: 0,
-      [CityName.Ishima]: 0,
-      [CityName.Volhaven]: 0,
+      [CityNames.NewTokyo]: 0,
+      [CityNames.Ishima]: 0,
+      [CityNames.Volhaven]: 0,
     };
 
     const data = IndustriesData[this.type];
@@ -135,7 +135,7 @@ export class Industry {
   //materials/products (such as quality, etc.)
   calculateProductionFactors(): void {
     let multSum = 0;
-    for (const city of Object.values(CityName)) {
+    for (const city of CityNames) {
       const warehouse = this.warehouses[city];
       if (!warehouse) continue;
 
@@ -191,7 +191,7 @@ export class Industry {
 
       // Process offices (and the employees in them)
       let employeeSalary = 0;
-      for (const officeLoc of Object.values(CityName)) {
+      for (const officeLoc of CityNames) {
         const office = this.offices[officeLoc];
         if (office) employeeSalary += office.process(marketCycles, corporation, this);
       }
@@ -241,7 +241,7 @@ export class Industry {
       prodMats = this.prodMats;
 
     //Only 'process the market' for materials that this industry deals with
-    for (const city of Object.values(CityName)) {
+    for (const city of CityNames) {
       //If this industry has a warehouse in this city, process the market
       //for every material this industry requires or produces
       if (this.warehouses[city]) {
@@ -275,9 +275,9 @@ export class Industry {
         if (change === 0) continue;
 
         if (
-          this.type === IndustryType.Pharmaceutical ||
-          this.type === IndustryType.Software ||
-          this.type === IndustryType.Robotics
+          this.type === IndustryTypes.Pharmaceutical ||
+          this.type === IndustryTypes.Software ||
+          this.type === IndustryTypes.Robotics
         ) {
           change *= 3;
         }
@@ -296,7 +296,7 @@ export class Industry {
       expenses = 0;
     this.calculateProductionFactors();
 
-    for (const city of Object.values(CityName)) {
+    for (const city of CityNames) {
       const office = this.offices[city];
       if (office === 0) continue;
 
@@ -759,7 +759,7 @@ export class Industry {
   //Processes FINISHED products
   processProduct(marketCycles = 1, product: Product, corporation: Corporation): number {
     let totalProfit = 0;
-    for (const city of Object.values(CityName)) {
+    for (const city of CityNames) {
       const office = this.offices[city];
       if (office === 0) continue;
       const warehouse = this.warehouses[city];
@@ -959,7 +959,7 @@ export class Industry {
   resetImports(state: string): void {
     //At the start of the export state, set the imports of everything to 0
     if (state === "EXPORT") {
-      for (const city of Object.values(CityName)) {
+      for (const city of CityNames) {
         if (!this.warehouses[city]) continue;
 
         const warehouse = this.warehouses[city];
@@ -1147,10 +1147,10 @@ export class Industry {
   static fromJSON(value: IReviverValue): Industry {
     const matNameMap = { AICores: "AI Cores", RealEstate: "Real Estate" };
     const indNameMap = {
-      RealEstate: IndustryType.RealEstate,
-      Utilities: IndustryType.Utilities,
-      Computers: IndustryType.Computers,
-      Computer: IndustryType.Computers,
+      RealEstate: IndustryTypes.RealEstate,
+      Utilities: IndustryTypes.Utilities,
+      Computers: IndustryTypes.Computers,
+      Computer: IndustryTypes.Computers,
     };
     for (const [key, val] of Object.entries(indNameMap)) if (value.data.type === key) value.data.type = val;
     value.data.prodMats = value.data.prodMats.map((matName: string) => {

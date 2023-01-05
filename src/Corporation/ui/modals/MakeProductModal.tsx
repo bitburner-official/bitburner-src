@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { IndustriesData } from "../../IndustryData";
-import { IndustryType } from "../../data/Enums";
+import { IndustryTypes } from "../../data/Enums";
 import { MakeProduct } from "../../Actions";
 import { useCorporation, useDivision } from "../Context";
 import Typography from "@mui/material/Typography";
@@ -12,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { NumberInput } from "../../../ui/React/NumberInput";
-import { CityName } from "../../../Enums";
+import { CityName, CityNames } from "../../../Enums";
 
 interface IProps {
   open: boolean;
@@ -20,11 +20,11 @@ interface IProps {
 }
 
 function productPlaceholder(type: string): string {
-  if (type === IndustryType.Food) {
+  if (type === IndustryTypes.Food) {
     return "Restaurant Name";
-  } else if (type === IndustryType.Healthcare) {
+  } else if (type === IndustryTypes.Healthcare) {
     return "Hospital Name";
-  } else if (type === IndustryType.RealEstate) {
+  } else if (type === IndustryTypes.RealEstate) {
     return "Property Name";
   }
   return "Product Name";
@@ -34,8 +34,8 @@ function productPlaceholder(type: string): string {
 export function MakeProductModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
-  const allCities = Object.values(CityName).filter((cityName) => division.offices[cityName] !== 0);
-  const [city, setCity] = useState(allCities.length > 0 ? allCities[0] : CityName.Sector12);
+  const allCities = [...CityNames].filter((cityName) => division.offices[cityName] !== 0);
+  const [city, setCity] = useState(allCities.length > 0 ? allCities[0] : CityNames.Sector12);
   const [name, setName] = useState("");
   const [design, setDesign] = useState<number>(NaN);
   const [marketing, setMarketing] = useState<number>(NaN);

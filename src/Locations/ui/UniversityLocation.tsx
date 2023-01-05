@@ -17,7 +17,7 @@ import { Box } from "@mui/material";
 
 import { ClassWork, Classes } from "../../Work/ClassWork";
 import { calculateCost } from "../../Work/Formulas";
-import { UniversityClassType } from "../../Enums";
+import { UniversityClassType, UniversityClassTypes } from "../../Enums";
 
 type IProps = {
   loc: Location;
@@ -36,11 +36,11 @@ export function UniversityLocation(props: IProps): React.ReactElement {
     Router.toPage(Page.Work);
   }
 
-  const dataStructuresCost = calculateCost(Classes[UniversityClassType.dataStructures], props.loc);
-  const networksCost = calculateCost(Classes[UniversityClassType.networks], props.loc);
-  const algorithmsCost = calculateCost(Classes[UniversityClassType.algorithms], props.loc);
-  const managementCost = calculateCost(Classes[UniversityClassType.management], props.loc);
-  const leadershipCost = calculateCost(Classes[UniversityClassType.leadership], props.loc);
+  const dataStructuresCost = calculateCost(Classes[UniversityClassTypes.dataStructures], props.loc);
+  const networksCost = calculateCost(Classes[UniversityClassTypes.networks], props.loc);
+  const algorithmsCost = calculateCost(Classes[UniversityClassTypes.algorithms], props.loc);
+  const managementCost = calculateCost(Classes[UniversityClassTypes.management], props.loc);
+  const leadershipCost = calculateCost(Classes[UniversityClassTypes.leadership], props.loc);
 
   const earnHackingExpTooltip = `Gain hacking experience!`;
   const earnCharismaExpTooltip = `Gain charisma experience!`;
@@ -48,34 +48,34 @@ export function UniversityLocation(props: IProps): React.ReactElement {
   return (
     <Box sx={{ display: "grid", width: "fit-content" }}>
       <Tooltip title={earnHackingExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.computerScience)}>Study Computer Science (free)</Button>
+        <Button onClick={() => take(UniversityClassTypes.computerScience)}>Study Computer Science (free)</Button>
       </Tooltip>
       <Tooltip title={earnHackingExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.dataStructures)}>
+        <Button onClick={() => take(UniversityClassTypes.dataStructures)}>
           Take Data Structures course (
           <Money money={dataStructuresCost} forPurchase={true} /> / sec)
         </Button>
       </Tooltip>
       <Tooltip title={earnHackingExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.networks)}>
+        <Button onClick={() => take(UniversityClassTypes.networks)}>
           Take Networks course (
           <Money money={networksCost} forPurchase={true} /> / sec)
         </Button>
       </Tooltip>
       <Tooltip title={earnHackingExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.algorithms)}>
+        <Button onClick={() => take(UniversityClassTypes.algorithms)}>
           Take Algorithms course (
           <Money money={algorithmsCost} forPurchase={true} /> / sec)
         </Button>
       </Tooltip>
       <Tooltip title={earnCharismaExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.management)}>
+        <Button onClick={() => take(UniversityClassTypes.management)}>
           Take Management course (
           <Money money={managementCost} forPurchase={true} /> / sec)
         </Button>
       </Tooltip>
       <Tooltip title={earnCharismaExpTooltip}>
-        <Button onClick={() => take(UniversityClassType.leadership)}>
+        <Button onClick={() => take(UniversityClassTypes.leadership)}>
           Take Leadership course (
           <Money money={leadershipCost} forPurchase={true} /> / sec)
         </Button>

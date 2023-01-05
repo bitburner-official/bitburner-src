@@ -1,6 +1,6 @@
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { FactionWorkType } from "../../../Enums";
+import { CrimeTypes, FactionWorkTypes } from "../../../Enums";
 import { CONSTANTS } from "../../../Constants";
 import { Player } from "@player";
 import { numeralWrapper } from "../../../ui/numeralFormat";
@@ -21,7 +21,6 @@ import { isSleeveSupportWork } from "../Work/SleeveSupportWork";
 import { isSleeveBladeburnerWork } from "../Work/SleeveBladeburnerWork";
 import { isSleeveCrimeWork } from "../Work/SleeveCrimeWork";
 import { findCrime } from "../../../Crime/CrimeHelpers";
-import { CrimeType } from "../../../Enums";
 
 interface IProps {
   sleeve: Sleeve;
@@ -46,7 +45,7 @@ export function SleeveElem(props: IProps): React.ReactElement {
         props.sleeve.workForFaction(abc[1], abc[2]);
         break;
       case "Commit Crime":
-        props.sleeve.commitCrime(findCrime(abc[1])?.type ?? CrimeType.shoplift);
+        props.sleeve.commitCrime(findCrime(abc[1])?.type ?? CrimeTypes.shoplift);
         break;
       case "Take University Course":
         props.sleeve.takeUniversityCourse(abc[2], abc[1]);
@@ -106,13 +105,13 @@ export function SleeveElem(props: IProps): React.ReactElement {
   if (isSleeveFactionWork(props.sleeve.currentWork)) {
     let doing = "nothing";
     switch (props.sleeve.currentWork.factionWorkType) {
-      case FactionWorkType.field:
+      case FactionWorkTypes.field:
         doing = "Field work";
         break;
-      case FactionWorkType.hacking:
+      case FactionWorkTypes.hacking:
         doing = "Hacking contracts";
         break;
-      case FactionWorkType.security:
+      case FactionWorkTypes.security:
         doing = "Security work";
         break;
     }

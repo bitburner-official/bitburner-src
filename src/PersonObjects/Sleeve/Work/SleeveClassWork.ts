@@ -1,12 +1,10 @@
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
 import { applySleeveGains, Work, WorkType } from "./Work";
 import { Classes, ClassType } from "../../../Work/ClassWork";
-import { LocationName } from "../../../Enums";
+import { GymTypes, LocationName, LocationNames, UniversityClassTypes } from "../../../Enums";
 import { calculateClassEarnings } from "../../../Work/Formulas";
 import { Sleeve } from "../Sleeve";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
-import { GymType, UniversityClassType } from "../../../Enums";
-import { checkEnum } from "../../../utils/helpers/enum";
 import { Locations } from "../../../Locations/Locations";
 
 export const isSleeveClassWork = (w: Work | null): w is SleeveClassWork => w !== null && w.type === WorkType.CLASS;
@@ -22,8 +20,8 @@ export class SleeveClassWork extends Work {
 
   constructor(params?: ClassWorkParams) {
     super(WorkType.CLASS);
-    this.classType = params?.classType ?? UniversityClassType.computerScience;
-    this.location = params?.location ?? LocationName.Sector12RothmanUniversity;
+    this.classType = params?.classType ?? UniversityClassTypes.computerScience;
+    this.location = params?.location ?? LocationNames.Sector12RothmanUniversity;
   }
 
   calculateRates(sleeve: Sleeve): WorkStats {
@@ -31,7 +29,7 @@ export class SleeveClassWork extends Work {
   }
 
   isGym(): boolean {
-    return checkEnum(GymType, this.classType);
+    return GymTypes.has(this.classType);
   }
 
   process(sleeve: Sleeve, cycles: number) {
@@ -54,7 +52,7 @@ export class SleeveClassWork extends Work {
   /** Initializes a ClassWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveClassWork {
     if (!(value.data.classType in Classes)) value.data.classType = "Computer Science";
-    if (!(value.data.location in Locations)) value.data.location = LocationName.Sector12RothmanUniversity;
+    if (!(value.data.location in Locations)) value.data.location = LocationNames.Sector12RothmanUniversity;
     return Generic_fromJSON(SleeveClassWork, value.data);
   }
 }

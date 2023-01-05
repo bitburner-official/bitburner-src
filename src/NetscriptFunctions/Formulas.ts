@@ -44,11 +44,9 @@ import { calculateCompanyWorkStats } from "../Work/Formulas";
 import { Companies } from "../Company/Companies";
 import { calculateClassEarnings } from "../Work/Formulas";
 import { calculateFactionExp, calculateFactionRep } from "../Work/Formulas";
-import { FactionWorkType, GymType, UniversityClassType, LocationName, CityName } from "../Enums";
+import { JobNames, FactionWorkTypes, LocationNames, UniversityClassTypes, GymTypes, CityNames } from "../Enums";
 
 import { defaultMultipliers } from "../PersonObjects/Multipliers";
-import { checkEnum, findEnumMember } from "../utils/helpers/enum";
-import { JobName } from "../Enums";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { findCrime } from "../Crime/CrimeHelpers";
 
@@ -92,7 +90,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       mults: defaultMultipliers(),
       numPeopleKilled: 0,
       money: 0,
-      city: CityName.Sector12,
+      city: CityNames.Sector12,
       location: "",
       bitNodeN: 0,
       totalPlaytime: 0,
@@ -107,7 +105,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       skills: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
       exp: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
       mults: defaultMultipliers(),
-      city: CityName.Sector12,
+      city: CityNames.Sector12,
     }),
     reputation: {
       calculateFavorToRep: (ctx) => (_favor) => {
@@ -368,25 +366,25 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       gymGains: (ctx) => (_person, _classType, _locationName) => {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
-        const classType = findEnumMember(GymType, helpers.string(ctx, "classType", _classType));
+        const classType = GymTypes.find(helpers.string(ctx, "classType", _classType));
         if (!classType) throw new Error(`Invalid gym training type: ${_classType}`);
         const locationName = helpers.string(ctx, "locationName", _locationName);
-        if (!checkEnum(LocationName, locationName)) throw new Error(`Invalid location name: ${locationName}`);
+        if (!LocationNames.has(locationName)) throw new Error(`Invalid location name: ${locationName}`);
         return calculateClassEarnings(person, classType, locationName);
       },
       universityGains: (ctx) => (_person, _classType, _locationName) => {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
-        const classType = findEnumMember(UniversityClassType, helpers.string(ctx, "classType", _classType));
+        const classType = UniversityClassTypes.find(helpers.string(ctx, "classType", _classType));
         if (!classType) throw new Error(`Invalid university class type: ${_classType}`);
         const locationName = helpers.string(ctx, "locationName", _locationName);
-        if (!checkEnum(LocationName, locationName)) throw new Error(`Invalid location name: ${locationName}`);
+        if (!LocationNames.has(locationName)) throw new Error(`Invalid location name: ${locationName}`);
         return calculateClassEarnings(person, classType, locationName);
       },
       factionGains: (ctx) => (_player, _workType, _favor) => {
         checkFormulasAccess(ctx);
         const player = helpers.person(ctx, _player);
-        const workType = findEnumMember(FactionWorkType, helpers.string(ctx, "_workType", _workType));
+        const workType = FactionWorkTypes.find(helpers.string(ctx, "_workType", _workType));
         if (!workType) throw new Error(`Invalid faction work type: ${_workType}`);
         const favor = helpers.number(ctx, "favor", _favor);
         const exp = calculateFactionExp(player, workType);
@@ -397,7 +395,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       companyGains: (ctx) => (_person, _companyName, _positionName, _favor) => {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
-        const positionName = findEnumMember(JobName, helpers.string(ctx, "_positionName", _positionName));
+        const positionName = JobNames.find(helpers.string(ctx, "_positionName", _positionName));
         if (!positionName) throw new Error(`Invalid company position: ${_positionName}`);
         const position = CompanyPositions[positionName];
         const companyName = helpers.string(ctx, "_companyName", _companyName);

@@ -3,7 +3,7 @@ import { FactionNames } from "../../Faction/data/FactionNames";
 
 // This could actually be a JSON file as it should be constant metadata to be imported...
 import { IMinMaxRange } from "../../types";
-import { LocationName } from "../../Enums";
+import { LocationNames } from "../../Enums";
 import { LiteratureNames } from "../../Literature/data/LiteratureNames";
 import { SpecialServers } from "./SpecialServers";
 
@@ -57,37 +57,37 @@ interface IServerMetadata {
 export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 99,
-    hostname: LocationName.AevumECorp.toLowerCase(),
+    hostname: LocationNames.AevumECorp.toLowerCase(),
     moneyAvailable: {
       max: 70e9,
       min: 30e9,
     },
     networkLayer: 15,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.AevumECorp,
+    organizationName: LocationNames.AevumECorp,
     requiredHackingSkill: {
       max: 1400,
       min: 1050,
     },
     serverGrowth: 99,
-    specialName: LocationName.AevumECorp,
+    specialName: LocationNames.AevumECorp,
   },
   {
     hackDifficulty: 99,
-    hostname: LocationName.Sector12MegaCorp.toLowerCase(),
+    hostname: LocationNames.Sector12MegaCorp.toLowerCase(),
     moneyAvailable: {
       max: 60e9,
       min: 40e9,
     },
     networkLayer: 15,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.Sector12MegaCorp,
+    organizationName: LocationNames.Sector12MegaCorp,
     requiredHackingSkill: {
       max: 1350,
       min: 1100,
     },
     serverGrowth: 99,
-    specialName: LocationName.Sector12MegaCorp,
+    specialName: LocationNames.Sector12MegaCorp,
   },
   {
     hackDifficulty: {
@@ -101,7 +101,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 14,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.AevumBachmanAndAssociates,
+    organizationName: LocationNames.AevumBachmanAndAssociates,
     requiredHackingSkill: {
       max: 1150,
       min: 900,
@@ -110,7 +110,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 80,
       min: 60,
     },
-    specialName: LocationName.AevumBachmanAndAssociates,
+    specialName: LocationNames.AevumBachmanAndAssociates,
   },
   {
     hackDifficulty: {
@@ -129,7 +129,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 14,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.Sector12BladeIndustries,
+    organizationName: LocationNames.Sector12BladeIndustries,
     requiredHackingSkill: {
       max: 1200,
       min: 900,
@@ -138,11 +138,11 @@ export const serverMetadata: IServerMetadata[] = [
       max: 85,
       min: 55,
     },
-    specialName: LocationName.Sector12BladeIndustries,
+    specialName: LocationNames.Sector12BladeIndustries,
   },
   {
     hackDifficulty: 99,
-    hostname: LocationName.VolhavenNWO.toLowerCase(),
+    hostname: LocationNames.VolhavenNWO.toLowerCase(),
     literature: [LiteratureNames.TheHiddenWorld],
     moneyAvailable: {
       max: 40e9,
@@ -150,7 +150,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 14,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.VolhavenNWO,
+    organizationName: LocationNames.VolhavenNWO,
     requiredHackingSkill: {
       max: 1300,
       min: 950,
@@ -159,7 +159,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 95,
       min: 65,
     },
-    specialName: LocationName.VolhavenNWO,
+    specialName: LocationNames.VolhavenNWO,
   },
   {
     hackDifficulty: {
@@ -174,7 +174,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 14,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.AevumClarkeIncorporated,
+    organizationName: LocationNames.AevumClarkeIncorporated,
     requiredHackingSkill: {
       max: 1250,
       min: 950,
@@ -183,7 +183,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 75,
       min: 45,
     },
-    specialName: LocationName.AevumClarkeIncorporated,
+    specialName: LocationNames.AevumClarkeIncorporated,
   },
   {
     hackDifficulty: {
@@ -202,7 +202,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 13,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.VolhavenOmniTekIncorporated,
+    organizationName: LocationNames.VolhavenOmniTekIncorporated,
     requiredHackingSkill: {
       max: 1100,
       min: 900,
@@ -211,7 +211,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 99,
       min: 95,
     },
-    specialName: LocationName.VolhavenOmniTekIncorporated,
+    specialName: LocationNames.VolhavenOmniTekIncorporated,
   },
   {
     hackDifficulty: {
@@ -225,7 +225,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 13,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.Sector12FourSigma,
+    organizationName: LocationNames.Sector12FourSigma,
     requiredHackingSkill: {
       max: 1250,
       min: 900,
@@ -234,7 +234,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 99,
       min: 75,
     },
-    specialName: LocationName.Sector12FourSigma,
+    specialName: LocationNames.Sector12FourSigma,
   },
   {
     hackDifficulty: {
@@ -248,7 +248,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 13,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.ChongqingKuaiGongInternational,
+    organizationName: LocationNames.ChongqingKuaiGongInternational,
     requiredHackingSkill: {
       max: 1300,
       min: 950,
@@ -257,7 +257,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 99,
       min: 90,
     },
-    specialName: LocationName.ChongqingKuaiGongInternational,
+    specialName: LocationNames.ChongqingKuaiGongInternational,
   },
   {
     hackDifficulty: {
@@ -276,7 +276,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 12,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.AevumFulcrumTechnologies,
+    organizationName: LocationNames.AevumFulcrumTechnologies,
     requiredHackingSkill: {
       max: 1250,
       min: 950,
@@ -285,7 +285,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 99,
       min: 80,
     },
-    specialName: LocationName.AevumFulcrumTechnologies,
+    specialName: LocationNames.AevumFulcrumTechnologies,
   },
   {
     hackDifficulty: 99,
@@ -293,7 +293,7 @@ export const serverMetadata: IServerMetadata[] = [
     moneyAvailable: 1e6,
     networkLayer: 15,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.AevumFulcrumTechnologies,
+    organizationName: LocationNames.AevumFulcrumTechnologies,
     requiredHackingSkill: {
       max: 1600,
       min: 1100,
@@ -313,7 +313,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 12,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.IshimaStormTechnologies,
+    organizationName: LocationNames.IshimaStormTechnologies,
     requiredHackingSkill: {
       max: 1075,
       min: 875,
@@ -322,7 +322,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 92,
       min: 68,
     },
-    specialName: LocationName.IshimaStormTechnologies,
+    specialName: LocationNames.IshimaStormTechnologies,
   },
   {
     hackDifficulty: {
@@ -336,7 +336,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 9,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.NewTokyoDefComm,
+    organizationName: LocationNames.NewTokyoDefComm,
     requiredHackingSkill: {
       max: 1050,
       min: 850,
@@ -345,7 +345,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 73,
       min: 47,
     },
-    specialName: LocationName.NewTokyoDefComm,
+    specialName: LocationNames.NewTokyoDefComm,
   },
   {
     hackDifficulty: {
@@ -386,7 +386,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 12,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.VolhavenHeliosLabs,
+    organizationName: LocationNames.VolhavenHeliosLabs,
     requiredHackingSkill: {
       max: 900,
       min: 800,
@@ -395,14 +395,14 @@ export const serverMetadata: IServerMetadata[] = [
       max: 80,
       min: 70,
     },
-    specialName: LocationName.VolhavenHeliosLabs,
+    specialName: LocationNames.VolhavenHeliosLabs,
   },
   {
     hackDifficulty: {
       max: 90,
       min: 80,
     },
-    hostname: LocationName.NewTokyoVitaLife.toLowerCase(),
+    hostname: LocationNames.NewTokyoVitaLife.toLowerCase(),
     literature: [LiteratureNames.AGreenTomorrow],
     maxRamExponent: {
       max: 7,
@@ -414,7 +414,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 12,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.NewTokyoVitaLife,
+    organizationName: LocationNames.NewTokyoVitaLife,
     requiredHackingSkill: {
       max: 900,
       min: 775,
@@ -423,7 +423,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 80,
       min: 60,
     },
-    specialName: LocationName.NewTokyoVitaLife,
+    specialName: LocationNames.NewTokyoVitaLife,
   },
   {
     hackDifficulty: {
@@ -437,7 +437,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 9,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.Sector12IcarusMicrosystems,
+    organizationName: LocationNames.Sector12IcarusMicrosystems,
     requiredHackingSkill: {
       max: 925,
       min: 850,
@@ -446,7 +446,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 95,
       min: 85,
     },
-    specialName: LocationName.Sector12IcarusMicrosystems,
+    specialName: LocationNames.Sector12IcarusMicrosystems,
   },
   {
     hackDifficulty: {
@@ -464,7 +464,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 9,
     numOpenPortsRequired: 4,
-    organizationName: LocationName.Sector12UniversalEnergy,
+    organizationName: LocationNames.Sector12UniversalEnergy,
     requiredHackingSkill: {
       max: 900,
       min: 800,
@@ -473,7 +473,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 90,
       min: 80,
     },
-    specialName: LocationName.Sector12UniversalEnergy,
+    specialName: LocationNames.Sector12UniversalEnergy,
   },
   {
     hackDifficulty: {
@@ -564,7 +564,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 7,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.AevumGalacticCybersystems,
+    organizationName: LocationNames.AevumGalacticCybersystems,
     requiredHackingSkill: {
       max: 875,
       min: 825,
@@ -573,14 +573,14 @@ export const serverMetadata: IServerMetadata[] = [
       max: 90,
       min: 70,
     },
-    specialName: LocationName.AevumGalacticCybersystems,
+    specialName: LocationNames.AevumGalacticCybersystems,
   },
   {
     hackDifficulty: {
       max: 90,
       min: 80,
     },
-    hostname: LocationName.AevumAeroCorp.toLowerCase(),
+    hostname: LocationNames.AevumAeroCorp.toLowerCase(),
     literature: [LiteratureNames.ManAndMachine],
     moneyAvailable: {
       max: 1200000000,
@@ -588,7 +588,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 7,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.AevumAeroCorp,
+    organizationName: LocationNames.AevumAeroCorp,
     requiredHackingSkill: {
       max: 925,
       min: 850,
@@ -597,7 +597,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 65,
       min: 55,
     },
-    specialName: LocationName.AevumAeroCorp,
+    specialName: LocationNames.AevumAeroCorp,
   },
   {
     hackDifficulty: {
@@ -616,7 +616,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 8,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.VolhavenOmniaCybersystems,
+    organizationName: LocationNames.VolhavenOmniaCybersystems,
     requiredHackingSkill: {
       max: 950,
       min: 850,
@@ -625,7 +625,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 70,
       min: 60,
     },
-    specialName: LocationName.VolhavenOmniaCybersystems,
+    specialName: LocationNames.VolhavenOmniaCybersystems,
   },
   {
     hackDifficulty: {
@@ -689,7 +689,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 9,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.ChongqingSolarisSpaceSystems,
+    organizationName: LocationNames.ChongqingSolarisSpaceSystems,
     requiredHackingSkill: {
       max: 850,
       min: 750,
@@ -698,21 +698,21 @@ export const serverMetadata: IServerMetadata[] = [
       max: 80,
       min: 70,
     },
-    specialName: LocationName.ChongqingSolarisSpaceSystems,
+    specialName: LocationNames.ChongqingSolarisSpaceSystems,
   },
   {
     hackDifficulty: {
       max: 85,
       min: 75,
     },
-    hostname: LocationName.Sector12DeltaOne.toLowerCase(),
+    hostname: LocationNames.Sector12DeltaOne.toLowerCase(),
     moneyAvailable: {
       max: 1700000000,
       min: 1300000000,
     },
     networkLayer: 8,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.Sector12DeltaOne,
+    organizationName: LocationNames.Sector12DeltaOne,
     requiredHackingSkill: {
       max: 900,
       min: 800,
@@ -721,7 +721,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 70,
       min: 50,
     },
-    specialName: LocationName.Sector12DeltaOne,
+    specialName: LocationNames.Sector12DeltaOne,
   },
   {
     hackDifficulty: {
@@ -740,7 +740,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 7,
     numOpenPortsRequired: 4,
-    organizationName: LocationName.NewTokyoGlobalPharmaceuticals,
+    organizationName: LocationNames.NewTokyoGlobalPharmaceuticals,
     requiredHackingSkill: {
       max: 850,
       min: 750,
@@ -749,7 +749,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 90,
       min: 80,
     },
-    specialName: LocationName.NewTokyoGlobalPharmaceuticals,
+    specialName: LocationNames.NewTokyoGlobalPharmaceuticals,
   },
   {
     hackDifficulty: {
@@ -763,7 +763,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 10,
     numOpenPortsRequired: 4,
-    organizationName: LocationName.IshimaNovaMedical,
+    organizationName: LocationNames.IshimaNovaMedical,
     requiredHackingSkill: {
       max: 850,
       min: 775,
@@ -772,7 +772,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 85,
       min: 65,
     },
-    specialName: LocationName.IshimaNovaMedical,
+    specialName: LocationNames.IshimaNovaMedical,
   },
   {
     hackDifficulty: {
@@ -838,7 +838,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 6,
     numOpenPortsRequired: 4,
-    organizationName: LocationName.VolhavenLexoCorp,
+    organizationName: LocationNames.VolhavenLexoCorp,
     requiredHackingSkill: {
       max: 750,
       min: 650,
@@ -847,7 +847,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 65,
       min: 55,
     },
-    specialName: LocationName.VolhavenLexoCorp,
+    specialName: LocationNames.VolhavenLexoCorp,
   },
   {
     hackDifficulty: {
@@ -865,7 +865,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 6,
     numOpenPortsRequired: 3,
-    organizationName: LocationName.AevumRhoConstruction,
+    organizationName: LocationNames.AevumRhoConstruction,
     requiredHackingSkill: {
       max: 525,
       min: 475,
@@ -874,7 +874,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 60,
       min: 40,
     },
-    specialName: LocationName.AevumRhoConstruction,
+    specialName: LocationNames.AevumRhoConstruction,
   },
   {
     hackDifficulty: {
@@ -893,7 +893,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 6,
     numOpenPortsRequired: 4,
-    organizationName: LocationName.Sector12AlphaEnterprises,
+    organizationName: LocationNames.Sector12AlphaEnterprises,
     requiredHackingSkill: {
       max: 600,
       min: 500,
@@ -902,7 +902,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 60,
       min: 50,
     },
-    specialName: LocationName.Sector12AlphaEnterprises,
+    specialName: LocationNames.Sector12AlphaEnterprises,
   },
   {
     hackDifficulty: {
@@ -920,7 +920,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 6,
     numOpenPortsRequired: 4,
-    organizationName: LocationName.AevumPolice,
+    organizationName: LocationNames.AevumPolice,
     requiredHackingSkill: {
       max: 450,
       min: 400,
@@ -929,7 +929,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 50,
       min: 30,
     },
-    specialName: LocationName.AevumPolice,
+    specialName: LocationNames.AevumPolice,
   },
   {
     hackDifficulty: {
@@ -952,7 +952,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 5,
     numOpenPortsRequired: 3,
-    organizationName: LocationName.Sector12RothmanUniversity,
+    organizationName: LocationNames.Sector12RothmanUniversity,
     requiredHackingSkill: {
       max: 430,
       min: 370,
@@ -961,7 +961,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 45,
       min: 35,
     },
-    specialName: LocationName.Sector12RothmanUniversity,
+    specialName: LocationNames.Sector12RothmanUniversity,
   },
   {
     hackDifficulty: {
@@ -979,7 +979,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 5,
     numOpenPortsRequired: 5,
-    organizationName: LocationName.VolhavenZBInstituteOfTechnology,
+    organizationName: LocationNames.VolhavenZBInstituteOfTechnology,
     requiredHackingSkill: {
       max: 775,
       min: 725,
@@ -988,7 +988,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 85,
       min: 75,
     },
-    specialName: LocationName.VolhavenZBInstituteOfTechnology,
+    specialName: LocationNames.VolhavenZBInstituteOfTechnology,
   },
   {
     hackDifficulty: {
@@ -1007,7 +1007,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 5,
     numOpenPortsRequired: 3,
-    organizationName: LocationName.AevumSummitUniversity,
+    organizationName: LocationNames.AevumSummitUniversity,
     requiredHackingSkill: {
       max: 475,
       min: 425,
@@ -1016,7 +1016,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 60,
       min: 40,
     },
-    specialName: LocationName.AevumSummitUniversity,
+    specialName: LocationNames.AevumSummitUniversity,
   },
   {
     hackDifficulty: {
@@ -1030,7 +1030,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 5,
     numOpenPortsRequired: 4,
-    organizationName: LocationName.VolhavenSysCoreSecurities,
+    organizationName: LocationNames.VolhavenSysCoreSecurities,
     requiredHackingSkill: {
       max: 650,
       min: 550,
@@ -1039,7 +1039,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 70,
       min: 60,
     },
-    specialName: LocationName.VolhavenSysCoreSecurities,
+    specialName: LocationNames.VolhavenSysCoreSecurities,
   },
   {
     hackDifficulty: {
@@ -1099,7 +1099,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 65,
       min: 55,
     },
-    hostname: LocationName.VolhavenCompuTek.toLowerCase(),
+    hostname: LocationNames.VolhavenCompuTek.toLowerCase(),
     literature: [LiteratureNames.ManAndMachine],
     moneyAvailable: {
       max: 250000000,
@@ -1107,7 +1107,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 4,
     numOpenPortsRequired: 3,
-    organizationName: LocationName.VolhavenCompuTek,
+    organizationName: LocationNames.VolhavenCompuTek,
     requiredHackingSkill: {
       max: 400,
       min: 300,
@@ -1116,7 +1116,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 65,
       min: 45,
     },
-    specialName: LocationName.VolhavenCompuTek,
+    specialName: LocationNames.VolhavenCompuTek,
   },
   {
     hackDifficulty: {
@@ -1132,7 +1132,7 @@ export const serverMetadata: IServerMetadata[] = [
     moneyAvailable: 275000000,
     networkLayer: 4,
     numOpenPortsRequired: 3,
-    organizationName: LocationName.AevumNetLinkTechnologies,
+    organizationName: LocationNames.AevumNetLinkTechnologies,
     requiredHackingSkill: {
       max: 425,
       min: 375,
@@ -1141,7 +1141,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 75,
       min: 45,
     },
-    specialName: LocationName.AevumNetLinkTechnologies,
+    specialName: LocationNames.AevumNetLinkTechnologies,
   },
   {
     hackDifficulty: {
@@ -1173,23 +1173,23 @@ export const serverMetadata: IServerMetadata[] = [
     moneyAvailable: 70000,
     networkLayer: 1,
     numOpenPortsRequired: 0,
-    organizationName: LocationName.NewTokyoNoodleBar,
+    organizationName: LocationNames.NewTokyoNoodleBar,
     requiredHackingSkill: 1,
     serverGrowth: 3000,
-    specialName: LocationName.NewTokyoNoodleBar,
+    specialName: LocationNames.NewTokyoNoodleBar,
   },
   {
     hackDifficulty: 10,
-    hostname: LocationName.Sector12FoodNStuff.toLowerCase(),
+    hostname: LocationNames.Sector12FoodNStuff.toLowerCase(),
     literature: [LiteratureNames.Sector12Crime],
     maxRamExponent: 4,
     moneyAvailable: 2000000,
     networkLayer: 1,
     numOpenPortsRequired: 0,
-    organizationName: LocationName.Sector12FoodNStuff,
+    organizationName: LocationNames.Sector12FoodNStuff,
     requiredHackingSkill: 1,
     serverGrowth: 5,
-    specialName: LocationName.Sector12FoodNStuff,
+    specialName: LocationNames.Sector12FoodNStuff,
   },
   {
     hackDifficulty: 10,
@@ -1209,10 +1209,10 @@ export const serverMetadata: IServerMetadata[] = [
     moneyAvailable: 2500000,
     networkLayer: 1,
     numOpenPortsRequired: 0,
-    organizationName: LocationName.Sector12JoesGuns,
+    organizationName: LocationNames.Sector12JoesGuns,
     requiredHackingSkill: 10,
     serverGrowth: 20,
-    specialName: LocationName.Sector12JoesGuns,
+    specialName: LocationNames.Sector12JoesGuns,
   },
   {
     hackDifficulty: 25,
@@ -1319,7 +1319,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
     networkLayer: 3,
     numOpenPortsRequired: 2,
-    organizationName: LocationName.IshimaOmegaSoftware,
+    organizationName: LocationNames.IshimaOmegaSoftware,
     requiredHackingSkill: {
       max: 220,
       min: 180,
@@ -1328,7 +1328,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 40,
       min: 30,
     },
-    specialName: LocationName.IshimaOmegaSoftware,
+    specialName: LocationNames.IshimaOmegaSoftware,
   },
   {
     hackDifficulty: {
@@ -1351,7 +1351,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 33,
       min: 27,
     },
-    specialName: LocationName.AevumCrushFitnessGym,
+    specialName: LocationNames.AevumCrushFitnessGym,
   },
   {
     hackDifficulty: 30,
@@ -1360,10 +1360,10 @@ export const serverMetadata: IServerMetadata[] = [
     moneyAvailable: 20000000,
     networkLayer: 1,
     numOpenPortsRequired: 1,
-    organizationName: `${LocationName.Sector12IronGym} Network`,
+    organizationName: `${LocationNames.Sector12IronGym} Network`,
     requiredHackingSkill: 100,
     serverGrowth: 20,
-    specialName: LocationName.Sector12IronGym,
+    specialName: LocationNames.Sector12IronGym,
   },
   {
     hackDifficulty: {
@@ -1387,7 +1387,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 45,
       min: 25,
     },
-    specialName: LocationName.VolhavenMilleniumFitnessGym,
+    specialName: LocationNames.VolhavenMilleniumFitnessGym,
   },
   {
     hackDifficulty: {
@@ -1411,7 +1411,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 60,
       min: 50,
     },
-    specialName: LocationName.Sector12PowerhouseGym,
+    specialName: LocationNames.Sector12PowerhouseGym,
   },
   {
     hackDifficulty: {
@@ -1431,7 +1431,7 @@ export const serverMetadata: IServerMetadata[] = [
       max: 60,
       min: 40,
     },
-    specialName: LocationName.AevumSnapFitnessGym,
+    specialName: LocationNames.AevumSnapFitnessGym,
   },
   {
     hackDifficulty: 0,

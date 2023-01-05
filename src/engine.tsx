@@ -43,7 +43,7 @@ import { calculateAchievements } from "./Achievements/Achievements";
 import React from "react";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
+import { SnackbarEvents, ToastVariants } from "./ui/React/Snackbar";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -430,7 +430,7 @@ function warnAutosaveDisabled(): void {
       </Button>
     </>
   );
-  SnackbarEvents.emit(warningToast, ToastVariant.WARNING, 5000);
+  SnackbarEvents.emit(warningToast, ToastVariants.WARNING, 5000);
 }
 
 export { Engine };

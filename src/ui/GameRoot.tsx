@@ -4,7 +4,7 @@ import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { saveObject } from "../SaveObject";
 import { onExport } from "../ExportBonus";
-import { LocationName } from "../Enums";
+import { LocationNames } from "../Enums";
 import { Location } from "../Locations/Location";
 import { ITutorial, iTutorialStart } from "../InteractiveTutorial";
 import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutorialRoot";
@@ -177,7 +177,7 @@ export function GameRoot(): React.ReactElement {
     toPage: (page: SimplePage) => {
       switch (page) {
         case Page.Travel:
-          Player.gotoLocation(LocationName.TravelAgency);
+          Player.gotoLocation(LocationNames.TravelAgency);
           break;
         case Page.BladeburnerCinematic:
           setPage(page);

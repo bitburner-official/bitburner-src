@@ -4,7 +4,7 @@ import { Industry } from "./Industry";
 import { MaterialInfo } from "./MaterialInfo";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
-import { CityName } from "../Enums";
+import { CityName, CityNames } from "../Enums";
 import { CorpMaterialName } from "@nsdefs";
 import { materialNames } from "./data/Constants";
 
@@ -43,7 +43,7 @@ export class Warehouse {
   smartSupplyStore = 0;
 
   constructor(params: IConstructorParams = {}) {
-    this.loc = params.loc ? params.loc : CityName.Sector12;
+    this.loc = params.loc ? params.loc : CityNames.Sector12;
     this.size = params.size ? params.size : 0;
 
     this.materials = {} as Record<CorpMaterialName, Material>;

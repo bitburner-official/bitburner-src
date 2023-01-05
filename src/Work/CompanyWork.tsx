@@ -3,7 +3,7 @@ import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../uti
 import { Player } from "@player";
 import { Work, WorkType } from "./Work";
 import { influenceStockThroughCompanyWork } from "../StockMarket/PlayerInfluencing";
-import { LocationName } from "../Enums";
+import { LocationNames } from "../Enums";
 import { calculateCompanyWorkStats } from "./Formulas";
 import { Companies } from "../Company/Companies";
 import { applyWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
@@ -25,7 +25,7 @@ export class CompanyWork extends Work {
   companyName: string;
   constructor(params?: CompanyWorkParams) {
     super(WorkType.COMPANY, params?.singularity ?? false);
-    this.companyName = params?.companyName ?? LocationName.NewTokyoNoodleBar;
+    this.companyName = params?.companyName ?? LocationNames.NewTokyoNoodleBar;
   }
 
   getCompany(): Company {
