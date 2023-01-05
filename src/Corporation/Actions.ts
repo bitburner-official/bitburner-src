@@ -330,6 +330,12 @@ export function BuyBackShares(corporation: Corporation, numShares: number): bool
   return true;
 }
 
+export function AutoAssignJob(office: OfficeSpace, job: string, count: number): boolean {
+  count = count < 0 ? 0 : count;
+  if (!checkEnum(EmployeePositions, job)) throw new Error(`'${job}' is not a valid job.`);
+  return office.autoAssignJob(job, count);
+}
+
 export function UpgradeOfficeSize(corp: Corporation, office: OfficeSpace, size: number): void {
   const initialPriceMult = Math.round(office.size / corpConstants.officeInitialSize);
   const costMultiplier = 1.09;
