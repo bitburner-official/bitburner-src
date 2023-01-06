@@ -32,6 +32,10 @@ module.exports = (env, argv) => {
       publicPath: `/`,
       stats: statsConfig,
     },
+    static: {
+      directory: path.join(__dirname, "dist", "ext"),
+      publicPath: '/dist/ext',
+    },
   };
 
   // By default, the webpack-dev-server is not exposed outside of localhost.
