@@ -7,7 +7,7 @@ import { InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Terminal } from "../Terminal";
 
-export interface INetscriptExtra {
+export type INetscriptExtra = {
   heart: {
     break(): number;
   };
@@ -18,7 +18,7 @@ export interface INetscriptExtra {
   rainbow(guess: string): void;
   iKnowWhatImDoing(): void;
   printRaw(value: React.ReactNode): void;
-}
+};
 
 export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
   return {
