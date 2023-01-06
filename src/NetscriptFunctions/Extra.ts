@@ -18,7 +18,7 @@ export type INetscriptExtra = {
   rainbow(guess: string): void;
   iKnowWhatImDoing(): void;
   printRaw(value: React.ReactNode): void;
-}
+};
 
 export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
   return {
