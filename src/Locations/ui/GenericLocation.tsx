@@ -41,49 +41,47 @@ export function GenericLocation({ loc }: IProps): React.ReactElement {
    * Determine what needs to be rendered for this location based on the locations
    * type. Returns an array of React components that should be rendered
    */
-  function getLocationSpecificContent(): React.ReactNode[] {
-    const content: React.ReactNode[] = [];
-
+  function getLocationSpecificContent(): React.ReactNode {
     if (loc.types.includes(LocationType.Company)) {
-      content.push(<CompanyLocation locName={loc.name} />);
+      return <CompanyLocation locName={loc.name} />;
     }
 
     if (loc.types.includes(LocationType.Gym)) {
-      content.push(<GymLocation loc={loc} />);
+      return <GymLocation loc={loc} />;
     }
 
     if (loc.types.includes(LocationType.Hospital)) {
-      content.push(<HospitalLocation />);
+      return <HospitalLocation />;
     }
 
     if (loc.types.includes(LocationType.Slums)) {
-      content.push(<SlumsLocation />);
+      return <SlumsLocation />;
     }
 
     if (loc.types.includes(LocationType.Special)) {
-      content.push(<SpecialLocation loc={loc} />);
+      return <SpecialLocation loc={loc} />;
     }
 
     if (loc.types.includes(LocationType.TechVendor)) {
-      content.push(<TechVendorLocation loc={loc} />);
+      return <TechVendorLocation loc={loc} />;
     }
 
     if (loc.types.includes(LocationType.TravelAgency)) {
-      content.push(<TravelAgencyRoot />);
+      return <TravelAgencyRoot />;
     }
 
     if (loc.types.includes(LocationType.University)) {
-      content.push(<UniversityLocation loc={loc} />);
+      return <UniversityLocation loc={loc} />;
     }
 
     if (loc.types.includes(LocationType.Casino)) {
-      content.push(<CasinoLocation />);
+      return <CasinoLocation />;
     }
 
-    return content;
+    return null;
   }
 
-  const locContent: React.ReactNode[] = getLocationSpecificContent();
+  const locContent: React.ReactNode = getLocationSpecificContent();
   const serverMeta = serverMetadata.find((s) => s.specialName === loc.name);
   const server = GetServer(serverMeta ? serverMeta.hostname : "");
 

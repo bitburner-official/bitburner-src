@@ -39,8 +39,8 @@ type State = {
 export class Blackjack extends React.Component<Record<string, never>, State> {
   deck: Deck;
 
-  constructor() {
-    super({});
+  constructor(props: Record<string, never>) {
+    super(props);
 
     this.deck = new Deck(DECK_COUNT);
 

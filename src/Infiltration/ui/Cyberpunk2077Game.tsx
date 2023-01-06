@@ -126,8 +126,9 @@ export function Cyberpunk2077Game(props: IMinigameProps): React.ReactElement {
             gap: 1,
           }}
         >
-          {flatGrid.map((item) => (
+          {flatGrid.map((item, idx) => (
             <Typography
+              key={idx}
               sx={{
                 fontSize: fontSize,
                 color: item.color,
