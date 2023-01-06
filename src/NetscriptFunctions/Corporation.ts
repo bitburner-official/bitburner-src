@@ -607,6 +607,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const amount = helpers.number(ctx, "amount", _amount);
       const job = helpers.string(ctx, "job", _job);
 
+      if (job === EmployeePositions.Unassigned) return false;
       if (!checkEnum(EmployeePositions, job)) throw new Error(`'${job}' is not a valid job.`);
       if (amount < 0 || !Number.isInteger(amount))
         throw helpers.makeRuntimeErrorMsg(
