@@ -12,4 +12,4 @@ scan() Netscript Function
 
     .. code-block:: javascript
 
-        scan("home"); // returns: ["foodnstuff", "sigma-cosmetics", "joesguns", "hong-fang-tea", "harakiri-sushi", "iron-gym"]
+        ns.scan("home"); // returns: ["foodnstuff", "sigma-cosmetics", "joesguns", "hong-fang-tea", "harakiri-sushi", "iron-gym"]

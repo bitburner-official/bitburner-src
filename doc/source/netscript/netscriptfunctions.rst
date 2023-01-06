@@ -52,9 +52,11 @@ This includes information such as function signatures, what they do, and their r
     getPurchasedServerCost() <basicfunctions/getPurchasedServerCost>
     purchaseServer() <basicfunctions/purchaseServer>
     deleteServer() <basicfunctions/deleteServer>
+    upgradePurchasedServer() <basicfunctions/upgradePurchasedServer>
     getPurchasedServers() <basicfunctions/getPurchasedServers>
     getPurchasedServerLimit() <basicfunctions/getPurchasedServerLimit>
     getPurchasedServerMaxRam() <basicfunctions/getPurchasedServerMaxRam>
+    getPurchasedServerUpgradeCost() <basicfunctions/getPurchasedServerUpgradeCost>
     scriptRunning() <basicfunctions/scriptRunning>
     scriptKill() <basicfunctions/scriptKill>
     getScriptRam() <basicfunctions/getScriptRam>

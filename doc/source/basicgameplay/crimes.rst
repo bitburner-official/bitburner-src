@@ -24,7 +24,7 @@ Crimes are not always successful. Your rate of success is determined by your
 stats (and Augmentation multipliers) and can be seen on the crime-selection
 page. If you are unsuccessful at committing a crime you will gain EXP,
 but you will not earn money. If you are successful at committing the crime
-you will gain extra EXP (double of what an unsuccessful attempt would give)
+you will gain extra EXP (4x of what an unsuccessful attempt would give)
 and earn money.
 
 Harder crimes are typically more profitable, and also give more EXP.

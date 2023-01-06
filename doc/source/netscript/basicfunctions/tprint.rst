@@ -12,5 +12,5 @@ tprint() Netscript Function
 
     .. code-block:: javascript
 
-        tprint("Hello world!"); // Prints "Hello world!" to the terminal.
-        tprint({a:5}); // Prints '{"a":5}' to the terminal.
+        ns.tprint("Hello world!"); // Prints "Hello world!" to the terminal.
+        ns.tprint({a:5}); // Prints '{"a":5}' to the terminal.

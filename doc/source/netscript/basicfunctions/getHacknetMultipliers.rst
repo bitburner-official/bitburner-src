@@ -22,6 +22,6 @@ getHacknetMultipliers() Netscript Function
 
     .. code-block:: javascript
 
-        mults = getHacknetMultipliers();
-        print(mults.production);
-        print(mults.purchaseCost);
+        const mults = ns.getHacknetMultipliers();
+        ns.print(mults.production);
+        ns.print(mults.purchaseCost);

@@ -10,4 +10,4 @@ getPurchasedServerMaxRam() Netscript Function
 
     .. code-block:: javascript
 
-        getPurchasedServerMaxRam(); // returns: 1048576
+        ns.getPurchasedServerMaxRam(); // returns: 1048576

@@ -11,6 +11,12 @@ hasRootAccess() Netscript Function
 
     .. code-block:: javascript
 
-        if (hasRootAccess("foodnstuff") == false) {
-            nuke("foodnstuff");
+        if (ns.hasRootAccess("foodnstuff") == false) {
+            ns.nuke("foodnstuff");
+        }
+
+    .. code-block:: javascript
+
+        if (ns.hasRootAccess("foodnstuff")) {
+            ns.exec("foo.js", 1, "foodnstuff");
         }

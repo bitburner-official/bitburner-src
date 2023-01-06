@@ -17,8 +17,8 @@ grow() Netscript Function
     Increase the amount of money available on a server. The time it takes to
     execute depends on your hacking level and the target server's security
     level. When :doc:`grow<grow>` completes, the money available on a target
-    server will be increased by a certain, fixed percentage. This percentage is
-    determined by the target server's growth rate (which varies between servers)
+    server will be increased by the number of threads used and a certain, fixed percentage.
+    The percentage is determined by the target server's growth rate (which varies between servers)
     and security level. Generally, higher-level servers have higher growth
     rates.
 
@@ -34,5 +34,5 @@ grow() Netscript Function
     .. code-block:: javascript
 
         while(true) {
-            grow("foodnstuff");
+            await ns.grow("foodnstuff");
         }

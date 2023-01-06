@@ -33,6 +33,6 @@ hack() Netscript Function
 
     .. code-block:: javascript
 
-        hack("foodnstuff");
-        hack("10.1.2.3");
-        hack("foodnstuff", { threads: 5 }); // Only use 5 threads to hack
+        await ns.hack("foodnstuff");
+        await ns.hack("10.1.2.3");
+        await ns.hack("foodnstuff", { threads: 5 }); // Only use 5 threads to hack
