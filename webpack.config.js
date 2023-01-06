@@ -28,8 +28,10 @@ module.exports = (env, argv) => {
   const devServerSettings = {
     hot: true,
     port: 8000,
-    publicPath: `/`,
-    stats: statsConfig,
+    devMiddleware: {
+      publicPath: `/`,
+      stats: statsConfig,
+    },
   };
 
   // By default, the webpack-dev-server is not exposed outside of localhost.
@@ -165,13 +167,10 @@ module.exports = (env, argv) => {
       removeEmptyChunks: true,
       mergeDuplicateChunks: true,
       flagIncludedChunks: true,
-      occurrenceOrder: true,
       sideEffects: true,
       providedExports: true,
       usedExports: true,
       concatenateModules: false,
-      namedModules: false,
-      namedChunks: false,
       minimize: !isDevelopment,
       portableRecords: true,
       splitChunks: {
@@ -191,6 +190,7 @@ module.exports = (env, argv) => {
         "@player": path.resolve(__dirname, "src/Player"),
         "@nsdefs": path.resolve(__dirname, "src/ScriptEditor/NetscriptDefinitions.d.ts"),
       },
+      fallback: { crypto: false },
     },
     stats: statsConfig,
   };
