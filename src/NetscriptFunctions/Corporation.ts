@@ -608,7 +608,18 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const job = helpers.string(ctx, "job", _job);
 
       if (!checkEnum(EmployeePositions, job)) throw new Error(`'${job}' is not a valid job.`);
+      if (amount < 0 || !Number.isInteger(amount))
+        throw helpers.makeRuntimeErrorMsg(
+          ctx,
+          `Invalid value for amount! Must be an integer and greater than or be 0". Amount:'${amount}'`,
+        );
+
       const office = getOffice(divisionName, cityName);
+      if (office.employeeJobs[EmployeePositions.Unassigned] < amount)
+        throw helpers.makeRuntimeErrorMsg(
+          ctx,
+          `Tried to assign more Employees to '${job}' than are unassigned. Amount:'${amount}'`,
+        );
       return AutoAssignJob(office, job, amount);
     },
     hireEmployee: (ctx) => (_divisionName, _cityName, _position?) => {
