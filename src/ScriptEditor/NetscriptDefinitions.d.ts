@@ -4440,7 +4440,7 @@ type UserInterface = {
  *  // Some related functions are gathered within a common namespace
  *  stock.getPrice();
  * ```
- * {@link https://bitburner.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
+ * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
  * <hr>
  * <b>Basic ns2 usage example:</b>
  * ```ts
@@ -4453,7 +4453,7 @@ type UserInterface = {
  *  await ns.hack('n00dles');
  * }
  * ```
- * {@link https://bitburner.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
+ * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
  * <hr>
  */
 export type NS = {
@@ -6304,7 +6304,7 @@ export type NS = {
    *
    * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
    *
-   * @see https://bitburner.readthedocs.io/en/latest/netscript/netscriptmisc.html#netscript-ports
+   * @see https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptmisc.html#netscript-ports
    * @param port - Port number. Must be an integer between 1 and 20.
    */
   getPortHandle(port: number): NetscriptPort;

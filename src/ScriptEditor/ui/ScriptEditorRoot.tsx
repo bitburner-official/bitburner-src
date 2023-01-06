@@ -907,7 +907,7 @@ export function Root(props: IProps): React.ReactElement {
           <Typography>
             {" "}
             <strong>Documentation:</strong>{" "}
-            <Link target="_blank" href="https://bitburner.readthedocs.io/en/latest/index.html">
+            <Link target="_blank" href="https://bitburner-official.readthedocs.io/en/latest/index.html">
               Basic
             </Link>
             {" | "}

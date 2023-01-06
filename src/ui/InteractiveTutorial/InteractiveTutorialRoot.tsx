@@ -527,7 +527,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <br />
           <br />
           The{" "}
-          <a href="https://bitburner.readthedocs.io/en/latest/guidesandtips/gettingstartedguideforbeginnerprogrammers.html">
+          <a href="https://bitburner-official.readthedocs.io/en/latest/guidesandtips/gettingstartedguideforbeginnerprogrammers.html">
             Getting Started
           </a>{" "}
           contains the guide for new players, navigating you through most of early game.

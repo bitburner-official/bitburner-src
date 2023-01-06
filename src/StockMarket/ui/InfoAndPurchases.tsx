@@ -171,7 +171,7 @@ function Purchase4SMarketDataButton(props: IProps): React.ReactElement {
 
 export function InfoAndPurchases(props: IProps): React.ReactElement {
   const [helpOpen, setHelpOpen] = useState(false);
-  const documentationLink = "https://bitburner.readthedocs.io/en/latest/basicgameplay/stockmarket.html";
+  const documentationLink = "https://bitburner-official.readthedocs.io/en/latest/basicgameplay/stockmarket.html";
   return (
     <>
       <Typography>Welcome to the World Stock Exchange (WSE)!</Typography>
