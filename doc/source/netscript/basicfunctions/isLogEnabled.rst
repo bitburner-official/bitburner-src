@@ -11,4 +11,4 @@ isLogEnabled() Netscript Function
 
     .. code-block:: javascript
 
-        isLogEnabled('hack'); // returns: true
+        ns.isLogEnabled('hack'); // returns: true

@@ -2,6 +2,10 @@
 
 Netscript 1.0
 =============
+
+.. note:: Note that NS1/.script is being deprecated, avoid using and migrate
+        scripts to NS2/.js if possible.
+
 Netscript 1.0 is implemented using a modified version of Neil Fraser's
 `JS-Interpreter <https://github.com/NeilFraser/JS-Interpreter>`_.
 

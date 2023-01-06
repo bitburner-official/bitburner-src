@@ -28,11 +28,11 @@ The general logic goes like this:
 
         loop forever {
             if security is not minimum {
-                weaken(target)
+                await ns.weaken(target)
             } else if money is not maximum {
-                grow(target)
+                await ns.grow(target)
             } else {
-                hack(target)
+                await ns.hack(target)
             }
         }
 
@@ -61,7 +61,7 @@ By splitting our hack, weaken, and grow functions into three separate scripts, w
     .. code-block:: javascript
 
         loop forever {
-            hack(target) // or grow, or weaken
+            await ns.hack(target) // or grow, or weaken
         }
 
 Now we can take the total amount of threads available and split it and allocate, for example:
@@ -95,8 +95,8 @@ The scripts used to execute the hacking functions are even simpler than the prev
 
     .. code-block:: javascript
 
-        sleep(a bit)
-        hack(target) // or grow, or weaken
+        await ns.sleep(a bit)
+        await ns.hack(target) // or grow, or weaken
 
 A few things need to be known before this algorithm can be implemented:
 

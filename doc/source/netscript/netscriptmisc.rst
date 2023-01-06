@@ -33,8 +33,12 @@ Let's assume Port 1 starts out empty (no data inside). We'll represent the port 
 
 Now assume we ran the following simple script::
 
-    for (i = 0; i < 10; ++i) {
-        writePort(1, i); //Writes the value of i to port 1
+.. code:: javascript
+
+    export async function main(ns) {
+        for (const i = 0; i < 10; ++i) {
+            ns.writePort(1, i); //Writes the value of i to port 1
+        }
     }
 
 After this script executes, our script will contain every number from 0 through 9, as so::
@@ -43,8 +47,12 @@ After this script executes, our script will contain every number from 0 through 
 
 Then, assume we run the following script::
 
-    for (i = 0; i < 3; ++i) {
-        print(readPort(1)); //Reads a value from port 1 and then prints it
+.. code:: javascript
+
+    export async function main(ns) {
+        for (const i = 0; i < 3; ++i) {
+            ns.print(ns.readPort(1)); //Reads a value from port 1 and then prints it
+        }
     }
 
 This script above will read the first three values from port 1 and then print them to the script's log. The log will end up looking like::
@@ -112,22 +120,25 @@ This handle allows you to access several new port-related functions. The functio
 
 Port Handle Example::
 
-    port = getPortHandle(5);
-    back = port.data.pop(); //Get and remove last element in port
+.. code:: javascript
 
-    //Wait for port data before reading
-    while(port.empty()) {
-        sleep(10000);
+    export async function main(ns) {
+        port = ns.getPortHandle(5);
+        back = port.data.pop(); //Get and remove last element in port
+
+        //Wait for port data before reading
+        while(port.empty()) {
+            await ns.sleep(10000);
+        }
+        res = port.read();
+
+        //Wait for there to be room in a port before writing
+        while (!port.tryWrite(5)) {
+            await ns.sleep(5000);
+        }
+
+        //Successfully wrote to port!
     }
-    res = port.read();
-
-    //Wait for there to be room in a port before writing
-    while (!port.tryWrite(5)) {
-        sleep(5000);
-    }
-
-    //Successfully wrote to port!
-
 
 Comments
 --------
@@ -138,7 +149,7 @@ Comments are not evaluated as code, and can be used to document and/or explain c
     /* Multi
      * line
      * comment */
-    print("This code will actually get executed");
+    ns.print("This code will actually get executed");
 
 .. _netscriptimporting:
 
@@ -152,57 +163,70 @@ There are two ways of doing this::
     import * as namespace from "script filename"; //Import all functions from script
     import {fn1, fn2, ...} from "script filename"; //Import specific functions from script
 
-Suppose you have a library script called *testlibrary.script*::
+Suppose you have a library script called *testlibrary.js*::
 
-    function foo1(args) {
+.. code:: javascript
+
+    export function foo1(args) {
         //function definition...
     }
 
-    function foo2(args) {
+    export function foo2(args) {
         //function definition...
     }
 
-    function foo3(args) {
+    export async function foo3(args) {
         //function definition...
     }
 
-    function foo4(args) {
+    export function foo4(args) {
         //function definition...
+    }
+
+    export async function main(ns) {
+        //main function definition, can be empty but must exist...
     }
 
 Then, if you wanted to use these functions in another script, you can import them like so::
 
-    import * as testlib from "testlibrary.script";
+.. code:: javascript
 
-    values = [1,2,3];
+    import * as testlib from "testlibrary.js";
 
-    //The imported functions must be specified using the namespace
-    someVal1 = testlib.foo3(values);
-    someVal2 = testlib.foo1(values);
-    if (someVal1 > someVal2) {
-        //...
-    } else {
-        //...
+    export async function main(ns) {
+        const values = [1,2,3];
+
+        //The imported functions must be specified using the namespace
+        const someVal1 = await testlib.foo3(...values); //'...' separates the array into separate values
+        const someVal2 = testlib.foo1(values[0]);
+        if (someVal1 > someVal2) {
+            //...
+        } else {
+            //...
+        }
     }
 
 If you only wanted to import certain functions, you can do so without needing
 to specify a namespace for the import::
 
-    import {foo1, foo3} from "testlibrary.script"; //Saves RAM since not all functions are imported!
+.. code:: javascript
 
-    values = [1,2,3];
+    import {foo1, foo3} from "testlibrary.js"; //Saves RAM since not all functions are imported!
 
-    //No namespace needed
-    someVal1 = foo3(values);
-    someVal2 = foo1(values);
-    if (someVal1 > someVal2) {
-        //...
-    } else {
-        //...
+    export async function main(ns) {
+        const values = [1,2,3];
+
+        //No namespace needed
+        const someVal1 = await foo3(...values);
+        const someVal2 = foo1(values[1]);
+        if (someVal1 > someVal2) {
+            //...
+        } else {
+            //...
+        }
     }
 
-.. warning:: For those who are experienced with JavaScript, note that the `export`
-             keyword should **NOT** be used in :ref:`netscript1`, as this will break the script.
+.. warning:: Note that the `export` keyword can **NOT** be used in :ref:`netscript1` as it's not supported.
              It can, however, be used in :ref:`netscriptjs` (but it's not required).
 
 Standard, Built-In JavaScript Objects

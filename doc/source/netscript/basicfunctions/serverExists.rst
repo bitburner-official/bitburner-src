@@ -11,4 +11,4 @@ serverExists() Netscript Function
 
     .. code-block:: javascript
 
-        serverExists("foodnstuff"); // returns: true
+        ns.serverExists("foodnstuff"); // returns: true

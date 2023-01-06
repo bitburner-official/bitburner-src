@@ -1,42 +1,42 @@
 kill() Netscript Function
 =========================
 
-.. js:function:: kill(script, hostname, [args...])
+.. js:function:: kill(script, [hostname=current hostname, [args...]])
 
     :RAM cost: 0.5 GB
     :param string script: Filename of the script to kill.
-    :param string hostname: Hostname of the server on which to kill the script.
+    :param string hostname: Hostname of the server on which to kill the script. 
     :param args...: Arguments to identify which script to kill.
     :returns: ``true`` is that script was killed.
 
     Kills the script on the target server specified by the script's name and
     arguments. Remember that scripts are uniquely identified by both their name
-    and arguments. For example, if ``foo.script`` is run with the argument 1,
-    then this is not the same as ``foo.script`` run with the argument 2, even
+    and arguments. For example, if ``foo.js`` is run with the argument 1,
+    then this is not the same as ``foo.js`` run with the argument 2, even
     though they have the same code.
 
     Examples:
 
-    The following example will try to kill a script named ``foo.script`` on the
+    The following example will try to kill a script named ``foo.js`` on the
     ``foodnstuff`` server that was ran with no arguments:
 
     .. code-block:: javascript
 
-        kill("foo.script", "foodnstuff");
+        ns.kill("foo.js", "foodnstuff");
 
-    The following will try to kill a script named ``foo.script`` on the current
+    The following will try to kill a script named ``foo.js`` on the current
     server that was ran with no arguments:
 
     .. code-block:: javascript
 
-        kill("foo.script", getHostname());
+        ns.kill("foo.js");
 
-    The following will try to kill a script named ``foo.script`` on the current
+    The following will try to kill a script named ``foo.js`` on the current
     server that was ran with the arguments 1 and "foodnstuff":
 
     .. code-block:: javascript
 
-        kill("foo.script", getHostname(), 1, "foodnstuff");
+        ns.kill("foo.js", ns.getHostname(), 1, "foodnstuff");
 
 .. js:function:: kill(scriptPid)
 
@@ -53,6 +53,6 @@ kill() Netscript Function
 
     .. code-block:: javascript
 
-        if (kill(10)) {
-            print("Killed script with PID 10!");
+        if (ns.kill(10)) {
+            ns.print("Killed script with PID 10!");
         }

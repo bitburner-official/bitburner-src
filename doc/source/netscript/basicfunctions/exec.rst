@@ -24,17 +24,17 @@ exec() Netscript Function
 
     The simplest way to use the :doc:`exec<exec>` command is to call it with
     just the script name and the target server. The following example will try
-    to run ``generic-hack.script`` on the ``foodnstuff`` server::
+    to run ``generic-hack.js`` on the ``foodnstuff`` server::
 
-        exec("generic-hack.script", "foodnstuff");
+        ns.exec("generic-hack.js", "foodnstuff");
 
-    The following example will try to run the script ``generic-hack.script`` on
+    The following example will try to run the script ``generic-hack.js`` on
     the ``joesguns`` server with 10 threads::
 
-        exec("generic-hack.script", "joesguns", 10);
+        ns.exec("generic-hack.js", "joesguns", 10);
 
-    This last example will try to run the script ``foo.script`` on the
+    This last example will try to run the script ``foo.js`` on the
     ``foodnstuff`` server with 5 threads. It will also pass the number 1 and the
     string "test" in as arguments to the script::
 
-        exec("foo.script", "foodnstuff", 5, 1, "test");
+        ns.exec("foo.js", "foodnstuff", 5, 1, "test");

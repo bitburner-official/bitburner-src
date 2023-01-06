@@ -23,11 +23,11 @@ scp() Netscript Function
     .. code-block:: javascript
 
         //Copies "hack-template.script" from the current server to "foodnstuff"
-        scp("hack-template.script", "foodnstuff"); // returns: true
+        ns.scp("hack-template.script", "foodnstuff"); // returns: true
 
         //Copies "foo.lit" from the helios server to the "home" computer
-        scp("foo.lit", "home", "helios"); // returns: true
+        ns.scp("foo.lit", "home", "helios"); // returns: true
 
         //Tries to copy three files from "rothman-uni" to "home" computer
-        files = ["foo1.lit", "foo2.script", "foo3.script"];
-        scp(files, "home", "rothman-uni"); // returns: true
+        const files = ["foo1.lit", "foo2.script", "foo3.script"];
+        ns.scp(files, "home", "rothman-uni"); // returns: true

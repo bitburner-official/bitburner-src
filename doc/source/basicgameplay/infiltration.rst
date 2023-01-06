@@ -33,11 +33,11 @@ infiltration will immediately end.
 
 ** Slash when his guard is down! **
 
-Press space when the guard is attacking you.
-There's 3 phase
+Press space when the guard is preparing to attack you.
+There's 3 phases
 The first is guarding, where attacking back will result in failure.
-The 2nd is preparing, this informs you that in 250ms there will be an opening window to attack.
-The 3rd is attack, during this phase you can press space to slash and kill the enemy.
+The 2nd is preparing, where attacking will result in a victory.
+The 3rd is attack, where the guard will attack you resulting in failure.
 
 ** Close the brackets **
 

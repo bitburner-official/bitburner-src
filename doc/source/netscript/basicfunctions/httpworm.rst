@@ -13,4 +13,4 @@ httpworm() Netscript Function
 
     .. code-block:: javascript
 
-        httpworm("foodnstuff");
+        ns.httpworm("foodnstuff");

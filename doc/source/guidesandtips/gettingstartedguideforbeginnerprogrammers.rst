@@ -34,7 +34,7 @@ to do this:
 
 1. You can go to the Terminal and enter::
 
-    $ kill n00dles.script
+    $ kill n00dles.js
 
 2. You can go to the :code:`Active Scripts` page (|Keyboard shortcut| Alt + s) and
    press the "Kill Script" button for :code:`n00dles.js`.
@@ -413,6 +413,7 @@ Create the script by going to |Terminal| and typing::
 Paste the following code into the script editor:
 
 .. code:: javascript
+    
     /** @param {NS} ns */
     export async function main(ns) {
         // How much RAM each purchased server will have. In this case, it'll
@@ -433,8 +434,8 @@ Paste the following code into the script editor:
                 //  3. Run our hacking script on the newly-purchased server with 3 threads
                 //  4. Increment our iterator to indicate that we've bought a new server
                 let hostname = ns.purchaseServer("pserv-" + i, ram);
-                ns.scp("early-hack-template.script", hostname);
-                ns.exec("early-hack-template.script", hostname, 3);
+                ns.scp("early-hack-template.js", hostname);
+                ns.exec("early-hack-template.js", hostname, 3);
                 ++i;
             }
             //Make the script wait for a second before looping again.
@@ -838,9 +839,9 @@ startup script. Feel free to adjust it to your liking.
         for (let i = 0; i < servers0Port.length; ++i) {
             const serv = servers0Port[i];
 
-            ns.scp("early-hack-template.script", serv);
+            ns.scp("early-hack-template.js", serv);
             ns.nuke(serv);
-            ns.exec("early-hack-template.script", serv, 6);
+            ns.exec("early-hack-template.js", serv, 6);
         }
 
         // Wait until we acquire the "BruteSSH.exe" program
@@ -854,10 +855,10 @@ startup script. Feel free to adjust it to your liking.
         for (let i = 0; i < servers1Port.length; ++i) {
             const serv = servers1Port[i];
 
-            ns.scp("early-hack-template.script", serv);
+            ns.scp("early-hack-template.js", serv);
             ns.brutessh(serv);
             ns.nuke(serv);
-            ns.exec("early-hack-template.script", serv, 12);
+            ns.exec("early-hack-template.sj", serv, 12);
         }
     }
 Random Tips

@@ -33,7 +33,7 @@ In order to create a directory, simply name a file using a full absolute Linux-s
 This will automatically create a "directory" called :code:`scripts`. This will also work
 for subdirectories::
 
-    /scripts/hacking/helpers/myHelperScripts.script
+    /scripts/hacking/helpers/myHelperScripts.js
 
 Files in the root directory do not need to begin with a forward slash::
 
@@ -72,9 +72,9 @@ Note that in order to reference a file, :ref:`netscript` functions require the
 
 .. code:: javascript
 
-    run("/scripts/hacking/helpers.myHelperScripts.script");
-    rm("/logs/myHackingLogs.txt");
-    rm("thisIsAFileInTheRootDirectory.txt");
+    ns.run("/scripts/hacking/helpers.myHelperScripts.js");
+    ns.rm("/logs/myHackingLogs.txt");
+    ns.rm("thisIsAFileInTheRootDirectory.txt");
 
 .. note:: A full file path **must** begin with a forward slash (/) if that file
           is not in the root directory.
@@ -150,12 +150,16 @@ This can pass faction tests or give bonsues such as discounts from companies.
 buy
 ^^^
 
-    $ buy [-l/program]
+    $ buy [-l/-a/program]
 
 Purchase a program through the Dark Web. Requires a TOR Router to use.
 
 If this command is ran with the '-l' flag, it will display a list of all programs
 that can be purchased through the Dark Web, as well as their costs.
+
+If this command is ran with the '-a' flag, it will attempt to buy all programs 
+that can be purchased through the Dark Web and if the player can't afford all of them
+none will be bought.
 
 Otherwise, the name of the program must be passed in as a parameter. This name
 is NOT case-sensitive::
@@ -205,11 +209,11 @@ Each argument must be separated by a space.
 **Remember that a running script is uniquely identified both by its name and the arguments that are used to start it**. So,
 if a script was ran with the following arguments::
 
-    $ run foo.script 1 2 foodnstuff
+    $ run foo.js 1 2 foodnstuff
 
 Then to run the 'check' command on this script you would have to pass the same arguments in::
 
-    $ check foo.script 1 2 foodnstuff
+    $ check foo.js 1 2 foodnstuff
 
 clear/cls
 ^^^^^^^^^
@@ -275,7 +279,7 @@ hack
 
 Attempt to hack the current server. Requires root access in order to be run.
 
-Related: Hacking Mechanics (TODO Add link here when page gets made)
+Related: Hacking Mechanics :ref:`hacking`
 
 help
 ^^^^
@@ -302,29 +306,27 @@ hostname
 
 Prints the hostname of the server you are currently connected to.
 
-ifconfig
-^^^^^^^^
-
-Prints the IP address of the server you are currently connected to.
-
 kill
 ^^^^
 
     $ kill [script name] [args...]
     $ kill [pid]
 
-Kill the script specified by the script filename and arguments OR by its PID.
+Kill the script specified by the script filename and arguments OR by its PID. If 
+filename and arguments are used the kill is server-specific, so if you're connected 
+to home and want to kill a script running on n00dles, you have to either use it's PID 
+or :code:`connect` to n00dles first and then use the the kill command.
 
 If you are killing the script using its filename and arguments, then each argument
 must be separated by a space. Remember that a running script is uniquely identified
 by both its name and the arguments that are used to start it. So, if a script
 was ran with the following arguments::
 
-    $ run foo.script 50e3 sigma-cosmetics
+    $ run foo.js 50e3 sigma-cosmetics
 
 Then to kill this script the same arguments would have to be used::
 
-    $ kill foo.script 50e3 sigma-cosmetics
+    $ kill foo.js 50e3 sigma-cosmetics
 
 If you are killing the script using its PID, then the PID argument must be numeric.
 
@@ -362,7 +364,7 @@ Examples::
     // List files/directories with the '.js' extension in the root directory
     $ ls / -l --grep .js
 
-    // List files/directories with the word 'purchase' in the name, in the :code:`scripts` directory
+    // List files/directories with the word 'purchase' in the name, in the 'scripts' directory
     $ ls scripts -l --grep purchase
 
 
@@ -384,12 +386,12 @@ a script with multiple threads using the '-t' flag. If the '-t' flag is
 specified, then an argument for the number of threads must be passed in
 afterwards. Examples::
 
-    $ mem foo.script
-    $ mem foo.script -t 50
+    $ mem foo.js
+    $ mem foo.js -t 50
 
-The first example above will print the amount of RAM needed to run 'foo.script'
+The first example above will print the amount of RAM needed to run 'foo.js'
 with a single thread. The second example above will print the amount of RAM needed
-to run 'foo.script' with 50 threads.
+to run 'foo.js' with 50 threads.
 
 .. _mv_terminal_command:
 
@@ -467,9 +469,9 @@ Run a program::
 
     $ run BruteSSH.exe
 
-Run *foo.script* with 50 threads and the arguments [1e3, 0.5, foodnstuff]::
+Run *foo.js* with 50 threads and the arguments [1e3, 0.5, foodnstuff]::
 
-    $ run foo.script -t 50 1e3 0.5 foodnstuff
+    $ run foo.js -t 50 1e3 0.5 foodnstuff
 
 Run a Coding Contract::
 
@@ -500,7 +502,26 @@ execute 'scan-analyze' with a depth up to 5 and 10, respectively.
 
 The information 'scan-analyze' displays about each server includes whether or
 not you have root access to it, its required hacking level, the number of open
-ports required to run NUKE.exe on it, and how much RAM it has.
+ports required to run NUKE.exe on it, and how much RAM it has. When used the 
+information is structured like:
+
+    n00dles
+    --Root Access: YES, Required hacking skill: 1
+    --Number of open ports required to NUKE: 0
+    --RAM: 4.00GB
+
+    ----zer0
+    ------Root Access: NO, Required hacking skill: 75
+    ------Number of open ports required to NUKE: 1
+    ------RAM: 32.00GB
+
+    foodnstuff
+    --Root Access: NO, Required hacking skill: 1
+    --Number of open ports required to NUKE: 0
+    --RAM: 16.00GB
+
+In this case :code:`n00dles` and :code:`foodnstuff` are connected to the current server
+and :code:`zer0` is connected to :code:`n00dles`.
 
 .. _scp_terminal_command:
 
@@ -529,11 +550,11 @@ Each argument must be separated by a space. Remember that a running script is
 uniquely identified by both its name and the arguments that were used to run
 it. So, if a script was ran with the following arguments::
 
-    $ run foo.script 10 50000
+    $ run foo.js 10 50000
 
 Then in order to check its logs with 'tail' the same arguments must be used::
 
-    $ tail foo.script 10 50000
+    $ tail foo.js 10 50000
 
 top
 ^^^
@@ -590,26 +611,28 @@ There are two main points:
 2. Anything that can represent a number is automatically cast to a number, unless its
    surrounded by quotation marks.
 
-Here's an example to show how these rules work. Consider the following script `argType.script`::
-
-    tprint("Number of args: " + args.length);
-    for (var i = 0; i < args.length; ++i) {
-        tprint(typeof args[i]);
+Here's an example to show how these rules work. Consider the following script `argType.js`::
+    
+    export async function main(ns) {
+        ns.tprint("Number of args: " + args.length);
+        for (var i = 0; i < ns.args.length; ++i) {
+            ns.tprint(typeof ns.args[i]);
+        }
     }
 
 Then if we run the following terminal command::
 
-    $ run argType.script 123 1e3 "5" "this is a single argument"
+    $ run argType.js 123 1e3 "5" "this is a single argument"
 
 We'll see the following in the Terminal::
 
     Running script with 1 thread(s) and args: [123, 1000, "5", "this is a single argument"].
     May take a few seconds to start up the process...
-    argType.script: Number of args: 4
-    argType.script: number
-    argType.script: number
-    argType.script: string
-    argType.script: string
+    argType.js: Number of args: 4
+    argType.js: number
+    argType.js: number
+    argType.js: string
+    argType.js: string
 
 Chaining Commands
 -----------------
@@ -618,4 +641,4 @@ with a semicolon (;).
 
 Example::
 
-    $ run foo.script; tail foo.script
+    $ run foo.js; tail foo.js

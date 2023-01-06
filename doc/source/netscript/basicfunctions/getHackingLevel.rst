@@ -10,4 +10,4 @@ getHackingLevel() Netscript Function
 
     .. code-block:: javascript
 
-        getHackingLevel(); // returns: 124
+        ns.getHackingLevel(); // returns: 124

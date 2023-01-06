@@ -11,5 +11,5 @@ getServerMaxRam() Netscript Function
 
     .. code-block:: javascript
 
-        maxRam = getServerMaxRam("helios"); // returns: 16
-        print("helios has "+maxRam + "GB");
+        const maxRam = ns.getServerMaxRam("helios"); // returns: 16
+        ns.print("helios has "+maxRam + "GB");
