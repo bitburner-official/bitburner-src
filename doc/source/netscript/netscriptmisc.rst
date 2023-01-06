@@ -9,7 +9,7 @@ Netscript Ports
 ---------------
 Netscript Ports are endpoints that can be used to communicate between scripts.
 A port is implemented as a sort of serialized queue, where you can only write
-and read one element at a time from the port. When you read data from a port,
+and read one element at a time from the port. Only string and number types may be written to ports. When you read data from a port,
 the element that is read is removed from the port.
 
 The :js:func:`read`, :js:func:`write`, :js:func:`tryWrite`, :js:func:`clear`, and :js:func:`peek`
@@ -17,9 +17,10 @@ Netscript functions can be used to interact with ports.
 
 Right now, there are only 20 ports for Netscript, denoted by the number 1
 through 20. When using the functions above, the ports are specified
-by passing the number as the first argument.
+by passing the number as the first argument and the value as the second. 
+The default maximum capacity of a port is 50, but this can be changed in Options > System. Setting this too high can cause the game to use a lot of memory. 
 
-IMPORTANT: The data inside ports are not saved! This means if you close and
+.. important:: The data inside ports are not saved! This means if you close and
 re-open the game, or reload the page then you will lose all of the data in
 the ports!
 
@@ -31,7 +32,9 @@ Let's assume Port 1 starts out empty (no data inside). We'll represent the port 
 
     []
 
-Now assume we ran the following simple script::
+Now assume we ran the following simple script
+
+.. code-block:: js
 
 .. code:: javascript
 
@@ -45,7 +48,9 @@ After this script executes, our script will contain every number from 0 through 
 
     [0, 1, 2, 3, 4, 5, 6, 7 , 8, 9]
 
-Then, assume we run the following script::
+Then, assume we run the following script
+
+.. code-block:: js
 
 .. code:: javascript
 
@@ -65,13 +70,13 @@ And the data in port 1 will look like::
 
     [3, 4, 5, 6, 7, 8, 9]
 
-.. warning:: In :ref:`netscriptjs`, do not trying writing base
+.. warning:: In :ref:`netscriptjs`, do not try writing base
              `Promises <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise>`_
              to a port.
 
 **Port Handles**
 
-WARNING: Port Handles only work in :ref:`netscriptjs`. They do not work in :ref:`netscript1`
+.. warning:: Port Handles only work in :ref:`netscriptjs`. They do not work in :ref:`netscript1`
 
 The :js:func:`getPortHandle` Netscript function can be used to get a handle to a Netscript Port.
 This handle allows you to access several new port-related functions. The functions are:
@@ -118,7 +123,9 @@ This handle allows you to access several new port-related functions. The functio
 
     Clears all data from the port. Works the same as the Netscript function `clear`
 
-Port Handle Example::
+Port Handle Example
+
+.. code-block:: js
 
 .. code:: javascript
 
@@ -165,6 +172,7 @@ There are two ways of doing this::
 
 Suppose you have a library script called *testlibrary.js*::
 
+
 .. code:: javascript
 
     export function foo1(args) {
@@ -207,7 +215,9 @@ Then, if you wanted to use these functions in another script, you can import the
     }
 
 If you only wanted to import certain functions, you can do so without needing
-to specify a namespace for the import::
+to specify a namespace for the import
+
+.. code-block:: js
 
 .. code:: javascript
 
