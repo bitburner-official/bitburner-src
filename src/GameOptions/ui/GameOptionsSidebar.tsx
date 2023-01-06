@@ -251,7 +251,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           </Button>
           <Button
             startIcon={<SystemUpdateAlt />}
-            href="https://bitburner.readthedocs.io/en/latest/changelog.html"
+            href="https://bitburner-official.readthedocs.io/en/latest/changelog.html"
             target="_blank"
             sx={{ gridArea: " changelog" }}
           >
@@ -259,7 +259,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           </Button>
           <Button
             startIcon={<LibraryBooks />}
-            href="https://bitburner.readthedocs.io/en/latest/index.html"
+            href="https://bitburner-official.readthedocs.io/en/latest/index.html"
             target="_blank"
             sx={{ gridArea: "docs" }}
           >

@@ -15,6 +15,8 @@ argument will be a number. This generic script will run the
 script specified in the first argument with the amount of threads
 specified in the second argument. The code would look like::
 
+.. code:: javascript
+
     run(args[0], args[1]);
 
 And it could be ran from the terminal like:
@@ -23,9 +25,11 @@ And it could be ran from the terminal like:
 
 In .js / ns2, the above script would look like::
 
-    export async function main(ns) {
-      ns.run(ns.args[0], ns.args[1]);
-    }
+.. code:: javascript
+
+      export async function main(ns) {
+        ns.run(ns.args[0], ns.args[1]);
+      }
 
 It is also possible to get the number of arguments that were passed
 into a script using ``args.length``.

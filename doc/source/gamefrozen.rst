@@ -8,7 +8,7 @@ If your game is frozen or stuck in any way, then the most likely culprit is an
 infinitely running loop in :ref:`netscriptjs`. To get past the freezing, run the game with
 `?noScripts` in the URL:
 
-`https://danielyxie.github.io/bitburner/?noScripts <https://danielyxie.github.io/bitburner/?noScripts>`_
+`https://bitburner-official.github.io/bitburner/?noScripts <https://bitburner-official.github.io/bitburner/?noScripts>`_
 
 Then, to fix your script, make sure you have a sleep or any other timed function like `hack()` or
 `grow()` in any infinite loops::

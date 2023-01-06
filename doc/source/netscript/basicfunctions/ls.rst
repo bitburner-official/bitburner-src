@@ -12,4 +12,6 @@ ls() Netscript Function
 
     .. code-block:: javascript
 
-        ls("home"); // returns: ["demo.script", "msg1.txt"]
+        ns.ls("home"); // returns: ["demo.js", "msg1.txt"]
+        ns.ls("home", ".txt"); // returns: ["msg1.txt"]
+        ns.ls("home", ".script"); // returns: []

@@ -12,4 +12,4 @@ getServerNumPortsRequired() Netscript Function
 
     .. code-block:: javascript
 
-        getServerNumPortsRequired("unitalife"); // returns: 4
+        ns.getServerNumPortsRequired("unitalife"); // returns: 4

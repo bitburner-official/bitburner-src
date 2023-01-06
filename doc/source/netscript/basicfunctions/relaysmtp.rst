@@ -13,4 +13,4 @@ relaysmtp() Netscript Function
 
     .. code-block:: javascript
 
-        relaysmtp("foodnstuff");
+        ns.relaysmtp("foodnstuff");

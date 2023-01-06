@@ -78,11 +78,11 @@ with scripts:
 Prints the logs of the script specified by the name and arguments to
 Terminal. Arguments should be separated by a space. Remember that scripts
 are uniquely identified by their arguments as well as their name. For
-example, if you ran a script `foo.script` with the argument `foodnstuff`
+example, if you ran a script `foo.hs` with the argument `foodnstuff`
 then in order to 'check' it you must also add the `foodnstuff` argument
 to the check command::
 
-    $ check foo.script foodnstuff
+    $ check foo.js foodnstuff
 
 **free**
 
@@ -93,11 +93,11 @@ Shows the current server's RAM usage and availability
 Stops a script that is running with the specified script name and
 arguments. Arguments should be separated by a space. Remember that
 scripts are uniquely identified by their arguments as well as
-their name. For example, if you ran a script `foo.script` with
-the argument 1 and 2, then just typing "`kill foo.script`" will
+their name. For example, if you ran a script `foo.js` with
+the argument 1 and 2, then just typing "`kill foo.js`" will
 not work. You have to use::
 
-    $ kill foo.script 1 2
+    $ kill foo.js 1 2
 
 **mem [script] [-t] [n]**
 
@@ -125,26 +125,30 @@ with no arguments.
 
 Examples:
 
-Run 'foo.script' single-threaded with no arguments::
+Run 'foo.js' single-threaded with no arguments::
 
-    $ run foo.script
+    $ run foo.js
 
-Run 'foo.script' with 10 threads and no arguments::
+Run 'foo.js' with 10 threads and no arguments::
 
-    $ run foo.script -t 10
+    $ run foo.js -t 10
 
-Run 'foo.script' single-threaded with three arguments: [foodnstuff, sigma-cosmetics, 10]::
+Run 'foo.js' single-threaded with three arguments: [foodnstuff, sigma-cosmetics, 10]::
 
-    $ run foo.script foodnstuff sigma-cosmetics 10
+    $ run foo.js foodnstuff sigma-cosmetics 10
 
-Run 'foo.script' with 50 threads and a single argument: [foodnstuff]::
+Run 'foo.js' with 50 threads and a single argument: [foodnstuff]::
 
-    $ run foo.script -t 50 foodnstuff
+    $ run foo.js -t 50 foodnstuff
 
 
 **tail [script] [args...]**
 
-Displays the logs of the script specified by the name and arguments. Note that scripts are uniquely identified by their arguments as well as their name. For example, if you ran a script 'foo.script' with the argument 'foodnstuff' then in order to 'tail' it you must also add the 'foodnstuff' argument to the tail command as so:  tail foo.script foodnstuff
+Displays the logs of the script specified by the name and arguments. Note that scripts
+ are uniquely identified by their arguments as well as their name. For example, if you 
+ ran a script 'foo.js' with the argument 'foodnstuff' then in order to 'tail' it you 
+ must also add the 'foodnstuff' argument to the tail command as so:  tail foo.js 
+ foodnstuff
 
 **top**
 

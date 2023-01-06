@@ -11,4 +11,4 @@ getServerRequiredHackingLevel() Netscript Function
 
     .. code-block:: javascript
 
-        getServerRequiredHackingLevel("foodnstuff"); // returns: 5
+        ns.getServerRequiredHackingLevel("foodnstuff"); // returns: 5

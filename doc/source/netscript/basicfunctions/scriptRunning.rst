@@ -16,15 +16,15 @@ scriptRunning() Netscript Function
     Examples:
 
     The example below will return true if there is any script named
-    ``foo.script`` running on the ``foodnstuff`` server, and false otherwise:
+    ``foo.js`` running on the ``foodnstuff`` server, and false otherwise:
 
     .. code-block:: javascript
 
-        scriptRunning("foo.script", "foodnstuff");
+        ns.scriptRunning("foo.js", "foodnstuff");
 
     The example below will return true if there is any script named
-    ``foo.script`` running on the current server, and false otherwise:
+    ``foo.js`` running on the current server, and false otherwise:
 
     .. code-block:: javascript
 
-        scriptRunning("foo.script", getHostname());
+        ns.scriptRunning("foo.js", ns.getHostname());

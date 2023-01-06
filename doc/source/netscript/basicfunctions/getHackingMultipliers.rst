@@ -21,6 +21,6 @@ getHackingMultipliers() Netscript Function
 
     .. code-block:: javascript
 
-        mults = getHackingMultipliers();
-        print(mults.chance);
-        print(mults.growth);
+        const mults = ns.getHackingMultipliers();
+        ns.print(mults.chance);
+        ns.print(mults.growth);

@@ -11,4 +11,4 @@ getServerMaxMoney() Netscript Function
 
     .. code-block:: javascript
 
-        getServerMaxMoney('foodnstuff'); // returns: 50000000
+        ns.getServerMaxMoney('foodnstuff'); // returns: 50000000

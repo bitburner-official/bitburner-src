@@ -13,4 +13,4 @@ sqlinject() Netscript Function
 
     .. code-block:: javascript
 
-        sqlinject("foodnstuff");
+        ns.sqlinject("foodnstuff");
