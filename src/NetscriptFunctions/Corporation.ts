@@ -614,7 +614,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx, 8);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
-      const position = _position ? helpers.string(ctx, "position", _position) : EmployeePositions.Unassigned;
+      const position = _position ? helpers.string(ctx, "position", _position) : "Unassigned";
       if (!EmployeePositions.has(position)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: ${position}`);
       }

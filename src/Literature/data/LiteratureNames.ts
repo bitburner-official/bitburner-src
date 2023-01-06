@@ -1,4 +1,4 @@
-import { buildEnum } from "../../utils/helpers/enum";
+import { buildObjectEnum } from "../../utils/helpers/enum";
 
 const literatureNames = {
   HackersStartingHandbook: "hackers-starting-handbook.lit",
@@ -25,4 +25,4 @@ const literatureNames = {
 } as const;
 
 export type LiteratureName = typeof literatureNames[keyof typeof literatureNames];
-export const LiteratureNames = buildEnum<typeof literatureNames, LiteratureName>(literatureNames);
+export const LiteratureNames = buildObjectEnum<typeof literatureNames, LiteratureName>(literatureNames);

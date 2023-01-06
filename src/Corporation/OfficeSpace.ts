@@ -1,4 +1,4 @@
-import { EmployeePosition, EmployeePositions } from "./data/Enums";
+import { EmployeePosition } from "./data/Enums";
 import * as corpConstants from "./data/Constants";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { Industry } from "./Industry";
@@ -38,32 +38,32 @@ export class OfficeSpace {
   partyMult = 1;
 
   employeeProd: Record<EmployeePosition | "total", number> = {
-    [EmployeePositions.Operations]: 0,
-    [EmployeePositions.Engineer]: 0,
-    [EmployeePositions.Business]: 0,
-    [EmployeePositions.Management]: 0,
-    [EmployeePositions.RandD]: 0,
-    [EmployeePositions.Training]: 0,
-    [EmployeePositions.Unassigned]: 0,
+    Operations: 0,
+    Engineer: 0,
+    Business: 0,
+    Management: 0,
+    "Research & Development": 0,
+    Training: 0,
+    Unassigned: 0,
     total: 0,
   };
   employeeJobs: Record<EmployeePosition, number> = {
-    [EmployeePositions.Operations]: 0,
-    [EmployeePositions.Engineer]: 0,
-    [EmployeePositions.Business]: 0,
-    [EmployeePositions.Management]: 0,
-    [EmployeePositions.RandD]: 0,
-    [EmployeePositions.Training]: 0,
-    [EmployeePositions.Unassigned]: 0,
+    Operations: 0,
+    Engineer: 0,
+    Business: 0,
+    Management: 0,
+    "Research & Development": 0,
+    Training: 0,
+    Unassigned: 0,
   };
   employeeNextJobs: Record<EmployeePosition, number> = {
-    [EmployeePositions.Operations]: 0,
-    [EmployeePositions.Engineer]: 0,
-    [EmployeePositions.Business]: 0,
-    [EmployeePositions.Management]: 0,
-    [EmployeePositions.RandD]: 0,
-    [EmployeePositions.Training]: 0,
-    [EmployeePositions.Unassigned]: 0,
+    Operations: 0,
+    Engineer: 0,
+    Business: 0,
+    Management: 0,
+    "Research & Development": 0,
+    Training: 0,
+    Unassigned: 0,
   };
 
   constructor(params: IParams = {}) {
@@ -78,9 +78,7 @@ export class OfficeSpace {
   process(marketCycles = 1, corporation: Corporation, industry: Industry): number {
     // HRBuddy AutoRecruitment and training
     if (industry.hasResearch("HRBuddy-Recruitment") && !this.atCapacity()) {
-      this.hireRandomEmployee(
-        industry.hasResearch("HRBuddy-Training") ? EmployeePositions.Training : EmployeePositions.Unassigned,
-      );
+      this.hireRandomEmployee(industry.hasResearch("HRBuddy-Training") ? "Training" : "Unassigned");
     }
 
     // Update employee jobs and job counts
@@ -147,11 +145,7 @@ export class OfficeSpace {
 
     // Get experience increase; unassigned employees do not contribute, employees in training contribute 5x
     this.totalExp +=
-      0.0015 *
-      marketCycles *
-      (this.totalEmployees -
-        this.employeeJobs[EmployeePositions.Unassigned] +
-        this.employeeJobs[EmployeePositions.Training] * 4);
+      0.0015 * marketCycles * (this.totalEmployees - this.employeeJobs.Unassigned + this.employeeJobs.Training * 4);
 
     this.calculateEmployeeProductivity(corporation, industry);
     if (this.totalEmployees === 0) {
@@ -178,23 +172,23 @@ export class OfficeSpace {
     for (const name of Object.keys(this.employeeProd) as (EmployeePosition | "total")[]) {
       let prodMult = 0;
       switch (name) {
-        case EmployeePositions.Operations:
+        case "Operations":
           prodMult = 0.6 * effInt + 0.1 * effCha + exp + 0.5 * effCre + effEff;
           break;
-        case EmployeePositions.Engineer:
+        case "Engineer":
           prodMult = effInt + 0.1 * effCha + 1.5 * exp + effEff;
           break;
-        case EmployeePositions.Business:
+        case "Business":
           prodMult = 0.4 * effInt + effCha + 0.5 * exp;
           break;
-        case EmployeePositions.Management:
+        case "Management":
           prodMult = 2 * effCha + exp + 0.2 * effCre + 0.7 * effEff;
           break;
-        case EmployeePositions.RandD:
+        case "Research & Development":
           prodMult = 1.5 * effInt + 0.8 * exp + effCre + 0.5 * effEff;
           break;
-        case EmployeePositions.Unassigned:
-        case EmployeePositions.Training:
+        case "Unassigned":
+        case "Training":
         case "total":
           continue;
         default:
@@ -234,9 +228,9 @@ export class OfficeSpace {
 
     if (diff === 0) {
       return true;
-    } else if (diff <= this.employeeNextJobs[EmployeePositions.Unassigned]) {
+    } else if (diff <= this.employeeNextJobs.Unassigned) {
       // This covers both a negative diff (reducing the amount of employees in position) and a positive (increasing and using up unassigned employees)
-      this.employeeNextJobs[EmployeePositions.Unassigned] -= diff;
+      this.employeeNextJobs["Unassigned"] -= diff;
       this.employeeNextJobs[job] = target;
       return true;
     }

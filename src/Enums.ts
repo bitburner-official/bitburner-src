@@ -1,4 +1,4 @@
-import { buildEnum } from "./utils/helpers/enum";
+import { buildObjectEnum } from "./utils/helpers/enum";
 
 /** Job for company work */
 const jobNames = {
@@ -43,7 +43,7 @@ const jobNames = {
 } as const;
 
 export type JobName = typeof jobNames[keyof typeof jobNames];
-export const JobNames = buildEnum<typeof jobNames, JobName>(jobNames);
+export const JobNames = buildObjectEnum<typeof jobNames, JobName>(jobNames);
 
 /** Crime names */
 const crimeType = {
@@ -62,7 +62,7 @@ const crimeType = {
 } as const;
 
 export type CrimeType = typeof crimeType[keyof typeof crimeType];
-export const CrimeTypes = buildEnum<typeof crimeType, CrimeType>(crimeType);
+export const CrimeTypes = buildObjectEnum<typeof crimeType, CrimeType>(crimeType);
 
 const factionWorkType = {
   hacking: "hacking",
@@ -71,7 +71,7 @@ const factionWorkType = {
 } as const;
 
 export type FactionWorkType = typeof factionWorkType[keyof typeof factionWorkType];
-export const FactionWorkTypes = buildEnum<typeof factionWorkType, FactionWorkType>(factionWorkType);
+export const FactionWorkTypes = buildObjectEnum<typeof factionWorkType, FactionWorkType>(factionWorkType);
 
 const universityClassType = {
   computerScience: "Computer Science",
@@ -83,7 +83,9 @@ const universityClassType = {
 } as const;
 
 export type UniversityClassType = typeof universityClassType[keyof typeof universityClassType];
-export const UniversityClassTypes = buildEnum<typeof universityClassType, UniversityClassType>(universityClassType);
+export const UniversityClassTypes = buildObjectEnum<typeof universityClassType, UniversityClassType>(
+  universityClassType,
+);
 
 //Uses skill short codes to allow easier fuzzy matching with player input
 const gymType = {
@@ -94,7 +96,7 @@ const gymType = {
 } as const;
 
 export type GymType = typeof gymType[keyof typeof gymType];
-export const GymTypes = buildEnum<typeof gymType, GymType>(gymType);
+export const GymTypes = buildObjectEnum<typeof gymType, GymType>(gymType);
 
 /** Names of all cities */
 const cityName = {
@@ -107,7 +109,7 @@ const cityName = {
 } as const;
 
 export type CityName = typeof cityName[keyof typeof cityName];
-export const CityNames = buildEnum<typeof cityName, CityName>(cityName);
+export const CityNames = buildObjectEnum<typeof cityName, CityName>(cityName);
 
 /** Names of all locations */
 const locationName = {
@@ -177,4 +179,4 @@ const locationName = {
 } as const;
 
 export type LocationName = typeof locationName[keyof typeof locationName];
-export const LocationNames = buildEnum<typeof locationName, LocationName>(locationName);
+export const LocationNames = buildObjectEnum<typeof locationName, LocationName>(locationName);

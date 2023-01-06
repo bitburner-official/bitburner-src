@@ -11,7 +11,7 @@ import { Settings } from "../Settings/Settings";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { FactionNames } from "../Faction/data/FactionNames";
 import { Server } from "../Server/Server";
-import { buildEnum } from "../utils/helpers/enum";
+import { buildObjectEnum } from "../utils/helpers/enum";
 
 //Sends message to player, including a pop up
 function sendMessage(msg: Message, forced = false): void {
@@ -125,7 +125,7 @@ const messageFilenames = {
 } as const;
 
 export type MessageFilename = typeof messageFilenames[keyof typeof messageFilenames];
-export const MessageFilenames = buildEnum<typeof messageFilenames, MessageFilename>(messageFilenames);
+export const MessageFilenames = buildObjectEnum<typeof messageFilenames, MessageFilename>(messageFilenames);
 
 //Reset
 const Messages: Record<MessageFilename, Message> = {

@@ -1,4 +1,4 @@
-import { buildEnum } from "../../utils/helpers/enum";
+import { buildObjectEnum, ListEnum } from "../../utils/helpers/enum";
 
 const industryType = {
   Energy: "Energy",
@@ -18,17 +18,23 @@ const industryType = {
 } as const;
 
 export type IndustryType = typeof industryType[keyof typeof industryType];
-export const IndustryTypes = buildEnum<typeof industryType, IndustryType>(industryType);
+export const IndustryTypes = buildObjectEnum<typeof industryType, IndustryType>(industryType);
 
-const employeePositions = {
-  Operations: "Operations",
-  Engineer: "Engineer",
-  Business: "Business",
-  Management: "Management",
-  RandD: "Research & Development",
-  Training: "Training",
-  Unassigned: "Unassigned",
-} as const;
+export type EmployeePosition =
+  | "Operations"
+  | "Engineer"
+  | "Business"
+  | "Management"
+  | "Research & Development"
+  | "Training"
+  | "Unassigned";
 
-export type EmployeePosition = typeof employeePositions[keyof typeof employeePositions];
-export const EmployeePositions = buildEnum<typeof employeePositions, EmployeePosition>(employeePositions);
+export const EmployeePositions = new ListEnum<EmployeePosition>([
+  "Operations",
+  "Engineer",
+  "Business",
+  "Management",
+  "Research & Development",
+  "Training",
+  "Unassigned",
+]);
