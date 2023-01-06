@@ -527,7 +527,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         HackingLevelMultiplier: 0.8,
 
         ServerGrowthRate: 0.8,
-        ServerMaxMoney: 0.2,
+        ServerMaxMoney: 0.08,
         ServerStartingMoney: 0.4,
 
         PurchasedServerSoftcap: 1.3,
@@ -550,7 +550,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         HackingLevelMultiplier: 0.8,
 
         ServerGrowthRate: 0.2,
-        ServerMaxMoney: 0.2,
+        ServerMaxMoney: 0.04,
         ServerStartingMoney: 0.2,
 
         HomeComputerRamCost: 1.5,
@@ -579,7 +579,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
     }
     case 4: {
       return Object.assign(mults, {
-        ServerMaxMoney: 0.15,
+        ServerMaxMoney: 0.1125,
         ServerStartingMoney: 0.75,
 
         PurchasedServerSoftcap: 1.2,
@@ -607,7 +607,6 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
     }
     case 5: {
       return Object.assign(mults, {
-        ServerMaxMoney: 2,
         ServerStartingSecurity: 2,
         ServerStartingMoney: 0.5,
 
@@ -638,7 +637,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       return Object.assign(mults, {
         HackingLevelMultiplier: 0.35,
 
-        ServerMaxMoney: 0.4,
+        ServerMaxMoney: 0.2,
         ServerStartingMoney: 0.5,
         ServerStartingSecurity: 1.5,
 
@@ -671,7 +670,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       return Object.assign(mults, {
         HackingLevelMultiplier: 0.35,
 
-        ServerMaxMoney: 0.4,
+        ServerMaxMoney: 0.2,
         ServerStartingMoney: 0.5,
         ServerStartingSecurity: 1.5,
 
@@ -744,7 +743,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         AgilityLevelMultiplier: 0.45,
         CharismaLevelMultiplier: 0.45,
 
-        ServerMaxMoney: 0.1,
+        ServerMaxMoney: 0.01,
         ServerStartingMoney: 0.1,
         ServerStartingSecurity: 2.5,
 
@@ -822,7 +821,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         HackingLevelMultiplier: 0.6,
 
         ServerGrowthRate: 0.2,
-        ServerMaxMoney: 0.1,
+        ServerMaxMoney: 0.01,
         ServerStartingMoney: 0.1,
         ServerWeakenRate: 2,
 
@@ -866,7 +865,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         CharismaLevelMultiplier: dec,
 
         ServerGrowthRate: dec,
-        ServerMaxMoney: dec,
+        ServerMaxMoney: dec * dec,
         ServerStartingMoney: dec,
         ServerWeakenRate: dec,
 
@@ -931,7 +930,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
 
         PurchasedServerSoftcap: 1.6,
 
-        ServerMaxMoney: 0.45,
+        ServerMaxMoney: 0.3375,
         ServerStartingMoney: 0.75,
         ServerStartingSecurity: 3,
 
