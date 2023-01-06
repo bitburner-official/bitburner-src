@@ -33,8 +33,8 @@ module.exports = (env, argv) => {
       stats: statsConfig,
     },
     static: {
-      directory: path.join(__dirname, "dist", "ext"),
-      publicPath: '/dist/ext',
+      directory: path.join(__dirname, "dist"),
+      publicPath: "/dist",
     },
   };
 
