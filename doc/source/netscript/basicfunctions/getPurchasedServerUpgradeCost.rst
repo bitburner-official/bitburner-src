@@ -3,7 +3,7 @@ getPurchasedServerUpgradeCost() Netscript Function
 
 .. js:function:: getPurchasedServerUpgradeCost(hostname, ram)
 
-    :RAM cost: 0.25 GB
+    :RAM cost: 0.1 GB
 
     :param string hostname: Hostname of target purchased server.
     :param number ram: Target amount of RAM for purchased server. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of :doc:`getPurchasedServerMaxRam<getPurchasedServerMaxRam>`

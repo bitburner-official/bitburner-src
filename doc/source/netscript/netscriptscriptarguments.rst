@@ -13,9 +13,9 @@ For example, let's say we want to make a generic script
 The first argument will be the name of another script, and the second
 argument will be a number. This generic script will run the
 script specified in the first argument with the amount of threads
-specified in the second argument. The code would look like::
+specified in the second argument. The code would look like:
 
-.. code:: javascript
+..  code:: javascript
 
     run(args[0], args[1]);
 
@@ -23,13 +23,13 @@ And it could be ran from the terminal like:
 
 ``run generic-run.script myscript.script 7``
 
-In .js / ns2, the above script would look like::
+In .js / ns2, the above script would look like:
 
 .. code:: javascript
 
-      export async function main(ns) {
-        ns.run(ns.args[0], ns.args[1]);
-      }
+    export async function main(ns) {
+      ns.run(ns.args[0], ns.args[1]);
+    }
 
 It is also possible to get the number of arguments that were passed
 into a script using ``args.length``.
