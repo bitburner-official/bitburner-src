@@ -12,4 +12,4 @@ sleep() Netscript Function
 
     .. code-block:: javascript
 
-        sleep(3000); // Will wait 3 seconds.
+        await ns.sleep(3000); // Will wait 3 seconds.

@@ -2,6 +2,7 @@
  * Class representing a Script instance that is actively running.
  * A Script can have multiple active instances
  */
+import type React from "react";
 import { Script } from "./Script";
 import { ScriptUrl } from "./ScriptUrl";
 import { Settings } from "../Settings/Settings";
@@ -23,7 +24,7 @@ export class RunningScript {
   filename = "";
 
   // This script's logs. An array of log entries
-  logs: string[] = [];
+  logs: React.ReactNode[] = [];
 
   // Flag indicating whether the logs have been updated since
   // the last time the UI was updated
@@ -73,13 +74,13 @@ export class RunningScript {
     this.dependencies = script.dependencies;
   }
 
-  log(txt: string): void {
+  log(txt: React.ReactNode): void {
     if (this.logs.length > Settings.MaxLogCapacity) {
       this.logs.shift();
     }
 
     let logEntry = txt;
-    if (Settings.TimestampsFormat) {
+    if (Settings.TimestampsFormat && typeof txt === "string") {
       logEntry = "[" + formatTime(Settings.TimestampsFormat) + "] " + logEntry;
     }
 
@@ -88,8 +89,12 @@ export class RunningScript {
   }
 
   displayLog(): void {
-    for (let i = 0; i < this.logs.length; ++i) {
-      Terminal.print(this.logs[i]);
+    for (const log of this.logs) {
+      if (typeof log === "string") {
+        Terminal.print(log);
+      } else {
+        Terminal.printRaw(log);
+      }
     }
   }
 

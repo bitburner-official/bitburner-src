@@ -7,7 +7,7 @@ import { Script } from "../../../src/Script/Script";
 import { WorkerScript } from "../../../src/Netscript/WorkerScript";
 import { calculateRamUsage } from "../../../src/Script/RamCalculations";
 import { ns } from "../../../src/NetscriptFunctions";
-import { ExternalAPI, InternalAPI } from "src/Netscript/APIWrapper";
+import { InternalAPI, NetscriptContext } from "src/Netscript/APIWrapper";
 import { Singularity } from "@nsdefs";
 
 type PotentiallyAsyncFunction = (arg?: unknown) => { catch?: PotentiallyAsyncFunction };
@@ -20,15 +20,10 @@ function getFunction(fn: unknown) {
 function grabCost<API>(ramEntry: RamCostTree<API>[keyof API]) {
   if (typeof ramEntry === "function") return ramEntry();
   if (typeof ramEntry === "number") return ramEntry;
-  throw new Error("Invalid ramcost");
+  throw new Error("Invalid ramcost: " + ramEntry);
 }
-function isRemovedFunction(fn: Function) {
-  try {
-    fn();
-  } catch {
-    return true;
-  }
-  return false;
+function isRemovedFunction(ctx: NetscriptContext, fn: (ctx: NetscriptContext) => (...__: unknown[]) => unknown) {
+  return /REMOVED FUNCTION/.test(fn(ctx) + "");
 }
 
 describe("Netscript RAM Calculation/Generation Tests", function () {
@@ -112,7 +107,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
   describe("ns", () => {
     function testLayer<API>(
       internalLayer: InternalAPI<API>,
-      externalLayer: ExternalAPI<API>,
+      externalLayer: API,
       ramLayer: RamCostTree<API>,
       path: string[],
       extraLayerCost: number,
@@ -122,18 +117,22 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
           const newPath = [...path, key as string];
           if (typeof val === "function") {
             // Removed functions have no ram cost and should be skipped.
-            if (isRemovedFunction(val)) return;
+            if (isRemovedFunction({ workerScript }, val)) return;
             const fn = getFunction(externalLayer[key]);
             const fnName = newPath.join(".");
+            if (!(key in ramLayer)) {
+              throw new Error("Missing ramcost for " + fnName);
+            }
             const expectedRam = grabCost(ramLayer[key]);
             it(`${fnName}()`, () => combinedRamCheck(fn, newPath, expectedRam, extraLayerCost));
           }
           //A layer should be the only other option. Hacknet is currently the only layer with a layer cost.
-          else {
+          else if (typeof val === "object" && key !== "enums") {
             //hacknet is currently the only layer with a layer cost.
             const layerCost = key === "hacknet" ? 4 : 0;
             testLayer(val as InternalAPI<unknown>, externalLayer[key], ramLayer[key], newPath, layerCost);
           }
+          // Other things like args, enums, etc. have no cost
         }
       });
     }
@@ -149,7 +148,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     const singObjects = (
       Object.entries(ns.singularity) as [keyof Singularity, InternalAPI<Singularity>[keyof Singularity]][]
     )
-      .filter(([_, v]) => typeof v === "function" && !isRemovedFunction(v))
+      .filter(([__, v]) => typeof v === "function" && !isRemovedFunction({ workerScript }, v))
       .map(([name]) => {
         return {
           name,

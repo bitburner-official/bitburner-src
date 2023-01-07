@@ -1000,7 +1000,7 @@ interface NetscriptPort {
  * Stock market API
  * @public
  */
-export interface TIX {
+export type TIX = {
   /**
    * Returns true if the player has access to a WSE Account
    * @remarks RAM cost: 0.05 GB
@@ -1439,7 +1439,7 @@ export interface TIX {
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchaseTixApi(): boolean;
-}
+};
 
 /**
  * Singularity API
@@ -1448,7 +1448,7 @@ export interface TIX {
  * Source-File 4 levels.
  * @public
  */
-export interface Singularity {
+export type Singularity = {
   /**
    * Backup game save.
    * @remarks
@@ -2292,7 +2292,7 @@ export interface Singularity {
    * @returns - An object representing the current work. Fields depend on the kind of work.
    */
   getCurrentWork(): any | null;
-}
+};
 
 /**
  * Hacknet API
@@ -2300,7 +2300,7 @@ export interface Singularity {
  * Not all these functions are immediately available.
  * @public
  */
-export interface Hacknet {
+export type Hacknet = {
   /**
    * Get the number of hacknet nodes you own.
    * @remarks
@@ -2651,7 +2651,7 @@ export interface Hacknet {
    * @returns Multiplier.
    */
   getTrainingMult(): number;
-}
+};
 
 /**
  * Bladeburner API
@@ -2660,7 +2660,7 @@ export interface Hacknet {
  * or have Source-File 7 in order to use this API.
  * @public
  */
-export interface Bladeburner {
+export type Bladeburner = {
   /**
    * List all contracts.
    * @remarks
@@ -3148,13 +3148,13 @@ export interface Bladeburner {
    *
    * @returns whether player is a member of bladeburner division. */
   inBladeburner(): boolean;
-}
+};
 
 /**
  * Coding Contract API
  * @public
  */
-export interface CodingContract {
+export type CodingContract = {
   /**
    * Attempts a coding contract, returning a reward string on success or empty string on failure.
    * @remarks
@@ -3259,7 +3259,7 @@ export interface CodingContract {
    * RAM cost: 2 GB
    */
   getContractTypes(): string[];
-}
+};
 
 /**
  * Gang API
@@ -3267,7 +3267,7 @@ export interface CodingContract {
  * If you are not in BitNode-2, then you must have Source-File 2 in order to use this API.
  * @public
  */
-export interface Gang {
+export type Gang = {
   /**
    * Create a gang.
    * @remarks
@@ -3526,7 +3526,7 @@ export interface Gang {
    * @returns Bonus time for the Gang mechanic in milliseconds.
    */
   getBonusTime(): number;
-}
+};
 
 /**
  * Sleeve API
@@ -3534,7 +3534,7 @@ export interface Gang {
  * If you are not in BitNode-10, then you must have Source-File 10 in order to use this API.
  * @public
  */
-export interface Sleeve {
+export type Sleeve = {
   /**
    * Get the number of sleeves you own.
    * @remarks
@@ -3764,7 +3764,7 @@ export interface Sleeve {
    * @returns True if the sleeve started working out, false otherwise.
    */
   setToBladeburnerAction(sleeveNumber: number, action: string, contract?: string): boolean;
-}
+};
 
 /**
  * Grafting API
@@ -3772,7 +3772,7 @@ export interface Sleeve {
  * This API requires Source-File 10 to use.
  * @public
  */
-export interface Grafting {
+export type Grafting = {
   /**
    * Retrieve the grafting cost of an aug.
    * @remarks
@@ -3819,13 +3819,13 @@ export interface Grafting {
    * @throws Will error if called while you are not in New Tokyo.
    */
   graftAugmentation(augName: string, focus?: boolean): boolean;
-}
+};
 
 /**
  * Skills formulas
  * @public
  */
-interface SkillsFormulas {
+type SkillsFormulas = {
   /**
    * Calculate skill level.
    * @param exp - experience for that skill
@@ -3840,7 +3840,7 @@ interface SkillsFormulas {
    * @returns The calculated exp required.
    */
   calculateExp(skill: number, skillMult?: number): number;
-}
+};
 
 /** @public */
 interface WorkStats {
@@ -3859,7 +3859,7 @@ interface WorkStats {
  * Work formulas
  * @public
  */
-interface WorkFormulas {
+type WorkFormulas = {
   crimeSuccessChance(person: Person, crimeType: CrimeType | `${CrimeType}`): number;
   /** @returns The WorkStats gained when completing one instance of the specified crime. */
   crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
@@ -3875,13 +3875,13 @@ interface WorkFormulas {
   factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified company work. */
   companyGains(person: Person, companyName: string, workType: JobName | `${JobName}`, favor: number): WorkStats;
-}
+};
 
 /**
  * Reputation formulas
  * @public
  */
-interface ReputationFormulas {
+type ReputationFormulas = {
   /**
    * Calculate the total required amount of faction reputation to reach a target favor.
    * @param favor - target faction favor.
@@ -3902,13 +3902,13 @@ interface ReputationFormulas {
    * @param player - Player info from {@link NS.getPlayer | getPlayer}
    */
   repFromDonation(amount: number, player: Person): number;
-}
+};
 
 /**
  * Hacking formulas
  * @public
  */
-interface HackingFormulas {
+type HackingFormulas = {
   /**
    * Calculate hack chance.
    * (Ex: 0.25 would indicate a 25% chance of success.)
@@ -3968,13 +3968,13 @@ interface HackingFormulas {
    * @returns The calculated weaken time.
    */
   weakenTime(server: Server, player: Person): number;
-}
+};
 
 /**
  * Hacknet Node formulas
  * @public
  */
-interface HacknetNodesFormulas {
+type HacknetNodesFormulas = {
   /**
    * Calculate money gain rate.
    * @param level - level of the node.
@@ -4020,13 +4020,13 @@ interface HacknetNodesFormulas {
    * @returns An object with all hacknet node constants used by the game.
    */
   constants(): HacknetNodeConstants;
-}
+};
 
 /**
  * Hacknet Server formulas
  * @public
  */
-interface HacknetServersFormulas {
+type HacknetServersFormulas = {
   /**
    * Calculate hash gain rate.
    * @param level - level of the server.
@@ -4087,13 +4087,13 @@ interface HacknetServersFormulas {
    * @returns An object with all hacknet server constants used by the game.
    */
   constants(): HacknetServerConstants;
-}
+};
 
 /**
  * Gang formulas
  * @public
  */
-interface GangFormulas {
+type GangFormulas = {
   /**
    * Calculate the wanted penalty.
    * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
@@ -4138,7 +4138,7 @@ interface GangFormulas {
    * @returns The calculated ascension mult.
    */
   ascensionMultiplier(points: number): number;
-}
+};
 
 /**
  * Formulas API
@@ -4146,7 +4146,7 @@ interface GangFormulas {
  * You need Formulas.exe on your home computer to use this API.
  * @public
  */
-export interface Formulas {
+export type Formulas = {
   mockServer(): Server;
   mockPlayer(): Player;
   mockPerson(): Person;
@@ -4164,7 +4164,7 @@ export interface Formulas {
   gang: GangFormulas;
   /** Work formulas */
   work: WorkFormulas;
-}
+};
 
 /** @public */
 interface Fragment {
@@ -4189,7 +4189,7 @@ interface ActiveFragment {
  * Stanek's Gift API.
  * @public
  */
-interface Stanek {
+type Stanek = {
   /**
    * Stanek's Gift width.
    * @remarks
@@ -4295,7 +4295,7 @@ interface Stanek {
    * false otherwise.
    */
   acceptGift(): boolean;
-}
+};
 
 /** @public */
 interface InfiltrationReward {
@@ -4321,7 +4321,7 @@ interface InfiltrationLocation {
  * Infiltration API.
  * @public
  */
-interface Infiltration {
+type Infiltration = {
   /**
    * Get all locations that can be infiltrated.
    * @remarks
@@ -4338,13 +4338,13 @@ interface Infiltration {
    * @returns Infiltration data for given location.
    */
   getInfiltration(location: string): InfiltrationLocation;
-}
+};
 
 /**
  * User Interface API.
  * @public
  */
-interface UserInterface {
+type UserInterface = {
   /**
    * Get the current window size
    * @remarks
@@ -4427,7 +4427,7 @@ interface UserInterface {
    * RAM cost: 0.2 GB
    */
   clearTerminal(): void;
-}
+};
 
 /**
  * Collection of all functions passed to scripts
@@ -4440,7 +4440,7 @@ interface UserInterface {
  *  // Some related functions are gathered within a common namespace
  *  stock.getPrice();
  * ```
- * {@link https://bitburner.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
+ * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
  * <hr>
  * <b>Basic ns2 usage example:</b>
  * ```ts
@@ -4453,10 +4453,10 @@ interface UserInterface {
  *  await ns.hack('n00dles');
  * }
  * ```
- * {@link https://bitburner.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
+ * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
  * <hr>
  */
-export interface NS {
+export type NS = {
   /**
    * Namespace for hacknet functions.
    * @remarks RAM cost: 4 GB
@@ -6304,7 +6304,7 @@ export interface NS {
    *
    * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
    *
-   * @see https://bitburner.readthedocs.io/en/latest/netscript/netscriptmisc.html#netscript-ports
+   * @see https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptmisc.html#netscript-ports
    * @param port - Port number. Must be an integer between 1 and 20.
    */
   getPortHandle(port: number): NetscriptPort;
@@ -6853,7 +6853,7 @@ export interface NS {
   getSharePower(): number;
 
   enums: NSEnums;
-}
+};
 
 // BASE ENUMS
 /** @public */
@@ -7225,7 +7225,7 @@ export type NSEnums = {
  * @public
  */
 
-export interface OfficeAPI {
+export type OfficeAPI = {
   /**
    * Hire an employee.
    * @param divisionName - Name of the division
@@ -7317,7 +7317,7 @@ export interface OfficeAPI {
    * @returns Cost of upgrading the office
    */
   getOfficeSizeUpgradeCost(divisionName: string, city: CityName | `${CityName}`, asize: number): number;
-}
+};
 
 /**
  * Corporation Warehouse API
@@ -7325,7 +7325,7 @@ export interface OfficeAPI {
  * Requires the Warehouse API upgrade from your corporation.
  * @public
  */
-export interface WarehouseAPI {
+export type WarehouseAPI = {
   /**
    * Set material sell data.
    * @param divisionName - Name of the division
@@ -7548,13 +7548,13 @@ export interface WarehouseAPI {
    * @returns true if warehouse is present, false if not
    */
   hasWarehouse(divisionName: string, city: CityName | `${CityName}`): boolean;
-}
+};
 
 /**
  * Corporation API
  * @public
  */
-export interface Corporation extends WarehouseAPI, OfficeAPI {
+export type Corporation = {
   /** Returns whether the player has a corporation. Does not require API access.
    * @returns whether the player has a corporation */
   hasCorporation(): boolean;
@@ -7665,7 +7665,8 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * “Bonus time” makes the game progress faster.
    * @returns Bonus time for the Corporation mechanic in milliseconds. */
   getBonusTime(): number;
-}
+} & WarehouseAPI &
+  OfficeAPI;
 
 /** Product rating information
  *  @public */

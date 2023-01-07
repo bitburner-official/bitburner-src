@@ -13,4 +13,4 @@ getScriptRam() Netscript Function
 
     .. code-block:: javascript
 
-        getScriptRam("grow.script"); // returns: 1.75
+        ns.getScriptRam("grow.js"); // returns: 1.75

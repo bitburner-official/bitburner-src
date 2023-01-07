@@ -22,8 +22,8 @@ fileExists() Netscript Function
 
     .. code-block:: javascript
 
-        fileExists("foo.script", "foodnstuff"); // returns: false
-        fileExists("ftpcrack.exe"); // returns: true
+        ns.fileExists("foo.js", "foodnstuff"); // returns: false
+        ns.fileExists("ftpcrack.exe"); // returns: true
 
-    The first example above will return true if the script named ``foo.script`` exists on the ``foodnstuff`` server, and false otherwise.
+    The first example above will return true if the script named ``foo.js`` exists on the ``foodnstuff`` server, and false otherwise.
     The second example above will return true if the current server contains the ``FTPCrack.exe`` program, and false otherwise.

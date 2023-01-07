@@ -72,59 +72,64 @@ The following is an example of one way a script can be used to automate the
 purchasing and upgrading of Hacknet Nodes.
 
 This script attempts to purchase Hacknet Nodes until the player has a total of 8. Then
-it gradually upgrades those Node's to a minimum of level 80, 16 GB RAM, and 8 cores
+it gradually upgrades those Node's to level 80, 16 GB RAM, and 8 cores
 
 .. code:: javascript
 
-    function myMoney() {
-        return getServerMoneyAvailable("home");
-    }
-
-    disableLog("getServerMoneyAvailable");
-    disableLog("sleep");
-
-    var cnt = 8;
-
-    while(hacknet.numNodes() < cnt) {
-        res = hacknet.purchaseNode();
-        print("Purchased hacknet Node with index " + res);
-    };
-
-    for (var i = 0; i < cnt; i++) {
-        while (hacknet.getNodeStats(i).level <= 80) {
-            var cost = hacknet.getLevelUpgradeCost(i, 10);
-            while (myMoney() < cost) {
-                print("Need $" + cost + " . Have $" + myMoney());
-                sleep(3000);
+        export async function main(ns) {
+            function myMoney() {
+                return ns.getServerMoneyAvailable("home");
             }
-            res = hacknet.upgradeLevel(i, 10);
-        };
-    };
 
-    print("All nodes upgraded to level 80");
+            ns.disableLog("getServerMoneyAvailable");
+            ns.disableLog("sleep");
 
-    for (var i = 0; i < cnt; i++) {
-        while (hacknet.getNodeStats(i).ram < 16) {
-            var cost = hacknet.getRamUpgradeCost(i, 2);
-            while (myMoney() < cost) {
-                print("Need $" + cost + " . Have $" + myMoney());
-                sleep(3000);
-            }
-            res = hacknet.upgradeRam(i, 2);
-        };
-    };
+            const cnt = 8;
 
-    print("All nodes upgraded to 16GB RAM");
+            while (ns.hacknet.numNodes() < cnt) {
+                res = ns.hacknet.purchaseNode();
+                if (res != -1) ns.print("Purchased hacknet Node with index " + res);
+                await ns.sleep(1000);
+            };
 
-    for (var i = 0; i < cnt; i++) {
-        while (hacknet.getNodeStats(i).cores < 8) {
-            var cost = hacknet.getCoreUpgradeCost(i, 1);
-            while (myMoney() < cost) {
-                print("Need $" + cost + " . Have $" + myMoney());
-                sleep(3000);
-            }
-            res = hacknet.upgradeCore(i, 1);
-        };
-    };
+            ns.tprint("All " + cnt + " nodes purchased")
 
-    print("All nodes upgraded to 8 cores");
+            for (const i = 0; i < cnt; i++) {
+                while (ns.hacknet.getNodeStats(i).level <= 80) {
+                    var cost = ns.hacknet.getLevelUpgradeCost(i, 1);
+                    while (myMoney() < cost) {
+                        ns.print("Need $" + cost + " . Have $" + myMoney());
+                        await ns.sleep(3000);
+                    }
+                    res = ns.hacknet.upgradeLevel(i, 1);
+                };
+            };
+
+            ns.tprint("All nodes upgraded to level 80");
+
+            for (var i = 0; i < cnt; i++) {
+                while (ns.hacknet.getNodeStats(i).ram < 16) {
+                    var cost = ns.hacknet.getRamUpgradeCost(i, 1);
+                    while (myMoney() < cost) {
+                        ns.print("Need $" + cost + " . Have $" + myMoney());
+                        await ns.sleep(3000);
+                    }
+                    res = ns.hacknet.upgradeRam(i, 1);
+                };
+            };
+
+            ns.tprint("All nodes upgraded to 16GB RAM");
+
+            for (var i = 0; i < cnt; i++) {
+                while (ns.hacknet.getNodeStats(i).cores < 8) {
+                    var cost = ns.hacknet.getCoreUpgradeCost(i, 1);
+                    while (myMoney() < cost) {
+                        ns.print("Need $" + cost + " . Have $" + myMoney());
+                        await ns.sleep(3000);
+                    }
+                    res = ns.hacknet.upgradeCore(i, 1);
+                };
+            };
+
+            ns.tprint("All nodes upgraded to 8 cores");
+        }

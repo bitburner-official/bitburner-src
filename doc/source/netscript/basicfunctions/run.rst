@@ -21,23 +21,23 @@ run() Netscript Function
                  less will cause a runtime error.
 
     The simplest way to use the :doc:`run<run>` command is to call it with just
-    the script name. The following example will run ``foo.script``
+    the script name. The following example will run ``foo.js``
     single-threaded with no arguments:
 
     .. code-block:: javascript
 
-        run("foo.script");
+        ns.run("foo.js");
 
-    The following example will run 'foo.script' but with 5 threads instead of
+    The following example will run 'foo.js' but with 5 threads instead of
     single-threaded:
 
     .. code-block:: javascript
 
-        run("foo.script", 5);
+        ns.run("foo.js", 5);
 
-    This next example will run ``foo.script`` single-threaded, and will pass the
+    This next example will run ``foo.js`` single-threaded, and will pass the
     string ``foodnstuff`` into the script as an argument:
 
     .. code-block:: javascript
 
-        run("foo.script", 1, 'foodnstuff');
+        ns.run("foo.sj", 1, 'foodnstuff');

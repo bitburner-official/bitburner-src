@@ -20,7 +20,7 @@ import { SpecialServers } from "../Server/data/SpecialServers";
 import { Server } from "../Server/Server";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
-import * as data from "./AchievementData.json";
+import data from "./AchievementData.json";
 import { FactionNames } from "../Faction/data/FactionNames";
 import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
 import { isClassWork } from "../Work/ClassWork";

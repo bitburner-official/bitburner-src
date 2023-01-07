@@ -12,3 +12,10 @@ deleteServer() Netscript Function
     The ``hostname`` argument can be any data type, but it will be converted to
     a string. Whitespace is automatically removed from the string. This function
     will not delete a server that still has scripts running on it.
+
+    Examples:
+
+    .. code-block:: javascript
+
+        ns.killall("dummyServer");
+        ns.deleteServer("dummyServer"); //returns: true if purhcased server 'dummyServer'existed

@@ -1,3 +1,4 @@
+import type React from "react";
 import { Player } from "../Player";
 import { Exploit } from "../Exploits/Exploit";
 import * as bcrypt from "bcryptjs";
@@ -6,7 +7,7 @@ import { InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Terminal } from "../Terminal";
 
-export interface INetscriptExtra {
+export type INetscriptExtra = {
   heart: {
     break(): number;
   };
@@ -16,7 +17,8 @@ export interface INetscriptExtra {
   alterReality(): void;
   rainbow(guess: string): void;
   iKnowWhatImDoing(): void;
-}
+  printRaw(value: React.ReactNode): void;
+};
 
 export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
   return {
@@ -81,6 +83,10 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
       helpers.log(ctx, () => "Unlocking unsupported feature: window.tprintRaw");
       // @ts-ignore window has no tprintRaw property defined
       window.tprintRaw = Terminal.printRaw.bind(Terminal);
+    },
+    printRaw: (ctx) => (value) => {
+      // Using this voids the warranty on your tail log
+      ctx.workerScript.print(value as React.ReactNode);
     },
   };
 }

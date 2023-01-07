@@ -14,7 +14,7 @@ See the [frequently asked questions](./doc/FAQ.md) for more information . To dis
 # Documentation
 
 The game's official documentation can be found on [Read The
-Docs](http://bitburner.readthedocs.io/). Please note that this is still a work-in-progress.
+Docs](http://bitburner-official.readthedocs.io/). Please note that this is still a work-in-progress.
 
 The [in-game documentation](./markdown/bitburner.md) is generated from the [TypeScript definitions](./src/ScriptEditor/NetscriptDefinitions.d.ts).
 

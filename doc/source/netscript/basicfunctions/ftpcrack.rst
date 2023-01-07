@@ -14,4 +14,4 @@ ftpcrack() Netscript Function
 
     .. code-block:: javascript
 
-        ftpcrack("foodnstuff");
+        ns.ftpcrack("foodnstuff");

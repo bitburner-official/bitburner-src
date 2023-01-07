@@ -11,5 +11,5 @@ getServerUsedRam() Netscript Function
 
     .. code-block:: javascript
 
-        usedRam = getServerUsedRam("harakiri-sushi"); // returns: 5.6
-        print("harakiri-sushi uses "+usedRam + "GB");
+        const usedRam = ns.getServerUsedRam("harakiri-sushi"); // returns: 5.6
+        ns.print("harakiri-sushi uses "+ usedRam + "GB"); // prints: "harakiri-sushi uses 5.6GB"

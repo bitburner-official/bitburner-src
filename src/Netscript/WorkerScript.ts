@@ -6,6 +6,7 @@
  * Instead, whenever the game is opened, WorkerScripts are re-created from
  * RunningScript objects
  */
+import type React from "react";
 import { Environment } from "./Environment";
 import { RamCostConstants } from "./RamCostGenerator";
 
@@ -15,7 +16,6 @@ import { GetServer } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
 import { ScriptDeath } from "./ScriptDeath";
 import { ScriptArg } from "./ScriptArg";
-import { ExternalAPI } from "./APIWrapper";
 import { NSFull } from "../NetscriptFunctions";
 
 export class WorkerScript {
@@ -83,11 +83,7 @@ export class WorkerScript {
   /** Function called when the script ends. */
   atExit?: () => void;
 
-  constructor(
-    runningScriptObj: RunningScript,
-    pid: number,
-    nsFuncsGenerator?: (ws: WorkerScript) => ExternalAPI<NSFull>,
-  ) {
+  constructor(runningScriptObj: RunningScript, pid: number, nsFuncsGenerator?: (ws: WorkerScript) => NSFull) {
     this.name = runningScriptObj.filename;
     this.hostname = runningScriptObj.server;
 
@@ -180,7 +176,7 @@ export class WorkerScript {
     }
   }
 
-  print(txt: string): void {
+  print(txt: React.ReactNode): void {
     this.scriptRef.log(txt);
   }
 }

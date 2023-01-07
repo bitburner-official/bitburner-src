@@ -207,18 +207,18 @@ List of Factions and their Requirements
 .. raw:: html
 
 	</details>
-	<details><summary><a>Endgame Factions</a></summary>
+	<details><summary><a>Midgame Factions</a></summary>
 
 .. _gameplay_factions:: 
 
 +---------------------+----------------+-----------------------------------------+-------------------------------+
-| Endgame             | Faction Name   | Requirements                            | Joining this Faction prevents |
+| Midgame             | Faction Name   | Requirements                            | Joining this Faction prevents |
 | Factions            |                |                                         | you from joining:             |
 +                     +----------------+-----------------------------------------+-------------------------------+
 |                     | The Covenant   | * 20 Augmentations                      |                               |
 |                     |                | * $75b                                  |                               |
 |                     |                | * Hacking Level of 850                  |                               |
-|                     |                | * All Combat Stats of 850               |                               |
+|                     |                | * or All Combat Stats of 850            |                               |
 +                     +----------------+-----------------------------------------+-------------------------------+
 |                     | Daedalus       | * 30 Augmentations                      |                               |
 |                     |                | * $100b                                 |                               |
@@ -230,6 +230,26 @@ List of Factions and their Requirements
 |                     |                | * Hacking Level of 1500                 |                               |
 |                     |                | * All Combat Stats of 1200              |                               |
 +---------------------+----------------+-----------------------------------------+-------------------------------+
+.. raw:: html
+
+	</details>
+	<details><summary><a>Endgame Factions</a></summary>
+
+.. _gameplay_factions:: 
+
++---------------------+----------------+--------------------------------------------------------------+-------------------------------+
+| Endgame             | Faction Name   | Requirements                                                 | Joining this Faction prevents |
+| Factions            |                |                                                              | you from joining:             |
++                     +----------------+--------------------------------------------------------------+-------------------------------+
+|                     | Bladeburners   | * Join Bladeburner Division                                  |                               |
+|                     |                | * Have 25 Rank                                               |                               |
+|                     |                | * Be in BitNode 6 or 7                                       |                               |
+|                     |                | * or have Source-File 6 or 7                                 |                               |
++                     +----------------+--------------------------------------------------------------+-------------------------------+
+|                     | Church of the  | * Have not installed any augmentations in the current BitNode|                               |
+|                     |  Machine God   | * Be in BitNode 13                                           |                               |
+|                     |                | * or have Source-File 13                                     |                               |
++---------------------+----------------+--------------------------------------------------------------+-------------------------------+
 .. raw:: html
 
 	</details><br>

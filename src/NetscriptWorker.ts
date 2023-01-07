@@ -83,11 +83,6 @@ async function startNetscript1Script(workerScript: WorkerScript): Promise<void> 
   type BasicObject = Record<string, any>;
   const wrappedNS = NetscriptFunctions(workerScript);
   function wrapNS1Layer(int: Interpreter, intLayer: unknown, nsLayer = wrappedNS as BasicObject) {
-    if (nsLayer === wrappedNS) {
-      int.setProperty(intLayer, "args", int.nativeToPseudo(nsLayer.args));
-      int.setProperty(intLayer, "enums", int.nativeToPseudo(nsLayer.enums));
-      int.setProperty(intLayer, "pid", nsLayer.pid);
-    }
     for (const [name, entry] of Object.entries(nsLayer)) {
       if (typeof entry === "function") {
         const wrapper = async (...args: unknown[]) => {
@@ -420,9 +415,6 @@ export function runScriptFromScript(
   if (!(workerScript instanceof WorkerScript)) {
     return 0;
   }
-
-  //prevent leading / from causing a bug
-  if (scriptname.startsWith("/")) scriptname = scriptname.slice(1);
 
   if (typeof scriptname !== "string" || !Array.isArray(args)) {
     workerScript.log(caller, () => `Invalid arguments: scriptname='${scriptname} args='${args}'`);

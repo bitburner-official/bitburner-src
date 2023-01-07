@@ -10,7 +10,7 @@ than 'sleeves' for the human consciousness. This technology thus became known as
 Sleeve technology unlocks two different gameplay features:
 
 * Duplicate Sleeves
-* Re-sleeving
+* Grafting
 
 Sleeve technology is unlocked in :ref:`BitNode-10 <gameplay_bitnodes>`.
 
@@ -48,11 +48,6 @@ Synchronization is a measure of how aligned your consciousness is with that of y
 Duplicate Sleeves. It is a numerical value between 1 and 100, and it affects how much experience
 is earned when the sleeve is performing a task.
 
-Let N be the sleeve's synchronization. When the sleeve earns experience by performing
-a task, both the sleeve and the player's original host consciousness gain N% of the
-amount of experience normally earned by the task. All of the player's other sleeves
-earn ((N/100)^2 * 100)% of the experience.
-
 Synchronization can be increased by assigning sleeves to the 'Synchronize' task.
 
 Sleeve Shock
@@ -63,6 +58,10 @@ no shock. Shock affects the amount of experience earned by the sleeve.
 
 Sleeve shock slowly decreases over time. You can further increase the rate at which
 it decreases by assigning sleeves to the 'Shock Recovery' task.
+
+Let X be the sleeve's shock and Y be the sleeve's synchronization. When the sleeve earns experience by performing
+a task, the sleeve gains X% of the amount of experience normally earned by the task. player’s original host consciousness and all of the player's other sleeves
+earn Y% of the experience that the sleeve gained, or X*Y % of the normal experience amount.
 
 Augmentations
 ~~~~~~~~~~~~~
@@ -90,3 +89,6 @@ the ability to purchase additional sleeves, this is only available in BitNode-10
 
 Memory is a persistent stat, meaning it never gets reset back to 1.
 The maximum possible value for a sleeve's memory is 100.
+
+Buying memory has no instant affect on synchronization,
+memory affects only the starting synchronization upon entering a BitNode.

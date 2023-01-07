@@ -7,7 +7,7 @@ Welcome to Bitburner's documentation!
 =====================================
 Bitburner is a programming-based `incremental game <https://en.wikipedia.org/wiki/Incremental_game>`_
 that revolves around hacking and cyberpunk themes. The game is currently in the
-early beta stage of development. It `can be played here <https://danielyxie.github.io/bitburner/>`_.
+early beta stage of development. It `can be played here <https://bitburner-official.github.io/bitburner/>`_.
 
 What is Bitburner?
 ------------------
@@ -33,7 +33,6 @@ secrets that you've been searching for.
     v1.0.0 script migration guide <v1.0.0_migration.rst>
     v2.0.0 script migration guide <v2.0.0_migration.rst>
     404 <404.rst>
-    Donate <https://paypal.me/danielyxie>
 
 Indices and tables
 ==================

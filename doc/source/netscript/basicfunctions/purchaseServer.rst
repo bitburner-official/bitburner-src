@@ -9,7 +9,7 @@ purchaseServer() Netscript Function
         2. Maximum value of :doc:`getPurchasedServerMaxRam<getPurchasedServerMaxRam>`
     :returns: The hostname of the newly purchased server. Empty string on failure.
 
-    Purchased a server with the specified hostname and amount of RAM.
+    Purchases a server with the specified hostname and amount of RAM.
 
     The ``hostname`` argument can be any data type, but it will be converted to
     a string and have whitespace removed. Anything that resolves to an empty
@@ -27,8 +27,8 @@ purchaseServer() Netscript Function
 
     .. code-block:: javascript
 
-        ram = 64;
-        hn = "pserv-";
-        for (i = 0; i < 5; ++i) {
-            purchaseServer(hn + i, ram);
+        const ram = 64;
+        const name = "pserv-";
+        for (const i = 0; i < 5; ++i) {
+            ns.purchaseServer(name + i, ram);
         }
