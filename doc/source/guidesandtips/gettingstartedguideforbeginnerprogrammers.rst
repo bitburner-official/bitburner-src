@@ -80,6 +80,7 @@ Specifically, you'll want to take a look at :ref:`netscriptfunctions`.
 Enter the following code in the script editor:
 
 .. code:: javascript
+    
     /** @param {NS} ns */
     export async function main(ns) {
         // Defines the "target server", which is the server
