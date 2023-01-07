@@ -607,6 +607,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const job = helpers.string(ctx, "job", _job);
 
       if (!EmployeePositions.has(job)) throw new Error(`'${job}' is not a valid job.`);
+      if (job === 'Unassigned') return false;
       if (amount < 0 || !Number.isInteger(amount))
         throw helpers.makeRuntimeErrorMsg(
           ctx,
