@@ -46,6 +46,9 @@ import { Modal } from "../../ui/React/Modal";
 import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
 import { TextField, Tooltip } from "@mui/material";
 
+// @ts-ignore
+import { initVimMode, VimMode } from "monaco-vim";
+
 interface IProps {
   // Map of filename -> code
   files: Record<string, string>;
@@ -172,55 +175,49 @@ export function Root(props: IProps): React.ReactElement {
   useEffect(() => {
     // setup monaco-vim
     if (options.vim && editor && !vimEditor) {
-      try {
-        // This library is not typed
-        // @ts-expect-error
-        window.require(["monaco-vim"], function (MonacoVim: any) {
-          setVimEditor(MonacoVim.initVimMode(editor, vimStatusRef.current));
-          MonacoVim.VimMode.Vim.defineEx("write", "w", function () {
-            // your own implementation on what you want to do when :w is pressed
-            save();
-          });
-          MonacoVim.VimMode.Vim.defineEx("quit", "q", function () {
-            Router.toPage(Page.Terminal);
-          });
+      setVimEditor(initVimMode(editor, vimStatusRef.current));
+      VimMode.Vim.defineEx("write", "w", function () {
+        // your own implementation on what you want to do when :w is pressed
+        save();
+      });
+      VimMode.Vim.defineEx("quit", "q", function () {
+        Router.toPage(Page.Terminal);
+      });
 
-          const saveNQuit = (): void => {
-            save();
-            Router.toPage(Page.Terminal);
-          };
-          // "wqriteandquit" &  "xriteandquit" are not typos, prefix must be found in full string
-          MonacoVim.VimMode.Vim.defineEx("wqriteandquit", "wq", saveNQuit);
-          MonacoVim.VimMode.Vim.defineEx("xriteandquit", "x", saveNQuit);
+      const saveNQuit = (): void => {
+        save();
+        Router.toPage(Page.Terminal);
+      };
+      // "wqriteandquit" &  "xriteandquit" are not typos, prefix must be found in full string
+      VimMode.Vim.defineEx("wqriteandquit", "wq", saveNQuit);
+      VimMode.Vim.defineEx("xriteandquit", "x", saveNQuit);
 
-          // Setup "go to next tab" and "go to previous tab". This is a little more involved
-          // since these aren't Ex commands (they run in normal mode, not after typing `:`)
-          MonacoVim.VimMode.Vim.defineAction("nextTabs", function (_cm: any, args: { repeat?: number }) {
-            const nTabs = args.repeat ?? 1;
-            // Go to the next tab (to the right). Wraps around when at the rightmost tab
-            const currIndex = currentTabIndex();
-            if (currIndex !== undefined) {
-              const nextIndex = (currIndex + nTabs) % openScripts.length;
-              onTabClick(nextIndex);
-            }
-          });
-          MonacoVim.VimMode.Vim.defineAction("prevTabs", function (_cm: any, args: { repeat?: number }) {
-            const nTabs = args.repeat ?? 1;
-            // Go to the previous tab (to the left). Wraps around when at the leftmost tab
-            const currIndex = currentTabIndex();
-            if (currIndex !== undefined) {
-              let nextIndex = currIndex - nTabs;
-              while (nextIndex < 0) {
-                nextIndex += openScripts.length;
-              }
-              onTabClick(nextIndex);
-            }
-          });
-          MonacoVim.VimMode.Vim.mapCommand("gt", "action", "nextTabs", {}, { context: "normal" });
-          MonacoVim.VimMode.Vim.mapCommand("gT", "action", "prevTabs", {}, { context: "normal" });
-          editor.focus();
-        });
-      } catch {}
+      // Setup "go to next tab" and "go to previous tab". This is a little more involved
+      // since these aren't Ex commands (they run in normal mode, not after typing `:`)
+      VimMode.Vim.defineAction("nextTabs", function (_cm: any, args: { repeat?: number }) {
+        const nTabs = args.repeat ?? 1;
+        // Go to the next tab (to the right). Wraps around when at the rightmost tab
+        const currIndex = currentTabIndex();
+        if (currIndex !== undefined) {
+          const nextIndex = (currIndex + nTabs) % openScripts.length;
+          onTabClick(nextIndex);
+        }
+      });
+      VimMode.Vim.defineAction("prevTabs", function (_cm: any, args: { repeat?: number }) {
+        const nTabs = args.repeat ?? 1;
+        // Go to the previous tab (to the left). Wraps around when at the leftmost tab
+        const currIndex = currentTabIndex();
+        if (currIndex !== undefined) {
+          let nextIndex = currIndex - nTabs;
+          while (nextIndex < 0) {
+            nextIndex += openScripts.length;
+          }
+          onTabClick(nextIndex);
+        }
+      });
+      VimMode.Vim.mapCommand("gt", "action", "nextTabs", {}, { context: "normal" });
+      VimMode.Vim.mapCommand("gT", "action", "prevTabs", {}, { context: "normal" });
+      editor.focus();
     } else if (!options.vim) {
       // When vim mode is disabled
       vimEditor?.dispose();
@@ -454,7 +451,7 @@ export function Root(props: IProps): React.ReactElement {
     }
     try {
       infLoop(newCode);
-    } catch (err) {}
+    } catch (err) { }
   }
 
   function saveScript(scriptToSave: OpenScript): void {
@@ -783,15 +780,15 @@ export function Root(props: IProps): React.ReactElement {
                   const externalScript = hostname !== "home";
                   const colorProps = editingCurrentScript
                     ? {
-                        background: Settings.theme.button,
-                        borderColor: Settings.theme.button,
-                        color: Settings.theme.primary,
-                      }
+                      background: Settings.theme.button,
+                      borderColor: Settings.theme.button,
+                      color: Settings.theme.primary,
+                    }
                     : {
-                        background: Settings.theme.backgroundsecondary,
-                        borderColor: Settings.theme.backgroundsecondary,
-                        color: Settings.theme.secondary,
-                      };
+                      background: Settings.theme.backgroundsecondary,
+                      borderColor: Settings.theme.backgroundsecondary,
+                      color: Settings.theme.secondary,
+                    };
 
                   if (externalScript) {
                     colorProps.color = Settings.theme.info;
