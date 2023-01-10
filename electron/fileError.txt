@@ -1,0 +1,1 @@
+Attempts to access local files outside the normal game environment will be directed to this file.
