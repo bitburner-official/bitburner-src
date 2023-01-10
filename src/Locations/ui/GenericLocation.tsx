@@ -41,47 +41,49 @@ export function GenericLocation({ loc }: IProps): React.ReactElement {
    * Determine what needs to be rendered for this location based on the locations
    * type. Returns an array of React components that should be rendered
    */
-  function getLocationSpecificContent(): React.ReactNode {
+  function getLocationSpecificContent(): React.ReactNode[] {
+    const content: React.ReactNode[] = [];
+
     if (loc.types.includes(LocationType.Company)) {
-      return <CompanyLocation locName={loc.name} />;
+      content.push(<CompanyLocation key="CompanyLocation" locName={loc.name} />);
     }
 
     if (loc.types.includes(LocationType.Gym)) {
-      return <GymLocation loc={loc} />;
+      content.push(<GymLocation key="GymLocation" loc={loc} />);
     }
 
     if (loc.types.includes(LocationType.Hospital)) {
-      return <HospitalLocation />;
+      content.push(<HospitalLocation key="HospitalLocation" />);
     }
 
     if (loc.types.includes(LocationType.Slums)) {
-      return <SlumsLocation />;
+      content.push(<SlumsLocation key="SlumsLocation" />);
     }
 
     if (loc.types.includes(LocationType.Special)) {
-      return <SpecialLocation loc={loc} />;
+      content.push(<SpecialLocation key="SpecialLocation" loc={loc} />);
     }
 
     if (loc.types.includes(LocationType.TechVendor)) {
-      return <TechVendorLocation loc={loc} />;
+      content.push(<TechVendorLocation key="TechVendorLocation" loc={loc} />);
     }
 
     if (loc.types.includes(LocationType.TravelAgency)) {
-      return <TravelAgencyRoot />;
+      content.push(<TravelAgencyRoot key="TravelAgencyRoot" />);
     }
 
     if (loc.types.includes(LocationType.University)) {
-      return <UniversityLocation loc={loc} />;
+      content.push(<UniversityLocation key="UniversityLocation" loc={loc} />);
     }
 
     if (loc.types.includes(LocationType.Casino)) {
-      return <CasinoLocation />;
+      content.push(<CasinoLocation key="CasinoLocation" />);
     }
 
-    return null;
+    return content;
   }
 
-  const locContent: React.ReactNode = getLocationSpecificContent();
+  const locContent: React.ReactNode[] = getLocationSpecificContent();
   const serverMeta = serverMetadata.find((s) => s.specialName === loc.name);
   const server = GetServer(serverMeta ? serverMeta.hostname : "");
 
