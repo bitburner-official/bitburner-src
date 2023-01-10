@@ -113,10 +113,7 @@ function setStopProcessHandler(app, window) {
   };
 
   const receivedGameReadyHandler = async (event, arg) => {
-    if (!window) {
-      log.warn("Window was undefined in game info handler");
-      return;
-    }
+    if (!window) return log.warn("Window was undefined in game info handler");
 
     log.debug("Received game information", arg);
     window.gameInfo = { ...arg };
@@ -133,10 +130,7 @@ function setStopProcessHandler(app, window) {
   };
 
   const receivedDisableRestoreHandler = async (event, arg) => {
-    if (!window) {
-      log.warn("Window was undefined in disable import handler");
-      return;
-    }
+    if (!window) return log.warn("Window was undefined in disable import handler");
 
     log.debug(`Disabling auto-restore for ${arg.duration}ms.`);
     isRestoreDisabled = true;
@@ -147,10 +141,7 @@ function setStopProcessHandler(app, window) {
   };
 
   const receivedGameSavedHandler = async (event, arg) => {
-    if (!window) {
-      log.warn("Window was undefined in game saved handler");
-      return;
-    }
+    if (!window) return log.warn("Window was undefined in game saved handler");
 
     const { save, ...other } = arg;
     log.silly("Received game saved info", { ...other, save: `${save.length} bytes` });
@@ -215,7 +206,6 @@ async function startWindow(noScript) {
 
 global.app_handlers = {
   stopProcess: setStopProcessHandler,
-  createWindow: startWindow,
 };
 
 app.on("ready", async () => {

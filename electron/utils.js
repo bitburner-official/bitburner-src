@@ -1,31 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, dialog, shell } = require("electron");
+const { dialog, shell } = require("electron");
 const log = require("electron-log");
-
-const achievements = require("./achievements");
-const api = require("./api-server");
 
 const Config = require("electron-config");
 const config = new Config();
 
 function reloadAndKill(window, killScripts) {
-  const setStopProcessHandler = global.app_handlers.stopProcess;
-  const createWindowHandler = global.app_handlers.createWindow;
-
   log.info("Reloading & Killing all scripts...");
-  setStopProcessHandler(app, window, false);
-
-  achievements.disableAchievementsInterval(window);
-  api.disable();
-
   window.webContents.forcefullyCrashRenderer();
-  window.on("closed", () => {
-    // Wait for window to be closed before opening the new one to prevent race conditions
-    log.debug("Opening new window");
-    createWindowHandler(killScripts);
-  });
-
-  window.close();
+  window.loadFile("index.html", killScripts ? { query: { noScripts: true } } : {});
 }
 
 function promptForReload(window) {

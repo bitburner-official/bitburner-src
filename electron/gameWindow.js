@@ -95,7 +95,7 @@ async function createWindow(killall) {
   }
 
   menu.refreshMenu(window);
-  setStopProcessHandler(app, window, true);
+  setStopProcessHandler(app, window);
 
   return window;
 }
