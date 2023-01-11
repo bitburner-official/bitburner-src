@@ -12,7 +12,8 @@ Netburner.txt
 /input/bitburner.api.json
 .cypress
 
-# tmp folder for electron
+# tmp folder for build and electron
+.app
 .package
 .build
 

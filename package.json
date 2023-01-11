@@ -105,7 +105,7 @@
     "format:report-diff": "bash -c 'if [[ $(git diff --name-only --diff-filter=ACMRTUXB origin/dev | grep -E \"(.js$|.jsx$|.ts$|.tsx$)\" | wc -c) -ne 0 ]]; then prettier -c $(git diff --name-only --diff-filter=ACMRTUXB origin/dev | grep -E \"(.js$|.jsx$|.ts$|.tsx$)\" | xargs); fi'",
     "start": "http-server -p 8000",
     "start:dev": "webpack serve --progress --env devServer --mode development",
-    "build": "webpack --mode production",
+    "build": "bash ./tools/build.sh",
     "build:dev": "webpack --mode development",
     "lint": "eslint --fix --ext js,jsx,ts,tsx --max-warnings 0 src",
     "lint:report": "eslint --ext js,jsx,ts,tsx --max-warnings 0 src",
