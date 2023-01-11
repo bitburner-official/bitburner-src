@@ -428,7 +428,7 @@ export function GameRoot(): React.ReactElement {
   }
 
   return (
-    <MathJaxContext version={3} src={"dist/ext/MathJax-3.2.2/es5/tex-chtml.js"}>
+    <MathJaxContext>
       <ErrorBoundary key={errorBoundaryKey} softReset={softReset}>
         <BypassWrapper content={bypassGame ? mainPage : null}>
           <SnackbarProvider>
