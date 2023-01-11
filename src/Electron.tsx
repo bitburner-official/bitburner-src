@@ -2,7 +2,7 @@ import { Player } from "@player";
 import { Router } from "./ui/GameRoot";
 import { removeLeadingSlash } from "./Terminal/DirectoryHelpers";
 import { Terminal } from "./Terminal";
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
+import { SnackbarEvents, ToastVariant, ToastVariants } from "./ui/React/Snackbar";
 import { IReturnStatus } from "./types";
 import { GetServer } from "./Server/AllServers";
 import { ImportPlayerData, SaveData, saveObject } from "./SaveObject";
@@ -151,7 +151,7 @@ function initSaveFunctions(): void {
         saveObject.exportGame();
       } catch (error) {
         console.error(error);
-        SnackbarEvents.emit("Could not export game.", ToastVariant.ERROR, 2000);
+        SnackbarEvents.emit("Could not export game.", ToastVariants.ERROR, 2000);
       }
     },
     triggerScriptsExport: (): void => exportScripts("*", Player.getHomeComputer()),
@@ -203,7 +203,7 @@ function initElectronBridge(): void {
       })
       .catch((error: unknown) => {
         console.error(error);
-        SnackbarEvents.emit("Could not save game.", ToastVariant.ERROR, 2000);
+        SnackbarEvents.emit("Could not save game.", ToastVariants.ERROR, 2000);
       });
   });
   bridge.receive("trigger-game-export", () => {
@@ -211,7 +211,7 @@ function initElectronBridge(): void {
       window.appSaveFns.triggerGameExport();
     } catch (error) {
       console.error(error);
-      SnackbarEvents.emit("Could not export game.", ToastVariant.ERROR, 2000);
+      SnackbarEvents.emit("Could not export game.", ToastVariants.ERROR, 2000);
     }
   });
   bridge.receive("trigger-scripts-export", () => {
@@ -219,7 +219,7 @@ function initElectronBridge(): void {
       window.appSaveFns.triggerScriptsExport();
     } catch (error) {
       console.error(error);
-      SnackbarEvents.emit("Could not export scripts.", ToastVariant.ERROR, 2000);
+      SnackbarEvents.emit("Could not export scripts.", ToastVariants.ERROR, 2000);
     }
   });
 }

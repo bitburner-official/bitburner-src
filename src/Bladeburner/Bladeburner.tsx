@@ -35,8 +35,7 @@ import { KEY } from "../utils/helpers/keyCodes";
 import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfiltrateWork";
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
-import { CityName } from "../Enums";
-import { getRandomMember } from "../utils/helpers/enum";
+import { CityName, CityNames } from "../Enums";
 
 export interface BlackOpsAttempt {
   error?: string;
@@ -71,7 +70,7 @@ export class Bladeburner {
   });
 
   cities: Record<CityName, City>;
-  city = CityName.Sector12;
+  city: CityName = CityNames.Sector12;
   // Todo: better types for all these Record<string, etc> types. Will need custom types or enums for the named string categories (e.g. skills).
   skills: Record<string, number> = {};
   skillMultipliers: Record<string, number> = {};
@@ -103,7 +102,7 @@ export class Bladeburner {
   constructor() {
     this.cities = {} as Record<CityName, City>;
     // This for loop ensures the above type is met for this.cities.
-    for (const city of Object.values(CityName)) this.cities[city] = new City(city);
+    for (const city of CityNames) this.cities[city] = new City(city);
 
     this.updateSkillMultipliers(); // Calls resetSkillMultipliers()
 
@@ -852,8 +851,8 @@ export class Bladeburner {
   }
 
   triggerMigration(sourceCityName: CityName): void {
-    let destCityName = getRandomMember(CityName);
-    while (destCityName === sourceCityName) destCityName = getRandomMember(CityName);
+    let destCityName = CityNames.random();
+    while (destCityName === sourceCityName) destCityName = CityNames.random();
 
     const destCity = this.cities[destCityName];
     const sourceCity = this.cities[sourceCityName];
@@ -888,11 +887,11 @@ export class Bladeburner {
     const chance = Math.random();
 
     // Choose random source/destination city for events
-    const sourceCityName = getRandomMember(CityName);
+    const sourceCityName = CityNames.random();
     const sourceCity = this.cities[sourceCityName];
 
-    let destCityName = getRandomMember(CityName);
-    while (destCityName === sourceCityName) destCityName = getRandomMember(CityName);
+    let destCityName = CityNames.random();
+    while (destCityName === sourceCityName) destCityName = CityNames.random();
     const destCity = this.cities[destCityName];
 
     if (chance <= 0.05) {
@@ -1565,7 +1564,7 @@ export class Bladeburner {
         if (this.logging.general) {
           this.log(`${person.whoAmI()}: Incited violence in the synthoid communities.`);
         }
-        for (const cityName of Object.values(CityName)) {
+        for (const cityName of CityNames) {
           const city = this.cities[cityName];
           city.chaos += 10;
           city.chaos += city.chaos / (Math.log(city.chaos) / Math.log(10));
@@ -2001,7 +2000,7 @@ export class Bladeburner {
       }
 
       // Chaos goes down very slowly
-      for (const cityName of Object.values(CityName)) {
+      for (const cityName of CityNames) {
         const city = this.cities[cityName];
         if (!city) throw new Error("Invalid city when processing passive chaos reduction in Bladeburner.process");
         city.chaos -= 0.0001 * seconds;

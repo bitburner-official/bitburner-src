@@ -7,7 +7,7 @@ import { ExpandNewCity } from "./ExpandNewCity";
 import { useDivision } from "./Context";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { CityName } from "../../Enums";
+import { CityName, CityNames } from "../../Enums";
 
 interface IProps {
   city: CityName | "Expand";
@@ -24,14 +24,14 @@ export function CityTabs(props: IProps): React.ReactElement {
   } else {
     const office = division.offices[city];
     if (office === 0) {
-      setCity(CityName.Sector12);
+      setCity(CityNames.Sector12);
       return <></>;
     }
     mainContent = (
       <Industry rerender={props.rerender} city={city} warehouse={division.warehouses[city]} office={office} />
     );
   }
-  const canExpand = Object.values(CityName).filter((cityName) => division.offices[cityName] === 0).length > 0;
+  const canExpand = [...CityNames].filter((cityName) => division.offices[cityName] === 0).length > 0;
   function handleChange(event: React.SyntheticEvent, tab: CityName | "Expand"): void {
     setCity(tab);
   }

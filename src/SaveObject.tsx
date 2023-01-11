@@ -16,7 +16,7 @@ import { Settings } from "./Settings/Settings";
 import { loadStockMarket, StockMarket } from "./StockMarket/StockMarket";
 import { staneksGift, loadStaneksGift } from "./CotMG/Helper";
 
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
+import { SnackbarEvents, ToastVariants } from "./ui/React/Snackbar";
 
 import * as ExportBonus from "./ExportBonus";
 
@@ -26,7 +26,7 @@ import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
 import { PlayerOwnedAugmentation } from "./Augmentation/PlayerOwnedAugmentation";
-import { LocationName } from "./Enums";
+import { LocationNames } from "./Enums";
 import { PlayerObject } from "./PersonObjects/Player/PlayerObject";
 import { pushGameSaved } from "./Electron";
 import { defaultMonacoTheme } from "./ScriptEditor/ui/themes";
@@ -120,7 +120,7 @@ class BitburnerSaveObject {
           pushGameSaved(saveData);
 
           if (emitToastEvent) {
-            SnackbarEvents.emit("Game Saved!", ToastVariant.INFO, 2000);
+            SnackbarEvents.emit("Game Saved!", ToastVariants.INFO, 2000);
           }
           return resolve();
         })
@@ -380,7 +380,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
     if (StockMarket.hasOwnProperty("Joes Guns")) {
       const s = StockMarket["Joes Guns"];
       delete StockMarket["Joes Guns"];
-      StockMarket[LocationName.Sector12JoesGuns] = s;
+      StockMarket[LocationNames.Sector12JoesGuns] = s;
     }
   }
   if (ver < 10) {

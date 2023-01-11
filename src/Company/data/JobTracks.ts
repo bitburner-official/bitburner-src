@@ -1,45 +1,45 @@
-import { JobName } from "../../Enums";
+import { JobName, JobNames } from "../../Enums";
 export const SoftwareCompanyPositions: JobName[] = [
-  JobName.software0,
-  JobName.software1,
-  JobName.software2,
-  JobName.software3,
-  JobName.software4,
-  JobName.software5,
-  JobName.software6,
-  JobName.software7,
+  JobNames.software0,
+  JobNames.software1,
+  JobNames.software2,
+  JobNames.software3,
+  JobNames.software4,
+  JobNames.software5,
+  JobNames.software6,
+  JobNames.software7,
 ];
 
-export const ITCompanyPositions: JobName[] = [JobName.IT0, JobName.IT1, JobName.IT2, JobName.IT3];
+export const ITCompanyPositions: JobName[] = [JobNames.IT0, JobNames.IT1, JobNames.IT2, JobNames.IT3];
 
-export const SecurityEngineerCompanyPositions: JobName[] = [JobName.securityEng];
+export const SecurityEngineerCompanyPositions: JobName[] = [JobNames.securityEng];
 
-export const NetworkEngineerCompanyPositions: JobName[] = [JobName.networkEng0, JobName.networkEng1];
+export const NetworkEngineerCompanyPositions: JobName[] = [JobNames.networkEng0, JobNames.networkEng1];
 
 export const BusinessCompanyPositions: JobName[] = [
-  JobName.business0,
-  JobName.business1,
-  JobName.business2,
-  JobName.business3,
-  JobName.business4,
-  JobName.business5,
+  JobNames.business0,
+  JobNames.business1,
+  JobNames.business2,
+  JobNames.business3,
+  JobNames.business4,
+  JobNames.business5,
 ];
 
 export const SecurityCompanyPositions: JobName[] = [
-  JobName.security0,
-  JobName.security1,
-  JobName.security2,
-  JobName.security3,
-  JobName.security4,
-  JobName.security5,
+  JobNames.security0,
+  JobNames.security1,
+  JobNames.security2,
+  JobNames.security3,
+  JobNames.security4,
+  JobNames.security5,
 ];
 
-export const AgentCompanyPositions: JobName[] = [JobName.agent0, JobName.agent1, JobName.agent2];
+export const AgentCompanyPositions: JobName[] = [JobNames.agent0, JobNames.agent1, JobNames.agent2];
 
-export const MiscCompanyPositions: JobName[] = [JobName.waiter, JobName.employee];
+export const MiscCompanyPositions: JobName[] = [JobNames.waiter, JobNames.employee];
 
-export const SoftwareConsultantCompanyPositions: JobName[] = [JobName.softwareConsult0, JobName.softwareConsult1];
+export const SoftwareConsultantCompanyPositions: JobName[] = [JobNames.softwareConsult0, JobNames.softwareConsult1];
 
-export const BusinessConsultantCompanyPositions: JobName[] = [JobName.businessConsult0, JobName.businessConsult1];
+export const BusinessConsultantCompanyPositions: JobName[] = [JobNames.businessConsult0, JobNames.businessConsult1];
 
-export const PartTimeCompanyPositions: JobName[] = [JobName.waiterPT, JobName.employeePT];
+export const PartTimeCompanyPositions: JobName[] = [JobNames.waiterPT, JobNames.employeePT];

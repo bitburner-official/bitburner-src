@@ -18,7 +18,16 @@ import { CompanyPosition } from "../../Company/CompanyPosition";
 import { CompanyPositions } from "../../Company/CompanyPositions";
 import { Contracts } from "../../Bladeburner/data/Contracts";
 import { CONSTANTS } from "../../Constants";
-import { CityName, CrimeType, GymType, LocationName, UniversityClassType } from "../../Enums";
+import {
+  CityName,
+  CityNames,
+  CrimeType,
+  FactionWorkTypes,
+  GymTypes,
+  LocationName,
+  LocationNames,
+  UniversityClassTypes,
+} from "../../Enums";
 
 import { Factions } from "../../Faction/Factions";
 
@@ -152,7 +161,7 @@ export class Sleeve extends Person implements SleevePerson {
     this.shockRecovery();
 
     // Reset Location
-    this.city = CityName.Sector12;
+    this.city = CityNames.Sector12;
 
     // Reset sleeve-related stats
     this.shock = 100;
@@ -192,19 +201,19 @@ export class Sleeve extends Person implements SleevePerson {
     // Also check that the sleeve is in the right city
     let loc: LocationName | undefined;
     switch (universityName.toLowerCase()) {
-      case LocationName.AevumSummitUniversity.toLowerCase(): {
-        if (this.city !== CityName.Aevum) return false;
-        loc = LocationName.AevumSummitUniversity;
+      case LocationNames.AevumSummitUniversity.toLowerCase(): {
+        if (this.city !== CityNames.Aevum) return false;
+        loc = LocationNames.AevumSummitUniversity;
         break;
       }
-      case LocationName.Sector12RothmanUniversity.toLowerCase(): {
-        if (this.city !== CityName.Sector12) return false;
-        loc = LocationName.Sector12RothmanUniversity;
+      case LocationNames.Sector12RothmanUniversity.toLowerCase(): {
+        if (this.city !== CityNames.Sector12) return false;
+        loc = LocationNames.Sector12RothmanUniversity;
         break;
       }
-      case LocationName.VolhavenZBInstituteOfTechnology.toLowerCase(): {
-        if (this.city !== CityName.Volhaven) return false;
-        loc = LocationName.VolhavenZBInstituteOfTechnology;
+      case LocationNames.VolhavenZBInstituteOfTechnology.toLowerCase(): {
+        if (this.city !== CityNames.Volhaven) return false;
+        loc = LocationNames.VolhavenZBInstituteOfTechnology;
         break;
       }
     }
@@ -214,22 +223,22 @@ export class Sleeve extends Person implements SleevePerson {
     let classType: ClassType | undefined;
     switch (className.toLowerCase()) {
       case "study computer science":
-        classType = UniversityClassType.computerScience;
+        classType = UniversityClassTypes.computerScience;
         break;
       case "data structures":
-        classType = UniversityClassType.dataStructures;
+        classType = UniversityClassTypes.dataStructures;
         break;
       case "networks":
-        classType = UniversityClassType.networks;
+        classType = UniversityClassTypes.networks;
         break;
       case "algorithms":
-        classType = UniversityClassType.algorithms;
+        classType = UniversityClassTypes.algorithms;
         break;
       case "management":
-        classType = UniversityClassType.management;
+        classType = UniversityClassTypes.management;
         break;
       case "leadership":
-        classType = UniversityClassType.leadership;
+        classType = UniversityClassTypes.leadership;
         break;
     }
     if (!classType) return false;
@@ -304,13 +313,13 @@ export class Sleeve extends Person implements SleevePerson {
     let factionWorkType: FactionWorkType;
     if (sanitizedWorkType.includes("hack")) {
       if (!factionInfo.offerHackingWork) return false;
-      factionWorkType = FactionWorkType.hacking;
+      factionWorkType = FactionWorkTypes.hacking;
     } else if (sanitizedWorkType.includes("field")) {
       if (!factionInfo.offerFieldWork) return false;
-      factionWorkType = FactionWorkType.field;
+      factionWorkType = FactionWorkTypes.field;
     } else if (sanitizedWorkType.includes("security")) {
       if (!factionInfo.offerSecurityWork) return false;
-      factionWorkType = FactionWorkType.security;
+      factionWorkType = FactionWorkTypes.security;
     } else {
       return false;
     }
@@ -331,29 +340,29 @@ export class Sleeve extends Person implements SleevePerson {
     // Also check that the sleeve is in the right city
     let loc: LocationName | undefined;
     switch (gymName.toLowerCase()) {
-      case LocationName.AevumCrushFitnessGym.toLowerCase(): {
-        if (this.city != CityName.Aevum) return false;
-        loc = LocationName.AevumCrushFitnessGym;
+      case LocationNames.AevumCrushFitnessGym.toLowerCase(): {
+        if (this.city != CityNames.Aevum) return false;
+        loc = LocationNames.AevumCrushFitnessGym;
         break;
       }
-      case LocationName.AevumSnapFitnessGym.toLowerCase(): {
-        if (this.city != CityName.Aevum) return false;
-        loc = LocationName.AevumSnapFitnessGym;
+      case LocationNames.AevumSnapFitnessGym.toLowerCase(): {
+        if (this.city != CityNames.Aevum) return false;
+        loc = LocationNames.AevumSnapFitnessGym;
         break;
       }
-      case LocationName.Sector12IronGym.toLowerCase(): {
-        if (this.city != CityName.Sector12) return false;
-        loc = LocationName.Sector12IronGym;
+      case LocationNames.Sector12IronGym.toLowerCase(): {
+        if (this.city != CityNames.Sector12) return false;
+        loc = LocationNames.Sector12IronGym;
         break;
       }
-      case LocationName.Sector12PowerhouseGym.toLowerCase(): {
-        if (this.city != CityName.Sector12) return false;
-        loc = LocationName.Sector12PowerhouseGym;
+      case LocationNames.Sector12PowerhouseGym.toLowerCase(): {
+        if (this.city != CityNames.Sector12) return false;
+        loc = LocationNames.Sector12PowerhouseGym;
         break;
       }
-      case LocationName.VolhavenMilleniumFitnessGym.toLowerCase(): {
-        if (this.city != CityName.Volhaven) return false;
-        loc = LocationName.VolhavenMilleniumFitnessGym;
+      case LocationNames.VolhavenMilleniumFitnessGym.toLowerCase(): {
+        if (this.city != CityNames.Volhaven) return false;
+        loc = LocationNames.VolhavenMilleniumFitnessGym;
         break;
       }
     }
@@ -365,16 +374,16 @@ export class Sleeve extends Person implements SleevePerson {
     // set stat to a default value.
     let classType: ClassType | undefined;
     if (sanitizedStat.includes("str")) {
-      classType = GymType.strength;
+      classType = GymTypes.strength;
     }
     if (sanitizedStat.includes("def")) {
-      classType = GymType.defense;
+      classType = GymTypes.defense;
     }
     if (sanitizedStat.includes("dex")) {
-      classType = GymType.dexterity;
+      classType = GymTypes.dexterity;
     }
     if (sanitizedStat.includes("agi")) {
-      classType = GymType.agility;
+      classType = GymTypes.agility;
     }
     // if stat is still equals its default value, then validation has failed.
     if (!classType) return false;

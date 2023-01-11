@@ -14,8 +14,7 @@ import { Cities } from "../Locations/Cities";
 import { EmployeePositions, IndustryType } from "./data/Enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
-import { checkEnum } from "../utils/helpers/enum";
-import { CityName } from "../Enums";
+import { CityName, CityNames } from "../Enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { CorpResearchName } from "@nsdefs";
 
@@ -332,7 +331,7 @@ export function BuyBackShares(corporation: Corporation, numShares: number): bool
 }
 
 export function AutoAssignJob(office: OfficeSpace, job: string, count: number): boolean {
-  if (!checkEnum(EmployeePositions, job)) throw new Error(`'${job}' is not a valid job.`);
+  if (!EmployeePositions.has(job)) throw new Error(`'${job}' is not a valid job.`);
   return office.autoAssignJob(job, count);
 }
 
@@ -480,7 +479,7 @@ export function Research(division: Industry, researchName: CorpResearchName): vo
   // whether research is done by script or UI. All other stats gets calculated in every cycle
   // Warehouse size gets updated only when something increases it.
   if (researchName == "Drones - Transport") {
-    for (const city of Object.values(CityName)) {
+    for (const city of CityNames) {
       const warehouse = division.warehouses[city];
       if (!warehouse) continue;
 

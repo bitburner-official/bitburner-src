@@ -2,13 +2,12 @@ import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { applySleeveGains, Work, WorkType } from "./Work";
-import { FactionWorkType } from "../../../Enums";
+import { FactionWorkType, FactionWorkTypes } from "../../../Enums";
 import { FactionNames } from "../../../Faction/data/FactionNames";
 import { Factions } from "../../../Faction/Factions";
 import { calculateFactionExp, calculateFactionRep } from "../../../Work/Formulas";
 import { Faction } from "../../../Faction/Faction";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
-import { findEnumMember } from "../../../utils/helpers/enum";
 
 interface SleeveFactionWorkParams {
   factionWorkType: FactionWorkType;
@@ -24,7 +23,7 @@ export class SleeveFactionWork extends Work {
 
   constructor(params?: SleeveFactionWorkParams) {
     super(WorkType.FACTION);
-    this.factionWorkType = params?.factionWorkType ?? FactionWorkType.hacking;
+    this.factionWorkType = params?.factionWorkType ?? FactionWorkTypes.hacking;
     this.factionName = params?.factionName ?? FactionNames.Sector12;
   }
 
@@ -67,8 +66,7 @@ export class SleeveFactionWork extends Work {
   /** Initializes a FactionWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveFactionWork {
     const factionWork = Generic_fromJSON(SleeveFactionWork, value.data);
-    factionWork.factionWorkType =
-      findEnumMember(FactionWorkType, factionWork.factionWorkType) ?? FactionWorkType.hacking;
+    factionWork.factionWorkType = FactionWorkTypes.find(factionWork.factionWorkType) ?? FactionWorkTypes.hacking;
     return factionWork;
   }
 }

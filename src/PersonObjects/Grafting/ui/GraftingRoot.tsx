@@ -7,7 +7,7 @@ import { AugmentationNames } from "../../../Augmentation/data/AugmentationNames"
 import { StaticAugmentations } from "../../../Augmentation/StaticAugmentations";
 import { CONSTANTS } from "../../../Constants";
 import { hasAugmentationPrereqs } from "../../../Faction/FactionHelpers";
-import { LocationName } from "../../../Enums";
+import { LocationNames } from "../../../Enums";
 import { Locations } from "../../../Locations/Locations";
 import { PurchaseAugmentationsOrderSetting } from "../../../Settings/SettingEnums";
 import { Settings } from "../../../Settings/Settings";
@@ -92,7 +92,7 @@ export const GraftingRoot = (): React.ReactElement => {
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
-      <Button onClick={() => Router.toLocation(Locations[LocationName.NewTokyoVitaLife])}>Back</Button>
+      <Button onClick={() => Router.toLocation(Locations[LocationNames.NewTokyoVitaLife])}>Back</Button>
       <Typography variant="h4">Grafting Laboratory</Typography>
       <Typography>
         You find yourself in a secret laboratory, owned by a mysterious researcher.

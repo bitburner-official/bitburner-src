@@ -3,7 +3,7 @@
 // divisions, see an overview of your corporation, or create a new industry
 import React, { useState, useEffect } from "react";
 import { MainPanel } from "./MainPanel";
-import { IndustryType } from "../data/Enums";
+import { IndustryTypes } from "../data/Enums";
 import { ExpandIndustryTab } from "./ExpandIndustryTab";
 import { Player } from "@player";
 import { Context } from "./Context";
@@ -29,7 +29,7 @@ export function CorporationRoot(): React.ReactElement {
   }, []);
 
   const canExpand =
-    Object.values(IndustryType).filter(
+    [...IndustryTypes].filter(
       (industryType) => corporation.divisions.find((division) => division.type === industryType) === undefined,
     ).length > 0;
 

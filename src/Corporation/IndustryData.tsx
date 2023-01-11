@@ -4,10 +4,10 @@ import { Corporation } from "./Corporation";
 import { getBaseResearchTreeCopy, getProductIndustryResearchTreeCopy } from "./data/BaseResearchTree";
 import { MoneyCost } from "./ui/MoneyCost";
 import { CorpIndustryData, CorpIndustryName } from "@nsdefs";
-import { IndustryType } from "./data/Enums";
+import { IndustryType, IndustryTypes } from "./data/Enums";
 
 export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
-  [IndustryType.Agriculture]: {
+  [IndustryTypes.Agriculture]: {
     startingCost: 40e9,
     description: "Cultivate crops and breed livestock to produce food.",
     recommendStarting: true,
@@ -20,7 +20,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     requiredMaterials: { Water: 0.5, Energy: 0.5 },
     producedMaterials: ["Plants", "Food"],
   },
-  [IndustryType.Chemical]: {
+  [IndustryTypes.Chemical]: {
     startingCost: 70e9,
     description: "Produce industrial chemicals.",
     recommendStarting: false,
@@ -33,7 +33,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     requiredMaterials: { Plants: 1, Energy: 0.5, Water: 0.5 },
     producedMaterials: ["Chemicals"],
   },
-  [IndustryType.Computers]: {
+  [IndustryTypes.Computers]: {
     startingCost: 500e9,
     description: "Develop and manufacture new computer hardware and networking infrastructures.",
     product: {
@@ -58,7 +58,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     requiredMaterials: { Metal: 2, Energy: 1 },
     producedMaterials: ["Hardware"],
   },
-  [IndustryType.Energy]: {
+  [IndustryTypes.Energy]: {
     startingCost: 225e9,
     description: "Engage in the production and distribution of energy.",
     recommendStarting: false,
@@ -70,7 +70,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     requiredMaterials: { Hardware: 0.1, Metal: 0.2 },
     producedMaterials: ["Energy"],
   },
-  [IndustryType.Fishing]: {
+  [IndustryTypes.Fishing]: {
     startingCost: 80e9,
     description: "Produce food through the breeding and processing of fish and fish products.",
     recommendStarting: false,
@@ -83,7 +83,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     requiredMaterials: { Energy: 0.5 },
     producedMaterials: ["Food"],
   },
-  [IndustryType.Food]: {
+  [IndustryTypes.Food]: {
     startingCost: 10e9,
     description: "Create your own restaurants all around the world.",
     product: {
@@ -105,7 +105,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     realEstateFactor: 0.05,
     requiredMaterials: { Food: 0.5, Water: 0.5, Energy: 0.2 },
   },
-  [IndustryType.Healthcare]: {
+  [IndustryTypes.Healthcare]: {
     startingCost: 750e9,
     description: "Create and manage hospitals.",
     product: {
@@ -129,7 +129,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     aiCoreFactor: 0.1,
     requiredMaterials: { Robots: 10, "AI Cores": 5, Energy: 5, Water: 5 },
   },
-  [IndustryType.Mining]: {
+  [IndustryTypes.Mining]: {
     startingCost: 300e9,
     description: "Extract and process metals from the earth.",
     recommendStarting: false,
@@ -142,7 +142,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     requiredMaterials: { Energy: 0.8 },
     producedMaterials: ["Metal"],
   },
-  [IndustryType.Pharmaceutical]: {
+  [IndustryTypes.Pharmaceutical]: {
     startingCost: 200e9,
     description: "Discover, develop, and create new pharmaceutical drugs.",
     product: {
@@ -167,7 +167,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     requiredMaterials: { Chemicals: 2, Energy: 1, Water: 0.5 },
     producedMaterials: ["Drugs"],
   },
-  [IndustryType.RealEstate]: {
+  [IndustryTypes.RealEstate]: {
     startingCost: 600e9,
     description: "Develop and manage real estate properties.",
     product: {
@@ -191,7 +191,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     requiredMaterials: { Metal: 5, Energy: 5, Water: 2, Hardware: 4 },
     producedMaterials: ["Real Estate"],
   },
-  [IndustryType.Robotics]: {
+  [IndustryTypes.Robotics]: {
     startingCost: 1e12,
     description: "Develop and create robots.",
     product: {
@@ -216,7 +216,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     requiredMaterials: { Hardware: 5, Energy: 3 },
     producedMaterials: ["Robots"],
   },
-  [IndustryType.Software]: {
+  [IndustryTypes.Software]: {
     startingCost: 25e9,
     description: "Develop computer software and create AI Cores.",
     product: {
@@ -241,7 +241,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     requiredMaterials: { Hardware: 0.5, Energy: 0.5 },
     producedMaterials: ["AI Cores"],
   },
-  [IndustryType.Tobacco]: {
+  [IndustryTypes.Tobacco]: {
     startingCost: 20e9,
     description: "Create and distribute tobacco and tobacco-related products.",
     product: {
@@ -263,7 +263,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     advertisingFactor: 0.2,
     requiredMaterials: { Plants: 1, Water: 0.2 },
   },
-  [IndustryType.Utilities]: {
+  [IndustryTypes.Utilities]: {
     startingCost: 150e9,
     description: "Distribute water and provide wastewater services.",
     recommendStarting: false,
@@ -305,7 +305,7 @@ export const IndustryResearchTrees = {} as Record<IndustryType, ResearchTree>;
 resetIndustryResearchTrees();
 
 export function resetIndustryResearchTrees() {
-  Object.values(IndustryType).forEach(
+  [...IndustryTypes].forEach(
     (ind) =>
       (IndustryResearchTrees[ind] = IndustriesData[ind].product
         ? getProductIndustryResearchTreeCopy()

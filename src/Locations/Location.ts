@@ -1,4 +1,4 @@
-import { CityName, LocationName } from "../Enums";
+import { CityName, LocationName, LocationNames } from "../Enums";
 import { LocationType } from "./LocationTypeEnum";
 
 interface IInfiltrationMetadata {
@@ -38,7 +38,7 @@ export class Location {
   infiltrationData?: IInfiltrationMetadata;
 
   /** Identifier for location */
-  name: LocationName = LocationName.Void;
+  name: LocationName = LocationNames.Void;
 
   /**
    * List of what type(s) this location is. A location can be multiple types

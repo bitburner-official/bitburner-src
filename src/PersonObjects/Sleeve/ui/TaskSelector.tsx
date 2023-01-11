@@ -2,7 +2,15 @@ import React, { useState } from "react";
 import { Sleeve } from "../Sleeve";
 import { Player } from "@player";
 import { Crimes } from "../../../Crime/Crimes";
-import { CityName, LocationName } from "../../../Enums";
+import {
+  CityName,
+  CityNames,
+  CrimeTypes,
+  FactionWorkTypes,
+  GymTypes,
+  LocationNames,
+  UniversityClassTypes,
+} from "../../../Enums";
 import { Factions } from "../../../Faction/Factions";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -16,8 +24,6 @@ import { isSleeveClassWork } from "../Work/SleeveClassWork";
 import { isSleeveInfiltrateWork } from "../Work/SleeveInfiltrateWork";
 import { isSleeveSupportWork } from "../Work/SleeveSupportWork";
 import { isSleeveCrimeWork } from "../Work/SleeveCrimeWork";
-import { CrimeType, FactionWorkType, GymType, UniversityClassType } from "../../../Enums";
-import { checkEnum } from "../../../utils/helpers/enum";
 
 const universitySelectorOptions: string[] = [
   "Study Computer Science",
@@ -169,14 +175,14 @@ const tasks: {
   "Take University Course": (sleeve: Sleeve): ITaskDetails => {
     let universities: string[] = [];
     switch (sleeve.city) {
-      case CityName.Aevum:
-        universities = [LocationName.AevumSummitUniversity];
+      case CityNames.Aevum:
+        universities = [LocationNames.AevumSummitUniversity];
         break;
-      case CityName.Sector12:
-        universities = [LocationName.Sector12RothmanUniversity];
+      case CityNames.Sector12:
+        universities = [LocationNames.Sector12RothmanUniversity];
         break;
-      case CityName.Volhaven:
-        universities = [LocationName.VolhavenZBInstituteOfTechnology];
+      case CityNames.Volhaven:
+        universities = [LocationNames.VolhavenZBInstituteOfTechnology];
         break;
       default:
         universities = ["No university available in city!"];
@@ -188,14 +194,14 @@ const tasks: {
   "Workout at Gym": (sleeve: Sleeve): ITaskDetails => {
     let gyms: string[] = [];
     switch (sleeve.city) {
-      case CityName.Aevum:
-        gyms = [LocationName.AevumCrushFitnessGym, LocationName.AevumSnapFitnessGym];
+      case CityNames.Aevum:
+        gyms = [LocationNames.AevumCrushFitnessGym, LocationNames.AevumSnapFitnessGym];
         break;
-      case CityName.Sector12:
-        gyms = [LocationName.Sector12IronGym, LocationName.Sector12PowerhouseGym];
+      case CityNames.Sector12:
+        gyms = [LocationNames.Sector12IronGym, LocationNames.Sector12PowerhouseGym];
         break;
-      case CityName.Volhaven:
-        gyms = [LocationName.VolhavenMilleniumFitnessGym];
+      case CityNames.Volhaven:
+        gyms = [LocationNames.VolhavenMilleniumFitnessGym];
         break;
       default:
         gyms = ["No gym available in city!"];
@@ -241,8 +247,9 @@ const canDo: {
   "Work for Faction": (sleeve: Sleeve) => possibleFactions(sleeve).length > 0,
   "Commit Crime": () => true,
   "Take University Course": (sleeve: Sleeve) =>
-    [CityName.Aevum, CityName.Sector12, CityName.Volhaven].includes(sleeve.city),
-  "Workout at Gym": (sleeve: Sleeve) => [CityName.Aevum, CityName.Sector12, CityName.Volhaven].includes(sleeve.city),
+    [CityNames.Aevum as CityName, CityNames.Sector12, CityNames.Volhaven].includes(sleeve.city),
+  "Workout at Gym": (sleeve: Sleeve) =>
+    [CityNames.Aevum as CityName, CityNames.Sector12, CityNames.Volhaven].includes(sleeve.city),
   "Perform Bladeburner Actions": () => !!Player.bladeburner,
   "Shock Recovery": (sleeve: Sleeve) => sleeve.shock > 0,
   Synchronize: (sleeve: Sleeve) => sleeve.sync < 100,
@@ -260,13 +267,13 @@ function getABC(sleeve: Sleeve): [string, string, string] {
   if (isSleeveFactionWork(w)) {
     let workType = "";
     switch (w.factionWorkType) {
-      case FactionWorkType.hacking:
+      case FactionWorkTypes.hacking:
         workType = "Hacking Contracts";
         break;
-      case FactionWorkType.field:
+      case FactionWorkTypes.field:
         workType = "Field Work";
         break;
-      case FactionWorkType.security:
+      case FactionWorkTypes.security:
         workType = "Security Work";
         break;
     }
@@ -290,30 +297,30 @@ function getABC(sleeve: Sleeve): [string, string, string] {
 
   if (isSleeveClassWork(w)) {
     switch (w.classType) {
-      case UniversityClassType.computerScience:
+      case UniversityClassTypes.computerScience:
         return ["Take University Course", "Study Computer Science", w.location];
-      case UniversityClassType.dataStructures:
+      case UniversityClassTypes.dataStructures:
         return ["Take University Course", "Data Structures", w.location];
-      case UniversityClassType.networks:
+      case UniversityClassTypes.networks:
         return ["Take University Course", "Networks", w.location];
-      case UniversityClassType.algorithms:
+      case UniversityClassTypes.algorithms:
         return ["Take University Course", "Algorithms", w.location];
-      case UniversityClassType.management:
+      case UniversityClassTypes.management:
         return ["Take University Course", "Management", w.location];
-      case UniversityClassType.leadership:
+      case UniversityClassTypes.leadership:
         return ["Take University Course", "Leadership", w.location];
-      case GymType.strength:
+      case GymTypes.strength:
         return ["Workout at Gym", "Train Strength", w.location];
-      case GymType.defense:
+      case GymTypes.defense:
         return ["Workout at Gym", "Train Defense", w.location];
-      case GymType.dexterity:
+      case GymTypes.dexterity:
         return ["Workout at Gym", "Train Dexterity", w.location];
-      case GymType.agility:
+      case GymTypes.agility:
         return ["Workout at Gym", "Train Agility", w.location];
     }
   }
   if (isSleeveCrimeWork(w)) {
-    return ["Commit Crime", checkEnum(CrimeType, w.crimeType) ? w.crimeType : "Shoplift", "------"];
+    return ["Commit Crime", CrimeTypes.has(w.crimeType) ? w.crimeType : "Shoplift", "------"];
   }
   if (isSleeveSupportWork(w)) {
     return ["Perform Bladeburner Actions", "Support main sleeve", "------"];

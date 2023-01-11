@@ -5,11 +5,10 @@ import { determineCrimeSuccess, findCrime } from "../Crime/CrimeHelpers";
 import { Crimes } from "../Crime/Crimes";
 import { Player } from "@player";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { CrimeType } from "../Enums";
+import { CrimeType, CrimeTypes } from "../Enums";
 import { Work, WorkType } from "./Work";
 import { scaleWorkStats, WorkStats } from "./WorkStats";
 import { calculateCrimeWorkStats } from "./Formulas";
-import { checkEnum } from "../utils/helpers/enum";
 
 interface CrimeWorkParams {
   crimeType: CrimeType;
@@ -24,12 +23,12 @@ export class CrimeWork extends Work {
 
   constructor(params?: CrimeWorkParams) {
     super(WorkType.CRIME, params?.singularity ?? true);
-    this.crimeType = params?.crimeType ?? CrimeType.shoplift;
+    this.crimeType = params?.crimeType ?? CrimeTypes.shoplift;
     this.unitCompleted = 0;
   }
 
   getCrime(): Crime {
-    if (!checkEnum(CrimeType, this.crimeType)) {
+    if (!CrimeTypes.has(this.crimeType)) {
       throw new Error("CrimeWork object constructed with invalid crime type");
     }
     return Crimes[this.crimeType];
@@ -89,7 +88,7 @@ export class CrimeWork extends Work {
     return {
       type: this.type,
       cyclesWorked: this.cyclesWorked,
-      crimeType: checkEnum(CrimeType, this.crimeType) ? this.crimeType : CrimeType.shoplift,
+      crimeType: CrimeTypes.has(this.crimeType) ? this.crimeType : CrimeTypes.shoplift,
     };
   }
 
@@ -101,7 +100,7 @@ export class CrimeWork extends Work {
   /** Initializes a CrimeWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): CrimeWork {
     const crimeWork = Generic_fromJSON(CrimeWork, value.data);
-    crimeWork.crimeType = findCrime(crimeWork.crimeType)?.type ?? CrimeType.shoplift;
+    crimeWork.crimeType = findCrime(crimeWork.crimeType)?.type ?? CrimeTypes.shoplift;
     return crimeWork;
   }
 }

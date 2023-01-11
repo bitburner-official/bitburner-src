@@ -1,7 +1,7 @@
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { applySleeveGains, Work, WorkType } from "./Work";
-import { LocationName } from "../../../Enums";
+import { LocationNames } from "../../../Enums";
 import { Companies } from "../../../Company/Companies";
 import { Company } from "../../../Company/Company";
 import { calculateCompanyWorkStats } from "../../../Work/Formulas";
@@ -22,7 +22,7 @@ export class SleeveCompanyWork extends Work {
 
   constructor(params?: SleeveCompanyWorkParams) {
     super(WorkType.COMPANY);
-    this.companyName = params?.companyName ?? LocationName.NewTokyoNoodleBar;
+    this.companyName = params?.companyName ?? LocationNames.NewTokyoNoodleBar;
   }
 
   getCompany(): Company {

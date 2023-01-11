@@ -10,8 +10,7 @@ import {
 import { FactionNames } from "../Faction/data/FactionNames";
 import { Factions } from "../Faction/Factions";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { checkEnum } from "../utils/helpers/enum";
-import { CityName, LocationName } from "../Enums";
+import { CityName, LocationNames } from "../Enums";
 import { helpers } from "../Netscript/NetscriptHelpers";
 
 export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
@@ -20,7 +19,7 @@ export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
   );
 
   const calculateInfiltrationData = (ctx: NetscriptContext, locationName: string): InfiltrationLocation => {
-    if (!checkEnum(LocationName, locationName)) throw new Error(`Location '${locationName}' does not exists.`);
+    if (!LocationNames.has(locationName)) throw new Error(`Location '${locationName}' does not exists.`);
     const location = Locations[locationName];
     if (location === undefined) throw helpers.makeRuntimeErrorMsg(ctx, `Location '${location}' does not exists.`);
     if (location.infiltrationData === undefined)

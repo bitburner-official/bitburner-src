@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { IndustryDescriptions, IndustriesData } from "../IndustryData";
-import { IndustryType } from "../data/Enums";
+import { IndustryType, IndustryTypes } from "../data/Enums";
 import { useCorporation } from "./Context";
 import { Industry } from "../Industry";
 import { NewIndustry } from "../Actions";
@@ -20,7 +20,7 @@ interface IProps {
 
 export function ExpandIndustryTab(props: IProps): React.ReactElement {
   const corp = useCorporation();
-  const allIndustries = Object.values(IndustryType).sort();
+  const allIndustries = [...IndustryTypes].sort();
   const possibleIndustries = allIndustries.filter(
     (industryType: IndustryType) =>
       corp.divisions.find((division: Industry) => division.type === industryType) === undefined,

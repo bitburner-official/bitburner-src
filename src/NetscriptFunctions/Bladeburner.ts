@@ -6,8 +6,7 @@ import { Action } from "src/Bladeburner/Action";
 import { InternalAPI, NetscriptContext } from "src/Netscript/APIWrapper";
 import { BlackOperation } from "../Bladeburner/BlackOperation";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { checkEnum } from "../utils/helpers/enum";
-import { CityName } from "../Enums";
+import { CityNames } from "../Enums";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {
@@ -260,19 +259,19 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     getCityEstimatedPopulation: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
       const cityName = helpers.string(ctx, "cityName", _cityName);
-      if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city: ${cityName}`);
+      if (!CityNames.has(cityName)) throw new Error(`Invalid city: ${cityName}`);
       return bladeburner.cities[cityName].popEst;
     },
     getCityCommunities: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
       const cityName = helpers.string(ctx, "cityName", _cityName);
-      if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city: ${cityName}`);
+      if (!CityNames.has(cityName)) throw new Error(`Invalid city: ${cityName}`);
       return bladeburner.cities[cityName].comms;
     },
     getCityChaos: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
       const cityName = helpers.string(ctx, "cityName", _cityName);
-      if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city: ${cityName}`);
+      if (!CityNames.has(cityName)) throw new Error(`Invalid city: ${cityName}`);
       return bladeburner.cities[cityName].chaos;
     },
     getCity: (ctx) => () => {
@@ -282,7 +281,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     switchCity: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
       const cityName = helpers.string(ctx, "cityName", _cityName);
-      if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city: ${cityName}`);
+      if (!CityNames.has(cityName)) throw new Error(`Invalid city: ${cityName}`);
       bladeburner.city = cityName;
       return true;
     },

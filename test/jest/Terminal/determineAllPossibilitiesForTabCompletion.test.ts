@@ -4,7 +4,7 @@ import { Player } from "../../../src/Player";
 import { determineAllPossibilitiesForTabCompletion } from "../../../src/Terminal/determineAllPossibilitiesForTabCompletion";
 import { Server } from "../../../src/Server/Server";
 import { AddToAllServers, prestigeAllServers } from "../../../src/Server/AllServers";
-import { LocationName } from "../../../src/Enums";
+import { LocationNames } from "../../../src/Enums";
 import { CodingContract } from "../../../src/CodingContracts";
 import { initDarkWebItems } from "../../../src/DarkWeb/DarkWebItems";
 
@@ -23,7 +23,7 @@ describe("determineAllPossibilitiesForTabCompletion", function () {
       hackDifficulty: 1,
       moneyAvailable: 70000,
       numOpenPortsRequired: 0,
-      organizationName: LocationName.NewTokyoNoodleBar,
+      organizationName: LocationNames.NewTokyoNoodleBar,
       requiredHackingSkill: 1,
       serverGrowth: 3000,
     });
@@ -33,7 +33,7 @@ describe("determineAllPossibilitiesForTabCompletion", function () {
       hackDifficulty: 1,
       moneyAvailable: 70000,
       numOpenPortsRequired: 0,
-      organizationName: LocationName.Sector12JoesGuns,
+      organizationName: LocationNames.Sector12JoesGuns,
       requiredHackingSkill: 1,
       serverGrowth: 3000,
     });
