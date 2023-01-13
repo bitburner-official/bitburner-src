@@ -7,9 +7,13 @@ export const getGraftingAvailableAugs = (): string[] => {
   const augs: string[] = [];
 
   for (const [augName, aug] of Object.entries(StaticAugmentations)) {
+if (Player.factions.includes("Bladeburners")) {
+    if (aug.isSpecial && !aug.factions.includes("Bladeburners")) continue;
+  } else {
     if (aug.isSpecial) continue;
-    augs.push(augName);
   }
+  augs.push(augName);
+ }
 
   return augs.filter((augmentation: string) => !Player.hasAugmentation(augmentation));
 };
@@ -22,3 +26,6 @@ export const calculateGraftingTimeWithBonus = (aug: GraftableAugmentation): numb
   const baseTime = aug.time;
   return baseTime / graftingIntBonus();
 };
+
+
+  
