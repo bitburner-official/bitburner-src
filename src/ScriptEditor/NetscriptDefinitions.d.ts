@@ -2871,6 +2871,19 @@ export type Bladeburner = {
   getActionAutolevel(type: string, name: string): boolean;
 
   /**
+   * Get action successes.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Return a number with how many successes you have with action.
+   *
+   * @param type - Type of action.
+   * @param name - Name of action. Must be an exact match.
+   * @returns a number with how many successes you have with action.
+   */
+  getActionSuccesses(type: string, name: string): number;
+
+  /**
    * Set an action autolevel.
    * @remarks
    * RAM cost: 4 GB
