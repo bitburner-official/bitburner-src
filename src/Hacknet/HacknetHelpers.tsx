@@ -65,7 +65,7 @@ export function purchaseHacknet(): number {
     }
 
     // Auto generate a name for the Node
-    const name = "hacknet-node-" + numOwned;
+    const name = hasHacknetServers() ? `hacknet-server-${numOwned}` : `hacknet-node-${numOwned}`;
     const node = new HacknetNode(name, Player.mults.hacknet_node_money);
 
     Player.loseMoney(cost, "hacknet_expenses");

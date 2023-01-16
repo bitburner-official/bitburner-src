@@ -9,6 +9,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { GetServer, AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
+import { hasHacknetServers } from "../../Hacknet/HacknetHelpers";
 
 export function hasTorRouter(this: PlayerObject): boolean {
   return this.getHomeComputer().serversOnNetwork.includes(SpecialServers.DarkWeb);
@@ -44,7 +45,7 @@ export function getUpgradeHomeCoresCost(this: PlayerObject): number {
 
 export function createHacknetServer(this: PlayerObject): HacknetServer {
   const numOwned = this.hacknetNodes.length;
-  const name = `hacknet-node-${numOwned}`;
+  const name = hasHacknetServers() ? `hacknet-server-${numOwned}` : `hacknet-node-${numOwned}`;
   const server = new HacknetServer({
     adminRights: true,
     hostname: name,
