@@ -67,6 +67,7 @@ export class SleeveBladeburnerWork extends Work {
       type: WorkType.BLADEBURNER as "BLADEBURNER",
       actionType: this.actionType,
       actionName: this.actionName,
+      cyclesWorked: this.cyclesWorked,
     };
   }
 

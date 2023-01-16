@@ -874,6 +874,7 @@ type SleeveBladeburnerTask = {
   type: "BLADEBURNER";
   actionType: "General" | "Contracts";
   actionName: string;
+  cyclesWorked: number;
 };
 
 /** @public */
@@ -887,7 +888,7 @@ type SleeveClassTask = {
 type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
 
 /** @public */
-type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}` };
+type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}`; cyclesWorked: number };
 
 /** @public */
 type SleeveFactionTask = {
@@ -897,7 +898,7 @@ type SleeveFactionTask = {
 };
 
 /** @public */
-type SleeveInfiltrateTask = { type: "INFILTRATE" };
+type SleeveInfiltrateTask = { type: "INFILTRATE"; cyclesWorked: number };
 
 /** @public */
 type SleeveRecoveryTask = { type: "RECOVERY" };
@@ -2869,6 +2870,19 @@ export type Bladeburner = {
    * @returns True if the action is set to autolevel, and false otherwise.
    */
   getActionAutolevel(type: string, name: string): boolean;
+
+  /**
+   * Get action successes.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Return a number with how many successes you have with action.
+   *
+   * @param type - Type of action.
+   * @param name - Name of action. Must be an exact match.
+   * @returns a number with how many successes you have with action.
+   */
+  getActionSuccesses(type: string, name: string): number;
 
   /**
    * Set an action autolevel.

@@ -172,6 +172,13 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const action = getBladeburnerActionObject(ctx, type, name);
       return action.autoLevel;
     },
+    getActionSuccesses: (ctx) => (_type, _name) => {
+      const type = helpers.string(ctx, "type", _type);
+      const name = helpers.string(ctx, "name", _name);
+      checkBladeburnerAccess(ctx);
+      const action = getBladeburnerActionObject(ctx, type, name);
+      return action.successes;
+    },
     setActionAutolevel:
       (ctx) =>
       (_type, _name, _autoLevel = true) => {
