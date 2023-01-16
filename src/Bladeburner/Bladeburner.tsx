@@ -1497,7 +1497,7 @@ export class Bladeburner {
         const successChance = this.getRecruitmentSuccessChance(person);
         const recruitTime = this.getRecruitmentTime(person) * 1000;
         if (Math.random() < successChance) {
-          const expGain = 2 * BladeburnerConstants.BaseStatGain * recruitTime;
+          const expGain = (2 * BladeburnerConstants.BaseStatGain * recruitTime) / 1000;
           retValue.chaExp = expGain;
           ++this.teamSize;
           if (this.logging.general) {
@@ -1509,7 +1509,7 @@ export class Bladeburner {
             );
           }
         } else {
-          const expGain = BladeburnerConstants.BaseStatGain * recruitTime;
+          const expGain = (BladeburnerConstants.BaseStatGain * recruitTime) / 1000;
           retValue.chaExp = expGain;
           if (this.logging.general) {
             this.log(
