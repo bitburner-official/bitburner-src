@@ -888,7 +888,7 @@ type SleeveClassTask = {
 type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
 
 /** @public */
-type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}`; cyclesWorked: number; };
+type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}`; cyclesWorked: number };
 
 /** @public */
 type SleeveFactionTask = {
@@ -898,7 +898,7 @@ type SleeveFactionTask = {
 };
 
 /** @public */
-type SleeveInfiltrateTask = { type: "INFILTRATE"; cyclesWorked: number; };
+type SleeveInfiltrateTask = { type: "INFILTRATE"; cyclesWorked: number };
 
 /** @public */
 type SleeveRecoveryTask = { type: "RECOVERY" };
