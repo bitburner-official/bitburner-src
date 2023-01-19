@@ -59,7 +59,7 @@ export function Stats(props: IProps): React.ReactElement {
         </Box>
         <Box display="flex">
           <Tooltip title={<Typography>Your rank within the Bladeburner division.</Typography>}>
-            <Typography>Rank: {formatNumber(props.bladeburner.rank, 2)}</Typography>
+            <Typography>Rank: {numeralWrapper.formatReallyBigNumber(props.bladeburner.rank)}</Typography>
           </Tooltip>
         </Box>
         <br />
@@ -88,7 +88,8 @@ export function Stats(props: IProps): React.ReactElement {
             }
           >
             <Typography>
-              Stamina: {formatNumber(props.bladeburner.stamina, 3)} / {formatNumber(props.bladeburner.maxStamina, 3)}
+              Stamina: {numeralWrapper.formatReallyBigNumber(props.bladeburner.stamina)} /{" "}
+              {numeralWrapper.formatReallyBigNumber(props.bladeburner.maxStamina)}
             </Typography>
           </Tooltip>
         </Box>
@@ -140,7 +141,9 @@ export function Stats(props: IProps): React.ReactElement {
               </Typography>
             }
           >
-            <Typography>City Chaos: {formatNumber(props.bladeburner.getCurrentCity().chaos)}</Typography>
+            <Typography>
+              City Chaos: {numeralWrapper.formatReallyBigNumber(props.bladeburner.getCurrentCity().chaos)}
+            </Typography>
           </Tooltip>
         </Box>
         <br />
@@ -166,7 +169,7 @@ export function Stats(props: IProps): React.ReactElement {
             <br />
           </>
         )}
-        <Typography>Skill Points: {formatNumber(props.bladeburner.skillPoints, 0)}</Typography>
+        <Typography>Skill Points: {numeralWrapper.formatReallyBigNumber(props.bladeburner.skillPoints)}</Typography>
         <br />
         <Typography>
           Aug. Success Chance mult: {formatNumber(Player.mults.bladeburner_success_chance * 100, 1)}%
