@@ -119,7 +119,7 @@ class NumeralFormatter {
   }
 
   formatPercentage(n: number | string, decimalPlaces = 2): string {
-    const formatter: string = "0,0." + "0".repeat(decimalPlaces) + "%";
+    const formatter: string = "0." + "0".repeat(decimalPlaces) + "%";
     return this.format(n, formatter);
   }
 
