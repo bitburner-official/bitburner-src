@@ -61,7 +61,7 @@ class NumeralFormatter {
     const nAbs = Math.abs(n as number);
     if (n === Infinity) return "∞";
     for (let i = 0; i < extraFormats.length; i++) {
-      if (extraFormats[i] < nAbs && nAbs <= extraFormats[i] * 1000) {
+      if (extraFormats[i] <= nAbs && nAbs < extraFormats[i] * 1000) {
         return this.format((n as number) / extraFormats[i], "0." + "0".repeat(decimalPlaces)) + extraNotations[i];
       }
     }
@@ -152,11 +152,11 @@ class NumeralFormatter {
   }
 
   formatPopulation(n: number): string {
-    return this.format(n, "0.000a");
+    return this.formatReallyBigNumber(n);
   }
 
   formatStamina(n: number): string {
-    return this.format(n, "0.0");
+    return this.formatReallyBigNumber(n);
   }
 
   formatShares(n: number): string {
