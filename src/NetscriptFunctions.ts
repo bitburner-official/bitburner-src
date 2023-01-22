@@ -314,6 +314,27 @@ export const ns: InternalAPI<NSFull> = {
 
       return numCycleForGrowth(server, Number(growth), cores);
     },
+  growthAnalyzeCorrected:
+    (ctx) =>
+    (_hostname, _targetMoney, _startMoney, _cores = 1) => {
+      const hostname = helpers.string(ctx, "hostname", _hostname);
+      const targetMoney = helpers.number(ctx, "targetMoney", _targetMoney);
+      const startMoney = helpers.number(ctx, "startMoney", _startMoney);
+      const cores = helpers.number(ctx, "cores", _cores);
+
+      // Check argument validity
+      const server = helpers.getServer(ctx, hostname);
+      if (!(server instanceof Server)) {
+        helpers.log(ctx, () => "Cannot be executed on this server.");
+        return 0;
+      }
+      if (cores < 1 || !isFinite(cores)) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: cores must be numeric and >= 1, is ${cores}.`);
+      }
+      // Other arguments are clamped inside numCycleForGrowthCorrected
+
+      return numCycleForGrowthCorrected(server, targetMoney, startMoney, cores);
+    },
   growthAnalyzeSecurity:
     (ctx) =>
     (_threads, _hostname?, _cores = 1) => {

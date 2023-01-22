@@ -42,7 +42,8 @@ export function safelyCreateUniqueServer(params: IConstructorParams): Server {
 
 /**
  * Returns the number of "growth cycles" needed to grow the specified server by the
- * specified amount.
+ * specified amount. This is a rough estimate only; virtually all functions
+ * should use numCycleForGrowthCorrected instead.
  * @param server - Server being grown
  * @param growth - How much the server is being grown by, in DECIMAL form (e.g. 1.5 rather than 50)
  * @param p - Reference to Player object

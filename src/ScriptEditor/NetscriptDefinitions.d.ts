@@ -3962,6 +3962,16 @@ interface HackingFormulas {
    */
   growPercent(server: Server, threads: number, player: Person, cores?: number): number;
   /**
+   * Calculate how many threads it will take to grow server to targetMoney.
+   * This calculation is the same as what the game uses, but is only accurate
+   * if all the server details are correctly set, *including* moneyAvailable.
+   * @param server - Server info from {@link NS.getServer | getServer}
+   * @param targetMoney - Desired final money, capped to moneyMax
+   * @param cores - Number of cores on the computer that will execute grow.
+   * @returns The calculated grow threads as an integer, rounded up.
+   */
+  growThreads(server: Server, targetMoney: number, cores?: number): number;
+  /**
    * Calculate hack time.
    * @param server - Server info from {@link NS.getServer | getServer}
    * @param player - Player info from {@link NS.getPlayer | getPlayer}
@@ -4768,37 +4778,77 @@ export interface NS {
   hackAnalyzeChance(host: string): number;
 
   /**
-   * Calculate the number of grow threads needed to grow a server by a certain multiplier.
+   * Estimate the number of grow threads needed to grow a server by a certain multiplier.
    * @remarks
    * RAM cost: 1 GB
    *
-   * This function returns the number of “growths” needed in order to increase
+   * This function returns the number of threads needed in order to increase
    * the amount of money available on the specified server by the specified amount.
    * The specified amount is multiplicative and is in decimal form, not percentage.
    *
-   * Due to limitations of mathematics, this function won't be the true value, but an approximation.
-   *
-   * Warning: The value returned by this function isn’t necessarily a whole number.
+   * Important caveats:
+   * - This is an estimate only! It assumes that {@link NS.grow | grow} multiplies money by some fraction
+   *   for each thread used. In reality, the number of threads is also *added* to the money first, and this
+   *   has a large effect when the server is low or at 0$. Use {@link NS.growthAnalyzeCorrected | growthAnalyzeCorrected }
+   *   for an exact result.
+   * - The result is only valid for the server's current status. Changes in
+   *   security will change the result. Use functions in `ns.formulas` to find
+   *   results for arbitrary situations.
+   * - Calling grow N times with 1 thread will *not* be exactly the same effect as
+   *   calling it once with N threads, because of security changes.
+   * - The result will likely not be an integer.
    *
    * @example
    * ```ts
    * // NS1:
-   * //For example, if you want to determine how many grow calls you need to double the amount of money on foodnstuff, you would use:
-   * var growTimes = growthAnalyze("foodnstuff", 2);
-   * //If this returns 100, then this means you need to call grow 100 times in order to double the money (or once with 100 threads).
+   * //For example, if you want to determine how many grow threads you need to double the amount of money on foodnstuff, you would use:
+   * var growThreads = growthAnalyze("foodnstuff", 2);
+   * //If this returns 100, then this means you need to call grow once with at most 100 threads in order to double the money.
    * ```
    * @example
    * ```ts
    * // NS2:
-   * //For example, if you want to determine how many grow calls you need to double the amount of money on foodnstuff, you would use:
-   * const growTimes = ns.growthAnalyze("foodnstuff", 2);
-   * //If this returns 100, then this means you need to call grow 100 times in order to double the money (or once with 100 threads).
+   * //For example, if you want to determine how many grow threads you need to double the amount of money on foodnstuff, you would use:
+   * const growThreads = ns.growthAnalyze("foodnstuff", 2);
+   * //If this returns 100, then this means you need to call grow once with at most 100 threads in order to double the money.
+   * ```
+   * @param host - Hostname of the target server.
+   * @param growthAmount - Multiplicative factor by which the server is grown. Decimal form.
+   * @returns The amount of grow threads needed to grow the specified server by the specified amount.
+   */
+  growthAnalyze(host: string, growthAmount: number, cores?: number): number;
+
+  /**
+   * Return the number of grow threads needed to grow a server to a certain target.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * This function returns the number of threads needed in order to increase
+   * the amount of money currently available on the specified server from startMoney to targetMoney.
+   *
+   * Important caveats:
+   * - The result is only valid for the server's current status. Changes in
+   *   security will change the result. Use functions in `ns.formulas` to find
+   *   results for arbitrary situations.
+   * - Calling grow N times with 1 thread will *not* be exactly the same effect as
+   *   calling it once with N threads, because of security changes.
+   * - The result will be an integer, not a fraction, and it rounds up.
+   * - The result is capped by `server.moneyMax`. In particular, if `startMoney >= server.moneyMax`
+   *   then this function always returns 0.
+   *
+   * @example
+   * ```ts
+   * // NS2:
+   * //For example, if you want to determine how many grow threads you need to recover from 50% money on foodnstuff, you would use:
+   * const server = ns.getServer("foodnstuff");
+   * const growThreads = ns.growthAnalyzeCorrected("foodnstuff", server.moneyMax, server.moneyMax/2);
+   * //If this returns 100, then this means you need to call grow once with 100 threads in order to double the money.
    * ```
    * @param host - Hostname of the target server.
    * @param growthAmount - Multiplicative factor by which the server is grown. Decimal form.
    * @returns The amount of grow calls needed to grow the specified server by the specified amount.
    */
-  growthAnalyze(host: string, growthAmount: number, cores?: number): number;
+  growthAnalyzeCorrected(host: string, targetMoney: number, startMoney: number, cores?: number): number;
 
   /**
    * Calculate the security increase for a number of threads.
