@@ -4788,7 +4788,7 @@ export interface NS {
    * Note that {@link NS.grow | grow} will add $1 to the host's money for each thread before applying this multiplier.
    * This means that at extremely low starting money, fewer threads would be needed to apply the same effective
    * multiplier than what is calculated by growthAnalyze.
-   * 
+   *
    * Use {@link NS.growthAnalyzeCorrected | growthAnalyzeCorrected} instead to calculate the exact number of threads
    * to reach a specified target money from the current starting money, taking into account the additive portion of
    * growth that is significant at extremely low starting money.
@@ -4818,7 +4818,7 @@ export interface NS {
    *
    * Like other basic hacking functions, this calculation uses the current status of the player and server.
    * To calculate using hypothetical server or player status, use the growThreads function from the Formulas API.
-   * 
+   *
    * @example
    * ```js
    * // calculate number of grow threads needed to grow foodnstuff to its maximum money:
