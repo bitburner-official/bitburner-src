@@ -165,6 +165,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         return calculatePercentMoneyHacked(server, person);
       },
+      // TODO 2.3: Remove growPercent, add growMultiplier function. Much better name given the output.
       growPercent:
         (ctx) =>
         (_server, _threads, _player, _cores = 1) => {
@@ -177,13 +178,14 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         },
       growThreads:
         (ctx) =>
-        (_server, _targetMoney, _cores = 1) => {
+        (_server, _player, _targetMoney, _cores = 1) => {
           const server = helpers.server(ctx, _server);
+          const player = helpers.person(ctx, _player);
           const targetMoney = helpers.number(ctx, "targetMoney", _targetMoney);
           const startMoney = helpers.number(ctx, "server.moneyAvailable", server.moneyAvailable);
           const cores = helpers.number(ctx, "cores", _cores);
           checkFormulasAccess(ctx);
-          return numCycleForGrowthCorrected(server, targetMoney, startMoney, cores);
+          return numCycleForGrowthCorrected(server, targetMoney, startMoney, cores, player);
         },
       hackTime: (ctx) => (_server, _player) => {
         const server = helpers.server(ctx, _server);

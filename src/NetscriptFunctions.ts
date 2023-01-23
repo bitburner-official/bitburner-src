@@ -297,43 +297,45 @@ export const ns: InternalAPI<NSFull> = {
     },
   growthAnalyze:
     (ctx) =>
-    (_hostname, _growth, _cores = 1) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const growth = helpers.number(ctx, "growth", _growth);
+    (_host, _multiplier, _cores = 1) => {
+      const host = helpers.string(ctx, "hostname", _host);
+      const mult = helpers.number(ctx, "multiplier", _multiplier);
       const cores = helpers.number(ctx, "cores", _cores);
 
       // Check argument validity
-      const server = helpers.getServer(ctx, hostname);
+      const server = helpers.getServer(ctx, host);
       if (!(server instanceof Server)) {
-        helpers.log(ctx, () => "Cannot be executed on this server.");
+        // Todo 2.3: Make this throw instead of returning 0?
+        helpers.log(ctx, () => `${host} is not a hackable server. Returning 0.`);
         return 0;
       }
-      if (typeof growth !== "number" || isNaN(growth) || growth < 1 || !isFinite(growth)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: growth must be numeric and >= 1, is ${growth}.`);
+      if (mult < 1 || !isFinite(mult)) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: multiplier must be finite and >= 1, is ${mult}.`);
+      }
+      // TODO 2.3: Add assertion function for positive integer, there are a lot of places everywhere that can use this
+      if (cores < 1 || !isFinite(cores)) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: cores must be finite and >= 1, is ${cores}.`);
       }
 
-      return numCycleForGrowth(server, Number(growth), cores);
+      return Math.ceil(numCycleForGrowth(server, mult, cores));
     },
   growthAnalyzeCorrected:
     (ctx) =>
-    (_hostname, _targetMoney, _startMoney, _cores = 1) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
+    (_host, _targetMoney, _cores = 1) => {
+      const host = helpers.string(ctx, "host", _host);
       const targetMoney = helpers.number(ctx, "targetMoney", _targetMoney);
-      const startMoney = helpers.number(ctx, "startMoney", _startMoney);
       const cores = helpers.number(ctx, "cores", _cores);
 
       // Check argument validity
-      const server = helpers.getServer(ctx, hostname);
+      const server = helpers.getServer(ctx, host);
       if (!(server instanceof Server)) {
-        helpers.log(ctx, () => "Cannot be executed on this server.");
-        return 0;
+        throw helpers.makeRuntimeErrorMsg(ctx, `The target server ${server.hostname} is not a hackable server.`);
       }
       if (cores < 1 || !isFinite(cores)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: cores must be numeric and >= 1, is ${cores}.`);
       }
-      // Other arguments are clamped inside numCycleForGrowthCorrected
-
-      return numCycleForGrowthCorrected(server, targetMoney, startMoney, cores);
+      // target money is clamped silently inside numCycleForGrowthCorrected, no need to throw here
+      return numCycleForGrowthCorrected(server, targetMoney, server.moneyAvailable, cores);
     },
   growthAnalyzeSecurity:
     (ctx) =>
