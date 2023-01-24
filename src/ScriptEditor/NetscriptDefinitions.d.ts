@@ -3962,7 +3962,7 @@ interface HackingFormulas {
    */
   growPercent(server: Server, threads: number, player: Person, cores?: number): number;
   /**
-   * Calculate how many threads it will take to grow server to targetMoney.
+   * Calculate how many threads it will take to grow server to targetMoney. Starting money is server.moneyAvailable.
    * @param server - Server info, typically from {@link NS.getServer | getServer}
    * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    * @param targetMoney - Desired final money, capped to server's moneyMax
@@ -4626,32 +4626,43 @@ export interface NS {
    * RAM cost: 0.15 GB
    *
    * Use your hacking skills to increase the amount of money available on a server.
-   * The runtime for this command depends on your hacking level and the target server’s
-   * security level. When `grow` completes, the money available on a target server will be increased
-   * by amount equal to the number of threads used and a certain, fixed percentage of current money on
-   * the server. This percentage is determined by the target server’s growth rate (which varies between servers)
-   * and security level. Generally, higher-level servers have higher growth rates.
-   * The {@link NS.getServerGrowth | getServerGrowth} function can be used to obtain a server’s growth rate.
    *
-   * Like {@link NS.hack | hack}, `grow` can be called on any server, regardless of where the script is running.
+   * Once the grow is complete, $1 is added to the server's available money for every script thread. This additive
+   * growth allows for rescuing a server even after it is emptied.
+   *
+   * After this addition, the thread count is also used to determine a multiplier, which the server's money is then
+   * multiplied by.
+   *
+   * The multiplier scales exponentially with thread count, and its base depends on the server's security
+   * level and in inherent "growth" statistic that varies between different servers.
+   *
+   * {@link NS.getServerGrowth | getServerGrowth} can be used to check the inherent growth statistic of a server.
+   *
+   * {@link NS.growthAnalyze | growthAnalyze} can be used to determine the number of threads needed for a specified
+   * multiplicative portion of server growth.
+   *
+   * {@link NS.growthAnalyzeMult | growthAnalyzeMult} can be used to determine the multiplicative portion of growth for
+   * a specified number of threads.
+   *
+   * The {@link NS.growthAnalyzeTargetMoney | growthAnalyzeTargetMoney} function can be used to determine the number of
+   * threads needed for reaching a certain target money (this takes into account both the additive and mutiplicative
+   * growth factors).
+   *
+   * Like {@link NS.hack | hack}, `grow` can be called on any hackable server, regardless of where the script is
+   * running. Hackable servers are any servers not owned by the player.
+   *
    * The grow() command requires root access to the target server, but there is no required hacking
-   * level to run the command. It also raises the security level of the target server by 0.004.
+   * level to run the command. It also raises the security level of the target server based on the number of threads.
+   * The security increase can be determined using {@link NS.growthAnalyzeSecurity | growthAnalyzeSecurity}.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var currentMoney = getServerMoneyAvailable("foodnstuff");
-   * currentMoney = currentMoney * grow("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * let currentMoney = ns.getServerMoneyAvailable("foodnstuff");
+   * ```js
+   * let currentMoney = ns.getServerMoneyAvailable("n00dles");
    * currentMoney *= await ns.grow("foodnstuff");
    * ```
    * @param host - Hostname of the target server to grow.
    * @param opts - Optional parameters for configuring function behavior.
-   * @returns The number by which the money on the server was multiplied for the growth.
+   * @returns The total effective multiplier that was applied to the server's money (after both additive and multiplicative growth).
    */
   grow(host: string, opts?: BasicHGWOptions): Promise<number>;
 
@@ -4700,22 +4711,24 @@ export interface NS {
   weakenAnalyze(threads: number, cores?: number): number;
 
   /**
-   * Predict the effect of hack.
+   * Calculate the decimal number of threads needed to hack a specified amount of money from a target host.
    * @remarks
    * RAM cost: 1 GB
    *
-   * This function returns the number of script threads you need when running the hack command
+   * This function returns the decimal number of script threads you need when running the hack command
    * to steal the specified amount of money from the target server.
    * If hackAmount is less than zero or greater than the amount of money available on the server,
    * then this function returns -1.
    *
-   * Warning: The value returned by this function isn’t necessarily a whole number.
    *
    * @example
    * ```ts
-   * //For example, let’s say the foodnstuff server has $10m and you run:
-   * hackAnalyzeThreads("foodnstuff", 1e6);
-   * //If this function returns 50, this means that if your next hack call is run on a script with 50 threads, it will steal $1m from the foodnstuff server.
+   * // Calculate threadcount of a single hack that would take $100k from n00dles
+   * const hackThreads = hackAnalyzeThreads("n00dles", 1e5);
+   *
+   * // Launching a script requires an integer thread count. The below would take less than the targeted $100k.
+   * ns.run("noodleHack.js", Math.floor(hackThreads))
+   *
    * ```
    * @param host - Hostname of the target server to analyze.
    * @param hackAmount - Amount of money you want to hack from the server.
@@ -4730,16 +4743,11 @@ export interface NS {
    *
    * Returns the part of the specified server’s money you will steal with a single thread hack.
    *
+   * Like other basic hacking analysis functions, this calculation uses the current status of the player and server.
+   * To calculate using hypothetical server or player status, obtain access to the Formulas API and use {@link HackingFormulas.hackPercent | formulas.hacking.hackPercent}.
+   *
    * @example
-   * ```ts
-   * // NS1:
-   * //For example, assume the following returns 0.01:
-   * var hackAmount = hackAnalyze("foodnstuff");
-   * //This means that if hack the foodnstuff server using a single thread, then you will steal 1%, or 0.01 of its total money. If you hack using N threads, then you will steal N*0.01 times its total money.
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * //For example, assume the following returns 0.01:
    * const hackAmount = ns.hackAnalyze("foodnstuff");
    * //This means that if hack the foodnstuff server using a single thread, then you will steal 1%, or 0.01 of its total money. If you hack using N threads, then you will steal N*0.01 times its total money.
@@ -4771,66 +4779,103 @@ export interface NS {
    *
    * This returned value is in decimal form, not percentage.
    *
+   * Like other basic hacking analysis functions, this calculation uses the current status of the player and server.
+   * To calculate using hypothetical server or player status, obtain access to the Formulas API and use {@link HackingFormulas.hackChance | formulas.hacking.hackChance}.
+   *
    * @param host - Hostname of the target server.
    * @returns The chance you have of successfully hacking the target server.
    */
   hackAnalyzeChance(host: string): number;
 
   /**
-   * Calculate the number of threads needed to multiply funds on a target host by a given multiplier.
+   * Calculate the number of grow threads needed for a given multiplicative growth factor.
    * @remarks
    * RAM cost: 1 GB
    *
-   * This function returns the integer number of {@link NS.grow | grow} threads needed in order to multiply the money
-   * available on the specified server by a given multiplier, at the server's current security level. This does not
-   * take into account the server's current money.
+   * This function returns the total decimal number of {@link NS.grow | grow} threads needed in order to multiply the
+   * money available on the specified server by a given multiplier, if all threads are executed at the server's current
+   * security level, regardless of how many threads are assigned to each call.
    *
-   * Note that {@link NS.grow | grow} will add $1 to the host's money for each thread before applying this multiplier.
-   * This means that at extremely low starting money, fewer threads would be needed to apply the same effective
-   * multiplier than what is calculated by growthAnalyze.
+   * Note that there is also an additive factor that is applied before the multiplier. Each {@link NS.grow | grow} call
+   * will add $1 to the host's money for each thread before applying the multiplier for its thread count. This means
+   * that at extremely low starting money, fewer threads would be needed to apply the same effective multiplier than
+   * what is calculated by growthAnalyze.
    *
-   * Use {@link NS.growthAnalyzeCorrected | growthAnalyzeCorrected} instead to calculate the exact number of threads
-   * to reach a specified target money from the current starting money, taking into account the additive portion of
-   * growth that is significant at extremely low starting money.
+   * Use {@link NS.growthAnalyzeTargetMoney | growthAnalyzeTargetMoney} instead to calculate the exact number of threads
+   * to reach a specified target money from the current starting money.
    *
-   * Like other basic hacking functions, this calculation uses the current status of the player and server.
-   * To calculate using hypothetical server or player status, use the growThreads function from the Formulas API.
+   * Like other basic hacking analysis functions, this calculation uses the current status of the player and server.
+   * To calculate using hypothetical server or player status, obtain access to the Formulas API and use {@link HackingFormulas.growThreads | formulas.hacking.growThreads}.
    *
    * @example
    * ```js
-   * // calculate number of grow threads needed to apply a 2x multiplier server money.
-   * const growThreads = ns.growthAnalyze("foodnstuff", 2);
+   * // calculate number of grow threads to apply 2x growth multiplier on n00dles (does not include the additive growth).
+   * const growThreads = ns.growthAnalyze("n00dles", 2);
+   *
+   * // When using the thread count to launch a script, it needs to be converted to an integer.
+   * ns.run("noodleGrow.js", Math.ceil(growThreads));
    * ```
    * @param host - Hostname of the target server.
-   * @param multiplier - Multiplicative factor by which the server is grown. Decimal form.
+   * @param multiplier - Multiplier that will be applied to a server's money after applying additive growth. Decimal form.
    * @param cores - Number of cores on the host running the grow function. Optional, defaults to 1.
-   * @returns Integer number of grow threads to apply the specified multiplier (ignoring additive growth).
+   * @returns Decimal number of grow threads needed for the specified multiplicative growth factor (does not include additive growth).
    */
   growthAnalyze(host: string, multiplier: number, cores?: number): number;
 
   /**
-   * Calculate the exact number of grow threads needed to grow a server to at least a certain target money.
+   * Calculate the exact integer number of grow threads needed to grow a server to a certain target money.
    * @remarks
    * RAM cost: 1 GB
    *
    * This function returns the integer number of grow threads needed in a single {@link NS.grow | grow} call in order
    * to increase the amount of money on the specified server from its current money to targetMoney.
    *
-   * Like other basic hacking functions, this calculation uses the current status of the player and server.
-   * To calculate using hypothetical server or player status, use the growThreads function from the Formulas API.
+   * Like other basic hacking analysis functions, this calculation uses the current status of the player and server.
+   * To calculate using hypothetical server or player status, obtain access to the Formulas API and use {@link HackingFormulas.growThreads | formulas.hacking.growThreads}.
    *
    * @example
    * ```js
-   * // calculate number of grow threads needed to grow foodnstuff to its maximum money:
-   * const maxMoney = ns.getServerMaxMoney("foodnstuff");
-   * const growThreads = ns.growthAnalyzeCorrected("foodnstuff", maxMoney);
+   * // calculate number of grow threads needed to grow n00dles to its maximum money:
+   * const maxMoney = ns.getServerMaxMoney("n00dles");
+   * const growThreads = ns.growthAnalyzeTargetMoney("n00dles", maxMoney);
    * ```
    * @param host - Hostname of the target server.
    * @param targetMoney - Target amount of money. Amount greater than host's max money will be treated as host's max.
    * @param cores - Number of cores on the host running the grow function. Optional, defaults to 1.
-   * @returns Integer number of grow threads to reach targetMoney.
+   * @returns Exact integer number of grow threads to reach targetMoney.
    */
-  growthAnalyzeCorrected(host: string, targetMoney: number, cores?: number): number;
+  growthAnalyzeTargetMoney(host: string, targetMoney: number, cores?: number): number;
+
+  /**
+   * Calculate the growth multiplier for a given number of grow threads. This does not include additive growth.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * This function returns the growth multiplier from {@link NS.grow | grow} running with the specified number of threads
+   * against the target host.
+   *
+   * When a grow is performed, $1/thread is added to the server's current money before the resulting multiplier is applied.
+   *
+   * This function depends on the server's current security level and the player's current multipliers.
+   * There is no Formulas API equivalent for this function at this time.
+   *
+   * @example
+   * ```js
+   * // Calculating expected growth on n00dles for a 10-thread grow
+   * const noodles = ns.getServer("n00dles");
+   * let money = noodles.startingMoney;
+   *
+   * money += 10; // simulating 10 threads of additive growth
+   * money *= ns.growthAnalyzeMult("n00dles", 10); // simulating 10-thread growth multiplier
+   * money = Math.min(noodles.moneyMax, money); // cap money to max
+   * ns.tprint(`Expected final money is ${money}`);
+   * ```
+   * @param host - Hostname of the target server.
+   * @param threads - Number of grow threads. Must be a finite integer greater than 1.
+   * @param cores - Number of cores on the script host running the grow function. Optional, defaults to 1.
+   * @returns Exact integer number of grow threads to reach targetMoney.
+   */
+  growthAnalyzeMult(host: string, threads: number, cores?: number): number;
 
   /**
    * Calculate the security increase for a number of threads.

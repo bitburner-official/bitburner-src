@@ -165,7 +165,9 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         return calculatePercentMoneyHacked(server, person);
       },
-      // TODO 2.3: Remove growPercent, add growMultiplier function. Much better name given the output.
+      /* TODO 2.3: Remove growPercent, add growMultiplier function?
+      Much better name given the output. Not sure if removedFunction error dialog/editing script will be too annoying.
+      Changing the function name also allows reordering params as server, player, etc. like other formulas functions */
       growPercent:
         (ctx) =>
         (_server, _threads, _player, _cores = 1) => {

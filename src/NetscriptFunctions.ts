@@ -89,6 +89,7 @@ import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers
 import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassType } from "./Enums";
 import { cloneDeep } from "lodash";
 import { FactionWorkType } from "./Enums";
+import { calculateServerGrowth } from "./Server/formulas/grow";
 import numeral from "numeral";
 
 export const enums: NSEnums = {
@@ -313,13 +314,13 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: multiplier must be finite and >= 1, is ${mult}.`);
       }
       // TODO 2.3: Add assertion function for positive integer, there are a lot of places everywhere that can use this
-      if (cores < 1 || !isFinite(cores)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: cores must be finite and >= 1, is ${cores}.`);
+      if (!Number.isInteger(cores) || cores < 1) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Cores should be a positive integer. Cores provided: ${cores}`);
       }
 
-      return Math.ceil(numCycleForGrowth(server, mult, cores));
+      return numCycleForGrowth(server, mult, cores);
     },
-  growthAnalyzeCorrected:
+  growthAnalyzeTargetMoney:
     (ctx) =>
     (_host, _targetMoney, _cores = 1) => {
       const host = helpers.string(ctx, "host", _host);
@@ -331,11 +332,29 @@ export const ns: InternalAPI<NSFull> = {
       if (!(server instanceof Server)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `The target server ${server.hostname} is not a hackable server.`);
       }
-      if (cores < 1 || !isFinite(cores)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: cores must be numeric and >= 1, is ${cores}.`);
+      if (!Number.isInteger(cores) || cores < 1) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Cores should be a positive integer. Cores provided: ${cores}`);
       }
       // target money is clamped silently inside numCycleForGrowthCorrected, no need to throw here
       return numCycleForGrowthCorrected(server, targetMoney, server.moneyAvailable, cores);
+    },
+  growthAnalyzeMult:
+    (ctx) =>
+    (_host, _threads, _cores = 1) => {
+      const host = helpers.string(ctx, "host", _host);
+      const server = helpers.getServer(ctx, host);
+      if (!(server instanceof Server)) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `The target server ${server.hostname} is not a hackable server.`);
+      }
+      const threads = helpers.number(ctx, "threads", _threads);
+      if (!Number.isInteger(threads) || threads < 1) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Threads should be a positive integer. Threads provided: ${threads}`);
+      }
+      const cores = helpers.number(ctx, "cores", _cores);
+      if (!Number.isInteger(cores) || cores < 1) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Cores should be a positive integer. Cores provided: ${cores}`);
+      }
+      return calculateServerGrowth(server, threads, Player, cores);
     },
   growthAnalyzeSecurity:
     (ctx) =>

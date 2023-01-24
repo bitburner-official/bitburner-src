@@ -71,7 +71,7 @@ export function numCycleForGrowth(server: Server, growth: number, cores = 1): nu
 /**
  * This function calculates the number of threads needed to grow a server from one $amount to a higher $amount
  * (ie, how many threads to grow this server from $200 to $600 for example). Used for formulas.growThreads and
- * growthAnalyzeCorrected.
+ * growthAnalyzeTargetMoney.
  * It protects the inputs (so putting in INFINITY for targetMoney will use moneyMax, putting in a negative for start will use 0, etc.)
  * @param server - Server being grown
  * @param targetMoney - How much you want the server grown TO (not by), for instance, to grow from 200 to 600, input 600
