@@ -48,10 +48,8 @@ There are two versions of Netscript:
 * :doc:`netscript1`
 * :doc:`netscriptjs`
 
-Visit the pages above to get more details about each version. If you are new
-to programming or unfamiliar with JavaScript, I would recommend starting out
-with :doc:`netscript1`. Experienced web developers can use :doc:`netscriptjs`
-to take advantage of faster speeds and additional features.
+Visit the pages above to get more details about each version. Note that :doc:`netscript1` is being depprecated, 
+so I'd recommend migrating any scripts using it to :doc:`netscriptjs`
 
 Here is a short summary of the differences between Netscript 1.0 and Netscript 2.0:
 
