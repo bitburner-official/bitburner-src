@@ -24,7 +24,7 @@ describe("Numeral formatting for positive numbers", () => {
     expect(numeralWrapper.formatBigNumber(987654321900000000)).toEqual("987654.322t");
   });
   test("should format really big numbers in readable format", () => {
-    expect(numeralWrapper.formatReallyBigNumber(987)).toEqual("987.000");
+    expect(numeralWrapper.formatReallyBigNumber(987)).toEqual("987");
     expect(numeralWrapper.formatReallyBigNumber(987654)).toEqual("987.654k");
     expect(numeralWrapper.formatReallyBigNumber(987654321)).toEqual("987.654m");
     expect(numeralWrapper.formatReallyBigNumber(987654321987)).toEqual("987.654b");
@@ -68,7 +68,7 @@ describe("Numeral formatting for negative numbers", () => {
     expect(numeralWrapper.formatBigNumber(-987654321900000000)).toEqual("-987654.322t");
   });
   test("should format really big numbers in readable format", () => {
-    expect(numeralWrapper.formatReallyBigNumber(-987)).toEqual("-987.000");
+    expect(numeralWrapper.formatReallyBigNumber(-987)).toEqual("-987");
     expect(numeralWrapper.formatReallyBigNumber(-987654)).toEqual("-987.654k");
     expect(numeralWrapper.formatReallyBigNumber(-987654321)).toEqual("-987.654m");
     expect(numeralWrapper.formatReallyBigNumber(-987654321987)).toEqual("-987.654b");
@@ -123,7 +123,7 @@ describe("Numeral formatting of text", () => {
     expect(numeralWrapper.formatBigNumber("-987654321900000000")).toEqual("-987654.322t");
   });
   test("should format really big numbers in readable format", () => {
-    expect(numeralWrapper.formatReallyBigNumber("987")).toEqual("987.000");
+    expect(numeralWrapper.formatReallyBigNumber("987")).toEqual("987");
     expect(numeralWrapper.formatReallyBigNumber("987654")).toEqual("987.654k");
     expect(numeralWrapper.formatReallyBigNumber("987654321")).toEqual("987.654m");
     expect(numeralWrapper.formatReallyBigNumber("987654321987")).toEqual("987.654b");
