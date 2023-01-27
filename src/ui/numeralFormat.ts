@@ -62,14 +62,16 @@ class NumeralFormatter {
     if (n === Infinity) return "∞";
     for (let i = 0; i < extraFormats.length; i++) {
       if (extraFormats[i] <= nAbs && nAbs < extraFormats[i] * 1000) {
-        return this.format((n as number) / extraFormats[i], "0." + "0".repeat(decimalPlaces)) + extraNotations[i];
+        return (
+          this.format((n as number) / extraFormats[i], "0." + "[" + "0".repeat(decimalPlaces) + "]") + extraNotations[i]
+        );
       }
     }
     if (nAbs < 1000) {
-      return this.format(n, "0." + "0".repeat(decimalPlaces));
+      return this.format(n, "0." + "[" + "0".repeat(decimalPlaces) + "]");
     }
-    const str = this.format(n, "0." + "0".repeat(decimalPlaces) + "a");
-    if (str === "NaNt") return this.format(n, "0." + " ".repeat(decimalPlaces) + "e+0");
+    const str = this.format(n, "0." + "[" + "0".repeat(decimalPlaces) + "]" + "a");
+    if (str === "NaNt") return this.format(n, "0." + "[" + " ".repeat(decimalPlaces) + "]" + "e+0");
     return str;
   }
 
@@ -85,9 +87,6 @@ class NumeralFormatter {
   }
 
   formatSkill(n: number): string {
-    if (n < 1e15) {
-      return this.format(n, "0,0");
-    }
     return this.formatReallyBigNumber(n);
   }
 
