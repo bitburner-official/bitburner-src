@@ -134,7 +134,7 @@ describe("Numeral formatting of text", () => {
     expect(numeralWrapper.formatReallyBigNumber("987654321987654321987654321")).toEqual("987.654S");
     expect(numeralWrapper.formatReallyBigNumber("987654321987654321987654321987")).toEqual("987.654o");
     expect(numeralWrapper.formatReallyBigNumber("987654321987654321987654321987654")).toEqual("987.654n");
-    expect(numeralWrapper.formatReallyBigNumber("-987")).toEqual("-987.000");
+    expect(numeralWrapper.formatReallyBigNumber("-987")).toEqual("-987");
     expect(numeralWrapper.formatReallyBigNumber("-987654")).toEqual("-987.654k");
     expect(numeralWrapper.formatReallyBigNumber("-987654321")).toEqual("-987.654m");
     expect(numeralWrapper.formatReallyBigNumber("-987654321987")).toEqual("-987.654b");
