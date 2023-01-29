@@ -56,10 +56,7 @@ function AutoAssignJob(props: IAutoAssignProps): React.ReactElement {
   const nextUna = props.office.employeeNextJobs[EmployeePositions.Unassigned];
 
   function assignEmployee(): void {
-    if (nextUna <= 0) {
-      console.warn("Cannot assign employee. No unassigned employees available");
-      return;
-    }
+    if (nextUna <= 0) return console.warn("Cannot assign employee. No unassigned employees available");
 
     props.office.autoAssignJob(props.job, nextJob + 1);
     props.rerender();

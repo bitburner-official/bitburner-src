@@ -93,21 +93,11 @@ export class OfficeSpace {
     this.maxHap = 100;
     this.maxMor = 100;
 
-    if (industry.hasResearch("Go-Juice")) {
-      this.maxEne += 10;
-    }
-    if (industry.hasResearch("JoyWire")) {
-      this.maxHap += 10;
-    }
-    if (industry.hasResearch("Sti.mu")) {
-      this.maxMor += 10;
-    }
-    if (industry.hasResearch("AutoBrew")) {
-      this.autoCoffee = true;
-    }
-    if (industry.hasResearch("AutoPartyManager")) {
-      this.autoParty = true;
-    }
+    if (industry.hasResearch("Go-Juice")) this.maxEne += 10;
+    if (industry.hasResearch("JoyWire")) this.maxHap += 10;
+    if (industry.hasResearch("Sti.mu")) this.maxMor += 10;
+    if (industry.hasResearch("AutoBrew")) this.autoCoffee = true;
+    if (industry.hasResearch("AutoPartyManager")) this.autoParty = true;
 
     if (this.totalEmployees > 0) {
       /** Multiplier for employee morale/happiness/energy based on company performance */
@@ -234,11 +224,13 @@ export class OfficeSpace {
   }
 
   autoAssignJob(job: EmployeePositions, target: number): boolean {
+    if (job === EmployeePositions.Unassigned) {
+      throw new Error("internal autoAssignJob function called with EmployeePositions.Unassigned");
+    }
     const diff = target - this.employeeNextJobs[job];
 
-    if (diff === 0) {
-      return true;
-    } else if (diff <= this.employeeNextJobs[EmployeePositions.Unassigned]) {
+    if (diff === 0) return true; // We are already at the desired number
+    else if (diff <= this.employeeNextJobs[EmployeePositions.Unassigned]) {
       // This covers both a negative diff (reducing the amount of employees in position) and a positive (increasing and using up unassigned employees)
       this.employeeNextJobs[EmployeePositions.Unassigned] -= diff;
       this.employeeNextJobs[job] = target;

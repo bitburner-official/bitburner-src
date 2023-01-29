@@ -29,7 +29,6 @@ import {
   SellProduct,
   SetSmartSupply,
   BuyMaterial,
-  AutoAssignJob,
   UpgradeOfficeSize,
   PurchaseWarehouse,
   UpgradeWarehouse,
@@ -624,7 +623,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
           ctx,
           `Unable to bring '${job} employees to ${amount}. Requires ${totalNewEmployees} unassigned employees`,
         );
-      return AutoAssignJob(office, job, amount);
+      return office.autoAssignJob(job, amount);
     },
     hireEmployee: (ctx) => (_divisionName, _cityName, _position?) => {
       checkAccess(ctx, 8);
