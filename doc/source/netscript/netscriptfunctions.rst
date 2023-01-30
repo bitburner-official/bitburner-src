@@ -16,9 +16,16 @@ This includes information such as function signatures, what they do, and their r
     sleep() <basicfunctions/sleep>
     print() <basicfunctions/print>
     tprint() <basicfunctions/tprint>
+    tFormat() <basicfunctions/tFormat>
+    nFormat() <basicfunctions/nFormat>
     disableLog() <basicfunctions/disableLog>
     enableLog() <basicfunctions/enableLog>
     isLogEnabled() <basicfunctions/isLogEnabled>
+    clearLog() <basicfunctions/clearLog>
+    tail() <basicfunctions/tail>
+    closeTail() <basicfunctions/closeTail>
+    moveTail() <basicfunctions/moveTail>
+    resizeTail() <basicfunctions/resizeTail>
     scan() <basicfunctions/scan>
     nuke() <basicfunctions/nuke>
     brutessh() <basicfunctions/brutessh>
@@ -31,10 +38,14 @@ This includes information such as function signatures, what they do, and their r
     spawn() <basicfunctions/spawn>
     kill() <basicfunctions/kill>
     killall() <basicfunctions/killall>
+    scriptKill() <basicfunctions/scriptKill>
+    scriptRunning() <basicfunctions/scriptRunning>
     scp() <basicfunctions/scp>
     ls() <basicfunctions/ls>
     ps() <basicfunctions/ps>
+    mv() <basicfunctions/mv>
     hasRootAccess() <basicfunctions/hasRootAccess>
+    getHostname() <basicfunctions/getHostname>
     getHackingLevel() <basicfunctions/getHackingLevel>
     getHackingMultipliers() <basicfunctions/getHackingMultipliers>
     getHacknetMultipliers() <basicfunctions/getHacknetMultipliers>
@@ -49,14 +60,14 @@ This includes information such as function signatures, what they do, and their r
     serverExists() <basicfunctions/serverExists>
     fileExists() <basicfunctions/fileExists>
     isRunning() <basicfunctions/isRunning>
-    getPurchasedServerCost() <basicfunctions/getPurchasedServerCost>
     purchaseServer() <basicfunctions/purchaseServer>
     deleteServer() <basicfunctions/deleteServer>
     upgradePurchasedServer() <basicfunctions/upgradePurchasedServer>
     getPurchasedServers() <basicfunctions/getPurchasedServers>
     getPurchasedServerLimit() <basicfunctions/getPurchasedServerLimit>
     getPurchasedServerMaxRam() <basicfunctions/getPurchasedServerMaxRam>
+    getPurchasedServerCost() <basicfunctions/getPurchasedServerCost>
     getPurchasedServerUpgradeCost() <basicfunctions/getPurchasedServerUpgradeCost>
-    scriptRunning() <basicfunctions/scriptRunning>
-    scriptKill() <basicfunctions/scriptKill>
     getScriptRam() <basicfunctions/getScriptRam>
+    share() <basicfunctions/share>
+    getSharePower() <basicfunctions/getSharePower>
