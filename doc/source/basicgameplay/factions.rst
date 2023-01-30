@@ -218,7 +218,7 @@ List of Factions and their Requirements
 |                     | The Covenant   | * 20 Augmentations                      |                               |
 |                     |                | * $75b                                  |                               |
 |                     |                | * Hacking Level of 850                  |                               |
-|                     |                | * or All Combat Stats of 850            |                               |
+|                     |                | * All Combat Stats of 850               |                               |
 +                     +----------------+-----------------------------------------+-------------------------------+
 |                     | Daedalus       | * 30 Augmentations                      |                               |
 |                     |                | * $100b                                 |                               |
