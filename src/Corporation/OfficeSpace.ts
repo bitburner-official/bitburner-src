@@ -229,7 +229,8 @@ export class OfficeSpace {
     }
     const diff = target - this.employeeNextJobs[job];
 
-    if (diff === 0) return true; // We are already at the desired number
+    if (diff === 0) return true;
+    // We are already at the desired number
     else if (diff <= this.employeeNextJobs[EmployeePositions.Unassigned]) {
       // This covers both a negative diff (reducing the amount of employees in position) and a positive (increasing and using up unassigned employees)
       this.employeeNextJobs[EmployeePositions.Unassigned] -= diff;
