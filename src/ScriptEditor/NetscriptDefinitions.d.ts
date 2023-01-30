@@ -6854,7 +6854,7 @@ export type NS = {
    * @remarks
    * RAM cost: 2.4 GB
    *
-   * Increases your rep gain of hacking contracts while share is called.
+   * Increases your rep gain of all faction work types while share is called.
    * Scales with thread count.
    */
   share(): Promise<void>;
