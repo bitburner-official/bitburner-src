@@ -4,6 +4,7 @@ import { Settings } from "../../Settings/Settings";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { GameOptionsPage } from "./GameOptionsPage";
 import { formatTime } from "../../utils/helpers/formatTime";
+import { FormatsNeedReset } from "../../ui/nFormat";
 
 export const InterfacePage = (): React.ReactElement => {
   const [timestampFormat, setTimestampFormat] = useState(Settings.TimestampsFormat);
@@ -12,6 +13,7 @@ export const InterfacePage = (): React.ReactElement => {
   function handleLocaleChange(event: SelectChangeEvent<string>): void {
     setLocale(event.target.value);
     Settings.Locale = event.target.value;
+    FormatsNeedReset.emit();
   }
   function handleTimestampFormatChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setTimestampFormat(event.target.value);
@@ -19,6 +21,15 @@ export const InterfacePage = (): React.ReactElement => {
   }
   return (
     <GameOptionsPage title="Interface">
+      <OptionSwitch
+        checked={Settings.hideTrailingDecimalZeros}
+        onChange={(newValue) => {
+          Settings.hideTrailingDecimalZeros = newValue;
+          FormatsNeedReset.emit();
+        }}
+        text="Hide trailing fractional zeroes for decimals"
+        tooltip={<>If this is set, zeroes at the end of a fractional part of a decimal will not be displayed.</>}
+      />
       <OptionSwitch
         checked={Settings.DisableASCIIArt}
         onChange={(newValue) => (Settings.DisableASCIIArt = newValue)}

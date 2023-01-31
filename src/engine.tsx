@@ -26,7 +26,7 @@ import { Player } from "@player";
 import { saveObject, loadGame } from "./SaveObject";
 import { initForeignServers } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
-import { ThemeEvents } from "./Themes/ui/Theme";
+import { FormatsNeedReset } from "./ui/nFormat";
 import { initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
 import { Terminal } from "./Terminal";
 
@@ -226,7 +226,7 @@ const Engine: {
     // Load game from save or create new game
 
     if (loadGame(saveString)) {
-      ThemeEvents.emit();
+      FormatsNeedReset.emit();
       initSourceFiles();
       initDarkWebItems();
       initAugmentations(); // Also calls Player.reapplyAllAugmentations()
@@ -370,6 +370,7 @@ const Engine: {
       );
     } else {
       // No save found, start new game
+      FormatsNeedReset.emit();
       initSourceFiles();
       initDarkWebItems();
       Engine.start(); // Run main game loop and Scripts loop

@@ -172,8 +172,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
           }
         >
           <Typography color={props.warehouse.sizeUsed >= props.warehouse.size ? "error" : "primary"}>
-            Storage: {formatBigNumber(props.warehouse.sizeUsed)} /{" "}
-            {formatBigNumber(props.warehouse.size)}
+            Storage: {formatBigNumber(props.warehouse.sizeUsed)} / {formatBigNumber(props.warehouse.size)}
           </Typography>
         </Tooltip>
       </Box>

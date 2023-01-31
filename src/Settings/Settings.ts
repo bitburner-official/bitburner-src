@@ -85,6 +85,8 @@ export const Settings = {
   MonacoVim: false,
   /** Word wrap setting for Script Editor. */
   MonacoWordWrap: "off" as WordWrapOptions,
+  /** Whether to hide trailing zeroes on fractional part of decimal */
+  hideTrailingDecimalZeros: false,
 
   load(saveString: string) {
     const save = JSON.parse(saveString);

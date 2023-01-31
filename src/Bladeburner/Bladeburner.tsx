@@ -19,7 +19,7 @@ import { ConsoleHelpText } from "./data/Help";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { BladeburnerConstants } from "./data/Constants";
-import { formatExp, formatMoney, formatPercentage, formatReallyBigNumber, formatStamina } from "../ui/nFormat";
+import { formatExp, formatMoney, formatPercentage, formatBigNumber, formatStamina } from "../ui/nFormat";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { addOffset } from "../utils/helpers/addOffset";
 import { Factions, factionExists } from "../Faction/Factions";
@@ -1288,14 +1288,12 @@ export class Bladeburner {
               this.changeRank(person, gain);
               if (isOperation && this.logging.ops) {
                 this.log(
-                  `${person.whoAmI()}: ${action.name} successfully completed! Gained ${formatReallyBigNumber(
-                    gain,
-                  )} rank`,
+                  `${person.whoAmI()}: ${action.name} successfully completed! Gained ${formatBigNumber(gain)} rank`,
                 );
               } else if (!isOperation && this.logging.contracts) {
                 this.log(
                   `${person.whoAmI()}: ${action.name} contract successfully completed! Gained ` +
-                    `${formatReallyBigNumber(gain)} rank and ${formatMoney(moneyGain)}`,
+                    `${formatBigNumber(gain)} rank and ${formatMoney(moneyGain)}`,
                 );
               }
             }
@@ -1460,7 +1458,7 @@ export class Bladeburner {
               " dex exp, " +
               formatExp(agiExpGain) +
               " agi exp, " +
-              formatReallyBigNumber(staminaGain) +
+              formatBigNumber(staminaGain) +
               " max stamina",
           );
         }
@@ -1488,7 +1486,7 @@ export class Bladeburner {
         if (this.logging.general) {
           this.log(
             `${person.whoAmI()}: ` +
-              `Field analysis completed. Gained ${formatReallyBigNumber(rankGain)} rank, ` +
+              `Field analysis completed. Gained ${formatBigNumber(rankGain)} rank, ` +
               `${formatExp(hackingExpGain)} hacking exp, and ` +
               `${formatExp(charismaExpGain)} charisma exp`,
           );

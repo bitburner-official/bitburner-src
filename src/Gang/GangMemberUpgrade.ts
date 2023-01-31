@@ -1,5 +1,5 @@
 import { IMults, UpgradeType } from "./data/upgrades";
-import { formatPercentage } from "../ui/nFormat";
+import { formatPercentage, FormatsReset } from "../ui/nFormat";
 
 export class GangMemberUpgrade {
   name: string;
@@ -13,8 +13,9 @@ export class GangMemberUpgrade {
     this.cost = cost;
     this.type = type;
     this.mults = mults;
-
-    this.desc = this.createDescription();
+    // No initialization because it depend on number formatter config
+    this.desc = "";
+    FormatsReset.subscribe(() => (this.desc = this.createDescription()));
   }
 
   createDescription(): string {

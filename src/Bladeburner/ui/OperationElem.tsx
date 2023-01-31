@@ -12,7 +12,7 @@ import { Operation } from "../Operation";
 import { Operations } from "../data/Operations";
 import { Player } from "@player";
 import { CopyableText } from "../../ui/React/CopyableText";
-import { formatNumber, formatReallyBigNumber } from "../../ui/nFormat";
+import { formatNumber, formatBigNumber } from "../../ui/nFormat";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 
@@ -79,11 +79,11 @@ export function OperationElem(props: IProps): React.ReactElement {
         <br />
         Time Required: {convertTimeMsToTimeElapsedString(actionTime * 1000)}
         <br />
-        Operations remaining: {formatReallyBigNumber(Math.floor(props.action.count), 3)}
+        Operations remaining: {formatBigNumber(Math.floor(props.action.count), 3)}
         <br />
-        Successes: {formatReallyBigNumber(props.action.successes, 3)}
+        Successes: {formatBigNumber(props.action.successes, 3)}
         <br />
-        Failures: {formatReallyBigNumber(props.action.failures, 3)}
+        Failures: {formatBigNumber(props.action.failures, 3)}
       </Typography>
       <br />
       <Autolevel rerender={rerender} action={props.action} />
