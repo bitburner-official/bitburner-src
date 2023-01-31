@@ -16,7 +16,7 @@ import { CorporationUnlockUpgrade, CorporationUnlockUpgrades } from "../data/Cor
 import { CorporationUpgrade, CorporationUpgradeIndex, CorporationUpgrades } from "../data/CorporationUpgrades";
 
 import { CONSTANTS } from "../../Constants";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { nFormat } from "../../ui/nFormat";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { Money } from "../../ui/React/Money";
 import { MoneyRate } from "../../ui/React/MoneyRate";
@@ -40,7 +40,7 @@ export function Overview({ rerender }: IProps): React.ReactElement {
   const multRows: string[][] = [];
   function appendMult(name: string, value: number): void {
     if (value === 1) return;
-    multRows.push([name, numeralWrapper.format(value, "0.000")]);
+    multRows.push([name, nFormat(value, "0.000")]);
   }
   appendMult("Production Multiplier: ", corp.getProductionMultiplier());
   appendMult("Storage Multiplier: ", corp.getStorageMultiplier());
@@ -61,7 +61,7 @@ export function Overview({ rerender }: IProps): React.ReactElement {
           ["Total Expenses:", <MoneyRate money={corp.expenses} />],
           ["Total Profit:", <MoneyRate money={corp.revenue - corp.expenses} />],
           ["Publicly Traded:", corp.public ? "Yes" : "No"],
-          ["Owned Stock Shares:", numeralWrapper.format(corp.numShares, "0.000a")],
+          ["Owned Stock Shares:", nFormat(corp.numShares, "0.000a")],
           ["Stock Price:", corp.public ? <Money money={corp.sharePrice} /> : "N/A"],
         ]}
       />
@@ -71,16 +71,13 @@ export function Overview({ rerender }: IProps): React.ReactElement {
           title={
             <StatsTable
               rows={[
-                ["Outstanding Shares:", numeralWrapper.format(corp.issuedShares, "0.000a")],
-                [
-                  "Private Shares:",
-                  numeralWrapper.format(corp.totalShares - corp.issuedShares - corp.numShares, "0.000a"),
-                ],
+                ["Outstanding Shares:", nFormat(corp.issuedShares, "0.000a")],
+                ["Private Shares:", nFormat(corp.totalShares - corp.issuedShares - corp.numShares, "0.000a")],
               ]}
             />
           }
         >
-          <Typography>Total Stock Shares: {numeralWrapper.format(corp.totalShares, "0.000a")}</Typography>
+          <Typography>Total Stock Shares: {nFormat(corp.totalShares, "0.000a")}</Typography>
         </Tooltip>
       </Box>
       <br />
@@ -282,7 +279,7 @@ function DividendsStats({ profit }: IDividendsStatsProps): React.ReactElement {
     <StatsTable
       rows={[
         ["Retained Profits (after dividends):", <MoneyRate money={retainedEarnings} />],
-        ["Dividend Percentage:", numeralWrapper.format(corp.dividendRate, "0%")],
+        ["Dividend Percentage:", nFormat(corp.dividendRate, "0%")],
         ["Dividends per share:", <MoneyRate money={dividendsPerShare} />],
         ["Your earnings as a shareholder:", <MoneyRate money={playerEarnings} />],
       ]}

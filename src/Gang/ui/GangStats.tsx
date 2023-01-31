@@ -5,8 +5,7 @@
 import React from "react";
 import { Factions } from "../../Faction/Factions";
 
-import { formatNumber } from "../../utils/StringHelperFunctions";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatNumber, formatRespect, formatWanted } from "../../ui/nFormat";
 import { MoneyRate } from "../../ui/React/MoneyRate";
 import { Reputation } from "../../ui/React/Reputation";
 import { AllGangs } from "../AllGangs";
@@ -41,8 +40,7 @@ export function GangStats(): React.ReactElement {
           }
         >
           <Typography>
-            Respect: {numeralWrapper.formatRespect(gang.respect)} (
-            {numeralWrapper.formatRespect(5 * gang.respectGainRate)} / sec)
+            Respect: {formatRespect(gang.respect)} ({formatRespect(5 * gang.respectGainRate)} / sec)
           </Typography>
         </Tooltip>
       </Box>
@@ -57,8 +55,7 @@ export function GangStats(): React.ReactElement {
           }
         >
           <Typography>
-            Wanted Level: {numeralWrapper.formatWanted(gang.wanted)} (
-            {numeralWrapper.formatWanted(5 * gang.wantedGainRate)} / sec)
+            Wanted Level: {formatWanted(gang.wanted)} ({formatWanted(5 * gang.wantedGainRate)} / sec)
           </Typography>
         </Tooltip>
       </Box>

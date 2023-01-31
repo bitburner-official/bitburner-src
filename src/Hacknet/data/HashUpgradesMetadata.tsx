@@ -1,7 +1,7 @@
 // Metadata used to construct all Hash Upgrades
 import React from "react";
 import { IConstructorParams } from "../HashUpgrade";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { nFormat } from "../../ui/nFormat";
 import { Money } from "../../ui/React/Money";
 
 export const HashUpgradesMetadata: IConstructorParams[] = [
@@ -81,7 +81,7 @@ export const HashUpgradesMetadata: IConstructorParams[] = [
     desc: "Exchange hashes for 100 Bladeburner Rank",
     name: "Exchange for Bladeburner Rank",
     effectText: (level: number): JSX.Element | null => (
-      <>Acquired a total of {numeralWrapper.format(100 * level, "0a")} Bladeburner rank</>
+      <>Acquired a total of {nFormat(100 * level, "0a")} Bladeburner rank</>
     ),
     value: 100,
   },
@@ -90,7 +90,7 @@ export const HashUpgradesMetadata: IConstructorParams[] = [
     desc: "Exchanges hashes for 10 Bladeburner Skill Points",
     name: "Exchange for Bladeburner SP",
     effectText: (level: number): JSX.Element | null => (
-      <>Acquired a total of {numeralWrapper.format(10 * level, "0a")} Bladeburner Skill Points</>
+      <>Acquired a total of {nFormat(10 * level, "0a")} Bladeburner Skill Points</>
     ),
     value: 10,
   },

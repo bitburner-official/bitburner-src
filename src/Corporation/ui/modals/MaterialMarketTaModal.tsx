@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatMoney, nFormat } from "../../../ui/nFormat";
 import { Material } from "../../Material";
 import { Modal } from "../../../ui/React/Modal";
 import { useDivision } from "../Context";
@@ -54,8 +54,8 @@ function MarketTA2(props: IMarketTA2Props): React.ReactElement {
       <Typography variant="h4">Market-TA.II</Typography>
       <br />
       <Typography>
-        If you sell at {numeralWrapper.formatMoney(sCost)}, then you will sell{" "}
-        {numeralWrapper.format(markup, "0.00000")}x as much compared to if you sold at market price.
+        If you sell at {formatMoney(sCost)}, then you will sell {nFormat(markup, "0.00000")}x as much compared to if you
+        sold at market price.
       </Typography>
       <TextField type="number" onChange={onChange} value={newCost} />
       <br />
@@ -103,9 +103,8 @@ export function MaterialMarketTaModal(props: IProps): React.ReactElement {
       <>
         <Typography variant="h4">Market-TA.I</Typography>
         <Typography>
-          The maximum sale price you can mark this up to is {numeralWrapper.formatMoney(props.mat.bCost + markupLimit)}.
-          This means that if you set the sale price higher than this, you will begin to experience a loss in number of
-          sales
+          The maximum sale price you can mark this up to is {formatMoney(props.mat.bCost + markupLimit)}. This means
+          that if you set the sale price higher than this, you will begin to experience a loss in number of sales
         </Typography>
 
         <FormControlLabel

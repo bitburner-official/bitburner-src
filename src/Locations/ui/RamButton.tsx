@@ -8,7 +8,7 @@ import { Player } from "@player";
 import { purchaseRamForHomeComputer } from "../../Server/ServerPurchases";
 
 import { Money } from "../../ui/React/Money";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatRAM } from "../../ui/nFormat";
 
 import { MathJax } from "better-react-mathjax";
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
@@ -45,8 +45,8 @@ export function RamButton(props: IProps): React.ReactElement {
         </Typography>
         <br />
         <Button disabled={!Player.canAfford(cost)} onClick={buy}>
-          Upgrade 'home' RAM ({numeralWrapper.formatRAM(homeComputer.maxRam)} -&gt;&nbsp;
-          {numeralWrapper.formatRAM(homeComputer.maxRam * 2)}) -&nbsp;
+          Upgrade 'home' RAM ({formatRAM(homeComputer.maxRam)} -&gt;&nbsp;
+          {formatRAM(homeComputer.maxRam * 2)}) -&nbsp;
           <Money money={cost} forPurchase={true} />
         </Button>
       </span>

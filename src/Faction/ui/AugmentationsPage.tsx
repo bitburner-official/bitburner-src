@@ -8,7 +8,7 @@ import { PurchasableAugmentations } from "../../Augmentation/ui/PurchasableAugme
 import { PurchaseAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatReallyBigNumber } from "../../ui/nFormat";
 import { Favor } from "../../ui/React/Favor";
 import { Reputation } from "../../ui/React/Reputation";
 import { FactionNames } from "../data/FactionNames";
@@ -140,7 +140,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
         }
       >
         <Typography>
-          <b>Price multiplier:</b> x {numeralWrapper.formatReallyBigNumber(getGenericAugmentationPriceMultiplier())}
+          <b>Price multiplier:</b> x {formatReallyBigNumber(getGenericAugmentationPriceMultiplier())}
         </Typography>
       </Tooltip>
     ) : (
@@ -154,7 +154,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
       >
         <Typography>
           <b>Price multiplier:</b> x{" "}
-          {numeralWrapper.formatReallyBigNumber(
+          {formatReallyBigNumber(
             Math.pow(
               CONSTANTS.SoACostMult,
               augs.filter((augmentationName) => Player.hasAugmentation(augmentationName)).length,
@@ -162,7 +162,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
           )}
           <br />
           <b>Reputation multiplier:</b> x{" "}
-          {numeralWrapper.formatReallyBigNumber(
+          {formatReallyBigNumber(
             Math.pow(
               CONSTANTS.SoARepMult,
               augs.filter((augmentationName) => Player.hasAugmentation(augmentationName)).length,

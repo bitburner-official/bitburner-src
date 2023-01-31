@@ -4,7 +4,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { GangMember } from "../GangMember";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatRespect, nFormat } from "../../ui/nFormat";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { Modal } from "../../ui/React/Modal";
 import { useGang } from "./Context";
@@ -34,22 +34,22 @@ export function AscensionModal(props: IProps): React.ReactElement {
       <>
         You ascended {props.member.name}!<br />
         <br />
-        Your gang lost {numeralWrapper.formatRespect(res.respect)} respect.
+        Your gang lost {formatRespect(res.respect)} respect.
         <br />
         <br />
         {props.member.name} gained the following stat multipliers for ascending:
         <br />
-        Hacking: x{numeralWrapper.format(res.hack, "0.000")}
+        Hacking: x{nFormat(res.hack, "0.000")}
         <br />
-        Strength: x{numeralWrapper.format(res.str, "0.000")}
+        Strength: x{nFormat(res.str, "0.000")}
         <br />
-        Defense: x{numeralWrapper.format(res.def, "0.000")}
+        Defense: x{nFormat(res.def, "0.000")}
         <br />
-        Dexterity: x{numeralWrapper.format(res.dex, "0.000")}
+        Dexterity: x{nFormat(res.dex, "0.000")}
         <br />
-        Agility: x{numeralWrapper.format(res.agi, "0.000")}
+        Agility: x{nFormat(res.agi, "0.000")}
         <br />
-        Charisma: x{numeralWrapper.format(res.cha, "0.000")}
+        Charisma: x{nFormat(res.cha, "0.000")}
         <br />
       </>,
     );
@@ -68,28 +68,22 @@ export function AscensionModal(props: IProps): React.ReactElement {
         their non-Augmentation upgrades and their stats will reset back to 1.
         <br />
         <br />
-        Furthermore, your gang will lose {numeralWrapper.formatRespect(props.member.earnedRespect)} respect
+        Furthermore, your gang will lose {formatRespect(props.member.earnedRespect)} respect
         <br />
         <br />
         In return, they will gain the following permanent boost to stat multipliers:
         <br />
-        Hacking: x{numeralWrapper.format(preAscend.hack, "0.000")} =&gt; x
-        {numeralWrapper.format(postAscend.hack, "0.000")}
+        Hacking: x{nFormat(preAscend.hack, "0.000")} =&gt; x{nFormat(postAscend.hack, "0.000")}
         <br />
-        Strength: x{numeralWrapper.format(preAscend.str, "0.000")} =&gt; x
-        {numeralWrapper.format(postAscend.str, "0.000")}
+        Strength: x{nFormat(preAscend.str, "0.000")} =&gt; x{nFormat(postAscend.str, "0.000")}
         <br />
-        Defense: x{numeralWrapper.format(preAscend.def, "0.000")} =&gt; x
-        {numeralWrapper.format(postAscend.def, "0.000")}
+        Defense: x{nFormat(preAscend.def, "0.000")} =&gt; x{nFormat(postAscend.def, "0.000")}
         <br />
-        Dexterity: x{numeralWrapper.format(preAscend.dex, "0.000")} =&gt; x
-        {numeralWrapper.format(postAscend.dex, "0.000")}
+        Dexterity: x{nFormat(preAscend.dex, "0.000")} =&gt; x{nFormat(postAscend.dex, "0.000")}
         <br />
-        Agility: x{numeralWrapper.format(preAscend.agi, "0.000")} =&gt; x
-        {numeralWrapper.format(postAscend.agi, "0.000")}
+        Agility: x{nFormat(preAscend.agi, "0.000")} =&gt; x{nFormat(postAscend.agi, "0.000")}
         <br />
-        Charisma: x{numeralWrapper.format(preAscend.cha, "0.000")} =&gt; x
-        {numeralWrapper.format(postAscend.cha, "0.000")}
+        Charisma: x{nFormat(preAscend.cha, "0.000")} =&gt; x{nFormat(postAscend.cha, "0.000")}
         <br />
       </Typography>
       <Button onClick={confirm}>Ascend</Button>

@@ -22,7 +22,7 @@ import { Page } from "../ui/Router";
 import { Locations } from "../Locations/Locations";
 import { GetServer } from "../Server/AllServers";
 import { Programs } from "../Programs/Programs";
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatMoney, formatRAM, formatReputation } from "../ui/nFormat";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Company } from "../Company/Company";
 import { Companies } from "../Company/Companies";
@@ -458,10 +458,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
 
       if (Player.money < item.price) {
-        helpers.log(
-          ctx,
-          () => `Not enough money to purchase '${item.program}'. Need ${numeralWrapper.formatMoney(item.price)}`,
-        );
+        helpers.log(ctx, () => `Not enough money to purchase '${item.program}'. Need ${formatMoney(item.price)}`);
         return false;
       }
 
@@ -625,7 +622,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       const cost = Player.getUpgradeHomeCoresCost();
       if (Player.money < cost) {
-        helpers.log(ctx, () => `You don't have enough money. Need ${numeralWrapper.formatMoney(cost)}`);
+        helpers.log(ctx, () => `You don't have enough money. Need ${formatMoney(cost)}`);
         return false;
       }
 
@@ -656,7 +653,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       const cost = Player.getUpgradeHomeRamCost();
       if (Player.money < cost) {
-        helpers.log(ctx, () => `You don't have enough money. Need ${numeralWrapper.formatMoney(cost)}`);
+        helpers.log(ctx, () => `You don't have enough money. Need ${formatMoney(cost)}`);
         return false;
       }
 
@@ -666,10 +663,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 2);
       helpers.log(
         ctx,
-        () =>
-          `Purchased additional RAM for home computer! It now has ${numeralWrapper.formatRAM(
-            homeComputer.maxRam,
-          )} of RAM.`,
+        () => `Purchased additional RAM for home computer! It now has ${formatRAM(homeComputer.maxRam)} of RAM.`,
       );
       return true;
     },
@@ -979,10 +973,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         return false;
       }
       if (Player.money < amt) {
-        helpers.log(
-          ctx,
-          () => `You do not have enough money to donate ${numeralWrapper.formatMoney(amt)} to '${facName}'`,
-        );
+        helpers.log(ctx, () => `You do not have enough money to donate ${formatMoney(amt)} to '${facName}'`);
         return false;
       }
       const repNeededToDonate = Math.floor(CONSTANTS.BaseFavorToDonate * BitNodeMultipliers.RepToDonateToFaction);
@@ -997,13 +988,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const repGain = (amt / CONSTANTS.DonateMoneyToRepDivisor) * Player.mults.faction_rep;
       faction.playerReputation += repGain;
       Player.loseMoney(amt, "other");
-      helpers.log(
-        ctx,
-        () =>
-          `${numeralWrapper.formatMoney(amt)} donated to '${facName}' for ${numeralWrapper.formatReputation(
-            repGain,
-          )} reputation`,
-      );
+      helpers.log(ctx, () => `${formatMoney(amt)} donated to '${facName}' for ${formatReputation(repGain)} reputation`);
       return true;
     },
     createProgram:

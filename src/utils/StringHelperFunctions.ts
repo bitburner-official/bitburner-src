@@ -78,14 +78,6 @@ function containsAllStrings(arr: string[]): boolean {
   return arr.every(isString);
 }
 
-// Formats a number with commas and a specific number of decimal digits
-function formatNumber(num: number, numFractionDigits = 0): string {
-  return num.toLocaleString(undefined, {
-    maximumFractionDigits: numFractionDigits,
-    minimumFractionDigits: numFractionDigits,
-  });
-}
-
 // Generates a random alphanumeric string with N characters
 function generateRandomString(n: number): string {
   let str = "";
@@ -133,7 +125,6 @@ export {
   convertTimeMsToTimeElapsedString,
   longestCommonStart,
   containsAllStrings,
-  formatNumber,
   generateRandomString,
   cyrb53,
   capitalizeFirstLetter,

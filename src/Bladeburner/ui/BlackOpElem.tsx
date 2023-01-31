@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { formatNumber, convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { formatNumber } from "../../ui/nFormat";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { ActionTypes } from "../data/ActionTypes";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { TeamSizeButton } from "./TeamSizeButton";

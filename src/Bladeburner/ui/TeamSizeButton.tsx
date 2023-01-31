@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Operation } from "../Operation";
 import { Bladeburner } from "../Bladeburner";
 import { TeamSizeModal } from "./TeamSizeModal";
-import { formatNumber } from "../../utils/StringHelperFunctions";
+import { formatNumber } from "../../ui/nFormat";
 import Button from "@mui/material/Button";
 interface IProps {
   action: Operation;

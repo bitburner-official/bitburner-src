@@ -1,5 +1,5 @@
 import React from "react";
-import { formatNumber } from "../../utils/StringHelperFunctions";
+import { formatNumber } from "../../ui/nFormat";
 import { StealthIcon } from "./StealthIcon";
 import { KillIcon } from "./KillIcon";
 import { Action } from "../Action";

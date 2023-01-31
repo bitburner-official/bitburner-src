@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { Faction } from "../../Faction/Faction";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatMoney, formatReputation } from "../../ui/nFormat";
 import { Augmentation } from "../Augmentation";
 import { AugmentationNames } from "../data/AugmentationNames";
 import { StaticAugmentations } from "../StaticAugmentations";
@@ -88,11 +88,13 @@ const Exclusive = (props: IExclusiveProps): React.ReactElement => {
                   Certain <b>gangs</b>
                 </li>
               )}
-              {Player.canAccessGrafting() && !props.aug.isSpecial && props.aug.name !== AugmentationNames.TheRedPill && (
-                <li>
-                  <b>Grafting</b>
-                </li>
-              )}
+              {Player.canAccessGrafting() &&
+                !props.aug.isSpecial &&
+                props.aug.name !== AugmentationNames.TheRedPill && (
+                  <li>
+                    <b>Grafting</b>
+                  </li>
+                )}
             </Typography>
           </ul>
         </>
@@ -238,13 +240,13 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
           <Box sx={{ display: "grid", alignItems: "center", gridTemplateColumns: "1fr 1fr" }}>
             <Requirement
               fulfilled={cost === 0 || Player.money > cost}
-              value={numeralWrapper.formatMoney(cost)}
+              value={formatMoney(cost)}
               color={Settings.theme.money}
             />
             {props.parent.rep !== undefined && (
               <Requirement
                 fulfilled={props.parent.rep >= repCost}
-                value={`${numeralWrapper.formatReputation(repCost)} rep`}
+                value={`${formatReputation(repCost)} rep`}
                 color={Settings.theme.rep}
               />
             )}

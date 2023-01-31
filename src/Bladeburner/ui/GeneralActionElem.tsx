@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { ActionTypes } from "../data/ActionTypes";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
-import { formatNumber, convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { formatNumber } from "../../ui/nFormat";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { Bladeburner } from "../Bladeburner";
 import { Action } from "../Action";
 import { GeneralActions } from "../data/GeneralActions";

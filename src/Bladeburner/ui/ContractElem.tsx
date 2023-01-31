@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ActionTypes } from "../data/ActionTypes";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
-import { formatNumber, convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { Contracts } from "../data/Contracts";
 import { Bladeburner } from "../Bladeburner";
 import { Action } from "../Action";
@@ -11,7 +11,7 @@ import { CopyableText } from "../../ui/React/CopyableText";
 import { ActionLevel } from "./ActionLevel";
 import { Autolevel } from "./Autolevel";
 import { StartButton } from "./StartButton";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatNumber, formatReallyBigNumber } from "../../ui/nFormat";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 
@@ -76,11 +76,11 @@ export function ContractElem(props: IProps): React.ReactElement {
         <br />
         Time Required: {convertTimeMsToTimeElapsedString(actionTime * 1000)}
         <br />
-        Contracts remaining: {numeralWrapper.formatReallyBigNumber(Math.floor(props.action.count), 3)}
+        Contracts remaining: {formatReallyBigNumber(Math.floor(props.action.count), 3)}
         <br />
-        Successes: {numeralWrapper.formatReallyBigNumber(props.action.successes, 3)}
+        Successes: {formatReallyBigNumber(props.action.successes, 3)}
         <br />
-        Failures: {numeralWrapper.formatReallyBigNumber(props.action.failures, 3)}
+        Failures: {formatReallyBigNumber(props.action.failures, 3)}
       </Typography>
       <br />
       <Autolevel rerender={rerender} action={props.action} />

@@ -8,7 +8,7 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
 import { Reputation } from "../../ui/React/Reputation";
-import { formatNumber } from "../../utils/StringHelperFunctions";
+import { formatNumber } from "../../ui/nFormat";
 import {
   calculateInfiltratorsRepReward,
   calculateSellInformationCashReward,

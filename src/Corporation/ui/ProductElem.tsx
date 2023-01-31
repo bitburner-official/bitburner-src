@@ -8,7 +8,7 @@ import { SellProductModal } from "./modals/SellProductModal";
 import { ProductMarketTaModal } from "./modals/ProductMarketTaModal";
 import { CancelProductModal } from "./modals/CancelProductModal";
 
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatMoney, nFormat } from "../../ui/nFormat";
 
 import { isString } from "../../utils/helpers/isString";
 import { Money } from "../../ui/React/Money";
@@ -53,14 +53,13 @@ export function ProductElem(props: IProductProps): React.ReactElement {
     if (isString(product.sllman[city][1])) {
       sellButtonText = (
         <>
-          Sell ({numeralWrapper.format(product.data[city][2], nfB)}/{product.sllman[city][1]})
+          Sell ({nFormat(product.data[city][2], nfB)}/{product.sllman[city][1]})
         </>
       );
     } else {
       sellButtonText = (
         <>
-          Sell ({numeralWrapper.format(product.data[city][2], nfB)}/
-          {numeralWrapper.format(product.sllman[city][1], nfB)})
+          Sell ({nFormat(product.data[city][2], nfB)}/{nFormat(product.sllman[city][1], nfB)})
         </>
       );
     }
@@ -101,7 +100,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   // Limit Production button
   let limitProductionButtonText = "Limit Production";
   if (product.prdman[city][0]) {
-    limitProductionButtonText += " (" + numeralWrapper.format(product.prdman[city][1], nf) + ")";
+    limitProductionButtonText += " (" + nFormat(product.prdman[city][1], nf) + ")";
   }
 
   return (
@@ -112,7 +111,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             Designing {product.name} (req. Operations/Engineers in {product.createCity})...
           </Typography>
           <br />
-          <Typography>{numeralWrapper.format(product.prog, "0.00")}% complete</Typography>
+          <Typography>{nFormat(product.prog, "0.00")}% complete</Typography>
           <Button onClick={() => setCancelOpen(true)}>Cancel</Button>
           <CancelProductModal
             product={product}
@@ -127,15 +126,14 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  Prod: {numeralWrapper.format(product.data[city][1], nfB)}/s
+                  Prod: {nFormat(product.data[city][1], nfB)}/s
                   <br />
-                  Sell: {numeralWrapper.format(product.data[city][2], nfB)} /s
+                  Sell: {nFormat(product.data[city][2], nfB)} /s
                 </Typography>
               }
             >
               <Typography>
-                {product.name}: {numeralWrapper.format(product.data[city][0], nfB)} (
-                {numeralWrapper.format(totalGain, nfB)}
+                {product.name}: {nFormat(product.data[city][0], nfB)} ({nFormat(totalGain, nfB)}
                 /s)
               </Typography>
             </Tooltip>
@@ -144,26 +142,26 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  Quality: {numeralWrapper.format(product.qlt, nf)} <br />
-                  Performance: {numeralWrapper.format(product.per, nf)} <br />
-                  Durability: {numeralWrapper.format(product.dur, nf)} <br />
-                  Reliability: {numeralWrapper.format(product.rel, nf)} <br />
-                  Aesthetics: {numeralWrapper.format(product.aes, nf)} <br />
-                  Features: {numeralWrapper.format(product.fea, nf)}
+                  Quality: {nFormat(product.qlt, nf)} <br />
+                  Performance: {nFormat(product.per, nf)} <br />
+                  Durability: {nFormat(product.dur, nf)} <br />
+                  Reliability: {nFormat(product.rel, nf)} <br />
+                  Aesthetics: {nFormat(product.aes, nf)} <br />
+                  Features: {nFormat(product.fea, nf)}
                   {corp.unlockUpgrades[2] === 1 && <br />}
-                  {corp.unlockUpgrades[2] === 1 && "Demand: " + numeralWrapper.format(product.dmd, nf)}
+                  {corp.unlockUpgrades[2] === 1 && "Demand: " + nFormat(product.dmd, nf)}
                   {corp.unlockUpgrades[3] === 1 && <br />}
-                  {corp.unlockUpgrades[3] === 1 && "Competition: " + numeralWrapper.format(product.cmp, nf)}
+                  {corp.unlockUpgrades[3] === 1 && "Competition: " + nFormat(product.cmp, nf)}
                 </Typography>
               }
             >
-              <Typography>Rating: {numeralWrapper.format(product.rat, nf)}</Typography>
+              <Typography>Rating: {nFormat(product.rat, nf)}</Typography>
             </Tooltip>
           </Box>
           <Box display="flex">
             <Tooltip title={<Typography>An estimate of the material cost it takes to create this Product.</Typography>}>
               <Typography>
-                Est. Production Cost: {numeralWrapper.formatMoney(product.pCost / corpConstants.baseProductProfitMult)}
+                Est. Production Cost: {formatMoney(product.pCost / corpConstants.baseProductProfitMult)}
               </Typography>
             </Tooltip>
           </Box>
@@ -176,7 +174,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
                 </Typography>
               }
             >
-              <Typography>Est. Market Price: {numeralWrapper.formatMoney(product.pCost)}</Typography>
+              <Typography>Est. Market Price: {formatMoney(product.pCost)}</Typography>
             </Tooltip>
           </Box>
           <Button onClick={() => setDiscontinueOpen(true)}>Discontinue</Button>

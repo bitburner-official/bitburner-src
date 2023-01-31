@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatMoney, nFormat } from "../../../ui/nFormat";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -38,8 +38,7 @@ export function GoPublicModal(props: IProps): React.ReactElement {
     corp.addFunds(shares * initialSharePrice);
     props.rerender();
     dialogBoxCreate(
-      `You took your ${corp.name} public and earned ` +
-        `${numeralWrapper.formatMoney(shares * initialSharePrice)} in your IPO`,
+      `You took your ${corp.name} public and earned ` + `${formatMoney(shares * initialSharePrice)} in your IPO`,
     );
     props.onClose();
   }
@@ -52,11 +51,11 @@ export function GoPublicModal(props: IProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
         Enter the number of shares you would like to issue for your IPO. These shares will be publicly sold and you will
-        no longer own them. Your Corporation will receive {numeralWrapper.formatMoney(initialSharePrice)} per share (the
-        IPO money will be deposited directly into your Corporation's funds).
+        no longer own them. Your Corporation will receive {formatMoney(initialSharePrice)} per share (the IPO money will
+        be deposited directly into your Corporation's funds).
         <br />
         <br />
-        You have a total of {numeralWrapper.format(corp.numShares, "0.000a")} of shares that you can issue.
+        You have a total of {nFormat(corp.numShares, "0.000a")} of shares that you can issue.
       </Typography>
       <Box display="flex" alignItems="center">
         <NumberInput onChange={setShares} autoFocus placeholder="Shares to issue" onKeyDown={onKeyDown} />

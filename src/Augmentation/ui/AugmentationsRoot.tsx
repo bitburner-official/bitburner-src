@@ -22,7 +22,7 @@ import { Player } from "@player";
 import { AugmentationNames } from "../data/AugmentationNames";
 import { StaticAugmentations } from "../StaticAugmentations";
 import { CONSTANTS } from "../../Constants";
-import { formatNumber } from "../../utils/StringHelperFunctions";
+import { formatNumber } from "../../ui/nFormat";
 import { Info } from "@mui/icons-material";
 import { Link } from "@mui/material";
 import { AlertEvents } from "../../ui/React/AlertManager";
