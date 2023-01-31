@@ -7604,7 +7604,7 @@ interface CorporationInfo {
   dividendTax: number;
   /** Your earnings as a shareholder per second this cycle */
   dividendEarnings: number;
-  /** State of the corporation. Possible states are START, PURCHASE, PRODUCTION, SALE, EXPORT. */
+  /** State of the corporation. Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. */
   state: string;
   /** Array of all division names */
   divisions: string[];
@@ -7662,7 +7662,7 @@ interface CorpConstants {
   minEmployeeDecay: number;
 }
 /** @public */
-type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "SALE" | "EXPORT";
+type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "EXPORT" | "SALE";
 
 /** @public */
 type CorpMaterialName =

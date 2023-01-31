@@ -15,7 +15,7 @@ import { IndustryType, EmployeePositions } from "./Enums";
 // This structure + import * as corpConstants allows easier type definitions for individual properties.
 
 /** Names of all corporation game states */
-export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "SALE", "EXPORT"],
+export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "EXPORT", "SALE"],
   // TODO: remove IndustryType and EmployeePositions enums and just use the typed strings.
   /** Names of all corporation employee positions */
   employeePositions: CorpEmployeePosition[] = Object.values(EmployeePositions),
