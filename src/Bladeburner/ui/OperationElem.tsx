@@ -12,7 +12,7 @@ import { Operation } from "../Operation";
 import { Operations } from "../data/Operations";
 import { Player } from "@player";
 import { CopyableText } from "../../ui/React/CopyableText";
-
+import { numeralWrapper } from "../../ui/numeralFormat";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 
@@ -79,11 +79,11 @@ export function OperationElem(props: IProps): React.ReactElement {
         <br />
         Time Required: {convertTimeMsToTimeElapsedString(actionTime * 1000)}
         <br />
-        Operations remaining: {Math.floor(props.action.count)}
+        Operations remaining: {numeralWrapper.formatBBNumber(Math.floor(props.action.count))}
         <br />
-        Successes: {props.action.successes}
+        Successes: {numeralWrapper.formatBBNumber(props.action.successes)}
         <br />
-        Failures: {props.action.failures}
+        Failures: {numeralWrapper.formatBBNumber(props.action.failures)}
       </Typography>
       <br />
       <Autolevel rerender={rerender} action={props.action} />

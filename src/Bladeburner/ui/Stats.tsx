@@ -8,7 +8,6 @@ import { Factions } from "../../Faction/Factions";
 import { Router } from "../../ui/GameRoot";
 import { joinFaction } from "../../Faction/FactionHelpers";
 import { Bladeburner } from "../Bladeburner";
-
 import { TravelModal } from "./TravelModal";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
@@ -59,7 +58,7 @@ export function Stats(props: IProps): React.ReactElement {
         </Box>
         <Box display="flex">
           <Tooltip title={<Typography>Your rank within the Bladeburner division.</Typography>}>
-            <Typography>Rank: {numeralWrapper.formatReallyBigNumber(props.bladeburner.rank)}</Typography>
+            <Typography>Rank: {numeralWrapper.formatBBNumber(props.bladeburner.rank)}</Typography>
           </Tooltip>
         </Box>
         <br />
@@ -88,8 +87,8 @@ export function Stats(props: IProps): React.ReactElement {
             }
           >
             <Typography>
-              Stamina: {numeralWrapper.formatReallyBigNumber(props.bladeburner.stamina)} /{" "}
-              {numeralWrapper.formatReallyBigNumber(props.bladeburner.maxStamina)}
+              Stamina: {numeralWrapper.formatBBNumber(props.bladeburner.stamina)} /{" "}
+              {numeralWrapper.formatBBNumber(props.bladeburner.maxStamina)}
             </Typography>
           </Tooltip>
         </Box>
@@ -142,7 +141,7 @@ export function Stats(props: IProps): React.ReactElement {
             }
           >
             <Typography>
-              City Chaos: {numeralWrapper.formatReallyBigNumber(props.bladeburner.getCurrentCity().chaos)}
+              City Chaos: {numeralWrapper.formatBBNumber(props.bladeburner.getCurrentCity().chaos)}
             </Typography>
           </Tooltip>
         </Box>
@@ -169,7 +168,7 @@ export function Stats(props: IProps): React.ReactElement {
             <br />
           </>
         )}
-        <Typography>Skill Points: {numeralWrapper.formatReallyBigNumber(props.bladeburner.skillPoints)}</Typography>
+        <Typography>Skill Points: {numeralWrapper.formatBBNumber(props.bladeburner.skillPoints)}</Typography>
         <br />
         <Typography>
           Aug. Success Chance mult: {formatNumber(Player.mults.bladeburner_success_chance * 100, 1)}%
