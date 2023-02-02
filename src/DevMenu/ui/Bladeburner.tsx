@@ -7,7 +7,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
 import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
-import { CityName } from "src/Enums";
+import { CityName } from "../../Enums";
 
 const bigNumber = 1e27;
 
