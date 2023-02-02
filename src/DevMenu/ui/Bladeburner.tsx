@@ -7,101 +7,46 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
 import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
+import { CityName } from "src/Enums";
 
 const bigNumber = 1e27;
 
 export function Bladeburner(): React.ReactElement {
+  if (!Player.bladeburner) return <></>;
   const bladeburner = Player.bladeburner;
-  if (bladeburner === null) return <></>;
-  function modifyBladeburnerRank(modify: number): (x: number) => void {
-    return function (rank: number): void {
-      if (!bladeburner) return;
-      bladeburner.changeRank(Player, rank * modify);
-    };
-  }
 
-  function resetBladeburnerRank(): void {
-    if (!bladeburner) return;
+  // Rank functions
+  const modifyBladeburnerRank = (modify: number) => (rank: number) => bladeburner.changeRank(Player, rank * modify);
+  const resetBladeburnerRank = () => {
     bladeburner.rank = 0;
     bladeburner.maxRank = 0;
-  }
+  };
+  const addTonsBladeburnerRank = () => bladeburner.changeRank(Player, bigNumber);
 
-  function addTonsBladeburnerRank(): void {
-    if (!bladeburner) return;
-    bladeburner.changeRank(Player, bigNumber);
-  }
-
-  function modifyBladeburnerSP(modify: number): (x: number) => void {
-    return function (skillPoints: number): void {
-      if (!bladeburner) return;
-      bladeburner.skillPoints += skillPoints * modify;
-    };
-  }
-
-  function resetBladeburnerSP(): void {
-    if (!bladeburner) return;
+  // Skill point functions
+  const modifyBladeburnerSP = (modify: number) => (skillPoints: number) => {
+    bladeburner.skillPoints += skillPoints * modify;
+  };
+  const resetBladeburnerSP = () => {
     bladeburner.skillPoints = 0;
     bladeburner.totalSkillPoints = 0;
-  }
+  };
+  const addTonsBladeburnerSP = () => (bladeburner.skillPoints = bigNumber);
 
-  function addTonsBladeburnerSP(): void {
-    if (!bladeburner) return;
-    bladeburner.skillPoints = bigNumber;
-  }
+  // Cycles functions
+  const modifyBladeburnerCycles = (modify: number) => (cycles: number) => (bladeburner.storedCycles += cycles * modify);
+  const resetBladeburnerCycles = () => (bladeburner.storedCycles = 0);
+  const addTonsBladeburnerCycles = () => (bladeburner.storedCycles += bigNumber);
 
-  function modifyBladeburnerCycles(modify: number): (x: number) => void {
-    return function (cycles: number): void {
-      if (!bladeburner) return;
-      bladeburner.storedCycles += cycles * modify;
-    };
-  }
-
-  function resetBladeburnerCycles(): void {
-    if (!bladeburner) return;
-    bladeburner.storedCycles = 0;
-  }
-
-  function addTonsBladeburnerCycles(): void {
-    if (!bladeburner) return;
-    bladeburner.storedCycles += bigNumber;
-  }
-
-  function wipeAllChaos(): void {
-    if (!bladeburner) return;
-    bladeburner.cities["Sector-12"].chaos = 0;
-    bladeburner.cities.Aevum.chaos = 0;
-    bladeburner.cities.Chongqing.chaos = 0;
-    bladeburner.cities["New Tokyo"].chaos = 0;
-    bladeburner.cities.Ishima.chaos = 0;
-    bladeburner.cities.Volhaven.chaos = 0;
-  }
-
-  function wipeActiveCityChaos(): void {
-    if (!bladeburner) return;
-    bladeburner.cities[bladeburner.getCurrentCity().name].chaos = 0;
-  }
-
-  function addAllChaos(modify: number): (x: number) => void {
-    return function (chaos: number): void {
-      if (!bladeburner) return;
-      bladeburner.cities["Sector-12"].chaos += chaos * modify;
-      bladeburner.cities.Aevum.chaos += chaos * modify;
-      bladeburner.cities.Chongqing.chaos += chaos * modify;
-      bladeburner.cities["New Tokyo"].chaos += chaos * modify;
-      bladeburner.cities.Ishima.chaos += chaos * modify;
-      bladeburner.cities.Volhaven.chaos += chaos * modify;
-    };
-  }
-
-  function addTonsAllChaos(): void {
-    if (!bladeburner) return;
-    bladeburner.cities["Sector-12"].chaos += bigNumber;
-    bladeburner.cities.Aevum.chaos += bigNumber;
-    bladeburner.cities.Chongqing.chaos += bigNumber;
-    bladeburner.cities["New Tokyo"].chaos += bigNumber;
-    bladeburner.cities.Ishima.chaos += bigNumber;
-    bladeburner.cities.Volhaven.chaos += bigNumber;
-  }
+  // Chaos functions
+  const wipeAllChaos = () => Object.values(CityName).forEach((city) => (bladeburner.cities[city].chaos = 0));
+  const wipeActiveCityChaos = () => (bladeburner.cities[bladeburner.city].chaos = 0);
+  const addAllChaos = (modify: number) => (chaos: number) => {
+    Object.values(CityName).forEach((city) => (bladeburner.cities[city].chaos += chaos * modify));
+  };
+  const addTonsAllChaos = () => {
+    Object.values(CityName).forEach((city) => (bladeburner.cities[city].chaos += bigNumber));
+  };
 
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
