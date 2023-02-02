@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Money } from "../../ui/React/Money";
@@ -21,9 +19,27 @@ export function General(): React.ReactElement {
   const [corporationName, setCorporationName] = useState("");
   const [gangFaction, setGangFaction] = useState("");
 
+  let devMoney: number;
+
+  function updateDevMoney(n: any) {
+    if (!isNaN(n)) {
+      devMoney = Number(n);
+    }
+  }
+
+  function addCustomMoney(): void {
+    Player.gainMoney(devMoney, "other");
+  }
+
   function addMoney(n: number) {
     return function () {
       Player.gainMoney(n, "other");
+    };
+  }
+
+  function setMoney(n: number) {
+    return function () {
+      Player.money = Number(n);
     };
   }
 
@@ -78,6 +94,14 @@ export function General(): React.ReactElement {
         <Typography>General</Typography>
       </AccordionSummary>
       <AccordionDetails>
+        <Button
+          onClick={setMoney(0)}
+          title="This sets your money to $0, this means the money you had will just vanish without being accounted for where it went and may offset some metrics."
+        >
+          <pre>
+            = <Money money={0} />
+          </pre>
+        </Button>
         <Button onClick={addMoney(1e6)}>
           <pre>
             + <Money money={1e6} />
@@ -105,6 +129,12 @@ export function General(): React.ReactElement {
         </Button>
         <Button onClick={upgradeRam}>+ RAM</Button>
         <br />
+        <Typography>Add Custom Money</Typography>
+        <TextField onChange={(x) => updateDevMoney(x.target.value)} />
+        <Button onClick={addCustomMoney} title="Zelow was here... shh...">
+          Give Money
+        </Button>
+        <br />
         <Typography>Corporation Name:</Typography>
         <TextField value={corporationName} onChange={(x) => setCorporationName(x.target.value)} />
         <Button onClick={createCorporation}>Create Corporation</Button>
@@ -121,7 +151,6 @@ export function General(): React.ReactElement {
         <br />
         <Button onClick={joinBladeburner}>Join BladeBurner</Button>
         <br />
-
         <Button onClick={quickB1tFlum3}>Quick b1t_flum3.exe</Button>
         <Button onClick={b1tflum3}>Run b1t_flum3.exe</Button>
         <Button onClick={quickHackW0r1dD43m0n}>Quick w0rld_d34m0n</Button>
