@@ -119,7 +119,7 @@ export function Bladeburner(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-      <Button onClick={wipeActiveCityChaos}>Clear Active Cities Chaos</Button>
+      <Button onClick={wipeActiveCityChaos}>Clear Active City's Chaos</Button>
     </Accordion>
   );
 }
