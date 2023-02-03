@@ -31,7 +31,7 @@ import { TableCell } from "../../ui/React/Table";
 import TableBody from "@mui/material/TableBody";
 import Table from "@mui/material/Table";
 import TableRow from "@mui/material/TableRow";
-import { formatRAM } from "../../ui/nFormat";
+import { formatRam } from "../../ui/nFormat";
 import { calculateHashGainRate } from "../formulas/HacknetServers";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -273,10 +273,10 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
                     </span>{" "}
                     max production rate. (achieved when 100% RAM is allocated to it)
                     <br />
-                    {formatRAM(node.ramUsed)} / {formatRAM(node.maxRam)} (
+                    {formatRam(node.ramUsed)} / {formatRam(node.maxRam)} (
                     {Math.round((100 * node.ramUsed) / node.maxRam)}%) RAM allocated to script.
                     <br />
-                    {formatRAM(node.maxRam - node.ramUsed)} / {formatRAM(node.maxRam)} (
+                    {formatRam(node.maxRam - node.ramUsed)} / {formatRam(node.maxRam)} (
                     {Math.round((100 * (node.maxRam - node.ramUsed)) / node.maxRam)}%) RAM allocated to hash production.
                   </Typography>
                 }
@@ -311,7 +311,7 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
               <Typography>RAM:</Typography>
             </TableCell>
             <TableCell>
-              <Typography>{formatRAM(node.maxRam)}</Typography>
+              <Typography>{formatRam(node.maxRam)}</Typography>
             </TableCell>
             <TableCell>{upgradeRamButton}</TableCell>
           </TableRow>

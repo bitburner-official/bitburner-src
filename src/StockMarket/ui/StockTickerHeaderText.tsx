@@ -10,7 +10,7 @@ import { TickerHeaderFormatData } from "../data/TickerHeaderFormatData";
 
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { formatMoney, formatPercentage } from "../../ui/nFormat";
+import { formatMoney, formatPercent } from "../../ui/nFormat";
 import Typography from "@mui/material/Typography";
 
 type IProps = {
@@ -34,7 +34,7 @@ export function StockTickerHeaderText(props: IProps): React.ReactElement {
 
   let hdrText = `${stock.name}${spacesAfterStockName}${stock.symbol} -${spacesBeforePrice}${stockPriceFormat}`;
   if (Player.has4SData) {
-    hdrText += ` - Volatility: ${formatPercentage(stock.mv / 100)} - Price Forecast: `;
+    hdrText += ` - Volatility: ${formatPercent(stock.mv / 100)} - Price Forecast: `;
     let plusOrMinus = stock.b; // True for "+", false for "-"
     if (stock.otlkMag < 0) {
       plusOrMinus = !plusOrMinus;

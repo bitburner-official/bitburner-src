@@ -16,7 +16,7 @@ import { Script } from "../../Script/Script";
 import { TextFile } from "../../TextFile";
 import { calculateRamUsage, checkInfiniteLoop } from "../../Script/RamCalculations";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
-import { formatRAM } from "../../ui/nFormat";
+import { formatRam } from "../../ui/nFormat";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -256,10 +256,10 @@ export function Root(props: IProps): React.ReactElement {
       const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
       const entriesDisp = [];
       for (const entry of entries) {
-        entriesDisp.push([`${entry.name} (${entry.type})`, formatRAM(entry.cost)]);
+        entriesDisp.push([`${entry.name} (${entry.type})`, formatRam(entry.cost)]);
       }
 
-      setRAM("RAM: " + formatRAM(ramUsage.cost));
+      setRAM("RAM: " + formatRam(ramUsage.cost));
       setRamEntries(entriesDisp);
       return;
     }

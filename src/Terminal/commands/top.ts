@@ -1,7 +1,7 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { getRamUsageFromRunningScript } from "../../Script/RunningScriptHelpers";
-import { formatRAM } from "../../ui/nFormat";
+import { formatRam } from "../../ui/nFormat";
 
 export function top(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 0) {
@@ -45,7 +45,7 @@ export function top(args: (string | number | boolean)[], server: BaseServer): vo
     const spacesThread = " ".repeat(numSpacesThread);
 
     // Calculate and transform RAM usage
-    const ramUsage = formatRAM(getRamUsageFromRunningScript(script) * script.threads);
+    const ramUsage = formatRam(getRamUsageFromRunningScript(script) * script.threads);
 
     const entry = [script.filename, spacesScript, script.pid, spacesPid, script.threads, spacesThread, ramUsage].join(
       "",

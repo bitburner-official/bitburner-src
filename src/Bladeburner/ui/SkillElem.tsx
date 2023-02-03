@@ -48,11 +48,11 @@ export function SkillElem(props: IProps): React.ReactElement {
           </IconButton>
         )}
       </Box>
-      <Typography>Level: {formatBigNumber(currentLevel, 3)}</Typography>
+      <Typography>Level: {formatBigNumber(currentLevel)}</Typography>
       {maxLvl ? (
         <Typography>MAX LEVEL</Typography>
       ) : (
-        <Typography>Skill Points required: {formatBigNumber(pointCost, 3)}</Typography>
+        <Typography>Skill Points required: {formatBigNumber(pointCost)}</Typography>
       )}
       <Typography>{props.skill.desc}</Typography>
     </Paper>

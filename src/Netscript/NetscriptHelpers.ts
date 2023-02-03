@@ -3,7 +3,7 @@ import { WorkerScript } from "./WorkerScript";
 import { GetAllServers, GetServer } from "../Server/AllServers";
 import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
-import { formatExp, formatMoney, formatRAM, formatThreads } from "../ui/nFormat";
+import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/nFormat";
 import { ScriptArg } from "./ScriptArg";
 import { CityName } from "../Enums";
 import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson } from "@nsdefs";
@@ -354,8 +354,8 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
       This is probably because you somehow circumvented the static RAM calculation.
 
       Threads: ${threads}
-      Dynamic RAM Usage: ${formatRAM(ws.dynamicRamUsage)} per thread
-      Static RAM Usage: ${formatRAM(ws.ramUsage)} per thread
+      Dynamic RAM Usage: ${formatRam(ws.dynamicRamUsage)} per thread
+      Static RAM Usage: ${formatRam(ws.ramUsage)} per thread
 
       One of these could be the reason:
       * Using eval() to get a reference to a ns function

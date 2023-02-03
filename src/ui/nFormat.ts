@@ -8,49 +8,49 @@ const ramLog1000Suffixes = ["GB", "TB", "PB", "EB"];
 const ramLog1024Suffixes = ["GiB", "TiB", "PiB", "EiB"];
 let digitFormats = {} as Record<number, Intl.NumberFormat | undefined>;
 let percentFormats = {} as Record<number, Intl.NumberFormat | undefined>;
-let exponentialFormats = {} as Record<number, Intl.NumberFormat | undefined>;
-let smallIntFormat: Intl.NumberFormat;
-/** Event to be emitted when changing number display settings. */
-export const FormatsNeedReset = new EventEmitter();
-/** Event to be emitted after the cached formatters are cleared. */
-export const FormatsReset = new EventEmitter();
+let basicFormatter: Intl.NumberFormat;
+let exponentialFormatter: Intl.NumberFormat;
 
-FormatsNeedReset.subscribe(() => {
+/** Event to be emitted when changing number display settings. */
+export const FormatsNeedToChange = new EventEmitter();
+
+/** Event to be emitted after the cached formatters are cleared. */
+export const FormatsHaveChanged = new EventEmitter();
+
+// Initialization function
+FormatsNeedToChange.subscribe(() => {
   // Clear all cached formatters
   digitFormats = {};
   percentFormats = {};
-  exponentialFormats = {};
-  // Regenerate the special smallIntFormat
-  smallIntFormat = new Intl.NumberFormat([Settings.Locale, "en"]);
-  // Emit a FormatsReset event so any dynamic content can be regenerated.
-  FormatsReset.emit();
+  exponentialFormatter = makeFormatter(3, { notation: "scientific" });
+  basicFormatter = new Intl.NumberFormat([Settings.Locale, "en"]);
+  // Emit a FormatsHaveChanged event so any static content that uses formats can be regenerated.
+  FormatsHaveChanged.emit();
   // Force a redraw of the entire UI
   ThemeEvents.emit();
 });
+
+/** Makes a new formatter */
 function makeFormatter(fractionalDigits: number, otherOptions: Intl.NumberFormatOptions = {}): Intl.NumberFormat {
   return new Intl.NumberFormat([Settings.Locale, "en"], {
     minimumFractionDigits: Settings.hideTrailingDecimalZeros ? 0 : fractionalDigits,
     maximumFractionDigits: fractionalDigits,
-    // @ts-ignore using an experimental config that isn't in the ts for NumberFormatOptions.
-    roundingMode: "trunc",
     ...otherOptions,
   });
 }
-function getFormatter(fractionalDigits: number, percent?: boolean, exponential?: boolean): Intl.NumberFormat {
+function getFormatter(fractionalDigits: number, percent?: boolean): Intl.NumberFormat {
   // Determine whether to use the cached normal formatters or the percentage formatters
-  const baseFormats = percent ? percentFormats : exponential ? exponentialFormats : digitFormats;
+  const baseFormats = percent ? percentFormats : digitFormats;
 
   // Return cached formatter if it already exists
   if (baseFormats[fractionalDigits]) return baseFormats[fractionalDigits] as Intl.NumberFormat;
 
   // Make a new formatter and then return it.
-  const formatterOptions: Intl.NumberFormatOptions = percent
-    ? { style: "percent" }
-    : { notation: exponential ? "scientific" : "standard" };
+  const formatterOptions: Intl.NumberFormatOptions = percent ? { style: "percent" } : {};
   return (baseFormats[fractionalDigits] = makeFormatter(fractionalDigits, formatterOptions));
 }
 
-type NFormatOptions = {
+export type NFormatOptions = {
   suffixStart?: number;
   fractionalDigits?: number;
   isInt?: boolean;
@@ -70,7 +70,7 @@ export function nFormatNew(n: number, options: NFormatOptions = {}) {
   if (options.isPercent) return getFormatter(fractionalDigits, true).format(n);
   // For less than suffixStart, what we return depends on whether it's an integer form.
   if (nAbs < suffixStart) {
-    if (options.isInt) return smallIntFormat.format(n);
+    if (options.isInt) return basicFormatter.format(n);
     return getFormatter(fractionalDigits).format(n);
   }
 
@@ -80,16 +80,15 @@ export function nFormatNew(n: number, options: NFormatOptions = {}) {
       ? ramLog1024Suffixes
       : ramLog1000Suffixes
     : log1000suffixes;
-  const suffixIndex = Math.floor(Math.log(nAbs) / Math.log(logBase));
+  let suffixIndex = Math.floor(Math.log(nAbs) / Math.log(logBase));
+  // If there's no suffix and we're in ram formatting, use the highest available suffix.
+  if (!suffixList[suffixIndex] && options.isRam) suffixIndex = suffixList.length - 1;
   // If there's no suffix use exponential
-  if (!suffixList[suffixIndex]) return getFormatter(fractionalDigits, false, true).format(n).toLocaleLowerCase();
+  if (!suffixList[suffixIndex]) return exponentialFormatter.format(n).toLocaleLowerCase();
   // Suffixed form
   n /= logBase ** suffixIndex;
   return getFormatter(fractionalDigits).format(n) + suffixList[suffixIndex];
 }
-
-const extraFormats = [1e15, 1e18, 1e21, 1e24, 1e27, 1e30];
-const extraNotations = ["q", "Q", "s", "S", "o", "n"];
 
 export function nFormat(n: number | string, format?: string): string {
   // numeral.js doesn't properly format numbers that are too big or too small
@@ -103,132 +102,63 @@ export function nFormat(n: number | string, format?: string): string {
   return answer;
 }
 
-/** Format a number without suffixes */
-export function formatNumber(n: number, fractionalDigits = 0): string {
-  // Still use exponential if the number is too large certain size large
-  return nFormatNew(n, { fractionalDigits, suffixStart: 1e33 });
-}
-
-/** Standard noninteger big number formatting */
-export function formatBigNumber(n: number, fractionalDigits = 3): string {
-  return nFormatNew(n, { fractionalDigits });
-}
-
-export function formatHp(n: number): string {
-  return nFormatNew(n, { isInt: true, suffixStart: 1e6 });
-}
-
-export function formatMoney(n: number): string {
-  return "$" + nFormatNew(n);
-}
-
-export function formatSkill(n: number): string {
-  return nFormatNew(n, { isInt: true, suffixStart: 1e15 });
-}
-
-export const formatExp = nFormatNew;
-export const formatHashes = nFormatNew;
-export const formatReputation = nFormatNew;
-export const formatSecurity = nFormatNew;
-// Displaying with no suffixes
+/** Format a number without suffixes. Still show exponential form if >= 1e33. */
+export const formatNumber = (n: number, fractionalDigits = 0) => nFormatNew(n, { fractionalDigits, suffixStart: 1e33 });
 export const formatFavor = formatNumber;
 
-export function formatRAM(n: number): string {
-  return nFormatNew(n, { isRam: true, fractionalDigits: 2 });
-}
+/** Standard noninteger formatting with no options set. Collapses to suffix at 1000 and shows 3 fractional digits. */
+export const formatBigNumber = (n: number) => nFormatNew(n);
+export const formatExp = formatBigNumber;
+export const formatHashes = formatBigNumber;
+export const formatReputation = formatBigNumber;
+export const formatPopulation = formatBigNumber;
+export const formatSecurity = formatBigNumber;
+export const formatStamina = formatBigNumber;
+export const formatStaneksGiftCharge = formatBigNumber;
 
-export function formatPercentage(n: number, fractionalDigits = 2): string {
-  return nFormatNew(n, { isPercent: true, fractionalDigits });
-}
+/** Display an integer up to 999 before collapsing to suffixed form with 3 fractional digits */
+export const formatShares = (n: number) => nFormatNew(n, { isInt: true });
+export const formatSleeveMemory = formatShares;
 
-// Increased precision (5 fractional digits displayed)
+/** Display an integer up to 999,999 before collapsing to suffixed form with 3 fractional digits */
+export const formatHp = (n: number) => nFormatNew(n, { isInt: true, suffixStart: 1e6 });
+export const formatThreads = formatHp;
+
+/** Display an integer up to 999,999,999 before collapsing to suffixed form with 3 fractional digits */
+export const formatSkill = (n: number) => nFormatNew(n, { isInt: true, suffixStart: 1e9 });
+
+/** Display standard money formatting, including the preceding $. */
+export const formatMoney = (n: number) => "$" + nFormatNew(n);
+
+/** Display standard ram formatting. */
+export const formatRam = (n: number) => nFormatNew(n, { isRam: true, fractionalDigits: 2, suffixStart: 0 });
+
+/** Display a percentage with a configurable number of fractional digits. Percentages never collapse to suffix form. */
+export const formatPercent = (n: number, fractionalDigits = 2) => nFormatNew(n, { isPercent: true, fractionalDigits });
+
+/** Display a decimal number with increased precision (5 fractional digits) */
 export const formatRespect = (n: number) => nFormatNew(n, { fractionalDigits: 5 });
 export const formatWanted = formatRespect;
 
-// No suffix use, 2 fractional digits
+/** Display a number that does not collapse to suffix form and shows 2 fractional digits */
 export const formatMultiplier = (n: number) => formatNumber(n, 2);
+export const formatStaneksGiftPower = formatMultiplier;
 
-// No suffix use, 3 fractional digits
+/** Display a number that does not collapse to suffix form and shows 2 fractional digits */
 export const formatSleeveShock = (n: number) => formatNumber(n, 3);
 export const formatSleeveSynchro = formatSleeveShock;
 
-// Data that is always a small int
-export function formatSleeveMemory(n: number): string {
-  return smallIntFormat.format(n);
-}
+/** Parsing numbers does not use the locale as this causes complications. */
+export function parseBigNumber(str: string): number {
+  str = str.trim();
+  // Remove all commas in case the player is typing a longform number
+  str = str.replace(/,/g, "");
+  // Handle special returns
+  if (["infinity", "Infinity", "∞"].includes(str)) return Infinity;
+  if (["-infinity", "-Infinity", "-∞"].includes(str)) return -Infinity;
 
-export const formatPopulation = nFormatNew;
-export const formatStamina = nFormatNew;
-
-// Integer with default 1000 suffixStart
-export const formatShares = (n: number) => nFormatNew(n, { isInt: true });
-
-export const formatThreads = formatSleeveMemory;
-export const formatStaneksGiftCharge = nFormatNew;
-export const formatStaneksGiftPower = formatMultiplier;
-
-export function parseCustomLargeNumber(str: string): number {
-  const numericRegExp = new RegExp("^(-?\\d+\\.?\\d*)([" + extraNotations.join("") + "]?)$");
-  const match = str.match(numericRegExp);
-  if (match == null) {
-    return NaN;
-  }
-  const [, number, notation] = match;
-  const notationIndex = extraNotations.indexOf(notation);
-  if (notationIndex === -1) {
-    return NaN;
-  }
-  return parseFloat(number) * extraFormats[notationIndex];
-}
-
-export function largestAbsoluteNumber(n1: number, n2 = 0, n3 = 0): number {
-  if (isNaN(n1)) n1 = 0;
-  if (isNaN(n2)) n2 = 0;
-  if (isNaN(n3)) n3 = 0;
-  const largestAbsolute = Math.max(Math.abs(n1), Math.abs(n2), Math.abs(n3));
-  switch (largestAbsolute) {
-    case Math.abs(n1):
-      return n1;
-    case Math.abs(n2):
-      return n2;
-    case Math.abs(n3):
-      return n3;
-  }
-  return 0;
-}
-
-export function parseMoney(s: string): number {
-  // numeral library does not handle formats like 1s (returns 1) and 1e10 (returns 110) well,
-  // so if more then 1 return a valid number, return the one farthest from 0
-  const numeralValue = numeral(s).value();
-  const parsed = parseFloat(s);
-  const selfParsed = parseCustomLargeNumber(s);
-  // Check for one or more NaN values
-  if (isNaN(parsed) && isNaN(selfParsed)) {
-    if (numeralValue === null) {
-      // 3x NaN
-      return NaN;
-    }
-    // 2x NaN
-    return numeralValue;
-  } else if (numeralValue === null && isNaN(selfParsed)) {
-    // 2x NaN
-    return parsed;
-  } else if (isNaN(parsed)) {
-    if (numeralValue === null) {
-      // 2x NaN
-      return selfParsed;
-    }
-    // 1x NaN
-    return largestAbsoluteNumber(numeralValue, selfParsed);
-  } else if (numeralValue === null) {
-    // 1x NaN
-    return largestAbsoluteNumber(parsed, selfParsed);
-  } else if (isNaN(selfParsed)) {
-    // 1x NaN
-    return largestAbsoluteNumber(numeralValue, parsed);
-  } else {
-    // no NaN
-    return largestAbsoluteNumber(numeralValue, parsed, selfParsed);
-  }
+  const suffixIndex = log1000suffixes.indexOf(str.substring(str.length - 1));
+  // If there's no valid suffix at the end, just return parseFloated string
+  if (suffixIndex === -1) return parseFloat(str);
+  return parseFloat(str.substring(0, str.length - 1) + "e" + suffixIndex * 3);
 }

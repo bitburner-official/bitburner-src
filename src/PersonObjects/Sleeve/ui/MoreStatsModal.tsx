@@ -1,5 +1,5 @@
 import { Sleeve } from "../Sleeve";
-import { formatExp, formatPercentage } from "../../../ui/nFormat";
+import { formatExp, formatPercent } from "../../../ui/nFormat";
 import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
 import { CONSTANTS } from "../../../Constants";
 import { Typography } from "@mui/material";
@@ -34,23 +34,23 @@ export function MoreStatsModal(props: IProps): React.ReactElement {
       <br />
       <StatsTable
         rows={[
-          [<>Hacking Level multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.hacking)],
-          [<>Hacking Experience multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.hacking_exp)],
-          [<>Strength Level multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.strength)],
-          [<>Strength Experience multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.strength_exp)],
-          [<>Defense Level multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.defense)],
-          [<>Defense Experience multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.defense_exp)],
-          [<>Dexterity Level multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.dexterity)],
-          [<>Dexterity Experience multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.dexterity_exp)],
-          [<>Agility Level multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.agility)],
-          [<>Agility Experience multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.agility_exp)],
-          [<>Charisma Level multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.charisma)],
-          [<>Charisma Experience multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.charisma_exp)],
-          [<>Faction Reputation Gain multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.faction_rep)],
-          [<>Company Reputation Gain multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.company_rep)],
-          [<>Salary multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.work_money)],
-          [<>Crime Money multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.crime_money)],
-          [<>Crime Success multiplier:&nbsp;</>, formatPercentage(props.sleeve.mults.crime_success)],
+          [<>Hacking Level multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.hacking)],
+          [<>Hacking Experience multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.hacking_exp)],
+          [<>Strength Level multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.strength)],
+          [<>Strength Experience multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.strength_exp)],
+          [<>Defense Level multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.defense)],
+          [<>Defense Experience multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.defense_exp)],
+          [<>Dexterity Level multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.dexterity)],
+          [<>Dexterity Experience multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.dexterity_exp)],
+          [<>Agility Level multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.agility)],
+          [<>Agility Experience multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.agility_exp)],
+          [<>Charisma Level multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.charisma)],
+          [<>Charisma Experience multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.charisma_exp)],
+          [<>Faction Reputation Gain multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.faction_rep)],
+          [<>Company Reputation Gain multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.company_rep)],
+          [<>Salary multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.work_money)],
+          [<>Crime Money multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.crime_money)],
+          [<>Crime Success multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.crime_success)],
         ]}
         title="Multipliers:"
       />

@@ -12,7 +12,7 @@ import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions
 import { Player } from "@player";
 import { Router } from "./GameRoot";
 import { Page } from "./Router";
-import { formatExp, formatPercentage } from "./nFormat";
+import { formatExp, formatPercent } from "./nFormat";
 import { Money } from "./React/Money";
 import { MoneyRate } from "./React/MoneyRate";
 import { ProgressBar } from "./React/Progress";
@@ -235,7 +235,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       title: `You are attempting ${crime.workName}`,
 
       gains: [
-        <Typography>Success chance: {formatPercentage(successChance)}</Typography>,
+        <Typography>Success chance: {formatPercent(successChance)}</Typography>,
         <Typography>Gains (on success)</Typography>,
         <StatsRow name="Money:" color={Settings.theme.money}>
           <Typography>

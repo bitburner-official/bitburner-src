@@ -1,5 +1,5 @@
 import { Terminal } from "../../Terminal";
-import { formatRAM } from "../../ui/nFormat";
+import { formatRam } from "../../ui/nFormat";
 import { Settings } from "../../Settings/Settings";
 
 export function mem(args: (string | number | boolean)[]): void {
@@ -27,12 +27,12 @@ export function mem(args: (string | number | boolean)[]): void {
 
     const ramUsage = script.ramUsage * numThreads;
 
-    Terminal.print(`This script requires ${formatRAM(ramUsage)} of RAM to run for ${numThreads} thread(s)`);
+    Terminal.print(`This script requires ${formatRam(ramUsage)} of RAM to run for ${numThreads} thread(s)`);
 
     const verboseEntries = script.ramUsageEntries?.sort((a, b) => b.cost - a.cost) ?? [];
     const padding = Settings.UseIEC60027_2 ? 9 : 8;
     for (const entry of verboseEntries) {
-      Terminal.print(`${formatRAM(entry.cost * numThreads).padStart(padding)} | ${entry.name} (${entry.type})`);
+      Terminal.print(`${formatRam(entry.cost * numThreads).padStart(padding)} | ${entry.name} (${entry.type})`);
     }
 
     if (ramUsage > 0 && verboseEntries.length === 0) {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { purchaseServer } from "../../Server/ServerPurchases";
-import { formatRAM } from "../../ui/nFormat";
+import { formatRam } from "../../ui/nFormat";
 import { Money } from "../../ui/React/Money";
 import { Modal } from "../../ui/React/Modal";
 import { Player } from "@player";
@@ -37,7 +37,7 @@ export function PurchaseServerModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Would you like to purchase a new server with {formatRAM(props.ram)} of RAM for{" "}
+        Would you like to purchase a new server with {formatRam(props.ram)} of RAM for{" "}
         <Money money={props.cost} forPurchase={true} />?
       </Typography>
       <br />

@@ -169,9 +169,7 @@ function AutoManagement(props: IProps): React.ReactElement {
                 </Tooltip>
               </TableCell>
               <TableCell>
-                <Typography align="right">
-                  {nFormat(division.getOfficeProductivity(props.office), "0.000")}
-                </Typography>
+                <Typography align="right">{nFormat(division.getOfficeProductivity(props.office), "0.000")}</Typography>
               </TableCell>
             </TableRow>
             <TableRow>

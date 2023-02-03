@@ -79,11 +79,11 @@ export function OperationElem(props: IProps): React.ReactElement {
         <br />
         Time Required: {convertTimeMsToTimeElapsedString(actionTime * 1000)}
         <br />
-        Operations remaining: {formatBigNumber(Math.floor(props.action.count), 3)}
+        Operations remaining: {formatBigNumber(Math.floor(props.action.count))}
         <br />
-        Successes: {formatBigNumber(props.action.successes, 3)}
+        Successes: {formatBigNumber(props.action.successes)}
         <br />
-        Failures: {formatBigNumber(props.action.failures, 3)}
+        Failures: {formatBigNumber(props.action.failures)}
       </Typography>
       <br />
       <Autolevel rerender={rerender} action={props.action} />

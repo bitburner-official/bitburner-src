@@ -30,7 +30,7 @@ import {
   calculateGrowTime,
   calculateWeakenTime,
 } from "../Hacking";
-import { formatExp, formatMoney, formatPercentage, formatRAM, formatSecurity } from "../ui/nFormat";
+import { formatExp, formatMoney, formatPercent, formatRam, formatSecurity } from "../ui/nFormat";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 
 // TODO: Does every terminal function really need its own file...?
@@ -253,7 +253,7 @@ export class Terminal {
 
     Player.gainHackingExp(expGain);
     this.print(
-      `Available money on '${server.hostname}' grown by ${formatPercentage(growth, 6)}. Gained ${formatExp(
+      `Available money on '${server.hostname}' grown by ${formatPercent(growth, 6)}. Gained ${formatExp(
         expGain,
       )} hacking exp.`,
     );
@@ -312,7 +312,7 @@ export class Terminal {
       this.print("Root Access: " + (hasAdminRights ? "YES" : "NO"));
       const canRunScripts = hasAdminRights && currServ.maxRam > 0;
       this.print("Can run scripts on this host: " + (canRunScripts ? "YES" : "NO"));
-      this.print("RAM: " + formatRAM(currServ.maxRam));
+      this.print("RAM: " + formatRam(currServ.maxRam));
       if (currServ instanceof Server) {
         this.print("Backdoor: " + (currServ.backdoorInstalled ? "YES" : "NO"));
         const hackingSkill = currServ.requiredHackingSkill;
@@ -320,7 +320,7 @@ export class Terminal {
         const security = currServ.hackDifficulty;
         this.print("Server security level: " + (!isHacknet ? formatSecurity(security) : "N/A"));
         const hackingChance = calculateHackingChance(currServ, Player);
-        this.print("Chance to hack: " + (!isHacknet ? formatPercentage(hackingChance) : "N/A"));
+        this.print("Chance to hack: " + (!isHacknet ? formatPercent(hackingChance) : "N/A"));
         const hackingTime = calculateHackingTime(currServ, Player) * 1000;
         this.print("Time to hack: " + (!isHacknet ? convertTimeMsToTimeElapsedString(hackingTime, true) : "N/A"));
       }
@@ -549,7 +549,7 @@ export class Terminal {
           this.print(dashes + "Number of open ports required to NUKE: " + s.numOpenPortsRequired);
         }
       }
-      this.print(dashes + "RAM: " + formatRAM(s.maxRam));
+      this.print(dashes + "RAM: " + formatRam(s.maxRam));
       this.print(" ");
     }
   }

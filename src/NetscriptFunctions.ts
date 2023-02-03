@@ -47,8 +47,8 @@ import {
   formatExp,
   formatNumber,
   formatMoney,
-  formatPercentage,
-  formatRAM,
+  formatPercent,
+  formatRam,
   formatSecurity,
   formatThreads,
   nFormat,
@@ -282,10 +282,9 @@ export const ns: InternalAPI<NSFull> = {
         helpers.log(
           ctx,
           () =>
-            `Available money on '${server.hostname}' grown by ${formatPercentage(
-              logGrowPercent,
-              6,
-            )}. Gained ${formatExp(expGain)} hacking exp (t=${formatThreads(threads)}).`,
+            `Available money on '${server.hostname}' grown by ${formatPercent(logGrowPercent, 6)}. Gained ${formatExp(
+              expGain,
+            )} hacking exp (t=${formatThreads(threads)}).`,
         );
         ctx.workerScript.scriptRef.onlineExpGained += expGain;
         Player.gainHackingExp(expGain);
@@ -1180,13 +1179,13 @@ export const ns: InternalAPI<NSFull> = {
   getServerMaxRam: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const server = helpers.getServer(ctx, hostname);
-    helpers.log(ctx, () => `returned ${formatRAM(server.maxRam)}`);
+    helpers.log(ctx, () => `returned ${formatRam(server.maxRam)}`);
     return server.maxRam;
   },
   getServerUsedRam: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const server = helpers.getServer(ctx, hostname);
-    helpers.log(ctx, () => `returned ${formatRAM(server.ramUsed)}`);
+    helpers.log(ctx, () => `returned ${formatRam(server.ramUsed)}`);
     return server.ramUsed;
   },
   serverExists: (ctx) => (_hostname) => {

@@ -2,7 +2,7 @@ import React from "react";
 import { ActiveFragment } from "../ActiveFragment";
 import { StaneksGift } from "../StaneksGift";
 import { FragmentType, Effect } from "../FragmentType";
-import { formatPercentage } from "../../ui/nFormat";
+import { formatPercent } from "../../ui/nFormat";
 
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -15,9 +15,9 @@ type IProps = {
 
 function formatEffect(effect: number, type: FragmentType): string {
   if (Effect(type).includes("+x%")) {
-    return Effect(type).replace(/-*x%/, formatPercentage(effect - 1));
+    return Effect(type).replace(/-*x%/, formatPercent(effect - 1));
   } else if (Effect(type).includes("-x%")) {
-    const perc = formatPercentage(1 - 1 / effect);
+    const perc = formatPercent(1 - 1 / effect);
     return Effect(type).replace(/-x%/, perc);
   } else {
     return Effect(type);

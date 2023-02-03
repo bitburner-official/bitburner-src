@@ -45,8 +45,8 @@ function MarketTA2(props: ITa2Props): React.ReactElement {
       <Typography variant="h4">Market-TA.II</Typography>
       <br />
       <Typography>
-        If you sell at {formatMoney(sCost)}, then you will sell {nFormat(markup, "0.00000")}x as much compared to if
-        you sold at market price.
+        If you sell at {formatMoney(sCost)}, then you will sell {nFormat(markup, "0.00000")}x as much compared to if you
+        sold at market price.
       </Typography>
       <TextField type="number" onChange={onChange} value={value} />
       <br />

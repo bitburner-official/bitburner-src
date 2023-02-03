@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ActiveFragment } from "../ActiveFragment";
 import { StaneksGift } from "../StaneksGift";
 import { FragmentType, Effect } from "../FragmentType";
-import { formatPercentage, formatStaneksGiftCharge, formatStaneksGiftPower } from "../../ui/nFormat";
+import { formatPercent, formatStaneksGiftCharge, formatStaneksGiftPower } from "../../ui/nFormat";
 
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -53,10 +53,10 @@ export function FragmentInspector(props: IProps): React.ReactElement {
     charge = "N/A";
     effect = `${f.power}x adjacent fragment power`;
   } else if (Effect(f.type).includes("+x%")) {
-    effect = Effect(f.type).replace(/-*x%/, formatPercentage(props.gift.effect(props.fragment) - 1));
+    effect = Effect(f.type).replace(/-*x%/, formatPercent(props.gift.effect(props.fragment) - 1));
   } else if (Effect(f.type).includes("-x%")) {
     const effectAmt = props.gift.effect(props.fragment);
-    const perc = formatPercentage(1 - 1 / effectAmt);
+    const perc = formatPercent(1 - 1 / effectAmt);
     effect = Effect(f.type).replace(/-x%/, perc);
   }
 

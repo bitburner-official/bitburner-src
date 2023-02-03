@@ -7,7 +7,7 @@ import * as React from "react";
 import { Stock } from "../Stock";
 
 import { Player } from "@player";
-import { formatPercentage, formatShares } from "../../ui/nFormat";
+import { formatPercent, formatShares } from "../../ui/nFormat";
 import { Money } from "../../ui/React/Money";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
@@ -48,7 +48,7 @@ function LongPosition(props: IProps): React.ReactElement {
         Average Price: <Money money={stock.playerAvgPx} /> (Total Cost: <Money money={totalCost} />)
       </Typography>
       <Typography>
-        Profit: <Money money={gains} /> ({formatPercentage(percentageGains)})
+        Profit: <Money money={gains} /> ({formatPercent(percentageGains)})
       </Typography>
     </>
   );
@@ -87,7 +87,7 @@ function ShortPosition(props: IProps): React.ReactElement {
           Average Price: <Money money={stock.playerAvgShortPx} /> (Total Cost: <Money money={totalCost} />)
         </Typography>
         <Typography>
-          Profit: <Money money={gains} /> ({formatPercentage(percentageGains)})
+          Profit: <Money money={gains} /> ({formatPercent(percentageGains)})
         </Typography>
       </>
     );

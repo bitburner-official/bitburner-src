@@ -22,7 +22,7 @@ import { Page } from "../ui/Router";
 import { Locations } from "../Locations/Locations";
 import { GetServer } from "../Server/AllServers";
 import { Programs } from "../Programs/Programs";
-import { formatMoney, formatRAM, formatReputation } from "../ui/nFormat";
+import { formatMoney, formatRam, formatReputation } from "../ui/nFormat";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Company } from "../Company/Company";
 import { Companies } from "../Company/Companies";
@@ -663,7 +663,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 2);
       helpers.log(
         ctx,
-        () => `Purchased additional RAM for home computer! It now has ${formatRAM(homeComputer.maxRam)} of RAM.`,
+        () => `Purchased additional RAM for home computer! It now has ${formatRam(homeComputer.maxRam)} of RAM.`,
       );
       return true;
     },

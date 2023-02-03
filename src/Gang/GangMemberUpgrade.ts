@@ -1,5 +1,5 @@
 import { IMults, UpgradeType } from "./data/upgrades";
-import { formatPercentage, FormatsReset } from "../ui/nFormat";
+import { formatPercent, FormatsHaveChanged } from "../ui/nFormat";
 
 export class GangMemberUpgrade {
   name: string;
@@ -15,34 +15,34 @@ export class GangMemberUpgrade {
     this.mults = mults;
     // No initialization because it depend on number formatter config
     this.desc = "";
-    FormatsReset.subscribe(() => (this.desc = this.createDescription()));
+    FormatsHaveChanged.subscribe(() => (this.desc = this.createDescription()));
   }
 
   createDescription(): string {
     const lines = ["Effects:"];
     if (this.mults.str != null) {
-      lines.push(`+${formatPercentage(this.mults.str - 1, 0)} strength skill`);
-      lines.push(`+${formatPercentage((this.mults.str - 1) / 4, 2)} strength exp`);
+      lines.push(`+${formatPercent(this.mults.str - 1, 0)} strength skill`);
+      lines.push(`+${formatPercent((this.mults.str - 1) / 4, 2)} strength exp`);
     }
     if (this.mults.def != null) {
-      lines.push(`+${formatPercentage(this.mults.def - 1, 0)} defense skill`);
-      lines.push(`+${formatPercentage((this.mults.def - 1) / 4, 2)} defense exp`);
+      lines.push(`+${formatPercent(this.mults.def - 1, 0)} defense skill`);
+      lines.push(`+${formatPercent((this.mults.def - 1) / 4, 2)} defense exp`);
     }
     if (this.mults.dex != null) {
-      lines.push(`+${formatPercentage(this.mults.dex - 1, 0)} dexterity skill`);
-      lines.push(`+${formatPercentage((this.mults.dex - 1) / 4, 2)} dexterity exp`);
+      lines.push(`+${formatPercent(this.mults.dex - 1, 0)} dexterity skill`);
+      lines.push(`+${formatPercent((this.mults.dex - 1) / 4, 2)} dexterity exp`);
     }
     if (this.mults.agi != null) {
-      lines.push(`+${formatPercentage(this.mults.agi - 1, 0)} agility skill`);
-      lines.push(`+${formatPercentage((this.mults.agi - 1) / 4, 2)} agility exp`);
+      lines.push(`+${formatPercent(this.mults.agi - 1, 0)} agility skill`);
+      lines.push(`+${formatPercent((this.mults.agi - 1) / 4, 2)} agility exp`);
     }
     if (this.mults.cha != null) {
-      lines.push(`+${formatPercentage(this.mults.cha - 1, 0)} charisma skill`);
-      lines.push(`+${formatPercentage((this.mults.cha - 1) / 4, 2)} charisma exp`);
+      lines.push(`+${formatPercent(this.mults.cha - 1, 0)} charisma skill`);
+      lines.push(`+${formatPercent((this.mults.cha - 1) / 4, 2)} charisma exp`);
     }
     if (this.mults.hack != null) {
-      lines.push(`+${formatPercentage(this.mults.hack - 1, 0)} hacking skill`);
-      lines.push(`+${formatPercentage((this.mults.hack - 1) / 4, 2)} hacking exp`);
+      lines.push(`+${formatPercent(this.mults.hack - 1, 0)} hacking skill`);
+      lines.push(`+${formatPercent((this.mults.hack - 1) / 4, 2)} hacking exp`);
     }
     return lines.join("<br>");
   }

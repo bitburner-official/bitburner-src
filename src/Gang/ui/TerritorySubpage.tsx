@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Container, Button, Paper, Box, Tooltip, Switch, FormControlLabel, Typography } from "@mui/material";
 import { Help } from "@mui/icons-material";
 
-import { formatNumber, formatPercentage } from "../../ui/nFormat";
+import { formatNumber, formatPercent } from "../../ui/nFormat";
 
 import { AllGangs } from "../AllGangs";
 
@@ -76,7 +76,7 @@ export function TerritorySubpage(): React.ReactElement {
         />
 
         <Typography>
-          <b>Territory Clash Chance:</b> {formatPercentage(gang.territoryClashChance, 3)} <br />
+          <b>Territory Clash Chance:</b> {formatPercent(gang.territoryClashChance, 3)} <br />
           <b>Power:</b> {formatNumber(AllGangs[gang.facName].power, 3)} <br />
           <b>Territory:</b> {formatTerritory(AllGangs[gang.facName].territory)}% <br />
         </Typography>
@@ -127,7 +127,7 @@ function OtherGangTerritory(props: ITerritoryProps): React.ReactElement {
       <Typography>
         <b>Power:</b> {formatNumber(power, 3)} <br />
         <b>Territory:</b> {formatTerritory(territory)}% <br />
-        <b>Clash Win Chance:</b> {formatPercentage(clashVictoryChance, 3)}
+        <b>Clash Win Chance:</b> {formatPercent(clashVictoryChance, 3)}
       </Typography>
     </Box>
   );

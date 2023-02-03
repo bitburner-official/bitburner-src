@@ -5,7 +5,7 @@ import { Multipliers, defaultMultipliers, mergeMultipliers } from "../../PersonO
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { formatPercentage } from "../../ui/nFormat";
+import { formatPercent } from "../../ui/nFormat";
 import { StaticAugmentations } from "../StaticAugmentations";
 
 function calculateAugmentedStats(): Multipliers {
@@ -26,11 +26,11 @@ interface IBitNodeModifiedStatsProps {
 function BitNodeModifiedStats(props: IBitNodeModifiedStatsProps): React.ReactElement {
   // If player doesn't have SF5 or if the property isn't affected by BitNode mults
   if (props.mult === 1 || Player.sourceFileLvl(5) === 0)
-    return <Typography color={props.color}>{formatPercentage(props.base)}</Typography>;
+    return <Typography color={props.color}>{formatPercent(props.base)}</Typography>;
 
   return (
     <Typography color={props.color}>
-      <span style={{ opacity: 0.5 }}>{formatPercentage(props.base)}</span> {formatPercentage(props.base * props.mult)}
+      <span style={{ opacity: 0.5 }}>{formatPercent(props.base)}</span> {formatPercent(props.base * props.mult)}
     </Typography>
   );
 }
