@@ -87,6 +87,10 @@ export function nFormatNew(n: number, options: NFormatOptions = {}) {
   if (!suffixList[suffixIndex]) return exponentialFormatter.format(n).toLocaleLowerCase();
   // Suffixed form
   n /= logBase ** suffixIndex;
+  if (Math.abs(n) >= logBase - 1 + parseFloat("0." + "9".repeat(fractionalDigits)) && suffixList[suffixIndex + 1]) {
+    suffixIndex += 1;
+    n /= logBase;
+  }
   return getFormatter(fractionalDigits).format(n) + suffixList[suffixIndex];
 }
 

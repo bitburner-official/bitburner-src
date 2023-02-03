@@ -12,6 +12,15 @@ import {
 
 const format: NFormatOptions = { fractionalDigits: 6 };
 
+describe("Suffix rounding test", () => {
+  test("Rounding Test", () => {
+    Settings.hideTrailingDecimalZeros = false;
+    FormatsNeedToChange.emit();
+    expect(nFormatNew(0.99999999e12)).toEqual("1.000t");
+    expect(nFormatNew(-0.99999999e12)).toEqual("-1.000t");
+  });
+});
+
 describe("Numeral formatting for positive numbers", () => {
   test("should not format too small numbers and should hide trailing zeroes if configured", () => {
     // Initial settings
