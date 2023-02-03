@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
-import { formatMoney, nFormat } from "../../../ui/nFormat";
+import { formatMoney, formatShares } from "../../../ui/nFormat";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -55,7 +55,7 @@ export function GoPublicModal(props: IProps): React.ReactElement {
         be deposited directly into your Corporation's funds).
         <br />
         <br />
-        You have a total of {nFormat(corp.numShares, "0.000a")} of shares that you can issue.
+        You have a total of {formatShares(corp.numShares)} shares that you can issue.
       </Typography>
       <Box display="flex" alignItems="center">
         <NumberInput onChange={setShares} autoFocus placeholder="Shares to issue" onKeyDown={onKeyDown} />

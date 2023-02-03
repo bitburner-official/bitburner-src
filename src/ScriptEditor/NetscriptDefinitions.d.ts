@@ -1,6 +1,14 @@
 /* TODO: remove ns1-specific documentation for all functions, and just create a basic doc somewhere that says how to
  *       convert examples for use in .script files (e.g. no async/await, var instead of let/const, etc). */
 
+type NFormatOptions = {
+  suffixStart?: number;
+  fractionalDigits?: number;
+  isInt?: boolean;
+  isPercent?: boolean;
+  isRam?: boolean;
+};
+
 /** @public */
 interface HP {
   current: number;
@@ -6546,17 +6554,16 @@ export type NS = {
    * @remarks
    * RAM cost: 0 GB
    *
-   * Converts a number into a string with the specified formatter.
-   * This uses the numeral.js library, so the formatters must be compatible with that.
-   * This is the same function that the game itself uses to display numbers.
-   *
-   * For more information, see: http://numeraljs.com/
+   * Converts a number into a string with the specified format options.
+   * This is the same function that the game itself uses to display numbers. The formatted number is based on the
+   * provided formatOptions, and on the interface settings related to numeric display (locale, hide trailing decimal
+   * zeroes, etc.)
    *
    * @param n - Number to format.
-   * @param format - Formatter.
+   * @param formatOptions - Formatting options.
    * @returns Formatted number.
    */
-  nFormat(n: number, format: string): string;
+  nFormat(n: number, formatOptions: NFormatOptions): string;
 
   /**
    * Format time to a readable string.

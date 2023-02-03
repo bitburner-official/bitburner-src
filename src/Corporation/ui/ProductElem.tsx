@@ -8,7 +8,7 @@ import { SellProductModal } from "./modals/SellProductModal";
 import { ProductMarketTaModal } from "./modals/ProductMarketTaModal";
 import { CancelProductModal } from "./modals/CancelProductModal";
 
-import { formatMoney, nFormat } from "../../ui/nFormat";
+import { formatBigNumber, formatCorpStat, formatMoney, formatPercent } from "../../ui/nFormat";
 
 import { isString } from "../../utils/helpers/isString";
 import { Money } from "../../ui/React/Money";
@@ -38,10 +38,6 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   const city = props.city;
   const product = props.product;
 
-  // Numeral.js formatters
-  const nf = "0.000";
-  const nfB = "0.000a"; // For numbers that might be big
-
   const hasUpgradeDashboard = division.hasResearch("uPgrade: Dashboard");
 
   // Total product gain = production - sale
@@ -53,13 +49,13 @@ export function ProductElem(props: IProductProps): React.ReactElement {
     if (isString(product.sllman[city][1])) {
       sellButtonText = (
         <>
-          Sell ({nFormat(product.data[city][2], nfB)}/{product.sllman[city][1]})
+          Sell ({formatBigNumber(product.data[city][2])}/{product.sllman[city][1]})
         </>
       );
     } else {
       sellButtonText = (
         <>
-          Sell ({nFormat(product.data[city][2], nfB)}/{nFormat(product.sllman[city][1], nfB)})
+          Sell ({formatBigNumber(product.data[city][2])}/{formatBigNumber(product.sllman[city][1])})
         </>
       );
     }
@@ -100,7 +96,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   // Limit Production button
   let limitProductionButtonText = "Limit Production";
   if (product.prdman[city][0]) {
-    limitProductionButtonText += " (" + nFormat(product.prdman[city][1], nf) + ")";
+    limitProductionButtonText += " (" + formatCorpStat(product.prdman[city][1]) + ")";
   }
 
   return (
@@ -111,7 +107,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             Designing {product.name} (req. Operations/Engineers in {product.createCity})...
           </Typography>
           <br />
-          <Typography>{nFormat(product.prog, "0.00")}% complete</Typography>
+          <Typography>{formatPercent(product.prog / 100, 2)}% complete</Typography>
           <Button onClick={() => setCancelOpen(true)}>Cancel</Button>
           <CancelProductModal
             product={product}
@@ -126,14 +122,14 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  Prod: {nFormat(product.data[city][1], nfB)}/s
+                  Prod: {formatBigNumber(product.data[city][1])}/s
                   <br />
-                  Sell: {nFormat(product.data[city][2], nfB)} /s
+                  Sell: {formatBigNumber(product.data[city][2])} /s
                 </Typography>
               }
             >
               <Typography>
-                {product.name}: {nFormat(product.data[city][0], nfB)} ({nFormat(totalGain, nfB)}
+                {product.name}: {formatBigNumber(product.data[city][0])} ({formatBigNumber(totalGain)}
                 /s)
               </Typography>
             </Tooltip>
@@ -142,20 +138,20 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  Quality: {nFormat(product.qlt, nf)} <br />
-                  Performance: {nFormat(product.per, nf)} <br />
-                  Durability: {nFormat(product.dur, nf)} <br />
-                  Reliability: {nFormat(product.rel, nf)} <br />
-                  Aesthetics: {nFormat(product.aes, nf)} <br />
-                  Features: {nFormat(product.fea, nf)}
+                  Quality: {formatCorpStat(product.qlt)} <br />
+                  Performance: {formatCorpStat(product.per)} <br />
+                  Durability: {formatCorpStat(product.dur)} <br />
+                  Reliability: {formatCorpStat(product.rel)} <br />
+                  Aesthetics: {formatCorpStat(product.aes)} <br />
+                  Features: {formatCorpStat(product.fea)}
                   {corp.unlockUpgrades[2] === 1 && <br />}
-                  {corp.unlockUpgrades[2] === 1 && "Demand: " + nFormat(product.dmd, nf)}
+                  {corp.unlockUpgrades[2] === 1 && "Demand: " + formatCorpStat(product.dmd)}
                   {corp.unlockUpgrades[3] === 1 && <br />}
-                  {corp.unlockUpgrades[3] === 1 && "Competition: " + nFormat(product.cmp, nf)}
+                  {corp.unlockUpgrades[3] === 1 && "Competition: " + formatCorpStat(product.cmp)}
                 </Typography>
               }
             >
-              <Typography>Rating: {nFormat(product.rat, nf)}</Typography>
+              <Typography>Rating: {formatCorpStat(product.rat)}</Typography>
             </Tooltip>
           </Box>
           <Box display="flex">

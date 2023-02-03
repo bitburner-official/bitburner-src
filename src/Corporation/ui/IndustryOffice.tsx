@@ -7,7 +7,7 @@ import { EmployeePositions } from "../data/Enums";
 import { BuyCoffee } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
-import { nFormat } from "../../ui/nFormat";
+import { formatCorpStat } from "../../ui/nFormat";
 
 import { UpgradeOfficeSizeModal } from "./modals/UpgradeOfficeSizeModal";
 import { ThrowPartyModal } from "./modals/ThrowPartyModal";
@@ -115,7 +115,7 @@ function AutoManagement(props: IProps): React.ReactElement {
             <Typography>Avg Employee Morale:</Typography>
           </TableCell>
           <TableCell align="right">
-            <Typography>{nFormat(props.office.avgMor, "0.000")}</Typography>
+            <Typography>{formatCorpStat(props.office.avgMor)}</Typography>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -123,7 +123,7 @@ function AutoManagement(props: IProps): React.ReactElement {
             <Typography>Avg Employee Happiness:</Typography>
           </TableCell>
           <TableCell align="right">
-            <Typography>{nFormat(props.office.avgHap, "0.000")}</Typography>
+            <Typography>{formatCorpStat(props.office.avgHap)}</Typography>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -131,7 +131,7 @@ function AutoManagement(props: IProps): React.ReactElement {
             <Typography>Avg Employee Energy:</Typography>
           </TableCell>
           <TableCell align="right">
-            <Typography>{nFormat(props.office.avgEne, "0.000")}</Typography>
+            <Typography>{formatCorpStat(props.office.avgEne)}</Typography>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -139,7 +139,7 @@ function AutoManagement(props: IProps): React.ReactElement {
             <Typography>Avg Employee Experience:</Typography>
           </TableCell>
           <TableCell align="right">
-            <Typography>{nFormat(props.office.totalExp / props.office.totalEmployees || 0, "0.000")}</Typography>
+            <Typography>{formatCorpStat(props.office.totalExp / props.office.totalEmployees || 0)}</Typography>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -169,7 +169,7 @@ function AutoManagement(props: IProps): React.ReactElement {
                 </Tooltip>
               </TableCell>
               <TableCell>
-                <Typography align="right">{nFormat(division.getOfficeProductivity(props.office), "0.000")}</Typography>
+                <Typography align="right">{formatCorpStat(division.getOfficeProductivity(props.office))}</Typography>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -188,12 +188,7 @@ function AutoManagement(props: IProps): React.ReactElement {
               </TableCell>
               <TableCell>
                 <Typography align="right">
-                  {nFormat(
-                    division.getOfficeProductivity(props.office, {
-                      forProduct: true,
-                    }),
-                    "0.000",
-                  )}
+                  {formatCorpStat(division.getOfficeProductivity(props.office, { forProduct: true }))}
                 </Typography>
               </TableCell>
             </TableRow>
@@ -206,7 +201,7 @@ function AutoManagement(props: IProps): React.ReactElement {
                 </Tooltip>
               </TableCell>
               <TableCell align="right">
-                <Typography>x{nFormat(division.getBusinessFactor(props.office), "0.000")}</Typography>
+                <Typography>x{formatCorpStat(division.getBusinessFactor(props.office))}</Typography>
               </TableCell>
             </TableRow>
           </>

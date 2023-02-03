@@ -3,7 +3,7 @@ import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { MaterialInfo } from "../../MaterialInfo";
 import { Warehouse } from "../../Warehouse";
 import { Material } from "../../Material";
-import { formatMoney, nFormat } from "../../../ui/nFormat";
+import { formatMatPurchaseAmount, formatMoney } from "../../../ui/nFormat";
 import { BulkPurchase, BuyMaterial } from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation, useDivision } from "../Context";
@@ -55,7 +55,7 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
       return (
         <>
           <Typography>
-            Purchasing {nFormat(parsedAmt, "0,0.00")} of {props.mat.name} will cost {formatMoney(cost)}
+            Purchasing {formatMatPurchaseAmount(parsedAmt)} of {props.mat.name} will cost {formatMoney(cost)}
           </Typography>
         </>
       );

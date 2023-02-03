@@ -9,7 +9,7 @@ import { ProductElem } from "./ProductElem";
 import { MaterialElem } from "./MaterialElem";
 import { MaterialInfo } from "../MaterialInfo";
 
-import { formatBigNumber, nFormat } from "../../ui/nFormat";
+import { formatBigNumber, formatMaterialSize } from "../../ui/nFormat";
 
 import { Corporation } from "../Corporation";
 import { Industry } from "../Industry";
@@ -126,7 +126,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
     if (mat.qty === 0) continue;
     breakdownItems.push(
       <>
-        {matName}: {nFormat(mat.qty * MaterialInfo[matName].size, "0,0.0")}
+        {matName}: {formatMaterialSize(mat.qty * MaterialInfo[matName].size)}
       </>,
     );
   }
@@ -136,7 +136,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
     if (prod === undefined) continue;
     breakdownItems.push(
       <>
-        {prodName}: {nFormat(prod.data[props.warehouse.loc][0] * prod.siz, "0,0.0")}
+        {prodName}: {formatMaterialSize(prod.data[props.warehouse.loc][0] * prod.siz)}
       </>,
     );
   }

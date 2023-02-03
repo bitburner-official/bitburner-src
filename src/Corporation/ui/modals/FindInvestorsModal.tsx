@@ -1,5 +1,5 @@
 import React from "react";
-import { formatMoney, nFormat } from "../../../ui/nFormat";
+import { formatMoney, formatPercent, formatShares } from "../../../ui/nFormat";
 import * as corpConstants from "../../data/Constants";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
@@ -38,7 +38,7 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
         An investment firm has offered you {formatMoney(funding)} in funding in exchange for a{" "}
-        {nFormat(percShares * 100, "0.000a")}% stake in the company ({nFormat(investShares, "0.000a")} shares).
+        {formatPercent(percShares, 3)} stake in the company ({formatShares(investShares)} shares).
         <br />
         <br />
         Do you accept or reject this offer?

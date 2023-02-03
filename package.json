@@ -35,7 +35,6 @@
     "material-ui-popup-state": "^1.5.3",
     "monaco-editor": "^0.34.1",
     "notistack": "^2.0.8",
-    "numeral": "2.0.6",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.1",

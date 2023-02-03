@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { formatMoney, nFormat } from "../../../ui/nFormat";
+import { formatMoney, formatPreciseMultiplier } from "../../../ui/nFormat";
 import { Material } from "../../Material";
 import { Modal } from "../../../ui/React/Modal";
 import { useDivision } from "../Context";
@@ -54,8 +54,8 @@ function MarketTA2(props: IMarketTA2Props): React.ReactElement {
       <Typography variant="h4">Market-TA.II</Typography>
       <br />
       <Typography>
-        If you sell at {formatMoney(sCost)}, then you will sell {nFormat(markup, "0.00000")}x as much compared to if you
-        sold at market price.
+        If you sell at {formatMoney(sCost)}, then you will sell x{formatPreciseMultiplier(markup)} as much compared to
+        if you sold at market price.
       </Typography>
       <TextField type="number" onChange={onChange} value={newCost} />
       <br />

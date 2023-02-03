@@ -4,11 +4,10 @@ import {
   formatPercent,
   parseBigNumber,
   FormatsNeedToChange,
-  nFormatNew,
-  NFormatOptions,
+  nFormat,
   formatRam,
 } from "../../../src/ui/nFormat";
-// Simulate initialization of formats that normally occurs in engine after game load.
+import { NFormatOptions } from "@nsdefs";
 
 const format: NFormatOptions = { fractionalDigits: 6 };
 
@@ -16,8 +15,8 @@ describe("Suffix rounding test", () => {
   test("Rounding Test", () => {
     Settings.hideTrailingDecimalZeros = false;
     FormatsNeedToChange.emit();
-    expect(nFormatNew(0.99999999e12)).toEqual("1.000t");
-    expect(nFormatNew(-0.99999999e12)).toEqual("-1.000t");
+    expect(nFormat(0.99999999e12)).toEqual("1.000t");
+    expect(nFormat(-0.99999999e12)).toEqual("-1.000t");
   });
 });
 
@@ -26,17 +25,17 @@ describe("Numeral formatting for positive numbers", () => {
     // Initial settings
     Settings.hideTrailingDecimalZeros = true;
     FormatsNeedToChange.emit();
-    expect(nFormatNew(0.0000000001, format)).toEqual("0");
-    expect(nFormatNew(0.000000001, format)).toEqual("0");
-    expect(nFormatNew(0.00000001, format)).toEqual("0");
-    expect(nFormatNew(0.0000001, format)).toEqual("0");
-    expect(nFormatNew(0.000001, format)).toEqual("0.000001");
-    expect(nFormatNew(0.00001, format)).toEqual("0.00001");
-    expect(nFormatNew(0.0001, format)).toEqual("0.0001");
-    expect(nFormatNew(0.001, format)).toEqual("0.001");
-    expect(nFormatNew(0.01, format)).toEqual("0.01");
-    expect(nFormatNew(0.1, format)).toEqual("0.1");
-    expect(nFormatNew(1, format)).toEqual("1");
+    expect(nFormat(0.0000000001, format)).toEqual("0");
+    expect(nFormat(0.000000001, format)).toEqual("0");
+    expect(nFormat(0.00000001, format)).toEqual("0");
+    expect(nFormat(0.0000001, format)).toEqual("0");
+    expect(nFormat(0.000001, format)).toEqual("0.000001");
+    expect(nFormat(0.00001, format)).toEqual("0.00001");
+    expect(nFormat(0.0001, format)).toEqual("0.0001");
+    expect(nFormat(0.001, format)).toEqual("0.001");
+    expect(nFormat(0.01, format)).toEqual("0.01");
+    expect(nFormat(0.1, format)).toEqual("0.1");
+    expect(nFormat(1, format)).toEqual("1");
     Settings.hideTrailingDecimalZeros = false;
     FormatsNeedToChange.emit();
   });
@@ -46,9 +45,9 @@ describe("Numeral formatting for positive numbers", () => {
     FormatsNeedToChange.emit();
     const suffixes = ["", "k", "m", "b", "t", "q", "Q", "s", "S", "o", "n"];
     for (let i = 0; i < suffixes.length; i++) {
-      expect(nFormatNew(parseFloat("1e" + i * 3))).toEqual("1.000" + suffixes[i]);
-      expect(nFormatNew(parseFloat("1e" + (i * 3 + 1)))).toEqual("10.000" + suffixes[i]);
-      expect(nFormatNew(parseFloat("1e" + (i * 3 + 2)))).toEqual("100.000" + suffixes[i]);
+      expect(nFormat(parseFloat("1e" + i * 3))).toEqual("1.000" + suffixes[i]);
+      expect(nFormat(parseFloat("1e" + (i * 3 + 1)))).toEqual("10.000" + suffixes[i]);
+      expect(nFormat(parseFloat("1e" + (i * 3 + 2)))).toEqual("100.000" + suffixes[i]);
     }
   });
   test("should format really big numbers in readable format", () => {
@@ -83,17 +82,17 @@ describe("Numeral formatting for negative numbers", () => {
     Settings.hideTrailingDecimalZeros = true;
     FormatsNeedToChange.emit();
     // No simple way right now to force 0 instead of -0
-    expect(nFormatNew(-0.0000000001, format)).toEqual("-0");
-    expect(nFormatNew(-0.000000001, format)).toEqual("-0");
-    expect(nFormatNew(-0.00000001, format)).toEqual("-0");
-    expect(nFormatNew(-0.0000001, format)).toEqual("-0");
-    expect(nFormatNew(-0.000001, format)).toEqual("-0.000001");
-    expect(nFormatNew(-0.00001, format)).toEqual("-0.00001");
-    expect(nFormatNew(-0.0001, format)).toEqual("-0.0001");
-    expect(nFormatNew(-0.001, format)).toEqual("-0.001");
-    expect(nFormatNew(-0.01, format)).toEqual("-0.01");
-    expect(nFormatNew(-0.1, format)).toEqual("-0.1");
-    expect(nFormatNew(-1, format)).toEqual("-1");
+    expect(nFormat(-0.0000000001, format)).toEqual("-0");
+    expect(nFormat(-0.000000001, format)).toEqual("-0");
+    expect(nFormat(-0.00000001, format)).toEqual("-0");
+    expect(nFormat(-0.0000001, format)).toEqual("-0");
+    expect(nFormat(-0.000001, format)).toEqual("-0.000001");
+    expect(nFormat(-0.00001, format)).toEqual("-0.00001");
+    expect(nFormat(-0.0001, format)).toEqual("-0.0001");
+    expect(nFormat(-0.001, format)).toEqual("-0.001");
+    expect(nFormat(-0.01, format)).toEqual("-0.01");
+    expect(nFormat(-0.1, format)).toEqual("-0.1");
+    expect(nFormat(-1, format)).toEqual("-1");
   });
   test("powers of 10 test for suffix form", () => {
     // Initial settings
@@ -101,9 +100,9 @@ describe("Numeral formatting for negative numbers", () => {
     FormatsNeedToChange.emit();
     const suffixes = ["", "k", "m", "b", "t", "q", "Q", "s", "S", "o", "n"];
     for (let i = 0; i < suffixes.length; i++) {
-      expect(nFormatNew(parseFloat("-1e" + i * 3))).toEqual("-1.000" + suffixes[i]);
-      expect(nFormatNew(parseFloat("-1e" + (i * 3 + 1)))).toEqual("-10.000" + suffixes[i]);
-      expect(nFormatNew(parseFloat("-1e" + (i * 3 + 2)))).toEqual("-100.000" + suffixes[i]);
+      expect(nFormat(parseFloat("-1e" + i * 3))).toEqual("-1.000" + suffixes[i]);
+      expect(nFormat(parseFloat("-1e" + (i * 3 + 1)))).toEqual("-10.000" + suffixes[i]);
+      expect(nFormat(parseFloat("-1e" + (i * 3 + 2)))).toEqual("-100.000" + suffixes[i]);
     }
   });
   test("should format really big numbers in readable format", () => {

@@ -70,7 +70,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums } from "@nsdefs";
+import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums, NFormatOptions } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
@@ -1681,15 +1681,21 @@ export const ns: InternalAPI<NSFull> = {
       }
       return runningScript.onlineExpGained / runningScript.onlineRunningTime;
     },
-  nFormat: (ctx) => (_n, _format) => {
-    const n = helpers.number(ctx, "n", _n);
-    const format = helpers.string(ctx, "format", _format);
-    if (isNaN(n)) {
-      return "";
-    }
-
-    return nFormat(n, format);
-  },
+  nFormat:
+    (ctx) =>
+    (_n, format = {}) => {
+      const n = helpers.number(ctx, "n", _n);
+      // Provide legacy
+      if (typeof format !== "object") {
+        throw helpers.makeRuntimeErrorMsg(
+          ctx,
+          "Incorrect usage of nFormat. The formatOptions for nFormat is no longer a string.\n" +
+            "Please review the latest documentation and adjust usage accordingly.\n" +
+            "Sorry for the inconvenience!",
+        );
+      }
+      return nFormat(n, format as NFormatOptions);
+    },
   tFormat: (ctx) => (_milliseconds, _milliPrecision) => {
     const milliseconds = helpers.number(ctx, "milliseconds", _milliseconds);
     const milliPrecision = !!_milliPrecision;

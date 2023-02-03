@@ -4,7 +4,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { GangMember } from "../GangMember";
-import { formatRespect, nFormat } from "../../ui/nFormat";
+import { formatPreciseMultiplier, formatRespect } from "../../ui/nFormat";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { Modal } from "../../ui/React/Modal";
 import { useGang } from "./Context";
@@ -39,17 +39,17 @@ export function AscensionModal(props: IProps): React.ReactElement {
         <br />
         {props.member.name} gained the following stat multipliers for ascending:
         <br />
-        Hacking: x{nFormat(res.hack, "0.000")}
+        Hacking: x{formatPreciseMultiplier(res.hack)}
         <br />
-        Strength: x{nFormat(res.str, "0.000")}
+        Strength: x{formatPreciseMultiplier(res.str)}
         <br />
-        Defense: x{nFormat(res.def, "0.000")}
+        Defense: x{formatPreciseMultiplier(res.def)}
         <br />
-        Dexterity: x{nFormat(res.dex, "0.000")}
+        Dexterity: x{formatPreciseMultiplier(res.dex)}
         <br />
-        Agility: x{nFormat(res.agi, "0.000")}
+        Agility: x{formatPreciseMultiplier(res.agi)}
         <br />
-        Charisma: x{nFormat(res.cha, "0.000")}
+        Charisma: x{formatPreciseMultiplier(res.cha)}
         <br />
       </>,
     );
@@ -73,17 +73,17 @@ export function AscensionModal(props: IProps): React.ReactElement {
         <br />
         In return, they will gain the following permanent boost to stat multipliers:
         <br />
-        Hacking: x{nFormat(preAscend.hack, "0.000")} =&gt; x{nFormat(postAscend.hack, "0.000")}
+        Hacking: x{formatPreciseMultiplier(preAscend.hack)} =&gt; x{formatPreciseMultiplier(postAscend.hack)}
         <br />
-        Strength: x{nFormat(preAscend.str, "0.000")} =&gt; x{nFormat(postAscend.str, "0.000")}
+        Strength: x{formatPreciseMultiplier(preAscend.str)} =&gt; x{formatPreciseMultiplier(postAscend.str)}
         <br />
-        Defense: x{nFormat(preAscend.def, "0.000")} =&gt; x{nFormat(postAscend.def, "0.000")}
+        Defense: x{formatPreciseMultiplier(preAscend.def)} =&gt; x{formatPreciseMultiplier(postAscend.def)}
         <br />
-        Dexterity: x{nFormat(preAscend.dex, "0.000")} =&gt; x{nFormat(postAscend.dex, "0.000")}
+        Dexterity: x{formatPreciseMultiplier(preAscend.dex)} =&gt; x{formatPreciseMultiplier(postAscend.dex)}
         <br />
-        Agility: x{nFormat(preAscend.agi, "0.000")} =&gt; x{nFormat(postAscend.agi, "0.000")}
+        Agility: x{formatPreciseMultiplier(preAscend.agi)} =&gt; x{formatPreciseMultiplier(postAscend.agi)}
         <br />
-        Charisma: x{nFormat(preAscend.cha, "0.000")} =&gt; x{nFormat(postAscend.cha, "0.000")}
+        Charisma: x{formatPreciseMultiplier(preAscend.cha)} =&gt; x{formatPreciseMultiplier(postAscend.cha)}
         <br />
       </Typography>
       <Button onClick={confirm}>Ascend</Button>
