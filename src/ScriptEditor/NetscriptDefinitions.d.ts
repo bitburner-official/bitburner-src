@@ -6582,7 +6582,7 @@ export interface NS {
    *
    * Converts a number into a string with the specified format options.
    * This is the same function that the game itself uses to display numbers. The formatted number is based on the
-   * provided formatOptions, and on the Numeric Display settings (all options in Options->Numeric Display)
+   * provided formatOptions, and on the Numeric Display settings (all options in Options-\>Numeric Display)
    *
    * @param n - Number to format.
    * @param formatOptions - Formatting options.

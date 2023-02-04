@@ -98,7 +98,7 @@
     "url": "git+https://github.com/danielyxie/bitburner.git"
   },
   "scripts": {
-    "doc": "npx api-extractor run && npx api-documenter markdown && rm input/bitburner.api.json && rm -r input",
+    "doc": "npx api-extractor run && npx api-documenter markdown && rm input/bitburner.api.json && rm -r input && git add markdown/ && git add tsdoc-metadata.json",
     "format": "prettier --write .",
     "format:report": "prettier -c .",
     "start": "http-server -p 8000",

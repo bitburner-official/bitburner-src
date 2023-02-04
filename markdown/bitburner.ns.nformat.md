@@ -29,5 +29,5 @@ Formatted number.
 
 RAM cost: 0 GB
 
-Converts a number into a string with the specified format options. This is the same function that the game itself uses to display numbers. The formatted number is based on the provided formatOptions, and on the interface settings related to numeric display (locale, hide trailing decimal zeroes, ram format, etc.)
+Converts a number into a string with the specified format options. This is the same function that the game itself uses to display numbers. The formatted number is based on the provided formatOptions, and on the Numeric Display settings (all options in Options-<!-- -->&gt;<!-- -->Numeric Display)
 

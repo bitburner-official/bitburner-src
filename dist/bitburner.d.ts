@@ -2962,12 +2962,12 @@ export declare interface NFormatOptions {
      *  ignored until the value is suffixed. */
     fractionalDigits?: number;
     /** Defines special behavior for nFormat. For normal formatting, do not include a special flag.
-     * 
+     *
      * "integer": Formats the number as an integer. The specified fractionalDigits will only be applied if the number is
      *   large enough for a suffix. This is how e.g. skills or hp are displayed ingame.
-     * 
+     *
      * "percent": Formats the number as a percent. Never collapses to a suffixed form (treats suffixStart as Infinity)
-     * 
+     *
      * "ram": Formats the number as an amount of ram. Ram is always suffixed (treats suffixStart as 0). */
     specialFlag?: NFormatSpecialFlag;
 }
@@ -2975,12 +2975,12 @@ export declare interface NFormatOptions {
 /**
  * @public
  * Defines special behavior for nFormat.
- * 
+ *
  * "integer": Formats the number as an integer. The specified fractionalDigits will only be applied if the number is
  *   large enough for a suffix. This is how e.g. skills or hp are displayed ingame.
- * 
+ *
  * "percent": Formats the number as a percent. Never collapses to a suffixed form (treats suffixStart as Infinity)
- * 
+ *
  * "ram": Formats the number as an amount of ram. Ram is always suffixed (treats suffixStart as 0). */
 export declare type NFormatSpecialFlag = "integer" | "percent" | "ram";
 
@@ -5116,8 +5116,7 @@ export declare interface NS {
      *
      * Converts a number into a string with the specified format options.
      * This is the same function that the game itself uses to display numbers. The formatted number is based on the
-     * provided formatOptions, and on the interface settings related to numeric display (locale, hide trailing decimal
-     * zeroes, ram format, etc.)
+     * provided formatOptions, and on the Numeric Display settings (all options in Options-\>Numeric Display)
      *
      * @param n - Number to format.
      * @param formatOptions - Formatting options.
