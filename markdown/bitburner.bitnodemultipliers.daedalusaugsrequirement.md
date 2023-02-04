@@ -6,7 +6,7 @@
 
 Influences how many Augmentations you need in order to get invited to the Daedalus faction
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 DaedalusAugsRequirement: number;

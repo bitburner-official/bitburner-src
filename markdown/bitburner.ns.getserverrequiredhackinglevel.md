@@ -6,7 +6,7 @@
 
 Returns the required hacking level of the target server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getServerRequiredHackingLevel(host: string): number;
@@ -18,7 +18,7 @@ getServerRequiredHackingLevel(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

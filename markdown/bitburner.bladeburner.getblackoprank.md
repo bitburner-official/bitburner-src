@@ -6,7 +6,7 @@
 
 Get black op required rank.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getBlackOpRank(name: string): number;
@@ -18,7 +18,7 @@ getBlackOpRank(name: string): number;
 |  --- | --- | --- |
 |  name | string | Name of BlackOp. Must be an exact match. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

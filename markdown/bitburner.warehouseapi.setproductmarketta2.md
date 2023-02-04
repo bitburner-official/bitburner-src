@@ -6,7 +6,7 @@
 
 Set market TA 2 for a product.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setProductMarketTA2(divisionName: string, productName: string, on: boolean): void;
@@ -20,7 +20,7 @@ setProductMarketTA2(divisionName: string, productName: string, on: boolean): voi
 |  productName | string | Name of the product |
 |  on | boolean | market ta enabled |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

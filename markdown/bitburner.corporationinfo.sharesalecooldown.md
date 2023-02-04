@@ -6,7 +6,7 @@
 
 Cooldown until shares can be sold again
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 shareSaleCooldown: number;

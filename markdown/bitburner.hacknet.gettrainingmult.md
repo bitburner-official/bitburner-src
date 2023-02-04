@@ -6,12 +6,12 @@
 
 Get the multiplier to training.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getTrainingMult(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

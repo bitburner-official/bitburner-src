@@ -6,7 +6,7 @@
 
 Amount of money gained per level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 MoneyGainPerLevel: number;

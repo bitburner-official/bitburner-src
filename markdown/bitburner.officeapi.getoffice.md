@@ -6,7 +6,7 @@
 
 Get data about an office
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getOffice(divisionName: string, city: CityName | `${CityName}`): Office;
@@ -19,7 +19,7 @@ getOffice(divisionName: string, city: CityName | `${CityName}`): Office;
 |  divisionName | string | Name of the division |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
 
-<b>Returns:</b>
+**Returns:**
 
 [Office](./bitburner.office.md)
 

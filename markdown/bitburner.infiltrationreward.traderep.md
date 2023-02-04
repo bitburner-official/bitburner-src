@@ -4,7 +4,7 @@
 
 ## InfiltrationReward.tradeRep property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 tradeRep: number;

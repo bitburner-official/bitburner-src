@@ -6,7 +6,7 @@
 
 Hacking level required to hack this server
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 requiredHackingSkill: number;

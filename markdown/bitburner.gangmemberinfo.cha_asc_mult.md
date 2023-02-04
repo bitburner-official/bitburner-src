@@ -6,7 +6,7 @@
 
 Charisma multiplier from ascensions
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cha_asc_mult: number;

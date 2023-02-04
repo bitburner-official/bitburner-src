@@ -6,7 +6,7 @@
 
 Current strength experience
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 str_exp: number;

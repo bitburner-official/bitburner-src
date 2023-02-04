@@ -5,7 +5,7 @@
 ## HP interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface HP 
@@ -13,8 +13,8 @@ interface HP
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [current](./bitburner.hp.current.md) | number |  |
-|  [max](./bitburner.hp.max.md) | number |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [current](./bitburner.hp.current.md) |  | number |  |
+|  [max](./bitburner.hp.max.md) |  | number |  |
 

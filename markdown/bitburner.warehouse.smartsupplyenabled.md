@@ -6,7 +6,7 @@
 
 Smart Supply status in the warehouse
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 smartSupplyEnabled: boolean;

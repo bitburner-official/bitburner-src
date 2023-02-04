@@ -6,7 +6,7 @@
 
 Check the price of an exploit on the dark web
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getDarkwebProgramCost(programName: string): number;
@@ -18,7 +18,7 @@ getDarkwebProgramCost(programName: string): number;
 |  --- | --- | --- |
 |  programName | string | Name of program to check the price of |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

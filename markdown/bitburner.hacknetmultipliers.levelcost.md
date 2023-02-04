@@ -6,7 +6,7 @@
 
 Player's hacknet level cost multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 levelCost: number;

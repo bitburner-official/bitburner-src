@@ -6,7 +6,7 @@
 
 Total space in the warehouse
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 size: number;

@@ -6,7 +6,7 @@
 
 Territory impact on task scaling
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 territory: GangTerritory;

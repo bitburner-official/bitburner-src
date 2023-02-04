@@ -6,7 +6,7 @@
 
 Get a list of augmentation available from a faction.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getAugmentationsFromFaction(faction: string): string[];
@@ -18,7 +18,7 @@ getAugmentationsFromFaction(faction: string): string[];
 |  --- | --- | --- |
 |  faction | string | Name of faction. |
 
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

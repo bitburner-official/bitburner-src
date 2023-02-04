@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.secondarylight property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 secondarylight: string;

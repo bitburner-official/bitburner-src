@@ -6,7 +6,7 @@
 
 Influences how much money it costs to upgrade your home computer's RAM
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 HomeComputerRamCost: number;

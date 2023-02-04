@@ -6,7 +6,7 @@
 
 Get the part of money stolen with a single thread.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hackAnalyze(host: string): number;
@@ -18,7 +18,7 @@ hackAnalyze(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

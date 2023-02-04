@@ -6,7 +6,7 @@
 
 Open up a message box.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 alert(msg: string): void;
@@ -18,7 +18,7 @@ alert(msg: string): void;
 |  --- | --- | --- |
 |  msg | string | Message to alert. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

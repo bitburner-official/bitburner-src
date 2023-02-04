@@ -6,7 +6,7 @@
 
 Namespace for hacknet functions.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly hacknet: Hacknet;

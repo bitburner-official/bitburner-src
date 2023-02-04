@@ -6,7 +6,7 @@
 
 Total earned strength experience
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 str_asc_points: number;

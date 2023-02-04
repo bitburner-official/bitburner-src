@@ -6,7 +6,7 @@
 
 Influences the base cost to purchase an augmentation.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 AugmentationMoneyCost: number;

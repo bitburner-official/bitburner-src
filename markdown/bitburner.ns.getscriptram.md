@@ -6,7 +6,7 @@
 
 Get the ram cost of a script.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getScriptRam(script: string, host?: string): number;
@@ -17,9 +17,9 @@ getScriptRam(script: string, host?: string): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  script | string | Filename of script. This is case-sensitive. |
-|  host | string | Hostname of target server the script is located on. This is optional. If it is not specified then the function will use the current server as the target server. |
+|  host | string | _(Optional)_ Hostname of target server the script is located on. This is optional. If it is not specified then the function will use the current server as the target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

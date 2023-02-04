@@ -6,7 +6,7 @@
 
 Donate to a faction.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 donateToFaction(faction: string, amount: number): boolean;
@@ -19,7 +19,7 @@ donateToFaction(faction: string, amount: number): boolean;
 |  faction | string | Name of faction to donate to. |
 |  amount | number | Amount of money to donate. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

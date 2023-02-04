@@ -6,7 +6,7 @@
 
 Start another script on any server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 exec(script: string, host: string, numThreads?: number, ...args: (string | number | boolean)[]): number;
@@ -18,10 +18,10 @@ exec(script: string, host: string, numThreads?: number, ...args: (string | numbe
 |  --- | --- | --- |
 |  script | string | Filename of script to execute. |
 |  host | string | Hostname of the <code>target server</code> on which to execute the script. |
-|  numThreads | number | Optional thread count for new script. Set to 1 by default. Will be rounded down to the nearest integer. |
+|  numThreads | number | _(Optional)_ Optional thread count for new script. Set to 1 by default. Will be rounded down to the nearest integer. |
 |  args | (string \| number \| boolean)\[\] | Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument numThreads must be filled in with a value. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

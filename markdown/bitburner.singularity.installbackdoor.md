@@ -6,12 +6,12 @@
 
 Run the backdoor command in the terminal.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 installBackdoor(): Promise<void>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;void&gt;
 

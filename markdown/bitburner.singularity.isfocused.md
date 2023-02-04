@@ -6,12 +6,12 @@
 
 Check if the player is focused.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 isFocused(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

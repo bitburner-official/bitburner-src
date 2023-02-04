@@ -6,7 +6,7 @@
 
 Fraction of profits issued as dividends
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dividendRate: number;

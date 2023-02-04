@@ -6,12 +6,12 @@
 
 Returns Backup save bonus availability.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 exportGameBonus(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

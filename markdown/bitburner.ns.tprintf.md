@@ -6,7 +6,7 @@
 
 Prints a raw value or a variable to the Terminal.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 tprintf(format: string, ...values: any[]): void;
@@ -19,7 +19,7 @@ tprintf(format: string, ...values: any[]): void;
 |  format | string | Format of the message. |
 |  values | any\[\] | Value(s) to be printed. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -6,12 +6,12 @@
 
 Returns a string with the hostname of the server that the script is running on.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getHostname(): string;
 ```
-<b>Returns:</b>
+**Returns:**
 
 string
 

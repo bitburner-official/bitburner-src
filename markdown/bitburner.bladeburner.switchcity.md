@@ -6,7 +6,7 @@
 
 Travel to another city in bladeburner.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 switchCity(city: CityName | `${CityName}`): boolean;
@@ -18,7 +18,7 @@ switchCity(city: CityName | `${CityName}`): boolean;
 |  --- | --- | --- |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of city. Case-sensitive |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

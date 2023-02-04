@@ -6,7 +6,7 @@
 
 Influences the initial money that a server starts with.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ServerStartingMoney: number;

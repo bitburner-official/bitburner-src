@@ -6,7 +6,7 @@
 
 Set an action autolevel.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setActionAutolevel(type: string, name: string, autoLevel: boolean): void;
@@ -20,7 +20,7 @@ setActionAutolevel(type: string, name: string, autoLevel: boolean): void;
 |  name | string | Name of action. Must be an exact match. |
 |  autoLevel | boolean | Whether or not to autolevel this action |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -361,6 +361,19 @@ export declare interface Bladeburner {
     getActionAutolevel(type: string, name: string): boolean;
 
     /**
+     * Get action successes.
+     * @remarks
+     * RAM cost: 4 GB
+     *
+     * Return a number with how many successes you have with action.
+     *
+     * @param type - Type of action.
+     * @param name - Name of action. Must be an exact match.
+     * @returns a number with how many successes you have with action.
+     */
+    getActionSuccesses(type: string, name: string): number;
+
+    /**
      * Set an action autolevel.
      * @remarks
      * RAM cost: 4 GB
@@ -1062,7 +1075,7 @@ export declare interface CorporationInfo {
     dividendTax: number;
     /** Your earnings as a shareholder per second this cycle */
     dividendEarnings: number;
-    /** State of the corporation. Possible states are START, PURCHASE, PRODUCTION, SALE, EXPORT. */
+    /** State of the corporation. Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. */
     state: string;
     /** Array of all division names */
     divisions: string[];
@@ -1070,7 +1083,7 @@ export declare interface CorporationInfo {
 
 /** Product rating information
  *  @public */
-export declare type CorpProductData = {
+export declare interface CorpProductData {
     /** Name of the product */
     name: string;
     /** Verb used to describe creation of the product */
@@ -1086,7 +1099,7 @@ export declare type CorpProductData = {
         performance?: number;
         reliability?: number;
     };
-};
+}
 
 /** @public */
 export declare type CorpResearchName =
@@ -1115,7 +1128,7 @@ export declare type CorpResearchName =
 | "sudo.Assist";
 
 /** @public */
-export declare type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "SALE" | "EXPORT";
+export declare type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "EXPORT" | "SALE";
 
 /** @public */
 export declare type CorpUnlockName =
@@ -1585,7 +1598,7 @@ export declare interface Gang {
      *
      * “Bonus time” is accumulated when the game is offline or if the game is inactive in the browser.
      *
-     * “Bonus time” makes the game progress faster, up to 10x the normal speed.
+     * “Bonus time” makes the game progress faster, up to 25x the normal speed.
      *
      * @returns Bonus time for the Gang mechanic in milliseconds.
      */
@@ -2938,6 +2951,40 @@ export declare interface NetscriptPort {
 }
 
 /**
+ * @public
+ * Options for formatting a number with nFormat.
+ */
+export declare interface NFormatOptions {
+    /** How large the number has to be before it will collapse into a suffixed form. If not provided, defaults
+     *  to 1000. Always treated as 0 for ram formatting. */
+    suffixStart?: number;
+    /** Defines how many digits to show in the fractional part of the decimal. Defaults to 3. For integers, this is
+     *  ignored until the value is suffixed. */
+    fractionalDigits?: number;
+    /** Defines special behavior for nFormat. For normal formatting, do not include a special flag.
+     * 
+     * "integer": Formats the number as an integer. The specified fractionalDigits will only be applied if the number is
+     *   large enough for a suffix. This is how e.g. skills or hp are displayed ingame.
+     * 
+     * "percent": Formats the number as a percent. Never collapses to a suffixed form (treats suffixStart as Infinity)
+     * 
+     * "ram": Formats the number as an amount of ram. Ram is always suffixed (treats suffixStart as 0). */
+    specialFlag?: NFormatSpecialFlag;
+}
+
+/**
+ * @public
+ * Defines special behavior for nFormat.
+ * 
+ * "integer": Formats the number as an integer. The specified fractionalDigits will only be applied if the number is
+ *   large enough for a suffix. This is how e.g. skills or hp are displayed ingame.
+ * 
+ * "percent": Formats the number as a percent. Never collapses to a suffixed form (treats suffixStart as Infinity)
+ * 
+ * "ram": Formats the number as an amount of ram. Ram is always suffixed (treats suffixStart as 0). */
+export declare type NFormatSpecialFlag = "integer" | "percent" | "ram";
+
+/**
  * Object representing all the values related to a hacknet node.
  * @public
  */
@@ -2975,7 +3022,7 @@ export declare interface NodeStats {
  *  // Some related functions are gathered within a common namespace
  *  stock.getPrice();
  * ```
- * {@link https://bitburner.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
+ * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
  * <hr>
  * <b>Basic ns2 usage example:</b>
  * ```ts
@@ -2988,7 +3035,7 @@ export declare interface NodeStats {
  *  await ns.hack('n00dles');
  * }
  * ```
- * {@link https://bitburner.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
+ * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
  * <hr>
  */
 export declare interface NS {
@@ -4839,7 +4886,7 @@ export declare interface NS {
      *
      * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
      *
-     * @see https://bitburner.readthedocs.io/en/latest/netscript/netscriptmisc.html#netscript-ports
+     * @see https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptmisc.html#netscript-ports
      * @param port - Port number. Must be an integer between 1 and 20.
      */
     getPortHandle(port: number): NetscriptPort;
@@ -5067,17 +5114,16 @@ export declare interface NS {
      * @remarks
      * RAM cost: 0 GB
      *
-     * Converts a number into a string with the specified formatter.
-     * This uses the numeral.js library, so the formatters must be compatible with that.
-     * This is the same function that the game itself uses to display numbers.
-     *
-     * For more information, see: http://numeraljs.com/
+     * Converts a number into a string with the specified format options.
+     * This is the same function that the game itself uses to display numbers. The formatted number is based on the
+     * provided formatOptions, and on the interface settings related to numeric display (locale, hide trailing decimal
+     * zeroes, ram format, etc.)
      *
      * @param n - Number to format.
-     * @param format - Formatter.
+     * @param formatOptions - Formatting options.
      * @returns Formatted number.
      */
-    nFormat(n: number, format: string): string;
+    nFormat(n: number, formatOptions: NFormatOptions): string;
 
     /**
      * Format time to a readable string.
@@ -5375,7 +5421,7 @@ export declare interface NS {
      * @remarks
      * RAM cost: 2.4 GB
      *
-     * Increases your rep gain of hacking contracts while share is called.
+     * Increases your rep gain of all faction work types while share is called.
      * Scales with thread count.
      */
     share(): Promise<void>;
@@ -6901,6 +6947,7 @@ export declare type SleeveBladeburnerTask = {
     type: "BLADEBURNER";
     actionType: "General" | "Contracts";
     actionName: string;
+    cyclesWorked: number;
 };
 
 /** @public */
@@ -6914,7 +6961,7 @@ export declare type SleeveClassTask = {
 export declare type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
 
 /** @public */
-export declare type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}` };
+export declare type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}`; cyclesWorked: number };
 
 /** @public */
 export declare type SleeveFactionTask = {
@@ -6924,7 +6971,7 @@ export declare type SleeveFactionTask = {
 };
 
 /** @public */
-export declare type SleeveInfiltrateTask = { type: "INFILTRATE" };
+export declare type SleeveInfiltrateTask = { type: "INFILTRATE"; cyclesWorked: number };
 
 /** @public */
 export declare interface SleevePerson extends Person {

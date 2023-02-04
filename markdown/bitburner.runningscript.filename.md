@@ -6,7 +6,7 @@
 
 Filename of the script
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 filename: string;

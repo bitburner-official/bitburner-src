@@ -6,7 +6,7 @@
 
 Kill all scripts with a filename.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 scriptKill(script: string, host: string): boolean;
@@ -19,7 +19,7 @@ scriptKill(script: string, host: string): boolean;
 |  script | string | Filename of script to kill. This is case-sensitive. |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

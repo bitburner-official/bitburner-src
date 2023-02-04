@@ -6,7 +6,7 @@
 
 Cancel order for stocks.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cancelOrder(sym: string, shares: number, price: number, type: string, pos: string): void;
@@ -22,7 +22,7 @@ cancelOrder(sym: string, shares: number, price: number, type: string, pos: strin
 |  type | string | Type of order. |
 |  pos | string | Specifies whether the order is a “Long” or “Short” position. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

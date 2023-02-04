@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.money property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 money: string;

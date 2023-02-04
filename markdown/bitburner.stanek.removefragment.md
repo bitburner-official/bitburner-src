@@ -6,7 +6,7 @@
 
 Remove fragment at location.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 removeFragment(rootX: number, rootY: number): boolean;
@@ -19,7 +19,7 @@ removeFragment(rootX: number, rootY: number): boolean;
 |  rootX | number | X against which to align the top left of the fragment. |
 |  rootY | number | Y against which to align the top left of the fragment. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

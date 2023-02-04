@@ -4,7 +4,7 @@
 
 ## CorpMaterialConstantData.baseMarkup property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 baseMarkup: number;

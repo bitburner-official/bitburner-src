@@ -6,7 +6,7 @@
 
 Indicating if territory warfare is enabled
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 territoryWarfareEngaged: boolean;

@@ -6,7 +6,7 @@
 
 Namespace for gang functions.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly gang: Gang;

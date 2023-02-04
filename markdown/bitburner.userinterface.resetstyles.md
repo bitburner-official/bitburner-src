@@ -6,12 +6,12 @@
 
 Resets the player's styles to the default values
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 resetStyles(): void;
 ```
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -4,7 +4,7 @@
 
 ## MoneySource.bladeburner property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 bladeburner: number;

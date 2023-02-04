@@ -4,7 +4,7 @@
 
 ## CorpMaterialConstantData.demandBase property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 demandBase: number;

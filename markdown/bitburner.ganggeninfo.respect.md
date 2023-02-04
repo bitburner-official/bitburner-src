@@ -6,7 +6,7 @@
 
 Gang's respect
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 respect: number;

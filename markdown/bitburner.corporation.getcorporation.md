@@ -6,12 +6,12 @@
 
 Get corporation data
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getCorporation(): CorporationInfo;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [CorporationInfo](./bitburner.corporationinfo.md)
 

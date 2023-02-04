@@ -6,7 +6,7 @@
 
 Set a sleeve to shock recovery.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setToShockRecovery(sleeveNumber: number): boolean;
@@ -18,7 +18,7 @@ setToShockRecovery(sleeveNumber: number): boolean;
 |  --- | --- | --- |
 |  sleeveNumber | number | Index of the sleeve to start recovery. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

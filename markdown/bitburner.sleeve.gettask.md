@@ -6,7 +6,7 @@
 
 Get task of a sleeve.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getTask(sleeveNumber: number): SleeveTask | null;
@@ -18,7 +18,7 @@ getTask(sleeveNumber: number): SleeveTask | null;
 |  --- | --- | --- |
 |  sleeveNumber | number | Index of the sleeve to retrieve task from. |
 
-<b>Returns:</b>
+**Returns:**
 
 [SleeveTask](./bitburner.sleevetask.md) \| null
 

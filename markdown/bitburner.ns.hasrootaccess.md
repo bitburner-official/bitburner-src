@@ -6,7 +6,7 @@
 
 Check if you have root access on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hasRootAccess(host: string): boolean;
@@ -18,7 +18,7 @@ hasRootAccess(host: string): boolean;
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

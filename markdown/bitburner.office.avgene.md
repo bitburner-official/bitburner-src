@@ -6,7 +6,7 @@
 
 Average energy of the employees
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 avgEne: number;

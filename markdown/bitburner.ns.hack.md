@@ -6,7 +6,7 @@
 
 Steal a server's money.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hack(host: string, opts?: BasicHGWOptions): Promise<number>;
@@ -17,9 +17,9 @@ hack(host: string, opts?: BasicHGWOptions): Promise<number>;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  host | string | Hostname of the target server to hack. |
-|  opts | [BasicHGWOptions](./bitburner.basichgwoptions.md) | Optional parameters for configuring function behavior. |
+|  opts | [BasicHGWOptions](./bitburner.basichgwoptions.md) | _(Optional)_ Optional parameters for configuring function behavior. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;number&gt;
 

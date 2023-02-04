@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.button property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 button: string;

@@ -6,7 +6,7 @@
 
 Node's level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 level: number;

@@ -6,7 +6,7 @@
 
 Calculate cost of upgrading hacknet server level.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 levelUpgradeCost(startingLevel: number, extraLevels?: number, costMult?: number): number;
@@ -17,10 +17,10 @@ levelUpgradeCost(startingLevel: number, extraLevels?: number, costMult?: number)
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  startingLevel | number | starting level |
-|  extraLevels | number | amount of level to purchase (defaults to 1) |
-|  costMult | number | player cost reduction (default to 1) |
+|  extraLevels | number | _(Optional)_ amount of level to purchase (defaults to 1) |
+|  costMult | number | _(Optional)_ player cost reduction (default to 1) |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

@@ -6,7 +6,7 @@
 
 Predict the effect of hack.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hackAnalyzeThreads(host: string, hackAmount: number): number;
@@ -19,7 +19,7 @@ hackAnalyzeThreads(host: string, hackAmount: number): number;
 |  host | string | Hostname of the target server to analyze. |
 |  hackAmount | number | Amount of money you want to hack from the server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

@@ -6,7 +6,7 @@
 
 Set material buy data
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 buyMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: number): void;
@@ -21,7 +21,7 @@ buyMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: 
 |  materialName | string | Name of the material |
 |  amt | number | Amount of material to buy |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

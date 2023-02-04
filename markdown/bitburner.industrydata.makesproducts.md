@@ -6,7 +6,7 @@
 
 Whether the division makes products
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 makesProducts: boolean;

@@ -6,7 +6,7 @@
 
 Hacking skill impact on task scaling
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hackWeight: number;

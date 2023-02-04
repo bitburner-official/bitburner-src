@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.disabled property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 disabled: string;

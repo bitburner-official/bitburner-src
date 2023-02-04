@@ -6,7 +6,7 @@
 
 Whether the industry this division is in is capable of making products
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 makesProducts: boolean;

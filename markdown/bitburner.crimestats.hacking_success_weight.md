@@ -6,7 +6,7 @@
 
 hacking level impact on success change of the crime
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacking_success_weight: number;

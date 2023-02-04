@@ -6,12 +6,12 @@
 
 Resets the player's theme to the default values
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 resetTheme(): void;
 ```
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -6,7 +6,7 @@
 
 Names of all researches only available to product industries
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 researchNamesProductOnly: CorpResearchName[];

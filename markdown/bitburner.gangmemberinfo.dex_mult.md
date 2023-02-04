@@ -6,7 +6,7 @@
 
 Dexterity multiplier from equipment
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dex_mult: number;

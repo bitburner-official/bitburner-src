@@ -6,7 +6,7 @@
 
 Unlock an upgrade
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 unlockUpgrade(upgradeName: string): void;
@@ -18,7 +18,7 @@ unlockUpgrade(upgradeName: string): void;
 |  --- | --- | --- |
 |  upgradeName | string | Name of the upgrade |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

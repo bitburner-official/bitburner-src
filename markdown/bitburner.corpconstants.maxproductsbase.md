@@ -6,7 +6,7 @@
 
 Max products for a division without upgrades
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 maxProductsBase: number;

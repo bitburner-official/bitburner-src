@@ -6,7 +6,7 @@
 
 Influences the experience gained for each ability when the player completes work for a Faction.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 FactionWorkExpGain: number;

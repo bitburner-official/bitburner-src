@@ -4,7 +4,7 @@
 
 ## CorpConstants.employeeRaiseAmount property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 employeeRaiseAmount: number;

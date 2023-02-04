@@ -60,22 +60,23 @@ export function nFormat(n: number, options: NFormatOptions = {}) {
   const suffixStart = options.suffixStart ?? 1000;
   const fractionalDigits = options.fractionalDigits ?? 3;
   // For percents or if less than the suffix, just format the number without doing suffixes
-  if (options.isPercent) return getFormatter(fractionalDigits, true).format(n);
+  if (options.specialFlag === "percent") return getFormatter(fractionalDigits, true).format(n);
   // For less than suffixStart, what we return depends on whether it's an integer form.
   if (nAbs < suffixStart) {
-    if (options.isInt) return basicFormatter.format(n);
+    if (options.specialFlag === "integer") return basicFormatter.format(n);
     return getFormatter(fractionalDigits).format(n);
   }
 
-  const logBase = options.isRam && Settings.UseIEC60027_2 ? 1024 : 1000;
-  const suffixList = options.isRam
-    ? Settings.UseIEC60027_2
-      ? ramLog1024Suffixes
-      : ramLog1000Suffixes
-    : log1000suffixes;
+  const logBase = options.specialFlag === "ram" && Settings.UseIEC60027_2 ? 1024 : 1000;
+  const suffixList =
+    options.specialFlag === "ram"
+      ? Settings.UseIEC60027_2
+        ? ramLog1024Suffixes
+        : ramLog1000Suffixes
+      : log1000suffixes;
   let suffixIndex = Math.floor(Math.log(nAbs) / Math.log(logBase));
   // If there's no suffix and we're in ram formatting, use the highest available suffix.
-  if (!suffixList[suffixIndex] && options.isRam) suffixIndex = suffixList.length - 1;
+  if (!suffixList[suffixIndex] && options.specialFlag === "ram") suffixIndex = suffixList.length - 1;
   // If there's no suffix use exponential
   if (!suffixList[suffixIndex]) return exponentialFormatter.format(n).toLocaleLowerCase();
   // Suffixed form
@@ -105,25 +106,27 @@ export const formatStaneksGiftCharge = formatBigNumber;
 export const formatQuality = (n: number) => nFormat(n, { fractionalDigits: 2 });
 
 /** Format an integer that uses suffixed form at 1000 and 3 fractional digits. */
-export const formatInt = (n: number) => nFormat(n, { isInt: true });
+export const formatInt = (n: number) => nFormat(n, { specialFlag: "integer" });
 export const formatSleeveMemory = formatInt;
 export const formatShares = formatInt;
 
 /** Display an integer up to 999,999 before collapsing to suffixed form with 3 fractional digits */
-export const formatHp = (n: number) => nFormat(n, { isInt: true, suffixStart: 1e6 });
+export const formatHp = (n: number) => nFormat(n, { specialFlag: "integer", suffixStart: 1e6 });
 export const formatThreads = formatHp;
 
 /** Display an integer up to 999,999,999 before collapsing to suffixed form with 3 fractional digits */
-export const formatSkill = (n: number) => nFormat(n, { isInt: true, suffixStart: 1e9 });
+export const formatSkill = (n: number) => nFormat(n, { specialFlag: "integer", suffixStart: 1e9 });
 
 /** Display standard money formatting, including the preceding $. */
 export const formatMoney = (n: number) => "$" + nFormat(n);
 
 /** Display standard ram formatting. */
-export const formatRam = (n: number) => nFormat(n, { isRam: true, fractionalDigits: 2, suffixStart: 0 });
+export const formatRam = (n: number) => nFormat(n, { specialFlag: "ram", fractionalDigits: 2, suffixStart: 0 });
 
 /** Display a percentage with a configurable number of fractional digits. Percentages never collapse to suffix form. */
-export const formatPercent = (n: number, fractionalDigits = 2) => nFormat(n, { isPercent: true, fractionalDigits });
+export const formatPercent = (n: number, fractionalDigits = 2) => {
+  nFormat(n, { specialFlag: "percent", fractionalDigits });
+};
 
 /** Display a decimal number with increased precision (5 fractional digits) */
 export const formatRespect = (n: number) => nFormat(n, { fractionalDigits: 5 });

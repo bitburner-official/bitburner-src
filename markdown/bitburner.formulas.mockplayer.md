@@ -4,12 +4,12 @@
 
 ## Formulas.mockPlayer() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 mockPlayer(): Player;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [Player](./bitburner.player.md)
 

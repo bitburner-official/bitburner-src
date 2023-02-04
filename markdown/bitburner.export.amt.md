@@ -6,7 +6,7 @@
 
 Amount of material exported
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 amt: string;

@@ -6,7 +6,7 @@
 
 Charisma skill impact on task scaling
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 chaWeight: number;

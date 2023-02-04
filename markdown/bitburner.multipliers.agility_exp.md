@@ -6,7 +6,7 @@
 
 Multiplier to agility experience gain rate
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agility_exp: number;

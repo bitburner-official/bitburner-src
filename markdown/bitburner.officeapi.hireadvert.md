@@ -6,7 +6,7 @@
 
 Hire AdVert.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hireAdVert(divisionName: string): void;
@@ -18,7 +18,7 @@ hireAdVert(divisionName: string): void;
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

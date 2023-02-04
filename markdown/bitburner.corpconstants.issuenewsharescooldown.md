@@ -6,7 +6,7 @@
 
 Cooldown for issue new shares cooldown in game cycles (1 game cycle = 200ms)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 issueNewSharesCooldown: number;

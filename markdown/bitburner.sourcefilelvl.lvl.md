@@ -6,7 +6,7 @@
 
 The level of the source file
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 lvl: number;

@@ -6,7 +6,7 @@
 
 Division the material is being exported to
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 div: string;

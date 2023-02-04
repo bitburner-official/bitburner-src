@@ -6,7 +6,7 @@
 
 Flag indicating whether the FTP port is open
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ftpPortOpen: boolean;

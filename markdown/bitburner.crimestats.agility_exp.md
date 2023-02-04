@@ -6,7 +6,7 @@
 
 agility exp gained from crime
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agility_exp: number;

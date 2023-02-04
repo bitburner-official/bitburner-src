@@ -4,7 +4,7 @@
 
 ## CorpConstants.warehouseInitialSize property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 warehouseInitialSize: number;

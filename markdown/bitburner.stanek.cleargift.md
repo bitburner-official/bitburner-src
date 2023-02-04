@@ -6,12 +6,12 @@
 
 Clear the board of all fragments.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 clearGift(): void;
 ```
-<b>Returns:</b>
+**Returns:**
 
 void
 

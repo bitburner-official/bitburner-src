@@ -6,7 +6,7 @@
 
 Get the cost to unlock research
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getResearchCost(divisionName: string, researchName: string): number;
@@ -19,7 +19,7 @@ getResearchCost(divisionName: string, researchName: string): number;
 |  divisionName | string | Name of the division |
 |  researchName | string | Name of the research |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

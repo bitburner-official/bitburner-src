@@ -6,7 +6,7 @@
 
 Purchase an augmentation
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 purchaseAugmentation(faction: string, augmentation: string): boolean;
@@ -19,7 +19,7 @@ purchaseAugmentation(faction: string, augmentation: string): boolean;
 |  faction | string | Name of faction to purchase Augmentation from. |
 |  augmentation | string | Name of Augmentation to purchase. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

@@ -6,7 +6,7 @@
 
 Multiplier to upgrade cache
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 UpgradeCacheMult: number;

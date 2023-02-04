@@ -6,7 +6,7 @@
 
 Flag indicating whether player is currently connected to this server
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 isConnectedTo: boolean;

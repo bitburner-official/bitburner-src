@@ -6,7 +6,7 @@
 
 Flag indicating whether this server has a backdoor installed by a player
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 backdoorInstalled: boolean;

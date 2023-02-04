@@ -1681,21 +1681,23 @@ export const ns: InternalAPI<NSFull> = {
       }
       return runningScript.onlineExpGained / runningScript.onlineRunningTime;
     },
-  nFormat:
-    (ctx) =>
-    (_n, format = {}) => {
-      const n = helpers.number(ctx, "n", _n);
-      // Provide legacy
-      if (typeof format !== "object") {
-        throw helpers.makeRuntimeErrorMsg(
-          ctx,
-          "Incorrect usage of nFormat. The formatOptions for nFormat is no longer a string.\n" +
-            "Please review the latest documentation and adjust usage accordingly.\n" +
-            "Sorry for the inconvenience!",
-        );
-      }
-      return nFormat(n, format as NFormatOptions);
-    },
+  nFormat: (ctx) => (_n, format) => {
+    // Reassigns format to an empty object if undefined or null. Prevents error on null and allows typecheck.
+    format ??= {};
+    const n = helpers.number(ctx, "n", _n);
+    if (typeof format !== "object") {
+      throw helpers.makeRuntimeErrorMsg(
+        ctx,
+        "Incorrect usage of nFormat. The formatOptions for nFormat is no longer a string.\n" +
+          "Please review the latest documentation and adjust usage accordingly.\n" +
+          "https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.nformat.md" +
+          "https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.nformatoptions.md" +
+          "Sorry for the inconvenience!",
+      );
+    }
+    // Because there are no required properties on NFormatOptions, any object can be treated as this type
+    return nFormat(n, format as NFormatOptions);
+  },
   tFormat: (ctx) => (_milliseconds, _milliPrecision) => {
     const milliseconds = helpers.number(ctx, "milliseconds", _milliseconds);
     const milliPrecision = !!_milliPrecision;

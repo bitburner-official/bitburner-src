@@ -6,7 +6,7 @@
 
 Collection of all functions passed to scripts
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface NS 
@@ -22,7 +22,7 @@ export interface NS
  // Some related functions are gathered within a common namespace
  stock.getPrice();
 ```
-[ns1 in-game docs](https://bitburner.readthedocs.io/en/latest/netscript/netscript1.html) <hr> <b>Basic ns2 usage example:</b>
+[ns1 in-game docs](https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html) <hr> <b>Basic ns2 usage example:</b>
 
 ```ts
 export async function main(ns) {
@@ -34,28 +34,28 @@ export async function main(ns) {
  await ns.hack('n00dles');
 }
 ```
-[ns2 in-game docs](https://bitburner.readthedocs.io/en/latest/netscript/netscriptjs.html) <hr>
+[ns2 in-game docs](https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html) <hr>
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [args](./bitburner.ns.args.md) | (string \| number \| boolean)\[\] | Arguments passed into the script. |
-|  [bladeburner](./bitburner.ns.bladeburner.md) | [Bladeburner](./bitburner.bladeburner.md) | Namespace for bladeburner functions. |
-|  [codingcontract](./bitburner.ns.codingcontract.md) | [CodingContract](./bitburner.codingcontract.md) | Namespace for codingcontract functions. |
-|  [corporation](./bitburner.ns.corporation.md) | [Corporation](./bitburner.corporation.md) | Namespace for corporation functions. RAM cost: 1022.4 GB |
-|  [enums](./bitburner.ns.enums.md) | [NSEnums](./bitburner.nsenums.md) |  |
-|  [formulas](./bitburner.ns.formulas.md) | [Formulas](./bitburner.formulas.md) | Namespace for formulas functions. |
-|  [gang](./bitburner.ns.gang.md) | [Gang](./bitburner.gang.md) | Namespace for gang functions. |
-|  [grafting](./bitburner.ns.grafting.md) | [Grafting](./bitburner.grafting.md) | Namespace for grafting functions. |
-|  [hacknet](./bitburner.ns.hacknet.md) | [Hacknet](./bitburner.hacknet.md) | Namespace for hacknet functions. |
-|  [infiltration](./bitburner.ns.infiltration.md) | [Infiltration](./bitburner.infiltration.md) | Namespace for infiltration functions. RAM cost: 0 GB |
-|  [pid](./bitburner.ns.pid.md) | number | The current script's PID |
-|  [singularity](./bitburner.ns.singularity.md) | [Singularity](./bitburner.singularity.md) | Namespace for singularity functions. RAM cost: 0 GB |
-|  [sleeve](./bitburner.ns.sleeve.md) | [Sleeve](./bitburner.sleeve.md) | Namespace for sleeve functions. |
-|  [stanek](./bitburner.ns.stanek.md) | [Stanek](./bitburner.stanek.md) | Namespace for stanek functions. RAM cost: 0 GB |
-|  [stock](./bitburner.ns.stock.md) | [TIX](./bitburner.tix.md) | Namespace for stock functions. |
-|  [ui](./bitburner.ns.ui.md) | [UserInterface](./bitburner.userinterface.md) | Namespace for user interface functions. RAM cost: 0 GB |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [args](./bitburner.ns.args.md) | <code>readonly</code> | (string \| number \| boolean)\[\] | Arguments passed into the script. |
+|  [bladeburner](./bitburner.ns.bladeburner.md) | <code>readonly</code> | [Bladeburner](./bitburner.bladeburner.md) | Namespace for bladeburner functions. |
+|  [codingcontract](./bitburner.ns.codingcontract.md) | <code>readonly</code> | [CodingContract](./bitburner.codingcontract.md) | Namespace for codingcontract functions. |
+|  [corporation](./bitburner.ns.corporation.md) | <code>readonly</code> | [Corporation](./bitburner.corporation.md) | Namespace for corporation functions. RAM cost: 1022.4 GB |
+|  [enums](./bitburner.ns.enums.md) |  | [NSEnums](./bitburner.nsenums.md) |  |
+|  [formulas](./bitburner.ns.formulas.md) | <code>readonly</code> | [Formulas](./bitburner.formulas.md) | Namespace for formulas functions. |
+|  [gang](./bitburner.ns.gang.md) | <code>readonly</code> | [Gang](./bitburner.gang.md) | Namespace for gang functions. |
+|  [grafting](./bitburner.ns.grafting.md) | <code>readonly</code> | [Grafting](./bitburner.grafting.md) | Namespace for grafting functions. |
+|  [hacknet](./bitburner.ns.hacknet.md) | <code>readonly</code> | [Hacknet](./bitburner.hacknet.md) | Namespace for hacknet functions. |
+|  [infiltration](./bitburner.ns.infiltration.md) | <code>readonly</code> | [Infiltration](./bitburner.infiltration.md) | Namespace for infiltration functions. RAM cost: 0 GB |
+|  [pid](./bitburner.ns.pid.md) | <code>readonly</code> | number | The current script's PID |
+|  [singularity](./bitburner.ns.singularity.md) | <code>readonly</code> | [Singularity](./bitburner.singularity.md) | Namespace for singularity functions. RAM cost: 0 GB |
+|  [sleeve](./bitburner.ns.sleeve.md) | <code>readonly</code> | [Sleeve](./bitburner.sleeve.md) | Namespace for sleeve functions. |
+|  [stanek](./bitburner.ns.stanek.md) | <code>readonly</code> | [Stanek](./bitburner.stanek.md) | Namespace for stanek functions. RAM cost: 0 GB |
+|  [stock](./bitburner.ns.stock.md) | <code>readonly</code> | [TIX](./bitburner.tix.md) | Namespace for stock functions. |
+|  [ui](./bitburner.ns.ui.md) | <code>readonly</code> | [UserInterface](./bitburner.userinterface.md) | Namespace for user interface functions. RAM cost: 0 GB |
 
 ## Methods
 
@@ -135,7 +135,7 @@ export async function main(ns) {
 |  [ls(host, grep)](./bitburner.ns.ls.md) | List files on a server. |
 |  [moveTail(x, y, pid)](./bitburner.ns.movetail.md) | Move a tail window. |
 |  [mv(host, source, destination)](./bitburner.ns.mv.md) | Move a file on the target server. |
-|  [nFormat(n, format)](./bitburner.ns.nformat.md) | Format a number. |
+|  [nFormat(n, formatOptions)](./bitburner.ns.nformat.md) | Format a number. |
 |  [nuke(host)](./bitburner.ns.nuke.md) | Runs NUKE.exe on a server. |
 |  [peek(port)](./bitburner.ns.peek.md) | Get a copy of the data from a port without popping it. |
 |  [print(args)](./bitburner.ns.print.md) | Prints one or more values or variables to the script’s logs. |

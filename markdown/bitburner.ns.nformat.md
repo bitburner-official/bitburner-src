@@ -6,10 +6,10 @@
 
 Format a number.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-nFormat(n: number, format: string): string;
+nFormat(n: number, formatOptions: NFormatOptions): string;
 ```
 
 ## Parameters
@@ -17,9 +17,9 @@ nFormat(n: number, format: string): string;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  n | number | Number to format. |
-|  format | string | Formatter. |
+|  formatOptions | [NFormatOptions](./bitburner.nformatoptions.md) | Formatting options. |
 
-<b>Returns:</b>
+**Returns:**
 
 string
 
@@ -29,7 +29,5 @@ Formatted number.
 
 RAM cost: 0 GB
 
-Converts a number into a string with the specified formatter. This uses the numeral.js library, so the formatters must be compatible with that. This is the same function that the game itself uses to display numbers.
-
-For more information, see: http://numeraljs.com/
+Converts a number into a string with the specified format options. This is the same function that the game itself uses to display numbers. The formatted number is based on the provided formatOptions, and on the interface settings related to numeric display (locale, hide trailing decimal zeroes, ram format, etc.)
 

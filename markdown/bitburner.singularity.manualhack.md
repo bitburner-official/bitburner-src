@@ -6,12 +6,12 @@
 
 Run the hack command in the terminal.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 manualHack(): Promise<number>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;number&gt;
 

@@ -6,7 +6,7 @@
 
 Prints one or more values or variables to the script’s logs.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 print(...args: any[]): void;
@@ -18,7 +18,7 @@ print(...args: any[]): void;
 |  --- | --- | --- |
 |  args | any\[\] | Value(s) to be printed. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

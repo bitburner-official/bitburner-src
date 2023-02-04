@@ -6,7 +6,7 @@
 
 Hacknet API
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface Hacknet 

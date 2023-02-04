@@ -6,12 +6,12 @@
 
 Get the total number of hashes stored.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 numHashes(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

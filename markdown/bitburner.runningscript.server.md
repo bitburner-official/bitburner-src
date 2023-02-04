@@ -6,7 +6,7 @@
 
 Hostname of the server on which this script runs
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 server: string;

@@ -6,7 +6,7 @@
 
 Base cost per level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 LevelBaseCost: number;

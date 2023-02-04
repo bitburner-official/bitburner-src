@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.warninglight property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 warninglight: string;

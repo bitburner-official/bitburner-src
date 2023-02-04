@@ -6,7 +6,7 @@
 
 IP Address. Must be unique
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ip: string;

@@ -6,7 +6,7 @@
 
 Create a gang.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 createGang(faction: string): boolean;
@@ -18,7 +18,7 @@ createGang(faction: string): boolean;
 |  --- | --- | --- |
 |  faction | string |  |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

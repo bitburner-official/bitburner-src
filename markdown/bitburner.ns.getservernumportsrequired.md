@@ -6,7 +6,7 @@
 
 Returns the number of open ports required to successfully run NUKE.exe on the specified server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getServerNumPortsRequired(host: string): number;
@@ -18,7 +18,7 @@ getServerNumPortsRequired(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

@@ -4,7 +4,7 @@
 
 ## CorpIndustryData.recommendStarting property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 recommendStarting: boolean;

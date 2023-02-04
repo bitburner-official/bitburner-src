@@ -6,7 +6,7 @@
 
 Runs relaySMTP.exe on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 relaysmtp(host: string): void;
@@ -18,7 +18,7 @@ relaysmtp(host: string): void;
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

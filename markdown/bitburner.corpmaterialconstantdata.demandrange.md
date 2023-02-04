@@ -6,7 +6,7 @@
 
 Min and max demand
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 demandRange: [min: number, max: number];

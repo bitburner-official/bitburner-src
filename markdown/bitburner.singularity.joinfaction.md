@@ -6,7 +6,7 @@
 
 Join a faction.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 joinFaction(faction: string): boolean;
@@ -18,7 +18,7 @@ joinFaction(faction: string): boolean;
 |  --- | --- | --- |
 |  faction | string | Name of faction to join. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

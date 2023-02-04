@@ -6,12 +6,12 @@
 
 Terminates the current script immediately.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 exit(): never;
 ```
-<b>Returns:</b>
+**Returns:**
 
 never
 

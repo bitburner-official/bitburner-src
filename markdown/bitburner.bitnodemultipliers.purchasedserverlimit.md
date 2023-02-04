@@ -6,7 +6,7 @@
 
 Influences the maximum number of purchased servers you can have
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 PurchasedServerLimit: number;

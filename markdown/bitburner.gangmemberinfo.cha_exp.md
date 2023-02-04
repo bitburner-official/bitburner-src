@@ -6,7 +6,7 @@
 
 Current charisma experience
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cha_exp: number;

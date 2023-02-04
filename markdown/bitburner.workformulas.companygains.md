@@ -4,7 +4,7 @@
 
 ## WorkFormulas.companyGains() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 companyGains(person: Person, companyName: string, workType: JobName | `${JobName}`, favor: number): WorkStats;
@@ -19,7 +19,7 @@ companyGains(person: Person, companyName: string, workType: JobName | `${JobName
 |  workType | [JobName](./bitburner.jobname.md) \| \`${[JobName](./bitburner.jobname.md)<!-- -->}\` |  |
 |  favor | number |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [WorkStats](./bitburner.workstats.md)
 

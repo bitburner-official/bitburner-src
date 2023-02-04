@@ -6,7 +6,7 @@
 
 Indicating if the company is public
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 public: boolean;

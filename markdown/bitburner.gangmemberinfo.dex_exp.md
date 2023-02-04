@@ -6,7 +6,7 @@
 
 Current dexterity experience
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dex_exp: number;

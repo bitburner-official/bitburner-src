@@ -6,7 +6,7 @@
 
 Order type
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type: OrderTypes;

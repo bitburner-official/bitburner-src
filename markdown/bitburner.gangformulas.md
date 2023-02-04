@@ -6,7 +6,7 @@
 
 Gang formulas
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface GangFormulas 

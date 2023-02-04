@@ -6,7 +6,7 @@
 
 Size of the material
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 size: number;

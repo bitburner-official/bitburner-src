@@ -6,7 +6,7 @@
 
 Current hack experience
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hack_exp: number;

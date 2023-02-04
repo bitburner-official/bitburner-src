@@ -4,7 +4,7 @@
 
 ## Skills.charisma property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 charisma: number;

@@ -4,7 +4,7 @@
 
 ## MoneySource.augmentations property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 augmentations: number;

@@ -36,6 +36,7 @@
 |  [CorpMaterialConstantData](./bitburner.corpmaterialconstantdata.md) | Corporation material information |
 |  [Corporation](./bitburner.corporation.md) | Corporation API |
 |  [CorporationInfo](./bitburner.corporationinfo.md) | General info about a corporation |
+|  [CorpProductData](./bitburner.corpproductdata.md) | Product rating information |
 |  [CrimeStats](./bitburner.crimestats.md) | Data representing the internal values of a crime. |
 |  [Division](./bitburner.division.md) | Corporation division |
 |  [EquipmentStats](./bitburner.equipmentstats.md) | Object representing data representing a gang member equipment. |
@@ -74,6 +75,7 @@
 |  [MoneySources](./bitburner.moneysources.md) |  |
 |  [Multipliers](./bitburner.multipliers.md) |  |
 |  [NetscriptPort](./bitburner.netscriptport.md) | Object representing a port. A port is a serialized queue. |
+|  [NFormatOptions](./bitburner.nformatoptions.md) | Options for formatting a number with nFormat. |
 |  [NodeStats](./bitburner.nodestats.md) | Object representing all the values related to a hacknet node. |
 |  [NS](./bitburner.ns.md) | Collection of all functions passed to scripts |
 |  [Office](./bitburner.office.md) | Office for a division in a city. |
@@ -93,7 +95,7 @@
 |  [SleevePerson](./bitburner.sleeveperson.md) |  |
 |  [SourceFileLvl](./bitburner.sourcefilelvl.md) |  |
 |  [Stanek](./bitburner.stanek.md) | Stanek's Gift API. |
-|  [StockOrder](./bitburner.stockorder.md) | Return value of [getOrders](./bitburner.tix.getorders.md)<!-- -->Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md) |
+|  [StockOrder](./bitburner.stockorder.md) | <p>Return value of [getOrders](./bitburner.tix.getorders.md)</p><p>Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md)</p> |
 |  [StockOrderObject](./bitburner.stockorderobject.md) | Value in map of [StockOrder](./bitburner.stockorder.md) |
 |  [TIX](./bitburner.tix.md) | Stock market API |
 |  [UserInterface](./bitburner.userinterface.md) | User Interface API. |
@@ -111,12 +113,12 @@
 |  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |
 |  [CorpIndustryName](./bitburner.corpindustryname.md) |  |
 |  [CorpMaterialName](./bitburner.corpmaterialname.md) |  |
-|  [CorpProductData](./bitburner.corpproductdata.md) | Product rating information |
 |  [CorpResearchName](./bitburner.corpresearchname.md) |  |
 |  [CorpStateName](./bitburner.corpstatename.md) |  |
 |  [CorpUnlockName](./bitburner.corpunlockname.md) |  |
 |  [CorpUpgradeName](./bitburner.corpupgradename.md) |  |
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
+|  [NFormatSpecialFlag](./bitburner.nformatspecialflag.md) | <p>Defines special behavior for nFormat.</p><p>"integer": Formats the number as an integer. The specified fractionalDigits will only be applied if the number is large enough for a suffix. This is how e.g. skills or hp are displayed ingame.</p><p>"percent": Formats the number as a percent. Never collapses to a suffixed form (treats suffixStart as Infinity)</p><p>"ram": Formats the number as an amount of ram. Ram is always suffixed (treats suffixStart as 0).</p> |
 |  [NSEnums](./bitburner.nsenums.md) |  |
 |  [PortData](./bitburner.portdata.md) |  |
 |  [ScriptArg](./bitburner.scriptarg.md) |  |

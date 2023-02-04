@@ -6,7 +6,7 @@
 
 Amount of employees
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 employees: number;

@@ -6,7 +6,7 @@
 
 Get team size.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getTeamSize(type: string, name: string): number;
@@ -19,7 +19,7 @@ getTeamSize(type: string, name: string): number;
 |  type | string | Type of action. |
 |  name | string | Name of action. Must be an exact match. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

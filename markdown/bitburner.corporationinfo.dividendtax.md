@@ -6,7 +6,7 @@
 
 Tax applied on your earnings as a shareholder
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dividendTax: number;

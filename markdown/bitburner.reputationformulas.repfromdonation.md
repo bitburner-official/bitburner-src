@@ -6,7 +6,7 @@
 
 Calculate how much rep would be gained.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 repFromDonation(amount: number, player: Person): number;
@@ -19,7 +19,7 @@ repFromDonation(amount: number, player: Person): number;
 |  amount | number | Amount of money donated |
 |  player | [Person](./bitburner.person.md) | Player info from [getPlayer](./bitburner.ns.getplayer.md) |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

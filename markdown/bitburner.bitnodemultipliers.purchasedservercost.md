@@ -6,7 +6,7 @@
 
 Influence how much it costs to purchase a server
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 PurchasedServerCost: number;

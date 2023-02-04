@@ -6,7 +6,7 @@
 
 Money gain impact on task scaling
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 money: number;

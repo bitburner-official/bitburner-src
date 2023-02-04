@@ -6,7 +6,7 @@
 
 Revenue per second this cycle
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 revenue: number;

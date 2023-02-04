@@ -5,8 +5,8 @@
 ## CorpStateName type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "SALE" | "EXPORT";
+type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "EXPORT" | "SALE";
 ```

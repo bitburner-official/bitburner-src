@@ -6,12 +6,12 @@
 
 Returns whether player is a member of bladeburner division. Does not require API access.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 inBladeburner(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

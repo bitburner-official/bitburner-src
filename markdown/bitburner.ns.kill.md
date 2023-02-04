@@ -6,7 +6,7 @@
 
 Terminate another script.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 kill(script: number): boolean;
@@ -18,7 +18,7 @@ kill(script: number): boolean;
 |  --- | --- | --- |
 |  script | number | Filename or PID of the script to kill. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

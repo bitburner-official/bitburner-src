@@ -6,7 +6,7 @@
 
 Cost to expand to the division
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cost: number;

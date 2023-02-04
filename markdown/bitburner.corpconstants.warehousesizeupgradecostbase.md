@@ -4,7 +4,7 @@
 
 ## CorpConstants.warehouseSizeUpgradeCostBase property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 warehouseSizeUpgradeCostBase: number;

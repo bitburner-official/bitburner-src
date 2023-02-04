@@ -6,7 +6,7 @@
 
 Get company favor.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getCompanyFavor(companyName: string): number;
@@ -18,7 +18,7 @@ getCompanyFavor(companyName: string): number;
 |  --- | --- | --- |
 |  companyName | string | Name of the company. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

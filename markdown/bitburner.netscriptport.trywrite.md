@@ -6,7 +6,7 @@
 
 Attempt to write data to the port.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 tryWrite(value: string | number): boolean;
@@ -18,7 +18,7 @@ tryWrite(value: string | number): boolean;
 |  --- | --- | --- |
 |  value | string \| number |  |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

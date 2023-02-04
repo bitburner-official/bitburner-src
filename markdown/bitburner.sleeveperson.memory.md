@@ -6,7 +6,7 @@
 
 Number 1-100 initial Value of sync on BN start
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 memory: number;

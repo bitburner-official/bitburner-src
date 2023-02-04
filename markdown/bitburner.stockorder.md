@@ -8,7 +8,7 @@ Return value of [getOrders](./bitburner.tix.getorders.md)
 
 Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface StockOrder 

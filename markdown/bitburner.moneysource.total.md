@@ -4,7 +4,7 @@
 
 ## MoneySource.total property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 total: number;

@@ -6,7 +6,7 @@
 
 Set a sleeve to commit crime.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setToCommitCrime(sleeveNumber: number, crimeType: CrimeType | `${CrimeType}`): boolean;
@@ -19,7 +19,7 @@ setToCommitCrime(sleeveNumber: number, crimeType: CrimeType | `${CrimeType}`): b
 |  sleeveNumber | number | Index of the sleeve to start committing crime. Sleeves are numbered starting from 0. |
 |  crimeType | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` |  |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

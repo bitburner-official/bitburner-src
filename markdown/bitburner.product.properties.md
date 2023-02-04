@@ -6,7 +6,7 @@
 
 Product Properties. The data is {<!-- -->qlt, per, dur, rel, aes, fea<!-- -->}
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 properties: { [key: string]: number };

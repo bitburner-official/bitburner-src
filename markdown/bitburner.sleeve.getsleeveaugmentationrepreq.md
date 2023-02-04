@@ -6,7 +6,7 @@
 
 Get reputation requirement of an augmentation.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getSleeveAugmentationRepReq(augName: string): number;
@@ -18,7 +18,7 @@ getSleeveAugmentationRepReq(augName: string): number;
 |  --- | --- | --- |
 |  augName | string | Name of Augmentation. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

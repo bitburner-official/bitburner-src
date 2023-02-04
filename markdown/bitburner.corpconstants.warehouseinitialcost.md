@@ -4,7 +4,7 @@
 
 ## CorpConstants.warehouseInitialCost property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 warehouseInitialCost: number;

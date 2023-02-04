@@ -6,7 +6,7 @@
 
 Amount of material
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 qty: number;

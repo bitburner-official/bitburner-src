@@ -6,7 +6,7 @@
 
 Upgrade the cache of a hacknet node.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 upgradeCache(index: number, n: number): boolean;
@@ -19,7 +19,7 @@ upgradeCache(index: number, n: number): boolean;
 |  index | number | Index/Identifier of Hacknet Node. |
 |  n | number | Number of cache levels to purchase. Must be positive. Rounded to nearest integer. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

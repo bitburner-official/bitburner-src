@@ -5,7 +5,7 @@
 ## MoneySources interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface MoneySources 
@@ -13,8 +13,8 @@ interface MoneySources
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [sinceInstall](./bitburner.moneysources.sinceinstall.md) | [MoneySource](./bitburner.moneysource.md) |  |
-|  [sinceStart](./bitburner.moneysources.sincestart.md) | [MoneySource](./bitburner.moneysource.md) |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [sinceInstall](./bitburner.moneysources.sinceinstall.md) |  | [MoneySource](./bitburner.moneysource.md) |  |
+|  [sinceStart](./bitburner.moneysources.sincestart.md) |  | [MoneySource](./bitburner.moneysource.md) |  |
 

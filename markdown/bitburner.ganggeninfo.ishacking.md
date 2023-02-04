@@ -6,7 +6,7 @@
 
 Indicating whether or not it's a hacking gang
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 isHacking: boolean;

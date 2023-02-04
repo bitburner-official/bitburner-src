@@ -6,7 +6,7 @@
 
 Buy stocks.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 buyStock(sym: string, shares: number): number;
@@ -19,7 +19,7 @@ buyStock(sym: string, shares: number): number;
 |  sym | string | Stock symbol. |
 |  shares | number | Number of shares to purchased. Must be positive. Will be rounded to nearest integer. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

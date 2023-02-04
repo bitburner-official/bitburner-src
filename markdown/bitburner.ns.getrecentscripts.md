@@ -6,12 +6,12 @@
 
 Get an array of recently killed scripts across all servers.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getRecentScripts(): RecentScript[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 [RecentScript](./bitburner.recentscript.md)<!-- -->\[\]
 

@@ -6,7 +6,7 @@
 
 Max level for a server
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 MaxLevel: number;

@@ -6,7 +6,7 @@
 
 Influences how quickly the player's hacking level (not experience) scales
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 HackingLevelMultiplier: number;

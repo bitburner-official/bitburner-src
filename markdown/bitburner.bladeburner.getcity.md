@@ -6,12 +6,12 @@
 
 Get current city.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getCity(): CityName;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [CityName](./bitburner.cityname.md)
 

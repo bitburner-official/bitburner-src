@@ -6,7 +6,7 @@
 
 Product type
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 productType?: string;

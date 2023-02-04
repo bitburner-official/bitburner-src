@@ -6,12 +6,12 @@
 
 Returns the maximum RAM that a purchased server can have.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getPurchasedServerMaxRam(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

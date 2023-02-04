@@ -4,7 +4,7 @@
 
 ## CorpIndustryData.product property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 product?: CorpProductData;

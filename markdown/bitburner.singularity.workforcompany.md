@@ -6,7 +6,7 @@
 
 Work for a company.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 workForCompany(companyName: string, focus?: boolean): boolean;
@@ -17,9 +17,9 @@ workForCompany(companyName: string, focus?: boolean): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  companyName | string | Name of company to work for. Must be an exact match. Optional. If not specified, this argument defaults to the last job that you worked. |
-|  focus | boolean | Acquire player focus on this work operation. Optional. Defaults to true. |
+|  focus | boolean | _(Optional)_ Acquire player focus on this work operation. Optional. Defaults to true. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

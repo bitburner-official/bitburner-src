@@ -5,25 +5,25 @@
 ## Player interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface Player extends Person 
 ```
-<b>Extends:</b> [Person](./bitburner.person.md)
+**Extends:** [Person](./bitburner.person.md)
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [bitNodeN](./bitburner.player.bitnoden.md) | number |  |
-|  [entropy](./bitburner.player.entropy.md) | number |  |
-|  [factions](./bitburner.player.factions.md) | string\[\] |  |
-|  [jobs](./bitburner.player.jobs.md) | Record&lt;string, string&gt; |  |
-|  [location](./bitburner.player.location.md) | string |  |
-|  [money](./bitburner.player.money.md) | number |  |
-|  [numPeopleKilled](./bitburner.player.numpeoplekilled.md) | number |  |
-|  [playtimeSinceLastAug](./bitburner.player.playtimesincelastaug.md) | number |  |
-|  [playtimeSinceLastBitnode](./bitburner.player.playtimesincelastbitnode.md) | number |  |
-|  [totalPlaytime](./bitburner.player.totalplaytime.md) | number |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [bitNodeN](./bitburner.player.bitnoden.md) |  | number |  |
+|  [entropy](./bitburner.player.entropy.md) |  | number |  |
+|  [factions](./bitburner.player.factions.md) |  | string\[\] |  |
+|  [jobs](./bitburner.player.jobs.md) |  | Record&lt;string, string&gt; |  |
+|  [location](./bitburner.player.location.md) |  | string |  |
+|  [money](./bitburner.player.money.md) |  | number |  |
+|  [numPeopleKilled](./bitburner.player.numpeoplekilled.md) |  | number |  |
+|  [playtimeSinceLastAug](./bitburner.player.playtimesincelastaug.md) |  | number |  |
+|  [playtimeSinceLastBitnode](./bitburner.player.playtimesincelastbitnode.md) |  | number |  |
+|  [totalPlaytime](./bitburner.player.totalplaytime.md) |  | number |  |
 

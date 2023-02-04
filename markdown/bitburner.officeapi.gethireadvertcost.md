@@ -6,7 +6,7 @@
 
 Get the cost to hire AdVert.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getHireAdVertCost(divisionName: string): number;
@@ -18,7 +18,7 @@ getHireAdVertCost(divisionName: string): number;
 |  --- | --- | --- |
 |  divisionName | string | Name of the division. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

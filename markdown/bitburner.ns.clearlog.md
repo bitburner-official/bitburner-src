@@ -6,12 +6,12 @@
 
 Clears the script’s logs.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 clearLog(): void;
 ```
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -6,7 +6,7 @@
 
 Get cost of purchasing a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getPurchasedServerCost(ram: number): number;
@@ -18,7 +18,7 @@ getPurchasedServerCost(ram: number): number;
 |  --- | --- | --- |
 |  ram | number | Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20). |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

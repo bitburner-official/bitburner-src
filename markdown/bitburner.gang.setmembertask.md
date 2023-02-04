@@ -6,7 +6,7 @@
 
 Set gang member to task.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setMemberTask(memberName: string, taskName: string): boolean;
@@ -19,7 +19,7 @@ setMemberTask(memberName: string, taskName: string): boolean;
 |  memberName | string | Name of Gang member to assign. |
 |  taskName | string | Task to assign. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

@@ -6,7 +6,7 @@
 
 Multiplier to amount of money gained from crimes
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 crime_money: number;

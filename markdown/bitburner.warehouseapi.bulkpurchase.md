@@ -6,7 +6,7 @@
 
 Set material to bulk buy
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 bulkPurchase(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: number): void;
@@ -21,7 +21,7 @@ bulkPurchase(divisionName: string, city: CityName | `${CityName}`, materialName:
 |  materialName | string | Name of the material |
 |  amt | number | Amount of material to buy |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -6,7 +6,7 @@
 
 Set material export data
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 exportMaterial(
@@ -30,7 +30,7 @@ exportMaterial(
 |  materialName | string | Name of the material |
 |  amt | number | Amount of material to export. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

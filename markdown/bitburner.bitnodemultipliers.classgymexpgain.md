@@ -6,7 +6,7 @@
 
 Influences the experience gained for each ability when a player completes a class.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ClassGymExpGain: number;

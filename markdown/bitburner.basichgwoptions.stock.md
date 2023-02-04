@@ -6,7 +6,7 @@
 
 Set to true this action will affect the stock market.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 stock?: boolean;

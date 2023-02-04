@@ -6,7 +6,7 @@
 
 Multiplier to charisma experience gain rate
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 charisma_exp: number;

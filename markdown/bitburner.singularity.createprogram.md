@@ -6,7 +6,7 @@
 
 Create a program.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 createProgram(program: string, focus?: boolean): boolean;
@@ -17,9 +17,9 @@ createProgram(program: string, focus?: boolean): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  program | string | Name of program to create. |
-|  focus | boolean | Acquire player focus on this program creation. Optional. Defaults to true. |
+|  focus | boolean | _(Optional)_ Acquire player focus on this program creation. Optional. Defaults to true. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

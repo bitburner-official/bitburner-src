@@ -7,7 +7,7 @@ type APIFn = (...args: any[]) => unknown;
 /** Type for internal, unwrapped ctx function that produces an APIFunction */
 type InternalFn<F extends APIFn> = (ctx: NetscriptContext) => ((...args: unknown[]) => ReturnType<F>) & F;
 /** Type constraint for an API layer. They must all fit this "shape". */
-type GenericAPI = { [key: string]: APIFn | GenericAPI };
+type GenericAPI<T> = { [key in keyof T]: APIFn | GenericAPI<T[key]> };
 
 // args, enums, and pid are excluded from the API for typing purposes via the definition of NSFull.
 // They do in fact exist on the external API (but are absent on the internal API and ramcost tree)
@@ -21,7 +21,7 @@ export type NetscriptContext = {
   functionPath: string;
 };
 
-class NSProxyHandler<API extends GenericAPI> {
+class NSProxyHandler<API extends GenericAPI<API>> {
   ns: API;
   ws: WorkerScript;
   tree: string[];
@@ -81,17 +81,18 @@ class NSProxyHandler<API extends GenericAPI> {
       return ((this.memoed[key] as APIFn) = wrappedFunction);
     }
     if (typeof field === "object") {
-      return ((this.memoed[key] as GenericAPI) = NSProxy(this.ws, field as InternalAPI<GenericAPI>, [
-        ...this.tree,
-        key,
-      ]));
+      return ((this.memoed[key] as GenericAPI<API[keyof API]>) = NSProxy(
+        this.ws,
+        field as InternalAPI<GenericAPI<API[keyof API]>>,
+        [...this.tree, key],
+      ));
     }
     console.warn(`Unexpected data while wrapping API.`, "tree:", this.tree, "key:", key, "field:", field);
     throw new Error("Error while wrapping netscript API. See console.");
   }
 }
 
-export function NSProxy<API extends GenericAPI>(
+export function NSProxy<API extends GenericAPI<API>>(
   ws: WorkerScript,
   ns: InternalAPI<API>,
   tree: string[],

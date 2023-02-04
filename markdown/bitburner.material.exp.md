@@ -6,7 +6,7 @@
 
 Export orders
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 exp: Export[];

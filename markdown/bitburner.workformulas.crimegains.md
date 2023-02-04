@@ -4,7 +4,7 @@
 
 ## WorkFormulas.crimeGains() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
@@ -17,7 +17,7 @@ crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
 |  person | [Person](./bitburner.person.md) |  |
 |  crimeType | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [WorkStats](./bitburner.workstats.md)
 

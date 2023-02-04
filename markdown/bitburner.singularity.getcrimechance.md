@@ -6,7 +6,7 @@
 
 Get chance to successfully commit a crime.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getCrimeChance(crime: CrimeType | `${CrimeType}`): number;
@@ -18,7 +18,7 @@ getCrimeChance(crime: CrimeType | `${CrimeType}`): number;
 |  --- | --- | --- |
 |  crime | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` | Name of crime. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

@@ -6,7 +6,7 @@
 
 Namespace for infiltration functions. RAM cost: 0 GB
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly infiltration: Infiltration;

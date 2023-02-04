@@ -6,12 +6,12 @@
 
 Upgrade home computer RAM.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 upgradeHomeRam(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

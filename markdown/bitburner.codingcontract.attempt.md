@@ -6,7 +6,7 @@
 
 Attempts a coding contract, returning a reward string on success or empty string on failure.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 attempt(answer: string | number | any[], filename: string, host?: string): string;
@@ -18,9 +18,9 @@ attempt(answer: string | number | any[], filename: string, host?: string): strin
 |  --- | --- | --- |
 |  answer | string \| number \| any\[\] | Attempted solution for the contract. |
 |  filename | string | Filename of the contract. |
-|  host | string | Hostname of the server containing the contract. Optional. Defaults to current server if not provided. |
+|  host | string | _(Optional)_ Hostname of the server containing the contract. Optional. Defaults to current server if not provided. |
 
-<b>Returns:</b>
+**Returns:**
 
 string
 

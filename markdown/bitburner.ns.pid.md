@@ -6,7 +6,7 @@
 
 The current script's PID
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly pid: number;

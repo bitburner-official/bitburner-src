@@ -6,7 +6,7 @@
 
 Timestamp of when the script was killed
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 timeOfDeath: Date;

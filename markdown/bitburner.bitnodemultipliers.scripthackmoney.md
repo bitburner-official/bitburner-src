@@ -6,7 +6,7 @@
 
 Influences how much the money on a server can be reduced when a script performs a hack against it.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ScriptHackMoney: number;

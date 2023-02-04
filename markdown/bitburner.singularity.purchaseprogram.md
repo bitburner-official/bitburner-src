@@ -6,7 +6,7 @@
 
 Purchase a program from the dark web.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 purchaseProgram(programName: string): boolean;
@@ -18,7 +18,7 @@ purchaseProgram(programName: string): boolean;
 |  --- | --- | --- |
 |  programName | string | Name of program to purchase. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

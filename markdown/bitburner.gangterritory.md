@@ -5,7 +5,7 @@
 ## GangTerritory interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface GangTerritory 
@@ -13,9 +13,9 @@ interface GangTerritory
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [money](./bitburner.gangterritory.money.md) | number | Money gain impact on task scaling |
-|  [respect](./bitburner.gangterritory.respect.md) | number | Respect gain impact on task scaling |
-|  [wanted](./bitburner.gangterritory.wanted.md) | number | Wanted gain impact on task scaling |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [money](./bitburner.gangterritory.money.md) |  | number | Money gain impact on task scaling |
+|  [respect](./bitburner.gangterritory.respect.md) |  | number | Respect gain impact on task scaling |
+|  [wanted](./bitburner.gangterritory.wanted.md) |  | number | Wanted gain impact on task scaling |
 

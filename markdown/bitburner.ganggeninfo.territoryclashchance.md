@@ -6,7 +6,7 @@
 
 Clash chance
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 territoryClashChance: number;

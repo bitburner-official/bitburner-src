@@ -6,7 +6,7 @@
 
 Influences the experienced gained when hacking a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 HackExpGain: number;

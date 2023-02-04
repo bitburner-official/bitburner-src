@@ -6,7 +6,7 @@
 
 Read content of a file.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 read(filename: string): string;
@@ -18,7 +18,7 @@ read(filename: string): string;
 |  --- | --- | --- |
 |  filename | string | Name of the file to be read. |
 
-<b>Returns:</b>
+**Returns:**
 
 string
 

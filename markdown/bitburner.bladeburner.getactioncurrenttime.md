@@ -6,12 +6,12 @@
 
 Get the time elapsed on current action.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getActionCurrentTime(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

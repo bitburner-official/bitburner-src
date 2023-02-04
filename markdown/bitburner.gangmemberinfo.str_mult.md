@@ -6,7 +6,7 @@
 
 Strength multiplier from equipment
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 str_mult: number;

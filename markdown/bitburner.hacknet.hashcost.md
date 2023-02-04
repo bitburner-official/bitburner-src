@@ -6,7 +6,7 @@
 
 Get the cost of a hash upgrade.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hashCost(upgName: string, count?: number): number;
@@ -17,9 +17,9 @@ hashCost(upgName: string, count?: number): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  upgName | string | Name of the upgrade of Hacknet Node. |
-|  count | number | Number of upgrades to buy at once. Defaults to 1 if not specified. |
+|  count | number | _(Optional)_ Number of upgrades to buy at once. Defaults to 1 if not specified. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

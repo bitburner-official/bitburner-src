@@ -6,7 +6,7 @@
 
 Influences how much money can be stolen from a server when the player performs a hack against it through the Terminal.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ManualHackMoney: number;

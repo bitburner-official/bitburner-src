@@ -6,12 +6,12 @@
 
 Get the current work the player is doing.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getCurrentWork(): any | null;
 ```
-<b>Returns:</b>
+**Returns:**
 
 any \| null
 

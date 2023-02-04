@@ -6,12 +6,12 @@
 
 Calculate your share power. Based on all the active share calls.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getSharePower(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

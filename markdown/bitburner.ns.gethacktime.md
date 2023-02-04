@@ -6,7 +6,7 @@
 
 Get the execution time of a hack() call.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getHackTime(host: string): number;
@@ -18,7 +18,7 @@ getHackTime(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

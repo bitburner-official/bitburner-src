@@ -6,7 +6,7 @@
 
 Product Rating
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 rat: number;

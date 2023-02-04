@@ -6,7 +6,7 @@
 
 Gang general info.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface GangGenInfo 
@@ -14,18 +14,18 @@ interface GangGenInfo
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [faction](./bitburner.ganggeninfo.faction.md) | string | Name of faction that the gang belongs to ("Slum Snakes", etc.) |
-|  [isHacking](./bitburner.ganggeninfo.ishacking.md) | boolean | Indicating whether or not it's a hacking gang |
-|  [moneyGainRate](./bitburner.ganggeninfo.moneygainrate.md) | number | Money earned per game cycle |
-|  [power](./bitburner.ganggeninfo.power.md) | number | Gang's power for territory warfare |
-|  [respect](./bitburner.ganggeninfo.respect.md) | number | Gang's respect |
-|  [respectGainRate](./bitburner.ganggeninfo.respectgainrate.md) | number | Respect earned per game cycle |
-|  [territory](./bitburner.ganggeninfo.territory.md) | number | Amount of territory held |
-|  [territoryClashChance](./bitburner.ganggeninfo.territoryclashchance.md) | number | Clash chance |
-|  [territoryWarfareEngaged](./bitburner.ganggeninfo.territorywarfareengaged.md) | boolean | Indicating if territory warfare is enabled |
-|  [wantedLevel](./bitburner.ganggeninfo.wantedlevel.md) | number | Gang's wanted level |
-|  [wantedLevelGainRate](./bitburner.ganggeninfo.wantedlevelgainrate.md) | number | Wanted level gained/lost per game cycle (negative for losses) |
-|  [wantedPenalty](./bitburner.ganggeninfo.wantedpenalty.md) | number | Number indicating the current wanted penalty |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [faction](./bitburner.ganggeninfo.faction.md) |  | string | Name of faction that the gang belongs to ("Slum Snakes", etc.) |
+|  [isHacking](./bitburner.ganggeninfo.ishacking.md) |  | boolean | Indicating whether or not it's a hacking gang |
+|  [moneyGainRate](./bitburner.ganggeninfo.moneygainrate.md) |  | number | Money earned per game cycle |
+|  [power](./bitburner.ganggeninfo.power.md) |  | number | Gang's power for territory warfare |
+|  [respect](./bitburner.ganggeninfo.respect.md) |  | number | Gang's respect |
+|  [respectGainRate](./bitburner.ganggeninfo.respectgainrate.md) |  | number | Respect earned per game cycle |
+|  [territory](./bitburner.ganggeninfo.territory.md) |  | number | Amount of territory held |
+|  [territoryClashChance](./bitburner.ganggeninfo.territoryclashchance.md) |  | number | Clash chance |
+|  [territoryWarfareEngaged](./bitburner.ganggeninfo.territorywarfareengaged.md) |  | boolean | Indicating if territory warfare is enabled |
+|  [wantedLevel](./bitburner.ganggeninfo.wantedlevel.md) |  | number | Gang's wanted level |
+|  [wantedLevelGainRate](./bitburner.ganggeninfo.wantedlevelgainrate.md) |  | number | Wanted level gained/lost per game cycle (negative for losses) |
+|  [wantedPenalty](./bitburner.ganggeninfo.wantedpenalty.md) |  | number | Number indicating the current wanted penalty |
 

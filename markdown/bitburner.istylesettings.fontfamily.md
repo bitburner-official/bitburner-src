@@ -4,7 +4,7 @@
 
 ## IStyleSettings.fontFamily property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 fontFamily: string;

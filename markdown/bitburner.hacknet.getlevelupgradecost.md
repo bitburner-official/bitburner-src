@@ -6,7 +6,7 @@
 
 Calculate the cost of upgrading hacknet node levels.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getLevelUpgradeCost(index: number, n: number): number;
@@ -19,7 +19,7 @@ getLevelUpgradeCost(index: number, n: number): number;
 |  index | number | Index/Identifier of Hacknet Node. |
 |  n | number | Number of levels to upgrade. Must be positive. Rounded to nearest integer. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

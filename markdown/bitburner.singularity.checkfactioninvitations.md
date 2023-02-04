@@ -6,12 +6,12 @@
 
 List all current faction invitations.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 checkFactionInvitations(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

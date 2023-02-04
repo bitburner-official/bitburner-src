@@ -6,7 +6,7 @@
 
 Flag indicating whether this is a purchased server
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 purchasedByPlayer: boolean;

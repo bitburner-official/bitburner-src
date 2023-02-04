@@ -6,7 +6,7 @@
 
 Currently assigned task
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 task: string;

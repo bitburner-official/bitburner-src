@@ -4,7 +4,7 @@
 
 ## Skills.agility property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agility: number;

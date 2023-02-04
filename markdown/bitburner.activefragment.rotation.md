@@ -4,7 +4,7 @@
 
 ## ActiveFragment.rotation property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 rotation: number;

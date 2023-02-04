@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.int property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 int: string;

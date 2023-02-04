@@ -6,7 +6,7 @@
 
 The number of the source file
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 n: number;

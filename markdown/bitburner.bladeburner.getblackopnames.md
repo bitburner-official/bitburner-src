@@ -6,12 +6,12 @@
 
 List all black ops.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getBlackOpNames(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

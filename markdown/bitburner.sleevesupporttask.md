@@ -5,7 +5,7 @@
 ## SleeveSupportTask type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type SleeveSupportTask = { type: "SUPPORT" };

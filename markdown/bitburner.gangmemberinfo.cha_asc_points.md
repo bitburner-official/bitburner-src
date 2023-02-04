@@ -6,7 +6,7 @@
 
 Total earned charisma experience
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cha_asc_points: number;

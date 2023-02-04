@@ -6,12 +6,12 @@
 
 Get corporation related constants
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getConstants(): CorpConstants;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [CorpConstants](./bitburner.corpconstants.md)
 

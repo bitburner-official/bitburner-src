@@ -4,7 +4,7 @@
 
 ## Player.jobs property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 jobs: Record<string, string>;

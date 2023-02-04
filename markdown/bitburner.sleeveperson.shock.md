@@ -6,7 +6,7 @@
 
 Number 0-100 Experience earned and shared is multiplied with shock% before sync%
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 shock: number;

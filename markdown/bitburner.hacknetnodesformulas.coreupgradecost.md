@@ -6,7 +6,7 @@
 
 Calculate cost of upgrading hacknet node cores.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 coreUpgradeCost(startingCore: number, extraCores?: number, costMult?: number): number;
@@ -17,10 +17,10 @@ coreUpgradeCost(startingCore: number, extraCores?: number, costMult?: number): n
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  startingCore | number | starting cores |
-|  extraCores | number | amount of cores to purchase (defaults to 1) |
-|  costMult | number | player cost reduction (default to 1) |
+|  extraCores | number | _(Optional)_ amount of cores to purchase (defaults to 1) |
+|  costMult | number | _(Optional)_ player cost reduction (default to 1) |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

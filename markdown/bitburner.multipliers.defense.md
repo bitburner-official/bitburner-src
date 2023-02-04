@@ -6,7 +6,7 @@
 
 Multiplier to defense skill
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 defense: number;

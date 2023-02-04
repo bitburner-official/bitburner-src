@@ -6,7 +6,7 @@
 
 Number representing the difficulty of the crime. Used for success chance calculations
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 difficulty: number;

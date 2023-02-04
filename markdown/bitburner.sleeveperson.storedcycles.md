@@ -6,7 +6,7 @@
 
 Number of 200ms cycles which are stored as bonus time
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 storedCycles: number;

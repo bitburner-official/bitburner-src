@@ -6,7 +6,7 @@
 
 Amount of share owned
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 numShares: number;

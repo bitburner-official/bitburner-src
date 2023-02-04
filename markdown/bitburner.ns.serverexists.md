@@ -6,7 +6,7 @@
 
 Returns a boolean denoting whether or not the specified server exists.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 serverExists(host: string): boolean;
@@ -18,7 +18,7 @@ serverExists(host: string): boolean;
 |  --- | --- | --- |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

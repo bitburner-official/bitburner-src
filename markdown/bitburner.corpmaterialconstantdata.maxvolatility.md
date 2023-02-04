@@ -4,7 +4,7 @@
 
 ## CorpMaterialConstantData.maxVolatility property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 maxVolatility: number;

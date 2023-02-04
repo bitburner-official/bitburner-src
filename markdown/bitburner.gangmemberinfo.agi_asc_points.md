@@ -6,7 +6,7 @@
 
 Total earned agility experience
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agi_asc_points: number;

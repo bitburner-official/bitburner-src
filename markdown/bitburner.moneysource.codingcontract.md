@@ -4,7 +4,7 @@
 
 ## MoneySource.codingcontract property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 codingcontract: number;

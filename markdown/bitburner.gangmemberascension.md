@@ -5,7 +5,7 @@
 ## GangMemberAscension interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface GangMemberAscension 
@@ -13,13 +13,13 @@ interface GangMemberAscension
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [agi](./bitburner.gangmemberascension.agi.md) | number | Agility multiplier gained from ascending |
-|  [cha](./bitburner.gangmemberascension.cha.md) | number | Charisma multiplier gained from ascending |
-|  [def](./bitburner.gangmemberascension.def.md) | number | Defense multiplier gained from ascending |
-|  [dex](./bitburner.gangmemberascension.dex.md) | number | Dexterity multiplier gained from ascending |
-|  [hack](./bitburner.gangmemberascension.hack.md) | number | Hacking multiplier gained from ascending |
-|  [respect](./bitburner.gangmemberascension.respect.md) | number | Amount of respect lost from ascending |
-|  [str](./bitburner.gangmemberascension.str.md) | number | Strength multiplier gained from ascending |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [agi](./bitburner.gangmemberascension.agi.md) |  | number | Agility multiplier gained from ascending |
+|  [cha](./bitburner.gangmemberascension.cha.md) |  | number | Charisma multiplier gained from ascending |
+|  [def](./bitburner.gangmemberascension.def.md) |  | number | Defense multiplier gained from ascending |
+|  [dex](./bitburner.gangmemberascension.dex.md) |  | number | Dexterity multiplier gained from ascending |
+|  [hack](./bitburner.gangmemberascension.hack.md) |  | number | Hacking multiplier gained from ascending |
+|  [respect](./bitburner.gangmemberascension.respect.md) |  | number | Amount of respect lost from ascending |
+|  [str](./bitburner.gangmemberascension.str.md) |  | number | Strength multiplier gained from ascending |
 

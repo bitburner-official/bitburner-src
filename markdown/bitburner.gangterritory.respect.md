@@ -6,7 +6,7 @@
 
 Respect gain impact on task scaling
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 respect: number;

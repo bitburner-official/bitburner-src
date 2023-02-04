@@ -5,7 +5,7 @@
 ## GymType enum
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 declare enum GymType 

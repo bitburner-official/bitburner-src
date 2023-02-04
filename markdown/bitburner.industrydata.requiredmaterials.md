@@ -6,7 +6,7 @@
 
 Materials required for production and their amounts
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 requiredMaterials: Record<string, number>;

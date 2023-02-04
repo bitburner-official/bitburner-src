@@ -6,7 +6,7 @@
 
 Gang's power for territory warfare
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 power: number;

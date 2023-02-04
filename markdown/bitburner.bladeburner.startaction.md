@@ -6,7 +6,7 @@
 
 Start an action.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 startAction(type: string, name: string): boolean;
@@ -19,7 +19,7 @@ startAction(type: string, name: string): boolean;
 |  type | string | Type of action. |
 |  name | string | Name of action. Must be an exact match |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

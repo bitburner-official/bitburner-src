@@ -6,7 +6,7 @@
 
 Place fragment on Stanek's Gift.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 placeFragment(rootX: number, rootY: number, rotation: number, fragmentId: number): boolean;
@@ -21,7 +21,7 @@ placeFragment(rootX: number, rootY: number, rotation: number, fragmentId: number
 |  rotation | number | A number from 0 to 3, the mount of 90 degree turn to take. |
 |  fragmentId | number | ID of the fragment to place. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

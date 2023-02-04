@@ -4,7 +4,7 @@
 
 ## CorpConstants.gameCyclesPerCorpStateCycle property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 gameCyclesPerCorpStateCycle: number;

@@ -6,7 +6,7 @@
 
 Multiplier to amount of money the player gains from hacking
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacking_money: number;
