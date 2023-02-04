@@ -22,8 +22,8 @@ FormatsNeedToChange.subscribe(() => {
   // Clear all cached formatters
   digitFormats = {};
   percentFormats = {};
-  exponentialFormatter = makeFormatter(3, { notation: "scientific" });
-  basicFormatter = new Intl.NumberFormat([Settings.Locale, "en"]);
+  exponentialFormatter = makeFormatter(3, { notation: Settings.useEngineeringNotation ? "engineering" : "scientific" });
+  basicFormatter = new Intl.NumberFormat([Settings.Locale, "en"], { useGrouping: !Settings.hideThousandsSeparator });
   // Emit a FormatsHaveChanged event so any static content that uses formats can be regenerated.
   FormatsHaveChanged.emit();
   // Force a redraw of the entire UI
@@ -32,6 +32,7 @@ FormatsNeedToChange.subscribe(() => {
 
 /** Makes a new formatter */
 function makeFormatter(fractionalDigits: number, otherOptions: Intl.NumberFormatOptions = {}): Intl.NumberFormat {
+  if (Settings.hideThousandsSeparator) otherOptions.useGrouping = false;
   return new Intl.NumberFormat([Settings.Locale, "en"], {
     minimumFractionDigits: Settings.hideTrailingDecimalZeros ? 0 : fractionalDigits,
     maximumFractionDigits: fractionalDigits,
@@ -54,8 +55,12 @@ export function nFormat(n: number, options: NFormatOptions = {}) {
   // NaN does not get formatted
   if (Number.isNaN(n)) return "NaN";
   const nAbs = Math.abs(n);
+
   // Special handling for Infinities
   if (nAbs === Infinity) return n < 0 ? "-∞" : "∞";
+
+  // Force suffix on ram type
+  if (options.specialFlag === "ram") options.suffixStart = 0;
 
   const suffixStart = options.suffixStart ?? 1000;
   const fractionalDigits = options.fractionalDigits ?? 3;
@@ -66,6 +71,9 @@ export function nFormat(n: number, options: NFormatOptions = {}) {
     if (options.specialFlag === "integer") return basicFormatter.format(n);
     return getFormatter(fractionalDigits).format(n);
   }
+  if (Settings.disableSuffixes && options.specialFlag !== "ram") {
+    return exponentialFormatter.format(n).toLocaleLowerCase();
+  }
 
   const logBase = options.specialFlag === "ram" && Settings.UseIEC60027_2 ? 1024 : 1000;
   const suffixList =
@@ -74,13 +82,15 @@ export function nFormat(n: number, options: NFormatOptions = {}) {
         ? ramLog1024Suffixes
         : ramLog1000Suffixes
       : log1000suffixes;
+  // Todo: Cache logBase log values. Test if log math is slower than iterating through the suffix list and testing against cached breakpoints.
   let suffixIndex = Math.floor(Math.log(nAbs) / Math.log(logBase));
   // If there's no suffix and we're in ram formatting, use the highest available suffix.
   if (!suffixList[suffixIndex] && options.specialFlag === "ram") suffixIndex = suffixList.length - 1;
   // If there's no suffix use exponential
   if (!suffixList[suffixIndex]) return exponentialFormatter.format(n).toLocaleLowerCase();
-  // Suffixed form
+  // Suffixed form -- Todo: Cache these multipliers to avoid exponential math needed for every format call
   n /= logBase ** suffixIndex;
+  // Jank rounding fix. Prevents display from showing e.g. 1,000.000m instead of 1.000b when the number rounds to 1b
   if (Math.abs(n) >= logBase - 1 + parseFloat("0." + "9".repeat(fractionalDigits)) && suffixList[suffixIndex + 1]) {
     suffixIndex += 1;
     n /= logBase;

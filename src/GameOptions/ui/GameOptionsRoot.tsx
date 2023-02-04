@@ -1,10 +1,10 @@
 import { Box, Container, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { GameOptionsTab } from "../GameOptionsTab";
 import { GameOptionsSidebar } from "./GameOptionsSidebar";
 import { GameplayPage } from "./GameplayPage";
 import { InterfacePage } from "./InterfacePage";
 import { MiscPage } from "./MiscPage";
+import { NumericDisplayPage } from "./NumericDisplayOptions";
 import { RemoteAPIPage } from "./RemoteAPIPage";
 import { SystemPage } from "./SystemPage";
 
@@ -14,9 +14,18 @@ interface IProps {
   forceKill: () => void;
   softReset: () => void;
 }
+export type OptionsTabName = "System" | "Interface" | "Numeric Display" | "Gameplay" | "Misc" | "Remote API";
+const tabs: Record<OptionsTabName, React.ReactNode> = {
+  System: <SystemPage />,
+  Interface: <InterfacePage />,
+  "Numeric Display": <NumericDisplayPage />,
+  Gameplay: <GameplayPage />,
+  Misc: <MiscPage />,
+  "Remote API": <RemoteAPIPage />,
+};
 
 export function GameOptionsRoot(props: IProps): React.ReactElement {
-  const [currentTab, setCurrentTab] = useState(GameOptionsTab.SYSTEM);
+  const [currentTab, setCurrentTab] = useState<OptionsTabName>("System");
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
@@ -30,11 +39,7 @@ export function GameOptionsRoot(props: IProps): React.ReactElement {
           forceKill={props.forceKill}
           softReset={props.softReset}
         />
-        {currentTab === GameOptionsTab.SYSTEM && <SystemPage />}
-        {currentTab === GameOptionsTab.INTERFACE && <InterfacePage />}
-        {currentTab === GameOptionsTab.GAMEPLAY && <GameplayPage />}
-        {currentTab === GameOptionsTab.MISC && <MiscPage />}
-        {currentTab === GameOptionsTab.REMOTE_API && <RemoteAPIPage />}
+        {tabs[currentTab]}
       </Box>
     </Container>
   );

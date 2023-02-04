@@ -87,6 +87,12 @@ export const Settings = {
   MonacoWordWrap: "off" as WordWrapOptions,
   /** Whether to hide trailing zeroes on fractional part of decimal */
   hideTrailingDecimalZeros: false,
+  /** Whether to hide thousands separators. */
+  hideThousandsSeparator: false,
+  /** Whether to use engineering notation instead of scientific for exponentials. */
+  useEngineeringNotation: false,
+  /** Whether to disable suffixes and always use exponential form (scientific or engineering). */
+  disableSuffixes: false,
 
   load(saveString: string) {
     const save = JSON.parse(saveString);
