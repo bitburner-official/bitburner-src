@@ -1,6 +1,7 @@
 import { ScriptArg } from "./ScriptArg";
 
-export type ScriptIdentifier =  //This was previously in INetscriptHelper.ts, may move to its own file or a generic types file.
+//This was previously in INetscriptHelper.ts, may move to its own file or a generic types file.
+export type ScriptIdentifier =
   | number
   | {
       scriptname: string;

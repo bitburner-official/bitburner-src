@@ -1287,12 +1287,14 @@ export class Bladeburner {
               this.changeRank(person, gain);
               if (isOperation && this.logging.ops) {
                 this.log(
-                  `${person.whoAmI()}: ${action.name} successfully completed! Gained ${formatNumber(gain, 3)} rank`,
+                  `${person.whoAmI()}: ${
+                    action.name
+                  } successfully completed! Gained ${numeralWrapper.formatReallyBigNumber(gain)} rank`,
                 );
               } else if (!isOperation && this.logging.contracts) {
                 this.log(
                   `${person.whoAmI()}: ${action.name} contract successfully completed! Gained ` +
-                    `${formatNumber(gain, 3)} rank and ${numeralWrapper.formatMoney(moneyGain)}`,
+                    `${numeralWrapper.formatReallyBigNumber(gain)} rank and ${numeralWrapper.formatMoney(moneyGain)}`,
                 );
               }
             }
@@ -1449,15 +1451,15 @@ export class Bladeburner {
           this.log(
             `${person.whoAmI()}: ` +
               "Training completed. Gained: " +
-              formatNumber(strExpGain, 1) +
+              numeralWrapper.formatExp(strExpGain) +
               " str exp, " +
-              formatNumber(defExpGain, 1) +
+              numeralWrapper.formatExp(defExpGain) +
               " def exp, " +
-              formatNumber(dexExpGain, 1) +
+              numeralWrapper.formatExp(dexExpGain) +
               " dex exp, " +
-              formatNumber(agiExpGain, 1) +
+              numeralWrapper.formatExp(agiExpGain) +
               " agi exp, " +
-              formatNumber(staminaGain, 3) +
+              numeralWrapper.formatReallyBigNumber(staminaGain) +
               " max stamina",
           );
         }
@@ -1485,9 +1487,9 @@ export class Bladeburner {
         if (this.logging.general) {
           this.log(
             `${person.whoAmI()}: ` +
-              `Field analysis completed. Gained ${formatNumber(rankGain, 2)} rank, ` +
-              `${formatNumber(hackingExpGain, 1)} hacking exp, and ` +
-              `${formatNumber(charismaExpGain, 1)} charisma exp`,
+              `Field analysis completed. Gained ${numeralWrapper.formatReallyBigNumber(rankGain)} rank, ` +
+              `${numeralWrapper.formatExp(hackingExpGain)} hacking exp, and ` +
+              `${numeralWrapper.formatExp(charismaExpGain)} charisma exp`,
           );
         }
         break;
@@ -1503,7 +1505,7 @@ export class Bladeburner {
             this.log(
               `${person.whoAmI()}: ` +
                 "Successfully recruited a team member! Gained " +
-                formatNumber(expGain, 1) +
+                numeralWrapper.formatExp(expGain) +
                 " charisma exp",
             );
           }
@@ -1514,7 +1516,7 @@ export class Bladeburner {
             this.log(
               `${person.whoAmI()}: ` +
                 "Failed to recruit a team member. Gained " +
-                formatNumber(expGain, 1) +
+                numeralWrapper.formatExp(expGain) +
                 " charisma exp",
             );
           }

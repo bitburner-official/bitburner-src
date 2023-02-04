@@ -3,7 +3,7 @@ getHacknetMultipliers() Netscript Function
 
 .. js:function:: getHacknetMultipliers()
 
-    :RAM cost: 4 GB
+    :RAM cost: 0.25 GB
     :returns: object containing the player's hacknet multipliers. These
         multipliers are returned in decimal forms, not percentages (e.g. 1.5
         instead of 150%).

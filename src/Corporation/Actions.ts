@@ -11,7 +11,7 @@ import { Warehouse } from "./Warehouse";
 import { CorporationUnlockUpgrade } from "./data/CorporationUnlockUpgrades";
 import { CorporationUpgrade } from "./data/CorporationUpgrades";
 import { Cities } from "../Locations/Cities";
-import { EmployeePositions, IndustryType } from "./data/Enums";
+import { IndustryType } from "./data/Enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
 import { CityName, CityNames } from "../Enums";
@@ -328,11 +328,6 @@ export function BuyBackShares(corporation: Corporation, numShares: number): bool
   corporation.issuedShares -= numShares;
   Player.loseMoney(numShares * buybackPrice, "corporation");
   return true;
-}
-
-export function AutoAssignJob(office: OfficeSpace, job: string, count: number): boolean {
-  if (!EmployeePositions.has(job)) throw new Error(`'${job}' is not a valid job.`);
-  return office.autoAssignJob(job, count);
 }
 
 export function UpgradeOfficeSize(corp: Corporation, office: OfficeSpace, size: number): void {

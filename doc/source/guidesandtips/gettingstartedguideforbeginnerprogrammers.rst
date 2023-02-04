@@ -80,6 +80,7 @@ Specifically, you'll want to take a look at :ref:`netscriptfunctions`.
 Enter the following code in the script editor:
 
 .. code:: javascript
+    
     /** @param {NS} ns */
     export async function main(ns) {
         // Defines the "target server", which is the server
@@ -816,6 +817,7 @@ so you should write a script to automate the process. Here's a simple example fo
 startup script. Feel free to adjust it to your liking.
 
 .. code:: javascript
+
     /** @param {NS} ns */
     export async function main(ns) {
         // Array of all servers that don't need any ports opened
@@ -861,6 +863,7 @@ startup script. Feel free to adjust it to your liking.
             ns.exec("early-hack-template.sj", serv, 12);
         }
     }
+    
 Random Tips
 -----------
 * Early on in the game, it's better to spend your money on upgrading RAM and purchasing

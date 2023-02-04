@@ -4,6 +4,5 @@
     "allowJs": true,
     "types": ["jest"]
   },
-  "include": ["**/*", "../src/**/*.d.ts"],
-  "exclude": ["cypress/**/*"]
+  "include": ["**/*", "../src/**/*.d.ts"]
 }

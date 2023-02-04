@@ -874,6 +874,7 @@ type SleeveBladeburnerTask = {
   type: "BLADEBURNER";
   actionType: "General" | "Contracts";
   actionName: string;
+  cyclesWorked: number;
 };
 
 /** @public */
@@ -887,7 +888,7 @@ type SleeveClassTask = {
 type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
 
 /** @public */
-type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType };
+type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType; cyclesWorked: number };
 
 /** @public */
 type SleeveFactionTask = {
@@ -897,7 +898,7 @@ type SleeveFactionTask = {
 };
 
 /** @public */
-type SleeveInfiltrateTask = { type: "INFILTRATE" };
+type SleeveInfiltrateTask = { type: "INFILTRATE"; cyclesWorked: number };
 
 /** @public */
 type SleeveRecoveryTask = { type: "RECOVERY" };
@@ -2871,6 +2872,19 @@ export type Bladeburner = {
   getActionAutolevel(type: string, name: string): boolean;
 
   /**
+   * Get action successes.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Return a number with how many successes you have with action.
+   *
+   * @param type - Type of action.
+   * @param name - Name of action. Must be an exact match.
+   * @returns a number with how many successes you have with action.
+   */
+  getActionSuccesses(type: string, name: string): number;
+
+  /**
    * Set an action autolevel.
    * @remarks
    * RAM cost: 4 GB
@@ -3521,7 +3535,7 @@ export type Gang = {
    *
    * “Bonus time” is accumulated when the game is offline or if the game is inactive in the browser.
    *
-   * “Bonus time” makes the game progress faster, up to 10x the normal speed.
+   * “Bonus time” makes the game progress faster, up to 25x the normal speed.
    *
    * @returns Bonus time for the Gang mechanic in milliseconds.
    */
@@ -6840,7 +6854,7 @@ export type NS = {
    * @remarks
    * RAM cost: 2.4 GB
    *
-   * Increases your rep gain of hacking contracts while share is called.
+   * Increases your rep gain of all faction work types while share is called.
    * Scales with thread count.
    */
   share(): Promise<void>;
@@ -7742,7 +7756,7 @@ interface CorporationInfo {
   dividendTax: number;
   /** Your earnings as a shareholder per second this cycle */
   dividendEarnings: number;
-  /** State of the corporation. Possible states are START, PURCHASE, PRODUCTION, SALE, EXPORT. */
+  /** State of the corporation. Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. */
   state: string;
   /** Array of all division names */
   divisions: string[];
@@ -7800,7 +7814,7 @@ interface CorpConstants {
   minEmployeeDecay: number;
 }
 /** @public */
-type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "SALE" | "EXPORT";
+type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "EXPORT" | "SALE";
 
 /** @public */
 type CorpMaterialName =

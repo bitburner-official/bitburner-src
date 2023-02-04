@@ -7,7 +7,11 @@ export const getGraftingAvailableAugs = (): string[] => {
   const augs: string[] = [];
 
   for (const [augName, aug] of Object.entries(StaticAugmentations)) {
-    if (aug.isSpecial) continue;
+    if (Player.factions.includes("Bladeburners")) {
+      if (aug.isSpecial && !aug.factions.includes("Bladeburners")) continue;
+    } else {
+      if (aug.isSpecial) continue;
+    }
     augs.push(augName);
   }
 

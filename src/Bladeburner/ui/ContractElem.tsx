@@ -11,7 +11,7 @@ import { CopyableText } from "../../ui/React/CopyableText";
 import { ActionLevel } from "./ActionLevel";
 import { Autolevel } from "./Autolevel";
 import { StartButton } from "./StartButton";
-
+import { numeralWrapper } from "../../ui/numeralFormat";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 
@@ -76,11 +76,11 @@ export function ContractElem(props: IProps): React.ReactElement {
         <br />
         Time Required: {convertTimeMsToTimeElapsedString(actionTime * 1000)}
         <br />
-        Contracts remaining: {Math.floor(props.action.count)}
+        Contracts remaining: {numeralWrapper.formatReallyBigNumber(Math.floor(props.action.count), 3)}
         <br />
-        Successes: {props.action.successes}
+        Successes: {numeralWrapper.formatReallyBigNumber(props.action.successes, 3)}
         <br />
-        Failures: {props.action.failures}
+        Failures: {numeralWrapper.formatReallyBigNumber(props.action.failures, 3)}
       </Typography>
       <br />
       <Autolevel rerender={rerender} action={props.action} />

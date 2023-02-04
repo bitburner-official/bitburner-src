@@ -249,6 +249,7 @@ const bladeburner = {
   getActionMaxLevel: RamCostConstants.BladeburnerApiBase,
   getActionCurrentLevel: RamCostConstants.BladeburnerApiBase,
   getActionAutolevel: RamCostConstants.BladeburnerApiBase,
+  getActionSuccesses: RamCostConstants.BladeburnerApiBase,
   setActionAutolevel: RamCostConstants.BladeburnerApiBase,
   setActionLevel: RamCostConstants.BladeburnerApiBase,
   getRank: RamCostConstants.BladeburnerApiBase,

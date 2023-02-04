@@ -1,8 +1,7 @@
 import React from "react";
 import { CopyableText } from "../../ui/React/CopyableText";
-import { formatNumber } from "../../utils/StringHelperFunctions";
+import { numeralWrapper } from "../../ui/numeralFormat";
 import { Bladeburner } from "../Bladeburner";
-
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
@@ -49,11 +48,11 @@ export function SkillElem(props: IProps): React.ReactElement {
           </IconButton>
         )}
       </Box>
-      <Typography>Level: {currentLevel}</Typography>
+      <Typography>Level: {numeralWrapper.formatReallyBigNumber(currentLevel, 3)}</Typography>
       {maxLvl ? (
         <Typography>MAX LEVEL</Typography>
       ) : (
-        <Typography>Skill Points required: {formatNumber(pointCost, 0)}</Typography>
+        <Typography>Skill Points required: {numeralWrapper.formatReallyBigNumber(pointCost, 3)}</Typography>
       )}
       <Typography>{props.skill.desc}</Typography>
     </Paper>

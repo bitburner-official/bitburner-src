@@ -17,7 +17,7 @@ module.exports = {
     ecmaFeatures: {
       experimentalObjectRestSpread: true,
     },
-    project: ["./tsconfig.json", "./test/tsconfig.json", "./tools/tsconfig.json", "./test/cypress/tsconfig.json"],
+    project: ["./tsconfig.json", "./test/tsconfig.json", "./tools/tsconfig.json"],
   },
   plugins: ["@typescript-eslint"],
   extends: ["plugin:@typescript-eslint/recommended"],

@@ -91,29 +91,23 @@ export class OfficeSpace {
     this.maxHap = 100;
     this.maxMor = 100;
 
-    if (industry.hasResearch("Go-Juice")) {
-      this.maxEne += 10;
-    }
-    if (industry.hasResearch("JoyWire")) {
-      this.maxHap += 10;
-    }
-    if (industry.hasResearch("Sti.mu")) {
-      this.maxMor += 10;
-    }
-    if (industry.hasResearch("AutoBrew")) {
-      this.autoCoffee = true;
-    }
-    if (industry.hasResearch("AutoPartyManager")) {
-      this.autoParty = true;
-    }
+    if (industry.hasResearch("Go-Juice")) this.maxEne += 10;
+    if (industry.hasResearch("JoyWire")) this.maxHap += 10;
+    if (industry.hasResearch("Sti.mu")) this.maxMor += 10;
+    if (industry.hasResearch("AutoBrew")) this.autoCoffee = true;
+    if (industry.hasResearch("AutoPartyManager")) this.autoParty = true;
 
     if (this.totalEmployees > 0) {
       /** Multiplier for employee morale/happiness/energy based on company performance */
       const perfMult = Math.pow(
-        0.999 - (corporation.funds < 0 ? 0.002 : 0) - (industry.lastCycleRevenue < 0 ? 0.002 : 0),
+        1.002 -
+          (corporation.funds < 0 ? 0.002 : 0) -
+          (industry.lastCycleRevenue < industry.lastCycleExpenses ? 0.002 : 0),
         marketCycles,
       );
-      /** Flat reduction per cycle */
+      // Flat reduction per cycle.
+      // This does not cause a noticable decrease (it's only -.001% per cycle), it only serves
+      // to make the numbers slightly different between Happiness and Morale.
       const reduction = 0.001 * marketCycles;
 
       if (this.autoCoffee) {
@@ -224,11 +218,14 @@ export class OfficeSpace {
   }
 
   autoAssignJob(job: EmployeePosition, target: number): boolean {
+    if (job === "Unassigned") {
+      throw new Error("internal autoAssignJob function called with EmployeePositions.Unassigned");
+    }
     const diff = target - this.employeeNextJobs[job];
 
-    if (diff === 0) {
-      return true;
-    } else if (diff <= this.employeeNextJobs.Unassigned) {
+    if (diff === 0) return true;
+    // We are already at the desired number
+    else if (diff <= this.employeeNextJobs["Unassigned"]) {
       // This covers both a negative diff (reducing the amount of employees in position) and a positive (increasing and using up unassigned employees)
       this.employeeNextJobs["Unassigned"] -= diff;
       this.employeeNextJobs[job] = target;
