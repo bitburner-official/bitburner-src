@@ -125,7 +125,7 @@ export const formatRam = (n: number) => nFormat(n, { specialFlag: "ram", fractio
 
 /** Display a percentage with a configurable number of fractional digits. Percentages never collapse to suffix form. */
 export const formatPercent = (n: number, fractionalDigits = 2) => {
-  nFormat(n, { specialFlag: "percent", fractionalDigits });
+  return nFormat(n, { specialFlag: "percent", fractionalDigits });
 };
 
 /** Display a decimal number with increased precision (5 fractional digits) */
