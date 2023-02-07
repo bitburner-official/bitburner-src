@@ -160,9 +160,9 @@ export function PurchaseMaterialModal(props: IProps): React.ReactElement {
         <Button disabled={props.disablePurchaseLimit} onClick={clearPurchase}>
           Clear Purchase
         </Button>
-        {division.hasResearch("Bulk Purchasing") && (
+        {
           <BulkPurchaseSection onClose={props.onClose} mat={props.mat} warehouse={props.warehouse} />
-        )}
+        }
       </>
     </Modal>
   );
