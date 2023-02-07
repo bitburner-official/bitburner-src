@@ -457,8 +457,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     bulkPurchase: (ctx) => (_divisionName, _cityName, materialName, _amt) => {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
-      if (!hasResearched(getDivision(divisionName), "Bulk Purchasing"))
-        throw new Error(`You have not researched Bulk Purchasing in ${divisionName}`);
       const corporation = getCorporation();
       const cityName = helpers.city(ctx, "cityName", _cityName);
       assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
