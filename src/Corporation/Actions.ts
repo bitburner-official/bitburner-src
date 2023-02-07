@@ -143,21 +143,21 @@ export function SellMaterial(mat: Material, amt: string, price: string): void {
 
   //Parse quantity
   amt = amt.toUpperCase();
-  if (amt.includes("MAX") || amt.includes("PROD")) {
+  if (amt.includes("MAX") || amt.includes("PROD") || amt.includes("INV")) {
     let q = amt.replace(/\s+/g, "");
-    q = q.replace(/[^-()\d/*+.MAXPROD]/g, "");
+    q = q.replace(/[^-()\d/*+.MAXPRODINV]/g, "");
     let tempQty = q.replace(/MAX/g, mat.maxsll.toString());
     tempQty = tempQty.replace(/PROD/g, mat.prd.toString());
+    tempQty = tempQty.replace(/INV/g, mat.prd.toString());
     try {
       tempQty = eval(tempQty);
     } catch (e) {
       throw new Error("Invalid value or expression for sell quantity field: " + e);
     }
 
-    if (tempQty == null || isNaN(parseFloat(tempQty)) || parseFloat(tempQty) < 0) {
+    if (tempQty == null || isNaN(parseFloat(tempQty))) {
       throw new Error("Invalid value or expression for sell quantity field");
     }
-
     mat.sllman[0] = true;
     mat.sllman[1] = q; //Use sanitized input
   } else if (isNaN(parseFloat(amt)) || parseFloat(amt) < 0) {
@@ -208,19 +208,20 @@ export function SellProduct(product: Product, city: string, amt: string, price: 
 
   // Parse quantity
   amt = amt.toUpperCase();
-  if (amt.includes("MAX") || amt.includes("PROD")) {
+  if (amt.includes("MAX") || amt.includes("PROD") || amt.includes("INV")) {
     //Dynamically evaluated quantity. First test to make sure its valid
     let qty = amt.replace(/\s+/g, "");
-    qty = qty.replace(/[^-()\d/*+.MAXPROD]/g, "");
+    qty = qty.replace(/[^-()\d/*+.MAXPRODINV]/g, "");
     let temp = qty.replace(/MAX/g, product.maxsll.toString());
     temp = temp.replace(/PROD/g, product.data[city][1].toString());
+    temp = temp.replace(/INV/g, product.data[city][0].toString());
     try {
       temp = eval(temp);
     } catch (e) {
       throw new Error("Invalid value or expression for sell quantity field: " + e);
     }
 
-    if (temp == null || isNaN(parseFloat(temp)) || parseFloat(temp) < 0) {
+    if (temp == null || isNaN(parseFloat(temp))) {
       throw new Error("Invalid value or expression for sell quantity field");
     }
     if (all) {
@@ -328,12 +329,6 @@ export function BuyBackShares(corporation: Corporation, numShares: number): bool
   corporation.issuedShares -= numShares;
   Player.loseMoney(numShares * buybackPrice, "corporation");
   return true;
-}
-
-export function AutoAssignJob(office: OfficeSpace, job: string, count: number): boolean {
-  count = count < 0 ? 0 : count;
-  if (!checkEnum(EmployeePositions, job)) throw new Error(`'${job}' is not a valid job.`);
-  return office.autoAssignJob(job, count);
 }
 
 export function UpgradeOfficeSize(corp: Corporation, office: OfficeSpace, size: number): void {
@@ -501,8 +496,12 @@ export function ExportMaterial(
 ): void {
   // Sanitize amt
   let sanitizedAmt = amt.replace(/\s+/g, "").toUpperCase();
-  sanitizedAmt = sanitizedAmt.replace(/[^-()\d/*+.MAX]/g, "");
-  let temp = sanitizedAmt.replace(/MAX/g, "1");
+  sanitizedAmt = sanitizedAmt.replace(/[^-()\d/*+.MAXEPRODINV]/g, "");
+  let temp = sanitizedAmt.replace(/MAX/g, "1")
+  temp=temp.replace(/IPROD/g, "1")
+  temp=temp.replace(/EPROD/g, "1")
+  temp=temp.replace(/IINV/g, "1");
+  temp=temp.replace(/EINV/g, "1");
   try {
     temp = eval(temp);
   } catch (e) {
@@ -511,7 +510,7 @@ export function ExportMaterial(
 
   const n = parseFloat(temp);
 
-  if (n == null || isNaN(n) || n < 0) {
+  if (n == null || isNaN(n)) {
     throw new Error("Invalid amount entered for export");
   }
 

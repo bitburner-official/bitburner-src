@@ -82,7 +82,23 @@ export function ExportModal(props: IProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
         Select the industry and city to export this material to, as well as how much of this material to export per
-        second. You can set the export amount to 'MAX' to export all of the materials in this warehouse.
+        second. 
+        <br />
+        <br />
+        You can use 'MAX', 'EINV', 'IINV', 'EPROD' or 'IPROD' in the amount for:
+        <br />
+        - 'MAX' to export maximum amount possible.
+        <br />
+        - 'EINV' export city's inventory of the material.
+        <br />
+        - 'IINV' import city's inventory of the material.
+        <br />
+        - 'EPROD' export city's per second production of the material
+        <br />
+        - 'IPROD' import city's per second production of the material
+        <br />
+        <br />
+        For example: setting the amount "(EINV-20)/10" would try to export all except 20 of the material.
       </Typography>
       <Select onChange={onIndustryChange} value={industry}>
         {corp.divisions
