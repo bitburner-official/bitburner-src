@@ -130,7 +130,7 @@ export class Product {
   }
 
   // Make progress on this product based on current employee productivity
-  createProduct(marketCycles: number, employeeProd: typeof this["creationProd"]): void {
+  createProduct(marketCycles: number, employeeProd: typeof this.creationProd): void {
     if (this.fin) {
       return;
     }
