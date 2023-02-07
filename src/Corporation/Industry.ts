@@ -13,8 +13,6 @@ import { MaterialInfo } from "./MaterialInfo";
 import { Warehouse } from "./Warehouse";
 import { Corporation } from "./Corporation";
 import { CorpMaterialName, CorpResearchName, CorpStateName } from "@nsdefs";
-import { Atm } from "@mui/icons-material";
-import { Player } from "@player";
 
 interface IParams {
   name?: string;
@@ -685,7 +683,7 @@ export class Industry {
                     console.error(`Invalid export! ${exp.ind}`);
                     continue;
                   }
-                  const expWarehouse = expIndustry.warehouses[exp.city]
+                  const expWarehouse = expIndustry.warehouses[exp.city];
                   if (!expWarehouse) {
                     console.error(`Invalid export! ${expIndustry.name} ${exp.city}`);
                     continue;
@@ -696,22 +694,10 @@ export class Industry {
                     /MAX/g,
                     (mat.qty / (corpConstants.secondsPerMarketCycle * marketCycles) + "").toUpperCase(),
                   );
-                  amtStr = amtStr.replace(
-                    /EPROD/g,
-                    mat.prd.toString()
-                  );
-                  amtStr = amtStr.replace(
-                    /IPROD/g,
-                    tempMaterial.prd.toString()
-                  );
-                  amtStr = amtStr.replace(
-                    /EINV/g,
-                    mat.qty.toString()
-                  );
-                  amtStr = amtStr.replace(
-                    /IINV/g,
-                    tempMaterial.qty.toString()
-                  );
+                  amtStr = amtStr.replace(/EPROD/g, mat.prd.toString());
+                  amtStr = amtStr.replace(/IPROD/g, tempMaterial.prd.toString());
+                  amtStr = amtStr.replace(/EINV/g, mat.qty.toString());
+                  amtStr = amtStr.replace(/IINV/g, tempMaterial.qty.toString());
                   let amt = 0;
                   try {
                     amt = eval(amtStr);
