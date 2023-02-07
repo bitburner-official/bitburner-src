@@ -7159,10 +7159,11 @@ export interface WarehouseAPI {
   /**
    * Get product data
    * @param divisionName - Name of the division
+   * @param city - Name of the city
    * @param productName - Name of the product
    * @returns product data
    */
-  getProduct(divisionName: string, productName: string): Product;
+  getProduct(divisionName: string, city: CityName | `${CityName}`, productName: string): Product;
   /**
    * Get material data
    * @param divisionName - Name of the division
@@ -7190,17 +7191,19 @@ export interface WarehouseAPI {
   /**
    * Set market TA 1 for a product.
    * @param divisionName - Name of the division
+   * @param city - Name of the city
    * @param productName - Name of the product
    * @param on - market ta enabled
    */
-  setProductMarketTA1(divisionName: string, productName: string, on: boolean): void;
+  setProductMarketTA1(divisionName: string, city: CityName | `${CityName}`, productName: string, on: boolean): void;
   /**
    * Set market TA 2 for a product.
    * @param divisionName - Name of the division
+   * @param city - Name of the city
    * @param productName - Name of the product
    * @param on - market ta enabled
    */
-  setProductMarketTA2(divisionName: string, productName: string, on: boolean): void;
+  setProductMarketTA2(divisionName: string, city: CityName | `${CityName}`, productName: string, on: boolean): void;
   /**
    * Set material export data
    * @param sourceDivision - Source division
@@ -7668,16 +7671,22 @@ interface Product {
   cmp: number | undefined;
   /** Product Rating */
   rat: number;
+  /** Effective rating  */
+  effRat: number;
   /** Product Properties. The data is \{qlt, per, dur, rel, aes, fea\} */
   properties: { [key: string]: number };
   /** Production cost */
   pCost: number;
   /** Sell cost, can be "MP+5" */
-  sCost: { [key: string]: any };
-  /** Data refers to the production, sale, and quantity of the products
-   * These values are specific to a city
-   * For each city, the data is [qty, prod, sell, effRat] */
-  cityData: Record<CityName | `${CityName}`, number[]>;
+  sCost: string;
+  /** Sell amount, can be "PROD/2" */
+  sAmt: string;
+  /** Amount of product  */
+  qty: number;
+  /** Amount of product produced  */
+  prod: number;
+  /** Amount of product sold */
+  sell: number;
   /** Creation progress - A number between 0-100 representing percentage */
   developmentProgress: number;
 }
@@ -7705,6 +7714,8 @@ interface Material {
   cost: number;
   /** Sell cost, can be "MP+5" */
   sCost: string | number;
+  /** Sell amount, can be "PROD/2" */
+  sAmt: string | number;
   /** Export orders */
   exp: Export[];
 }
