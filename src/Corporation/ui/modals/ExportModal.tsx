@@ -82,7 +82,7 @@ export function ExportModal(props: IProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
         Select the industry and city to export this material to, as well as how much of this material to export per
-        second. 
+        second.
         <br />
         <br />
         You can use 'MAX', 'EINV', 'IINV', 'EPROD' or 'IPROD' in the amount for:

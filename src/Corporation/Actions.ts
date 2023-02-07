@@ -497,11 +497,11 @@ export function ExportMaterial(
   // Sanitize amt
   let sanitizedAmt = amt.replace(/\s+/g, "").toUpperCase();
   sanitizedAmt = sanitizedAmt.replace(/[^-()\d/*+.MAXEPRODINV]/g, "");
-  let temp = sanitizedAmt.replace(/MAX/g, "1")
-  temp=temp.replace(/IPROD/g, "1")
-  temp=temp.replace(/EPROD/g, "1")
-  temp=temp.replace(/IINV/g, "1");
-  temp=temp.replace(/EINV/g, "1");
+  let temp = sanitizedAmt.replace(/MAX/g, "1");
+  temp = temp.replace(/IPROD/g, "1");
+  temp = temp.replace(/EPROD/g, "1");
+  temp = temp.replace(/IINV/g, "1");
+  temp = temp.replace(/EINV/g, "1");
   try {
     temp = eval(temp);
   } catch (e) {
