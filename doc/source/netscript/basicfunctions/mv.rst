@@ -15,4 +15,4 @@ mv() Netscript Function
 
     .. code-block:: javascript
 
-        ns.tprint("home", "foo.js", "old_foo.txt")
+        ns.mv("home", "foo.js", "old_foo.txt")
