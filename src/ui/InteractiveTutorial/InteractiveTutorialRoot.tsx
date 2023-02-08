@@ -414,12 +414,15 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography>
             This page displays information about all of your scripts that are running across every server. You can use
-            this to gauge how well your scripts are doing. 
-            <br /><br />
+            this to gauge how well your scripts are doing.
+            <br />
+            <br />
             Click on Home to see the scripts running on it.
-            <br /><br />
+            <br />
+            <br />
             Then click on n00dles.js to see the scripts information.
-            <br /><br /> 
+            <br />
+            <br />
             Let's go back to
           </Typography>
           <ListItem>
@@ -533,7 +536,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <br />
           <br />
           The{" "}
-          <a href="https://bitburner-official.readthedocs.io/en/latest/guidesandtips/gettingstartedguideforbeginnerprogrammers.html" target="_blank"> 
+          <a
+            href="https://bitburner-official.readthedocs.io/en/latest/guidesandtips/gettingstartedguideforbeginnerprogrammers.html"
+            target="_blank"
+          >
             Getting Started
           </a>{" "}
           contains the guide for new players, navigating you through most of early game.
