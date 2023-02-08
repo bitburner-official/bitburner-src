@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Money } from "../../ui/React/Money";
@@ -15,59 +13,68 @@ import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { GangConstants } from "../../Gang/data/Constants";
 import { FactionNames } from "../../Faction/data/FactionNames";
 import { checkForMessagesToSend } from "../../Message/MessageHelpers";
+import { ThemeEvents } from "../../Themes/ui/Theme";
 
 export function General(): React.ReactElement {
   const [error, setError] = useState(false);
   const [corporationName, setCorporationName] = useState("");
-  const [gangFaction, setGangFaction] = useState("");
+  const [gangFaction, setGangFaction] = useState("Slum Snakes");
+  const [devMoney, setDevMoney] = useState(0);
 
-  function addMoney(n: number) {
-    return function () {
-      Player.gainMoney(n, "other");
-    };
-  }
+  // Money functions
+  const addCustomMoney = () => !Number.isNaN(devMoney) && Player.gainMoney(devMoney, "other");
+  const addMoney = (n: number) => () => Player.gainMoney(n, "other");
+  const setMoney = (n: number) => () => (Player.money = Number(n));
 
-  function upgradeRam(): void {
-    Player.getHomeComputer().maxRam *= 2;
-  }
+  // Ram functions
+  const upgradeRam = () => (Player.getHomeComputer().maxRam *= 2);
 
-  function quickB1tFlum3(): void {
-    Router.toBitVerse(true, true);
-  }
+  // Node-clearing functions
+  const quickB1tFlum3 = () => Router.toBitVerse(true, true);
+  const b1tflum3 = () => Router.toBitVerse(true, false);
+  const quickHackW0r1dD43m0n = () => Router.toBitVerse(false, true);
+  const hackW0r1dD43m0n = () => Router.toBitVerse(false, false);
 
-  function b1tflum3(): void {
-    Router.toBitVerse(true, false);
-  }
-
-  function quickHackW0r1dD43m0n(): void {
-    Router.toBitVerse(false, true);
-  }
-
-  function hackW0r1dD43m0n(): void {
-    Router.toBitVerse(false, false);
-  }
-
-  function createCorporation(): void {
+  // Corp functions
+  const createCorporation = () => {
     Player.startCorporation(corporationName);
-  }
+    // Rerender so the corp menu option will show up immediately on the devmenu page selection
+    ThemeEvents.emit();
+  };
+  const destroyCorporation = () => {
+    Player.corporation = null;
+    // Rerender so the corp menu option will be removed immediately on the devmenu page selection
+    ThemeEvents.emit();
+  };
 
-  function joinBladeburner(): void {
+  // Blade functions
+  const joinBladeburner = () => {
     Player.bladeburner = new Bladeburner();
-  }
+    // Rerender so the blade menu option will show up immediately on the devmenu page selection
+    ThemeEvents.emit();
+  };
+  const leaveBladeburner = () => {
+    Player.bladeburner = null;
+    // Rerender so the blade menu option will be removed immediately on the devmenu page selection
+    ThemeEvents.emit();
+  };
 
-  function startGang(): void {
+  // Gang functions
+  const startGang = () => {
     const isHacking = gangFaction === FactionNames.NiteSec || gangFaction === FactionNames.TheBlackHand;
     Player.startGang(gangFaction, isHacking);
-  }
+    // Rerender so the gang menu option will show up immediately on the devmenu page selection
+    ThemeEvents.emit();
+  };
+  const stopGang = () => {
+    Player.gang = null;
+    // Rerender so the gang menu option will be removed immediately on the devmenu page selection
+    ThemeEvents.emit();
+  };
+  const setGangFactionDropdown = (event: SelectChangeEvent<string>) => setGangFaction(event.target.value);
 
-  function setGangFactionDropdown(event: SelectChangeEvent<string>): void {
-    setGangFaction(event.target.value);
-  }
-
-  function checkMessages(): void {
-    checkForMessagesToSend();
-  }
-
+  // Misc functions
+  const checkMessages = () => checkForMessagesToSend();
   useEffect(() => {
     if (error) throw new ReferenceError("Manually thrown error");
   }, [error]);
@@ -78,6 +85,14 @@ export function General(): React.ReactElement {
         <Typography>General</Typography>
       </AccordionSummary>
       <AccordionDetails>
+        <Button
+          onClick={setMoney(0)}
+          title="This sets your money to $0, this means the money you had will just vanish without being accounted for where it went and may offset some metrics."
+        >
+          <pre>
+            = <Money money={0} />
+          </pre>
+        </Button>
         <Button onClick={addMoney(1e6)}>
           <pre>
             + <Money money={1e6} />
@@ -105,23 +120,42 @@ export function General(): React.ReactElement {
         </Button>
         <Button onClick={upgradeRam}>+ RAM</Button>
         <br />
-        <Typography>Corporation Name:</Typography>
-        <TextField value={corporationName} onChange={(x) => setCorporationName(x.target.value)} />
-        <Button onClick={createCorporation}>Create Corporation</Button>
+        <Typography>Add Custom Money</Typography>
+        <TextField onChange={(x) => setDevMoney(parseFloat(x.target.value))} />
+        <Button onClick={addCustomMoney}>Give Money</Button>
         <br />
-        <Typography>Gang Faction:</Typography>
-        <Select value={gangFaction} onChange={setGangFactionDropdown}>
-          {GangConstants.Names.map((factionName) => (
-            <MenuItem key={factionName} value={factionName}>
-              {factionName}
-            </MenuItem>
-          ))}
-        </Select>
-        <Button onClick={startGang}>Start Gang</Button>
+        {Player.corporation ? (
+          <Button onClick={destroyCorporation}>Destroy Corporation</Button>
+        ) : (
+          <>
+            <Typography>Corporation Name:</Typography>
+            <TextField value={corporationName} onChange={(x) => setCorporationName(x.target.value)} />
+            <Button onClick={createCorporation}>Create Corporation</Button>
+          </>
+        )}
         <br />
-        <Button onClick={joinBladeburner}>Join BladeBurner</Button>
+        {Player.gang ? (
+          <Button onClick={stopGang}>Stop Gang</Button>
+        ) : (
+          <>
+            <Typography>Gang Faction:</Typography>
+            <Select value={gangFaction} onChange={setGangFactionDropdown}>
+              {GangConstants.Names.map((factionName) => (
+                <MenuItem key={factionName} value={factionName}>
+                  {factionName}
+                </MenuItem>
+              ))}
+            </Select>
+            <Button onClick={startGang}>Start Gang</Button>
+          </>
+        )}
         <br />
-
+        {Player.bladeburner ? (
+          <Button onClick={leaveBladeburner}>Leave BladeBurner</Button>
+        ) : (
+          <Button onClick={joinBladeburner}>Join BladeBurner</Button>
+        )}
+        <br />
         <Button onClick={quickB1tFlum3}>Quick b1t_flum3.exe</Button>
         <Button onClick={b1tflum3}>Run b1t_flum3.exe</Button>
         <Button onClick={quickHackW0r1dD43m0n}>Quick w0rld_d34m0n</Button>

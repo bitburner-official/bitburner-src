@@ -1,10 +1,11 @@
 node_modules
 package.json
 dist
-doc/build/
+doc/build
 doc/source
 .build
 .package
+.app
 
 editor.main.js
 main.bundle.js
