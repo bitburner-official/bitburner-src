@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { purchaseServer } from "../../Server/ServerPurchases";
-import { formatRam } from "../../ui/nFormat";
+import { formatRam } from "../../ui/formatNumber";
 import { Money } from "../../ui/React/Money";
 import { Modal } from "../../ui/React/Modal";
 import { Player } from "@player";

@@ -6,7 +6,7 @@ import { RunningScript } from "./RunningScript";
 import { processSingleServerGrowth } from "../Server/ServerHelpers";
 import { GetServer } from "../Server/AllServers";
 
-import { formatPercent } from "../ui/nFormat";
+import { formatPercent } from "../ui/formatNumber";
 
 import { compareArrays } from "../utils/helpers/compareArrays";
 

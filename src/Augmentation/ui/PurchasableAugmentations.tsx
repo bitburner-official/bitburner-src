@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { Faction } from "../../Faction/Faction";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { formatMoney, formatReputation } from "../../ui/nFormat";
+import { formatMoney, formatReputation } from "../../ui/formatNumber";
 import { Augmentation } from "../Augmentation";
 import { AugmentationNames } from "../data/AugmentationNames";
 import { StaticAugmentations } from "../StaticAugmentations";

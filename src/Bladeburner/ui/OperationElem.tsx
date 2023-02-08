@@ -12,7 +12,7 @@ import { Operation } from "../Operation";
 import { Operations } from "../data/Operations";
 import { Player } from "@player";
 import { CopyableText } from "../../ui/React/CopyableText";
-import { formatNumber, formatBigNumber } from "../../ui/nFormat";
+import { formatNumberNoSuffix, formatBigNumber } from "../../ui/formatNumber";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 
@@ -44,8 +44,9 @@ export function OperationElem(props: IProps): React.ReactElement {
       {isActive ? (
         <>
           <Typography>
-            <CopyableText value={props.action.name} /> (IN PROGRESS - {formatNumber(computedActionTimeCurrent, 0)} /{" "}
-            {formatNumber(props.bladeburner.actionTimeToComplete, 0)})
+            <CopyableText value={props.action.name} /> (IN PROGRESS -{" "}
+            {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
+            {formatNumberNoSuffix(props.bladeburner.actionTimeToComplete, 0)})
           </Typography>
           <Typography>
             {createProgressBarText({

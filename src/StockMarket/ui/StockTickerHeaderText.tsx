@@ -10,7 +10,7 @@ import { TickerHeaderFormatData } from "../data/TickerHeaderFormatData";
 
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { formatMoney, formatPercent } from "../../ui/nFormat";
+import { formatMoney, formatPercent } from "../../ui/formatNumber";
 import Typography from "@mui/material/Typography";
 
 type IProps = {

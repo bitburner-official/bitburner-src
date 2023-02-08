@@ -28,7 +28,7 @@ import WarningIcon from "@mui/icons-material/Warning";
 import { ImportData, saveObject } from "../../SaveObject";
 import { Settings } from "../../Settings/Settings";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { formatMoney, formatNumber } from "../nFormat";
+import { formatMoney, formatNumberNoSuffix } from "../formatNumber";
 import { ConfirmationModal } from "./ConfirmationModal";
 import { pushImportResult } from "../../Electron";
 import { Router } from "../GameRoot";
@@ -244,8 +244,8 @@ export function ImportSaveRoot(props: IProps): JSX.Element {
 
             <TableRow>
               <TableCell>Hacking</TableCell>
-              <TableCell>{formatNumber(currentData.playerData?.hacking ?? 0, 0)}</TableCell>
-              <TableCell>{formatNumber(importData.playerData?.hacking ?? 0, 0)}</TableCell>
+              <TableCell>{formatNumberNoSuffix(currentData.playerData?.hacking ?? 0, 0)}</TableCell>
+              <TableCell>{formatNumberNoSuffix(importData.playerData?.hacking ?? 0, 0)}</TableCell>
               <TableCell>
                 {importData.playerData?.hacking !== currentData.playerData?.hacking && (
                   <ComparisonIcon

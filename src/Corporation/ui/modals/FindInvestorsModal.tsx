@@ -1,5 +1,5 @@
 import React from "react";
-import { formatMoney, formatPercent, formatShares } from "../../../ui/nFormat";
+import { formatMoney, formatPercent, formatShares } from "../../../ui/formatNumber";
 import * as corpConstants from "../../data/Constants";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";

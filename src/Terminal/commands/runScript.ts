@@ -5,7 +5,7 @@ import { startWorkerScript } from "../../NetscriptWorker";
 import { RunningScript } from "../../Script/RunningScript";
 import { findRunningScript } from "../../Script/ScriptHelpers";
 import * as libarg from "arg";
-import { formatRam } from "../../ui/nFormat";
+import { formatRam } from "../../ui/formatNumber";
 
 export function runScript(commandArgs: (string | number | boolean)[], server: BaseServer): void {
   if (commandArgs.length < 1) {

@@ -9,7 +9,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 import { Crimes } from "../../Crime/Crimes";
 
-import { formatPercent } from "../../ui/nFormat";
+import { formatPercent } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { Player } from "@player";

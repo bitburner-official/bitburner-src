@@ -3,7 +3,7 @@ import { MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 import { Settings } from "../../Settings/Settings";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { GameOptionsPage } from "./GameOptionsPage";
-import { FormatsNeedToChange } from "../../ui/nFormat";
+import { FormatsNeedToChange } from "../../ui/formatNumber";
 
 export const NumericDisplayPage = (): React.ReactElement => {
   const [locale, setLocale] = useState(Settings.Locale);

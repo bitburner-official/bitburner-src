@@ -7,7 +7,7 @@ import { EmployeePositions } from "../data/Enums";
 import { BuyCoffee } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
-import { formatCorpStat } from "../../ui/nFormat";
+import { formatCorpStat } from "../../ui/formatNumber";
 
 import { UpgradeOfficeSizeModal } from "./modals/UpgradeOfficeSizeModal";
 import { ThrowPartyModal } from "./modals/ThrowPartyModal";

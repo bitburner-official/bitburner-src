@@ -1,5 +1,5 @@
 import { Terminal } from "../../Terminal";
-import { formatRam } from "../../ui/nFormat";
+import { formatRam } from "../../ui/formatNumber";
 import { Settings } from "../../Settings/Settings";
 
 export function mem(args: (string | number | boolean)[]): void {

@@ -3,7 +3,7 @@ import { Box, Button, Container, Paper, Tooltip, Typography, useTheme } from "@m
 import React, { useEffect, useState } from "react";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { formatFavor, formatReputation } from "../../ui/nFormat";
+import { formatFavor, formatReputation } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
 import { FactionNames } from "../data/FactionNames";
 import { Faction } from "../Faction";

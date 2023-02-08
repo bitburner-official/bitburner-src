@@ -3,7 +3,7 @@ import * as React from "react";
 import { Order } from "../Order";
 import { PositionTypes } from "../data/PositionTypes";
 
-import { formatShares } from "../../ui/nFormat";
+import { formatShares } from "../../ui/formatNumber";
 import { Money } from "../../ui/React/Money";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";

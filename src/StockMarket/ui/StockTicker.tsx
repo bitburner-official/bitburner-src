@@ -15,7 +15,7 @@ import { placeOrder } from "../StockMarket";
 import { buyStock, shortStock, sellStock, sellShort } from "../BuyingAndSelling";
 
 import { Player } from "@player";
-import { formatShares } from "../../ui/nFormat";
+import { formatShares } from "../../ui/formatNumber";
 import { Money } from "../../ui/React/Money";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";

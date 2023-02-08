@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { Sleeve } from "../Sleeve";
 import { Player } from "@player";
 
-import { formatSleeveMemory } from "../../../ui/nFormat";
+import { formatSleeveMemory } from "../../../ui/formatNumber";
 import { Money } from "../../../ui/React/Money";
 
 import Typography from "@mui/material/Typography";

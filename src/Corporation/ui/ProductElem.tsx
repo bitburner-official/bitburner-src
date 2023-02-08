@@ -8,7 +8,7 @@ import { SellProductModal } from "./modals/SellProductModal";
 import { ProductMarketTaModal } from "./modals/ProductMarketTaModal";
 import { CancelProductModal } from "./modals/CancelProductModal";
 
-import { formatBigNumber, formatCorpStat, formatMoney, formatPercent } from "../../ui/nFormat";
+import { formatBigNumber, formatCorpStat, formatMoney, formatPercent } from "../../ui/formatNumber";
 
 import { isString } from "../../utils/helpers/isString";
 import { Money } from "../../ui/React/Money";

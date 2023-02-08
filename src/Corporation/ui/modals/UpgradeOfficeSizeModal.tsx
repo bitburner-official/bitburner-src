@@ -1,5 +1,5 @@
 import React from "react";
-import { formatMoney } from "../../../ui/nFormat";
+import { formatMoney } from "../../../ui/formatNumber";
 import * as corpConstants from "../../data/Constants";
 import { OfficeSpace } from "../../OfficeSpace";
 import { Corporation } from "../../Corporation";

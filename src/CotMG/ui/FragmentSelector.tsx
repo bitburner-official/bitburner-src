@@ -3,7 +3,7 @@ import { Fragments, Fragment, NoneFragment, DeleteFragment } from "../Fragment";
 import { FragmentType, Effect } from "../FragmentType";
 import { StaneksGift } from "../StaneksGift";
 import { FragmentPreview } from "./FragmentPreview";
-import { formatStaneksGiftPower } from "../../ui/nFormat";
+import { formatStaneksGiftPower } from "../../ui/formatNumber";
 
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";

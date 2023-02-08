@@ -12,7 +12,7 @@ import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions
 import { Player } from "@player";
 import { Router } from "./GameRoot";
 import { Page } from "./Router";
-import { formatExp, formatPercent } from "./nFormat";
+import { formatExp, formatPercent } from "./formatNumber";
 import { Money } from "./React/Money";
 import { MoneyRate } from "./React/MoneyRate";
 import { ProgressBar } from "./React/Progress";

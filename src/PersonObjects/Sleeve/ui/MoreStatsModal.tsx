@@ -1,5 +1,5 @@
 import { Sleeve } from "../Sleeve";
-import { formatExp, formatPercent } from "../../../ui/nFormat";
+import { formatExp, formatPercent } from "../../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
 import { CONSTANTS } from "../../../Constants";
 import { Typography } from "@mui/material";

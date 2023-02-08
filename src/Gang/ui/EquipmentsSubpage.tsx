@@ -10,7 +10,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { MenuItem, Table, TableBody, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-import { formatMultiplier, formatPercent } from "../../ui/nFormat";
+import { formatMultiplier, formatPercent } from "../../ui/formatNumber";
 import { GangMemberUpgrades } from "../GangMemberUpgrades";
 import { GangMemberUpgrade } from "../GangMemberUpgrade";
 import { Money } from "../../ui/React/Money";

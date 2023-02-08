@@ -3,7 +3,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { TableCell, Tooltip, Typography } from "@mui/material";
 import { characterOverviewStyles } from "./CharacterOverview";
 import { ISkillProgress } from "src/PersonObjects/formulas/skill";
-import { formatExp } from "../nFormat";
+import { formatExp } from "../formatNumber";
 
 interface IProgressProps {
   min: number;

@@ -4,7 +4,7 @@ import { Typography, Table, TableBody, TableCell, TableRow } from "@mui/material
 
 import { CONSTANTS } from "../../../Constants";
 
-import { formatExp, formatHp, formatSleeveMemory, formatSleeveShock, formatSleeveSynchro } from "../../../ui/nFormat";
+import { formatExp, formatHp, formatSleeveMemory, formatSleeveShock, formatSleeveSynchro } from "../../../ui/formatNumber";
 import { Settings } from "../../../Settings/Settings";
 import { StatsRow } from "../../../ui/React/StatsRow";
 import { characterOverviewStyles as useStyles } from "../../../ui/React/CharacterOverview";

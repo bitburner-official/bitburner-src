@@ -4,7 +4,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { GangMember } from "../GangMember";
-import { formatPreciseMultiplier, formatRespect } from "../../ui/nFormat";
+import { formatPreciseMultiplier, formatRespect } from "../../ui/formatNumber";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { Modal } from "../../ui/React/Modal";
 import { useGang } from "./Context";

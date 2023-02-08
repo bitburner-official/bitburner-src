@@ -10,7 +10,7 @@ import { PositionTypes } from "./data/PositionTypes";
 import { StockSymbols } from "./data/StockSymbols";
 
 import { CONSTANTS } from "../Constants";
-import { formatMoney } from "../ui/nFormat";
+import { formatMoney } from "../ui/formatNumber";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reviver } from "../utils/JSONReviver";

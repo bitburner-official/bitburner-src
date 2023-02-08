@@ -16,7 +16,7 @@ import { Script } from "../../Script/Script";
 import { TextFile } from "../../TextFile";
 import { calculateRamUsage, checkInfiniteLoop } from "../../Script/RamCalculations";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
-import { formatRam } from "../../ui/nFormat";
+import { formatRam } from "../../ui/formatNumber";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import SearchIcon from "@mui/icons-material/Search";
 

@@ -17,7 +17,7 @@ import { getPurchaseServerCost } from "../../Server/ServerPurchases";
 import { Money } from "../../ui/React/Money";
 import { Player } from "@player";
 import { PurchaseServerModal } from "./PurchaseServerModal";
-import { formatRam } from "../../ui/nFormat";
+import { formatRam } from "../../ui/formatNumber";
 import { Box } from "@mui/material";
 
 interface IServerProps {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { formatMoney, formatPreciseMultiplier } from "../../../ui/nFormat";
+import { formatMoney, formatPreciseMultiplier } from "../../../ui/formatNumber";
 import { Product } from "../../Product";
 import { Modal } from "../../../ui/React/Modal";
 import { useDivision } from "../Context";

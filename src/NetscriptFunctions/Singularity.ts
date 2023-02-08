@@ -22,7 +22,7 @@ import { Page } from "../ui/Router";
 import { Locations } from "../Locations/Locations";
 import { GetServer } from "../Server/AllServers";
 import { Programs } from "../Programs/Programs";
-import { formatMoney, formatRam, formatReputation } from "../ui/nFormat";
+import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Company } from "../Company/Company";
 import { Companies } from "../Company/Companies";

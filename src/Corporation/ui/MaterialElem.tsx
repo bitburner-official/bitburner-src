@@ -9,7 +9,7 @@ import { MaterialMarketTaModal } from "./modals/MaterialMarketTaModal";
 import { SellMaterialModal } from "./modals/SellMaterialModal";
 import { PurchaseMaterialModal } from "./modals/PurchaseMaterialModal";
 
-import { formatBigNumber, formatCorpStat, formatMoney, formatQuality } from "../../ui/nFormat";
+import { formatBigNumber, formatCorpStat, formatMoney, formatQuality } from "../../ui/formatNumber";
 
 import { isString } from "../../utils/helpers/isString";
 import { Money } from "../../ui/React/Money";

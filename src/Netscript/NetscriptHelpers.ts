@@ -3,7 +3,7 @@ import { WorkerScript } from "./WorkerScript";
 import { GetAllServers, GetServer } from "../Server/AllServers";
 import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
-import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/nFormat";
+import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
 import { ScriptArg } from "./ScriptArg";
 import { CityName } from "../Enums";
 import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson } from "@nsdefs";

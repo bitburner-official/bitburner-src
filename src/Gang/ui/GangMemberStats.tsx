@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 
-import { formatMultiplier, formatRespect, formatWanted } from "../../ui/nFormat";
+import { formatMultiplier, formatRespect, formatWanted } from "../../ui/formatNumber";
 import { GangMember } from "../GangMember";
 import { Settings } from "../../Settings/Settings";
 import { MoneyRate } from "../../ui/React/MoneyRate";

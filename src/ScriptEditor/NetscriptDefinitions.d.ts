@@ -3,36 +3,36 @@
 
 /**
  * @public
- * Defines special behavior for nFormat.
+ * Defines special behavior for {@link NS.formatNumber | formatNumber}. See {@link FormatNumberOptions | FormatNumberOptions}.
  *
- * "integer": Formats the number as an integer. The specified fractionalDigits will only be applied if the number is
- *   large enough for a suffix. This is how e.g. skills or hp are displayed ingame.
+ * "integer": Formats the number as an integer. Ignores fractionalDigits if the number is below the suffixStart.
+ *   This is how e.g. skills or hp are displayed ingame.
  *
- * "percent": Formats the number as a percent. Never collapses to a suffixed form (treats suffixStart as Infinity)
+ * "percent": Formats the number as a percent. Never collapses to a suffixed form.
  *
- * "ram": Formats the number as an amount of ram. Ram is always suffixed (treats suffixStart as 0). */
-type NFormatSpecialFlag = "integer" | "percent" | "ram";
+ * "ram": Formats the number as an amount of ram. Ram is always suffixed. */
+type FormatNumberSpecialFlag = "integer" | "percent" | "ram";
 
 /**
  * @public
- * Options for formatting a number with nFormat.
+ * Options for formatting a number with {@link NS.formatNumber | formatNumber}.
  */
-interface NFormatOptions {
+interface FormatNumberOptions {
   /** How large the number has to be before it will collapse into a suffixed form. If not provided, defaults
-   *  to 1000. Always treated as 0 for ram formatting. */
+   *  to 1000. This is ignored for ram and percent. Ram always shows a suffix and percent never shows a suffix. */
   suffixStart?: number;
   /** Defines how many digits to show in the fractional part of the decimal. Defaults to 3. For integers, this is
    *  ignored until the value is suffixed. */
   fractionalDigits?: number;
-  /** Defines special behavior for nFormat. For normal formatting, do not include a special flag.
+  /** Defines special behavior. For normal formatting, do not include any special flag.
    *
-   * "integer": Formats the number as an integer. The specified fractionalDigits will only be applied if the number is
-   *   large enough for a suffix. This is how e.g. skills or hp are displayed ingame.
+   * "integer": Formats the number as an integer. Ignores fractionalDigits if the number is below the suffixStart.
+   *   This is how e.g. skills or hp are displayed ingame.
    *
-   * "percent": Formats the number as a percent. Never collapses to a suffixed form (treats suffixStart as Infinity)
+   * "percent": Formats the number as a percent. Never collapses to a suffixed form.
    *
-   * "ram": Formats the number as an amount of ram. Ram is always suffixed (treats suffixStart as 0). */
-  specialFlag?: NFormatSpecialFlag;
+   * "ram": Formats the number as an amount of ram. Ram is always suffixed. */
+  specialFlag?: FormatNumberSpecialFlag;
 }
 
 /** @public */
@@ -6588,7 +6588,23 @@ export interface NS {
    * @param formatOptions - Formatting options.
    * @returns Formatted number.
    */
-  nFormat(n: number, formatOptions: NFormatOptions): string;
+  formatNumber(n: number, formatOptions: FormatNumberOptions): string;
+
+  /**
+   * Format a number using the numeral library. This function is deprecated and will be removed in 2.3.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a string with the specified format options.
+   * See http://numeraljs.com/#format for documentation on format strings supported.
+   *
+   * This function is deprecated and will be removed in 2.3.
+   *
+   * @param n - Number to format.
+   * @param format - Formatting options. See http://numeraljs.com/#format for valid formats.
+   * @returns Formatted number.
+   */
+  nFormat(n: number, format: string): string;
 
   /**
    * Format time to a readable string.

@@ -9,7 +9,7 @@ import { ProductElem } from "./ProductElem";
 import { MaterialElem } from "./MaterialElem";
 import { MaterialInfo } from "../MaterialInfo";
 
-import { formatBigNumber, formatMaterialSize } from "../../ui/nFormat";
+import { formatBigNumber, formatMaterialSize } from "../../ui/formatNumber";
 
 import { Corporation } from "../Corporation";
 import { Industry } from "../Industry";

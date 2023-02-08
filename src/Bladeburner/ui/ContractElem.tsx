@@ -11,7 +11,7 @@ import { CopyableText } from "../../ui/React/CopyableText";
 import { ActionLevel } from "./ActionLevel";
 import { Autolevel } from "./Autolevel";
 import { StartButton } from "./StartButton";
-import { formatNumber, formatBigNumber } from "../../ui/nFormat";
+import { formatNumberNoSuffix, formatBigNumber } from "../../ui/formatNumber";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 
@@ -43,8 +43,9 @@ export function ContractElem(props: IProps): React.ReactElement {
       {isActive ? (
         <>
           <Typography>
-            <CopyableText value={props.action.name} /> (IN PROGRESS - {formatNumber(computedActionTimeCurrent, 0)} /{" "}
-            {formatNumber(props.bladeburner.actionTimeToComplete, 0)})
+            <CopyableText value={props.action.name} /> (IN PROGRESS -{" "}
+            {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
+            {formatNumberNoSuffix(props.bladeburner.actionTimeToComplete, 0)})
           </Typography>
           <Typography>
             {createProgressBarText({

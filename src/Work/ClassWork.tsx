@@ -2,7 +2,7 @@ import React from "react";
 import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { CONSTANTS } from "../Constants";
 import { LocationName } from "../Enums";
-import { formatExp } from "../ui/nFormat";
+import { formatExp } from "../ui/formatNumber";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Money } from "../ui/React/Money";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";

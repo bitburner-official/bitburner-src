@@ -45,14 +45,15 @@ import { WorkerScript } from "./Netscript/WorkerScript";
 import { helpers, assertObjectType } from "./Netscript/NetscriptHelpers";
 import {
   formatExp,
-  formatNumber,
+  formatNumberNoSuffix,
   formatMoney,
   formatPercent,
   formatRam,
   formatSecurity,
   formatThreads,
-  nFormat,
-} from "./ui/nFormat";
+  formatNumber,
+  FormatNumberStrictOptions,
+} from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { LogBoxEvents, LogBoxCloserEvents, LogBoxPositionEvents, LogBoxSizeEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/arrayToString";
@@ -70,7 +71,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums, NFormatOptions } from "@nsdefs";
+import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums, FormatNumberOptions } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
@@ -89,6 +90,7 @@ import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers
 import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassType } from "./Enums";
 import { cloneDeep } from "lodash";
 import { FactionWorkType } from "./Enums";
+import numeral from "numeral";
 
 export const enums: NSEnums = {
   CityName,
@@ -1134,7 +1136,7 @@ export const ns: InternalAPI<NSFull> = {
     if (helpers.failOnHacknetServer(ctx, server)) {
       return 1;
     }
-    helpers.log(ctx, () => `returned ${formatNumber(server.requiredHackingSkill, 0)} for '${server.hostname}'`);
+    helpers.log(ctx, () => `returned ${formatNumberNoSuffix(server.requiredHackingSkill, 0)} for '${server.hostname}'`);
     return server.requiredHackingSkill;
   },
   getServerMaxMoney: (ctx) => (_hostname) => {
@@ -1681,22 +1683,29 @@ export const ns: InternalAPI<NSFull> = {
       }
       return runningScript.onlineExpGained / runningScript.onlineRunningTime;
     },
-  nFormat: (ctx) => (_n, format) => {
-    // Reassigns format to an empty object if undefined or null. Prevents error on null and allows typecheck.
-    format ??= {};
+  formatNumber: (ctx) => (_n, _format) => {
+    _format ??= {};
     const n = helpers.number(ctx, "n", _n);
-    if (typeof format !== "object") {
+    if (typeof _format !== "object") {
       throw helpers.makeRuntimeErrorMsg(
         ctx,
-        "Incorrect usage of nFormat. The formatOptions for nFormat is no longer a string.\n" +
-          "Please review the latest documentation and adjust usage accordingly.\n" +
-          "https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.nformat.md" +
-          "https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.nformatoptions.md" +
-          "Sorry for the inconvenience!",
+        `Incorrect usage of nFormat. formatOptions is an object, but type ${typeof _format} was provided\n` +
+          "Please review documentation:\n" +
+          "https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.formatnumber.md" +
+          "https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.formatnumberoptions.md",
       );
     }
-    // Because there are no required properties on NFormatOptions, any object can be treated as this type
-    return nFormat(n, format as NFormatOptions);
+    // New variable is just for type assertion. No required properties on an NFormatOptions so this is semi-safe.
+    // TODO: typechecking function for checking types of optional properties if present
+    const format = _format as FormatNumberOptions;
+    if (format.specialFlag === "ram") return formatRam(n, format.fractionalDigits);
+    return formatNumber(n, format as FormatNumberStrictOptions);
+  },
+  // Todo: Remove function in 2.3. Until then it just directly wraps numeral.
+  nFormat: (ctx) => (_n, _format) => {
+    const n = helpers.number(ctx, "n", _n);
+    const format = helpers.string(ctx, "format", _format);
+    return numeral(n).format(format);
   },
   tFormat: (ctx) => (_milliseconds, _milliPrecision) => {
     const milliseconds = helpers.number(ctx, "milliseconds", _milliseconds);

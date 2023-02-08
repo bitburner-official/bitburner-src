@@ -518,6 +518,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   getTotalScriptExpGain: RamCostConstants.GetScript,
   getScriptExpGain: RamCostConstants.GetScript,
   getRunningScript: RamCostConstants.GetRunningScript,
+  formatNumber: 0,
   nFormat: 0,
   tFormat: 0,
   getTimeSinceLastAug: RamCostConstants.GetHackTime,

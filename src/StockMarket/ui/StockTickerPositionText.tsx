@@ -7,7 +7,7 @@ import * as React from "react";
 import { Stock } from "../Stock";
 
 import { Player } from "@player";
-import { formatPercent, formatShares } from "../../ui/nFormat";
+import { formatPercent, formatShares } from "../../ui/formatNumber";
 import { Money } from "../../ui/React/Money";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";

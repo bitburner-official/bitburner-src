@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { formatMoney, formatShares } from "../../../ui/nFormat";
+import { formatMoney, formatShares } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";

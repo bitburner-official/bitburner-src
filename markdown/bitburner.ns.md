@@ -76,6 +76,7 @@ export async function main(ns) {
 |  [exit()](./bitburner.ns.exit.md) | Terminates the current script immediately. |
 |  [fileExists(filename, host)](./bitburner.ns.fileexists.md) | Check if a file exists. |
 |  [flags(schema)](./bitburner.ns.flags.md) | Parse command line flags. |
+|  [formatNumber(n, formatOptions)](./bitburner.ns.formatnumber.md) | Format a number. |
 |  [ftpcrack(host)](./bitburner.ns.ftpcrack.md) | Runs FTPCrack.exe on a server. |
 |  [getBitNodeMultipliers(n, lvl)](./bitburner.ns.getbitnodemultipliers.md) | Get the current Bitnode multipliers. |
 |  [getFavorToDonate()](./bitburner.ns.getfavortodonate.md) | Returns the amount of Faction favor required to be able to donate to a faction. |
@@ -135,7 +136,7 @@ export async function main(ns) {
 |  [ls(host, grep)](./bitburner.ns.ls.md) | List files on a server. |
 |  [moveTail(x, y, pid)](./bitburner.ns.movetail.md) | Move a tail window. |
 |  [mv(host, source, destination)](./bitburner.ns.mv.md) | Move a file on the target server. |
-|  [nFormat(n, formatOptions)](./bitburner.ns.nformat.md) | Format a number. |
+|  [nFormat(n, format)](./bitburner.ns.nformat.md) | Format a number using the numeral library. This function is deprecated and will be removed in 2.3. |
 |  [nuke(host)](./bitburner.ns.nuke.md) | Runs NUKE.exe on a server. |
 |  [peek(port)](./bitburner.ns.peek.md) | Get a copy of the data from a port without popping it. |
 |  [print(args)](./bitburner.ns.print.md) | Prints one or more values or variables to the script’s logs. |

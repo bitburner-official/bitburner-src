@@ -2,7 +2,7 @@ import React from "react";
 
 import { Typography, TableCell, TableRow } from "@mui/material";
 
-import { formatExp, formatNumber } from "../nFormat";
+import { formatExp, formatNumberNoSuffix } from "../formatNumber";
 import { characterOverviewStyles as useStyles } from "./CharacterOverview";
 import { ClassNameMap } from "@material-ui/core/styles/withStyles";
 
@@ -27,9 +27,9 @@ export const StatsRow = ({ name, color, classes = useStyles(), children, data }:
     if (data.content !== undefined) {
       content = data.content;
     } else if (data.level !== undefined && data.exp !== undefined) {
-      content = `${formatNumber(data.level, 0)} (${formatExp(data.exp)} exp)`;
+      content = `${formatNumberNoSuffix(data.level, 0)} (${formatExp(data.exp)} exp)`;
     } else if (data.level !== undefined && data.exp === undefined) {
-      content = `${formatNumber(data.level, 0)}`;
+      content = `${formatNumberNoSuffix(data.level, 0)}`;
     }
   }
 

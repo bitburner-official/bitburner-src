@@ -3,7 +3,7 @@ import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { MaterialInfo } from "../../MaterialInfo";
 import { Warehouse } from "../../Warehouse";
 import { Material } from "../../Material";
-import { formatMatPurchaseAmount, formatMoney } from "../../../ui/nFormat";
+import { formatMatPurchaseAmount, formatMoney } from "../../../ui/formatNumber";
 import { BulkPurchase, BuyMaterial } from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation, useDivision } from "../Context";

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { formatHashes } from "../nFormat";
+import { formatHashes } from "../formatNumber";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";

@@ -29,7 +29,7 @@ import TableBody from "@mui/material/TableBody";
 import Table from "@mui/material/Table";
 import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
-import { formatRam } from "../../ui/nFormat";
+import { formatRam } from "../../ui/formatNumber";
 import { calculateMoneyGainRate } from "../formulas/HacknetNodes";
 
 interface IProps {

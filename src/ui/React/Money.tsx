@@ -1,5 +1,5 @@
 import * as React from "react";
-import { formatMoney } from "../nFormat";
+import { formatMoney } from "../formatNumber";
 import { Player } from "@player";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";

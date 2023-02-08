@@ -11,7 +11,7 @@ import { Stock } from "./Stock";
 import { OrderTypes } from "./data/OrderTypes";
 import { PositionTypes } from "./data/PositionTypes";
 
-import { formatShares } from "../ui/nFormat";
+import { formatShares } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";

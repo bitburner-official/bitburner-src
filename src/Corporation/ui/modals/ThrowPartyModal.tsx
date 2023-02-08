@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { formatMultiplier, formatPercent } from "../../../ui/nFormat";
+import { formatMultiplier, formatPercent } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { OfficeSpace } from "../../OfficeSpace";
 import { ThrowParty } from "../../Actions";

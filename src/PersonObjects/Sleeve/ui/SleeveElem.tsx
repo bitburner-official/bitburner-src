@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FactionWorkType } from "../../../Enums";
 import { CONSTANTS } from "../../../Constants";
 import { Player } from "@player";
-import { formatPercent } from "../../../ui/nFormat";
+import { formatPercent } from "../../../ui/formatNumber";
 import { ProgressBar } from "../../../ui/React/Progress";
 import { Sleeve } from "../Sleeve";
 import { MoreStatsModal } from "./MoreStatsModal";

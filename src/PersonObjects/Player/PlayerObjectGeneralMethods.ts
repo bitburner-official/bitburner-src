@@ -34,7 +34,7 @@ import { SourceFiles } from "../../SourceFile/SourceFiles";
 import { getHospitalizationCost } from "../../Hospital/Hospital";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 
-import { formatMoney } from "../../ui/nFormat";
+import { formatMoney } from "../../ui/formatNumber";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 

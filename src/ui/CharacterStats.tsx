@@ -10,7 +10,7 @@ import { Settings } from "../Settings/Settings";
 import { MoneySourceTracker } from "../utils/MoneySourceTracker";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { Player } from "@player";
-import { formatPercent } from "./nFormat";
+import { formatPercent } from "./formatNumber";
 import { Modal } from "./React/Modal";
 import { Money } from "./React/Money";
 import { StatsRow } from "./React/StatsRow";

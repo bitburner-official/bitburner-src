@@ -4,7 +4,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import { Theme, useTheme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
-import { formatHp, formatMoney, formatSkill } from "../nFormat";
+import { formatHp, formatMoney, formatSkill } from "../formatNumber";
 import { Reputation } from "./Reputation";
 import { KillScriptsModal } from "./KillScriptsModal";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";

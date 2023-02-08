@@ -8,7 +8,7 @@ import { Player } from "@player";
 import { purchaseRamForHomeComputer } from "../../Server/ServerPurchases";
 
 import { Money } from "../../ui/React/Money";
-import { formatRam } from "../../ui/nFormat";
+import { formatRam } from "../../ui/formatNumber";
 
 import { MathJax } from "better-react-mathjax";
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";

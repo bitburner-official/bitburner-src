@@ -16,7 +16,7 @@ import { CorporationUnlockUpgrade, CorporationUnlockUpgrades } from "../data/Cor
 import { CorporationUpgrade, CorporationUpgradeIndex, CorporationUpgrades } from "../data/CorporationUpgrades";
 
 import { CONSTANTS } from "../../Constants";
-import { formatCorpStat, formatPercent, formatShares } from "../../ui/nFormat";
+import { formatCorpStat, formatPercent, formatShares } from "../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { Money } from "../../ui/React/Money";
 import { MoneyRate } from "../../ui/React/MoneyRate";

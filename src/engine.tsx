@@ -26,7 +26,7 @@ import { Player } from "@player";
 import { saveObject, loadGame } from "./SaveObject";
 import { initForeignServers } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
-import { FormatsNeedToChange } from "./ui/nFormat";
+import { FormatsNeedToChange } from "./ui/formatNumber";
 import { initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
 import { Terminal } from "./Terminal";
 

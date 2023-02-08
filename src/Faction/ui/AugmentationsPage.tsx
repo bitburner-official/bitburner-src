@@ -8,7 +8,7 @@ import { PurchasableAugmentations } from "../../Augmentation/ui/PurchasableAugme
 import { PurchaseAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
-import { formatBigNumber } from "../../ui/nFormat";
+import { formatBigNumber } from "../../ui/formatNumber";
 import { Favor } from "../../ui/React/Favor";
 import { Reputation } from "../../ui/React/Reputation";
 import { FactionNames } from "../data/FactionNames";

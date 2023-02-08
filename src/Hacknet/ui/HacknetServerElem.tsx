@@ -31,7 +31,7 @@ import { TableCell } from "../../ui/React/Table";
 import TableBody from "@mui/material/TableBody";
 import Table from "@mui/material/Table";
 import TableRow from "@mui/material/TableRow";
-import { formatRam } from "../../ui/nFormat";
+import { formatRam } from "../../ui/formatNumber";
 import { calculateHashGainRate } from "../formulas/HacknetServers";
 import Tooltip from "@mui/material/Tooltip";
 

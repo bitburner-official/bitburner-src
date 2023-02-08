@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Factions } from "../../../Faction/Factions";
 import * as corpConstants from "../../data/Constants";
-import { formatReputation } from "../../../ui/nFormat";
+import { formatReputation } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { Player } from "@player";

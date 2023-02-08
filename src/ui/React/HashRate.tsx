@@ -1,5 +1,5 @@
 import React from "react";
-import { formatHashes } from "../nFormat";
+import { formatHashes } from "../formatNumber";
 import { Hashes } from "./Hashes";
 
 export function HashRate({ hashes }: { hashes: number }): React.ReactElement {

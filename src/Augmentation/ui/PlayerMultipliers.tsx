@@ -5,7 +5,7 @@ import { Multipliers, defaultMultipliers, mergeMultipliers } from "../../PersonO
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { formatPercent } from "../../ui/nFormat";
+import { formatPercent } from "../../ui/formatNumber";
 import { StaticAugmentations } from "../StaticAugmentations";
 
 function calculateAugmentedStats(): Multipliers {

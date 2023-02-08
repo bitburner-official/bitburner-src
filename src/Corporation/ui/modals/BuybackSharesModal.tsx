@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal } from "../../../ui/React/Modal";
-import { formatBigNumber, formatMoney } from "../../../ui/nFormat";
+import { formatBigNumber, formatMoney } from "../../../ui/formatNumber";
 import { Player } from "@player";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";

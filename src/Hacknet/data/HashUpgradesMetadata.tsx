@@ -1,7 +1,7 @@
 // Metadata used to construct all Hash Upgrades
 import React from "react";
 import { IConstructorParams } from "../HashUpgrade";
-import { formatInt } from "../../ui/nFormat";
+import { formatInt } from "../../ui/formatNumber";
 import { Money } from "../../ui/React/Money";
 
 export const HashUpgradesMetadata: IConstructorParams[] = [

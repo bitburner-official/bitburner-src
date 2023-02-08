@@ -4,7 +4,7 @@
  */
 import * as React from "react";
 
-import { formatExp, formatThreads } from "../nFormat";
+import { formatExp, formatThreads } from "../formatNumber";
 
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";

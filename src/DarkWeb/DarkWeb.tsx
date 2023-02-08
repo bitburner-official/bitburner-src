@@ -4,7 +4,7 @@ import { DarkWebItems } from "./DarkWebItems";
 import { Player } from "@player";
 import { Terminal } from "../Terminal";
 import { SpecialServers } from "../Server/data/SpecialServers";
-import { formatMoney } from "../ui/nFormat";
+import { formatMoney } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
 import { DarkWebItem } from "./DarkWebItem";
 import { isCreateProgramWork } from "../Work/CreateProgramWork";

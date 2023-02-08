@@ -1,6 +1,6 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { formatPercent, formatRam } from "../../ui/nFormat";
+import { formatPercent, formatRam } from "../../ui/formatNumber";
 
 export function free(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 0) {

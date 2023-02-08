@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { RecruitModal } from "./RecruitModal";
 import { GangConstants } from "../data/Constants";
-import { formatRespect } from "../../ui/nFormat";
+import { formatRespect } from "../../ui/formatNumber";
 import { useGang } from "./Context";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";

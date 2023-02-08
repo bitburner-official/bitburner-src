@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
-import { formatMoney, formatShares } from "../../../ui/nFormat";
+import { formatMoney, formatShares } from "../../../ui/formatNumber";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";

@@ -1,6 +1,6 @@
 import { TextField, StandardTextFieldProps } from "@mui/material";
 import React from "react";
-import { parseBigNumber } from "../nFormat";
+import { parseBigNumber } from "../formatNumber";
 
 interface IProps extends Omit<StandardTextFieldProps, "onChange"> {
   onChange: (v: number) => void;

@@ -2,7 +2,7 @@ import React from "react";
 import { ActiveFragment } from "../ActiveFragment";
 import { StaneksGift } from "../StaneksGift";
 import { FragmentType, Effect } from "../FragmentType";
-import { formatPercent } from "../../ui/nFormat";
+import { formatPercent } from "../../ui/formatNumber";
 
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";

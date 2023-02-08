@@ -1,6 +1,6 @@
 import React from "react";
 import { CopyableText } from "../../ui/React/CopyableText";
-import { formatBigNumber } from "../../ui/nFormat";
+import { formatBigNumber } from "../../ui/formatNumber";
 import { Bladeburner } from "../Bladeburner";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";

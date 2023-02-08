@@ -14,7 +14,7 @@ import { PositionTypes } from "./data/PositionTypes";
 import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
 
-import { formatMoney, formatShares } from "../ui/nFormat";
+import { formatMoney, formatShares } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";

@@ -1,7 +1,7 @@
 import React from "react";
 import { GetServer, GetAllServers } from "../Server/AllServers";
 import { Modal } from "../ui/React/Modal";
-import { formatBigNumber } from "../ui/nFormat";
+import { formatBigNumber } from "../ui/formatNumber";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";

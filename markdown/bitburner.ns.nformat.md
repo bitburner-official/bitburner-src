@@ -4,12 +4,12 @@
 
 ## NS.nFormat() method
 
-Format a number.
+Format a number using the numeral library. This function is deprecated and will be removed in 2.3.
 
 **Signature:**
 
 ```typescript
-nFormat(n: number, formatOptions: NFormatOptions): string;
+nFormat(n: number, format: string): string;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ nFormat(n: number, formatOptions: NFormatOptions): string;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  n | number | Number to format. |
-|  formatOptions | [NFormatOptions](./bitburner.nformatoptions.md) | Formatting options. |
+|  format | string | Formatting options. See http://numeraljs.com/\#format for valid formats. |
 
 **Returns:**
 
@@ -29,5 +29,7 @@ Formatted number.
 
 RAM cost: 0 GB
 
-Converts a number into a string with the specified format options. This is the same function that the game itself uses to display numbers. The formatted number is based on the provided formatOptions, and on the Numeric Display settings (all options in Options-<!-- -->&gt;<!-- -->Numeric Display)
+Converts a number into a string with the specified format options. See http://numeraljs.com/\#format for documentation on format strings supported.
+
+This function is deprecated and will be removed in 2.3.
 

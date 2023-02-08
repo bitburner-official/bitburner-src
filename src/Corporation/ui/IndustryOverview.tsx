@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 import { IndustryType } from "../data/Enums";
 import { HireAdVert } from "../Actions";
-import { formatBigNumber } from "../../ui/nFormat";
+import { formatBigNumber } from "../../ui/formatNumber";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { MakeProductModal } from "./modals/MakeProductModal";
 import { ResearchModal } from "./modals/ResearchModal";

@@ -23,7 +23,7 @@ import { CityName, CrimeType, GymType, LocationName, UniversityClassType } from 
 import { Factions } from "../../Faction/Factions";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../utils/JSONReviver";
-import { formatPercent } from "../../ui/nFormat";
+import { formatPercent } from "../../ui/formatNumber";
 import { FactionWorkType } from "../../Enums";
 import { Work } from "./Work/Work";
 import { SleeveClassWork } from "./Work/SleeveClassWork";
