@@ -767,7 +767,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const corporation = getCorporation();
       const upgrade = Object.values(CorporationUpgrades).find((upgrade) => upgrade.name === upgradeName);
       if (upgrade === undefined) throw new Error(`No upgrade named '${upgradeName}'`);
-      LevelUpgrade(corporation, upgrade);
+      LevelUpgrade(corporation, upgrade, 1);
     },
     issueDividends: (ctx) => (_rate) => {
       checkAccess(ctx);

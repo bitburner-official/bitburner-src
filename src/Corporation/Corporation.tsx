@@ -14,6 +14,7 @@ import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../uti
 import { isString } from "../utils/helpers/isString";
 import { CityName } from "../Enums";
 import { CorpStateName } from "@nsdefs";
+import { calculateUpgradeCost } from "./helpers";
 
 interface IParams {
   name?: string;
@@ -305,7 +306,8 @@ export class Corporation {
   }
 
   //Levelable upgrades
-  upgrade(upgrade: CorporationUpgrade): void {
+  upgrade(upgrade: CorporationUpgrade, amount: number): void {
+    if (amount <1)amount=1;
     const upgN = upgrade.index,
       basePrice = upgrade.basePrice,
       priceMult = upgrade.priceMult,
@@ -316,12 +318,12 @@ export class Corporation {
     while (this.upgradeMultipliers.length <= upgN) {
       this.upgradeMultipliers.push(1);
     }
-    const totalCost = basePrice * Math.pow(priceMult, this.upgrades[upgN]);
+    const totalCost = calculateUpgradeCost(this,upgrade,amount);
     if (this.funds < totalCost) {
       dialogBoxCreate("You don't have enough funds to purchase this!");
       return;
     }
-    ++this.upgrades[upgN];
+    this.upgrades[upgN] += amount;
     this.funds = this.funds - totalCost;
 
     //Increase upgrade multiplier

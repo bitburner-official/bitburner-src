@@ -11,9 +11,11 @@ import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import { calculateMaxAffordableUpgrade, calculateUpgradeCost } from "../helpers";
 
 interface IProps {
   upgrade: CorporationUpgrade;
+  amount: number|"MAX";
   rerender: () => void;
 }
 
@@ -21,16 +23,16 @@ export function LevelableUpgrade(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const data = props.upgrade;
   const level = corp.upgrades[data.index];
+  const amount = props.amount;
 
-  const baseCost = data.basePrice;
-  const priceMult = data.priceMult;
-  const cost = baseCost * Math.pow(priceMult, level);
-
-  const tooltip = data.desc;
+  const maxUpgrades=calculateMaxAffordableUpgrade(corp,data,amount);
+  const cost = calculateUpgradeCost(corp, data, maxUpgrades);
+  //const cost = maxUpgrades
+  const tooltip =  data.desc;
   function onClick(): void {
     if (corp.funds < cost) return;
     try {
-      LevelUpgrade(corp, props.upgrade);
+      LevelUpgrade(corp, props.upgrade, maxUpgrades);
     } catch (err) {
       dialogBoxCreate(err + "");
     }

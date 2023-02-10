@@ -121,3 +121,20 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   valuationLength = 5,
   /** Minimum decay value for employee morale/happiness/energy */
   minEmployeeDecay = 10;
+
+export const PurchaseMultipliers: {
+  [key: string]: number | "MAX" | undefined;
+  x1: number;
+  x5: number;
+  x10: number;
+  x50: number;
+  x100: number;
+  MAX: "MAX";
+} = {
+  x1: 1,
+  x5: 5,
+  x10: 10,
+  x50: 50,
+  x100: 100,
+  MAX: "MAX",
+}; 
