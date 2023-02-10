@@ -114,12 +114,11 @@ const FactionElement = (props: IFactionProps): React.ReactElement => {
               alignItems: "center",
             }}
           >
-            <span
-              style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}
-              title={props.faction.name}
-            >
-              {props.faction.name}
-            </span>
+            <Tooltip title={props.faction.name}>
+              <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
+                {props.faction.name}
+              </span>
+            </Tooltip>
 
             <span style={{ display: "flex", alignItems: "center" }}>
               {Player.hasGangWith(props.faction.name) && (
@@ -156,12 +155,10 @@ const FactionElement = (props: IFactionProps): React.ReactElement => {
 
           <span style={{ display: "flex", alignItems: "center" }}>
             {!Player.hasGangWith(props.faction.name) && <WorkTypesOffered faction={props.faction} />}
-
-            {props.joined && (
-              <Typography variant="body2" sx={{ display: "flex" }}>
-                {getAugsLeft(props.faction)} Augmentations left
-              </Typography>
-            )}
+            <Typography variant="body2" sx={{ display: "flex" }}>
+              {getAugsLeft(props.faction) > 0 && getAugsLeft(props.faction) + " Augmentations left"}
+              {getAugsLeft(props.faction) <= 0 && "No Augmentations left"}
+            </Typography>
           </span>
         </span>
       </Box>
