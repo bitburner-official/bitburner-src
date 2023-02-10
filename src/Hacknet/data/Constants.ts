@@ -21,11 +21,13 @@ export const PurchaseMultipliers: {
   x1: number;
   x5: number;
   x10: number;
+  x100: number;
   MAX: "MAX";
 } = {
   x1: 1,
   x5: 5,
   x10: 10,
+  x100: 100,
   MAX: "MAX",
 };
 

@@ -69,6 +69,7 @@ export function HacknetRoot(): React.ReactElement {
     () => setPurchaseMultiplier(PurchaseMultipliers.x1),
     () => setPurchaseMultiplier(PurchaseMultipliers.x5),
     () => setPurchaseMultiplier(PurchaseMultipliers.x10),
+    () => setPurchaseMultiplier(PurchaseMultipliers.x100),
     () => setPurchaseMultiplier(PurchaseMultipliers.MAX),
   ];
 

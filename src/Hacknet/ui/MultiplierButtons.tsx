@@ -32,7 +32,7 @@ export function MultiplierButtons(props: IProps): React.ReactElement {
     throw new Error(`MultiplierButtons constructed without required props`);
   }
 
-  const mults = ["x1", "x5", "x10", "MAX"];
+  const mults = ["x1", "x5", "x10", "x100", "MAX"];
   const onClicks = props.onClicks;
   const buttons = [];
   for (let i = 0; i < mults.length; ++i) {
