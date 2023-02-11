@@ -2,7 +2,7 @@ import { Box, Container, Paper, Table, TableBody, Tooltip } from "@mui/material"
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { uniqueId } from "lodash";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Companies } from "../Company/Companies";
 import { CONSTANTS } from "../Constants";
 import { LocationName } from "../Enums";
@@ -27,6 +27,7 @@ import { isGraftingWork } from "../Work/GraftingWork";
 import { isFactionWork } from "../Work/FactionWork";
 import { FactionWorkType } from "../Enums";
 import { isCompanyWork } from "../Work/CompanyWork";
+import { useRerender } from "./React/hooks";
 
 const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
 
@@ -193,15 +194,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
 }
 
 export function WorkInProgressRoot(): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
-
-  useEffect(() => {
-    const id = setInterval(rerender, CONSTANTS.MilliPerCycle);
-    return () => clearInterval(id);
-  }, []);
+  useRerender(CONSTANTS.MilliPerCycle);
 
   let workInfo: IWorkInfo = {
     buttons: {

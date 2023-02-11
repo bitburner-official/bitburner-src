@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { GeneralInfo } from "./GeneralInfo";
 import { HacknetNodeElem } from "./HacknetNodeElem";
@@ -25,20 +25,13 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
+import { useRerender } from "../../ui/React/hooks";
 
 /** Root React Component for the Hacknet Node UI */
 export function HacknetRoot(): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender(200);
   const [purchaseMultiplier, setPurchaseMultiplier] = useState<number | "MAX">(PurchaseMultipliers.x1);
-
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
 
   let totalProduction = 0;
   for (let i = 0; i < Player.hacknetNodes.length; ++i) {

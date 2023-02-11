@@ -3,7 +3,7 @@
  *
  * This subcomponent renders all of the buttons for purchasing things from tech vendors
  */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
@@ -19,13 +19,9 @@ import { Player } from "@player";
 import { PurchaseServerModal } from "./PurchaseServerModal";
 import { formatRam } from "../../ui/formatNumber";
 import { Box } from "@mui/material";
+import { useRerender } from "../../ui/React/hooks";
 
-interface IServerProps {
-  ram: number;
-  rerender: () => void;
-}
-
-function ServerButton(props: IServerProps): React.ReactElement {
+function ServerButton(props: { ram: number }): React.ReactElement {
   const [open, setOpen] = useState(false);
   const cost = getPurchaseServerCost(props.ram);
   return (
@@ -34,35 +30,17 @@ function ServerButton(props: IServerProps): React.ReactElement {
         Purchase {formatRam(props.ram)} Server&nbsp;-&nbsp;
         <Money money={cost} forPurchase={true} />
       </Button>
-      <PurchaseServerModal
-        open={open}
-        onClose={() => setOpen(false)}
-        ram={props.ram}
-        cost={cost}
-        rerender={props.rerender}
-      />
+      <PurchaseServerModal open={open} onClose={() => setOpen(false)} ram={props.ram} cost={cost} />
     </>
   );
 }
 
-type IProps = {
-  loc: Location;
-};
-
-export function TechVendorLocation(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
-
-  useEffect(() => {
-    const id = setInterval(rerender, 1000);
-    return () => clearInterval(id);
-  }, []);
+export function TechVendorLocation(props: { loc: Location }): React.ReactElement {
+  const rerender = useRerender(1000);
 
   const purchaseServerButtons: React.ReactNode[] = [];
   for (let i = props.loc.techVendorMinRam; i <= props.loc.techVendorMaxRam; i *= 2) {
-    purchaseServerButtons.push(<ServerButton key={i} ram={i} rerender={rerender} />);
+    purchaseServerButtons.push(<ServerButton key={i} ram={i} />);
   }
 
   return (

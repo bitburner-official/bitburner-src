@@ -45,6 +45,7 @@ import { Modal } from "../../ui/React/Modal";
 
 import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
 import { TextField, Tooltip } from "@mui/material";
+import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
   // Map of filename -> code
@@ -106,10 +107,7 @@ let currentScript: OpenScript | null = null;
 
 // Called every time script editor is opened
 export function Root(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((o) => !o);
-  }
+  const rerender = useRerender();
   const editorRef = useRef<IStandaloneCodeEditor | null>(null);
   const monacoRef = useRef<Monaco | null>(null);
   const vimStatusRef = useRef<HTMLElement>(null);

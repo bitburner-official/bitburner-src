@@ -10,13 +10,14 @@ import { StockTickersConfig, TickerDisplayMode } from "./StockTickersConfig";
 
 import { IStockMarket } from "../IStockMarket";
 import { Stock } from "../Stock";
+import { useRerender } from "../../ui/React/hooks";
 
 type IProps = {
   stockMarket: IStockMarket;
 };
 
 export function StockTickers(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
+  const rerender = useRerender();
   const [tickerDisplayMode, setTickerDisplayMode] = useState(TickerDisplayMode.AllStocks);
   const [watchlistSymbols, setWatchlistSymbols] = useState<string[]>([]);
 
@@ -37,10 +38,6 @@ export function StockTickers(props: IProps): React.ReactElement {
     } else {
       setWatchlistSymbols([]);
     }
-  }
-
-  function rerender(): void {
-    setRerender((old) => !old);
   }
 
   const tickers: React.ReactElement[] = [];

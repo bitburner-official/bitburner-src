@@ -4,6 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import _ from "lodash";
 import { Color, ColorPicker } from "material-ui-color";
 import React, { useState } from "react";
+import { useRerender } from "../../ui/React/hooks";
 import { Settings } from "../../Settings/Settings";
 import { Modal } from "../../ui/React/Modal";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
@@ -65,10 +66,7 @@ function ColorEditor({ label, themePath, onColorChange, color, defaultColor }: I
 }
 
 export function ThemeEditorModal(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((o) => !o);
-  }
+  const rerender = useRerender();
 
   // Need to deep copy the object since it has nested attributes
   const [themeCopy, setThemeCopy] = useState<IScriptEditorTheme>(JSON.parse(JSON.stringify(Settings.EditorTheme)));

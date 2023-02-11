@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Stats } from "./Stats";
 import { Console } from "./Console";
 import { AllPages } from "./AllPages";
 
 import { Player } from "@player";
 import Box from "@mui/material/Box";
+import { useRerender } from "../../ui/React/hooks";
 
 export function BladeburnerRoot(): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
-
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
-
+  useRerender(200);
   const bladeburner = Player.bladeburner;
   if (!bladeburner) return <></>;
   return (

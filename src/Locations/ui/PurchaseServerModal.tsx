@@ -14,7 +14,6 @@ interface IProps {
   onClose: () => void;
   ram: number;
   cost: number;
-  rerender: () => void;
 }
 
 /** React Component for the popup used to purchase a new server. */

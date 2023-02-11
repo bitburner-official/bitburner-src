@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { ActionTypes } from "../data/ActionTypes";
@@ -14,6 +14,7 @@ import { StartButton } from "./StartButton";
 
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
+import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
   bladeburner: Bladeburner;
@@ -21,10 +22,7 @@ interface IProps {
 }
 
 export function BlackOpElem(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender();
   const isCompleted = props.bladeburner.blackops[props.action.name] != null;
   if (isCompleted) {
     return (

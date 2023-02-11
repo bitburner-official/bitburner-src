@@ -3,7 +3,7 @@
  *
  * This subcomponent renders all of the buttons for applying to jobs at a company
  */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
@@ -25,6 +25,7 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 import { QuitJobModal } from "../../Company/ui/QuitJobModal";
 import { CompanyWork } from "../../Work/CompanyWork";
+import { useRerender } from "../../ui/React/hooks";
 
 type IProps = {
   locName: LocationName;
@@ -32,15 +33,8 @@ type IProps = {
 
 export function CompanyLocation(props: IProps): React.ReactElement {
   const [quitOpen, setQuitOpen] = useState(false);
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender(200);
 
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
   /**
    * We'll keep a reference to the Company that this component is being rendered for,
    * so we don't have to look it up every time

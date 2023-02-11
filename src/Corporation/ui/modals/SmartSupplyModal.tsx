@@ -10,6 +10,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { CorpMaterialName } from "@nsdefs";
 import { materialNames } from "../../data/Constants";
+import { useRerender } from "../../../ui/React/hooks";
 
 interface ILeftoverProps {
   matName: CorpMaterialName;
@@ -49,10 +50,7 @@ interface IProps {
 
 export function SmartSupplyModal(props: IProps): React.ReactElement {
   const division = useDivision();
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender();
 
   // Smart Supply Checkbox
   function smartSupplyOnChange(e: React.ChangeEvent<HTMLInputElement>): void {

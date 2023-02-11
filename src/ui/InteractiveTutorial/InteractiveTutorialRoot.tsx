@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -27,6 +27,7 @@ import {
   iTutorialSteps,
   iTutorialEnd,
 } from "../../InteractiveTutorial";
+import { useRerender } from "../React/hooks";
 
 interface IContent {
   content: React.ReactElement;
@@ -47,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function InteractiveTutorialRoot(): React.ReactElement {
   const classes = useStyles();
+  const rerender = useRerender();
 
   const tutorialScriptName = `n00dles.js`;
 
@@ -555,11 +557,6 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       canNext: true,
     },
   };
-
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
 
   useEffect(() => {
     return ITutorialEvents.subscribe(rerender);

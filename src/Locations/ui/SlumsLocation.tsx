@@ -3,7 +3,7 @@
  *
  * This subcomponent renders all of the buttons for committing crimes
  */
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -15,15 +15,11 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 import { Box } from "@mui/material";
 import { Crime } from "../../Crime/Crime";
+import { useRerender } from "../../ui/React/hooks";
 
 export function SlumsLocation(): React.ReactElement {
-  const setRerender = useState(false)[1];
-  const rerender = () => setRerender((o) => !o);
+  useRerender(1000);
   const crimes = Object.values(Crimes);
-  useEffect(() => {
-    const timerId = setInterval(() => rerender(), 1000);
-    return () => clearInterval(timerId);
-  });
 
   function doCrime(e: React.MouseEvent<HTMLElement>, crime: Crime) {
     if (!e.isTrusted) return;

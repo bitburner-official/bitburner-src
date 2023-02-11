@@ -54,6 +54,7 @@ import { ProgramsSeen } from "../../Programs/ui/ProgramsRoot";
 import { InvitationsSeen } from "../../Faction/ui/FactionsRoot";
 import { hash } from "../../hash/hash";
 import { Locations } from "../../Locations/Locations";
+import { useRerender } from "../../ui/React/hooks";
 
 const RotatedDoubleArrowIcon = React.forwardRef((props: { color: "primary" | "secondary" | "error" }, __ref) => (
   <DoubleArrowIcon color={props.color} style={{ transform: "rotate(-90deg)" }} />
@@ -108,15 +109,7 @@ interface IProps {
 }
 
 export function SidebarRoot(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
-
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
+  useRerender(200);
 
   let flash: Page | null = null;
   switch (ITutorial.currStep) {

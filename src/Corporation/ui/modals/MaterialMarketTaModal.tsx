@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Tooltip from "@mui/material/Tooltip";
+import { useRerender } from "../../../ui/React/hooks";
 
 interface IMarketTA2Props {
   mat: Material;
@@ -17,10 +18,7 @@ function MarketTA2(props: IMarketTA2Props): React.ReactElement {
   const division = useDivision();
   if (!division.hasResearch("Market-TA.II")) return <></>;
   const [newCost, setNewCost] = useState<number>(props.mat.bCost);
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender();
   const markupLimit = props.mat.getMarkupLimit();
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
