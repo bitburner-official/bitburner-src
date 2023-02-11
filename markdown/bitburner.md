@@ -41,7 +41,6 @@
 |  [Division](./bitburner.division.md) | Corporation division |
 |  [EquipmentStats](./bitburner.equipmentstats.md) | Object representing data representing a gang member equipment. |
 |  [Export](./bitburner.export.md) | Export order for a material |
-|  [FormatNumberOptions](./bitburner.formatnumberoptions.md) | Options for formatting a number with [formatNumber](./bitburner.ns.formatnumber.md)<!-- -->. |
 |  [Formulas](./bitburner.formulas.md) | Formulas API |
 |  [Fragment](./bitburner.fragment.md) |  |
 |  [GameInfo](./bitburner.gameinfo.md) | Game Information |
@@ -118,7 +117,6 @@
 |  [CorpUnlockName](./bitburner.corpunlockname.md) |  |
 |  [CorpUpgradeName](./bitburner.corpupgradename.md) |  |
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
-|  [FormatNumberSpecialFlag](./bitburner.formatnumberspecialflag.md) | <p>Defines special behavior for [formatNumber](./bitburner.ns.formatnumber.md)<!-- -->. See [FormatNumberOptions](./bitburner.formatnumberoptions.md)<!-- -->.</p><p>"integer": Formats the number as an integer. Ignores fractionalDigits if the number is below the suffixStart. This is how e.g. skills or hp are displayed ingame.</p><p>"percent": Formats the number as a percent. Never collapses to a suffixed form.</p><p>"ram": Formats the number as an amount of ram. Ram is always suffixed.</p> |
 |  [NSEnums](./bitburner.nsenums.md) |  |
 |  [PortData](./bitburner.portdata.md) |  |
 |  [ScriptArg](./bitburner.scriptarg.md) |  |

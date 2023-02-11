@@ -6,10 +6,7 @@ import {
   FormatsNeedToChange,
   formatNumber,
   formatRam,
-  FormatNumberStrictOptions,
 } from "../../../src/ui/formatNumber";
-
-const format: FormatNumberStrictOptions = { fractionalDigits: 6 };
 
 describe("Suffix rounding test", () => {
   test("Rounding Test", () => {
@@ -25,17 +22,17 @@ describe("Numeral formatting for positive numbers", () => {
     // Initial settings
     Settings.hideTrailingDecimalZeros = true;
     FormatsNeedToChange.emit();
-    expect(formatNumber(0.0000000001, format)).toEqual("0");
-    expect(formatNumber(0.000000001, format)).toEqual("0");
-    expect(formatNumber(0.00000001, format)).toEqual("0");
-    expect(formatNumber(0.0000001, format)).toEqual("0");
-    expect(formatNumber(0.000001, format)).toEqual("0.000001");
-    expect(formatNumber(0.00001, format)).toEqual("0.00001");
-    expect(formatNumber(0.0001, format)).toEqual("0.0001");
-    expect(formatNumber(0.001, format)).toEqual("0.001");
-    expect(formatNumber(0.01, format)).toEqual("0.01");
-    expect(formatNumber(0.1, format)).toEqual("0.1");
-    expect(formatNumber(1, format)).toEqual("1");
+    expect(formatNumber(0.0000000001, 6)).toEqual("0");
+    expect(formatNumber(0.000000001, 6)).toEqual("0");
+    expect(formatNumber(0.00000001, 6)).toEqual("0");
+    expect(formatNumber(0.0000001, 6)).toEqual("0");
+    expect(formatNumber(0.000001, 6)).toEqual("0.000001");
+    expect(formatNumber(0.00001, 6)).toEqual("0.00001");
+    expect(formatNumber(0.0001, 6)).toEqual("0.0001");
+    expect(formatNumber(0.001, 6)).toEqual("0.001");
+    expect(formatNumber(0.01, 6)).toEqual("0.01");
+    expect(formatNumber(0.1, 6)).toEqual("0.1");
+    expect(formatNumber(1, 6)).toEqual("1");
     Settings.hideTrailingDecimalZeros = false;
     FormatsNeedToChange.emit();
   });
@@ -82,17 +79,17 @@ describe("Numeral formatting for negative numbers", () => {
     Settings.hideTrailingDecimalZeros = true;
     FormatsNeedToChange.emit();
     // No simple way right now to force 0 instead of -0
-    expect(formatNumber(-0.0000000001, format)).toEqual("-0");
-    expect(formatNumber(-0.000000001, format)).toEqual("-0");
-    expect(formatNumber(-0.00000001, format)).toEqual("-0");
-    expect(formatNumber(-0.0000001, format)).toEqual("-0");
-    expect(formatNumber(-0.000001, format)).toEqual("-0.000001");
-    expect(formatNumber(-0.00001, format)).toEqual("-0.00001");
-    expect(formatNumber(-0.0001, format)).toEqual("-0.0001");
-    expect(formatNumber(-0.001, format)).toEqual("-0.001");
-    expect(formatNumber(-0.01, format)).toEqual("-0.01");
-    expect(formatNumber(-0.1, format)).toEqual("-0.1");
-    expect(formatNumber(-1, format)).toEqual("-1");
+    expect(formatNumber(-0.0000000001, 6)).toEqual("-0");
+    expect(formatNumber(-0.000000001, 6)).toEqual("-0");
+    expect(formatNumber(-0.00000001, 6)).toEqual("-0");
+    expect(formatNumber(-0.0000001, 6)).toEqual("-0");
+    expect(formatNumber(-0.000001, 6)).toEqual("-0.000001");
+    expect(formatNumber(-0.00001, 6)).toEqual("-0.00001");
+    expect(formatNumber(-0.0001, 6)).toEqual("-0.0001");
+    expect(formatNumber(-0.001, 6)).toEqual("-0.001");
+    expect(formatNumber(-0.01, 6)).toEqual("-0.01");
+    expect(formatNumber(-0.1, 6)).toEqual("-0.1");
+    expect(formatNumber(-1, 6)).toEqual("-1");
   });
   test("powers of 10 test for suffix form", () => {
     // Initial settings

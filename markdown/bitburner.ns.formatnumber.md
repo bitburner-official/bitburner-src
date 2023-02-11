@@ -9,7 +9,7 @@ Format a number.
 **Signature:**
 
 ```typescript
-formatNumber(n: number, formatOptions: FormatNumberOptions): string;
+formatNumber(n: number, fractionalDigits?: number, suffixStart?: number, isInteger?: boolean): string;
 ```
 
 ## Parameters
@@ -17,7 +17,9 @@ formatNumber(n: number, formatOptions: FormatNumberOptions): string;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  n | number | Number to format. |
-|  formatOptions | [FormatNumberOptions](./bitburner.formatnumberoptions.md) | Formatting options. |
+|  fractionalDigits | number | _(Optional)_ Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3. |
+|  suffixStart | number | _(Optional)_ How high a number must be before a suffix will be added. Optional, defaults to 1000. |
+|  isInteger | boolean | _(Optional)_ Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. Optional, defaults to false. |
 
 **Returns:**
 
@@ -29,5 +31,5 @@ Formatted number.
 
 RAM cost: 0 GB
 
-Converts a number into a string with the specified format options. This is the same function that the game itself uses to display numbers. The formatted number is based on the provided formatOptions, and on the Numeric Display settings (all options in Options-<!-- -->&gt;<!-- -->Numeric Display)
+Converts a number into a numeric string with the specified format options. This is the same function that the game itself uses to display numbers. The format also depends on the Numeric Display settings (all options on the "Numeric Display" options page) To format ram or percentages, see [formatRam](./bitburner.ns.formatram.md) and [formatPercent](./bitburner.ns.formatpercent.md)
 

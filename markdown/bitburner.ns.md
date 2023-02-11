@@ -76,7 +76,9 @@ export async function main(ns) {
 |  [exit()](./bitburner.ns.exit.md) | Terminates the current script immediately. |
 |  [fileExists(filename, host)](./bitburner.ns.fileexists.md) | Check if a file exists. |
 |  [flags(schema)](./bitburner.ns.flags.md) | Parse command line flags. |
-|  [formatNumber(n, formatOptions)](./bitburner.ns.formatnumber.md) | Format a number. |
+|  [formatNumber(n, fractionalDigits, suffixStart, isInteger)](./bitburner.ns.formatnumber.md) | Format a number. |
+|  [formatPercent(n, fractionalDigits)](./bitburner.ns.formatpercent.md) | Format a number as a percentage. |
+|  [formatRam(n, fractionalDigits)](./bitburner.ns.formatram.md) | Format a number as an amount of ram. |
 |  [ftpcrack(host)](./bitburner.ns.ftpcrack.md) | Runs FTPCrack.exe on a server. |
 |  [getBitNodeMultipliers(n, lvl)](./bitburner.ns.getbitnodemultipliers.md) | Get the current Bitnode multipliers. |
 |  [getFavorToDonate()](./bitburner.ns.getfavortodonate.md) | Returns the amount of Faction favor required to be able to donate to a faction. |
