@@ -3,7 +3,7 @@
  *
  * TThis subcomponent renders all of the buttons for traveling to different cities
  */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { CityName } from "../../Enums";
 import { TravelConfirmationModal } from "./TravelConfirmationModal";
@@ -21,6 +21,7 @@ import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import { useRerender } from "../../ui/React/hooks";
 
 function travel(to: CityName): void {
   const cost = CONSTANTS.TravelCost;
@@ -35,17 +36,9 @@ function travel(to: CityName): void {
 }
 
 export function TravelAgencyRoot(): React.ReactElement {
-  const setRerender = useState(false)[1];
   const [open, setOpen] = useState(false);
   const [destination, setDestination] = useState(CityName.Sector12);
-  function rerender(): void {
-    setRerender((o) => !o);
-  }
-
-  useEffect(() => {
-    const id = setInterval(rerender, 1000);
-    return () => clearInterval(id);
-  }, []);
+  useRerender(1000);
 
   function startTravel(city: CityName): void {
     const cost = CONSTANTS.TravelCost;

@@ -19,6 +19,7 @@ import { UpgradeType } from "../data/upgrades";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { StatsRow } from "../../ui/React/StatsRow";
+import { useRerender } from "../../ui/React/hooks";
 
 interface INextRevealProps {
   upgrades: string[];
@@ -86,12 +87,8 @@ interface IPanelProps {
 
 function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
   const gang = useGang();
-  const setRerender = useState(false)[1];
+  const rerender = useRerender();
   const [currentCategory, setCurrentCategory] = useState("Weapons");
-
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
 
   function filterUpgrades(list: string[], type: UpgradeType): GangMemberUpgrade[] {
     return Object.keys(GangMemberUpgrades)

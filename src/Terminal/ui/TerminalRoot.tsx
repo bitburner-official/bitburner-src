@@ -16,6 +16,7 @@ import { CodingContractModal } from "../../ui/React/CodingContractModal";
 
 import _ from "lodash";
 import { ANSIITypography } from "../../ui/React/ANSIITypography";
+import { useRerender } from "../../ui/React/hooks";
 
 function ActionTimer(): React.ReactElement {
   return (
@@ -44,11 +45,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function TerminalRoot(): React.ReactElement {
   const scrollHook = useRef<HTMLDivElement>(null);
-  const setRerender = useState(0)[1];
+  const rerender = useRerender();
   const [key, setKey] = useState(0);
-  function rerender(): void {
-    setRerender((old) => old + 1);
-  }
 
   function clear(): void {
     setKey((key) => key + 1);

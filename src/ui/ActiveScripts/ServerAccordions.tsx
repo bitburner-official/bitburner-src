@@ -16,6 +16,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { Settings } from "../../Settings/Settings";
 import { TablePaginationActionsAll } from "../React/TablePaginationActionsAll";
 import SearchIcon from "@mui/icons-material/Search";
+import { useRerender } from "../React/hooks";
 
 // Map of server hostname -> all workerscripts on that server for all active scripts
 interface IServerData {
@@ -35,7 +36,7 @@ export function ServerAccordions(props: IProps): React.ReactElement {
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(Settings.ActiveScriptsServerPageSize);
-  const setRerender = useState(false)[1];
+  const rerender = useRerender();
 
   const handleChangePage = (event: unknown, newPage: number): void => {
     setPage(newPage);
@@ -77,10 +78,6 @@ export function ServerAccordions(props: IProps): React.ReactElement {
       data &&
       (data.server.hostname.includes(filter) || data.server.runningScripts.find((s) => s.filename.includes(filter))),
   );
-
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
 
   useEffect(() => WorkerScriptStartStopEventEmitter.subscribe(rerender));
 

@@ -1,6 +1,6 @@
 import { Explore, Info, LastPage, LocalPolice, NewReleases, Report, SportsMma } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography, useTheme } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { numeralWrapper } from "../../ui/numeralFormat";
@@ -9,6 +9,7 @@ import { FactionNames } from "../data/FactionNames";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
+import { useRerender } from "../../ui/React/hooks";
 
 export const InvitationsSeen: string[] = [];
 
@@ -182,15 +183,7 @@ const FactionElement = (props: IFactionProps): React.ReactElement => {
 
 export function FactionsRoot(): React.ReactElement {
   const theme = useTheme();
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
-
+  const rerender = useRerender(200);
   useEffect(() => {
     Player.factionInvitations.forEach((faction) => {
       if (InvitationsSeen.includes(faction)) return;

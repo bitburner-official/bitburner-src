@@ -1,9 +1,10 @@
 import { Container, Typography, Paper } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { PurchasableAugmentations } from "../../../Augmentation/ui/PurchasableAugmentations";
 import { Player } from "@player";
 import { Modal } from "../../../ui/React/Modal";
 import { Sleeve } from "../Sleeve";
+import { useRerender } from "../../../ui/React/hooks";
 
 interface IProps {
   open: boolean;
@@ -12,15 +13,7 @@ interface IProps {
 }
 
 export function SleeveAugmentationsModal(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
-
-  useEffect(() => {
-    const id = setInterval(rerender, 150);
-    return () => clearInterval(id);
-  }, []);
+  const rerender = useRerender(150);
 
   // Array of all owned Augmentations. Names only
   const ownedAugNames = props.sleeve.augmentations.map((e) => e.name);

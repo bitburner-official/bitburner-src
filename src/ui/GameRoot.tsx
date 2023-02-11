@@ -77,6 +77,7 @@ import { Apr1 } from "./Apr1";
 import { isFactionWork } from "../Work/FactionWork";
 import { V2Modal } from "../utils/V2Modal";
 import { MathJaxContext } from "better-react-mathjax";
+import { useRerender } from "./React/hooks";
 
 const htmlLocation = location;
 
@@ -127,7 +128,7 @@ export function GameRoot(): React.ReactElement {
   const classes = useStyles();
   const [{ files, vim }, setEditorOptions] = useState({ files: {}, vim: false });
   const [page, setPage] = useState(determineStartPage());
-  const setRerender = useState(0)[1];
+  const rerender = useRerender();
   const [augPage, setAugPage] = useState<boolean>(false);
   const [faction, setFaction] = useState<Faction>(
     isFactionWork(Player.currentWork) ? Factions[Player.currentWork.factionName] : (undefined as unknown as Faction),
@@ -155,9 +156,6 @@ export function GameRoot(): React.ReactElement {
     setErrorBoundaryKey(errorBoundaryKey + 1);
   }
 
-  function rerender(): void {
-    setRerender((old) => old + 1);
-  }
   useEffect(() => {
     return ITutorialEvents.subscribe(rerender);
   }, []);

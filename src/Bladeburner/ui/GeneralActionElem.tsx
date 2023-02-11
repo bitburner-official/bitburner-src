@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { ActionTypes } from "../data/ActionTypes";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { formatNumber, convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
@@ -13,6 +13,7 @@ import { StartButton } from "./StartButton";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
   bladeburner: Bladeburner;
@@ -20,10 +21,7 @@ interface IProps {
 }
 
 export function GeneralActionElem(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender();
   const isActive = props.action.name === props.bladeburner.action.name;
   const computedActionTimeCurrent = Math.min(
     props.bladeburner.actionTimeCurrent + props.bladeburner.actionTimeOverflow,

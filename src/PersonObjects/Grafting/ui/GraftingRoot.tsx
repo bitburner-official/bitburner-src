@@ -1,6 +1,6 @@
 import { CheckBox, CheckBoxOutlineBlank, Construction } from "@mui/icons-material";
 import { Box, Button, Container, List, ListItemButton, Paper, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GraftingWork } from "../../../Work/GraftingWork";
 import { Augmentation } from "../../../Augmentation/Augmentation";
 import { AugmentationNames } from "../../../Augmentation/data/AugmentationNames";
@@ -19,6 +19,7 @@ import { convertTimeMsToTimeElapsedString, formatNumber } from "../../../utils/S
 import { Player } from "@player";
 import { GraftableAugmentation } from "../GraftableAugmentation";
 import { calculateGraftingTimeWithBonus, getGraftingAvailableAugs } from "../GraftingHelpers";
+import { useRerender } from "../../../ui/React/hooks";
 
 export const GraftableAugmentations = (): Record<string, GraftableAugmentation> => {
   const gAugs: Record<string, GraftableAugmentation> = {};
@@ -64,11 +65,7 @@ export const GraftingRoot = (): React.ReactElement => {
   const [selectedAug, setSelectedAug] = useState(getGraftingAvailableAugs()[0]);
   const [graftOpen, setGraftOpen] = useState(false);
   const selectedAugmentation = StaticAugmentations[selectedAug];
-
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender(200);
 
   const getAugsSorted = (): string[] => {
     const augs = getGraftingAvailableAugs();
@@ -84,11 +81,6 @@ export const GraftingRoot = (): React.ReactElement => {
     Settings.PurchaseAugmentationsOrder = newOrder;
     rerender();
   };
-
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>

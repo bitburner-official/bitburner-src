@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
+import { useRerender } from "../../ui/React/hooks";
 
 interface ILineProps {
   content: React.ReactNode;
@@ -54,25 +55,14 @@ interface IProps {
 export function Console(props: IProps): React.ReactElement {
   const classes = useStyles();
   const [command, setCommand] = useState("");
-  const setRerender = useState(false)[1];
   const consoleInput = useRef<HTMLInputElement>(null);
+  useRerender(1000);
 
   function handleCommandChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setCommand(event.target.value);
   }
 
   const [consoleHistoryIndex, setConsoleHistoryIndex] = useState(props.bladeburner.consoleHistory.length);
-
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
-
-  useEffect(() => {
-    const id = setInterval(rerender, 1000);
-    return () => {
-      clearInterval(id);
-    };
-  }, []);
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === KEY.ENTER) {

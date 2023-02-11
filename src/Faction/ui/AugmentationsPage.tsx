@@ -1,5 +1,5 @@
 import { Box, Button, Tooltip, Typography, Paper, Container } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
 import { getGenericAugmentationPriceMultiplier } from "../../Augmentation/AugmentationHelpers";
@@ -15,6 +15,7 @@ import { FactionNames } from "../data/FactionNames";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, hasAugmentationPrereqs, purchaseAugmentation } from "../FactionHelpers";
 import { CONSTANTS } from "../../Constants";
+import { useRerender } from "../../ui/React/hooks";
 
 type IProps = {
   faction: Faction;
@@ -23,11 +24,7 @@ type IProps = {
 
 /** Root React Component for displaying a faction's "Purchase Augmentations" page */
 export function AugmentationsPage(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender();
 
   function getAugs(): string[] {
     return getFactionAugmentationsFiltered(props.faction);

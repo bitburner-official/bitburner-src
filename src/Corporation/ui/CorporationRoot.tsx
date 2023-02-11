@@ -1,7 +1,7 @@
 // React Components for the Corporation UI's navigation tabs
 // These are the tabs at the top of the UI that let you switch to different
 // divisions, see an overview of your corporation, or create a new industry
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { MainPanel } from "./MainPanel";
 import { IndustryType } from "../data/Enums";
 import { ExpandIndustryTab } from "./ExpandIndustryTab";
@@ -11,22 +11,16 @@ import { Overview } from "./Overview";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import { useRerender } from "../../ui/React/hooks";
 
 export function CorporationRoot(): React.ReactElement {
+  const rerender = useRerender(200);
   const corporation = Player.corporation;
   if (corporation === null) return <></>;
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
   const [divisionName, setDivisionName] = useState<string | number>("Overview");
   function handleChange(event: React.SyntheticEvent, tab: string | number): void {
     setDivisionName(tab);
   }
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
 
   const canExpand =
     Object.values(IndustryType).filter(
