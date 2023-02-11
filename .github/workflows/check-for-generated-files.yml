@@ -23,15 +23,6 @@ jobs:
           files: |
             dist/*
             index.html
-            main.bundle.js
-            main.bundle.js.map
-
-      - name: Check documentation changes
-        id: changed-markdown-doc-files
-        uses: tj-actions/changed-files@v18.4
-        with:
-          files: |
-            markdown/*.md
 
       - name: Warn when bundle files were changed
         id: warn-bundles-changed
@@ -51,14 +42,14 @@ jobs:
             echo "Forbidden files included, generating warning"
 
             touch comment.txt
-            echo "## Generated build or documentation files were included. PRs should not normally contain any generated files." >> comment.txt
+            echo "## Generated build files were included. PRs should not normally contain generated files." >> comment.txt
             echo "" >> comment.txt
-            echo "Review the changes and ensure that including built files was necessary." >> comment.txt
+            echo "Review the changes and ensure that including generated files was necessary." >> comment.txt
 
             echo "Add pr label"
             gh --repo "${{ github.repository }}" \
               pr edit "${{ github.event.number }}" --add-label "$LABEL"
             echo "And comment on the pr"
             gh --repo "${{ github.repository }}" \
-              pr comment "${{ github.event.number }}" --body-file comment.txt
+              pr comment "${{ github.event.number }}" --body-file comment.txt --edit-last
           fi
