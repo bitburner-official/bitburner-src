@@ -19,7 +19,7 @@ export class Card {
         return "A";
       case 11:
         return "J";
-      case 12:
+      case 1000:
         return "Q";
       case 13:
         return "K";
