@@ -35,8 +35,9 @@ jobs:
 
           if [ "${{ steps.changed-bundle-files.outputs.any_changed }}" == "false" ]; then
             echo "No forbidden files included, removing warning"
-            gh --repo "${{ github.repository }}" \
-              pr edit "${{ github.event.number }}" --remove-label "$LABEL" || true
+            gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --remove-label "$LABEL" || true
+            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body "Generated files no longer detected." --edit-last || true
+
           else
             echo "Forbidden files included, generating warning"
 
