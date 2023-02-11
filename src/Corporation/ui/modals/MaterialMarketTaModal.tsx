@@ -50,28 +50,16 @@ function MarketTA2(props: IMarketTA2Props): React.ReactElement {
   return (
     <>
       <Typography variant="h4">Market-TA.II</Typography>
-      <br />
       <Typography>
-        If you sell at {formatMoney(sCost)}, then you will sell x{formatPreciseMultiplier(markup)} as much compared to
-        if you sold at market price.
+        If this is enabled, then this Material will automatically be sold at the optimal price such that the
+        amount sold matches the amount produced. (i.e. the highest possible price, while still ensuring that all
+        produced materials will be sold)
       </Typography>
       <TextField type="number" onChange={onChange} value={newCost} />
       <br />
       <FormControlLabel
         control={<Switch checked={props.mat.marketTa2} onChange={onMarketTA2} />}
-        label={
-          <Tooltip
-            title={
-              <Typography>
-                If this is enabled, then this Material will automatically be sold at the optimal price such that the
-                amount sold matches the amount produced. (i.e. the highest possible price, while still ensuring that all
-                produced materials will be sold)
-              </Typography>
-            }
-          >
-            <Typography>Use Market-TA.II for Auto-Sale Price</Typography>
-          </Tooltip>
-        }
+        label={<Typography>Use Market-TA.II for Auto-Sale Price</Typography>}
       />
     </>
   );
@@ -103,21 +91,15 @@ export function MaterialMarketTaModal(props: IProps): React.ReactElement {
         <Typography>
           The maximum sale price you can mark this up to is {formatMoney(props.mat.bCost + markupLimit)}. This means
           that if you set the sale price higher than this, you will begin to experience a loss in number of sales
+          <br></br>
+          <br></br>
+          If this is enabled, then this Material will automatically be sold at the price identified by
+          Market-TA.I (i.e. the price shown above)
         </Typography>
 
         <FormControlLabel
           control={<Switch checked={props.mat.marketTa1} onChange={onMarketTA1} />}
-          label={
-            <Tooltip
-              title={
-                <Typography>
-                  If this is enabled, then this Material will automatically be sold at the price identified by
-                  Market-TA.I (i.e. the price shown above)
-                </Typography>
-              }
-            >
-              <Typography>Use Market-TA.I for Auto-Sale Price</Typography>
-            </Tooltip>
+          label={<Typography>Use Market-TA.I for Auto-Sale Price</Typography>
           }
         />
       </>
