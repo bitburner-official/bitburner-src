@@ -43,7 +43,7 @@ jobs:
             touch comment.txt
             echo "## Generated build files were included. PRs should not normally contain generated files." >> comment.txt
             echo "" >> comment.txt
-            echo "Review the changes and ensure that including generated files was necessary." >> comment.txt
+            echo "Review the changes and ensure that including generated files was necessary. This is edited at the end." >> comment.txt
 
             echo "Add pr label"
             gh --repo "${{ github.repository }}" \
