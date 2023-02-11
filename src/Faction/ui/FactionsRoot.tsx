@@ -12,20 +12,10 @@ import { Factions } from "../Factions";
 
 export const InvitationsSeen: string[] = [];
 
-const getAugsLeft = (faction: Faction): number => {
-  const augs = getFactionAugmentationsFiltered(faction);
-
-  return augs.filter((augmentation: string) => !Player.hasAugmentation(augmentation)).length;
-};
-
-interface IWorkTypeProps {
-  faction: Faction;
-}
-
 const fontSize = "small";
 const marginRight = 0.5;
 
-const WorkTypesOffered = (props: IWorkTypeProps): React.ReactElement => {
+const WorkTypesOffered = (props: { faction: Faction }): React.ReactElement => {
   const info = props.faction.getInfo();
 
   return (
@@ -49,16 +39,16 @@ const WorkTypesOffered = (props: IWorkTypeProps): React.ReactElement => {
   );
 };
 
-interface IFactionProps {
+interface FactionElementProps {
   faction: Faction;
-
+  /** Whether the player is a member of this faction already */
   joined: boolean;
-
+  /** Rerender function to force the entire FactionsRoot to rerender */
   rerender: () => void;
 }
-
-const FactionElement = (props: IFactionProps): React.ReactElement => {
+const FactionElement = (props: FactionElementProps): React.ReactElement => {
   const facInfo = props.faction.getInfo();
+  const augsLeft = getFactionAugmentationsFiltered(props.faction).filter((aug) => !Player.hasAugmentation(aug)).length;
 
   function openFaction(faction: Faction): void {
     Router.toFaction(faction);
@@ -114,12 +104,11 @@ const FactionElement = (props: IFactionProps): React.ReactElement => {
               alignItems: "center",
             }}
           >
-            <span
-              style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}
-              title={props.faction.name}
-            >
-              {props.faction.name}
-            </span>
+            <Tooltip title={props.faction.name}>
+              <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
+                {props.faction.name}
+              </span>
+            </Tooltip>
 
             <span style={{ display: "flex", alignItems: "center" }}>
               {Player.hasGangWith(props.faction.name) && (
@@ -156,12 +145,7 @@ const FactionElement = (props: IFactionProps): React.ReactElement => {
 
           <span style={{ display: "flex", alignItems: "center" }}>
             {!Player.hasGangWith(props.faction.name) && <WorkTypesOffered faction={props.faction} />}
-
-            {props.joined && (
-              <Typography variant="body2" sx={{ display: "flex" }}>
-                {getAugsLeft(props.faction)} Augmentations left
-              </Typography>
-            )}
+            <Typography variant="body2" sx={{ display: "flex" }}>{`${augsLeft || "No"} Augmentations left`}</Typography>
           </span>
         </span>
       </Box>
