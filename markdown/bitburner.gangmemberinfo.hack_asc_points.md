@@ -6,7 +6,7 @@
 
 Total earned hack experience
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hack_asc_points: number;

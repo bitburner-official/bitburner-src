@@ -6,7 +6,7 @@
 
 Respect earned per game cycle
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 respectGainRate: number;

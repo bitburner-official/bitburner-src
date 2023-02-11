@@ -6,12 +6,12 @@
 
 Returns whether the player has access to the darkweb.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hasTorRouter(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

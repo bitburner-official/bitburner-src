@@ -6,7 +6,7 @@
 
 Returns the price of a stock.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getPrice(sym: string): number;
@@ -18,7 +18,7 @@ getPrice(sym: string): number;
 |  --- | --- | --- |
 |  sym | string | Stock symbol. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

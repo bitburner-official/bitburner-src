@@ -6,12 +6,12 @@
 
 Get all locations that can be infiltrated.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getPossibleLocations(): ILocation[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 [ILocation](./bitburner.ilocation.md)<!-- -->\[\]
 

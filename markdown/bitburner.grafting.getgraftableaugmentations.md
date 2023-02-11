@@ -6,12 +6,12 @@
 
 Retrieves a list of Augmentations that can be grafted.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getGraftableAugmentations(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

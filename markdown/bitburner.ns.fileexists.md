@@ -6,7 +6,7 @@
 
 Check if a file exists.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 fileExists(filename: string, host?: string): boolean;
@@ -17,9 +17,9 @@ fileExists(filename: string, host?: string): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  filename | string | Filename of file to check. |
-|  host | string | Host of target server. This is optional. If it is not specified then the function will use the current server as the target server. |
+|  host | string | _(Optional)_ Host of target server. This is optional. If it is not specified then the function will use the current server as the target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

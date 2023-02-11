@@ -6,7 +6,7 @@
 
 Average happiness of the employees
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 avgHap: number;

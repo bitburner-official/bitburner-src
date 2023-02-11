@@ -6,7 +6,7 @@
 
 Get chance to win clash with other gang.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getChanceToWinClash(gangName: string): number;
@@ -18,7 +18,7 @@ getChanceToWinClash(gangName: string): number;
 |  --- | --- | --- |
 |  gangName | string | Target gang |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

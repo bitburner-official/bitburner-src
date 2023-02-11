@@ -6,7 +6,7 @@
 
 Suspends the script for n milliseconds.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sleep(millis: number): Promise<true>;
@@ -18,7 +18,7 @@ sleep(millis: number): Promise<true>;
 |  --- | --- | --- |
 |  millis | number | Number of milliseconds to sleep. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;true&gt;
 

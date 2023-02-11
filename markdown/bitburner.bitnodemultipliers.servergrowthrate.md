@@ -6,7 +6,7 @@
 
 Influences the growth percentage per cycle against a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ServerGrowthRate: number;

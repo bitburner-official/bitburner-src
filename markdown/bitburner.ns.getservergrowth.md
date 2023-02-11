@@ -6,7 +6,7 @@
 
 Get a server growth parameter.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getServerGrowth(host: string): number;
@@ -18,7 +18,7 @@ getServerGrowth(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

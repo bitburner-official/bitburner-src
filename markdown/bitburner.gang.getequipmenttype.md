@@ -6,7 +6,7 @@
 
 Get type of an equipment.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getEquipmentType(equipName: string): string;
@@ -18,7 +18,7 @@ getEquipmentType(equipName: string): string;
 |  --- | --- | --- |
 |  equipName | string | Name of equipment. |
 
-<b>Returns:</b>
+**Returns:**
 
 string
 

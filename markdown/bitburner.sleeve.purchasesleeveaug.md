@@ -6,7 +6,7 @@
 
 Purchase an aug for a sleeve.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 purchaseSleeveAug(sleeveNumber: number, augName: string): boolean;
@@ -19,7 +19,7 @@ purchaseSleeveAug(sleeveNumber: number, augName: string): boolean;
 |  sleeveNumber | number | Index of the sleeve to buy an aug for. |
 |  augName | string | Name of the aug to buy. Must be an exact match. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

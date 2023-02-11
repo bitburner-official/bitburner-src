@@ -6,7 +6,7 @@
 
 Create a Corporation
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 createCorporation(corporationName: string, selfFund: boolean): boolean;
@@ -19,7 +19,7 @@ createCorporation(corporationName: string, selfFund: boolean): boolean;
 |  corporationName | string | Name of the corporation |
 |  selfFund | boolean | If you should self fund, defaults to true, false will only work on Bitnode 3 |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

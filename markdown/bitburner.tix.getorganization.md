@@ -6,7 +6,7 @@
 
 Returns the organization associated with a stock symbol.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getOrganization(sym: string): string;
@@ -18,7 +18,7 @@ getOrganization(sym: string): string;
 |  --- | --- | --- |
 |  sym | string | Stock symbol. |
 
-<b>Returns:</b>
+**Returns:**
 
 string
 

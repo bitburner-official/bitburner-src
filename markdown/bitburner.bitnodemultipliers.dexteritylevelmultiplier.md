@@ -6,7 +6,7 @@
 
 Influences how quickly the player's dexterity level (not exp) scales
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 DexterityLevelMultiplier: number;

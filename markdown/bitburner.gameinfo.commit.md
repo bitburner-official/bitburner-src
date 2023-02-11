@@ -4,7 +4,7 @@
 
 ## GameInfo.commit property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 commit: string;

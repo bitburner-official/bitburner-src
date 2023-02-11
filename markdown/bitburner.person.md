@@ -5,7 +5,7 @@
 ## Person interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface Person 
@@ -13,11 +13,11 @@ interface Person
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [city](./bitburner.person.city.md) | [CityName](./bitburner.cityname.md) |  |
-|  [exp](./bitburner.person.exp.md) | [Skills](./bitburner.skills.md) |  |
-|  [hp](./bitburner.person.hp.md) | [HP](./bitburner.hp.md) |  |
-|  [mults](./bitburner.person.mults.md) | [Multipliers](./bitburner.multipliers.md) |  |
-|  [skills](./bitburner.person.skills.md) | [Skills](./bitburner.skills.md) |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [city](./bitburner.person.city.md) |  | [CityName](./bitburner.cityname.md) |  |
+|  [exp](./bitburner.person.exp.md) |  | [Skills](./bitburner.skills.md) |  |
+|  [hp](./bitburner.person.hp.md) |  | [HP](./bitburner.hp.md) |  |
+|  [mults](./bitburner.person.mults.md) |  | [Multipliers](./bitburner.multipliers.md) |  |
+|  [skills](./bitburner.person.skills.md) |  | [Skills](./bitburner.skills.md) |  |
 

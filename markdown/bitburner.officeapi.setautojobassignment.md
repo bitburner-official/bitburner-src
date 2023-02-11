@@ -6,7 +6,7 @@
 
 Set the auto job assignment for a job
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setAutoJobAssignment(divisionName: string, city: CityName | `${CityName}`, job: string, amount: number): boolean;
@@ -21,7 +21,7 @@ setAutoJobAssignment(divisionName: string, city: CityName | `${CityName}`, job: 
 |  job | string | Name of the job |
 |  amount | number | Number of employees to assign to that job |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

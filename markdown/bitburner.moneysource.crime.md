@@ -4,7 +4,7 @@
 
 ## MoneySource.crime property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 crime: number;

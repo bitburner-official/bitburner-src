@@ -6,7 +6,7 @@
 
 Short stocks.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 buyShort(sym: string, shares: number): number;
@@ -19,7 +19,7 @@ buyShort(sym: string, shares: number): number;
 |  sym | string | Stock symbol. |
 |  shares | number | Number of shares to short. Must be positive. Will be rounded to nearest integer. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

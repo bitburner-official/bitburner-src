@@ -6,12 +6,12 @@
 
 Check if you're in a gang.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 inGang(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

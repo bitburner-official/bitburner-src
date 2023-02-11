@@ -6,7 +6,7 @@
 
 Create a new product
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 makeProduct(
@@ -28,7 +28,7 @@ makeProduct(
 |  designInvest | number | Amount to invest for the design of the product. |
 |  marketingInvest | number | Amount to invest for the marketing of the product. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

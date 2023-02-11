@@ -6,7 +6,7 @@
 
 Base wanted earned
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 baseWanted: number;

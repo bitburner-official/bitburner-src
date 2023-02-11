@@ -3,7 +3,7 @@ import { Box, Button, Container, Paper, Tooltip, Typography } from "@mui/materia
 import React from "react";
 import { Location } from "../../Locations/Location";
 import { Settings } from "../../Settings/Settings";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatNumberNoSuffix } from "../../ui/formatNumber";
 
 interface IProps {
   Location: Location;
@@ -74,7 +74,7 @@ export function Intro(props: IProps): React.ReactElement {
           }}
         >
           <b>Difficulty:&nbsp;</b>
-          {numeralWrapper.format(props.Difficulty * 33.3333, "0")} / 100
+          {formatNumberNoSuffix(props.Difficulty * 33.3333)} / 100
           {props.Difficulty > 1.5 && (
             <Tooltip
               title={

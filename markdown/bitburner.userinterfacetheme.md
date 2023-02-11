@@ -6,7 +6,7 @@
 
 Interface Theme
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface UserInterfaceTheme 
@@ -14,39 +14,39 @@ interface UserInterfaceTheme
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [backgroundprimary](./bitburner.userinterfacetheme.backgroundprimary.md) | string |  |
-|  [backgroundsecondary](./bitburner.userinterfacetheme.backgroundsecondary.md) | string |  |
-|  [black](./bitburner.userinterfacetheme.black.md) | string |  |
-|  [button](./bitburner.userinterfacetheme.button.md) | string |  |
-|  [cha](./bitburner.userinterfacetheme.cha.md) | string |  |
-|  [combat](./bitburner.userinterfacetheme.combat.md) | string |  |
-|  [disabled](./bitburner.userinterfacetheme.disabled.md) | string |  |
-|  [error](./bitburner.userinterfacetheme.error.md) | string |  |
-|  [errordark](./bitburner.userinterfacetheme.errordark.md) | string |  |
-|  [errorlight](./bitburner.userinterfacetheme.errorlight.md) | string |  |
-|  [hack](./bitburner.userinterfacetheme.hack.md) | string |  |
-|  [hp](./bitburner.userinterfacetheme.hp.md) | string |  |
-|  [info](./bitburner.userinterfacetheme.info.md) | string |  |
-|  [infodark](./bitburner.userinterfacetheme.infodark.md) | string |  |
-|  [infolight](./bitburner.userinterfacetheme.infolight.md) | string |  |
-|  [int](./bitburner.userinterfacetheme.int.md) | string |  |
-|  [money](./bitburner.userinterfacetheme.money.md) | string |  |
-|  [primary](./bitburner.userinterfacetheme.primary.md) | string |  |
-|  [primarydark](./bitburner.userinterfacetheme.primarydark.md) | string |  |
-|  [primarylight](./bitburner.userinterfacetheme.primarylight.md) | string |  |
-|  [rep](./bitburner.userinterfacetheme.rep.md) | string |  |
-|  [secondary](./bitburner.userinterfacetheme.secondary.md) | string |  |
-|  [secondarydark](./bitburner.userinterfacetheme.secondarydark.md) | string |  |
-|  [secondarylight](./bitburner.userinterfacetheme.secondarylight.md) | string |  |
-|  [success](./bitburner.userinterfacetheme.success.md) | string |  |
-|  [successdark](./bitburner.userinterfacetheme.successdark.md) | string |  |
-|  [successlight](./bitburner.userinterfacetheme.successlight.md) | string |  |
-|  [warning](./bitburner.userinterfacetheme.warning.md) | string |  |
-|  [warningdark](./bitburner.userinterfacetheme.warningdark.md) | string |  |
-|  [warninglight](./bitburner.userinterfacetheme.warninglight.md) | string |  |
-|  [well](./bitburner.userinterfacetheme.well.md) | string |  |
-|  [welllight](./bitburner.userinterfacetheme.welllight.md) | string |  |
-|  [white](./bitburner.userinterfacetheme.white.md) | string |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [backgroundprimary](./bitburner.userinterfacetheme.backgroundprimary.md) |  | string |  |
+|  [backgroundsecondary](./bitburner.userinterfacetheme.backgroundsecondary.md) |  | string |  |
+|  [black](./bitburner.userinterfacetheme.black.md) |  | string |  |
+|  [button](./bitburner.userinterfacetheme.button.md) |  | string |  |
+|  [cha](./bitburner.userinterfacetheme.cha.md) |  | string |  |
+|  [combat](./bitburner.userinterfacetheme.combat.md) |  | string |  |
+|  [disabled](./bitburner.userinterfacetheme.disabled.md) |  | string |  |
+|  [error](./bitburner.userinterfacetheme.error.md) |  | string |  |
+|  [errordark](./bitburner.userinterfacetheme.errordark.md) |  | string |  |
+|  [errorlight](./bitburner.userinterfacetheme.errorlight.md) |  | string |  |
+|  [hack](./bitburner.userinterfacetheme.hack.md) |  | string |  |
+|  [hp](./bitburner.userinterfacetheme.hp.md) |  | string |  |
+|  [info](./bitburner.userinterfacetheme.info.md) |  | string |  |
+|  [infodark](./bitburner.userinterfacetheme.infodark.md) |  | string |  |
+|  [infolight](./bitburner.userinterfacetheme.infolight.md) |  | string |  |
+|  [int](./bitburner.userinterfacetheme.int.md) |  | string |  |
+|  [money](./bitburner.userinterfacetheme.money.md) |  | string |  |
+|  [primary](./bitburner.userinterfacetheme.primary.md) |  | string |  |
+|  [primarydark](./bitburner.userinterfacetheme.primarydark.md) |  | string |  |
+|  [primarylight](./bitburner.userinterfacetheme.primarylight.md) |  | string |  |
+|  [rep](./bitburner.userinterfacetheme.rep.md) |  | string |  |
+|  [secondary](./bitburner.userinterfacetheme.secondary.md) |  | string |  |
+|  [secondarydark](./bitburner.userinterfacetheme.secondarydark.md) |  | string |  |
+|  [secondarylight](./bitburner.userinterfacetheme.secondarylight.md) |  | string |  |
+|  [success](./bitburner.userinterfacetheme.success.md) |  | string |  |
+|  [successdark](./bitburner.userinterfacetheme.successdark.md) |  | string |  |
+|  [successlight](./bitburner.userinterfacetheme.successlight.md) |  | string |  |
+|  [warning](./bitburner.userinterfacetheme.warning.md) |  | string |  |
+|  [warningdark](./bitburner.userinterfacetheme.warningdark.md) |  | string |  |
+|  [warninglight](./bitburner.userinterfacetheme.warninglight.md) |  | string |  |
+|  [well](./bitburner.userinterfacetheme.well.md) |  | string |  |
+|  [welllight](./bitburner.userinterfacetheme.welllight.md) |  | string |  |
+|  [white](./bitburner.userinterfacetheme.white.md) |  | string |  |
 

@@ -6,7 +6,7 @@
 
 Spoof money in a server's bank account, increasing the amount available.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 grow(host: string, opts?: BasicHGWOptions): Promise<number>;
@@ -17,9 +17,9 @@ grow(host: string, opts?: BasicHGWOptions): Promise<number>;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  host | string | Hostname of the target server to grow. |
-|  opts | [BasicHGWOptions](./bitburner.basichgwoptions.md) | Optional parameters for configuring function behavior. |
+|  opts | [BasicHGWOptions](./bitburner.basichgwoptions.md) | _(Optional)_ Optional parameters for configuring function behavior. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;number&gt;
 

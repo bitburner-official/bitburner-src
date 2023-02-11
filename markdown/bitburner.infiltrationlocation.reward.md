@@ -4,7 +4,7 @@
 
 ## InfiltrationLocation.reward property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 reward: InfiltrationReward;

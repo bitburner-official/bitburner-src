@@ -6,7 +6,7 @@
 
 Multiplier to agility skill
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agility: number;

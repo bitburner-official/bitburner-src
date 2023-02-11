@@ -6,7 +6,7 @@
 
 Production of the employees
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 employeeProd: Record<CorpEmployeePosition, number>;

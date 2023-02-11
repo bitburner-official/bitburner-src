@@ -6,7 +6,7 @@
 
 Your earnings as a shareholder per second this cycle
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dividendEarnings: number;

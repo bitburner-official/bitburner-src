@@ -6,7 +6,7 @@
 
 Influences the valuation of corporations created by the player.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 CorporationValuation: number;

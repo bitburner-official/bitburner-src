@@ -6,7 +6,7 @@
 
 Destroy the w0r1d\_d43m0n and move on to the next BN.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 destroyW0r1dD43m0n(nextBN: number, callbackScript?: string): void;
@@ -17,9 +17,9 @@ destroyW0r1dD43m0n(nextBN: number, callbackScript?: string): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  nextBN | number | BN number to jump to |
-|  callbackScript | string | Name of the script to launch in the next BN. |
+|  callbackScript | string | _(Optional)_ Name of the script to launch in the next BN. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

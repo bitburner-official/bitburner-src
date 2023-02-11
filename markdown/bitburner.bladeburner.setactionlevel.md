@@ -6,7 +6,7 @@
 
 Set the level of an action.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setActionLevel(type: string, name: string, level: number): void;
@@ -20,7 +20,7 @@ setActionLevel(type: string, name: string, level: number): void;
 |  name | string | Name of action. Must be an exact match. |
 |  level | number | Level to set this action to. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

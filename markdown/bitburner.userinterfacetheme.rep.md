@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.rep property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 rep: string;

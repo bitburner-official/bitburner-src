@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.primary property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 primary: string;

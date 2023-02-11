@@ -6,7 +6,7 @@
 
 Flag indicating whether HTTP Port is open
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 httpPortOpen: boolean;

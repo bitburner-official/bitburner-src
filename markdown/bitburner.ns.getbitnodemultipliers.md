@@ -6,7 +6,7 @@
 
 Get the current Bitnode multipliers.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getBitNodeMultipliers(n?: number, lvl?: number): BitNodeMultipliers;
@@ -16,10 +16,10 @@ getBitNodeMultipliers(n?: number, lvl?: number): BitNodeMultipliers;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  n | number |  |
-|  lvl | number |  |
+|  n | number | _(Optional)_ |
+|  lvl | number | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 [BitNodeMultipliers](./bitburner.bitnodemultipliers.md)
 

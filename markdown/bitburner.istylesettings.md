@@ -6,7 +6,7 @@
 
 Interface Styles
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface IStyleSettings 
@@ -14,8 +14,8 @@ interface IStyleSettings
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [fontFamily](./bitburner.istylesettings.fontfamily.md) | string |  |
-|  [lineHeight](./bitburner.istylesettings.lineheight.md) | number |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [fontFamily](./bitburner.istylesettings.fontfamily.md) |  | string |  |
+|  [lineHeight](./bitburner.istylesettings.lineheight.md) |  | number |  |
 

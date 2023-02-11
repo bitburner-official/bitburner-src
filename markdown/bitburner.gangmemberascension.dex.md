@@ -6,7 +6,7 @@
 
 Dexterity multiplier gained from ascending
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dex: number;

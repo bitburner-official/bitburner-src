@@ -6,7 +6,7 @@
 
 Namespace for formulas functions.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly formulas: Formulas;

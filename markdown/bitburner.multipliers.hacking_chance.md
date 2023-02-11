@@ -6,7 +6,7 @@
 
 Multiplier to chance of successfully performing a hack
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacking_chance: number;

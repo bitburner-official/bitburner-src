@@ -6,7 +6,7 @@
 
 Influences the base experience gained for each ability when the player commits a crime.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 CrimeExpGain: number;

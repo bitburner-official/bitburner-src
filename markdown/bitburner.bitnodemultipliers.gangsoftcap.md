@@ -6,7 +6,7 @@
 
 Influences the respect gain and money gain of your gang.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 GangSoftcap: number;

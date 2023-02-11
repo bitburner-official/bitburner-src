@@ -4,7 +4,7 @@
 
 ## MoneySource.hacknet property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacknet: number;

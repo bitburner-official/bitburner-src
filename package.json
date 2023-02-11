@@ -35,7 +35,7 @@
     "material-ui-popup-state": "^1.5.3",
     "monaco-editor": "^0.34.1",
     "notistack": "^2.0.8",
-    "numeral": "2.0.6",
+    "numeral": "^2.0.6",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.1",
@@ -50,8 +50,8 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
-    "@microsoft/api-documenter": "^7.13.65",
-    "@microsoft/api-extractor": "^7.18.17",
+    "@microsoft/api-documenter": "^7.21.3",
+    "@microsoft/api-extractor": "^7.34.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@types/bcryptjs": "^2.4.2",
     "@types/escodegen": "^0.0.7",
@@ -99,7 +99,7 @@
     "url": "git+https://github.com/danielyxie/bitburner.git"
   },
   "scripts": {
-    "doc": "npx api-extractor run && npx api-documenter markdown && rm input/bitburner.api.json && rm -r input",
+    "doc": "npx api-extractor run && npx api-documenter markdown && rm input/bitburner.api.json && rm -r input && git add markdown/ && git add tsdoc-metadata.json",
     "format": "prettier --write .",
     "format:report": "prettier -c .",
     "start": "http-server -p 8000",

@@ -4,7 +4,7 @@
 
 ## ActiveFragment.highestCharge property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 highestCharge: number;

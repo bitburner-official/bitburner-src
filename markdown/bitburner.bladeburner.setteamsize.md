@@ -6,7 +6,7 @@
 
 Set team size.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setTeamSize(type: string, name: string, size: number): number;
@@ -20,7 +20,7 @@ setTeamSize(type: string, name: string, size: number): number;
 |  name | string | Name of action. Must be an exact match. |
 |  size | number | Number of team members to set. Will be converted using Math.round(). |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

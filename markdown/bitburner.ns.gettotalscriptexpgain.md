@@ -6,12 +6,12 @@
 
 Get the exp gain of all scripts.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getTotalScriptExpGain(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

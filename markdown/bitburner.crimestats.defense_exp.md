@@ -6,7 +6,7 @@
 
 defense exp gained from crime
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 defense_exp: number;

@@ -6,12 +6,12 @@
 
 List all contract types.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getContractTypes(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

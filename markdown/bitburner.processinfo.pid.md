@@ -6,7 +6,7 @@
 
 Process ID
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 pid: number;

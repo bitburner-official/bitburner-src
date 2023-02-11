@@ -6,7 +6,7 @@
 
 Namespace for bladeburner functions.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly bladeburner: Bladeburner;

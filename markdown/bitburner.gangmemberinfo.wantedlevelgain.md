@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.wantedLevelGain property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 wantedLevelGain: number;

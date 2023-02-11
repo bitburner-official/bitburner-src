@@ -4,7 +4,7 @@
 
 ## InfiltrationLocation.difficulty property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 difficulty: number;

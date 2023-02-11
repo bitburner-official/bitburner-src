@@ -6,12 +6,12 @@
 
 List all gang members.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getMemberNames(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

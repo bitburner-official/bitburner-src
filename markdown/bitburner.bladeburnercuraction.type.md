@@ -6,7 +6,7 @@
 
 Type of Action
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type: string;

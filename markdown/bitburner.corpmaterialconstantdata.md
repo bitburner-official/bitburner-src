@@ -6,7 +6,7 @@
 
 Corporation material information
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface CorpMaterialConstantData 
@@ -14,15 +14,15 @@ interface CorpMaterialConstantData
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [baseCost](./bitburner.corpmaterialconstantdata.basecost.md) | number |  |
-|  [baseMarkup](./bitburner.corpmaterialconstantdata.basemarkup.md) | number |  |
-|  [competitionBase](./bitburner.corpmaterialconstantdata.competitionbase.md) | number |  |
-|  [competitionRange](./bitburner.corpmaterialconstantdata.competitionrange.md) | \[min: number, max: number\] |  |
-|  [demandBase](./bitburner.corpmaterialconstantdata.demandbase.md) | number |  |
-|  [demandRange](./bitburner.corpmaterialconstantdata.demandrange.md) | \[min: number, max: number\] | Min and max demand |
-|  [maxVolatility](./bitburner.corpmaterialconstantdata.maxvolatility.md) | number |  |
-|  [name](./bitburner.corpmaterialconstantdata.name.md) | string | Name of the material |
-|  [size](./bitburner.corpmaterialconstantdata.size.md) | number | Size of the material |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [baseCost](./bitburner.corpmaterialconstantdata.basecost.md) |  | number |  |
+|  [baseMarkup](./bitburner.corpmaterialconstantdata.basemarkup.md) |  | number |  |
+|  [competitionBase](./bitburner.corpmaterialconstantdata.competitionbase.md) |  | number |  |
+|  [competitionRange](./bitburner.corpmaterialconstantdata.competitionrange.md) |  | \[min: number, max: number\] |  |
+|  [demandBase](./bitburner.corpmaterialconstantdata.demandbase.md) |  | number |  |
+|  [demandRange](./bitburner.corpmaterialconstantdata.demandrange.md) |  | \[min: number, max: number\] | Min and max demand |
+|  [maxVolatility](./bitburner.corpmaterialconstantdata.maxvolatility.md) |  | number |  |
+|  [name](./bitburner.corpmaterialconstantdata.name.md) |  | string | Name of the material |
+|  [size](./bitburner.corpmaterialconstantdata.size.md) |  | number | Size of the material |
 

@@ -6,7 +6,7 @@
 
 How many ports are currently opened on the server
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 openPortCount: number;

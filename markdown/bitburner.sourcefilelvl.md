@@ -5,7 +5,7 @@
 ## SourceFileLvl interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface SourceFileLvl 
@@ -13,8 +13,8 @@ interface SourceFileLvl
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [lvl](./bitburner.sourcefilelvl.lvl.md) | number | The level of the source file |
-|  [n](./bitburner.sourcefilelvl.n.md) | number | The number of the source file |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [lvl](./bitburner.sourcefilelvl.lvl.md) |  | number | The level of the source file |
+|  [n](./bitburner.sourcefilelvl.n.md) |  | number | The number of the source file |
 

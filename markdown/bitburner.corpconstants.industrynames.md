@@ -6,7 +6,7 @@
 
 Names of all industries
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 industryNames: CorpIndustryName[];

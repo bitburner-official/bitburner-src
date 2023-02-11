@@ -1,5 +1,5 @@
 import React from "react";
-import { formatNumber } from "../../utils/StringHelperFunctions";
+import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { StealthIcon } from "./StealthIcon";
 import { KillIcon } from "./KillIcon";
 import { Action } from "../Action";
@@ -16,11 +16,12 @@ export function SuccessChance(props: IProps): React.ReactElement {
 
   let chance = <></>;
   if (estimatedSuccessChance[0] === estimatedSuccessChance[1]) {
-    chance = <>{formatNumber(estimatedSuccessChance[0] * 100, 1)}%</>;
+    chance = <>{formatNumberNoSuffix(estimatedSuccessChance[0] * 100, 1)}%</>;
   } else {
     chance = (
       <>
-        {formatNumber(estimatedSuccessChance[0] * 100, 1)}% ~ {formatNumber(estimatedSuccessChance[1] * 100, 1)}%
+        {formatNumberNoSuffix(estimatedSuccessChance[0] * 100, 1)}% ~{" "}
+        {formatNumberNoSuffix(estimatedSuccessChance[1] * 100, 1)}%
       </>
     );
   }

@@ -6,7 +6,7 @@
 
 Get warehouse data
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getWarehouse(divisionName: string, city: CityName | `${CityName}`): Warehouse;
@@ -19,7 +19,7 @@ getWarehouse(divisionName: string, city: CityName | `${CityName}`): Warehouse;
 |  divisionName | string | Name of the division |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
 
-<b>Returns:</b>
+**Returns:**
 
 [Warehouse](./bitburner.warehouse.md)
 

@@ -6,7 +6,7 @@
 
 Base respect earned
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 baseRespect: number;

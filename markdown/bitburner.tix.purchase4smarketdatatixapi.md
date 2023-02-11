@@ -6,12 +6,12 @@
 
 Purchase 4S Market Data TIX API Access.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 purchase4SMarketDataTixApi(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

@@ -6,7 +6,7 @@
 
 Total number of shares issues by this corporation
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 totalShares: number;

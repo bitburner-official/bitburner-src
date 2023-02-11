@@ -6,7 +6,7 @@
 
 Base cost for a new server
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 BaseCost: number;

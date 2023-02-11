@@ -6,7 +6,7 @@
 
 Agility multiplier from equipment
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agi_mult: number;

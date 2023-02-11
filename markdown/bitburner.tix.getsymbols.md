@@ -6,12 +6,12 @@
 
 Returns an array of the symbols of the tradable stocks
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getSymbols(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

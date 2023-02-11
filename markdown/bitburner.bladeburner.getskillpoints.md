@@ -6,12 +6,12 @@
 
 Get bladeburner skill points.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getSkillPoints(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

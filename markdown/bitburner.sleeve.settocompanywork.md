@@ -6,7 +6,7 @@
 
 Set a sleeve to work for a company.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setToCompanyWork(sleeveNumber: number, companyName: string): boolean;
@@ -19,7 +19,7 @@ setToCompanyWork(sleeveNumber: number, companyName: string): boolean;
 |  sleeveNumber | number | Index of the sleeve to work for the company. |
 |  companyName | string | Name of the company to work for. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

@@ -6,7 +6,7 @@
 
 dexterity level impact on success change of the crime
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dexterity_success_weight: number;

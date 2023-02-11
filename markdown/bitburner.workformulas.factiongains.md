@@ -4,7 +4,7 @@
 
 ## WorkFormulas.factionGains() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
@@ -18,7 +18,7 @@ factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, f
 |  workType | [FactionWorkType](./bitburner.factionworktype.md) \| \`${[FactionWorkType](./bitburner.factionworktype.md)<!-- -->}\` |  |
 |  favor | number |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [WorkStats](./bitburner.workstats.md)
 

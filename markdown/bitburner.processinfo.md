@@ -6,7 +6,7 @@
 
 A single process on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface ProcessInfo 
@@ -14,10 +14,10 @@ interface ProcessInfo
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [args](./bitburner.processinfo.args.md) | (string \| number \| boolean)\[\] | Script's arguments |
-|  [filename](./bitburner.processinfo.filename.md) | string | Script name. |
-|  [pid](./bitburner.processinfo.pid.md) | number | Process ID |
-|  [threads](./bitburner.processinfo.threads.md) | number | Number of threads script is running with |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [args](./bitburner.processinfo.args.md) |  | (string \| number \| boolean)\[\] | Script's arguments |
+|  [filename](./bitburner.processinfo.filename.md) |  | string | Script name. |
+|  [pid](./bitburner.processinfo.pid.md) |  | number | Process ID |
+|  [threads](./bitburner.processinfo.threads.md) |  | number | Number of threads script is running with |
 

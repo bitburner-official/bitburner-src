@@ -6,7 +6,7 @@
 
 Multiplier to strength experience gain rate
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 strength_exp: number;

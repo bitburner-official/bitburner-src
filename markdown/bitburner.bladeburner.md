@@ -6,7 +6,7 @@
 
 Bladeburner API
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface Bladeburner 
@@ -27,6 +27,7 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [getActionEstimatedSuccessChance(type, name)](./bitburner.bladeburner.getactionestimatedsuccesschance.md) | Get estimate success chance of an action. |
 |  [getActionMaxLevel(type, name)](./bitburner.bladeburner.getactionmaxlevel.md) | Get the maximum level of an action. |
 |  [getActionRepGain(type, name, level)](./bitburner.bladeburner.getactionrepgain.md) | Get the reputation gain of an action. |
+|  [getActionSuccesses(type, name)](./bitburner.bladeburner.getactionsuccesses.md) | Get action successes. |
 |  [getActionTime(type, name)](./bitburner.bladeburner.getactiontime.md) | Get the time to complete an action. |
 |  [getBlackOpNames()](./bitburner.bladeburner.getblackopnames.md) | List all black ops. |
 |  [getBlackOpRank(name)](./bitburner.bladeburner.getblackoprank.md) | Get black op required rank. |

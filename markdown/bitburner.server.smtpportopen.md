@@ -6,7 +6,7 @@
 
 Flag indicating whether SMTP Port is open
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 smtpPortOpen: boolean;

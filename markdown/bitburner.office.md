@@ -6,7 +6,7 @@
 
 Office for a division in a city.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface Office 
@@ -14,17 +14,17 @@ export interface Office
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [avgEne](./bitburner.office.avgene.md) | number | Average energy of the employees |
-|  [avgHap](./bitburner.office.avghap.md) | number | Average happiness of the employees |
-|  [avgMor](./bitburner.office.avgmor.md) | number | Average morale of the employees |
-|  [employeeJobs](./bitburner.office.employeejobs.md) | Record&lt;[CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->, number&gt; | Positions of the employees |
-|  [employeeProd](./bitburner.office.employeeprod.md) | Record&lt;[CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->, number&gt; | Production of the employees |
-|  [employees](./bitburner.office.employees.md) | number | Amount of employees |
-|  [loc](./bitburner.office.loc.md) | [CityName](./bitburner.cityname.md) | City of the office |
-|  [maxEne](./bitburner.office.maxene.md) | number | Maximum amount of energy of the employees |
-|  [maxHap](./bitburner.office.maxhap.md) | number | Maximum happiness of the employees |
-|  [maxMor](./bitburner.office.maxmor.md) | number | Maximum morale of the employees |
-|  [size](./bitburner.office.size.md) | number | Maximum number of employee |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [avgEne](./bitburner.office.avgene.md) |  | number | Average energy of the employees |
+|  [avgHap](./bitburner.office.avghap.md) |  | number | Average happiness of the employees |
+|  [avgMor](./bitburner.office.avgmor.md) |  | number | Average morale of the employees |
+|  [employeeJobs](./bitburner.office.employeejobs.md) |  | Record&lt;[CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->, number&gt; | Positions of the employees |
+|  [employeeProd](./bitburner.office.employeeprod.md) |  | Record&lt;[CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->, number&gt; | Production of the employees |
+|  [employees](./bitburner.office.employees.md) |  | number | Amount of employees |
+|  [loc](./bitburner.office.loc.md) |  | [CityName](./bitburner.cityname.md) | City of the office |
+|  [maxEne](./bitburner.office.maxene.md) |  | number | Maximum amount of energy of the employees |
+|  [maxHap](./bitburner.office.maxhap.md) |  | number | Maximum happiness of the employees |
+|  [maxMor](./bitburner.office.maxmor.md) |  | number | Maximum morale of the employees |
+|  [size](./bitburner.office.size.md) |  | number | Maximum number of employee |
 

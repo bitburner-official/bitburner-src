@@ -6,7 +6,7 @@
 
 Namespace for sleeve functions.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly sleeve: Sleeve;

@@ -6,7 +6,7 @@
 
 Influences the initial security level (hackDifficulty) of a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ServerStartingSecurity: number;

@@ -6,7 +6,7 @@
 
 Issue dividends
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 issueDividends(rate: number): void;
@@ -18,7 +18,7 @@ issueDividends(rate: number): void;
 |  --- | --- | --- |
 |  rate | number | Fraction of profit to issue as dividends. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

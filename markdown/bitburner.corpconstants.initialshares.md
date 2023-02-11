@@ -4,7 +4,7 @@
 
 ## CorpConstants.initialShares property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 initialShares: number;

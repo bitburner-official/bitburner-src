@@ -6,7 +6,7 @@
 
 Multiplier to defense experience gain rate
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 defense_exp: number;

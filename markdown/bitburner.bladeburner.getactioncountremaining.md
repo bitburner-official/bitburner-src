@@ -6,7 +6,7 @@
 
 Get action count remaining.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getActionCountRemaining(type: string, name: string): number;
@@ -19,7 +19,7 @@ getActionCountRemaining(type: string, name: string): number;
 |  type | string | Type of action. |
 |  name | string | Name of action. Must be an exact match. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

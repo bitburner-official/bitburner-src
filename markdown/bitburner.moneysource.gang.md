@@ -4,7 +4,7 @@
 
 ## MoneySource.gang property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 gang: number;

@@ -6,7 +6,7 @@
 
 Revenue last cycle
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 lastCycleRevenue: number;

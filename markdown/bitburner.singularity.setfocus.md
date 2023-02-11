@@ -6,7 +6,7 @@
 
 Set the players focus.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setFocus(focus: boolean): boolean;
@@ -18,7 +18,7 @@ setFocus(focus: boolean): boolean;
 |  --- | --- | --- |
 |  focus | boolean |  |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

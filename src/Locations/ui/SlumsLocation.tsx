@@ -9,7 +9,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 import { Crimes } from "../../Crime/Crimes";
 
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatPercent } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { Player } from "@player";
@@ -37,7 +37,7 @@ export function SlumsLocation(): React.ReactElement {
       {crimes.map((crime) => (
         <Tooltip title={crime.tooltipText}>
           <Button onClick={(e) => doCrime(e, crime)}>
-            {crime.type} ({numeralWrapper.formatPercentage(crime.successRate(Player))} chance of success)
+            {crime.type} ({formatPercent(crime.successRate(Player))} chance of success)
           </Button>
         </Tooltip>
       ))}

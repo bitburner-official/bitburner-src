@@ -6,7 +6,7 @@
 
 Player's hacking growth multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 growth: number;

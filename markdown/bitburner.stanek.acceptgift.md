@@ -6,12 +6,12 @@
 
 Accept Stanek's Gift by joining the Church of the Machine God
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 acceptGift(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

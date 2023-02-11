@@ -6,7 +6,7 @@
 
 Calculate the resulting faction favor of a total amount of reputation. (Faction favor is gained whenever you install an Augmentation.)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 calculateRepToFavor(rep: number): number;
@@ -18,7 +18,7 @@ calculateRepToFavor(rep: number): number;
 |  --- | --- | --- |
 |  rep | number | amount of reputation. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

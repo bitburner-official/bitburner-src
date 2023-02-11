@@ -6,7 +6,7 @@
 
 Checks the status of the logging for the given function.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 isLogEnabled(fn: string): boolean;
@@ -18,7 +18,7 @@ isLogEnabled(fn: string): boolean;
 |  --- | --- | --- |
 |  fn | string | Name of function to check. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

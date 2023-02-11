@@ -6,12 +6,12 @@
 
 Get hacknet related multipliers.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getHacknetMultipliers(): HacknetMultipliers;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [HacknetMultipliers](./bitburner.hacknetmultipliers.md)
 

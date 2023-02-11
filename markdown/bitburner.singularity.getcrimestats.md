@@ -6,7 +6,7 @@
 
 Get stats related to a crime.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getCrimeStats(crime: CrimeType | `${CrimeType}`): CrimeStats;
@@ -18,7 +18,7 @@ getCrimeStats(crime: CrimeType | `${CrimeType}`): CrimeStats;
 |  --- | --- | --- |
 |  crime | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` | Name of crime. |
 
-<b>Returns:</b>
+**Returns:**
 
 [CrimeStats](./bitburner.crimestats.md)
 

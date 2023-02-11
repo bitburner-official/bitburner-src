@@ -4,7 +4,7 @@
 
 ## CorpConstants.officeInitialSize property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 officeInitialSize: number;

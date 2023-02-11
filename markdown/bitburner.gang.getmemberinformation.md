@@ -6,7 +6,7 @@
 
 Get information about a specific gang member.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getMemberInformation(name: string): GangMemberInfo;
@@ -18,7 +18,7 @@ getMemberInformation(name: string): GangMemberInfo;
 |  --- | --- | --- |
 |  name | string | Name of member. |
 
-<b>Returns:</b>
+**Returns:**
 
 [GangMemberInfo](./bitburner.gangmemberinfo.md)
 

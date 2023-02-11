@@ -6,7 +6,7 @@
 
 Get the list of servers connected to a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 scan(host?: string): string[];
@@ -16,9 +16,9 @@ scan(host?: string): string[];
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | Optional. Hostname of the server to scan, default to current server. |
+|  host | string | _(Optional)_ Optional. Hostname of the server to scan, default to current server. |
 
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

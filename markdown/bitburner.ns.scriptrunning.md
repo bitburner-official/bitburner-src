@@ -6,7 +6,7 @@
 
 Check if any script with a filename is running.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 scriptRunning(script: string, host: string): boolean;
@@ -19,7 +19,7 @@ scriptRunning(script: string, host: string): boolean;
 |  script | string | Filename of script to check. This is case-sensitive. |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

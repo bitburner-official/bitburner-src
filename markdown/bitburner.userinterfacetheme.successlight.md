@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.successlight property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 successlight: string;

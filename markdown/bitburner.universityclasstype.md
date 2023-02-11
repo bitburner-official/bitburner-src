@@ -5,7 +5,7 @@
 ## UniversityClassType enum
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 declare enum UniversityClassType 

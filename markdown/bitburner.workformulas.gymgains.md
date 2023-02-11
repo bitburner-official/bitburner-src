@@ -4,7 +4,7 @@
 
 ## WorkFormulas.gymGains() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 gymGains(person: Person, gymType: GymType | `${GymType}`, locationName: string): WorkStats;
@@ -18,7 +18,7 @@ gymGains(person: Person, gymType: GymType | `${GymType}`, locationName: string):
 |  gymType | [GymType](./bitburner.gymtype.md) \| \`${[GymType](./bitburner.gymtype.md)<!-- -->}\` |  |
 |  locationName | string |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [WorkStats](./bitburner.workstats.md)
 

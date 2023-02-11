@@ -4,7 +4,7 @@
 
 ## CorpIndustryData.startingCost property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 startingCost: number;

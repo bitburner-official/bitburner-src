@@ -6,7 +6,7 @@
 
 Get the execution time of a weaken() call.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getWeakenTime(host: string): number;
@@ -18,7 +18,7 @@ getWeakenTime(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

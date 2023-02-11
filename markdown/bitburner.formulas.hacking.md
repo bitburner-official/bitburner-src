@@ -6,7 +6,7 @@
 
 Hacking formulas
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacking: HackingFormulas;

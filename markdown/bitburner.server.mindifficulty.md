@@ -6,7 +6,7 @@
 
 Minimum server security level that this server can be weakened to
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 minDifficulty: number;

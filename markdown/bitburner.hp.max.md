@@ -4,7 +4,7 @@
 
 ## HP.max property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 max: number;

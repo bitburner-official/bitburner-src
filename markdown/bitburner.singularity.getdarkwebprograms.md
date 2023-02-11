@@ -6,12 +6,12 @@
 
 Get a list of programs offered on the dark web.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getDarkwebPrograms(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

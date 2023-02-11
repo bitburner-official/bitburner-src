@@ -1,5 +1,5 @@
 import React from "react";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatMoney } from "../../../ui/formatNumber";
 import * as corpConstants from "../../data/Constants";
 import { OfficeSpace } from "../../OfficeSpace";
 import { Corporation } from "../../Corporation";
@@ -32,7 +32,7 @@ function UpgradeSizeButton(props: IUpgradeButton): React.ReactElement {
     props.onClose();
   }
   return (
-    <Tooltip title={numeralWrapper.formatMoney(props.cost)}>
+    <Tooltip title={formatMoney(props.cost)}>
       <span>
         <Button disabled={corp.funds < props.cost} onClick={() => upgradeSize(props.cost, props.size)}>
           +{props.size}

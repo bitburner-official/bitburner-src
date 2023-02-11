@@ -6,7 +6,7 @@
 
 Defense multiplier from ascensions
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 def_asc_mult: number;

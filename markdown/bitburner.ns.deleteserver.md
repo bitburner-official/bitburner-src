@@ -6,7 +6,7 @@
 
 Delete a purchased server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 deleteServer(host: string): boolean;
@@ -18,7 +18,7 @@ deleteServer(host: string): boolean;
 |  --- | --- | --- |
 |  host | string | Hostname of the server to delete. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

@@ -6,7 +6,7 @@
 
 Flag indicating whether the SSH Port is open
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sshPortOpen: boolean;

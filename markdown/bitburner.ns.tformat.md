@@ -6,7 +6,7 @@
 
 Format time to a readable string.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 tFormat(milliseconds: number, milliPrecision?: boolean): string;
@@ -17,9 +17,9 @@ tFormat(milliseconds: number, milliPrecision?: boolean): string;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  milliseconds | number | Number of millisecond to format. |
-|  milliPrecision | boolean | Format time with subsecond precision. Defaults to false. |
+|  milliPrecision | boolean | _(Optional)_ Format time with subsecond precision. Defaults to false. |
 
-<b>Returns:</b>
+**Returns:**
 
 string
 

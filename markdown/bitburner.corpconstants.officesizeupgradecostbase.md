@@ -4,7 +4,7 @@
 
 ## CorpConstants.officeSizeUpgradeCostBase property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 officeSizeUpgradeCostBase: number;

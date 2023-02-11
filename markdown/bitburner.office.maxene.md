@@ -6,7 +6,7 @@
 
 Maximum amount of energy of the employees
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 maxEne: number;

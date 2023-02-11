@@ -6,7 +6,7 @@
 
 Agility skill level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agi: number;

@@ -6,7 +6,7 @@
 
 Names of all corporation game states
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 stateNames: CorpStateName[];

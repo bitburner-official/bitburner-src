@@ -6,7 +6,7 @@
 
 Influences the hacking skill required to backdoor the world daemon.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 WorldDaemonDifficulty: number;

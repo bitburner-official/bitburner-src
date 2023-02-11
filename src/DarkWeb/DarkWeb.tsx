@@ -4,7 +4,7 @@ import { DarkWebItems } from "./DarkWebItems";
 import { Player } from "@player";
 import { Terminal } from "../Terminal";
 import { SpecialServers } from "../Server/data/SpecialServers";
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatMoney } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
 import { DarkWebItem } from "./DarkWebItem";
 import { isCreateProgramWork } from "../Work/CreateProgramWork";
@@ -102,9 +102,7 @@ export function buyAllDarkwebItems(): void {
   }
 
   if (cost > Player.money) {
-    Terminal.error(
-      "Not enough money to purchase remaining programs, " + numeralWrapper.formatMoney(cost) + " required",
-    );
+    Terminal.error("Not enough money to purchase remaining programs, " + formatMoney(cost) + " required");
     return;
   }
 

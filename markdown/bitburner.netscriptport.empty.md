@@ -6,12 +6,12 @@
 
 Check if the port is empty.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 empty(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

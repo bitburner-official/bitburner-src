@@ -6,7 +6,7 @@
 
 Strength multiplier from ascensions
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 str_asc_mult: number;

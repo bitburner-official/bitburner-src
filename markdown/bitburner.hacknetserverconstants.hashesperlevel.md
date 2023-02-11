@@ -6,7 +6,7 @@
 
 Number of hashes calculated per level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 HashesPerLevel: number;

@@ -6,7 +6,7 @@
 
 How much money is given
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 money: number;

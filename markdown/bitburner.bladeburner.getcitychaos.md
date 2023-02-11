@@ -6,7 +6,7 @@
 
 Get chaos of a city.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getCityChaos(city: CityName | `${CityName}`): number;
@@ -18,7 +18,7 @@ getCityChaos(city: CityName | `${CityName}`): number;
 |  --- | --- | --- |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of city. Case-sensitive |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

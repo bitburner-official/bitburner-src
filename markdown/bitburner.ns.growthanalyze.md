@@ -6,7 +6,7 @@
 
 Calculate the number of grow threads needed to grow a server by a certain multiplier.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 growthAnalyze(host: string, growthAmount: number, cores?: number): number;
@@ -18,9 +18,9 @@ growthAnalyze(host: string, growthAmount: number, cores?: number): number;
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
 |  growthAmount | number | Multiplicative factor by which the server is grown. Decimal form. |
-|  cores | number |  |
+|  cores | number | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

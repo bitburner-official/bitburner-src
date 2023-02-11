@@ -6,12 +6,12 @@
 
 Get current action.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getCurrentAction(): BladeburnerCurAction;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [BladeburnerCurAction](./bitburner.bladeburnercuraction.md)
 

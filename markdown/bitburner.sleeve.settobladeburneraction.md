@@ -6,7 +6,7 @@
 
 Set a sleeve to perform bladeburner actions.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setToBladeburnerAction(sleeveNumber: number, action: string, contract?: string): boolean;
@@ -18,9 +18,9 @@ setToBladeburnerAction(sleeveNumber: number, action: string, contract?: string):
 |  --- | --- | --- |
 |  sleeveNumber | number | Index of the sleeve to workout at the gym. |
 |  action | string | Name of the action to be performed. |
-|  contract | string | Name of the contract if applicable. |
+|  contract | string | _(Optional)_ Name of the contract if applicable. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

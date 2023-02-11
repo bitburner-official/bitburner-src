@@ -6,7 +6,7 @@
 
 Bladeburner current action.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface BladeburnerCurAction 
@@ -14,8 +14,8 @@ interface BladeburnerCurAction
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [name](./bitburner.bladeburnercuraction.name.md) | string | Name of Action |
-|  [type](./bitburner.bladeburnercuraction.type.md) | string | Type of Action |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [name](./bitburner.bladeburnercuraction.name.md) |  | string | Name of Action |
+|  [type](./bitburner.bladeburnercuraction.type.md) |  | string | Type of Action |
 

@@ -6,7 +6,7 @@
 
 Cost to buy material
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cost: number;

@@ -6,7 +6,7 @@
 
 Calculate hack time.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hackTime(server: Server, player: Person): number;
@@ -19,7 +19,7 @@ hackTime(server: Server, player: Person): number;
 |  server | [Server](./bitburner.server.md) | Server info from [getServer](./bitburner.ns.getserver.md) |
 |  player | [Person](./bitburner.person.md) | Player info from [getPlayer](./bitburner.ns.getplayer.md) |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

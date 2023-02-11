@@ -6,7 +6,7 @@
 
 Multiplier to amount of reputation gained when working
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 company_rep: number;

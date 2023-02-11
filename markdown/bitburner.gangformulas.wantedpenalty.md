@@ -6,7 +6,7 @@
 
 Calculate the wanted penalty.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 wantedPenalty(gang: GangGenInfo): number;
@@ -18,7 +18,7 @@ wantedPenalty(gang: GangGenInfo): number;
 |  --- | --- | --- |
 |  gang | [GangGenInfo](./bitburner.ganggeninfo.md) | Gang info from [getGangInformation](./bitburner.gang.getganginformation.md) |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

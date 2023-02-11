@@ -6,7 +6,7 @@
 
 Return value of [getSleevePurchasableAugs](./bitburner.sleeve.getsleevepurchasableaugs.md)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface AugmentPair 
@@ -14,8 +14,8 @@ interface AugmentPair
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [cost](./bitburner.augmentpair.cost.md) | number | augmentation cost |
-|  [name](./bitburner.augmentpair.name.md) | string | augmentation name |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [cost](./bitburner.augmentpair.cost.md) |  | number | augmentation cost |
+|  [name](./bitburner.augmentpair.name.md) |  | string | augmentation name |
 

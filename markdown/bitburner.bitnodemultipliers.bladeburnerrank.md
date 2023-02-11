@@ -6,7 +6,7 @@
 
 Influences how quickly the player can gain rank within Bladeburner.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 BladeburnerRank: number;

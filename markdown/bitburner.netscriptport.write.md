@@ -6,7 +6,7 @@
 
 Write data to a port.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 write(value: string | number): PortData | null;
@@ -18,7 +18,7 @@ write(value: string | number): PortData | null;
 |  --- | --- | --- |
 |  value | string \| number |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [PortData](./bitburner.portdata.md) \| null
 

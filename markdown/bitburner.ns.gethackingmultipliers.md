@@ -6,12 +6,12 @@
 
 Get hacking related multipliers.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getHackingMultipliers(): HackingMultipliers;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [HackingMultipliers](./bitburner.hackingmultipliers.md)
 

@@ -6,7 +6,7 @@
 
 Names of all one-time corporation-wide unlocks
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 unlockNames: CorpUnlockName[];

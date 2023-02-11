@@ -6,12 +6,12 @@
 
 Returns the amount of Faction favor required to be able to donate to a faction.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getFavorToDonate(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

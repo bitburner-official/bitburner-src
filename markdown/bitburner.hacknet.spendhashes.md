@@ -6,7 +6,7 @@
 
 Purchase a hash upgrade.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 spendHashes(upgName: string, upgTarget?: string, count?: number): boolean;
@@ -17,10 +17,10 @@ spendHashes(upgName: string, upgTarget?: string, count?: number): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  upgName | string | Name of the upgrade of Hacknet Node. |
-|  upgTarget | string | Object to which upgrade applies. Required for certain upgrades. |
-|  count | number | Number of upgrades to buy at once. Defaults to 1 if not specified. For compatibility reasons, upgTarget must be specified, even if it is not used, in order to specify count. |
+|  upgTarget | string | _(Optional)_ Object to which upgrade applies. Required for certain upgrades. |
+|  count | number | _(Optional)_ Number of upgrades to buy at once. Defaults to 1 if not specified. For compatibility reasons, upgTarget must be specified, even if it is not used, in order to specify count. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

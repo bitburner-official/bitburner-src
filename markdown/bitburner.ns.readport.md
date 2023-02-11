@@ -6,7 +6,7 @@
 
 Read data from a port.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readPort(port: number): PortData;
@@ -18,7 +18,7 @@ readPort(port: number): PortData;
 |  --- | --- | --- |
 |  port | number |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [PortData](./bitburner.portdata.md)
 

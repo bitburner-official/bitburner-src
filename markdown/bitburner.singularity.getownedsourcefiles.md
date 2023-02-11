@@ -6,12 +6,12 @@
 
 Get a list of acquired Source-Files.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getOwnedSourceFiles(): SourceFileLvl[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 [SourceFileLvl](./bitburner.sourcefilelvl.md)<!-- -->\[\]
 

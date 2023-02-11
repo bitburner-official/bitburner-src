@@ -6,7 +6,7 @@
 
 Dexterity skill level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dex: number;

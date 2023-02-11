@@ -6,7 +6,7 @@
 
 Name of the gang member
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 name: string;

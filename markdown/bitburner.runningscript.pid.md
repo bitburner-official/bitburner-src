@@ -6,7 +6,7 @@
 
 Process ID. Must be an integer
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 pid: number;

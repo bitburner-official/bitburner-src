@@ -6,7 +6,7 @@
 
 Script's arguments
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 args: (string | number | boolean)[];

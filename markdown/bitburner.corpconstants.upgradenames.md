@@ -6,7 +6,7 @@
 
 Names of all corporation-wide upgrades
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 upgradeNames: CorpUpgradeName[];

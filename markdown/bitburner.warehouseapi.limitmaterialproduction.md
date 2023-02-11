@@ -6,7 +6,7 @@
 
 Limit Material Production.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 limitMaterialProduction(
@@ -26,7 +26,7 @@ limitMaterialProduction(
 |  materialName | string | Name of the material. |
 |  qty | number | Amount to limit to. Pass a negative value to remove the limit instead. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

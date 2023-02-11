@@ -6,7 +6,7 @@
 
 Influences the amount of money gained from completing Coding Contracts
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 CodingContractMoney: number;

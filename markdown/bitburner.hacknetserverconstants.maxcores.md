@@ -6,7 +6,7 @@
 
 Max number of cores
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 MaxCores: number;

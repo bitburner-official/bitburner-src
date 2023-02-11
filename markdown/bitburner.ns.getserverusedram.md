@@ -6,7 +6,7 @@
 
 Get the used RAM on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getServerUsedRam(host: string): number;
@@ -18,7 +18,7 @@ getServerUsedRam(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

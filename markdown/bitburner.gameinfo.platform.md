@@ -4,7 +4,7 @@
 
 ## GameInfo.platform property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 platform: string;

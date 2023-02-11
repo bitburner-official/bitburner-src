@@ -5,16 +5,16 @@
 ## RecentScript interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface RecentScript extends RunningScript 
 ```
-<b>Extends:</b> [RunningScript](./bitburner.runningscript.md)
+**Extends:** [RunningScript](./bitburner.runningscript.md)
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [timeOfDeath](./bitburner.recentscript.timeofdeath.md) | Date | Timestamp of when the script was killed |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [timeOfDeath](./bitburner.recentscript.timeofdeath.md) |  | Date | Timestamp of when the script was killed |
 

@@ -6,7 +6,7 @@
 
 Expenses last cycle
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 lastCycleExpenses: number;

@@ -4,7 +4,7 @@
 
 ## WorkStats.reputation property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 reputation: number;

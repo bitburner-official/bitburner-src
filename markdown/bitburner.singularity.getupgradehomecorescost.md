@@ -6,12 +6,12 @@
 
 Get the price of upgrading home cores.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getUpgradeHomeCoresCost(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

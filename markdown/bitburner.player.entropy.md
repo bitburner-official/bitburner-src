@@ -4,7 +4,7 @@
 
 ## Player.entropy property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 entropy: number;

@@ -6,7 +6,7 @@
 
 Competition for the material, only present if "Market Research - Competition" unlocked
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cmp: number | undefined;

@@ -6,7 +6,7 @@
 
 Demand for the product, only present if "Market Research - Demand" unlocked
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dmd: number | undefined;

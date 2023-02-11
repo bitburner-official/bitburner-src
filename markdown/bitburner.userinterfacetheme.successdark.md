@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.successdark property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 successdark: string;

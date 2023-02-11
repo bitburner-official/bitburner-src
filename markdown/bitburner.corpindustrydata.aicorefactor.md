@@ -6,7 +6,7 @@
 
 AI Cores factor
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 aiCoreFactor?: number;

@@ -6,12 +6,12 @@
 
 Get bladeburner stamina.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getStamina(): [number, number];
 ```
-<b>Returns:</b>
+**Returns:**
 
 \[number, number\]
 

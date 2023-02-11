@@ -6,7 +6,7 @@
 
 Cities in which this division has expanded
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cities: CityName[];

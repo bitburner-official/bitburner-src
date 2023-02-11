@@ -10,6 +10,8 @@ Netburner.txt
 /test/*.bundle.*
 /test/*.css
 /input/bitburner.api.json
+dist/bitburner.d.ts
+dist/images
 .cypress
 
 # tmp folder for build and electron

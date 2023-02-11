@@ -6,7 +6,7 @@
 
 Calculate ascension point gain.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ascensionPointsGain(exp: number): number;
@@ -18,7 +18,7 @@ ascensionPointsGain(exp: number): number;
 |  --- | --- | --- |
 |  exp | number | Experience point before ascension. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

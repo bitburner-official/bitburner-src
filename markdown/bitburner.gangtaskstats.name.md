@@ -6,7 +6,7 @@
 
 Task name
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 name: string;

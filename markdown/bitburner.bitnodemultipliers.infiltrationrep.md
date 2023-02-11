@@ -6,7 +6,7 @@
 
 Influences how much rep the player can gain from factions when selling stolen documents and secrets
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 InfiltrationRep: number;

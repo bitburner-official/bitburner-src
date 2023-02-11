@@ -6,7 +6,7 @@
 
 Terminate another script.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 kill(script: string, host: string, ...args: (string | number | boolean)[]): boolean;
@@ -20,7 +20,7 @@ kill(script: string, host: string, ...args: (string | number | boolean)[]): bool
 |  host | string | Hostname of the server on which to kill the script. |
 |  args | (string \| number \| boolean)\[\] | Arguments to identify which script to kill. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

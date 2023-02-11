@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.black property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 black: string;

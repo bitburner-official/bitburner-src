@@ -6,7 +6,7 @@
 
 Quality of the material
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 qlt: number;

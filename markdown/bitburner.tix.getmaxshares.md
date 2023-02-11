@@ -6,7 +6,7 @@
 
 Returns the maximum number of shares of a stock.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getMaxShares(sym: string): number;
@@ -18,7 +18,7 @@ getMaxShares(sym: string): number;
 |  --- | --- | --- |
 |  sym | string | Stock symbol. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

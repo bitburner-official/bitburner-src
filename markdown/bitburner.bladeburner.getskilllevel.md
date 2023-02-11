@@ -6,7 +6,7 @@
 
 Get skill level.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getSkillLevel(name: string): number;
@@ -18,7 +18,7 @@ getSkillLevel(name: string): number;
 |  --- | --- | --- |
 |  name | string |  |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

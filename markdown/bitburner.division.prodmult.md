@@ -6,7 +6,7 @@
 
 Production multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 prodMult: number;

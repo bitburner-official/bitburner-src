@@ -4,7 +4,7 @@
 
 ## WorkFormulas.universityGains() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 universityGains(
@@ -22,7 +22,7 @@ universityGains(
 |  classType | [UniversityClassType](./bitburner.universityclasstype.md) \| \`${[UniversityClassType](./bitburner.universityclasstype.md)<!-- -->}\` |  |
 |  locationName | string |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [WorkStats](./bitburner.workstats.md)
 

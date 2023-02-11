@@ -6,7 +6,7 @@
 
 Number of threads to use for this function. Must be less than or equal to the number of threads the script is running with.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 threads?: number;

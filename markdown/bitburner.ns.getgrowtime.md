@@ -6,7 +6,7 @@
 
 Get the execution time of a grow() call.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getGrowTime(host: string): number;
@@ -18,7 +18,7 @@ getGrowTime(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

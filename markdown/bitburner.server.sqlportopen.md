@@ -6,7 +6,7 @@
 
 Flag indicating whether SQL Port is open
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sqlPortOpen: boolean;

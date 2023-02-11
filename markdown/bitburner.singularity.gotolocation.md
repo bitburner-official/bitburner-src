@@ -6,7 +6,7 @@
 
 Go to a location.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 goToLocation(locationName: string): boolean;
@@ -18,7 +18,7 @@ goToLocation(locationName: string): boolean;
 |  --- | --- | --- |
 |  locationName | string | Name of the location. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

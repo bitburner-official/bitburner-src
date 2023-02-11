@@ -6,7 +6,7 @@
 
 Price of the shares
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sharePrice: number;

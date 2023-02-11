@@ -6,7 +6,7 @@
 
 Names of all researches common to all industries
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 researchNamesBase: CorpResearchName[];

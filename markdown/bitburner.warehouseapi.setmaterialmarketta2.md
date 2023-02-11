@@ -6,7 +6,7 @@
 
 Set market TA 2 for a material.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setMaterialMarketTA2(divisionName: string, city: CityName | `${CityName}`, materialName: string, on: boolean): void;
@@ -21,7 +21,7 @@ setMaterialMarketTA2(divisionName: string, city: CityName | `${CityName}`, mater
 |  materialName | string | Name of the material |
 |  on | boolean | market ta enabled |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

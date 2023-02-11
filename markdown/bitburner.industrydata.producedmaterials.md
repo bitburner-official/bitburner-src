@@ -6,7 +6,7 @@
 
 Materials produced
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 producedMaterials?: string[];

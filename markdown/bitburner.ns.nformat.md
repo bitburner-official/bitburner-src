@@ -4,9 +4,9 @@
 
 ## NS.nFormat() method
 
-Format a number.
+Format a number using the numeral library. This function is deprecated and will be removed in 2.3.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 nFormat(n: number, format: string): string;
@@ -17,9 +17,9 @@ nFormat(n: number, format: string): string;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  n | number | Number to format. |
-|  format | string | Formatter. |
+|  format | string | Formatting options. See http://numeraljs.com/\#format for valid formats. |
 
-<b>Returns:</b>
+**Returns:**
 
 string
 
@@ -29,7 +29,7 @@ Formatted number.
 
 RAM cost: 0 GB
 
-Converts a number into a string with the specified formatter. This uses the numeral.js library, so the formatters must be compatible with that. This is the same function that the game itself uses to display numbers.
+Converts a number into a string with the specified format options. See http://numeraljs.com/\#format for documentation on format strings supported.
 
-For more information, see: http://numeraljs.com/
+This function is deprecated and will be removed in 2.3.
 

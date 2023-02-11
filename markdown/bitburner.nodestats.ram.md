@@ -6,7 +6,7 @@
 
 Node's RAM (GB)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ram: number;

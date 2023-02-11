@@ -6,7 +6,7 @@
 
 Generate a dummy contract.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 createDummyContract(type: string): void;
@@ -18,7 +18,7 @@ createDummyContract(type: string): void;
 |  --- | --- | --- |
 |  type | string | Type of contract to generate |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

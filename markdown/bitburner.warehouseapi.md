@@ -6,7 +6,7 @@
 
 Corporation Warehouse API
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface WarehouseAPI 

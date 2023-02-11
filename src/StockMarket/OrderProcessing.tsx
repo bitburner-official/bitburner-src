@@ -11,7 +11,7 @@ import { Stock } from "./Stock";
 import { OrderTypes } from "./data/OrderTypes";
 import { PositionTypes } from "./data/PositionTypes";
 
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatShares } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
@@ -153,7 +153,7 @@ function executeOrder(order: Order, refs: IProcessOrderRefs): void {
           dialogBoxCreate(
             <>
               {order.type} for {stock.symbol} @ <Money money={order.price} /> ({pos}) was filled (
-              {numeralWrapper.formatShares(Math.round(order.shares))} shares)
+              {formatShares(Math.round(order.shares))} shares)
             </>,
           );
         }

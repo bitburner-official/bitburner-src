@@ -6,7 +6,7 @@
 
 Runs HTTPWorm.exe on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 httpworm(host: string): void;
@@ -18,7 +18,7 @@ httpworm(host: string): void;
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

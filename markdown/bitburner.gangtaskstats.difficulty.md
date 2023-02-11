@@ -6,7 +6,7 @@
 
 Number representing the difficulty of the task
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 difficulty: number;

@@ -6,7 +6,7 @@
 
 Hacknet node related constants
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface HacknetNodeConstants 
@@ -14,18 +14,18 @@ interface HacknetNodeConstants
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [BaseCost](./bitburner.hacknetnodeconstants.basecost.md) | number | Base cost for a new node |
-|  [CoreBaseCost](./bitburner.hacknetnodeconstants.corebasecost.md) | number | Base cost to increase cores |
-|  [LevelBaseCost](./bitburner.hacknetnodeconstants.levelbasecost.md) | number | Base cost per level |
-|  [MaxCores](./bitburner.hacknetnodeconstants.maxcores.md) | number | Max number of cores |
-|  [MaxLevel](./bitburner.hacknetnodeconstants.maxlevel.md) | number | Max node level |
-|  [MaxRam](./bitburner.hacknetnodeconstants.maxram.md) | number | Max amount of RAM in GB |
-|  [MoneyGainPerLevel](./bitburner.hacknetnodeconstants.moneygainperlevel.md) | number | Amount of money gained per level |
-|  [PurchaseNextMult](./bitburner.hacknetnodeconstants.purchasenextmult.md) | number | Multiplier to purchase new node |
-|  [RamBaseCost](./bitburner.hacknetnodeconstants.rambasecost.md) | number | Base cost to increase RAM |
-|  [UpgradeCoreMult](./bitburner.hacknetnodeconstants.upgradecoremult.md) | number | Multiplier to increase cores |
-|  [UpgradeLevelMult](./bitburner.hacknetnodeconstants.upgradelevelmult.md) | number | Multiplier to increase node level |
-|  [UpgradeRamMult](./bitburner.hacknetnodeconstants.upgraderammult.md) | number | Multiplier to increase RAM |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [BaseCost](./bitburner.hacknetnodeconstants.basecost.md) |  | number | Base cost for a new node |
+|  [CoreBaseCost](./bitburner.hacknetnodeconstants.corebasecost.md) |  | number | Base cost to increase cores |
+|  [LevelBaseCost](./bitburner.hacknetnodeconstants.levelbasecost.md) |  | number | Base cost per level |
+|  [MaxCores](./bitburner.hacknetnodeconstants.maxcores.md) |  | number | Max number of cores |
+|  [MaxLevel](./bitburner.hacknetnodeconstants.maxlevel.md) |  | number | Max node level |
+|  [MaxRam](./bitburner.hacknetnodeconstants.maxram.md) |  | number | Max amount of RAM in GB |
+|  [MoneyGainPerLevel](./bitburner.hacknetnodeconstants.moneygainperlevel.md) |  | number | Amount of money gained per level |
+|  [PurchaseNextMult](./bitburner.hacknetnodeconstants.purchasenextmult.md) |  | number | Multiplier to purchase new node |
+|  [RamBaseCost](./bitburner.hacknetnodeconstants.rambasecost.md) |  | number | Base cost to increase RAM |
+|  [UpgradeCoreMult](./bitburner.hacknetnodeconstants.upgradecoremult.md) |  | number | Multiplier to increase cores |
+|  [UpgradeLevelMult](./bitburner.hacknetnodeconstants.upgradelevelmult.md) |  | number | Multiplier to increase node level |
+|  [UpgradeRamMult](./bitburner.hacknetnodeconstants.upgraderammult.md) |  | number | Multiplier to increase RAM |
 

@@ -6,12 +6,12 @@
 
 Get the list of hash upgrades
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getHashUpgrades(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

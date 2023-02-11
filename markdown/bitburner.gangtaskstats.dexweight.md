@@ -6,7 +6,7 @@
 
 Dexterity skill impact on task scaling
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dexWeight: number;

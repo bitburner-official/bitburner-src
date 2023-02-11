@@ -6,7 +6,7 @@
 
 Agility multiplier from ascensions
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agi_asc_mult: number;

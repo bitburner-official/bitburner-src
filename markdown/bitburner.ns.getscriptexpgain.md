@@ -6,7 +6,7 @@
 
 Get the exp gain of a script.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getScriptExpGain(script: string, host: string, ...args: (string | number | boolean)[]): number;
@@ -20,7 +20,7 @@ getScriptExpGain(script: string, host: string, ...args: (string | number | boole
 |  host | string | Server on which script is running. |
 |  args | (string \| number \| boolean)\[\] | Arguments that the script is running with. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

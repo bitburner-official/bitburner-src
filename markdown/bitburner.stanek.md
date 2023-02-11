@@ -6,7 +6,7 @@
 
 Stanek's Gift API.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface Stanek 

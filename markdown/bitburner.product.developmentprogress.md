@@ -6,7 +6,7 @@
 
 Creation progress - A number between 0-100 representing percentage
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 developmentProgress: number;

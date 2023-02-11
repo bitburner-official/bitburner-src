@@ -6,7 +6,7 @@
 
 Influences the maximum money that a server can grow to.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ServerMaxMoney: number;

@@ -6,7 +6,7 @@
 
 Set whether smart supply uses leftovers before buying
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setSmartSupplyUseLeftovers(
@@ -26,7 +26,7 @@ setSmartSupplyUseLeftovers(
 |  materialName | string | Name of the material |
 |  enabled | boolean | smart supply use leftovers enabled |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.warningdark property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 warningdark: string;

@@ -6,7 +6,7 @@
 
 Get the reputation gain of an action.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getActionRepGain(type: string, name: string, level: number): number;
@@ -20,7 +20,7 @@ getActionRepGain(type: string, name: string, level: number): number;
 |  name | string | Name of action. Must be an exact match. |
 |  level | number | Optional action level at which to calculate the gain |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

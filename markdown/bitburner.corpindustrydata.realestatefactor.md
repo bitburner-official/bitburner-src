@@ -6,7 +6,7 @@
 
 Real estate factor
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 realEstateFactor?: number;

@@ -6,7 +6,7 @@
 
 Influences how much rep the player gains when performing work for a faction.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 FactionWorkRepGain: number;

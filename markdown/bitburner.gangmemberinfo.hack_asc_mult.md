@@ -6,7 +6,7 @@
 
 Hack multiplier from ascensions
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hack_asc_mult: number;

@@ -4,7 +4,7 @@
 
 ## CorpMaterialConstantData.competitionBase property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 competitionBase: number;

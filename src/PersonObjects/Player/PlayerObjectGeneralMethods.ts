@@ -34,7 +34,7 @@ import { SourceFiles } from "../../SourceFile/SourceFiles";
 import { getHospitalizationCost } from "../../Hospital/Hospital";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatMoney } from "../../ui/formatNumber";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
@@ -257,7 +257,7 @@ export function takeDamage(this: PlayerObject, amt: number): boolean {
 
 export function hospitalize(this: PlayerObject): number {
   const cost = getHospitalizationCost();
-  SnackbarEvents.emit(`You've been Hospitalized for ${numeralWrapper.formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
+  SnackbarEvents.emit(`You've been Hospitalized for ${formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
 
   this.loseMoney(cost, "hospitalization");
   this.hp.current = this.hp.max;
@@ -1164,7 +1164,7 @@ export function gainCodingContractReward(
     default: {
       const moneyGain = CONSTANTS.CodingContractBaseMoneyGain * difficulty * BitNodeMultipliers.CodingContractMoney;
       this.gainMoney(moneyGain, "codingcontract");
-      return `Gained ${numeralWrapper.formatMoney(moneyGain)}`;
+      return `Gained ${formatMoney(moneyGain)}`;
     }
   }
   /* eslint-enable no-case-declarations */

@@ -6,7 +6,7 @@
 
 Defense multiplier from equipment
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 def_mult: number;

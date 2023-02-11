@@ -6,7 +6,7 @@
 
 Charisma multiplier gained from ascending
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cha: number;

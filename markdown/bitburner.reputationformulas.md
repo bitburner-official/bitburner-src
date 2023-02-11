@@ -6,7 +6,7 @@
 
 Reputation formulas
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface ReputationFormulas 

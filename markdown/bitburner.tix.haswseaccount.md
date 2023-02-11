@@ -6,12 +6,12 @@
 
 Returns true if the player has access to a WSE Account
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hasWSEAccount(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

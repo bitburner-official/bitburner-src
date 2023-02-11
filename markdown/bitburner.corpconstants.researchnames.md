@@ -6,7 +6,7 @@
 
 Names of all researches
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 researchNames: CorpResearchName[];

@@ -6,7 +6,7 @@
 
 Close the tail window of a script.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 closeTail(pid?: number): void;
@@ -16,9 +16,9 @@ closeTail(pid?: number): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  pid | number | Optional. PID of the script having its tail closed. If omitted, the current script is used. |
+|  pid | number | _(Optional)_ Optional. PID of the script having its tail closed. If omitted, the current script is used. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

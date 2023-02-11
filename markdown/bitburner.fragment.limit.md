@@ -4,7 +4,7 @@
 
 ## Fragment.limit property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 limit: number;

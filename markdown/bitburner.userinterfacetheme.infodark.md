@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.infodark property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 infodark: string;

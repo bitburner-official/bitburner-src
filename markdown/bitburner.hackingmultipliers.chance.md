@@ -6,7 +6,7 @@
 
 Player's hacking chance multiplier.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 chance: number;

@@ -6,12 +6,12 @@
 
 Sleeps until the port is written to.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 nextWrite(): Promise<void>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;void&gt;
 

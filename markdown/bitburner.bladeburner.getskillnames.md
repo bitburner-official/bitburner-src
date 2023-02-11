@@ -6,12 +6,12 @@
 
 List all skills.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getSkillNames(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

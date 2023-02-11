@@ -3,7 +3,7 @@ import { Box, Button, Container, Paper, Tooltip, Typography, useTheme } from "@m
 import React, { useEffect, useState } from "react";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatFavor, formatReputation } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
 import { FactionNames } from "../data/FactionNames";
 import { Faction } from "../Faction";
@@ -153,10 +153,10 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
       {props.joined && (
         <Box display="grid" sx={{ alignItems: "center", justifyItems: "left", gridAutoFlow: "row" }}>
           <Typography sx={{ color: Settings.theme.rep }}>
-            {numeralWrapper.formatFavor(Math.floor(props.faction.favor))} favor
+            {formatFavor(Math.floor(props.faction.favor))} favor
           </Typography>
           <Typography sx={{ color: Settings.theme.rep }}>
-            {numeralWrapper.formatReputation(props.faction.playerReputation)} rep
+            {formatReputation(props.faction.playerReputation)} rep
           </Typography>
         </Box>
       )}

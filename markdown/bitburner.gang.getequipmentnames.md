@@ -6,12 +6,12 @@
 
 List equipment names.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getEquipmentNames(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

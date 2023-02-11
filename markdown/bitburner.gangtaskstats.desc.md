@@ -6,7 +6,7 @@
 
 Task Description
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 desc: string;

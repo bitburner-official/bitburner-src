@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { Faction } from "../../Faction/Faction";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatMoney, formatReputation } from "../../ui/formatNumber";
 import { Augmentation } from "../Augmentation";
 import { AugmentationNames } from "../data/AugmentationNames";
 import { StaticAugmentations } from "../StaticAugmentations";
@@ -240,13 +240,13 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
           <Box sx={{ display: "grid", alignItems: "center", gridTemplateColumns: "1fr 1fr" }}>
             <Requirement
               fulfilled={cost === 0 || Player.money > cost}
-              value={numeralWrapper.formatMoney(cost)}
+              value={formatMoney(cost)}
               color={Settings.theme.money}
             />
             {props.parent.rep !== undefined && (
               <Requirement
                 fulfilled={props.parent.rep >= repCost}
-                value={`${numeralWrapper.formatReputation(repCost)} rep`}
+                value={`${formatReputation(repCost)} rep`}
                 color={Settings.theme.rep}
               />
             )}

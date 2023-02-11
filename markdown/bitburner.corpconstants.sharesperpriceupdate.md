@@ -6,7 +6,7 @@
 
 When selling large number of shares, price is dynamically updated for every batch of this amount
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sharesPerPriceUpdate: number;

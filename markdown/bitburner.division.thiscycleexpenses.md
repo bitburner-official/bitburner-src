@@ -6,7 +6,7 @@
 
 Expenses this cycle
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 thisCycleExpenses: number;

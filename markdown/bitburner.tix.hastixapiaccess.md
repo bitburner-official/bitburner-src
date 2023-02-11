@@ -6,12 +6,12 @@
 
 Returns true if the player has access to the TIX API
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hasTIXAPIAccess(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

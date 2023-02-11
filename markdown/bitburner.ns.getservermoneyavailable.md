@@ -6,7 +6,7 @@
 
 Get money available on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getServerMoneyAvailable(host: string): number;
@@ -18,7 +18,7 @@ getServerMoneyAvailable(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

@@ -6,7 +6,7 @@
 
 Returns the minimum security level of the target server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getServerMinSecurityLevel(host: string): number;
@@ -18,7 +18,7 @@ getServerMinSecurityLevel(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

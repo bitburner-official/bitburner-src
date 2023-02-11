@@ -4,7 +4,7 @@
 
 ## WorkStats.dexExp property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dexExp: number;

@@ -6,12 +6,12 @@
 
 Purchase the TOR router.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 purchaseTor(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

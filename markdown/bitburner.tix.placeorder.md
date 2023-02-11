@@ -6,7 +6,7 @@
 
 Place order for stocks.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 placeOrder(sym: string, shares: number, price: number, type: string, pos: string): boolean;
@@ -22,7 +22,7 @@ placeOrder(sym: string, shares: number, price: number, type: string, pos: string
 |  type | string | Type of order. |
 |  pos | string | Specifies whether the order is a “Long” or “Short” position. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

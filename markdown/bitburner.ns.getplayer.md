@@ -6,12 +6,12 @@
 
 Get information about the player.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getPlayer(): Player;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [Player](./bitburner.player.md)
 

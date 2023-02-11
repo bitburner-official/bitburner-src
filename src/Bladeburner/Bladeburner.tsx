@@ -7,7 +7,7 @@ import { BlackOperation } from "./BlackOperation";
 import { Operation } from "./Operation";
 import { Contract } from "./Contract";
 import { GeneralActions } from "./GeneralActions";
-import { formatNumber } from "../utils/StringHelperFunctions";
+import { formatNumberNoSuffix } from "../ui/formatNumber";
 import { Skills } from "./Skills";
 import { Skill } from "./Skill";
 import { City } from "./City";
@@ -19,7 +19,7 @@ import { ConsoleHelpText } from "./data/Help";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { BladeburnerConstants } from "./data/Constants";
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatExp, formatMoney, formatPercent, formatBigNumber, formatStamina } from "../ui/formatNumber";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { addOffset } from "../utils/helpers/addOffset";
 import { Factions, factionExists } from "../Faction/Factions";
@@ -470,7 +470,7 @@ export class Bladeburner {
             if (this.skills[skill.name] != null) {
               level = this.skills[skill.name];
             }
-            this.postToConsole(skill.name + ": Level " + formatNumber(level, 0));
+            this.postToConsole(skill.name + ": Level " + formatNumberNoSuffix(level, 0));
           }
           this.postToConsole(" ");
           this.postToConsole("Effects: ");
@@ -478,7 +478,7 @@ export class Bladeburner {
           for (let i = 0; i < multKeys.length; ++i) {
             const mult = this.skillMultipliers[multKeys[i]];
             if (mult && mult !== 1) {
-              const mults = formatNumber(mult, 3);
+              const mults = formatNumberNoSuffix(mult, 3);
               switch (multKeys[i]) {
                 case "successChanceAll":
                   this.postToConsole("Total Success Chance: x" + mults);
@@ -549,7 +549,7 @@ export class Bladeburner {
           if (this.skills[skill.name] !== undefined) {
             level = this.skills[skill.name];
           }
-          this.postToConsole(skill.name + ": Level " + formatNumber(level));
+          this.postToConsole(skill.name + ": Level " + formatNumberNoSuffix(level));
         } else if (args[1].toLowerCase() === "level") {
           let currentLevel = 0;
           if (this.skills[skillName] && !isNaN(this.skills[skillName])) {
@@ -564,7 +564,7 @@ export class Bladeburner {
             this.log(skill.name + " upgraded to Level " + this.skills[skillName]);
           } else {
             this.postToConsole(
-              "You do not have enough Skill Points to upgrade this. You need " + formatNumber(pointCost, 0),
+              "You do not have enough Skill Points to upgrade this. You need " + formatNumberNoSuffix(pointCost, 0),
             );
           }
         } else {
@@ -671,11 +671,11 @@ export class Bladeburner {
         this.postToConsole("Automation: " + (this.automateEnabled ? "enabled" : "disabled"));
         this.postToConsole(
           "When your stamina drops to " +
-            formatNumber(this.automateThreshLow, 0) +
+            formatNumberNoSuffix(this.automateThreshLow, 0) +
             ", you will automatically switch to " +
             this.automateActionLow.name +
             ". When your stamina recovers to " +
-            formatNumber(this.automateThreshHigh, 0) +
+            formatNumberNoSuffix(this.automateThreshHigh, 0) +
             ", you will automatically " +
             "switch to " +
             this.automateActionHigh.name +
@@ -1120,7 +1120,7 @@ export class Bladeburner {
       }
       this.teamLost += losses;
       if (this.logging.ops && losses > 0) {
-        this.log("Lost " + formatNumber(losses, 0) + " team members during this " + action.name);
+        this.log("Lost " + formatNumberNoSuffix(losses, 0) + " team members during this " + action.name);
       }
     }
 
@@ -1288,14 +1288,12 @@ export class Bladeburner {
               this.changeRank(person, gain);
               if (isOperation && this.logging.ops) {
                 this.log(
-                  `${person.whoAmI()}: ${
-                    action.name
-                  } successfully completed! Gained ${numeralWrapper.formatReallyBigNumber(gain)} rank`,
+                  `${person.whoAmI()}: ${action.name} successfully completed! Gained ${formatBigNumber(gain)} rank`,
                 );
               } else if (!isOperation && this.logging.contracts) {
                 this.log(
                   `${person.whoAmI()}: ${action.name} contract successfully completed! Gained ` +
-                    `${numeralWrapper.formatReallyBigNumber(gain)} rank and ${numeralWrapper.formatMoney(moneyGain)}`,
+                    `${formatBigNumber(gain)} rank and ${formatMoney(moneyGain)}`,
                 );
               }
             }
@@ -1321,10 +1319,10 @@ export class Bladeburner {
             }
             let logLossText = "";
             if (loss > 0) {
-              logLossText += "Lost " + formatNumber(loss, 3) + " rank. ";
+              logLossText += "Lost " + formatNumberNoSuffix(loss, 3) + " rank. ";
             }
             if (damage > 0) {
-              logLossText += "Took " + formatNumber(damage, 0) + " damage.";
+              logLossText += "Took " + formatNumberNoSuffix(damage, 0) + " damage.";
             }
             if (isOperation && this.logging.ops) {
               this.log(`${person.whoAmI()}: ` + action.name + " failed! " + logLossText);
@@ -1376,7 +1374,11 @@ export class Bladeburner {
 
             if (this.logging.blackops) {
               this.log(
-                `${person.whoAmI()}: ` + action.name + " successful! Gained " + formatNumber(rankGain, 1) + " rank",
+                `${person.whoAmI()}: ` +
+                  action.name +
+                  " successful! Gained " +
+                  formatNumberNoSuffix(rankGain, 1) +
+                  " rank",
               );
             }
           } else {
@@ -1403,9 +1405,9 @@ export class Bladeburner {
                 `${person.whoAmI()}: ` +
                   action.name +
                   " failed! Lost " +
-                  formatNumber(rankLoss, 1) +
+                  formatNumberNoSuffix(rankLoss, 1) +
                   " rank and took " +
-                  formatNumber(damage, 0) +
+                  formatNumberNoSuffix(damage, 0) +
                   " damage",
               );
             }
@@ -1428,7 +1430,9 @@ export class Bladeburner {
             }
             this.teamLost += losses;
             if (this.logging.blackops) {
-              this.log(`${person.whoAmI()}:  You lost ${formatNumber(losses, 0)} team members during ${action.name}`);
+              this.log(
+                `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(losses, 0)} team members during ${action.name}`,
+              );
             }
           }
         } catch (e: unknown) {
@@ -1452,15 +1456,15 @@ export class Bladeburner {
           this.log(
             `${person.whoAmI()}: ` +
               "Training completed. Gained: " +
-              numeralWrapper.formatExp(strExpGain) +
+              formatExp(strExpGain) +
               " str exp, " +
-              numeralWrapper.formatExp(defExpGain) +
+              formatExp(defExpGain) +
               " def exp, " +
-              numeralWrapper.formatExp(dexExpGain) +
+              formatExp(dexExpGain) +
               " dex exp, " +
-              numeralWrapper.formatExp(agiExpGain) +
+              formatExp(agiExpGain) +
               " agi exp, " +
-              numeralWrapper.formatReallyBigNumber(staminaGain) +
+              formatBigNumber(staminaGain) +
               " max stamina",
           );
         }
@@ -1488,9 +1492,9 @@ export class Bladeburner {
         if (this.logging.general) {
           this.log(
             `${person.whoAmI()}: ` +
-              `Field analysis completed. Gained ${numeralWrapper.formatReallyBigNumber(rankGain)} rank, ` +
-              `${numeralWrapper.formatExp(hackingExpGain)} hacking exp, and ` +
-              `${numeralWrapper.formatExp(charismaExpGain)} charisma exp`,
+              `Field analysis completed. Gained ${formatBigNumber(rankGain)} rank, ` +
+              `${formatExp(hackingExpGain)} hacking exp, and ` +
+              `${formatExp(charismaExpGain)} charisma exp`,
           );
         }
         break;
@@ -1506,7 +1510,7 @@ export class Bladeburner {
             this.log(
               `${person.whoAmI()}: ` +
                 "Successfully recruited a team member! Gained " +
-                numeralWrapper.formatExp(expGain) +
+                formatExp(expGain) +
                 " charisma exp",
             );
           }
@@ -1517,7 +1521,7 @@ export class Bladeburner {
             this.log(
               `${person.whoAmI()}: ` +
                 "Failed to recruit a team member. Gained " +
-                numeralWrapper.formatExp(expGain) +
+                formatExp(expGain) +
                 " charisma exp",
             );
           }
@@ -1532,7 +1536,7 @@ export class Bladeburner {
         }
         if (this.logging.general) {
           this.log(
-            `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${numeralWrapper.formatPercentage(
+            `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${formatPercent(
               1 - eff,
             )}`,
           );
@@ -1548,7 +1552,7 @@ export class Bladeburner {
           this.log(
             `${person.whoAmI()}: Rested in Hyperbolic Regeneration Chamber. Restored ${
               BladeburnerConstants.HrcHpGain
-            } HP and gained ${numeralWrapper.formatStamina(staminaGain)} stamina`,
+            } HP and gained ${formatStamina(staminaGain)} stamina`,
           );
         }
         break;

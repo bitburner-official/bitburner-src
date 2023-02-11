@@ -6,7 +6,7 @@
 
 Current agility experience
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agi_exp: number;

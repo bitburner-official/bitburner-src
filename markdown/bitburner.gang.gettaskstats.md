@@ -6,7 +6,7 @@
 
 Get stats of a task.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getTaskStats(name: string): GangTaskStats;
@@ -18,7 +18,7 @@ getTaskStats(name: string): GangTaskStats;
 |  --- | --- | --- |
 |  name | string | Name of the task. |
 
-<b>Returns:</b>
+**Returns:**
 
 [GangTaskStats](./bitburner.gangtaskstats.md)
 

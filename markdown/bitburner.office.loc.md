@@ -6,7 +6,7 @@
 
 City of the office
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 loc: CityName;

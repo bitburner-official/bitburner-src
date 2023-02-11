@@ -6,7 +6,7 @@
 
 Prints one or more values or variables to the Terminal.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 tprint(...args: any[]): void;
@@ -18,7 +18,7 @@ tprint(...args: any[]): void;
 |  --- | --- | --- |
 |  args | any\[\] | Value(s) to be printed. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

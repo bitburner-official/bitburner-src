@@ -6,7 +6,7 @@
 
 Influences the maximum allowed RAM for a purchased server
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 PurchasedServerMaxRam: number;

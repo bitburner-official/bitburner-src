@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.secondarydark property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 secondarydark: string;

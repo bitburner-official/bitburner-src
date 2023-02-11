@@ -6,7 +6,7 @@
 
 Get estimate success chance of an action.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getActionEstimatedSuccessChance(type: string, name: string): [number, number];
@@ -19,7 +19,7 @@ getActionEstimatedSuccessChance(type: string, name: string): [number, number];
 |  type | string | Type of action. |
 |  name | string | Name of action. Must be an exact match. |
 
-<b>Returns:</b>
+**Returns:**
 
 \[number, number\]
 

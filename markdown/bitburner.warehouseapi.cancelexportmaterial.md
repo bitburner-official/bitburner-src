@@ -6,7 +6,7 @@
 
 Cancel material export
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cancelExportMaterial(
@@ -30,7 +30,7 @@ cancelExportMaterial(
 |  materialName | string | Name of the material |
 |  amt | number | Amount of material to export. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

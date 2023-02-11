@@ -6,12 +6,12 @@
 
 Share your computer with your factions.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 share(): Promise<void>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;void&gt;
 
@@ -19,5 +19,5 @@ Promise&lt;void&gt;
 
 RAM cost: 2.4 GB
 
-Increases your rep gain of hacking contracts while share is called. Scales with thread count.
+Increases your rep gain of all faction work types while share is called. Scales with thread count.
 

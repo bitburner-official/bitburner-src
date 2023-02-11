@@ -6,7 +6,7 @@
 
 Returns the probability that the specified stock’s price will increase (as opposed to decrease) during the next tick.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getForecast(sym: string): number;
@@ -18,7 +18,7 @@ getForecast(sym: string): number;
 |  --- | --- | --- |
 |  sym | string | Stock symbol. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

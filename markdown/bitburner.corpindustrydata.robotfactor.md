@@ -6,7 +6,7 @@
 
 Robots factor
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 robotFactor?: number;

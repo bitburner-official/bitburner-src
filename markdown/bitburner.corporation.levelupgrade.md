@@ -6,7 +6,7 @@
 
 Level an upgrade.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 levelUpgrade(upgradeName: string): void;
@@ -18,7 +18,7 @@ levelUpgrade(upgradeName: string): void;
 |  --- | --- | --- |
 |  upgradeName | string | Name of the upgrade |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

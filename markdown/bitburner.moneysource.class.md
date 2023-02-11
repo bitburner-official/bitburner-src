@@ -4,7 +4,7 @@
 
 ## MoneySource.class property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 class: number;

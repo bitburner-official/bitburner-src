@@ -6,7 +6,7 @@
 
 Get the type of a coding contract.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getContractType(filename: string, host?: string): string;
@@ -17,9 +17,9 @@ getContractType(filename: string, host?: string): string;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  filename | string | Filename of the contract. |
-|  host | string | Hostname of the server containing the contract. Optional. Defaults to current server if not provided. |
+|  host | string | _(Optional)_ Hostname of the server containing the contract. Optional. Defaults to current server if not provided. |
 
-<b>Returns:</b>
+**Returns:**
 
 string
 

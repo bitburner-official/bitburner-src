@@ -6,12 +6,12 @@
 
 Returns true if the player has access to the 4S Data
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 has4SData(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

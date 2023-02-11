@@ -4,7 +4,7 @@
 
 ## CorpConstants.dividendMaxRate property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dividendMaxRate: number;

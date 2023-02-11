@@ -6,7 +6,7 @@
 
 Maximum morale of the employees
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 maxMor: number;

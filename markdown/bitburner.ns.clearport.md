@@ -6,7 +6,7 @@
 
 Clear data from a port.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 clearPort(handle: number): void;
@@ -18,7 +18,7 @@ clearPort(handle: number): void;
 |  --- | --- | --- |
 |  handle | number | Port to clear. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -6,7 +6,7 @@
 
 City the material is being exported to
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 loc: CityName;

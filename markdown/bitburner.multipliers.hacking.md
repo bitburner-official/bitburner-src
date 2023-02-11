@@ -6,7 +6,7 @@
 
 Multiplier to hacking skill
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacking: number;

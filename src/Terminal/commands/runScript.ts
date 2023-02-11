@@ -5,7 +5,7 @@ import { startWorkerScript } from "../../NetscriptWorker";
 import { RunningScript } from "../../Script/RunningScript";
 import { findRunningScript } from "../../Script/ScriptHelpers";
 import * as libarg from "arg";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatRam } from "../../ui/formatNumber";
 
 export function runScript(commandArgs: (string | number | boolean)[], server: BaseServer): void {
   if (commandArgs.length < 1) {
@@ -59,7 +59,7 @@ export function runScript(commandArgs: (string | number | boolean)[], server: Ba
       Terminal.error(
         "This machine does not have enough RAM to run this script" +
           (numThreads === 1 ? "" : ` with ${numThreads} threads`) +
-          `. Script requires ${numeralWrapper.formatRAM(ramUsage)} of RAM`,
+          `. Script requires ${formatRam(ramUsage)} of RAM`,
       );
       return;
     }

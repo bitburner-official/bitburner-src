@@ -36,6 +36,7 @@
 |  [CorpMaterialConstantData](./bitburner.corpmaterialconstantdata.md) | Corporation material information |
 |  [Corporation](./bitburner.corporation.md) | Corporation API |
 |  [CorporationInfo](./bitburner.corporationinfo.md) | General info about a corporation |
+|  [CorpProductData](./bitburner.corpproductdata.md) | Product rating information |
 |  [CrimeStats](./bitburner.crimestats.md) | Data representing the internal values of a crime. |
 |  [Division](./bitburner.division.md) | Corporation division |
 |  [EquipmentStats](./bitburner.equipmentstats.md) | Object representing data representing a gang member equipment. |
@@ -93,7 +94,7 @@
 |  [SleevePerson](./bitburner.sleeveperson.md) |  |
 |  [SourceFileLvl](./bitburner.sourcefilelvl.md) |  |
 |  [Stanek](./bitburner.stanek.md) | Stanek's Gift API. |
-|  [StockOrder](./bitburner.stockorder.md) | Return value of [getOrders](./bitburner.tix.getorders.md)<!-- -->Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md) |
+|  [StockOrder](./bitburner.stockorder.md) | <p>Return value of [getOrders](./bitburner.tix.getorders.md)</p><p>Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md)</p> |
 |  [StockOrderObject](./bitburner.stockorderobject.md) | Value in map of [StockOrder](./bitburner.stockorder.md) |
 |  [TIX](./bitburner.tix.md) | Stock market API |
 |  [UserInterface](./bitburner.userinterface.md) | User Interface API. |
@@ -111,7 +112,6 @@
 |  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |
 |  [CorpIndustryName](./bitburner.corpindustryname.md) |  |
 |  [CorpMaterialName](./bitburner.corpmaterialname.md) |  |
-|  [CorpProductData](./bitburner.corpproductdata.md) | Product rating information |
 |  [CorpResearchName](./bitburner.corpresearchname.md) |  |
 |  [CorpStateName](./bitburner.corpstatename.md) |  |
 |  [CorpUnlockName](./bitburner.corpunlockname.md) |  |

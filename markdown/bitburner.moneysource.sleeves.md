@@ -4,7 +4,7 @@
 
 ## MoneySource.sleeves property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sleeves: number;

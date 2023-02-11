@@ -6,7 +6,7 @@
 
 Calculate exp for skill level.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 calculateExp(skill: number, skillMult?: number): number;
@@ -17,9 +17,9 @@ calculateExp(skill: number, skillMult?: number): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  skill | number | target skill level |
-|  skillMult | number | Multiplier for that skill, defaults to 1. |
+|  skillMult | number | _(Optional)_ Multiplier for that skill, defaults to 1. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

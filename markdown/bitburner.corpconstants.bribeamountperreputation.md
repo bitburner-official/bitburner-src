@@ -4,7 +4,7 @@
 
 ## CorpConstants.bribeAmountPerReputation property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 bribeAmountPerReputation: number;
