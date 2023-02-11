@@ -107,6 +107,7 @@
     "build": "bash ./tools/build.sh production",
     "build:dev": "bash ./tools/build.sh development",
     "lint": "eslint --fix --ext js,jsx,ts,tsx --max-warnings 0 src",
+    "lint:report": "eslint --ext js,jsx,ts,tsx --max-warnings 0 src",
     "preinstall": "node ./tools/engines-check/engines-check.js",
     "test": "jest",
     "test:watch": "jest --watch",
