@@ -6,12 +6,12 @@
 
 Upgrade home computer cores.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 upgradeHomeCores(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

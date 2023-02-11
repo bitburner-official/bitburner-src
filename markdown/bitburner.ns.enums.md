@@ -4,7 +4,7 @@
 
 ## NS.enums property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 enums: NSEnums;

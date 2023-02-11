@@ -4,7 +4,7 @@
 
 ## MoneySource.work property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 work: number;

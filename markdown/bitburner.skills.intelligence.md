@@ -4,7 +4,7 @@
 
 ## Skills.intelligence property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 intelligence: number;

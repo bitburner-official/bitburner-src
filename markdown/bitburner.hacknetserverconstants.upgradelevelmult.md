@@ -6,7 +6,7 @@
 
 Multiplier to increase server level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 UpgradeLevelMult: number;

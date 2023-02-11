@@ -6,7 +6,7 @@
 
 Apply for a job at a company.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 applyToCompany(companyName: string, field: string): boolean;
@@ -19,7 +19,7 @@ applyToCompany(companyName: string, field: string): boolean;
 |  companyName | string | Name of company to apply to. |
 |  field | string | Field to which you want to apply. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

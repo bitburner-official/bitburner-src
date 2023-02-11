@@ -6,7 +6,7 @@
 
 Strength multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 str?: number;

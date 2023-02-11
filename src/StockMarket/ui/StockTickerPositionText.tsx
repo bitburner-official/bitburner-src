@@ -7,7 +7,7 @@ import * as React from "react";
 import { Stock } from "../Stock";
 
 import { Player } from "@player";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatPercent, formatShares } from "../../ui/formatNumber";
 import { Money } from "../../ui/React/Money";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
@@ -43,12 +43,12 @@ function LongPosition(props: IProps): React.ReactElement {
           </Typography>
         </Tooltip>
       </Box>
-      <Typography>Shares: {numeralWrapper.formatShares(stock.playerShares)}</Typography>
+      <Typography>Shares: {formatShares(stock.playerShares)}</Typography>
       <Typography>
         Average Price: <Money money={stock.playerAvgPx} /> (Total Cost: <Money money={totalCost} />)
       </Typography>
       <Typography>
-        Profit: <Money money={gains} /> ({numeralWrapper.formatPercentage(percentageGains)})
+        Profit: <Money money={gains} /> ({formatPercent(percentageGains)})
       </Typography>
     </>
   );
@@ -82,12 +82,12 @@ function ShortPosition(props: IProps): React.ReactElement {
           </Tooltip>
         </Box>
 
-        <Typography>Shares: {numeralWrapper.formatShares(stock.playerShortShares)}</Typography>
+        <Typography>Shares: {formatShares(stock.playerShortShares)}</Typography>
         <Typography>
           Average Price: <Money money={stock.playerAvgShortPx} /> (Total Cost: <Money money={totalCost} />)
         </Typography>
         <Typography>
-          Profit: <Money money={gains} /> ({numeralWrapper.formatPercentage(percentageGains)})
+          Profit: <Money money={gains} /> ({formatPercent(percentageGains)})
         </Typography>
       </>
     );
@@ -101,7 +101,7 @@ export function StockTickerPositionText(props: IProps): React.ReactElement {
 
   return (
     <>
-      <Typography>Max Shares: {numeralWrapper.formatShares(stock.maxShares)}</Typography>
+      <Typography>Max Shares: {formatShares(stock.maxShares)}</Typography>
       <Typography>
         Ask Price: <Money money={stock.getAskPrice()} />
       </Typography>

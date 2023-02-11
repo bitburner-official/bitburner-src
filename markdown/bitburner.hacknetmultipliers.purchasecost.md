@@ -6,7 +6,7 @@
 
 Player's hacknet purchase cost multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 purchaseCost: number;

@@ -6,7 +6,7 @@
 
 Products developed by this division
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 products: string[];

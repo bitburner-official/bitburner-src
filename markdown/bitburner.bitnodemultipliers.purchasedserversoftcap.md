@@ -6,7 +6,7 @@
 
 Influences cost of any purchased server at or above 128GB
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 PurchasedServerSoftcap: number;

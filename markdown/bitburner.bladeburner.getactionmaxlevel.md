@@ -6,7 +6,7 @@
 
 Get the maximum level of an action.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getActionMaxLevel(type: string, name: string): number;
@@ -19,7 +19,7 @@ getActionMaxLevel(type: string, name: string): number;
 |  type | string | Type of action. |
 |  name | string | Name of action. Must be an exact match. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

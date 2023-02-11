@@ -6,7 +6,7 @@
 
 Current defense experience
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 def_exp: number;

@@ -4,7 +4,7 @@
 
 ## Person.exp property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 exp: Skills;

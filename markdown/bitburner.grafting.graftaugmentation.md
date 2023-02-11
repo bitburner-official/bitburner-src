@@ -6,7 +6,7 @@
 
 Begins grafting the named aug. You must be in New Tokyo to use this.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 graftAugmentation(augName: string, focus?: boolean): boolean;
@@ -17,9 +17,9 @@ graftAugmentation(augName: string, focus?: boolean): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  augName | string | The name of the aug to begin grafting. Must be an exact match. |
-|  focus | boolean | Acquire player focus on this Augmentation grafting. Optional. Defaults to true. |
+|  focus | boolean | _(Optional)_ Acquire player focus on this Augmentation grafting. Optional. Defaults to true. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

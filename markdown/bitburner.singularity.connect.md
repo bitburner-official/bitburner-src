@@ -6,7 +6,7 @@
 
 Connect to a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 connect(hostname: string): boolean;
@@ -18,7 +18,7 @@ connect(hostname: string): boolean;
 |  --- | --- | --- |
 |  hostname | string |  |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

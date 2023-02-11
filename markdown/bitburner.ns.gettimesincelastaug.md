@@ -6,12 +6,12 @@
 
 Returns the amount of time in milliseconds that have passed since you last installed Augmentations.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getTimeSinceLastAug(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

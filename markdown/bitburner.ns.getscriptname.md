@@ -6,12 +6,12 @@
 
 Returns the current script name.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getScriptName(): string;
 ```
-<b>Returns:</b>
+**Returns:**
 
 string
 

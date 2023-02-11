@@ -6,12 +6,12 @@
 
 Check if you can recruit a new gang member.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 canRecruitMember(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

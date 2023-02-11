@@ -6,7 +6,7 @@
 
 Influences the base rep the player must have with a faction to purchase an augmentation.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 AugmentationRepCost: number;

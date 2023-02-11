@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.hack property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hack: string;

@@ -6,7 +6,7 @@
 
 Get the number of times you have hired AdVert.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getHireAdVertCount(divisionName: string): number;
@@ -18,7 +18,7 @@ getHireAdVertCount(divisionName: string): number;
 |  --- | --- | --- |
 |  divisionName | string | Name of the division. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

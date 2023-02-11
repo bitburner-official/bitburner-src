@@ -6,12 +6,12 @@
 
 Backup game save.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 exportGame(): void;
 ```
-<b>Returns:</b>
+**Returns:**
 
 void
 

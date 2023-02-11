@@ -4,7 +4,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { GangMember } from "../GangMember";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatPreciseMultiplier, formatRespect } from "../../ui/formatNumber";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { Modal } from "../../ui/React/Modal";
 import { useGang } from "./Context";
@@ -34,22 +34,22 @@ export function AscensionModal(props: IProps): React.ReactElement {
       <>
         You ascended {props.member.name}!<br />
         <br />
-        Your gang lost {numeralWrapper.formatRespect(res.respect)} respect.
+        Your gang lost {formatRespect(res.respect)} respect.
         <br />
         <br />
         {props.member.name} gained the following stat multipliers for ascending:
         <br />
-        Hacking: x{numeralWrapper.format(res.hack, "0.000")}
+        Hacking: x{formatPreciseMultiplier(res.hack)}
         <br />
-        Strength: x{numeralWrapper.format(res.str, "0.000")}
+        Strength: x{formatPreciseMultiplier(res.str)}
         <br />
-        Defense: x{numeralWrapper.format(res.def, "0.000")}
+        Defense: x{formatPreciseMultiplier(res.def)}
         <br />
-        Dexterity: x{numeralWrapper.format(res.dex, "0.000")}
+        Dexterity: x{formatPreciseMultiplier(res.dex)}
         <br />
-        Agility: x{numeralWrapper.format(res.agi, "0.000")}
+        Agility: x{formatPreciseMultiplier(res.agi)}
         <br />
-        Charisma: x{numeralWrapper.format(res.cha, "0.000")}
+        Charisma: x{formatPreciseMultiplier(res.cha)}
         <br />
       </>,
     );
@@ -68,28 +68,22 @@ export function AscensionModal(props: IProps): React.ReactElement {
         their non-Augmentation upgrades and their stats will reset back to 1.
         <br />
         <br />
-        Furthermore, your gang will lose {numeralWrapper.formatRespect(props.member.earnedRespect)} respect
+        Furthermore, your gang will lose {formatRespect(props.member.earnedRespect)} respect
         <br />
         <br />
         In return, they will gain the following permanent boost to stat multipliers:
         <br />
-        Hacking: x{numeralWrapper.format(preAscend.hack, "0.000")} =&gt; x
-        {numeralWrapper.format(postAscend.hack, "0.000")}
+        Hacking: x{formatPreciseMultiplier(preAscend.hack)} =&gt; x{formatPreciseMultiplier(postAscend.hack)}
         <br />
-        Strength: x{numeralWrapper.format(preAscend.str, "0.000")} =&gt; x
-        {numeralWrapper.format(postAscend.str, "0.000")}
+        Strength: x{formatPreciseMultiplier(preAscend.str)} =&gt; x{formatPreciseMultiplier(postAscend.str)}
         <br />
-        Defense: x{numeralWrapper.format(preAscend.def, "0.000")} =&gt; x
-        {numeralWrapper.format(postAscend.def, "0.000")}
+        Defense: x{formatPreciseMultiplier(preAscend.def)} =&gt; x{formatPreciseMultiplier(postAscend.def)}
         <br />
-        Dexterity: x{numeralWrapper.format(preAscend.dex, "0.000")} =&gt; x
-        {numeralWrapper.format(postAscend.dex, "0.000")}
+        Dexterity: x{formatPreciseMultiplier(preAscend.dex)} =&gt; x{formatPreciseMultiplier(postAscend.dex)}
         <br />
-        Agility: x{numeralWrapper.format(preAscend.agi, "0.000")} =&gt; x
-        {numeralWrapper.format(postAscend.agi, "0.000")}
+        Agility: x{formatPreciseMultiplier(preAscend.agi)} =&gt; x{formatPreciseMultiplier(postAscend.agi)}
         <br />
-        Charisma: x{numeralWrapper.format(preAscend.cha, "0.000")} =&gt; x
-        {numeralWrapper.format(postAscend.cha, "0.000")}
+        Charisma: x{formatPreciseMultiplier(preAscend.cha)} =&gt; x{formatPreciseMultiplier(postAscend.cha)}
         <br />
       </Typography>
       <Button onClick={confirm}>Ascend</Button>

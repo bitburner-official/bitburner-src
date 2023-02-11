@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 import { IndustryType } from "../data/Enums";
 import { HireAdVert } from "../Actions";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatBigNumber } from "../../ui/formatNumber";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { MakeProductModal } from "./modals/MakeProductModal";
 import { ResearchModal } from "./modals/ResearchModal";
@@ -128,8 +128,8 @@ export function IndustryOverview(props: IProps): React.ReactElement {
       <br />
       <StatsTable
         rows={[
-          ["Awareness:", numeralWrapper.formatReallyBigNumber(division.awareness)],
-          ["Popularity:", numeralWrapper.formatReallyBigNumber(division.popularity)],
+          ["Awareness:", formatBigNumber(division.awareness)],
+          ["Popularity:", formatBigNumber(division.popularity)],
         ]}
       />
       {advertisingInfo !== false && (
@@ -139,15 +139,15 @@ export function IndustryOverview(props: IProps): React.ReactElement {
               <Typography>Total multiplier for this industry's sales due to its awareness and popularity</Typography>
               <StatsTable
                 rows={[
-                  ["Awareness Bonus:", "x" + numeralWrapper.formatReallyBigNumber(Math.pow(awarenessFac, 0.85))],
-                  ["Popularity Bonus:", "x" + numeralWrapper.formatReallyBigNumber(Math.pow(popularityFac, 0.85))],
-                  ["Ratio Multiplier:", "x" + numeralWrapper.formatReallyBigNumber(Math.pow(ratioFac, 0.85))],
+                  ["Awareness Bonus:", "x" + formatBigNumber(Math.pow(awarenessFac, 0.85))],
+                  ["Popularity Bonus:", "x" + formatBigNumber(Math.pow(popularityFac, 0.85))],
+                  ["Ratio Multiplier:", "x" + formatBigNumber(Math.pow(ratioFac, 0.85))],
                 ]}
               />
             </>
           }
         >
-          <Typography>Advertising Multiplier: x{numeralWrapper.formatReallyBigNumber(totalAdvertisingFac)}</Typography>
+          <Typography>Advertising Multiplier: x{formatBigNumber(totalAdvertisingFac)}</Typography>
         </Tooltip>
       )}
       <br />
@@ -168,7 +168,7 @@ export function IndustryOverview(props: IProps): React.ReactElement {
             </Typography>
           }
         >
-          <Typography>Production Multiplier: {numeralWrapper.formatReallyBigNumber(division.prodMult)}</Typography>
+          <Typography>Production Multiplier: {formatBigNumber(division.prodMult)}</Typography>
         </Tooltip>
         <IconButton onClick={() => setHelpOpen(true)}>
           <HelpIcon />
@@ -207,7 +207,7 @@ export function IndustryOverview(props: IProps): React.ReactElement {
             </Typography>
           }
         >
-          <Typography>Scientific Research: {numeralWrapper.formatReallyBigNumber(division.sciResearch)}</Typography>
+          <Typography>Scientific Research: {formatBigNumber(division.sciResearch)}</Typography>
         </Tooltip>
         <Button sx={{ mx: 1 }} onClick={() => setResearchOpen(true)}>
           Research

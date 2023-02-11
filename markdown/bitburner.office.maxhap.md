@@ -6,7 +6,7 @@
 
 Maximum happiness of the employees
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 maxHap: number;

@@ -6,7 +6,7 @@
 
 Hostname. Must be unique
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hostname: string;

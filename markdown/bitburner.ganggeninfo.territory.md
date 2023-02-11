@@ -6,7 +6,7 @@
 
 Amount of territory held
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 territory: number;

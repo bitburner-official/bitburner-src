@@ -4,7 +4,7 @@
 
 ## CorpMaterialConstantData.competitionRange property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 competitionRange: [min: number, max: number];

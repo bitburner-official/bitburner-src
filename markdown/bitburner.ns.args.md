@@ -6,7 +6,7 @@
 
 Arguments passed into the script.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly args: (string | number | boolean)[];

@@ -6,7 +6,7 @@
 
 Amount of funds you will get from this investment
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 funds: number;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SkillList } from "./SkillList";
 import { BladeburnerConstants } from "../data/Constants";
 import { Bladeburner } from "../Bladeburner";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatBigNumber } from "../../ui/formatNumber";
 import Typography from "@mui/material/Typography";
 interface IProps {
   bladeburner: Bladeburner;
@@ -19,7 +19,7 @@ export function SkillPage(props: IProps): React.ReactElement {
   return (
     <>
       <Typography>
-        <strong>Skill Points: {numeralWrapper.formatReallyBigNumber(props.bladeburner.skillPoints, 3)}</strong>
+        <strong>Skill Points: {formatBigNumber(props.bladeburner.skillPoints)}</strong>
       </Typography>
       <Typography>
         You will gain one skill point every {BladeburnerConstants.RanksPerSkillPoint} ranks.
@@ -28,68 +28,34 @@ export function SkillPage(props: IProps): React.ReactElement {
         skills with each other is multiplicative.
       </Typography>
       {valid(mults["successChanceAll"]) && (
-        <Typography>
-          Total Success Chance: x{numeralWrapper.formatReallyBigNumber(mults["successChanceAll"], 3)}
-        </Typography>
+        <Typography>Total Success Chance: x{formatBigNumber(mults["successChanceAll"])}</Typography>
       )}
       {valid(mults["successChanceStealth"]) && (
-        <Typography>
-          Stealth Success Chance: x{numeralWrapper.formatReallyBigNumber(mults["successChanceStealth"], 3)}
-        </Typography>
+        <Typography>Stealth Success Chance: x{formatBigNumber(mults["successChanceStealth"])}</Typography>
       )}
       {valid(mults["successChanceKill"]) && (
-        <Typography>
-          Retirement Success Chance: x{numeralWrapper.formatReallyBigNumber(mults["successChanceKill"], 3)}
-        </Typography>
+        <Typography>Retirement Success Chance: x{formatBigNumber(mults["successChanceKill"])}</Typography>
       )}
       {valid(mults["successChanceContract"]) && (
-        <Typography>
-          Contract Success Chance: x{numeralWrapper.formatReallyBigNumber(mults["successChanceContract"], 3)}
-        </Typography>
+        <Typography>Contract Success Chance: x{formatBigNumber(mults["successChanceContract"])}</Typography>
       )}
       {valid(mults["successChanceOperation"]) && (
-        <Typography>
-          Operation Success Chance: x{numeralWrapper.formatReallyBigNumber(mults["successChanceOperation"], 3)}
-        </Typography>
+        <Typography>Operation Success Chance: x{formatBigNumber(mults["successChanceOperation"])}</Typography>
       )}
       {valid(mults["successChanceEstimate"]) && (
-        <Typography>
-          Synthoid Data Estimate: x{numeralWrapper.formatReallyBigNumber(mults["successChanceEstimate"], 3)}
-        </Typography>
+        <Typography>Synthoid Data Estimate: x{formatBigNumber(mults["successChanceEstimate"])}</Typography>
       )}
-      {valid(mults["actionTime"]) && (
-        <Typography>Action Time: x{numeralWrapper.formatReallyBigNumber(mults["actionTime"], 3)}</Typography>
-      )}
-      {valid(mults["effHack"]) && (
-        <Typography>Hacking Skill: x{numeralWrapper.formatReallyBigNumber(mults["effHack"], 3)}</Typography>
-      )}
-      {valid(mults["effStr"]) && (
-        <Typography>Strength: x{numeralWrapper.formatReallyBigNumber(mults["effStr"], 3)}</Typography>
-      )}
-      {valid(mults["effDef"]) && (
-        <Typography>Defense: x{numeralWrapper.formatReallyBigNumber(mults["effDef"], 3)}</Typography>
-      )}
-      {valid(mults["effDex"]) && (
-        <Typography>Dexterity: x{numeralWrapper.formatReallyBigNumber(mults["effDex"], 3)}</Typography>
-      )}
-      {valid(mults["effAgi"]) && (
-        <Typography>Agility: x{numeralWrapper.formatReallyBigNumber(mults["effAgi"], 3)}</Typography>
-      )}
-      {valid(mults["effCha"]) && (
-        <Typography>Charisma: x{numeralWrapper.formatReallyBigNumber(mults["effCha"], 3)}</Typography>
-      )}
-      {valid(mults["effInt"]) && (
-        <Typography>Intelligence: x{numeralWrapper.formatReallyBigNumber(mults["effInt"], 3)}</Typography>
-      )}
-      {valid(mults["stamina"]) && (
-        <Typography>Stamina: x{numeralWrapper.formatReallyBigNumber(mults["stamina"], 3)}</Typography>
-      )}
-      {valid(mults["money"]) && (
-        <Typography>Contract Money: x{numeralWrapper.formatReallyBigNumber(mults["money"], 3)}</Typography>
-      )}
-      {valid(mults["expGain"]) && (
-        <Typography>Exp Gain: x{numeralWrapper.formatReallyBigNumber(mults["expGain"], 3)}</Typography>
-      )}
+      {valid(mults["actionTime"]) && <Typography>Action Time: x{formatBigNumber(mults["actionTime"])}</Typography>}
+      {valid(mults["effHack"]) && <Typography>Hacking Skill: x{formatBigNumber(mults["effHack"])}</Typography>}
+      {valid(mults["effStr"]) && <Typography>Strength: x{formatBigNumber(mults["effStr"])}</Typography>}
+      {valid(mults["effDef"]) && <Typography>Defense: x{formatBigNumber(mults["effDef"])}</Typography>}
+      {valid(mults["effDex"]) && <Typography>Dexterity: x{formatBigNumber(mults["effDex"])}</Typography>}
+      {valid(mults["effAgi"]) && <Typography>Agility: x{formatBigNumber(mults["effAgi"])}</Typography>}
+      {valid(mults["effCha"]) && <Typography>Charisma: x{formatBigNumber(mults["effCha"])}</Typography>}
+      {valid(mults["effInt"]) && <Typography>Intelligence: x{formatBigNumber(mults["effInt"])}</Typography>}
+      {valid(mults["stamina"]) && <Typography>Stamina: x{formatBigNumber(mults["stamina"])}</Typography>}
+      {valid(mults["money"]) && <Typography>Contract Money: x{formatBigNumber(mults["money"])}</Typography>}
+      {valid(mults["expGain"]) && <Typography>Exp Gain: x{formatBigNumber(mults["expGain"])}</Typography>}
       <SkillList bladeburner={props.bladeburner} onUpgrade={() => setRerender((old) => !old)} />
     </>
   );

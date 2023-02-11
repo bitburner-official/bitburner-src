@@ -6,7 +6,7 @@
 
 Multiplier to dexterity experience gain rate
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dexterity_exp: number;

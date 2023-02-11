@@ -6,7 +6,7 @@
 
 Hack multiplier from equipment
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hack_mult: number;

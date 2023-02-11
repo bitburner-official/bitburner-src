@@ -6,7 +6,7 @@
 
 Write data to a file.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 write(filename: string, data?: string, mode?: "w" | "a"): void;
@@ -17,10 +17,10 @@ write(filename: string, data?: string, mode?: "w" | "a"): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  filename | string | Name of the file to be written to. |
-|  data | string | Data to write. |
-|  mode | "w" \| "a" | Defines the write mode. |
+|  data | string | _(Optional)_ Data to write. |
+|  mode | "w" \| "a" | _(Optional)_ Defines the write mode. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

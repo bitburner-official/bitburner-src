@@ -6,7 +6,7 @@
 
 Whether the division makes materials
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 makesMaterials: boolean;

@@ -6,7 +6,7 @@
 
 Grafting API
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface Grafting 

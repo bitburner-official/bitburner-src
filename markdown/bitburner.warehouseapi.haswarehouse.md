@@ -6,7 +6,7 @@
 
 Check if you have a warehouse in city
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hasWarehouse(divisionName: string, city: CityName | `${CityName}`): boolean;
@@ -19,7 +19,7 @@ hasWarehouse(divisionName: string, city: CityName | `${CityName}`): boolean;
 |  divisionName | string |  |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` |  |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

@@ -6,7 +6,7 @@
 
 Amount of size upgrade bought
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 level: number;

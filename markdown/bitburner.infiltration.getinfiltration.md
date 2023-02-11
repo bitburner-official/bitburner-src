@@ -6,7 +6,7 @@
 
 Get all infiltrations with difficulty, location and rewards.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getInfiltration(location: string): InfiltrationLocation;
@@ -18,7 +18,7 @@ getInfiltration(location: string): InfiltrationLocation;
 |  --- | --- | --- |
 |  location | string |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [InfiltrationLocation](./bitburner.infiltrationlocation.md)
 

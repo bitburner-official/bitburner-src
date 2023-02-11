@@ -23,7 +23,7 @@ import { CityName, CrimeType, GymType, LocationName, UniversityClassType } from 
 import { Factions } from "../../Faction/Factions";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../utils/JSONReviver";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatPercent } from "../../ui/formatNumber";
 import { FactionWorkType } from "../../Enums";
 import { Work } from "./Work/Work";
 import { SleeveClassWork } from "./Work/SleeveClassWork";
@@ -438,7 +438,7 @@ export class Sleeve extends Person implements SleevePerson {
     if (chances[0] >= 1) {
       return "100%";
     } else {
-      return `${numeralWrapper.formatPercentage(chances[0])} - ${numeralWrapper.formatPercentage(chances[1])}`;
+      return `${formatPercent(chances[0])} - ${formatPercent(chances[1])}`;
     }
   }
 

@@ -6,7 +6,7 @@
 
 Multiplier to strength skill
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 strength: number;

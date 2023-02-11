@@ -5,7 +5,7 @@
 ## NSEnums type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export type NSEnums = {
@@ -19,5 +19,5 @@ export type NSEnums = {
   UniversityClassType: typeof UniversityClassType;
 };
 ```
-<b>References:</b> [CityName](./bitburner.cityname.md)<!-- -->, [CrimeType](./bitburner.crimetype.md)<!-- -->, [FactionWorkType](./bitburner.factionworktype.md)<!-- -->, [GymType](./bitburner.gymtype.md)<!-- -->, [JobName](./bitburner.jobname.md)<!-- -->, [LocationName](./bitburner.locationname.md)<!-- -->, [ToastVariant](./bitburner.toastvariant.md)<!-- -->, [UniversityClassType](./bitburner.universityclasstype.md)
+**References:** [CityName](./bitburner.cityname.md)<!-- -->, [CrimeType](./bitburner.crimetype.md)<!-- -->, [FactionWorkType](./bitburner.factionworktype.md)<!-- -->, [GymType](./bitburner.gymtype.md)<!-- -->, [JobName](./bitburner.jobname.md)<!-- -->, [LocationName](./bitburner.locationname.md)<!-- -->, [ToastVariant](./bitburner.toastvariant.md)<!-- -->, [UniversityClassType](./bitburner.universityclasstype.md)
 

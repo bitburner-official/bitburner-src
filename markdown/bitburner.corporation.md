@@ -6,12 +6,12 @@
 
 Corporation API
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface Corporation extends WarehouseAPI, OfficeAPI 
 ```
-<b>Extends:</b> [WarehouseAPI](./bitburner.warehouseapi.md)<!-- -->, [OfficeAPI](./bitburner.officeapi.md)
+**Extends:** [WarehouseAPI](./bitburner.warehouseapi.md)<!-- -->, [OfficeAPI](./bitburner.officeapi.md)
 
 ## Methods
 

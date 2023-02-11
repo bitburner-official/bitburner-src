@@ -6,7 +6,7 @@
 
 Returns the bid price of that stock.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getBidPrice(sym: string): number;
@@ -18,7 +18,7 @@ getBidPrice(sym: string): number;
 |  --- | --- | --- |
 |  sym | string | Stock symbol. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

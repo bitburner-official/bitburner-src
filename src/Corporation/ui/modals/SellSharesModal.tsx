@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatMoney } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
@@ -34,7 +34,7 @@ export function SellSharesModal(props: IProps): React.ReactElement {
     } else {
       const stockSaleResults = corp.calculateShareSale(props.shares);
       const profit = stockSaleResults[0];
-      text = `Sell ${props.shares} shares for a total of ${numeralWrapper.formatMoney(profit)}`;
+      text = `Sell ${props.shares} shares for a total of ${formatMoney(profit)}`;
     }
 
     return (
@@ -51,7 +51,7 @@ export function SellSharesModal(props: IProps): React.ReactElement {
       props.onClose();
       dialogBoxCreate(
         <>
-          Sold {numeralWrapper.formatMoney(shares)} shares for
+          Sold {formatMoney(shares)} shares for
           <Money money={profit} />. The corporation's stock price fell to&nbsp; <Money money={corp.sharePrice} />
           as a result of dilution.
         </>,
@@ -78,7 +78,7 @@ export function SellSharesModal(props: IProps): React.ReactElement {
         large number of shares all at once will have an immediate effect in reducing your stock price.
         <br />
         <br />
-        The current price of your company's stock is {numeralWrapper.formatMoney(corp.sharePrice)}
+        The current price of your company's stock is {formatMoney(corp.sharePrice)}
       </Typography>
       <br />
       <NumberInput

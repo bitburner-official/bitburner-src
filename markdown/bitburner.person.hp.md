@@ -4,7 +4,7 @@
 
 ## Person.hp property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hp: HP;

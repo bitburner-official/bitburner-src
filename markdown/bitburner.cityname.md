@@ -6,7 +6,7 @@
 
 Names of all cities
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 declare enum CityName 

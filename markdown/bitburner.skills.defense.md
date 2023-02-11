@@ -4,7 +4,7 @@
 
 ## Skills.defense property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 defense: number;

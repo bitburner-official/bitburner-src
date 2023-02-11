@@ -6,7 +6,7 @@
 
 Issue new shares
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 issueNewShares(amount?: number): number;
@@ -16,9 +16,9 @@ issueNewShares(amount?: number): number;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  amount | number | Number of new shares to issue, will be rounded to nearest 10m. Defaults to max amount. |
+|  amount | number | _(Optional)_ Number of new shares to issue, will be rounded to nearest 10m. Defaults to max amount. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

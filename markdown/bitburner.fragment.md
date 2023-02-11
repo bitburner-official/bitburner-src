@@ -5,7 +5,7 @@
 ## Fragment interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface Fragment 
@@ -13,11 +13,11 @@ interface Fragment
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [id](./bitburner.fragment.id.md) | number |  |
-|  [limit](./bitburner.fragment.limit.md) | number |  |
-|  [power](./bitburner.fragment.power.md) | number |  |
-|  [shape](./bitburner.fragment.shape.md) | boolean\[\]\[\] |  |
-|  [type](./bitburner.fragment.type.md) | number |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [id](./bitburner.fragment.id.md) |  | number |  |
+|  [limit](./bitburner.fragment.limit.md) |  | number |  |
+|  [power](./bitburner.fragment.power.md) |  | number |  |
+|  [shape](./bitburner.fragment.shape.md) |  | boolean\[\]\[\] |  |
+|  [type](./bitburner.fragment.type.md) |  | number |  |
 

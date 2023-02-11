@@ -6,7 +6,7 @@
 
 Scientific research factor (affects quality)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 scienceFactor?: number;

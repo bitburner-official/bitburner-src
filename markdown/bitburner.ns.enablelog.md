@@ -6,7 +6,7 @@
 
 Enable logging for a certain function.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 enableLog(fn: string): void;
@@ -18,7 +18,7 @@ enableLog(fn: string): void;
 |  --- | --- | --- |
 |  fn | string | Name of function for which to enable logging. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

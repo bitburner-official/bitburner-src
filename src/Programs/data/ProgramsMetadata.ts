@@ -6,7 +6,7 @@ import { Terminal } from "../../Terminal";
 import { Player } from "@player";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { GetServer } from "../../Server/AllServers";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatMoney } from "../../ui/formatNumber";
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 import { BitFlumeEvent } from "../../BitNode/ui/BitFlumeModal";
 import { calculateHackingTime, calculateGrowTime, calculateWeakenTime } from "../../Hacking";
@@ -311,7 +311,7 @@ export const programsMetadata: IProgramCreationParams[] = [
         Player.augmentations.length >= numAugReq && Player.money > 1e11 && Player.skills.hacking >= 2500;
       if (!fulfilled) {
         Terminal.print(`Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
-        Terminal.print(`Money: ${numeralWrapper.formatMoney(Player.money)} / $100b`);
+        Terminal.print(`Money: ${formatMoney(Player.money)} / $100b`);
         Terminal.print(`Hacking skill: ${Player.skills.hacking} / 2500`);
         return;
       }

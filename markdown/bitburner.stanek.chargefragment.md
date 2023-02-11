@@ -6,7 +6,7 @@
 
 Charge a fragment, increasing its power.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 chargeFragment(rootX: number, rootY: number): Promise<void>;
@@ -19,7 +19,7 @@ chargeFragment(rootX: number, rootY: number): Promise<void>;
 |  rootX | number | rootX Root X against which to align the top left of the fragment. |
 |  rootY | number | rootY Root Y against which to align the top left of the fragment. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;void&gt;
 

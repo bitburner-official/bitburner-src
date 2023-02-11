@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.augmentations property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 augmentations: string[];

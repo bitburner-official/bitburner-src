@@ -6,7 +6,7 @@
 
 Multiplier to increase cores
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 UpgradeCoreMult: number;

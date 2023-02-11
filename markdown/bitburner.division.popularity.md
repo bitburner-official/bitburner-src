@@ -6,7 +6,7 @@
 
 Popularity of the division
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 popularity: number;

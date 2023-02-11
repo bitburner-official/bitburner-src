@@ -6,7 +6,7 @@
 
 Charisma multiplier from equipment
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cha_mult: number;

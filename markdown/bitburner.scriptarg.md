@@ -5,7 +5,7 @@
 ## ScriptArg type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type ScriptArg = string | number | boolean;

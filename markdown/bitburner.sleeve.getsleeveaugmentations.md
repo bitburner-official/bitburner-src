@@ -6,7 +6,7 @@
 
 Get augmentations installed on a sleeve.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getSleeveAugmentations(sleeveNumber: number): string[];
@@ -18,7 +18,7 @@ getSleeveAugmentations(sleeveNumber: number): string[];
 |  --- | --- | --- |
 |  sleeveNumber | number | Index of the sleeve to retrieve augmentations from. |
 
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

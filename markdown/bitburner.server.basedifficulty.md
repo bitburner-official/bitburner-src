@@ -6,7 +6,7 @@
 
 Initial server security level (i.e. security level when the server was created)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 baseDifficulty: number;

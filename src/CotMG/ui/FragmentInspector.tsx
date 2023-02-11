@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ActiveFragment } from "../ActiveFragment";
 import { StaneksGift } from "../StaneksGift";
 import { FragmentType, Effect } from "../FragmentType";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatPercent, formatStaneksGiftCharge, formatStaneksGiftPower } from "../../ui/formatNumber";
 
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -46,17 +46,17 @@ export function FragmentInspector(props: IProps): React.ReactElement {
   }
   const f = props.fragment.fragment();
 
-  let charge = numeralWrapper.formatStaneksGiftCharge(props.fragment.highestCharge * props.fragment.numCharge);
+  let charge = formatStaneksGiftCharge(props.fragment.highestCharge * props.fragment.numCharge);
   let effect = "N/A";
   // Boosters and cooling don't deal with heat.
   if ([FragmentType.Booster, FragmentType.None, FragmentType.Delete].includes(f.type)) {
     charge = "N/A";
     effect = `${f.power}x adjacent fragment power`;
   } else if (Effect(f.type).includes("+x%")) {
-    effect = Effect(f.type).replace(/-*x%/, numeralWrapper.formatPercentage(props.gift.effect(props.fragment) - 1));
+    effect = Effect(f.type).replace(/-*x%/, formatPercent(props.gift.effect(props.fragment) - 1));
   } else if (Effect(f.type).includes("-x%")) {
     const effectAmt = props.gift.effect(props.fragment);
-    const perc = numeralWrapper.formatPercentage(1 - 1 / effectAmt);
+    const perc = formatPercent(1 - 1 / effectAmt);
     effect = Effect(f.type).replace(/-x%/, perc);
   }
 
@@ -70,7 +70,7 @@ export function FragmentInspector(props: IProps): React.ReactElement {
         <br />
         Effect: {effect}
         <br />
-        Base Power: {numeralWrapper.formatStaneksGiftPower(f.power)}
+        Base Power: {formatStaneksGiftPower(f.power)}
         <br />
         Charge: {charge}
         <br />

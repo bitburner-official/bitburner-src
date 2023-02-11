@@ -5,7 +5,7 @@
 ## WorkStats interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface WorkStats 
@@ -13,15 +13,15 @@ interface WorkStats
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [agiExp](./bitburner.workstats.agiexp.md) | number |  |
-|  [chaExp](./bitburner.workstats.chaexp.md) | number |  |
-|  [defExp](./bitburner.workstats.defexp.md) | number |  |
-|  [dexExp](./bitburner.workstats.dexexp.md) | number |  |
-|  [hackExp](./bitburner.workstats.hackexp.md) | number |  |
-|  [intExp](./bitburner.workstats.intexp.md) | number |  |
-|  [money](./bitburner.workstats.money.md) | number |  |
-|  [reputation](./bitburner.workstats.reputation.md) | number |  |
-|  [strExp](./bitburner.workstats.strexp.md) | number |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [agiExp](./bitburner.workstats.agiexp.md) |  | number |  |
+|  [chaExp](./bitburner.workstats.chaexp.md) |  | number |  |
+|  [defExp](./bitburner.workstats.defexp.md) |  | number |  |
+|  [dexExp](./bitburner.workstats.dexexp.md) |  | number |  |
+|  [hackExp](./bitburner.workstats.hackexp.md) |  | number |  |
+|  [intExp](./bitburner.workstats.intexp.md) |  | number |  |
+|  [money](./bitburner.workstats.money.md) |  | number |  |
+|  [reputation](./bitburner.workstats.reputation.md) |  | number |  |
+|  [strExp](./bitburner.workstats.strexp.md) |  | number |  |
 

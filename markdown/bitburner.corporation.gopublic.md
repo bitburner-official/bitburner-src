@@ -6,7 +6,7 @@
 
 Go public
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 goPublic(numShares: number): boolean;
@@ -18,7 +18,7 @@ goPublic(numShares: number): boolean;
 |  --- | --- | --- |
 |  numShares | number | number of shares you would like to issue for your IPO |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

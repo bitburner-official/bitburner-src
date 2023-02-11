@@ -6,7 +6,7 @@
 
 charisma exp gained from crime
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 charisma_exp: number;

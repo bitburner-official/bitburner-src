@@ -6,7 +6,7 @@
 
 Namespace for stock functions.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly stock: TIX;

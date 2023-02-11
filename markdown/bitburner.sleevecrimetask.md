@@ -5,10 +5,10 @@
 ## SleeveCrimeTask type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}` };
+type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}`; cyclesWorked: number };
 ```
-<b>References:</b> [CrimeType](./bitburner.crimetype.md)
+**References:** [CrimeType](./bitburner.crimetype.md)
 

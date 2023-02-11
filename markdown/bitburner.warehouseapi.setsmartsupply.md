@@ -6,7 +6,7 @@
 
 Set smart supply
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setSmartSupply(divisionName: string, city: CityName | `${CityName}`, enabled: boolean): void;
@@ -20,7 +20,7 @@ setSmartSupply(divisionName: string, city: CityName | `${CityName}`, enabled: bo
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
 |  enabled | boolean | smart supply enabled |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

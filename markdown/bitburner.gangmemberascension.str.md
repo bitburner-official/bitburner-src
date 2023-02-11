@@ -6,7 +6,7 @@
 
 Strength multiplier gained from ascending
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 str: number;

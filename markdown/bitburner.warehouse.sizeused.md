@@ -6,7 +6,7 @@
 
 Used space in the warehouse
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sizeUsed: number;

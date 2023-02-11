@@ -6,7 +6,7 @@
 
 Set a sleeve to workout at the gym.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setToGymWorkout(sleeveNumber: number, gymName: string, stat: string): boolean;
@@ -20,7 +20,7 @@ setToGymWorkout(sleeveNumber: number, gymName: string, stat: string): boolean;
 |  gymName | string | Name of the gym. |
 |  stat | string | Name of the stat to train. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

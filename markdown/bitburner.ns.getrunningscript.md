@@ -6,7 +6,7 @@
 
 Get general info about a running script.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getRunningScript(
@@ -20,11 +20,11 @@ getRunningScript(
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  filename | [FilenameOrPID](./bitburner.filenameorpid.md) | Optional. Filename or PID of the script. |
-|  hostname | string | Optional. Name of host server the script is running on. |
+|  filename | [FilenameOrPID](./bitburner.filenameorpid.md) | _(Optional)_ Optional. Filename or PID of the script. |
+|  hostname | string | _(Optional)_ Optional. Name of host server the script is running on. |
 |  args | (string \| number \| boolean)\[\] | Arguments to identify the script |
 
-<b>Returns:</b>
+**Returns:**
 
 [RunningScript](./bitburner.runningscript.md) \| null
 

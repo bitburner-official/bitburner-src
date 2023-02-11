@@ -6,7 +6,7 @@
 
 Multiplier to increase node level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 UpgradeLevelMult: number;

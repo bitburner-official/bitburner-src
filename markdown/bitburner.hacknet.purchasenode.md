@@ -6,12 +6,12 @@
 
 Purchase a new hacknet node.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 purchaseNode(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

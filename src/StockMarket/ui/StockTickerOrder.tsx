@@ -3,7 +3,7 @@ import * as React from "react";
 import { Order } from "../Order";
 import { PositionTypes } from "../data/PositionTypes";
 
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatShares } from "../../ui/formatNumber";
 import { Money } from "../../ui/React/Money";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -25,7 +25,7 @@ export function StockTickerOrder(props: IProps): React.ReactElement {
   const posTxt = order.pos === PositionTypes.Long ? "Long Position" : "Short Position";
   const txt = (
     <>
-      {order.type} - {posTxt} - {numeralWrapper.formatShares(order.shares)} @ <Money money={order.price} />
+      {order.type} - {posTxt} - {formatShares(order.shares)} @ <Money money={order.price} />
     </>
   );
 

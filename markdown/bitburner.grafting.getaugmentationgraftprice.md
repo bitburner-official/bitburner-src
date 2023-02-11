@@ -6,7 +6,7 @@
 
 Retrieve the grafting cost of an aug.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getAugmentationGraftPrice(augName: string): number;
@@ -18,7 +18,7 @@ getAugmentationGraftPrice(augName: string): number;
 |  --- | --- | --- |
 |  augName | string | Name of the aug to check the price of. Must be an exact match. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

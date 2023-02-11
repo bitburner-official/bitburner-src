@@ -6,7 +6,7 @@
 
 Max amount of RAM in GB
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 MaxRam: number;

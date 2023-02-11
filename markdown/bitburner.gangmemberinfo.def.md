@@ -6,7 +6,7 @@
 
 Defense skill level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 def: number;

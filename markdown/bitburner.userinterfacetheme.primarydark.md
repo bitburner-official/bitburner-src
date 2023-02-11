@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.primarydark property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 primarydark: string;

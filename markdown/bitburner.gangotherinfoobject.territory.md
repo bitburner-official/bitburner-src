@@ -6,7 +6,7 @@
 
 Gang territory, in decimal form
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 territory: number;

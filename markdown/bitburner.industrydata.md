@@ -6,7 +6,7 @@
 
 Corporation industry information
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface IndustryData 
@@ -14,13 +14,13 @@ interface IndustryData
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [cost](./bitburner.industrydata.cost.md) | number | Cost to expand to the division |
-|  [makesMaterials](./bitburner.industrydata.makesmaterials.md) | boolean | Whether the division makes materials |
-|  [makesProducts](./bitburner.industrydata.makesproducts.md) | boolean | Whether the division makes products |
-|  [producedMaterials?](./bitburner.industrydata.producedmaterials.md) | string\[\] | <i>(Optional)</i> Materials produced |
-|  [productType?](./bitburner.industrydata.producttype.md) | string | <i>(Optional)</i> Product type |
-|  [requiredMaterials](./bitburner.industrydata.requiredmaterials.md) | Record&lt;string, number&gt; | Materials required for production and their amounts |
-|  [type](./bitburner.industrydata.type.md) | [CorpIndustryName](./bitburner.corpindustryname.md) | Industry type |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [cost](./bitburner.industrydata.cost.md) |  | number | Cost to expand to the division |
+|  [makesMaterials](./bitburner.industrydata.makesmaterials.md) |  | boolean | Whether the division makes materials |
+|  [makesProducts](./bitburner.industrydata.makesproducts.md) |  | boolean | Whether the division makes products |
+|  [producedMaterials?](./bitburner.industrydata.producedmaterials.md) |  | string\[\] | _(Optional)_ Materials produced |
+|  [productType?](./bitburner.industrydata.producttype.md) |  | string | _(Optional)_ Product type |
+|  [requiredMaterials](./bitburner.industrydata.requiredmaterials.md) |  | Record&lt;string, number&gt; | Materials required for production and their amounts |
+|  [type](./bitburner.industrydata.type.md) |  | [CorpIndustryName](./bitburner.corpindustryname.md) | Industry type |
 

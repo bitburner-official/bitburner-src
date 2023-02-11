@@ -4,7 +4,7 @@
 
 ## MoneySource.stock property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 stock: number;

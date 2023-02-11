@@ -4,7 +4,7 @@
 
 ## MoneySources.sinceStart property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sinceStart: MoneySource;

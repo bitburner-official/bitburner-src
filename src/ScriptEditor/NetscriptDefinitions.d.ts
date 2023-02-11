@@ -1001,7 +1001,7 @@ interface NetscriptPort {
  * Stock market API
  * @public
  */
-export type TIX = {
+export interface TIX {
   /**
    * Returns true if the player has access to a WSE Account
    * @remarks RAM cost: 0.05 GB
@@ -1440,7 +1440,7 @@ export type TIX = {
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchaseTixApi(): boolean;
-};
+}
 
 /**
  * Singularity API
@@ -1449,7 +1449,7 @@ export type TIX = {
  * Source-File 4 levels.
  * @public
  */
-export type Singularity = {
+export interface Singularity {
   /**
    * Backup game save.
    * @remarks
@@ -2293,7 +2293,7 @@ export type Singularity = {
    * @returns - An object representing the current work. Fields depend on the kind of work.
    */
   getCurrentWork(): any | null;
-};
+}
 
 /**
  * Hacknet API
@@ -2301,7 +2301,7 @@ export type Singularity = {
  * Not all these functions are immediately available.
  * @public
  */
-export type Hacknet = {
+export interface Hacknet {
   /**
    * Get the number of hacknet nodes you own.
    * @remarks
@@ -2652,7 +2652,7 @@ export type Hacknet = {
    * @returns Multiplier.
    */
   getTrainingMult(): number;
-};
+}
 
 /**
  * Bladeburner API
@@ -2661,7 +2661,7 @@ export type Hacknet = {
  * or have Source-File 7 in order to use this API.
  * @public
  */
-export type Bladeburner = {
+export interface Bladeburner {
   /**
    * List all contracts.
    * @remarks
@@ -3162,13 +3162,13 @@ export type Bladeburner = {
    *
    * @returns whether player is a member of bladeburner division. */
   inBladeburner(): boolean;
-};
+}
 
 /**
  * Coding Contract API
  * @public
  */
-export type CodingContract = {
+export interface CodingContract {
   /**
    * Attempts a coding contract, returning a reward string on success or empty string on failure.
    * @remarks
@@ -3273,7 +3273,7 @@ export type CodingContract = {
    * RAM cost: 2 GB
    */
   getContractTypes(): string[];
-};
+}
 
 /**
  * Gang API
@@ -3281,7 +3281,7 @@ export type CodingContract = {
  * If you are not in BitNode-2, then you must have Source-File 2 in order to use this API.
  * @public
  */
-export type Gang = {
+export interface Gang {
   /**
    * Create a gang.
    * @remarks
@@ -3540,7 +3540,7 @@ export type Gang = {
    * @returns Bonus time for the Gang mechanic in milliseconds.
    */
   getBonusTime(): number;
-};
+}
 
 /**
  * Sleeve API
@@ -3548,7 +3548,7 @@ export type Gang = {
  * If you are not in BitNode-10, then you must have Source-File 10 in order to use this API.
  * @public
  */
-export type Sleeve = {
+export interface Sleeve {
   /**
    * Get the number of sleeves you own.
    * @remarks
@@ -3778,7 +3778,7 @@ export type Sleeve = {
    * @returns True if the sleeve started working out, false otherwise.
    */
   setToBladeburnerAction(sleeveNumber: number, action: string, contract?: string): boolean;
-};
+}
 
 /**
  * Grafting API
@@ -3786,7 +3786,7 @@ export type Sleeve = {
  * This API requires Source-File 10 to use.
  * @public
  */
-export type Grafting = {
+export interface Grafting {
   /**
    * Retrieve the grafting cost of an aug.
    * @remarks
@@ -3833,13 +3833,13 @@ export type Grafting = {
    * @throws Will error if called while you are not in New Tokyo.
    */
   graftAugmentation(augName: string, focus?: boolean): boolean;
-};
+}
 
 /**
  * Skills formulas
  * @public
  */
-type SkillsFormulas = {
+interface SkillsFormulas {
   /**
    * Calculate skill level.
    * @param exp - experience for that skill
@@ -3854,7 +3854,7 @@ type SkillsFormulas = {
    * @returns The calculated exp required.
    */
   calculateExp(skill: number, skillMult?: number): number;
-};
+}
 
 /** @public */
 interface WorkStats {
@@ -3873,7 +3873,7 @@ interface WorkStats {
  * Work formulas
  * @public
  */
-type WorkFormulas = {
+interface WorkFormulas {
   crimeSuccessChance(person: Person, crimeType: CrimeType | `${CrimeType}`): number;
   /** @returns The WorkStats gained when completing one instance of the specified crime. */
   crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
@@ -3889,13 +3889,13 @@ type WorkFormulas = {
   factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified company work. */
   companyGains(person: Person, companyName: string, workType: JobName | `${JobName}`, favor: number): WorkStats;
-};
+}
 
 /**
  * Reputation formulas
  * @public
  */
-type ReputationFormulas = {
+interface ReputationFormulas {
   /**
    * Calculate the total required amount of faction reputation to reach a target favor.
    * @param favor - target faction favor.
@@ -3916,13 +3916,13 @@ type ReputationFormulas = {
    * @param player - Player info from {@link NS.getPlayer | getPlayer}
    */
   repFromDonation(amount: number, player: Person): number;
-};
+}
 
 /**
  * Hacking formulas
  * @public
  */
-type HackingFormulas = {
+interface HackingFormulas {
   /**
    * Calculate hack chance.
    * (Ex: 0.25 would indicate a 25% chance of success.)
@@ -3982,13 +3982,13 @@ type HackingFormulas = {
    * @returns The calculated weaken time.
    */
   weakenTime(server: Server, player: Person): number;
-};
+}
 
 /**
  * Hacknet Node formulas
  * @public
  */
-type HacknetNodesFormulas = {
+interface HacknetNodesFormulas {
   /**
    * Calculate money gain rate.
    * @param level - level of the node.
@@ -4034,13 +4034,13 @@ type HacknetNodesFormulas = {
    * @returns An object with all hacknet node constants used by the game.
    */
   constants(): HacknetNodeConstants;
-};
+}
 
 /**
  * Hacknet Server formulas
  * @public
  */
-type HacknetServersFormulas = {
+interface HacknetServersFormulas {
   /**
    * Calculate hash gain rate.
    * @param level - level of the server.
@@ -4101,13 +4101,13 @@ type HacknetServersFormulas = {
    * @returns An object with all hacknet server constants used by the game.
    */
   constants(): HacknetServerConstants;
-};
+}
 
 /**
  * Gang formulas
  * @public
  */
-type GangFormulas = {
+interface GangFormulas {
   /**
    * Calculate the wanted penalty.
    * @param gang - Gang info from {@link Gang.getGangInformation | getGangInformation}
@@ -4152,7 +4152,7 @@ type GangFormulas = {
    * @returns The calculated ascension mult.
    */
   ascensionMultiplier(points: number): number;
-};
+}
 
 /**
  * Formulas API
@@ -4160,7 +4160,7 @@ type GangFormulas = {
  * You need Formulas.exe on your home computer to use this API.
  * @public
  */
-export type Formulas = {
+export interface Formulas {
   mockServer(): Server;
   mockPlayer(): Player;
   mockPerson(): Person;
@@ -4178,7 +4178,7 @@ export type Formulas = {
   gang: GangFormulas;
   /** Work formulas */
   work: WorkFormulas;
-};
+}
 
 /** @public */
 interface Fragment {
@@ -4203,7 +4203,7 @@ interface ActiveFragment {
  * Stanek's Gift API.
  * @public
  */
-type Stanek = {
+interface Stanek {
   /**
    * Stanek's Gift width.
    * @remarks
@@ -4309,7 +4309,7 @@ type Stanek = {
    * false otherwise.
    */
   acceptGift(): boolean;
-};
+}
 
 /** @public */
 interface InfiltrationReward {
@@ -4335,7 +4335,7 @@ interface InfiltrationLocation {
  * Infiltration API.
  * @public
  */
-type Infiltration = {
+interface Infiltration {
   /**
    * Get all locations that can be infiltrated.
    * @remarks
@@ -4352,13 +4352,13 @@ type Infiltration = {
    * @returns Infiltration data for given location.
    */
   getInfiltration(location: string): InfiltrationLocation;
-};
+}
 
 /**
  * User Interface API.
  * @public
  */
-type UserInterface = {
+interface UserInterface {
   /**
    * Get the current window size
    * @remarks
@@ -4441,7 +4441,7 @@ type UserInterface = {
    * RAM cost: 0.2 GB
    */
   clearTerminal(): void;
-};
+}
 
 /**
  * Collection of all functions passed to scripts
@@ -4470,7 +4470,7 @@ type UserInterface = {
  * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
  * <hr>
  */
-export type NS = {
+export interface NS {
   /**
    * Namespace for hacknet functions.
    * @remarks RAM cost: 4 GB
@@ -6546,14 +6546,63 @@ export type NS = {
    * @remarks
    * RAM cost: 0 GB
    *
-   * Converts a number into a string with the specified formatter.
-   * This uses the numeral.js library, so the formatters must be compatible with that.
-   * This is the same function that the game itself uses to display numbers.
-   *
-   * For more information, see: http://numeraljs.com/
+   * Converts a number into a numeric string with the specified format options.
+   * This is the same function that the game itself uses to display numbers. The format also depends on the Numeric
+   * Display settings (all options on the "Numeric Display" options page)
+   * To format ram or percentages, see {@link NS.formatRam | formatRam} and {@link NS.formatPercent | formatPercent}
    *
    * @param n - Number to format.
-   * @param format - Formatter.
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3.
+   * @param suffixStart - How high a number must be before a suffix will be added. Optional, defaults to 1000.
+   * @param isInteger - Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. Optional, defaults to false.
+   * @returns Formatted number.
+   */
+  formatNumber(n: number, fractionalDigits?: number, suffixStart?: number, isInteger?: boolean): string;
+
+  /**
+   * Format a number as an amount of ram.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a ram string with the specified number of fractional digits.
+   * This is the same function that the game itself uses to display ram. The format also depends on the Numeric Display
+   * settings (all options on the "Numeric Display" options page)
+   * To format plain numbers or percentages, see {@link NS.formatNumber | formatNumber} and {@link NS.formatPercent | formatPercent}
+   *
+   * @param n - Number to format as an amount of ram, in base units of GB (or GiB if that Numeric Display option is set).
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+   * @returns Formatted ram amount.
+   */
+  formatRam(n: number, fractionalDigits?: number): string;
+
+  /**
+   * Format a number as a percentage.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a percentage string with the specified number of fractional digits.
+   * This is the same function that the game itself uses to display percentages. The format also depends on the Numeric
+   * Display settings (all options on the "Numeric Display" options page)
+   * To format plain numbers or ram, see {@link NS.formatNumber | formatNumber} and {@link NS.formatRam | formatRam}
+   *
+   * @param n - Number to format as a percentage.
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+   * @returns Formatted percentage.
+   */
+  formatPercent(n: number, fractionalDigits?: number): string;
+
+  /**
+   * Format a number using the numeral library. This function is deprecated and will be removed in 2.3.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a string with the specified format options.
+   * See http://numeraljs.com/#format for documentation on format strings supported.
+   *
+   * This function is deprecated and will be removed in 2.3.
+   *
+   * @param n - Number to format.
+   * @param format - Formatting options. See http://numeraljs.com/#format for valid formats.
    * @returns Formatted number.
    */
   nFormat(n: number, format: string): string;
@@ -6867,7 +6916,7 @@ export type NS = {
   getSharePower(): number;
 
   enums: NSEnums;
-};
+}
 
 // BASE ENUMS
 /** @public */
@@ -7087,7 +7136,7 @@ export type NSEnums = {
  * @public
  */
 
-export type OfficeAPI = {
+export interface OfficeAPI {
   /**
    * Hire an employee.
    * @param divisionName - Name of the division
@@ -7179,7 +7228,7 @@ export type OfficeAPI = {
    * @returns Cost of upgrading the office
    */
   getOfficeSizeUpgradeCost(divisionName: string, city: CityName | `${CityName}`, asize: number): number;
-};
+}
 
 /**
  * Corporation Warehouse API
@@ -7187,7 +7236,7 @@ export type OfficeAPI = {
  * Requires the Warehouse API upgrade from your corporation.
  * @public
  */
-export type WarehouseAPI = {
+export interface WarehouseAPI {
   /**
    * Set material sell data.
    * @param divisionName - Name of the division
@@ -7410,13 +7459,13 @@ export type WarehouseAPI = {
    * @returns true if warehouse is present, false if not
    */
   hasWarehouse(divisionName: string, city: CityName | `${CityName}`): boolean;
-};
+}
 
 /**
  * Corporation API
  * @public
  */
-export type Corporation = {
+export interface Corporation extends WarehouseAPI, OfficeAPI {
   /** Returns whether the player has a corporation. Does not require API access.
    * @returns whether the player has a corporation */
   hasCorporation(): boolean;
@@ -7527,12 +7576,11 @@ export type Corporation = {
    * “Bonus time” makes the game progress faster.
    * @returns Bonus time for the Corporation mechanic in milliseconds. */
   getBonusTime(): number;
-} & WarehouseAPI &
-  OfficeAPI;
+}
 
 /** Product rating information
  *  @public */
-type CorpProductData = {
+interface CorpProductData {
   /** Name of the product */
   name: string;
   /** Verb used to describe creation of the product */
@@ -7548,7 +7596,7 @@ type CorpProductData = {
     performance?: number;
     reliability?: number;
   };
-};
+}
 
 /** Data for an individual industry
  *  @public */

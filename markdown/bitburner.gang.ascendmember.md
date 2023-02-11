@@ -6,7 +6,7 @@
 
 Ascend a gang member.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ascendMember(memberName: string): GangMemberAscension | undefined;
@@ -18,7 +18,7 @@ ascendMember(memberName: string): GangMemberAscension | undefined;
 |  --- | --- | --- |
 |  memberName | string | Name of member to ascend. |
 
-<b>Returns:</b>
+**Returns:**
 
 [GangMemberAscension](./bitburner.gangmemberascension.md) \| undefined
 

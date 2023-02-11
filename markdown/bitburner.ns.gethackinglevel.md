@@ -6,12 +6,12 @@
 
 Returns the player’s current hacking level.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getHackingLevel(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

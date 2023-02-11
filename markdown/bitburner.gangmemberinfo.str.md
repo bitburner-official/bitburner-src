@@ -6,7 +6,7 @@
 
 Strength skill level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 str: number;

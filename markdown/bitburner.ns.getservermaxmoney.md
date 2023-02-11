@@ -6,7 +6,7 @@
 
 Get the maximum money available on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getServerMaxMoney(host: string): number;
@@ -18,7 +18,7 @@ getServerMaxMoney(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

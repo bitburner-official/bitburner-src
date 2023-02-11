@@ -22,7 +22,7 @@ import { Player } from "@player";
 import { AugmentationNames } from "../data/AugmentationNames";
 import { StaticAugmentations } from "../StaticAugmentations";
 import { CONSTANTS } from "../../Constants";
-import { formatNumber } from "../../utils/StringHelperFunctions";
+import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { Info } from "@mui/icons-material";
 import { Link } from "@mui/material";
 import { AlertEvents } from "../../ui/React/AlertManager";
@@ -69,8 +69,8 @@ const EntropyDisplay = (): React.ReactElement => {
         Entropy Virus - Level {Player.entropy}
       </Typography>
       <Typography color={Settings.theme.error}>
-        <b>All multipliers decreased by:</b> {formatNumber((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}%
-        (multiplicative)
+        <b>All multipliers decreased by:</b>{" "}
+        {formatNumberNoSuffix((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}% (multiplicative)
       </Typography>
     </Paper>
   ) : (

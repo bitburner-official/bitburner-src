@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FactionWorkType } from "../../../Enums";
 import { CONSTANTS } from "../../../Constants";
 import { Player } from "@player";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatPercent } from "../../../ui/formatNumber";
 import { ProgressBar } from "../../../ui/React/Progress";
 import { Sleeve } from "../Sleeve";
 import { MoreStatsModal } from "./MoreStatsModal";
@@ -77,7 +77,7 @@ export function SleeveElem(props: IProps): React.ReactElement {
     desc = (
       <>
         This sleeve is currently attempting {crime.workName} (Success Rate:{" "}
-        {numeralWrapper.formatPercentage(crime.successRate(props.sleeve))}).
+        {formatPercent(crime.successRate(props.sleeve))}).
       </>
     );
   }

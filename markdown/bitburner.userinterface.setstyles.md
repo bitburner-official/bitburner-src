@@ -6,7 +6,7 @@
 
 Sets the current styles
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setStyles(newStyles: IStyleSettings): void;
@@ -18,7 +18,7 @@ setStyles(newStyles: IStyleSettings): void;
 |  --- | --- | --- |
 |  newStyles | [IStyleSettings](./bitburner.istylesettings.md) |  |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

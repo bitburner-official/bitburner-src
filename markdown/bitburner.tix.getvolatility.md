@@ -6,7 +6,7 @@
 
 Returns the volatility of the specified stock.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getVolatility(sym: string): number;
@@ -18,7 +18,7 @@ getVolatility(sym: string): number;
 |  --- | --- | --- |
 |  sym | string | Stock symbol. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

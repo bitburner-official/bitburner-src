@@ -6,7 +6,7 @@
 
 Limit Product Production.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 limitProductProduction(divisionName: string, city: CityName | `${CityName}`, productName: string, qty: number): void;
@@ -21,7 +21,7 @@ limitProductProduction(divisionName: string, city: CityName | `${CityName}`, pro
 |  productName | string | Name of the product. |
 |  qty | number | Amount to limit to. Pass a negative value to remove the limit instead. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -6,7 +6,7 @@
 
 Multiplier to effectiveness in Bladeburner Field Analysis
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 bladeburner_analysis: number;

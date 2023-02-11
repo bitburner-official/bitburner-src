@@ -6,7 +6,7 @@
 
 Work for a faction.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 workForFaction(faction: string, workType: FactionWorkType | `${FactionWorkType}`, focus?: boolean): boolean;
@@ -18,9 +18,9 @@ workForFaction(faction: string, workType: FactionWorkType | `${FactionWorkType}`
 |  --- | --- | --- |
 |  faction | string | Name of faction to work for. |
 |  workType | [FactionWorkType](./bitburner.factionworktype.md) \| \`${[FactionWorkType](./bitburner.factionworktype.md)<!-- -->}\` | Type of work to perform for the faction. |
-|  focus | boolean | Acquire player focus on this work operation. Optional. Defaults to true. |
+|  focus | boolean | _(Optional)_ Acquire player focus on this work operation. Optional. Defaults to true. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

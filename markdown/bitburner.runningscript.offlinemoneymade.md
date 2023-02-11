@@ -6,7 +6,7 @@
 
 Total amount of money made by this script when offline
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 offlineMoneyMade: number;

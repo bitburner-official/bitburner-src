@@ -27,8 +27,8 @@ import WarningIcon from "@mui/icons-material/Warning";
 
 import { ImportData, saveObject } from "../../SaveObject";
 import { Settings } from "../../Settings/Settings";
-import { convertTimeMsToTimeElapsedString, formatNumber } from "../../utils/StringHelperFunctions";
-import { numeralWrapper } from "../numeralFormat";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { formatMoney, formatNumberNoSuffix } from "../formatNumber";
 import { ConfirmationModal } from "./ConfirmationModal";
 import { pushImportResult } from "../../Electron";
 import { Router } from "../GameRoot";
@@ -231,8 +231,8 @@ export function ImportSaveRoot(props: IProps): JSX.Element {
 
             <TableRow>
               <TableCell>Money</TableCell>
-              <TableCell>{numeralWrapper.formatMoney(currentData.playerData?.money ?? 0)}</TableCell>
-              <TableCell>{numeralWrapper.formatMoney(importData.playerData?.money ?? 0)}</TableCell>
+              <TableCell>{formatMoney(currentData.playerData?.money ?? 0)}</TableCell>
+              <TableCell>{formatMoney(importData.playerData?.money ?? 0)}</TableCell>
               <TableCell>
                 {importData.playerData?.money !== currentData.playerData?.money && (
                   <ComparisonIcon
@@ -244,8 +244,8 @@ export function ImportSaveRoot(props: IProps): JSX.Element {
 
             <TableRow>
               <TableCell>Hacking</TableCell>
-              <TableCell>{formatNumber(currentData.playerData?.hacking ?? 0, 0)}</TableCell>
-              <TableCell>{formatNumber(importData.playerData?.hacking ?? 0, 0)}</TableCell>
+              <TableCell>{formatNumberNoSuffix(currentData.playerData?.hacking ?? 0, 0)}</TableCell>
+              <TableCell>{formatNumberNoSuffix(importData.playerData?.hacking ?? 0, 0)}</TableCell>
               <TableCell>
                 {importData.playerData?.hacking !== currentData.playerData?.hacking && (
                   <ComparisonIcon

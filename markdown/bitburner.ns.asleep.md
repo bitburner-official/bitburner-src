@@ -6,7 +6,7 @@
 
 Suspends the script for n milliseconds. Doesn't block with concurrent calls. You should prefer 'sleep' over 'asleep' except when doing very complex UI work.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 asleep(millis: number): Promise<true>;
@@ -18,7 +18,7 @@ asleep(millis: number): Promise<true>;
 |  --- | --- | --- |
 |  millis | number | Number of milliseconds to sleep. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;true&gt;
 

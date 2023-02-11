@@ -6,7 +6,7 @@
 
 Object representing a sleeve current task.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export type SleeveTask =
@@ -20,5 +20,5 @@ export type SleeveTask =
   | SleeveSupportTask
   | SleeveSynchroTask;
 ```
-<b>References:</b> [SleeveBladeburnerTask](./bitburner.sleevebladeburnertask.md)<!-- -->, [SleeveClassTask](./bitburner.sleeveclasstask.md)<!-- -->, [SleeveCompanyTask](./bitburner.sleevecompanytask.md)<!-- -->, [SleeveCrimeTask](./bitburner.sleevecrimetask.md)<!-- -->, [SleeveFactionTask](./bitburner.sleevefactiontask.md)<!-- -->, [SleeveInfiltrateTask](./bitburner.sleeveinfiltratetask.md)<!-- -->, [SleeveRecoveryTask](./bitburner.sleeverecoverytask.md)<!-- -->, [SleeveSupportTask](./bitburner.sleevesupporttask.md)<!-- -->, [SleeveSynchroTask](./bitburner.sleevesynchrotask.md)
+**References:** [SleeveBladeburnerTask](./bitburner.sleevebladeburnertask.md)<!-- -->, [SleeveClassTask](./bitburner.sleeveclasstask.md)<!-- -->, [SleeveCompanyTask](./bitburner.sleevecompanytask.md)<!-- -->, [SleeveCrimeTask](./bitburner.sleevecrimetask.md)<!-- -->, [SleeveFactionTask](./bitburner.sleevefactiontask.md)<!-- -->, [SleeveInfiltrateTask](./bitburner.sleeveinfiltratetask.md)<!-- -->, [SleeveRecoveryTask](./bitburner.sleeverecoverytask.md)<!-- -->, [SleeveSupportTask](./bitburner.sleevesupporttask.md)<!-- -->, [SleeveSynchroTask](./bitburner.sleevesynchrotask.md)
 

@@ -6,12 +6,12 @@
 
 Get information about the sources of income for this run.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getMoneySources(): MoneySources;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [MoneySources](./bitburner.moneysources.md)
 

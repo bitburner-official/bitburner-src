@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { formatNumber, convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { BladeburnerConstants } from "../data/Constants";
 import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatNumberNoSuffix, formatPopulation, formatBigNumber } from "../../ui/formatNumber";
 import { Factions } from "../../Faction/Factions";
 import { Router } from "../../ui/GameRoot";
 import { joinFaction } from "../../Faction/FactionHelpers";
@@ -59,7 +59,7 @@ export function Stats(props: IProps): React.ReactElement {
         </Box>
         <Box display="flex">
           <Tooltip title={<Typography>Your rank within the Bladeburner division.</Typography>}>
-            <Typography>Rank: {numeralWrapper.formatReallyBigNumber(props.bladeburner.rank)}</Typography>
+            <Typography>Rank: {formatBigNumber(props.bladeburner.rank)}</Typography>
           </Tooltip>
         </Box>
         <br />
@@ -88,17 +88,16 @@ export function Stats(props: IProps): React.ReactElement {
             }
           >
             <Typography>
-              Stamina: {numeralWrapper.formatReallyBigNumber(props.bladeburner.stamina)} /{" "}
-              {numeralWrapper.formatReallyBigNumber(props.bladeburner.maxStamina)}
+              Stamina: {formatBigNumber(props.bladeburner.stamina)} / {formatBigNumber(props.bladeburner.maxStamina)}
             </Typography>
           </Tooltip>
         </Box>
         <Typography>
-          Stamina Penalty: {formatNumber((1 - props.bladeburner.calculateStaminaPenalty()) * 100, 1)}%
+          Stamina Penalty: {formatNumberNoSuffix((1 - props.bladeburner.calculateStaminaPenalty()) * 100, 1)}%
         </Typography>
         <br />
-        <Typography>Team Size: {formatNumber(props.bladeburner.teamSize, 0)}</Typography>
-        <Typography>Team Members Lost: {formatNumber(props.bladeburner.teamLost, 0)}</Typography>
+        <Typography>Team Size: {formatNumberNoSuffix(props.bladeburner.teamSize, 0)}</Typography>
+        <Typography>Team Members Lost: {formatNumberNoSuffix(props.bladeburner.teamLost, 0)}</Typography>
         <br />
         <Typography>Num Times Hospitalized: {props.bladeburner.numHosp}</Typography>
         <Typography>
@@ -116,7 +115,7 @@ export function Stats(props: IProps): React.ReactElement {
             }
           >
             <Typography>
-              Est. Synthoid Population: {numeralWrapper.formatPopulation(props.bladeburner.getCurrentCity().popEst)}
+              Est. Synthoid Population: {formatPopulation(props.bladeburner.getCurrentCity().popEst)}
             </Typography>
           </Tooltip>
         </Box>
@@ -129,7 +128,9 @@ export function Stats(props: IProps): React.ReactElement {
               </Typography>
             }
           >
-            <Typography>Synthoid Communities: {formatNumber(props.bladeburner.getCurrentCity().comms, 0)}</Typography>
+            <Typography>
+              Synthoid Communities: {formatNumberNoSuffix(props.bladeburner.getCurrentCity().comms, 0)}
+            </Typography>
           </Tooltip>
         </Box>
         <Box display="flex">
@@ -141,9 +142,7 @@ export function Stats(props: IProps): React.ReactElement {
               </Typography>
             }
           >
-            <Typography>
-              City Chaos: {numeralWrapper.formatReallyBigNumber(props.bladeburner.getCurrentCity().chaos)}
-            </Typography>
+            <Typography>City Chaos: {formatBigNumber(props.bladeburner.getCurrentCity().chaos)}</Typography>
           </Tooltip>
         </Box>
         <br />
@@ -169,16 +168,16 @@ export function Stats(props: IProps): React.ReactElement {
             <br />
           </>
         )}
-        <Typography>Skill Points: {numeralWrapper.formatReallyBigNumber(props.bladeburner.skillPoints)}</Typography>
+        <Typography>Skill Points: {formatBigNumber(props.bladeburner.skillPoints)}</Typography>
         <br />
         <Typography>
-          Aug. Success Chance mult: {formatNumber(Player.mults.bladeburner_success_chance * 100, 1)}%
+          Aug. Success Chance mult: {formatNumberNoSuffix(Player.mults.bladeburner_success_chance * 100, 1)}%
           <br />
-          Aug. Max Stamina mult: {formatNumber(Player.mults.bladeburner_max_stamina * 100, 1)}%
+          Aug. Max Stamina mult: {formatNumberNoSuffix(Player.mults.bladeburner_max_stamina * 100, 1)}%
           <br />
-          Aug. Stamina Gain mult: {formatNumber(Player.mults.bladeburner_stamina_gain * 100, 1)}%
+          Aug. Stamina Gain mult: {formatNumberNoSuffix(Player.mults.bladeburner_stamina_gain * 100, 1)}%
           <br />
-          Aug. Field Analysis mult: {formatNumber(Player.mults.bladeburner_analysis * 100, 1)}%
+          Aug. Field Analysis mult: {formatNumberNoSuffix(Player.mults.bladeburner_analysis * 100, 1)}%
         </Typography>
       </Box>
     </Paper>

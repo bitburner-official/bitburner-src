@@ -15,7 +15,7 @@ import { placeOrder } from "../StockMarket";
 import { buyStock, shortStock, sellStock, sellShort } from "../BuyingAndSelling";
 
 import { Player } from "@player";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatShares } from "../../ui/formatNumber";
 import { Money } from "../../ui/React/Money";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
@@ -75,7 +75,7 @@ export function StockTicker(props: IProps): React.ReactElement {
 
     return (
       <>
-        Purchasing {numeralWrapper.formatShares(qty)} shares ({position === PositionTypes.Long ? "Long" : "Short"}
+        Purchasing {formatShares(qty)} shares ({position === PositionTypes.Long ? "Long" : "Short"}
         ) will cost <Money money={cost} />.
       </>
     );
@@ -107,8 +107,8 @@ export function StockTicker(props: IProps): React.ReactElement {
 
     return (
       <>
-        Selling {numeralWrapper.formatShares(qty)} shares ({position === PositionTypes.Long ? "Long" : "Short"}) will
-        result in a gain of <Money money={cost} />.
+        Selling {formatShares(qty)} shares ({position === PositionTypes.Long ? "Long" : "Short"}) will result in a gain
+        of <Money money={cost} />.
       </>
     );
   }

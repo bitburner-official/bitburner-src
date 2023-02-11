@@ -6,7 +6,7 @@
 
 Upgrade skill.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 upgradeSkill(name: string, count?: number): boolean;
@@ -17,9 +17,9 @@ upgradeSkill(name: string, count?: number): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  name | string |  |
-|  count | number | Number of times to upgrade the skill. Defaults to 1 if not specified. |
+|  count | number | _(Optional)_ Number of times to upgrade the skill. Defaults to 1 if not specified. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

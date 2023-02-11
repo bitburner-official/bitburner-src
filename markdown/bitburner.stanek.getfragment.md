@@ -6,7 +6,7 @@
 
 Get placed fragment at location.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getFragment(rootX: number, rootY: number): ActiveFragment | undefined;
@@ -19,7 +19,7 @@ getFragment(rootX: number, rootY: number): ActiveFragment | undefined;
 |  rootX | number | X against which to align the top left of the fragment. |
 |  rootY | number | Y against which to align the top left of the fragment. |
 
-<b>Returns:</b>
+**Returns:**
 
 [ActiveFragment](./bitburner.activefragment.md) \| undefined
 

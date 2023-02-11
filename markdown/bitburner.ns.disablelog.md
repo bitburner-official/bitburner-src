@@ -6,7 +6,7 @@
 
 Disables logging for the given function.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 disableLog(fn: string): void;
@@ -18,7 +18,7 @@ disableLog(fn: string): void;
 |  --- | --- | --- |
 |  fn | string | Name of function for which to disable logging. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

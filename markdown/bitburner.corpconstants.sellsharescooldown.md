@@ -6,7 +6,7 @@
 
 Cooldown for selling shares in game cycles (1 game cycle = 200ms)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sellSharesCooldown: number;

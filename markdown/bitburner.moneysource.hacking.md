@@ -4,7 +4,7 @@
 
 ## MoneySource.hacking property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacking: number;

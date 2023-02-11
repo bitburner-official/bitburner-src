@@ -1,7 +1,7 @@
 import React from "react";
 import { ActionTypes } from "../data/ActionTypes";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
-import { formatNumber, convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { Contracts } from "../data/Contracts";
 import { Bladeburner } from "../Bladeburner";
 import { Action } from "../Action";
@@ -11,7 +11,7 @@ import { CopyableText } from "../../ui/React/CopyableText";
 import { ActionLevel } from "./ActionLevel";
 import { Autolevel } from "./Autolevel";
 import { StartButton } from "./StartButton";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatNumberNoSuffix, formatBigNumber } from "../../ui/formatNumber";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { useRerender } from "../../ui/React/hooks";
@@ -41,8 +41,9 @@ export function ContractElem(props: IProps): React.ReactElement {
       {isActive ? (
         <>
           <Typography>
-            <CopyableText value={props.action.name} /> (IN PROGRESS - {formatNumber(computedActionTimeCurrent, 0)} /{" "}
-            {formatNumber(props.bladeburner.actionTimeToComplete, 0)})
+            <CopyableText value={props.action.name} /> (IN PROGRESS -{" "}
+            {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
+            {formatNumberNoSuffix(props.bladeburner.actionTimeToComplete, 0)})
           </Typography>
           <Typography>
             {createProgressBarText({
@@ -74,11 +75,11 @@ export function ContractElem(props: IProps): React.ReactElement {
         <br />
         Time Required: {convertTimeMsToTimeElapsedString(actionTime * 1000)}
         <br />
-        Contracts remaining: {numeralWrapper.formatReallyBigNumber(Math.floor(props.action.count), 3)}
+        Contracts remaining: {formatBigNumber(Math.floor(props.action.count))}
         <br />
-        Successes: {numeralWrapper.formatReallyBigNumber(props.action.successes, 3)}
+        Successes: {formatBigNumber(props.action.successes)}
         <br />
-        Failures: {numeralWrapper.formatReallyBigNumber(props.action.failures, 3)}
+        Failures: {formatBigNumber(props.action.failures)}
       </Typography>
       <br />
       <Autolevel rerender={rerender} action={props.action} />

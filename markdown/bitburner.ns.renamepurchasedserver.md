@@ -6,7 +6,7 @@
 
 Rename a purchased server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 renamePurchasedServer(hostname: string, newName: string): boolean;
@@ -19,7 +19,7 @@ renamePurchasedServer(hostname: string, newName: string): boolean;
 |  hostname | string | Current server hostname. |
 |  newName | string | New server hostname. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

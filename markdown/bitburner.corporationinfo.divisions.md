@@ -6,7 +6,7 @@
 
 Array of all division names
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 divisions: string[];

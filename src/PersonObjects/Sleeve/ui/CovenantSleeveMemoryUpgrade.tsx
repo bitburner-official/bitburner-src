@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { Sleeve } from "../Sleeve";
 import { Player } from "@player";
 
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatSleeveMemory } from "../../../ui/formatNumber";
 import { Money } from "../../../ui/React/Money";
 
 import Typography from "@mui/material/Typography";
@@ -80,7 +80,7 @@ export function CovenantSleeveMemoryUpgrade(props: IProps): React.ReactElement {
       </Typography>
       <Typography>
         Purchase a memory upgrade for your sleeve. Note that a sleeve's max memory is 100 (current:{" "}
-        {numeralWrapper.formatSleeveMemory(props.sleeve.memory)})
+        {formatSleeveMemory(props.sleeve.memory)})
       </Typography>
 
       <Box display="flex" flexDirection="row" alignItems="center">

@@ -6,12 +6,12 @@
 
 List member task names.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getTaskNames(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

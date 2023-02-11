@@ -6,7 +6,7 @@
 
 Name of faction that the gang belongs to ("Slum Snakes", etc.)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 faction: string;

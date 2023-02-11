@@ -6,7 +6,7 @@
 
 Set product sell data.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sellProduct(
@@ -30,7 +30,7 @@ sellProduct(
 |  price | string | Price to sell, can be "MP" |
 |  all | boolean | Sell in all city |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

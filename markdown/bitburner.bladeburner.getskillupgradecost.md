@@ -6,7 +6,7 @@
 
 Get cost to upgrade skill.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getSkillUpgradeCost(name: string, count?: number): number;
@@ -17,9 +17,9 @@ getSkillUpgradeCost(name: string, count?: number): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  name | string |  |
-|  count | number | Number of times to upgrade the skill. Defaults to 1 if not specified. |
+|  count | number | _(Optional)_ Number of times to upgrade the skill. Defaults to 1 if not specified. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

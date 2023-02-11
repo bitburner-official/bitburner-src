@@ -4,7 +4,7 @@
 
 ## CorpConstants.gameCyclesPerMarketCycle property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 gameCyclesPerMarketCycle: number;

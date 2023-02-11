@@ -6,7 +6,7 @@
 
 Influences how much it costs to unlock the stock market's 4S Market Data API
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 FourSigmaMarketDataApiCost: number;

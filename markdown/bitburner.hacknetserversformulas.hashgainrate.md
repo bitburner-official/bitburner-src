@@ -6,7 +6,7 @@
 
 Calculate hash gain rate.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hashGainRate(level: number, ramUsed: number, maxRam: number, cores: number, mult?: number): number;
@@ -20,9 +20,9 @@ hashGainRate(level: number, ramUsed: number, maxRam: number, cores: number, mult
 |  ramUsed | number | ramUsed of the server. |
 |  maxRam | number | maxRam of the server. |
 |  cores | number | cores of the server. |
-|  mult | number | player production mult (default to 1) |
+|  mult | number | _(Optional)_ player production mult (default to 1) |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

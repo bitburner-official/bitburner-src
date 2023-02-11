@@ -4,7 +4,7 @@
 
 ## CorpIndustryData.producedMaterials property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 producedMaterials?: CorpMaterialName[];

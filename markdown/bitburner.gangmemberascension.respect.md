@@ -6,7 +6,7 @@
 
 Amount of respect lost from ascending
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 respect: number;

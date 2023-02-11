@@ -6,7 +6,7 @@
 
 Options to affect the behavior of [hack](./bitburner.ns.hack.md)<!-- -->, [grow](./bitburner.ns.grow.md)<!-- -->, and [weaken](./bitburner.ns.weaken.md)<!-- -->.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface BasicHGWOptions 
@@ -14,8 +14,8 @@ interface BasicHGWOptions
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [stock?](./bitburner.basichgwoptions.stock.md) | boolean | <i>(Optional)</i> Set to true this action will affect the stock market. |
-|  [threads?](./bitburner.basichgwoptions.threads.md) | number | <i>(Optional)</i> Number of threads to use for this function. Must be less than or equal to the number of threads the script is running with. |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [stock?](./bitburner.basichgwoptions.stock.md) |  | boolean | _(Optional)_ Set to true this action will affect the stock market. |
+|  [threads?](./bitburner.basichgwoptions.threads.md) |  | number | _(Optional)_ Number of threads to use for this function. Must be less than or equal to the number of threads the script is running with. |
 

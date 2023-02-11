@@ -6,7 +6,7 @@
 
 Base money earned
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 baseMoney: number;

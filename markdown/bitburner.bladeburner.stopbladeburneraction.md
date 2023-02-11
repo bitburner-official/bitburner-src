@@ -6,12 +6,12 @@
 
 Stop current action.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 stopBladeburnerAction(): void;
 ```
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -6,7 +6,7 @@
 
 Agility skill impact on task scaling
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agiWeight: number;

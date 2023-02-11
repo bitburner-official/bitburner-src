@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { Faction } from "../Faction/Faction";
 import { Factions } from "../Faction/Factions";
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatPercent } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
@@ -69,7 +69,7 @@ export interface IConstructorParams {
 
 function generateStatsDescription(mults: Multipliers, programs?: string[], startingMoney?: number): JSX.Element {
   // For a percentage that is <10, show x.xx%, otherwise show xx.x%
-  const f = (x: number) => numeralWrapper.formatPercentage(x, x - 1 < 0.1 ? 2 : 1);
+  const f = (x: number) => formatPercent(x, x - 1 < 0.1 ? 2 : 1);
   let desc = <>Effects:</>;
 
   if (

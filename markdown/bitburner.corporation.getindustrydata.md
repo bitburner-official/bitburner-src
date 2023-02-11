@@ -6,7 +6,7 @@
 
 Get constant industry definition data for a specific industry
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getIndustryData(industryName: CorpIndustryName): CorpIndustryData;
@@ -18,7 +18,7 @@ getIndustryData(industryName: CorpIndustryName): CorpIndustryData;
 |  --- | --- | --- |
 |  industryName | [CorpIndustryName](./bitburner.corpindustryname.md) |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [CorpIndustryData](./bitburner.corpindustrydata.md)
 

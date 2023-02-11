@@ -6,7 +6,7 @@
 
 Download a file from the internet.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 wget(url: string, target: string, host?: string): Promise<boolean>;
@@ -18,9 +18,9 @@ wget(url: string, target: string, host?: string): Promise<boolean>;
 |  --- | --- | --- |
 |  url | string | URL to pull data from. |
 |  target | string | Filename to write data to. Must be script or text file. |
-|  host | string | Optional hostname/ip of server for target file. |
+|  host | string | _(Optional)_ Optional hostname/ip of server for target file. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;boolean&gt;
 

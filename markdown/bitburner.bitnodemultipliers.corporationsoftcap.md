@@ -6,7 +6,7 @@
 
 Influences the money gain from dividends of corporations created by the player.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 CorporationSoftcap: number;

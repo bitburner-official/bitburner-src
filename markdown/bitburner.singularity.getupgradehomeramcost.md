@@ -6,12 +6,12 @@
 
 Get the price of upgrading home RAM.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getUpgradeHomeRamCost(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

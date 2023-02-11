@@ -6,7 +6,7 @@
 
 Amount of research in that division
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 research: number;

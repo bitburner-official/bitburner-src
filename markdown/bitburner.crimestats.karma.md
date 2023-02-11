@@ -6,7 +6,7 @@
 
 Amount of karma lost for successfully committing this crime
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 karma: number;

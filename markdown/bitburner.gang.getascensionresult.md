@@ -6,7 +6,7 @@
 
 Get the result of an ascension without ascending.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getAscensionResult(memberName: string): GangMemberAscension | undefined;
@@ -18,7 +18,7 @@ getAscensionResult(memberName: string): GangMemberAscension | undefined;
 |  --- | --- | --- |
 |  memberName | string | Name of member. |
 
-<b>Returns:</b>
+**Returns:**
 
 [GangMemberAscension](./bitburner.gangmemberascension.md) \| undefined
 

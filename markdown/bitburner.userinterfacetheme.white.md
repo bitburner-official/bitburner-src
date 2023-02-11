@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.white property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 white: string;

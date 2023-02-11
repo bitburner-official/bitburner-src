@@ -4,7 +4,7 @@
 
 ## WorkStats.chaExp property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 chaExp: number;

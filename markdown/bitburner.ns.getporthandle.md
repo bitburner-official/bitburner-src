@@ -6,7 +6,7 @@
 
 Get all data on a port.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getPortHandle(port: number): NetscriptPort;
@@ -18,7 +18,7 @@ getPortHandle(port: number): NetscriptPort;
 |  --- | --- | --- |
 |  port | number | Port number. Must be an integer between 1 and 20. |
 
-<b>Returns:</b>
+**Returns:**
 
 [NetscriptPort](./bitburner.netscriptport.md)
 

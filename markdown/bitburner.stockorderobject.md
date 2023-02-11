@@ -6,7 +6,7 @@
 
 Value in map of [StockOrder](./bitburner.stockorder.md)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface StockOrderObject 
@@ -14,10 +14,10 @@ interface StockOrderObject
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [position](./bitburner.stockorderobject.position.md) | [PositionTypes](./bitburner.positiontypes.md) | Order position |
-|  [price](./bitburner.stockorderobject.price.md) | number | Price per share |
-|  [shares](./bitburner.stockorderobject.shares.md) | number | Number of shares |
-|  [type](./bitburner.stockorderobject.type.md) | [OrderTypes](./bitburner.ordertypes.md) | Order type |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [position](./bitburner.stockorderobject.position.md) |  | [PositionTypes](./bitburner.positiontypes.md) | Order position |
+|  [price](./bitburner.stockorderobject.price.md) |  | number | Price per share |
+|  [shares](./bitburner.stockorderobject.shares.md) |  | number | Number of shares |
+|  [type](./bitburner.stockorderobject.type.md) |  | [OrderTypes](./bitburner.ordertypes.md) | Order type |
 

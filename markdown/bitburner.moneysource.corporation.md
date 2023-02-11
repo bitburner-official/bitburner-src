@@ -4,7 +4,7 @@
 
 ## MoneySource.corporation property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 corporation: number;

@@ -6,7 +6,7 @@
 
 Calculate hash cost of an upgrade.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hashUpgradeCost(upgName: number, level: number): number;
@@ -19,7 +19,7 @@ hashUpgradeCost(upgName: number, level: number): number;
 |  upgName | number | name of the upgrade |
 |  level | number | level of the upgrade |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

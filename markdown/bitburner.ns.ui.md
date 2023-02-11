@@ -6,7 +6,7 @@
 
 Namespace for user interface functions. RAM cost: 0 GB
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly ui: UserInterface;

@@ -6,7 +6,7 @@
 
 Multiplier to increase RAM
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 UpgradeRamMult: number;

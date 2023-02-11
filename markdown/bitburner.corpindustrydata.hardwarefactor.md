@@ -6,7 +6,7 @@
 
 Hardware factor
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hardwareFactor?: number;

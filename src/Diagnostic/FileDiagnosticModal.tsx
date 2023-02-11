@@ -1,7 +1,7 @@
 import React from "react";
 import { GetServer, GetAllServers } from "../Server/AllServers";
 import { Modal } from "../ui/React/Modal";
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatBigNumber } from "../ui/formatNumber";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -57,7 +57,7 @@ function ServerAccordion(props: IServerProps): React.ReactElement {
     <Accordion TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>
-          {server.hostname} ({numeralWrapper.formatBigNumber(totalSize)}b)
+          {server.hostname} ({formatBigNumber(totalSize)}b)
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
@@ -80,7 +80,7 @@ function ServerAccordion(props: IServerProps): React.ReactElement {
                     <Typography>{file.name}</Typography>
                   </TableCell>
                   <TableCell align="right">
-                    <Typography>{numeralWrapper.formatBigNumber(file.size)}b</Typography>
+                    <Typography>{formatBigNumber(file.size)}b</Typography>
                   </TableCell>
                 </TableRow>
               ))}

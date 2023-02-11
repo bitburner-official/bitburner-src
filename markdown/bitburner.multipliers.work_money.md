@@ -6,7 +6,7 @@
 
 Multiplier to amount of money gained from working
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 work_money: number;

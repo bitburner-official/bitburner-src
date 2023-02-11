@@ -6,7 +6,7 @@
 
 Defense multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 def?: number;

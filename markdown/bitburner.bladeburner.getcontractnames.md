@@ -6,12 +6,12 @@
 
 List all contracts.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getContractNames(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

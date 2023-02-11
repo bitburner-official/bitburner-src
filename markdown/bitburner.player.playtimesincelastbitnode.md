@@ -4,7 +4,7 @@
 
 ## Player.playtimeSinceLastBitnode property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 playtimeSinceLastBitnode: number;

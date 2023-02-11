@@ -6,7 +6,7 @@
 
 Amount of share you will give in exchange for this investment
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 shares: number;

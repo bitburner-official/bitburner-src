@@ -6,7 +6,7 @@
 
 Get information about a sleeve.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getSleeve(sleeveNumber: number): SleevePerson;
@@ -18,7 +18,7 @@ getSleeve(sleeveNumber: number): SleevePerson;
 |  --- | --- | --- |
 |  sleeveNumber | number | Index of the sleeve to retrieve information. |
 
-<b>Returns:</b>
+**Returns:**
 
 [SleevePerson](./bitburner.sleeveperson.md)
 

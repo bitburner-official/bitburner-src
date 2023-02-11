@@ -6,7 +6,7 @@
 
 Is a task of a hacking gang
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 isHacking: boolean;

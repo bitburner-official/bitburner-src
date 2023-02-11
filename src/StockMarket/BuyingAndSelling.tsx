@@ -14,7 +14,7 @@ import { PositionTypes } from "./data/PositionTypes";
 import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
 
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatMoney, formatShares } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
@@ -67,8 +67,7 @@ export function buyStock(
     if (ctx) {
       helpers.log(
         ctx,
-        () =>
-          `You do not have enough money to purchase this position. You need ${numeralWrapper.formatMoney(totalPrice)}.`,
+        () => `You do not have enough money to purchase this position. You need ${formatMoney(totalPrice)}.`,
       );
     } else if (opts.suppressDialog !== true) {
       dialogBoxCreate(
@@ -93,7 +92,7 @@ export function buyStock(
       );
     } else if (opts.suppressDialog !== true) {
       dialogBoxCreate(
-        `You cannot purchase this many shares. ${stock.symbol} has a maximum of ${numeralWrapper.formatShares(
+        `You cannot purchase this many shares. ${stock.symbol} has a maximum of ${formatShares(
           stock.maxShares,
         )} shares.`,
       );
@@ -113,16 +112,14 @@ export function buyStock(
   }
 
   if (ctx) {
-    const resultTxt = `Bought ${numeralWrapper.formatShares(shares)} shares of ${
-      stock.symbol
-    } for ${numeralWrapper.formatMoney(totalPrice)}. Paid ${numeralWrapper.formatMoney(
-      CONSTANTS.StockMarketCommission,
-    )} in commission fees.`;
+    const resultTxt = `Bought ${formatShares(shares)} shares of ${stock.symbol} for ${formatMoney(
+      totalPrice,
+    )}. Paid ${formatMoney(CONSTANTS.StockMarketCommission)} in commission fees.`;
     helpers.log(ctx, () => resultTxt);
   } else if (opts.suppressDialog !== true) {
     dialogBoxCreate(
       <>
-        Bought {numeralWrapper.formatShares(shares)} shares of {stock.symbol} for <Money money={totalPrice} />. Paid{" "}
+        Bought {formatShares(shares)} shares of {stock.symbol} for <Money money={totalPrice} />. Paid{" "}
         <Money money={CONSTANTS.StockMarketCommission} /> in commission fees.
       </>,
     );
@@ -192,13 +189,13 @@ export function sellStock(
 
   if (ctx) {
     const resultTxt =
-      `Sold ${numeralWrapper.formatShares(shares)} shares of ${stock.symbol}. ` +
-      `After commissions, you gained a total of ${numeralWrapper.formatMoney(gains)}.`;
+      `Sold ${formatShares(shares)} shares of ${stock.symbol}. ` +
+      `After commissions, you gained a total of ${formatMoney(gains)}.`;
     helpers.log(ctx, () => resultTxt);
   } else if (opts.suppressDialog !== true) {
     dialogBoxCreate(
       <>
-        Sold {numeralWrapper.formatShares(shares)} shares of {stock.symbol}. After commissions, you gained a total of{" "}
+        Sold {formatShares(shares)} shares of {stock.symbol}. After commissions, you gained a total of{" "}
         <Money money={gains} />.
       </>,
     );
@@ -247,10 +244,7 @@ export function shortStock(
     if (ctx) {
       helpers.log(
         ctx,
-        () =>
-          "You do not have enough " +
-          "money to purchase this short position. You need " +
-          numeralWrapper.formatMoney(totalPrice),
+        () => "You do not have enough " + "money to purchase this short position. You need " + formatMoney(totalPrice),
       );
     } else if (opts.suppressDialog !== true) {
       dialogBoxCreate(
@@ -295,17 +289,15 @@ export function shortStock(
 
   if (ctx) {
     const resultTxt =
-      `Bought a short position of ${numeralWrapper.formatShares(shares)} shares of ${stock.symbol} ` +
-      `for ${numeralWrapper.formatMoney(totalPrice)}. Paid ${numeralWrapper.formatMoney(
-        CONSTANTS.StockMarketCommission,
-      )} ` +
+      `Bought a short position of ${formatShares(shares)} shares of ${stock.symbol} ` +
+      `for ${formatMoney(totalPrice)}. Paid ${formatMoney(CONSTANTS.StockMarketCommission)} ` +
       `in commission fees.`;
     helpers.log(ctx, () => resultTxt);
   } else if (!opts.suppressDialog) {
     dialogBoxCreate(
       <>
-        Bought a short position of {numeralWrapper.formatShares(shares)} shares of {stock.symbol} for{" "}
-        <Money money={totalPrice} />. Paid <Money money={CONSTANTS.StockMarketCommission} /> in commission fees.
+        Bought a short position of {formatShares(shares)} shares of {stock.symbol} for <Money money={totalPrice} />.
+        Paid <Money money={CONSTANTS.StockMarketCommission} /> in commission fees.
       </>,
     );
   }
@@ -385,14 +377,14 @@ export function sellShort(
 
   if (ctx) {
     const resultTxt =
-      `Sold your short position of ${numeralWrapper.formatShares(shares)} shares of ${stock.symbol}. ` +
-      `After commissions, you gained a total of ${numeralWrapper.formatMoney(totalGain)}`;
+      `Sold your short position of ${formatShares(shares)} shares of ${stock.symbol}. ` +
+      `After commissions, you gained a total of ${formatMoney(totalGain)}`;
     helpers.log(ctx, () => resultTxt);
   } else if (!opts.suppressDialog) {
     dialogBoxCreate(
       <>
-        Sold your short position of {numeralWrapper.formatShares(shares)} shares of {stock.symbol}. After commissions,
-        you gained a total of <Money money={totalGain} />
+        Sold your short position of {formatShares(shares)} shares of {stock.symbol}. After commissions, you gained a
+        total of <Money money={totalGain} />
       </>,
     );
   }

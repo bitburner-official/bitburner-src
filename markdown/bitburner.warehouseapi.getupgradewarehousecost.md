@@ -6,7 +6,7 @@
 
 Gets the cost to upgrade a warehouse to the next level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getUpgradeWarehouseCost(divisionName: string, city: CityName | `${CityName}`, amt?: number): number;
@@ -18,9 +18,9 @@ getUpgradeWarehouseCost(divisionName: string, city: CityName | `${CityName}`, am
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
-|  amt | number | amount of upgrades. Optional, defaults to 1 |
+|  amt | number | _(Optional)_ amount of upgrades. Optional, defaults to 1 |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

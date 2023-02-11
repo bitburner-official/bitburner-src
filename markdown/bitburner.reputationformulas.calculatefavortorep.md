@@ -6,7 +6,7 @@
 
 Calculate the total required amount of faction reputation to reach a target favor.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 calculateFavorToRep(favor: number): number;
@@ -18,7 +18,7 @@ calculateFavorToRep(favor: number): number;
 |  --- | --- | --- |
 |  favor | number | target faction favor. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

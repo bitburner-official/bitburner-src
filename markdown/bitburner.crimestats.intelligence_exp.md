@@ -6,7 +6,7 @@
 
 intelligence exp gained from crime
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 intelligence_exp: number;

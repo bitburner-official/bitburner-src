@@ -6,7 +6,7 @@
 
 Get company reputation.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getCompanyRep(companyName: string): number;
@@ -18,7 +18,7 @@ getCompanyRep(companyName: string): number;
 |  --- | --- | --- |
 |  companyName | string | Name of the company. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

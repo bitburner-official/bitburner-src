@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.welllight property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 welllight: string;

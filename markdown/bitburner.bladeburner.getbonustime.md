@@ -6,12 +6,12 @@
 
 Get bladeburner bonus time.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getBonusTime(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

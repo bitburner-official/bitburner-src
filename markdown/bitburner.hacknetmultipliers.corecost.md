@@ -6,7 +6,7 @@
 
 Player's hacknet core cost multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 coreCost: number;

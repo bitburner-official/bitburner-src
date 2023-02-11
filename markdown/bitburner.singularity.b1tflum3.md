@@ -6,7 +6,7 @@
 
 b1t\_flum3 into a different BN.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 b1tflum3(nextBN: number, callbackScript?: string): void;
@@ -17,9 +17,9 @@ b1tflum3(nextBN: number, callbackScript?: string): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  nextBN | number | BN number to jump to |
-|  callbackScript | string | Name of the script to launch in the next BN. |
+|  callbackScript | string | _(Optional)_ Name of the script to launch in the next BN. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

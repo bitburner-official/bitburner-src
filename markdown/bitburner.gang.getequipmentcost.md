@@ -6,7 +6,7 @@
 
 Get cost of equipment.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getEquipmentCost(equipName: string): number;
@@ -18,7 +18,7 @@ getEquipmentCost(equipName: string): number;
 |  --- | --- | --- |
 |  equipName | string | Name of equipment. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

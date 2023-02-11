@@ -6,7 +6,7 @@
 
 Conversion factor for employee stats to initial salary
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 employeeSalaryMultiplier: number;

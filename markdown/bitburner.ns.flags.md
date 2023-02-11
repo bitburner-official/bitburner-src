@@ -6,7 +6,7 @@
 
 Parse command line flags.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
@@ -18,7 +18,7 @@ flags(schema: [string, string | number | boolean | string[]][]): { [key: string]
 |  --- | --- | --- |
 |  schema | \[string, string \| number \| boolean \| string\[\]\]\[\] |  |
 
-<b>Returns:</b>
+**Returns:**
 
 { \[key: string\]: [ScriptArg](./bitburner.scriptarg.md) \| string\[\] }
 

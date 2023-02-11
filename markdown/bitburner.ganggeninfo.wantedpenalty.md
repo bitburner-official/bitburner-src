@@ -6,7 +6,7 @@
 
 Number indicating the current wanted penalty
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 wantedPenalty: number;

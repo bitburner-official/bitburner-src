@@ -6,7 +6,7 @@
 
 Get constant data for a specific material
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getMaterialData(materialName: CorpMaterialName): CorpMaterialConstantData;
@@ -18,7 +18,7 @@ getMaterialData(materialName: CorpMaterialName): CorpMaterialConstantData;
 |  --- | --- | --- |
 |  materialName | [CorpMaterialName](./bitburner.corpmaterialname.md) |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [CorpMaterialConstantData](./bitburner.corpmaterialconstantdata.md)
 

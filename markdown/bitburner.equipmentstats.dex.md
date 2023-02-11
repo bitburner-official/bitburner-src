@@ -6,7 +6,7 @@
 
 Dexterity multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dex?: number;

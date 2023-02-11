@@ -6,7 +6,7 @@
 
 Set material sell data.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sellMaterial(
@@ -28,7 +28,7 @@ sellMaterial(
 |  amt | string | Amount to sell, can be "MAX" |
 |  price | string | Price to sell, can be "MP" |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

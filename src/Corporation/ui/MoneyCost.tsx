@@ -1,5 +1,5 @@
 import * as React from "react";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatMoney } from "../../ui/formatNumber";
 import { Corporation } from "../Corporation";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
@@ -23,8 +23,7 @@ interface IProps {
 
 export function MoneyCost(props: IProps): React.ReactElement {
   const classes = useStyles();
-  if (!(props.corp.funds > props.money))
-    return <span className={classes.unbuyable}>{numeralWrapper.formatMoney(props.money)}</span>;
+  if (!(props.corp.funds > props.money)) return <span className={classes.unbuyable}>{formatMoney(props.money)}</span>;
 
-  return <span className={classes.money}>{numeralWrapper.formatMoney(props.money)}</span>;
+  return <span className={classes.money}>{formatMoney(props.money)}</span>;
 }

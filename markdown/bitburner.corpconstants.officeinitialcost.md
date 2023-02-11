@@ -4,7 +4,7 @@
 
 ## CorpConstants.officeInitialCost property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 officeInitialCost: number;

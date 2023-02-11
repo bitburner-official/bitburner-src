@@ -4,7 +4,7 @@
 
 ## CorpMaterialConstantData.baseCost property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 baseCost: number;

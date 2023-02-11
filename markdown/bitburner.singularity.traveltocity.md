@@ -6,7 +6,7 @@
 
 Travel to another city.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 travelToCity(city: CityName | `${CityName}`): boolean;
@@ -18,7 +18,7 @@ travelToCity(city: CityName | `${CityName}`): boolean;
 |  --- | --- | --- |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | City to travel to. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

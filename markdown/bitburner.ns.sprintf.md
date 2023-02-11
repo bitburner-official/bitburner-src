@@ -6,7 +6,7 @@
 
 Format a string.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sprintf(format: string, ...args: any[]): string;
@@ -19,7 +19,7 @@ sprintf(format: string, ...args: any[]): string;
 |  format | string | String to format. |
 |  args | any\[\] | Formatting arguments. |
 
-<b>Returns:</b>
+**Returns:**
 
 string
 

@@ -6,7 +6,7 @@
 
 Max cache size
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 MaxCache: number;

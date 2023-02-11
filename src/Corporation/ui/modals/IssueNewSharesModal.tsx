@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatMoney, formatShares } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
@@ -37,8 +37,7 @@ function EffectText(props: IEffectTextProps): React.ReactElement {
 
   return (
     <Typography>
-      Issue {numeralWrapper.format(newShares, "0.000a")} new shares for{" "}
-      {numeralWrapper.formatMoney(newShares * newSharePrice)}?
+      Issue {formatShares(newShares)} new shares for {formatMoney(newShares * newSharePrice)}?
     </Typography>
   );
 }
@@ -66,12 +65,10 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
     props.onClose();
 
     let dialogContents =
-      `Issued ${numeralWrapper.format(newShares, "0.000a")} new shares` +
-      ` and raised ${numeralWrapper.formatMoney(profit)}.` +
-      (privateShares > 0)
-        ? "\n" + numeralWrapper.format(privateShares, "0.000a") + "of these shares were bought by private investors."
+      `Issued ${formatShares(newShares)} new shares` + ` and raised ${formatMoney(profit)}.` + (privateShares > 0)
+        ? "\n" + formatShares(privateShares) + "of these shares were bought by private investors."
         : "";
-    dialogContents += `\n\nStock price decreased to ${numeralWrapper.formatMoney(corp.sharePrice)}`;
+    dialogContents += `\n\nStock price decreased to ${formatMoney(corp.sharePrice)}`;
     dialogBoxCreate(dialogContents);
   }
 
@@ -85,7 +82,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
         You can issue new equity shares (i.e. stocks) in order to raise capital for your corporation.
         <br />
         <br />
-        &nbsp;* You can issue at most {numeralWrapper.format(maxNewShares, "0.000a")} new shares
+        &nbsp;* You can issue at most {formatShares(maxNewShares)} new shares
         <br />
         &nbsp;* New shares are sold at a 10% discount
         <br />

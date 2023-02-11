@@ -6,7 +6,7 @@
 
 Gets the cost to unlock the next level of a levelable upgrade
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getUpgradeLevelCost(upgradeName: string): number;
@@ -18,7 +18,7 @@ getUpgradeLevelCost(upgradeName: string): number;
 |  --- | --- | --- |
 |  upgradeName | string | Name of the upgrade |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

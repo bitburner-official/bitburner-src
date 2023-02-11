@@ -6,7 +6,7 @@
 
 Multiplier to purchase a new server
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 PurchaseMult: number;

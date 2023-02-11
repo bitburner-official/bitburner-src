@@ -6,7 +6,7 @@
 
 Purchase a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 purchaseServer(hostname: string, ram: number): string;
@@ -19,7 +19,7 @@ purchaseServer(hostname: string, ram: number): string;
 |  hostname | string | Hostname of the purchased server. |
 |  ram | number | Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20). |
 
-<b>Returns:</b>
+**Returns:**
 
 string
 

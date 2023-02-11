@@ -12,7 +12,7 @@ import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions
 import { Player } from "@player";
 import { Router } from "./GameRoot";
 import { Page } from "./Router";
-import { numeralWrapper } from "./numeralFormat";
+import { formatExp, formatPercent } from "./formatNumber";
 import { Money } from "./React/Money";
 import { MoneyRate } from "./React/MoneyRate";
 import { ProgressBar } from "./React/Progress";
@@ -57,7 +57,7 @@ function ExpRows(rate: WorkStats): React.ReactElement[] {
         name="Hacking Exp"
         color={Settings.theme.hack}
         data={{
-          content: `${numeralWrapper.formatExp(rate.hackExp * CYCLES_PER_SEC)} / sec`,
+          content: `${formatExp(rate.hackExp * CYCLES_PER_SEC)} / sec`,
         }}
       />
     ) : (
@@ -68,7 +68,7 @@ function ExpRows(rate: WorkStats): React.ReactElement[] {
         name="Strength Exp"
         color={Settings.theme.combat}
         data={{
-          content: `${numeralWrapper.formatExp(rate.strExp * CYCLES_PER_SEC)} / sec`,
+          content: `${formatExp(rate.strExp * CYCLES_PER_SEC)} / sec`,
         }}
       />
     ) : (
@@ -79,7 +79,7 @@ function ExpRows(rate: WorkStats): React.ReactElement[] {
         name="Defense Exp"
         color={Settings.theme.combat}
         data={{
-          content: `${numeralWrapper.formatExp(rate.defExp * CYCLES_PER_SEC)} / sec`,
+          content: `${formatExp(rate.defExp * CYCLES_PER_SEC)} / sec`,
         }}
       />
     ) : (
@@ -90,7 +90,7 @@ function ExpRows(rate: WorkStats): React.ReactElement[] {
         name="Dexterity Exp"
         color={Settings.theme.combat}
         data={{
-          content: `${numeralWrapper.formatExp(rate.dexExp * CYCLES_PER_SEC)} / sec`,
+          content: `${formatExp(rate.dexExp * CYCLES_PER_SEC)} / sec`,
         }}
       />
     ) : (
@@ -101,7 +101,7 @@ function ExpRows(rate: WorkStats): React.ReactElement[] {
         name="Agility Exp"
         color={Settings.theme.combat}
         data={{
-          content: `${numeralWrapper.formatExp(rate.agiExp * CYCLES_PER_SEC)} / sec`,
+          content: `${formatExp(rate.agiExp * CYCLES_PER_SEC)} / sec`,
         }}
       />
     ) : (
@@ -112,7 +112,7 @@ function ExpRows(rate: WorkStats): React.ReactElement[] {
         name="Charisma Exp"
         color={Settings.theme.cha}
         data={{
-          content: `${numeralWrapper.formatExp(rate.chaExp * CYCLES_PER_SEC)} / sec`,
+          content: `${formatExp(rate.chaExp * CYCLES_PER_SEC)} / sec`,
         }}
       />
     ) : (
@@ -129,7 +129,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
         name="Hacking Exp"
         color={Settings.theme.hack}
         data={{
-          content: `${numeralWrapper.formatExp(rate.hackExp)}`,
+          content: `${formatExp(rate.hackExp)}`,
         }}
       />
     ) : (
@@ -140,7 +140,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
         name="Strength Exp"
         color={Settings.theme.combat}
         data={{
-          content: `${numeralWrapper.formatExp(rate.strExp)}`,
+          content: `${formatExp(rate.strExp)}`,
         }}
       />
     ) : (
@@ -151,7 +151,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
         name="Defense Exp"
         color={Settings.theme.combat}
         data={{
-          content: `${numeralWrapper.formatExp(rate.defExp)}`,
+          content: `${formatExp(rate.defExp)}`,
         }}
       />
     ) : (
@@ -162,7 +162,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
         name="Dexterity Exp"
         color={Settings.theme.combat}
         data={{
-          content: `${numeralWrapper.formatExp(rate.dexExp)}`,
+          content: `${formatExp(rate.dexExp)}`,
         }}
       />
     ) : (
@@ -173,7 +173,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
         name="Agility Exp"
         color={Settings.theme.combat}
         data={{
-          content: `${numeralWrapper.formatExp(rate.agiExp)}`,
+          content: `${formatExp(rate.agiExp)}`,
         }}
       />
     ) : (
@@ -184,7 +184,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
         name="Charisma Exp"
         color={Settings.theme.cha}
         data={{
-          content: `${numeralWrapper.formatExp(rate.chaExp)}`,
+          content: `${formatExp(rate.chaExp)}`,
         }}
       />
     ) : (
@@ -228,7 +228,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       title: `You are attempting ${crime.workName}`,
 
       gains: [
-        <Typography>Success chance: {numeralWrapper.formatPercentage(successChance)}</Typography>,
+        <Typography>Success chance: {formatPercent(successChance)}</Typography>,
         <Typography>Gains (on success)</Typography>,
         <StatsRow name="Money:" color={Settings.theme.money}>
           <Typography>

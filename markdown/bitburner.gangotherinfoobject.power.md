@@ -6,7 +6,7 @@
 
 Gang power
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 power: number;

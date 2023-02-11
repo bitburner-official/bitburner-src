@@ -6,7 +6,7 @@
 
 Purchase a research
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 research(divisionName: string, researchName: string): void;
@@ -19,7 +19,7 @@ research(divisionName: string, researchName: string): void;
 |  divisionName | string | Name of the division |
 |  researchName | string | Name of the research |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

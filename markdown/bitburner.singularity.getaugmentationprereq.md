@@ -6,7 +6,7 @@
 
 Get the pre-requisite of an augmentation.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getAugmentationPrereq(augName: string): string[];
@@ -18,7 +18,7 @@ getAugmentationPrereq(augName: string): string[];
 |  --- | --- | --- |
 |  augName | string | Name of Augmentation. |
 
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

@@ -6,7 +6,7 @@
 
 Retrieves the time required to graft an aug.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getAugmentationGraftTime(augName: string): number;
@@ -18,7 +18,7 @@ getAugmentationGraftTime(augName: string): number;
 |  --- | --- | --- |
 |  augName | string | Name of the aug to check the grafting time of. Must be an exact match. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

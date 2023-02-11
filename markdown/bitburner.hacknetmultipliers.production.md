@@ -6,7 +6,7 @@
 
 Player's hacknet production multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 production: number;

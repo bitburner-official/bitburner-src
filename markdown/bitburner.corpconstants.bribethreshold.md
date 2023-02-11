@@ -4,7 +4,7 @@
 
 ## CorpConstants.bribeThreshold property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 bribeThreshold: number;

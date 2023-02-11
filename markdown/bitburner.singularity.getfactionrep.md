@@ -6,7 +6,7 @@
 
 Get faction reputation.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getFactionRep(faction: string): number;
@@ -18,7 +18,7 @@ getFactionRep(faction: string): number;
 |  --- | --- | --- |
 |  faction | string | Name of faction to work for. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

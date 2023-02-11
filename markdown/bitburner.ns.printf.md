@@ -6,7 +6,7 @@
 
 Prints a formatted string to the script’s logs.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 printf(format: string, ...args: any[]): void;
@@ -19,7 +19,7 @@ printf(format: string, ...args: any[]): void;
 |  format | string | Format of the message. |
 |  args | any\[\] | Value(s) to be printed. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

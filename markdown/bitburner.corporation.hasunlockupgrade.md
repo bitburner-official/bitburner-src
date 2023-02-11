@@ -6,7 +6,7 @@
 
 Check if you have a one time unlockable upgrade
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hasUnlockUpgrade(upgradeName: string): boolean;
@@ -18,7 +18,7 @@ hasUnlockUpgrade(upgradeName: string): boolean;
 |  --- | --- | --- |
 |  upgradeName | string | Name of the upgrade |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

@@ -4,7 +4,7 @@
 
 ## InfiltrationReward.sellCash property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sellCash: number;

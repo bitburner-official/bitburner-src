@@ -6,7 +6,7 @@
 
 Multiplier to amount of money produced by Hacknet Nodes
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacknet_node_money: number;

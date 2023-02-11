@@ -4,7 +4,7 @@
 
 ## AutocompleteData.servers property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 servers: string[];

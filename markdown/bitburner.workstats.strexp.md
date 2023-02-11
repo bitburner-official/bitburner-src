@@ -4,7 +4,7 @@
 
 ## WorkStats.strExp property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 strExp: number;

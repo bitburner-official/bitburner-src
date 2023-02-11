@@ -6,12 +6,12 @@
 
 Purchase WSE Account.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 purchaseWseAccount(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

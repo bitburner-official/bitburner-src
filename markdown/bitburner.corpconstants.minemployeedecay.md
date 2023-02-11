@@ -6,7 +6,7 @@
 
 The minimum decay value for happiness/morale/energy
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 minEmployeeDecay: number;

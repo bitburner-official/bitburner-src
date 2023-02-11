@@ -6,7 +6,7 @@
 
 Get stats of an equipment.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getEquipmentStats(equipName: string): EquipmentStats;
@@ -18,7 +18,7 @@ getEquipmentStats(equipName: string): EquipmentStats;
 |  --- | --- | --- |
 |  equipName | string | Name of equipment. |
 
-<b>Returns:</b>
+**Returns:**
 
 [EquipmentStats](./bitburner.equipmentstats.md)
 

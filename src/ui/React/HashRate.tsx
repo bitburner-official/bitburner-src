@@ -1,7 +1,7 @@
 import React from "react";
-import { numeralWrapper } from "../numeralFormat";
+import { formatHashes } from "../formatNumber";
 import { Hashes } from "./Hashes";
 
 export function HashRate({ hashes }: { hashes: number }): React.ReactElement {
-  return <Hashes hashes={`${numeralWrapper.formatHashes(hashes)} h / s`} />;
+  return <Hashes hashes={`${formatHashes(hashes)} h / s`} />;
 }

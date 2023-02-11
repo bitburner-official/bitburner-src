@@ -6,7 +6,7 @@
 
 Advertising factor (affects sales)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 advertisingFactor?: number;

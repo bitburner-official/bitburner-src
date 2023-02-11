@@ -6,7 +6,7 @@
 
 How much RAM this script uses for ONE thread
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ramUsage: number;

@@ -6,7 +6,7 @@
 
 Hacknet related multipliers.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface HacknetMultipliers 
@@ -14,11 +14,11 @@ interface HacknetMultipliers
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [coreCost](./bitburner.hacknetmultipliers.corecost.md) | number | Player's hacknet core cost multiplier |
-|  [levelCost](./bitburner.hacknetmultipliers.levelcost.md) | number | Player's hacknet level cost multiplier |
-|  [production](./bitburner.hacknetmultipliers.production.md) | number | Player's hacknet production multiplier |
-|  [purchaseCost](./bitburner.hacknetmultipliers.purchasecost.md) | number | Player's hacknet purchase cost multiplier |
-|  [ramCost](./bitburner.hacknetmultipliers.ramcost.md) | number | Player's hacknet ram cost multiplier |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [coreCost](./bitburner.hacknetmultipliers.corecost.md) |  | number | Player's hacknet core cost multiplier |
+|  [levelCost](./bitburner.hacknetmultipliers.levelcost.md) |  | number | Player's hacknet level cost multiplier |
+|  [production](./bitburner.hacknetmultipliers.production.md) |  | number | Player's hacknet production multiplier |
+|  [purchaseCost](./bitburner.hacknetmultipliers.purchasecost.md) |  | number | Player's hacknet purchase cost multiplier |
+|  [ramCost](./bitburner.hacknetmultipliers.ramcost.md) |  | number | Player's hacknet ram cost multiplier |
 

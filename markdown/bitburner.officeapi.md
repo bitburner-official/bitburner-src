@@ -6,7 +6,7 @@
 
 Corporation Office API
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface OfficeAPI 

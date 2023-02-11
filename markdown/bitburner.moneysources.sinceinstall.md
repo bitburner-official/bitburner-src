@@ -4,7 +4,7 @@
 
 ## MoneySources.sinceInstall property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sinceInstall: MoneySource;

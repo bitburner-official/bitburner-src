@@ -4,9 +4,9 @@
 
 ## CorporationInfo.state property
 
-State of the corporation. Possible states are START, PURCHASE, PRODUCTION, SALE, EXPORT.
+State of the corporation. Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 state: string;

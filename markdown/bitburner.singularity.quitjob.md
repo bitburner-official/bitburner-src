@@ -6,7 +6,7 @@
 
 Quit jobs by company.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 quitJob(companyName?: string): void;
@@ -16,9 +16,9 @@ quitJob(companyName?: string): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  companyName | string | Name of the company. |
+|  companyName | string | _(Optional)_ Name of the company. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

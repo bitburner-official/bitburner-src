@@ -6,7 +6,7 @@
 
 Calculate the percent a server would grow to. Not exact due to limitations of mathematics. (Ex: 3.0 would would grow the server to 300% of its current value.)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 growPercent(server: Server, threads: number, player: Person, cores?: number): number;
@@ -19,9 +19,9 @@ growPercent(server: Server, threads: number, player: Person, cores?: number): nu
 |  server | [Server](./bitburner.server.md) | Server info from [getServer](./bitburner.ns.getserver.md) |
 |  threads | number | Amount of thread. |
 |  player | [Person](./bitburner.person.md) | Player info from [getPlayer](./bitburner.ns.getplayer.md) |
-|  cores | number | Number of cores on the computer that will execute grow. |
+|  cores | number | _(Optional)_ Number of cores on the computer that will execute grow. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

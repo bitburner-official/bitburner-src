@@ -4,7 +4,7 @@
 
 ## CorpIndustryData.requiredMaterials property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 requiredMaterials: Partial<Record<CorpMaterialName, number>>;

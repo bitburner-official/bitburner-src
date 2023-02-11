@@ -4,7 +4,7 @@
 
 ## WorkStats.hackExp property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hackExp: number;

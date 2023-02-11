@@ -6,7 +6,7 @@
 
 Used for autocompletion
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface AutocompleteData 
@@ -14,11 +14,11 @@ interface AutocompleteData
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [scripts](./bitburner.autocompletedata.scripts.md) | string\[\] |  |
-|  [servers](./bitburner.autocompletedata.servers.md) | string\[\] |  |
-|  [txts](./bitburner.autocompletedata.txts.md) | string\[\] |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [scripts](./bitburner.autocompletedata.scripts.md) |  | string\[\] |  |
+|  [servers](./bitburner.autocompletedata.servers.md) |  | string\[\] |  |
+|  [txts](./bitburner.autocompletedata.txts.md) |  | string\[\] |  |
 
 ## Methods
 

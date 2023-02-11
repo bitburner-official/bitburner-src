@@ -6,7 +6,7 @@
 
 Get the level of a levelable upgrade
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getUpgradeLevel(upgradeName: string): number;
@@ -18,7 +18,7 @@ getUpgradeLevel(upgradeName: string): number;
 |  --- | --- | --- |
 |  upgradeName | string | Name of the upgrade |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

@@ -5,7 +5,7 @@
 ## ActiveFragment interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface ActiveFragment 
@@ -13,12 +13,12 @@ interface ActiveFragment
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [highestCharge](./bitburner.activefragment.highestcharge.md) | number |  |
-|  [id](./bitburner.activefragment.id.md) | number |  |
-|  [numCharge](./bitburner.activefragment.numcharge.md) | number |  |
-|  [rotation](./bitburner.activefragment.rotation.md) | number |  |
-|  [x](./bitburner.activefragment.x.md) | number |  |
-|  [y](./bitburner.activefragment.y.md) | number |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [highestCharge](./bitburner.activefragment.highestcharge.md) |  | number |  |
+|  [id](./bitburner.activefragment.id.md) |  | number |  |
+|  [numCharge](./bitburner.activefragment.numcharge.md) |  | number |  |
+|  [rotation](./bitburner.activefragment.rotation.md) |  | number |  |
+|  [x](./bitburner.activefragment.x.md) |  | number |  |
+|  [y](./bitburner.activefragment.y.md) |  | number |  |
 

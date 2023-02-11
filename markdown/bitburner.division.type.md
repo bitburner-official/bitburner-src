@@ -6,7 +6,7 @@
 
 Type of division, like Agriculture
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type: CorpIndustryName;

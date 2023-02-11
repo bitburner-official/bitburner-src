@@ -6,7 +6,7 @@
 
 Get a list of owned augmentation.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getOwnedAugmentations(purchased?: boolean): string[];
@@ -16,9 +16,9 @@ getOwnedAugmentations(purchased?: boolean): string[];
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  purchased | boolean | Specifies whether the returned array should include Augmentations you have purchased but not yet installed. By default, this argument is false which means that the return value will NOT have the purchased Augmentations. |
+|  purchased | boolean | _(Optional)_ Specifies whether the returned array should include Augmentations you have purchased but not yet installed. By default, this argument is false which means that the return value will NOT have the purchased Augmentations. |
 
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

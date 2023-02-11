@@ -6,7 +6,7 @@
 
 Gang's wanted level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 wantedLevel: number;

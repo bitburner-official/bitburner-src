@@ -4,7 +4,7 @@
 
 ## CorpConstants.secondsPerMarketCycle property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 secondsPerMarketCycle: number;

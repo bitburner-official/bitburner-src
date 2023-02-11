@@ -6,12 +6,12 @@
 
 Get the number of sleeves you own.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getNumSleeves(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

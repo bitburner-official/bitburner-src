@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.well property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 well: string;

@@ -6,12 +6,12 @@
 
 Get the current theme
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getTheme(): UserInterfaceTheme;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [UserInterfaceTheme](./bitburner.userinterfacetheme.md)
 

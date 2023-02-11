@@ -6,12 +6,12 @@
 
 Stop the current action.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 stopAction(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

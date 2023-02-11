@@ -6,7 +6,7 @@
 
 Defense multiplier gained from ascending
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 def: number;

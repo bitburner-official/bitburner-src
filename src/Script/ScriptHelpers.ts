@@ -6,7 +6,7 @@ import { RunningScript } from "./RunningScript";
 import { processSingleServerGrowth } from "../Server/ServerHelpers";
 import { GetServer } from "../Server/AllServers";
 
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatPercent } from "../ui/formatNumber";
 
 import { compareArrays } from "../utils/helpers/compareArrays";
 
@@ -44,9 +44,7 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
       if (host === null) throw new Error("getServer of null key?");
       if (!(serv instanceof Server)) throw new Error("trying to grow a non-normal server");
       const growth = processSingleServerGrowth(serv, timesGrown, host.cpuCores);
-      runningScript.log(
-        `'${serv.hostname}' grown by ${numeralWrapper.format(growth * 100 - 100, "0.000000%")} while offline`,
-      );
+      runningScript.log(`'${serv.hostname}' grown by ${formatPercent(growth - 1, 6)} while offline`);
     }
   }
 

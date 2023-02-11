@@ -6,7 +6,7 @@
 
 Get product data
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getProduct(divisionName: string, productName: string): Product;
@@ -19,7 +19,7 @@ getProduct(divisionName: string, productName: string): Product;
 |  divisionName | string | Name of the division |
 |  productName | string | Name of the product |
 
-<b>Returns:</b>
+**Returns:**
 
 [Product](./bitburner.product.md)
 

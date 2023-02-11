@@ -5,7 +5,7 @@
 ## InfiltrationLocation interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface InfiltrationLocation 
@@ -13,9 +13,9 @@ interface InfiltrationLocation
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [difficulty](./bitburner.infiltrationlocation.difficulty.md) | number |  |
-|  [location](./bitburner.infiltrationlocation.location.md) | [ILocation](./bitburner.ilocation.md) |  |
-|  [reward](./bitburner.infiltrationlocation.reward.md) | [InfiltrationReward](./bitburner.infiltrationreward.md) |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [difficulty](./bitburner.infiltrationlocation.difficulty.md) |  | number |  |
+|  [location](./bitburner.infiltrationlocation.location.md) |  | [ILocation](./bitburner.ilocation.md) |  |
+|  [reward](./bitburner.infiltrationlocation.reward.md) |  | [InfiltrationReward](./bitburner.infiltrationreward.md) |  |
 

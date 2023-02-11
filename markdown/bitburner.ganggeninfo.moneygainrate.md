@@ -6,7 +6,7 @@
 
 Money earned per game cycle
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 moneyGainRate: number;

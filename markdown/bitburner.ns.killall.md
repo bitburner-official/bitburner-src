@@ -6,7 +6,7 @@
 
 Terminate all scripts on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 killall(host?: string, safetyguard?: boolean): boolean;
@@ -16,10 +16,10 @@ killall(host?: string, safetyguard?: boolean): boolean;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | IP or hostname of the server on which to kill all scripts. |
-|  safetyguard | boolean | Skips the script that calls this function |
+|  host | string | _(Optional)_ IP or hostname of the server on which to kill all scripts. |
+|  safetyguard | boolean | _(Optional)_ Skips the script that calls this function |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

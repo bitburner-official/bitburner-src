@@ -2,24 +2,22 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [CorpProductData](./bitburner.corpproductdata.md)
 
-## CorpProductData type
+## CorpProductData interface
 
 Product rating information
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-type CorpProductData = {
-  name: string;
-  verb: string;
-  desc: string;
-  ratingWeights: {
-    aesthetics?: number;
-    durability?: number;
-    features?: number;
-    quality?: number;
-    performance?: number;
-    reliability?: number;
-  };
-};
+interface CorpProductData 
 ```
+
+## Properties
+
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [desc](./bitburner.corpproductdata.desc.md) |  | string | Description of product creation |
+|  [name](./bitburner.corpproductdata.name.md) |  | string | Name of the product |
+|  [ratingWeights](./bitburner.corpproductdata.ratingweights.md) |  | { aesthetics?: number; durability?: number; features?: number; quality?: number; performance?: number; reliability?: number; } | Weighting factors for product |
+|  [verb](./bitburner.corpproductdata.verb.md) |  | string | Verb used to describe creation of the product |
+

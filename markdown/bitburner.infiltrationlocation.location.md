@@ -4,7 +4,7 @@
 
 ## InfiltrationLocation.location property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 location: ILocation;

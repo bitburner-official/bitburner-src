@@ -4,7 +4,7 @@
 
 ## Player.totalPlaytime property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 totalPlaytime: number;

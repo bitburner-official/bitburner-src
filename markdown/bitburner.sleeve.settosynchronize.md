@@ -6,7 +6,7 @@
 
 Set a sleeve to synchronize.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setToSynchronize(sleeveNumber: number): boolean;
@@ -18,7 +18,7 @@ setToSynchronize(sleeveNumber: number): boolean;
 |  --- | --- | --- |
 |  sleeveNumber | number | Index of the sleeve to start synchronizing. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

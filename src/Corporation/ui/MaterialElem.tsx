@@ -9,7 +9,7 @@ import { MaterialMarketTaModal } from "./modals/MaterialMarketTaModal";
 import { SellMaterialModal } from "./modals/SellMaterialModal";
 import { PurchaseMaterialModal } from "./modals/PurchaseMaterialModal";
 
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatBigNumber, formatCorpStat, formatMoney, formatQuality } from "../../ui/formatNumber";
 
 import { isString } from "../../utils/helpers/isString";
 import { Money } from "../../ui/React/Money";
@@ -49,10 +49,6 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
     throw new Error(`Could not get OfficeSpace object for this city (${city})`);
   }
 
-  // Numeral.js formatter
-  const nf = "0.000";
-  const nfB = "0.000a"; // For numbers that might be bigger
-
   // Total gain or loss of this material (per second)
   const totalGain = mat.buy + mat.prd + mat.imp - mat.sll - mat.totalExp;
 
@@ -62,9 +58,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
     division.newInd && Object.keys(division.reqMats).includes(mat.name) && mat.buy === 0 && mat.imp === 0;
 
   // Purchase material button
-  const purchaseButtonText = `Buy (${
-    mat.buy >= 1e33 ? mat.buy.toExponential(3) : numeralWrapper.format(mat.buy, nfB)
-  })`;
+  const purchaseButtonText = `Buy (${formatBigNumber(mat.buy)})`;
 
   // Sell material button
   let sellButtonText: JSX.Element;
@@ -72,13 +66,13 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
     if (isString(mat.sllman[1])) {
       sellButtonText = (
         <>
-          Sell ({numeralWrapper.format(mat.sll, nfB)}/{mat.sllman[1]})
+          Sell ({formatBigNumber(mat.sll)}/{mat.sllman[1]})
         </>
       );
     } else {
       sellButtonText = (
         <>
-          Sell ({numeralWrapper.format(mat.sll, nfB)}/{numeralWrapper.format(mat.sllman[1] as number, nfB)})
+          Sell ({formatBigNumber(mat.sll)}/{formatBigNumber(mat.sllman[1] as number)})
         </>
       );
     }
@@ -118,7 +112,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   // Limit Production button
   let limitMaterialButtonText = "Limit Material";
   if (mat.prdman[0]) {
-    limitMaterialButtonText += " (" + numeralWrapper.format(mat.prdman[1], nf) + ")";
+    limitMaterialButtonText += " (" + formatCorpStat(mat.prdman[1]) + ")";
   }
 
   return (
@@ -128,21 +122,21 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
           <Tooltip
             title={
               <Typography>
-                Buy: {mat.buy >= 1e33 ? mat.buy.toExponential(3) : numeralWrapper.format(mat.buy, nfB)} <br />
-                Prod: {numeralWrapper.format(mat.prd, nfB)} <br />
-                Sell: {numeralWrapper.format(mat.sll, nfB)} <br />
-                Export: {numeralWrapper.format(mat.totalExp, nfB)} <br />
-                Import: {numeralWrapper.format(mat.imp, nfB)}
+                Buy: {mat.buy >= 1e33 ? mat.buy.toExponential(3) : formatBigNumber(mat.buy)} <br />
+                Prod: {formatBigNumber(mat.prd)} <br />
+                Sell: {formatBigNumber(mat.sll)} <br />
+                Export: {formatBigNumber(mat.totalExp)} <br />
+                Import: {formatBigNumber(mat.imp)}
                 {corp.unlockUpgrades[2] === 1 && <br />}
-                {corp.unlockUpgrades[2] === 1 && "Demand: " + numeralWrapper.format(mat.dmd, nf)}
+                {corp.unlockUpgrades[2] === 1 && "Demand: " + formatCorpStat(mat.dmd)}
                 {corp.unlockUpgrades[3] === 1 && <br />}
-                {corp.unlockUpgrades[3] === 1 && "Competition: " + numeralWrapper.format(mat.cmp, nf)}
+                {corp.unlockUpgrades[3] === 1 && "Competition: " + formatCorpStat(mat.cmp)}
               </Typography>
             }
           >
             <Typography>
-              {mat.name}: {numeralWrapper.format(mat.qty, nfB)} (
-              {totalGain >= 1e33 ? totalGain.toExponential(3) : numeralWrapper.format(totalGain, nfB)}/s)
+              {mat.name}: {formatBigNumber(mat.qty)} (
+              {totalGain >= 1e33 ? totalGain.toExponential(3) : formatBigNumber(totalGain)}/s)
             </Typography>
           </Tooltip>
           <Tooltip
@@ -152,12 +146,12 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
               </Typography>
             }
           >
-            <Typography>MP: {numeralWrapper.formatMoney(mat.bCost)}</Typography>
+            <Typography>MP: {formatMoney(mat.bCost)}</Typography>
           </Tooltip>
           <Tooltip
             title={<Typography>The quality of your material. Higher quality will lead to more sales</Typography>}
           >
-            <Typography>Quality: {numeralWrapper.format(mat.qlt, "0.00a")}</Typography>
+            <Typography>Quality: {formatQuality(mat.qlt)}</Typography>
           </Tooltip>
         </Box>
 

@@ -6,7 +6,7 @@
 
 Influences how much money is produced by Hacknet Nodes and the hash rate of Hacknet Servers (unlocked in BitNode-9)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 HacknetNodeMoney: number;

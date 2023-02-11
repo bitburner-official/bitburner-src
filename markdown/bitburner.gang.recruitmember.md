@@ -6,7 +6,7 @@
 
 Recruit a new gang member.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 recruitMember(name: string): boolean;
@@ -18,7 +18,7 @@ recruitMember(name: string): boolean;
 |  --- | --- | --- |
 |  name | string | Name of member to recruit. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

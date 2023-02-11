@@ -3,7 +3,7 @@ import { Fragments, Fragment, NoneFragment, DeleteFragment } from "../Fragment";
 import { FragmentType, Effect } from "../FragmentType";
 import { StaneksGift } from "../StaneksGift";
 import { FragmentPreview } from "./FragmentPreview";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatStaneksGiftPower } from "../../ui/formatNumber";
 
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -37,7 +37,7 @@ function FragmentOption(props: IOptionProps): React.ReactElement {
           ? `${props.fragment.power}x adjacent fragment power`
           : Effect(props.fragment.type)}
         <br />
-        power: {numeralWrapper.formatStaneksGiftPower(props.fragment.power)}
+        power: {formatStaneksGiftPower(props.fragment.power)}
         <br />
         {remaining}
       </Typography>

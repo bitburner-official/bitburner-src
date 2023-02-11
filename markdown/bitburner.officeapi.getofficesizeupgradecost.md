@@ -6,7 +6,7 @@
 
 Cost to Upgrade office size.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getOfficeSizeUpgradeCost(divisionName: string, city: CityName | `${CityName}`, asize: number): number;
@@ -20,7 +20,7 @@ getOfficeSizeUpgradeCost(divisionName: string, city: CityName | `${CityName}`, a
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
 |  asize | number |  |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

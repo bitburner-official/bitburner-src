@@ -4,7 +4,7 @@
 
 ## CorpConstants.baseProductProfitMult property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 baseProductProfitMult: number;

@@ -6,7 +6,7 @@
 
 Hack related multipliers.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface HackingMultipliers 
@@ -14,10 +14,10 @@ interface HackingMultipliers
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [chance](./bitburner.hackingmultipliers.chance.md) | number | Player's hacking chance multiplier. |
-|  [growth](./bitburner.hackingmultipliers.growth.md) | number | Player's hacking growth multiplier |
-|  [money](./bitburner.hackingmultipliers.money.md) | number | Player's hacking money stolen multiplier. |
-|  [speed](./bitburner.hackingmultipliers.speed.md) | number | Player's hacking speed multiplier. |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [chance](./bitburner.hackingmultipliers.chance.md) |  | number | Player's hacking chance multiplier. |
+|  [growth](./bitburner.hackingmultipliers.growth.md) |  | number | Player's hacking growth multiplier |
+|  [money](./bitburner.hackingmultipliers.money.md) |  | number | Player's hacking money stolen multiplier. |
+|  [speed](./bitburner.hackingmultipliers.speed.md) |  | number | Player's hacking speed multiplier. |
 

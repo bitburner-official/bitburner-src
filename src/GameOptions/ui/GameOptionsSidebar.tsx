@@ -23,11 +23,11 @@ import { SoftResetButton } from "../../ui/React/SoftResetButton";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { GameOptionsTab } from "../GameOptionsTab";
+import { OptionsTabName } from "./GameOptionsRoot";
 
 interface IProps {
-  tab: GameOptionsTab;
-  setTab: (tab: GameOptionsTab) => void;
+  tab: OptionsTabName;
+  setTab: (tab: OptionsTabName) => void;
   save: () => void;
   export: () => void;
   forceKill: () => void;
@@ -36,15 +36,14 @@ interface IProps {
 
 interface ITabProps {
   sideBarProps: IProps;
-  tab: GameOptionsTab;
-  tabName: string;
+  tabName: OptionsTabName;
 }
 
 const SideBarTab = (props: ITabProps): React.ReactElement => {
   return (
     <ListItemButton
-      selected={props.sideBarProps.tab === props.tab}
-      onClick={() => props.sideBarProps.setTab(props.tab)}
+      selected={props.sideBarProps.tab === props.tabName}
+      onClick={() => props.sideBarProps.setTab(props.tabName)}
     >
       <Typography>{props.tabName}</Typography>
     </ListItemButton>
@@ -101,11 +100,12 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
     <Box>
       <Paper sx={{ height: "fit-content", mb: 1 }}>
         <List>
-          <SideBarTab sideBarProps={props} tab={GameOptionsTab.SYSTEM} tabName="System" />
-          <SideBarTab sideBarProps={props} tab={GameOptionsTab.GAMEPLAY} tabName="Gameplay" />
-          <SideBarTab sideBarProps={props} tab={GameOptionsTab.INTERFACE} tabName="Interface" />
-          <SideBarTab sideBarProps={props} tab={GameOptionsTab.MISC} tabName="Misc" />
-          <SideBarTab sideBarProps={props} tab={GameOptionsTab.REMOTE_API} tabName="Remote API" />
+          <SideBarTab sideBarProps={props} tabName="System" />
+          <SideBarTab sideBarProps={props} tabName="Gameplay" />
+          <SideBarTab sideBarProps={props} tabName="Interface" />
+          <SideBarTab sideBarProps={props} tabName="Numeric Display" />
+          <SideBarTab sideBarProps={props} tabName="Misc" />
+          <SideBarTab sideBarProps={props} tabName="Remote API" />
         </List>
       </Paper>
       <Box

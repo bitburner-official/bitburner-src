@@ -4,7 +4,7 @@
 
 ## MoneySource.hospitalization property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hospitalization: number;

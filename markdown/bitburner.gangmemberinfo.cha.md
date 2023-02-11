@@ -6,7 +6,7 @@
 
 Charisma skill level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cha: number;

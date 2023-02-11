@@ -6,7 +6,7 @@
 
 Names of all materials
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 materialNames: CorpMaterialName[];

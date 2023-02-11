@@ -6,7 +6,7 @@
 
 Multiplier to hacking experience gain rate
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacking_exp: number;

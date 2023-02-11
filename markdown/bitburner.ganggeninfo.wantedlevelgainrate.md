@@ -6,7 +6,7 @@
 
 Wanted level gained/lost per game cycle (negative for losses)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 wantedLevelGainRate: number;

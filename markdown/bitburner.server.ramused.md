@@ -6,7 +6,7 @@
 
 RAM (GB) used. i.e. unavailable RAM
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ramUsed: number;

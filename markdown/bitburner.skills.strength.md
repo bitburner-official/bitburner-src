@@ -4,7 +4,7 @@
 
 ## Skills.strength property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 strength: number;

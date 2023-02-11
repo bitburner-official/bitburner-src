@@ -5,7 +5,7 @@
 ## SleeveSynchroTask type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type SleeveSynchroTask = { type: "SYNCHRO" };

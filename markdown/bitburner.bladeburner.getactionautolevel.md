@@ -6,7 +6,7 @@
 
 Get whether an action is set to autolevel.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getActionAutolevel(type: string, name: string): boolean;
@@ -19,7 +19,7 @@ getActionAutolevel(type: string, name: string): boolean;
 |  type | string | Type of action. |
 |  name | string | Name of action. Must be an exact match. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

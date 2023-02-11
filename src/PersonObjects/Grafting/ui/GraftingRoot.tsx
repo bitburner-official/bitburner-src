@@ -15,7 +15,8 @@ import { Router } from "../../../ui/GameRoot";
 import { Page } from "../../../ui/Router";
 import { ConfirmationModal } from "../../../ui/React/ConfirmationModal";
 import { Money } from "../../../ui/React/Money";
-import { convertTimeMsToTimeElapsedString, formatNumber } from "../../../utils/StringHelperFunctions";
+import { formatNumberNoSuffix } from "../../../ui/formatNumber";
+import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
 import { Player } from "@player";
 import { GraftableAugmentation } from "../GraftableAugmentation";
 import { calculateGraftingTimeWithBonus, getGraftingAvailableAugs } from "../GraftingHelpers";
@@ -215,7 +216,7 @@ export const GraftingRoot = (): React.ReactElement => {
             <b>Entropy strength:</b> {Player.entropy}
             <br />
             <b>All multipliers decreased by:</b>{" "}
-            {formatNumber((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}% (multiplicative)
+            {formatNumberNoSuffix((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}% (multiplicative)
           </Typography>
         </Paper>
 
