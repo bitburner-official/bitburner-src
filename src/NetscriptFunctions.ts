@@ -52,7 +52,6 @@ import {
   formatSecurity,
   formatThreads,
   formatNumber,
-  FormatNumberStrictOptions,
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { LogBoxEvents, LogBoxCloserEvents, LogBoxPositionEvents, LogBoxSizeEvents } from "./ui/React/LogBoxManager";
@@ -71,7 +70,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums, FormatNumberOptions } from "@nsdefs";
+import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
@@ -1683,24 +1682,28 @@ export const ns: InternalAPI<NSFull> = {
       }
       return runningScript.onlineExpGained / runningScript.onlineRunningTime;
     },
-  formatNumber: (ctx) => (_n, _format) => {
-    _format ??= {};
-    const n = helpers.number(ctx, "n", _n);
-    if (typeof _format !== "object") {
-      throw helpers.makeRuntimeErrorMsg(
-        ctx,
-        `Incorrect usage of nFormat. formatOptions is an object, but type ${typeof _format} was provided\n` +
-          "Please review documentation:\n" +
-          "https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.formatnumber.md" +
-          "https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.formatnumberoptions.md",
-      );
-    }
-    // New variable is just for type assertion. No required properties on an NFormatOptions so this is semi-safe.
-    // TODO: typechecking function for checking types of optional properties if present
-    const format = _format as FormatNumberOptions;
-    if (format.specialFlag === "ram") return formatRam(n, format.fractionalDigits);
-    return formatNumber(n, format as FormatNumberStrictOptions);
-  },
+  formatNumber:
+    (ctx) =>
+    (_n, _fractionalDigits = 3, _suffixStart = 1000, isInteger) => {
+      const n = helpers.number(ctx, "n", _n);
+      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
+      const suffixStart = helpers.number(ctx, "suffixStart", _suffixStart);
+      return formatNumber(n, fractionalDigits, suffixStart, !!isInteger);
+    },
+  formatRam:
+    (ctx) =>
+    (_n, _fractionalDigits = 2) => {
+      const n = helpers.number(ctx, "n", _n);
+      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
+      return formatRam(n, fractionalDigits);
+    },
+  formatPercent:
+    (ctx) =>
+    (_n, _fractionalDigits = 2) => {
+      const n = helpers.number(ctx, "n", _n);
+      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
+      return formatPercent(n, fractionalDigits);
+    },
   // Todo: Remove function in 2.3. Until then it just directly wraps numeral.
   nFormat: (ctx) => (_n, _format) => {
     const n = helpers.number(ctx, "n", _n);

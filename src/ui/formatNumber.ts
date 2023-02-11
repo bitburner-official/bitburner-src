@@ -1,9 +1,6 @@
 import { ThemeEvents } from "../Themes/ui/Theme";
 import { EventEmitter } from "../utils/EventEmitter";
 import { Settings } from "../Settings/Settings";
-import { FormatNumberOptions } from "@nsdefs";
-// ram as a special flag is just for the ns API. Here formatRam is a separate function to reduce unnecessary conditionals.
-export type FormatNumberStrictOptions = FormatNumberOptions & { specialFlag?: "percent" | "integer" };
 
 const numberSuffixList = ["", "k", "m", "b", "t", "q", "Q", "s", "S", "o", "n"];
 // exponents associated with each suffix
@@ -58,16 +55,14 @@ function makeFormatter(fractionalDigits: number, otherOptions: Intl.NumberFormat
     ...otherOptions,
   });
 }
-function getFormatter(fractionalDigits: number, percent?: boolean): Intl.NumberFormat {
-  // Determine whether to use the cached normal formatters or the percentage formatters
-  const baseFormats = percent ? percentFormats : digitFormats;
-
-  // Return cached formatter if it already exists
-  if (baseFormats[fractionalDigits]) return baseFormats[fractionalDigits] as Intl.NumberFormat;
-
-  // Make a new formatter and then return it.
-  const formatterOptions: Intl.NumberFormatOptions = percent ? { style: "percent" } : {};
-  return (baseFormats[fractionalDigits] = makeFormatter(fractionalDigits, formatterOptions));
+/** Returns a cached formatter if it already exists, otherwise makes and returns a new formatter */
+function getFormatter(
+  fractionalDigits: number,
+  formatList = digitFormats,
+  options: Intl.NumberFormatOptions = {},
+): Intl.NumberFormat {
+  if (formatList[fractionalDigits]) return formatList[fractionalDigits] as Intl.NumberFormat;
+  return (formatList[fractionalDigits] = makeFormatter(fractionalDigits, options));
 }
 
 /** Display standard ram formatting. */
@@ -93,8 +88,19 @@ function formatExponential(n: number) {
   return exponentialFormatter.format(n).toLocaleLowerCase();
 }
 
+export function formatPercent(n: number, fractionalDigits = 2) {
+  // NaN does not get formatted
+  if (Number.isNaN(n)) return "NaN%";
+  const nAbs = Math.abs(n);
+
+  // Special handling for Infinities
+  if (nAbs === Infinity) return n < 0 ? "-∞%" : "∞%";
+
+  return getFormatter(fractionalDigits, percentFormats, { style: "percent" }).format(n);
+}
+
 // formatNumber doesn't accept ram as a special flag, that is only used for ns.formatNumber which will use formatRam
-export function formatNumber(n: number, options: FormatNumberStrictOptions = {}) {
+export function formatNumber(n: number, fractionalDigits = 3, suffixStart = 1000, isInteger = false) {
   // NaN does not get formatted
   if (Number.isNaN(n)) return "NaN";
   const nAbs = Math.abs(n);
@@ -102,23 +108,14 @@ export function formatNumber(n: number, options: FormatNumberStrictOptions = {})
   // Special handling for Infinities
   if (nAbs === Infinity) return n < 0 ? "-∞" : "∞";
 
-  const fractionalDigits = options.fractionalDigits ?? 3;
-  // Early return for percent because no suffix checking
-  if (options.specialFlag === "percent") return getFormatter(fractionalDigits, true).format(n);
-
-  // Early return for exponential form due to high number
-  if (nAbs >= 1e33) return exponentialFormatter.format(n).toLocaleLowerCase();
-
-  // Determine suffixStart
-  const suffixStart = options.suffixStart ?? 1000;
   // Early return for non-suffix
   if (nAbs < suffixStart) {
-    if (options.specialFlag === "integer") return basicFormatter.format(n);
+    if (isInteger) return basicFormatter.format(n);
     return getFormatter(fractionalDigits).format(n);
   }
 
-  // Early return for turning suffix into exponential
-  if (Settings.disableSuffixes) return formatExponential(n);
+  // Exponential form
+  if (Settings.disableSuffixes || nAbs >= 1e33) return formatExponential(n);
 
   // Calculate suffix index. 1000 = 10^3
   let suffixIndex = Math.floor(Math.log10(nAbs) / 3);
@@ -135,7 +132,7 @@ export function formatNumber(n: number, options: FormatNumberStrictOptions = {})
 
 /** Format a number without suffixes. Still show exponential form if >= 1e33. */
 export const formatNumberNoSuffix = (n: number, fractionalDigits = 0) => {
-  return formatNumber(n, { fractionalDigits, suffixStart: 1e33 });
+  return formatNumber(n, fractionalDigits, 1e33);
 };
 export const formatFavor = formatNumberNoSuffix;
 
@@ -150,30 +147,25 @@ export const formatStamina = formatBigNumber;
 export const formatStaneksGiftCharge = formatBigNumber;
 
 /** Format a number with suffixes starting at 1000 and 2 fractional digits */
-export const formatQuality = (n: number) => formatNumber(n, { fractionalDigits: 2 });
+export const formatQuality = (n: number) => formatNumber(n, 2);
 
 /** Format an integer that uses suffixed form at 1000 and 3 fractional digits. */
-export const formatInt = (n: number) => formatNumber(n, { specialFlag: "integer" });
+export const formatInt = (n: number) => formatNumber(n, 3, 1000, true);
 export const formatSleeveMemory = formatInt;
 export const formatShares = formatInt;
 
 /** Display an integer up to 999,999 before collapsing to suffixed form with 3 fractional digits */
-export const formatHp = (n: number) => formatNumber(n, { specialFlag: "integer", suffixStart: 1e6 });
+export const formatHp = (n: number) => formatNumber(n, 3, 1e6, true);
 export const formatThreads = formatHp;
 
 /** Display an integer up to 999,999,999 before collapsing to suffixed form with 3 fractional digits */
-export const formatSkill = (n: number) => formatNumber(n, { specialFlag: "integer", suffixStart: 1e9 });
+export const formatSkill = (n: number) => formatNumber(n, 3, 1e9, true);
 
 /** Display standard money formatting, including the preceding $. */
 export const formatMoney = (n: number) => "$" + formatNumber(n);
 
-/** Display a percentage with a configurable number of fractional digits. Percentages never collapse to suffix form. */
-export const formatPercent = (n: number, fractionalDigits = 2) => {
-  return formatNumber(n, { specialFlag: "percent", fractionalDigits });
-};
-
 /** Display a decimal number with increased precision (5 fractional digits) */
-export const formatRespect = (n: number) => formatNumber(n, { fractionalDigits: 5 });
+export const formatRespect = (n: number) => formatNumber(n, 5);
 export const formatWanted = formatRespect;
 export const formatPreciseMultiplier = formatRespect;
 
