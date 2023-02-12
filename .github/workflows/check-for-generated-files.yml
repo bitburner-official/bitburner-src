@@ -21,35 +21,53 @@ jobs:
         with:
           files: |
             dist/*
-            index.html
 
       - name: Warn when bundle files were changed
         id: warn-bundles-changed
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Creating label (if it does not exist)"
-          LABEL="validation: bundle files modified"
-          gh --repo "${{ github.repository }}" \
-            label create "$LABEL" --description "Modifications to this pull request are suggested" --color D93F0B || true
+          echo "Creating labels for dist modification and for invalid title"
+          LABELDIST="warning: includes dist changes"
+          LABELTITLE="error: invalid title"
+          gh --repo "${{ github.repository }}" label create "$LABELDIST" --description "Dist changes should not normally be included" --color EBAE34 || true
+          gh --repo "${{ github.repository }}" label create "$LABELTITLE" --description "PR title must follow specific format" --color D93F0B || true
 
+          echo "Determine dist portion of comment text, and add/remove dist label as appropriate"
           if [ "${{ steps.changed-bundle-files.outputs.any_changed }}" == "false" ]; then
             echo "No forbidden files included, removing warning"
-            gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --remove-label "$LABEL" || true
-            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body "Generated files no longer detected." --edit-last || true
-
+            gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --remove-label "$LABELDIST" || true
+            distText="### No dist changes are detected."
           else
             echo "Forbidden files included, generating warning"
+            gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --add-label "$LABELDIST"
+            distText="## Dist changes were included. PRs should not normally contain any changes in the dist folder.\n\nReview the changes and ensure that the included dist changes were necessary."
+          fi
 
-            touch comment.txt
-            echo "## Generated build files were included. PRs should not normally contain generated files." >> comment.txt
-            echo "" >> comment.txt
-            echo "Review the changes and ensure that including generated files was necessary. This is edited at the end." >> comment.txt
+          echo "Validate title"
+          PR_TITLE=$(gh --repo "${{ github.repository }}" pr view "${{ github.event.number }}" --json title --jq .title)
+          TITLE_REGEX="^[0-9A-Z\-]*: .*$"
+          PR_TITLE_VALID=$(echo "$PR_TITLE" | grep -Eq "$TITLE_REGEX" && echo "true" || echo "false")
 
-            echo "Add pr label"
-            gh --repo "${{ github.repository }}" \
-              pr edit "${{ github.event.number }}" --add-label "$LABEL"
-            echo "And comment on the pr"
-            gh --repo "${{ github.repository }}" \
-              pr comment "${{ github.event.number }}" --body-file comment.txt --edit-last || gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body-file comment.txt
+          echo "Determine title portion of comment text, and add/remove title label as appropriate"
+          if [ "$PR_TITLE_VALID" == "true" ]; then
+            gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --remove-label "$LABELTITLE" || true
+            commentText="$distText"+"\n\n### Title is valid."
+            if [ "${{ steps.changed-bundle-files.outputs.any_changed }}" == "false" ]; then
+              makeNewComment="false"
+            else
+              makeNewComment="true"
+            fi
+          else
+            gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --add-label "$LABELTITLE" || true
+            commentText=$distText + '\n\n## The title \`$PR_TITLE\` should match \`$TITLE_REGEX\`\n\nCATEGORY: Change Description\n\nCATEGORY is something like "API", "UI", "MISC", "STANEK", etc.\n\nChange Description is what you'd tell a non-contributor to convey what is changed.'
+            makeNewComment="true"
+          fi
+
+          echo "Edit existing comment or make a new one (if no comment present and one of the tests failed)"
+          if [ "$makeNewComment" = "true" ]; then
+            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body '$commentText' --edit-last || gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body '$commentText'
+            exit 1
+          else
+            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body '$commentText' --edit-last || true
           fi
