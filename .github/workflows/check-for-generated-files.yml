@@ -53,18 +53,18 @@ jobs:
           echo "Determine title portion of comment text, and add/remove title label as appropriate"
           if [ "$PR_TITLE_VALID" == "true" ]; then
             gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --remove-label "$LABELTITLE" || true
-            commentText="$distText"+"\n\n### Title is valid."
+            commentText="$distText \n\n### Title is valid."
             makeNewComment="${{ steps.changed-bundle-files.outputs.any_changed }}"
           else
             gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --add-label "$LABELTITLE" || true
-            commentText="$distText" + '\n\n## The title \`$PR_TITLE\` should match \`$TITLE_REGEX\`\n\nCATEGORY: Change Description\n\nCATEGORY is something like "API", "UI", "MISC", "STANEK", etc.\n\nChange Description is what you'd tell a non-contributor to convey what is changed.'
+            commentText="$distText \n\n## The title \`$PR_TITLE\` should match \`$TITLE_REGEX\`\n\nCATEGORY: Change Description\n\nCATEGORY is something like 'API', 'UI', 'MISC', 'STANEK', etc.\n\nChange Description is what you'd tell a non-contributor to convey what is changed."
             makeNewComment="true"
           fi
 
           echo "Edit existing comment or make a new one (if no comment present and one of the tests failed)"
-          if [ "$makeNewComment" = "true" ]; then
-            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body '$commentText' --edit-last || gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body '$commentText'
+          if [ "$makeNewComment" == "true" ]; then
+            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body "$commentText" --edit-last || gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body '$commentText'
             exit 1
           else
-            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body '$commentText' --edit-last || true
+            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body "$commentText" --edit-last || true
           fi
