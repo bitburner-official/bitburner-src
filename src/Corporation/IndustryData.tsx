@@ -80,7 +80,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     robotFactor: 0.5,
     aiCoreFactor: 0.2,
     advertisingFactor: 0.08,
-    requiredMaterials: { Energy: 0.5 },
+    requiredMaterials: { Energy: 0.5 , Plants: 0.5},
     producedMaterials: ["Food"],
   },
   [IndustryType.Food]: {
@@ -139,7 +139,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     robotFactor: 0.45,
     aiCoreFactor: 0.45,
     advertisingFactor: 0.06,
-    requiredMaterials: { Energy: 0.8 },
+    requiredMaterials: { Energy: 0.8 , Robots: 0.02},
     producedMaterials: ["Metal"],
   },
   [IndustryType.Pharmaceutical]: {
