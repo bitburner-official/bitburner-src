@@ -1,0 +1,70 @@
+name: Validate Title and Check for Dist Changes
+
+on:
+  # Triggers the workflow on a few types of pull request events but only for the dev branch
+  pull_request:
+    branches: [dev]
+    types: [opened, edited, synchronize, reopened]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  checkFiles:
+    name: Check Files and Title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v3
+      - name: Check bundle files
+        id: changed-bundle-files
+        uses: tj-actions/changed-files@v18.4
+        with:
+          files: |
+            dist/*
+
+      - name: Warn when dist was changed or title is invalid
+        id: warn-bundles-changed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Creating labels for dist modification and for invalid title"
+          LABELDIST="warning: includes dist changes"
+          LABELTITLE="error: invalid title"
+          gh --repo "${{ github.repository }}" label create "$LABELDIST" --description "Dist changes should not normally be included" --color EBAE34 || true
+          gh --repo "${{ github.repository }}" label create "$LABELTITLE" --description "PR title must follow specific format" --color D93F0B || true
+
+          echo "Determine dist portion of comment text, and add/remove dist label as appropriate"
+          if [ "${{ steps.changed-bundle-files.outputs.any_changed }}" == "false" ]; then
+            echo "No forbidden files included, removing warning"
+            gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --remove-label "$LABELDIST" || true
+            distText="### No dist changes are detected."
+          else
+            echo "Forbidden files included, generating warning"
+            gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --add-label "$LABELDIST"
+            distText="## Dist changes were included. PRs should not normally contain any changes in the dist folder.\n\nReview the changes and ensure that the included dist changes were necessary."
+          fi
+
+          echo "Validate title"
+          PR_TITLE=$(gh --repo "${{ github.repository }}" pr view "${{ github.event.number }}" --json title --jq .title)
+          TITLE_REGEX="^[0-9A-Z\-]*: .*$"
+          PR_TITLE_VALID=$(echo "$PR_TITLE" | grep -Eq "$TITLE_REGEX" && echo "true" || echo "false")
+
+          echo "Determine title portion of comment text, and add/remove title label as appropriate"
+          if [ "$PR_TITLE_VALID" == "true" ]; then
+            gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --remove-label "$LABELTITLE" || true
+            commentText="$distText \n\n### Title is valid."
+            makeNewComment="${{ steps.changed-bundle-files.outputs.any_changed }}"
+          else
+            gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --add-label "$LABELTITLE" || true
+            commentText="$distText \n\n## The title \`$PR_TITLE\` should match \`$TITLE_REGEX\`\n\nCATEGORY: Change Description\n\nCATEGORY is something like 'API', 'UI', 'MISC', 'STANEK', etc.\n\nChange Description is what you'd tell a non-contributor to convey what is changed."
+            makeNewComment="true"
+          fi
+
+          echo "Edit existing comment or make a new one (if no comment present and one of the tests failed)"
+          if [ "$makeNewComment" == "true" ]; then
+            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body "$(echo -e $commentText)" --edit-last || gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body "$(echo -e $commentText)"
+            exit 1
+          else
+            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body "$(echo -e $commentText)" --edit-last || true
+          fi
