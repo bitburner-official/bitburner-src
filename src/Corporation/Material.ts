@@ -16,7 +16,7 @@ export class Material {
   qty = 0;
 
   // Material's "quality". Unbounded
-  qlt = 0;
+  qlt = 1;
 
   // How much demand the Material has in the market, and the range of possible
   // values for this "demand"
