@@ -4,6 +4,7 @@ on:
   # Triggers the workflow on push or pull request events but only for the dev branch
   pull_request:
     branches: [dev]
+    types: [opened, edited, synchronize, reopened]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -53,14 +54,10 @@ jobs:
           if [ "$PR_TITLE_VALID" == "true" ]; then
             gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --remove-label "$LABELTITLE" || true
             commentText="$distText"+"\n\n### Title is valid."
-            if [ "${{ steps.changed-bundle-files.outputs.any_changed }}" == "false" ]; then
-              makeNewComment="false"
-            else
-              makeNewComment="true"
-            fi
+            makeNewComment="${{ steps.changed-bundle-files.outputs.any_changed }}"
           else
             gh --repo "${{ github.repository }}" pr edit "${{ github.event.number }}" --add-label "$LABELTITLE" || true
-            commentText=$distText + '\n\n## The title \`$PR_TITLE\` should match \`$TITLE_REGEX\`\n\nCATEGORY: Change Description\n\nCATEGORY is something like "API", "UI", "MISC", "STANEK", etc.\n\nChange Description is what you'd tell a non-contributor to convey what is changed.'
+            commentText="$distText" + '\n\n## The title \`$PR_TITLE\` should match \`$TITLE_REGEX\`\n\nCATEGORY: Change Description\n\nCATEGORY is something like "API", "UI", "MISC", "STANEK", etc.\n\nChange Description is what you'd tell a non-contributor to convey what is changed.'
             makeNewComment="true"
           fi
 
