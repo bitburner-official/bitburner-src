@@ -63,8 +63,8 @@ jobs:
 
           echo "Edit existing comment or make a new one (if no comment present and one of the tests failed)"
           if [ "$makeNewComment" == "true" ]; then
-            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body "$commentText" --edit-last || gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body '$commentText'
+            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body "$(echo -e $commentText)" --edit-last || gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body "$(echo -e $commentText)"
             exit 1
           else
-            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body "$commentText" --edit-last || true
+            gh --repo "${{ github.repository }}" pr comment "${{ github.event.number }}" --body "$(echo -e $commentText)" --edit-last || true
           fi
