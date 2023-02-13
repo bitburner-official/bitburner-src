@@ -6,7 +6,7 @@
 
 Amount of material sold
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sell: number;

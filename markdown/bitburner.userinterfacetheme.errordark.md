@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.errordark property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 errordark: string;

@@ -6,7 +6,7 @@
 
 Player's hacknet ram cost multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ramCost: number;

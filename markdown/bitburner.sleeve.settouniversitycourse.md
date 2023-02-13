@@ -6,7 +6,7 @@
 
 Set a sleeve to take a class at a university.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setToUniversityCourse(sleeveNumber: number, university: string, className: string): boolean;
@@ -20,7 +20,7 @@ setToUniversityCourse(sleeveNumber: number, university: string, className: strin
 |  university | string | Name of the university to attend. |
 |  className | string | Name of the class to follow. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

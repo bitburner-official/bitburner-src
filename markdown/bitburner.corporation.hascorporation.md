@@ -6,12 +6,12 @@
 
 Returns whether the player has a corporation. Does not require API access.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hasCorporation(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

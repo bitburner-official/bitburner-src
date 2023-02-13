@@ -6,7 +6,7 @@
 
 Runs BruteSSH.exe on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 brutessh(host: string): void;
@@ -18,7 +18,7 @@ brutessh(host: string): void;
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

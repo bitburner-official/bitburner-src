@@ -3,7 +3,7 @@ getHackingMultipliers() Netscript Function
 
 .. js:function:: getHackingMultipliers()
 
-    :RAM cost: 4 GB
+    :RAM cost: 0.25 GB
     :returns: object containing the player's hacking multipliers. These
         multipliers are returned in decimal forms, not percentages (e.g. 1.5
         instead of 150%).
@@ -21,6 +21,6 @@ getHackingMultipliers() Netscript Function
 
     .. code-block:: javascript
 
-        mults = getHackingMultipliers();
-        print(mults.chance);
-        print(mults.growth);
+        const mults = ns.getHackingMultipliers();
+        ns.print(mults.chance);
+        ns.print(mults.growth);

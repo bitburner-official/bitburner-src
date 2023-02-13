@@ -6,7 +6,7 @@
 
 Resize a tail window.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 resizeTail(width: number, height: number, pid?: number): void;
@@ -18,9 +18,9 @@ resizeTail(width: number, height: number, pid?: number): void;
 |  --- | --- | --- |
 |  width | number | Width of the window. |
 |  height | number | Height of the window. |
-|  pid | number | Optional. PID of the script having its tail resized. If omitted, the current script is used. |
+|  pid | number | _(Optional)_ Optional. PID of the script having its tail resized. If omitted, the current script is used. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

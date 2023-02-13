@@ -6,7 +6,7 @@
 
 strength exp gained from crime
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 strength_exp: number;

@@ -6,7 +6,7 @@
 
 Coding contract data will differ depending on coding contract.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type CodingContractData = any;

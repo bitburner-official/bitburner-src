@@ -2,7 +2,7 @@
  * Root React component for the popup that lets player purchase Duplicate
  * Sleeves and Sleeve-related upgrades from The Covenant
  */
-import React, { useState } from "react";
+import React from "react";
 
 import { CovenantSleeveMemoryUpgrade } from "./CovenantSleeveMemoryUpgrade";
 
@@ -17,6 +17,7 @@ import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { FactionNames } from "../../../Faction/data/FactionNames";
+import { useRerender } from "../../../ui/React/hooks";
 
 interface IProps {
   open: boolean;
@@ -24,16 +25,11 @@ interface IProps {
 }
 
 export function CovenantPurchasesRoot(props: IProps): React.ReactElement {
-  const [update, setUpdate] = useState(0);
+  const rerender = useRerender();
 
   /** Get the cost to purchase a new Duplicate Sleeve */
   function purchaseCost(): number {
     return Math.pow(10, Player.sleevesFromCovenant) * BaseCostPerSleeve;
-  }
-
-  /** Force a rerender by just changing an arbitrary state value */
-  function rerender(): void {
-    setUpdate(update + 1);
   }
 
   // Purchasing a new Duplicate Sleeve

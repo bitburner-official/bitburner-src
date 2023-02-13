@@ -6,7 +6,7 @@
 
 Influences the experience gained for each ability when the player completes working their job.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 CompanyWorkExpGain: number;

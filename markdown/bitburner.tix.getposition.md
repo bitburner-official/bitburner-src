@@ -6,7 +6,7 @@
 
 Returns the player’s position in a stock.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getPosition(sym: string): [number, number, number, number];
@@ -18,7 +18,7 @@ getPosition(sym: string): [number, number, number, number];
 |  --- | --- | --- |
 |  sym | string | Stock symbol. |
 
-<b>Returns:</b>
+**Returns:**
 
 \[number, number, number, number\]
 

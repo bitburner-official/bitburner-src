@@ -129,7 +129,12 @@ export abstract class BaseServer {
    */
   getRunningScript(scriptName: string, scriptArgs: ScriptArg[]): RunningScript | null {
     for (const rs of this.runningScripts) {
-      if (rs.filename === scriptName && compareArrays(rs.args, scriptArgs)) {
+      //compare file names without leading '/' to prevent running multiple script with the same name
+      if (
+        (rs.filename.charAt(0) == "/" ? rs.filename.slice(1) : rs.filename) ===
+          (scriptName.charAt(0) == "/" ? scriptName.slice(1) : scriptName) &&
+        compareArrays(rs.args, scriptArgs)
+      ) {
         return rs;
       }
     }

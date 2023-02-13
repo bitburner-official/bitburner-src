@@ -10,7 +10,7 @@ import { PositionTypes } from "./data/PositionTypes";
 import { StockSymbols } from "./data/StockSymbols";
 
 import { CONSTANTS } from "../Constants";
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatMoney } from "../ui/formatNumber";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reviver } from "../utils/JSONReviver";
@@ -106,7 +106,7 @@ export function cancelOrder(params: ICancelOrderParams, ctx?: NetscriptContext):
   ) {
     // Order properties are passed in. Need to look for the order
     const stockOrders = StockMarket["Orders"][params.stock.symbol];
-    const orderTxt = params.stock.symbol + " - " + params.shares + " @ " + numeralWrapper.formatMoney(params.price);
+    const orderTxt = params.stock.symbol + " - " + params.shares + " @ " + formatMoney(params.price);
     for (let i = 0; i < stockOrders.length; ++i) {
       const order = stockOrders[i];
       if (

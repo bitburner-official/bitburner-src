@@ -5,12 +5,13 @@
 ## SleeveBladeburnerTask type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type SleeveBladeburnerTask = {
   type: "BLADEBURNER";
   actionType: "General" | "Contracts";
   actionName: string;
+  cyclesWorked: number;
 };
 ```

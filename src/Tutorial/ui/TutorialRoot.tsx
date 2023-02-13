@@ -26,7 +26,7 @@ export function TutorialRoot(props: IProps): React.ReactElement {
         <Link
           color="primary"
           target="_blank"
-          href="https://bitburner.readthedocs.io/en/latest/guidesandtips/gettingstartedguideforbeginnerprogrammers.html"
+          href="https://bitburner-official.readthedocs.io/en/latest/guidesandtips/gettingstartedguideforbeginnerprogrammers.html"
         >
           <Typography>Getting Started</Typography>
         </Link>
@@ -34,7 +34,7 @@ export function TutorialRoot(props: IProps): React.ReactElement {
         <Link
           color="primary"
           target="_blank"
-          href="https://bitburner.readthedocs.io/en/latest/basicgameplay/servers.html"
+          href="https://bitburner-official.readthedocs.io/en/latest/basicgameplay/servers.html"
         >
           <Typography>Servers & Networking</Typography>
         </Link>
@@ -42,7 +42,7 @@ export function TutorialRoot(props: IProps): React.ReactElement {
         <Link
           color="primary"
           target="_blank"
-          href="https://bitburner.readthedocs.io/en/latest/basicgameplay/hacking.html"
+          href="https://bitburner-official.readthedocs.io/en/latest/basicgameplay/hacking.html"
         >
           <Typography>Hacking</Typography>
         </Link>
@@ -50,19 +50,19 @@ export function TutorialRoot(props: IProps): React.ReactElement {
         <Link
           color="primary"
           target="_blank"
-          href="https://bitburner.readthedocs.io/en/latest/basicgameplay/scripts.html"
+          href="https://bitburner-official.readthedocs.io/en/latest/basicgameplay/scripts.html"
         >
           <Typography>Scripts</Typography>
         </Link>
         <br />
-        <Link color="primary" target="_blank" href="https://bitburner.readthedocs.io/en/latest/netscript.html">
+        <Link color="primary" target="_blank" href="https://bitburner-official.readthedocs.io/en/latest/netscript.html">
           <Typography>Netscript Programming Language</Typography>
         </Link>
         <br />
         <Link
           color="primary"
           target="_blank"
-          href="https://bitburner.readthedocs.io/en/latest/basicgameplay/world.html"
+          href="https://bitburner-official.readthedocs.io/en/latest/basicgameplay/world.html"
         >
           <Typography>Traveling</Typography>
         </Link>
@@ -70,7 +70,7 @@ export function TutorialRoot(props: IProps): React.ReactElement {
         <Link
           color="primary"
           target="_blank"
-          href="https://bitburner.readthedocs.io/en/latest/basicgameplay/companies.html"
+          href="https://bitburner-official.readthedocs.io/en/latest/basicgameplay/companies.html"
         >
           <Typography>Companies</Typography>
         </Link>
@@ -78,7 +78,7 @@ export function TutorialRoot(props: IProps): React.ReactElement {
         <Link
           color="primary"
           target="_blank"
-          href="https://bitburner.readthedocs.io/en/latest/basicgameplay/infiltration.html"
+          href="https://bitburner-official.readthedocs.io/en/latest/basicgameplay/infiltration.html"
         >
           <Typography>Infiltration</Typography>
         </Link>
@@ -86,7 +86,7 @@ export function TutorialRoot(props: IProps): React.ReactElement {
         <Link
           color="primary"
           target="_blank"
-          href="https://bitburner.readthedocs.io/en/latest/basicgameplay/factions.html"
+          href="https://bitburner-official.readthedocs.io/en/latest/basicgameplay/factions.html"
         >
           <Typography>Factions</Typography>
         </Link>
@@ -94,19 +94,19 @@ export function TutorialRoot(props: IProps): React.ReactElement {
         <Link
           color="primary"
           target="_blank"
-          href="https://bitburner.readthedocs.io/en/latest/basicgameplay/augmentations.html"
+          href="https://bitburner-official.readthedocs.io/en/latest/basicgameplay/augmentations.html"
         >
           <Typography>Augmentations</Typography>
         </Link>
         <br />
-        <Link color="primary" target="_blank" href="https://bitburner.readthedocs.io/en/latest/shortcuts.html">
+        <Link color="primary" target="_blank" href="https://bitburner-official.readthedocs.io/en/latest/shortcuts.html">
           <Typography>Keyboard Shortcuts</Typography>
         </Link>
         <br />
         <Link
           color="primary"
           target="_blank"
-          href="https://bitburner.readthedocs.io/en/latest/netscript/netscriptlearntoprogram.html#netscript-1-0-vs-netscript-2-0"
+          href="https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptlearntoprogram.html#netscript-1-0-vs-netscript-2-0"
         >
           <Typography>NS1 vs NS2 (or .script vs .js)</Typography>
         </Link>
@@ -114,7 +114,7 @@ export function TutorialRoot(props: IProps): React.ReactElement {
         <Link
           color="primary"
           target="_blank"
-          href="https://bitburner.readthedocs.io/en/latest/netscript/netscriptfunctions.html"
+          href="https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptfunctions.html"
         >
           <Typography>Simplified list of functions</Typography>
         </Link>

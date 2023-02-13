@@ -6,7 +6,7 @@
 
 Agility multiplier gained from ascending
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agi: number;

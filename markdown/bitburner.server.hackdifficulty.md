@@ -6,7 +6,7 @@
 
 Server Security Level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hackDifficulty: number;

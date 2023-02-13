@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Factions } from "../../../Faction/Factions";
-import { CorporationConstants } from "../../data/Constants";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import * as corpConstants from "../../data/Constants";
+import { formatReputation } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { Player } from "@player";
@@ -35,7 +35,7 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
   }
 
   function repGain(money: number): number {
-    return money / CorporationConstants.BribeToRepRatio;
+    return money / corpConstants.bribeAmountPerReputation;
   }
 
   function getRepText(money: number): string {
@@ -46,11 +46,7 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
       return "ERROR: You do not have this much money to bribe with";
     } else {
       return (
-        "You will gain " +
-        numeralWrapper.formatReputation(repGain(money)) +
-        " reputation with " +
-        selectedFaction +
-        " with this bribe"
+        "You will gain " + formatReputation(repGain(money)) + " reputation with " + selectedFaction + " with this bribe"
       );
     }
   }
@@ -59,7 +55,7 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
     const fac = Factions[selectedFaction];
     if (disabled) return;
     const rep = repGain(money);
-    dialogBoxCreate(`You gained ${numeralWrapper.formatReputation(rep)} reputation with ${fac.name} by bribing them.`);
+    dialogBoxCreate(`You gained ${formatReputation(rep)} reputation with ${fac.name} by bribing them.`);
     fac.playerReputation += rep;
     corp.funds = corp.funds - money;
     props.onClose();

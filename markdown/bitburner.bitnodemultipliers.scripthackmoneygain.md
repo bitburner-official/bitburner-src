@@ -6,7 +6,7 @@
 
 Influences how much of the money stolen by a scripted hack will be added to the player's money.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ScriptHackMoneyGain: number;

@@ -6,12 +6,12 @@
 
 Retrieve the first element from the port without removing it.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 peek(): PortData;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [PortData](./bitburner.portdata.md)
 

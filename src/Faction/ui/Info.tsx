@@ -2,20 +2,21 @@
  * React component for general information about the faction. This includes the
  * factions "motto", reputation, favor, and gameplay instructions
  */
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import { Faction } from "../Faction";
 import { FactionInfo } from "../FactionInfo";
 
 import { Reputation } from "../../ui/React/Reputation";
 import { Favor } from "../../ui/React/Favor";
-import { MathJaxWrapper } from "../../MathJaxWrapper";
+import { MathJax } from "better-react-mathjax";
 
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
+import { useRerender } from "../../ui/React/hooks";
 
 type IProps = {
   faction: Faction;
@@ -43,16 +44,7 @@ function DefaultAssignment(): React.ReactElement {
 }
 
 export function Info(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
-
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
-
+  useRerender(200);
   const classes = useStyles();
 
   const Assignment = props.factionInfo.assignment ?? DefaultAssignment;
@@ -71,10 +63,10 @@ export function Info(props: IProps): React.ReactElement {
                 You will have <Favor favor={Math.floor(props.faction.favor + favorGain)} /> faction favor after
                 installing an Augmentation.
               </Typography>
-              <MathJaxWrapper>{"\\(\\huge{r = \\text{total faction reputation}}\\)"}</MathJaxWrapper>
-              <MathJaxWrapper>
+              <MathJax>{"\\(\\huge{r = \\text{total faction reputation}}\\)"}</MathJax>
+              <MathJax>
                 {"\\(\\huge{favor=1+\\left\\lfloor\\log_{1.02}\\left(\\frac{r+25000}{25500}\\right)\\right\\rfloor}\\)"}
-              </MathJaxWrapper>
+              </MathJax>
             </>
           }
         >
@@ -96,8 +88,8 @@ export function Info(props: IProps): React.ReactElement {
                 amount of reputation you earned with this faction. Across all resets.
               </Typography>
 
-              <MathJaxWrapper>{"\\(\\huge{r = reputation}\\)"}</MathJaxWrapper>
-              <MathJaxWrapper>{"\\(\\huge{\\Delta r = \\Delta r \\times \\frac{100+favor}{100}}\\)"}</MathJaxWrapper>
+              <MathJax>{"\\(\\huge{r = reputation}\\)"}</MathJax>
+              <MathJax>{"\\(\\huge{\\Delta r = \\Delta r \\times \\frac{100+favor}{100}}\\)"}</MathJax>
             </>
           }
         >

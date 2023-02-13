@@ -6,12 +6,12 @@
 
 Clear the Terminal window, as if the player ran `clear` in the terminal
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 clearTerminal(): void;
 ```
-<b>Returns:</b>
+**Returns:**
 
 void
 

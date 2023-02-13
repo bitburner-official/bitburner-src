@@ -4,7 +4,7 @@
 
 ## ActiveFragment.numCharge property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 numCharge: number;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal } from "../../../ui/React/Modal";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatBigNumber, formatMoney } from "../../../ui/formatNumber";
 import { Player } from "@player";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
@@ -49,14 +49,14 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
     } else if (shares > corp.issuedShares) {
       return (
         <>
-          There are not this many shares available to buy back. There are only{" "}
-          {numeralWrapper.formatBigNumber(corp.issuedShares)} outstanding shares.
+          There are not this many shares available to buy back. There are only {formatBigNumber(corp.issuedShares)}{" "}
+          outstanding shares.
         </>
       );
     } else {
       return (
         <>
-          Purchase {shares} shares for a total of {numeralWrapper.formatMoney(shares * buybackPrice)}
+          Purchase {shares} shares for a total of {formatMoney(shares * buybackPrice)}
         </>
       );
     }
@@ -76,8 +76,8 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
         To purchase these shares, you must use your own money (NOT your Corporation's funds).
         <br />
         <br />
-        The current buyback price of your company's stock is {numeralWrapper.formatMoney(buybackPrice)}. Your company
-        currently has {numeralWrapper.formatBigNumber(corp.issuedShares)} outstanding stock shares.
+        The current buyback price of your company's stock is {formatMoney(buybackPrice)}. Your company currently has{" "}
+        {formatBigNumber(corp.issuedShares)} outstanding stock shares.
       </Typography>
       <CostIndicator />
       <br />

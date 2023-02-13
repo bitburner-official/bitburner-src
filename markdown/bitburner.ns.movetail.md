@@ -6,7 +6,7 @@
 
 Move a tail window.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 moveTail(x: number, y: number, pid?: number): void;
@@ -18,9 +18,9 @@ moveTail(x: number, y: number, pid?: number): void;
 |  --- | --- | --- |
 |  x | number | x coordinate. |
 |  y | number | y coordinate. |
-|  pid | number | Optional. PID of the script having its tail moved. If omitted, the current script is used. |
+|  pid | number | _(Optional)_ Optional. PID of the script having its tail moved. If omitted, the current script is used. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

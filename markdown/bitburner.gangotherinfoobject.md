@@ -5,7 +5,7 @@
 ## GangOtherInfoObject interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface GangOtherInfoObject 
@@ -13,8 +13,8 @@ interface GangOtherInfoObject
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [power](./bitburner.gangotherinfoobject.power.md) | number | Gang power |
-|  [territory](./bitburner.gangotherinfoobject.territory.md) | number | Gang territory, in decimal form |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [power](./bitburner.gangotherinfoobject.power.md) |  | number | Gang power |
+|  [territory](./bitburner.gangotherinfoobject.territory.md) |  | number | Gang territory, in decimal form |
 

@@ -7,7 +7,7 @@ import { BlackOperation } from "./BlackOperation";
 import { Operation } from "./Operation";
 import { Contract } from "./Contract";
 import { GeneralActions } from "./GeneralActions";
-import { formatNumber } from "../utils/StringHelperFunctions";
+import { formatNumberNoSuffix } from "../ui/formatNumber";
 import { Skills } from "./Skills";
 import { Skill } from "./Skill";
 import { City } from "./City";
@@ -19,7 +19,7 @@ import { ConsoleHelpText } from "./data/Help";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { BladeburnerConstants } from "./data/Constants";
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatExp, formatMoney, formatPercent, formatBigNumber, formatStamina } from "../ui/formatNumber";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { addOffset } from "../utils/helpers/addOffset";
 import { Factions, factionExists } from "../Faction/Factions";
@@ -35,6 +35,8 @@ import { KEY } from "../utils/helpers/keyCodes";
 import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfiltrateWork";
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
+import { CityName } from "../Enums";
+import { getRandomMember } from "../utils/helpers/enum";
 
 export interface BlackOpsAttempt {
   error?: string;
@@ -68,8 +70,9 @@ export class Bladeburner {
     type: ActionTypes["Idle"],
   });
 
-  cities: Record<string, City> = {};
-  city: string = BladeburnerConstants.CityNames[2];
+  cities: Record<CityName, City>;
+  city = CityName.Sector12;
+  // Todo: better types for all these Record<string, etc> types. Will need custom types or enums for the named string categories (e.g. skills).
   skills: Record<string, number> = {};
   skillMultipliers: Record<string, number> = {};
   staminaBonus = 0;
@@ -98,9 +101,9 @@ export class Bladeburner {
   consoleLogs: string[] = ["Bladeburner Console", "Type 'help' to see console commands"];
 
   constructor() {
-    for (let i = 0; i < BladeburnerConstants.CityNames.length; ++i) {
-      this.cities[BladeburnerConstants.CityNames[i]] = new City(BladeburnerConstants.CityNames[i]);
-    }
+    this.cities = {} as Record<CityName, City>;
+    // This for loop ensures the above type is met for this.cities.
+    for (const city of Object.values(CityName)) this.cities[city] = new City(city);
 
     this.updateSkillMultipliers(); // Calls resetSkillMultipliers()
 
@@ -111,9 +114,7 @@ export class Bladeburner {
   }
 
   getCurrentCity(): City {
-    const city = this.cities[this.city];
-    if (!city) throw new Error("Invalid city in Bladeburner.getCurrentCity()");
-    return city;
+    return this.cities[this.city];
   }
 
   calculateStaminaPenalty(): number {
@@ -157,7 +158,8 @@ export class Bladeburner {
     return { isAvailable: true, action };
   }
 
-  /** This function is only for the player. Sleeves use their own functions to perform blade work. */
+  /** This function is only for the player. Sleeves use their own functions to perform blade work.
+   *  Todo: partial unification of player and sleeve methods? */
   startAction(actionId: ActionIdentifier): void {
     if (actionId == null) return;
     this.action = actionId;
@@ -468,7 +470,7 @@ export class Bladeburner {
             if (this.skills[skill.name] != null) {
               level = this.skills[skill.name];
             }
-            this.postToConsole(skill.name + ": Level " + formatNumber(level, 0));
+            this.postToConsole(skill.name + ": Level " + formatNumberNoSuffix(level, 0));
           }
           this.postToConsole(" ");
           this.postToConsole("Effects: ");
@@ -476,7 +478,7 @@ export class Bladeburner {
           for (let i = 0; i < multKeys.length; ++i) {
             const mult = this.skillMultipliers[multKeys[i]];
             if (mult && mult !== 1) {
-              const mults = formatNumber(mult, 3);
+              const mults = formatNumberNoSuffix(mult, 3);
               switch (multKeys[i]) {
                 case "successChanceAll":
                   this.postToConsole("Total Success Chance: x" + mults);
@@ -547,7 +549,7 @@ export class Bladeburner {
           if (this.skills[skill.name] !== undefined) {
             level = this.skills[skill.name];
           }
-          this.postToConsole(skill.name + ": Level " + formatNumber(level));
+          this.postToConsole(skill.name + ": Level " + formatNumberNoSuffix(level));
         } else if (args[1].toLowerCase() === "level") {
           let currentLevel = 0;
           if (this.skills[skillName] && !isNaN(this.skills[skillName])) {
@@ -562,7 +564,7 @@ export class Bladeburner {
             this.log(skill.name + " upgraded to Level " + this.skills[skillName]);
           } else {
             this.postToConsole(
-              "You do not have enough Skill Points to upgrade this. You need " + formatNumber(pointCost, 0),
+              "You do not have enough Skill Points to upgrade this. You need " + formatNumberNoSuffix(pointCost, 0),
             );
           }
         } else {
@@ -669,11 +671,11 @@ export class Bladeburner {
         this.postToConsole("Automation: " + (this.automateEnabled ? "enabled" : "disabled"));
         this.postToConsole(
           "When your stamina drops to " +
-            formatNumber(this.automateThreshLow, 0) +
+            formatNumberNoSuffix(this.automateThreshLow, 0) +
             ", you will automatically switch to " +
             this.automateActionLow.name +
             ". When your stamina recovers to " +
-            formatNumber(this.automateThreshHigh, 0) +
+            formatNumberNoSuffix(this.automateThreshHigh, 0) +
             ", you will automatically " +
             "switch to " +
             this.automateActionHigh.name +
@@ -849,16 +851,13 @@ export class Bladeburner {
     }
   }
 
-  triggerMigration(sourceCityName: string): void {
-    let destCityName = BladeburnerConstants.CityNames[getRandomInt(0, 5)];
-    while (destCityName === sourceCityName) {
-      destCityName = BladeburnerConstants.CityNames[getRandomInt(0, 5)];
-    }
+  triggerMigration(sourceCityName: CityName): void {
+    let destCityName = getRandomMember(CityName);
+    while (destCityName === sourceCityName) destCityName = getRandomMember(CityName);
+
     const destCity = this.cities[destCityName];
     const sourceCity = this.cities[sourceCityName];
-    if (destCity == null || sourceCity == null) {
-      throw new Error("Failed to find City with name: " + destCityName);
-    }
+
     const rand = Math.random();
     let percentage = getRandomInt(3, 15) / 100;
 
@@ -873,7 +872,7 @@ export class Bladeburner {
     destCity.pop += count;
   }
 
-  triggerPotentialMigration(sourceCityName: string, chance: number): void {
+  triggerPotentialMigration(sourceCityName: CityName, chance: number): void {
     if (chance == null || isNaN(chance)) {
       console.error("Invalid 'chance' parameter passed into Bladeburner.triggerPotentialMigration()");
     }
@@ -889,17 +888,12 @@ export class Bladeburner {
     const chance = Math.random();
 
     // Choose random source/destination city for events
-    const sourceCityName = BladeburnerConstants.CityNames[getRandomInt(0, 5)];
+    const sourceCityName = getRandomMember(CityName);
     const sourceCity = this.cities[sourceCityName];
-    if (!sourceCity) throw new Error("Invalid sourceCity in Bladeburner.randomEvent()");
 
-    let destCityName = BladeburnerConstants.CityNames[getRandomInt(0, 5)];
-    while (destCityName === sourceCityName) {
-      destCityName = BladeburnerConstants.CityNames[getRandomInt(0, 5)];
-    }
+    let destCityName = getRandomMember(CityName);
+    while (destCityName === sourceCityName) destCityName = getRandomMember(CityName);
     const destCity = this.cities[destCityName];
-
-    if (!sourceCity || !destCity) throw new Error("Invalid sourceCity or destCity in Bladeburner.randomEvent()");
 
     if (chance <= 0.05) {
       // New Synthoid Community, 5%
@@ -1126,7 +1120,7 @@ export class Bladeburner {
       }
       this.teamLost += losses;
       if (this.logging.ops && losses > 0) {
-        this.log("Lost " + formatNumber(losses, 0) + " team members during this " + action.name);
+        this.log("Lost " + formatNumberNoSuffix(losses, 0) + " team members during this " + action.name);
       }
     }
 
@@ -1294,12 +1288,12 @@ export class Bladeburner {
               this.changeRank(person, gain);
               if (isOperation && this.logging.ops) {
                 this.log(
-                  `${person.whoAmI()}: ${action.name} successfully completed! Gained ${formatNumber(gain, 3)} rank`,
+                  `${person.whoAmI()}: ${action.name} successfully completed! Gained ${formatBigNumber(gain)} rank`,
                 );
               } else if (!isOperation && this.logging.contracts) {
                 this.log(
                   `${person.whoAmI()}: ${action.name} contract successfully completed! Gained ` +
-                    `${formatNumber(gain, 3)} rank and ${numeralWrapper.formatMoney(moneyGain)}`,
+                    `${formatBigNumber(gain)} rank and ${formatMoney(moneyGain)}`,
                 );
               }
             }
@@ -1325,10 +1319,10 @@ export class Bladeburner {
             }
             let logLossText = "";
             if (loss > 0) {
-              logLossText += "Lost " + formatNumber(loss, 3) + " rank. ";
+              logLossText += "Lost " + formatNumberNoSuffix(loss, 3) + " rank. ";
             }
             if (damage > 0) {
-              logLossText += "Took " + formatNumber(damage, 0) + " damage.";
+              logLossText += "Took " + formatNumberNoSuffix(damage, 0) + " damage.";
             }
             if (isOperation && this.logging.ops) {
               this.log(`${person.whoAmI()}: ` + action.name + " failed! " + logLossText);
@@ -1380,7 +1374,11 @@ export class Bladeburner {
 
             if (this.logging.blackops) {
               this.log(
-                `${person.whoAmI()}: ` + action.name + " successful! Gained " + formatNumber(rankGain, 1) + " rank",
+                `${person.whoAmI()}: ` +
+                  action.name +
+                  " successful! Gained " +
+                  formatNumberNoSuffix(rankGain, 1) +
+                  " rank",
               );
             }
           } else {
@@ -1407,9 +1405,9 @@ export class Bladeburner {
                 `${person.whoAmI()}: ` +
                   action.name +
                   " failed! Lost " +
-                  formatNumber(rankLoss, 1) +
+                  formatNumberNoSuffix(rankLoss, 1) +
                   " rank and took " +
-                  formatNumber(damage, 0) +
+                  formatNumberNoSuffix(damage, 0) +
                   " damage",
               );
             }
@@ -1432,7 +1430,9 @@ export class Bladeburner {
             }
             this.teamLost += losses;
             if (this.logging.blackops) {
-              this.log(`${person.whoAmI()}:  You lost ${formatNumber(losses, 0)} team members during ${action.name}`);
+              this.log(
+                `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(losses, 0)} team members during ${action.name}`,
+              );
             }
           }
         } catch (e: unknown) {
@@ -1456,15 +1456,15 @@ export class Bladeburner {
           this.log(
             `${person.whoAmI()}: ` +
               "Training completed. Gained: " +
-              formatNumber(strExpGain, 1) +
+              formatExp(strExpGain) +
               " str exp, " +
-              formatNumber(defExpGain, 1) +
+              formatExp(defExpGain) +
               " def exp, " +
-              formatNumber(dexExpGain, 1) +
+              formatExp(dexExpGain) +
               " dex exp, " +
-              formatNumber(agiExpGain, 1) +
+              formatExp(agiExpGain) +
               " agi exp, " +
-              formatNumber(staminaGain, 3) +
+              formatBigNumber(staminaGain) +
               " max stamina",
           );
         }
@@ -1492,9 +1492,9 @@ export class Bladeburner {
         if (this.logging.general) {
           this.log(
             `${person.whoAmI()}: ` +
-              `Field analysis completed. Gained ${formatNumber(rankGain, 2)} rank, ` +
-              `${formatNumber(hackingExpGain, 1)} hacking exp, and ` +
-              `${formatNumber(charismaExpGain, 1)} charisma exp`,
+              `Field analysis completed. Gained ${formatBigNumber(rankGain)} rank, ` +
+              `${formatExp(hackingExpGain)} hacking exp, and ` +
+              `${formatExp(charismaExpGain)} charisma exp`,
           );
         }
         break;
@@ -1510,7 +1510,7 @@ export class Bladeburner {
             this.log(
               `${person.whoAmI()}: ` +
                 "Successfully recruited a team member! Gained " +
-                formatNumber(expGain, 1) +
+                formatExp(expGain) +
                 " charisma exp",
             );
           }
@@ -1521,7 +1521,7 @@ export class Bladeburner {
             this.log(
               `${person.whoAmI()}: ` +
                 "Failed to recruit a team member. Gained " +
-                formatNumber(expGain, 1) +
+                formatExp(expGain) +
                 " charisma exp",
             );
           }
@@ -1536,7 +1536,7 @@ export class Bladeburner {
         }
         if (this.logging.general) {
           this.log(
-            `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${numeralWrapper.formatPercentage(
+            `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${formatPercent(
               1 - eff,
             )}`,
           );
@@ -1552,7 +1552,7 @@ export class Bladeburner {
           this.log(
             `${person.whoAmI()}: Rested in Hyperbolic Regeneration Chamber. Restored ${
               BladeburnerConstants.HrcHpGain
-            } HP and gained ${numeralWrapper.formatStamina(staminaGain)} stamina`,
+            } HP and gained ${formatStamina(staminaGain)} stamina`,
           );
         }
         break;
@@ -1571,7 +1571,7 @@ export class Bladeburner {
         if (this.logging.general) {
           this.log(`${person.whoAmI()}: Incited violence in the synthoid communities.`);
         }
-        for (const cityName of Object.keys(this.cities)) {
+        for (const cityName of Object.values(CityName)) {
           const city = this.cities[cityName];
           city.chaos += 10;
           city.chaos += city.chaos / (Math.log(city.chaos) / Math.log(10));
@@ -1965,7 +1965,7 @@ export class Bladeburner {
       if (this.action.type !== ActionTypes["Idle"]) {
         let msg = "Your Bladeburner action was cancelled because you started doing something else.";
         if (this.automateEnabled) {
-          msg += `<br /><br />Your automation was disabled as well. You will have to re-enable it through the Bladeburner console`;
+          msg += `\n\nYour automation was disabled as well. You will have to re-enable it through the Bladeburner console`;
           this.automateEnabled = false;
         }
         if (!Settings.SuppressBladeburnerPopup) {
@@ -2007,7 +2007,7 @@ export class Bladeburner {
       }
 
       // Chaos goes down very slowly
-      for (const cityName of BladeburnerConstants.CityNames) {
+      for (const cityName of Object.values(CityName)) {
         const city = this.cities[cityName];
         if (!city) throw new Error("Invalid city when processing passive chaos reduction in Bladeburner.process");
         city.chaos -= 0.0001 * seconds;

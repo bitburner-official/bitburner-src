@@ -6,7 +6,7 @@
 
 Multiplier to Bladeburner stamina gain rate
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 bladeburner_stamina_gain: number;

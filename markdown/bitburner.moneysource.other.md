@@ -4,7 +4,7 @@
 
 ## MoneySource.other property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 other: number;

@@ -6,7 +6,7 @@
 
 Get the input data.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getData(filename: string, host?: string): CodingContractData;
@@ -17,9 +17,9 @@ getData(filename: string, host?: string): CodingContractData;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  filename | string | Filename of the contract. |
-|  host | string | Host of the server containing the contract. Optional. Defaults to current server if not provided. |
+|  host | string | _(Optional)_ Host of the server containing the contract. Optional. Defaults to current server if not provided. |
 
-<b>Returns:</b>
+**Returns:**
 
 [CodingContractData](./bitburner.codingcontractdata.md)
 

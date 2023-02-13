@@ -5,7 +5,7 @@
 ## PortData type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type PortData = string | number;

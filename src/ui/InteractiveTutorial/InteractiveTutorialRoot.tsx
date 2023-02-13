@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -27,6 +27,7 @@ import {
   iTutorialSteps,
   iTutorialEnd,
 } from "../../InteractiveTutorial";
+import { useRerender } from "../React/hooks";
 
 interface IContent {
   content: React.ReactElement;
@@ -47,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function InteractiveTutorialRoot(): React.ReactElement {
   const classes = useStyles();
+  const rerender = useRerender();
 
   const tutorialScriptName = `n00dles.js`;
 
@@ -414,7 +416,16 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <>
           <Typography>
             This page displays information about all of your scripts that are running across every server. You can use
-            this to gauge how well your scripts are doing. Let's go back to
+            this to gauge how well your scripts are doing.
+            <br />
+            <br />
+            Click on Home to see the scripts running on it.
+            <br />
+            <br />
+            Then click on n00dles.js to see the scripts information.
+            <br />
+            <br />
+            Let's go back to
           </Typography>
           <ListItem>
             <LastPageIcon color={"error"} />
@@ -473,7 +484,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography>through the main navigation menu now.</Typography>
         </>
       ),
-      canNext: true,
+      canNext: false,
     },
     [iTutorialSteps.HacknetNodesIntroduction as number]: {
       content: (
@@ -499,7 +510,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           </ListItem>
         </>
       ),
-      canNext: true,
+      canNext: false,
     },
     [iTutorialSteps.WorldDescription as number]: {
       content: (
@@ -517,7 +528,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           </ListItem>
         </>
       ),
-      canNext: true,
+      canNext: false,
     },
     [iTutorialSteps.TutorialPageInfo as number]: {
       content: (
@@ -527,7 +538,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <br />
           <br />
           The{" "}
-          <a href="https://bitburner.readthedocs.io/en/latest/guidesandtips/gettingstartedguideforbeginnerprogrammers.html">
+          <a
+            href="https://bitburner-official.readthedocs.io/en/latest/guidesandtips/gettingstartedguideforbeginnerprogrammers.html"
+            target="_blank"
+          >
             Getting Started
           </a>{" "}
           contains the guide for new players, navigating you through most of early game.
@@ -543,11 +557,6 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       canNext: true,
     },
   };
-
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
 
   useEffect(() => {
     return ITutorialEvents.subscribe(rerender);

@@ -6,7 +6,7 @@
 
 Get the level of a hash upgrade.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getHashUpgradeLevel(upgName: string): number;
@@ -18,7 +18,7 @@ getHashUpgradeLevel(upgName: string): number;
 |  --- | --- | --- |
 |  upgName | string |  |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

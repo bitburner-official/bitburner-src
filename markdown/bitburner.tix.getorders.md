@@ -6,12 +6,12 @@
 
 Returns your order book for the stock market.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getOrders(): StockOrder;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [StockOrder](./bitburner.stockorder.md)
 

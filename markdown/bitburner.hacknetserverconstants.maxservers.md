@@ -6,7 +6,7 @@
 
 Max number of servers
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 MaxServers: number;

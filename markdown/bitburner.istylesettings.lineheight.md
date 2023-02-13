@@ -4,7 +4,7 @@
 
 ## IStyleSettings.lineHeight property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 lineHeight: number;

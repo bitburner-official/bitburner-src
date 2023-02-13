@@ -6,7 +6,7 @@
 
 Multiplier to cost of purchasing a Hacknet Node
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacknet_node_purchase_cost: number;

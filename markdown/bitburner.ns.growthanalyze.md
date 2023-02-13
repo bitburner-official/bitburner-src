@@ -6,7 +6,7 @@
 
 Calculate the number of grow threads needed to grow a server by a certain multiplier.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 growthAnalyze(host: string, growthAmount: number, cores?: number): number;
@@ -18,9 +18,9 @@ growthAnalyze(host: string, growthAmount: number, cores?: number): number;
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
 |  growthAmount | number | Multiplicative factor by which the server is grown. Decimal form. |
-|  cores | number |  |
+|  cores | number | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 
@@ -31,6 +31,8 @@ The amount of grow calls needed to grow the specified server by the specified am
 RAM cost: 1 GB
 
 This function returns the number of “growths” needed in order to increase the amount of money available on the specified server by the specified amount. The specified amount is multiplicative and is in decimal form, not percentage.
+
+Due to limitations of mathematics, this function won't be the true value, but an approximation.
 
 Warning: The value returned by this function isn’t necessarily a whole number.
 

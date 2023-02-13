@@ -8,18 +8,21 @@ import { useDivision } from "../Context";
 import Typography from "@mui/material/Typography";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import { CorpMaterialName } from "@nsdefs";
+import { materialNames } from "../../data/Constants";
+import { useRerender } from "../../../ui/React/hooks";
 
 interface ILeftoverProps {
-  matName: string;
+  matName: CorpMaterialName;
   warehouse: Warehouse;
 }
 
 function Leftover(props: ILeftoverProps): React.ReactElement {
-  const [checked, setChecked] = useState(!!props.warehouse.smartSupplyUseLeftovers[props.matName.replace(/ /g, "")]);
+  const [checked, setChecked] = useState(!!props.warehouse.smartSupplyUseLeftovers[props.matName]);
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
     try {
-      const matName = props.matName.replace(/ /g, "");
+      const matName = props.matName;
       const material = props.warehouse.materials[matName];
       SetSmartSupplyUseLeftovers(props.warehouse, material, event.target.checked);
     } catch (err) {
@@ -32,7 +35,7 @@ function Leftover(props: ILeftoverProps): React.ReactElement {
     <>
       <FormControlLabel
         control={<Switch checked={checked} onChange={onChange} />}
-        label={<Typography>{props.warehouse.materials[props.matName.replace(/ /g, "")].name}</Typography>}
+        label={<Typography>{props.warehouse.materials[props.matName].name}</Typography>}
       />
       <br />
     </>
@@ -47,10 +50,7 @@ interface IProps {
 
 export function SmartSupplyModal(props: IProps): React.ReactElement {
   const division = useDivision();
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender();
 
   // Smart Supply Checkbox
   function smartSupplyOnChange(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -60,7 +60,7 @@ export function SmartSupplyModal(props: IProps): React.ReactElement {
 
   // Create React components for materials
   const mats = [];
-  for (const matName of Object.keys(props.warehouse.materials)) {
+  for (const matName of Object.values(materialNames)) {
     if (!props.warehouse.materials[matName]) continue;
     if (!Object.keys(division.reqMats).includes(matName)) continue;
     mats.push(<Leftover key={matName} warehouse={props.warehouse} matName={matName} />);

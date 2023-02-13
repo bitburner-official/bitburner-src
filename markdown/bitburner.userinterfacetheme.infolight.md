@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.infolight property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 infolight: string;

@@ -6,7 +6,7 @@
 
 Bribe a faction
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 bribe(factionName: string, amountCash: number): boolean;
@@ -19,7 +19,7 @@ bribe(factionName: string, amountCash: number): boolean;
 |  factionName | string | Faction name |
 |  amountCash | number | Amount of money to bribe |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

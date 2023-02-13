@@ -18,16 +18,13 @@ import { CompanyPosition } from "../../Company/CompanyPosition";
 import { CompanyPositions } from "../../Company/CompanyPositions";
 import { Contracts } from "../../Bladeburner/data/Contracts";
 import { CONSTANTS } from "../../Constants";
-import { CrimeType, GymType, UniversityClassType } from "../../utils/enums";
-import { CityName } from "../../Locations/data/CityNames";
+import { CityName, CrimeType, GymType, LocationName, UniversityClassType } from "../../Enums";
 
 import { Factions } from "../../Faction/Factions";
 
-import { LocationName } from "../../utils/enums";
-
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../utils/JSONReviver";
-import { numeralWrapper } from "../../ui/numeralFormat";
-import { FactionWorkType } from "../../utils/enums";
+import { formatPercent } from "../../ui/formatNumber";
+import { FactionWorkType } from "../../Enums";
 import { Work } from "./Work/Work";
 import { SleeveClassWork } from "./Work/SleeveClassWork";
 import { ClassType } from "../../Work/ClassWork";
@@ -40,7 +37,7 @@ import { SleeveSupportWork } from "./Work/SleeveSupportWork";
 import { SleeveBladeburnerWork } from "./Work/SleeveBladeburnerWork";
 import { SleeveCrimeWork } from "./Work/SleeveCrimeWork";
 import * as sleeveMethods from "./SleeveMethods";
-import { SleevePerson } from "../../ScriptEditor/NetscriptDefinitions";
+import { SleevePerson } from "@nsdefs";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: Work | null = null;
@@ -136,6 +133,10 @@ export class Sleeve extends Person implements SleevePerson {
 
   /** Called on every sleeve for a Source File Prestige */
   prestige(): void {
+    // Reset augs and multipliers
+    this.augmentations = [];
+    this.resetMultipliers();
+
     // Reset exp
     this.exp.hacking = 0;
     this.exp.strength = 0;
@@ -150,12 +151,7 @@ export class Sleeve extends Person implements SleevePerson {
     this.stopWork();
     this.shockRecovery();
 
-    // Reset augs and multipliers
-    this.augmentations = [];
-    this.resetMultipliers();
-
     // Reset Location
-
     this.city = CityName.Sector12;
 
     // Reset sleeve-related stats
@@ -442,7 +438,7 @@ export class Sleeve extends Person implements SleevePerson {
     if (chances[0] >= 1) {
       return "100%";
     } else {
-      return `${numeralWrapper.formatPercentage(chances[0])} - ${numeralWrapper.formatPercentage(chances[1])}`;
+      return `${formatPercent(chances[0])} - ${formatPercent(chances[1])}`;
     }
   }
 
@@ -473,6 +469,7 @@ export class Sleeve extends Person implements SleevePerson {
 
   /** Initializes a Sleeve object from a JSON save state. */
   static fromJSON(value: IReviverValue): Sleeve {
+    if (!value.data.hp?.current || !value.data.hp?.max) value.data.hp = { current: 10, max: 10 };
     return Generic_fromJSON(Sleeve, value.data);
   }
 }

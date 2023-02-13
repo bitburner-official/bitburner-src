@@ -6,12 +6,12 @@
 
 All constants used by the game.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 constants(): HacknetNodeConstants;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [HacknetNodeConstants](./bitburner.hacknetnodeconstants.md)
 

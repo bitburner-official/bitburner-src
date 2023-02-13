@@ -10,4 +10,4 @@ getPurchasedServers() Netscript Function
 
     .. code-block:: javascript
 
-        getPurchasedServers(); // returns: ['grow-server-0', 'grow-server-1', 'weaken-server-0']
+        ns.getPurchasedServers(); // returns: ['grow-server-0', 'grow-server-1', 'weaken-server-0']

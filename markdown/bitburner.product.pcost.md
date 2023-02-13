@@ -6,7 +6,7 @@
 
 Production cost
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 pCost: number;

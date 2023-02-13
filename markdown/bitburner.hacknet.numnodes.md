@@ -6,12 +6,12 @@
 
 Get the number of hacknet nodes you own.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 numNodes(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

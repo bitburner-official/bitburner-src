@@ -6,12 +6,12 @@
 
 Get hacking related multipliers.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getHackingMultipliers(): HackingMultipliers;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [HackingMultipliers](./bitburner.hackingmultipliers.md)
 
@@ -19,7 +19,7 @@ Object containing the Player’s hacking related multipliers.
 
 ## Remarks
 
-RAM cost: 4 GB
+RAM cost: 0.25 GB
 
 Returns an object containing the Player’s hacking related multipliers. These multipliers are returned in fractional forms, not percentages (e.g. 1.5 instead of 150%).
 

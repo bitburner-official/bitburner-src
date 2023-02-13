@@ -6,12 +6,12 @@
 
 Empties all data from the port.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 clear(): void;
 ```
-<b>Returns:</b>
+**Returns:**
 
 void
 

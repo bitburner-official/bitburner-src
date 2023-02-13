@@ -6,7 +6,7 @@
 
 Number of threads script is running with
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 threads: number;

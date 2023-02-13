@@ -5,7 +5,7 @@
 ## FilenameOrPID type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type FilenameOrPID = number | string;

@@ -6,7 +6,7 @@
 
 Total earned dexterity experience
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dex_asc_points: number;

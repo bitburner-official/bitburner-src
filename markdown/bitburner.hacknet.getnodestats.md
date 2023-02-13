@@ -6,7 +6,7 @@
 
 Get the stats of a hacknet node.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getNodeStats(index: number): NodeStats;
@@ -18,7 +18,7 @@ getNodeStats(index: number): NodeStats;
 |  --- | --- | --- |
 |  index | number | Index/Identifier of Hacknet Node |
 
-<b>Returns:</b>
+**Returns:**
 
 [NodeStats](./bitburner.nodestats.md)
 

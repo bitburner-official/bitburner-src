@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { Box, Typography, Button, Container } from "@mui/material";
 
@@ -6,18 +6,11 @@ import { Player } from "@player";
 
 import { SleeveElem } from "./SleeveElem";
 import { FAQModal } from "./FAQModal";
+import { useRerender } from "../../../ui/React/hooks";
 
 export function SleeveRoot(): React.ReactElement {
   const [FAQOpen, setFAQOpen] = useState(false);
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
-
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
+  const rerender = useRerender(200);
 
   return (
     <>
@@ -36,7 +29,7 @@ export function SleeveRoot(): React.ReactElement {
 
       <Button onClick={() => setFAQOpen(true)}>FAQ</Button>
       <Button
-        href="https://bitburner.readthedocs.io/en/latest/advancedgameplay/sleeves.html#duplicate-sleeves"
+        href="https://bitburner-official.readthedocs.io/en/latest/advancedgameplay/sleeves.html#duplicate-sleeves"
         target="_blank"
       >
         Wiki Documentation

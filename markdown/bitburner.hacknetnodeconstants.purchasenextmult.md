@@ -6,7 +6,7 @@
 
 Multiplier to purchase new node
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 PurchaseNextMult: number;

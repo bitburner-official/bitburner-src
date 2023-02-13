@@ -6,7 +6,7 @@
 
 Predict the effect of weaken.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 weakenAnalyze(threads: number, cores?: number): number;
@@ -17,9 +17,9 @@ weakenAnalyze(threads: number, cores?: number): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  threads | number | Amount of threads that will be used. |
-|  cores | number | Optional. The number of cores of the server that would run weaken. |
+|  cores | number | _(Optional)_ Optional. The number of cores of the server that would run weaken. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

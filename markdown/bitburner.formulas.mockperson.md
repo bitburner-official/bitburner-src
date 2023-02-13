@@ -4,12 +4,12 @@
 
 ## Formulas.mockPerson() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 mockPerson(): Person;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [Person](./bitburner.person.md)
 

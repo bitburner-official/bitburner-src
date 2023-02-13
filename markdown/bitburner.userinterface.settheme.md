@@ -6,7 +6,7 @@
 
 Sets the current theme
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setTheme(newTheme: UserInterfaceTheme): void;
@@ -18,7 +18,7 @@ setTheme(newTheme: UserInterfaceTheme): void;
 |  --- | --- | --- |
 |  newTheme | [UserInterfaceTheme](./bitburner.userinterfacetheme.md) |  |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

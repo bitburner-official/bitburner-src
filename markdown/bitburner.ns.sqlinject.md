@@ -6,7 +6,7 @@
 
 Runs SQLInject.exe on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sqlinject(host: string): void;
@@ -18,7 +18,7 @@ sqlinject(host: string): void;
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

@@ -5,7 +5,7 @@
 ## SleeveFactionTask type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type SleeveFactionTask = {
@@ -14,5 +14,5 @@ type SleeveFactionTask = {
   factionName: string;
 };
 ```
-<b>References:</b> [FactionWorkType](./bitburner.factionworktype.md)
+**References:** [FactionWorkType](./bitburner.factionworktype.md)
 

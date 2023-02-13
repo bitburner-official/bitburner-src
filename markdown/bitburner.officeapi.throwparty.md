@@ -6,10 +6,10 @@
 
 Throw a party for your employees
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-throwParty(divisionName: string, cityName: string, costPerEmployee: number): number;
+throwParty(divisionName: string, city: CityName | `${CityName}`, costPerEmployee: number): number;
 ```
 
 ## Parameters
@@ -17,10 +17,10 @@ throwParty(divisionName: string, cityName: string, costPerEmployee: number): num
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  cityName | string | Name of the city |
+|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
 |  costPerEmployee | number | Amount to spend per employee. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

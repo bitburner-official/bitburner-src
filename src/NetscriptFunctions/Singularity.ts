@@ -10,20 +10,19 @@ import { isString } from "../utils/helpers/isString";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";
 
-import { Singularity as ISingularity } from "../ScriptEditor/NetscriptDefinitions";
+import { Singularity as ISingularity } from "@nsdefs";
 
 import { findCrime } from "../Crime/CrimeHelpers";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { DarkWebItems } from "../DarkWeb/DarkWebItems";
-import { CityName } from "../Locations/data/CityNames";
-import { LocationName } from "../utils/enums";
+import { CityName, LocationName } from "../Enums";
 import { Router } from "../ui/GameRoot";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Page } from "../ui/Router";
 import { Locations } from "../Locations/Locations";
 import { GetServer } from "../Server/AllServers";
 import { Programs } from "../Programs/Programs";
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Company } from "../Company/Company";
 import { Companies } from "../Company/Companies";
@@ -37,14 +36,14 @@ import { calculateHackingTime } from "../Hacking";
 import { Server } from "../Server/Server";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { FactionInfos } from "../Faction/FactionInfo";
-import { InternalAPI, NetscriptContext } from "src/Netscript/APIWrapper";
+import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
 import { enterBitNode } from "../RedPill";
 import { FactionNames } from "../Faction/data/FactionNames";
 import { ClassWork } from "../Work/ClassWork";
 import { CreateProgramWork, isCreateProgramWork } from "../Work/CreateProgramWork";
 import { FactionWork } from "../Work/FactionWork";
-import { FactionWorkType, GymType, UniversityClassType } from "../utils/enums";
+import { FactionWorkType, GymType, UniversityClassType } from "../Enums";
 import { CompanyWork } from "../Work/CompanyWork";
 import { canGetBonus, onExport } from "../ExportBonus";
 import { saveObject } from "../SaveObject";
@@ -92,7 +91,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     }
   };
 
-  return {
+  const singularityAPI: InternalAPI<ISingularity> = {
     getOwnedAugmentations: (ctx) => (_purchased) => {
       helpers.checkSingularityAccess(ctx);
       const purchased = !!_purchased;
@@ -118,13 +117,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const faction = getFaction(ctx, facName);
 
       return getFactionAugmentationsFiltered(faction);
-    },
-    getAugmentationCost: (ctx) => (_augName) => {
-      helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
-      const costs = aug.getCost();
-      return [costs.repCost, costs.moneyCost];
     },
     getAugmentationPrereq: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
@@ -466,10 +458,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
 
       if (Player.money < item.price) {
-        helpers.log(
-          ctx,
-          () => `Not enough money to purchase '${item.program}'. Need ${numeralWrapper.formatMoney(item.price)}`,
-        );
+        helpers.log(ctx, () => `Not enough money to purchase '${item.program}'. Need ${formatMoney(item.price)}`);
         return false;
       }
 
@@ -633,7 +622,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       const cost = Player.getUpgradeHomeCoresCost();
       if (Player.money < cost) {
-        helpers.log(ctx, () => `You don't have enough money. Need ${numeralWrapper.formatMoney(cost)}`);
+        helpers.log(ctx, () => `You don't have enough money. Need ${formatMoney(cost)}`);
         return false;
       }
 
@@ -664,7 +653,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       const cost = Player.getUpgradeHomeRamCost();
       if (Player.money < cost) {
-        helpers.log(ctx, () => `You don't have enough money. Need ${numeralWrapper.formatMoney(cost)}`);
+        helpers.log(ctx, () => `You don't have enough money. Need ${formatMoney(cost)}`);
         return false;
       }
 
@@ -674,10 +663,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 2);
       helpers.log(
         ctx,
-        () =>
-          `Purchased additional RAM for home computer! It now has ${numeralWrapper.formatRAM(
-            homeComputer.maxRam,
-          )} of RAM.`,
+        () => `Purchased additional RAM for home computer! It now has ${formatRam(homeComputer.maxRam)} of RAM.`,
       );
       return true;
     },
@@ -987,10 +973,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         return false;
       }
       if (Player.money < amt) {
-        helpers.log(
-          ctx,
-          () => `You do not have enough money to donate ${numeralWrapper.formatMoney(amt)} to '${facName}'`,
-        );
+        helpers.log(ctx, () => `You do not have enough money to donate ${formatMoney(amt)} to '${facName}'`);
         return false;
       }
       const repNeededToDonate = Math.floor(CONSTANTS.BaseFavorToDonate * BitNodeMultipliers.RepToDonateToFaction);
@@ -1005,13 +988,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const repGain = (amt / CONSTANTS.DonateMoneyToRepDivisor) * Player.mults.faction_rep;
       faction.playerReputation += repGain;
       Player.loseMoney(amt, "other");
-      helpers.log(
-        ctx,
-        () =>
-          `${numeralWrapper.formatMoney(amt)} donated to '${facName}' for ${numeralWrapper.formatReputation(
-            repGain,
-          )} reputation`,
-      );
+      helpers.log(ctx, () => `${formatMoney(amt)} donated to '${facName}' for ${formatReputation(repGain)} reputation`);
       return true;
     },
     createProgram:
@@ -1178,6 +1155,9 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       (_nextBN, _callbackScript = "") => {
         helpers.checkSingularityAccess(ctx);
         const nextBN = helpers.number(ctx, "nextBN", _nextBN);
+        if (nextBN > 13 || nextBN < 1 || !Number.isInteger(nextBN)) {
+          throw new Error(`Invalid bitnode specified: ${_nextBN}`);
+        }
         const callbackScript = helpers.string(ctx, "callbackScript", _callbackScript);
 
         const wd = GetServer(SpecialServers.WorldDaemon);
@@ -1219,4 +1199,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       return canGetBonus();
     },
   };
+  Object.assign(singularityAPI, {
+    getAugmentationCost: removedFunction(
+      "v2.2.0",
+      "singularity.getAugmentationPrice and singularity.getAugmentationRepReq",
+    ),
+  });
+  return singularityAPI;
 }

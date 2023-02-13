@@ -4,7 +4,7 @@
 
 ## WorkStats.agiExp property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agiExp: number;

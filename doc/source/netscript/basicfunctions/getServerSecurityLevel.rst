@@ -11,4 +11,4 @@ getServerSecurityLevel() Netscript Function
 
     .. code-block:: javascript
 
-        getServerSecurityLevel("foodnstuff"); // returns: 3.45
+        ns.getServerSecurityLevel("foodnstuff"); // returns: 3.45

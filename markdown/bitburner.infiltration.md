@@ -6,7 +6,7 @@
 
 Infiltration API.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface Infiltration 

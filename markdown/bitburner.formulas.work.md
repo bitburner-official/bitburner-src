@@ -6,7 +6,7 @@
 
 Work formulas
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 work: WorkFormulas;

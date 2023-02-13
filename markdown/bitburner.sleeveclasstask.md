@@ -5,7 +5,7 @@
 ## SleeveClassTask type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type SleeveClassTask = {
@@ -14,5 +14,5 @@ type SleeveClassTask = {
   location: LocationName | `${LocationName}`;
 };
 ```
-<b>References:</b> [UniversityClassType](./bitburner.universityclasstype.md)<!-- -->, [GymType](./bitburner.gymtype.md)<!-- -->, [LocationName](./bitburner.locationname.md)
+**References:** [UniversityClassType](./bitburner.universityclasstype.md)<!-- -->, [GymType](./bitburner.gymtype.md)<!-- -->, [LocationName](./bitburner.locationname.md)
 

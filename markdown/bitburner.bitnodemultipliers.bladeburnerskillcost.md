@@ -6,7 +6,7 @@
 
 Influences the cost of skill levels from Bladeburner.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 BladeburnerSkillCost: number;

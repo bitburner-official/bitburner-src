@@ -6,7 +6,7 @@
 
 Corporation investment offer
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface InvestmentOffer 
@@ -14,9 +14,9 @@ interface InvestmentOffer
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [funds](./bitburner.investmentoffer.funds.md) | number | Amount of funds you will get from this investment |
-|  [round](./bitburner.investmentoffer.round.md) | number | Current round of funding (max 4) |
-|  [shares](./bitburner.investmentoffer.shares.md) | number | Amount of share you will give in exchange for this investment |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [funds](./bitburner.investmentoffer.funds.md) |  | number | Amount of funds you will get from this investment |
+|  [round](./bitburner.investmentoffer.round.md) |  | number | Current round of funding (max 4) |
+|  [shares](./bitburner.investmentoffer.shares.md) |  | number | Amount of share you will give in exchange for this investment |
 

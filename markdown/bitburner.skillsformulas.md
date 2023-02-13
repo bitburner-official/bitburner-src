@@ -6,7 +6,7 @@
 
 Skills formulas
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface SkillsFormulas 

@@ -6,7 +6,7 @@
 
 Expenses per second this cycle
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 expenses: number;

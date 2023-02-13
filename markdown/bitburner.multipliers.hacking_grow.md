@@ -6,7 +6,7 @@
 
 Multiplier to amount of money injected into servers using grow
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacking_grow: number;

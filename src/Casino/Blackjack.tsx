@@ -39,8 +39,8 @@ type State = {
 export class Blackjack extends React.Component<Record<string, never>, State> {
   deck: Deck;
 
-  constructor() {
-    super({});
+  constructor(props: Record<string, never>) {
+    super(props);
 
     this.deck = new Deck(DECK_COUNT);
 
@@ -70,8 +70,6 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
       return;
     }
 
-    // Take money from player right away so that players don't just "leave" to avoid the loss (I mean they could
-    // always reload without saving but w.e) TODO: Save/Restore the RNG state to limit the value of save-scumming.
     win(-this.state.bet);
 
     const playerHand = new Hand([this.deck.safeDrawCard(), this.deck.safeDrawCard()]);

@@ -6,12 +6,12 @@
 
 Shift an element out of the port.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 read(): PortData;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [PortData](./bitburner.portdata.md)
 

@@ -5,7 +5,7 @@
 ## Skills interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface Skills 
@@ -13,13 +13,13 @@ interface Skills
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [agility](./bitburner.skills.agility.md) | number |  |
-|  [charisma](./bitburner.skills.charisma.md) | number |  |
-|  [defense](./bitburner.skills.defense.md) | number |  |
-|  [dexterity](./bitburner.skills.dexterity.md) | number |  |
-|  [hacking](./bitburner.skills.hacking.md) | number |  |
-|  [intelligence](./bitburner.skills.intelligence.md) | number |  |
-|  [strength](./bitburner.skills.strength.md) | number |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [agility](./bitburner.skills.agility.md) |  | number |  |
+|  [charisma](./bitburner.skills.charisma.md) |  | number |  |
+|  [defense](./bitburner.skills.defense.md) |  | number |  |
+|  [dexterity](./bitburner.skills.dexterity.md) |  | number |  |
+|  [hacking](./bitburner.skills.hacking.md) |  | number |  |
+|  [intelligence](./bitburner.skills.intelligence.md) |  | number |  |
+|  [strength](./bitburner.skills.strength.md) |  | number |  |
 

@@ -4,12 +4,12 @@
 
 ## Formulas.mockServer() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 mockServer(): Server;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [Server](./bitburner.server.md)
 

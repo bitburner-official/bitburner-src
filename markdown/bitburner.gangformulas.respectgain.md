@@ -6,7 +6,7 @@
 
 Calculate respect gain per tick.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 respectGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats): number;
@@ -20,7 +20,7 @@ respectGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats): num
 |  member | [GangMemberInfo](./bitburner.gangmemberinfo.md) | Gang info from [getMemberInformation](./bitburner.gang.getmemberinformation.md) |
 |  task | [GangTaskStats](./bitburner.gangtaskstats.md) | Gang info from [getTaskStats](./bitburner.gang.gettaskstats.md) |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

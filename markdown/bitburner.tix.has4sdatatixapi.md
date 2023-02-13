@@ -6,12 +6,12 @@
 
 Returns true if the player has access to the 4SData TIX API
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 has4SDataTIXAPI(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

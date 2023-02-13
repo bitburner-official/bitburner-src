@@ -6,12 +6,12 @@
 
 Get an offer for investment based on you companies current valuation
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getInvestmentOffer(): InvestmentOffer;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [InvestmentOffer](./bitburner.investmentoffer.md)
 

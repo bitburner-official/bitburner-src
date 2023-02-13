@@ -4,7 +4,9 @@
 
 ## SleevePerson.memory property
 
-<b>Signature:</b>
+Number 1-100 initial Value of sync on BN start
+
+**Signature:**
 
 ```typescript
 memory: number;

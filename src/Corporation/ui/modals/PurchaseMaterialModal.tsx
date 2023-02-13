@@ -3,7 +3,7 @@ import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { MaterialInfo } from "../../MaterialInfo";
 import { Warehouse } from "../../Warehouse";
 import { Material } from "../../Material";
-import { numeralWrapper } from "../../../ui/numeralFormat";
+import { formatMatPurchaseAmount, formatMoney } from "../../../ui/formatNumber";
 import { BulkPurchase, BuyMaterial } from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation, useDivision } from "../Context";
@@ -33,7 +33,7 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
     const parsedAmt = parseFloat(props.amount);
     const cost = parsedAmt * props.mat.bCost;
 
-    const matSize = MaterialInfo[props.mat.name][1];
+    const matSize = MaterialInfo[props.mat.name].size;
     const maxAmount = (props.warehouse.size - props.warehouse.sizeUsed) / matSize;
 
     if (parsedAmt > maxAmount) {
@@ -55,8 +55,7 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
       return (
         <>
           <Typography>
-            Purchasing {numeralWrapper.format(parsedAmt, "0,0.00")} of {props.mat.name} will cost{" "}
-            {numeralWrapper.formatMoney(cost)}
+            Purchasing {formatMatPurchaseAmount(parsedAmt)} of {props.mat.name} will cost {formatMoney(cost)}
           </Typography>
         </>
       );

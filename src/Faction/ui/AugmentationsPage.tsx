@@ -1,5 +1,5 @@
 import { Box, Button, Tooltip, Typography, Paper, Container } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
 import { getGenericAugmentationPriceMultiplier } from "../../Augmentation/AugmentationHelpers";
@@ -8,13 +8,14 @@ import { PurchasableAugmentations } from "../../Augmentation/ui/PurchasableAugme
 import { PurchaseAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatBigNumber } from "../../ui/formatNumber";
 import { Favor } from "../../ui/React/Favor";
 import { Reputation } from "../../ui/React/Reputation";
 import { FactionNames } from "../data/FactionNames";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, hasAugmentationPrereqs, purchaseAugmentation } from "../FactionHelpers";
 import { CONSTANTS } from "../../Constants";
+import { useRerender } from "../../ui/React/hooks";
 
 type IProps = {
   faction: Faction;
@@ -23,11 +24,7 @@ type IProps = {
 
 /** Root React Component for displaying a faction's "Purchase Augmentations" page */
 export function AugmentationsPage(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender();
 
   function getAugs(): string[] {
     return getFactionAugmentationsFiltered(props.faction);
@@ -140,7 +137,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
         }
       >
         <Typography>
-          <b>Price multiplier:</b> x {numeralWrapper.formatReallyBigNumber(getGenericAugmentationPriceMultiplier())}
+          <b>Price multiplier:</b> x {formatBigNumber(getGenericAugmentationPriceMultiplier())}
         </Typography>
       </Tooltip>
     ) : (
@@ -154,7 +151,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
       >
         <Typography>
           <b>Price multiplier:</b> x{" "}
-          {numeralWrapper.formatReallyBigNumber(
+          {formatBigNumber(
             Math.pow(
               CONSTANTS.SoACostMult,
               augs.filter((augmentationName) => Player.hasAugmentation(augmentationName)).length,
@@ -162,7 +159,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
           )}
           <br />
           <b>Reputation multiplier:</b> x{" "}
-          {numeralWrapper.formatReallyBigNumber(
+          {formatBigNumber(
             Math.pow(
               CONSTANTS.SoARepMult,
               augs.filter((augmentationName) => Player.hasAugmentation(augmentationName)).length,

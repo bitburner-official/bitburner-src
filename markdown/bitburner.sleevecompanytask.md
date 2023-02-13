@@ -5,7 +5,7 @@
 ## SleeveCompanyTask type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type SleeveCompanyTask = { type: "COMPANY"; companyName: string };

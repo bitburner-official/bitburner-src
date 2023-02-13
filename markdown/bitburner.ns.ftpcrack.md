@@ -6,7 +6,7 @@
 
 Runs FTPCrack.exe on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ftpcrack(host: string): void;
@@ -18,7 +18,7 @@ ftpcrack(host: string): void;
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

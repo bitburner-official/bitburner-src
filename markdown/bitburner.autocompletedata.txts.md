@@ -4,7 +4,7 @@
 
 ## AutocompleteData.txts property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 txts: string[];

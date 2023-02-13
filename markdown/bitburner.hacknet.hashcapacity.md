@@ -6,12 +6,12 @@
 
 Get the maximum number of hashes you can store.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hashCapacity(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

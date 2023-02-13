@@ -8,8 +8,11 @@ game are connected to each other to form a large, global network.
 To learn about how to navigate this network and connect to other
 servers, see the :ref:`Terminal` page.
 
-Server RAM
-^^^^^^^^^^
+Server Statistics
+^^^^^^^^^^^^^^^^^
+Each server has it's own statistics, such as RAM, required hacking level and number of 
+ports required to successfully NUKE it.
+
 Perhaps the most important property of a server to make note of is its RAM,
 which refers to how much memory is available on that machine. RAM is
 important because it is required to run Scripts. More RAM allows
@@ -18,6 +21,9 @@ a script with :ref:`more threads <gameplay_scripts_multithreadingscripts>`.
 
 The `free`, `scan-analyze`, and `analyze` Terminal commands
 can be used to check how much RAM a server has.
+
+Some servers have some randomized statistics, such as RAM, max Money or 
+required hacking level. These statistics are randomly genererated from a range of values.
 
 Identifying Servers
 ^^^^^^^^^^^^^^^^^^^
@@ -64,3 +70,10 @@ and exp. See the :ref:`gameplay_hacking` page for more details.
 
 Different servers have different levels of security, but also offer
 different rewards when being hacked.
+
+Server Connections
+^^^^^^^^^^^^^^^^^^
+The servers are in a randomly organized tree-structure. The distance from 
+the home computer to each server is fixed, but the exact route to them is 
+randomized when you install :ref:`gameplay_augmentations`. In general the 
+further away from home computer a server is the higher it's statistics are.

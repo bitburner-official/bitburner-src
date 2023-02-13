@@ -6,7 +6,7 @@
 
 Get server security level.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getServerSecurityLevel(host: string): number;
@@ -18,7 +18,7 @@ getServerSecurityLevel(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

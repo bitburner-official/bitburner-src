@@ -6,12 +6,12 @@
 
 Get the current styles
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getStyles(): IStyleSettings;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [IStyleSettings](./bitburner.istylesettings.md)
 

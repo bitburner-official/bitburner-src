@@ -1,5 +1,5 @@
 import * as React from "react";
-import { numeralWrapper } from "../numeralFormat";
+import { formatMoney } from "../formatNumber";
 import { Player } from "@player";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
@@ -25,12 +25,9 @@ export function Money(props: IProps): React.ReactElement {
   if (props.forPurchase) {
     if (typeof props.money !== "number")
       throw new Error("if value is for a purchase, money should be number, contact dev");
-    if (!Player.canAfford(props.money))
-      return <span className={classes.unbuyable}>{numeralWrapper.formatMoney(props.money)}</span>;
+    if (!Player.canAfford(props.money)) return <span className={classes.unbuyable}>{formatMoney(props.money)}</span>;
   }
   return (
-    <span className={classes.money}>
-      {typeof props.money === "number" ? numeralWrapper.formatMoney(props.money) : props.money}
-    </span>
+    <span className={classes.money}>{typeof props.money === "number" ? formatMoney(props.money) : props.money}</span>
   );
 }

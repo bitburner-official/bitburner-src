@@ -10,7 +10,7 @@ import { getNextCompanyPositionHelper } from "../../Company/GetNextCompanyPositi
 import { getJobRequirementText } from "../../Company/GetJobRequirementText";
 import { CompanyPositions } from "../../Company/CompanyPositions";
 import { CompanyPosition } from "../../Company/CompanyPosition";
-import * as posNames from "../../Company/data/companypositionnames";
+import * as posNames from "../../Company/data/JobTracks";
 import { CONSTANTS } from "../../Constants";
 import { Programs } from "../../Programs/Programs";
 import { Exploit } from "../../Exploits/Exploit";
@@ -19,8 +19,7 @@ import { Factions } from "../../Faction/Factions";
 import { resetGangs } from "../../Gang/AllGangs";
 import { Cities } from "../../Locations/Cities";
 import { Locations } from "../../Locations/Locations";
-import { CityName } from "../../Locations/data/CityNames";
-import { LocationName } from "../../utils/enums";
+import { CityName, LocationName } from "../../Enums";
 import { Sleeve } from "../Sleeve/Sleeve";
 import { isSleeveCompanyWork } from "../Sleeve/Work/SleeveCompanyWork";
 import { calculateSkillProgress as calculateSkillProgressF, ISkillProgress } from "../formulas/skill";
@@ -35,7 +34,7 @@ import { SourceFiles } from "../../SourceFile/SourceFiles";
 import { getHospitalizationCost } from "../../Hospital/Hospital";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatMoney } from "../../ui/formatNumber";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
@@ -258,7 +257,7 @@ export function takeDamage(this: PlayerObject, amt: number): boolean {
 
 export function hospitalize(this: PlayerObject): number {
   const cost = getHospitalizationCost();
-  SnackbarEvents.emit(`You've been Hospitalized for ${numeralWrapper.formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
+  SnackbarEvents.emit(`You've been Hospitalized for ${formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
 
   this.loseMoney(cost, "hospitalization");
   this.hp.current = this.hp.max;
@@ -1165,7 +1164,7 @@ export function gainCodingContractReward(
     default: {
       const moneyGain = CONSTANTS.CodingContractBaseMoneyGain * difficulty * BitNodeMultipliers.CodingContractMoney;
       this.gainMoney(moneyGain, "codingcontract");
-      return `Gained ${numeralWrapper.formatMoney(moneyGain)}`;
+      return `Gained ${formatMoney(moneyGain)}`;
     }
   }
   /* eslint-enable no-case-declarations */

@@ -6,7 +6,7 @@
 
 Calculate the cost of upgrading hacknet node RAM.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getRamUpgradeCost(index: number, n: number): number;
@@ -19,7 +19,7 @@ getRamUpgradeCost(index: number, n: number): number;
 |  index | number | Index/Identifier of Hacknet Node. |
 |  n | number | Number of times to upgrade RAM. Must be positive. Rounded to nearest integer. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

@@ -6,7 +6,7 @@
 
 Multiplier to Bladeburner max stamina
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 bladeburner_max_stamina: number;

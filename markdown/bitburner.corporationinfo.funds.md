@@ -6,7 +6,7 @@
 
 Funds available
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 funds: number;

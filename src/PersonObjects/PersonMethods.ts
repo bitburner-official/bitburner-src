@@ -2,7 +2,7 @@ import { Person } from "./Person";
 import { calculateSkill } from "./formulas/skill";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
-import { WorkStats } from "../ScriptEditor/NetscriptDefinitions";
+import { WorkStats } from "@nsdefs";
 
 export function gainHackingExp(this: Person, exp: number): void {
   if (isNaN(exp)) {
@@ -193,11 +193,9 @@ export function updateSkillLevels(this: Person): void {
     ),
   );
 
-  const ratio: number = this.hp.current / this.hp.max;
-  this.hp = {
-    max: Math.floor(10 + this.skills.defense / 10),
-    current: Math.round(this.hp.max * ratio),
-  };
+  const ratio: number = Math.min(this.hp.current / this.hp.max, 1);
+  this.hp.max = Math.floor(10 + this.skills.defense / 10);
+  this.hp.current = Math.round(this.hp.max * ratio);
 }
 
 export function hasAugmentation(this: Person, augName: string, ignoreQueued = false) {

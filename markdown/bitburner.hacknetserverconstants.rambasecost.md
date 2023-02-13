@@ -6,7 +6,7 @@
 
 Base cost to increase RAM
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 RamBaseCost: number;

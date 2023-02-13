@@ -8,7 +8,7 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
 import { Reputation } from "../../ui/React/Reputation";
-import { formatNumber } from "../../utils/StringHelperFunctions";
+import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import {
   calculateInfiltratorsRepReward,
   calculateSellInformationCashReward,
@@ -38,14 +38,12 @@ export function Victory(props: IProps): React.ReactElement {
   const isMemberOfInfiltrators = Player.factions.includes(FactionNames.ShadowsOfAnarchy);
 
   function sell(): void {
-    handleInfiltrators();
     Player.gainMoney(moneyGain, "infiltration");
     quitInfiltration();
   }
 
   function trade(): void {
     if (faction === "none") return;
-    handleInfiltrators();
     Factions[faction].playerReputation += repGain;
     quitInfiltration();
   }
@@ -68,7 +66,7 @@ export function Victory(props: IProps): React.ReactElement {
         You{" "}
         {isMemberOfInfiltrators ? (
           <>
-            have gained {formatNumber(infiltrationRepGain, 2)} rep for {FactionNames.ShadowsOfAnarchy} and{" "}
+            have gained {formatNumberNoSuffix(infiltrationRepGain, 2)} rep for {FactionNames.ShadowsOfAnarchy} and{" "}
           </>
         ) : (
           <></>

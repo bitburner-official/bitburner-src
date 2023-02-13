@@ -9,7 +9,7 @@
 > useless
 > 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getServerBaseSecurityLevel(host: string): number;
@@ -21,7 +21,7 @@ getServerBaseSecurityLevel(host: string): number;
 |  --- | --- | --- |
 |  host | string | Host of target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

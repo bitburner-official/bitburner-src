@@ -6,7 +6,7 @@
 
 Multiplier to dexterity skill
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dexterity: number;

@@ -4,7 +4,7 @@
 
 ## Player.bitNodeN property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 bitNodeN: number;

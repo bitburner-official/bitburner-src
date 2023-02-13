@@ -6,7 +6,7 @@
 
 Calculates cost of buying stocks.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getPurchaseCost(sym: string, shares: number, posType: string): number;
@@ -20,7 +20,7 @@ getPurchaseCost(sym: string, shares: number, posType: string): number;
 |  shares | number | Number of shares to purchase. |
 |  posType | string | Specifies whether the order is a “Long” or “Short” position. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

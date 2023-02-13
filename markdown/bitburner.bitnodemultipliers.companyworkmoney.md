@@ -6,7 +6,7 @@
 
 Influences how much money the player earns when completing working their job.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 CompanyWorkMoney: number;

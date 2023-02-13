@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { formatNumber, convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import React from "react";
+import { formatNumberNoSuffix } from "../../ui/formatNumber";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { ActionTypes } from "../data/ActionTypes";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { TeamSizeButton } from "./TeamSizeButton";
@@ -13,6 +14,7 @@ import { StartButton } from "./StartButton";
 
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
+import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
   bladeburner: Bladeburner;
@@ -20,10 +22,7 @@ interface IProps {
 }
 
 export function BlackOpElem(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender();
   const isCompleted = props.bladeburner.blackops[props.action.name] != null;
   if (isCompleted) {
     return (
@@ -55,8 +54,8 @@ export function BlackOpElem(props: IProps): React.ReactElement {
           <>
             <CopyableText value={props.action.name} />
             <Typography>
-              (IN PROGRESS - {formatNumber(computedActionTimeCurrent, 0)} /{" "}
-              {formatNumber(props.bladeburner.actionTimeToComplete, 0)})
+              (IN PROGRESS - {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
+              {formatNumberNoSuffix(props.bladeburner.actionTimeToComplete, 0)})
             </Typography>
             <Typography>
               {createProgressBarText({
@@ -85,7 +84,7 @@ export function BlackOpElem(props: IProps): React.ReactElement {
       <br />
       <br />
       <Typography color={hasReqdRank ? "primary" : "error"}>
-        Required Rank: {formatNumber(props.action.reqdRank, 0)}
+        Required Rank: {formatNumberNoSuffix(props.action.reqdRank, 0)}
       </Typography>
       <br />
       <Typography>

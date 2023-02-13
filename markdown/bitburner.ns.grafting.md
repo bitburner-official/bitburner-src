@@ -6,7 +6,7 @@
 
 Namespace for grafting functions.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly grafting: Grafting;

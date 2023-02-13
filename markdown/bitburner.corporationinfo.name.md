@@ -6,7 +6,7 @@
 
 Name of the corporation
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 name: string;

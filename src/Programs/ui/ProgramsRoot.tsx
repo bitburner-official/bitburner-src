@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { find } from "lodash";
 
 import { Box, Typography, Button, Container, Paper } from "@mui/material";
@@ -11,14 +11,12 @@ import { Settings } from "../../Settings/Settings";
 
 import { Programs } from "../Programs";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
+import { useRerender } from "../../ui/React/hooks";
 
 export const ProgramsSeen: string[] = [];
 
 export function ProgramsRoot(): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  useRerender(200);
 
   const programs = [...Object.values(Programs)]
     .filter((prog) => {
@@ -40,11 +38,6 @@ export function ProgramsRoot(): React.ReactElement {
       if (ProgramsSeen.includes(p.name)) return;
       ProgramsSeen.push(p.name);
     });
-  }, []);
-
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
   }, []);
 
   const getHackingLevelRemaining = (lvl: number): number => {

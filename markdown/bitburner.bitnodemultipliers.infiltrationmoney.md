@@ -6,7 +6,7 @@
 
 Influences how much money is gained when the player infiltrates a company.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 InfiltrationMoney: number;

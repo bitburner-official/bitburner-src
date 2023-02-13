@@ -4,9 +4,9 @@
 
 ## OfficeAPI.getHireAdVertCost() method
 
-Get data about an employee
+Get the cost to hire AdVert.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getHireAdVertCost(divisionName: string): number;
@@ -16,11 +16,11 @@ getHireAdVertCost(divisionName: string): number;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  divisionName | string | Name of the division |
+|  divisionName | string | Name of the division. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 
-Employee data
+The cost to hire AdVert.
 

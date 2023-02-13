@@ -6,7 +6,7 @@
 
 Name of the product
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 name: string;

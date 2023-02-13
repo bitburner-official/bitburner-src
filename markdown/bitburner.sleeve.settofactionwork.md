@@ -6,7 +6,7 @@
 
 Set a sleeve to work for a faction.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setToFactionWork(
@@ -24,7 +24,7 @@ setToFactionWork(
 |  factionName | string | Name of the faction to work for. |
 |  factionWorkType | [FactionWorkType](./bitburner.factionworktype.md) \| \`${[FactionWorkType](./bitburner.factionworktype.md)<!-- -->}\` | Name of the action to perform for this faction. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean \| undefined
 

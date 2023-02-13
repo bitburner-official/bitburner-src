@@ -5,7 +5,7 @@
 ## InfiltrationReward interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface InfiltrationReward 
@@ -13,9 +13,9 @@ interface InfiltrationReward
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [sellCash](./bitburner.infiltrationreward.sellcash.md) | number |  |
-|  [SoARep](./bitburner.infiltrationreward.soarep.md) | number |  |
-|  [tradeRep](./bitburner.infiltrationreward.traderep.md) | number |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [sellCash](./bitburner.infiltrationreward.sellcash.md) |  | number |  |
+|  [SoARep](./bitburner.infiltrationreward.soarep.md) |  | number |  |
+|  [tradeRep](./bitburner.infiltrationreward.traderep.md) |  | number |  |
 

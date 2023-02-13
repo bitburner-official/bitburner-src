@@ -1,3 +1,6 @@
+/* TODO: remove ns1-specific documentation for all functions, and just create a basic doc somewhere that says how to
+ *       convert examples for use in .script files (e.g. no async/await, var instead of let/const, etc). */
+
 /** @public */
 interface HP {
   current: number;
@@ -15,7 +18,7 @@ interface Skills {
   intelligence: number;
 }
 
-// TODO: provide same treatment to CodingContractData as for SleeveTask
+// TODO: provide same treatment to CodingContractData as for SleeveTask (actual types)
 /**
  * Coding contract data will differ depending on coding contract.
  * @public
@@ -37,7 +40,7 @@ interface Person {
   skills: Skills;
   exp: Skills;
   mults: Multipliers;
-  city: string;
+  city: CityName;
 }
 
 /** @public */
@@ -56,9 +59,14 @@ interface Player extends Person {
 
 /** @public */
 interface SleevePerson extends Person {
+  /** Number 0-100 Experience earned and shared is multiplied with shock% before sync% */
   shock: number;
+  /** Number 1-100 Experience earned by this sleeve and shared with the player is multiplied with sync% after shock% */
   sync: number;
+  /** Number 1-100 initial Value of sync on BN start */
   memory: number;
+  /** Number of 200ms cycles which are stored as bonus time */
+  storedCycles: number;
 }
 
 /** @public */
@@ -866,6 +874,7 @@ type SleeveBladeburnerTask = {
   type: "BLADEBURNER";
   actionType: "General" | "Contracts";
   actionName: string;
+  cyclesWorked: number;
 };
 
 /** @public */
@@ -879,7 +888,7 @@ type SleeveClassTask = {
 type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
 
 /** @public */
-type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}` };
+type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}`; cyclesWorked: number };
 
 /** @public */
 type SleeveFactionTask = {
@@ -889,7 +898,7 @@ type SleeveFactionTask = {
 };
 
 /** @public */
-type SleeveInfiltrateTask = { type: "INFILTRATE" };
+type SleeveInfiltrateTask = { type: "INFILTRATE"; cyclesWorked: number };
 
 /** @public */
 type SleeveRecoveryTask = { type: "RECOVERY" };
@@ -1035,20 +1044,8 @@ export interface TIX {
    * 1. TIX API Access
    *
    * @example
-   * ```ts
-   * // NS1
-   * stock.getPrice("FSIG");
-   *
-   * // Choose the first stock symbol from the array of stock symbols.  Get the price
-   * // of the corresponding stock.
-   * var sym = stock.getSymbols()[0];
-   * tprint("Stock symbol: " + sym);
-   * tprint("Stock price: " + stock.getPrice(sym));
-   * ```
-   * @example
-   * ```ts
-   * // NS2
-   * ns.stock.getPrice("FSIG");
+   * ```js
+   * const fourSigmaStockPrice = ns.stock.getPrice("FSIG");
    *
    * // Choose the first stock symbol from the array of stock symbols.  Get the price
    * // of the corresponding stock.
@@ -1531,7 +1528,7 @@ export interface Singularity {
    * @param city - City to travel to.
    * @returns True if action is successful, false otherwise.
    */
-  travelToCity(city: string): boolean;
+  travelToCity(city: CityName | `${CityName}`): boolean;
 
   /**
    * Purchase the TOR router.
@@ -1947,7 +1944,7 @@ export interface Singularity {
    *
    * This function returns the number of milliseconds it takes to attempt the
    * specified crime (e.g It takes 60 seconds to attempt the ‘Rob Store’ crime,
-   * so running `commitCrime('ROBSTORE')` will return 60,000).
+   * so running `commitCrime('Rob Store')` will return 60,000).
    *
    * @param crime - Name of crime to attempt.
    * @param focus - Acquire player focus on this crime. Optional. Defaults to true.
@@ -2035,26 +2032,6 @@ export interface Singularity {
    * @returns Array with the names of the prerequisite Augmentation(s) for the specified Augmentation.
    */
   getAugmentationPrereq(augName: string): string[];
-
-  /**
-   * Get the price and reputation of an augmentation.
-   * @deprecated use getAugmentationPrice getAugmentationRepReq
-   * @remarks
-   * RAM cost: 5 GB * 16/4/1
-   *
-   *
-   * This function returns an array with two elements that gives the cost for
-   * the specified Augmentation. The first element in the returned array is the
-   * reputation requirement of the Augmentation, and the second element is the
-   * money cost.
-   *
-   * If an invalid Augmentation name is passed in for the augName argument, this
-   * function will return the array [-1, -1].
-   *
-   * @param augName - Name of Augmentation.
-   * @returns Array with first element as a reputation requirement and second element as the money cost.
-   */
-  getAugmentationCost(augName: string): [number, number];
 
   /**
    * Get price of an augmentation.
@@ -2895,6 +2872,19 @@ export interface Bladeburner {
   getActionAutolevel(type: string, name: string): boolean;
 
   /**
+   * Get action successes.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Return a number with how many successes you have with action.
+   *
+   * @param type - Type of action.
+   * @param name - Name of action. Must be an exact match.
+   * @returns a number with how many successes you have with action.
+   */
+  getActionSuccesses(type: string, name: string): number;
+
+  /**
    * Set an action autolevel.
    * @remarks
    * RAM cost: 4 GB
@@ -3039,10 +3029,10 @@ export interface Bladeburner {
    * Returns the estimated number of Synthoids in the specified city,
    * or -1 if an invalid city was specified.
    *
-   * @param cityName - Name of city. Case-sensitive
+   * @param city - Name of city. Case-sensitive
    * @returns Estimated number of Synthoids in the specified city.
    */
-  getCityEstimatedPopulation(name: string): number;
+  getCityEstimatedPopulation(city: CityName | `${CityName}`): number;
 
   /**
    * Get number of communities in a city.
@@ -3052,10 +3042,10 @@ export interface Bladeburner {
    * Returns the estimated number of Synthoid communities in the specified city,
    * or -1 if an invalid city was specified.
    *
-   * @param cityName - Name of city. Case-sensitive
+   * @param city - Name of city. Case-sensitive
    * @returns Number of Synthoids communities in the specified city.
    */
-  getCityCommunities(name: string): number;
+  getCityCommunities(city: CityName | `${CityName}`): number;
 
   /**
    * Get chaos of a city.
@@ -3065,10 +3055,10 @@ export interface Bladeburner {
    * Returns the chaos in the specified city,
    * or -1 if an invalid city was specified.
    *
-   * @param cityName - Name of city. Case-sensitive
+   * @param city - Name of city. Case-sensitive
    * @returns Chaos in the specified city.
    */
-  getCityChaos(name: string): number;
+  getCityChaos(city: CityName | `${CityName}`): number;
 
   /**
    * Get current city.
@@ -3079,7 +3069,7 @@ export interface Bladeburner {
    *
    * @returns City that the player is currently in (for Bladeburner).
    */
-  getCity(): string;
+  getCity(): CityName;
 
   /**
    * Travel to another city in bladeburner.
@@ -3089,10 +3079,10 @@ export interface Bladeburner {
    *
    * Returns true if successful, and false otherwise
    *
-   * @param cityName - Name of city. Case-sensitive
+   * @param city - Name of city. Case-sensitive
    * @returns true if successful, and false otherwise
    */
-  switchCity(name: string): boolean;
+  switchCity(city: CityName | `${CityName}`): boolean;
 
   /**
    * Get bladeburner stamina.
@@ -3545,7 +3535,7 @@ export interface Gang {
    *
    * “Bonus time” is accumulated when the game is offline or if the game is inactive in the browser.
    *
-   * “Bonus time” makes the game progress faster, up to 10x the normal speed.
+   * “Bonus time” makes the game progress faster, up to 25x the normal speed.
    *
    * @returns Bonus time for the Gang mechanic in milliseconds.
    */
@@ -3576,6 +3566,8 @@ export interface Sleeve {
    * RAM cost: 4 GB
    *
    * Return a person object for this sleeve
+   *
+   * storedCycles is the amount of Bonus Time in cycles, each translates to 200ms
    *
    * @param sleeveNumber - Index of the sleeve to retrieve information.
    * @returns Object containing information about this sleeve.
@@ -3628,23 +3620,12 @@ export interface Sleeve {
    *
    * @example
    * ```ts
-   * // NS1
-   * // Assign the first 3 sleeves to commit various crimes.
-   * var crime = ["MUG", "ROBSTORE", "SHOPLIFT"];
-   * for (var i = 0; i < crime.length; i++) {
-   *     tprintf("Sleeve %d commits crime: %s", i, crime[i]);
-   *     sleeve.setToCommitCrime(i, crime[i]);
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2
-   * // Assign the first 3 sleeves to commit various crimes.
-   * const crime = ["MUG", "ROBSTORE", "SHOPLIFT"];
-   * for (let i = 0; i < crime.length; i++) {
-   *     ns.tprintf("Sleeve %d commits crime: %s", i, crime[i]);
-   *     ns.sleeve.setToCommitCrime(i, crime[i]);
-   * }
+   * // Assigns the first sleeve to Homicide.
+   * ns.sleeve.setToCommitCrime(0, "Homicide");
+   *
+   * // Assigns the second sleeve to Grand Theft Auto, using enum
+   * const crimes = ns.enums.CrimeType;
+   * ns.sleeve.setToCommitCrime(1, crimes.grandTheftAuto)
    * ```
    *
    * @param sleeveNumber - Index of the sleeve to start committing crime. Sleeves are numbered starting from 0.
@@ -3720,10 +3701,10 @@ export interface Sleeve {
    * Return a boolean indicating whether or not the sleeve reached destination.
    *
    * @param sleeveNumber - Index of the sleeve to travel.
-   * @param cityName - Name of the destination city.
+   * @param city - Name of the destination city.
    * @returns True if the sleeve reached destination, false otherwise.
    */
-  travel(sleeveNumber: number, cityName: string): boolean;
+  travel(sleeveNumber: number, city: CityName | `${CityName}`): boolean;
 
   /**
    * Get augmentations installed on a sleeve.
@@ -3907,12 +3888,7 @@ interface WorkFormulas {
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified faction work. */
   factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified company work. */
-  companyGains(
-    person: Person,
-    companyName: string,
-    workType: CompanyPosName | `${CompanyPosName}`,
-    favor: number,
-  ): WorkStats;
+  companyGains(person: Person, companyName: string, workType: JobName | `${JobName}`, favor: number): WorkStats;
 }
 
 /**
@@ -3976,6 +3952,7 @@ interface HackingFormulas {
   hackPercent(server: Server, player: Person): number;
   /**
    * Calculate the percent a server would grow to.
+   * Not exact due to limitations of mathematics.
    * (Ex: 3.0 would would grow the server to 300% of its current value.)
    * @param server - Server info from {@link NS.getServer | getServer}
    * @param threads - Amount of thread.
@@ -4343,8 +4320,8 @@ interface InfiltrationReward {
 
 /** @public */
 interface ILocation {
-  city: string;
-  name: string;
+  city: CityName;
+  name: LocationName;
 }
 
 /** @public */
@@ -4477,7 +4454,7 @@ interface UserInterface {
  *  // Some related functions are gathered within a common namespace
  *  stock.getPrice();
  * ```
- * {@link https://bitburner.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
+ * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
  * <hr>
  * <b>Basic ns2 usage example:</b>
  * ```ts
@@ -4490,7 +4467,7 @@ interface UserInterface {
  *  await ns.hack('n00dles');
  * }
  * ```
- * {@link https://bitburner.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
+ * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
  * <hr>
  */
 export interface NS {
@@ -4653,11 +4630,11 @@ export interface NS {
    *
    * Use your hacking skills to increase the amount of money available on a server.
    * The runtime for this command depends on your hacking level and the target server’s
-   * security level. When `grow` completes, the money available on a target server will
-   * be increased by a certain, fixed percentage. This percentage is determined by the
-   * target server’s growth rate (which varies between servers) and security level. Generally,
-   * higher-level servers have higher growth rates. The {@link NS.getServerGrowth | getServerGrowth} function can be used
-   * to obtain a server’s growth rate.
+   * security level. When `grow` completes, the money available on a target server will be increased
+   * by amount equal to the number of threads used and a certain, fixed percentage of current money on
+   * the server. This percentage is determined by the target server’s growth rate (which varies between servers)
+   * and security level. Generally, higher-level servers have higher growth rates.
+   * The {@link NS.getServerGrowth | getServerGrowth} function can be used to obtain a server’s growth rate.
    *
    * Like {@link NS.hack | hack}, `grow` can be called on any server, regardless of where the script is running.
    * The grow() command requires root access to the target server, but there is no required hacking
@@ -4810,6 +4787,8 @@ export interface NS {
    * This function returns the number of “growths” needed in order to increase
    * the amount of money available on the specified server by the specified amount.
    * The specified amount is multiplicative and is in decimal form, not percentage.
+   *
+   * Due to limitations of mathematics, this function won't be the true value, but an approximation.
    *
    * Warning: The value returned by this function isn’t necessarily a whole number.
    *
@@ -5775,7 +5754,7 @@ export interface NS {
   /**
    * Get hacking related multipliers.
    * @remarks
-   * RAM cost: 4 GB
+   * RAM cost: 0.25 GB
    *
    * Returns an object containing the Player’s hacking related multipliers.
    * These multipliers are returned in fractional forms, not percentages
@@ -5804,7 +5783,7 @@ export interface NS {
   /**
    * Get hacknet related multipliers.
    * @remarks
-   * RAM cost: 4 GB
+   * RAM cost: 0.25 GB
    *
    * Returns an object containing the Player’s hacknet related multipliers.
    * These multipliers are returned in fractional forms, not percentages
@@ -5933,33 +5912,6 @@ export interface NS {
    * @returns Base security level of the target server.
    */
   getServerBaseSecurityLevel(host: string): number;
-
-  /**
-   * @deprecated use getServerMaxRam / getServerUsedRam
-   * @remarks
-   * RAM cost: 0.1 GB
-   *
-   * Returns an array with two elements that gives information about a server’s memory (RAM).
-   * The first element in the array is the amount of RAM that the server has total (in GB).
-   * The second element in the array is the amount of RAM that is currently being used on
-   * the server (in GB).
-   *
-   * @example
-   * ```ts
-   * // NS1:
-   * var serverRam = getServerRam("helios");
-   * var totalRam = serverRam[0];
-   * var ramUsed = serverRam[1];
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * const [totalRam, ramUsed] = ns.getServerRam("helios");
-   * ```
-   * @param host - Host of target server.
-   * @returns Array with total and used memory on the specified server, in GB.
-   */
-  getServerRam(host: string): [number, number];
 
   /**
    * Get the maximum amount of RAM on a server.
@@ -6366,7 +6318,7 @@ export interface NS {
    *
    * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
    *
-   * @see https://bitburner.readthedocs.io/en/latest/netscript/netscriptmisc.html#netscript-ports
+   * @see https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptmisc.html#netscript-ports
    * @param port - Port number. Must be an integer between 1 and 20.
    */
   getPortHandle(port: number): NetscriptPort;
@@ -6594,14 +6546,63 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * Converts a number into a string with the specified formatter.
-   * This uses the numeral.js library, so the formatters must be compatible with that.
-   * This is the same function that the game itself uses to display numbers.
-   *
-   * For more information, see: http://numeraljs.com/
+   * Converts a number into a numeric string with the specified format options.
+   * This is the same function that the game itself uses to display numbers. The format also depends on the Numeric
+   * Display settings (all options on the "Numeric Display" options page)
+   * To format ram or percentages, see {@link NS.formatRam | formatRam} and {@link NS.formatPercent | formatPercent}
    *
    * @param n - Number to format.
-   * @param format - Formatter.
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3.
+   * @param suffixStart - How high a number must be before a suffix will be added. Optional, defaults to 1000.
+   * @param isInteger - Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. Optional, defaults to false.
+   * @returns Formatted number.
+   */
+  formatNumber(n: number, fractionalDigits?: number, suffixStart?: number, isInteger?: boolean): string;
+
+  /**
+   * Format a number as an amount of ram.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a ram string with the specified number of fractional digits.
+   * This is the same function that the game itself uses to display ram. The format also depends on the Numeric Display
+   * settings (all options on the "Numeric Display" options page)
+   * To format plain numbers or percentages, see {@link NS.formatNumber | formatNumber} and {@link NS.formatPercent | formatPercent}
+   *
+   * @param n - Number to format as an amount of ram, in base units of GB (or GiB if that Numeric Display option is set).
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+   * @returns Formatted ram amount.
+   */
+  formatRam(n: number, fractionalDigits?: number): string;
+
+  /**
+   * Format a number as a percentage.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a percentage string with the specified number of fractional digits.
+   * This is the same function that the game itself uses to display percentages. The format also depends on the Numeric
+   * Display settings (all options on the "Numeric Display" options page)
+   * To format plain numbers or ram, see {@link NS.formatNumber | formatNumber} and {@link NS.formatRam | formatRam}
+   *
+   * @param n - Number to format as a percentage.
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+   * @returns Formatted percentage.
+   */
+  formatPercent(n: number, fractionalDigits?: number): string;
+
+  /**
+   * Format a number using the numeral library. This function is deprecated and will be removed in 2.3.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a string with the specified format options.
+   * See http://numeraljs.com/#format for documentation on format strings supported.
+   *
+   * This function is deprecated and will be removed in 2.3.
+   *
+   * @param n - Number to format.
+   * @param format - Formatting options. See http://numeraljs.com/#format for valid formats.
    * @returns Formatted number.
    */
   nFormat(n: number, format: string): string;
@@ -6902,7 +6903,7 @@ export interface NS {
    * @remarks
    * RAM cost: 2.4 GB
    *
-   * Increases your rep gain of hacking contracts while share is called.
+   * Increases your rep gain of all faction work types while share is called.
    * Scales with thread count.
    */
   share(): Promise<void>;
@@ -6968,76 +6969,74 @@ declare enum GymType {
 }
 
 /** @public */
-declare enum CompanyPosName {
-  sw0 = "Software Engineering Intern",
-  sw1 = "Junior Software Engineer",
-  sw2 = "Senior Software Engineer",
-  sw3 = "Lead Software Developer",
-  sw4 = "Head of Software",
-  sw5 = "Head of Engineering",
-  sw6 = "Vice President of Technology",
-  sw7 = "Chief Technology Officer",
+declare enum JobName {
+  software0 = "Software Engineering Intern",
+  software1 = "Junior Software Engineer",
+  software2 = "Senior Software Engineer",
+  software3 = "Lead Software Developer",
+  software4 = "Head of Software",
+  software5 = "Head of Engineering",
+  software6 = "Vice President of Technology",
+  software7 = "Chief Technology Officer",
   IT0 = "IT Intern",
   IT1 = "IT Analyst",
   IT2 = "IT Manager",
   IT3 = "Systems Administrator",
-  secEng = "Security Engineer",
-  netEng0 = "Network Engineer",
-  netEng1 = "Network Administrator",
-  bus0 = "Business Intern",
-  bus1 = "Business Analyst",
-  bus2 = "Business Manager",
-  bus3 = "Operations Manager",
-  bus4 = "Chief Financial Officer",
-  bus5 = "Chief Executive Officer",
-  sec0 = "Police Officer",
-  sec1 = "Police Chief",
-  sec2 = "Security Guard",
-  sec3 = "Security Officer",
-  sec4 = "Security Supervisor",
-  sec5 = "Head of Security",
+  securityEng = "Security Engineer",
+  networkEng0 = "Network Engineer",
+  networkEng1 = "Network Administrator",
+  business0 = "Business Intern",
+  business1 = "Business Analyst",
+  business2 = "Business Manager",
+  business3 = "Operations Manager",
+  business4 = "Chief Financial Officer",
+  business5 = "Chief Executive Officer",
+  security0 = "Police Officer",
+  security1 = "Police Chief",
+  security2 = "Security Guard",
+  security3 = "Security Officer",
+  security4 = "Security Supervisor",
+  security5 = "Head of Security",
   agent0 = "Field Agent",
   agent1 = "Secret Agent",
   agent2 = "Special Operative",
   waiter = "Waiter",
   employee = "Employee",
-  softCons0 = "Software Consultant",
-  softCons1 = "Senior Software Consultant",
-  busCons0 = "Business Consultant",
-  busCons1 = "Senior Business Consultant",
+  softwareConsult0 = "Software Consultant",
+  softwareConsult1 = "Senior Software Consultant",
+  businessConsult0 = "Business Consultant",
+  businessConsult1 = "Senior Business Consultant",
   waiterPT = "Part-time Waiter",
   employeePT = "Part-time Employee",
 }
 
-// CORP ENUMS
+// CORP ENUMS - Changed to types
 /** @public */
-declare enum EmployeePositions {
-  Operations = "Operations",
-  Engineer = "Engineer",
-  Business = "Business",
-  Management = "Management",
-  RandD = "Research & Development",
-  Training = "Training",
-  Unassigned = "Unassigned",
-}
+type CorpEmployeePosition =
+  | "Operations"
+  | "Engineer"
+  | "Business"
+  | "Management"
+  | "Research & Development"
+  | "Training"
+  | "Unassigned";
 
 /** @public */
-declare enum IndustryType {
-  Energy = "Energy",
-  Utilities = "Water Utilities",
-  Agriculture = "Agriculture",
-  Fishing = "Fishing",
-  Mining = "Mining",
-  Food = "Food",
-  Tobacco = "Tobacco",
-  Chemical = "Chemical",
-  Pharmaceutical = "Pharmaceutical",
-  Computers = "Computer Hardware",
-  Robotics = "Robotics",
-  Software = "Software",
-  Healthcare = "Healthcare",
-  RealEstate = "RealEstate",
-}
+type CorpIndustryName =
+  | "Energy"
+  | "Water Utilities"
+  | "Agriculture"
+  | "Fishing"
+  | "Mining"
+  | "Food"
+  | "Tobacco"
+  | "Chemical"
+  | "Pharmaceutical"
+  | "Computer Hardware"
+  | "Robotics"
+  | "Software"
+  | "Healthcare"
+  | "Real Estate";
 
 /** Names of all cities
  * @public */
@@ -7120,13 +7119,14 @@ declare enum LocationName {
 
 /** @public */
 export type NSEnums = {
-  toast: typeof ToastVariant;
+  CityName: typeof CityName;
   CrimeType: typeof CrimeType;
   FactionWorkType: typeof FactionWorkType;
   GymType: typeof GymType;
-  UniversityClassType: typeof UniversityClassType;
-  CompanyPosName: typeof CompanyPosName;
+  JobName: typeof JobName;
   LocationName: typeof LocationName;
+  ToastVariant: typeof ToastVariant;
+  UniversityClassType: typeof UniversityClassType;
 };
 
 /**
@@ -7140,37 +7140,33 @@ export interface OfficeAPI {
   /**
    * Hire an employee.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param employeePosition - Position to place into. Defaults to "Unassigned".
    * @returns True if an employee was hired, false otherwise
    */
-  hireEmployee(
-    divisionName: string,
-    cityName: string,
-    employeePosition?: EmployeePositions | `${EmployeePositions}`,
-  ): boolean;
+  hireEmployee(divisionName: string, city: CityName | `${CityName}`, employeePosition?: CorpEmployeePosition): boolean;
   /**
    * Upgrade office size.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param size - Amount of positions to open
    */
-  upgradeOfficeSize(divisionName: string, cityName: string, size: number): void;
+  upgradeOfficeSize(divisionName: string, city: CityName | `${CityName}`, size: number): void;
   /**
    * Throw a party for your employees
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param costPerEmployee - Amount to spend per employee.
    * @returns Multiplier for happiness and morale, or zero on failure
    */
-  throwParty(divisionName: string, cityName: string, costPerEmployee: number): number;
+  throwParty(divisionName: string, city: CityName | `${CityName}`, costPerEmployee: number): number;
   /**
    * Buy coffee for your employees
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @returns true if buying coffee was successful, false otherwise
    */
-  buyCoffee(divisionName: string, cityName: string): boolean;
+  buyCoffee(divisionName: string, city: CityName | `${CityName}`): boolean;
   /**
    * Hire AdVert.
    * @param divisionName - Name of the division
@@ -7185,10 +7181,10 @@ export interface OfficeAPI {
   /**
    * Get data about an office
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @returns Office data
    */
-  getOffice(divisionName: string, cityName: string): Office;
+  getOffice(divisionName: string, city: CityName | `${CityName}`): Office;
   /**
    * Get the cost to hire AdVert.
    * @param divisionName - Name of the division.
@@ -7218,20 +7214,20 @@ export interface OfficeAPI {
   /**
    * Set the auto job assignment for a job
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param job - Name of the job
    * @param amount - Number of employees to assign to that job
    * @returns true if the employee count reached the target amount, false if not
    */
-  setAutoJobAssignment(divisionName: string, cityName: string, job: string, amount: number): boolean;
+  setAutoJobAssignment(divisionName: string, city: CityName | `${CityName}`, job: string, amount: number): boolean;
   /**
    * Cost to Upgrade office size.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param size - Amount of positions to open
    * @returns Cost of upgrading the office
    */
-  getOfficeSizeUpgradeCost(divisionName: string, cityName: string, asize: number): number;
+  getOfficeSizeUpgradeCost(divisionName: string, city: CityName | `${CityName}`, asize: number): number;
 }
 
 /**
@@ -7244,16 +7240,22 @@ export interface WarehouseAPI {
   /**
    * Set material sell data.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @param amt - Amount to sell, can be "MAX"
    * @param price - Price to sell, can be "MP"
    */
-  sellMaterial(divisionName: string, cityName: string, materialName: string, amt: string, price: string): void;
+  sellMaterial(
+    divisionName: string,
+    city: CityName | `${CityName}`,
+    materialName: string,
+    amt: string,
+    price: string,
+  ): void;
   /**
    * Set product sell data.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param productName - Name of the product
    * @param amt - Amount to sell, can be "MAX"
    * @param price - Price to sell, can be "MP"
@@ -7261,7 +7263,7 @@ export interface WarehouseAPI {
    */
   sellProduct(
     divisionName: string,
-    cityName: string,
+    city: CityName | `${CityName}`,
     productName: string,
     amt: string,
     price: string,
@@ -7276,41 +7278,46 @@ export interface WarehouseAPI {
   /**
    * Set smart supply
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param enabled - smart supply enabled
    */
-  setSmartSupply(divisionName: string, cityName: string, enabled: boolean): void;
+  setSmartSupply(divisionName: string, city: CityName | `${CityName}`, enabled: boolean): void;
   /**
    * Set whether smart supply uses leftovers before buying
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @param enabled - smart supply use leftovers enabled
    */
-  setSmartSupplyUseLeftovers(divisionName: string, cityName: string, materialName: string, enabled: boolean): void;
+  setSmartSupplyUseLeftovers(
+    divisionName: string,
+    city: CityName | `${CityName}`,
+    materialName: string,
+    enabled: boolean,
+  ): void;
   /**
    * Set material buy data
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @param amt - Amount of material to buy
    */
-  buyMaterial(divisionName: string, cityName: string, materialName: string, amt: number): void;
+  buyMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: number): void;
   /**
    * Set material to bulk buy
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @param amt - Amount of material to buy
    */
-  bulkPurchase(divisionName: string, cityName: string, materialName: string, amt: number): void;
+  bulkPurchase(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: number): void;
   /**
    * Get warehouse data
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @returns warehouse data
    */
-  getWarehouse(divisionName: string, cityName: string): Warehouse;
+  getWarehouse(divisionName: string, city: CityName | `${CityName}`): Warehouse;
   /**
    * Get product data
    * @param divisionName - Name of the division
@@ -7321,26 +7328,27 @@ export interface WarehouseAPI {
   /**
    * Get material data
    * @param divisionName - Name of the division
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @returns material data
    */
-  getMaterial(divisionName: string, cityName: string, materialName: string): Material;
+  getMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: string): Material;
   /**
    * Set market TA 1 for a material.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @param on - market ta enabled
    */
-  setMaterialMarketTA1(divisionName: string, cityName: string, materialName: string, on: boolean): void;
+  setMaterialMarketTA1(divisionName: string, city: CityName | `${CityName}`, materialName: string, on: boolean): void;
   /**
    * Set market TA 2 for a material.
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param materialName - Name of the material
    * @param on - market ta enabled
    */
-  setMaterialMarketTA2(divisionName: string, cityName: string, materialName: string, on: boolean): void;
+  setMaterialMarketTA2(divisionName: string, city: CityName | `${CityName}`, materialName: string, on: boolean): void;
   /**
    * Set market TA 1 for a product.
    * @param divisionName - Name of the division
@@ -7366,9 +7374,9 @@ export interface WarehouseAPI {
    */
   exportMaterial(
     sourceDivision: string,
-    sourceCity: string,
+    sourceCity: CityName | `${CityName}`,
     targetDivision: string,
-    targetCity: string,
+    targetCity: CityName | `${CityName}`,
     materialName: string,
     amt: number,
   ): void;
@@ -7383,36 +7391,36 @@ export interface WarehouseAPI {
    */
   cancelExportMaterial(
     sourceDivision: string,
-    sourceCity: string,
+    sourceCity: CityName | `${CityName}`,
     targetDivision: string,
-    targetCity: string,
+    targetCity: CityName | `${CityName}`,
     materialName: string,
     amt: number,
   ): void;
   /**
    * Purchase warehouse for a new city
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    */
-  purchaseWarehouse(divisionName: string, cityName: string): void;
+  purchaseWarehouse(divisionName: string, city: CityName | `${CityName}`): void;
   /**
    * Upgrade warehouse
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param amt - amount of upgrades defaults to 1
    */
-  upgradeWarehouse(divisionName: string, cityName: string, amt?: number): void;
+  upgradeWarehouse(divisionName: string, city: CityName | `${CityName}`, amt?: number): void;
   /**
    * Create a new product
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
+   * @param city - Name of the city
    * @param productName - Name of the product
    * @param designInvest - Amount to invest for the design of the product.
    * @param marketingInvest - Amount to invest for the marketing of the product.
    */
   makeProduct(
     divisionName: string,
-    cityName: string,
+    city: CityName | `${CityName}`,
     productName: string,
     designInvest: number,
     marketingInvest: number,
@@ -7420,32 +7428,37 @@ export interface WarehouseAPI {
   /**
    * Limit Material Production.
    * @param divisionName - Name of the division.
-   * @param cityName - Name of the city.
+   * @param city - Name of the city.
    * @param materialName - Name of the material.
    * @param qty - Amount to limit to. Pass a negative value to remove the limit instead.
    */
-  limitMaterialProduction(divisionName: string, cityName: string, materialName: string, qty: number): void;
+  limitMaterialProduction(
+    divisionName: string,
+    city: CityName | `${CityName}`,
+    materialName: string,
+    qty: number,
+  ): void;
   /**
    * Limit Product Production.
    * @param divisionName - Name of the division.
-   * @param cityName - Name of the city.
+   * @param city - Name of the city.
    * @param productName - Name of the product.
    * @param qty - Amount to limit to. Pass a negative value to remove the limit instead.
    */
-  limitProductProduction(divisionName: string, cityName: string, productName: string, qty: number): void;
+  limitProductProduction(divisionName: string, city: CityName | `${CityName}`, productName: string, qty: number): void;
   /**
    * Gets the cost to upgrade a warehouse to the next level
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city
-   * @param amt - amount of upgrades defaults to 1
+   * @param city - Name of the city
+   * @param amt - amount of upgrades. Optional, defaults to 1
    * @returns cost to upgrade
    */
-  getUpgradeWarehouseCost(adivisionName: string, acityName: string, amt?: number): number;
+  getUpgradeWarehouseCost(divisionName: string, city: CityName | `${CityName}`, amt?: number): number;
   /**
    * Check if you have a warehouse in city
    * @returns true if warehouse is present, false if not
    */
-  hasWarehouse(adivisionName: string, acityName: string): boolean;
+  hasWarehouse(divisionName: string, city: CityName | `${CityName}`): boolean;
 }
 
 /**
@@ -7453,12 +7466,6 @@ export interface WarehouseAPI {
  * @public
  */
 export interface Corporation extends WarehouseAPI, OfficeAPI {
-  /** Enums specific to the corporation game mechanic. */
-  enums: {
-    EmployeePositions: typeof EmployeePositions;
-    IndustryType: typeof IndustryType;
-  };
-
   /** Returns whether the player has a corporation. Does not require API access.
    * @returns whether the player has a corporation */
   hasCorporation(): boolean;
@@ -7497,6 +7504,12 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @returns corporation related constants */
   getConstants(): CorpConstants;
 
+  /** Get constant industry definition data for a specific industry */
+  getIndustryData(industryName: CorpIndustryName): CorpIndustryData;
+
+  /** Get constant data for a specific material */
+  getMaterialData(materialName: CorpMaterialName): CorpMaterialConstantData;
+
   /** Accept investment based on you companies current valuation
    * @remarks
    * Is based on current valuation and will not honer a specific Offer
@@ -7526,12 +7539,12 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   /** Expand to a new industry
    * @param industryType - Name of the industry
    * @param divisionName - Name of the division */
-  expandIndustry(industryType: IndustryType | `${IndustryType}`, divisionName: string): void;
+  expandIndustry(industryType: CorpIndustryName, divisionName: string): void;
 
   /** Expand to a new city
    * @param divisionName - Name of the division
-   * @param cityName - Name of the city */
-  expandCity(divisionName: string, cityName: string): void;
+   * @param city - Name of the city */
+  expandCity(divisionName: string, city: CityName | `${CityName}`): void;
 
   /** Unlock an upgrade
    * @param upgradeName - Name of the upgrade */
@@ -7565,6 +7578,49 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   getBonusTime(): number;
 }
 
+/** Product rating information
+ *  @public */
+interface CorpProductData {
+  /** Name of the product */
+  name: string;
+  /** Verb used to describe creation of the product */
+  verb: string;
+  /** Description of product creation */
+  desc: string;
+  /** Weighting factors for product  */
+  ratingWeights: {
+    aesthetics?: number;
+    durability?: number;
+    features?: number;
+    quality?: number;
+    performance?: number;
+    reliability?: number;
+  };
+}
+
+/** Data for an individual industry
+ *  @public */
+interface CorpIndustryData {
+  startingCost: number;
+  description: string;
+  product?: CorpProductData;
+  recommendStarting: boolean;
+  requiredMaterials: Partial<Record<CorpMaterialName, number>>;
+  /** Real estate factor */
+  realEstateFactor?: number;
+  /** Scientific research factor (affects quality) */
+  scienceFactor?: number;
+  /** Hardware factor */
+  hardwareFactor?: number;
+  /** Robots factor */
+  robotFactor?: number;
+  /** AI Cores factor */
+  aiCoreFactor?: number;
+  /** Advertising factor (affects sales) */
+  advertisingFactor?: number;
+  producedMaterials?: CorpMaterialName[];
+}
+
 /**
  * General info about a corporation
  * @public
@@ -7596,10 +7652,10 @@ interface CorporationInfo {
   dividendTax: number;
   /** Your earnings as a shareholder per second this cycle */
   dividendEarnings: number;
-  /** State of the corporation. Possible states are START, PURCHASE, PRODUCTION, SALE, EXPORT. */
+  /** State of the corporation. Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. */
   state: string;
-  /** Array of all divisions */
-  divisions: Division[];
+  /** Array of all division names */
+  divisions: string[];
 }
 
 /**
@@ -7607,67 +7663,146 @@ interface CorporationInfo {
  * @public
  */
 interface CorpConstants {
-  /** Corporation cycle states */
-  states: string[];
-  /** Unlockable upgrades */
-  unlocks: string[];
-  /** Levelable upgrades */
-  upgrades: string[];
-  /** Researches, product researches are only available to product making divisions */
-  researches: Record<string, string[]>;
-  /** Amount of funds required to bribe for 1 reputation */
-  bribeToRepRatio: number;
-  /** Amount of products a division can have without researches */
-  baseMaxProducts: number;
-  /** Cost to expand to another city within a division */
-  cityExpandCost: number;
-  /** Cost to purchase a warehouse in a city */
-  warehousePurchaseCost: number;
-  /** Cost of coffee per employee in an office */
-  coffeeCost: number;
-  /** Array of all material types */
-  materials: Record<string, materialInfo>;
-  /** Array of all product types */
-  products: Record<string, productInfo>;
-  /** Array of all division types */
-  divisions: Record<string, divisionInfo>;
+  /** Names of all corporation game states */
+  stateNames: CorpStateName[];
+  /** Names of all industries */
+  industryNames: CorpIndustryName[];
+  /** Names of all materials */
+  materialNames: CorpMaterialName[];
+  /** Names of all one-time corporation-wide unlocks */
+  unlockNames: CorpUnlockName[];
+  /** Names of all corporation-wide upgrades */
+  upgradeNames: CorpUpgradeName[];
+  /** Names of all researches common to all industries */
+  researchNamesBase: CorpResearchName[];
+  /** Names of all researches only available to product industries */
+  researchNamesProductOnly: CorpResearchName[];
+  /** Names of all researches */
+  researchNames: CorpResearchName[];
+  initialShares: number;
+  /** When selling large number of shares, price is dynamically updated for every batch of this amount */
+  sharesPerPriceUpdate: number;
+  /** Cooldown for issue new shares cooldown in game cycles (1 game cycle = 200ms) */
+  issueNewSharesCooldown: number;
+  /** Cooldown for selling shares in game cycles (1 game cycle = 200ms) */
+  sellSharesCooldown: number;
+  coffeeCostPerEmployee: number;
+  gameCyclesPerMarketCycle: number;
+  gameCyclesPerCorpStateCycle: number;
+  secondsPerMarketCycle: number;
+  warehouseInitialCost: number;
+  warehouseInitialSize: number;
+  warehouseSizeUpgradeCostBase: number;
+  officeInitialCost: number;
+  officeInitialSize: number;
+  officeSizeUpgradeCostBase: number;
+  bribeThreshold: number;
+  bribeAmountPerReputation: number;
+  baseProductProfitMult: number;
+  dividendMaxRate: number;
+  /** Conversion factor for employee stats to initial salary */
+  employeeSalaryMultiplier: number;
+  marketCyclesPerEmployeeRaise: number;
+  employeeRaiseAmount: number;
+  /** Max products for a division without upgrades */
+  maxProductsBase: number;
+  /** The minimum decay value for happiness/morale/energy */
+  minEmployeeDecay: number;
 }
+/** @public */
+type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "EXPORT" | "SALE";
+
+/** @public */
+type CorpMaterialName =
+  | "Water"
+  | "Energy"
+  | "Food"
+  | "Plants"
+  | "Metal"
+  | "Hardware"
+  | "Chemicals"
+  | "Drugs"
+  | "Robots"
+  | "AI Cores"
+  | "Real Estate";
+
+/** @public */
+type CorpUnlockName =
+  | "Export"
+  | "Smart Supply"
+  | "Market Research - Demand"
+  | "Market Data - Competition"
+  | "VeChain"
+  | "Shady Accounting"
+  | "Government Partnership"
+  | "Warehouse API"
+  | "Office API";
+
+/** @public */
+type CorpUpgradeName =
+  | "Smart Factories"
+  | "Smart Storage"
+  | "DreamSense"
+  | "Wilson Analytics"
+  | "Nuoptimal Nootropic Injector Implants"
+  | "Speech Processor Implants"
+  | "Neural Accelerators"
+  | "FocusWires"
+  | "ABC SalesBots"
+  | "Project Insight";
+
+/** @public */
+type CorpResearchName =
+  | "Hi-Tech R&D Laboratory"
+  | "AutoBrew"
+  | "AutoPartyManager"
+  | "Automatic Drug Administration"
+  | "Bulk Purchasing"
+  | "CPH4 Injections"
+  | "Drones"
+  | "Drones - Assembly"
+  | "Drones - Transport"
+  | "Go-Juice"
+  | "HRBuddy-Recruitment"
+  | "HRBuddy-Training"
+  | "JoyWire"
+  | "Market-TA.I"
+  | "Market-TA.II"
+  | "Overclock"
+  | "Self-Correcting Assemblers"
+  | "Sti.mu"
+  | "uPgrade: Capacity.I"
+  | "uPgrade: Capacity.II"
+  | "uPgrade: Dashboard"
+  | "uPgrade: Fulcrum"
+  | "sudo.Assist";
 
 /**
  * Corporation material information
  * @public
  */
-interface materialInfo {
+interface CorpMaterialConstantData {
   /** Name of the material */
   name: string;
   /** Size of the material */
   size: number;
-  /** Revenue per second this cycle */
-  prodMult: boolean;
+  demandBase: number;
+  /** Min and max demand */
+  demandRange: [min: number, max: number];
+  competitionBase: number;
+  competitionRange: [min: number, max: number];
+  baseCost: number;
+  maxVolatility: number;
+  baseMarkup: number;
 }
 
 /**
- * Corporation product information
+ * Corporation industry information
  * @public
  */
-interface productInfo {
-  /** Product type */
-  type?: string;
-  /** Size of the product */
-  size: number;
-  /** Materials required to make the product */
-  requiredMaterials: string[];
-  /** Division type which makes the product */
-  division: string;
-}
-
-/**
- * Corporation division information
- * @public
- */
-interface divisionInfo {
-  /** Division type */
-  type: string;
+interface IndustryData {
+  /** Industry type */
+  type: CorpIndustryName;
   /** Cost to expand to the division */
   cost: number;
   /** Materials required for production and their amounts */
@@ -7704,7 +7839,7 @@ interface Product {
   /** Data refers to the production, sale, and quantity of the products
    * These values are specific to a city
    * For each city, the data is [qty, prod, sell] */
-  cityData: { [key: string]: number[] };
+  cityData: Record<CityName | `${CityName}`, number[]>;
   /** Creation progress - A number between 0-100 representing percentage */
   developmentProgress: number;
 }
@@ -7715,7 +7850,7 @@ interface Product {
  */
 interface Material {
   /** Name of the material */
-  name: string;
+  name: CorpMaterialName;
   /** Amount of material  */
   qty: number;
   /** Quality of the material */
@@ -7744,7 +7879,7 @@ interface Export {
   /** Division the material is being exported to */
   div: string;
   /** City the material is being exported to */
-  loc: string;
+  loc: CityName;
   /** Amount of material exported */
   amt: string;
 }
@@ -7757,7 +7892,7 @@ interface Warehouse {
   /** Amount of size upgrade bought */
   level: number;
   /** City in which the warehouse is located */
-  loc: string;
+  loc: CityName;
   /** Total space in the warehouse */
   size: number;
   /** Used space in the warehouse */
@@ -7772,19 +7907,13 @@ interface Warehouse {
  */
 export interface Office {
   /** City of the office */
-  loc: string;
+  loc: CityName;
   /** Maximum number of employee */
   size: number;
-  /** Minimum amount of energy of the employees */
-  minEne: number;
   /** Maximum amount of energy of the employees */
   maxEne: number;
-  /** Minimum happiness of the employees */
-  minHap: number;
   /** Maximum happiness of the employees */
   maxHap: number;
-  /** Minimum morale of the employees */
-  minMor: number;
   /** Maximum morale of the employees */
   maxMor: number;
   /** Amount of employees */
@@ -7796,9 +7925,9 @@ export interface Office {
   /** Average morale of the employees */
   avgMor: number;
   /** Production of the employees */
-  employeeProd: Record<`${EmployeePositions}`, number>;
+  employeeProd: Record<CorpEmployeePosition, number>;
   /** Positions of the employees */
-  employeeJobs: Record<`${EmployeePositions}`, number>;
+  employeeJobs: Record<CorpEmployeePosition, number>;
 }
 
 /**
@@ -7809,7 +7938,7 @@ interface Division {
   /** Name of the division */
   name: string;
   /** Type of division, like Agriculture */
-  type: string;
+  type: CorpIndustryName;
   /** Awareness of the division */
   awareness: number;
   /** Popularity of the division */
@@ -7829,7 +7958,7 @@ interface Division {
   /** All research bought */
   upgrades: number[];
   /** Cities in which this division has expanded */
-  cities: string[];
+  cities: CityName[];
   /** Products developed by this division */
   products: string[];
   /** Whether the industry this division is in is capable of making products */

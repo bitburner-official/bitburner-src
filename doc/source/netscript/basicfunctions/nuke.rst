@@ -7,11 +7,12 @@ nuke() Netscript Function
     :param string hostname: Hostname of the target server.
 
     Runs the ``NUKE.exe`` program on the target server. ``NUKE.exe`` must exist
-    on your home computer.
+    on your home computer. Requires the targeted server to have enough ports opened,
+    otherwise will throw an error.
 
 
     Example:
 
     .. code-block:: javascript
 
-        nuke("foodnstuff");
+        ns.nuke("foodnstuff");

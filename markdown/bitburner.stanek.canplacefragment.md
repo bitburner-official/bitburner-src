@@ -6,7 +6,7 @@
 
 Check if fragment can be placed at specified location.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 canPlaceFragment(rootX: number, rootY: number, rotation: number, fragmentId: number): boolean;
@@ -21,7 +21,7 @@ canPlaceFragment(rootX: number, rootY: number, rotation: number, fragmentId: num
 |  rotation | number | rotation A number from 0 to 3, the mount of 90 degree turn to take. |
 |  fragmentId | number | fragmentId ID of the fragment to place. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

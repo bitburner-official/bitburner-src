@@ -27,5 +27,5 @@ weaken() Netscript Function
 
     .. code-block:: javascript
 
-        weaken("foodnstuff");
-        weaken("foodnstuff", { threads: 5 }); // Only use 5 threads to weaken
+        await ns.weaken("foodnstuff");
+        await ns.weaken("foodnstuff", { threads: 5 }); // Only use 5 threads to weaken

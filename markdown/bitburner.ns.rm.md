@@ -6,7 +6,7 @@
 
 Delete a file.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 rm(name: string, host?: string): boolean;
@@ -17,9 +17,9 @@ rm(name: string, host?: string): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  name | string | Filename of file to remove. Must include the extension. |
-|  host | string | Hostname of the server on which to delete the file. Optional. Defaults to current server. |
+|  host | string | _(Optional)_ Hostname of the server on which to delete the file. Optional. Defaults to current server. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

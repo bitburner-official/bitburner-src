@@ -4,7 +4,7 @@
 
 ## Player.location property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 location: string;

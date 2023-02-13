@@ -6,7 +6,7 @@
 
 Material in a warehouse
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface Material 
@@ -14,16 +14,16 @@ interface Material
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [cmp](./bitburner.material.cmp.md) | number \| undefined | Competition for the material, only present if "Market Research - Competition" unlocked |
-|  [cost](./bitburner.material.cost.md) | number | Cost to buy material |
-|  [dmd](./bitburner.material.dmd.md) | number \| undefined | Demand for the material, only present if "Market Research - Demand" unlocked |
-|  [exp](./bitburner.material.exp.md) | [Export](./bitburner.export.md)<!-- -->\[\] | Export orders |
-|  [name](./bitburner.material.name.md) | string | Name of the material |
-|  [prod](./bitburner.material.prod.md) | number | Amount of material produced |
-|  [qlt](./bitburner.material.qlt.md) | number | Quality of the material |
-|  [qty](./bitburner.material.qty.md) | number | Amount of material |
-|  [sCost](./bitburner.material.scost.md) | string \| number | Sell cost, can be "MP+5" |
-|  [sell](./bitburner.material.sell.md) | number | Amount of material sold |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [cmp](./bitburner.material.cmp.md) |  | number \| undefined | Competition for the material, only present if "Market Research - Competition" unlocked |
+|  [cost](./bitburner.material.cost.md) |  | number | Cost to buy material |
+|  [dmd](./bitburner.material.dmd.md) |  | number \| undefined | Demand for the material, only present if "Market Research - Demand" unlocked |
+|  [exp](./bitburner.material.exp.md) |  | [Export](./bitburner.export.md)<!-- -->\[\] | Export orders |
+|  [name](./bitburner.material.name.md) |  | [CorpMaterialName](./bitburner.corpmaterialname.md) | Name of the material |
+|  [prod](./bitburner.material.prod.md) |  | number | Amount of material produced |
+|  [qlt](./bitburner.material.qlt.md) |  | number | Quality of the material |
+|  [qty](./bitburner.material.qty.md) |  | number | Amount of material |
+|  [sCost](./bitburner.material.scost.md) |  | string \| number | Sell cost, can be "MP+5" |
+|  [sell](./bitburner.material.sell.md) |  | number | Amount of material sold |
 

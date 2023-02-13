@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.errorlight property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 errorlight: string;

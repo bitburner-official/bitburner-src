@@ -1,5 +1,5 @@
 import { FactionNames } from "./Faction/data/FactionNames";
-import { CityName } from "./Locations/data/CityNames";
+import { CityName } from "./Enums";
 import { StaticAugmentations } from "./Augmentation/StaticAugmentations";
 import { augmentationExists, initAugmentations } from "./Augmentation/AugmentationHelpers";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
@@ -99,6 +99,7 @@ export function prestigeAugmentation(): void {
   Player.factionInvitations = Player.factionInvitations.concat(maintainMembership);
   initAugmentations(); // Calls reapplyAllAugmentations() and resets Player multipliers
   Player.reapplyAllSourceFiles();
+  Player.hp.current = Player.hp.max;
   initCompanies();
 
   // Apply entropy from grafting

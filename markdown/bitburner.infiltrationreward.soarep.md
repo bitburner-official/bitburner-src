@@ -4,7 +4,7 @@
 
 ## InfiltrationReward.SoARep property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 SoARep: number;

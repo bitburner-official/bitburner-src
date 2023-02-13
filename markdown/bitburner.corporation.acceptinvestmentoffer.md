@@ -6,12 +6,12 @@
 
 Accept investment based on you companies current valuation
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 acceptInvestmentOffer(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

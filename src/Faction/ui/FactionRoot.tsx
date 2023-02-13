@@ -3,7 +3,7 @@
  * This is the component for displaying a single faction's UI, not the list of all
  * accessible factions
  */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { AugmentationsPage } from "./AugmentationsPage";
 import { DonateOption } from "./DonateOption";
@@ -24,7 +24,8 @@ import { CovenantPurchasesRoot } from "../../PersonObjects/Sleeve/ui/CovenantPur
 import { FactionNames } from "../data/FactionNames";
 import { GangButton } from "./GangButton";
 import { FactionWork } from "../../Work/FactionWork";
-import { FactionWorkType } from "../../utils/enums";
+import { FactionWorkType } from "../../Enums";
+import { useRerender } from "../../ui/React/hooks";
 
 type IProps = {
   faction: Faction;
@@ -152,17 +153,8 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
 }
 
 export function FactionRoot(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
+  const rerender = useRerender(200);
   const [purchasingAugs, setPurchasingAugs] = useState(props.augPage);
-
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
-
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
 
   const faction = props.faction;
 

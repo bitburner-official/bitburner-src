@@ -6,12 +6,12 @@
 
 Create a new product
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 makeProduct(
     divisionName: string,
-    cityName: string,
+    city: CityName | `${CityName}`,
     productName: string,
     designInvest: number,
     marketingInvest: number,
@@ -23,12 +23,12 @@ makeProduct(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  cityName | string | Name of the city |
+|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
 |  productName | string | Name of the product |
 |  designInvest | number | Amount to invest for the design of the product. |
 |  marketingInvest | number | Amount to invest for the marketing of the product. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

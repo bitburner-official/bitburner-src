@@ -4,8 +4,8 @@
 
 ## Person.city property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-city: string;
+city: CityName;
 ```

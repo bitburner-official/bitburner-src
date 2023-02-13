@@ -6,7 +6,7 @@
 
 Multiplier to success chance in Bladeburner contracts/operations
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 bladeburner_success_chance: number;

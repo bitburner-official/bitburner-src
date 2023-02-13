@@ -13,7 +13,8 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { CityName } from "../../../Locations/data/CityNames";
+import { CityName } from "../../../Enums";
+import { useRerender } from "../../../ui/React/hooks";
 
 interface IProps {
   open: boolean;
@@ -32,11 +33,7 @@ export function ExportModal(props: IProps): React.ReactElement {
   const [industry, setIndustry] = useState<string>(defaultDivision.name);
   const [city, setCity] = useState(Object.keys(defaultDivision.warehouses)[0] as CityName);
   const [amt, setAmt] = useState("");
-  const setRerender = useState(false)[1];
-
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender();
 
   function onCityChange(event: SelectChangeEvent<string>): void {
     setCity(event.target.value as CityName);

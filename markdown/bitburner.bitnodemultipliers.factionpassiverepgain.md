@@ -6,7 +6,7 @@
 
 Influences how much rep the player gains in each faction simply by being a member.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 FactionPassiveRepGain: number;

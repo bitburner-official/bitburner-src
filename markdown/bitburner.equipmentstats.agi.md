@@ -6,7 +6,7 @@
 
 Agility multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agi?: number;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { CorporationConstants } from "../data/Constants";
+import * as corpConstants from "../data/Constants";
 import { Product } from "../Product";
 import { DiscontinueProductModal } from "./modals/DiscontinueProductModal";
 import { LimitProductProductionModal } from "./modals/LimitProductProductionModal";
@@ -8,7 +8,7 @@ import { SellProductModal } from "./modals/SellProductModal";
 import { ProductMarketTaModal } from "./modals/ProductMarketTaModal";
 import { CancelProductModal } from "./modals/CancelProductModal";
 
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatBigNumber, formatCorpStat, formatMoney, formatPercent } from "../../ui/formatNumber";
 
 import { isString } from "../../utils/helpers/isString";
 import { Money } from "../../ui/React/Money";
@@ -38,10 +38,6 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   const city = props.city;
   const product = props.product;
 
-  // Numeral.js formatters
-  const nf = "0.000";
-  const nfB = "0.000a"; // For numbers that might be big
-
   const hasUpgradeDashboard = division.hasResearch("uPgrade: Dashboard");
 
   // Total product gain = production - sale
@@ -53,14 +49,13 @@ export function ProductElem(props: IProductProps): React.ReactElement {
     if (isString(product.sllman[city][1])) {
       sellButtonText = (
         <>
-          Sell ({numeralWrapper.format(product.data[city][2], nfB)}/{product.sllman[city][1]})
+          Sell ({formatBigNumber(product.data[city][2])}/{product.sllman[city][1]})
         </>
       );
     } else {
       sellButtonText = (
         <>
-          Sell ({numeralWrapper.format(product.data[city][2], nfB)}/
-          {numeralWrapper.format(product.sllman[city][1], nfB)})
+          Sell ({formatBigNumber(product.data[city][2])}/{formatBigNumber(product.sllman[city][1])})
         </>
       );
     }
@@ -101,7 +96,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   // Limit Production button
   let limitProductionButtonText = "Limit Production";
   if (product.prdman[city][0]) {
-    limitProductionButtonText += " (" + numeralWrapper.format(product.prdman[city][1], nf) + ")";
+    limitProductionButtonText += " (" + formatCorpStat(product.prdman[city][1]) + ")";
   }
 
   return (
@@ -112,7 +107,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             Designing {product.name} (req. Operations/Engineers in {product.createCity})...
           </Typography>
           <br />
-          <Typography>{numeralWrapper.format(product.prog, "0.00")}% complete</Typography>
+          <Typography>{formatPercent(product.prog / 100, 2)}% complete</Typography>
           <Button onClick={() => setCancelOpen(true)}>Cancel</Button>
           <CancelProductModal
             product={product}
@@ -127,15 +122,14 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  Prod: {numeralWrapper.format(product.data[city][1], nfB)}/s
+                  Prod: {formatBigNumber(product.data[city][1])}/s
                   <br />
-                  Sell: {numeralWrapper.format(product.data[city][2], nfB)} /s
+                  Sell: {formatBigNumber(product.data[city][2])} /s
                 </Typography>
               }
             >
               <Typography>
-                {product.name}: {numeralWrapper.format(product.data[city][0], nfB)} (
-                {numeralWrapper.format(totalGain, nfB)}
+                {product.name}: {formatBigNumber(product.data[city][0])} ({formatBigNumber(totalGain)}
                 /s)
               </Typography>
             </Tooltip>
@@ -144,27 +138,26 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  Quality: {numeralWrapper.format(product.qlt, nf)} <br />
-                  Performance: {numeralWrapper.format(product.per, nf)} <br />
-                  Durability: {numeralWrapper.format(product.dur, nf)} <br />
-                  Reliability: {numeralWrapper.format(product.rel, nf)} <br />
-                  Aesthetics: {numeralWrapper.format(product.aes, nf)} <br />
-                  Features: {numeralWrapper.format(product.fea, nf)}
+                  Quality: {formatCorpStat(product.qlt)} <br />
+                  Performance: {formatCorpStat(product.per)} <br />
+                  Durability: {formatCorpStat(product.dur)} <br />
+                  Reliability: {formatCorpStat(product.rel)} <br />
+                  Aesthetics: {formatCorpStat(product.aes)} <br />
+                  Features: {formatCorpStat(product.fea)}
                   {corp.unlockUpgrades[2] === 1 && <br />}
-                  {corp.unlockUpgrades[2] === 1 && "Demand: " + numeralWrapper.format(product.dmd, nf)}
+                  {corp.unlockUpgrades[2] === 1 && "Demand: " + formatCorpStat(product.dmd)}
                   {corp.unlockUpgrades[3] === 1 && <br />}
-                  {corp.unlockUpgrades[3] === 1 && "Competition: " + numeralWrapper.format(product.cmp, nf)}
+                  {corp.unlockUpgrades[3] === 1 && "Competition: " + formatCorpStat(product.cmp)}
                 </Typography>
               }
             >
-              <Typography>Rating: {numeralWrapper.format(product.rat, nf)}</Typography>
+              <Typography>Rating: {formatCorpStat(product.rat)}</Typography>
             </Tooltip>
           </Box>
           <Box display="flex">
             <Tooltip title={<Typography>An estimate of the material cost it takes to create this Product.</Typography>}>
               <Typography>
-                Est. Production Cost:{" "}
-                {numeralWrapper.formatMoney(product.pCost / CorporationConstants.ProductProductionCostRatio)}
+                Est. Production Cost: {formatMoney(product.pCost / corpConstants.baseProductProfitMult)}
               </Typography>
             </Tooltip>
           </Box>
@@ -177,7 +170,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
                 </Typography>
               }
             >
-              <Typography>Est. Market Price: {numeralWrapper.formatMoney(product.pCost)}</Typography>
+              <Typography>Est. Market Price: {formatMoney(product.pCost)}</Typography>
             </Tooltip>
           </Box>
           <Button onClick={() => setDiscontinueOpen(true)}>Discontinue</Button>

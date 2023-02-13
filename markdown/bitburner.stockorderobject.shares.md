@@ -6,7 +6,7 @@
 
 Number of shares
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 shares: number;

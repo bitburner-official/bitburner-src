@@ -6,7 +6,7 @@
 
 User Interface API.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface UserInterface 

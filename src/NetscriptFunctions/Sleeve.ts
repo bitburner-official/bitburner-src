@@ -1,12 +1,12 @@
 import { Player } from "@player";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { CityName } from "../Locations/data/CityNames";
+import { CityName } from "../Enums";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { Augmentation } from "../Augmentation/Augmentation";
 
-import { Sleeve } from "../ScriptEditor/NetscriptDefinitions";
+import { Sleeve } from "@nsdefs";
 import { checkEnum } from "../utils/helpers/enum";
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
 import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
@@ -31,7 +31,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
     }
   };
 
-  return {
+  const sleeveFunctions: InternalAPI<Sleeve> = {
     getNumSleeves: (ctx) => () => {
       checkSleeveAPIAccess(ctx);
       return Player.sleeves.length;
@@ -162,6 +162,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
         shock: sl.shock,
         sync: sl.sync,
         memory: sl.memory,
+        storedCycles: sl.storedCycles,
       };
 
       return data;
@@ -254,4 +255,11 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
       return Player.sleeves[sleeveNumber].bladeburner(action, contract);
     },
   };
+  // Removed undocumented functions added using Object.assign because typescript.
+  // TODO: Remove these at 3.0
+  Object.assign(sleeveFunctions, {
+    getSleeveStats: removedFunction("v2.2.0", "sleeve.getSleeve"),
+    getInformation: removedFunction("v2.2.0", "sleeve.getSleeve"),
+  });
+  return sleeveFunctions;
 }

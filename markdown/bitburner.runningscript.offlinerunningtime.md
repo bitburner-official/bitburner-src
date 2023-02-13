@@ -6,7 +6,7 @@
 
 Number of seconds that the script has been running offline
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 offlineRunningTime: number;

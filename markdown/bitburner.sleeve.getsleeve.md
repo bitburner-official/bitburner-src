@@ -6,7 +6,7 @@
 
 Get information about a sleeve.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getSleeve(sleeveNumber: number): SleevePerson;
@@ -18,7 +18,7 @@ getSleeve(sleeveNumber: number): SleevePerson;
 |  --- | --- | --- |
 |  sleeveNumber | number | Index of the sleeve to retrieve information. |
 
-<b>Returns:</b>
+**Returns:**
 
 [SleevePerson](./bitburner.sleeveperson.md)
 
@@ -29,4 +29,6 @@ Object containing information about this sleeve.
 RAM cost: 4 GB
 
 Return a person object for this sleeve
+
+storedCycles is the amount of Bonus Time in cycles, each translates to 200ms
 

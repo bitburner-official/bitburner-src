@@ -6,7 +6,7 @@
 
 Total number of money Node has produced
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 totalProduction: number;

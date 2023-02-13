@@ -6,7 +6,7 @@
 
 Total earned defense experience
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 def_asc_points: number;

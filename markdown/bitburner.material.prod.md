@@ -6,7 +6,7 @@
 
 Amount of material produced
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 prod: number;

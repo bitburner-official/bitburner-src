@@ -6,12 +6,12 @@
 
 Get the current window size
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 windowSize(): [number, number];
 ```
-<b>Returns:</b>
+**Returns:**
 
 \[number, number\]
 

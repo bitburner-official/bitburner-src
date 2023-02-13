@@ -6,7 +6,7 @@
 
 Returns the ask price of that stock.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getAskPrice(sym: string): number;
@@ -18,7 +18,7 @@ getAskPrice(sym: string): number;
 |  --- | --- | --- |
 |  sym | string | Stock symbol. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

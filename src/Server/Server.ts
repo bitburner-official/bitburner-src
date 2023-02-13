@@ -59,7 +59,7 @@ export class Server extends BaseServer {
     super(params);
 
     // "hacknet-node-X" hostnames are reserved for Hacknet Servers
-    if (this.hostname.startsWith("hacknet-node-")) {
+    if (this.hostname.startsWith("hacknet-node-" || "hacknet-server-")) {
       this.hostname = createRandomString(10);
     }
 
@@ -70,9 +70,9 @@ export class Server extends BaseServer {
 
     /* Hacking information (only valid for "foreign" aka non-purchased servers) */
     this.requiredHackingSkill = params.requiredHackingSkill != null ? params.requiredHackingSkill : 1;
-    this.moneyAvailable =
-      params.moneyAvailable != null ? params.moneyAvailable * BitNodeMultipliers.ServerStartingMoney : 0;
-    this.moneyMax = 25 * this.moneyAvailable * BitNodeMultipliers.ServerMaxMoney;
+    const baseMoney = params.moneyAvailable ?? 0;
+    this.moneyAvailable = baseMoney * BitNodeMultipliers.ServerStartingMoney;
+    this.moneyMax = 25 * baseMoney * BitNodeMultipliers.ServerMaxMoney;
 
     //Hack Difficulty is synonymous with server security. Base Difficulty = Starting difficulty
     const realDifficulty =

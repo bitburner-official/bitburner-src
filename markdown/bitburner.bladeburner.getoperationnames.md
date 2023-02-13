@@ -6,12 +6,12 @@
 
 List all operations.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getOperationNames(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

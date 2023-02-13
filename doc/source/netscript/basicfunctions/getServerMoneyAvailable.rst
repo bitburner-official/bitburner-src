@@ -15,5 +15,5 @@ getServerMoneyAvailable() Netscript Function
 
     .. code-block:: javascript
 
-        getServerMoneyAvailable("foodnstuff"); // returns: 120000
-        getServerMoneyAvailable("home"); // returns: 1000
+        ns.getServerMoneyAvailable("foodnstuff"); // returns: 120000
+        ns.getServerMoneyAvailable("home"); // returns: 1000

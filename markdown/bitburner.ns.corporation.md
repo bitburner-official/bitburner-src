@@ -6,7 +6,7 @@
 
 Namespace for corporation functions. RAM cost: 1022.4 GB
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly corporation: Corporation;

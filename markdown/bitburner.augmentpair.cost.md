@@ -6,7 +6,7 @@
 
 augmentation cost
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cost: number;

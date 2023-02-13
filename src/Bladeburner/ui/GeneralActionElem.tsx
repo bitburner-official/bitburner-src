@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { ActionTypes } from "../data/ActionTypes";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
-import { formatNumber, convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { formatNumberNoSuffix } from "../../ui/formatNumber";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { Bladeburner } from "../Bladeburner";
 import { Action } from "../Action";
 import { GeneralActions } from "../data/GeneralActions";
@@ -13,6 +14,7 @@ import { StartButton } from "./StartButton";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
   bladeburner: Bladeburner;
@@ -20,10 +22,7 @@ interface IProps {
 }
 
 export function GeneralActionElem(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender();
   const isActive = props.action.name === props.bladeburner.action.name;
   const computedActionTimeCurrent = Math.min(
     props.bladeburner.actionTimeCurrent + props.bladeburner.actionTimeOverflow,
@@ -59,8 +58,8 @@ export function GeneralActionElem(props: IProps): React.ReactElement {
         <>
           <CopyableText value={props.action.name} />
           <Typography>
-            (IN PROGRESS - {formatNumber(computedActionTimeCurrent, 0)} /{" "}
-            {formatNumber(props.bladeburner.actionTimeToComplete, 0)})
+            (IN PROGRESS - {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
+            {formatNumberNoSuffix(props.bladeburner.actionTimeToComplete, 0)})
           </Typography>
           <Typography>
             {createProgressBarText({
@@ -89,7 +88,7 @@ export function GeneralActionElem(props: IProps): React.ReactElement {
         {successChance !== -1 && (
           <>
             <br />
-            Estimated success chance: {formatNumber(successChance * 100, 1)}%
+            Estimated success chance: {formatNumberNoSuffix(successChance * 100, 1)}%
           </>
         )}
       </Typography>

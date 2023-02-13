@@ -4,7 +4,7 @@
 
 ## Player.playtimeSinceLastAug property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 playtimeSinceLastAug: number;

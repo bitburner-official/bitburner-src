@@ -1,22 +1,19 @@
-import { EmployeePositions } from "./EmployeePositions";
-import { CorporationConstants } from "./data/Constants";
+import { EmployeePositions } from "./data/Enums";
+import * as corpConstants from "./data/Constants";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { Industry } from "./Industry";
 import { Corporation } from "./Corporation";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { CityName } from "../Enums";
 
 interface IParams {
-  loc?: string;
+  loc?: CityName;
   size?: number;
 }
 
 export class OfficeSpace {
-  loc: string;
+  loc: CityName;
   size: number;
-
-  minEne = 0;
-  minHap = 0;
-  minMor = 0;
 
   maxEne = 100;
   maxHap = 100;
@@ -70,7 +67,7 @@ export class OfficeSpace {
   };
 
   constructor(params: IParams = {}) {
-    this.loc = params.loc ? params.loc : "";
+    this.loc = params.loc ? params.loc : CityName.Sector12;
     this.size = params.size ? params.size : 1;
   }
 
@@ -96,29 +93,23 @@ export class OfficeSpace {
     this.maxHap = 100;
     this.maxMor = 100;
 
-    if (industry.hasResearch("Go-Juice")) {
-      this.maxEne += 10;
-    }
-    if (industry.hasResearch("JoyWire")) {
-      this.maxHap += 10;
-    }
-    if (industry.hasResearch("Sti.mu")) {
-      this.maxMor += 10;
-    }
-    if (industry.hasResearch("AutoBrew")) {
-      this.autoCoffee = true;
-    }
-    if (industry.hasResearch("AutoPartyManager")) {
-      this.autoParty = true;
-    }
+    if (industry.hasResearch("Go-Juice")) this.maxEne += 10;
+    if (industry.hasResearch("JoyWire")) this.maxHap += 10;
+    if (industry.hasResearch("Sti.mu")) this.maxMor += 10;
+    if (industry.hasResearch("AutoBrew")) this.autoCoffee = true;
+    if (industry.hasResearch("AutoPartyManager")) this.autoParty = true;
 
     if (this.totalEmployees > 0) {
       /** Multiplier for employee morale/happiness/energy based on company performance */
       const perfMult = Math.pow(
-        0.999 - (corporation.funds < 0 ? 0.002 : 0) - (industry.lastCycleRevenue < 0 ? 0.002 : 0),
+        1.002 -
+          (corporation.funds < 0 ? 0.002 : 0) -
+          (industry.lastCycleRevenue < industry.lastCycleExpenses ? 0.002 : 0),
         marketCycles,
       );
-      /** Flat reduction per cycle */
+      // Flat reduction per cycle.
+      // This does not cause a noticable decrease (it's only -.001% per cycle), it only serves
+      // to make the numbers slightly different between Happiness and Morale.
       const reduction = 0.001 * marketCycles;
 
       if (this.autoCoffee) {
@@ -140,9 +131,9 @@ export class OfficeSpace {
         this.avgMor = (this.avgMor * perfMult + increase) * this.partyMult;
       }
 
-      this.avgEne = Math.max(Math.min(this.avgEne, this.maxEne), this.minEne);
-      this.avgMor = Math.max(Math.min(this.avgMor, this.maxMor), this.minMor);
-      this.avgHap = Math.max(Math.min(this.avgHap, this.maxHap), this.minHap);
+      this.avgEne = Math.max(Math.min(this.avgEne, this.maxEne), corpConstants.minEmployeeDecay);
+      this.avgMor = Math.max(Math.min(this.avgMor, this.maxMor), corpConstants.minEmployeeDecay);
+      this.avgHap = Math.max(Math.min(this.avgHap, this.maxHap), corpConstants.minEmployeeDecay);
 
       this.coffeePending = false;
       this.partyMult = 1;
@@ -161,7 +152,7 @@ export class OfficeSpace {
       this.totalSalary = 0;
     } else {
       this.totalSalary =
-        CorporationConstants.EmployeeSalaryMultiplier *
+        corpConstants.employeeSalaryMultiplier *
         marketCycles *
         this.totalEmployees *
         (this.avgInt + this.avgCha + this.totalExp / this.totalEmployees + this.avgCre + this.avgEff);
@@ -233,11 +224,14 @@ export class OfficeSpace {
   }
 
   autoAssignJob(job: EmployeePositions, target: number): boolean {
+    if (job === EmployeePositions.Unassigned) {
+      throw new Error("internal autoAssignJob function called with EmployeePositions.Unassigned");
+    }
     const diff = target - this.employeeNextJobs[job];
 
-    if (diff === 0) {
-      return true;
-    } else if (diff <= this.employeeNextJobs[EmployeePositions.Unassigned]) {
+    if (diff === 0) return true;
+    // We are already at the desired number
+    else if (diff <= this.employeeNextJobs[EmployeePositions.Unassigned]) {
       // This covers both a negative diff (reducing the amount of employees in position) and a positive (increasing and using up unassigned employees)
       this.employeeNextJobs[EmployeePositions.Unassigned] -= diff;
       this.employeeNextJobs[job] = target;
@@ -247,7 +241,7 @@ export class OfficeSpace {
   }
 
   getCoffeeCost(): number {
-    return 500e3 * this.totalEmployees;
+    return corpConstants.coffeeCostPerEmployee * this.totalEmployees;
   }
 
   setCoffee(): boolean {

@@ -6,7 +6,7 @@
 
 Parameter that affects how effectively this server's money can be increased using the grow() Netscript function
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 serverGrowth: number;

@@ -6,7 +6,7 @@
 
 How many people die as a result of this crime
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 kills: number;

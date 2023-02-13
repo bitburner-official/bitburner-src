@@ -6,7 +6,7 @@
 
 List files on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ls(host: string, grep?: string): string[];
@@ -17,9 +17,9 @@ ls(host: string, grep?: string): string[];
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
-|  grep | string | A substring to search for in the filename. |
+|  grep | string | _(Optional)_ A substring to search for in the filename. |
 
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

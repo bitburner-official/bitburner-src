@@ -1,31 +1,37 @@
 import { Player } from "../../../src/Player";
-import { NetscriptFunctions, wrappedNS } from "../../../src/NetscriptFunctions";
-import { RamCosts, getRamCost, RamCostConstants } from "../../../src/Netscript/RamCostGenerator";
+import { NetscriptFunctions } from "../../../src/NetscriptFunctions";
+import { RamCosts, getRamCost, RamCostConstants, RamCostTree } from "../../../src/Netscript/RamCostGenerator";
 import { Environment } from "../../../src/Netscript/Environment";
 import { RunningScript } from "../../../src/Script/RunningScript";
 import { Script } from "../../../src/Script/Script";
 import { WorkerScript } from "../../../src/Netscript/WorkerScript";
 import { calculateRamUsage } from "../../../src/Script/RamCalculations";
+import { ns } from "../../../src/NetscriptFunctions";
+import { InternalAPI, NetscriptContext } from "src/Netscript/APIWrapper";
+import { Singularity } from "@nsdefs";
 
 type PotentiallyAsyncFunction = (arg?: unknown) => { catch?: PotentiallyAsyncFunction };
-type NSLayer = {
-  [key: string]: NSLayer | PotentiallyAsyncFunction;
-};
-type RamLayer = {
-  [key: string]: number | (() => number) | RamLayer;
-};
-function grabCost(ramLayer: RamLayer, fullPath: string[]) {
-  const ramEntry = ramLayer[fullPath[fullPath.length - 1]];
-  const expectedRam = typeof ramEntry === "function" ? ramEntry() : ramEntry;
-  if (typeof expectedRam !== "number") throw new Error(`There was no defined ram cost for ${fullPath.join(".")}().`);
-  return expectedRam;
+
+/** Get a potentiallyAsyncFunction from a layer of the external ns */
+function getFunction(fn: unknown) {
+  if (typeof fn !== "function") throw new Error("Expected a function at this location.");
+  return fn as PotentiallyAsyncFunction;
+}
+function grabCost<API>(ramEntry: RamCostTree<API>[keyof API]) {
+  if (typeof ramEntry === "function") return ramEntry();
+  if (typeof ramEntry === "number") return ramEntry;
+  throw new Error("Invalid ramcost: " + ramEntry);
+}
+function isRemovedFunction(ctx: NetscriptContext, fn: (ctx: NetscriptContext) => (...__: unknown[]) => unknown) {
+  return /REMOVED FUNCTION/.test(fn(ctx) + "");
 }
 
 describe("Netscript RAM Calculation/Generation Tests", function () {
   Player.sourceFiles[0] = { n: 4, lvl: 3 };
-  const sf4 = Player.sourceFiles[0];
   // For simulating costs of singularity functions.
-  const ScriptBaseCost = RamCostConstants.ScriptBaseRamCost;
+  const sf4 = Player.sourceFiles[0];
+  const baseCost = RamCostConstants.Base;
+  const maxCost = RamCostConstants.Max;
   const script = new Script();
   /** Creates a RunningScript object which calculates static ram usage */
   function createRunningScript(code: string) {
@@ -49,12 +55,12 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     code: "",
     delay: null,
     dynamicLoadedFns: {},
-    dynamicRamUsage: RamCostConstants.ScriptBaseRamCost,
+    dynamicRamUsage: RamCostConstants.Base,
     env: new Environment(),
     ramUsage: scriptRef.ramUsage,
     scriptRef,
   };
-  const ns = NetscriptFunctions(workerScript as WorkerScript);
+  const nsExternal = NetscriptFunctions(workerScript as WorkerScript);
 
   function combinedRamCheck(
     fn: PotentiallyAsyncFunction,
@@ -70,7 +76,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
 
     // Static ram check
     const staticCost = calculateRamUsage(code, []).cost;
-    expect(staticCost).toBeCloseTo(ScriptBaseCost + expectedRamCost + extraLayerCost);
+    expect(staticCost).toBeCloseTo(Math.min(baseCost + expectedRamCost + extraLayerCost, maxCost));
 
     // reset workerScript for dynamic check
     scriptRef = createRunningScript(code);
@@ -78,11 +84,11 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
       code,
       scriptRef,
       ramUsage: scriptRef.ramUsage,
-      dynamicRamUsage: ScriptBaseCost,
+      dynamicRamUsage: baseCost,
       env: new Environment(),
       dynamicLoadedFns: {},
     });
-    workerScript.env.vars = ns;
+    workerScript.env.vars = nsExternal;
 
     // Run the function through the workerscript's args
     if (typeof fn === "function") {
@@ -94,64 +100,69 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     }
 
     expect(workerScript.dynamicLoadedFns).toHaveProperty(fnName);
-    expect(workerScript.dynamicRamUsage - ScriptBaseCost).toBeCloseTo(expectedRamCost, 5);
+    expect(workerScript.dynamicRamUsage).toBeCloseTo(Math.min(expectedRamCost + baseCost, maxCost), 5);
     expect(workerScript.dynamicRamUsage).toBeCloseTo(scriptRef.ramUsage - extraLayerCost, 5);
   }
 
   describe("ns", () => {
-    Object.entries(wrappedNS as unknown as NSLayer).forEach(([key, val]) => {
-      if (key === "args" || key === "enums") return;
-      if (typeof val === "function") {
-        const expectedRam = grabCost(RamCosts, [key]);
-        it(`${key}()`, () => combinedRamCheck(val.bind(ns), [key], expectedRam));
-      }
-      //The only other option should be an NSLayer
-      const extraLayerCost = { corporation: 1022.4, hacknet: 4 }[key] ?? 0;
-      testLayer(val as NSLayer, RamCosts[key as keyof typeof RamCosts] as RamLayer, [key], extraLayerCost);
-    });
+    function testLayer<API>(
+      internalLayer: InternalAPI<API>,
+      externalLayer: API,
+      ramLayer: RamCostTree<API>,
+      path: string[],
+      extraLayerCost: number,
+    ) {
+      describe(path[path.length - 1] ?? "Base ns layer", () => {
+        for (const [key, val] of Object.entries(internalLayer) as [keyof API, InternalAPI<API>[keyof API]][]) {
+          const newPath = [...path, key as string];
+          if (typeof val === "function") {
+            // Removed functions have no ram cost and should be skipped.
+            if (isRemovedFunction({ workerScript }, val)) return;
+            const fn = getFunction(externalLayer[key]);
+            const fnName = newPath.join(".");
+            if (!(key in ramLayer)) {
+              throw new Error("Missing ramcost for " + fnName);
+            }
+            const expectedRam = grabCost(ramLayer[key]);
+            it(`${fnName}()`, () => combinedRamCheck(fn, newPath, expectedRam, extraLayerCost));
+          }
+          //A layer should be the only other option. Hacknet is currently the only layer with a layer cost.
+          else if (typeof val === "object" && key !== "enums") {
+            //hacknet is currently the only layer with a layer cost.
+            const layerCost = key === "hacknet" ? 4 : 0;
+            testLayer(val as InternalAPI<unknown>, externalLayer[key], ramLayer[key], newPath, layerCost);
+          }
+          // Other things like args, enums, etc. have no cost
+        }
+      });
+    }
+    testLayer(ns, nsExternal, RamCosts, [], 0);
   });
 
-  function testLayer(nsLayer: NSLayer, ramLayer: RamLayer, path: string[], extraLayerCost: number) {
-    // nsLayer is the layer on the main, unstamped wrappedNS object. The actualLayer is needed to check correct stamping.
-    const actualLayer = path.reduce((prev, curr) => prev[curr], ns as any); //todo: do this typesafely?
-    describe(path[path.length - 1], () => {
-      Object.entries(nsLayer).forEach(([key, val]) => {
-        const newPath = [...path, key];
-        if (typeof val === "function") {
-          const fnName = newPath.join(".");
-          const expectedRam = grabCost(ramLayer, newPath);
-          it(`${fnName}()`, () => combinedRamCheck(val.bind(actualLayer), newPath, expectedRam, extraLayerCost));
-        }
-        //Skip enums layers
-        else if (key === "enums") return;
-        //A layer should be the only other option.
-        else testLayer(val, ramLayer[key] as RamLayer, newPath, 0);
-      });
-    });
-  }
-
   describe("Singularity multiplier checks", () => {
+    // Checks were already done above for SF4.3 having normal ramcost.
     sf4.lvl = 3;
-    const singFunctions = Object.entries(wrappedNS.singularity).filter(([__, val]) => typeof val === "function");
-    const singObjects = singFunctions.map(([key, val]) => {
-      return {
-        name: key,
-        fn: val.bind(ns.singularity),
-        baseRam: grabCost(RamCosts.singularity, ["singularity", key]),
-      };
-    });
-    const lvlToMult: Record<number, number> = { 0: 16, 1: 16, 2: 4 };
-    for (const lvl of [0, 1, 2]) {
+    const lvlToMult = { 0: 16, 1: 16, 2: 4 };
+    const externalSingularity = nsExternal.singularity;
+    const ramCostSingularity = RamCosts.singularity;
+    const singObjects = (
+      Object.entries(ns.singularity) as [keyof Singularity, InternalAPI<Singularity>[keyof Singularity]][]
+    )
+      .filter(([__, v]) => typeof v === "function" && !isRemovedFunction({ workerScript }, v))
+      .map(([name]) => {
+        return {
+          name,
+          baseRam: grabCost<Singularity>(ramCostSingularity[name]),
+        };
+      });
+    for (const lvl of [0, 1, 2] as const) {
       it(`SF4.${lvl} check for x${lvlToMult[lvl]} costs`, () => {
         sf4.lvl = lvl;
-        singObjects.forEach((obj) =>
-          combinedRamCheck(
-            obj.fn as PotentiallyAsyncFunction,
-            ["singularity", obj.name],
-            obj.baseRam * lvlToMult[lvl],
-            0,
-          ),
-        );
+        const expectedMult = lvlToMult[lvl];
+        singObjects.forEach(({ name, baseRam }) => {
+          const fn = getFunction(externalSingularity[name]);
+          combinedRamCheck(fn, ["singularity", name], baseRam * expectedMult);
+        });
       });
     }
   });

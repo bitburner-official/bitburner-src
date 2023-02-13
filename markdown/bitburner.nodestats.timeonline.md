@@ -6,7 +6,7 @@
 
 Number of seconds since Node has been purchased
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 timeOnline: number;

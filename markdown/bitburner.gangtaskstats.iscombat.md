@@ -6,7 +6,7 @@
 
 Is a task of a combat gang
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 isCombat: boolean;

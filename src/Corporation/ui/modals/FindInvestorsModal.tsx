@@ -1,6 +1,6 @@
 import React from "react";
-import { numeralWrapper } from "../../../ui/numeralFormat";
-import { CorporationConstants } from "../../data/Constants";
+import { formatMoney, formatPercent, formatShares } from "../../../ui/formatNumber";
+import * as corpConstants from "../../data/Constants";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
 
@@ -18,14 +18,14 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
   const corporation = useCorporation();
   const val = corporation.valuation;
   if (
-    corporation.fundingRound >= CorporationConstants.FundingRoundShares.length ||
-    corporation.fundingRound >= CorporationConstants.FundingRoundMultiplier.length
+    corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
+    corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length
   )
     return <></>;
-  const percShares = CorporationConstants.FundingRoundShares[corporation.fundingRound];
-  const roundMultiplier = CorporationConstants.FundingRoundMultiplier[corporation.fundingRound];
+  const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
+  const roundMultiplier = corpConstants.fundingRoundMultiplier[corporation.fundingRound];
   const funding = val * percShares * roundMultiplier;
-  const investShares = Math.floor(CorporationConstants.INITIALSHARES * percShares);
+  const investShares = Math.floor(corpConstants.initialShares * percShares);
 
   function findInvestors(): void {
     corporation.fundingRound++;
@@ -37,9 +37,8 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        An investment firm has offered you {numeralWrapper.formatMoney(funding)} in funding in exchange for a{" "}
-        {numeralWrapper.format(percShares * 100, "0.000a")}% stake in the company (
-        {numeralWrapper.format(investShares, "0.000a")} shares).
+        An investment firm has offered you {formatMoney(funding)} in funding in exchange for a{" "}
+        {formatPercent(percShares, 3)} stake in the company ({formatShares(investShares)} shares).
         <br />
         <br />
         Do you accept or reject this offer?

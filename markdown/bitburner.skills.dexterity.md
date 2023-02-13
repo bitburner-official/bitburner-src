@@ -4,7 +4,7 @@
 
 ## Skills.dexterity property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dexterity: number;

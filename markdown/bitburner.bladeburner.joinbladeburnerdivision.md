@@ -6,12 +6,12 @@
 
 Join the bladeburner division.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 joinBladeburnerDivision(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

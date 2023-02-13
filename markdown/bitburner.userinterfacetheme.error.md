@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.error property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 error: string;

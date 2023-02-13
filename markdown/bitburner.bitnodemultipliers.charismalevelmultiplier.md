@@ -6,7 +6,7 @@
 
 Influences how quickly the player's charisma level (not exp) scales
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 CharismaLevelMultiplier: number;

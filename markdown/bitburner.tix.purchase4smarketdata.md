@@ -6,12 +6,12 @@
 
 Purchase 4S Market Data Access.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 purchase4SMarketData(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

@@ -6,7 +6,7 @@
 
 Base cost to upgrade cache
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 CacheBaseCost: number;

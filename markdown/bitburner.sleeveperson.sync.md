@@ -4,7 +4,9 @@
 
 ## SleevePerson.sync property
 
-<b>Signature:</b>
+Number 1-100 Experience earned by this sleeve and shared with the player is multiplied with sync% after shock%
+
+**Signature:**
 
 ```typescript
 sync: number;

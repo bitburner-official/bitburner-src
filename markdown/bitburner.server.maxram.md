@@ -6,7 +6,7 @@
 
 RAM (GB) available on this server
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 maxRam: number;

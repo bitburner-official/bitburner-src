@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.cha property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cha: string;

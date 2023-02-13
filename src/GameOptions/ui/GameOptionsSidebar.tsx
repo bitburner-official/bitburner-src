@@ -8,7 +8,6 @@ import {
   Save,
   SystemUpdateAlt,
   Upload,
-  Bloodtype,
 } from "@mui/icons-material";
 import { Box, Button, List, ListItemButton, Paper, Tooltip, Typography } from "@mui/material";
 import { default as React, useRef, useState } from "react";
@@ -24,11 +23,11 @@ import { SoftResetButton } from "../../ui/React/SoftResetButton";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { GameOptionsTab } from "../GameOptionsTab";
+import { OptionsTabName } from "./GameOptionsRoot";
 
 interface IProps {
-  tab: GameOptionsTab;
-  setTab: (tab: GameOptionsTab) => void;
+  tab: OptionsTabName;
+  setTab: (tab: OptionsTabName) => void;
   save: () => void;
   export: () => void;
   forceKill: () => void;
@@ -37,15 +36,14 @@ interface IProps {
 
 interface ITabProps {
   sideBarProps: IProps;
-  tab: GameOptionsTab;
-  tabName: string;
+  tabName: OptionsTabName;
 }
 
 const SideBarTab = (props: ITabProps): React.ReactElement => {
   return (
     <ListItemButton
-      selected={props.sideBarProps.tab === props.tab}
-      onClick={() => props.sideBarProps.setTab(props.tab)}
+      selected={props.sideBarProps.tab === props.tabName}
+      onClick={() => props.sideBarProps.setTab(props.tabName)}
     >
       <Typography>{props.tabName}</Typography>
     </ListItemButton>
@@ -73,6 +71,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
       setImportData(data);
       setImportSaveOpen(true);
     } catch (e: unknown) {
+      console.error(e);
       SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
     }
   }
@@ -101,11 +100,12 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
     <Box>
       <Paper sx={{ height: "fit-content", mb: 1 }}>
         <List>
-          <SideBarTab sideBarProps={props} tab={GameOptionsTab.SYSTEM} tabName="System" />
-          <SideBarTab sideBarProps={props} tab={GameOptionsTab.GAMEPLAY} tabName="Gameplay" />
-          <SideBarTab sideBarProps={props} tab={GameOptionsTab.INTERFACE} tabName="Interface" />
-          <SideBarTab sideBarProps={props} tab={GameOptionsTab.MISC} tabName="Misc" />
-          <SideBarTab sideBarProps={props} tab={GameOptionsTab.REMOTE_API} tabName="Remote API" />
+          <SideBarTab sideBarProps={props} tabName="System" />
+          <SideBarTab sideBarProps={props} tabName="Gameplay" />
+          <SideBarTab sideBarProps={props} tabName="Interface" />
+          <SideBarTab sideBarProps={props} tabName="Numeric Display" />
+          <SideBarTab sideBarProps={props} tabName="Misc" />
+          <SideBarTab sideBarProps={props} tabName="Remote API" />
         </List>
       </Paper>
       <Box
@@ -250,7 +250,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           </Button>
           <Button
             startIcon={<SystemUpdateAlt />}
-            href="https://bitburner.readthedocs.io/en/latest/changelog.html"
+            href="https://bitburner-official.readthedocs.io/en/latest/changelog.html"
             target="_blank"
             sx={{ gridArea: " changelog" }}
           >
@@ -258,7 +258,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           </Button>
           <Button
             startIcon={<LibraryBooks />}
-            href="https://bitburner.readthedocs.io/en/latest/index.html"
+            href="https://bitburner-official.readthedocs.io/en/latest/index.html"
             target="_blank"
             sx={{ gridArea: "docs" }}
           >
@@ -276,49 +276,6 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
             Reddit
           </Button>
         </Box>
-
-        {!location.href.startsWith("file://") && (
-          <Box sx={{ gridArea: "devs" }}>
-            <form
-              action="https://www.paypal.com/cgi-bin/webscr"
-              method="post"
-              target="_blank"
-              style={{ display: "block" }}
-            >
-              <Button sx={{ width: "100%", display: "flex", flexDirection: "column" }} type="submit">
-                danielyxie / BigD (Original Dev)
-                <input type="hidden" name="cmd" value="_s-xclick" />
-                <input
-                  type="hidden"
-                  name="encrypted"
-                  value="-----BEGIN PKCS7-----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-----END PKCS7-----"
-                />
-                <input
-                  type="image"
-                  // src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
-                  src="https://www.paypalobjects.com/digitalassets/c/website/marketing/apac/C2/logos-buttons/optimize/26_Yellow_PayPal_Pill_Button.png"
-                  name="submit"
-                  alt="PayPal - The safer, easier way to pay online!"
-                />
-              </Button>
-            </form>
-            <Button
-              href="https://www.google.com/search?q=Where+to+donate+blood+near+me%3F"
-              target="_blank"
-              sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              hydroflame (Current Maintainer)
-              <span style={{ display: "flex", alignItems: "center" }}>
-                <Bloodtype sx={{ mb: 0.5, mr: 1 }} />
-                Donate blood!
-              </span>
-            </Button>
-          </Box>
-        )}
       </Box>
       <FileDiagnosticModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
     </Box>

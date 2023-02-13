@@ -6,7 +6,7 @@
 
 Milliseconds it takes to attempt the crime
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 time: number;

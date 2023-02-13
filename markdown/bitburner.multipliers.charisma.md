@@ -6,7 +6,7 @@
 
 Multiplier to charisma skill
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 charisma: number;

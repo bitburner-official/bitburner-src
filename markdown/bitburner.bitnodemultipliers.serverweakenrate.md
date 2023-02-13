@@ -6,7 +6,7 @@
 
 Influences the weaken amount per invocation against a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ServerWeakenRate: number;

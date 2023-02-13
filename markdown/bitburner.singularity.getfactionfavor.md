@@ -6,7 +6,7 @@
 
 Get faction favor.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getFactionFavor(faction: string): number;
@@ -18,7 +18,7 @@ getFactionFavor(faction: string): number;
 |  --- | --- | --- |
 |  faction | string | Name of faction. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

@@ -6,7 +6,7 @@
 
 Add callback function when the script dies
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 atExit(f: () => void): void;
@@ -18,7 +18,7 @@ atExit(f: () => void): void;
 |  --- | --- | --- |
 |  f | () =&gt; void |  |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

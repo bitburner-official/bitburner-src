@@ -6,7 +6,7 @@
 
 Calculate wanted gain per tick.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 wantedLevelGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats): number;
@@ -20,7 +20,7 @@ wantedLevelGain(gang: GangGenInfo, member: GangMemberInfo, task: GangTaskStats):
 |  member | [GangMemberInfo](./bitburner.gangmemberinfo.md) | Member info from [getMemberInformation](./bitburner.gang.getmemberinformation.md) |
 |  task | [GangTaskStats](./bitburner.gangtaskstats.md) | Task info from [getTaskStats](./bitburner.gang.gettaskstats.md) |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

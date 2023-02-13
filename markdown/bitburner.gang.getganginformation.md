@@ -6,12 +6,12 @@
 
 Get information about your gang.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getGangInformation(): GangGenInfo;
 ```
-<b>Returns:</b>
+**Returns:**
 
 [GangGenInfo](./bitburner.ganggeninfo.md)
 

@@ -16,7 +16,7 @@ import { Script } from "../../Script/Script";
 import { TextFile } from "../../TextFile";
 import { calculateRamUsage, checkInfiniteLoop } from "../../Script/RamCalculations";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatRam } from "../../ui/formatNumber";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -45,6 +45,7 @@ import { Modal } from "../../ui/React/Modal";
 
 import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
 import { TextField, Tooltip } from "@mui/material";
+import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
   // Map of filename -> code
@@ -106,10 +107,7 @@ let currentScript: OpenScript | null = null;
 
 // Called every time script editor is opened
 export function Root(props: IProps): React.ReactElement {
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((o) => !o);
-  }
+  const rerender = useRerender();
   const editorRef = useRef<IStandaloneCodeEditor | null>(null);
   const monacoRef = useRef<Monaco | null>(null);
   const vimStatusRef = useRef<HTMLElement>(null);
@@ -256,10 +254,10 @@ export function Root(props: IProps): React.ReactElement {
       const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
       const entriesDisp = [];
       for (const entry of entries) {
-        entriesDisp.push([`${entry.name} (${entry.type})`, numeralWrapper.formatRAM(entry.cost)]);
+        entriesDisp.push([`${entry.name} (${entry.type})`, formatRam(entry.cost)]);
       }
 
-      setRAM("RAM: " + numeralWrapper.formatRAM(ramUsage.cost));
+      setRAM("RAM: " + formatRam(ramUsage.cost));
       setRamEntries(entriesDisp);
       return;
     }
@@ -907,7 +905,7 @@ export function Root(props: IProps): React.ReactElement {
           <Typography>
             {" "}
             <strong>Documentation:</strong>{" "}
-            <Link target="_blank" href="https://bitburner.readthedocs.io/en/latest/index.html">
+            <Link target="_blank" href="https://bitburner-official.readthedocs.io/en/latest/index.html">
               Basic
             </Link>
             {" | "}

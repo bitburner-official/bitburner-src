@@ -6,12 +6,12 @@
 
 Get player bladeburner rank.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getRank(): number;
 ```
-<b>Returns:</b>
+**Returns:**
 
 number
 

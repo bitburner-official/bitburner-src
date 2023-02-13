@@ -6,7 +6,7 @@
 
 Copy file between servers.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 scp(files: string | string[], destination: string, source?: string): boolean;
@@ -16,11 +16,11 @@ scp(files: string | string[], destination: string, source?: string): boolean;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  files | string \| string\[\] | Filename or an array of filenames of script/literature files to copy. |
+|  files | string \| string\[\] | Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading <code>/</code>. |
 |  destination | string | Hostname of the destination server, which is the server to which the file will be copied. |
-|  source | string | Hostname of the source server, which is the server from which the file will be copied. This argument is optional and if it’s omitted the source will be the current server. |
+|  source | string | _(Optional)_ Hostname of the source server, which is the server from which the file will be copied. This argument is optional and if it’s omitted the source will be the current server. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

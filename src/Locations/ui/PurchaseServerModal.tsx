@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { purchaseServer } from "../../Server/ServerPurchases";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatRam } from "../../ui/formatNumber";
 import { Money } from "../../ui/React/Money";
 import { Modal } from "../../ui/React/Modal";
 import { Player } from "@player";
@@ -14,7 +14,6 @@ interface IProps {
   onClose: () => void;
   ram: number;
   cost: number;
-  rerender: () => void;
 }
 
 /** React Component for the popup used to purchase a new server. */
@@ -37,7 +36,7 @@ export function PurchaseServerModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Would you like to purchase a new server with {numeralWrapper.formatRAM(props.ram)} of RAM for{" "}
+        Would you like to purchase a new server with {formatRam(props.ram)} of RAM for{" "}
         <Money money={props.cost} forPurchase={true} />?
       </Typography>
       <br />

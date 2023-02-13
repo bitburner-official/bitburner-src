@@ -5,7 +5,7 @@
 ## SleeveRecoveryTask type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 type SleeveRecoveryTask = { type: "RECOVERY" };

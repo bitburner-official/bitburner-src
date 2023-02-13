@@ -6,10 +6,10 @@
 
 Get material data
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-getMaterial(divisionName: string, cityName: string, materialName: string): Material;
+getMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: string): Material;
 ```
 
 ## Parameters
@@ -17,10 +17,10 @@ getMaterial(divisionName: string, cityName: string, materialName: string): Mater
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  cityName | string |  |
+|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
 |  materialName | string | Name of the material |
 
-<b>Returns:</b>
+**Returns:**
 
 [Material](./bitburner.material.md)
 

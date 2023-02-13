@@ -6,7 +6,7 @@
 
 Commit a crime.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 commitCrime(crime: CrimeType | `${CrimeType}`, focus?: boolean): number;
@@ -17,9 +17,9 @@ commitCrime(crime: CrimeType | `${CrimeType}`, focus?: boolean): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  crime | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` | Name of crime to attempt. |
-|  focus | boolean | Acquire player focus on this crime. Optional. Defaults to true. |
+|  focus | boolean | _(Optional)_ Acquire player focus on this crime. Optional. Defaults to true. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 
@@ -31,5 +31,5 @@ RAM cost: 5 GB \* 16/4/1
 
 This function is used to automatically attempt to commit crimes. If you are already in the middle of some ‘working’ action (such as working for a company or training at a gym), then running this function will automatically cancel that action and give you your earnings.
 
-This function returns the number of milliseconds it takes to attempt the specified crime (e.g It takes 60 seconds to attempt the ‘Rob Store’ crime, so running `commitCrime('ROBSTORE')` will return 60,000).
+This function returns the number of milliseconds it takes to attempt the specified crime (e.g It takes 60 seconds to attempt the ‘Rob Store’ crime, so running `commitCrime('Rob Store')` will return 60,000).
 

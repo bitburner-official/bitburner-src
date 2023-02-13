@@ -6,8 +6,8 @@
 
 Positions of the employees
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-employeeJobs: Record<`${EmployeePositions}`, number>;
+employeeJobs: Record<CorpEmployeePosition, number>;
 ```

@@ -6,7 +6,7 @@
 
 Discontinue a product.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 discontinueProduct(divisionName: string, productName: string): void;
@@ -19,7 +19,7 @@ discontinueProduct(divisionName: string, productName: string): void;
 |  divisionName | string | Name of the division |
 |  productName | string | Name of the product |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

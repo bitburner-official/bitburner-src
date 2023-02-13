@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.respectGain property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 respectGain: number;

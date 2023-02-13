@@ -4,7 +4,7 @@
 
 ## MoneySource.casino property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 casino: number;

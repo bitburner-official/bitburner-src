@@ -6,7 +6,7 @@
 
 Calculate profit of selling stocks.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getSaleGain(sym: string, shares: number, posType: string): number;
@@ -20,7 +20,7 @@ getSaleGain(sym: string, shares: number, posType: string): number;
 |  shares | number | Number of shares to sell. |
 |  posType | string | Specifies whether the order is a “Long” or “Short” position. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

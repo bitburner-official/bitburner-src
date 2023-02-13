@@ -6,12 +6,12 @@
 
 Get the current server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getCurrentServer(): string;
 ```
-<b>Returns:</b>
+**Returns:**
 
 string
 

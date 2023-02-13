@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.primarylight property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 primarylight: string;

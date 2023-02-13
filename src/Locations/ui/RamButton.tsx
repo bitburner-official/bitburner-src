@@ -8,9 +8,9 @@ import { Player } from "@player";
 import { purchaseRamForHomeComputer } from "../../Server/ServerPurchases";
 
 import { Money } from "../../ui/React/Money";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatRam } from "../../ui/formatNumber";
 
-import { MathJaxWrapper } from "../../MathJaxWrapper";
+import { MathJax } from "better-react-mathjax";
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 
 type IProps = {
@@ -35,7 +35,7 @@ export function RamButton(props: IProps): React.ReactElement {
   return (
     <Tooltip
       title={
-        <MathJaxWrapper>{`\\(\\large{cost = ram \\cdot 3.2 \\cdot 10^4 \\cdot 1.58^{log_2{(ram)}}} ${bnMult}\\)`}</MathJaxWrapper>
+        <MathJax>{`\\(\\large{cost = ram \\cdot 3.2 \\cdot 10^4 \\cdot 1.58^{log_2{(ram)}}} ${bnMult}\\)`}</MathJax>
       }
     >
       <span>
@@ -45,8 +45,8 @@ export function RamButton(props: IProps): React.ReactElement {
         </Typography>
         <br />
         <Button disabled={!Player.canAfford(cost)} onClick={buy}>
-          Upgrade 'home' RAM ({numeralWrapper.formatRAM(homeComputer.maxRam)} -&gt;&nbsp;
-          {numeralWrapper.formatRAM(homeComputer.maxRam * 2)}) -&nbsp;
+          Upgrade 'home' RAM ({formatRam(homeComputer.maxRam)} -&gt;&nbsp;
+          {formatRam(homeComputer.maxRam * 2)}) -&nbsp;
           <Money money={cost} forPurchase={true} />
         </Button>
       </span>

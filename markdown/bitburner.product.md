@@ -6,7 +6,7 @@
 
 Product in a warehouse
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface Product 
@@ -14,15 +14,15 @@ interface Product
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [cityData](./bitburner.product.citydata.md) | { \[key: string\]: number\[\] } | Data refers to the production, sale, and quantity of the products These values are specific to a city For each city, the data is \[qty, prod, sell\] |
-|  [cmp](./bitburner.product.cmp.md) | number \| undefined | Competition for the product, only present if "Market Research - Competition" unlocked |
-|  [developmentProgress](./bitburner.product.developmentprogress.md) | number | Creation progress - A number between 0-100 representing percentage |
-|  [dmd](./bitburner.product.dmd.md) | number \| undefined | Demand for the product, only present if "Market Research - Demand" unlocked |
-|  [name](./bitburner.product.name.md) | string | Name of the product |
-|  [pCost](./bitburner.product.pcost.md) | number | Production cost |
-|  [properties](./bitburner.product.properties.md) | { \[key: string\]: number } | Product Properties. The data is {<!-- -->qlt, per, dur, rel, aes, fea<!-- -->} |
-|  [rat](./bitburner.product.rat.md) | number | Product Rating |
-|  [sCost](./bitburner.product.scost.md) | string \| number | Sell cost, can be "MP+5" |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [cityData](./bitburner.product.citydata.md) |  | Record&lt;[CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\`, number\[\]&gt; | Data refers to the production, sale, and quantity of the products These values are specific to a city For each city, the data is \[qty, prod, sell\] |
+|  [cmp](./bitburner.product.cmp.md) |  | number \| undefined | Competition for the product, only present if "Market Research - Competition" unlocked |
+|  [developmentProgress](./bitburner.product.developmentprogress.md) |  | number | Creation progress - A number between 0-100 representing percentage |
+|  [dmd](./bitburner.product.dmd.md) |  | number \| undefined | Demand for the product, only present if "Market Research - Demand" unlocked |
+|  [name](./bitburner.product.name.md) |  | string | Name of the product |
+|  [pCost](./bitburner.product.pcost.md) |  | number | Production cost |
+|  [properties](./bitburner.product.properties.md) |  | { \[key: string\]: number } | Product Properties. The data is {<!-- -->qlt, per, dur, rel, aes, fea<!-- -->} |
+|  [rat](./bitburner.product.rat.md) |  | number | Product Rating |
+|  [sCost](./bitburner.product.scost.md) |  | string \| number | Sell cost, can be "MP+5" |
 

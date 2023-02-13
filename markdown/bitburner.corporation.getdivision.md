@@ -6,7 +6,7 @@
 
 Get division data
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getDivision(divisionName: string): Division;
@@ -18,7 +18,7 @@ getDivision(divisionName: string): Division;
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
 
-<b>Returns:</b>
+**Returns:**
 
 [Division](./bitburner.division.md)
 

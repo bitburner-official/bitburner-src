@@ -4,7 +4,7 @@
 
 ## MoneySource.infiltration property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 infiltration: number;

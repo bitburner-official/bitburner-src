@@ -5,7 +5,7 @@
 ## ToastVariant enum
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 declare enum ToastVariant 

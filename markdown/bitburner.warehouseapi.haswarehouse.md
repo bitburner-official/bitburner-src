@@ -6,20 +6,20 @@
 
 Check if you have a warehouse in city
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-hasWarehouse(adivisionName: string, acityName: string): boolean;
+hasWarehouse(divisionName: string, city: CityName | `${CityName}`): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  adivisionName | string |  |
-|  acityName | string |  |
+|  divisionName | string |  |
+|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` |  |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

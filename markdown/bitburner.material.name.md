@@ -6,8 +6,8 @@
 
 Name of the material
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-name: string;
+name: CorpMaterialName;
 ```

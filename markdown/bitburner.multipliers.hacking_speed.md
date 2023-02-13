@@ -6,7 +6,7 @@
 
 Multiplier to hacking speed
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacking_speed: number;

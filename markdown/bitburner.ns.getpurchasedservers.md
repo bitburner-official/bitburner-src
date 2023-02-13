@@ -6,12 +6,12 @@
 
 Returns an array with the hostnames of all of the servers you have purchased.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getPurchasedServers(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

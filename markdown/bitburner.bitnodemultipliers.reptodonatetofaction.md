@@ -6,7 +6,7 @@
 
 Influences the minimum favor the player must have with a faction before they can donate to gain rep.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 RepToDonateToFaction: number;

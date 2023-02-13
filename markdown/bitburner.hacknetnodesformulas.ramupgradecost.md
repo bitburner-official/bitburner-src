@@ -6,7 +6,7 @@
 
 Calculate cost of upgrading hacknet node ram.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 ramUpgradeCost(startingRam: number, extraLevels?: number, costMult?: number): number;
@@ -17,10 +17,10 @@ ramUpgradeCost(startingRam: number, extraLevels?: number, costMult?: number): nu
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  startingRam | number | starting ram |
-|  extraLevels | number | amount of level of ram to purchase (defaults to 1) |
-|  costMult | number | player cost reduction (default to 1) |
+|  extraLevels | number | _(Optional)_ amount of level of ram to purchase (defaults to 1) |
+|  costMult | number | _(Optional)_ player cost reduction (default to 1) |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

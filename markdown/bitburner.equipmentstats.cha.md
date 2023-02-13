@@ -6,7 +6,7 @@
 
 Charisma multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cha?: number;

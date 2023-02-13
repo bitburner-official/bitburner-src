@@ -6,7 +6,7 @@
 
 Enable/Disable territory warfare.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setTerritoryWarfare(engage: boolean): void;
@@ -18,7 +18,7 @@ setTerritoryWarfare(engage: boolean): void;
 |  --- | --- | --- |
 |  engage | boolean | Whether or not to engage in territory warfare. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

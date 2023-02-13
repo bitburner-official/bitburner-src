@@ -2,14 +2,14 @@
 // (right-side panel in the Industry UI)
 import React, { useState } from "react";
 
-import { CorporationConstants } from "../data/Constants";
+import * as corpConstants from "../data/Constants";
 import { Warehouse } from "../Warehouse";
 import { SmartSupplyModal } from "./modals/SmartSupplyModal";
 import { ProductElem } from "./ProductElem";
 import { MaterialElem } from "./MaterialElem";
 import { MaterialInfo } from "../MaterialInfo";
 
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatBigNumber, formatMaterialSize } from "../../ui/formatNumber";
 
 import { Corporation } from "../Corporation";
 import { Industry } from "../Industry";
@@ -26,7 +26,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
-import { CityName } from "../../Locations/data/CityNames";
+import { CityName } from "../../Enums";
 
 interface IProps {
   corp: Corporation;
@@ -51,7 +51,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
   if (props.warehouse === 0) return <></>;
 
   // Upgrade Warehouse size button
-  const sizeUpgradeCost = CorporationConstants.WarehouseUpgradeBaseCost * Math.pow(1.07, props.warehouse.level + 1);
+  const sizeUpgradeCost = corpConstants.warehouseSizeUpgradeCostBase * Math.pow(1.07, props.warehouse.level + 1);
   const canAffordUpgrade = corp.funds > sizeUpgradeCost;
   function upgradeWarehouseOnClick(): void {
     if (division === null) return;
@@ -90,7 +90,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
 
   // Create React components for materials
   const mats = [];
-  for (const matName of Object.keys(props.warehouse.materials)) {
+  for (const matName of Object.values(corpConstants.materialNames)) {
     if (!props.warehouse.materials[matName]) continue;
     // Only create UI for materials that are relevant for the industry or in stock
     const isInStock = props.warehouse.materials[matName].qty > 0;
@@ -120,13 +120,13 @@ function WarehouseRoot(props: IProps): React.ReactElement {
   }
 
   const breakdownItems: JSX.Element[] = [];
-  for (const matName of Object.keys(props.warehouse.materials)) {
+  for (const matName of Object.values(corpConstants.materialNames)) {
     const mat = props.warehouse.materials[matName];
     if (!MaterialInfo.hasOwnProperty(matName)) continue;
     if (mat.qty === 0) continue;
     breakdownItems.push(
       <>
-        {matName}: {numeralWrapper.format(mat.qty * MaterialInfo[matName][1], "0,0.0")}
+        {matName}: {formatMaterialSize(mat.qty * MaterialInfo[matName].size)}
       </>,
     );
   }
@@ -136,7 +136,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
     if (prod === undefined) continue;
     breakdownItems.push(
       <>
-        {prodName}: {numeralWrapper.format(prod.data[props.warehouse.loc][0] * prod.siz, "0,0.0")}
+        {prodName}: {formatMaterialSize(prod.data[props.warehouse.loc][0] * prod.siz)}
       </>,
     );
   }
@@ -172,8 +172,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
           }
         >
           <Typography color={props.warehouse.sizeUsed >= props.warehouse.size ? "error" : "primary"}>
-            Storage: {numeralWrapper.formatBigNumber(props.warehouse.sizeUsed)} /{" "}
-            {numeralWrapper.formatBigNumber(props.warehouse.size)}
+            Storage: {formatBigNumber(props.warehouse.sizeUsed)} / {formatBigNumber(props.warehouse.size)}
           </Typography>
         </Tooltip>
       </Box>
@@ -231,7 +230,7 @@ interface IEmptyProps {
 function EmptyWarehouse(props: IEmptyProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
-  const disabled = corp.funds < CorporationConstants.WarehouseInitialCost;
+  const disabled = corp.funds < corpConstants.warehouseInitialCost;
   function purchaseWarehouse(): void {
     if (disabled) return;
     PurchaseWarehouse(corp, division, props.city);
@@ -241,7 +240,7 @@ function EmptyWarehouse(props: IEmptyProps): React.ReactElement {
     <Paper>
       <Button onClick={purchaseWarehouse} disabled={disabled}>
         Purchase Warehouse (
-        <MoneyCost money={CorporationConstants.WarehouseInitialCost} corp={corp} />)
+        <MoneyCost money={corpConstants.warehouseInitialCost} corp={corp} />)
       </Button>
     </Paper>
   );

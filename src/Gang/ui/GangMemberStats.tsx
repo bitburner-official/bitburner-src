@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatMultiplier, formatRespect, formatWanted } from "../../ui/formatNumber";
 import { GangMember } from "../GangMember";
 import { Settings } from "../../Settings/Settings";
 import { MoneyRate } from "../../ui/React/MoneyRate";
@@ -35,9 +35,9 @@ export function GangMemberStats(props: IProps): React.ReactElement {
   const gang = useGang();
   const data = [
     [`Money:`, <MoneyRate money={5 * props.member.calculateMoneyGain(gang)} />],
-    [`Respect:`, `${numeralWrapper.formatRespect(5 * props.member.calculateRespectGain(gang))} / sec`],
-    [`Wanted Level:`, `${numeralWrapper.formatWanted(5 * props.member.calculateWantedLevelGain(gang))} / sec`],
-    [`Total Respect:`, `${numeralWrapper.formatRespect(props.member.earnedRespect)}`],
+    [`Respect:`, `${formatRespect(5 * props.member.calculateRespectGain(gang))} / sec`],
+    [`Wanted Level:`, `${formatWanted(5 * props.member.calculateWantedLevelGain(gang))} / sec`],
+    [`Total Respect:`, `${formatRespect(props.member.earnedRespect)}`],
   ];
 
   return (
@@ -45,29 +45,23 @@ export function GangMemberStats(props: IProps): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            Hk: x{numeralWrapper.formatMultiplier(props.member.hack_mult * asc.hack)}(x
-            {numeralWrapper.formatMultiplier(props.member.hack_mult)} Eq, x{numeralWrapper.formatMultiplier(asc.hack)}{" "}
-            Asc)
+            Hk: x{formatMultiplier(props.member.hack_mult * asc.hack)}(x
+            {formatMultiplier(props.member.hack_mult)} Eq, x{formatMultiplier(asc.hack)} Asc)
             <br />
-            St: x{numeralWrapper.formatMultiplier(props.member.str_mult * asc.str)}
-            (x{numeralWrapper.formatMultiplier(props.member.str_mult)} Eq, x{numeralWrapper.formatMultiplier(asc.str)}{" "}
-            Asc)
+            St: x{formatMultiplier(props.member.str_mult * asc.str)}
+            (x{formatMultiplier(props.member.str_mult)} Eq, x{formatMultiplier(asc.str)} Asc)
             <br />
-            Df: x{numeralWrapper.formatMultiplier(props.member.def_mult * asc.def)}
-            (x{numeralWrapper.formatMultiplier(props.member.def_mult)} Eq, x{numeralWrapper.formatMultiplier(asc.def)}{" "}
-            Asc)
+            Df: x{formatMultiplier(props.member.def_mult * asc.def)}
+            (x{formatMultiplier(props.member.def_mult)} Eq, x{formatMultiplier(asc.def)} Asc)
             <br />
-            Dx: x{numeralWrapper.formatMultiplier(props.member.dex_mult * asc.dex)}
-            (x{numeralWrapper.formatMultiplier(props.member.dex_mult)} Eq, x{numeralWrapper.formatMultiplier(asc.dex)}{" "}
-            Asc)
+            Dx: x{formatMultiplier(props.member.dex_mult * asc.dex)}
+            (x{formatMultiplier(props.member.dex_mult)} Eq, x{formatMultiplier(asc.dex)} Asc)
             <br />
-            Ag: x{numeralWrapper.formatMultiplier(props.member.agi_mult * asc.agi)}
-            (x{numeralWrapper.formatMultiplier(props.member.agi_mult)} Eq, x{numeralWrapper.formatMultiplier(asc.agi)}{" "}
-            Asc)
+            Ag: x{formatMultiplier(props.member.agi_mult * asc.agi)}
+            (x{formatMultiplier(props.member.agi_mult)} Eq, x{formatMultiplier(asc.agi)} Asc)
             <br />
-            Ch: x{numeralWrapper.formatMultiplier(props.member.cha_mult * asc.cha)}
-            (x{numeralWrapper.formatMultiplier(props.member.cha_mult)} Eq, x{numeralWrapper.formatMultiplier(asc.cha)}{" "}
-            Asc)
+            Ch: x{formatMultiplier(props.member.cha_mult * asc.cha)}
+            (x{formatMultiplier(props.member.cha_mult)} Eq, x{formatMultiplier(asc.cha)} Asc)
           </Typography>
         }
       >

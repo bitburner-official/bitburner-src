@@ -6,7 +6,7 @@
 
 Game Information
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 interface GameInfo 
@@ -14,9 +14,9 @@ interface GameInfo
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [commit](./bitburner.gameinfo.commit.md) | string |  |
-|  [platform](./bitburner.gameinfo.platform.md) | string |  |
-|  [version](./bitburner.gameinfo.version.md) | string |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [commit](./bitburner.gameinfo.commit.md) |  | string |  |
+|  [platform](./bitburner.gameinfo.platform.md) |  | string |  |
+|  [version](./bitburner.gameinfo.version.md) |  | string |  |
 

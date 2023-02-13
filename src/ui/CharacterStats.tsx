@@ -1,6 +1,6 @@
 import { Paper, Table, TableBody, Box, IconButton, Typography, Container, Tooltip } from "@mui/material";
 import { MoreHoriz, Info } from "@mui/icons-material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BitNodes, defaultMultipliers, getBitNodeMultipliers } from "../BitNode/BitNode";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { BitNodeMultipliersDisplay } from "../BitNode/ui/BitnodeMultipliersDescription";
@@ -10,12 +10,13 @@ import { Settings } from "../Settings/Settings";
 import { MoneySourceTracker } from "../utils/MoneySourceTracker";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { Player } from "@player";
-import { numeralWrapper } from "./numeralFormat";
+import { formatPercent } from "./formatNumber";
 import { Modal } from "./React/Modal";
 import { Money } from "./React/Money";
 import { StatsRow } from "./React/StatsRow";
 import { StatsTable } from "./React/StatsTable";
 import { isEqual } from "lodash";
+import { useRerender } from "./React/hooks";
 
 interface EmployersModalProps {
   open: boolean;
@@ -69,16 +70,13 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
               <StatsRow key={mult} name={mult} color={color} data={{}}>
                 <>
                   <Typography color={color}>
-                    <span style={{ opacity: 0.5 }}>{numeralWrapper.formatPercentage(value)}</span>{" "}
-                    {numeralWrapper.formatPercentage(effValue)}
+                    <span style={{ opacity: 0.5 }}>{formatPercent(value)}</span> {formatPercent(effValue)}
                   </Typography>
                 </>
               </StatsRow>
             );
           }
-          return (
-            <StatsRow key={mult} name={mult} color={color} data={{ content: numeralWrapper.formatPercentage(value) }} />
-          );
+          return <StatsRow key={mult} name={mult} color={color} data={{ content: formatPercent(value) }} />;
         })}
       </TableBody>
     </Table>
@@ -202,15 +200,7 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
 export function CharacterStats(): React.ReactElement {
   const [moneyOpen, setMoneyOpen] = useState(false);
   const [employersOpen, setEmployersOpen] = useState(false);
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
-
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
+  useRerender(200);
 
   const timeRows = [
     ["Since last Augmentation installation", convertTimeMsToTimeElapsedString(Player.playtimeSinceLastAug)],

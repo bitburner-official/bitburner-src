@@ -6,7 +6,7 @@
 
 Maximum number of employee
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 size: number;

@@ -6,8 +6,8 @@
 
 City in which the warehouse is located
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-loc: string;
+loc: CityName;
 ```

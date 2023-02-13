@@ -6,7 +6,7 @@
 
 Names of all locations
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 declare enum LocationName 

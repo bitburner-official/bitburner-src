@@ -2,7 +2,7 @@ import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { applySleeveGains, Work, WorkType } from "./Work";
-import { CrimeType } from "../../../utils/enums";
+import { CrimeType } from "../../../Enums";
 import { Crimes } from "../../../Crime/Crimes";
 import { Crime } from "../../../Crime/Crime";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
@@ -51,6 +51,7 @@ export class SleeveCrimeWork extends Work {
     return {
       type: WorkType.CRIME as "CRIME",
       crimeType: this.crimeType,
+      cyclesWorked: this.cyclesWorked,
     };
   }
 

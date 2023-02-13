@@ -6,7 +6,7 @@
 
 Gets the cost to unlock a one time unlockable upgrade
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getUnlockUpgradeCost(upgradeName: string): number;
@@ -18,7 +18,7 @@ getUnlockUpgradeCost(upgradeName: string): number;
 |  --- | --- | --- |
 |  upgradeName | string | Name of the upgrade |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

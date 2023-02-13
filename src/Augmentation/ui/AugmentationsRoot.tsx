@@ -2,7 +2,7 @@
  * Root React component for the Augmentations UI page that display all of your
  * owned and purchased Augmentations and Source-Files.
  */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { InstalledAugmentations } from "./InstalledAugmentations";
 import { PlayerMultipliers } from "./PlayerMultipliers";
@@ -22,10 +22,11 @@ import { Player } from "@player";
 import { AugmentationNames } from "../data/AugmentationNames";
 import { StaticAugmentations } from "../StaticAugmentations";
 import { CONSTANTS } from "../../Constants";
-import { formatNumber } from "../../utils/StringHelperFunctions";
+import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { Info } from "@mui/icons-material";
 import { Link } from "@mui/material";
 import { AlertEvents } from "../../ui/React/AlertManager";
+import { useRerender } from "../../ui/React/hooks";
 
 const NeuroFluxDisplay = (): React.ReactElement => {
   const level = Player.augmentations.find((e) => e.name === AugmentationNames.NeuroFluxGovernor)?.level ?? 0;
@@ -68,8 +69,8 @@ const EntropyDisplay = (): React.ReactElement => {
         Entropy Virus - Level {Player.entropy}
       </Typography>
       <Typography color={Settings.theme.error}>
-        <b>All multipliers decreased by:</b> {formatNumber((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}%
-        (multiplicative)
+        <b>All multipliers decreased by:</b>{" "}
+        {formatNumberNoSuffix((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}% (multiplicative)
       </Typography>
     </Paper>
   ) : (
@@ -84,14 +85,7 @@ interface IProps {
 
 export function AugmentationsRoot(props: IProps): React.ReactElement {
   const [installOpen, setInstallOpen] = useState(false);
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((o) => !o);
-  }
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
+  const rerender = useRerender(200);
 
   function doExport(): void {
     props.exportGameFn();

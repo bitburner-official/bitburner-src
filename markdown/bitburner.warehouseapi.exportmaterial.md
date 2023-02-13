@@ -6,14 +6,14 @@
 
 Set material export data
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 exportMaterial(
     sourceDivision: string,
-    sourceCity: string,
+    sourceCity: CityName | `${CityName}`,
     targetDivision: string,
-    targetCity: string,
+    targetCity: CityName | `${CityName}`,
     materialName: string,
     amt: number,
   ): void;
@@ -24,13 +24,13 @@ exportMaterial(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  sourceDivision | string | Source division |
-|  sourceCity | string | Source city |
+|  sourceCity | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Source city |
 |  targetDivision | string | Target division |
-|  targetCity | string | Target city |
+|  targetCity | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Target city |
 |  materialName | string | Name of the material |
 |  amt | number | Amount of material to export. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

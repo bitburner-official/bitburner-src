@@ -3,10 +3,10 @@ import { WorkerScript } from "./WorkerScript";
 import { GetAllServers, GetServer } from "../Server/AllServers";
 import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
-import { numeralWrapper } from "../ui/numeralFormat";
+import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
 import { ScriptArg } from "./ScriptArg";
-import { CityName } from "../Locations/data/CityNames";
-import { BasicHGWOptions } from "src/ScriptEditor/NetscriptDefinitions";
+import { CityName } from "../Enums";
+import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson } from "@nsdefs";
 import { Server } from "../Server/Server";
 import {
   calculateHackingChance,
@@ -28,12 +28,12 @@ import { RunningScript } from "../Script/RunningScript";
 import { toNative } from "../NetscriptFunctions/toNative";
 import { ScriptIdentifier } from "./ScriptIdentifier";
 import { findRunningScript, findRunningScriptByPid } from "../Script/ScriptHelpers";
-import { RunningScript as IRunningScript, Person as IPerson } from "../ScriptEditor/NetscriptDefinitions";
 import { arrayToString } from "../utils/helpers/arrayToString";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { checkEnum } from "../utils/helpers/enum";
+import { RamCostConstants } from "./RamCostGenerator";
 
 export const helpers = {
   string,
@@ -65,15 +65,15 @@ export const helpers = {
   failOnHacknetServer,
 };
 
-export function assertEnumMember<T extends string>(
+export function assertMember<T extends string>(
   ctx: NetscriptContext,
-  obj: Record<string, T>,
-  enumName: string,
+  obj: Record<string, T> | T[],
+  typeName: string,
   argName: string,
   v: unknown,
 ): asserts v is T {
   assertString(ctx, argName, v);
-  if (!checkEnum(obj, v)) throw makeRuntimeErrorMsg(ctx, `${argName}: ${v} is not a valid ${enumName}.`, "TYPE");
+  if (!checkEnum(obj, v)) throw makeRuntimeErrorMsg(ctx, `${argName}: ${v} is not a valid ${typeName}.`, "TYPE");
 }
 
 export function assertString(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {
@@ -344,7 +344,7 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
     console.warn(`WorkerScript detected NaN for thread count for ${ws.name} on ${ws.hostname}`);
     threads = 1;
   }
-  ws.dynamicRamUsage += ramCost;
+  ws.dynamicRamUsage = Math.min(ws.dynamicRamUsage + ramCost, RamCostConstants.Max);
   if (ws.dynamicRamUsage > 1.01 * ws.ramUsage) {
     log(ctx, () => "Insufficient static ram available.");
     ws.env.stopFlag = true;
@@ -354,8 +354,8 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
       This is probably because you somehow circumvented the static RAM calculation.
 
       Threads: ${threads}
-      Dynamic RAM Usage: ${numeralWrapper.formatRAM(ws.dynamicRamUsage)} per thread
-      Static RAM Usage: ${numeralWrapper.formatRAM(ws.ramUsage)} per thread
+      Dynamic RAM Usage: ${formatRam(ws.dynamicRamUsage)} per thread
+      Static RAM Usage: ${formatRam(ws.ramUsage)} per thread
 
       One of these could be the reason:
       * Using eval() to get a reference to a ns function
@@ -372,8 +372,8 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
 
 /** Validates the input v as being a CityName. Throws an error if it is not. */
 function city(ctx: NetscriptContext, argName: string, v: unknown): CityName {
-  if (typeof v !== "string") throw makeRuntimeErrorMsg(ctx, `${argName} should be a city name.`);
-  if (!checkEnum(CityName, v)) throw makeRuntimeErrorMsg(ctx, `${argName} should be a city name.`);
+  if (typeof v !== "string" || !checkEnum(CityName, v))
+    throw makeRuntimeErrorMsg(ctx, `${argName} should be a city name.`);
   return v;
 }
 
@@ -448,7 +448,7 @@ function hack(
       `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
         hackingTime * 1000,
         true,
-      )} (t=${numeralWrapper.formatThreads(threads)})`,
+      )} (t=${formatThreads(threads)})`,
   );
 
   return helpers.netscriptDelay(ctx, hackingTime * 1000).then(function () {
@@ -495,9 +495,9 @@ function hack(
       log(
         ctx,
         () =>
-          `Successfully hacked '${server.hostname}' for ${numeralWrapper.formatMoney(
-            moneyGained,
-          )} and ${numeralWrapper.formatExp(expGainedOnSuccess)} exp (t=${numeralWrapper.formatThreads(threads)})`,
+          `Successfully hacked '${server.hostname}' for ${formatMoney(moneyGained)} and ${formatExp(
+            expGainedOnSuccess,
+          )} exp (t=${formatThreads(threads)})`,
       );
       server.fortify(CONSTANTS.ServerFortifyAmount * Math.min(threads, maxThreadNeeded));
       if (stock) {
@@ -514,9 +514,9 @@ function hack(
       log(
         ctx,
         () =>
-          `Failed to hack '${server.hostname}'. Gained ${numeralWrapper.formatExp(
-            expGainedOnFailure,
-          )} exp (t=${numeralWrapper.formatThreads(threads)})`,
+          `Failed to hack '${server.hostname}'. Gained ${formatExp(expGainedOnFailure)} exp (t=${formatThreads(
+            threads,
+          )})`,
       );
       return 0;
     }
@@ -703,7 +703,7 @@ function createPublicRunningScript(runningScript: RunningScript): IRunningScript
   return {
     args: runningScript.args.slice(),
     filename: runningScript.filename,
-    logs: runningScript.logs.slice(),
+    logs: runningScript.logs.map((x) => "" + x),
     offlineExpGained: runningScript.offlineExpGained,
     offlineMoneyMade: runningScript.offlineMoneyMade,
     offlineRunningTime: runningScript.offlineRunningTime,

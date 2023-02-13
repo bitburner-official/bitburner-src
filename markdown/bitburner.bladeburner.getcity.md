@@ -6,14 +6,14 @@
 
 Get current city.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-getCity(): string;
+getCity(): CityName;
 ```
-<b>Returns:</b>
+**Returns:**
 
-string
+[CityName](./bitburner.cityname.md)
 
 City that the player is currently in (for Bladeburner).
 

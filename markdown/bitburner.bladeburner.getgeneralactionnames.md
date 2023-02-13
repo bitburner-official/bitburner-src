@@ -6,12 +6,12 @@
 
 List all general actions.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getGeneralActionNames(): string[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 string\[\]
 

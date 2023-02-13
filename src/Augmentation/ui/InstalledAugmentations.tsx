@@ -15,9 +15,10 @@ import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
 import { StaticAugmentations } from "../StaticAugmentations";
 import { AugmentationNames } from "../data/AugmentationNames";
+import { useRerender } from "../../ui/React/hooks";
 
 export function InstalledAugmentations(): React.ReactElement {
-  const setRerender = useState(true)[1];
+  const rerender = useRerender();
   const sourceAugs = Player.augmentations.slice().filter((aug) => aug.name !== AugmentationNames.NeuroFluxGovernor);
 
   const [selectedAug, setSelectedAug] = useState(sourceAugs[0]);
@@ -26,10 +27,6 @@ export function InstalledAugmentations(): React.ReactElement {
     sourceAugs.sort((aug1, aug2) => {
       return aug1.name.localeCompare(aug2.name);
     });
-  }
-
-  function rerender(): void {
-    setRerender((old) => !old);
   }
 
   function sortByAcquirementTime(): void {

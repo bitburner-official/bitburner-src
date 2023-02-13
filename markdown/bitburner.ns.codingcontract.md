@@ -6,7 +6,7 @@
 
 Namespace for codingcontract functions.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly codingcontract: CodingContract;

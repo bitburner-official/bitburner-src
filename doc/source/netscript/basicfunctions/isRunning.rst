@@ -2,6 +2,7 @@ isRunning() Netscript Function
 ==============================
 
 .. js:function:: isRunning(filename[, hostname=current hostname[, args...]])
+.. js:function:: isRunning(PID)
 
     :RAM cost: 0.1 GB
     :param string filename: Filename of script to check. case-sensitive.
@@ -16,20 +17,20 @@ isRunning() Netscript Function
     **Examples:**
 
     In this first example below, the function call will return true if there is
-    a script named ``foo.script`` with no arguments running on the
+    a script named ``foo.js`` with no arguments running on the
     ``foodnstuff`` server, and false otherwise:
 
     .. code-block:: javascript
 
-            isRunning("foo.script", "foodnstuff");
+            ns.isRunning("foo.js", "foodnstuff");
 
     In this second example below, the function call will return true if there is
-    a script named ``foo.script`` with no arguments running on the current 
+    a script named ``foo.js`` with no arguments running on the current 
     server, and false otherwise:
 
     .. code-block:: javascript
 
-            isRunning("foo.script", getHostname());
+            ns.isRunning("foo.js", ns.getHostname());
 
     In this next example below, the function call will return true if there is a
     script named ``foo.script`` running with the arguments 1, 5, and "test" (in
@@ -37,7 +38,7 @@ isRunning() Netscript Function
 
     .. code-block:: javascript
 
-            isRunning("foo.script", "joesguns", 1, 5, "test");
+            ns.isRunning("foo.js", "joesguns", 1, 5, "test");
 
 
 .. js:function:: isRunning(scriptPid)
@@ -51,4 +52,4 @@ isRunning() Netscript Function
 
     .. code-block:: javascript
 
-            isRunning(39);
+            ns.isRunning(39);

@@ -6,7 +6,7 @@
 
 Awareness of the division
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 awareness: number;

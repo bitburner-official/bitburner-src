@@ -6,12 +6,12 @@
 
 Check if the port is full.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 full(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

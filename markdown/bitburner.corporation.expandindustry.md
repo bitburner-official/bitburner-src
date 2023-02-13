@@ -6,20 +6,20 @@
 
 Expand to a new industry
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-expandIndustry(industryType: IndustryType | `${IndustryType}`, divisionName: string): void;
+expandIndustry(industryType: CorpIndustryName, divisionName: string): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  industryType | [IndustryType](./bitburner.industrytype.md) \| \`${[IndustryType](./bitburner.industrytype.md)<!-- -->}\` | Name of the industry |
+|  industryType | [CorpIndustryName](./bitburner.corpindustryname.md) | Name of the industry |
 |  divisionName | string | Name of the division |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

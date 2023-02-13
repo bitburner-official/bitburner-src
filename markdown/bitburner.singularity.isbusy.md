@@ -6,12 +6,12 @@
 
 Check if the player is busy.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 isBusy(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

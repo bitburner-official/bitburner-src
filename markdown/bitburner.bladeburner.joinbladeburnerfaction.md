@@ -6,12 +6,12 @@
 
 Join the bladeburner faction.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 joinBladeburnerFaction(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

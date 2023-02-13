@@ -4,7 +4,7 @@
 
 ## UserInterfaceTheme.combat property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 combat: string;

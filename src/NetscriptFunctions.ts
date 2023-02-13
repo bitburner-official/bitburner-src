@@ -43,8 +43,17 @@ import { killWorkerScript } from "./Netscript/killWorkerScript";
 import { workerScripts } from "./Netscript/WorkerScripts";
 import { WorkerScript } from "./Netscript/WorkerScript";
 import { helpers, assertObjectType } from "./Netscript/NetscriptHelpers";
-import { numeralWrapper } from "./ui/numeralFormat";
-import { convertTimeMsToTimeElapsedString, formatNumber } from "./utils/StringHelperFunctions";
+import {
+  formatExp,
+  formatNumberNoSuffix,
+  formatMoney,
+  formatPercent,
+  formatRam,
+  formatSecurity,
+  formatThreads,
+  formatNumber,
+} from "./ui/formatNumber";
+import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { LogBoxEvents, LogBoxCloserEvents, LogBoxPositionEvents, LogBoxSizeEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/arrayToString";
 import { isString } from "./utils/helpers/isString";
@@ -61,7 +70,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums } from "./ScriptEditor/NetscriptDefinitions";
+import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
@@ -72,29 +81,32 @@ import { Flags } from "./NetscriptFunctions/Flags";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
-import { ExternalAPI, InternalAPI, StampedLayer, wrapAPILayer } from "./Netscript/APIWrapper";
+import { InternalAPI, removedFunction, NSProxy } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
-import { CompanyPosName, CrimeType, GymType, LocationName, UniversityClassType } from "./utils/enums";
+import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassType } from "./Enums";
 import { cloneDeep } from "lodash";
-import { FactionWorkType } from "./utils/enums";
+import { FactionWorkType } from "./Enums";
+import numeral from "numeral";
 
 export const enums: NSEnums = {
-  toast: ToastVariant,
+  CityName,
   CrimeType,
   FactionWorkType,
   GymType,
-  UniversityClassType,
-  CompanyPosName,
   LocationName,
+  JobName,
+  ToastVariant,
+  UniversityClassType,
 };
+for (const val of Object.values(enums)) Object.freeze(val);
+Object.freeze(enums);
 
-export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args">>;
+export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums">>;
 
 export const ns: InternalAPI<NSFull> = {
-  enums,
   singularity: NetscriptSingularity(),
   gang: NetscriptGang(),
   bladeburner: NetscriptBladeburner(),
@@ -129,7 +141,7 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_hostname, opts = {}) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
-      // Todo: better type safety rework for functions using assertObjectType, then remove function.
+      // TODO 2.2: better type safety rework for functions using assertObjectType, then remove function.
       const optsValidator: BasicHGWOptions = {};
       assertObjectType(ctx, "opts", opts, optsValidator);
       return helpers.hack(ctx, hostname, false, { threads: opts.threads, stock: opts.stock });
@@ -259,7 +271,7 @@ export const ns: InternalAPI<NSFull> = {
           `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
             growTime * 1000,
             true,
-          )} (t=${numeralWrapper.formatThreads(threads)}).`,
+          )} (t=${formatThreads(threads)}).`,
       );
       return helpers.netscriptDelay(ctx, growTime * 1000).then(function () {
         const moneyBefore = server.moneyAvailable <= 0 ? 1 : server.moneyAvailable;
@@ -271,10 +283,9 @@ export const ns: InternalAPI<NSFull> = {
         helpers.log(
           ctx,
           () =>
-            `Available money on '${server.hostname}' grown by ${numeralWrapper.formatPercentage(
-              logGrowPercent,
-              6,
-            )}. Gained ${numeralWrapper.formatExp(expGain)} hacking exp (t=${numeralWrapper.formatThreads(threads)}).`,
+            `Available money on '${server.hostname}' grown by ${formatPercent(logGrowPercent, 6)}. Gained ${formatExp(
+              expGain,
+            )} hacking exp (t=${formatThreads(threads)}).`,
         );
         ctx.workerScript.scriptRef.onlineExpGained += expGain;
         Player.gainHackingExp(expGain);
@@ -357,7 +368,7 @@ export const ns: InternalAPI<NSFull> = {
           `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
             weakenTime * 1000,
             true,
-          )} (t=${numeralWrapper.formatThreads(threads)})`,
+          )} (t=${formatThreads(threads)})`,
       );
       return helpers.netscriptDelay(ctx, weakenTime * 1000).then(function () {
         const host = GetServer(ctx.workerScript.hostname);
@@ -372,9 +383,9 @@ export const ns: InternalAPI<NSFull> = {
         helpers.log(
           ctx,
           () =>
-            `'${server.hostname}' security level weakened to ${
-              server.hackDifficulty
-            }. Gained ${numeralWrapper.formatExp(expGain)} hacking exp (t=${numeralWrapper.formatThreads(threads)})`,
+            `'${server.hostname}' security level weakened to ${server.hackDifficulty}. Gained ${formatExp(
+              expGain,
+            )} hacking exp (t=${formatThreads(threads)})`,
         );
         ctx.workerScript.scriptRef.onlineExpGained += expGain;
         Player.gainHackingExp(expGain);
@@ -515,7 +526,7 @@ export const ns: InternalAPI<NSFull> = {
         return [] as string[];
       }
 
-      return runningScriptObj.logs.slice();
+      return runningScriptObj.logs.map((x) => "" + x);
     },
   tail:
     (ctx) =>
@@ -1068,10 +1079,10 @@ export const ns: InternalAPI<NSFull> = {
     }
     if (server.hostname == "home") {
       // Return player's money
-      helpers.log(ctx, () => `returned player's money: ${numeralWrapper.formatMoney(Player.money)}`);
+      helpers.log(ctx, () => `returned player's money: ${formatMoney(Player.money)}`);
       return Player.money;
     }
-    helpers.log(ctx, () => `returned ${numeralWrapper.formatMoney(server.moneyAvailable)} for '${server.hostname}'`);
+    helpers.log(ctx, () => `returned ${formatMoney(server.moneyAvailable)} for '${server.hostname}'`);
     return server.moneyAvailable;
   },
   getServerSecurityLevel: (ctx) => (_hostname) => {
@@ -1084,10 +1095,7 @@ export const ns: InternalAPI<NSFull> = {
     if (helpers.failOnHacknetServer(ctx, server)) {
       return 1;
     }
-    helpers.log(
-      ctx,
-      () => `returned ${numeralWrapper.formatServerSecurity(server.hackDifficulty)} for '${server.hostname}'`,
-    );
+    helpers.log(ctx, () => `returned ${formatSecurity(server.hackDifficulty)} for '${server.hostname}'`);
     return server.hackDifficulty;
   },
   getServerBaseSecurityLevel: (ctx) => (_hostname) => {
@@ -1101,10 +1109,7 @@ export const ns: InternalAPI<NSFull> = {
     if (helpers.failOnHacknetServer(ctx, server)) {
       return 1;
     }
-    helpers.log(
-      ctx,
-      () => `returned ${numeralWrapper.formatServerSecurity(server.baseDifficulty)} for '${server.hostname}'`,
-    );
+    helpers.log(ctx, () => `returned ${formatSecurity(server.baseDifficulty)} for '${server.hostname}'`);
     return server.baseDifficulty;
   },
   getServerMinSecurityLevel: (ctx) => (_hostname) => {
@@ -1117,10 +1122,7 @@ export const ns: InternalAPI<NSFull> = {
     if (helpers.failOnHacknetServer(ctx, server)) {
       return 1;
     }
-    helpers.log(
-      ctx,
-      () => `returned ${numeralWrapper.formatServerSecurity(server.minDifficulty)} for ${server.hostname}`,
-    );
+    helpers.log(ctx, () => `returned ${formatSecurity(server.minDifficulty)} for ${server.hostname}`);
     return server.minDifficulty;
   },
   getServerRequiredHackingLevel: (ctx) => (_hostname) => {
@@ -1133,7 +1135,7 @@ export const ns: InternalAPI<NSFull> = {
     if (helpers.failOnHacknetServer(ctx, server)) {
       return 1;
     }
-    helpers.log(ctx, () => `returned ${formatNumber(server.requiredHackingSkill, 0)} for '${server.hostname}'`);
+    helpers.log(ctx, () => `returned ${formatNumberNoSuffix(server.requiredHackingSkill, 0)} for '${server.hostname}'`);
     return server.requiredHackingSkill;
   },
   getServerMaxMoney: (ctx) => (_hostname) => {
@@ -1146,7 +1148,7 @@ export const ns: InternalAPI<NSFull> = {
     if (helpers.failOnHacknetServer(ctx, server)) {
       return 0;
     }
-    helpers.log(ctx, () => `returned ${numeralWrapper.formatMoney(server.moneyMax)} for '${server.hostname}'`);
+    helpers.log(ctx, () => `returned ${formatMoney(server.moneyMax)} for '${server.hostname}'`);
     return server.moneyMax;
   },
   getServerGrowth: (ctx) => (_hostname) => {
@@ -1175,28 +1177,16 @@ export const ns: InternalAPI<NSFull> = {
     helpers.log(ctx, () => `returned ${server.numOpenPortsRequired} for '${server.hostname}'`);
     return server.numOpenPortsRequired;
   },
-  getServerRam:
-    (ctx) =>
-    (_hostname): [number, number] => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      helpers.log(ctx, () => `getServerRam is deprecated in favor of getServerMaxRam / getServerUsedRam`);
-      const server = helpers.getServer(ctx, hostname);
-      helpers.log(
-        ctx,
-        () => `returned [${numeralWrapper.formatRAM(server.maxRam)}, ${numeralWrapper.formatRAM(server.ramUsed)}]`,
-      );
-      return [server.maxRam, server.ramUsed];
-    },
   getServerMaxRam: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const server = helpers.getServer(ctx, hostname);
-    helpers.log(ctx, () => `returned ${numeralWrapper.formatRAM(server.maxRam)}`);
+    helpers.log(ctx, () => `returned ${formatRam(server.maxRam)}`);
     return server.maxRam;
   },
   getServerUsedRam: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const server = helpers.getServer(ctx, hostname);
-    helpers.log(ctx, () => `returned ${numeralWrapper.formatRAM(server.ramUsed)}`);
+    helpers.log(ctx, () => `returned ${formatRam(server.ramUsed)}`);
     return server.ramUsed;
   },
   serverExists: (ctx) => (_hostname) => {
@@ -1283,7 +1273,7 @@ export const ns: InternalAPI<NSFull> = {
     }
 
     if (Player.money < cost) {
-      helpers.log(ctx, () => `Not enough money to purchase server. Need ${numeralWrapper.formatMoney(cost)}`);
+      helpers.log(ctx, () => `Not enough money to purchase server. Need ${formatMoney(cost)}`);
       return "";
     }
     const newServ = safelyCreateUniqueServer({
@@ -1302,10 +1292,7 @@ export const ns: InternalAPI<NSFull> = {
     homeComputer.serversOnNetwork.push(newServ.hostname);
     newServ.serversOnNetwork.push(homeComputer.hostname);
     Player.loseMoney(cost, "servers");
-    helpers.log(
-      ctx,
-      () => `Purchased new server with hostname '${newServ.hostname}' for ${numeralWrapper.formatMoney(cost)}`,
-    );
+    helpers.log(ctx, () => `Purchased new server with hostname '${newServ.hostname}' for ${formatMoney(cost)}`);
     return newServ.hostname;
   },
 
@@ -1695,14 +1682,33 @@ export const ns: InternalAPI<NSFull> = {
       }
       return runningScript.onlineExpGained / runningScript.onlineRunningTime;
     },
+  formatNumber:
+    (ctx) =>
+    (_n, _fractionalDigits = 3, _suffixStart = 1000, isInteger) => {
+      const n = helpers.number(ctx, "n", _n);
+      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
+      const suffixStart = helpers.number(ctx, "suffixStart", _suffixStart);
+      return formatNumber(n, fractionalDigits, suffixStart, !!isInteger);
+    },
+  formatRam:
+    (ctx) =>
+    (_n, _fractionalDigits = 2) => {
+      const n = helpers.number(ctx, "n", _n);
+      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
+      return formatRam(n, fractionalDigits);
+    },
+  formatPercent:
+    (ctx) =>
+    (_n, _fractionalDigits = 2) => {
+      const n = helpers.number(ctx, "n", _n);
+      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
+      return formatPercent(n, fractionalDigits);
+    },
+  // Todo: Remove function in 2.3. Until then it just directly wraps numeral.
   nFormat: (ctx) => (_n, _format) => {
     const n = helpers.number(ctx, "n", _n);
     const format = helpers.string(ctx, "format", _format);
-    if (isNaN(n)) {
-      return "";
-    }
-
-    return numeralWrapper.format(n, format);
+    return numeral(n).format(format);
   },
   tFormat: (ctx) => (_milliseconds, _milliPrecision) => {
     const milliseconds = helpers.number(ctx, "milliseconds", _milliseconds);
@@ -1899,35 +1905,13 @@ export const ns: InternalAPI<NSFull> = {
   flags: Flags,
   ...NetscriptExtra(),
 };
+// Object.assign to bypass ts for removedFunctions which have no documentation or ramcost
+Object.assign(ns, {
+  getServerRam: removedFunction("v2.2.0", "getServerMaxRam and getServerUsedRam"),
+});
 
-// add undocumented functions
-export const wrappedNS = wrapAPILayer({} as ExternalAPI<NSFull>, ns, []);
-
-// Figure out once which layers of ns have functions on them and will need to be stamped with a private workerscript field for API access
-const layerLocations: string[][] = [];
-function populateLayers(nsLayer: ExternalAPI<unknown>, currentLayers: string[] = []) {
-  for (const [k, v] of Object.entries(nsLayer)) {
-    if (typeof v === "object" && k !== "enums") {
-      if (Object.values(v as object).some((member) => typeof member === "function"))
-        layerLocations.push([...currentLayers, k]);
-      populateLayers(v as ExternalAPI<unknown>, [...currentLayers, k]);
-    }
-  }
-}
-populateLayers(wrappedNS);
-
-export function NetscriptFunctions(ws: WorkerScript): ExternalAPI<NSFull> {
-  //todo: better typing instead of relying on an any
-  const instance = new StampedLayer(ws, wrappedNS) as any;
-  for (const layerLocation of layerLocations) {
-    const key = layerLocation.pop() as string;
-    const obj = layerLocation.reduce((prev, curr) => prev[curr], instance);
-    layerLocation.push(key);
-    obj[key] = new StampedLayer(ws, obj[key]);
-  }
-  instance.args = ws.args.slice();
-  instance.pid = ws.pid;
-  return instance;
+export function NetscriptFunctions(ws: WorkerScript): NSFull {
+  return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid, enums });
 }
 
 const possibleLogs = Object.fromEntries([...getFunctionNames(ns, "")].map((a) => [a, true]));

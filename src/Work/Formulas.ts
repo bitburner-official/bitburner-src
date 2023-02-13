@@ -1,9 +1,9 @@
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Crime } from "../Crime/Crime";
 import { newWorkStats, scaleWorkStats, WorkStats, multWorkStats } from "./WorkStats";
-import { Person as IPerson } from "../ScriptEditor/NetscriptDefinitions";
+import { Person as IPerson } from "@nsdefs";
 import { CONSTANTS } from "../Constants";
-import { FactionWorkType, GymType } from "../utils/enums";
+import { FactionWorkType, GymType } from "../Enums";
 import {
   getFactionFieldWorkRepGain,
   getFactionSecurityWorkRepGain,
@@ -16,28 +16,28 @@ import { Class, Classes, ClassType } from "./ClassWork";
 import { Server } from "../Server/Server";
 import { GetServer } from "../Server/AllServers";
 import { serverMetadata } from "../Server/data/servers";
-import { LocationName } from "../utils/enums";
+import { LocationName } from "../Enums";
 import { Company } from "../Company/Company";
 import { CompanyPosition } from "../Company/CompanyPosition";
 import { checkEnum } from "../utils/helpers/enum";
 
 const gameCPS = 1000 / CONSTANTS._idleSpeed; // 5 cycles per second
 export const FactionWorkStats: Record<FactionWorkType, WorkStats> = {
-  [FactionWorkType.hacking]: newWorkStats({ hackExp: 15 }),
+  [FactionWorkType.hacking]: newWorkStats({ hackExp: 2 }),
   [FactionWorkType.field]: newWorkStats({
-    hackExp: 10,
-    strExp: 10,
-    defExp: 10,
-    dexExp: 10,
-    agiExp: 10,
-    chaExp: 10,
+    hackExp: 1,
+    strExp: 1,
+    defExp: 1,
+    dexExp: 1,
+    agiExp: 1,
+    chaExp: 1,
   }),
   [FactionWorkType.security]: newWorkStats({
-    hackExp: 5,
-    strExp: 15,
-    defExp: 15,
-    dexExp: 15,
-    agiExp: 15,
+    hackExp: 0.5,
+    strExp: 1.5,
+    defExp: 1.5,
+    dexExp: 1.5,
+    agiExp: 1.5,
   }),
 };
 

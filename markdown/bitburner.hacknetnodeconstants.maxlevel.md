@@ -6,7 +6,7 @@
 
 Max node level
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 MaxLevel: number;

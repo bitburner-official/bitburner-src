@@ -6,7 +6,7 @@
 
 Get the stats of an augmentation.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getAugmentationStats(name: string): Multipliers;
@@ -18,7 +18,7 @@ getAugmentationStats(name: string): Multipliers;
 |  --- | --- | --- |
 |  name | string | Name of Augmentation. CASE-SENSITIVE. |
 
-<b>Returns:</b>
+**Returns:**
 
 [Multipliers](./bitburner.multipliers.md)
 

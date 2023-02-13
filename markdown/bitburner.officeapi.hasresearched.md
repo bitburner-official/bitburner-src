@@ -6,7 +6,7 @@
 
 Gets if you have unlocked a research
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hasResearched(divisionName: string, researchName: string): boolean;
@@ -19,7 +19,7 @@ hasResearched(divisionName: string, researchName: string): boolean;
 |  divisionName | string | Name of the division |
 |  researchName | string | Name of the research |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

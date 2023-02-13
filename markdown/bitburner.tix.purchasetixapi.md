@@ -6,12 +6,12 @@
 
 Purchase TIX API Access
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 purchaseTixApi(): boolean;
 ```
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

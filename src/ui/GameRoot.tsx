@@ -4,7 +4,7 @@ import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { saveObject } from "../SaveObject";
 import { onExport } from "../ExportBonus";
-import { LocationName } from "../utils/enums";
+import { LocationName } from "../Enums";
 import { Location } from "../Locations/Location";
 import { ITutorial, iTutorialStart } from "../InteractiveTutorial";
 import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutorialRoot";
@@ -76,6 +76,8 @@ import _functions from "lodash/functions";
 import { Apr1 } from "./Apr1";
 import { isFactionWork } from "../Work/FactionWork";
 import { V2Modal } from "../utils/V2Modal";
+import { MathJaxContext } from "better-react-mathjax";
+import { useRerender } from "./React/hooks";
 
 const htmlLocation = location;
 
@@ -126,7 +128,7 @@ export function GameRoot(): React.ReactElement {
   const classes = useStyles();
   const [{ files, vim }, setEditorOptions] = useState({ files: {}, vim: false });
   const [page, setPage] = useState(determineStartPage());
-  const setRerender = useState(0)[1];
+  const rerender = useRerender();
   const [augPage, setAugPage] = useState<boolean>(false);
   const [faction, setFaction] = useState<Faction>(
     isFactionWork(Player.currentWork) ? Factions[Player.currentWork.factionName] : (undefined as unknown as Faction),
@@ -154,9 +156,6 @@ export function GameRoot(): React.ReactElement {
     setErrorBoundaryKey(errorBoundaryKey + 1);
   }
 
-  function rerender(): void {
-    setRerender((old) => old + 1);
-  }
   useEffect(() => {
     return ITutorialEvents.subscribe(rerender);
   }, []);
@@ -427,7 +426,7 @@ export function GameRoot(): React.ReactElement {
   }
 
   return (
-    <>
+    <MathJaxContext version={3} src={"dist/ext/MathJax-3.2.2/es5/tex-chtml.js"}>
       <ErrorBoundary key={errorBoundaryKey} softReset={softReset}>
         <BypassWrapper content={bypassGame ? mainPage : null}>
           <SnackbarProvider>
@@ -467,6 +466,6 @@ export function GameRoot(): React.ReactElement {
         </BypassWrapper>
       </ErrorBoundary>
       <V2Modal />
-    </>
+    </MathJaxContext>
   );
 }

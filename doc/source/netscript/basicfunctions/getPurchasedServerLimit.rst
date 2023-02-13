@@ -10,4 +10,4 @@ getPurchasedServerLimit() Netscript Function
 
     .. code-block:: javascript
 
-        getPurchasedServerLimit() // returns: 25
+        ns.getPurchasedServerLimit() // returns: 25

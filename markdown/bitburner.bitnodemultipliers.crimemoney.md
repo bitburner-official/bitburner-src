@@ -6,7 +6,7 @@
 
 Influences the base money gained when the player commits a crime.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 CrimeMoney: number;

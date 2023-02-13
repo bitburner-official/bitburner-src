@@ -6,7 +6,7 @@
 
 All research bought
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 upgrades: number[];

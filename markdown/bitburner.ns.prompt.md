@@ -6,7 +6,7 @@
 
 Prompt the player with an input modal.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 prompt(
@@ -20,9 +20,9 @@ prompt(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  txt | string | Text to appear in the prompt dialog box. |
-|  options | { type?: "boolean" \| "text" \| "select"; choices?: string\[\] } | Options to modify the prompt the player is shown. |
+|  options | { type?: "boolean" \| "text" \| "select"; choices?: string\[\] } | _(Optional)_ Options to modify the prompt the player is shown. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;boolean \| string&gt;
 

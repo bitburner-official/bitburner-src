@@ -4,7 +4,7 @@
 
 ## Person.mults property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 mults: Multipliers;

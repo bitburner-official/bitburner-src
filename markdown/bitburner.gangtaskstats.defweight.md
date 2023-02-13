@@ -6,7 +6,7 @@
 
 Defense skill impact on task scaling
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 defWeight: number;

@@ -6,7 +6,7 @@
 
 Hacking multiplier
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hack?: number;

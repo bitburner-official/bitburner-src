@@ -6,7 +6,7 @@
 
 Node's number of cores
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cores: number;

@@ -1,31 +1,22 @@
 import { Explore, Info, LastPage, LocalPolice, NewReleases, Report, SportsMma } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography, useTheme } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { numeralWrapper } from "../../ui/numeralFormat";
+import { formatFavor, formatReputation } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
 import { FactionNames } from "../data/FactionNames";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
+import { useRerender } from "../../ui/React/hooks";
 
 export const InvitationsSeen: string[] = [];
-
-const getAugsLeft = (faction: Faction): number => {
-  const augs = getFactionAugmentationsFiltered(faction);
-
-  return augs.filter((augmentation: string) => !Player.hasAugmentation(augmentation)).length;
-};
-
-interface IWorkTypeProps {
-  faction: Faction;
-}
 
 const fontSize = "small";
 const marginRight = 0.5;
 
-const WorkTypesOffered = (props: IWorkTypeProps): React.ReactElement => {
+const WorkTypesOffered = (props: { faction: Faction }): React.ReactElement => {
   const info = props.faction.getInfo();
 
   return (
@@ -49,16 +40,16 @@ const WorkTypesOffered = (props: IWorkTypeProps): React.ReactElement => {
   );
 };
 
-interface IFactionProps {
+interface FactionElementProps {
   faction: Faction;
-
+  /** Whether the player is a member of this faction already */
   joined: boolean;
-
+  /** Rerender function to force the entire FactionsRoot to rerender */
   rerender: () => void;
 }
-
-const FactionElement = (props: IFactionProps): React.ReactElement => {
+const FactionElement = (props: FactionElementProps): React.ReactElement => {
   const facInfo = props.faction.getInfo();
+  const augsLeft = getFactionAugmentationsFiltered(props.faction).filter((aug) => !Player.hasAugmentation(aug)).length;
 
   function openFaction(faction: Faction): void {
     Router.toFaction(faction);
@@ -114,12 +105,11 @@ const FactionElement = (props: IFactionProps): React.ReactElement => {
               alignItems: "center",
             }}
           >
-            <span
-              style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}
-              title={props.faction.name}
-            >
-              {props.faction.name}
-            </span>
+            <Tooltip title={props.faction.name}>
+              <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
+                {props.faction.name}
+              </span>
+            </Tooltip>
 
             <span style={{ display: "flex", alignItems: "center" }}>
               {Player.hasGangWith(props.faction.name) && (
@@ -156,12 +146,7 @@ const FactionElement = (props: IFactionProps): React.ReactElement => {
 
           <span style={{ display: "flex", alignItems: "center" }}>
             {!Player.hasGangWith(props.faction.name) && <WorkTypesOffered faction={props.faction} />}
-
-            {props.joined && (
-              <Typography variant="body2" sx={{ display: "flex" }}>
-                {getAugsLeft(props.faction)} Augmentations left
-              </Typography>
-            )}
+            <Typography variant="body2" sx={{ display: "flex" }}>{`${augsLeft || "No"} Augmentations left`}</Typography>
           </span>
         </span>
       </Box>
@@ -169,10 +154,10 @@ const FactionElement = (props: IFactionProps): React.ReactElement => {
       {props.joined && (
         <Box display="grid" sx={{ alignItems: "center", justifyItems: "left", gridAutoFlow: "row" }}>
           <Typography sx={{ color: Settings.theme.rep }}>
-            {numeralWrapper.formatFavor(Math.floor(props.faction.favor))} favor
+            {formatFavor(Math.floor(props.faction.favor))} favor
           </Typography>
           <Typography sx={{ color: Settings.theme.rep }}>
-            {numeralWrapper.formatReputation(props.faction.playerReputation)} rep
+            {formatReputation(props.faction.playerReputation)} rep
           </Typography>
         </Box>
       )}
@@ -182,15 +167,7 @@ const FactionElement = (props: IFactionProps): React.ReactElement => {
 
 export function FactionsRoot(): React.ReactElement {
   const theme = useTheme();
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
-
+  const rerender = useRerender(200);
   useEffect(() => {
     Player.factionInvitations.forEach((faction) => {
       if (InvitationsSeen.includes(faction)) return;

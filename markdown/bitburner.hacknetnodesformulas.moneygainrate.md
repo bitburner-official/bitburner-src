@@ -6,7 +6,7 @@
 
 Calculate money gain rate.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 moneyGainRate(level: number, ram: number, cores: number, mult?: number): number;
@@ -19,9 +19,9 @@ moneyGainRate(level: number, ram: number, cores: number, mult?: number): number;
 |  level | number | level of the node. |
 |  ram | number | ram of the node. |
 |  cores | number | cores of the node. |
-|  mult | number | player production mult (default to 1) |
+|  mult | number | _(Optional)_ player production mult (default to 1) |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

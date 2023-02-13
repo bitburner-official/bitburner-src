@@ -6,7 +6,7 @@
 
 Amount of acquirable shares.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 issuedShares: number;

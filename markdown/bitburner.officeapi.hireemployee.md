@@ -6,14 +6,10 @@
 
 Hire an employee.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-hireEmployee(
-    divisionName: string,
-    cityName: string,
-    employeePosition?: EmployeePositions | `${EmployeePositions}`,
-  ): boolean;
+hireEmployee(divisionName: string, city: CityName | `${CityName}`, employeePosition?: CorpEmployeePosition): boolean;
 ```
 
 ## Parameters
@@ -21,10 +17,10 @@ hireEmployee(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  cityName | string | Name of the city |
-|  employeePosition | [EmployeePositions](./bitburner.employeepositions.md) \| \`${[EmployeePositions](./bitburner.employeepositions.md)<!-- -->}\` | Position to place into. Defaults to "Unassigned". |
+|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
+|  employeePosition | [CorpEmployeePosition](./bitburner.corpemployeeposition.md) | _(Optional)_ Position to place into. Defaults to "Unassigned". |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

@@ -6,7 +6,7 @@
 
 Move a file on the target server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 mv(host: string, source: string, destination: string): void;
@@ -20,7 +20,7 @@ mv(host: string, source: string, destination: string): void;
 |  source | string | Filename of the source file. |
 |  destination | string | Filename of the destination file. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

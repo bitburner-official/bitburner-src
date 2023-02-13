@@ -6,7 +6,7 @@
 
 Hacknet Nodes formulas
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hacknetNodes: HacknetNodesFormulas;

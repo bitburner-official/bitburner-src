@@ -6,7 +6,7 @@
 
 Player's hacking speed multiplier.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 speed: number;

@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.moneyGain property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 moneyGain: number;

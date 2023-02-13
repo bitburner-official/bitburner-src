@@ -4,7 +4,7 @@
 
 ## Player.numPeopleKilled property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 numPeopleKilled: number;

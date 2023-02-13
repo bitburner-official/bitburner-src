@@ -1,13 +1,13 @@
 import { CheckBox, CheckBoxOutlineBlank, Construction } from "@mui/icons-material";
 import { Box, Button, Container, List, ListItemButton, Paper, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GraftingWork } from "../../../Work/GraftingWork";
 import { Augmentation } from "../../../Augmentation/Augmentation";
 import { AugmentationNames } from "../../../Augmentation/data/AugmentationNames";
 import { StaticAugmentations } from "../../../Augmentation/StaticAugmentations";
 import { CONSTANTS } from "../../../Constants";
 import { hasAugmentationPrereqs } from "../../../Faction/FactionHelpers";
-import { LocationName } from "../../../utils/enums";
+import { LocationName } from "../../../Enums";
 import { Locations } from "../../../Locations/Locations";
 import { PurchaseAugmentationsOrderSetting } from "../../../Settings/SettingEnums";
 import { Settings } from "../../../Settings/Settings";
@@ -15,10 +15,12 @@ import { Router } from "../../../ui/GameRoot";
 import { Page } from "../../../ui/Router";
 import { ConfirmationModal } from "../../../ui/React/ConfirmationModal";
 import { Money } from "../../../ui/React/Money";
-import { convertTimeMsToTimeElapsedString, formatNumber } from "../../../utils/StringHelperFunctions";
+import { formatNumberNoSuffix } from "../../../ui/formatNumber";
+import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
 import { Player } from "@player";
 import { GraftableAugmentation } from "../GraftableAugmentation";
 import { calculateGraftingTimeWithBonus, getGraftingAvailableAugs } from "../GraftingHelpers";
+import { useRerender } from "../../../ui/React/hooks";
 
 export const GraftableAugmentations = (): Record<string, GraftableAugmentation> => {
   const gAugs: Record<string, GraftableAugmentation> = {};
@@ -64,11 +66,7 @@ export const GraftingRoot = (): React.ReactElement => {
   const [selectedAug, setSelectedAug] = useState(getGraftingAvailableAugs()[0]);
   const [graftOpen, setGraftOpen] = useState(false);
   const selectedAugmentation = StaticAugmentations[selectedAug];
-
-  const setRerender = useState(false)[1];
-  function rerender(): void {
-    setRerender((old) => !old);
-  }
+  const rerender = useRerender(200);
 
   const getAugsSorted = (): string[] => {
     const augs = getGraftingAvailableAugs();
@@ -84,11 +82,6 @@ export const GraftingRoot = (): React.ReactElement => {
     Settings.PurchaseAugmentationsOrder = newOrder;
     rerender();
   };
-
-  useEffect(() => {
-    const id = setInterval(rerender, 200);
-    return () => clearInterval(id);
-  }, []);
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
@@ -223,7 +216,7 @@ export const GraftingRoot = (): React.ReactElement => {
             <b>Entropy strength:</b> {Player.entropy}
             <br />
             <b>All multipliers decreased by:</b>{" "}
-            {formatNumber((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}% (multiplicative)
+            {formatNumberNoSuffix((1 - CONSTANTS.EntropyEffect ** Player.entropy) * 100, 3)}% (multiplicative)
           </Typography>
         </Paper>
 

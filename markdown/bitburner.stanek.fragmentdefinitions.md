@@ -6,12 +6,12 @@
 
 List possible fragments.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 fragmentDefinitions(): Fragment[];
 ```
-<b>Returns:</b>
+**Returns:**
 
 [Fragment](./bitburner.fragment.md)<!-- -->\[\]
 

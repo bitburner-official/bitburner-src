@@ -10,7 +10,7 @@ import { Sleeve } from "../Sleeve/Sleeve";
 import { PlayerOwnedSourceFile } from "../../SourceFile/PlayerOwnedSourceFile";
 import { Exploit } from "../../Exploits/Exploit";
 
-import { LocationName } from "../../utils/enums";
+import { LocationName } from "../../Enums";
 import { Corporation } from "../../Corporation/Corporation";
 import { Gang } from "../../Gang/Gang";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
@@ -26,7 +26,7 @@ import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { CONSTANTS } from "../../Constants";
 import { Work } from "src/Work/Work";
 import { Person } from "../Person";
-import { Player as IPlayer } from "../../ScriptEditor/NetscriptDefinitions";
+import { Player as IPlayer } from "@nsdefs";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -165,6 +165,7 @@ export class PlayerObject extends Person implements IPlayer {
 
   /** Initializes a PlayerObject object from a JSON save state. */
   static fromJSON(value: IReviverValue): PlayerObject {
+    if (!value.data.hp?.current || !value.data.hp?.max) value.data.hp = { current: 10, max: 10 };
     const player = Generic_fromJSON(PlayerObject, value.data);
     if (player.money === null) player.money = 0;
     return player;

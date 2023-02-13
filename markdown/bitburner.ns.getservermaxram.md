@@ -6,7 +6,7 @@
 
 Get the maximum amount of RAM on a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getServerMaxRam(host: string): number;
@@ -18,7 +18,7 @@ getServerMaxRam(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

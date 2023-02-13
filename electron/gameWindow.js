@@ -7,9 +7,7 @@ const menu = require("./menu");
 const api = require("./api-server");
 const cp = require("child_process");
 const path = require("path");
-const fs = require("fs");
 const { windowTracker } = require("./windowTracker");
-const { fileURLToPath } = require("url");
 
 const debug = process.argv.includes("--debug");
 
@@ -62,30 +60,8 @@ async function createWindow(killall) {
       return;
     }
 
-    // make sure local urls stay in electron perimeter
-    if (url.substr(0, "file://".length) === "file://") {
-      const requestedPath = fileURLToPath(url);
-      const appPath = path.parse(app.getAppPath());
-      const filePath = path.parse(requestedPath);
-      const isChild = filePath.dir.startsWith(appPath.dir);
-
-      // eslint-disable-next-line no-sync
-      const fileExists = fs.existsSync(requestedPath);
-
-      if (!isChild) {
-        // If we're not relative to our app's path let's abort
-        log.warn(
-          `Requested path ${filePath.dir}${path.sep}${filePath.base} is not relative to the app: ${appPath.dir}${path.sep}${appPath.base}`,
-        );
-        e.preventDefault();
-      } else if (!fileExists) {
-        // If the file does not exist let's abort
-        log.warn(`Requested path ${filePath.dir}${path.sep}${filePath.base} does not exist`);
-        e.preventDefault();
-      }
-
-      return;
-    }
+    // Just use the default handling for file requests, they should be intercepted in main.js file protocol intercept.
+    if (url.startswith("file://")) return;
 
     if (process.platform === "win32") {
       // If we have parameters in the URL, explorer.exe won't register the URL and will open the file explorer instead.
@@ -119,7 +95,7 @@ async function createWindow(killall) {
   }
 
   menu.refreshMenu(window);
-  setStopProcessHandler(app, window, true);
+  setStopProcessHandler(app, window);
 
   return window;
 }

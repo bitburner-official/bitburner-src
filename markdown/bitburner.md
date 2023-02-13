@@ -8,12 +8,11 @@
 
 |  Enumeration | Description |
 |  --- | --- |
-|  [CompanyPosName](./bitburner.companyposname.md) |  |
+|  [CityName](./bitburner.cityname.md) | Names of all cities |
 |  [CrimeType](./bitburner.crimetype.md) |  |
-|  [EmployeePositions](./bitburner.employeepositions.md) |  |
 |  [FactionWorkType](./bitburner.factionworktype.md) |  |
 |  [GymType](./bitburner.gymtype.md) |  |
-|  [IndustryType](./bitburner.industrytype.md) |  |
+|  [JobName](./bitburner.jobname.md) |  |
 |  [LocationName](./bitburner.locationname.md) | Names of all locations |
 |  [OrderTypes](./bitburner.ordertypes.md) |  |
 |  [PositionTypes](./bitburner.positiontypes.md) |  |
@@ -32,8 +31,12 @@
 |  [Bladeburner](./bitburner.bladeburner.md) | Bladeburner API |
 |  [BladeburnerCurAction](./bitburner.bladeburnercuraction.md) | Bladeburner current action. |
 |  [CodingContract](./bitburner.codingcontract.md) | Coding Contract API |
+|  [CorpConstants](./bitburner.corpconstants.md) | Corporation related constants |
+|  [CorpIndustryData](./bitburner.corpindustrydata.md) | Data for an individual industry |
+|  [CorpMaterialConstantData](./bitburner.corpmaterialconstantdata.md) | Corporation material information |
 |  [Corporation](./bitburner.corporation.md) | Corporation API |
 |  [CorporationInfo](./bitburner.corporationinfo.md) | General info about a corporation |
+|  [CorpProductData](./bitburner.corpproductdata.md) | Product rating information |
 |  [CrimeStats](./bitburner.crimestats.md) | Data representing the internal values of a crime. |
 |  [Division](./bitburner.division.md) | Corporation division |
 |  [EquipmentStats](./bitburner.equipmentstats.md) | Object representing data representing a gang member equipment. |
@@ -61,6 +64,7 @@
 |  [HacknetServersFormulas](./bitburner.hacknetserversformulas.md) | Hacknet Server formulas |
 |  [HP](./bitburner.hp.md) |  |
 |  [ILocation](./bitburner.ilocation.md) |  |
+|  [IndustryData](./bitburner.industrydata.md) | Corporation industry information |
 |  [Infiltration](./bitburner.infiltration.md) | Infiltration API. |
 |  [InfiltrationLocation](./bitburner.infiltrationlocation.md) |  |
 |  [InfiltrationReward](./bitburner.infiltrationreward.md) |  |
@@ -90,7 +94,7 @@
 |  [SleevePerson](./bitburner.sleeveperson.md) |  |
 |  [SourceFileLvl](./bitburner.sourcefilelvl.md) |  |
 |  [Stanek](./bitburner.stanek.md) | Stanek's Gift API. |
-|  [StockOrder](./bitburner.stockorder.md) | Return value of [getOrders](./bitburner.tix.getorders.md)<!-- -->Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md) |
+|  [StockOrder](./bitburner.stockorder.md) | <p>Return value of [getOrders](./bitburner.tix.getorders.md)</p><p>Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md)</p> |
 |  [StockOrderObject](./bitburner.stockorderobject.md) | Value in map of [StockOrder](./bitburner.stockorder.md) |
 |  [TIX](./bitburner.tix.md) | Stock market API |
 |  [UserInterface](./bitburner.userinterface.md) | User Interface API. |
@@ -105,6 +109,13 @@
 |  Type Alias | Description |
 |  --- | --- |
 |  [CodingContractData](./bitburner.codingcontractdata.md) | Coding contract data will differ depending on coding contract. |
+|  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |
+|  [CorpIndustryName](./bitburner.corpindustryname.md) |  |
+|  [CorpMaterialName](./bitburner.corpmaterialname.md) |  |
+|  [CorpResearchName](./bitburner.corpresearchname.md) |  |
+|  [CorpStateName](./bitburner.corpstatename.md) |  |
+|  [CorpUnlockName](./bitburner.corpunlockname.md) |  |
+|  [CorpUpgradeName](./bitburner.corpupgradename.md) |  |
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
 |  [NSEnums](./bitburner.nsenums.md) |  |
 |  [PortData](./bitburner.portdata.md) |  |

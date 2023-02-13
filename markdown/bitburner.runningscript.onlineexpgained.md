@@ -6,7 +6,7 @@
 
 Total amount of hacking experience earned from this script when online
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 onlineExpGained: number;

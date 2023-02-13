@@ -6,7 +6,7 @@
 
 Returns a server object for the given server. Defaults to the running script's server if host is not specified.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getServer(host?: string): Server;
@@ -16,9 +16,9 @@ getServer(host?: string): Server;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | Optional. Hostname for the requested server object. |
+|  host | string | _(Optional)_ Optional. Hostname for the requested server object. |
 
-<b>Returns:</b>
+**Returns:**
 
 [Server](./bitburner.server.md)
 

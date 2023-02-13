@@ -6,7 +6,7 @@
 
 Sell Shares
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 sellShares(amount: number): void;
@@ -18,7 +18,7 @@ sellShares(amount: number): void;
 |  --- | --- | --- |
 |  amount | number | Amount of shares to sell. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

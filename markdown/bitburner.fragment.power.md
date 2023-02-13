@@ -4,7 +4,7 @@
 
 ## Fragment.power property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 power: number;

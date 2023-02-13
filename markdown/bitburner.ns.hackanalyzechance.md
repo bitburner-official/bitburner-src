@@ -6,7 +6,7 @@
 
 Get the chance of successfully hacking a server.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hackAnalyzeChance(host: string): number;
@@ -18,7 +18,7 @@ hackAnalyzeChance(host: string): number;
 |  --- | --- | --- |
 |  host | string | Hostname of the target server. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

@@ -6,7 +6,7 @@
 
 Current round of funding (max 4)
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 round: number;

@@ -6,7 +6,7 @@
 
 defense level impact on success change of the crime
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 defense_success_weight: number;

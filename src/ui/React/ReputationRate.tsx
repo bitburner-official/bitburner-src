@@ -1,7 +1,7 @@
 import React from "react";
-import { numeralWrapper } from "../numeralFormat";
+import { formatReputation } from "../formatNumber";
 import { Reputation } from "./Reputation";
 
 export function ReputationRate({ reputation }: { reputation: number }): React.ReactElement {
-  return <Reputation reputation={`${numeralWrapper.formatReputation(reputation)} / sec`} />;
+  return <Reputation reputation={`${formatReputation(reputation)} / sec`} />;
 }

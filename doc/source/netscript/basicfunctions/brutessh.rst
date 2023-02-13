@@ -14,4 +14,4 @@ brutessh() Netscript Function
 
     .. code-block:: javascript
 
-        brutessh("foodnstuff");
+        ns.brutessh("foodnstuff");

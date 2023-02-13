@@ -4,7 +4,7 @@
 
 ## WorkFormulas.crimeSuccessChance() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 crimeSuccessChance(person: Person, crimeType: CrimeType | `${CrimeType}`): number;
@@ -17,7 +17,7 @@ crimeSuccessChance(person: Person, crimeType: CrimeType | `${CrimeType}`): numbe
 |  person | [Person](./bitburner.person.md) |  |
 |  crimeType | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` |  |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

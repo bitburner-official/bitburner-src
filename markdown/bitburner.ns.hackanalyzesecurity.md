@@ -6,7 +6,7 @@
 
 Get the security increase for a number of threads.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hackAnalyzeSecurity(threads: number, hostname?: string): number;
@@ -17,9 +17,9 @@ hackAnalyzeSecurity(threads: number, hostname?: string): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  threads | number | Amount of threads that will be used. |
-|  hostname | string | Hostname of the target server. The number of threads is limited to the number needed to hack the server's maximum amount of money. |
+|  hostname | string | _(Optional)_ Hostname of the target server. The number of threads is limited to the number needed to hack the server's maximum amount of money. |
 
-<b>Returns:</b>
+**Returns:**
 
 number
 

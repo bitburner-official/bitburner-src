@@ -101,7 +101,7 @@ function checkForMessagesToSend(): void {
     sendMessage(jumper2);
   } else if (!recvd(nitesecTest) && Player.skills.hacking >= 200) {
     sendMessage(nitesecTest);
-  } else if (!recvd(jumper3) && Player.skills.hacking >= 350) {
+  } else if (!recvd(jumper3) && Player.skills.hacking >= 325) {
     sendMessage(jumper3);
   } else if (!recvd(jumper4) && Player.skills.hacking >= 490) {
     sendMessage(jumper4);

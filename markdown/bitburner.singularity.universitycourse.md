@@ -6,7 +6,7 @@
 
 Take university class.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 universityCourse(universityName: string, courseName: string, focus?: boolean): boolean;
@@ -18,9 +18,9 @@ universityCourse(universityName: string, courseName: string, focus?: boolean): b
 |  --- | --- | --- |
 |  universityName | string | Name of university. You must be in the correct city for whatever university you specify. |
 |  courseName | string | Name of course. |
-|  focus | boolean | Acquire player focus on this class. Optional. Defaults to true. |
+|  focus | boolean | _(Optional)_ Acquire player focus on this class. Optional. Defaults to true. |
 
-<b>Returns:</b>
+**Returns:**
 
 boolean
 

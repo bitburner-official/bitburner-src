@@ -6,7 +6,7 @@
 
 Node's production per second
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 production: number;
