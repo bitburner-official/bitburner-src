@@ -307,10 +307,8 @@ export class Corporation {
 
   //Levelable upgrades
   upgrade(upgrade: CorporationUpgrade, amount: number): void {
-    if (amount <1)amount=1;
+    if (amount < 1) amount = 1;
     const upgN = upgrade.index,
-      basePrice = upgrade.basePrice,
-      priceMult = upgrade.priceMult,
       upgradeAmt = upgrade.benefit; //Amount by which the upgrade multiplier gets increased (additive)
     while (this.upgrades.length <= upgN) {
       this.upgrades.push(0);
@@ -318,7 +316,7 @@ export class Corporation {
     while (this.upgradeMultipliers.length <= upgN) {
       this.upgradeMultipliers.push(1);
     }
-    const totalCost = calculateUpgradeCost(this,upgrade,amount);
+    const totalCost = calculateUpgradeCost(this, upgrade, amount);
     if (this.funds < totalCost) {
       dialogBoxCreate("You don't have enough funds to purchase this!");
       return;

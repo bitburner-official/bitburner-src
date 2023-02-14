@@ -174,10 +174,9 @@ function Upgrades({ rerender }: IUpgradeProps): React.ReactElement {
       <Paper sx={{ p: 1, my: 1 }}>
         <Typography variant="h4">Unlocks</Typography>
         <Grid container>
-          {Object.values(CorporationUnlockUpgrades)
-            .map((upgrade: CorporationUnlockUpgrade) => (
-              <UnlockUpgrade rerender={rerender} upgradeData={upgrade} key={upgrade.index} />
-            ))}
+          {Object.values(CorporationUnlockUpgrades).map((upgrade: CorporationUnlockUpgrade) => (
+            <UnlockUpgrade rerender={rerender} upgradeData={upgrade} key={upgrade.index} />
+          ))}
         </Grid>
       </Paper>
       <Paper sx={{ p: 1, my: 1 }}>
