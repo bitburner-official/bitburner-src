@@ -37,10 +37,10 @@ Kills the script with the provided filename, running on the specified host with 
 
 ```js
 // kill the script "foo.js" on the same server the current script is running from, with no arguments
-ns.kill("foo.script");
+ns.kill("foo.js");
 
 // kill the script "foo.js" on the "n00dles" server with no arguments.
-ns.kill("foo.script", "n00dles");
+ns.kill("foo.js", "n00dles");
 
 // kill the script foo.js on the current server that was ran with the arguments [1, “foodnstuff”, false]:
 ns.kill("foo.js", ns.getHostname(), 1, "foodnstuff", false);

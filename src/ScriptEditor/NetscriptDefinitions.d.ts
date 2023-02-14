@@ -4561,22 +4561,10 @@ export interface NS {
    * Use `args.length` to get the number of arguments that were passed into a script.
    *
    * @example
-   * `run example.script 7 text true`
-   *
-   * ```js
-   * // NS1 - example.script
-   * tprint(args.length) // 3
-   * tprint(args[0]); // 7 (number)
-   * tprint(args[1]); // "text" (string)
-   * tprint(args[2]); // true (boolean)
-   * tprint(args[3]); // undefined, because only 3 arguments were provided
-   * ```
-   *
-   * @example
    * `run example.js 7 text true`
    *
    * ```js
-   * // NS2 - example.js
+   * // example.js
    * export async function main(ns) {
    *   ns.tprint(ns.args.length) // 3
    *   ns.tprint(ns.args[0]); // 7 (number)
@@ -5061,28 +5049,15 @@ export interface NS {
    * Remember that scripts are uniquely identified by both their names and arguments.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //Get logs from foo.script on the current server that was run with no args
-   * getScriptLogs("foo.script");
+   * ```js
+   * //Get logs from foo.js on the current server that was run with no args
+   * ns.getScriptLogs("foo.js");
    *
-   * //Open logs from foo.script on the foodnstuff server that was run with no args
-   * getScriptLogs("foo.script", "foodnstuff");
+   * //Open logs from foo.js on the foodnstuff server that was run with no args
+   * ns.getScriptLogs("foo.js", "foodnstuff");
    *
-   * //Open logs from foo.script on the foodnstuff server that was run with the arguments [1, "test"]
-   * getScriptLogs("foo.script", "foodnstuff", 1, "test");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //Get logs from foo.script on the current server that was run with no args
-   * ns.getScriptLogs("foo.script");
-   *
-   * //Open logs from foo.script on the foodnstuff server that was run with no args
-   * ns.getScriptLogs("foo.script", "foodnstuff");
-   *
-   * //Open logs from foo.script on the foodnstuff server that was run with the arguments [1, "test"]
-   * ns.getScriptLogs("foo.script", "foodnstuff", 1, "test");
+   * //Open logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
+   * ns.getScriptLogs("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename of script to get logs from.
    * @param host - Optional. Hostname of the server that the script is on.
@@ -5125,28 +5100,15 @@ export interface NS {
    * Remember that scripts are uniquely identified by both their names and arguments.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //Open logs from foo.script on the current server that was run with no args
-   * tail("foo.script");
+   * ```js
+   * //Open logs from foo.js on the current server that was run with no args
+   * ns.tail("foo.js");
    *
-   * //Get logs from foo.script on the foodnstuff server that was run with no args
-   * tail("foo.script", "foodnstuff");
+   * //Get logs from foo.js on the foodnstuff server that was run with no args
+   * ns.tail("foo.js", "foodnstuff");
    *
-   * //Get logs from foo.script on the foodnstuff server that was run with the arguments [1, "test"]
-   * tail("foo.script", "foodnstuff", 1, "test");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //Open logs from foo.script on the current server that was run with no args
-   * ns.tail("foo.script");
-   *
-   * //Get logs from foo.script on the foodnstuff server that was run with no args
-   * ns.tail("foo.script", "foodnstuff");
-   *
-   * //Get logs from foo.script on the foodnstuff server that was run with the arguments [1, "test"]
-   * ns.tail("foo.script", "foodnstuff", 1, "test");
+   * //Get logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
+   * ns.tail("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
    * @param host - Optional. Hostname of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
@@ -5408,31 +5370,18 @@ export interface NS {
    * Running this function with a numThreads argument of 0 or less will cause a runtime error.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //The simplest way to use the run command is to call it with just the script name. The following example will run ‘foo.script’ single-threaded with no arguments:
-   * run("foo.script");
+   * ```js
+   * //The simplest way to use the run command is to call it with just the script name. The following example will run ‘foo.js’ single-threaded with no arguments:
+   * ns.run("foo.js");
    *
-   * //The following example will run ‘foo.script’ but with 5 threads instead of single-threaded:
-   * run("foo.script", 5);
+   * //The following example will run ‘foo.js’ but with 5 threads instead of single-threaded:
+   * ns.run("foo.js", 5);
    *
-   * //This next example will run ‘foo.script’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
-   * run("foo.script", 1, 'foodnstuff');
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //The simplest way to use the run command is to call it with just the script name. The following example will run ‘foo.script’ single-threaded with no arguments:
-   * ns.run("foo.script");
-   *
-   * //The following example will run ‘foo.script’ but with 5 threads instead of single-threaded:
-   * ns.run("foo.script", 5);
-   *
-   * //This next example will run ‘foo.script’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
-   * ns.run("foo.script", 1, 'foodnstuff');
+   * //This next example will run ‘foo.js’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
+   * ns.run("foo.js", 1, 'foodnstuff');
    * ```
    * @param script - Filename of script to run.
-   * @param numThreads - Optional thread count for new script. Set to 1 by default. Will be rounded to nearest integer.
+   * @param numThreads - Integer number of threads for new script. Defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the second argument numThreads must be filled in with a value.
    * @returns Returns the PID of a successfully started script, and 0 otherwise.
    */
@@ -5455,46 +5404,28 @@ export interface NS {
    * Running this function with a numThreads argument of 0 or less will cause a runtime error.
    *
    * @example
-   * ```ts
-   * // NS1:
+   * ```js
    * // The simplest way to use the exec command is to call it with just the script name
-   * // and the target server. The following example will try to run generic-hack.script
+   * // and the target server. The following example will try to run generic-hack.js
    * // on the foodnstuff server.
-   * exec("generic-hack.script", "foodnstuff");
+   * ns.exec("generic-hack.js", "foodnstuff");
    *
-   * // The following example will try to run the script generic-hack.script on the
+   * // The following example will try to run the script generic-hack.js on the
    * // joesguns server with 10 threads.
-   * exec("generic-hack.script", "joesguns", 10);
+   * ns.exec("generic-hack.js", "joesguns", 10);
    *
-   * // This last example will try to run the script foo.script on the foodnstuff server
+   * // This last example will try to run the script foo.js on the foodnstuff server
    * // with 5 threads. It will also pass the number 1 and the string “test” in as
    * // arguments to the script.
-   * exec("foo.script", "foodnstuff", 5, 1, "test");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * // The simplest way to use the exec command is to call it with just the script name
-   * // and the target server. The following example will try to run generic-hack.script
-   * // on the foodnstuff server.
-   * ns.exec("generic-hack.script", "foodnstuff");
-   *
-   * // The following example will try to run the script generic-hack.script on the
-   * // joesguns server with 10 threads.
-   * ns.exec("generic-hack.script", "joesguns", 10);
-   *
-   * // This last example will try to run the script foo.script on the foodnstuff server
-   * // with 5 threads. It will also pass the number 1 and the string “test” in as
-   * // arguments to the script.
-   * ns.exec("foo.script", "foodnstuff", 5, 1, "test");
+   * ns.exec("foo.js", "foodnstuff", 5, 1, "test");
    * ```
    * @param script - Filename of script to execute.
-   * @param host - Hostname of the `target server` on which to execute the script.
-   * @param numThreads - Optional thread count for new script. Set to 1 by default. Will be rounded down to the nearest integer.
+   * @param hostname - Hostname of the `target server` on which to execute the script.
+   * @param numThreads - Integer number of threads for new script. Defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument numThreads must be filled in with a value.
    * @returns Returns the PID of a successfully started script, and 0 otherwise.
    */
-  exec(script: string, host: string, numThreads?: number, ...args: (string | number | boolean)[]): number;
+  exec(script: string, hostname: string, numThreads?: number, ...args: (string | number | boolean)[]): number;
 
   /**
    * Terminate current script and start another in 10 seconds.
@@ -5511,19 +5442,12 @@ export interface NS {
    * Running this function with a numThreads argument of 0 or less will cause a runtime error.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //The following example will execute the script ‘foo.script’ with 10 threads and the arguments ‘foodnstuff’ and 90:
-   * spawn('foo.script', 10, 'foodnstuff', 90);
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //The following example will execute the script ‘foo.script’ with 10 threads and the arguments ‘foodnstuff’ and 90:
-   * ns.spawn('foo.script', 10, 'foodnstuff', 90);
+   * ```js
+   * //The following example will execute the script ‘foo.js’ with 10 threads and the arguments ‘foodnstuff’ and 90:
+   * ns.spawn('foo.js', 10, 'foodnstuff', 90);
    * ```
    * @param script - Filename of script to execute.
-   * @param numThreads - Number of threads to spawn new script with. Will be rounded to nearest integer.
+   * @param numThreads - Integer number of threads for new script. Defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run.
    */
   spawn(script: string, numThreads?: number, ...args: (string | number | boolean)[]): void;
@@ -5558,10 +5482,10 @@ export interface NS {
    * @example
    * ```js
    * // kill the script "foo.js" on the same server the current script is running from, with no arguments
-   * ns.kill("foo.script");
+   * ns.kill("foo.js");
    *
    * // kill the script "foo.js" on the "n00dles" server with no arguments.
-   * ns.kill("foo.script", "n00dles");
+   * ns.kill("foo.js", "n00dles");
    *
    * // kill the script foo.js on the current server that was ran with the arguments [1, “foodnstuff”, false]:
    * ns.kill("foo.js", ns.getHostname(), 1, "foodnstuff", false);
@@ -5605,30 +5529,18 @@ export interface NS {
    * specifying a single file to copy, or an array of strings specifying multiple files to copy.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //Copies foo.lit from the helios server to the home computer:
-   * scp("foo.lit", "home", "helios");
-   *
-   * //Tries to copy three files from rothman-uni to home computer:
-   * files = ["foo1.lit", "foo2.script", "foo3.script"];
-   * scp(files, "home", "rothman-uni");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * //Copies foo.lit from the helios server to the home computer:
    * ns.scp("foo.lit", "home", "helios" );
    *
    * //Tries to copy three files from rothman-uni to home computer:
-   * files = ["foo1.lit", "foo2.script", "foo3.script"];
-   * ns.scp(files,  "home", "rothman-uni");
+   * files = ["foo1.lit", "foo2.txt", "foo3.js"];
+   * ns.scp(files, "home", "rothman-uni");
    * ```
    * @example
-   * ```ts
-   * //ns2, copies files from home to a target server
+   * ```js
    * const server = ns.args[0];
-   * const files = ["hack.js","weaken.js","grow.js"];
+   * const files = ["hack.js", "weaken.js", "grow.js"];
    * ns.scp(files, server, "home");
    * ```
    * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
@@ -5947,20 +5859,10 @@ export interface NS {
    * If the hostname/ip argument is omitted, then the function will search through the current
    * server (the server running the script that calls this function) for the file.
    *
-   * @example
-   * ```ts
-   * // NS1:
-   * //The function call will return true if the script named foo.script exists on the foodnstuff server, and false otherwise.
-   * fileExists("foo.script", "foodnstuff");
-   *
-   * //The function call will return true if the current server contains the FTPCrack.exe program, and false otherwise.
-   * fileExists("ftpcrack.exe");
-   * ```
    * * @example
-   * ```ts
-   * // NS2:
-   * // The function call will return true if the script named foo.script exists on the foodnstuff server, and false otherwise.
-   * ns.fileExists("foo.script", "foodnstuff");
+   * ```js
+   * // The function call will return true if the script named foo.js exists on the foodnstuff server, and false otherwise.
+   * ns.fileExists("foo.js", "foodnstuff");
    *
    * // The function call will return true if the current server contains the FTPCrack.exe program, and false otherwise.
    * ns.fileExists("ftpcrack.exe");
@@ -5981,28 +5883,15 @@ export interface NS {
    * Remember that a script is uniquely identified by both its name and its arguments.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //The function call will return true if there is a script named foo.script with no arguments running on the foodnstuff server, and false otherwise:
-   * isRunning("foo.script", "foodnstuff");
+   * ```js
+   * //The function call will return true if there is a script named foo.js with no arguments running on the foodnstuff server, and false otherwise:
+   * ns.isRunning("foo.js", "foodnstuff");
    *
-   * //The function call will return true if there is a script named foo.script with no arguments running on the current server, and false otherwise:
-   * isRunning("foo.script", getHostname());
+   * //The function call will return true if there is a script named foo.js with no arguments running on the current server, and false otherwise:
+   * ns.isRunning("foo.js", ns.getHostname());
    *
-   * //The function call will return true if there is a script named foo.script running with the arguments 1, 5, and “test” (in that order) on the joesguns server, and false otherwise:
-   * isRunning("foo.script", "joesguns", 1, 5, "test");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //The function call will return true if there is a script named foo.script with no arguments running on the foodnstuff server, and false otherwise:
-   * ns.isRunning("foo.script", "foodnstuff");
-   *
-   * //The function call will return true if there is a script named foo.script with no arguments running on the current server, and false otherwise:
-   * ns.isRunning("foo.script", ns.getHostname());
-   *
-   * //The function call will return true if there is a script named foo.script running with the arguments 1, 5, and “test” (in that order) on the joesguns server, and false otherwise:
-   * ns.isRunning("foo.script", "joesguns", 1, 5, "test");
+   * //The function call will return true if there is a script named foo.js running with the arguments 1, 5, and “test” (in that order) on the joesguns server, and false otherwise:
+   * ns.isRunning("foo.js", "joesguns", 1, 5, "test");
    * ```
    * @param script - Filename or PID of script to check. This is case-sensitive.
    * @param host - Hostname of target server.
@@ -6217,7 +6106,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function is used to read data from a text file (.txt) or script (.script, .js).
+   * This function is used to read data from a text file (.txt) or script (.js or .script).
    *
    * This function will return the data in the specified file.
    * If the file does not exist, an empty string will be returned.
@@ -6324,22 +6213,12 @@ export interface NS {
    * identify a specific instance of a running script by its arguments.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //The function call will return true if there is any script named foo.script running on the foodnstuff server, and false otherwise:
-   * scriptRunning("foo.script", "foodnstuff");
+   * ```js
+   * //The function call will return true if there is any script named foo.js running on the foodnstuff server, and false otherwise:
+   * ns.scriptRunning("foo.js", "foodnstuff");
    *
-   * //The function call will return true if there is any script named “foo.script” running on the current server, and false otherwise:
-   * scriptRunning("foo.script", getHostname());
-   * ```
-   * * @example
-   * ```ts
-   * // NS2:
-   * //The function call will return true if there is any script named foo.script running on the foodnstuff server, and false otherwise:
-   * ns.scriptRunning("foo.script", "foodnstuff");
-   *
-   * //The function call will return true if there is any script named “foo.script” running on the current server, and false otherwise:
-   * ns.scriptRunning("foo.script", ns.getHostname());
+   * //The function call will return true if there is any script named “foo.js” running on the current server, and false otherwise:
+   * ns.scriptRunning("foo.js", ns.getHostname());
    * ```
    * @param script - Filename of script to check. This is case-sensitive.
    * @param host - Hostname of target server.
@@ -6702,7 +6581,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Retrieves data from a URL and downloads it to a file on the specified server.
-   * The data can only be downloaded to a script (.script, .js) or a text file (.txt).
+   * The data can only be downloaded to a script (.js or .script) or a text file (.txt).
    * If the file already exists, it will be overwritten by this command.
    * Note that it will not be possible to download data from many websites because they
    * do not allow cross-origin resource sharing (CORS).
@@ -6719,13 +6598,7 @@ export interface NS {
    * you will not be able to process the returned value of wget in Netscript 1.0.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * wget("https://raw.githubusercontent.com/bitburner-official/bitburner-src/master/README.md", "game_readme.txt");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * await ns.wget("https://raw.githubusercontent.com/bitburner-official/bitburner-src/master/README.md", "game_readme.txt");
    * ```
    * @param url - URL to pull data from.
@@ -6836,17 +6709,7 @@ export interface NS {
    *
    * Allows Unix-like flag parsing.
    * @example
-   * ```ts
-   * // example.script
-   * var data = flags([
-   *     ['delay', 0], // a default number means this flag is a number
-   *     ['server', 'foodnstuff'], //  a default string means this flag is a string
-   *     ['exclude', []], // a default array means this flag is a default array of string
-   *     ['help', false], // a default boolean means this flag is a boolean
-   * ]);
-   * tprint(data);
-   *
-   * // example.js
+   * ```js
    * export async function main(ns) {
    *   const data = ns.flags([
    *     ['delay', 0], // a default number means this flag is a number
@@ -6857,15 +6720,15 @@ export interface NS {
    *   ns.tprint(data);
    * }
    *
-   * // [home ~/]> run example.script
+   * // [home ~/]> run example.js
    * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":false}
-   * // [home ~/]> run example.script --delay 3000
+   * // [home ~/]> run example.js --delay 3000
    * // {"_":[],"server":"foodnstuff","exclude":[],"help":false,"delay":3000}
-   * // [home ~/]> run example.script --delay 3000 --server harakiri-sushi
+   * // [home ~/]> run example.js --delay 3000 --server harakiri-sushi
    * // {"_":[],"exclude":[],"help":false,"delay":3000,"server":"harakiri-sushi"}
-   * // [home ~/]> run example.script --delay 3000 --server harakiri-sushi hello world
+   * // [home ~/]> run example.js --delay 3000 --server harakiri-sushi hello world
    * // {"_":["hello","world"],"exclude":[],"help":false,"delay":3000,"server":"harakiri-sushi"}
-   * // [home ~/]> run example.script --delay 3000 --server harakiri-sushi hello world --exclude a --exclude b
+   * // [home ~/]> run example.js --delay 3000 --server harakiri-sushi hello world --exclude a --exclude b
    * // {"_":["hello","world"],"help":false,"delay":3000,"server":"harakiri-sushi","exclude":["a","b"]}
    * // [home ~/]> run example.script --help
    * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":true}

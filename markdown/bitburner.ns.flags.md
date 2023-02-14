@@ -31,17 +31,7 @@ Allows Unix-like flag parsing.
 ## Example
 
 
-```ts
-// example.script
-var data = flags([
-    ['delay', 0], // a default number means this flag is a number
-    ['server', 'foodnstuff'], //  a default string means this flag is a string
-    ['exclude', []], // a default array means this flag is a default array of string
-    ['help', false], // a default boolean means this flag is a boolean
-]);
-tprint(data);
-
-// example.js
+```js
 export async function main(ns) {
   const data = ns.flags([
     ['delay', 0], // a default number means this flag is a number
@@ -52,15 +42,15 @@ export async function main(ns) {
   ns.tprint(data);
 }
 
-// [home ~/]> run example.script
+// [home ~/]> run example.js
 // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":false}
-// [home ~/]> run example.script --delay 3000
+// [home ~/]> run example.js --delay 3000
 // {"_":[],"server":"foodnstuff","exclude":[],"help":false,"delay":3000}
-// [home ~/]> run example.script --delay 3000 --server harakiri-sushi
+// [home ~/]> run example.js --delay 3000 --server harakiri-sushi
 // {"_":[],"exclude":[],"help":false,"delay":3000,"server":"harakiri-sushi"}
-// [home ~/]> run example.script --delay 3000 --server harakiri-sushi hello world
+// [home ~/]> run example.js --delay 3000 --server harakiri-sushi hello world
 // {"_":["hello","world"],"exclude":[],"help":false,"delay":3000,"server":"harakiri-sushi"}
-// [home ~/]> run example.script --delay 3000 --server harakiri-sushi hello world --exclude a --exclude b
+// [home ~/]> run example.js --delay 3000 --server harakiri-sushi hello world --exclude a --exclude b
 // {"_":["hello","world"],"help":false,"delay":3000,"server":"harakiri-sushi","exclude":["a","b"]}
 // [home ~/]> run example.script --help
 // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":true}

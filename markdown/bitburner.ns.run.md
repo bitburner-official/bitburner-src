@@ -17,7 +17,7 @@ run(script: string, numThreads?: number, ...args: (string | number | boolean)[])
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  script | string | Filename of script to run. |
-|  numThreads | number | _(Optional)_ Optional thread count for new script. Set to 1 by default. Will be rounded to nearest integer. |
+|  numThreads | number | _(Optional)_ Integer number of threads for new script. Defaults to 1. |
 |  args | (string \| number \| boolean)\[\] | Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the second argument numThreads must be filled in with a value. |
 
 **Returns:**
@@ -38,33 +38,17 @@ PID stands for Process ID. The PID is a unique identifier for each script. The P
 
 Running this function with a numThreads argument of 0 or less will cause a runtime error.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-//The simplest way to use the run command is to call it with just the script name. The following example will run ‘foo.script’ single-threaded with no arguments:
-run("foo.script");
+```js
+//The simplest way to use the run command is to call it with just the script name. The following example will run ‘foo.js’ single-threaded with no arguments:
+ns.run("foo.js");
 
-//The following example will run ‘foo.script’ but with 5 threads instead of single-threaded:
-run("foo.script", 5);
+//The following example will run ‘foo.js’ but with 5 threads instead of single-threaded:
+ns.run("foo.js", 5);
 
-//This next example will run ‘foo.script’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
-run("foo.script", 1, 'foodnstuff');
-```
-
-## Example 2
-
-
-```ts
-// NS2:
-//The simplest way to use the run command is to call it with just the script name. The following example will run ‘foo.script’ single-threaded with no arguments:
-ns.run("foo.script");
-
-//The following example will run ‘foo.script’ but with 5 threads instead of single-threaded:
-ns.run("foo.script", 5);
-
-//This next example will run ‘foo.script’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
-ns.run("foo.script", 1, 'foodnstuff');
+//This next example will run ‘foo.js’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
+ns.run("foo.js", 1, 'foodnstuff');
 ```
 
