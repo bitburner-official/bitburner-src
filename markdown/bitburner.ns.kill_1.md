@@ -35,7 +35,7 @@ Kills the script with the provided filename, running on the specified host with 
 ## Example
 
 
-```ks
+```js
 // kill the script "foo.js" on the same server the current script is running from, with no arguments
 ns.kill("foo.script");
 

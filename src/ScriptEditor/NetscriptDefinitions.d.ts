@@ -5556,7 +5556,7 @@ export interface NS {
    * To instead kill a script using its PID, see {@link NS.(kill:1) | the other ns.kill entry}.
    *
    * @example
-   * ```ks
+   * ```js
    * // kill the script "foo.js" on the same server the current script is running from, with no arguments
    * ns.kill("foo.script");
    *
