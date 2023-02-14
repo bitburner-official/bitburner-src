@@ -55,7 +55,6 @@ function MarketTA2(props: IMarketTA2Props): React.ReactElement {
         amount sold matches the amount produced. (i.e. the highest possible price, while still ensuring that all
         produced materials will be sold)
       </Typography>
-      <TextField type="number" onChange={onChange} value={newCost} />
       <br />
       <FormControlLabel
         control={<Switch checked={props.mat.marketTa2} onChange={onMarketTA2} />}
