@@ -34,33 +34,17 @@ If the function is called with no arguments, it will open the current script’s
 
 Otherwise, the fn, hostname/ip, and args… arguments can be used to get the logs from another script. Remember that scripts are uniquely identified by both their names and arguments.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-//Open logs from foo.script on the current server that was run with no args
-tail("foo.script");
+```js
+//Open logs from foo.js on the current server that was run with no args
+ns.tail("foo.js");
 
-//Get logs from foo.script on the foodnstuff server that was run with no args
-tail("foo.script", "foodnstuff");
+//Get logs from foo.js on the foodnstuff server that was run with no args
+ns.tail("foo.js", "foodnstuff");
 
-//Get logs from foo.script on the foodnstuff server that was run with the arguments [1, "test"]
-tail("foo.script", "foodnstuff", 1, "test");
-```
-
-## Example 2
-
-
-```ts
-// NS2:
-//Open logs from foo.script on the current server that was run with no args
-ns.tail("foo.script");
-
-//Get logs from foo.script on the foodnstuff server that was run with no args
-ns.tail("foo.script", "foodnstuff");
-
-//Get logs from foo.script on the foodnstuff server that was run with the arguments [1, "test"]
-ns.tail("foo.script", "foodnstuff", 1, "test");
+//Get logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
+ns.tail("foo.js", "foodnstuff", 1, "test");
 ```
 

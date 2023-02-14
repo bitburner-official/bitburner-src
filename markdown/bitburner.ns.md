@@ -72,7 +72,7 @@ export async function main(ns) {
 |  [deleteServer(host)](./bitburner.ns.deleteserver.md) | Delete a purchased server. |
 |  [disableLog(fn)](./bitburner.ns.disablelog.md) | Disables logging for the given function. |
 |  [enableLog(fn)](./bitburner.ns.enablelog.md) | Enable logging for a certain function. |
-|  [exec(script, host, numThreads, args)](./bitburner.ns.exec.md) | Start another script on any server. |
+|  [exec(script, hostname, numThreads, args)](./bitburner.ns.exec.md) | Start another script on any server. |
 |  [exit()](./bitburner.ns.exit.md) | Terminates the current script immediately. |
 |  [fileExists(filename, host)](./bitburner.ns.fileexists.md) | Check if a file exists. |
 |  [flags(schema)](./bitburner.ns.flags.md) | Parse command line flags. |

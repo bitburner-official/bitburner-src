@@ -38,6 +38,7 @@ import { RamCostConstants } from "./RamCostGenerator";
 export const helpers = {
   string,
   number,
+  positiveInteger,
   scriptArgs,
   argsToString,
   makeBasicErrorMsg,
@@ -155,6 +156,15 @@ function number(ctx: NetscriptContext, argName: string, v: unknown): number {
     return v;
   }
   throw makeRuntimeErrorMsg(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
+}
+
+/** Convert provided value v for argument argName to a positive integer, throwing if it looks like something else. */
+function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): number {
+  const n = number(ctx, argName, v);
+  if (n < 1 || !Number.isInteger(n)) {
+    throw makeRuntimeErrorMsg(ctx, `${argName} should be a positive integer, was ${n}`, "TYPE");
+  }
+  return n;
 }
 
 /** Returns args back if it is a ScriptArg[]. Throws an error if it is not. */

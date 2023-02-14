@@ -32,33 +32,17 @@ RAM cost: 0.1 GB
 
 Returns a boolean indicating whether the specified script is running on the target server. If you use a PID instead of a filename, the hostname and args parameters are unnecessary. Remember that a script is uniquely identified by both its name and its arguments.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-//The function call will return true if there is a script named foo.script with no arguments running on the foodnstuff server, and false otherwise:
-isRunning("foo.script", "foodnstuff");
+```js
+//The function call will return true if there is a script named foo.js with no arguments running on the foodnstuff server, and false otherwise:
+ns.isRunning("foo.js", "foodnstuff");
 
-//The function call will return true if there is a script named foo.script with no arguments running on the current server, and false otherwise:
-isRunning("foo.script", getHostname());
+//The function call will return true if there is a script named foo.js with no arguments running on the current server, and false otherwise:
+ns.isRunning("foo.js", ns.getHostname());
 
-//The function call will return true if there is a script named foo.script running with the arguments 1, 5, and “test” (in that order) on the joesguns server, and false otherwise:
-isRunning("foo.script", "joesguns", 1, 5, "test");
-```
-
-## Example 2
-
-
-```ts
-// NS2:
-//The function call will return true if there is a script named foo.script with no arguments running on the foodnstuff server, and false otherwise:
-ns.isRunning("foo.script", "foodnstuff");
-
-//The function call will return true if there is a script named foo.script with no arguments running on the current server, and false otherwise:
-ns.isRunning("foo.script", ns.getHostname());
-
-//The function call will return true if there is a script named foo.script running with the arguments 1, 5, and “test” (in that order) on the joesguns server, and false otherwise:
-ns.isRunning("foo.script", "joesguns", 1, 5, "test");
+//The function call will return true if there is a script named foo.js running with the arguments 1, 5, and “test” (in that order) on the joesguns server, and false otherwise:
+ns.isRunning("foo.js", "joesguns", 1, 5, "test");
 ```
 

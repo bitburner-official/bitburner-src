@@ -684,11 +684,8 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_scriptname, _threads = 1, ..._args) => {
       const scriptname = helpers.string(ctx, "scriptname", _scriptname);
-      const threads = helpers.number(ctx, "threads", _threads);
+      const threads = helpers.positiveInteger(ctx, "threads", _threads);
       const args = helpers.scriptArgs(ctx, _args);
-      if (isNaN(threads) || threads <= 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid thread count. Must be numeric and > 0, is ${threads}`);
-      }
       const scriptServer = GetServer(ctx.workerScript.hostname);
       if (scriptServer == null) {
         throw helpers.makeRuntimeErrorMsg(ctx, "Could not find server. This is a bug. Report to dev.");
@@ -701,11 +698,8 @@ export const ns: InternalAPI<NSFull> = {
     (_scriptname, _hostname, _threads = 1, ..._args) => {
       const scriptname = helpers.string(ctx, "scriptname", _scriptname);
       const hostname = helpers.string(ctx, "hostname", _hostname);
-      const threads = helpers.number(ctx, "threads", _threads);
+      const threads = helpers.positiveInteger(ctx, "threads", _threads);
       const args = helpers.scriptArgs(ctx, _args);
-      if (isNaN(threads) || threads <= 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid thread count. Must be numeric and > 0, is ${threads}`);
-      }
       const server = helpers.getServer(ctx, hostname);
       return runScriptFromScript("exec", server, scriptname, args, ctx.workerScript, threads);
     },
@@ -713,17 +707,10 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_scriptname, _threads = 1, ..._args) => {
       const scriptname = helpers.string(ctx, "scriptname", _scriptname);
-      const threads = helpers.number(ctx, "threads", _threads);
+      const threads = helpers.positiveInteger(ctx, "threads", _threads);
       const args = helpers.scriptArgs(ctx, _args);
-      if (!scriptname || !threads) {
-        throw helpers.makeRuntimeErrorMsg(ctx, "Usage: spawn(scriptname, threads)");
-      }
-
       const spawnDelay = 10;
       setTimeout(() => {
-        if (isNaN(threads) || threads <= 0) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `Invalid thread count. Must be numeric and > 0, is ${threads}`);
-        }
         const scriptServer = GetServer(ctx.workerScript.hostname);
         if (scriptServer == null) {
           throw helpers.makeRuntimeErrorMsg(ctx, "Could not find server. This is a bug. Report to dev");

@@ -454,7 +454,7 @@ Execute a program, script, or :ref:`codingcontracts`.
 
 The '[-t]', '[num threads]', and '[args...]' arguments are only valid when
 running a script. The '-t' flag is used to indicate that the script should
-be run with the specified number of threads. If the flag is omitted, then
+be run with the specified integer number of threads. If the flag is omitted,
 the script will be run with a single thread by default. If the '-t' flag is
 used, then it MUST come immediately after the script name, and the
 [num threads] argument MUST come immediately afterwards.

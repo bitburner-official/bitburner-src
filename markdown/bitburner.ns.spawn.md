@@ -17,7 +17,7 @@ spawn(script: string, numThreads?: number, ...args: (string | number | boolean)[
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  script | string | Filename of script to execute. |
-|  numThreads | number | _(Optional)_ Number of threads to spawn new script with. Will be rounded to nearest integer. |
+|  numThreads | number | _(Optional)_ Integer number of threads for new script. Defaults to 1. |
 |  args | (string \| number \| boolean)\[\] | Additional arguments to pass into the new script that is being run. |
 
 **Returns:**
@@ -34,21 +34,11 @@ Because this function immediately terminates the script, it does not have a retu
 
 Running this function with a numThreads argument of 0 or less will cause a runtime error.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-//The following example will execute the script ‘foo.script’ with 10 threads and the arguments ‘foodnstuff’ and 90:
-spawn('foo.script', 10, 'foodnstuff', 90);
-```
-
-## Example 2
-
-
-```ts
-// NS2:
-//The following example will execute the script ‘foo.script’ with 10 threads and the arguments ‘foodnstuff’ and 90:
-ns.spawn('foo.script', 10, 'foodnstuff', 90);
+```js
+//The following example will execute the script ‘foo.js’ with 10 threads and the arguments ‘foodnstuff’ and 90:
+ns.spawn('foo.js', 10, 'foodnstuff', 90);
 ```
 

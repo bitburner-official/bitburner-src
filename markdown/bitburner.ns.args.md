@@ -18,25 +18,12 @@ RAM cost: 0 GB
 
 Arguments passed into a script can be accessed as a normal array by using the `[]` operator (`args[0]`<!-- -->, `args[1]`<!-- -->, etc...). Arguments can be string, number, or boolean. Use `args.length` to get the number of arguments that were passed into a script.
 
-## Example 1
-
-`run example.script 7 text true`
-
-```js
-// NS1 - example.script
-tprint(args.length) // 3
-tprint(args[0]); // 7 (number)
-tprint(args[1]); // "text" (string)
-tprint(args[2]); // true (boolean)
-tprint(args[3]); // undefined, because only 3 arguments were provided
-```
-
-## Example 2
+## Example
 
 `run example.js 7 text true`
 
 ```js
-// NS2 - example.js
+// example.js
 export async function main(ns) {
   ns.tprint(ns.args.length) // 3
   ns.tprint(ns.args[0]); // 7 (number)
