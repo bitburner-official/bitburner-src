@@ -30,7 +30,7 @@ True if the script is successfully killed, and false otherwise.
 
 RAM cost: 0.5 GB
 
-Kills the script with the provided filename, running on the specified host with the specified args. To instead kill a script using its filename, hostname, and args, see [the other ns.kill entry](./bitburner.ns.kill.md)<!-- -->.
+Kills the script with the provided filename, running on the specified host with the specified args. To instead kill a script using its PID, see [the other ns.kill entry](./bitburner.ns.kill.md)<!-- -->.
 
 ## Example
 

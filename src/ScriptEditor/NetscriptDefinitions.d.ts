@@ -5553,7 +5553,7 @@ export interface NS {
    * RAM cost: 0.5 GB
    *
    * Kills the script with the provided filename, running on the specified host with the specified args.
-   * To instead kill a script using its filename, hostname, and args, see {@link NS.(kill:1) | the other ns.kill entry}.
+   * To instead kill a script using its PID, see {@link NS.(kill:1) | the other ns.kill entry}.
    *
    * @example
    * ```ks
