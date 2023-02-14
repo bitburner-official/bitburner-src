@@ -696,6 +696,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         avgEne: office.avgEne,
         avgHap: office.avgHap,
         avgMor: office.avgMor,
+        totalExperience: office.totalExp,
         employeeProd: Object.assign({}, office.employeeProd),
         employeeJobs: Object.assign({}, office.employeeJobs),
       };

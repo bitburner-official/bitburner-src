@@ -7762,6 +7762,8 @@ export interface Office {
   avgHap: number;
   /** Average morale of the employees */
   avgMor: number;
+  /** Total experience of all employees */
+  totalExperience: number;
   /** Production of the employees */
   employeeProd: Record<CorpEmployeePosition, number>;
   /** Positions of the employees */
