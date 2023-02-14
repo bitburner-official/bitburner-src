@@ -8,7 +8,7 @@ import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
 import { Programs } from "../Programs/Programs";
 import { LiteratureNames } from "../Literature/data/LiteratureNames";
-
+import { Person as IPerson } from "@nsdefs";
 import { isValidNumber } from "../utils/helpers/isValidNumber";
 
 /**
@@ -41,8 +41,8 @@ export function safelyCreateUniqueServer(params: IConstructorParams): Server {
 }
 
 /**
- * Returns the number of "growth cycles" needed to grow the specified server by the
- * specified amount.
+ * Returns the number of "growth cycles" needed to grow the specified server by the specified amount, taking into
+ * account only the multiplicative factor. Does not account for the additive $1/thread. Only used for growthAnalyze.
  * @param server - Server being grown
  * @param growth - How much the server is being grown by, in DECIMAL form (e.g. 1.5 rather than 50)
  * @param p - Reference to Player object
@@ -70,26 +70,24 @@ export function numCycleForGrowth(server: Server, growth: number, cores = 1): nu
 
 /**
  * This function calculates the number of threads needed to grow a server from one $amount to a higher $amount
- * (ie, how many threads to grow this server from $200 to $600 for example). Used primarily for a formulas (or possibly growthAnalyze)
- * type of application. It lets you "theorycraft" and easily ask what-if type questions. It's also the one that implements the
- * main thread calculation algorithm, and so is the function all helper functions should call.
+ * (ie, how many threads to grow this server from $200 to $600 for example).
  * It protects the inputs (so putting in INFINITY for targetMoney will use moneyMax, putting in a negative for start will use 0, etc.)
  * @param server - Server being grown
  * @param targetMoney - How much you want the server grown TO (not by), for instance, to grow from 200 to 600, input 600
  * @param startMoney - How much you are growing the server from, for instance, to grow from 200 to 600, input 200
  * @param cores - Number of cores on the host performing grow
- * @returns Number of "growth cycles" needed
+ * @returns Integer threads needed by a single ns.grow call to reach targetMoney from startMoney.
  */
-export function numCycleForGrowthCorrected(server: Server, targetMoney: number, startMoney: number, cores = 1): number {
-  if (startMoney < 0) {
-    startMoney = 0;
-  } // servers "can't" have less than 0 dollars on them
-  if (targetMoney > server.moneyMax) {
-    targetMoney = server.moneyMax;
-  } // can't grow a server to more than its moneyMax
-  if (targetMoney <= startMoney) {
-    return 0;
-  } // no growth --> no threads
+export function numCycleForGrowthCorrected(
+  server: Server,
+  targetMoney: number,
+  startMoney: number,
+  cores = 1,
+  person: IPerson = Player,
+): number {
+  if (startMoney < 0) startMoney = 0; // servers "can't" have less than 0 dollars on them
+  if (targetMoney > server.moneyMax) targetMoney = server.moneyMax; // can't grow a server to more than its moneyMax
+  if (targetMoney <= startMoney) return 0; // no growth --> no threads
 
   // exponential base adjusted by security
   const adjGrowthRate = 1 + (CONSTANTS.ServerBaseGrowthRate - 1) / server.hackDifficulty;
@@ -99,7 +97,7 @@ export function numCycleForGrowthCorrected(server: Server, targetMoney: number, 
   const serverGrowthPercentage = server.serverGrowth / 100.0;
   const coreMultiplier = 1 + (cores - 1) / 16;
   const threadMultiplier =
-    serverGrowthPercentage * Player.mults.hacking_grow * coreMultiplier * BitNodeMultipliers.ServerGrowthRate;
+    serverGrowthPercentage * person.mults.hacking_grow * coreMultiplier * BitNodeMultipliers.ServerGrowthRate;
 
   /* To understand what is done below we need to do some math. I hope the explanation is clear enough.
    * First of, the names will be shortened for ease of manipulation:

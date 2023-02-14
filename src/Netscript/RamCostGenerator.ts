@@ -565,6 +565,7 @@ export const RamCosts: RamCostTree<NSFull> = {
       hackExp: 0,
       hackPercent: 0,
       growPercent: 0,
+      growThreads: 0,
       hackTime: 0,
       growTime: 0,
       weakenTime: 0,
