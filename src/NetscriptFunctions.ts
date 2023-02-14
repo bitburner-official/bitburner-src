@@ -320,42 +320,6 @@ export const ns: InternalAPI<NSFull> = {
 
       return numCycleForGrowth(server, mult, cores);
     },
-  growthAnalyzeTargetMoney:
-    (ctx) =>
-    (_host, _targetMoney, _cores = 1) => {
-      const host = helpers.string(ctx, "host", _host);
-      const targetMoney = helpers.number(ctx, "targetMoney", _targetMoney);
-      const cores = helpers.number(ctx, "cores", _cores);
-
-      // Check argument validity
-      const server = helpers.getServer(ctx, host);
-      if (!(server instanceof Server)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `The target server ${server.hostname} is not a hackable server.`);
-      }
-      if (!Number.isInteger(cores) || cores < 1) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Cores should be a positive integer. Cores provided: ${cores}`);
-      }
-      // target money is clamped silently inside numCycleForGrowthCorrected, no need to throw here
-      return numCycleForGrowthCorrected(server, targetMoney, server.moneyAvailable, cores);
-    },
-  growthAnalyzeMult:
-    (ctx) =>
-    (_host, _threads, _cores = 1) => {
-      const host = helpers.string(ctx, "host", _host);
-      const server = helpers.getServer(ctx, host);
-      if (!(server instanceof Server)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `The target server ${server.hostname} is not a hackable server.`);
-      }
-      const threads = helpers.number(ctx, "threads", _threads);
-      if (!Number.isInteger(threads) || threads < 1) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Threads should be a positive integer. Threads provided: ${threads}`);
-      }
-      const cores = helpers.number(ctx, "cores", _cores);
-      if (!Number.isInteger(cores) || cores < 1) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Cores should be a positive integer. Cores provided: ${cores}`);
-      }
-      return calculateServerGrowth(server, threads, Player, cores);
-    },
   growthAnalyzeSecurity:
     (ctx) =>
     (_threads, _hostname?, _cores = 1) => {

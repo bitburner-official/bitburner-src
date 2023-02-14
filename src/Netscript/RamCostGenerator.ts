@@ -438,8 +438,6 @@ export const RamCosts: RamCostTree<NSFull> = {
   getSharePower: 0.2,
   grow: RamCostConstants.Grow,
   growthAnalyze: RamCostConstants.GrowthAnalyze,
-  growthAnalyzeTargetMoney: RamCostConstants.GrowthAnalyze,
-  growthAnalyzeMult: RamCostConstants.GrowthAnalyze,
   growthAnalyzeSecurity: RamCostConstants.GrowthAnalyze,
   weaken: RamCostConstants.Weaken,
   weakenAnalyze: RamCostConstants.WeakenAnalyze,
