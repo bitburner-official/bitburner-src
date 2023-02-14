@@ -24,6 +24,7 @@ interface Material
 |  [prod](./bitburner.material.prod.md) |  | number | Amount of material produced |
 |  [qlt](./bitburner.material.qlt.md) |  | number | Quality of the material |
 |  [qty](./bitburner.material.qty.md) |  | number | Amount of material |
+|  [sAmt](./bitburner.material.samt.md) |  | string \| number | Sell amount, can be "PROD/2" |
 |  [sCost](./bitburner.material.scost.md) |  | string \| number | Sell cost, can be "MP+5" |
 |  [sell](./bitburner.material.sell.md) |  | number | Amount of material sold |
 
