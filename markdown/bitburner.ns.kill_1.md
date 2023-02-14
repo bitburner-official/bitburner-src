@@ -4,21 +4,21 @@
 
 ## NS.kill() method
 
-Terminate another script.
+Terminate the script with the provided filename, hostname, and script arguments.
 
 **Signature:**
 
 ```typescript
-kill(script: string, host: string, ...args: (string | number | boolean)[]): boolean;
+kill(filename: string, hostname?: string, ...args: ScriptArg[]): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  script | string | Filename or PID of the script to kill. |
-|  host | string | Hostname of the server on which to kill the script. |
-|  args | (string \| number \| boolean)\[\] | Arguments to identify which script to kill. |
+|  filename | string | Filename of the script to kill. |
+|  hostname | string | _(Optional)_ Hostname where the script to kill is running. Defaults to the current server. |
+|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments of the script to kill. |
 
 **Returns:**
 
@@ -30,35 +30,19 @@ True if the script is successfully killed, and false otherwise.
 
 RAM cost: 0.5 GB
 
-Kills the script on the target server specified by the script’s name and arguments. Remember that scripts are uniquely identified by both their names and arguments. For example, if `foo.script` is run with the argument 1, then this is not the same as `foo.script` run with the argument 2, even though they have the same name.
+Kills the script with the provided filename, running on the specified host with the specified args. To instead kill a script using its PID, see [the other ns.kill entry](./bitburner.ns.kill.md)<!-- -->.
 
-## Example 1
-
-
-```ts
-// NS1:
-//The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
-kill("foo.script", "foodnstuff");
-
-//The following will try to kill a script named foo.script on the current server that was ran with no arguments:
-kill("foo.script", getHostname());
-
-//The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
-kill("foo.script", getHostname(), 1, "foodnstuff");
-```
-
-## Example 2
+## Example
 
 
-```ts
-// NS2:
-//The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
-ns.kill("foo.script", "foodnstuff");
+```js
+// kill the script "foo.js" on the same server the current script is running from, with no arguments
+ns.kill("foo.script");
 
-//The following will try to kill a script named foo.script on the current server that was ran with no arguments:
-ns.kill("foo.script", getHostname());
+// kill the script "foo.js" on the "n00dles" server with no arguments.
+ns.kill("foo.script", "n00dles");
 
-//The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
-ns.kill("foo.script", getHostname(), 1, "foodnstuff");
+// kill the script foo.js on the current server that was ran with the arguments [1, “foodnstuff”, false]:
+ns.kill("foo.js", ns.getHostname(), 1, "foodnstuff", false);
 ```
 

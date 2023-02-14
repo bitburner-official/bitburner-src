@@ -740,7 +740,7 @@ export const ns: InternalAPI<NSFull> = {
     },
   kill:
     (ctx) =>
-    (scriptID, hostname?, ...scriptArgs) => {
+    (scriptID, hostname = ctx.workerScript.hostname, ...scriptArgs) => {
       const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
       let res;
       const killByPid = typeof ident === "number";
@@ -749,7 +749,7 @@ export const ns: InternalAPI<NSFull> = {
         res = killWorkerScript(ident);
       } else {
         // Kill by filename/hostname
-        if (scriptID === undefined || hostname === undefined) {
+        if (scriptID === undefined) {
           throw helpers.makeRuntimeErrorMsg(ctx, "Usage: kill(scriptname, server, [arg1], [arg2]...)");
         }
 

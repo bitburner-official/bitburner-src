@@ -5529,74 +5529,49 @@ export interface NS {
   spawn(script: string, numThreads?: number, ...args: (string | number | boolean)[]): void;
 
   /**
-   * Terminate another script.
+   * Terminate the script with the provided PID.
    * @remarks
    * RAM cost: 0.5 GB
    *
-   * Kills the script on the target server specified by the script’s name and arguments.
-   * Remember that scripts are uniquely identified by both their names and arguments.
-   * For example, if `foo.script` is run with the argument 1, then this is not the same as
-   * `foo.script` run with the argument 2, even though they have the same name.
+   * Kills the script with the provided PID.
+   * To instead kill a script using its filename, hostname, and args, see {@link NS.(kill:2) | the other ns.kill entry}.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
-   * kill("foo.script", "foodnstuff");
-   *
-   * //The following will try to kill a script named foo.script on the current server that was ran with no arguments:
-   * kill("foo.script", getHostname());
-   *
-   * //The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
-   * kill("foo.script", getHostname(), 1, "foodnstuff");
+   * ```js
+   * // kills the script with PID 20:
+   * ns.kill(20);
    * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
-   * ns.kill("foo.script", "foodnstuff");
    *
-   * //The following will try to kill a script named foo.script on the current server that was ran with no arguments:
-   * ns.kill("foo.script", getHostname());
-   *
-   * //The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
-   * ns.kill("foo.script", getHostname(), 1, "foodnstuff");
-   * ```
-   * @param script - Filename or PID of the script to kill.
-   * @param host - Hostname of the server on which to kill the script.
-   * @param args - Arguments to identify which script to kill.
+   * @param pid - The PID of the script to kill.
    * @returns True if the script is successfully killed, and false otherwise.
    */
-  kill(script: number): boolean;
+  kill(pid: number): boolean;
 
   /**
-   * {@inheritDoc NS.(kill:1)}
+   * Terminate the script with the provided filename, hostname, and script arguments.
+   * @remarks
+   * RAM cost: 0.5 GB
+   *
+   * Kills the script with the provided filename, running on the specified host with the specified args.
+   * To instead kill a script using its PID, see {@link NS.(kill:1) | the other ns.kill entry}.
+   *
    * @example
-   * ```ts
-   * // NS1:
-   * //The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
-   * kill("foo.script", "foodnstuff");
+   * ```js
+   * // kill the script "foo.js" on the same server the current script is running from, with no arguments
+   * ns.kill("foo.script");
    *
-   * //The following will try to kill a script named foo.script on the current server that was ran with no arguments:
-   * kill("foo.script", getHostname());
+   * // kill the script "foo.js" on the "n00dles" server with no arguments.
+   * ns.kill("foo.script", "n00dles");
    *
-   * //The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
-   * kill("foo.script", getHostname(), 1, "foodnstuff");
+   * // kill the script foo.js on the current server that was ran with the arguments [1, “foodnstuff”, false]:
+   * ns.kill("foo.js", ns.getHostname(), 1, "foodnstuff", false);
    * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
-   * ns.kill("foo.script", "foodnstuff");
-   *
-   * //The following will try to kill a script named foo.script on the current server that was ran with no arguments:
-   * ns.kill("foo.script", getHostname());
-   *
-   * //The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
-   * ns.kill("foo.script", getHostname(), 1, "foodnstuff");
-   * ```
+   * @param filename - Filename of the script to kill.
+   * @param hostname - Hostname where the script to kill is running. Defaults to the current server.
+   * @param args - Arguments of the script to kill.
+   * @returns True if the script is successfully killed, and false otherwise.
    */
-  kill(script: string, host: string, ...args: (string | number | boolean)[]): boolean;
+  kill(filename: string, hostname?: string, ...args: ScriptArg[]): boolean;
 
   /**
    * Terminate all scripts on a server.
