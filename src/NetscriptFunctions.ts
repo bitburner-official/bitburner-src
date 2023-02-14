@@ -89,7 +89,6 @@ import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers
 import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassType } from "./Enums";
 import { cloneDeep } from "lodash";
 import { FactionWorkType } from "./Enums";
-import { calculateServerGrowth } from "./Server/formulas/grow";
 import numeral from "numeral";
 
 export const enums: NSEnums = {
