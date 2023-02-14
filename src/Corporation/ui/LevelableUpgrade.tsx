@@ -15,7 +15,7 @@ import { calculateMaxAffordableUpgrade, calculateUpgradeCost } from "../helpers"
 
 interface IProps {
   upgrade: CorporationUpgrade;
-  amount: number|"MAX";
+  amount: number | "MAX";
   rerender: () => void;
 }
 
@@ -25,9 +25,9 @@ export function LevelableUpgrade(props: IProps): React.ReactElement {
   const level = corp.upgrades[data.index];
   const amount = props.amount;
 
-  const maxUpgrades=calculateMaxAffordableUpgrade(corp,data,amount);
+  const maxUpgrades = calculateMaxAffordableUpgrade(corp, data, amount);
   const cost = calculateUpgradeCost(corp, data, maxUpgrades);
-  const tooltip =  data.desc;
+  const tooltip = data.desc;
   function onClick(): void {
     if (corp.funds < cost) return;
     try {
@@ -42,7 +42,7 @@ export function LevelableUpgrade(props: IProps): React.ReactElement {
     <Grid item xs={4}>
       <Box display="flex" alignItems="center" flexDirection="row-reverse">
         <Button disabled={corp.funds < cost} sx={{ mx: 1 }} onClick={onClick}>
-        +{maxUpgrades} -&nbsp;
+          +{maxUpgrades} -&nbsp;
           <MoneyCost money={cost} corp={corp} />
         </Button>
         <Tooltip title={tooltip}>

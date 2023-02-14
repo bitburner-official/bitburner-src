@@ -484,7 +484,7 @@ export class Industry {
                   divider++;
                 }
                 avgQlt /= divider;
-                avgQlt = Math.max(avgQlt,1)
+                avgQlt = Math.max(avgQlt, 1);
                 for (let j = 0; j < this.prodMats.length; ++j) {
                   let tempQlt =
                     office.employeeProd[EmployeePositions.Engineer] / 90 +
@@ -492,10 +492,12 @@ export class Industry {
                     Math.pow(warehouse.materials["AI Cores"].qty, this.aiFac) / 10e3;
                   const logQlt = Math.max(Math.log10(tempQlt), 1);
                   tempQlt = Math.min(tempQlt, avgQlt * logQlt);
-                  warehouse.materials[this.prodMats[j]].qlt = Math.max(1,
+                  warehouse.materials[this.prodMats[j]].qlt = Math.max(
+                    1,
                     (warehouse.materials[this.prodMats[j]].qlt * warehouse.materials[this.prodMats[j]].qty +
                       tempQlt * prod * producableFrac) /
-                    (warehouse.materials[this.prodMats[j]].qty + prod * producableFrac));
+                      (warehouse.materials[this.prodMats[j]].qty + prod * producableFrac),
+                  );
                   warehouse.materials[this.prodMats[j]].qty += prod * producableFrac;
                 }
               } else {
@@ -633,7 +635,7 @@ export class Industry {
                   //Dynamically evaluated
                   let tmp = (mat.sllman[1] as string).replace(/MAX/g, (mat.maxsll + "").toUpperCase());
                   tmp = tmp.replace(/PROD/g, mat.prd + "");
-                  
+
                   try {
                     sellAmt = eval(tmp);
                   } catch (e) {
@@ -740,7 +742,7 @@ export class Industry {
                     (expWarehouse.materials[matName].qlt * expWarehouse.materials[matName].qty + amt * mat.qlt) /
                       (expWarehouse.materials[matName].qty + amt),
                   );
-                  
+
                   expWarehouse.materials[matName].qty += amt;
                   mat.qty -= amt;
                   mat.totalExp += amt;

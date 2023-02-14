@@ -137,4 +137,4 @@ export const PurchaseMultipliers: {
   x50: 50,
   x100: 100,
   MAX: "MAX",
-}; 
+};

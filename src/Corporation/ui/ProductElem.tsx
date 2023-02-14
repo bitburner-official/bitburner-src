@@ -138,8 +138,8 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                Effective rating is calculated from product rating and the quality of materials used <br />
-                Rating: {formatCorpStat(product.rat)} <br /> <br />
+                  Effective rating is calculated from product rating and the quality of materials used <br />
+                  Rating: {formatCorpStat(product.rat)} <br /> <br />
                   Quality: {formatCorpStat(product.qlt)} <br />
                   Performance: {formatCorpStat(product.per)} <br />
                   Durability: {formatCorpStat(product.dur)} <br />

@@ -73,7 +73,7 @@ export function UnlockUpgrade(corporation: Corporation, upgrade: CorporationUnlo
 }
 
 export function LevelUpgrade(corporation: Corporation, upgrade: CorporationUpgrade, amount: number): void {
-  const cost = calculateUpgradeCost(corporation,upgrade,amount);
+  const cost = calculateUpgradeCost(corporation, upgrade, amount);
   if (corporation.funds < cost) {
     throw new Error("Insufficient funds");
   } else {
