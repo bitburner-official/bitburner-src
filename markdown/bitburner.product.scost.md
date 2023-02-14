@@ -9,5 +9,5 @@ Sell cost, can be "MP+5"
 **Signature:**
 
 ```typescript
-sCost: string | number;
+sCost: string;
 ```
