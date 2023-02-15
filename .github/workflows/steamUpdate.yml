@@ -8,22 +8,22 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Setup steamcmd
-      uses: CyberAndrii/setup-steamcmd@v1
-    
-    - name: Checkout dev branch
-      uses: actions/checkout@v3
-      with:
-        ref: dev
+      - name: Setup steamcmd
+        uses: CyberAndrii/setup-steamcmd@v1
 
-    - name: Setup node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
+      - name: Checkout dev branch
+        uses: actions/checkout@v3
+        with:
+          ref: dev
 
-    - name: Build and deploy
-      run: | 
-        npm ci
-        npm run build
-        npm run electron
-        steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} +run_app_build ../tools/steamdev.vdf +quit
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Build and deploy
+        run: |
+          npm ci
+          npm run build
+          npm run electron
+          steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} +run_app_build ../tools/steamdev.vdf +quit
