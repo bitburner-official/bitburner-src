@@ -1,0 +1,40 @@
+"AppBuild"
+{
+	"AppID" "1812820"
+	"Desc" "Dev update from github action"
+
+	"ContentRoot" "/"
+	"BuildOutput" "/"
+	"SetLive" "development"
+
+	"Depots"
+	{
+		"1812821"
+		{
+			"FileMapping"
+			{
+				"LocalPath" ".build/bitburner-win32-x64/*"
+				"DepotPath" "."
+				"recursive" "1"
+			}
+		}
+		"1812822"
+		{
+			"FileMapping"
+			{
+				"LocalPath" ".build/bitburner-darwin-x64/*"
+				"DepotPath" "."
+				"recursive" "1"
+			}
+		}
+		"1812823"
+		{
+			"FileMapping"
+			{
+				"LocalPath" ".build/bitburner-linux-x64/*"
+				"DepotPath" "."
+				"recursive" "1"
+			}
+		}
+	}
+}
