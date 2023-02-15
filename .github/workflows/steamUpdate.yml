@@ -10,11 +10,17 @@ jobs:
     - name: Setup steamcmd
       uses: CyberAndrii/setup-steamcmd@v1
     
-    - name: Checkout dev branch and build
+    - name: Checkout dev branch
       uses: actions/checkout@v3
+        with:
+          ref: dev
+
+    - name: Setup node
       uses: actions/setup-node@v3
         with:
           node-version: 16
+
+    - name: Build and deploy
       run: | 
         npm ci
         npm run build
