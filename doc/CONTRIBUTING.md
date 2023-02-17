@@ -1,5 +1,3 @@
-# Only bugfix are accepted
-
 # Contributing to Bitburner
 
 ## In General
@@ -156,7 +154,6 @@ upstream/master
 - Work in a new branch forked from the `dev` branch to isolate your new code.
   - Keep code-changes on a branch as small as possible. This makes it easier for code review. Each branch should be its own independent feature.
   - Regularly rebase your branch against `dev` to make sure you have the latest updates pulled.
-  - When merging, always merge your branch into `dev`. When releasing a new update, merge `dev` into `master`.
 
 ## Running locally
 
