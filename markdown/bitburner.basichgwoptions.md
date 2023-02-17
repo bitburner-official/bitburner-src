@@ -16,6 +16,7 @@ interface BasicHGWOptions
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [additionalMsec?](./bitburner.basichgwoptions.additionalmsec.md) |  | number | _(Optional)_ Number of additional milliseconds that will be spent waiting between the start of the function and when it completes. There will only be one, contiguous wait, which is relevant because stats such as server security level are computed at the \*start\* of the function. Must be non-negative. |
 |  [stock?](./bitburner.basichgwoptions.stock.md) |  | boolean | _(Optional)_ Set to true this action will affect the stock market. |
 |  [threads?](./bitburner.basichgwoptions.threads.md) |  | number | _(Optional)_ Number of threads to use for this function. Must be less than or equal to the number of threads the script is running with. |
 
