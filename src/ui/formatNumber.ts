@@ -88,18 +88,21 @@ function formatExponential(n: number) {
   return exponentialFormatter.format(n).toLocaleLowerCase();
 }
 
-export function formatPercent(n: number, fractionalDigits = 2) {
+// Default suffixing starts at 1e9 % which is 1e7.
+export function formatPercent(n: number, fractionalDigits = 2, suffixStart = 1e7) {
   // NaN does not get formatted
   if (Number.isNaN(n)) return "NaN%";
   const nAbs = Math.abs(n);
 
   // Special handling for Infinities
-  if (nAbs === Infinity) return n < 0 ? "-∞%" : "∞%";
+  if (nAbs * 100 === Infinity) return n < 0 ? "-∞%" : "∞%";
+
+  // Suffix form adds a space to be less visually confusing. Values this high should rarely be seen.
+  if (nAbs >= suffixStart) return formatNumber(n * 100, fractionalDigits, 0) + " %";
 
   return getFormatter(fractionalDigits, percentFormats, { style: "percent" }).format(n);
 }
 
-// formatNumber doesn't accept ram as a special flag, that is only used for ns.formatNumber which will use formatRam
 export function formatNumber(n: number, fractionalDigits = 3, suffixStart = 1000, isInteger = false) {
   // NaN does not get formatted
   if (Number.isNaN(n)) return "NaN";

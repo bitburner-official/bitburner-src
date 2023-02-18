@@ -6456,9 +6456,10 @@ export interface NS {
    *
    * @param n - Number to format as a percentage.
    * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+   * @param suffixStart - When to attach a suffix to the percentage. Default is 1e7 which is 1b %.
    * @returns Formatted percentage.
    */
-  formatPercent(n: number, fractionalDigits?: number): string;
+  formatPercent(n: number, fractionalDigits?: number, suffixStart?: number): string;
 
   /**
    * Format a number using the numeral library. This function is deprecated and will be removed in 2.3.

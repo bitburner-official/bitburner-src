@@ -1691,10 +1691,11 @@ export const ns: InternalAPI<NSFull> = {
     },
   formatPercent:
     (ctx) =>
-    (_n, _fractionalDigits = 2) => {
+    (_n, _fractionalDigits = 2, _suffixStart = 1e7) => {
       const n = helpers.number(ctx, "n", _n);
       const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      return formatPercent(n, fractionalDigits);
+      const suffixStart = helpers.number(ctx, "suffixStart", _suffixStart);
+      return formatPercent(n, fractionalDigits, suffixStart);
     },
   // Todo: Remove function in 2.3. Until then it just directly wraps numeral.
   nFormat: (ctx) => (_n, _format) => {
