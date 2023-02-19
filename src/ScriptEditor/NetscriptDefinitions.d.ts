@@ -3588,6 +3588,17 @@ export interface Sleeve {
   getTask(sleeveNumber: number): SleeveTask | null;
 
   /**
+   * Set a sleeve to idle.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Returns void.
+   *
+   * @param sleeveNumber - Index of the sleeve to idle.
+   */
+  setToIdle(sleeveNumber: number): void;
+
+  /**
    * Set a sleeve to shock recovery.
    * @remarks
    * RAM cost: 4 GB
