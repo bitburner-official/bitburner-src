@@ -112,6 +112,8 @@ interface Multipliers {
   agility: number;
   /** Multiplier to charisma skill */
   charisma: number;
+  /** Multiplier to intelligence skill */
+  intelligence: number;
   /** Multiplier to hacking experience gain rate */
   hacking_exp: number;
   /** Multiplier to strength experience gain rate */
@@ -124,6 +126,8 @@ interface Multipliers {
   agility_exp: number;
   /** Multiplier to charisma experience gain rate */
   charisma_exp: number;
+  /** Multiplier to intelligence experience gain rate */
+  intelligence_exp: number;
   /** Multiplier to chance of successfully performing a hack */
   hacking_chance: number;
   /** Multiplier to hacking speed */

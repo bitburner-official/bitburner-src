@@ -38,12 +38,14 @@ export interface IConstructorParams {
   dexterity?: number;
   agility?: number;
   charisma?: number;
+  intelligence?: number;
   hacking_exp?: number;
   strength_exp?: number;
   defense_exp?: number;
   dexterity_exp?: number;
   agility_exp?: number;
   charisma_exp?: number;
+  intelligence_exp?: number;
   hacking_chance?: number;
   hacking_speed?: number;
   hacking_money?: number;
@@ -436,6 +438,9 @@ export class Augmentation {
     if (params.charisma) {
       this.mults.charisma = params.charisma;
     }
+    if (params.intelligence) {
+      this.mults.intelligence = params.intelligence;
+    }
     if (params.hacking_exp) {
       this.mults.hacking_exp = params.hacking_exp;
     }
@@ -453,6 +458,9 @@ export class Augmentation {
     }
     if (params.charisma_exp) {
       this.mults.charisma_exp = params.charisma_exp;
+    }
+    if (params.intelligence_exp) {
+      this.mults.intelligence_exp = params.intelligence_exp;
     }
     if (params.hacking_chance) {
       this.mults.hacking_chance = params.hacking_chance;

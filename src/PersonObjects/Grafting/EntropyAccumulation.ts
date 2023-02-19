@@ -17,6 +17,7 @@ export const calculateEntropy = (stacks = 1): Multipliers => {
     dexterity: Player.mults.dexterity * nerf,
     agility: Player.mults.agility * nerf,
     charisma: Player.mults.charisma * nerf,
+    intelligence: Player.mults.intelligence * 1,
 
     hacking_exp: Player.mults.hacking_exp * nerf,
     strength_exp: Player.mults.strength_exp * nerf,
@@ -24,6 +25,7 @@ export const calculateEntropy = (stacks = 1): Multipliers => {
     dexterity_exp: Player.mults.dexterity_exp * nerf,
     agility_exp: Player.mults.agility_exp * nerf,
     charisma_exp: Player.mults.charisma_exp * nerf,
+    intelligence_exp: Player.mults.charisma_exp * 1,
 
     company_rep: Player.mults.company_rep * nerf,
     faction_rep: Player.mults.faction_rep * nerf,
