@@ -3592,8 +3592,6 @@ export interface Sleeve {
    * @remarks
    * RAM cost: 4 GB
    *
-   * Returns void.
-   *
    * @param sleeveNumber - Index of the sleeve to idle.
    */
   setToIdle(sleeveNumber: number): void;

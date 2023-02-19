@@ -40,7 +40,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
-      return Player.sleeves[sleeveNumber].stopWork();
+      Player.sleeves[sleeveNumber].stopWork();
     },
     setToShockRecovery: (ctx) => (_sleeveNumber) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
