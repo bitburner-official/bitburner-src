@@ -289,6 +289,7 @@ const codingcontract = {
 // Duplicate Sleeve API
 const sleeve = {
   getNumSleeves: RamCostConstants.SleeveBase,
+  setToIdle: RamCostConstants.SleeveBase,
   setToShockRecovery: RamCostConstants.SleeveBase,
   setToSynchronize: RamCostConstants.SleeveBase,
   setToCommitCrime: RamCostConstants.SleeveBase,
