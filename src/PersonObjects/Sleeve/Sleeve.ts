@@ -38,6 +38,7 @@ import { SleeveBladeburnerWork } from "./Work/SleeveBladeburnerWork";
 import { SleeveCrimeWork } from "./Work/SleeveCrimeWork";
 import * as sleeveMethods from "./SleeveMethods";
 import { SleevePerson } from "@nsdefs";
+import { calculateIntelligenceBonus } from "../formulas/intelligence";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: Work | null = null;
@@ -171,7 +172,7 @@ export class Sleeve extends Person implements SleevePerson {
     this.storedCycles += numCycles;
     if (this.storedCycles < CyclesPerSecond || !this.currentWork) return;
     const cyclesUsed = Math.min(this.storedCycles, 15);
-    this.shock = Math.max(0, this.shock - 0.0001 * cyclesUsed);
+    this.shock =this.shock - 0.0001 * calculateIntelligenceBonus(this.skills.intelligence, .75) * cyclesUsed;
     this.currentWork.process(this, cyclesUsed);
     this.storedCycles -= cyclesUsed;
   }
