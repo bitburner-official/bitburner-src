@@ -59,7 +59,7 @@ export class Server extends BaseServer {
     super(params);
 
     // "hacknet-node-X" hostnames are reserved for Hacknet Servers
-    if (this.hostname.startsWith("hacknet-node-" || "hacknet-server-")) {
+    if (this.hostname.startsWith("hacknet-node-") || this.hostname.startsWith("hacknet-server-")) {
       this.hostname = createRandomString(10);
     }
 
