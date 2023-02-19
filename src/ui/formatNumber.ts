@@ -89,7 +89,7 @@ function formatExponential(n: number) {
 }
 
 // Default suffixing starts at 1e9 % which is 1e7.
-export function formatPercent(n: number, fractionalDigits = 2, suffixStart = 1e7) {
+export function formatPercent(n: number, fractionalDigits = 2, multStart = 1e6) {
   // NaN does not get formatted
   if (Number.isNaN(n)) return "NaN%";
   const nAbs = Math.abs(n);
@@ -97,8 +97,8 @@ export function formatPercent(n: number, fractionalDigits = 2, suffixStart = 1e7
   // Special handling for Infinities
   if (nAbs * 100 === Infinity) return n < 0 ? "-∞%" : "∞%";
 
-  // Suffix form adds a space to be less visually confusing. Values this high should rarely be seen.
-  if (nAbs >= suffixStart) return formatNumber(n * 100, fractionalDigits, 0) + " %";
+  // Mult form. There are probably some areas in the game this wouldn't make sense, but they hopefully won't ever have huge %.
+  if (nAbs >= multStart) return "x" + formatNumber(n, fractionalDigits, 0);
 
   return getFormatter(fractionalDigits, percentFormats, { style: "percent" }).format(n);
 }
