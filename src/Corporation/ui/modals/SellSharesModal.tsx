@@ -10,6 +10,7 @@ import { Money } from "../../../ui/React/Money";
 import { SellShares } from "../../Actions";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { NumberInput } from "../../../ui/React/NumberInput";
+import { isInteger } from "lodash";
 interface IProps {
   open: boolean;
   onClose: () => void;
@@ -27,10 +28,12 @@ export function SellSharesModal(props: IProps): React.ReactElement {
   function ProfitIndicator(props: { shares: number | null; corp: Corporation }): React.ReactElement {
     if (props.shares === null) return <></>;
     let text = "";
-    if (isNaN(props.shares) || props.shares <= 0) {
+    if (isNaN(props.shares) || props.shares <= 0 || !isInteger(props.shares)) {
       text = `ERROR: Invalid value entered for number of shares to sell`;
     } else if (props.shares > corp.numShares) {
       text = `You don't have this many shares to sell!`;
+    } else if (props.shares > 1e14) {
+      text = `You can't sell more than 100t shares at once!`;
     } else {
       const stockSaleResults = corp.calculateShareSale(props.shares);
       const profit = stockSaleResults[0];
@@ -72,6 +75,9 @@ export function SellSharesModal(props: IProps): React.ReactElement {
       <Typography>
         Enter the number of shares you would like to sell. The money from selling your shares will go directly to you
         (NOT your Corporation).
+        <br />
+        <br />
+        The amount sold must be an integer between 1 and 100t.
         <br />
         <br />
         Selling your shares will cause your corporation's stock price to fall due to dilution. Furthermore, selling a

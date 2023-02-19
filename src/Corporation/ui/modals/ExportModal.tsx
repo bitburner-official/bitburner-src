@@ -97,6 +97,8 @@ export function ExportModal(props: IProps): React.ReactElement {
         <br />
         - 'IPROD' import city's per second production of the material
         <br />
+        Note: Consumption is negative production.
+        <br />
         <br />
         For example: setting the amount "(EINV-20)/10" would try to export all except 20 of the material.
       </Typography>

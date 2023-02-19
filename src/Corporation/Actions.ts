@@ -18,6 +18,7 @@ import { CityName } from "../Enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { CorpResearchName } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
+import { isInteger } from "lodash";
 
 export function NewIndustry(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.find(({ type }) => industry == type))
@@ -297,9 +298,10 @@ export function BulkPurchase(corp: Corporation, warehouse: Warehouse, material: 
 }
 
 export function SellShares(corporation: Corporation, numShares: number): number {
-  if (isNaN(numShares)) throw new Error("Invalid value for number of shares");
-  if (numShares < 0) throw new Error("Invalid value for number of shares");
+  if (isNaN(numShares) || !isInteger(numShares)) throw new Error("Invalid value for number of shares");
+  if (numShares <= 0) throw new Error("Invalid value for number of shares");
   if (numShares > corporation.numShares) throw new Error("You don't have that many shares to sell!");
+  if (numShares > 1e14) throw new Error("Invalid value for number of shares");
   if (!corporation.public) throw new Error("You haven't gone public!");
   if (corporation.shareSaleCooldown) throw new Error("Share sale on cooldown!");
   const stockSaleResults = corporation.calculateShareSale(numShares);
@@ -317,8 +319,8 @@ export function SellShares(corporation: Corporation, numShares: number): number 
 }
 
 export function BuyBackShares(corporation: Corporation, numShares: number): boolean {
-  if (isNaN(numShares)) throw new Error("Invalid value for number of shares");
-  if (numShares < 0) throw new Error("Invalid value for number of shares");
+  if (isNaN(numShares) || !isInteger(numShares)) throw new Error("Invalid value for number of shares");
+  if (numShares <= 0) throw new Error("Invalid value for number of shares");
   if (numShares > corporation.issuedShares) throw new Error("You don't have that many shares to buy!");
   if (!corporation.public) throw new Error("You haven't gone public!");
   const buybackPrice = corporation.sharePrice * 1.1;

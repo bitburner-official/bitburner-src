@@ -7436,11 +7436,11 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   issueNewShares(amount?: number): number;
 
   /** Buyback Shares
-   * @param amount - Amount of shares to buy back. */
+   * @param amount - Amount of shares to buy back, must be integer and larger than 0 */
   buyBackShares(amount: number): void;
 
   /** Sell Shares
-   * @param amount -  Amount of shares to sell. */
+   * @param amount -  Amount of shares to sell, must be integer between 1 and 100t */
   sellShares(amount: number): void;
 
   /** Get bonus time.
