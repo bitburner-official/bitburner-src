@@ -4,7 +4,7 @@
 
 ## NS.hackAnalyzeThreads() method
 
-Predict the effect of hack.
+Calculate the decimal number of threads needed to hack a specified amount of money from a target host.
 
 **Signature:**
 
@@ -29,16 +29,17 @@ The number of threads needed to hack the server for hackAmount money.
 
 RAM cost: 1 GB
 
-This function returns the number of script threads you need when running the hack command to steal the specified amount of money from the target server. If hackAmount is less than zero or greater than the amount of money available on the server, then this function returns -1.
-
-Warning: The value returned by this function isn’t necessarily a whole number.
+This function returns the decimal number of script threads you need when running the hack command to steal the specified amount of money from the target server. If hackAmount is less than zero or greater than the amount of money available on the server, then this function returns -1.
 
 ## Example
 
 
 ```ts
-//For example, let’s say the foodnstuff server has $10m and you run:
-hackAnalyzeThreads("foodnstuff", 1e6);
-//If this function returns 50, this means that if your next hack call is run on a script with 50 threads, it will steal $1m from the foodnstuff server.
+// Calculate threadcount of a single hack that would take $100k from n00dles
+const hackThreads = hackAnalyzeThreads("n00dles", 1e5);
+
+// Launching a script requires an integer thread count. The below would take less than the targeted $100k.
+ns.run("noodleHack.js", Math.floor(hackThreads))
+
 ```
 

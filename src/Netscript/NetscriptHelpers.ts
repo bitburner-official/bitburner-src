@@ -434,17 +434,22 @@ function hack(
   ctx: NetscriptContext,
   hostname: string,
   manual: boolean,
-  { threads: requestedThreads, stock }: BasicHGWOptions = {},
+  { threads: requestedThreads, stock, additionalMsec: requestedSec }: BasicHGWOptions = {},
 ): Promise<number> {
   const ws = ctx.workerScript;
   const threads = helpers.resolveNetscriptRequestedThreads(ctx, requestedThreads);
+  const additionalMsec = number(ctx, "opts.additionalMsec", requestedSec ?? 0);
+  if (additionalMsec < 0) {
+    throw makeRuntimeErrorMsg(ctx, `additionalMsec must be non-negative, got ${additionalMsec}`);
+  }
   const server = getServer(ctx, hostname);
   if (!(server instanceof Server)) {
     throw makeRuntimeErrorMsg(ctx, "Cannot be executed on this server.");
   }
 
   // Calculate the hacking time
-  const hackingTime = calculateHackingTime(server, Player); // This is in seconds
+  // This is in seconds
+  const hackingTime = calculateHackingTime(server, Player) + additionalMsec / 1000.0;
 
   // No root access or skill level too low
   const canHack = netscriptCanHack(server);

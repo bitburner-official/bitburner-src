@@ -256,6 +256,12 @@ interface BasicHGWOptions {
   threads?: number;
   /** Set to true this action will affect the stock market. */
   stock?: boolean;
+  /** Number of additional milliseconds that will be spent waiting between the
+   *  start of the function and when it completes. There will only be one,
+   *  contiguous wait, which is relevant because stats such as server security
+   *  level are computed at the *start* of the function.
+   *  Must be non-negative. */
+  additionalMsec?: number;
 }
 
 /**

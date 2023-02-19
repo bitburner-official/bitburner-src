@@ -17,7 +17,7 @@ repFromDonation(amount: number, player: Person): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  amount | number | Amount of money donated |
-|  player | [Person](./bitburner.person.md) | Player info from [getPlayer](./bitburner.ns.getplayer.md) |
+|  player | [Person](./bitburner.person.md) | Player info, typically from [getPlayer](./bitburner.ns.getplayer.md) |
 
 **Returns:**
 
