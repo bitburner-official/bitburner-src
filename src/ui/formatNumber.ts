@@ -74,6 +74,9 @@ export function formatRam(n: number, fractionalDigits = 2) {
   // Special handling for Infinities
   if (nAbs === Infinity) return `${n < 0 ? "-∞" : ""}∞${ramSuffixList.at(-1)}`;
 
+  // Early return if using first suffix.
+  if (nAbs < 1000) return getFormatter(fractionalDigits).format(n) + ramSuffixList[0];
+
   // Ram always uses a suffix and never goes to exponential
   const suffixIndex = Math.min(Math.floor(ramLogFn(nAbs) / ramLogDivisor), ramSuffixList.length - 1);
   n /= ramExpList[suffixIndex];
