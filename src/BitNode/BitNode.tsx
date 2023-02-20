@@ -754,6 +754,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         CrimeMoney: 0.5,
         ScriptHackMoney: 0.1,
 
+        HacknetNodeMoney: Math.PI,
+
         HackExpGain: 0.05,
 
         FourSigmaMarketDataCost: 5,
@@ -771,7 +773,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         StaneksGiftPowerMultiplier: 0.5,
         StaneksGiftExtraSize: 2,
 
-        WorldDaemonDifficulty: 2,
+        WorldDaemonDifficulty: Math.PI,
       });
     }
     case 10: {
