@@ -256,11 +256,8 @@ interface BasicHGWOptions {
   threads?: number;
   /** Set to true this action will affect the stock market. */
   stock?: boolean;
-  /** Number of additional milliseconds that will be spent waiting between the
-   *  start of the function and when it completes. There will only be one,
-   *  contiguous wait, which is relevant because stats such as server security
-   *  level are computed at the *start* of the function.
-   *  Must be non-negative. */
+  /** Number of additional milliseconds that will be spent waiting between the start of the function and when it
+   * completes. Experimental in 2.2.2, may be removed in 2.3. */
   additionalMsec?: number;
 }
 
@@ -5814,16 +5811,11 @@ export interface NS {
   getServerMinSecurityLevel(host: string): number;
 
   /**
-   * @deprecated useless
+   * Get the base security level of a server.
    * @remarks
    * RAM cost: 0.1 GB
-   * Returns the base security level of the target server. This is the security
-   * level that the server starts out with. This is different than
-   * getServerSecurityLevel because getServerSecurityLevel returns
-   * the current security level of a server, which can constantly change due to
-   * hack, grow, and weaken, calls on that server.
-   * The base security level will stay the same until you reset by
-   * installing an Augmentation(s).
+   * Returns the base security level of the target server.
+   * For the server's actual security level, use {@link NS.getServerSecurityLevel | ns.getServerSecurityLevel}.
    *
    * @param host - Host of target server.
    * @returns Base security level of the target server.
@@ -6478,6 +6470,7 @@ export interface NS {
 
   /**
    * Format a number using the numeral library. This function is deprecated and will be removed in 2.3.
+   * @deprecated Use ns.formatNumber, formatRam, or formatPercent instead. Will be removed in 2.3. 
    * @remarks
    * RAM cost: 0 GB
    *
