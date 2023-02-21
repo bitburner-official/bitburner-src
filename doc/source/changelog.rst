@@ -7,6 +7,10 @@ Changelog
 v2.2.2 - 21 Feb 2022
 --------------------
 
+PLANNED 2.3 BREAKING CHANGES:
+
+* 2.3 will include a large planned rework to corporation. This may cause api breaks for any corporation scripts, and there will be large changes in how the corporation mechanic functions.
+
 NETSCRIPT API:
 
 * Added ns.formatNumber, ns.formatRam, and ns.formatPercent, which allow formatting these types of numbers the same way the game does (@Snarling, See UI section).
