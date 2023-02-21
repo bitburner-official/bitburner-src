@@ -51,6 +51,7 @@ UI:
 * Improve some bladeburner number formatting (@Zelow79)
 * Added IronMan theme (@MattiYT)
 * Factions that have not been joined yet will show how many unowned augments they have available. (@Zelow79)
+* Added more features to dev menu (@Zelow79 and @Snarling)
 
 CORPORATION:
 
@@ -80,11 +81,7 @@ CODEBASE:
 * Updated many dependencies (@d0sboots)
 * Updated lots of the build processes and GitHub workflows. (@Snarling)
 * Internal refactoring of how BitNode multipliers are stored (@d0sboots)
-* Added useRerender hook and positiveInteger ns argument validator. (@Snarling)
-
-DEV MENU:
-
-* Added more features to dev menu (@Zelow79 and @Snarling)
+* Added some extra helper function (useRerender hook, positiveInteger ns argument validator). (@Snarling)
 
 MISC:
 
