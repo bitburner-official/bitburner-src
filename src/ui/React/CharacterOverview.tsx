@@ -348,7 +348,7 @@ function Work(): React.ReactElement {
   if (isClassWork(Player.currentWork)) {
     details = <>{Player.currentWork.getClass().youAreCurrently}</>;
     header = <>You are {Player.currentWork.getClass().youAreCurrently}</>;
-    innerText = <>{convertTimeMsToTimeElapsedString(Player.currentWork.cyclesWorked * CONSTANTS._idleSpeed)}</>;
+    innerText = <>{convertTimeMsToTimeElapsedString(Player.currentWork.cyclesWorked * CONSTANTS.MilliPerCycle)}</>;
   }
   if (isCreateProgramWork(Player.currentWork)) {
     const create = Player.currentWork;
@@ -382,7 +382,7 @@ function Work(): React.ReactElement {
       <>
         <Reputation reputation={factionWork.getFaction().playerReputation} /> rep
         <br />(
-        <ReputationRate reputation={factionWork.getReputationRate() * (1000 / CONSTANTS._idleSpeed)} />)
+        <ReputationRate reputation={factionWork.getReputationRate() * (1000 / CONSTANTS.MilliPerCycle)} />)
       </>
     );
   }
@@ -402,7 +402,7 @@ function Work(): React.ReactElement {
       <>
         <Reputation reputation={companyWork.getCompany().playerReputation} /> rep
         <br />(
-        <ReputationRate reputation={companyWork.getGainRates().reputation * (1000 / CONSTANTS._idleSpeed)} />)
+        <ReputationRate reputation={companyWork.getGainRates().reputation * (1000 / CONSTANTS.MilliPerCycle)} />)
       </>
     );
   }

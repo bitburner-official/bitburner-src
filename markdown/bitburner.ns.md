@@ -104,7 +104,7 @@ export async function main(ns) {
 |  [getScriptName()](./bitburner.ns.getscriptname.md) | Returns the current script name. |
 |  [getScriptRam(script, host)](./bitburner.ns.getscriptram.md) | Get the ram cost of a script. |
 |  [getServer(host)](./bitburner.ns.getserver.md) | Returns a server object for the given server. Defaults to the running script's server if host is not specified. |
-|  [getServerBaseSecurityLevel(host)](./bitburner.ns.getserverbasesecuritylevel.md) |  |
+|  [getServerBaseSecurityLevel(host)](./bitburner.ns.getserverbasesecuritylevel.md) | Get the base security level of a server. |
 |  [getServerGrowth(host)](./bitburner.ns.getservergrowth.md) | Get a server growth parameter. |
 |  [getServerMaxMoney(host)](./bitburner.ns.getservermaxmoney.md) | Get the maximum money available on a server. |
 |  [getServerMaxRam(host)](./bitburner.ns.getservermaxram.md) | Get the maximum amount of RAM on a server. |

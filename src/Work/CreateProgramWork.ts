@@ -67,7 +67,7 @@ export class CreateProgramWork extends Work {
     skillMult *= focusBonus;
     //Skill multiplier directly applied to "time worked"
     this.cyclesWorked += cycles;
-    this.unitCompleted += CONSTANTS._idleSpeed * cycles * skillMult;
+    this.unitCompleted += CONSTANTS.MilliPerCycle * cycles * skillMult;
 
     if (this.unitCompleted >= this.unitNeeded()) {
       return true;
@@ -79,7 +79,7 @@ export class CreateProgramWork extends Work {
     if (!cancelled) {
       //Complete case
       Player.gainIntelligenceExp(
-        (CONSTANTS.IntelligenceProgramBaseExpGain * this.cyclesWorked * CONSTANTS._idleSpeed) / 1000,
+        (CONSTANTS.IntelligenceProgramBaseExpGain * this.cyclesWorked * CONSTANTS.MilliPerCycle) / 1000,
       );
       if (!this.singularity) {
         const lines = [

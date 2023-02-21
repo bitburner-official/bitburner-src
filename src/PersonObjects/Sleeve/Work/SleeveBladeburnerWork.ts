@@ -28,7 +28,7 @@ export class SleeveBladeburnerWork extends Work {
   cyclesNeeded(sleeve: Sleeve): number {
     const ret = Player.bladeburner?.getActionTimeNetscriptFn(sleeve, this.actionType, this.actionName);
     if (!ret || typeof ret === "string") throw new Error(`Error querying ${this.actionName} time`);
-    return ret / CONSTANTS._idleSpeed;
+    return ret / CONSTANTS.MilliPerCycle;
   }
 
   process(sleeve: Sleeve, cycles: number) {

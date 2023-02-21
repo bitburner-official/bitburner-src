@@ -41,7 +41,7 @@ export class GraftingWork extends Work {
     }
 
     this.cyclesWorked += cycles;
-    this.unitCompleted += CONSTANTS._idleSpeed * cycles * graftingIntBonus() * focusBonus;
+    this.unitCompleted += CONSTANTS.MilliPerCycle * cycles * graftingIntBonus() * focusBonus;
 
     return this.unitCompleted >= this.unitNeeded();
   }
@@ -78,7 +78,7 @@ export class GraftingWork extends Work {
     // Intelligence gain
     if (!cancelled) {
       Player.gainIntelligenceExp(
-        (CONSTANTS.IntelligenceGraftBaseExpGain * this.cyclesWorked * CONSTANTS._idleSpeed) / 10000,
+        (CONSTANTS.IntelligenceGraftBaseExpGain * this.cyclesWorked * CONSTANTS.MilliPerCycle) / 10000,
       );
     }
   }

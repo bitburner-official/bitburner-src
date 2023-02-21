@@ -4,7 +4,7 @@
 
 ## BasicHGWOptions.additionalMsec property
 
-Number of additional milliseconds that will be spent waiting between the start of the function and when it completes. There will only be one, contiguous wait, which is relevant because stats such as server security level are computed at the \*start\* of the function. Must be non-negative.
+Number of additional milliseconds that will be spent waiting between the start of the function and when it completes. Experimental in 2.2.2, may be removed in 2.3.
 
 **Signature:**
 

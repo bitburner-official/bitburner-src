@@ -4,6 +4,11 @@
 
 ## NS.nFormat() method
 
+> Warning: This API is now obsolete.
+> 
+> Use ns.formatNumber, formatRam, or formatPercent instead. Will be removed in 2.3.
+> 
+
 Format a number using the numeral library. This function is deprecated and will be removed in 2.3.
 
 **Signature:**
