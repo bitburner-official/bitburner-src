@@ -12,7 +12,7 @@ interface IProps {
 
 /** React Component for displaying the bonus time remaining. */
 export function BonusTime(props: IProps): React.ReactElement {
-  const CyclerPerSecond = 1000 / CONSTANTS._idleSpeed;
+  const CyclerPerSecond = 1000 / CONSTANTS.MilliPerCycle;
   if ((props.gang.storedCycles / CyclerPerSecond) * 1000 <= 5000) return <></>;
   const bonusMillis = (props.gang.storedCycles / CyclerPerSecond) * 1000;
   return (

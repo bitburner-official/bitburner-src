@@ -6,7 +6,6 @@
 export const CONSTANTS: {
   VersionString: string;
   VersionNumber: number;
-  _idleSpeed: number;
   MaxSkillLevel: number;
   MilliPerCycle: number;
   CorpFactionRepRequirement: number;
@@ -88,11 +87,8 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.2.2dev",
-  VersionNumber: 29,
-
-  // Speed (in ms) at which the main loop is updated
-  _idleSpeed: 200,
+  VersionString: "2.2.2",
+  VersionNumber: 30,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -232,18 +228,70 @@ export const CONSTANTS: {
   Donations: 41,
 
   LatestUpdate: `
-v2.2.2 in progress development patch notes
+v2.2.2 - 21 Feb 2022
 
-NETSCRIPT:
+NETSCRIPT API:
+* Added ns.formatNumber, ns.formatRam, and ns.formatPercent, which allow formatting these types of numbers the same way the game does (@Snarling, See UI section).
+* Deprecated ns.nFormat. Likely to be removed in 2.3. Now just directly wraps numeral.format (@Snarling)
+* EXPERIMENTAL CHANGE (may be reverted next patch): BasicHGWOptions now allows specifying a number of additionalMsec. This should allow easier and more reliable coordination
+  of completion times for hack, grow, and weaken. Since this is an experimental change, be prepared for a possible API break next patch if you use this functionality. (@d0sboots)
 
-* Add unsupported ns.printRaw function, which allows printing rich content to script logs using React. (@d0sboots)
+- Corporation API
+* Fix bugs with ns.corporation.setAutoJobAssignment. (@zerbosh and @croy)
+
+- Formulas API
+* Added ns.formulas.hacking.growThreads function (@d0sboots)
+
+- Sleeve API
+* ns.sleeve.getTask now also includes cyclesWorked for the task types where this applies. (@Zelow79)
+* Added ns.sleeve.setToIdle function (@Zelow79)
+
+- Unsupported API
+* Added ns.printRaw - allows printing custom React content to script logs. Use at your own risk, misuse is very likely to cause a crash. (@d0sboots)
+
+ELECTRON (STEAM) VERSION:
+* Fix security issue where player scripts were allowed to access any part of the player's filesystem. Now access is limited to the game's 'dist' folder. (@Snarling)
+
+SCRIPTS:
 * Fix an issue where multiple copies of the same script could be launched with same args/same server (@Mughur)
-* Internal changes to API wrapping. (@d0sboots)
+* Followup changes to API wrapping from 2.2.1 changes. (@d0sboots)
+
+UI:
+* Add new number formatting code to replace internal use of unmaintained package numeral.js. Added several Numeric Display options. (@Snarling)
+* Removed ingame donation section. (@hydroflame)
+* Improve some bladeburner number formatting (@Zelow79)
+* Added IronMan theme (@MattiYT)
+* Factions that have not been joined yet will show how many unowned augments they have available. (@Zelow79)
+
+CORPORATION:
+* Reverted previous change to employee needs. Now they will trend up on their own again. (@d0sboots)
+* Improvements to how Market TA II works (@d0sboots)
+* ns.corporation.getOffice return value now includes a totalExperience property. (@Snarling)
+
+HACKNET:
+* Hacknet servers are now named hacknet-server-# instead of hacknet-node-#. (@Tyasuh)
+* Fix bug related to renaming hacknet servers (@Mughur)
+
+GRAFTING:
+* Bladeburner augs can be grafted if player is in Bladeburner faction (@Tyasuh)
+
+DOCUMENTATION
+* Many documentation updates (@Mughur, @d0sboots, @Snarling, @teauxfu).
+* Official non-markdown docs are at http://bitburner-official.readthedocs.io/
+* Official dev version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md
+* Official stable version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md
+* Dev version documentation is now kept up to date as changes are made. (@Snarling)
+
+CODEBASE:
+* Updated many dependencies (@d0sboots)
+* Updated lots of the build processes and GitHub workflows. (@Snarling)
+* Internal refactoring of how BitNode multipliers are stored (@d0sboots)
+* Added useRerender hook and positiveInteger ns argument validator. (@Snarling)
+
+DEV MENU:
+* Added more features to dev menu (@Zelow79 and @Snarling)
 
 MISC:
-
-* Updated large number of dependency packages (@d0sboots)
-* Refactored how bitnode multipliers for max / starting money work. (@d0sboots)
 * Nerf noodle bar
 `,
 };

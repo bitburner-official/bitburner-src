@@ -21,7 +21,7 @@ import { Company } from "../Company/Company";
 import { CompanyPosition } from "../Company/CompanyPosition";
 import { checkEnum } from "../utils/helpers/enum";
 
-const gameCPS = 1000 / CONSTANTS._idleSpeed; // 5 cycles per second
+const gameCPS = 1000 / CONSTANTS.MilliPerCycle; // 5 cycles per second
 export const FactionWorkStats: Record<FactionWorkType, WorkStats> = {
   [FactionWorkType.hacking]: newWorkStats({ hackExp: 2 }),
   [FactionWorkType.field]: newWorkStats({

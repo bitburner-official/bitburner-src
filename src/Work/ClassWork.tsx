@@ -118,7 +118,7 @@ export class ClassWork extends Work {
       dialogBoxCreate(
         <>
           After {this.getClass().youAreCurrently} for{" "}
-          {convertTimeMsToTimeElapsedString(this.cyclesWorked * CONSTANTS._idleSpeed)}, <br />
+          {convertTimeMsToTimeElapsedString(this.cyclesWorked * CONSTANTS.MilliPerCycle)}, <br />
           you spent a total of <Money money={-this.earnings.money} />. <br />
           <br />
           You earned a total of: <br />

@@ -38,7 +38,7 @@ export class CrimeWork extends Work {
   process(cycles = 1): boolean {
     this.cyclesWorked += cycles;
     const time = Object.values(Crimes).find((c) => c.type === this.crimeType)?.time ?? 0;
-    this.unitCompleted += CONSTANTS._idleSpeed * cycles;
+    this.unitCompleted += CONSTANTS.MilliPerCycle * cycles;
     while (this.unitCompleted >= time) {
       this.commit();
       this.unitCompleted -= time;
