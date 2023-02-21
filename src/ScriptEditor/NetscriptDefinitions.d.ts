@@ -6470,7 +6470,7 @@ export interface NS {
 
   /**
    * Format a number using the numeral library. This function is deprecated and will be removed in 2.3.
-   * @deprecated Use ns.formatNumber, formatRam, or formatPercent instead. Will be removed in 2.3. 
+   * @deprecated Use ns.formatNumber, formatRam, or formatPercent instead. Will be removed in 2.3.
    * @remarks
    * RAM cost: 0 GB
    *
