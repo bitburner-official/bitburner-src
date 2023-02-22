@@ -754,8 +754,6 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         CrimeMoney: 0.5,
         ScriptHackMoney: 0.1,
 
-        HacknetNodeMoney: 1,
-
         HackExpGain: 0.05,
 
         FourSigmaMarketDataCost: 5,
