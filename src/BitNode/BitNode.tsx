@@ -754,7 +754,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         CrimeMoney: 0.5,
         ScriptHackMoney: 0.1,
 
-        HacknetNodeMoney: Math.PI,
+        HacknetNodeMoney: 1,
 
         HackExpGain: 0.05,
 
@@ -773,7 +773,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         StaneksGiftPowerMultiplier: 0.5,
         StaneksGiftExtraSize: 2,
 
-        WorldDaemonDifficulty: Math.PI,
+        WorldDaemonDifficulty: 2,
       });
     }
     case 10: {
