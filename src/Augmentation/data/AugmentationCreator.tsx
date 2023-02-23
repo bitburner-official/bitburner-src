@@ -1658,6 +1658,36 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     stats: <>This Augmentation removes the Entropy virus, and prevents it from affecting you again.</>,
     factions: [],
   }),
+  new Augmentation({
+    name: AugmentationNames.UltraReflex,
+    repCost: Infinity,
+    moneyCost: 25e12,
+    info:
+      "Powerful chip that controls parts of the nervous system overclocking your " +
+      "speed and natural reaction time more than ever before. Comes with auto-replying " +
+      "technology so you no longer have to thank about what you say!",
+    dexterity: 2.8,
+    factions: [],
+  }),
+  new Augmentation({
+    name: AugmentationNames.MughursEye,
+    repCost: Infinity,
+    moneyCost: 25e12,
+    info:
+      "He sees you when you're sleeping. He knows when you're awake. " +
+      "He knows when you're talking about Minecraft and Hockey " +
+      "and the all seeing eye will know if it isn't in the right place!",
+    agility: 2.8,
+    factions: [],
+  }),
+  new Augmentation({
+    name: AugmentationNames.SilverTongue,
+    repCost: Infinity,
+    moneyCost: 25e12,
+    info: "So you is speek gooder.",
+    charisma: 2.8,
+    factions: [],
+  }),
 
   // Sleeve exclusive augmentations
   new Augmentation({
