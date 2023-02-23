@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Editor, { Monaco, loader } from "@monaco-editor/react";
+import { Editor } from "./Editor";
 import * as monaco from "monaco-editor";
 // @ts-expect-error This library does not have types.
 import * as MonacoVim from "monaco-vim";
@@ -47,10 +47,7 @@ import { Modal } from "../../ui/React/Modal";
 import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
 import { TextField, Tooltip } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
-import { NetscriptExtra } from "src/NetscriptFunctions/Extra";
-
-// Loading monaco locally / no cdn
-loader.config({ monaco });
+import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
 
 interface IProps {
   // Map of filename -> code
@@ -102,8 +99,8 @@ let currentScript: OpenScript | null = null;
 export function Root(props: IProps): React.ReactElement {
   const rerender = useRerender();
   const editorRef = useRef<IStandaloneCodeEditor | null>(null);
-  const monacoRef = useRef<Monaco | null>(null);
   const vimStatusRef = useRef<HTMLElement>(null);
+  // monaco-vim does not have types, so this is an any
   const [vimEditor, setVimEditor] = useState<any>(null);
   const [editor, setEditor] = useState<IStandaloneCodeEditor | null>(null);
   const [filter, setFilter] = useState("");
@@ -222,9 +219,7 @@ export function Root(props: IProps): React.ReactElement {
 
   // Generates a new model for the script
   function regenerateModel(script: OpenScript): void {
-    if (monacoRef.current !== null) {
-      script.model = monacoRef.current.editor.createModel(script.code, script.isTxt ? "plaintext" : "javascript");
-    }
+    script.model = monaco.editor.createModel(script.code, script.isTxt ? "plaintext" : "javascript");
   }
 
   const debouncedUpdateRAM = debounce((newCode: string) => {
@@ -285,16 +280,15 @@ export function Root(props: IProps): React.ReactElement {
   // https://github.com/threehams/typescript-error-guide/blob/master/stories/components/Editor.tsx#L11-L39
   // https://blog.checklyhq.com/customizing-monaco/
   // Before the editor is mounted
-  function beforeMount(monaco: any): void {
+  function beforeMount(): void {
     if (symbolsLoaded) return;
     // Setup monaco auto completion
     symbolsLoaded = true;
     (async function () {
       // We have to improve the default js language otherwise theme sucks
-      const l = await monaco.languages
-        .getLanguages()
-        .find((l: any) => l.id === "javascript")
-        .loader();
+      const jsLanguage = monaco.languages.getLanguages().find((l) => l.id === "javascript");
+      // Unsupported function is not exposed in monaco public API.
+      const l = await (jsLanguage as any).loader();
       // replaced the bare tokens with regexes surrounded by \b, e.g. \b{token}\b which matches a word-break on either side
       // this prevents the highlighter from highlighting pieces of variables that start with a reserved token name
       l.language.tokenizer.root.unshift([new RegExp("\\bns\\b"), { token: "ns" }]);
@@ -320,15 +314,14 @@ export function Root(props: IProps): React.ReactElement {
   }
 
   // When the editor is mounted
-  function onMount(editor: IStandaloneCodeEditor, monaco: Monaco): void {
+  function onMount(editor: IStandaloneCodeEditor): void {
     // Required when switching between site navigation (e.g. from Script Editor -> Terminal and back)
     // the `useEffect()` for vim mode is called before editor is mounted.
     setEditor(editor);
 
     editorRef.current = editor;
-    monacoRef.current = monaco;
 
-    if (editorRef.current === null || monacoRef.current === null) return;
+    if (!editorRef.current) return;
 
     if (!props.files && currentScript !== null) {
       // Open currentscript
@@ -370,8 +363,8 @@ export function Root(props: IProps): React.ReactElement {
             filename,
             code,
             props.hostname,
-            new monacoRef.current.Position(0, 0),
-            monacoRef.current.editor.createModel(code, filename.endsWith(".txt") ? "plaintext" : "javascript"),
+            new monaco.Position(0, 0),
+            monaco.editor.createModel(code, filename.endsWith(".txt") ? "plaintext" : "javascript"),
           );
           openScripts.push(newScript);
           currentScript = newScript;
@@ -841,12 +834,8 @@ export function Root(props: IProps): React.ReactElement {
         <Editor
           beforeMount={beforeMount}
           onMount={onMount}
-          loading={<Typography>Loading script editor!</Typography>}
           height={`calc(100vh - ${130 + (options.vim ? 34 : 0)}px)`}
-          defaultLanguage="javascript"
-          defaultValue={""}
           onChange={updateCode}
-          theme={options.theme}
           options={{ ...options, glyphMargin: true }}
         />
 
@@ -896,7 +885,7 @@ export function Root(props: IProps): React.ReactElement {
           open={optionsOpen}
           onClose={() => {
             sanitizeTheme(Settings.EditorTheme);
-            monacoRef.current?.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
+            monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
             setOptionsOpen(false);
           }}
           options={{
@@ -908,7 +897,7 @@ export function Root(props: IProps): React.ReactElement {
           }}
           save={(options: Options) => {
             sanitizeTheme(Settings.EditorTheme);
-            monacoRef.current?.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
+            monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
             setOptions(options);
             Settings.MonacoTheme = options.theme;
             Settings.MonacoInsertSpaces = options.insertSpaces;
