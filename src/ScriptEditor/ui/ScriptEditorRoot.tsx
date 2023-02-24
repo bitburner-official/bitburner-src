@@ -705,13 +705,21 @@ export function Root(props: IProps): React.ReactElement {
   const tabTextWidth = tabMaxWidth - tabIconWidth * 2;
   return (
     <>
-      <div style={{ display: currentScript !== null ? "block" : "none", height: "100%", width: "100%" }}>
+      <div
+        style={{
+          display: currentScript !== null ? "flex" : "none",
+          height: "100%",
+          width: "100%",
+          flexDirection: "column",
+        }}
+      >
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="tabs" direction="horizontal">
             {(provided, snapshot) => (
               <Box
                 maxWidth={`${tabsMaxWidth}px`}
                 display="flex"
+                flexGrow="0"
                 flexDirection="row"
                 alignItems="center"
                 whiteSpace="nowrap"
@@ -830,19 +838,19 @@ export function Root(props: IProps): React.ReactElement {
             )}
           </Droppable>
         </DragDropContext>
-        <div style={{ paddingBottom: "5px" }} />
+        <div style={{ flex: "0 0 5px" }} />
         <Editor
           beforeMount={beforeMount}
           onMount={onMount}
-          height={`calc(100vh - ${130 + (options.vim ? 34 : 0)}px)`}
           onChange={updateCode}
           options={{ ...options, glyphMargin: true }}
         />
 
         <Box
           ref={vimStatusRef}
-          className="monaco-editor"
+          className="vim-display"
           display="flex"
+          flexGrow="0"
           flexDirection="row"
           sx={{ p: 1 }}
           alignItems="center"
