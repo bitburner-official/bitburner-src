@@ -1,7 +1,7 @@
 scan() Netscript Function
 =========================
 
-.. js:function:: scan(hostname=current hostname)
+.. js:function:: scan(hostname = current hostname)
 
     :RAM cost: 0.2 GB
     :param string hostname: Hostname of the server to scan.

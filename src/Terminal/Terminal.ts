@@ -97,7 +97,7 @@ export class Terminal {
 
   process(cycles: number): void {
     if (this.action === null) return;
-    this.action.timeLeft -= (CONSTANTS._idleSpeed * cycles) / 1000;
+    this.action.timeLeft -= (CONSTANTS.MilliPerCycle * cycles) / 1000;
     if (this.action.timeLeft < 0.01) this.finishAction(false);
     TerminalEvents.emit();
   }

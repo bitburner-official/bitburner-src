@@ -144,7 +144,7 @@ export const ns: InternalAPI<NSFull> = {
       // TODO 2.2: better type safety rework for functions using assertObjectType, then remove function.
       const optsValidator: BasicHGWOptions = {};
       assertObjectType(ctx, "opts", opts, optsValidator);
-      return helpers.hack(ctx, hostname, false, { threads: opts.threads, stock: opts.stock });
+      return helpers.hack(ctx, hostname, false, opts);
     },
   hackAnalyzeThreads: (ctx) => (_hostname, _hackAmount) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -241,11 +241,11 @@ export const ns: InternalAPI<NSFull> = {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const optsValidator: BasicHGWOptions = {};
       assertObjectType(ctx, "opts", opts, optsValidator);
-      const requestedThreads =
-        opts.threads === undefined
-          ? ctx.workerScript.scriptRef.threads
-          : helpers.number(ctx, "opts.threads", opts.threads);
-      const threads = helpers.resolveNetscriptRequestedThreads(ctx, requestedThreads);
+      const threads = helpers.resolveNetscriptRequestedThreads(ctx, opts.threads);
+      const additionalMsec = helpers.number(ctx, "opts.additionalMsec", opts.additionalMsec ?? 0);
+      if (additionalMsec < 0) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `additionalMsec must be non-negative, got ${additionalMsec}`);
+      }
 
       const server = helpers.getServer(ctx, hostname);
       if (!(server instanceof Server)) {
@@ -264,7 +264,7 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
       }
 
-      const growTime = calculateGrowTime(server, Player);
+      const growTime = calculateGrowTime(server, Player) + additionalMsec / 1000.0;
       helpers.log(
         ctx,
         () =>
@@ -297,22 +297,27 @@ export const ns: InternalAPI<NSFull> = {
     },
   growthAnalyze:
     (ctx) =>
-    (_hostname, _growth, _cores = 1) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const growth = helpers.number(ctx, "growth", _growth);
+    (_host, _multiplier, _cores = 1) => {
+      const host = helpers.string(ctx, "hostname", _host);
+      const mult = helpers.number(ctx, "multiplier", _multiplier);
       const cores = helpers.number(ctx, "cores", _cores);
 
       // Check argument validity
-      const server = helpers.getServer(ctx, hostname);
+      const server = helpers.getServer(ctx, host);
       if (!(server instanceof Server)) {
-        helpers.log(ctx, () => "Cannot be executed on this server.");
+        // Todo 2.3: Make this throw instead of returning 0?
+        helpers.log(ctx, () => `${host} is not a hackable server. Returning 0.`);
         return 0;
       }
-      if (typeof growth !== "number" || isNaN(growth) || growth < 1 || !isFinite(growth)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: growth must be numeric and >= 1, is ${growth}.`);
+      if (mult < 1 || !isFinite(mult)) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: multiplier must be finite and >= 1, is ${mult}.`);
+      }
+      // TODO 2.3: Add assertion function for positive integer, there are a lot of places everywhere that can use this
+      if (!Number.isInteger(cores) || cores < 1) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Cores should be a positive integer. Cores provided: ${cores}`);
       }
 
-      return numCycleForGrowth(server, Number(growth), cores);
+      return numCycleForGrowth(server, mult, cores);
     },
   growthAnalyzeSecurity:
     (ctx) =>
@@ -343,11 +348,11 @@ export const ns: InternalAPI<NSFull> = {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const optsValidator: BasicHGWOptions = {};
       assertObjectType(ctx, "opts", opts, optsValidator);
-      const requestedThreads =
-        opts.threads === undefined
-          ? ctx.workerScript.scriptRef.threads
-          : helpers.number(ctx, "opts.threads", opts.threads);
-      const threads = helpers.resolveNetscriptRequestedThreads(ctx, requestedThreads);
+      const threads = helpers.resolveNetscriptRequestedThreads(ctx, opts.threads);
+      const additionalMsec = helpers.number(ctx, "opts.additionalMsec", opts.additionalMsec ?? 0);
+      if (additionalMsec < 0) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `additionalMsec must be non-negative, got ${additionalMsec}`);
+      }
 
       const server = helpers.getServer(ctx, hostname);
       if (!(server instanceof Server)) {
@@ -361,7 +366,7 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
       }
 
-      const weakenTime = calculateWeakenTime(server, Player);
+      const weakenTime = calculateWeakenTime(server, Player) + additionalMsec / 1000.0;
       helpers.log(
         ctx,
         () =>
@@ -684,11 +689,8 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_scriptname, _threads = 1, ..._args) => {
       const scriptname = helpers.string(ctx, "scriptname", _scriptname);
-      const threads = helpers.number(ctx, "threads", _threads);
+      const threads = helpers.positiveInteger(ctx, "threads", _threads);
       const args = helpers.scriptArgs(ctx, _args);
-      if (isNaN(threads) || threads <= 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid thread count. Must be numeric and > 0, is ${threads}`);
-      }
       const scriptServer = GetServer(ctx.workerScript.hostname);
       if (scriptServer == null) {
         throw helpers.makeRuntimeErrorMsg(ctx, "Could not find server. This is a bug. Report to dev.");
@@ -701,11 +703,8 @@ export const ns: InternalAPI<NSFull> = {
     (_scriptname, _hostname, _threads = 1, ..._args) => {
       const scriptname = helpers.string(ctx, "scriptname", _scriptname);
       const hostname = helpers.string(ctx, "hostname", _hostname);
-      const threads = helpers.number(ctx, "threads", _threads);
+      const threads = helpers.positiveInteger(ctx, "threads", _threads);
       const args = helpers.scriptArgs(ctx, _args);
-      if (isNaN(threads) || threads <= 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid thread count. Must be numeric and > 0, is ${threads}`);
-      }
       const server = helpers.getServer(ctx, hostname);
       return runScriptFromScript("exec", server, scriptname, args, ctx.workerScript, threads);
     },
@@ -713,17 +712,10 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_scriptname, _threads = 1, ..._args) => {
       const scriptname = helpers.string(ctx, "scriptname", _scriptname);
-      const threads = helpers.number(ctx, "threads", _threads);
+      const threads = helpers.positiveInteger(ctx, "threads", _threads);
       const args = helpers.scriptArgs(ctx, _args);
-      if (!scriptname || !threads) {
-        throw helpers.makeRuntimeErrorMsg(ctx, "Usage: spawn(scriptname, threads)");
-      }
-
       const spawnDelay = 10;
       setTimeout(() => {
-        if (isNaN(threads) || threads <= 0) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `Invalid thread count. Must be numeric and > 0, is ${threads}`);
-        }
         const scriptServer = GetServer(ctx.workerScript.hostname);
         if (scriptServer == null) {
           throw helpers.makeRuntimeErrorMsg(ctx, "Could not find server. This is a bug. Report to dev");
@@ -740,7 +732,7 @@ export const ns: InternalAPI<NSFull> = {
     },
   kill:
     (ctx) =>
-    (scriptID, hostname?, ...scriptArgs) => {
+    (scriptID, hostname = ctx.workerScript.hostname, ...scriptArgs) => {
       const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
       let res;
       const killByPid = typeof ident === "number";
@@ -749,7 +741,7 @@ export const ns: InternalAPI<NSFull> = {
         res = killWorkerScript(ident);
       } else {
         // Kill by filename/hostname
-        if (scriptID === undefined || hostname === undefined) {
+        if (scriptID === undefined) {
           throw helpers.makeRuntimeErrorMsg(ctx, "Usage: kill(scriptname, server, [arg1], [arg2]...)");
         }
 
@@ -1699,10 +1691,11 @@ export const ns: InternalAPI<NSFull> = {
     },
   formatPercent:
     (ctx) =>
-    (_n, _fractionalDigits = 2) => {
+    (_n, _fractionalDigits = 2, _multStart = 1e6) => {
       const n = helpers.number(ctx, "n", _n);
       const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      return formatPercent(n, fractionalDigits);
+      const multStart = helpers.number(ctx, "multStart", _multStart);
+      return formatPercent(n, fractionalDigits, multStart);
     },
   // Todo: Remove function in 2.3. Until then it just directly wraps numeral.
   nFormat: (ctx) => (_n, _format) => {

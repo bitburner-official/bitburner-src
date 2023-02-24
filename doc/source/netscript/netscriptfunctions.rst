@@ -18,6 +18,9 @@ This includes information such as function signatures, what they do, and their r
     tprint() <basicfunctions/tprint>
     tFormat() <basicfunctions/tFormat>
     nFormat() <basicfunctions/nFormat>
+    formatNumber() <basicfunctions/formatNumber>
+    formatPercent() <basicfunctions/formatPercent>
+    formatRam() <basicfunctions/formatRam>
     disableLog() <basicfunctions/disableLog>
     enableLog() <basicfunctions/enableLog>
     isLogEnabled() <basicfunctions/isLogEnabled>
@@ -44,6 +47,7 @@ This includes information such as function signatures, what they do, and their r
     ls() <basicfunctions/ls>
     ps() <basicfunctions/ps>
     mv() <basicfunctions/mv>
+    rm() <basicfunctions/rm>
     hasRootAccess() <basicfunctions/hasRootAccess>
     getHostname() <basicfunctions/getHostname>
     getHackingLevel() <basicfunctions/getHackingLevel>
@@ -63,6 +67,7 @@ This includes information such as function signatures, what they do, and their r
     purchaseServer() <basicfunctions/purchaseServer>
     deleteServer() <basicfunctions/deleteServer>
     upgradePurchasedServer() <basicfunctions/upgradePurchasedServer>
+    renamePurchasedServer() <basicfunctions/renamePurchasedServer>
     getPurchasedServers() <basicfunctions/getPurchasedServers>
     getPurchasedServerLimit() <basicfunctions/getPurchasedServerLimit>
     getPurchasedServerMaxRam() <basicfunctions/getPurchasedServerMaxRam>

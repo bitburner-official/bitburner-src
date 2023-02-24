@@ -33,28 +33,14 @@ Returns a boolean indicating whether any instance of the specified script is run
 
 This is different than the [isRunning](./bitburner.ns.isrunning.md) function because it does not try to identify a specific instance of a running script by its arguments.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-//The function call will return true if there is any script named foo.script running on the foodnstuff server, and false otherwise:
-scriptRunning("foo.script", "foodnstuff");
+```js
+//The function call will return true if there is any script named foo.js running on the foodnstuff server, and false otherwise:
+ns.scriptRunning("foo.js", "foodnstuff");
 
-//The function call will return true if there is any script named “foo.script” running on the current server, and false otherwise:
-scriptRunning("foo.script", getHostname());
-```
-\*
-
-## Example 2
-
-
-```ts
-// NS2:
-//The function call will return true if there is any script named foo.script running on the foodnstuff server, and false otherwise:
-ns.scriptRunning("foo.script", "foodnstuff");
-
-//The function call will return true if there is any script named “foo.script” running on the current server, and false otherwise:
-ns.scriptRunning("foo.script", ns.getHostname());
+//The function call will return true if there is any script named “foo.js” running on the current server, and false otherwise:
+ns.scriptRunning("foo.js", ns.getHostname());
 ```
 

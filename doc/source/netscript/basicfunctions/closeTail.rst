@@ -1,7 +1,7 @@
 closeTail() Netscript Function
 ===============================
 
-.. js:function:: closeTail([scriptPid])
+.. js:function:: closeTail([scriptPid = current script])
 
     :RAM cost: 0 GB
 

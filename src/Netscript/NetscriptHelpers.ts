@@ -38,6 +38,7 @@ import { RamCostConstants } from "./RamCostGenerator";
 export const helpers = {
   string,
   number,
+  positiveInteger,
   scriptArgs,
   argsToString,
   makeBasicErrorMsg,
@@ -155,6 +156,15 @@ function number(ctx: NetscriptContext, argName: string, v: unknown): number {
     return v;
   }
   throw makeRuntimeErrorMsg(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
+}
+
+/** Convert provided value v for argument argName to a positive integer, throwing if it looks like something else. */
+function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): number {
+  const n = number(ctx, argName, v);
+  if (n < 1 || !Number.isInteger(n)) {
+    throw makeRuntimeErrorMsg(ctx, `${argName} should be a positive integer, was ${n}`, "TYPE");
+  }
+  return n;
 }
 
 /** Returns args back if it is a ScriptArg[]. Throws an error if it is not. */
@@ -424,17 +434,22 @@ function hack(
   ctx: NetscriptContext,
   hostname: string,
   manual: boolean,
-  { threads: requestedThreads, stock }: BasicHGWOptions = {},
+  { threads: requestedThreads, stock, additionalMsec: requestedSec }: BasicHGWOptions = {},
 ): Promise<number> {
   const ws = ctx.workerScript;
   const threads = helpers.resolveNetscriptRequestedThreads(ctx, requestedThreads);
+  const additionalMsec = number(ctx, "opts.additionalMsec", requestedSec ?? 0);
+  if (additionalMsec < 0) {
+    throw makeRuntimeErrorMsg(ctx, `additionalMsec must be non-negative, got ${additionalMsec}`);
+  }
   const server = getServer(ctx, hostname);
   if (!(server instanceof Server)) {
     throw makeRuntimeErrorMsg(ctx, "Cannot be executed on this server.");
   }
 
   // Calculate the hacking time
-  const hackingTime = calculateHackingTime(server, Player); // This is in seconds
+  // This is in seconds
+  const hackingTime = calculateHackingTime(server, Player) + additionalMsec / 1000.0;
 
   // No root access or skill level too low
   const canHack = netscriptCanHack(server);

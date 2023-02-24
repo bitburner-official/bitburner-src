@@ -5,7 +5,7 @@ deleteServer() Netscript Function
 
     :RAM cost: 2.25 GB
     :param string hostname: Hostname of the server to delete.
-    :returns: ``true`` if successful, ``false`` otherwise.
+    :returns: ``true`` if successful.
 
     Deletes the specified purchased server.
 

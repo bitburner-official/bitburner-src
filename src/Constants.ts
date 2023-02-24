@@ -6,7 +6,6 @@
 export const CONSTANTS: {
   VersionString: string;
   VersionNumber: number;
-  _idleSpeed: number;
   MaxSkillLevel: number;
   MilliPerCycle: number;
   CorpFactionRepRequirement: number;
@@ -88,11 +87,8 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.2.2dev",
-  VersionNumber: 29,
-
-  // Speed (in ms) at which the main loop is updated
-  _idleSpeed: 200,
+  VersionString: "2.3.0",
+  VersionNumber: 30,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -232,18 +228,24 @@ export const CONSTANTS: {
   Donations: 41,
 
   LatestUpdate: `
-v2.2.2 in progress development patch notes
+v2.3 Dev
 
-NETSCRIPT:
+Major bugfix (Will backport these changes to 2.2.2 if possible)
+* Fix an issue that prevented the Electron API server from communicating with the VSCode plugin. (credit to u/AnyGiraffe4367 on reddit)
 
-* Add unsupported ns.printRaw function, which allows printing rich content to script logs using React. (@d0sboots)
-* Fix an issue where multiple copies of the same script could be launched with same args/same server (@Mughur)
-* Internal changes to API wrapping. (@d0sboots)
+Other changes
+* Monaco script editor updated to a newer version. Also many internal code changes to support this. (@Snarling)
+* The SF9.3 bonus is also given to the player when inside of BN9. (@Zelow79)
+* Sleeve shock recovery now scales with intelligence. (@Tyasuh)
+* Nerf noodle bar
 
-MISC:
-
-* Updated large number of dependency packages (@d0sboots)
-* Refactored how bitnode multipliers for max / starting money work. (@d0sboots)
+Planned changes:
+* 2.3 will include a large planned rework to corporation. This may cause api breaks for any corporation scripts, and there will be large changes in how the corporation mechanic functions.
+* Enum changes, potentially causing API break with some enums. Enums will be more usable and there will be more of them.
+* Constants rework - interenal game constants will be reorganized and will be provided to the player as different categories of constants.
+* Improve type validation on ns functions.
+* Add more Script Editor configuration options (font family, ligatures, etc).
+* Further deprecation of ns1. Removal of more documentation, add ingame notice to prompt player to update scripts to .js.
 * Nerf noodle bar
 `,
 };

@@ -9,7 +9,7 @@ Format a number as a percentage.
 **Signature:**
 
 ```typescript
-formatPercent(n: number, fractionalDigits?: number): string;
+formatPercent(n: number, fractionalDigits?: number, multStart?: number): string;
 ```
 
 ## Parameters
@@ -18,6 +18,7 @@ formatPercent(n: number, fractionalDigits?: number): string;
 |  --- | --- | --- |
 |  n | number | Number to format as a percentage. |
 |  fractionalDigits | number | _(Optional)_ Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2. |
+|  multStart | number | _(Optional)_ |
 
 **Returns:**
 

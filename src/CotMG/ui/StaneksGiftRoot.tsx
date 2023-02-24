@@ -191,7 +191,7 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
       </Typography>
       {staneksGift.storedCycles > 5 && (
         <Typography sx={{ mb: 1 }}>
-          Bonus time: {convertTimeMsToTimeElapsedString(CONSTANTS._idleSpeed * staneksGift.storedCycles)}
+          Bonus time: {convertTimeMsToTimeElapsedString(CONSTANTS.MilliPerCycle * staneksGift.storedCycles)}
         </Typography>
       )}
       <MainBoard gift={staneksGift} />

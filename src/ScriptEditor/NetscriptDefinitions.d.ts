@@ -256,6 +256,9 @@ interface BasicHGWOptions {
   threads?: number;
   /** Set to true this action will affect the stock market. */
   stock?: boolean;
+  /** Number of additional milliseconds that will be spent waiting between the start of the function and when it
+   * completes. Experimental in 2.2.2, may be removed in 2.3. */
+  additionalMsec?: number;
 }
 
 /**
@@ -3588,6 +3591,15 @@ export interface Sleeve {
   getTask(sleeveNumber: number): SleeveTask | null;
 
   /**
+   * Set a sleeve to idle.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @param sleeveNumber - Index of the sleeve to idle.
+   */
+  setToIdle(sleeveNumber: number): void;
+
+  /**
    * Set a sleeve to shock recovery.
    * @remarks
    * RAM cost: 4 GB
@@ -3913,7 +3925,7 @@ interface ReputationFormulas {
   /**
    * Calculate how much rep would be gained.
    * @param amount - Amount of money donated
-   * @param player - Player info from {@link NS.getPlayer | getPlayer}
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    */
   repFromDonation(amount: number, player: Person): number;
 }
@@ -3926,8 +3938,8 @@ interface HackingFormulas {
   /**
    * Calculate hack chance.
    * (Ex: 0.25 would indicate a 25% chance of success.)
-   * @param server - Server info from {@link NS.getServer | getServer}
-   * @param player - Player info from {@link NS.getPlayer | getPlayer}
+   * @param server - Server info, typically from {@link NS.getServer | getServer}
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    * @returns The calculated hack chance.
    */
   hackChance(server: Server, player: Person): number;
@@ -3935,8 +3947,8 @@ interface HackingFormulas {
    * Calculate hack exp for one thread.
    * @remarks
    * Multiply by thread to get total exp
-   * @param server - Server info from {@link NS.getServer | getServer}
-   * @param player - Player info from {@link NS.getPlayer | getPlayer}
+   * @param server - Server info, typically from {@link NS.getServer | getServer}
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    * @returns The calculated hack exp.
    */
   hackExp(server: Server, player: Person): number;
@@ -3945,8 +3957,8 @@ interface HackingFormulas {
    * (Ex: 0.25 would steal 25% of the server's current value.)
    * @remarks
    * Multiply by thread to get total percent hacked.
-   * @param server - Server info from {@link NS.getServer | getServer}
-   * @param player - Player info from {@link NS.getPlayer | getPlayer}
+   * @param server - Server info, typically from {@link NS.getServer | getServer}
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    * @returns The calculated hack percent.
    */
   hackPercent(server: Server, player: Person): number;
@@ -3954,31 +3966,40 @@ interface HackingFormulas {
    * Calculate the percent a server would grow to.
    * Not exact due to limitations of mathematics.
    * (Ex: 3.0 would would grow the server to 300% of its current value.)
-   * @param server - Server info from {@link NS.getServer | getServer}
+   * @param server - Server info, typically from {@link NS.getServer | getServer}
    * @param threads - Amount of thread.
-   * @param player - Player info from {@link NS.getPlayer | getPlayer}
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    * @param cores - Number of cores on the computer that will execute grow.
    * @returns The calculated grow percent.
    */
   growPercent(server: Server, threads: number, player: Person, cores?: number): number;
   /**
+   * Calculate how many threads it will take to grow server to targetMoney. Starting money is server.moneyAvailable.
+   * @param server - Server info, typically from {@link NS.getServer | getServer}
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
+   * @param targetMoney - Desired final money, capped to server's moneyMax
+   * @param cores - Number of cores on the computer that will execute grow.
+   * @returns The calculated grow threads as an integer, rounded up.
+   */
+  growThreads(server: Server, player: Person, targetMoney: number, cores?: number): number;
+  /**
    * Calculate hack time.
-   * @param server - Server info from {@link NS.getServer | getServer}
-   * @param player - Player info from {@link NS.getPlayer | getPlayer}
+   * @param server - Server info, typically from {@link NS.getServer | getServer}
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    * @returns The calculated hack time.
    */
   hackTime(server: Server, player: Person): number;
   /**
    * Calculate grow time.
-   * @param server - Server info from {@link NS.getServer | getServer}
-   * @param player - Player info from {@link NS.getPlayer | getPlayer}
+   * @param server - Server info, typically from {@link NS.getServer | getServer}
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    * @returns The calculated grow time.
    */
   growTime(server: Server, player: Person): number;
   /**
    * Calculate weaken time.
-   * @param server - Server info from {@link NS.getServer | getServer}
-   * @param player - Player info from {@link NS.getPlayer | getPlayer}
+   * @param server - Server info, typically from {@link NS.getServer | getServer}
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    * @returns The calculated weaken time.
    */
   weakenTime(server: Server, player: Person): number;
@@ -4561,22 +4582,10 @@ export interface NS {
    * Use `args.length` to get the number of arguments that were passed into a script.
    *
    * @example
-   * `run example.script 7 text true`
-   *
-   * ```js
-   * // NS1 - example.script
-   * tprint(args.length) // 3
-   * tprint(args[0]); // 7 (number)
-   * tprint(args[1]); // "text" (string)
-   * tprint(args[2]); // true (boolean)
-   * tprint(args[3]); // undefined, because only 3 arguments were provided
-   * ```
-   *
-   * @example
    * `run example.js 7 text true`
    *
    * ```js
-   * // NS2 - example.js
+   * // example.js
    * export async function main(ns) {
    *   ns.tprint(ns.args.length) // 3
    *   ns.tprint(ns.args[0]); // 7 (number)
@@ -4629,32 +4638,39 @@ export interface NS {
    * RAM cost: 0.15 GB
    *
    * Use your hacking skills to increase the amount of money available on a server.
-   * The runtime for this command depends on your hacking level and the target server’s
-   * security level. When `grow` completes, the money available on a target server will be increased
-   * by amount equal to the number of threads used and a certain, fixed percentage of current money on
-   * the server. This percentage is determined by the target server’s growth rate (which varies between servers)
-   * and security level. Generally, higher-level servers have higher growth rates.
-   * The {@link NS.getServerGrowth | getServerGrowth} function can be used to obtain a server’s growth rate.
    *
-   * Like {@link NS.hack | hack}, `grow` can be called on any server, regardless of where the script is running.
+   * Once the grow is complete, $1 is added to the server's available money for every script thread. This additive
+   * growth allows for rescuing a server even after it is emptied.
+   *
+   * After this addition, the thread count is also used to determine a multiplier, which the server's money is then
+   * multiplied by.
+   *
+   * The multiplier scales exponentially with thread count, and its base depends on the server's security
+   * level and in inherent "growth" statistic that varies between different servers.
+   *
+   * {@link NS.getServerGrowth | getServerGrowth} can be used to check the inherent growth statistic of a server.
+   *
+   * {@link NS.growthAnalyze | growthAnalyze} can be used to determine the number of threads needed for a specified
+   * multiplicative portion of server growth.
+   *
+   * To determine the effect of a single grow, obtain access to the Formulas API and use
+   * {@link HackingFormulas.growPercent | formulas.hacking.growPercent}, or invert {@link NS.growthAnalyze | growthAnalyze}.
+   *
+   * Like {@link NS.hack | hack}, `grow` can be called on any hackable server, regardless of where the script is
+   * running. Hackable servers are any servers not owned by the player.
+   *
    * The grow() command requires root access to the target server, but there is no required hacking
-   * level to run the command. It also raises the security level of the target server by 0.004.
+   * level to run the command. It also raises the security level of the target server based on the number of threads.
+   * The security increase can be determined using {@link NS.growthAnalyzeSecurity | growthAnalyzeSecurity}.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var currentMoney = getServerMoneyAvailable("foodnstuff");
-   * currentMoney = currentMoney * grow("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * let currentMoney = ns.getServerMoneyAvailable("foodnstuff");
+   * ```js
+   * let currentMoney = ns.getServerMoneyAvailable("n00dles");
    * currentMoney *= await ns.grow("foodnstuff");
    * ```
    * @param host - Hostname of the target server to grow.
    * @param opts - Optional parameters for configuring function behavior.
-   * @returns The number by which the money on the server was multiplied for the growth.
+   * @returns The total effective multiplier that was applied to the server's money (after both additive and multiplicative growth).
    */
   grow(host: string, opts?: BasicHGWOptions): Promise<number>;
 
@@ -4703,22 +4719,24 @@ export interface NS {
   weakenAnalyze(threads: number, cores?: number): number;
 
   /**
-   * Predict the effect of hack.
+   * Calculate the decimal number of threads needed to hack a specified amount of money from a target host.
    * @remarks
    * RAM cost: 1 GB
    *
-   * This function returns the number of script threads you need when running the hack command
+   * This function returns the decimal number of script threads you need when running the hack command
    * to steal the specified amount of money from the target server.
    * If hackAmount is less than zero or greater than the amount of money available on the server,
    * then this function returns -1.
    *
-   * Warning: The value returned by this function isn’t necessarily a whole number.
    *
    * @example
    * ```ts
-   * //For example, let’s say the foodnstuff server has $10m and you run:
-   * hackAnalyzeThreads("foodnstuff", 1e6);
-   * //If this function returns 50, this means that if your next hack call is run on a script with 50 threads, it will steal $1m from the foodnstuff server.
+   * // Calculate threadcount of a single hack that would take $100k from n00dles
+   * const hackThreads = hackAnalyzeThreads("n00dles", 1e5);
+   *
+   * // Launching a script requires an integer thread count. The below would take less than the targeted $100k.
+   * ns.run("noodleHack.js", Math.floor(hackThreads))
+   *
    * ```
    * @param host - Hostname of the target server to analyze.
    * @param hackAmount - Amount of money you want to hack from the server.
@@ -4733,16 +4751,11 @@ export interface NS {
    *
    * Returns the part of the specified server’s money you will steal with a single thread hack.
    *
+   * Like other basic hacking analysis functions, this calculation uses the current status of the player and server.
+   * To calculate using hypothetical server or player status, obtain access to the Formulas API and use {@link HackingFormulas.hackPercent | formulas.hacking.hackPercent}.
+   *
    * @example
-   * ```ts
-   * // NS1:
-   * //For example, assume the following returns 0.01:
-   * var hackAmount = hackAnalyze("foodnstuff");
-   * //This means that if hack the foodnstuff server using a single thread, then you will steal 1%, or 0.01 of its total money. If you hack using N threads, then you will steal N*0.01 times its total money.
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * //For example, assume the following returns 0.01:
    * const hackAmount = ns.hackAnalyze("foodnstuff");
    * //This means that if hack the foodnstuff server using a single thread, then you will steal 1%, or 0.01 of its total money. If you hack using N threads, then you will steal N*0.01 times its total money.
@@ -4774,43 +4787,45 @@ export interface NS {
    *
    * This returned value is in decimal form, not percentage.
    *
+   * Like other basic hacking analysis functions, this calculation uses the current status of the player and server.
+   * To calculate using hypothetical server or player status, obtain access to the Formulas API and use {@link HackingFormulas.hackChance | formulas.hacking.hackChance}.
+   *
    * @param host - Hostname of the target server.
    * @returns The chance you have of successfully hacking the target server.
    */
   hackAnalyzeChance(host: string): number;
 
   /**
-   * Calculate the number of grow threads needed to grow a server by a certain multiplier.
+   * Calculate the number of grow threads needed for a given multiplicative growth factor.
    * @remarks
    * RAM cost: 1 GB
    *
-   * This function returns the number of “growths” needed in order to increase
-   * the amount of money available on the specified server by the specified amount.
-   * The specified amount is multiplicative and is in decimal form, not percentage.
+   * This function returns the total decimal number of {@link NS.grow | grow} threads needed in order to multiply the
+   * money available on the specified server by a given multiplier, if all threads are executed at the server's current
+   * security level, regardless of how many threads are assigned to each call.
    *
-   * Due to limitations of mathematics, this function won't be the true value, but an approximation.
+   * Note that there is also an additive factor that is applied before the multiplier. Each {@link NS.grow | grow} call
+   * will add $1 to the host's money for each thread before applying the multiplier for its thread count. This means
+   * that at extremely low starting money, fewer threads would be needed to apply the same effective multiplier than
+   * what is calculated by growthAnalyze.
    *
-   * Warning: The value returned by this function isn’t necessarily a whole number.
+   * Like other basic hacking analysis functions, this calculation uses the current status of the player and server.
+   * To calculate using hypothetical server or player status, obtain access to the Formulas API and use {@link HackingFormulas.growThreads | formulas.hacking.growThreads}.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //For example, if you want to determine how many grow calls you need to double the amount of money on foodnstuff, you would use:
-   * var growTimes = growthAnalyze("foodnstuff", 2);
-   * //If this returns 100, then this means you need to call grow 100 times in order to double the money (or once with 100 threads).
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //For example, if you want to determine how many grow calls you need to double the amount of money on foodnstuff, you would use:
-   * const growTimes = ns.growthAnalyze("foodnstuff", 2);
-   * //If this returns 100, then this means you need to call grow 100 times in order to double the money (or once with 100 threads).
+   * ```js
+   * // calculate number of grow threads to apply 2x growth multiplier on n00dles (does not include the additive growth).
+   * const growThreads = ns.growthAnalyze("n00dles", 2);
+   *
+   * // When using the thread count to launch a script, it needs to be converted to an integer.
+   * ns.run("noodleGrow.js", Math.ceil(growThreads));
    * ```
    * @param host - Hostname of the target server.
-   * @param growthAmount - Multiplicative factor by which the server is grown. Decimal form.
-   * @returns The amount of grow calls needed to grow the specified server by the specified amount.
+   * @param multiplier - Multiplier that will be applied to a server's money after applying additive growth. Decimal form.
+   * @param cores - Number of cores on the host running the grow function. Optional, defaults to 1.
+   * @returns Decimal number of grow threads needed for the specified multiplicative growth factor (does not include additive growth).
    */
-  growthAnalyze(host: string, growthAmount: number, cores?: number): number;
+  growthAnalyze(host: string, multiplier: number, cores?: number): number;
 
   /**
    * Calculate the security increase for a number of threads.
@@ -5061,28 +5076,15 @@ export interface NS {
    * Remember that scripts are uniquely identified by both their names and arguments.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //Get logs from foo.script on the current server that was run with no args
-   * getScriptLogs("foo.script");
+   * ```js
+   * //Get logs from foo.js on the current server that was run with no args
+   * ns.getScriptLogs("foo.js");
    *
-   * //Open logs from foo.script on the foodnstuff server that was run with no args
-   * getScriptLogs("foo.script", "foodnstuff");
+   * //Open logs from foo.js on the foodnstuff server that was run with no args
+   * ns.getScriptLogs("foo.js", "foodnstuff");
    *
-   * //Open logs from foo.script on the foodnstuff server that was run with the arguments [1, "test"]
-   * getScriptLogs("foo.script", "foodnstuff", 1, "test");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //Get logs from foo.script on the current server that was run with no args
-   * ns.getScriptLogs("foo.script");
-   *
-   * //Open logs from foo.script on the foodnstuff server that was run with no args
-   * ns.getScriptLogs("foo.script", "foodnstuff");
-   *
-   * //Open logs from foo.script on the foodnstuff server that was run with the arguments [1, "test"]
-   * ns.getScriptLogs("foo.script", "foodnstuff", 1, "test");
+   * //Open logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
+   * ns.getScriptLogs("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename of script to get logs from.
    * @param host - Optional. Hostname of the server that the script is on.
@@ -5125,28 +5127,15 @@ export interface NS {
    * Remember that scripts are uniquely identified by both their names and arguments.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //Open logs from foo.script on the current server that was run with no args
-   * tail("foo.script");
+   * ```js
+   * //Open logs from foo.js on the current server that was run with no args
+   * ns.tail("foo.js");
    *
-   * //Get logs from foo.script on the foodnstuff server that was run with no args
-   * tail("foo.script", "foodnstuff");
+   * //Get logs from foo.js on the foodnstuff server that was run with no args
+   * ns.tail("foo.js", "foodnstuff");
    *
-   * //Get logs from foo.script on the foodnstuff server that was run with the arguments [1, "test"]
-   * tail("foo.script", "foodnstuff", 1, "test");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //Open logs from foo.script on the current server that was run with no args
-   * ns.tail("foo.script");
-   *
-   * //Get logs from foo.script on the foodnstuff server that was run with no args
-   * ns.tail("foo.script", "foodnstuff");
-   *
-   * //Get logs from foo.script on the foodnstuff server that was run with the arguments [1, "test"]
-   * ns.tail("foo.script", "foodnstuff", 1, "test");
+   * //Get logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
+   * ns.tail("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
    * @param host - Optional. Hostname of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
@@ -5408,31 +5397,18 @@ export interface NS {
    * Running this function with a numThreads argument of 0 or less will cause a runtime error.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //The simplest way to use the run command is to call it with just the script name. The following example will run ‘foo.script’ single-threaded with no arguments:
-   * run("foo.script");
+   * ```js
+   * //The simplest way to use the run command is to call it with just the script name. The following example will run ‘foo.js’ single-threaded with no arguments:
+   * ns.run("foo.js");
    *
-   * //The following example will run ‘foo.script’ but with 5 threads instead of single-threaded:
-   * run("foo.script", 5);
+   * //The following example will run ‘foo.js’ but with 5 threads instead of single-threaded:
+   * ns.run("foo.js", 5);
    *
-   * //This next example will run ‘foo.script’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
-   * run("foo.script", 1, 'foodnstuff');
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //The simplest way to use the run command is to call it with just the script name. The following example will run ‘foo.script’ single-threaded with no arguments:
-   * ns.run("foo.script");
-   *
-   * //The following example will run ‘foo.script’ but with 5 threads instead of single-threaded:
-   * ns.run("foo.script", 5);
-   *
-   * //This next example will run ‘foo.script’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
-   * ns.run("foo.script", 1, 'foodnstuff');
+   * //This next example will run ‘foo.js’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
+   * ns.run("foo.js", 1, 'foodnstuff');
    * ```
    * @param script - Filename of script to run.
-   * @param numThreads - Optional thread count for new script. Set to 1 by default. Will be rounded to nearest integer.
+   * @param numThreads - Integer number of threads for new script. Defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the second argument numThreads must be filled in with a value.
    * @returns Returns the PID of a successfully started script, and 0 otherwise.
    */
@@ -5455,46 +5431,28 @@ export interface NS {
    * Running this function with a numThreads argument of 0 or less will cause a runtime error.
    *
    * @example
-   * ```ts
-   * // NS1:
+   * ```js
    * // The simplest way to use the exec command is to call it with just the script name
-   * // and the target server. The following example will try to run generic-hack.script
+   * // and the target server. The following example will try to run generic-hack.js
    * // on the foodnstuff server.
-   * exec("generic-hack.script", "foodnstuff");
+   * ns.exec("generic-hack.js", "foodnstuff");
    *
-   * // The following example will try to run the script generic-hack.script on the
+   * // The following example will try to run the script generic-hack.js on the
    * // joesguns server with 10 threads.
-   * exec("generic-hack.script", "joesguns", 10);
+   * ns.exec("generic-hack.js", "joesguns", 10);
    *
-   * // This last example will try to run the script foo.script on the foodnstuff server
+   * // This last example will try to run the script foo.js on the foodnstuff server
    * // with 5 threads. It will also pass the number 1 and the string “test” in as
    * // arguments to the script.
-   * exec("foo.script", "foodnstuff", 5, 1, "test");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * // The simplest way to use the exec command is to call it with just the script name
-   * // and the target server. The following example will try to run generic-hack.script
-   * // on the foodnstuff server.
-   * ns.exec("generic-hack.script", "foodnstuff");
-   *
-   * // The following example will try to run the script generic-hack.script on the
-   * // joesguns server with 10 threads.
-   * ns.exec("generic-hack.script", "joesguns", 10);
-   *
-   * // This last example will try to run the script foo.script on the foodnstuff server
-   * // with 5 threads. It will also pass the number 1 and the string “test” in as
-   * // arguments to the script.
-   * ns.exec("foo.script", "foodnstuff", 5, 1, "test");
+   * ns.exec("foo.js", "foodnstuff", 5, 1, "test");
    * ```
    * @param script - Filename of script to execute.
-   * @param host - Hostname of the `target server` on which to execute the script.
-   * @param numThreads - Optional thread count for new script. Set to 1 by default. Will be rounded down to the nearest integer.
+   * @param hostname - Hostname of the `target server` on which to execute the script.
+   * @param numThreads - Integer number of threads for new script. Defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument numThreads must be filled in with a value.
    * @returns Returns the PID of a successfully started script, and 0 otherwise.
    */
-  exec(script: string, host: string, numThreads?: number, ...args: (string | number | boolean)[]): number;
+  exec(script: string, hostname: string, numThreads?: number, ...args: (string | number | boolean)[]): number;
 
   /**
    * Terminate current script and start another in 10 seconds.
@@ -5511,92 +5469,60 @@ export interface NS {
    * Running this function with a numThreads argument of 0 or less will cause a runtime error.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //The following example will execute the script ‘foo.script’ with 10 threads and the arguments ‘foodnstuff’ and 90:
-   * spawn('foo.script', 10, 'foodnstuff', 90);
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //The following example will execute the script ‘foo.script’ with 10 threads and the arguments ‘foodnstuff’ and 90:
-   * ns.spawn('foo.script', 10, 'foodnstuff', 90);
+   * ```js
+   * //The following example will execute the script ‘foo.js’ with 10 threads and the arguments ‘foodnstuff’ and 90:
+   * ns.spawn('foo.js', 10, 'foodnstuff', 90);
    * ```
    * @param script - Filename of script to execute.
-   * @param numThreads - Number of threads to spawn new script with. Will be rounded to nearest integer.
+   * @param numThreads - Integer number of threads for new script. Defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run.
    */
   spawn(script: string, numThreads?: number, ...args: (string | number | boolean)[]): void;
 
   /**
-   * Terminate another script.
+   * Terminate the script with the provided PID.
    * @remarks
    * RAM cost: 0.5 GB
    *
-   * Kills the script on the target server specified by the script’s name and arguments.
-   * Remember that scripts are uniquely identified by both their names and arguments.
-   * For example, if `foo.script` is run with the argument 1, then this is not the same as
-   * `foo.script` run with the argument 2, even though they have the same name.
+   * Kills the script with the provided PID.
+   * To instead kill a script using its filename, hostname, and args, see {@link NS.(kill:2) | the other ns.kill entry}.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
-   * kill("foo.script", "foodnstuff");
-   *
-   * //The following will try to kill a script named foo.script on the current server that was ran with no arguments:
-   * kill("foo.script", getHostname());
-   *
-   * //The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
-   * kill("foo.script", getHostname(), 1, "foodnstuff");
+   * ```js
+   * // kills the script with PID 20:
+   * ns.kill(20);
    * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
-   * ns.kill("foo.script", "foodnstuff");
    *
-   * //The following will try to kill a script named foo.script on the current server that was ran with no arguments:
-   * ns.kill("foo.script", getHostname());
-   *
-   * //The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
-   * ns.kill("foo.script", getHostname(), 1, "foodnstuff");
-   * ```
-   * @param script - Filename or PID of the script to kill.
-   * @param host - Hostname of the server on which to kill the script.
-   * @param args - Arguments to identify which script to kill.
+   * @param pid - The PID of the script to kill.
    * @returns True if the script is successfully killed, and false otherwise.
    */
-  kill(script: number): boolean;
+  kill(pid: number): boolean;
 
   /**
-   * {@inheritDoc NS.(kill:1)}
+   * Terminate the script with the provided filename, hostname, and script arguments.
+   * @remarks
+   * RAM cost: 0.5 GB
+   *
+   * Kills the script with the provided filename, running on the specified host with the specified args.
+   * To instead kill a script using its PID, see {@link NS.(kill:1) | the other ns.kill entry}.
+   *
    * @example
-   * ```ts
-   * // NS1:
-   * //The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
-   * kill("foo.script", "foodnstuff");
+   * ```js
+   * // kill the script "foo.js" on the same server the current script is running from, with no arguments
+   * ns.kill("foo.js");
    *
-   * //The following will try to kill a script named foo.script on the current server that was ran with no arguments:
-   * kill("foo.script", getHostname());
+   * // kill the script "foo.js" on the "n00dles" server with no arguments.
+   * ns.kill("foo.js", "n00dles");
    *
-   * //The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
-   * kill("foo.script", getHostname(), 1, "foodnstuff");
+   * // kill the script foo.js on the current server that was ran with the arguments [1, “foodnstuff”, false]:
+   * ns.kill("foo.js", ns.getHostname(), 1, "foodnstuff", false);
    * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //The following example will try to kill a script named foo.script on the foodnstuff server that was ran with no arguments:
-   * ns.kill("foo.script", "foodnstuff");
-   *
-   * //The following will try to kill a script named foo.script on the current server that was ran with no arguments:
-   * ns.kill("foo.script", getHostname());
-   *
-   * //The following will try to kill a script named foo.script on the current server that was ran with the arguments 1 and “foodnstuff”:
-   * ns.kill("foo.script", getHostname(), 1, "foodnstuff");
-   * ```
+   * @param filename - Filename of the script to kill.
+   * @param hostname - Hostname where the script to kill is running. Defaults to the current server.
+   * @param args - Arguments of the script to kill.
+   * @returns True if the script is successfully killed, and false otherwise.
    */
-  kill(script: string, host: string, ...args: (string | number | boolean)[]): boolean;
+  kill(filename: string, hostname?: string, ...args: ScriptArg[]): boolean;
 
   /**
    * Terminate all scripts on a server.
@@ -5630,30 +5556,18 @@ export interface NS {
    * specifying a single file to copy, or an array of strings specifying multiple files to copy.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //Copies foo.lit from the helios server to the home computer:
-   * scp("foo.lit", "home", "helios");
-   *
-   * //Tries to copy three files from rothman-uni to home computer:
-   * files = ["foo1.lit", "foo2.script", "foo3.script"];
-   * scp(files, "home", "rothman-uni");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * //Copies foo.lit from the helios server to the home computer:
    * ns.scp("foo.lit", "home", "helios" );
    *
    * //Tries to copy three files from rothman-uni to home computer:
-   * files = ["foo1.lit", "foo2.script", "foo3.script"];
-   * ns.scp(files,  "home", "rothman-uni");
+   * files = ["foo1.lit", "foo2.txt", "foo3.js"];
+   * ns.scp(files, "home", "rothman-uni");
    * ```
    * @example
-   * ```ts
-   * //ns2, copies files from home to a target server
+   * ```js
    * const server = ns.args[0];
-   * const files = ["hack.js","weaken.js","grow.js"];
+   * const files = ["hack.js", "weaken.js", "grow.js"];
    * ns.scp(files, server, "home");
    * ```
    * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
@@ -5897,16 +5811,11 @@ export interface NS {
   getServerMinSecurityLevel(host: string): number;
 
   /**
-   * @deprecated useless
+   * Get the base security level of a server.
    * @remarks
    * RAM cost: 0.1 GB
-   * Returns the base security level of the target server. This is the security
-   * level that the server starts out with. This is different than
-   * getServerSecurityLevel because getServerSecurityLevel returns
-   * the current security level of a server, which can constantly change due to
-   * hack, grow, and weaken, calls on that server.
-   * The base security level will stay the same until you reset by
-   * installing an Augmentation(s).
+   * Returns the base security level of the target server.
+   * For the server's actual security level, use {@link NS.getServerSecurityLevel | ns.getServerSecurityLevel}.
    *
    * @param host - Host of target server.
    * @returns Base security level of the target server.
@@ -5972,20 +5881,10 @@ export interface NS {
    * If the hostname/ip argument is omitted, then the function will search through the current
    * server (the server running the script that calls this function) for the file.
    *
-   * @example
-   * ```ts
-   * // NS1:
-   * //The function call will return true if the script named foo.script exists on the foodnstuff server, and false otherwise.
-   * fileExists("foo.script", "foodnstuff");
-   *
-   * //The function call will return true if the current server contains the FTPCrack.exe program, and false otherwise.
-   * fileExists("ftpcrack.exe");
-   * ```
    * * @example
-   * ```ts
-   * // NS2:
-   * // The function call will return true if the script named foo.script exists on the foodnstuff server, and false otherwise.
-   * ns.fileExists("foo.script", "foodnstuff");
+   * ```js
+   * // The function call will return true if the script named foo.js exists on the foodnstuff server, and false otherwise.
+   * ns.fileExists("foo.js", "foodnstuff");
    *
    * // The function call will return true if the current server contains the FTPCrack.exe program, and false otherwise.
    * ns.fileExists("ftpcrack.exe");
@@ -6006,28 +5905,15 @@ export interface NS {
    * Remember that a script is uniquely identified by both its name and its arguments.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //The function call will return true if there is a script named foo.script with no arguments running on the foodnstuff server, and false otherwise:
-   * isRunning("foo.script", "foodnstuff");
+   * ```js
+   * //The function call will return true if there is a script named foo.js with no arguments running on the foodnstuff server, and false otherwise:
+   * ns.isRunning("foo.js", "foodnstuff");
    *
-   * //The function call will return true if there is a script named foo.script with no arguments running on the current server, and false otherwise:
-   * isRunning("foo.script", getHostname());
+   * //The function call will return true if there is a script named foo.js with no arguments running on the current server, and false otherwise:
+   * ns.isRunning("foo.js", ns.getHostname());
    *
-   * //The function call will return true if there is a script named foo.script running with the arguments 1, 5, and “test” (in that order) on the joesguns server, and false otherwise:
-   * isRunning("foo.script", "joesguns", 1, 5, "test");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * //The function call will return true if there is a script named foo.script with no arguments running on the foodnstuff server, and false otherwise:
-   * ns.isRunning("foo.script", "foodnstuff");
-   *
-   * //The function call will return true if there is a script named foo.script with no arguments running on the current server, and false otherwise:
-   * ns.isRunning("foo.script", ns.getHostname());
-   *
-   * //The function call will return true if there is a script named foo.script running with the arguments 1, 5, and “test” (in that order) on the joesguns server, and false otherwise:
-   * ns.isRunning("foo.script", "joesguns", 1, 5, "test");
+   * //The function call will return true if there is a script named foo.js running with the arguments 1, 5, and “test” (in that order) on the joesguns server, and false otherwise:
+   * ns.isRunning("foo.js", "joesguns", 1, 5, "test");
    * ```
    * @param script - Filename or PID of script to check. This is case-sensitive.
    * @param host - Hostname of target server.
@@ -6242,7 +6128,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function is used to read data from a text file (.txt) or script (.script, .js).
+   * This function is used to read data from a text file (.txt) or script (.js or .script).
    *
    * This function will return the data in the specified file.
    * If the file does not exist, an empty string will be returned.
@@ -6349,22 +6235,12 @@ export interface NS {
    * identify a specific instance of a running script by its arguments.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * //The function call will return true if there is any script named foo.script running on the foodnstuff server, and false otherwise:
-   * scriptRunning("foo.script", "foodnstuff");
+   * ```js
+   * //The function call will return true if there is any script named foo.js running on the foodnstuff server, and false otherwise:
+   * ns.scriptRunning("foo.js", "foodnstuff");
    *
-   * //The function call will return true if there is any script named “foo.script” running on the current server, and false otherwise:
-   * scriptRunning("foo.script", getHostname());
-   * ```
-   * * @example
-   * ```ts
-   * // NS2:
-   * //The function call will return true if there is any script named foo.script running on the foodnstuff server, and false otherwise:
-   * ns.scriptRunning("foo.script", "foodnstuff");
-   *
-   * //The function call will return true if there is any script named “foo.script” running on the current server, and false otherwise:
-   * ns.scriptRunning("foo.script", ns.getHostname());
+   * //The function call will return true if there is any script named “foo.js” running on the current server, and false otherwise:
+   * ns.scriptRunning("foo.js", ns.getHostname());
    * ```
    * @param script - Filename of script to check. This is case-sensitive.
    * @param host - Hostname of target server.
@@ -6587,12 +6463,14 @@ export interface NS {
    *
    * @param n - Number to format as a percentage.
    * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+   * @param suffixStart - When to switch the percentage to a multiplier. Default is 1e6 or x1.00m.
    * @returns Formatted percentage.
    */
-  formatPercent(n: number, fractionalDigits?: number): string;
+  formatPercent(n: number, fractionalDigits?: number, multStart?: number): string;
 
   /**
    * Format a number using the numeral library. This function is deprecated and will be removed in 2.3.
+   * @deprecated Use ns.formatNumber, formatRam, or formatPercent instead. Will be removed in 2.3.
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6727,7 +6605,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Retrieves data from a URL and downloads it to a file on the specified server.
-   * The data can only be downloaded to a script (.script, .js) or a text file (.txt).
+   * The data can only be downloaded to a script (.js or .script) or a text file (.txt).
    * If the file already exists, it will be overwritten by this command.
    * Note that it will not be possible to download data from many websites because they
    * do not allow cross-origin resource sharing (CORS).
@@ -6744,13 +6622,7 @@ export interface NS {
    * you will not be able to process the returned value of wget in Netscript 1.0.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * wget("https://raw.githubusercontent.com/bitburner-official/bitburner-src/master/README.md", "game_readme.txt");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * await ns.wget("https://raw.githubusercontent.com/bitburner-official/bitburner-src/master/README.md", "game_readme.txt");
    * ```
    * @param url - URL to pull data from.
@@ -6861,17 +6733,7 @@ export interface NS {
    *
    * Allows Unix-like flag parsing.
    * @example
-   * ```ts
-   * // example.script
-   * var data = flags([
-   *     ['delay', 0], // a default number means this flag is a number
-   *     ['server', 'foodnstuff'], //  a default string means this flag is a string
-   *     ['exclude', []], // a default array means this flag is a default array of string
-   *     ['help', false], // a default boolean means this flag is a boolean
-   * ]);
-   * tprint(data);
-   *
-   * // example.js
+   * ```js
    * export async function main(ns) {
    *   const data = ns.flags([
    *     ['delay', 0], // a default number means this flag is a number
@@ -6882,15 +6744,15 @@ export interface NS {
    *   ns.tprint(data);
    * }
    *
-   * // [home ~/]> run example.script
+   * // [home ~/]> run example.js
    * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":false}
-   * // [home ~/]> run example.script --delay 3000
+   * // [home ~/]> run example.js --delay 3000
    * // {"_":[],"server":"foodnstuff","exclude":[],"help":false,"delay":3000}
-   * // [home ~/]> run example.script --delay 3000 --server harakiri-sushi
+   * // [home ~/]> run example.js --delay 3000 --server harakiri-sushi
    * // {"_":[],"exclude":[],"help":false,"delay":3000,"server":"harakiri-sushi"}
-   * // [home ~/]> run example.script --delay 3000 --server harakiri-sushi hello world
+   * // [home ~/]> run example.js --delay 3000 --server harakiri-sushi hello world
    * // {"_":["hello","world"],"exclude":[],"help":false,"delay":3000,"server":"harakiri-sushi"}
-   * // [home ~/]> run example.script --delay 3000 --server harakiri-sushi hello world --exclude a --exclude b
+   * // [home ~/]> run example.js --delay 3000 --server harakiri-sushi hello world --exclude a --exclude b
    * // {"_":["hello","world"],"help":false,"delay":3000,"server":"harakiri-sushi","exclude":["a","b"]}
    * // [home ~/]> run example.script --help
    * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":true}
@@ -7924,6 +7786,8 @@ export interface Office {
   avgHap: number;
   /** Average morale of the employees */
   avgMor: number;
+  /** Total experience of all employees */
+  totalExperience: number;
   /** Production of the employees */
   employeeProd: Record<CorpEmployeePosition, number>;
   /** Positions of the employees */

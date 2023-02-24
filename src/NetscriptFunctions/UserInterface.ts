@@ -28,17 +28,16 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
       const hex = /^(#)((?:[A-Fa-f0-9]{2}){3,4}|(?:[A-Fa-f0-9]{3}))$/;
       const currentTheme = { ...Settings.theme };
       const errors: string[] = [];
-      if (typeof newTheme !== "object")
-        for (const key of Object.keys(newTheme)) {
-          if (!currentTheme[key]) {
-            // Invalid key
-            errors.push(`Invalid key "${key}"`);
-          } else if (!hex.test(newTheme[key] ?? "")) {
-            errors.push(`Invalid color "${key}": ${newTheme[key]}`);
-          } else {
-            currentTheme[key] = newTheme[key];
-          }
+      for (const key of Object.keys(newTheme)) {
+        if (!currentTheme[key]) {
+          // Invalid key
+          errors.push(`Invalid key "${key}"`);
+        } else if (!hex.test(newTheme[key] ?? "")) {
+          errors.push(`Invalid color "${key}": ${newTheme[key]}`);
+        } else {
+          currentTheme[key] = newTheme[key];
         }
+      }
 
       if (errors.length === 0) {
         Object.assign(Settings.theme, currentTheme);

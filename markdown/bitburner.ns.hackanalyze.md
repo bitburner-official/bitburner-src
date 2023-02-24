@@ -30,21 +30,12 @@ RAM cost: 1 GB
 
 Returns the part of the specified server’s money you will steal with a single thread hack.
 
-## Example 1
+Like other basic hacking analysis functions, this calculation uses the current status of the player and server. To calculate using hypothetical server or player status, obtain access to the Formulas API and use [formulas.hacking.hackPercent](./bitburner.hackingformulas.hackpercent.md)<!-- -->.
+
+## Example
 
 
-```ts
-// NS1:
-//For example, assume the following returns 0.01:
-var hackAmount = hackAnalyze("foodnstuff");
-//This means that if hack the foodnstuff server using a single thread, then you will steal 1%, or 0.01 of its total money. If you hack using N threads, then you will steal N*0.01 times its total money.
-```
-
-## Example 2
-
-
-```ts
-// NS2:
+```js
 //For example, assume the following returns 0.01:
 const hackAmount = ns.hackAnalyze("foodnstuff");
 //This means that if hack the foodnstuff server using a single thread, then you will steal 1%, or 0.01 of its total money. If you hack using N threads, then you will steal N*0.01 times its total money.

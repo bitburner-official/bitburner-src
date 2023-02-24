@@ -45,7 +45,7 @@ export class StaneksGift extends BaseGift {
   }
 
   inBonus(): boolean {
-    return (this.storedCycles * CONSTANTS._idleSpeed) / 1000 > 1;
+    return (this.storedCycles * CONSTANTS.MilliPerCycle) / 1000 > 1;
   }
 
   process(numCycles = 1): void {

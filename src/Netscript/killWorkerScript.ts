@@ -66,11 +66,12 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   if (typeof ws.atExit === "function") {
     try {
       ws.env.stopFlag = false;
-      ws.atExit();
+      const atExit = ws.atExit;
+      ws.atExit = undefined;
+      atExit();
     } catch (e: unknown) {
       handleUnknownError(e, ws, "Error running atExit function.\n\n");
     }
-    ws.atExit = undefined;
   }
   ws.env.stopFlag = true;
   removeWorkerScript(ws);

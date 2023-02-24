@@ -82,7 +82,7 @@ export class Gang {
 
   process(numCycles = 1): void {
     // Run every cycle
-    const CyclesPerSecond = 1000 / CONSTANTS._idleSpeed;
+    const CyclesPerSecond = 1000 / CONSTANTS.MilliPerCycle;
 
     if (isNaN(numCycles)) {
       console.error(`NaN passed into Gang.process(): ${numCycles}`);

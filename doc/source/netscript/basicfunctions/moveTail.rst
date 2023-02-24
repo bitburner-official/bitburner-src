@@ -1,7 +1,7 @@
 moveTail() Netscript Function
 ===============================
 
-.. js:function:: moveTail(x , y[, pid])
+.. js:function:: moveTail(x , y[, pid = current script])
 
     :RAM cost: 0 GB
 

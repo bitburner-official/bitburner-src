@@ -1,7 +1,7 @@
 resizeTail() Netscript Function
 ===============================
 
-.. js:function:: resizeTail(width, heigth[, pid])
+.. js:function:: resizeTail(width, heigth[, pid = current script])
 
     :RAM cost: 0 GB
 

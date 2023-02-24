@@ -1,7 +1,7 @@
 isRunning() Netscript Function
 ==============================
 
-.. js:function:: isRunning(filename[, hostname=current hostname[, args...]])
+.. js:function:: isRunning(filename[, hostname = current hostname[, args...]])
 .. js:function:: isRunning(PID)
 
     :RAM cost: 0.1 GB

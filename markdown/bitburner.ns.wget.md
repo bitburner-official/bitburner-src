@@ -30,25 +30,16 @@ True if the data was successfully retrieved from the URL, false otherwise.
 
 RAM cost: 0 GB
 
-Retrieves data from a URL and downloads it to a file on the specified server. The data can only be downloaded to a script (.script, .js) or a text file (.txt). If the file already exists, it will be overwritten by this command. Note that it will not be possible to download data from many websites because they do not allow cross-origin resource sharing (CORS).
+Retrieves data from a URL and downloads it to a file on the specified server. The data can only be downloaded to a script (.js or .script) or a text file (.txt). If the file already exists, it will be overwritten by this command. Note that it will not be possible to download data from many websites because they do not allow cross-origin resource sharing (CORS).
 
 IMPORTANT: This is an asynchronous function that returns a Promise. The Promise’s resolved value will be a boolean indicating whether or not the data was successfully retrieved from the URL. Because the function is async and returns a Promise, it is recommended you use wget in NetscriptJS (Netscript 2.0).
 
 In NetscriptJS, you must preface any call to wget with the await keyword (like you would [hack](./bitburner.ns.hack.md) or [sleep](./bitburner.ns.sleep.md)<!-- -->). wget will still work in Netscript 1.0, but the function's execution will not be synchronous (i.e. it may not execute when you expect/want it to). Furthermore, since Promises are not supported in ES5, you will not be able to process the returned value of wget in Netscript 1.0.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-wget("https://raw.githubusercontent.com/bitburner-official/bitburner-src/master/README.md", "game_readme.txt");
-```
-
-## Example 2
-
-
-```ts
-// NS2:
+```js
 await ns.wget("https://raw.githubusercontent.com/bitburner-official/bitburner-src/master/README.md", "game_readme.txt");
 ```
 

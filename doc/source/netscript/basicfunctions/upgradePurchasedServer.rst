@@ -7,7 +7,7 @@ upgradePurchasedServer() Netscript Function
     :param string hostname: Hostname of the purchased server.
     :param number ram: Amount of RAM of the purchased server. Must be a power of
         2. Maximum value of :doc:`getPurchasedServerMaxRam<getPurchasedServerMaxRam>`
-    :returns: ``true`` if the upgrade succeeded, ``false`` otherwise
+    :returns: ``true`` if the upgrade succeeded.
 
     Upgrades the purchased server with the specified hostname to have specified amount of RAM.
 

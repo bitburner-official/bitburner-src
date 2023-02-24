@@ -74,7 +74,7 @@ const Engine: {
   _lastUpdate: new Date().getTime(),
 
   updateGame: function (numCycles = 1) {
-    const time = numCycles * CONSTANTS._idleSpeed;
+    const time = numCycles * CONSTANTS.MilliPerCycle;
     if (Player.totalPlaytime == null) {
       Player.totalPlaytime = 0;
     }
@@ -242,7 +242,7 @@ const Engine: {
       Engine._lastUpdate = new Date().getTime();
       const lastUpdate = Player.lastUpdate;
       const timeOffline = Engine._lastUpdate - lastUpdate;
-      const numCyclesOffline = Math.floor(timeOffline / CONSTANTS._idleSpeed);
+      const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
 
       // Calculate the number of chances for a contract the player had whilst offline
       const contractChancesWhileOffline = Math.floor(timeOffline / (1000 * 60 * 10));
@@ -332,7 +332,7 @@ const Engine: {
       Player.sleeves.forEach((sleeve) => sleeve.process(numCyclesOffline));
 
       // Update total playtime
-      const time = numCyclesOffline * CONSTANTS._idleSpeed;
+      const time = numCyclesOffline * CONSTANTS.MilliPerCycle;
       Player.totalPlaytime ??= 0;
       Player.playtimeSinceLastAug ??= 0;
       Player.playtimeSinceLastBitnode ??= 0;
@@ -390,10 +390,10 @@ const Engine: {
     // Get time difference
     const _thisUpdate = new Date().getTime();
     let diff = _thisUpdate - Engine._lastUpdate;
-    const offset = diff % CONSTANTS._idleSpeed;
+    const offset = diff % CONSTANTS.MilliPerCycle;
 
     // Divide this by cycle time to determine how many cycles have elapsed since last update
-    diff = Math.floor(diff / CONSTANTS._idleSpeed);
+    diff = Math.floor(diff / CONSTANTS.MilliPerCycle);
 
     if (diff > 0) {
       // Update the game engine by the calculated number of cycles

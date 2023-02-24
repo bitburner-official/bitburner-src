@@ -285,7 +285,8 @@ export function prestigeSourceFile(flume: boolean): void {
   resetIndustryResearchTrees();
 
   // Source-File 9 (level 3) effect
-  if (Player.sourceFileLvl(9) >= 3) {
+  // also now applies when entering bn9 until install
+  if (Player.sourceFileLvl(9) >= 3 || Player.bitNodeN === 9) {
     const hserver = Player.createHacknetServer();
 
     hserver.level = 100;

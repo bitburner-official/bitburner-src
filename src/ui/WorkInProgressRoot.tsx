@@ -286,7 +286,7 @@ export function WorkInProgressRoot(): React.ReactElement {
         ...ExpRows(rates),
       ],
       progress: {
-        elapsed: classWork.cyclesWorked * CONSTANTS._idleSpeed,
+        elapsed: classWork.cyclesWorked * CONSTANTS.MilliPerCycle,
       },
 
       stopText: stopText,
@@ -318,7 +318,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       ),
 
       progress: {
-        elapsed: create.cyclesWorked * CONSTANTS._idleSpeed,
+        elapsed: create.cyclesWorked * CONSTANTS.MilliPerCycle,
         percentage: completion,
       },
 
@@ -350,7 +350,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       ),
 
       progress: {
-        elapsed: graft.cyclesWorked * CONSTANTS._idleSpeed,
+        elapsed: graft.cyclesWorked * CONSTANTS.MilliPerCycle,
         percentage: (graft.unitCompleted / graft.unitNeeded()) * 100,
       },
 
@@ -414,7 +414,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       ),
       gains: ExpRows(exp),
       progress: {
-        elapsed: Player.currentWork.cyclesWorked * CONSTANTS._idleSpeed,
+        elapsed: Player.currentWork.cyclesWorked * CONSTANTS.MilliPerCycle,
       },
 
       stopText: "Stop Faction work",
@@ -479,7 +479,7 @@ export function WorkInProgressRoot(): React.ReactElement {
         ...ExpRows(gains),
       ],
       progress: {
-        elapsed: Player.currentWork.cyclesWorked * CONSTANTS._idleSpeed,
+        elapsed: Player.currentWork.cyclesWorked * CONSTANTS.MilliPerCycle,
       },
 
       stopText: "Stop working",

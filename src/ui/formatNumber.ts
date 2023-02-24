@@ -74,6 +74,9 @@ export function formatRam(n: number, fractionalDigits = 2) {
   // Special handling for Infinities
   if (nAbs === Infinity) return `${n < 0 ? "-∞" : ""}∞${ramSuffixList.at(-1)}`;
 
+  // Early return if using first suffix.
+  if (nAbs < 1000) return getFormatter(fractionalDigits).format(n) + ramSuffixList[0];
+
   // Ram always uses a suffix and never goes to exponential
   const suffixIndex = Math.min(Math.floor(ramLogFn(nAbs) / ramLogDivisor), ramSuffixList.length - 1);
   n /= ramExpList[suffixIndex];
@@ -88,18 +91,21 @@ function formatExponential(n: number) {
   return exponentialFormatter.format(n).toLocaleLowerCase();
 }
 
-export function formatPercent(n: number, fractionalDigits = 2) {
+// Default suffixing starts at 1e9 % which is 1e7.
+export function formatPercent(n: number, fractionalDigits = 2, multStart = 1e6) {
   // NaN does not get formatted
   if (Number.isNaN(n)) return "NaN%";
   const nAbs = Math.abs(n);
 
   // Special handling for Infinities
-  if (nAbs === Infinity) return n < 0 ? "-∞%" : "∞%";
+  if (nAbs * 100 === Infinity) return n < 0 ? "-∞%" : "∞%";
+
+  // Mult form. There are probably some areas in the game this wouldn't make sense, but they hopefully won't ever have huge %.
+  if (nAbs >= multStart) return "x" + formatNumber(n, fractionalDigits, 0);
 
   return getFormatter(fractionalDigits, percentFormats, { style: "percent" }).format(n);
 }
 
-// formatNumber doesn't accept ram as a special flag, that is only used for ns.formatNumber which will use formatRam
 export function formatNumber(n: number, fractionalDigits = 3, suffixStart = 1000, isInteger = false) {
   // NaN does not get formatted
   if (Number.isNaN(n)) return "NaN";

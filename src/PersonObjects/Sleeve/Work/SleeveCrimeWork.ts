@@ -31,7 +31,7 @@ export class SleeveCrimeWork extends Work {
   }
 
   cyclesNeeded(): number {
-    return this.getCrime().time / CONSTANTS._idleSpeed;
+    return this.getCrime().time / CONSTANTS.MilliPerCycle;
   }
 
   process(sleeve: Sleeve, cycles: number) {

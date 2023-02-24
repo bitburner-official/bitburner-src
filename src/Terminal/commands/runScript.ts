@@ -22,13 +22,12 @@ export function runScript(commandArgs: (string | number | boolean)[], server: Ba
     permissive: true,
     argv: commandArgs.slice(1),
   });
-  const threadFlag = Math.round(parseFloat(flags["-t"]));
   const tailFlag = flags["--tail"] === true;
-  if (flags["-t"] !== undefined && (threadFlag < 0 || isNaN(threadFlag))) {
-    Terminal.error("Invalid number of threads specified. Number of threads must be greater than 0");
+  const numThreads = parseFloat(flags["-t"] ?? 1);
+  if (numThreads < 1 || !Number.isInteger(numThreads)) {
+    Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
     return;
   }
-  const numThreads = !isNaN(threadFlag) && threadFlag > 0 ? threadFlag : 1;
   const args = flags["_"];
 
   // Check if this script is already running

@@ -78,9 +78,18 @@ export const Settings = {
   PurchaseAugmentationsOrder: PurchaseAugmentationsOrderSetting.Default,
   /** Script editor theme. */
   MonacoTheme: "monokai",
-  MonacoInsertSpaces: false,
+  /** Whether to use spaces instead of tabs for indentation */
+  MonacoInsertSpaces: true,
+  /** Size of indentation */
+  MonacoTabSize: 2,
+  /** Whether to auto detect indentation settings per-file based on contents */
+  MonacoDetectIndentation: false,
+  /** Font Family for script editor. */
+  MonacoFontFamily: "Lucida Console",
   /** Text size for script editor. */
   MonacoFontSize: 20,
+  /** Whether to use font ligatures */
+  MonacoFontLigatures: false,
   /** Whether to use Vim mod by default in the script editor */
   MonacoVim: false,
   /** Word wrap setting for Script Editor. */

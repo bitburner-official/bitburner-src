@@ -1,7 +1,7 @@
 killall() Netscript Function
 ============================
 
-.. js:function:: killall([hostname = current hostname,[safetyguard = true]])
+.. js:function:: killall([hostname = current hostname[, safetyguard = true]])
 
     :RAM cost: 0.5 GB
     :param string hostname: Hostname of the server on which to kill all scripts.

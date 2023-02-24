@@ -72,12 +72,12 @@ export async function main(ns) {
 |  [deleteServer(host)](./bitburner.ns.deleteserver.md) | Delete a purchased server. |
 |  [disableLog(fn)](./bitburner.ns.disablelog.md) | Disables logging for the given function. |
 |  [enableLog(fn)](./bitburner.ns.enablelog.md) | Enable logging for a certain function. |
-|  [exec(script, host, numThreads, args)](./bitburner.ns.exec.md) | Start another script on any server. |
+|  [exec(script, hostname, numThreads, args)](./bitburner.ns.exec.md) | Start another script on any server. |
 |  [exit()](./bitburner.ns.exit.md) | Terminates the current script immediately. |
 |  [fileExists(filename, host)](./bitburner.ns.fileexists.md) | Check if a file exists. |
 |  [flags(schema)](./bitburner.ns.flags.md) | Parse command line flags. |
 |  [formatNumber(n, fractionalDigits, suffixStart, isInteger)](./bitburner.ns.formatnumber.md) | Format a number. |
-|  [formatPercent(n, fractionalDigits)](./bitburner.ns.formatpercent.md) | Format a number as a percentage. |
+|  [formatPercent(n, fractionalDigits, multStart)](./bitburner.ns.formatpercent.md) | Format a number as a percentage. |
 |  [formatRam(n, fractionalDigits)](./bitburner.ns.formatram.md) | Format a number as an amount of ram. |
 |  [ftpcrack(host)](./bitburner.ns.ftpcrack.md) | Runs FTPCrack.exe on a server. |
 |  [getBitNodeMultipliers(n, lvl)](./bitburner.ns.getbitnodemultipliers.md) | Get the current Bitnode multipliers. |
@@ -104,7 +104,7 @@ export async function main(ns) {
 |  [getScriptName()](./bitburner.ns.getscriptname.md) | Returns the current script name. |
 |  [getScriptRam(script, host)](./bitburner.ns.getscriptram.md) | Get the ram cost of a script. |
 |  [getServer(host)](./bitburner.ns.getserver.md) | Returns a server object for the given server. Defaults to the running script's server if host is not specified. |
-|  [getServerBaseSecurityLevel(host)](./bitburner.ns.getserverbasesecuritylevel.md) |  |
+|  [getServerBaseSecurityLevel(host)](./bitburner.ns.getserverbasesecuritylevel.md) | Get the base security level of a server. |
 |  [getServerGrowth(host)](./bitburner.ns.getservergrowth.md) | Get a server growth parameter. |
 |  [getServerMaxMoney(host)](./bitburner.ns.getservermaxmoney.md) | Get the maximum money available on a server. |
 |  [getServerMaxRam(host)](./bitburner.ns.getservermaxram.md) | Get the maximum amount of RAM on a server. |
@@ -120,20 +120,20 @@ export async function main(ns) {
 |  [getTotalScriptIncome()](./bitburner.ns.gettotalscriptincome.md) | Get the income of all scripts. |
 |  [getWeakenTime(host)](./bitburner.ns.getweakentime.md) | Get the execution time of a weaken() call. |
 |  [grow(host, opts)](./bitburner.ns.grow.md) | Spoof money in a server's bank account, increasing the amount available. |
-|  [growthAnalyze(host, growthAmount, cores)](./bitburner.ns.growthanalyze.md) | Calculate the number of grow threads needed to grow a server by a certain multiplier. |
+|  [growthAnalyze(host, multiplier, cores)](./bitburner.ns.growthanalyze.md) | Calculate the number of grow threads needed for a given multiplicative growth factor. |
 |  [growthAnalyzeSecurity(threads, hostname, cores)](./bitburner.ns.growthanalyzesecurity.md) | Calculate the security increase for a number of threads. |
 |  [hack(host, opts)](./bitburner.ns.hack.md) | Steal a server's money. |
 |  [hackAnalyze(host)](./bitburner.ns.hackanalyze.md) | Get the part of money stolen with a single thread. |
 |  [hackAnalyzeChance(host)](./bitburner.ns.hackanalyzechance.md) | Get the chance of successfully hacking a server. |
 |  [hackAnalyzeSecurity(threads, hostname)](./bitburner.ns.hackanalyzesecurity.md) | Get the security increase for a number of threads. |
-|  [hackAnalyzeThreads(host, hackAmount)](./bitburner.ns.hackanalyzethreads.md) | Predict the effect of hack. |
+|  [hackAnalyzeThreads(host, hackAmount)](./bitburner.ns.hackanalyzethreads.md) | Calculate the decimal number of threads needed to hack a specified amount of money from a target host. |
 |  [hasRootAccess(host)](./bitburner.ns.hasrootaccess.md) | Check if you have root access on a server. |
 |  [hasTorRouter()](./bitburner.ns.hastorrouter.md) | Returns whether the player has access to the darkweb. |
 |  [httpworm(host)](./bitburner.ns.httpworm.md) | Runs HTTPWorm.exe on a server. |
 |  [isLogEnabled(fn)](./bitburner.ns.islogenabled.md) | Checks the status of the logging for the given function. |
 |  [isRunning(script, host, args)](./bitburner.ns.isrunning.md) | Check if a script is running. |
-|  [kill(script)](./bitburner.ns.kill.md) | Terminate another script. |
-|  [kill(script, host, args)](./bitburner.ns.kill_1.md) | Terminate another script. |
+|  [kill(pid)](./bitburner.ns.kill.md) | Terminate the script with the provided PID. |
+|  [kill(filename, hostname, args)](./bitburner.ns.kill_1.md) | Terminate the script with the provided filename, hostname, and script arguments. |
 |  [killall(host, safetyguard)](./bitburner.ns.killall.md) | Terminate all scripts on a server. |
 |  [ls(host, grep)](./bitburner.ns.ls.md) | List files on a server. |
 |  [moveTail(x, y, pid)](./bitburner.ns.movetail.md) | Move a tail window. |

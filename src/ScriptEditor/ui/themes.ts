@@ -1,5 +1,5 @@
 import * as monaco from "monaco-editor";
-import type { Monaco } from "@monaco-editor/react";
+import type { Monaco } from "./Editor";
 
 export interface IScriptEditorTheme {
   base: "vs" | "vs-dark" | "hc-black";

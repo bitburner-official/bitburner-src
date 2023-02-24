@@ -517,18 +517,41 @@ export class Industry {
                 const advertisingFactor = this.getAdvertisingFactors()[0]; //Awareness + popularity
                 const marketFactor = this.getMarketFactor(mat); //Competition + demand
 
+                // Parse player sell-amount input (needed for TA.II and selling)
+                let sellAmt;
+                // The amount gets re-multiplied later, so this is the correct
+                // amount to calculate with for "MAX".
+                const adjustedQty = mat.qty / (corpConstants.secondsPerMarketCycle * marketCycles);
+                if (isString(mat.sllman[1])) {
+                  //Dynamically evaluated
+                  let tmp = (mat.sllman[1] as string).replace(/MAX/g, (adjustedQty + "").toUpperCase());
+                  tmp = tmp.replace(/PROD/g, mat.prd + "");
+                  try {
+                    sellAmt = eval(tmp);
+                  } catch (e) {
+                    dialogBoxCreate(
+                      `Error evaluating your sell amount for material ${mat.name} in ${this.name}'s ${city} office. The sell amount is being set to zero`,
+                    );
+                    sellAmt = 0;
+                  }
+                } else if (mat.sllman[1] === -1) {
+                  //Backwards compatibility, -1 = MAX
+                  sellAmt = adjustedQty;
+                } else {
+                  //Player's input value is just a number
+                  sellAmt = mat.sllman[1] as number;
+                }
+
                 // Determine the cost that the material will be sold at
                 const markupLimit = mat.getMarkupLimit();
                 let sCost;
                 if (mat.marketTa2) {
-                  const prod = mat.prd;
-
                   // Reverse engineer the 'maxSell' formula
-                  // 1. Set 'maxSell' = prod
+                  // 1. Set 'maxSell' = sellAmt
                   // 2. Substitute formula for 'markup'
                   // 3. Solve for 'sCost'
                   const numerator = markupLimit;
-                  const sqrtNumerator = prod;
+                  const sqrtNumerator = sellAmt;
                   const sqrtDenominator =
                     (mat.qlt + 0.001) *
                     marketFactor *
@@ -540,7 +563,7 @@ export class Industry {
                   let optimalPrice;
                   if (sqrtDenominator === 0 || denominator === 0) {
                     if (sqrtNumerator === 0) {
-                      optimalPrice = 0; // No production
+                      optimalPrice = 0; // Nothing to sell
                     } else {
                       optimalPrice = mat.bCost + markupLimit;
                       console.warn(`In Corporation, found illegal 0s when trying to calculate MarketTA2 sale cost`);
@@ -587,28 +610,7 @@ export class Industry {
                   corporation.getSalesMultiplier() *
                   advertisingFactor *
                   this.getSalesMultiplier();
-                let sellAmt;
-                if (isString(mat.sllman[1])) {
-                  //Dynamically evaluated
-                  let tmp = (mat.sllman[1] as string).replace(/MAX/g, (mat.maxsll + "").toUpperCase());
-                  tmp = tmp.replace(/PROD/g, mat.prd + "");
-                  try {
-                    sellAmt = eval(tmp);
-                  } catch (e) {
-                    dialogBoxCreate(
-                      `Error evaluating your sell amount for material ${mat.name} in ${this.name}'s ${city} office. The sell amount is being set to zero`,
-                    );
-                    sellAmt = 0;
-                  }
-                  sellAmt = Math.min(mat.maxsll, sellAmt);
-                } else if (mat.sllman[1] === -1) {
-                  //Backwards compatibility, -1 = MAX
-                  sellAmt = mat.maxsll;
-                } else {
-                  //Player's input value is just a number
-                  sellAmt = Math.min(mat.maxsll, mat.sllman[1] as number);
-                }
-
+                sellAmt = Math.min(mat.maxsll, sellAmt);
                 sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
                 sellAmt = Math.min(mat.qty, sellAmt);
                 if (sellAmt < 0) {
@@ -841,18 +843,46 @@ export class Industry {
             const advertisingFactor = this.getAdvertisingFactors()[0]; //Awareness + popularity
             const marketFactor = this.getMarketFactor(product); //Competition + demand
 
+            // Parse player sell-amount input (needed for TA.II and selling)
+            let sellAmt;
+            // The amount gets re-multiplied later, so this is the correct
+            // amount to calculate with for "MAX".
+            const adjustedQty = product.data[city][0] / (corpConstants.secondsPerMarketCycle * marketCycles);
+            if (product.sllman[city][0] && isString(product.sllman[city][1])) {
+              //Sell amount is dynamically evaluated
+              let tmp = product.sllman[city][1].replace(/MAX/g, (adjustedQty + "").toUpperCase());
+              tmp = tmp.replace(/PROD/g, product.data[city][1]);
+              try {
+                tmp = eval(tmp);
+              } catch (e) {
+                dialogBoxCreate(
+                  `Error evaluating your sell price expression for ${product.name} in ${this.name}'s ${city} office. Sell price is being set to MAX`,
+                );
+                tmp = product.maxsll;
+              }
+              sellAmt = tmp;
+            } else if (product.sllman[city][0] && product.sllman[city][1] > 0) {
+              //Sell amount is manually limited
+              sellAmt = product.sllman[city][1];
+            } else if (product.sllman[city][0] === false) {
+              sellAmt = 0;
+            } else {
+              sellAmt = adjustedQty;
+            }
+            if (sellAmt < 0) {
+              sellAmt = 0;
+            }
+
             // Calculate Sale Cost (sCost), which could be dynamically evaluated
             const markupLimit = product.rat / product.mku;
             let sCost;
             if (product.marketTa2) {
-              const prod = product.data[city][1];
-
               // Reverse engineer the 'maxSell' formula
-              // 1. Set 'maxSell' = prod
+              // 1. Set 'maxSell' = sellAmt
               // 2. Substitute formula for 'markup'
               // 3. Solve for 'sCost', product.pCost = sCost
               const numerator = markupLimit;
-              const sqrtNumerator = prod;
+              const sqrtNumerator = sellAmt;
               const sqrtDenominator =
                 0.5 *
                 Math.pow(product.rat, 0.65) *
@@ -865,7 +895,7 @@ export class Industry {
               let optimalPrice;
               if (sqrtDenominator === 0 || denominator === 0) {
                 if (sqrtNumerator === 0) {
-                  optimalPrice = 0; // No production
+                  optimalPrice = 0; // Nothing to sell
                 } else {
                   optimalPrice = product.pCost + markupLimit;
                   console.warn(`In Corporation, found illegal 0s when trying to calculate MarketTA2 sale cost`);
@@ -907,31 +937,7 @@ export class Industry {
               businessFactor *
               advertisingFactor *
               this.getSalesMultiplier();
-            let sellAmt;
-            if (product.sllman[city][0] && isString(product.sllman[city][1])) {
-              //Sell amount is dynamically evaluated
-              let tmp = product.sllman[city][1].replace(/MAX/g, (product.maxsll + "").toUpperCase());
-              tmp = tmp.replace(/PROD/g, product.data[city][1]);
-              try {
-                tmp = eval(tmp);
-              } catch (e) {
-                dialogBoxCreate(
-                  `Error evaluating your sell price expression for ${product.name} in ${this.name}'s ${city} office. Sell price is being set to MAX`,
-                );
-                tmp = product.maxsll;
-              }
-              sellAmt = Math.min(product.maxsll, tmp);
-            } else if (product.sllman[city][0] && product.sllman[city][1] > 0) {
-              //Sell amount is manually limited
-              sellAmt = Math.min(product.maxsll, product.sllman[city][1]);
-            } else if (product.sllman[city][0] === false) {
-              sellAmt = 0;
-            } else {
-              sellAmt = product.maxsll;
-            }
-            if (sellAmt < 0) {
-              sellAmt = 0;
-            }
+            sellAmt = Math.min(product.maxsll, sellAmt);
             sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
             sellAmt = Math.min(product.data[city][0], sellAmt); //data[0] is qty
             if (sellAmt && sCost) {

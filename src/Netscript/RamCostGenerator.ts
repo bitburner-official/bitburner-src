@@ -289,6 +289,7 @@ const codingcontract = {
 // Duplicate Sleeve API
 const sleeve = {
   getNumSleeves: RamCostConstants.SleeveBase,
+  setToIdle: RamCostConstants.SleeveBase,
   setToShockRecovery: RamCostConstants.SleeveBase,
   setToSynchronize: RamCostConstants.SleeveBase,
   setToCommitCrime: RamCostConstants.SleeveBase,
@@ -565,6 +566,7 @@ export const RamCosts: RamCostTree<NSFull> = {
       hackExp: 0,
       hackPercent: 0,
       growPercent: 0,
+      growThreads: 0,
       hackTime: 0,
       growTime: 0,
       weakenTime: 0,

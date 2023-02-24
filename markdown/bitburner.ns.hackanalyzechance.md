@@ -32,3 +32,5 @@ Returns the chance you have of successfully hacking the specified server.
 
 This returned value is in decimal form, not percentage.
 
+Like other basic hacking analysis functions, this calculation uses the current status of the player and server. To calculate using hypothetical server or player status, obtain access to the Formulas API and use [formulas.hacking.hackChance](./bitburner.hackingformulas.hackchance.md)<!-- -->.
+

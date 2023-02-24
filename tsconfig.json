@@ -16,5 +16,5 @@
     "strict": true,
     "target": "es2019"
   },
-  "include": ["src/**/*", "electron/**/*", ".eslintrc.js"]
+  "include": ["src/**/*", "electron/**/*", ".eslintrc.js", "node_modules/monaco-editor/monaco.d.ts"]
 }
