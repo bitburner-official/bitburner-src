@@ -1,7 +1,7 @@
 sleep() Netscript Function
 ==========================
 
-.. js:function:: sleep(n)
+.. js:function:: sleep([n = 0])
 
     :RAM cost: 0 GB
     :param number n: Number of milliseconds to sleep

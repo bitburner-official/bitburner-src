@@ -8,12 +8,12 @@ exec() Netscript Function
     :param string script: Filename of script to execute.
     :param string hostname: Hostname of the target server on which to execute the script.
     :param number numThreads: Optional thread count for new script. Set to 1 by
-        default. Will be rounded to nearest integer
+        default. Has to be an integer.
     :param args...: Additional arguments to pass into the new script that is
         being run. Note that if any arguments are being
         passed into the new script, then the third argument ``numThreads`` must
         be filled in with a value.
-    :returns: Newly created process id on success, 0 on failure.
+    :returns: Newly created process id (PID) on success, 0 on failure.
 
     Run a script as a separate process on a specified server. This is similar to
     the :doc:`run<run>` function except that it can be used to run a script on any

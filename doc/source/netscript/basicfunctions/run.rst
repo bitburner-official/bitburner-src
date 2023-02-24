@@ -6,12 +6,12 @@ run() Netscript Function
     :RAM cost: 1 GB
     :param string script: Filename of script to run
     :param number numThreads: Optional thread count for new script. Set to 1 by
-        default. Will be rounded to nearest integer.
+        default. Has to be an integer.
     :param args...:
         Additional arguments to pass into the new script that is being run. Note
         that if any arguments are being passed into the new script, then the
         second argument ``numThreads`` must be filled in with a value.
-    :returns: The process id of the new process or 0 on failure.
+    :returns: The process id (PID) of the new process or 0 on failure.
 
     Run a script as a separate process. This function can only be used to run
     scripts located on the current server (the server running the script that

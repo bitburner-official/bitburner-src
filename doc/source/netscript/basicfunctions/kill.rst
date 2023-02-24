@@ -1,8 +1,7 @@
 kill() Netscript Function
 =========================
 
-.. js:function:: kill(script, [hostname=current hostname, [args...]])
-.. js:function:: kill(PID)
+.. js:function:: kill(script[, hostname=current hostname[, args...]])
 
     :RAM cost: 0.5 GB
     :param string script: Filename of the script to kill.
