@@ -87,7 +87,7 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.2.2",
+  VersionString: "2.3.0",
   VersionNumber: 30,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
@@ -228,71 +228,24 @@ export const CONSTANTS: {
   Donations: 41,
 
   LatestUpdate: `
-v2.2.2 - 21 Feb 2022
+v2.3 Dev
 
-PLANNED 2.3 BREAKING CHANGES:
+Major bugfix (Will backport these changes to 2.2.2 if possible)
+* Fix an issue that prevented the Electron API server from communicating with the VSCode plugin. (credit to u/AnyGiraffe4367 on reddit)
+
+Other changes
+* Monaco script editor updated to a newer version. Also many internal code changes to support this. (@Snarling)
+* The SF9.3 bonus is also given to the player when inside of BN9. (@Zelow79)
+* Sleeve shock recovery now scales with intelligence. (@Tyasuh)
+* Nerf noodle bar
+
+Planned changes:
 * 2.3 will include a large planned rework to corporation. This may cause api breaks for any corporation scripts, and there will be large changes in how the corporation mechanic functions.
-
-NETSCRIPT API:
-* Added ns.formatNumber, ns.formatRam, and ns.formatPercent, which allow formatting these types of numbers the same way the game does (@Snarling, See UI section).
-* Deprecated ns.nFormat. Likely to be removed in 2.3. Now just directly wraps numeral.format (@Snarling)
-* EXPERIMENTAL CHANGE (may be reverted next patch): BasicHGWOptions now allows specifying a number of additionalMsec. This should allow easier and more reliable coordination
-  of completion times for hack, grow, and weaken. Since this is an experimental change, be prepared for a possible API break next patch if you use this functionality. (@d0sboots)
-
-- Corporation API
-* Fix bugs with ns.corporation.setAutoJobAssignment. (@zerbosh and @croy)
-
-- Formulas API
-* Added ns.formulas.hacking.growThreads function (@d0sboots)
-
-- Sleeve API
-* ns.sleeve.getTask now also includes cyclesWorked for the task types where this applies. (@Zelow79)
-* Added ns.sleeve.setToIdle function (@Zelow79)
-
-- Unsupported API
-* Added ns.printRaw - allows printing custom React content to script logs. Use at your own risk, misuse is very likely to cause a crash. (@d0sboots)
-
-ELECTRON (STEAM) VERSION:
-* Fix security issue where player scripts were allowed to access any part of the player's filesystem. Now access is limited to the game's 'dist' folder. (@Snarling)
-
-SCRIPTS:
-* Fix an issue where multiple copies of the same script could be launched with same args/same server (@Mughur)
-* Followup changes to API wrapping from 2.2.1 changes. (@d0sboots)
-
-UI:
-* Add new number formatting code to replace internal use of unmaintained package numeral.js. Added several Numeric Display options. (@Snarling)
-* Removed ingame donation section. (@hydroflame)
-* Improve some bladeburner number formatting (@Zelow79)
-* Added IronMan theme (@MattiYT)
-* Factions that have not been joined yet will show how many unowned augments they have available. (@Zelow79)
-* Added more features to dev menu (@Zelow79 and @Snarling)
-
-CORPORATION:
-* Reverted previous change to employee needs. Now they will trend up on their own again. (@d0sboots)
-* Improvements to how Market TA II works (@d0sboots)
-* ns.corporation.getOffice return value now includes a totalExperience property. (@Snarling)
-
-HACKNET:
-* Hacknet servers are now named hacknet-server-# instead of hacknet-node-#. (@Tyasuh)
-* Fix bug related to renaming hacknet servers (@Mughur)
-
-GRAFTING:
-* Bladeburner augs can be grafted if player is in Bladeburner faction (@Tyasuh)
-
-DOCUMENTATION
-* Many documentation updates (@Mughur, @d0sboots, @Snarling, @teauxfu).
-* Official non-markdown docs are at http://bitburner-official.readthedocs.io/
-* Official dev version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md
-* Official stable version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md
-* Dev version documentation is now kept up to date as changes are made. (@Snarling)
-
-CODEBASE:
-* Updated many dependencies (@d0sboots)
-* Updated lots of the build processes and GitHub workflows. (@Snarling)
-* Internal refactoring of how BitNode multipliers are stored (@d0sboots)
-* Added some extra helper function (useRerender hook, positiveInteger ns argument validator). (@Snarling)
-
-MISC:
+* Enum changes, potentially causing API break with some enums. Enums will be more usable and there will be more of them.
+* Constants rework - interenal game constants will be reorganized and will be provided to the player as different categories of constants.
+* Improve type validation on ns functions.
+* Add more Script Editor configuration options (font family, ligatures, etc).
+* Further deprecation of ns1. Removal of more documentation, add ingame notice to prompt player to update scripts to .js.
 * Nerf noodle bar
 `,
 };
