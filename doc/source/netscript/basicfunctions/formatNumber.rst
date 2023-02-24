@@ -8,10 +8,10 @@ formatRam() Netscript Function
     :param number fractionalDigits: Number of digits to show in the fractional part of the decimal number. 
     :param number suffixStart: How high a number must be before a suffix will be added. 
     :param boolean isInteger: Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. 
-    
+
     :returns: Formatted string.
 
-    Converts a number into a string with ram formatting. 
+    Converts a number into a string with formatting. 
 
     The format depends on the Numeric Display settings (all options on the "Numeric Display" options page).
 

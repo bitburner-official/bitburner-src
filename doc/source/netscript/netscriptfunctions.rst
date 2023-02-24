@@ -18,9 +18,9 @@ This includes information such as function signatures, what they do, and their r
     tprint() <basicfunctions/tprint>
     tFormat() <basicfunctions/tFormat>
     nFormat() <basicfunctions/nFormat>
-    formatNumber() <basicfunctions/nFormat>
-    formatPercent() <basicfunctions/nFormat>
-    formatRam() <basicfunctions/nFormat>
+    formatNumber() <basicfunctions/formatNumber>
+    formatPercent() <basicfunctions/formatPercent>
+    formatRam() <basicfunctions/formatRam>
     disableLog() <basicfunctions/disableLog>
     enableLog() <basicfunctions/enableLog>
     isLogEnabled() <basicfunctions/isLogEnabled>
