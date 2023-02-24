@@ -49,12 +49,13 @@ export function ParseCommand(command: string): (string | number | boolean)[] {
 
   let arg = "";
   let stringOverride = false;
-  
+
   while (idx < command.length) {
     const c = command.charAt(idx);
     // If the current character is a backslash, add the next character verbatim to the argument
     if (c === "\\") {
       arg += command.charAt(++idx);
+      
       // If the current character is a single- or double-quote mark, add it to the current argument.
     } else if (c === KEY.DOUBLE_QUOTE || c === KEY.QUOTE) {
       stringOverride = true;
@@ -73,6 +74,7 @@ export function ParseCommand(command: string): (string | number | boolean)[] {
       // and start a new one
     } else if (c === KEY.SPACE && lastQuote === "") {
       args.push(parseArg(arg, stringOverride));
+
       stringOverride = false;
       arg = "";
     } else {
@@ -87,5 +89,6 @@ export function ParseCommand(command: string): (string | number | boolean)[] {
   if (arg !== "") {
     args.push(parseArg(arg, stringOverride));
   }
+  
   return args;
 }
