@@ -898,6 +898,7 @@ export function Root(props: IProps): React.ReactElement {
           save={(options: Options) => {
             sanitizeTheme(Settings.EditorTheme);
             monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
+            editor?.updateOptions(options);
             setOptions(options);
             Settings.MonacoTheme = options.theme;
             Settings.MonacoInsertSpaces = options.insertSpaces;
