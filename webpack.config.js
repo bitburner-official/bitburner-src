@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
 const webpack = require("webpack");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
@@ -96,13 +96,11 @@ module.exports = (env, argv) => {
 
   return {
     plugins: [
+      new MonacoWebpackPlugin({ languages: ["javascript", "typescript"] }),
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": isDevelopment ? '"development"' : '"production"',
       }),
       new HtmlWebpackPlugin(htmlConfig),
-      new MiniCssExtractPlugin({
-        filename: "[name].css",
-      }),
       new ForkTsCheckerWebpackPlugin({
         typescript: {
           diagnosticOptions: {
@@ -137,6 +135,7 @@ module.exports = (env, argv) => {
     output: {
       path: path.resolve(__dirname, outputDirectory),
       filename: "[name].bundle.js",
+      assetModuleFilename: "assets/[hash][ext][query]",
     },
     module: {
       rules: [
@@ -151,18 +150,10 @@ module.exports = (env, argv) => {
             },
           },
         },
+        { test: /\.(ttf|png|jpe?g|gif|jp2|webp)$/, type: "asset/resource" },
         {
           test: /\.s?css$/,
-          use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
-        },
-        {
-          test: /\.(png|jpe?g|gif|jp2|webp)$/,
-          loader: "file-loader",
-          options: {
-            name: "[contenthash].[ext]",
-            outputPath: "images",
-            publicPath: `${outputDirectory}/images`,
-          },
+          use: ["style-loader", "css-loader"],
         },
       ],
     },

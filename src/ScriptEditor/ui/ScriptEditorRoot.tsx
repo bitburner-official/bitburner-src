@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import Editor, { Monaco } from "@monaco-editor/react";
+import { Editor } from "./Editor";
 import * as monaco from "monaco-editor";
+// @ts-expect-error This library does not have types.
+import * as MonacoVim from "monaco-vim";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 type ITextModel = monaco.editor.ITextModel;
@@ -20,8 +22,7 @@ import { formatRam } from "../../ui/formatNumber";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import SearchIcon from "@mui/icons-material/Search";
 
-import { NetscriptFunctions } from "../../NetscriptFunctions";
-import { WorkerScript } from "../../Netscript/WorkerScript";
+import { ns, enums } from "../../NetscriptFunctions";
 import { Settings } from "../../Settings/Settings";
 import { iTutorialNextStep, ITutorial, iTutorialSteps } from "../../InteractiveTutorial";
 import { debounce } from "lodash";
@@ -46,6 +47,7 @@ import { Modal } from "../../ui/React/Modal";
 import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
 import { TextField, Tooltip } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
+import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
 
 interface IProps {
   // Map of filename -> code
@@ -56,31 +58,19 @@ interface IProps {
 
 // TODO: try to remove global symbols
 let symbolsLoaded = false;
-let symbols: string[] = [];
+const apiKeys: string[] = [];
 export function SetupTextEditor(): void {
-  const ns = NetscriptFunctions({ args: [] } as unknown as WorkerScript);
-
-  // Populates symbols for text editor
-  function populate(ns: any): string[] {
-    let symbols: string[] = [];
-    const keys = Object.keys(ns);
-    for (const key of keys) {
-      if (typeof ns[key] === "object") {
-        symbols.push(key);
-        symbols = symbols.concat(populate(ns[key]));
-      }
-      if (typeof ns[key] === "function") {
-        symbols.push(key);
-      }
+  // Function for populating apiKeys using a given layer of the API.
+  const api = { args: [], pid: 1, enums, ...ns };
+  const hiddenAPI = NetscriptExtra();
+  function populate(apiLayer: object = api) {
+    for (const [apiKey, apiValue] of Object.entries(apiLayer)) {
+      if (apiLayer === api && apiKey in hiddenAPI) continue;
+      apiKeys.push(apiKey);
+      if (typeof apiValue === "object") populate(apiValue);
     }
-
-    return symbols;
   }
-
-  symbols = populate(ns);
-
-  const exclude = ["heart", "break", "exploit", "bypass", "corporation", "alterReality"];
-  symbols = symbols.filter((symbol: string) => !exclude.includes(symbol)).sort();
+  populate();
 }
 
 // Holds all the data for a open script
@@ -109,8 +99,8 @@ let currentScript: OpenScript | null = null;
 export function Root(props: IProps): React.ReactElement {
   const rerender = useRerender();
   const editorRef = useRef<IStandaloneCodeEditor | null>(null);
-  const monacoRef = useRef<Monaco | null>(null);
   const vimStatusRef = useRef<HTMLElement>(null);
+  // monaco-vim does not have types, so this is an any
   const [vimEditor, setVimEditor] = useState<any>(null);
   const [editor, setEditor] = useState<IStandaloneCodeEditor | null>(null);
   const [filter, setFilter] = useState("");
@@ -170,54 +160,51 @@ export function Root(props: IProps): React.ReactElement {
   useEffect(() => {
     // setup monaco-vim
     if (options.vim && editor && !vimEditor) {
+      // Using try/catch because MonacoVim does not have types.
       try {
-        // This library is not typed
-        // @ts-expect-error
-        window.require(["monaco-vim"], function (MonacoVim: any) {
-          setVimEditor(MonacoVim.initVimMode(editor, vimStatusRef.current));
-          MonacoVim.VimMode.Vim.defineEx("write", "w", function () {
-            // your own implementation on what you want to do when :w is pressed
-            save();
-          });
-          MonacoVim.VimMode.Vim.defineEx("quit", "q", function () {
-            Router.toPage(Page.Terminal);
-          });
-
-          const saveNQuit = (): void => {
-            save();
-            Router.toPage(Page.Terminal);
-          };
-          // "wqriteandquit" &  "xriteandquit" are not typos, prefix must be found in full string
-          MonacoVim.VimMode.Vim.defineEx("wqriteandquit", "wq", saveNQuit);
-          MonacoVim.VimMode.Vim.defineEx("xriteandquit", "x", saveNQuit);
-
-          // Setup "go to next tab" and "go to previous tab". This is a little more involved
-          // since these aren't Ex commands (they run in normal mode, not after typing `:`)
-          MonacoVim.VimMode.Vim.defineAction("nextTabs", function (_cm: any, args: { repeat?: number }) {
-            const nTabs = args.repeat ?? 1;
-            // Go to the next tab (to the right). Wraps around when at the rightmost tab
-            const currIndex = currentTabIndex();
-            if (currIndex !== undefined) {
-              const nextIndex = (currIndex + nTabs) % openScripts.length;
-              onTabClick(nextIndex);
-            }
-          });
-          MonacoVim.VimMode.Vim.defineAction("prevTabs", function (_cm: any, args: { repeat?: number }) {
-            const nTabs = args.repeat ?? 1;
-            // Go to the previous tab (to the left). Wraps around when at the leftmost tab
-            const currIndex = currentTabIndex();
-            if (currIndex !== undefined) {
-              let nextIndex = currIndex - nTabs;
-              while (nextIndex < 0) {
-                nextIndex += openScripts.length;
-              }
-              onTabClick(nextIndex);
-            }
-          });
-          MonacoVim.VimMode.Vim.mapCommand("gt", "action", "nextTabs", {}, { context: "normal" });
-          MonacoVim.VimMode.Vim.mapCommand("gT", "action", "prevTabs", {}, { context: "normal" });
-          editor.focus();
+        setVimEditor(MonacoVim.initVimMode(editor, vimStatusRef.current));
+        MonacoVim.VimMode.Vim.defineEx("write", "w", function () {
+          // your own implementation on what you want to do when :w is pressed
+          save();
         });
+        MonacoVim.VimMode.Vim.defineEx("quit", "q", function () {
+          Router.toPage(Page.Terminal);
+        });
+
+        const saveNQuit = (): void => {
+          save();
+          Router.toPage(Page.Terminal);
+        };
+        // "wqriteandquit" &  "xriteandquit" are not typos, prefix must be found in full string
+        MonacoVim.VimMode.Vim.defineEx("wqriteandquit", "wq", saveNQuit);
+        MonacoVim.VimMode.Vim.defineEx("xriteandquit", "x", saveNQuit);
+
+        // Setup "go to next tab" and "go to previous tab". This is a little more involved
+        // since these aren't Ex commands (they run in normal mode, not after typing `:`)
+        MonacoVim.VimMode.Vim.defineAction("nextTabs", function (_cm: any, args: { repeat?: number }) {
+          const nTabs = args.repeat ?? 1;
+          // Go to the next tab (to the right). Wraps around when at the rightmost tab
+          const currIndex = currentTabIndex();
+          if (currIndex !== undefined) {
+            const nextIndex = (currIndex + nTabs) % openScripts.length;
+            onTabClick(nextIndex);
+          }
+        });
+        MonacoVim.VimMode.Vim.defineAction("prevTabs", function (_cm: any, args: { repeat?: number }) {
+          const nTabs = args.repeat ?? 1;
+          // Go to the previous tab (to the left). Wraps around when at the leftmost tab
+          const currIndex = currentTabIndex();
+          if (currIndex !== undefined) {
+            let nextIndex = currIndex - nTabs;
+            while (nextIndex < 0) {
+              nextIndex += openScripts.length;
+            }
+            onTabClick(nextIndex);
+          }
+        });
+        MonacoVim.VimMode.Vim.mapCommand("gt", "action", "nextTabs", {}, { context: "normal" });
+        MonacoVim.VimMode.Vim.mapCommand("gT", "action", "prevTabs", {}, { context: "normal" });
+        editor.focus();
       } catch {}
     } else if (!options.vim) {
       // When vim mode is disabled
@@ -232,9 +219,7 @@ export function Root(props: IProps): React.ReactElement {
 
   // Generates a new model for the script
   function regenerateModel(script: OpenScript): void {
-    if (monacoRef.current !== null) {
-      script.model = monacoRef.current.editor.createModel(script.code, script.isTxt ? "plaintext" : "javascript");
-    }
+    script.model = monaco.editor.createModel(script.code, script.isTxt ? "plaintext" : "javascript");
   }
 
   const debouncedUpdateRAM = debounce((newCode: string) => {
@@ -284,7 +269,7 @@ export function Root(props: IProps): React.ReactElement {
   // Formats the code
   function beautify(): void {
     if (editorRef.current === null) return;
-    editorRef.current.getAction("editor.action.formatDocument").run();
+    editorRef.current.getAction("editor.action.formatDocument")?.run();
   }
 
   // How to load function definition in monaco
@@ -295,35 +280,19 @@ export function Root(props: IProps): React.ReactElement {
   // https://github.com/threehams/typescript-error-guide/blob/master/stories/components/Editor.tsx#L11-L39
   // https://blog.checklyhq.com/customizing-monaco/
   // Before the editor is mounted
-  function beforeMount(monaco: any): void {
+  function beforeMount(): void {
     if (symbolsLoaded) return;
     // Setup monaco auto completion
     symbolsLoaded = true;
-    monaco.languages.registerCompletionItemProvider("javascript", {
-      provideCompletionItems: () => {
-        const suggestions = [];
-        for (const symbol of symbols) {
-          suggestions.push({
-            label: symbol,
-            kind: monaco.languages.CompletionItemKind.Function,
-            insertText: symbol,
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-          });
-        }
-        return { suggestions: suggestions };
-      },
-    });
-
     (async function () {
       // We have to improve the default js language otherwise theme sucks
-      const l = await monaco.languages
-        .getLanguages()
-        .find((l: any) => l.id === "javascript")
-        .loader();
+      const jsLanguage = monaco.languages.getLanguages().find((l) => l.id === "javascript");
+      // Unsupported function is not exposed in monaco public API.
+      const l = await (jsLanguage as any).loader();
       // replaced the bare tokens with regexes surrounded by \b, e.g. \b{token}\b which matches a word-break on either side
       // this prevents the highlighter from highlighting pieces of variables that start with a reserved token name
       l.language.tokenizer.root.unshift([new RegExp("\\bns\\b"), { token: "ns" }]);
-      for (const symbol of symbols)
+      for (const symbol of apiKeys)
         l.language.tokenizer.root.unshift([new RegExp(`\\b${symbol}\\b`), { token: "netscriptfunction" }]);
       const otherKeywords = ["let", "const", "var", "function"];
       const otherKeyvars = ["true", "false", "null", "undefined"];
@@ -345,15 +314,14 @@ export function Root(props: IProps): React.ReactElement {
   }
 
   // When the editor is mounted
-  function onMount(editor: IStandaloneCodeEditor, monaco: Monaco): void {
+  function onMount(editor: IStandaloneCodeEditor): void {
     // Required when switching between site navigation (e.g. from Script Editor -> Terminal and back)
     // the `useEffect()` for vim mode is called before editor is mounted.
     setEditor(editor);
 
     editorRef.current = editor;
-    monacoRef.current = monaco;
 
-    if (editorRef.current === null || monacoRef.current === null) return;
+    if (!editorRef.current) return;
 
     if (!props.files && currentScript !== null) {
       // Open currentscript
@@ -395,8 +363,8 @@ export function Root(props: IProps): React.ReactElement {
             filename,
             code,
             props.hostname,
-            new monacoRef.current.Position(0, 0),
-            monacoRef.current.editor.createModel(code, filename.endsWith(".txt") ? "plaintext" : "javascript"),
+            new monaco.Position(0, 0),
+            monaco.editor.createModel(code, filename.endsWith(".txt") ? "plaintext" : "javascript"),
           );
           openScripts.push(newScript);
           currentScript = newScript;
@@ -866,12 +834,8 @@ export function Root(props: IProps): React.ReactElement {
         <Editor
           beforeMount={beforeMount}
           onMount={onMount}
-          loading={<Typography>Loading script editor!</Typography>}
           height={`calc(100vh - ${130 + (options.vim ? 34 : 0)}px)`}
-          defaultLanguage="javascript"
-          defaultValue={""}
           onChange={updateCode}
-          theme={options.theme}
           options={{ ...options, glyphMargin: true }}
         />
 
@@ -921,7 +885,7 @@ export function Root(props: IProps): React.ReactElement {
           open={optionsOpen}
           onClose={() => {
             sanitizeTheme(Settings.EditorTheme);
-            monacoRef.current?.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
+            monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
             setOptionsOpen(false);
           }}
           options={{
@@ -933,7 +897,7 @@ export function Root(props: IProps): React.ReactElement {
           }}
           save={(options: Options) => {
             sanitizeTheme(Settings.EditorTheme);
-            monacoRef.current?.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
+            monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
             setOptions(options);
             Settings.MonacoTheme = options.theme;
             Settings.MonacoInsertSpaces = options.insertSpaces;
