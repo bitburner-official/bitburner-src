@@ -10,6 +10,7 @@ import { Settings } from "./Settings/Settings";
 import { exportScripts } from "./Terminal/commands/download";
 import { CONSTANTS } from "./Constants";
 import { hash } from "./hash/hash";
+import { Buffer } from "buffer";
 
 interface IReturnWebStatus extends IReturnStatus {
   data?: Record<string, unknown>;
