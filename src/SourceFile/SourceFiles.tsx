@@ -175,11 +175,11 @@ export function initSourceFiles() {
         <br />
         This Source-File also increases your hacknet multipliers by:
         <br />
-        Level 1: 8%
+        Level 1: 16%
         <br />
-        Level 2: 12%
+        Level 2: 24%
         <br />
-        Level 3: 14%
+        Level 3: 28%
       </>
     ),
   );
