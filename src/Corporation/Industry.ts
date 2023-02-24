@@ -383,11 +383,16 @@ export class Industry {
 
             // Use the materials already in the warehouse if the option is on.
             for (const matName of Object.keys(smartBuy) as CorpMaterialName[]) {
-              if (!warehouse.smartSupplyUseLeftovers[matName]) continue;
+              if (warehouse.smartSupplyOptions[matName] === "none")continue;
               const mat = warehouse.materials[matName];
               const buyAmt = smartBuy[matName];
               if (buyAmt === undefined) throw new Error(`Somehow smartbuy matname is undefined`);
-              smartBuy[matName] = Math.max(0, buyAmt - mat.qty);
+              if (warehouse.smartSupplyOptions[matName] === "leftovers"){
+                smartBuy[matName] = Math.max(0, buyAmt - mat.qty);
+              }
+              else{
+                smartBuy[matName] = Math.max(0, buyAmt - mat.imp);
+              }
             }
 
             // buy them

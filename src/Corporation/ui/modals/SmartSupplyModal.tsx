@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { Warehouse } from "../../Warehouse";
-import { SetSmartSupply, SetSmartSupplyUseLeftovers } from "../../Actions";
+import { SetSmartSupply, SetSmartSupplyOption } from "../../Actions";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { useDivision } from "../Context";
@@ -12,30 +12,50 @@ import { CorpMaterialName } from "@nsdefs";
 import { materialNames } from "../../data/Constants";
 import { useRerender } from "../../../ui/React/hooks";
 
-interface ILeftoverProps {
+interface ISSoptionProps {
   matName: CorpMaterialName;
   warehouse: Warehouse;
 }
 
-function Leftover(props: ILeftoverProps): React.ReactElement {
-  const [checked, setChecked] = useState(!!props.warehouse.smartSupplyUseLeftovers[props.matName]);
+function SSoption(props: ISSoptionProps): React.ReactElement {
+  const [value, setChecked] = useState(props.warehouse.smartSupplyOptions[props.matName]);
 
-  function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
+  //leftover switch
+  function onLOChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    const newValue = value != "leftovers" ? "leftovers" : "none"
     try {
       const matName = props.matName;
       const material = props.warehouse.materials[matName];
-      SetSmartSupplyUseLeftovers(props.warehouse, material, event.target.checked);
+      SetSmartSupplyOption(props.warehouse, material, newValue)
     } catch (err) {
       dialogBoxCreate(err + "");
     }
-    setChecked(event.target.checked);
+    setChecked(newValue);
+  }
+
+  //imports switch
+  function onIChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    const newValue = value != "imports" ? "imports" : "none"
+    try {
+      const matName = props.matName;
+      const material = props.warehouse.materials[matName];
+      SetSmartSupplyOption(props.warehouse, material, newValue);
+    } catch (err) {
+      dialogBoxCreate(err + "");
+    }
+    setChecked(newValue);
   }
 
   return (
     <>
+      label={<Typography>{props.warehouse.materials[props.matName].name}</Typography>}
       <FormControlLabel
-        control={<Switch checked={checked} onChange={onChange} />}
-        label={<Typography>{props.warehouse.materials[props.matName].name}</Typography>}
+        control={<Switch checked={value == "leftovers"} onChange={onLOChange} />}
+        label={<Typography>{"Use leftovers"}</Typography>}
+      />
+      <FormControlLabel
+        control={<Switch checked={value == "imports"} onChange={onIChange} />}
+        label={<Typography>{"Use imported"}</Typography>}
       />
       <br />
     </>
@@ -63,7 +83,7 @@ export function SmartSupplyModal(props: IProps): React.ReactElement {
   for (const matName of Object.values(materialNames)) {
     if (!props.warehouse.materials[matName]) continue;
     if (!Object.keys(division.reqMats).includes(matName)) continue;
-    mats.push(<Leftover key={matName} warehouse={props.warehouse} matName={matName} />);
+    mats.push(<SSoption key={matName} warehouse={props.warehouse} matName={matName} />);
   }
 
   return (
@@ -74,7 +94,8 @@ export function SmartSupplyModal(props: IProps): React.ReactElement {
           label={<Typography>Enable Smart Supply</Typography>}
         />
         <br />
-        <Typography>Use materials already in the warehouse instead of buying new ones, if available:</Typography>
+        <Typography>Use materials already in the warehouse instead of buying new ones, if available or use 
+          only imported materials, if any:</Typography>
         {mats}
       </>
     </Modal>

@@ -19,6 +19,7 @@ import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { CorpResearchName } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
 import { isInteger } from "lodash";
+import { CONSTANTS } from "src/Constants";
 
 export function NewIndustry(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.find(({ type }) => industry == type))
@@ -268,8 +269,11 @@ export function SetSmartSupply(warehouse: Warehouse, smartSupply: boolean): void
   warehouse.smartSupplyEnabled = smartSupply;
 }
 
-export function SetSmartSupplyUseLeftovers(warehouse: Warehouse, material: Material, useLeftover: boolean): void {
-  warehouse.smartSupplyUseLeftovers[material.name] = useLeftover;
+export function SetSmartSupplyOption(warehouse: Warehouse, material: Material, useOption: string): void {
+  if (!corpConstants.smartSupplyUseOptions.includes(useOption)){
+    throw new Error(`Invalid Smart Supply option '${useOption}'`);
+  }
+  warehouse.smartSupplyOptions[material.name] = useOption;
 }
 
 export function BuyMaterial(material: Material, amt: number): void {

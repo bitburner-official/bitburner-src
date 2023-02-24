@@ -372,7 +372,7 @@ const corporation = {
   sellProduct: RamCostConstants.Corporation,
   discontinueProduct: RamCostConstants.Corporation,
   setSmartSupply: RamCostConstants.Corporation,
-  setSmartSupplyUseLeftovers: RamCostConstants.Corporation,
+  setSmartSupplyOption: RamCostConstants.Corporation,
   buyMaterial: RamCostConstants.Corporation,
   bulkPurchase: RamCostConstants.Corporation,
   getWarehouse: RamCostConstants.Corporation,
