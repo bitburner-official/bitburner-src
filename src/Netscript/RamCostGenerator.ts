@@ -395,7 +395,7 @@ const corporation = {
   hireEmployee: RamCostConstants.Corporation,
   upgradeOfficeSize: RamCostConstants.Corporation,
   throwParty: RamCostConstants.Corporation,
-  buyCoffee: RamCostConstants.Corporation,
+  buyTea: RamCostConstants.Corporation,
   hireAdVert: RamCostConstants.Corporation,
   research: RamCostConstants.Corporation,
   getOffice: RamCostConstants.Corporation,

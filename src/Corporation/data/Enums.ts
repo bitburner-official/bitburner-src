@@ -21,6 +21,6 @@ export enum EmployeePositions {
   Business = "Business",
   Management = "Management",
   RandD = "Research & Development",
-  Training = "Training",
+  Intern = "Intern",
   Unassigned = "Unassigned",
 }

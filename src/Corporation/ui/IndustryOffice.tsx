@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 import { OfficeSpace } from "../OfficeSpace";
 import { EmployeePositions } from "../data/Enums";
-import { BuyCoffee } from "../Actions";
+import { BuyTea } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
 import { formatCorpStat } from "../../ui/formatNumber";
@@ -120,14 +120,6 @@ function AutoManagement(props: IProps): React.ReactElement {
         </TableRow>
         <TableRow>
           <TableCell>
-            <Typography>Avg Employee Happiness:</Typography>
-          </TableCell>
-          <TableCell align="right">
-            <Typography>{formatCorpStat(props.office.avgHap)}</Typography>
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>
             <Typography>Avg Employee Energy:</Typography>
           </TableCell>
           <TableCell align="right">
@@ -218,7 +210,7 @@ function AutoManagement(props: IProps): React.ReactElement {
           office={props.office}
           job={EmployeePositions.Engineer}
           desc={
-            "Develops and maintains products and production systems. Increases the quality of everything you produce. Also increases the amount you produce (not as much as Operations, however)"
+            "Develops and maintains products and production systems. Increases the quality of everything you produce. Also increases the amount you produce (not as much as Operations, however)."
           }
         />
 
@@ -242,15 +234,17 @@ function AutoManagement(props: IProps): React.ReactElement {
           rerender={props.rerender}
           office={props.office}
           job={EmployeePositions.RandD}
-          desc={"Research new innovative ways to improve the company. Generates Scientific Research."}
+          desc={
+            "Research new innovative ways to improve the company. Generates Scientific Research. Also increases the quality of everything you produce (not as much as Engineer, however)."
+          }
         />
 
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.Training}
+          job={EmployeePositions.Intern}
           desc={
-            "Set employee to training, which will increase some of their stats. Employees in training do not affect any company operations."
+            "Set employee to intern, which will increase some of their stats. Employees in intern do not affect any company operations, but gain increased exp and improve morale and energy."
           }
         />
       </TableBody>
@@ -304,21 +298,20 @@ export function IndustryOffice(props: IProps): React.ReactElement {
               <Tooltip
                 title={
                   <Typography>
-                    Provide your employees with coffee, increasing their energy by half the difference to 100%, plus
-                    1.5%
+                    Provide your employees with tea, increasing their energy by half the difference to 100%, plus 1.5%
                   </Typography>
                 }
               >
                 <span>
                   <Button
-                    disabled={corp.funds < props.office.getCoffeeCost() || props.office.coffeePending}
-                    onClick={() => BuyCoffee(corp, props.office)}
+                    disabled={corp.funds < props.office.getTeaCost() || props.office.teaPending}
+                    onClick={() => BuyTea(corp, props.office)}
                   >
-                    {props.office.coffeePending ? (
-                      "Buying coffee..."
+                    {props.office.teaPending ? (
+                      "Buying tea..."
                     ) : (
                       <span>
-                        Buy Coffee - <MoneyCost money={props.office.getCoffeeCost()} corp={corp} />
+                        Buy Tea - <MoneyCost money={props.office.getTeaCost()} corp={corp} />
                       </span>
                     )}
                   </Button>
@@ -329,9 +322,7 @@ export function IndustryOffice(props: IProps): React.ReactElement {
 
           {!division.hasResearch("AutoPartyManager") && (
             <>
-              <Tooltip
-                title={<Typography>Throw an office party to increase your employee's morale and happiness</Typography>}
-              >
+              <Tooltip title={<Typography>Throw an office party to increase your employee's morale</Typography>}>
                 <span>
                   <Button
                     disabled={corp.funds < 0 || props.office.partyMult > 1}

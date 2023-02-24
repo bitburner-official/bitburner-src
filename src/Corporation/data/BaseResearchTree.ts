@@ -27,7 +27,6 @@ function createBaseResearchTreeNodes(): Node {
   const goJuice: Node = makeNode("Go-Juice");
   const hrRecruitment: Node = makeNode("HRBuddy-Recruitment");
   const hrTraining: Node = makeNode("HRBuddy-Training");
-  const joywire: Node = makeNode("JoyWire");
   const marketta1: Node = makeNode("Market-TA.I");
   const marketta2: Node = makeNode("Market-TA.II");
   const overclock: Node = makeNode("Overclock");
@@ -51,7 +50,6 @@ function createBaseResearchTreeNodes(): Node {
   rootNode.addChild(autoDrugs);
   rootNode.addChild(drones);
   rootNode.addChild(hrRecruitment);
-  rootNode.addChild(joywire);
   rootNode.addChild(marketta1);
   rootNode.addChild(overclock);
   rootNode.addChild(scAssemblers);

@@ -16,11 +16,9 @@ export class OfficeSpace {
   size: number;
 
   maxEne = 100;
-  maxHap = 100;
   maxMor = 100;
 
   avgEne = 75;
-  avgHap = 75;
   avgMor = 75;
 
   avgInt = 75;
@@ -32,9 +30,9 @@ export class OfficeSpace {
   totalEmployees = 0;
   totalSalary = 0;
 
-  autoCoffee = false;
+  autoTea = false;
   autoParty = false;
-  coffeePending = false;
+  teaPending = false;
   partyMult = 1;
 
   employeeProd: Record<EmployeePositions | "total", number> = {
@@ -43,7 +41,7 @@ export class OfficeSpace {
     [EmployeePositions.Business]: 0,
     [EmployeePositions.Management]: 0,
     [EmployeePositions.RandD]: 0,
-    [EmployeePositions.Training]: 0,
+    [EmployeePositions.Intern]: 0,
     [EmployeePositions.Unassigned]: 0,
     total: 0,
   };
@@ -53,7 +51,7 @@ export class OfficeSpace {
     [EmployeePositions.Business]: 0,
     [EmployeePositions.Management]: 0,
     [EmployeePositions.RandD]: 0,
-    [EmployeePositions.Training]: 0,
+    [EmployeePositions.Intern]: 0,
     [EmployeePositions.Unassigned]: 0,
   };
   employeeNextJobs: Record<EmployeePositions, number> = {
@@ -62,7 +60,7 @@ export class OfficeSpace {
     [EmployeePositions.Business]: 0,
     [EmployeePositions.Management]: 0,
     [EmployeePositions.RandD]: 0,
-    [EmployeePositions.Training]: 0,
+    [EmployeePositions.Intern]: 0,
     [EmployeePositions.Unassigned]: 0,
   };
 
@@ -76,10 +74,10 @@ export class OfficeSpace {
   }
 
   process(marketCycles = 1, corporation: Corporation, industry: Industry): number {
-    // HRBuddy AutoRecruitment and training
+    // HRBuddy AutoRecruitment and Interning
     if (industry.hasResearch("HRBuddy-Recruitment") && !this.atCapacity()) {
       this.hireRandomEmployee(
-        industry.hasResearch("HRBuddy-Training") ? EmployeePositions.Training : EmployeePositions.Unassigned,
+        industry.hasResearch("HRBuddy-Training") ? EmployeePositions.Intern : EmployeePositions.Unassigned,
       );
     }
 
@@ -90,62 +88,57 @@ export class OfficeSpace {
 
     // Process Office properties
     this.maxEne = 100;
-    this.maxHap = 100;
     this.maxMor = 100;
 
     if (industry.hasResearch("Go-Juice")) this.maxEne += 10;
-    if (industry.hasResearch("JoyWire")) this.maxHap += 10;
     if (industry.hasResearch("Sti.mu")) this.maxMor += 10;
-    if (industry.hasResearch("AutoBrew")) this.autoCoffee = true;
+    if (industry.hasResearch("AutoBrew")) this.autoTea = true;
     if (industry.hasResearch("AutoPartyManager")) this.autoParty = true;
 
     if (this.totalEmployees > 0) {
-      /** Multiplier for employee morale/happiness/energy based on company performance */
-      const perfMult = Math.pow(
-        1.002 -
-          (corporation.funds < 0 ? 0.002 : 0) -
-          (industry.lastCycleRevenue < industry.lastCycleExpenses ? 0.002 : 0),
-        marketCycles,
-      );
+      /** Multiplier for employee morale/energy based on company performance */
+      let perfMult = 1.002;
+      if (this.totalEmployees >= 9) {
+        perfMult = Math.pow(
+          1 +
+            0.002 * Math.min(1 / 9, this.employeeJobs.Intern / this.totalEmployees - 1 / 9) * 9 -
+            (corporation.funds < 0 && industry.lastCycleRevenue < industry.lastCycleExpenses ? 0.001 : 0),
+          marketCycles,
+        );
+      }
       // Flat reduction per cycle.
-      // This does not cause a noticable decrease (it's only -.001% per cycle), it only serves
-      // to make the numbers slightly different between Happiness and Morale.
-      const reduction = 0.001 * marketCycles;
+      // This does not cause a noticable decrease (it's only -.001% per cycle).
+      const reduction = 0.002 * marketCycles;
 
-      if (this.autoCoffee) {
+      if (this.autoTea) {
         this.avgEne = this.maxEne;
       } else {
-        // Coffee gives a flat +3 to energy
-        this.avgEne = (this.avgEne - reduction) * perfMult + (this.coffeePending ? 3 : 0);
-        // Coffee also halves the difference between current and max energy
-        if (this.coffeePending) this.avgEne = this.maxEne - (this.maxEne - this.avgEne) / 2;
+        // Tea gives a flat +2 to energy
+        this.avgEne = (this.avgEne - reduction * Math.random()) * perfMult + (this.teaPending ? 2 : 0);
       }
 
       if (this.autoParty) {
         this.avgMor = this.maxMor;
-        this.avgHap = this.maxHap;
       } else {
-        // Each 5% multiplier gives an extra flat +1 to morale and happiness to make recovering from low morale easier.
-        const increase = this.partyMult > 1 ? (this.partyMult - 1) * 20 : 0;
-        this.avgHap = ((this.avgHap - reduction) * perfMult + increase) * this.partyMult;
-        this.avgMor = (this.avgMor * perfMult + increase) * this.partyMult;
+        // Each 5% multiplier gives an extra flat +1 to morale to make recovering from low morale easier.
+        const increase = this.partyMult > 1 ? (this.partyMult - 1) * 10 : 0;
+        this.avgMor = ((this.avgMor - reduction * Math.random()) * perfMult + increase) * this.partyMult;
       }
 
       this.avgEne = Math.max(Math.min(this.avgEne, this.maxEne), corpConstants.minEmployeeDecay);
       this.avgMor = Math.max(Math.min(this.avgMor, this.maxMor), corpConstants.minEmployeeDecay);
-      this.avgHap = Math.max(Math.min(this.avgHap, this.maxHap), corpConstants.minEmployeeDecay);
 
-      this.coffeePending = false;
+      this.teaPending = false;
       this.partyMult = 1;
     }
 
-    // Get experience increase; unassigned employees do not contribute, employees in training contribute 5x
+    // Get experience increase; unassigned employees do not contribute, interning employees contribute 10x
     this.totalExp +=
       0.0015 *
       marketCycles *
       (this.totalEmployees -
         this.employeeJobs[EmployeePositions.Unassigned] +
-        this.employeeJobs[EmployeePositions.Training] * 4);
+        this.employeeJobs[EmployeePositions.Intern] * 9);
 
     this.calculateEmployeeProductivity(corporation, industry);
     if (this.totalEmployees === 0) {
@@ -165,7 +158,7 @@ export class OfficeSpace {
       effCha = this.avgCha * corporation.getEmployeeChaMultiplier() * industry.getEmployeeChaMultiplier(),
       effInt = this.avgInt * corporation.getEmployeeIntMultiplier() * industry.getEmployeeIntMultiplier(),
       effEff = this.avgEff * corporation.getEmployeeEffMultiplier() * industry.getEmployeeEffMultiplier();
-    const prodBase = this.avgMor * this.avgHap * this.avgEne * 1e-6;
+    const prodBase = this.avgMor * this.avgEne * 1e-4;
 
     let total = 0;
     const exp = this.totalExp / this.totalEmployees || 0;
@@ -188,7 +181,7 @@ export class OfficeSpace {
           prodMult = 1.5 * effInt + 0.8 * exp + effCre + 0.5 * effEff;
           break;
         case EmployeePositions.Unassigned:
-        case EmployeePositions.Training:
+        case EmployeePositions.Intern:
         case "total":
           continue;
         default:
@@ -213,7 +206,6 @@ export class OfficeSpace {
     this.totalExp += getRandomInt(50, 100);
 
     this.avgMor = (this.avgMor * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
-    this.avgHap = (this.avgHap * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
     this.avgEne = (this.avgEne * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
 
     this.avgInt = (this.avgInt * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
@@ -240,13 +232,13 @@ export class OfficeSpace {
     return false;
   }
 
-  getCoffeeCost(): number {
-    return corpConstants.coffeeCostPerEmployee * this.totalEmployees;
+  getTeaCost(): number {
+    return corpConstants.teaCostPerEmployee * this.totalEmployees;
   }
 
-  setCoffee(): boolean {
-    if (!this.coffeePending && !this.autoCoffee && this.totalEmployees > 0) {
-      this.coffeePending = true;
+  setTea(): boolean {
+    if (!this.teaPending && !this.autoTea && this.totalEmployees > 0) {
+      this.teaPending = true;
       return true;
     }
     return false;
@@ -267,11 +259,10 @@ export class OfficeSpace {
   static fromJSON(value: IReviverValue): OfficeSpace {
     // Convert employees from the old version
     if (value.data.hasOwnProperty("employees")) {
-      const empCopy: [{ data: { hap: number; mor: number; ene: number; exp: number } }] = value.data.employees;
+      const empCopy: [{ data: { mor: number; ene: number; exp: number } }] = value.data.employees;
       delete value.data.employees;
       const ret = Generic_fromJSON(OfficeSpace, value.data);
       ret.totalEmployees = empCopy.length;
-      ret.avgHap = empCopy.reduce((a, b) => a + b.data.hap, 0) / ret.totalEmployees || 75;
       ret.avgMor = empCopy.reduce((a, b) => a + b.data.mor, 0) / ret.totalEmployees || 75;
       ret.avgEne = empCopy.reduce((a, b) => a + b.data.ene, 0) / ret.totalEmployees || 75;
       ret.totalExp = empCopy.reduce((a, b) => a + b.data.exp, 0);
