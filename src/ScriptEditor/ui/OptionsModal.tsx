@@ -3,7 +3,6 @@ import { Options, WordWrapOptions } from "./Options";
 import { Modal } from "../../ui/React/Modal";
 
 import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Select from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
@@ -24,7 +23,11 @@ interface IProps {
 export function OptionsModal(props: IProps): React.ReactElement {
   const [theme, setTheme] = useState(props.options.theme);
   const [insertSpaces, setInsertSpaces] = useState(props.options.insertSpaces);
+  const [tabSize, setTabSize] = useState(props.options.tabSize);
+  const [detectIndentation, setDetectIndentation] = useState(props.options.detectIndentation);
+  const [fontFamily, setFontFamily] = useState(props.options.fontFamily);
   const [fontSize, setFontSize] = useState(props.options.fontSize);
+  const [fontLigatures, setFontLigatures] = useState(props.options.fontLigatures);
   const [wordWrap, setWordWrap] = useState(props.options.wordWrap);
   const [vim, setVim] = useState(props.options.vim);
   const [themeEditorOpen, setThemeEditorOpen] = useState(false);
@@ -33,23 +36,33 @@ export function OptionsModal(props: IProps): React.ReactElement {
     props.save({
       theme,
       insertSpaces,
+      tabSize,
+      detectIndentation,
+      fontFamily,
       fontSize,
+      fontLigatures,
       wordWrap,
       vim,
     });
     props.onClose();
   }
 
-  function onFontChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    const f = parseFloat(event.target.value);
-    if (isNaN(f)) return;
-    setFontSize(f);
+  function onFontSizeChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    const n = parseInt(event.target.value);
+    if (!Number.isFinite(n) || n < 1) return;
+    setFontSize(n);
+  }
+
+  function onTabSizeChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    const n = parseInt(event.target.value);
+    if (!Number.isFinite(n) || n < 1) return;
+    setTabSize(n);
   }
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <ThemeEditorModal open={themeEditorOpen} onClose={() => setThemeEditorOpen(false)} />
-      <Box display="flex" flexDirection="row" alignItems="center">
+      <div style={{ display: "flex", alignItems: "center" }}>
         <Typography>Theme: </Typography>
         <Select onChange={(event) => setTheme(event.target.value)} value={theme}>
           <MenuItem value="monokai">monokai</MenuItem>
@@ -61,34 +74,56 @@ export function OptionsModal(props: IProps): React.ReactElement {
           <MenuItem value="one-dark">one-dark</MenuItem>
           <MenuItem value="customTheme">Custom theme</MenuItem>
         </Select>
-        <Button onClick={() => setThemeEditorOpen(true)} sx={{ mx: 1 }} startIcon={<EditIcon />}>
+        <Button onClick={() => setThemeEditorOpen(true)} sx={{ ml: 1 }} startIcon={<EditIcon />}>
           Edit custom theme
         </Button>
-      </Box>
+      </div>
 
-      <Box display="flex" flexDirection="row" alignItems="center">
-        <Typography>Use whitespace over tabs: </Typography>
-        <Switch onChange={(event) => setInsertSpaces(event.target.checked)} checked={insertSpaces} />
-      </Box>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Indent using tabs: </Typography>
+        <Switch onChange={(e) => setInsertSpaces(e.target.checked)} checked={insertSpaces} />
+      </div>
 
-      <Box display="flex" flexDirection="row" alignItems="center">
-        <Typography>Word Wrap: </Typography>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Tab size: </Typography>
+        <TextField type="number" value={tabSize} onChange={onTabSizeChange} />
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Auto-detect indentation: </Typography>
+        <Switch onChange={(e) => setDetectIndentation(e.target.checked)} checked={detectIndentation} />
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Word wrap: </Typography>
         <Select onChange={(event) => setWordWrap(event.target.value as WordWrapOptions)} value={wordWrap}>
           <MenuItem value={"off"}>Off</MenuItem>
           <MenuItem value={"on"}>On</MenuItem>
           <MenuItem value={"bounded"}>Bounded</MenuItem>
           <MenuItem value={"wordWrapColumn"}>Word Wrap Column</MenuItem>
         </Select>
-      </Box>
+      </div>
 
-      <Box display="flex" flexDirection="row" alignItems="center">
-        <Typography>Enable vim mode: </Typography>
-        <Switch onChange={(event) => setVim(event.target.checked)} checked={vim} />
-      </Box>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Enable vim mode: </Typography>
+        <Switch onChange={(e) => setVim(e.target.checked)} checked={vim} />
+      </div>
 
-      <Box display="flex" flexDirection="row" alignItems="center">
-        <TextField type="number" label="Font size" value={fontSize} onChange={onFontChange} />
-      </Box>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Font family: </Typography>
+        <TextField type="text" value={fontFamily} onChange={(e) => setFontFamily(e.target.value)} />
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Font size: </Typography>
+        <TextField type="number" value={fontSize} onChange={onFontSizeChange} />
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Enable font ligatures: </Typography>
+        <Switch onChange={(e) => setFontLigatures(e.target.checked)} checked={fontLigatures} />
+      </div>
+
       <br />
       <Button onClick={save} startIcon={<SaveIcon />}>
         Save

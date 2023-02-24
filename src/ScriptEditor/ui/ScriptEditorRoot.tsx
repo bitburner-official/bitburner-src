@@ -115,7 +115,11 @@ export function Root(props: IProps): React.ReactElement {
   const [options, setOptions] = useState<Options>({
     theme: Settings.MonacoTheme,
     insertSpaces: Settings.MonacoInsertSpaces,
+    tabSize: Settings.MonacoTabSize,
+    detectIndentation: Settings.MonacoDetectIndentation,
+    fontFamily: Settings.MonacoFontFamily,
     fontSize: Settings.MonacoFontSize,
+    fontLigatures: Settings.MonacoFontLigatures,
     wordWrap: Settings.MonacoWordWrap,
     vim: props.vim || Settings.MonacoVim,
   });
@@ -705,13 +709,21 @@ export function Root(props: IProps): React.ReactElement {
   const tabTextWidth = tabMaxWidth - tabIconWidth * 2;
   return (
     <>
-      <div style={{ display: currentScript !== null ? "block" : "none", height: "100%", width: "100%" }}>
+      <div
+        style={{
+          display: currentScript !== null ? "flex" : "none",
+          height: "100%",
+          width: "100%",
+          flexDirection: "column",
+        }}
+      >
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="tabs" direction="horizontal">
             {(provided, snapshot) => (
               <Box
                 maxWidth={`${tabsMaxWidth}px`}
                 display="flex"
+                flexGrow="0"
                 flexDirection="row"
                 alignItems="center"
                 whiteSpace="nowrap"
@@ -830,19 +842,19 @@ export function Root(props: IProps): React.ReactElement {
             )}
           </Droppable>
         </DragDropContext>
-        <div style={{ paddingBottom: "5px" }} />
+        <div style={{ flex: "0 0 5px" }} />
         <Editor
           beforeMount={beforeMount}
           onMount={onMount}
-          height={`calc(100vh - ${130 + (options.vim ? 34 : 0)}px)`}
           onChange={updateCode}
           options={{ ...options, glyphMargin: true }}
         />
 
         <Box
           ref={vimStatusRef}
-          className="monaco-editor"
+          className="vim-display"
           display="flex"
+          flexGrow="0"
           flexDirection="row"
           sx={{ p: 1 }}
           alignItems="center"
@@ -888,20 +900,19 @@ export function Root(props: IProps): React.ReactElement {
             monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
             setOptionsOpen(false);
           }}
-          options={{
-            theme: Settings.MonacoTheme,
-            insertSpaces: Settings.MonacoInsertSpaces,
-            fontSize: Settings.MonacoFontSize,
-            wordWrap: Settings.MonacoWordWrap,
-            vim: Settings.MonacoVim,
-          }}
+          options={{ ...options }}
           save={(options: Options) => {
             sanitizeTheme(Settings.EditorTheme);
             monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
+            editor?.updateOptions(options);
             setOptions(options);
             Settings.MonacoTheme = options.theme;
             Settings.MonacoInsertSpaces = options.insertSpaces;
+            Settings.MonacoTabSize = options.tabSize;
+            Settings.MonacoDetectIndentation = options.detectIndentation;
+            Settings.MonacoFontFamily = options.fontFamily;
             Settings.MonacoFontSize = options.fontSize;
+            Settings.MonacoFontLigatures = options.fontLigatures;
             Settings.MonacoWordWrap = options.wordWrap;
             Settings.MonacoVim = options.vim;
           }}
