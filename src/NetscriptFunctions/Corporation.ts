@@ -46,7 +46,7 @@ import {
   BulkPurchase,
   SellShares,
   BuyBackShares,
-  SetSmartSupplyUseLeftovers,
+  SetSmartSupplyOption,
   LimitMaterialProduction,
   LimitProductProduction,
   UpgradeWarehouseCost,
@@ -431,17 +431,17 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not purchased the Smart Supply upgrade!`);
       SetSmartSupply(warehouse, enabled);
     },
-    setSmartSupplyUseLeftovers: (ctx) => (_divisionName, _cityName, materialName, _enabled) => {
+    setSmartSupplyOption: (ctx) => (_divisionName, _cityName, materialName, _option) => {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
       assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
-      const enabled = !!_enabled;
       const warehouse = getWarehouse(divisionName, cityName);
       const material = getMaterial(divisionName, cityName, materialName);
+      const option = helpers.string(ctx, "option", _option);
       if (!hasUnlockUpgrade("Smart Supply"))
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not purchased the Smart Supply upgrade!`);
-      SetSmartSupplyUseLeftovers(warehouse, material, enabled);
+        SetSmartSupplyOption(warehouse, material, option);
     },
     buyMaterial: (ctx) => (_divisionName, _cityName, materialName, _amt) => {
       checkAccess(ctx, 7);

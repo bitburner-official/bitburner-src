@@ -7156,13 +7156,13 @@ export interface WarehouseAPI {
    * @param divisionName - Name of the division
    * @param city - Name of the city
    * @param materialName - Name of the material
-   * @param enabled - smart supply use leftovers enabled
+   * @param option - smart supply option, "leftovers" to use leftovers, "imports" to use only imported materials, "none" to not use materials from store
    */
-  setSmartSupplyUseLeftovers(
+  setSmartSupplyOption(
     divisionName: string,
     city: CityName | `${CityName}`,
     materialName: string,
-    enabled: boolean,
+    option: string,
   ): void;
   /**
    * Set material buy data
