@@ -308,9 +308,9 @@ Source-File
 
     This Source-File also increases your hacknet multipliers by:
 
-    * Level 1: 8%
-    * Level 2: 12%
-    * Level 3: 14%
+    * Level 1: 16%
+    * Level 2: 24%
+    * Level 3: 28%
 
 Difficulty
     Hard
