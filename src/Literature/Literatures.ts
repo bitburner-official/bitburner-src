@@ -70,7 +70,7 @@ export const Literatures: Record<string, Literature> = {};
     "-In order to optimize your production, you will need a good balance of Operators, Managers, and Engineers<br><br>" +
     "-Different employees excel in different jobs. For example, the highly intelligent employees will probably do best " +
     "if they are assigned to do Engineering work or Research & Development.<br><br>" +
-    "-If your employees have low morale, energy, or happiness, their production will greatly suffer.<br><br>" +
+    "-If your employees have low morale or energy, their production will greatly suffer.<br><br>" +
     "-Tech is important, but don't neglect sales! Having several Businessmen can boost your sales and your bottom line.<br><br>" +
     "-Don't forget to advertise your company. You won't have any business if nobody knows you.<br><br>" +
     "-Having company awareness is great, but what's really important is your company's popularity. Try to keep " +

@@ -6856,7 +6856,7 @@ type CorpEmployeePosition =
   | "Business"
   | "Management"
   | "Research & Development"
-  | "Training"
+  | "Intern"
   | "Unassigned";
 
 /** @public */
@@ -6995,16 +6995,16 @@ export interface OfficeAPI {
    * @param divisionName - Name of the division
    * @param city - Name of the city
    * @param costPerEmployee - Amount to spend per employee.
-   * @returns Multiplier for happiness and morale, or zero on failure
+   * @returns Multiplier for morale, or zero on failure
    */
   throwParty(divisionName: string, city: CityName | `${CityName}`, costPerEmployee: number): number;
   /**
-   * Buy coffee for your employees
+   * Buy tea for your employees
    * @param divisionName - Name of the division
    * @param city - Name of the city
-   * @returns true if buying coffee was successful, false otherwise
+   * @returns true if buying tea was successful, false otherwise
    */
-  buyCoffee(divisionName: string, city: CityName | `${CityName}`): boolean;
+  buyTea(divisionName: string, city: CityName | `${CityName}`): boolean;
   /**
    * Hire AdVert.
    * @param divisionName - Name of the division
@@ -7527,7 +7527,7 @@ interface CorpConstants {
   issueNewSharesCooldown: number;
   /** Cooldown for selling shares in game cycles (1 game cycle = 200ms) */
   sellSharesCooldown: number;
-  coffeeCostPerEmployee: number;
+  teaCostPerEmployee: number;
   gameCyclesPerMarketCycle: number;
   gameCyclesPerCorpStateCycle: number;
   secondsPerMarketCycle: number;
@@ -7547,7 +7547,7 @@ interface CorpConstants {
   employeeRaiseAmount: number;
   /** Max products for a division without upgrades */
   maxProductsBase: number;
-  /** The minimum decay value for happiness/morale/energy */
+  /** The minimum decay value for morale/energy */
   minEmployeeDecay: number;
 }
 /** @public */
@@ -7761,16 +7761,12 @@ export interface Office {
   size: number;
   /** Maximum amount of energy of the employees */
   maxEne: number;
-  /** Maximum happiness of the employees */
-  maxHap: number;
   /** Maximum morale of the employees */
   maxMor: number;
   /** Amount of employees */
   employees: number;
   /** Average energy of the employees */
   avgEne: number;
-  /** Average happiness of the employees */
-  avgHap: number;
   /** Average morale of the employees */
   avgMor: number;
   /** Total experience of all employees */

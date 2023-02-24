@@ -345,9 +345,9 @@ export function UpgradeOfficeSize(corp: Corporation, office: OfficeSpace, size: 
   corp.funds = corp.funds - cost;
 }
 
-export function BuyCoffee(corp: Corporation, office: OfficeSpace): boolean {
-  const cost = office.getCoffeeCost();
-  if (corp.funds < cost || !office.setCoffee()) return false;
+export function BuyTea(corp: Corporation, office: OfficeSpace): boolean {
+  const cost = office.getTeaCost();
+  if (corp.funds < cost || !office.setTea()) return false;
   corp.funds -= cost;
   return true;
 }

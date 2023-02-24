@@ -32,7 +32,7 @@ import {
   UpgradeOfficeSize,
   PurchaseWarehouse,
   UpgradeWarehouse,
-  BuyCoffee,
+  BuyTea,
   ThrowParty,
   HireAdVert,
   MakeProduct,
@@ -666,14 +666,14 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
 
       return ThrowParty(corporation, office, costPerEmployee);
     },
-    buyCoffee: (ctx) => (_divisionName, _cityName) => {
+    buyTea: (ctx) => (_divisionName, _cityName) => {
       checkAccess(ctx, 8);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
 
       const corporation = getCorporation();
       const office = getOffice(divisionName, cityName);
-      return BuyCoffee(corporation, office);
+      return BuyTea(corporation, office);
     },
     hireAdVert: (ctx) => (_divisionName) => {
       checkAccess(ctx, 8);
@@ -696,11 +696,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         loc: office.loc,
         size: office.size,
         maxEne: office.maxEne,
-        maxHap: office.maxHap,
         maxMor: office.maxMor,
         employees: office.totalEmployees,
         avgEne: office.avgEne,
-        avgHap: office.avgHap,
         avgMor: office.avgMor,
         totalExperience: office.totalExp,
         employeeProd: Object.assign({}, office.employeeProd),
