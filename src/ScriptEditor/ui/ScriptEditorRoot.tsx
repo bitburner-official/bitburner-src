@@ -115,7 +115,11 @@ export function Root(props: IProps): React.ReactElement {
   const [options, setOptions] = useState<Options>({
     theme: Settings.MonacoTheme,
     insertSpaces: Settings.MonacoInsertSpaces,
+    tabSize: Settings.MonacoTabSize,
+    detectIndentation: Settings.MonacoDetectIndentation,
+    fontFamily: Settings.MonacoFontFamily,
     fontSize: Settings.MonacoFontSize,
+    fontLigatures: Settings.MonacoFontLigatures,
     wordWrap: Settings.MonacoWordWrap,
     vim: props.vim || Settings.MonacoVim,
   });
@@ -896,13 +900,7 @@ export function Root(props: IProps): React.ReactElement {
             monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
             setOptionsOpen(false);
           }}
-          options={{
-            theme: Settings.MonacoTheme,
-            insertSpaces: Settings.MonacoInsertSpaces,
-            fontSize: Settings.MonacoFontSize,
-            wordWrap: Settings.MonacoWordWrap,
-            vim: Settings.MonacoVim,
-          }}
+          options={{ ...options }}
           save={(options: Options) => {
             sanitizeTheme(Settings.EditorTheme);
             monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
@@ -910,7 +908,11 @@ export function Root(props: IProps): React.ReactElement {
             setOptions(options);
             Settings.MonacoTheme = options.theme;
             Settings.MonacoInsertSpaces = options.insertSpaces;
+            Settings.MonacoTabSize = options.tabSize;
+            Settings.MonacoDetectIndentation = options.detectIndentation;
+            Settings.MonacoFontFamily = options.fontFamily;
             Settings.MonacoFontSize = options.fontSize;
+            Settings.MonacoFontLigatures = options.fontLigatures;
             Settings.MonacoWordWrap = options.wordWrap;
             Settings.MonacoVim = options.vim;
           }}

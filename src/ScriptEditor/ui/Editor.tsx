@@ -41,9 +41,9 @@ export function Editor({ options, beforeMount, onMount, onChange }: EditorProps)
 
     // Unmounting
     return () => {
-      editor.current?.dispose();
-      editor.current?.getModel()?.dispose();
       subscription.current?.dispose();
+      editor.current?.getModel()?.dispose();
+      editor.current?.dispose();
     };
   }, []);
 
