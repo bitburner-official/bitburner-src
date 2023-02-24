@@ -1,7 +1,7 @@
 fileExists() Netscript Function
 ===============================
 
-.. js:function:: fileExists(filename[, hostname])
+.. js:function:: fileExists(filename[, hostname = current hostname])
 
     :RAM cost: 0.1 GB
 
@@ -9,9 +9,9 @@ fileExists() Netscript Function
     :param string hostname:
         Hostname of target server. This is optional. If it is not specified then
         the function will use the current server as the target server.
-    :returns: ``true`` if the file exists, ``false`` if it doesn't.
+    :returns: ``true`` if the file exists.
 
-    The filename for scripts is case-sensitive, but for other types of files it
+    The filename for scripts and .txt files is case-sensitive, but for other types of files it
     is not. For example, ``fileExists("brutessh.exe")`` will work fine, even
     though the actual program is named ``BruteSSH.exe``.
 

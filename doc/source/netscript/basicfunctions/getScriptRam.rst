@@ -1,7 +1,7 @@
 getScriptRam() Netscript Function
 =================================
 
-.. js:function:: getScriptRam(filename[, hostname])
+.. js:function:: getScriptRam(filename[, hostname = current hostname])
 
     :RAM cost: 0.1 GB
     :param string filename: Filename of script.

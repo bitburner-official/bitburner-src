@@ -6,7 +6,7 @@ ps() Netscript Function
     :RAM cost: 0.2 GB
     :param string hostname: Hostname address of the target server.
         If not specified, it will be the current server's IP by default.
-    :returns: array of object
+    :returns: array of objects
 
     Returns an array with general information about all scripts running on the
     specified target server. The information for each server is given in an

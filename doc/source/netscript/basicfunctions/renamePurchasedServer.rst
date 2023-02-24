@@ -1,13 +1,12 @@
-upgradePurchasedServer() Netscript Function
+renamePurchasedServer() Netscript Function
 ===================================
 
-.. js:function:: upgradePurchasedServer(hostname, ram)
+.. js:function:: renamePurchasedServer(hostname, newName)
 
-    :RAM cost: 0.25 GB
+    :RAM cost: 2 GB
     :param string hostname: Hostname of the purchased server.
-    :param number ram: Amount of RAM of the purchased server. Must be a power of
-        2. Maximum value of :doc:`getPurchasedServerMaxRam<getPurchasedServerMaxRam>`
-    :returns: ``true`` if the upgrade succeeded.
+    :param string newName: New name for the given server.
+    :returns: ``true`` if the renaming was succesful.
 
     Upgrades the purchased server with the specified hostname to have specified amount of RAM.
 
@@ -20,8 +19,4 @@ upgradePurchasedServer() Netscript Function
 
     .. code-block:: javascript
 
-        const ram = 64;
-        const name = "pserv-";
-        for (const i = 0; i < 5; ++i) {
-            ns.upgradePurchasedServer(name + i, ram);
-        }
+        ns.renamePurchasedServer("server", "old_server");

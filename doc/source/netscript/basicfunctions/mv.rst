@@ -1,9 +1,13 @@
 mv() Netscript Function
 ==============================
 
-.. js:function:: mv(serverName, sourceFile, targetFile)
+.. js:function:: mv(hostname, sourceFile, targetFile)
 
     :RAM cost: 0 GB
+
+    :param string hostname: Hostname of the target server.
+    :param string sourceFile: Name of the file to be moved/renamed.
+    :param string targetFile: Target name of the file.
 
     Move the source file to target file on the given server.
 

@@ -7,8 +7,12 @@ nFormat() Netscript Function
 
     :param number number: Number to format.
     :param string format: Formatting to use. Read http://numeraljs.com/#format for specifics.
+    :returns: Formatted string.
 
-    onverts a number into a string with the specified formatter. 
+    Deprecated, might be removed in 2.3 version of the game. Use :doc:`formatPercent<formatPercent>` for formatting percentages,
+    :doc:`formatRam<formatRam>` for formatting ram amounts and :doc:`formatNumber<formatNumber>` for formatting other numbers.
+
+    Converts a number into a string with the specified formatter. 
     This uses the numeral.js library, so the formatters must be compatible with that.
 
     Examples:

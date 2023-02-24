@@ -1,12 +1,11 @@
 spawn() Netscript Function
 ==========================
 
-.. js:function:: spawn(script, numThreads[, args...])
+.. js:function:: spawn(script[, numThreads = 1[, args...]])
 
     :RAM cost: 2 GB
     :param string script: Filename of script to execute
-    :param number numThreads: Number of threads to spawn new script with. Will
-        be rounded to nearest integer.
+    :param number numThreads: Number of threads to spawn new script with. Has to be an integer.
     :param args...:
         Additional arguments to pass into the new script that is being run.
 
