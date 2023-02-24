@@ -49,6 +49,7 @@ export function ParseCommand(command: string): (string | number | boolean)[] {
 
   let arg = "";
   let stringOverride = false;
+  
   while (idx < command.length) {
     const c = command.charAt(idx);
     // If the current character is a backslash, add the next character verbatim to the argument
