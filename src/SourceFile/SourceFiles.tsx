@@ -173,7 +173,7 @@ export function initSourceFiles() {
         Augmentations)
         <br />
         <br />
-        This Source-File also increases your hacknet multipliers by:
+        This Source-File also increases hacknet production and reduces hacknet costs by:
         <br />
         Level 1: 16%
         <br />

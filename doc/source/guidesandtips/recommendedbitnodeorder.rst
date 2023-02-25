@@ -306,7 +306,7 @@ Source-File
     (Note that the Level 3 effect of this Source-File only applies when entering a new BitNode, NOT
     when installing Augmentations.)
 
-    This Source-File also increases your hacknet multipliers by:
+    This Source-File also increases hacknet production and reduces hacknet costs by:
 
     * Level 1: 16%
     * Level 2: 24%
