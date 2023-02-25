@@ -1,8 +1,9 @@
 import { KEY } from "../utils/helpers/keyCodes";
 import { substituteAliases } from "../Alias";
 // Helper function to parse individual arguments into number/boolean/string as appropriate
-function parseArg(arg: string): string | number | boolean {
+function parseArg(arg: string, stringOverride: boolean): string | number | boolean {
   // Handles all numbers including hexadecimal, octal, and binary representations, returning NaN on an unparsable string
+  if (stringOverride) return arg;
   const asNumber = Number(arg);
   if (!isNaN(asNumber)) {
     return asNumber;
@@ -47,14 +48,17 @@ export function ParseCommand(command: string): (string | number | boolean)[] {
   let lastQuote = "";
 
   let arg = "";
+  let stringOverride = false;
+
   while (idx < command.length) {
     const c = command.charAt(idx);
-
     // If the current character is a backslash, add the next character verbatim to the argument
     if (c === "\\") {
       arg += command.charAt(++idx);
+
       // If the current character is a single- or double-quote mark, add it to the current argument.
     } else if (c === KEY.DOUBLE_QUOTE || c === KEY.QUOTE) {
+      stringOverride = true;
       // If we're currently in a quoted string argument and this quote mark is the same as the beginning,
       // the string is done
       if (lastQuote !== "" && c === lastQuote) {
@@ -69,8 +73,9 @@ export function ParseCommand(command: string): (string | number | boolean)[] {
       // If the current character is a space and we are not inside a string, parse the current argument
       // and start a new one
     } else if (c === KEY.SPACE && lastQuote === "") {
-      args.push(parseArg(arg));
+      args.push(parseArg(arg, stringOverride));
 
+      stringOverride = false;
       arg = "";
     } else {
       // Add the current character to the current argument
@@ -82,7 +87,7 @@ export function ParseCommand(command: string): (string | number | boolean)[] {
 
   // Add the last arg (if any)
   if (arg !== "") {
-    args.push(parseArg(arg));
+    args.push(parseArg(arg, stringOverride));
   }
 
   return args;
