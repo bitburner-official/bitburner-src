@@ -72,6 +72,9 @@ function setStopProcessHandler(app, window) {
       log.error(error);
     }
 
+    // This may no longer be needed due to the return of action: deny in gameWindow.js setWindowOpenHandler.
+    // Nothing currently sets the app_playerOpenedExternalLink flag. See utils.js openExternal comment for more info.
+    // -------
     // Because of a steam limitation, if the player has launched an external browser,
     // steam will keep displaying the game as "Running" in their UI as long as the browser is up.
     // So we'll alert the player to close their browser.
