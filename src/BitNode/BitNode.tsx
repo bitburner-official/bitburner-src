@@ -119,11 +119,11 @@ export function initBitNodes() {
         BitNodes will disable this mechanic) and level 3 permanently unlocks the full API. This Source-File also
         increases your charisma and company salary multipliers by:
         <br />
-        Level 1: 16%
+        Level 1: 8%
         <br />
-        Level 2: 24%
+        Level 2: 12%
         <br />
-        Level 3: 28%
+        Level 3: 14%
       </>
     ),
   );
@@ -324,11 +324,11 @@ export function initBitNodes() {
         <br />
         This Source-File also increases your hacknet multipliers by:
         <br />
-        Level 1: 8%
+        Level 1: 16%
         <br />
-        Level 2: 12%
+        Level 2: 24%
         <br />
-        Level 3: 14%
+        Level 3: 28%
       </>
     ),
   );
