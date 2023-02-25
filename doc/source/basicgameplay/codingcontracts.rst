@@ -249,9 +249,9 @@ The list contains the name of (i.e. the value returned by
 |                                         | | the string, the result should be an array with only an empty string.                   |
 |                                         | |                                                                                        |
 |                                         | | Examples:                                                                              |
-|                                         | |  ()())() -> [()()(), (())()]                                                           |
-|                                         | |  (a)())() -> [(a)()(), (a())()]                                                        |
-|                                         | |  )( -> [""]                                                                            |
+|                                         | |  "()())()" -> ["()()()", "(())()"]                                                     |
+|                                         | |  "(a)())()" -> ["(a)()()", "(a())()"]                                                  |
+|                                         | |  ")(" -> [""]                                                                          |
 +-----------------------------------------+------------------------------------------------------------------------------------------+
 | Find All Valid Math Expressions         | | You are given a string which contains only digits between 0 and 9 as well as a target  |
 |                                         | | number. Return all possible ways you can add the +, -, and * operators to the string   |

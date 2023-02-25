@@ -1073,8 +1073,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "the result should be an array with only an empty string.\n\n",
         "IMPORTANT: The string may contain letters, not just parentheses.",
         `Examples:\n`,
-        `"()())()" -> [()()(), (())()]\n`,
-        `"(a)())()" -> [(a)()(), (a())()]\n`,
+        `"()())()" -> ["()()()", "(())()"]\n`,
+        `"(a)())()" -> ["(a)()()", "(a())()"]\n`,
         `")(" -> [""]`,
       ].join(" ");
     },
