@@ -1125,7 +1125,7 @@ export interface TIX {
    * RAM cost: 2 GB
    * Returns an array of four elements that represents the player’s position in a stock.
    *
-   * The first element is the returned array is the number of shares the player owns of
+   * The first element in the returned array is the number of shares the player owns of
    * the stock in the Long position. The second element in the array is the average price
    * of the player’s shares in the Long position.
    *
