@@ -107,7 +107,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             Designing {product.name} (req. Operations/Engineers in {product.createCity})...
           </Typography>
           <br />
-          <Typography>{formatPercent(product.prog / 100, 2)}% complete</Typography>
+          <Typography>{formatPercent(product.prog / 100, 2)} complete</Typography>
           <Button onClick={() => setCancelOpen(true)}>Cancel</Button>
           <CancelProductModal
             product={product}
