@@ -87,6 +87,9 @@ async function writeToast(window, message, type = "info", duration = 2000) {
   await window.webContents.executeJavaScript(`window.appNotifier.toast("${message}", "${type}", ${duration});`, true);
 }
 
+// This may no longer be needed due to the return of { action: "deny" } in gameWindow.js setWindowOpenHandler.
+// Currently this is unused so that this can be tested. If the issue no longer exists, this util will be removed.
+// Otherwise, its use will be reimplemented.
 function openExternal(url) {
   shell.openExternal(url);
   global.app_playerOpenedExternalLink = true;

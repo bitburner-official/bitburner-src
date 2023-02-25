@@ -310,7 +310,7 @@ function getMenu(window) {
               })
               .then(({ response }) => {
                 if (response === 1) {
-                  utils.openExternal("https://github.com/bitburner-official/bitburner-vscode");
+                  shell.openExternal("https://github.com/bitburner-official/bitburner-vscode");
                 }
               });
           },
