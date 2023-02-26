@@ -21,12 +21,12 @@ function SSoption(props: ISSoptionProps): React.ReactElement {
   const [value, setChecked] = useState(props.warehouse.smartSupplyOptions[props.matName]);
 
   //leftover switch
-  function onLOChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    const newValue = value != "leftovers" ? "leftovers" : "none"
+  function onLOChange(): void {
+    const newValue = value != "leftovers" ? "leftovers" : "none";
     try {
       const matName = props.matName;
       const material = props.warehouse.materials[matName];
-      SetSmartSupplyOption(props.warehouse, material, newValue)
+      SetSmartSupplyOption(props.warehouse, material, newValue);
     } catch (err) {
       dialogBoxCreate(err + "");
     }
@@ -34,8 +34,8 @@ function SSoption(props: ISSoptionProps): React.ReactElement {
   }
 
   //imports switch
-  function onIChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    const newValue = value != "imports" ? "imports" : "none"
+  function onIChange(): void {
+    const newValue = value != "imports" ? "imports" : "none";
     try {
       const matName = props.matName;
       const material = props.warehouse.materials[matName];
@@ -89,13 +89,23 @@ export function SmartSupplyModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <>
+        <Typography>Smart Supply purchases the exact amount of materials needed for maximal production.</Typography>
+        <br />
         <FormControlLabel
           control={<Switch checked={props.warehouse.smartSupplyEnabled} onChange={smartSupplyOnChange} />}
           label={<Typography>Enable Smart Supply</Typography>}
         />
         <br />
-        <Typography>Use materials already in the warehouse instead of buying new ones, if available or use 
-          only imported materials, if any:</Typography>
+        <Typography>
+          Options:
+          <br />
+          - Use leftovers takes the amount of that material already in storage into account when purchasing new ones.
+          <br />
+          - Use imported takes the amount of that materials that was imported in previous cycle into account.
+          <br />
+          if neither is toggled on, Smart Supply will ignore any materials in store and attempts to buy as much as is
+          needed for production.
+        </Typography>
         {mats}
       </>
     </Modal>

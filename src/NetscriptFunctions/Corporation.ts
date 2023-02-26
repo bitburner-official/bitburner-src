@@ -76,10 +76,10 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     if (selfFund) {
       if (!player.canAfford(150e9)) return false;
 
-      player.startCorporation(corporationName);
+      player.startCorporation(corporationName, false);
       player.loseMoney(150e9, "corporation");
     } else {
-      player.startCorporation(corporationName, 500e6);
+      player.startCorporation(corporationName, true);
     }
     return true;
   }
@@ -441,7 +441,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const option = helpers.string(ctx, "option", _option);
       if (!hasUnlockUpgrade("Smart Supply"))
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not purchased the Smart Supply upgrade!`);
-        SetSmartSupplyOption(warehouse, material, option);
+      SetSmartSupplyOption(warehouse, material, option);
     },
     buyMaterial: (ctx) => (_divisionName, _cityName, materialName, _amt) => {
       checkAccess(ctx, 7);

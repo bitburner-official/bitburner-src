@@ -30,6 +30,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { MultiplierButtons } from "./MultiplierButtons";
+import { SellCorporationModal } from "./modals/SellCorporationModal";
 
 interface IProps {
   rerender: () => void;
@@ -102,6 +103,7 @@ export function Overview({ rerender }: IProps): React.ReactElement {
         </Tooltip>
         {corp.public ? <PublicButtons rerender={rerender} /> : <PrivateButtons rerender={rerender} />}
         <BribeButton />
+        <RestartButton />
       </Box>
       <br />
       <Upgrades rerender={rerender} />
@@ -278,6 +280,23 @@ function BribeButton(): React.ReactElement {
         </Button>
       </Tooltip>
       <BribeFactionModal open={open} onClose={() => setOpen(false)} />
+    </>
+  );
+}
+
+function RestartButton(): React.ReactElement {
+  const [open, setOpen] = useState(false);
+
+  function restart(): void {
+    setOpen(true);
+  }
+
+  return (
+    <>
+      <Tooltip title={"restart"}>
+        <Button onClick={restart}>Sell CEO position</Button>
+      </Tooltip>
+      <SellCorporationModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 }

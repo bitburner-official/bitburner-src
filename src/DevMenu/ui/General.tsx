@@ -37,7 +37,7 @@ export function General(): React.ReactElement {
 
   // Corp functions
   const createCorporation = () => {
-    Player.startCorporation(corporationName);
+    Player.startCorporation(corporationName, false);
     // Rerender so the corp menu option will show up immediately on the devmenu page selection
     ThemeEvents.emit();
   };
