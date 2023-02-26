@@ -18,6 +18,7 @@ import { calculateUpgradeCost } from "./helpers";
 
 interface IParams {
   name?: string;
+  seedFunded?: boolean;
 }
 
 export class Corporation {
@@ -51,6 +52,8 @@ export class Corporation {
   valuationsList = [0];
   valuation = 0;
 
+  seedFunded: boolean;
+
   state = new CorporationState();
 
   constructor(params: IParams = {}) {
@@ -60,6 +63,7 @@ export class Corporation {
     this.unlockUpgrades = Array(numUnlockUpgrades).fill(0);
     this.upgrades = Array(numUpgrades).fill(0);
     this.upgradeMultipliers = Array(numUpgrades).fill(1);
+    this.seedFunded = params.seedFunded ?? false;
   }
 
   addFunds(amt: number): void {

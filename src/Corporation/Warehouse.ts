@@ -6,7 +6,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../uti
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { CityName } from "../Enums";
 import { CorpMaterialName } from "@nsdefs";
-import { materialNames, smartSupplyUseOptions } from "./data/Constants";
+import { materialNames } from "./data/Constants";
 
 interface IConstructorParams {
   corp?: Corporation;

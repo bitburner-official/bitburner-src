@@ -248,8 +248,11 @@ export function prestigeSourceFile(flume: boolean): void {
     homeComp.programs.push(Programs.Formulas.name);
   }
 
+  console.log(Player.bitNodeN);
+  dialogBoxCreate("hello");
   // BitNode 3: Corporatocracy
   if (Player.bitNodeN === 3) {
+    console.log("why isn't the dialogbox happening?");
     homeComp.messages.push(LiteratureNames.CorporationManagementHandbook);
     dialogBoxCreate(
       "You received a copy of the Corporation Management Handbook on your home computer. " +
