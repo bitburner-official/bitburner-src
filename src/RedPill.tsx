@@ -1,13 +1,13 @@
 /** Implementation for what happens when you destroy a BitNode */
 import React from "react";
 import { Player } from "@player";
-import { prestigeSourceFile } from "./Prestige";
 import { PlayerOwnedSourceFile } from "./SourceFile/PlayerOwnedSourceFile";
 import { SourceFiles } from "./SourceFile/SourceFiles";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
+import { Engine } from "./engine";
 
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();
@@ -73,5 +73,5 @@ export function enterBitNode(flume: boolean, destroyedBitNode: number, newBitNod
   } else {
     Router.toPage(Page.Terminal);
   }
-  prestigeSourceFile(flume);
+  Engine.nodeTransfer = flume;
 }
