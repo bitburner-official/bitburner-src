@@ -257,6 +257,11 @@ export function prestigeSourceFile(flume: boolean): void {
     );
   }
 
+  // BitNode 6: Bladeburners and BitNode 7: Bladeburners 2079
+  if (Player.bitNodeN === 6 || Player.bitNodeN === 7) {
+    dialogBoxCreate("NSA would like to have a word with you once you're ready.");
+  }
+
   // BitNode 8: Ghost of Wall Street
   if (Player.bitNodeN === 8) {
     Player.money = BitNode8StartingMoney;
@@ -266,9 +271,16 @@ export function prestigeSourceFile(flume: boolean): void {
     Player.hasTixApiAccess = true;
   }
 
-  // Bit Node 10: Digital Carbon
+  // BitNode 10: Digital Carbon
   if (Player.bitNodeN === 10) {
-    dialogBoxCreate("Visit VitaLife in New Tokyo if you'd like to purchase a new sleeve!");
+    dialogBoxCreate(
+      "Seek out The Covenant if you'd like to purchase a new sleeve or two! And see what VitaLife in New Tokyo has to offer for you",
+    );
+  }
+
+  // BitNode 12: Digital Carbon
+  if (Player.bitNodeN === 12 && Player.sourceFileLvl(10) > 100) {
+    dialogBoxCreate("Saynt_Garmo is watching you");
   }
 
   if (Player.bitNodeN === 13) {
