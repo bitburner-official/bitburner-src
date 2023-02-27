@@ -4,7 +4,7 @@ Changelog
 =========
 
 
-v2.2.2 - 21 Feb 2022
+v2.2.2 - 21 Feb 2023
 --------------------
 
 PLANNED 2.3 BREAKING CHANGES:
