@@ -1469,6 +1469,7 @@ export const ns: InternalAPI<NSFull> = {
     // Read from port
     const iport = helpers.getValidPort(ctx, port);
     const x = iport.read();
+    helpers.deletePortIfEmpty(ctx, port);
     return x;
   },
   read: (ctx) => (_filename) => {
@@ -1498,6 +1499,7 @@ export const ns: InternalAPI<NSFull> = {
     const port = helpers.number(ctx, "port", _port);
     const iport = helpers.getValidPort(ctx, port);
     const x = iport.peek();
+    helpers.deletePortIfEmpty(ctx, port);
     return x;
   },
   clear: (ctx) => (_file) => {
@@ -1522,6 +1524,7 @@ export const ns: InternalAPI<NSFull> = {
     // Clear port
     const iport = helpers.getValidPort(ctx, port);
     iport.clear();
+    helpers.deletePortIfEmpty(ctx, port);
   },
   getPortHandle: (ctx) => (_port) => {
     const port = helpers.number(ctx, "port", _port);

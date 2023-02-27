@@ -53,6 +53,7 @@ export const helpers = {
   scriptIdentifier,
   hack,
   getValidPort,
+  deletePortIfEmpty,
   person,
   server,
   gang,
@@ -558,6 +559,30 @@ function getValidPort(ctx: NetscriptContext, port: number): IPort {
     NetscriptPorts.set(port, iport);
   }
   return iport;
+}
+
+function deletePortIfEmpty(ctx: NetscriptContext, port: number): void {
+  if (isNaN(port)) {
+    throw makeRuntimeErrorMsg(
+      ctx,
+      `Invalid argument. Must be a port number between 1 and ${CONSTANTS.NumNetscriptPorts}, is ${port}`,
+    );
+  }
+  port = Math.round(port);
+  if (port < 1 || port > CONSTANTS.NumNetscriptPorts) {
+    throw makeRuntimeErrorMsg(
+      ctx,
+      `Trying to use an invalid port: ${port}. Only ports 1-${CONSTANTS.NumNetscriptPorts} are valid.`,
+    );
+  }
+  let iport = NetscriptPorts.get(port);
+  if (!iport) {
+    iport = NetscriptPort();
+    NetscriptPorts.set(port, iport);
+  }
+  if (iport.empty()) {
+    NetscriptPorts.delete(port);
+  }
 }
 
 function person(ctx: NetscriptContext, p: unknown): IPerson {
