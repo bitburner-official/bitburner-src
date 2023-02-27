@@ -19,7 +19,7 @@ import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { influenceStockThroughServerHack } from "../StockMarket/PlayerInfluencing";
-import { IPort, NetscriptPort } from "../NetscriptPort";
+import { Port } from "../NetscriptPort";
 import { NetscriptPorts } from "../NetscriptWorker";
 import { FormulaGang } from "../Gang/formulas/formulas";
 import { GangMember } from "../Gang/GangMember";
@@ -539,50 +539,24 @@ function hack(
   });
 }
 
-function getValidPort(ctx: NetscriptContext, port: number): IPort {
-  if (isNaN(port)) {
+function getValidPort(ctx: NetscriptContext, portNumber: number): Port {
+  if (portNumber < 1 || portNumber > CONSTANTS.NumNetscriptPorts || !Number.isInteger(portNumber)) {
     throw makeRuntimeErrorMsg(
       ctx,
-      `Invalid argument. Must be a port number between 1 and ${CONSTANTS.NumNetscriptPorts}, is ${port}`,
+      `Trying to use an invalid port: ${portNumber}. Only integer ports 1-${CONSTANTS.NumNetscriptPorts} are valid.`,
     );
   }
-  port = Math.round(port);
-  if (port < 1 || port > CONSTANTS.NumNetscriptPorts) {
-    throw makeRuntimeErrorMsg(
-      ctx,
-      `Trying to use an invalid port: ${port}. Only ports 1-${CONSTANTS.NumNetscriptPorts} are valid.`,
-    );
+  let port = NetscriptPorts.get(portNumber);
+  if (!port) {
+    port = new Port();
+    NetscriptPorts.set(portNumber, port);
   }
-  let iport = NetscriptPorts.get(port);
-  if (!iport) {
-    iport = NetscriptPort();
-    NetscriptPorts.set(port, iport);
-  }
-  return iport;
+  return port;
 }
 
-function deletePortIfEmpty(ctx: NetscriptContext, port: number): void {
-  if (isNaN(port)) {
-    throw makeRuntimeErrorMsg(
-      ctx,
-      `Invalid argument. Must be a port number between 1 and ${CONSTANTS.NumNetscriptPorts}, is ${port}`,
-    );
-  }
-  port = Math.round(port);
-  if (port < 1 || port > CONSTANTS.NumNetscriptPorts) {
-    throw makeRuntimeErrorMsg(
-      ctx,
-      `Trying to use an invalid port: ${port}. Only ports 1-${CONSTANTS.NumNetscriptPorts} are valid.`,
-    );
-  }
-  let iport = NetscriptPorts.get(port);
-  if (!iport) {
-    iport = NetscriptPort();
-    NetscriptPorts.set(port, iport);
-  }
-  if (iport.empty()) {
-    NetscriptPorts.delete(port);
-  }
+// Currently unused
+function deletePortIfEmpty(portNumber: number, port: Port): void {
+  if (port.empty()) NetscriptPorts.delete(portNumber);
 }
 
 function person(ctx: NetscriptContext, p: unknown): IPerson {

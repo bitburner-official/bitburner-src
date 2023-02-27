@@ -9,14 +9,14 @@ Get a copy of the data from a port without popping it.
 **Signature:**
 
 ```typescript
-peek(port: number): PortData;
+peek(portNumber: number): PortData;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  port | number | Port to peek. Must be an integer between 1 and 20. |
+|  portNumber | number | Port to peek. Must be an integer between 1 and 20. |
 
 **Returns:**
 

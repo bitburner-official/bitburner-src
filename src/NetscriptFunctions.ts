@@ -1399,19 +1399,17 @@ export const ns: InternalAPI<NSFull> = {
     });
     return res;
   },
-  writePort:
-    (ctx) =>
-    (_port, data): string | number | null => {
-      const port = helpers.number(ctx, "port", _port);
-      if (typeof data !== "string" && typeof data !== "number") {
-        throw helpers.makeRuntimeErrorMsg(
-          ctx,
-          `Trying to write invalid data to a port: only strings and numbers are valid.`,
-        );
-      }
-      const iport = helpers.getValidPort(ctx, port);
-      return iport.write(data);
-    },
+  writePort: (ctx) => (_portNumber, data) => {
+    const portNumber = helpers.positiveInteger(ctx, "port", _portNumber);
+    if (typeof data !== "string" && typeof data !== "number") {
+      throw helpers.makeRuntimeErrorMsg(
+        ctx,
+        `Trying to write invalid data to a port: only strings and numbers are valid.`,
+      );
+    }
+    const port = helpers.getValidPort(ctx, portNumber);
+    return port.write(data);
+  },
   write:
     (ctx) =>
     (_filename, _data = "", _mode = "a") => {
@@ -1451,25 +1449,22 @@ export const ns: InternalAPI<NSFull> = {
       }
       return;
     },
-  tryWritePort:
-    (ctx) =>
-    (_port, data = "") => {
-      const port = helpers.number(ctx, "port", _port);
-      if (typeof data !== "string" && typeof data !== "number") {
-        throw helpers.makeRuntimeErrorMsg(
-          ctx,
-          `Trying to write invalid data to a port: only strings and numbers are valid.`,
-        );
-      }
-      const iport = helpers.getValidPort(ctx, port);
-      return iport.tryWrite(data);
-    },
-  readPort: (ctx) => (_port) => {
-    const port = helpers.number(ctx, "port", _port);
+  tryWritePort: (ctx) => (_portNumber, data) => {
+    const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
+    if (typeof data !== "string" && typeof data !== "number") {
+      throw helpers.makeRuntimeErrorMsg(
+        ctx,
+        `Trying to write invalid data to a port: only strings and numbers are valid.`,
+      );
+    }
+    const port = helpers.getValidPort(ctx, portNumber);
+    return port.tryWrite(data);
+  },
+  readPort: (ctx) => (_portNumber) => {
+    const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
     // Read from port
-    const iport = helpers.getValidPort(ctx, port);
-    const x = iport.read();
-    helpers.deletePortIfEmpty(ctx, port);
+    const port = helpers.getValidPort(ctx, portNumber);
+    const x = port.read();
     return x;
   },
   read: (ctx) => (_filename) => {
@@ -1495,11 +1490,10 @@ export const ns: InternalAPI<NSFull> = {
       }
     }
   },
-  peek: (ctx) => (_port) => {
-    const port = helpers.number(ctx, "port", _port);
-    const iport = helpers.getValidPort(ctx, port);
-    const x = iport.peek();
-    helpers.deletePortIfEmpty(ctx, port);
+  peek: (ctx) => (_portNumber) => {
+    const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
+    const port = helpers.getValidPort(ctx, portNumber);
+    const x = port.peek();
     return x;
   },
   clear: (ctx) => (_file) => {
@@ -1519,17 +1513,15 @@ export const ns: InternalAPI<NSFull> = {
       throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: ${file}`);
     }
   },
-  clearPort: (ctx) => (_port) => {
-    const port = helpers.number(ctx, "port", _port);
-    // Clear port
-    const iport = helpers.getValidPort(ctx, port);
-    iport.clear();
-    helpers.deletePortIfEmpty(ctx, port);
+  clearPort: (ctx) => (_portNumber) => {
+    const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
+    const port = helpers.getValidPort(ctx, portNumber);
+    port.clear();
   },
-  getPortHandle: (ctx) => (_port) => {
-    const port = helpers.number(ctx, "port", _port);
-    const iport = helpers.getValidPort(ctx, port);
-    return iport;
+  getPortHandle: (ctx) => (_portNumber) => {
+    const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
+    const port = helpers.getValidPort(ctx, portNumber);
+    return port;
   },
   rm:
     (ctx) =>

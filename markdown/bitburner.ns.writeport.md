@@ -9,14 +9,14 @@ Write data to a port.
 **Signature:**
 
 ```typescript
-writePort(port: number, data: string | number): PortData | null;
+writePort(portNumber: number, data: string | number): PortData | null;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  port | number |  |
+|  portNumber | number |  |
 |  data | string \| number |  |
 
 **Returns:**
