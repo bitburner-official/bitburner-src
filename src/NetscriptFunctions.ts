@@ -90,6 +90,7 @@ import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassTyp
 import { cloneDeep } from "lodash";
 import { FactionWorkType } from "./Enums";
 import numeral from "numeral";
+import { portHandle } from "./NetscriptPort";
 
 export const enums: NSEnums = {
   CityName,
@@ -1520,8 +1521,8 @@ export const ns: InternalAPI<NSFull> = {
   },
   getPortHandle: (ctx) => (_portNumber) => {
     const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
-    const port = helpers.getValidPort(ctx, portNumber);
-    return port;
+    if (portNumber <= CONSTANTS.NumNetscriptPorts) return portHandle(portNumber);
+    throw helpers.makeRuntimeErrorMsg(ctx, `portNumber must be less than ${CONSTANTS.NumNetscriptPorts}`);
   },
   rm:
     (ctx) =>

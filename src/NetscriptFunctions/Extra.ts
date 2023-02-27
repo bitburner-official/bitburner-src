@@ -6,6 +6,7 @@ import { Apr1Events as devMenu } from "../ui/Apr1";
 import { InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Terminal } from "../Terminal";
+import { NetscriptPorts } from "../NetscriptWorker";
 
 export type INetscriptExtra = {
   heart: {
@@ -18,22 +19,16 @@ export type INetscriptExtra = {
   rainbow(guess: string): void;
   iKnowWhatImDoing(): void;
   printRaw(value: React.ReactNode): void;
+  deletePortReference(portNumber: number): boolean;
 };
 
 export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
   return {
     heart: {
-      // Easter egg function
-      break: () => () => {
-        return Player.karma;
-      },
+      break: () => () => Player.karma,
     },
-    openDevMenu: () => () => {
-      devMenu.emit();
-    },
-    exploit: () => () => {
-      Player.giveExploit(Exploit.UndocumentedFunctionCall);
-    },
+    openDevMenu: () => () => devMenu.emit(),
+    exploit: () => () => Player.giveExploit(Exploit.UndocumentedFunctionCall),
     bypass: (ctx) => (doc) => {
       // reset both fields first
       type temporary = { completely_unused_field: unknown };
@@ -64,20 +59,12 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
         Player.giveExploit(Exploit.RealityAlteration);
       }
     },
-    rainbow: (ctx) => (guess) => {
-      function tryGuess(): boolean {
-        // eslint-disable-next-line no-sync
-        const verified = bcrypt.compareSync(
-          helpers.string(ctx, "guess", guess),
-          "$2a$10$aertxDEkgor8baVtQDZsLuMwwGYmkRM/ohcA6FjmmzIHQeTCsrCcO",
-        );
-        if (verified) {
-          Player.giveExploit(Exploit.INeedARainbow);
-          return true;
-        }
-        return false;
-      }
-      return tryGuess();
+    rainbow: (ctx) => (_guess) => {
+      const guess = helpers.string(ctx, "guess", _guess);
+      const verified = bcrypt.compareSync(guess, "$2a$10$aertxDEkgor8baVtQDZsLuMwwGYmkRM/ohcA6FjmmzIHQeTCsrCcO");
+      if (!verified) return false;
+      Player.giveExploit(Exploit.INeedARainbow);
+      return true;
     },
     iKnowWhatImDoing: (ctx) => () => {
       helpers.log(ctx, () => "Unlocking unsupported feature: window.tprintRaw");
@@ -87,6 +74,16 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
     printRaw: (ctx) => (value) => {
       // Using this voids the warranty on your tail log
       ctx.workerScript.print(value as React.ReactNode);
+    },
+    deletePortReference: (ctx) => (_portNumber) => {
+      const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
+      const port = NetscriptPorts.get(portNumber);
+      if (!port) return false;
+      // @ts-ignore deleting port data manually
+      delete port.data;
+      // @ts-ignore deleting port resolvers array manually
+      delete port.resolvers;
+      return NetscriptPorts.delete(portNumber);
     },
   };
 }

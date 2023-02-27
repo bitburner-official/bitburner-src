@@ -53,7 +53,6 @@ export const helpers = {
   scriptIdentifier,
   hack,
   getValidPort,
-  deletePortIfEmpty,
   person,
   server,
   gang,
@@ -552,11 +551,6 @@ function getValidPort(ctx: NetscriptContext, portNumber: number): Port {
     NetscriptPorts.set(portNumber, port);
   }
   return port;
-}
-
-// Currently unused
-function deletePortIfEmpty(portNumber: number, port: Port): void {
-  if (port.empty()) NetscriptPorts.delete(portNumber);
 }
 
 function person(ctx: NetscriptContext, p: unknown): IPerson {
