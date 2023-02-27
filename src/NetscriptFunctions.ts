@@ -90,7 +90,7 @@ import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassTyp
 import { cloneDeep } from "lodash";
 import { FactionWorkType } from "./Enums";
 import numeral from "numeral";
-import { portHandle } from "./NetscriptPort";
+import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort } from "./NetscriptPort";
 
 export const enums: NSEnums = {
   CityName,
@@ -1401,15 +1401,14 @@ export const ns: InternalAPI<NSFull> = {
     return res;
   },
   writePort: (ctx) => (_portNumber, data) => {
-    const portNumber = helpers.positiveInteger(ctx, "port", _portNumber);
+    const portNumber = helpers.portNumber(ctx, _portNumber);
     if (typeof data !== "string" && typeof data !== "number") {
       throw helpers.makeRuntimeErrorMsg(
         ctx,
         `Trying to write invalid data to a port: only strings and numbers are valid.`,
       );
     }
-    const port = helpers.getValidPort(ctx, portNumber);
-    return port.write(data);
+    return writePort(portNumber, data);
   },
   write:
     (ctx) =>
@@ -1451,22 +1450,18 @@ export const ns: InternalAPI<NSFull> = {
       return;
     },
   tryWritePort: (ctx) => (_portNumber, data) => {
-    const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
+    const portNumber = helpers.portNumber(ctx, _portNumber);
     if (typeof data !== "string" && typeof data !== "number") {
       throw helpers.makeRuntimeErrorMsg(
         ctx,
         `Trying to write invalid data to a port: only strings and numbers are valid.`,
       );
     }
-    const port = helpers.getValidPort(ctx, portNumber);
-    return port.tryWrite(data);
+    return tryWritePort(portNumber, data);
   },
   readPort: (ctx) => (_portNumber) => {
-    const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
-    // Read from port
-    const port = helpers.getValidPort(ctx, portNumber);
-    const x = port.read();
-    return x;
+    const portNumber = helpers.portNumber(ctx, _portNumber);
+    return readPort(portNumber);
   },
   read: (ctx) => (_filename) => {
     const fn = helpers.string(ctx, "filename", _filename);
@@ -1492,10 +1487,8 @@ export const ns: InternalAPI<NSFull> = {
     }
   },
   peek: (ctx) => (_portNumber) => {
-    const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
-    const port = helpers.getValidPort(ctx, portNumber);
-    const x = port.peek();
-    return x;
+    const portNumber = helpers.portNumber(ctx, _portNumber);
+    return peekPort(portNumber);
   },
   clear: (ctx) => (_file) => {
     const file = helpers.string(ctx, "file", _file);
@@ -1515,14 +1508,12 @@ export const ns: InternalAPI<NSFull> = {
     }
   },
   clearPort: (ctx) => (_portNumber) => {
-    const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
-    const port = helpers.getValidPort(ctx, portNumber);
-    port.clear();
+    const portNumber = helpers.portNumber(ctx, _portNumber);
+    return clearPort(portNumber);
   },
   getPortHandle: (ctx) => (_portNumber) => {
-    const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
-    if (portNumber <= CONSTANTS.NumNetscriptPorts) return portHandle(portNumber);
-    throw helpers.makeRuntimeErrorMsg(ctx, `portNumber must be less than ${CONSTANTS.NumNetscriptPorts}`);
+    const portNumber = helpers.portNumber(ctx, _portNumber);
+    return portHandle(portNumber);
   },
   rm:
     (ctx) =>

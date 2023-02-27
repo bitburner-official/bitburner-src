@@ -6,7 +6,6 @@ import { Apr1Events as devMenu } from "../ui/Apr1";
 import { InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Terminal } from "../Terminal";
-import { NetscriptPorts } from "../NetscriptWorker";
 
 export type INetscriptExtra = {
   heart: {
@@ -19,7 +18,6 @@ export type INetscriptExtra = {
   rainbow(guess: string): void;
   iKnowWhatImDoing(): void;
   printRaw(value: React.ReactNode): void;
-  deletePortReference(portNumber: number): boolean;
 };
 
 export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
@@ -74,16 +72,6 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
     printRaw: (ctx) => (value) => {
       // Using this voids the warranty on your tail log
       ctx.workerScript.print(value as React.ReactNode);
-    },
-    deletePortReference: (ctx) => (_portNumber) => {
-      const portNumber = helpers.positiveInteger(ctx, "portNumber", _portNumber);
-      const port = NetscriptPorts.get(portNumber);
-      if (!port) return false;
-      // @ts-ignore deleting port data manually
-      delete port.data;
-      // @ts-ignore deleting port resolvers array manually
-      delete port.resolvers;
-      return NetscriptPorts.delete(portNumber);
     },
   };
 }
