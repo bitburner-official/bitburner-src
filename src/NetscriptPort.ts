@@ -5,7 +5,7 @@ import { NetscriptPorts } from "./NetscriptWorker";
 type PortData = string | number;
 type Resolver = () => void;
 const emptyPortData = "NULL PORT DATA";
-// PortNumber is typechecked by helpers.portNumber. The object property is for typechecking only and is not real at runtime.
+/** The object property is for typechecking and is not present at runtime */
 export type PortNumber = number & { __PortNumber: true };
 
 /** Gets the numbered port, initializing it if it doesn't already exist.

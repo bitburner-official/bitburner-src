@@ -15,9 +15,7 @@ the element that is read is removed from the port.
 The :js:func:`read`, :js:func:`write`, :js:func:`tryWrite`, :js:func:`clear`, and :js:func:`peek`
 Netscript functions can be used to interact with ports.
 
-Right now, there are only 20 ports for Netscript, denoted by the number 1
-through 20. When using the functions above, the ports are specified
-by passing the number as the first argument and the value as the second. 
+When using the functions above, the ports are specified by passing the number as the first argument and the value as the second. 
 The default maximum capacity of a port is 50, but this can be changed in Options > System. Setting this too high can cause the game to use a lot of memory. 
 
 .. important:: The data inside ports are not saved! This means if you close and re-open the game, or reload the page then you will lose all of the data in the ports!
