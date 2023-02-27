@@ -58,12 +58,10 @@ async function prepareFolders(...folders) {
   for (const folder of folders) {
     try {
       // Making sure the folder exists
-      // eslint-disable-next-line no-await-in-loop
       await fs.stat(folder);
     } catch (error) {
       if (error.code === "ENOENT") {
         log.warn(`'${folder}' not found, creating it...`);
-        // eslint-disable-next-line no-await-in-loop
         await fs.mkdir(folder);
       } else {
         log.error(error);
@@ -250,13 +248,11 @@ async function saveGameToDisk(window, saveData) {
     const fileToRemove = oldestFiles.shift();
     log.debug(`Over Quota -> Removing "${fileToRemove}"`);
     try {
-      // eslint-disable-next-line no-await-in-loop
       await fs.unlink(fileToRemove);
     } catch (error) {
       log.error(error);
     }
 
-    // eslint-disable-next-line no-await-in-loop
     saveFolderSizeBytes = await getFolderSizeInBytes(currentFolder);
     log.debug(`Save Folder: ${saveFolderSizeBytes} bytes`);
     log.debug(

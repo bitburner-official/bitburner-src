@@ -72,23 +72,6 @@ function setStopProcessHandler(app, window) {
       log.error(error);
     }
 
-    // This may no longer be needed due to the return of action: deny in gameWindow.js setWindowOpenHandler.
-    // Nothing currently sets the app_playerOpenedExternalLink flag. See utils.js openExternal comment for more info.
-    // -------
-    // Because of a steam limitation, if the player has launched an external browser,
-    // steam will keep displaying the game as "Running" in their UI as long as the browser is up.
-    // So we'll alert the player to close their browser.
-    if (global.app_playerOpenedExternalLink) {
-      await dialog.showMessageBox({
-        title: "Bitburner",
-        message: "You may have to close your browser to properly exit the game.",
-        detail:
-          'Steam will keep tracking Bitburner as "Running" if any process started within the game is still running.' +
-          " This includes launching an external link, which opens up your browser.",
-        type: "warning",
-        buttons: ["OK"],
-      });
-    }
     // We'll try to execute javascript on the page to see if we're stuck
     let canRunJS = false;
     window.webContents.executeJavaScript("window.stop(); document.close()", true).then(() => (canRunJS = true));
