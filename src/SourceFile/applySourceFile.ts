@@ -135,10 +135,10 @@ export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
       // Hacktocracy
       let mult = 0;
       for (let i = 0; i < srcFile.lvl; ++i) {
-        mult += 16 / Math.pow(2, i);
+        mult += 12 / Math.pow(2, i);
       }
       const incMult = 1 + mult / 100;
-      const decMult = 1 / incMult;
+      const decMult = 1 - mult / 100;
       Player.mults.hacknet_node_core_cost *= decMult;
       Player.mults.hacknet_node_level_cost *= decMult;
       Player.mults.hacknet_node_money *= incMult;

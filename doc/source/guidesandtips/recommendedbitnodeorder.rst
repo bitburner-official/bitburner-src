@@ -308,9 +308,9 @@ Source-File
 
     This Source-File also increases hacknet production and reduces hacknet costs by:
 
-    * Level 1: 16%
-    * Level 2: 24%
-    * Level 3: 28%
+    * Level 1: 12%
+    * Level 2: 18%
+    * Level 3: 21%
 
 Difficulty
     Hard

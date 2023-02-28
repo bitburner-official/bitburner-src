@@ -324,11 +324,11 @@ export function initBitNodes() {
         <br />
         This Source-File also increases hacknet production and reduces hacknet costs by:
         <br />
-        Level 1: 16%
+        Level 1: 12%
         <br />
-        Level 2: 24%
+        Level 2: 18%
         <br />
-        Level 3: 28%
+        Level 3: 21%
       </>
     ),
   );
