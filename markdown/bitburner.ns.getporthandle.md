@@ -9,14 +9,14 @@ Get all data on a port.
 **Signature:**
 
 ```typescript
-getPortHandle(port: number): NetscriptPort;
+getPortHandle(portNumber: number): NetscriptPort;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  port | number | Port number. Must be an integer between 1 and 20. |
+|  portNumber | number | Port number. Must be an integer between 1 and 20. |
 
 **Returns:**
 

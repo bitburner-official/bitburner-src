@@ -13,7 +13,7 @@ import { CONSTANTS } from "./Constants";
 import { Interpreter } from "./ThirdParty/JSInterpreter";
 import { NetscriptFunctions } from "./NetscriptFunctions";
 import { compile, Node } from "./NetscriptJSEvaluator";
-import { IPort } from "./NetscriptPort";
+import { Port, PortNumber } from "./NetscriptPort";
 import { RunningScript } from "./Script/RunningScript";
 import { getRamUsageFromRunningScript } from "./Script/RunningScriptHelpers";
 import { scriptCalculateOfflineProduction } from "./Script/ScriptHelpers";
@@ -35,7 +35,7 @@ import { Terminal } from "./Terminal";
 import { ScriptArg } from "./Netscript/ScriptArg";
 import { handleUnknownError } from "./Netscript/NetscriptHelpers";
 
-export const NetscriptPorts: Map<number, IPort> = new Map();
+export const NetscriptPorts: Map<PortNumber, Port> = new Map();
 
 export function prestigeWorkerScripts(): void {
   for (const ws of workerScripts.values()) {

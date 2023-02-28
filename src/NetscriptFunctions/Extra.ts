@@ -23,17 +23,10 @@ export type INetscriptExtra = {
 export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
   return {
     heart: {
-      // Easter egg function
-      break: () => () => {
-        return Player.karma;
-      },
+      break: () => () => Player.karma,
     },
-    openDevMenu: () => () => {
-      devMenu.emit();
-    },
-    exploit: () => () => {
-      Player.giveExploit(Exploit.UndocumentedFunctionCall);
-    },
+    openDevMenu: () => () => devMenu.emit(),
+    exploit: () => () => Player.giveExploit(Exploit.UndocumentedFunctionCall),
     bypass: (ctx) => (doc) => {
       // reset both fields first
       type temporary = { completely_unused_field: unknown };
@@ -64,20 +57,12 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
         Player.giveExploit(Exploit.RealityAlteration);
       }
     },
-    rainbow: (ctx) => (guess) => {
-      function tryGuess(): boolean {
-        // eslint-disable-next-line no-sync
-        const verified = bcrypt.compareSync(
-          helpers.string(ctx, "guess", guess),
-          "$2a$10$aertxDEkgor8baVtQDZsLuMwwGYmkRM/ohcA6FjmmzIHQeTCsrCcO",
-        );
-        if (verified) {
-          Player.giveExploit(Exploit.INeedARainbow);
-          return true;
-        }
-        return false;
-      }
-      return tryGuess();
+    rainbow: (ctx) => (_guess) => {
+      const guess = helpers.string(ctx, "guess", _guess);
+      const verified = bcrypt.compareSync(guess, "$2a$10$aertxDEkgor8baVtQDZsLuMwwGYmkRM/ohcA6FjmmzIHQeTCsrCcO");
+      if (!verified) return false;
+      Player.giveExploit(Exploit.INeedARainbow);
+      return true;
     },
     iKnowWhatImDoing: (ctx) => () => {
       helpers.log(ctx, () => "Unlocking unsupported feature: window.tprintRaw");

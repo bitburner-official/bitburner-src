@@ -19,8 +19,7 @@ import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { influenceStockThroughServerHack } from "../StockMarket/PlayerInfluencing";
-import { IPort, NetscriptPort } from "../NetscriptPort";
-import { NetscriptPorts } from "../NetscriptWorker";
+import { PortNumber } from "../NetscriptPort";
 import { FormulaGang } from "../Gang/formulas/formulas";
 import { GangMember } from "../Gang/GangMember";
 import { GangMemberTask } from "../Gang/GangMemberTask";
@@ -52,7 +51,7 @@ export const helpers = {
   getServer,
   scriptIdentifier,
   hack,
-  getValidPort,
+  portNumber,
   person,
   server,
   gang,
@@ -538,26 +537,15 @@ function hack(
   });
 }
 
-function getValidPort(ctx: NetscriptContext, port: number): IPort {
-  if (isNaN(port)) {
+function portNumber(ctx: NetscriptContext, _n: unknown): PortNumber {
+  const n = positiveInteger(ctx, "portNumber", _n);
+  if (n > CONSTANTS.NumNetscriptPorts) {
     throw makeRuntimeErrorMsg(
       ctx,
-      `Invalid argument. Must be a port number between 1 and ${CONSTANTS.NumNetscriptPorts}, is ${port}`,
+      `Trying to use an invalid port: ${n}. Must be less or equal to ${CONSTANTS.NumNetscriptPorts}.`,
     );
   }
-  port = Math.round(port);
-  if (port < 1 || port > CONSTANTS.NumNetscriptPorts) {
-    throw makeRuntimeErrorMsg(
-      ctx,
-      `Trying to use an invalid port: ${port}. Only ports 1-${CONSTANTS.NumNetscriptPorts} are valid.`,
-    );
-  }
-  let iport = NetscriptPorts.get(port);
-  if (!iport) {
-    iport = NetscriptPort();
-    NetscriptPorts.set(port, iport);
-  }
-  return iport;
+  return n as PortNumber;
 }
 
 function person(ctx: NetscriptContext, p: unknown): IPerson {

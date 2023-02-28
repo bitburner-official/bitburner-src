@@ -927,7 +927,7 @@ export type SleeveTask =
 
 /** Object representing a port. A port is a serialized queue.
  * @public */
-interface NetscriptPort {
+export interface NetscriptPort {
   /** Write data to a port.
    * @remarks
    * RAM cost: 0 GB
@@ -6117,11 +6117,11 @@ export interface NS {
    * If the port is full, the data will not be written.
    * Otherwise, the data will be written normally.
    *
-   * @param port - Port or text file that will be written to.
+   * @param portNumber - Port or text file that will be written to.
    * @param data - Data to write.
    * @returns True if the data is successfully written to the port, and false otherwise.
    */
-  tryWritePort(port: number, data: string | number): boolean;
+  tryWritePort(portNumber: number, data: string | number): boolean;
 
   /**
    * Read content of a file.
@@ -6147,10 +6147,10 @@ export interface NS {
    * first element in the specified port without removing that element. If
    * the port is empty, the string “NULL PORT DATA” will be returned.
    *
-   * @param port - Port to peek. Must be an integer between 1 and 20.
+   * @param portNumber - Port to peek. Must be an integer between 1 and 20.
    * @returns Data in the specified port.
    */
-  peek(port: number): PortData;
+  peek(portNumber: number): PortData;
 
   /**
    * Clear data from a file.
@@ -6182,7 +6182,7 @@ export interface NS {
    * Write data to the given Netscript port.
    * @returns The data popped off the queue if it was full, or null if it was not full.
    */
-  writePort(port: number, data: string | number): PortData | null;
+  writePort(portNumber: number, data: string | number): PortData | null;
   /**
    * Read data from a port.
    * @remarks
@@ -6193,7 +6193,7 @@ export interface NS {
    * If the queue is empty, then the string “NULL PORT DATA” will be returned.
    * @returns The data read.
    */
-  readPort(port: number): PortData;
+  readPort(portNumber: number): PortData;
 
   /**
    * Get all data on a port.
@@ -6205,9 +6205,9 @@ export interface NS {
    * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
    *
    * @see https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptmisc.html#netscript-ports
-   * @param port - Port number. Must be an integer between 1 and 20.
+   * @param portNumber - Port number. Must be an integer between 1 and 20.
    */
-  getPortHandle(port: number): NetscriptPort;
+  getPortHandle(portNumber: number): NetscriptPort;
 
   /**
    * Delete a file.

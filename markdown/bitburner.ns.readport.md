@@ -9,14 +9,14 @@ Read data from a port.
 **Signature:**
 
 ```typescript
-readPort(port: number): PortData;
+readPort(portNumber: number): PortData;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  port | number |  |
+|  portNumber | number |  |
 
 **Returns:**
 

@@ -90,6 +90,7 @@ import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassTyp
 import { cloneDeep } from "lodash";
 import { FactionWorkType } from "./Enums";
 import numeral from "numeral";
+import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort } from "./NetscriptPort";
 
 export const enums: NSEnums = {
   CityName,
@@ -1399,19 +1400,16 @@ export const ns: InternalAPI<NSFull> = {
     });
     return res;
   },
-  writePort:
-    (ctx) =>
-    (_port, data): string | number | null => {
-      const port = helpers.number(ctx, "port", _port);
-      if (typeof data !== "string" && typeof data !== "number") {
-        throw helpers.makeRuntimeErrorMsg(
-          ctx,
-          `Trying to write invalid data to a port: only strings and numbers are valid.`,
-        );
-      }
-      const iport = helpers.getValidPort(ctx, port);
-      return iport.write(data);
-    },
+  writePort: (ctx) => (_portNumber, data) => {
+    const portNumber = helpers.portNumber(ctx, _portNumber);
+    if (typeof data !== "string" && typeof data !== "number") {
+      throw helpers.makeRuntimeErrorMsg(
+        ctx,
+        `Trying to write invalid data to a port: only strings and numbers are valid.`,
+      );
+    }
+    return writePort(portNumber, data);
+  },
   write:
     (ctx) =>
     (_filename, _data = "", _mode = "a") => {
@@ -1451,25 +1449,19 @@ export const ns: InternalAPI<NSFull> = {
       }
       return;
     },
-  tryWritePort:
-    (ctx) =>
-    (_port, data = "") => {
-      const port = helpers.number(ctx, "port", _port);
-      if (typeof data !== "string" && typeof data !== "number") {
-        throw helpers.makeRuntimeErrorMsg(
-          ctx,
-          `Trying to write invalid data to a port: only strings and numbers are valid.`,
-        );
-      }
-      const iport = helpers.getValidPort(ctx, port);
-      return iport.tryWrite(data);
-    },
-  readPort: (ctx) => (_port) => {
-    const port = helpers.number(ctx, "port", _port);
-    // Read from port
-    const iport = helpers.getValidPort(ctx, port);
-    const x = iport.read();
-    return x;
+  tryWritePort: (ctx) => (_portNumber, data) => {
+    const portNumber = helpers.portNumber(ctx, _portNumber);
+    if (typeof data !== "string" && typeof data !== "number") {
+      throw helpers.makeRuntimeErrorMsg(
+        ctx,
+        `Trying to write invalid data to a port: only strings and numbers are valid.`,
+      );
+    }
+    return tryWritePort(portNumber, data);
+  },
+  readPort: (ctx) => (_portNumber) => {
+    const portNumber = helpers.portNumber(ctx, _portNumber);
+    return readPort(portNumber);
   },
   read: (ctx) => (_filename) => {
     const fn = helpers.string(ctx, "filename", _filename);
@@ -1494,11 +1486,9 @@ export const ns: InternalAPI<NSFull> = {
       }
     }
   },
-  peek: (ctx) => (_port) => {
-    const port = helpers.number(ctx, "port", _port);
-    const iport = helpers.getValidPort(ctx, port);
-    const x = iport.peek();
-    return x;
+  peek: (ctx) => (_portNumber) => {
+    const portNumber = helpers.portNumber(ctx, _portNumber);
+    return peekPort(portNumber);
   },
   clear: (ctx) => (_file) => {
     const file = helpers.string(ctx, "file", _file);
@@ -1517,16 +1507,13 @@ export const ns: InternalAPI<NSFull> = {
       throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: ${file}`);
     }
   },
-  clearPort: (ctx) => (_port) => {
-    const port = helpers.number(ctx, "port", _port);
-    // Clear port
-    const iport = helpers.getValidPort(ctx, port);
-    iport.clear();
+  clearPort: (ctx) => (_portNumber) => {
+    const portNumber = helpers.portNumber(ctx, _portNumber);
+    return clearPort(portNumber);
   },
-  getPortHandle: (ctx) => (_port) => {
-    const port = helpers.number(ctx, "port", _port);
-    const iport = helpers.getValidPort(ctx, port);
-    return iport;
+  getPortHandle: (ctx) => (_portNumber) => {
+    const portNumber = helpers.portNumber(ctx, _portNumber);
+    return portHandle(portNumber);
   },
   rm:
     (ctx) =>
