@@ -102,6 +102,8 @@ export const Settings = {
   useEngineeringNotation: false,
   /** Whether to disable suffixes and always use exponential form (scientific or engineering). */
   disableSuffixes: false,
+  /** Whether to check for execution timeout errors */
+  infiniteLoopDetection: true,
 
   load(saveString: string) {
     const save = JSON.parse(saveString);
