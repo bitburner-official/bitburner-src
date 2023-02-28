@@ -4828,14 +4828,14 @@ export interface NS {
   growthAnalyze(host: string, multiplier: number, cores?: number): number;
 
   /**
-   * Calculate the security increase for a number of threads.
+   * Calculate the security increase for a number of grow threads.
    * @remarks
    * RAM cost: 1 GB
    *
    * Returns the security increase that would occur if a grow with this many threads happened.
    *
    * @param threads - Amount of threads that will be used.
-   * @param hostname - Optional. Hostname of the target server. The number of threads is limited to the number needed to hack the server's maximum amount of money.
+   * @param hostname - Optional. Hostname of the target server. If provided, security increase is limited by the number of threads needed to reach maximum money.
    * @param cores - Optional. The number of cores of the server that would run grow.
    * @returns The security increase.
    */

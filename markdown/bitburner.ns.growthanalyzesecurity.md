@@ -4,7 +4,7 @@
 
 ## NS.growthAnalyzeSecurity() method
 
-Calculate the security increase for a number of threads.
+Calculate the security increase for a number of grow threads.
 
 **Signature:**
 
@@ -17,7 +17,7 @@ growthAnalyzeSecurity(threads: number, hostname?: string, cores?: number): numbe
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  threads | number | Amount of threads that will be used. |
-|  hostname | string | _(Optional)_ Optional. Hostname of the target server. The number of threads is limited to the number needed to hack the server's maximum amount of money. |
+|  hostname | string | _(Optional)_ Optional. Hostname of the target server. If provided, security increase is limited by the number of threads needed to reach maximum money. |
 |  cores | number | _(Optional)_ Optional. The number of cores of the server that would run grow. |
 
 **Returns:**

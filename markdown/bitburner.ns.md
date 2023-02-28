@@ -121,7 +121,7 @@ export async function main(ns) {
 |  [getWeakenTime(host)](./bitburner.ns.getweakentime.md) | Get the execution time of a weaken() call. |
 |  [grow(host, opts)](./bitburner.ns.grow.md) | Spoof money in a server's bank account, increasing the amount available. |
 |  [growthAnalyze(host, multiplier, cores)](./bitburner.ns.growthanalyze.md) | Calculate the number of grow threads needed for a given multiplicative growth factor. |
-|  [growthAnalyzeSecurity(threads, hostname, cores)](./bitburner.ns.growthanalyzesecurity.md) | Calculate the security increase for a number of threads. |
+|  [growthAnalyzeSecurity(threads, hostname, cores)](./bitburner.ns.growthanalyzesecurity.md) | Calculate the security increase for a number of grow threads. |
 |  [hack(host, opts)](./bitburner.ns.hack.md) | Steal a server's money. |
 |  [hackAnalyze(host)](./bitburner.ns.hackanalyze.md) | Get the part of money stolen with a single thread. |
 |  [hackAnalyzeChance(host)](./bitburner.ns.hackanalyzechance.md) | Get the chance of successfully hacking a server. |
