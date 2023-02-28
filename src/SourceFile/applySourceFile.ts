@@ -19,7 +19,7 @@ export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
         mult += 16 / Math.pow(2, i);
       }
       const incMult = 1 + mult / 100;
-      const decMult = 1 - mult / 100;
+      const decMult = 1 / incMult;
       Player.mults.hacking_chance *= incMult;
       Player.mults.hacking_speed *= incMult;
       Player.mults.hacking_money *= incMult;
@@ -135,7 +135,7 @@ export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
       // Hacktocracy
       let mult = 0;
       for (let i = 0; i < srcFile.lvl; ++i) {
-        mult += 8 / Math.pow(2, i);
+        mult += 12 / Math.pow(2, i);
       }
       const incMult = 1 + mult / 100;
       const decMult = 1 - mult / 100;
