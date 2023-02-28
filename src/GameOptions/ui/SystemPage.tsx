@@ -141,6 +141,17 @@ export const SystemPage = (): React.ReactElement => {
         />
       </>
       <OptionSwitch
+        checked={Settings.infiniteLoopDetection}
+        onChange={(newValue) => (Settings.infiniteLoopDetection = newValue)}
+        text="Infinite loop detection"
+        tooltip={
+          <>
+            If this is set, scripts can generate an execution timeout error when an ns function is called and the script
+            has been running synchronous operations for at least 7s.
+          </>
+        }
+      />
+      <OptionSwitch
         checked={Settings.SuppressSavedGameToast}
         onChange={(newValue) => (Settings.SuppressSavedGameToast = newValue)}
         text="Suppress Auto-Save Game Toast"

@@ -33,14 +33,7 @@ import { BaseServer } from "../Server/BaseServer";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { checkEnum } from "../utils/helpers/enum";
 import { RamCostConstants } from "./RamCostGenerator";
-
-let lastTime = Date.now();
-setInterval(() => (lastTime = Date.now()), 1000);
-// This event should prevent false positive timeout errors when user alt-tabs / otherwise hides the window
-document.addEventListener(
-  "visibilitychange",
-  () => (lastTime = document.visibilityState === "hidden" ? Infinity : Date.now()),
-);
+import { Settings } from "../Settings/Settings";
 
 export const helpers = {
   string,
@@ -311,6 +304,15 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
   }
 }
 
+/** The last time the page was able to update this tracking variable, which is used for timeout detection */
+let lastTime = Date.now();
+setInterval(() => (lastTime = Date.now()), 1000);
+// This event should prevent false positive timeout errors when user alt-tabs / otherwise hides the window
+document.addEventListener(
+  "visibilitychange",
+  () => (lastTime = document.visibilityState === "hidden" ? Infinity : Date.now()),
+);
+
 /** Create an error if a script is dead or if concurrent ns function calls are made */
 function checkEnvFlags(ctx: NetscriptContext): void {
   const ws = ctx.workerScript;
@@ -331,12 +333,16 @@ function checkEnvFlags(ctx: NetscriptContext): void {
       "CONCURRENCY",
     );
   }
-  // 6s because lastTime only gets updated every 1s, so this allows scripts at least 5s of synchronous execution time.
-  if (Date.now() - 6000 > lastTime) {
+  // 8s allows scripts at least 7s of synchronous execution time before error, since updates are every 1s.
+  if (Settings.infiniteLoopDetection && Date.now() - 8000 > lastTime) {
     // Prevent error getting piggybacked to another script due to a stale timer.
     lastTime = Date.now();
 
-    throw makeRuntimeErrorMsg(ctx, "TODO: Make a better timeout error message.", "EXECUTION TIMEOUT");
+    throw makeRuntimeErrorMsg(
+      ctx,
+      "Possible infinite loop detected while running function.\nThis error is enabled by Options -> System -> Infinite loop detection.",
+      "EXECUTION TIMEOUT",
+    );
   }
 }
 
