@@ -176,7 +176,7 @@ export const ns: InternalAPI<NSFull> = {
       return 0; // To prevent returning infinity below
     }
 
-    return hackAmount / Math.floor(server.moneyAvailable * percentHacked);
+    return hackAmount / server.moneyAvailable * percentHacked;
   },
   hackAnalyze: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
