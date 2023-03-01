@@ -3,6 +3,8 @@
 # Clear out any files remaining from old builds and recreate folder
 rm -rf .package
 mkdir .package
+rm -rf .build
+mkdir .build
 
 # .app should have the fully built game already after npm run build
 cp -r .app/* .package
