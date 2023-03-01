@@ -25,5 +25,4 @@ jobs:
       - run: npm run electron
       - uses: actions/upload-artifact@v3
         with:
-          path: ".build"
-          
+          path: ".build/bitburner-linux-x64"
