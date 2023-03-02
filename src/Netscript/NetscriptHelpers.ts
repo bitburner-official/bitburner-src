@@ -304,15 +304,6 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
   }
 }
 
-/** The last time the page was able to update this tracking variable, which is used for timeout detection */
-let lastTime = Date.now();
-setInterval(() => (lastTime = Date.now()), 1000);
-// This event should prevent false positive timeout errors when user alt-tabs / otherwise hides the window
-document.addEventListener(
-  "visibilitychange",
-  () => (lastTime = document.visibilityState === "hidden" ? Infinity : Date.now()),
-);
-
 /** Create an error if a script is dead or if concurrent ns function calls are made */
 function checkEnvFlags(ctx: NetscriptContext): void {
   const ws = ctx.workerScript;
@@ -331,17 +322,6 @@ function checkEnvFlags(ctx: NetscriptContext): void {
       promise-returning function?
       Currently running: ${ws.env.runningFn} tried to run: ${ctx.function}`,
       "CONCURRENCY",
-    );
-  }
-  // 8s allows scripts at least 7s of synchronous execution time before error, since updates are every 1s.
-  if (Settings.infiniteLoopDetection && Date.now() - 8000 > lastTime) {
-    // Prevent error getting piggybacked to another script due to a stale timer.
-    lastTime = Date.now();
-
-    throw makeRuntimeErrorMsg(
-      ctx,
-      "Possible infinite loop detected while running function.\nThis error is enabled by Options -> System -> Infinite loop detection.",
-      "EXECUTION TIMEOUT",
     );
   }
 }
