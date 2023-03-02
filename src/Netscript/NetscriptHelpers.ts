@@ -33,7 +33,6 @@ import { BaseServer } from "../Server/BaseServer";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { checkEnum } from "../utils/helpers/enum";
 import { RamCostConstants } from "./RamCostGenerator";
-import { Settings } from "../Settings/Settings";
 
 export const helpers = {
   string,
