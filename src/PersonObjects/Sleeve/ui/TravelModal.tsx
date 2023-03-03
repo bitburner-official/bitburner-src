@@ -24,7 +24,7 @@ export function TravelModal(props: IProps): React.ReactElement {
       dialogBoxCreate("You cannot afford to have this sleeve travel to another city");
     }
     props.sleeve.city = city as CityName;
-    Player.loseMoney(CONSTANTS.TravelCost, "sleeve");
+    Player.loseMoney(CONSTANTS.TravelCost, "sleeves");
     props.sleeve.stopWork();
     props.rerender();
     props.onClose();
