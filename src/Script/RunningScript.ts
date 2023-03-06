@@ -65,8 +65,9 @@ export class RunningScript {
   // Script urls for the current running script for translating urls back to file names in errors
   dependencies: ScriptUrl[] = [];
 
-  constructor(script?: Script, ramUsage = RamCostConstants.Base, args: ScriptArg[] = []) {
+  constructor(script?: Script, ramUsage?: number, args: ScriptArg[] = []) {
     if (!script) return;
+    if (!ramUsage) throw new Error("Must provide a ramUsage for RunningScript initialization.");
     this.filename = script.filename;
     this.args = args;
     this.server = script.server;
