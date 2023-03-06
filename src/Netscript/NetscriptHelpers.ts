@@ -33,7 +33,7 @@ import { BaseServer } from "../Server/BaseServer";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { checkEnum } from "../utils/helpers/enum";
 import { RamCostConstants } from "./RamCostGenerator";
-import { PositiveInteger } from "../types";
+import { isPositiveInteger, PositiveInteger } from "../types";
 
 export const helpers = {
   string,
@@ -161,10 +161,10 @@ function number(ctx: NetscriptContext, argName: string, v: unknown): number {
 /** Convert provided value v for argument argName to a positive integer, throwing if it looks like something else. */
 function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): PositiveInteger {
   const n = number(ctx, argName, v);
-  if (n < 1 || !Number.isInteger(n)) {
+  if (!isPositiveInteger(n)) {
     throw makeRuntimeErrorMsg(ctx, `${argName} should be a positive integer, was ${n}`, "TYPE");
   }
-  return n as PositiveInteger;
+  return n;
 }
 
 /** Returns args back if it is a ScriptArg[]. Throws an error if it is not. */

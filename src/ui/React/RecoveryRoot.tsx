@@ -92,6 +92,7 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
               multiline
               fullWidth
               rows={12}
+              spellCheck={false}
               sx={{ "& .MuiOutlinedInput-root": { color: Settings.theme.secondary } }}
             />
           </Box>

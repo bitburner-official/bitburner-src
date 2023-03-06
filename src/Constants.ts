@@ -229,22 +229,32 @@ export const CONSTANTS: {
 
   LatestUpdate: `
 v2.3 Dev
+* Monaco script editor updated to a newer version + more config options. (@Snarling)
+* Revamp of script ram calculation process, should be more reliable now. (@Snarling)
+* The SF9.3 bonus is also given to the player when inside of BN9. (@Zelow79)
+* Adjusted the SF1 bonus for hacknet costs (slight nerf), and raised the SF9 bonus to compensate. (@d0sboots)
+* Sleeve shock recovery now scales with intelligence. (@Tyasuh)
+* Improve ns.scp filename recognition when leading slash discrepancy (@lucebac)
+* Fix memory leak when netscript ports were initialized and never used again. (@Snarling)
+* Fix a bug that could result in an infinite atExit loop if a script killed itself. (@Snarling)
+* Fix a bug where numeric terminal arguments were not being detected as strings when enclosed in quote marks. (@LiamGeorge1999)
+* Fix a bug with hackAnalyzeThreads where infinite threads would be indicated any time a single thread would hack less than $1 (@Snarling)
+* Fix a misspelled moneySourceTracker call for sleeves (@zerbosh)
+* All Math Expressions contract no longer accepts wrong answers (@Snarling)
+* Improve Electron's handling of external links (@Snarling) 
+* Documentation improvements (@Mughur, @quacksouls, @Snarling, @AdityaHegde)
+* Nerf noodle bar
 
-Major bugfix (Will backport these changes to 2.2.2 if possible)
+2.2.2 Hotfixes
 * Fix an issue that prevented the Electron API server from communicating with the VSCode plugin. (credit to u/AnyGiraffe4367 on reddit)
 
 Other changes
-* Monaco script editor updated to a newer version. Also many internal code changes to support this. (@Snarling)
-* The SF9.3 bonus is also given to the player when inside of BN9. (@Zelow79)
-* Sleeve shock recovery now scales with intelligence. (@Tyasuh)
-* Nerf noodle bar
 
 Planned changes:
 * 2.3 will include a large planned rework to corporation. This may cause api breaks for any corporation scripts, and there will be large changes in how the corporation mechanic functions.
 * Enum changes, potentially causing API break with some enums. Enums will be more usable and there will be more of them.
 * Constants rework - interenal game constants will be reorganized and will be provided to the player as different categories of constants.
 * Improve type validation on ns functions.
-* Add more Script Editor configuration options (font family, ligatures, etc).
 * Further deprecation of ns1. Removal of more documentation, add ingame notice to prompt player to update scripts to .js.
 * Nerf noodle bar
 `,
