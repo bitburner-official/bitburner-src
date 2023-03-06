@@ -272,7 +272,8 @@ export abstract class BaseServer {
       if (fn === this.scripts[i].filename) {
         const script = this.scripts[i];
         script.code = code;
-        script.updateRamUsage(this.scripts);
+        // Set ramUsage to null in order to force recalculation on next run
+        script.ramUsage = null;
         script.markUpdated();
         ret.overwritten = true;
         ret.success = true;
@@ -281,7 +282,7 @@ export abstract class BaseServer {
     }
 
     // Otherwise, create a new script
-    const newScript = new Script(fn, code, this.hostname, this.scripts);
+    const newScript = new Script(fn, code, this.hostname);
     this.scripts.push(newScript);
     ret.success = true;
     return ret;

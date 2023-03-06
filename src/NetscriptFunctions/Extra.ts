@@ -6,6 +6,7 @@ import { Apr1Events as devMenu } from "../ui/Apr1";
 import { InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Terminal } from "../Terminal";
+import { RamCostConstants } from "../Netscript/RamCostGenerator";
 
 export type INetscriptExtra = {
   heart: {
@@ -36,7 +37,7 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
       real_document.completely_unused_field = undefined;
       // set one to true and check that it affected the other.
       real_document.completely_unused_field = true;
-      if (d.completely_unused_field && ctx.workerScript.ramUsage === 1.6) {
+      if (d.completely_unused_field && ctx.workerScript.ramUsage === RamCostConstants.Base) {
         Player.giveExploit(Exploit.Bypass);
       }
       d.completely_unused_field = undefined;

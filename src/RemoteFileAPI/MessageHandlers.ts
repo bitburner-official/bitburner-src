@@ -124,8 +124,8 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => void | R
     if (!isScriptFilename(fileData.filename)) return error("Filename isn't a script filename", msg);
     const script = server.getScript(fileData.filename);
     if (!script) return error("File doesn't exist", msg);
-    const ramUsage = script.ramUsage;
-
+    const ramUsage = script.getRamUsage(server.scripts);
+    if (!ramUsage) return error("Ram cost could not be calculated", msg);
     return new RFAMessage({ result: ramUsage, id: msg.id });
   },
 

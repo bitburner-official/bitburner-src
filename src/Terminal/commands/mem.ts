@@ -1,8 +1,9 @@
 import { Terminal } from "../../Terminal";
 import { formatRam } from "../../ui/formatNumber";
 import { Settings } from "../../Settings/Settings";
+import { BaseServer } from "../../Server/BaseServer";
 
-export function mem(args: (string | number | boolean)[]): void {
+export function mem(args: (string | number | boolean)[], server: BaseServer): void {
   try {
     if (args.length !== 1 && args.length !== 3) {
       Terminal.error("Incorrect usage of mem command. usage: mem [scriptname] [-t] [number threads]");
@@ -25,7 +26,10 @@ export function mem(args: (string | number | boolean)[]): void {
       return;
     }
 
-    const ramUsage = script.ramUsage * numThreads;
+    const singleRamUsage = script.getRamUsage(server.scripts);
+    if (!singleRamUsage) return Terminal.error(`Could not calculate ram usage for ${scriptName}`);
+
+    const ramUsage = singleRamUsage * numThreads;
 
     Terminal.print(`This script requires ${formatRam(ramUsage)} of RAM to run for ${numThreads} thread(s)`);
 

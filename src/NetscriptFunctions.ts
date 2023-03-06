@@ -36,7 +36,7 @@ import {
 } from "./Server/ServerPurchases";
 import { Server } from "./Server/Server";
 import { influenceStockThroughServerGrow } from "./StockMarket/PlayerInfluencing";
-import { isValidFilePath, removeLeadingSlash } from "./Terminal/DirectoryHelpers";
+import { areFilesEqual, isValidFilePath, removeLeadingSlash } from "./Terminal/DirectoryHelpers";
 import { TextFile, getTextFile, createTextFile } from "./TextFile";
 import { runScriptFromScript } from "./NetscriptWorker";
 import { killWorkerScript } from "./Netscript/killWorkerScript";
@@ -890,7 +890,8 @@ export const ns: InternalAPI<NSFull> = {
             continue;
           }
           destScript.code = sourceScript.code;
-          destScript.ramUsage = sourceScript.ramUsage;
+          // Set ramUsage to null in order to force a recalculation prior to next run.
+          destScript.ramUsage = null;
           destScript.markUpdated();
           helpers.log(ctx, () => `WARNING: File '${file}' overwritten on '${destServer?.hostname}'`);
           continue;
@@ -899,11 +900,11 @@ export const ns: InternalAPI<NSFull> = {
         // Create new script if it does not already exist
         const newScript = new Script(file);
         newScript.code = sourceScript.code;
-        newScript.ramUsage = sourceScript.ramUsage;
+        // Set ramUsage to null in order to force a recalculation prior to next run.
+        newScript.ramUsage = null;
         newScript.server = destServer.hostname;
         destServer.scripts.push(newScript);
         helpers.log(ctx, () => `File '${file}' copied over to '${destServer?.hostname}'.`);
-        newScript.updateRamUsage(destServer.scripts);
       }
 
       return noFailures;
@@ -1430,12 +1431,14 @@ export const ns: InternalAPI<NSFull> = {
         let script = ctx.workerScript.getScriptOnServer(fn, server);
         if (script == null) {
           // Create a new script
-          script = new Script(fn, String(data), server.hostname, server.scripts);
+          script = new Script(fn, String(data), server.hostname);
           server.scripts.push(script);
-          return script.updateRamUsage(server.scripts);
+          return;
         }
         mode === "w" ? (script.code = String(data)) : (script.code += data);
-        return script.updateRamUsage(server.scripts);
+        // Set ram to null so a recalc is performed the next time ram usage is needed
+        script.ramUsage = null;
+        return;
       } else {
         // Write to text file
         if (!fn.endsWith(".txt")) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filename: ${fn}`);
@@ -1566,12 +1569,14 @@ export const ns: InternalAPI<NSFull> = {
       const scriptname = helpers.string(ctx, "scriptname", _scriptname);
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const server = helpers.getServer(ctx, hostname);
-      for (let i = 0; i < server.scripts.length; ++i) {
-        if (server.scripts[i].filename == scriptname) {
-          return server.scripts[i].ramUsage;
-        }
+      const script = server.scripts.find((serverScript) => areFilesEqual(serverScript.filename, scriptname));
+      if (!script) return 0;
+      const ramUsage = script.getRamUsage(server.scripts);
+      if (!ramUsage) {
+        helpers.log(ctx, () => `Could not calculate ram usage for ${scriptname} on ${hostname}.`);
+        return 0;
       }
-      return 0;
+      return ramUsage;
     },
   getRunningScript:
     (ctx) =>
