@@ -72,7 +72,7 @@ export class WorkerScript {
   pid: number;
 
   /** Script's Static RAM usage. Equivalent to underlying script's RAM usage */
-  ramUsage = 0;
+  ramUsage = RamCostConstants.Base;
 
   /** Reference to underlying RunningScript object */
   scriptRef: RunningScript;

@@ -1,4 +1,4 @@
-import { PlayerObject } from "src/PersonObjects/Player/PlayerObject";
+import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { SkillNames } from "../Bladeburner/data/SkillNames";
 import { Skills } from "../Bladeburner/Skills";
@@ -341,7 +341,7 @@ export const achievements: Record<string, Achievement> = {
   SCRIPT_32GB: {
     ...achievementData["SCRIPT_32GB"],
     Icon: "bigcost",
-    Condition: () => Player.getHomeComputer().scripts.some((s) => s.ramUsage >= 32),
+    Condition: () => Player.getHomeComputer().scripts.some((s) => (s.ramUsage as number) >= 32),
   },
   FIRST_HACKNET_NODE: {
     ...achievementData["FIRST_HACKNET_NODE"],

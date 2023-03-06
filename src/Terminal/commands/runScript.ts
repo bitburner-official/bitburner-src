@@ -6,6 +6,8 @@ import { RunningScript } from "../../Script/RunningScript";
 import { findRunningScript } from "../../Script/ScriptHelpers";
 import * as libarg from "arg";
 import { formatRam } from "../../ui/formatNumber";
+import { ScriptArg } from "@nsdefs";
+import { isPositiveInteger } from "../../types";
 
 export function runScript(commandArgs: (string | number | boolean)[], server: BaseServer): void {
   if (commandArgs.length < 1) {
@@ -24,11 +26,12 @@ export function runScript(commandArgs: (string | number | boolean)[], server: Ba
   });
   const tailFlag = flags["--tail"] === true;
   const numThreads = parseFloat(flags["-t"] ?? 1);
-  if (numThreads < 1 || !Number.isInteger(numThreads)) {
-    Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
-    return;
+  if (!isPositiveInteger(numThreads)) {
+    return Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
   }
-  const args = flags["_"];
+
+  // Todo: Switch out arg for something with typescript support
+  const args = flags["_"] as ScriptArg[];
 
   // Check if this script is already running
   if (findRunningScript(scriptName, args, server) != null) {
@@ -46,7 +49,9 @@ export function runScript(commandArgs: (string | number | boolean)[], server: Ba
     // Check for admin rights and that there is enough RAM available to run
     const script = server.scripts[i];
     script.server = server.hostname;
-    const ramUsage = script.ramUsage * numThreads;
+    const singleRamUsage = script.getRamUsage(server.scripts);
+    if (!singleRamUsage) return Terminal.error("Error while calculating ram usage for this script.");
+    const ramUsage = singleRamUsage * numThreads;
     const ramAvailable = server.maxRam - server.ramUsed;
 
     if (!server.hasAdminRights) {
@@ -64,7 +69,7 @@ export function runScript(commandArgs: (string | number | boolean)[], server: Ba
     }
 
     // Able to run script
-    const runningScript = new RunningScript(script, args);
+    const runningScript = new RunningScript(script, singleRamUsage, args);
     runningScript.threads = numThreads;
 
     const success = startWorkerScript(runningScript, server);

@@ -10,7 +10,9 @@ import { Terminal } from "../Terminal";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { formatTime } from "../utils/helpers/formatTime";
-import { ScriptArg } from "../Netscript/ScriptArg";
+import { ScriptArg } from "@nsdefs";
+import { RamCostConstants } from "../Netscript/RamCostGenerator";
+import { PositiveInteger } from "../types";
 
 export class RunningScript {
   // Script arguments
@@ -52,25 +54,24 @@ export class RunningScript {
   pid = -1;
 
   // How much RAM this script uses for ONE thread
-  ramUsage = 0;
+  ramUsage = RamCostConstants.Base;
 
   // hostname of the server on which this script is running
   server = "";
 
   // Number of threads that this script is running with
-  threads = 1;
+  threads = 1 as PositiveInteger;
 
   // Script urls for the current running script for translating urls back to file names in errors
   dependencies: ScriptUrl[] = [];
 
-  constructor(script: Script | null = null, args: ScriptArg[] = []) {
-    if (script == null) {
-      return;
-    }
+  constructor(script?: Script, ramUsage?: number, args: ScriptArg[] = []) {
+    if (!script) return;
+    if (!ramUsage) throw new Error("Must provide a ramUsage for RunningScript initialization.");
     this.filename = script.filename;
     this.args = args;
     this.server = script.server;
-    this.ramUsage = script.ramUsage;
+    this.ramUsage = ramUsage;
     this.dependencies = script.dependencies;
   }
 

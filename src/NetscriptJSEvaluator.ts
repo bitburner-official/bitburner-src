@@ -28,7 +28,6 @@ export async function compile(script: Script, scripts: Script[]): Promise<Script
   //If multiple compiles were called on the same script before a compilation could be completed this ensures only one compilation is actually performed.
   if (!script.queueCompile) return script.module as Promise<ScriptModule>;
   script.queueCompile = false;
-  script.updateRamUsage(scripts);
   const uurls = _getScriptUrls(script, scripts, []);
   const url = uurls[uurls.length - 1].url;
   if (script.url && script.url !== url) URL.revokeObjectURL(script.url);

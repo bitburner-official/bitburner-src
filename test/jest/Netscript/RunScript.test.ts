@@ -52,7 +52,7 @@ test.each([
     const alerted = new Promise((resolve) => {
       alertDelete = AlertEvents.subscribe((x) => resolve(x));
     });
-    server = new Server({ hostname: "home", hasAdminRights: true, maxRam: 8 });
+    server = new Server({ hostname: "home", adminRights: true, maxRam: 8 });
     AddToAllServers(server);
     for (const s of scripts) {
       expect(server.writeToScriptFile(s.name, s.code)).toEqual({ success: true, overwritten: false });
@@ -61,8 +61,8 @@ test.each([
     const script = server.scripts[server.scripts.length - 1];
     expect(script.filename).toEqual(scripts[scripts.length - 1].name);
 
-    const runningScript = new RunningScript(script);
-    runningScript.threads = 1;
+    const ramUsage = script.getRamUsage(server.scripts);
+    const runningScript = new RunningScript(script, ramUsage as number);
     expect(startWorkerScript(runningScript, server)).toBeGreaterThan(0);
     // We don't care about start, so subscribe after that. Await script death.
     const result = await Promise.race([

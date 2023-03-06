@@ -10,6 +10,7 @@ import { ScriptUrl } from "./ScriptUrl";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { ScriptModule } from "./ScriptModule";
+import { RamCostConstants } from "../Netscript/RamCostGenerator";
 
 let globalModuleSequenceNumber = 0;
 
@@ -41,8 +42,8 @@ export class Script {
   dependencies: ScriptUrl[] = [];
   dependents: ScriptReference[] = [];
 
-  // Amount of RAM this Script requires to run
-  ramUsage = 0;
+  // Amount of RAM this Script requires to run. null indicates an error in calculating ram.
+  ramUsage: number | null = null;
   ramUsageEntries?: RamUsageEntry[];
 
   // Used to deconflict multiple simultaneous compilations.
@@ -51,14 +52,11 @@ export class Script {
   // hostname of server that this script is on.
   server = "";
 
-  constructor(fn = "", code = "", server = "", otherScripts: Script[] = []) {
+  constructor(fn = "", code = "", server = "") {
     this.filename = fn;
     this.code = code;
     this.server = server; // hostname of server this script is on
     this.moduleSequenceNumber = ++globalModuleSequenceNumber;
-    if (this.code !== "") {
-      this.updateRamUsage(otherScripts);
-    }
   }
 
   /** Download the script as a file */
@@ -97,14 +95,24 @@ export class Script {
 
     this.filename = filename;
     this.server = hostname;
-    this.updateRamUsage(otherScripts);
+    // Null ramUsage forces a recalc next time ramUsage is needed
+    this.ramUsage = null;
     this.markUpdated();
-    for (const dependent of this.dependents) {
-      const [dependentScript] = otherScripts.filter(
-        (s) => s.filename === dependent.filename && s.server == dependent.server,
+    this.dependents.forEach((dependent) => {
+      const scriptToUpdate = otherScripts.find(
+        (otherScript) => otherScript.filename === dependent.filename && otherScript.server === dependent.server,
       );
-      dependentScript?.markUpdated();
-    }
+      if (!scriptToUpdate) return;
+      scriptToUpdate.ramUsage = null;
+      scriptToUpdate.markUpdated();
+    });
+  }
+
+  /** Gets the ram usage, while also attempting to update it if it's currently null */
+  getRamUsage(otherScripts: Script[]): number | null {
+    if (this.ramUsage) return this.ramUsage;
+    this.updateRamUsage(otherScripts);
+    return this.ramUsage;
   }
 
   /**
@@ -112,11 +120,11 @@ export class Script {
    * @param {Script[]} otherScripts - Other scripts on the server. Used to process imports
    */
   updateRamUsage(otherScripts: Script[]): void {
-    const res = calculateRamUsage(this.code, otherScripts);
-    if (res.cost > 0) {
-      this.ramUsage = roundToTwo(res.cost);
-      this.ramUsageEntries = res.entries;
-    }
+    const ramCalc = calculateRamUsage(this.code, otherScripts);
+    if (ramCalc.cost >= RamCostConstants.Base) {
+      this.ramUsage = roundToTwo(ramCalc.cost);
+      this.ramUsageEntries = ramCalc.entries;
+    } else this.ramUsage = null;
     this.markUpdated();
   }
 

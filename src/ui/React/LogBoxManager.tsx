@@ -20,6 +20,8 @@ import { Settings } from "../../Settings/Settings";
 import { ANSIITypography } from "./ANSIITypography";
 import { ScriptArg } from "../../Netscript/ScriptArg";
 import { useRerender } from "./hooks";
+import { areFilesEqual } from "../../Terminal/DirectoryHelpers";
+import { dialogBoxCreate } from "./DialogBox";
 
 let layerCounter = 0;
 
@@ -220,7 +222,17 @@ function LogWindow(props: IProps): React.ReactElement {
     if (server === null) return;
     const s = findRunningScript(script.filename, script.args, server);
     if (s === null) {
-      script.ramUsage = 0;
+      const baseScript = server.scripts.find((serverScript) => areFilesEqual(serverScript.filename, script.filename));
+      if (!baseScript) {
+        return dialogBoxCreate(
+          `Could not launch script. The script ${script.filename} no longer exists on the server ${server.hostname}.`,
+        );
+      }
+      const ramUsage = baseScript.getRamUsage(server.scripts);
+      if (!ramUsage) {
+        return dialogBoxCreate(`Could not calculate ram usage for ${script.filename} on ${server.hostname}.`);
+      }
+      script.ramUsage = ramUsage;
       startWorkerScript(script, server);
     } else {
       setScript(s);

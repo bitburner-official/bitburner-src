@@ -49,6 +49,7 @@ import { canGetBonus, onExport } from "../ExportBonus";
 import { saveObject } from "../SaveObject";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { findEnumMember } from "../utils/helpers/enum";
+import { areFilesEqual } from "../Terminal/DirectoryHelpers";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const getAugmentation = function (ctx: NetscriptContext, name: string): Augmentation {
@@ -77,18 +78,17 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     //Run a script after reset
     if (!cbScript) return;
     const home = Player.getHomeComputer();
-    for (const script of home.scripts) {
-      if (script.filename === cbScript) {
-        const ramUsage = script.ramUsage;
-        const ramAvailable = home.maxRam - home.ramUsed;
-        if (ramUsage > ramAvailable + 0.001) {
-          return; // Not enough RAM
-        }
-        const runningScriptObj = new RunningScript(script, []); // No args
-        runningScriptObj.threads = 1; // Only 1 thread
-        startWorkerScript(runningScriptObj, home);
-      }
+    const script = home.scripts.find((serverScript) => areFilesEqual(serverScript.filename, cbScript));
+    if (!script) return;
+    const ramUsage = script.getRamUsage(home.scripts);
+    if (!ramUsage) {
+      return Terminal.error(`Attempted to launch ${cbScript} after reset but could not calculate ram usage.`);
     }
+    const ramAvailable = home.maxRam - home.ramUsed;
+    if (ramUsage > ramAvailable + 0.001) return;
+    // Start script with no args and 1 thread (default).
+    const runningScriptObj = new RunningScript(script, ramUsage, []);
+    startWorkerScript(runningScriptObj, home);
   };
 
   const singularityAPI: InternalAPI<ISingularity> = {

@@ -36,8 +36,11 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
   /** Creates a RunningScript object which calculates static ram usage */
   function createRunningScript(code: string) {
     script.code = code;
-    script.updateRamUsage([]);
-    const runningScript = new RunningScript(script);
+    // Force ram calculation reset
+    script.ramUsage = null;
+    const ramUsage = script.getRamUsage([]);
+    if (!ramUsage) throw new Error("Ram usage should be defined.");
+    const runningScript = new RunningScript(script, ramUsage);
     return runningScript;
   }
 

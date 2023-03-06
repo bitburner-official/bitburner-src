@@ -254,9 +254,9 @@ export function prestigeHomeComputer(homeComp: Server): void {
     homeComp.programs.push(Programs.BitFlume.name);
   }
 
-  //Update RAM usage on all scripts
+  //Reset RAM usage calculation for all scripts
   homeComp.scripts.forEach(function (script) {
-    script.updateRamUsage(homeComp.scripts);
+    script.ramUsage = null;
   });
 
   homeComp.messages.length = 0; //Remove .lit and .msg files

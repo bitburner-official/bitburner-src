@@ -1,4 +1,4 @@
-import { Person } from "src/PersonObjects/Person";
+import { Person } from "../PersonObjects/Person";
 import { Player } from "@player";
 import { Multipliers } from "../PersonObjects/Multipliers";
 

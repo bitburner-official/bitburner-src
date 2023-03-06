@@ -2,7 +2,7 @@ import * as React from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import { TableCell, Tooltip, Typography } from "@mui/material";
 import { characterOverviewStyles } from "./CharacterOverview";
-import { ISkillProgress } from "src/PersonObjects/formulas/skill";
+import { ISkillProgress } from "../../PersonObjects/formulas/skill";
 import { formatExp } from "../formatNumber";
 
 interface IProgressProps {

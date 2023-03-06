@@ -1,12 +1,13 @@
 import { Settings } from "./Settings/Settings";
 import { NetscriptPort } from "@nsdefs";
 import { NetscriptPorts } from "./NetscriptWorker";
+import { PositiveInteger } from "./types";
 
 type PortData = string | number;
 type Resolver = () => void;
 const emptyPortData = "NULL PORT DATA";
 /** The object property is for typechecking and is not present at runtime */
-export type PortNumber = number & { __PortNumber: true };
+export type PortNumber = PositiveInteger & { __PortNumber: true };
 
 /** Gets the numbered port, initializing it if it doesn't already exist.
  * Only using for functions that write data/resolvers. Use NetscriptPorts.get(n) for */

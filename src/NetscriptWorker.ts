@@ -15,7 +15,6 @@ import { NetscriptFunctions } from "./NetscriptFunctions";
 import { compile, Node } from "./NetscriptJSEvaluator";
 import { Port, PortNumber } from "./NetscriptPort";
 import { RunningScript } from "./Script/RunningScript";
-import { getRamUsageFromRunningScript } from "./Script/RunningScriptHelpers";
 import { scriptCalculateOfflineProduction } from "./Script/ScriptHelpers";
 import { Script } from "./Script/Script";
 import { GetAllServers } from "./Server/AllServers";
@@ -32,8 +31,9 @@ import { parse } from "acorn";
 import { simple as walksimple } from "acorn-walk";
 import { areFilesEqual } from "./Terminal/DirectoryHelpers";
 import { Terminal } from "./Terminal";
-import { ScriptArg } from "./Netscript/ScriptArg";
+import { ScriptArg } from "@nsdefs";
 import { handleUnknownError } from "./Netscript/NetscriptHelpers";
+import { PositiveInteger } from "./types";
 
 export const NetscriptPorts: Map<PortNumber, Port> = new Map();
 
@@ -53,6 +53,7 @@ async function startNetscript2Script(workerScript: WorkerScript): Promise<void> 
   const scripts = workerScript.getServer().scripts;
   const script = workerScript.getScript();
   if (script === null) throw "workerScript had no associated script. This is a bug.";
+  if (!script.ramUsage) throw "Attempting to start a script with no calculated ram cost. This is a bug.";
   const loadedModule = await compile(script, scripts);
   workerScript.ramUsage = script.ramUsage;
   const ns = workerScript.env.vars;
@@ -294,15 +295,7 @@ export function startWorkerScript(runningScript: RunningScript, server: BaseServ
  * returns {boolean} indicating whether or not the workerScript was successfully added
  */
 function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseServer, parent?: WorkerScript): boolean {
-  // Update server's ram usage
-  let threads = 1;
-  if (runningScriptObj.threads && !isNaN(runningScriptObj.threads)) {
-    threads = runningScriptObj.threads;
-  } else {
-    runningScriptObj.threads = 1;
-  }
-  const oneRamUsage = getRamUsageFromRunningScript(runningScriptObj);
-  const ramUsage = roundToTwo(oneRamUsage * threads);
+  const ramUsage = roundToTwo(runningScriptObj.ramUsage * runningScriptObj.threads);
   const ramAvailable = server.maxRam - server.ramUsed;
   if (ramUsage > ramAvailable + 0.001) {
     dialogBoxCreate(
@@ -327,7 +320,7 @@ function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseS
   // Create the WorkerScript. NOTE: WorkerScript ctor will set the underlying
   // RunningScript's PID as well
   const workerScript = new WorkerScript(runningScriptObj, pid, NetscriptFunctions);
-  workerScript.ramUsage = oneRamUsage;
+  workerScript.ramUsage = runningScriptObj.ramUsage;
 
   // Add the WorkerScript to the global pool
   workerScripts.set(pid, workerScript);
@@ -405,82 +398,61 @@ export function loadAllRunningScripts(): void {
 /** Run a script from inside another script (run(), exec(), spawn(), etc.) */
 export function runScriptFromScript(
   caller: string,
-  server: BaseServer,
+  host: BaseServer,
   scriptname: string,
   args: ScriptArg[],
   workerScript: WorkerScript,
-  threads = 1,
+  threads = 1 as PositiveInteger,
 ): number {
-  // Sanitize arguments
-  if (!(workerScript instanceof WorkerScript)) {
+  /* Very inefficient, TODO change data structures so that finding script & checking if it's already running does
+   * not require iterating through all scripts and comparing names/args. This is a big part of slowdown when
+   * running a large number of scripts. */
+
+  // Find the script, fail if it doesn't exist.
+  const script = host.scripts.find((serverScript) => areFilesEqual(serverScript.filename, scriptname));
+  if (!script) {
+    workerScript.log(caller, () => `Could not find script '${scriptname}' on '${host.hostname}'`);
     return 0;
   }
 
-  if (typeof scriptname !== "string" || !Array.isArray(args)) {
-    workerScript.log(caller, () => `Invalid arguments: scriptname='${scriptname} args='${args}'`);
-    console.error(`runScriptFromScript() failed due to invalid arguments`);
+  // Check if script is already running on server and fail if it is.
+  if (host.getRunningScript(scriptname, args)) {
+    workerScript.log(caller, () => `'${scriptname}' is already running on '${host.hostname}'`);
     return 0;
   }
 
-  args.forEach((arg, i) => {
-    if (typeof arg !== "string" && typeof arg !== "number" && typeof arg !== "boolean")
-      throw new Error(
-        "Only strings, numbers, and booleans can be passed as arguments to other scripts.\n" +
-          `${scriptname} argument index ${i} is of type ${typeof arg} and value ${JSON.stringify(arg)}`,
-      );
-  });
-
-  // Check if the script is already running
-  const runningScriptObj = server.getRunningScript(scriptname, args);
-  if (runningScriptObj != null) {
-    workerScript.log(caller, () => `'${scriptname}' is already running on '${server.hostname}'`);
+  const singleRamUsage = script.getRamUsage(host.scripts);
+  if (!singleRamUsage) {
+    workerScript.log(caller, () => `Ram usage could not be calculated for ${scriptname}`);
     return 0;
   }
 
-  // 'null/undefined' arguments are not allowed
-  for (let i = 0; i < args.length; ++i) {
-    if (args[i] == null) {
-      workerScript.log(caller, () => "Cannot execute a script with null/undefined as an argument");
-      return 0;
-    }
+  // Check if admin rights on host, fail if not.
+  if (host.hasAdminRights == false) {
+    workerScript.log(caller, () => `You do not have root access on '${host.hostname}'`);
+    return 0;
   }
 
-  // Check if the script exists and if it does run it
-  for (let i = 0; i < server.scripts.length; ++i) {
-    if (!areFilesEqual(server.scripts[i].filename, scriptname)) continue;
-    // Check for admin rights and that there is enough RAM available to run
-    const script = server.scripts[i];
-    let ramUsage = script.ramUsage;
-    threads = Math.floor(Number(threads));
-    if (threads === 0) {
-      return 0;
-    }
-    ramUsage = ramUsage * threads;
-    const ramAvailable = server.maxRam - server.ramUsed;
+  // Calculate ram usage including thread count
+  const ramUsage = singleRamUsage * threads;
 
-    if (server.hasAdminRights == false) {
-      workerScript.log(caller, () => `You do not have root access on '${server.hostname}'`);
-      return 0;
-    } else if (ramUsage > ramAvailable + 0.001) {
-      workerScript.log(
-        caller,
-        () =>
-          `Cannot run script '${scriptname}' (t=${threads}) on '${server.hostname}' because there is not enough available RAM!`,
-      );
-      return 0;
-    }
-    // Able to run script
+  // Check if there is enough ram to run the script, fail if not.
+  const ramAvailable = host.maxRam - host.ramUsed;
+  if (ramUsage > ramAvailable + 0.001) {
     workerScript.log(
       caller,
-      () => `'${scriptname}' on '${server.hostname}' with ${threads} threads and args: ${arrayToString(args)}.`,
+      () =>
+        `Cannot run script '${scriptname}' (t=${threads}) on '${host.hostname}' because there is not enough available RAM!`,
     );
-    const runningScriptObj = new RunningScript(script, args);
-    runningScriptObj.threads = threads;
-    runningScriptObj.server = server.hostname;
-
-    return startWorkerScript(runningScriptObj, server, workerScript);
+    return 0;
   }
+  // Able to run script
+  workerScript.log(
+    caller,
+    () => `'${scriptname}' on '${host.hostname}' with ${threads} threads and args: ${arrayToString(args)}.`,
+  );
+  const runningScriptObj = new RunningScript(script, singleRamUsage, args);
+  runningScriptObj.threads = threads;
 
-  workerScript.log(caller, () => `Could not find script '${scriptname}' on '${server.hostname}'`);
-  return 0;
+  return startWorkerScript(runningScriptObj, host, workerScript);
 }
