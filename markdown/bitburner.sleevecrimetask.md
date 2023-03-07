@@ -8,7 +8,12 @@
 **Signature:**
 
 ```typescript
-type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}`; cyclesWorked: number };
+type SleeveCrimeTask = {
+  type: "CRIME";
+  crimeType: CrimeType | `${CrimeType}`;
+  cyclesWorked: number;
+  cyclesNeeded: number;
+};
 ```
 **References:** [CrimeType](./bitburner.crimetype.md)
 

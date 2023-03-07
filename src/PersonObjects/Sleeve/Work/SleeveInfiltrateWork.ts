@@ -33,6 +33,7 @@ export class SleeveInfiltrateWork extends Work {
     return {
       type: WorkType.INFILTRATE as "INFILTRATE",
       cyclesWorked: this.cyclesWorked,
+      cyclesNeeded: this.cyclesNeeded(),
     };
   }
 

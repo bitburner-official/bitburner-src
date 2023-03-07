@@ -52,6 +52,7 @@ export class SleeveCrimeWork extends Work {
       type: WorkType.CRIME as "CRIME",
       crimeType: this.crimeType,
       cyclesWorked: this.cyclesWorked,
+      cyclesNeeded: this.cyclesNeeded(),
     };
   }
 

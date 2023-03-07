@@ -62,12 +62,13 @@ export class SleeveBladeburnerWork extends Work {
     }
   }
 
-  APICopy() {
+  APICopy(sleeve: Sleeve) {
     return {
       type: WorkType.BLADEBURNER as "BLADEBURNER",
       actionType: this.actionType,
       actionName: this.actionName,
       cyclesWorked: this.cyclesWorked,
+      cyclesNeeded: this.cyclesNeeded(sleeve),
     };
   }
 

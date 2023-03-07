@@ -8,5 +8,5 @@
 **Signature:**
 
 ```typescript
-type SleeveInfiltrateTask = { type: "INFILTRATE"; cyclesWorked: number };
+type SleeveInfiltrateTask = { type: "INFILTRATE"; cyclesWorked: number; cyclesNeeded: number };
 ```
