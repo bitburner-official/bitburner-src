@@ -20,9 +20,7 @@ export class SleeveSupportWork extends Work {
   }
 
   APICopy() {
-    return {
-      type: WorkType.SUPPORT as "SUPPORT",
-    };
+    return { type: WorkType.SUPPORT as "SUPPORT" };
   }
 
   /** Serialize the current object to a JSON save state. */
