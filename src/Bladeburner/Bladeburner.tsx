@@ -1301,6 +1301,7 @@ export class Bladeburner {
           } else {
             retValue = this.getActionStats(action, person, false);
             ++action.failures;
+            --action.count;
             let loss = 0,
               damage = 0;
             if (action.rankLoss) {
