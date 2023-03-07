@@ -551,7 +551,8 @@ function person(ctx: NetscriptContext, p: unknown): IPerson {
     mults: undefined,
     city: undefined,
   };
-  if (!roughlyIs(fakePerson, p)) throw makeRuntimeErrorMsg(ctx, `person should be a Person.`, "TYPE");
+  const error = missingKey(fakePerson, p);
+  if (error) throw makeRuntimeErrorMsg(ctx, `person should be a Person.\n${error}`, "TYPE");
   return p as IPerson;
 }
 
@@ -582,36 +583,36 @@ function server(ctx: NetscriptContext, s: unknown): Server {
     requiredHackingSkill: undefined,
     serverGrowth: undefined,
   };
-  if (!roughlyIs(fakeServer, s)) throw makeRuntimeErrorMsg(ctx, `server should be a Server.`, "TYPE");
+  const error = missingKey(fakeServer, s);
+  if (error) throw makeRuntimeErrorMsg(ctx, `server should be a hackable Server.\n${error}`, "TYPE");
   return s as Server;
 }
 
-function roughlyIs(expect: object, actual: unknown): boolean {
-  if (typeof actual !== "object" || actual == null) return false;
-
-  const expects = Object.keys(expect);
-  const actuals = Object.keys(actual);
-  for (const expect of expects)
-    if (!actuals.includes(expect)) {
-      return false;
-    }
-  return true;
+function missingKey(expect: object, actual: unknown): string | false {
+  if (typeof actual !== "object" || actual === null) {
+    return `Expected to be an object, was ${actual === null ? "null" : typeof actual}.`;
+  }
+  for (const key in expect) {
+    if (!(key in actual)) return `Property ${key} was expected but not present.`;
+  }
+  return false;
 }
 
 function gang(ctx: NetscriptContext, g: unknown): FormulaGang {
-  if (!roughlyIs({ respect: 0, territory: 0, wantedLevel: 0 }, g))
-    throw makeRuntimeErrorMsg(ctx, `gang should be a Gang.`, "TYPE");
+  const error = missingKey({ respect: 0, territory: 0, wantedLevel: 0 }, g);
+  if (error) throw makeRuntimeErrorMsg(ctx, `gang should be a Gang.\n${error}`, "TYPE");
   return g as FormulaGang;
 }
 
 function gangMember(ctx: NetscriptContext, m: unknown): GangMember {
-  if (!roughlyIs(new GangMember(), m)) throw makeRuntimeErrorMsg(ctx, `member should be a GangMember.`, "TYPE");
+  const error = missingKey(new GangMember(), m);
+  if (error) throw makeRuntimeErrorMsg(ctx, `member should be a GangMember.\n${error}`, "TYPE");
   return m as GangMember;
 }
 
 function gangTask(ctx: NetscriptContext, t: unknown): GangMemberTask {
-  if (!roughlyIs(new GangMemberTask("", "", false, false, { hackWeight: 100 }), t))
-    throw makeRuntimeErrorMsg(ctx, `task should be a GangMemberTask.`, "TYPE");
+  const error = missingKey(new GangMemberTask("", "", false, false, { hackWeight: 100 }), t);
+  if (error) throw makeRuntimeErrorMsg(ctx, `task should be a GangMemberTask.\n${error}`, "TYPE");
   return t as GangMemberTask;
 }
 
