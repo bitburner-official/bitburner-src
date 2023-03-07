@@ -22,7 +22,7 @@ export abstract class Work {
   }
 
   abstract process(sleeve: Sleeve, cycles: number): void;
-  abstract APICopy(): SleeveTask;
+  abstract APICopy(sleeve: Sleeve): SleeveTask;
   abstract toJSON(): IReviverValue;
   finish(): void {
     /* left for children to implement */

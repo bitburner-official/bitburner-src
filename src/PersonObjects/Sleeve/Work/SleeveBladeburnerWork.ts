@@ -32,7 +32,7 @@ export class SleeveBladeburnerWork extends Work {
   }
 
   process(sleeve: Sleeve, cycles: number) {
-    if (!Player.bladeburner) throw new Error("sleeve doing blade work without being a member");
+    if (!Player.bladeburner) return sleeve.stopWork();
     this.cyclesWorked += cycles;
     const actionIdent = Player.bladeburner.getActionIdFromTypeAndName(this.actionType, this.actionName);
     if (!actionIdent) throw new Error(`Error getting ${this.actionName} action`);
@@ -62,12 +62,13 @@ export class SleeveBladeburnerWork extends Work {
     }
   }
 
-  APICopy() {
+  APICopy(sleeve: Sleeve) {
     return {
       type: WorkType.BLADEBURNER as "BLADEBURNER",
       actionType: this.actionType,
       actionName: this.actionName,
       cyclesWorked: this.cyclesWorked,
+      cyclesNeeded: this.cyclesNeeded(sleeve),
     };
   }
 

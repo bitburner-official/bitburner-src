@@ -20,8 +20,8 @@ export class SleeveInfiltrateWork extends Work {
     return infiltrateCycles;
   }
 
-  process(_sleeve: Sleeve, cycles: number) {
-    if (!Player.bladeburner) throw new Error("sleeve doing blade work without being a member");
+  process(sleeve: Sleeve, cycles: number) {
+    if (!Player.bladeburner) return sleeve.stopWork();
     this.cyclesWorked += cycles;
     if (this.cyclesWorked > this.cyclesNeeded()) {
       this.cyclesWorked -= this.cyclesNeeded();
@@ -33,6 +33,7 @@ export class SleeveInfiltrateWork extends Work {
     return {
       type: WorkType.INFILTRATE as "INFILTRATE",
       cyclesWorked: this.cyclesWorked,
+      cyclesNeeded: this.cyclesNeeded(),
     };
   }
 

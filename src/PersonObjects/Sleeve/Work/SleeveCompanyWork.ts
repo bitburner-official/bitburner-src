@@ -10,19 +10,15 @@ import { influenceStockThroughCompanyWork } from "../../../StockMarket/PlayerInf
 import { Player } from "@player";
 import { CompanyPositions } from "../../../Company/CompanyPositions";
 
-interface SleeveCompanyWorkParams {
-  companyName: string;
-}
-
 export const isSleeveCompanyWork = (w: Work | null): w is SleeveCompanyWork =>
   w !== null && w.type === WorkType.COMPANY;
 
 export class SleeveCompanyWork extends Work {
   companyName: string;
 
-  constructor(params?: SleeveCompanyWorkParams) {
+  constructor(companyName?: string) {
     super(WorkType.COMPANY);
-    this.companyName = params?.companyName ?? LocationName.NewTokyoNoodleBar;
+    this.companyName = companyName ?? LocationName.NewTokyoNoodleBar;
   }
 
   getCompany(): Company {

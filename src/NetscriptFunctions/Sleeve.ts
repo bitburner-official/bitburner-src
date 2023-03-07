@@ -150,7 +150,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
 
       const sl = Player.sleeves[sleeveNumber];
       if (sl.currentWork === null) return null;
-      return sl.currentWork.APICopy();
+      return sl.currentWork.APICopy(sl);
     },
     getSleeve: (ctx) => (_sleeveNumber) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);

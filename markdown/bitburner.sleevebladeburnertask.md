@@ -13,5 +13,6 @@ type SleeveBladeburnerTask = {
   actionType: "General" | "Contracts";
   actionName: string;
   cyclesWorked: number;
+  cyclesNeeded: number;
 };
 ```

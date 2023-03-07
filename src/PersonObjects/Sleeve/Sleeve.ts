@@ -286,7 +286,7 @@ export class Sleeve extends Person implements SleevePerson {
     if (company == null) return false;
     if (companyPosition == null) return false;
 
-    this.startWork(new SleeveCompanyWork({ companyName: companyName }));
+    this.startWork(new SleeveCompanyWork(companyName));
 
     return true;
   }

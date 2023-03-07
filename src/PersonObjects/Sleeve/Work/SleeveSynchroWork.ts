@@ -21,9 +21,7 @@ export class SleeveSynchroWork extends Work {
   }
 
   APICopy() {
-    return {
-      type: WorkType.SYNCHRO as "SYNCHRO",
-    };
+    return { type: WorkType.SYNCHRO as "SYNCHRO" };
   }
 
   /** Serialize the current object to a JSON save state. */

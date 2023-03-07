@@ -878,6 +878,7 @@ type SleeveBladeburnerTask = {
   actionType: "General" | "Contracts";
   actionName: string;
   cyclesWorked: number;
+  cyclesNeeded: number;
 };
 
 /** @public */
@@ -891,7 +892,12 @@ type SleeveClassTask = {
 type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
 
 /** @public */
-type SleeveCrimeTask = { type: "CRIME"; crimeType: CrimeType | `${CrimeType}`; cyclesWorked: number };
+type SleeveCrimeTask = {
+  type: "CRIME";
+  crimeType: CrimeType | `${CrimeType}`;
+  cyclesWorked: number;
+  cyclesNeeded: number;
+};
 
 /** @public */
 type SleeveFactionTask = {
@@ -901,7 +907,7 @@ type SleeveFactionTask = {
 };
 
 /** @public */
-type SleeveInfiltrateTask = { type: "INFILTRATE"; cyclesWorked: number };
+type SleeveInfiltrateTask = { type: "INFILTRATE"; cyclesWorked: number; cyclesNeeded: number };
 
 /** @public */
 type SleeveRecoveryTask = { type: "RECOVERY" };
