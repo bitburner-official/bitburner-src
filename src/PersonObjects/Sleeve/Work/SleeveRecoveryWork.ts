@@ -7,9 +7,7 @@ export const isSleeveRecoveryWork = (w: Work | null): w is SleeveRecoveryWork =>
   w !== null && w.type === WorkType.RECOVERY;
 
 export class SleeveRecoveryWork extends Work {
-  constructor() {
-    super(WorkType.RECOVERY);
-  }
+  type: WorkType.RECOVERY = WorkType.RECOVERY;
 
   process(sleeve: Sleeve, cycles: number) {
     sleeve.shock = Math.max(

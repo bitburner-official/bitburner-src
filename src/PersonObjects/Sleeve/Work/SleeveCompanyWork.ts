@@ -14,10 +14,11 @@ export const isSleeveCompanyWork = (w: Work | null): w is SleeveCompanyWork =>
   w !== null && w.type === WorkType.COMPANY;
 
 export class SleeveCompanyWork extends Work {
+  type: WorkType.COMPANY = WorkType.COMPANY;
   companyName: string;
 
   constructor(companyName?: string) {
-    super(WorkType.COMPANY);
+    super();
     this.companyName = companyName ?? LocationName.NewTokyoNoodleBar;
   }
 

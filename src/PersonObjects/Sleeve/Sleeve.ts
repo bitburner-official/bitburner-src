@@ -25,7 +25,7 @@ import { Factions } from "../../Faction/Factions";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../utils/JSONReviver";
 import { formatPercent } from "../../ui/formatNumber";
 import { FactionWorkType } from "../../Enums";
-import { Work } from "./Work/Work";
+import { SleeveWork } from "./Work/Work";
 import { SleeveClassWork } from "./Work/SleeveClassWork";
 import { ClassType } from "../../Work/ClassWork";
 import { SleeveSynchroWork } from "./Work/SleeveSynchroWork";
@@ -41,7 +41,7 @@ import { SleevePerson } from "@nsdefs";
 import { calculateIntelligenceBonus } from "../formulas/intelligence";
 
 export class Sleeve extends Person implements SleevePerson {
-  currentWork: Work | null = null;
+  currentWork: SleeveWork | null = null;
 
   /** Clone retains 'memory' synchronization (and maybe exp?) upon prestige/installing Augs */
   memory = 1;
@@ -81,7 +81,7 @@ export class Sleeve extends Person implements SleevePerson {
     return this.sync / 100;
   }
 
-  startWork(w: Work): void {
+  startWork(w: SleeveWork): void {
     if (this.currentWork) this.currentWork.finish();
     this.currentWork = w;
   }
@@ -398,6 +398,7 @@ export class Sleeve extends Person implements SleevePerson {
     if (!Player.bladeburner) return false;
     switch (action) {
       case "Field analysis":
+      case "Field Analysis":
         this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Field Analysis" }));
         return true;
       case "Recruitment":
@@ -410,6 +411,7 @@ export class Sleeve extends Person implements SleevePerson {
         this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Hyperbolic Regeneration Chamber" }));
         return true;
       case "Infiltrate synthoids":
+      case "Infiltrate Synthoids":
         this.startWork(new SleeveInfiltrateWork());
         return true;
       case "Support main sleeve":

@@ -14,10 +14,11 @@ import { findCrime } from "../../../Crime/CrimeHelpers";
 export const isSleeveCrimeWork = (w: Work | null): w is SleeveCrimeWork => w !== null && w.type === WorkType.CRIME;
 
 export class SleeveCrimeWork extends Work {
+  type: WorkType.CRIME = WorkType.CRIME;
   crimeType: CrimeType;
   cyclesWorked = 0;
   constructor(crimeType?: CrimeType) {
-    super(WorkType.CRIME);
+    super();
     this.crimeType = crimeType ?? CrimeType.shoplift;
   }
 
