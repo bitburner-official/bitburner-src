@@ -909,74 +909,22 @@ export const ns: InternalAPI<NSFull> = {
 
       return noFailures;
     },
-  ls:
-    (ctx) =>
-    (_hostname, _grep = ""): string[] => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const grep = helpers.string(ctx, "grep", _grep);
+  ls: (ctx) => (_hostname, _substring) => {
+    const hostname = helpers.string(ctx, "hostname", _hostname);
+    const substring = helpers.string(ctx, "substring", _substring ?? "");
+    const server = helpers.getServer(ctx, hostname);
 
-      const server = helpers.getServer(ctx, hostname);
+    const allFilenames = [
+      ...server.contracts.map((contract) => contract.fn),
+      ...server.messages,
+      ...server.programs,
+      ...server.scripts.map((script) => script.filename),
+      ...server.textFiles.map((textFile) => textFile.filename),
+    ];
 
-      // Get the grep filter, if one exists
-      let filter = "";
-      if (_grep !== undefined) {
-        filter = grep.toString();
-      }
-
-      const allFiles = [];
-      for (let i = 0; i < server.programs.length; i++) {
-        if (filter) {
-          if (server.programs[i].includes(filter)) {
-            allFiles.push(server.programs[i]);
-          }
-        } else {
-          allFiles.push(server.programs[i]);
-        }
-      }
-      for (let i = 0; i < server.scripts.length; i++) {
-        if (filter) {
-          if (server.scripts[i].filename.includes(filter)) {
-            allFiles.push(server.scripts[i].filename);
-          }
-        } else {
-          allFiles.push(server.scripts[i].filename);
-        }
-      }
-      for (let i = 0; i < server.messages.length; i++) {
-        if (filter) {
-          const msg = server.messages[i];
-          if (msg.includes(filter)) {
-            allFiles.push(msg);
-          }
-        } else {
-          allFiles.push(server.messages[i]);
-        }
-      }
-
-      for (let i = 0; i < server.textFiles.length; i++) {
-        if (filter) {
-          if (server.textFiles[i].fn.includes(filter)) {
-            allFiles.push(server.textFiles[i].fn);
-          }
-        } else {
-          allFiles.push(server.textFiles[i].fn);
-        }
-      }
-
-      for (let i = 0; i < server.contracts.length; ++i) {
-        if (filter) {
-          if (server.contracts[i].fn.includes(filter)) {
-            allFiles.push(server.contracts[i].fn);
-          }
-        } else {
-          allFiles.push(server.contracts[i].fn);
-        }
-      }
-
-      // Sort the files alphabetically then print each
-      allFiles.sort();
-      return allFiles;
-    },
+    if (!substring) return allFilenames.sort();
+    return allFilenames.filter((filename) => filename.includes(substring)).sort();
+  },
   getRecentScripts: () => (): RecentScript[] => {
     return recentScripts.map((rs) => ({
       timeOfDeath: rs.timeOfDeath,

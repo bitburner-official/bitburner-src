@@ -5592,10 +5592,10 @@ export interface NS {
    * (as strings). The returned array is sorted in alphabetic order.
    *
    * @param host - Hostname of the target server.
-   * @param grep - A substring to search for in the filename.
+   * @param substring - A substring to search for in the filename.
    * @returns Array with the filenames of all files on the specified server.
    */
-  ls(host: string, grep?: string): string[];
+  ls(host: string, substring?: string): string[];
 
   /**
    * List running scripts on a server.

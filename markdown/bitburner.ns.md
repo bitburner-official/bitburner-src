@@ -135,7 +135,7 @@ export async function main(ns) {
 |  [kill(pid)](./bitburner.ns.kill.md) | Terminate the script with the provided PID. |
 |  [kill(filename, hostname, args)](./bitburner.ns.kill_1.md) | Terminate the script with the provided filename, hostname, and script arguments. |
 |  [killall(host, safetyguard)](./bitburner.ns.killall.md) | Terminate all scripts on a server. |
-|  [ls(host, grep)](./bitburner.ns.ls.md) | List files on a server. |
+|  [ls(host, substring)](./bitburner.ns.ls.md) | List files on a server. |
 |  [moveTail(x, y, pid)](./bitburner.ns.movetail.md) | Move a tail window. |
 |  [mv(host, source, destination)](./bitburner.ns.mv.md) | Move a file on the target server. |
 |  [nFormat(n, format)](./bitburner.ns.nformat.md) | Format a number using the numeral library. This function is deprecated and will be removed in 2.3. |
