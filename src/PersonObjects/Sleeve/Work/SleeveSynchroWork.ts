@@ -8,9 +8,7 @@ export const isSleeveSynchroWork = (w: Work | null): w is SleeveSynchroWork =>
   w !== null && w.type === WorkType.SYNCHRO;
 
 export class SleeveSynchroWork extends Work {
-  constructor() {
-    super(WorkType.SYNCHRO);
-  }
+  type: WorkType.SYNCHRO = WorkType.SYNCHRO;
 
   process(sleeve: Sleeve, cycles: number) {
     sleeve.sync = Math.min(

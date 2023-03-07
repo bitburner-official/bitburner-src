@@ -10,17 +10,12 @@ import { FactionNames } from "../../../Faction/data/FactionNames";
 import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
 import { isSleeveBladeburnerWork } from "../Work/SleeveBladeburnerWork";
-import { isSleeveRecoveryWork } from "../Work/SleeveRecoveryWork";
-import { isSleeveSynchroWork } from "../Work/SleeveSynchroWork";
-import { isSleeveClassWork } from "../Work/SleeveClassWork";
-import { isSleeveInfiltrateWork } from "../Work/SleeveInfiltrateWork";
-import { isSleeveSupportWork } from "../Work/SleeveSupportWork";
-import { isSleeveCrimeWork } from "../Work/SleeveCrimeWork";
-import { CrimeType, FactionWorkType, GymType, UniversityClassType } from "../../../Enums";
+import { CrimeType, FactionWorkType, GymType } from "../../../Enums";
 import { checkEnum } from "../../../utils/helpers/enum";
+import { WorkType } from "../Work/Work";
 
 const universitySelectorOptions: string[] = [
-  "Study Computer Science",
+  "Computer Science",
   "Data Structures",
   "Networks",
   "Algorithms",
@@ -31,11 +26,11 @@ const universitySelectorOptions: string[] = [
 const gymSelectorOptions: string[] = ["Train Strength", "Train Defense", "Train Dexterity", "Train Agility"];
 
 const bladeburnerSelectorOptions: string[] = [
-  "Field analysis",
+  "Field Analysis",
   "Recruitment",
   "Diplomacy",
   "Hyperbolic Regeneration Chamber",
-  "Infiltrate synthoids",
+  "Infiltrate Synthoids",
   "Support main sleeve",
   "Take on contracts",
 ];
@@ -249,86 +244,43 @@ const canDo: {
 };
 
 function getABC(sleeve: Sleeve): [string, string, string] {
-  const w = sleeve.currentWork;
-  if (w === null) {
-    return ["------", "------", "------"];
+  const work = sleeve.currentWork;
+  if (work === null) return ["------", "------", "------"];
+  switch (work.type) {
+    case WorkType.COMPANY:
+      return ["Work for Company", work.companyName, "------"];
+    case WorkType.FACTION:
+      const workNames = {
+        [FactionWorkType.field]: "Field Work",
+        [FactionWorkType.hacking]: "Hacking Contracts",
+        [FactionWorkType.security]: "Security Work",
+      };
+      return ["Work for Faction", work.factionName, workNames[work.factionWorkType] ?? ""];
+    case WorkType.BLADEBURNER:
+      if (work.actionType === "Contracts") {
+        return ["Perform Bladeburner Actions", "Take on contracts", work.actionName];
+      }
+      return ["Perform Bladeburner Actions", work.actionName, "------"];
+    case WorkType.CLASS:
+      if (!work.isGym()) return ["Take University Course", work.classType, work.location];
+      const gymNames: Record<GymType, string> = {
+        [GymType.strength]: "Train Strength",
+        [GymType.defense]: "Train Defense",
+        [GymType.dexterity]: "Train Dexterity",
+        [GymType.agility]: "Train Agility",
+      };
+      return ["Workout at Gym", gymNames[work.classType as GymType], work.location];
+    case WorkType.CRIME:
+      return ["Commit Crime", checkEnum(CrimeType, work.crimeType) ? work.crimeType : "Shoplift", "------"];
+    case WorkType.SUPPORT:
+      return ["Perform Bladeburner Actions", "Support main sleeve", "------"];
+    case WorkType.INFILTRATE:
+      return ["Perform Bladeburner Actions", "Infiltrate Synthoids", "------"];
+    case WorkType.RECOVERY:
+      return ["Shock Recovery", "------", "------"];
+    case WorkType.SYNCHRO:
+      return ["Synchronize", "------", "------"];
   }
-
-  if (isSleeveCompanyWork(w)) {
-    return ["Work for Company", w.companyName, "------"];
-  }
-  if (isSleeveFactionWork(w)) {
-    let workType = "";
-    switch (w.factionWorkType) {
-      case FactionWorkType.hacking:
-        workType = "Hacking Contracts";
-        break;
-      case FactionWorkType.field:
-        workType = "Field Work";
-        break;
-      case FactionWorkType.security:
-        workType = "Security Work";
-        break;
-    }
-    return ["Work for Faction", w.factionName, workType];
-  }
-  if (isSleeveBladeburnerWork(w)) {
-    if (w.actionType === "Contracts") {
-      return ["Perform Bladeburner Actions", "Take on contracts", w.actionName];
-    }
-    switch (w.actionName) {
-      case "Field Analysis":
-        return ["Perform Bladeburner Actions", "Field Analysis", "------"];
-      case "Diplomacy":
-        return ["Perform Bladeburner Actions", "Diplomacy", "------"];
-      case "Recruitment":
-        return ["Perform Bladeburner Actions", "Recruitment", "------"];
-      case "Hyperbolic Regeneration Chamber":
-        return ["Perform Bladeburner Actions", "Hyperbolic Regeneration Chamber", "------"];
-    }
-  }
-
-  if (isSleeveClassWork(w)) {
-    switch (w.classType) {
-      case UniversityClassType.computerScience:
-        return ["Take University Course", "Study Computer Science", w.location];
-      case UniversityClassType.dataStructures:
-        return ["Take University Course", "Data Structures", w.location];
-      case UniversityClassType.networks:
-        return ["Take University Course", "Networks", w.location];
-      case UniversityClassType.algorithms:
-        return ["Take University Course", "Algorithms", w.location];
-      case UniversityClassType.management:
-        return ["Take University Course", "Management", w.location];
-      case UniversityClassType.leadership:
-        return ["Take University Course", "Leadership", w.location];
-      case GymType.strength:
-        return ["Workout at Gym", "Train Strength", w.location];
-      case GymType.defense:
-        return ["Workout at Gym", "Train Defense", w.location];
-      case GymType.dexterity:
-        return ["Workout at Gym", "Train Dexterity", w.location];
-      case GymType.agility:
-        return ["Workout at Gym", "Train Agility", w.location];
-    }
-  }
-  if (isSleeveCrimeWork(w)) {
-    return ["Commit Crime", checkEnum(CrimeType, w.crimeType) ? w.crimeType : "Shoplift", "------"];
-  }
-  if (isSleeveSupportWork(w)) {
-    return ["Perform Bladeburner Actions", "Support main sleeve", "------"];
-  }
-  if (isSleeveInfiltrateWork(w)) {
-    return ["Perform Bladeburner Actions", "Infiltrate synthoids", "------"];
-  }
-  if (isSleeveRecoveryWork(w)) {
-    return ["Shock Recovery", "------", "------"];
-  }
-  if (isSleeveSynchroWork(w)) {
-    return ["Synchronize", "------", "------"];
-  }
-
-  return ["------", "------", "------"];
 }
 
 export function TaskSelector(props: IProps): React.ReactElement {

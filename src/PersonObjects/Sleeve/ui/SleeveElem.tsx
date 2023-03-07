@@ -11,24 +11,58 @@ import { SleeveAugmentationsModal } from "./SleeveAugmentationsModal";
 import { EarningsElement, StatsElement } from "./StatsElement";
 import { TaskSelector } from "./TaskSelector";
 import { TravelModal } from "./TravelModal";
-import { isSleeveClassWork } from "../Work/SleeveClassWork";
-import { isSleeveSynchroWork } from "../Work/SleeveSynchroWork";
-import { isSleeveRecoveryWork } from "../Work/SleeveRecoveryWork";
-import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
-import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
-import { isSleeveInfiltrateWork } from "../Work/SleeveInfiltrateWork";
-import { isSleeveSupportWork } from "../Work/SleeveSupportWork";
-import { isSleeveBladeburnerWork } from "../Work/SleeveBladeburnerWork";
-import { isSleeveCrimeWork } from "../Work/SleeveCrimeWork";
 import { findCrime } from "../../../Crime/CrimeHelpers";
 import { CrimeType } from "../../../Enums";
+import { WorkType } from "../Work/Work";
 
-interface IProps {
+function getWorkDescription(sleeve: Sleeve, progress: number): string {
+  const work = sleeve.currentWork;
+  if (!work) return "This sleeve is currently idle.";
+  switch (work.type) {
+    case WorkType.COMPANY:
+      return `This sleeve is currently working your job at ${work.companyName}`;
+    case WorkType.SUPPORT:
+      return "This sleeve is currently supporting you in your bladeburner activities.";
+    case WorkType.CLASS:
+      return `This sleeve is currently ${work.isGym() ? "working out" : "studying"} at ${work.location}`;
+    case WorkType.RECOVERY:
+      return "This sleeve is currently set to focus on shock recovery. This causes the Sleeve's shock to decrease at a faster rate.";
+    case WorkType.SYNCHRO:
+      return "This sleeve is currently set to synchronize with the original consciousness. This causes the Sleeve's synchronization to increase.";
+    case WorkType.BLADEBURNER:
+      return (
+        `This sleeve is currently attempting to perform ${work.actionName}.\n\n` +
+        `Progress: ${formatPercent(progress)}`
+      );
+    case WorkType.CRIME:
+      const crime = work.getCrime();
+      return (
+        `This sleeve is currently attempting ${crime.workName} (Success Rate: ${formatPercent(
+          crime.successRate(sleeve),
+        )}).\n\n` + `Progress: ${formatPercent(progress)}`
+      );
+    case WorkType.FACTION:
+      // This isn't the way this should be handled...
+      const workNames = {
+        [FactionWorkType.field]: "Field Work",
+        [FactionWorkType.hacking]: "Hacking Contracts",
+        [FactionWorkType.security]: "Security Work",
+      };
+      const doing = workNames[work.factionWorkType] ?? "nothing";
+      return `This sleeve is currently doing ${doing} for ${work.factionName}.`;
+    case WorkType.INFILTRATE:
+      return (
+        "This sleeve is currently attempting to infiltrate synthoid communities to generate additional contracts and operations.\nThis activity is less efficient the more sleeves are assigned to it.\n\n" +
+        `Progress: ${formatPercent(progress)}`
+      );
+  }
+}
+
+interface SleeveElemProps {
   sleeve: Sleeve;
   rerender: () => void;
 }
-
-export function SleeveElem(props: IProps): React.ReactElement {
+export function SleeveElem(props: SleeveElemProps): React.ReactElement {
   const [statsOpen, setStatsOpen] = useState(false);
   const [travelOpen, setTravelOpen] = useState(false);
   const [augmentationsOpen, setAugmentationsOpen] = useState(false);
@@ -68,88 +102,19 @@ export function SleeveElem(props: IProps): React.ReactElement {
     }
     props.rerender();
   }
-
-  let desc = <>This sleeve is currently idle</>;
-
-  if (isSleeveCrimeWork(props.sleeve.currentWork)) {
-    const w = props.sleeve.currentWork;
-    const crime = w.getCrime();
-    desc = (
-      <>
-        This sleeve is currently attempting {crime.workName} (Success Rate:{" "}
-        {formatPercent(crime.successRate(props.sleeve))}).
-      </>
-    );
-  }
-
-  if (isSleeveClassWork(props.sleeve.currentWork)) {
-    if (props.sleeve.currentWork.isGym())
-      desc = <>This sleeve is currently working out at {props.sleeve.currentWork.location}.</>;
-    else desc = <>This sleeve is currently studying at {props.sleeve.currentWork.location}.</>;
-  }
-  if (isSleeveSynchroWork(props.sleeve.currentWork)) {
-    desc = (
-      <>
-        This sleeve is currently set to synchronize with the original consciousness. This causes the Sleeve's
-        synchronization to increase.
-      </>
-    );
-  }
-  if (isSleeveRecoveryWork(props.sleeve.currentWork)) {
-    desc = (
-      <>
-        This sleeve is currently set to focus on shock recovery. This causes the Sleeve's shock to decrease at a faster
-        rate.
-      </>
-    );
-  }
-  if (isSleeveFactionWork(props.sleeve.currentWork)) {
-    let doing = "nothing";
-    switch (props.sleeve.currentWork.factionWorkType) {
-      case FactionWorkType.field:
-        doing = "Field work";
-        break;
-      case FactionWorkType.hacking:
-        doing = "Hacking contracts";
-        break;
-      case FactionWorkType.security:
-        doing = "Security work";
-        break;
+  let progress = 0;
+  let percentBar = <></>;
+  const work = props.sleeve.currentWork;
+  if (work) {
+    switch (work.type) {
+      case WorkType.BLADEBURNER:
+      case WorkType.CRIME:
+      case WorkType.INFILTRATE:
+        progress = work.cyclesWorked / work.cyclesNeeded(props.sleeve);
+        percentBar = <ProgressBar variant="determinate" value={progress * 100} color="primary" />;
     }
-    desc = (
-      <>
-        This sleeve is currently doing {doing} for {props.sleeve.currentWork.factionName}.
-      </>
-    );
   }
-  if (isSleeveCompanyWork(props.sleeve.currentWork)) {
-    desc = <>This sleeve is currently working your job at {props.sleeve.currentWork.companyName}.</>;
-  }
-
-  if (isSleeveBladeburnerWork(props.sleeve.currentWork)) {
-    const w = props.sleeve.currentWork;
-    desc = (
-      <>
-        This sleeve is currently attempting to perform {w.actionName}. (
-        {((100 * w.cyclesWorked) / w.cyclesNeeded(props.sleeve)).toFixed(2)}%)
-      </>
-    );
-  }
-
-  if (isSleeveInfiltrateWork(props.sleeve.currentWork)) {
-    const w = props.sleeve.currentWork;
-    desc = (
-      <>
-        This sleeve is currently attempting to infiltrate synthoids communities. (
-        {((100 * w.cyclesWorked) / w.cyclesNeeded()).toFixed(2)}%)
-      </>
-    );
-  }
-
-  if (isSleeveSupportWork(props.sleeve.currentWork)) {
-    desc = <>This sleeve is currently supporting you in your bladeburner activities.</>;
-  }
-
+  const desc = getWorkDescription(props.sleeve, progress);
   return (
     <>
       <Paper sx={{ p: 1, display: "grid", gridTemplateColumns: "1fr 1fr", width: "auto", gap: 1 }}>
@@ -189,25 +154,8 @@ export function SleeveElem(props: IProps): React.ReactElement {
           <Button onClick={setTask} sx={{ width: "100%" }}>
             Set Task
           </Button>
-          <Typography>{desc}</Typography>
-          <Typography>
-            {isSleeveCrimeWork(props.sleeve.currentWork) && (
-              <ProgressBar
-                variant="determinate"
-                value={(props.sleeve.currentWork.cyclesWorked / props.sleeve.currentWork.cyclesNeeded()) * 100}
-                color="primary"
-              />
-            )}
-            {isSleeveBladeburnerWork(props.sleeve.currentWork) && (
-              <ProgressBar
-                variant="determinate"
-                value={
-                  (props.sleeve.currentWork.cyclesWorked / props.sleeve.currentWork.cyclesNeeded(props.sleeve)) * 100
-                }
-                color="primary"
-              />
-            )}
-          </Typography>
+          <Typography whiteSpace={"pre-wrap"}>{desc}</Typography>
+          {percentBar}
         </span>
       </Paper>
       <MoreStatsModal open={statsOpen} onClose={() => setStatsOpen(false)} sleeve={props.sleeve} />

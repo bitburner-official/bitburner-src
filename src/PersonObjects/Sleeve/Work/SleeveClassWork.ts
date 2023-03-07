@@ -17,11 +17,12 @@ interface ClassWorkParams {
 }
 
 export class SleeveClassWork extends Work {
+  type: WorkType.CLASS = WorkType.CLASS;
   classType: ClassType;
   location: LocationName;
 
   constructor(params?: ClassWorkParams) {
-    super(WorkType.CLASS);
+    super();
     this.classType = params?.classType ?? UniversityClassType.computerScience;
     this.location = params?.location ?? LocationName.Sector12RothmanUniversity;
   }

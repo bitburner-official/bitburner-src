@@ -10,11 +10,8 @@ export const isSleeveInfiltrateWork = (w: Work | null): w is SleeveInfiltrateWor
   w !== null && w.type === WorkType.INFILTRATE;
 
 export class SleeveInfiltrateWork extends Work {
+  type: WorkType.INFILTRATE = WorkType.INFILTRATE;
   cyclesWorked = 0;
-
-  constructor() {
-    super(WorkType.INFILTRATE);
-  }
 
   cyclesNeeded(): number {
     return infiltrateCycles;

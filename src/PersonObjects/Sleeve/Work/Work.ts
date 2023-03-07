@@ -3,6 +3,15 @@ import { IReviverValue } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { applyWorkStatsExp, WorkStats } from "../../../Work/WorkStats";
 import { SleeveTask } from "@nsdefs";
+import { SleeveCompanyWork } from "./SleeveCompanyWork";
+import { SleeveFactionWork } from "./SleeveFactionWork";
+import { SleeveCrimeWork } from "./SleeveCrimeWork";
+import { SleeveClassWork } from "./SleeveClassWork";
+import { SleeveRecoveryWork } from "./SleeveRecoveryWork";
+import { SleeveSynchroWork } from "./SleeveSynchroWork";
+import { SleeveBladeburnerWork } from "./SleeveBladeburnerWork";
+import { SleeveInfiltrateWork } from "./SleeveInfiltrateWork";
+import { SleeveSupportWork } from "./SleeveSupportWork";
 
 export const applySleeveGains = (sleeve: Sleeve, shockedStats: WorkStats, mult = 1): void => {
   applyWorkStatsExp(sleeve, shockedStats, mult);
@@ -15,12 +24,7 @@ export const applySleeveGains = (sleeve: Sleeve, shockedStats: WorkStats, mult =
 };
 
 export abstract class Work {
-  type: WorkType;
-
-  constructor(type: WorkType) {
-    this.type = type;
-  }
-
+  abstract type: WorkType;
   abstract process(sleeve: Sleeve, cycles: number): void;
   abstract APICopy(sleeve: Sleeve): SleeveTask;
   abstract toJSON(): IReviverValue;
@@ -40,3 +44,14 @@ export enum WorkType {
   INFILTRATE = "INFILTRATE",
   SUPPORT = "SUPPORT",
 }
+
+export type SleeveWork =
+  | SleeveCompanyWork
+  | SleeveFactionWork
+  | SleeveCrimeWork
+  | SleeveClassWork
+  | SleeveRecoveryWork
+  | SleeveSynchroWork
+  | SleeveBladeburnerWork
+  | SleeveInfiltrateWork
+  | SleeveSupportWork;

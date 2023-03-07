@@ -15,14 +15,15 @@ export const isSleeveBladeburnerWork = (w: Work | null): w is SleeveBladeburnerW
   w !== null && w.type === WorkType.BLADEBURNER;
 
 export class SleeveBladeburnerWork extends Work {
+  type: WorkType.BLADEBURNER = WorkType.BLADEBURNER;
   cyclesWorked = 0;
   actionType: "General" | "Contracts";
   actionName: string;
 
   constructor(params?: SleeveBladeburnerWorkParams) {
-    super(WorkType.BLADEBURNER);
+    super();
     this.actionType = params?.type ?? "General";
-    this.actionName = params?.name ?? "Field analysis";
+    this.actionName = params?.name ?? "Field Analysis";
   }
 
   cyclesNeeded(sleeve: Sleeve): number {

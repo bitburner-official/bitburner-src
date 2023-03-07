@@ -19,11 +19,12 @@ export const isSleeveFactionWork = (w: Work | null): w is SleeveFactionWork =>
   w !== null && w.type === WorkType.FACTION;
 
 export class SleeveFactionWork extends Work {
+  type: WorkType.FACTION = WorkType.FACTION;
   factionWorkType: FactionWorkType;
   factionName: string;
 
   constructor(params?: SleeveFactionWorkParams) {
-    super(WorkType.FACTION);
+    super();
     this.factionWorkType = params?.factionWorkType ?? FactionWorkType.hacking;
     this.factionName = params?.factionName ?? FactionNames.Sector12;
   }
