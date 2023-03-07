@@ -7,7 +7,6 @@ import { Factions } from "../Faction/Factions";
 import { CalculateEffect } from "./formulas/effect";
 import { StaneksGiftEvents } from "./StaneksGiftEvents";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
-import { CONSTANTS } from "../Constants";
 import { StanekConstants } from "./data/Constants";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
@@ -16,6 +15,8 @@ import { defaultMultipliers, mergeMultipliers, Multipliers, scaleMultipliers } f
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
 
 export class StaneksGift extends BaseGift {
+  isBonusCharging = false;
+  justCharged = false;
   storedCycles = 0;
   constructor() {
     super();
@@ -42,18 +43,24 @@ export class StaneksGift extends BaseGift {
 
     const cotmg = Factions[FactionNames.ChurchOfTheMachineGod];
     cotmg.playerReputation += (Player.mults.faction_rep * (Math.pow(threads, 0.95) * (cotmg.favor + 100))) / 1000;
+    this.justCharged = true;
   }
 
   inBonus(): boolean {
-    return (this.storedCycles * CONSTANTS.MilliPerCycle) / 1000 > 1;
+    return this.storedCycles >= 5;
   }
 
   process(numCycles = 1): void {
     if (!Player.hasAugmentation(AugmentationNames.StaneksGift1)) return;
     this.storedCycles += numCycles;
-    this.storedCycles -= 10;
-    this.storedCycles = Math.max(0, this.storedCycles);
-    this.updateMults();
+    const usedCycles = this.isBonusCharging ? 5 : 1;
+    this.isBonusCharging = false;
+    this.storedCycles = Math.max(0, this.storedCycles - usedCycles);
+    // Only update multipliers (slow) if there was charging done since last process tick.
+    if (this.justCharged) {
+      this.updateMults();
+      this.justCharged = false;
+    }
     StaneksGiftEvents.emit();
   }
 

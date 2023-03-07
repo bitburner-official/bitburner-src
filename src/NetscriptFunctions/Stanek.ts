@@ -44,7 +44,9 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
         );
       }
       //Charge the fragment
-      const time = staneksGift.inBonus() ? 200 : 1000;
+      const inBonus = staneksGift.inBonus();
+      const time = inBonus ? 200 : 1000;
+      if (inBonus) staneksGift.isBonusCharging = true;
       return helpers.netscriptDelay(ctx, time).then(function () {
         staneksGift.charge(fragment, ctx.workerScript.scriptRef.threads);
         helpers.log(ctx, () => `Charged fragment with ${ctx.workerScript.scriptRef.threads} threads.`);
