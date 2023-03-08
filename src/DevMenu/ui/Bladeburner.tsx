@@ -89,17 +89,24 @@ export function Bladeburner(): React.ReactElement {
   const modifyContractCount = (modifier: number) => (countchange: number) => {
     if (!isNaN(countchange)) bladeburner.contracts[AllContracts[contractTarget].name].count += countchange * modifier;
   };
+  const modifyContractSuccesses = (modifier: number) => (successeschange: number) => {
+    if (!isNaN(successeschange))
+      bladeburner.contracts[AllContracts[contractTarget].name].successes += successeschange * modifier;
+  };
   const addTonsOfContractLevel = () => {
     bladeburner.contracts[AllContracts[contractTarget].name].level += bigNumber;
     const level = bladeburner.contracts[AllContracts[contractTarget].name].level;
     bladeburner.contracts[AllContracts[contractTarget].name].maxLevel = level;
   };
   const addTonsOfContractCount = () => (bladeburner.contracts[AllContracts[contractTarget].name].count += bigNumber);
+  const addTonsOfContractSuccesses = () =>
+    (bladeburner.contracts[AllContracts[contractTarget].name].successes += bigNumber);
   const resetContractLevel = () => {
     bladeburner.contracts[AllContracts[contractTarget].name].level = 1;
     bladeburner.contracts[AllContracts[contractTarget].name].maxLevel = 1;
   };
   const resetContractCount = () => (bladeburner.contracts[AllContracts[contractTarget].name].count = 0);
+  const resetContractSuccesses = () => (bladeburner.contracts[AllContracts[contractTarget].name].successes = 0);
 
   // Operation functions
   const AllOperations = bladeburner.operations;
@@ -118,6 +125,10 @@ export function Bladeburner(): React.ReactElement {
     if (!isNaN(countchange))
       bladeburner.operations[AllOperations[operationTarget].name].count += countchange * modifier;
   };
+  const modifyOperationSuccesses = (modifier: number) => (successeschange: number) => {
+    if (!isNaN(successeschange))
+      bladeburner.operations[AllOperations[operationTarget].name].successes += successeschange * modifier;
+  };
   const addTonsOfOperationLevel = () => {
     bladeburner.operations[AllOperations[operationTarget].name].level += bigNumber;
     const level = bladeburner.operations[AllOperations[operationTarget].name].level;
@@ -125,11 +136,14 @@ export function Bladeburner(): React.ReactElement {
   };
   const addTonsOfOperationCount = () =>
     (bladeburner.operations[AllOperations[operationTarget].name].count += bigNumber);
+  const addTonsOfOperationSuccesses = () =>
+    (bladeburner.operations[AllOperations[operationTarget].name].successes += bigNumber);
   const resetOperationLevel = () => {
     bladeburner.operations[AllOperations[operationTarget].name].level = 1;
     bladeburner.operations[AllOperations[operationTarget].name].maxLevel = 1;
   };
   const resetOperationCount = () => (bladeburner.operations[AllOperations[operationTarget].name].count = 0);
+  const resetOperationSuccesses = () => (bladeburner.operations[AllOperations[operationTarget].name].successes = 0);
 
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
@@ -280,6 +294,21 @@ export function Bladeburner(): React.ReactElement {
             </tr>
             <tr>
               <td>
+                <Typography>Successes:</Typography>
+              </td>
+              <td>
+                <Adjuster
+                  label="Successes"
+                  placeholder="amt"
+                  tons={addTonsOfContractSuccesses}
+                  add={modifyContractSuccesses(1)}
+                  subtract={modifyContractSuccesses(-1)}
+                  reset={resetContractSuccesses}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
                 <Typography>Count:</Typography>
               </td>
               <td>
@@ -327,6 +356,21 @@ export function Bladeburner(): React.ReactElement {
                   add={modifyOperationLevel(1)}
                   subtract={modifyOperationLevel(-1)}
                   reset={resetOperationLevel}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Typography>Successes:</Typography>
+              </td>
+              <td>
+                <Adjuster
+                  label="Successes"
+                  placeholder="amt"
+                  tons={addTonsOfOperationSuccesses}
+                  add={modifyOperationSuccesses(1)}
+                  subtract={modifyOperationSuccesses(-1)}
+                  reset={resetOperationSuccesses}
                 />
               </td>
             </tr>
