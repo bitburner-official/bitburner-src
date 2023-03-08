@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
 import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
 import { CityName } from "../../Enums";
+import { Skills as AllSkills } from "../../Bladeburner/Skills";
+import { SkillNames } from "../../Bladeburner/data/SkillNames";
 
 const bigNumber = 1e27;
 
@@ -48,6 +54,71 @@ export function Bladeburner(): React.ReactElement {
     Object.values(CityName).forEach((city) => (bladeburner.cities[city].chaos += bigNumber));
   };
 
+  // Skill functions
+  const [skill, setSkill] = useState(SkillNames.BladesIntuition as string);
+  function setSkillDropdown(event: SelectChangeEvent<string>): void {
+    setSkill(event.target.value);
+  }
+  const modifySkill = (modifier: number) => (levelchange: number) => {
+    if (AllSkills[skill] == null) resetSkill();
+    if (!isNaN(levelchange)) bladeburner.skills[AllSkills[skill].name] += levelchange * modifier;
+  };
+  const addTonsOfSkill = () => {
+    if (AllSkills[skill] == null) resetSkill();
+    bladeburner.skills[AllSkills[skill].name] += bigNumber;
+  };
+  const resetSkill = () => bladeburner.skills[AllSkills[skill].name] = 0;
+
+  // Contract functions
+  const AllContracts = bladeburner.contracts;
+  const [contractTarget, setContract] = useState(AllContracts.Tracking.name as string);
+  function setContractDropdown(event: SelectChangeEvent<string>): void {
+    setContract(event.target.value);
+  }
+  const modifyContractLevel = (modifier: number) => (levelchange: number) => {
+    if (!isNaN(levelchange)) {
+      bladeburner.contracts[AllContracts[contractTarget].name].level += levelchange * modifier;
+      const level = bladeburner.contracts[AllContracts[contractTarget].name].level;
+      bladeburner.contracts[AllContracts[contractTarget].name].maxLevel = level;
+    }
+  };
+  const modifyContractCount = (modifier: number) => (countchange: number) => {
+    if (!isNaN(countchange)) bladeburner.contracts[AllContracts[contractTarget].name].count += countchange * modifier;
+  };
+  const addTonsOfContractLevel = () => {
+    bladeburner.contracts[AllContracts[contractTarget].name].level += bigNumber;
+    const level = bladeburner.contracts[AllContracts[contractTarget].name].level;
+    bladeburner.contracts[AllContracts[contractTarget].name].maxLevel = level;
+  };
+  const addTonsOfContractCount = () => bladeburner.contracts[AllContracts[contractTarget].name].count += bigNumber;
+  const resetContractLevel = () => bladeburner.contracts[AllContracts[contractTarget].name].level = 1;
+  const resetContractCount = () => bladeburner.contracts[AllContracts[contractTarget].name].count = 0;
+
+    // Operation functions
+    const AllOperations = bladeburner.operations;
+    const [operationTarget, setOperation] = useState(AllOperations.Investigation.name as string);
+    function setOperationDropdown(event: SelectChangeEvent<string>): void {
+      setOperation(event.target.value);
+    }
+    const modifyOperationLevel = (modifier: number) => (levelchange: number) => {
+      if (!isNaN(levelchange)) {
+        bladeburner.operations[AllOperations[operationTarget].name].level += levelchange * modifier;
+        const level = bladeburner.operations[AllOperations[operationTarget].name].level;
+        bladeburner.operations[AllOperations[operationTarget].name].maxLevel = level;
+      }
+    };
+    const modifyOperationCount = (modifier: number) => (countchange: number) => {
+      if (!isNaN(countchange)) bladeburner.operations[AllOperations[operationTarget].name].count += countchange * modifier;
+    };
+    const addTonsOfOperationLevel = () => {
+      bladeburner.operations[AllOperations[operationTarget].name].level += bigNumber;
+      const level = bladeburner.operations[AllOperations[operationTarget].name].level;
+      bladeburner.operations[AllOperations[operationTarget].name].maxLevel = level;
+    };
+    const addTonsOfOperationCount = () => bladeburner.operations[AllOperations[operationTarget].name].count += bigNumber;
+    const resetOperationLevel = () => bladeburner.operations[AllOperations[operationTarget].name].level = 1;
+    const resetOperationCount = () => bladeburner.operations[AllOperations[operationTarget].name].count = 0;
+  
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -113,6 +184,147 @@ export function Bladeburner(): React.ReactElement {
                   add={addAllChaos(1)}
                   subtract={addAllChaos(-1)}
                   reset={wipeAllChaos}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+              <Typography>Skills: </Typography>
+              </td>
+              <td align="center">
+              <FormControl>
+                  <InputLabel id="skills-select"></InputLabel>
+                  <Select
+                    labelId="skills-select"
+                    id="skills-dropdown"
+                    onChange={setSkillDropdown}
+                    value={skill}
+                  >
+                    {Object.values(AllSkills).map((skill) => (
+                      <MenuItem key={skill.name} value={skill.name}>
+                        {skill.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Typography>Level:</Typography>
+              </td>
+              <td>
+                <Adjuster
+                  label="Level"
+                  placeholder="amt"
+                  tons={addTonsOfSkill}
+                  add={modifySkill(1)}
+                  subtract={modifySkill(-1)}
+                  reset={resetSkill}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+              <Typography>Contracts: </Typography>
+              </td>
+              <td align="center">
+              <FormControl>
+                  <InputLabel id="contracts-select"></InputLabel>
+                  <Select
+                    labelId="contracts-select"
+                    id="contracts-dropdown"
+                    onChange={setContractDropdown}
+                    value={contractTarget}
+                  >
+                    {Object.values(AllContracts).map((contract) => (
+                      <MenuItem key={contract.name} value={contract.name}>
+                        {contract.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Typography>Level:</Typography>
+              </td>
+              <td>
+                <Adjuster
+                  label="Level"
+                  placeholder="amt"
+                  tons={addTonsOfContractLevel}
+                  add={modifyContractLevel(1)}
+                  subtract={modifyContractLevel(-1)}
+                  reset={resetContractLevel}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Typography>Count:</Typography>
+              </td>
+              <td>
+                <Adjuster
+                  label="Count"
+                  placeholder="amt"
+                  tons={addTonsOfContractCount}
+                  add={modifyContractCount(1)}
+                  subtract={modifyContractCount(-1)}
+                  reset={resetContractCount}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+              <Typography>Operations: </Typography>
+              </td>
+              <td align="center">
+              <FormControl>
+                  <InputLabel id="Operations-select"></InputLabel>
+                  <Select
+                    labelId="Operations-select"
+                    id="Operations-dropdown"
+                    onChange={setOperationDropdown}
+                    value={operationTarget}
+                  >
+                    {Object.values(AllOperations).map((Operation) => (
+                      <MenuItem key={Operation.name} value={Operation.name}>
+                        {Operation.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Typography>Level:</Typography>
+              </td>
+              <td>
+                <Adjuster
+                  label="Level"
+                  placeholder="amt"
+                  tons={addTonsOfOperationLevel}
+                  add={modifyOperationLevel(1)}
+                  subtract={modifyOperationLevel(-1)}
+                  reset={resetOperationLevel}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Typography>Count:</Typography>
+              </td>
+              <td>
+                <Adjuster
+                  label="Count"
+                  placeholder="amt"
+                  tons={addTonsOfOperationCount}
+                  add={modifyOperationCount(1)}
+                  subtract={modifyOperationCount(-1)}
+                  reset={resetOperationCount}
                 />
               </td>
             </tr>
