@@ -91,7 +91,10 @@ export function Bladeburner(): React.ReactElement {
     bladeburner.contracts[AllContracts[contractTarget].name].maxLevel = level;
   };
   const addTonsOfContractCount = () => (bladeburner.contracts[AllContracts[contractTarget].name].count += bigNumber);
-  const resetContractLevel = () => (bladeburner.contracts[AllContracts[contractTarget].name].level = 1);
+  const resetContractLevel = () => {
+    bladeburner.contracts[AllContracts[contractTarget].name].level = 1;
+    bladeburner.contracts[AllContracts[contractTarget].name].maxLevel = 1;
+  }
   const resetContractCount = () => (bladeburner.contracts[AllContracts[contractTarget].name].count = 0);
 
   // Operation functions
@@ -118,7 +121,10 @@ export function Bladeburner(): React.ReactElement {
   };
   const addTonsOfOperationCount = () =>
     (bladeburner.operations[AllOperations[operationTarget].name].count += bigNumber);
-  const resetOperationLevel = () => (bladeburner.operations[AllOperations[operationTarget].name].level = 1);
+  const resetOperationLevel = () => {
+    bladeburner.operations[AllOperations[operationTarget].name].level = 1;
+    bladeburner.operations[AllOperations[operationTarget].name].maxLevel = 1;
+  }
   const resetOperationCount = () => (bladeburner.operations[AllOperations[operationTarget].name].count = 0);
 
   return (
