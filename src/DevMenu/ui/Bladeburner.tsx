@@ -198,7 +198,7 @@ export function Bladeburner(): React.ReactElement {
                   reset={wipeAllChaos}
                 />
               </td>
-              <Tooltip title="You have a gang with this Faction">
+              <Tooltip title="Wipe Active City Chaos">
                 <IconButton
                   onClick={wipeActiveCityChaos}
                   size="large"
