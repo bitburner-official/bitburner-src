@@ -76,6 +76,7 @@ import { hash } from "../hash/hash";
 import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { Engine } from "../engine";
 
 export class Terminal {
   // Flags to determine whether the player is currently running a hack or an analyze
@@ -207,6 +208,10 @@ export class Terminal {
         Router.toBitVerse(false, false);
         return;
       }
+      // Manunally check for faction invites
+      Engine.Counters.checkFactionInvitations = 0;
+      Engine.checkCounters();
+
       let moneyGained = calculatePercentMoneyHacked(server, Player) * BitNodeMultipliers.ManualHackMoney;
       moneyGained = Math.floor(server.moneyAvailable * moneyGained);
 
@@ -298,6 +303,10 @@ export class Terminal {
         Router.toBitVerse(false, false);
         return;
       }
+      // Manunally check for faction invites
+      Engine.Counters.checkFactionInvitations = 0;
+      Engine.checkCounters();
+
       this.print(`Backdoor on '${server.hostname}' successful!`);
     }
   }

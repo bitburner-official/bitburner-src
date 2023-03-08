@@ -34,6 +34,7 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { checkEnum } from "../utils/helpers/enum";
 import { RamCostConstants } from "./RamCostGenerator";
 import { isPositiveInteger, PositiveInteger } from "../types";
+import { Engine } from "../engine";
 
 export const helpers = {
   string,
@@ -515,6 +516,9 @@ function hack(
       }
       if (manual) {
         server.backdoorInstalled = true;
+        // Manunally check for faction invites
+        Engine.Counters.checkFactionInvitations = 0;
+        Engine.checkCounters();
       }
       return moneyGained;
     } else {

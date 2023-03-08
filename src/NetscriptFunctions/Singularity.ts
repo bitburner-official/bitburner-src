@@ -50,6 +50,7 @@ import { saveObject } from "../SaveObject";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { findEnumMember } from "../utils/helpers/enum";
 import { areFilesEqual } from "../Terminal/DirectoryHelpers";
+import { Engine } from "../engine";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const getAugmentation = function (ctx: NetscriptContext, name: string): Augmentation {
@@ -561,13 +562,14 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       return helpers.netscriptDelay(ctx, installTime).then(function () {
         helpers.log(ctx, () => `Successfully installed backdoor on '${server.hostname}'`);
-
         server.backdoorInstalled = true;
 
         if (SpecialServers.WorldDaemon === server.hostname) {
-          Router.toBitVerse(false, false);
+          return Router.toBitVerse(false, false);
         }
-        return Promise.resolve();
+        // Manunally check for faction invites
+        Engine.Counters.checkFactionInvitations = 0;
+        Engine.checkCounters();
       });
     },
     isFocused: (ctx) => () => {
@@ -810,6 +812,9 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     checkFactionInvitations: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
+      // Manually trigger a check for faction invites
+      Engine.Counters.checkFactionInvitations = 0;
+      Engine.checkCounters();
       // Make a copy of player.factionInvitations
       return Player.factionInvitations.slice();
     },
