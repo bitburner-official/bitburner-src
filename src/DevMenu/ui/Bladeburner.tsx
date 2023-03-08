@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import Typography from "@mui/material/Typography";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+import {
+  Tooltip,
+  Typography,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Button from "@mui/material/Button";
-import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
 import { CityName } from "../../Enums";
@@ -182,7 +186,7 @@ export function Bladeburner(): React.ReactElement {
             </tr>
             <tr>
               <td>
-                <Typography title="This is for ALL cities">Chaos:</Typography>
+                <Typography>Chaos:</Typography>
               </td>
               <td>
                 <Adjuster
@@ -194,6 +198,16 @@ export function Bladeburner(): React.ReactElement {
                   reset={wipeAllChaos}
                 />
               </td>
+              <Tooltip title="You have a gang with this Faction">
+                <IconButton
+                  onClick={wipeActiveCityChaos}
+                  size="large"
+                  arial-label="clear-active-city-chaos"
+                  title="Clear Only Active City Chaos"
+                >
+                  <DeleteIcon sx={{ fontSize: 40 }} />
+                </IconButton>
+              </Tooltip>
             </tr>
             <tr>
               <td>
@@ -334,7 +348,6 @@ export function Bladeburner(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-      <Button onClick={wipeActiveCityChaos}>Clear Active City's Chaos</Button>
     </Accordion>
   );
 }
