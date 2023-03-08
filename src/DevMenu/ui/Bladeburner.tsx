@@ -67,7 +67,7 @@ export function Bladeburner(): React.ReactElement {
     if (AllSkills[skill] == null) resetSkill();
     bladeburner.skills[AllSkills[skill].name] += bigNumber;
   };
-  const resetSkill = () => bladeburner.skills[AllSkills[skill].name] = 0;
+  const resetSkill = () => (bladeburner.skills[AllSkills[skill].name] = 0);
 
   // Contract functions
   const AllContracts = bladeburner.contracts;
@@ -90,35 +90,37 @@ export function Bladeburner(): React.ReactElement {
     const level = bladeburner.contracts[AllContracts[contractTarget].name].level;
     bladeburner.contracts[AllContracts[contractTarget].name].maxLevel = level;
   };
-  const addTonsOfContractCount = () => bladeburner.contracts[AllContracts[contractTarget].name].count += bigNumber;
-  const resetContractLevel = () => bladeburner.contracts[AllContracts[contractTarget].name].level = 1;
-  const resetContractCount = () => bladeburner.contracts[AllContracts[contractTarget].name].count = 0;
+  const addTonsOfContractCount = () => (bladeburner.contracts[AllContracts[contractTarget].name].count += bigNumber);
+  const resetContractLevel = () => (bladeburner.contracts[AllContracts[contractTarget].name].level = 1);
+  const resetContractCount = () => (bladeburner.contracts[AllContracts[contractTarget].name].count = 0);
 
-    // Operation functions
-    const AllOperations = bladeburner.operations;
-    const [operationTarget, setOperation] = useState(AllOperations.Investigation.name as string);
-    function setOperationDropdown(event: SelectChangeEvent<string>): void {
-      setOperation(event.target.value);
-    }
-    const modifyOperationLevel = (modifier: number) => (levelchange: number) => {
-      if (!isNaN(levelchange)) {
-        bladeburner.operations[AllOperations[operationTarget].name].level += levelchange * modifier;
-        const level = bladeburner.operations[AllOperations[operationTarget].name].level;
-        bladeburner.operations[AllOperations[operationTarget].name].maxLevel = level;
-      }
-    };
-    const modifyOperationCount = (modifier: number) => (countchange: number) => {
-      if (!isNaN(countchange)) bladeburner.operations[AllOperations[operationTarget].name].count += countchange * modifier;
-    };
-    const addTonsOfOperationLevel = () => {
-      bladeburner.operations[AllOperations[operationTarget].name].level += bigNumber;
+  // Operation functions
+  const AllOperations = bladeburner.operations;
+  const [operationTarget, setOperation] = useState(AllOperations.Investigation.name as string);
+  function setOperationDropdown(event: SelectChangeEvent<string>): void {
+    setOperation(event.target.value);
+  }
+  const modifyOperationLevel = (modifier: number) => (levelchange: number) => {
+    if (!isNaN(levelchange)) {
+      bladeburner.operations[AllOperations[operationTarget].name].level += levelchange * modifier;
       const level = bladeburner.operations[AllOperations[operationTarget].name].level;
       bladeburner.operations[AllOperations[operationTarget].name].maxLevel = level;
-    };
-    const addTonsOfOperationCount = () => bladeburner.operations[AllOperations[operationTarget].name].count += bigNumber;
-    const resetOperationLevel = () => bladeburner.operations[AllOperations[operationTarget].name].level = 1;
-    const resetOperationCount = () => bladeburner.operations[AllOperations[operationTarget].name].count = 0;
-  
+    }
+  };
+  const modifyOperationCount = (modifier: number) => (countchange: number) => {
+    if (!isNaN(countchange))
+      bladeburner.operations[AllOperations[operationTarget].name].count += countchange * modifier;
+  };
+  const addTonsOfOperationLevel = () => {
+    bladeburner.operations[AllOperations[operationTarget].name].level += bigNumber;
+    const level = bladeburner.operations[AllOperations[operationTarget].name].level;
+    bladeburner.operations[AllOperations[operationTarget].name].maxLevel = level;
+  };
+  const addTonsOfOperationCount = () =>
+    (bladeburner.operations[AllOperations[operationTarget].name].count += bigNumber);
+  const resetOperationLevel = () => (bladeburner.operations[AllOperations[operationTarget].name].level = 1);
+  const resetOperationCount = () => (bladeburner.operations[AllOperations[operationTarget].name].count = 0);
+
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -189,17 +191,12 @@ export function Bladeburner(): React.ReactElement {
             </tr>
             <tr>
               <td>
-              <Typography>Skills: </Typography>
+                <Typography>Skills: </Typography>
               </td>
               <td align="center">
-              <FormControl>
+                <FormControl>
                   <InputLabel id="skills-select"></InputLabel>
-                  <Select
-                    labelId="skills-select"
-                    id="skills-dropdown"
-                    onChange={setSkillDropdown}
-                    value={skill}
-                  >
+                  <Select labelId="skills-select" id="skills-dropdown" onChange={setSkillDropdown} value={skill}>
                     {Object.values(AllSkills).map((skill) => (
                       <MenuItem key={skill.name} value={skill.name}>
                         {skill.name}
@@ -226,10 +223,10 @@ export function Bladeburner(): React.ReactElement {
             </tr>
             <tr>
               <td>
-              <Typography>Contracts: </Typography>
+                <Typography>Contracts: </Typography>
               </td>
               <td align="center">
-              <FormControl>
+                <FormControl>
                   <InputLabel id="contracts-select"></InputLabel>
                   <Select
                     labelId="contracts-select"
@@ -278,10 +275,10 @@ export function Bladeburner(): React.ReactElement {
             </tr>
             <tr>
               <td>
-              <Typography>Operations: </Typography>
+                <Typography>Operations: </Typography>
               </td>
               <td align="center">
-              <FormControl>
+                <FormControl>
                   <InputLabel id="Operations-select"></InputLabel>
                   <Select
                     labelId="Operations-select"
