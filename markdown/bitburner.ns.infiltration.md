@@ -4,10 +4,15 @@
 
 ## NS.infiltration property
 
-Namespace for infiltration functions. RAM cost: 0 GB
+Namespace for infiltration functions.
 
 **Signature:**
 
 ```typescript
 readonly infiltration: Infiltration;
 ```
+
+## Remarks
+
+RAM cost: 0 GB
+

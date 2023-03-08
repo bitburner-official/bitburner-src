@@ -1787,7 +1787,8 @@ export interface Singularity {
    * RAM cost: 3 GB * 16/4/1
    *
    *
-   * Returns an array with the name of all Factions you currently have outstanding invitations from.
+   * Performs an immediate check for which factions you qualify for invites from, then returns an array with the name
+   * of all Factions you have outstanding invitations from.
    *
    * @returns Array with the name of all Factions you currently have outstanding invitations from.
    */
@@ -4499,13 +4500,13 @@ interface UserInterface {
  */
 export interface NS {
   /**
-   * Namespace for hacknet functions.
-   * @remarks RAM cost: 4 GB
+   * Namespace for hacknet functions. Some of this API contains spoilers.
+   * @remarks RAM cost: 4 GB.
    */
   readonly hacknet: Hacknet;
 
   /**
-   * Namespace for bladeburner functions.
+   * Namespace for bladeburner functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
   readonly bladeburner: Bladeburner;
@@ -4517,13 +4518,13 @@ export interface NS {
   readonly codingcontract: CodingContract;
 
   /**
-   * Namespace for gang functions.
+   * Namespace for gang functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
   readonly gang: Gang;
 
   /**
-   * Namespace for sleeve functions.
+   * Namespace for sleeve functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
   readonly sleeve: Sleeve;
@@ -4541,37 +4542,37 @@ export interface NS {
   readonly formulas: Formulas;
 
   /**
-   * Namespace for stanek functions.
-   * RAM cost: 0 GB
+   * Namespace for stanek functions. Contains spoilers.
+   * @remarks RAM cost: 0 GB
    */
   readonly stanek: Stanek;
 
   /**
    * Namespace for infiltration functions.
-   * RAM cost: 0 GB
+   * @remarks RAM cost: 0 GB
    */
   readonly infiltration: Infiltration;
 
   /**
-   * Namespace for corporation functions.
-   * RAM cost: 1022.4 GB
+   * Namespace for corporation functions. Contains spoilers.
+   * @remarks RAM cost: 0 GB
    */
   readonly corporation: Corporation;
 
   /**
    * Namespace for user interface functions.
-   * RAM cost: 0 GB
+   * @remarks RAM cost: 0 GB
    */
   readonly ui: UserInterface;
 
   /**
-   * Namespace for singularity functions.
-   * RAM cost: 0 GB
+   * Namespace for singularity functions. Contains spoilers.
+   * @remarks RAM cost: 0 GB
    */
   readonly singularity: Singularity;
 
   /**
-   * Namespace for grafting functions.
+   * Namespace for grafting functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
   readonly grafting: Grafting;

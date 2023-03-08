@@ -4,10 +4,15 @@
 
 ## NS.corporation property
 
-Namespace for corporation functions. RAM cost: 1022.4 GB
+Namespace for corporation functions. Contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly corporation: Corporation;
 ```
+
+## Remarks
+
+RAM cost: 0 GB
+

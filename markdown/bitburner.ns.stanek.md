@@ -4,10 +4,15 @@
 
 ## NS.stanek property
 
-Namespace for stanek functions. RAM cost: 0 GB
+Namespace for stanek functions. Contains spoilers.
 
 **Signature:**
 
 ```typescript
 readonly stanek: Stanek;
 ```
+
+## Remarks
+
+RAM cost: 0 GB
+

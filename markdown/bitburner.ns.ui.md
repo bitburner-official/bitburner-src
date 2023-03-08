@@ -4,10 +4,15 @@
 
 ## NS.ui property
 
-Namespace for user interface functions. RAM cost: 0 GB
+Namespace for user interface functions.
 
 **Signature:**
 
 ```typescript
 readonly ui: UserInterface;
 ```
+
+## Remarks
+
+RAM cost: 0 GB
+

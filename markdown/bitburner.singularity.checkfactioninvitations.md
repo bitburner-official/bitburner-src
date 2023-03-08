@@ -21,5 +21,5 @@ Array with the name of all Factions you currently have outstanding invitations f
 
 RAM cost: 3 GB \* 16/4/1
 
-Returns an array with the name of all Factions you currently have outstanding invitations from.
+Performs an immediate check for which factions you qualify for invites from, then returns an array with the name of all Factions you have outstanding invitations from.
 

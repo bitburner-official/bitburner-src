@@ -4,7 +4,7 @@
 
 ## NS.grafting property
 
-Namespace for grafting functions.
+Namespace for grafting functions. Contains spoilers.
 
 **Signature:**
 

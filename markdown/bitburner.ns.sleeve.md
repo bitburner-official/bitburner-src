@@ -4,7 +4,7 @@
 
 ## NS.sleeve property
 
-Namespace for sleeve functions.
+Namespace for sleeve functions. Contains spoilers.
 
 **Signature:**
 
