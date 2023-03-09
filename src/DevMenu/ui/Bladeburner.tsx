@@ -62,7 +62,7 @@ export function Bladeburner(): React.ReactElement {
   const [skill, setSkill] = useState(SkillNames.BladesIntuition as string);
   function setSkillDropdown(event: SelectChangeEvent<string>): void {
     setSkill(event.target.value);
-  };
+  }
   const modifySkill = (modifier: number) => (levelchange: number) => {
     if (bladeburner.skills[AllSkills[skill].name] == null) resetSkill();
     if (!isNaN(levelchange)) {
@@ -85,7 +85,7 @@ export function Bladeburner(): React.ReactElement {
   const [contractTarget, setContract] = useState(AllContracts.Tracking.name as string);
   function setContractDropdown(event: SelectChangeEvent<string>): void {
     setContract(event.target.value);
-  };
+  }
   const modifyContractLevel = (modifier: number) => (levelchange: number) => {
     if (!isNaN(levelchange)) {
       bladeburner.contracts[AllContracts[contractTarget].name].level += levelchange * modifier;
@@ -120,7 +120,7 @@ export function Bladeburner(): React.ReactElement {
   const [operationTarget, setOperation] = useState(AllOperations.Investigation.name as string);
   function setOperationDropdown(event: SelectChangeEvent<string>): void {
     setOperation(event.target.value);
-  };
+  }
   const modifyOperationLevel = (modifier: number) => (levelchange: number) => {
     if (!isNaN(levelchange)) {
       bladeburner.operations[AllOperations[operationTarget].name].level += levelchange * modifier;
