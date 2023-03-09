@@ -64,14 +64,14 @@ export function Bladeburner(): React.ReactElement {
     setSkill(event.target.value);
   };
   const modifySkill = (modifier: number) => (levelchange: number) => {
-    if (AllSkills[skill] == null) resetSkill();
+    if (bladeburner.skills[AllSkills[skill].name] == null) resetSkill();
     if (!isNaN(levelchange)) {
       bladeburner.skills[AllSkills[skill].name] += levelchange * modifier;
       bladeburner.updateSkillMultipliers();
     }
   };
   const addTonsOfSkill = () => {
-    if (AllSkills[skill] == null) resetSkill();
+    if (bladeburner.skills[AllSkills[skill].name] == null) resetSkill();
     bladeburner.skills[AllSkills[skill].name] += bigNumber;
     bladeburner.updateSkillMultipliers();
   };
