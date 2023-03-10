@@ -134,7 +134,8 @@ export class Gang {
     }
     const favorMult = 1 + fac.favor / 100;
 
-    this.factionReputationGain = (Player.mults.faction_rep * gain * favorMult) / GangConstants.GangRespectToReputationRatio;
+    this.factionReputationGain =
+      (Player.mults.faction_rep * gain * favorMult) / GangConstants.GangRespectToReputationRatio;
     fac.playerReputation += this.factionReputationGain;
 
     // Keep track of respect gained per member
