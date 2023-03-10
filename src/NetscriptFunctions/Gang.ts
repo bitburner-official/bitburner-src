@@ -59,6 +59,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       return {
         faction: gang.facName,
         isHacking: gang.isHackingGang,
+        factionReputationGain: gang.factionReputationGain,
         moneyGainRate: gang.moneyGainRate,
         power: gang.getPower(),
         respect: gang.respect,

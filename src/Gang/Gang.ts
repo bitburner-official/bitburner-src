@@ -33,6 +33,7 @@ export class Gang {
 
   isHackingGang: boolean;
 
+  factionReputationGain: number;
   respectGainRate: number;
   wantedGainRate: number;
   moneyGainRate: number;
@@ -54,6 +55,7 @@ export class Gang {
 
     this.isHackingGang = hacking;
 
+    this.factionReputationGain = 0;
     this.respectGainRate = 0;
     this.wantedGainRate = 0;
     this.moneyGainRate = 0;
@@ -132,7 +134,8 @@ export class Gang {
     }
     const favorMult = 1 + fac.favor / 100;
 
-    fac.playerReputation += (Player.mults.faction_rep * gain * favorMult) / GangConstants.GangRespectToReputationRatio;
+    this.factionReputationGain = (Player.mults.faction_rep * gain * favorMult) / GangConstants.GangRespectToReputationRatio;
+    fac.playerReputation += this.factionReputationGain;
 
     // Keep track of respect gained per member
     for (let i = 0; i < this.members.length; ++i) {

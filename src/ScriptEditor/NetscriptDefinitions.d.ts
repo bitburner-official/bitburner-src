@@ -672,6 +672,8 @@ interface GangGenInfo {
   faction: string;
   /** Indicating whether or not it's a hacking gang */
   isHacking: boolean;
+  /** Faction reputation gain per game cycle */
+  factionReputationGain: number;
   /** Money earned per game cycle */
   moneyGainRate: number;
   /** Gang's power for territory warfare */
