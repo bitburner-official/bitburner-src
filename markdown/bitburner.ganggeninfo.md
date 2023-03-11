@@ -17,6 +17,7 @@ interface GangGenInfo
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [faction](./bitburner.ganggeninfo.faction.md) |  | string | Name of faction that the gang belongs to ("Slum Snakes", etc.) |
+|  [factionReputationGain](./bitburner.ganggeninfo.factionreputationgain.md) |  | number | Faction reputation gain per game cycle |
 |  [isHacking](./bitburner.ganggeninfo.ishacking.md) |  | boolean | Indicating whether or not it's a hacking gang |
 |  [moneyGainRate](./bitburner.ganggeninfo.moneygainrate.md) |  | number | Money earned per game cycle |
 |  [power](./bitburner.ganggeninfo.power.md) |  | number | Gang's power for territory warfare |
