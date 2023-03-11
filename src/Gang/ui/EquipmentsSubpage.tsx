@@ -41,7 +41,7 @@ function NextReveal(props: INextRevealProps): React.ReactElement {
   if (upgrades.length === 0) return <></>;
   return (
     <Typography>
-      Next at <Money money={upgrades[0].cost} />
+      Next at <Money money={gang.getUpgradeCost(upgrades[0])} />
     </Typography>
   );
 }
