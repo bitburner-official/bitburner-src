@@ -229,32 +229,54 @@ export const CONSTANTS: {
 
   LatestUpdate: `
 v2.3 Dev
+
+General:
 * Monaco script editor updated to a newer version + more config options. (@Snarling)
 * Revamp of script ram calculation process, should be more reliable now. (@Snarling)
-* The SF9.3 bonus is also given to the player when inside of BN9. (@Zelow79)
-* Adjusted the SF1 bonus for hacknet costs (slight nerf), and raised the SF9 bonus to compensate. (@d0sboots)
-* Sleeve shock recovery now scales with intelligence. (@Tyasuh)
 * Improve ns.scp filename recognition when leading slash discrepancy (@lucebac)
 * Fix memory leak when netscript ports were initialized and never used again. (@Snarling)
 * Fix a bug that could result in an infinite atExit loop if a script killed itself. (@Snarling)
 * Fix a bug where numeric terminal arguments were not being detected as strings when enclosed in quote marks. (@LiamGeorge1999)
 * Fix a bug with hackAnalyzeThreads where infinite threads would be indicated any time a single thread would hack less than $1 (@Snarling)
-* Fix a misspelled moneySourceTracker call for sleeves (@zerbosh)
 * All Math Expressions contract no longer accepts wrong answers (@Snarling)
 * Improve Electron's handling of external links (@Snarling) 
 * Documentation improvements (@Mughur, @quacksouls, @Snarling, @AdityaHegde)
+* Performance improvements for shallow typechecking on objects sent into API (e.g. for formulas) (@Snarling)
+* Faction invites now trigger immediately when backdooring a server.
+
+SF2:
+* Corrected the "Next equipment unlock" text for member upgrades. (@LiamGeorge1999)
+
+SF4:
+* Faction invites trigger immediately when running ns.singularity.getFactionInvitations (@Snarling)
+
+SF6:
+* Failing a contract or operation now consumes the action (@Zelow79)
+
+SF9:
+* The SF9.3 bonus is also given to the player when inside of BN9. (@Zelow79)
+* Adjusted the SF1 bonus for hacknet costs (slight nerf), and raised the SF9 bonus to compensate. (@d0sboots)
+
+SF10:
+* Sleeve shock recovery now scales with intelligence. (@Tyasuh)
+* Sleeve kills during crimes count towards numPeopleKilled (@Zelow79)
+* Fix a misspelled moneySourceTracker call for sleeves (@zerbosh)
+* ns.sleeve.getTask return value now includes cyclesNeeded where applicable (@Snarling)
+* Internal type refactoring on Sleeve Work. (@Snarling)
+
+SF13:
+* Improve performance of Stanek's gift update cycle, and rework (buff) bonus time handling. (@Snarling)
+
+Misc:
 * Nerf noodle bar
 
 2.2.2 Hotfixes
 * Fix an issue that prevented the Electron API server from communicating with the VSCode plugin. (credit to u/AnyGiraffe4367 on reddit)
 
-Other changes
-
-Planned changes:
+Planned changes remaining in 2.3:
 * 2.3 will include a large planned rework to corporation. This may cause api breaks for any corporation scripts, and there will be large changes in how the corporation mechanic functions.
 * Enum changes, potentially causing API break with some enums. Enums will be more usable and there will be more of them.
 * Constants rework - interenal game constants will be reorganized and will be provided to the player as different categories of constants.
-* Improve type validation on ns functions.
 * Further deprecation of ns1. Removal of more documentation, add ingame notice to prompt player to update scripts to .js.
 * Nerf noodle bar
 `,

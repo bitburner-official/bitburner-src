@@ -1,0 +1,29 @@
+# update the steam development version
+name: "Steam dev update"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Setup steamcmd
+        uses: CyberAndrii/setup-steamcmd@v1
+
+      - name: Checkout dev branch
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Build and deploy
+        run: |
+          npm ci
+          npm run build
+          npm run electron
+          steamcmd +login ${{ secrets.STEAM_BUILD_USERNAME }} ${{ secrets.STEAM_BUILD_PASSWORD }} +run_app_build ../tools/steamdev.vdf +quit
