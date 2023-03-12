@@ -341,7 +341,7 @@ export const achievements: Record<string, Achievement> = {
   SCRIPT_32GB: {
     ...achievementData["SCRIPT_32GB"],
     Icon: "bigcost",
-    Condition: () => Player.getHomeComputer().scripts.some((s) => s.ramUsage ?? 0 >= 32),
+    Condition: () => Player.getHomeComputer().scripts.some((s) => (s.ramUsage ?? 0) >= 32),
   },
   FIRST_HACKNET_NODE: {
     ...achievementData["FIRST_HACKNET_NODE"],
