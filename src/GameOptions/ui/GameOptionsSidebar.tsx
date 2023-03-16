@@ -73,6 +73,9 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
     } catch (e: unknown) {
       console.error(e);
       SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
+    } finally {
+      // Re-trigger if we import the same save
+      event.target.value = "";
     }
   }
 
