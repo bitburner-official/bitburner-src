@@ -24,7 +24,8 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   /** Names of all materials */
   materialNames: CorpMaterialName[] = [
     "Water",
-    "Energy",
+    "Ore",
+    "Minerals",
     "Food",
     "Plants",
     "Metal",

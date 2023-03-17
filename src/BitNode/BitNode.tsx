@@ -499,6 +499,7 @@ export const defaultMultipliers: IBitNodeMultipliers = {
 
   CorporationValuation: 1,
   CorporationSoftcap: 1,
+  CorporationDivisions: 1,
 
   BladeburnerRank: 1,
   BladeburnerSkillCost: 1,
@@ -538,6 +539,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         FactionWorkRepGain: 0.5,
 
         CorporationSoftcap: 0.9,
+        CorporationDivisions: 0.9,
 
         InfiltrationMoney: 3,
         StaneksGiftPowerMultiplier: 2,
@@ -623,7 +625,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         InfiltrationMoney: 1.5,
         InfiltrationRep: 1.5,
 
-        CorporationValuation: 0.5,
+        CorporationValuation: 0.75,
+        CorporationDivisions: 0.75,
 
         GangUniqueAugs: 0.5,
 
@@ -654,6 +657,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
 
         CorporationValuation: 0.2,
         CorporationSoftcap: 0.9,
+        CorporationDivisions: 0.8,
 
         GangSoftcap: 0.7,
         GangUniqueAugs: 0.2,
@@ -692,6 +696,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
 
         CorporationValuation: 0.2,
         CorporationSoftcap: 0.9,
+        CorporationDivisions: 0.8,
 
         BladeburnerRank: 0.6,
         BladeburnerSkillCost: 2,
@@ -725,6 +730,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
 
         CorporationValuation: 0,
         CorporationSoftcap: 0,
+        CorporationDivisions: 0,
 
         BladeburnerRank: 0,
 
@@ -760,7 +766,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         FourSigmaMarketDataApiCost: 4,
 
         CorporationValuation: 0.5,
-        CorporationSoftcap: 0.7,
+        CorporationSoftcap: 0.75,
+        CorporationDivisions: 0.8,
 
         BladeburnerRank: 0.9,
         BladeburnerSkillCost: 1.2,
@@ -804,6 +811,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
 
         CorporationValuation: 0.5,
         CorporationSoftcap: 0.9,
+        CorporationDivisions: 0.9,
 
         BladeburnerRank: 0.8,
 
@@ -844,6 +852,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
 
         CorporationValuation: 0.1,
         CorporationSoftcap: 0.9,
+        CorporationDivisions: 0.9,
 
         GangUniqueAugs: 0.75,
 
@@ -907,6 +916,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
 
         CorporationValuation: dec,
         CorporationSoftcap: 0.8,
+        CorporationDivisions: 0.5,
 
         BladeburnerRank: dec,
         BladeburnerSkillCost: inc,
@@ -952,7 +962,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
         FourSigmaMarketDataApiCost: 10,
 
         CorporationValuation: 0.001,
-        CorporationSoftcap: 0.3,
+        CorporationSoftcap: 0.4,
+        CorporationDivisions: 0.4,
 
         BladeburnerRank: 0.45,
         BladeburnerSkillCost: 2,

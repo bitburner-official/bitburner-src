@@ -401,7 +401,7 @@ export class Industry {
               if (mat.qty + buyAmt != 0) mat.qlt = (mat.qlt * mat.qty + 1 * buyAmt) / (mat.qty + buyAmt);
               else mat.qlt = 1;
               mat.qty += buyAmt;
-              mat.buy = buyAmt/10;
+              mat.buy = buyAmt / 10;
               expenses += buyAmt * mat.bCost;
             }
             break;
@@ -482,9 +482,6 @@ export class Industry {
                   warehouse.materials[reqMatName].prd -=
                     reqMatQtyNeeded / (corpConstants.secondsPerMarketCycle * marketCycles);
 
-                  //temporarily ignore energy in here, will be moved
-                  if (reqMatName == "Energy") continue;
-
                   avgQlt += warehouse.materials[reqMatName].qlt;
                   divider++;
                 }
@@ -495,7 +492,7 @@ export class Industry {
                     office.employeeProd[EmployeePositions.Engineer] / 90 +
                     Math.pow(this.sciResearch, this.sciFac) +
                     Math.pow(warehouse.materials["AI Cores"].qty, this.aiFac) / 10e3;
-                  const logQlt = Math.max(Math.log10(tempQlt), 1);
+                  const logQlt = Math.max(Math.pow(tempQlt, 0.5), 1);
                   tempQlt = Math.min(tempQlt, avgQlt * logQlt);
                   warehouse.materials[this.prodMats[j]].qlt = Math.max(
                     1,
@@ -883,7 +880,7 @@ export class Industry {
                 avgQlt += warehouse.materials[reqMatName].qlt;
               }
               avgQlt /= Object.keys(product.reqMats).length;
-              const tempEffRat = Math.min(product.rat, avgQlt * Math.log10(product.rat));
+              const tempEffRat = Math.min(product.rat, avgQlt * Math.pow(product.rat, 0.5));
               //Effective Rating
               product.data[city][3] =
                 (product.data[city][3] * product.data[city][0] + tempEffRat * prod * producableFrac) /
@@ -1222,7 +1219,7 @@ export class Industry {
     const matNameMap = { AICores: "AI Cores", RealEstate: "Real Estate" };
     const indNameMap = {
       RealEstate: IndustryType.RealEstate,
-      Utilities: IndustryType.Utilities,
+      Water: IndustryType.Water,
       Computers: IndustryType.Computers,
       Computer: IndustryType.Computers,
     };

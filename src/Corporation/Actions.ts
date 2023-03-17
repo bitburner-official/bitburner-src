@@ -21,9 +21,9 @@ import { calculateUpgradeCost } from "./helpers";
 import { isInteger } from "lodash";
 
 export function NewIndustry(corporation: Corporation, industry: IndustryType, name: string): void {
-  if (corporation.divisions.find(({ type }) => industry == type))
-    throw new Error(`You have already expanded into the ${industry} industry!`);
-
+  if (corporation.divisions.length >= corporation.maxDivisions)
+  throw new Error(`Cannot expand into ${industry} industry, too many divisions!`);
+  
   for (let i = 0; i < corporation.divisions.length; ++i) {
     if (corporation.divisions[i].name === name) {
       throw new Error("This division name is already in use!");
@@ -47,6 +47,14 @@ export function NewIndustry(corporation: Corporation, industry: IndustryType, na
       }),
     );
   }
+}
+
+export function removeIndustry(corporation: Corporation, name: string){
+  const divIndex = corporation.divisions.findIndex(div => div.name === name)
+  if (divIndex === -1)
+    throw new Error("There is no division called "+name);
+
+  corporation.divisions.splice(divIndex,1)
 }
 
 export function NewCity(corporation: Corporation, division: Industry, city: CityName): void {
@@ -100,7 +108,7 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
     throw new Error(`Invalid value. Must be an number between 10m and ${max} (20% of total shares)`);
   }
 
-  const newSharePrice = Math.round(corporation.sharePrice * 0.9);
+  const newSharePrice = Math.round(corporation.sharePrice * 0.8);
 
   const profit = amount * newSharePrice;
   corporation.issueNewSharesCooldown = corpConstants.issueNewSharesCooldown;
@@ -304,6 +312,7 @@ export function SellShares(corporation: Corporation, numShares: number): number 
   if (isNaN(numShares) || !isInteger(numShares)) throw new Error("Invalid value for number of shares");
   if (numShares <= 0) throw new Error("Invalid value for number of shares");
   if (numShares > corporation.numShares) throw new Error("You don't have that many shares to sell!");
+  if (numShares === corporation.numShares) throw new Error("You cant't sell all your shares!");
   if (numShares > 1e14) throw new Error("Invalid value for number of shares");
   if (!corporation.public) throw new Error("You haven't gone public!");
   if (corporation.shareSaleCooldown) throw new Error("Share sale on cooldown!");

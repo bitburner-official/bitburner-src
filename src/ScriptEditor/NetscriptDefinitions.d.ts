@@ -6861,12 +6861,13 @@ type CorpEmployeePosition =
 
 /** @public */
 type CorpIndustryName =
-  | "Energy"
+  | "Spring Water"
   | "Water Utilities"
   | "Agriculture"
   | "Fishing"
   | "Mining"
-  | "Food"
+  | "Refinery"
+  | "Restaurant"
   | "Tobacco"
   | "Chemical"
   | "Pharmaceutical"
@@ -7555,8 +7556,9 @@ type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "EXPORT" | "SALE";
 
 /** @public */
 type CorpMaterialName =
+  | "Minerals"
+  | "Ore"
   | "Water"
-  | "Energy"
   | "Food"
   | "Plants"
   | "Metal"

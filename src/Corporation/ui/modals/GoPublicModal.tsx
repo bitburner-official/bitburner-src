@@ -55,11 +55,11 @@ export function GoPublicModal(props: IProps): React.ReactElement {
         be deposited directly into your Corporation's funds).
         <br />
         <br />
-        You have a total of {formatShares(corp.numShares)} shares that you can issue.
+        You have a total of {formatShares(corp.numShares)}-1 shares that you can issue. You cannot sell all your shares.
       </Typography>
       <Box display="flex" alignItems="center">
         <NumberInput onChange={setShares} autoFocus placeholder="Shares to issue" onKeyDown={onKeyDown} />
-        <Button disabled={shares < 0 || shares > corp.numShares} sx={{ mx: 1 }} onClick={goPublic}>
+        <Button disabled={shares < 0 || shares >= corp.numShares} sx={{ mx: 1 }} onClick={goPublic}>
           Go Public
         </Button>
       </Box>

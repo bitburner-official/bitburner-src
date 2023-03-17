@@ -23,7 +23,7 @@ export function SellSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
 
-  const disabled = isNaN(shares) || shares <= 0 || shares > corp.numShares;
+  const disabled = isNaN(shares) || shares <= 0 || shares >= corp.numShares;
 
   function ProfitIndicator(props: { shares: number | null; corp: Corporation }): React.ReactElement {
     if (props.shares === null) return <></>;
@@ -32,6 +32,8 @@ export function SellSharesModal(props: IProps): React.ReactElement {
       text = `ERROR: Invalid value entered for number of shares to sell`;
     } else if (props.shares > corp.numShares) {
       text = `You don't have this many shares to sell!`;
+    } else if (props.shares === corp.numShares) {
+      text = `You can not sell all your shares!`;
     } else if (props.shares > 1e14) {
       text = `You can't sell more than 100t shares at once!`;
     } else {
