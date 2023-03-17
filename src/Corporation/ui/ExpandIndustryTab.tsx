@@ -21,20 +21,13 @@ interface IProps {
 export function ExpandIndustryTab(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const allIndustries = Object.values(IndustryType).sort();
-  const possibleIndustries = allIndustries.filter(
-    (industryType: IndustryType) =>
-      corp.divisions.find((division: Industry) => division.type === industryType) === undefined,
-  );
-  const [industry, setIndustry] = useState(possibleIndustries[0]);
+  const [industry, setIndustry] = useState(allIndustries[0]);
   const [name, setName] = useState("");
-
-  //If there are no possible industries to expand into, nothing to render in this tab.
-  if (possibleIndustries.length === 0) return <></>;
 
   const data = IndustriesData[industry];
   if (!data) return <></>;
 
-  const disabled = corp.funds < data.startingCost;
+  const disabled = corp.funds < data.startingCost && corp.divisions.length < corp.maxDivisions;
 
   function newIndustry(): void {
     if (disabled) return;
@@ -67,9 +60,10 @@ export function ExpandIndustryTab(props: IProps): React.ReactElement {
 
   return (
     <>
+      <Typography>{corp.name} has {corp.divisions.length}/{corp.maxDivisions} divisions.</Typography>
       <Typography>Create a new division to expand into a new industry:</Typography>
       <Select value={industry} onChange={onIndustryChange}>
-        {possibleIndustries.map((industry) => (
+        {allIndustries.map((industry) => (
           <MenuItem key={industry} value={industry}>
             {industry}
           </MenuItem>

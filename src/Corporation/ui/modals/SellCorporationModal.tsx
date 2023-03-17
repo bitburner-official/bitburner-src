@@ -17,7 +17,7 @@ interface IProps {
 export function SellCorporationModal(props: IProps): React.ReactElement {
   let cost = 150e9;
   if (!Player.corporation?.seedFunded) {
-    cost = 0;
+    cost /= 3;
   }
   const canSelfFund = Player.canAfford(cost);
 

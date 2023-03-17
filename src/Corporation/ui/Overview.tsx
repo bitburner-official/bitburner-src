@@ -31,6 +31,8 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { MultiplierButtons } from "./MultiplierButtons";
 import { SellCorporationModal } from "./modals/SellCorporationModal";
+import { SellDivisionModal } from "./modals/SellDivisionModal";
+import { Corporation } from "src/DevMenu/ui/Corporation";
 
 interface IProps {
   rerender: () => void;
@@ -103,6 +105,7 @@ export function Overview({ rerender }: IProps): React.ReactElement {
         </Tooltip>
         {corp.public ? <PublicButtons rerender={rerender} /> : <PrivateButtons rerender={rerender} />}
         <BribeButton />
+        {corp.divisions.length != 0 ? <SellDivisionButton />: <></>}
         <RestartButton />
       </Box>
       <br />
@@ -284,6 +287,23 @@ function BribeButton(): React.ReactElement {
   );
 }
 
+function SellDivisionButton(): React.ReactElement {
+  const corp = useCorporation();
+  const [open, setOpen] = useState(false);
+
+  function sellDiv(): void {
+    setOpen(true);
+  }
+  return (
+    <>
+      <Tooltip title={"Sell a division to make room for other divisions"}>
+        <Button onClick={sellDiv}>Sell division</Button>
+      </Tooltip>
+      <SellDivisionModal open={open} onClose={() => setOpen(false)} />
+    </>
+  );
+}
+
 function RestartButton(): React.ReactElement {
   const [open, setOpen] = useState(false);
 
@@ -293,7 +313,7 @@ function RestartButton(): React.ReactElement {
 
   return (
     <>
-      <Tooltip title={"restart"}>
+      <Tooltip title={"Sell corporation and start over"}>
         <Button onClick={restart}>Sell CEO position</Button>
       </Tooltip>
       <SellCorporationModal open={open} onClose={() => setOpen(false)} />

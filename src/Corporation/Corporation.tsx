@@ -26,6 +26,7 @@ export class Corporation {
 
   //A division/business sector is represented  by the object:
   divisions: Industry[] = [];
+  maxDivisions = 20 * BitNodeMultipliers.CorporationDivisions;
 
   //Financial stats
   funds = 150e9;
@@ -83,8 +84,8 @@ export class Corporation {
   }
 
   process(): void {
-    if (this.storedCycles < 0) this.storedCycles = 0
-    
+    if (this.storedCycles < 0) this.storedCycles = 0;
+
     if (this.storedCycles >= corpConstants.gameCyclesPerCorpStateCycle) {
       const state = this.getState();
       const marketCycles = 1;
