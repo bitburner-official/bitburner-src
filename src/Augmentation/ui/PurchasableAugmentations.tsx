@@ -13,6 +13,7 @@ import { Augmentation } from "../Augmentation";
 import { AugmentationNames } from "../data/AugmentationNames";
 import { StaticAugmentations } from "../StaticAugmentations";
 import { PurchaseAugmentationModal } from "./PurchaseAugmentationModal";
+import { FactionNames } from "../../Faction/data/FactionNames";
 
 interface IPreReqsProps {
   aug: Augmentation;
@@ -89,7 +90,7 @@ const Exclusive = (props: IExclusiveProps): React.ReactElement => {
                 </li>
               )}
               {Player.canAccessGrafting() &&
-                !props.aug.isSpecial &&
+                (!props.aug.isSpecial || props.aug.factions.includes(FactionNames.Bladeburners)) &&
                 props.aug.name !== AugmentationNames.TheRedPill && (
                   <li>
                     <b>Grafting</b>
