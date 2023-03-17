@@ -401,6 +401,7 @@ export class Industry {
               if (mat.qty + buyAmt != 0) mat.qlt = (mat.qlt * mat.qty + 1 * buyAmt) / (mat.qty + buyAmt);
               else mat.qlt = 1;
               mat.qty += buyAmt;
+              mat.buy = buyAmt/10;
               expenses += buyAmt * mat.bCost;
             }
             break;
@@ -1063,10 +1064,10 @@ export class Industry {
 
   applyAdVert(corporation: Corporation): void {
     const advMult = corporation.getAdvertisingMultiplier() * this.getAdvertisingMultiplier();
-    const awareness = (this.awareness + 3 * advMult) * (1.01 * advMult);
+    const awareness = (this.awareness + 3 * advMult) * (1.005 * advMult);
     this.awareness = Math.min(awareness, Number.MAX_VALUE);
 
-    const popularity = (this.popularity + 1 * advMult) * ((1 + getRandomInt(1, 3) / 100) * advMult);
+    const popularity = (this.popularity + 1 * advMult) * ((1 + getRandomInt(1, 3) / 200) * advMult);
     this.popularity = Math.min(popularity, Number.MAX_VALUE);
 
     ++this.numAdVerts;
