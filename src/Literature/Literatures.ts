@@ -67,7 +67,7 @@ export const Literatures: Record<string, Literature> = {};
     "-The 'Smart Supply' upgrade is extremely useful. Consider purchasing it as soon as possible.<br><br>" +
     "-Purchasing Hardware, Robots, AI Cores, and Real Estate can potentially increase your production. The effects of these depend on " +
     "what industry you are in.<br><br>" +
-    "-In order to optimize your production, you will need a good balance of all employee positions<br><br>" +
+    "-In order to optimize your production, you will need a good balance of all employee positions, about 1/9 should be interning<br><br>" +
     "-Quality of materials used for production affects the quality/effective rating of materials/products produced, so vertical integration " +
     "is important for high profits.<br><br>" +
     "-Materials purchased from the open market are always of quality 1.<br><br>" +

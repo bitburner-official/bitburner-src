@@ -83,6 +83,8 @@ export class Corporation {
   }
 
   process(): void {
+    if (this.storedCycles < 0) this.storedCycles = 0
+    
     if (this.storedCycles >= corpConstants.gameCyclesPerCorpStateCycle) {
       const state = this.getState();
       const marketCycles = 1;
