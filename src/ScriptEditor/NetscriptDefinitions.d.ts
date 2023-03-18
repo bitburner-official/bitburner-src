@@ -6768,7 +6768,7 @@ export interface NS {
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
 
   /**
-   * Share your computer with your factions.
+   * Share the server's ram with your factions.
    * @remarks
    * RAM cost: 2.4 GB
    *

@@ -2,6 +2,7 @@ formatRam() Netscript Function
 ==============================
 
 .. js:function:: formatRam(number[, fractionalDigits = 3[, suffixStart = 1000[, isInteger = false]]])
+    
     :RAM cost: 0 GB
 
     :param number number: Number to format.
