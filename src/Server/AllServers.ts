@@ -12,6 +12,8 @@ import { isValidIPAddress } from "../utils/helpers/isValidIPAddress";
 import { SpecialServers } from "./data/SpecialServers";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 
+import type { RunningScript } from "../Script/RunningScript";
+
 /**
  * Map of all Servers that exist in the game
  *  Key (string) = IP
@@ -206,9 +208,16 @@ function excludeReplacer(key: string, value: any): any {
   return value;
 }
 
+function scriptFilter(script: RunningScript): boolean {
+  return !script.temporary;
+}
+
 function includeReplacer(key: string, value: any): any {
   if (key === "logs") {
     return [];
+  }
+  if (key === "runningScripts") {
+    return value.filter(scriptFilter);
   }
   return value;
 }

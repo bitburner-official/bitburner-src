@@ -48,6 +48,30 @@ function loadStandardServers() {
             "args": [],
             "filename": "script.js",
             "logs": [
+              "I shouldn't even be saved, since I'm temporary"
+            ],
+            "logUpd": true,
+            "offlineRunningTime": 0.01,
+            "onlineRunningTime": 7.210000000000004,
+            "pid": 3,
+            "ramUsage": 1.6,
+            "server": "home",
+            "temporary": true,
+            "dependencies": [
+              {
+                "filename": "script.js",
+                "url": "blob:http://localhost/302fe9e5-2ec3-4ed7-bb5a-4f8f4a85f46d",
+                "moduleSequenceNumber": 2
+              }
+            ]
+          }
+        },
+        {
+          "ctor": "RunningScript",
+          "data": {
+            "args": [],
+            "filename": "script.js",
+            "logs": [
               "I'm a log line that should be pruned",
               "Another log line"
             ],

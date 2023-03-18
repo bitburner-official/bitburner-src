@@ -688,32 +688,32 @@ export const ns: InternalAPI<NSFull> = {
   },
   run:
     (ctx) =>
-    (_scriptname, _threads = 1, ..._args) => {
+    (_scriptname, _thread_or_opt = 1, ..._args) => {
       const scriptname = helpers.string(ctx, "scriptname", _scriptname);
-      const threads = helpers.positiveInteger(ctx, "threads", _threads);
+      const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const scriptServer = GetServer(ctx.workerScript.hostname);
       if (scriptServer == null) {
         throw helpers.makeRuntimeErrorMsg(ctx, "Could not find server. This is a bug. Report to dev.");
       }
 
-      return runScriptFromScript("run", scriptServer, scriptname, args, ctx.workerScript, threads);
+      return runScriptFromScript("run", scriptServer, scriptname, args, ctx.workerScript, runOpts);
     },
   exec:
     (ctx) =>
-    (_scriptname, _hostname, _threads = 1, ..._args) => {
+    (_scriptname, _hostname, _thread_or_opt = 1, ..._args) => {
       const scriptname = helpers.string(ctx, "scriptname", _scriptname);
       const hostname = helpers.string(ctx, "hostname", _hostname);
-      const threads = helpers.positiveInteger(ctx, "threads", _threads);
+      const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const server = helpers.getServer(ctx, hostname);
-      return runScriptFromScript("exec", server, scriptname, args, ctx.workerScript, threads);
+      return runScriptFromScript("exec", server, scriptname, args, ctx.workerScript, runOpts);
     },
   spawn:
     (ctx) =>
-    (_scriptname, _threads = 1, ..._args) => {
+    (_scriptname, _thread_or_opt = 1, ..._args) => {
       const scriptname = helpers.string(ctx, "scriptname", _scriptname);
-      const threads = helpers.positiveInteger(ctx, "threads", _threads);
+      const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const spawnDelay = 10;
       setTimeout(() => {
@@ -722,7 +722,7 @@ export const ns: InternalAPI<NSFull> = {
           throw helpers.makeRuntimeErrorMsg(ctx, "Could not find server. This is a bug. Report to dev");
         }
 
-        return runScriptFromScript("spawn", scriptServer, scriptname, args, ctx.workerScript, threads);
+        return runScriptFromScript("spawn", scriptServer, scriptname, args, ctx.workerScript, runOpts);
       }, spawnDelay * 1e3);
 
       helpers.log(ctx, () => `Will execute '${scriptname}' in ${spawnDelay} seconds`);
@@ -943,6 +943,7 @@ export const ns: InternalAPI<NSFull> = {
           threads: script.threads,
           args: script.args.slice(),
           pid: script.pid,
+          temporary: script.temporary,
         });
       }
       return processes;
