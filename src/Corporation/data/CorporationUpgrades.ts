@@ -66,7 +66,7 @@ export const CorporationUpgrades: Record<CorporationUpgradeIndex, CorporationUpg
   [CorporationUpgradeIndex.WilsonAnalytics]: {
     index: CorporationUpgradeIndex.WilsonAnalytics,
     basePrice: 4e9,
-    priceMult: 1.5,
+    priceMult: 2,
     benefit: 0.005,
     name: "Wilson Analytics",
     desc:

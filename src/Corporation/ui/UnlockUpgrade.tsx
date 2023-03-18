@@ -21,7 +21,10 @@ export function UnlockUpgrade(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const data = props.upgradeData;
   const tooltip = data.desc;
+  const price = corp.unlockUpgrades[data.index] === 0 ? data.price : 0;
+
   function onClick(): void {
+    if (corp.unlockUpgrades[data.index] === 1) return;
     if (corp.funds < data.price) return;
     try {
       UU(corp, props.upgradeData);
@@ -34,8 +37,12 @@ export function UnlockUpgrade(props: IProps): React.ReactElement {
   return (
     <Grid item xs={4}>
       <Box display="flex" alignItems="center" flexDirection="row-reverse">
-        <Button disabled={corp.funds < data.price} sx={{ mx: 1 }} onClick={onClick}>
-          <MoneyCost money={data.price} corp={corp} />
+        <Button
+          disabled={corp.funds < data.price || corp.unlockUpgrades[data.index] === 1}
+          sx={{ mx: 1 }}
+          onClick={onClick}
+        >
+          <MoneyCost money={price} corp={corp} />
         </Button>
         <Tooltip title={tooltip}>
           <Typography>{data.name}</Typography>

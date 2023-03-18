@@ -16,7 +16,7 @@ buyBackShares(amount: number): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  amount | number | Amount of shares to buy back. |
+|  amount | number | Amount of shares to buy back, must be integer and larger than 0 |
 
 **Returns:**
 

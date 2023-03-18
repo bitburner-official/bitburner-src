@@ -29,10 +29,14 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
+import { MultiplierButtons } from "./MultiplierButtons";
+import { SellCorporationModal } from "./modals/SellCorporationModal";
+import { SellDivisionModal } from "./modals/SellDivisionModal";
 
 interface IProps {
   rerender: () => void;
 }
+
 export function Overview({ rerender }: IProps): React.ReactElement {
   const corp = useCorporation();
   const profit: number = corp.revenue - corp.expenses;
@@ -100,6 +104,8 @@ export function Overview({ rerender }: IProps): React.ReactElement {
         </Tooltip>
         {corp.public ? <PublicButtons rerender={rerender} /> : <PrivateButtons rerender={rerender} />}
         <BribeButton />
+        {corp.divisions.length != 0 ? <SellDivisionButton /> : <></>}
+        <RestartButton />
       </Box>
       <br />
       <Upgrades rerender={rerender} />
@@ -155,25 +161,40 @@ function Upgrades({ rerender }: IUpgradeProps): React.ReactElement {
     return <Typography variant="h4">Upgrades are unlocked once you create an industry.</Typography>;
   }
 
+  const [purchaseMultiplier, setPurchaseMultiplier] = useState<number | "MAX">(corpConstants.PurchaseMultipliers.x1);
+
+  // onClick event handlers for purchase multiplier buttons
+  const purchaseMultiplierOnClicks = [
+    () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.x1),
+    () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.x5),
+    () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.x10),
+    () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.x50),
+    () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.x100),
+    () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.MAX),
+  ];
+
   return (
     <>
       <Paper sx={{ p: 1, my: 1 }}>
         <Typography variant="h4">Unlocks</Typography>
         <Grid container>
-          {Object.values(CorporationUnlockUpgrades)
-            .filter((upgrade: CorporationUnlockUpgrade) => !corp.unlockUpgrades[upgrade.index])
-            .map((upgrade: CorporationUnlockUpgrade) => (
-              <UnlockUpgrade rerender={rerender} upgradeData={upgrade} key={upgrade.index} />
-            ))}
+          {Object.values(CorporationUnlockUpgrades).map((upgrade: CorporationUnlockUpgrade) => (
+            <UnlockUpgrade rerender={rerender} upgradeData={upgrade} key={upgrade.index} />
+          ))}
         </Grid>
       </Paper>
       <Paper sx={{ p: 1, my: 1 }}>
         <Typography variant="h4">Upgrades</Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <MultiplierButtons onClicks={purchaseMultiplierOnClicks} purchaseMultiplier={purchaseMultiplier} />
+          </Grid>
+        </Grid>
         <Grid container>
           {corp.upgrades
             .map((level: number, i: number) => CorporationUpgrades[i as CorporationUpgradeIndex])
             .map((upgrade: CorporationUpgrade) => (
-              <LevelableUpgrade rerender={rerender} upgrade={upgrade} key={upgrade.index} />
+              <LevelableUpgrade rerender={rerender} upgrade={upgrade} key={upgrade.index} amount={purchaseMultiplier} />
             ))}
         </Grid>
       </Paper>
@@ -261,6 +282,39 @@ function BribeButton(): React.ReactElement {
         </Button>
       </Tooltip>
       <BribeFactionModal open={open} onClose={() => setOpen(false)} />
+    </>
+  );
+}
+
+function SellDivisionButton(): React.ReactElement {
+  const [open, setOpen] = useState(false);
+
+  function sellDiv(): void {
+    setOpen(true);
+  }
+  return (
+    <>
+      <Tooltip title={"Sell a division to make room for other divisions"}>
+        <Button onClick={sellDiv}>Sell division</Button>
+      </Tooltip>
+      <SellDivisionModal open={open} onClose={() => setOpen(false)} />
+    </>
+  );
+}
+
+function RestartButton(): React.ReactElement {
+  const [open, setOpen] = useState(false);
+
+  function restart(): void {
+    setOpen(true);
+  }
+
+  return (
+    <>
+      <Tooltip title={"Sell corporation and start over"}>
+        <Button onClick={restart}>Sell CEO position</Button>
+      </Tooltip>
+      <SellCorporationModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 }

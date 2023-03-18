@@ -1,10 +1,11 @@
 export enum IndustryType {
-  Energy = "Energy",
-  Utilities = "Water Utilities",
+  Water = "Water Utilities",
+  Spring = "Spring Water",
   Agriculture = "Agriculture",
   Fishing = "Fishing",
   Mining = "Mining",
-  Food = "Food",
+  Refinery = "Refinery",
+  Restaurant = "Restaurant",
   Tobacco = "Tobacco",
   Chemical = "Chemical",
   Pharmaceutical = "Pharmaceutical",
@@ -21,6 +22,6 @@ export enum EmployeePositions {
   Business = "Business",
   Management = "Management",
   RandD = "Research & Development",
-  Training = "Training",
+  Intern = "Intern",
   Unassigned = "Unassigned",
 }

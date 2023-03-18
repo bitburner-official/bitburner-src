@@ -24,7 +24,8 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   /** Names of all materials */
   materialNames: CorpMaterialName[] = [
     "Water",
-    "Energy",
+    "Ore",
+    "Minerals",
     "Food",
     "Plants",
     "Metal",
@@ -73,7 +74,6 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
     "Go-Juice",
     "HRBuddy-Recruitment",
     "HRBuddy-Training",
-    "JoyWire",
     "Market-TA.I",
     "Market-TA.II",
     "Overclock",
@@ -96,7 +96,7 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   issueNewSharesCooldown = 216e3,
   /** Cooldown for selling shares in game cycles. 1 hour. */
   sellSharesCooldown = 18e3,
-  coffeeCostPerEmployee = 500e3,
+  teaCostPerEmployee = 500e3,
   gameCyclesPerMarketCycle = 50,
   gameCyclesPerCorpStateCycle = gameCyclesPerMarketCycle / stateNames.length,
   secondsPerMarketCycle = (gameCyclesPerMarketCycle * CONSTANTS.MilliPerCycle) / 1000,
@@ -117,7 +117,25 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   /** Max products for a division without upgrades */
   maxProductsBase = 3,
   fundingRoundShares = [0.1, 0.35, 0.25, 0.2],
-  fundingRoundMultiplier = [4, 3, 3, 2.5],
-  valuationLength = 5,
-  /** Minimum decay value for employee morale/happiness/energy */
-  minEmployeeDecay = 10;
+  fundingRoundMultiplier = [3, 2, 2, 1.5],
+  valuationLength = 10,
+  /** Minimum decay value for employee morale/energy */
+  minEmployeeDecay = 10,
+  /**smart supply ot */
+  smartSupplyUseOptions = ["leftovers", "imports", "none"],
+  PurchaseMultipliers: {
+    [key: string]: number | "MAX" | undefined;
+    x1: number;
+    x5: number;
+    x10: number;
+    x50: number;
+    x100: number;
+    MAX: "MAX";
+  } = {
+    x1: 1,
+    x5: 5,
+    x10: 10,
+    x50: 50,
+    x100: 100,
+    MAX: "MAX",
+  };

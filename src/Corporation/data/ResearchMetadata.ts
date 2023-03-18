@@ -6,17 +6,17 @@ export const researchMetadata: IConstructorParams[] = [
     cost: 12e3,
     desc:
       "Automatically keep your employees fully caffeinated with " +
-      "coffee injections. This research will keep the energy of all " +
+      "tea injections. This research will keep the energy of all " +
       "employees at its maximum possible value, for no cost. " +
-      "This will also disable the Coffee upgrade.",
+      "This will also disable the Tea upgrade.",
   },
   {
     name: "AutoPartyManager",
     cost: 15e3,
     desc:
-      "Automatically analyzes your employees' happiness and morale " +
+      "Automatically analyzes your employees' morale " +
       "and boosts them whenever it detects a decrease. This research will " +
-      "keep the morale and happiness of all employees at their maximum possible " +
+      "keep the morale of all employees at their maximum possible " +
       "values, for no cost. " +
       "This will also disable the 'Throw Party' feature.",
   },
@@ -26,13 +26,6 @@ export const researchMetadata: IConstructorParams[] = [
     desc:
       "Research how to automatically administer performance-enhancing drugs to all of " +
       "your employees. This unlocks Drug-related Research.",
-  },
-  {
-    name: "Bulk Purchasing",
-    cost: 5e3,
-    desc:
-      "Research the art of buying materials in bulk. This allows you to purchase " +
-      "any amount of a material instantly.",
   },
   {
     name: "CPH4 Injections",
@@ -73,7 +66,7 @@ export const researchMetadata: IConstructorParams[] = [
     name: "Go-Juice",
     cost: 25e3,
     desc:
-      "Provide employees with Go-Juice, a coffee-derivative that further enhances " +
+      "Provide employees with Go-Juice, a tea-derivative that further enhances " +
       "the brain's dopamine production. This increases the maximum energy of all " +
       "employees by 10.",
   },
@@ -101,12 +94,7 @@ export const researchMetadata: IConstructorParams[] = [
     desc:
       "Use automated software to handle the training of employees. With this " +
       "research, each employee hired with HRBuddy-Recruitment will automatically " +
-      "be assigned to 'Training', rather than being unassigned.",
-  },
-  {
-    name: "JoyWire",
-    cost: 20e3,
-    desc: "A brain implant which is installed in employees, increasing their maximum happiness by 10.",
+      "be assigned to 'Intern', rather than being unassigned.",
   },
   {
     name: "Market-TA.I",

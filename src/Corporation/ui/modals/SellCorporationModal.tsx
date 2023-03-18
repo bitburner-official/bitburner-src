@@ -14,12 +14,12 @@ interface IProps {
   onClose: () => void;
 }
 
-export function CreateCorporationModal(props: IProps): React.ReactElement {
-  const canSelfFund = Player.canAfford(150e9);
-  if (!Player.canAccessCorporation() || Player.corporation) {
-    props.onClose();
-    return <></>;
+export function SellCorporationModal(props: IProps): React.ReactElement {
+  let cost = 150e9;
+  if (!Player.corporation?.seedFunded) {
+    cost /= 3;
   }
+  const canSelfFund = Player.canAfford(cost);
 
   const [name, setName] = useState("");
   function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -31,7 +31,7 @@ export function CreateCorporationModal(props: IProps): React.ReactElement {
     if (name == "") return;
 
     Player.startCorporation(name, false);
-    Player.loseMoney(150e9, "corporation");
+    Player.loseMoney(cost, "corporation");
 
     props.onClose();
     Router.toPage(Page.Corporation);
@@ -51,14 +51,11 @@ export function CreateCorporationModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Would you like to start a corporation? This will require $150b for registration and initial funding.{" "}
-        {Player.bitNodeN === 3 &&
-          `This $150b
-        can either be self-funded, or you can obtain the seed money from the government in exchange for 500 million
-        shares`}
+        Would you like to sell your position as CEO and start a new corporation? Everything from your current
+        corporation will be gone and you start fresh.
         <br />
         <br />
-        If you would like to start one, please enter a name for your corporation below:
+        If you would like to start new one, please enter a name for your corporation below:
       </Typography>
       <TextField autoFocus={true} placeholder="Corporation Name" onChange={onChange} value={name} />
       {Player.bitNodeN === 3 && (
@@ -67,7 +64,7 @@ export function CreateCorporationModal(props: IProps): React.ReactElement {
         </Button>
       )}
       <Button onClick={selfFund} disabled={name == "" || !canSelfFund}>
-        Self-Fund (<Money money={150e9} forPurchase={true} />)
+        Self-Fund (<Money money={cost} forPurchase={true} />)
       </Button>
     </Modal>
   );

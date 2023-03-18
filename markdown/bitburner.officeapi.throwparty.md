@@ -24,5 +24,5 @@ throwParty(divisionName: string, city: CityName | `${CityName}`, costPerEmployee
 
 number
 
-Multiplier for happiness and morale, or zero on failure
+Multiplier for morale, or zero on failure
 

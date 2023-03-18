@@ -6,7 +6,7 @@ import { Material } from "../../Material";
 import { formatMatPurchaseAmount, formatMoney } from "../../../ui/formatNumber";
 import { BulkPurchase, BuyMaterial } from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
-import { useCorporation, useDivision } from "../Context";
+import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -110,7 +110,6 @@ interface IProps {
 
 // Create a popup that lets the player purchase a Material
 export function PurchaseMaterialModal(props: IProps): React.ReactElement {
-  const division = useDivision();
   const [buyAmt, setBuyAmt] = useState(props.mat.buy ? props.mat.buy : 0);
 
   function purchaseMaterial(): void {
@@ -160,9 +159,7 @@ export function PurchaseMaterialModal(props: IProps): React.ReactElement {
         <Button disabled={props.disablePurchaseLimit} onClick={clearPurchase}>
           Clear Purchase
         </Button>
-        {division.hasResearch("Bulk Purchasing") && (
-          <BulkPurchaseSection onClose={props.onClose} mat={props.mat} warehouse={props.warehouse} />
-        )}
+        {<BulkPurchaseSection onClose={props.onClose} mat={props.mat} warehouse={props.warehouse} />}
       </>
     </Modal>
   );

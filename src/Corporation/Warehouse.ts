@@ -34,8 +34,8 @@ export class Warehouse {
   // Whether Smart Supply is enabled for this Industry (the Industry that this Warehouse is for)
   smartSupplyEnabled = false;
 
-  // Decide if smart supply should use the materials already in the warehouse when deciding on the amount to buy.
-  smartSupplyUseLeftovers: Record<CorpMaterialName, boolean>;
+  // Decide if smart supply should use the amount of materials imported into account when deciding on the amount to buy.
+  smartSupplyOptions: Record<CorpMaterialName, string>;
 
   // Stores the amount of product to be produced. Used for Smart Supply unlock.
   // The production tracked by smart supply is always based on the previous cycle,
@@ -47,10 +47,10 @@ export class Warehouse {
     this.size = params.size ? params.size : 0;
 
     this.materials = {} as Record<CorpMaterialName, Material>;
-    this.smartSupplyUseLeftovers = {} as Record<CorpMaterialName, boolean>;
+    this.smartSupplyOptions = {} as Record<CorpMaterialName, string>;
     for (const matName of materialNames) {
       this.materials[matName] = new Material({ name: matName });
-      this.smartSupplyUseLeftovers[matName] = true;
+      this.smartSupplyOptions[matName] = "leftovers";
     }
 
     if (params.corp && params.industry) {

@@ -154,8 +154,11 @@ export interface IBitNodeMultipliers {
   /** Influences the hacking skill required to backdoor the world daemon. */
   WorldDaemonDifficulty: number;
 
-  /** Influences corporation dividends. */
+  /** Influences profits from corporation dividends and selling shares. */
   CorporationSoftcap: number;
+
+  /** Influences number of divisions a corporation can have. */
+  CorporationDivisions: number;
 
   // Index signature
   [key: string]: number;

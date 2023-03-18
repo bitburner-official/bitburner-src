@@ -4,15 +4,19 @@ import {
   CorporationUnlockUpgrades,
 } from "../../Corporation/data/CorporationUnlockUpgrades";
 import { PlayerObject } from "./PlayerObject";
+import { resetIndustryResearchTrees } from "../../Corporation/IndustryData";
 
 export function canAccessCorporation(this: PlayerObject): boolean {
   return this.bitNodeN === 3 || this.sourceFileLvl(3) > 0;
 }
 
-export function startCorporation(this: PlayerObject, corpName: string, additionalShares = 0): void {
+export function startCorporation(this: PlayerObject, corpName: string, seedFunded: boolean): void {
   this.corporation = new Corporation({
     name: corpName,
+    seedFunded: seedFunded,
   });
+  //reset the research tree in case the corporation was restarted
+  resetIndustryResearchTrees();
 
   if (this.bitNodeN === 3 || this.sourceFileLvl(3) === 3) {
     const warehouseApi = CorporationUnlockUpgrades[CorporationUnlockUpgradeIndex.WarehouseAPI].index;
@@ -22,5 +26,5 @@ export function startCorporation(this: PlayerObject, corpName: string, additiona
     this.corporation.unlockUpgrades[OfficeApi] = 1;
   }
 
-  this.corporation.totalShares += additionalShares;
+  this.corporation.totalShares += seedFunded ? 500_000_000 : 0;
 }

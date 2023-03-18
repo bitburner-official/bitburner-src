@@ -20,7 +20,6 @@ function createBaseResearchTreeNodes(): Node {
   const autoBrew: Node = makeNode("AutoBrew");
   const autoParty: Node = makeNode("AutoPartyManager");
   const autoDrugs: Node = makeNode("Automatic Drug Administration");
-  const bulkPurchasing: Node = makeNode("Bulk Purchasing");
   const cph4: Node = makeNode("CPH4 Injections");
   const drones: Node = makeNode("Drones");
   const dronesAssembly: Node = makeNode("Drones - Assembly");
@@ -28,7 +27,6 @@ function createBaseResearchTreeNodes(): Node {
   const goJuice: Node = makeNode("Go-Juice");
   const hrRecruitment: Node = makeNode("HRBuddy-Recruitment");
   const hrTraining: Node = makeNode("HRBuddy-Training");
-  const joywire: Node = makeNode("JoyWire");
   const marketta1: Node = makeNode("Market-TA.I");
   const marketta2: Node = makeNode("Market-TA.II");
   const overclock: Node = makeNode("Overclock");
@@ -50,10 +48,8 @@ function createBaseResearchTreeNodes(): Node {
   rootNode.addChild(autoBrew);
   rootNode.addChild(autoParty);
   rootNode.addChild(autoDrugs);
-  rootNode.addChild(bulkPurchasing);
   rootNode.addChild(drones);
   rootNode.addChild(hrRecruitment);
-  rootNode.addChild(joywire);
   rootNode.addChild(marketta1);
   rootNode.addChild(overclock);
   rootNode.addChild(scAssemblers);

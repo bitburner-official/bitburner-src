@@ -14,6 +14,6 @@ type CorpEmployeePosition =
   | "Business"
   | "Management"
   | "Research & Development"
-  | "Training"
+  | "Intern"
   | "Unassigned";
 ```

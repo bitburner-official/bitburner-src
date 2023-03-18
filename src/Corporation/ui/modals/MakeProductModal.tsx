@@ -20,7 +20,7 @@ interface IProps {
 }
 
 function productPlaceholder(type: string): string {
-  if (type === IndustryType.Food) {
+  if (type === IndustryType.Restaurant) {
     return "Restaurant Name";
   } else if (type === IndustryType.Healthcare) {
     return "Hospital Name";

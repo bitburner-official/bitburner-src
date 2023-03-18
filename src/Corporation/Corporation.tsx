@@ -14,9 +14,11 @@ import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../uti
 import { isString } from "../utils/helpers/isString";
 import { CityName } from "../Enums";
 import { CorpStateName } from "@nsdefs";
+import { calculateUpgradeCost } from "./helpers";
 
 interface IParams {
   name?: string;
+  seedFunded?: boolean;
 }
 
 export class Corporation {
@@ -24,6 +26,7 @@ export class Corporation {
 
   //A division/business sector is represented  by the object:
   divisions: Industry[] = [];
+  maxDivisions = 20 * BitNodeMultipliers.CorporationDivisions;
 
   //Financial stats
   funds = 150e9;
@@ -50,6 +53,8 @@ export class Corporation {
   valuationsList = [0];
   valuation = 0;
 
+  seedFunded: boolean;
+
   state = new CorporationState();
 
   constructor(params: IParams = {}) {
@@ -59,6 +64,7 @@ export class Corporation {
     this.unlockUpgrades = Array(numUnlockUpgrades).fill(0);
     this.upgrades = Array(numUpgrades).fill(0);
     this.upgradeMultipliers = Array(numUpgrades).fill(1);
+    this.seedFunded = params.seedFunded ?? false;
   }
 
   addFunds(amt: number): void {
@@ -78,6 +84,8 @@ export class Corporation {
   }
 
   process(): void {
+    if (this.storedCycles < 0) this.storedCycles = 0;
+
     if (this.storedCycles >= corpConstants.gameCyclesPerCorpStateCycle) {
       const state = this.getState();
       const marketCycles = 1;
@@ -305,10 +313,9 @@ export class Corporation {
   }
 
   //Levelable upgrades
-  upgrade(upgrade: CorporationUpgrade): void {
+  upgrade(upgrade: CorporationUpgrade, amount: number): void {
+    if (amount < 1) amount = 1;
     const upgN = upgrade.index,
-      basePrice = upgrade.basePrice,
-      priceMult = upgrade.priceMult,
       upgradeAmt = upgrade.benefit; //Amount by which the upgrade multiplier gets increased (additive)
     while (this.upgrades.length <= upgN) {
       this.upgrades.push(0);
@@ -316,12 +323,12 @@ export class Corporation {
     while (this.upgradeMultipliers.length <= upgN) {
       this.upgradeMultipliers.push(1);
     }
-    const totalCost = basePrice * Math.pow(priceMult, this.upgrades[upgN]);
+    const totalCost = calculateUpgradeCost(this, upgrade, amount);
     if (this.funds < totalCost) {
       dialogBoxCreate("You don't have enough funds to purchase this!");
       return;
     }
-    ++this.upgrades[upgN];
+    this.upgrades[upgN] += amount;
     this.funds = this.funds - totalCost;
 
     //Increase upgrade multiplier

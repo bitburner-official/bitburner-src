@@ -32,7 +32,7 @@ import {
   UpgradeOfficeSize,
   PurchaseWarehouse,
   UpgradeWarehouse,
-  BuyCoffee,
+  BuyTea,
   ThrowParty,
   HireAdVert,
   MakeProduct,
@@ -46,7 +46,7 @@ import {
   BulkPurchase,
   SellShares,
   BuyBackShares,
-  SetSmartSupplyUseLeftovers,
+  SetSmartSupplyOption,
   LimitMaterialProduction,
   LimitProductProduction,
   UpgradeWarehouseCost,
@@ -76,10 +76,10 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     if (selfFund) {
       if (!player.canAfford(150e9)) return false;
 
-      player.startCorporation(corporationName);
+      player.startCorporation(corporationName, false);
       player.loseMoney(150e9, "corporation");
     } else {
-      player.startCorporation(corporationName, 500e6);
+      player.startCorporation(corporationName, true);
     }
     return true;
   }
@@ -243,7 +243,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     return material;
   }
 
-  function getProduct(divisionName: string, productName: string): Product {
+  function getProduct(divisionName: string, cityName: string, productName: string): Product {
     const division = getDivision(divisionName);
     const product = division.products[productName];
     if (product === undefined) throw new Error(`Invalid product name: '${productName}'`);
@@ -331,6 +331,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       return {
         cost: material.bCost,
         sCost: material.sCost,
+        sAmt: material.sllman[1],
         name: material.name,
         qty: material.qty,
         qlt: material.qlt,
@@ -341,17 +342,19 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         exp: exports,
       };
     },
-    getProduct: (ctx) => (_divisionName, _productName) => {
+    getProduct: (ctx) => (_divisionName, _cityName, _productName) => {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const productName = helpers.string(ctx, "productName", _productName);
-      const product = getProduct(divisionName, productName);
+      const cityName = helpers.city(ctx, "cityName", _cityName);
+      const product = getProduct(divisionName, cityName, productName);
       const corporation = getCorporation();
       return {
         name: product.name,
         dmd: corporation.unlockUpgrades[2] ? product.dmd : undefined,
         cmp: corporation.unlockUpgrades[3] ? product.cmp : undefined,
         rat: product.rat,
+        effRat: product.data[cityName][3],
         properties: {
           qlt: product.qlt,
           per: product.per,
@@ -361,8 +364,11 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
           fea: product.fea,
         },
         pCost: product.pCost,
-        sCost: product.sCost,
-        cityData: product.data,
+        sCost: product.sCost[cityName],
+        sAmt: product.sllman[cityName][1],
+        qty: product.data[cityName][0],
+        prod: product.data[cityName][1],
+        sell: product.data[cityName][2],
         developmentProgress: product.prog,
       };
     },
@@ -406,14 +412,14 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         const amt = helpers.string(ctx, "amt", _amt);
         const price = helpers.string(ctx, "price", _price);
         const all = !!_all;
-        const product = getProduct(divisionName, productName);
+        const product = getProduct(divisionName, cityName, productName);
         SellProduct(product, cityName, amt, price, all);
       },
     discontinueProduct: (ctx) => (_divisionName, _productName) => {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const productName = helpers.string(ctx, "productName", _productName);
-      getDivision(divisionName).discontinueProduct(getProduct(divisionName, productName));
+      getDivision(divisionName).discontinueProduct(getProduct(divisionName, "Sector-12", productName));
     },
     setSmartSupply: (ctx) => (_divisionName, _cityName, _enabled) => {
       checkAccess(ctx, 7);
@@ -425,17 +431,17 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not purchased the Smart Supply upgrade!`);
       SetSmartSupply(warehouse, enabled);
     },
-    setSmartSupplyUseLeftovers: (ctx) => (_divisionName, _cityName, materialName, _enabled) => {
+    setSmartSupplyOption: (ctx) => (_divisionName, _cityName, materialName, _option) => {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
       assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
-      const enabled = !!_enabled;
       const warehouse = getWarehouse(divisionName, cityName);
       const material = getMaterial(divisionName, cityName, materialName);
+      const option = helpers.string(ctx, "option", _option);
       if (!hasUnlockUpgrade("Smart Supply"))
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not purchased the Smart Supply upgrade!`);
-      SetSmartSupplyUseLeftovers(warehouse, material, enabled);
+      SetSmartSupplyOption(warehouse, material, option);
     },
     buyMaterial: (ctx) => (_divisionName, _cityName, materialName, _amt) => {
       checkAccess(ctx, 7);
@@ -451,8 +457,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     bulkPurchase: (ctx) => (_divisionName, _cityName, materialName, _amt) => {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
-      if (!hasResearched(getDivision(divisionName), "Bulk Purchasing"))
-        throw new Error(`You have not researched Bulk Purchasing in ${divisionName}`);
       const corporation = getCorporation();
       const cityName = helpers.city(ctx, "cityName", _cityName);
       assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
@@ -479,7 +483,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const cityName = helpers.city(ctx, "cityName", _cityName);
       const productName = helpers.string(ctx, "productName", _productName);
       const qty = helpers.number(ctx, "qty", _qty);
-      LimitProductProduction(getProduct(divisionName, productName), cityName, qty);
+      LimitProductProduction(getProduct(divisionName, cityName, productName), cityName, qty);
     },
     exportMaterial:
       (ctx) =>
@@ -539,23 +543,25 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not researched MarketTA.II for division: ${divisionName}`);
       SetMaterialMarketTA2(getMaterial(divisionName, cityName, materialName), on);
     },
-    setProductMarketTA1: (ctx) => (_divisionName, _productName, _on) => {
+    setProductMarketTA1: (ctx) => (_divisionName, _cityName, _productName, _on) => {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
+      const cityName = helpers.city(ctx, "cityName", _cityName);
       const productName = helpers.string(ctx, "productName", _productName);
       const on = !!_on;
       if (!getDivision(divisionName).hasResearch("Market-TA.I"))
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not researched MarketTA.I for division: ${divisionName}`);
-      SetProductMarketTA1(getProduct(divisionName, productName), on);
+      SetProductMarketTA1(getProduct(divisionName, cityName, productName), on);
     },
-    setProductMarketTA2: (ctx) => (_divisionName, _productName, _on) => {
+    setProductMarketTA2: (ctx) => (_divisionName, _cityName, _productName, _on) => {
       checkAccess(ctx, 7);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
+      const cityName = helpers.city(ctx, "cityName", _cityName);
       const productName = helpers.string(ctx, "productName", _productName);
       const on = !!_on;
       if (!getDivision(divisionName).hasResearch("Market-TA.II"))
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not researched MarketTA.II for division: ${divisionName}`);
-      SetProductMarketTA2(getProduct(divisionName, productName), on);
+      SetProductMarketTA2(getProduct(divisionName, cityName, productName), on);
     },
   };
 
@@ -660,14 +666,14 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
 
       return ThrowParty(corporation, office, costPerEmployee);
     },
-    buyCoffee: (ctx) => (_divisionName, _cityName) => {
+    buyTea: (ctx) => (_divisionName, _cityName) => {
       checkAccess(ctx, 8);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = helpers.city(ctx, "cityName", _cityName);
 
       const corporation = getCorporation();
       const office = getOffice(divisionName, cityName);
-      return BuyCoffee(corporation, office);
+      return BuyTea(corporation, office);
     },
     hireAdVert: (ctx) => (_divisionName) => {
       checkAccess(ctx, 8);
@@ -690,11 +696,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         loc: office.loc,
         size: office.size,
         maxEne: office.maxEne,
-        maxHap: office.maxHap,
         maxMor: office.maxMor,
         employees: office.totalEmployees,
         avgEne: office.avgEne,
-        avgHap: office.avgHap,
         avgMor: office.avgMor,
         totalExperience: office.totalExp,
         employeeProd: Object.assign({}, office.employeeProd),
@@ -761,7 +765,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const corporation = getCorporation();
       const upgrade = Object.values(CorporationUpgrades).find((upgrade) => upgrade.name === upgradeName);
       if (upgrade === undefined) throw new Error(`No upgrade named '${upgradeName}'`);
-      LevelUpgrade(corporation, upgrade);
+      LevelUpgrade(corporation, upgrade, 1);
     },
     issueDividends: (ctx) => (_rate) => {
       checkAccess(ctx);

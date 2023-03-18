@@ -6887,17 +6887,18 @@ type CorpEmployeePosition =
   | "Business"
   | "Management"
   | "Research & Development"
-  | "Training"
+  | "Intern"
   | "Unassigned";
 
 /** @public */
 type CorpIndustryName =
-  | "Energy"
+  | "Spring Water"
   | "Water Utilities"
   | "Agriculture"
   | "Fishing"
   | "Mining"
-  | "Food"
+  | "Refinery"
+  | "Restaurant"
   | "Tobacco"
   | "Chemical"
   | "Pharmaceutical"
@@ -7026,16 +7027,16 @@ export interface OfficeAPI {
    * @param divisionName - Name of the division
    * @param city - Name of the city
    * @param costPerEmployee - Amount to spend per employee.
-   * @returns Multiplier for happiness and morale, or zero on failure
+   * @returns Multiplier for morale, or zero on failure
    */
   throwParty(divisionName: string, city: CityName | `${CityName}`, costPerEmployee: number): number;
   /**
-   * Buy coffee for your employees
+   * Buy tea for your employees
    * @param divisionName - Name of the division
    * @param city - Name of the city
-   * @returns true if buying coffee was successful, false otherwise
+   * @returns true if buying tea was successful, false otherwise
    */
-  buyCoffee(divisionName: string, city: CityName | `${CityName}`): boolean;
+  buyTea(divisionName: string, city: CityName | `${CityName}`): boolean;
   /**
    * Hire AdVert.
    * @param divisionName - Name of the division
@@ -7156,13 +7157,13 @@ export interface WarehouseAPI {
    * @param divisionName - Name of the division
    * @param city - Name of the city
    * @param materialName - Name of the material
-   * @param enabled - smart supply use leftovers enabled
+   * @param option - smart supply option, "leftovers" to use leftovers, "imports" to use only imported materials, "none" to not use materials from store
    */
-  setSmartSupplyUseLeftovers(
+  setSmartSupplyOption(
     divisionName: string,
     city: CityName | `${CityName}`,
     materialName: string,
-    enabled: boolean,
+    option: string,
   ): void;
   /**
    * Set material buy data
@@ -7190,10 +7191,11 @@ export interface WarehouseAPI {
   /**
    * Get product data
    * @param divisionName - Name of the division
+   * @param city - Name of the city
    * @param productName - Name of the product
    * @returns product data
    */
-  getProduct(divisionName: string, productName: string): Product;
+  getProduct(divisionName: string, city: CityName | `${CityName}`, productName: string): Product;
   /**
    * Get material data
    * @param divisionName - Name of the division
@@ -7221,17 +7223,19 @@ export interface WarehouseAPI {
   /**
    * Set market TA 1 for a product.
    * @param divisionName - Name of the division
+   * @param city - Name of the city
    * @param productName - Name of the product
    * @param on - market ta enabled
    */
-  setProductMarketTA1(divisionName: string, productName: string, on: boolean): void;
+  setProductMarketTA1(divisionName: string, city: CityName | `${CityName}`, productName: string, on: boolean): void;
   /**
    * Set market TA 2 for a product.
    * @param divisionName - Name of the division
+   * @param city - Name of the city
    * @param productName - Name of the product
    * @param on - market ta enabled
    */
-  setProductMarketTA2(divisionName: string, productName: string, on: boolean): void;
+  setProductMarketTA2(divisionName: string, city: CityName | `${CityName}`, productName: string, on: boolean): void;
   /**
    * Set material export data
    * @param sourceDivision - Source division
@@ -7433,11 +7437,11 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   issueNewShares(amount?: number): number;
 
   /** Buyback Shares
-   * @param amount - Amount of shares to buy back. */
+   * @param amount - Amount of shares to buy back, must be integer and larger than 0 */
   buyBackShares(amount: number): void;
 
   /** Sell Shares
-   * @param amount -  Amount of shares to sell. */
+   * @param amount -  Amount of shares to sell, must be integer between 1 and 100t */
   sellShares(amount: number): void;
 
   /** Get bonus time.
@@ -7555,7 +7559,7 @@ interface CorpConstants {
   issueNewSharesCooldown: number;
   /** Cooldown for selling shares in game cycles (1 game cycle = 200ms) */
   sellSharesCooldown: number;
-  coffeeCostPerEmployee: number;
+  teaCostPerEmployee: number;
   gameCyclesPerMarketCycle: number;
   gameCyclesPerCorpStateCycle: number;
   secondsPerMarketCycle: number;
@@ -7575,7 +7579,7 @@ interface CorpConstants {
   employeeRaiseAmount: number;
   /** Max products for a division without upgrades */
   maxProductsBase: number;
-  /** The minimum decay value for happiness/morale/energy */
+  /** The minimum decay value for morale/energy */
   minEmployeeDecay: number;
 }
 /** @public */
@@ -7583,8 +7587,9 @@ type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "EXPORT" | "SALE";
 
 /** @public */
 type CorpMaterialName =
+  | "Minerals"
+  | "Ore"
   | "Water"
-  | "Energy"
   | "Food"
   | "Plants"
   | "Metal"
@@ -7699,16 +7704,22 @@ interface Product {
   cmp: number | undefined;
   /** Product Rating */
   rat: number;
+  /** Effective rating  */
+  effRat: number;
   /** Product Properties. The data is \{qlt, per, dur, rel, aes, fea\} */
   properties: { [key: string]: number };
   /** Production cost */
   pCost: number;
   /** Sell cost, can be "MP+5" */
-  sCost: string | number;
-  /** Data refers to the production, sale, and quantity of the products
-   * These values are specific to a city
-   * For each city, the data is [qty, prod, sell] */
-  cityData: Record<CityName | `${CityName}`, number[]>;
+  sCost: string;
+  /** Sell amount, can be "PROD/2" */
+  sAmt: string;
+  /** Amount of product  */
+  qty: number;
+  /** Amount of product produced  */
+  prod: number;
+  /** Amount of product sold */
+  sell: number;
   /** Creation progress - A number between 0-100 representing percentage */
   developmentProgress: number;
 }
@@ -7736,6 +7747,8 @@ interface Material {
   cost: number;
   /** Sell cost, can be "MP+5" */
   sCost: string | number;
+  /** Sell amount, can be "PROD/2" */
+  sAmt: string | number;
   /** Export orders */
   exp: Export[];
 }
@@ -7781,16 +7794,12 @@ export interface Office {
   size: number;
   /** Maximum amount of energy of the employees */
   maxEne: number;
-  /** Maximum happiness of the employees */
-  maxHap: number;
   /** Maximum morale of the employees */
   maxMor: number;
   /** Amount of employees */
   employees: number;
   /** Average energy of the employees */
   avgEne: number;
-  /** Average happiness of the employees */
-  avgHap: number;
   /** Average morale of the employees */
   avgMor: number;
   /** Total experience of all employees */

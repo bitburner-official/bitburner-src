@@ -343,6 +343,7 @@ function CorporationMults({ mults }: IMultsProps): React.ReactElement {
       content: mults.CorporationSoftcap.toFixed(3),
     },
     CorporationValuation: { name: "Valuation" },
+    CorporationDivisions: { name: "Division limit" },
   };
 
   return <BNMultTable sectionName="Corporation" rowData={rows} mults={mults} />;

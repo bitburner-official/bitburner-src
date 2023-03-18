@@ -40,7 +40,7 @@ function MakeProductButton(): React.ReactElement {
 
   let createProductButtonText = "";
   switch (division.type) {
-    case IndustryType.Food:
+    case IndustryType.Restaurant:
       createProductButtonText = "Build Restaurant";
       break;
     case IndustryType.Tobacco:
