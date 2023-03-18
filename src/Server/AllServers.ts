@@ -199,20 +199,20 @@ export function loadAllServers(saveString: string): void {
   AllServers = JSON.parse(saveString, Reviver);
 }
 
-export function saveAllServers(excludeRunningScripts = false): string {
-  const TempAllServers = JSON.parse(JSON.stringify(AllServers), Reviver);
-  for (const key of Object.keys(TempAllServers)) {
-    const server = TempAllServers[key];
-    if (excludeRunningScripts) {
-      server.runningScripts = [];
-      continue;
-    }
-    for (let i = 0; i < server.runningScripts.length; ++i) {
-      const runningScriptObj = server.runningScripts[i];
-      runningScriptObj.logs.length = 0;
-      runningScriptObj.logs = [];
-    }
+function excludeReplacer(key: string, value: any): any {
+  if (key === "runningScripts") {
+    return [];
   }
+  return value;
+}
 
-  return JSON.stringify(TempAllServers);
+function includeReplacer(key: string, value: any): any {
+  if (key === "logs") {
+    return [];
+  }
+  return value;
+}
+
+export function saveAllServers(excludeRunningScripts = false): string {
+  return JSON.stringify(AllServers, excludeRunningScripts ? excludeReplacer : includeReplacer);
 }
