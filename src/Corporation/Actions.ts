@@ -22,8 +22,8 @@ import { isInteger } from "lodash";
 
 export function NewIndustry(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.length >= corporation.maxDivisions)
-  throw new Error(`Cannot expand into ${industry} industry, too many divisions!`);
-  
+    throw new Error(`Cannot expand into ${industry} industry, too many divisions!`);
+
   for (let i = 0; i < corporation.divisions.length; ++i) {
     if (corporation.divisions[i].name === name) {
       throw new Error("This division name is already in use!");
@@ -49,12 +49,11 @@ export function NewIndustry(corporation: Corporation, industry: IndustryType, na
   }
 }
 
-export function removeIndustry(corporation: Corporation, name: string){
-  const divIndex = corporation.divisions.findIndex(div => div.name === name)
-  if (divIndex === -1)
-    throw new Error("There is no division called "+name);
+export function removeIndustry(corporation: Corporation, name: string) {
+  const divIndex = corporation.divisions.findIndex((div) => div.name === name);
+  if (divIndex === -1) throw new Error("There is no division called " + name);
 
-  corporation.divisions.splice(divIndex,1)
+  corporation.divisions.splice(divIndex, 1);
 }
 
 export function NewCity(corporation: Corporation, division: Industry, city: CityName): void {

@@ -41,6 +41,6 @@ Requires the Warehouse API upgrade from your corporation.
 |  [setProductMarketTA1(divisionName, city, productName, on)](./bitburner.warehouseapi.setproductmarketta1.md) | Set market TA 1 for a product. |
 |  [setProductMarketTA2(divisionName, city, productName, on)](./bitburner.warehouseapi.setproductmarketta2.md) | Set market TA 2 for a product. |
 |  [setSmartSupply(divisionName, city, enabled)](./bitburner.warehouseapi.setsmartsupply.md) | Set smart supply |
-|  [setSmartSupplyUseLeftovers(divisionName, city, materialName, enabled)](./bitburner.warehouseapi.setsmartsupplyuseleftovers.md) | Set whether smart supply uses leftovers before buying |
+|  [setSmartSupplyOption(divisionName, city, materialName, option)](./bitburner.warehouseapi.setsmartsupplyoption.md) | Set whether smart supply uses leftovers before buying |
 |  [upgradeWarehouse(divisionName, city, amt)](./bitburner.warehouseapi.upgradewarehouse.md) | Upgrade warehouse |
 

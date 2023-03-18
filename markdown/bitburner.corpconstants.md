@@ -19,7 +19,6 @@ interface CorpConstants
 |  [baseProductProfitMult](./bitburner.corpconstants.baseproductprofitmult.md) |  | number |  |
 |  [bribeAmountPerReputation](./bitburner.corpconstants.bribeamountperreputation.md) |  | number |  |
 |  [bribeThreshold](./bitburner.corpconstants.bribethreshold.md) |  | number |  |
-|  [coffeeCostPerEmployee](./bitburner.corpconstants.coffeecostperemployee.md) |  | number |  |
 |  [dividendMaxRate](./bitburner.corpconstants.dividendmaxrate.md) |  | number |  |
 |  [employeeRaiseAmount](./bitburner.corpconstants.employeeraiseamount.md) |  | number |  |
 |  [employeeSalaryMultiplier](./bitburner.corpconstants.employeesalarymultiplier.md) |  | number | Conversion factor for employee stats to initial salary |
@@ -31,7 +30,7 @@ interface CorpConstants
 |  [marketCyclesPerEmployeeRaise](./bitburner.corpconstants.marketcyclesperemployeeraise.md) |  | number |  |
 |  [materialNames](./bitburner.corpconstants.materialnames.md) |  | [CorpMaterialName](./bitburner.corpmaterialname.md)<!-- -->\[\] | Names of all materials |
 |  [maxProductsBase](./bitburner.corpconstants.maxproductsbase.md) |  | number | Max products for a division without upgrades |
-|  [minEmployeeDecay](./bitburner.corpconstants.minemployeedecay.md) |  | number | The minimum decay value for happiness/morale/energy |
+|  [minEmployeeDecay](./bitburner.corpconstants.minemployeedecay.md) |  | number | The minimum decay value for morale/energy |
 |  [officeInitialCost](./bitburner.corpconstants.officeinitialcost.md) |  | number |  |
 |  [officeInitialSize](./bitburner.corpconstants.officeinitialsize.md) |  | number |  |
 |  [officeSizeUpgradeCostBase](./bitburner.corpconstants.officesizeupgradecostbase.md) |  | number |  |
@@ -42,6 +41,7 @@ interface CorpConstants
 |  [sellSharesCooldown](./bitburner.corpconstants.sellsharescooldown.md) |  | number | Cooldown for selling shares in game cycles (1 game cycle = 200ms) |
 |  [sharesPerPriceUpdate](./bitburner.corpconstants.sharesperpriceupdate.md) |  | number | When selling large number of shares, price is dynamically updated for every batch of this amount |
 |  [stateNames](./bitburner.corpconstants.statenames.md) |  | [CorpStateName](./bitburner.corpstatename.md)<!-- -->\[\] | Names of all corporation game states |
+|  [teaCostPerEmployee](./bitburner.corpconstants.teacostperemployee.md) |  | number |  |
 |  [unlockNames](./bitburner.corpconstants.unlocknames.md) |  | [CorpUnlockName](./bitburner.corpunlockname.md)<!-- -->\[\] | Names of all one-time corporation-wide unlocks |
 |  [upgradeNames](./bitburner.corpconstants.upgradenames.md) |  | [CorpUpgradeName](./bitburner.corpupgradename.md)<!-- -->\[\] | Names of all corporation-wide upgrades |
 |  [warehouseInitialCost](./bitburner.corpconstants.warehouseinitialcost.md) |  | number |  |

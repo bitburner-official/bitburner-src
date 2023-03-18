@@ -32,7 +32,6 @@ import Grid from "@mui/material/Grid";
 import { MultiplierButtons } from "./MultiplierButtons";
 import { SellCorporationModal } from "./modals/SellCorporationModal";
 import { SellDivisionModal } from "./modals/SellDivisionModal";
-import { Corporation } from "src/DevMenu/ui/Corporation";
 
 interface IProps {
   rerender: () => void;
@@ -105,7 +104,7 @@ export function Overview({ rerender }: IProps): React.ReactElement {
         </Tooltip>
         {corp.public ? <PublicButtons rerender={rerender} /> : <PrivateButtons rerender={rerender} />}
         <BribeButton />
-        {corp.divisions.length != 0 ? <SellDivisionButton />: <></>}
+        {corp.divisions.length != 0 ? <SellDivisionButton /> : <></>}
         <RestartButton />
       </Box>
       <br />
@@ -288,7 +287,6 @@ function BribeButton(): React.ReactElement {
 }
 
 function SellDivisionButton(): React.ReactElement {
-  const corp = useCorporation();
   const [open, setOpen] = useState(false);
 
   function sellDiv(): void {

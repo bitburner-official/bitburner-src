@@ -4,7 +4,7 @@
 
 ## CorpConstants.minEmployeeDecay property
 
-The minimum decay value for happiness/morale/energy
+The minimum decay value for morale/energy
 
 **Signature:**
 
