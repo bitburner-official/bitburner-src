@@ -20,7 +20,7 @@ requires the Office API upgrade from your corporation.
 
 |  Method | Description |
 |  --- | --- |
-|  [buyCoffee(divisionName, city)](./bitburner.officeapi.buycoffee.md) | Buy coffee for your employees |
+|  [buyTea(divisionName, city)](./bitburner.officeapi.buytea.md) | Buy tea for your employees |
 |  [getHireAdVertCost(divisionName)](./bitburner.officeapi.gethireadvertcost.md) | Get the cost to hire AdVert. |
 |  [getHireAdVertCount(divisionName)](./bitburner.officeapi.gethireadvertcount.md) | Get the number of times you have hired AdVert. |
 |  [getOffice(divisionName, city)](./bitburner.officeapi.getoffice.md) | Get data about an office |

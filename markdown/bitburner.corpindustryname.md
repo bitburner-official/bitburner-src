@@ -9,12 +9,13 @@
 
 ```typescript
 type CorpIndustryName =
-  | "Energy"
+  | "Spring Water"
   | "Water Utilities"
   | "Agriculture"
   | "Fishing"
   | "Mining"
-  | "Food"
+  | "Refinery"
+  | "Restaurant"
   | "Tobacco"
   | "Chemical"
   | "Pharmaceutical"

@@ -9,8 +9,9 @@
 
 ```typescript
 type CorpMaterialName =
+  | "Minerals"
+  | "Ore"
   | "Water"
-  | "Energy"
   | "Food"
   | "Plants"
   | "Metal"

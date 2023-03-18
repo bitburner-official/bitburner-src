@@ -3,7 +3,6 @@ import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { IndustryDescriptions, IndustriesData } from "../IndustryData";
 import { IndustryType } from "../data/Enums";
 import { useCorporation } from "./Context";
-import { Industry } from "../Industry";
 import { NewIndustry } from "../Actions";
 
 import Typography from "@mui/material/Typography";
@@ -60,7 +59,9 @@ export function ExpandIndustryTab(props: IProps): React.ReactElement {
 
   return (
     <>
-      <Typography>{corp.name} has {corp.divisions.length}/{corp.maxDivisions} divisions.</Typography>
+      <Typography>
+        {corp.name} has {corp.divisions.length}/{corp.maxDivisions} divisions.
+      </Typography>
       <Typography>Create a new division to expand into a new industry:</Typography>
       <Select value={industry} onChange={onIndustryChange}>
         {allIndustries.map((industry) => (

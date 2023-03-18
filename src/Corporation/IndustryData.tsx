@@ -17,7 +17,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     robotFactor: 0.3,
     aiCoreFactor: 0.3,
     advertisingFactor: 0.04,
-    requiredMaterials: { Water: 0.5, Chemicals : 0.2 },
+    requiredMaterials: { Water: 0.5, Chemicals: 0.2 },
     producedMaterials: ["Plants", "Food"],
   },
   [IndustryType.Spring]: {
@@ -43,7 +43,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     robotFactor: 0.4,
     aiCoreFactor: 0.3,
     advertisingFactor: 0.04,
-    requiredMaterials: { Ore: 1},
+    requiredMaterials: { Ore: 1 },
     producedMaterials: ["Metal"],
   },
   [IndustryType.Chemical]: {
@@ -81,7 +81,7 @@ export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
     robotFactor: 0.36,
     aiCoreFactor: 0.19,
     advertisingFactor: 0.17,
-    requiredMaterials: { Metal: 2, },
+    requiredMaterials: { Metal: 2 },
     producedMaterials: ["Hardware"],
   },
   [IndustryType.Fishing]: {
