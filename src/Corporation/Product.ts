@@ -1,4 +1,4 @@
-import { EmployeePositions } from "./data/Enums";
+import { EmployeePosition } from "./data/Enums";
 import { MaterialInfo } from "./MaterialInfo";
 import { Industry } from "./Industry";
 import { IndustriesData } from "./IndustryData";
@@ -7,7 +7,7 @@ import { createCityMap } from "../Locations/createCityMap";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 import { materialNames } from "./data/Constants";
 import { CorpMaterialName } from "@nsdefs";
 
@@ -59,11 +59,11 @@ export class Product {
 
   // The average employee productivity and scientific research across the creation of the Product
   creationProd: { [key: string]: number } = {
-    [EmployeePositions.Operations]: 0,
-    [EmployeePositions.Engineer]: 0,
-    [EmployeePositions.Business]: 0,
-    [EmployeePositions.Management]: 0,
-    [EmployeePositions.RandD]: 0,
+    [EmployeePosition.Operations]: 0,
+    [EmployeePosition.Engineer]: 0,
+    [EmployeePosition.Business]: 0,
+    [EmployeePosition.Management]: 0,
+    [EmployeePosition.RandD]: 0,
     total: 0,
   };
 
@@ -136,9 +136,9 @@ export class Product {
     }
 
     // Designing/Creating a Product is based mostly off Engineers
-    const opProd = employeeProd[EmployeePositions.Operations];
-    const engrProd = employeeProd[EmployeePositions.Engineer];
-    const mgmtProd = employeeProd[EmployeePositions.Management];
+    const opProd = employeeProd[EmployeePosition.Operations];
+    const engrProd = employeeProd[EmployeePosition.Engineer];
+    const mgmtProd = employeeProd[EmployeePosition.Management];
     const total = opProd + engrProd + mgmtProd;
     if (total <= 0) {
       return;
@@ -164,11 +164,11 @@ export class Product {
 
     // Calculate properties
     const totalProd = this.creationProd.total;
-    const engrRatio = this.creationProd[EmployeePositions.Engineer] / totalProd;
-    const mgmtRatio = this.creationProd[EmployeePositions.Management] / totalProd;
-    const rndRatio = this.creationProd[EmployeePositions.RandD] / totalProd;
-    const opsRatio = this.creationProd[EmployeePositions.Operations] / totalProd;
-    const busRatio = this.creationProd[EmployeePositions.Business] / totalProd;
+    const engrRatio = this.creationProd[EmployeePosition.Engineer] / totalProd;
+    const mgmtRatio = this.creationProd[EmployeePosition.Management] / totalProd;
+    const rndRatio = this.creationProd[EmployeePosition.RandD] / totalProd;
+    const opsRatio = this.creationProd[EmployeePosition.Operations] / totalProd;
+    const busRatio = this.creationProd[EmployeePosition.Business] / totalProd;
 
     const designMult = 1 + Math.pow(this.designCost, 0.1) / 100;
     const balanceMult = 1.2 * engrRatio + 0.9 * mgmtRatio + 1.3 * rndRatio + 1.5 * opsRatio + busRatio;
@@ -177,46 +177,46 @@ export class Product {
 
     this.qlt =
       totalMult *
-      (0.1 * this.creationProd[EmployeePositions.Engineer] +
-        0.05 * this.creationProd[EmployeePositions.Management] +
-        0.05 * this.creationProd[EmployeePositions.RandD] +
-        0.02 * this.creationProd[EmployeePositions.Operations] +
-        0.02 * this.creationProd[EmployeePositions.Business]);
+      (0.1 * this.creationProd[EmployeePosition.Engineer] +
+        0.05 * this.creationProd[EmployeePosition.Management] +
+        0.05 * this.creationProd[EmployeePosition.RandD] +
+        0.02 * this.creationProd[EmployeePosition.Operations] +
+        0.02 * this.creationProd[EmployeePosition.Business]);
     this.per =
       totalMult *
-      (0.15 * this.creationProd[EmployeePositions.Engineer] +
-        0.02 * this.creationProd[EmployeePositions.Management] +
-        0.02 * this.creationProd[EmployeePositions.RandD] +
-        0.02 * this.creationProd[EmployeePositions.Operations] +
-        0.02 * this.creationProd[EmployeePositions.Business]);
+      (0.15 * this.creationProd[EmployeePosition.Engineer] +
+        0.02 * this.creationProd[EmployeePosition.Management] +
+        0.02 * this.creationProd[EmployeePosition.RandD] +
+        0.02 * this.creationProd[EmployeePosition.Operations] +
+        0.02 * this.creationProd[EmployeePosition.Business]);
     this.dur =
       totalMult *
-      (0.05 * this.creationProd[EmployeePositions.Engineer] +
-        0.02 * this.creationProd[EmployeePositions.Management] +
-        0.08 * this.creationProd[EmployeePositions.RandD] +
-        0.05 * this.creationProd[EmployeePositions.Operations] +
-        0.05 * this.creationProd[EmployeePositions.Business]);
+      (0.05 * this.creationProd[EmployeePosition.Engineer] +
+        0.02 * this.creationProd[EmployeePosition.Management] +
+        0.08 * this.creationProd[EmployeePosition.RandD] +
+        0.05 * this.creationProd[EmployeePosition.Operations] +
+        0.05 * this.creationProd[EmployeePosition.Business]);
     this.rel =
       totalMult *
-      (0.02 * this.creationProd[EmployeePositions.Engineer] +
-        0.08 * this.creationProd[EmployeePositions.Management] +
-        0.02 * this.creationProd[EmployeePositions.RandD] +
-        0.05 * this.creationProd[EmployeePositions.Operations] +
-        0.08 * this.creationProd[EmployeePositions.Business]);
+      (0.02 * this.creationProd[EmployeePosition.Engineer] +
+        0.08 * this.creationProd[EmployeePosition.Management] +
+        0.02 * this.creationProd[EmployeePosition.RandD] +
+        0.05 * this.creationProd[EmployeePosition.Operations] +
+        0.08 * this.creationProd[EmployeePosition.Business]);
     this.aes =
       totalMult *
-      (0.0 * this.creationProd[EmployeePositions.Engineer] +
-        0.08 * this.creationProd[EmployeePositions.Management] +
-        0.05 * this.creationProd[EmployeePositions.RandD] +
-        0.02 * this.creationProd[EmployeePositions.Operations] +
-        0.1 * this.creationProd[EmployeePositions.Business]);
+      (0.0 * this.creationProd[EmployeePosition.Engineer] +
+        0.08 * this.creationProd[EmployeePosition.Management] +
+        0.05 * this.creationProd[EmployeePosition.RandD] +
+        0.02 * this.creationProd[EmployeePosition.Operations] +
+        0.1 * this.creationProd[EmployeePosition.Business]);
     this.fea =
       totalMult *
-      (0.08 * this.creationProd[EmployeePositions.Engineer] +
-        0.05 * this.creationProd[EmployeePositions.Management] +
-        0.02 * this.creationProd[EmployeePositions.RandD] +
-        0.05 * this.creationProd[EmployeePositions.Operations] +
-        0.05 * this.creationProd[EmployeePositions.Business]);
+      (0.08 * this.creationProd[EmployeePosition.Engineer] +
+        0.05 * this.creationProd[EmployeePosition.Management] +
+        0.02 * this.creationProd[EmployeePosition.RandD] +
+        0.05 * this.creationProd[EmployeePosition.Operations] +
+        0.05 * this.creationProd[EmployeePosition.Business]);
     this.calculateRating(industry);
     const advMult = 1 + Math.pow(this.advCost, 0.1) / 100;
     const busmgtgRatio = Math.max(busRatio + mgmtRatio, 1 / totalProd);

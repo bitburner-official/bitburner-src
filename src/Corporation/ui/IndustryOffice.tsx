@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 import { OfficeSpace } from "../OfficeSpace";
-import { EmployeePositions } from "../data/Enums";
+import { EmployeePosition } from "../data/Enums";
 import { BuyTea } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
@@ -35,7 +35,7 @@ interface IProps {
 
 interface IAutoAssignProps {
   office: OfficeSpace;
-  job: EmployeePositions;
+  job: EmployeePosition;
   desc: string;
   rerender: () => void;
 }
@@ -53,7 +53,7 @@ function EmployeeCount(props: { num: number; next: number }): React.ReactElement
 function AutoAssignJob(props: IAutoAssignProps): React.ReactElement {
   const currJob = props.office.employeeJobs[props.job];
   const nextJob = props.office.employeeNextJobs[props.job];
-  const nextUna = props.office.employeeNextJobs[EmployeePositions.Unassigned];
+  const nextUna = props.office.employeeNextJobs[EmployeePosition.Unassigned];
 
   function assignEmployee(): void {
     if (nextUna <= 0) return console.warn("Cannot assign employee. No unassigned employees available");
@@ -96,8 +96,8 @@ function AutoManagement(props: IProps): React.ReactElement {
   const division = useDivision();
   const vechain = corp.unlockUpgrades[4] === 1; // Has Vechain upgrade
 
-  const currUna = props.office.employeeJobs[EmployeePositions.Unassigned];
-  const nextUna = props.office.employeeNextJobs[EmployeePositions.Unassigned];
+  const currUna = props.office.employeeJobs[EmployeePosition.Unassigned];
+  const nextUna = props.office.employeeNextJobs[EmployeePosition.Unassigned];
 
   return (
     <Table padding="none">
@@ -201,14 +201,14 @@ function AutoManagement(props: IProps): React.ReactElement {
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.Operations}
+          job={EmployeePosition.Operations}
           desc={"Manages supply chain operations. Improves the amount of Materials and Products you produce."}
         />
 
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.Engineer}
+          job={EmployeePosition.Engineer}
           desc={
             "Develops and maintains products and production systems. Increases the quality of everything you produce. Also increases the amount you produce (not as much as Operations, however)."
           }
@@ -217,14 +217,14 @@ function AutoManagement(props: IProps): React.ReactElement {
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.Business}
+          job={EmployeePosition.Business}
           desc={"Handles sales and finances. Improves the amount of Materials and Products you can sell."}
         />
 
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.Management}
+          job={EmployeePosition.Management}
           desc={
             "Leads and oversees employees and office operations. Improves the effectiveness of Engineer and Operations employees."
           }
@@ -233,7 +233,7 @@ function AutoManagement(props: IProps): React.ReactElement {
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.RandD}
+          job={EmployeePosition.RandD}
           desc={
             "Research new innovative ways to improve the company. Generates Scientific Research. Also increases the quality of everything you produce (not as much as Engineer, however)."
           }
@@ -242,7 +242,7 @@ function AutoManagement(props: IProps): React.ReactElement {
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.Intern}
+          job={EmployeePosition.Intern}
           desc={
             "Set employee to intern, which will increase some of their stats. Employees in intern do not affect any company operations, but gain increased exp and improve morale and energy."
           }
@@ -260,7 +260,7 @@ export function IndustryOffice(props: IProps): React.ReactElement {
 
   function autohireEmployeeButtonOnClick(): void {
     if (props.office.atCapacity()) return;
-    props.office.hireRandomEmployee(EmployeePositions.Unassigned);
+    props.office.hireRandomEmployee(EmployeePosition.Unassigned);
     props.rerender();
   }
 

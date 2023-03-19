@@ -8,7 +8,7 @@ import { Stanek as IStanek } from "@nsdefs";
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { FactionName } from "../Faction/data/Enums";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
@@ -113,7 +113,7 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
         player.queuedAugmentations.filter((a) => a.name !== AugmentationNames.NeuroFluxGovernor).length == 0
       ) {
         //Attempt to join CotMG
-        joinFaction(Factions[FactionNames.ChurchOfTheMachineGod]);
+        joinFaction(Factions[FactionName.ChurchOfTheMachineGod]);
         //Attempt to install the first Stanek aug
         if (
           !player.hasAugmentation(AugmentationNames.StaneksGift1) &&
@@ -122,13 +122,13 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
           applyAugmentation({ name: AugmentationNames.StaneksGift1, level: 1 });
           helpers.log(
             ctx,
-            () => `'${FactionNames.ChurchOfTheMachineGod}' joined and '${AugmentationNames.StaneksGift1}' installed.`,
+            () => `'${FactionName.ChurchOfTheMachineGod}' joined and '${AugmentationNames.StaneksGift1}' installed.`,
           );
         }
       }
       //Return true iff the player is in CotMG and has the first Stanek aug installed
       return (
-        Factions[FactionNames.ChurchOfTheMachineGod].isMember &&
+        Factions[FactionName.ChurchOfTheMachineGod].isMember &&
         player.hasAugmentation(AugmentationNames.StaneksGift1, true)
       );
     },

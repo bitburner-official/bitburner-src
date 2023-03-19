@@ -1,11 +1,11 @@
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { applySleeveGains, Work, WorkType } from "./Work";
-import { LocationName } from "../../../Enums";
+import { LocationName } from "../../../data/Enums";
 import { Companies } from "../../../Company/Companies";
 import { Company } from "../../../Company/Company";
 import { calculateCompanyWorkStats } from "../../../Work/Formulas";
-import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
+import { newWorkStats, scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 import { influenceStockThroughCompanyWork } from "../../../StockMarket/PlayerInfluencing";
 import { Player } from "@player";
 import { CompanyPositions } from "../../../Company/CompanyPositions";
@@ -15,9 +15,9 @@ export const isSleeveCompanyWork = (w: Work | null): w is SleeveCompanyWork =>
 
 export class SleeveCompanyWork extends Work {
   type: WorkType.COMPANY = WorkType.COMPANY;
-  companyName: string;
+  companyName: LocationName;
 
-  constructor(companyName?: string) {
+  constructor(companyName?: LocationName) {
     super();
     this.companyName = companyName ?? LocationName.NewTokyoNoodleBar;
   }
@@ -30,8 +30,13 @@ export class SleeveCompanyWork extends Work {
 
   getGainRates(sleeve: Sleeve): WorkStats {
     const company = this.getCompany();
+    const positionName = Player.jobs[company.name];
+    if (!positionName) {
+      this.finish();
+      return newWorkStats();
+    }
     return scaleWorkStats(
-      calculateCompanyWorkStats(sleeve, company, CompanyPositions[Player.jobs[company.name]], company.favor),
+      calculateCompanyWorkStats(sleeve, company, CompanyPositions[positionName], company.favor),
       sleeve.shockBonus(),
       false,
     );

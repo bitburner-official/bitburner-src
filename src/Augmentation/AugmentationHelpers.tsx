@@ -4,14 +4,13 @@ import { PlayerOwnedAugmentation } from "./PlayerOwnedAugmentation";
 import { AugmentationNames } from "./data/AugmentationNames";
 
 import { CONSTANTS } from "../Constants";
-import { Factions, factionExists } from "../Faction/Factions";
+import { Factions } from "../Faction/Factions";
 import { Player } from "@player";
 import { prestigeAugmentation } from "../Prestige";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { clearObject } from "../utils/helpers/clearObject";
 
-import { FactionNames } from "../Faction/data/FactionNames";
 import {
   initBladeburnerAugmentations,
   initChurchOfTheMachineGodAugmentations,
@@ -35,17 +34,13 @@ function createAugmentations(): void {
     initUnstableCircadianModulator(),
     ...initGeneralAugmentations(),
     ...initSoAAugmentations(),
-    ...(factionExists(FactionNames.Bladeburners) ? initBladeburnerAugmentations() : []),
-    ...(factionExists(FactionNames.ChurchOfTheMachineGod) ? initChurchOfTheMachineGodAugmentations() : []),
+    ...initBladeburnerAugmentations(),
+    ...initChurchOfTheMachineGodAugmentations(),
   ].map(resetAugmentation);
 }
 
 function resetFactionAugmentations(): void {
-  for (const name of Object.keys(Factions)) {
-    if (Factions.hasOwnProperty(name)) {
-      Factions[name].augmentations = [];
-    }
-  }
+  for (const faction of Object.values(Factions)) faction.augmentations = [];
 }
 
 function initAugmentations(): void {

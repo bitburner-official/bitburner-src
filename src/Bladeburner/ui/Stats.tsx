@@ -15,7 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "../../Faction/data/Enums";
 
 interface IProps {
   bladeburner: Bladeburner;
@@ -33,7 +33,7 @@ export function Stats(props: IProps): React.ReactElement {
 
   function openFaction(): void {
     if (!inFaction) return;
-    const faction = Factions[FactionNames.Bladeburners];
+    const faction = Factions[FactionName.Bladeburners];
     if (!faction.isMember) {
       joinFaction(faction);
     }

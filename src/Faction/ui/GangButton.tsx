@@ -6,6 +6,8 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 import { Faction } from "../Faction";
 import { CreateGangModal } from "./CreateGangModal";
+import { gangFactions } from "../../Gang/data/Enums";
+import { getEnumHelper } from "../../utils/helpers/enum";
 
 type IProps = {
   faction: Faction;
@@ -13,9 +15,9 @@ type IProps = {
 
 export function GangButton({ faction }: IProps): React.ReactElement {
   const [gangOpen, setGangOpen] = useState(false);
-
+  const factionName = faction.name;
   if (
-    !GangConstants.Names.includes(faction.name) || // not even a gang
+    !getEnumHelper(gangFactions).isMember(factionName) || // not even a gang
     !Player.isAwareOfGang() || // doesn't know about gang
     (Player.gang && Player.getGangName() !== faction.name) // already in another gang
   ) {
@@ -73,7 +75,7 @@ export function GangButton({ faction }: IProps): React.ReactElement {
         </Paper>
       </Box>
 
-      <CreateGangModal facName={faction.name} open={gangOpen} onClose={() => setGangOpen(false)} />
+      <CreateGangModal facName={factionName} open={gangOpen} onClose={() => setGangOpen(false)} />
     </>
   );
 }

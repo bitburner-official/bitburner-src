@@ -2,17 +2,17 @@ import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { applySleeveGains, Work, WorkType } from "./Work";
-import { FactionWorkType } from "../../../Enums";
-import { FactionNames } from "../../../Faction/data/FactionNames";
+import { FactionWorkType } from "../../../data/Enums";
+import { FactionName } from "../../../Faction/data/Enums";
 import { Factions } from "../../../Faction/Factions";
 import { calculateFactionExp, calculateFactionRep } from "../../../Work/Formulas";
 import { Faction } from "../../../Faction/Faction";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
-import { findEnumMember } from "../../../utils/helpers/enum";
+import { getEnumHelper } from "../../../utils/helpers/enum";
 
 interface SleeveFactionWorkParams {
   factionWorkType: FactionWorkType;
-  factionName: string;
+  factionName: FactionName;
 }
 
 export const isSleeveFactionWork = (w: Work | null): w is SleeveFactionWork =>
@@ -21,12 +21,12 @@ export const isSleeveFactionWork = (w: Work | null): w is SleeveFactionWork =>
 export class SleeveFactionWork extends Work {
   type: WorkType.FACTION = WorkType.FACTION;
   factionWorkType: FactionWorkType;
-  factionName: string;
+  factionName: FactionName;
 
   constructor(params?: SleeveFactionWorkParams) {
     super();
     this.factionWorkType = params?.factionWorkType ?? FactionWorkType.hacking;
-    this.factionName = params?.factionName ?? FactionNames.Sector12;
+    this.factionName = params?.factionName ?? FactionName.Sector12;
   }
 
   getExpRates(sleeve: Sleeve): WorkStats {
@@ -68,8 +68,7 @@ export class SleeveFactionWork extends Work {
   /** Initializes a FactionWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveFactionWork {
     const factionWork = Generic_fromJSON(SleeveFactionWork, value.data);
-    factionWork.factionWorkType =
-      findEnumMember(FactionWorkType, factionWork.factionWorkType) ?? FactionWorkType.hacking;
+    factionWork.factionWorkType = getEnumHelper(FactionWorkType).fuzzyMatch(factionWork.factionWorkType);
     return factionWork;
   }
 }

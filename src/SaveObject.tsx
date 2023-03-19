@@ -16,7 +16,8 @@ import { Settings } from "./Settings/Settings";
 import { loadStockMarket, StockMarket } from "./StockMarket/StockMarket";
 import { staneksGift, loadStaneksGift } from "./CotMG/Helper";
 
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
+import { SnackbarEvents } from "./ui/React/Snackbar";
+import { ToastVariant } from "./data/Enums";
 
 import * as ExportBonus from "./ExportBonus";
 
@@ -26,10 +27,10 @@ import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
 import { PlayerOwnedAugmentation } from "./Augmentation/PlayerOwnedAugmentation";
-import { LocationName } from "./Enums";
+import { LocationName } from "./data/Enums";
 import { pushGameSaved } from "./Electron";
 import { defaultMonacoTheme } from "./ScriptEditor/ui/themes";
-import { FactionNames } from "./Faction/data/FactionNames";
+import { FactionName } from "./Faction/data/Enums";
 import { Faction } from "./Faction/Faction";
 import { safelyCreateUniqueServer } from "./Server/ServerHelpers";
 import { SpecialServers } from "./Server/data/SpecialServers";
@@ -250,6 +251,7 @@ class BitburnerSaveObject {
 function evaluateVersionCompatibility(ver: string | number): void {
   // We have to do this because ts won't let us otherwise
   const anyPlayer = Player as any;
+  const anyCompanies = Companies as any;
   if (typeof ver === "string") {
     // This version refactored the Company/job-related code
     if (ver <= "0.41.2") {
@@ -268,7 +270,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
         companyPositions: Record<number, boolean>;
       }
       for (const companyName of Object.keys(Companies)) {
-        const company = Companies[companyName] as unknown as Company0_41_2;
+        const company = anyCompanies[companyName] as unknown as Company0_41_2;
         if (company.name == 0 && company.companyName != null) {
           company.name = company.companyName;
         }
@@ -411,7 +413,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
   }
   //Fix contract names
   if (ver < 16) {
-    Factions[FactionNames.ShadowsOfAnarchy] = new Faction(FactionNames.ShadowsOfAnarchy);
+    Factions[FactionName.ShadowsOfAnarchy] = new Faction(FactionName.ShadowsOfAnarchy);
     //Iterate over all contracts on all servers
     for (const server of GetAllServers()) {
       for (const contract of server.contracts) {

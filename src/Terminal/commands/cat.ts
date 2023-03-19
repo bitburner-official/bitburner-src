@@ -3,10 +3,11 @@ import { BaseServer } from "../../Server/BaseServer";
 import { MessageFilename, showMessage } from "../../Message/MessageHelpers";
 import { showLiterature } from "../../Literature/LiteratureHelpers";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { checkEnum } from "../../utils/helpers/enum";
+import { getEnumHelper } from "../../utils/helpers/enum";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { LiteratureName } from "../../Literature/data/LiteratureNames";
+import { MessageFilenames } from "../../data/HiddenEnums";
 
 export function cat(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 1) return Terminal.error("Incorrect usage of cat command. Usage: cat [file]");

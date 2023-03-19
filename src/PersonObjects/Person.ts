@@ -1,6 +1,6 @@
 import * as personMethods from "./PersonMethods";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 import { calculateSkill } from "./formulas/skill";
 import { defaultMultipliers } from "./Multipliers";
 import { Skills } from "./Skills";

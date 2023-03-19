@@ -4,11 +4,12 @@ import { Player } from "@player";
 import { Modal } from "../../ui/React/Modal";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { LocationName } from "../../data/Enums";
 
 interface IProps {
   open: boolean;
   onClose: () => void;
-  locName: string;
+  locName: LocationName;
   company: Company;
   onQuit: () => void;
 }

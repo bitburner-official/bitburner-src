@@ -2,13 +2,14 @@ import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
 import { GraftableAugmentation } from "./GraftableAugmentation";
 import { Player } from "@player";
 import { calculateIntelligenceBonus } from "../formulas/intelligence";
+import { FactionName } from "../../Faction/data/Enums";
 
 export const getGraftingAvailableAugs = (): string[] => {
   const augs: string[] = [];
 
   for (const [augName, aug] of Object.entries(StaticAugmentations)) {
-    if (Player.factions.includes("Bladeburners")) {
-      if (aug.isSpecial && !aug.factions.includes("Bladeburners")) continue;
+    if (Player.factions.includes(FactionName.Bladeburners)) {
+      if (aug.isSpecial && !aug.factions.includes(FactionName.Bladeburners)) continue;
     } else {
       if (aug.isSpecial) continue;
     }

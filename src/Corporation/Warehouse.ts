@@ -4,7 +4,7 @@ import { Industry } from "./Industry";
 import { MaterialInfo } from "./MaterialInfo";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 import { CorpMaterialName } from "@nsdefs";
 import { materialNames } from "./data/Constants";
 

@@ -55,6 +55,7 @@ import { InvitationsSeen } from "../../Faction/ui/FactionsRoot";
 import { hash } from "../../hash/hash";
 import { Locations } from "../../Locations/Locations";
 import { useRerender } from "../../ui/React/hooks";
+import { LocationName } from "../../data/Enums";
 
 const RotatedDoubleArrowIcon = React.forwardRef((props: { color: "primary" | "secondary" | "error" }, __ref) => (
   <DoubleArrowIcon color={props.color} style={{ transform: "rotate(-90deg)" }} />
@@ -239,7 +240,7 @@ export function SidebarRoot(props: IProps): React.ReactElement {
   const clickPage = useCallback(
     (page: Page) => {
       if (page === Page.Job) {
-        Router.toJob(Locations[Object.keys(Player.jobs)[0]]);
+        Router.toJob(Locations[Object.keys(Player.jobs)[0] as LocationName]);
       } else if (page == Page.ScriptEditor) {
         Router.toScriptEditor();
       } else if ((Object.values(SimplePage) as Page[]).includes(page)) {

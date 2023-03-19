@@ -13,7 +13,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { CityName } from "../../../Enums";
+import { CityName } from "../../../data/Enums";
 import { useRerender } from "../../../ui/React/hooks";
 
 interface IProps {

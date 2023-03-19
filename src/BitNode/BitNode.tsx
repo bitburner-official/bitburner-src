@@ -1,8 +1,8 @@
 import React from "react";
 import { Player } from "@player";
 import { BitNodeMultipliers, IBitNodeMultipliers } from "./BitNodeMultipliers";
-import { FactionNames } from "../Faction/data/FactionNames";
-import { CityName } from "../Enums";
+import { FactionName } from "../Faction/data/Enums";
+import { CityName } from "../data/Enums";
 
 class BitNode {
   // A short description, or tagline, about the BitNode
@@ -72,9 +72,8 @@ export function initBitNodes() {
         and savagery. The organized crime factions quickly rose to the top of the modern world.
         <br />
         <br />
-        Certain Factions ({FactionNames.SlumSnakes}, {FactionNames.Tetrads}, {FactionNames.TheSyndicate},{" "}
-        {FactionNames.TheDarkArmy}, {FactionNames.SpeakersForTheDead}, {FactionNames.NiteSec},{" "}
-        {FactionNames.TheBlackHand}
+        Certain Factions ({FactionName.SlumSnakes}, {FactionName.Tetrads}, {FactionName.TheSyndicate},{" "}
+        {FactionName.TheDarkArmy}, {FactionName.SpeakersForTheDead}, {FactionName.NiteSec}, {FactionName.TheBlackHand}
         ) give the player the ability to form and manage their own gangs. These gangs will earn the player money and
         reputation with the corresponding Faction
         <br />
@@ -188,23 +187,23 @@ export function initBitNodes() {
   BitNodes["BitNode6"] = new BitNode(
     6,
     1,
-    FactionNames.Bladeburners,
+    FactionName.Bladeburners,
     "Like Tears in Rain",
     (
       <>
-        In the middle of the 21st century, {FactionNames.OmniTekIncorporated} began designing and manufacturing advanced
+        In the middle of the 21st century, {FactionName.OmniTekIncorporated} began designing and manufacturing advanced
         synthetic androids, or Synthoids for short. They achieved a major technological breakthrough in the sixth
         generation of their Synthoid design, called MK-VI, by developing a hyperintelligent AI. Many argue that this was
         the first sentient AI ever created. This resulted in Synthoid models that were stronger, faster, and more
         intelligent than the humans that had created them.
         <br />
         <br />
-        In this BitNode you will be able to access the {FactionNames.Bladeburners} Division at the NSA, which provides a
+        In this BitNode you will be able to access the {FactionName.Bladeburners} Division at the NSA, which provides a
         new mechanic for progression.
         <br />
         <br />
         Destroying this BitNode will give you Source-File 6, or if you already have this Source-File it will upgrade its
-        level up to a maximum of 3. This Source-File allows you to access the NSA's {FactionNames.Bladeburners} Division
+        level up to a maximum of 3. This Source-File allows you to access the NSA's {FactionName.Bladeburners} Division
         in other BitNodes. In addition, this Source-File will raise both the level and experience gain rate of all your
         combat stats by:
         <br />
@@ -220,24 +219,24 @@ export function initBitNodes() {
   BitNodes["BitNode7"] = new BitNode(
     7,
     2,
-    `${FactionNames.Bladeburners} 2079`,
+    `${FactionName.Bladeburners} 2079`,
     "More human than humans",
     (
       <>
-        In the middle of the 21st century, you were doing cutting-edge work at {FactionNames.OmniTekIncorporated} as
-        part of the AI design team for advanced synthetic androids, or Synthoids for short. You helped achieve a major
+        In the middle of the 21st century, you were doing cutting-edge work at {FactionName.OmniTekIncorporated} as part
+        of the AI design team for advanced synthetic androids, or Synthoids for short. You helped achieve a major
         technological breakthrough in the sixth generation of the company's Synthoid design, called MK-VI, by developing
         a hyperintelligent AI. Many argue that this was the first sentient AI ever created. This resulted in Synthoid
         models that were stronger, faster, and more intelligent than the humans that had created them.
         <br />
         <br />
-        In this BitNode you will be able to access the {FactionNames.Bladeburners} API, which allows you to access{" "}
-        {FactionNames.Bladeburners} functionality through Netscript.
+        In this BitNode you will be able to access the {FactionName.Bladeburners} API, which allows you to access{" "}
+        {FactionName.Bladeburners} functionality through Netscript.
         <br />
         <br />
         Destroying this BitNode will give you Source-File 7, or if you already have this Source-File it will upgrade its
-        level up to a maximum of 3. This Source-File allows you to access the {FactionNames.Bladeburners} Netscript API
-        in other BitNodes. In addition, this Source-File will increase all of your {FactionNames.Bladeburners}{" "}
+        level up to a maximum of 3. This Source-File allows you to access the {FactionName.Bladeburners} Netscript API
+        in other BitNodes. In addition, this Source-File will increase all of your {FactionName.Bladeburners}{" "}
         multipliers by:
         <br />
         <br />
@@ -297,9 +296,9 @@ export function initBitNodes() {
     "Hacknet Unleashed",
     (
       <>
-        When {FactionNames.FulcrumSecretTechnologies} released their open-source Linux distro Chapeau, it quickly became
+        When {FactionName.FulcrumSecretTechnologies} released their open-source Linux distro Chapeau, it quickly became
         the OS of choice for the underground hacking community. Chapeau became especially notorious for powering the
-        Hacknet, a global, decentralized network used for nefarious purposes. {FactionNames.FulcrumSecretTechnologies}{" "}
+        Hacknet, a global, decentralized network used for nefarious purposes. {FactionName.FulcrumSecretTechnologies}{" "}
         quickly abandoned the project and dissociated themselves from it.
         <br />
         <br />
@@ -431,7 +430,7 @@ export function initBitNodes() {
     (
       <>
         With the invention of Augmentations in the 2040s a religious group known as the{" "}
-        {FactionNames.ChurchOfTheMachineGod} has rallied far more support than anyone would have hoped.
+        {FactionName.ChurchOfTheMachineGod} has rallied far more support than anyone would have hoped.
         <br />
         <br />
         Their leader, Allison "Mother" Stanek is said to have created her own Augmentation whose power goes beyond any
@@ -439,7 +438,7 @@ export function initBitNodes() {
         <br />
         <br />
         Destroying this BitNode will give you Source-File 13, or if you already have this Source-File it will upgrade
-        its level up to a maximum of 3. This Source-File lets the {FactionNames.ChurchOfTheMachineGod} appear in other
+        its level up to a maximum of 3. This Source-File lets the {FactionName.ChurchOfTheMachineGod} appear in other
         BitNodes.
         <br />
         <br />

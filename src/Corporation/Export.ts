@@ -1,4 +1,4 @@
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 
 export interface Export {
   ind: string;

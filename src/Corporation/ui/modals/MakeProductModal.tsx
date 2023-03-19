@@ -12,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { NumberInput } from "../../../ui/React/NumberInput";
-import { CityName } from "../../../Enums";
+import { CityName } from "../../../data/Enums";
 
 interface IProps {
   open: boolean;

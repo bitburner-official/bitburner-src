@@ -1,17 +1,15 @@
 import { Player } from "@player";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { CityName } from "../Enums";
-import { findCrime } from "../Crime/CrimeHelpers";
+import { CityName, CrimeType, LocationName } from "../data/Enums";
 import { Augmentation } from "../Augmentation/Augmentation";
 
 import { Sleeve } from "@nsdefs";
-import { checkEnum } from "../utils/helpers/enum";
+import { getEnumHelper } from "../utils/helpers/enum";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
-import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
-import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
-import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { cloneDeep } from "lodash";
+import { WorkType } from "../PersonObjects/Sleeve/Work/Work";
+import { FactionName } from "../Faction/data/Enums";
 
 export function NetscriptSleeve(): InternalAPI<Sleeve> {
   const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
@@ -56,12 +54,10 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
     },
     setToCommitCrime: (ctx) => (_sleeveNumber, _crimeType) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const crimeType = helpers.string(ctx, "crimeType", _crimeType);
+      const crimeType = getEnumHelper(CrimeType).nsGetMember(ctx, "crimeType", _crimeType);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
-      const crime = findCrime(crimeType);
-      if (crime == null) return false;
-      return Player.sleeves[sleeveNumber].commitCrime(crime.type);
+      return Player.sleeves[sleeveNumber].commitCrime(crimeType);
     },
     setToUniversityCourse: (ctx) => (_sleeveNumber, _universityName, _className) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
@@ -73,28 +69,22 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
     },
     travel: (ctx) => (_sleeveNumber, _cityName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const cityName = helpers.string(ctx, "cityName", _cityName);
+      const cityName = getEnumHelper(CityName).nsGetMember(ctx, "cityName", _cityName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
-      if (checkEnum(CityName, cityName)) {
-        return Player.sleeves[sleeveNumber].travel(cityName);
-      } else {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid city name: '${cityName}'.`);
-      }
+      return Player.sleeves[sleeveNumber].travel(cityName);
     },
-    setToCompanyWork: (ctx) => (_sleeveNumber, acompanyName) => {
+    setToCompanyWork: (ctx) => (_sleeveNumber, _companyName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const companyName = helpers.string(ctx, "companyName", acompanyName);
+      const companyName = getEnumHelper(LocationName).nsGetMember(ctx, "companyName", _companyName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 
       // Cannot work at the same company that another sleeve is working at
       for (let i = 0; i < Player.sleeves.length; ++i) {
-        if (i === sleeveNumber) {
-          continue;
-        }
+        if (i === sleeveNumber) continue;
         const other = Player.sleeves[i];
-        if (isSleeveCompanyWork(other.currentWork) && other.currentWork.companyName === companyName) {
+        if (other.currentWork?.type === WorkType.COMPANY && other.currentWork.companyName === companyName) {
           throw helpers.makeRuntimeErrorMsg(
             ctx,
             `Sleeve ${sleeveNumber} cannot work for company ${companyName} because Sleeve ${i} is already working for them.`,
@@ -106,7 +96,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
     },
     setToFactionWork: (ctx) => (_sleeveNumber, _factionName, _workType) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const factionName = helpers.string(ctx, "factionName", _factionName);
+      const factionName = getEnumHelper(FactionName).nsGetMember(ctx, "factionName", _factionName);
       const workType = helpers.string(ctx, "workType", _workType);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
@@ -117,7 +107,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
           continue;
         }
         const other = Player.sleeves[i];
-        if (isSleeveFactionWork(other.currentWork) && other.currentWork.factionName === factionName) {
+        if (other.currentWork?.type === WorkType.FACTION && other.currentWork.factionName === factionName) {
           throw helpers.makeRuntimeErrorMsg(
             ctx,
             `Sleeve ${sleeveNumber} cannot work for faction ${factionName} because Sleeve ${i} is already working for them.`,
@@ -249,7 +239,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
             continue;
           }
           const other = Player.sleeves[i];
-          if (isSleeveBladeburnerWork(other.currentWork) && other.currentWork.actionName === contract) {
+          if (other.currentWork?.type === WorkType.BLADEBURNER && other.currentWork.actionName === contract) {
             throw helpers.makeRuntimeErrorMsg(
               ctx,
               `Sleeve ${sleeveNumber} cannot take on contracts because Sleeve ${i} is already performing that action.`,

@@ -11,7 +11,7 @@ import { HacknetNodeConstants, HacknetServerConstants } from "../Hacknet/data/Co
 import { hasHacknetServers } from "../Hacknet/HacknetHelpers";
 import { HacknetNode } from "../Hacknet/HacknetNode";
 import { HacknetServer } from "../Hacknet/HacknetServer";
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 import { Player } from "@player";
 import { CompletedProgramName } from "../Programs/Programs";
 import { GetAllServers, GetServer } from "../Server/AllServers";
@@ -20,8 +20,8 @@ import { Server } from "../Server/Server";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import data from "./AchievementData.json";
-import { FactionNames } from "../Faction/data/FactionNames";
-import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
+import { FactionName } from "../Faction/data/Enums";
+import { BlackOperationName } from "../Bladeburner/data/Enums";
 import { isClassWork } from "../Work/ClassWork";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 
@@ -61,7 +61,7 @@ function bitNodeFinishedState(): boolean {
   if (!(wd instanceof Server)) return false;
   if (wd.backdoorInstalled) return true;
   return (
-    Player.bladeburner !== null && Player.bladeburner.blackops.hasOwnProperty(BlackOperationNames.OperationDaedalus)
+    Player.bladeburner !== null && Player.bladeburner.blackops.hasOwnProperty(BlackOperationName.OperationDaedalus)
   );
 }
 
@@ -88,40 +88,40 @@ function sfAchievement(): Achievement[] {
 }
 
 export const achievements: Record<string, Achievement> = {
-  [FactionNames.CyberSec.toUpperCase()]: {
-    ...achievementData[FactionNames.CyberSec.toUpperCase()],
+  [FactionName.CyberSec.toUpperCase()]: {
+    ...achievementData[FactionName.CyberSec.toUpperCase()],
     Icon: "CSEC",
-    Condition: () => Player.factions.includes(FactionNames.CyberSec),
+    Condition: () => Player.factions.includes(FactionName.CyberSec),
   },
-  [FactionNames.NiteSec.toUpperCase()]: {
-    ...achievementData[FactionNames.NiteSec.toUpperCase()],
-    Icon: FactionNames.NiteSec,
-    Condition: () => Player.factions.includes(FactionNames.NiteSec),
+  [FactionName.NiteSec.toUpperCase()]: {
+    ...achievementData[FactionName.NiteSec.toUpperCase()],
+    Icon: FactionName.NiteSec,
+    Condition: () => Player.factions.includes(FactionName.NiteSec),
   },
   THE_BLACK_HAND: {
     ...achievementData["THE_BLACK_HAND"],
     Icon: "TBH",
-    Condition: () => Player.factions.includes(FactionNames.TheBlackHand),
+    Condition: () => Player.factions.includes(FactionName.TheBlackHand),
   },
-  [FactionNames.BitRunners.toUpperCase()]: {
-    ...achievementData[FactionNames.BitRunners.toUpperCase()],
-    Icon: FactionNames.BitRunners.toLowerCase(),
-    Condition: () => Player.factions.includes(FactionNames.BitRunners),
+  [FactionName.BitRunners.toUpperCase()]: {
+    ...achievementData[FactionName.BitRunners.toUpperCase()],
+    Icon: FactionName.BitRunners.toLowerCase(),
+    Condition: () => Player.factions.includes(FactionName.BitRunners),
   },
-  [FactionNames.Daedalus.toUpperCase()]: {
-    ...achievementData[FactionNames.Daedalus.toUpperCase()],
-    Icon: FactionNames.Daedalus.toLowerCase(),
-    Condition: () => Player.factions.includes(FactionNames.Daedalus),
+  [FactionName.Daedalus.toUpperCase()]: {
+    ...achievementData[FactionName.Daedalus.toUpperCase()],
+    Icon: FactionName.Daedalus.toLowerCase(),
+    Condition: () => Player.factions.includes(FactionName.Daedalus),
   },
   THE_COVENANT: {
     ...achievementData["THE_COVENANT"],
-    Icon: FactionNames.TheCovenant.toLowerCase().replace(/ /g, ""),
-    Condition: () => Player.factions.includes(FactionNames.TheCovenant),
+    Icon: FactionName.TheCovenant.toLowerCase().replace(/ /g, ""),
+    Condition: () => Player.factions.includes(FactionName.TheCovenant),
   },
-  [FactionNames.Illuminati.toUpperCase()]: {
-    ...achievementData[FactionNames.Illuminati.toUpperCase()],
-    Icon: FactionNames.Illuminati.toLowerCase(),
-    Condition: () => Player.factions.includes(FactionNames.Illuminati),
+  [FactionName.Illuminati.toUpperCase()]: {
+    ...achievementData[FactionName.Illuminati.toUpperCase()],
+    Icon: FactionName.Illuminati.toLowerCase(),
+    Condition: () => Player.factions.includes(FactionName.Illuminati),
   },
   "BRUTESSH.EXE": {
     ...achievementData["BRUTESSH.EXE"],

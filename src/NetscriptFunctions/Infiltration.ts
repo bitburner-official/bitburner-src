@@ -7,11 +7,11 @@ import {
   calculateSellInformationCashReward,
   calculateTradeInformationRepReward,
 } from "../Infiltration/formulas/victory";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { FactionName } from "../Faction/data/Enums";
 import { Factions } from "../Faction/Factions";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { checkEnum } from "../utils/helpers/enum";
-import { CityName, LocationName } from "../Enums";
+import { getEnumHelper } from "../utils/helpers/enum";
+import { CityName, LocationName } from "../data/Enums";
 import { helpers } from "../Netscript/NetscriptHelpers";
 
 export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
@@ -19,8 +19,8 @@ export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
     (location: Location) => location.infiltrationData,
   );
 
-  const calculateInfiltrationData = (ctx: NetscriptContext, locationName: string): InfiltrationLocation => {
-    if (!checkEnum(LocationName, locationName)) throw new Error(`Location '${locationName}' does not exists.`);
+  const calculateInfiltrationData = (ctx: NetscriptContext, _locationName: unknown): InfiltrationLocation => {
+    const locationName = getEnumHelper(LocationName).nsGetMember(ctx, "locationName", _locationName);
     const location = Locations[locationName];
     if (location === undefined) throw helpers.makeRuntimeErrorMsg(ctx, `Location '${location}' does not exists.`);
     if (location.infiltrationData === undefined)
@@ -34,7 +34,7 @@ export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
       reward: {
         tradeRep: calculateTradeInformationRepReward(reward, maxLevel, startingSecurityLevel),
         sellCash: calculateSellInformationCashReward(reward, maxLevel, startingSecurityLevel),
-        SoARep: calculateInfiltratorsRepReward(Factions[FactionNames.ShadowsOfAnarchy], startingSecurityLevel),
+        SoARep: calculateInfiltratorsRepReward(Factions[FactionName.ShadowsOfAnarchy], startingSecurityLevel),
       },
       difficulty: difficulty,
     };

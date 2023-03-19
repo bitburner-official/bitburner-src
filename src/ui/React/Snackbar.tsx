@@ -5,16 +5,10 @@ import { EventEmitter } from "../../utils/EventEmitter";
 import Alert from "@mui/material/Alert";
 import Paper from "@mui/material/Paper";
 import { logBoxBaseZIndex } from "./LogBoxManager";
+import { ToastVariant } from "../../data/Enums";
 
 interface IProps {
   children: React.ReactNode | React.ReactNode[];
-}
-
-export enum ToastVariant {
-  SUCCESS = "success",
-  WARNING = "warning",
-  ERROR = "error",
-  INFO = "info",
 }
 
 const useStyles = makeStyles(() => ({

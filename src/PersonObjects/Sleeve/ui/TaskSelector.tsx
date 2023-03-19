@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import { Sleeve } from "../Sleeve";
 import { Player } from "@player";
 import { Crimes } from "../../../Crime/Crimes";
-import { CityName, LocationName } from "../../../Enums";
+import { CityName, LocationName } from "../../../data/Enums";
 import { Factions } from "../../../Faction/Factions";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { FactionNames } from "../../../Faction/data/FactionNames";
+import { FactionName } from "../../../Faction/data/Enums";
 import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
 import { isSleeveBladeburnerWork } from "../Work/SleeveBladeburnerWork";
-import { CrimeType, FactionWorkType, GymType } from "../../../Enums";
-import { checkEnum } from "../../../utils/helpers/enum";
+import { FactionWorkType, GymType } from "../../../data/Enums";
 import { WorkType } from "../Work/Work";
+import { getEnumHelper } from "../../../utils/helpers/enum";
 
 const universitySelectorOptions: string[] = [
   "Computer Science",
@@ -61,16 +61,14 @@ function possibleJobs(sleeve: Sleeve): string[] {
   return allJobs.filter((company) => !forbiddenCompanies.includes(company));
 }
 
-function possibleFactions(sleeve: Sleeve): string[] {
+function possibleFactions(sleeve: Sleeve): FactionName[] {
   // Array of all factions that other sleeves are working for
-  const forbiddenFactions = [FactionNames.Bladeburners as string, FactionNames.ShadowsOfAnarchy as string];
+  const forbiddenFactions = [FactionName.Bladeburners, FactionName.ShadowsOfAnarchy];
   if (Player.gang) {
     forbiddenFactions.push(Player.gang.facName);
   }
   for (const otherSleeve of Player.sleeves) {
-    if (sleeve === otherSleeve) {
-      continue;
-    }
+    if (sleeve === otherSleeve) continue;
     if (isSleeveFactionWork(otherSleeve.currentWork)) {
       forbiddenFactions.push(otherSleeve.currentWork.factionName);
     }
@@ -134,15 +132,15 @@ const tasks: {
     return { first: jobs, second: () => ["------"] };
   },
   "Work for Faction": (sleeve: Sleeve): ITaskDetails => {
-    let factions = possibleFactions(sleeve);
+    let factions: (FactionName | "------")[] = possibleFactions(sleeve);
     if (factions.length === 0) factions = ["------"];
 
     return {
       first: factions,
       second: (s1: string) => {
-        const faction = Factions[s1];
-        if (!faction) return ["------"];
-
+        const factionName = getEnumHelper(FactionName).match(s1);
+        if (!factionName) return ["------"];
+        const faction = Factions[factionName];
         const facInfo = faction.getInfo();
         const options: string[] = [];
         if (facInfo.offerHackingWork) {
@@ -271,7 +269,7 @@ function getABC(sleeve: Sleeve): [string, string, string] {
       };
       return ["Workout at Gym", gymNames[work.classType as GymType], work.location];
     case WorkType.CRIME:
-      return ["Commit Crime", checkEnum(CrimeType, work.crimeType) ? work.crimeType : "Shoplift", "------"];
+      return ["Commit Crime", work.crimeType, "------"];
     case WorkType.SUPPORT:
       return ["Perform Bladeburner Actions", "Support main sleeve", "------"];
     case WorkType.INFILTRATE:

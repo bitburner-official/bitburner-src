@@ -3,9 +3,10 @@ import * as posNames from "./data/JobTracks";
 import { favorToRep, repToFavor } from "../Faction/formulas/favor";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { LocationName } from "../data/Enums";
 
 export interface IConstructorParams {
-  name: string;
+  name: LocationName;
   info: string;
   companyPositions: Record<string, boolean>;
   expMultiplier: number;
@@ -15,7 +16,7 @@ export interface IConstructorParams {
 }
 
 const DefaultConstructorParams: IConstructorParams = {
-  name: "",
+  name: LocationName.NewTokyoNoodleBar,
   info: "",
   companyPositions: {},
   expMultiplier: 1,
@@ -24,8 +25,8 @@ const DefaultConstructorParams: IConstructorParams = {
 };
 
 export class Company {
-  /** Company name */
-  name: string;
+  /** Company name, which is also the associated location name */
+  name: LocationName;
 
   /** Description and general information about company */
   info: string;

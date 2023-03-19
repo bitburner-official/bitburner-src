@@ -2,13 +2,12 @@
 import * as React from "react";
 
 import type { CompletedProgramName } from "src/Programs/Programs";
-import { Faction } from "../Faction/Faction";
 import { Factions } from "../Faction/Factions";
 import { formatPercent } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { FactionName } from "../Faction/data/Enums";
 import { Player } from "@player";
 import { AugmentationNames } from "./data/AugmentationNames";
 import { CONSTANTS } from "../Constants";
@@ -31,7 +30,7 @@ export interface IConstructorParams {
   name: string;
   prereqs?: string[];
   repCost: number;
-  factions: string[];
+  factions: FactionName[];
 
   hacking?: number;
   strength?: number;
@@ -393,7 +392,7 @@ export class Augmentation {
   mults: Multipliers = defaultMultipliers();
 
   // Factions that offer this aug.
-  factions: string[] = [];
+  factions: FactionName[] = [];
 
   constructor(
     params: IConstructorParams = {
@@ -516,10 +515,10 @@ export class Augmentation {
   }
 
   // Adds this Augmentation to the specified Factions
-  addToFactions(factionList: string[]): void {
+  addToFactions(factionList: FactionName[]): void {
     for (let i = 0; i < factionList.length; ++i) {
-      const faction: Faction | null = Factions[factionList[i]];
-      if (faction == null) {
+      const faction = Factions[factionList[i]];
+      if (!faction) {
         console.warn(`In Augmentation.addToFactions(), could not find faction with this name: ${factionList[i]}`);
         continue;
       }
@@ -542,7 +541,7 @@ export class Augmentation {
       for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
         moneyCost *= getBaseAugmentationPriceMultiplier();
       }
-    } else if (augmentationReference.factions.includes(FactionNames.ShadowsOfAnarchy)) {
+    } else if (augmentationReference.factions.includes(FactionName.ShadowsOfAnarchy)) {
       const soaAugmentationNames = initSoAAugmentations().map((augmentation) => augmentation.name);
       const soaAugCount = soaAugmentationNames.filter((augmentationName) =>
         Player.hasAugmentation(augmentationName),
@@ -584,16 +583,9 @@ export class Augmentation {
 
   // Adds this Augmentation to all Factions
   addToAllFactions(): void {
-    for (const fac of Object.keys(Factions)) {
-      if (Factions.hasOwnProperty(fac)) {
-        const facObj: Faction | null = Factions[fac];
-        if (facObj == null) {
-          console.warn(`Invalid Faction object in addToAllFactions(). Key value: ${fac}`);
-          continue;
-        }
-        if (facObj.getInfo().special) continue;
-        facObj.augmentations.push(this.name);
-      }
+    for (const faction of Object.values(Factions)) {
+      if (faction.getInfo().special) continue;
+      faction.augmentations.push(this.name);
     }
   }
 

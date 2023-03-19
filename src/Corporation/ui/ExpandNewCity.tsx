@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Button from "@mui/material/Button";
-import { CityName } from "../../Enums";
+import { CityName } from "../../data/Enums";
 
 interface IProps {
   cityStateSetter: (city: CityName | "Expand") => void;

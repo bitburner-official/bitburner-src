@@ -9,7 +9,7 @@ import { Warehouse } from "../Warehouse";
 import { OfficeSpace } from "../OfficeSpace";
 import { useCorporation, useDivision } from "./Context";
 import Box from "@mui/material/Box";
-import { CityName } from "../../Enums";
+import { CityName } from "../../data/Enums";
 
 interface IProps {
   city: CityName;

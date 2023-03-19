@@ -1,5 +1,5 @@
 import { City } from "./City";
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 
 export const Cities: Record<CityName, City> = {
   [CityName.Aevum]: new City(CityName.Aevum),

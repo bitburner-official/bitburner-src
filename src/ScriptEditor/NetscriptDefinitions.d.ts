@@ -7324,19 +7324,17 @@ export interface WarehouseAPI {
   /**
    * Set market TA 1 for a product.
    * @param divisionName - Name of the division
-   * @param city - Name of the city
    * @param productName - Name of the product
    * @param on - market ta enabled
    */
-  setProductMarketTA1(divisionName: string, city: CityName | `${CityName}`, productName: string, on: boolean): void;
+  setProductMarketTA1(divisionName: string, productName: string, on: boolean): void;
   /**
    * Set market TA 2 for a product.
    * @param divisionName - Name of the division
-   * @param city - Name of the city
    * @param productName - Name of the product
    * @param on - market ta enabled
    */
-  setProductMarketTA2(divisionName: string, city: CityName | `${CityName}`, productName: string, on: boolean): void;
+  setProductMarketTA2(divisionName: string, productName: string, on: boolean): void;
   /**
    * Set material export data
    * @param sourceDivision - Source division

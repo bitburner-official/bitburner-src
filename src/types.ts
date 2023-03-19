@@ -7,11 +7,14 @@ export type PositiveInteger = Integer & PositiveNumber;
 export const isInteger = (n: unknown): n is Integer => Number.isInteger(n);
 export const isPositiveInteger = (n: unknown): n is PositiveInteger => isInteger(n) && n > 0;
 
+// General utility types
 /** Utility type for typechecking objects. Makes all keys optional and sets values to unknown,
  * making it safe to assert a shape for the variable once it's known to be a non-null object */
 export type Unknownify<T> = {
   [key in keyof T]?: unknown;
 };
+/** Utility type for specifying a value of either an array or an object */
+export type Member<T> = T extends (infer arrayMember)[] ? arrayMember : T[keyof T];
 
 /** Status object for functions that return a boolean indicating success/failure
  * and an optional message */

@@ -1,4 +1,4 @@
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "../../Faction/data/Enums";
 
 export const GangConstants = {
   // Respect is divided by this to get rep gain
@@ -9,13 +9,13 @@ export const GangConstants = {
   AscensionMultiplierRatio: 0.15,
   // Names of possible Gangs
   Names: [
-    FactionNames.SlumSnakes,
-    FactionNames.Tetrads,
-    FactionNames.TheSyndicate,
-    FactionNames.TheDarkArmy,
-    FactionNames.SpeakersForTheDead,
-    FactionNames.NiteSec,
-    FactionNames.TheBlackHand,
+    FactionName.SlumSnakes,
+    FactionName.Tetrads,
+    FactionName.TheSyndicate,
+    FactionName.TheDarkArmy,
+    FactionName.SpeakersForTheDead,
+    FactionName.NiteSec,
+    FactionName.TheBlackHand,
   ] as string[],
   GangKarmaRequirement: -54000,
 };

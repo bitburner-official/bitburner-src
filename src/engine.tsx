@@ -43,7 +43,8 @@ import { calculateAchievements } from "./Achievements/Achievements";
 import React from "react";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
+import { SnackbarEvents } from "./ui/React/Snackbar";
+import { ToastVariant } from "./data/Enums";
 import { prestigeSourceFile } from "./Prestige";
 
 /** Game engine. Handles the main game loop. */
@@ -379,7 +380,7 @@ const Engine: {
       Player.init();
       initForeignServers(Player.getHomeComputer());
       initCompanies();
-      initFactions();
+      initFactions(); // Factions must be initialized before augmentations
       initAugmentations();
 
       // Start interactive tutorial

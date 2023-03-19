@@ -6,12 +6,13 @@ import { Player } from "@player";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { KEY } from "../../utils/helpers/keyCodes";
-import { FactionNames } from "../data/FactionNames";
+import { FactionName } from "../data/Enums";
+import { GangFaction } from "../../Gang/data/Enums";
 
 interface IProps {
   open: boolean;
   onClose: () => void;
-  facName: string;
+  facName: GangFaction;
 }
 
 /** React Component for the popup used to create a new gang. */
@@ -27,7 +28,7 @@ export function CreateGangModal(props: IProps): React.ReactElement {
     "is not as important.";
 
   function isHacking(): boolean {
-    return [FactionNames.NiteSec as string, FactionNames.TheBlackHand as string].includes(props.facName);
+    return [FactionName.NiteSec, FactionName.TheBlackHand].includes(props.facName);
   }
 
   function createGang(): void {

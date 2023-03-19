@@ -12,6 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import Box from "@mui/material/Box";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { FactionName } from "../../../Faction/data/Enums";
 
 interface IProps {
   open: boolean;
@@ -19,7 +20,7 @@ interface IProps {
 }
 
 export function BribeFactionModal(props: IProps): React.ReactElement {
-  const factions = Player.factions.filter((name: string) => {
+  const factions = Player.factions.filter((name: FactionName) => {
     const info = Factions[name].getInfo();
     if (!info.offersWork()) return false;
     if (Player.hasGangWith(name)) return false;
@@ -27,11 +28,11 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
   });
   const corp = useCorporation();
   const [money, setMoney] = useState<number>(NaN);
-  const [selectedFaction, setSelectedFaction] = useState(factions.length > 0 ? factions[0] : "");
+  const [selectedFaction, setSelectedFaction] = useState<FactionName | "">(factions.length > 0 ? factions[0] : "");
   const disabled = money === 0 || isNaN(money) || money < 0 || corp.funds < money;
 
   function changeFaction(event: SelectChangeEvent<string>): void {
-    setSelectedFaction(event.target.value);
+    setSelectedFaction(event.target.value as FactionName);
   }
 
   function repGain(money: number): number {
@@ -52,8 +53,8 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
   }
 
   function bribe(money: number): void {
+    if (!selectedFaction || disabled) return;
     const fac = Factions[selectedFaction];
-    if (disabled) return;
     const rep = repGain(money);
     dialogBoxCreate(`You gained ${formatReputation(rep)} reputation with ${fac.name} by bribing them.`);
     fac.playerReputation += rep;
@@ -69,7 +70,7 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
       <Box display="flex" alignItems="center">
         <Typography>Faction:</Typography>
         <Select value={selectedFaction} onChange={changeFaction}>
-          {factions.map((name: string) => {
+          {factions.map((name: FactionName) => {
             const info = Factions[name].getInfo();
             if (!info.offersWork()) return;
             if (Player.hasGangWith(name)) return;

@@ -1,7 +1,7 @@
 import React from "react";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { CONSTANTS } from "../Constants";
-import { LocationName } from "../Enums";
+import { allClasses, LocationName } from "../data/Enums";
 import { formatExp } from "../ui/formatNumber";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Money } from "../ui/React/Money";
@@ -10,8 +10,8 @@ import { Player } from "@player";
 import { calculateClassEarnings as calculateClassEarningsRate } from "./Formulas";
 import { Work, WorkType } from "./Work";
 import { applyWorkStats, newWorkStats, sumWorkStats, WorkStats } from "./WorkStats";
-import { GymType, UniversityClassType } from "../Enums";
-import { checkEnum, findEnumMember } from "../utils/helpers/enum";
+import { GymType, UniversityClassType } from "../data/Enums";
+import { getEnumHelper } from "../utils/helpers/enum";
 
 export type ClassType = UniversityClassType | GymType;
 
@@ -94,7 +94,7 @@ export class ClassWork extends Work {
   }
 
   isGym(): boolean {
-    return checkEnum(GymType, this.classType);
+    return getEnumHelper(GymType).isMember(this.classType);
   }
 
   getClass(): Class {
@@ -151,10 +151,7 @@ export class ClassWork extends Work {
   /** Initializes a ClassWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): ClassWork {
     const classWork = Generic_fromJSON(ClassWork, value.data);
-    classWork.classType =
-      findEnumMember(UniversityClassType, classWork.classType) ??
-      findEnumMember(GymType, classWork.classType) ??
-      UniversityClassType.computerScience;
+    classWork.classType = getEnumHelper(allClasses).fuzzyMatch(classWork.classType);
     return classWork;
   }
 }

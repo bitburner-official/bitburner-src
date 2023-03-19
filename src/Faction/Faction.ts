@@ -1,6 +1,7 @@
 import { FactionInfo, FactionInfos } from "./FactionInfo";
 import { favorToRep, repToFavor } from "./formulas/favor";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { FactionName } from "./data/Enums";
 
 export class Faction {
   /**
@@ -22,13 +23,13 @@ export class Faction {
   isMember = false;
 
   /** Name of faction */
-  name = "";
+  name = FactionName.CyberSec;
 
   /** Amount of reputation player has with this faction */
   playerReputation = 0;
 
-  constructor(name = "") {
-    this.name = name;
+  constructor(name?: FactionName) {
+    if (name) this.name = name;
   }
 
   getInfo(): FactionInfo {

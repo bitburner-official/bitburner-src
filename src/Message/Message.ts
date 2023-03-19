@@ -1,5 +1,5 @@
 import { FilePath, asFilePath } from "../Paths/FilePath";
-import { MessageFilename } from "./MessageHelpers";
+import { MessageFilename } from "../data/HiddenEnums";
 
 export class Message {
   // Name of Message file

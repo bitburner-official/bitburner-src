@@ -2,8 +2,9 @@
 import { companiesMetadata } from "./data/CompaniesMetadata";
 import { Company, IConstructorParams } from "./Company";
 import { Reviver } from "../utils/JSONReviver";
+import { LocationName } from "../data/Enums";
 
-export let Companies: Record<string, Company> = {};
+export let Companies: Partial<Record<LocationName, Company>> = {};
 
 function addCompany(params: IConstructorParams): void {
   if (Companies[params.name] != null) {
@@ -25,14 +26,14 @@ export function initCompanies(): void {
   });
 
   // Reset data
-  for (const companyName of Object.keys(Companies)) {
-    const company = Companies[companyName];
+  for (const company of Object.values(Companies)) {
+    const companyName = company.name;
     const oldCompany = oldCompanies[companyName];
     if (!oldCompany) {
       // New game, so no OldCompanies data
       company.favor = 0;
     } else {
-      company.favor = oldCompanies[companyName].favor;
+      company.favor = oldCompany.favor;
       if (isNaN(company.favor)) {
         company.favor = 0;
       }

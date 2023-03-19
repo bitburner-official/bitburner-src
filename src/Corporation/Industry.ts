@@ -1,8 +1,8 @@
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 import { IndustryResearchTrees, IndustriesData } from "./IndustryData";
 import * as corpConstants from "./data/Constants";
-import { EmployeePositions, IndustryType } from "./data/Enums";
+import { EmployeePosition, IndustryType } from "./data/Enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { calculateEffectWithFactors } from "../utils/calculateEffectWithFactors";
 import { OfficeSpace } from "./OfficeSpace";
@@ -489,7 +489,7 @@ export class Industry {
                 avgQlt = Math.max(avgQlt, 1);
                 for (let j = 0; j < this.prodMats.length; ++j) {
                   let tempQlt =
-                    office.employeeProd[EmployeePositions.Engineer] / 90 +
+                    office.employeeProd[EmployeePosition.Engineer] / 90 +
                     Math.pow(this.sciResearch, this.sciFac) +
                     Math.pow(warehouse.materials["AI Cores"].qty, this.aiFac) / 10e3;
                   const logQlt = Math.max(Math.pow(tempQlt, 0.5), 1);
@@ -771,7 +771,7 @@ export class Industry {
       if (office) {
         this.sciResearch +=
           0.004 *
-          Math.pow(office.employeeProd[EmployeePositions.RandD], 0.5) *
+          Math.pow(office.employeeProd[EmployeePosition.RandD], 0.5) *
           corporation.getScientificResearchMultiplier() *
           this.getScientificResearchMultiplier();
       }
@@ -1072,9 +1072,9 @@ export class Industry {
 
   // Returns how much of a material can be produced based of office productivity (employee stats)
   getOfficeProductivity(office: OfficeSpace, params: { forProduct?: boolean } = {}): number {
-    const opProd = office.employeeProd[EmployeePositions.Operations];
-    const engrProd = office.employeeProd[EmployeePositions.Engineer];
-    const mgmtProd = office.employeeProd[EmployeePositions.Management];
+    const opProd = office.employeeProd[EmployeePosition.Operations];
+    const engrProd = office.employeeProd[EmployeePosition.Engineer];
+    const mgmtProd = office.employeeProd[EmployeePosition.Management];
     const total = opProd + engrProd + mgmtProd;
 
     if (total <= 0) return 0;
@@ -1099,7 +1099,7 @@ export class Industry {
 
   // Returns a multiplier based on the office' 'Business' employees that affects sales
   getBusinessFactor(office: OfficeSpace): number {
-    const businessProd = 1 + office.employeeProd[EmployeePositions.Business];
+    const businessProd = 1 + office.employeeProd[EmployeePosition.Business];
 
     return calculateEffectWithFactors(businessProd, 0.26, 10e3);
   }

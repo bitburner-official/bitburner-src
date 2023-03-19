@@ -4,10 +4,10 @@
  */
 import { Cities } from "./Cities";
 import { Location, IConstructorParams } from "./Location";
-import { CityName } from "../Enums";
+import { CityName, LocationName } from "../data/Enums";
 import { LocationsMetadata } from "./data/LocationsMetadata";
 
-export const Locations: Record<string, Location> = {};
+export const Locations = {} as Record<LocationName, Location>;
 
 /**
  * Here, we'll initialize both Locations and Cities data. These can both

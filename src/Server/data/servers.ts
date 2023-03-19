@@ -1,9 +1,9 @@
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "../../Faction/data/Enums";
 // tslint:disable:max-file-line-count
 
 // This could actually be a JSON file as it should be constant metadata to be imported...
 import { IMinMaxRange } from "../../types";
-import { LocationName } from "../../Enums";
+import { LocationName } from "../../data/Enums";
 import { LiteratureName } from "../../Literature/data/LiteratureNames";
 import { SpecialServers } from "./SpecialServers";
 import { ServerName } from "../../Types/strings";
@@ -1479,7 +1479,7 @@ export const serverMetadata: IServerMetadata[] = [
     moneyAvailable: 0,
     networkLayer: 4,
     numOpenPortsRequired: 2,
-    organizationName: FactionNames.NiteSec,
+    organizationName: FactionName.NiteSec,
     requiredHackingSkill: {
       max: 220,
       min: 202,
@@ -1510,7 +1510,7 @@ export const serverMetadata: IServerMetadata[] = [
     moneyAvailable: 0,
     networkLayer: 2,
     numOpenPortsRequired: 1,
-    organizationName: FactionNames.CyberSec,
+    organizationName: FactionName.CyberSec,
     requiredHackingSkill: {
       max: 60,
       min: 51,

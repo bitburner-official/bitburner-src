@@ -2,7 +2,7 @@ import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
 import { PlayerOwnedAugmentation } from "../../Augmentation/PlayerOwnedAugmentation";
 import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
-import { CodingContractRewardType, ICodingContractReward } from "../../CodingContracts";
+import { CodingContractRewardType, CodingContractReward } from "../../CodingContracts";
 import { Company } from "../../Company/Company";
 import { Companies } from "../../Company/Companies";
 import { getNextCompanyPositionHelper } from "../../Company/GetNextCompanyPosition";
@@ -18,7 +18,7 @@ import { Factions } from "../../Faction/Factions";
 import { resetGangs } from "../../Gang/AllGangs";
 import { Cities } from "../../Locations/Cities";
 import { Locations } from "../../Locations/Locations";
-import { CityName, LocationName } from "../../Enums";
+import { CityName, LocationName, ToastVariant } from "../../data/Enums";
 import { Sleeve } from "../Sleeve/Sleeve";
 import { isSleeveCompanyWork } from "../Sleeve/Work/SleeveCompanyWork";
 import { calculateSkillProgress as calculateSkillProgressF, ISkillProgress } from "../formulas/skill";
@@ -37,9 +37,9 @@ import { formatMoney } from "../../ui/formatNumber";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
-import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
+import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { achievements } from "../../Achievements/Achievements";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "../../Faction/data/Enums";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { serverMetadata } from "../../Server/data/servers";
@@ -160,7 +160,7 @@ export function prestigeSourceFile(this: PlayerObject): void {
   this.augmentations = [];
 }
 
-export function receiveInvite(this: PlayerObject, factionName: string): void {
+export function receiveInvite(this: PlayerObject, factionName: FactionName): void {
   if (this.factionInvitations.includes(factionName) || this.factions.includes(factionName)) {
     return;
   }
@@ -351,17 +351,17 @@ export function getNextCompanyPosition(
   return entryPosType;
 }
 
-export function quitJob(this: PlayerObject, company: string): void {
-  if (isCompanyWork(this.currentWork) && this.currentWork.companyName === company) {
+export function quitJob(this: PlayerObject, companyName: LocationName): void {
+  if (isCompanyWork(this.currentWork) && this.currentWork.companyName === companyName) {
     this.finishWork(true);
   }
   for (const sleeve of this.sleeves) {
-    if (isSleeveCompanyWork(sleeve.currentWork) && sleeve.currentWork.companyName === company) {
+    if (isSleeveCompanyWork(sleeve.currentWork) && sleeve.currentWork.companyName === companyName) {
       sleeve.stopWork();
-      dialogBoxCreate(`You quit ${company} while one of your sleeves was working there. The sleeve is now idle.`);
+      dialogBoxCreate(`You quit ${companyName} while one of your sleeves was working there. The sleeve is now idle.`);
     }
   }
-  delete this.jobs[company];
+  delete this.jobs[companyName];
 }
 
 /**
@@ -387,6 +387,7 @@ export function applyForItJob(this: PlayerObject, sing = false): boolean {
 
 export function applyForSecurityEngineerJob(this: PlayerObject, sing = false): boolean {
   const company = Companies[this.location]; //Company being applied to
+  if (!company) return false;
   if (this.isQualified(company, CompanyPositions[posNames.SecurityEngineerCompanyPositions[0]])) {
     return this.applyForJob(CompanyPositions[posNames.SecurityEngineerCompanyPositions[0]], sing);
   } else {
@@ -399,6 +400,7 @@ export function applyForSecurityEngineerJob(this: PlayerObject, sing = false): b
 
 export function applyForNetworkEngineerJob(this: PlayerObject, sing = false): boolean {
   const company = Companies[this.location]; //Company being applied to
+  if (!company) return false;
   if (this.isQualified(company, CompanyPositions[posNames.NetworkEngineerCompanyPositions[0]])) {
     const pos = CompanyPositions[posNames.NetworkEngineerCompanyPositions[0]];
     return this.applyForJob(pos, sing);
@@ -426,6 +428,7 @@ export function applyForSecurityJob(this: PlayerObject, sing = false): boolean {
 
 export function applyForAgentJob(this: PlayerObject, sing = false): boolean {
   const company = Companies[this.location]; //Company being applied to
+  if (!company) return false;
   if (this.isQualified(company, CompanyPositions[posNames.AgentCompanyPositions[0]])) {
     const pos = CompanyPositions[posNames.AgentCompanyPositions[0]];
     return this.applyForJob(pos, sing);
@@ -439,6 +442,7 @@ export function applyForAgentJob(this: PlayerObject, sing = false): boolean {
 
 export function applyForEmployeeJob(this: PlayerObject, sing = false): boolean {
   const company = Companies[this.location]; //Company being applied to
+  if (!company) return false;
   const position = posNames.MiscCompanyPositions[1];
   // Check if this company has the position
   if (!company.hasPosition(position)) {
@@ -463,6 +467,7 @@ export function applyForEmployeeJob(this: PlayerObject, sing = false): boolean {
 
 export function applyForPartTimeEmployeeJob(this: PlayerObject, sing = false): boolean {
   const company = Companies[this.location]; //Company being applied to
+  if (!company) return false;
   const position = posNames.PartTimeCompanyPositions[1];
   // Check if this company has the position
   if (!company.hasPosition(position)) {
@@ -486,6 +491,7 @@ export function applyForPartTimeEmployeeJob(this: PlayerObject, sing = false): b
 
 export function applyForWaiterJob(this: PlayerObject, sing = false): boolean {
   const company = Companies[this.location]; //Company being applied to
+  if (!company) return false;
   const position = posNames.MiscCompanyPositions[0];
   // Check if this company has the position
   if (!company.hasPosition(position)) {
@@ -507,6 +513,7 @@ export function applyForWaiterJob(this: PlayerObject, sing = false): boolean {
 
 export function applyForPartTimeWaiterJob(this: PlayerObject, sing = false): boolean {
   const company = Companies[this.location]; //Company being applied to
+  if (!company) return false;
   const position = posNames.PartTimeCompanyPositions[0];
   // Check if this company has the position
   if (!company.hasPosition(position)) {
@@ -600,24 +607,18 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
 
   const numAugmentations = this.augmentations.length;
 
-  const allCompanies = Object.keys(this.jobs);
-  const allPositions = Object.values(this.jobs);
+  const { hacking, strength, defense, dexterity, agility } = this.skills;
+  const [allCompanies, allPositions] = Object.entries(this.jobs);
 
   // Given a company name, safely returns the reputation (returns 0 if invalid company is specified)
-  function getCompanyRep(companyName: string): number {
+  function getCompanyRep(companyName: LocationName): number {
     const company = Companies[companyName];
-    if (company == null) {
-      return 0;
-    } else {
-      return company.playerReputation;
-    }
+    if (!company) return 0;
+    return company.playerReputation;
   }
 
-  // Helper function that returns a boolean indicating whether the Player meets
-  // the requirements for the specified company. There are two requirements:
-  //      1. High enough reputation
-  //      2. Player is employed at the company
-  function checkMegacorpRequirements(companyName: string): boolean {
+  /** Checks if player meets rep and employment requirements for joining a megacorp faction */
+  function checkMegacorpRequirements(companyName: LocationName): boolean {
     const serverMeta = serverMetadata.find((s) => s.specialName === companyName);
     const server = GetServer(serverMeta ? serverMeta.hostname : "");
     const bonus = (server as Server).backdoorInstalled ? -100e3 : 0;
@@ -626,456 +627,219 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     );
   }
 
-  //Illuminati
-  const illuminatiFac = Factions[FactionNames.Illuminati];
-  if (
-    !illuminatiFac.isBanned &&
-    !illuminatiFac.isMember &&
-    !illuminatiFac.alreadyInvited &&
-    numAugmentations >= 30 &&
-    this.money >= 150000000000 &&
-    this.skills.hacking >= 1500 &&
-    this.skills.strength >= 1200 &&
-    this.skills.defense >= 1200 &&
-    this.skills.dexterity >= 1200 &&
-    this.skills.agility >= 1200
-  ) {
-    invitedFactions.push(illuminatiFac);
-  }
-
-  //Daedalus
-  const daedalusFac = Factions[FactionNames.Daedalus];
-  if (
-    !daedalusFac.isBanned &&
-    !daedalusFac.isMember &&
-    !daedalusFac.alreadyInvited &&
-    numAugmentations >= BitNodeMultipliers.DaedalusAugsRequirement &&
-    this.money >= 100000000000 &&
-    (this.skills.hacking >= 2500 ||
-      (this.skills.strength >= 1500 &&
-        this.skills.defense >= 1500 &&
-        this.skills.dexterity >= 1500 &&
-        this.skills.agility >= 1500))
-  ) {
-    invitedFactions.push(daedalusFac);
-  }
-
-  //The Covenant
-  const covenantFac = Factions[FactionNames.TheCovenant];
-  if (
-    !covenantFac.isBanned &&
-    !covenantFac.isMember &&
-    !covenantFac.alreadyInvited &&
-    numAugmentations >= 20 &&
-    this.money >= 75000000000 &&
-    this.skills.hacking >= 850 &&
-    this.skills.strength >= 850 &&
-    this.skills.defense >= 850 &&
-    this.skills.dexterity >= 850 &&
-    this.skills.agility >= 850
-  ) {
-    invitedFactions.push(covenantFac);
-  }
-
-  //ECorp
-  const ecorpFac = Factions[FactionNames.ECorp];
-  if (
-    !ecorpFac.isBanned &&
-    !ecorpFac.isMember &&
-    !ecorpFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.AevumECorp)
-  ) {
-    invitedFactions.push(ecorpFac);
-  }
-
-  //MegaCorp
-  const megacorpFac = Factions[FactionNames.MegaCorp];
-  if (
-    !megacorpFac.isBanned &&
-    !megacorpFac.isMember &&
-    !megacorpFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.Sector12MegaCorp)
-  ) {
-    invitedFactions.push(megacorpFac);
-  }
-
-  //Bachman & Associates
-  const bachmanandassociatesFac = Factions[FactionNames.BachmanAssociates];
-  if (
-    !bachmanandassociatesFac.isBanned &&
-    !bachmanandassociatesFac.isMember &&
-    !bachmanandassociatesFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.AevumBachmanAndAssociates)
-  ) {
-    invitedFactions.push(bachmanandassociatesFac);
-  }
-
-  //Blade Industries
-  const bladeindustriesFac = Factions[FactionNames.BladeIndustries];
-  if (
-    !bladeindustriesFac.isBanned &&
-    !bladeindustriesFac.isMember &&
-    !bladeindustriesFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.Sector12BladeIndustries)
-  ) {
-    invitedFactions.push(bladeindustriesFac);
-  }
-
-  //NWO
-  const nwoFac = Factions[FactionNames.NWO];
-  if (
-    !nwoFac.isBanned &&
-    !nwoFac.isMember &&
-    !nwoFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.VolhavenNWO)
-  ) {
-    invitedFactions.push(nwoFac);
-  }
-
-  //Clarke Incorporated
-  const clarkeincorporatedFac = Factions[FactionNames.ClarkeIncorporated];
-  if (
-    !clarkeincorporatedFac.isBanned &&
-    !clarkeincorporatedFac.isMember &&
-    !clarkeincorporatedFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.AevumClarkeIncorporated)
-  ) {
-    invitedFactions.push(clarkeincorporatedFac);
-  }
-
-  //OmniTek Incorporated
-  const omnitekincorporatedFac = Factions[FactionNames.OmniTekIncorporated];
-  if (
-    !omnitekincorporatedFac.isBanned &&
-    !omnitekincorporatedFac.isMember &&
-    !omnitekincorporatedFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.VolhavenOmniTekIncorporated)
-  ) {
-    invitedFactions.push(omnitekincorporatedFac);
-  }
-
-  //Four Sigma
-  const foursigmaFac = Factions[FactionNames.FourSigma];
-  if (
-    !foursigmaFac.isBanned &&
-    !foursigmaFac.isMember &&
-    !foursigmaFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.Sector12FourSigma)
-  ) {
-    invitedFactions.push(foursigmaFac);
-  }
-
-  //KuaiGong International
-  const kuaigonginternationalFac = Factions[FactionNames.KuaiGongInternational];
-  if (
-    !kuaigonginternationalFac.isBanned &&
-    !kuaigonginternationalFac.isMember &&
-    !kuaigonginternationalFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.ChongqingKuaiGongInternational)
-  ) {
-    invitedFactions.push(kuaigonginternationalFac);
-  }
-
-  //Fulcrum Secret Technologies - If you've unlocked fulcrum secret technologies server and have a high rep with the company
-  const fulcrumsecrettechonologiesFac = Factions[FactionNames.FulcrumSecretTechnologies];
-  const fulcrumSecretServer = GetServer(SpecialServers.FulcrumSecretTechnologies);
-  if (!(fulcrumSecretServer instanceof Server))
-    throw new Error(`${FactionNames.FulcrumSecretTechnologies} should be normal server`);
-  if (fulcrumSecretServer == null) {
-    console.error(`Could not find ${FactionNames.FulcrumSecretTechnologies} Server`);
-  } else if (
-    !fulcrumsecrettechonologiesFac.isBanned &&
-    !fulcrumsecrettechonologiesFac.isMember &&
-    !fulcrumsecrettechonologiesFac.alreadyInvited &&
-    fulcrumSecretServer.backdoorInstalled &&
-    checkMegacorpRequirements(LocationName.AevumFulcrumTechnologies)
-  ) {
-    invitedFactions.push(fulcrumsecrettechonologiesFac);
-  }
-
-  //BitRunners
-  const bitrunnersFac = Factions[FactionNames.BitRunners];
-  const bitrunnersServer = GetServer(SpecialServers.BitRunnersServer);
-  if (!(bitrunnersServer instanceof Server)) throw new Error(`${FactionNames.BitRunners} should be normal server`);
-  if (bitrunnersServer == null) {
-    console.error(`Could not find ${FactionNames.BitRunners} Server`);
-  } else if (
-    !bitrunnersFac.isBanned &&
-    !bitrunnersFac.isMember &&
-    bitrunnersServer.backdoorInstalled &&
-    !bitrunnersFac.alreadyInvited
-  ) {
-    invitedFactions.push(bitrunnersFac);
-  }
-
-  //The Black Hand
-
-  const theblackhandFac = Factions[FactionNames.TheBlackHand];
-  const blackhandServer = GetServer(SpecialServers.TheBlackHandServer);
-  if (!(blackhandServer instanceof Server)) throw new Error(`${FactionNames.TheBlackHand} should be normal server`);
-  if (blackhandServer == null) {
-    console.error(`Could not find ${FactionNames.TheBlackHand} Server`);
-  } else if (
-    !theblackhandFac.isBanned &&
-    !theblackhandFac.isMember &&
-    blackhandServer.backdoorInstalled &&
-    !theblackhandFac.alreadyInvited
-  ) {
-    invitedFactions.push(theblackhandFac);
-  }
-
-  //NiteSec
-  const nitesecFac = Factions[FactionNames.NiteSec];
-  const nitesecServer = GetServer(SpecialServers.NiteSecServer);
-  if (!(nitesecServer instanceof Server)) throw new Error(`${FactionNames.NiteSec} should be normal server`);
-  if (nitesecServer == null) {
-    console.error(`Could not find ${FactionNames.NiteSec} Server`);
-  } else if (
-    !nitesecFac.isBanned &&
-    !nitesecFac.isMember &&
-    nitesecServer.backdoorInstalled &&
-    !nitesecFac.alreadyInvited
-  ) {
-    invitedFactions.push(nitesecFac);
-  }
-
-  //Chongqing
-  const chongqingFac = Factions[FactionNames.Chongqing];
-  if (
-    !chongqingFac.isBanned &&
-    !chongqingFac.isMember &&
-    !chongqingFac.alreadyInvited &&
-    this.money >= 20000000 &&
-    this.city == CityName.Chongqing
-  ) {
-    invitedFactions.push(chongqingFac);
-  }
-
-  //Sector-12
-  const sector12Fac = Factions[FactionNames.Sector12];
-  if (
-    !sector12Fac.isBanned &&
-    !sector12Fac.isMember &&
-    !sector12Fac.alreadyInvited &&
-    this.money >= 15000000 &&
-    this.city == CityName.Sector12
-  ) {
-    invitedFactions.push(sector12Fac);
-  }
-
-  //New Tokyo
-  const newtokyoFac = Factions[FactionNames.NewTokyo];
-  if (
-    !newtokyoFac.isBanned &&
-    !newtokyoFac.isMember &&
-    !newtokyoFac.alreadyInvited &&
-    this.money >= 20000000 &&
-    this.city == CityName.NewTokyo
-  ) {
-    invitedFactions.push(newtokyoFac);
-  }
-
-  //Aevum
-  const aevumFac = Factions[FactionNames.Aevum];
-  if (
-    !aevumFac.isBanned &&
-    !aevumFac.isMember &&
-    !aevumFac.alreadyInvited &&
-    this.money >= 40000000 &&
-    this.city == CityName.Aevum
-  ) {
-    invitedFactions.push(aevumFac);
-  }
-
-  //Ishima
-  const ishimaFac = Factions[FactionNames.Ishima];
-  if (
-    !ishimaFac.isBanned &&
-    !ishimaFac.isMember &&
-    !ishimaFac.alreadyInvited &&
-    this.money >= 30000000 &&
-    this.city == CityName.Ishima
-  ) {
-    invitedFactions.push(ishimaFac);
-  }
-
-  //Volhaven
-  const volhavenFac = Factions[FactionNames.Volhaven];
-  if (
-    !volhavenFac.isBanned &&
-    !volhavenFac.isMember &&
-    !volhavenFac.alreadyInvited &&
-    this.money >= 50000000 &&
-    this.city == CityName.Volhaven
-  ) {
-    invitedFactions.push(volhavenFac);
-  }
-
-  //Speakers for the Dead
-  const speakersforthedeadFac = Factions[FactionNames.SpeakersForTheDead];
-  if (
-    !speakersforthedeadFac.isBanned &&
-    !speakersforthedeadFac.isMember &&
-    !speakersforthedeadFac.alreadyInvited &&
-    this.skills.hacking >= 100 &&
-    this.skills.strength >= 300 &&
-    this.skills.defense >= 300 &&
-    this.skills.dexterity >= 300 &&
-    this.skills.agility >= 300 &&
-    this.numPeopleKilled >= 30 &&
-    this.karma <= -45 &&
-    !allCompanies.includes(LocationName.Sector12CIA) &&
-    !allCompanies.includes(LocationName.Sector12NSA)
-  ) {
-    invitedFactions.push(speakersforthedeadFac);
-  }
-
-  //The Dark Army
-  const thedarkarmyFac = Factions[FactionNames.TheDarkArmy];
-  if (
-    !thedarkarmyFac.isBanned &&
-    !thedarkarmyFac.isMember &&
-    !thedarkarmyFac.alreadyInvited &&
-    this.skills.hacking >= 300 &&
-    this.skills.strength >= 300 &&
-    this.skills.defense >= 300 &&
-    this.skills.dexterity >= 300 &&
-    this.skills.agility >= 300 &&
-    this.city == CityName.Chongqing &&
-    this.numPeopleKilled >= 5 &&
-    this.karma <= -45 &&
-    !allCompanies.includes(LocationName.Sector12CIA) &&
-    !allCompanies.includes(LocationName.Sector12NSA)
-  ) {
-    invitedFactions.push(thedarkarmyFac);
-  }
-
-  //The Syndicate
-  const thesyndicateFac = Factions[FactionNames.TheSyndicate];
-  if (
-    !thesyndicateFac.isBanned &&
-    !thesyndicateFac.isMember &&
-    !thesyndicateFac.alreadyInvited &&
-    this.skills.hacking >= 200 &&
-    this.skills.strength >= 200 &&
-    this.skills.defense >= 200 &&
-    this.skills.dexterity >= 200 &&
-    this.skills.agility >= 200 &&
-    (this.city == CityName.Aevum || this.city == CityName.Sector12) &&
-    this.money >= 10000000 &&
-    this.karma <= -90 &&
-    !allCompanies.includes(LocationName.Sector12CIA) &&
-    !allCompanies.includes(LocationName.Sector12NSA)
-  ) {
-    invitedFactions.push(thesyndicateFac);
-  }
-
-  //Silhouette
-  const silhouetteFac = Factions[FactionNames.Silhouette];
-  if (
-    !silhouetteFac.isBanned &&
-    !silhouetteFac.isMember &&
-    !silhouetteFac.alreadyInvited &&
-    (allPositions.includes("Chief Technology Officer") ||
-      allPositions.includes("Chief Financial Officer") ||
-      allPositions.includes("Chief Executive Officer")) &&
-    this.money >= 15000000 &&
-    this.karma <= -22
-  ) {
-    invitedFactions.push(silhouetteFac);
-  }
-
-  //Tetrads
-  const tetradsFac = Factions[FactionNames.Tetrads];
-  if (
-    !tetradsFac.isBanned &&
-    !tetradsFac.isMember &&
-    !tetradsFac.alreadyInvited &&
-    (this.city == CityName.Chongqing || this.city == CityName.NewTokyo || this.city == CityName.Ishima) &&
-    this.skills.strength >= 75 &&
-    this.skills.defense >= 75 &&
-    this.skills.dexterity >= 75 &&
-    this.skills.agility >= 75 &&
-    this.karma <= -18
-  ) {
-    invitedFactions.push(tetradsFac);
-  }
-
-  //SlumSnakes
-  const slumsnakesFac = Factions[FactionNames.SlumSnakes];
-  if (
-    !slumsnakesFac.isBanned &&
-    !slumsnakesFac.isMember &&
-    !slumsnakesFac.alreadyInvited &&
-    this.skills.strength >= 30 &&
-    this.skills.defense >= 30 &&
-    this.skills.dexterity >= 30 &&
-    this.skills.agility >= 30 &&
-    this.karma <= -9 &&
-    this.money >= 1000000
-  ) {
-    invitedFactions.push(slumsnakesFac);
-  }
-
-  //Netburners
-  const netburnersFac = Factions[FactionNames.Netburners];
-  let totalHacknetRam = 0;
-  let totalHacknetCores = 0;
-  let totalHacknetLevels = 0;
-  for (let i = 0; i < this.hacknetNodes.length; ++i) {
-    const v = this.hacknetNodes[i];
-    if (typeof v === "string") {
-      const hserver = GetServer(v);
-      if (hserver === null || !(hserver instanceof HacknetServer))
-        throw new Error("player hacknet server was not HacknetServer");
-      totalHacknetLevels += hserver.level;
-      totalHacknetRam += hserver.maxRam;
-      totalHacknetCores += hserver.cores;
-    } else {
-      totalHacknetLevels += v.level;
-      totalHacknetRam += v.ram;
-      totalHacknetCores += v.cores;
+  const nodes = this.hacknetNodes;
+  /** Checks netburner requirements. Due to structure this needed to be a separate function. */
+  function checkNetburnerRequirements(): boolean {
+    if (hacking < 80) return false;
+    let ram = 0;
+    let cores = 0;
+    let levels = 0;
+    for (const nodeOrName of nodes) {
+      if (typeof nodeOrName === "string") {
+        const hacknet = GetServer(nodeOrName);
+        if (!hacknet || !(hacknet instanceof HacknetServer)) {
+          throw new Error("player hacknet server was not HacknetServer");
+        }
+        ram += hacknet.maxRam;
+        cores += hacknet.cores;
+        levels += hacknet.level;
+        continue;
+      }
+      levels += nodeOrName.level;
+      ram += nodeOrName.ram;
+      cores += nodeOrName.cores;
     }
-  }
-  if (
-    !netburnersFac.isBanned &&
-    !netburnersFac.isMember &&
-    !netburnersFac.alreadyInvited &&
-    this.skills.hacking >= 80 &&
-    totalHacknetRam >= 8 &&
-    totalHacknetCores >= 4 &&
-    totalHacknetLevels >= 100
-  ) {
-    invitedFactions.push(netburnersFac);
+    return ram >= 8 && cores >= 4 && levels >= 100;
   }
 
-  //Tian Di Hui
-  const tiandihuiFac = Factions[FactionNames.TianDiHui];
-  if (
-    !tiandihuiFac.isBanned &&
-    !tiandihuiFac.isMember &&
-    !tiandihuiFac.alreadyInvited &&
-    this.money >= 1000000 &&
-    this.skills.hacking >= 50 &&
-    (this.city == CityName.Chongqing || this.city == CityName.NewTokyo || this.city == CityName.Ishima)
-  ) {
-    invitedFactions.push(tiandihuiFac);
-  }
+  // Check eligibility for hacking faction invites
+  const hackFactions: { factionName: FactionName; serverName: string }[] = [
+    { factionName: FactionName.CyberSec, serverName: SpecialServers.CyberSecServer },
+    { factionName: FactionName.NiteSec, serverName: SpecialServers.NiteSecServer },
+    { factionName: FactionName.TheBlackHand, serverName: SpecialServers.TheBlackHandServer },
+    { factionName: FactionName.BitRunners, serverName: SpecialServers.BitRunnersServer },
+  ];
+  hackFactions.forEach(({ factionName, serverName }) => {
+    const faction = Factions[factionName];
+    const server = GetServer(serverName);
+    if (server === null) {
+      return console.error(`Could not find server ${serverName} for faction ${factionName}`);
+    }
+    if (server.backdoorInstalled && !faction.isBanned && !faction.isMember && !faction.alreadyInvited) {
+      invitedFactions.push(faction);
+    }
+  });
 
-  //CyberSec
-  const cybersecFac = Factions[FactionNames.CyberSec];
-  const cybersecServer = GetServer(SpecialServers.CyberSecServer);
-  if (!(cybersecServer instanceof Server)) throw new Error(`${FactionNames.CyberSec} should be normal server`);
-  if (cybersecServer == null) {
-    console.error(`Could not find ${FactionNames.CyberSec} Server`);
-  } else if (
-    !cybersecFac.isBanned &&
-    !cybersecFac.isMember &&
-    cybersecServer.backdoorInstalled &&
-    !cybersecFac.alreadyInvited
-  ) {
-    invitedFactions.push(cybersecFac);
-  }
+  // Check eligibility for city factions
+  const cityFactions: { factionName: FactionName; cityName: CityName; moneyReq: number }[] = [
+    { factionName: FactionName.Chongqing, cityName: CityName.Chongqing, moneyReq: 20e6 },
+    { factionName: FactionName.Sector12, cityName: CityName.Sector12, moneyReq: 15e6 },
+    { factionName: FactionName.NewTokyo, cityName: CityName.NewTokyo, moneyReq: 20e6 },
+    { factionName: FactionName.Aevum, cityName: CityName.Aevum, moneyReq: 40e6 },
+    { factionName: FactionName.Ishima, cityName: CityName.Ishima, moneyReq: 30e6 },
+    { factionName: FactionName.Volhaven, cityName: CityName.Volhaven, moneyReq: 50e6 },
+  ];
+  cityFactions.forEach(({ factionName, cityName, moneyReq }) => {
+    const faction = Factions[factionName];
+    if (
+      !faction.isBanned &&
+      !faction.isMember &&
+      !faction.alreadyInvited &&
+      this.city === cityName &&
+      this.money > moneyReq
+    ) {
+      invitedFactions.push(faction);
+    }
+  });
+
+  // Check eligibility for megacorp factions that follow standard requirements
+  const plainMegacorps: { factionName: FactionName; locationName: LocationName }[] = [
+    { factionName: FactionName.ECorp, locationName: LocationName.AevumECorp },
+    { factionName: FactionName.MegaCorp, locationName: LocationName.Sector12MegaCorp },
+    { factionName: FactionName.BachmanAssociates, locationName: LocationName.AevumBachmanAndAssociates },
+    { factionName: FactionName.BladeIndustries, locationName: LocationName.Sector12BladeIndustries },
+    { factionName: FactionName.NWO, locationName: LocationName.VolhavenNWO },
+    { factionName: FactionName.ClarkeIncorporated, locationName: LocationName.AevumClarkeIncorporated },
+    { factionName: FactionName.OmniTekIncorporated, locationName: LocationName.VolhavenOmniTekIncorporated },
+    { factionName: FactionName.FourSigma, locationName: LocationName.Sector12FourSigma },
+    { factionName: FactionName.KuaiGongInternational, locationName: LocationName.ChongqingKuaiGongInternational },
+  ];
+  plainMegacorps.forEach((megacorp) => {
+    const faction = Factions[megacorp.factionName];
+    if (
+      !faction.isBanned &&
+      !faction.isMember &&
+      !faction.alreadyInvited &&
+      checkMegacorpRequirements(megacorp.locationName)
+    ) {
+      invitedFactions.push(faction);
+    }
+  });
+
+  // Factions with unique requirements
+  const otherFactions: { factionName: FactionName; qualifies?: boolean }[] = [
+    {
+      factionName: FactionName.Illuminati,
+      qualifies:
+        numAugmentations >= 30 &&
+        this.money >= 150e9 &&
+        hacking >= 1500 &&
+        strength >= 1200 &&
+        defense >= 1200 &&
+        dexterity >= 1200 &&
+        agility >= 1200,
+    },
+    {
+      factionName: FactionName.Daedalus,
+      qualifies:
+        numAugmentations >= BitNodeMultipliers.DaedalusAugsRequirement &&
+        this.money >= 100e9 &&
+        (hacking >= 2500 || (strength >= 1500 && defense >= 1500 && dexterity >= 1500 && agility >= 1500)),
+    },
+    {
+      factionName: FactionName.TheCovenant,
+      qualifies:
+        numAugmentations >= 20 &&
+        this.money >= 75e9 &&
+        hacking >= 850 &&
+        strength >= 850 &&
+        defense >= 850 &&
+        dexterity >= 850 &&
+        agility >= 850,
+    },
+    {
+      factionName: FactionName.FulcrumSecretTechnologies,
+      qualifies:
+        GetServer(SpecialServers.FulcrumSecretTechnologies)?.backdoorInstalled &&
+        checkMegacorpRequirements(LocationName.AevumFulcrumTechnologies),
+    },
+    {
+      factionName: FactionName.SpeakersForTheDead,
+      qualifies:
+        hacking >= 100 &&
+        strength >= 300 &&
+        defense >= 300 &&
+        dexterity >= 300 &&
+        agility >= 300 &&
+        this.numPeopleKilled >= 30 &&
+        this.karma <= -45 &&
+        !(LocationName.Sector12CIA in this.jobs) &&
+        !(LocationName.Sector12NSA in this.jobs),
+    },
+    {
+      factionName: FactionName.TheDarkArmy,
+      qualifies:
+        hacking >= 300 &&
+        strength >= 300 &&
+        defense >= 300 &&
+        dexterity >= 300 &&
+        agility >= 300 &&
+        this.city === CityName.Chongqing &&
+        this.numPeopleKilled >= 5 &&
+        this.karma <= -45 &&
+        !(LocationName.Sector12CIA in this.jobs) &&
+        !(LocationName.Sector12NSA in this.jobs),
+    },
+    {
+      factionName: FactionName.TheSyndicate,
+      qualifies:
+        hacking >= 200 &&
+        strength >= 200 &&
+        defense >= 200 &&
+        dexterity >= 200 &&
+        agility >= 200 &&
+        (this.city === CityName.Aevum || this.city === CityName.Sector12) &&
+        this.money >= 10000000 &&
+        this.karma <= -90 &&
+        !(LocationName.Sector12CIA in this.jobs) &&
+        !(LocationName.Sector12NSA in this.jobs),
+    },
+    {
+      factionName: FactionName.Silhouette,
+      qualifies:
+        (allPositions.includes("Chief Technology Officer") ||
+          allPositions.includes("Chief Financial Officer") ||
+          allPositions.includes("Chief Executive Officer")) &&
+        this.money >= 15000000 &&
+        this.karma <= -22,
+    },
+    {
+      factionName: FactionName.Tetrads,
+      qualifies:
+        (this.city == CityName.Chongqing || this.city == CityName.NewTokyo || this.city == CityName.Ishima) &&
+        strength >= 75 &&
+        defense >= 75 &&
+        dexterity >= 75 &&
+        agility >= 75 &&
+        this.karma <= -18,
+    },
+    {
+      factionName: FactionName.SlumSnakes,
+      qualifies:
+        strength >= 30 &&
+        defense >= 30 &&
+        dexterity >= 30 &&
+        agility >= 30 &&
+        this.karma <= -9 &&
+        this.money >= 1000000,
+    },
+    {
+      factionName: FactionName.Netburners,
+      qualifies: checkNetburnerRequirements(),
+    },
+    {
+      factionName: FactionName.TianDiHui,
+      qualifies:
+        this.money >= 1e6 &&
+        hacking >= 50 &&
+        (this.city == CityName.Chongqing || this.city == CityName.NewTokyo || this.city == CityName.Ishima),
+    },
+  ];
+  otherFactions.forEach(({ factionName, qualifies }) => {
+    if (!qualifies) return;
+    const faction = Factions[factionName];
+    if (!faction.isBanned && !faction.isMember && !faction.alreadyInvited) invitedFactions.push(faction);
+  });
 
   return invitedFactions;
 }
@@ -1106,7 +870,7 @@ export function queueAugmentation(this: PlayerObject, name: string): void {
 /************* Coding Contracts **************/
 export function gainCodingContractReward(
   this: PlayerObject,
-  reward: ICodingContractReward | null,
+  reward: CodingContractReward | null,
   difficulty = 1,
 ): string {
   if (reward == null || reward.type == null) {
@@ -1116,22 +880,23 @@ export function gainCodingContractReward(
   /* eslint-disable no-case-declarations */
   switch (reward.type) {
     case CodingContractRewardType.FactionReputation:
-      if (reward.name == null || !Factions[reward.name]) {
+      const faction = Factions[reward.name];
+      if (!faction) {
         // If no/invalid faction was designated, just give rewards to all factions
-        reward.type = CodingContractRewardType.FactionReputationAll;
-        return this.gainCodingContractReward(reward);
+        return this.gainCodingContractReward(
+          { name: "", type: CodingContractRewardType.FactionReputationAll },
+          difficulty,
+        );
       }
       const repGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty;
-      Factions[reward.name].playerReputation += repGain;
+      faction.playerReputation += repGain;
       return `Gained ${repGain} faction reputation for ${reward.name}`;
     case CodingContractRewardType.FactionReputationAll:
       const totalGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty;
 
       // Ignore Bladeburners and other special factions for this calculation
-      const specialFactions = [FactionNames.Bladeburners as string];
-      const factions = this.factions.slice().filter((f) => {
-        return !specialFactions.includes(f);
-      });
+      const specialFactions = [FactionName.Bladeburners, FactionName.ShadowsOfAnarchy];
+      const factions = this.factions.filter((f) => !specialFactions.includes(f));
 
       // If the player was only part of the special factions, we'll just give money
       if (factions.length == 0) {
@@ -1141,18 +906,18 @@ export function gainCodingContractReward(
 
       const gainPerFaction = Math.floor(totalGain / factions.length);
       for (const facName of factions) {
-        if (!Factions[facName]) continue;
-        Factions[facName].playerReputation += gainPerFaction;
+        const faction = Factions[facName];
+        if (!faction) continue;
+        faction.playerReputation += gainPerFaction;
       }
       return `Gained ${gainPerFaction} reputation for each of the following factions: ${factions.join(", ")}`;
     case CodingContractRewardType.CompanyReputation: {
-      if (reward.name == null || !Companies[reward.name]) {
+      if (!(reward.name in Companies)) {
         //If no/invalid company was designated, just give rewards to all factions
-        reward.type = CodingContractRewardType.FactionReputationAll;
-        return this.gainCodingContractReward(reward);
+        return this.gainCodingContractReward({ name: "", type: CodingContractRewardType.FactionReputationAll });
       }
       const repGain = CONSTANTS.CodingContractBaseCompanyRepGain * difficulty;
-      Companies[reward.name].playerReputation += repGain;
+      (Companies[reward.name] as Company).playerReputation += repGain;
       return `Gained ${repGain} company reputation for ${reward.name}`;
     }
     case CodingContractRewardType.Money:

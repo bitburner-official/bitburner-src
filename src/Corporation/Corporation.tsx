@@ -11,7 +11,7 @@ import { Player } from "@player";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 import { CorpStateName } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
 

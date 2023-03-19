@@ -10,7 +10,7 @@ import { setPlayer } from "../../Player";
 import { Sleeve } from "../Sleeve/Sleeve";
 import { Exploit } from "../../Exploits/Exploit";
 
-import { LocationName } from "../../Enums";
+import { LocationName } from "../../data/Enums";
 import { Corporation } from "../../Corporation/Corporation";
 import { Gang } from "../../Gang/Gang";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
@@ -28,6 +28,8 @@ import { CONSTANTS } from "../../Constants";
 import { Work } from "src/Work/Work";
 import { Person } from "../Person";
 import { Player as IPlayer } from "@nsdefs";
+import { FactionName } from "../../Faction/data/Enums";
+import { getEnumHelper } from "../../utils/helpers/enum";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -36,15 +38,15 @@ export class PlayerObject extends Person implements IPlayer {
   gang: Gang | null = null;
   bladeburner: Bladeburner | null = null;
   currentServer = "";
-  factions: string[] = [];
-  factionInvitations: string[] = [];
+  factions: FactionName[] = [];
+  factionInvitations: FactionName[] = [];
   hacknetNodes: (HacknetNode | string)[] = []; // HacknetNode object or hostname of Hacknet Server
   has4SData = false;
   has4SDataTixApi = false;
   hashManager = new HashManager();
   hasTixApiAccess = false;
   hasWseAccount = false;
-  jobs: Record<string, string> = {};
+  jobs: Partial<Record<LocationName, string>> = {};
   karma = 0;
   numPeopleKilled = 0;
   location = LocationName.TravelAgency;
@@ -177,6 +179,10 @@ export class PlayerObject extends Person implements IPlayer {
       type OldSourceFiles = { n: number; lvl: number }[];
       player.sourceFiles = new JSONMap((player.sourceFiles as OldSourceFiles).map(({ n, lvl }) => [n, lvl]));
     }
+    player.location = getEnumHelper(LocationName).fuzzyMatch(player.location);
+    const factionFilter = (name: string) => getEnumHelper(FactionName).isMember(name);
+    player.factions = Array.isArray(player.factions) ? player.factions.filter(factionFilter) : [];
+    player.factionInvitations = Array.isArray(player.factions) ? player.factionInvitations.filter(factionFilter) : [];
     return player;
   }
 }

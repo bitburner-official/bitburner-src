@@ -1,4 +1,4 @@
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "../../Faction/data/Enums";
 import { Sleeve } from "./Sleeve";
 
 import { Player } from "@player";
@@ -74,8 +74,8 @@ export function findPurchasableAugs(this: Sleeve): Augmentation[] {
   }
 
   for (const facName of Player.factions) {
-    if (facName === FactionNames.Bladeburners) continue;
-    if (facName === FactionNames.Netburners) continue;
+    if (facName === FactionName.Bladeburners) continue;
+    if (facName === FactionName.Netburners) continue;
     const fac = Factions[facName];
     if (!fac) continue;
 
@@ -90,7 +90,7 @@ export function findPurchasableAugs(this: Sleeve): Augmentation[] {
   }
 
   // Add the stanek sleeve aug
-  if (!ownedAugNames.includes(AugmentationNames.ZOE) && Player.factions.includes(FactionNames.ChurchOfTheMachineGod)) {
+  if (!ownedAugNames.includes(AugmentationNames.ZOE) && Player.factions.includes(FactionName.ChurchOfTheMachineGod)) {
     const aug = StaticAugmentations[AugmentationNames.ZOE];
     availableAugs.push(aug);
   }

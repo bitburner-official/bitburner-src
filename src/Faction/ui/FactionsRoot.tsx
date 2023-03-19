@@ -5,7 +5,7 @@ import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { formatFavor, formatReputation } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
-import { FactionNames } from "../data/FactionNames";
+import { FactionName } from "../data/Enums";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
@@ -59,9 +59,9 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
     Router.toFaction(faction, true);
   }
 
-  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, faction: string): void {
+  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, factionName: FactionName): void {
     if (!event.isTrusted) return;
-    joinFaction(Factions[faction]);
+    joinFaction(Factions[factionName]);
     props.rerender();
   }
 
@@ -175,7 +175,7 @@ export function FactionsRoot(): React.ReactElement {
     });
   }, []);
 
-  const allFactions = Object.values(FactionNames).map((faction) => faction as string);
+  const allFactions = Object.values(FactionName).map((faction) => faction as string);
   const allJoinedFactions = [...Player.factions];
   allJoinedFactions.sort((a, b) => allFactions.indexOf(a) - allFactions.indexOf(b));
   const invitations = Player.factionInvitations;
@@ -218,7 +218,6 @@ export function FactionsRoot(): React.ReactElement {
             </Typography>
             <Box>
               {invitations.map((facName) => {
-                if (!Factions.hasOwnProperty(facName)) return null;
                 return <FactionElement key={facName} faction={Factions[facName]} joined={false} rerender={rerender} />;
               })}
             </Box>
@@ -232,7 +231,6 @@ export function FactionsRoot(): React.ReactElement {
           <Box>
             {allJoinedFactions.length > 0 ? (
               allJoinedFactions.map((facName) => {
-                if (!Factions.hasOwnProperty(facName)) return null;
                 return <FactionElement key={facName} faction={Factions[facName]} joined={true} rerender={rerender} />;
               })
             ) : (

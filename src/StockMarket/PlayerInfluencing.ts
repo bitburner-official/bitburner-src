@@ -73,13 +73,8 @@ export function influenceStockThroughCompanyWork(
   cyclesOfWork: number,
 ): void {
   const compName = company.name;
-  let stock: Stock | null = null;
-  if (typeof compName === "string" && compName !== "") {
-    stock = StockMarket[compName];
-  }
-  if (!(stock instanceof Stock)) {
-    return;
-  }
+  const stock = StockMarket[compName];
+  if (!(stock instanceof Stock)) return;
 
   if (Math.random() < 0.002 * cyclesOfWork) {
     const change = forecastForecastChangeFromCompanyWork * performanceMult;

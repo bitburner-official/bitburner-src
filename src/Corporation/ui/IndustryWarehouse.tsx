@@ -26,7 +26,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
-import { CityName } from "../../Enums";
+import { CityName } from "../../data/Enums";
 
 interface IProps {
   corp: Corporation;

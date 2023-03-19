@@ -3,10 +3,10 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { Player } from "@player";
 import { Work, WorkType } from "./Work";
 import { influenceStockThroughCompanyWork } from "../StockMarket/PlayerInfluencing";
-import { LocationName } from "../Enums";
+import { LocationName } from "../data/Enums";
 import { calculateCompanyWorkStats } from "./Formulas";
 import { Companies } from "../Company/Companies";
-import { applyWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
+import { applyWorkStats, newWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
 import { Company } from "../Company/Company";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reputation } from "../ui/React/Reputation";
@@ -15,14 +15,14 @@ import { CONSTANTS } from "../Constants";
 import { CompanyPositions } from "../Company/CompanyPositions";
 
 interface CompanyWorkParams {
-  companyName: string;
+  companyName: LocationName;
   singularity: boolean;
 }
 
 export const isCompanyWork = (w: Work | null): w is CompanyWork => w !== null && w.type === WorkType.COMPANY;
 
 export class CompanyWork extends Work {
-  companyName: string;
+  companyName: LocationName;
   constructor(params?: CompanyWorkParams) {
     super(WorkType.COMPANY, params?.singularity ?? false);
     this.companyName = params?.companyName ?? LocationName.NewTokyoNoodleBar;
@@ -40,8 +40,13 @@ export class CompanyWork extends Work {
       focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
     }
     const company = this.getCompany();
+    const positionName = Player.jobs[company.name];
+    if (!positionName) {
+      this.finish();
+      return newWorkStats();
+    }
     return scaleWorkStats(
-      calculateCompanyWorkStats(Player, company, CompanyPositions[Player.jobs[company.name]], company.favor),
+      calculateCompanyWorkStats(Player, company, CompanyPositions[positionName], company.favor),
       focusBonus,
     );
   }

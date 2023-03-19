@@ -14,7 +14,7 @@ import { Cities } from "../Locations/Cities";
 import { IndustryType } from "./data/Enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { CorpResearchName } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";

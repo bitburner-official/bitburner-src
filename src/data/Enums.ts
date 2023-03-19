@@ -79,6 +79,9 @@ export enum GymType {
   agility = "agi",
 }
 
+type ClassType = UniversityClassType | GymType;
+export const allClasses: ClassType[] = [...Object.values(UniversityClassType), ...Object.values(GymType)];
+
 /** Names of all cities */
 export enum CityName {
   Aevum = "Aevum",
@@ -154,4 +157,11 @@ export enum LocationName {
   WorldStockExchange = "World Stock Exchange",
 
   Void = "The Void",
+}
+
+export enum ToastVariant {
+  SUCCESS = "success",
+  WARNING = "warning",
+  ERROR = "error",
+  INFO = "info",
 }

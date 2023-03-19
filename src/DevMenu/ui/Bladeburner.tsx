@@ -15,7 +15,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
-import { CityName } from "../../Enums";
+import { CityName } from "../../data/Enums";
 import { Skills as AllSkills } from "../../Bladeburner/Skills";
 import { SkillNames } from "../../Bladeburner/data/SkillNames";
 

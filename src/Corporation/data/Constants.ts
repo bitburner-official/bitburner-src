@@ -1,14 +1,13 @@
-import {
-  CorpEmployeePosition,
-  CorpIndustryName,
-  CorpMaterialName,
-  CorpResearchName,
-  CorpStateName,
-  CorpUnlockName,
-  CorpUpgradeName,
-} from "@nsdefs";
+import { CorpStateName, CorpUnlockName, CorpUpgradeName } from "@nsdefs";
 import { CONSTANTS } from "../../Constants";
-import { IndustryType, EmployeePositions } from "./Enums";
+import {
+  IndustryType,
+  EmployeePosition,
+  MaterialName,
+  ResearchBase,
+  ResearchProductSpecific,
+  allResearch,
+} from "./Enums";
 
 // For typed strings, we need runtime objects to do API typechecking against.
 
@@ -18,24 +17,11 @@ import { IndustryType, EmployeePositions } from "./Enums";
 export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "EXPORT", "SALE"],
   // TODO: remove IndustryType and EmployeePositions enums and just use the typed strings.
   /** Names of all corporation employee positions */
-  employeePositions: CorpEmployeePosition[] = Object.values(EmployeePositions),
+  employeePositions = Object.values(EmployeePosition),
   /** Names of all industries. */
-  industryNames: CorpIndustryName[] = Object.values(IndustryType),
+  industryNames = Object.values(IndustryType),
   /** Names of all materials */
-  materialNames: CorpMaterialName[] = [
-    "Water",
-    "Ore",
-    "Minerals",
-    "Food",
-    "Plants",
-    "Metal",
-    "Hardware",
-    "Chemicals",
-    "Drugs",
-    "Robots",
-    "AI Cores",
-    "Real Estate",
-  ],
+  materialNames = Object.values(MaterialName),
   /** Names of all one-time corporation-wide unlocks */
   unlockNames: CorpUnlockName[] = [
     "Export",
@@ -61,34 +47,11 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
     "Project Insight",
   ],
   /** Names of all reasearches common to all industries */
-  researchNamesBase: CorpResearchName[] = [
-    "Hi-Tech R&D Laboratory",
-    "AutoBrew",
-    "AutoPartyManager",
-    "Automatic Drug Administration",
-    "Bulk Purchasing",
-    "CPH4 Injections",
-    "Drones",
-    "Drones - Assembly",
-    "Drones - Transport",
-    "Go-Juice",
-    "HRBuddy-Recruitment",
-    "HRBuddy-Training",
-    "Market-TA.I",
-    "Market-TA.II",
-    "Overclock",
-    "Self-Correcting Assemblers",
-    "Sti.mu",
-  ],
+  researchNamesBase = Object.values(ResearchBase),
   /** Names of all researches only available to product industries */
-  researchNamesProductOnly: CorpResearchName[] = [
-    "uPgrade: Capacity.I",
-    "uPgrade: Capacity.II",
-    "uPgrade: Dashboard",
-    "uPgrade: Fulcrum",
-  ],
+  researchNamesProductOnly = Object.values(ResearchProductSpecific),
   /** Names of all researches */
-  researchNames: CorpResearchName[] = [...researchNamesBase, ...researchNamesProductOnly],
+  researchNames = allResearch,
   initialShares = 1e9,
   /** When selling large number of shares, price is dynamically updated for every batch of this amount */
   sharesPerPriceUpdate = 1e6,

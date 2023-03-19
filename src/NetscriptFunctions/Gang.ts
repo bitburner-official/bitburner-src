@@ -1,5 +1,4 @@
-import { FactionNames } from "../Faction/data/FactionNames";
-import { GangConstants } from "../Gang/data/Constants";
+import { FactionName } from "../Faction/data/Enums";
 import { Player } from "@player";
 import { Gang } from "../Gang/Gang";
 import { AllGangs } from "../Gang/AllGangs";
@@ -11,6 +10,8 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 
 import { Gang as IGang, EquipmentStats, GangOtherInfoObject } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import { getEnumHelper } from "../utils/helpers/enum";
+import { gangFactions } from "../Gang/data/Enums";
 
 export function NetscriptGang(): InternalAPI<IGang> {
   /** Functions as an API check and also returns the gang object */
@@ -36,14 +37,10 @@ export function NetscriptGang(): InternalAPI<IGang> {
 
   return {
     createGang: (ctx) => (_faction) => {
-      const faction = helpers.string(ctx, "faction", _faction);
-      // this list is copied from Faction/ui/Root.tsx
+      const faction = getEnumHelper(gangFactions).nsGetMember(ctx, "faction", _faction);
+      if (!Player.canAccessGang() || Player.gang || !Player.factions.includes(faction)) return false;
 
-      if (!Player.canAccessGang() || !GangConstants.Names.includes(faction)) return false;
-      if (Player.gang) return false;
-      if (!Player.factions.includes(faction)) return false;
-
-      const isHacking = faction === FactionNames.NiteSec || faction === FactionNames.TheBlackHand;
+      const isHacking = faction === FactionName.NiteSec || faction === FactionName.TheBlackHand;
       Player.startGang(faction, isHacking);
       return true;
     },

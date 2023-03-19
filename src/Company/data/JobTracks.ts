@@ -1,4 +1,4 @@
-import { JobName } from "../../Enums";
+import { JobName } from "../../data/Enums";
 export const SoftwareCompanyPositions: JobName[] = [
   JobName.software0,
   JobName.software1,

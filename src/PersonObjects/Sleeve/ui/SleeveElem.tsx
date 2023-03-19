@@ -1,6 +1,6 @@
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { FactionWorkType } from "../../../Enums";
+import { FactionWorkType, CrimeType, LocationName } from "../../../data/Enums";
 import { CONSTANTS } from "../../../Constants";
 import { Player } from "@player";
 import { formatPercent } from "../../../ui/formatNumber";
@@ -11,9 +11,9 @@ import { SleeveAugmentationsModal } from "./SleeveAugmentationsModal";
 import { EarningsElement, StatsElement } from "./StatsElement";
 import { TaskSelector } from "./TaskSelector";
 import { TravelModal } from "./TravelModal";
-import { findCrime } from "../../../Crime/CrimeHelpers";
-import { CrimeType } from "../../../Enums";
 import { WorkType } from "../Work/Work";
+import { getEnumHelper } from "../../../utils/helpers/enum";
+import { FactionName } from "../../../Faction/data/Enums";
 
 function getWorkDescription(sleeve: Sleeve, progress: number): string {
   const work = sleeve.currentWork;
@@ -74,13 +74,13 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
       case "------":
         break;
       case "Work for Company":
-        props.sleeve.workForCompany(abc[1]);
+        props.sleeve.workForCompany(getEnumHelper(LocationName).fuzzyMatch(abc[1]));
         break;
       case "Work for Faction":
-        props.sleeve.workForFaction(abc[1], abc[2]);
+        props.sleeve.workForFaction(getEnumHelper(FactionName).fuzzyMatch(abc[1]), abc[2]);
         break;
       case "Commit Crime":
-        props.sleeve.commitCrime(findCrime(abc[1])?.type ?? CrimeType.shoplift);
+        props.sleeve.commitCrime(getEnumHelper(CrimeType).fuzzyMatch(abc[1]));
         break;
       case "Take University Course":
         props.sleeve.takeUniversityCourse(abc[2], abc[1]);

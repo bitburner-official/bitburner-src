@@ -1,4 +1,4 @@
-import { FactionNames } from "../Faction/data/FactionNames";
+import { FactionName } from "../Faction/data/Enums";
 import { Fragment } from "./Fragment";
 import { ActiveFragment } from "./ActiveFragment";
 import { FragmentType } from "./FragmentType";
@@ -41,7 +41,7 @@ export class StaneksGift extends BaseGift {
       af.numCharge += threads / af.highestCharge;
     }
 
-    const cotmg = Factions[FactionNames.ChurchOfTheMachineGod];
+    const cotmg = Factions[FactionName.ChurchOfTheMachineGod];
     cotmg.playerReputation += (Player.mults.faction_rep * (Math.pow(threads, 0.95) * (cotmg.favor + 100))) / 1000;
     this.justCharged = true;
   }

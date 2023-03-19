@@ -1,4 +1,4 @@
-import { CityName, LocationName } from "../Enums";
+import { CityName, LocationName } from "../data/Enums";
 import { LocationType } from "./LocationTypeEnum";
 
 interface IInfiltrationMetadata {

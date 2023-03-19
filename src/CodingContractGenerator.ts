@@ -1,9 +1,4 @@
-import {
-  CodingContract,
-  CodingContractRewardType,
-  CodingContractTypes,
-  ICodingContractReward,
-} from "./CodingContracts";
+import { CodingContract, CodingContractRewardType, CodingContractTypes, CodingContractReward } from "./CodingContracts";
 import { Factions } from "./Faction/Factions";
 import { Player } from "@player";
 import { GetServer, GetAllServers } from "./Server/AllServers";
@@ -13,6 +8,7 @@ import { BaseServer } from "./Server/BaseServer";
 
 import { getRandomInt } from "./utils/helpers/getRandomInt";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
+import { LocationName } from "./data/Enums";
 
 export function generateRandomContract(): void {
   // First select a random problem type
@@ -95,14 +91,7 @@ export function generateContract(params: IGenerateContractParams): void {
 function sanitizeRewardType(rewardType: CodingContractRewardType): CodingContractRewardType {
   let type = rewardType; // Create copy
 
-  const factionsThatAllowHacking = Player.factions.filter((fac) => {
-    try {
-      return Factions[fac].getInfo().offerHackingWork;
-    } catch (e) {
-      console.error(`Error when trying to filter Hacking Factions for Coding Contract Generation: ${e}`);
-      return false;
-    }
-  });
+  const factionsThatAllowHacking = Player.factions.filter((name) => Factions[name].getInfo().offerHackingWork);
   if (type === CodingContractRewardType.FactionReputation && factionsThatAllowHacking.length === 0) {
     type = CodingContractRewardType.CompanyReputation;
   }
@@ -123,39 +112,29 @@ function getRandomProblemType(): string {
   return problemTypes[randIndex];
 }
 
-function getRandomReward(): ICodingContractReward {
-  const reward: ICodingContractReward = {
-    name: "",
-    type: getRandomInt(0, CodingContractRewardType.Money),
-  };
-  reward.type = sanitizeRewardType(reward.type);
+function getRandomReward(): CodingContractReward {
+  const rewardType = sanitizeRewardType(getRandomInt(0, CodingContractRewardType.Money));
 
   // Add additional information based on the reward type
   const factionsThatAllowHacking = Player.factions.filter((fac) => Factions[fac].getInfo().offerHackingWork);
 
-  switch (reward.type) {
-    case CodingContractRewardType.FactionReputation: {
+  switch (rewardType) {
+    case CodingContractRewardType.FactionReputation:
       // Get a random faction that player is a part of. That
       // faction must allow hacking contracts
       const numFactions = factionsThatAllowHacking.length;
       const randFaction = factionsThatAllowHacking[getRandomInt(0, numFactions - 1)];
-      reward.name = randFaction;
-      break;
-    }
-    case CodingContractRewardType.CompanyReputation: {
-      const allJobs = Object.keys(Player.jobs);
+      return { name: randFaction, type: rewardType };
+    case CodingContractRewardType.CompanyReputation:
+      const allJobs = Object.keys(Player.jobs) as LocationName[];
       if (allJobs.length > 0) {
-        reward.name = allJobs[getRandomInt(0, allJobs.length - 1)];
+        return { name: allJobs[getRandomInt(0, allJobs.length - 1)], type: rewardType };
       } else {
-        reward.type = CodingContractRewardType.Money;
+        return { name: "", type: CodingContractRewardType.Money };
       }
-      break;
-    }
     default:
-      break;
+      return { name: "", type: rewardType };
   }
-
-  return reward;
 }
 
 function getRandomServer(): BaseServer {
@@ -182,14 +161,14 @@ function getRandomServer(): BaseServer {
 
 function getRandomFilename(
   server: BaseServer,
-  reward: ICodingContractReward = { name: "", type: 0 },
+  reward: CodingContractReward = { name: "", type: CodingContractRewardType.Money },
 ): ContractFilePath {
   let contractFn = `contract-${getRandomInt(0, 1e6)}`;
 
   for (let i = 0; i < 1000; ++i) {
     if (
-      server.contracts.filter((c: CodingContract) => {
-        return c.fn === contractFn;
+      server.contracts.filter((contract) => {
+        return contract.fn === contractFn;
       }).length <= 0
     ) {
       break;

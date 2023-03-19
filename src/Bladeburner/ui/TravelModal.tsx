@@ -2,7 +2,7 @@ import React from "react";
 import { Bladeburner } from "../Bladeburner";
 import { WorldMap } from "../../ui/React/WorldMap";
 import { Modal } from "../../ui/React/Modal";
-import { CityName } from "../../Enums";
+import { CityName } from "../../data/Enums";
 import { Settings } from "../../Settings/Settings";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";

@@ -9,8 +9,9 @@ import { GetServer } from "../Server/AllServers";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { FactionName } from "../Faction/data/Enums";
 import { Server } from "../Server/Server";
+import { MessageFilenames } from "../data/HiddenEnums";
 
 //Sends message to player, including a pop up
 function sendMessage(name: MessageFilename, forced = false): void {
@@ -103,8 +104,8 @@ export enum MessageFilename {
   RedPill = "icarus.msg",
 }
 
-// This type ensures that all members of the MessageFilename enum are valid keys
-const Messages: Record<MessageFilename, Message> = {
+//Reset
+const Messages: Record<MessageFilenames, Message> = {
   //jump3R Messages
   [MessageFilename.Jumper0]: new Message(
     MessageFilename.Jumper0,
@@ -119,7 +120,7 @@ const Messages: Record<MessageFilename, Message> = {
 
   [MessageFilename.Jumper1]: new Message(
     MessageFilename.Jumper1,
-    `Soon you will be contacted by a hacking group known as ${FactionNames.CyberSec}. ` +
+    `Soon you will be contacted by a hacking group known as ${FactionName.CyberSec}. ` +
       "They can help you with your search. \n\n" +
       "You should join them, garner their favor, and " +
       "exploit them for their Augmentations. But do not trust them. " +
@@ -131,14 +132,14 @@ const Messages: Record<MessageFilename, Message> = {
     MessageFilename.Jumper2,
     "Do not try to save the world. There is no world to save. If " +
       "you want to find the truth, worry only about yourself. Ethics and " +
-      `morals will get you killed. \n\nWatch out for a hacking group known as ${FactionNames.NiteSec}.` +
+      `morals will get you killed. \n\nWatch out for a hacking group known as ${FactionName.NiteSec}.` +
       "\n\n-jump3R",
   ),
 
   [MessageFilename.Jumper3]: new Message(
     MessageFilename.Jumper3,
     "You must learn to walk before you can run. And you must " +
-      `run before you can fly. Look for ${FactionNames.TheBlackHand}. \n\n` +
+      `run before you can fly. Look for ${FactionName.TheBlackHand}. \n\n` +
       "I.I.I.I \n\n-jump3R",
   ),
 
@@ -156,7 +157,7 @@ const Messages: Record<MessageFilename, Message> = {
       "your talents. If you join us, you can put your skills to good use and change " +
       "the world for the better. If you join us, we can unlock your full potential. \n\n" +
       "But first, you must pass our test. Find and install the backdoor on our server. \n\n" +
-      `-${FactionNames.CyberSec}`,
+      `-${FactionName.CyberSec}`,
   ),
 
   [MessageFilename.NiteSecTest]: new Message(
@@ -167,7 +168,7 @@ const Messages: Record<MessageFilename, Message> = {
       "and ideas with bullets. \n\n" +
       "Join us, and people will fear you, too. \n\n" +
       "Find and install the backdoor on our server, avmnite-02h. Then, we will contact you again." +
-      `\n\n-${FactionNames.NiteSec}`,
+      `\n\n-${FactionName.NiteSec}`,
   ),
 
   [MessageFilename.BitRunnersTest]: new Message(

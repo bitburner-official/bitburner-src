@@ -22,7 +22,7 @@ import { BladeburnerConstants } from "./data/Constants";
 import { formatExp, formatMoney, formatPercent, formatBigNumber, formatStamina } from "../ui/formatNumber";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { addOffset } from "../utils/helpers/addOffset";
-import { Factions, factionExists } from "../Faction/Factions";
+import { Factions } from "../Faction/Factions";
 import { calculateHospitalizationCost } from "../Hospital/Hospital";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Settings } from "../Settings/Settings";
@@ -30,13 +30,13 @@ import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { getTimestamp } from "../utils/helpers/getTimestamp";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { WorkerScript } from "../Netscript/WorkerScript";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { FactionName } from "../Faction/data/Enums";
 import { KEY } from "../utils/helpers/keyCodes";
 import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfiltrateWork";
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
-import { CityName } from "../Enums";
-import { getRandomMember } from "../utils/helpers/enum";
+import { CityName } from "../data/Enums";
+import { getEnumHelper } from "../utils/helpers/enum";
 
 export interface BlackOpsAttempt {
   error?: string;
@@ -296,7 +296,7 @@ export class Bladeburner {
 
   prestige(): void {
     this.resetAction();
-    const bladeburnerFac = Factions[FactionNames.Bladeburners];
+    const bladeburnerFac = Factions[FactionName.Bladeburners];
     if (this.rank >= BladeburnerConstants.RankNeededForFaction) {
       joinFaction(bladeburnerFac);
     }
@@ -852,8 +852,9 @@ export class Bladeburner {
   }
 
   triggerMigration(sourceCityName: CityName): void {
-    let destCityName = getRandomMember(CityName);
-    while (destCityName === sourceCityName) destCityName = getRandomMember(CityName);
+    const cityHelper = getEnumHelper(CityName);
+    let destCityName = cityHelper.random();
+    while (destCityName === sourceCityName) destCityName = cityHelper.random();
 
     const destCity = this.cities[destCityName];
     const sourceCity = this.cities[sourceCityName];
@@ -886,13 +887,14 @@ export class Bladeburner {
 
   randomEvent(): void {
     const chance = Math.random();
+    const cityHelper = getEnumHelper(CityName);
 
     // Choose random source/destination city for events
-    const sourceCityName = getRandomMember(CityName);
+    const sourceCityName = cityHelper.random();
     const sourceCity = this.cities[sourceCityName];
 
-    let destCityName = getRandomMember(CityName);
-    while (destCityName === sourceCityName) destCityName = getRandomMember(CityName);
+    let destCityName = cityHelper.random();
+    while (destCityName === sourceCityName) destCityName = cityHelper.random();
     const destCity = this.cities[destCityName];
 
     if (chance <= 0.05) {
@@ -1601,28 +1603,16 @@ export class Bladeburner {
   }
 
   changeRank(person: Person, change: number): void {
-    if (isNaN(change)) {
-      throw new Error("NaN passed into Bladeburner.changeRank()");
-    }
+    if (isNaN(change)) throw new Error("NaN passed into Bladeburner.changeRank()");
     this.rank += change;
-    if (this.rank < 0) {
-      this.rank = 0;
-    }
+    if (this.rank < 0) this.rank = 0;
     this.maxRank = Math.max(this.rank, this.maxRank);
 
-    const bladeburnersFactionName = FactionNames.Bladeburners;
-    if (factionExists(bladeburnersFactionName)) {
-      const bladeburnerFac = Factions[bladeburnersFactionName];
-      if (!bladeburnerFac) {
-        throw new Error(
-          `Could not properly get ${FactionNames.Bladeburners} Faction object in ${FactionNames.Bladeburners} UI Overview Faction button`,
-        );
-      }
-      if (bladeburnerFac.isMember) {
-        const favorBonus = 1 + bladeburnerFac.favor / 100;
-        bladeburnerFac.playerReputation +=
-          BladeburnerConstants.RankToFactionRepFactor * change * person.mults.faction_rep * favorBonus;
-      }
+    const bladeburnerFac = Factions[FactionName.Bladeburners];
+    if (bladeburnerFac.isMember) {
+      const favorBonus = 1 + bladeburnerFac.favor / 100;
+      bladeburnerFac.playerReputation +=
+        BladeburnerConstants.RankToFactionRepFactor * change * person.mults.faction_rep * favorBonus;
     }
 
     // Gain skill points
@@ -2363,12 +2353,12 @@ export class Bladeburner {
   }
 
   joinBladeburnerFactionNetscriptFn(workerScript: WorkerScript): boolean {
-    const bladeburnerFac = Factions[FactionNames.Bladeburners];
+    const bladeburnerFac = Factions[FactionName.Bladeburners];
     if (bladeburnerFac.isMember) {
       return true;
     } else if (this.rank >= BladeburnerConstants.RankNeededForFaction) {
       joinFaction(bladeburnerFac);
-      workerScript.log("bladeburner.joinBladeburnerFaction", () => `Joined ${FactionNames.Bladeburners} faction.`);
+      workerScript.log("bladeburner.joinBladeburnerFaction", () => `Joined ${FactionName.Bladeburners} faction.`);
       return true;
     } else {
       workerScript.log(

@@ -2,7 +2,7 @@
  * Metadata for constructing Location objects for all Locations
  * in the game
  */
-import { CityName, LocationName } from "../../Enums";
+import { CityName, LocationName } from "../../data/Enums";
 import { IConstructorParams } from "../Location";
 import { LocationType } from "../LocationTypeEnum";
 

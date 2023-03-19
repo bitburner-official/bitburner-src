@@ -1,10 +1,10 @@
-import { EmployeePositions } from "./data/Enums";
+import { EmployeePosition } from "./data/Enums";
 import * as corpConstants from "./data/Constants";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { Industry } from "./Industry";
 import { Corporation } from "./Corporation";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { CityName } from "../Enums";
+import { CityName } from "../data/Enums";
 
 interface IParams {
   loc?: CityName;
@@ -35,33 +35,33 @@ export class OfficeSpace {
   teaPending = false;
   partyMult = 1;
 
-  employeeProd: Record<EmployeePositions | "total", number> = {
-    [EmployeePositions.Operations]: 0,
-    [EmployeePositions.Engineer]: 0,
-    [EmployeePositions.Business]: 0,
-    [EmployeePositions.Management]: 0,
-    [EmployeePositions.RandD]: 0,
-    [EmployeePositions.Intern]: 0,
-    [EmployeePositions.Unassigned]: 0,
+  employeeProd: Record<EmployeePosition | "total", number> = {
+    [EmployeePosition.Operations]: 0,
+    [EmployeePosition.Engineer]: 0,
+    [EmployeePosition.Business]: 0,
+    [EmployeePosition.Management]: 0,
+    [EmployeePosition.RandD]: 0,
+    [EmployeePosition.Intern]: 0,
+    [EmployeePosition.Unassigned]: 0,
     total: 0,
   };
-  employeeJobs: Record<EmployeePositions, number> = {
-    [EmployeePositions.Operations]: 0,
-    [EmployeePositions.Engineer]: 0,
-    [EmployeePositions.Business]: 0,
-    [EmployeePositions.Management]: 0,
-    [EmployeePositions.RandD]: 0,
-    [EmployeePositions.Intern]: 0,
-    [EmployeePositions.Unassigned]: 0,
+  employeeJobs: Record<EmployeePosition, number> = {
+    [EmployeePosition.Operations]: 0,
+    [EmployeePosition.Engineer]: 0,
+    [EmployeePosition.Business]: 0,
+    [EmployeePosition.Management]: 0,
+    [EmployeePosition.RandD]: 0,
+    [EmployeePosition.Intern]: 0,
+    [EmployeePosition.Unassigned]: 0,
   };
-  employeeNextJobs: Record<EmployeePositions, number> = {
-    [EmployeePositions.Operations]: 0,
-    [EmployeePositions.Engineer]: 0,
-    [EmployeePositions.Business]: 0,
-    [EmployeePositions.Management]: 0,
-    [EmployeePositions.RandD]: 0,
-    [EmployeePositions.Intern]: 0,
-    [EmployeePositions.Unassigned]: 0,
+  employeeNextJobs: Record<EmployeePosition, number> = {
+    [EmployeePosition.Operations]: 0,
+    [EmployeePosition.Engineer]: 0,
+    [EmployeePosition.Business]: 0,
+    [EmployeePosition.Management]: 0,
+    [EmployeePosition.RandD]: 0,
+    [EmployeePosition.Intern]: 0,
+    [EmployeePosition.Unassigned]: 0,
   };
 
   constructor(params: IParams = {}) {
@@ -77,12 +77,12 @@ export class OfficeSpace {
     // HRBuddy AutoRecruitment and Interning
     if (industry.hasResearch("HRBuddy-Recruitment") && !this.atCapacity()) {
       this.hireRandomEmployee(
-        industry.hasResearch("HRBuddy-Training") ? EmployeePositions.Intern : EmployeePositions.Unassigned,
+        industry.hasResearch("HRBuddy-Training") ? EmployeePosition.Intern : EmployeePosition.Unassigned,
       );
     }
 
     // Update employee jobs and job counts
-    for (const [pos, jobCount] of Object.entries(this.employeeNextJobs) as [EmployeePositions, number][]) {
+    for (const [pos, jobCount] of Object.entries(this.employeeNextJobs) as [EmployeePosition, number][]) {
       this.employeeJobs[pos] = jobCount;
     }
 
@@ -137,8 +137,8 @@ export class OfficeSpace {
       0.0015 *
       marketCycles *
       (this.totalEmployees -
-        this.employeeJobs[EmployeePositions.Unassigned] +
-        this.employeeJobs[EmployeePositions.Intern] * 9);
+        this.employeeJobs[EmployeePosition.Unassigned] +
+        this.employeeJobs[EmployeePosition.Intern] * 9);
 
     this.calculateEmployeeProductivity(corporation, industry);
     if (this.totalEmployees === 0) {
@@ -162,26 +162,26 @@ export class OfficeSpace {
 
     let total = 0;
     const exp = this.totalExp / this.totalEmployees || 0;
-    for (const name of Object.keys(this.employeeProd) as (EmployeePositions | "total")[]) {
+    for (const name of Object.keys(this.employeeProd) as (EmployeePosition | "total")[]) {
       let prodMult = 0;
       switch (name) {
-        case EmployeePositions.Operations:
+        case EmployeePosition.Operations:
           prodMult = 0.6 * effInt + 0.1 * effCha + exp + 0.5 * effCre + effEff;
           break;
-        case EmployeePositions.Engineer:
+        case EmployeePosition.Engineer:
           prodMult = effInt + 0.1 * effCha + 1.5 * exp + effEff;
           break;
-        case EmployeePositions.Business:
+        case EmployeePosition.Business:
           prodMult = 0.4 * effInt + effCha + 0.5 * exp;
           break;
-        case EmployeePositions.Management:
+        case EmployeePosition.Management:
           prodMult = 2 * effCha + exp + 0.2 * effCre + 0.7 * effEff;
           break;
-        case EmployeePositions.RandD:
+        case EmployeePosition.RandD:
           prodMult = 1.5 * effInt + 0.8 * exp + effCre + 0.5 * effEff;
           break;
-        case EmployeePositions.Unassigned:
-        case EmployeePositions.Intern:
+        case EmployeePosition.Unassigned:
+        case EmployeePosition.Intern:
         case "total":
           continue;
         default:
@@ -195,7 +195,7 @@ export class OfficeSpace {
     this.employeeProd.total = total;
   }
 
-  hireRandomEmployee(position: EmployeePositions): boolean {
+  hireRandomEmployee(position: EmployeePosition): boolean {
     if (this.atCapacity()) return false;
     if (document.getElementById("cmpy-mgmt-hire-employee-popup") != null) return false;
 
@@ -215,17 +215,17 @@ export class OfficeSpace {
     return true;
   }
 
-  autoAssignJob(job: EmployeePositions, target: number): boolean {
-    if (job === EmployeePositions.Unassigned) {
+  autoAssignJob(job: EmployeePosition, target: number): boolean {
+    if (job === EmployeePosition.Unassigned) {
       throw new Error("internal autoAssignJob function called with EmployeePositions.Unassigned");
     }
     const diff = target - this.employeeNextJobs[job];
 
     if (diff === 0) return true;
     // We are already at the desired number
-    else if (diff <= this.employeeNextJobs[EmployeePositions.Unassigned]) {
+    else if (diff <= this.employeeNextJobs[EmployeePosition.Unassigned]) {
       // This covers both a negative diff (reducing the amount of employees in position) and a positive (increasing and using up unassigned employees)
-      this.employeeNextJobs[EmployeePositions.Unassigned] -= diff;
+      this.employeeNextJobs[EmployeePosition.Unassigned] -= diff;
       this.employeeNextJobs[job] = target;
       return true;
     }
