@@ -14,5 +14,5 @@ readonly hacknet: Hacknet;
 
 ## Remarks
 
-RAM cost: 4 GB
+RAM cost: 4 GB.
 

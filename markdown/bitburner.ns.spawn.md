@@ -9,7 +9,7 @@ Terminate current script and start another in 10 seconds.
 **Signature:**
 
 ```typescript
-spawn(script: string, numThreads?: number, ...args: (string | number | boolean)[]): void;
+spawn(script: string, threadOrOptions?: number | RunOptions, ...args: (string | number | boolean)[]): void;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ spawn(script: string, numThreads?: number, ...args: (string | number | boolean)[
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  script | string | Filename of script to execute. |
-|  numThreads | number | _(Optional)_ Integer number of threads for new script. Defaults to 1. |
+|  threadOrOptions | number \| [RunOptions](./bitburner.runoptions.md) | _(Optional)_ Either an integer number of threads for new script, or a [RunOptions](./bitburner.runoptions.md) object. Threads defaults to 1. |
 |  args | (string \| number \| boolean)\[\] | Additional arguments to pass into the new script that is being run. |
 
 **Returns:**
@@ -32,7 +32,7 @@ Terminates the current script, and then after a delay of about 10 seconds it wil
 
 Because this function immediately terminates the script, it does not have a return value.
 
-Running this function with a numThreads argument of 0 or less will cause a runtime error.
+Running this function with 0 or fewer threads will cause a runtime error.
 
 ## Example
 

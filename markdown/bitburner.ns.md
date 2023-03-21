@@ -72,7 +72,7 @@ export async function main(ns) {
 |  [deleteServer(host)](./bitburner.ns.deleteserver.md) | Delete a purchased server. |
 |  [disableLog(fn)](./bitburner.ns.disablelog.md) | Disables logging for the given function. |
 |  [enableLog(fn)](./bitburner.ns.enablelog.md) | Enable logging for a certain function. |
-|  [exec(script, hostname, numThreads, args)](./bitburner.ns.exec.md) | Start another script on any server. |
+|  [exec(script, hostname, threadOrOptions, args)](./bitburner.ns.exec.md) | Start another script on any server. |
 |  [exit()](./bitburner.ns.exit.md) | Terminates the current script immediately. |
 |  [fileExists(filename, host)](./bitburner.ns.fileexists.md) | Check if a file exists. |
 |  [flags(schema)](./bitburner.ns.flags.md) | Parse command line flags. |
@@ -152,15 +152,15 @@ export async function main(ns) {
 |  [renamePurchasedServer(hostname, newName)](./bitburner.ns.renamepurchasedserver.md) | Rename a purchased server. |
 |  [resizeTail(width, height, pid)](./bitburner.ns.resizetail.md) | Resize a tail window. |
 |  [rm(name, host)](./bitburner.ns.rm.md) | Delete a file. |
-|  [run(script, numThreads, args)](./bitburner.ns.run.md) | Start another script on the current server. |
+|  [run(script, threadOrOptions, args)](./bitburner.ns.run.md) | Start another script on the current server. |
 |  [scan(host)](./bitburner.ns.scan.md) | Get the list of servers connected to a server. |
 |  [scp(files, destination, source)](./bitburner.ns.scp.md) | Copy file between servers. |
 |  [scriptKill(script, host)](./bitburner.ns.scriptkill.md) | Kill all scripts with a filename. |
 |  [scriptRunning(script, host)](./bitburner.ns.scriptrunning.md) | Check if any script with a filename is running. |
 |  [serverExists(host)](./bitburner.ns.serverexists.md) | Returns a boolean denoting whether or not the specified server exists. |
-|  [share()](./bitburner.ns.share.md) | Share your computer with your factions. |
+|  [share()](./bitburner.ns.share.md) | Share the server's ram with your factions. |
 |  [sleep(millis)](./bitburner.ns.sleep.md) | Suspends the script for n milliseconds. |
-|  [spawn(script, numThreads, args)](./bitburner.ns.spawn.md) | Terminate current script and start another in 10 seconds. |
+|  [spawn(script, threadOrOptions, args)](./bitburner.ns.spawn.md) | Terminate current script and start another in 10 seconds. |
 |  [sprintf(format, args)](./bitburner.ns.sprintf.md) | Format a string. |
 |  [sqlinject(host)](./bitburner.ns.sqlinject.md) | Runs SQLInject.exe on a server. |
 |  [tail(fn, host, args)](./bitburner.ns.tail.md) | Open the tail window of a script. |

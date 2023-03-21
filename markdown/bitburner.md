@@ -86,6 +86,7 @@
 |  [RecentScript](./bitburner.recentscript.md) |  |
 |  [ReputationFormulas](./bitburner.reputationformulas.md) | Reputation formulas |
 |  [RunningScript](./bitburner.runningscript.md) |  |
+|  [RunOptions](./bitburner.runoptions.md) |  |
 |  [Server](./bitburner.server.md) | A single server. |
 |  [Singularity](./bitburner.singularity.md) | Singularity API |
 |  [Skills](./bitburner.skills.md) |  |

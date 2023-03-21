@@ -9,7 +9,7 @@ Start another script on the current server.
 **Signature:**
 
 ```typescript
-run(script: string, numThreads?: number, ...args: (string | number | boolean)[]): number;
+run(script: string, threadOrOptions?: number | RunOptions, ...args: (string | number | boolean)[]): number;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ run(script: string, numThreads?: number, ...args: (string | number | boolean)[])
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  script | string | Filename of script to run. |
-|  numThreads | number | _(Optional)_ Integer number of threads for new script. Defaults to 1. |
+|  threadOrOptions | number \| [RunOptions](./bitburner.runoptions.md) | _(Optional)_ Either an integer number of threads for new script, or a [RunOptions](./bitburner.runoptions.md) object. Threads defaults to 1. |
 |  args | (string \| number \| boolean)\[\] | Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the second argument numThreads must be filled in with a value. |
 
 **Returns:**
@@ -32,11 +32,13 @@ RAM cost: 1 GB
 
 Run a script as a separate process. This function can only be used to run scripts located on the current server (the server running the script that calls this function). Requires a significant amount of RAM to run this command.
 
+The second argument is either a thread count, or a [RunOptions](./bitburner.runoptions.md) object that can also specify the number of threads (among other things).
+
 If the script was successfully started, then this functions returns the PID of that script. Otherwise, it returns 0.
 
 PID stands for Process ID. The PID is a unique identifier for each script. The PID will always be a positive integer.
 
-Running this function with a numThreads argument of 0 or less will cause a runtime error.
+Running this function with 0 or fewer threads will cause a runtime error.
 
 ## Example
 
@@ -46,7 +48,7 @@ Running this function with a numThreads argument of 0 or less will cause a runti
 ns.run("foo.js");
 
 //The following example will run ‘foo.js’ but with 5 threads instead of single-threaded:
-ns.run("foo.js", 5);
+ns.run("foo.js", {threads: 5});
 
 //This next example will run ‘foo.js’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
 ns.run("foo.js", 1, 'foodnstuff');

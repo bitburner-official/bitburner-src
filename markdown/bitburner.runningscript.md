@@ -27,5 +27,6 @@ interface RunningScript
 |  [pid](./bitburner.runningscript.pid.md) |  | number | Process ID. Must be an integer |
 |  [ramUsage](./bitburner.runningscript.ramusage.md) |  | number | How much RAM this script uses for ONE thread |
 |  [server](./bitburner.runningscript.server.md) |  | string | Hostname of the server on which this script runs |
+|  [temporary](./bitburner.runningscript.temporary.md) |  | boolean | Whether this RunningScript is excluded from saves |
 |  [threads](./bitburner.runningscript.threads.md) |  | number | Number of threads that this script runs with |
 
