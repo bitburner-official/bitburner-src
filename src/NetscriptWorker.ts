@@ -32,8 +32,7 @@ import { simple as walksimple } from "acorn-walk";
 import { areFilesEqual } from "./Terminal/DirectoryHelpers";
 import { Terminal } from "./Terminal";
 import { ScriptArg } from "@nsdefs";
-import { handleUnknownError } from "./Netscript/NetscriptHelpers";
-import { PositiveInteger } from "./types";
+import { handleUnknownError, CompleteRunOptions } from "./Netscript/NetscriptHelpers";
 
 export const NetscriptPorts: Map<PortNumber, Port> = new Map();
 
@@ -402,7 +401,7 @@ export function runScriptFromScript(
   scriptname: string,
   args: ScriptArg[],
   workerScript: WorkerScript,
-  threads = 1 as PositiveInteger,
+  runOpts: CompleteRunOptions,
 ): number {
   /* Very inefficient, TODO change data structures so that finding script & checking if it's already running does
    * not require iterating through all scripts and comparing names/args. This is a big part of slowdown when
@@ -434,7 +433,7 @@ export function runScriptFromScript(
   }
 
   // Calculate ram usage including thread count
-  const ramUsage = singleRamUsage * threads;
+  const ramUsage = singleRamUsage * runOpts.threads;
 
   // Check if there is enough ram to run the script, fail if not.
   const ramAvailable = host.maxRam - host.ramUsed;
@@ -442,17 +441,18 @@ export function runScriptFromScript(
     workerScript.log(
       caller,
       () =>
-        `Cannot run script '${scriptname}' (t=${threads}) on '${host.hostname}' because there is not enough available RAM!`,
+        `Cannot run script '${scriptname}' (t=${runOpts.threads}) on '${host.hostname}' because there is not enough available RAM!`,
     );
     return 0;
   }
   // Able to run script
   workerScript.log(
     caller,
-    () => `'${scriptname}' on '${host.hostname}' with ${threads} threads and args: ${arrayToString(args)}.`,
+    () => `'${scriptname}' on '${host.hostname}' with ${runOpts.threads} threads and args: ${arrayToString(args)}.`,
   );
   const runningScriptObj = new RunningScript(script, singleRamUsage, args);
-  runningScriptObj.threads = threads;
+  runningScriptObj.threads = runOpts.threads;
+  runningScriptObj.temporary = runOpts.temporary;
 
   return startWorkerScript(runningScriptObj, host, workerScript);
 }

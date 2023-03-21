@@ -4,7 +4,7 @@
 
 ## NS.share() method
 
-Share your computer with your factions.
+Share the server's ram with your factions.
 
 **Signature:**
 

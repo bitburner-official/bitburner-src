@@ -19,5 +19,6 @@ interface ProcessInfo
 |  [args](./bitburner.processinfo.args.md) |  | (string \| number \| boolean)\[\] | Script's arguments |
 |  [filename](./bitburner.processinfo.filename.md) |  | string | Script name. |
 |  [pid](./bitburner.processinfo.pid.md) |  | number | Process ID |
+|  [temporary](./bitburner.processinfo.temporary.md) |  | boolean | Whether this process is excluded from saves |
 |  [threads](./bitburner.processinfo.threads.md) |  | number | Number of threads script is running with |
 

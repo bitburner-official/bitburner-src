@@ -6,7 +6,7 @@ import { ScriptDeath } from "./ScriptDeath";
 import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
 import { ScriptArg } from "./ScriptArg";
 import { CityName } from "../Enums";
-import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson } from "@nsdefs";
+import { BasicHGWOptions, RunOptions, RunningScript as IRunningScript, Person as IPerson } from "@nsdefs";
 import { Server } from "../Server/Server";
 import {
   calculateHackingChance,
@@ -41,6 +41,7 @@ export const helpers = {
   number,
   positiveInteger,
   scriptArgs,
+  runOptions,
   argsToString,
   makeBasicErrorMsg,
   makeRuntimeErrorMsg,
@@ -66,6 +67,12 @@ export const helpers = {
   createPublicRunningScript,
   failOnHacknetServer,
 };
+
+// RunOptions with non-optional, type-validated members, for passing between internal functions.
+export interface CompleteRunOptions {
+  threads: PositiveInteger;
+  temporary: boolean;
+}
 
 export function assertMember<T extends string>(
   ctx: NetscriptContext,
@@ -172,6 +179,23 @@ function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): Po
 function scriptArgs(ctx: NetscriptContext, args: unknown) {
   if (!isScriptArgs(args)) throw makeRuntimeErrorMsg(ctx, "'args' is not an array of script args", "TYPE");
   return args;
+}
+
+function runOptions(ctx: NetscriptContext, thread_or_opt: unknown): CompleteRunOptions {
+  let threads: any = 1;
+  let temporary: any = false;
+  if (typeof thread_or_opt !== "object" || thread_or_opt === null) {
+    threads = thread_or_opt ?? 1;
+  } else {
+    // Lie and pretend it's a RunOptions. It could be anything, we'll deal with that below.
+    const options = thread_or_opt as RunOptions;
+    threads = options.threads ?? 1;
+    temporary = options.temporary ?? false;
+  }
+  return {
+    threads: positiveInteger(ctx, "thread", threads),
+    temporary: !!temporary,
+  };
 }
 
 /** Convert multiple arguments for tprint or print into a single string. */
@@ -718,6 +742,7 @@ function createPublicRunningScript(runningScript: RunningScript): IRunningScript
     ramUsage: runningScript.ramUsage,
     server: runningScript.server,
     threads: runningScript.threads,
+    temporary: runningScript.temporary,
   };
 }
 

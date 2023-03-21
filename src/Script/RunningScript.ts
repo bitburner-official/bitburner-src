@@ -62,6 +62,9 @@ export class RunningScript {
   // Number of threads that this script is running with
   threads = 1 as PositiveInteger;
 
+  // Whether this RunningScript is excluded from saves
+  temporary = false;
+
   // Script urls for the current running script for translating urls back to file names in errors
   dependencies: ScriptUrl[] = [];
 

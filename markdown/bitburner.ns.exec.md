@@ -9,7 +9,12 @@ Start another script on any server.
 **Signature:**
 
 ```typescript
-exec(script: string, hostname: string, numThreads?: number, ...args: (string | number | boolean)[]): number;
+exec(
+    script: string,
+    hostname: string,
+    threadOrOptions?: number | RunOptions,
+    ...args: (string | number | boolean)[]
+  ): number;
 ```
 
 ## Parameters
@@ -18,7 +23,7 @@ exec(script: string, hostname: string, numThreads?: number, ...args: (string | n
 |  --- | --- | --- |
 |  script | string | Filename of script to execute. |
 |  hostname | string | Hostname of the <code>target server</code> on which to execute the script. |
-|  numThreads | number | _(Optional)_ Integer number of threads for new script. Defaults to 1. |
+|  threadOrOptions | number \| [RunOptions](./bitburner.runoptions.md) | _(Optional)_ Either an integer number of threads for new script, or a [RunOptions](./bitburner.runoptions.md) object. Threads defaults to 1. |
 |  args | (string \| number \| boolean)\[\] | Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument numThreads must be filled in with a value. |
 
 **Returns:**
@@ -37,7 +42,7 @@ If the script was successfully started, then this function returns the PID of th
 
 PID stands for Process ID. The PID is a unique identifier for each script. The PID will always be a positive integer.
 
-Running this function with a numThreads argument of 0 or less will cause a runtime error.
+Running this function with 0 or fewer threads will cause a runtime error.
 
 ## Example
 
@@ -50,7 +55,7 @@ ns.exec("generic-hack.js", "foodnstuff");
 
 // The following example will try to run the script generic-hack.js on the
 // joesguns server with 10 threads.
-ns.exec("generic-hack.js", "joesguns", 10);
+ns.exec("generic-hack.js", "joesguns", {threads: 10});
 
 // This last example will try to run the script foo.js on the foodnstuff server
 // with 5 threads. It will also pass the number 1 and the string “test” in as

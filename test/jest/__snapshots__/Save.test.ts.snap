@@ -1,0 +1,258 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`load/saveAllServers 1`] = `
+"{
+  "home": {
+    "ctor": "Server",
+    "data": {
+      "contracts": [],
+      "cpuCores": 1,
+      "ftpPortOpen": false,
+      "hasAdminRights": true,
+      "hostname": "home",
+      "httpPortOpen": false,
+      "ip": "67.4.8.1",
+      "isConnectedTo": true,
+      "maxRam": 8,
+      "messages": [
+        "hackers-starting-handbook.lit"
+      ],
+      "organizationName": "Home PC",
+      "programs": [
+        "NUKE.exe"
+      ],
+      "ramUsed": 1.6,
+      "runningScripts": [
+        {
+          "ctor": "RunningScript",
+          "data": {
+            "args": [],
+            "dataMap": {},
+            "filename": "script.js",
+            "logs": [],
+            "logUpd": true,
+            "offlineExpGained": 0,
+            "offlineMoneyMade": 0,
+            "offlineRunningTime": 0.01,
+            "onlineExpGained": 0,
+            "onlineMoneyMade": 0,
+            "onlineRunningTime": 7.210000000000004,
+            "pid": 2,
+            "ramUsage": 1.6,
+            "server": "home",
+            "threads": 1,
+            "temporary": false,
+            "dependencies": [
+              {
+                "filename": "script.js",
+                "url": "blob:http://localhost/302fe9e5-2ec3-4ed7-bb5a-4f8f4a85f46d",
+                "moduleSequenceNumber": 2
+              }
+            ]
+          }
+        }
+      ],
+      "scripts": [
+        {
+          "ctor": "Script",
+          "data": {
+            "code": "/** @param {NS} ns */\\\\nexport async function main(ns) {\\\\n  return ns.asleep(1000000);\\\\n}",
+            "filename": "script.js",
+            "url": "",
+            "module": {},
+            "dependencies": [
+              {
+                "filename": "script.js",
+                "url": "blob:http://localhost/e0abfafd-2c73-42fc-9eea-288c03820c47",
+                "moduleSequenceNumber": 5
+              }
+            ],
+            "dependents": [],
+            "ramUsage": 1.6,
+            "queueCompile": false,
+            "server": "home",
+            "moduleSequenceNumber": 5,
+            "ramUsageEntries": [
+              {
+                "type": "misc",
+                "name": "baseCost",
+                "cost": 1.6
+              }
+            ]
+          }
+        }
+      ],
+      "serversOnNetwork": [
+        "n00dles"
+      ],
+      "smtpPortOpen": false,
+      "sqlPortOpen": false,
+      "sshPortOpen": false,
+      "textFiles": [],
+      "purchasedByPlayer": true,
+      "backdoorInstalled": false,
+      "baseDifficulty": 1,
+      "hackDifficulty": 1,
+      "minDifficulty": 1,
+      "moneyAvailable": 0,
+      "moneyMax": 0,
+      "numOpenPortsRequired": 5,
+      "openPortCount": 0,
+      "requiredHackingSkill": 1,
+      "serverGrowth": 1
+    }
+  },
+  "n00dles": {
+    "ctor": "Server",
+    "data": {
+      "contracts": [],
+      "cpuCores": 1,
+      "ftpPortOpen": false,
+      "hasAdminRights": false,
+      "hostname": "n00dles",
+      "httpPortOpen": false,
+      "ip": "61.6.6.2",
+      "isConnectedTo": false,
+      "maxRam": 4,
+      "messages": [],
+      "organizationName": "Noodle Bar",
+      "programs": [],
+      "ramUsed": 0,
+      "runningScripts": [],
+      "scripts": [],
+      "serversOnNetwork": [
+        "home"
+      ],
+      "smtpPortOpen": false,
+      "sqlPortOpen": false,
+      "sshPortOpen": false,
+      "textFiles": [],
+      "purchasedByPlayer": false,
+      "backdoorInstalled": false,
+      "baseDifficulty": 1,
+      "hackDifficulty": 1,
+      "minDifficulty": 1,
+      "moneyAvailable": 70000,
+      "moneyMax": 1750000,
+      "numOpenPortsRequired": 0,
+      "openPortCount": 0,
+      "requiredHackingSkill": 1,
+      "serverGrowth": 3000
+    }
+  }
+}"
+`;
+
+exports[`load/saveAllServers pruning RunningScripts 1`] = `
+"{
+  "home": {
+    "ctor": "Server",
+    "data": {
+      "contracts": [],
+      "cpuCores": 1,
+      "ftpPortOpen": false,
+      "hasAdminRights": true,
+      "hostname": "home",
+      "httpPortOpen": false,
+      "ip": "67.4.8.1",
+      "isConnectedTo": true,
+      "maxRam": 8,
+      "messages": [
+        "hackers-starting-handbook.lit"
+      ],
+      "organizationName": "Home PC",
+      "programs": [
+        "NUKE.exe"
+      ],
+      "ramUsed": 1.6,
+      "runningScripts": [],
+      "scripts": [
+        {
+          "ctor": "Script",
+          "data": {
+            "code": "/** @param {NS} ns */\\\\nexport async function main(ns) {\\\\n  return ns.asleep(1000000);\\\\n}",
+            "filename": "script.js",
+            "url": "",
+            "module": {},
+            "dependencies": [
+              {
+                "filename": "script.js",
+                "url": "blob:http://localhost/e0abfafd-2c73-42fc-9eea-288c03820c47",
+                "moduleSequenceNumber": 5
+              }
+            ],
+            "dependents": [],
+            "ramUsage": 1.6,
+            "queueCompile": false,
+            "server": "home",
+            "moduleSequenceNumber": 5,
+            "ramUsageEntries": [
+              {
+                "type": "misc",
+                "name": "baseCost",
+                "cost": 1.6
+              }
+            ]
+          }
+        }
+      ],
+      "serversOnNetwork": [
+        "n00dles"
+      ],
+      "smtpPortOpen": false,
+      "sqlPortOpen": false,
+      "sshPortOpen": false,
+      "textFiles": [],
+      "purchasedByPlayer": true,
+      "backdoorInstalled": false,
+      "baseDifficulty": 1,
+      "hackDifficulty": 1,
+      "minDifficulty": 1,
+      "moneyAvailable": 0,
+      "moneyMax": 0,
+      "numOpenPortsRequired": 5,
+      "openPortCount": 0,
+      "requiredHackingSkill": 1,
+      "serverGrowth": 1
+    }
+  },
+  "n00dles": {
+    "ctor": "Server",
+    "data": {
+      "contracts": [],
+      "cpuCores": 1,
+      "ftpPortOpen": false,
+      "hasAdminRights": false,
+      "hostname": "n00dles",
+      "httpPortOpen": false,
+      "ip": "61.6.6.2",
+      "isConnectedTo": false,
+      "maxRam": 4,
+      "messages": [],
+      "organizationName": "Noodle Bar",
+      "programs": [],
+      "ramUsed": 0,
+      "runningScripts": [],
+      "scripts": [],
+      "serversOnNetwork": [
+        "home"
+      ],
+      "smtpPortOpen": false,
+      "sqlPortOpen": false,
+      "sshPortOpen": false,
+      "textFiles": [],
+      "purchasedByPlayer": false,
+      "backdoorInstalled": false,
+      "baseDifficulty": 1,
+      "hackDifficulty": 1,
+      "minDifficulty": 1,
+      "moneyAvailable": 70000,
+      "moneyMax": 1750000,
+      "numOpenPortsRequired": 0,
+      "openPortCount": 0,
+      "requiredHackingSkill": 1,
+      "serverGrowth": 3000
+    }
+  }
+}"
+`;

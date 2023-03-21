@@ -193,6 +193,16 @@ interface RunningScript {
   server: string;
   /** Number of threads that this script runs with */
   threads: number;
+  /** Whether this RunningScript is excluded from saves */
+  temporary: boolean;
+}
+
+/** @public */
+interface RunOptions {
+  /** Number of threads that the script will run with, defaults to 1 */
+  threads?: number;
+  /** Whether this script is excluded from saves, defaults to false */
+  temporary?: boolean;
 }
 
 /** @public */
@@ -324,6 +334,8 @@ interface ProcessInfo {
   args: (string | number | boolean)[];
   /** Process ID */
   pid: number;
+  /** Whether this process is excluded from saves */
+  temporary: boolean;
 }
 
 /**
@@ -5395,13 +5407,16 @@ export interface NS {
    * current server (the server running the script that calls this function). Requires a significant
    * amount of RAM to run this command.
    *
+   * The second argument is either a thread count, or a {@link RunOptions} object that can also
+   * specify the number of threads (among other things).
+   *
    * If the script was successfully started, then this functions returns the PID of that script.
    * Otherwise, it returns 0.
    *
    * PID stands for Process ID. The PID is a unique identifier for each script.
    * The PID will always be a positive integer.
    *
-   * Running this function with a numThreads argument of 0 or less will cause a runtime error.
+   * Running this function with 0 or fewer threads will cause a runtime error.
    *
    * @example
    * ```js
@@ -5409,17 +5424,17 @@ export interface NS {
    * ns.run("foo.js");
    *
    * //The following example will run ‘foo.js’ but with 5 threads instead of single-threaded:
-   * ns.run("foo.js", 5);
+   * ns.run("foo.js", {threads: 5});
    *
    * //This next example will run ‘foo.js’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
    * ns.run("foo.js", 1, 'foodnstuff');
    * ```
    * @param script - Filename of script to run.
-   * @param numThreads - Integer number of threads for new script. Defaults to 1.
+   * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the second argument numThreads must be filled in with a value.
    * @returns Returns the PID of a successfully started script, and 0 otherwise.
    */
-  run(script: string, numThreads?: number, ...args: (string | number | boolean)[]): number;
+  run(script: string, threadOrOptions?: number | RunOptions, ...args: (string | number | boolean)[]): number;
 
   /**
    * Start another script on any server.
@@ -5435,7 +5450,7 @@ export interface NS {
    * PID stands for Process ID. The PID is a unique identifier for each script.
    * The PID will always be a positive integer.
    *
-   * Running this function with a numThreads argument of 0 or less will cause a runtime error.
+   * Running this function with 0 or fewer threads will cause a runtime error.
    *
    * @example
    * ```js
@@ -5446,7 +5461,7 @@ export interface NS {
    *
    * // The following example will try to run the script generic-hack.js on the
    * // joesguns server with 10 threads.
-   * ns.exec("generic-hack.js", "joesguns", 10);
+   * ns.exec("generic-hack.js", "joesguns", {threads: 10});
    *
    * // This last example will try to run the script foo.js on the foodnstuff server
    * // with 5 threads. It will also pass the number 1 and the string “test” in as
@@ -5455,11 +5470,16 @@ export interface NS {
    * ```
    * @param script - Filename of script to execute.
    * @param hostname - Hostname of the `target server` on which to execute the script.
-   * @param numThreads - Integer number of threads for new script. Defaults to 1.
+   * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument numThreads must be filled in with a value.
    * @returns Returns the PID of a successfully started script, and 0 otherwise.
    */
-  exec(script: string, hostname: string, numThreads?: number, ...args: (string | number | boolean)[]): number;
+  exec(
+    script: string,
+    hostname: string,
+    threadOrOptions?: number | RunOptions,
+    ...args: (string | number | boolean)[]
+  ): number;
 
   /**
    * Terminate current script and start another in 10 seconds.
@@ -5473,7 +5493,7 @@ export interface NS {
    *
    * Because this function immediately terminates the script, it does not have a return value.
    *
-   * Running this function with a numThreads argument of 0 or less will cause a runtime error.
+   * Running this function with 0 or fewer threads will cause a runtime error.
    *
    * @example
    * ```js
@@ -5481,10 +5501,10 @@ export interface NS {
    * ns.spawn('foo.js', 10, 'foodnstuff', 90);
    * ```
    * @param script - Filename of script to execute.
-   * @param numThreads - Integer number of threads for new script. Defaults to 1.
+   * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run.
    */
-  spawn(script: string, numThreads?: number, ...args: (string | number | boolean)[]): void;
+  spawn(script: string, threadOrOptions?: number | RunOptions, ...args: (string | number | boolean)[]): void;
 
   /**
    * Terminate the script with the provided PID.
