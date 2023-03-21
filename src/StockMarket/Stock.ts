@@ -213,8 +213,7 @@ export class Stock {
    * RL stock market cycles and introduce volatility
    */
   flipForecastForecast(): void {
-    const diff = this.otlkMagForecast - 50;
-    this.otlkMagForecast = 50 + -1 * diff;
+    this.otlkMagForecast = 100 - this.otlkMagForecast;
   }
 
   /** Returns the stock's absolute forecast, which is a number between 0-100 */
