@@ -6,7 +6,7 @@ import { ScriptDeath } from "./ScriptDeath";
 import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
 import { ScriptArg } from "./ScriptArg";
 import { CityName } from "../Enums";
-import { BasicHGWOptions, RunOptions, RunningScript as IRunningScript, Person as IPerson } from "@nsdefs";
+import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson } from "@nsdefs";
 import { Server } from "../Server/Server";
 import {
   calculateHackingChance,
@@ -33,7 +33,7 @@ import { BaseServer } from "../Server/BaseServer";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { checkEnum } from "../utils/helpers/enum";
 import { RamCostConstants } from "./RamCostGenerator";
-import { isPositiveInteger, PositiveInteger } from "../types";
+import { isPositiveInteger, PositiveInteger, Unknownify } from "../types";
 import { Engine } from "../engine";
 
 export const helpers = {
@@ -72,6 +72,7 @@ export const helpers = {
 export interface CompleteRunOptions {
   threads: PositiveInteger;
   temporary: boolean;
+  ramOverride?: number;
 }
 
 export function assertMember<T extends string>(
@@ -181,21 +182,23 @@ function scriptArgs(ctx: NetscriptContext, args: unknown) {
   return args;
 }
 
-function runOptions(ctx: NetscriptContext, thread_or_opt: unknown): CompleteRunOptions {
-  let threads: any = 1;
-  let temporary: any = false;
-  if (typeof thread_or_opt !== "object" || thread_or_opt === null) {
-    threads = thread_or_opt ?? 1;
-  } else {
-    // Lie and pretend it's a RunOptions. It could be anything, we'll deal with that below.
-    const options = thread_or_opt as RunOptions;
-    threads = options.threads ?? 1;
-    temporary = options.temporary ?? false;
+function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {
+  if (typeof threadOrOption !== "object" || threadOrOption === null) {
+    return { threads: positiveInteger(ctx, "threads", threadOrOption ?? 1), temporary: false };
   }
-  return {
-    threads: positiveInteger(ctx, "thread", threads),
-    temporary: !!temporary,
-  };
+  // Safe assertion since threadOrOption type has been narrowed to a non-null object
+  const options = threadOrOption as Unknownify<CompleteRunOptions>;
+  const threads = positiveInteger(ctx, "RunOptions.threads", options.threads ?? 1);
+  const temporary = !!options.temporary;
+  if (options.ramOverride === undefined || options.ramOverride === null) return { threads, temporary };
+  const ramOverride = number(ctx, "RunOptions.ramOverride", options.ramOverride);
+  if (ramOverride < RamCostConstants.Base) {
+    throw makeRuntimeErrorMsg(
+      ctx,
+      `RunOptions.ramOverride must be >= baseCost (${RamCostConstants.Base}), was ${ramOverride}`,
+    );
+  }
+  return { threads, temporary, ramOverride };
 }
 
 /** Convert multiple arguments for tprint or print into a single string. */
@@ -375,17 +378,17 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
   ws.dynamicLoadedFns[fnName] = true;
 
   ws.dynamicRamUsage = Math.min(ws.dynamicRamUsage + ramCost, RamCostConstants.Max);
-  if (ws.dynamicRamUsage > 1.01 * ws.ramUsage) {
+  if (ws.dynamicRamUsage > 1.01 * ws.scriptRef.ramUsage) {
     log(ctx, () => "Insufficient static ram available.");
     ws.env.stopFlag = true;
     throw makeRuntimeErrorMsg(
       ctx,
-      `Dynamic RAM usage calculated to be greater than initial RAM usage.
+      `Dynamic RAM usage calculated to be greater than RAM allocation.
       This is probably because you somehow circumvented the static RAM calculation.
 
       Threads: ${ws.scriptRef.threads}
       Dynamic RAM Usage: ${formatRam(ws.dynamicRamUsage)} per thread
-      Static RAM Usage: ${formatRam(ws.ramUsage)} per thread
+      RAM Allocation: ${formatRam(ws.scriptRef.ramUsage)} per thread
 
       One of these could be the reason:
       * Using eval() to get a reference to a ns function
@@ -393,6 +396,8 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
 
       * Using map access to do the same
       \u00a0\u00a0const myScan = ns['scan'];
+
+      * Using RunOptions.ramOverride to set a smaller allocation than needed
 
       Sorry :(`,
       "RAM USAGE",
@@ -651,13 +656,12 @@ function log(ctx: NetscriptContext, message: () => string) {
 /**
  * Searches for and returns the RunningScript object for the specified script.
  * If the 'fn' argument is not specified, this returns the current RunningScript.
- * @param {string} fn - Filename of script
- * @param {string} hostname - Hostname/ip of the server on which the script resides
- * @param {any[]} scriptArgs - Running script's arguments
- * @returns {RunningScript}
- *      Running script identified by the parameters, or null if no such script
- *      exists, or the current running script if the first argument 'fn'
- *      is not specified.
+ * @param fn - Filename of script
+ * @param hostname - Hostname/ip of the server on which the script resides
+ * @param scriptArgs - Running script's arguments
+ * @returns Running script identified by the parameters, or null if no such script
+ *   exists, or the current running script if the first argument 'fn'
+ *   is not specified.
  */
 function getRunningScriptByArgs(
   ctx: NetscriptContext,
@@ -706,10 +710,8 @@ function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): Runni
 /**
  * Helper function for getting the error log message when the user specifies
  * a nonexistent running script
- * @param {string} fn - Filename of script
- * @param {string} hostname - Hostname/ip of the server on which the script resides
- * @param {any[]} scriptArgs - Running script's arguments
- * @returns {string} Error message to print to logs
+ * @param ident - Identifier (pid or identifier object) of script.
+ * @returns Error message to print to logs
  */
 function getCannotFindRunningScriptErrorMessage(ident: ScriptIdentifier): string {
   if (typeof ident === "number") return `Cannot find running script with pid: ${ident}`;
