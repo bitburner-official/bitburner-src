@@ -252,7 +252,6 @@ export function prestigeHomeComputer(homeComp: Server): void {
   const hasBitflume = homeComp.programs.includes(CompletedProgramName.bitFlume);
 
   homeComp.programs.length = 0; //Remove programs
-  homeComp.runningScripts = [];
   homeComp.serversOnNetwork = [];
   homeComp.isConnectedTo = true;
   homeComp.ramUsed = 0;
@@ -263,6 +262,9 @@ export function prestigeHomeComputer(homeComp: Server): void {
 
   homeComp.messages.length = 0; //Remove .lit and .msg files
   homeComp.messages.push(LiteratureName.HackersStartingHandbook);
+  if (homeComp.runningScriptMap.size !== 0) {
+    throw new Error("All programs weren't already killed!");
+  }
 }
 
 // Returns the i-th server on the specified server's network

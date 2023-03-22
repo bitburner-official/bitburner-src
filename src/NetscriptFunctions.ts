@@ -1,6 +1,5 @@
 import $ from "jquery";
 import { vsprintf, sprintf } from "sprintf-js";
-import { WorkerScriptStartStopEventEmitter } from "./Netscript/WorkerScriptStartStopEventEmitter";
 import { BitNodeMultipliers, IBitNodeMultipliers } from "./BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "./Constants";
 import {
@@ -35,7 +34,7 @@ import {
 import { Server } from "./Server/Server";
 import { influenceStockThroughServerGrow } from "./StockMarket/PlayerInfluencing";
 import { runScriptFromScript } from "./NetscriptWorker";
-import { killWorkerScript } from "./Netscript/killWorkerScript";
+import { killWorkerScript, killWorkerScriptByPid } from "./Netscript/killWorkerScript";
 import { workerScripts } from "./Netscript/WorkerScripts";
 import { WorkerScript } from "./Netscript/WorkerScript";
 import { helpers, assertObjectType } from "./Netscript/NetscriptHelpers";
@@ -71,6 +70,7 @@ import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
 import { checkEnum } from "./utils/helpers/enum";
+import { matchScriptPathExact } from "./utils/helpers/scriptKey";
 
 import { Flags } from "./NetscriptFunctions/Flags";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
@@ -82,12 +82,12 @@ import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
 import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassType } from "./Enums";
-import { cloneDeep } from "lodash";
+import { cloneDeep, escapeRegExp } from "lodash";
 import { FactionWorkType } from "./Enums";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort } from "./NetscriptPort";
-import { FilePath, resolveFilePath } from "./Paths/FilePath";
-import { hasScriptExtension, resolveScriptFilePath } from "./Paths/ScriptFilePath";
+import { FilePath } from "./Paths/FilePath";
+import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
 import { ContentFilePath } from "./Paths/ContentFile";
 import { LiteratureName } from "./Literature/data/LiteratureNames";
@@ -691,8 +691,7 @@ export const ns: InternalAPI<NSFull> = {
   run:
     (ctx) =>
     (_scriptname, _thread_or_opt = 1, ..._args) => {
-      const path = resolveScriptFilePath(helpers.string(ctx, "scriptname", _scriptname), ctx.workerScript.name);
-      if (!path) throw helpers.makeRuntimeErrorMsg(ctx, `${path} is not a valid script file path.`);
+      const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const scriptServer = ctx.workerScript.getServer();
@@ -702,8 +701,7 @@ export const ns: InternalAPI<NSFull> = {
   exec:
     (ctx) =>
     (_scriptname, _hostname, _thread_or_opt = 1, ..._args) => {
-      const path = resolveScriptFilePath(helpers.string(ctx, "scriptname", _scriptname), ctx.workerScript.name);
-      if (!path) throw helpers.makeRuntimeErrorMsg(ctx, `${path} is not a valid script file path.`);
+      const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
@@ -713,8 +711,7 @@ export const ns: InternalAPI<NSFull> = {
   spawn:
     (ctx) =>
     (_scriptname, _thread_or_opt = 1, ..._args) => {
-      const path = resolveScriptFilePath(helpers.string(ctx, "scriptname", _scriptname), ctx.workerScript.name);
-      if (!path) throw helpers.makeRuntimeErrorMsg(ctx, `${path} is not a valid script file path.`);
+      const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const spawnDelay = 10;
@@ -741,21 +738,23 @@ export const ns: InternalAPI<NSFull> = {
       const killByPid = typeof ident === "number";
       if (killByPid) {
         // Kill by pid
-        res = killWorkerScript(ident);
+        res = killWorkerScriptByPid(ident);
       } else {
         // Kill by filename/hostname
         if (scriptID === undefined) {
           throw helpers.makeRuntimeErrorMsg(ctx, "Usage: kill(scriptname, server, [arg1], [arg2]...)");
         }
 
-        const server = helpers.getServer(ctx, ident.hostname);
-        const runningScriptObj = helpers.getRunningScriptByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
-        if (runningScriptObj == null) {
+        const byPid = helpers.getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
+        if (byPid === null) {
           helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
           return false;
         }
 
-        res = killWorkerScript({ runningScript: runningScriptObj, hostname: server.hostname });
+        res = true;
+        for (const pid of byPid.keys()) {
+          res = killWorkerScriptByPid(pid);
+        }
       }
 
       if (res) {
@@ -771,7 +770,7 @@ export const ns: InternalAPI<NSFull> = {
         } else {
           helpers.log(
             ctx,
-            () => `No such script '${scriptID}' on '${hostname}' with args: ${arrayToString(scriptArgs)}`,
+            () => `Internal error killing '${scriptID}' on '${hostname}' with args: ${arrayToString(scriptArgs)}`,
           );
         }
         return false;
@@ -786,12 +785,13 @@ export const ns: InternalAPI<NSFull> = {
 
       let scriptsKilled = 0;
 
-      for (let i = server.runningScripts.length - 1; i >= 0; --i) {
-        if (safetyguard === true && server.runningScripts[i].pid == ctx.workerScript.pid) continue;
-        killWorkerScript({ runningScript: server.runningScripts[i], hostname: server.hostname });
-        ++scriptsKilled;
+      for (const byPid of server.runningScriptMap.values()) {
+        for (const pid of byPid.keys()) {
+          if (safetyguard === true && pid == ctx.workerScript.pid) continue;
+          killWorkerScriptByPid(pid);
+          ++scriptsKilled;
+        }
       }
-      WorkerScriptStartStopEventEmitter.emit();
       helpers.log(
         ctx,
         () => `Killing all scripts on '${server.hostname}'. May take a few minutes for the scripts to die.`,
@@ -814,24 +814,15 @@ export const ns: InternalAPI<NSFull> = {
     const contentFiles: ContentFilePath[] = [];
     //First loop through filenames to find all errors before moving anything.
     for (const file of files) {
-      // Not a string
-      if (typeof file !== "string") {
-        throw helpers.makeRuntimeErrorMsg(ctx, "files should be a string or an array of strings.");
-      }
-      if (hasScriptExtension(file) || hasTextExtension(file)) {
-        const path = resolveScriptFilePath(file, ctx.workerScript.name);
-        if (!path) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filepath: ${file}`);
+      const path = helpers.filePath(ctx, "files", file);
+      if (hasScriptExtension(path) || hasTextExtension(path)) {
         contentFiles.push(path);
         continue;
       }
-      if (!file.endsWith(".lit")) {
+      if (!checkEnum(LiteratureName, path)) {
         throw helpers.makeRuntimeErrorMsg(ctx, "Only works for scripts, .lit and .txt files.");
       }
-      const sanitizedPath = resolveFilePath(file, ctx.workerScript.name);
-      if (!sanitizedPath || !checkEnum(LiteratureName, sanitizedPath)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filename: '${file}'`);
-      }
-      lits.push(sanitizedPath);
+      lits.push(path);
     }
 
     let noFailures = true;
@@ -898,14 +889,16 @@ export const ns: InternalAPI<NSFull> = {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const server = helpers.getServer(ctx, hostname);
       const processes: ProcessInfo[] = [];
-      for (const script of server.runningScripts) {
-        processes.push({
-          filename: script.filename,
-          threads: script.threads,
-          args: script.args.slice(),
-          pid: script.pid,
-          temporary: script.temporary,
-        });
+      for (const byPid of server.runningScriptMap.values()) {
+        for (const script of byPid.values()) {
+          processes.push({
+            filename: script.filename,
+            threads: script.threads,
+            args: script.args.slice(),
+            pid: script.pid,
+            temporary: script.temporary,
+          });
+        }
       }
       return processes;
     },
@@ -1267,7 +1260,7 @@ export const ns: InternalAPI<NSFull> = {
     }
 
     // Delete all scripts running on server
-    if (server.runningScripts.length > 0) {
+    if (server.runningScriptMap.size > 0) {
       helpers.log(ctx, () => `Cannot delete server '${hostname}' because it still has scripts running.`);
       return false;
     }
@@ -1325,11 +1318,9 @@ export const ns: InternalAPI<NSFull> = {
     return writePort(portNumber, data);
   },
   write: (ctx) => (_filename, _data, _mode) => {
-    const filepath = resolveFilePath(helpers.string(ctx, "filename", _filename), ctx.workerScript.name);
+    const filepath = helpers.filePath(ctx, "filename", _filename);
     const data = helpers.string(ctx, "data", _data ?? "");
     const mode = helpers.string(ctx, "mode", _mode ?? "a");
-
-    if (!filepath) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filepath: ${filepath}`);
 
     const server = helpers.getServer(ctx, ctx.workerScript.hostname);
 
@@ -1369,8 +1360,8 @@ export const ns: InternalAPI<NSFull> = {
     return readPort(portNumber);
   },
   read: (ctx) => (_filename) => {
-    const path = resolveFilePath(helpers.string(ctx, "filename", _filename), ctx.workerScript.name);
-    if (!path || (!hasScriptExtension(path) && !hasTextExtension(path))) return "";
+    const path = helpers.filePath(ctx, "filename", _filename);
+    if (!hasScriptExtension(path) && !hasTextExtension(path)) return "";
     const server = ctx.workerScript.getServer();
     return server.getContentFile(path)?.content ?? "";
   },
@@ -1379,8 +1370,8 @@ export const ns: InternalAPI<NSFull> = {
     return peekPort(portNumber);
   },
   clear: (ctx) => (_file) => {
-    const path = resolveFilePath(helpers.string(ctx, "file", _file), ctx.workerScript.name);
-    if (!path || (!hasScriptExtension(path) && !hasTextExtension(path))) {
+    const path = helpers.filePath(ctx, "file", _file);
+    if (!hasScriptExtension(path) && !hasTextExtension(path)) {
       throw helpers.makeRuntimeErrorMsg(ctx, `Invalid file path or extension: ${_file}`);
     }
     const server = ctx.workerScript.getServer();
@@ -1398,7 +1389,7 @@ export const ns: InternalAPI<NSFull> = {
     return portHandle(portNumber);
   },
   rm: (ctx) => (_fn, _hostname) => {
-    const filepath = resolveFilePath(helpers.string(ctx, "fn", _fn), ctx.workerScript.name);
+    const filepath = helpers.filePath(ctx, "fn", _fn);
     const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
     const s = helpers.getServer(ctx, hostname);
     if (!filepath) {
@@ -1414,34 +1405,30 @@ export const ns: InternalAPI<NSFull> = {
     return status.res;
   },
   scriptRunning: (ctx) => (_scriptname, _hostname) => {
-    const scriptname = helpers.string(ctx, "scriptname", _scriptname);
+    const scriptname = helpers.scriptPath(ctx, "scriptname", _scriptname);
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const server = helpers.getServer(ctx, hostname);
-    for (let i = 0; i < server.runningScripts.length; ++i) {
-      if (server.runningScripts[i].filename == scriptname) {
-        return true;
-      }
-    }
-    return false;
+    return server.isRunning(scriptname);
   },
   scriptKill: (ctx) => (_scriptname, _hostname) => {
-    const scriptname = helpers.string(ctx, "scriptname", _scriptname);
+    const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const server = helpers.getServer(ctx, hostname);
     let suc = false;
-    for (let i = 0; i < server.runningScripts.length; i++) {
-      if (server.runningScripts[i].filename == scriptname) {
-        killWorkerScript({ runningScript: server.runningScripts[i], hostname: server.hostname });
-        suc = true;
-        i--;
+
+    const pattern = matchScriptPathExact(escapeRegExp(path));
+    for (const [key, byPid] of server.runningScriptMap) {
+      if (!pattern.test(key)) continue;
+      suc = true;
+      for (const pid of byPid.keys()) {
+        killWorkerScriptByPid(pid);
       }
     }
     return suc;
   },
   getScriptName: (ctx) => () => ctx.workerScript.name,
   getScriptRam: (ctx) => (_scriptname, _hostname) => {
-    const path = resolveScriptFilePath(helpers.string(ctx, "scriptname", _scriptname), ctx.workerScript.name);
-    if (!path) throw helpers.makeRuntimeErrorMsg(ctx, `Could not parse file path ${_scriptname}`);
+    const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
     const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
     const server = helpers.getServer(ctx, hostname);
     const script = server.scripts.get(path);
@@ -1640,7 +1627,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   wget: (ctx) => async (_url, _target, _hostname) => {
     const url = helpers.string(ctx, "url", _url);
-    const target = resolveFilePath(helpers.string(ctx, "target", _target), ctx.workerScript.name);
+    const target = helpers.scriptPath(ctx, "target", _target);
     const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
     const server = helpers.getServer(ctx, hostname);
     if (!target || (!hasTextExtension(target) && !hasScriptExtension(target))) {
@@ -1725,10 +1712,8 @@ export const ns: InternalAPI<NSFull> = {
   mv: (ctx) => (_host, _source, _destination) => {
     const hostname = helpers.string(ctx, "host", _host);
     const server = helpers.getServer(ctx, hostname);
-    const sourcePath = resolveFilePath(helpers.string(ctx, "source", _source));
-    if (!sourcePath) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid source filename: '${_source}'`);
-    const destinationPath = resolveFilePath(helpers.string(ctx, "destination", _destination), sourcePath);
-    if (!destinationPath) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid destination filename: '${destinationPath}'`);
+    const sourcePath = helpers.filePath(ctx, "source", _source);
+    const destinationPath = helpers.filePath(ctx, "destination", _destination);
 
     if (
       (!hasTextExtension(sourcePath) && !hasScriptExtension(sourcePath)) ||

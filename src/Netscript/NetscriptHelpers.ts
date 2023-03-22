@@ -26,7 +26,7 @@ import { GangMemberTask } from "../Gang/GangMemberTask";
 import { RunningScript } from "../Script/RunningScript";
 import { toNative } from "../NetscriptFunctions/toNative";
 import { ScriptIdentifier } from "./ScriptIdentifier";
-import { findRunningScript, findRunningScriptByPid } from "../Script/ScriptHelpers";
+import { findRunningScripts, findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { arrayToString } from "../utils/helpers/arrayToString";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
@@ -35,6 +35,8 @@ import { checkEnum } from "../utils/helpers/enum";
 import { RamCostConstants } from "./RamCostGenerator";
 import { isPositiveInteger, PositiveInteger, Unknownify } from "../types";
 import { Engine } from "../engine";
+import { resolveFilePath, FilePath } from "../Paths/FilePath";
+import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 
 export const helpers = {
   string,
@@ -61,8 +63,10 @@ export const helpers = {
   gangMember,
   gangTask,
   log,
+  filePath,
+  scriptPath,
   getRunningScript,
-  getRunningScriptByArgs,
+  getRunningScriptsByArgs,
   getCannotFindRunningScriptErrorMessage,
   createPublicRunningScript,
   failOnHacknetServer,
@@ -73,6 +77,7 @@ export interface CompleteRunOptions {
   threads: PositiveInteger;
   temporary: boolean;
   ramOverride?: number;
+  preventDuplicates: boolean;
 }
 
 export function assertMember<T extends string>(
@@ -186,6 +191,7 @@ function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRun
   const result: CompleteRunOptions = {
     threads: 1 as PositiveInteger,
     temporary: false,
+    preventDuplicates: false,
   };
   function checkThreads(threads: unknown, argName: string) {
     if (threads !== null && threads !== undefined) {
@@ -200,6 +206,7 @@ function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRun
   const options = threadOrOption as Unknownify<CompleteRunOptions>;
   checkThreads(options.threads, "RunOptions.threads");
   result.temporary = !!options.temporary;
+  result.preventDuplicates = !!options.preventDuplicates;
   if (options.ramOverride !== undefined && options.ramOverride !== null) {
     result.ramOverride = number(ctx, "RunOptions.ramOverride", options.ramOverride);
     if (result.ramOverride < RamCostConstants.Base) {
@@ -651,22 +658,35 @@ function log(ctx: NetscriptContext, message: () => string) {
   ctx.workerScript.log(ctx.functionPath, message);
 }
 
+export function filePath(ctx: NetscriptContext, argName: string, filename: unknown): FilePath {
+  assertString(ctx, argName, filename);
+  const path = resolveFilePath(filename, ctx.workerScript.name);
+  if (path) return path;
+  throw makeRuntimeErrorMsg(ctx, `Invalid ${argName}, was not a valid path: ${filename}`);
+}
+
+export function scriptPath(ctx: NetscriptContext, argName: string, filename: unknown): ScriptFilePath {
+  const path = filePath(ctx, argName, filename);
+  if (hasScriptExtension(path)) return path;
+  throw makeRuntimeErrorMsg(ctx, `Invalid ${argName}, must be a script: ${filename}`);
+}
+
 /**
- * Searches for and returns the RunningScript object for the specified script.
+ * Searches for and returns the RunningScript objects for the specified script.
  * If the 'fn' argument is not specified, this returns the current RunningScript.
  * @param fn - Filename of script
  * @param hostname - Hostname/ip of the server on which the script resides
  * @param scriptArgs - Running script's arguments
- * @returns Running script identified by the parameters, or null if no such script
- *   exists, or the current running script if the first argument 'fn'
+ * @returns Running scripts identified by the parameters, or empty if no such script
+ *   exists, or only the current running script if the first argument 'fn'
  *   is not specified.
  */
-function getRunningScriptByArgs(
+export function getRunningScriptsByArgs(
   ctx: NetscriptContext,
   fn: string,
   hostname: string,
   scriptArgs: ScriptArg[],
-): RunningScript | null {
+): Map<number, RunningScript> | null {
   if (!Array.isArray(scriptArgs)) {
     throw helpers.makeRuntimeErrorMsg(
       ctx,
@@ -675,18 +695,14 @@ function getRunningScriptByArgs(
     );
   }
 
-  if (fn != null && typeof fn === "string") {
-    // Get Logs of another script
-    if (hostname == null) {
-      hostname = ctx.workerScript.hostname;
-    }
-    const server = helpers.getServer(ctx, hostname);
-
-    return findRunningScript(fn, scriptArgs, server);
+  const path = scriptPath(ctx, "filename", fn);
+  // Lookup server to scope search
+  if (hostname == null) {
+    hostname = ctx.workerScript.hostname;
   }
+  const server = helpers.getServer(ctx, hostname);
 
-  // If no arguments are specified, return the current RunningScript
-  return ctx.workerScript.scriptRef;
+  return findRunningScripts(path, scriptArgs, server);
 }
 
 function getRunningScriptByPid(pid: number): RunningScript | null {
@@ -701,7 +717,9 @@ function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): Runni
   if (typeof ident === "number") {
     return getRunningScriptByPid(ident);
   } else {
-    return getRunningScriptByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
+    const scripts = getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
+    if (scripts === null) return null;
+    return scripts.values().next().value;
   }
 }
 

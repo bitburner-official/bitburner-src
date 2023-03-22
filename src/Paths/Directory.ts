@@ -1,6 +1,6 @@
 import { allContentFiles } from "./ContentFile";
 import type { BaseServer } from "../Server/BaseServer";
-import { FilePath } from "./FilePath";
+import type { FilePath } from "./FilePath";
 
 /** The directory part of a BasicFilePath. Everything up to and including the last /
  * e.g. "file.js" => "", or "dir/file.js" => "dir/", or "../test.js" => "../" */

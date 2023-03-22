@@ -1,6 +1,7 @@
 import "../../src/Player";
 
 import { loadAllServers, saveAllServers } from "../../src/Server/AllServers";
+import { loadAllRunningScripts } from "../../src/NetscriptWorker";
 
 // Direct tests of loading and saving.
 // Tests here should try to be comprehensive (cover as much stuff as possible)
@@ -81,33 +82,39 @@ function loadStandardServers() {
           }
         }
       ],
-      "scripts": [
-        {
-          "ctor": "Script",
-          "data": {
-            "code": "/** @param {NS} ns */\\nexport async function main(ns) {\\n  return ns.asleep(1000000);\\n}",
-            "filename": "script.js",
-            "module": {},
-            "dependencies": [
-              {
+      "scripts": {
+        "ctor": "JSONMap",
+        "data": [
+          [
+            "script.js",
+            {
+              "ctor": "Script",
+              "data": {
+                "code": "/** @param {NS} ns */\\nexport async function main(ns) {\\n  return ns.asleep(1000000);\\n}",
                 "filename": "script.js",
-                "url": "blob:http://localhost/e0abfafd-2c73-42fc-9eea-288c03820c47",
-                "moduleSequenceNumber": 5
+                "module": {},
+                "dependencies": [
+                  {
+                    "filename": "script.js",
+                    "url": "blob:http://localhost/e0abfafd-2c73-42fc-9eea-288c03820c47",
+                    "moduleSequenceNumber": 5
+                  }
+                ],
+                "ramUsage": 1.6,
+                "server": "home",
+                "moduleSequenceNumber": 5,
+                "ramUsageEntries": [
+                  {
+                    "type": "misc",
+                    "name": "baseCost",
+                    "cost": 1.6
+                  }
+                ]
               }
-            ],
-            "ramUsage": 1.6,
-            "server": "home",
-            "moduleSequenceNumber": 5,
-            "ramUsageEntries": [
-              {
-                "type": "misc",
-                "name": "baseCost",
-                "cost": 1.6
-              }
-            ]
-          }
-        }
-      ],
+            }
+          ]
+        ]
+      },
       "serversOnNetwork": [
         "n00dles"
       ],
@@ -131,6 +138,7 @@ function loadStandardServers() {
     }
   }
 }`); // Fix confused highlighting `
+  loadAllRunningScripts();
 }
 
 test("load/saveAllServers", () => {

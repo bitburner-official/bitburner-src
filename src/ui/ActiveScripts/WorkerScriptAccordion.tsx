@@ -24,7 +24,7 @@ import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
-import { killWorkerScript } from "../../Netscript/killWorkerScript";
+import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
 import { WorkerScript } from "../../Netscript/WorkerScript";
 
 import { dialogBoxCreate } from "../React/DialogBox";
@@ -53,7 +53,7 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
   function logClickHandler(): void {
     LogBoxEvents.emit(scriptRef);
   }
-  const killScript = killWorkerScript.bind(null, { runningScript: scriptRef, hostname: scriptRef.server });
+  const killScript = killWorkerScriptByPid.bind(null, scriptRef.pid);
 
   function killScriptClickHandler(): void {
     if (killScript()) dialogBoxCreate("Killing script");

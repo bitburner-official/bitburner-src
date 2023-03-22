@@ -15,6 +15,7 @@ import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { PositiveInteger } from "../types";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import { ScriptFilePath } from "../Paths/ScriptFilePath";
+import { ScriptKey, scriptKey } from "../utils/helpers/scriptKey";
 
 export class RunningScript {
   // Script arguments
@@ -61,6 +62,9 @@ export class RunningScript {
   // hostname of the server on which this script is running
   server = "";
 
+  // Cached key for ByArgs lookups
+  scriptKey: ScriptKey = "";
+
   // Number of threads that this script is running with
   threads = 1 as PositiveInteger;
 
@@ -75,6 +79,7 @@ export class RunningScript {
     if (!ramUsage) throw new Error("Must provide a ramUsage for RunningScript initialization.");
     this.filename = script.filename;
     this.args = args;
+    this.scriptKey = scriptKey(this.filename, args);
     this.server = script.server;
     this.ramUsage = ramUsage;
     this.dependencies = script.dependencies;

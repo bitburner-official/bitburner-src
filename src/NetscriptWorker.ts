@@ -31,7 +31,7 @@ import { parse } from "acorn";
 import { simple as walksimple } from "acorn-walk";
 import { Terminal } from "./Terminal";
 import { ScriptArg } from "@nsdefs";
-import { handleUnknownError, CompleteRunOptions } from "./Netscript/NetscriptHelpers";
+import { handleUnknownError, CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
 import { resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
 import { root } from "./Paths/Directory";
 
@@ -44,9 +44,6 @@ export function prestigeWorkerScripts(): void {
   }
 
   NetscriptPorts.clear();
-
-  WorkerScriptStartStopEventEmitter.emit();
-  workerScripts.clear();
 }
 
 async function startNetscript2Script(workerScript: WorkerScript): Promise<void> {
@@ -360,18 +357,15 @@ export function loadAllRunningScripts(): void {
     // Reset each server's RAM usage to 0
     server.ramUsed = 0;
 
-    if (skipScriptLoad) {
+    const rsList = server.savedScripts;
+    server.savedScripts = undefined;
+    if (skipScriptLoad || !rsList) {
       // Start game with no scripts
-      server.runningScripts.length = 0;
       continue;
     }
-    // Using backwards index iteration to avoid complications when removing elements during iteration.
-    for (let i = server.runningScripts.length - 1; i >= 0; i--) {
-      const runningScript = server.runningScripts[i];
-      const success = createAndAddWorkerScript(runningScript, server);
+    for (const runningScript of rsList) {
+      createAndAddWorkerScript(runningScript, server);
       scriptCalculateOfflineProduction(runningScript);
-      // Remove the RunningScript if the WorkerScript failed to start.
-      if (!success) server.runningScripts.splice(i, 1);
     }
   }
 }
@@ -392,7 +386,15 @@ export function runScriptFromScript(
   }
 
   // Check if script is already running on server and fail if it is.
-  if (host.getRunningScript(scriptname, args)) {
+  if (
+    runOpts.preventDuplicates &&
+    getRunningScriptsByArgs(
+      { workerScript, function: "runScriptFromScript", functionPath: "internal.runScriptFromScript" },
+      scriptname,
+      host.hostname,
+      args,
+    ) !== null
+  ) {
     workerScript.log(caller, () => `'${scriptname}' is already running on '${host.hostname}'`);
     return 0;
   }

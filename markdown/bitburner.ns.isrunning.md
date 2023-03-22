@@ -30,7 +30,7 @@ True if the specified script is running on the target server, and false otherwis
 
 RAM cost: 0.1 GB
 
-Returns a boolean indicating whether the specified script is running on the target server. If you use a PID instead of a filename, the hostname and args parameters are unnecessary. Remember that a script is uniquely identified by both its name and its arguments.
+Returns a boolean indicating whether the specified script is running on the target server. If you use a PID instead of a filename, the hostname and args parameters are unnecessary. Remember that a script is semi-uniquely identified by both its name and its arguments. (You can run multiple copies of scripts with the same arguments, but for the purposes of functions like this that check based on filename, the filename plus arguments forms the key.)
 
 ## Example
 

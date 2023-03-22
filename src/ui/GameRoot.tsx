@@ -170,7 +170,7 @@ export function GameRoot(): React.ReactElement {
 
   function killAllScripts(): void {
     for (const server of GetAllServers()) {
-      server.runningScripts = [];
+      server.runningScriptMap.clear();
     }
     saveObject.saveGame();
     setTimeout(() => htmlLocation.reload(), 2000);

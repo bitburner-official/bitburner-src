@@ -318,7 +318,7 @@ to home and want to kill a script running on n00dles, you have to either use it'
 or :code:`connect` to n00dles first and then use the the kill command.
 
 If you are killing the script using its filename and arguments, then each argument
-must be separated by a space. Remember that a running script is uniquely identified
+must be separated by a space. Remember that a running script is identified
 by both its name and the arguments that are used to start it. So, if a script
 was ran with the following arguments::
 
@@ -327,6 +327,9 @@ was ran with the following arguments::
 Then to kill this script the same arguments would have to be used::
 
     $ kill foo.js 50e3 sigma-cosmetics
+
+If there are multiple copies of a script running with the same arguments, all
+of them will be killed.
 
 If you are killing the script using its PID, then the PID argument must be numeric.
 
@@ -543,11 +546,13 @@ Prints whether or not you have root access to the current server.
 tail
 ^^^^
 
+    $ tail [pid]
+    or
     $ tail [script name] [args...]
 
-Displays dynamic logs for the script specified by the script name and arguments.
+Displays dynamic logs for the script specified by PID or the script name and arguments.
 Each argument must be separated by a space. Remember that a running script is
-uniquely identified by both its name and the arguments that were used to run
+identified by both its name and the arguments that were used to run
 it. So, if a script was ran with the following arguments::
 
     $ run foo.js 10 50000
@@ -642,3 +647,6 @@ with a semicolon (;).
 Example::
 
     $ run foo.js; tail foo.js
+
+This does *not* wait for commands with a delay to finish executing, so it
+generally doesn't work with things like :code:`hack`, :code:`wget`, etc.

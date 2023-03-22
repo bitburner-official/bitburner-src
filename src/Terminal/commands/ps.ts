@@ -1,5 +1,6 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
+import { matchScriptPathUnanchored } from "../../utils/helpers/scriptKey";
 import * as libarg from "arg";
 
 export function ps(args: (string | number | boolean)[], server: BaseServer): void {
@@ -17,26 +18,15 @@ export function ps(args: (string | number | boolean)[], server: BaseServer): voi
     Terminal.error("Incorrect usage of ps command. Usage: ps [-g, --grep pattern]");
     return;
   }
-  const pattern = flags["--grep"];
-  if (pattern) {
-    const re = new RegExp(pattern.toString());
-    const matching = server.runningScripts.filter((x) => re.test(x.filename));
-    for (let i = 0; i < matching.length; i++) {
-      const rsObj = matching[i];
-      let res = `(PID - ${rsObj.pid}) ${rsObj.filename}`;
-      for (let j = 0; j < rsObj.args.length; ++j) {
-        res += " " + rsObj.args[j].toString();
-      }
-      Terminal.print(res);
-    }
+  let pattern = flags["--grep"];
+  if (!pattern) {
+    pattern = ".*"; // Match anything
   }
-  if (args.length === 0) {
-    for (let i = 0; i < server.runningScripts.length; i++) {
-      const rsObj = server.runningScripts[i];
-      let res = `(PID - ${rsObj.pid}) ${rsObj.filename}`;
-      for (let j = 0; j < rsObj.args.length; ++j) {
-        res += " " + rsObj.args[j].toString();
-      }
+  const re = matchScriptPathUnanchored(pattern);
+  for (const [k, byPid] of server.runningScriptMap) {
+    if (!re.test(k)) continue;
+    for (const rsObj of byPid.values()) {
+      const res = `(PID - ${rsObj.pid}) ${rsObj.filename} ${rsObj.args.join(" ")}`;
       Terminal.print(res);
     }
   }

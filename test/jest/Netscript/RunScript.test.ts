@@ -103,9 +103,12 @@ test.each([
       alerted,
       new Promise((resolve) => {
         eventDelete = WorkerScriptStartStopEventEmitter.subscribe(() => {
-          if (!server.runningScripts.includes(runningScript)) {
-            resolve(null);
+          for (const byPid of server.runningScriptMap.values()) {
+            for (const rs of byPid.values()) {
+              if (rs === runningScript) return;
+            }
           }
+          resolve(null);
         });
       }),
     ]);

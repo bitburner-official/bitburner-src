@@ -26,29 +26,29 @@ export function top(args: (string | number | boolean)[], server: BaseServer): vo
 
   Terminal.print(headers);
 
-  const currRunningScripts = server.runningScripts;
+  const currRunningScripts = server.runningScriptMap;
   // Iterate through scripts on current server
-  for (let i = 0; i < currRunningScripts.length; i++) {
-    const script = currRunningScripts[i];
+  for (const byPid of currRunningScripts.values()) {
+    for (const script of byPid.values()) {
+      // Calculate name padding
+      const numSpacesScript = Math.max(0, scriptWidth - script.filename.length);
+      const spacesScript = " ".repeat(numSpacesScript);
 
-    // Calculate name padding
-    const numSpacesScript = Math.max(0, scriptWidth - script.filename.length);
-    const spacesScript = " ".repeat(numSpacesScript);
+      // Calculate PID padding
+      const numSpacesPid = Math.max(0, pidWidth - (script.pid + "").length);
+      const spacesPid = " ".repeat(numSpacesPid);
 
-    // Calculate PID padding
-    const numSpacesPid = Math.max(0, pidWidth - (script.pid + "").length);
-    const spacesPid = " ".repeat(numSpacesPid);
+      // Calculate thread padding
+      const numSpacesThread = Math.max(0, threadsWidth - (script.threads + "").length);
+      const spacesThread = " ".repeat(numSpacesThread);
 
-    // Calculate thread padding
-    const numSpacesThread = Math.max(0, threadsWidth - (script.threads + "").length);
-    const spacesThread = " ".repeat(numSpacesThread);
+      // Calculate and transform RAM usage
+      const ramUsage = formatRam(script.ramUsage * script.threads);
 
-    // Calculate and transform RAM usage
-    const ramUsage = formatRam(script.ramUsage * script.threads);
-
-    const entry = [script.filename, spacesScript, script.pid, spacesPid, script.threads, spacesThread, ramUsage].join(
-      "",
-    );
-    Terminal.print(entry);
+      const entry = [script.filename, spacesScript, script.pid, spacesPid, script.threads, spacesThread, ramUsage].join(
+        "",
+      );
+      Terminal.print(entry);
+    }
   }
 }

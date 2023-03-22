@@ -11,6 +11,7 @@ import { Player } from "@player";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { isPowerOfTwo } from "../utils/helpers/isPowerOfTwo";
+import { WorkerScript } from "../Netscript/WorkerScript";
 import { workerScripts } from "../Netscript/WorkerScripts";
 
 // Returns the cost of purchasing a server with the given RAM
@@ -72,12 +73,16 @@ export const renamePurchasedServer = (hostname: string, newName: string): void =
   const home = Player.getHomeComputer();
   home.serversOnNetwork = replace(home.serversOnNetwork, hostname, newName);
   server.serversOnNetwork = replace(server.serversOnNetwork, hostname, newName);
-  server.runningScripts.forEach((r) => (r.server = newName));
+  for (const byPid of server.runningScriptMap.values()) {
+    for (const r of byPid.values()) {
+      r.server = newName;
+      // Lookup can't fail.
+      const ws = workerScripts.get(r.pid) as WorkerScript;
+      ws.hostname = newName;
+    }
+  }
   server.scripts.forEach((r) => (r.server = newName));
   server.hostname = newName;
-  workerScripts.forEach((w) => {
-    if (w.hostname === hostname) w.hostname = newName;
-  });
   renameServer(hostname, newName);
 };
 

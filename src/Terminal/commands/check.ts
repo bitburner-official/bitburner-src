@@ -1,6 +1,6 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { findRunningScript } from "../../Script/ScriptHelpers";
+import { findRunningScripts } from "../../Script/ScriptHelpers";
 import { hasScriptExtension, validScriptExtensions } from "../../Paths/ScriptFilePath";
 
 export function check(args: (string | number | boolean)[], server: BaseServer): void {
@@ -16,8 +16,11 @@ export function check(args: (string | number | boolean)[], server: BaseServer): 
     }
 
     // Check that the script is running on this machine
-    const runningScript = findRunningScript(scriptName, args.slice(1), server);
-    if (runningScript == null) return Terminal.error(`No script named ${scriptName} is running on the server`);
-    runningScript.displayLog();
+    const runningScripts = findRunningScripts(scriptName, args.slice(1), server);
+    if (runningScripts === null) {
+      Terminal.error(`No script named ${scriptName} is running on the server`);
+      return;
+    }
+    runningScripts.values().next().value.displayLog();
   }
 }
