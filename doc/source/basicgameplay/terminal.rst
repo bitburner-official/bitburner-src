@@ -614,7 +614,7 @@ There are two main points:
 Here's an example to show how these rules work. Consider the following script `argType.js`::
     
     export async function main(ns) {
-        ns.tprint("Number of args: " + args.length);
+        ns.tprint("Number of args: " + ns.args.length);
         for (var i = 0; i < ns.args.length; ++i) {
             ns.tprint(typeof ns.args[i]);
         }
