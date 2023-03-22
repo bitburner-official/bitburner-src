@@ -33,7 +33,7 @@ import { BaseServer } from "../Server/BaseServer";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { checkEnum } from "../utils/helpers/enum";
 import { RamCostConstants } from "./RamCostGenerator";
-import { isPositiveInteger, PositiveInteger } from "../types";
+import { isPositiveInteger, PositiveInteger, Unknownify } from "../types";
 import { Engine } from "../engine";
 
 export const helpers = {
@@ -182,34 +182,23 @@ function scriptArgs(ctx: NetscriptContext, args: unknown) {
   return args;
 }
 
-function runOptions(ctx: NetscriptContext, thread_or_opt: unknown): CompleteRunOptions {
-  let threads: any = 1;
-  let temporary: any = false;
-  let ramOverride: any;
-  if (typeof thread_or_opt !== "object" || thread_or_opt === null) {
-    threads = thread_or_opt ?? 1;
-  } else {
-    // Lie and pretend it's a RunOptions. It could be anything, we'll deal with that below.
-    const options = thread_or_opt as RunOptions;
-    threads = options.threads ?? 1;
-    temporary = options.temporary ?? false;
-    ramOverride = options.ramOverride;
+function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {
+  if (typeof threadOrOption !== "object" || threadOrOption === null) {
+    return { threads: positiveInteger(ctx, "threads", threadOrOption ?? 1), temporary: false };
   }
-  const result: CompleteRunOptions = {
-    threads: positiveInteger(ctx, "threads", threads),
-    temporary: !!temporary,
-  };
-  if (ramOverride !== undefined && ramOverride !== null) {
-    result.ramOverride = number(ctx, "ramOverride", ramOverride);
-    if (result.ramOverride < RamCostConstants.Base) {
-      throw makeRuntimeErrorMsg(
-        ctx,
-        `ramOverride must be >= baseCost (${RamCostConstants.Base}), was ${result.ramOverride}`,
-        "RAM USAGE",
-      );
-    }
+  // Safe assertion since threadOrOption type has been narrowed to a non-null object
+  const options = threadOrOption as Unknownify<CompleteRunOptions>;
+  const threads = positiveInteger(ctx, "RunOptions.threads", options.threads ?? 1);
+  const temporary = !!options.temporary;
+  if (options.ramOverride === undefined || options.ramOverride === null) return { threads, temporary };
+  const ramOverride = number(ctx, "RunOptions.ramOverride", options.ramOverride);
+  if (ramOverride < RamCostConstants.Base) {
+    throw makeRuntimeErrorMsg(
+      ctx,
+      `RunOptions.ramOverride must be >= baseCost (${RamCostConstants.Base}), was ${ramOverride}`,
+    );
   }
-  return result;
+  return { threads, temporary, ramOverride };
 }
 
 /** Convert multiple arguments for tprint or print into a single string. */
@@ -667,13 +656,12 @@ function log(ctx: NetscriptContext, message: () => string) {
 /**
  * Searches for and returns the RunningScript object for the specified script.
  * If the 'fn' argument is not specified, this returns the current RunningScript.
- * @param {string} fn - Filename of script
- * @param {string} hostname - Hostname/ip of the server on which the script resides
- * @param {any[]} scriptArgs - Running script's arguments
- * @returns {RunningScript}
- *      Running script identified by the parameters, or null if no such script
- *      exists, or the current running script if the first argument 'fn'
- *      is not specified.
+ * @param fn - Filename of script
+ * @param hostname - Hostname/ip of the server on which the script resides
+ * @param scriptArgs - Running script's arguments
+ * @returns Running script identified by the parameters, or null if no such script
+ *   exists, or the current running script if the first argument 'fn'
+ *   is not specified.
  */
 function getRunningScriptByArgs(
   ctx: NetscriptContext,
@@ -722,10 +710,8 @@ function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): Runni
 /**
  * Helper function for getting the error log message when the user specifies
  * a nonexistent running script
- * @param {string} fn - Filename of script
- * @param {string} hostname - Hostname/ip of the server on which the script resides
- * @param {any[]} scriptArgs - Running script's arguments
- * @returns {string} Error message to print to logs
+ * @param ident - Identifier (pid or identifier object) of script.
+ * @returns Error message to print to logs
  */
 function getCannotFindRunningScriptErrorMessage(ident: ScriptIdentifier): string {
   if (typeof ident === "number") return `Cannot find running script with pid: ${ident}`;
