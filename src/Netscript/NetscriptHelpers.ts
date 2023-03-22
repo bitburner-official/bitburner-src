@@ -6,7 +6,7 @@ import { ScriptDeath } from "./ScriptDeath";
 import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
 import { ScriptArg } from "./ScriptArg";
 import { CityName } from "../Enums";
-import { BasicHGWOptions, RunOptions, RunningScript as IRunningScript, Person as IPerson } from "@nsdefs";
+import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson } from "@nsdefs";
 import { Server } from "../Server/Server";
 import {
   calculateHackingChance,
