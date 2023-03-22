@@ -68,6 +68,7 @@ export const renamePurchasedServer = (hostname: string, newName: string): void =
     return arr.map((v) => (v === old ? next : v));
   };
   Player.purchasedServers = replace(Player.purchasedServers, hostname, newName);
+  if (Player.currentServer === hostname) Player.currentServer = newName;
   const home = Player.getHomeComputer();
   home.serversOnNetwork = replace(home.serversOnNetwork, hostname, newName);
   server.serversOnNetwork = replace(server.serversOnNetwork, hostname, newName);
