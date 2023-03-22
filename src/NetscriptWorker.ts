@@ -54,7 +54,6 @@ async function startNetscript2Script(workerScript: WorkerScript): Promise<void> 
   if (script === null) throw "workerScript had no associated script. This is a bug.";
   if (!script.ramUsage) throw "Attempting to start a script with no calculated ram cost. This is a bug.";
   const loadedModule = await compile(script, scripts);
-  workerScript.ramUsage = script.ramUsage;
   const ns = workerScript.env.vars;
 
   if (!loadedModule) throw `${script.filename} cannot be run because the script module won't load`;
@@ -319,7 +318,6 @@ function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseS
   // Create the WorkerScript. NOTE: WorkerScript ctor will set the underlying
   // RunningScript's PID as well
   const workerScript = new WorkerScript(runningScriptObj, pid, NetscriptFunctions);
-  workerScript.ramUsage = runningScriptObj.ramUsage;
 
   // Add the WorkerScript to the global pool
   workerScripts.set(pid, workerScript);
@@ -420,7 +418,7 @@ export function runScriptFromScript(
     return 0;
   }
 
-  const singleRamUsage = script.getRamUsage(host.scripts);
+  const singleRamUsage = runOpts.ramOverride ?? script.getRamUsage(host.scripts);
   if (!singleRamUsage) {
     workerScript.log(caller, () => `Ram usage could not be calculated for ${scriptname}`);
     return 0;

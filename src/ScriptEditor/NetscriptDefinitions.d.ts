@@ -203,6 +203,21 @@ interface RunOptions {
   threads?: number;
   /** Whether this script is excluded from saves, defaults to false */
   temporary?: boolean;
+  /**
+   * The RAM allocation to launch each thread of the script with.
+   *
+   * Lowering this will *not* automatically let you get away with using less RAM:
+   * the dynamic RAM check enforces that all {@link NS} functions actually called incur their cost.
+   * However, if you know that certain functions that are statically present (and thus included
+   * in the static RAM cost) will never be called in a particular circumstance, you can use
+   * this to avoid paying for them.
+   *
+   * You can also use this to *increase* the RAM if the static RAM checker has missed functions
+   * that you need to call.
+   *
+   * Must be >= the base RAM cost. Defaults to the statically calculated cost.
+   */
+  ramOverride?: number;
 }
 
 /** @public */

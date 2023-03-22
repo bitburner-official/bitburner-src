@@ -37,7 +37,7 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
       real_document.completely_unused_field = undefined;
       // set one to true and check that it affected the other.
       real_document.completely_unused_field = true;
-      if (d.completely_unused_field && ctx.workerScript.ramUsage === RamCostConstants.Base) {
+      if (d.completely_unused_field && ctx.workerScript.scriptRef.ramUsage === RamCostConstants.Base) {
         Player.giveExploit(Exploit.Bypass);
       }
       d.completely_unused_field = undefined;

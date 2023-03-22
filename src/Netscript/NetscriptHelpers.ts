@@ -72,6 +72,7 @@ export const helpers = {
 export interface CompleteRunOptions {
   threads: PositiveInteger;
   temporary: boolean;
+  ramOverride?: number;
 }
 
 export function assertMember<T extends string>(
@@ -184,6 +185,7 @@ function scriptArgs(ctx: NetscriptContext, args: unknown) {
 function runOptions(ctx: NetscriptContext, thread_or_opt: unknown): CompleteRunOptions {
   let threads: any = 1;
   let temporary: any = false;
+  let ramOverride: any;
   if (typeof thread_or_opt !== "object" || thread_or_opt === null) {
     threads = thread_or_opt ?? 1;
   } else {
@@ -191,11 +193,23 @@ function runOptions(ctx: NetscriptContext, thread_or_opt: unknown): CompleteRunO
     const options = thread_or_opt as RunOptions;
     threads = options.threads ?? 1;
     temporary = options.temporary ?? false;
+    ramOverride = options.ramOverride;
   }
-  return {
-    threads: positiveInteger(ctx, "thread", threads),
+  const result: CompleteRunOptions = {
+    threads: positiveInteger(ctx, "threads", threads),
     temporary: !!temporary,
   };
+  if (ramOverride !== undefined && ramOverride !== null) {
+    result.ramOverride = number(ctx, "ramOverride", ramOverride);
+    if (result.ramOverride < RamCostConstants.Base) {
+      throw makeRuntimeErrorMsg(
+        ctx,
+        `ramOverride must be >= baseCost (${RamCostConstants.Base}), was ${result.ramOverride}`,
+        "RAM USAGE",
+      );
+    }
+  }
+  return result;
 }
 
 /** Convert multiple arguments for tprint or print into a single string. */
@@ -375,17 +389,17 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
   ws.dynamicLoadedFns[fnName] = true;
 
   ws.dynamicRamUsage = Math.min(ws.dynamicRamUsage + ramCost, RamCostConstants.Max);
-  if (ws.dynamicRamUsage > 1.01 * ws.ramUsage) {
+  if (ws.dynamicRamUsage > 1.01 * ws.scriptRef.ramUsage) {
     log(ctx, () => "Insufficient static ram available.");
     ws.env.stopFlag = true;
     throw makeRuntimeErrorMsg(
       ctx,
-      `Dynamic RAM usage calculated to be greater than initial RAM usage.
+      `Dynamic RAM usage calculated to be greater than RAM allocation.
       This is probably because you somehow circumvented the static RAM calculation.
 
       Threads: ${ws.scriptRef.threads}
       Dynamic RAM Usage: ${formatRam(ws.dynamicRamUsage)} per thread
-      Static RAM Usage: ${formatRam(ws.ramUsage)} per thread
+      RAM Allocation: ${formatRam(ws.scriptRef.ramUsage)} per thread
 
       One of these could be the reason:
       * Using eval() to get a reference to a ns function
@@ -393,6 +407,8 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
 
       * Using map access to do the same
       \u00a0\u00a0const myScan = ns['scan'];
+
+      * Using RunOptions.ramOverride to set a smaller allocation than needed
 
       Sorry :(`,
       "RAM USAGE",
