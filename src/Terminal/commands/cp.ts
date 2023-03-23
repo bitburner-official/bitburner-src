@@ -5,39 +5,26 @@ import { getDestinationFilepath, areFilesEqual } from "../DirectoryHelpers";
 
 export function cp(args: (string | number | boolean)[], server: BaseServer): void {
   try {
-    if (args.length !== 2) {
-      Terminal.error("Incorrect usage of cp command. Usage: cp [src] [dst]");
-      return;
-    }
+    if (args.length !== 2) return Terminal.error("Incorrect usage of cp command. Usage: cp [src] [dst]");
     // Convert a relative path source file to the absolute path.
     const src = Terminal.getFilepath(args[0] + "");
-    if (src === null) {
-      Terminal.error("src cannot be a directory");
-      return;
-    }
+    if (src === null) return Terminal.error(`Invalid source filename ${args[0]}`);
 
     // Get the destination based on the source file and the current directory
     const t_dst = getDestinationFilepath(args[1] + "", src, Terminal.cwd());
-    if (t_dst === null) {
-      Terminal.error("error parsing dst file");
-      return;
-    }
+    if (t_dst === null) return Terminal.error("error parsing dst file");
 
     // Convert a relative path destination file to the absolute path.
     const dst = Terminal.getFilepath(t_dst);
-    if (areFilesEqual(src, dst)) {
-      Terminal.error("src and dst cannot be the same");
-      return;
-    }
+    if (!dst) return Terminal.error(`Invalid destination filename ${t_dst}`);
+    if (areFilesEqual(src, dst)) return Terminal.error("src and dst cannot be the same");
+
     const srcExt = src.slice(src.lastIndexOf("."));
     const dstExt = dst.slice(dst.lastIndexOf("."));
-    if (srcExt !== dstExt) {
-      Terminal.error("src and dst must have the same extension.");
-      return;
-    }
+    if (srcExt !== dstExt) return Terminal.error("src and dst must have the same extension.");
+
     if (!isScriptFilename(src) && !src.endsWith(".txt")) {
-      Terminal.error("cp only works for scripts and .txt files");
-      return;
+      return Terminal.error("cp only works for scripts and .txt files");
     }
 
     // Scp for txt files

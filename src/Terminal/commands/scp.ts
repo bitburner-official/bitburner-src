@@ -10,6 +10,7 @@ export function scp(args: (string | number | boolean)[], server: BaseServer): vo
       return;
     }
     const scriptname = Terminal.getFilepath(args[0] + "");
+    if (!scriptname) return Terminal.error(`Invalid filename: ${args[0]}`);
     if (!scriptname.endsWith(".lit") && !isScriptFilename(scriptname) && !scriptname.endsWith(".txt")) {
       Terminal.error("scp only works for scripts, text files (.txt), and literature files (.lit)");
       return;
