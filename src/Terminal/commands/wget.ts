@@ -12,7 +12,7 @@ export function wget(args: (string | number | boolean)[], server: BaseServer): v
 
   const url = args[0] + "";
   const target = Terminal.getFilepath(args[1] + "");
-  if (!isScriptFilename(target) && !target.endsWith(".txt")) {
+  if (!target || (!isScriptFilename(target) && !target.endsWith(".txt"))) {
     return Terminal.error(`wget failed: Invalid target file. Target file must be script or text file`);
   }
   $.get(

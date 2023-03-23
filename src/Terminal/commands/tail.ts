@@ -11,6 +11,7 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
       Terminal.error("Incorrect number of arguments. Usage: tail [script] [arg1] [arg2]...");
     } else if (typeof commandArray[0] === "string") {
       const scriptName = Terminal.getFilepath(commandArray[0]);
+      if (!scriptName) return Terminal.error(`Invalid filename: ${commandArray[0]}`);
       if (!isScriptFilename(scriptName)) {
         Terminal.error(`tail can only be called on ${validScriptExtensions.join(", ")} files, or by PID`);
         return;

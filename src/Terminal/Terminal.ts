@@ -392,22 +392,17 @@ export class Terminal {
     return null;
   }
 
-  getFilepath(filename: string): string {
+  getFilepath(filename: string): string | null {
     const path = evaluateFilePath(filename, this.cwd());
-    if (path == null) {
-      throw new Error(`Invalid file path specified: ${filename}`);
-    }
+    if (path === null || !isInRootDirectory(path)) return path;
 
-    if (isInRootDirectory(path)) {
-      return removeLeadingSlash(path);
-    }
-
-    return path;
+    return removeLeadingSlash(path);
   }
 
   getScript(filename: string): Script | null {
     const s = Player.getCurrentServer();
     const filepath = this.getFilepath(filename);
+    if (!filepath) return null;
     for (const script of s.scripts) {
       if (filepath === script.filename) {
         return script;
@@ -420,6 +415,7 @@ export class Terminal {
   getTextFile(filename: string): TextFile | null {
     const s = Player.getCurrentServer();
     const filepath = this.getFilepath(filename);
+    if (!filepath) return null;
     for (const txt of s.textFiles) {
       if (filepath === txt.fn) {
         return txt;
@@ -432,6 +428,7 @@ export class Terminal {
   getLitFile(filename: string): string | null {
     const s = Player.getCurrentServer();
     const filepath = this.getFilepath(filename);
+    if (!filepath) return null;
     for (const lit of s.messages) {
       if (typeof lit === "string" && filepath === lit) {
         return lit;

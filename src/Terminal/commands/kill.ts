@@ -26,6 +26,7 @@ export function kill(args: (string | number | boolean)[], server: BaseServer): v
     }
 
     const scriptName = Terminal.getFilepath(args[0]);
+    if (!scriptName) return Terminal.error(`Invalid filename: ${args[0]}`);
     const runningScript = server.getRunningScript(scriptName, args.slice(1));
     if (runningScript == null) {
       Terminal.error("No such script is running. Nothing to kill");

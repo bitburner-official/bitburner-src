@@ -155,6 +155,9 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
       const filepath = Terminal.getFilepath(`${prefix}${filename}`);
       // Terminal.getScript also calls Terminal.getFilepath and therefore also
       // needs the given parameter
+      if (!filepath) {
+        return Terminal.error(`Invalid filename (${prefix}${filename}) when clicking script link. This is a bug.`);
+      }
       const code = toString(Terminal.getScript(`${prefix}${filename}`)?.code);
       Router.toScriptEditor({ [filepath]: code });
     }
@@ -199,6 +202,9 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
       }
       if (filename.startsWith("/")) filename = filename.slice(1);
       const filepath = Terminal.getFilepath(`${prefix}${filename}`);
+      if (!filepath) {
+        return Terminal.error(`Invalid filename ${prefix}${filename} when clicking message link. This is a bug.`);
+      }
 
       if (filepath.endsWith(".lit")) {
         showLiterature(filepath);

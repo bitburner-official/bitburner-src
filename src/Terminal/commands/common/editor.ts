@@ -109,6 +109,7 @@ export function commonEditor(
 
       if (isScriptFilename(filename)) {
         const filepath = Terminal.getFilepath(filename);
+        if (!filepath) throw `Invalid filename: ${filename}`;
         const script = Terminal.getScript(filename);
         const fileIsNs2 = isNs2(filename);
         const code = script !== null ? script.code : fileIsNs2 ? newNs2Template : "";
@@ -125,6 +126,7 @@ export function commonEditor(
 
       if (filename.endsWith(".txt")) {
         const filepath = Terminal.getFilepath(filename);
+        if (!filepath) throw `Invalid filename: ${filename}`;
         const txt = Terminal.getTextFile(filename);
         return [filepath, txt === null ? "" : txt.text];
       }

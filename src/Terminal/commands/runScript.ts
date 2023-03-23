@@ -18,6 +18,7 @@ export function runScript(commandArgs: (string | number | boolean)[], server: Ba
   }
 
   const scriptName = Terminal.getFilepath(commandArgs[0] + "");
+  if (!scriptName) return Terminal.error(`Invalid filename: ${commandArgs[0]}`);
 
   const runArgs = { "--tail": Boolean, "-t": Number };
   const flags = libarg(runArgs, {

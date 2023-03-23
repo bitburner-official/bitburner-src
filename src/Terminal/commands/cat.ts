@@ -12,6 +12,7 @@ export function cat(args: (string | number | boolean)[], server: BaseServer): vo
   }
   const relative_filename = args[0] + "";
   const filename = Terminal.getFilepath(relative_filename);
+  if (!filename) return Terminal.error(`Invalid filename: ${relative_filename}`);
   if (
     !filename.endsWith(".msg") &&
     !filename.endsWith(".lit") &&
