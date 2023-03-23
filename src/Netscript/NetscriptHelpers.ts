@@ -183,22 +183,33 @@ function scriptArgs(ctx: NetscriptContext, args: unknown) {
 }
 
 function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {
+  const result: CompleteRunOptions = {
+    threads: 1 as PositiveInteger,
+    temporary: false,
+  };
+  function checkThreads(threads: unknown, argName: string) {
+    if (threads !== null && threads !== undefined) {
+      result.threads = positiveInteger(ctx, argName, threads);
+    }
+  }
   if (typeof threadOrOption !== "object" || threadOrOption === null) {
-    return { threads: positiveInteger(ctx, "threads", threadOrOption ?? 1), temporary: false };
+    checkThreads(threadOrOption, "threads");
+    return result;
   }
   // Safe assertion since threadOrOption type has been narrowed to a non-null object
   const options = threadOrOption as Unknownify<CompleteRunOptions>;
-  const threads = positiveInteger(ctx, "RunOptions.threads", options.threads ?? 1);
-  const temporary = !!options.temporary;
-  if (options.ramOverride === undefined || options.ramOverride === null) return { threads, temporary };
-  const ramOverride = number(ctx, "RunOptions.ramOverride", options.ramOverride);
-  if (ramOverride < RamCostConstants.Base) {
-    throw makeRuntimeErrorMsg(
-      ctx,
-      `RunOptions.ramOverride must be >= baseCost (${RamCostConstants.Base}), was ${ramOverride}`,
-    );
+  checkThreads(options.threads, "RunOptions.threads");
+  result.temporary = !!options.temporary;
+  if (options.ramOverride !== undefined && options.ramOverride !== null) {
+    result.ramOverride = number(ctx, "RunOptions.ramOverride", options.ramOverride);
+    if (result.ramOverride < RamCostConstants.Base) {
+      throw makeRuntimeErrorMsg(
+        ctx,
+        `RunOptions.ramOverride must be >= baseCost (${RamCostConstants.Base}), was ${result.ramOverride}`,
+      );
+    }
   }
-  return { threads, temporary, ramOverride };
+  return result;
 }
 
 /** Convert multiple arguments for tprint or print into a single string. */
