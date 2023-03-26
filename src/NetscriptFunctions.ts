@@ -383,7 +383,8 @@ export const ns: InternalAPI<NSFull> = {
           return Promise.resolve(0);
         }
         const coreBonus = 1 + (host.cpuCores - 1) / 16;
-        server.weaken(CONSTANTS.ServerWeakenAmount * threads * coreBonus);
+        const weakenAmt = CONSTANTS.ServerWeakenAmount * threads * coreBonus;
+        server.weaken(weakenAmt);
         ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
         const expGain = calculateHackingExpGain(server, Player) * threads;
         helpers.log(
@@ -395,7 +396,8 @@ export const ns: InternalAPI<NSFull> = {
         );
         ctx.workerScript.scriptRef.onlineExpGained += expGain;
         Player.gainHackingExp(expGain);
-        return Promise.resolve(CONSTANTS.ServerWeakenAmount * threads * coreBonus);
+        // Account for hidden multiplier in Server.weaken()
+        return Promise.resolve(weakenAmt * BitNodeMultipliers.ServerWeakenRate);
       });
     },
   weakenAnalyze:
