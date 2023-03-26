@@ -10,7 +10,7 @@ import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 
 import { Programs } from "../Programs";
-import { CreateProgramWork } from "../../Work/CreateProgramWork";
+import { CreateProgramWork, isCreateProgramWork } from "../../Work/CreateProgramWork";
 import { useRerender } from "../../ui/React/hooks";
 
 export const ProgramsSeen: string[] = [];
@@ -91,6 +91,9 @@ export function ProgramsRoot(): React.ReactElement {
                     sx={{ my: 1, width: "100%" }}
                     onClick={(event) => {
                       if (!event.isTrusted) return;
+                      if (isCreateProgramWork(Player.currentWork)) {
+                        Player.finishWork(true);
+                      }
                       Player.startWork(new CreateProgramWork({ singularity: false, programName: program.name }));
                       Player.startFocusing();
                       Router.toPage(Page.Work);
