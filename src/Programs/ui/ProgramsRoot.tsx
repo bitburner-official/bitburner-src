@@ -99,7 +99,7 @@ export function ProgramsRoot(): React.ReactElement {
                       Router.toPage(Page.Work);
                     }}
                   >
-                    Create program
+                    {isCreateProgramWork(Player.currentWork) && Player.currentWork?.programName === program.name ? "Resume focus" : "Create program"}
                   </Button>
                 )}
                 {Player.hasProgram(program.name) || getHackingLevelRemaining(create.level) === 0 || (
@@ -112,6 +112,10 @@ export function ProgramsRoot(): React.ReactElement {
                     <b>Current completion:</b> {curCompletion}%
                   </Typography>
                 )}
+                {/*Displays the current completion of the program currently being created*/}
+                {isCreateProgramWork(Player.currentWork) && Player.currentWork?.programName === program.name && (<Typography color={Settings.theme.infolight}>
+                  <b>Current completion:</b> {((100 * Player.currentWork.unitCompleted) / Player.currentWork.unitNeeded()).toFixed(2)}%
+                </Typography>)}
                 <Typography>{create.tooltip}</Typography>
               </>
             </Box>
