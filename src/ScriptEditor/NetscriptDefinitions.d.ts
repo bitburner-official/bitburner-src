@@ -6082,7 +6082,7 @@ export interface NS {
   /**
    * Rename a purchased server.
    * @remarks
-   * RAM cost: 2.00 GB
+   * RAM cost: 0 GB
    *
    * @param hostname - Current server hostname.
    * @param newName - New server hostname.

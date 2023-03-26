@@ -494,7 +494,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   getPurchasedServerCost: RamCostConstants.GetPurchaseServer,
   getPurchasedServerUpgradeCost: 0.1,
   upgradePurchasedServer: 0.25,
-  renamePurchasedServer: 2,
+  renamePurchasedServer: 0,
   purchaseServer: RamCostConstants.PurchaseServer,
   deleteServer: RamCostConstants.PurchaseServer,
   getPurchasedServers: RamCostConstants.PurchaseServer,
