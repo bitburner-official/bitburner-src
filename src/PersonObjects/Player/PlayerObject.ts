@@ -6,6 +6,7 @@ import * as generalMethods from "./PlayerObjectGeneralMethods";
 import * as serverMethods from "./PlayerObjectServerMethods";
 import * as workMethods from "./PlayerObjectWorkMethods";
 
+import { setPlayer } from "../../Player";
 import { Sleeve } from "../Sleeve/Sleeve";
 import { PlayerOwnedSourceFile } from "../../SourceFile/PlayerOwnedSourceFile";
 import { Exploit } from "../../Exploits/Exploit";
@@ -171,5 +172,7 @@ export class PlayerObject extends Person implements IPlayer {
     return player;
   }
 }
+
+setPlayer(new PlayerObject());
 
 Reviver.constructors.PlayerObject = PlayerObject;

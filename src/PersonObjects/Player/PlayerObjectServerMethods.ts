@@ -1,6 +1,4 @@
 // Server and HacknetServer-related methods for the Player class (PlayerObject)
-import { PlayerObject } from "./PlayerObject";
-
 import { CONSTANTS } from "../../Constants";
 
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
@@ -10,6 +8,8 @@ import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { GetServer, AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { hasHacknetServers } from "../../Hacknet/HacknetHelpers";
+
+import type { PlayerObject } from "./PlayerObject";
 
 export function hasTorRouter(this: PlayerObject): boolean {
   return this.getHomeComputer().serversOnNetwork.includes(SpecialServers.DarkWeb);

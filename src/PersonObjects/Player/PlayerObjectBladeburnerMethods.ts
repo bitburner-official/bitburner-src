@@ -1,5 +1,6 @@
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
-import { PlayerObject } from "./PlayerObject";
+
+import type { PlayerObject } from "./PlayerObject";
 
 export function canAccessBladeburner(this: PlayerObject): boolean {
   return this.bitNodeN === 6 || this.bitNodeN === 7 || this.sourceFileLvl(6) > 0 || this.sourceFileLvl(7) > 0;

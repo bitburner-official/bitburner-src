@@ -1,6 +1,7 @@
 /** Augmentation-related methods for the Player class (PlayerObject) */
-import { PlayerObject } from "./PlayerObject";
 import { calculateEntropy } from "../Grafting/EntropyAccumulation";
+
+import type { PlayerObject } from "./PlayerObject";
 
 export function applyEntropy(this: PlayerObject, stacks = 1): void {
   // Re-apply all multipliers

@@ -11,6 +11,7 @@ import { Reviver } from "../utils/JSONReviver";
 import { isValidIPAddress } from "../utils/helpers/isValidIPAddress";
 import { SpecialServers } from "./data/SpecialServers";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import "../Script/RunningScript"; // For reviver side-effect
 
 import type { RunningScript } from "../Script/RunningScript";
 

@@ -1,9 +1,10 @@
 import { Factions } from "../../Faction/Factions";
 import { Faction } from "../../Faction/Faction";
 import { Gang } from "../../Gang/Gang";
-import { PlayerObject } from "./PlayerObject";
 import { GangConstants } from "../../Gang/data/Constants";
 import { isFactionWork } from "../../Work/FactionWork";
+
+import type { PlayerObject } from "./PlayerObject";
 
 export function canAccessGang(this: PlayerObject): boolean {
   if (this.bitNodeN === 2) {

@@ -12,6 +12,7 @@ import { processPassiveFactionRepGain, inviteToFaction } from "./Faction/Faction
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { SetupTextEditor } from "./ScriptEditor/ui/ScriptEditorRoot";
+import "./PersonObjects/Player/PlayerObject"; // For side-effect of creating Player
 
 import {
   getHackingWorkRepGain,
