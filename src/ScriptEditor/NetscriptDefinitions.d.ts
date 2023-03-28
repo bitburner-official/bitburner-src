@@ -6082,13 +6082,12 @@ export interface NS {
   /**
    * Rename a purchased server.
    * @remarks
-   * RAM cost: 2.00 GB
+   * RAM cost: 0 GB
    *
    * @param hostname - Current server hostname.
    * @param newName - New server hostname.
-   * @returns True if the upgrade succeeded, and false otherwise.
    */
-  renamePurchasedServer(hostname: string, newName: string): boolean;
+  renamePurchasedServer(hostname: string, newName: string): void;
 
   /**
    * Delete a purchased server.
