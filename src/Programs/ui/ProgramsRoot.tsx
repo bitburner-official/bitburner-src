@@ -86,22 +86,37 @@ export function ProgramsRoot(): React.ReactElement {
                     (create.req() && <Create sx={{ mr: 1 }} />) || <Lock sx={{ mr: 1 }} />}
                   {program.name}
                 </Typography>
-                {!Player.hasProgram(program.name) && create.req() && (
-                  <Button
-                    sx={{ my: 1, width: "100%" }}
-                    onClick={(event) => {
-                      if (!event.isTrusted) return;
-                      if (isCreateProgramWork(Player.currentWork)) {
-                        Player.finishWork(true);
-                      }
-                      Player.startWork(new CreateProgramWork({ singularity: false, programName: program.name }));
-                      Player.startFocusing();
-                      Router.toPage(Page.Work);
-                    }}
-                  >
-                    Create program
-                  </Button>
-                )}
+                {!Player.hasProgram(program.name) &&
+                  create.req() &&
+                  (isCreateProgramWork(Player.currentWork) && Player.currentWork?.programName === program.name ? (
+                    //Button if the program is currently being worked on
+                    <Button
+                      sx={{ my: 1, width: "100%" }}
+                      onClick={(event) => {
+                        if (!event.isTrusted) return;
+                        Player.startFocusing();
+                        Router.toPage(Page.Work);
+                      }}
+                    >
+                      Resume focus
+                    </Button>
+                  ) : (
+                    //Button if the program is not currently worked on
+                    <Button
+                      sx={{ my: 1, width: "100%" }}
+                      onClick={(event) => {
+                        if (!event.isTrusted) return;
+                        if (isCreateProgramWork(Player.currentWork)) {
+                          Player.finishWork(true);
+                        }
+                        Player.startWork(new CreateProgramWork({ singularity: false, programName: program.name }));
+                        Player.startFocusing();
+                        Router.toPage(Page.Work);
+                      }}
+                    >
+                      Create program
+                    </Button>
+                  ))}
                 {Player.hasProgram(program.name) || getHackingLevelRemaining(create.level) === 0 || (
                   <Typography color={Settings.theme.hack}>
                     <b>Unlocks in:</b> {getHackingLevelRemaining(create.level)} hacking levels
@@ -110,6 +125,13 @@ export function ProgramsRoot(): React.ReactElement {
                 {curCompletion !== -1 && (
                   <Typography color={Settings.theme.infolight}>
                     <b>Current completion:</b> {curCompletion}%
+                  </Typography>
+                )}
+                {/*Displays the current completion of the program currently being created*/}
+                {isCreateProgramWork(Player.currentWork) && Player.currentWork?.programName === program.name && (
+                  <Typography color={Settings.theme.infolight}>
+                    <b>Current completion:</b>{" "}
+                    {((100 * Player.currentWork.unitCompleted) / Player.currentWork.unitNeeded()).toFixed(2)}%
                   </Typography>
                 )}
                 <Typography>{create.tooltip}</Typography>
