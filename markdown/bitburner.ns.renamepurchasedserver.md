@@ -23,9 +23,9 @@ renamePurchasedServer(hostname: string, newName: string): boolean;
 
 boolean
 
-True if the upgrade succeeded, and false otherwise.
+True if successful, and false otherwise.
 
 ## Remarks
 
-RAM cost: 2.00 GB
+RAM cost: 0 GB
 

@@ -1270,7 +1270,13 @@ export const ns: InternalAPI<NSFull> = {
   renamePurchasedServer: (ctx) => (_hostname, _newName) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const newName = helpers.string(ctx, "newName", _newName);
-    renamePurchasedServer(hostname, newName);
+    try {
+      renamePurchasedServer(hostname, newName);
+      return true;
+    } catch (err) {
+      helpers.log(ctx, () => String(err));
+      return false;
+    }
   },
 
   deleteServer: (ctx) => (_name) => {

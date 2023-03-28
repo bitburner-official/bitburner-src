@@ -61,7 +61,7 @@ export const upgradePurchasedServer = (hostname: string, ram: number): void => {
 
 export const renamePurchasedServer = (hostname: string, newName: string): void => {
   const server = GetServer(hostname);
-  if (!server) throw new Error(`Server '${newName}' doesn't exists.`);
+  if (!server) throw new Error(`Server '${hostname}' doesn't exists.`);
   if (GetServer(newName)) throw new Error(`Server '${newName}' already exists.`);
   if (!Player.purchasedServers.includes(hostname)) throw new Error(`Server '${hostname}' is not a player server.`);
   const replace = (arr: string[], old: string, next: string): string[] => {

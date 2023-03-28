@@ -6086,8 +6086,9 @@ export interface NS {
    *
    * @param hostname - Current server hostname.
    * @param newName - New server hostname.
+   * @returns True if successful, and false otherwise.
    */
-  renamePurchasedServer(hostname: string, newName: string): void;
+  renamePurchasedServer(hostname: string, newName: string): boolean;
 
   /**
    * Delete a purchased server.
