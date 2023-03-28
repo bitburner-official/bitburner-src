@@ -21,8 +21,6 @@ import { HashManager } from "../../Hacknet/HashManager";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
 import { PlayerAchievement } from "../../Achievements/Achievements";
-import { cyrb53 } from "../../utils/StringHelperFunctions";
-import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { CONSTANTS } from "../../Constants";
 import { Work } from "src/Work/Work";
 import { Person } from "../Person";
@@ -61,6 +59,8 @@ export class PlayerObject extends Person implements IPlayer {
   achievements: PlayerAchievement[] = [];
   terminalCommandHistory: string[] = [];
   identifier: string;
+  runIdentifier = generalMethods.getNewIdentifier();
+  installIdentifier = generalMethods.getNewIdentifier();
   lastUpdate = 0;
   lastSave = 0;
   totalPlaytime = 0;
@@ -144,14 +144,7 @@ export class PlayerObject extends Person implements IPlayer {
   constructor() {
     super();
     // Let's get a hash of some semi-random stuff so we have something unique.
-    this.identifier = cyrb53(
-      "I-" +
-        new Date().getTime() +
-        navigator.userAgent +
-        window.innerWidth +
-        window.innerHeight +
-        getRandomInt(100, 999),
-    );
+    this.identifier = generalMethods.getNewIdentifier();
   }
 
   whoAmI(): string {

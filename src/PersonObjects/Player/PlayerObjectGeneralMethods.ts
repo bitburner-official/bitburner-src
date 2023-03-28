@@ -44,6 +44,8 @@ import { FactionNames } from "../../Faction/data/FactionNames";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { serverMetadata } from "../../Server/data/servers";
+import { cyrb53 } from "../../utils/StringHelperFunctions";
+import { getRandomInt } from "../../utils/helpers/getRandomInt";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -66,6 +68,8 @@ export function prestigeAugmentation(this: PlayerObject): void {
   this.currentServer = SpecialServers.Home;
 
   this.numPeopleKilled = 0;
+
+  this.installIdentifier = getNewIdentifier();
 
   //Reset stats
   this.skills.hacking = 1;
@@ -123,6 +127,12 @@ export function prestigeAugmentation(this: PlayerObject): void {
   this.finishWork(true);
 }
 
+export function getNewIdentifier(): string {
+  return cyrb53(
+    "I-" + navigator.userAgent + window.innerHeight + window.innerWidth + getRandomInt(100, 999) + new Date().getTime(),
+  );
+}
+
 export function prestigeSourceFile(this: PlayerObject): void {
   this.entropy = 0;
   this.prestigeAugmentation();
@@ -136,6 +146,8 @@ export function prestigeSourceFile(this: PlayerObject): void {
       this.sleeves[i].sync = Math.max(25, this.sleeves[i].sync);
     }
   }
+
+  this.runIdentifier = getNewIdentifier();
 
   this.gang = null;
   resetGangs();

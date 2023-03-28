@@ -220,6 +220,17 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
     },
 
+    getRunIdentifier: (ctx) => () => {
+      helpers.checkSingularityAccess(ctx);
+
+      return Player.runIdentifier;
+    },
+    getInstallIdentifier: (ctx) => () => {
+      helpers.checkSingularityAccess(ctx);
+
+      return Player.installIdentifier;
+    },
+
     goToLocation: (ctx) => (_locationName) => {
       helpers.checkSingularityAccess(ctx);
       const locationName = helpers.string(ctx, "locationName", _locationName);

@@ -2145,6 +2145,26 @@ export interface Singularity {
   installAugmentations(cbScript?: string): void;
 
   /**
+   * Get the current run identifier.
+   * @remarks
+   * RAM cost: 0.5 GB * 16/4/1
+   *
+   *
+   * This function will return an identifier for the current run of a certain bitnode. This identifier will be different each time you are in a new bitnode or a new playthrough of the bitnode.
+   */
+  getRunIdentifier(): string;
+
+  /**
+   * Get the current install identifier.
+   * @remarks
+   * RAM cost: 0.5 GB * 16/4/1
+   *
+   *
+   * This function will return an identifier for the current install of a certain bitnode. This identifier will be different each time you install augmentations or enter a new bitnode.
+   */
+  getInstallIdentifier(): string;
+
+  /**
    * Hospitalize the player.
    * @remarks
    * RAM cost: 0.25 GB * 16/4/1
