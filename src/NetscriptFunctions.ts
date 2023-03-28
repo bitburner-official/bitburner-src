@@ -1254,6 +1254,7 @@ export const ns: InternalAPI<NSFull> = {
       return -1;
     }
   },
+
   upgradePurchasedServer: (ctx) => (_hostname, _ram) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const ram = helpers.number(ctx, "ram", _ram);
@@ -1265,17 +1266,11 @@ export const ns: InternalAPI<NSFull> = {
       return false;
     }
   },
+
   renamePurchasedServer: (ctx) => (_hostname, _newName) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const newName = helpers.string(ctx, "newName", _newName);
-    try {
-      renamePurchasedServer(hostname, newName);
-      return true;
-    } catch (err) {
-      helpers.log(ctx, () => String(err));
-      return false;
-    }
-    return false;
+    renamePurchasedServer(hostname, newName);
   },
 
   deleteServer: (ctx) => (_name) => {
