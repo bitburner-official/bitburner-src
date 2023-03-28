@@ -89,6 +89,7 @@ export function ProgramsRoot(): React.ReactElement {
                 {!Player.hasProgram(program.name) &&
                   create.req() &&
                   (isCreateProgramWork(Player.currentWork) && Player.currentWork?.programName === program.name ? (
+                    //Button if the program is currently being worked on
                     <Button
                       sx={{ my: 1, width: "100%" }}
                       onClick={(event) => {
@@ -100,6 +101,7 @@ export function ProgramsRoot(): React.ReactElement {
                       Resume focus
                     </Button>
                   ) : (
+                    //Button if the program is not currently worked on
                     <Button
                       sx={{ my: 1, width: "100%" }}
                       onClick={(event) => {
