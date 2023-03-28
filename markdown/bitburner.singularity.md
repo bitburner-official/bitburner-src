@@ -48,8 +48,10 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [getFactionFavor(faction)](./bitburner.singularity.getfactionfavor.md) | Get faction favor. |
 |  [getFactionFavorGain(faction)](./bitburner.singularity.getfactionfavorgain.md) | Get faction favor gain. |
 |  [getFactionRep(faction)](./bitburner.singularity.getfactionrep.md) | Get faction reputation. |
+|  [getInstallIdentifier()](./bitburner.singularity.getinstallidentifier.md) | Get the current install identifier. |
 |  [getOwnedAugmentations(purchased)](./bitburner.singularity.getownedaugmentations.md) | Get a list of owned augmentation. |
 |  [getOwnedSourceFiles()](./bitburner.singularity.getownedsourcefiles.md) | Get a list of acquired Source-Files. |
+|  [getRunIdentifier()](./bitburner.singularity.getrunidentifier.md) | Get the current run identifier. |
 |  [getUpgradeHomeCoresCost()](./bitburner.singularity.getupgradehomecorescost.md) | Get the price of upgrading home cores. |
 |  [getUpgradeHomeRamCost()](./bitburner.singularity.getupgradehomeramcost.md) | Get the price of upgrading home RAM. |
 |  [goToLocation(locationName)](./bitburner.singularity.gotolocation.md) | Go to a location. |
