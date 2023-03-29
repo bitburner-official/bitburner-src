@@ -1,4 +1,3 @@
-import { PlayerObject } from "./PlayerObject";
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
 import { PlayerOwnedAugmentation } from "../../Augmentation/PlayerOwnedAugmentation";
 import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
@@ -44,6 +43,8 @@ import { FactionNames } from "../../Faction/data/FactionNames";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { serverMetadata } from "../../Server/data/servers";
+
+import type { PlayerObject } from "./PlayerObject";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */

@@ -1,5 +1,6 @@
 import { Work } from "../../Work/Work";
-import { PlayerObject } from "./PlayerObject";
+
+import type { PlayerObject } from "./PlayerObject";
 
 export function startWork(this: PlayerObject, w: Work): void {
   if (this.currentWork !== null) {

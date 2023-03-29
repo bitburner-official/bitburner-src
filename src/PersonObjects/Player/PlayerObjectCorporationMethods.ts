@@ -3,8 +3,9 @@ import {
   CorporationUnlockUpgradeIndex,
   CorporationUnlockUpgrades,
 } from "../../Corporation/data/CorporationUnlockUpgrades";
-import { PlayerObject } from "./PlayerObject";
 import { resetIndustryResearchTrees } from "../../Corporation/IndustryData";
+
+import type { PlayerObject } from "./PlayerObject";
 
 export function canAccessCorporation(this: PlayerObject): boolean {
   return this.bitNodeN === 3 || this.sourceFileLvl(3) > 0;

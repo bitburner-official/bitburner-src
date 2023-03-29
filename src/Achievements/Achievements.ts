@@ -1,4 +1,3 @@
-import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { SkillNames } from "../Bladeburner/data/SkillNames";
 import { Skills } from "../Bladeburner/Skills";
@@ -25,6 +24,8 @@ import { FactionNames } from "../Faction/data/FactionNames";
 import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
 import { isClassWork } from "../Work/ClassWork";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+
+import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
 const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;
