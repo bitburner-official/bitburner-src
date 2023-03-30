@@ -191,8 +191,10 @@ export class GangMember {
       this.calculateAscensionMult(this.cha_asc_points);
   }
 
-  recordEarnedRespect(numCycles = 1, gang: Gang): void {
-    this.earnedRespect += this.calculateRespectGain(gang) * numCycles;
+  earnRespect(numCycles = 1, gang: Gang): number {
+    const earnedRespect = this.calculateRespectGain(gang) * numCycles;
+    this.earnedRespect += earnedRespect;
+    return earnedRespect;
   }
 
   getGainedAscensionPoints(): IMults {

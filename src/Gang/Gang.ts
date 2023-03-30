@@ -111,7 +111,7 @@ export class Gang {
     let wantedLevelGains = 0;
     let justice = 0;
     for (let i = 0; i < this.members.length; ++i) {
-      respectGains += this.members[i].calculateRespectGain(this);
+      respectGains += this.members[i].earnRespect(numCycles, this);
       moneyGains += this.members[i].calculateMoneyGain(this);
       const wantedLevelGain = this.members[i].calculateWantedLevelGain(this);
       wantedLevelGains += wantedLevelGain;
@@ -134,10 +134,6 @@ export class Gang {
 
     fac.playerReputation += (Player.mults.faction_rep * gain * favorMult) / GangConstants.GangRespectToReputationRatio;
 
-    // Keep track of respect gained per member
-    for (let i = 0; i < this.members.length; ++i) {
-      this.members[i].recordEarnedRespect(numCycles, this);
-    }
     if (!(this.wanted === 1 && wantedLevelGains < 0)) {
       const oldWanted = this.wanted;
       let newWanted = oldWanted + wantedLevelGains * numCycles;
@@ -335,7 +331,7 @@ export class Gang {
     // Player loses a percentage of total respect, plus whatever respect that member has earned
     const totalRespect = this.respect;
     const lostRespect = 0.05 * totalRespect + member.earnedRespect;
-    this.respect = Math.max(0, totalRespect - lostRespect);
+    this.respect = Math.max(1, totalRespect - lostRespect);
 
     for (let i = 0; i < this.members.length; ++i) {
       if (member.name === this.members[i].name) {
