@@ -120,7 +120,7 @@ export class Gang {
     this.respectGainRate = respectGains;
     this.wantedGainRate = wantedLevelGains;
     this.moneyGainRate = moneyGains;
-    const gain = respectGains * numCycles;
+    const gain = respectGains;
     this.respect += gain;
     // Faction reputation gains is respect gain divided by some constant
     const fac = Factions[this.facName];
