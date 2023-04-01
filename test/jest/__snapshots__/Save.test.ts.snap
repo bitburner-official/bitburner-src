@@ -58,27 +58,7 @@ exports[`load/saveAllServers 1`] = `
           "data": {
             "code": "/** @param {NS} ns */\\\\nexport async function main(ns) {\\\\n  return ns.asleep(1000000);\\\\n}",
             "filename": "script.js",
-            "url": "",
-            "module": {},
-            "dependencies": [
-              {
-                "filename": "script.js",
-                "url": "blob:http://localhost/e0abfafd-2c73-42fc-9eea-288c03820c47",
-                "moduleSequenceNumber": 5
-              }
-            ],
-            "dependents": [],
-            "ramUsage": 1.6,
-            "queueCompile": false,
-            "server": "home",
-            "moduleSequenceNumber": 5,
-            "ramUsageEntries": [
-              {
-                "type": "misc",
-                "name": "baseCost",
-                "cost": 1.6
-              }
-            ]
+            "server": "home"
           }
         }
       ],
@@ -172,27 +152,7 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
           "data": {
             "code": "/** @param {NS} ns */\\\\nexport async function main(ns) {\\\\n  return ns.asleep(1000000);\\\\n}",
             "filename": "script.js",
-            "url": "",
-            "module": {},
-            "dependencies": [
-              {
-                "filename": "script.js",
-                "url": "blob:http://localhost/e0abfafd-2c73-42fc-9eea-288c03820c47",
-                "moduleSequenceNumber": 5
-              }
-            ],
-            "dependents": [],
-            "ramUsage": 1.6,
-            "queueCompile": false,
-            "server": "home",
-            "moduleSequenceNumber": 5,
-            "ramUsageEntries": [
-              {
-                "type": "misc",
-                "name": "baseCost",
-                "cost": 1.6
-              }
-            ]
+            "server": "home"
           }
         }
       ],

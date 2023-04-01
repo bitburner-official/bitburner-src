@@ -7,16 +7,6 @@ import { loadAllServers, saveAllServers } from "../../src/Server/AllServers";
 // without requiring burdensome levels of maintenance when legitimate changes
 // are made.
 
-// Get a stable clock so we don't have time-based diffs.
-function freezeTime() {
-  // You're about to hack time, are you sure? YES/NO
-  const RealDate = Date;
-  Date = function () {
-    return new RealDate(1678834800000);
-  };
-  Date.now = () => 1678834800000;
-}
-
 // Savegame generated from dev on 2023-03-12, mostly empty game with a few
 // tweaks. A RunningScript was added in-game to test the one bit of
 // non-trivial machinery involved in save/load.
@@ -147,7 +137,6 @@ test("load/saveAllServers", () => {
   // Feed a JSON object through loadAllServers/saveAllServers.
   // The object is a pruned set of servers that was extracted from a real (dev) game.
 
-  freezeTime();
   loadStandardServers();
 
   // Re-stringify with indenting for nicer diffs
@@ -159,7 +148,6 @@ test("load/saveAllServers pruning RunningScripts", () => {
   // Feed a JSON object through loadAllServers/saveAllServers.
   // The object is a pruned set of servers that was extracted from a real (dev) game.
 
-  freezeTime();
   loadStandardServers();
 
   // Re-stringify with indenting for nicer diffs

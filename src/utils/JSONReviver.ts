@@ -54,17 +54,19 @@ export namespace Reviver {
 //             regardless of whether it's an "own" property.)
 // Returns:    The structure (which will then be turned into a string
 //             as part of the JSON.stringify algorithm)
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function Generic_toJSON(ctorName: string, obj: Record<string, any>, keys?: string[]): IReviverValue {
-  if (!keys) {
-    keys = Object.keys(obj); // Only "own" properties are included
+export function Generic_toJSON<T extends Record<string, any>>(
+  ctorName: string,
+  obj: T,
+  keys?: readonly (keyof T)[],
+): IReviverValue {
+  const data = {} as T;
+  // keys provided: only save data for the provided keys 
+  if (keys) {
+    for (const key of keys) data[key] = obj[key];
+    return { ctor: ctorName, data: data };
   }
-
-  const data: Record<string, unknown> = {};
-  for (let index = 0; index < keys.length; ++index) {
-    const key = keys[index];
-    data[key] = obj[key];
-  }
+  // no keys provided: save all own keys of the object
+  for (const key in obj) data[key] = obj[key];
   return { ctor: ctorName, data: data };
 }
 
@@ -72,14 +74,23 @@ export function Generic_toJSON(ctorName: string, obj: Record<string, any>, keys?
 // constructor function with no arguments, then applies all of the
 // key/value pairs from the raw data to the instance. Only useful for
 // constructors that can be reasonably called without arguments!
+// Providing an array of keys will only restore data from those keys.
 // `ctor`      The constructor to call
 // `data`      The data to apply
 // Returns:    The object
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function Generic_fromJSON<T>(ctor: new () => T, data: any): T {
-  const obj: any = new ctor();
-  for (const name in data) {
-    obj[name] = data[name];
+export function Generic_fromJSON<T extends Record<string, any>>(
+  ctor: new () => T,
+  // data can actually be anything. We're just pretending it has the right keys for T. Save data is not type validated.
+  data: Record<keyof T, any>,
+  keys?: readonly (keyof T)[],
+): T {
+  const obj = new ctor();
+  // If keys were provided, just load the provided keys (if they are in the data)
+  if (keys) {
+    for (const key of keys) if (key in data) obj[key] = data[key];
+    return obj;
   }
+  // No keys provided: load every key in data
+  for (const key in data) obj[key] = data[key];
   return obj;
 }

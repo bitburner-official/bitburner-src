@@ -132,18 +132,17 @@ export class Script {
     return [];
   }
 
+  /** The keys that are relevant in a save file */
+  static savedKeys = ["code", "filename", "server"] as const;
+
   // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {
-    return Generic_toJSON("Script", this);
+    return Generic_toJSON("Script", this, Script.savedKeys);
   }
 
   // Initializes a Script Object from a JSON save state
   static fromJSON(value: IReviverValue): Script {
-    const s = Generic_fromJSON(Script, value.data);
-    // Force the url to blank from the save data. Urls are not valid outside the current browser page load.
-    s.url = "";
-    s.dependents = [];
-    return s;
+    return Generic_fromJSON(Script, value.data, Script.savedKeys);
   }
 
   /**
