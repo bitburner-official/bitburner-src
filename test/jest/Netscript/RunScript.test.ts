@@ -1,9 +1,24 @@
 import { startWorkerScript } from "../../../src/NetscriptWorker";
+import { config as EvaluatorConfig } from "../../../src/NetscriptJSEvaluator";
 import { Server } from "../../../src/Server/Server";
 import { RunningScript } from "../../../src/Script/RunningScript";
 import { AddToAllServers, DeleteServer } from "../../../src/Server/AllServers";
 import { WorkerScriptStartStopEventEmitter } from "../../../src/Netscript/WorkerScriptStartStopEventEmitter";
 import { AlertEvents } from "../../../src/ui/React/AlertManager";
+
+// Replace Blob/ObjectURL functions, because they don't work natively in Jest
+global.Blob = class extends Blob {
+  code: string;
+  constructor(blobParts?: BlobPart[], options?: BlobPropertyBag) {
+    super();
+    this.code = (blobParts ?? [])[0] + "";
+  }
+};
+global.URL.revokeObjectURL = function () {};
+// Critical: We have to overwrite this, otherwise we get Jest's hooked
+// implementation, which will not work without passing special flags to Node,
+// and tends to crash even if you do.
+EvaluatorConfig.doImport = importActual;
 
 test.each([
   {
@@ -30,24 +45,40 @@ test.each([
       },
     ],
   },
-  /*  { // Doesn't work, due to issues with URL.createObjectURL
-    name: "NS2 test, no import",
-    expected: [
-      "false home 8",
-      "Script finished running",
-    ],
+  {
+    name: "NS2 test /w import",
+    expected: ["false home 8", "Script finished running"],
     scripts: [
-      {name: "simple_test.js", code: `
+      {
+        name: "import.js",
+        code: `
+        export function getInfo(ns) {
+          return ns.stock.has4SData();
+        }
+      `,
+      },
+      {
+        name: "simple_test.js",
+        code: `
+        import { getInfo } from "./import.js";
+
         export async function main(ns) {
-          var access = ns.stock.has4SData();
+          var access = getInfo(ns);
           var server = ns.getServer();
           ns.printf("%s %s %d", access, server.hostname, server.maxRam);
         }
-      `},
+      `,
+      },
     ],
-  },*/
+  },
 ])("Netscript execution: $name", async function ({ expected: expectedLog, scripts }) {
-  let server, eventDelete, alertDelete;
+  global.URL.createObjectURL = function (blob) {
+    return "data:text/javascript," + encodeURIComponent(blob.code);
+  };
+
+  let server;
+  let eventDelete = () => {};
+  let alertDelete = () => {};
   try {
     const alerted = new Promise((resolve) => {
       alertDelete = AlertEvents.subscribe((x) => resolve(x));
@@ -75,8 +106,8 @@ test.each([
     expect(result).toBeNull();
     expect(runningScript.logs).toEqual(expectedLog);
   } finally {
-    if (eventDelete) eventDelete();
+    eventDelete();
     if (server) DeleteServer(server.hostname);
-    if (alertDelete) alertDelete();
+    alertDelete();
   }
 });
