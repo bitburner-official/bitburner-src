@@ -674,18 +674,19 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       return Player.getUpgradeHomeRamCost();
     },
-    getCompanyPositions:
-      (ctx) => (_companyName) => {
-        helpers.checkSingularityAccess(ctx);
-        const companyName = helpers.string(ctx, "companyName", _companyName);
+    getCompanyPositions: (ctx) => (_companyName) => {
+      helpers.checkSingularityAccess(ctx);
+      const companyName = helpers.string(ctx, "companyName", _companyName);
 
-        // Make sure its a valid company
-        if (companyName == null || companyName === "" || !Companies[companyName]) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`)
-        }
+      // Make sure its a valid company
+      if (companyName == null || companyName === "" || !Companies[companyName]) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
+      }
 
-        return Object.entries(CompanyPositions).filter(_position => Companies[companyName].hasPosition(_position[0])).map(_position => _position[1]['name']);
-      },
+      return Object.entries(CompanyPositions)
+        .filter((_position) => Companies[companyName].hasPosition(_position[0]))
+        .map((_position) => _position[1]["name"]);
+    },
     workForCompany:
       (ctx) =>
       (_companyName, _focus = true) => {
@@ -695,19 +696,19 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
         // Make sure its a valid company
         if (companyName == null || companyName === "" || !Companies[companyName]) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`)
+          throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
         }
 
         // Make sure player is actually employed at the company
         if (!Object.keys(Player.jobs).includes(companyName)) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `You do not have a job at: '${companyName}'`)
+          throw helpers.makeRuntimeErrorMsg(ctx, `You do not have a job at: '${companyName}'`);
         }
 
         // Check to make sure company position data is valid
         const companyPositionName = Player.jobs[companyName];
         const companyPosition = CompanyPositions[companyPositionName];
         if (companyPositionName === "" || !companyPosition) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `You do not have a job`)
+          throw helpers.makeRuntimeErrorMsg(ctx, `You do not have a job`);
         }
 
         const wasFocused = Player.focus;

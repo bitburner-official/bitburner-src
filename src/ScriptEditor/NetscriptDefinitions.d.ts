@@ -1698,7 +1698,7 @@ export interface Singularity {
    */
   getUpgradeHomeCoresCost(): number;
 
-    /**
+  /**
    * Get List of Company Positions.
    * @remarks
    * RAM cost: 2 GB * 16/4/1
@@ -1725,7 +1725,7 @@ export interface Singularity {
    * @param companyName - Name of company to get the position list for. Must be an exact match.
    * @returns The position list if the company name is valid.
    */
-    getCompanyPositions(companyName: string): CompanyPosName[];
+  getCompanyPositions(companyName: string): CompanyPosName[];
 
   /**
    * Work for a company.
