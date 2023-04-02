@@ -15,7 +15,7 @@ import { Singularity as ISingularity } from "@nsdefs";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { DarkWebItems } from "../DarkWeb/DarkWebItems";
-import { CityName, LocationName } from "../Enums";
+import { CityName, LocationName, JobName } from "../Enums";
 import { Router } from "../ui/GameRoot";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Page } from "../ui/Router";
@@ -42,7 +42,6 @@ import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
 import { enterBitNode } from "../RedPill";
 import { FactionNames } from "../Faction/data/FactionNames";
 import { ClassWork } from "../Work/ClassWork";
-import { scaleCompanyPositionRequirements } from "../Work/CompanyPositionRequirements";
 import { CreateProgramWork, isCreateProgramWork } from "../Work/CreateProgramWork";
 import { FactionWork } from "../Work/FactionWork";
 import { FactionWorkType, GymType, UniversityClassType } from "../Enums";
@@ -53,6 +52,7 @@ import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { findEnumMember } from "../utils/helpers/enum";
 import { areFilesEqual } from "../Terminal/DirectoryHelpers";
 import { Engine } from "../engine";
+import { checkEnum } from "../utils/helpers/enum";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const getAugmentation = function (ctx: NetscriptContext, name: string): Augmentation {
@@ -695,12 +695,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const positionName = helpers.string(ctx, "positionName", _positionName);
 
       // Make sure its a valid company
-      if (companyName == null || companyName === "" || !Companies[companyName]) {
+      if (!(companyName in Companies)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
       }
 
       // Make sure its a valid position
-      if (positionName == null || positionName === "" || !CompanyPositions[positionName]) {
+      if (!checkEnum(JobName, positionName)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: '${positionName}'`);
       }
 
@@ -708,21 +708,24 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         throw helpers.makeRuntimeErrorMsg(ctx, `Company '${companyName}' does not have position '${positionName}'`);
       }
 
+      const c = CompanyPositions[positionName];
+      const n = companiesMetadata.filter((company) => company.name === companyName)[0];
       const res = {
         name: CompanyPositions[positionName].name,
         nextPosition: CompanyPositions[positionName].nextPosition,
-        requiredHacking: CompanyPositions[positionName].requiredHacking,
-        requiredStrength: CompanyPositions[positionName].requiredStrength,
-        requiredDefense: CompanyPositions[positionName].requiredDefense,
-        requiredDexterity: CompanyPositions[positionName].requiredDexterity,
-        requiredAgility: CompanyPositions[positionName].requiredAgility,
-        requiredCharisma: CompanyPositions[positionName].requiredCharisma,
+        salary: CompanyPositions[positionName].baseSalary * n.salaryMultiplier,
         requiredReputation: CompanyPositions[positionName].requiredReputation,
+        requiredSkills: {
+          hacking: c.requiredHacking > 0 ? c.requiredHacking + n.jobStatReqOffset : 0,
+          strength: c.requiredStrength > 0 ? c.requiredStrength + n.jobStatReqOffset : 0,
+          defense: c.requiredDefense > 0 ? c.requiredDefense + n.jobStatReqOffset : 0,
+          dexterity: c.requiredDexterity > 0 ? c.requiredDexterity + n.jobStatReqOffset : 0,
+          agility: c.requiredAgility > 0 ? c.requiredAgility + n.jobStatReqOffset : 0,
+          charisma: c.requiredCharisma > 0 ? c.requiredCharisma + n.jobStatReqOffset : 0,
+          intelligence: 0,
+        },
       };
-      return scaleCompanyPositionRequirements(
-        res,
-        companiesMetadata.filter((company) => company.name === companyName)[0].jobStatReqOffset,
-      );
+      return res;
     },
     workForCompany:
       (ctx) =>
