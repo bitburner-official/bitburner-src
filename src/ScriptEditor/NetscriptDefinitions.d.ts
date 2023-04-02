@@ -1725,7 +1725,7 @@ export interface Singularity {
    * @param companyName - Name of company to get the position list for. Must be an exact match.
    * @returns The position list if the company name is valid, and false otherwise.
    */
-    getCompanyPositions(companyName: string): CompanyPosition[] | boolean;
+    getCompanyPositions(companyName: string): CompanyPosition[];
 
   /**
    * Work for a company.
