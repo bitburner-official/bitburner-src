@@ -1699,6 +1699,35 @@ export interface Singularity {
   getUpgradeHomeCoresCost(): number;
 
   /**
+   * Get List of Company Positions.
+   * @remarks
+   * RAM cost: 2 GB * 16/4/1
+   *
+   *
+   * This function will return a list of positions at a specific company.
+   *
+   * This function will return the position list if the company name is valid.
+   *
+   * @example
+   * ```js
+   * // NS1:
+   * var COMPANY_NAME = "Noodle Bar";
+   *
+   * var jobList = singularity.getCompanyPositions(COMPANY_NAME);
+   * ```
+   * @example
+   * ```js
+   * // NS2:
+   * const COMPANY_NAME = "Noodle Bar";
+   *
+   * let jobList = ns.singularity.getCompanyPositions(COMPANY_NAME);
+   * ```
+   * @param companyName - Name of company to get the position list for. Must be an exact match.
+   * @returns The position list if the company name is valid.
+   */
+  getCompanyPositions(companyName: string): CompanyPosName[];
+
+  /**
    * Work for a company.
    * @remarks
    * RAM cost: 3 GB * 16/4/1
