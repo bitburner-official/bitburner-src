@@ -1699,6 +1699,29 @@ export interface Singularity {
   getUpgradeHomeCoresCost(): number;
 
   /**
+   * Get Requirements for Company Position.
+   * @remarks
+   * RAM cost: 2 GB * 16/4/1
+   *
+   *
+   * This function will return an object that contains the requirements for
+   * a specific position at a specific country.
+   *
+   * @example
+   * ```js
+   * // NS2:
+   * const COMPANY_NAME = "ECorp";
+   * const POSITION = "Chief Executive Officer";
+   *
+   * let requirements = ns.singularity.getCompanyPositionInfo(COMPANY_NAME, POSITION);
+   * ```
+   * @param companyName - Name of company to get the requirements for. Must be an exact match.
+   * @param positionName - Name of position to get the requirements for. Must be an exact match.
+   * @returns CompanyPositionRequirements object.
+   */
+  getCompanyPositionInfo(companyName: string, positionName: string): CompanyPositionRequirements;
+
+  /**
    * Get List of Company Positions.
    * @remarks
    * RAM cost: 2 GB * 16/4/1

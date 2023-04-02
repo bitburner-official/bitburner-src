@@ -26,6 +26,7 @@ import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Company } from "../Company/Company";
 import { Companies } from "../Company/Companies";
+import { companiesMetadata } from "../Company/data/CompaniesMetadata";
 import { Factions, factionExists } from "../Faction/Factions";
 import { Faction } from "../Faction/Faction";
 import { helpers } from "../Netscript/NetscriptHelpers";
@@ -41,6 +42,7 @@ import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
 import { enterBitNode } from "../RedPill";
 import { FactionNames } from "../Faction/data/FactionNames";
 import { ClassWork } from "../Work/ClassWork";
+import { CompanyPositionRequirements, scaleCompanyPositionRequirements } from "../Work/CompanyPositionRequirements";
 import { CreateProgramWork, isCreateProgramWork } from "../Work/CreateProgramWork";
 import { FactionWork } from "../Work/FactionWork";
 import { FactionWorkType, GymType, UniversityClassType } from "../Enums";
@@ -686,6 +688,41 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       return Object.entries(CompanyPositions)
         .filter((_position) => Companies[companyName].hasPosition(_position[0]))
         .map((_position) => _position[1]["name"]);
+    },
+    getCompanyPositionInfo: (ctx) => (_companyName, _positionName) => {
+      helpers.checkSingularityAccess(ctx);
+      const companyName = helpers.string(ctx, "companyName", _companyName);
+      const positionName = helpers.string(ctx, "positionName", _positionName);
+
+      // Make sure its a valid company
+      if (companyName == null || companyName === "" || !Companies[companyName]) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
+      }
+
+      // Make sure its a valid position
+      if (positionName == null || positionName === "" || !CompanyPositions[positionName]) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: '${positionName}'`);
+      }
+
+      if (!Companies[companyName].hasPosition(positionName)) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Company '${companyName}' does not have position '${positionName}'`);
+      }
+
+      const res = {
+        name: CompanyPositions[positionName].name,
+        nextPosition: CompanyPositions[positionName].nextPosition,
+        requiredHacking: CompanyPositions[positionName].requiredHacking,
+        requiredStrength: CompanyPositions[positionName].requiredStrength,
+        requiredDefense: CompanyPositions[positionName].requiredDefense,
+        requiredDexterity: CompanyPositions[positionName].requiredDexterity,
+        requiredAgility: CompanyPositions[positionName].requiredAgility,
+        requiredCharisma: CompanyPositions[positionName].requiredCharisma,
+        requiredReputation: CompanyPositions[positionName].requiredReputation,
+      };
+      return scaleCompanyPositionRequirements(
+        res,
+        companiesMetadata.filter((company) => company.name === companyName)[0].jobStatReqOffset,
+      );
     },
     workForCompany:
       (ctx) =>
