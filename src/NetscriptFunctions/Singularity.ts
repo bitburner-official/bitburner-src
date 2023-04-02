@@ -674,6 +674,19 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       return Player.getUpgradeHomeRamCost();
     },
+    getCompanyPositions:
+      (ctx) => (_companyName) => {
+        helpers.checkSingularityAccess(ctx);
+        const companyName = helpers.string(ctx, "companyName", _companyName);
+
+        // Make sure its a valid company
+        if (companyName == null || companyName === "" || !Companies[companyName]) {
+          helpers.log(ctx, () => `Invalid company: '${companyName}'`);
+          return false;
+        }
+
+        return Object.keys(CompanyPositions).filter(_position => Companies[companyName].hasPosition(_position));
+      },
     workForCompany:
       (ctx) =>
       (_companyName, _focus = true) => {
