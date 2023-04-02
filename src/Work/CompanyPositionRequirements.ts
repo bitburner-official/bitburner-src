@@ -1,6 +1,3 @@
-import { Person } from "../PersonObjects/Person";
-import { Player } from "@player";
-
 export interface CompanyPositionRequirements {
   name: string;
   nextPosition: string | null;

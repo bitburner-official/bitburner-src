@@ -42,7 +42,7 @@ import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
 import { enterBitNode } from "../RedPill";
 import { FactionNames } from "../Faction/data/FactionNames";
 import { ClassWork } from "../Work/ClassWork";
-import { CompanyPositionRequirements, scaleCompanyPositionRequirements } from "../Work/CompanyPositionRequirements";
+import { scaleCompanyPositionRequirements } from "../Work/CompanyPositionRequirements";
 import { CreateProgramWork, isCreateProgramWork } from "../Work/CreateProgramWork";
 import { FactionWork } from "../Work/FactionWork";
 import { FactionWorkType, GymType, UniversityClassType } from "../Enums";
