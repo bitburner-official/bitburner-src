@@ -1706,7 +1706,7 @@ export interface Singularity {
    *
    * This function will return a list of positions at a specific company.
    *
-   * This function will return the position list if the company name is valid, and false otherwise.
+   * This function will return the position list if the company name is valid.
    *
    * @example
    * ```js
@@ -1723,7 +1723,7 @@ export interface Singularity {
    * let jobList = ns.singularity.getCompanyPositions(COMPANY_NAME);
    * ```
    * @param companyName - Name of company to get the position list for. Must be an exact match.
-   * @returns The position list if the company name is valid, and false otherwise.
+   * @returns The position list if the company name is valid.
    */
     getCompanyPositions(companyName: string): CompanyPosName[];
 
