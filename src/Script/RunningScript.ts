@@ -139,7 +139,7 @@ export class RunningScript {
 
   // Initializes a RunningScript Object from a JSON save state
   static fromJSON(value: IReviverValue): RunningScript {
-    return Generic_fromJSON(RunningScript, value.data);
+    return Generic_fromJSON(RunningScript, value.data, includedProperties);
   }
 }
 const includedProperties = getKeyList(RunningScript, { removedKeys: ["logs", "dependencies"] });
