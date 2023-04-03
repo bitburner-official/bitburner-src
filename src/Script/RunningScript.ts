@@ -3,8 +3,7 @@
  * A Script can have multiple active instances
  */
 import type React from "react";
-import { Script } from "./Script";
-import { ScriptUrl } from "./ScriptUrl";
+import { Script, ScriptURL } from "./Script";
 import { Settings } from "../Settings/Settings";
 import { Terminal } from "../Terminal";
 
@@ -13,6 +12,7 @@ import { formatTime } from "../utils/helpers/formatTime";
 import { ScriptArg } from "@nsdefs";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { PositiveInteger } from "../types";
+import { getKeyList } from "../utils/helpers/getKeyList";
 
 export class RunningScript {
   // Script arguments
@@ -23,7 +23,7 @@ export class RunningScript {
   dataMap: Record<string, number[]> = {};
 
   // Script filename
-  filename = "";
+  filename = "default.js";
 
   // This script's logs. An array of log entries
   logs: React.ReactNode[] = [];
@@ -66,7 +66,8 @@ export class RunningScript {
   temporary = false;
 
   // Script urls for the current running script for translating urls back to file names in errors
-  dependencies: ScriptUrl[] = [];
+  dependencies: Map<ScriptURL, Script> = new Map();
+  url?: ScriptURL;
 
   constructor(script?: Script, ramUsage?: number, args: ScriptArg[] = []) {
     if (!script) return;
@@ -75,7 +76,7 @@ export class RunningScript {
     this.args = args;
     this.server = script.server;
     this.ramUsage = ramUsage;
-    this.dependencies = script.dependencies;
+    this.dependencies = new Map(script.dependencies);
   }
 
   log(txt: React.ReactNode): void {
@@ -133,7 +134,7 @@ export class RunningScript {
 
   // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {
-    return Generic_toJSON("RunningScript", this);
+    return Generic_toJSON("RunningScript", this, includedProperties);
   }
 
   // Initializes a RunningScript Object from a JSON save state
@@ -141,5 +142,6 @@ export class RunningScript {
     return Generic_fromJSON(RunningScript, value.data);
   }
 }
+const includedProperties = getKeyList(RunningScript, { removedKeys: ["logs", "dependencies"] });
 
 Reviver.constructors.RunningScript = RunningScript;

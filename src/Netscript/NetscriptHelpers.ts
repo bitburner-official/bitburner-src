@@ -234,8 +234,8 @@ function argsToString(args: unknown[]): string {
 /** Creates an error message string containing hostname, scriptname, and the error message msg */
 function makeBasicErrorMsg(ws: WorkerScript | ScriptDeath, msg: string, type = "RUNTIME"): string {
   if (ws instanceof WorkerScript) {
-    for (const scriptUrl of ws.scriptRef.dependencies) {
-      msg = msg.replace(new RegExp(scriptUrl.url, "g"), scriptUrl.filename);
+    for (const [scriptUrl, script] of ws.scriptRef.dependencies) {
+      msg = msg.replace(new RegExp(scriptUrl, "g"), script.filename);
     }
   }
   return `${type} ERROR\n${ws.name}@${ws.hostname} (PID - ${ws.pid})\n\n${msg}`;
@@ -248,20 +248,20 @@ function makeRuntimeErrorMsg(ctx: NetscriptContext, msg: string, type = "RUNTIME
   const stack = errstack.split("\n").slice(1);
   const ws = ctx.workerScript;
   const caller = ctx.functionPath;
-  const scripts = ws.getServer().scripts;
   const userstack = [];
   for (const stackline of stack) {
-    let filename;
-    for (const script of scripts) {
-      if (script.filename && stackline.includes(script.filename)) {
-        filename = script.filename;
-      }
-      for (const dependency of script.dependencies) {
-        if (stackline.includes(dependency.filename)) {
-          filename = dependency.filename;
-        }
+    function getFileName() {
+      // Filename is current file if url found
+      if (ws.scriptRef.url && stackline.includes(ws.scriptRef.url)) return ws.scriptRef.filename;
+      // Also check urls for importees
+      for (const [url, script] of ws.scriptRef.dependencies) if (stackline.includes(url)) return script.filename;
+      // Check for filenames directly if no URL found
+      if (stackline.includes(ws.scriptRef.filename)) return ws.scriptRef.filename;
+      for (const script of ws.scriptRef.dependencies.values()) {
+        if (stackline.includes(script.filename)) return script.filename;
       }
     }
+    const filename = getFileName();
     if (!filename) continue;
 
     interface ILine {

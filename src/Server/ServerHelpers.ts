@@ -256,7 +256,8 @@ export function prestigeHomeComputer(homeComp: Server): void {
 
   //Reset RAM usage calculation for all scripts
   homeComp.scripts.forEach(function (script) {
-    script.ramUsage = null;
+    // Don't need to invalidate the whole module, just the ram usage.
+    delete script.ramUsage;
   });
 
   homeComp.messages.length = 0; //Remove .lit and .msg files

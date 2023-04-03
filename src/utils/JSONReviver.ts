@@ -37,6 +37,7 @@ export function Reviver(key: string, value: unknown): any {
   return obj;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Reviver {
   export const constructors: Partial<
     Record<

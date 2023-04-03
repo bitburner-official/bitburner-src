@@ -434,7 +434,7 @@ export function Root(props: IProps): React.ReactElement {
       //If the current script already exists on the server, overwrite it
       for (let i = 0; i < server.scripts.length; i++) {
         if (scriptToSave.fileName == server.scripts[i].filename) {
-          server.scripts[i].saveScript(scriptToSave.fileName, scriptToSave.code, Player.currentServer, server.scripts);
+          server.scripts[i].saveScript(scriptToSave.fileName, scriptToSave.code, Player.currentServer);
           if (Settings.SaveGameOnFileSave) saveObject.saveGame();
           Router.toPage(Page.Terminal);
           return;
@@ -443,7 +443,7 @@ export function Root(props: IProps): React.ReactElement {
 
       //If the current script does NOT exist, create a new one
       const script = new Script();
-      script.saveScript(scriptToSave.fileName, scriptToSave.code, Player.currentServer, server.scripts);
+      script.saveScript(scriptToSave.fileName, scriptToSave.code, Player.currentServer);
       server.scripts.push(script);
     } else if (scriptToSave.isTxt) {
       for (let i = 0; i < server.textFiles.length; ++i) {
@@ -511,12 +511,7 @@ export function Root(props: IProps): React.ReactElement {
       //If the current script already exists on the server, overwrite it
       for (let i = 0; i < server.scripts.length; i++) {
         if (currentScript.fileName == server.scripts[i].filename) {
-          server.scripts[i].saveScript(
-            currentScript.fileName,
-            currentScript.code,
-            Player.currentServer,
-            server.scripts,
-          );
+          server.scripts[i].saveScript(currentScript.fileName, currentScript.code, Player.currentServer);
           if (Settings.SaveGameOnFileSave) saveObject.saveGame();
           rerender();
           return;
@@ -525,7 +520,7 @@ export function Root(props: IProps): React.ReactElement {
 
       //If the current script does NOT exist, create a new one
       const script = new Script();
-      script.saveScript(currentScript.fileName, currentScript.code, Player.currentServer, server.scripts);
+      script.saveScript(currentScript.fileName, currentScript.code, Player.currentServer);
       server.scripts.push(script);
     } else if (currentScript.isTxt) {
       for (let i = 0; i < server.textFiles.length; ++i) {

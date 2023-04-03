@@ -273,8 +273,7 @@ export abstract class BaseServer {
         const script = this.scripts[i];
         script.code = code;
         // Set ramUsage to null in order to force recalculation on next run
-        script.ramUsage = null;
-        script.markUpdated();
+        script.invalidateModule();
         ret.overwritten = true;
         ret.success = true;
         return ret;

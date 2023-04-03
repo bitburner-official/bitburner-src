@@ -5,58 +5,35 @@
  * being evaluated. See RunningScript for that
  */
 import { calculateRamUsage, RamUsageEntry } from "./RamCalculations";
-import { ScriptUrl } from "./ScriptUrl";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { ScriptModule } from "./ScriptModule";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 
-let globalModuleSequenceNumber = 0;
-
-interface ScriptReference {
-  filename: string;
-  server: string;
-}
+export type ScriptURL = string;
 
 export class Script {
-  // Code for this script
   code = "";
+  filename = "default.js";
+  server = "home";
 
-  // Filename for the script file
-  filename = "";
-
-  // url of the script if any, only for NS2.
-  url = "";
-
-  // The dynamic module generated for this script when it is run.
-  // This is only applicable for NetscriptJS
-  module: Promise<ScriptModule> | null = null;
-
-  // The timestamp when when the script was last updated.
-  moduleSequenceNumber: number;
-
-  // Only used with NS2 scripts; the list of dependency script filenames. This is constructed
-  // whenever the script is first evaluated, and therefore may be out of date if the script
-  // has been updated since it was last run.
-  dependencies: ScriptUrl[] = [];
-  dependents: ScriptReference[] = [];
-
-  // Amount of RAM this Script requires to run. null indicates an error in calculating ram.
-  ramUsage: number | null = null;
+  // Ram calculation, only exists after first poll of ram cost after updating
+  ramUsage?: number;
   ramUsageEntries?: RamUsageEntry[];
 
-  // Used to deconflict multiple simultaneous compilations.
-  queueCompile = false;
-
-  // hostname of server that this script is on.
-  server = "";
+  // Runtime data that only exists when the script has been initiated. Cleared when script or a dependency script is updated.
+  module?: Promise<ScriptModule>;
+  url?: ScriptURL;
+  /** Scripts that import this one, either directly or through an import chain */
+  dependents: Set<Script> = new Set();
+  /** Scripts that are imported by this one, either directly or through an import chain */
+  dependencies: Map<ScriptURL, Script> = new Map();
 
   constructor(fn = "", code = "", server = "") {
     this.filename = fn;
     this.code = code;
     this.server = server; // hostname of server this script is on
-    this.moduleSequenceNumber = ++globalModuleSequenceNumber;
   }
 
   /** Download the script as a file */
@@ -75,13 +52,21 @@ export class Script {
     }, 0);
   }
 
-  /**
-   * Marks this script as having been updated. It will be recompiled next time something tries
-   * to exec it.
-   */
-  markUpdated(): void {
-    this.module = null;
-    this.moduleSequenceNumber = ++globalModuleSequenceNumber;
+  /** Invalidates the current script module and related data, e.g. when modifying the file. */
+  invalidateModule(): void {
+    delete this.module;
+    if (this.url) URL.revokeObjectURL(this.url);
+    delete this.url;
+    delete this.ramUsage;
+    delete this.ramUsageEntries;
+    for (const [url, importee] of this.dependencies) {
+      importee.dependents.delete(this);
+      this.dependencies.delete(url);
+    }
+    this.dependents.forEach((importer) => {
+      this.dependents.delete(importer);
+      importer.invalidateModule();
+    });
   }
 
   /**
@@ -89,30 +74,18 @@ export class Script {
    * @param {string} code - The new contents of the script
    * @param {Script[]} otherScripts - Other scripts on the server. Used to process imports
    */
-  saveScript(filename: string, code: string, hostname: string, otherScripts: Script[]): void {
-    // Update code and filename
+  saveScript(filename: string, code: string, hostname: string): void {
+    this.invalidateModule();
     this.code = Script.formatCode(code);
-
     this.filename = filename;
     this.server = hostname;
-    // Null ramUsage forces a recalc next time ramUsage is needed
-    this.ramUsage = null;
-    this.markUpdated();
-    this.dependents.forEach((dependent) => {
-      const scriptToUpdate = otherScripts.find(
-        (otherScript) => otherScript.filename === dependent.filename && otherScript.server === dependent.server,
-      );
-      if (!scriptToUpdate) return;
-      scriptToUpdate.ramUsage = null;
-      scriptToUpdate.markUpdated();
-    });
   }
 
   /** Gets the ram usage, while also attempting to update it if it's currently null */
   getRamUsage(otherScripts: Script[]): number | null {
     if (this.ramUsage) return this.ramUsage;
     this.updateRamUsage(otherScripts);
-    return this.ramUsage;
+    return this.ramUsage ?? null;
   }
 
   /**
@@ -124,8 +97,7 @@ export class Script {
     if (ramCalc.cost >= RamCostConstants.Base) {
       this.ramUsage = roundToTwo(ramCalc.cost);
       this.ramUsageEntries = ramCalc.entries;
-    } else this.ramUsage = null;
-    this.markUpdated();
+    } else delete this.ramUsage;
   }
 
   imports(): string[] {

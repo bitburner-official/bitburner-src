@@ -29,7 +29,6 @@ exports[`load/saveAllServers 1`] = `
             "args": [],
             "dataMap": {},
             "filename": "script.js",
-            "logs": [],
             "logUpd": true,
             "offlineExpGained": 0,
             "offlineMoneyMade": 0,
@@ -41,14 +40,7 @@ exports[`load/saveAllServers 1`] = `
             "ramUsage": 1.6,
             "server": "home",
             "threads": 1,
-            "temporary": false,
-            "dependencies": [
-              {
-                "filename": "script.js",
-                "url": "blob:http://localhost/302fe9e5-2ec3-4ed7-bb5a-4f8f4a85f46d",
-                "moduleSequenceNumber": 2
-              }
-            ]
+            "temporary": false
           }
         }
       ],

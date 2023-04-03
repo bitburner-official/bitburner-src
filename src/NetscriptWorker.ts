@@ -52,7 +52,10 @@ async function startNetscript2Script(workerScript: WorkerScript): Promise<void> 
   const scripts = workerScript.getServer().scripts;
   const script = workerScript.getScript();
   if (script === null) throw "workerScript had no associated script. This is a bug.";
-  if (!script.ramUsage) throw "Attempting to start a script with no calculated ram cost. This is a bug.";
+  if (!script.ramUsage) {
+    script.updateRamUsage(scripts);
+    if (!script.ramUsage) throw "Attempting to start a script with no calculated ram cost. This is a bug.";
+  }
   const loadedModule = await compile(script, scripts);
   const ns = workerScript.env.vars;
 
@@ -368,7 +371,7 @@ export function loadAllRunningScripts(): void {
 
     // Reset modules on all scripts
     for (let i = 0; i < server.scripts.length; ++i) {
-      server.scripts[i].markUpdated();
+      server.scripts[i].invalidateModule();
     }
 
     if (skipScriptLoad) {

@@ -893,18 +893,13 @@ export const ns: InternalAPI<NSFull> = {
           }
           destScript.code = sourceScript.code;
           // Set ramUsage to null in order to force a recalculation prior to next run.
-          destScript.ramUsage = null;
-          destScript.markUpdated();
+          destScript.invalidateModule();
           helpers.log(ctx, () => `WARNING: File '${file}' overwritten on '${destServer?.hostname}'`);
           continue;
         }
 
         // Create new script if it does not already exist
-        const newScript = new Script(file);
-        newScript.code = sourceScript.code;
-        // Set ramUsage to null in order to force a recalculation prior to next run.
-        newScript.ramUsage = null;
-        newScript.server = destServer.hostname;
+        const newScript = new Script(file, sourceScript.code, destServer.hostname);
         destServer.scripts.push(newScript);
         helpers.log(ctx, () => `File '${file}' copied over to '${destServer?.hostname}'.`);
       }
@@ -1389,7 +1384,7 @@ export const ns: InternalAPI<NSFull> = {
         }
         mode === "w" ? (script.code = String(data)) : (script.code += data);
         // Set ram to null so a recalc is performed the next time ram usage is needed
-        script.ramUsage = null;
+        script.invalidateModule();
         return;
       } else {
         // Write to text file
@@ -1831,14 +1826,14 @@ export const ns: InternalAPI<NSFull> = {
         dest_file.text = source_file.text;
       } else if (dest_file instanceof Script && source_file instanceof Script) {
         dest_file.code = source_file.code;
-        dest_file.markUpdated();
+        dest_file.invalidateModule();
       }
 
       destServer.removeFile(source);
     } else {
       source_file.filename = destination;
       if (source_file instanceof Script) {
-        source_file.markUpdated();
+        source_file.invalidateModule();
       }
     }
   },
