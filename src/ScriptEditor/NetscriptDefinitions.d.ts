@@ -1709,7 +1709,6 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * // NS2:
    * const companyName = "ECorp";
    * const position = "Chief Executive Officer";
    *
