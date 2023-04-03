@@ -21,7 +21,7 @@ export function SleeveRoot(): React.ReactElement {
           other words, these Synthoids contain a perfect duplicate of your mind.
           <br />
           <br />
-          Sleeves can be used to perform different tasks synchronously.
+          Sleeves can be used to perform different tasks simultaneously.
           <br />
           <br />
         </Typography>
