@@ -51,19 +51,16 @@ export function prestigeWorkerScripts(): void {
 async function startNetscript2Script(workerScript: WorkerScript): Promise<void> {
   const scripts = workerScript.getServer().scripts;
   const script = workerScript.getScript();
-  if (script === null) throw "workerScript had no associated script. This is a bug.";
-  if (!script.ramUsage) {
-    script.updateRamUsage(scripts);
-    if (!script.ramUsage) throw "Attempting to start a script with no calculated ram cost. This is a bug.";
-  }
-  const loadedModule = await compile(script, scripts);
+  if (!script) throw "workerScript had no associated script. This is a bug.";
   const ns = workerScript.env.vars;
+  if (!ns) throw `${script.filename} cannot be run because the NS object hasn't been constructed properly.`;
+
+  const loadedModule = await compile(script, scripts);
 
   if (!loadedModule) throw `${script.filename} cannot be run because the script module won't load`;
   // TODO unplanned: Better error for "unexpected reserved word" when using await in non-async function?
   if (typeof loadedModule.main !== "function")
     throw `${script.filename} cannot be run because it does not have a main function.`;
-  if (!ns) throw `${script.filename} cannot be run because the NS object hasn't been constructed properly.`;
   await loadedModule.main(ns);
 }
 
@@ -298,6 +295,7 @@ export function startWorkerScript(runningScript: RunningScript, server: BaseServ
 function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseServer, parent?: WorkerScript): boolean {
   const ramUsage = roundToTwo(runningScriptObj.ramUsage * runningScriptObj.threads);
   const ramAvailable = server.maxRam - server.ramUsed;
+  // Check failure conditions before generating the workersScript and return false
   if (ramUsage > ramAvailable + 0.001) {
     dialogBoxCreate(
       `Not enough RAM to run script ${runningScriptObj.filename} with args ${arrayToString(runningScriptObj.args)}.\n` +
@@ -307,16 +305,17 @@ function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseS
     return false;
   }
 
-  server.updateRamUsed(roundToTwo(server.ramUsed + ramUsage));
-
   // Get the pid
   const pid = generateNextPid();
   if (pid === -1) {
-    throw new Error(
+    dialogBoxCreate(
       `Failed to start script because could not find available PID. This is most ` +
         `because you have too many scripts running.`,
     );
+    return false;
   }
+
+  server.updateRamUsed(roundToTwo(server.ramUsed + ramUsage));
 
   // Create the WorkerScript. NOTE: WorkerScript ctor will set the underlying
   // RunningScript's PID as well
@@ -369,28 +368,18 @@ export function loadAllRunningScripts(): void {
     // Reset each server's RAM usage to 0
     server.ramUsed = 0;
 
-    // Reset modules on all scripts
-    for (let i = 0; i < server.scripts.length; ++i) {
-      server.scripts[i].invalidateModule();
-    }
-
     if (skipScriptLoad) {
       // Start game with no scripts
       server.runningScripts.length = 0;
-    } else {
-      for (let j = 0; j < server.runningScripts.length; ++j) {
-        const fileName = server.runningScripts[j].filename;
-        createAndAddWorkerScript(server.runningScripts[j], server);
-
-        if (!server.runningScripts[j]) {
-          // createAndAddWorkerScript can modify the server.runningScripts array if a script is invalid
-          console.error(`createAndAddWorkerScript removed ${fileName} from ${server}`);
-          continue;
-        }
-
-        // Offline production
-        scriptCalculateOfflineProduction(server.runningScripts[j]);
-      }
+      continue;
+    }
+    // Using backwards index iteration to avoid complications when removing elements during iteration.
+    for (let i = server.runningScripts.length - 1; i >= 0; i--) {
+      const runningScript = server.runningScripts[i];
+      const success = createAndAddWorkerScript(runningScript, server);
+      scriptCalculateOfflineProduction(runningScript);
+      // Remove the RunningScript if the WorkerScript failed to start.
+      if (!success) server.runningScripts.splice(i, 1);
     }
   }
 }

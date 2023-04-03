@@ -142,6 +142,6 @@ export class RunningScript {
     return Generic_fromJSON(RunningScript, value.data, includedProperties);
   }
 }
-const includedProperties = getKeyList(RunningScript, { removedKeys: ["logs", "dependencies"] });
+const includedProperties = getKeyList(RunningScript, { removedKeys: ["logs", "dependencies", "logUpd", "pid"] });
 
 Reviver.constructors.RunningScript = RunningScript;
