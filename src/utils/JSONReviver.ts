@@ -42,7 +42,7 @@ export namespace Reviver {
   export const constructors: Partial<
     Record<
       string,
-      Function & {
+      (new () => object) & {
         fromJSON: (value: IReviverValue) => any;
         validationData?: ObjectValidator<any>;
       }
