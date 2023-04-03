@@ -253,7 +253,7 @@ function makeRuntimeErrorMsg(ctx: NetscriptContext, msg: string, type = "RUNTIME
     function getFileName() {
       // Filename is current file if url found
       if (ws.scriptRef.url && stackline.includes(ws.scriptRef.url)) return ws.scriptRef.filename;
-      // Also check urls for importees
+      // Also check urls for dependencies
       for (const [url, script] of ws.scriptRef.dependencies) if (stackline.includes(url)) return script.filename;
       // Check for filenames directly if no URL found
       if (stackline.includes(ws.scriptRef.filename)) return ws.scriptRef.filename;

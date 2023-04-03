@@ -59,13 +59,13 @@ export class Script {
     delete this.url;
     delete this.ramUsage;
     delete this.ramUsageEntries;
-    for (const [url, importee] of this.dependencies) {
-      importee.dependents.delete(this);
+    for (const [url, dependency] of this.dependencies) {
+      dependency.dependents.delete(this);
       this.dependencies.delete(url);
     }
-    this.dependents.forEach((importer) => {
-      this.dependents.delete(importer);
-      importer.invalidateModule();
+    this.dependents.forEach((dependent) => {
+      this.dependents.delete(dependent);
+      dependent.invalidateModule();
     });
   }
 

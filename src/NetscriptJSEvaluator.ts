@@ -36,13 +36,8 @@ export const config = {
 export async function compile(script: Script, scripts: Script[]): Promise<ScriptModule> {
   // Return the module if it already exists
   if (script.module) return script.module;
-  // If there's no url yet, generate a new one
-  if (!script.url) _getScriptUrls(script, scripts, []);
-  //If there is still no url, this is an unexpected error.
-  if (!script.url) throw new Error("Script did not have a URL, this is a bug");
-
-  // Assign and return the module
-  script.module = config.doImport(script.url).catch((e) => {
+  // While importing, use an existing url or generate a new one.
+  script.module = config.doImport(script.url || generateScriptUrl(script, scripts, [])).catch((e) => {
     script.invalidateModule();
     console.error(`Error occurred while attempting to compile ${script.filename} on ${script.server}:`);
     console.error(e);
@@ -54,15 +49,14 @@ export async function compile(script: Script, scripts: Script[]): Promise<Script
 /**
  * @param script the script that needs a URL assigned
  * @param scripts array of other scripts on the server
- * @param importers array of scripts which have already had their URLs assigned
+ * @param dependents array of scripts higher up in the import tree from this execution
  */
-function _getScriptUrls(script: Script, scripts: Script[], importers: Script[]): ScriptURL {
+function generateScriptUrl(script: Script, scripts: Script[], dependents: Script[]): ScriptURL {
   // Inspired by: https://stackoverflow.com/a/43834063/91401
-  importers.forEach((importer) => {
-    script.dependents.add(importer);
-  });
+  dependents.forEach((dependent) => script.dependents.add(dependent));
+  // Early return if script already has a URL
   if (script.url) {
-    for (const importer of importers) importer.dependencies.set(script.url, script);
+    for (const dependent of dependents) dependent.dependencies.set(script.url, script);
     return script.url;
   }
 
@@ -113,9 +107,7 @@ function _getScriptUrls(script: Script, scripts: Script[], importers: Script[]):
     const importedScript = scripts.find((s) => areImportsEquals(s.filename, filename));
     if (!importedScript) continue;
 
-    _getScriptUrls(importedScript, scripts, [...importers, script]);
-    if (!importedScript.url)
-      throw new Error(`Failed to create a URL for an imported script ${importedScript.filename}.`);
+    importedScript.url = generateScriptUrl(importedScript, scripts, [...dependents, script]);
     newCode = newCode.substring(0, node.start) + importedScript.url + newCode.substring(node.end);
   }
 
@@ -124,6 +116,6 @@ function _getScriptUrls(script: Script, scripts: Script[], importers: Script[]):
   // We only ever assign the URL
   const url = URL.createObjectURL(makeScriptBlob(newCode));
   script.url = url;
-  importers.forEach((importer) => importer.dependencies.set(url, script));
+  dependents.forEach((dependent) => dependent.dependencies.set(url, script));
   return script.url;
 }
