@@ -34,21 +34,18 @@ export const config = {
 };
 
 export async function compile(script: Script, scripts: Script[]): Promise<ScriptModule> {
-  //!shouldCompile ensures that script.module is non-null, hence the "as".
+  // Return the module if it already exists
   if (script.module) return script.module;
-  if (script.url) {
-    script.module = config.doImport(script.url).catch((e) => {
-      // Clear the module if an error occurs during import
-      delete script.module;
-      throw e;
-    });
-    return script.module;
-  }
-  _getScriptUrls(script, scripts, []);
+  // If there's no url yet, generate a new one
+  if (!script.url) _getScriptUrls(script, scripts, []);
+  //If there is still no url, this is an unexpected error.
   if (!script.url) throw new Error("Script did not have a URL, this is a bug");
+
+  // Assign and return the module
   script.module = config.doImport(script.url).catch((e) => {
-    // Clear the module if an error occurs during import
-    delete script.module;
+    script.invalidateModule();
+    console.error(`Error occurred while attempting to compile ${script.filename} on ${script.server}:`);
+    console.error(e);
     throw e;
   });
   return script.module;
