@@ -27,7 +27,7 @@ export class Script {
   // Runtime data that only exists when the script has been initiated. Cleared when script or a dependency script is updated.
   module?: Promise<ScriptModule>;
   url?: ScriptURL;
-  /** Scripts that import this one, either directly or through an import chain */
+  /** Scripts that directly import this one. Stored so we can invalidate these dependent scripts when this one is invalidated. */
   dependents: Set<Script> = new Set();
   /** Scripts that are imported by this one, either directly or through an import chain */
   dependencies: Map<ScriptURL, Script> = new Map();
