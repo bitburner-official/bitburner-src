@@ -250,7 +250,7 @@ function makeRuntimeErrorMsg(ctx: NetscriptContext, msg: string, type = "RUNTIME
   const caller = ctx.functionPath;
   const userstack = [];
   for (const stackline of stack) {
-    function getFileName() {
+    const filename = (() => {
       // Filename is current file if url found
       if (ws.scriptRef.url && stackline.includes(ws.scriptRef.url)) return ws.scriptRef.filename;
       // Also check urls for dependencies
@@ -260,8 +260,7 @@ function makeRuntimeErrorMsg(ctx: NetscriptContext, msg: string, type = "RUNTIME
       for (const script of ws.scriptRef.dependencies.values()) {
         if (stackline.includes(script.filename)) return script.filename;
       }
-    }
-    const filename = getFileName();
+    })();
     if (!filename) continue;
 
     interface ILine {

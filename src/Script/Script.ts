@@ -54,11 +54,11 @@ export class Script {
 
   /** Invalidates the current script module and related data, e.g. when modifying the file. */
   invalidateModule(): void {
-    delete this.module;
+    this.module = undefined;
     if (this.url) URL.revokeObjectURL(this.url);
-    delete this.url;
-    delete this.ramUsage;
-    delete this.ramUsageEntries;
+    this.url = undefined;
+    this.ramUsage = undefined;
+    this.ramUsageEntries = undefined;
     for (const dependency of this.dependencies.values()) dependency.dependents.delete(this);
     this.dependencies.clear();
     for (const dependent of this.dependents) dependent.invalidateModule();
