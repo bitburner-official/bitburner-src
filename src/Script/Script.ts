@@ -11,7 +11,9 @@ import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { ScriptModule } from "./ScriptModule";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 
-export type ScriptURL = string;
+// The object portion of this type is not runtime information, it's only to ensure type validation
+// And make it harder to overwrite a url with a random non-url string.
+export type ScriptURL = string & { __type: "ScriptURL" };
 
 export class Script {
   code = "";
@@ -54,11 +56,14 @@ export class Script {
 
   /** Invalidates the current script module and related data, e.g. when modifying the file. */
   invalidateModule(): void {
-    this.module = undefined;
-    if (this.url) URL.revokeObjectURL(this.url);
-    this.url = undefined;
+    // Always clear ram usage
     this.ramUsage = undefined;
     this.ramUsageEntries = undefined;
+    // Early return if there's already no URL
+    if (!this.url) return;
+    this.module = undefined;
+    URL.revokeObjectURL(this.url);
+    this.url = undefined;
     for (const dependency of this.dependencies.values()) dependency.dependents.delete(this);
     this.dependencies.clear();
     for (const dependent of this.dependents) dependent.invalidateModule();

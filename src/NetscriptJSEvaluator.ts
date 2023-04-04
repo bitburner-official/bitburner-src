@@ -28,7 +28,7 @@ function makeScriptBlob(code: string): Blob {
 // import() is not a function, so it can't be replaced. We need this separate
 // config object to provide a hook point.
 export const config = {
-  doImport(url: string): Promise<ScriptModule> {
+  doImport(url: ScriptURL): Promise<ScriptModule> {
     return import(/*webpackIgnore:true*/ url);
   },
 };
@@ -46,20 +46,32 @@ export function compile(script: Script, scripts: Script[]): Promise<ScriptModule
   return script.module;
 }
 
+/** Add the necessary dependency relationships for a script.
+ * Dependents are used only for passing invalidation up an import tree, so only direct dependents need to be stored.
+ * Direct and indirect dependents need to have the current url/script added to their dependency map for error text.
+ *
+ * This should only be called once the script has an assigned URL. */
+function addDependencyInfo(script: Script, dependents: Script[]) {
+  if (!script.url) throw new Error(`addDependencyInfo called without an assigned script URL (${script.filename})`);
+  if (dependents.length) {
+    script.dependents.add(dependents[dependents.length - 1]);
+    for (const dependent of dependents) dependent.dependencies.set(script.url, script);
+  }
+}
+
 /**
  * @param script the script that needs a URL assigned
  * @param scripts array of other scripts on the server
- * @param dependents array of scripts higher up in the import tree from this execution
+ * @param dependents All scripts that were higher up in the import tree in a recursive call.
  */
 function generateScriptUrl(script: Script, scripts: Script[], dependents: Script[]): ScriptURL {
-  // Inspired by: https://stackoverflow.com/a/43834063/91401
-  dependents.forEach((dependent) => script.dependents.add(dependent));
-  // Early return if script already has a URL
+  // Early return for recursive calls where the script already has a URL
   if (script.url) {
-    for (const dependent of dependents) dependent.dependencies.set(script.url, script);
+    addDependencyInfo(script, dependents);
     return script.url;
   }
 
+  // Inspired by: https://stackoverflow.com/a/43834063/91401
   const ast = parse(script.code, { sourceType: "module", ecmaVersion: "latest", ranges: true });
   interface importNode {
     filename: string;
@@ -113,9 +125,8 @@ function generateScriptUrl(script: Script, scripts: Script[], dependents: Script
 
   newCode += `\n//# sourceURL=${script.server}/${script.filename}`;
 
-  // We only ever assign the URL
-  const url = URL.createObjectURL(makeScriptBlob(newCode));
-  script.url = url;
-  dependents.forEach((dependent) => dependent.dependencies.set(url, script));
+  // At this point we have the full code and can construct a new blob / assign the URL.
+  script.url = URL.createObjectURL(makeScriptBlob(newCode)) as ScriptURL;
+  addDependencyInfo(script, dependents);
   return script.url;
 }
