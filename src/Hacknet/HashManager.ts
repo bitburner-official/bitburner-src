@@ -9,7 +9,7 @@
 import { HashUpgrades } from "./HashUpgrades";
 import { HashUpgrade } from "./HashUpgrade";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
 export class HashManager {
   // Max number of hashes this can hold. Equal to the sum of capacities of
@@ -156,4 +156,4 @@ export class HashManager {
   }
 }
 
-Reviver.constructors.HashManager = HashManager;
+constructorsForReviver.HashManager = HashManager;

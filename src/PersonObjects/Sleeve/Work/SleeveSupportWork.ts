@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Work, WorkType } from "./Work";
 
 export const isSleeveSupportWork = (w: Work | null): w is SleeveSupportWork =>
@@ -35,4 +35,4 @@ export class SleeveSupportWork extends Work {
   }
 }
 
-Reviver.constructors.SleeveSupportWork = SleeveSupportWork;
+constructorsForReviver.SleeveSupportWork = SleeveSupportWork;

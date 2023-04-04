@@ -6,7 +6,7 @@ import { Factions } from "../Faction/Factions";
 import { formatPercent } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { FactionNames } from "../Faction/data/FactionNames";
 import { Player } from "@player";
 import { AugmentationNames } from "./data/AugmentationNames";
@@ -607,4 +607,4 @@ export class Augmentation {
   }
 }
 
-Reviver.constructors.Augmentation = Augmentation;
+constructorsForReviver.Augmentation = Augmentation;

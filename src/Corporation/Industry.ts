@@ -1,4 +1,4 @@
-import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { CityName } from "../Enums";
 import { IndustryResearchTrees, IndustriesData } from "./IndustryData";
 import * as corpConstants from "./data/Constants";
@@ -1238,4 +1238,4 @@ export class Industry {
   }
 }
 
-Reviver.constructors.Industry = Industry;
+constructorsForReviver.Industry = Industry;

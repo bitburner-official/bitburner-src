@@ -1,6 +1,6 @@
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { addOffset } from "../utils/helpers/addOffset";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { BladeburnerConstants } from "./data/Constants";
 import { Bladeburner } from "./Bladeburner";
 import { Person } from "../PersonObjects/Person";
@@ -304,4 +304,4 @@ export class Action {
   }
 }
 
-Reviver.constructors.Action = Action;
+constructorsForReviver.Action = Action;

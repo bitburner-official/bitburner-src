@@ -1,5 +1,5 @@
 import { CorpMaterialName } from "@nsdefs";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { materialNames } from "./data/Constants";
 import { Export } from "./Export";
 import { MaterialInfo } from "./MaterialInfo";
@@ -140,4 +140,4 @@ export class Material {
   }
 }
 
-Reviver.constructors.Material = Material;
+constructorsForReviver.Material = Material;

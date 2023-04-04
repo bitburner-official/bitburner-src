@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { Work, WorkType } from "./Work";
 import { calculateIntelligenceBonus } from "../../formulas/intelligence";
@@ -33,4 +33,4 @@ export class SleeveSynchroWork extends Work {
   }
 }
 
-Reviver.constructors.SleeveSynchroWork = SleeveSynchroWork;
+constructorsForReviver.SleeveSynchroWork = SleeveSynchroWork;

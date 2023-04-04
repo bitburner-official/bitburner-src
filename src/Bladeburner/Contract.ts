@@ -1,6 +1,6 @@
 import { Bladeburner } from "./Bladeburner";
 import { Action, IActionParams } from "./Action";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
 export class Contract extends Action {
   constructor(params: IActionParams | null = null) {
@@ -20,4 +20,4 @@ export class Contract extends Action {
   }
 }
 
-Reviver.constructors.Contract = Contract;
+constructorsForReviver.Contract = Contract;

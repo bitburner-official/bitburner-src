@@ -1,6 +1,6 @@
 import { FactionInfo, FactionInfos } from "./FactionInfo";
 import { favorToRep, repToFavor } from "./formulas/favor";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
 export class Faction {
   /**
@@ -71,4 +71,4 @@ export class Faction {
   }
 }
 
-Reviver.constructors.Faction = Faction;
+constructorsForReviver.Faction = Faction;

@@ -7,7 +7,7 @@ import { Script, ScriptURL } from "./Script";
 import { Settings } from "../Settings/Settings";
 import { Terminal } from "../Terminal";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { formatTime } from "../utils/helpers/formatTime";
 import { ScriptArg } from "@nsdefs";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
@@ -144,4 +144,4 @@ export class RunningScript {
 }
 const includedProperties = getKeyList(RunningScript, { removedKeys: ["logs", "dependencies", "logUpd", "pid"] });
 
-Reviver.constructors.RunningScript = RunningScript;
+constructorsForReviver.RunningScript = RunningScript;

@@ -1,4 +1,4 @@
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { applySleeveGains, Work, WorkType } from "./Work";
 import { LocationName } from "../../../Enums";
@@ -63,4 +63,4 @@ export class SleeveCompanyWork extends Work {
   }
 }
 
-Reviver.constructors.SleeveCompanyWork = SleeveCompanyWork;
+constructorsForReviver.SleeveCompanyWork = SleeveCompanyWork;

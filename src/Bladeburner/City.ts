@@ -1,6 +1,6 @@
 import { BladeburnerConstants } from "./data/Constants";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { addOffset } from "../utils/helpers/addOffset";
 import { CityName } from "../Enums";
 
@@ -169,4 +169,4 @@ export class City {
   }
 }
 
-Reviver.constructors.City = City;
+constructorsForReviver.City = City;

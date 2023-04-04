@@ -1,4 +1,4 @@
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { Work, WorkType } from "./Work";
 import { calculateIntelligenceBonus } from "../../formulas/intelligence";
@@ -32,4 +32,4 @@ export class SleeveRecoveryWork extends Work {
   }
 }
 
-Reviver.constructors.SleeveRecoveryWork = SleeveRecoveryWork;
+constructorsForReviver.SleeveRecoveryWork = SleeveRecoveryWork;

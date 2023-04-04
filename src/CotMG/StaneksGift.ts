@@ -6,7 +6,7 @@ import { BaseGift } from "./BaseGift";
 import { Factions } from "../Faction/Factions";
 import { CalculateEffect } from "./formulas/effect";
 import { StaneksGiftEvents } from "./StaneksGiftEvents";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { StanekConstants } from "./data/Constants";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
@@ -255,4 +255,4 @@ export class StaneksGift extends BaseGift {
   }
 }
 
-Reviver.constructors.StaneksGift = StaneksGift;
+constructorsForReviver.StaneksGift = StaneksGift;

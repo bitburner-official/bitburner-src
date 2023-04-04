@@ -1,7 +1,7 @@
 import { Bladeburner } from "./Bladeburner";
 import { BladeburnerConstants } from "./data/Constants";
 import { Action, IActionParams } from "./Action";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
 export interface IOperationParams extends IActionParams {
   reqdRank?: number;
@@ -53,4 +53,4 @@ export class Operation extends Action {
   }
 }
 
-Reviver.constructors.Operation = Operation;
+constructorsForReviver.Operation = Operation;

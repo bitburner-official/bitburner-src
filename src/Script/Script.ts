@@ -6,7 +6,7 @@
  */
 import { calculateRamUsage, RamUsageEntry } from "./RamCalculations";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { ScriptModule } from "./ScriptModule";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
@@ -127,4 +127,4 @@ export class Script {
   }
 }
 
-Reviver.constructors.Script = Script;
+constructorsForReviver.Script = Script;

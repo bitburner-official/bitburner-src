@@ -5,7 +5,7 @@ import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 
 import { createRandomString } from "../utils/helpers/createRandomString";
 import { createRandomIp } from "../utils/IPAddress";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
 export interface IConstructorParams {
   adminRights?: boolean;
@@ -155,4 +155,4 @@ export class Server extends BaseServer {
   }
 }
 
-Reviver.constructors.Server = Server;
+constructorsForReviver.Server = Server;

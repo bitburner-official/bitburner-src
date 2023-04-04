@@ -1,4 +1,4 @@
-import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { ActionIdentifier } from "./ActionIdentifier";
 import { ActionTypes } from "./data/ActionTypes";
 import { Growths } from "./data/Growths";
@@ -2390,4 +2390,4 @@ export class Bladeburner {
   }
 }
 
-Reviver.constructors.Bladeburner = Bladeburner;
+constructorsForReviver.Bladeburner = Bladeburner;

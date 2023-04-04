@@ -19,7 +19,7 @@ function isReviverValue(value: unknown): value is IReviverValue {
  * off to that `fromJSON` function, passing in the value. */
 export function Reviver(_key: string, value: unknown): any {
   if (!isReviverValue(value)) return value;
-  const ctor = Reviver.constructors[value.ctor];
+  const ctor = constructorsForReviver[value.ctor];
   if (!ctor) {
     // Known missing constructors with special handling.
     switch (value.ctor) {
@@ -38,18 +38,15 @@ export function Reviver(_key: string, value: unknown): any {
   return obj;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
-export namespace Reviver {
-  export const constructors: Partial<
-    Record<
-      string,
-      (new () => object) & {
-        fromJSON: (value: IReviverValue) => any;
-        validationData?: ObjectValidator<any>;
-      }
-    >
-  > = {};
-}
+export const constructorsForReviver: Partial<
+  Record<
+    string,
+    (new () => object) & {
+      fromJSON: (value: IReviverValue) => any;
+      validationData?: ObjectValidator<any>;
+    }
+  >
+> = {};
 
 /**
  * A generic "toJSON" function that creates the data expected by Reviver.

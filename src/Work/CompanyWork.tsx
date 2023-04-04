@@ -1,5 +1,5 @@
 import React from "react";
-import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { Player } from "@player";
 import { Work, WorkType } from "./Work";
 import { influenceStockThroughCompanyWork } from "../StockMarket/PlayerInfluencing";
@@ -86,4 +86,4 @@ export class CompanyWork extends Work {
   }
 }
 
-Reviver.constructors.CompanyWork = CompanyWork;
+constructorsForReviver.CompanyWork = CompanyWork;

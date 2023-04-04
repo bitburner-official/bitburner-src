@@ -21,7 +21,7 @@ import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
 import * as ExportBonus from "./ExportBonus";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
-import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "./utils/JSONReviver";
+import { Reviver, constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "./utils/JSONReviver";
 import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
@@ -798,7 +798,7 @@ function download(filename: string, content: string): void {
   }, 0);
 }
 
-Reviver.constructors.BitburnerSaveObject = BitburnerSaveObject;
+constructorsForReviver.BitburnerSaveObject = BitburnerSaveObject;
 
 export { saveObject, loadGame, download };
 
