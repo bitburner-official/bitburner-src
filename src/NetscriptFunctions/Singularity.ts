@@ -15,7 +15,7 @@ import { Singularity as ISingularity } from "@nsdefs";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { DarkWebItems } from "../DarkWeb/DarkWebItems";
-import { CityName, LocationName } from "../Enums";
+import { CityName, LocationName, JobName } from "../Enums";
 import { Router } from "../ui/GameRoot";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Page } from "../ui/Router";
@@ -26,6 +26,7 @@ import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Company } from "../Company/Company";
 import { Companies } from "../Company/Companies";
+import { companiesMetadata } from "../Company/data/CompaniesMetadata";
 import { Factions, factionExists } from "../Faction/Factions";
 import { Faction } from "../Faction/Faction";
 import { helpers } from "../Netscript/NetscriptHelpers";
@@ -51,6 +52,7 @@ import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { findEnumMember } from "../utils/helpers/enum";
 import { areFilesEqual } from "../Terminal/DirectoryHelpers";
 import { Engine } from "../engine";
+import { checkEnum } from "../utils/helpers/enum";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const getAugmentation = function (ctx: NetscriptContext, name: string): Augmentation {
@@ -686,6 +688,44 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       return Object.entries(CompanyPositions)
         .filter((_position) => Companies[companyName].hasPosition(_position[0]))
         .map((_position) => _position[1]["name"]);
+    },
+    getCompanyPositionInfo: (ctx) => (_companyName, _positionName) => {
+      helpers.checkSingularityAccess(ctx);
+      const companyName = helpers.string(ctx, "companyName", _companyName);
+      const positionName = helpers.string(ctx, "positionName", _positionName);
+
+      // Make sure its a valid company
+      if (!(companyName in Companies)) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
+      }
+
+      // Make sure its a valid position
+      if (!checkEnum(JobName, positionName)) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: '${positionName}'`);
+      }
+
+      if (!Companies[companyName].hasPosition(positionName)) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Company '${companyName}' does not have position '${positionName}'`);
+      }
+
+      const c = CompanyPositions[positionName];
+      const n = companiesMetadata.filter((company) => company.name === companyName)[0];
+      const res = {
+        name: CompanyPositions[positionName].name,
+        nextPosition: CompanyPositions[positionName].nextPosition,
+        salary: CompanyPositions[positionName].baseSalary * n.salaryMultiplier,
+        requiredReputation: CompanyPositions[positionName].requiredReputation,
+        requiredSkills: {
+          hacking: c.requiredHacking > 0 ? c.requiredHacking + n.jobStatReqOffset : 0,
+          strength: c.requiredStrength > 0 ? c.requiredStrength + n.jobStatReqOffset : 0,
+          defense: c.requiredDefense > 0 ? c.requiredDefense + n.jobStatReqOffset : 0,
+          dexterity: c.requiredDexterity > 0 ? c.requiredDexterity + n.jobStatReqOffset : 0,
+          agility: c.requiredAgility > 0 ? c.requiredAgility + n.jobStatReqOffset : 0,
+          charisma: c.requiredCharisma > 0 ? c.requiredCharisma + n.jobStatReqOffset : 0,
+          intelligence: 0,
+        },
+      };
+      return res;
     },
     workForCompany:
       (ctx) =>

@@ -155,6 +155,7 @@ const singularity = {
   purchaseTor: SF4Cost(RamCostConstants.SingularityFn1),
   purchaseProgram: SF4Cost(RamCostConstants.SingularityFn1),
   getCurrentServer: SF4Cost(RamCostConstants.SingularityFn1),
+  getCompanyPositionInfo: SF4Cost(RamCostConstants.SingularityFn1),
   getCompanyPositions: SF4Cost(RamCostConstants.SingularityFn1),
   connect: SF4Cost(RamCostConstants.SingularityFn1),
   manualHack: SF4Cost(RamCostConstants.SingularityFn1),
