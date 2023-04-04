@@ -33,7 +33,7 @@ export const config = {
   },
 };
 
-export async function compile(script: Script, scripts: Script[]): Promise<ScriptModule> {
+export function compile(script: Script, scripts: Script[]): Promise<ScriptModule> {
   // Return the module if it already exists
   if (script.module) return script.module;
   // While importing, use an existing url or generate a new one.

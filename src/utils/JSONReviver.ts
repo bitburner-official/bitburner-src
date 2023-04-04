@@ -6,31 +6,32 @@ export interface IReviverValue {
   ctor: string;
   data: any;
 }
+function isReviverValue(value: unknown): value is IReviverValue {
+  return (
+    typeof value === "object" && value !== null && "ctor" in value && typeof value.ctor === "string" && "data" in value
+  );
+}
 
 /**
  * A generic "smart reviver" function.
  * Looks for object values with a `ctor` property and a `data` property.
  * If it finds them, and finds a matching constructor, it hands
  * off to that `fromJSON` function, passing in the value. */
-export function Reviver(key: string, value: unknown): any {
-  if (typeof value !== "object" || value === null) return value;
-  // @ts-ignore We know it's an object here, just checking type of object properties to type validate.
-  if (typeof value.ctor !== "string" || typeof value.data === "undefined") return value;
-  const typedValue = value as IReviverValue;
-
-  const ctor = Reviver.constructors[typedValue.ctor];
+export function Reviver(_key: string, value: unknown): any {
+  if (!isReviverValue(value)) return value;
+  const ctor = Reviver.constructors[value.ctor];
   if (!ctor) {
     // Known missing constructors with special handling.
-    switch (typedValue.ctor) {
+    switch (value.ctor) {
       case "AllServersMap":
         console.warn("Converting AllServersMap for v0.43.1");
-        return typedValue.data;
+        return value.data;
     }
     // Missing constructor with no special handling. Throw error.
-    throw new Error(`Could not locate constructor named ${typedValue.ctor}. If the save data is valid, this is a bug.`);
+    throw new Error(`Could not locate constructor named ${value.ctor}. If the save data is valid, this is a bug.`);
   }
 
-  const obj = ctor.fromJSON(typedValue);
+  const obj = ctor.fromJSON(value);
   if (ctor.validationData !== undefined) {
     validateObject(obj, ctor.validationData);
   }
@@ -68,7 +69,7 @@ export function Generic_toJSON<T extends Record<string, any>>(
     return { ctor: ctorName, data: data };
   }
   // no keys provided: save all own keys of the object
-  for (const key in obj) data[key] = obj[key];
+  for (const [key, val] of Object.entries(obj) as [keyof T, T[keyof T]][]) data[key] = val;
   return { ctor: ctorName, data: data };
 }
 
@@ -91,10 +92,13 @@ export function Generic_fromJSON<T extends Record<string, any>>(
   const obj = new ctor();
   // If keys were provided, just load the provided keys (if they are in the data)
   if (keys) {
-    for (const key of keys) if (key in data) obj[key] = data[key];
+    for (const key of keys) {
+      const val = data[key];
+      if (val) obj[key] = val;
+    }
     return obj;
   }
   // No keys provided: load every key in data
-  for (const key in data) obj[key] = data[key];
+  for (const [key, val] of Object.entries(data) as [keyof T, T[keyof T]][]) obj[key] = val;
   return obj;
 }
