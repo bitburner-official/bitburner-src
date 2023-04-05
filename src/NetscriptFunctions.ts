@@ -900,6 +900,12 @@ export const ns: InternalAPI<NSFull> = {
 
         // Create new script if it does not already exist
         const newScript = new Script(file, sourceScript.code, destServer.hostname);
+        // If the script being copied has no dependencies, reuse the module / URL
+        // The new script will not show up in the correct location in the sources tab because it is just reusing the module from a different server
+        if (sourceScript.dependencies.size === 0 && sourceScript.url) {
+          newScript.url = sourceScript.url;
+          newScript.module = sourceScript.module;
+        }
         destServer.scripts.push(newScript);
         helpers.log(ctx, () => `File '${file}' copied over to '${destServer?.hostname}'.`);
       }

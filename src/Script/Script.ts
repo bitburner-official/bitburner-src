@@ -10,6 +10,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { ScriptModule } from "./ScriptModule";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
+import { queueUrlRevoke } from "../NetscriptJSEvaluator";
 
 // The object portion of this type is not runtime information, it's only to ensure type validation
 // And make it harder to overwrite a url with a random non-url string.
@@ -62,7 +63,7 @@ export class Script {
     // Early return if there's already no URL
     if (!this.url) return;
     this.module = undefined;
-    URL.revokeObjectURL(this.url);
+    queueUrlRevoke(this.url);
     this.url = undefined;
     for (const dependency of this.dependencies.values()) dependency.dependents.delete(this);
     this.dependencies.clear();

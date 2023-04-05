@@ -17,6 +17,23 @@ function makeScriptBlob(code: string): Blob {
   return new Blob([code], { type: "text/javascript" });
 }
 
+const urlsToRevoke: ScriptURL[] = [];
+let activeCompilations = 0;
+/** Function to queue up revoking of script URLs  */
+export const queueUrlRevoke = (url: ScriptURL) => urlsToRevoke.push(url);
+
+/** Function to revoke any expired urls */
+function triggerURLRevokes() {
+  if (activeCompilations === 0) {
+    // Revoke all pending revoke URLS
+    urlsToRevoke.forEach((url) => {
+      URL.revokeObjectURL(url);
+    });
+    // Remove all url strings from array
+    urlsToRevoke.length = 0;
+  }
+}
+
 // Webpack likes to turn the import into a require, which sort of
 // but not really behaves like import. So we use a "magic comment"
 // to disable that and leave it as a dynamic import.
@@ -37,12 +54,20 @@ export function compile(script: Script, scripts: Script[]): Promise<ScriptModule
   // Return the module if it already exists
   if (script.module) return script.module;
   // While importing, use an existing url or generate a new one.
-  script.module = config.doImport(script.url || generateScriptUrl(script, scripts, [])).catch((e) => {
-    script.invalidateModule();
-    console.error(`Error occurred while attempting to compile ${script.filename} on ${script.server}:`);
-    console.error(e);
-    throw e;
-  });
+  if (!script.url) script.url = generateScriptUrl(script, scripts, []);
+  activeCompilations++;
+  script.module = config
+    .doImport(script.url)
+    .catch((e) => {
+      script.invalidateModule();
+      console.error(`Error occurred while attempting to compile ${script.filename} on ${script.server}:`);
+      console.error(e);
+      throw e;
+    })
+    .finally(() => {
+      activeCompilations--;
+      triggerURLRevokes();
+    });
   return script.module;
 }
 
