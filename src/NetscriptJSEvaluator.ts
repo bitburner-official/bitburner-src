@@ -19,8 +19,11 @@ function makeScriptBlob(code: string): Blob {
 
 const urlsToRevoke: ScriptURL[] = [];
 let activeCompilations = 0;
-/** Function to queue up revoking of script URLs  */
-export const queueUrlRevoke = (url: ScriptURL) => urlsToRevoke.push(url);
+/** Function to queue up revoking of script URLs. If there's no active compilation, just revoke it now. */
+export const queueUrlRevoke = (url: ScriptURL) => {
+  if (!activeCompilations) return URL.revokeObjectURL(url);
+  urlsToRevoke.push(url);
+};
 
 /** Function to revoke any expired urls */
 function triggerURLRevokes() {
