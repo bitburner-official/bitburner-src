@@ -29,9 +29,7 @@ export const queueUrlRevoke = (url: ScriptURL) => {
 function triggerURLRevokes() {
   if (activeCompilations === 0) {
     // Revoke all pending revoke URLS
-    urlsToRevoke.forEach((url) => {
-      URL.revokeObjectURL(url);
-    });
+    urlsToRevoke.forEach((url) => URL.revokeObjectURL(url));
     // Remove all url strings from array
     urlsToRevoke.length = 0;
   }
