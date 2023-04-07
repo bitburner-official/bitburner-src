@@ -186,7 +186,7 @@ export abstract class BaseServer {
         }
       }
     } else if (isScriptFilename(fn)) {
-      const scriptIndex = this.scripts.findIndex(script => script.filename === fn);
+      const scriptIndex = this.scripts.findIndex((script) => script.filename === fn);
       if (scriptIndex === -1) return { res: false, msg: `script ${fn} not found.` };
       if (this.isRunning(fn)) {
         return { res: false, msg: "Cannot delete a script that is currently running!" };
