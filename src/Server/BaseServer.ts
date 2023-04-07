@@ -132,7 +132,7 @@ export abstract class BaseServer {
       //compare file names without leading '/' to prevent running multiple script with the same name
       if (
         (rs.filename.charAt(0) == "/" ? rs.filename.slice(1) : rs.filename) ===
-        (scriptName.charAt(0) == "/" ? scriptName.slice(1) : scriptName) &&
+          (scriptName.charAt(0) == "/" ? scriptName.slice(1) : scriptName) &&
         compareArrays(rs.args, scriptArgs)
       ) {
         return rs;
