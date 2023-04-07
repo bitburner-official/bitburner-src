@@ -191,8 +191,8 @@ export abstract class BaseServer {
       if (this.isRunning(fn)) {
         return { res: false, msg: "Cannot delete a script that is currently running!" };
       }
-      this.scripts[i].invalidateModule();
-      this.scripts.splice(i, 1);
+      this.scripts[scriptIndex].invalidateModule();
+      this.scripts.splice(scriptIndex, 1);
       return { res: true };
     } else if (fn.endsWith(".lit")) {
       for (let i = 0; i < this.messages.length; ++i) {
