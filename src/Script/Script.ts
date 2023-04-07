@@ -5,32 +5,30 @@
  * being evaluated. See RunningScript for that
  */
 import { calculateRamUsage, RamUsageEntry } from "./RamCalculations";
+import { LoadedModule, ScriptURL } from "./LoadedModule";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
-import { ScriptModule } from "./ScriptModule";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
-import { queueUrlRevoke } from "../NetscriptJSEvaluator";
-
-// The object portion of this type is not runtime information, it's only to ensure type validation
-// And make it harder to overwrite a url with a random non-url string.
-export type ScriptURL = string & { __type: "ScriptURL" };
 
 export class Script {
-  code = "";
-  filename = "default.js";
-  server = "home";
+  code: string;
+  filename: string;
+  server: string;
 
   // Ram calculation, only exists after first poll of ram cost after updating
-  ramUsage?: number;
-  ramUsageEntries?: RamUsageEntry[];
+  ramUsage: number | null = null;
+  ramUsageEntries: RamUsageEntry[] = [];
 
   // Runtime data that only exists when the script has been initiated. Cleared when script or a dependency script is updated.
-  module?: Promise<ScriptModule>;
-  url?: ScriptURL;
+  mod: LoadedModule | null = null;
   /** Scripts that directly import this one. Stored so we can invalidate these dependent scripts when this one is invalidated. */
   dependents: Set<Script> = new Set();
-  /** Scripts that are imported by this one, either directly or through an import chain */
+  /**
+   * Scripts that we directly or indirectly import, including ourselves.
+   * Stored only so RunningScript can use it, to translate urls in error messages.
+   * Because RunningScript uses the reference directly (to reduce object copies), it must be immutable.
+   */
   dependencies: Map<ScriptURL, Script> = new Map();
 
   constructor(fn = "", code = "", server = "") {
@@ -58,16 +56,16 @@ export class Script {
   /** Invalidates the current script module and related data, e.g. when modifying the file. */
   invalidateModule(): void {
     // Always clear ram usage
-    this.ramUsage = undefined;
-    this.ramUsageEntries = undefined;
+    this.ramUsage = null;
+    this.ramUsageEntries.length = 0;
     // Early return if there's already no URL
-    if (!this.url) return;
-    this.module = undefined;
-    queueUrlRevoke(this.url);
-    this.url = undefined;
-    for (const dependency of this.dependencies.values()) dependency.dependents.delete(this);
-    this.dependencies.clear();
+    if (!this.mod) return;
+    this.mod = null;
     for (const dependent of this.dependents) dependent.invalidateModule();
+    this.dependents.clear();
+    // This will be mutated in compile(), but is immutable after that.
+    // (No RunningScripts can access this copy before that point).
+    this.dependencies = new Map();
   }
 
   /**
@@ -86,7 +84,7 @@ export class Script {
   getRamUsage(otherScripts: Script[]): number | null {
     if (this.ramUsage) return this.ramUsage;
     this.updateRamUsage(otherScripts);
-    return this.ramUsage ?? null;
+    return this.ramUsage;
   }
 
   /**
@@ -97,12 +95,10 @@ export class Script {
     const ramCalc = calculateRamUsage(this.code, otherScripts);
     if (ramCalc.cost >= RamCostConstants.Base) {
       this.ramUsage = roundToTwo(ramCalc.cost);
-      this.ramUsageEntries = ramCalc.entries;
-    } else delete this.ramUsage;
-  }
-
-  imports(): string[] {
-    return [];
+      this.ramUsageEntries = ramCalc.entries as RamUsageEntry[];
+    } else {
+      this.ramUsage = null;
+    }
   }
 
   /** The keys that are relevant in a save file */
