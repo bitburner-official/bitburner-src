@@ -55,6 +55,7 @@ module.exports = (env, argv) => {
   const htmlConfig = {
     title: "Bitburner",
     template: "src/index.html",
+    filename: "../index.html",
     favicon: "favicon.ico",
     googleAnalytics: {
       trackingId: "UA-100157497-1",
@@ -90,9 +91,6 @@ module.exports = (env, argv) => {
           useShortDoctype: false,
         },
   };
-  if (!isDevelopment) {
-    htmlConfig.filename = "../index.html";
-  }
 
   return {
     plugins: [
