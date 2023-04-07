@@ -132,7 +132,7 @@ export abstract class BaseServer {
       //compare file names without leading '/' to prevent running multiple script with the same name
       if (
         (rs.filename.charAt(0) == "/" ? rs.filename.slice(1) : rs.filename) ===
-          (scriptName.charAt(0) == "/" ? scriptName.slice(1) : scriptName) &&
+        (scriptName.charAt(0) == "/" ? scriptName.slice(1) : scriptName) &&
         compareArrays(rs.args, scriptArgs)
       ) {
         return rs;
@@ -186,19 +186,14 @@ export abstract class BaseServer {
         }
       }
     } else if (isScriptFilename(fn)) {
-      for (let i = 0; i < this.scripts.length; ++i) {
-        if (this.scripts[i].filename === fn) {
-          if (this.isRunning(fn)) {
-            return {
-              res: false,
-              msg: "Cannot delete a script that is currently running!",
-            };
-          }
-
-          this.scripts.splice(i, 1);
-          return { res: true };
-        }
+      const scriptIndex = this.scripts.findIndex(script => script.filename === fn);
+      if (scriptIndex === -1) return { res: false, msg: `script ${fn} not found.` };
+      if (this.isRunning(fn)) {
+        return { res: false, msg: "Cannot delete a script that is currently running!" };
       }
+      this.scripts[i].invalidateModule();
+      this.scripts.splice(i, 1);
+      return { res: true };
     } else if (fn.endsWith(".lit")) {
       for (let i = 0; i < this.messages.length; ++i) {
         const f = this.messages[i];
