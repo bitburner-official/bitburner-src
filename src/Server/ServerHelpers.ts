@@ -254,12 +254,6 @@ export function prestigeHomeComputer(homeComp: Server): void {
     homeComp.programs.push(Programs.BitFlume.name);
   }
 
-  //Reset RAM usage calculation for all scripts
-  homeComp.scripts.forEach(function (script) {
-    // Don't need to invalidate the whole module, just the ram usage.
-    delete script.ramUsage;
-  });
-
   homeComp.messages.length = 0; //Remove .lit and .msg files
   homeComp.messages.push(LiteratureNames.HackersStartingHandbook);
 }
