@@ -3657,7 +3657,7 @@ export interface Sleeve {
    *
    * Return the number of duplicate sleeves the player has.
    *
-   * @returns number of duplicate sleeves the player has.
+   * @returns Number of duplicate sleeves the player has.
    */
   getNumSleeves(): number;
 
@@ -3749,12 +3749,12 @@ export interface Sleeve {
    * @remarks
    * RAM cost: 4 GB
    *
-   * Return a boolean indicating whether or not the sleeve started working or this faction.
+   * Return a boolean indicating whether or not the sleeve started working for a faction.
    *
    * @param sleeveNumber - Index of the sleeve to work for the faction.
    * @param factionName - Name of the faction to work for.
    * @param factionWorkType - Name of the action to perform for this faction.
-   * @returns True if the sleeve started working on this faction, false otherwise, can also throw on errors
+   * @returns True if the sleeve started working for this faction, false otherwise. Can also throw on errors.
    */
   setToFactionWork(
     sleeveNumber: number,
@@ -3767,11 +3767,11 @@ export interface Sleeve {
    * @remarks
    * RAM cost: 4 GB
    *
-   * Return a boolean indicating whether or not the sleeve started working or this company.
+   * Return a boolean indicating whether or not the sleeve started working for a company.
    *
    * @param sleeveNumber - Index of the sleeve to work for the company.
    * @param companyName - Name of the company to work for.
-   * @returns True if the sleeve started working on this company, false otherwise.
+   * @returns True if the sleeve started working for this company, false otherwise.
    */
   setToCompanyWork(sleeveNumber: number, companyName: string): boolean;
 
@@ -3876,16 +3876,16 @@ export interface Sleeve {
   purchaseSleeveAug(sleeveNumber: number, augName: string): boolean;
 
   /**
-   * Set a sleeve to perform bladeburner actions.
+   * Set a sleeve to perform Bladeburner actions.
    * @remarks
    * RAM cost: 4 GB
    *
-   * Return a boolean indicating whether or not the sleeve started working out.
+   * Return a boolean indicating whether or not the sleeve started a Bladeburner action.
    *
-   * @param sleeveNumber - Index of the sleeve to workout at the gym.
+   * @param sleeveNumber - Index of the sleeve to perform a Bladeburner action.
    * @param action - Name of the action to be performed.
    * @param contract - Name of the contract if applicable.
-   * @returns True if the sleeve started working out, false otherwise.
+   * @returns True if the sleeve started the given Bladeburner action, false otherwise.
    */
   setToBladeburnerAction(sleeveNumber: number, action: string, contract?: string): boolean;
 }
