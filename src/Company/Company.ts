@@ -2,7 +2,7 @@ import { CompanyPosition } from "./CompanyPosition";
 import * as posNames from "./data/JobTracks";
 import { favorToRep, repToFavor } from "../Faction/formulas/favor";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
 export interface IConstructorParams {
   name: string;
@@ -143,4 +143,4 @@ export class Company {
   }
 }
 
-Reviver.constructors.Company = Company;
+constructorsForReviver.Company = Company;

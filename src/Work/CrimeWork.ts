@@ -1,4 +1,4 @@
-import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { Crime } from "../Crime/Crime";
 import { CONSTANTS } from "../Constants";
 import { determineCrimeSuccess, findCrime } from "../Crime/CrimeHelpers";
@@ -106,4 +106,4 @@ export class CrimeWork extends Work {
   }
 }
 
-Reviver.constructors.CrimeWork = CrimeWork;
+constructorsForReviver.CrimeWork = CrimeWork;

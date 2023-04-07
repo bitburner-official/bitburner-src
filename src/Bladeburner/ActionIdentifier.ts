@@ -1,4 +1,4 @@
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
 interface IParams {
   name?: string;
@@ -23,4 +23,4 @@ export class ActionIdentifier {
   }
 }
 
-Reviver.constructors.ActionIdentifier = ActionIdentifier;
+constructorsForReviver.ActionIdentifier = ActionIdentifier;

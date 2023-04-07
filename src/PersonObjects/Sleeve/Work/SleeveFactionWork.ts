@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { applySleeveGains, Work, WorkType } from "./Work";
 import { FactionWorkType } from "../../../Enums";
@@ -74,4 +74,4 @@ export class SleeveFactionWork extends Work {
   }
 }
 
-Reviver.constructors.SleeveFactionWork = SleeveFactionWork;
+constructorsForReviver.SleeveFactionWork = SleeveFactionWork;

@@ -15,7 +15,7 @@ import {
 
 import { createRandomIp } from "../utils/IPAddress";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { Player } from "@player";
 
 interface IConstructorParams {
@@ -153,4 +153,4 @@ export class HacknetServer extends BaseServer implements IHacknetNode {
   }
 }
 
-Reviver.constructors.HacknetServer = HacknetServer;
+constructorsForReviver.HacknetServer = HacknetServer;

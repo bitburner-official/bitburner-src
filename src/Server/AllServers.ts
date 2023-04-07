@@ -214,9 +214,6 @@ function scriptFilter(script: RunningScript): boolean {
 }
 
 function includeReplacer(key: string, value: any): any {
-  if (key === "logs") {
-    return [];
-  }
   if (key === "runningScripts") {
     return value.filter(scriptFilter);
   }

@@ -1,6 +1,6 @@
 import React from "react";
 import { Work, WorkType } from "./Work";
-import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { Player } from "@player";
 import { FactionNames } from "../Faction/data/FactionNames";
 import { Factions } from "../Faction/Factions";
@@ -100,4 +100,4 @@ export class FactionWork extends Work {
   }
 }
 
-Reviver.constructors.FactionWork = FactionWork;
+constructorsForReviver.FactionWork = FactionWork;

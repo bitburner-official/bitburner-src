@@ -1,6 +1,6 @@
 import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { BaseServer } from "./Server/BaseServer";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "./utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
 import { removeLeadingSlash, isInRootDirectory } from "./Terminal/DirectoryHelpers";
 
 /** Represents a plain text file that is typically stored on a server. */
@@ -73,7 +73,7 @@ export class TextFile {
   }
 }
 
-Reviver.constructors.TextFile = TextFile;
+constructorsForReviver.TextFile = TextFile;
 
 /**
  * Retrieve the file object for the filename on the specified server.

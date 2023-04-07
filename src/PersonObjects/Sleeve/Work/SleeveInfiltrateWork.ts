@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../../../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { Work, WorkType } from "./Work";
 import { CONSTANTS } from "../../../Constants";
@@ -45,4 +45,4 @@ export class SleeveInfiltrateWork extends Work {
   }
 }
 
-Reviver.constructors.SleeveInfiltrateWork = SleeveInfiltrateWork;
+constructorsForReviver.SleeveInfiltrateWork = SleeveInfiltrateWork;

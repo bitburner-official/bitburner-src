@@ -5,7 +5,7 @@ import { GangMemberUpgrades } from "./GangMemberUpgrades";
 import { IAscensionResult } from "./IAscensionResult";
 import { Player } from "@player";
 import { Gang } from "./Gang";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import {
   calculateRespectGain,
   calculateMoneyGain,
@@ -332,4 +332,4 @@ export class GangMember {
   }
 }
 
-Reviver.constructors.GangMember = GangMember;
+constructorsForReviver.GangMember = GangMember;

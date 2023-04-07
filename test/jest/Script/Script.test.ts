@@ -10,7 +10,7 @@ describe("Validate Save Script Works", function () {
     const server = "home";
     const filename = "test.js";
     const script = new Script();
-    script.saveScript(filename, code, server, []);
+    script.saveScript(filename, code, server);
 
     expect(script.filename).toEqual(filename);
     expect(script.code).toEqual(code);

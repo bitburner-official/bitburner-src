@@ -5,7 +5,7 @@ import { IndustriesData } from "./IndustryData";
 
 import { createCityMap } from "../Locations/createCityMap";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { CityName } from "../Enums";
 import { materialNames } from "./data/Constants";
@@ -285,4 +285,4 @@ export class Product {
   }
 }
 
-Reviver.constructors.Product = Product;
+constructorsForReviver.Product = Product;

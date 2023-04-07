@@ -2,7 +2,7 @@ import { Material } from "./Material";
 import { Corporation } from "./Corporation";
 import { Industry } from "./Industry";
 import { MaterialInfo } from "./MaterialInfo";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { CityName } from "../Enums";
 import { CorpMaterialName } from "@nsdefs";
@@ -107,4 +107,4 @@ export class Warehouse {
   }
 }
 
-Reviver.constructors.Warehouse = Warehouse;
+constructorsForReviver.Warehouse = Warehouse;

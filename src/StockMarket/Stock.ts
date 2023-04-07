@@ -1,5 +1,5 @@
 import { IMinMaxRange } from "../types";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 
 export const StockForecastInfluenceLimit = 5;
@@ -275,4 +275,4 @@ export class Stock {
   }
 }
 
-Reviver.constructors.Stock = Stock;
+constructorsForReviver.Stock = Stock;

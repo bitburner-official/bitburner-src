@@ -7,7 +7,7 @@ import { Work, WorkType } from "./Work";
 import { graftingIntBonus } from "../PersonObjects/Grafting/GraftingHelpers";
 import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
 
@@ -102,4 +102,4 @@ export class GraftingWork extends Work {
   }
 }
 
-Reviver.constructors.GraftingWork = GraftingWork;
+constructorsForReviver.GraftingWork = GraftingWork;

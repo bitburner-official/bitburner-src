@@ -1,5 +1,5 @@
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
@@ -119,4 +119,4 @@ export class CreateProgramWork extends Work {
   }
 }
 
-Reviver.constructors.CreateProgramWork = CreateProgramWork;
+constructorsForReviver.CreateProgramWork = CreateProgramWork;

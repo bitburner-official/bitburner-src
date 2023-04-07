@@ -17,7 +17,7 @@ import {
 import { HacknetNodeConstants } from "./data/Constants";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { ObjectValidator, minMax } from "../utils/Validator";
 
 export class HacknetNode implements IHacknetNode {
@@ -131,4 +131,4 @@ export class HacknetNode implements IHacknetNode {
   }
 }
 
-Reviver.constructors.HacknetNode = HacknetNode;
+constructorsForReviver.HacknetNode = HacknetNode;

@@ -1,5 +1,5 @@
 import { CorpStateName } from "@nsdefs";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { stateNames } from "./data/Constants";
 export class CorporationState {
   // Number representing what state the Corporation is in. The number
@@ -36,4 +36,4 @@ export class CorporationState {
   }
 }
 
-Reviver.constructors.CorporationState = CorporationState;
+constructorsForReviver.CorporationState = CorporationState;

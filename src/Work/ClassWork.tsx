@@ -1,5 +1,5 @@
 import React from "react";
-import { Reviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { CONSTANTS } from "../Constants";
 import { LocationName } from "../Enums";
 import { formatExp } from "../ui/formatNumber";
@@ -159,4 +159,4 @@ export class ClassWork extends Work {
   }
 }
 
-Reviver.constructors.ClassWork = ClassWork;
+constructorsForReviver.ClassWork = ClassWork;

@@ -5,7 +5,7 @@
 import { OrderTypes } from "./data/OrderTypes";
 import { PositionTypes } from "./data/PositionTypes";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
 export class Order {
   readonly pos: PositionTypes;
@@ -54,4 +54,4 @@ export class Order {
   }
 }
 
-Reviver.constructors.Order = Order;
+constructorsForReviver.Order = Order;

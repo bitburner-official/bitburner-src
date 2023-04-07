@@ -5,58 +5,38 @@
  * being evaluated. See RunningScript for that
  */
 import { calculateRamUsage, RamUsageEntry } from "./RamCalculations";
-import { ScriptUrl } from "./ScriptUrl";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { ScriptModule } from "./ScriptModule";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
+import { queueUrlRevoke } from "../NetscriptJSEvaluator";
 
-let globalModuleSequenceNumber = 0;
-
-interface ScriptReference {
-  filename: string;
-  server: string;
-}
+// The object portion of this type is not runtime information, it's only to ensure type validation
+// And make it harder to overwrite a url with a random non-url string.
+export type ScriptURL = string & { __type: "ScriptURL" };
 
 export class Script {
-  // Code for this script
   code = "";
+  filename = "default.js";
+  server = "home";
 
-  // Filename for the script file
-  filename = "";
-
-  // url of the script if any, only for NS2.
-  url = "";
-
-  // The dynamic module generated for this script when it is run.
-  // This is only applicable for NetscriptJS
-  module: Promise<ScriptModule> | null = null;
-
-  // The timestamp when when the script was last updated.
-  moduleSequenceNumber: number;
-
-  // Only used with NS2 scripts; the list of dependency script filenames. This is constructed
-  // whenever the script is first evaluated, and therefore may be out of date if the script
-  // has been updated since it was last run.
-  dependencies: ScriptUrl[] = [];
-  dependents: ScriptReference[] = [];
-
-  // Amount of RAM this Script requires to run. null indicates an error in calculating ram.
-  ramUsage: number | null = null;
+  // Ram calculation, only exists after first poll of ram cost after updating
+  ramUsage?: number;
   ramUsageEntries?: RamUsageEntry[];
 
-  // Used to deconflict multiple simultaneous compilations.
-  queueCompile = false;
-
-  // hostname of server that this script is on.
-  server = "";
+  // Runtime data that only exists when the script has been initiated. Cleared when script or a dependency script is updated.
+  module?: Promise<ScriptModule>;
+  url?: ScriptURL;
+  /** Scripts that directly import this one. Stored so we can invalidate these dependent scripts when this one is invalidated. */
+  dependents: Set<Script> = new Set();
+  /** Scripts that are imported by this one, either directly or through an import chain */
+  dependencies: Map<ScriptURL, Script> = new Map();
 
   constructor(fn = "", code = "", server = "") {
     this.filename = fn;
     this.code = code;
     this.server = server; // hostname of server this script is on
-    this.moduleSequenceNumber = ++globalModuleSequenceNumber;
   }
 
   /** Download the script as a file */
@@ -75,13 +55,19 @@ export class Script {
     }, 0);
   }
 
-  /**
-   * Marks this script as having been updated. It will be recompiled next time something tries
-   * to exec it.
-   */
-  markUpdated(): void {
-    this.module = null;
-    this.moduleSequenceNumber = ++globalModuleSequenceNumber;
+  /** Invalidates the current script module and related data, e.g. when modifying the file. */
+  invalidateModule(): void {
+    // Always clear ram usage
+    this.ramUsage = undefined;
+    this.ramUsageEntries = undefined;
+    // Early return if there's already no URL
+    if (!this.url) return;
+    this.module = undefined;
+    queueUrlRevoke(this.url);
+    this.url = undefined;
+    for (const dependency of this.dependencies.values()) dependency.dependents.delete(this);
+    this.dependencies.clear();
+    for (const dependent of this.dependents) dependent.invalidateModule();
   }
 
   /**
@@ -89,30 +75,18 @@ export class Script {
    * @param {string} code - The new contents of the script
    * @param {Script[]} otherScripts - Other scripts on the server. Used to process imports
    */
-  saveScript(filename: string, code: string, hostname: string, otherScripts: Script[]): void {
-    // Update code and filename
+  saveScript(filename: string, code: string, hostname: string): void {
+    this.invalidateModule();
     this.code = Script.formatCode(code);
-
     this.filename = filename;
     this.server = hostname;
-    // Null ramUsage forces a recalc next time ramUsage is needed
-    this.ramUsage = null;
-    this.markUpdated();
-    this.dependents.forEach((dependent) => {
-      const scriptToUpdate = otherScripts.find(
-        (otherScript) => otherScript.filename === dependent.filename && otherScript.server === dependent.server,
-      );
-      if (!scriptToUpdate) return;
-      scriptToUpdate.ramUsage = null;
-      scriptToUpdate.markUpdated();
-    });
   }
 
   /** Gets the ram usage, while also attempting to update it if it's currently null */
   getRamUsage(otherScripts: Script[]): number | null {
     if (this.ramUsage) return this.ramUsage;
     this.updateRamUsage(otherScripts);
-    return this.ramUsage;
+    return this.ramUsage ?? null;
   }
 
   /**
@@ -124,26 +98,24 @@ export class Script {
     if (ramCalc.cost >= RamCostConstants.Base) {
       this.ramUsage = roundToTwo(ramCalc.cost);
       this.ramUsageEntries = ramCalc.entries;
-    } else this.ramUsage = null;
-    this.markUpdated();
+    } else delete this.ramUsage;
   }
 
   imports(): string[] {
     return [];
   }
 
+  /** The keys that are relevant in a save file */
+  static savedKeys = ["code", "filename", "server"] as const;
+
   // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {
-    return Generic_toJSON("Script", this);
+    return Generic_toJSON("Script", this, Script.savedKeys);
   }
 
   // Initializes a Script Object from a JSON save state
   static fromJSON(value: IReviverValue): Script {
-    const s = Generic_fromJSON(Script, value.data);
-    // Force the url to blank from the save data. Urls are not valid outside the current browser page load.
-    s.url = "";
-    s.dependents = [];
-    return s;
+    return Generic_fromJSON(Script, value.data, Script.savedKeys);
   }
 
   /**
@@ -156,4 +128,4 @@ export class Script {
   }
 }
 
-Reviver.constructors.Script = Script;
+constructorsForReviver.Script = Script;

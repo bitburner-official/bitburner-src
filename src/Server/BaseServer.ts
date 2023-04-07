@@ -186,19 +186,14 @@ export abstract class BaseServer {
         }
       }
     } else if (isScriptFilename(fn)) {
-      for (let i = 0; i < this.scripts.length; ++i) {
-        if (this.scripts[i].filename === fn) {
-          if (this.isRunning(fn)) {
-            return {
-              res: false,
-              msg: "Cannot delete a script that is currently running!",
-            };
-          }
-
-          this.scripts.splice(i, 1);
-          return { res: true };
-        }
+      const scriptIndex = this.scripts.findIndex((script) => script.filename === fn);
+      if (scriptIndex === -1) return { res: false, msg: `script ${fn} not found.` };
+      if (this.isRunning(fn)) {
+        return { res: false, msg: "Cannot delete a script that is currently running!" };
       }
+      this.scripts[i].invalidateModule();
+      this.scripts.splice(i, 1);
+      return { res: true };
     } else if (fn.endsWith(".lit")) {
       for (let i = 0; i < this.messages.length; ++i) {
         const f = this.messages[i];
@@ -273,8 +268,7 @@ export abstract class BaseServer {
         const script = this.scripts[i];
         script.code = code;
         // Set ramUsage to null in order to force recalculation on next run
-        script.ramUsage = null;
-        script.markUpdated();
+        script.invalidateModule();
         ret.overwritten = true;
         ret.success = true;
         return ret;
