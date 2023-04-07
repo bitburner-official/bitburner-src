@@ -38,6 +38,8 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [getAugmentationStats(name)](./bitburner.singularity.getaugmentationstats.md) | Get the stats of an augmentation. |
 |  [getCompanyFavor(companyName)](./bitburner.singularity.getcompanyfavor.md) | Get company favor. |
 |  [getCompanyFavorGain(companyName)](./bitburner.singularity.getcompanyfavorgain.md) | Get company favor gain. |
+|  [getCompanyPositionInfo(companyName, positionName)](./bitburner.singularity.getcompanypositioninfo.md) | Get Requirements for Company Position. |
+|  [getCompanyPositions(companyName)](./bitburner.singularity.getcompanypositions.md) | Get List of Company Positions. |
 |  [getCompanyRep(companyName)](./bitburner.singularity.getcompanyrep.md) | Get company reputation. |
 |  [getCrimeChance(crime)](./bitburner.singularity.getcrimechance.md) | Get chance to successfully commit a crime. |
 |  [getCrimeStats(crime)](./bitburner.singularity.getcrimestats.md) | Get stats related to a crime. |

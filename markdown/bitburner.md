@@ -31,6 +31,7 @@
 |  [Bladeburner](./bitburner.bladeburner.md) | Bladeburner API |
 |  [BladeburnerCurAction](./bitburner.bladeburnercuraction.md) | Bladeburner current action. |
 |  [CodingContract](./bitburner.codingcontract.md) | Coding Contract API |
+|  [CompanyPositionInfo](./bitburner.companypositioninfo.md) | Company position requirements and salary. |
 |  [CorpConstants](./bitburner.corpconstants.md) | Corporation related constants |
 |  [CorpIndustryData](./bitburner.corpindustrydata.md) | Data for an individual industry |
 |  [CorpMaterialConstantData](./bitburner.corpmaterialconstantdata.md) | Corporation material information |

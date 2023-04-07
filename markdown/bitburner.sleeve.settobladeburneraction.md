@@ -4,7 +4,7 @@
 
 ## Sleeve.setToBladeburnerAction() method
 
-Set a sleeve to perform bladeburner actions.
+Set a sleeve to perform Bladeburner actions.
 
 **Signature:**
 
@@ -16,7 +16,7 @@ setToBladeburnerAction(sleeveNumber: number, action: string, contract?: string):
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  sleeveNumber | number | Index of the sleeve to workout at the gym. |
+|  sleeveNumber | number | Index of the sleeve to perform a Bladeburner action. |
 |  action | string | Name of the action to be performed. |
 |  contract | string | _(Optional)_ Name of the contract if applicable. |
 
@@ -24,11 +24,11 @@ setToBladeburnerAction(sleeveNumber: number, action: string, contract?: string):
 
 boolean
 
-True if the sleeve started working out, false otherwise.
+True if the sleeve started the given Bladeburner action, false otherwise.
 
 ## Remarks
 
 RAM cost: 4 GB
 
-Return a boolean indicating whether or not the sleeve started working out.
+Return a boolean indicating whether or not the sleeve started a Bladeburner action.
 

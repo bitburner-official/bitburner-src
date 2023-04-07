@@ -1747,7 +1747,7 @@ export interface Singularity {
    * @param companyName - Name of company to get the position list for. Must be an exact match.
    * @returns The position list if the company name is valid.
    */
-  getCompanyPositions(companyName: string): CompanyPosName[];
+  getCompanyPositions(companyName: string): JobName[];
 
   /**
    * Work for a company.
@@ -2389,8 +2389,8 @@ export interface Singularity {
  * @returns - An object representing the requirements and salary for a company/position combination.
  */
 export interface CompanyPositionInfo {
-  name: CompanyPosName;
-  nextPosition: CompanyPosName | null;
+  name: JobName;
+  nextPosition: JobName | null;
   salary: number;
   requiredReputation: number;
   requiredSkills: Skills;

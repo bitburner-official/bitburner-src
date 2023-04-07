@@ -23,11 +23,11 @@ setToCompanyWork(sleeveNumber: number, companyName: string): boolean;
 
 boolean
 
-True if the sleeve started working on this company, false otherwise.
+True if the sleeve started working for this company, false otherwise.
 
 ## Remarks
 
 RAM cost: 4 GB
 
-Return a boolean indicating whether or not the sleeve started working or this company.
+Return a boolean indicating whether or not the sleeve started working for a company.
 

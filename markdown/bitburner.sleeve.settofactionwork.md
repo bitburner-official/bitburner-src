@@ -28,11 +28,11 @@ setToFactionWork(
 
 boolean \| undefined
 
-True if the sleeve started working on this faction, false otherwise, can also throw on errors
+True if the sleeve started working for this faction, false otherwise. Can also throw on errors.
 
 ## Remarks
 
 RAM cost: 4 GB
 
-Return a boolean indicating whether or not the sleeve started working or this faction.
+Return a boolean indicating whether or not the sleeve started working for a faction.
 

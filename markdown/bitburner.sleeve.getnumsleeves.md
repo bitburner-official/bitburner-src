@@ -15,7 +15,7 @@ getNumSleeves(): number;
 
 number
 
-number of duplicate sleeves the player has.
+Number of duplicate sleeves the player has.
 
 ## Remarks
 
