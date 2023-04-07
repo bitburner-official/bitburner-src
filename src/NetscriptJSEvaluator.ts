@@ -40,7 +40,10 @@ export const config = {
 // to keep from making more than we need.
 const moduleCache: Map<string, WeakRef<LoadedModule>> = new Map();
 const cleanup = new FinalizationRegistry((mapKey: string) => {
-  moduleCache.delete(mapKey);
+  // A new entry can be created with the same key, before this callback is called.
+  if (moduleCache.get(mapKey)?.deref() === undefined) {
+    moduleCache.delete(mapKey);
+  }
 });
 
 export function compile(script: Script, scripts: Script[]): Promise<ScriptModule> {
