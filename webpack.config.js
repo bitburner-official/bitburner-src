@@ -55,7 +55,7 @@ module.exports = (env, argv) => {
   const htmlConfig = {
     title: "Bitburner",
     template: "src/index.html",
-    filename: "../index.html",
+    filename: isDevServer ? "index.html" : "../index.html",
     favicon: "favicon.ico",
     googleAnalytics: {
       trackingId: "UA-100157497-1",
