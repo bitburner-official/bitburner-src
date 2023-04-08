@@ -45,7 +45,10 @@ export function HacknetUpgradeElem(props: IProps): React.ReactElement {
   function purchase(): void {
     const canPurchase = props.hashManager.hashes >= props.hashManager.getUpgradeCost(props.upg.name);
     if (canPurchase) {
-      const res = purchaseHashUpgrade(props.upg.name, props.upg.name === "Company Favor" ? selectedCompany : selectedServer);
+      const res = purchaseHashUpgrade(
+        props.upg.name,
+        props.upg.name === "Company Favor" ? selectedCompany : selectedServer,
+      );
       if (!res) {
         dialogBoxCreate(
           "Failed to purchase upgrade. This may be because you do not have enough hashes, " +

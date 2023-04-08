@@ -103,9 +103,7 @@ export const HashUpgradesMetadata: IConstructorParams[] = [
   },
   {
     costPerLevel: 200,
-    desc:
-      "Use hashes to increase the favor with a company by 5. " +
-      "This effect is permanent.",
+    desc: "Use hashes to increase the favor with a company by 5. " + "This effect is permanent.",
     hasTargetCompany: true,
     name: "Company Favor",
     value: 5,

@@ -16,7 +16,6 @@ interface IProps {
 }
 
 export function CompanyDropdown(props: IProps): React.ReactElement {
-
   const companies = [];
   for (const company of companiesMetadata.sort((a, b) => a.name.localeCompare(b.name))) {
     companies.push(

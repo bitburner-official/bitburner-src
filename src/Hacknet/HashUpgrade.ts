@@ -33,7 +33,7 @@ export class HashUpgrade {
    * the "target" server
    */
   hasTargetServer = false;
-  
+
   /**
    * Boolean indicating that this upgrade's effect affects a single company,
    * the "target" company
