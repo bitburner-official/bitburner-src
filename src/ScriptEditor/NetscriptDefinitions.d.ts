@@ -51,6 +51,7 @@ interface Player extends Person {
   jobs: Record<string, string>;
   factions: string[];
   bitNodeN: number;
+  sourceFiles: Map<number, number>;
   totalPlaytime: number;
   location: string;
 }

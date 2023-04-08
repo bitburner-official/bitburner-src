@@ -80,7 +80,7 @@ function checkForMessagesToSend(): void {
     }
     //If the daemon can be hacked, send the player icarus.msg
     if (Player.skills.hacking >= worldDaemon.requiredHackingSkill) {
-      sendMessage(redpill, Player.sourceFiles.length === 0);
+      sendMessage(redpill, Player.sourceFiles.size === 0);
     }
     //If the daemon cannot be hacked, send the player truthgazer.msg a single time.
     else if (!recvd(truthGazer)) {

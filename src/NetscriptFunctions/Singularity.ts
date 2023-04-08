@@ -110,9 +110,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       return res;
     },
     getOwnedSourceFiles: () => () => {
-      return Player.sourceFiles.map((sf) => {
-        return { n: sf.n, lvl: sf.lvl };
-      });
+      return [...Player.sourceFiles].map(([n, lvl]) => ({ n, lvl }));
     },
     getAugmentationsFromFaction: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);

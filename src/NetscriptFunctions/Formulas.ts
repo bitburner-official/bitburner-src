@@ -96,6 +96,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       city: CityName.Sector12,
       location: "",
       bitNodeN: 0,
+      sourceFiles: new Map(),
       totalPlaytime: 0,
       jobs: {},
       factions: [],

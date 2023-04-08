@@ -3,7 +3,7 @@ import { Companies, loadCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
 import { Factions, loadFactions } from "./Faction/Factions";
 import { loadAllGangs, AllGangs } from "./Gang/AllGangs";
-import { Player, loadPlayer } from "./Player";
+import { Player, setPlayer, loadPlayer } from "./Player";
 import {
   saveAllServers,
   loadAllServers,
@@ -27,7 +27,6 @@ import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
 import { PlayerOwnedAugmentation } from "./Augmentation/PlayerOwnedAugmentation";
 import { LocationName } from "./Enums";
-import { PlayerObject } from "./PersonObjects/Player/PlayerObject";
 import { pushGameSaved } from "./Electron";
 import { defaultMonacoTheme } from "./ScriptEditor/ui/themes";
 import { FactionNames } from "./Faction/data/FactionNames";
@@ -208,7 +207,7 @@ class BitburnerSaveObject {
       base64: base64Save,
     };
 
-    const importedPlayer = PlayerObject.fromJSON(JSON.parse(parsedSave.data.PlayerSave));
+    const importedPlayer = loadPlayer(parsedSave.data.PlayerSave);
 
     const playerData: ImportPlayerData = {
       identifier: importedPlayer.identifier,
@@ -224,7 +223,7 @@ class BitburnerSaveObject {
 
       bitNode: importedPlayer.bitNodeN,
       bitNodeLevel: importedPlayer.sourceFileLvl(Player.bitNodeN) + 1,
-      sourceFiles: importedPlayer.sourceFiles?.reduce<number>((total, current) => (total += current.lvl), 0) ?? 0,
+      sourceFiles: [...importedPlayer.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0),
     };
 
     data.playerData = playerData;
@@ -673,7 +672,7 @@ function loadGame(saveString: string): boolean {
 
   const saveObj = JSON.parse(saveString, Reviver);
 
-  loadPlayer(saveObj.PlayerSave);
+  setPlayer(loadPlayer(saveObj.PlayerSave));
   loadAllServers(saveObj.AllServersSave);
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave);
