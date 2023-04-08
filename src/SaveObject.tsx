@@ -657,6 +657,9 @@ function evaluateVersionCompatibility(ver: string | number): void {
     // Prior to v2.2.0, sleeve shock was 0 to 100 internally but displayed as 100 to 0. This unifies them as 100 to 0.
     for (const sleeve of Player.sleeves) sleeve.shock = 100 - sleeve.shock;
   }
+  if (ver < 31) {
+    anyPlayer.hashManager.upgrades["Company Favor"] = anyPlayer.hashManager.upgrades["Company Favor"] ?? 0;
+  }
 }
 
 function loadGame(saveString: string): boolean {
