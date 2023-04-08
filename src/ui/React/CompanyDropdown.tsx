@@ -15,9 +15,11 @@ interface IProps {
   value: string;
 }
 
+const sortedCompanies = companiesMetadata.sort((a, b) => a.name.localeCompare(b.name));
+
 export function CompanyDropdown(props: IProps): React.ReactElement {
   const companies = [];
-  for (const company of companiesMetadata.sort((a, b) => a.name.localeCompare(b.name))) {
+  for (const company of sortedCompanies) {
     companies.push(
       <MenuItem key={company.name} value={company.name}>
         {company.name}
