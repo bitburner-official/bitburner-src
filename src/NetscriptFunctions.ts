@@ -1756,6 +1756,7 @@ export const ns: InternalAPI<NSFull> = {
       city: Player.city,
       location: Player.location,
       bitNodeN: Player.bitNodeN,
+      sourceFiles: new Map(Player.sourceFiles),
       totalPlaytime: Player.totalPlaytime,
       playtimeSinceLastAug: Player.playtimeSinceLastAug,
       playtimeSinceLastBitnode: Player.playtimeSinceLastBitnode,

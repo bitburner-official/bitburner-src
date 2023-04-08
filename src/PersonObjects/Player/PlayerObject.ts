@@ -8,7 +8,6 @@ import * as workMethods from "./PlayerObjectWorkMethods";
 
 import { setPlayer } from "../../Player";
 import { Sleeve } from "../Sleeve/Sleeve";
-import { PlayerOwnedSourceFile } from "../../SourceFile/PlayerOwnedSourceFile";
 import { Exploit } from "../../Exploits/Exploit";
 
 import { LocationName } from "../../Enums";
@@ -20,7 +19,13 @@ import { HacknetNode } from "../../Hacknet/HacknetNode";
 import { HashManager } from "../../Hacknet/HashManager";
 
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
+import {
+  constructorsForReviver,
+  Generic_toJSON,
+  Generic_fromJSON,
+  IReviverValue,
+  JSONMap,
+} from "../../utils/JSONReviver";
 import { PlayerAchievement } from "../../Achievements/Achievements";
 import { cyrb53 } from "../../utils/StringHelperFunctions";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
@@ -57,7 +62,7 @@ export class PlayerObject extends Person implements IPlayer {
   scriptProdSinceLastAug = 0;
   sleeves: Sleeve[] = [];
   sleevesFromCovenant = 0;
-  sourceFiles: PlayerOwnedSourceFile[] = [];
+  sourceFiles: JSONMap<number, number> = new JSONMap();
   exploits: Exploit[] = [];
   achievements: PlayerAchievement[] = [];
   terminalCommandHistory: string[] = [];

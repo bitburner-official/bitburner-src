@@ -38,6 +38,34 @@ export function Reviver(_key: string, value: unknown): any {
   return obj;
 }
 
+// Extensions so that we can set toJSON on the class and have everything
+// round-trip properly.
+export class JSONSet<T> extends Set<T> {
+  toJSON(): IReviverValue {
+    return {
+      ctor: "JSONSet",
+      data: Array.from(this),
+    };
+  }
+
+  static fromJSON(value: IReviverValue): JSONSet<any> {
+    return new JSONSet(value.data);
+  }
+}
+
+export class JSONMap<K, V> extends Map<K, V> {
+  toJSON(): IReviverValue {
+    return {
+      ctor: "JSONMap",
+      data: Array.from(this),
+    };
+  }
+
+  static fromJSON(value: IReviverValue): JSONMap<any, any> {
+    return new JSONMap(value.data);
+  }
+}
+
 export const constructorsForReviver: Partial<
   Record<
     string,
@@ -46,7 +74,7 @@ export const constructorsForReviver: Partial<
       validationData?: ObjectValidator<any>;
     }
   >
-> = {};
+> = { JSONSet, JSONMap };
 
 /**
  * A generic "toJSON" function that creates the data expected by Reviver.

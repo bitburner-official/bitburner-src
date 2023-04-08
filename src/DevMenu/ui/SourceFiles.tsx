@@ -7,7 +7,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { PlayerOwnedSourceFile } from "../../SourceFile/PlayerOwnedSourceFile";
 import { Player } from "@player";
 import ButtonGroup from "@mui/material/ButtonGroup";
 
@@ -21,20 +20,10 @@ export function SourceFiles(): React.ReactElement {
         Player.hacknetNodes = [];
       }
       if (sfLvl === 0) {
-        Player.sourceFiles = Player.sourceFiles.filter((sf) => sf.n !== sfN);
+        Player.sourceFiles.delete(sfN);
         return;
       }
-
-      if (!Player.sourceFiles.some((sf) => sf.n === sfN)) {
-        Player.sourceFiles.push(new PlayerOwnedSourceFile(sfN, sfLvl));
-        return;
-      }
-
-      for (let i = 0; i < Player.sourceFiles.length; i++) {
-        if (Player.sourceFiles[i].n === sfN) {
-          Player.sourceFiles[i].lvl = sfLvl;
-        }
-      }
+      Player.sourceFiles.set(sfN, sfLvl);
     };
   }
 

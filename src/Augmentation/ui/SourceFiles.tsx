@@ -71,27 +71,24 @@ const getMaxLevel = (sfObj: SourceFile | SfMinus1): string | number => {
 };
 
 export function SourceFilesElement(): React.ReactElement {
-  const sourceSfs = Player.sourceFiles.slice();
+  const sourceFilesCopy = new Map(Player.sourceFiles);
   const exploits = Player.exploits;
   // Create a fake SF for -1, if "owned"
   if (exploits.length > 0) {
-    sourceSfs.unshift({
-      n: -1,
-      lvl: exploits.length,
-    });
+    sourceFilesCopy.set(-1, exploits.length);
   }
 
+  const sfList = [...sourceFilesCopy];
   if (Settings.OwnedAugmentationsOrder === OwnedAugmentationsOrderSetting.Alphabetically) {
-    sourceSfs.sort((sf1, sf2) => {
-      return sf1.n - sf2.n;
-    });
+    sfList.sort(([n1, __lvl1], [n2, __lvl2]) => n1 - n2);
   }
 
-  if (sourceSfs.length === 0) {
+  if (sfList.length === 0) {
     return <></>;
   }
 
-  const [selectedSf, setSelectedSf] = useState(sourceSfs[0]);
+  const firstEle = sfList[0];
+  const [selectedSf, setSelectedSf] = useState({ n: firstEle[0], lvl: firstEle[1] });
 
   return (
     <Box sx={{ width: "100%", mt: 1 }}>
@@ -104,8 +101,8 @@ export function SourceFilesElement(): React.ReactElement {
             sx={{ height: 400, overflowY: "scroll", borderRight: `1px solid ${Settings.theme.welllight}` }}
             disablePadding
           >
-            {sourceSfs.map((e, i) => {
-              const sfObj = safeGetSf(e.n);
+            {sfList.map(([n, lvl], i) => {
+              const sfObj = safeGetSf(n);
               if (!sfObj) return;
 
               const maxLevel = getMaxLevel(sfObj);
@@ -113,8 +110,8 @@ export function SourceFilesElement(): React.ReactElement {
               return (
                 <ListItemButton
                   key={i + 1}
-                  onClick={() => setSelectedSf(e)}
-                  selected={selectedSf.n === e.n}
+                  onClick={() => setSelectedSf({ n, lvl })}
+                  selected={selectedSf.n === n}
                   sx={{ py: 0 }}
                 >
                   <ListItemText
@@ -122,7 +119,7 @@ export function SourceFilesElement(): React.ReactElement {
                     primary={<Typography>{sfObj.name}</Typography>}
                     secondary={
                       <Typography>
-                        Level {e.lvl} / {maxLevel}
+                        Level {lvl} / {maxLevel}
                       </Typography>
                     }
                   />

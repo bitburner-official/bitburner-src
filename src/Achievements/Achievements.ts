@@ -66,11 +66,11 @@ function bitNodeFinishedState(): boolean {
 }
 
 function hasAccessToSF(player: PlayerObject, bn: number): boolean {
-  return player.bitNodeN === bn || player.sourceFiles.some((a) => a.n === bn);
+  return player.bitNodeN === bn || player.sourceFileLvl(bn) > 0;
 }
 
 function knowsAboutBitverse(player: PlayerObject): boolean {
-  return player.sourceFiles.some((a) => a.n === 1);
+  return player.sourceFiles.size > 0;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

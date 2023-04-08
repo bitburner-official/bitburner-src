@@ -20,7 +20,7 @@ function requireHackingLevel(lvl: number) {
 
 function bitFlumeRequirements() {
   return function () {
-    return Player.sourceFiles.length > 0 && Player.skills.hacking >= 1;
+    return Player.sourceFiles.size > 0 && Player.skills.hacking >= 1;
   };
 }
 
