@@ -3,7 +3,8 @@
  * A Script can have multiple active instances
  */
 import type React from "react";
-import { Script, ScriptURL } from "./Script";
+import { Script } from "./Script";
+import { ScriptURL } from "./LoadedModule";
 import { Settings } from "../Settings/Settings";
 import { Terminal } from "../Terminal";
 
@@ -67,7 +68,6 @@ export class RunningScript {
 
   // Script urls for the current running script for translating urls back to file names in errors
   dependencies: Map<ScriptURL, Script> = new Map();
-  url?: ScriptURL;
 
   constructor(script?: Script, ramUsage?: number, args: ScriptArg[] = []) {
     if (!script) return;
@@ -76,7 +76,7 @@ export class RunningScript {
     this.args = args;
     this.server = script.server;
     this.ramUsage = ramUsage;
-    this.dependencies = new Map(script.dependencies);
+    this.dependencies = script.dependencies;
   }
 
   log(txt: React.ReactNode): void {

@@ -99,7 +99,11 @@ test.each([
     const result = await Promise.race([
       alerted,
       new Promise((resolve) => {
-        eventDelete = WorkerScriptStartStopEventEmitter.subscribe(() => resolve(null));
+        eventDelete = WorkerScriptStartStopEventEmitter.subscribe(() => {
+          if (!server.runningScripts.includes(runningScript)) {
+            resolve(null);
+          }
+        });
       }),
     ]);
     // If an error alert was thrown, we catch it here.
