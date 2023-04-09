@@ -84,12 +84,6 @@ const Engine: {
     if (Player.totalPlaytime == null) {
       Player.totalPlaytime = 0;
     }
-    if (Player.lastAugReset == null) {
-      Player.lastAugReset = 0;
-    }
-    if (Player.lastNodeReset == null) {
-      Player.lastNodeReset = 0;
-    }
     Player.totalPlaytime += time;
 
     Terminal.process(numCycles);

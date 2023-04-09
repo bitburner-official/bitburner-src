@@ -48,8 +48,8 @@ export class PlayerObject extends Person implements IPlayer {
   money = 1000 + CONSTANTS.Donations;
   moneySourceA = new MoneySourceTracker();
   moneySourceB = new MoneySourceTracker();
-  lastAugReset = 0;
-  lastNodeReset = 0;
+  lastAugReset = Date.now();
+  lastNodeReset = Date.now();
   purchasedServers: string[] = [];
   scriptProdSinceLastAug = 0;
   sleeves: Sleeve[] = [];
