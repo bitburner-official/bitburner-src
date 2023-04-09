@@ -21,6 +21,7 @@ import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../InteractiveTuto
 import { Player } from "@player";
 import { GetServer } from "../Server/AllServers";
 import { Server } from "../Server/Server";
+import { Companies } from "../Company/Companies";
 
 // Returns a boolean indicating whether the player has Hacknet Servers
 // (the upgraded form of Hacknet Nodes)
@@ -560,6 +561,14 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
         for (let i = 0; i < count; i++) {
           generateRandomContract();
         }
+        break;
+      }
+      case "Company Favor": {
+        if (!(upgTarget in Companies)) {
+          console.error(`Invalid target specified in purchaseHashUpgrade(): ${upgTarget}`);
+          throw new Error(`'${upgTarget}' is not a company.`);
+        }
+        Companies[upgTarget].favor += 5;
         break;
       }
       default:

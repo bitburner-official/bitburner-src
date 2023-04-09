@@ -101,4 +101,11 @@ export const HashUpgradesMetadata: IConstructorParams[] = [
     effectText: (level: number): JSX.Element | null => <>Generated {level} contracts.</>,
     value: 1,
   },
+  {
+    costPerLevel: 200,
+    desc: "Use hashes to increase the favor with a company by 5. This effect is permanent.",
+    hasTargetCompany: true,
+    name: "Company Favor",
+    value: 5,
+  },
 ];

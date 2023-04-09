@@ -4,6 +4,7 @@ export interface IConstructorParams {
   costPerLevel: number;
   desc: string;
   hasTargetServer?: boolean;
+  hasTargetCompany?: boolean;
   name: string;
   value: number;
   effectText?: (level: number) => JSX.Element | null;
@@ -33,6 +34,12 @@ export class HashUpgrade {
    */
   hasTargetServer = false;
 
+  /**
+   * Boolean indicating that this upgrade's effect affects a single company,
+   * the "target" company
+   */
+  hasTargetCompany = false;
+
   /** Name of upgrade */
   name = "";
 
@@ -51,6 +58,7 @@ export class HashUpgrade {
     this.costPerLevel = p.costPerLevel;
     this.desc = p.desc;
     this.hasTargetServer = p.hasTargetServer ? p.hasTargetServer : false;
+    this.hasTargetCompany = p.hasTargetCompany ? p.hasTargetCompany : false;
     this.name = p.name;
     this.value = p.value;
   }
