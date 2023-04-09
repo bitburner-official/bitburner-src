@@ -69,8 +69,6 @@ export function prestigeAugmentation(this: PlayerObject): void {
 
   this.numPeopleKilled = 0;
 
-  this.installIdentifier = getNewIdentifier();
-
   //Reset stats
   this.skills.hacking = 1;
 
@@ -113,7 +111,7 @@ export function prestigeAugmentation(this: PlayerObject): void {
   this.lastUpdate = new Date().getTime();
 
   // Statistics Trackers
-  this.playtimeSinceLastAug = 0;
+	this.lastAugReset = Date.now();
   this.scriptProdSinceLastAug = 0;
   this.moneySourceA.reset();
 
@@ -147,8 +145,6 @@ export function prestigeSourceFile(this: PlayerObject): void {
     }
   }
 
-  this.runIdentifier = getNewIdentifier();
-
   this.gang = null;
   resetGangs();
   this.corporation = null;
@@ -164,7 +160,7 @@ export function prestigeSourceFile(this: PlayerObject): void {
   this.corporation = null;
 
   this.moneySourceB.reset();
-  this.playtimeSinceLastBitnode = 0;
+	this.lastNodeReset = Date.now();
   this.augmentations = [];
 }
 

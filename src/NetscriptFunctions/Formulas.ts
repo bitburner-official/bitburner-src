@@ -97,8 +97,6 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       location: "",
       bitNodeN: 0,
       totalPlaytime: 0,
-      playtimeSinceLastAug: 0,
-      playtimeSinceLastBitnode: 0,
       jobs: {},
       factions: [],
       entropy: 0,

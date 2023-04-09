@@ -203,10 +203,10 @@ export function CharacterStats(): React.ReactElement {
   useRerender(200);
 
   const timeRows = [
-    ["Since last Augmentation installation", convertTimeMsToTimeElapsedString(Player.playtimeSinceLastAug)],
+    ["Since last Augmentation installation", convertTimeMsToTimeElapsedString(Date.now() - Player.lastAugReset)],
   ];
   if (Player.sourceFiles.length > 0) {
-    timeRows.push(["Since last Bitnode destroyed", convertTimeMsToTimeElapsedString(Player.playtimeSinceLastBitnode)]);
+    timeRows.push(["Since last Bitnode destroyed", convertTimeMsToTimeElapsedString(Date.now() - Player.lastNodeReset)]);
   }
   timeRows.push(["Total", convertTimeMsToTimeElapsedString(Player.totalPlaytime)]);
 

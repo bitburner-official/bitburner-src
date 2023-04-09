@@ -1589,7 +1589,7 @@ export const ns: InternalAPI<NSFull> = {
       total += script.scriptRef.onlineMoneyMade / script.scriptRef.onlineRunningTime;
     }
 
-    return [total, Player.scriptProdSinceLastAug / (Player.playtimeSinceLastAug / 1000)];
+    return [total, Player.scriptProdSinceLastAug / ((Date.now() - Player.lastAugReset) / 1000)];
   },
   getScriptIncome:
     (ctx) =>
@@ -1654,8 +1654,8 @@ export const ns: InternalAPI<NSFull> = {
     const milliPrecision = !!_milliPrecision;
     return convertTimeMsToTimeElapsedString(milliseconds, milliPrecision);
   },
-  getTimeSinceLastAug: () => () => {
-    return Player.playtimeSinceLastAug;
+  getLastAugReset: () => () => {
+    return Player.lastAugReset;
   },
   alert: (ctx) => (_message) => {
     const message = helpers.string(ctx, "message", _message);
@@ -1761,8 +1761,6 @@ export const ns: InternalAPI<NSFull> = {
       location: Player.location,
       bitNodeN: Player.bitNodeN,
       totalPlaytime: Player.totalPlaytime,
-      playtimeSinceLastAug: Player.playtimeSinceLastAug,
-      playtimeSinceLastBitnode: Player.playtimeSinceLastBitnode,
       jobs: cloneDeep(Player.jobs),
       factions: Player.factions.slice(),
       entropy: Player.entropy,

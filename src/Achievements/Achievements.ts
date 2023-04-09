@@ -587,7 +587,7 @@ export const achievements: Record<string, Achievement> = {
     ...achievementData["FAST_BN"],
     Icon: "2DAYS",
     Visible: () => knowsAboutBitverse(Player),
-    Condition: () => bitNodeFinishedState() && Player.playtimeSinceLastBitnode < 1000 * 60 * 60 * 24 * 2,
+    Condition: () => bitNodeFinishedState() && Date.now() - Player.lastNodeReset < 1000 * 60 * 60 * 24 * 2,
   },
   CHALLENGE_BN1: {
     ...achievementData["CHALLENGE_BN1"],

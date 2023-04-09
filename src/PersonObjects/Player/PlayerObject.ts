@@ -48,8 +48,8 @@ export class PlayerObject extends Person implements IPlayer {
   money = 1000 + CONSTANTS.Donations;
   moneySourceA = new MoneySourceTracker();
   moneySourceB = new MoneySourceTracker();
-  playtimeSinceLastAug = 0;
-  playtimeSinceLastBitnode = 0;
+  lastAugReset = 0;
+  lastNodeReset = 0;
   purchasedServers: string[] = [];
   scriptProdSinceLastAug = 0;
   sleeves: Sleeve[] = [];
@@ -59,8 +59,6 @@ export class PlayerObject extends Person implements IPlayer {
   achievements: PlayerAchievement[] = [];
   terminalCommandHistory: string[] = [];
   identifier: string;
-  runIdentifier = generalMethods.getNewIdentifier();
-  installIdentifier = generalMethods.getNewIdentifier();
   lastUpdate = 0;
   lastSave = 0;
   totalPlaytime = 0;

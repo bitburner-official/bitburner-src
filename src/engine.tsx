@@ -84,15 +84,13 @@ const Engine: {
     if (Player.totalPlaytime == null) {
       Player.totalPlaytime = 0;
     }
-    if (Player.playtimeSinceLastAug == null) {
-      Player.playtimeSinceLastAug = 0;
+    if (Player.lastAugReset == null) {
+      Player.lastAugReset = 0;
     }
-    if (Player.playtimeSinceLastBitnode == null) {
-      Player.playtimeSinceLastBitnode = 0;
+    if (Player.lastNodeReset == null) {
+      Player.lastNodeReset = 0;
     }
     Player.totalPlaytime += time;
-    Player.playtimeSinceLastAug += time;
-    Player.playtimeSinceLastBitnode += time;
 
     Terminal.process(numCycles);
 
@@ -272,7 +270,7 @@ const Engine: {
       }
 
       let offlineReputation = 0;
-      const offlineHackingIncome = (Player.moneySourceA.hacking / Player.playtimeSinceLastAug) * timeOffline * 0.75;
+      const offlineHackingIncome = (Player.moneySourceA.hacking / (Date.now() - Player.lastAugReset)) * timeOffline * 0.75;
       Player.gainMoney(offlineHackingIncome, "hacking");
       // Process offline progress
 
@@ -340,12 +338,10 @@ const Engine: {
       // Update total playtime
       const time = numCyclesOffline * CONSTANTS.MilliPerCycle;
       Player.totalPlaytime ??= 0;
-      Player.playtimeSinceLastAug ??= 0;
-      Player.playtimeSinceLastBitnode ??= 0;
+      Player.lastAugReset ??= 0;
+      Player.lastNodeReset ??= 0;
 
       Player.totalPlaytime += time;
-      Player.playtimeSinceLastAug += time;
-      Player.playtimeSinceLastBitnode += time;
 
       Player.lastUpdate = Engine._lastUpdate;
       Engine.start(); // Run main game loop and Scripts loop

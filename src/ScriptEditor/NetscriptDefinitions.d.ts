@@ -52,8 +52,6 @@ interface Player extends Person {
   factions: string[];
   bitNodeN: number;
   totalPlaytime: number;
-  playtimeSinceLastAug: number;
-  playtimeSinceLastBitnode: number;
   location: string;
 }
 
@@ -2144,25 +2142,14 @@ export interface Singularity {
    */
   installAugmentations(cbScript?: string): void;
 
-  /**
-   * Get the current run identifier.
-   * @remarks
-   * RAM cost: 0.5 GB * 16/4/1
-   *
-   *
-   * This function will return an identifier for the current run of a certain bitnode. This identifier will be different each time you are in a new bitnode or a new playthrough of the bitnode.
-   */
-  getRunIdentifier(): string;
-
-  /**
-   * Get the current install identifier.
-   * @remarks
-   * RAM cost: 0.5 GB * 16/4/1
-   *
-   *
-   * This function will return an identifier for the current install of a certain bitnode. This identifier will be different each time you install augmentations or enter a new bitnode.
-   */
-  getInstallIdentifier(): string;
+	/**
+	 * Returns the last time you finished a bitnode.
+	 * @remarks
+	 * RAM cost: 0.5GB * 16/4/1
+	 * 
+	 * @returns The timestamp in milliseconds from when you finished a bitnode.
+	 */
+	getLastNodeReset(): number;
 
   /**
    * Hospitalize the player.
@@ -6447,12 +6434,12 @@ export interface NS {
   getScriptExpGain(script: string, host: string, ...args: (string | number | boolean)[]): number;
 
   /**
-   * Returns the amount of time in milliseconds that have passed since you last installed Augmentations.
+   * Returns the last time you installed augmentations.
    *
    * @remarks RAM cost: 0.05 GB
-   * @returns Time in milliseconds that have passed since you last installed Augmentations.
+   * @returns The timestamp in milliseconds from when you installed augmentations.
    */
-  getTimeSinceLastAug(): number;
+  getLastAugReset(): number;
 
   /**
    * Format a string.
