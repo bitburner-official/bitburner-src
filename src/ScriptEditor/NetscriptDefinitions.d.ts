@@ -52,8 +52,6 @@ interface Player extends Person {
   factions: string[];
   bitNodeN: number;
   totalPlaytime: number;
-  playtimeSinceLastAug: number;
-  playtimeSinceLastBitnode: number;
   location: string;
 }
 
