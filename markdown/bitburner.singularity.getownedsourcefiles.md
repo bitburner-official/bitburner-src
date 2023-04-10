@@ -21,5 +21,5 @@ Array containing an object with number and level of the source file.
 
 RAM cost: 5 GB
 
-Returns an array of source files
+Returns an array of source files. This function is obsolete: use [Player.sourceFiles](./bitburner.player.sourcefiles.md) from the return of [getPlayer](./bitburner.ns.getplayer.md) instead.
 

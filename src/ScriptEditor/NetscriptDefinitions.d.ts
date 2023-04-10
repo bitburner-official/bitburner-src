@@ -2088,7 +2088,8 @@ export interface Singularity {
    * RAM cost: 5 GB
    *
    *
-   * Returns an array of source files
+   * Returns an array of source files. This function is obsolete: use {@link Player.sourceFiles}
+   * from the return of {@link NS.getPlayer | getPlayer} instead.
    *
    * @returns Array containing an object with number and level of the source file.
    */

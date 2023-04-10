@@ -25,5 +25,6 @@ interface Player extends Person
 |  [numPeopleKilled](./bitburner.player.numpeoplekilled.md) |  | number |  |
 |  [playtimeSinceLastAug](./bitburner.player.playtimesincelastaug.md) |  | number |  |
 |  [playtimeSinceLastBitnode](./bitburner.player.playtimesincelastbitnode.md) |  | number |  |
+|  [sourceFiles](./bitburner.player.sourcefiles.md) |  | Map&lt;number, number&gt; |  |
 |  [totalPlaytime](./bitburner.player.totalplaytime.md) |  | number |  |
 
