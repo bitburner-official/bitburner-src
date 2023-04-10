@@ -111,6 +111,7 @@ export function prestigeAugmentation(this: PlayerObject): void {
 
   // Statistics Trackers
   this.playtimeSinceLastAug = 0;
+	this.lastAugReset = this.lastUpdate;
   this.scriptProdSinceLastAug = 0;
   this.moneySourceA.reset();
 
@@ -154,6 +155,7 @@ export function prestigeSourceFile(this: PlayerObject): void {
 
   this.moneySourceB.reset();
   this.playtimeSinceLastBitnode = 0;
+	this.lastNodeReset = this.lastUpdate;
   this.augmentations = [];
 }
 
