@@ -369,6 +369,7 @@ function getMenu(window) {
       submenu: [
         {
           label: "Activate",
+          accelerator: "f12",
           click: () => window.webContents.openDevTools(),
         },
         {
