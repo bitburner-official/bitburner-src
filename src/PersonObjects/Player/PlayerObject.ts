@@ -19,13 +19,8 @@ import { HacknetNode } from "../../Hacknet/HacknetNode";
 import { HashManager } from "../../Hacknet/HashManager";
 
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
-import {
-  constructorsForReviver,
-  Generic_toJSON,
-  Generic_fromJSON,
-  IReviverValue,
-  JSONMap,
-} from "../../utils/JSONReviver";
+import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
+import { JSONMap } from "../../Types/Jsonable";
 import { PlayerAchievement } from "../../Achievements/Achievements";
 import { cyrb53 } from "../../utils/StringHelperFunctions";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
@@ -173,9 +168,15 @@ export class PlayerObject extends Person implements IPlayer {
 
   /** Initializes a PlayerObject object from a JSON save state. */
   static fromJSON(value: IReviverValue): PlayerObject {
-    if (!value.data.hp?.current || !value.data.hp?.max) value.data.hp = { current: 10, max: 10 };
     const player = Generic_fromJSON(PlayerObject, value.data);
-    if (player.money === null) player.money = 0;
+    player.hp = { current: player.hp?.current ?? 10, max: player.hp?.max ?? 10 };
+    player.money ??= 0;
+    player.updateSkillLevels();
+    if (Array.isArray(player.sourceFiles)) {
+      // Expect pre-2.3 sourcefile format here.
+      type OldSourceFiles = { n: number; lvl: number }[];
+      player.sourceFiles = new JSONMap((player.sourceFiles as OldSourceFiles).map(({ n, lvl }) => [n, lvl]));
+    }
     return player;
   }
 }

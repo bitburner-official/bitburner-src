@@ -1,6 +1,11 @@
 /* Generic Reviver, toJSON, and fromJSON functions used for saving and loading objects */
-
 import { ObjectValidator, validateObject } from "./Validator";
+import { JSONMap, JSONSet } from "../Types/Jsonable";
+
+type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
+  fromJSON: (value: IReviverValue) => any;
+  validationData?: ObjectValidator<any>;
+};
 
 export interface IReviverValue {
   ctor: string;
@@ -38,43 +43,7 @@ export function Reviver(_key: string, value: unknown): any {
   return obj;
 }
 
-// Extensions so that we can set toJSON on the class and have everything
-// round-trip properly.
-export class JSONSet<T> extends Set<T> {
-  toJSON(): IReviverValue {
-    return {
-      ctor: "JSONSet",
-      data: Array.from(this),
-    };
-  }
-
-  static fromJSON(value: IReviverValue): JSONSet<any> {
-    return new JSONSet(value.data);
-  }
-}
-
-export class JSONMap<K, V> extends Map<K, V> {
-  toJSON(): IReviverValue {
-    return {
-      ctor: "JSONMap",
-      data: Array.from(this),
-    };
-  }
-
-  static fromJSON(value: IReviverValue): JSONMap<any, any> {
-    return new JSONMap(value.data);
-  }
-}
-
-export const constructorsForReviver: Partial<
-  Record<
-    string,
-    (new () => object) & {
-      fromJSON: (value: IReviverValue) => any;
-      validationData?: ObjectValidator<any>;
-    }
-  >
-> = { JSONSet, JSONMap };
+export const constructorsForReviver: Partial<Record<string, JsonableClass>> = { JSONSet, JSONMap };
 
 /**
  * A generic "toJSON" function that creates the data expected by Reviver.
