@@ -9,5 +9,5 @@ How many ports are currently opened on the server
 **Signature:**
 
 ```typescript
-openPortCount: number;
+openPortCount?: number;
 ```

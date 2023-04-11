@@ -6,7 +6,7 @@ import { ScriptDeath } from "./ScriptDeath";
 import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
 import { ScriptArg } from "./ScriptArg";
 import { CityName } from "../Enums";
-import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson } from "@nsdefs";
+import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson, Server as IServer } from "@nsdefs";
 import { Server } from "../Server/Server";
 import {
   calculateHackingChance,
@@ -597,36 +597,26 @@ function person(ctx: NetscriptContext, p: unknown): IPerson {
   return p as IPerson;
 }
 
-function server(ctx: NetscriptContext, s: unknown): Server {
+function server(ctx: NetscriptContext, s: unknown): IServer {
   const fakeServer = {
-    cpuCores: undefined,
-    ftpPortOpen: undefined,
-    hasAdminRights: undefined,
     hostname: undefined,
-    httpPortOpen: undefined,
     ip: undefined,
+    sshPortOpen: undefined,
+    ftpPortOpen: undefined,
+    smtpPortOpen: undefined,
+    httpPortOpen: undefined,
+    sqlPortOpen: undefined,
+    hasAdminRights: undefined,
+    cpuCores: undefined,
     isConnectedTo: undefined,
+    ramUsed: undefined,
     maxRam: undefined,
     organizationName: undefined,
-    ramUsed: undefined,
-    smtpPortOpen: undefined,
-    sqlPortOpen: undefined,
-    sshPortOpen: undefined,
     purchasedByPlayer: undefined,
-    backdoorInstalled: undefined,
-    baseDifficulty: undefined,
-    hackDifficulty: undefined,
-    minDifficulty: undefined,
-    moneyAvailable: undefined,
-    moneyMax: undefined,
-    numOpenPortsRequired: undefined,
-    openPortCount: undefined,
-    requiredHackingSkill: undefined,
-    serverGrowth: undefined,
   };
   const error = missingKey(fakeServer, s);
-  if (error) throw makeRuntimeErrorMsg(ctx, `server should be a hackable Server.\n${error}`, "TYPE");
-  return s as Server;
+  if (error) throw makeRuntimeErrorMsg(ctx, `server should be a Server.\n${error}`, "TYPE");
+  return s as IServer;
 }
 
 function missingKey(expect: object, actual: unknown): string | false {

@@ -9,5 +9,5 @@ Minimum server security level that this server can be weakened to
 **Signature:**
 
 ```typescript
-minDifficulty: number;
+minDifficulty?: number;
 ```

@@ -10,6 +10,7 @@ import { Programs } from "../Programs/Programs";
 import { LiteratureNames } from "../Literature/data/LiteratureNames";
 import { Person as IPerson } from "@nsdefs";
 import { isValidNumber } from "../utils/helpers/isValidNumber";
+import { Server as IServer } from "@nsdefs";
 
 /**
  * Constructs a new server, while also ensuring that the new server
@@ -48,8 +49,10 @@ export function safelyCreateUniqueServer(params: IConstructorParams): Server {
  * @param p - Reference to Player object
  * @returns Number of "growth cycles" needed
  */
-export function numCycleForGrowth(server: Server, growth: number, cores = 1): number {
-  let ajdGrowthRate = 1 + (CONSTANTS.ServerBaseGrowthRate - 1) / server.hackDifficulty;
+export function numCycleForGrowth(server: IServer, growth: number, cores = 1): number {
+  if (!server.serverGrowth) return Infinity;
+  const hackDifficulty = server.hackDifficulty ?? 100;
+  let ajdGrowthRate = 1 + (CONSTANTS.ServerBaseGrowthRate - 1) / hackDifficulty;
   if (ajdGrowthRate > CONSTANTS.ServerMaxGrowthRate) {
     ajdGrowthRate = CONSTANTS.ServerMaxGrowthRate;
   }
@@ -79,18 +82,22 @@ export function numCycleForGrowth(server: Server, growth: number, cores = 1): nu
  * @returns Integer threads needed by a single ns.grow call to reach targetMoney from startMoney.
  */
 export function numCycleForGrowthCorrected(
-  server: Server,
+  server: IServer,
   targetMoney: number,
   startMoney: number,
   cores = 1,
   person: IPerson = Player,
 ): number {
+  if (!server.serverGrowth) return Infinity;
+  const moneyMax = server.moneyMax ?? 1;
+  const hackDifficulty = server.hackDifficulty ?? 100;
+
   if (startMoney < 0) startMoney = 0; // servers "can't" have less than 0 dollars on them
-  if (targetMoney > server.moneyMax) targetMoney = server.moneyMax; // can't grow a server to more than its moneyMax
+  if (targetMoney > moneyMax) targetMoney = moneyMax; // can't grow a server to more than its moneyMax
   if (targetMoney <= startMoney) return 0; // no growth --> no threads
 
   // exponential base adjusted by security
-  const adjGrowthRate = 1 + (CONSTANTS.ServerBaseGrowthRate - 1) / server.hackDifficulty;
+  const adjGrowthRate = 1 + (CONSTANTS.ServerBaseGrowthRate - 1) / hackDifficulty;
   const exponentialBase = Math.min(adjGrowthRate, CONSTANTS.ServerMaxGrowthRate); // cap growth rate
 
   // total of all grow thread multipliers

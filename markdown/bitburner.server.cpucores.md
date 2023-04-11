@@ -4,7 +4,7 @@
 
 ## Server.cpuCores property
 
-How many CPU cores this server has. Maximum of 8. Affects magnitude of grow and weaken.
+How many CPU cores this server has. Affects magnitude of grow and weaken ran from this server.
 
 **Signature:**
 

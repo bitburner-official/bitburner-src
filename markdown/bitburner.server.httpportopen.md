@@ -4,7 +4,7 @@
 
 ## Server.httpPortOpen property
 
-Flag indicating whether HTTP Port is open
+Whether or not the HTTP Port is open
 
 **Signature:**
 

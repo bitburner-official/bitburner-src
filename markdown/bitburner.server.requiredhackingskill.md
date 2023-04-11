@@ -9,5 +9,5 @@ Hacking level required to hack this server
 **Signature:**
 
 ```typescript
-requiredHackingSkill: number;
+requiredHackingSkill?: number;
 ```

@@ -9,5 +9,5 @@ How much money currently resides on the server and can be hacked
 **Signature:**
 
 ```typescript
-moneyAvailable: number;
+moneyAvailable?: number;
 ```

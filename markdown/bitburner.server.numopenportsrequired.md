@@ -9,5 +9,5 @@ Number of open ports required in order to gain admin/root access
 **Signature:**
 
 ```typescript
-numOpenPortsRequired: number;
+numOpenPortsRequired?: number;
 ```

@@ -4,7 +4,7 @@
 
 ## Server.organizationName property
 
-Name of company/faction/etc. that this server belongs to. Optional, not applicable to all Servers
+Name of company/faction/etc. that this server belongs to, not applicable to all Servers
 
 **Signature:**
 
