@@ -88,7 +88,7 @@
 |  [ReputationFormulas](./bitburner.reputationformulas.md) | Reputation formulas |
 |  [RunningScript](./bitburner.runningscript.md) |  |
 |  [RunOptions](./bitburner.runoptions.md) |  |
-|  [Server](./bitburner.server.md) | A single server. |
+|  [Server](./bitburner.server.md) | A server. Not all servers have all of these properties - optional properties are missing on certain servers. |
 |  [Singularity](./bitburner.singularity.md) | Singularity API |
 |  [Skills](./bitburner.skills.md) |  |
 |  [SkillsFormulas](./bitburner.skillsformulas.md) | Skills formulas |

@@ -9,5 +9,5 @@ Server Security Level
 **Signature:**
 
 ```typescript
-hackDifficulty: number;
+hackDifficulty?: number;
 ```

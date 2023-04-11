@@ -4,10 +4,10 @@
 
 ## Server.serverGrowth property
 
-Parameter that affects how effectively this server's money can be increased using the grow() Netscript function
+Growth effectiveness statistic. Higher values produce more growth with ns.grow()
 
 **Signature:**
 
 ```typescript
-serverGrowth: number;
+serverGrowth?: number;
 ```

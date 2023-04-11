@@ -4,7 +4,7 @@
 
 ## Server.sqlPortOpen property
 
-Flag indicating whether SQL Port is open
+Whether or not the SQL Port is open
 
 **Signature:**
 

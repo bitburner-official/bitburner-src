@@ -4,7 +4,7 @@
 
 ## Server.ftpPortOpen property
 
-Flag indicating whether the FTP port is open
+Whether or not the FTP port is open
 
 **Signature:**
 

@@ -454,7 +454,7 @@ interface HacknetServerConstants {
 }
 
 /**
- * A single server.
+ * A server. Not all servers have all of these properties - optional properties are missing on certain servers.
  * @public
  */
 export interface Server {

@@ -4,10 +4,10 @@
 
 ## Server.baseDifficulty property
 
-Initial server security level (i.e. security level when the server was created)
+Server's initial server security level at creation.
 
 **Signature:**
 
 ```typescript
-baseDifficulty: number;
+baseDifficulty?: number;
 ```

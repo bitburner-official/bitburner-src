@@ -9,5 +9,5 @@ Flag indicating whether this server has a backdoor installed by a player
 **Signature:**
 
 ```typescript
-backdoorInstalled: boolean;
+backdoorInstalled?: boolean;
 ```

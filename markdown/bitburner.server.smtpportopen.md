@@ -4,7 +4,7 @@
 
 ## Server.smtpPortOpen property
 
-Flag indicating whether SMTP Port is open
+Whether or not the SMTP Port is open
 
 **Signature:**
 
