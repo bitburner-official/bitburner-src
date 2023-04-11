@@ -457,90 +457,72 @@ interface HacknetServerConstants {
  * A single server.
  * @public
  */
-interface Server {
-  /**
-   * How many CPU cores this server has. Maximum of 8.
-   * Affects magnitude of grow and weaken.
-   */
-  cpuCores: number;
+export interface Server {
+  /** Hostname. Must be unique */
+  hostname: string;
+  /** IP Address. Must be unique */
+  ip: string;
 
-  /** Flag indicating whether the FTP port is open */
+  /** Whether or not the SSH Port is open */
+  sshPortOpen: boolean;
+  /** Whether or not the FTP port is open */
   ftpPortOpen: boolean;
+  /** Whether or not the SMTP Port is open */
+  smtpPortOpen: boolean;
+  /** Whether or not the HTTP Port is open */
+  httpPortOpen: boolean;
+  /** Whether or not the SQL Port is open */
+  sqlPortOpen: boolean;
 
   /** Flag indicating whether player has admin/root access to this server */
   hasAdminRights: boolean;
 
-  /** Hostname. Must be unique */
-  hostname: string;
-
-  /** Flag indicating whether HTTP Port is open */
-  httpPortOpen: boolean;
-
-  /** IP Address. Must be unique */
-  ip: string;
+  /** How many CPU cores this server has. Affects magnitude of grow and weaken ran from this server. */
+  cpuCores: number;
 
   /** Flag indicating whether player is currently connected to this server */
   isConnectedTo: boolean;
 
+  /** RAM (GB) used. i.e. unavailable RAM */
+  ramUsed: number;
   /** RAM (GB) available on this server */
   maxRam: number;
 
-  /**
-   * Name of company/faction/etc. that this server belongs to.
-   * Optional, not applicable to all Servers
-   */
+  /** Name of company/faction/etc. that this server belongs to, not applicable to all Servers */
   organizationName: string;
-
-  /** RAM (GB) used. i.e. unavailable RAM */
-  ramUsed: number;
-
-  /** Flag indicating whether SMTP Port is open */
-  smtpPortOpen: boolean;
-
-  /** Flag indicating whether SQL Port is open */
-  sqlPortOpen: boolean;
-
-  /** Flag indicating whether the SSH Port is open */
-  sshPortOpen: boolean;
 
   /** Flag indicating whether this is a purchased server */
   purchasedByPlayer: boolean;
 
   /** Flag indicating whether this server has a backdoor installed by a player */
-  backdoorInstalled: boolean;
+  backdoorInstalled?: boolean;
 
-  /**
-   * Initial server security level
-   * (i.e. security level when the server was created)
-   */
-  baseDifficulty: number;
+  /** Server's initial server security level at creation. */
+  baseDifficulty?: number;
 
   /** Server Security Level */
-  hackDifficulty: number;
+  hackDifficulty?: number;
 
   /** Minimum server security level that this server can be weakened to */
-  minDifficulty: number;
+  minDifficulty?: number;
 
   /** How much money currently resides on the server and can be hacked */
-  moneyAvailable: number;
+  moneyAvailable?: number;
 
   /** Maximum amount of money that this server can hold */
-  moneyMax: number;
+  moneyMax?: number;
 
   /** Number of open ports required in order to gain admin/root access */
-  numOpenPortsRequired: number;
+  numOpenPortsRequired?: number;
 
   /** How many ports are currently opened on the server */
-  openPortCount: number;
+  openPortCount?: number;
 
   /** Hacking level required to hack this server */
-  requiredHackingSkill: number;
+  requiredHackingSkill?: number;
 
-  /**
-   * Parameter that affects how effectively this server's money can
-   * be increased using the grow() Netscript function
-   */
-  serverGrowth: number;
+  /** Growth effectiveness statistic. Higher values produce more growth with ns.grow() */
+  serverGrowth?: number;
 }
 
 /**

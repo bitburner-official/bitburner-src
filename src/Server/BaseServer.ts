@@ -1,3 +1,4 @@
+import type { Server as IServer } from "@nsdefs";
 import { CodingContract } from "../CodingContracts";
 import { RunningScript } from "../Script/RunningScript";
 import { Script } from "../Script/Script";
@@ -26,7 +27,7 @@ interface writeResult {
 }
 
 /** Abstract Base Class for any Server object */
-export abstract class BaseServer {
+export abstract class BaseServer implements IServer {
   // Coding Contract files on this server
   contracts: CodingContract[] = [];
 
@@ -93,8 +94,17 @@ export abstract class BaseServer {
   // Flag indicating whether this is a purchased server
   purchasedByPlayer = false;
 
-  // Variables that exist only on some types of servers can just be optional.
+  // Optional, listed just so they can be accessed on a BaseServer. These will be undefined for HacknetServers.
   backdoorInstalled?: boolean;
+  baseDifficulty?: number;
+  hackDifficulty?: number;
+  minDifficulty?: number;
+  moneyAvailable?: number;
+  moneyMax?: number;
+  numOpenPortsRequired?: number;
+  openPortCount?: number;
+  requiredHackingSkill?: number;
+  serverGrowth?: number;
 
   constructor(params: IConstructorParams = { hostname: "", ip: createRandomIp() }) {
     this.ip = params.ip ? params.ip : createRandomIp();
