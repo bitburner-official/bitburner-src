@@ -2380,23 +2380,23 @@ export interface Singularity {
    */
   getCurrentWork(): any | null;
 
-	/**
-	 * Get the last timestamp from when you installed augmentations.
-	 * @remarks
-	 * RAM cost: 0.5 GB * 16/4/1
-	 * 
-	 * @returns The timestamp in milliseconds from your last augmentation install.
-	 */
-	getLastAugReset(): number;
+  /**
+   * Get the last timestamp from when you installed augmentations.
+   * @remarks
+   * RAM cost: 0.5 GB * 16/4/1
+   *
+   * @returns The timestamp in milliseconds from your last augmentation install.
+   */
+  getLastAugReset(): number;
 
-	/**
-	 * Get the last timestamp from when you finished a bitnode.
-	 * @remarks
-	 * RAM cost: 0.5 GB * 16/4/1
-	 * 
-	 * @returns The timestamp in milliseconds from your last bitnode finish.
-	 */
-	getLastNodeReset(): number;
+  /**
+   * Get the last timestamp from when you finished a bitnode.
+   * @remarks
+   * RAM cost: 0.5 GB * 16/4/1
+   *
+   * @returns The timestamp in milliseconds from your last bitnode finish.
+   */
+  getLastNodeReset(): number;
 }
 
 /**

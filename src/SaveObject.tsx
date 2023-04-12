@@ -658,12 +658,12 @@ function evaluateVersionCompatibility(ver: string | number): void {
     for (const sleeve of Player.sleeves) sleeve.shock = 100 - sleeve.shock;
   }
   if (ver < 31) {
-		if (anyPlayer.hashManager !== undefined) {
-			anyPlayer.hashManager.upgrades["Company Favor"] ??= 0;
-		}
-		anyPlayer.lastAugReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastAug;
-		anyPlayer.lastNodeReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastBitnode;
-	}
+    if (anyPlayer.hashManager !== undefined) {
+      anyPlayer.hashManager.upgrades["Company Favor"] ??= 0;
+    }
+    anyPlayer.lastAugReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastAug;
+    anyPlayer.lastNodeReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastBitnode;
+  }
 }
 
 function loadGame(saveString: string): boolean {

@@ -1253,14 +1253,14 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       return canGetBonus();
     },
-		getLastAugReset: (ctx) => () => {
-			helpers.checkSingularityAccess(ctx);
-			return Player.lastAugReset;
-		},
-		getLastNodeReset: (ctx) => () => {
-			helpers.checkSingularityAccess(ctx);
-			return Player.lastNodeReset;
-		},
+    getLastAugReset: (ctx) => () => {
+      helpers.checkSingularityAccess(ctx);
+      return Player.lastAugReset;
+    },
+    getLastNodeReset: (ctx) => () => {
+      helpers.checkSingularityAccess(ctx);
+      return Player.lastNodeReset;
+    },
   };
   Object.assign(singularityAPI, {
     getAugmentationCost: removedFunction(

@@ -50,6 +50,8 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [getFactionFavor(faction)](./bitburner.singularity.getfactionfavor.md) | Get faction favor. |
 |  [getFactionFavorGain(faction)](./bitburner.singularity.getfactionfavorgain.md) | Get faction favor gain. |
 |  [getFactionRep(faction)](./bitburner.singularity.getfactionrep.md) | Get faction reputation. |
+|  [getLastAugReset()](./bitburner.singularity.getlastaugreset.md) | Get the last timestamp from when you installed augmentations. |
+|  [getLastNodeReset()](./bitburner.singularity.getlastnodereset.md) | Get the last timestamp from when you finished a bitnode. |
 |  [getOwnedAugmentations(purchased)](./bitburner.singularity.getownedaugmentations.md) | Get a list of owned augmentation. |
 |  [getOwnedSourceFiles()](./bitburner.singularity.getownedsourcefiles.md) | Get a list of acquired Source-Files. |
 |  [getUpgradeHomeCoresCost()](./bitburner.singularity.getupgradehomecorescost.md) | Get the price of upgrading home cores. |
