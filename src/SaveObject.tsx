@@ -657,9 +657,13 @@ function evaluateVersionCompatibility(ver: string | number): void {
     // Prior to v2.2.0, sleeve shock was 0 to 100 internally but displayed as 100 to 0. This unifies them as 100 to 0.
     for (const sleeve of Player.sleeves) sleeve.shock = 100 - sleeve.shock;
   }
-  if (anyPlayer.hashManager !== undefined) {
-    anyPlayer.hashManager.upgrades["Company Favor"] ??= 0;
-  }
+  if (ver < 31) {
+		if (anyPlayer.hashManager !== undefined) {
+			anyPlayer.hashManager.upgrades["Company Favor"] ??= 0;
+		}
+		anyPlayer.lastAugReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastAug;
+		anyPlayer.lastNodeReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastBitnode;
+	}
 }
 
 function loadGame(saveString: string): boolean {
