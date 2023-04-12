@@ -23,7 +23,5 @@ interface Player extends Person
 |  [location](./bitburner.player.location.md) |  | string |  |
 |  [money](./bitburner.player.money.md) |  | number |  |
 |  [numPeopleKilled](./bitburner.player.numpeoplekilled.md) |  | number |  |
-|  [playtimeSinceLastAug](./bitburner.player.playtimesincelastaug.md) |  | number |  |
-|  [playtimeSinceLastBitnode](./bitburner.player.playtimesincelastbitnode.md) |  | number |  |
 |  [totalPlaytime](./bitburner.player.totalplaytime.md) |  | number |  |
 

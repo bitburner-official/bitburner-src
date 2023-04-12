@@ -1782,8 +1782,6 @@ export const ns: InternalAPI<NSFull> = {
       location: Player.location,
       bitNodeN: Player.bitNodeN,
       totalPlaytime: Player.totalPlaytime,
-      playtimeSinceLastAug: Player.playtimeSinceLastAug,
-      playtimeSinceLastBitnode: Player.playtimeSinceLastBitnode,
       jobs: cloneDeep(Player.jobs),
       factions: Player.factions.slice(),
       entropy: Player.entropy,
