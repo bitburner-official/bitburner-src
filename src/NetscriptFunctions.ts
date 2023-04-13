@@ -1014,26 +1014,6 @@ export const ns: InternalAPI<NSFull> = {
       requiredHackingSkill: server.requiredHackingSkill,
       serverGrowth: server.serverGrowth,
     };
-
-    const copy = Object.assign({}, server) as Server;
-    // These fields should be hidden.
-    copy.contracts = [];
-    copy.messages = [];
-    copy.runningScripts = [];
-    copy.scripts = [];
-    copy.textFiles = [];
-    copy.programs = [];
-    copy.serversOnNetwork = [];
-    if (!copy.baseDifficulty) copy.baseDifficulty = 0;
-    if (!copy.hackDifficulty) copy.hackDifficulty = 0;
-    if (!copy.minDifficulty) copy.minDifficulty = 0;
-    if (!copy.moneyAvailable) copy.moneyAvailable = 0;
-    if (!copy.moneyMax) copy.moneyMax = 0;
-    if (!copy.numOpenPortsRequired) copy.numOpenPortsRequired = 0;
-    if (!copy.openPortCount) copy.openPortCount = 0;
-    if (!copy.requiredHackingSkill) copy.requiredHackingSkill = 0;
-    if (!copy.serverGrowth) copy.serverGrowth = 0;
-    return copy;
   },
   getServerMoneyAvailable: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
