@@ -75,7 +75,7 @@ function initWebserver(): void {
     return {
       res: true,
       data: {
-        files: home.scripts.map((script) => ({
+        files: [...home.scripts.values()].map((script) => ({
           filename: script.filename,
           code: script.code,
           ramUsage: script.ramUsage,

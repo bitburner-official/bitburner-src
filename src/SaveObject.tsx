@@ -34,6 +34,8 @@ import { Faction } from "./Faction/Faction";
 import { safelyCreateUniqueServer } from "./Server/ServerHelpers";
 import { SpecialServers } from "./Server/data/SpecialServers";
 import { v2APIBreak } from "./utils/v2APIBreak";
+import { Script } from "./Script/Script";
+import { JSONMap } from "./Types/Jsonable";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -344,7 +346,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
         }
         return code;
       }
-      for (const server of GetAllServers()) {
+      for (const server of GetAllServers() as unknown as { scripts: Script[] }[]) {
         for (const script of server.scripts) {
           script.code = convert(script.code);
         }
@@ -662,6 +664,15 @@ function evaluateVersionCompatibility(ver: string | number): void {
     }
     anyPlayer.lastAugReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastAug;
     anyPlayer.lastNodeReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastBitnode;
+    for (const server of GetAllServers()) {
+      if (Array.isArray(server.scripts)) {
+        const oldScripts = server.scripts as Script[];
+        server.scripts = new JSONMap();
+        for (const script of oldScripts) {
+          server.scripts.set(script.filename, script);
+        }
+      }
+    }
   }
 }
 

@@ -36,7 +36,7 @@ import {
 } from "./Server/ServerPurchases";
 import { Server } from "./Server/Server";
 import { influenceStockThroughServerGrow } from "./StockMarket/PlayerInfluencing";
-import { areFilesEqual, isValidFilePath, removeLeadingSlash } from "./Terminal/DirectoryHelpers";
+import { isValidFilePath, removeLeadingSlash } from "./Terminal/DirectoryHelpers";
 import { TextFile, getTextFile, createTextFile } from "./TextFile";
 import { runScriptFromScript } from "./NetscriptWorker";
 import { killWorkerScript } from "./Netscript/killWorkerScript";
@@ -877,7 +877,7 @@ export const ns: InternalAPI<NSFull> = {
         }
 
         // Scp for script files
-        const sourceScript = sourceServ.scripts.find((script) => script.filename === file);
+        const sourceScript = sourceServ.scripts.get(file);
         if (!sourceScript) {
           helpers.log(ctx, () => `File '${file}' does not exist.`);
           noFailures = false;
@@ -885,7 +885,7 @@ export const ns: InternalAPI<NSFull> = {
         }
 
         // Overwrite script if it already exists
-        const destScript = destServer.scripts.find((script) => script.filename === file);
+        const destScript = destServer.scripts.get(file);
         if (destScript) {
           if (destScript.code === sourceScript.code) {
             helpers.log(ctx, () => `Identical file '${file}' was already on '${destServer?.hostname}'`);
@@ -900,7 +900,7 @@ export const ns: InternalAPI<NSFull> = {
 
         // Create new script if it does not already exist
         const newScript = new Script(file, sourceScript.code, destServer.hostname);
-        destServer.scripts.push(newScript);
+        destServer.scripts.set(file, newScript);
         helpers.log(ctx, () => `File '${file}' copied over to '${destServer?.hostname}'.`);
       }
 
@@ -915,7 +915,7 @@ export const ns: InternalAPI<NSFull> = {
       ...server.contracts.map((contract) => contract.fn),
       ...server.messages,
       ...server.programs,
-      ...server.scripts.map((script) => script.filename),
+      ...server.scripts.keys(),
       ...server.textFiles.map((textFile) => textFile.filename),
     ];
 
@@ -1014,26 +1014,6 @@ export const ns: InternalAPI<NSFull> = {
       requiredHackingSkill: server.requiredHackingSkill,
       serverGrowth: server.serverGrowth,
     };
-
-    const copy = Object.assign({}, server) as Server;
-    // These fields should be hidden.
-    copy.contracts = [];
-    copy.messages = [];
-    copy.runningScripts = [];
-    copy.scripts = [];
-    copy.textFiles = [];
-    copy.programs = [];
-    copy.serversOnNetwork = [];
-    if (!copy.baseDifficulty) copy.baseDifficulty = 0;
-    if (!copy.hackDifficulty) copy.hackDifficulty = 0;
-    if (!copy.minDifficulty) copy.minDifficulty = 0;
-    if (!copy.moneyAvailable) copy.moneyAvailable = 0;
-    if (!copy.moneyMax) copy.moneyMax = 0;
-    if (!copy.numOpenPortsRequired) copy.numOpenPortsRequired = 0;
-    if (!copy.openPortCount) copy.openPortCount = 0;
-    if (!copy.requiredHackingSkill) copy.requiredHackingSkill = 0;
-    if (!copy.serverGrowth) copy.serverGrowth = 0;
-    return copy;
   },
   getServerMoneyAvailable: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -1167,11 +1147,7 @@ export const ns: InternalAPI<NSFull> = {
       const filename = helpers.string(ctx, "filename", _filename);
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const server = helpers.getServer(ctx, hostname);
-      for (let i = 0; i < server.scripts.length; ++i) {
-        if (filename == server.scripts[i].filename) {
-          return true;
-        }
-      }
+      if (server.scripts.has(filename)) return true;
       for (let i = 0; i < server.programs.length; ++i) {
         if (filename.toLowerCase() == server.programs[i].toLowerCase()) {
           return true;
@@ -1386,47 +1362,45 @@ export const ns: InternalAPI<NSFull> = {
     }
     return writePort(portNumber, data);
   },
-  write:
-    (ctx) =>
-    (_filename, _data = "", _mode = "a") => {
-      let fn = helpers.string(ctx, "handle", _filename);
-      const data = helpers.string(ctx, "data", _data);
-      const mode = helpers.string(ctx, "mode", _mode);
-      if (!isValidFilePath(fn)) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filepath: ${fn}`);
+  write: (ctx) => (_filename, _data, _mode) => {
+    let filename = helpers.string(ctx, "handle", _filename);
+    const data = helpers.string(ctx, "data", _data ?? "");
+    const mode = helpers.string(ctx, "mode", _mode ?? "a");
+    if (!isValidFilePath(filename)) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filepath: ${filename}`);
 
-      if (fn.lastIndexOf("/") === 0) fn = removeLeadingSlash(fn);
+    if (filename.lastIndexOf("/") === 0) filename = removeLeadingSlash(filename);
 
-      const server = helpers.getServer(ctx, ctx.workerScript.hostname);
+    const server = helpers.getServer(ctx, ctx.workerScript.hostname);
 
-      if (isScriptFilename(fn)) {
-        // Write to script
-        let script = ctx.workerScript.getScriptOnServer(fn, server);
-        if (script == null) {
-          // Create a new script
-          script = new Script(fn, String(data), server.hostname);
-          server.scripts.push(script);
-          return;
-        }
-        mode === "w" ? (script.code = String(data)) : (script.code += data);
-        // Set ram to null so a recalc is performed the next time ram usage is needed
-        script.invalidateModule();
+    if (isScriptFilename(filename)) {
+      // Write to script
+      let script = ctx.workerScript.getScriptOnServer(filename, server);
+      if (!script) {
+        // Create a new script
+        script = new Script(filename, String(data), server.hostname);
+        server.scripts.set(filename, script);
         return;
-      } else {
-        // Write to text file
-        if (!fn.endsWith(".txt")) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filename: ${fn}`);
-        const txtFile = getTextFile(fn, server);
-        if (txtFile == null) {
-          createTextFile(fn, String(data), server);
-          return;
-        }
-        if (mode === "w") {
-          txtFile.write(String(data));
-        } else {
-          txtFile.append(String(data));
-        }
       }
+      mode === "w" ? (script.code = data) : (script.code += data);
+      // Set ram to null so a recalc is performed the next time ram usage is needed
+      script.invalidateModule();
       return;
-    },
+    } else {
+      // Write to text file
+      if (!filename.endsWith(".txt")) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filename: ${filename}`);
+      const txtFile = getTextFile(filename, server);
+      if (txtFile == null) {
+        createTextFile(filename, String(data), server);
+        return;
+      }
+      if (mode === "w") {
+        txtFile.write(String(data));
+      } else {
+        txtFile.append(String(data));
+      }
+    }
+    return;
+  },
   tryWritePort: (ctx) => (_portNumber, data) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
     if (typeof data !== "string" && typeof data !== "number") {
@@ -1535,21 +1509,19 @@ export const ns: InternalAPI<NSFull> = {
   getScriptName: (ctx) => () => {
     return ctx.workerScript.name;
   },
-  getScriptRam:
-    (ctx) =>
-    (_scriptname, _hostname = ctx.workerScript.hostname) => {
-      const scriptname = helpers.string(ctx, "scriptname", _scriptname);
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const server = helpers.getServer(ctx, hostname);
-      const script = server.scripts.find((serverScript) => areFilesEqual(serverScript.filename, scriptname));
-      if (!script) return 0;
-      const ramUsage = script.getRamUsage(server.scripts);
-      if (!ramUsage) {
-        helpers.log(ctx, () => `Could not calculate ram usage for ${scriptname} on ${hostname}.`);
-        return 0;
-      }
-      return ramUsage;
-    },
+  getScriptRam: (ctx) => (_scriptname, _hostname) => {
+    const scriptname = helpers.string(ctx, "scriptname", _scriptname);
+    const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+    const server = helpers.getServer(ctx, hostname);
+    const script = server.scripts.get(scriptname);
+    if (!script) return 0;
+    const ramUsage = script.getRamUsage(server.scripts);
+    if (!ramUsage) {
+      helpers.log(ctx, () => `Could not calculate ram usage for ${scriptname} on ${hostname}.`);
+      return 0;
+    }
+    return ramUsage;
+  },
   getRunningScript:
     (ctx) =>
     (fn, hostname, ...args) => {
@@ -1801,7 +1773,7 @@ export const ns: InternalAPI<NSFull> = {
     }; // Wrap the user function to prevent WorkerScript leaking as 'this'
   },
   mv: (ctx) => (_host, _source, _destination) => {
-    const host = helpers.string(ctx, "host", _host);
+    const hostname = helpers.string(ctx, "host", _host);
     const source = helpers.string(ctx, "source", _source);
     const destination = helpers.string(ctx, "destination", _destination);
 
@@ -1820,44 +1792,40 @@ export const ns: InternalAPI<NSFull> = {
       return;
     }
 
-    const destServer = helpers.getServer(ctx, host);
+    const server = helpers.getServer(ctx, hostname);
 
-    if (!source_is_txt && destServer.isRunning(source))
+    if (!source_is_txt && server.isRunning(source))
       throw helpers.makeRuntimeErrorMsg(ctx, `Cannot use 'mv' on a script that is running`);
 
     interface File {
       filename: string;
     }
+    let source_file: File | undefined;
+    let dest_file: File | undefined;
 
-    const files = source_is_txt ? destServer.textFiles : destServer.scripts;
-    let source_file: File | null = null;
-    let dest_file: File | null = null;
-
-    for (let i = 0; i < files.length; ++i) {
-      const file = files[i];
-      if (file.filename === source) {
-        source_file = file;
-      } else if (file.filename === destination) {
-        dest_file = file;
-      }
+    if (source_is_txt) {
+      // Traverses twice potentially. Inefficient but will soon be replaced with a map.
+      source_file = server.textFiles.find((textFile) => textFile.filename === source);
+      dest_file = server.textFiles.find((textFile) => textFile.filename === destination);
+    } else {
+      source_file = server.scripts.get(source);
+      dest_file = server.scripts.get(destination);
     }
+    if (!source_file) throw helpers.makeRuntimeErrorMsg(ctx, `Source file ${source} does not exist`);
 
-    if (source_file == null) throw helpers.makeRuntimeErrorMsg(ctx, `Source file ${source} does not exist`);
-
-    if (dest_file != null) {
+    if (dest_file) {
       if (dest_file instanceof TextFile && source_file instanceof TextFile) {
         dest_file.text = source_file.text;
       } else if (dest_file instanceof Script && source_file instanceof Script) {
         dest_file.code = source_file.code;
+        // Source needs to be invalidated as well, to invalidate its dependents
+        source_file.invalidateModule();
         dest_file.invalidateModule();
       }
-
-      destServer.removeFile(source);
+      server.removeFile(source);
     } else {
       source_file.filename = destination;
-      if (source_file instanceof Script) {
-        source_file.invalidateModule();
-      }
+      if (source_file instanceof Script) source_file.invalidateModule();
     }
   },
   flags: Flags,

@@ -101,8 +101,8 @@ export async function determineAllPossibilitiesForTabCompletion(
   }
 
   function addAllScripts(): void {
-    for (const script of currServ.scripts) {
-      const res = processFilepath(script.filename);
+    for (const scriptFilename of currServ.scripts.keys()) {
+      const res = processFilepath(scriptFilename);
       if (res) {
         allPos.push(res);
       }
@@ -281,10 +281,7 @@ export async function determineAllPossibilitiesForTabCompletion(
     // Use regex to remove any leading './', and then check if it matches against
     // the output of processFilepath or if it matches with a '/' prepended,
     // this way autocomplete works inside of directories
-    const script = currServ.scripts.find((script) => {
-      const fn = filename.replace(/^\.\//g, "");
-      return processFilepath(script.filename) === fn || script.filename === "/" + fn;
-    });
+    const script = currServ.scripts.get(filename);
     if (!script) return; // Doesn't exist.
     let loadedModule;
     try {
@@ -304,7 +301,7 @@ export async function determineAllPossibilitiesForTabCompletion(
     const flagFunc = Flags(flags._);
     const autocompleteData: AutocompleteData = {
       servers: GetAllServers().map((server) => server.hostname),
-      scripts: currServ.scripts.map((script) => script.filename),
+      scripts: [...currServ.scripts.keys()],
       txts: currServ.textFiles.map((txt) => txt.fn),
       flags: (schema: unknown) => {
         if (!Array.isArray(schema)) throw new Error("flags require an array of array");
@@ -334,8 +331,8 @@ export async function determineAllPossibilitiesForTabCompletion(
   // invocation of `run`.
   if (input.startsWith("./")) {
     // All programs and scripts
-    for (const script of currServ.scripts) {
-      const res = processFilepath(script.filename);
+    for (const scriptFilename of currServ.scripts.keys()) {
+      const res = processFilepath(scriptFilename);
       if (res) {
         allPos.push(res);
       }

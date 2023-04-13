@@ -87,10 +87,7 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => void | R
     const server = GetServer(msg.params.server);
     if (!server) return error("Server hostname invalid", msg);
 
-    const fileNameList: string[] = [
-      ...server.textFiles.map((txt): string => txt.filename),
-      ...server.scripts.map((scr): string => scr.filename),
-    ];
+    const fileNameList: string[] = [...server.textFiles.map((txt): string => txt.filename), ...server.scripts.keys()];
 
     return new RFAMessage({ result: fileNameList, id: msg.id });
   },
@@ -105,10 +102,8 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => void | R
       ...server.textFiles.map((txt): FileContent => {
         return { filename: txt.filename, content: txt.text };
       }),
-      ...server.scripts.map((scr): FileContent => {
-        return { filename: scr.filename, content: scr.code };
-      }),
     ];
+    for (const [filename, script] of server.scripts) fileList.push({ filename, content: script.code });
 
     return new RFAMessage({ result: fileList, id: msg.id });
   },

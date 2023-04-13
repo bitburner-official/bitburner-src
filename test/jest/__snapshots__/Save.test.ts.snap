@@ -89,7 +89,10 @@ exports[`load/saveAllServers 1`] = `
       "programs": [],
       "ramUsed": 0,
       "runningScripts": [],
-      "scripts": [],
+      "scripts": {
+        "ctor": "JSONMap",
+        "data": []
+      },
       "serversOnNetwork": [
         "home"
       ],
@@ -183,7 +186,10 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
       "programs": [],
       "ramUsed": 0,
       "runningScripts": [],
-      "scripts": [],
+      "scripts": {
+        "ctor": "JSONMap",
+        "data": []
+      },
       "serversOnNetwork": [
         "home"
       ],

@@ -106,7 +106,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
 
   // Get all of the programs and scripts on the machine into one temporary array
   for (const program of server.programs) handleFn(program, allPrograms);
-  for (const script of server.scripts) handleFn(script.filename, allScripts);
+  for (const scriptFilename of server.scripts.keys()) handleFn(scriptFilename, allScripts);
   for (const txt of server.textFiles) handleFn(txt.fn, allTextFiles);
   for (const contract of server.contracts) handleFn(contract.fn, allContracts);
   for (const msgOrLit of server.messages) handleFn(msgOrLit, allMessages);

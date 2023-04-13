@@ -8,11 +8,11 @@ import { IMinMaxRange } from "../types";
 import { createRandomIp } from "../utils/IPAddress";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { Reviver } from "../utils/JSONReviver";
-import { isValidIPAddress } from "../utils/helpers/isValidIPAddress";
 import { SpecialServers } from "./data/SpecialServers";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import "../Script/RunningScript"; // For reviver side-effect
 
+import { IPAddress, isIPAddress } from "../Types/strings";
 import type { RunningScript } from "../Script/RunningScript";
 
 /**
@@ -50,9 +50,7 @@ export function GetServer(s: string): BaseServer | null {
     if (server) return server;
   }
 
-  if (!isValidIPAddress(s)) {
-    return GetServerByHostname(s);
-  }
+  if (!isIPAddress(s)) return GetServerByHostname(s);
 
   const ipserver = GetServerByIP(s);
   if (ipserver !== undefined) {
@@ -88,8 +86,8 @@ export function ipExists(ip: string): boolean {
   return false;
 }
 
-export function createUniqueRandomIp(): string {
-  let ip: string;
+export function createUniqueRandomIp(): IPAddress {
+  let ip: IPAddress;
   // Repeat generating ip, until unique one is found
   do {
     ip = createRandomIp();
@@ -117,7 +115,7 @@ export const renameServer = (hostname: string, newName: string): void => {
 interface IServerParams {
   hackDifficulty?: number;
   hostname: string;
-  ip: string;
+  ip: IPAddress;
   maxRam?: number;
   moneyAvailable?: number;
   numOpenPortsRequired: number;

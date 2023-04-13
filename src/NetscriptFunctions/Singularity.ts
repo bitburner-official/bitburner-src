@@ -50,7 +50,6 @@ import { canGetBonus, onExport } from "../ExportBonus";
 import { saveObject } from "../SaveObject";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { findEnumMember } from "../utils/helpers/enum";
-import { areFilesEqual } from "../Terminal/DirectoryHelpers";
 import { Engine } from "../engine";
 import { checkEnum } from "../utils/helpers/enum";
 
@@ -81,7 +80,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     //Run a script after reset
     if (!cbScript) return;
     const home = Player.getHomeComputer();
-    const script = home.scripts.find((serverScript) => areFilesEqual(serverScript.filename, cbScript));
+    const script = home.scripts.get(cbScript);
     if (!script) return;
     const ramUsage = script.getRamUsage(home.scripts);
     if (!ramUsage) {

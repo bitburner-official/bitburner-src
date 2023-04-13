@@ -29,10 +29,10 @@ import { roundToTwo } from "./utils/helpers/roundToTwo";
 
 import { parse } from "acorn";
 import { simple as walksimple } from "acorn-walk";
-import { areFilesEqual } from "./Terminal/DirectoryHelpers";
 import { Terminal } from "./Terminal";
 import { ScriptArg } from "@nsdefs";
 import { handleUnknownError, CompleteRunOptions } from "./Netscript/NetscriptHelpers";
+import { scriptFilenameFromImport } from "./Types/strings";
 
 export const NetscriptPorts: Map<PortNumber, Port> = new Map();
 
@@ -147,12 +147,7 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
   }
 
   function getScript(scriptName: string): Script | null {
-    for (let i = 0; i < server.scripts.length; ++i) {
-      if (server.scripts[i].filename === scriptName) {
-        return server.scripts[i];
-      }
-    }
-    return null;
+    return server.scripts.get(scriptName) ?? null;
   }
 
   let generatedCode = ""; // Generated Javascript Code
@@ -162,10 +157,7 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
   walksimple(ast, {
     ImportDeclaration: (node: Node) => {
       hasImports = true;
-      let scriptName = node.source.value;
-      if (scriptName.startsWith("./")) {
-        scriptName = scriptName.slice(2);
-      }
+      const scriptName = scriptFilenameFromImport(node.source.value, true);
       const script = getScript(scriptName);
       if (script == null) {
         throw new Error("'Import' failed due to invalid script: " + scriptName);
@@ -398,7 +390,7 @@ export function runScriptFromScript(
    * running a large number of scripts. */
 
   // Find the script, fail if it doesn't exist.
-  const script = host.scripts.find((serverScript) => areFilesEqual(serverScript.filename, scriptname));
+  const script = host.scripts.get(scriptname);
   if (!script) {
     workerScript.log(caller, () => `Could not find script '${scriptname}' on '${host.hostname}'`);
     return 0;

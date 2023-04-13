@@ -5,6 +5,7 @@ import { RunningScript } from "../../../src/Script/RunningScript";
 import { AddToAllServers, DeleteServer } from "../../../src/Server/AllServers";
 import { WorkerScriptStartStopEventEmitter } from "../../../src/Netscript/WorkerScriptStartStopEventEmitter";
 import { AlertEvents } from "../../../src/ui/React/AlertManager";
+import type { Script } from "src/Script/Script";
 
 // Replace Blob/ObjectURL functions, because they don't work natively in Jest
 global.Blob = class extends Blob {
@@ -89,10 +90,11 @@ test.each([
       expect(server.writeToScriptFile(s.name, s.code)).toEqual({ success: true, overwritten: false });
     }
 
-    const script = server.scripts[server.scripts.length - 1];
+    const script = server.scripts.get(scripts[scripts.length - 1].name) as Script;
     expect(script.filename).toEqual(scripts[scripts.length - 1].name);
 
     const ramUsage = script.getRamUsage(server.scripts);
+    if (!ramUsage) throw new Error(`ramUsage calculated to be ${ramUsage}`);
     const runningScript = new RunningScript(script, ramUsage as number);
     expect(startWorkerScript(runningScript, server)).toBeGreaterThan(0);
     // We don't care about start, so subscribe after that. Await script death.

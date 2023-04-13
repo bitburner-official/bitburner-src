@@ -51,11 +51,8 @@ export function scp(args: (string | number | boolean)[], server: BaseServer): vo
     }
 
     // Get the current script
-    const sourceScript = server.scripts.find((script) => script.filename === scriptname);
-    if (!sourceScript) {
-      Terminal.error("scp failed. No such script exists");
-      return;
-    }
+    const sourceScript = server.scripts.get(scriptname);
+    if (!sourceScript) return Terminal.error("scp failed. No such script exists");
 
     const sRes = destServer.writeToScriptFile(scriptname, sourceScript.code);
     if (!sRes.success) {

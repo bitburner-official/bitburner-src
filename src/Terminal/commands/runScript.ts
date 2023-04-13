@@ -43,50 +43,43 @@ export function runScript(commandArgs: (string | number | boolean)[], server: Ba
   }
 
   // Check if the script exists and if it does run it
-  for (let i = 0; i < server.scripts.length; i++) {
-    if (server.scripts[i].filename !== scriptName) {
-      continue;
-    }
-    // Check for admin rights and that there is enough RAM available to run
-    const script = server.scripts[i];
-    script.server = server.hostname;
-    const singleRamUsage = script.getRamUsage(server.scripts);
-    if (!singleRamUsage) return Terminal.error("Error while calculating ram usage for this script.");
-    const ramUsage = singleRamUsage * numThreads;
-    const ramAvailable = server.maxRam - server.ramUsed;
+  const script = server.scripts.get(scriptName);
+  if (!script) return Terminal.error("No such script");
 
-    if (!server.hasAdminRights) {
-      Terminal.error("Need root access to run script");
-      return;
-    }
+  const singleRamUsage = script.getRamUsage(server.scripts);
+  if (!singleRamUsage) return Terminal.error("Error while calculating ram usage for this script.");
+  const ramUsage = singleRamUsage * numThreads;
+  const ramAvailable = server.maxRam - server.ramUsed;
 
-    if (ramUsage > ramAvailable + 0.001) {
-      Terminal.error(
-        "This machine does not have enough RAM to run this script" +
-          (numThreads === 1 ? "" : ` with ${numThreads} threads`) +
-          `. Script requires ${formatRam(ramUsage)} of RAM`,
-      );
-      return;
-    }
-
-    // Able to run script
-    const runningScript = new RunningScript(script, singleRamUsage, args);
-    runningScript.threads = numThreads;
-
-    const success = startWorkerScript(runningScript, server);
-    if (!success) {
-      Terminal.error(`Failed to start script`);
-      return;
-    }
-
-    Terminal.print(
-      `Running script with ${numThreads} thread(s), pid ${runningScript.pid} and args: ${JSON.stringify(args)}.`,
-    );
-    if (tailFlag) {
-      LogBoxEvents.emit(runningScript);
-    }
+  if (!server.hasAdminRights) {
+    Terminal.error("Need root access to run script");
     return;
   }
 
-  Terminal.error("No such script");
+  if (ramUsage > ramAvailable + 0.001) {
+    Terminal.error(
+      "This machine does not have enough RAM to run this script" +
+        (numThreads === 1 ? "" : ` with ${numThreads} threads`) +
+        `. Script requires ${formatRam(ramUsage)} of RAM`,
+    );
+    return;
+  }
+
+  // Able to run script
+  const runningScript = new RunningScript(script, singleRamUsage, args);
+  runningScript.threads = numThreads;
+
+  const success = startWorkerScript(runningScript, server);
+  if (!success) {
+    Terminal.error(`Failed to start script`);
+    return;
+  }
+
+  Terminal.print(
+    `Running script with ${numThreads} thread(s), pid ${runningScript.pid} and args: ${JSON.stringify(args)}.`,
+  );
+  if (tailFlag) {
+    LogBoxEvents.emit(runningScript);
+  }
+  return;
 }

@@ -7,7 +7,8 @@ import { parse } from "acorn";
 
 import { LoadedModule, ScriptURL, ScriptModule } from "./Script/LoadedModule";
 import { Script } from "./Script/Script";
-import { areImportsEquals, removeLeadingSlash } from "./Terminal/DirectoryHelpers";
+import { removeLeadingSlash } from "./Terminal/DirectoryHelpers";
+import { ScriptFilename, scriptFilenameFromImport } from "./Types/strings";
 
 // Acorn type def is straight up incomplete so we have to fill with our own.
 export type Node = any;
@@ -46,7 +47,7 @@ const cleanup = new FinalizationRegistry((mapKey: string) => {
   }
 });
 
-export function compile(script: Script, scripts: Script[]): Promise<ScriptModule> {
+export function compile(script: Script, scripts: Map<ScriptFilename, Script>): Promise<ScriptModule> {
   // Return the module if it already exists
   if (script.mod) return script.mod.module;
 
@@ -75,7 +76,7 @@ function addDependencyInfo(script: Script, seenStack: Script[]) {
  * @param scripts array of other scripts on the server
  * @param seenStack A stack of scripts that were higher up in the import tree in a recursive call.
  */
-function generateLoadedModule(script: Script, scripts: Script[], seenStack: Script[]): LoadedModule {
+function generateLoadedModule(script: Script, scripts: Map<ScriptFilename, Script>, seenStack: Script[]): LoadedModule {
   // Early return for recursive calls where the script already has a URL
   if (script.mod) {
     addDependencyInfo(script, seenStack);
@@ -124,10 +125,10 @@ function generateLoadedModule(script: Script, scripts: Script[], seenStack: Scri
   let newCode = script.code;
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
-    const filename = node.filename.startsWith("./") ? node.filename.substring(2) : node.filename;
+    const filename = scriptFilenameFromImport(node.filename);
 
     // Find the corresponding script.
-    const importedScript = scripts.find((s) => areImportsEquals(s.filename, filename));
+    const importedScript = scripts.get(filename);
     if (!importedScript) continue;
 
     seenStack.push(script);

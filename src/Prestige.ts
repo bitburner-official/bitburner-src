@@ -192,7 +192,7 @@ export function prestigeSourceFile(flume: boolean): void {
   AddToAllServers(homeComp);
   prestigeHomeComputer(homeComp);
   // Ram usage needs to be cleared for bitnode-level resets, due to possible change in singularity cost.
-  for (const script of homeComp.scripts) script.ramUsage = null;
+  for (const script of homeComp.scripts.values()) script.ramUsage = null;
 
   // Re-create foreign servers
   initForeignServers(Player.getHomeComputer());

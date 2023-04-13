@@ -37,7 +37,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     script.code = code;
     // Force ram calculation reset
     script.ramUsage = null;
-    const ramUsage = script.getRamUsage([]);
+    const ramUsage = script.getRamUsage(new Map());
     if (!ramUsage) throw new Error("Ram usage should be defined.");
     const runningScript = new RunningScript(script, ramUsage);
     return runningScript;
@@ -62,7 +62,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     ramUsage: scriptRef.ramUsage,
     scriptRef,
   };
-  const nsExternal = NetscriptFunctions(workerScript as WorkerScript);
+  const nsExternal = NetscriptFunctions(workerScript as unknown as WorkerScript);
 
   function combinedRamCheck(
     fn: PotentiallyAsyncFunction,
@@ -77,7 +77,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     expect(getRamCost(...fnPath)).toEqual(expectedRamCost);
 
     // Static ram check
-    const staticCost = calculateRamUsage(code, []).cost;
+    const staticCost = calculateRamUsage(code, new Map()).cost;
     expect(staticCost).toBeCloseTo(Math.min(baseCost + expectedRamCost + extraLayerCost, maxCost));
 
     // reset workerScript for dynamic check

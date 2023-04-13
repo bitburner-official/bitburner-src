@@ -6,12 +6,13 @@ import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { createRandomString } from "../utils/helpers/createRandomString";
 import { createRandomIp } from "../utils/IPAddress";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { IPAddress, ServerName } from "../Types/strings";
 
 export interface IConstructorParams {
   adminRights?: boolean;
   hackDifficulty?: number;
   hostname: string;
-  ip?: string;
+  ip?: IPAddress;
   isConnectedTo?: boolean;
   maxRam?: number;
   moneyAvailable?: number;
@@ -60,7 +61,7 @@ export class Server extends BaseServer {
 
     // "hacknet-node-X" hostnames are reserved for Hacknet Servers
     if (this.hostname.startsWith("hacknet-node-") || this.hostname.startsWith("hacknet-server-")) {
-      this.hostname = createRandomString(10);
+      this.hostname = createRandomString(10) as ServerName;
     }
 
     this.purchasedByPlayer = params.purchasedByPlayer != null ? params.purchasedByPlayer : false;
