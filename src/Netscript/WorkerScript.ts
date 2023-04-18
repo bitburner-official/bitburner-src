@@ -96,16 +96,11 @@ export class WorkerScript {
     if (server == null) {
       throw new Error(`WorkerScript constructed with invalid server ip: ${this.hostname}`);
     }
-    let found = false;
-    for (let i = 0; i < server.scripts.length; ++i) {
-      if (server.scripts[i].filename === this.name) {
-        found = true;
-        this.code = server.scripts[i].code;
-      }
-    }
-    if (!found) {
+    const script = server.scripts.get(this.name);
+    if (!script) {
       throw new Error(`WorkerScript constructed with invalid script filename: ${this.name}`);
     }
+    this.code = script.code;
     this.scriptRef = runningScriptObj;
     this.args = runningScriptObj.args.slice();
     this.env = new Environment();
@@ -127,16 +122,14 @@ export class WorkerScript {
    */
   getScript(): Script | null {
     const server = this.getServer();
-    for (let i = 0; i < server.scripts.length; ++i) {
-      if (server.scripts[i].filename === this.name) {
-        return server.scripts[i];
-      }
+    const script = server.scripts.get(this.name);
+    if (!script) {
+      console.error(
+        "Failed to find underlying Script object in WorkerScript.getScript(). This probably means somethings wrong",
+      );
+      return null;
     }
-
-    console.error(
-      "Failed to find underlying Script object in WorkerScript.getScript(). This probably means somethings wrong",
-    );
-    return null;
+    return script;
   }
 
   /**
@@ -144,17 +137,7 @@ export class WorkerScript {
    * or null if it cannot be found
    */
   getScriptOnServer(fn: string, server: BaseServer): Script | null {
-    if (server == null) {
-      server = this.getServer();
-    }
-
-    for (let i = 0; i < server.scripts.length; ++i) {
-      if (server.scripts[i].filename === fn) {
-        return server.scripts[i];
-      }
-    }
-
-    return null;
+    return server.scripts.get(fn) ?? null;
   }
 
   shouldLog(fn: string): boolean {

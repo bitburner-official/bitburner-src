@@ -10,6 +10,7 @@ import { LoadedModule, ScriptURL } from "./LoadedModule";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
+import { ScriptFilename } from "src/Types/strings";
 
 export class Script {
   code: string;
@@ -81,7 +82,7 @@ export class Script {
   }
 
   /** Gets the ram usage, while also attempting to update it if it's currently null */
-  getRamUsage(otherScripts: Script[]): number | null {
+  getRamUsage(otherScripts: Map<ScriptFilename, Script>): number | null {
     if (this.ramUsage) return this.ramUsage;
     this.updateRamUsage(otherScripts);
     return this.ramUsage;
@@ -91,8 +92,8 @@ export class Script {
    * Calculates and updates the script's RAM usage based on its code
    * @param {Script[]} otherScripts - Other scripts on the server. Used to process imports
    */
-  updateRamUsage(otherScripts: Script[]): void {
-    const ramCalc = calculateRamUsage(this.code, otherScripts);
+  updateRamUsage(otherScripts: Map<ScriptFilename, Script>): void {
+    const ramCalc = calculateRamUsage(this.code, otherScripts, this.filename.endsWith(".script"));
     if (ramCalc.cost >= RamCostConstants.Base) {
       this.ramUsage = roundToTwo(ramCalc.cost);
       this.ramUsageEntries = ramCalc.entries as RamUsageEntry[];

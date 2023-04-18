@@ -19,8 +19,8 @@ export function exportScripts(pattern: string, server: BaseServer): void {
   // In the case of script files, we pull from the server.scripts array
   if (!matchEnding || isScriptFilename(matchEnding))
     zipFiles(
-      server.scripts.map((s) => s.filename),
-      server.scripts.map((s) => s.code),
+      [...server.scripts.keys()],
+      [...server.scripts.values()].map((script) => script.code),
     );
   // In the case of text files, we pull from the server.scripts array
   if (!matchEnding || matchEnding.endsWith(".txt"))

@@ -7,6 +7,7 @@ import { isScriptFilename } from "../../../Script/isScriptFilename";
 import { CursorPositions } from "../../../ScriptEditor/CursorPositions";
 import { Script } from "../../../Script/Script";
 import { isEmpty } from "lodash";
+import { ScriptFilename } from "src/Types/strings";
 
 interface EditorParameters {
   args: (string | number | boolean)[];
@@ -28,7 +29,7 @@ interface ISimpleScriptGlob {
   postGlob: string;
   globError: string;
   globMatches: string[];
-  globAgainst: Script[];
+  globAgainst: Map<ScriptFilename, Script>;
 }
 
 function containsSimpleGlob(filename: string): boolean {
@@ -45,7 +46,7 @@ function detectSimpleScriptGlob({ args, server }: EditorParameters): ISimpleScri
   return null;
 }
 
-function parseSimpleScriptGlob(globString: string, globDatabase: Script[]): ISimpleScriptGlob {
+function parseSimpleScriptGlob(globString: string, globDatabase: Map<ScriptFilename, Script>): ISimpleScriptGlob {
   const parsedGlob: ISimpleScriptGlob = {
     glob: globString,
     preGlob: "",

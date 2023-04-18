@@ -41,8 +41,8 @@ export function getSubdirectories(serv: BaseServer, dir: string): string[] {
     }
   }
 
-  for (const script of serv.scripts) {
-    processFile(script.filename);
+  for (const scriptFilename of serv.scripts.keys()) {
+    processFile(scriptFilename);
   }
 
   for (const txt of serv.textFiles) {
@@ -56,7 +56,7 @@ export function getSubdirectories(serv: BaseServer, dir: string): string[] {
 export function containsFiles(server: BaseServer, dir: string): boolean {
   const dirWithTrailingSlash = dir + (dir.slice(-1) === "/" ? "" : "/");
 
-  return [...server.scripts.map((s) => s.filename), ...server.textFiles.map((t) => t.fn)].some((filename) =>
+  return [...server.scripts.keys(), ...server.textFiles.map((t) => t.fn)].some((filename) =>
     filename.startsWith(dirWithTrailingSlash),
   );
 }

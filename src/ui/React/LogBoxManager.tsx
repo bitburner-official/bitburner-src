@@ -20,7 +20,6 @@ import { Settings } from "../../Settings/Settings";
 import { ANSIITypography } from "./ANSIITypography";
 import { ScriptArg } from "../../Netscript/ScriptArg";
 import { useRerender } from "./hooks";
-import { areFilesEqual } from "../../Terminal/DirectoryHelpers";
 import { dialogBoxCreate } from "./DialogBox";
 
 let layerCounter = 0;
@@ -222,7 +221,7 @@ function LogWindow(props: IProps): React.ReactElement {
     if (server === null) return;
     const s = findRunningScript(script.filename, script.args, server);
     if (s === null) {
-      const baseScript = server.scripts.find((serverScript) => areFilesEqual(serverScript.filename, script.filename));
+      const baseScript = server.scripts.get(script.filename);
       if (!baseScript) {
         return dialogBoxCreate(
           `Could not launch script. The script ${script.filename} no longer exists on the server ${server.hostname}.`,

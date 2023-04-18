@@ -94,7 +94,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       numPeopleKilled: 0,
       money: 0,
       city: CityName.Sector12,
-      location: "",
+      location: LocationName.TravelAgency,
       bitNodeN: 0,
       totalPlaytime: 0,
       jobs: {},

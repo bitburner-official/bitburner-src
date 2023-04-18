@@ -11,11 +11,13 @@ import { isScriptFilename } from "../Script/isScriptFilename";
 import { createRandomIp } from "../utils/IPAddress";
 import { compareArrays } from "../utils/helpers/compareArrays";
 import { ScriptArg } from "../Netscript/ScriptArg";
+import { JSONMap } from "../Types/Jsonable";
+import { IPAddress, ScriptFilename, ServerName } from "../Types/strings";
 
 interface IConstructorParams {
   adminRights?: boolean;
   hostname: string;
-  ip?: string;
+  ip?: IPAddress;
   isConnectedTo?: boolean;
   maxRam?: number;
   organizationName?: string;
@@ -42,13 +44,13 @@ export abstract class BaseServer implements IServer {
   hasAdminRights = false;
 
   // Hostname. Must be unique
-  hostname = "";
+  hostname: ServerName = "home";
 
   // Flag indicating whether HTTP Port is open
   httpPortOpen = false;
 
   // IP Address. Must be unique
-  ip = "";
+  ip = "1.1.1.1" as IPAddress;
 
   // Flag indicating whether player is currently connected to this server
   isConnectedTo = false;
@@ -73,7 +75,7 @@ export abstract class BaseServer implements IServer {
   runningScripts: RunningScript[] = [];
 
   // Script files on this Server
-  scripts: Script[] = [];
+  scripts: JSONMap<ScriptFilename, Script> = new JSONMap();
 
   // Contains the hostnames of all servers that are immediately
   // reachable from this one
@@ -157,13 +159,7 @@ export abstract class BaseServer implements IServer {
    * Script object on the server (if it exists)
    */
   getScript(scriptName: string): Script | null {
-    for (let i = 0; i < this.scripts.length; i++) {
-      if (this.scripts[i].filename === scriptName) {
-        return this.scripts[i];
-      }
-    }
-
-    return null;
+    return this.scripts.get(scriptName) ?? null;
   }
 
   /** Returns boolean indicating whether the given script is running on this server */
@@ -184,44 +180,44 @@ export abstract class BaseServer implements IServer {
 
   /**
    * Remove a file from the server
-   * @param fn {string} Name of file to be deleted
+   * @param filename {string} Name of file to be deleted
    * @returns {IReturnStatus} Return status object indicating whether or not file was deleted
    */
-  removeFile(fn: string): IReturnStatus {
-    if (fn.endsWith(".exe") || fn.match(/^.+\.exe-\d+(?:\.\d*)?%-INC$/) != null) {
+  removeFile(filename: string): IReturnStatus {
+    if (filename.endsWith(".exe") || filename.match(/^.+\.exe-\d+(?:\.\d*)?%-INC$/) != null) {
       for (let i = 0; i < this.programs.length; ++i) {
-        if (this.programs[i] === fn) {
+        if (this.programs[i] === filename) {
           this.programs.splice(i, 1);
           return { res: true };
         }
       }
-    } else if (isScriptFilename(fn)) {
-      const scriptIndex = this.scripts.findIndex((script) => script.filename === fn);
-      if (scriptIndex === -1) return { res: false, msg: `script ${fn} not found.` };
-      if (this.isRunning(fn)) {
+    } else if (isScriptFilename(filename)) {
+      const script = this.scripts.get(filename);
+      if (!script) return { res: false, msg: `script ${filename} not found.` };
+      if (this.isRunning(filename)) {
         return { res: false, msg: "Cannot delete a script that is currently running!" };
       }
-      this.scripts[scriptIndex].invalidateModule();
-      this.scripts.splice(scriptIndex, 1);
+      script.invalidateModule();
+      this.scripts.delete(filename);
       return { res: true };
-    } else if (fn.endsWith(".lit")) {
+    } else if (filename.endsWith(".lit")) {
       for (let i = 0; i < this.messages.length; ++i) {
         const f = this.messages[i];
-        if (typeof f === "string" && f === fn) {
+        if (typeof f === "string" && f === filename) {
           this.messages.splice(i, 1);
           return { res: true };
         }
       }
-    } else if (fn.endsWith(".txt")) {
+    } else if (filename.endsWith(".txt")) {
       for (let i = 0; i < this.textFiles.length; ++i) {
-        if (this.textFiles[i].fn === fn) {
+        if (this.textFiles[i].fn === filename) {
           this.textFiles.splice(i, 1);
           return { res: true };
         }
       }
-    } else if (fn.endsWith(".cct")) {
+    } else if (filename.endsWith(".cct")) {
       for (let i = 0; i < this.contracts.length; ++i) {
-        if (this.contracts[i].fn === fn) {
+        if (this.contracts[i].fn === filename) {
           this.contracts.splice(i, 1);
           return { res: true };
         }
@@ -266,30 +262,23 @@ export abstract class BaseServer implements IServer {
    * Write to a script file
    * Overwrites existing files. Creates new files if the script does not exist.
    */
-  writeToScriptFile(fn: string, code: string): writeResult {
-    const ret = { success: false, overwritten: false };
-    if (!isValidFilePath(fn) || !isScriptFilename(fn)) {
-      return ret;
+  writeToScriptFile(filename: string, code: string): writeResult {
+    if (!isValidFilePath(filename) || !isScriptFilename(filename)) {
+      return { success: false, overwritten: false };
     }
 
     // Check if the script already exists, and overwrite it if it does
-    for (let i = 0; i < this.scripts.length; ++i) {
-      if (fn === this.scripts[i].filename) {
-        const script = this.scripts[i];
-        script.code = code;
-        // Set ramUsage to null in order to force recalculation on next run
-        script.invalidateModule();
-        ret.overwritten = true;
-        ret.success = true;
-        return ret;
-      }
+    const script = this.scripts.get(filename);
+    if (script) {
+      script.invalidateModule();
+      script.code = code;
+      return { success: true, overwritten: true };
     }
 
     // Otherwise, create a new script
-    const newScript = new Script(fn, code, this.hostname);
-    this.scripts.push(newScript);
-    ret.success = true;
-    return ret;
+    const newScript = new Script(filename, code, this.hostname);
+    this.scripts.set(filename, newScript);
+    return { success: true, overwritten: false };
   }
 
   // Write to a text file

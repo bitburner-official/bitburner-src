@@ -15,16 +15,17 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { ServerName } from "../Types/strings";
 
 interface IServerProps {
-  hostname: string;
+  hostname: ServerName;
 }
 
 function ServerAccordion(props: IServerProps): React.ReactElement {
   const server = GetServer(props.hostname);
   if (server === null) throw new Error(`server '${props.hostname}' should not be null`);
   let totalSize = 0;
-  for (const f of server.scripts) {
+  for (const f of server.scripts.values()) {
     totalSize += f.code.length;
   }
 
@@ -43,7 +44,7 @@ function ServerAccordion(props: IServerProps): React.ReactElement {
 
   const files: File[] = [];
 
-  for (const f of server.scripts) {
+  for (const f of server.scripts.values()) {
     files.push({ name: f.filename, size: f.code.length });
   }
 

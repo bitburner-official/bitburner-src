@@ -1,7 +1,6 @@
 /** Implementation for what happens when you destroy a BitNode */
 import React from "react";
 import { Player } from "@player";
-import { PlayerOwnedSourceFile } from "./SourceFile/PlayerOwnedSourceFile";
 import { SourceFiles } from "./SourceFile/SourceFiles";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
@@ -12,32 +11,26 @@ import { Engine } from "./engine";
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();
   const sourceFile = SourceFiles[sourceFileKey];
-  if (sourceFile == null) {
+  if (!sourceFile) {
     console.error(`Could not find source file for Bit node: ${bitNodeNumber}`);
     return;
   }
 
   // Check if player already has this source file
-  const ownedSourceFile = Player.sourceFiles.find((sourceFile) => sourceFile.n === bitNodeNumber);
+  let lvl = Player.sourceFileLvl(bitNodeNumber);
 
-  if (ownedSourceFile) {
-    if (ownedSourceFile.lvl >= 3 && ownedSourceFile.n !== 12) {
+  if (lvl > 0) {
+    if (lvl >= 3 && bitNodeNumber !== 12) {
       dialogBoxCreate(
         `The Source-File for the BitNode you just destroyed, ${sourceFile.name}, is already at max level!`,
       );
     } else {
-      ++ownedSourceFile.lvl;
-      dialogBoxCreate(
-        sourceFile.name +
-          " was upgraded to level " +
-          ownedSourceFile.lvl +
-          " for " +
-          "destroying its corresponding BitNode!",
-      );
+      lvl++;
+      Player.sourceFiles.set(bitNodeNumber, lvl);
+      dialogBoxCreate(`${sourceFile.name} was upgraded to level ${lvl} for destroying its corresponding BitNode!`);
     }
   } else {
-    const newSrcFile = new PlayerOwnedSourceFile(bitNodeNumber, 1);
-    Player.sourceFiles.push(newSrcFile);
+    Player.sourceFiles.set(bitNodeNumber, 1);
     if (bitNodeNumber === 5 && Player.skills.intelligence === 0) {
       Player.skills.intelligence = 1;
     }

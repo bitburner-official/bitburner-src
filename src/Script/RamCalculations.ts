@@ -12,8 +12,8 @@ import { RamCalculationErrorCode } from "./RamCalculationErrorCodes";
 
 import { RamCosts, RamCostConstants } from "../Netscript/RamCostGenerator";
 import { Script } from "./Script";
-import { areImportsEquals } from "../Terminal/DirectoryHelpers";
 import { Node } from "../NetscriptJSEvaluator";
+import { ScriptFilename, scriptFilenameFromImport } from "../Types/strings";
 
 export interface RamUsageEntry {
   type: "ns" | "dom" | "fn" | "misc";
@@ -40,7 +40,7 @@ const memCheckGlobalKey = ".__GLOBAL__";
  * RAM usage. Also accounts for imported modules.
  * @param {Script[]} otherScripts - All other scripts on the server. Used to account for imported scripts
  * @param {string} code - The code being parsed */
-function parseOnlyRamCalculate(otherScripts: Script[], code: string): RamCalculation {
+function parseOnlyRamCalculate(otherScripts: Map<ScriptFilename, Script>, code: string, ns1?: boolean): RamCalculation {
   try {
     /**
      * Maps dependent identifiers to their dependencies.
@@ -86,16 +86,9 @@ function parseOnlyRamCalculate(otherScripts: Script[], code: string): RamCalcula
       if (nextModule === undefined) throw new Error("nextModule should not be undefined");
       if (nextModule.startsWith("https://") || nextModule.startsWith("http://")) continue;
 
-      let script = null;
-      const fn = nextModule.startsWith("./") ? nextModule.slice(2) : nextModule;
-      for (const s of otherScripts) {
-        if (areImportsEquals(s.filename, fn)) {
-          script = s;
-          break;
-        }
-      }
-
-      if (script == null) {
+      const filename = scriptFilenameFromImport(nextModule, ns1);
+      const script = otherScripts.get(filename);
+      if (!script) {
         return { cost: RamCalculationErrorCode.ImportError }; // No such script on the server
       }
 
@@ -375,9 +368,13 @@ function parseOnlyCalculateDeps(code: string, currentModule: string): ParseDepsR
  * @param {Script[]} otherScripts - All other scripts on the server.
  *                                  Used to account for imported scripts
  */
-export function calculateRamUsage(codeCopy: string, otherScripts: Script[]): RamCalculation {
+export function calculateRamUsage(
+  codeCopy: string,
+  otherScripts: Map<ScriptFilename, Script>,
+  ns1?: boolean,
+): RamCalculation {
   try {
-    return parseOnlyRamCalculate(otherScripts, codeCopy);
+    return parseOnlyRamCalculate(otherScripts, codeCopy, ns1);
   } catch (e) {
     console.error(`Failed to parse script for RAM calculations:`);
     console.error(e);

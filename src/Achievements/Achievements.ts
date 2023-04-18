@@ -66,11 +66,11 @@ function bitNodeFinishedState(): boolean {
 }
 
 function hasAccessToSF(player: PlayerObject, bn: number): boolean {
-  return player.bitNodeN === bn || player.sourceFiles.some((a) => a.n === bn);
+  return player.bitNodeN === bn || player.sourceFileLvl(bn) > 0;
 }
 
 function knowsAboutBitverse(player: PlayerObject): boolean {
-  return player.sourceFiles.some((a) => a.n === 1);
+  return player.sourceFiles.size > 0;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -274,7 +274,7 @@ export const achievements: Record<string, Achievement> = {
   NS2: {
     ...achievementData["NS2"],
     Icon: "ns2",
-    Condition: () => Player.getHomeComputer().scripts.some((s) => s.filename.endsWith(".js")),
+    Condition: () => [...Player.getHomeComputer().scripts.values()].some((s) => s.filename.endsWith(".js")),
   },
   FROZE: {
     ...achievementData["FROZE"],
@@ -317,7 +317,7 @@ export const achievements: Record<string, Achievement> = {
   SCRIPTS_30: {
     ...achievementData["SCRIPTS_30"],
     Icon: "folders",
-    Condition: () => Player.getHomeComputer().scripts.length >= 30,
+    Condition: () => Player.getHomeComputer().scripts.size >= 30,
   },
   KARMA_1000000: {
     ...achievementData["KARMA_1000000"],
@@ -342,7 +342,7 @@ export const achievements: Record<string, Achievement> = {
   SCRIPT_32GB: {
     ...achievementData["SCRIPT_32GB"],
     Icon: "bigcost",
-    Condition: () => Player.getHomeComputer().scripts.some((s) => (s.ramUsage ?? 0) >= 32),
+    Condition: () => [...Player.getHomeComputer().scripts.values()].some((s) => (s.ramUsage ?? 0) >= 32),
   },
   FIRST_HACKNET_NODE: {
     ...achievementData["FIRST_HACKNET_NODE"],

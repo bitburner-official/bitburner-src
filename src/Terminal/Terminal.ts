@@ -400,16 +400,10 @@ export class Terminal {
   }
 
   getScript(filename: string): Script | null {
-    const s = Player.getCurrentServer();
+    const server = Player.getCurrentServer();
     const filepath = this.getFilepath(filename);
-    if (!filepath) return null;
-    for (const script of s.scripts) {
-      if (filepath === script.filename) {
-        return script;
-      }
-    }
-
-    return null;
+    if (filepath === null) return null;
+    return server.scripts.get(filepath) ?? null;
   }
 
   getTextFile(filename: string): TextFile | null {

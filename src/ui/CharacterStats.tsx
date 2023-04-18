@@ -84,7 +84,7 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
 }
 
 function CurrentBitNode(): React.ReactElement {
-  if (Player.sourceFiles.length > 0) {
+  if (Player.sourceFiles.size > 0) {
     const index = "BitNode" + Player.bitNodeN;
     const lvl = Math.min(Player.sourceFileLvl(Player.bitNodeN) + 1, Player.bitNodeN === 12 ? Infinity : 3);
     return (
@@ -175,7 +175,7 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
       {convertMoneySourceTrackerToString(Player.moneySourceA)}
     </>
   );
-  if (Player.sourceFiles.length !== 0) {
+  if (Player.sourceFiles.size > 0) {
     content = (
       <>
         {content}
@@ -205,7 +205,7 @@ export function CharacterStats(): React.ReactElement {
   const timeRows = [
     ["Since last Augmentation installation", convertTimeMsToTimeElapsedString(Player.playtimeSinceLastAug)],
   ];
-  if (Player.sourceFiles.length > 0) {
+  if (Player.sourceFiles.size > 0) {
     timeRows.push(["Since last Bitnode destroyed", convertTimeMsToTimeElapsedString(Player.playtimeSinceLastBitnode)]);
   }
   timeRows.push(["Total", convertTimeMsToTimeElapsedString(Player.totalPlaytime)]);

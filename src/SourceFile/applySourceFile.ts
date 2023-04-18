@@ -1,21 +1,20 @@
-import { PlayerOwnedSourceFile } from "./PlayerOwnedSourceFile";
 import { SourceFiles } from "./SourceFiles";
 
 import { Player } from "@player";
 
-export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
-  const srcFileKey = "SourceFile" + srcFile.n;
+export function applySourceFile(bn: number, lvl: number): void {
+  const srcFileKey = "SourceFile" + bn;
   const sourceFileObject = SourceFiles[srcFileKey];
   if (sourceFileObject == null) {
-    console.error(`Invalid source file number: ${srcFile.n}`);
+    console.error(`Invalid source file number: ${bn}`);
     return;
   }
 
-  switch (srcFile.n) {
+  switch (bn) {
     case 1: {
       // The Source Genesis
       let mult = 0;
-      for (let i = 0; i < srcFile.lvl; ++i) {
+      for (let i = 0; i < lvl; ++i) {
         mult += 16 / Math.pow(2, i);
       }
       const incMult = 1 + mult / 100;
@@ -51,7 +50,7 @@ export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
     case 2: {
       // Rise of the Underworld
       let mult = 0;
-      for (let i = 0; i < srcFile.lvl; ++i) {
+      for (let i = 0; i < lvl; ++i) {
         mult += 24 / Math.pow(2, i);
       }
       const incMult = 1 + mult / 100;
@@ -63,7 +62,7 @@ export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
     case 3: {
       // Corporatocracy
       let mult = 0;
-      for (let i = 0; i < srcFile.lvl; ++i) {
+      for (let i = 0; i < lvl; ++i) {
         mult += 8 / Math.pow(2, i);
       }
       const incMult = 1 + mult / 100;
@@ -79,7 +78,7 @@ export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
     case 5: {
       // Artificial Intelligence
       let mult = 0;
-      for (let i = 0; i < srcFile.lvl; ++i) {
+      for (let i = 0; i < lvl; ++i) {
         mult += 8 / Math.pow(2, i);
       }
       const incMult = 1 + mult / 100;
@@ -94,7 +93,7 @@ export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
     case 6: {
       // Bladeburner
       let mult = 0;
-      for (let i = 0; i < srcFile.lvl; ++i) {
+      for (let i = 0; i < lvl; ++i) {
         mult += 8 / Math.pow(2, i);
       }
       const incMult = 1 + mult / 100;
@@ -111,7 +110,7 @@ export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
     case 7: {
       // Bladeburner 2079
       let mult = 0;
-      for (let i = 0; i < srcFile.lvl; ++i) {
+      for (let i = 0; i < lvl; ++i) {
         mult += 8 / Math.pow(2, i);
       }
       const incMult = 1 + mult / 100;
@@ -124,7 +123,7 @@ export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
     case 8: {
       // Ghost of Wall Street
       let mult = 0;
-      for (let i = 0; i < srcFile.lvl; ++i) {
+      for (let i = 0; i < lvl; ++i) {
         mult += 12 / Math.pow(2, i);
       }
       const incMult = 1 + mult / 100;
@@ -134,7 +133,7 @@ export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
     case 9: {
       // Hacktocracy
       let mult = 0;
-      for (let i = 0; i < srcFile.lvl; ++i) {
+      for (let i = 0; i < lvl; ++i) {
         mult += 12 / Math.pow(2, i);
       }
       const incMult = 1 + mult / 100;
@@ -154,7 +153,7 @@ export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
     case 11: {
       // The Big Crash
       let mult = 0;
-      for (let i = 0; i < srcFile.lvl; ++i) {
+      for (let i = 0; i < lvl; ++i) {
         mult += 32 / Math.pow(2, i);
       }
       const incMult = 1 + mult / 100;
@@ -169,7 +168,7 @@ export function applySourceFile(srcFile: PlayerOwnedSourceFile): void {
       // Grants more space on Stanek's Gift.
       break;
     default:
-      console.error(`Invalid source file number: ${srcFile.n}`);
+      console.error(`Invalid source file number: ${bn}`);
       break;
   }
 

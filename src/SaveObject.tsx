@@ -3,7 +3,7 @@ import { Companies, loadCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
 import { Factions, loadFactions } from "./Faction/Factions";
 import { loadAllGangs, AllGangs } from "./Gang/AllGangs";
-import { Player, loadPlayer } from "./Player";
+import { Player, setPlayer, loadPlayer } from "./Player";
 import {
   saveAllServers,
   loadAllServers,
@@ -27,7 +27,6 @@ import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
 import { PlayerOwnedAugmentation } from "./Augmentation/PlayerOwnedAugmentation";
 import { LocationName } from "./Enums";
-import { PlayerObject } from "./PersonObjects/Player/PlayerObject";
 import { pushGameSaved } from "./Electron";
 import { defaultMonacoTheme } from "./ScriptEditor/ui/themes";
 import { FactionNames } from "./Faction/data/FactionNames";
@@ -35,6 +34,8 @@ import { Faction } from "./Faction/Faction";
 import { safelyCreateUniqueServer } from "./Server/ServerHelpers";
 import { SpecialServers } from "./Server/data/SpecialServers";
 import { v2APIBreak } from "./utils/v2APIBreak";
+import { Script } from "./Script/Script";
+import { JSONMap } from "./Types/Jsonable";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -208,7 +209,7 @@ class BitburnerSaveObject {
       base64: base64Save,
     };
 
-    const importedPlayer = PlayerObject.fromJSON(JSON.parse(parsedSave.data.PlayerSave));
+    const importedPlayer = loadPlayer(parsedSave.data.PlayerSave);
 
     const playerData: ImportPlayerData = {
       identifier: importedPlayer.identifier,
@@ -224,7 +225,7 @@ class BitburnerSaveObject {
 
       bitNode: importedPlayer.bitNodeN,
       bitNodeLevel: importedPlayer.sourceFileLvl(Player.bitNodeN) + 1,
-      sourceFiles: importedPlayer.sourceFiles?.reduce<number>((total, current) => (total += current.lvl), 0) ?? 0,
+      sourceFiles: [...importedPlayer.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0),
     };
 
     data.playerData = playerData;
@@ -345,7 +346,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
         }
         return code;
       }
-      for (const server of GetAllServers()) {
+      for (const server of GetAllServers() as unknown as { scripts: Script[] }[]) {
         for (const script of server.scripts) {
           script.code = convert(script.code);
         }
@@ -663,6 +664,15 @@ function evaluateVersionCompatibility(ver: string | number): void {
     }
     anyPlayer.lastAugReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastAug;
     anyPlayer.lastNodeReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastBitnode;
+    for (const server of GetAllServers()) {
+      if (Array.isArray(server.scripts)) {
+        const oldScripts = server.scripts as Script[];
+        server.scripts = new JSONMap();
+        for (const script of oldScripts) {
+          server.scripts.set(script.filename, script);
+        }
+      }
+    }
   }
 }
 
@@ -673,7 +683,7 @@ function loadGame(saveString: string): boolean {
 
   const saveObj = JSON.parse(saveString, Reviver);
 
-  loadPlayer(saveObj.PlayerSave);
+  setPlayer(loadPlayer(saveObj.PlayerSave));
   loadAllServers(saveObj.AllServersSave);
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave);

@@ -143,10 +143,13 @@ export function SidebarRoot(props: IProps): React.ReactElement {
     Player.factions.length > 0 ||
     Player.augmentations.length > 0 ||
     Player.queuedAugmentations.length > 0 ||
-    Player.sourceFiles.length > 0;
+    Player.sourceFiles.size > 0;
 
   const canOpenAugmentations =
-    Player.augmentations.length > 0 || Player.queuedAugmentations.length > 0 || Player.sourceFiles.length > 0;
+    Player.augmentations.length > 0 ||
+    Player.queuedAugmentations.length > 0 ||
+    Player.sourceFiles.size > 0 ||
+    Player.exploits.length > 0;
 
   const canOpenSleeves = Player.sleeves.length > 0;
 

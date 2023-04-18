@@ -1,6 +1,11 @@
 /* Generic Reviver, toJSON, and fromJSON functions used for saving and loading objects */
-
 import { ObjectValidator, validateObject } from "./Validator";
+import { JSONMap, JSONSet } from "../Types/Jsonable";
+
+type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
+  fromJSON: (value: IReviverValue) => any;
+  validationData?: ObjectValidator<any>;
+};
 
 export interface IReviverValue {
   ctor: string;
@@ -38,15 +43,7 @@ export function Reviver(_key: string, value: unknown): any {
   return obj;
 }
 
-export const constructorsForReviver: Partial<
-  Record<
-    string,
-    (new () => object) & {
-      fromJSON: (value: IReviverValue) => any;
-      validationData?: ObjectValidator<any>;
-    }
-  >
-> = {};
+export const constructorsForReviver: Partial<Record<string, JsonableClass>> = { JSONSet, JSONMap };
 
 /**
  * A generic "toJSON" function that creates the data expected by Reviver.

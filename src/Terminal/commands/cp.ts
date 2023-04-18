@@ -56,17 +56,8 @@ export function cp(args: (string | number | boolean)[], server: BaseServer): voi
     }
 
     // Get the current script
-    let sourceScript = null;
-    for (let i = 0; i < server.scripts.length; ++i) {
-      if (areFilesEqual(server.scripts[i].filename, src)) {
-        sourceScript = server.scripts[i];
-        break;
-      }
-    }
-    if (sourceScript == null) {
-      Terminal.error("cp failed. No such script exists");
-      return;
-    }
+    const sourceScript = server.scripts.get(src);
+    if (!sourceScript) return Terminal.error("cp failed. No such script exists");
 
     const sRes = server.writeToScriptFile(dst, sourceScript.code);
     if (!sRes.success) {

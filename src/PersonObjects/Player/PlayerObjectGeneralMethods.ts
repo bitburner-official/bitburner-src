@@ -586,14 +586,14 @@ export function reapplyAllSourceFiles(this: PlayerObject): void {
   //Will always be called after reapplyAllAugmentations() so multipliers do not have to be reset
   //this.resetMultipliers();
 
-  for (let i = 0; i < this.sourceFiles.length; ++i) {
-    const srcFileKey = "SourceFile" + this.sourceFiles[i].n;
+  for (const [bn, lvl] of this.sourceFiles) {
+    const srcFileKey = "SourceFile" + bn;
     const sourceFileObject = SourceFiles[srcFileKey];
-    if (sourceFileObject == null) {
-      console.error(`Invalid source file number: ${this.sourceFiles[i].n}`);
+    if (!sourceFileObject) {
+      console.error(`Invalid source file number: ${bn}`);
       continue;
     }
-    applySourceFile(this.sourceFiles[i]);
+    applySourceFile(bn, lvl);
   }
   applyExploit();
   this.updateSkillLevels();
@@ -1222,9 +1222,7 @@ export function canAccessCotMG(this: PlayerObject): boolean {
 }
 
 export function sourceFileLvl(this: PlayerObject, n: number): number {
-  const sf = this.sourceFiles.find((sf) => sf.n === n);
-  if (!sf) return 0;
-  return sf.lvl;
+  return this.sourceFiles.get(n) ?? 0;
 }
 
 export function focusPenalty(this: PlayerObject): number {

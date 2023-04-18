@@ -95,7 +95,11 @@ export function v1APIBreak(): void {
   for (const server of GetAllServers()) {
     for (const change of detect) {
       const s: IFileLine[] = [];
-      for (const script of server.scripts) {
+      const scriptsArray: Script[] = Array.isArray(server.scripts)
+        ? (server.scripts as Script[])
+        : [...server.scripts.values()];
+
+      for (const script of scriptsArray) {
         const lines = script.code.split("\n");
         for (let i = 0; i < lines.length; i++) {
           if (lines[i].includes(change[0])) {
@@ -121,7 +125,8 @@ export function v1APIBreak(): void {
     home.writeToTextFile("v1_DETECTED_CHANGES.txt", txt);
   }
 
-  for (const server of GetAllServers()) {
+  // API break function is called before version31 / 2.3.0 changes - scripts is still an array
+  for (const server of GetAllServers() as unknown as { scripts: Script[] }[]) {
     const backups: Script[] = [];
     for (const script of server.scripts) {
       if (!hasChanges(script.code)) continue;
