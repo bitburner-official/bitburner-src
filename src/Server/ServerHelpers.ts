@@ -7,10 +7,11 @@ import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
 import { Programs } from "../Programs/Programs";
-import { LiteratureNames } from "../Literature/data/LiteratureNames";
+import { LiteratureName } from "../Literature/data/LiteratureNames";
 import { Person as IPerson } from "@nsdefs";
 import { isValidNumber } from "../utils/helpers/isValidNumber";
 import { Server as IServer } from "@nsdefs";
+import { Literatures } from "../Literature/Literatures";
 
 /**
  * Constructs a new server, while also ensuring that the new server
@@ -262,7 +263,7 @@ export function prestigeHomeComputer(homeComp: Server): void {
   }
 
   homeComp.messages.length = 0; //Remove .lit and .msg files
-  homeComp.messages.push(LiteratureNames.HackersStartingHandbook);
+  homeComp.messages.push(Literatures[LiteratureName.HackersStartingHandbook].fn);
 }
 
 // Returns the i-th server on the specified server's network

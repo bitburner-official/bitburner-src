@@ -11,11 +11,13 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Player } from "@player";
 import { Programs as AllPrograms } from "../../Programs/Programs";
 import MenuItem from "@mui/material/MenuItem";
+import { programsMetadata } from "../../Programs/data/ProgramsMetadata";
+import { ProgramFilePath } from "../../Paths/ProgramFilePath";
 
 export function Programs(): React.ReactElement {
-  const [program, setProgram] = useState("NUKE.exe");
+  const [program, setProgram] = useState(programsMetadata[0].name);
   function setProgramDropdown(event: SelectChangeEvent<string>): void {
-    setProgram(event.target.value);
+    setProgram(event.target.value as ProgramFilePath);
   }
   function addProgram(): void {
     if (!Player.hasProgram(program)) {

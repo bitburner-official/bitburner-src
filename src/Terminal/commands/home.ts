@@ -1,3 +1,4 @@
+import { root } from "../../Paths/Directory";
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
 
@@ -10,5 +11,5 @@ export function home(args: (string | number | boolean)[]): void {
   Player.currentServer = Player.getHomeComputer().hostname;
   Player.getCurrentServer().isConnectedTo = true;
   Terminal.print("Connected to home");
-  Terminal.setcwd("/");
+  Terminal.setcwd(root);
 }

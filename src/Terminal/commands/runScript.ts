@@ -3,27 +3,20 @@ import { BaseServer } from "../../Server/BaseServer";
 import { LogBoxEvents } from "../../ui/React/LogBoxManager";
 import { startWorkerScript } from "../../NetscriptWorker";
 import { RunningScript } from "../../Script/RunningScript";
-import { findRunningScript } from "../../Script/ScriptHelpers";
 import * as libarg from "arg";
 import { formatRam } from "../../ui/formatNumber";
 import { ScriptArg } from "@nsdefs";
 import { isPositiveInteger } from "../../types";
+import { ScriptFilePath } from "../../Paths/ScriptFilePath";
 
-export function runScript(commandArgs: (string | number | boolean)[], server: BaseServer): void {
-  if (commandArgs.length < 1) {
-    Terminal.error(
-      `Bug encountered with Terminal.runScript(). Command array has a length of less than 1: ${commandArgs}`,
-    );
-    return;
-  }
-
-  const scriptName = Terminal.getFilepath(commandArgs[0] + "");
-  if (!scriptName) return Terminal.error(`Invalid filename: ${commandArgs[0]}`);
+export function runScript(path: ScriptFilePath, commandArgs: (string | number | boolean)[], server: BaseServer): void {
+  const script = server.scripts.get(path);
+  if (!script) return Terminal.error(`Script ${path} does not exist on this server.`);
 
   const runArgs = { "--tail": Boolean, "-t": Number };
   const flags = libarg(runArgs, {
     permissive: true,
-    argv: commandArgs.slice(1),
+    argv: commandArgs,
   });
   const tailFlag = flags["--tail"] === true;
   const numThreads = parseFloat(flags["-t"] ?? 1);
@@ -35,34 +28,24 @@ export function runScript(commandArgs: (string | number | boolean)[], server: Ba
   const args = flags["_"] as ScriptArg[];
 
   // Check if this script is already running
-  if (findRunningScript(scriptName, args, server) != null) {
-    Terminal.error(
-      "This script is already running with the same args. Cannot run multiple instances with the same args",
-    );
-    return;
+  if (server.getRunningScript(path, args)) {
+    return Terminal.error("This script is already running with the same args.");
   }
-
-  // Check if the script exists and if it does run it
-  const script = server.scripts.get(scriptName);
-  if (!script) return Terminal.error("No such script");
 
   const singleRamUsage = script.getRamUsage(server.scripts);
   if (!singleRamUsage) return Terminal.error("Error while calculating ram usage for this script.");
+
   const ramUsage = singleRamUsage * numThreads;
   const ramAvailable = server.maxRam - server.ramUsed;
 
-  if (!server.hasAdminRights) {
-    Terminal.error("Need root access to run script");
-    return;
-  }
+  if (!server.hasAdminRights) return Terminal.error("Need root access to run script");
 
   if (ramUsage > ramAvailable + 0.001) {
-    Terminal.error(
+    return Terminal.error(
       "This machine does not have enough RAM to run this script" +
         (numThreads === 1 ? "" : ` with ${numThreads} threads`) +
         `. Script requires ${formatRam(ramUsage)} of RAM`,
     );
-    return;
   }
 
   // Able to run script
@@ -70,10 +53,7 @@ export function runScript(commandArgs: (string | number | boolean)[], server: Ba
   runningScript.threads = numThreads;
 
   const success = startWorkerScript(runningScript, server);
-  if (!success) {
-    Terminal.error(`Failed to start script`);
-    return;
-  }
+  if (!success) return Terminal.error(`Failed to start script`);
 
   Terminal.print(
     `Running script with ${numThreads} thread(s), pid ${runningScript.pid} and args: ${JSON.stringify(args)}.`,

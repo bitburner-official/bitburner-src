@@ -1,15 +1,28 @@
 import { Theme } from "@mui/material/styles";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import { toString } from "lodash";
 import React from "react";
 import { BaseServer } from "../../Server/BaseServer";
-import { evaluateDirectoryPath, getFirstParentDirectory, isValidDirectoryPath } from "../DirectoryHelpers";
 import { Router } from "../../ui/GameRoot";
 import { Terminal } from "../../Terminal";
 import libarg from "arg";
 import { showLiterature } from "../../Literature/LiteratureHelpers";
-import { MessageFilenames, showMessage } from "../../Message/MessageHelpers";
+import { MessageFilename, showMessage } from "../../Message/MessageHelpers";
+import { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { FilePath, combinePath, removeDirectoryFromPath } from "../../Paths/FilePath";
+import { ContentFilePath } from "../../Files/ContentFile";
+import {
+  Directory,
+  directoryExistsOnServer,
+  getFirstDirectoryInPath,
+  resolveDirectory,
+  root,
+} from "../../Paths/Directory";
+import { TextFilePath } from "../../Paths/TextFilePath";
+import { ContractFilePath } from "../../Paths/ContractFilePath";
+import { ProgramFilePath } from "../../Paths/ProgramFilePath";
+import { checkEnum } from "../../utils/helpers/enum";
+import { LiteratureName } from "../../Literature/data/LiteratureNames";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer): void {
   interface LSFlags {
@@ -31,7 +44,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     incorrectUsage();
     return;
   }
-  const filter = flags["--grep"];
+  const filter = flags["--grep"] ?? "";
 
   const numArgs = args.length;
   function incorrectUsage(): void {
@@ -42,74 +55,46 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     return incorrectUsage();
   }
 
-  // Directory path
-  let prefix = Terminal.cwd();
-  if (!prefix.endsWith("/")) {
-    prefix += "/";
-  }
-
-  // If first arg doesn't contain a - it must be the file/folder
-  const dir = args[0] && typeof args[0] == "string" && !args[0].startsWith("-") ? args[0] : "";
-  const newPath = evaluateDirectoryPath(dir + "", Terminal.cwd());
-  prefix = newPath || "";
-  if (!prefix.endsWith("/")) {
-    prefix += "/";
-  }
-  if (!isValidDirectoryPath(prefix)) {
-    return incorrectUsage();
-  }
-
-  // Root directory, which is the same as no 'prefix' at all
-  if (prefix === "/") {
-    prefix = "";
+  let baseDirectory = Terminal.currDir;
+  // Parse first argument which should be a directory.
+  if (args[0] && typeof args[0] == "string" && !args[0].startsWith("-")) {
+    const directory = resolveDirectory(args[0], args[0].startsWith("/") ? root : Terminal.currDir);
+    if (directory !== null && directoryExistsOnServer(directory, server)) {
+      baseDirectory = directory;
+    } else return incorrectUsage();
   }
 
   // Display all programs and scripts
-  const allPrograms: string[] = [];
-  const allScripts: string[] = [];
-  const allTextFiles: string[] = [];
-  const allContracts: string[] = [];
-  const allMessages: string[] = [];
-  const folders: string[] = [];
+  const allPrograms: ProgramFilePath[] = [];
+  const allScripts: ScriptFilePath[] = [];
+  const allTextFiles: TextFilePath[] = [];
+  const allContracts: ContractFilePath[] = [];
+  const allMessages: FilePath[] = [];
+  const folders: Directory[] = [];
 
-  function handleFn(fn: string, dest: string[]): void {
-    let parsedFn = fn;
-    if (prefix) {
-      if (!fn.startsWith(prefix)) {
-        return;
-      } else {
-        parsedFn = fn.slice(prefix.length, fn.length);
-      }
-    }
+  function handlePath(path: FilePath, dest: FilePath[]): void {
+    // This parses out any files not in the starting directory.
+    const parsedPath = removeDirectoryFromPath(baseDirectory, path);
+    if (!parsedPath) return;
 
-    if (filter && !parsedFn.includes(filter)) {
+    if (!parsedPath.includes(filter)) return;
+
+    // Check if there's a directory in the parsed path, if so we need to add the folder and not the file.
+    const firstParentDir = getFirstDirectoryInPath(parsedPath);
+    if (firstParentDir) {
+      if (!firstParentDir.includes(filter) || folders.includes(firstParentDir)) return;
+      folders.push(firstParentDir);
       return;
     }
-
-    // If the fn includes a forward slash, it must be in a subdirectory.
-    // Therefore, we only list the "first" directory in its path
-    if (parsedFn.includes("/")) {
-      const firstParentDir = getFirstParentDirectory(parsedFn);
-      if (filter && !firstParentDir.includes(filter)) {
-        return;
-      }
-
-      if (!folders.includes(firstParentDir)) {
-        folders.push(firstParentDir);
-      }
-
-      return;
-    }
-
-    dest.push(parsedFn);
+    dest.push(parsedPath);
   }
 
   // Get all of the programs and scripts on the machine into one temporary array
-  for (const program of server.programs) handleFn(program, allPrograms);
-  for (const scriptFilename of server.scripts.keys()) handleFn(scriptFilename, allScripts);
-  for (const txt of server.textFiles) handleFn(txt.fn, allTextFiles);
-  for (const contract of server.contracts) handleFn(contract.fn, allContracts);
-  for (const msgOrLit of server.messages) handleFn(msgOrLit, allMessages);
+  for (const program of server.programs) handlePath(program, allPrograms);
+  for (const scriptFilename of server.scripts.keys()) handlePath(scriptFilename, allScripts);
+  for (const txtFilename of server.textFiles.keys()) handlePath(txtFilename, allTextFiles);
+  for (const contract of server.contracts) handlePath(contract.fn, allContracts);
+  for (const msgOrLit of server.messages) handlePath(msgOrLit as FilePath, allMessages as FilePath[]);
 
   // Sort the files/folders alphabetically then print each
   allPrograms.sort();
@@ -119,13 +104,10 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
   allMessages.sort();
   folders.sort();
 
-  interface ClickableRowProps {
-    row: string;
-    prefix: string;
-    hostname: string;
+  interface ScriptRowProps {
+    scripts: ScriptFilePath[];
   }
-
-  function ClickableScriptRow({ row, prefix, hostname }: ClickableRowProps): React.ReactElement {
+  function ClickableScriptRow({ scripts }: ScriptRowProps): React.ReactElement {
     const classes = makeStyles((theme: Theme) =>
       createStyles({
         scriptLinksWrap: {
@@ -135,48 +117,38 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
         scriptLink: {
           cursor: "pointer",
           textDecorationLine: "underline",
-          paddingRight: "1.15em",
-          "&:last-child": { padding: 0 },
+          marginRight: "1.5em",
+          "&:last-child": { marginRight: 0 },
         },
       }),
     )();
 
-    const rowSplit = row.split("~");
-    let rowSplitArray = rowSplit.map((x) => [x.trim(), x.replace(x.trim(), "")]);
-    rowSplitArray = rowSplitArray.filter((x) => !!x[0]);
-
-    function onScriptLinkClick(filename: string): void {
-      if (!server.isConnectedTo) {
-        return Terminal.error(`File is not on this server, connect to ${hostname} and try again`);
-      }
-      if (filename.startsWith("/")) filename = filename.slice(1);
-      // Terminal.getFilepath needs leading slash to correctly work here
-      if (prefix === "") filename = `/${filename}`;
-      const filepath = Terminal.getFilepath(`${prefix}${filename}`);
-      // Terminal.getScript also calls Terminal.getFilepath and therefore also
-      // needs the given parameter
-      if (!filepath) {
-        return Terminal.error(`Invalid filename (${prefix}${filename}) when clicking script link. This is a bug.`);
-      }
-      const code = toString(Terminal.getScript(`${prefix}${filename}`)?.code);
-      Router.toScriptEditor({ [filepath]: code });
+    function onScriptLinkClick(filename: ScriptFilePath): void {
+      const filePath = combinePath(baseDirectory, filename);
+      const code = server.scripts.get(filePath)?.content ?? "";
+      const map = new Map<ContentFilePath, string>();
+      map.set(filePath, code);
+      Router.toScriptEditor(map);
     }
 
     return (
       <span className={classes.scriptLinksWrap}>
-        {rowSplitArray.map((rowItem) => (
-          <span key={"script_" + rowItem[0]}>
-            <span className={classes.scriptLink} onClick={() => onScriptLinkClick(rowItem[0])}>
-              {rowItem[0]}
+        {scripts.map((script) => (
+          <span key={script}>
+            <span className={classes.scriptLink} onClick={() => onScriptLinkClick(script)}>
+              {script}
             </span>
-            <span>{rowItem[1]}</span>
+            <span></span>
           </span>
         ))}
       </span>
     );
   }
 
-  function ClickableMessageRow({ row, prefix, hostname }: ClickableRowProps): React.ReactElement {
+  interface MessageRowProps {
+    messages: FilePath[];
+  }
+  function ClickableMessageRow({ messages }: MessageRowProps): React.ReactElement {
     const classes = makeStyles((theme: Theme) =>
       createStyles({
         linksWrap: {
@@ -186,41 +158,33 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
         link: {
           cursor: "pointer",
           textDecorationLine: "underline",
-          paddingRight: "1.15em",
-          "&:last-child": { padding: 0 },
+          marginRight: "1.5em",
+          "&:last-child": { marginRight: 0 },
         },
       }),
     )();
 
-    const rowSplit = row.split("~");
-    let rowSplitArray = rowSplit.map((x) => [x.trim(), x.replace(x.trim(), "")]);
-    rowSplitArray = rowSplitArray.filter((x) => !!x[0]);
-
-    function onMessageLinkClick(filename: string): void {
+    function onMessageLinkClick(filename: FilePath): void {
       if (!server.isConnectedTo) {
-        return Terminal.error(`File is not on this server, connect to ${hostname} and try again`);
+        return Terminal.error(`File is not on this server, connect to ${server.hostname} and try again`);
       }
-      if (filename.startsWith("/")) filename = filename.slice(1);
-      const filepath = Terminal.getFilepath(`${prefix}${filename}`);
-      if (!filepath) {
-        return Terminal.error(`Invalid filename ${prefix}${filename} when clicking message link. This is a bug.`);
-      }
+      // Message and lit files have no directories
 
-      if (filepath.endsWith(".lit")) {
-        showLiterature(filepath);
-      } else if (filepath.endsWith(".msg")) {
-        showMessage(filepath as MessageFilenames);
+      if (checkEnum(MessageFilename, filename)) {
+        showMessage(filename);
+      } else if (checkEnum(LiteratureName, filename)) {
+        showLiterature(filename);
       }
     }
 
     return (
       <span className={classes.linksWrap}>
-        {rowSplitArray.map((rowItem) => (
-          <span key={"text_" + rowItem[0]}>
-            <span className={classes.link} onClick={() => onMessageLinkClick(rowItem[0])}>
-              {rowItem[0]}
+        {messages.map((message) => (
+          <span key={message}>
+            <span className={classes.link} onClick={() => onMessageLinkClick(message)}>
+              {message}
             </span>
-            <span>{rowItem[1]}</span>
+            <span></span>
           </span>
         ))}
       </span>
@@ -236,38 +200,50 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     Script,
   }
 
-  interface FileGroup {
-    type: FileType;
-    segments: string[];
-  }
+  type FileGroup =
+    | {
+        // Types that are not clickable only need to be string[]
+        type: FileType.Folder | FileType.Program | FileType.Contract | FileType.TextFile;
+        segments: string[];
+      }
+    | { type: FileType.Message; segments: FilePath[] }
+    | { type: FileType.Script; segments: ScriptFilePath[] };
 
-  function postSegments(group: FileGroup, flags: LSFlags): void {
-    const segments = group.segments;
-    const linked = group.type === FileType.Script || group.type === FileType.Message;
+  function postSegments({ type, segments }: FileGroup, flags: LSFlags): void {
     const maxLength = Math.max(...segments.map((s) => s.length)) + 1;
     const filesPerRow = flags["-l"] === true ? 1 : Math.ceil(80 / maxLength);
-    for (let i = 0; i < segments.length; i++) {
-      let row = "";
-      for (let col = 0; col < filesPerRow; col++) {
-        if (!(i < segments.length)) break;
-        row += segments[i];
-        row += " ".repeat(maxLength * (col + 1) - row.length);
-        if (linked) {
-          row += "~";
+    const padLength = Math.max(maxLength + 2, 40);
+    let i = 0;
+    if (type === FileType.Script) {
+      while (i < segments.length) {
+        const scripts: ScriptFilePath[] = [];
+        for (let col = 0; col < filesPerRow && i < segments.length; col++, i++) {
+          scripts.push(segments[i]);
         }
+        Terminal.printRaw(<ClickableScriptRow scripts={scripts} />);
+      }
+      return;
+    }
+    if (type === FileType.Message) {
+      while (i < segments.length) {
+        const messages: FilePath[] = [];
+        for (let col = 0; col < filesPerRow && i < segments.length; col++, i++) {
+          messages.push(segments[i]);
+        }
+        Terminal.printRaw(<ClickableMessageRow messages={messages} />);
+      }
+      return;
+    }
+    while (i < segments.length) {
+      let row = "";
+      for (let col = 0; col < filesPerRow; col++, i++) {
+        if (!(i < segments.length)) break;
+        row += segments[i].padEnd(padLength);
         i++;
       }
-      i--;
-
-      switch (group.type) {
+      switch (type) {
         case FileType.Folder:
           Terminal.printRaw(<span style={{ color: "cyan" }}>{row}</span>);
-          break;
-        case FileType.Script:
-          Terminal.printRaw(<ClickableScriptRow row={row} prefix={prefix} hostname={server.hostname} />);
-          break;
-        case FileType.Message:
-          Terminal.printRaw(<ClickableMessageRow row={row} prefix={prefix} hostname={server.hostname} />);
           break;
         default:
           Terminal.print(row);
@@ -282,8 +258,8 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     { type: FileType.Program, segments: allPrograms },
     { type: FileType.Contract, segments: allContracts },
     { type: FileType.Script, segments: allScripts },
-  ].filter((g) => g.segments.length > 0);
+  ];
   for (const group of groups) {
-    postSegments(group, flags);
+    if (group.segments.length > 0) postSegments(group, flags);
   }
 }

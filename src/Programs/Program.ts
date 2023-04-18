@@ -1,4 +1,6 @@
+import { ProgramFilePath } from "../Paths/ProgramFilePath";
 import { BaseServer } from "../Server/BaseServer";
+import { programsMetadata } from "./data/ProgramsMetadata";
 
 export interface IProgramCreate {
   level: number;
@@ -8,11 +10,11 @@ export interface IProgramCreate {
 }
 
 export class Program {
-  name = "";
+  name = programsMetadata[0].name;
   create: IProgramCreate | null;
   run: (args: string[], server: BaseServer) => void;
 
-  constructor(name: string, create: IProgramCreate | null, run: (args: string[], server: BaseServer) => void) {
+  constructor(name: ProgramFilePath, create: IProgramCreate | null, run: (args: string[], server: BaseServer) => void) {
     this.name = name;
     this.create = create;
     this.run = run;

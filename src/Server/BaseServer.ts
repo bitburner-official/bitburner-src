@@ -2,17 +2,22 @@ import type { Server as IServer } from "@nsdefs";
 import { CodingContract } from "../CodingContracts";
 import { RunningScript } from "../Script/RunningScript";
 import { Script } from "../Script/Script";
-import { isValidFilePath } from "../Terminal/DirectoryHelpers";
 import { TextFile } from "../TextFile";
 import { IReturnStatus } from "../types";
 
-import { isScriptFilename } from "../Script/isScriptFilename";
+import { ScriptFilePath, hasScriptExtension } from "../Paths/ScriptFilePath";
+import { TextFilePath, hasTextExtension } from "../Paths/TextFilePath";
 
 import { createRandomIp } from "../utils/IPAddress";
 import { compareArrays } from "../utils/helpers/compareArrays";
 import { ScriptArg } from "../Netscript/ScriptArg";
 import { JSONMap } from "../Types/Jsonable";
-import { IPAddress, ScriptFilename, ServerName } from "../Types/strings";
+import { IPAddress, ServerName } from "../Types/strings";
+import { FilePath } from "../Paths/FilePath";
+import { ContentFile, ContentFilePath } from "../Files/ContentFile";
+import { ProgramFilePath } from "../Paths/ProgramFilePath";
+import { MessageFilename } from "src/Message/MessageHelpers";
+import { LiteratureName } from "src/Literature/data/LiteratureNames";
 
 interface IConstructorParams {
   adminRights?: boolean;
@@ -24,7 +29,6 @@ interface IConstructorParams {
 }
 
 interface writeResult {
-  success: boolean;
   overwritten: boolean;
 }
 
@@ -59,14 +63,14 @@ export abstract class BaseServer implements IServer {
   maxRam = 0;
 
   // Message files AND Literature files on this Server
-  messages: string[] = [];
+  messages: ((MessageFilename | LiteratureName) & FilePath)[] = [];
 
   // Name of company/faction/etc. that this server belongs to.
   // Optional, not applicable to all Servers
   organizationName = "";
 
   // Programs on this servers. Contains only the names of the programs
-  programs: string[] = [];
+  programs: ProgramFilePath[] = [];
 
   // RAM (GB) used. i.e. unavailable RAM
   ramUsed = 0;
@@ -75,7 +79,7 @@ export abstract class BaseServer implements IServer {
   runningScripts: RunningScript[] = [];
 
   // Script files on this Server
-  scripts: JSONMap<ScriptFilename, Script> = new JSONMap();
+  scripts: JSONMap<ScriptFilePath, Script> = new JSONMap();
 
   // Contains the hostnames of all servers that are immediately
   // reachable from this one
@@ -91,7 +95,7 @@ export abstract class BaseServer implements IServer {
   sshPortOpen = false;
 
   // Text files on this server
-  textFiles: TextFile[] = [];
+  textFiles: JSONMap<TextFilePath, TextFile> = new JSONMap();
 
   // Flag indicating whether this is a purchased server
   purchasedByPlayer = false;
@@ -132,34 +136,17 @@ export abstract class BaseServer implements IServer {
     return null;
   }
 
-  /**
-   * Find an actively running script on this server
-   * @param scriptName - Filename of script to search for
-   * @param scriptArgs - Arguments that script is being run with
-   * @returns RunningScript for the specified active script
-   *          Returns null if no such script can be found
-   */
-  getRunningScript(scriptName: string, scriptArgs: ScriptArg[]): RunningScript | null {
+  /** Find an actively running script on this server by filepath and args. */
+  getRunningScript(path: ScriptFilePath, scriptArgs: ScriptArg[]): RunningScript | null {
     for (const rs of this.runningScripts) {
-      //compare file names without leading '/' to prevent running multiple script with the same name
-      if (
-        (rs.filename.charAt(0) == "/" ? rs.filename.slice(1) : rs.filename) ===
-          (scriptName.charAt(0) == "/" ? scriptName.slice(1) : scriptName) &&
-        compareArrays(rs.args, scriptArgs)
-      ) {
-        return rs;
-      }
+      if (rs.filename === path && compareArrays(rs.args, scriptArgs)) return rs;
     }
-
     return null;
   }
 
-  /**
-   * Given the name of the script, returns the corresponding
-   * Script object on the server (if it exists)
-   */
-  getScript(scriptName: string): Script | null {
-    return this.scripts.get(scriptName) ?? null;
+  /** Get a TextFile or Script depending on the input path type. */
+  getContentFile(path: ContentFilePath): ContentFile | null {
+    return (hasTextExtension(path) ? this.textFiles.get(path) : this.scripts.get(path)) ?? null;
   }
 
   /** Returns boolean indicating whether the given script is running on this server */
@@ -180,51 +167,44 @@ export abstract class BaseServer implements IServer {
 
   /**
    * Remove a file from the server
-   * @param filename {string} Name of file to be deleted
+   * @param path Name of file to be deleted
    * @returns {IReturnStatus} Return status object indicating whether or not file was deleted
    */
-  removeFile(filename: string): IReturnStatus {
-    if (filename.endsWith(".exe") || filename.match(/^.+\.exe-\d+(?:\.\d*)?%-INC$/) != null) {
-      for (let i = 0; i < this.programs.length; ++i) {
-        if (this.programs[i] === filename) {
-          this.programs.splice(i, 1);
-          return { res: true };
-        }
-      }
-    } else if (isScriptFilename(filename)) {
-      const script = this.scripts.get(filename);
-      if (!script) return { res: false, msg: `script ${filename} not found.` };
-      if (this.isRunning(filename)) {
-        return { res: false, msg: "Cannot delete a script that is currently running!" };
-      }
-      script.invalidateModule();
-      this.scripts.delete(filename);
+  removeFile(path: FilePath): IReturnStatus {
+    if (hasTextExtension(path)) {
+      const textFile = this.textFiles.get(path);
+      if (!textFile) return { res: false, msg: `Text file ${path} not found.` };
+      this.textFiles.delete(path);
       return { res: true };
-    } else if (filename.endsWith(".lit")) {
-      for (let i = 0; i < this.messages.length; ++i) {
-        const f = this.messages[i];
-        if (typeof f === "string" && f === filename) {
-          this.messages.splice(i, 1);
-          return { res: true };
-        }
-      }
-    } else if (filename.endsWith(".txt")) {
-      for (let i = 0; i < this.textFiles.length; ++i) {
-        if (this.textFiles[i].fn === filename) {
-          this.textFiles.splice(i, 1);
-          return { res: true };
-        }
-      }
-    } else if (filename.endsWith(".cct")) {
-      for (let i = 0; i < this.contracts.length; ++i) {
-        if (this.contracts[i].fn === filename) {
-          this.contracts.splice(i, 1);
-          return { res: true };
-        }
-      }
+    }
+    if (hasScriptExtension(path)) {
+      const script = this.scripts.get(path);
+      if (!script) return { res: false, msg: `Script ${path} not found.` };
+      if (this.isRunning(path)) return { res: false, msg: "Cannot delete a script that is currently running!" };
+      script.invalidateModule();
+      this.scripts.delete(path);
+      return { res: true };
+    }
+    if (path.endsWith(".exe") || path.match(/^.+\.exe-\d+(?:\.\d*)?%-INC$/) != null) {
+      const programIndex = this.programs.findIndex((program) => program === path);
+      if (programIndex === -1) return { res: false, msg: `Program ${path} does not exist` };
+      this.programs.splice(programIndex, 1);
+      return { res: true };
+    }
+    if (path.endsWith(".lit")) {
+      const litIndex = this.messages.findIndex((lit) => lit === path);
+      if (litIndex === -1) return { res: false, msg: `Literature file ${path} does not exist` };
+      this.messages.splice(litIndex, 1);
+      return { res: true };
+    }
+    if (path.endsWith(".cct")) {
+      const contractIndex = this.contracts.findIndex((program) => program);
+      if (contractIndex === -1) return { res: false, msg: `Contract file ${path} does not exist` };
+      this.contracts.splice(contractIndex, 1);
+      return { res: true };
     }
 
-    return { res: false, msg: "No such file exists" };
+    return { res: false, msg: `Unhandled file extension on file path ${path}` };
   }
 
   /**
@@ -245,15 +225,13 @@ export abstract class BaseServer implements IServer {
     this.ramUsed = ram;
   }
 
-  pushProgram(program: string): void {
+  pushProgram(program: ProgramFilePath): void {
     if (this.programs.includes(program)) return;
 
     // Remove partially created program if there is one
     const existingPartialExeIndex = this.programs.findIndex((p) => p.startsWith(program));
     // findIndex returns -1 if there is no match, we only want to splice on a match
-    if (existingPartialExeIndex > -1) {
-      this.programs.splice(existingPartialExeIndex, 1);
-    }
+    if (existingPartialExeIndex > -1) this.programs.splice(existingPartialExeIndex, 1);
 
     this.programs.push(program);
   }
@@ -262,47 +240,41 @@ export abstract class BaseServer implements IServer {
    * Write to a script file
    * Overwrites existing files. Creates new files if the script does not exist.
    */
-  writeToScriptFile(filename: string, code: string): writeResult {
-    if (!isValidFilePath(filename) || !isScriptFilename(filename)) {
-      return { success: false, overwritten: false };
-    }
-
+  writeToScriptFile(filename: ScriptFilePath, code: string): writeResult {
     // Check if the script already exists, and overwrite it if it does
     const script = this.scripts.get(filename);
     if (script) {
-      script.invalidateModule();
-      script.code = code;
-      return { success: true, overwritten: true };
+      // content setter handles module invalidation and code formatting
+      script.content = code;
+      return { overwritten: true };
     }
 
     // Otherwise, create a new script
     const newScript = new Script(filename, code, this.hostname);
     this.scripts.set(filename, newScript);
-    return { success: true, overwritten: false };
+    return { overwritten: false };
   }
 
   // Write to a text file
   // Overwrites existing files. Creates new files if the text file does not exist
-  writeToTextFile(fn: string, txt: string): writeResult {
-    const ret = { success: false, overwritten: false };
-    if (!isValidFilePath(fn) || !fn.endsWith("txt")) {
-      return ret;
-    }
-
+  writeToTextFile(textPath: TextFilePath, txt: string): writeResult {
     // Check if the text file already exists, and overwrite if it does
-    for (let i = 0; i < this.textFiles.length; ++i) {
-      if (this.textFiles[i].fn === fn) {
-        ret.overwritten = true;
-        this.textFiles[i].text = txt;
-        ret.success = true;
-        return ret;
-      }
+    const existingFile = this.textFiles.get(textPath);
+    // overWrite if already exists
+    if (existingFile) {
+      existingFile.text = txt;
+      return { overwritten: true };
     }
 
     // Otherwise create a new text file
-    const newFile = new TextFile(fn, txt);
-    this.textFiles.push(newFile);
-    ret.success = true;
-    return ret;
+    const newFile = new TextFile(textPath, txt);
+    this.textFiles.set(textPath, newFile);
+    return { overwritten: false };
+  }
+
+  /** Write to a Script or TextFile */
+  writeToContentFile(path: ContentFilePath, content: string): writeResult {
+    if (hasTextExtension(path)) return this.writeToTextFile(path, content);
+    return this.writeToScriptFile(path, content);
   }
 }

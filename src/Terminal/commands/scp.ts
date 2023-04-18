@@ -1,71 +1,40 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { GetServer } from "../../Server/AllServers";
-import { isScriptFilename } from "../../Script/isScriptFilename";
+import { hasScriptExtension } from "../../Paths/ScriptFilePath";
+import { hasTextExtension } from "../../Paths/TextFilePath";
+import { checkEnum } from "../../utils/helpers/enum";
+import { LiteratureName } from "../../Literature/data/LiteratureNames";
 
 export function scp(args: (string | number | boolean)[], server: BaseServer): void {
-  try {
-    if (args.length !== 2) {
-      Terminal.error("Incorrect usage of scp command. Usage: scp [file] [destination hostname]");
-      return;
-    }
-    const scriptname = Terminal.getFilepath(args[0] + "");
-    if (!scriptname) return Terminal.error(`Invalid filename: ${args[0]}`);
-    if (!scriptname.endsWith(".lit") && !isScriptFilename(scriptname) && !scriptname.endsWith(".txt")) {
-      Terminal.error("scp only works for scripts, text files (.txt), and literature files (.lit)");
-      return;
-    }
-
-    const destServer = GetServer(args[1] + "");
-    if (destServer == null) {
-      Terminal.error(`Invalid destination. ${args[1]} not found`);
-      return;
-    }
-
-    // Scp for lit files
-    if (scriptname.endsWith(".lit")) {
-      if (!server.messages.includes(scriptname)) return Terminal.error("No such file exists!");
-
-      const onDestServer = destServer.messages.includes(scriptname);
-      if (!onDestServer) destServer.messages.push(scriptname);
-      return Terminal.print(`${scriptname} ${onDestServer ? "was already on" : "copied to"} ${destServer.hostname}`);
-    }
-
-    // Scp for txt files
-    if (scriptname.endsWith(".txt")) {
-      const txtFile = server.textFiles.find((txtFile) => txtFile.fn === scriptname);
-      if (!txtFile) return Terminal.error("No such file exists!");
-
-      const tRes = destServer.writeToTextFile(txtFile.fn, txtFile.text);
-      if (!tRes.success) {
-        Terminal.error("scp failed");
-        return;
-      }
-      if (tRes.overwritten) {
-        Terminal.print(`WARNING: ${scriptname} already exists on ${destServer.hostname} and will be overwritten`);
-        Terminal.print(`${scriptname} overwritten on ${destServer.hostname}`);
-        return;
-      }
-      Terminal.print(`${scriptname} copied over to ${destServer.hostname}`);
-      return;
-    }
-
-    // Get the current script
-    const sourceScript = server.scripts.get(scriptname);
-    if (!sourceScript) return Terminal.error("scp failed. No such script exists");
-
-    const sRes = destServer.writeToScriptFile(scriptname, sourceScript.code);
-    if (!sRes.success) {
-      Terminal.error(`scp failed`);
-      return;
-    }
-    if (sRes.overwritten) {
-      Terminal.print(`WARNING: ${scriptname} already exists on ${destServer.hostname} and will be overwritten`);
-      Terminal.print(`${scriptname} overwritten on ${destServer.hostname}`);
-      return;
-    }
-    Terminal.print(`${scriptname} copied over to ${destServer.hostname}`);
-  } catch (e) {
-    Terminal.error(e + "");
+  if (args.length !== 2) {
+    return Terminal.error("Incorrect usage of scp command. Usage: scp [source filename] [destination hostname]");
   }
+  const [scriptname, destHostname] = args.map((arg) => arg + "");
+
+  const path = Terminal.getFilepath(scriptname);
+  if (!path) return Terminal.error(`Invalid file path: ${scriptname}`);
+
+  const destServer = GetServer(destHostname);
+  if (!destServer) return Terminal.error(`Invalid destination server: ${args[1]}`);
+
+  // Lit files
+  if (path.endsWith(".lit")) {
+    if (!checkEnum(LiteratureName, path) || !server.messages.includes(path)) {
+      return Terminal.error(`No file at path ${path}`);
+    }
+    if (destServer.messages.includes(path)) return Terminal.print(`${path} was already on ${destHostname}`);
+    destServer.messages.push(path);
+    return Terminal.print(`Copied ${path} to ${destHostname}`);
+  }
+
+  if (!hasScriptExtension(path) && !hasTextExtension(path)) {
+    return Terminal.error("scp only works for scripts, text files (.txt), and literature files (.lit)");
+  }
+  // Text or script
+  const source = server.getContentFile(path);
+  if (!source) return Terminal.error(`No file at path ${path}`);
+  const { overwritten } = destServer.writeToContentFile(path, source.content);
+  if (overwritten) Terminal.warn(`${path} already exists on ${destHostname} and will be overwritten`);
+  Terminal.print(`${path} copied to ${destHostname}`);
 }

@@ -1,8 +1,8 @@
 import { Player } from "@player";
-
-import { LiteratureNames } from "./Literature/data/LiteratureNames";
-
+import { LiteratureName } from "./Literature/data/LiteratureNames";
 import { ITutorialEvents } from "./ui/InteractiveTutorial/ITutorialEvents";
+import { isFilePath } from "./Paths/FilePath";
+import { isAbsolutePath } from "./Paths/Directory";
 
 // Ordered array of keys to Interactive Tutorial Steps
 enum iTutorialSteps {
@@ -104,7 +104,10 @@ function iTutorialEnd(): void {
   ITutorial.isRunning = false;
   ITutorial.currStep = iTutorialSteps.Start;
   const messages = Player.getHomeComputer().messages;
-  const handbook = LiteratureNames.HackersStartingHandbook;
+  const handbook = LiteratureName.HackersStartingHandbook;
+  if (!isFilePath(handbook) || !isAbsolutePath(handbook)) {
+    throw new Error(`Handbook had an invalid file name: ${handbook} This is a bug`);
+  }
   if (!messages.includes(handbook)) messages.push(handbook);
   ITutorialEvents.emit();
 }

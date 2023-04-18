@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import { KEY, KEYCODE } from "../../utils/helpers/keyCodes";
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
-import { determineAllPossibilitiesForTabCompletion } from "../determineAllPossibilitiesForTabCompletion";
+import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities";
 import { tabCompletion } from "../tabCompletion";
 import { Settings } from "../../Settings/Settings";
 
@@ -222,7 +222,7 @@ export function TerminalInput(): React.ReactElement {
       if (index < -1) {
         index = 0;
       }
-      const allPos = await determineAllPossibilitiesForTabCompletion(copy, index, Terminal.cwd());
+      const allPos = await getTabCompletionPossibilities(copy, index, Terminal.cwd());
       if (allPos.length == 0) {
         return;
       }

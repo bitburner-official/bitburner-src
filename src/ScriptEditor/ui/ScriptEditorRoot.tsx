@@ -8,14 +8,12 @@ type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 type ITextModel = monaco.editor.ITextModel;
 import { OptionsModal } from "./OptionsModal";
 import { Options } from "./Options";
-import { isValidFilePath } from "../../Terminal/DirectoryHelpers";
 import { Player } from "@player";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { isScriptFilename } from "../../Script/isScriptFilename";
+import { ScriptFilePath } from "../../Paths/ScriptFilePath";
 import { Script } from "../../Script/Script";
-import { TextFile } from "../../TextFile";
 import { calculateRamUsage, checkInfiniteLoop } from "../../Script/RamCalculations";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { formatRam } from "../../ui/formatNumber";
@@ -48,10 +46,12 @@ import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
 import { TextField, Tooltip } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
 import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
+import { TextFilePath } from "src/Paths/TextFilePath";
+import { ContentFilePath } from "src/Files/ContentFile";
 
 interface IProps {
   // Map of filename -> code
-  files: Record<string, string>;
+  files: Map<ScriptFilePath | TextFilePath, string>;
   hostname: string;
   vim: boolean;
 }
@@ -75,20 +75,20 @@ export function SetupTextEditor(): void {
 
 // Holds all the data for a open script
 class OpenScript {
-  fileName: string;
+  path: ContentFilePath;
   code: string;
   hostname: string;
   lastPosition: monaco.Position;
   model: ITextModel;
   isTxt: boolean;
 
-  constructor(fileName: string, code: string, hostname: string, lastPosition: monaco.Position, model: ITextModel) {
-    this.fileName = fileName;
+  constructor(path: ContentFilePath, code: string, hostname: string, lastPosition: monaco.Position, model: ITextModel) {
+    this.path = path;
     this.code = code;
     this.hostname = hostname;
     this.lastPosition = lastPosition;
     this.model = model;
-    this.isTxt = fileName.endsWith(".txt");
+    this.isTxt = path.endsWith(".txt");
   }
 }
 
@@ -232,7 +232,7 @@ export function Root(props: IProps): React.ReactElement {
   }, 300);
 
   function updateRAM(newCode: string): void {
-    if (currentScript != null && currentScript.isTxt) {
+    if (!currentScript || currentScript.isTxt) {
       setRAM("N/A");
       setRamEntries([["N/A", ""]]);
       return;
@@ -338,18 +338,16 @@ export function Root(props: IProps): React.ReactElement {
       return;
     }
     if (props.files) {
-      const files = Object.entries(props.files);
+      const files = props.files;
 
-      if (!files.length) {
+      if (!files.size) {
         editorRef.current.focus();
         return;
       }
 
       for (const [filename, code] of files) {
         // Check if file is already opened
-        const openScript = openScripts.find(
-          (script) => script.fileName === filename && script.hostname === props.hostname,
-        );
+        const openScript = openScripts.find((script) => script.path === filename && script.hostname === props.hostname);
         if (openScript) {
           // Script is already opened
           if (openScript.model === undefined || openScript.model === null || openScript.model.isDisposed()) {
@@ -383,7 +381,7 @@ export function Root(props: IProps): React.ReactElement {
 
   function infLoop(newCode: string): void {
     if (editorRef.current === null || currentScript === null) return;
-    if (!currentScript.fileName.endsWith(".js")) return;
+    if (!currentScript.path.endsWith(".js")) return;
     const awaitWarning = checkInfiniteLoop(newCode);
     if (awaitWarning !== -1) {
       const newDecorations = editorRef.current.deltaDecorations(decorations, [
@@ -429,37 +427,9 @@ export function Root(props: IProps): React.ReactElement {
 
   function saveScript(scriptToSave: OpenScript): void {
     const server = GetServer(scriptToSave.hostname);
-    if (server === null) throw new Error("Server should not be null but it is.");
-    if (isScriptFilename(scriptToSave.fileName)) {
-      //If the current script already exists on the server, overwrite it
-      const existingScript = server.scripts.get(scriptToSave.fileName);
-      if (existingScript) {
-        existingScript.saveScript(scriptToSave.fileName, scriptToSave.code, Player.currentServer);
-        if (Settings.SaveGameOnFileSave) saveObject.saveGame();
-        Router.toPage(Page.Terminal);
-        return;
-      }
-
-      //If the current script does NOT exist, create a new one
-      const script = new Script();
-      script.saveScript(scriptToSave.fileName, scriptToSave.code, Player.currentServer);
-      server.scripts.set(scriptToSave.fileName, script);
-    } else if (scriptToSave.isTxt) {
-      for (let i = 0; i < server.textFiles.length; ++i) {
-        if (server.textFiles[i].fn === scriptToSave.fileName) {
-          server.textFiles[i].write(scriptToSave.code);
-          if (Settings.SaveGameOnFileSave) saveObject.saveGame();
-          Router.toPage(Page.Terminal);
-          return;
-        }
-      }
-      const textFile = new TextFile(scriptToSave.fileName, scriptToSave.code);
-      server.textFiles.push(textFile);
-    } else {
-      dialogBoxCreate("Invalid filename. Must be either a script (.script or .js) or a text file (.txt)");
-      return;
-    }
-
+    if (!server) throw new Error("Server should not be null but it is.");
+    // This server helper already handles overwriting, etc.
+    server.writeToContentFile(scriptToSave.path, scriptToSave.code);
     if (Settings.SaveGameOnFileSave) saveObject.saveGame();
     Router.toPage(Page.Terminal);
   }
@@ -472,7 +442,7 @@ export function Root(props: IProps): React.ReactElement {
     // this is duplicate code with saving later.
     if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalTypeScript) {
       //Make sure filename + code properly follow tutorial
-      if (currentScript.fileName !== "n00dles.script" && currentScript.fileName !== "n00dles.js") {
+      if (currentScript.path !== "n00dles.script" && currentScript.path !== "n00dles.js") {
         dialogBoxCreate("Don't change the script name for now.");
         return;
       }
@@ -492,50 +462,9 @@ export function Root(props: IProps): React.ReactElement {
       return;
     }
 
-    if (currentScript.fileName == "") {
-      dialogBoxCreate("You must specify a filename!");
-      return;
-    }
-
-    if (!isValidFilePath(currentScript.fileName)) {
-      dialogBoxCreate(
-        "Script filename can contain only alphanumerics, hyphens, and underscores, and must end with an extension.",
-      );
-      return;
-    }
-
     const server = GetServer(currentScript.hostname);
     if (server === null) throw new Error("Server should not be null but it is.");
-    if (isScriptFilename(currentScript.fileName)) {
-      //If the current script already exists on the server, overwrite it
-      const existingScript = server.scripts.get(currentScript.fileName);
-      if (existingScript) {
-        existingScript.saveScript(currentScript.fileName, currentScript.code, Player.currentServer);
-        if (Settings.SaveGameOnFileSave) saveObject.saveGame();
-        rerender();
-        return;
-      }
-
-      //If the current script does NOT exist, create a new one
-      const script = new Script();
-      script.saveScript(currentScript.fileName, currentScript.code, Player.currentServer);
-      server.scripts.set(currentScript.fileName, script);
-    } else if (currentScript.isTxt) {
-      for (let i = 0; i < server.textFiles.length; ++i) {
-        if (server.textFiles[i].fn === currentScript.fileName) {
-          server.textFiles[i].write(currentScript.code);
-          if (Settings.SaveGameOnFileSave) saveObject.saveGame();
-          rerender();
-          return;
-        }
-      }
-      const textFile = new TextFile(currentScript.fileName, currentScript.code);
-      server.textFiles.push(textFile);
-    } else {
-      dialogBoxCreate("Invalid filename. Must be either a script (.script or .js) or a text file (.txt)");
-      return;
-    }
-
+    server.writeToContentFile(currentScript.path, currentScript.code);
     if (Settings.SaveGameOnFileSave) saveObject.saveGame();
     rerender();
   }
@@ -555,9 +484,7 @@ export function Root(props: IProps): React.ReactElement {
     if (currentScript !== null) {
       return openScripts.findIndex(
         (script) =>
-          currentScript !== null &&
-          script.fileName === currentScript.fileName &&
-          script.hostname === currentScript.hostname,
+          currentScript !== null && script.path === currentScript.path && script.hostname === currentScript.hostname,
       );
     }
 
@@ -596,7 +523,7 @@ export function Root(props: IProps): React.ReactElement {
 
     if (dirty(index)) {
       PromptEvent.emit({
-        txt: `Do you want to save changes to ${closingScript.fileName} on ${closingScript.hostname}?`,
+        txt: `Do you want to save changes to ${closingScript.path} on ${closingScript.hostname}?`,
         resolve: (result: boolean | string) => {
           if (result) {
             // Save changes
@@ -641,7 +568,7 @@ export function Root(props: IProps): React.ReactElement {
       PromptEvent.emit({
         txt:
           "Do you want to overwrite the current editor content with the contents of " +
-          openScript.fileName +
+          openScript.path +
           " on the server? This cannot be undone.",
         resolve: (result: boolean | string) => {
           if (result) {
@@ -679,10 +606,8 @@ export function Root(props: IProps): React.ReactElement {
     const openScript = openScripts[index];
     const server = GetServer(openScript.hostname);
     if (server === null) throw new Error(`Server '${openScript.hostname}' should not be null, but it is.`);
-    const data = openScript.isTxt
-      ? server.textFiles.find((t) => t.filename === openScript.fileName)?.text
-      : server.scripts.get(openScript.fileName)?.code;
-    return data ?? null;
+    const data = server.getContentFile(openScript.path)?.content ?? null;
+    return data;
   }
   function handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setFilter(event.target.value);
@@ -692,7 +617,7 @@ export function Root(props: IProps): React.ReactElement {
     setSearchExpanded(!searchExpanded);
   }
   const filteredOpenScripts = Object.values(openScripts).filter(
-    (script) => script.hostname.includes(filter) || script.fileName.includes(filter),
+    (script) => script.hostname.includes(filter) || script.path.includes(filter),
   );
 
   const tabsMaxWidth = 1640;
@@ -747,9 +672,9 @@ export function Root(props: IProps): React.ReactElement {
                     </Button>
                   )}
                 </Tooltip>
-                {filteredOpenScripts.map(({ fileName, hostname }, index) => {
+                {filteredOpenScripts.map(({ path: fileName, hostname }, index) => {
                   const editingCurrentScript =
-                    currentScript?.fileName === filteredOpenScripts[index].fileName &&
+                    currentScript?.path === filteredOpenScripts[index].path &&
                     currentScript?.hostname === filteredOpenScripts[index].hostname;
                   const externalScript = hostname !== "home";
                   const colorProps = editingCurrentScript

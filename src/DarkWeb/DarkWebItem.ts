@@ -1,9 +1,11 @@
+import { ProgramFilePath } from "../Paths/ProgramFilePath";
+
 export class DarkWebItem {
-  program: string;
+  program: ProgramFilePath;
   price: number;
   description: string;
 
-  constructor(program: string, price: number, description: string) {
+  constructor(program: ProgramFilePath, price: number, description: string) {
     this.program = program;
     this.price = price;
     this.description = description;

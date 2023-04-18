@@ -7,24 +7,26 @@ import { Programs } from "../Programs/Programs";
 import { Work, WorkType } from "./Work";
 import { Program } from "../Programs/Program";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
+import { ProgramFilePath, isProgramFilePath } from "../Paths/ProgramFilePath";
+import { programsMetadata } from "../Programs/data/ProgramsMetadata";
 
 export const isCreateProgramWork = (w: Work | null): w is CreateProgramWork =>
   w !== null && w.type === WorkType.CREATE_PROGRAM;
 
 interface CreateProgramWorkParams {
-  programName: string;
+  programName: ProgramFilePath;
   singularity: boolean;
 }
 
 export class CreateProgramWork extends Work {
-  programName: string;
+  programName: ProgramFilePath;
   // amount of effective work completed on the program (time boosted by skills).
   unitCompleted: number;
 
   constructor(params?: CreateProgramWorkParams) {
     super(WorkType.CREATE_PROGRAM, params?.singularity ?? true);
     this.unitCompleted = 0;
-    this.programName = params?.programName ?? "";
+    this.programName = params?.programName ?? programsMetadata[0].name;
 
     if (params) {
       for (let i = 0; i < Player.getHomeComputer().programs.length; ++i) {
@@ -96,6 +98,9 @@ export class CreateProgramWork extends Work {
       //Incomplete case
       const perc = ((100 * this.unitCompleted) / this.unitNeeded()).toFixed(2);
       const incompleteName = programName + "-" + perc + "%-INC";
+      if (!isProgramFilePath(incompleteName)) {
+        throw new Error("Incomplete filename failed to validate, this is a bug.");
+      }
       Player.getHomeComputer().programs.push(incompleteName);
     }
   }

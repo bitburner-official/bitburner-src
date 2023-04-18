@@ -1,6 +1,5 @@
 import { Player } from "@player";
 import { Router } from "./ui/GameRoot";
-import { removeLeadingSlash } from "./Terminal/DirectoryHelpers";
 import { Terminal } from "./Terminal";
 import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
 import { IReturnStatus } from "./types";
@@ -11,6 +10,8 @@ import { exportScripts } from "./Terminal/commands/download";
 import { CONSTANTS } from "./Constants";
 import { hash } from "./hash/hash";
 import { Buffer } from "buffer";
+import { resolveFilePath } from "./Paths/FilePath";
+import { hasScriptExtension } from "./Paths/ScriptFilePath";
 
 interface IReturnWebStatus extends IReturnStatus {
   data?: Record<string, unknown>;
@@ -55,23 +56,9 @@ export function initElectron(): void {
 }
 
 function initWebserver(): void {
-  function normalizeFileName(filename: string): string {
-    filename = filename.replace(/\/\/+/g, "/");
-    filename = removeLeadingSlash(filename);
-    if (filename.includes("/")) {
-      filename = "/" + removeLeadingSlash(filename);
-    }
-    return filename;
-  }
-
   document.getFiles = function (): IReturnWebStatus {
     const home = GetServer("home");
-    if (home === null) {
-      return {
-        res: false,
-        msg: "Home server does not exist.",
-      };
-    }
+    if (home === null) return { res: false, msg: "Home server does not exist." };
     return {
       res: true,
       data: {
@@ -85,40 +72,28 @@ function initWebserver(): void {
   };
 
   document.deleteFile = function (filename: string): IReturnWebStatus {
-    filename = normalizeFileName(filename);
+    const path = resolveFilePath(filename);
+    if (!path) return { res: false, msg: "Invalid file path." };
     const home = GetServer("home");
-    if (home === null) {
-      return {
-        res: false,
-        msg: "Home server does not exist.",
-      };
-    }
-    return home.removeFile(filename);
+    if (!home) return { res: false, msg: "Home server does not exist." };
+    return home.removeFile(path);
   };
 
   document.saveFile = function (filename: string, code: string): IReturnWebStatus {
-    filename = normalizeFileName(filename);
+    const path = resolveFilePath(filename);
+    if (!path) return { res: false, msg: "Invalid file path." };
+    if (!hasScriptExtension(path)) return { res: false, msg: "Invalid file extension: must be a script" };
 
     code = Buffer.from(code, "base64").toString();
     const home = GetServer("home");
-    if (home === null) {
-      return {
-        res: false,
-        msg: "Home server does not exist.",
-      };
-    }
-    const { success, overwritten } = home.writeToScriptFile(filename, code);
-    let script;
-    if (success) {
-      script = home.getScript(filename);
-    }
-    return {
-      res: success,
-      data: {
-        overwritten,
-        ramUsage: script?.ramUsage,
-      },
-    };
+    if (!home) return { res: false, msg: "Home server does not exist." };
+
+    const { overwritten } = home.writeToScriptFile(path, code);
+    const script = home.scripts.get(path);
+    if (!script) return { res: false, msg: "Somehow failed to get script after writing it. This is a bug." };
+
+    const ramUsage = script.getRamUsage(home.scripts);
+    return { res: true, data: { overwritten, ramUsage } };
   };
 }
 

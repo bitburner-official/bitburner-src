@@ -1,37 +1,12 @@
 import { Terminal } from "../../Terminal";
-import { Player } from "@player";
 import { BaseServer } from "../../Server/BaseServer";
-import { Server } from "../../Server/Server";
 
 export function weaken(args: (string | number | boolean)[], server: BaseServer): void {
-  if (args.length !== 0) {
-    Terminal.error("Incorrect usage of weaken command. Usage: weaken");
-    return;
-  }
+  if (args.length !== 0) return Terminal.error("Incorrect usage of weaken command. Usage: weaken");
 
-  if (!(server instanceof Server)) {
-    Terminal.error(
-      "Cannot weaken your own machines! You are currently connected to your home PC or one of your purchased servers",
-    );
-  }
-  const normalServer = server as Server;
-  // Hack the current PC (usually for money)
-  // You can't weaken your home pc or servers you purchased
-  if (normalServer.purchasedByPlayer) {
-    Terminal.error(
-      "Cannot weaken your own machines! You are currently connected to your home PC or one of your purchased servers",
-    );
-    return;
-  }
-  if (!normalServer.hasAdminRights) {
-    Terminal.error("You do not have admin rights for this machine! Cannot weaken");
-    return;
-  }
-  if (normalServer.requiredHackingSkill > Player.skills.hacking) {
-    Terminal.error(
-      "Your hacking skill is not high enough to attempt hacking this machine. Try analyzing the machine to determine the required hacking skill",
-    );
-    return;
-  }
+  if (server.purchasedByPlayer) return Terminal.error("Cannot weaken your own machines!");
+  if (!server.hasAdminRights) return Terminal.error("You do not have admin rights for this machine!");
+  // Weaken does not require meeting the hacking level, but undefined requiredHackingSkill indicates the wrong type of server.
+  if (server.requiredHackingSkill === undefined) return Terminal.error("Cannot weaken this server.");
   Terminal.startWeaken();
 }

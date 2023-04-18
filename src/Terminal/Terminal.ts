@@ -10,11 +10,10 @@ import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
 
 import { TextFile } from "../TextFile";
 import { Script } from "../Script/Script";
-import { isScriptFilename } from "../Script/isScriptFilename";
+import { hasScriptExtension } from "../Paths/ScriptFilePath";
 import { CONSTANTS } from "../Constants";
 import { GetServer, GetAllServers } from "../Server/AllServers";
 
-import { removeLeadingSlash, isInRootDirectory, evaluateFilePath } from "./DirectoryHelpers";
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
 import { getServerOnNetwork, processSingleServerGrowth } from "../Server/ServerHelpers";
@@ -77,6 +76,9 @@ import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Engine } from "../engine";
+import { Directory, resolveDirectory, root } from "../Paths/Directory";
+import { FilePath, resolveFilePath } from "../Paths/FilePath";
+import { hasTextExtension } from "../Paths/TextFilePath";
 
 export class Terminal {
   // Flags to determine whether the player is currently running a hack or an analyze
@@ -92,9 +94,8 @@ export class Terminal {
   // True if a Coding Contract prompt is opened
   contractOpen = false;
 
-  // Full Path of current directory
-  // Excludes the trailing forward slash
-  currDir = "/";
+  // Path of current directory
+  currDir = "" as Directory;
 
   process(cycles: number): void {
     if (this.action === null) return;
@@ -377,46 +378,40 @@ export class Terminal {
   }
 
   getFile(filename: string): Script | TextFile | string | null {
-    if (isScriptFilename(filename)) {
-      return this.getScript(filename);
-    }
-
-    if (filename.endsWith(".lit")) {
-      return this.getLitFile(filename);
-    }
-
-    if (filename.endsWith(".txt")) {
-      return this.getTextFile(filename);
-    }
-
+    if (hasScriptExtension(filename)) return this.getScript(filename);
+    if (hasTextExtension(filename)) return this.getTextFile(filename);
+    if (filename.endsWith(".lit")) return this.getLitFile(filename);
     return null;
   }
 
-  getFilepath(filename: string): string | null {
-    const path = evaluateFilePath(filename, this.cwd());
-    if (path === null || !isInRootDirectory(path)) return path;
+  getFilepath(path: string, useAbsolute?: boolean): FilePath | null {
+    // If path starts with a slash, consider it to be an absolute path
+    if (useAbsolute || path.startsWith("/")) return resolveFilePath(path);
+    // Otherwise, force path to be seen as relative to the current directory.
+    path = "./" + path;
+    return resolveFilePath(path, this.currDir);
+  }
 
-    return removeLeadingSlash(path);
+  getDirectory(path: string, useAbsolute?: boolean): Directory | null {
+    // If path starts with a slash, consider it to be an absolute path
+    if (useAbsolute || path.startsWith("/")) return resolveDirectory(path);
+    // Otherwise, force path to be seen as relative to the current directory.
+    path = "./" + path;
+    return resolveDirectory(path, this.currDir);
   }
 
   getScript(filename: string): Script | null {
     const server = Player.getCurrentServer();
     const filepath = this.getFilepath(filename);
-    if (filepath === null) return null;
+    if (!filepath || !hasScriptExtension(filepath)) return null;
     return server.scripts.get(filepath) ?? null;
   }
 
   getTextFile(filename: string): TextFile | null {
-    const s = Player.getCurrentServer();
+    const server = Player.getCurrentServer();
     const filepath = this.getFilepath(filename);
-    if (!filepath) return null;
-    for (const txt of s.textFiles) {
-      if (filepath === txt.fn) {
-        return txt;
-      }
-    }
-
-    return null;
+    if (!filepath || !hasTextExtension(filepath)) return null;
+    return server.textFiles.get(filepath) ?? null;
   }
 
   getLitFile(filename: string): string | null {
@@ -432,11 +427,11 @@ export class Terminal {
     return null;
   }
 
-  cwd(): string {
+  cwd(): Directory {
     return this.currDir;
   }
 
-  setcwd(dir: string): void {
+  setcwd(dir: Directory): void {
     this.currDir = dir;
     TerminalEvents.emit();
   }
@@ -564,7 +559,7 @@ export class Terminal {
     Player.currentServer = serv.hostname;
     Player.getCurrentServer().isConnectedTo = true;
     this.print("Connected to " + serv.hostname);
-    this.setcwd("/");
+    this.setcwd(root);
     if (Player.getCurrentServer().hostname == "darkweb") {
       checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
     }

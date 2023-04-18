@@ -1,14 +1,14 @@
 import { CityName } from "./../Enums";
 import { Literature } from "./Literature";
-import { LiteratureNames } from "./data/LiteratureNames";
+import { LiteratureName } from "./data/LiteratureNames";
 import { FactionNames } from "../Faction/data/FactionNames";
 
-export const Literatures: Record<string, Literature> = {};
+export const Literatures = {} as Record<LiteratureName, Literature>;
 
 (function () {
   let title, fn, txt;
   title = "The Beginner's Guide to Hacking";
-  fn = LiteratureNames.HackersStartingHandbook;
+  fn = LiteratureName.HackersStartingHandbook;
   txt =
     "Some resources:<br><br>" +
     "<a class='a-link-button' href='https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptlearntoprogram.html' target='_blank' style='margin:4px'>Learn to Program</a><br><br>" +
@@ -31,7 +31,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "The Complete Handbook for Creating a Successful Corporation";
-  fn = LiteratureNames.CorporationManagementHandbook;
+  fn = LiteratureName.CorporationManagementHandbook;
   txt =
     "<u>Getting Started with Corporations</u><br>" +
     "To get started, visit the City Hall in Sector-12 in order to create a Corporation. This requires $150b of your own money, " +
@@ -85,7 +85,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "A Brief History of Synthoids";
-  fn = LiteratureNames.HistoryOfSynthoids;
+  fn = LiteratureName.HistoryOfSynthoids;
   txt =
     "Synthetic androids, or Synthoids for short, are genetically engineered robots and, short of Augmentations, " +
     "are composed entirely of organic substances. For this reason, Synthoids are virtually identical to " +
@@ -126,7 +126,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "A Green Tomorrow";
-  fn = LiteratureNames.AGreenTomorrow;
+  fn = LiteratureName.AGreenTomorrow;
   txt =
     "Starting a few decades ago, there was a massive global movement towards the generation of renewable energy in an effort to " +
     "combat global warming and climate change. The shift towards renewable energy was a big success, or so it seemed. In 2045 " +
@@ -149,7 +149,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "Alpha and Omega";
-  fn = LiteratureNames.AlphaOmega;
+  fn = LiteratureName.AlphaOmega;
   txt =
     "Then we saw a new Heaven and a new Earth, for our first Heaven and Earth had gone away, and our sea was no more. " +
     "And we saw a new holy city, new Aeria, coming down out of this new Heaven, prepared as a bride adorned for her husband. " +
@@ -167,7 +167,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "Are We Living in a Computer Simulation?";
-  fn = LiteratureNames.SimulatedReality;
+  fn = LiteratureName.SimulatedReality;
   txt =
     "The idea that we are living in a virtual world is not new. It's a trope that has " +
     "been explored constantly in literature and pop culture. However, it is also a legitimate " +
@@ -186,7 +186,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "Beyond Man";
-  fn = LiteratureNames.BeyondMan;
+  fn = LiteratureName.BeyondMan;
   txt =
     "Humanity entered a 'transhuman' era a long time ago. And despite the protests and criticisms of many who cried out against " +
     "human augmentation at the time, the transhuman movement continued and prospered. Proponents of the movement ignored the critics, " +
@@ -203,7 +203,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "Brighter than the Sun";
-  fn = LiteratureNames.BrighterThanTheSun;
+  fn = LiteratureName.BrighterThanTheSun;
   txt =
     `When people think about the corporations that dominate the East, they typically think of ${FactionNames.KuaiGongInternational}, which ` +
     "holds a complete monopoly for manufacturing and commerce in Asia, or Global Pharmaceuticals, the world's largest " +
@@ -227,7 +227,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "Democracy is Dead: The Fall of an Empire";
-  fn = LiteratureNames.DemocracyIsDead;
+  fn = LiteratureName.DemocracyIsDead;
   txt =
     "They rose from the shadows in the street.<br>From the places where the oppressed meet.<br>" +
     "Their cries echoed loudly through the air.<br>As they once did in Tiananmen Square.<br>" +
@@ -241,7 +241,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = `Figures Show Rising Crime Rates in ${CityName.Sector12}`;
-  fn = LiteratureNames.Sector12Crime;
+  fn = LiteratureName.Sector12Crime;
   txt =
     "A recent study by analytics company Wilson Inc. shows a significant rise " +
     `in criminal activity in ${CityName.Sector12}. Perhaps the most alarming part of the statistic ` +
@@ -256,7 +256,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "Man and the Machine";
-  fn = LiteratureNames.ManAndMachine;
+  fn = LiteratureName.ManAndMachine;
   txt =
     "In 2005 Ray Kurzweil popularized his theory of the Singularity. He predicted that the rate " +
     "of technological advancement would continue to accelerate faster and faster until one day " +
@@ -275,7 +275,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "Secret Societies";
-  fn = LiteratureNames.SecretSocieties;
+  fn = LiteratureName.SecretSocieties;
   txt =
     "The idea of secret societies has long intrigued the general public by inspiring curiosity, fascination, and " +
     "distrust. People have long wondered about who these secret society members are and what they do, with the " +
@@ -294,7 +294,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "Space: The Failed Frontier";
-  fn = LiteratureNames.TheFailedFrontier;
+  fn = LiteratureName.TheFailedFrontier;
   txt =
     "Humans have long dreamed about spaceflight. With enduring interest, we were driven to explore " +
     "the unknown and discover new worlds. We dreamed about conquering the stars. And in our quest, " +
@@ -312,7 +312,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "Coded Intelligence: Myth or Reality?";
-  fn = LiteratureNames.CodedIntelligence;
+  fn = LiteratureName.CodedIntelligence;
   txt =
     "Tremendous progress has been made in the field of Artificial Intelligence over the past few decades. " +
     "Our autonomous vehicles and transportation systems. The electronic personal assistants that control our everyday lives. " +
@@ -329,7 +329,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "Synthetic Muscles";
-  fn = LiteratureNames.SyntheticMuscles;
+  fn = LiteratureName.SyntheticMuscles;
   txt =
     "Initial versions of synthetic muscles weren't made of anything organic but were actually " +
     "crude devices made to mimic human muscle function. Some of the early iterations were actually made of " +
@@ -343,7 +343,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "Tensions rise in global tech race";
-  fn = LiteratureNames.TensionsInTechRace;
+  fn = LiteratureName.TensionsInTechRace;
   txt =
     "Have we entered a new Cold War? Is WWIII just beyond the horizon?<br><br>" +
     `After rumors came out that ${FactionNames.OmniTekIncorporated} had begun developing advanced robotic supersoldiers, ` +
@@ -358,7 +358,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "The Cost of Immortality";
-  fn = LiteratureNames.CostOfImmortality;
+  fn = LiteratureName.CostOfImmortality;
   txt =
     "Evolution and advances in medical and augmentation technology has lead to drastic improvements " +
     "in human mortality rates. Recent figures show that the life expectancy for humans " +
@@ -383,7 +383,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "The Hidden World";
-  fn = LiteratureNames.TheHiddenWorld;
+  fn = LiteratureName.TheHiddenWorld;
   txt =
     "WAKE UP SHEEPLE<br><br>" +
     "THE GOVERNMENT DOES NOT EXIST. CORPORATIONS DO NOT RUN SOCIETY<br><br>" +
@@ -402,7 +402,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "The New God";
-  fn = LiteratureNames.TheNewGod;
+  fn = LiteratureName.TheNewGod;
   txt =
     "Everyone has a moment in their life when they wonder about the bigger questions.<br><br>" +
     "What's the point of all this? What is my purpose?<br><br>" +
@@ -416,7 +416,7 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "The New Triads";
-  fn = LiteratureNames.NewTriads;
+  fn = LiteratureName.NewTriads;
   txt =
     "The Triads were an ancient transnational crime syndicate based in China, Hong Kong, and other Asian " +
     "territories. They were often considered one of the first and biggest criminal secret societies. " +
@@ -435,7 +435,11 @@ export const Literatures: Record<string, Literature> = {};
   Literatures[fn] = new Literature(title, fn, txt);
 
   title = "The Secret War";
-  fn = LiteratureNames.TheSecretWar;
+  fn = LiteratureName.TheSecretWar;
   txt = "";
   Literatures[fn] = new Literature(title, fn, txt);
+
+  for (const name of Object.values(LiteratureName)) {
+    if (!Literatures[name]) throw new Error(`Not all literatures were initialized. ${name} was missing`);
+  }
 })();

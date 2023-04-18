@@ -5,9 +5,8 @@ import { Server } from "../Server/Server";
 import { RunningScript } from "./RunningScript";
 import { processSingleServerGrowth } from "../Server/ServerHelpers";
 import { GetServer } from "../Server/AllServers";
-
 import { formatPercent } from "../ui/formatNumber";
-
+import { workerScripts } from "../Netscript/WorkerScripts";
 import { compareArrays } from "../utils/helpers/compareArrays";
 
 export function scriptCalculateOfflineProduction(runningScript: RunningScript): void {
@@ -99,10 +98,9 @@ export function findRunningScript(
 //Returns a RunningScript object matching the pid on the
 //designated server, and false otherwise
 export function findRunningScriptByPid(pid: number, server: BaseServer): RunningScript | null {
-  for (let i = 0; i < server.runningScripts.length; ++i) {
-    if (server.runningScripts[i].pid === pid) {
-      return server.runningScripts[i];
-    }
-  }
-  return null;
+  const ws = workerScripts.get(pid);
+  // Return null if no ws found or if it's on a different server.
+  if (!ws) return null;
+  if (ws.scriptRef.server !== server.hostname) return null;
+  return ws.scriptRef;
 }

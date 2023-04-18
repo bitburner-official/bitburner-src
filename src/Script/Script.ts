@@ -1,20 +1,19 @@
-/**
- * Class representing a script file.
- *
- * This does NOT represent a script that is actively running and
- * being evaluated. See RunningScript for that
- */
+import type { BaseServer } from "../Server/BaseServer";
 import { calculateRamUsage, RamUsageEntry } from "./RamCalculations";
 import { LoadedModule, ScriptURL } from "./LoadedModule";
-
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
-import { ScriptFilename } from "src/Types/strings";
+import { ScriptFilePath } from "../Paths/ScriptFilePath";
+import { ContentFile } from "../Files/ContentFile";
+/** Type for ensuring script code is always trimmed */
+export type FormattedCode = string & { __type: "FormattedCode" };
 
-export class Script {
-  code: string;
-  filename: string;
+/** A script file as a file on a server.
+ * For the execution of a script, see RunningScript and WorkerScript */
+export class Script implements ContentFile {
+  code: FormattedCode;
+  filename: ScriptFilePath;
   server: string;
 
   // Ram calculation, only exists after first poll of ram cost after updating
@@ -32,9 +31,19 @@ export class Script {
    */
   dependencies: Map<ScriptURL, Script> = new Map();
 
-  constructor(fn = "", code = "", server = "") {
+  get content() {
+    return this.code;
+  }
+  set content(code: string) {
+    const newCode = Script.formatCode(code);
+    if (this.code === newCode) return;
+    this.code = newCode;
+    this.invalidateModule();
+  }
+
+  constructor(fn = "default.js" as ScriptFilePath, code = "", server = "") {
     this.filename = fn;
-    this.code = code;
+    this.code = Script.formatCode(code);
     this.server = server; // hostname of server this script is on
   }
 
@@ -71,18 +80,19 @@ export class Script {
 
   /**
    * Save a script from the script editor
-   * @param {string} code - The new contents of the script
-   * @param {Script[]} otherScripts - Other scripts on the server. Used to process imports
+   * @param filename The new filepath for this Script
+   * @param code The unformatted code to save
+   * @param hostname The server to save the script to
    */
-  saveScript(filename: string, code: string, hostname: string): void {
-    this.invalidateModule();
+  saveScript(filename: ScriptFilePath, code: string, hostname: string): void {
     this.code = Script.formatCode(code);
+    this.invalidateModule();
     this.filename = filename;
     this.server = hostname;
   }
 
   /** Gets the ram usage, while also attempting to update it if it's currently null */
-  getRamUsage(otherScripts: Map<ScriptFilename, Script>): number | null {
+  getRamUsage(otherScripts: Map<ScriptFilePath, Script>): number | null {
     if (this.ramUsage) return this.ramUsage;
     this.updateRamUsage(otherScripts);
     return this.ramUsage;
@@ -92,7 +102,7 @@ export class Script {
    * Calculates and updates the script's RAM usage based on its code
    * @param {Script[]} otherScripts - Other scripts on the server. Used to process imports
    */
-  updateRamUsage(otherScripts: Map<ScriptFilename, Script>): void {
+  updateRamUsage(otherScripts: Map<ScriptFilePath, Script>): void {
     const ramCalc = calculateRamUsage(this.code, otherScripts, this.filename.endsWith(".script"));
     if (ramCalc.cost >= RamCostConstants.Base) {
       this.ramUsage = roundToTwo(ramCalc.cost);
@@ -100,6 +110,14 @@ export class Script {
     } else {
       this.ramUsage = null;
     }
+  }
+
+  /** Remove script from server. Fails if the provided server isn't the server for this script. */
+  deleteFromServer(server: BaseServer): boolean {
+    if (this.server !== server.hostname || server.isRunning(this.filename)) return false;
+    this.invalidateModule();
+    server.scripts.delete(this.filename);
+    return true;
   }
 
   /** The keys that are relevant in a save file */
@@ -120,8 +138,8 @@ export class Script {
    * @param {string} code - The code to format
    * @returns The formatted code
    */
-  static formatCode(code: string): string {
-    return code.replace(/^\s+|\s+$/g, "");
+  static formatCode(code: string): FormattedCode {
+    return code.replace(/^\s+|\s+$/g, "") as FormattedCode;
   }
 }
 

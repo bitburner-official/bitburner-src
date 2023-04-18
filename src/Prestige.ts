@@ -14,7 +14,8 @@ import { prestigeWorkerScripts } from "./NetscriptWorker";
 import { Player } from "@player";
 import { recentScripts } from "./Netscript/RecentScripts";
 import { resetPidCounter } from "./Netscript/Pid";
-import { LiteratureNames } from "./Literature/data/LiteratureNames";
+import { LiteratureName } from "./Literature/data/LiteratureNames";
+import { Literatures } from "./Literature/Literatures";
 
 import { GetServer, AddToAllServers, initForeignServers, prestigeAllServers } from "./Server/AllServers";
 import { prestigeHomeComputer } from "./Server/ServerHelpers";
@@ -123,7 +124,8 @@ export function prestigeAugmentation(): void {
 
   // BitNode 3: Corporatocracy
   if (Player.bitNodeN === 3) {
-    homeComp.messages.push(LiteratureNames.CorporationManagementHandbook);
+    // Easiest way to comply with type constraint, instead of revalidating the enum member's file path
+    homeComp.messages.push(Literatures[LiteratureName.CorporationManagementHandbook].fn);
   }
 
   // Cancel Bladeburner action
@@ -251,11 +253,10 @@ export function prestigeSourceFile(flume: boolean): void {
   }
 
   console.log(Player.bitNodeN);
-  dialogBoxCreate("hello");
   // BitNode 3: Corporatocracy
   if (Player.bitNodeN === 3) {
-    console.log("why isn't the dialogbox happening?");
-    homeComp.messages.push(LiteratureNames.CorporationManagementHandbook);
+    // Easiest way to comply with type constraint, instead of revalidating the enum member's file path
+    homeComp.messages.push(Literatures[LiteratureName.CorporationManagementHandbook].fn);
     dialogBoxCreate(
       "You received a copy of the Corporation Management Handbook on your home computer. " +
         "Read it if you need help getting started with Corporations!",

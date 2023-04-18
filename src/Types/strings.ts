@@ -1,18 +1,3 @@
-// Script Filename
-export type ScriptFilename = string /*& { __type: "ScriptFilename" }*/;
-/*export function isScriptFilename(value: string): value is ScriptFilename {
-  // implementation
-}*/
-/*export function sanitizeScriptFilename(filename: string): ScriptFilename {
-  // implementation
-}*/
-export function scriptFilenameFromImport(importPath: string, ns1?: boolean): ScriptFilename {
-  if (importPath.startsWith("./")) importPath = importPath.substring(2);
-  if (!ns1 && !importPath.endsWith(".js")) importPath += ".js";
-  if (ns1 && !importPath.endsWith(".script")) importPath += ".script";
-  return importPath as ScriptFilename;
-}
-
 // Server name
 export type ServerName = string /*& { __type: "ServerName" }*/;
 /*export function isExistingServerName(value: unknown): value is ServerName {

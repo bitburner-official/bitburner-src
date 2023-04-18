@@ -15,8 +15,6 @@ import { netscriptCanGrow, netscriptCanWeaken } from "./Hacking/netscriptCanHack
 import { Terminal } from "./Terminal";
 import { Player } from "@player";
 import { Programs } from "./Programs/Programs";
-import { Script } from "./Script/Script";
-import { isScriptFilename } from "./Script/isScriptFilename";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer, DeleteServer, AddToAllServers, createUniqueRandomIp } from "./Server/AllServers";
 import {
@@ -36,8 +34,6 @@ import {
 } from "./Server/ServerPurchases";
 import { Server } from "./Server/Server";
 import { influenceStockThroughServerGrow } from "./StockMarket/PlayerInfluencing";
-import { isValidFilePath, removeLeadingSlash } from "./Terminal/DirectoryHelpers";
-import { TextFile, getTextFile, createTextFile } from "./TextFile";
 import { runScriptFromScript } from "./NetscriptWorker";
 import { killWorkerScript } from "./Netscript/killWorkerScript";
 import { workerScripts } from "./Netscript/WorkerScripts";
@@ -56,7 +52,6 @@ import {
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { LogBoxEvents, LogBoxCloserEvents, LogBoxPositionEvents, LogBoxSizeEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/arrayToString";
-import { isString } from "./utils/helpers/isString";
 import { NetscriptGang } from "./NetscriptFunctions/Gang";
 import { NetscriptSleeve } from "./NetscriptFunctions/Sleeve";
 import { NetscriptExtra } from "./NetscriptFunctions/Extra";
@@ -91,6 +86,11 @@ import { cloneDeep } from "lodash";
 import { FactionWorkType } from "./Enums";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort } from "./NetscriptPort";
+import { FilePath, resolveFilePath } from "./Paths/FilePath";
+import { hasScriptExtension, resolveScriptFilePath } from "./Paths/ScriptFilePath";
+import { hasTextExtension } from "./Paths/TextFilePath";
+import { ContentFilePath } from "./Files/ContentFile";
+import { LiteratureName } from "./Literature/data/LiteratureNames";
 
 export const enums: NSEnums = {
   CityName,
@@ -446,22 +446,22 @@ export const ns: InternalAPI<NSFull> = {
       }
       const str = helpers.argsToString(args);
       if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
-        Terminal.error(`${ctx.workerScript.scriptRef.filename}: ${str}`);
+        Terminal.error(`${ctx.workerScript.name}: ${str}`);
         return;
       }
       if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${ctx.workerScript.scriptRef.filename}: ${str}`);
+        Terminal.success(`${ctx.workerScript.name}: ${str}`);
         return;
       }
       if (str.startsWith("WARN")) {
-        Terminal.warn(`${ctx.workerScript.scriptRef.filename}: ${str}`);
+        Terminal.warn(`${ctx.workerScript.name}: ${str}`);
         return;
       }
       if (str.startsWith("INFO")) {
-        Terminal.info(`${ctx.workerScript.scriptRef.filename}: ${str}`);
+        Terminal.info(`${ctx.workerScript.name}: ${str}`);
         return;
       }
-      Terminal.print(`${ctx.workerScript.scriptRef.filename}: ${str}`);
+      Terminal.print(`${ctx.workerScript.name}: ${str}`);
     },
   tprintf:
     (ctx) =>
@@ -691,30 +691,30 @@ export const ns: InternalAPI<NSFull> = {
   run:
     (ctx) =>
     (_scriptname, _thread_or_opt = 1, ..._args) => {
-      const scriptname = helpers.string(ctx, "scriptname", _scriptname);
+      const path = resolveScriptFilePath(helpers.string(ctx, "scriptname", _scriptname), ctx.workerScript.name);
+      if (!path) throw helpers.makeRuntimeErrorMsg(ctx, `${path} is not a valid script file path.`);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
-      const scriptServer = GetServer(ctx.workerScript.hostname);
-      if (scriptServer == null) {
-        throw helpers.makeRuntimeErrorMsg(ctx, "Could not find server. This is a bug. Report to dev.");
-      }
+      const scriptServer = ctx.workerScript.getServer();
 
-      return runScriptFromScript("run", scriptServer, scriptname, args, ctx.workerScript, runOpts);
+      return runScriptFromScript("run", scriptServer, path, args, ctx.workerScript, runOpts);
     },
   exec:
     (ctx) =>
     (_scriptname, _hostname, _thread_or_opt = 1, ..._args) => {
-      const scriptname = helpers.string(ctx, "scriptname", _scriptname);
+      const path = resolveScriptFilePath(helpers.string(ctx, "scriptname", _scriptname), ctx.workerScript.name);
+      if (!path) throw helpers.makeRuntimeErrorMsg(ctx, `${path} is not a valid script file path.`);
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const server = helpers.getServer(ctx, hostname);
-      return runScriptFromScript("exec", server, scriptname, args, ctx.workerScript, runOpts);
+      return runScriptFromScript("exec", server, path, args, ctx.workerScript, runOpts);
     },
   spawn:
     (ctx) =>
     (_scriptname, _thread_or_opt = 1, ..._args) => {
-      const scriptname = helpers.string(ctx, "scriptname", _scriptname);
+      const path = resolveScriptFilePath(helpers.string(ctx, "scriptname", _scriptname), ctx.workerScript.name);
+      if (!path) throw helpers.makeRuntimeErrorMsg(ctx, `${path} is not a valid script file path.`);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const spawnDelay = 10;
@@ -724,10 +724,10 @@ export const ns: InternalAPI<NSFull> = {
           throw helpers.makeRuntimeErrorMsg(ctx, "Could not find server. This is a bug. Report to dev");
         }
 
-        return runScriptFromScript("spawn", scriptServer, scriptname, args, ctx.workerScript, runOpts);
+        return runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
       }, spawnDelay * 1e3);
 
-      helpers.log(ctx, () => `Will execute '${scriptname}' in ${spawnDelay} seconds`);
+      helpers.log(ctx, () => `Will execute '${path}' in ${spawnDelay} seconds`);
 
       if (killWorkerScript(ctx.workerScript)) {
         helpers.log(ctx, () => "Exiting...");
@@ -804,108 +804,72 @@ export const ns: InternalAPI<NSFull> = {
     killWorkerScript(ctx.workerScript);
     throw new ScriptDeath(ctx.workerScript);
   },
-  scp:
-    (ctx) =>
-    (_files, _destination, _source = ctx.workerScript.hostname) => {
-      const destination = helpers.string(ctx, "destination", _destination);
-      const source = helpers.string(ctx, "source", _source);
-      const destServer = helpers.getServer(ctx, destination);
-      const sourceServ = helpers.getServer(ctx, source);
-      const files = Array.isArray(_files) ? _files : [_files];
+  scp: (ctx) => (_files, _destination, _source) => {
+    const destination = helpers.string(ctx, "destination", _destination);
+    const source = helpers.string(ctx, "source", _source ?? ctx.workerScript.hostname);
+    const destServer = helpers.getServer(ctx, destination);
+    const sourceServer = helpers.getServer(ctx, source);
+    const files = Array.isArray(_files) ? _files : [_files];
+    const lits: (FilePath & LiteratureName)[] = [];
+    const contentFiles: ContentFilePath[] = [];
+    //First loop through filenames to find all errors before moving anything.
+    for (const file of files) {
+      // Not a string
+      if (typeof file !== "string") {
+        throw helpers.makeRuntimeErrorMsg(ctx, "files should be a string or an array of strings.");
+      }
+      if (hasScriptExtension(file) || hasTextExtension(file)) {
+        const path = resolveScriptFilePath(file, ctx.workerScript.name);
+        if (!path) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filepath: ${file}`);
+        contentFiles.push(path);
+        continue;
+      }
+      if (!file.endsWith(".lit")) {
+        throw helpers.makeRuntimeErrorMsg(ctx, "Only works for scripts, .lit and .txt files.");
+      }
+      const sanitizedPath = resolveFilePath(file, ctx.workerScript.name);
+      if (!sanitizedPath || !checkEnum(LiteratureName, sanitizedPath)) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filename: '${file}'`);
+      }
+      lits.push(sanitizedPath);
+    }
 
-      //First loop through filenames to find all errors before moving anything.
-      for (const file of files) {
-        // Not a string
-        if (typeof file !== "string")
-          throw helpers.makeRuntimeErrorMsg(ctx, "files should be a string or an array of strings.");
+    let noFailures = true;
+    // --- Scripts and Text Files---
+    for (const contentFilePath of contentFiles) {
+      const sourceContentFile = sourceServer.getContentFile(contentFilePath);
+      if (!sourceContentFile) {
+        helpers.log(ctx, () => `File '${contentFilePath}' does not exist.`);
+        noFailures = false;
+        continue;
+      }
+      // Overwrite script if it already exists
+      const result = destServer.writeToContentFile(contentFilePath, sourceContentFile.content);
+      helpers.log(ctx, () => `Copied file ${contentFilePath} from ${sourceServer} to ${destServer}`);
+      if (result.overwritten) helpers.log(ctx, () => `Warning: ${contentFilePath} was overwritten on ${destServer}`);
+    }
 
-        // Invalid file name
-        if (!isValidFilePath(file)) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filename: '${file}'`);
-
-        // Invalid file type
-        if (!file.endsWith(".lit") && !isScriptFilename(file) && !file.endsWith(".txt")) {
-          throw helpers.makeRuntimeErrorMsg(ctx, "Only works for scripts, .lit and .txt files.");
-        }
+    // --- Literature Files ---
+    for (const litFilePath of lits) {
+      const sourceMessage = sourceServer.messages.find((message) => message === litFilePath);
+      if (!sourceMessage) {
+        helpers.log(ctx, () => `File '${litFilePath}' does not exist.`);
+        noFailures = false;
+        continue;
       }
 
-      let noFailures = true;
-      //ts detects files as any[] here even though we would have thrown in the above loop if it wasn't string[]
-      for (let file of files as string[]) {
-        // cut off the leading / for files in the root of the server; this assumes that the filename is somewhat normalized and doesn't look like `//file.js`
-        if (file.startsWith("/") && file.indexOf("/", 1) === -1) file = file.slice(1);
-
-        // Scp for lit files
-        if (file.endsWith(".lit")) {
-          const sourceMessage = sourceServ.messages.find((message) => message === file);
-          if (!sourceMessage) {
-            helpers.log(ctx, () => `File '${file}' does not exist.`);
-            noFailures = false;
-            continue;
-          }
-
-          const destMessage = destServer.messages.find((message) => message === file);
-          if (destMessage) {
-            helpers.log(ctx, () => `File '${file}' was already on '${destServer?.hostname}'.`);
-            continue;
-          }
-
-          destServer.messages.push(file);
-          helpers.log(ctx, () => `File '${file}' copied over to '${destServer?.hostname}'.`);
-          continue;
-        }
-
-        // Scp for text files
-        if (file.endsWith(".txt")) {
-          const sourceTextFile = sourceServ.textFiles.find((textFile) => textFile.fn === file);
-          if (!sourceTextFile) {
-            helpers.log(ctx, () => `File '${file}' does not exist.`);
-            noFailures = false;
-            continue;
-          }
-
-          const destTextFile = destServer.textFiles.find((textFile) => textFile.fn === file);
-          if (destTextFile) {
-            destTextFile.text = sourceTextFile.text;
-            helpers.log(ctx, () => `File '${file}' overwritten on '${destServer?.hostname}'.`);
-            continue;
-          }
-
-          const newFile = new TextFile(sourceTextFile.fn, sourceTextFile.text);
-          destServer.textFiles.push(newFile);
-          helpers.log(ctx, () => `File '${file}' copied over to '${destServer?.hostname}'.`);
-          continue;
-        }
-
-        // Scp for script files
-        const sourceScript = sourceServ.scripts.get(file);
-        if (!sourceScript) {
-          helpers.log(ctx, () => `File '${file}' does not exist.`);
-          noFailures = false;
-          continue;
-        }
-
-        // Overwrite script if it already exists
-        const destScript = destServer.scripts.get(file);
-        if (destScript) {
-          if (destScript.code === sourceScript.code) {
-            helpers.log(ctx, () => `Identical file '${file}' was already on '${destServer?.hostname}'`);
-            continue;
-          }
-          destScript.code = sourceScript.code;
-          // Set ramUsage to null in order to force a recalculation prior to next run.
-          destScript.invalidateModule();
-          helpers.log(ctx, () => `WARNING: File '${file}' overwritten on '${destServer?.hostname}'`);
-          continue;
-        }
-
-        // Create new script if it does not already exist
-        const newScript = new Script(file, sourceScript.code, destServer.hostname);
-        destServer.scripts.set(file, newScript);
-        helpers.log(ctx, () => `File '${file}' copied over to '${destServer?.hostname}'.`);
+      const destMessage = destServer.messages.find((message) => message === litFilePath);
+      if (destMessage) {
+        helpers.log(ctx, () => `File '${litFilePath}' was already on '${destServer?.hostname}'.`);
+        continue;
       }
 
-      return noFailures;
-    },
+      destServer.messages.push(litFilePath);
+      helpers.log(ctx, () => `File '${litFilePath}' copied over to '${destServer?.hostname}'.`);
+      continue;
+    }
+    return noFailures;
+  },
   ls: (ctx) => (_hostname, _substring) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const substring = helpers.string(ctx, "substring", _substring ?? "");
@@ -916,7 +880,7 @@ export const ns: InternalAPI<NSFull> = {
       ...server.messages,
       ...server.programs,
       ...server.scripts.keys(),
-      ...server.textFiles.map((textFile) => textFile.filename),
+      ...server.textFiles.keys(),
     ];
 
     if (!substring) return allFilenames.sort();
@@ -1147,7 +1111,7 @@ export const ns: InternalAPI<NSFull> = {
       const filename = helpers.string(ctx, "filename", _filename);
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const server = helpers.getServer(ctx, hostname);
-      if (server.scripts.has(filename)) return true;
+      if (server.scripts.has(filename) || server.textFiles.has(filename)) return true;
       for (let i = 0; i < server.programs.length; ++i) {
         if (filename.toLowerCase() == server.programs[i].toLowerCase()) {
           return true;
@@ -1160,8 +1124,7 @@ export const ns: InternalAPI<NSFull> = {
       }
       const contract = server.contracts.find((c) => c.fn.toLowerCase() === filename.toLowerCase());
       if (contract) return true;
-      const txtFile = getTextFile(filename, server);
-      return txtFile != null;
+      return false;
     },
   isRunning:
     (ctx) =>
@@ -1363,43 +1326,34 @@ export const ns: InternalAPI<NSFull> = {
     return writePort(portNumber, data);
   },
   write: (ctx) => (_filename, _data, _mode) => {
-    let filename = helpers.string(ctx, "handle", _filename);
+    const filepath = resolveFilePath(helpers.string(ctx, "filename", _filename), ctx.workerScript.name);
     const data = helpers.string(ctx, "data", _data ?? "");
     const mode = helpers.string(ctx, "mode", _mode ?? "a");
-    if (!isValidFilePath(filename)) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filepath: ${filename}`);
 
-    if (filename.lastIndexOf("/") === 0) filename = removeLeadingSlash(filename);
+    if (!filepath) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filepath: ${filepath}`);
 
     const server = helpers.getServer(ctx, ctx.workerScript.hostname);
 
-    if (isScriptFilename(filename)) {
-      // Write to script
-      let script = ctx.workerScript.getScriptOnServer(filename, server);
-      if (!script) {
-        // Create a new script
-        script = new Script(filename, String(data), server.hostname);
-        server.scripts.set(filename, script);
-        return;
-      }
-      mode === "w" ? (script.code = data) : (script.code += data);
-      // Set ram to null so a recalc is performed the next time ram usage is needed
-      script.invalidateModule();
-      return;
-    } else {
-      // Write to text file
-      if (!filename.endsWith(".txt")) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filename: ${filename}`);
-      const txtFile = getTextFile(filename, server);
-      if (txtFile == null) {
-        createTextFile(filename, String(data), server);
-        return;
-      }
+    if (hasScriptExtension(filepath)) {
       if (mode === "w") {
-        txtFile.write(String(data));
-      } else {
-        txtFile.append(String(data));
+        server.writeToScriptFile(filepath, data);
+        return;
       }
+      const existingScript = server.scripts.get(filepath);
+      const existingCode = existingScript ? existingScript.code : "";
+      server.writeToScriptFile(filepath, existingCode + data);
+      return;
     }
-    return;
+    if (!hasTextExtension(filepath)) {
+      throw helpers.makeRuntimeErrorMsg(ctx, `File path should be a text file or script. ${filepath} is invalid.`);
+    }
+    if (mode === "w") {
+      server.writeToTextFile(filepath, data);
+      return;
+    }
+    const existingTextFile = server.textFiles.get(filepath);
+    const existingText = existingTextFile?.text ?? "";
+    server.writeToTextFile(filepath, mode === "w" ? data : existingText + data);
   },
   tryWritePort: (ctx) => (_portNumber, data) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
@@ -1416,48 +1370,25 @@ export const ns: InternalAPI<NSFull> = {
     return readPort(portNumber);
   },
   read: (ctx) => (_filename) => {
-    const fn = helpers.string(ctx, "filename", _filename);
-    const server = GetServer(ctx.workerScript.hostname);
-    if (server == null) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "Error getting Server. This is a bug. Report to dev.");
-    }
-    if (isScriptFilename(fn)) {
-      // Read from script
-      const script = ctx.workerScript.getScriptOnServer(fn, server);
-      if (script == null) {
-        return "";
-      }
-      return script.code;
-    } else {
-      // Read from text file
-      const txtFile = getTextFile(fn, server);
-      if (txtFile !== null) {
-        return txtFile.text;
-      } else {
-        return "";
-      }
-    }
+    const path = resolveFilePath(helpers.string(ctx, "filename", _filename), ctx.workerScript.name);
+    if (!path || (!hasScriptExtension(path) && !hasTextExtension(path))) return "";
+    const server = ctx.workerScript.getServer();
+    return server.getContentFile(path)?.content ?? "";
   },
   peek: (ctx) => (_portNumber) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
     return peekPort(portNumber);
   },
   clear: (ctx) => (_file) => {
-    const file = helpers.string(ctx, "file", _file);
-    if (isString(file)) {
-      // Clear text file
-      const fn = file;
-      const server = GetServer(ctx.workerScript.hostname);
-      if (server == null) {
-        throw helpers.makeRuntimeErrorMsg(ctx, "Error getting Server. This is a bug. Report to dev.");
-      }
-      const txtFile = getTextFile(fn, server);
-      if (txtFile != null) {
-        txtFile.write("");
-      }
-    } else {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: ${file}`);
+    const path = resolveFilePath(helpers.string(ctx, "file", _file), ctx.workerScript.name);
+    if (!path || (!hasScriptExtension(path) && !hasTextExtension(path))) {
+      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid file path or extension: ${_file}`);
     }
+    const server = ctx.workerScript.getServer();
+    const file = server.getContentFile(path);
+    if (!file) throw helpers.makeRuntimeErrorMsg(ctx, `${path} does not exist on ${server.hostname}`);
+    // The content setter handles invalidating script modules where applicable.
+    file.content = "";
   },
   clearPort: (ctx) => (_portNumber) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
@@ -1467,20 +1398,22 @@ export const ns: InternalAPI<NSFull> = {
     const portNumber = helpers.portNumber(ctx, _portNumber);
     return portHandle(portNumber);
   },
-  rm:
-    (ctx) =>
-    (_fn, _hostname = ctx.workerScript.hostname) => {
-      const fn = helpers.string(ctx, "fn", _fn);
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const s = helpers.getServer(ctx, hostname);
+  rm: (ctx) => (_fn, _hostname) => {
+    const filepath = resolveFilePath(helpers.string(ctx, "fn", _fn), ctx.workerScript.name);
+    const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+    const s = helpers.getServer(ctx, hostname);
+    if (!filepath) {
+      helpers.log(ctx, () => `Error while parsing filepath ${filepath}`);
+      return false;
+    }
 
-      const status = s.removeFile(fn);
-      if (!status.res) {
-        helpers.log(ctx, () => status.msg + "");
-      }
+    const status = s.removeFile(filepath);
+    if (!status.res) {
+      helpers.log(ctx, () => status.msg + "");
+    }
 
-      return status.res;
-    },
+    return status.res;
+  },
   scriptRunning: (ctx) => (_scriptname, _hostname) => {
     const scriptname = helpers.string(ctx, "scriptname", _scriptname);
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -1506,18 +1439,17 @@ export const ns: InternalAPI<NSFull> = {
     }
     return suc;
   },
-  getScriptName: (ctx) => () => {
-    return ctx.workerScript.name;
-  },
+  getScriptName: (ctx) => () => ctx.workerScript.name,
   getScriptRam: (ctx) => (_scriptname, _hostname) => {
-    const scriptname = helpers.string(ctx, "scriptname", _scriptname);
+    const path = resolveScriptFilePath(helpers.string(ctx, "scriptname", _scriptname), ctx.workerScript.name);
+    if (!path) throw helpers.makeRuntimeErrorMsg(ctx, `Could not parse file path ${_scriptname}`);
     const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
     const server = helpers.getServer(ctx, hostname);
-    const script = server.scripts.get(scriptname);
+    const script = server.scripts.get(path);
     if (!script) return 0;
     const ramUsage = script.getRamUsage(server.scripts);
     if (!ramUsage) {
-      helpers.log(ctx, () => `Could not calculate ram usage for ${scriptname} on ${hostname}.`);
+      helpers.log(ctx, () => `Could not calculate ram usage for ${path} on ${hostname}.`);
       return 0;
     }
     return ramUsage;
@@ -1704,26 +1636,22 @@ export const ns: InternalAPI<NSFull> = {
   },
   wget: (ctx) => async (_url, _target, _hostname) => {
     const url = helpers.string(ctx, "url", _url);
-    const target = helpers.string(ctx, "target", _target);
+    const target = resolveFilePath(helpers.string(ctx, "target", _target), ctx.workerScript.name);
     const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-    if (!isScriptFilename(target) && !target.endsWith(".txt")) {
+    const server = helpers.getServer(ctx, hostname);
+    if (!target || (!hasTextExtension(target) && !hasScriptExtension(target))) {
       helpers.log(ctx, () => `Invalid target file: '${target}'. Must be a script or text file.`);
       return Promise.resolve(false);
     }
-    const s = helpers.getServer(ctx, hostname);
     return new Promise(function (resolve) {
       $.get(
         url,
         function (data) {
           let res;
-          if (isScriptFilename(target)) {
-            res = s.writeToScriptFile(target, data);
+          if (hasScriptExtension(target)) {
+            res = server.writeToScriptFile(target, data);
           } else {
-            res = s.writeToTextFile(target, data);
-          }
-          if (!res.success) {
-            helpers.log(ctx, () => "Failed.");
-            return resolve(false);
+            res = server.writeToTextFile(target, data);
           }
           if (res.overwritten) {
             helpers.log(ctx, () => `Successfully retrieved content and overwrote '${target}' on '${hostname}'`);
@@ -1774,59 +1702,34 @@ export const ns: InternalAPI<NSFull> = {
   },
   mv: (ctx) => (_host, _source, _destination) => {
     const hostname = helpers.string(ctx, "host", _host);
-    const source = helpers.string(ctx, "source", _source);
-    const destination = helpers.string(ctx, "destination", _destination);
+    const server = helpers.getServer(ctx, hostname);
+    const sourcePath = resolveFilePath(helpers.string(ctx, "source", _source));
+    if (!sourcePath) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid source filename: '${_source}'`);
+    const destinationPath = resolveFilePath(helpers.string(ctx, "destination", _destination), sourcePath);
+    if (!destinationPath) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid destination filename: '${destinationPath}'`);
 
-    if (!isValidFilePath(source)) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filename: '${source}'`);
-    if (!isValidFilePath(destination)) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filename: '${destination}'`);
-
-    const source_is_txt = source.endsWith(".txt");
-    const dest_is_txt = destination.endsWith(".txt");
-
-    if (!isScriptFilename(source) && !source_is_txt)
+    if (
+      (!hasTextExtension(sourcePath) && !hasScriptExtension(sourcePath)) ||
+      (!hasTextExtension(destinationPath) && !hasScriptExtension(destinationPath))
+    ) {
       throw helpers.makeRuntimeErrorMsg(ctx, `'mv' can only be used on scripts and text files (.txt)`);
-    if (source_is_txt != dest_is_txt)
-      throw helpers.makeRuntimeErrorMsg(ctx, `Source and destination files must have the same type`);
-
-    if (source === destination) {
+    }
+    if (sourcePath === destinationPath) {
+      helpers.log(ctx, () => "WARNING: Did nothing, source and destination paths were the same.");
       return;
     }
-
-    const server = helpers.getServer(ctx, hostname);
-
-    if (!source_is_txt && server.isRunning(source))
-      throw helpers.makeRuntimeErrorMsg(ctx, `Cannot use 'mv' on a script that is running`);
-
-    interface File {
-      filename: string;
+    const sourceContentFile = server.getContentFile(sourcePath);
+    if (!sourceContentFile) {
+      throw helpers.makeRuntimeErrorMsg(ctx, `Source text file ${sourcePath} does not exist on ${hostname}`);
     }
-    let source_file: File | undefined;
-    let dest_file: File | undefined;
-
-    if (source_is_txt) {
-      // Traverses twice potentially. Inefficient but will soon be replaced with a map.
-      source_file = server.textFiles.find((textFile) => textFile.filename === source);
-      dest_file = server.textFiles.find((textFile) => textFile.filename === destination);
-    } else {
-      source_file = server.scripts.get(source);
-      dest_file = server.scripts.get(destination);
+    const success = sourceContentFile.deleteFromServer(server);
+    if (success) {
+      const { overwritten } = server.writeToContentFile(destinationPath, sourceContentFile.content);
+      if (overwritten) helpers.log(ctx, () => `WARNING: Overwriting file ${destinationPath} on ${hostname}`);
+      helpers.log(ctx, () => `Moved ${sourcePath} to ${destinationPath} on ${hostname}`);
+      return;
     }
-    if (!source_file) throw helpers.makeRuntimeErrorMsg(ctx, `Source file ${source} does not exist`);
-
-    if (dest_file) {
-      if (dest_file instanceof TextFile && source_file instanceof TextFile) {
-        dest_file.text = source_file.text;
-      } else if (dest_file instanceof Script && source_file instanceof Script) {
-        dest_file.code = source_file.code;
-        // Source needs to be invalidated as well, to invalidate its dependents
-        source_file.invalidateModule();
-        dest_file.invalidateModule();
-      }
-      server.removeFile(source);
-    } else {
-      source_file.filename = destination;
-      if (source_file instanceof Script) source_file.invalidateModule();
-    }
+    helpers.log(ctx, () => `ERROR: Failed. Was unable to remove file ${sourcePath} from its original location.`);
   },
   flags: Flags,
   ...NetscriptExtra(),

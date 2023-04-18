@@ -7,8 +7,8 @@ import { parse } from "acorn";
 
 import { LoadedModule, ScriptURL, ScriptModule } from "./Script/LoadedModule";
 import { Script } from "./Script/Script";
-import { removeLeadingSlash } from "./Terminal/DirectoryHelpers";
-import { ScriptFilename, scriptFilenameFromImport } from "./Types/strings";
+import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
+import { root } from "./Paths/Directory";
 
 // Acorn type def is straight up incomplete so we have to fill with our own.
 export type Node = any;
@@ -47,7 +47,7 @@ const cleanup = new FinalizationRegistry((mapKey: string) => {
   }
 });
 
-export function compile(script: Script, scripts: Map<ScriptFilename, Script>): Promise<ScriptModule> {
+export function compile(script: Script, scripts: Map<ScriptFilePath, Script>): Promise<ScriptModule> {
   // Return the module if it already exists
   if (script.mod) return script.mod.module;
 
@@ -76,7 +76,7 @@ function addDependencyInfo(script: Script, seenStack: Script[]) {
  * @param scripts array of other scripts on the server
  * @param seenStack A stack of scripts that were higher up in the import tree in a recursive call.
  */
-function generateLoadedModule(script: Script, scripts: Map<ScriptFilename, Script>, seenStack: Script[]): LoadedModule {
+function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Script>, seenStack: Script[]): LoadedModule {
   // Early return for recursive calls where the script already has a URL
   if (script.mod) {
     addDependencyInfo(script, seenStack);
@@ -122,10 +122,11 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilename, Scrip
   // Sort the nodes from last start index to first. This replaces the last import with a blob first,
   // preventing the ranges for other imports from being shifted.
   importNodes.sort((a, b) => b.start - a.start);
-  let newCode = script.code;
+  let newCode = script.code as string;
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
-    const filename = scriptFilenameFromImport(node.filename);
+    const filename = resolveScriptFilePath(node.filename, root, ".js");
+    if (!filename) throw new Error(`Failed to parse import: ${node.filename}`);
 
     // Find the corresponding script.
     const importedScript = scripts.get(filename);
@@ -146,7 +147,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilename, Scrip
     // servers; it will be listed under the first server it was compiled for.
     // We don't include this in the cache key, so that other instances of the
     // script dedupe properly.
-    const adjustedCode = newCode + `\n//# sourceURL=${script.server}/${removeLeadingSlash(script.filename)}`;
+    const adjustedCode = newCode + `\n//# sourceURL=${script.server}/${script.filename}`;
     // At this point we have the full code and can construct a new blob / assign the URL.
     const url = URL.createObjectURL(makeScriptBlob(adjustedCode)) as ScriptURL;
     const module = config.doImport(url).catch((e) => {

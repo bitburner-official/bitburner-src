@@ -11,6 +11,7 @@ import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 import { BitFlumeEvent } from "../../BitNode/ui/BitFlumeModal";
 import { calculateHackingTime, calculateGrowTime, calculateWeakenTime } from "../../Hacking";
 import { FactionNames } from "../../Faction/data/FactionNames";
+import { ProgramFilePath, resolveProgramFilePath } from "../../Paths/ProgramFilePath";
 
 function requireHackingLevel(lvl: number) {
   return function () {
@@ -24,9 +25,16 @@ function bitFlumeRequirements() {
   };
 }
 
+// Throws if program name is invalid.
+function assignProgramName(name: string) {
+  const programName = resolveProgramFilePath(name);
+  if (!programName) throw new Error("Error while trying to initialize program metadata.");
+  return programName;
+}
+
 interface IProgramCreationParams {
   key: string;
-  name: string;
+  name: ProgramFilePath;
   create: IProgramCreate | null;
   run: (args: string[], server: BaseServer) => void;
 }
@@ -34,7 +42,7 @@ interface IProgramCreationParams {
 export const programsMetadata: IProgramCreationParams[] = [
   {
     key: "NukeProgram",
-    name: "NUKE.exe",
+    name: assignProgramName("NUKE.exe"),
     create: {
       level: 1,
       tooltip: "This virus is used to gain root access to a machine if enough ports are opened.",
@@ -63,7 +71,7 @@ export const programsMetadata: IProgramCreationParams[] = [
   },
   {
     key: "BruteSSHProgram",
-    name: "BruteSSH.exe",
+    name: assignProgramName("BruteSSH.exe"),
     create: {
       level: 50,
       tooltip: "This program executes a brute force attack that opens SSH ports",
@@ -87,7 +95,7 @@ export const programsMetadata: IProgramCreationParams[] = [
   },
   {
     key: "FTPCrackProgram",
-    name: "FTPCrack.exe",
+    name: assignProgramName("FTPCrack.exe"),
     create: {
       level: 100,
       tooltip: "This program cracks open FTP ports",
@@ -111,7 +119,7 @@ export const programsMetadata: IProgramCreationParams[] = [
   },
   {
     key: "RelaySMTPProgram",
-    name: "relaySMTP.exe",
+    name: assignProgramName("relaySMTP.exe"),
     create: {
       level: 250,
       tooltip: "This program opens SMTP ports by redirecting data",
@@ -135,7 +143,7 @@ export const programsMetadata: IProgramCreationParams[] = [
   },
   {
     key: "HTTPWormProgram",
-    name: "HTTPWorm.exe",
+    name: assignProgramName("HTTPWorm.exe"),
     create: {
       level: 500,
       tooltip: "This virus opens up HTTP ports",
@@ -159,7 +167,7 @@ export const programsMetadata: IProgramCreationParams[] = [
   },
   {
     key: "SQLInjectProgram",
-    name: "SQLInject.exe",
+    name: assignProgramName("SQLInject.exe"),
     create: {
       level: 750,
       tooltip: "This virus opens SQL ports",
@@ -183,7 +191,7 @@ export const programsMetadata: IProgramCreationParams[] = [
   },
   {
     key: "DeepscanV1",
-    name: "DeepscanV1.exe",
+    name: assignProgramName("DeepscanV1.exe"),
     create: {
       level: 75,
       tooltip: "This program allows you to use the scan-analyze command with a depth up to 5",
@@ -197,7 +205,7 @@ export const programsMetadata: IProgramCreationParams[] = [
   },
   {
     key: "DeepscanV2",
-    name: "DeepscanV2.exe",
+    name: assignProgramName("DeepscanV2.exe"),
     create: {
       level: 400,
       tooltip: "This program allows you to use the scan-analyze command with a depth up to 10",
@@ -211,7 +219,7 @@ export const programsMetadata: IProgramCreationParams[] = [
   },
   {
     key: "ServerProfiler",
-    name: "ServerProfiler.exe",
+    name: assignProgramName("ServerProfiler.exe"),
     create: {
       level: 75,
       tooltip: "This program is used to display hacking and Netscript-related information about servers",
@@ -261,7 +269,7 @@ export const programsMetadata: IProgramCreationParams[] = [
   },
   {
     key: "AutoLink",
-    name: "AutoLink.exe",
+    name: assignProgramName("AutoLink.exe"),
     create: {
       level: 25,
       tooltip: "This program allows you to directly connect to other servers through the 'scan-analyze' command",
@@ -276,7 +284,7 @@ export const programsMetadata: IProgramCreationParams[] = [
   },
   {
     key: "Formulas",
-    name: "Formulas.exe",
+    name: assignProgramName("Formulas.exe"),
     create: {
       level: 1000,
       tooltip: "This program allows you to use the formulas API",
@@ -290,7 +298,7 @@ export const programsMetadata: IProgramCreationParams[] = [
   },
   {
     key: "BitFlume",
-    name: "b1t_flum3.exe",
+    name: assignProgramName("b1t_flum3.exe"),
     create: {
       level: 1,
       tooltip: "This program creates a portal to the BitNode Nexus (allows you to restart and switch BitNodes)",
@@ -303,7 +311,7 @@ export const programsMetadata: IProgramCreationParams[] = [
   },
   {
     key: "Flight",
-    name: "fl1ght.exe",
+    name: assignProgramName("fl1ght.exe"),
     create: null,
     run: (): void => {
       const numAugReq = BitNodeMultipliers.DaedalusAugsRequirement;

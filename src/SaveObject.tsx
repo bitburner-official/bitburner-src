@@ -36,6 +36,10 @@ import { SpecialServers } from "./Server/data/SpecialServers";
 import { v2APIBreak } from "./utils/v2APIBreak";
 import { Script } from "./Script/Script";
 import { JSONMap } from "./Types/Jsonable";
+import { TextFile } from "./TextFile";
+import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
+import { Directory, resolveDirectory } from "./Paths/Directory";
+import { TextFilePath, resolveTextFilePath } from "./Paths/TextFilePath";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -348,7 +352,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
       }
       for (const server of GetAllServers() as unknown as { scripts: Script[] }[]) {
         for (const script of server.scripts) {
-          script.code = convert(script.code);
+          script.content = convert(script.code);
         }
       }
     }
@@ -490,7 +494,10 @@ function evaluateVersionCompatibility(ver: string | number): void {
     anyPlayer.currentWork = null;
   }
   if (ver < 24) {
-    Player.getHomeComputer().scripts.forEach((s) => s.filename.endsWith(".ns") && (s.filename += ".js"));
+    // Assert the relevant type that was in effect at this version.
+    (Player.getHomeComputer().scripts as unknown as { filename: string }[]).forEach(
+      (s) => s.filename.endsWith(".ns") && (s.filename += ".js"),
+    );
   }
   if (ver < 25) {
     const removePlayerFields = [
@@ -659,17 +666,43 @@ function evaluateVersionCompatibility(ver: string | number): void {
     for (const sleeve of Player.sleeves) sleeve.shock = 100 - sleeve.shock;
   }
   if (ver < 31) {
-    if (anyPlayer.hashManager !== undefined) {
+    if (anyPlayer.hashManager?.upgrades) {
       anyPlayer.hashManager.upgrades["Company Favor"] ??= 0;
     }
     anyPlayer.lastAugReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastAug;
     anyPlayer.lastNodeReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastBitnode;
+    const newDirectory = resolveDirectory("v2.3FileChanges/") as Directory;
     for (const server of GetAllServers()) {
-      if (Array.isArray(server.scripts)) {
-        const oldScripts = server.scripts as Script[];
-        server.scripts = new JSONMap();
-        for (const script of oldScripts) {
-          server.scripts.set(script.filename, script);
+      let invalidScriptCount = 0;
+      // There was a brief dev window where Server.scripts was already a map but the filepath changes weren't in yet.
+      const oldScripts = Array.isArray(server.scripts) ? (server.scripts as Script[]) : [...server.scripts.values()];
+      server.scripts = new JSONMap();
+      // In case somehow there are previously valid filenames that can't be sanitized, they will go in a new directory with a note.
+      for (const script of oldScripts) {
+        let newFilePath = resolveScriptFilePath(script.filename);
+        if (!newFilePath) {
+          newFilePath = `${newDirectory}script${++invalidScriptCount}.js` as ScriptFilePath;
+          script.content = `// Original path: ${script.filename}. Path was no longer valid\n` + script.content;
+        }
+        script.filename = newFilePath;
+        server.scripts.set(newFilePath, script);
+      }
+      // Handle changing textFiles to a map as well as FilePath changes at the same time.
+      if (Array.isArray(server.textFiles)) {
+        const oldTextFiles = server.textFiles as (TextFile & { fn?: string })[];
+        server.textFiles = new JSONMap();
+        let invalidTextCount = 0;
+        for (const textFile of oldTextFiles) {
+          const oldName = textFile.fn ?? textFile.filename;
+          delete textFile.fn;
+
+          let newFilePath = resolveTextFilePath(oldName);
+          if (!newFilePath) {
+            newFilePath = `${newDirectory}text${++invalidTextCount}.txt` as TextFilePath;
+            textFile.content = `// Original path: ${textFile.filename}. Path was no longer valid\n` + textFile.content;
+          }
+          textFile.filename = newFilePath;
+          server.textFiles.set(newFilePath, textFile);
         }
       }
     }

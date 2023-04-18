@@ -6,15 +6,16 @@ import { Industry } from "./Industry";
 
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { showLiterature } from "../Literature/LiteratureHelpers";
-import { LiteratureNames } from "../Literature/data/LiteratureNames";
+import { LiteratureName } from "../Literature/data/LiteratureNames";
 import { Player } from "@player";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { isString } from "../utils/helpers/isString";
 import { CityName } from "../Enums";
 import { CorpStateName } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
+import { isFilePath } from "../Paths/FilePath";
+import { isAbsolutePath } from "../Paths/Directory";
 
 interface IParams {
   name?: string;
@@ -442,15 +443,18 @@ export class Corporation {
     // Check if player already has Corporation Handbook
     const homeComp = Player.getHomeComputer();
     let hasHandbook = false;
-    const handbookFn = LiteratureNames.CorporationManagementHandbook;
+    const handbookFn = LiteratureName.CorporationManagementHandbook;
     for (let i = 0; i < homeComp.messages.length; ++i) {
-      if (isString(homeComp.messages[i]) && homeComp.messages[i] === handbookFn) {
+      if (homeComp.messages[i] === handbookFn) {
         hasHandbook = true;
         break;
       }
     }
 
     if (!hasHandbook) {
+      if (!isFilePath(handbookFn) || !isAbsolutePath(handbookFn)) {
+        throw new Error(`Corporation handbook had an invalid filepath. This is a bug.`);
+      }
       homeComp.messages.push(handbookFn);
     }
     showLiterature(handbookFn);
