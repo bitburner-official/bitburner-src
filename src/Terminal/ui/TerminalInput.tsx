@@ -198,8 +198,11 @@ export function TerminalInput(): React.ReactElement {
     // Run command.
     if (event.key === KEY.ENTER && value !== "") {
       event.preventDefault();
-      Terminal.print(`[${Player.getCurrentServer().hostname} ~${Terminal.cwd()}]> ${value}`);
-      Terminal.executeCommands(value);
+      // Sanitize the player input, and parse the commands by expanding any expressions.
+      const parsedCommands = Terminal.parseCommands(value);
+      // Print the commands as interpreted by the terminal, as opposed to how the player typed them.
+      Terminal.print(`[${Player.getCurrentServer().hostname} ~${Terminal.cwd()}]> ${parsedCommands.join("; ")}`);
+      Terminal.executeCommands(parsedCommands);
       saveValue("");
       return;
     }
@@ -208,6 +211,8 @@ export function TerminalInput(): React.ReactElement {
     if (event.key === KEY.TAB && value !== "") {
       event.preventDefault();
 
+      // The variable "copy" copies the user input, and then slices it
+      // to obtain the incomplete section of the user's input.
       let copy = value;
       const semiColonIndex = copy.lastIndexOf(";");
       if (semiColonIndex !== -1) {
@@ -222,8 +227,21 @@ export function TerminalInput(): React.ReactElement {
       if (index < -1) {
         index = 0;
       }
-      const allPos = await determineAllPossibilitiesForTabCompletion(copy, index, Terminal.cwd());
-      if (allPos.length == 0) {
+
+      // If the incomplete section of the user input starts with a bang ("!"),
+      // attempt to autocomplete the value from the command history. 
+      if (copy.startsWith("!")) {
+        const expandedResult = await Terminal.expandCommandFromHistory(copy);
+        if (!expandedResult) {
+          return; 
+        }
+        const valueWithoutIncompleteCommand = value.slice(0, value.lastIndexOf(copy));
+        saveValue(valueWithoutIncompleteCommand + expandedResult);
+        return;
+      }
+
+      const allPossibilities = await determineAllPossibilitiesForTabCompletion(copy, index, Terminal.cwd());
+      if (allPossibilities.length == 0) {
         return;
       }
 
@@ -245,9 +263,9 @@ export function TerminalInput(): React.ReactElement {
         command = commandArray.join(" ");
       }
 
-      let newValue = tabCompletion(command, arg, allPos, value);
+      let newValue = tabCompletion(command, arg, allPossibilities, value);
       if (typeof newValue === "string" && newValue !== "") {
-        if (!newValue.endsWith(" ") && !newValue.endsWith("/") && allPos.length === 1) newValue += " ";
+        if (!newValue.endsWith(" ") && !newValue.endsWith("/") && allPossibilities.length === 1) newValue += " ";
         saveValue(newValue);
       }
       if (Array.isArray(newValue)) {

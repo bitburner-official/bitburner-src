@@ -570,25 +570,67 @@ export class Terminal {
     }
   }
 
-  executeCommands(commands: string): void {
-    // Sanitize input
-    commands = commands.trim();
-    commands = commands.replace(/\s\s+/g, " "); // Replace all extra whitespace in command with a single space
-
+  executeCommands(commands: string[]): void {
     // Handle Terminal History - multiple commands should be saved as one
-    if (this.commandHistory[this.commandHistory.length - 1] != commands) {
-      this.commandHistory.push(commands);
+    const commandsAsString = commands.join("; ")
+    if (this.commandHistory[this.commandHistory.length - 1] != commandsAsString) {
+      this.commandHistory.push(commandsAsString);
       if (this.commandHistory.length > 50) {
         this.commandHistory.splice(0, 1);
       }
       Player.terminalCommandHistory = this.commandHistory;
     }
     this.commandHistoryIndex = this.commandHistory.length;
-    const allCommands = ParseCommands(commands);
 
-    for (let i = 0; i < allCommands.length; i++) {
-      this.executeCommand(allCommands[i]);
+    commands.forEach(cmd => this.executeCommand(cmd)); 
+  }
+
+  /**
+   * @param command A command to autocomplete from the terminal history. The string must be prepended with a `!` character,
+   * and may be followed by a number to specify the history index of the command to autocomplete from, or a string that will be 
+   * matched against the history.
+   * @returns A command string if there was a successful match, or `undefined` if no command was found.
+   */
+  expandCommandFromHistory(command: string): string | undefined {
+    if (command.charAt(0) !== "!") {
+      return undefined;
     }
+    // Remove the `!` character
+    const token = command.substring(1); 
+    if (token === "") {
+      return undefined;
+    }
+    // If the token is a number, retrieve the command using that number as index.
+    const indexOfRequestedCommand = parseInt(token, 10);
+    if (!isNaN(indexOfRequestedCommand)) {
+      return this.commandHistory[indexOfRequestedCommand];
+    }
+    // Return the most recent match, or undefined if no matches were found.
+    const matches = this.commandHistory.filter(cmd => cmd.startsWith(token));
+    return matches[matches.length - 1]; 
+  }
+
+  /**
+   * @param commands The unsanitized player input to be parsed into commands and expanded.
+   * @returns An array of commands.
+   */
+  parseCommands(commands: string): string[] {
+    // Sanitize input
+    commands = commands.trim();
+    // Replace all extra whitespace in command with a single space
+    commands = commands.replace(/\s\s+/g, " "); 
+    
+    const commandList = ParseCommands(commands);
+    const expandedCommandList = []; 
+    for (let i = 0; i < commandList.length; ++i) {
+      const expandedCommands = this.expandCommandFromHistory(commandList[i]);
+      if (expandedCommands) {
+        ParseCommands(expandedCommands).forEach(cmd => expandedCommandList.push(cmd)); 
+      } else {
+        expandedCommandList.push(commandList[i]); 
+      }
+    }
+    return expandedCommandList; 
   }
 
   clear(): void {
