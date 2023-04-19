@@ -229,11 +229,11 @@ export function TerminalInput(): React.ReactElement {
       }
 
       // If the incomplete section of the user input starts with a bang ("!"),
-      // attempt to autocomplete the value from the command history. 
+      // attempt to autocomplete the value from the command history.
       if (copy.startsWith("!")) {
-        const expandedResult = await Terminal.expandCommandFromHistory(copy);
+        const expandedResult = Terminal.expandCommandFromHistory(copy);
         if (!expandedResult) {
-          return; 
+          return;
         }
         const valueWithoutIncompleteCommand = value.slice(0, value.lastIndexOf(copy));
         saveValue(valueWithoutIncompleteCommand + expandedResult);

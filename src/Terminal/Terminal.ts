@@ -572,7 +572,7 @@ export class Terminal {
 
   executeCommands(commands: string[]): void {
     // Handle Terminal History - multiple commands should be saved as one
-    const commandsAsString = commands.join("; ")
+    const commandsAsString = commands.join("; ");
     if (this.commandHistory[this.commandHistory.length - 1] != commandsAsString) {
       this.commandHistory.push(commandsAsString);
       if (this.commandHistory.length > 50) {
@@ -582,12 +582,12 @@ export class Terminal {
     }
     this.commandHistoryIndex = this.commandHistory.length;
 
-    commands.forEach(cmd => this.executeCommand(cmd)); 
+    commands.forEach((cmd) => this.executeCommand(cmd));
   }
 
   /**
    * @param command A command to autocomplete from the terminal history. The string must be prepended with a `!` character,
-   * and may be followed by a number to specify the history index of the command to autocomplete from, or a string that will be 
+   * and may be followed by a number to specify the history index of the command to autocomplete from, or a string that will be
    * matched against the history.
    * @returns A command string if there was a successful match, or `undefined` if no command was found.
    */
@@ -596,7 +596,7 @@ export class Terminal {
       return undefined;
     }
     // Remove the `!` character
-    const token = command.substring(1); 
+    const token = command.substring(1);
     if (token === "") {
       return undefined;
     }
@@ -606,8 +606,8 @@ export class Terminal {
       return this.commandHistory[indexOfRequestedCommand];
     }
     // Return the most recent match, or undefined if no matches were found.
-    const matches = this.commandHistory.filter(cmd => cmd.startsWith(token));
-    return matches[matches.length - 1]; 
+    const matches = this.commandHistory.filter((cmd) => cmd.startsWith(token));
+    return matches[matches.length - 1];
   }
 
   /**
@@ -618,19 +618,19 @@ export class Terminal {
     // Sanitize input
     commands = commands.trim();
     // Replace all extra whitespace in command with a single space
-    commands = commands.replace(/\s\s+/g, " "); 
-    
+    commands = commands.replace(/\s\s+/g, " ");
+
     const commandList = ParseCommands(commands);
-    const expandedCommandList = []; 
+    const expandedCommandList = [];
     for (let i = 0; i < commandList.length; ++i) {
       const expandedCommands = this.expandCommandFromHistory(commandList[i]);
       if (expandedCommands) {
-        ParseCommands(expandedCommands).forEach(cmd => expandedCommandList.push(cmd)); 
+        ParseCommands(expandedCommands).forEach((cmd) => expandedCommandList.push(cmd));
       } else {
-        expandedCommandList.push(commandList[i]); 
+        expandedCommandList.push(commandList[i]);
       }
     }
-    return expandedCommandList; 
+    return expandedCommandList;
   }
 
   clear(): void {
