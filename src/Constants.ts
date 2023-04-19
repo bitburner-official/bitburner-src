@@ -225,7 +225,7 @@ export const CONSTANTS: {
 
   InfiniteLoopLimit: 2000,
 
-  Donations: 41,
+  Donations: 79,
 
   LatestUpdate: `
 v2.3 Dev
