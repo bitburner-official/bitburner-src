@@ -145,10 +145,12 @@ export async function getTabCompletionPossibilities(
   };
 
   const addPrograms = () => {
+    // Only allow completed programs to autocomplete
+    const programs = homeComputer.programs.filter((name) => name.endsWith(".exe"));
     // At all times, programs can be accessed without pathing
-    addGeneric({ iterable: homeComputer.programs, usePathing: false });
+    addGeneric({ iterable: programs, usePathing: false });
     // If we're on home and a path is being used, also include pathing results
-    if (homeComputer.isConnectedTo && relativeDir) addGeneric({ iterable: homeComputer.programs, usePathing: true });
+    if (homeComputer.isConnectedTo && relativeDir) addGeneric({ iterable: programs, usePathing: true });
   };
 
   const addDirectories = () => addGeneric({ iterable: getAllDirectories(currServ), usePathing: true });

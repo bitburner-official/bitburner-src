@@ -14,6 +14,7 @@ import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities"
 import { Settings } from "../../Settings/Settings";
 import { substituteAliases } from "../../Alias";
 import { longestCommonStart } from "../../utils/StringHelperFunctions";
+import { maxWidth } from "@mui/system";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,7 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0),
     },
     preformatted: {
-      whiteSpace: "pre-wrap",
       margin: theme.spacing(0),
     },
     list: {
@@ -232,7 +232,7 @@ export function TerminalInput(): React.ReactElement {
       const possibilities = await getTabCompletionPossibilities(aliasedArray, Terminal.cwd());
       if (possibilities.length === 0) return;
       if (possibilities.length === 1) {
-        saveValue(value.replace(/[^ ]*$/, possibilities[0]));
+        saveValue(value.replace(/[^ ]*$/, possibilities[0]) + " ");
         return;
       }
       // More than one possibility, check to see if there is a longer common string than currentText.
@@ -392,7 +392,12 @@ export function TerminalInput(): React.ReactElement {
           onKeyDown: onKeyDown,
         }}
       ></TextField>
-      <Popper open={possibilities.length > 0} anchorEl={terminalInput.current} placement={"top-start"}>
+      <Popper
+        open={possibilities.length > 0}
+        anchorEl={terminalInput.current}
+        placement={"top"}
+        sx={{ maxWidth: "75%" }}
+      >
         <Paper sx={{ m: 1, p: 2 }}>
           <Typography classes={{ root: classes.preformatted }} color={"primary"} paragraph={false}>
             Possible autocomplete candidates:
