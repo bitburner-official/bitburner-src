@@ -1,3 +1,4 @@
+import { allContentFiles } from "../Files/ContentFile";
 import type { BaseServer } from "../Server/BaseServer";
 import { FilePath } from "./FilePath";
 
@@ -70,7 +71,6 @@ export function resolveValidatedDirectory(relative: BasicDirectory, absolute: Di
         absoluteArray.push(nextDir);
     }
   }
-  console.log(absoluteArray.join(""));
   return absoluteArray.join("") as Directory;
 }
 
@@ -86,6 +86,20 @@ export function getFirstDirectoryInPath(path: FilePath | Directory): Directory |
   const firstSlashIndex = path.indexOf("/");
   if (firstSlashIndex === -1) return null;
   return path.substring(0, firstSlashIndex + 1) as Directory;
+}
+
+export function getAllDirectories(server: BaseServer): Set<Directory> {
+  const dirSet = new Set([root]);
+  function peel(path: FilePath | Directory) {
+    const lastSlashIndex = path.lastIndexOf("/", path.length - 2);
+    if (lastSlashIndex === -1) return;
+    const newDir = path.substring(0, lastSlashIndex + 1) as Directory;
+    if (dirSet.has(newDir)) return;
+    dirSet.add(newDir);
+    peel(newDir);
+  }
+  for (const [filename] of allContentFiles(server)) peel(filename);
+  return dirSet;
 }
 
 // This is to validate the assertion earlier that root is in fact a Directory

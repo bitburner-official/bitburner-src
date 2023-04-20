@@ -11,8 +11,9 @@ import { KEY, KEYCODE } from "../../utils/helpers/keyCodes";
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
 import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities";
-import { tabCompletion } from "../tabCompletion";
 import { Settings } from "../../Settings/Settings";
+import { substituteAliases } from "../../Alias";
+import { longestCommonStart } from "../../utils/StringHelperFunctions";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -205,54 +206,39 @@ export function TerminalInput(): React.ReactElement {
     }
 
     // Autocomplete
-    if (event.key === KEY.TAB && value !== "") {
+    if (event.key === KEY.TAB) {
       event.preventDefault();
 
-      let copy = value;
-      const semiColonIndex = copy.lastIndexOf(";");
-      if (semiColonIndex !== -1) {
-        copy = copy.slice(semiColonIndex + 1);
-      }
+      // Apply aliases, but not to the current argument. We are only concerned with the last command.
+      // Remove the last semicolon and anything preceding it, then split by whitespace to get the current command array
+      const unaliasedArray = value.replace(/.*(?<=;)/, "").split(/\s+/);
 
-      copy = copy.trim();
-      copy = copy.replace(/\s\s+/g, " ");
+      // The last element of this array is always the argument currently being typed (the text needing autocomplete).
+      // We remove it from the unaliased array before applying the aliases.
+      // .split return value always has at least one member, so this assertion is safe.
+      const currentText = unaliasedArray.pop() as string;
 
-      const commandArray = copy.split(" ");
-      let index = commandArray.length - 2;
-      if (index < -1) {
-        index = 0;
-      }
-      const allPos = await getTabCompletionPossibilities(copy, index, Terminal.cwd());
-      if (allPos.length == 0) {
+      // If the unaliased array has members, convert to string -> apply alias -> capture from last semicolon again -> split back into an array
+      // Ternary is needed so that a 0-length unaliased array does not result in a 1-length aliased array
+      const aliasedArray = unaliasedArray.length
+        ? substituteAliases(unaliasedArray.join(" "))
+            .replace(/.*(?<=;)/, "")
+            .split(/\s+/)
+        : unaliasedArray;
+
+      // Add the current text back onto the aliased array
+      aliasedArray.push(currentText);
+
+      const possibilities = await getTabCompletionPossibilities(aliasedArray, Terminal.cwd());
+      if (possibilities.length === 0) return;
+      if (possibilities.length === 1) {
+        saveValue(value.replace(/[^ ]*$/, possibilities[0]));
         return;
       }
-
-      let arg = "";
-      let command = "";
-      if (commandArray.length == 0) {
-        return;
-      }
-      if (commandArray.length == 1) {
-        command = commandArray[0];
-      } else if (commandArray.length == 2) {
-        command = commandArray[0];
-        arg = commandArray[1];
-      } else if (commandArray.length == 3) {
-        command = commandArray[0] + " " + commandArray[1];
-        arg = commandArray[2];
-      } else {
-        arg = commandArray.pop() + "";
-        command = commandArray.join(" ");
-      }
-
-      let newValue = tabCompletion(command, arg, allPos, value);
-      if (typeof newValue === "string" && newValue !== "") {
-        if (!newValue.endsWith(" ") && !newValue.endsWith("/") && allPos.length === 1) newValue += " ";
-        saveValue(newValue);
-      }
-      if (Array.isArray(newValue)) {
-        setPossibilities(newValue);
-      }
+      // More than one possibility, check to see if there is a longer common string than currentText.
+      const longestMatch = longestCommonStart(possibilities);
+      if (longestMatch.length > currentText.length) saveValue(value.replace(/[^ ]*$/, longestMatch));
+      setPossibilities(possibilities);
     }
 
     // Clear screen.
@@ -310,6 +296,7 @@ export function TerminalInput(): React.ReactElement {
       } else {
         ++Terminal.commandHistoryIndex;
         const prevCommand = Terminal.commandHistory[Terminal.commandHistoryIndex];
+
         saveValue(prevCommand);
       }
     }

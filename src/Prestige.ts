@@ -252,7 +252,6 @@ export function prestigeSourceFile(flume: boolean): void {
     homeComp.programs.push(Programs.Formulas.name);
   }
 
-  console.log(Player.bitNodeN);
   // BitNode 3: Corporatocracy
   if (Player.bitNodeN === 3) {
     // Easiest way to comply with type constraint, instead of revalidating the enum member's file path
