@@ -173,7 +173,7 @@ export const ns: InternalAPI<NSFull> = {
     const percentHacked = calculatePercentMoneyHacked(server, Player);
 
     if (percentHacked === 0 || server.moneyAvailable === 0) {
-      return 0; // To prevent returning infinity below
+      return -1; // To prevent returning infinity below
     }
 
     return hackAmount / (server.moneyAvailable * percentHacked);
