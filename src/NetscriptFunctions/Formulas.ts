@@ -26,7 +26,7 @@ import {
   calculateGrowTime,
   calculateWeakenTime,
 } from "../Hacking";
-import { Programs } from "../Programs/Programs";
+import { CompletedProgramName } from "../Programs/Programs";
 import { Formulas as IFormulas, Player as IPlayer, Person as IPerson } from "@nsdefs";
 import {
   calculateRespectGain,
@@ -55,7 +55,7 @@ import { findCrime } from "../Crime/CrimeHelpers";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
-    if (!player.hasProgram(Programs.Formulas.name)) {
+    if (!player.hasProgram(CompletedProgramName.formulas)) {
       throw helpers.makeRuntimeErrorMsg(ctx, `Requires Formulas.exe to run.`);
     }
   };

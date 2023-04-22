@@ -2,7 +2,7 @@ import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { BaseServer } from "./Server/BaseServer";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
 import { TextFilePath } from "./Paths/TextFilePath";
-import { ContentFile } from "./Files/ContentFile";
+import { ContentFile } from "./Paths/ContentFile";
 
 /** Represents a plain text file that is typically stored on a server. */
 export class TextFile implements ContentFile {

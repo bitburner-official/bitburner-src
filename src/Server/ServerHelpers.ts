@@ -6,12 +6,11 @@ import { calculateServerGrowth } from "./formulas/grow";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
-import { Programs } from "../Programs/Programs";
+import { CompletedProgramName } from "../Programs/Programs";
 import { LiteratureName } from "../Literature/data/LiteratureNames";
 import { Person as IPerson } from "@nsdefs";
 import { isValidNumber } from "../utils/helpers/isValidNumber";
 import { Server as IServer } from "@nsdefs";
-import { Literatures } from "../Literature/Literatures";
 
 /**
  * Constructs a new server, while also ensuring that the new server
@@ -250,20 +249,20 @@ export function processSingleServerGrowth(server: Server, threads: number, cores
 }
 
 export function prestigeHomeComputer(homeComp: Server): void {
-  const hasBitflume = homeComp.programs.includes(Programs.BitFlume.name);
+  const hasBitflume = homeComp.programs.includes(CompletedProgramName.bitFlume);
 
   homeComp.programs.length = 0; //Remove programs
   homeComp.runningScripts = [];
   homeComp.serversOnNetwork = [];
   homeComp.isConnectedTo = true;
   homeComp.ramUsed = 0;
-  homeComp.programs.push(Programs.NukeProgram.name);
+  homeComp.programs.push(CompletedProgramName.nuke);
   if (hasBitflume) {
-    homeComp.programs.push(Programs.BitFlume.name);
+    homeComp.programs.push(CompletedProgramName.bitFlume);
   }
 
   homeComp.messages.length = 0; //Remove .lit and .msg files
-  homeComp.messages.push(Literatures[LiteratureName.HackersStartingHandbook].fn);
+  homeComp.messages.push(LiteratureName.HackersStartingHandbook);
 }
 
 // Returns the i-th server on the specified server's network

@@ -1,6 +1,6 @@
 import { BaseServer } from "../Server/BaseServer";
 import { root } from "./Directory";
-import { ContentFileMap, allContentFiles } from "../Files/ContentFile";
+import { ContentFileMap, allContentFiles } from "./ContentFile";
 
 /** Search for files (Script and TextFile only) that match a given glob pattern
  * @param pattern The glob pattern. Supported glob characters are * and ?

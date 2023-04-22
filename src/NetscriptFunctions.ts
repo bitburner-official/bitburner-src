@@ -14,7 +14,7 @@ import {
 import { netscriptCanGrow, netscriptCanWeaken } from "./Hacking/netscriptCanHack";
 import { Terminal } from "./Terminal";
 import { Player } from "@player";
-import { Programs } from "./Programs/Programs";
+import { CompletedProgramName } from "./Programs/Programs";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer, DeleteServer, AddToAllServers, createUniqueRandomIp } from "./Server/AllServers";
 import {
@@ -89,7 +89,7 @@ import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort } fr
 import { FilePath, resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension, resolveScriptFilePath } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
-import { ContentFilePath } from "./Files/ContentFile";
+import { ContentFilePath } from "./Paths/ContentFile";
 import { LiteratureName } from "./Literature/data/LiteratureNames";
 
 export const enums: NSEnums = {
@@ -583,7 +583,7 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => `Already have root access to '${server.hostname}'.`);
       return true;
     }
-    if (!Player.hasProgram(Programs.NukeProgram.name)) {
+    if (!Player.hasProgram(CompletedProgramName.nuke)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the NUKE.exe virus!");
     }
     if (server.openPortCount < server.numOpenPortsRequired) {
@@ -600,7 +600,7 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => "Cannot be executed on this server.");
       return false;
     }
-    if (!Player.hasProgram(Programs.BruteSSHProgram.name)) {
+    if (!Player.hasProgram(CompletedProgramName.bruteSsh)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the BruteSSH.exe program!");
     }
     if (!server.sshPortOpen) {
@@ -619,7 +619,7 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => "Cannot be executed on this server.");
       return false;
     }
-    if (!Player.hasProgram(Programs.FTPCrackProgram.name)) {
+    if (!Player.hasProgram(CompletedProgramName.ftpCrack)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the FTPCrack.exe program!");
     }
     if (!server.ftpPortOpen) {
@@ -638,7 +638,7 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => "Cannot be executed on this server.");
       return false;
     }
-    if (!Player.hasProgram(Programs.RelaySMTPProgram.name)) {
+    if (!Player.hasProgram(CompletedProgramName.relaySmtp)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the relaySMTP.exe program!");
     }
     if (!server.smtpPortOpen) {
@@ -657,7 +657,7 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => "Cannot be executed on this server.");
       return false;
     }
-    if (!Player.hasProgram(Programs.HTTPWormProgram.name)) {
+    if (!Player.hasProgram(CompletedProgramName.httpWorm)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the HTTPWorm.exe program!");
     }
     if (!server.httpPortOpen) {
@@ -676,7 +676,7 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => "Cannot be executed on this server.");
       return false;
     }
-    if (!Player.hasProgram(Programs.SQLInjectProgram.name)) {
+    if (!Player.hasProgram(CompletedProgramName.sqlInject)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the SQLInject.exe program!");
     }
     if (!server.sqlPortOpen) {

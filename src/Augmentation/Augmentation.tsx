@@ -1,6 +1,7 @@
 // Class definition for a single Augmentation object
 import * as React from "react";
 
+import type { CompletedProgramName } from "src/Programs/Programs";
 import { Faction } from "../Faction/Faction";
 import { Factions } from "../Faction/Factions";
 import { formatPercent } from "../ui/formatNumber";
@@ -64,7 +65,7 @@ export interface IConstructorParams {
   bladeburner_success_chance?: number;
 
   startingMoney?: number;
-  programs?: string[];
+  programs?: CompletedProgramName[];
 }
 
 function generateStatsDescription(mults: Multipliers, programs?: string[], startingMoney?: number): JSX.Element {

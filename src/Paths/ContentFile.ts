@@ -1,6 +1,6 @@
 import type { BaseServer } from "../Server/BaseServer";
-import { ScriptFilePath } from "../Paths/ScriptFilePath";
-import { TextFilePath } from "../Paths/TextFilePath";
+import { ScriptFilePath } from "./ScriptFilePath";
+import { TextFilePath } from "./TextFilePath";
 
 /** Provide a common interface for accessing script and text files */
 export type ContentFilePath = ScriptFilePath | TextFilePath;

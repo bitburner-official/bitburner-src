@@ -1,4 +1,4 @@
-import { Directory } from "./Directory";
+import { Directory, isAbsolutePath } from "./Directory";
 import { FilePath, isFilePath, resolveFilePath } from "./FilePath";
 
 /** Filepath with the additional constraint of having a .cct extension */
@@ -18,7 +18,7 @@ export function resolveProgramFilePath(path: string, base = "" as FilePath | Dir
   return result && hasProgramExtension(result) ? result : null;
 }
 
-/** Full typecheck with no modification */
-export function isProgramFilePath(path: string): path is ProgramFilePath {
-  return hasProgramExtension(path) && isFilePath(path);
+export function asProgramFilePath<T extends string>(path: T): T & ProgramFilePath {
+  if (isFilePath(path) && hasProgramExtension(path) && isAbsolutePath(path)) return path;
+  throw new Error(`${path} failed to validate as a ProgramFilePath.`);
 }

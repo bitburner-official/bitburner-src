@@ -2,7 +2,7 @@ import React from "react";
 import { Message } from "./Message";
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { Router } from "../ui/GameRoot";
-import { Programs } from "../Programs/Programs";
+import { CompletedProgramName } from "../Programs/Programs";
 import { Player } from "@player";
 import { Page } from "../ui/Router";
 import { GetServer } from "../Server/AllServers";
@@ -13,16 +13,15 @@ import { FactionNames } from "../Faction/data/FactionNames";
 import { Server } from "../Server/Server";
 
 //Sends message to player, including a pop up
-function sendMessage(msg: Message, forced = false): void {
+function sendMessage(name: MessageFilename, forced = false): void {
   if (forced || !Settings.SuppressMessages) {
-    showMessage(msg.filename);
+    showMessage(name);
   }
-  addMessageToServer(msg);
+  addMessageToServer(name);
 }
 
 function showMessage(name: MessageFilename): void {
   const msg = Messages[name];
-  if (!(msg instanceof Message)) throw new Error("trying to display nonexistent message");
   dialogBoxCreate(
     <>
       Message received from unknown sender:
@@ -37,37 +36,22 @@ function showMessage(name: MessageFilename): void {
 }
 
 //Adds a message to a server
-function addMessageToServer(msg: Message): void {
+function addMessageToServer(name: MessageFilename): void {
   //Short-circuit if the message has already been saved
-  if (recvd(msg)) return;
-
-  const server = GetServer("home");
-  if (!server) throw new Error("The home server doesn't exist. This is a bug.");
-
-  server.messages.push(msg.filename);
+  if (recvd(name)) return;
+  const home = Player.getHomeComputer();
+  home.messages.push(name);
 }
 
 //Returns whether the given message has already been received
-function recvd(msg: Message): boolean {
-  const server = GetServer("home");
-  if (!server) throw new Error("The home server doesn't exist. This is a bug.");
-
-  return server.messages.includes(msg.filename);
+function recvd(name: MessageFilename): boolean {
+  const home = Player.getHomeComputer();
+  return home.messages.includes(name);
 }
 
 //Checks if any of the 'timed' messages should be sent
 function checkForMessagesToSend(): void {
   if (Router.page() === Page.BitVerse) return;
-  const jumper0 = Messages[MessageFilename.Jumper0];
-  const jumper1 = Messages[MessageFilename.Jumper1];
-  const jumper2 = Messages[MessageFilename.Jumper2];
-  const jumper3 = Messages[MessageFilename.Jumper3];
-  const jumper4 = Messages[MessageFilename.Jumper4];
-  const cybersecTest = Messages[MessageFilename.CyberSecTest];
-  const nitesecTest = Messages[MessageFilename.NiteSecTest];
-  const bitrunnersTest = Messages[MessageFilename.BitRunnersTest];
-  const truthGazer = Messages[MessageFilename.TruthGazer];
-  const redpill = Messages[MessageFilename.RedPill];
 
   if (Player.hasAugmentation(AugmentationNames.TheRedPill, true)) {
     //Get the world daemon required hacking level
@@ -77,33 +61,32 @@ function checkForMessagesToSend(): void {
     }
     //If the daemon can be hacked, send the player icarus.msg
     if (Player.skills.hacking >= worldDaemon.requiredHackingSkill) {
-      sendMessage(redpill, Player.sourceFiles.size === 0);
+      sendMessage(MessageFilename.RedPill, Player.sourceFiles.size === 0);
     }
     //If the daemon cannot be hacked, send the player truthgazer.msg a single time.
-    else if (!recvd(truthGazer)) {
-      sendMessage(truthGazer);
+    else if (!recvd(MessageFilename.TruthGazer)) {
+      sendMessage(MessageFilename.TruthGazer);
     }
-  } else if (!recvd(jumper0) && Player.skills.hacking >= 25) {
-    sendMessage(jumper0);
-    const flightName = Programs.Flight.name;
+  } else if (!recvd(MessageFilename.Jumper0) && Player.skills.hacking >= 25) {
+    sendMessage(MessageFilename.Jumper0);
     const homeComp = Player.getHomeComputer();
-    if (!homeComp.programs.includes(flightName)) {
-      homeComp.programs.push(flightName);
+    if (!homeComp.programs.includes(CompletedProgramName.flight)) {
+      homeComp.programs.push(CompletedProgramName.flight);
     }
-  } else if (!recvd(jumper1) && Player.skills.hacking >= 40) {
-    sendMessage(jumper1);
-  } else if (!recvd(cybersecTest) && Player.skills.hacking >= 50) {
-    sendMessage(cybersecTest);
-  } else if (!recvd(jumper2) && Player.skills.hacking >= 175) {
-    sendMessage(jumper2);
-  } else if (!recvd(nitesecTest) && Player.skills.hacking >= 200) {
-    sendMessage(nitesecTest);
-  } else if (!recvd(jumper3) && Player.skills.hacking >= 325) {
-    sendMessage(jumper3);
-  } else if (!recvd(jumper4) && Player.skills.hacking >= 490) {
-    sendMessage(jumper4);
-  } else if (!recvd(bitrunnersTest) && Player.skills.hacking >= 500) {
-    sendMessage(bitrunnersTest);
+  } else if (!recvd(MessageFilename.Jumper1) && Player.skills.hacking >= 40) {
+    sendMessage(MessageFilename.Jumper1);
+  } else if (!recvd(MessageFilename.CyberSecTest) && Player.skills.hacking >= 50) {
+    sendMessage(MessageFilename.CyberSecTest);
+  } else if (!recvd(MessageFilename.Jumper2) && Player.skills.hacking >= 175) {
+    sendMessage(MessageFilename.Jumper2);
+  } else if (!recvd(MessageFilename.NiteSecTest) && Player.skills.hacking >= 200) {
+    sendMessage(MessageFilename.NiteSecTest);
+  } else if (!recvd(MessageFilename.Jumper3) && Player.skills.hacking >= 325) {
+    sendMessage(MessageFilename.Jumper3);
+  } else if (!recvd(MessageFilename.Jumper4) && Player.skills.hacking >= 490) {
+    sendMessage(MessageFilename.Jumper4);
+  } else if (!recvd(MessageFilename.BitRunnersTest) && Player.skills.hacking >= 500) {
+    sendMessage(MessageFilename.BitRunnersTest);
   }
 }
 
@@ -120,7 +103,7 @@ export enum MessageFilename {
   RedPill = "icarus.msg",
 }
 
-//Reset
+// This type ensures that all members of the MessageFilename enum are valid keys
 const Messages: Record<MessageFilename, Message> = {
   //jump3R Messages
   [MessageFilename.Jumper0]: new Message(

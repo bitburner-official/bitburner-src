@@ -47,7 +47,7 @@ import { TextField, Tooltip } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
 import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
 import { TextFilePath } from "src/Paths/TextFilePath";
-import { ContentFilePath } from "src/Files/ContentFile";
+import { ContentFilePath } from "src/Paths/ContentFile";
 
 interface IProps {
   // Map of filename -> code

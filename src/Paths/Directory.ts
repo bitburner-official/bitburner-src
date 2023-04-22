@@ -1,8 +1,8 @@
-import { allContentFiles } from "../Files/ContentFile";
+import { allContentFiles } from "./ContentFile";
 import type { BaseServer } from "../Server/BaseServer";
 import { FilePath } from "./FilePath";
 
-/** The directory part of a BasicFilePath.
+/** The directory part of a BasicFilePath. Everything up to and including the last /
  * e.g. "file.js" => "", or "dir/file.js" => "dir/", or "../test.js" => "../" */
 export type BasicDirectory = string & { __type: "Directory" };
 

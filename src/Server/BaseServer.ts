@@ -14,10 +14,11 @@ import { ScriptArg } from "../Netscript/ScriptArg";
 import { JSONMap } from "../Types/Jsonable";
 import { IPAddress, ServerName } from "../Types/strings";
 import { FilePath } from "../Paths/FilePath";
-import { ContentFile, ContentFilePath } from "../Files/ContentFile";
-import { ProgramFilePath } from "../Paths/ProgramFilePath";
+import { ContentFile, ContentFilePath } from "../Paths/ContentFile";
+import { ProgramFilePath, hasProgramExtension } from "../Paths/ProgramFilePath";
 import { MessageFilename } from "src/Message/MessageHelpers";
 import { LiteratureName } from "src/Literature/data/LiteratureNames";
+import { CompletedProgramName } from "src/Programs/Programs";
 
 interface IConstructorParams {
   adminRights?: boolean;
@@ -63,14 +64,15 @@ export abstract class BaseServer implements IServer {
   maxRam = 0;
 
   // Message files AND Literature files on this Server
-  messages: ((MessageFilename | LiteratureName) & FilePath)[] = [];
+  messages: (MessageFilename | LiteratureName | FilePath)[] = [];
 
   // Name of company/faction/etc. that this server belongs to.
   // Optional, not applicable to all Servers
   organizationName = "";
 
   // Programs on this servers. Contains only the names of the programs
-  programs: ProgramFilePath[] = [];
+  // CompletedProgramNames are all typechecked as valid paths in Program constructor
+  programs: (ProgramFilePath | CompletedProgramName)[] = [];
 
   // RAM (GB) used. i.e. unavailable RAM
   ramUsed = 0;
@@ -185,7 +187,7 @@ export abstract class BaseServer implements IServer {
       this.scripts.delete(path);
       return { res: true };
     }
-    if (path.endsWith(".exe") || path.match(/^.+\.exe-\d+(?:\.\d*)?%-INC$/) != null) {
+    if (hasProgramExtension(path)) {
       const programIndex = this.programs.findIndex((program) => program === path);
       if (programIndex === -1) return { res: false, msg: `Program ${path} does not exist` };
       this.programs.splice(programIndex, 1);
@@ -225,7 +227,7 @@ export abstract class BaseServer implements IServer {
     this.ramUsed = ram;
   }
 
-  pushProgram(program: ProgramFilePath): void {
+  pushProgram(program: ProgramFilePath | CompletedProgramName): void {
     if (this.programs.includes(program)) return;
 
     // Remove partially created program if there is one

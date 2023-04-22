@@ -6,7 +6,7 @@ import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { Companies, initCompanies } from "./Company/Companies";
 import { resetIndustryResearchTrees } from "./Corporation/IndustryData";
-import { Programs } from "./Programs/Programs";
+import { CompletedProgramName } from "./Programs/Programs";
 import { Factions, initFactions } from "./Faction/Factions";
 import { joinFaction } from "./Faction/FactionHelpers";
 import { updateHashManagerCapacity } from "./Hacknet/HacknetHelpers";
@@ -15,7 +15,6 @@ import { Player } from "@player";
 import { recentScripts } from "./Netscript/RecentScripts";
 import { resetPidCounter } from "./Netscript/Pid";
 import { LiteratureName } from "./Literature/data/LiteratureNames";
-import { Literatures } from "./Literature/Literatures";
 
 import { GetServer, AddToAllServers, initForeignServers, prestigeAllServers } from "./Server/AllServers";
 import { prestigeHomeComputer } from "./Server/ServerHelpers";
@@ -54,20 +53,20 @@ export function prestigeAugmentation(): void {
   prestigeHomeComputer(homeComp);
 
   if (augmentationExists(AugmentationNames.Neurolink) && Player.hasAugmentation(AugmentationNames.Neurolink, true)) {
-    homeComp.programs.push(Programs.FTPCrackProgram.name);
-    homeComp.programs.push(Programs.RelaySMTPProgram.name);
+    homeComp.programs.push(CompletedProgramName.ftpCrack);
+    homeComp.programs.push(CompletedProgramName.relaySmtp);
   }
   if (augmentationExists(AugmentationNames.CashRoot) && Player.hasAugmentation(AugmentationNames.CashRoot, true)) {
     Player.setMoney(1e6);
-    homeComp.programs.push(Programs.BruteSSHProgram.name);
+    homeComp.programs.push(CompletedProgramName.bruteSsh);
   }
   if (augmentationExists(AugmentationNames.PCMatrix) && Player.hasAugmentation(AugmentationNames.PCMatrix, true)) {
-    homeComp.programs.push(Programs.DeepscanV1.name);
-    homeComp.programs.push(Programs.AutoLink.name);
+    homeComp.programs.push(CompletedProgramName.deepScan1);
+    homeComp.programs.push(CompletedProgramName.autoLink);
   }
 
   if (Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) {
-    homeComp.programs.push(Programs.Formulas.name);
+    homeComp.programs.push(CompletedProgramName.formulas);
   }
 
   // Re-create foreign servers
@@ -125,7 +124,7 @@ export function prestigeAugmentation(): void {
   // BitNode 3: Corporatocracy
   if (Player.bitNodeN === 3) {
     // Easiest way to comply with type constraint, instead of revalidating the enum member's file path
-    homeComp.messages.push(Literatures[LiteratureName.CorporationManagementHandbook].fn);
+    homeComp.messages.push(LiteratureName.CorporationManagementHandbook);
   }
 
   // Cancel Bladeburner action
@@ -249,13 +248,13 @@ export function prestigeSourceFile(flume: boolean): void {
   initCompanies();
 
   if (Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) {
-    homeComp.programs.push(Programs.Formulas.name);
+    homeComp.programs.push(CompletedProgramName.formulas);
   }
 
   // BitNode 3: Corporatocracy
   if (Player.bitNodeN === 3) {
     // Easiest way to comply with type constraint, instead of revalidating the enum member's file path
-    homeComp.messages.push(Literatures[LiteratureName.CorporationManagementHandbook].fn);
+    homeComp.messages.push(LiteratureName.CorporationManagementHandbook);
     dialogBoxCreate(
       "You received a copy of the Corporation Management Handbook on your home computer. " +
         "Read it if you need help getting started with Corporations!",

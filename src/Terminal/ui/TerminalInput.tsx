@@ -14,7 +14,6 @@ import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities"
 import { Settings } from "../../Settings/Settings";
 import { substituteAliases } from "../../Alias";
 import { longestCommonStart } from "../../utils/StringHelperFunctions";
-import { maxWidth } from "@mui/system";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

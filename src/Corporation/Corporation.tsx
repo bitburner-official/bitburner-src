@@ -14,8 +14,6 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { CityName } from "../Enums";
 import { CorpStateName } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
-import { isFilePath } from "../Paths/FilePath";
-import { isAbsolutePath } from "../Paths/Directory";
 
 interface IParams {
   name?: string;
@@ -442,22 +440,9 @@ export class Corporation {
   getStarterGuide(): void {
     // Check if player already has Corporation Handbook
     const homeComp = Player.getHomeComputer();
-    let hasHandbook = false;
-    const handbookFn = LiteratureName.CorporationManagementHandbook;
-    for (let i = 0; i < homeComp.messages.length; ++i) {
-      if (homeComp.messages[i] === handbookFn) {
-        hasHandbook = true;
-        break;
-      }
-    }
-
-    if (!hasHandbook) {
-      if (!isFilePath(handbookFn) || !isAbsolutePath(handbookFn)) {
-        throw new Error(`Corporation handbook had an invalid filepath. This is a bug.`);
-      }
-      homeComp.messages.push(handbookFn);
-    }
-    showLiterature(handbookFn);
+    const handbook = LiteratureName.CorporationManagementHandbook;
+    if (!homeComp.messages.includes(handbook)) homeComp.messages.push(handbook);
+    showLiterature(handbook);
     return;
   }
 

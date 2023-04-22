@@ -1,5 +1,5 @@
 import { Directory } from "./Directory";
-import { FilePath, isFilePath, resolveFilePath } from "./FilePath";
+import { FilePath, resolveFilePath } from "./FilePath";
 
 /** Filepath with the additional constraint of having a .cct extension */
 type WithContractExtension = string & { __fileType: "Contract" };
@@ -14,9 +14,4 @@ export function hasContractExtension(path: string): path is WithContractExtensio
 export function resolveContractFilePath(path: string, base = "" as FilePath | Directory): ContractFilePath | null {
   const result = resolveFilePath(path, base);
   return result && hasContractExtension(result) ? result : null;
-}
-
-/** Full typecheck with no modification */
-export function isContractFilePath(path: string): path is ContractFilePath {
-  return hasContractExtension(path) && isFilePath(path);
 }

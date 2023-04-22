@@ -7,6 +7,6 @@ export function showLiterature(fn: LiteratureName): void {
   if (litObj == null) {
     return;
   }
-  const txt = `<i>${litObj.title}</i><br><br>${litObj.txt}`;
+  const txt = `<i>${litObj.title}</i><br><br>${litObj.text}`;
   dialogBoxCreate(txt, true);
 }

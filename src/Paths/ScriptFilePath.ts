@@ -1,5 +1,5 @@
 import { Directory } from "./Directory";
-import { FilePath, isFilePath, resolveFilePath } from "./FilePath";
+import { FilePath, resolveFilePath } from "./FilePath";
 
 /** Type for just checking a .js extension with no other verification*/
 type WithScriptExtension = string & { __fileType: "Script" };
@@ -27,9 +27,4 @@ export function resolveScriptFilePath(
 /** Just check extension */
 export function hasScriptExtension(path: string): path is WithScriptExtension {
   return validScriptExtensions.some((extension) => path.endsWith(extension));
-}
-
-/** Check if a provided string is a valid script filename with no modification */
-export function isScriptFilePath(path: string): path is ScriptFilePath {
-  return hasScriptExtension(path) && isFilePath(path);
 }

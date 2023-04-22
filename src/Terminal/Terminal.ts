@@ -4,7 +4,7 @@ import { Player } from "@player";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
-import { Programs } from "../Programs/Programs";
+import { CompletedProgramName } from "../Programs/Programs";
 import { CodingContractResult } from "../CodingContracts";
 import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
 
@@ -524,7 +524,7 @@ export class Terminal {
         continue;
       } // Don't print current server
       const titleDashes = Array((d - 1) * 4 + 1).join("-");
-      if (Player.hasProgram(Programs.AutoLink.name)) {
+      if (Player.hasProgram(CompletedProgramName.autoLink)) {
         this.append(new Link(titleDashes, s.hostname));
       } else {
         this.print(titleDashes + s.hostname);

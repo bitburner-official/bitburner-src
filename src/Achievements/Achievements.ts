@@ -13,7 +13,7 @@ import { HacknetNode } from "../Hacknet/HacknetNode";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { CityName } from "../Enums";
 import { Player } from "@player";
-import { Programs } from "../Programs/Programs";
+import { CompletedProgramName } from "../Programs/Programs";
 import { GetAllServers, GetServer } from "../Server/AllServers";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Server } from "../Server/Server";
@@ -126,33 +126,33 @@ export const achievements: Record<string, Achievement> = {
   "BRUTESSH.EXE": {
     ...achievementData["BRUTESSH.EXE"],
     Icon: "p0",
-    Condition: () => Player.getHomeComputer().programs.includes(Programs.BruteSSHProgram.name),
+    Condition: () => Player.getHomeComputer().programs.includes(CompletedProgramName.bruteSsh),
   },
   "FTPCRACK.EXE": {
     ...achievementData["FTPCRACK.EXE"],
     Icon: "p1",
-    Condition: () => Player.getHomeComputer().programs.includes(Programs.FTPCrackProgram.name),
+    Condition: () => Player.getHomeComputer().programs.includes(CompletedProgramName.ftpCrack),
   },
   //-----------------------------------------------------
   "RELAYSMTP.EXE": {
     ...achievementData["RELAYSMTP.EXE"],
     Icon: "p2",
-    Condition: () => Player.getHomeComputer().programs.includes(Programs.RelaySMTPProgram.name),
+    Condition: () => Player.getHomeComputer().programs.includes(CompletedProgramName.relaySmtp),
   },
   "HTTPWORM.EXE": {
     ...achievementData["HTTPWORM.EXE"],
     Icon: "p3",
-    Condition: () => Player.getHomeComputer().programs.includes(Programs.HTTPWormProgram.name),
+    Condition: () => Player.getHomeComputer().programs.includes(CompletedProgramName.httpWorm),
   },
   "SQLINJECT.EXE": {
     ...achievementData["SQLINJECT.EXE"],
     Icon: "p4",
-    Condition: () => Player.getHomeComputer().programs.includes(Programs.SQLInjectProgram.name),
+    Condition: () => Player.getHomeComputer().programs.includes(CompletedProgramName.sqlInject),
   },
   "FORMULAS.EXE": {
     ...achievementData["FORMULAS.EXE"],
     Icon: "formulas",
-    Condition: () => Player.getHomeComputer().programs.includes(Programs.Formulas.name),
+    Condition: () => Player.getHomeComputer().programs.includes(CompletedProgramName.formulas),
   },
   "SF1.1": {
     ...achievementData["SF1.1"],

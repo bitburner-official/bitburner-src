@@ -1,5 +1,5 @@
 import { Directory } from "./Directory";
-import { FilePath, isFilePath, resolveFilePath } from "./FilePath";
+import { FilePath, resolveFilePath } from "./FilePath";
 
 /** Filepath with the additional constraint of having a .js extension */
 type WithTextExtension = string & { __fileType: "Text" };
@@ -14,9 +14,4 @@ export function hasTextExtension(path: string): path is WithTextExtension {
 export function resolveTextFilePath(path: string, base = "" as FilePath | Directory): TextFilePath | null {
   const result = resolveFilePath(path, base);
   return result && hasTextExtension(result) ? result : null;
-}
-
-/** Full typecheck with no modification */
-export function isTextFilePath(path: string): path is TextFilePath {
-  return hasTextExtension(path) && isFilePath(path);
 }

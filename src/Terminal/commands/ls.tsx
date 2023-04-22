@@ -10,7 +10,7 @@ import { showLiterature } from "../../Literature/LiteratureHelpers";
 import { MessageFilename, showMessage } from "../../Message/MessageHelpers";
 import { ScriptFilePath } from "../../Paths/ScriptFilePath";
 import { FilePath, combinePath, removeDirectoryFromPath } from "../../Paths/FilePath";
-import { ContentFilePath } from "../../Files/ContentFile";
+import { ContentFilePath } from "../../Paths/ContentFile";
 import {
   Directory,
   directoryExistsOnServer,
@@ -90,11 +90,13 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
   }
 
   // Get all of the programs and scripts on the machine into one temporary array
-  for (const program of server.programs) handlePath(program, allPrograms);
+  // Type assertions that programs and msg/lit are filepaths are safe due to checks in
+  // Program, Message, and Literature constructors
+  for (const program of server.programs) handlePath(program as FilePath, allPrograms);
   for (const scriptFilename of server.scripts.keys()) handlePath(scriptFilename, allScripts);
   for (const txtFilename of server.textFiles.keys()) handlePath(txtFilename, allTextFiles);
   for (const contract of server.contracts) handlePath(contract.fn, allContracts);
-  for (const msgOrLit of server.messages) handlePath(msgOrLit as FilePath, allMessages as FilePath[]);
+  for (const msgOrLit of server.messages) handlePath(msgOrLit as FilePath, allMessages);
 
   // Sort the files/folders alphabetically then print each
   allPrograms.sort();

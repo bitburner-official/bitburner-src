@@ -1,6 +1,6 @@
-import { ProgramFilePath } from "../Paths/ProgramFilePath";
+import type { CompletedProgramName } from "./Programs";
+import { ProgramFilePath, asProgramFilePath } from "../Paths/ProgramFilePath";
 import { BaseServer } from "../Server/BaseServer";
-import { programsMetadata } from "./data/ProgramsMetadata";
 
 export interface IProgramCreate {
   level: number;
@@ -8,14 +8,19 @@ export interface IProgramCreate {
   time: number;
   tooltip: string;
 }
+type ProgramConstructorParams = {
+  name: CompletedProgramName;
+  create: IProgramCreate | null;
+  run: (args: string[], server: BaseServer) => void;
+};
 
 export class Program {
-  name = programsMetadata[0].name;
+  name: ProgramFilePath & CompletedProgramName;
   create: IProgramCreate | null;
   run: (args: string[], server: BaseServer) => void;
 
-  constructor(name: ProgramFilePath, create: IProgramCreate | null, run: (args: string[], server: BaseServer) => void) {
-    this.name = name;
+  constructor({ name, create, run }: ProgramConstructorParams) {
+    this.name = asProgramFilePath(name);
     this.create = create;
     this.run = run;
   }

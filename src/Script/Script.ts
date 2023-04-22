@@ -5,7 +5,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { ScriptFilePath } from "../Paths/ScriptFilePath";
-import { ContentFile } from "../Files/ContentFile";
+import { ContentFile } from "../Paths/ContentFile";
 /** Type for ensuring script code is always trimmed */
 export type FormattedCode = string & { __type: "FormattedCode" };
 

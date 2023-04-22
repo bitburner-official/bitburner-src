@@ -33,6 +33,11 @@ export function isFilePath(path: string): path is BasicFilePath {
   return basicFilePathRegex.test(path);
 }
 
+export function asFilePath<T extends string>(input: T): T & FilePath {
+  if (isFilePath(input) && isAbsolutePath(input)) return input;
+  throw new Error(`${input} failed to validate as a FilePath.`);
+}
+
 export function getFilenameOnly<T extends BasicFilePath>(path: T): T & FilePath {
   const start = path.lastIndexOf("/") + 1;
   return path.substring(start) as T & FilePath;
