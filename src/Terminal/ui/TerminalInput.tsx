@@ -12,8 +12,8 @@ import { Terminal } from "../../Terminal";
 import { Player } from "@player";
 import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities";
 import { Settings } from "../../Settings/Settings";
-import { substituteAliases } from "../../Alias";
 import { longestCommonStart } from "../../utils/StringHelperFunctions";
+import { ParseCommand, ParseCommands } from "../Parser";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -207,28 +207,21 @@ export function TerminalInput(): React.ReactElement {
     // Autocomplete
     if (event.key === KEY.TAB) {
       event.preventDefault();
+      // Get the text currently being autocompleted.
+      const currentText = /[^ ]*$/.exec(value)?.[0] ?? "";
+      console.log(currentText);
+      // Remove the current text from the commands string
+      const valueWithoutCurrent = value.substring(0, value.length - currentText.length);
+      // Parse the commands string, this handles alias replacement as well.
+      const commands = ParseCommands(valueWithoutCurrent);
+      console.log("commands", commands);
+      if (!commands.length) commands.push("");
+      // parse the last command into a commandArgs array, but convert to string
+      const commandArray = ParseCommand(commands[commands.length - 1]).map(String);
+      commandArray.push(currentText);
+      console.log("commandArray", commandArray);
 
-      // Apply aliases, but not to the current argument. We are only concerned with the last command.
-      // Remove the last semicolon and anything preceding it, then split by whitespace to get the current command array
-      const unaliasedArray = value.replace(/.*(?<=;)/, "").split(/\s+/);
-
-      // The last element of this array is always the argument currently being typed (the text needing autocomplete).
-      // We remove it from the unaliased array before applying the aliases.
-      // .split return value always has at least one member, so this assertion is safe.
-      const currentText = unaliasedArray.pop() as string;
-
-      // If the unaliased array has members, convert to string -> apply alias -> capture from last semicolon again -> split back into an array
-      // Ternary is needed so that a 0-length unaliased array does not result in a 1-length aliased array
-      const aliasedArray = unaliasedArray.length
-        ? substituteAliases(unaliasedArray.join(" "))
-            .replace(/.*(?<=;)/, "")
-            .split(/\s+/)
-        : unaliasedArray;
-
-      // Add the current text back onto the aliased array
-      aliasedArray.push(currentText);
-
-      const possibilities = await getTabCompletionPossibilities(aliasedArray, Terminal.cwd());
+      const possibilities = await getTabCompletionPossibilities(commandArray, Terminal.cwd());
       if (possibilities.length === 0) return;
       if (possibilities.length === 1) {
         saveValue(value.replace(/[^ ]*$/, possibilities[0]) + " ");

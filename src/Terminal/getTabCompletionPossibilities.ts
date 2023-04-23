@@ -99,20 +99,25 @@ export async function getTabCompletionPossibilities(
     // The iterable to iterate through the data
     iterable: Iterable<string>;
     // Whether the item can be pathed to. Typically this is true for files (programs are an exception)
-    usePathing: boolean;
+    usePathing?: boolean;
+    // Whether to exclude the current text as one of the autocomplete options
+    ignoreCurrent?: boolean;
   }
-  function addGeneric({ iterable, usePathing }: AddAllGenericOptions) {
+  function addGeneric({ iterable, usePathing, ignoreCurrent }: AddAllGenericOptions) {
     const requiredStart = usePathing ? pathingRequiredMatch : requiredMatch;
     for (const member of iterable) {
+      if (ignoreCurrent && member.length <= requiredStart.length) continue;
       if (member.toLowerCase().startsWith(requiredStart)) {
         possibilities.push(usePathing && relativeDir ? relativeDir + member.substring(baseDir.length) : member);
       }
     }
   }
 
-  const addAliases = () => addGeneric({ iterable: Object.keys(Aliases), usePathing: false });
-  const addGlobalAliases = () => addGeneric({ iterable: Object.keys(GlobalAliases), usePathing: false });
-  const addCommands = () => addGeneric({ iterable: commands, usePathing: false });
+  const addAliases = () => addGeneric({ iterable: Object.keys(Aliases) });
+  const addGlobalAliases = () => addGeneric({ iterable: Object.keys(GlobalAliases) });
+  const addCommands = () => addGeneric({ iterable: commands });
+  const addDarkwebItems = () => addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
+  const addServerNames = () => addGeneric({ iterable: GetAllServers().map((server) => server.hostname) });
   const addScripts = () => addGeneric({ iterable: currServ.scripts.keys(), usePathing: true });
   const addTextFiles = () => addGeneric({ iterable: currServ.textFiles.keys(), usePathing: true });
   const addCodingContracts = () => {
@@ -127,20 +132,11 @@ export async function getTabCompletionPossibilities(
     addGeneric({ iterable: currServ.messages.filter((message) => message.endsWith(".msg")), usePathing: true });
   };
 
-  const addDarkwebItems = () => {
-    addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program), usePathing: false });
-  };
-
-  const addServerNames = () => {
-    addGeneric({ iterable: GetAllServers().map((server) => server.hostname), usePathing: false });
-  };
-
   const addReachableServerNames = () => {
     addGeneric({
       iterable: GetAllServers()
         .filter((server) => server.backdoorInstalled || currServ.serversOnNetwork.includes(server.hostname))
         .map((server) => server.hostname),
-      usePathing: false,
     });
   };
 
@@ -148,12 +144,14 @@ export async function getTabCompletionPossibilities(
     // Only allow completed programs to autocomplete
     const programs = homeComputer.programs.filter((name) => name.endsWith(".exe"));
     // At all times, programs can be accessed without pathing
-    addGeneric({ iterable: programs, usePathing: false });
+    addGeneric({ iterable: programs });
     // If we're on home and a path is being used, also include pathing results
     if (homeComputer.isConnectedTo && relativeDir) addGeneric({ iterable: programs, usePathing: true });
   };
 
-  const addDirectories = () => addGeneric({ iterable: getAllDirectories(currServ), usePathing: true });
+  const addDirectories = () => {
+    addGeneric({ iterable: getAllDirectories(currServ), usePathing: true, ignoreCurrent: true });
+  };
 
   // Just some booleans so the mismatch between command length and arg number are not as confusing.
   const onCommand = commandLength === 1;
@@ -171,8 +169,8 @@ export async function getTabCompletionPossibilities(
   if (onCommand) {
     addAliases();
     addCommands();
-    // Allow any relative pathing with . to act like the ./ command
-    if (currentArg.startsWith(".")) {
+    // Allow any relative pathing as a command arg to act as previous ./ command
+    if (relativeDir) {
       addScripts();
       addPrograms();
       addCodingContracts();
@@ -237,12 +235,11 @@ export async function getTabCompletionPossibilities(
       return possibilities;
 
     case "scp":
-      if (onFirstCommandArg) addServerNames();
-      else if (onSecondCommandArg) {
+      if (onFirstCommandArg) {
         addScripts();
         addTextFiles();
         addLiterature();
-      }
+      } else if (onSecondCommandArg) addServerNames();
       return possibilities;
 
     case "rm":
