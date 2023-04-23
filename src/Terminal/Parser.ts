@@ -20,14 +20,15 @@ export function splitCommands(commandString: string): string[] {
 }
 
 /** Split commands string while also applying aliases */
-export function ParseCommands(commands: string): string[] {
+export function parseCommands(commands: string): string[] {
   // Remove any unquoted whitespace longer than length 1
   commands = commands.replace(/(?:"[^"]+"|'[^']+'|\s{2,})+?/g, (match) => (match.startsWith(" ") ? " " : match));
+  // Split the commands, apply aliases once, then split again and filter out empty strings.
   const commandsArr = splitCommands(commands).map(substituteAliases).flatMap(splitCommands).filter(Boolean);
   return commandsArr;
 }
 
-export function ParseCommand(command: string): (string | number | boolean)[] {
+export function parseCommand(command: string): (string | number | boolean)[] {
   const commandArgs = command.match(/(?:("[^"]+"|'[^']+'|[^\s]+))+?/g);
   if (!commandArgs) return [];
   const argsToReturn = commandArgs.map(parseArg);

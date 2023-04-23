@@ -13,7 +13,6 @@ import { Player } from "@player";
 import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities";
 import { Settings } from "../../Settings/Settings";
 import { longestCommonStart } from "../../utils/StringHelperFunctions";
-import { ParseCommand, ParseCommands } from "../Parser";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -207,21 +206,7 @@ export function TerminalInput(): React.ReactElement {
     // Autocomplete
     if (event.key === KEY.TAB) {
       event.preventDefault();
-      // Get the text currently being autocompleted.
-      const currentText = /[^ ]*$/.exec(value)?.[0] ?? "";
-      console.log(currentText);
-      // Remove the current text from the commands string
-      const valueWithoutCurrent = value.substring(0, value.length - currentText.length);
-      // Parse the commands string, this handles alias replacement as well.
-      const commands = ParseCommands(valueWithoutCurrent);
-      console.log("commands", commands);
-      if (!commands.length) commands.push("");
-      // parse the last command into a commandArgs array, but convert to string
-      const commandArray = ParseCommand(commands[commands.length - 1]).map(String);
-      commandArray.push(currentText);
-      console.log("commandArray", commandArray);
-
-      const possibilities = await getTabCompletionPossibilities(commandArray, Terminal.cwd());
+      const possibilities = await getTabCompletionPossibilities(value, Terminal.cwd());
       if (possibilities.length === 0) return;
       if (possibilities.length === 1) {
         saveValue(value.replace(/[^ ]*$/, possibilities[0]) + " ");
@@ -229,7 +214,7 @@ export function TerminalInput(): React.ReactElement {
       }
       // More than one possibility, check to see if there is a longer common string than currentText.
       const longestMatch = longestCommonStart(possibilities);
-      if (longestMatch.length > currentText.length) saveValue(value.replace(/[^ ]*$/, longestMatch));
+      saveValue(value.replace(/[^ ]*$/, longestMatch));
       setPossibilities(possibilities);
     }
 

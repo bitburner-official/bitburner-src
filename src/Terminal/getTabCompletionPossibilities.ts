@@ -2,7 +2,7 @@ import { Aliases, GlobalAliases } from "../Alias";
 import { DarkWebItems } from "../DarkWeb/DarkWebItems";
 import { Player } from "@player";
 import { GetAllServers } from "../Server/AllServers";
-import { ParseCommand, ParseCommands } from "./Parser";
+import { parseCommand, parseCommands } from "./Parser";
 import { HelpTexts } from "./HelpText";
 import { compile } from "../NetscriptJSEvaluator";
 import { Flags } from "../NetscriptFunctions/Flags";
@@ -13,7 +13,7 @@ import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
 
 // TODO: this shouldn't be hardcoded in two places with no typechecks to verify equivalence
 // An array of all Terminal commands
-const commands = [
+const gameCommands = [
   "alias",
   "analyze",
   "backdoor",
@@ -56,37 +56,44 @@ const commands = [
 ];
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
- * @param commandArray Array of texts that combine to create the current command
+ * @param terminalText The current full text entered in the terminal
  * @param baseDir The current working directory.
  * @returns Array of possible string replacements for the current text being autocompleted.
  */
-export async function getTabCompletionPossibilities(
-  commandArray: readonly string[],
-  baseDir = root,
-): Promise<string[]> {
+export async function getTabCompletionPossibilities(terminalText: string, baseDir = root): Promise<string[]> {
+  // Get the current command text
+  const currentText = /[^ ]*$/.exec(terminalText)?.[0] ?? "";
+  // Remove the current text from the commands string
+  const valueWithoutCurrent = terminalText.substring(0, terminalText.length - currentText.length);
+  // Parse the commands string, this handles alias replacement as well.
+  const commands = parseCommands(valueWithoutCurrent);
+  if (!commands.length) commands.push("");
+  // parse the last command into a commandArgs array, but convert to string
+  const commandArray = parseCommand(commands[commands.length - 1]).map(String);
+  commandArray.push(currentText);
+
   /** How many separate strings make up the command, e.g. "run a" would result in 2 strings. */
   const commandLength = commandArray.length;
 
-  /** The current text being autocompleted. */
-  const currentArg = commandArray[commandLength - 1];
-
   // To prevent needing to convert currentArg to lowercase for every comparison
-  const requiredMatch = currentArg.toLowerCase();
+  const requiredMatch = currentText.toLowerCase();
 
   // If a relative directory is included in the path, this will store what the absolute path needs to start with to be valid
-  let pathingRequiredMatch = currentArg.toLowerCase();
+  let pathingRequiredMatch = currentText.toLowerCase();
 
   /** The directory portion of the current input */
   let relativeDir = "";
-  const slashIndex = currentArg.lastIndexOf("/");
+  const slashIndex = currentText.lastIndexOf("/");
 
   if (slashIndex !== -1) {
-    relativeDir = currentArg.substring(0, slashIndex + 1);
+    relativeDir = currentText.substring(0, slashIndex + 1);
     const path = resolveDirectory(relativeDir, baseDir);
     // No valid terminal inputs contain a / that does not indicate a path
     if (path === null) return [];
     baseDir = path;
-    pathingRequiredMatch = currentArg.replace(/.*(?<=\/)/, path).toLowerCase();
+    pathingRequiredMatch = currentText.replace(/^.*\//, path).toLowerCase();
+  } else if (baseDir !== root) {
+    pathingRequiredMatch = (baseDir + currentText).toLowerCase();
   }
 
   const possibilities: string[] = [];
@@ -108,14 +115,14 @@ export async function getTabCompletionPossibilities(
     for (const member of iterable) {
       if (ignoreCurrent && member.length <= requiredStart.length) continue;
       if (member.toLowerCase().startsWith(requiredStart)) {
-        possibilities.push(usePathing && relativeDir ? relativeDir + member.substring(baseDir.length) : member);
+        possibilities.push(usePathing ? relativeDir + member.substring(baseDir.length) : member);
       }
     }
   }
 
   const addAliases = () => addGeneric({ iterable: Object.keys(Aliases) });
   const addGlobalAliases = () => addGeneric({ iterable: Object.keys(GlobalAliases) });
-  const addCommands = () => addGeneric({ iterable: commands });
+  const addCommands = () => addGeneric({ iterable: gameCommands });
   const addDarkwebItems = () => addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
   const addServerNames = () => addGeneric({ iterable: GetAllServers().map((server) => server.hostname) });
   const addScripts = () => addGeneric({ iterable: currServ.scripts.keys(), usePathing: true });
@@ -273,9 +280,9 @@ export async function getTabCompletionPossibilities(
   async function scriptAutocomplete(): Promise<string[] | undefined> {
     let inputCopy = commandArray.join(" ");
     if (commandLength === 1) inputCopy = "run " + inputCopy;
-    const commands = ParseCommands(inputCopy);
+    const commands = parseCommands(inputCopy);
     if (commands.length === 0) return;
-    const command = ParseCommand(commands[commands.length - 1]);
+    const command = parseCommand(commands[commands.length - 1]);
     const filename = resolveScriptFilePath(String(command[1]), baseDir);
     if (!filename) return; // Not a script path.
     if (filename.endsWith(".script")) return; // Doesn't work with ns1.

@@ -17,7 +17,7 @@ import { GetServer, GetAllServers } from "../Server/AllServers";
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
 import { getServerOnNetwork, processSingleServerGrowth } from "../Server/ServerHelpers";
-import { ParseCommand, ParseCommands } from "./Parser";
+import { parseCommand, parseCommands } from "./Parser";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
 import { createProgressBarText } from "../utils/helpers/createProgressBarText";
@@ -574,7 +574,7 @@ export class Terminal {
       Player.terminalCommandHistory = this.commandHistory;
     }
     this.commandHistoryIndex = this.commandHistory.length;
-    const allCommands = ParseCommands(commands);
+    const allCommands = parseCommands(commands);
     for (const command of allCommands) this.executeCommand(command);
   }
 
@@ -592,7 +592,7 @@ export class Terminal {
   executeCommand(command: string): void {
     if (this.action !== null) return this.error(`Cannot execute command (${command}) while an action is in progress`);
 
-    const commandArray = ParseCommand(command);
+    const commandArray = parseCommand(command);
     if (!commandArray.length) return;
 
     const currentServer = Player.getCurrentServer();

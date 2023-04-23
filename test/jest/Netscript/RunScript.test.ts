@@ -6,6 +6,7 @@ import { AddToAllServers, DeleteServer } from "../../../src/Server/AllServers";
 import { WorkerScriptStartStopEventEmitter } from "../../../src/Netscript/WorkerScriptStartStopEventEmitter";
 import { AlertEvents } from "../../../src/ui/React/AlertManager";
 import type { Script } from "src/Script/Script";
+import { ScriptFilePath } from "src/Paths/ScriptFilePath";
 
 // Replace Blob/ObjectURL functions, because they don't work natively in Jest
 global.Blob = class extends Blob {
@@ -77,7 +78,7 @@ test.each([
     return "data:text/javascript," + encodeURIComponent(blob.code);
   };
 
-  let server;
+  let server = {} as Server;
   let eventDelete = () => {};
   let alertDelete = () => {};
   try {
@@ -87,10 +88,10 @@ test.each([
     server = new Server({ hostname: "home", adminRights: true, maxRam: 8 });
     AddToAllServers(server);
     for (const s of scripts) {
-      expect(server.writeToScriptFile(s.name, s.code)).toEqual({ success: true, overwritten: false });
+      expect(server.writeToScriptFile(s.name as ScriptFilePath, s.code)).toEqual({ overwritten: false });
     }
 
-    const script = server.scripts.get(scripts[scripts.length - 1].name) as Script;
+    const script = server.scripts.get(scripts[scripts.length - 1].name as ScriptFilePath) as Script;
     expect(script.filename).toEqual(scripts[scripts.length - 1].name);
 
     const ramUsage = script.getRamUsage(server.scripts);
