@@ -22,7 +22,7 @@ export function splitCommands(commandString: string): string[] {
 /** Split commands string while also applying aliases */
 export function parseCommands(commands: string): string[] {
   // Remove any unquoted whitespace longer than length 1
-  commands = commands.replace(/(?:"[^"]+"|'[^']+'|\s{2,})+?/g, (match) => (match.startsWith(" ") ? " " : match));
+  commands = commands.replace(/(?:"[^"]*"|'[^']*'|\s{2,})+?/g, (match) => (match.startsWith(" ") ? " " : match));
   // Split the commands, apply aliases once, then split again and filter out empty strings.
   const commandsArr = splitCommands(commands).map(substituteAliases).flatMap(splitCommands).filter(Boolean);
   return commandsArr;
