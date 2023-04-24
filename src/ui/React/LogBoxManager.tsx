@@ -249,12 +249,7 @@ function LogWindow(props: IProps): React.ReactElement {
 
   function title(full = false): string {
     const maxLength = 30;
-    const server = GetServer(script.server);
-    let hostname = "";
-    if (server !== null) {
-      hostname = `${server.hostname}: `;
-    }
-    const t = `${hostname}${script.filename} ${script.args.map((x: ScriptArg): string => `${x}`).join(" ")}`;
+    const t = `${script.server}: ${script.filename} ${script.args.join(" ")}`;
     if (full || t.length <= maxLength) {
       return t;
     }
