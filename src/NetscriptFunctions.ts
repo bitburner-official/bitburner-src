@@ -76,7 +76,7 @@ import { Flags } from "./NetscriptFunctions/Flags";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
-import { InternalAPI, removedFunction, NSProxy, NetscriptContext } from "./Netscript/APIWrapper";
+import { InternalAPI, removedFunction, NSProxy } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
