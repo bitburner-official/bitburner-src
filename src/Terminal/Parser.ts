@@ -12,25 +12,27 @@ function parseArg(arg: string): string | number | boolean {
   return arg;
 }
 
-/** Split a commands string (what is typed into the terminal) into multiple commands */
-export function splitCommands(commandString: string): string[] {
-  const commandArray = commandString.match(/(?:'[^']*'|"[^"]*"|[^;"])*/g);
-  if (!commandArray) return [];
-  return commandArray.map((command) => command.trim());
+/** split a commands string into a commands array */
+export function splitCommands(commandsText: string): string[] {
+  // regex to match each entire command separately, without the semicolon included.
+  const commandRegex = /(?:'[^']*'|"[^"]*"|[^;])*/g;
+  const commands = commandsText.match(commandRegex);
+  if (!commands) return [];
+  return commands.map((command) => command.trim());
 }
 
-/** Split commands string while also applying aliases */
-export function parseCommands(commands: string): string[] {
-  // Remove any unquoted whitespace longer than length 1
-  commands = commands.replace(/(?:"[^"]*"|'[^']*'|\s{2,})+?/g, (match) => (match.startsWith(" ") ? " " : match));
-  // Split the commands, apply aliases once, then split again and filter out empty strings.
-  const commandsArr = splitCommands(commands).map(substituteAliases).flatMap(splitCommands).filter(Boolean);
-  return commandsArr;
+/** parse a commands string, including alias substitution, into a commands array */
+export function parseCommands(commandsText: string): string[] {
+  // Split the commands, apply aliases once, then split again and filter out empty commands.
+  const commands = splitCommands(commandsText).map(substituteAliases).flatMap(splitCommands).filter(Boolean);
+  return commands;
 }
 
+/** get a commandArgs array from a single command string */
 export function parseCommand(command: string): (string | number | boolean)[] {
-  const commandArgs = command.match(/(?:("[^"]*"|'[^']*'|[^\s]+))+?/g);
+  // Match every command arg in a given command string
+  const argDetection = /(?:("[^"]*"|'[^']*'|[^\s]+))/g;
+  const commandArgs = command.match(argDetection);
   if (!commandArgs) return [];
-  const argsToReturn = commandArgs.map(parseArg);
-  return argsToReturn;
+  return commandArgs.map(parseArg);
 }
