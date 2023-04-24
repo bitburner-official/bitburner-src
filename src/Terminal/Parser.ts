@@ -29,7 +29,7 @@ export function parseCommands(commands: string): string[] {
 }
 
 export function parseCommand(command: string): (string | number | boolean)[] {
-  const commandArgs = command.match(/(?:("[^"]+"|'[^']+'|[^\s]+))+?/g);
+  const commandArgs = command.match(/(?:("[^"]*"|'[^']*'|[^\s]+))+?/g);
   if (!commandArgs) return [];
   const argsToReturn = commandArgs.map(parseArg);
   return argsToReturn;
