@@ -131,12 +131,13 @@ export function Root(props: IProps): React.ReactElement {
     GetServer(openScripts[i].hostname) === null && openScripts.splice(i, 1);
   }
   if (currentScript && GetServer(currentScript.hostname) === null) {
-    currentScript = openScripts[0];
-    if (currentScript === undefined) currentScript = null;
+    currentScript = openScripts[0] ?? null;
   }
 
   useEffect(() => {
     if (currentScript !== null) {
+      const tabIndex = currentTabIndex();
+      if (typeof tabIndex === "number") onTabClick(tabIndex);
       updateRAM(currentScript.code);
     }
   }, []);
@@ -481,13 +482,7 @@ export function Root(props: IProps): React.ReactElement {
   }
 
   function currentTabIndex(): number | undefined {
-    if (currentScript !== null) {
-      return openScripts.findIndex(
-        (script) =>
-          currentScript !== null && script.path === currentScript.path && script.hostname === currentScript.hostname,
-      );
-    }
-
+    if (currentScript) return openScripts.findIndex((openScript) => currentScript === openScript);
     return undefined;
   }
 

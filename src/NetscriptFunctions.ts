@@ -1792,8 +1792,11 @@ function createDeprecatedProperty(
         Terminal.warn(`Deprecated property ${propName} accessed from ns.${ctx.functionPath} return value.`);
         Terminal.warn(`This is no longer supported usage and will be removed in a later version.`);
         Terminal.warn(message);
+        Terminal.info(`Note that this message can also appear if you iterate through the object's values.`);
+        Terminal.info(`This message will only be shown once per game session for each deprecated property accessed.`);
       }
       return value;
     },
+    enumerable: true,
   });
 }

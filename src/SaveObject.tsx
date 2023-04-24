@@ -669,8 +669,13 @@ function evaluateVersionCompatibility(ver: string | number): void {
     if (anyPlayer.hashManager?.upgrades) {
       anyPlayer.hashManager.upgrades["Company Favor"] ??= 0;
     }
-    anyPlayer.lastAugReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastAug;
-    anyPlayer.lastNodeReset ??= anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastBitnode;
+    if (!anyPlayer.lastAugReset || anyPlayer.lastAugReset === -1) {
+      anyPlayer.lastAugReset = anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastAug;
+    }
+    if (!anyPlayer.lastNodeRest || anyPlayer.lastNodeReset === -1) {
+      anyPlayer.lastNodeReset = anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastBitnode;
+    }
+
     const newDirectory = resolveDirectory("v2.3FileChanges/") as Directory;
     for (const server of GetAllServers()) {
       let invalidScriptCount = 0;
