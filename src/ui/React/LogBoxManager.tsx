@@ -248,7 +248,7 @@ function LogWindow(props: IProps): React.ReactElement {
 
   function title(full = false): string {
     const maxLength = 30;
-    const t = `${script.filename} ${script.args.map((x: ScriptArg): string => `${x}`).join(" ")}`;
+    const t = `${script.server}: ${script.filename} ${script.args.join(" ")}`;
     if (full || t.length <= maxLength) {
       return t;
     }
