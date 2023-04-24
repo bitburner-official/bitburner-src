@@ -81,7 +81,7 @@ import { Flags } from "./NetscriptFunctions/Flags";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
-import { InternalAPI, removedFunction, NSProxy } from "./Netscript/APIWrapper";
+import { InternalAPI, removedFunction, NSProxy, NetscriptContext } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
@@ -1742,7 +1742,7 @@ export const ns: InternalAPI<NSFull> = {
   getFavorToDonate: () => () => {
     return Math.floor(CONSTANTS.BaseFavorToDonate * BitNodeMultipliers.RepToDonateToFaction);
   },
-  getPlayer: () => () => {
+  getPlayer: (ctx) => () => {
     const data = {
       hp: cloneDeep(Player.hp),
       skills: cloneDeep(Player.skills),
@@ -1758,6 +1758,22 @@ export const ns: InternalAPI<NSFull> = {
       factions: Player.factions.slice(),
       entropy: Player.entropy,
     };
+    createDeprecatedProperty(
+      ctx,
+      data,
+      "playtimeSinceLastAug",
+      Player.playtimeSinceLastAug,
+      "getPlayer.playtimeSinceLastAug",
+      "Use ns.getPlaytimeSinceLastAug or ns.singularity.getLastAugReset instead.",
+    );
+    createDeprecatedProperty(
+      ctx,
+      data,
+      "playtimeSinceLastBitnode",
+      Player.playtimeSinceLastBitnode,
+      "getPlayer.playtimeSinceLastBitnode",
+      "Use ns.singularity.getLastNodeReset instead.",
+    );
     return data;
   },
   getMoneySources: () => () => ({
@@ -1854,4 +1870,27 @@ function getFunctionNames(obj: object, prefix: string): string[] {
     }
   }
   return functionNames;
+}
+
+const deprecatedWarningsGiven = new Set();
+function createDeprecatedProperty(
+  ctx: NetscriptContext,
+  obj: object,
+  propName: string,
+  value: any,
+  identifier: string,
+  message: string,
+) {
+  Object.defineProperty(obj, propName, {
+    set: (newVal: any) => (value = newVal),
+    get: () => {
+      if (!deprecatedWarningsGiven.has(identifier)) {
+        deprecatedWarningsGiven.add(identifier);
+        Terminal.warn(`Deprecated property ${propName} accessed from ns.${ctx.functionPath} return value.`);
+        Terminal.warn(`This is no longer supported usage and will be removed in a later version.`);
+        Terminal.warn(message);
+      }
+      return value;
+    },
+  });
 }
