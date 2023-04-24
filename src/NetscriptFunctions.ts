@@ -1012,7 +1012,6 @@ export const ns: InternalAPI<NSFull> = {
   },
   getServerBaseSecurityLevel: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
-    helpers.log(ctx, () => `getServerBaseSecurityLevel is deprecated because it's not useful.`);
     const server = helpers.getServer(ctx, hostname);
     if (!(server instanceof Server)) {
       helpers.log(ctx, () => "Cannot be executed on this server.");
@@ -1568,8 +1567,12 @@ export const ns: InternalAPI<NSFull> = {
       const multStart = helpers.number(ctx, "multStart", _multStart);
       return formatPercent(n, fractionalDigits, multStart);
     },
-  // Todo: Remove function in 2.3. Until then it just directly wraps numeral.
+  // Todo: Remove function for real though in 2.4. Until then it just directly wraps numeral.
   nFormat: (ctx) => (_n, _format) => {
+    deprecationWarning(
+      "ns.nFormat",
+      "Use ns.formatNumber, formatRam, formatPercent, or js builtins like Intl.NumberFormat instead.",
+    );
     const n = helpers.number(ctx, "n", _n);
     const format = helpers.string(ctx, "format", _format);
     return numeral(n).format(format);
@@ -1580,6 +1583,7 @@ export const ns: InternalAPI<NSFull> = {
     return convertTimeMsToTimeElapsedString(milliseconds, milliPrecision);
   },
   getTimeSinceLastAug: () => () => {
+    deprecationWarning("ns.getTimeSinceLastAug()", "Use ns.getResetInfo().lastAugReset instead.");
     return Player.playtimeSinceLastAug;
   },
   alert: (ctx) => (_message) => {
@@ -1670,38 +1674,40 @@ export const ns: InternalAPI<NSFull> = {
   getFavorToDonate: () => () => {
     return Math.floor(CONSTANTS.BaseFavorToDonate * BitNodeMultipliers.RepToDonateToFaction);
   },
-  getPlayer: (ctx) => () => {
+  getPlayer: () => () => {
     const data = {
+      // Person
       hp: cloneDeep(Player.hp),
       skills: cloneDeep(Player.skills),
       exp: cloneDeep(Player.exp),
       mults: cloneDeep(Player.mults),
+      city: Player.city,
+      // Player-specific
       numPeopleKilled: Player.numPeopleKilled,
       money: Player.money,
-      city: Player.city,
       location: Player.location,
-      bitNodeN: Player.bitNodeN,
       totalPlaytime: Player.totalPlaytime,
       jobs: cloneDeep(Player.jobs),
       factions: Player.factions.slice(),
       entropy: Player.entropy,
     };
-    createDeprecatedProperty(
-      ctx,
-      data,
-      "playtimeSinceLastAug",
-      Player.playtimeSinceLastAug,
-      "getPlayer.playtimeSinceLastAug",
-      "Use ns.getPlaytimeSinceLastAug or ns.singularity.getLastAugReset instead.",
-    );
-    createDeprecatedProperty(
-      ctx,
-      data,
-      "playtimeSinceLastBitnode",
-      Player.playtimeSinceLastBitnode,
-      "getPlayer.playtimeSinceLastBitnode",
-      "Use ns.singularity.getLastNodeReset instead.",
-    );
+    setDeprecatedProperties(data, {
+      playtimeSinceLastAug: {
+        identifier: "ns.getPlayer().playtimeSinceLastAug",
+        message: "Use ns.getResetInfo().lastAugReset instead. This is a static timestamp instead of an elapsed time.",
+        value: Player.playtimeSinceLastAug,
+      },
+      playtimeSinceLastBitnode: {
+        identifier: "ns.getPlayer().playtimeSinceLastBitnode",
+        message: "Use ns.getResetInfo().lastNodeReset instead. This is a static timestamp instead of an elapsed time.",
+        value: Player.playtimeSinceLastBitnode,
+      },
+      bitNodeN: {
+        identifier: "ns.getPlayer().bitNodeN",
+        message: "Use ns.getResetInto().currentNode instead",
+        value: Player.bitNodeN,
+      },
+    });
     return data;
   },
   getMoneySources: () => () => ({
@@ -1747,6 +1753,11 @@ export const ns: InternalAPI<NSFull> = {
     }
     helpers.log(ctx, () => `ERROR: Failed. Was unable to remove file ${sourcePath} from its original location.`);
   },
+  getResetInfo: () => () => ({
+    lastAugReset: Player.lastAugReset,
+    lastNodeReset: Player.lastNodeReset,
+    currentNode: Player.bitNodeN,
+  }),
   flags: Flags,
   ...NetscriptExtra(),
 };
@@ -1776,27 +1787,28 @@ function getFunctionNames(obj: object, prefix: string): string[] {
 }
 
 const deprecatedWarningsGiven = new Set();
-function createDeprecatedProperty(
-  ctx: NetscriptContext,
+function setDeprecatedProperties(
   obj: object,
-  propName: string,
-  value: any,
-  identifier: string,
-  message: string,
+  properties: Record<string, { identifier: string; message: string; value: any }>,
 ) {
-  Object.defineProperty(obj, propName, {
-    set: (newVal: any) => (value = newVal),
-    get: () => {
-      if (!deprecatedWarningsGiven.has(identifier)) {
-        deprecatedWarningsGiven.add(identifier);
-        Terminal.warn(`Deprecated property ${propName} accessed from ns.${ctx.functionPath} return value.`);
-        Terminal.warn(`This is no longer supported usage and will be removed in a later version.`);
-        Terminal.warn(message);
-        Terminal.info(`Note that this message can also appear if you iterate through the object's values.`);
-        Terminal.info(`This message will only be shown once per game session for each deprecated property accessed.`);
-      }
-      return value;
-    },
-    enumerable: true,
-  });
+  for (const [name, info] of Object.entries(properties)) {
+    Object.defineProperty(obj, name, {
+      get: () => {
+        deprecationWarning(info.identifier, info.message);
+        return info.value;
+      },
+      set: (value: any) => (info.value = value),
+      enumerable: true,
+    });
+  }
+}
+function deprecationWarning(identifier: string, message: string) {
+  if (!deprecatedWarningsGiven.has(identifier)) {
+    deprecatedWarningsGiven.add(identifier);
+    Terminal.warn(`Accessed deprecated function or property: ${identifier}`);
+    Terminal.warn(`This is no longer supported usage and will be removed in a later version.`);
+    Terminal.warn(message);
+    Terminal.info(`This message can also appear for object properties when the object's values are iterated.`);
+    Terminal.info(`This message will only be shown once per game session for each deprecated item accessed.`);
+  }
 }

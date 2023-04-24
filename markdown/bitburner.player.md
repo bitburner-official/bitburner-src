@@ -16,7 +16,6 @@ interface Player extends Person
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [bitNodeN](./bitburner.player.bitnoden.md) |  | number |  |
 |  [entropy](./bitburner.player.entropy.md) |  | number |  |
 |  [factions](./bitburner.player.factions.md) |  | string\[\] |  |
 |  [jobs](./bitburner.player.jobs.md) |  | Record&lt;string, string&gt; |  |

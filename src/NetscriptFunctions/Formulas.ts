@@ -87,15 +87,16 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       serverGrowth: 0,
     }),
     mockPlayer: () => (): IPlayer => ({
+      // Person
       hp: { current: 0, max: 0 },
       skills: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
       exp: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
       mults: defaultMultipliers(),
+      city: CityName.Sector12,
+      // Player-specific
       numPeopleKilled: 0,
       money: 0,
-      city: CityName.Sector12,
       location: LocationName.TravelAgency,
-      bitNodeN: 0,
       totalPlaytime: 0,
       jobs: {},
       factions: [],
