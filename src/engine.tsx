@@ -2,7 +2,6 @@ import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions"
 import { initAugmentations } from "./Augmentation/AugmentationHelpers";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
 import { initSourceFiles } from "./SourceFile/SourceFiles";
-import { initDarkWebItems } from "./DarkWeb/DarkWebItems";
 import { generateRandomContract } from "./CodingContractGenerator";
 import { initCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
@@ -235,7 +234,6 @@ const Engine: {
     if (loadGame(saveString)) {
       FormatsNeedToChange.emit();
       initSourceFiles();
-      initDarkWebItems();
       initAugmentations(); // Also calls Player.reapplyAllAugmentations()
       Player.reapplyAllSourceFiles();
       if (Player.hasWseAccount) {
@@ -377,7 +375,6 @@ const Engine: {
       // No save found, start new game
       FormatsNeedToChange.emit();
       initSourceFiles();
-      initDarkWebItems();
       Engine.start(); // Run main game loop and Scripts loop
       Player.init();
       initForeignServers(Player.getHomeComputer());

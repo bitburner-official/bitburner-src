@@ -1,23 +1,15 @@
 import { DarkWebItem } from "./DarkWebItem";
-import { Programs, initPrograms } from "../Programs/Programs";
+import { CompletedProgramName } from "../Programs/Programs";
 
-export const DarkWebItems: Record<string, DarkWebItem> = {};
-export function initDarkWebItems() {
-  initPrograms();
-  Object.assign(DarkWebItems, {
-    BruteSSHProgram: new DarkWebItem(Programs.BruteSSHProgram.name, 500e3, "Opens up SSH Ports."),
-    FTPCrackProgram: new DarkWebItem(Programs.FTPCrackProgram.name, 1500e3, "Opens up FTP Ports."),
-    RelaySMTPProgram: new DarkWebItem(Programs.RelaySMTPProgram.name, 5e6, "Opens up SMTP Ports."),
-    HTTPWormProgram: new DarkWebItem(Programs.HTTPWormProgram.name, 30e6, "Opens up HTTP Ports."),
-    SQLInjectProgram: new DarkWebItem(Programs.SQLInjectProgram.name, 250e6, "Opens up SQL Ports."),
-    ServerProfiler: new DarkWebItem(
-      Programs.ServerProfiler.name,
-      500000,
-      "Displays detailed information about a server.",
-    ),
-    DeepscanV1: new DarkWebItem(Programs.DeepscanV1.name, 500000, "Enables 'scan-analyze' with a depth up to 5."),
-    DeepscanV2: new DarkWebItem(Programs.DeepscanV2.name, 25e6, "Enables 'scan-analyze' with a depth up to 10."),
-    AutolinkProgram: new DarkWebItem(Programs.AutoLink.name, 1e6, "Enables direct connect via 'scan-analyze'."),
-    FormulasProgram: new DarkWebItem(Programs.Formulas.name, 5e9, "Unlock access to the formulas API."),
-  });
-}
+export const DarkWebItems = {
+  BruteSSHProgram: new DarkWebItem(CompletedProgramName.bruteSsh, 500e3, "Opens up SSH Ports."),
+  FTPCrackProgram: new DarkWebItem(CompletedProgramName.ftpCrack, 1500e3, "Opens up FTP Ports."),
+  RelaySMTPProgram: new DarkWebItem(CompletedProgramName.relaySmtp, 5e6, "Opens up SMTP Ports."),
+  HTTPWormProgram: new DarkWebItem(CompletedProgramName.httpWorm, 30e6, "Opens up HTTP Ports."),
+  SQLInjectProgram: new DarkWebItem(CompletedProgramName.sqlInject, 250e6, "Opens up SQL Ports."),
+  ServerProfiler: new DarkWebItem(CompletedProgramName.serverProfiler, 500e3, "Displays detailed server information."),
+  DeepscanV1: new DarkWebItem(CompletedProgramName.deepScan1, 500000, "Enables 'scan-analyze' with a depth up to 5."),
+  DeepscanV2: new DarkWebItem(CompletedProgramName.deepScan2, 25e6, "Enables 'scan-analyze' with a depth up to 10."),
+  AutolinkProgram: new DarkWebItem(CompletedProgramName.autoLink, 1e6, "Enables direct connect via 'scan-analyze'."),
+  FormulasProgram: new DarkWebItem(CompletedProgramName.formulas, 5e9, "Unlock access to the formulas API."),
+};

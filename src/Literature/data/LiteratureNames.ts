@@ -1,4 +1,4 @@
-export enum LiteratureNames {
+export enum LiteratureName {
   HackersStartingHandbook = "hackers-starting-handbook.lit",
   CorporationManagementHandbook = "corporation-management-handbook.lit",
   HistoryOfSynthoids = "history-of-synthoids.lit",

@@ -1,40 +1,25 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { killWorkerScript } from "../../Netscript/killWorkerScript";
+import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 
 export function kill(args: (string | number | boolean)[], server: BaseServer): void {
-  try {
-    if (args.length < 1) {
-      Terminal.error("Incorrect usage of kill command. Usage: kill [scriptname] [arg1] [arg2]...");
-      return;
-    }
-    if (typeof args[0] === "boolean") {
-      return;
-    }
-
-    // Kill by PID
-    if (typeof args[0] === "number") {
-      const pid = args[0];
-      const res = killWorkerScript(pid);
-      if (res) {
-        Terminal.print(`Killing script with PID ${pid}`);
-      } else {
-        Terminal.error(`Failed to kill script with PID ${pid}. No such script is running`);
-      }
-
-      return;
-    }
-
-    const scriptName = Terminal.getFilepath(args[0]);
-    if (!scriptName) return Terminal.error(`Invalid filename: ${args[0]}`);
-    const runningScript = server.getRunningScript(scriptName, args.slice(1));
-    if (runningScript == null) {
-      Terminal.error("No such script is running. Nothing to kill");
-      return;
-    }
-    killWorkerScript({ runningScript: runningScript, hostname: server.hostname });
-    Terminal.print(`Killing ${scriptName}`);
-  } catch (e) {
-    Terminal.error(e + "");
+  if (args.length < 1) {
+    return Terminal.error("Incorrect usage of kill command. Usage: kill [pid] or kill [scriptname] [arg1] [arg2]...");
   }
+  if (typeof args[0] === "number") {
+    const pid = args[0];
+    if (killWorkerScript(pid)) return Terminal.print(`Killing script with PID ${pid}`);
+  }
+  // Shift args doesn't need to be sliced to check runningScript args
+  const fileName = String(args.shift());
+  const path = Terminal.getFilepath(fileName);
+  if (!path) return Terminal.error(`Could not parse filename: ${fileName}`);
+  if (!hasScriptExtension(path)) return Terminal.error(`${path} does not have a script file extension`);
+
+  const runningScript = server.getRunningScript(path, args);
+  if (runningScript == null) return Terminal.error("No such script is running. Nothing to kill");
+
+  killWorkerScript(runningScript.pid);
+  Terminal.print(`Killing ${path}`);
 }

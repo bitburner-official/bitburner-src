@@ -16,41 +16,24 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ServerName } from "../Types/strings";
+import { allContentFiles } from "../Paths/ContentFile";
 
-interface IServerProps {
-  hostname: ServerName;
+interface File {
+  name: string;
+  size: number;
 }
 
-function ServerAccordion(props: IServerProps): React.ReactElement {
+function ServerAccordion(props: { hostname: ServerName }): React.ReactElement {
   const server = GetServer(props.hostname);
   if (server === null) throw new Error(`server '${props.hostname}' should not be null`);
   let totalSize = 0;
-  for (const f of server.scripts.values()) {
-    totalSize += f.code.length;
-  }
-
-  for (const f of server.textFiles) {
-    totalSize += f.text.length;
-  }
-
-  if (totalSize === 0) {
-    return <></>;
-  }
-
-  interface File {
-    name: string;
-    size: number;
-  }
-
   const files: File[] = [];
-
-  for (const f of server.scripts.values()) {
-    files.push({ name: f.filename, size: f.code.length });
+  for (const [path, file] of allContentFiles(server)) {
+    totalSize += file.content.length;
+    files.push({ name: path, size: file.content.length });
   }
 
-  for (const f of server.textFiles) {
-    files.push({ name: f.fn, size: f.text.length });
-  }
+  if (totalSize === 0) return <></>;
 
   files.sort((a: File, b: File): number => b.size - a.size);
 

@@ -1,14 +1,15 @@
-import { MessageFilenames } from "./MessageHelpers";
+import { FilePath, asFilePath } from "../Paths/FilePath";
+import { MessageFilename } from "./MessageHelpers";
 
 export class Message {
   // Name of Message file
-  filename: MessageFilenames;
+  filename: MessageFilename & FilePath;
 
   // The text contains in the Message
   msg: string;
 
-  constructor(filename: MessageFilenames, msg: string) {
-    this.filename = filename;
+  constructor(filename: MessageFilename, msg: string) {
+    this.filename = asFilePath(filename);
     this.msg = msg;
   }
 }

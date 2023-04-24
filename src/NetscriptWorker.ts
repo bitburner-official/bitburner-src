@@ -32,7 +32,8 @@ import { simple as walksimple } from "acorn-walk";
 import { Terminal } from "./Terminal";
 import { ScriptArg } from "@nsdefs";
 import { handleUnknownError, CompleteRunOptions } from "./Netscript/NetscriptHelpers";
-import { scriptFilenameFromImport } from "./Types/strings";
+import { resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
+import { root } from "./Paths/Directory";
 
 export const NetscriptPorts: Map<PortNumber, Port> = new Map();
 
@@ -146,7 +147,7 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
     throw new Error("Failed to find underlying Server object for script");
   }
 
-  function getScript(scriptName: string): Script | null {
+  function getScript(scriptName: ScriptFilePath): Script | null {
     return server.scripts.get(scriptName) ?? null;
   }
 
@@ -157,11 +158,10 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
   walksimple(ast, {
     ImportDeclaration: (node: Node) => {
       hasImports = true;
-      const scriptName = scriptFilenameFromImport(node.source.value, true);
+      const scriptName = resolveScriptFilePath(node.source.value, root, ".script");
+      if (!scriptName) throw new Error("'Import' failed due to invalid path: " + scriptName);
       const script = getScript(scriptName);
-      if (script == null) {
-        throw new Error("'Import' failed due to invalid script: " + scriptName);
-      }
+      if (!script) throw new Error("'Import' failed due to script not found: " + scriptName);
       const scriptAst = parse(script.code, {
         ecmaVersion: 9,
         allowReserved: true,
@@ -380,16 +380,11 @@ export function loadAllRunningScripts(): void {
 export function runScriptFromScript(
   caller: string,
   host: BaseServer,
-  scriptname: string,
+  scriptname: ScriptFilePath,
   args: ScriptArg[],
   workerScript: WorkerScript,
   runOpts: CompleteRunOptions,
 ): number {
-  /* Very inefficient, TODO change data structures so that finding script & checking if it's already running does
-   * not require iterating through all scripts and comparing names/args. This is a big part of slowdown when
-   * running a large number of scripts. */
-
-  // Find the script, fail if it doesn't exist.
   const script = host.scripts.get(scriptname);
   if (!script) {
     workerScript.log(caller, () => `Could not find script '${scriptname}' on '${host.hostname}'`);

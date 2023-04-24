@@ -12,6 +12,7 @@ import { Server } from "./Server/Server";
 import { BaseServer } from "./Server/BaseServer";
 
 import { getRandomInt } from "./utils/helpers/getRandomInt";
+import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
 
 export function generateRandomContract(): void {
   // First select a random problem type
@@ -57,7 +58,7 @@ export const generateDummyContract = (problemType: string): void => {
 interface IGenerateContractParams {
   problemType?: string;
   server?: string;
-  fn?: string;
+  fn?: ContractFilePath;
 }
 
 export function generateContract(params: IGenerateContractParams): void {
@@ -84,15 +85,9 @@ export function generateContract(params: IGenerateContractParams): void {
     server = getRandomServer();
   }
 
-  // Filename
-  let fn;
-  if (params.fn != null) {
-    fn = params.fn;
-  } else {
-    fn = getRandomFilename(server, reward);
-  }
+  const filename = params.fn ? params.fn : getRandomFilename(server, reward);
 
-  const contract = new CodingContract(fn, problemType, reward);
+  const contract = new CodingContract(filename, problemType, reward);
   server.addContract(contract);
 }
 
@@ -185,7 +180,10 @@ function getRandomServer(): BaseServer {
   return randServer;
 }
 
-function getRandomFilename(server: BaseServer, reward: ICodingContractReward = { name: "", type: 0 }): string {
+function getRandomFilename(
+  server: BaseServer,
+  reward: ICodingContractReward = { name: "", type: 0 },
+): ContractFilePath {
   let contractFn = `contract-${getRandomInt(0, 1e6)}`;
 
   for (let i = 0; i < 1000; ++i) {
@@ -203,6 +201,8 @@ function getRandomFilename(server: BaseServer, reward: ICodingContractReward = {
     // Only alphanumeric characters in the reward name.
     contractFn += `-${reward.name.replace(/[^a-zA-Z0-9]/g, "")}`;
   }
-
-  return contractFn;
+  contractFn += ".cct";
+  const validatedPath = resolveContractFilePath(contractFn);
+  if (!validatedPath) throw new Error(`Generated contract path could not be validated: ${contractFn}`);
+  return validatedPath;
 }

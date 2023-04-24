@@ -4,21 +4,20 @@ import { Player } from "@player";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
-import { Programs } from "../Programs/Programs";
+import { CompletedProgramName } from "../Programs/Programs";
 import { CodingContractResult } from "../CodingContracts";
 import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
 
 import { TextFile } from "../TextFile";
 import { Script } from "../Script/Script";
-import { isScriptFilename } from "../Script/isScriptFilename";
+import { hasScriptExtension } from "../Paths/ScriptFilePath";
 import { CONSTANTS } from "../Constants";
 import { GetServer, GetAllServers } from "../Server/AllServers";
 
-import { removeLeadingSlash, isInRootDirectory, evaluateFilePath } from "./DirectoryHelpers";
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
 import { getServerOnNetwork, processSingleServerGrowth } from "../Server/ServerHelpers";
-import { ParseCommand, ParseCommands } from "./Parser";
+import { parseCommand, parseCommands } from "./Parser";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
 import { createProgressBarText } from "../utils/helpers/createProgressBarText";
@@ -77,6 +76,10 @@ import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Engine } from "../engine";
+import { Directory, resolveDirectory, root } from "../Paths/Directory";
+import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
+import { hasTextExtension } from "../Paths/TextFilePath";
+import { ContractFilePath } from "src/Paths/ContractFilePath";
 
 export class Terminal {
   // Flags to determine whether the player is currently running a hack or an analyze
@@ -92,9 +95,8 @@ export class Terminal {
   // True if a Coding Contract prompt is opened
   contractOpen = false;
 
-  // Full Path of current directory
-  // Excludes the trailing forward slash
-  currDir = "/";
+  // Path of current directory
+  currDir = "" as Directory;
 
   process(cycles: number): void {
     if (this.action === null) return;
@@ -377,46 +379,40 @@ export class Terminal {
   }
 
   getFile(filename: string): Script | TextFile | string | null {
-    if (isScriptFilename(filename)) {
-      return this.getScript(filename);
-    }
-
-    if (filename.endsWith(".lit")) {
-      return this.getLitFile(filename);
-    }
-
-    if (filename.endsWith(".txt")) {
-      return this.getTextFile(filename);
-    }
-
+    if (hasScriptExtension(filename)) return this.getScript(filename);
+    if (hasTextExtension(filename)) return this.getTextFile(filename);
+    if (filename.endsWith(".lit")) return this.getLitFile(filename);
     return null;
   }
 
-  getFilepath(filename: string): string | null {
-    const path = evaluateFilePath(filename, this.cwd());
-    if (path === null || !isInRootDirectory(path)) return path;
+  getFilepath(path: string, useAbsolute?: boolean): FilePath | null {
+    // If path starts with a slash, consider it to be an absolute path
+    if (useAbsolute || path.startsWith("/")) return resolveFilePath(path);
+    // Otherwise, force path to be seen as relative to the current directory.
+    path = "./" + path;
+    return resolveFilePath(path, this.currDir);
+  }
 
-    return removeLeadingSlash(path);
+  getDirectory(path: string, useAbsolute?: boolean): Directory | null {
+    // If path starts with a slash, consider it to be an absolute path
+    if (useAbsolute || path.startsWith("/")) return resolveDirectory(path);
+    // Otherwise, force path to be seen as relative to the current directory.
+    path = "./" + path;
+    return resolveDirectory(path, this.currDir);
   }
 
   getScript(filename: string): Script | null {
     const server = Player.getCurrentServer();
     const filepath = this.getFilepath(filename);
-    if (filepath === null) return null;
+    if (!filepath || !hasScriptExtension(filepath)) return null;
     return server.scripts.get(filepath) ?? null;
   }
 
   getTextFile(filename: string): TextFile | null {
-    const s = Player.getCurrentServer();
+    const server = Player.getCurrentServer();
     const filepath = this.getFilepath(filename);
-    if (!filepath) return null;
-    for (const txt of s.textFiles) {
-      if (filepath === txt.fn) {
-        return txt;
-      }
-    }
-
-    return null;
+    if (!filepath || !hasTextExtension(filepath)) return null;
+    return server.textFiles.get(filepath) ?? null;
   }
 
   getLitFile(filename: string): string | null {
@@ -432,32 +428,30 @@ export class Terminal {
     return null;
   }
 
-  cwd(): string {
+  cwd(): Directory {
     return this.currDir;
   }
 
-  setcwd(dir: string): void {
+  setcwd(dir: Directory): void {
     this.currDir = dir;
     TerminalEvents.emit();
   }
 
-  async runContract(contractName: string): Promise<void> {
+  async runContract(contractPath: ContractFilePath): Promise<void> {
     // There's already an opened contract
     if (this.contractOpen) {
       return this.error("There's already a Coding Contract in Progress");
     }
 
     const serv = Player.getCurrentServer();
-    const contract = serv.getContract(contractName);
-    if (contract == null) {
-      return this.error("No such contract");
-    }
+    const contract = serv.getContract(contractPath);
+    if (!contract) return this.error("No such contract");
 
     this.contractOpen = true;
     const res = await contract.prompt();
 
     //Check if the contract still exists by the time the promise is fulfilled
-    if (serv.getContract(contractName) == null) {
+    if (serv.getContract(contractPath) == null) {
       this.contractOpen = false;
       return this.error("Contract no longer exists (Was it solved by a script?)");
     }
@@ -529,7 +523,7 @@ export class Terminal {
         continue;
       } // Don't print current server
       const titleDashes = Array((d - 1) * 4 + 1).join("-");
-      if (Player.hasProgram(Programs.AutoLink.name)) {
+      if (Player.hasProgram(CompletedProgramName.autoLink)) {
         this.append(new Link(titleDashes, s.hostname));
       } else {
         this.print(titleDashes + s.hostname);
@@ -564,17 +558,13 @@ export class Terminal {
     Player.currentServer = serv.hostname;
     Player.getCurrentServer().isConnectedTo = true;
     this.print("Connected to " + serv.hostname);
-    this.setcwd("/");
+    this.setcwd(root);
     if (Player.getCurrentServer().hostname == "darkweb") {
       checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
     }
   }
 
   executeCommands(commands: string): void {
-    // Sanitize input
-    commands = commands.trim();
-    commands = commands.replace(/\s\s+/g, " "); // Replace all extra whitespace in command with a single space
-
     // Handle Terminal History - multiple commands should be saved as one
     if (this.commandHistory[this.commandHistory.length - 1] != commands) {
       this.commandHistory.push(commands);
@@ -584,11 +574,8 @@ export class Terminal {
       Player.terminalCommandHistory = this.commandHistory;
     }
     this.commandHistoryIndex = this.commandHistory.length;
-    const allCommands = ParseCommands(commands);
-
-    for (let i = 0; i < allCommands.length; i++) {
-      this.executeCommand(allCommands[i]);
-    }
+    const allCommands = parseCommands(commands);
+    for (const command of allCommands) this.executeCommand(command);
   }
 
   clear(): void {
@@ -603,20 +590,12 @@ export class Terminal {
   }
 
   executeCommand(command: string): void {
-    if (this.action !== null) {
-      this.error(`Cannot execute command (${command}) while an action is in progress`);
-      return;
-    }
-    // Allow usage of ./
-    if (command.startsWith("./")) {
-      command = "run " + command.slice(2);
-    }
-    // Only split the first space
-    const commandArray = ParseCommand(command);
-    if (commandArray.length == 0) {
-      return;
-    }
-    const s = Player.getCurrentServer();
+    if (this.action !== null) return this.error(`Cannot execute command (${command}) while an action is in progress`);
+
+    const commandArray = parseCommand(command);
+    if (!commandArray.length) return;
+
+    const currentServer = Player.getCurrentServer();
     /****************** Interactive Tutorial Terminal Commands ******************/
     if (ITutorial.isRunning) {
       const n00dlesServ = GetServer("n00dles");
@@ -769,11 +748,14 @@ export class Terminal {
     }
     /****************** END INTERACTIVE TUTORIAL ******************/
     /* Command parser */
+
     const commandName = commandArray[0];
-    if (typeof commandName === "number" || typeof commandName === "boolean") {
-      this.error(`Command ${commandArray[0]} not found`);
-      return;
-    }
+    if (typeof commandName !== "string") return this.error(`${commandName} is not a valid command.`);
+    // run by path command
+    if (isFilePath(commandName)) return run(commandArray, currentServer);
+
+    // Aside from the run-by-path command, we don't need the first entry once we've stored it in commandName.
+    commandArray.shift();
 
     const commands: {
       [key: string]: (args: (string | number | boolean)[], server: BaseServer) => void;
@@ -823,12 +805,9 @@ export class Terminal {
     };
 
     const f = commands[commandName.toLowerCase()];
-    if (!f) {
-      this.error(`Command ${commandArray[0]} not found`);
-      return;
-    }
+    if (!f) return this.error(`Command ${commandName} not found`);
 
-    f(commandArray.slice(1), s);
+    f(commandArray, currentServer);
   }
 
   getProgressText(): string {

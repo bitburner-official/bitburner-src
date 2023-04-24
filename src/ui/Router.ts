@@ -1,3 +1,5 @@
+import { ScriptFilePath } from "../Paths/ScriptFilePath";
+import { TextFilePath } from "../Paths/TextFilePath";
 import { Faction } from "../Faction/Faction";
 import { Location } from "../Locations/Location";
 
@@ -67,7 +69,7 @@ export interface IRouter {
   toFaction(faction: Faction, augPage?: boolean): void; // faction name
   toInfiltration(location: Location): void;
   toJob(location: Location): void;
-  toScriptEditor(files?: Record<string, string>, options?: ScriptEditorRouteOptions): void;
+  toScriptEditor(files?: Map<ScriptFilePath | TextFilePath, string>, options?: ScriptEditorRouteOptions): void;
   toLocation(location: Location): void;
   toImportSave(base64Save: string, automatic?: boolean): void;
 }

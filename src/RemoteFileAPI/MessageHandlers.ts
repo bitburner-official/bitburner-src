@@ -1,7 +1,7 @@
-import { isScriptFilename } from "../Script/isScriptFilename";
+import { resolveFilePath } from "../Paths/FilePath";
+import { hasTextExtension } from "../Paths/TextFilePath";
+import { hasScriptExtension } from "../Paths/ScriptFilePath";
 import { GetServer } from "../Server/AllServers";
-import { isValidFilePath } from "../Terminal/DirectoryHelpers";
-import { TextFile } from "../TextFile";
 import {
   RFAMessage,
   FileData,
@@ -23,62 +23,48 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => void | R
     if (!isFileData(msg.params)) return error("Misses parameters", msg);
 
     const fileData: FileData = msg.params;
-    if (!isValidFilePath(fileData.filename)) return error("Invalid filename", msg);
+    const filePath = resolveFilePath(fileData.filename);
+    if (!filePath) return error("Invalid file path", msg);
 
     const server = GetServer(fileData.server);
     if (!server) return error("Server hostname invalid", msg);
 
-    if (isScriptFilename(fileData.filename)) server.writeToScriptFile(fileData.filename, fileData.content);
-    // Assume it's a text file
-    else server.writeToTextFile(fileData.filename, fileData.content);
-
-    // If and only if the content is actually changed correctly, send back an OK.
-    const savedCorrectly =
-      server.getScript(fileData.filename)?.code === fileData.content ||
-      server.textFiles.filter((t: TextFile) => t.filename == fileData.filename).at(0)?.text === fileData.content;
-
-    if (!savedCorrectly) return error("File wasn't saved correctly", msg);
-
-    return new RFAMessage({ result: "OK", id: msg.id });
+    if (hasTextExtension(filePath) || hasScriptExtension(filePath)) {
+      server.writeToContentFile(filePath, fileData.content);
+      return new RFAMessage({ result: "OK", id: msg.id });
+    }
+    return error("Invalid file extension", msg);
   },
 
   getFile: function (msg: RFAMessage): RFAMessage {
     if (!isFileLocation(msg.params)) return error("Message misses parameters", msg);
 
     const fileData: FileLocation = msg.params;
-    if (!isValidFilePath(fileData.filename)) return error("Invalid filename", msg);
+    const filePath = resolveFilePath(fileData.filename);
+    if (!filePath) return error("Invalid file path", msg);
 
     const server = GetServer(fileData.server);
     if (!server) return error("Server hostname invalid", msg);
 
-    if (isScriptFilename(fileData.filename)) {
-      const scriptContent = server.getScript(fileData.filename);
-      if (!scriptContent) return error("File doesn't exist", msg);
-      return new RFAMessage({ result: scriptContent.code, id: msg.id });
-    } else {
-      // Assume it's a text file
-      const file = server.textFiles.filter((t: TextFile) => t.filename == fileData.filename).at(0);
-      if (!file) return error("File doesn't exist", msg);
-      return new RFAMessage({ result: file.text, id: msg.id });
-    }
+    if (!hasTextExtension(filePath) && !hasScriptExtension(filePath)) return error("Invalid file extension", msg);
+    const file = server.getContentFile(filePath);
+    if (!file) return error("File doesn't exist", msg);
+    return new RFAMessage({ result: file.content, id: msg.id });
   },
 
   deleteFile: function (msg: RFAMessage): RFAMessage {
     if (!isFileLocation(msg.params)) return error("Message misses parameters", msg);
+
     const fileData: FileLocation = msg.params;
-    if (!isValidFilePath(fileData.filename)) return error("Invalid filename", msg);
+    const filePath = resolveFilePath(fileData.filename);
+    if (!filePath) return error("Invalid filename", msg);
 
     const server = GetServer(fileData.server);
     if (!server) return error("Server hostname invalid", msg);
 
-    const fileExists = (): boolean =>
-      !!server.getScript(fileData.filename) || server.textFiles.some((t: TextFile) => t.filename === fileData.filename);
-
-    if (!fileExists()) return error("File doesn't exist", msg);
-    server.removeFile(fileData.filename);
-    if (fileExists()) return error("Failed to delete the file", msg);
-
-    return new RFAMessage({ result: "OK", id: msg.id });
+    const result = server.removeFile(filePath);
+    if (result.res) return new RFAMessage({ result: "OK", id: msg.id });
+    return error(result.msg ?? "Failed", msg);
   },
 
   getFileNames: function (msg: RFAMessage): RFAMessage {
@@ -87,7 +73,7 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => void | R
     const server = GetServer(msg.params.server);
     if (!server) return error("Server hostname invalid", msg);
 
-    const fileNameList: string[] = [...server.textFiles.map((txt): string => txt.filename), ...server.scripts.keys()];
+    const fileNameList: string[] = [...server.textFiles.keys(), ...server.scripts.keys()];
 
     return new RFAMessage({ result: fileNameList, id: msg.id });
   },
@@ -98,26 +84,24 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => void | R
     const server = GetServer(msg.params.server);
     if (!server) return error("Server hostname invalid", msg);
 
-    const fileList: FileContent[] = [
-      ...server.textFiles.map((txt): FileContent => {
-        return { filename: txt.filename, content: txt.text };
-      }),
-    ];
-    for (const [filename, script] of server.scripts) fileList.push({ filename, content: script.code });
-
+    const fileList: FileContent[] = [...server.scripts, ...server.textFiles].map(([filename, file]) => ({
+      filename,
+      content: file.content,
+    }));
     return new RFAMessage({ result: fileList, id: msg.id });
   },
 
   calculateRam: function (msg: RFAMessage): RFAMessage {
     if (!isFileLocation(msg.params)) return error("Message misses parameters", msg);
     const fileData: FileLocation = msg.params;
-    if (!isValidFilePath(fileData.filename)) return error("Invalid filename", msg);
+    const filePath = resolveFilePath(fileData.filename);
+    if (!filePath) return error("Invalid filename", msg);
 
     const server = GetServer(fileData.server);
     if (!server) return error("Server hostname invalid", msg);
 
-    if (!isScriptFilename(fileData.filename)) return error("Filename isn't a script filename", msg);
-    const script = server.getScript(fileData.filename);
+    if (!hasScriptExtension(filePath)) return error("Filename isn't a script filename", msg);
+    const script = server.scripts.get(filePath);
     if (!script) return error("File doesn't exist", msg);
     const ramUsage = script.getRamUsage(server.scripts);
     if (!ramUsage) return error("Ram cost could not be calculated", msg);

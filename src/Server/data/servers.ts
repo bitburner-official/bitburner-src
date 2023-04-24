@@ -4,8 +4,9 @@ import { FactionNames } from "../../Faction/data/FactionNames";
 // This could actually be a JSON file as it should be constant metadata to be imported...
 import { IMinMaxRange } from "../../types";
 import { LocationName } from "../../Enums";
-import { LiteratureNames } from "../../Literature/data/LiteratureNames";
+import { LiteratureName } from "../../Literature/data/LiteratureNames";
 import { SpecialServers } from "./SpecialServers";
+import { ServerName } from "../../Types/strings";
 
 /**
  * The metadata describing the base state of servers on the network.
@@ -16,10 +17,10 @@ interface IServerMetadata {
   hackDifficulty?: number | IMinMaxRange;
 
   /** The DNS name of the server. */
-  hostname: string;
+  hostname: ServerName;
 
   /** When populated, the files will be added to the server when created. */
-  literature?: string[];
+  literature?: LiteratureName[];
 
   /**
    * When populated, the exponent of 2^x amount of RAM the server has.
@@ -118,7 +119,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 88,
     },
     hostname: "blade",
-    literature: [LiteratureNames.BeyondMan],
+    literature: [LiteratureName.BeyondMan],
     maxRamExponent: {
       max: 9,
       min: 5,
@@ -143,7 +144,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 99,
     hostname: LocationName.VolhavenNWO.toLowerCase(),
-    literature: [LiteratureNames.TheHiddenWorld],
+    literature: [LiteratureName.TheHiddenWorld],
     moneyAvailable: {
       max: 40e9,
       min: 20e9,
@@ -167,7 +168,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 45,
     },
     hostname: "clarkinc",
-    literature: [LiteratureNames.BeyondMan, LiteratureNames.CostOfImmortality],
+    literature: [LiteratureName.BeyondMan, LiteratureName.CostOfImmortality],
     moneyAvailable: {
       max: 25e9,
       min: 15e9,
@@ -191,7 +192,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 90,
     },
     hostname: "omnitek",
-    literature: [LiteratureNames.CodedIntelligence, LiteratureNames.HistoryOfSynthoids],
+    literature: [LiteratureName.CodedIntelligence, LiteratureName.HistoryOfSynthoids],
     maxRamExponent: {
       max: 9,
       min: 7,
@@ -265,7 +266,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 83,
     },
     hostname: "fulcrumtech",
-    literature: [LiteratureNames.SimulatedReality],
+    literature: [LiteratureName.SimulatedReality],
     maxRamExponent: {
       max: 11,
       min: 7,
@@ -375,7 +376,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 85,
     },
     hostname: "helios",
-    literature: [LiteratureNames.BeyondMan],
+    literature: [LiteratureName.BeyondMan],
     maxRamExponent: {
       max: 8,
       min: 5,
@@ -403,7 +404,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 80,
     },
     hostname: LocationName.NewTokyoVitaLife.toLowerCase(),
-    literature: [LiteratureNames.AGreenTomorrow],
+    literature: [LiteratureName.AGreenTomorrow],
     maxRamExponent: {
       max: 7,
       min: 4,
@@ -481,7 +482,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 70,
     },
     hostname: "titan-labs",
-    literature: [LiteratureNames.CodedIntelligence],
+    literature: [LiteratureName.CodedIntelligence],
     maxRamExponent: {
       max: 7,
       min: 4,
@@ -508,7 +509,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 65,
     },
     hostname: "microdyne",
-    literature: [LiteratureNames.SyntheticMuscles],
+    literature: [LiteratureName.SyntheticMuscles],
     maxRamExponent: {
       max: 6,
       min: 4,
@@ -535,7 +536,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 70,
     },
     hostname: "taiyang-digital",
-    literature: [LiteratureNames.AGreenTomorrow, LiteratureNames.BrighterThanTheSun],
+    literature: [LiteratureName.AGreenTomorrow, LiteratureName.BrighterThanTheSun],
     moneyAvailable: {
       max: 900000000,
       min: 800000000,
@@ -581,7 +582,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 80,
     },
     hostname: LocationName.AevumAeroCorp.toLowerCase(),
-    literature: [LiteratureNames.ManAndMachine],
+    literature: [LiteratureName.ManAndMachine],
     moneyAvailable: {
       max: 1200000000,
       min: 1000000000,
@@ -605,7 +606,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 85,
     },
     hostname: "omnia",
-    literature: [LiteratureNames.HistoryOfSynthoids],
+    literature: [LiteratureName.HistoryOfSynthoids],
     maxRamExponent: {
       max: 6,
       min: 4,
@@ -633,7 +634,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 55,
     },
     hostname: "zb-def",
-    literature: [LiteratureNames.SyntheticMuscles],
+    literature: [LiteratureName.SyntheticMuscles],
     moneyAvailable: {
       max: 1100000000,
       min: 900000000,
@@ -678,7 +679,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 70,
     },
     hostname: "solaris",
-    literature: [LiteratureNames.AGreenTomorrow, LiteratureNames.TheFailedFrontier],
+    literature: [LiteratureName.AGreenTomorrow, LiteratureName.TheFailedFrontier],
     maxRamExponent: {
       max: 7,
       min: 4,
@@ -729,7 +730,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 75,
     },
     hostname: "global-pharm",
-    literature: [LiteratureNames.AGreenTomorrow],
+    literature: [LiteratureName.AGreenTomorrow],
     maxRamExponent: {
       max: 6,
       min: 3,
@@ -882,7 +883,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 50,
     },
     hostname: "alpha-ent",
-    literature: [LiteratureNames.Sector12Crime],
+    literature: [LiteratureName.Sector12Crime],
     maxRamExponent: {
       max: 7,
       min: 4,
@@ -937,11 +938,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 45,
     },
     hostname: "rothman-uni",
-    literature: [
-      LiteratureNames.SecretSocieties,
-      LiteratureNames.TheFailedFrontier,
-      LiteratureNames.TensionsInTechRace,
-    ],
+    literature: [LiteratureName.SecretSocieties, LiteratureName.TheFailedFrontier, LiteratureName.TensionsInTechRace],
     maxRamExponent: {
       max: 7,
       min: 4,
@@ -996,7 +993,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 45,
     },
     hostname: "summit-uni",
-    literature: [LiteratureNames.SecretSocieties, LiteratureNames.TheFailedFrontier, LiteratureNames.SyntheticMuscles],
+    literature: [LiteratureName.SecretSocieties, LiteratureName.TheFailedFrontier, LiteratureName.SyntheticMuscles],
     maxRamExponent: {
       max: 6,
       min: 4,
@@ -1047,7 +1044,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 60,
     },
     hostname: "catalyst",
-    literature: [LiteratureNames.TensionsInTechRace],
+    literature: [LiteratureName.TensionsInTechRace],
     maxRamExponent: {
       max: 7,
       min: 4,
@@ -1100,7 +1097,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 55,
     },
     hostname: LocationName.VolhavenCompuTek.toLowerCase(),
-    literature: [LiteratureNames.ManAndMachine],
+    literature: [LiteratureName.ManAndMachine],
     moneyAvailable: {
       max: 250000000,
       min: 220000000,
@@ -1124,7 +1121,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 60,
     },
     hostname: "netlink",
-    literature: [LiteratureNames.SimulatedReality],
+    literature: [LiteratureName.SimulatedReality],
     maxRamExponent: {
       max: 7,
       min: 4,
@@ -1181,7 +1178,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 10,
     hostname: LocationName.Sector12FoodNStuff.toLowerCase(),
-    literature: [LiteratureNames.Sector12Crime],
+    literature: [LiteratureName.Sector12Crime],
     maxRamExponent: 4,
     moneyAvailable: 2000000,
     networkLayer: 1,
@@ -1239,7 +1236,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 25,
     hostname: "neo-net",
-    literature: [LiteratureNames.TheHiddenWorld],
+    literature: [LiteratureName.TheHiddenWorld],
     maxRamExponent: 5,
     moneyAvailable: 5000000,
     networkLayer: 3,
@@ -1251,7 +1248,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 30,
     hostname: "silver-helix",
-    literature: [LiteratureNames.NewTriads],
+    literature: [LiteratureName.NewTriads],
     maxRamExponent: 6,
     moneyAvailable: 45000000,
     networkLayer: 3,
@@ -1263,7 +1260,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 15,
     hostname: "hong-fang-tea",
-    literature: [LiteratureNames.BrighterThanTheSun],
+    literature: [LiteratureName.BrighterThanTheSun],
     maxRamExponent: 4,
     moneyAvailable: 3000000,
     networkLayer: 1,
@@ -1311,7 +1308,7 @@ export const serverMetadata: IServerMetadata[] = [
       min: 25,
     },
     hostname: "omega-net",
-    literature: [LiteratureNames.TheNewGod],
+    literature: [LiteratureName.TheNewGod],
     maxRamExponent: 5,
     moneyAvailable: {
       max: 70000000,
@@ -1436,7 +1433,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 0,
     hostname: "run4theh111z",
-    literature: [LiteratureNames.SimulatedReality, LiteratureNames.TheNewGod],
+    literature: [LiteratureName.SimulatedReality, LiteratureName.TheNewGod],
     maxRamExponent: {
       max: 9,
       min: 5,
@@ -1455,7 +1452,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 0,
     hostname: "I.I.I.I",
-    literature: [LiteratureNames.DemocracyIsDead],
+    literature: [LiteratureName.DemocracyIsDead],
     maxRamExponent: {
       max: 8,
       min: 4,
@@ -1474,7 +1471,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 0,
     hostname: "avmnite-02h",
-    literature: [LiteratureNames.DemocracyIsDead],
+    literature: [LiteratureName.DemocracyIsDead],
     maxRamExponent: {
       max: 7,
       min: 4,
@@ -1508,7 +1505,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 0,
     hostname: "CSEC",
-    literature: [LiteratureNames.DemocracyIsDead],
+    literature: [LiteratureName.DemocracyIsDead],
     maxRamExponent: 3,
     moneyAvailable: 0,
     networkLayer: 2,
@@ -1524,7 +1521,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hackDifficulty: 0,
     hostname: "The-Cave",
-    literature: [LiteratureNames.AlphaOmega],
+    literature: [LiteratureName.AlphaOmega],
     moneyAvailable: 0,
     networkLayer: 15,
     numOpenPortsRequired: 5,

@@ -6,12 +6,11 @@ import { Industry } from "./Industry";
 
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { showLiterature } from "../Literature/LiteratureHelpers";
-import { LiteratureNames } from "../Literature/data/LiteratureNames";
+import { LiteratureName } from "../Literature/data/LiteratureNames";
 import { Player } from "@player";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { isString } from "../utils/helpers/isString";
 import { CityName } from "../Enums";
 import { CorpStateName } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
@@ -441,19 +440,9 @@ export class Corporation {
   getStarterGuide(): void {
     // Check if player already has Corporation Handbook
     const homeComp = Player.getHomeComputer();
-    let hasHandbook = false;
-    const handbookFn = LiteratureNames.CorporationManagementHandbook;
-    for (let i = 0; i < homeComp.messages.length; ++i) {
-      if (isString(homeComp.messages[i]) && homeComp.messages[i] === handbookFn) {
-        hasHandbook = true;
-        break;
-      }
-    }
-
-    if (!hasHandbook) {
-      homeComp.messages.push(handbookFn);
-    }
-    showLiterature(handbookFn);
+    const handbook = LiteratureName.CorporationManagementHandbook;
+    if (!homeComp.messages.includes(handbook)) homeComp.messages.push(handbook);
+    showLiterature(handbook);
     return;
   }
 

@@ -6,7 +6,6 @@ import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
 import { augmentationExists, installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { CONSTANTS } from "../Constants";
-import { isString } from "../utils/helpers/isString";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";
 
@@ -52,6 +51,8 @@ import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { findEnumMember } from "../utils/helpers/enum";
 import { Engine } from "../engine";
 import { checkEnum } from "../utils/helpers/enum";
+import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
+import { root } from "../Paths/Directory";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const getAugmentation = function (ctx: NetscriptContext, name: string): Augmentation {
@@ -76,7 +77,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     return company;
   };
 
-  const runAfterReset = function (cbScript: string | null = null) {
+  const runAfterReset = function (cbScript: ScriptFilePath) {
     //Run a script after reset
     if (!cbScript) return;
     const home = Player.getHomeComputer();
@@ -87,7 +88,9 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       return Terminal.error(`Attempted to launch ${cbScript} after reset but could not calculate ram usage.`);
     }
     const ramAvailable = home.maxRam - home.ramUsed;
-    if (ramUsage > ramAvailable + 0.001) return;
+    if (ramUsage > ramAvailable + 0.001) {
+      return Terminal.error(`Attempted to launch ${cbScript} after reset but there was not enough ram.`);
+    }
     // Start script with no args and 1 thread (default).
     const runningScriptObj = new RunningScript(script, ramUsage, []);
     startWorkerScript(runningScriptObj, home);
@@ -190,7 +193,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       const res = purchaseAugmentation(aug, fac, true);
       helpers.log(ctx, () => res);
-      if (isString(res) && res.startsWith("You purchased")) {
+      if (res.startsWith("You purchased")) {
         Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 10);
         return true;
       } else {
@@ -199,7 +202,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     softReset: (ctx) => (_cbScript) => {
       helpers.checkSingularityAccess(ctx);
-      const cbScript = _cbScript ? helpers.string(ctx, "cbScript", _cbScript) : "";
+      const cbScript = _cbScript
+        ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
+        : false;
+      if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
 
       helpers.log(ctx, () => "Soft resetting. This will cause this script to be killed");
       installAugmentations(true);
@@ -207,7 +213,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     installAugmentations: (ctx) => (_cbScript) => {
       helpers.checkSingularityAccess(ctx);
-      const cbScript = _cbScript ? helpers.string(ctx, "cbScript", _cbScript) : "";
+      const cbScript = _cbScript
+        ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
+        : false;
+      if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
 
       if (Player.queuedAugmentations.length === 0) {
         helpers.log(ctx, () => "You do not have any Augmentations to be installed.");
@@ -502,7 +511,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         Player.getCurrentServer().isConnectedTo = false;
         Player.currentServer = Player.getHomeComputer().hostname;
         Player.getCurrentServer().isConnectedTo = true;
-        Terminal.setcwd("/");
+        Terminal.setcwd(root);
         return true;
       }
 
@@ -515,7 +524,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           Player.getCurrentServer().isConnectedTo = false;
           Player.currentServer = target.hostname;
           Player.getCurrentServer().isConnectedTo = true;
-          Terminal.setcwd("/");
+          Terminal.setcwd(root);
           return true;
         }
       }
@@ -526,7 +535,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         Player.getCurrentServer().isConnectedTo = false;
         Player.currentServer = target.hostname;
         Player.getCurrentServer().isConnectedTo = true;
-        Terminal.setcwd("/");
+        Terminal.setcwd(root);
         return true;
       }
 
@@ -1189,54 +1198,49 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
       return item.price;
     },
-    b1tflum3:
-      (ctx) =>
-      (_nextBN, _callbackScript = "") => {
-        helpers.checkSingularityAccess(ctx);
-        const nextBN = helpers.number(ctx, "nextBN", _nextBN);
-        const callbackScript = helpers.string(ctx, "callbackScript", _callbackScript);
-        helpers.checkSingularityAccess(ctx);
-        enterBitNode(true, Player.bitNodeN, nextBN);
-        if (callbackScript)
-          setTimeout(() => {
-            runAfterReset(callbackScript);
-          }, 0);
-      },
-    destroyW0r1dD43m0n:
-      (ctx) =>
-      (_nextBN, _callbackScript = "") => {
-        helpers.checkSingularityAccess(ctx);
-        const nextBN = helpers.number(ctx, "nextBN", _nextBN);
-        if (nextBN > 13 || nextBN < 1 || !Number.isInteger(nextBN)) {
-          throw new Error(`Invalid bitnode specified: ${_nextBN}`);
-        }
-        const callbackScript = helpers.string(ctx, "callbackScript", _callbackScript);
+    b1tflum3: (ctx) => (_nextBN, _cbScript) => {
+      helpers.checkSingularityAccess(ctx);
+      const nextBN = helpers.number(ctx, "nextBN", _nextBN);
+      const cbScript = _cbScript
+        ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
+        : false;
+      if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
+      enterBitNode(true, Player.bitNodeN, nextBN);
+      if (cbScript) setTimeout(() => runAfterReset(cbScript), 0);
+    },
+    destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript) => {
+      helpers.checkSingularityAccess(ctx);
+      const nextBN = helpers.number(ctx, "nextBN", _nextBN);
+      if (nextBN > 13 || nextBN < 1 || !Number.isInteger(nextBN)) {
+        throw new Error(`Invalid bitnode specified: ${_nextBN}`);
+      }
+      const cbScript = _cbScript
+        ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
+        : false;
+      if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
 
-        const wd = GetServer(SpecialServers.WorldDaemon);
-        if (!(wd instanceof Server)) throw new Error("WorldDaemon was not a normal server. This is a bug contact dev.");
-        const hackingRequirements = () => {
-          if (Player.skills.hacking < wd.requiredHackingSkill) return false;
-          if (!wd.hasAdminRights) return false;
-          return true;
-        };
-        const bladeburnerRequirements = () => {
-          if (!Player.bladeburner) return false;
-          return Player.bladeburner.blackops[BlackOperationNames.OperationDaedalus];
-        };
+      const wd = GetServer(SpecialServers.WorldDaemon);
+      if (!(wd instanceof Server)) throw new Error("WorldDaemon was not a normal server. This is a bug contact dev.");
+      const hackingRequirements = () => {
+        if (Player.skills.hacking < wd.requiredHackingSkill) return false;
+        if (!wd.hasAdminRights) return false;
+        return true;
+      };
+      const bladeburnerRequirements = () => {
+        if (!Player.bladeburner) return false;
+        return Player.bladeburner.blackops[BlackOperationNames.OperationDaedalus];
+      };
 
-        if (!hackingRequirements() && !bladeburnerRequirements()) {
-          helpers.log(ctx, () => "Requirements not met to destroy the world daemon");
-          return;
-        }
+      if (!hackingRequirements() && !bladeburnerRequirements()) {
+        helpers.log(ctx, () => "Requirements not met to destroy the world daemon");
+        return;
+      }
 
-        wd.backdoorInstalled = true;
-        calculateAchievements();
-        enterBitNode(false, Player.bitNodeN, nextBN);
-        if (callbackScript)
-          setTimeout(() => {
-            runAfterReset(callbackScript);
-          }, 0);
-      },
+      wd.backdoorInstalled = true;
+      calculateAchievements();
+      enterBitNode(false, Player.bitNodeN, nextBN);
+      if (cbScript) setTimeout(() => runAfterReset(cbScript), 0);
+    },
     getCurrentWork: () => () => {
       if (!Player.currentWork) return null;
       return Player.currentWork.APICopy();

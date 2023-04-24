@@ -1,15 +1,19 @@
+import { FilePath, asFilePath } from "../Paths/FilePath";
+import type { LiteratureName } from "./data/LiteratureNames";
+
+type LiteratureConstructorParams = { title: string; filename: LiteratureName; text: string };
 /**
  * Lore / world building literature files that can be found on servers.
  * These files can be read by the player
  */
 export class Literature {
   title: string;
-  fn: string;
-  txt: string;
+  filename: LiteratureName & FilePath;
+  text: string;
 
-  constructor(title: string, filename: string, txt: string) {
+  constructor({ title, filename, text }: LiteratureConstructorParams) {
     this.title = title;
-    this.fn = filename;
-    this.txt = txt;
+    this.filename = asFilePath(filename);
+    this.text = text;
   }
 }

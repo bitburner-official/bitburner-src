@@ -58,7 +58,10 @@ exports[`load/saveAllServers 1`] = `
       "smtpPortOpen": false,
       "sqlPortOpen": false,
       "sshPortOpen": false,
-      "textFiles": [],
+      "textFiles": {
+        "ctor": "JSONMap",
+        "data": []
+      },
       "purchasedByPlayer": true,
       "backdoorInstalled": false,
       "baseDifficulty": 1,
@@ -99,7 +102,10 @@ exports[`load/saveAllServers 1`] = `
       "smtpPortOpen": false,
       "sqlPortOpen": false,
       "sshPortOpen": false,
-      "textFiles": [],
+      "textFiles": {
+        "ctor": "JSONMap",
+        "data": []
+      },
       "purchasedByPlayer": false,
       "backdoorInstalled": false,
       "baseDifficulty": 1,
@@ -155,7 +161,10 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
       "smtpPortOpen": false,
       "sqlPortOpen": false,
       "sshPortOpen": false,
-      "textFiles": [],
+      "textFiles": {
+        "ctor": "JSONMap",
+        "data": []
+      },
       "purchasedByPlayer": true,
       "backdoorInstalled": false,
       "baseDifficulty": 1,
@@ -196,7 +205,10 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
       "smtpPortOpen": false,
       "sqlPortOpen": false,
       "sshPortOpen": false,
-      "textFiles": [],
+      "textFiles": {
+        "ctor": "JSONMap",
+        "data": []
+      },
       "purchasedByPlayer": false,
       "backdoorInstalled": false,
       "baseDifficulty": 1,

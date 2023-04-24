@@ -13,7 +13,8 @@ import { RamCalculationErrorCode } from "./RamCalculationErrorCodes";
 import { RamCosts, RamCostConstants } from "../Netscript/RamCostGenerator";
 import { Script } from "./Script";
 import { Node } from "../NetscriptJSEvaluator";
-import { ScriptFilename, scriptFilenameFromImport } from "../Types/strings";
+import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
+import { root } from "../Paths/Directory";
 
 export interface RamUsageEntry {
   type: "ns" | "dom" | "fn" | "misc";
@@ -38,9 +39,9 @@ const memCheckGlobalKey = ".__GLOBAL__";
 /**
  * Parses code into an AST and walks through it recursively to calculate
  * RAM usage. Also accounts for imported modules.
- * @param {Script[]} otherScripts - All other scripts on the server. Used to account for imported scripts
- * @param {string} code - The code being parsed */
-function parseOnlyRamCalculate(otherScripts: Map<ScriptFilename, Script>, code: string, ns1?: boolean): RamCalculation {
+ * @param otherScripts - All other scripts on the server. Used to account for imported scripts
+ * @param code - The code being parsed */
+function parseOnlyRamCalculate(otherScripts: Map<ScriptFilePath, Script>, code: string, ns1?: boolean): RamCalculation {
   try {
     /**
      * Maps dependent identifiers to their dependencies.
@@ -86,11 +87,11 @@ function parseOnlyRamCalculate(otherScripts: Map<ScriptFilename, Script>, code: 
       if (nextModule === undefined) throw new Error("nextModule should not be undefined");
       if (nextModule.startsWith("https://") || nextModule.startsWith("http://")) continue;
 
-      const filename = scriptFilenameFromImport(nextModule, ns1);
+      // Using root as the path base right now. Difficult to implement
+      const filename = resolveScriptFilePath(nextModule, root, ns1 ? ".script" : ".js");
+      if (!filename) return { cost: RamCalculationErrorCode.ImportError }; // Invalid import path
       const script = otherScripts.get(filename);
-      if (!script) {
-        return { cost: RamCalculationErrorCode.ImportError }; // No such script on the server
-      }
+      if (!script) return { cost: RamCalculationErrorCode.ImportError }; // No such file on server
 
       parseCode(script.code, nextModule);
     }
@@ -370,7 +371,7 @@ function parseOnlyCalculateDeps(code: string, currentModule: string): ParseDepsR
  */
 export function calculateRamUsage(
   codeCopy: string,
-  otherScripts: Map<ScriptFilename, Script>,
+  otherScripts: Map<ScriptFilePath, Script>,
   ns1?: boolean,
 ): RamCalculation {
   try {

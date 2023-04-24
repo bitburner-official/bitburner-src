@@ -9,25 +9,21 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Player } from "@player";
-import { Programs as AllPrograms } from "../../Programs/Programs";
 import MenuItem from "@mui/material/MenuItem";
+import { CompletedProgramName } from "../../Programs/Programs";
 
 export function Programs(): React.ReactElement {
-  const [program, setProgram] = useState("NUKE.exe");
+  const [program, setProgram] = useState(CompletedProgramName.bruteSsh);
   function setProgramDropdown(event: SelectChangeEvent<string>): void {
-    setProgram(event.target.value);
+    setProgram(event.target.value as CompletedProgramName);
   }
   function addProgram(): void {
-    if (!Player.hasProgram(program)) {
-      Player.getHomeComputer().programs.push(program);
-    }
+    if (!Player.hasProgram(program)) Player.getHomeComputer().programs.push(program);
   }
 
   function addAllPrograms(): void {
-    for (const i of Object.keys(AllPrograms)) {
-      if (!Player.hasProgram(AllPrograms[i].name)) {
-        Player.getHomeComputer().programs.push(AllPrograms[i].name);
-      }
+    for (const name of Object.values(CompletedProgramName)) {
+      if (!Player.hasProgram(name)) Player.getHomeComputer().programs.push(name);
     }
   }
 
@@ -45,9 +41,9 @@ export function Programs(): React.ReactElement {
               </td>
               <td>
                 <Select onChange={setProgramDropdown} value={program}>
-                  {Object.values(AllPrograms).map((program) => (
-                    <MenuItem key={program.name} value={program.name}>
-                      {program.name}
+                  {Object.values(CompletedProgramName).map((name) => (
+                    <MenuItem key={name} value={name}>
+                      {name}
                     </MenuItem>
                   ))}
                 </Select>

@@ -14,6 +14,7 @@ import { ScriptArg } from "@nsdefs";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { PositiveInteger } from "../types";
 import { getKeyList } from "../utils/helpers/getKeyList";
+import { ScriptFilePath } from "../Paths/ScriptFilePath";
 
 export class RunningScript {
   // Script arguments
@@ -24,7 +25,7 @@ export class RunningScript {
   dataMap: Record<string, number[]> = {};
 
   // Script filename
-  filename = "default.js";
+  filename = "default.js" as ScriptFilePath;
 
   // This script's logs. An array of log entries
   logs: React.ReactNode[] = [];

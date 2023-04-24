@@ -2,6 +2,7 @@ import { codingContractTypesMetadata, DescriptionFunc, GeneratorFunc, SolverFunc
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
 import { CodingContractEvent } from "./ui/React/CodingContractModal";
+import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
 
 /* tslint:disable:no-magic-numbers completed-docs max-classes-per-file no-console */
 
@@ -89,7 +90,7 @@ export class CodingContract {
   data: unknown;
 
   /* Contract's filename */
-  fn: string;
+  fn: ContractFilePath;
 
   /* Describes the reward given if this Contract is solved. The reward is actually
        processed outside of this file */
@@ -101,17 +102,14 @@ export class CodingContract {
   /* String representing the contract's type. Must match type in ContractTypes */
   type: string;
 
-  constructor(fn = "", type = "Find Largest Prime Factor", reward: ICodingContractReward | null = null) {
-    this.fn = fn;
-    if (!this.fn.endsWith(".cct")) {
-      this.fn += ".cct";
-    }
-
-    // tslint:disable-next-line
-    if (CodingContractTypes[type] == null) {
+  constructor(fn = "default.cct", type = "Find Largest Prime Factor", reward: ICodingContractReward | null = null) {
+    const path = resolveContractFilePath(fn);
+    if (!path) throw new Error(`Bad file path while creating a coding contract: ${fn}`);
+    if (!CodingContractTypes[type]) {
       throw new Error(`Error: invalid contract type: ${type} please contact developer`);
     }
 
+    this.fn = path;
     this.type = type;
     this.data = CodingContractTypes[type].generate();
     this.reward = reward;

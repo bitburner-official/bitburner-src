@@ -17,6 +17,7 @@ import { BaseServer } from "../Server/BaseServer";
 import { ScriptDeath } from "./ScriptDeath";
 import { ScriptArg } from "./ScriptArg";
 import { NSFull } from "../NetscriptFunctions";
+import { ScriptFilePath } from "src/Paths/ScriptFilePath";
 
 export class WorkerScript {
   /** Script's arguments */
@@ -60,7 +61,7 @@ export class WorkerScript {
   loadedFns: Record<string, boolean> = {};
 
   /** Filename of script */
-  name: string;
+  name: ScriptFilePath;
 
   /** Script's output/return value. Currently not used or implemented */
   output = "";
@@ -130,14 +131,6 @@ export class WorkerScript {
       return null;
     }
     return script;
-  }
-
-  /**
-   * Returns the script with the specified filename on the specified server,
-   * or null if it cannot be found
-   */
-  getScriptOnServer(fn: string, server: BaseServer): Script | null {
-    return server.scripts.get(fn) ?? null;
   }
 
   shouldLog(fn: string): boolean {

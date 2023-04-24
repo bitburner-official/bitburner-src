@@ -1,29 +1,27 @@
 import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { BaseServer } from "./Server/BaseServer";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
-import { removeLeadingSlash, isInRootDirectory } from "./Terminal/DirectoryHelpers";
+import { TextFilePath } from "./Paths/TextFilePath";
+import { ContentFile } from "./Paths/ContentFile";
 
 /** Represents a plain text file that is typically stored on a server. */
-export class TextFile {
+export class TextFile implements ContentFile {
   /** The full file name. */
-  fn: string;
+  filename: TextFilePath;
 
   /** The content of the file. */
   text: string;
 
-  //TODO 2.3: Why are we using getter/setter for fn as filename? Rename parameter as more-readable "filename"
-  /** The full file name. */
-  get filename(): string {
-    return this.fn;
+  // Shared interface on Script and TextFile for accessing content
+  get content() {
+    return this.text;
+  }
+  set content(text: string) {
+    this.text = text;
   }
 
-  /** The full file name. */
-  set filename(value: string) {
-    this.fn = value;
-  }
-
-  constructor(fn = "", txt = "") {
-    this.fn = (fn.endsWith(".txt") ? fn : `${fn}.txt`).replace(/\s+/g, "");
+  constructor(filename = "default.txt" as TextFilePath, txt = "") {
+    this.filename = filename;
     this.text = txt;
   }
 
@@ -38,7 +36,7 @@ export class TextFile {
     const a: HTMLAnchorElement = document.createElement("a");
     const url: string = URL.createObjectURL(file);
     a.href = url;
-    a.download = this.fn;
+    a.download = this.filename;
     document.body.appendChild(a);
     a.click();
     setTimeout(() => {
@@ -54,7 +52,7 @@ export class TextFile {
 
   /** Shows the content to the user via the game's dialog box. */
   show(): void {
-    dialogBoxCreate(`${this.fn}\n\n${this.text}`);
+    dialogBoxCreate(`${this.filename}\n\n${this.text}`);
   }
 
   /** Serialize the current file to a JSON save state. */
@@ -67,6 +65,12 @@ export class TextFile {
     this.text = txt;
   }
 
+  deleteFromServer(server: BaseServer): boolean {
+    if (!server.textFiles.has(this.filename)) return false;
+    server.textFiles.delete(this.filename);
+    return true;
+  }
+
   /** Initializes a TextFile from a JSON save state. */
   static fromJSON(value: IReviverValue): TextFile {
     return Generic_fromJSON(TextFile, value.data);
@@ -74,46 +78,3 @@ export class TextFile {
 }
 
 constructorsForReviver.TextFile = TextFile;
-
-/**
- * Retrieve the file object for the filename on the specified server.
- * @param fn The file name to look for
- * @param server The server object to look in
- * @returns The file object, or null if it couldn't find it.
- */
-export function getTextFile(fn: string, server: BaseServer): TextFile | null {
-  let filename: string = !fn.endsWith(".txt") ? `${fn}.txt` : fn;
-
-  if (isInRootDirectory(filename)) {
-    filename = removeLeadingSlash(filename);
-  }
-
-  for (const file of server.textFiles) {
-    if (file.fn === filename) {
-      return file;
-    }
-  }
-
-  return null;
-}
-
-/**
- * Creates a TextFile on the target server.
- * @param fn The file name to create.
- * @param txt The contents of the file.
- * @param server The server that the file should be created on.
- * @returns The instance of the file.
- */
-export function createTextFile(fn: string, txt: string, server: BaseServer): TextFile | undefined {
-  if (getTextFile(fn, server) !== null) {
-    // This should probably be a `throw`...
-    /* tslint:disable-next-line:no-console */
-    console.error(`A file named "${fn}" already exists on server ${server.hostname}.`);
-
-    return undefined;
-  }
-  const file: TextFile = new TextFile(fn, txt);
-  server.textFiles.push(file);
-
-  return file;
-}

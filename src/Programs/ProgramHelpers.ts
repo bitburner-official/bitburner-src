@@ -1,4 +1,4 @@
-import { Programs } from "./Programs";
+import { CompletedProgramName, Programs } from "./Programs";
 import { Program } from "./Program";
 
 import { Player } from "@player";
@@ -6,18 +6,18 @@ import { Player } from "@player";
 //Returns the programs this player can create.
 export function getAvailableCreatePrograms(): Program[] {
   const programs: Program[] = [];
-  for (const key of Object.keys(Programs)) {
+  for (const program of Object.values(CompletedProgramName)) {
+    const create = Programs[program].create;
     // Non-creatable program
-    const create = Programs[key].create;
     if (create == null) continue;
 
     // Already has program
-    if (Player.hasProgram(Programs[key].name)) continue;
+    if (Player.hasProgram(program)) continue;
 
     // Does not meet requirements
     if (!create.req()) continue;
 
-    programs.push(Programs[key]);
+    programs.push(Programs[program]);
   }
 
   return programs;

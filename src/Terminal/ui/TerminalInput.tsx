@@ -10,9 +10,9 @@ import TextField from "@mui/material/TextField";
 import { KEY, KEYCODE } from "../../utils/helpers/keyCodes";
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
-import { determineAllPossibilitiesForTabCompletion } from "../determineAllPossibilitiesForTabCompletion";
-import { tabCompletion } from "../tabCompletion";
+import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities";
 import { Settings } from "../../Settings/Settings";
+import { longestCommonStart } from "../../utils/StringHelperFunctions";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0),
     },
     preformatted: {
-      whiteSpace: "pre-wrap",
       margin: theme.spacing(0),
     },
     list: {
@@ -205,54 +204,18 @@ export function TerminalInput(): React.ReactElement {
     }
 
     // Autocomplete
-    if (event.key === KEY.TAB && value !== "") {
+    if (event.key === KEY.TAB) {
       event.preventDefault();
-
-      let copy = value;
-      const semiColonIndex = copy.lastIndexOf(";");
-      if (semiColonIndex !== -1) {
-        copy = copy.slice(semiColonIndex + 1);
-      }
-
-      copy = copy.trim();
-      copy = copy.replace(/\s\s+/g, " ");
-
-      const commandArray = copy.split(" ");
-      let index = commandArray.length - 2;
-      if (index < -1) {
-        index = 0;
-      }
-      const allPos = await determineAllPossibilitiesForTabCompletion(copy, index, Terminal.cwd());
-      if (allPos.length == 0) {
+      const possibilities = await getTabCompletionPossibilities(value, Terminal.cwd());
+      if (possibilities.length === 0) return;
+      if (possibilities.length === 1) {
+        saveValue(value.replace(/[^ ]*$/, possibilities[0]) + " ");
         return;
       }
-
-      let arg = "";
-      let command = "";
-      if (commandArray.length == 0) {
-        return;
-      }
-      if (commandArray.length == 1) {
-        command = commandArray[0];
-      } else if (commandArray.length == 2) {
-        command = commandArray[0];
-        arg = commandArray[1];
-      } else if (commandArray.length == 3) {
-        command = commandArray[0] + " " + commandArray[1];
-        arg = commandArray[2];
-      } else {
-        arg = commandArray.pop() + "";
-        command = commandArray.join(" ");
-      }
-
-      let newValue = tabCompletion(command, arg, allPos, value);
-      if (typeof newValue === "string" && newValue !== "") {
-        if (!newValue.endsWith(" ") && !newValue.endsWith("/") && allPos.length === 1) newValue += " ";
-        saveValue(newValue);
-      }
-      if (Array.isArray(newValue)) {
-        setPossibilities(newValue);
-      }
+      // More than one possibility, check to see if there is a longer common string than currentText.
+      const longestMatch = longestCommonStart(possibilities);
+      saveValue(value.replace(/[^ ]*$/, longestMatch));
+      setPossibilities(possibilities);
     }
 
     // Clear screen.
@@ -310,6 +273,7 @@ export function TerminalInput(): React.ReactElement {
       } else {
         ++Terminal.commandHistoryIndex;
         const prevCommand = Terminal.commandHistory[Terminal.commandHistoryIndex];
+
         saveValue(prevCommand);
       }
     }
@@ -405,7 +369,12 @@ export function TerminalInput(): React.ReactElement {
           onKeyDown: onKeyDown,
         }}
       ></TextField>
-      <Popper open={possibilities.length > 0} anchorEl={terminalInput.current} placement={"top-start"}>
+      <Popper
+        open={possibilities.length > 0}
+        anchorEl={terminalInput.current}
+        placement={"top"}
+        sx={{ maxWidth: "75%" }}
+      >
         <Paper sx={{ m: 1, p: 2 }}>
           <Typography classes={{ root: classes.preformatted }} color={"primary"} paragraph={false}>
             Possible autocomplete candidates:

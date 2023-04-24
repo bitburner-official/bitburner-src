@@ -1,7 +1,7 @@
 import { Augmentation, IConstructorParams } from "../Augmentation";
 import { AugmentationNames } from "./AugmentationNames";
 import { Player } from "@player";
-import { Programs } from "../../Programs/Programs";
+import { CompletedProgramName } from "../../Programs/Programs";
 import { WHRNG } from "../../Casino/RNG";
 import React from "react";
 import { FactionNames } from "../../Faction/data/FactionNames";
@@ -1442,7 +1442,7 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     hacking_exp: 1.2,
     hacking_chance: 1.1,
     hacking_speed: 1.05,
-    programs: [Programs.FTPCrackProgram.name, Programs.RelaySMTPProgram.name],
+    programs: [CompletedProgramName.ftpCrack, CompletedProgramName.relaySmtp],
     factions: [FactionNames.BitRunners],
   }),
   new Augmentation({
@@ -1495,7 +1495,7 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       </>
     ),
     startingMoney: 1e6,
-    programs: [Programs.BruteSSHProgram.name],
+    programs: [CompletedProgramName.bruteSsh],
     factions: [FactionNames.Sector12],
   }),
   new Augmentation({
@@ -1528,7 +1528,7 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     company_rep: 1.0777,
     crime_success: 1.0777,
     crime_money: 1.0777,
-    programs: [Programs.DeepscanV1.name, Programs.AutoLink.name],
+    programs: [CompletedProgramName.deepScan1, CompletedProgramName.autoLink],
     factions: [FactionNames.Aevum],
   }),
   new Augmentation({
@@ -2104,16 +2104,16 @@ export const initChurchOfTheMachineGodAugmentations = (): Augmentation[] => [
 
     startingMoney: 1e12,
     programs: [
-      Programs.BruteSSHProgram.name,
-      Programs.FTPCrackProgram.name,
-      Programs.RelaySMTPProgram.name,
-      Programs.HTTPWormProgram.name,
-      Programs.SQLInjectProgram.name,
-      Programs.DeepscanV1.name,
-      Programs.DeepscanV2.name,
-      Programs.ServerProfiler.name,
-      Programs.AutoLink.name,
-      Programs.Formulas.name,
+      CompletedProgramName.bruteSsh,
+      CompletedProgramName.ftpCrack,
+      CompletedProgramName.relaySmtp,
+      CompletedProgramName.httpWorm,
+      CompletedProgramName.sqlInject,
+      CompletedProgramName.deepScan1,
+      CompletedProgramName.deepScan2,
+      CompletedProgramName.serverProfiler,
+      CompletedProgramName.autoLink,
+      CompletedProgramName.formulas,
     ],
   }),
 ];

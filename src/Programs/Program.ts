@@ -1,3 +1,5 @@
+import type { CompletedProgramName } from "./Programs";
+import { ProgramFilePath, asProgramFilePath } from "../Paths/ProgramFilePath";
 import { BaseServer } from "../Server/BaseServer";
 
 export interface IProgramCreate {
@@ -6,14 +8,19 @@ export interface IProgramCreate {
   time: number;
   tooltip: string;
 }
+type ProgramConstructorParams = {
+  name: CompletedProgramName;
+  create: IProgramCreate | null;
+  run: (args: string[], server: BaseServer) => void;
+};
 
 export class Program {
-  name = "";
+  name: ProgramFilePath & CompletedProgramName;
   create: IProgramCreate | null;
   run: (args: string[], server: BaseServer) => void;
 
-  constructor(name: string, create: IProgramCreate | null, run: (args: string[], server: BaseServer) => void) {
-    this.name = name;
+  constructor({ name, create, run }: ProgramConstructorParams) {
+    this.name = asProgramFilePath(name);
     this.create = create;
     this.run = run;
   }

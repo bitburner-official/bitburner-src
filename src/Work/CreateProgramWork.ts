@@ -7,24 +7,26 @@ import { Programs } from "../Programs/Programs";
 import { Work, WorkType } from "./Work";
 import { Program } from "../Programs/Program";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
+import { asProgramFilePath } from "../Paths/ProgramFilePath";
+import { CompletedProgramName } from "../Programs/Programs";
 
 export const isCreateProgramWork = (w: Work | null): w is CreateProgramWork =>
   w !== null && w.type === WorkType.CREATE_PROGRAM;
 
 interface CreateProgramWorkParams {
-  programName: string;
+  programName: CompletedProgramName;
   singularity: boolean;
 }
 
 export class CreateProgramWork extends Work {
-  programName: string;
+  programName: CompletedProgramName;
   // amount of effective work completed on the program (time boosted by skills).
   unitCompleted: number;
 
   constructor(params?: CreateProgramWorkParams) {
     super(WorkType.CREATE_PROGRAM, params?.singularity ?? true);
     this.unitCompleted = 0;
-    this.programName = params?.programName ?? "";
+    this.programName = params?.programName ?? CompletedProgramName.bruteSsh;
 
     if (params) {
       for (let i = 0; i < Player.getHomeComputer().programs.length; ++i) {
@@ -50,9 +52,7 @@ export class CreateProgramWork extends Work {
   }
 
   getProgram(): Program {
-    const p = Object.values(Programs).find((p) => p.name.toLowerCase() === this.programName.toLowerCase());
-    if (!p) throw new Error("Create program work started with invalid program " + this.programName);
-    return p;
+    return Programs[this.programName];
   }
 
   process(cycles: number): boolean {
@@ -75,7 +75,7 @@ export class CreateProgramWork extends Work {
     return false;
   }
   finish(cancelled: boolean): void {
-    const programName = this.programName;
+    const programName = asProgramFilePath(this.programName);
     if (!cancelled) {
       //Complete case
       Player.gainIntelligenceExp(
@@ -95,7 +95,7 @@ export class CreateProgramWork extends Work {
     } else if (!Player.getHomeComputer().programs.includes(programName)) {
       //Incomplete case
       const perc = ((100 * this.unitCompleted) / this.unitNeeded()).toFixed(2);
-      const incompleteName = programName + "-" + perc + "%-INC";
+      const incompleteName = asProgramFilePath(programName + "-" + perc + "%-INC");
       Player.getHomeComputer().programs.push(incompleteName);
     }
   }

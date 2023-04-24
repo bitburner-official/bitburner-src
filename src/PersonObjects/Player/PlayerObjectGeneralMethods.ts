@@ -11,7 +11,7 @@ import { CompanyPositions } from "../../Company/CompanyPositions";
 import { CompanyPosition } from "../../Company/CompanyPosition";
 import * as posNames from "../../Company/data/JobTracks";
 import { CONSTANTS } from "../../Constants";
-import { Programs } from "../../Programs/Programs";
+import { CompletedProgramName } from "../../Programs/Programs";
 import { Exploit } from "../../Exploits/Exploit";
 import { Faction } from "../../Faction/Faction";
 import { Factions } from "../../Faction/Factions";
@@ -45,6 +45,7 @@ import { isCompanyWork } from "../../Work/CompanyWork";
 import { serverMetadata } from "../../Server/data/servers";
 
 import type { PlayerObject } from "./PlayerObject";
+import { ProgramFilePath } from "src/Paths/ProgramFilePath";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -60,7 +61,7 @@ export function init(this: PlayerObject): void {
   this.currentServer = SpecialServers.Home;
   AddToAllServers(t_homeComp);
 
-  this.getHomeComputer().programs.push(Programs.NukeProgram.name);
+  this.getHomeComputer().programs.push(CompletedProgramName.nuke);
 }
 
 export function prestigeAugmentation(this: PlayerObject): void {
@@ -171,18 +172,9 @@ export function calculateSkillProgress(this: PlayerObject, exp: number, mult = 1
   return calculateSkillProgressF(exp, mult);
 }
 
-export function hasProgram(this: PlayerObject, programName: string): boolean {
+export function hasProgram(this: PlayerObject, programName: CompletedProgramName | ProgramFilePath): boolean {
   const home = this.getHomeComputer();
-  if (home == null) {
-    return false;
-  }
-
-  for (let i = 0; i < home.programs.length; ++i) {
-    if (programName.toLowerCase() == home.programs[i].toLowerCase()) {
-      return true;
-    }
-  }
-  return false;
+  return home.programs.includes(programName);
 }
 
 export function setMoney(this: PlayerObject, money: number): void {

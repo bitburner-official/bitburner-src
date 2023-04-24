@@ -1,7 +1,5 @@
 import { Player } from "@player";
-
-import { LiteratureNames } from "./Literature/data/LiteratureNames";
-
+import { LiteratureName } from "./Literature/data/LiteratureNames";
 import { ITutorialEvents } from "./ui/InteractiveTutorial/ITutorialEvents";
 
 // Ordered array of keys to Interactive Tutorial Steps
@@ -104,7 +102,7 @@ function iTutorialEnd(): void {
   ITutorial.isRunning = false;
   ITutorial.currStep = iTutorialSteps.Start;
   const messages = Player.getHomeComputer().messages;
-  const handbook = LiteratureNames.HackersStartingHandbook;
+  const handbook = LiteratureName.HackersStartingHandbook;
   if (!messages.includes(handbook)) messages.push(handbook);
   ITutorialEvents.emit();
 }

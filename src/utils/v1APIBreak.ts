@@ -1,8 +1,10 @@
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { Player } from "@player";
-import { Script } from "../Script/Script";
+import { FormattedCode, Script } from "../Script/Script";
 import { GetAllServers } from "../Server/AllServers";
+import { resolveTextFilePath } from "../Paths/TextFilePath";
+import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
 
 const detect: [string, string][] = [
   ["getHackTime", "returns milliseconds"],
@@ -52,7 +54,7 @@ function hasChanges(code: string): boolean {
   return false;
 }
 
-function convert(code: string): string {
+function convert(code: string): FormattedCode {
   const lines = code.split("\n");
   const out: string[] = [];
   for (let i = 0; i < lines.length; i++) {
@@ -70,7 +72,8 @@ function convert(code: string): string {
     }
     out.push(line);
   }
-  return out.join("\n");
+  code = out.join("\n");
+  return Script.formatCode(code);
 }
 
 export function AwardNFG(n = 1): void {
@@ -122,7 +125,9 @@ export function v1APIBreak(): void {
   }
   if (txt !== "") {
     const home = Player.getHomeComputer();
-    home.writeToTextFile("v1_DETECTED_CHANGES.txt", txt);
+    const textPath = resolveTextFilePath("v1_DETECTED_CHANGES.txt");
+    if (!textPath) return console.error("Filepath unexpectedly failed to parse");
+    home.writeToTextFile(textPath, txt);
   }
 
   // API break function is called before version31 / 2.3.0 changes - scripts is still an array
@@ -130,8 +135,14 @@ export function v1APIBreak(): void {
     const backups: Script[] = [];
     for (const script of server.scripts) {
       if (!hasChanges(script.code)) continue;
-      const prefix = script.filename.includes("/") ? "/BACKUP_" : "BACKUP_";
-      backups.push(new Script(prefix + script.filename, script.code, script.server));
+      // Sanitize first before combining
+      const oldFilename = resolveScriptFilePath(script.filename);
+      const filename = resolveScriptFilePath("BACKUP_" + oldFilename);
+      if (!filename) {
+        console.error(`Unexpected error resolving backup path for ${script.filename}`);
+        continue;
+      }
+      backups.push(new Script(filename, script.code, script.server));
       script.code = convert(script.code);
     }
     server.scripts = server.scripts.concat(backups);

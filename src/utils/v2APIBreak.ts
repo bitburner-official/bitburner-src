@@ -1,3 +1,4 @@
+import { TextFilePath } from "../Paths/TextFilePath";
 import { saveObject } from "../SaveObject";
 import { Script } from "../Script/Script";
 import { GetAllServers, GetServer } from "../Server/AllServers";
@@ -232,7 +233,7 @@ export const v2APIBreak = () => {
     processScript(rules, script);
   }
 
-  home.writeToTextFile("V2_0_0_API_BREAK.txt", formatRules(rules));
+  home.writeToTextFile("V2_0_0_API_BREAK.txt" as TextFilePath, formatRules(rules));
   openV2Modal();
 
   for (const server of GetAllServers()) {

@@ -23,7 +23,7 @@ import createStyles from "@mui/styles/createStyles";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import { Page, SimplePage, IRouter, ScriptEditorRouteOptions } from "./Router";
+import { Page, SimplePage, IRouter } from "./Router";
 import { Overview } from "./React/Overview";
 import { SidebarRoot } from "../Sidebar/ui/SidebarRoot";
 import { AugmentationsRoot } from "../Augmentation/ui/AugmentationsRoot";
@@ -78,6 +78,8 @@ import { isFactionWork } from "../Work/FactionWork";
 import { V2Modal } from "../utils/V2Modal";
 import { MathJaxContext } from "better-react-mathjax";
 import { useRerender } from "./React/hooks";
+import { ScriptFilePath } from "src/Paths/ScriptFilePath";
+import { TextFilePath } from "src/Paths/TextFilePath";
 
 const htmlLocation = location;
 
@@ -126,7 +128,13 @@ function determineStartPage(): Page {
 
 export function GameRoot(): React.ReactElement {
   const classes = useStyles();
-  const [{ files, vim }, setEditorOptions] = useState({ files: {}, vim: false });
+  const [{ files, vim }, setEditorOptions] = useState<{
+    files: Map<ScriptFilePath | TextFilePath, string>;
+    vim: boolean;
+  }>({
+    files: new Map(),
+    vim: false,
+  });
   const [page, setPage] = useState(determineStartPage());
   const rerender = useRerender();
   const [augPage, setAugPage] = useState<boolean>(false);
@@ -189,7 +197,7 @@ export function GameRoot(): React.ReactElement {
       setPage(Page.Faction);
       if (faction) setFaction(faction);
     },
-    toScriptEditor: (files: Record<string, string>, options?: ScriptEditorRouteOptions) => {
+    toScriptEditor: (files = new Map(), options) => {
       setEditorOptions({
         files,
         vim: !!options?.vim,
