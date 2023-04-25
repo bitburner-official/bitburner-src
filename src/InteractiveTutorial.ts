@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { LiteratureName } from "./Literature/data/LiteratureNames";
+import { LiteratureName } from "./data/HiddenEnums";
 import { ITutorialEvents } from "./ui/InteractiveTutorial/ITutorialEvents";
 
 // Ordered array of keys to Interactive Tutorial Steps

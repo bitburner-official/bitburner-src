@@ -16,9 +16,8 @@ import { IPAddress, ServerName } from "../Types/strings";
 import { FilePath } from "../Paths/FilePath";
 import { ContentFile, ContentFilePath } from "../Paths/ContentFile";
 import { ProgramFilePath, hasProgramExtension } from "../Paths/ProgramFilePath";
-import { MessageFilename } from "src/Message/MessageHelpers";
-import { LiteratureName } from "src/Literature/data/LiteratureNames";
-import { CompletedProgramName } from "src/Programs/Programs";
+import { LiteratureName, MessageFilename } from "../data/HiddenEnums";
+import { CompletedProgramName } from "../Programs/Programs";
 
 interface IConstructorParams {
   adminRights?: boolean;

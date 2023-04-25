@@ -3,8 +3,6 @@ import { BaseServer } from "../../Server/BaseServer";
 import { GetServer } from "../../Server/AllServers";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
-import { checkEnum } from "../../utils/helpers/enum";
-import { LiteratureName } from "../../Literature/data/LiteratureNames";
 
 export function scp(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 2) {
@@ -20,7 +18,7 @@ export function scp(args: (string | number | boolean)[], server: BaseServer): vo
 
   // Lit files
   if (path.endsWith(".lit")) {
-    if (!checkEnum(LiteratureName, path) || !server.messages.includes(path)) {
+    if (!server.messages.includes(path)) {
       return Terminal.error(`No file at path ${path}`);
     }
     if (destServer.messages.includes(path)) return Terminal.print(`${path} was already on ${destHostname}`);

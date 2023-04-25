@@ -669,33 +669,27 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     getCompanyPositions: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
-
-      // Make sure its a valid company
-      if (companyName == null || companyName === "" || !Companies[companyName]) {
+      const companyName = getEnumHelper(LocationName).nsGetMember(ctx, "companyName", _companyName);
+      const company = Companies[companyName];
+      if (!company) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
       }
 
       return Object.entries(CompanyPositions)
-        .filter((_position) => Companies[companyName].hasPosition(_position[0]))
+        .filter((_position) => company.hasPosition(_position[0]))
         .map((_position) => _position[1]["name"]);
     },
     getCompanyPositionInfo: (ctx) => (_companyName, _positionName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
-      const positionName = helpers.string(ctx, "positionName", _positionName);
-
+      const companyName = getEnumHelper(LocationName).nsGetMember(ctx, "companyName", _companyName);
+      const positionName = getEnumHelper(JobName).nsGetMember(ctx, "positionName", _positionName);
+      const company = Companies[companyName];
       // Make sure its a valid company
-      if (!(companyName in Companies)) {
+      if (!company) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
       }
 
-      // Make sure its a valid position
-      if (!checkEnum(JobName, positionName)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: '${positionName}'`);
-      }
-
-      if (!Companies[companyName].hasPosition(positionName)) {
+      if (!company.hasPosition(positionName)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Company '${companyName}' does not have position '${positionName}'`);
       }
 

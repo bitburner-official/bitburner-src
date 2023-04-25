@@ -1,5 +1,5 @@
 import { FilePath, asFilePath } from "../Paths/FilePath";
-import type { LiteratureName } from "./data/LiteratureNames";
+import type { LiteratureName } from "../data/HiddenEnums";
 
 type LiteratureConstructorParams = { title: string; filename: LiteratureName; text: string };
 /**

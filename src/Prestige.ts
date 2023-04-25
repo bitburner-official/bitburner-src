@@ -14,7 +14,7 @@ import { prestigeWorkerScripts } from "./NetscriptWorker";
 import { Player } from "@player";
 import { recentScripts } from "./Netscript/RecentScripts";
 import { resetPidCounter } from "./Netscript/Pid";
-import { LiteratureName } from "./Literature/data/LiteratureNames";
+import { LiteratureName } from "./data/HiddenEnums";
 
 import { GetServer, AddToAllServers, initForeignServers, prestigeAllServers } from "./Server/AllServers";
 import { prestigeHomeComputer } from "./Server/ServerHelpers";

@@ -1,9 +1,9 @@
 import { Literatures } from "./Literatures";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { LiteratureName } from "./data/LiteratureNames";
+import { LiteratureName } from "../data/HiddenEnums";
 
-export function showLiterature(fn: LiteratureName): void {
-  const litObj = Literatures[fn];
+export function showLiterature(filename: LiteratureName): void {
+  const litObj = Literatures[filename];
   if (litObj == null) {
     return;
   }

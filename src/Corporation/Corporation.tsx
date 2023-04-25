@@ -6,7 +6,7 @@ import { Industry } from "./Industry";
 
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { showLiterature } from "../Literature/LiteratureHelpers";
-import { LiteratureName } from "../Literature/data/LiteratureNames";
+import { LiteratureName } from "../data/HiddenEnums";
 import { Player } from "@player";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";

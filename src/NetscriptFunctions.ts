@@ -90,7 +90,7 @@ import { FilePath, resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension, resolveScriptFilePath } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
 import { ContentFilePath } from "./Paths/ContentFile";
-import { LiteratureName } from "./Literature/data/LiteratureNames";
+import { LiteratureName } from "./data/HiddenEnums";
 
 export const enums: NSEnums = {
   CityName,
@@ -828,7 +828,7 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.makeRuntimeErrorMsg(ctx, "Only works for scripts, .lit and .txt files.");
       }
       const sanitizedPath = resolveFilePath(file, ctx.workerScript.name);
-      if (!sanitizedPath || !checkEnum(LiteratureName, sanitizedPath)) {
+      if (!sanitizedPath || !getEnumHelper(LiteratureName).isMember(sanitizedPath)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid filename: '${file}'`);
       }
       lits.push(sanitizedPath);

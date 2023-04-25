@@ -11,7 +11,7 @@ import { Settings } from "../Settings/Settings";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { FactionName } from "../Faction/data/Enums";
 import { Server } from "../Server/Server";
-import { MessageFilenames } from "../data/HiddenEnums";
+import { MessageFilename } from "../data/HiddenEnums";
 
 //Sends message to player, including a pop up
 function sendMessage(name: MessageFilename, forced = false): void {
@@ -91,21 +91,8 @@ function checkForMessagesToSend(): void {
   }
 }
 
-export enum MessageFilename {
-  Jumper0 = "j0.msg",
-  Jumper1 = "j1.msg",
-  Jumper2 = "j2.msg",
-  Jumper3 = "j3.msg",
-  Jumper4 = "j4.msg",
-  CyberSecTest = "csec-test.msg",
-  NiteSecTest = "nitesec-test.msg",
-  BitRunnersTest = "19dfj3l1nd.msg",
-  TruthGazer = "truthgazer.msg",
-  RedPill = "icarus.msg",
-}
-
 //Reset
-const Messages: Record<MessageFilenames, Message> = {
+const Messages: Record<MessageFilename, Message> = {
   //jump3R Messages
   [MessageFilename.Jumper0]: new Message(
     MessageFilename.Jumper0,

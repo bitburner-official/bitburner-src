@@ -7,7 +7,7 @@ import { Router } from "../../ui/GameRoot";
 import { Terminal } from "../../Terminal";
 import libarg from "arg";
 import { showLiterature } from "../../Literature/LiteratureHelpers";
-import { MessageFilename, showMessage } from "../../Message/MessageHelpers";
+import { showMessage } from "../../Message/MessageHelpers";
 import { ScriptFilePath } from "../../Paths/ScriptFilePath";
 import { FilePath, combinePath, removeDirectoryFromPath } from "../../Paths/FilePath";
 import { ContentFilePath } from "../../Paths/ContentFile";
@@ -21,8 +21,8 @@ import {
 import { TextFilePath } from "../../Paths/TextFilePath";
 import { ContractFilePath } from "../../Paths/ContractFilePath";
 import { ProgramFilePath } from "../../Paths/ProgramFilePath";
-import { checkEnum } from "../../utils/helpers/enum";
-import { LiteratureName } from "../../Literature/data/LiteratureNames";
+import { getEnumHelper } from "../../utils/helpers/enum";
+import { LiteratureName, MessageFilename } from "../../data/HiddenEnums";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer): void {
   interface LSFlags {
@@ -172,9 +172,9 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
       }
       // Message and lit files have no directories
 
-      if (checkEnum(MessageFilename, filename)) {
+      if (getEnumHelper(MessageFilename).isMember(filename)) {
         showMessage(filename);
-      } else if (checkEnum(LiteratureName, filename)) {
+      } else if (getEnumHelper(LiteratureName).isMember(filename)) {
         showLiterature(filename);
       }
     }

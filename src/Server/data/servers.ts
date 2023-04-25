@@ -4,7 +4,7 @@ import { FactionName } from "../../Faction/data/Enums";
 // This could actually be a JSON file as it should be constant metadata to be imported...
 import { IMinMaxRange } from "../../types";
 import { LocationName } from "../../data/Enums";
-import { LiteratureName } from "../../Literature/data/LiteratureNames";
+import { LiteratureName } from "../../data/HiddenEnums";
 import { SpecialServers } from "./SpecialServers";
 import { ServerName } from "../../Types/strings";
 

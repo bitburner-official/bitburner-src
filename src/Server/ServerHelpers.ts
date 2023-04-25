@@ -7,7 +7,7 @@ import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
 import { CompletedProgramName } from "../Programs/Programs";
-import { LiteratureName } from "../Literature/data/LiteratureNames";
+import { LiteratureName } from "../data/HiddenEnums";
 import { Person as IPerson } from "@nsdefs";
 import { isValidNumber } from "../utils/helpers/isValidNumber";
 import { Server as IServer } from "@nsdefs";

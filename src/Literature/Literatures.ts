@@ -1,6 +1,6 @@
 import { CityName } from "../data/Enums";
 import { Literature } from "./Literature";
-import { LiteratureName } from "./data/LiteratureNames";
+import { LiteratureName } from "../data/HiddenEnums";
 import { FactionName } from "../Faction/data/Enums";
 
 export const Literatures: Record<LiteratureName, Literature> = {

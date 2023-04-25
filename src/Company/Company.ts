@@ -3,12 +3,13 @@ import * as posNames from "./data/JobTracks";
 import { favorToRep, repToFavor } from "../Faction/formulas/favor";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { LocationName } from "../data/Enums";
+import { JobName, LocationName } from "../data/Enums";
+import { JSONSet } from "src/Types/Jsonable";
 
 export interface IConstructorParams {
   name: LocationName;
   info: string;
-  companyPositions: Record<string, boolean>;
+  companyPositions: JobName[][];
   expMultiplier: number;
   salaryMultiplier: number;
   jobStatReqOffset: number;
@@ -18,7 +19,7 @@ export interface IConstructorParams {
 const DefaultConstructorParams: IConstructorParams = {
   name: LocationName.NewTokyoNoodleBar,
   info: "",
-  companyPositions: {},
+  companyPositions: [],
   expMultiplier: 1,
   salaryMultiplier: 1,
   jobStatReqOffset: 0,
@@ -41,7 +42,7 @@ export class Company {
    *
    * Must match names of Company Positions, defined in data/companypositionnames.ts
    */
-  companyPositions: Record<string, boolean>;
+  companyPositions: JSONSet<JobName> = new JSONSet();
 
   /** Company-specific multiplier for earnings */
   expMultiplier: number;
@@ -64,7 +65,10 @@ export class Company {
   constructor(p: IConstructorParams = DefaultConstructorParams) {
     this.name = p.name;
     this.info = p.info;
-    this.companyPositions = p.companyPositions;
+
+    for (const jobArray of p.companyPositions) {
+      for (const job of jobArray) this.companyPositions.add(job);
+    }
     this.expMultiplier = p.expMultiplier;
     this.salaryMultiplier = p.salaryMultiplier;
     this.jobStatReqOffset = p.jobStatReqOffset;
@@ -76,16 +80,16 @@ export class Company {
     if (p.isMegacorp) this.isMegacorp = true;
   }
 
-  hasPosition(pos: CompanyPosition | string): boolean {
-    return this.companyPositions[typeof pos === "string" ? pos : pos.name] != null;
+  hasPosition(jobName: JobName): boolean {
+    return this.companyPositions.has(jobName);
   }
 
   hasAgentPositions(): boolean {
-    return this.companyPositions[posNames.AgentCompanyPositions[0]] != null;
+    return this.companyPositions.has(posNames.AgentCompanyPositions[0]);
   }
 
   hasBusinessConsultantPositions(): boolean {
-    return this.companyPositions[posNames.BusinessConsultantCompanyPositions[0]] != null;
+    return this.companyPositions.has(posNames.BusinessConsultantCompanyPositions[0]);
   }
 
   hasBusinessPositions(): boolean {
