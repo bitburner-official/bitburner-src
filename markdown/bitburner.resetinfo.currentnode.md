@@ -4,7 +4,7 @@
 
 ## ResetInfo.currentNode property
 
-The current node
+The current bitnode
 
 **Signature:**
 

@@ -71,9 +71,9 @@ interface SleevePerson extends Person {
 interface ResetInfo {
   /** Numeric timestamp (from Date.now()) of last augmentation reset */
   lastAugReset: number;
-  /** Numneric timestamp (from Date.now()) of last node reset */
+  /** Numeric timestamp (from Date.now()) of last bitnode reset */
   lastNodeReset: number;
-  /** The current node */
+  /** The current bitnode */
   currentNode: number;
 }
 
