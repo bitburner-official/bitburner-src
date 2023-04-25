@@ -984,5 +984,5 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
 }
 
 export function initBitNodeMultipliers(): void {
-  Object.assign(BitNodeMultipliers, getBitNodeMultipliers(Player.bitNodeN, Player.sourceFileLvl(Player.bitNodeN)));
+  Object.assign(BitNodeMultipliers, getBitNodeMultipliers(Player.bitNodeN, Player.sourceFileLvl(Player.bitNodeN) + 1));
 }
