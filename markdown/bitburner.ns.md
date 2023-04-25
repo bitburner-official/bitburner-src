@@ -97,6 +97,7 @@ export async function main(ns) {
 |  [getPurchasedServers()](./bitburner.ns.getpurchasedservers.md) | Returns an array with the hostnames of all of the servers you have purchased. |
 |  [getPurchasedServerUpgradeCost(hostname, ram)](./bitburner.ns.getpurchasedserverupgradecost.md) | Get cost of upgrading a purchased server to the given ram. |
 |  [getRecentScripts()](./bitburner.ns.getrecentscripts.md) | Get an array of recently killed scripts across all servers. |
+|  [getResetInfo()](./bitburner.ns.getresetinfo.md) | Get information about resets. |
 |  [getRunningScript(filename, hostname, args)](./bitburner.ns.getrunningscript.md) | Get general info about a running script. |
 |  [getScriptExpGain(script, host, args)](./bitburner.ns.getscriptexpgain.md) | Get the exp gain of a script. |
 |  [getScriptIncome(script, host, args)](./bitburner.ns.getscriptincome.md) | Get the income of a script. |
@@ -138,7 +139,7 @@ export async function main(ns) {
 |  [ls(host, substring)](./bitburner.ns.ls.md) | List files on a server. |
 |  [moveTail(x, y, pid)](./bitburner.ns.movetail.md) | Move a tail window. |
 |  [mv(host, source, destination)](./bitburner.ns.mv.md) | Move a file on the target server. |
-|  [nFormat(n, format)](./bitburner.ns.nformat.md) | Format a number using the numeral library. This function is deprecated and will be removed in 2.3. |
+|  [nFormat(n, format)](./bitburner.ns.nformat.md) | Format a number using the numeral library. This function is deprecated and will be removed in 2.4. |
 |  [nuke(host)](./bitburner.ns.nuke.md) | Runs NUKE.exe on a server. |
 |  [peek(portNumber)](./bitburner.ns.peek.md) | Get a copy of the data from a port without popping it. |
 |  [print(args)](./bitburner.ns.print.md) | Prints one or more values or variables to the script’s logs. |

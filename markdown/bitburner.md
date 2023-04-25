@@ -86,6 +86,7 @@
 |  [Product](./bitburner.product.md) | Product in a warehouse |
 |  [RecentScript](./bitburner.recentscript.md) |  |
 |  [ReputationFormulas](./bitburner.reputationformulas.md) | Reputation formulas |
+|  [ResetInfo](./bitburner.resetinfo.md) | Various info about resets |
 |  [RunningScript](./bitburner.runningscript.md) |  |
 |  [RunOptions](./bitburner.runoptions.md) |  |
 |  [Server](./bitburner.server.md) | A server. Not all servers have all of these properties - optional properties are missing on certain servers. |

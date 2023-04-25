@@ -50,7 +50,6 @@ interface Player extends Person {
   entropy: number;
   jobs: Record<string, string>;
   factions: string[];
-  bitNodeN: number;
   totalPlaytime: number;
   location: string;
 }
@@ -65,6 +64,17 @@ interface SleevePerson extends Person {
   memory: number;
   /** Number of 200ms cycles which are stored as bonus time */
   storedCycles: number;
+}
+
+/** Various info about resets
+ * @public */
+interface ResetInfo {
+  /** Numeric timestamp (from Date.now()) of last augmentation reset */
+  lastAugReset: number;
+  /** Numeric timestamp (from Date.now()) of last bitnode reset */
+  lastNodeReset: number;
+  /** The current bitnode */
+  currentNode: number;
 }
 
 /** @public */
@@ -2361,24 +2371,6 @@ export interface Singularity {
    * @returns - An object representing the current work. Fields depend on the kind of work.
    */
   getCurrentWork(): any | null;
-
-  /**
-   * Get the last timestamp from when you installed augmentations.
-   * @remarks
-   * RAM cost: 0.5 GB * 16/4/1
-   *
-   * @returns The timestamp in milliseconds from your last augmentation install.
-   */
-  getLastAugReset(): number;
-
-  /**
-   * Get the last timestamp from when you finished a bitnode.
-   * @remarks
-   * RAM cost: 0.5 GB * 16/4/1
-   *
-   * @returns The timestamp in milliseconds from your last bitnode finish.
-   */
-  getLastNodeReset(): number;
 }
 
 /**
@@ -6573,8 +6565,8 @@ export interface NS {
   formatPercent(n: number, fractionalDigits?: number, multStart?: number): string;
 
   /**
-   * Format a number using the numeral library. This function is deprecated and will be removed in 2.3.
-   * @deprecated Use ns.formatNumber, formatRam, or formatPercent instead. Will be removed in 2.3.
+   * Format a number using the numeral library. This function is deprecated and will be removed in 2.4.
+   * @deprecated Use ns.formatNumber, formatRam, or formatPercent instead. Will be removed in 2.4.
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6815,8 +6807,6 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * NS2 exclusive.
-   *
    * Move the source file to the specified destination on the target server.
    *
    * This command only works for scripts and text files (.txt). It cannot, however,  be used
@@ -6829,6 +6819,20 @@ export interface NS {
    * @param destination - Filename of the destination file.
    */
   mv(host: string, source: string, destination: string): void;
+
+  /** Get information about resets.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @example
+   * ```js
+   * const resetInfo = ns.getResetInfo();
+   * const lastAugReset = resetInfo.lastAugReset;
+   * ns.tprint(`The last augmentation reset was: ${new Date(lastAugReset)}`);
+   * ns.tprint(`It has been ${Date.now() - lastAugReset}ms since the last augmentation reset.`);
+   * ```
+   * */
+  getResetInfo(): ResetInfo;
 
   /**
    * Parse command line flags.

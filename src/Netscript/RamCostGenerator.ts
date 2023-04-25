@@ -204,8 +204,6 @@ const singularity = {
   b1tflum3: SF4Cost(16),
   destroyW0r1dD43m0n: SF4Cost(32),
   getCurrentWork: SF4Cost(0.5),
-  getLastAugReset: SF4Cost(0.5),
-  getLastNodeReset: SF4Cost(0.5),
 } as const;
 
 // Gang API
@@ -535,6 +533,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   getPlayer: RamCostConstants.SingularityFn1 / 4,
   getMoneySources: RamCostConstants.GetMoneySourcesCost,
   mv: 0,
+  getResetInfo: 1,
   tail: 0,
   toast: 0,
   moveTail: 0,
