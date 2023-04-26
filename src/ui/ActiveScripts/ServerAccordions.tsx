@@ -105,15 +105,6 @@ export function ServerAccordions(props: IProps): React.ReactElement {
           spellCheck: false,
         }}
       />
-      <List dense={true}>
-        {filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((data) => {
-          return (
-            data && (
-              <ServerAccordion key={data.server.hostname} server={data.server} workerScripts={data.workerScripts} />
-            )
-          );
-        })}
-      </List>
       <TablePagination
         rowsPerPageOptions={[10, 15, 20, 100]}
         component="div"
@@ -124,6 +115,15 @@ export function ServerAccordions(props: IProps): React.ReactElement {
         onRowsPerPageChange={handleChangeRowsPerPage}
         ActionsComponent={TablePaginationActionsAll}
       />
+      <List dense={true}>
+        {filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((data) => {
+          return (
+            data && (
+              <ServerAccordion key={data.server.hostname} server={data.server} workerScripts={data.workerScripts} />
+            )
+          );
+        })}
+      </List>
     </>
   );
 }
