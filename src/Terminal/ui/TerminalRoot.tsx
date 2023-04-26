@@ -35,10 +35,12 @@ const useStyles = makeStyles((theme: Theme) =>
       whiteSpace: "pre-wrap",
       overflowWrap: "anywhere",
       margin: theme.spacing(0),
+      width: "100%",
     },
     list: {
       padding: theme.spacing(0),
       height: "100%",
+      width: "100%",
     },
   }),
 );

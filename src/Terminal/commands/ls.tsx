@@ -106,89 +106,69 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
   allMessages.sort();
   folders.sort();
 
-  interface ScriptRowProps {
-    scripts: ScriptFilePath[];
+  function SegmentGrid(props: { colSize: string; children: React.ReactChild[] }): React.ReactElement {
+    const classes = makeStyles({
+      segmentGrid: {
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, var(--colSize))",
+      },
+    })();
+    const style = { ["--colSize"]: props.colSize } as React.CSSProperties;
+    return (
+      <span style={style} className={classes.segmentGrid}>
+        {props.children}
+      </span>
+    );
   }
-  function ClickableScriptRow({ scripts }: ScriptRowProps): React.ReactElement {
+  function ClickableScriptLink(props: { path: ScriptFilePath }): React.ReactElement {
     const classes = makeStyles((theme: Theme) =>
       createStyles({
-        scriptLinksWrap: {
-          display: "inline-flex",
-          color: theme.palette.warning.main,
-        },
-        scriptLink: {
+        link: {
           cursor: "pointer",
           textDecorationLine: "underline",
-          marginRight: "1.5em",
-          "&:last-child": { marginRight: 0 },
+          color: theme.palette.warning.main,
         },
       }),
     )();
-
-    function onScriptLinkClick(filename: ScriptFilePath): void {
-      const filePath = combinePath(baseDirectory, filename);
-      const code = server.scripts.get(filePath)?.content ?? "";
+    const fullPath = combinePath(baseDirectory, props.path);
+    function onClick() {
+      const code = server.scripts.get(props.path)?.content ?? "";
       const map = new Map<ContentFilePath, string>();
-      map.set(filePath, code);
+      map.set(fullPath, code);
       Router.toScriptEditor(map);
     }
-
     return (
-      <span className={classes.scriptLinksWrap}>
-        {scripts.map((script) => (
-          <span key={script}>
-            <span className={classes.scriptLink} onClick={() => onScriptLinkClick(script)}>
-              {script}
-            </span>
-            <span></span>
-          </span>
-        ))}
+      <span>
+        <span className={classes.link} onClick={onClick}>
+          {props.path}
+        </span>
       </span>
     );
   }
 
-  interface MessageRowProps {
-    messages: FilePath[];
-  }
-  function ClickableMessageRow({ messages }: MessageRowProps): React.ReactElement {
-    const classes = makeStyles((theme: Theme) =>
-      createStyles({
-        linksWrap: {
-          display: "inline-flex",
-          color: theme.palette.primary.main,
-        },
-        link: {
-          cursor: "pointer",
-          textDecorationLine: "underline",
-          marginRight: "1.5em",
-          "&:last-child": { marginRight: 0 },
-        },
-      }),
-    )();
-
-    function onMessageLinkClick(filename: FilePath): void {
+  function ClickableMessageLink(props: { path: FilePath }): React.ReactElement {
+    const classes = makeStyles({
+      link: {
+        cursor: "pointer",
+        textDecorationLine: "underline",
+      },
+    })();
+    function onClick(): void {
       if (!server.isConnectedTo) {
         return Terminal.error(`File is not on this server, connect to ${server.hostname} and try again`);
       }
-      // Message and lit files have no directories
-
-      if (checkEnum(MessageFilename, filename)) {
-        showMessage(filename);
-      } else if (checkEnum(LiteratureName, filename)) {
-        showLiterature(filename);
+      // Message and lit files are always in root, no need to combine path with base directory
+      if (checkEnum(MessageFilename, props.path)) {
+        showMessage(props.path);
+      } else if (checkEnum(LiteratureName, props.path)) {
+        showLiterature(props.path);
       }
     }
-
     return (
-      <span className={classes.linksWrap}>
-        {messages.map((message) => (
-          <span key={message}>
-            <span className={classes.link} onClick={() => onMessageLinkClick(message)}>
-              {message}
-            </span>
-            <span></span>
-          </span>
-        ))}
+      <span>
+        <span className={classes.link} onClick={onClick}>
+          {props.path}
+        </span>
       </span>
     );
   }
@@ -212,45 +192,28 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     | { type: FileType.Script; segments: ScriptFilePath[] };
 
   function postSegments({ type, segments }: FileGroup, flags: LSFlags): void {
-    const maxLength = Math.max(...segments.map((s) => s.length)) + 1;
-    const filesPerRow = flags["-l"] === true ? 1 : Math.ceil(80 / maxLength);
-    const padLength = Math.max(maxLength + 2, 40);
-    let i = 0;
-    if (type === FileType.Script) {
-      while (i < segments.length) {
-        const scripts: ScriptFilePath[] = [];
-        for (let col = 0; col < filesPerRow && i < segments.length; col++, i++) {
-          scripts.push(segments[i]);
-        }
-        Terminal.printRaw(<ClickableScriptRow scripts={scripts} />);
-      }
-      return;
+    let segmentElements: React.ReactElement[];
+    const colSize = flags["-l"]
+      ? "100%"
+      : Math.ceil(Math.max(...segments.map((segment) => segment.length)) * 0.7) + "em";
+    switch (type) {
+      case FileType.Folder:
+        segmentElements = segments.map((segment) => (
+          <span key={segment} style={{ color: "cyan" }}>
+            {segment}
+          </span>
+        ));
+        break;
+      case FileType.Message:
+        segmentElements = segments.map((segment) => <ClickableMessageLink key={segment} path={segment} />);
+        break;
+      case FileType.Script:
+        segmentElements = segments.map((segment) => <ClickableScriptLink key={segment} path={segment} />);
+        break;
+      default:
+        segmentElements = segments.map((segment) => <span key={segment}>{segment}</span>);
     }
-    if (type === FileType.Message) {
-      while (i < segments.length) {
-        const messages: FilePath[] = [];
-        for (let col = 0; col < filesPerRow && i < segments.length; col++, i++) {
-          messages.push(segments[i]);
-        }
-        Terminal.printRaw(<ClickableMessageRow messages={messages} />);
-      }
-      return;
-    }
-    while (i < segments.length) {
-      let row = "";
-      for (let col = 0; col < filesPerRow; col++, i++) {
-        if (!(i < segments.length)) break;
-        row += segments[i].padEnd(padLength);
-        i++;
-      }
-      switch (type) {
-        case FileType.Folder:
-          Terminal.printRaw(<span style={{ color: "cyan" }}>{row}</span>);
-          break;
-        default:
-          Terminal.print(row);
-      }
-    }
+    Terminal.printRaw(<SegmentGrid colSize={colSize}>{segmentElements}</SegmentGrid>);
   }
 
   const groups: FileGroup[] = [
