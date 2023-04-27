@@ -88,7 +88,7 @@ export function Generic_fromJSON<T extends Record<string, any>>(
   if (keys) {
     for (const key of keys) {
       const val = data[key];
-      if (val) obj[key] = val;
+      if (val !== undefined) obj[key] = val;
     }
     return obj;
   }

@@ -3,6 +3,8 @@ import "../../src/Player";
 import { loadAllServers, saveAllServers } from "../../src/Server/AllServers";
 import { loadAllRunningScripts } from "../../src/NetscriptWorker";
 
+jest.useFakeTimers();
+
 // Direct tests of loading and saving.
 // Tests here should try to be comprehensive (cover as much stuff as possible)
 // without requiring burdensome levels of maintenance when legitimate changes
@@ -47,6 +49,7 @@ function loadStandardServers() {
             "pid": 3,
             "ramUsage": 1.6,
             "server": "home",
+            "scriptKey": "script.js*[]",
             "temporary": true,
             "dependencies": [
               {
@@ -72,6 +75,7 @@ function loadStandardServers() {
             "pid": 2,
             "ramUsage": 1.6,
             "server": "home",
+            "scriptKey": "script.js*[]",
             "dependencies": [
               {
                 "filename": "script.js",
@@ -144,7 +148,7 @@ function loadStandardServers() {
 test("load/saveAllServers", () => {
   // Feed a JSON object through loadAllServers/saveAllServers.
   // The object is a pruned set of servers that was extracted from a real (dev) game.
-
+  jest.setSystemTime(123456789000);
   loadStandardServers();
 
   // Re-stringify with indenting for nicer diffs

@@ -39,6 +39,10 @@ export function killWorkerScriptByPid(pid: number): boolean {
 }
 
 function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
+  // Only clean up once.
+  // Important: Only this function can set stopFlag!
+  if (ws.env.stopFlag) return;
+
   //Clean up any ongoing netscriptDelay
   if (ws.delay) clearTimeout(ws.delay);
   ws.delayReject?.(new ScriptDeath(ws));
@@ -46,7 +50,6 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
 
   if (typeof ws.atExit === "function") {
     try {
-      ws.env.stopFlag = false;
       const atExit = ws.atExit;
       ws.atExit = undefined;
       atExit();

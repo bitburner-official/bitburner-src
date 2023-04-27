@@ -315,6 +315,6 @@ export abstract class BaseServer implements IServer {
 
   // Customize a prune list for a subclass.
   static getIncludedKeys<T extends BaseServer>(ctor: new () => T): readonly (keyof T)[] {
-    return getKeyList(ctor, { removedKeys: ["runningScriptMap", "savedScripts"] });
+    return getKeyList(ctor, { removedKeys: ["runningScriptMap", "savedScripts", "ramUsed"] });
   }
 }

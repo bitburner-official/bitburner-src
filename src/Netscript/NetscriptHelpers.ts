@@ -1,5 +1,6 @@
 import { NetscriptContext } from "./APIWrapper";
 import { WorkerScript } from "./WorkerScript";
+import { killWorkerScript } from "./killWorkerScript";
 import { GetAllServers, GetServer } from "../Server/AllServers";
 import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
@@ -355,10 +356,8 @@ function checkEnvFlags(ctx: NetscriptContext): void {
     throw new ScriptDeath(ws);
   }
   if (ws.env.runningFn && ctx.function !== "asleep") {
-    ws.delayReject?.(new ScriptDeath(ws));
-    ws.env.stopFlag = true;
     log(ctx, () => "Failed to run due to failed concurrency check.");
-    throw makeRuntimeErrorMsg(
+    const err = makeRuntimeErrorMsg(
       ctx,
       `Concurrent calls to Netscript functions are not allowed!
       Did you forget to await hack(), grow(), or some other
@@ -366,6 +365,8 @@ function checkEnvFlags(ctx: NetscriptContext): void {
       Currently running: ${ws.env.runningFn} tried to run: ${ctx.function}`,
       "CONCURRENCY",
     );
+    killWorkerScript(ws);
+    throw err;
   }
 }
 
@@ -395,8 +396,7 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
   ws.dynamicRamUsage = Math.min(ws.dynamicRamUsage + ramCost, RamCostConstants.Max);
   if (ws.dynamicRamUsage > 1.01 * ws.scriptRef.ramUsage) {
     log(ctx, () => "Insufficient static ram available.");
-    ws.env.stopFlag = true;
-    throw makeRuntimeErrorMsg(
+    const err = makeRuntimeErrorMsg(
       ctx,
       `Dynamic RAM usage calculated to be greater than RAM allocation.
       This is probably because you somehow circumvented the static RAM calculation.
@@ -417,6 +417,8 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
       Sorry :(`,
       "RAM USAGE",
     );
+    killWorkerScript(ws);
+    throw err;
   }
 }
 

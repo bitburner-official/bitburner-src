@@ -201,7 +201,7 @@ export function loadAllServers(saveString: string): void {
 
 function excludeReplacer(key: string, value: any): any {
   if (key === "runningScripts") {
-    return new Map();
+    return [];
   }
   return value;
 }

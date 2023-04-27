@@ -39,7 +39,6 @@ export const NetscriptPorts: Map<PortNumber, Port> = new Map();
 
 export function prestigeWorkerScripts(): void {
   for (const ws of workerScripts.values()) {
-    ws.env.stopFlag = true;
     killWorkerScript(ws);
   }
 
@@ -364,7 +363,7 @@ export function loadAllRunningScripts(): void {
       continue;
     }
     for (const runningScript of rsList) {
-      createAndAddWorkerScript(runningScript, server);
+      startWorkerScript(runningScript, server);
       scriptCalculateOfflineProduction(runningScript);
     }
   }
