@@ -7,16 +7,12 @@ import { WorkerScript } from "./WorkerScript";
 import { workerScripts } from "./WorkerScripts";
 import { WorkerScriptStartStopEventEmitter } from "./WorkerScriptStartStopEventEmitter";
 
-import { RunningScript } from "../Script/RunningScript";
 import { GetServer } from "../Server/AllServers";
-
 import { AddRecentScript } from "./RecentScripts";
 import { ITutorial } from "../InteractiveTutorial";
 import { AlertEvents } from "../ui/React/AlertManager";
 import { handleUnknownError } from "./NetscriptHelpers";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
-
-export type killScriptParams = WorkerScript | number | { runningScript: RunningScript; hostname: string };
 
 export function killWorkerScript(ws: WorkerScript): boolean {
   if (ITutorial.isRunning) {

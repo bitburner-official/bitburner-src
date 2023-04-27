@@ -68,7 +68,7 @@ export abstract class BaseServer implements IServer {
   maxRam = 0;
 
   // Message files AND Literature files on this Server
-  messages: (MessageFilename | LiteratureName | FilePath)[] = [];
+  messages: (MessageFilename | LiteratureName)[] = [];
 
   // Name of company/faction/etc. that this server belongs to.
   // Optional, not applicable to all Servers

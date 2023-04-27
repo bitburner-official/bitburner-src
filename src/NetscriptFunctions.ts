@@ -753,7 +753,7 @@ export const ns: InternalAPI<NSFull> = {
 
         res = true;
         for (const pid of byPid.keys()) {
-          res = killWorkerScriptByPid(pid);
+          res &&= killWorkerScriptByPid(pid);
         }
       }
 
@@ -810,7 +810,7 @@ export const ns: InternalAPI<NSFull> = {
     const destServer = helpers.getServer(ctx, destination);
     const sourceServer = helpers.getServer(ctx, source);
     const files = Array.isArray(_files) ? _files : [_files];
-    const lits: (FilePath & LiteratureName)[] = [];
+    const lits: FilePath[] = [];
     const contentFiles: ContentFilePath[] = [];
     //First loop through filenames to find all errors before moving anything.
     for (const file of files) {
@@ -819,7 +819,7 @@ export const ns: InternalAPI<NSFull> = {
         contentFiles.push(path);
         continue;
       }
-      if (!checkEnum(LiteratureName, path)) {
+      if (!path.endsWith(".lit")) {
         throw helpers.makeRuntimeErrorMsg(ctx, "Only works for scripts, .lit and .txt files.");
       }
       lits.push(path);
@@ -855,7 +855,8 @@ export const ns: InternalAPI<NSFull> = {
         continue;
       }
 
-      destServer.messages.push(litFilePath);
+      // It exists in sourceServer.messages, so it's a valid name.
+      destServer.messages.push(litFilePath as LiteratureName);
       helpers.log(ctx, () => `File '${litFilePath}' copied over to '${destServer?.hostname}'.`);
       continue;
     }

@@ -18,7 +18,7 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
 
       // if there's no candidate then we just don't know.
       if (candidates === null) {
-        Terminal.error(`No script named ${path} is running on the server`);
+        Terminal.error(`No script named ${path} with args ${JSON.stringify(args)} is running on the server`);
         return;
       }
       // Just use the first one (if there are multiple with the same
