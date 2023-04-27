@@ -3,7 +3,6 @@ import { CONSTANTS } from "../Constants";
 import { IHacknetNode } from "./IHacknetNode";
 
 import { BaseServer } from "../Server/BaseServer";
-import { RunningScript } from "../Script/RunningScript";
 import { HacknetServerConstants } from "./data/Constants";
 import {
   calculateHashGainRate,
@@ -15,7 +14,7 @@ import {
 
 import { createRandomIp } from "../utils/IPAddress";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { Player } from "@player";
 
 interface IConstructorParams {
@@ -113,14 +112,6 @@ export class HacknetServer extends BaseServer implements IHacknetNode {
     return true;
   }
 
-  // Whenever a script is run, we must update this server's hash rate
-  runScript(script: RunningScript, prodMult?: number): void {
-    super.runScript(script);
-    if (prodMult != null && typeof prodMult === "number") {
-      this.updateHashRate(prodMult);
-    }
-  }
-
   updateRamUsed(ram: number): void {
     super.updateRamUsed(ram);
     this.updateHashRate(Player.mults.hacknet_node_money);
@@ -144,13 +135,14 @@ export class HacknetServer extends BaseServer implements IHacknetNode {
 
   // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {
-    return Generic_toJSON("HacknetServer", this);
+    return this.toJSONBase("HacknetServer", includedKeys);
   }
 
   // Initializes a HacknetServer Object from a JSON save state
   static fromJSON(value: IReviverValue): HacknetServer {
-    return Generic_fromJSON(HacknetServer, value.data);
+    return BaseServer.fromJSONBase(value, HacknetServer, includedKeys);
   }
 }
+const includedKeys = BaseServer.getIncludedKeys(HacknetServer);
 
 constructorsForReviver.HacknetServer = HacknetServer;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { EventEmitter } from "../../utils/EventEmitter";
 import { RunningScript } from "../../Script/RunningScript";
-import { killWorkerScript } from "../../Netscript/killWorkerScript";
+import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -14,7 +14,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { startWorkerScript } from "../../NetscriptWorker";
 import { GetServer } from "../../Server/AllServers";
-import { findRunningScript } from "../../Script/ScriptHelpers";
+import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 import { debounce } from "lodash";
 import { Settings } from "../../Settings/Settings";
 import { ANSIITypography } from "./ANSIITypography";
@@ -160,23 +160,6 @@ function LogWindow(props: IProps): React.ReactElement {
     setSize([size.width, size.height]);
   };
 
-  // useEffect(
-  //   () =>
-  //     WorkerScriptStartStopEventEmitter.subscribe(() => {
-  //       setTimeout(() => {
-  //         const server = GetServer(script.server);
-  //         if (server === null) return;
-  //         const existingScript = findRunningScript(script.filename, script.args, server);
-  //         if (existingScript) {
-  //           existingScript.logs = script.logs.concat(existingScript.logs)
-  //           setScript(existingScript)
-  //         }
-  //         rerender();
-  //       }, 100)
-  //     }),
-  //   [],
-  // );
-
   const setPosition = ({ x, y }: LogBoxPositionData) => {
     const node = rootRef?.current;
     if (!node) return;
@@ -213,13 +196,13 @@ function LogWindow(props: IProps): React.ReactElement {
   }, []);
 
   function kill(): void {
-    killWorkerScript({ runningScript: script, hostname: script.server });
+    killWorkerScriptByPid(script.pid);
   }
 
   function run(): void {
     const server = GetServer(script.server);
     if (server === null) return;
-    const s = findRunningScript(script.filename, script.args, server);
+    const s = findRunningScriptByPid(script.pid, server);
     if (s === null) {
       const baseScript = server.scripts.get(script.filename);
       if (!baseScript) {

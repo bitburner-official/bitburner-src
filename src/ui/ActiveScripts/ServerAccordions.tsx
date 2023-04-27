@@ -17,6 +17,8 @@ import { Settings } from "../../Settings/Settings";
 import { TablePaginationActionsAll } from "../React/TablePaginationActionsAll";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRerender } from "../React/hooks";
+import { matchScriptPathUnanchored } from "../../utils/helpers/scriptKey";
+import lodash from "lodash";
 
 // Map of server hostname -> all workerscripts on that server for all active scripts
 interface IServerData {
@@ -36,7 +38,13 @@ export function ServerAccordions(props: IProps): React.ReactElement {
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(Settings.ActiveScriptsServerPageSize);
-  const rerender = useRerender();
+  const rerenderHook = useRerender();
+  let scheduledRerender = false;
+  const rerender = () => {
+    if (scheduledRerender) return;
+    scheduledRerender = true;
+    requestAnimationFrame(rerenderHook);
+  };
 
   const handleChangePage = (event: unknown, newPage: number): void => {
     setPage(newPage);
@@ -73,11 +81,16 @@ export function ServerAccordions(props: IProps): React.ReactElement {
     if (data !== undefined) data.workerScripts.push(ws);
   }
 
-  const filtered = Object.values(serverToScriptMap).filter(
-    (data) =>
-      data &&
-      (data.server.hostname.includes(filter) || data.server.runningScripts.find((s) => s.filename.includes(filter))),
-  );
+  // Match filter in the scriptname part of the key
+  const pattern = matchScriptPathUnanchored(lodash.escapeRegExp(filter));
+  const filtered = Object.values(serverToScriptMap).filter((data) => {
+    if (!data) return false;
+    if (data.server.hostname.includes(filter)) return true;
+    for (const k of data.server.runningScriptMap.keys()) {
+      if (pattern.test(k)) return true;
+    }
+    return false;
+  });
 
   useEffect(() => WorkerScriptStartStopEventEmitter.subscribe(rerender));
 

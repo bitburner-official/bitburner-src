@@ -134,7 +134,7 @@ export async function main(ns) {
 |  [isLogEnabled(fn)](./bitburner.ns.islogenabled.md) | Checks the status of the logging for the given function. |
 |  [isRunning(script, host, args)](./bitburner.ns.isrunning.md) | Check if a script is running. |
 |  [kill(pid)](./bitburner.ns.kill.md) | Terminate the script with the provided PID. |
-|  [kill(filename, hostname, args)](./bitburner.ns.kill_1.md) | Terminate the script with the provided filename, hostname, and script arguments. |
+|  [kill(filename, hostname, args)](./bitburner.ns.kill_1.md) | Terminate the script(s) with the provided filename, hostname, and script arguments. |
 |  [killall(host, safetyguard)](./bitburner.ns.killall.md) | Terminate all scripts on a server. |
 |  [ls(host, substring)](./bitburner.ns.ls.md) | List files on a server. |
 |  [moveTail(x, y, pid)](./bitburner.ns.movetail.md) | Move a tail window. |

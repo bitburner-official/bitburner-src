@@ -1,6 +1,9 @@
 import "../../src/Player";
 
 import { loadAllServers, saveAllServers } from "../../src/Server/AllServers";
+import { loadAllRunningScripts } from "../../src/NetscriptWorker";
+
+jest.useFakeTimers();
 
 // Direct tests of loading and saving.
 // Tests here should try to be comprehensive (cover as much stuff as possible)
@@ -46,6 +49,7 @@ function loadStandardServers() {
             "pid": 3,
             "ramUsage": 1.6,
             "server": "home",
+            "scriptKey": "script.js*[]",
             "temporary": true,
             "dependencies": [
               {
@@ -71,6 +75,7 @@ function loadStandardServers() {
             "pid": 2,
             "ramUsage": 1.6,
             "server": "home",
+            "scriptKey": "script.js*[]",
             "dependencies": [
               {
                 "filename": "script.js",
@@ -81,33 +86,39 @@ function loadStandardServers() {
           }
         }
       ],
-      "scripts": [
-        {
-          "ctor": "Script",
-          "data": {
-            "code": "/** @param {NS} ns */\\nexport async function main(ns) {\\n  return ns.asleep(1000000);\\n}",
-            "filename": "script.js",
-            "module": {},
-            "dependencies": [
-              {
+      "scripts": {
+        "ctor": "JSONMap",
+        "data": [
+          [
+            "script.js",
+            {
+              "ctor": "Script",
+              "data": {
+                "code": "/** @param {NS} ns */\\nexport async function main(ns) {\\n  return ns.asleep(1000000);\\n}",
                 "filename": "script.js",
-                "url": "blob:http://localhost/e0abfafd-2c73-42fc-9eea-288c03820c47",
-                "moduleSequenceNumber": 5
+                "module": {},
+                "dependencies": [
+                  {
+                    "filename": "script.js",
+                    "url": "blob:http://localhost/e0abfafd-2c73-42fc-9eea-288c03820c47",
+                    "moduleSequenceNumber": 5
+                  }
+                ],
+                "ramUsage": 1.6,
+                "server": "home",
+                "moduleSequenceNumber": 5,
+                "ramUsageEntries": [
+                  {
+                    "type": "misc",
+                    "name": "baseCost",
+                    "cost": 1.6
+                  }
+                ]
               }
-            ],
-            "ramUsage": 1.6,
-            "server": "home",
-            "moduleSequenceNumber": 5,
-            "ramUsageEntries": [
-              {
-                "type": "misc",
-                "name": "baseCost",
-                "cost": 1.6
-              }
-            ]
-          }
-        }
-      ],
+            }
+          ]
+        ]
+      },
       "serversOnNetwork": [
         "n00dles"
       ],
@@ -131,12 +142,13 @@ function loadStandardServers() {
     }
   }
 }`); // Fix confused highlighting `
+  loadAllRunningScripts();
 }
 
 test("load/saveAllServers", () => {
   // Feed a JSON object through loadAllServers/saveAllServers.
   // The object is a pruned set of servers that was extracted from a real (dev) game.
-
+  jest.setSystemTime(123456789000);
   loadStandardServers();
 
   // Re-stringify with indenting for nicer diffs

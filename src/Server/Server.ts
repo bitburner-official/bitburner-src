@@ -5,7 +5,7 @@ import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 
 import { createRandomString } from "../utils/helpers/createRandomString";
 import { createRandomIp } from "../utils/IPAddress";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { IPAddress, ServerName } from "../Types/strings";
 
 export interface IConstructorParams {
@@ -147,13 +147,14 @@ export class Server extends BaseServer {
 
   /** Serialize the current object to a JSON save state */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Server", this);
+    return this.toJSONBase("Server", includedKeys);
   }
 
   // Initializes a Server Object from a JSON save state
   static fromJSON(value: IReviverValue): Server {
-    return Generic_fromJSON(Server, value.data);
+    return BaseServer.fromJSONBase(value, Server, includedKeys);
   }
 }
+const includedKeys = BaseServer.getIncludedKeys(Server);
 
 constructorsForReviver.Server = Server;

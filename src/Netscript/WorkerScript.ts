@@ -33,7 +33,7 @@ export class WorkerScript {
   delay: number | null = null;
 
   /** Holds the Promise reject() function while the script is "blocked" by an async op */
-  delayReject?: (reason?: ScriptDeath) => void;
+  delayReject: ((reason?: ScriptDeath) => void) | undefined = undefined;
 
   /** Stores names of all functions that have logging disabled */
   disableLogs: Record<string, boolean> = {};
@@ -79,7 +79,7 @@ export class WorkerScript {
   hostname: string;
 
   /** Function called when the script ends. */
-  atExit?: () => void;
+  atExit: (() => void) | undefined = undefined;
 
   constructor(runningScriptObj: RunningScript, pid: number, nsFuncsGenerator?: (ws: WorkerScript) => NSFull) {
     this.name = runningScriptObj.filename;

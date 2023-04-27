@@ -7,7 +7,9 @@ import { processSingleServerGrowth } from "../Server/ServerHelpers";
 import { GetServer } from "../Server/AllServers";
 import { formatPercent } from "../ui/formatNumber";
 import { workerScripts } from "../Netscript/WorkerScripts";
-import { compareArrays } from "../utils/helpers/compareArrays";
+import { scriptKey } from "../utils/helpers/scriptKey";
+
+import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 
 export function scriptCalculateOfflineProduction(runningScript: RunningScript): void {
   //The Player object stores the last update time from when we were online
@@ -80,19 +82,14 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
   }
 }
 
-//Returns a RunningScript object matching the filename and arguments on the
-//designated server, and false otherwise
-export function findRunningScript(
-  filename: string,
+//Returns a RunningScript map containing scripts matching the filename and
+//arguments on the designated server, or null if none were found
+export function findRunningScripts(
+  path: ScriptFilePath,
   args: (string | number | boolean)[],
   server: BaseServer,
-): RunningScript | null {
-  for (let i = 0; i < server.runningScripts.length; ++i) {
-    if (server.runningScripts[i].filename === filename && compareArrays(server.runningScripts[i].args, args)) {
-      return server.runningScripts[i];
-    }
-  }
-  return null;
+): Map<number, RunningScript> | null {
+  return server.runningScriptMap.get(scriptKey(path, args)) ?? null;
 }
 
 //Returns a RunningScript object matching the pid on the

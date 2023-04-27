@@ -10,10 +10,9 @@ import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { Reviver } from "../utils/JSONReviver";
 import { SpecialServers } from "./data/SpecialServers";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import "../Script/RunningScript"; // For reviver side-effect
-
 import { IPAddress, isIPAddress } from "../Types/strings";
-import type { RunningScript } from "../Script/RunningScript";
+
+import "../Script/RunningScript"; // For reviver side-effect
 
 /**
  * Map of all Servers that exist in the game
@@ -207,17 +206,6 @@ function excludeReplacer(key: string, value: any): any {
   return value;
 }
 
-function scriptFilter(script: RunningScript): boolean {
-  return !script.temporary;
-}
-
-function includeReplacer(key: string, value: any): any {
-  if (key === "runningScripts") {
-    return value.filter(scriptFilter);
-  }
-  return value;
-}
-
 export function saveAllServers(excludeRunningScripts = false): string {
-  return JSON.stringify(AllServers, excludeRunningScripts ? excludeReplacer : includeReplacer);
+  return JSON.stringify(AllServers, excludeRunningScripts ? excludeReplacer : undefined);
 }

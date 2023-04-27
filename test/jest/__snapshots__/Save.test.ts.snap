@@ -21,37 +21,22 @@ exports[`load/saveAllServers 1`] = `
       "programs": [
         "NUKE.exe"
       ],
-      "ramUsed": 1.6,
-      "runningScripts": [
-        {
-          "ctor": "RunningScript",
-          "data": {
-            "args": [],
-            "dataMap": {},
-            "filename": "script.js",
-            "offlineExpGained": 0,
-            "offlineMoneyMade": 0,
-            "offlineRunningTime": 0.01,
-            "onlineExpGained": 0,
-            "onlineMoneyMade": 0,
-            "onlineRunningTime": 7.210000000000004,
-            "ramUsage": 1.6,
-            "server": "home",
-            "threads": 1,
-            "temporary": false
-          }
-        }
-      ],
-      "scripts": [
-        {
-          "ctor": "Script",
-          "data": {
-            "code": "/** @param {NS} ns */\\\\nexport async function main(ns) {\\\\n  return ns.asleep(1000000);\\\\n}",
-            "filename": "script.js",
-            "server": "home"
-          }
-        }
-      ],
+      "scripts": {
+        "ctor": "JSONMap",
+        "data": [
+          [
+            "script.js",
+            {
+              "ctor": "Script",
+              "data": {
+                "code": "/** @param {NS} ns */\\\\nexport async function main(ns) {\\\\n  return ns.asleep(1000000);\\\\n}",
+                "filename": "script.js",
+                "server": "home"
+              }
+            }
+          ]
+        ]
+      },
       "serversOnNetwork": [
         "n00dles"
       ],
@@ -72,7 +57,28 @@ exports[`load/saveAllServers 1`] = `
       "numOpenPortsRequired": 5,
       "openPortCount": 0,
       "requiredHackingSkill": 1,
-      "serverGrowth": 1
+      "serverGrowth": 1,
+      "runningScripts": [
+        {
+          "ctor": "RunningScript",
+          "data": {
+            "args": [],
+            "dataMap": {},
+            "filename": "script.js",
+            "offlineExpGained": 0,
+            "offlineMoneyMade": 0,
+            "offlineRunningTime": 123456789.01,
+            "onlineExpGained": 0,
+            "onlineMoneyMade": 0,
+            "onlineRunningTime": 7.210000000000004,
+            "ramUsage": 1.6,
+            "server": "home",
+            "scriptKey": "script.js*[]",
+            "threads": 1,
+            "temporary": false
+          }
+        }
+      ]
     }
   },
   "n00dles": {
@@ -90,8 +96,6 @@ exports[`load/saveAllServers 1`] = `
       "messages": [],
       "organizationName": "Noodle Bar",
       "programs": [],
-      "ramUsed": 0,
-      "runningScripts": [],
       "scripts": {
         "ctor": "JSONMap",
         "data": []
@@ -116,7 +120,8 @@ exports[`load/saveAllServers 1`] = `
       "numOpenPortsRequired": 0,
       "openPortCount": 0,
       "requiredHackingSkill": 1,
-      "serverGrowth": 3000
+      "serverGrowth": 3000,
+      "runningScripts": []
     }
   }
 }"
@@ -143,18 +148,22 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
       "programs": [
         "NUKE.exe"
       ],
-      "ramUsed": 1.6,
-      "runningScripts": [],
-      "scripts": [
-        {
-          "ctor": "Script",
-          "data": {
-            "code": "/** @param {NS} ns */\\\\nexport async function main(ns) {\\\\n  return ns.asleep(1000000);\\\\n}",
-            "filename": "script.js",
-            "server": "home"
-          }
-        }
-      ],
+      "scripts": {
+        "ctor": "JSONMap",
+        "data": [
+          [
+            "script.js",
+            {
+              "ctor": "Script",
+              "data": {
+                "code": "/** @param {NS} ns */\\\\nexport async function main(ns) {\\\\n  return ns.asleep(1000000);\\\\n}",
+                "filename": "script.js",
+                "server": "home"
+              }
+            }
+          ]
+        ]
+      },
       "serversOnNetwork": [
         "n00dles"
       ],
@@ -175,7 +184,8 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
       "numOpenPortsRequired": 5,
       "openPortCount": 0,
       "requiredHackingSkill": 1,
-      "serverGrowth": 1
+      "serverGrowth": 1,
+      "runningScripts": []
     }
   },
   "n00dles": {
@@ -193,8 +203,6 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
       "messages": [],
       "organizationName": "Noodle Bar",
       "programs": [],
-      "ramUsed": 0,
-      "runningScripts": [],
       "scripts": {
         "ctor": "JSONMap",
         "data": []
@@ -219,7 +227,8 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
       "numOpenPortsRequired": 0,
       "openPortCount": 0,
       "requiredHackingSkill": 1,
-      "serverGrowth": 3000
+      "serverGrowth": 3000,
+      "runningScripts": []
     }
   }
 }"

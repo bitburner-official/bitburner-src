@@ -7,10 +7,10 @@ import { IReturnStatus } from "../types";
 
 import { ScriptFilePath, hasScriptExtension } from "../Paths/ScriptFilePath";
 import { TextFilePath, hasTextExtension } from "../Paths/TextFilePath";
+import { Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { matchScriptPathExact } from "../utils/helpers/scriptKey";
 
 import { createRandomIp } from "../utils/IPAddress";
-import { compareArrays } from "../utils/helpers/compareArrays";
-import { ScriptArg } from "../Netscript/ScriptArg";
 import { JSONMap } from "../Types/Jsonable";
 import { IPAddress, ServerName } from "../Types/strings";
 import { FilePath } from "../Paths/FilePath";
@@ -19,6 +19,10 @@ import { ProgramFilePath, hasProgramExtension } from "../Paths/ProgramFilePath";
 import { MessageFilename } from "src/Message/MessageHelpers";
 import { LiteratureName } from "src/Literature/data/LiteratureNames";
 import { CompletedProgramName } from "src/Programs/Programs";
+import { getKeyList } from "../utils/helpers/getKeyList";
+import lodash from "lodash";
+
+import type { ScriptKey } from "../utils/helpers/scriptKey";
 
 interface IConstructorParams {
   adminRights?: boolean;
@@ -64,7 +68,7 @@ export abstract class BaseServer implements IServer {
   maxRam = 0;
 
   // Message files AND Literature files on this Server
-  messages: (MessageFilename | LiteratureName | FilePath)[] = [];
+  messages: (MessageFilename | LiteratureName)[] = [];
 
   // Name of company/faction/etc. that this server belongs to.
   // Optional, not applicable to all Servers
@@ -77,8 +81,12 @@ export abstract class BaseServer implements IServer {
   // RAM (GB) used. i.e. unavailable RAM
   ramUsed = 0;
 
-  // RunningScript files on this server
-  runningScripts: RunningScript[] = [];
+  // RunningScript files on this server. Keyed first by name/args, then by PID.
+  runningScriptMap: Map<ScriptKey, Map<number, RunningScript>> = new Map();
+
+  // RunningScript files loaded from the savegame. Only stored here temporarily,
+  // this field is undef while the game is running.
+  savedScripts: RunningScript[] | undefined = undefined;
 
   // Script files on this Server
   scripts: JSONMap<ScriptFilePath, Script> = new JSONMap();
@@ -138,23 +146,16 @@ export abstract class BaseServer implements IServer {
     return null;
   }
 
-  /** Find an actively running script on this server by filepath and args. */
-  getRunningScript(path: ScriptFilePath, scriptArgs: ScriptArg[]): RunningScript | null {
-    for (const rs of this.runningScripts) {
-      if (rs.filename === path && compareArrays(rs.args, scriptArgs)) return rs;
-    }
-    return null;
-  }
-
   /** Get a TextFile or Script depending on the input path type. */
   getContentFile(path: ContentFilePath): ContentFile | null {
     return (hasTextExtension(path) ? this.textFiles.get(path) : this.scripts.get(path)) ?? null;
   }
 
   /** Returns boolean indicating whether the given script is running on this server */
-  isRunning(fn: string): boolean {
-    for (const runningScriptObj of this.runningScripts) {
-      if (runningScriptObj.filename === fn) {
+  isRunning(path: ScriptFilePath): boolean {
+    const pattern = matchScriptPathExact(lodash.escapeRegExp(path));
+    for (const k of this.runningScriptMap.keys()) {
+      if (pattern.test(k)) {
         return true;
       }
     }
@@ -216,7 +217,12 @@ export abstract class BaseServer implements IServer {
    * be run.
    */
   runScript(script: RunningScript): void {
-    this.runningScripts.push(script);
+    let byPid = this.runningScriptMap.get(script.scriptKey);
+    if (!byPid) {
+      byPid = new Map();
+      this.runningScriptMap.set(script.scriptKey, byPid);
+    }
+    byPid.set(script.pid, script);
   }
 
   setMaxRam(ram: number): void {
@@ -278,5 +284,37 @@ export abstract class BaseServer implements IServer {
   writeToContentFile(path: ContentFilePath, content: string): writeResult {
     if (hasTextExtension(path)) return this.writeToTextFile(path, content);
     return this.writeToScriptFile(path, content);
+  }
+
+  // Serialize the current object to a JSON save state
+  // Called by subclasses, not stringify.
+  toJSONBase(ctorName: string, keys: readonly (keyof this)[]): IReviverValue {
+    // RunningScripts are stored as a simple array, both for backward compatibility,
+    // compactness, and ease of filtering them here.
+    const result = Generic_toJSON(ctorName, this, keys);
+
+    const rsArray: RunningScript[] = [];
+    for (const byPid of this.runningScriptMap.values()) {
+      for (const rs of byPid.values()) {
+        if (!rs.temporary) {
+          rsArray.push(rs);
+        }
+      }
+    }
+    result.data.runningScripts = rsArray;
+    return result;
+  }
+
+  // Initializes a Server Object from a JSON save state
+  // Called by subclasses, not Reviver.
+  static fromJSONBase<T extends BaseServer>(value: IReviverValue, ctor: new () => T, keys: readonly (keyof T)[]): T {
+    const result = Generic_fromJSON(ctor, value.data, keys);
+    result.savedScripts = value.data.runningScripts;
+    return result;
+  }
+
+  // Customize a prune list for a subclass.
+  static getIncludedKeys<T extends BaseServer>(ctor: new () => T): readonly (keyof T)[] {
+    return getKeyList(ctor, { removedKeys: ["runningScriptMap", "savedScripts", "ramUsed"] });
   }
 }

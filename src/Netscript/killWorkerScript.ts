@@ -7,47 +7,24 @@ import { WorkerScript } from "./WorkerScript";
 import { workerScripts } from "./WorkerScripts";
 import { WorkerScriptStartStopEventEmitter } from "./WorkerScriptStartStopEventEmitter";
 
-import { RunningScript } from "../Script/RunningScript";
 import { GetServer } from "../Server/AllServers";
-
 import { AddRecentScript } from "./RecentScripts";
 import { ITutorial } from "../InteractiveTutorial";
 import { AlertEvents } from "../ui/React/AlertManager";
 import { handleUnknownError } from "./NetscriptHelpers";
+import { roundToTwo } from "../utils/helpers/roundToTwo";
 
-export type killScriptParams = WorkerScript | number | { runningScript: RunningScript; hostname: string };
-
-export function killWorkerScript(params: killScriptParams): boolean {
+export function killWorkerScript(ws: WorkerScript): boolean {
   if (ITutorial.isRunning) {
     AlertEvents.emit("Processes cannot be killed during the tutorial.");
     return false;
   }
-  if (params instanceof WorkerScript) {
-    stopAndCleanUpWorkerScript(params);
+  stopAndCleanUpWorkerScript(ws);
 
-    return true;
-  } else if (typeof params === "number") {
-    return killWorkerScriptByPid(params);
-  } else {
-    // Try to kill by PID
-    const res = killWorkerScriptByPid(params.runningScript.pid);
-    if (res) {
-      return res;
-    }
-
-    // If for some reason that doesn't work, we'll try the old way
-    for (const ws of workerScripts.values()) {
-      if (ws.scriptRef === params.runningScript) {
-        stopAndCleanUpWorkerScript(ws);
-        return true;
-      }
-    }
-
-    return false;
-  }
+  return true;
 }
 
-function killWorkerScriptByPid(pid: number): boolean {
+export function killWorkerScriptByPid(pid: number): boolean {
   const ws = workerScripts.get(pid);
   if (ws instanceof WorkerScript) {
     stopAndCleanUpWorkerScript(ws);
@@ -58,6 +35,10 @@ function killWorkerScriptByPid(pid: number): boolean {
 }
 
 function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
+  // Only clean up once.
+  // Important: Only this function can set stopFlag!
+  if (ws.env.stopFlag) return;
+
   //Clean up any ongoing netscriptDelay
   if (ws.delay) clearTimeout(ws.delay);
   ws.delayReject?.(new ScriptDeath(ws));
@@ -65,7 +46,6 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
 
   if (typeof ws.atExit === "function") {
     try {
-      ws.env.stopFlag = false;
       const atExit = ws.atExit;
       ws.atExit = undefined;
       atExit();
@@ -95,21 +75,21 @@ function removeWorkerScript(workerScript: WorkerScript): void {
   }
 
   // Delete the RunningScript object from that server
-  for (let i = 0; i < server.runningScripts.length; ++i) {
-    const runningScript = server.runningScripts[i];
-    if (runningScript === workerScript.scriptRef) {
-      server.runningScripts.splice(i, 1);
-      break;
+  const rs = workerScript.scriptRef;
+  const byPid = server.runningScriptMap.get(rs.scriptKey);
+  if (!byPid) {
+    console.error(`Couldn't find runningScriptMap for key ${rs.scriptKey}`);
+  } else {
+    byPid.delete(workerScript.pid);
+    if (byPid.size === 0) {
+      server.runningScriptMap.delete(rs.scriptKey);
     }
   }
 
-  // Recalculate ram used on that server
+  // Update ram used. Reround to prevent accumulation of error.
+  server.updateRamUsed(roundToTwo(server.ramUsed - rs.ramUsage * rs.threads));
 
-  server.updateRamUsed(0);
-  for (const rs of server.runningScripts) server.updateRamUsed(server.ramUsed + rs.ramUsage * rs.threads);
-
-  // Delete script from global pool (workerScripts) after verifying it's the right script (PIDs reset on aug install)
-  if (workerScripts.get(workerScript.pid) === workerScript) workerScripts.delete(workerScript.pid);
+  workerScripts.delete(workerScript.pid);
   AddRecentScript(workerScript);
   WorkerScriptStartStopEventEmitter.emit();
 }

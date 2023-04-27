@@ -24,6 +24,7 @@ import { FactionNames } from "../Faction/data/FactionNames";
 import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
 import { isClassWork } from "../Work/ClassWork";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { workerScripts } from "../Netscript/WorkerScripts";
 
 import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 
@@ -284,13 +285,7 @@ export const achievements: Record<string, Achievement> = {
   RUNNING_SCRIPTS_1000: {
     ...achievementData["RUNNING_SCRIPTS_1000"],
     Icon: "run1000",
-    Condition: (): boolean => {
-      let running = 0;
-      for (const s of GetAllServers()) {
-        running += s.runningScripts.length;
-      }
-      return running >= 1000;
-    },
+    Condition: (): boolean => workerScripts.size >= 1000,
   },
   DRAIN_SERVER: {
     ...achievementData["DRAIN_SERVER"],

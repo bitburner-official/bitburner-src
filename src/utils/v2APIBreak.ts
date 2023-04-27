@@ -237,7 +237,7 @@ export const v2APIBreak = () => {
   openV2Modal();
 
   for (const server of GetAllServers()) {
-    server.runningScripts = [];
+    server.runningScriptMap = new Map();
   }
   saveObject.exportGame();
 };

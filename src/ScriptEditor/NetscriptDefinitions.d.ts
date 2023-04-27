@@ -226,6 +226,11 @@ interface RunOptions {
    * Must be greater-or-equal to the base RAM cost. Defaults to the statically calculated cost.
    */
   ramOverride?: number;
+  /**
+   * Should we fail to run if another instance is running with the exact same arguments?
+   * This used to be the default behavior, now defaults to false.
+   */
+  preventDuplicates?: boolean;
 }
 
 /** @public */
@@ -5500,7 +5505,7 @@ export interface NS {
    * ```
    * @param script - Filename of script to run.
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
-   * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the second argument numThreads must be filled in with a value.
+   * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the second argument threadOrOptions must be filled in with a value.
    * @returns Returns the PID of a successfully started script, and 0 otherwise.
    */
   run(script: string, threadOrOptions?: number | RunOptions, ...args: (string | number | boolean)[]): number;
@@ -5540,7 +5545,7 @@ export interface NS {
    * @param script - Filename of script to execute.
    * @param hostname - Hostname of the `target server` on which to execute the script.
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
-   * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument numThreads must be filled in with a value.
+   * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument threadOrOptions must be filled in with a value.
    * @returns Returns the PID of a successfully started script, and 0 otherwise.
    */
   exec(
@@ -5595,11 +5600,11 @@ export interface NS {
   kill(pid: number): boolean;
 
   /**
-   * Terminate the script with the provided filename, hostname, and script arguments.
+   * Terminate the script(s) with the provided filename, hostname, and script arguments.
    * @remarks
    * RAM cost: 0.5 GB
    *
-   * Kills the script with the provided filename, running on the specified host with the specified args.
+   * Kills the script(s) with the provided filename, running on the specified host with the specified args.
    * To instead kill a script using its PID, see {@link NS.(kill:1) | the other ns.kill entry}.
    *
    * @example
@@ -5616,7 +5621,7 @@ export interface NS {
    * @param filename - Filename of the script to kill.
    * @param hostname - Hostname where the script to kill is running. Defaults to the current server.
    * @param args - Arguments of the script to kill.
-   * @returns True if the script is successfully killed, and false otherwise.
+   * @returns True if the scripts were successfully killed, and false otherwise.
    */
   kill(filename: string, hostname?: string, ...args: ScriptArg[]): boolean;
 
@@ -5998,7 +6003,9 @@ export interface NS {
    *
    * Returns a boolean indicating whether the specified script is running on the target server.
    * If you use a PID instead of a filename, the hostname and args parameters are unnecessary.
-   * Remember that a script is uniquely identified by both its name and its arguments.
+   * Remember that a script is semi-uniquely identified by both its name and its arguments.
+   * (You can run multiple copies of scripts with the same arguments, but for the purposes of
+   * functions like this that check based on filename, the filename plus arguments forms the key.)
    *
    * @example
    * ```js

@@ -1,10 +1,12 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { killWorkerScript } from "../../Netscript/killWorkerScript";
-import { WorkerScriptStartStopEventEmitter } from "../../Netscript/WorkerScriptStartStopEventEmitter";
+import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
 
 export function killall(_args: (string | number | boolean)[], server: BaseServer): void {
   Terminal.print("Killing all running scripts");
-  for (const runningScript of server.runningScripts) killWorkerScript(runningScript.pid);
-  WorkerScriptStartStopEventEmitter.emit();
+  for (const byPid of server.runningScriptMap.values()) {
+    for (const runningScript of byPid.values()) {
+      killWorkerScriptByPid(runningScript.pid);
+    }
+  }
 }

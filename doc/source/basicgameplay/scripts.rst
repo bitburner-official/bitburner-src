@@ -31,8 +31,16 @@ Many commands and functions act on an executing script
 be a way to specify which script you want those commands & functions
 to act on.
 
-**A script that is being executed is uniquely identified by both its
-name and the arguments that it was run with.**
+The best way to identify a script is by its PID (Process IDentifier). This
+unique number is returned from :js:func:`run`, :js:func:`exec`, etc., and also
+shows in the output of "ps".
+
+A secondary way to identify scripts is by name **and** arguments. However (by
+default) you can run a multiple copies of a script with the same arguments, so
+this does not necessarily **uniquely** identify a script. In case of multiple
+matches, most functions will return an arbitrary one (typically the first one
+to be started). An exception is :js:func:`kill`, which will kill all the
+matching scripts.
 
 The arguments must be an **exact** match. This means that both
 the order and type of the arguments matter.
@@ -88,12 +96,12 @@ to the check command::
 
 Shows the current server's RAM usage and availability
 
-**kill [script] [args...]**
+**kill [pid]** or **kill [script] [args...]**
 
-Stops a script that is running with the specified script name and
+Stops a script that is running with the specified PID, or script name and
 arguments. Arguments should be separated by a space. Remember that
-scripts are uniquely identified by their arguments as well as
-their name. For example, if you ran a script `foo.js` with
+scripts are identified by their arguments as well as their name.
+For example, if you ran a script `foo.js` with
 the argument 1 and 2, then just typing "`kill foo.js`" will
 not work. You have to use::
 
@@ -142,13 +150,13 @@ Run 'foo.js' with 50 threads and a single argument: [foodnstuff]::
     $ run foo.js -t 50 foodnstuff
 
 
-**tail [script] [args...]**
+**tail [pid]** or **tail [script] [args...]**
 
-Displays the logs of the script specified by the name and arguments. Note that scripts
- are uniquely identified by their arguments as well as their name. For example, if you 
- ran a script 'foo.js' with the argument 'foodnstuff' then in order to 'tail' it you 
- must also add the 'foodnstuff' argument to the tail command as so:  tail foo.js 
- foodnstuff
+Displays the logs of the script specified by the PID or name and arguments. Note that
+ scripts are identified by their arguments as well as their name. For example,
+ if you ran a script 'foo.js' with the argument 'foodnstuff' then in order to
+ 'tail' it you must also add the 'foodnstuff' argument to the tail command as
+ so: tail foo.js foodnstuff
 
 **top**
 

@@ -4,7 +4,7 @@
 
 ## NS.kill() method
 
-Terminate the script with the provided filename, hostname, and script arguments.
+Terminate the script(s) with the provided filename, hostname, and script arguments.
 
 **Signature:**
 
@@ -24,13 +24,13 @@ kill(filename: string, hostname?: string, ...args: ScriptArg[]): boolean;
 
 boolean
 
-True if the script is successfully killed, and false otherwise.
+True if the scripts were successfully killed, and false otherwise.
 
 ## Remarks
 
 RAM cost: 0.5 GB
 
-Kills the script with the provided filename, running on the specified host with the specified args. To instead kill a script using its PID, see [the other ns.kill entry](./bitburner.ns.kill.md)<!-- -->.
+Kills the script(s) with the provided filename, running on the specified host with the specified args. To instead kill a script using its PID, see [the other ns.kill entry](./bitburner.ns.kill.md)<!-- -->.
 
 ## Example
 
