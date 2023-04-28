@@ -1626,7 +1626,7 @@ export const ns: InternalAPI<NSFull> = {
       });
     });
   },
-  wget: (ctx) => async (_url, _target, _hostname) => {
+  wget: (ctx) => (_url, _target, _hostname) => {
     const url = helpers.string(ctx, "url", _url);
     const target = helpers.filePath(ctx, "target", _target);
     const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
@@ -1640,11 +1640,7 @@ export const ns: InternalAPI<NSFull> = {
         url,
         function (data) {
           let res;
-          if (hasScriptExtension(target)) {
-            res = server.writeToScriptFile(target, data);
-          } else {
-            res = server.writeToTextFile(target, data);
-          }
+          res = server.writeToContentFile(target, data);
           if (res.overwritten) {
             helpers.log(ctx, () => `Successfully retrieved content and overwrote '${target}' on '${hostname}'`);
             return resolve(true);
