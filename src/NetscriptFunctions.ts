@@ -1639,8 +1639,7 @@ export const ns: InternalAPI<NSFull> = {
       $.get(
         url,
         function (data) {
-          let res;
-          res = server.writeToContentFile(target, data);
+          const res = server.writeToContentFile(target, data);
           if (res.overwritten) {
             helpers.log(ctx, () => `Successfully retrieved content and overwrote '${target}' on '${hostname}'`);
             return resolve(true);
