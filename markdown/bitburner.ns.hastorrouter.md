@@ -21,19 +21,10 @@ Whether player has access to the dark web.
 
 RAM cost: 0.05GB
 
-## Example 1
+## Example
 
 
 ```js
-// NS1:
-if (hasTorRouter()) tprint("TOR router detected.");
-```
-
-## Example 2
-
-
-```js
-// NS2:
-if (ns.hasTorRouter()) tprint("TOR router detected.");
+if (ns.hasTorRouter()) ns.tprint("TOR router detected.");
 ```
 

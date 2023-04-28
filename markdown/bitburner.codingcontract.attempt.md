@@ -32,22 +32,10 @@ RAM cost: 10 GB
 
 Attempts to solve the Coding Contract with the provided solution.
 
-## Example 1
+## Example
 
 
 ```js
-// NS1
-var reward = codingcontract.attempt(yourSolution, filename, hostname);
-if (reward) {
-  tprint("Contract solved successfully! Reward: " + reward)
-} else tprint("Failed to solve contract.")
-```
-
-## Example 2
-
-
-```js
-// NS2
 const reward = codingcontract.attempt(yourSolution, filename, hostname);
 if (reward) {
   ns.tprint(`Contract solved successfully! Reward: ${reward}`)

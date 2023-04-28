@@ -31,27 +31,10 @@ RAM cost: 0 GB
 
 - For more detail, see: https://github.com/alexei/sprintf.js
 
-## Example 1
+## Example
 
 
-```ts
-// NS1
-var name = "Bit";
-var age = 4;
-printf("My name is %s.", name);
-printf("I'm %d seconds old.", age);
-printf("My age in binary is %b.", age);
-printf("My age in scientific notation is %e.", age);
-printf("In %d seconds, I'll be %s.", 6, "Byte");
-printf("Am I a nibble? %t", (4 == age));
-tail();
-```
-
-## Example 2
-
-
-```ts
-// NS2
+```js
 const name = "Bit";
 const age = 4;
 ns.printf("My name is %s.", name);

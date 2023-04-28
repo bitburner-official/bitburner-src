@@ -228,56 +228,110 @@ export const CONSTANTS: {
   Donations: 79,
 
   LatestUpdate: `
-v2.3 Dev
+v2.3 Dev - SF3 rework and performance improvements (28 Apr 2023)
+----------------------------------------------------------------
 
-General:
-* Monaco script editor updated to a newer version + more config options. (@Snarling)
-* Revamp of script ram calculation process, should be more reliable now. (@Snarling)
-* Improve ns.scp filename recognition when leading slash discrepancy (@lucebac)
-* Fix memory leak when netscript ports were initialized and never used again. (@Snarling)
-* Fix a bug that could result in an infinite atExit loop if a script killed itself. (@Snarling)
-* Fix a bug where numeric terminal arguments were not being detected as strings when enclosed in quote marks. (@LiamGeorge1999)
-* Fix a bug with hackAnalyzeThreads where infinite threads would be indicated any time a single thread would hack less than $1 (@Snarling)
-* All Math Expressions contract no longer accepts wrong answers (@Snarling)
+BREAKING CHANGES: These changes may require changes to your scripts.
+
+* Major changes to the SF3 mechanic. See the related section below for the full (spoiler) changes.
+* The same script filename can now be ran multiple times with the same args. If running a script from another script (ns.run/ns.exec/etc), this limitation can be re-imposed with the preventDuplicates RunOption (see general section for info on RunOptions).
+* The same .js script will now be the same js module whether the script was ran directly or used as an import. This means top-level variables (variables defined outside of any function) are shared across all instances of the script.
+* The js module for a script will also be reused by any script that has the exact same compiled text, even if that script is on another server or has a different filename. This can lead to unexpected results when using top-level variables.
+* Some properties removed from ns.getPlayer and added to a separate function ns.getResetInfo. These are still accessible from getPlayer but will produce a warning message the first time they are accessed per game session.
+* hackAnalyzeThreads now returns -1, instead of 0, when no money can be hacked from the targeted server. 
+
+PERFORMANCE:
+
+* Remove requirement for args to be unique. (@d0sboots)
+* Minimize impact of unavoidable memory leak when modules are created, by reusing modules as much as possible (@d0sboots)
+* Internal data structure changes (@d0sboots, @Snarling)
+* Fix memory leak when initializing large number of netscript ports (@Snarling)
+
+NETSCRIPT GENERAL:
+
+* ns.hackAnalyzeThreads no longer indicates infinity any time a single thread would hack less than $1 (@Snarling)
+* ns.renamePurchasedServer no longer crashes if player is connected to the server being renamed (@Snarling)
+* ns.hackAnalyzeThreads now return -1 (instead of 0) if no money can be hacked from the targeted server. (@d0sboots)
+* Fix a possible infinite atExit loop if a script killed itself. (@Snarling)
+* Static timestamps of last resets can be obtained via ns.getResetInfo, replacing playtimeSinceLastX from ns.getPlayer (@G4mingJon4s)
+* Added RunOptions, which can optionally replace the "threads" argument for ns.run/ns.exec/ns.spawn. (@d0sboots)
+  * RunOptions.threads: Provide a thread count (since RunOptions can replace the threads argument)
+  * RunOptions.temporary: Prevents the script execution from being included in the save file.
+  * RunOptions.ramOverride: Provide a static ram cost for the script to override what is calculated by the game. Dynamic ram checking is still enforced.
+  * RunOptions.preventDuplicates: Fail to launch the script if the args are identical to a script already running.
+
+GENERAL / MISC:
+
+* Monaco script editor updated to a newer version and has more config options available now. (@Snarling)
 * Improve Electron's handling of external links (@Snarling) 
-* Documentation improvements (@Mughur, @quacksouls, @Snarling, @AdityaHegde)
-* Performance improvements for shallow typechecking on objects sent into API (e.g. for formulas) (@Snarling)
-* Faction invites now trigger immediately when backdooring a server.
+* Improved support for ANSI color codes (@d0sboots)
+* Improved consistency of file paths. Correct names for files no longer start with a / even if they are in a directory. (@Snarling)
+* All Math Expressions contract no longer accepts wrong answers (@Snarling)
+* Faction invites now trigger immediately when backdooring a server. (@Snarling)
+* Fixed issue where duplicate programs could be created. (@Minzenkatze)
+* UI improvements to create program page (@Minzenkatze)
+* Fix inconsistency in skill xp to skill level conversion (@hydroflame)
+* Updated blood donation counter to reflect number of confirmed blood donations. (@hydroflame)
+* Minor improvements to ram calculation process (@Snarling)
+* Improved terminal arguments detection (@Snarling)
+* Improved display for ls terminal command. (@Snarling)
+* Added more internal tests and improved test quality (@d0sboots)
+* Various codebase improvements (@Snarling, @d0sboots)
+* Documentation improvements (Many contributors)
+* Nerf noodle bar
+
+SPOILER SECTIONS:
 
 SF2:
+
 * Corrected the "Next equipment unlock" text for member upgrades. (@LiamGeorge1999)
 
+SF3:
+
+* Product quality now depends on material quality (@Mughur)
+* Product price can be set separately per-city (@Mughur)
+* Exports can be set relative to inventory or production (@Mughur)
+* ns.corporation.getProduct is city-specific (@Mughur)
+* Bulk purchasing is available from the start (@Mughur)
+* Can buy multiple upgrades at a time, similar to hacknet node upgrades (@Mughur)
+* Various UI changes (@Mughur)
+* Removed happiness from employees (@Mughur)
+* Coffee renamed to tea (@Mughur)
+* Training position renamed to intern (@Mughur)
+* More options for SmartSupply (@Mughur)
+* Advertising nerf (@Mughur)
+* Nerfed investors and reduced effectiveness of "fraud" (@Mughur)
+* Various other changes (@Mughur)
+
 SF4:
+
 * Faction invites trigger immediately when running ns.singularity.getFactionInvitations (@Snarling)
+* Added ns.singularity.getCompanyPositionInfo (@jeek)
 
 SF6:
+
 * Failing a contract or operation now consumes the action (@Zelow79)
 
 SF9:
+
 * The SF9.3 bonus is also given to the player when inside of BN9. (@Zelow79)
 * Adjusted the SF1 bonus for hacknet costs (slight nerf), and raised the SF9 bonus to compensate. (@d0sboots)
+* Added option to purchase company favor using hashes. (@jeek)
 
 SF10:
+
 * Sleeve shock recovery now scales with intelligence. (@Tyasuh)
 * Sleeve kills during crimes count towards numPeopleKilled (@Zelow79)
 * Fix a misspelled moneySourceTracker call for sleeves (@zerbosh)
 * ns.sleeve.getTask return value now includes cyclesNeeded where applicable (@Snarling)
 * Internal type refactoring on Sleeve Work. (@Snarling)
 
+SF12:
+
+* Fix inconsistency in how BN12 multipliers were calculated 
+
 SF13:
+
 * Improve performance of Stanek's gift update cycle, and rework (buff) bonus time handling. (@Snarling)
-
-Misc:
-* Nerf noodle bar
-
-2.2.2 Hotfixes
-* Fix an issue that prevented the Electron API server from communicating with the VSCode plugin. (credit to u/AnyGiraffe4367 on reddit)
-
-Planned changes remaining in 2.3:
-* 2.3 will include a large planned rework to corporation. This may cause api breaks for any corporation scripts, and there will be large changes in how the corporation mechanic functions.
-* Enum changes, potentially causing API break with some enums. Enums will be more usable and there will be more of them.
-* Constants rework - interenal game constants will be reorganized and will be provided to the player as different categories of constants.
-* Further deprecation of ns1. Removal of more documentation, add ingame notice to prompt player to update scripts to .js.
-* Nerf noodle bar
 `,
 };

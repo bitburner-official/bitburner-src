@@ -32,19 +32,12 @@ This function allows you to check the price of a darkweb exploit/program. You MU
 
 If the program does not exist, an error is thrown.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1
-getDarkwebProgramCost("brutessh.exe");
-```
-
-## Example 2
-
-
-```ts
-// NS2
-ns.getDarkwebProgramCost("brutessh.exe");
+```js
+const programName = "BruteSSH.exe";
+const cost = ns.getDarkwebProgramCost(programName);
+if (cost > 0) ns.tprint(`${programName} costs ${ns.formatMoney(cost)}`);
 ```
 

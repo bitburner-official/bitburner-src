@@ -28,19 +28,10 @@ RAM cost: 0.05 GB
 
 Runs the BruteSSH.exe program on the target server. BruteSSH.exe must exist on your home computer.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-brutessh("foodnstuff");
-```
-
-## Example 2
-
-
-```ts
-// NS2:
+```js
 ns.brutessh("foodnstuff");
 ```
 

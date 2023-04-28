@@ -14,27 +14,19 @@ export interface NS
 
 ## Remarks
 
-<b>Basic ns1 usage example:</b>
+<b>Basic usage example:</b>
 
-```ts
- // Basic ns functions can be used directly
- getHostname();
- // Some related functions are gathered within a common namespace
- stock.getPrice();
-```
-[ns1 in-game docs](https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html) <hr> <b>Basic ns2 usage example:</b>
-
-```ts
+```js
 export async function main(ns) {
  // Basic ns functions can be accessed on the ns object
  ns.getHostname();
  // Some related functions are gathered under a sub-property of the ns object
  ns.stock.getPrice();
- // Some functions need to be awaited
+ // Most functions that return a promise need to be awaited.
  await ns.hack('n00dles');
 }
 ```
-[ns2 in-game docs](https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html) <hr>
+[ns2 in-game docs](https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html) <hr> For (deprecated) .script usage, see: [ns1 in-game docs](https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html) <hr>
 
 ## Properties
 
@@ -62,7 +54,7 @@ export async function main(ns) {
 |  Method | Description |
 |  --- | --- |
 |  [alert(msg)](./bitburner.ns.alert.md) | Open up a message box. |
-|  [asleep(millis)](./bitburner.ns.asleep.md) | Suspends the script for n milliseconds. Doesn't block with concurrent calls. You should prefer 'sleep' over 'asleep' except when doing very complex UI work. |
+|  [asleep(millis)](./bitburner.ns.asleep.md) | Suspends the script for n milliseconds. Doesn't block with concurrent calls. |
 |  [atExit(f)](./bitburner.ns.atexit.md) | Add callback function when the script dies |
 |  [brutessh(host)](./bitburner.ns.brutessh.md) | Runs BruteSSH.exe on a server. |
 |  [clear(handle)](./bitburner.ns.clear.md) | Clear data from a file. |

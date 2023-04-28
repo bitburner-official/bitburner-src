@@ -30,23 +30,12 @@ RAM cost: 0.05 GB
 
 Returns a boolean indicating whether or not the player has root access to the specified target server.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-if (hasRootAccess("foodnstuff") == false) {
-   nuke("foodnstuff");
-}
-```
-
-## Example 2
-
-
-```ts
-// NS2:
-if (ns.hasRootAccess("foodnstuff") == false) {
-   ns.nuke("foodnstuff");
+```js
+if (!ns.hasRootAccess("foodnstuff")) {
+  ns.nuke("foodnstuff");
 }
 ```
 

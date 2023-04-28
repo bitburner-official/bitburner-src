@@ -1,5 +1,4 @@
-/* TODO: remove ns1-specific documentation for all functions, and just create a basic doc somewhere that says how to
- *       convert examples for use in .script files (e.g. no async/await, var instead of let/const, etc). */
+/** All netscript definitions */
 
 /** @public */
 interface HP {
@@ -1103,19 +1102,7 @@ export interface TIX {
    * 1. TIX API Access
    *
    * @example
-   * ```ts
-   * // NS1
-   * stock.getOrganization("FSIG");
-   *
-   * // Choose the first stock symbol from the array of stock symbols. Get the
-   * // organization associated with the corresponding stock symbol
-   * var sym = stock.getSymbols()[0];
-   * tprint("Stock symbol: " + sym);
-   * tprint("Stock organization: " + stock.getOrganization(sym));
-   * ```
-   * @example
-   * ```ts
-   * // NS2
+   * ```js
    * ns.stock.getOrganization("FSIG");
    *
    * // Choose the first stock symbol from the array of stock symbols. Get the
@@ -1164,18 +1151,8 @@ export interface TIX {
    * All elements in the returned array are numeric.
    *
    * @example
-   * ```ts
-   * // NS1
-   * var pos = stock.getPosition("ECP");
-   * var shares      = pos[0];
-   * var avgPx       = pos[1];
-   * var sharesShort = pos[2];
-   * var avgPxShort  = pos[3];
-   * ```
-   * @example
-   * ```ts
-   * // NS2
-   * const [shares, avgPx, sharesShort, avgPxShort] = ns.stock.getPosition("ECP");
+   * ```js
+   * const [sharesLong, avgLongPrice, sharesShort, avgShortPrice] = ns.stock.getPosition("ECP");
    * ```
    * @param sym - Stock symbol.
    * @returns Array of four elements that represents the player’s position in a stock.
@@ -1587,14 +1564,10 @@ export interface Singularity {
    * Web using the Terminal buy command.
    *
    * @example
-   * ```ts
-   * // NS1
-   * purchaseProgram("brutessh.exe");
-   * ```
-   * @example
-   * ```ts
-   * // NS2
-   * ns.purchaseProgram("brutessh.exe");
+   * ```js
+   * const programName = "BruteSSH.exe"
+   * const success = ns.purchaseProgram(programName);
+   * if (!success) ns.tprint("ERROR: Failed to purchase ${programName}")
    * ```
    * @param programName - Name of program to purchase.
    * @returns True if the specified program is purchased, and false otherwise.
@@ -1727,17 +1700,8 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * // NS1:
-   * var COMPANY_NAME = "Noodle Bar";
-   *
-   * var jobList = singularity.getCompanyPositions(COMPANY_NAME);
-   * ```
-   * @example
-   * ```js
-   * // NS2:
-   * const COMPANY_NAME = "Noodle Bar";
-   *
-   * let jobList = ns.singularity.getCompanyPositions(COMPANY_NAME);
+   * const companyName = "Noodle Bar";
+   * const jobList = ns.singularity.getCompanyPositions(companyName);
    * ```
    * @param companyName - Name of company to get the position list for. Must be an exact match.
    * @returns The position list if the company name is valid.
@@ -1758,19 +1722,9 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * // NS1:
-   * var COMPANY_NAME = "Noodle Bar";
-   *
-   * var success = singularity.workForCompany(COMPANY_NAME);
-   * if (!success) tprint("ERROR: Failed to start work at " + COMPANY_NAME + ".");
-   * ```
-   * @example
-   * ```js
-   * // NS2:
-   * const COMPANY_NAME = "Noodle Bar";
-   *
-   * let success = ns.singularity.workForCompany(COMPANY_NAME);
-   * if (!success) ns.tprint(`ERROR: Failed to start work at ${COMPANY_NAME].`);
+   * const companyName = "Noodle Bar";
+   * const success = ns.singularity.workForCompany(companyName);
+   * if (!success) ns.tprint(`ERROR: Failed to start work at ${companyName}.`);
    * ```
    * @param companyName - Name of company to work for. Must be an exact match. Optional. If not specified, this
    *   argument defaults to the last job that you worked.
@@ -1895,19 +1849,11 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * // NS1
-   * var FACTION_NAME = "CyberSec", WORK_TYPE = "hacking";
+   * const factionName = "CyberSec";
+   * const workType = "hacking";
    *
-   * var success = singularity.workForFaction(FACTION_NAME, WORK_TYPE);
-   * if (!success) tprint("ERROR: Failed to start work for " + FACTION_NAME + " with work type " + WORK_TYPE);
-   * ```
-   * @example
-   * ```js
-   * // NS2
-   * const FACTION_NAME = "CyberSec", WORK_TYPE = "hacking";
-   *
-   * let success = ns.singularity.workForFaction(FACTION_NAME, WORK_TYPE);
-   * if (!success) ns.tprint(`ERROR: Failed to start work for ${FACTION_NAME} with work type ${WORK_TYPE}.`)
+   * let success = ns.singularity.workForFaction(factionName, workType);
+   * if (!success) ns.tprint(`ERROR: Failed to start work for ${factionName} with work type ${workType}.`)
    * ```
    * @param faction - Name of faction to work for.
    * @param workType - Type of work to perform for the faction.
@@ -1998,14 +1944,10 @@ export interface Singularity {
    * * AutoLink.exe: 25
    *
    * @example
-   * ```ts
-   * // NS1:
-   * createProgram(“relaysmtp.exe”);
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * ns.createProgram(“relaysmtp.exe”);
+   * ```js
+   * const programName = "BruteSSH.exe";
+   * const success = ns.createProgram(programName);
+   * if (!success) ns.tprint("ERROR: Failed to start working on ${programName}")
    * ```
    * @param program - Name of program to create.
    * @param focus - Acquire player focus on this program creation. Optional. Defaults to true.
@@ -2295,16 +2237,9 @@ export interface Singularity {
    * empty list.
    *
    * @example
-   * ```ts
-   * // NS1
-   * getDarkwebPrograms();
-   * // returns ['BruteSSH.exe', 'FTPCrack.exe'...etc]
-   * ```
-   * @example
-   * ```ts
-   * // NS2
-   * ns.getDarkwebPrograms();
-   * // returns ['BruteSSH.exe', 'FTPCrack.exe'...etc]
+   * ```js
+   * const programs = ns.getDarkwebPrograms();
+   * ns.tprint(`Available programs are: ${programs.split(", ")}`);
    * ```
    * @returns - a list of programs available for purchase on the dark web, or [] if Tor has not
    * been purchased
@@ -2328,14 +2263,10 @@ export interface Singularity {
    *
    *
    * @example
-   * ```ts
-   * // NS1
-   * getDarkwebProgramCost("brutessh.exe");
-   * ```
-   * @example
-   * ```ts
-   * // NS2
-   * ns.getDarkwebProgramCost("brutessh.exe");
+   * ```js
+   * const programName = "BruteSSH.exe";
+   * const cost = ns.getDarkwebProgramCost(programName);
+   * if (cost > 0) ns.tprint(`${programName} costs ${ns.formatMoney(cost)}`);
    * ```
    * @param programName - Name of program to check the price of
    * @returns Price of the specified darkweb program
@@ -2639,19 +2570,10 @@ export interface Hacknet {
    * Returns the number of hashes required for the specified upgrade. The name of the upgrade must be an exact match.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var upgradeName = "Sell for Corporation Funds";
-   * if (hacknet.numHashes() > hacknet.hashCost(upgradeName)) {
-   *    hacknet.spendHashes(upgradeName);
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * const upgradeName = "Sell for Corporation Funds";
    * if (ns.hacknet.numHashes() > ns.hacknet.hashCost(upgradeName)) {
-   *    ns.hacknet.spendHashes(upgradeName);
+   *   ns.hacknet.spendHashes(upgradeName);
    * }
    * ```
    * @param upgName - Name of the upgrade of Hacknet Node.
@@ -2675,15 +2597,10 @@ export interface Hacknet {
    * In this case, the `upgTarget` argument must be the hostname of the server.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * hacknet.spendHashes("Sell for Corporation Funds");
-   * hacknet.spendHashes("Increase Maximum Money", "foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * NS2:
+   * ```js
+   * // For upgrades where no target is required
    * ns.hacknet.spendHashes("Sell for Corporation Funds");
+   * // For upgrades requiring a target
    * ns.hacknet.spendHashes("Increase Maximum Money", "foodnstuff");
    * ```
    * @param upgName - Name of the upgrade of Hacknet Node.
@@ -2703,13 +2620,7 @@ export interface Hacknet {
    *
    * Returns the list of all available hash upgrades that can be used in the spendHashes function.
    * @example
-   * ```ts
-   * // NS1:
-   * var upgrades = hacknet.getHashUpgrades(); // ["Sell for Money","Sell for Corporation Funds",...]
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * const upgrades = ns.hacknet.getHashUpgrades(); // ["Sell for Money","Sell for Corporation Funds",...]
    * ```
    * @returns An array containing the available upgrades
@@ -3187,16 +3098,7 @@ export interface Bladeburner {
    * Returns an array with two elements:
    * * [Current stamina, Max stamina]
    * @example
-   * ```ts
-   * // NS1:
-   * function getStaminaPercentage() {
-   *    var res = bladeburner.getStamina();
-   *    return res[0] / res[1];
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * function getStaminaPercentage() {
    *    const [current, max] = ns.bladeburner.getStamina();
    *    return current / max;
@@ -3274,15 +3176,6 @@ export interface CodingContract {
    *
    * @example
    * ```js
-   * // NS1
-   * var reward = codingcontract.attempt(yourSolution, filename, hostname);
-   * if (reward) {
-   *   tprint("Contract solved successfully! Reward: " + reward)
-   * } else tprint("Failed to solve contract.")
-   * ```
-   * @example
-   * ```js
-   * // NS2
    * const reward = codingcontract.attempt(yourSolution, filename, hostname);
    * if (reward) {
    *   ns.tprint(`Contract solved successfully! Reward: ${reward}`)
@@ -4561,27 +4454,20 @@ interface UserInterface {
  * Collection of all functions passed to scripts
  * @public
  * @remarks
- * <b>Basic ns1 usage example:</b>
- * ```ts
- *  // Basic ns functions can be used directly
- *  getHostname();
- *  // Some related functions are gathered within a common namespace
- *  stock.getPrice();
- * ```
- * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
- * <hr>
- * <b>Basic ns2 usage example:</b>
- * ```ts
+ * <b>Basic usage example:</b>
+ * ```js
  * export async function main(ns) {
  *  // Basic ns functions can be accessed on the ns object
  *  ns.getHostname();
  *  // Some related functions are gathered under a sub-property of the ns object
  *  ns.stock.getPrice();
- *  // Some functions need to be awaited
+ *  // Most functions that return a promise need to be awaited.
  *  await ns.hack('n00dles');
  * }
  * ```
  * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
+ * <hr>
+ * For (deprecated) .script usage, see: {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
  * <hr>
  */
 export interface NS {
@@ -4710,18 +4596,12 @@ export interface NS {
    * A successful `hack()` on a server will raise that server’s security level by 0.002.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var earnedMoney = hack("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * let earnedMoney = await ns.hack("foodnstuff");
    * ```
    * @param host - Hostname of the target server to hack.
    * @param opts - Optional parameters for configuring function behavior.
-   * @returns The amount of money stolen if the hack is successful, and zero otherwise.
+   * @returns A promise that resolves to the amount of money stolen (which is zero if the hack is unsuccessful).
    */
   hack(host: string, opts?: BasicHGWOptions): Promise<number>;
 
@@ -4781,20 +4661,13 @@ export interface NS {
    * there is no required hacking level to run the function.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var currentSecurity = getServerSecurityLevel("foodnstuff");
-   * currentSecurity = currentSecurity - weaken("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * let currentSecurity = ns.getServerSecurityLevel("foodnstuff");
    * currentSecurity -= await ns.weaken("foodnstuff");
    * ```
    * @param host - Hostname of the target server to weaken.
    * @param opts - Optional parameters for configuring function behavior.
-   * @returns The amount by which the target server’s security level was decreased. This is equivalent to 0.05 multiplied by the number of script threads.
+   * @returns A promise that resolves to the value by which security was reduced.
    */
   weaken(host: string, opts?: BasicHGWOptions): Promise<number>;
 
@@ -4941,35 +4814,24 @@ export interface NS {
    *
    * @param millis - Number of milliseconds to sleep.
    * @example
-   * ```ts
-   * // NS1:
+   * ```js
    * // This will count from 1 to 10 in your terminal, with one number every 5 seconds
-   * for (var i=0; i<10; i++) {
-   *   tprint(i + 1);
-   *   sleep(5000);
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * // This will count from 1 to 10 in your terminal, with one number every 5 seconds
-   * for (var i=0; i<10; i++) {
-   *   ns.tprint(i + 1);
+   * for (var i = 1; i <= 10; i++) {
+   *   ns.tprint(i);
    *   await ns.sleep(5000);
    * }
    * ```
-   * @returns
+   * @returns A promise that resolves to true when the sleep is completed.
    */
   sleep(millis: number): Promise<true>;
 
   /**
    * Suspends the script for n milliseconds. Doesn't block with concurrent calls.
-   * You should prefer 'sleep' over 'asleep' except when doing very complex UI work.
    * @remarks
    * RAM cost: 0 GB
    *
    * @param millis - Number of milliseconds to sleep.
-   * @returns
+   * @returns A promise that resolves to true when the sleep is completed.
    */
   asleep(millis: number): Promise<true>;
 
@@ -5001,29 +4863,7 @@ export interface NS {
    * strict mode.
    *
    * @example
-   * ```ts
-   * // NS1
-   * // Default color coding.
-   * print("ERROR means something's wrong.");
-   * print("SUCCESS means everything's OK.");
-   * print("WARN Tread with caution!");
-   * print("WARNING, warning, danger, danger!");
-   * print("WARNing! Here be dragons.");
-   * print("INFO for your I's only (FYI).");
-   * print("INFOrmation overload!");
-   * // Custom color coding.
-   * var cyan = "\u001b[36m";
-   * var green = "\u001b[32m";
-   * var red = "\u001b[31m";
-   * var reset = "\u001b[0m";
-   * print(red + "Ugh! What a mess." + reset);
-   * print(green + "Well done!" + reset);
-   * print(cyan + "ERROR Should this be in red?" + reset);
-   * tail();
-   * ```
-   * @example
-   * ```ts
-   * // NS2
+   * ```js
    * // Default color coding.
    * ns.print("ERROR means something's wrong.");
    * ns.print("SUCCESS means everything's OK.");
@@ -5057,21 +4897,7 @@ export interface NS {
    * - For more detail, see: https://github.com/alexei/sprintf.js
    *
    * @example
-   * ```ts
-   * // NS1
-   * var name = "Bit";
-   * var age = 4;
-   * printf("My name is %s.", name);
-   * printf("I'm %d seconds old.", age);
-   * printf("My age in binary is %b.", age);
-   * printf("My age in scientific notation is %e.", age);
-   * printf("In %d seconds, I'll be %s.", 6, "Byte");
-   * printf("Am I a nibble? %t", (4 == age));
-   * tail();
-   * ```
-   * @example
-   * ```ts
-   * // NS2
+   * ```js
    * const name = "Bit";
    * const age = 4;
    * ns.printf("My name is %s.", name);
@@ -5287,25 +5113,7 @@ export interface NS {
    * array are strings.
    *
    * @example
-   * ```ts
-   * // NS1
-   * // All servers that are one hop from the current server.
-   * tprint("Neighbors of current server.");
-   * var neighbor = scan();
-   * for (var i = 0; i < neighbor.length; i++) {
-   *     tprint(neighbor[i]);
-   * }
-   * // All neighbors of n00dles.
-   * var target = "n00dles";
-   * neighbor = scan(target);
-   * tprintf("Neighbors of %s.", target);
-   * for (var i = 0; i < neighbor.length; i++) {
-   *     tprint(neighbor[i]);
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2
+   * ```js
    * // All servers that are one hop from the current server.
    * ns.tprint("Neighbors of current server.");
    * let neighbor = ns.scan();
@@ -5332,14 +5140,7 @@ export interface NS {
    *
    * @example
    * ```js
-   * // NS1:
-   * if (hasTorRouter()) tprint("TOR router detected.");
-   * ```
-   *
-   * @example
-   * ```js
-   * // NS2:
-   * if (ns.hasTorRouter()) tprint("TOR router detected.");
+   * if (ns.hasTorRouter()) ns.tprint("TOR router detected.");
    * ```
    *
    * @returns Whether player has access to the dark web. */
@@ -5353,13 +5154,7 @@ export interface NS {
    * Running NUKE.exe on a target server gives you root access which means you can execute scripts on said server. NUKE.exe must exist on your home computer.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * nuke("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.nuke("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
@@ -5374,13 +5169,7 @@ export interface NS {
    * Runs the BruteSSH.exe program on the target server. BruteSSH.exe must exist on your home computer.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * brutessh("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.brutessh("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
@@ -5395,13 +5184,7 @@ export interface NS {
    * Runs the FTPCrack.exe program on the target server. FTPCrack.exe must exist on your home computer.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * ftpcrack("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.ftpcrack("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
@@ -5416,13 +5199,7 @@ export interface NS {
    * Runs the relaySMTP.exe program on the target server. relaySMTP.exe must exist on your home computer.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * relaysmtp("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.relaysmtp("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
@@ -5437,13 +5214,7 @@ export interface NS {
    * Runs the HTTPWorm.exe program on the target server. HTTPWorm.exe must exist on your home computer.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * httpworm("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.httpworm("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
@@ -5458,13 +5229,7 @@ export interface NS {
    * Runs the SQLInject.exe program on the target server. SQLInject.exe must exist on your home computer.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * sqlinject("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.sqlinject("foodnstuff");
    * ```
    * @remarks RAM cost: 0.05 GB
@@ -5700,21 +5465,11 @@ export interface NS {
    * Returns an array with general information about all scripts running on the specified target server.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var scripts = ps("home");
-   * for (var i = 0; i < scripts.length; ++i) {
-   *     tprint(scripts[i].filename + ' ' + scripts[i].threads);
-   *     tprint(scripts[i].args);
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * const ps = ns.ps("home");
    * for (let script of ps) {
-   *     ns.tprint(`${script.filename} ${script.threads}`);
-   *     ns.tprint(script.args);
+   *   ns.tprint(`${script.filename} ${script.threads}`);
+   *   ns.tprint(script.args);
    * }
    * ```
    * @param host - Host address of the target server. If not specified, it will be the current server’s IP by default.
@@ -5730,17 +5485,9 @@ export interface NS {
    * Returns a boolean indicating whether or not the player has root access to the specified target server.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * if (hasRootAccess("foodnstuff") == false) {
-   *    nuke("foodnstuff");
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * if (ns.hasRootAccess("foodnstuff") == false) {
-   *    ns.nuke("foodnstuff");
+   * ```js
+   * if (!ns.hasRootAccess("foodnstuff")) {
+   *   ns.nuke("foodnstuff");
    * }
    * ```
    * @param host - Hostname of the target server.
@@ -5776,20 +5523,10 @@ export interface NS {
    * (e.g. 1.5 instead of 150%).
    *
    * @example
-   * ```ts
-   * // NS1:
-   * // Example of how this can be used:
-   * var mults = getHackingMultipliers();
-   * print(mults.chance);
-   * print(mults.growth);
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * // Example of how this can be used:
-   * const {chance, growth} = ns.getHackingMultipliers();
-   * print(chance);
-   * print(growth);
+   * ```js
+   * const mults = ns.getHackingMultipliers();
+   * print(`chance: ${mults.chance}`);
+   * print(`growthL ${mults.growth}`);
    * ```
    * @returns Object containing the Player’s hacking related multipliers.
    */
@@ -5805,20 +5542,10 @@ export interface NS {
    * (e.g. 1.5 instead of 150%).
    *
    * @example
-   * ```ts
-   * // NS1:
-   * // Example of how this can be used:
-   * var mults = getHacknetMultipliers();
-   * print(mults.production);
-   * print(mults.purchaseCost);
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * // Example of how this can be used:
-   * const {production, purchaseCost} = ns.getHacknetMultipliers();
-   * print(production);
-   * print(purchaseCost);
+   * ```js
+   * const mults = ns.getHacknetMultipliers();
+   * ns.tprint(`production: ${mults.production}`);
+   * ns.tprint(`purchaseCost: ${mults.purchaseCost}`);
    * ```
    * @returns Object containing the Player’s hacknet related multipliers.
    */
@@ -5843,14 +5570,7 @@ export interface NS {
    * Running this function on the home computer will return the player’s money.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * getServerMoneyAvailable("foodnstuff");
-   * getServerMoneyAvailable("home"); //Returns player's money
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.getServerMoneyAvailable("foodnstuff");
    * ns.getServerMoneyAvailable("home"); // Returns player's money
    * ```
@@ -6052,18 +5772,10 @@ export interface NS {
    * Returns the cost to purchase a server with the specified amount of ram.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * for (i = 1; i <= 20; i++) {
-   *     tprint(i + " -- " + getPurchasedServerCost(Math.pow(2, i)));
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * for (i = 1; i <= 20; i++) {
-   *     ns.tprint(i + " -- " + ns.getPurchasedServerCost(Math.pow(2, i)));
-   * }
+   * ```js
+   * const ram = 2 ** 20;
+   * const cost = ns.getPurchasedServerCost(ram);
+   * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs ${ns.formatMoney(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
    * @returns The cost to purchase a server with the specified amount of ram.
@@ -6095,17 +5807,8 @@ export interface NS {
    * amount of servers.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var ram = 64;
-   * var prefix = "pserv-";
-   * for (i = 0; i < 5; ++i) {
-   *    purchaseServer(prefix + i, ram);
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
+   * // Attempt to purchase 5 servers with 64GB of ram each
    * const ram = 64;
    * const prefix = "pserv-";
    * for (i = 0; i < 5; ++i) {
@@ -6629,33 +6332,7 @@ export interface NS {
    *   chooses one of the provided options and presses the "Confirm" button.
    *
    * @example
-   * ```ts
-   * // NS1
-   * // A Yes/No question. The default is to create a boolean dialog box.
-   * var queryA = "Do you enjoy Bitburner?";
-   * var resultA = prompt(queryA);
-   * tprint(queryA + " " + resultA);
-   *
-   * // Another Yes/No question. Can also create a boolean dialog box by explicitly
-   * // passing the option {"type": "boolean"}.
-   * var queryB = "Is programming fun?";
-   * var resultB = prompt(queryB, { type: "boolean" });
-   * tprint(queryB + " " + resultB);
-   *
-   * // Free-form text box.
-   * var resultC = prompt("Please enter your name.", { type: "text" });
-   * tprint("Hello, " + resultC + ".");
-   *
-   * // A drop-down list.
-   * var resultD = prompt("Please select your favorite fruit.", {
-   *     type: "select",
-   *     choices: ["Apple", "Banana", "Orange", "Pear", "Strawberry"]
-   * });
-   * tprint("Your favorite fruit is " + resultD.toLowerCase() + ".");
-   * ```
-   * @example
-   * ```ts
-   * // NS2
+   * ```js
    * // A Yes/No question. The default is to create a boolean dialog box.
    * const queryA = "Do you enjoy Bitburner?";
    * const resultA = await ns.prompt(queryA);
@@ -6673,8 +6350,8 @@ export interface NS {
    *
    * // A drop-down list.
    * const resultD = await ns.prompt("Please select your favorite fruit.", {
-   *     type: "select",
-   *     choices: ["Apple", "Banana", "Orange", "Pear", "Strawberry"]
+   *   type: "select",
+   *   choices: ["Apple", "Banana", "Orange", "Pear", "Strawberry"]
    * });
    * ns.tprint(`Your favorite fruit is ${resultD.toLowerCase()}.`);
    * ```
@@ -6759,18 +6436,10 @@ export interface NS {
    * you would have received in BitNode-1.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var mults = getBitNodeMultipliers();
-   * print(mults.ServerMaxMoney);
-   * print(mults.HackExpGain);
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * const {ServerMaxMoney, HackExpGain} = ns.getBitNodeMultipliers();
-   * print(ServerMaxMoney);
-   * print(HackExpGain);
+   * ```js
+   * const mults = ns.getBitNodeMultipliers();
+   * ns.tprint(`ServerMaxMoney: ${mults.ServerMaxMoney}`);
+   * ns.tprint(`HackExpGain: ${mults.HackExpGain}`);
    * ```
    * @returns Object containing the current BitNode multipliers.
    */

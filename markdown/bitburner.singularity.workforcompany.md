@@ -33,25 +33,12 @@ This function will set you to start working at your current job at a specified c
 
 This function will return true if the player starts working, and false otherwise.
 
-## Example 1
+## Example
 
 
 ```js
-// NS1:
-var COMPANY_NAME = "Noodle Bar";
-
-var success = singularity.workForCompany(COMPANY_NAME);
-if (!success) tprint("ERROR: Failed to start work at " + COMPANY_NAME + ".");
-```
-
-## Example 2
-
-
-```js
-// NS2:
-const COMPANY_NAME = "Noodle Bar";
-
-let success = ns.singularity.workForCompany(COMPANY_NAME);
-if (!success) ns.tprint(`ERROR: Failed to start work at ${COMPANY_NAME].`);
+const companyName = "Noodle Bar";
+const success = ns.singularity.workForCompany(companyName);
+if (!success) ns.tprint(`ERROR: Failed to start work at ${companyName}.`);
 ```
 
