@@ -1628,7 +1628,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   wget: (ctx) => async (_url, _target, _hostname) => {
     const url = helpers.string(ctx, "url", _url);
-    const target = helpers.scriptPath(ctx, "target", _target);
+    const target = helpers.filePath(ctx, "target", _target);
     const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
     const server = helpers.getServer(ctx, hostname);
     if (!target || (!hasTextExtension(target) && !hasScriptExtension(target))) {
