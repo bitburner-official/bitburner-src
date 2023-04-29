@@ -2,7 +2,7 @@
  * React Component for rendering the Accordion elements for all servers
  * on which scripts are running
  */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { ServerAccordion } from "./ServerAccordion";
 
@@ -10,7 +10,6 @@ import TextField from "@mui/material/TextField";
 import List from "@mui/material/List";
 import TablePagination from "@mui/material/TablePagination";
 import { WorkerScript } from "../../Netscript/WorkerScript";
-import { WorkerScriptStartStopEventEmitter } from "../../Netscript/WorkerScriptStartStopEventEmitter";
 import { GetServer } from "../../Server/AllServers";
 import { BaseServer } from "../../Server/BaseServer";
 import { Settings } from "../../Settings/Settings";
@@ -38,13 +37,7 @@ export function ServerAccordions(props: IProps): React.ReactElement {
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(Settings.ActiveScriptsServerPageSize);
-  const rerenderHook = useRerender();
-  let scheduledRerender = false;
-  const rerender = () => {
-    if (scheduledRerender) return;
-    scheduledRerender = true;
-    requestAnimationFrame(rerenderHook);
-  };
+  useRerender(400);
 
   const handleChangePage = (event: unknown, newPage: number): void => {
     setPage(newPage);
@@ -91,8 +84,6 @@ export function ServerAccordions(props: IProps): React.ReactElement {
     }
     return false;
   });
-
-  useEffect(() => WorkerScriptStartStopEventEmitter.subscribe(rerender));
 
   return (
     <>

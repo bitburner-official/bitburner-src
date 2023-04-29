@@ -6,7 +6,6 @@ import { killWorkerScript } from "./Netscript/killWorkerScript";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { WorkerScript } from "./Netscript/WorkerScript";
 import { workerScripts } from "./Netscript/WorkerScripts";
-import { WorkerScriptStartStopEventEmitter } from "./Netscript/WorkerScriptStartStopEventEmitter";
 import { generateNextPid } from "./Netscript/Pid";
 
 import { CONSTANTS } from "./Constants";
@@ -311,7 +310,6 @@ function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseS
 
   // Add the WorkerScript to the global pool
   workerScripts.set(pid, workerScript);
-  WorkerScriptStartStopEventEmitter.emit();
 
   // Start the script's execution using the correct function for file type
   (workerScript.name.endsWith(".js") ? startNetscript2Script : startNetscript1Script)(workerScript)

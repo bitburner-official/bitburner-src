@@ -9,7 +9,6 @@ import Tab from "@mui/material/Tab";
 import { ActiveScriptsPage } from "./ActiveScriptsPage";
 import { RecentScriptsPage } from "./RecentScriptsPage";
 import { WorkerScript } from "../../Netscript/WorkerScript";
-import { useRerender } from "../React/hooks";
 
 interface IProps {
   workerScripts: Map<number, WorkerScript>;
@@ -17,7 +16,6 @@ interface IProps {
 
 export function ActiveScriptsRoot(props: IProps): React.ReactElement {
   const [tab, setTab] = useState<"active" | "recent">("active");
-  useRerender(200);
 
   function handleChange(event: React.SyntheticEvent, tab: "active" | "recent"): void {
     setTab(tab);
