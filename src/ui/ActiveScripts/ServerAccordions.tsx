@@ -15,7 +15,6 @@ import { BaseServer } from "../../Server/BaseServer";
 import { Settings } from "../../Settings/Settings";
 import { TablePaginationActionsAll } from "../React/TablePaginationActionsAll";
 import SearchIcon from "@mui/icons-material/Search";
-import { useRerender } from "../React/hooks";
 import { matchScriptPathUnanchored } from "../../utils/helpers/scriptKey";
 import lodash from "lodash";
 
@@ -37,7 +36,6 @@ export function ServerAccordions(props: IProps): React.ReactElement {
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(Settings.ActiveScriptsServerPageSize);
-  useRerender(400);
 
   const handleChangePage = (event: unknown, newPage: number): void => {
     setPage(newPage);
