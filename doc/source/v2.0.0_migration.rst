@@ -100,7 +100,7 @@ Singularity
 stock.buy, stock.sell, stock.short
 ----------------------------------
     
-    These functions were renamed to stock.buyStock, stock.sellStock, and stock.buyShort because 'buy', 'sell', and 'short',
+    These functions were renamed to stock.buyStock, stock.sellStock, and stock.buyShort because 'buy', 'sell', and 'short'
     are very common tokens that would trick the ram calculation.
 
 corporation.bribe
