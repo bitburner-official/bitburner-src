@@ -5,7 +5,6 @@
 import { ScriptDeath } from "./ScriptDeath";
 import { WorkerScript } from "./WorkerScript";
 import { workerScripts } from "./WorkerScripts";
-import { WorkerScriptStartStopEventEmitter } from "./WorkerScriptStartStopEventEmitter";
 
 import { GetServer } from "../Server/AllServers";
 import { AddRecentScript } from "./RecentScripts";
@@ -91,5 +90,4 @@ function removeWorkerScript(workerScript: WorkerScript): void {
 
   workerScripts.delete(workerScript.pid);
   AddRecentScript(workerScript);
-  WorkerScriptStartStopEventEmitter.emit();
 }
