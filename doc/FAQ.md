@@ -2,7 +2,7 @@
 
 ## Can I donate to the project?
 
-No, the project does not take donation.
+No, the project does not take donations.
 
 If you still want to donate, go donate blood to your local blood bank or donate to the [Electronic Frontier Foundation](https://www.eff.org/) or [Médecins Sans Frontières](https://www.msf.org/)
 
@@ -27,25 +27,25 @@ You may have created an infinite loop with no sleep. You'll have to restart the 
 - On Browser: Stick `?noScript` at the end of the URL
 - On Steam:
   - In the menu, "Reloads" -> "Reload & Kill All Scripts".
-  - If this does not work, when launching the game, use the kill all script options.
+  - If this does not work, when launching the game, use the kill all scripts option.
 
 ---
 
 ## Steam: Where is the save game located?
 
-To maintain compatibility with the web browser version, the save game is not stored as a file on your filesystem. It lives inside the localStorage of the WebKit instance. You may export the save (and should backup it!) in the option menu.
+To maintain compatibility with the web browser version, the save game is not stored as a file on your filesystem. It lives inside the localStorage of the WebKit instance. Export the save (and back it up!) in the option menu.
 
 ---
 
 ## Steam: Game won't stop / Game is shown as "Running"
 
-Due to a limitation with the way Steam tracks the game, if you launch an external link (such as documentation), Steam may keep tracking the game as "Running" even after it is closed. You should simply have to close your web browser to fix this.
+Due to a limitation with the way Steam tracks the game, if you launch an external link (such as documentation), Steam may keep tracking the game as "Running" even after it is closed. Simply close the web browser to fix this.
 
 ---
 
 ## Steam: How do I get to the game files? <a name="game-files"></a>
 
-You can navigate to the game files by right-clicking the game in your library and then go into "Manage" -> "Browse Local Files". The game can be launched directly from that location, if you're having issues with Steam.
+Right-click the game in your Steam library, then go into "Manage" -> "Browse Local Files". The game can be launched directly from that location if you're having issues with Steam.
 
 ---
 
@@ -55,13 +55,13 @@ You can navigate to the game files by right-clicking the game in your library an
 
 If the game is installed on a network drive, it will fail to start due to a [limitation in Chromium](https://github.com/electron/electron/issues/27356).
 
-If you cannot move the game to another drive, you'll have to add the `--no-sandbox` launch option. In your Steam Library, Right click the game and hit "Properties". You'll see the launch option section in the "General" window.
+If you cannot move the game to another drive, you'll have to add `--no-sandbox` to the launch options. In your Steam Library, right click the game and hit "Properties". You'll see the "launch options" section in the "General" window.
 
 ### **On Linux**
 
-The game is built natively, do not use Proton unless native does not work.
+The game is built natively. Do not use Proton unless native does not work.
 
-When launching the game, you will be prompted with three options. If the standard launch does not work, you may attempt the `--disable-seccomp-filter-sandbox` or `--no-sandbox` launch option. If this still does not work, the game should be able to start by launching it directly or through the terminal. See [How do I get to the game files?](#game-files).
+When launching the game, you will be prompted with three options. If the standard launch does not work, you may attempt the `--disable-seccomp-filter-sandbox` or `--no-sandbox` launch options. If this still does not work, the game should be able to start by launching it directly or through the terminal. See [How do I get to the game files?](#game-files).
 
 ---
 
@@ -69,7 +69,7 @@ When launching the game, you will be prompted with three options. If the standar
 
 ### Logs (using [electron-log](https://github.com/megahertz/electron-log#readme))
 
-You may want access the logs to get information about crashes or such.
+You may want to access the logs to get information about crashes and such.
 
 - on Linux: `~/.config/bitburner/logs/main.log`
 - on macOS: `~/Library/Logs/bitburner/main.log`
@@ -77,7 +77,7 @@ You may want access the logs to get information about crashes or such.
 
 ### Config (using [electron-store](https://github.com/sindresorhus/electron-store#readme))
 
-Configuration file will be written to disk in the application data directory.
+Configuration files can be found in the application's data directory.
 
 - on Linux: `~/.config/bitburner/config.json`
 - on macOS: `~/Library/Application\ Support/bitburner/config.json`
@@ -87,4 +87,4 @@ Configuration file will be written to disk in the application data directory.
 
 ## Steam: What is the API Server?
 
-The API Server allows the official [Visual Studio Code Extension](https://github.com/bitburner-official/bitburner-vscode) to push script file from VSCode to your in-game home.
+The API Server allows the official [Visual Studio Code Extension](https://github.com/bitburner-official/bitburner-vscode) to push script files from VSCode to your in-game home.
