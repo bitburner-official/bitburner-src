@@ -19,7 +19,7 @@ Then, to fix your script, make sure you have a sleep or any other timed function
         await ns.sleep(1000); // Add a 1s sleep to prevent freezing
     }
 
-Also make sure that each while loop gets to `awaited` function or `break`, for example the next snippet has a sleep 
+Also make sure that each while loop gets to the `awaited` function or `break`, for example the next snippet has a sleep 
 function, but it nor any possible conditional breaks are never reached and therefore will crash the game::
 
     while(true) {
@@ -33,11 +33,11 @@ function, but it nor any possible conditional breaks are never reached and there
         }
     }
 
-If `n00dles` current money is, for example, 75% of the maximum money, the script will not reach neither `grow` nor `break` and crashes the game.
-Adding a sleep like in the first example, or changing the code so that `awaited` function or `break` is always reached, would prevent the crash.
+If `n00dles` current money is, for example, 75% of the maximum money, the script will reach neither `grow` nor `break` and the game will crash.
+Adding a sleep like in the first example, or changing the code so that the `awaited` function or `break` is always reached, would prevent the crash.
 
 Common infinite loop when translating the server purchasing script in starting guide to :ref:`netscriptjs` is to have a 
-while loop, that's condition's change is conditional::
+while loop, where the condition's change is conditional::
 
     var ram = 8;
     var i = 0;
@@ -51,7 +51,7 @@ while loop, that's condition's change is conditional::
         }
     }
 
-if player does not currently have enough money to purchase a server, the `if`'s condition will be false and `++i` will not be reached.
+If the player does not currently have enough money to purchase a server, the `if`'s condition will be false and `++i` will not be reached.
 Since the script doesn't have `sleep` and value `i` will not change without the `if` being true, this will crash the game. Adding a `sleep`
 that is always reached would prevent the crash.
 
