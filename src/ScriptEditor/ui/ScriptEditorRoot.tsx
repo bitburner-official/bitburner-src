@@ -593,9 +593,7 @@ export function Root(props: IProps): React.ReactElement {
     const openScript = openScripts[index];
     const serverData = getServerCode(index);
     if (serverData === null) return " *";
-    // For scripts, server code is stored with its starting & trailing whitespace removed
-    const code = openScript.isTxt ? openScript.code : Script.formatCode(openScript.code);
-    return serverData !== code ? " *" : "";
+    return serverData !== openScript.code ? " *" : "";
   }
   function getServerCode(index: number): string | null {
     const openScript = openScripts[index];

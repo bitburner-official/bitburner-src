@@ -82,7 +82,7 @@ export class Script implements ContentFile {
    * @param hostname The server to save the script to
    */
   saveScript(filename: ScriptFilePath, code: string, hostname: string): void {
-    this.code = Script.formatCode(code);
+    this.code = code;
     this.invalidateModule();
     this.filename = filename;
     this.server = hostname;
@@ -128,15 +128,6 @@ export class Script implements ContentFile {
   // Initializes a Script Object from a JSON save state
   static fromJSON(value: IReviverValue): Script {
     return Generic_fromJSON(Script, value.data, Script.savedKeys);
-  }
-
-  /**
-   * Formats code: Removes the starting & trailing whitespace
-   * @param {string} code - The code to format
-   * @returns The formatted code
-   */
-  static formatCode(code: string): string {
-    return code.replace(/^\s+|\s+$/g, "");
   }
 }
 

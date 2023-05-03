@@ -73,7 +73,7 @@ function convert(code: string): string {
     out.push(line);
   }
   code = out.join("\n");
-  return Script.formatCode(code);
+  return code;
 }
 
 export function AwardNFG(n = 1): void {
