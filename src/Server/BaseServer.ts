@@ -252,7 +252,7 @@ export abstract class BaseServer implements IServer {
     // Check if the script already exists, and overwrite it if it does
     const script = this.scripts.get(filename);
     if (script) {
-      // content setter handles module invalidation and code formatting
+      // content setter handles module invalidation
       script.content = code;
       return { overwritten: true };
     }

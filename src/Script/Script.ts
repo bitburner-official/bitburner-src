@@ -6,13 +6,11 @@ import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ContentFile } from "../Paths/ContentFile";
-/** Type for ensuring script code is always trimmed */
-export type FormattedCode = string & { __type: "FormattedCode" };
 
 /** A script file as a file on a server.
  * For the execution of a script, see RunningScript and WorkerScript */
 export class Script implements ContentFile {
-  code: FormattedCode;
+  code: string;
   filename: ScriptFilePath;
   server: string;
 
@@ -34,8 +32,7 @@ export class Script implements ContentFile {
   get content() {
     return this.code;
   }
-  set content(code: string) {
-    const newCode = Script.formatCode(code);
+  set content(newCode: string) {
     if (this.code === newCode) return;
     this.code = newCode;
     this.invalidateModule();
@@ -43,7 +40,7 @@ export class Script implements ContentFile {
 
   constructor(fn = "default.js" as ScriptFilePath, code = "", server = "") {
     this.filename = fn;
-    this.code = Script.formatCode(code);
+    this.code = code;
     this.server = server; // hostname of server this script is on
   }
 
@@ -138,8 +135,8 @@ export class Script implements ContentFile {
    * @param {string} code - The code to format
    * @returns The formatted code
    */
-  static formatCode(code: string): FormattedCode {
-    return code.replace(/^\s+|\s+$/g, "") as FormattedCode;
+  static formatCode(code: string): string {
+    return code.replace(/^\s+|\s+$/g, "");
   }
 }
 

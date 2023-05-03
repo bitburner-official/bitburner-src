@@ -1,7 +1,7 @@
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { Player } from "@player";
-import { FormattedCode, Script } from "../Script/Script";
+import { Script } from "../Script/Script";
 import { GetAllServers } from "../Server/AllServers";
 import { resolveTextFilePath } from "../Paths/TextFilePath";
 import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
@@ -54,7 +54,7 @@ function hasChanges(code: string): boolean {
   return false;
 }
 
-function convert(code: string): FormattedCode {
+function convert(code: string): string {
   const lines = code.split("\n");
   const out: string[] = [];
   for (let i = 0; i < lines.length; i++) {
