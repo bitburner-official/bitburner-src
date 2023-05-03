@@ -24,7 +24,6 @@ import { GangMember } from "./GangMember";
 import { WorkerScript } from "../Netscript/WorkerScript";
 import { Player } from "@player";
 import { PowerMultiplier } from "./data/power";
-import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 export class Gang {
   facName: string;
@@ -162,7 +161,7 @@ export class Gang {
     // Process power first
     const gangName = this.facName;
     for (const name of Object.keys(AllGangs)) {
-      if (hasOwnProp(AllGangs, name)) {
+      if (Object.hasOwn(AllGangs, name)) {
         if (name == gangName) {
           AllGangs[name].power += this.calculatePower();
         } else {
@@ -318,7 +317,7 @@ export class Gang {
   calculatePower(): number {
     let memberTotal = 0;
     for (let i = 0; i < this.members.length; ++i) {
-      if (!hasOwnProp(GangMemberTasks, this.members[i].task) || this.members[i].task !== "Territory Warfare") continue;
+      if (this.members[i].task !== "Territory Warfare") continue;
       memberTotal += this.members[i].calculatePower();
     }
     return 0.015 * Math.max(0.002, this.getTerritory()) * memberTotal;

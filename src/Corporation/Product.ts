@@ -10,7 +10,6 @@ import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { CityName } from "../Enums";
 import { materialNames } from "./data/Constants";
 import { CorpMaterialName } from "@nsdefs";
-import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 interface IConstructorParams {
   name?: string;
@@ -234,7 +233,7 @@ export class Product {
     //Calculate the product's required materials
     //For now, just set it to be the same as the requirements to make materials
     for (const matName of Object.keys(industry.reqMats) as CorpMaterialName[]) {
-      if (hasOwnProp(industry.reqMats, matName)) {
+      if (Object.hasOwn(industry.reqMats, matName)) {
         const reqMat = industry.reqMats[matName];
         if (reqMat === undefined) continue;
         this.reqMats[matName] = reqMat;

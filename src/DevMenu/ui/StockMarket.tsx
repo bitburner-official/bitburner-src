@@ -12,7 +12,6 @@ import { Money } from "../../ui/React/Money";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { StockMarket as SM } from "../../StockMarket/StockMarket";
 import { Stock } from "../../StockMarket/Stock";
-import { hasOwnProp } from "../../utils/helpers/ObjectHelpers";
 
 export function StockMarket(): React.ReactElement {
   const [stockPrice, setStockPrice] = useState(0);
@@ -40,7 +39,7 @@ export function StockMarket(): React.ReactElement {
     }
 
     for (const name of Object.keys(SM)) {
-      if (hasOwnProp(SM, name)) {
+      if (Object.hasOwn(SM, name)) {
         const stock = SM[name];
         if (stock instanceof Stock && match(stock.symbol)) {
           sub(stock);

@@ -9,7 +9,6 @@ import { Player } from "@player";
 import { prestigeAugmentation } from "../Prestige";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 import { FactionNames } from "../Faction/data/FactionNames";
 import {
@@ -140,7 +139,7 @@ function installAugmentations(force?: boolean): boolean {
 }
 
 function augmentationExists(name: string): boolean {
-  return hasOwnProp(StaticAugmentations, name);
+  return Object.hasOwn(StaticAugmentations, name);
 }
 
 export function isRepeatableAug(aug: Augmentation | string): boolean {

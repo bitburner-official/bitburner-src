@@ -38,7 +38,6 @@ import { isPositiveInteger, PositiveInteger, Unknownify } from "../types";
 import { Engine } from "../engine";
 import { resolveFilePath, FilePath } from "../Paths/FilePath";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
-import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 export const helpers = {
   string,
@@ -114,7 +113,7 @@ export function assertObjectType<T extends object>(
     );
   }
   for (const [key, val] of Object.entries(desiredObject)) {
-    if (!hasOwnProp(obj, key)) {
+    if (!Object.hasOwn(obj, key)) {
       throw makeRuntimeErrorMsg(
         ctx,
         `Object provided for argument ${name} is missing required property ${key}.`,

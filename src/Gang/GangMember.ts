@@ -13,7 +13,6 @@ import {
   calculateAscensionMult,
   calculateAscensionPointsGain,
 } from "./formulas/formulas";
-import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 interface IMults {
   hack: number;
@@ -87,7 +86,7 @@ export class GangMember {
   }
 
   assignToTask(taskName: string): boolean {
-    if (!hasOwnProp(GangMemberTasks, taskName)) {
+    if (!Object.hasOwn(GangMemberTasks, taskName)) {
       this.task = "Unassigned";
       return false;
     }
@@ -106,7 +105,7 @@ export class GangMember {
       this.task = (this.task as any).name;
     }
 
-    if (hasOwnProp(GangMemberTasks, this.task)) {
+    if (Object.hasOwn(GangMemberTasks, this.task)) {
       return GangMemberTasks[this.task];
     }
     return GangMemberTasks["Unassigned"];

@@ -1,5 +1,4 @@
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { hasOwnProp } from "./ObjectHelpers";
 
 interface IError {
   fileName?: string;
@@ -8,7 +7,7 @@ interface IError {
 
 export const isIError = (v: unknown): v is IError => {
   if (typeof v !== "object" || v == null) return false;
-  return hasOwnProp(v, "fileName") && hasOwnProp(v, "lineNumber");
+  return Object.hasOwn(v, "fileName") && Object.hasOwn(v, "lineNumber");
 };
 
 export function exceptionAlert(e: unknown): void {

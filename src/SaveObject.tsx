@@ -40,7 +40,6 @@ import { TextFile } from "./TextFile";
 import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
 import { Directory, resolveDirectory } from "./Paths/Directory";
 import { TextFilePath, resolveTextFilePath } from "./Paths/TextFilePath";
-import { hasOwnProp } from "./utils/helpers/ObjectHelpers";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -385,7 +384,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
     }
   }
   if (ver < 9) {
-    if (hasOwnProp(StockMarket, "Joes Guns")) {
+    if (Object.hasOwn(StockMarket, "Joes Guns")) {
       const s = StockMarket["Joes Guns"];
       delete StockMarket["Joes Guns"];
       StockMarket[LocationName.Sector12JoesGuns] = s;
@@ -729,13 +728,13 @@ function loadGame(saveString: string): boolean {
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave);
 
-  if (hasOwnProp(saveObj, "StaneksGiftSave")) {
+  if (Object.hasOwn(saveObj, "StaneksGiftSave")) {
     loadStaneksGift(saveObj.StaneksGiftSave);
   } else {
     console.warn(`Could not load Staneks Gift from save`);
     loadStaneksGift("");
   }
-  if (hasOwnProp(saveObj, "AliasesSave")) {
+  if (Object.hasOwn(saveObj, "AliasesSave")) {
     try {
       loadAliases(saveObj.AliasesSave);
     } catch (e) {
@@ -746,7 +745,7 @@ function loadGame(saveString: string): boolean {
     console.warn(`Save file did not contain an Aliases property`);
     loadAliases("");
   }
-  if (hasOwnProp(saveObj, "GlobalAliasesSave")) {
+  if (Object.hasOwn(saveObj, "GlobalAliasesSave")) {
     try {
       loadGlobalAliases(saveObj.GlobalAliasesSave);
     } catch (e) {
@@ -757,7 +756,7 @@ function loadGame(saveString: string): boolean {
     console.warn(`Save file did not contain a GlobalAliases property`);
     loadGlobalAliases("");
   }
-  if (hasOwnProp(saveObj, "StockMarketSave")) {
+  if (Object.hasOwn(saveObj, "StockMarketSave")) {
     try {
       loadStockMarket(saveObj.StockMarketSave);
     } catch (e) {
@@ -766,7 +765,7 @@ function loadGame(saveString: string): boolean {
   } else {
     loadStockMarket("");
   }
-  if (hasOwnProp(saveObj, "SettingsSave")) {
+  if (Object.hasOwn(saveObj, "SettingsSave")) {
     try {
       // Try to set saved settings.
       Settings.load(saveObj.SettingsSave);
@@ -775,7 +774,7 @@ function loadGame(saveString: string): boolean {
       console.error(e);
     }
   }
-  if (hasOwnProp(saveObj, "LastExportBonus")) {
+  if (Object.hasOwn(saveObj, "LastExportBonus")) {
     try {
       ExportBonus.setLastExportBonus(JSON.parse(saveObj.LastExportBonus));
     } catch (err) {
@@ -783,14 +782,14 @@ function loadGame(saveString: string): boolean {
       console.error("ERROR: Failed to parse last export bonus Settings " + err);
     }
   }
-  if (Player.gang && hasOwnProp(saveObj, "AllGangsSave")) {
+  if (Player.gang && Object.hasOwn(saveObj, "AllGangsSave")) {
     try {
       loadAllGangs(saveObj.AllGangsSave);
     } catch (e) {
       console.error("ERROR: Failed to parse AllGangsSave: " + e);
     }
   }
-  if (hasOwnProp(saveObj, "VersionSave")) {
+  if (Object.hasOwn(saveObj, "VersionSave")) {
     try {
       const ver = JSON.parse(saveObj.VersionSave, Reviver);
       evaluateVersionCompatibility(ver);

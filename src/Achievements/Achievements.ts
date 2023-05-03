@@ -25,7 +25,6 @@ import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
 import { isClassWork } from "../Work/ClassWork";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { workerScripts } from "../Netscript/WorkerScripts";
-import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 
@@ -62,7 +61,7 @@ function bitNodeFinishedState(): boolean {
   const wd = GetServer(SpecialServers.WorldDaemon);
   if (!(wd instanceof Server)) return false;
   if (wd.backdoorInstalled) return true;
-  return Player.bladeburner !== null && hasOwnProp(Player.bladeburner.blackops, BlackOperationNames.OperationDaedalus);
+  return Player.bladeburner !== null && BlackOperationNames.OperationDaedalus in Player.bladeburner.blackops;
 }
 
 function hasAccessToSF(player: PlayerObject, bn: number): boolean {

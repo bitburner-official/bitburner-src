@@ -5,7 +5,6 @@ import { Industry } from "./Industry";
 import { Corporation } from "./Corporation";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { CityName } from "../Enums";
-import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 interface IParams {
   loc?: CityName;
@@ -259,7 +258,7 @@ export class OfficeSpace {
 
   static fromJSON(value: IReviverValue): OfficeSpace {
     // Convert employees from the old version
-    if (hasOwnProp(value.data, "employees")) {
+    if (Object.hasOwn(value.data, "employees")) {
       const empCopy: [{ data: { mor: number; ene: number; exp: number } }] = value.data.employees;
       delete value.data.employees;
       const ret = Generic_fromJSON(OfficeSpace, value.data);

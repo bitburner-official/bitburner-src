@@ -1,5 +1,4 @@
 import { Terminal } from "./Terminal";
-import { hasOwnProp } from "./utils/helpers/ObjectHelpers";
 
 export let Aliases: Record<string, string> = {};
 export let GlobalAliases: Record<string, string> = {};
@@ -61,22 +60,22 @@ function addGlobalAlias(name: string, value: string): void {
 }
 
 function getAlias(name: string): string | null {
-  if (hasOwnProp(Aliases, name)) return Aliases[name];
+  if (Object.hasOwn(Aliases, name)) return Aliases[name];
   return null;
 }
 
 function getGlobalAlias(name: string): string | null {
-  if (hasOwnProp(GlobalAliases, name)) return GlobalAliases[name];
+  if (Object.hasOwn(GlobalAliases, name)) return GlobalAliases[name];
   return null;
 }
 
 export function removeAlias(name: string): boolean {
-  if (hasOwnProp(Aliases, name)) {
+  if (Object.hasOwn(Aliases, name)) {
     delete Aliases[name];
     return true;
   }
 
-  if (hasOwnProp(GlobalAliases, name)) {
+  if (Object.hasOwn(GlobalAliases, name)) {
     delete GlobalAliases[name];
     return true;
   }
