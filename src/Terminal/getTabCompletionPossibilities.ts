@@ -120,8 +120,8 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     }
   }
 
-  const addAliases = () => addGeneric({ iterable: Object.keys(Aliases) });
-  const addGlobalAliases = () => addGeneric({ iterable: Object.keys(GlobalAliases) });
+  const addAliases = () => addGeneric({ iterable: Aliases.keys() });
+  const addGlobalAliases = () => addGeneric({ iterable: GlobalAliases.keys() });
   const addCommands = () => addGeneric({ iterable: gameCommands });
   const addDarkwebItems = () => addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
   const addServerNames = () => addGeneric({ iterable: GetAllServers().map((server) => server.hostname) });

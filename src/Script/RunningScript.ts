@@ -62,8 +62,8 @@ export class RunningScript {
   // hostname of the server on which this script is running
   server = "";
 
-  // Cached key for ByArgs lookups
-  scriptKey!: ScriptKey;
+  // Cached key for ByArgs lookups. Will be overwritten by a correct ScriptKey in fromJSON or constructor
+  scriptKey = "" as ScriptKey;
 
   // Number of threads that this script is running with
   threads = 1 as PositiveInteger;

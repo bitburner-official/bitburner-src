@@ -94,8 +94,8 @@ class BitburnerSaveObject {
     this.AllServersSave = saveAllServers(excludeRunningScripts);
     this.CompaniesSave = JSON.stringify(Companies);
     this.FactionsSave = JSON.stringify(Factions);
-    this.AliasesSave = JSON.stringify(Aliases);
-    this.GlobalAliasesSave = JSON.stringify(GlobalAliases);
+    this.AliasesSave = JSON.stringify(Object.fromEntries(Aliases.entries()));
+    this.GlobalAliasesSave = JSON.stringify(Object.fromEntries(GlobalAliases.entries()));
     this.StockMarketSave = JSON.stringify(StockMarket);
     this.SettingsSave = JSON.stringify(Settings);
     this.VersionSave = JSON.stringify(CONSTANTS.VersionNumber);
