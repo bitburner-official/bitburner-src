@@ -200,10 +200,7 @@ export function loadAllServers(saveString: string): void {
 }
 
 function excludeReplacer(key: string, value: any): any {
-  if (key === "runningScripts") {
-    return [];
-  }
-  return value;
+  return key === "runningScripts" && Array.isArray(key) ? [] : value;
 }
 
 export function saveAllServers(excludeRunningScripts = false): string {
