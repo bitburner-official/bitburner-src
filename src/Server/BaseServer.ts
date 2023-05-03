@@ -21,6 +21,7 @@ import { LiteratureName } from "src/Literature/data/LiteratureNames";
 import { CompletedProgramName } from "src/Programs/Programs";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import lodash from "lodash";
+import { Settings } from "../Settings/Settings";
 
 import type { ScriptKey } from "../utils/helpers/scriptKey";
 
@@ -292,6 +293,10 @@ export abstract class BaseServer implements IServer {
     // RunningScripts are stored as a simple array, both for backward compatibility,
     // compactness, and ease of filtering them here.
     const result = Generic_toJSON(ctorName, this, keys);
+    if (Settings.ExcludeRunningScriptsFromSave) {
+      result.data.runningScripts = [];
+      return result;
+    }
 
     const rsArray: RunningScript[] = [];
     for (const byPid of this.runningScriptMap.values()) {

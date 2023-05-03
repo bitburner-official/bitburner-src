@@ -88,10 +88,15 @@ class BitburnerSaveObject {
   LastExportBonus = "";
   StaneksGiftSave = "";
 
-  getSaveString(excludeRunningScripts = false): string {
+  getSaveString(forceExcludeRunningScripts = false): string {
     this.PlayerSave = JSON.stringify(Player);
 
-    this.AllServersSave = saveAllServers(excludeRunningScripts);
+    // For the servers save, overwrite the ExcludeRunningScripts setting if forced
+    const originalExcludeSetting = Settings.ExcludeRunningScriptsFromSave;
+    if (forceExcludeRunningScripts) Settings.ExcludeRunningScriptsFromSave = true;
+    this.AllServersSave = saveAllServers();
+    Settings.ExcludeRunningScriptsFromSave = originalExcludeSetting;
+
     this.CompaniesSave = JSON.stringify(Companies);
     this.FactionsSave = JSON.stringify(Factions);
     this.AliasesSave = JSON.stringify(Aliases);
@@ -105,14 +110,13 @@ class BitburnerSaveObject {
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
 
     const saveString = btoa(unescape(encodeURIComponent(JSON.stringify(this))));
-
     return saveString;
   }
 
   saveGame(emitToastEvent = true): Promise<void> {
     const savedOn = new Date().getTime();
     Player.lastSave = savedOn;
-    const saveString = this.getSaveString(Settings.ExcludeRunningScriptsFromSave);
+    const saveString = this.getSaveString();
     return new Promise((resolve, reject) => {
       save(saveString)
         .then(() => {
@@ -146,7 +150,7 @@ class BitburnerSaveObject {
   }
 
   exportGame(): void {
-    const saveString = this.getSaveString(Settings.ExcludeRunningScriptsFromSave);
+    const saveString = this.getSaveString();
     const filename = this.getSaveFileName();
     download(filename, saveString);
   }

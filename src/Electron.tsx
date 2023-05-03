@@ -5,7 +5,6 @@ import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
 import { IReturnStatus } from "./types";
 import { GetServer } from "./Server/AllServers";
 import { ImportPlayerData, SaveData, saveObject } from "./SaveObject";
-import { Settings } from "./Settings/Settings";
 import { exportScripts } from "./Terminal/commands/download";
 import { CONSTANTS } from "./Constants";
 import { hash } from "./hash/hash";
@@ -133,7 +132,7 @@ function initSaveFunctions(): void {
     triggerScriptsExport: (): void => exportScripts("*", Player.getHomeComputer()),
     getSaveData: (): { save: string; fileName: string } => {
       return {
-        save: saveObject.getSaveString(Settings.ExcludeRunningScriptsFromSave),
+        save: saveObject.getSaveString(),
         fileName: saveObject.getSaveFileName(),
       };
     },

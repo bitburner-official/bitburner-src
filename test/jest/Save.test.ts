@@ -2,6 +2,7 @@ import "../../src/Player";
 
 import { loadAllServers, saveAllServers } from "../../src/Server/AllServers";
 import { loadAllRunningScripts } from "../../src/NetscriptWorker";
+import { Settings } from "../../src/Settings/Settings";
 
 jest.useFakeTimers();
 
@@ -152,7 +153,7 @@ test("load/saveAllServers", () => {
   loadStandardServers();
 
   // Re-stringify with indenting for nicer diffs
-  const result = saveAllServers(/*excludeRunningScripts=*/ false);
+  const result = saveAllServers();
   expect(JSON.stringify(JSON.parse(result), null, 2)).toMatchSnapshot();
 });
 
@@ -163,6 +164,7 @@ test("load/saveAllServers pruning RunningScripts", () => {
   loadStandardServers();
 
   // Re-stringify with indenting for nicer diffs
-  const result = saveAllServers(/*excludeRunningScripts=*/ true);
+  Settings.ExcludeRunningScriptsFromSave = true;
+  const result = saveAllServers();
   expect(JSON.stringify(JSON.parse(result), null, 2)).toMatchSnapshot();
 });
