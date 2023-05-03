@@ -3,6 +3,7 @@ import { BlackOperations } from "../BlackOperations";
 import { BlackOperation } from "../BlackOperation";
 import { BlackOpElem } from "./BlackOpElem";
 import { Bladeburner } from "../Bladeburner";
+import { hasOwnProp } from "../../utils/helpers/ObjectHelpers";
 
 interface IProps {
   bladeburner: Bladeburner;
@@ -11,7 +12,7 @@ interface IProps {
 export function BlackOpList(props: IProps): React.ReactElement {
   let blackops: BlackOperation[] = [];
   for (const blackopName of Object.keys(BlackOperations)) {
-    if (BlackOperations.hasOwnProperty(blackopName)) {
+    if (hasOwnProp(BlackOperations, blackopName)) {
       blackops.push(BlackOperations[blackopName]);
     }
   }

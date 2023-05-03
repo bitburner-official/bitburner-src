@@ -34,14 +34,15 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
         `This sleeve is currently attempting to perform ${work.actionName}.\n\n` +
         `Progress: ${formatPercent(progress)}`
       );
-    case WorkType.CRIME:
+    case WorkType.CRIME: {
       const crime = work.getCrime();
       return (
         `This sleeve is currently attempting ${crime.workName} (Success Rate: ${formatPercent(
           crime.successRate(sleeve),
         )}).\n\n` + `Progress: ${formatPercent(progress)}`
       );
-    case WorkType.FACTION:
+    }
+    case WorkType.FACTION: {
       // This isn't the way this should be handled...
       const workNames = {
         [FactionWorkType.field]: "Field Work",
@@ -50,6 +51,7 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
       };
       const doing = workNames[work.factionWorkType] ?? "nothing";
       return `This sleeve is currently doing ${doing} for ${work.factionName}.`;
+    }
     case WorkType.INFILTRATE:
       return (
         "This sleeve is currently attempting to infiltrate synthoid communities to generate additional contracts and operations.\nThis activity is less efficient the more sleeves are assigned to it.\n\n" +

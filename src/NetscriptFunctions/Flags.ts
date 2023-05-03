@@ -2,6 +2,7 @@ import { toNative } from "./toNative";
 import libarg from "arg";
 import { ScriptArg } from "../Netscript/ScriptArg";
 import { NetscriptContext } from "../Netscript/APIWrapper";
+import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 type FlagType = StringConstructor | NumberConstructor | BooleanConstructor | StringConstructor[];
 type FlagsRet = { [key: string]: ScriptArg | string[] };
@@ -28,7 +29,7 @@ export function Flags(ctx: NetscriptContext | string[]): (data: unknown) => Flag
     }
     const ret: FlagsRet = libarg(args, { argv: vargs });
     for (const d of schema) {
-      if (!ret.hasOwnProperty("--" + d[0]) || !ret.hasOwnProperty("-" + d[0])) ret[d[0]] = d[1];
+      if (!hasOwnProp(ret, "--" + d[0]) || !hasOwnProp(ret, "-" + d[0])) ret[d[0]] = d[1];
     }
     for (const key of Object.keys(ret)) {
       if (!key.startsWith("-")) continue;

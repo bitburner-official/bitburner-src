@@ -40,6 +40,7 @@ import { TextFile } from "./TextFile";
 import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
 import { Directory, resolveDirectory } from "./Paths/Directory";
 import { TextFilePath, resolveTextFilePath } from "./Paths/TextFilePath";
+import { hasOwnProp } from "./utils/helpers/ObjectHelpers";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -245,6 +246,14 @@ class BitburnerSaveObject {
   }
 }
 
+/** Function for performing a series of defined replacements. See 0.58.0 for usage */
+function convert(code: string, changes: [RegExp, string][]): string {
+  for (const change of changes) {
+    code = code.replace(change[0], change[1]);
+  }
+  return code;
+}
+
 // Makes necessary changes to the loaded/imported data to ensure
 // the game stills works with new versions
 function evaluateVersionCompatibility(ver: string | number): void {
@@ -344,15 +353,9 @@ function evaluateVersionCompatibility(ver: string | number): void {
         [/purchase4SMarketData/g, "stock.purchase4SMarketData"],
         [/purchase4SMarketDataTixApi/g, "stock.purchase4SMarketDataTixApi"],
       ];
-      function convert(code: string): string {
-        for (const change of changes) {
-          code = code.replace(change[0], change[1]);
-        }
-        return code;
-      }
       for (const server of GetAllServers() as unknown as { scripts: Script[] }[]) {
         for (const script of server.scripts) {
-          script.content = convert(script.code);
+          script.content = convert(script.code, changes);
         }
       }
     }
@@ -382,7 +385,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
     }
   }
   if (ver < 9) {
-    if (StockMarket.hasOwnProperty("Joes Guns")) {
+    if (hasOwnProp(StockMarket, "Joes Guns")) {
       const s = StockMarket["Joes Guns"];
       delete StockMarket["Joes Guns"];
       StockMarket[LocationName.Sector12JoesGuns] = s;
@@ -726,13 +729,13 @@ function loadGame(saveString: string): boolean {
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave);
 
-  if (saveObj.hasOwnProperty("StaneksGiftSave")) {
+  if (hasOwnProp(saveObj, "StaneksGiftSave")) {
     loadStaneksGift(saveObj.StaneksGiftSave);
   } else {
     console.warn(`Could not load Staneks Gift from save`);
     loadStaneksGift("");
   }
-  if (saveObj.hasOwnProperty("AliasesSave")) {
+  if (hasOwnProp(saveObj, "AliasesSave")) {
     try {
       loadAliases(saveObj.AliasesSave);
     } catch (e) {
@@ -743,7 +746,7 @@ function loadGame(saveString: string): boolean {
     console.warn(`Save file did not contain an Aliases property`);
     loadAliases("");
   }
-  if (saveObj.hasOwnProperty("GlobalAliasesSave")) {
+  if (hasOwnProp(saveObj, "GlobalAliasesSave")) {
     try {
       loadGlobalAliases(saveObj.GlobalAliasesSave);
     } catch (e) {
@@ -754,7 +757,7 @@ function loadGame(saveString: string): boolean {
     console.warn(`Save file did not contain a GlobalAliases property`);
     loadGlobalAliases("");
   }
-  if (saveObj.hasOwnProperty("StockMarketSave")) {
+  if (hasOwnProp(saveObj, "StockMarketSave")) {
     try {
       loadStockMarket(saveObj.StockMarketSave);
     } catch (e) {
@@ -763,13 +766,16 @@ function loadGame(saveString: string): boolean {
   } else {
     loadStockMarket("");
   }
-  if (saveObj.hasOwnProperty("SettingsSave")) {
+  if (hasOwnProp(saveObj, "SettingsSave")) {
     try {
       // Try to set saved settings.
       Settings.load(saveObj.SettingsSave);
-    } catch (e) {}
+    } catch (e) {
+      console.error("SettingsSave was present but an error occurred while loading:");
+      console.error(e);
+    }
   }
-  if (saveObj.hasOwnProperty("LastExportBonus")) {
+  if (hasOwnProp(saveObj, "LastExportBonus")) {
     try {
       ExportBonus.setLastExportBonus(JSON.parse(saveObj.LastExportBonus));
     } catch (err) {
@@ -777,14 +783,14 @@ function loadGame(saveString: string): boolean {
       console.error("ERROR: Failed to parse last export bonus Settings " + err);
     }
   }
-  if (Player.gang && saveObj.hasOwnProperty("AllGangsSave")) {
+  if (Player.gang && hasOwnProp(saveObj, "AllGangsSave")) {
     try {
       loadAllGangs(saveObj.AllGangsSave);
     } catch (e) {
       console.error("ERROR: Failed to parse AllGangsSave: " + e);
     }
   }
-  if (saveObj.hasOwnProperty("VersionSave")) {
+  if (hasOwnProp(saveObj, "VersionSave")) {
     try {
       const ver = JSON.parse(saveObj.VersionSave, Reviver);
       evaluateVersionCompatibility(ver);

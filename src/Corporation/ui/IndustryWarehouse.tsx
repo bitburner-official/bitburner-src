@@ -27,6 +27,7 @@ import Box from "@mui/material/Box";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 import { CityName } from "../../Enums";
+import { hasOwnProp } from "../../utils/helpers/ObjectHelpers";
 
 interface IProps {
   corp: Corporation;
@@ -122,7 +123,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
   const breakdownItems: JSX.Element[] = [];
   for (const matName of Object.values(corpConstants.materialNames)) {
     const mat = props.warehouse.materials[matName];
-    if (!MaterialInfo.hasOwnProperty(matName)) continue;
+    if (!hasOwnProp(MaterialInfo, matName)) continue;
     if (mat.qty === 0) continue;
     breakdownItems.push(
       <>

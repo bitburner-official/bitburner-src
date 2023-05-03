@@ -45,6 +45,7 @@ import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
 import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
 import { prestigeSourceFile } from "./Prestige";
+import { hasOwnProp } from "./utils/helpers/ObjectHelpers";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -281,7 +282,7 @@ const Engine: {
       } else if (Player.bitNodeN !== 2) {
         for (let i = 0; i < Player.factions.length; i++) {
           const facName = Player.factions[i];
-          if (!Factions.hasOwnProperty(facName)) continue;
+          if (!hasOwnProp(Factions, facName)) continue;
           const faction = Factions[facName];
           if (!faction.isMember) continue;
           // No rep for special factions.

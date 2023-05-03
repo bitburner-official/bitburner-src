@@ -36,47 +36,51 @@ const specialReferenceWHILE = "__SPECIAL_referenceWhile";
 // The global scope of a script is registered under this key during parsing.
 const memCheckGlobalKey = ".__GLOBAL__";
 
+/** Function for getting a function's ram cost, either from the ramcost function (singularity) or the static cost */
+function getNumericCost(cost: number | (() => number)): number {
+  return typeof cost === "function" ? cost() : cost;
+}
+
 /**
  * Parses code into an AST and walks through it recursively to calculate
  * RAM usage. Also accounts for imported modules.
  * @param otherScripts - All other scripts on the server. Used to account for imported scripts
  * @param code - The code being parsed */
 function parseOnlyRamCalculate(otherScripts: Map<ScriptFilePath, Script>, code: string, ns1?: boolean): RamCalculation {
-  try {
-    /**
-     * Maps dependent identifiers to their dependencies.
-     *
-     * The initial identifier is __SPECIAL_INITIAL_MODULE__.__GLOBAL__.
-     * It depends on all the functions declared in the module, all the global scopes
-     * of its imports, and any identifiers referenced in this global scope. Each
-     * function depends on all the identifiers referenced internally.
-     * We walk the dependency graph to calculate RAM usage, given that some identifiers
-     * reference Netscript functions which have a RAM cost.
-     */
-    let dependencyMap: { [key: string]: string[] } = {};
+  /**
+   * Maps dependent identifiers to their dependencies.
+   *
+   * The initial identifier is __SPECIAL_INITIAL_MODULE__.__GLOBAL__.
+   * It depends on all the functions declared in the module, all the global scopes
+   * of its imports, and any identifiers referenced in this global scope. Each
+   * function depends on all the identifiers referenced internally.
+   * We walk the dependency graph to calculate RAM usage, given that some identifiers
+   * reference Netscript functions which have a RAM cost.
+   */
+  let dependencyMap: { [key: string]: string[] } = {};
 
-    // Scripts we've parsed.
-    const completedParses = new Set();
+  // Scripts we've parsed.
+  const completedParses = new Set();
 
-    // Scripts we've discovered that need to be parsed.
-    const parseQueue: string[] = [];
+  // Scripts we've discovered that need to be parsed.
+  const parseQueue: string[] = [];
+  // Parses a chunk of code with a given module name, and updates parseQueue and dependencyMap.
+  function parseCode(code: string, moduleName: string): void {
+    const result = parseOnlyCalculateDeps(code, moduleName);
+    completedParses.add(moduleName);
 
-    // Parses a chunk of code with a given module name, and updates parseQueue and dependencyMap.
-    function parseCode(code: string, moduleName: string): void {
-      const result = parseOnlyCalculateDeps(code, moduleName);
-      completedParses.add(moduleName);
-
-      // Add any additional modules to the parse queue;
-      for (let i = 0; i < result.additionalModules.length; ++i) {
-        if (!completedParses.has(result.additionalModules[i])) {
-          parseQueue.push(result.additionalModules[i]);
-        }
+    // Add any additional modules to the parse queue;
+    for (let i = 0; i < result.additionalModules.length; ++i) {
+      if (!completedParses.has(result.additionalModules[i])) {
+        parseQueue.push(result.additionalModules[i]);
       }
-
-      // Splice all the references in
-      dependencyMap = Object.assign(dependencyMap, result.dependencyMap);
     }
 
+    // Splice all the references in
+    dependencyMap = Object.assign(dependencyMap, result.dependencyMap);
+  }
+
+  try {
     // Parse the initial module, which is the "main" script that is being run
     const initialModule = "__SPECIAL_INITIAL_MODULE__";
     parseCode(code, initialModule);
@@ -141,16 +145,6 @@ function parseOnlyRamCalculate(otherScripts: Map<ScriptFilePath, Script>, code: 
       // Check if this identifier is a function in the workerScript environment.
       // If it is, then we need to get its RAM cost.
       try {
-        function applyFuncRam(cost: number | (() => number)): number {
-          if (typeof cost === "number") {
-            return cost;
-          } else if (typeof cost === "function") {
-            return cost();
-          } else {
-            return 0;
-          }
-        }
-
         // Only count each function once
         if (loadedFns[ref]) {
           continue;
@@ -176,7 +170,7 @@ function parseOnlyRamCalculate(otherScripts: Map<ScriptFilePath, Script>, code: 
         };
 
         const details = findFunc("", RamCosts, ref);
-        const fnRam = applyFuncRam(details?.func ?? 0);
+        const fnRam = getNumericCost(details?.func ?? 0);
         ram += fnRam;
         detailedCosts.push({ type: "fn", name: details?.refDetail ?? "", cost: fnRam });
       } catch (error) {

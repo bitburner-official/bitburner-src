@@ -164,23 +164,15 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
   };
 
   playerStay = (event: React.MouseEvent): void => {
-    if (!event.isTrusted) {
-      return;
-    }
+    if (!event.isTrusted) return;
 
     // Determine if Dealer needs to hit. A dealer must hit if they have 16 or lower.
     // If the dealer has a Soft 17 (Ace + 6), then they stay.
     let newDealerHand = this.state.dealerHand;
-    while (true) {
-      // The dealer's "true" hand value is the 2nd one if its 21 or less (the 2nd value is always guaranteed
-      // to be equal or larger). Otherwise its the 1st.
-      const dealerHandValue = this.getTrueHandValue(newDealerHand);
-
-      if (dealerHandValue <= 16) {
-        newDealerHand = newDealerHand.addCards(this.deck.safeDrawCard());
-      } else {
-        break;
-      }
+    let dealerHandValue = this.getTrueHandValue(newDealerHand);
+    while (dealerHandValue <= 16) {
+      newDealerHand = newDealerHand.addCards(this.deck.safeDrawCard());
+      dealerHandValue = this.getTrueHandValue(newDealerHand);
     }
 
     this.setState({

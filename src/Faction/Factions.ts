@@ -6,6 +6,7 @@ import { Faction } from "./Faction";
 import { FactionInfos } from "./FactionInfo";
 
 import { Reviver } from "../utils/JSONReviver";
+import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 export let Factions: Record<string, Faction> = {};
 
@@ -28,7 +29,7 @@ function AddToFactions(faction: Faction): void {
 }
 
 export function factionExists(name: string): boolean {
-  return Factions.hasOwnProperty(name);
+  return hasOwnProp(Factions, name);
 }
 
 export function initFactions(): void {

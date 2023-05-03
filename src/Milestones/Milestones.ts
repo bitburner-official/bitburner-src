@@ -5,6 +5,7 @@ import { Faction } from "../Faction/Faction";
 import { GetServer } from "../Server/AllServers";
 import { FactionNames } from "../Faction/data/FactionNames";
 import { Server } from "../Server/Server";
+import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 function allFactionAugs(f: Faction): boolean {
   const factionAugs = f.augmentations.slice().filter((aug) => aug !== "NeuroFlux Governor");
@@ -24,7 +25,7 @@ export const Milestones: Milestone[] = [
     title: "Gain root access on CSEC",
     fulfilled: (): boolean => {
       const server = GetServer("CSEC");
-      if (!server || !server.hasOwnProperty("hasAdminRights")) return false;
+      if (!server || !hasOwnProp(server, "hasAdminRights")) return false;
       return server instanceof Server && server.hasAdminRights;
     },
   },
@@ -32,7 +33,7 @@ export const Milestones: Milestone[] = [
     title: "Install the backdoor on CSEC",
     fulfilled: (): boolean => {
       const server = GetServer("CSEC");
-      if (!server || !server.hasOwnProperty("backdoorInstalled")) return false;
+      if (!server || !hasOwnProp(server, "backdoorInstalled")) return false;
       return server instanceof Server && server.backdoorInstalled;
     },
   },

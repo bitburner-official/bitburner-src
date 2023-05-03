@@ -584,16 +584,8 @@ export class Augmentation {
 
   // Adds this Augmentation to all Factions
   addToAllFactions(): void {
-    for (const fac of Object.keys(Factions)) {
-      if (Factions.hasOwnProperty(fac)) {
-        const facObj: Faction | null = Factions[fac];
-        if (facObj == null) {
-          console.warn(`Invalid Faction object in addToAllFactions(). Key value: ${fac}`);
-          continue;
-        }
-        if (facObj.getInfo().special) continue;
-        facObj.augmentations.push(this.name);
-      }
+    for (const faction of Object.values(Factions)) {
+      if (!faction.getInfo().special) faction.augmentations.push(this.name);
     }
   }
 

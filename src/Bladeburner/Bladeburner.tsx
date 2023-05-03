@@ -37,6 +37,7 @@ import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportW
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { CityName } from "../Enums";
 import { getRandomMember } from "../utils/helpers/enum";
+import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 export interface BlackOpsAttempt {
   error?: string;
@@ -138,7 +139,7 @@ export class Bladeburner {
     // Can't start a BlackOp if you haven't done the one before it
     const blackops = [];
     for (const nm of Object.keys(BlackOperations)) {
-      if (BlackOperations.hasOwnProperty(nm)) {
+      if (hasOwnProp(BlackOperations, nm)) {
         blackops.push(nm);
       }
     }
@@ -319,7 +320,7 @@ export class Bladeburner {
       case "contracts":
       case "contr":
         action.type = ActionTypes["Contract"];
-        if (this.contracts.hasOwnProperty(name)) {
+        if (hasOwnProp(this.contracts, name)) {
           action.name = name;
           return action;
         }
@@ -329,7 +330,7 @@ export class Bladeburner {
       case "op":
       case "ops":
         action.type = ActionTypes["Operation"];
-        if (this.operations.hasOwnProperty(name)) {
+        if (hasOwnProp(this.operations, name)) {
           action.name = name;
           return action;
         }
@@ -342,7 +343,7 @@ export class Bladeburner {
       case "blackop":
       case "blackops":
         action.type = ActionTypes["BlackOp"];
-        if (BlackOperations.hasOwnProperty(name)) {
+        if (hasOwnProp(BlackOperations, name)) {
           action.name = name;
           return action;
         }
@@ -1063,7 +1064,7 @@ export class Bladeburner {
   updateSkillMultipliers(): void {
     this.resetSkillMultipliers();
     for (const skillName of Object.keys(this.skills)) {
-      if (this.skills.hasOwnProperty(skillName)) {
+      if (hasOwnProp(this.skills, skillName)) {
         const skill = Skills[skillName];
         if (skill == null) {
           throw new Error("Could not find Skill Object for: " + skillName);
@@ -2237,7 +2238,7 @@ export class Bladeburner {
   }
 
   getSkillLevelNetscriptFn(skillName: string, workerScript: WorkerScript): number {
-    if (skillName === "" || !Skills.hasOwnProperty(skillName)) {
+    if (skillName === "" || !hasOwnProp(Skills, skillName)) {
       workerScript.log("bladeburner.getSkillLevel", () => `Invalid skill: '${skillName}'`);
       return -1;
     }
@@ -2250,7 +2251,7 @@ export class Bladeburner {
   }
 
   getSkillUpgradeCostNetscriptFn(skillName: string, count: number, workerScript: WorkerScript): number {
-    if (skillName === "" || !Skills.hasOwnProperty(skillName)) {
+    if (skillName === "" || !hasOwnProp(Skills, skillName)) {
       workerScript.log("bladeburner.getSkillUpgradeCost", () => `Invalid skill: '${skillName}'`);
       return -1;
     }
@@ -2265,7 +2266,7 @@ export class Bladeburner {
 
   upgradeSkillNetscriptFn(skillName: string, count: number, workerScript: WorkerScript): boolean {
     const errorLogText = `Invalid skill: '${skillName}'`;
-    if (!Skills.hasOwnProperty(skillName)) {
+    if (!hasOwnProp(Skills, skillName)) {
       workerScript.log("bladeburner.upgradeSkill", () => errorLogText);
       return false;
     }

@@ -284,12 +284,10 @@ export function applyForJob(this: PlayerObject, entryPosType: CompanyPosition, s
     return false;
   }
 
-  while (true) {
-    const nextPos = getNextCompanyPositionHelper(pos);
-    if (nextPos == null) break;
-    if (company.hasPosition(nextPos) && this.isQualified(company, nextPos)) {
-      pos = nextPos;
-    } else break;
+  let nextPos = getNextCompanyPositionHelper(pos);
+  while (nextPos && company.hasPosition(nextPos) && this.isQualified(company, nextPos)) {
+    pos = nextPos;
+    nextPos = getNextCompanyPositionHelper(pos);
   }
 
   //Check if player already has the assigned job

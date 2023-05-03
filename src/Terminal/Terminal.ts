@@ -79,7 +79,7 @@ import { Engine } from "../engine";
 import { Directory, resolveDirectory, root } from "../Paths/Directory";
 import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
-import { ContractFilePath } from "src/Paths/ContractFilePath";
+import { ContractFilePath } from "../Paths/ContractFilePath";
 
 export class Terminal {
   // Flags to determine whether the player is currently running a hack or an analyze
@@ -535,13 +535,8 @@ export class Terminal {
         c = "YES";
       }
       if (s instanceof Server) {
-        this.print(
-          `${dashes}Root Access: ${c}${!isHacknet ? ", Required hacking skill: " + s.requiredHackingSkill : ""}`,
-        );
-
-        if (s.hasOwnProperty("numOpenPortsRequired")) {
-          this.print(dashes + "Number of open ports required to NUKE: " + s.numOpenPortsRequired);
-        }
+        this.print(`${dashes}Root Access: ${c}, Required hacking skill: ${s.requiredHackingSkill}`);
+        this.print(`${dashes}Number of open ports required to NUKE: ${s.numOpenPortsRequired}`);
       }
       this.print(dashes + "RAM: " + formatRam(s.maxRam));
       this.print(" ");

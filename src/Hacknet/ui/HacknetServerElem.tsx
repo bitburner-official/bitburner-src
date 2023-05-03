@@ -232,9 +232,6 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
         </Button>
       </Tooltip>
     );
-    if (Player.money < upgradeCacheCost) {
-    } else {
-    }
   }
   function upgradeCacheOnClick(): void {
     let numUpgrades = purchaseMult;

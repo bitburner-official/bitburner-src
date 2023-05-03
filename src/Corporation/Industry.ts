@@ -13,6 +13,7 @@ import { MaterialInfo } from "./MaterialInfo";
 import { Warehouse } from "./Warehouse";
 import { Corporation } from "./Corporation";
 import { CorpMaterialName, CorpResearchName, CorpStateName } from "@nsdefs";
+import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 interface IParams {
   name?: string;
@@ -156,7 +157,7 @@ export class Industry {
     warehouse.updateMaterialSizeUsed();
 
     for (const prodName of Object.keys(this.products)) {
-      if (this.products.hasOwnProperty(prodName)) {
+      if (hasOwnProp(this.products, prodName)) {
         const prod = this.products[prodName];
         if (prod === undefined) continue;
         warehouse.sizeUsed += prod.data[warehouse.loc][0] * prod.siz;
@@ -247,7 +248,7 @@ export class Industry {
       if (this.warehouses[city]) {
         const wh = this.warehouses[city] as Warehouse; // Warehouse type is known due to if check above
         for (const name of Object.keys(reqMats) as CorpMaterialName[]) {
-          if (reqMats.hasOwnProperty(name)) {
+          if (hasOwnProp(reqMats, name)) {
             wh.materials[name].processMarket();
           }
         }
@@ -268,7 +269,7 @@ export class Industry {
   processProductMarket(marketCycles = 1): void {
     // Demand gradually decreases, and competition gradually increases
     for (const name of Object.keys(this.products)) {
-      if (this.products.hasOwnProperty(name)) {
+      if (hasOwnProp(this.products, name)) {
         const product = this.products[name];
         if (product === undefined) continue;
         let change = getRandomInt(0, 3) * 0.0004;
@@ -308,7 +309,7 @@ export class Industry {
           case "PURCHASE": {
             /* Process purchase of materials */
             for (const matName of Object.values(corpConstants.materialNames)) {
-              if (!warehouse.materials.hasOwnProperty(matName)) continue;
+              if (!hasOwnProp(warehouse.materials, matName)) continue;
               const mat = warehouse.materials[matName];
               let buyAmt = 0;
               let maxAmt = 0;
@@ -331,7 +332,7 @@ export class Industry {
             // smart supply
             const smartBuy: Partial<Record<CorpMaterialName, number>> = {};
             for (const matName of Object.values(corpConstants.materialNames)) {
-              if (!warehouse.materials.hasOwnProperty(matName)) continue;
+              if (!hasOwnProp(warehouse.materials, matName)) continue;
               if (!warehouse.smartSupplyEnabled || !Object.keys(this.reqMats).includes(matName)) continue;
               const mat = warehouse.materials[matName];
 
@@ -455,7 +456,7 @@ export class Industry {
               // Make sure we have enough resource to make our materials
               let producableFrac = 1;
               for (const reqMatName of Object.keys(this.reqMats) as CorpMaterialName[]) {
-                if (this.reqMats.hasOwnProperty(reqMatName)) {
+                if (hasOwnProp(this.reqMats, reqMatName)) {
                   const reqMat = this.reqMats[reqMatName];
                   if (reqMat === undefined) continue;
                   const req = reqMat * prod;
@@ -504,7 +505,7 @@ export class Industry {
                 }
               } else {
                 for (const reqMatName of Object.keys(this.reqMats) as CorpMaterialName[]) {
-                  if (this.reqMats.hasOwnProperty(reqMatName)) {
+                  if (hasOwnProp(this.reqMats, reqMatName)) {
                     warehouse.materials[reqMatName].prd = 0;
                   }
                 }
@@ -528,9 +529,9 @@ export class Industry {
           case "SALE":
             /* Process sale of materials */
             for (const matName of Object.values(corpConstants.materialNames)) {
-              if (warehouse.materials.hasOwnProperty(matName)) {
+              if (hasOwnProp(warehouse.materials, matName)) {
                 const mat = warehouse.materials[matName];
-                if (mat.sCost < 0 || mat.sllman[0] === false) {
+                if ((typeof mat.sCost === "number" && mat.sCost < 0) || mat.sllman[0] === false) {
                   mat.sll = 0;
                   continue;
                 }
@@ -676,7 +677,7 @@ export class Industry {
 
           case "EXPORT":
             for (const matName of Object.values(corpConstants.materialNames)) {
-              if (warehouse.materials.hasOwnProperty(matName)) {
+              if (hasOwnProp(warehouse.materials, matName)) {
                 const mat = warehouse.materials[matName];
                 mat.totalExp = 0; //Reset export
                 for (let expI = 0; expI < mat.exp.length; ++expI) {
@@ -805,7 +806,7 @@ export class Industry {
 
     //Produce Products
     for (const prodName of Object.keys(this.products)) {
-      if (this.products.hasOwnProperty(prodName)) {
+      if (hasOwnProp(this.products, prodName)) {
         const prod = this.products[prodName];
         if (prod && prod.fin) {
           revenue += this.processProduct(marketCycles, prod, corporation);
@@ -846,7 +847,7 @@ export class Industry {
             //Calculate net change in warehouse storage making the Products will cost
             let netStorageSize = product.siz;
             for (const reqMatName of Object.keys(product.reqMats) as CorpMaterialName[]) {
-              if (product.reqMats.hasOwnProperty(reqMatName)) {
+              if (hasOwnProp(product.reqMats, reqMatName)) {
                 const normQty = product.reqMats[reqMatName] as number;
                 netStorageSize -= MaterialInfo[reqMatName].size * normQty;
               }
@@ -1036,7 +1037,7 @@ export class Industry {
         const warehouse = this.warehouses[city];
         if (warehouse === 0) continue;
         for (const matName of Object.values(corpConstants.materialNames)) {
-          if (warehouse.materials.hasOwnProperty(matName)) {
+          if (hasOwnProp(warehouse.materials, matName)) {
             const mat = warehouse.materials[matName];
             mat.imp = 0;
           }
@@ -1047,7 +1048,7 @@ export class Industry {
 
   discontinueProduct(product: Product): void {
     for (const productName of Object.keys(this.products)) {
-      if (this.products.hasOwnProperty(productName)) {
+      if (hasOwnProp(this.products, productName)) {
         if (product === this.products[productName]) {
           delete this.products[productName];
         }

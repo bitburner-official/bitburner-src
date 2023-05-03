@@ -1,4 +1,5 @@
 import { Terminal } from "./Terminal";
+import { hasOwnProp } from "./utils/helpers/ObjectHelpers";
 
 export let Aliases: Record<string, string> = {};
 export let GlobalAliases: Record<string, string> = {};
@@ -21,15 +22,11 @@ export function loadGlobalAliases(saveString: string): void {
 
 // Prints all aliases to terminal
 export function printAliases(): void {
-  for (const name of Object.keys(Aliases)) {
-    if (Aliases.hasOwnProperty(name)) {
-      Terminal.print("alias " + name + "=" + Aliases[name]);
-    }
+  for (const [name, alias] of Object.entries(Aliases)) {
+    Terminal.print("alias " + name + "=" + alias);
   }
-  for (const name of Object.keys(GlobalAliases)) {
-    if (GlobalAliases.hasOwnProperty(name)) {
-      Terminal.print("global alias " + name + "=" + GlobalAliases[name]);
-    }
+  for (const [name, alias] of Object.entries(GlobalAliases)) {
+    Terminal.print("global alias " + name + "=" + alias);
   }
 }
 
@@ -64,27 +61,22 @@ function addGlobalAlias(name: string, value: string): void {
 }
 
 function getAlias(name: string): string | null {
-  if (Aliases.hasOwnProperty(name)) {
-    return Aliases[name];
-  }
-
+  if (hasOwnProp(Aliases, name)) return Aliases[name];
   return null;
 }
 
 function getGlobalAlias(name: string): string | null {
-  if (GlobalAliases.hasOwnProperty(name)) {
-    return GlobalAliases[name];
-  }
+  if (hasOwnProp(GlobalAliases, name)) return GlobalAliases[name];
   return null;
 }
 
 export function removeAlias(name: string): boolean {
-  if (Aliases.hasOwnProperty(name)) {
+  if (hasOwnProp(Aliases, name)) {
     delete Aliases[name];
     return true;
   }
 
-  if (GlobalAliases.hasOwnProperty(name)) {
+  if (hasOwnProp(GlobalAliases, name)) {
     delete GlobalAliases[name];
     return true;
   }

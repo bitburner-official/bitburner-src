@@ -10,6 +10,7 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 import { scriptKey } from "../utils/helpers/scriptKey";
 
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
+import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 export function scriptCalculateOfflineProduction(runningScript: RunningScript): void {
   //The Player object stores the last update time from when we were online
@@ -29,7 +30,7 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
 
   // Grow
   for (const hostname of Object.keys(runningScript.dataMap)) {
-    if (runningScript.dataMap.hasOwnProperty(hostname)) {
+    if (hasOwnProp(runningScript.dataMap, hostname)) {
       if (runningScript.dataMap[hostname][2] == 0 || runningScript.dataMap[hostname][2] == null) {
         continue;
       }
@@ -60,7 +61,7 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
 
   // Weaken
   for (const hostname of Object.keys(runningScript.dataMap)) {
-    if (runningScript.dataMap.hasOwnProperty(hostname)) {
+    if (hasOwnProp(runningScript.dataMap, hostname)) {
       if (runningScript.dataMap[hostname][3] == 0 || runningScript.dataMap[hostname][3] == null) {
         continue;
       }

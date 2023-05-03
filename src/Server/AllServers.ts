@@ -11,6 +11,7 @@ import { Reviver } from "../utils/JSONReviver";
 import { SpecialServers } from "./data/SpecialServers";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { IPAddress, isIPAddress } from "../Types/strings";
+import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 import "../Script/RunningScript"; // For reviver side-effect
 
@@ -44,7 +45,7 @@ function GetServerByHostname(hostname: string): BaseServer | null {
 
 //Get server by IP or hostname. Returns null if invalid
 export function GetServer(s: string): BaseServer | null {
-  if (AllServers.hasOwnProperty(s)) {
+  if (hasOwnProp(AllServers, s)) {
     const server = AllServers[s];
     if (server) return server;
   }

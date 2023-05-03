@@ -14,6 +14,7 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { CityName } from "../Enums";
 import { CorpStateName } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
+import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 interface IParams {
   name?: string;
@@ -340,7 +341,7 @@ export class Corporation {
         for (const city of Object.keys(industry.warehouses) as CityName[]) {
           const warehouse = industry.warehouses[city];
           if (warehouse === 0) continue;
-          if (industry.warehouses.hasOwnProperty(city) && warehouse) {
+          if (hasOwnProp(industry.warehouses, city) && warehouse) {
             warehouse.updateSize(this, industry);
           }
         }

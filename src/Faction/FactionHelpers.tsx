@@ -19,6 +19,7 @@ import { InvitationEvent } from "./ui/InvitationModal";
 import { FactionNames } from "./data/FactionNames";
 import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
+import { hasOwnProp } from "../utils/helpers/ObjectHelpers";
 
 export function inviteToFaction(faction: Faction): void {
   Player.receiveInvite(faction.name);
@@ -110,7 +111,7 @@ export function processPassiveFactionRepGain(numCycles: number): void {
   if (Player.bitNodeN === 2) return;
   for (const name of Object.keys(Factions)) {
     if (isFactionWork(Player.currentWork) && name === Player.currentWork.factionName) continue;
-    if (!Factions.hasOwnProperty(name)) continue;
+    if (!hasOwnProp(Factions, name)) continue;
     const faction = Factions[name];
     if (!faction.isMember) continue;
     // No passive rep for special factions

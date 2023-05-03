@@ -72,19 +72,9 @@ export function prestigeAugmentation(): void {
   // Re-create foreign servers
   initForeignServers(Player.getHomeComputer());
 
-  // Gain favor for Companies
-  for (const member of Object.keys(Companies)) {
-    if (Companies.hasOwnProperty(member)) {
-      Companies[member].gainFavor();
-    }
-  }
-
-  // Gain favor for factions
-  for (const member of Object.keys(Factions)) {
-    if (Factions.hasOwnProperty(member)) {
-      Factions[member].gainFavor();
-    }
-  }
+  // Gain favor for Companies and Factions
+  for (const company of Object.values(Companies)) company.gainFavor();
+  for (const faction of Object.values(Factions)) faction.gainFavor();
 
   // Stop a Terminal action if there is one.
   if (Terminal.action !== null) {
@@ -207,19 +197,9 @@ export function prestigeSourceFile(flume: boolean): void {
   }
   homeComp.cpuCores = 1;
 
-  // Reset favor for Companies
-  for (const member of Object.keys(Companies)) {
-    if (Companies.hasOwnProperty(member)) {
-      Companies[member].favor = 0;
-    }
-  }
-
-  // Reset favor for factions
-  for (const member of Object.keys(Factions)) {
-    if (Factions.hasOwnProperty(member)) {
-      Factions[member].favor = 0;
-    }
-  }
+  // Reset favor for Companies and Factions
+  for (const company of Object.values(Companies)) company.favor = 0;
+  for (const faction of Object.values(Factions)) faction.favor = 0;
 
   // Stop a Terminal action if there is one
   if (Terminal.action !== null) {
@@ -227,10 +207,8 @@ export function prestigeSourceFile(flume: boolean): void {
   }
 
   // Delete all Augmentations
-  for (const name of Object.keys(StaticAugmentations)) {
-    if (StaticAugmentations.hasOwnProperty(name)) {
-      delete StaticAugmentations[name];
-    }
+  for (const name of Object.getOwnPropertyNames(StaticAugmentations)) {
+    delete StaticAugmentations[name];
   }
 
   // Give levels of NeuroFluxGovernor for Source-File 12. Must be done here before Augmentations are recalculated

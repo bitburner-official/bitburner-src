@@ -201,11 +201,8 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       if (onFirstCommandArg && !relativeDir) addDirectories();
       return possibilities;
 
-    case "check":
-    case "kill":
     case "mem":
-    case "tail":
-      addScripts();
+      if (onFirstCommandArg) addScripts();
       return possibilities;
 
     case "connect":
@@ -261,8 +258,13 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       if (onFirstCommandArg) {
         addPrograms();
         addCodingContracts();
+        addScripts();
+      } else {
+        const options = await scriptAutocomplete();
+        if (options) addGeneric({ iterable: options, usePathing: false });
       }
-    // Spill over into next cases
+      return possibilities;
+
     case "check":
     case "tail":
     case "kill":

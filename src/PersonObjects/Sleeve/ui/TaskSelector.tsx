@@ -249,19 +249,20 @@ function getABC(sleeve: Sleeve): [string, string, string] {
   switch (work.type) {
     case WorkType.COMPANY:
       return ["Work for Company", work.companyName, "------"];
-    case WorkType.FACTION:
+    case WorkType.FACTION: {
       const workNames = {
         [FactionWorkType.field]: "Field Work",
         [FactionWorkType.hacking]: "Hacking Contracts",
         [FactionWorkType.security]: "Security Work",
       };
       return ["Work for Faction", work.factionName, workNames[work.factionWorkType] ?? ""];
+    }
     case WorkType.BLADEBURNER:
       if (work.actionType === "Contracts") {
         return ["Perform Bladeburner Actions", "Take on contracts", work.actionName];
       }
       return ["Perform Bladeburner Actions", work.actionName, "------"];
-    case WorkType.CLASS:
+    case WorkType.CLASS: {
       if (!work.isGym()) return ["Take University Course", work.classType, work.location];
       const gymNames: Record<GymType, string> = {
         [GymType.strength]: "Train Strength",
@@ -270,6 +271,7 @@ function getABC(sleeve: Sleeve): [string, string, string] {
         [GymType.agility]: "Train Agility",
       };
       return ["Workout at Gym", gymNames[work.classType as GymType], work.location];
+    }
     case WorkType.CRIME:
       return ["Commit Crime", checkEnum(CrimeType, work.crimeType) ? work.crimeType : "Shoplift", "------"];
     case WorkType.SUPPORT:

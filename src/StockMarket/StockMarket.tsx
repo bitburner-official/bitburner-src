@@ -147,8 +147,8 @@ export function deleteStockMarket(): void {
 }
 
 export function initStockMarket(): void {
-  for (const stk of Object.keys(StockMarket)) {
-    if (StockMarket.hasOwnProperty(stk)) delete StockMarket[stk];
+  for (const stockName of Object.getOwnPropertyNames(StockMarket)) {
+    delete StockMarket[stockName];
   }
 
   for (const metadata of InitStockMetadata) {

@@ -76,11 +76,11 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
         <br></br>- Profit: ${formatNumber((industry.lastCycleRevenue - industry.lastCycleExpenses) / 10)} / sec
         <br></br>- Cities:{" "}
         {Object.keys(industry.offices)
-          .map((city) => (!!industry.offices[city as CityName] ? 1 : 0))
+          .map((city) => (industry.offices[city as CityName] ? 1 : 0))
           .reduce(sum, 0)}
         <br></br>- Warehouses:{" "}
         {Object.keys(industry.warehouses)
-          .map((city) => (!!industry.warehouses[city as CityName] ? 1 : 0))
+          .map((city) => (industry.warehouses[city as CityName] ? 1 : 0))
           .reduce(sum, 0)}
         {industry.makesProducts ?? (
           <Typography>

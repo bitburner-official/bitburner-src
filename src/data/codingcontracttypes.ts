@@ -270,14 +270,16 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       let l = 0;
       let r: number = n - 1;
       let k = 0;
-      while (true) {
+      let done = false;
+      while (!done) {
         // Up
         for (let col: number = l; col <= r; col++) {
           spiral[k] = data[u][col];
           ++k;
         }
         if (++u > d) {
-          break;
+          done = true;
+          continue;
         }
 
         // Right
@@ -286,7 +288,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
           ++k;
         }
         if (--r < l) {
-          break;
+          done = true;
+          continue;
         }
 
         // Down
@@ -295,7 +298,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
           ++k;
         }
         if (--d < u) {
-          break;
+          done = true;
+          continue;
         }
 
         // Left
@@ -304,7 +308,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
           ++k;
         }
         if (++l > r) {
-          break;
+          done = true;
+          continue;
         }
       }
 
@@ -1423,21 +1428,21 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       return [n + m, edges];
     },
     solver: (_data: unknown, ans: string): boolean => {
+      //Helper function to get neighbourhood of a vertex
+      function neighbourhood(vertex: number): number[] {
+        const adjLeft = data[1].filter(([a]) => a == vertex).map(([, b]) => b);
+        const adjRight = data[1].filter(([, b]) => b == vertex).map(([a]) => a);
+        return adjLeft.concat(adjRight);
+      }
+
       const data = _data as [number, [number, number][]];
 
       //Sanitize player input
-      const sanitizedPlayerAns: string = removeBracketsFromArrayString(ans);
+      const sanitizedPlayerAns = removeBracketsFromArrayString(ans);
 
       //Case where the player believes there is no solution.
       //Attempt to construct one to check if this is correct.
       if (sanitizedPlayerAns === "") {
-        //Helper function to get neighbourhood of a vertex
-        function neighbourhood(vertex: number): number[] {
-          const adjLeft = data[1].filter(([a]) => a == vertex).map(([, b]) => b);
-          const adjRight = data[1].filter(([, b]) => b == vertex).map(([a]) => a);
-          return adjLeft.concat(adjRight);
-        }
-
         //Verify that there is no solution by attempting to create a proper 2-coloring.
         const coloring: (number | undefined)[] = Array(data[0]).fill(undefined);
         while (coloring.some((val) => val === undefined)) {

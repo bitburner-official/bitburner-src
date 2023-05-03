@@ -248,15 +248,6 @@ export function WorkInProgressRoot(): React.ReactElement {
 
   if (isClassWork(Player.currentWork)) {
     const classWork = Player.currentWork;
-    function cancel(): void {
-      Player.finishWork(true);
-      Router.toPage(Page.City);
-    }
-
-    function unfocus(): void {
-      Router.toPage(Page.City);
-      Player.stopFocusing();
-    }
 
     let stopText = "";
     if (classWork.isGym()) {
@@ -268,8 +259,14 @@ export function WorkInProgressRoot(): React.ReactElement {
     const rates = classWork.calculateRates();
     workInfo = {
       buttons: {
-        cancel: cancel,
-        unfocus: unfocus,
+        cancel: () => {
+          Player.finishWork(true);
+          Router.toPage(Page.City);
+        },
+        unfocus: () => {
+          Router.toPage(Page.City);
+          Player.stopFocusing();
+        },
       },
       title: (
         <>
@@ -295,21 +292,18 @@ export function WorkInProgressRoot(): React.ReactElement {
 
   if (isCreateProgramWork(Player.currentWork)) {
     const create = Player.currentWork;
-    function cancel(): void {
-      Player.finishWork(true);
-      Router.toPage(Page.Terminal);
-    }
-    function unfocus(): void {
-      Router.toPage(Page.Terminal);
-      Player.stopFocusing();
-    }
-
     const completion = (create.unitCompleted / create.unitNeeded()) * 100;
 
     workInfo = {
       buttons: {
-        cancel: cancel,
-        unfocus: unfocus,
+        cancel: () => {
+          Player.finishWork(true);
+          Router.toPage(Page.Terminal);
+        },
+        unfocus: () => {
+          Router.toPage(Page.Terminal);
+          Player.stopFocusing();
+        },
       },
       title: (
         <>
@@ -328,30 +322,28 @@ export function WorkInProgressRoot(): React.ReactElement {
   }
 
   if (isGraftingWork(Player.currentWork)) {
-    const graft = Player.currentWork;
-    function cancel(): void {
-      Player.finishWork(true);
-      Router.toPage(Page.Terminal);
-    }
-    function unfocus(): void {
-      Router.toPage(Page.Terminal);
-      Player.stopFocusing();
-    }
+    const graftWork = Player.currentWork;
 
     workInfo = {
       buttons: {
-        cancel: cancel,
-        unfocus: unfocus,
+        cancel: () => {
+          Player.finishWork(true);
+          Router.toPage(Page.Terminal);
+        },
+        unfocus: () => {
+          Router.toPage(Page.Terminal);
+          Player.stopFocusing();
+        },
       },
       title: (
         <>
-          You are currently working on grafting <b>{graft.augmentation}</b>
+          You are currently working on grafting <b>{graftWork.augmentation}</b>
         </>
       ),
 
       progress: {
-        elapsed: graft.cyclesWorked * CONSTANTS.MilliPerCycle,
-        percentage: (graft.unitCompleted / graft.unitNeeded()) * 100,
+        elapsed: graftWork.cyclesWorked * CONSTANTS.MilliPerCycle,
+        percentage: (graftWork.unitCompleted / graftWork.unitNeeded()) * 100,
       },
 
       stopText: "Stop grafting",
@@ -378,15 +370,6 @@ export function WorkInProgressRoot(): React.ReactElement {
       };
     }
 
-    function cancel(): void {
-      Router.toFaction(faction);
-      Player.finishWork(true);
-    }
-    function unfocus(): void {
-      Router.toFaction(faction);
-      Player.stopFocusing();
-    }
-
     const description = {
       [FactionWorkType.hacking]: "carrying out hacking contracts",
       [FactionWorkType.field]: "carrying out field missions",
@@ -397,8 +380,14 @@ export function WorkInProgressRoot(): React.ReactElement {
 
     workInfo = {
       buttons: {
-        cancel: cancel,
-        unfocus: unfocus,
+        cancel: () => {
+          Router.toFaction(faction);
+          Player.finishWork(true);
+        },
+        unfocus: () => {
+          Router.toFaction(faction);
+          Player.stopFocusing();
+        },
       },
       title: (
         <>
@@ -438,21 +427,18 @@ export function WorkInProgressRoot(): React.ReactElement {
 
     const companyRep = comp.playerReputation;
 
-    function cancel(): void {
-      Player.finishWork(true);
-      Router.toJob(Locations[comp.name]);
-    }
-    function unfocus(): void {
-      Player.stopFocusing();
-      Router.toJob(Locations[comp.name]);
-    }
-
     const position = Player.jobs[Player.currentWork.companyName];
     const gains = Player.currentWork.getGainRates();
     workInfo = {
       buttons: {
-        cancel: cancel,
-        unfocus: unfocus,
+        cancel: () => {
+          Player.finishWork(true);
+          Router.toJob(Locations[comp.name]);
+        },
+        unfocus: () => {
+          Player.stopFocusing();
+          Router.toJob(Locations[comp.name]);
+        },
       },
       title: (
         <>
