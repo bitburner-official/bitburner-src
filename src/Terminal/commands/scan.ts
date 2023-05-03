@@ -1,6 +1,7 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { getServerOnNetwork } from "../../Server/ServerHelpers";
+import { IPAddress } from "../../Types/strings";
 
 export function scan(args: (string | number | boolean)[], currServ: BaseServer): void {
   if (args.length !== 0) {
@@ -13,7 +14,7 @@ export function scan(args: (string | number | boolean)[], currServ: BaseServer):
     if (server === null) throw new Error("Server should not be null");
     return {
       hostname: server.hostname,
-      ip: server.ip,
+      ip: server.ip as IPAddress | "IP",
       hasRoot: server.hasAdminRights ? "Y" : "N",
     };
   });

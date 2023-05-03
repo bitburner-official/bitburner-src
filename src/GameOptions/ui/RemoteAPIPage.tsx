@@ -9,7 +9,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
   const [remoteFileApiPort, setRemoteFileApiPort] = useState(Settings.RemoteFileApiPort);
 
   function handleRemoteFileApiPortChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setRemoteFileApiPort(Number(event.target.value) as number);
+    setRemoteFileApiPort(Number(event.target.value));
     Settings.RemoteFileApiPort = Number(event.target.value);
   }
 

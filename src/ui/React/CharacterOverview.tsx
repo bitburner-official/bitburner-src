@@ -103,7 +103,7 @@ function SkillBar({ name, color }: SkillBarProps): React.ReactElement {
   useEffect(() => {
     const clearSubscription = OverviewEventEmitter.subscribe(() => {
       setMult(skillMultUpdaters[name]());
-      setProgress(calculateSkillProgress(Player.exp[skillNameMap[name] as keyof Skills], mult));
+      setProgress(calculateSkillProgress(Player.exp[skillNameMap[name]], mult));
     });
     return clearSubscription;
   }, []);

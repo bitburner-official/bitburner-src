@@ -27,7 +27,7 @@ export function PurchaseAugmentationModal(props: IProps): React.ReactElement {
       return;
     }
 
-    purchaseAugmentation(props.aug as Augmentation, props.faction as Faction);
+    purchaseAugmentation(props.aug, props.faction as Faction);
     props.onClose();
   }
 

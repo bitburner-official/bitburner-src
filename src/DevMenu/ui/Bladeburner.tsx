@@ -59,7 +59,7 @@ export function Bladeburner(): React.ReactElement {
   };
 
   // Skill functions
-  const [skill, setSkill] = useState(SkillNames.BladesIntuition as string);
+  const [skill, setSkill] = useState(SkillNames.BladesIntuition);
   function setSkillDropdown(event: SelectChangeEvent<string>): void {
     setSkill(event.target.value);
   }
@@ -82,7 +82,7 @@ export function Bladeburner(): React.ReactElement {
 
   // Contract functions
   const AllContracts = bladeburner.contracts;
-  const [contractTarget, setContract] = useState(AllContracts.Tracking.name as string);
+  const [contractTarget, setContract] = useState(AllContracts.Tracking.name);
   function setContractDropdown(event: SelectChangeEvent<string>): void {
     setContract(event.target.value);
   }
@@ -117,7 +117,7 @@ export function Bladeburner(): React.ReactElement {
 
   // Operation functions
   const AllOperations = bladeburner.operations;
-  const [operationTarget, setOperation] = useState(AllOperations.Investigation.name as string);
+  const [operationTarget, setOperation] = useState(AllOperations.Investigation.name);
   function setOperationDropdown(event: SelectChangeEvent<string>): void {
     setOperation(event.target.value);
   }

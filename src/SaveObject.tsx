@@ -655,7 +655,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
       delete anyPlayer[field];
     }
     for (const sleeve of anyPlayer.sleeves) {
-      const anySleeve = sleeve as any;
+      const anySleeve = sleeve;
       let intExp = Number(anySleeve.intelligence_exp);
       if (isNaN(intExp)) intExp = 0;
       anySleeve.exp.intelligence += intExp;

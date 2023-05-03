@@ -548,7 +548,7 @@ export class Industry {
                 const adjustedQty = mat.qty / (corpConstants.secondsPerMarketCycle * marketCycles);
                 if (isString(mat.sllman[1])) {
                   //Dynamically evaluated
-                  let tmp = (mat.sllman[1] as string).replace(/MAX/g, (adjustedQty + "").toUpperCase());
+                  let tmp = mat.sllman[1].replace(/MAX/g, (adjustedQty + "").toUpperCase());
                   tmp = tmp.replace(/PROD/g, mat.prd + "");
                   try {
                     sellAmt = eval(tmp);
@@ -563,7 +563,7 @@ export class Industry {
                   sellAmt = adjustedQty;
                 } else {
                   //Player's input value is just a number
-                  sellAmt = mat.sllman[1] as number;
+                  sellAmt = mat.sllman[1];
                 }
 
                 // Determine the cost that the material will be sold at
@@ -604,7 +604,7 @@ export class Industry {
                 } else if (mat.marketTa1) {
                   sCost = mat.bCost + markupLimit;
                 } else if (isString(mat.sCost)) {
-                  sCost = (mat.sCost as string).replace(/MP/g, mat.bCost + "");
+                  sCost = mat.sCost.replace(/MP/g, mat.bCost + "");
                   sCost = eval(sCost);
                 } else {
                   sCost = mat.sCost;
@@ -636,7 +636,7 @@ export class Industry {
                   this.getSalesMultiplier();
                 if (isString(mat.sllman[1])) {
                   //Dynamically evaluated
-                  let tmp = (mat.sllman[1] as string).replace(/MAX/g, (mat.maxsll + "").toUpperCase());
+                  let tmp = mat.sllman[1].replace(/MAX/g, (mat.maxsll + "").toUpperCase());
                   tmp = tmp.replace(/PROD/g, mat.prd + "");
 
                   try {
@@ -654,7 +654,7 @@ export class Industry {
                   sellAmt = mat.maxsll;
                 } else {
                   //Player's input value is just a number
-                  sellAmt = Math.min(mat.maxsll, mat.sllman[1] as number);
+                  sellAmt = Math.min(mat.maxsll, mat.sllman[1]);
                 }
                 sellAmt = Math.min(mat.maxsll, sellAmt);
                 sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;

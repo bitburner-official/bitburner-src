@@ -12,6 +12,7 @@ import {
   calculateCacheUpgradeCost,
 } from "./formulas/HacknetServers";
 
+import { IPAddress } from "../Types/strings";
 import { createRandomIp } from "../utils/IPAddress";
 
 import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
@@ -20,7 +21,7 @@ import { Player } from "@player";
 interface IConstructorParams {
   adminRights?: boolean;
   hostname: string;
-  ip?: string;
+  ip?: IPAddress;
   isConnectedTo?: boolean;
   maxRam?: number;
   organizationName?: string;

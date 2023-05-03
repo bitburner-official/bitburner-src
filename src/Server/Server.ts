@@ -6,7 +6,7 @@ import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { createRandomString } from "../utils/helpers/createRandomString";
 import { createRandomIp } from "../utils/IPAddress";
 import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { IPAddress, ServerName } from "../Types/strings";
+import { IPAddress } from "../Types/strings";
 
 export interface IConstructorParams {
   adminRights?: boolean;
@@ -61,7 +61,7 @@ export class Server extends BaseServer {
 
     // "hacknet-node-X" hostnames are reserved for Hacknet Servers
     if (this.hostname.startsWith("hacknet-node-") || this.hostname.startsWith("hacknet-server-")) {
-      this.hostname = createRandomString(10) as ServerName;
+      this.hostname = createRandomString(10);
     }
 
     this.purchasedByPlayer = params.purchasedByPlayer != null ? params.purchasedByPlayer : false;

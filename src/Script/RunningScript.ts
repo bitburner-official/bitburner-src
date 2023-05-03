@@ -63,7 +63,7 @@ export class RunningScript {
   server = "";
 
   // Cached key for ByArgs lookups
-  scriptKey: ScriptKey = "";
+  scriptKey!: ScriptKey;
 
   // Number of threads that this script is running with
   threads = 1 as PositiveInteger;
@@ -145,7 +145,9 @@ export class RunningScript {
 
   // Initializes a RunningScript Object from a JSON save state
   static fromJSON(value: IReviverValue): RunningScript {
-    return Generic_fromJSON(RunningScript, value.data, includedProperties);
+    const runningScript = Generic_fromJSON(RunningScript, value.data, includedProperties);
+    if (!runningScript.scriptKey) runningScript.scriptKey = scriptKey(runningScript.filename, runningScript.args);
+    return runningScript;
   }
 }
 const includedProperties = getKeyList(RunningScript, { removedKeys: ["logs", "dependencies", "logUpd", "pid"] });
