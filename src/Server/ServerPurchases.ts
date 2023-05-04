@@ -11,7 +11,6 @@ import { Player } from "@player";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { isPowerOfTwo } from "../utils/helpers/isPowerOfTwo";
-import { WorkerScript } from "../Netscript/WorkerScript";
 import { workerScripts } from "../Netscript/WorkerScripts";
 
 // Returns the cost of purchasing a server with the given RAM
@@ -76,8 +75,8 @@ export const renamePurchasedServer = (hostname: string, newName: string): void =
   for (const byPid of server.runningScriptMap.values()) {
     for (const r of byPid.values()) {
       r.server = newName;
-      // Lookup can't fail.
-      const ws = workerScripts.get(r.pid) as WorkerScript;
+      const ws = workerScripts.get(r.pid);
+      if (!ws) continue;
       ws.hostname = newName;
     }
   }

@@ -24,7 +24,7 @@ enum Result {
   Tie = "Push! (Tie)",
 }
 
-type State = {
+interface State {
   playerHand: Hand;
   dealerHand: Hand;
   bet: number;
@@ -34,7 +34,7 @@ type State = {
   gains: number; // Track gains only for this session
   wagerInvalid: boolean;
   wagerInvalidHelperText: string;
-};
+}
 
 export class Blackjack extends React.Component<Record<string, never>, State> {
   deck: Deck;

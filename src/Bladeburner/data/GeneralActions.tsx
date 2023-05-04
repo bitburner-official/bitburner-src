@@ -6,9 +6,7 @@ interface IGeneral {
   exp: WorkStats;
 }
 
-export const GeneralActions: {
-  [key: string]: IGeneral | undefined;
-} = {
+export const GeneralActions: Record<string, IGeneral | undefined> = {
   Training: {
     desc: (
       <>

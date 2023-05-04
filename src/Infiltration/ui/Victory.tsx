@@ -48,7 +48,7 @@ export function Victory(props: IProps): React.ReactElement {
     quitInfiltration();
   }
 
-  function changeDropdown(event: SelectChangeEvent<string>): void {
+  function changeDropdown(event: SelectChangeEvent): void {
     setFaction(event.target.value);
   }
 

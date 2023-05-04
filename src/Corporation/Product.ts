@@ -58,7 +58,7 @@ export class Product {
   advCost = 0; // How much money was invested into advertising this Product
 
   // The average employee productivity and scientific research across the creation of the Product
-  creationProd: { [key: string]: number } = {
+  creationProd: Record<string, number> = {
     [EmployeePositions.Operations]: 0,
     [EmployeePositions.Engineer]: 0,
     [EmployeePositions.Business]: 0,

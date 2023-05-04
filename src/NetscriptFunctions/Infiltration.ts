@@ -11,8 +11,9 @@ import { FactionNames } from "../Faction/data/FactionNames";
 import { Factions } from "../Faction/Factions";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { checkEnum } from "../utils/helpers/enum";
-import { CityName, LocationName } from "../Enums";
+import { LocationName } from "../Enums";
 import { helpers } from "../Netscript/NetscriptHelpers";
+import { FilterTruthy } from "../utils/helpers/ArrayHelpers";
 
 export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
   const getLocationsWithInfiltrations = Object.values(Locations).filter(
@@ -41,12 +42,15 @@ export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
   };
   return {
     getPossibleLocations: () => () => {
-      return getLocationsWithInfiltrations
-        .filter((l) => l.city) //Guarantees no locations with a "null" entry, which should not be infiltratable anyway.
-        .map((l) => ({
-          city: l.city as CityName,
-          name: l.name,
-        }));
+      return FilterTruthy(
+        getLocationsWithInfiltrations.map((l) => {
+          if (!l.city) return false;
+          return {
+            city: l.city,
+            name: l.name,
+          };
+        }),
+      );
     },
     getInfiltration: (ctx) => (_location) => {
       const location = helpers.string(ctx, "location", _location);

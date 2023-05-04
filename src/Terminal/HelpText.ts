@@ -1,5 +1,3 @@
-/* tslint:disable:max-line-length completed-docs variable-name*/
-
 export const TerminalHelpText: string[] = [
   "Type 'help name' to learn more about the command ",
   " ",

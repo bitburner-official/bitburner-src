@@ -307,7 +307,7 @@ export function TaskSelector(props: IProps): React.ReactElement {
     props.setABC([s0, s1, details2[0]]);
   }
 
-  function onS0Change(event: SelectChangeEvent<string>): void {
+  function onS0Change(event: SelectChangeEvent): void {
     const n = event.target.value;
     const detailsF = tasks[n];
     if (detailsF === undefined) throw new Error(`No function for task '${s0}'`);
@@ -319,12 +319,12 @@ export function TaskSelector(props: IProps): React.ReactElement {
     props.setABC([n, details.first[0], details2[0]]);
   }
 
-  function onS1Change(event: SelectChangeEvent<string>): void {
+  function onS1Change(event: SelectChangeEvent): void {
     setS1(event.target.value);
     props.setABC([s0, event.target.value, s2]);
   }
 
-  function onS2Change(event: SelectChangeEvent<string>): void {
+  function onS2Change(event: SelectChangeEvent): void {
     setS2(event.target.value);
     props.setABC([s0, s1, event.target.value]);
   }

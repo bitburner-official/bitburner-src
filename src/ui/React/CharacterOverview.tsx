@@ -37,7 +37,6 @@ import { ReputationRate } from "./ReputationRate";
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isCrimeWork } from "../../Work/CrimeWork";
 import { ActionIdentifier } from "../../Bladeburner/ActionIdentifier";
-import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { Skills } from "../../PersonObjects/Skills";
 import { calculateSkillProgress } from "../../PersonObjects/formulas/skill";
 import { EventEmitter } from "../../utils/EventEmitter";
@@ -98,7 +97,7 @@ interface SkillBarProps {
   color?: string;
 }
 function SkillBar({ name, color }: SkillBarProps): React.ReactElement {
-  const [mult, setMult] = useState(skillMultUpdaters[name]?.());
+  const [mult, setMult] = useState(skillMultUpdaters[name]());
   const [progress, setProgress] = useState(calculateSkillProgress(Player.exp[skillNameMap[name]], mult));
   useEffect(() => {
     const clearSubscription = OverviewEventEmitter.subscribe(() => {
@@ -239,8 +238,9 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
 }
 
 function ActionText(props: { action: ActionIdentifier }): React.ReactElement {
-  // This component should never be called if Bladeburner is null, due to conditional checks in BladeburnerText
-  const action = (Player.bladeburner as Bladeburner).getTypeAndNameFromActionId(props.action);
+  const bladeburner = Player.bladeburner;
+  if (!bladeburner) return <></>;
+  const action = bladeburner.getTypeAndNameFromActionId(props.action);
   return (
     <Typography>
       {action.type}: {action.name}

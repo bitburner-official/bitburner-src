@@ -530,7 +530,7 @@ export class Industry {
             for (const matName of Object.values(corpConstants.materialNames)) {
               if (Object.hasOwn(warehouse.materials, matName)) {
                 const mat = warehouse.materials[matName];
-                if ((typeof mat.sCost === "number" && mat.sCost < 0) || mat.sllman[0] === false) {
+                if ((typeof mat.sCost === "number" && mat.sCost < 0) || !mat.sllman[0]) {
                   mat.sll = 0;
                   continue;
                 }
@@ -845,11 +845,8 @@ export class Industry {
 
             //Calculate net change in warehouse storage making the Products will cost
             let netStorageSize = product.siz;
-            for (const reqMatName of Object.keys(product.reqMats) as CorpMaterialName[]) {
-              if (Object.hasOwn(product.reqMats, reqMatName)) {
-                const normQty = product.reqMats[reqMatName] as number;
-                netStorageSize -= MaterialInfo[reqMatName].size * normQty;
-              }
+            for (const [reqMatName, reqQty] of Object.entries(product.reqMats) as [CorpMaterialName, number][]) {
+              netStorageSize -= MaterialInfo[reqMatName].size * reqQty;
             }
 
             //If there's not enough space in warehouse, limit the amount of Product

@@ -176,11 +176,16 @@ export function GameRoot(): React.ReactElement {
     setTimeout(() => htmlLocation.reload(), 2000);
   }
 
+  function attemptedForbiddenRouting(name: string) {
+    console.error(`Routing is currently disabled - Attempted router.${name}()`);
+  }
+
   Router = {
     isInitialized: true,
     page: () => page,
     allowRouting: (value: boolean) => setAllowRoutingCalls(value),
     toPage: (page: SimplePage) => {
+      if (!allowRoutingCalls) return attemptedForbiddenRouting("toPage");
       switch (page) {
         case Page.Travel:
           Player.gotoLocation(LocationName.TravelAgency);
@@ -193,11 +198,13 @@ export function GameRoot(): React.ReactElement {
       setPage(page);
     },
     toFaction: (faction: Faction, augPage = false) => {
+      if (!allowRoutingCalls) return attemptedForbiddenRouting("toFaction");
       setAugPage(augPage);
       setPage(Page.Faction);
       if (faction) setFaction(faction);
     },
     toScriptEditor: (files = new Map(), options) => {
+      if (!allowRoutingCalls) return attemptedForbiddenRouting("toScriptEditor");
       setEditorOptions({
         files,
         vim: !!options?.vim,
@@ -205,48 +212,34 @@ export function GameRoot(): React.ReactElement {
       setPage(Page.ScriptEditor);
     },
     toJob: (location: Location) => {
+      if (!allowRoutingCalls) return attemptedForbiddenRouting("toJob");
       setLocation(location);
       setPage(Page.Job);
     },
     toBitVerse: (flume: boolean, quick: boolean) => {
+      if (!allowRoutingCalls) return attemptedForbiddenRouting("toBitVerse");
       setFlume(flume);
       setQuick(quick);
       calculateAchievements();
       setPage(Page.BitVerse);
     },
     toInfiltration: (location: Location) => {
+      if (!allowRoutingCalls) return attemptedForbiddenRouting("toInfiltration");
       setLocation(location);
       setPage(Page.Infiltration);
     },
     toLocation: (location: Location) => {
+      if (!allowRoutingCalls) return attemptedForbiddenRouting("toLocation");
       setLocation(location);
       setPage(Page.Location);
     },
     toImportSave: (base64save: string, automatic = false) => {
+      if (!allowRoutingCalls) return attemptedForbiddenRouting("toImportSave");
       setImportString(base64save);
       setImportAutomatic(automatic);
       setPage(Page.ImportSave);
     },
   };
-
-  useEffect(() => {
-    // Wrap Router navigate functions to be able to disable the execution
-    _functions(Router)
-      .filter((fnName) => fnName.startsWith("to"))
-      .forEach((fnName) => {
-        // @ts-ignore - tslint does not like this, couldn't find a way to make it cooperate
-        Router[fnName] = _wrap(Router[fnName], (func, ...args) => {
-          if (!allowRoutingCalls) {
-            // Let's just log to console.
-            console.error(`Routing is currently disabled - Attempted router.${fnName}()`);
-            return;
-          }
-
-          // Call the function normally
-          return func(...args);
-        });
-      });
-  });
 
   useEffect(() => {
     if (page !== Page.Terminal) window.scrollTo(0, 0);

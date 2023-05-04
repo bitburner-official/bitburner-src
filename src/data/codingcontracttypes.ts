@@ -3,7 +3,6 @@ import { MinHeap } from "../utils/Heap";
 
 import { comprGenChar, comprLZGenerate, comprLZEncode, comprLZDecode } from "../utils/CompressionContracts";
 import { HammingEncode, HammingDecode, HammingEncodeProperly } from "../utils/HammingCodeTools";
-/* tslint:disable:completed-docs no-magic-numbers arrow-return-shorthand */
 
 /* Function that generates a valid 'data' for a contract type */
 export type GeneratorFunc = () => unknown;
@@ -1338,7 +1337,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     gen: (): string => {
       const _alteredBit = Math.round(Math.random());
-      const _buildArray: Array<string> = HammingEncodeProperly(
+      const _buildArray: string[] = HammingEncodeProperly(
         getRandomInt(Math.pow(2, 4), Math.pow(2, getRandomInt(1, 57))),
       ).split("");
       if (_alteredBit) {

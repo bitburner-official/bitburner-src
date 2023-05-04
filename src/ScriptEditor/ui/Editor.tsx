@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 export type Monaco = typeof monaco;
 
-type EditorProps = {
+interface EditorProps {
   /** Editor options */
   options: monaco.editor.IEditorOptions;
   /** Function to be ran prior to mounting editor */
@@ -13,7 +13,7 @@ type EditorProps = {
   onMount: (editor: monaco.editor.IStandaloneCodeEditor) => void;
   /** Function to be ran every time the code is updated */
   onChange: (newCode?: string) => void;
-};
+}
 
 export function Editor({ options, beforeMount, onMount, onChange }: EditorProps) {
   const containerDiv = useRef<HTMLDivElement | null>(null);

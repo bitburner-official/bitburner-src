@@ -1,7 +1,11 @@
 import { FilePath, asFilePath } from "../Paths/FilePath";
 import type { LiteratureName } from "./data/LiteratureNames";
 
-type LiteratureConstructorParams = { title: string; filename: LiteratureName; text: string };
+interface LiteratureConstructorParams {
+  title: string;
+  filename: LiteratureName;
+  text: string;
+}
 /**
  * Lore / world building literature files that can be found on servers.
  * These files can be read by the player

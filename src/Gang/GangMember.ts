@@ -108,7 +108,7 @@ export class GangMember {
     if (Object.hasOwn(GangMemberTasks, this.task)) {
       return GangMemberTasks[this.task];
     }
-    return GangMemberTasks["Unassigned"];
+    return GangMemberTasks.Unassigned;
   }
 
   calculateRespectGain(gang: Gang): number {
@@ -154,7 +154,7 @@ export class GangMember {
 
   gainExperience(numCycles = 1): void {
     const task = this.getTask();
-    if (task === GangMemberTasks["Unassigned"]) return;
+    if (task === GangMemberTasks.Unassigned) return;
     const difficultyMult = Math.pow(task.difficulty, 0.9);
     const difficultyPerCycles = difficultyMult * numCycles;
     const weightDivisor = 1500;

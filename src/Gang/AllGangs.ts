@@ -6,9 +6,7 @@ interface GangTerritory {
   territory: number;
 }
 
-export let AllGangs: {
-  [key: string]: GangTerritory;
-} = {
+export let AllGangs: Record<string, GangTerritory> = {
   [FactionNames.SlumSnakes]: {
     power: 1,
     territory: 1 / 7,

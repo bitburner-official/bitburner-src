@@ -30,7 +30,7 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
   const [selectedFaction, setSelectedFaction] = useState(factions.length > 0 ? factions[0] : "");
   const disabled = money === 0 || isNaN(money) || money < 0 || corp.funds < money;
 
-  function changeFaction(event: SelectChangeEvent<string>): void {
+  function changeFaction(event: SelectChangeEvent): void {
     setSelectedFaction(event.target.value);
   }
 

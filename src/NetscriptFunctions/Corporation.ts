@@ -186,7 +186,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   }
 
   function hasResearched(division: Industry, researchName: CorpResearchName): boolean {
-    return division.researched[researchName] === undefined ? false : (division.researched[researchName] as boolean);
+    return division.researched[researchName] ?? false;
   }
 
   function bribe(factionName: string, amountCash: number): boolean {

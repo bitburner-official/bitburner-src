@@ -1,6 +1,4 @@
-interface DifficultySetting {
-  [key: string]: number;
-}
+type DifficultySetting = Record<string, number>;
 
 interface DifficultySettings {
   Trivial: DifficultySetting;

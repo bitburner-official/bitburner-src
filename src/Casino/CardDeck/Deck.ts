@@ -14,11 +14,9 @@ export class Deck {
   }
 
   drawCard(): Card {
-    if (this.cards.length == 0) {
-      throw new Error("Tried to draw card from empty deck");
-    }
-
-    return this.cards.shift() as Card; // Guaranteed to return a Card since we throw an Error if array is empty
+    if (this.cards.length == 0) throw new Error("Tried to draw card from empty deck");
+    // Guaranteed to return a Card since we throw an Error if array is empty
+    return this.cards.shift() as Card;
   }
 
   // Draws a card, resetting the deck beforehand if the Deck is empty

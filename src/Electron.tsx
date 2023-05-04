@@ -45,7 +45,7 @@ declare global {
 
 export function initElectron(): void {
   const userAgent = navigator.userAgent.toLowerCase();
-  if (userAgent.indexOf(" electron/") > -1) {
+  if (userAgent.includes(" electron/")) {
     // Electron-specific code
     document.achievements = [];
     initWebserver();

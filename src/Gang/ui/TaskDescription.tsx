@@ -13,7 +13,7 @@ interface IProps {
 
 export function TaskDescription(props: IProps): React.ReactElement {
   const task = GangMemberTasks[props.member.task];
-  const desc = task ? task.desc : GangMemberTasks["Unassigned"].desc;
+  const desc = task ? task.desc : GangMemberTasks.Unassigned.desc;
 
   return <Typography dangerouslySetInnerHTML={{ __html: desc }} />;
 }

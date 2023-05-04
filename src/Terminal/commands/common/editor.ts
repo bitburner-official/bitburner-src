@@ -29,7 +29,7 @@ export function commonEditor(
   scriptEditorRouteOptions?: ScriptEditorRouteOptions,
 ): void {
   if (args.length < 1) return Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`);
-  const filesToOpen: Map<ScriptFilePath | TextFilePath, string> = new Map();
+  const filesToOpen = new Map<ScriptFilePath | TextFilePath, string>();
   for (const arg of args) {
     const pattern = String(arg);
 

@@ -21,13 +21,13 @@ export class Script implements ContentFile {
   // Runtime data that only exists when the script has been initiated. Cleared when script or a dependency script is updated.
   mod: LoadedModule | null = null;
   /** Scripts that directly import this one. Stored so we can invalidate these dependent scripts when this one is invalidated. */
-  dependents: Set<Script> = new Set();
+  dependents = new Set<Script>();
   /**
    * Scripts that we directly or indirectly import, including ourselves.
    * Stored only so RunningScript can use it, to translate urls in error messages.
    * Because RunningScript uses the reference directly (to reduce object copies), it must be immutable.
    */
-  dependencies: Map<ScriptURL, Script> = new Map();
+  dependencies = new Map<ScriptURL, Script>();
 
   get content() {
     return this.code;

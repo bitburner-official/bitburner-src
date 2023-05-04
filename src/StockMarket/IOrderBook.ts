@@ -1,5 +1,3 @@
 import { Order } from "./Order";
 
-export interface IOrderBook {
-  [key: string]: Order[];
-}
+export type IOrderBook = Record<string, Order[]>;

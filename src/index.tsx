@@ -8,8 +8,8 @@ import { initElectron } from "./Electron";
 import { newRemoteFileApiConnection } from "./RemoteFileAPI/RemoteFileAPI";
 
 initElectron();
-globalThis["React"] = React;
-globalThis["ReactDOM"] = ReactDOM;
+globalThis.React = React;
+globalThis.ReactDOM = ReactDOM;
 ReactDOM.render(
   <Theme>
     <LoadingScreen />

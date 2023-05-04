@@ -30,7 +30,7 @@ class BitNode {
 
 export const BitNodes: Record<string, BitNode> = {};
 export function initBitNodes() {
-  BitNodes["BitNode1"] = new BitNode(
+  BitNodes.BitNode1 = new BitNode(
     1,
     0,
     "Source Genesis",
@@ -57,7 +57,7 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes["BitNode2"] = new BitNode(
+  BitNodes.BitNode2 = new BitNode(
     2,
     0,
     "Rise of the Underworld",
@@ -95,7 +95,7 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes["BitNode3"] = new BitNode(
+  BitNodes.BitNode3 = new BitNode(
     3,
     0,
     "Corporatocracy",
@@ -127,7 +127,7 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes["BitNode4"] = new BitNode(
+  BitNodes.BitNode4 = new BitNode(
     4,
     1,
     "The Singularity",
@@ -155,7 +155,7 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes["BitNode5"] = new BitNode(
+  BitNodes.BitNode5 = new BitNode(
     5,
     1,
     "Artificial Intelligence",
@@ -185,7 +185,7 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes["BitNode6"] = new BitNode(
+  BitNodes.BitNode6 = new BitNode(
     6,
     1,
     FactionNames.Bladeburners,
@@ -217,7 +217,7 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes["BitNode7"] = new BitNode(
+  BitNodes.BitNode7 = new BitNode(
     7,
     2,
     `${FactionNames.Bladeburners} 2079`,
@@ -249,7 +249,7 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes["BitNode8"] = new BitNode(
+  BitNodes.BitNode8 = new BitNode(
     8,
     2,
     "Ghost of Wall Street",
@@ -290,7 +290,7 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes["BitNode9"] = new BitNode(
+  BitNodes.BitNode9 = new BitNode(
     9,
     2,
     "Hacktocracy",
@@ -332,7 +332,7 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes["BitNode10"] = new BitNode(
+  BitNodes.BitNode10 = new BitNode(
     10,
     2,
     "Digital Carbon",
@@ -363,7 +363,7 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes["BitNode11"] = new BitNode(
+  BitNodes.BitNode11 = new BitNode(
     11,
     1,
     "The Big Crash",
@@ -406,7 +406,7 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes["BitNode12"] = new BitNode(
+  BitNodes.BitNode12 = new BitNode(
     12,
     0,
     "The Recursion",
@@ -423,7 +423,7 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes["BitNode13"] = new BitNode(
+  BitNodes.BitNode13 = new BitNode(
     13,
     2,
     "They're lunatics",

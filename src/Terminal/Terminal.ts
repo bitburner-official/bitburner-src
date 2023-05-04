@@ -487,9 +487,7 @@ export class Terminal {
     this.print(" ");
 
     // Map of all servers to keep track of which have been visited
-    const visited: {
-      [key: string]: number | undefined;
-    } = {};
+    const visited: Record<string, number | undefined> = {};
     for (const server of GetAllServers()) {
       visited[server.hostname] = 0;
     }
@@ -752,9 +750,7 @@ export class Terminal {
     // Aside from the run-by-path command, we don't need the first entry once we've stored it in commandName.
     commandArray.shift();
 
-    const commands: {
-      [key: string]: (args: (string | number | boolean)[], server: BaseServer) => void;
-    } = {
+    const commands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
       "scan-analyze": scananalyze,
       alias: alias,
       analyze: analyze,

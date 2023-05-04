@@ -7,9 +7,7 @@ interface IBlackOp {
   desc: JSX.Element;
 }
 
-export const BlackOperations: {
-  [key: string]: IBlackOp | undefined;
-} = {
+export const BlackOperations: Record<string, IBlackOp | undefined> = {
   [BlackOperationNames.OperationTyphoon]: {
     desc: (
       <>

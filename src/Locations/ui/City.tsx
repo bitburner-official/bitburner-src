@@ -22,9 +22,9 @@ import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 
-type IProps = {
+interface IProps {
   city: City;
-};
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -70,9 +70,7 @@ function LocationLetter(location: Location, className: string): React.ReactEleme
 
 function ASCIICity(props: IProps): React.ReactElement {
   const locationLettersRegex = /[A-Z]/g;
-  const letterMap: {
-    [key: string]: number;
-  } = {
+  const letterMap: Record<string, number> = {
     A: 0,
     B: 1,
     C: 2,

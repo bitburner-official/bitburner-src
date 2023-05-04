@@ -17,10 +17,10 @@ import Collapse from "@mui/material/Collapse";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 
-type IProps = {
+interface IProps {
   aug: Augmentation;
   level?: number | string | null;
-};
+}
 
 export function AugmentationAccordion(props: IProps): React.ReactElement {
   const [open, setOpen] = useState(false);

@@ -4,15 +4,13 @@ import { ScriptArg } from "../Netscript/ScriptArg";
 import { NetscriptContext } from "../Netscript/APIWrapper";
 
 type FlagType = StringConstructor | NumberConstructor | BooleanConstructor | StringConstructor[];
-type FlagsRet = { [key: string]: ScriptArg | string[] };
+type FlagsRet = Record<string, ScriptArg | string[]>;
 export function Flags(ctx: NetscriptContext | string[]): (data: unknown) => FlagsRet {
   const vargs = Array.isArray(ctx) ? ctx : ctx.workerScript.args;
   return (schema: unknown): FlagsRet => {
     schema = toNative(schema);
     if (!Array.isArray(schema)) throw new Error("flags schema passed in is invalid.");
-    const args: {
-      [key: string]: FlagType;
-    } = {};
+    const args: Record<string, FlagType> = {};
 
     for (const d of schema) {
       let t: FlagType = String;

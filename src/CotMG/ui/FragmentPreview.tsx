@@ -6,11 +6,11 @@ import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import { Table } from "../../ui/React/Table";
 
-type IProps = {
+interface IProps {
   width: number;
   height: number;
   colorAt: (x: number, y: number) => string;
-};
+}
 
 export function FragmentPreview(props: IProps): React.ReactElement {
   // switch the width/length to make axis consistent.

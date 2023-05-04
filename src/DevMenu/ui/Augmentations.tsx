@@ -17,7 +17,7 @@ import { Player } from "@player";
 export function Augmentations(): React.ReactElement {
   const [augmentation, setAugmentation] = useState("Augmented Targeting I");
 
-  function setAugmentationDropdown(event: SelectChangeEvent<string>): void {
+  function setAugmentationDropdown(event: SelectChangeEvent): void {
     setAugmentation(event.target.value);
   }
   function queueAug(): void {

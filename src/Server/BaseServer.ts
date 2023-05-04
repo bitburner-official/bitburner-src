@@ -82,14 +82,14 @@ export abstract class BaseServer implements IServer {
   ramUsed = 0;
 
   // RunningScript files on this server. Keyed first by name/args, then by PID.
-  runningScriptMap: Map<ScriptKey, Map<number, RunningScript>> = new Map();
+  runningScriptMap = new Map<ScriptKey, Map<number, RunningScript>>();
 
   // RunningScript files loaded from the savegame. Only stored here temporarily,
   // this field is undef while the game is running.
   savedScripts: RunningScript[] | undefined = undefined;
 
   // Script files on this Server
-  scripts: JSONMap<ScriptFilePath, Script> = new JSONMap();
+  scripts = new JSONMap<ScriptFilePath, Script>();
 
   // Contains the hostnames of all servers that are immediately
   // reachable from this one
@@ -105,7 +105,7 @@ export abstract class BaseServer implements IServer {
   sshPortOpen = false;
 
   // Text files on this server
-  textFiles: JSONMap<TextFilePath, TextFile> = new JSONMap();
+  textFiles = new JSONMap<TextFilePath, TextFile>();
 
   // Flag indicating whether this is a purchased server
   purchasedByPlayer = false;

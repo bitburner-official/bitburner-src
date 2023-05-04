@@ -18,9 +18,9 @@ import { ClassWork, Classes } from "../../Work/ClassWork";
 import { calculateCost } from "../../Work/Formulas";
 import { GymType } from "../../Enums";
 
-type IProps = {
+interface IProps {
   loc: Location;
-};
+}
 
 export function GymLocation(props: IProps): React.ReactElement {
   function train(stat: GymType): void {

@@ -26,7 +26,7 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   }
 
   // Todo: Switch out arg for something with typescript support
-  const args = flags["_"] as ScriptArg[];
+  const args = flags._ as ScriptArg[];
 
   const singleRamUsage = script.getRamUsage(server.scripts);
   if (!singleRamUsage) return Terminal.error("Error while calculating ram usage for this script.");

@@ -24,21 +24,21 @@ interface IProps {
   rerender: () => void;
 }
 
-const serversMap: { [key: string]: string } = {};
-const companiesMap: { [key: string]: string } = {};
+const serversMap: Record<string, string> = {};
+const companiesMap: Record<string, string> = {};
 
 export function HacknetUpgradeElem(props: IProps): React.ReactElement {
   const [selectedServer, setSelectedServer] = useState(
     serversMap[props.upg.name] ? serversMap[props.upg.name] : FactionNames.ECorp.toLowerCase(),
   );
-  function changeTargetServer(event: SelectChangeEvent<string>): void {
+  function changeTargetServer(event: SelectChangeEvent): void {
     setSelectedServer(event.target.value);
     serversMap[props.upg.name] = event.target.value;
   }
   const [selectedCompany, setSelectedCompany] = useState(
     companiesMap[props.upg.name] ? companiesMap[props.upg.name] : companiesMetadata[0].name,
   );
-  function changeTargetCompany(event: SelectChangeEvent<string>): void {
+  function changeTargetCompany(event: SelectChangeEvent): void {
     setSelectedCompany(event.target.value);
     companiesMap[props.upg.name] = event.target.value;
   }

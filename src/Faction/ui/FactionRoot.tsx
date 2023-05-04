@@ -27,10 +27,10 @@ import { FactionWork } from "../../Work/FactionWork";
 import { FactionWorkType } from "../../Enums";
 import { useRerender } from "../../ui/React/hooks";
 
-type IProps = {
+interface IProps {
   faction: Faction;
   augPage: boolean;
-};
+}
 
 // Info text for all options on the UI
 const hackingContractsInfo =

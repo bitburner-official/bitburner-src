@@ -86,7 +86,7 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
     getGameInfo: () => () => {
       const version = CONSTANTS.VersionString;
       const commit = hash();
-      const platform = navigator.userAgent.toLowerCase().indexOf(" electron/") > -1 ? "Steam" : "Browser";
+      const platform = navigator.userAgent.toLowerCase().includes(" electron/") ? "Steam" : "Browser";
 
       const gameInfo = {
         version,

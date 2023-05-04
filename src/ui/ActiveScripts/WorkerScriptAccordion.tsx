@@ -30,7 +30,7 @@ import { WorkerScript } from "../../Netscript/WorkerScript";
 import { dialogBoxCreate } from "../React/DialogBox";
 import { LogBoxEvents } from "../React/LogBoxManager";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { arrayToString } from "../../utils/helpers/arrayToString";
+import { arrayToString } from "../../utils/helpers/ArrayHelpers";
 import { Money } from "../React/Money";
 import { MoneyRate } from "../React/MoneyRate";
 
@@ -40,9 +40,9 @@ const useStyles = makeStyles({
   },
 });
 
-type IProps = {
+interface IProps {
   workerScript: WorkerScript;
-};
+}
 
 export function WorkerScriptAccordion(props: IProps): React.ReactElement {
   const classes = useStyles();

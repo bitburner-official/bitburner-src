@@ -8,7 +8,7 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 import { Terminal } from "../Terminal";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 
-export type INetscriptExtra = {
+export interface INetscriptExtra {
   heart: {
     break(): number;
   };
@@ -19,7 +19,7 @@ export type INetscriptExtra = {
   rainbow(guess: string): void;
   iKnowWhatImDoing(): void;
   printRaw(value: React.ReactNode): void;
-};
+}
 
 export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
   return {
@@ -30,7 +30,9 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
     exploit: () => () => Player.giveExploit(Exploit.UndocumentedFunctionCall),
     bypass: (ctx) => (doc) => {
       // reset both fields first
-      type temporary = { completely_unused_field: unknown };
+      interface temporary {
+        completely_unused_field: unknown;
+      }
       const d = doc as temporary;
       d.completely_unused_field = undefined;
       const real_document = document as unknown as temporary;
@@ -53,7 +55,7 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
       };
       recur(2);
       console.warn("I am sure that this variable is false.");
-      if (x !== false) {
+      if (x) {
         console.warn("Reality has been altered!");
         Player.giveExploit(Exploit.RealityAlteration);
       }
@@ -67,7 +69,7 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
     },
     iKnowWhatImDoing: (ctx) => () => {
       helpers.log(ctx, () => "Unlocking unsupported feature: window.tprintRaw");
-      // @ts-ignore window has no tprintRaw property defined
+      // @ts-expect-error window has no tprintRaw property defined
       window.tprintRaw = Terminal.printRaw.bind(Terminal);
     },
     printRaw: (ctx) => (value) => {

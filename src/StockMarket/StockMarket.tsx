@@ -51,7 +51,7 @@ export function placeOrder(
   }
 
   const order = new Order(stock.symbol, shares, price, type, position);
-  if (StockMarket["Orders"] == null) {
+  if (StockMarket.Orders == null) {
     const orders: IOrderBook = {};
     for (const name of Object.keys(StockMarket)) {
       const stk = StockMarket[name];
@@ -60,9 +60,9 @@ export function placeOrder(
       }
       orders[stk.symbol] = [];
     }
-    StockMarket["Orders"] = orders;
+    StockMarket.Orders = orders;
   }
-  StockMarket["Orders"][stock.symbol].push(order);
+  StockMarket.Orders[stock.symbol].push(order);
 
   // Process to see if it should be executed immediately
   const processOrderRefs = {
@@ -84,11 +84,11 @@ export interface ICancelOrderParams {
   type?: OrderTypes;
 }
 export function cancelOrder(params: ICancelOrderParams, ctx?: NetscriptContext): boolean {
-  if (StockMarket["Orders"] == null) return false;
+  if (StockMarket.Orders == null) return false;
   if (params.order && params.order instanceof Order) {
     const order = params.order;
     // An 'Order' object is passed in
-    const stockOrders = StockMarket["Orders"][order.stockSymbol];
+    const stockOrders = StockMarket.Orders[order.stockSymbol];
     for (let i = 0; i < stockOrders.length; ++i) {
       if (order == stockOrders[i]) {
         stockOrders.splice(i, 1);
@@ -105,7 +105,7 @@ export function cancelOrder(params: ICancelOrderParams, ctx?: NetscriptContext):
     params.stock instanceof Stock
   ) {
     // Order properties are passed in. Need to look for the order
-    const stockOrders = StockMarket["Orders"][params.stock.symbol];
+    const stockOrders = StockMarket.Orders[params.stock.symbol];
     const orderTxt = params.stock.symbol + " - " + params.shares + " @ " + formatMoney(params.price);
     for (let i = 0; i < stockOrders.length; ++i) {
       const order = stockOrders[i];
@@ -162,7 +162,7 @@ export function initStockMarket(): void {
     if (!(stock instanceof Stock)) continue;
     orders[stock.symbol] = [];
   }
-  StockMarket["Orders"] = orders;
+  StockMarket.Orders = orders;
 
   StockMarket.storedCycles = 0;
   StockMarket.lastUpdate = 0;

@@ -18,10 +18,10 @@ import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import { useRerender } from "../../ui/React/hooks";
 
-type IProps = {
+interface IProps {
   faction: Faction;
   factionInfo: FactionInfo;
-};
+}
 
 const useStyles = makeStyles(() =>
   createStyles({

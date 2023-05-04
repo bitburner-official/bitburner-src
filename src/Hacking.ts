@@ -65,7 +65,6 @@ export function calculateHackingTime(server: IServer, person: IPerson): number {
   const baseSkill = 50;
   const diffFactor = 2.5;
   let skillFactor = diffFactor * difficultyMult + baseDiff;
-  // tslint:disable-next-line
   skillFactor /= person.skills.hacking + baseSkill;
 
   const hackTimeMultiplier = 5;

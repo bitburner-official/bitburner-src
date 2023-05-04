@@ -98,7 +98,7 @@ export const achievements: Record<string, Achievement> = {
     Condition: () => Player.factions.includes(FactionNames.NiteSec),
   },
   THE_BLACK_HAND: {
-    ...achievementData["THE_BLACK_HAND"],
+    ...achievementData.THE_BLACK_HAND,
     Icon: "TBH",
     Condition: () => Player.factions.includes(FactionNames.TheBlackHand),
   },
@@ -113,7 +113,7 @@ export const achievements: Record<string, Achievement> = {
     Condition: () => Player.factions.includes(FactionNames.Daedalus),
   },
   THE_COVENANT: {
-    ...achievementData["THE_COVENANT"],
+    ...achievementData.THE_COVENANT,
     Icon: FactionNames.TheCovenant.toLowerCase().replace(/ /g, ""),
     Condition: () => Player.factions.includes(FactionNames.TheCovenant),
   },
@@ -226,38 +226,38 @@ export const achievements: Record<string, Achievement> = {
     Condition: () => Player.sourceFileLvl(12) >= 1,
   },
   MONEY_1Q: {
-    ...achievementData["MONEY_1Q"],
+    ...achievementData.MONEY_1Q,
     Icon: "$1Q",
     Condition: () => Player.money >= 1e18,
   },
   MONEY_M1B: {
-    ...achievementData["MONEY_M1B"],
+    ...achievementData.MONEY_M1B,
     Icon: "-1b",
     Secret: true,
     Condition: () => Player.money <= -1e9,
   },
   INSTALL_1: {
-    ...achievementData["INSTALL_1"],
+    ...achievementData.INSTALL_1,
     Icon: "install",
     Condition: () => Player.augmentations.length >= 1,
   },
   INSTALL_100: {
-    ...achievementData["INSTALL_100"],
+    ...achievementData.INSTALL_100,
     Icon: "install_100",
     Condition: () => Player.augmentations.length >= 100,
   },
   QUEUE_40: {
-    ...achievementData["QUEUE_40"],
+    ...achievementData.QUEUE_40,
     Icon: "queue40",
     Condition: () => Player.queuedAugmentations.length >= 40,
   },
   HACKING_100000: {
-    ...achievementData["HACKING_100000"],
+    ...achievementData.HACKING_100000,
     Icon: "hack100000",
     Condition: () => Player.skills.hacking >= 100000,
   },
   COMBAT_3000: {
-    ...achievementData["COMBAT_3000"],
+    ...achievementData.COMBAT_3000,
     Icon: "combat3000",
     Condition: () =>
       Player.skills.strength >= 3000 &&
@@ -266,27 +266,27 @@ export const achievements: Record<string, Achievement> = {
       Player.skills.agility >= 3000,
   },
   NEUROFLUX_255: {
-    ...achievementData["NEUROFLUX_255"],
+    ...achievementData.NEUROFLUX_255,
     Icon: "nf255",
     Condition: () => Player.augmentations.some((a) => a.name === AugmentationNames.NeuroFluxGovernor && a.level >= 255),
   },
   NS2: {
-    ...achievementData["NS2"],
+    ...achievementData.NS2,
     Icon: "ns2",
     Condition: () => [...Player.getHomeComputer().scripts.values()].some((s) => s.filename.endsWith(".js")),
   },
   FROZE: {
-    ...achievementData["FROZE"],
+    ...achievementData.FROZE,
     Icon: "forze",
     Condition: () => location.href.includes("noScripts"),
   },
   RUNNING_SCRIPTS_1000: {
-    ...achievementData["RUNNING_SCRIPTS_1000"],
+    ...achievementData.RUNNING_SCRIPTS_1000,
     Icon: "run1000",
     Condition: (): boolean => workerScripts.size >= 1000,
   },
   DRAIN_SERVER: {
-    ...achievementData["DRAIN_SERVER"],
+    ...achievementData.DRAIN_SERVER,
     Icon: "drain",
     Condition: (): boolean => {
       for (const s of GetAllServers()) {
@@ -298,33 +298,33 @@ export const achievements: Record<string, Achievement> = {
     },
   },
   MAX_RAM: {
-    ...achievementData["MAX_RAM"],
+    ...achievementData.MAX_RAM,
     Icon: "maxram",
     Condition: () => Player.getHomeComputer().maxRam === CONSTANTS.HomeComputerMaxRam,
   },
   MAX_CORES: {
-    ...achievementData["MAX_CORES"],
+    ...achievementData.MAX_CORES,
     Icon: "maxcores",
     Condition: () => Player.getHomeComputer().cpuCores === 8,
   },
   SCRIPTS_30: {
-    ...achievementData["SCRIPTS_30"],
+    ...achievementData.SCRIPTS_30,
     Icon: "folders",
     Condition: () => Player.getHomeComputer().scripts.size >= 30,
   },
   KARMA_1000000: {
-    ...achievementData["KARMA_1000000"],
+    ...achievementData.KARMA_1000000,
     Icon: "karma",
     Secret: true,
     Condition: () => Player.karma <= -1e6,
   },
   STOCK_1q: {
-    ...achievementData["STOCK_1q"],
+    ...achievementData.STOCK_1q,
     Icon: "$1Q",
     Condition: () => Player.moneySourceB.stock >= 1e15,
   },
   DISCOUNT: {
-    ...achievementData["DISCOUNT"],
+    ...achievementData.DISCOUNT,
     Icon: "discount",
     Condition: (): boolean => {
       const p = GetServer("powerhouse-fitness");
@@ -333,12 +333,12 @@ export const achievements: Record<string, Achievement> = {
     },
   },
   SCRIPT_32GB: {
-    ...achievementData["SCRIPT_32GB"],
+    ...achievementData.SCRIPT_32GB,
     Icon: "bigcost",
     Condition: () => [...Player.getHomeComputer().scripts.values()].some((s) => (s.ramUsage ?? 0) >= 32),
   },
   FIRST_HACKNET_NODE: {
-    ...achievementData["FIRST_HACKNET_NODE"],
+    ...achievementData.FIRST_HACKNET_NODE,
     Icon: "node",
     Condition: () => !hasHacknetServers() && Player.hacknetNodes.length > 0,
   },
@@ -348,7 +348,7 @@ export const achievements: Record<string, Achievement> = {
     Condition: () => !hasHacknetServers() && Player.hacknetNodes.length >= 30,
   },
   MAX_HACKNET_NODE: {
-    ...achievementData["MAX_HACKNET_NODE"],
+    ...achievementData.MAX_HACKNET_NODE,
     Icon: "hacknet-max",
     Condition: (): boolean => {
       if (hasHacknetServers()) return false;
@@ -365,17 +365,17 @@ export const achievements: Record<string, Achievement> = {
     },
   },
   HACKNET_NODE_10M: {
-    ...achievementData["HACKNET_NODE_10M"],
+    ...achievementData.HACKNET_NODE_10M,
     Icon: "hacknet-10m",
     Condition: () => !hasHacknetServers() && Player.moneySourceB.hacknet >= 10e6,
   },
   REPUTATION_10M: {
-    ...achievementData["REPUTATION_10M"],
+    ...achievementData.REPUTATION_10M,
     Icon: "reputation",
     Condition: () => Object.values(Factions).some((f) => f.playerReputation >= 10e6),
   },
   DONATION: {
-    ...achievementData["DONATION"],
+    ...achievementData.DONATION,
     Icon: "donation",
     Condition: () =>
       Object.values(Factions).some(
@@ -383,45 +383,45 @@ export const achievements: Record<string, Achievement> = {
       ),
   },
   TRAVEL: {
-    ...achievementData["TRAVEL"],
+    ...achievementData.TRAVEL,
     Icon: "TRAVEL",
     Condition: () => Player.city !== CityName.Sector12,
   },
   WORKOUT: {
-    ...achievementData["WORKOUT"],
+    ...achievementData.WORKOUT,
     Icon: "WORKOUT",
     Condition: () => isClassWork(Player.currentWork),
   },
   TOR: {
-    ...achievementData["TOR"],
+    ...achievementData.TOR,
     Icon: "TOR",
     Condition: () => Player.hasTorRouter(),
   },
   HOSPITALIZED: {
-    ...achievementData["HOSPITALIZED"],
+    ...achievementData.HOSPITALIZED,
     Icon: "OUCH",
     Condition: () => Player.moneySourceB.hospitalization !== 0,
   },
   GANG: {
-    ...achievementData["GANG"],
+    ...achievementData.GANG,
     Icon: "GANG",
     Visible: () => hasAccessToSF(Player, 2),
     Condition: () => Player.gang !== null,
   },
   FULL_GANG: {
-    ...achievementData["FULL_GANG"],
+    ...achievementData.FULL_GANG,
     Icon: "GANGMAX",
     Visible: () => hasAccessToSF(Player, 2),
     Condition: () => Player.gang !== null && Player.gang.members.length === GangConstants.MaximumGangMembers,
   },
   GANG_TERRITORY: {
-    ...achievementData["GANG_TERRITORY"],
+    ...achievementData.GANG_TERRITORY,
     Icon: "GANG100%",
     Visible: () => hasAccessToSF(Player, 2),
     Condition: () => Player.gang !== null && AllGangs[Player.gang.facName].territory >= 0.999,
   },
   GANG_MEMBER_POWER: {
-    ...achievementData["GANG_MEMBER_POWER"],
+    ...achievementData.GANG_MEMBER_POWER,
     Icon: "GANG10000",
     Visible: () => hasAccessToSF(Player, 2),
     Condition: () =>
@@ -432,25 +432,25 @@ export const achievements: Record<string, Achievement> = {
       ),
   },
   CORPORATION: {
-    ...achievementData["CORPORATION"],
+    ...achievementData.CORPORATION,
     Icon: "CORP",
     Visible: () => hasAccessToSF(Player, 3),
     Condition: () => Player.corporation !== null,
   },
   CORPORATION_BRIBE: {
-    ...achievementData["CORPORATION_BRIBE"],
+    ...achievementData.CORPORATION_BRIBE,
     Icon: "CORPLOBBY",
     Visible: () => hasAccessToSF(Player, 3),
     Condition: () => Player.corporation !== null && Player.corporation.unlockUpgrades[6] === 1,
   },
   CORPORATION_PROD_1000: {
-    ...achievementData["CORPORATION_PROD_1000"],
+    ...achievementData.CORPORATION_PROD_1000,
     Icon: "CORP1000",
     Visible: () => hasAccessToSF(Player, 3),
     Condition: () => Player.corporation !== null && Player.corporation.divisions.some((d) => d.prodMult >= 1000),
   },
   CORPORATION_EMPLOYEE_3000: {
-    ...achievementData["CORPORATION_EMPLOYEE_3000"],
+    ...achievementData.CORPORATION_EMPLOYEE_3000,
     Icon: "CORPCITY",
     Visible: () => hasAccessToSF(Player, 3),
     Condition: (): boolean => {
@@ -464,7 +464,7 @@ export const achievements: Record<string, Achievement> = {
     },
   },
   CORPORATION_REAL_ESTATE: {
-    ...achievementData["CORPORATION_REAL_ESTATE"],
+    ...achievementData.CORPORATION_REAL_ESTATE,
     Icon: "CORPRE",
     Name: "Own the land",
     Description: "Expand to the Real Estate division.",
@@ -473,19 +473,19 @@ export const achievements: Record<string, Achievement> = {
       Player.corporation !== null && Player.corporation.divisions.some((d) => d.type === IndustryType.RealEstate),
   },
   INTELLIGENCE_255: {
-    ...achievementData["INTELLIGENCE_255"],
+    ...achievementData.INTELLIGENCE_255,
     Icon: "INT255",
     Visible: () => hasAccessToSF(Player, 5),
     Condition: () => Player.skills.intelligence >= 255,
   },
   BLADEBURNER_DIVISION: {
-    ...achievementData["BLADEBURNER_DIVISION"],
+    ...achievementData.BLADEBURNER_DIVISION,
     Icon: "BLADE",
     Visible: () => hasAccessToSF(Player, 6),
     Condition: () => Player.bladeburner !== null,
   },
   BLADEBURNER_OVERCLOCK: {
-    ...achievementData["BLADEBURNER_OVERCLOCK"],
+    ...achievementData.BLADEBURNER_OVERCLOCK,
     Icon: "BLADEOVERCLOCK",
     Visible: () => hasAccessToSF(Player, 6),
     Condition: () =>
@@ -493,7 +493,7 @@ export const achievements: Record<string, Achievement> = {
       Player.bladeburner.skills[SkillNames.Overclock] === Skills[SkillNames.Overclock].maxLvl,
   },
   BLADEBURNER_UNSPENT_100000: {
-    ...achievementData["BLADEBURNER_UNSPENT_100000"],
+    ...achievementData.BLADEBURNER_UNSPENT_100000,
     Icon: "BLADE100K",
     Visible: () => hasAccessToSF(Player, 6),
     Condition: () => Player.bladeburner !== null && Player.bladeburner.skillPoints >= 100000,
@@ -504,21 +504,21 @@ export const achievements: Record<string, Achievement> = {
     Condition: () => Player.has4SData,
   },
   FIRST_HACKNET_SERVER: {
-    ...achievementData["FIRST_HACKNET_SERVER"],
+    ...achievementData.FIRST_HACKNET_SERVER,
     Icon: "HASHNET",
     Visible: () => hasAccessToSF(Player, 9),
     Condition: () => hasHacknetServers() && Player.hacknetNodes.length > 0,
     AdditionalUnlock: [achievementData.FIRST_HACKNET_NODE.ID],
   },
   ALL_HACKNET_SERVER: {
-    ...achievementData["ALL_HACKNET_SERVER"],
+    ...achievementData.ALL_HACKNET_SERVER,
     Icon: "HASHNETALL",
     Visible: () => hasAccessToSF(Player, 9),
     Condition: () => hasHacknetServers() && Player.hacknetNodes.length === HacknetServerConstants.MaxServers,
     AdditionalUnlock: [achievementData["30_HACKNET_NODE"].ID],
   },
   MAX_HACKNET_SERVER: {
-    ...achievementData["MAX_HACKNET_SERVER"],
+    ...achievementData.MAX_HACKNET_SERVER,
     Icon: "HASHNETALL",
     Visible: () => hasAccessToSF(Player, 9),
     Condition: (): boolean => {
@@ -540,14 +540,14 @@ export const achievements: Record<string, Achievement> = {
     AdditionalUnlock: [achievementData.MAX_HACKNET_NODE.ID],
   },
   HACKNET_SERVER_1B: {
-    ...achievementData["HACKNET_SERVER_1B"],
+    ...achievementData.HACKNET_SERVER_1B,
     Icon: "HASHNETMONEY",
     Visible: () => hasAccessToSF(Player, 9),
     Condition: () => hasHacknetServers() && Player.moneySourceB.hacknet >= 1e9,
     AdditionalUnlock: [achievementData.HACKNET_NODE_10M.ID],
   },
   MAX_CACHE: {
-    ...achievementData["MAX_CACHE"],
+    ...achievementData.MAX_CACHE,
     Icon: "HASHNETCAP",
     Visible: () => hasAccessToSF(Player, 9),
     Condition: () =>
@@ -556,13 +556,13 @@ export const achievements: Record<string, Achievement> = {
       Player.hashManager.capacity > 0,
   },
   SLEEVE_8: {
-    ...achievementData["SLEEVE_8"],
+    ...achievementData.SLEEVE_8,
     Icon: "SLEEVE8",
     Visible: () => hasAccessToSF(Player, 10),
     Condition: () => Player.sleeves.length === 8 && Player.sourceFileLvl(10) === 3,
   },
   INDECISIVE: {
-    ...achievementData["INDECISIVE"],
+    ...achievementData.INDECISIVE,
     Icon: "1H",
     Visible: () => knowsAboutBitverse(Player),
     Condition: (function () {
@@ -578,13 +578,13 @@ export const achievements: Record<string, Achievement> = {
     })(),
   },
   FAST_BN: {
-    ...achievementData["FAST_BN"],
+    ...achievementData.FAST_BN,
     Icon: "2DAYS",
     Visible: () => knowsAboutBitverse(Player),
     Condition: () => bitNodeFinishedState() && Player.playtimeSinceLastBitnode < 1000 * 60 * 60 * 24 * 2,
   },
   CHALLENGE_BN1: {
-    ...achievementData["CHALLENGE_BN1"],
+    ...achievementData.CHALLENGE_BN1,
     Icon: "BN1+",
     Visible: () => knowsAboutBitverse(Player),
     Condition: () =>
@@ -594,37 +594,37 @@ export const achievements: Record<string, Achievement> = {
       Player.getHomeComputer().cpuCores === 1,
   },
   CHALLENGE_BN2: {
-    ...achievementData["CHALLENGE_BN2"],
+    ...achievementData.CHALLENGE_BN2,
     Icon: "BN2+",
     Visible: () => hasAccessToSF(Player, 2),
     Condition: () => Player.bitNodeN === 2 && bitNodeFinishedState() && Player.gang === null,
   },
   CHALLENGE_BN3: {
-    ...achievementData["CHALLENGE_BN3"],
+    ...achievementData.CHALLENGE_BN3,
     Icon: "BN3+",
     Visible: () => hasAccessToSF(Player, 3),
     Condition: () => Player.bitNodeN === 3 && bitNodeFinishedState() && Player.corporation === null,
   },
   CHALLENGE_BN6: {
-    ...achievementData["CHALLENGE_BN6"],
+    ...achievementData.CHALLENGE_BN6,
     Icon: "BN6+",
     Visible: () => hasAccessToSF(Player, 6),
     Condition: () => Player.bitNodeN === 6 && bitNodeFinishedState() && Player.bladeburner === null,
   },
   CHALLENGE_BN7: {
-    ...achievementData["CHALLENGE_BN7"],
+    ...achievementData.CHALLENGE_BN7,
     Icon: "BN7+",
     Visible: () => hasAccessToSF(Player, 7),
     Condition: () => Player.bitNodeN === 7 && bitNodeFinishedState() && Player.bladeburner === null,
   },
   CHALLENGE_BN8: {
-    ...achievementData["CHALLENGE_BN8"],
+    ...achievementData.CHALLENGE_BN8,
     Icon: "BN8+",
     Visible: () => hasAccessToSF(Player, 8),
     Condition: () => Player.bitNodeN === 8 && bitNodeFinishedState() && !Player.has4SData && !Player.has4SDataTixApi,
   },
   CHALLENGE_BN9: {
-    ...achievementData["CHALLENGE_BN9"],
+    ...achievementData.CHALLENGE_BN9,
     Icon: "BN9+",
     Visible: () => hasAccessToSF(Player, 9),
     Condition: () =>
@@ -634,7 +634,7 @@ export const achievements: Record<string, Achievement> = {
       Player.moneySourceB.hacknet_expenses === 0,
   },
   CHALLENGE_BN10: {
-    ...achievementData["CHALLENGE_BN10"],
+    ...achievementData.CHALLENGE_BN10,
     Icon: "BN10+",
     Visible: () => hasAccessToSF(Player, 10),
     Condition: () =>
@@ -652,68 +652,68 @@ export const achievements: Record<string, Achievement> = {
       ),
   },
   CHALLENGE_BN12: {
-    ...achievementData["CHALLENGE_BN12"],
+    ...achievementData.CHALLENGE_BN12,
     Icon: "BN12+",
     Visible: () => hasAccessToSF(Player, 12),
     Condition: () => Player.sourceFileLvl(12) >= 50,
   },
   BYPASS: {
-    ...achievementData["BYPASS"],
+    ...achievementData.BYPASS,
     Icon: "SF-1",
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.Bypass),
   },
   PROTOTYPETAMPERING: {
-    ...achievementData["PROTOTYPETAMPERING"],
+    ...achievementData.PROTOTYPETAMPERING,
     Icon: "SF-1",
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.PrototypeTampering),
   },
   UNCLICKABLE: {
-    ...achievementData["UNCLICKABLE"],
+    ...achievementData.UNCLICKABLE,
     Icon: "SF-1",
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.Unclickable),
   },
   UNDOCUMENTEDFUNCTIONCALL: {
-    ...achievementData["UNDOCUMENTEDFUNCTIONCALL"],
+    ...achievementData.UNDOCUMENTEDFUNCTIONCALL,
     Icon: "SF-1",
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.UndocumentedFunctionCall),
   },
   TIMECOMPRESSION: {
-    ...achievementData["TIMECOMPRESSION"],
+    ...achievementData.TIMECOMPRESSION,
     Icon: "SF-1",
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.TimeCompression),
   },
   REALITYALTERATION: {
-    ...achievementData["REALITYALTERATION"],
+    ...achievementData.REALITYALTERATION,
     Icon: "SF-1",
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.RealityAlteration),
   },
   N00DLES: {
-    ...achievementData["N00DLES"],
+    ...achievementData.N00DLES,
     Icon: "SF-1",
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.N00dles),
   },
   EDITSAVEFILE: {
-    ...achievementData["EDITSAVEFILE"],
+    ...achievementData.EDITSAVEFILE,
     Icon: "SF-1",
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.EditSaveFile),
   },
   UNACHIEVABLE: {
-    ...achievementData["UNACHIEVABLE"],
+    ...achievementData.UNACHIEVABLE,
     Icon: "SF-1",
     Secret: true,
     // Hey Players! Yes, you're supposed to modify this to get the achievement!
     Condition: () => false,
   },
   CHALLENGE_BN13: {
-    ...achievementData["CHALLENGE_BN13"],
+    ...achievementData.CHALLENGE_BN13,
     Icon: "BN13+",
     Visible: () => hasAccessToSF(Player, 13),
     Condition: () =>
@@ -722,19 +722,19 @@ export const achievements: Record<string, Achievement> = {
       !Player.augmentations.some((a) => a.name === AugmentationNames.StaneksGift1),
   },
   DEVMENU: {
-    ...achievementData["DEVMENU"],
+    ...achievementData.DEVMENU,
     Icon: "SF-1",
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.YoureNotMeantToAccessThis),
   },
   RAINBOW: {
-    ...achievementData["RAINBOW"],
+    ...achievementData.RAINBOW,
     Icon: "SF-1",
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.INeedARainbow),
   },
   TRUE_RECURSION: {
-    ...achievementData["TRUE_RECURSION"],
+    ...achievementData.TRUE_RECURSION,
     Icon: "SF-1",
     Secret: true,
     Condition: () => Player.exploits.includes(Exploit.TrueRecursion),

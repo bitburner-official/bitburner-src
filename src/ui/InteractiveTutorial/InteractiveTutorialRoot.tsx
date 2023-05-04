@@ -52,7 +52,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
 
   const tutorialScriptName = `n00dles.js`;
 
-  const contents: { [number: string]: IContent | undefined } = {
+  const contents: Record<string, IContent | undefined> = {
     [iTutorialSteps.Start as number]: {
       content: (
         <>

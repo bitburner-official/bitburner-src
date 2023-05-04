@@ -455,7 +455,7 @@ export function Root(props: IProps): React.ReactElement {
       const cleanCode = currentScript.code.replace(/\s/g, "");
       const ns1 = "while(true){hack('n00dles');}";
       const ns2 = `exportasyncfunctionmain(ns){while(true){awaitns.hack('n00dles');}}`;
-      if (cleanCode.indexOf(ns1) == -1 && cleanCode.indexOf(ns2) == -1) {
+      if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
         dialogBoxCreate("Please copy and paste the code from the tutorial!");
         return;
       }
@@ -673,7 +673,7 @@ export function Root(props: IProps): React.ReactElement {
                 {filteredOpenScripts.map(({ path: fileName, hostname }, index) => {
                   const editingCurrentScript =
                     currentScript?.path === filteredOpenScripts[index].path &&
-                    currentScript?.hostname === filteredOpenScripts[index].hostname;
+                    currentScript.hostname === filteredOpenScripts[index].hostname;
                   const externalScript = hostname !== "home";
                   const colorProps = editingCurrentScript
                     ? {

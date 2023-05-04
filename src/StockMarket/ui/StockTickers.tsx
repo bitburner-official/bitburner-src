@@ -12,9 +12,9 @@ import { IStockMarket } from "../IStockMarket";
 import { Stock } from "../Stock";
 import { useRerender } from "../../ui/React/hooks";
 
-type IProps = {
+interface IProps {
   stockMarket: IStockMarket;
-};
+}
 
 export function StockTickers(props: IProps): React.ReactElement {
   const rerender = useRerender();

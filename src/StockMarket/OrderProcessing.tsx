@@ -37,7 +37,7 @@ export function processOrders(
   posType: PositionTypes,
   refs: IProcessOrderRefs,
 ): void {
-  const orderBook = refs.stockMarket["Orders"];
+  const orderBook = refs.stockMarket.Orders;
   if (orderBook == null) {
     const orders: IOrderBook = {};
     for (const name of Object.keys(refs.stockMarket)) {
@@ -47,7 +47,7 @@ export function processOrders(
       }
       orders[stock.symbol] = [];
     }
-    refs.stockMarket["Orders"] = orders;
+    refs.stockMarket.Orders = orders;
     return; // Newly created, so no orders to process
   }
   let stockOrders = orderBook[stock.symbol];
@@ -108,7 +108,7 @@ function executeOrder(order: Order, refs: IProcessOrderRefs): void {
     return;
   }
   const stockMarket = refs.stockMarket;
-  const orderBook = stockMarket["Orders"];
+  const orderBook = stockMarket.Orders;
   const stockOrders = orderBook[stock.symbol];
 
   // When orders are executed, the buying and selling functions shouldn't

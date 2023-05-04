@@ -32,9 +32,9 @@ import { Page } from "../../ui/Router";
 import { serverMetadata } from "../../Server/data/servers";
 import { Tooltip } from "@mui/material";
 
-type IProps = {
+interface IProps {
   loc: Location;
-};
+}
 
 export function GenericLocation({ loc }: IProps): React.ReactElement {
   /**

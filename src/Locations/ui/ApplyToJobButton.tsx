@@ -8,12 +8,12 @@ import { Player } from "@player";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 
-type IProps = {
+interface IProps {
   company: Company;
   entryPosType: CompanyPosition;
   onClick: (e: React.MouseEvent<HTMLElement>) => void;
   text: string;
-};
+}
 
 /** React Component for a button that's used to apply for a job */
 export function ApplyToJobButton(props: IProps): React.ReactElement {

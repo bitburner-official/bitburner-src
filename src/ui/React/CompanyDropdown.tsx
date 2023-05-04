@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 interface IProps {
   purchase: () => void;
   canPurchase: boolean;
-  onChange: (event: SelectChangeEvent<string>) => void;
+  onChange: (event: SelectChangeEvent) => void;
   value: string;
 }
 

@@ -72,7 +72,7 @@ export class RunningScript {
   temporary = false;
 
   // Script urls for the current running script for translating urls back to file names in errors
-  dependencies: Map<ScriptURL, Script> = new Map();
+  dependencies = new Map<ScriptURL, Script>();
 
   constructor(script?: Script, ramUsage?: number, args: ScriptArg[] = []) {
     if (!script) return;

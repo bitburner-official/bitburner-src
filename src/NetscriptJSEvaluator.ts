@@ -39,7 +39,7 @@ export const config = {
 // or changes a script and then changes it back).
 // Modules can never be garbage collected by Javascript, so it's good to try
 // to keep from making more than we need.
-const moduleCache: Map<string, WeakRef<LoadedModule>> = new Map();
+const moduleCache = new Map<string, WeakRef<LoadedModule>>();
 const cleanup = new FinalizationRegistry((mapKey: string) => {
   // A new entry can be created with the same key, before this callback is called.
   if (moduleCache.get(mapKey)?.deref() === undefined) {

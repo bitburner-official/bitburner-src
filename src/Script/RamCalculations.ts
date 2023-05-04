@@ -57,7 +57,7 @@ function parseOnlyRamCalculate(otherScripts: Map<ScriptFilePath, Script>, code: 
    * We walk the dependency graph to calculate RAM usage, given that some identifiers
    * reference Netscript functions which have a RAM cost.
    */
-  let dependencyMap: { [key: string]: string[] } = {};
+  let dependencyMap: Record<string, string[]> = {};
 
   // Scripts we've parsed.
   const completedParses = new Set();
@@ -231,9 +231,7 @@ export function checkInfiniteLoop(code: string): number {
 }
 
 interface ParseDepsResult {
-  dependencyMap: {
-    [key: string]: Set<string> | undefined;
-  };
+  dependencyMap: Record<string, Set<string> | undefined>;
   additionalModules: string[];
 }
 
@@ -248,12 +246,12 @@ function parseOnlyCalculateDeps(code: string, currentModule: string): ParseDepsR
   // Everything from the global scope goes in ".". Everything else goes in ".function", where only
   // the outermost layer of functions counts.
   const globalKey = currentModule + memCheckGlobalKey;
-  const dependencyMap: { [key: string]: Set<string> | undefined } = {};
+  const dependencyMap: Record<string, Set<string> | undefined> = {};
   dependencyMap[globalKey] = new Set<string>();
 
   // If we reference this internal name, we're really referencing that external name.
   // Filled when we import names from other modules.
-  const internalToExternal: { [key: string]: string | undefined } = {};
+  const internalToExternal: Record<string, string | undefined> = {};
 
   const additionalModules: string[] = [];
 

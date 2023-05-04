@@ -50,7 +50,7 @@ import {
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { LogBoxEvents, LogBoxCloserEvents, LogBoxPositionEvents, LogBoxSizeEvents } from "./ui/React/LogBoxManager";
-import { arrayToString } from "./utils/helpers/arrayToString";
+import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { NetscriptGang } from "./NetscriptFunctions/Gang";
 import { NetscriptSleeve } from "./NetscriptFunctions/Sleeve";
 import { NetscriptExtra } from "./NetscriptFunctions/Extra";
@@ -787,7 +787,7 @@ export const ns: InternalAPI<NSFull> = {
 
       for (const byPid of server.runningScriptMap.values()) {
         for (const pid of byPid.keys()) {
-          if (safetyguard === true && pid == ctx.workerScript.pid) continue;
+          if (safetyguard && pid == ctx.workerScript.pid) continue;
           killWorkerScriptByPid(pid);
           ++scriptsKilled;
         }
@@ -851,13 +851,13 @@ export const ns: InternalAPI<NSFull> = {
 
       const destMessage = destServer.messages.find((message) => message === litFilePath);
       if (destMessage) {
-        helpers.log(ctx, () => `File '${litFilePath}' was already on '${destServer?.hostname}'.`);
+        helpers.log(ctx, () => `File '${litFilePath}' was already on '${destServer.hostname}'.`);
         continue;
       }
 
       // It exists in sourceServer.messages, so it's a valid name.
       destServer.messages.push(litFilePath as LiteratureName);
-      helpers.log(ctx, () => `File '${litFilePath}' copied over to '${destServer?.hostname}'.`);
+      helpers.log(ctx, () => `File '${litFilePath}' copied over to '${destServer.hostname}'.`);
       continue;
     }
     return noFailures;

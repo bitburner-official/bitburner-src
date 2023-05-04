@@ -24,7 +24,7 @@ interface IProps {
 export function ContractElem(props: IProps): React.ReactElement {
   const rerender = useRerender();
   const isActive =
-    props.bladeburner.action.type === ActionTypes["Contract"] && props.action.name === props.bladeburner.action.name;
+    props.bladeburner.action.type === ActionTypes.Contract && props.action.name === props.bladeburner.action.name;
   const computedActionTimeCurrent = Math.min(
     props.bladeburner.actionTimeCurrent + props.bladeburner.actionTimeOverflow,
     props.bladeburner.actionTimeToComplete,

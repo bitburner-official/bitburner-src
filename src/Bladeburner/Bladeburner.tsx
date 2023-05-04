@@ -67,7 +67,7 @@ export class Bladeburner {
   actionTimeOverflow = 0;
 
   action: ActionIdentifier = new ActionIdentifier({
-    type: ActionTypes["Idle"],
+    type: ActionTypes.Idle,
   });
 
   cities: Record<CityName, City>;
@@ -90,11 +90,11 @@ export class Bladeburner {
   };
   automateEnabled = false;
   automateActionHigh: ActionIdentifier = new ActionIdentifier({
-    type: ActionTypes["Idle"],
+    type: ActionTypes.Idle,
   });
   automateThreshHigh = 0;
   automateActionLow: ActionIdentifier = new ActionIdentifier({
-    type: ActionTypes["Idle"],
+    type: ActionTypes.Idle,
   });
   automateThreshLow = 0;
   consoleHistory: string[] = [];
@@ -165,10 +165,10 @@ export class Bladeburner {
     this.action = actionId;
     this.actionTimeCurrent = 0;
     switch (actionId.type) {
-      case ActionTypes["Idle"]:
+      case ActionTypes.Idle:
         this.actionTimeToComplete = 0;
         break;
-      case ActionTypes["Contract"]:
+      case ActionTypes.Contract:
         try {
           const action = this.getActionObject(actionId);
           if (action == null) {
@@ -182,7 +182,7 @@ export class Bladeburner {
           exceptionAlert(e);
         }
         break;
-      case ActionTypes["Operation"]: {
+      case ActionTypes.Operation: {
         try {
           const action = this.getActionObject(actionId);
           if (action == null) {
@@ -200,8 +200,8 @@ export class Bladeburner {
         }
         break;
       }
-      case ActionTypes["BlackOp"]:
-      case ActionTypes["BlackOperation"]: {
+      case ActionTypes.BlackOp:
+      case ActionTypes.BlackOperation: {
         try {
           const testBlackOp = this.canAttemptBlackOp(actionId);
           if (!testBlackOp.isAvailable) {
@@ -218,15 +218,15 @@ export class Bladeburner {
         }
         break;
       }
-      case ActionTypes["Recruitment"]:
+      case ActionTypes.Recruitment:
         this.actionTimeToComplete = this.getRecruitmentTime(Player);
         break;
-      case ActionTypes["Training"]:
-      case ActionTypes["FieldAnalysis"]:
+      case ActionTypes.Training:
+      case ActionTypes.FieldAnalysis:
       case ActionTypes["Field Analysis"]:
         this.actionTimeToComplete = 30;
         break;
-      case ActionTypes["Diplomacy"]:
+      case ActionTypes.Diplomacy:
       case ActionTypes["Hyperbolic Regeneration Chamber"]:
       case ActionTypes["Incite Violence"]:
         this.actionTimeToComplete = 60;
@@ -318,7 +318,7 @@ export class Bladeburner {
       case "contract":
       case "contracts":
       case "contr":
-        action.type = ActionTypes["Contract"];
+        action.type = ActionTypes.Contract;
         if (Object.hasOwn(this.contracts, name)) {
           action.name = name;
           return action;
@@ -328,7 +328,7 @@ export class Bladeburner {
       case "operations":
       case "op":
       case "ops":
-        action.type = ActionTypes["Operation"];
+        action.type = ActionTypes.Operation;
         if (Object.hasOwn(this.operations, name)) {
           action.name = name;
           return action;
@@ -341,7 +341,7 @@ export class Bladeburner {
       case "black ops":
       case "blackop":
       case "blackops":
-        action.type = ActionTypes["BlackOp"];
+        action.type = ActionTypes.BlackOp;
         if (Object.hasOwn(BlackOperations, name)) {
           action.name = name;
           return action;
@@ -358,12 +358,12 @@ export class Bladeburner {
     if (convertedType.startsWith("gen")) {
       switch (convertedName) {
         case "training":
-          action.type = ActionTypes["Training"];
+          action.type = ActionTypes.Training;
           action.name = "Training";
           break;
         case "recruitment":
         case "recruit":
-          action.type = ActionTypes["Recruitment"];
+          action.type = ActionTypes.Recruitment;
           action.name = "Recruitment";
           break;
         case "field analysis":
@@ -372,7 +372,7 @@ export class Bladeburner {
           action.name = "Field Analysis";
           break;
         case "diplomacy":
-          action.type = ActionTypes["Diplomacy"];
+          action.type = ActionTypes.Diplomacy;
           action.name = "Diplomacy";
           break;
         case "hyperbolic regeneration chamber":
@@ -1191,21 +1191,21 @@ export class Bladeburner {
      * GeneralAction, Contract, Operation, or BlackOperation object
      */
     switch (actionId.type) {
-      case ActionTypes["Contract"]:
+      case ActionTypes.Contract:
         return this.contracts[actionId.name];
-      case ActionTypes["Operation"]:
+      case ActionTypes.Operation:
         return this.operations[actionId.name];
-      case ActionTypes["BlackOp"]:
-      case ActionTypes["BlackOperation"]:
+      case ActionTypes.BlackOp:
+      case ActionTypes.BlackOperation:
         return BlackOperations[actionId.name];
-      case ActionTypes["Training"]:
-        return GeneralActions["Training"];
+      case ActionTypes.Training:
+        return GeneralActions.Training;
       case ActionTypes["Field Analysis"]:
         return GeneralActions["Field Analysis"];
-      case ActionTypes["Recruitment"]:
-        return GeneralActions["Recruitment"];
-      case ActionTypes["Diplomacy"]:
-        return GeneralActions["Diplomacy"];
+      case ActionTypes.Recruitment:
+        return GeneralActions.Recruitment;
+      case ActionTypes.Diplomacy:
+        return GeneralActions.Diplomacy;
       case ActionTypes["Hyperbolic Regeneration Chamber"]:
         return GeneralActions["Hyperbolic Regeneration Chamber"];
       case ActionTypes["Incite Violence"]:
@@ -1243,10 +1243,10 @@ export class Bladeburner {
   completeAction(person: Person, actionIdent: ActionIdentifier, isPlayer = true): WorkStats {
     let retValue = newWorkStats();
     switch (actionIdent.type) {
-      case ActionTypes["Contract"]:
-      case ActionTypes["Operation"]: {
+      case ActionTypes.Contract:
+      case ActionTypes.Operation: {
         try {
-          const isOperation = actionIdent.type === ActionTypes["Operation"];
+          const isOperation = actionIdent.type === ActionTypes.Operation;
           const action = this.getActionObject(actionIdent);
           if (action == null) {
             throw new Error("Failed to get Contract/Operation Object for: " + actionIdent.name);
@@ -1340,8 +1340,8 @@ export class Bladeburner {
         }
         break;
       }
-      case ActionTypes["BlackOp"]:
-      case ActionTypes["BlackOperation"]: {
+      case ActionTypes.BlackOp:
+      case ActionTypes.BlackOperation: {
         try {
           const action = this.getActionObject(actionIdent);
           if (action == null || !(action instanceof BlackOperation)) {
@@ -1441,7 +1441,7 @@ export class Bladeburner {
         }
         break;
       }
-      case ActionTypes["Training"]: {
+      case ActionTypes.Training: {
         this.stamina -= 0.5 * BladeburnerConstants.BaseStaminaLoss;
         const strExpGain = 30 * person.mults.strength_exp,
           defExpGain = 30 * person.mults.defense_exp,
@@ -1471,7 +1471,7 @@ export class Bladeburner {
         }
         break;
       }
-      case ActionTypes["FieldAnalysis"]:
+      case ActionTypes.FieldAnalysis:
       case ActionTypes["Field Analysis"]: {
         // Does not use stamina. Effectiveness depends on hacking, int, and cha
         let eff =
@@ -1500,7 +1500,7 @@ export class Bladeburner {
         }
         break;
       }
-      case ActionTypes["Recruitment"]: {
+      case ActionTypes.Recruitment: {
         const successChance = this.getRecruitmentSuccessChance(person);
         const recruitTime = this.getRecruitmentTime(person) * 1000;
         if (Math.random() < successChance) {
@@ -1529,7 +1529,7 @@ export class Bladeburner {
         }
         break;
       }
-      case ActionTypes["Diplomacy"]: {
+      case ActionTypes.Diplomacy: {
         const eff = this.getDiplomacyEffectiveness(person);
         this.getCurrentCity().chaos *= eff;
         if (this.getCurrentCity().chaos < 0) {
@@ -1638,7 +1638,7 @@ export class Bladeburner {
   }
 
   processAction(seconds: number): void {
-    if (this.action.type === ActionTypes["Idle"]) return;
+    if (this.action.type === ActionTypes.Idle) return;
     if (this.actionTimeToComplete <= 0) {
       throw new Error(`Invalid actionTimeToComplete value: ${this.actionTimeToComplete}, type; ${this.action.type}`);
     }
@@ -1659,7 +1659,7 @@ export class Bladeburner {
       // Operation Daedalus
       if (action == null) {
         throw new Error("Failed to get BlackOperation Object for: " + this.action.name);
-      } else if (this.action.type != ActionTypes["BlackOperation"] && this.action.type != ActionTypes["BlackOp"]) {
+      } else if (this.action.type != ActionTypes.BlackOperation && this.action.type != ActionTypes.BlackOp) {
         this.startAction(this.action); // Repeat action
       }
     }
@@ -1689,7 +1689,7 @@ export class Bladeburner {
   }
 
   create(): void {
-    this.contracts["Tracking"] = new Contract({
+    this.contracts.Tracking = new Contract({
       name: "Tracking",
       baseDifficulty: 125,
       difficultyFac: 1.02,
@@ -1745,7 +1745,7 @@ export class Bladeburner {
       },
       isKill: true,
     });
-    this.contracts["Retirement"] = new Contract({
+    this.contracts.Retirement = new Contract({
       name: "Retirement",
       baseDifficulty: 200,
       difficultyFac: 1.03,
@@ -1774,7 +1774,7 @@ export class Bladeburner {
       isKill: true,
     });
 
-    this.operations["Investigation"] = new Operation({
+    this.operations.Investigation = new Operation({
       name: "Investigation",
       baseDifficulty: 400,
       difficultyFac: 1.03,
@@ -1863,7 +1863,7 @@ export class Bladeburner {
       },
       isStealth: true,
     });
-    this.operations["Raid"] = new Operation({
+    this.operations.Raid = new Operation({
       name: "Raid",
       baseDifficulty: 800,
       difficultyFac: 1.045,
@@ -1924,7 +1924,7 @@ export class Bladeburner {
       isStealth: true,
       isKill: true,
     });
-    this.operations["Assassination"] = new Operation({
+    this.operations.Assassination = new Operation({
       name: "Assassination",
       baseDifficulty: 1500,
       difficultyFac: 1.06,
@@ -1963,7 +1963,7 @@ export class Bladeburner {
 
     // If the Player starts doing some other actions, set action to idle and alert
     if (!Player.hasAugmentation(AugmentationNames.BladesSimulacrum, true) && Player.currentWork) {
-      if (this.action.type !== ActionTypes["Idle"]) {
+      if (this.action.type !== ActionTypes.Idle) {
         let msg = "Your Bladeburner action was cancelled because you started doing something else.";
         if (this.automateEnabled) {
           msg += `\n\nYour automation was disabled as well. You will have to re-enable it through the Bladeburner console`;
@@ -2111,7 +2111,7 @@ export class Bladeburner {
     }
 
     // Special logic for Black Ops
-    if (actionId.type === ActionTypes["BlackOp"]) {
+    if (actionId.type === ActionTypes.BlackOp) {
       const canRunOp = this.canAttemptBlackOp(actionId);
       if (!canRunOp.isAvailable) {
         workerScript.log("bladeburner.startAction", () => canRunOp.error + "");
@@ -2145,18 +2145,18 @@ export class Bladeburner {
       return "bladeburner.getActionTime";
     }
     switch (actionId.type) {
-      case ActionTypes["Contract"]:
-      case ActionTypes["Operation"]:
-      case ActionTypes["BlackOp"]:
-      case ActionTypes["BlackOperation"]:
+      case ActionTypes.Contract:
+      case ActionTypes.Operation:
+      case ActionTypes.BlackOp:
+      case ActionTypes.BlackOperation:
         return actionObj.getActionTime(this, person) * 1000;
-      case ActionTypes["Training"]:
+      case ActionTypes.Training:
       case ActionTypes["Field Analysis"]:
-      case ActionTypes["FieldAnalysis"]:
+      case ActionTypes.FieldAnalysis:
         return 30000;
-      case ActionTypes["Recruitment"]:
+      case ActionTypes.Recruitment:
         return this.getRecruitmentTime(person) * 1000;
-      case ActionTypes["Diplomacy"]:
+      case ActionTypes.Diplomacy:
       case ActionTypes["Hyperbolic Regeneration Chamber"]:
       case ActionTypes["Incite Violence"]:
         return 60000;
@@ -2176,19 +2176,19 @@ export class Bladeburner {
       return "bladeburner.getActionEstimatedSuccessChance";
     }
     switch (actionId.type) {
-      case ActionTypes["Contract"]:
-      case ActionTypes["Operation"]:
-      case ActionTypes["BlackOp"]:
-      case ActionTypes["BlackOperation"]:
+      case ActionTypes.Contract:
+      case ActionTypes.Operation:
+      case ActionTypes.BlackOp:
+      case ActionTypes.BlackOperation:
         return actionObj.getEstSuccessChance(this, person);
-      case ActionTypes["Training"]:
+      case ActionTypes.Training:
       case ActionTypes["Field Analysis"]:
-      case ActionTypes["FieldAnalysis"]:
-      case ActionTypes["Diplomacy"]:
+      case ActionTypes.FieldAnalysis:
+      case ActionTypes.Diplomacy:
       case ActionTypes["Hyperbolic Regeneration Chamber"]:
       case ActionTypes["Incite Violence"]:
         return [1, 1];
-      case ActionTypes["Recruitment"]: {
+      case ActionTypes.Recruitment: {
         const recChance = this.getRecruitmentSuccessChance(person);
         return [recChance, recChance];
       }
@@ -2212,21 +2212,21 @@ export class Bladeburner {
     }
 
     switch (actionId.type) {
-      case ActionTypes["Contract"]:
-      case ActionTypes["Operation"]:
+      case ActionTypes.Contract:
+      case ActionTypes.Operation:
         return Math.floor(actionObj.count);
-      case ActionTypes["BlackOp"]:
-      case ActionTypes["BlackOperation"]:
+      case ActionTypes.BlackOp:
+      case ActionTypes.BlackOperation:
         if (this.blackops[name] != null) {
           return 0;
         } else {
           return 1;
         }
-      case ActionTypes["Training"]:
-      case ActionTypes["Recruitment"]:
+      case ActionTypes.Training:
+      case ActionTypes.Recruitment:
       case ActionTypes["Field Analysis"]:
-      case ActionTypes["FieldAnalysis"]:
-      case ActionTypes["Diplomacy"]:
+      case ActionTypes.FieldAnalysis:
+      case ActionTypes.Diplomacy:
       case ActionTypes["Hyperbolic Regeneration Chamber"]:
       case ActionTypes["Incite Violence"]:
         return Infinity;
@@ -2316,9 +2316,9 @@ export class Bladeburner {
     }
 
     if (
-      actionId.type === ActionTypes["Operation"] ||
-      actionId.type === ActionTypes["BlackOp"] ||
-      actionId.type === ActionTypes["BlackOperation"]
+      actionId.type === ActionTypes.Operation ||
+      actionId.type === ActionTypes.BlackOp ||
+      actionId.type === ActionTypes.BlackOperation
     ) {
       return actionObj.teamCount;
     } else {
@@ -2335,9 +2335,9 @@ export class Bladeburner {
     }
 
     if (
-      actionId.type !== ActionTypes["Operation"] &&
-      actionId.type !== ActionTypes["BlackOp"] &&
-      actionId.type !== ActionTypes["BlackOperation"]
+      actionId.type !== ActionTypes.Operation &&
+      actionId.type !== ActionTypes.BlackOp &&
+      actionId.type !== ActionTypes.BlackOperation
     ) {
       workerScript.log("bladeburner.setTeamSize", () => "Only valid for 'Operations' and 'BlackOps'");
       return -1;

@@ -165,7 +165,7 @@ class BitburnerSaveObject {
     if (!file) return Promise.reject(new Error("Invalid file selected"));
 
     const reader = new FileReader();
-    const promise: Promise<string> = new Promise((resolve, reject) => {
+    const promise = new Promise<string>((resolve, reject) => {
       reader.onload = function (this: FileReader, e: ProgressEvent<FileReader>) {
         const target = e.target;
         if (target === null) {
@@ -483,9 +483,9 @@ function evaluateVersionCompatibility(ver: string | number): void {
   if (ver < 21) {
     // 2.0.0 work rework
     AwardNFG(10);
-    const create = anyPlayer["createProgramName"];
+    const create = anyPlayer.createProgramName;
     if (create) Player.getHomeComputer().pushProgram(create);
-    const graft = anyPlayer["graftAugmentationName"];
+    const graft = anyPlayer.graftAugmentationName;
     if (graft) Player.augmentations.push({ name: graft, level: 1 });
   }
   if (ver < 22) {
@@ -809,7 +809,7 @@ function loadGame(saveString: string): boolean {
 }
 
 function createScamUpdateText(): void {
-  if (navigator.userAgent.indexOf("wv") !== -1 && navigator.userAgent.indexOf("Chrome/") !== -1) {
+  if (navigator.userAgent.includes("wv") && navigator.userAgent.includes("Chrome/")) {
     setInterval(() => {
       dialogBoxCreate("SCAM ALERT. This app is not official and you should uninstall it.");
     }, 1000);

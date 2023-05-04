@@ -8,7 +8,7 @@ function uuidv4(): string {
 
 /** Generic Event Emitter class following a subscribe/publish paradigm. */
 export class EventEmitter<T extends any[]> {
-  subscribers: { [key: string]: (...args: [...T]) => void | undefined } = {};
+  subscribers: Record<string, (...args: [...T]) => void | undefined> = {};
 
   subscribe(s: (...args: [...T]) => void): () => void {
     let uuid = uuidv4();

@@ -14,7 +14,7 @@ import { CompletedProgramName } from "../../Programs/Programs";
 
 export function Programs(): React.ReactElement {
   const [program, setProgram] = useState(CompletedProgramName.bruteSsh);
-  function setProgramDropdown(event: SelectChangeEvent<string>): void {
+  function setProgramDropdown(event: SelectChangeEvent): void {
     setProgram(event.target.value as CompletedProgramName);
   }
   function addProgram(): void {

@@ -8,11 +8,11 @@ export interface IProgramCreate {
   time: number;
   tooltip: string;
 }
-type ProgramConstructorParams = {
+interface ProgramConstructorParams {
   name: CompletedProgramName;
   create: IProgramCreate | null;
   run: (args: string[], server: BaseServer) => void;
-};
+}
 
 export class Program {
   name: ProgramFilePath & CompletedProgramName;

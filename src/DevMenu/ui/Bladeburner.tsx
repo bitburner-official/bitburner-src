@@ -60,7 +60,7 @@ export function Bladeburner(): React.ReactElement {
 
   // Skill functions
   const [skill, setSkill] = useState(SkillNames.BladesIntuition);
-  function setSkillDropdown(event: SelectChangeEvent<string>): void {
+  function setSkillDropdown(event: SelectChangeEvent): void {
     setSkill(event.target.value);
   }
   const modifySkill = (modifier: number) => (levelchange: number) => {
@@ -83,7 +83,7 @@ export function Bladeburner(): React.ReactElement {
   // Contract functions
   const AllContracts = bladeburner.contracts;
   const [contractTarget, setContract] = useState(AllContracts.Tracking.name);
-  function setContractDropdown(event: SelectChangeEvent<string>): void {
+  function setContractDropdown(event: SelectChangeEvent): void {
     setContract(event.target.value);
   }
   const modifyContractLevel = (modifier: number) => (levelchange: number) => {
@@ -118,7 +118,7 @@ export function Bladeburner(): React.ReactElement {
   // Operation functions
   const AllOperations = bladeburner.operations;
   const [operationTarget, setOperation] = useState(AllOperations.Investigation.name);
-  function setOperationDropdown(event: SelectChangeEvent<string>): void {
+  function setOperationDropdown(event: SelectChangeEvent): void {
     setOperation(event.target.value);
   }
   const modifyOperationLevel = (modifier: number) => (levelchange: number) => {

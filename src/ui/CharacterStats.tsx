@@ -60,7 +60,7 @@ interface MultTableProps {
 
 function MultiplierTable(props: MultTableProps): React.ReactElement {
   return (
-    <Table sx={{ display: "table", width: "100%", mb: (props.noMargin ?? false) === true ? 0 : 2 }}>
+    <Table sx={{ display: "table", width: "100%", mb: props.noMargin ? 0 : 2 }}>
       <TableBody>
         {props.rows.map((data) => {
           const { mult, value, effValue = null, color = props.color } = data;

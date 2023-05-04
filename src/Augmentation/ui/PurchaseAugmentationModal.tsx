@@ -17,36 +17,33 @@ interface IProps {
   aug?: Augmentation;
 }
 
-export function PurchaseAugmentationModal(props: IProps): React.ReactElement {
-  if (!props.aug || !props.faction) {
+export function PurchaseAugmentationModal({ aug, faction, onClose, open }: IProps): React.ReactElement {
+  if (!aug || !faction || (!isRepeatableAug(aug) && Player.hasAugmentation(aug.name))) {
     return <></>;
   }
 
-  function buy(): void {
-    if (!props.aug || (!isRepeatableAug(props.aug) && Player.hasAugmentation(props.aug.name))) {
-      return;
-    }
-
-    purchaseAugmentation(props.aug, props.faction as Faction);
-    props.onClose();
-  }
-
   return (
-    <Modal open={props.open} onClose={props.onClose}>
-      <Typography variant="h4">{props.aug.name}</Typography>
+    <Modal open={open} onClose={onClose}>
+      <Typography variant="h4">{aug.name}</Typography>
       <Typography>
-        {props.aug.info}
+        {aug.info}
         <br />
         <br />
-        {props.aug.stats}
+        {aug.stats}
         <br />
         <br />
-        Would you like to purchase the {props.aug.name} Augmentation for&nbsp;
-        <Money money={props.aug.getCost().moneyCost} />?
+        Would you like to purchase the {aug.name} Augmentation for&nbsp;
+        <Money money={aug.getCost().moneyCost} />?
         <br />
         <br />
       </Typography>
-      <Button autoFocus onClick={buy}>
+      <Button
+        autoFocus
+        onClick={() => {
+          purchaseAugmentation(aug, faction);
+          onClose();
+        }}
+      >
         Purchase
       </Button>
     </Modal>

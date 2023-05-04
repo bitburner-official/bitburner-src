@@ -1,9 +1,7 @@
 import { gangMemberUpgradesMetadata } from "./data/upgrades";
 import { GangMemberUpgrade } from "./GangMemberUpgrade";
 
-export const GangMemberUpgrades: {
-  [key: string]: GangMemberUpgrade;
-} = {};
+export const GangMemberUpgrades: Record<string, GangMemberUpgrade> = {};
 
 (function () {
   gangMemberUpgradesMetadata.forEach((e) => {

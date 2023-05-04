@@ -50,7 +50,7 @@ export function ExpandIndustryTab(props: IProps): React.ReactElement {
     if (event.key === KEY.ENTER) newIndustry();
   }
 
-  function onIndustryChange(event: SelectChangeEvent<string>): void {
+  function onIndustryChange(event: SelectChangeEvent): void {
     setIndustry(event.target.value as IndustryType);
   }
 

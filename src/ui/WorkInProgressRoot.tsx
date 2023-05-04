@@ -477,7 +477,7 @@ export function WorkInProgressRoot(): React.ReactElement {
   }
 
   const tooltipInfo =
-    typeof workInfo?.stopTooltip === "string" ? (
+    typeof workInfo.stopTooltip === "string" ? (
       <Typography>{workInfo.stopTooltip}</Typography>
     ) : (
       workInfo.stopTooltip || <></>

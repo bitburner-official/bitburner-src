@@ -4,8 +4,6 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { CodingContractEvent } from "./ui/React/CodingContractModal";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
 
-/* tslint:disable:no-magic-numbers completed-docs max-classes-per-file no-console */
-
 /* Represents different types of problems that a Coding Contract can have */
 class CodingContractType {
   /** Function that generates a description of the problem */
@@ -44,11 +42,9 @@ class CodingContractType {
 }
 
 /* Contract Types */
-// tslint:disable-next-line
 export const CodingContractTypes: Record<string, CodingContractType> = {};
 
 for (const md of codingContractTypesMetadata) {
-  // tslint:disable-next-line
   CodingContractTypes[md.name] = new CodingContractType(
     md.name,
     md.desc,

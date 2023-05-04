@@ -4,9 +4,7 @@ interface IContract {
   desc: JSX.Element;
 }
 
-export const Contracts: {
-  [key: string]: IContract | undefined;
-} = {
+export const Contracts: Record<string, IContract | undefined> = {
   Tracking: {
     desc: (
       <>

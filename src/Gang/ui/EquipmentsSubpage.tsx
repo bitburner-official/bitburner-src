@@ -102,7 +102,7 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
       .map((upgName: string) => GangMemberUpgrades[upgName]);
   }
 
-  const onChange = (event: SelectChangeEvent<string>): void => {
+  const onChange = (event: SelectChangeEvent): void => {
     setCurrentCategory(event.target.value);
     rerender();
   };
@@ -113,7 +113,7 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
   const rootkitUpgrades = filterUpgrades(props.member.upgrades, UpgradeType.Rootkit);
   const augUpgrades = filterUpgrades(props.member.augmentations, UpgradeType.Augmentation);
 
-  const categories: { [key: string]: (GangMemberUpgrade[] | UpgradeType)[] } = {
+  const categories: Record<string, (GangMemberUpgrade[] | UpgradeType)[]> = {
     Weapons: [weaponUpgrades, UpgradeType.Weapon],
     Armor: [armorUpgrades, UpgradeType.Armor],
     Vehicles: [vehicleUpgrades, UpgradeType.Vehicle],

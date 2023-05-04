@@ -59,7 +59,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
     Router.toFaction(faction, true);
   }
 
-  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, faction: string): void {
+  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement>, faction: string): void {
     if (!event.isTrusted) return;
     joinFaction(Factions[faction]);
     props.rerender();

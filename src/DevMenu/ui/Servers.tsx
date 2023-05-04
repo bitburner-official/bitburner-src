@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 export function Servers(): React.ReactElement {
   const [server, setServer] = useState("home");
-  function setServerDropdown(event: SelectChangeEvent<string>): void {
+  function setServerDropdown(event: SelectChangeEvent): void {
     setServer(event.target.value);
   }
   function rootServer(): void {

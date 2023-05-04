@@ -8,9 +8,9 @@ import { IStockMarket } from "../IStockMarket";
 import { Player } from "@player";
 import { useRerender } from "../../ui/React/hooks";
 
-type IProps = {
+interface IProps {
   stockMarket: IStockMarket;
-};
+}
 
 /** Root React component for the Stock Market UI */
 export function StockMarketRoot(props: IProps): React.ReactElement {

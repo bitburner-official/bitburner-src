@@ -9,9 +9,9 @@ import Typography from "@mui/material/Typography";
 import Table from "@mui/material/Table";
 import { TableBody, TableCell, TableRow } from "@mui/material";
 
-type IProps = {
+interface IProps {
   gift: StaneksGift;
-};
+}
 
 function formatEffect(effect: number, type: FragmentType): string {
   if (Effect(type).includes("+x%")) {
