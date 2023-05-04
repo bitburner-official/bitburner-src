@@ -199,13 +199,6 @@ export function loadAllServers(saveString: string): void {
   AllServers = JSON.parse(saveString, Reviver);
 }
 
-function excludeReplacer(key: string, value: any): any {
-  if (key === "runningScripts") {
-    return [];
-  }
-  return value;
-}
-
-export function saveAllServers(excludeRunningScripts = false): string {
-  return JSON.stringify(AllServers, excludeRunningScripts ? excludeReplacer : undefined);
+export function saveAllServers(): string {
+  return JSON.stringify(AllServers);
 }
