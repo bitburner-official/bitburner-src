@@ -71,8 +71,6 @@ import { ThemeBrowser } from "../Themes/ui/ThemeBrowser";
 import { ImportSaveRoot } from "./React/ImportSaveRoot";
 import { BypassWrapper } from "./React/BypassWrapper";
 
-import _wrap from "lodash/wrap";
-import _functions from "lodash/functions";
 import { Apr1 } from "./Apr1";
 import { isFactionWork } from "../Work/FactionWork";
 import { V2Modal } from "../utils/V2Modal";
