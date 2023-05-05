@@ -104,7 +104,7 @@ export function Overview({ rerender }: IProps): React.ReactElement {
         </Tooltip>
         {corp.public ? <PublicButtons rerender={rerender} /> : <PrivateButtons rerender={rerender} />}
         <BribeButton />
-        {corp.divisions.length != 0 ? <SellDivisionButton /> : <></>}
+        {corp.divisions.size > 0 && <SellDivisionButton />}
         <RestartButton />
       </Box>
       <br />
@@ -157,7 +157,7 @@ interface IUpgradeProps {
 function Upgrades({ rerender }: IUpgradeProps): React.ReactElement {
   const corp = useCorporation();
   // Don't show upgrades
-  if (corp.divisions.length <= 0) {
+  if (corp.divisions.size === 0) {
     return <Typography variant="h4">Upgrades are unlocked once you create an industry.</Typography>;
   }
 

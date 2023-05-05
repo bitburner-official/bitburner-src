@@ -25,24 +25,26 @@ interface IProps {
 // Create a popup that lets the player manage exports
 export function ExportModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
-  const possibleDivisions = corp.divisions.filter((division: Industry) => isRelevantMaterial(props.mat.name, division));
+  const possibleDivisions = [...corp.divisions.values()].filter((division: Industry) => {
+    return isRelevantMaterial(props.mat.name, division);
+  });
   if (possibleDivisions.length === 0) throw new Error("Export popup created with no divisions.");
   const defaultDivision = possibleDivisions[0];
   if (Object.keys(defaultDivision.warehouses).length === 0)
     throw new Error("Export popup created in a division with no warehouses.");
-  const [industry, setIndustry] = useState<string>(defaultDivision.name);
+  const [division, setDivision] = useState(defaultDivision);
   const [city, setCity] = useState(Object.keys(defaultDivision.warehouses)[0] as CityName);
   const [amt, setAmt] = useState("");
   const rerender = useRerender();
 
-  function onCityChange(event: SelectChangeEvent): void {
+  function onCityChange(event: SelectChangeEvent<CityName>): void {
     setCity(event.target.value as CityName);
   }
 
   function onIndustryChange(event: SelectChangeEvent): void {
-    const div = event.target.value;
-    setIndustry(div);
-    setCity(Object.keys(corp.divisions[0].warehouses)[0] as CityName);
+    const division = corp.divisions.get(event.target.value);
+    if (!division) return;
+    setDivision(division);
   }
 
   function onAmtChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -51,7 +53,7 @@ export function ExportModal(props: IProps): React.ReactElement {
 
   function exportMaterial(): void {
     try {
-      ExportMaterial(industry, city, props.mat, amt, currentDivision);
+      ExportMaterial(division.name, city, props.mat, amt, division);
     } catch (err) {
       dialogBoxCreate(err + "");
     }
@@ -68,11 +70,8 @@ export function ExportModal(props: IProps): React.ReactElement {
     rerender();
   }
 
-  const currentDivision = corp.divisions.find((division: Industry) => division.name === industry);
-  if (currentDivision === undefined)
-    throw new Error(`Export popup somehow ended up with undefined division '${currentDivision}'`);
-  const possibleCities = (Object.keys(currentDivision.warehouses) as CityName[]).filter(
-    (city) => currentDivision.warehouses[city] !== 0,
+  const possibleCities = (Object.keys(division.warehouses) as CityName[]).filter(
+    (city) => division.warehouses[city] !== 0,
   );
   if (possibleCities.length > 0 && !possibleCities.includes(city)) {
     setCity(possibleCities[0]);
@@ -102,18 +101,18 @@ export function ExportModal(props: IProps): React.ReactElement {
         <br />
         For example: setting the amount "(EINV-20)/10" would try to export all except 20 of the material.
       </Typography>
-      <Select onChange={onIndustryChange} value={industry}>
-        {corp.divisions
-          .filter((division: Industry) => isRelevantMaterial(props.mat.name, division))
-          .map((division: Industry) => (
-            <MenuItem key={division.name} value={division.name}>
-              {division.name}
+      <Select onChange={onIndustryChange} value={division.name}>
+        {[...corp.divisions.values()]
+          .filter((div) => isRelevantMaterial(props.mat.name, div))
+          .map((div) => (
+            <MenuItem key={div.name} value={div.name}>
+              {div.name}
             </MenuItem>
           ))}
       </Select>
       <Select onChange={onCityChange} value={city}>
         {possibleCities.map((cityName) => {
-          if (currentDivision.warehouses[cityName] === 0) return;
+          if (division.warehouses[cityName] === 0) return;
           return (
             <MenuItem key={cityName} value={cityName}>
               {cityName}

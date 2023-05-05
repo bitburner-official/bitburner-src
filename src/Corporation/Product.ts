@@ -172,7 +172,7 @@ export class Product {
 
     const designMult = 1 + Math.pow(this.designCost, 0.1) / 100;
     const balanceMult = 1.2 * engrRatio + 0.9 * mgmtRatio + 1.3 * rndRatio + 1.5 * opsRatio + busRatio;
-    const sciMult = 1 + Math.pow(industry.sciResearch, industry.sciFac) / 800;
+    const sciMult = 1 + Math.pow(industry.sciResearch, industry.researchFactor) / 800;
     const totalMult = balanceMult * designMult * sciMult;
 
     this.qlt =

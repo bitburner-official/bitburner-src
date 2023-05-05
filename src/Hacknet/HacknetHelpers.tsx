@@ -531,7 +531,7 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
           Player.hashManager.refundUpgrade(upgName, count);
           return false;
         }
-        for (const division of corp.divisions) {
+        for (const division of corp.divisions.values()) {
           division.sciResearch += upg.value * count;
         }
         break;

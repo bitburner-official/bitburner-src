@@ -40,6 +40,8 @@ import { TextFile } from "./TextFile";
 import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
 import { Directory, resolveDirectory } from "./Paths/Directory";
 import { TextFilePath, resolveTextFilePath } from "./Paths/TextFilePath";
+import { Industry } from "./Corporation/Industry";
+import { Corporation } from "./Corporation/Corporation";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -717,6 +719,24 @@ function evaluateVersionCompatibility(ver: string | number): void {
         }
       }
     }
+    // Divisions change from array to map keyed by division name.
+    // We will obliterate old divisions but reimburse the corporation based on a rough assessed value
+    if (anyPlayer.corporation) {
+      const divisions = anyPlayer.corporation?.divisions;
+      if (Array.isArray(divisions)) {
+        // If we're in this loop, this save conversion code has not been ran yet.
+        let reimbursement = 0;
+        for (const division of divisions) {
+          const value = division.startingCost + division.lastCycleRevenue * 500;
+          if (typeof value === "number" && value > 0) reimbursement += value;
+        }
+        // Need to use 'as' here to make sure an addFunds functions still exists
+        (anyPlayer.corporation as Corporation).addFunds(reimbursement);
+        // Reset divisions to an empty JSONMap
+        anyPlayer.corporation.divisions = new JSONMap<string, Industry>();
+      }
+    }
+    // End 2.3 changes
   }
 }
 

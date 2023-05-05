@@ -26,7 +26,7 @@ export function ExpandIndustryTab(props: IProps): React.ReactElement {
   const data = IndustriesData[industry];
   if (!data) return <></>;
 
-  const disabled = corp.funds < data.startingCost && corp.divisions.length < corp.maxDivisions;
+  const disabled = corp.funds < data.startingCost && corp.divisions.size < corp.maxDivisions;
 
   function newIndustry(): void {
     if (disabled) return;
@@ -60,7 +60,7 @@ export function ExpandIndustryTab(props: IProps): React.ReactElement {
   return (
     <>
       <Typography>
-        {corp.name} has {corp.divisions.length}/{corp.maxDivisions} divisions.
+        {corp.name} has {corp.divisions.size}/{corp.maxDivisions} divisions.
       </Typography>
       <Typography>Create a new division to expand into a new industry:</Typography>
       <Select value={industry} onChange={onIndustryChange}>

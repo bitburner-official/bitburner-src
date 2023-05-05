@@ -447,17 +447,25 @@ export const achievements: Record<string, Achievement> = {
     ...achievementData.CORPORATION_PROD_1000,
     Icon: "CORP1000",
     Visible: () => hasAccessToSF(Player, 3),
-    Condition: () => Player.corporation !== null && Player.corporation.divisions.some((d) => d.prodMult >= 1000),
+    Condition: () => {
+      if (!Player.corporation) return false;
+      for (const division of Player.corporation.divisions.values()) {
+        if (division.productionMult >= 1000) return true;
+      }
+      return false;
+    },
   },
   CORPORATION_EMPLOYEE_3000: {
     ...achievementData.CORPORATION_EMPLOYEE_3000,
     Icon: "CORPCITY",
     Visible: () => hasAccessToSF(Player, 3),
     Condition: (): boolean => {
-      if (Player.corporation === null) return false;
-      for (const d of Player.corporation.divisions) {
+      if (!Player.corporation) return false;
+      for (const division of Player.corporation.divisions.values()) {
         let totalEmployees = 0;
-        for (const o of Object.values(d.offices)) if (o && o.totalEmployees) totalEmployees += o.totalEmployees;
+        for (const office of Object.values(division.offices)) {
+          if (office && office.totalEmployees) totalEmployees += office.totalEmployees;
+        }
         if (totalEmployees >= 3000) return true;
       }
       return false;
@@ -469,8 +477,13 @@ export const achievements: Record<string, Achievement> = {
     Name: "Own the land",
     Description: "Expand to the Real Estate division.",
     Visible: () => hasAccessToSF(Player, 3),
-    Condition: () =>
-      Player.corporation !== null && Player.corporation.divisions.some((d) => d.type === IndustryType.RealEstate),
+    Condition: () => {
+      if (!Player.corporation) return false;
+      for (const division of Player.corporation.divisions.values()) {
+        if (division.type === IndustryType.RealEstate) return true;
+      }
+      return false;
+    },
   },
   INTELLIGENCE_255: {
     ...achievementData.INTELLIGENCE_255,

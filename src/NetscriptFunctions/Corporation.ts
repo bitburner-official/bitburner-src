@@ -216,7 +216,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
 
   function getDivision(divisionName: string): Industry {
     const corporation = getCorporation();
-    const division = corporation.divisions.find((div) => div.name === divisionName);
+    const division = corporation.divisions.get(divisionName);
     if (division === undefined) throw new Error(`No division named '${divisionName}'`);
     return division;
   }
@@ -270,7 +270,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       type: division.type,
       awareness: division.awareness,
       popularity: division.popularity,
-      prodMult: division.prodMult,
+      prodMult: division.productionMult,
       research: division.sciResearch,
       lastCycleRevenue: division.lastCycleRevenue,
       lastCycleExpenses: division.lastCycleExpenses,
@@ -816,7 +816,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         dividendTax: corporation.dividendTax,
         dividendEarnings: corporation.getCycleDividends() / corpConstants.secondsPerMarketCycle,
         state: corporation.state.getState(),
-        divisions: corporation.divisions.map((division) => division.name),
+        divisions: [...corporation.divisions.keys()],
       };
     },
     createCorporation:

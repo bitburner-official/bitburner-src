@@ -14,6 +14,7 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { CityName } from "../Enums";
 import { CorpStateName } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
+import { JSONMap } from "../Types/Jsonable";
 
 interface IParams {
   name?: string;
@@ -23,8 +24,8 @@ interface IParams {
 export class Corporation {
   name = "The Corporation";
 
-  //A division/business sector is represented  by the object:
-  divisions: Industry[] = [];
+  /** Map keyed by division name */
+  divisions = new JSONMap<string, Industry>();
   maxDivisions = 20 * BitNodeMultipliers.CorporationDivisions;
 
   //Financial stats
@@ -93,9 +94,6 @@ export class Corporation {
 
       this.divisions.forEach((ind) => {
         ind.resetImports(state);
-      });
-
-      this.divisions.forEach((ind) => {
         ind.process(marketCycles, state, this);
       });
 
@@ -186,14 +184,14 @@ export class Corporation {
       }
 
       val = this.funds + profit * 85e3;
-      val *= Math.pow(1.1, this.divisions.length);
+      val *= Math.pow(1.1, this.divisions.size);
       val = Math.max(val, 0);
     } else {
       val = 10e9 + Math.max(this.funds, 0) / 3; //Base valuation
       if (profit > 0) {
         val += profit * 315e3;
       }
-      val *= Math.pow(1.1, this.divisions.length);
+      val *= Math.pow(1.1, this.divisions.size);
       val -= val % 1e6; //Round down to nearest millionth
     }
     return val * BitNodeMultipliers.CorporationValuation;
@@ -335,14 +333,11 @@ export class Corporation {
 
     //If storage size is being updated, update values in Warehouse objects
     if (upgN === 1) {
-      for (let i = 0; i < this.divisions.length; ++i) {
-        const industry = this.divisions[i];
-        for (const city of Object.keys(industry.warehouses) as CityName[]) {
+      for (const industry of this.divisions.values()) {
+        for (const city of Object.values(CityName)) {
           const warehouse = industry.warehouses[city];
           if (warehouse === 0) continue;
-          if (Object.hasOwn(industry.warehouses, city) && warehouse) {
-            warehouse.updateSize(this, industry);
-          }
+          warehouse.updateSize(this, industry);
         }
       }
     }

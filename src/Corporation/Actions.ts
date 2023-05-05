@@ -21,14 +21,12 @@ import { calculateUpgradeCost } from "./helpers";
 import { isInteger } from "lodash";
 
 export function NewIndustry(corporation: Corporation, industry: IndustryType, name: string): void {
-  if (corporation.divisions.length >= corporation.maxDivisions)
+  if (corporation.divisions.size >= corporation.maxDivisions)
     throw new Error(`Cannot expand into ${industry} industry, too many divisions!`);
 
-  for (let i = 0; i < corporation.divisions.length; ++i) {
-    if (corporation.divisions[i].name === name) {
-      throw new Error("This division name is already in use!");
-    }
-  }
+  if (corporation.divisions.has(name)) throw new Error(`Division name ${name} is already in use!`);
+  // "Overview" is forbidden as a division name, see CorporationRoot.tsx for why this would cause issues.
+  if (name === "Overview") throw new Error(`"Overview" is a forbidden division name.`);
 
   const data = IndustriesData[industry];
   if (!data) throw new Error(`Invalid industry: '${industry}'`);
@@ -39,7 +37,8 @@ export function NewIndustry(corporation: Corporation, industry: IndustryType, na
     throw new Error("New division must have a name!");
   } else {
     corporation.funds = corporation.funds - cost;
-    corporation.divisions.push(
+    corporation.divisions.set(
+      name,
       new Industry({
         corp: corporation,
         name: name,
@@ -50,10 +49,8 @@ export function NewIndustry(corporation: Corporation, industry: IndustryType, na
 }
 
 export function removeIndustry(corporation: Corporation, name: string) {
-  const divIndex = corporation.divisions.findIndex((div) => div.name === name);
-  if (divIndex === -1) throw new Error("There is no division called " + name);
-
-  corporation.divisions.splice(divIndex, 1);
+  if (!corporation.divisions.has(name)) throw new Error("There is no division called " + name);
+  corporation.divisions.delete(name);
 }
 
 export function NewCity(corporation: Corporation, division: Industry, city: CityName): void {

@@ -42,14 +42,14 @@ export class Industry {
        and they are all represented by exponentials of < 1 (e.g x ^ 0.5, x ^ 0.8)
        The number for these represent the exponential. A lower number means more
        diminishing returns */
-  reFac: number; //Real estate Factor
-  sciFac: number; //Scientific Research Factor, affects quality
-  hwFac: number; //Hardware factor
-  robFac: number; //Robotics Factor
-  aiFac: number; //AI Cores factor;
-  advFac: number; //Advertising factor, affects sales
+  realEstateFactor: number; //Real estate Factor
+  researchFactor: number; //Scientific Research Factor, affects quality
+  hardwareFactor: number; //Hardware factor
+  robotFactor: number; //Robotics Factor
+  aiCoreFactor: number; //AI Cores factor;
+  advertisingFactor: number; //Advertising factor, affects sales
 
-  prodMult = 0; //Production multiplier
+  productionMult = 0; //Production multiplier
 
   //Financials
   lastCycleRevenue: number;
@@ -106,12 +106,12 @@ export class Industry {
     if (!data) throw new Error(`Invalid industry: "${this.type}"`);
     this.startingCost = data.startingCost;
     this.makesProducts = data.product ? true : false;
-    this.reFac = data.realEstateFactor ?? 0;
-    this.sciFac = data.scienceFactor ?? 0;
-    this.hwFac = data.hardwareFactor ?? 0;
-    this.robFac = data.robotFactor ?? 0;
-    this.aiFac = data.aiCoreFactor ?? 0;
-    this.advFac = data.advertisingFactor ?? 0;
+    this.realEstateFactor = data.realEstateFactor ?? 0;
+    this.researchFactor = data.scienceFactor ?? 0;
+    this.hardwareFactor = data.hardwareFactor ?? 0;
+    this.robotFactor = data.robotFactor ?? 0;
+    this.aiCoreFactor = data.aiCoreFactor ?? 0;
+    this.advertisingFactor = data.advertisingFactor ?? 0;
     this.reqMats = data.requiredMaterials;
     this.prodMats = data.producedMaterials ?? [];
   }
@@ -142,14 +142,14 @@ export class Industry {
       const materials = warehouse.materials;
 
       const cityMult =
-        Math.pow(0.002 * materials["Real Estate"].qty + 1, this.reFac) *
-        Math.pow(0.002 * materials.Hardware.qty + 1, this.hwFac) *
-        Math.pow(0.002 * materials.Robots.qty + 1, this.robFac) *
-        Math.pow(0.002 * materials["AI Cores"].qty + 1, this.aiFac);
+        Math.pow(0.002 * materials["Real Estate"].qty + 1, this.realEstateFactor) *
+        Math.pow(0.002 * materials.Hardware.qty + 1, this.hardwareFactor) *
+        Math.pow(0.002 * materials.Robots.qty + 1, this.robotFactor) *
+        Math.pow(0.002 * materials["AI Cores"].qty + 1, this.aiCoreFactor);
       multSum += Math.pow(cityMult, 0.73);
     }
 
-    multSum < 1 ? (this.prodMult = 1) : (this.prodMult = multSum);
+    multSum < 1 ? (this.productionMult = 1) : (this.productionMult = multSum);
   }
 
   updateWarehouseSizeUsed(warehouse: Warehouse): void {
@@ -416,7 +416,7 @@ export class Industry {
               //on the office's productivity
               const maxProd =
                 this.getOfficeProductivity(office) *
-                this.prodMult * // Multiplier from materials
+                this.productionMult * // Multiplier from materials
                 corporation.getProductionMultiplier() *
                 this.getProductionMultiplier(); // Multiplier from Research
               let prod;
@@ -490,8 +490,8 @@ export class Industry {
                 for (let j = 0; j < this.prodMats.length; ++j) {
                   let tempQlt =
                     office.employeeProd[EmployeePositions.Engineer] / 90 +
-                    Math.pow(this.sciResearch, this.sciFac) +
-                    Math.pow(warehouse.materials["AI Cores"].qty, this.aiFac) / 10e3;
+                    Math.pow(this.sciResearch, this.researchFactor) +
+                    Math.pow(warehouse.materials["AI Cores"].qty, this.aiCoreFactor) / 10e3;
                   const logQlt = Math.max(Math.pow(tempQlt, 0.5), 1);
                   tempQlt = Math.min(tempQlt, avgQlt * logQlt);
                   warehouse.materials[this.prodMats[j]].qlt = Math.max(
@@ -682,7 +682,7 @@ export class Industry {
                 for (let expI = 0; expI < mat.exp.length; ++expI) {
                   const exp = mat.exp[expI];
 
-                  const expIndustry = corporation.divisions.find((div) => div.name === exp.ind);
+                  const expIndustry = corporation.divisions.get(exp.ind);
                   if (!expIndustry) {
                     console.error(`Invalid export! ${exp.ind}`);
                     continue;
@@ -830,7 +830,7 @@ export class Industry {
             const maxProd =
               this.getOfficeProductivity(office, { forProduct: true }) *
               corporation.getProductionMultiplier() *
-              this.prodMult * // Multiplier from materials
+              this.productionMult * // Multiplier from materials
               this.getProductionMultiplier() * // Multiplier from research
               this.getProductProductionMultiplier(); // Multiplier from research
             let prod;
@@ -1105,8 +1105,8 @@ export class Industry {
   //multiplier affects sales. The result is:
   //  [Total sales mult, total awareness mult, total pop mult, awareness/pop ratio mult]
   getAdvertisingFactors(): [number, number, number, number] {
-    const awarenessFac = Math.pow(this.awareness + 1, this.advFac);
-    const popularityFac = Math.pow(this.popularity + 1, this.advFac);
+    const awarenessFac = Math.pow(this.awareness + 1, this.advertisingFactor);
+    const popularityFac = Math.pow(this.popularity + 1, this.advertisingFactor);
     const ratioFac = this.awareness === 0 ? 0.01 : Math.max((this.popularity + 0.001) / this.awareness, 0.01);
     const totalFac = Math.pow(awarenessFac * popularityFac * ratioFac, 0.85);
     return [totalFac, awarenessFac, popularityFac, ratioFac];

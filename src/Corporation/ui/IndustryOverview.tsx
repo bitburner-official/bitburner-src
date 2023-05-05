@@ -168,7 +168,7 @@ export function IndustryOverview(props: IProps): React.ReactElement {
             </Typography>
           }
         >
-          <Typography>Production Multiplier: {formatBigNumber(division.prodMult)}</Typography>
+          <Typography>Production Multiplier: {formatBigNumber(division.productionMult)}</Typography>
         </Tooltip>
         <IconButton onClick={() => setHelpOpen(true)}>
           <HelpIcon />
@@ -189,13 +189,13 @@ export function IndustryOverview(props: IProps): React.ReactElement {
             multiplier (Bigger bars = more effective):
             <br />
             <br />
-            Hardware:&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.hwFac)}
+            Hardware:&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.hardwareFactor)}
             <br />
-            Robots:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.robFac)}
+            Robots:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.robotFactor)}
             <br />
-            AI Cores:&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.aiFac)}
+            AI Cores:&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.aiCoreFactor)}
             <br />
-            Real Estate: {convertEffectFacToGraphic(division.reFac)}
+            Real Estate: {convertEffectFacToGraphic(division.realEstateFactor)}
           </Typography>
         </StaticModal>
       </Box>
