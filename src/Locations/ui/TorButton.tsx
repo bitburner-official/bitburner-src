@@ -36,9 +36,9 @@ export function purchaseTorRouter(): void {
   );
 }
 
-type IProps = {
+interface IProps {
   rerender: () => void;
-};
+}
 
 export function TorButton(props: IProps): React.ReactElement {
   function buy(): void {

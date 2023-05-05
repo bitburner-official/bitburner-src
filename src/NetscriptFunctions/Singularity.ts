@@ -693,7 +693,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       return Object.entries(CompanyPositions)
         .filter((_position) => Companies[companyName].hasPosition(_position[0]))
-        .map((_position) => _position[1]["name"]);
+        .map((_position) => _position[1].name);
     },
     getCompanyPositionInfo: (ctx) => (_companyName, _positionName) => {
       helpers.checkSingularityAccess(ctx);

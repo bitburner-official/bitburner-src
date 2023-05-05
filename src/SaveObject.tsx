@@ -99,8 +99,8 @@ class BitburnerSaveObject {
 
     this.CompaniesSave = JSON.stringify(Companies);
     this.FactionsSave = JSON.stringify(Factions);
-    this.AliasesSave = JSON.stringify(Aliases);
-    this.GlobalAliasesSave = JSON.stringify(GlobalAliases);
+    this.AliasesSave = JSON.stringify(Object.fromEntries(Aliases.entries()));
+    this.GlobalAliasesSave = JSON.stringify(Object.fromEntries(GlobalAliases.entries()));
     this.StockMarketSave = JSON.stringify(StockMarket);
     this.SettingsSave = JSON.stringify(Settings);
     this.VersionSave = JSON.stringify(CONSTANTS.VersionNumber);
@@ -169,7 +169,7 @@ class BitburnerSaveObject {
     if (!file) return Promise.reject(new Error("Invalid file selected"));
 
     const reader = new FileReader();
-    const promise: Promise<string> = new Promise((resolve, reject) => {
+    const promise = new Promise<string>((resolve, reject) => {
       reader.onload = function (this: FileReader, e: ProgressEvent<FileReader>) {
         const target = e.target;
         if (target === null) {
@@ -247,6 +247,14 @@ class BitburnerSaveObject {
   static fromJSON(value: IReviverValue): BitburnerSaveObject {
     return Generic_fromJSON(BitburnerSaveObject, value.data);
   }
+}
+
+/** Function for performing a series of defined replacements. See 0.58.0 for usage */
+function convert(code: string, changes: [RegExp, string][]): string {
+  for (const change of changes) {
+    code = code.replace(change[0], change[1]);
+  }
+  return code;
 }
 
 // Makes necessary changes to the loaded/imported data to ensure
@@ -348,15 +356,9 @@ function evaluateVersionCompatibility(ver: string | number): void {
         [/purchase4SMarketData/g, "stock.purchase4SMarketData"],
         [/purchase4SMarketDataTixApi/g, "stock.purchase4SMarketDataTixApi"],
       ];
-      function convert(code: string): string {
-        for (const change of changes) {
-          code = code.replace(change[0], change[1]);
-        }
-        return code;
-      }
       for (const server of GetAllServers() as unknown as { scripts: Script[] }[]) {
         for (const script of server.scripts) {
-          script.content = convert(script.code);
+          script.content = convert(script.code, changes);
         }
       }
     }
@@ -386,7 +388,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
     }
   }
   if (ver < 9) {
-    if (StockMarket.hasOwnProperty("Joes Guns")) {
+    if (Object.hasOwn(StockMarket, "Joes Guns")) {
       const s = StockMarket["Joes Guns"];
       delete StockMarket["Joes Guns"];
       StockMarket[LocationName.Sector12JoesGuns] = s;
@@ -485,9 +487,9 @@ function evaluateVersionCompatibility(ver: string | number): void {
   if (ver < 21) {
     // 2.0.0 work rework
     AwardNFG(10);
-    const create = anyPlayer["createProgramName"];
+    const create = anyPlayer.createProgramName;
     if (create) Player.getHomeComputer().pushProgram(create);
-    const graft = anyPlayer["graftAugmentationName"];
+    const graft = anyPlayer.graftAugmentationName;
     if (graft) Player.augmentations.push({ name: graft, level: 1 });
   }
   if (ver < 22) {
@@ -656,7 +658,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
       delete anyPlayer[field];
     }
     for (const sleeve of anyPlayer.sleeves) {
-      const anySleeve = sleeve as any;
+      const anySleeve = sleeve;
       let intExp = Number(anySleeve.intelligence_exp);
       if (isNaN(intExp)) intExp = 0;
       anySleeve.exp.intelligence += intExp;
@@ -730,13 +732,13 @@ function loadGame(saveString: string): boolean {
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave);
 
-  if (saveObj.hasOwnProperty("StaneksGiftSave")) {
+  if (Object.hasOwn(saveObj, "StaneksGiftSave")) {
     loadStaneksGift(saveObj.StaneksGiftSave);
   } else {
     console.warn(`Could not load Staneks Gift from save`);
     loadStaneksGift("");
   }
-  if (saveObj.hasOwnProperty("AliasesSave")) {
+  if (Object.hasOwn(saveObj, "AliasesSave")) {
     try {
       loadAliases(saveObj.AliasesSave);
     } catch (e) {
@@ -747,7 +749,7 @@ function loadGame(saveString: string): boolean {
     console.warn(`Save file did not contain an Aliases property`);
     loadAliases("");
   }
-  if (saveObj.hasOwnProperty("GlobalAliasesSave")) {
+  if (Object.hasOwn(saveObj, "GlobalAliasesSave")) {
     try {
       loadGlobalAliases(saveObj.GlobalAliasesSave);
     } catch (e) {
@@ -758,7 +760,7 @@ function loadGame(saveString: string): boolean {
     console.warn(`Save file did not contain a GlobalAliases property`);
     loadGlobalAliases("");
   }
-  if (saveObj.hasOwnProperty("StockMarketSave")) {
+  if (Object.hasOwn(saveObj, "StockMarketSave")) {
     try {
       loadStockMarket(saveObj.StockMarketSave);
     } catch (e) {
@@ -767,13 +769,16 @@ function loadGame(saveString: string): boolean {
   } else {
     loadStockMarket("");
   }
-  if (saveObj.hasOwnProperty("SettingsSave")) {
+  if (Object.hasOwn(saveObj, "SettingsSave")) {
     try {
       // Try to set saved settings.
       Settings.load(saveObj.SettingsSave);
-    } catch (e) {}
+    } catch (e) {
+      console.error("SettingsSave was present but an error occurred while loading:");
+      console.error(e);
+    }
   }
-  if (saveObj.hasOwnProperty("LastExportBonus")) {
+  if (Object.hasOwn(saveObj, "LastExportBonus")) {
     try {
       ExportBonus.setLastExportBonus(JSON.parse(saveObj.LastExportBonus));
     } catch (err) {
@@ -781,14 +786,14 @@ function loadGame(saveString: string): boolean {
       console.error("ERROR: Failed to parse last export bonus Settings " + err);
     }
   }
-  if (Player.gang && saveObj.hasOwnProperty("AllGangsSave")) {
+  if (Player.gang && Object.hasOwn(saveObj, "AllGangsSave")) {
     try {
       loadAllGangs(saveObj.AllGangsSave);
     } catch (e) {
       console.error("ERROR: Failed to parse AllGangsSave: " + e);
     }
   }
-  if (saveObj.hasOwnProperty("VersionSave")) {
+  if (Object.hasOwn(saveObj, "VersionSave")) {
     try {
       const ver = JSON.parse(saveObj.VersionSave, Reviver);
       evaluateVersionCompatibility(ver);
@@ -808,7 +813,7 @@ function loadGame(saveString: string): boolean {
 }
 
 function createScamUpdateText(): void {
-  if (navigator.userAgent.indexOf("wv") !== -1 && navigator.userAgent.indexOf("Chrome/") !== -1) {
+  if (navigator.userAgent.includes("wv") && navigator.userAgent.includes("Chrome/")) {
     setInterval(() => {
       dialogBoxCreate("SCAM ALERT. This app is not official and you should uninstall it.");
     }, 1000);

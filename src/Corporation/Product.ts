@@ -58,7 +58,7 @@ export class Product {
   advCost = 0; // How much money was invested into advertising this Product
 
   // The average employee productivity and scientific research across the creation of the Product
-  creationProd: { [key: string]: number } = {
+  creationProd: Record<string, number> = {
     [EmployeePositions.Operations]: 0,
     [EmployeePositions.Engineer]: 0,
     [EmployeePositions.Business]: 0,
@@ -233,7 +233,7 @@ export class Product {
     //Calculate the product's required materials
     //For now, just set it to be the same as the requirements to make materials
     for (const matName of Object.keys(industry.reqMats) as CorpMaterialName[]) {
-      if (industry.reqMats.hasOwnProperty(matName)) {
+      if (Object.hasOwn(industry.reqMats, matName)) {
         const reqMat = industry.reqMats[matName];
         if (reqMat === undefined) continue;
         this.reqMats[matName] = reqMat;

@@ -24,7 +24,7 @@ export const Milestones: Milestone[] = [
     title: "Gain root access on CSEC",
     fulfilled: (): boolean => {
       const server = GetServer("CSEC");
-      if (!server || !server.hasOwnProperty("hasAdminRights")) return false;
+      if (!server || !Object.hasOwn(server, "hasAdminRights")) return false;
       return server instanceof Server && server.hasAdminRights;
     },
   },
@@ -32,7 +32,7 @@ export const Milestones: Milestone[] = [
     title: "Install the backdoor on CSEC",
     fulfilled: (): boolean => {
       const server = GetServer("CSEC");
-      if (!server || !server.hasOwnProperty("backdoorInstalled")) return false;
+      if (!server || !Object.hasOwn(server, "backdoorInstalled")) return false;
       return server instanceof Server && server.backdoorInstalled;
     },
   },

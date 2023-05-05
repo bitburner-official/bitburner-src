@@ -3,8 +3,6 @@ import { CONSTANTS } from "../Constants";
 import * as names from "./data/JobTracks";
 import { JobName } from "../Enums";
 
-/* tslint:disable:completed-docs */
-
 export interface IConstructorParams {
   name: JobName;
   nextPosition: JobName | null;

@@ -132,7 +132,7 @@ export function IndustryOverview(props: IProps): React.ReactElement {
           ["Popularity:", formatBigNumber(division.popularity)],
         ]}
       />
-      {advertisingInfo !== false && (
+      {advertisingInfo && (
         <Tooltip
           title={
             <>

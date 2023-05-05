@@ -60,13 +60,14 @@ export const BitNodeMultipliersDisplay = ({ n, level }: IProps): React.ReactElem
   );
 };
 
-interface IBNMultRows {
-  [mult: string]: {
+type IBNMultRows = Record<
+  string,
+  {
     name: string;
     content?: string;
     color?: string;
-  };
-}
+  }
+>;
 
 interface IBNMultTableProps {
   sectionName: string;

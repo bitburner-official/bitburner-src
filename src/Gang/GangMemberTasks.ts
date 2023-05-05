@@ -1,9 +1,7 @@
 import { gangMemberTasksMetadata } from "./data/tasks";
 import { GangMemberTask } from "./GangMemberTask";
 
-export const GangMemberTasks: {
-  [key: string]: GangMemberTask;
-} = {};
+export const GangMemberTasks: Record<string, GangMemberTask> = {};
 
 (function () {
   gangMemberTasksMetadata.forEach((e) => {

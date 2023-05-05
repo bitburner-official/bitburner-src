@@ -38,9 +38,9 @@ import { ArcadeRoot } from "../../Arcade/ui/ArcadeRoot";
 import { FactionNames } from "../../Faction/data/FactionNames";
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 
-type IProps = {
+interface IProps {
   loc: Location;
-};
+}
 
 export function SpecialLocation(props: IProps): React.ReactElement {
   const setRerender = useState(false)[1];

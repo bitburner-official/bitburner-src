@@ -17,7 +17,7 @@ const bigNumber = 1e12;
 
 export function Companies(): React.ReactElement {
   const [company, setCompany] = useState(FactionNames.ECorp as string);
-  function setCompanyDropdown(event: SelectChangeEvent<string>): void {
+  function setCompanyDropdown(event: SelectChangeEvent): void {
     setCompany(event.target.value);
   }
   function resetCompanyRep(): void {

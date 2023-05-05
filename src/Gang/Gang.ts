@@ -148,6 +148,12 @@ export class Gang {
   }
 
   processTerritoryAndPowerGains(numCycles = 1): void {
+    function calculateTerritoryGain(winGang: string, loseGang: string): number {
+      const powerBonus = Math.max(1, 1 + Math.log(AllGangs[winGang].power / AllGangs[loseGang].power) / Math.log(50));
+      const gains = Math.min(AllGangs[loseGang].territory, powerBonus * 0.0001 * (Math.random() + 0.5));
+      return gains;
+    }
+
     this.storedTerritoryAndPowerCycles += numCycles;
     if (this.storedTerritoryAndPowerCycles < GangConstants.CyclesPerTerritoryAndPowerUpdate) return;
     this.storedTerritoryAndPowerCycles -= GangConstants.CyclesPerTerritoryAndPowerUpdate;
@@ -155,7 +161,7 @@ export class Gang {
     // Process power first
     const gangName = this.facName;
     for (const name of Object.keys(AllGangs)) {
-      if (AllGangs.hasOwnProperty(name)) {
+      if (Object.hasOwn(AllGangs, name)) {
         if (name == gangName) {
           AllGangs[name].power += this.calculatePower();
         } else {
@@ -207,15 +213,6 @@ export class Gang {
         const thisPwr = AllGangs[thisGang].power;
         const otherPwr = AllGangs[otherGang].power;
         const thisChance = thisPwr / (thisPwr + otherPwr);
-
-        function calculateTerritoryGain(winGang: string, loseGang: string): number {
-          const powerBonus = Math.max(
-            1,
-            1 + Math.log(AllGangs[winGang].power / AllGangs[loseGang].power) / Math.log(50),
-          );
-          const gains = Math.min(AllGangs[loseGang].territory, powerBonus * 0.0001 * (Math.random() + 0.5));
-          return gains;
-        }
 
         if (Math.random() < thisChance) {
           if (AllGangs[otherGang].territory <= 0) return;
@@ -320,8 +317,7 @@ export class Gang {
   calculatePower(): number {
     let memberTotal = 0;
     for (let i = 0; i < this.members.length; ++i) {
-      if (!GangMemberTasks.hasOwnProperty(this.members[i].task) || this.members[i].task !== "Territory Warfare")
-        continue;
+      if (this.members[i].task !== "Territory Warfare") continue;
       memberTotal += this.members[i].calculatePower();
     }
     return 0.015 * Math.max(0.002, this.getTerritory()) * memberTotal;

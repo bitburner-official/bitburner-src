@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 
-type IProps = {
+interface IProps {
   value: string;
   color?: string;
   variant?:
@@ -21,7 +21,7 @@ type IProps = {
     | "overline"
     | "inherit"
     | undefined;
-};
+}
 
 export function CopyableText(props: IProps): React.ReactElement {
   const [open, setOpen] = useState(false);

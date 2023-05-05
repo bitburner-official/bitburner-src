@@ -10,9 +10,9 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { cancelOrder } from "../StockMarket";
 
-type IProps = {
+interface IProps {
   order: Order;
-};
+}
 
 /** React component for displaying a single order in a stock's order book */
 export function StockTickerOrder(props: IProps): React.ReactElement {

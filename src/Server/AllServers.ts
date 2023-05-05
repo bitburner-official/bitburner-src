@@ -44,7 +44,7 @@ function GetServerByHostname(hostname: string): BaseServer | null {
 
 //Get server by IP or hostname. Returns null if invalid
 export function GetServer(s: string): BaseServer | null {
-  if (AllServers.hasOwnProperty(s)) {
+  if (Object.hasOwn(AllServers, s)) {
     const server = AllServers[s];
     if (server) return server;
   }

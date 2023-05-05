@@ -24,7 +24,7 @@ const bigNumber = 1e12;
 export function Factions(): React.ReactElement {
   const [faction, setFaction] = useState(FactionNames.Illuminati as string);
 
-  function setFactionDropdown(event: SelectChangeEvent<string>): void {
+  function setFactionDropdown(event: SelectChangeEvent): void {
     setFaction(event.target.value);
   }
 

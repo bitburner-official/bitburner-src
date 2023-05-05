@@ -24,13 +24,11 @@ interface IServerData {
   workerScripts: WorkerScript[];
 }
 
-interface IServerToScriptsMap {
-  [key: string]: IServerData | undefined;
-}
+type IServerToScriptsMap = Record<string, IServerData | undefined>;
 
-type IProps = {
+interface IProps {
   workerScripts: Map<number, WorkerScript>;
-};
+}
 
 export function ServerAccordions(props: IProps): React.ReactElement {
   const [filter, setFilter] = useState("");

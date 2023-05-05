@@ -122,7 +122,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
   const breakdownItems: JSX.Element[] = [];
   for (const matName of Object.values(corpConstants.materialNames)) {
     const mat = props.warehouse.materials[matName];
-    if (!MaterialInfo.hasOwnProperty(matName)) continue;
+    if (!Object.hasOwn(MaterialInfo, matName)) continue;
     if (mat.qty === 0) continue;
     breakdownItems.push(
       <>

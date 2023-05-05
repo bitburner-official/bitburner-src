@@ -15,7 +15,7 @@ export class RFAMessage {
   }
 }
 
-type ResultType = string | number | Array<string> | Array<FileContent>;
+type ResultType = string | number | string[] | FileContent[];
 type FileMetadata = FileData | FileContent | FileLocation | FileServer;
 
 export interface FileData {

@@ -59,7 +59,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
     Router.toFaction(faction, true);
   }
 
-  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, faction: string): void {
+  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement>, faction: string): void {
     if (!event.isTrusted) return;
     joinFaction(Factions[faction]);
     props.rerender();
@@ -218,7 +218,7 @@ export function FactionsRoot(): React.ReactElement {
             </Typography>
             <Box>
               {invitations.map((facName) => {
-                if (!Factions.hasOwnProperty(facName)) return null;
+                if (!Object.hasOwn(Factions, facName)) return null;
                 return <FactionElement key={facName} faction={Factions[facName]} joined={false} rerender={rerender} />;
               })}
             </Box>
@@ -232,7 +232,7 @@ export function FactionsRoot(): React.ReactElement {
           <Box>
             {allJoinedFactions.length > 0 ? (
               allJoinedFactions.map((facName) => {
-                if (!Factions.hasOwnProperty(facName)) return null;
+                if (!Object.hasOwn(Factions, facName)) return null;
                 return <FactionElement key={facName} faction={Factions[facName]} joined={true} rerender={rerender} />;
               })
             ) : (

@@ -7,9 +7,9 @@ import { Player } from "@player";
 import { Faction } from "../Faction";
 import { CreateGangModal } from "./CreateGangModal";
 
-type IProps = {
+interface IProps {
   faction: Faction;
-};
+}
 
 export function GangButton({ faction }: IProps): React.ReactElement {
   const [gangOpen, setGangOpen] = useState(false);

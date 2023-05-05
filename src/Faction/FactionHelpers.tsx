@@ -110,7 +110,7 @@ export function processPassiveFactionRepGain(numCycles: number): void {
   if (Player.bitNodeN === 2) return;
   for (const name of Object.keys(Factions)) {
     if (isFactionWork(Player.currentWork) && name === Player.currentWork.factionName) continue;
-    if (!Factions.hasOwnProperty(name)) continue;
+    if (!Object.hasOwn(Factions, name)) continue;
     const faction = Factions[name];
     if (!faction.isMember) continue;
     // No passive rep for special factions

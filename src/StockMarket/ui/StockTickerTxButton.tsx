@@ -7,11 +7,11 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
-type IProps = {
+interface IProps {
   onClick: () => void;
   text: string;
   tooltip?: JSX.Element | null;
-};
+}
 
 export function StockTickerTxButton(props: IProps): React.ReactElement {
   return (

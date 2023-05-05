@@ -33,7 +33,7 @@ export function TravelModal(props: IProps): React.ReactElement {
             </Button>
           ))
         ) : (
-          <WorldMap currentCity={props.bladeburner.city as CityName} onTravel={travel} />
+          <WorldMap currentCity={props.bladeburner.city} onTravel={travel} />
         )}
       </>
     </Modal>

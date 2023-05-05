@@ -22,7 +22,7 @@ export function ExpandNewCity(props: IProps): React.ReactElement {
 
   const disabled = corp.funds < corpConstants.officeInitialCost;
 
-  function onCityChange(event: SelectChangeEvent<string>): void {
+  function onCityChange(event: SelectChangeEvent): void {
     setCity(event.target.value as CityName);
   }
 

@@ -14,7 +14,7 @@ import { CodingContractTypes } from "../../CodingContracts";
 
 export function CodingContracts(): React.ReactElement {
   const [codingcontract, setCodingcontract] = useState("Find Largest Prime Factor");
-  function setCodingcontractDropdown(event: SelectChangeEvent<string>): void {
+  function setCodingcontractDropdown(event: SelectChangeEvent): void {
     setCodingcontract(event.target.value);
   }
 

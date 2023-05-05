@@ -27,9 +27,9 @@ import { QuitJobModal } from "../../Company/ui/QuitJobModal";
 import { CompanyWork } from "../../Work/CompanyWork";
 import { useRerender } from "../../ui/React/hooks";
 
-type IProps = {
+interface IProps {
   locName: LocationName;
-};
+}
 
 export function CompanyLocation(props: IProps): React.ReactElement {
   const [quitOpen, setQuitOpen] = useState(false);

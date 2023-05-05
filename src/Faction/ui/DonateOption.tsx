@@ -17,12 +17,12 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { NumberInput } from "../../ui/React/NumberInput";
 
-type IProps = {
+interface IProps {
   faction: Faction;
   disabled: boolean;
   favorToDonate: number;
   rerender: () => void;
-};
+}
 
 /** React component for a donate option on the Faction UI */
 export function DonateOption(props: IProps): React.ReactElement {

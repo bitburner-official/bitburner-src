@@ -13,9 +13,9 @@ import { Settings } from "../../Settings/Settings";
 import { formatMoney, formatPercent } from "../../ui/formatNumber";
 import Typography from "@mui/material/Typography";
 
-type IProps = {
+interface IProps {
   stock: Stock;
-};
+}
 
 const localesWithLongPriceFormat = ["cs", "lv", "pl", "ru"];
 

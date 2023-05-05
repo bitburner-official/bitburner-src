@@ -1,5 +1,5 @@
 export type WordWrapOptions = "on" | "off" | "bounded" | "wordWrapColumn";
-export type Options = {
+export interface Options {
   theme: string;
   insertSpaces: boolean;
   tabSize: number;
@@ -9,4 +9,4 @@ export type Options = {
   fontLigatures: boolean;
   wordWrap: WordWrapOptions;
   vim: boolean;
-};
+}

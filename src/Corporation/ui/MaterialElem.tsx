@@ -72,7 +72,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
     } else {
       sellButtonText = (
         <>
-          Sell ({formatBigNumber(mat.sll)}/{formatBigNumber(mat.sllman[1] as number)})
+          Sell ({formatBigNumber(mat.sll)}/{formatBigNumber(mat.sllman[1])})
         </>
       );
     }
@@ -91,7 +91,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
       );
     } else if (mat.sCost) {
       if (isString(mat.sCost)) {
-        const sCost = (mat.sCost as string).replace(/MP/g, mat.bCost + "");
+        const sCost = mat.sCost.replace(/MP/g, mat.bCost + "");
         sellButtonText = (
           <>
             {sellButtonText} @ <Money money={eval(sCost)} />

@@ -29,7 +29,7 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
 
   // Grow
   for (const hostname of Object.keys(runningScript.dataMap)) {
-    if (runningScript.dataMap.hasOwnProperty(hostname)) {
+    if (Object.hasOwn(runningScript.dataMap, hostname)) {
       if (runningScript.dataMap[hostname][2] == 0 || runningScript.dataMap[hostname][2] == null) {
         continue;
       }
@@ -60,7 +60,7 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
 
   // Weaken
   for (const hostname of Object.keys(runningScript.dataMap)) {
-    if (runningScript.dataMap.hasOwnProperty(hostname)) {
+    if (Object.hasOwn(runningScript.dataMap, hostname)) {
       if (runningScript.dataMap[hostname][3] == 0 || runningScript.dataMap[hostname][3] == null) {
         continue;
       }

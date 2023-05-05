@@ -10,11 +10,11 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-type IOptionProps = {
+interface IOptionProps {
   gift: StaneksGift;
   fragment: Fragment;
   selectFragment: (fragment: Fragment) => void;
-};
+}
 
 function FragmentOption(props: IOptionProps): React.ReactElement {
   const left = props.fragment.limit - props.gift.count(props.fragment);
@@ -45,10 +45,10 @@ function FragmentOption(props: IOptionProps): React.ReactElement {
   );
 }
 
-type IProps = {
+interface IProps {
   gift: StaneksGift;
   selectFragment: (fragment: Fragment) => void;
-};
+}
 
 export function FragmentSelector(props: IProps): React.ReactElement {
   const [value, setValue] = useState<string | number>("None");

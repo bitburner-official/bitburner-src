@@ -82,10 +82,10 @@ export const sanitizeTheme = (theme: IScriptEditorTheme): void => {
         continue;
     }
 
-    const repairBlock = (block: { [key: string]: object | string }): void => {
+    const repairBlock = (block: Record<string, object | string>): void => {
       for (const [k, v] of Object.entries(block)) {
         if (typeof v === "object") {
-          repairBlock(v as { [key: string]: string });
+          repairBlock(v as Record<string, string>);
         } else if (!v.match(colorRegExp)) block[k] = "FF0000";
       }
     };

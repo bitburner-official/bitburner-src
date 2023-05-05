@@ -35,11 +35,11 @@ export function ExportModal(props: IProps): React.ReactElement {
   const [amt, setAmt] = useState("");
   const rerender = useRerender();
 
-  function onCityChange(event: SelectChangeEvent<string>): void {
+  function onCityChange(event: SelectChangeEvent): void {
     setCity(event.target.value as CityName);
   }
 
-  function onIndustryChange(event: SelectChangeEvent<string>): void {
+  function onIndustryChange(event: SelectChangeEvent): void {
     const div = event.target.value;
     setIndustry(div);
     setCity(Object.keys(corp.divisions[0].warehouses)[0] as CityName);

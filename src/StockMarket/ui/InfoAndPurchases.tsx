@@ -22,9 +22,9 @@ import CheckIcon from "@mui/icons-material/Check";
 import { StaticModal } from "../../ui/React/StaticModal";
 import { FactionNames } from "../../Faction/data/FactionNames";
 
-type IProps = {
+interface IProps {
   rerender: () => void;
-};
+}
 
 function Purchase4SMarketDataTixApiAccessButton(props: IProps): React.ReactElement {
   function purchase4SMarketDataTixApiAccess(): void {

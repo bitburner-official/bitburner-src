@@ -10,6 +10,7 @@ import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { GraftingWork } from "../Work/GraftingWork";
 import { helpers } from "../Netscript/NetscriptHelpers";
+import { augmentationExists } from "../Augmentation/AugmentationHelpers";
 
 export function NetscriptGrafting(): InternalAPI<IGrafting> {
   const checkGraftingAPIAccess = (ctx: NetscriptContext): void => {
@@ -25,7 +26,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
     getAugmentationGraftPrice: (ctx) => (_augName) => {
       const augName = helpers.string(ctx, "augName", _augName);
       checkGraftingAPIAccess(ctx);
-      if (!getGraftingAvailableAugs().includes(augName) || !StaticAugmentations.hasOwnProperty(augName)) {
+      if (!getGraftingAvailableAugs().includes(augName) || augmentationExists(augName)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid aug: ${augName}`);
       }
       const graftableAug = new GraftableAugmentation(StaticAugmentations[augName]);
@@ -35,7 +36,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
     getAugmentationGraftTime: (ctx) => (_augName) => {
       const augName = helpers.string(ctx, "augName", _augName);
       checkGraftingAPIAccess(ctx);
-      if (!getGraftingAvailableAugs().includes(augName) || !StaticAugmentations.hasOwnProperty(augName)) {
+      if (!getGraftingAvailableAugs().includes(augName) || !augmentationExists(augName)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid aug: ${augName}`);
       }
       const graftableAug = new GraftableAugmentation(StaticAugmentations[augName]);
@@ -57,7 +58,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
         if (player.city !== CityName.NewTokyo) {
           throw helpers.makeRuntimeErrorMsg(ctx, "You must be in New Tokyo to begin grafting an Augmentation.");
         }
-        if (!getGraftingAvailableAugs().includes(augName) || !StaticAugmentations.hasOwnProperty(augName)) {
+        if (!getGraftingAvailableAugs().includes(augName) || !augmentationExists(augName)) {
           helpers.log(ctx, () => `Invalid aug: ${augName}`);
           return false;
         }

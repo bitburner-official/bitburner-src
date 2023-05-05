@@ -14,11 +14,11 @@ export enum TickerDisplayMode {
   Portfolio,
 }
 
-type IProps = {
+interface IProps {
   changeDisplayMode: () => void;
   changeWatchlistFilter: (e: React.ChangeEvent<HTMLInputElement>) => void;
   tickerDisplayMode: TickerDisplayMode;
-};
+}
 
 function DisplayModeButton(props: IProps): React.ReactElement {
   let txt = "";

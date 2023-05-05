@@ -7,7 +7,7 @@ interface IError {
 
 export const isIError = (v: unknown): v is IError => {
   if (typeof v !== "object" || v == null) return false;
-  return v.hasOwnProperty("fileName") && v.hasOwnProperty("lineNumber");
+  return Object.hasOwn(v, "fileName") && Object.hasOwn(v, "lineNumber");
 };
 
 export function exceptionAlert(e: unknown): void {

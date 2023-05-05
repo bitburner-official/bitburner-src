@@ -1,6 +1,6 @@
 export function HammingEncode(data: number): string {
-  const enc: Array<number> = [0];
-  const data_bits: Array<any> = data.toString(2).split("").reverse();
+  const enc: number[] = [0];
+  const data_bits: any[] = data.toString(2).split("").reverse();
 
   data_bits.forEach((e, i, a) => {
     a[i] = parseInt(e);
@@ -67,8 +67,8 @@ export function HammingEncodeProperly(data: number): string {
   const n: number = 2 ** m;
   const k: number = 2 ** m - m - 1;
 
-  const enc: Array<number> = [0];
-  const data_bits: Array<any> = data.toString(2).split("").reverse();
+  const enc: number[] = [0];
+  const data_bits: any[] = data.toString(2).split("").reverse();
 
   data_bits.forEach((e, i, a) => {
     a[i] = parseInt(e);
@@ -118,7 +118,7 @@ export function HammingEncodeProperly(data: number): string {
 
 export function HammingDecode(data: string): number {
   let err = 0;
-  const bits: Array<number> = [];
+  const bits: number[] = [];
 
   /* TODO why not just work with an array of digits from the start? */
   for (const i in data.split("")) {

@@ -26,7 +26,7 @@ export function TaskSelector(props: IProps): React.ReactElement {
     setCurrentTask(contextMember.task);
   }
 
-  function onChange(event: SelectChangeEvent<string>): void {
+  function onChange(event: SelectChangeEvent): void {
     const task = event.target.value;
     props.member.assignToTask(task);
     setCurrentTask(task);

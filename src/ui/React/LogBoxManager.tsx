@@ -161,7 +161,7 @@ function LogWindow(props: IProps): React.ReactElement {
   };
 
   const setPosition = ({ x, y }: LogBoxPositionData) => {
-    const node = rootRef?.current;
+    const node = rootRef.current;
     if (!node) return;
     const state = node.state as { x: number; y: number };
     state.x = x;
@@ -267,7 +267,7 @@ function LogWindow(props: IProps): React.ReactElement {
   }, []);
 
   const onWindowResize = debounce((): void => {
-    const node = draggableRef?.current;
+    const node = draggableRef.current;
     if (!node) return;
 
     if (!isOnScreen(node)) {

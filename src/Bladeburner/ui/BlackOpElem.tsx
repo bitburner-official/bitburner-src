@@ -33,8 +33,7 @@ export function BlackOpElem(props: IProps): React.ReactElement {
   }
 
   const isActive =
-    props.bladeburner.action.type === ActionTypes["BlackOperation"] &&
-    props.action.name === props.bladeburner.action.name;
+    props.bladeburner.action.type === ActionTypes.BlackOperation && props.action.name === props.bladeburner.action.name;
   const actionTime = props.action.getActionTime(props.bladeburner, Player);
   const hasReqdRank = props.bladeburner.rank >= props.action.reqdRank;
   const computedActionTimeCurrent = Math.min(

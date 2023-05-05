@@ -11,9 +11,9 @@ export function assert<T>(
 ): asserts v is T {
   try {
     assertFn(v);
-  } catch (type: unknown) {
-    if (typeof type !== "string") type = "unknown";
-    throw msgFn(type as string);
+  } catch (e) {
+    const type = typeof e === "string" ? e : "unknown";
+    throw msgFn(type);
   }
 }
 

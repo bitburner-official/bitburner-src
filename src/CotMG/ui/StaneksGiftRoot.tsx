@@ -13,9 +13,9 @@ import { DummyGrid } from "./DummyGrid";
 import Container from "@mui/material/Container";
 import { useRerender } from "../../ui/React/hooks";
 
-type IProps = {
+interface IProps {
   staneksGift: StaneksGift;
-};
+}
 
 export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
   const rerender = useRerender();

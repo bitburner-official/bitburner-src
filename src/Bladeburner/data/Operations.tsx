@@ -4,9 +4,7 @@ interface IOperation {
   desc: JSX.Element;
 }
 
-export const Operations: {
-  [key: string]: IOperation | undefined;
-} = {
+export const Operations: Record<string, IOperation | undefined> = {
   Investigation: {
     desc: (
       <>

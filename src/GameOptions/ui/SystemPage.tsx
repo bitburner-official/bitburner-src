@@ -12,50 +12,32 @@ export const SystemPage = (): React.ReactElement => {
   const [terminalSize, setTerminalSize] = useState(Settings.MaxTerminalCapacity);
   const [autosaveInterval, setAutosaveInterval] = useState(Settings.AutosaveInterval);
 
-  function handlePortSizeChange(
-    _event: Event | React.SyntheticEvent<Element, Event>,
-    newValue: number | number[],
-  ): void {
+  function handlePortSizeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setPortSize(newValue as number);
     Settings.MaxPortCapacity = newValue as number;
   }
 
-  function handleTerminalSizeChange(
-    _event: Event | React.SyntheticEvent<Element, Event>,
-    newValue: number | number[],
-  ): void {
+  function handleTerminalSizeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setTerminalSize(newValue as number);
     Settings.MaxTerminalCapacity = newValue as number;
   }
 
-  function handleExecTimeChange(
-    _event: Event | React.SyntheticEvent<Element, Event>,
-    newValue: number | number[],
-  ): void {
+  function handleExecTimeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setExecTime(newValue as number);
     Settings.CodeInstructionRunTime = newValue as number;
   }
 
-  function handleRecentScriptsSizeChange(
-    _event: Event | React.SyntheticEvent<Element, Event>,
-    newValue: number | number[],
-  ): void {
+  function handleRecentScriptsSizeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setRecentScriptsSize(newValue as number);
     Settings.MaxRecentScriptsCapacity = newValue as number;
   }
 
-  function handleLogSizeChange(
-    _event: Event | React.SyntheticEvent<Element, Event>,
-    newValue: number | number[],
-  ): void {
+  function handleLogSizeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setLogSize(newValue as number);
     Settings.MaxLogCapacity = newValue as number;
   }
 
-  function handleAutosaveIntervalChange(
-    _event: Event | React.SyntheticEvent<Element, Event>,
-    newValue: number | number[],
-  ): void {
+  function handleAutosaveIntervalChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setAutosaveInterval(newValue as number);
     Settings.AutosaveInterval = newValue as number;
   }

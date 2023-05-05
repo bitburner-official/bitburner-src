@@ -33,7 +33,7 @@ export function mem(args: (string | number | boolean)[], server: BaseServer): vo
 
     Terminal.print(`This script requires ${formatRam(ramUsage)} of RAM to run for ${numThreads} thread(s)`);
 
-    const verboseEntries = script.ramUsageEntries?.sort((a, b) => b.cost - a.cost) ?? [];
+    const verboseEntries = script.ramUsageEntries.sort((a, b) => b.cost - a.cost) ?? [];
     const padding = Settings.UseIEC60027_2 ? 9 : 8;
     for (const entry of verboseEntries) {
       Terminal.print(`${formatRam(entry.cost * numThreads).padStart(padding)} | ${entry.name} (${entry.type})`);

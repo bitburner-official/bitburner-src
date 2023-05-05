@@ -23,7 +23,7 @@ import { Settings } from "./Settings/Settings";
 import { generate } from "escodegen";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
-import { arrayToString } from "./utils/helpers/arrayToString";
+import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
 
 import { parse } from "acorn";
@@ -34,7 +34,7 @@ import { handleUnknownError, CompleteRunOptions, getRunningScriptsByArgs } from 
 import { resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
 import { root } from "./Paths/Directory";
 
-export const NetscriptPorts: Map<PortNumber, Port> = new Map();
+export const NetscriptPorts = new Map<PortNumber, Port>();
 
 export function prestigeWorkerScripts(): void {
   for (const ws of workerScripts.values()) {
@@ -345,7 +345,7 @@ export function updateOnlineScriptTimes(numCycles = 1): void {
  * into worker scripts so that they will start running
  */
 export function loadAllRunningScripts(): void {
-  const skipScriptLoad = window.location.href.toLowerCase().indexOf("?noscripts") !== -1;
+  const skipScriptLoad = window.location.href.toLowerCase().includes("?noscripts");
   if (skipScriptLoad) {
     Terminal.warn("Skipped loading player scripts during startup");
     console.info("Skipping the load of any scripts during startup");
@@ -403,7 +403,7 @@ export function runScriptFromScript(
   }
 
   // Check if admin rights on host, fail if not.
-  if (host.hasAdminRights == false) {
+  if (!host.hasAdminRights) {
     workerScript.log(caller, () => `You do not have root access on '${host.hostname}'`);
     return 0;
   }

@@ -28,7 +28,7 @@ import { RunningScript } from "../Script/RunningScript";
 import { toNative } from "../NetscriptFunctions/toNative";
 import { ScriptIdentifier } from "./ScriptIdentifier";
 import { findRunningScripts, findRunningScriptByPid } from "../Script/ScriptHelpers";
-import { arrayToString } from "../utils/helpers/arrayToString";
+import { arrayToString } from "../utils/helpers/ArrayHelpers";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
@@ -112,9 +112,8 @@ export function assertObjectType<T extends object>(
       "TYPE",
     );
   }
-  const objHas = Object.prototype.hasOwnProperty.bind(obj);
   for (const [key, val] of Object.entries(desiredObject)) {
-    if (!objHas(key)) {
+    if (!Object.hasOwn(obj, key)) {
       throw makeRuntimeErrorMsg(
         ctx,
         `Object provided for argument ${name} is missing required property ${key}.`,
@@ -269,38 +268,10 @@ function makeRuntimeErrorMsg(ctx: NetscriptContext, msg: string, type = "RUNTIME
     })();
     if (!filename) continue;
 
-    interface ILine {
-      line: string;
-      func: string;
-    }
-
-    function parseChromeStackline(line: string): ILine | null {
-      const lineRe = /.*:(\d+):\d+.*/;
-      const funcRe = /.*at (.+) \(.*/;
-
-      const lineMatch = line.match(lineRe);
-      const funcMatch = line.match(funcRe);
-      if (lineMatch && funcMatch) {
-        return { line: lineMatch[1], func: funcMatch[1] };
-      }
-      return null;
-    }
     let call = { line: "-1", func: "unknown" };
     const chromeCall = parseChromeStackline(stackline);
     if (chromeCall) {
       call = chromeCall;
-    }
-
-    function parseFirefoxStackline(line: string): ILine | null {
-      const lineRe = /.*:(\d+):\d+$/;
-      const lineMatch = line.match(lineRe);
-
-      const lio = line.lastIndexOf("@");
-
-      if (lineMatch && lio !== -1) {
-        return { line: lineMatch[1], func: line.slice(0, lio) };
-      }
-      return null;
     }
 
     const firefoxCall = parseFirefoxStackline(stackline);
@@ -315,6 +286,23 @@ function makeRuntimeErrorMsg(ctx: NetscriptContext, msg: string, type = "RUNTIME
   let rejectMsg = `${caller}: ${msg}`;
   if (userstack.length !== 0) rejectMsg += `\n\nStack:\n${userstack.join("\n")}`;
   return makeBasicErrorMsg(ws, rejectMsg, type);
+
+  interface ILine {
+    line: string;
+    func: string;
+  }
+  function parseChromeStackline(line: string): ILine | null {
+    const lineMatch = line.match(/.*:(\d+):\d+.*/);
+    const funcMatch = line.match(/.*at (.+) \(.*/);
+    if (lineMatch && funcMatch) return { line: lineMatch[1], func: funcMatch[1] };
+    return null;
+  }
+  function parseFirefoxStackline(line: string): ILine | null {
+    const lineMatch = line.match(/.*:(\d+):\d+$/);
+    const lio = line.lastIndexOf("@");
+    if (lineMatch && lio !== -1) return { line: lineMatch[1], func: line.slice(0, lio) };
+    return null;
+  }
 }
 
 /** Validate requested number of threads for h/g/w options */

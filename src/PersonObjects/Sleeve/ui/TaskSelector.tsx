@@ -249,19 +249,20 @@ function getABC(sleeve: Sleeve): [string, string, string] {
   switch (work.type) {
     case WorkType.COMPANY:
       return ["Work for Company", work.companyName, "------"];
-    case WorkType.FACTION:
+    case WorkType.FACTION: {
       const workNames = {
         [FactionWorkType.field]: "Field Work",
         [FactionWorkType.hacking]: "Hacking Contracts",
         [FactionWorkType.security]: "Security Work",
       };
       return ["Work for Faction", work.factionName, workNames[work.factionWorkType] ?? ""];
+    }
     case WorkType.BLADEBURNER:
       if (work.actionType === "Contracts") {
         return ["Perform Bladeburner Actions", "Take on contracts", work.actionName];
       }
       return ["Perform Bladeburner Actions", work.actionName, "------"];
-    case WorkType.CLASS:
+    case WorkType.CLASS: {
       if (!work.isGym()) return ["Take University Course", work.classType, work.location];
       const gymNames: Record<GymType, string> = {
         [GymType.strength]: "Train Strength",
@@ -270,6 +271,7 @@ function getABC(sleeve: Sleeve): [string, string, string] {
         [GymType.agility]: "Train Agility",
       };
       return ["Workout at Gym", gymNames[work.classType as GymType], work.location];
+    }
     case WorkType.CRIME:
       return ["Commit Crime", checkEnum(CrimeType, work.crimeType) ? work.crimeType : "Shoplift", "------"];
     case WorkType.SUPPORT:
@@ -305,7 +307,7 @@ export function TaskSelector(props: IProps): React.ReactElement {
     props.setABC([s0, s1, details2[0]]);
   }
 
-  function onS0Change(event: SelectChangeEvent<string>): void {
+  function onS0Change(event: SelectChangeEvent): void {
     const n = event.target.value;
     const detailsF = tasks[n];
     if (detailsF === undefined) throw new Error(`No function for task '${s0}'`);
@@ -317,12 +319,12 @@ export function TaskSelector(props: IProps): React.ReactElement {
     props.setABC([n, details.first[0], details2[0]]);
   }
 
-  function onS1Change(event: SelectChangeEvent<string>): void {
+  function onS1Change(event: SelectChangeEvent): void {
     setS1(event.target.value);
     props.setABC([s0, event.target.value, s2]);
   }
 
-  function onS2Change(event: SelectChangeEvent<string>): void {
+  function onS2Change(event: SelectChangeEvent): void {
     setS2(event.target.value);
     props.setABC([s0, s1, event.target.value]);
   }

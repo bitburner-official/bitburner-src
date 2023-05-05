@@ -88,7 +88,7 @@ export function ProgramsRoot(): React.ReactElement {
                 </Typography>
                 {!Player.hasProgram(program.name) &&
                   create.req() &&
-                  (isCreateProgramWork(Player.currentWork) && Player.currentWork?.programName === program.name ? (
+                  (isCreateProgramWork(Player.currentWork) && Player.currentWork.programName === program.name ? (
                     //Button if the program is currently being worked on
                     <Button
                       sx={{ my: 1, width: "100%" }}
@@ -128,7 +128,7 @@ export function ProgramsRoot(): React.ReactElement {
                   </Typography>
                 )}
                 {/*Displays the current completion of the program currently being created*/}
-                {isCreateProgramWork(Player.currentWork) && Player.currentWork?.programName === program.name && (
+                {isCreateProgramWork(Player.currentWork) && Player.currentWork.programName === program.name && (
                   <Typography color={Settings.theme.infolight}>
                     <b>Current completion:</b>{" "}
                     {((100 * Player.currentWork.unitCompleted) / Player.currentWork.unitNeeded()).toFixed(2)}%

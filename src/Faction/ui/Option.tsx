@@ -10,11 +10,11 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 
-type IProps = {
+interface IProps {
   buttonText: string;
   infoText: string;
   onClick: (e: React.MouseEvent<HTMLElement>) => void;
-};
+}
 
 export function Option(props: IProps): React.ReactElement {
   return (

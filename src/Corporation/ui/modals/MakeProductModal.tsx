@@ -52,7 +52,7 @@ export function MakeProductModal(props: IProps): React.ReactElement {
     props.onClose();
   }
 
-  function onCityChange(event: SelectChangeEvent<string>): void {
+  function onCityChange(event: SelectChangeEvent): void {
     setCity(event.target.value as CityName);
   }
 

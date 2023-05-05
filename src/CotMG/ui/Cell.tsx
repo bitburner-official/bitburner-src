@@ -23,11 +23,11 @@ export const TableCell: React.FC<TableCellProps> = (props: TableCellProps) => {
   );
 };
 
-type IProps = {
+interface IProps {
   onMouseEnter?: () => void;
   onClick?: () => void;
   color: string;
-};
+}
 
 export function Cell(cellProps: IProps): React.ReactElement {
   return (

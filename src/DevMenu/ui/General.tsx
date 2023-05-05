@@ -71,7 +71,7 @@ export function General(): React.ReactElement {
     // Rerender so the gang menu option will be removed immediately on the devmenu page selection
     ThemeEvents.emit();
   };
-  const setGangFactionDropdown = (event: SelectChangeEvent<string>) => setGangFaction(event.target.value);
+  const setGangFactionDropdown = (event: SelectChangeEvent) => setGangFaction(event.target.value);
 
   // Misc functions
   const checkMessages = () => checkForMessagesToSend();

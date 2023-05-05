@@ -13,9 +13,9 @@ import { formatRam } from "../../ui/formatNumber";
 import { MathJax } from "better-react-mathjax";
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 
-type IProps = {
+interface IProps {
   rerender: () => void;
-};
+}
 
 export function RamButton(props: IProps): React.ReactElement {
   const homeComputer = Player.getHomeComputer();

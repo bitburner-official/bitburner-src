@@ -258,7 +258,7 @@ export class OfficeSpace {
 
   static fromJSON(value: IReviverValue): OfficeSpace {
     // Convert employees from the old version
-    if (value.data.hasOwnProperty("employees")) {
+    if (Object.hasOwn(value.data, "employees")) {
       const empCopy: [{ data: { mor: number; ene: number; exp: number } }] = value.data.employees;
       delete value.data.employees;
       const ret = Generic_fromJSON(OfficeSpace, value.data);

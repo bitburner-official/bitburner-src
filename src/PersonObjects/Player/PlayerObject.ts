@@ -59,7 +59,7 @@ export class PlayerObject extends Person implements IPlayer {
   scriptProdSinceLastAug = 0;
   sleeves: Sleeve[] = [];
   sleevesFromCovenant = 0;
-  sourceFiles: JSONMap<number, number> = new JSONMap();
+  sourceFiles = new JSONMap<number, number>();
   exploits: Exploit[] = [];
   achievements: PlayerAchievement[] = [];
   terminalCommandHistory: string[] = [];

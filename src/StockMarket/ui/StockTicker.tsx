@@ -37,11 +37,11 @@ enum SelectorOrderType {
   Stop = "Stop Order",
 }
 
-type IProps = {
+interface IProps {
   orders: Order[];
   rerenderAllTickers: () => void;
   stock: Stock;
-};
+}
 
 /** React Component for a single stock ticker in the Stock Market UI */
 export function StockTicker(props: IProps): React.ReactElement {
@@ -177,7 +177,7 @@ export function StockTicker(props: IProps): React.ReactElement {
     }
   }
 
-  function handleOrderTypeChange(e: SelectChangeEvent<string>): void {
+  function handleOrderTypeChange(e: SelectChangeEvent): void {
     const val = e.target.value;
 
     // The select value returns a string. Afaik TypeScript doesn't make it easy
@@ -195,7 +195,7 @@ export function StockTicker(props: IProps): React.ReactElement {
     }
   }
 
-  function handlePositionTypeChange(e: SelectChangeEvent<string>): void {
+  function handlePositionTypeChange(e: SelectChangeEvent): void {
     const val = e.target.value;
 
     if (val === PositionTypes.Short) {

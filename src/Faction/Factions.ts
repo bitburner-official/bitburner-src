@@ -28,7 +28,7 @@ function AddToFactions(faction: Faction): void {
 }
 
 export function factionExists(name: string): boolean {
-  return Factions.hasOwnProperty(name);
+  return Object.hasOwn(Factions, name);
 }
 
 export function initFactions(): void {

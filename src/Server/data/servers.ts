@@ -1,5 +1,4 @@
 import { FactionNames } from "../../Faction/data/FactionNames";
-// tslint:disable:max-file-line-count
 
 // This could actually be a JSON file as it should be constant metadata to be imported...
 import { IMinMaxRange } from "../../types";

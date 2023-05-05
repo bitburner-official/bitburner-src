@@ -281,7 +281,7 @@ const Engine: {
       } else if (Player.bitNodeN !== 2) {
         for (let i = 0; i < Player.factions.length; i++) {
           const facName = Player.factions[i];
-          if (!Factions.hasOwnProperty(facName)) continue;
+          if (!Object.hasOwn(Factions, facName)) continue;
           const faction = Factions[facName];
           if (!faction.isMember) continue;
           // No rep for special factions.

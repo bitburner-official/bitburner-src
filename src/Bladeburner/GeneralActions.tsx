@@ -2,7 +2,7 @@ import { Action } from "./Action";
 
 export const GeneralActions: Record<string, Action> = {};
 
-const actionNames: Array<string> = [
+const actionNames: string[] = [
   "Training",
   "Field Analysis",
   "Recruitment",

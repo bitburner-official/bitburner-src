@@ -31,7 +31,7 @@ const invalidCharacters = ["/", "*", "?", "[", "]", "!", "\\", "~", "|", "#", '"
 export const oneValidCharacter = `[^${escapeRegExp(invalidCharacters.join(""))}]`;
 
 /** Regex string for matching the directory part of a valid filepath */
-export const directoryRegexString = `^(?<directory>(?:${oneValidCharacter}+\\\/)*)`;
+export const directoryRegexString = `^(?<directory>(?:${oneValidCharacter}+\\/)*)`;
 
 /** Actual RegExp for validating that an entire string is a BasicDirectory */
 const basicDirectoryRegex = new RegExp(directoryRegexString + "$");

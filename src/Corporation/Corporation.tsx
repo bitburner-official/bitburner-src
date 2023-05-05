@@ -340,7 +340,7 @@ export class Corporation {
         for (const city of Object.keys(industry.warehouses) as CityName[]) {
           const warehouse = industry.warehouses[city];
           if (warehouse === 0) continue;
-          if (industry.warehouses.hasOwnProperty(city) && warehouse) {
+          if (Object.hasOwn(industry.warehouses, city) && warehouse) {
             warehouse.updateSize(this, industry);
           }
         }

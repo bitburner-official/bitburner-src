@@ -209,7 +209,10 @@ export function Root(props: IProps): React.ReactElement {
         MonacoVim.VimMode.Vim.mapCommand("gt", "action", "nextTabs", {}, { context: "normal" });
         MonacoVim.VimMode.Vim.mapCommand("gT", "action", "prevTabs", {}, { context: "normal" });
         editor.focus();
-      } catch {}
+      } catch (e) {
+        console.error("An error occurred while loading monaco-vim:");
+        console.error(e);
+      }
     } else if (!options.vim) {
       // When vim mode is disabled
       vimEditor?.dispose();
@@ -422,7 +425,10 @@ export function Root(props: IProps): React.ReactElement {
     }
     try {
       infLoop(newCode);
-    } catch (err) {}
+    } catch (err) {
+      console.error("An error occurred during infinite loop detection in the script editor:");
+      console.error(err);
+    }
   }
 
   function saveScript(scriptToSave: OpenScript): void {
@@ -449,7 +455,7 @@ export function Root(props: IProps): React.ReactElement {
       const cleanCode = currentScript.code.replace(/\s/g, "");
       const ns1 = "while(true){hack('n00dles');}";
       const ns2 = `exportasyncfunctionmain(ns){while(true){awaitns.hack('n00dles');}}`;
-      if (cleanCode.indexOf(ns1) == -1 && cleanCode.indexOf(ns2) == -1) {
+      if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
         dialogBoxCreate("Please copy and paste the code from the tutorial!");
         return;
       }
@@ -667,7 +673,7 @@ export function Root(props: IProps): React.ReactElement {
                 {filteredOpenScripts.map(({ path: fileName, hostname }, index) => {
                   const editingCurrentScript =
                     currentScript?.path === filteredOpenScripts[index].path &&
-                    currentScript?.hostname === filteredOpenScripts[index].hostname;
+                    currentScript.hostname === filteredOpenScripts[index].hostname;
                   const externalScript = hostname !== "home";
                   const colorProps = editingCurrentScript
                     ? {

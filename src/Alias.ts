@@ -1,36 +1,30 @@
 import { Terminal } from "./Terminal";
 
-export let Aliases: Record<string, string> = {};
-export let GlobalAliases: Record<string, string> = {};
+export const Aliases = new Map<string, string>();
+export const GlobalAliases = new Map<string, string>();
 
 export function loadAliases(saveString: string): void {
-  if (saveString === "") {
-    Aliases = {};
-  } else {
-    Aliases = JSON.parse(saveString);
+  Aliases.clear();
+  const parsedAliases: unknown = JSON.parse(saveString);
+  if (!parsedAliases || typeof parsedAliases !== "object") return;
+  for (const [name, alias] of Object.entries(parsedAliases)) {
+    if (typeof name === "string" && typeof alias === "string") Aliases.set(name, alias);
   }
 }
 
 export function loadGlobalAliases(saveString: string): void {
-  if (saveString === "") {
-    GlobalAliases = {};
-  } else {
-    GlobalAliases = JSON.parse(saveString);
+  GlobalAliases.clear();
+  const parsedAliases: unknown = JSON.parse(saveString);
+  if (!parsedAliases || typeof parsedAliases !== "object") return;
+  for (const [name, alias] of Object.entries(parsedAliases)) {
+    if (typeof name === "string" && typeof alias === "string") GlobalAliases.set(name, alias);
   }
 }
 
 // Prints all aliases to terminal
 export function printAliases(): void {
-  for (const name of Object.keys(Aliases)) {
-    if (Aliases.hasOwnProperty(name)) {
-      Terminal.print("alias " + name + "=" + Aliases[name]);
-    }
-  }
-  for (const name of Object.keys(GlobalAliases)) {
-    if (GlobalAliases.hasOwnProperty(name)) {
-      Terminal.print("global alias " + name + "=" + GlobalAliases[name]);
-    }
-  }
+  for (const [name, alias] of Aliases) Terminal.print("alias " + name + "=" + alias);
+  for (const [name, alias] of GlobalAliases) Terminal.print("global alias " + name + "=" + alias);
 }
 
 // Returns true if successful, false otherwise
@@ -50,46 +44,20 @@ export function parseAliasDeclaration(dec: string, global = false): boolean {
 }
 
 function addAlias(name: string, value: string): void {
-  if (name in GlobalAliases) {
-    delete GlobalAliases[name];
-  }
-  Aliases[name] = value.trim();
+  GlobalAliases.delete(name);
+  Aliases.set(name, value.trim());
 }
 
 function addGlobalAlias(name: string, value: string): void {
-  if (name in Aliases) {
-    delete Aliases[name];
-  }
-  GlobalAliases[name] = value.trim();
-}
-
-function getAlias(name: string): string | null {
-  if (Aliases.hasOwnProperty(name)) {
-    return Aliases[name];
-  }
-
-  return null;
-}
-
-function getGlobalAlias(name: string): string | null {
-  if (GlobalAliases.hasOwnProperty(name)) {
-    return GlobalAliases[name];
-  }
-  return null;
+  Aliases.delete(name);
+  GlobalAliases.set(name, value.trim());
 }
 
 export function removeAlias(name: string): boolean {
-  if (Aliases.hasOwnProperty(name)) {
-    delete Aliases[name];
-    return true;
-  }
-
-  if (GlobalAliases.hasOwnProperty(name)) {
-    delete GlobalAliases[name];
-    return true;
-  }
-
-  return false;
+  const hadAlias = Aliases.has(name) || GlobalAliases.has(name);
+  Aliases.delete(name);
+  GlobalAliases.delete(name);
+  return hadAlias;
 }
 
 /**
@@ -110,15 +78,15 @@ export function substituteAliases(origCommand: string): string {
     while (somethingSubstituted && depth < 10) {
       depth++;
       somethingSubstituted = false;
-      const alias = getAlias(commandArray[0])?.split(" ");
-      if (alias != null) {
+      const alias = Aliases.get(commandArray[0])?.split(" ");
+      if (alias !== undefined) {
         somethingSubstituted = true;
         commandArray.splice(0, 1, ...alias);
         //commandArray[0] = alias;
       }
       for (let i = 0; i < commandArray.length; ++i) {
-        const alias = getGlobalAlias(commandArray[i])?.split(" ");
-        if (alias != null) {
+        const alias = GlobalAliases.get(commandArray[i])?.split(" ");
+        if (alias !== undefined) {
           somethingSubstituted = true;
           commandArray.splice(i, 1, ...alias);
           i += alias.length - 1;

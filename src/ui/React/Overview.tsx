@@ -94,7 +94,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
   }, []);
 
   const fakeDrag = debounce((): void => {
-    const node = draggableRef?.current;
+    const node = draggableRef.current;
     if (!node) return;
 
     // No official way to trigger an onChange to recompute the bounds

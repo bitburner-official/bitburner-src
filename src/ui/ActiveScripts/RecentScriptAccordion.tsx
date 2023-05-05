@@ -23,7 +23,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { arrayToString } from "../../utils/helpers/arrayToString";
+import { arrayToString } from "../../utils/helpers/ArrayHelpers";
 import { Money } from "../React/Money";
 import { MoneyRate } from "../React/MoneyRate";
 import { RecentScript } from "../../Netscript/RecentScripts";

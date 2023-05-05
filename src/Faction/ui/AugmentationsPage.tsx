@@ -17,10 +17,10 @@ import { getFactionAugmentationsFiltered, hasAugmentationPrereqs, purchaseAugmen
 import { CONSTANTS } from "../../Constants";
 import { useRerender } from "../../ui/React/hooks";
 
-type IProps = {
+interface IProps {
   faction: Faction;
   routeToMainPage: () => void;
-};
+}
 
 /** Root React Component for displaying a faction's "Purchase Augmentations" page */
 export function AugmentationsPage(props: IProps): React.ReactElement {

@@ -62,8 +62,8 @@ export class RunningScript {
   // hostname of the server on which this script is running
   server = "";
 
-  // Cached key for ByArgs lookups
-  scriptKey: ScriptKey = "";
+  // Cached key for ByArgs lookups. Will be overwritten by a correct ScriptKey in fromJSON or constructor
+  scriptKey = "" as ScriptKey;
 
   // Number of threads that this script is running with
   threads = 1 as PositiveInteger;
@@ -72,7 +72,7 @@ export class RunningScript {
   temporary = false;
 
   // Script urls for the current running script for translating urls back to file names in errors
-  dependencies: Map<ScriptURL, Script> = new Map();
+  dependencies = new Map<ScriptURL, Script>();
 
   constructor(script?: Script, ramUsage?: number, args: ScriptArg[] = []) {
     if (!script) return;
@@ -145,7 +145,9 @@ export class RunningScript {
 
   // Initializes a RunningScript Object from a JSON save state
   static fromJSON(value: IReviverValue): RunningScript {
-    return Generic_fromJSON(RunningScript, value.data, includedProperties);
+    const runningScript = Generic_fromJSON(RunningScript, value.data, includedProperties);
+    if (!runningScript.scriptKey) runningScript.scriptKey = scriptKey(runningScript.filename, runningScript.args);
+    return runningScript;
   }
 }
 const includedProperties = getKeyList(RunningScript, { removedKeys: ["logs", "dependencies", "logUpd", "pid"] });

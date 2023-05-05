@@ -15,11 +15,11 @@ export type InternalAPI<API> = {
   [key in keyof API]: API[key] extends APIFn ? InternalFn<API[key]> : InternalAPI<API[key]>;
 };
 
-export type NetscriptContext = {
+export interface NetscriptContext {
   workerScript: WorkerScript;
   function: string;
   functionPath: string;
-};
+}
 
 class NSProxyHandler<API extends GenericAPI<API>> {
   ns: API;

@@ -305,7 +305,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
 
       const orders: StockOrder = {};
 
-      const stockMarketOrders = StockMarket["Orders"];
+      const stockMarketOrders = StockMarket.Orders;
       for (const symbol of Object.keys(stockMarketOrders)) {
         const orderBook = stockMarketOrders[symbol];
         if (orderBook.constructor === Array && orderBook.length > 0) {

@@ -19,9 +19,9 @@ import { ClassWork, Classes } from "../../Work/ClassWork";
 import { calculateCost } from "../../Work/Formulas";
 import { UniversityClassType } from "../../Enums";
 
-type IProps = {
+interface IProps {
   loc: Location;
-};
+}
 
 export function UniversityLocation(props: IProps): React.ReactElement {
   function take(classType: UniversityClassType): void {
