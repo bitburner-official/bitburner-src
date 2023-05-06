@@ -24,11 +24,11 @@ export function calculateLevelUpgradeCost(startingLevel: number, extraLevels = 1
   let totalMultiplier = 0;
   let currLevel = startingLevel;
   for (let i = 0; i < sanitizedLevels; ++i) {
-    totalMultiplier += HacknetNodeConstants.LevelBaseCost * Math.pow(mult, currLevel);
+    totalMultiplier += Math.pow(mult, currLevel);
     ++currLevel;
   }
 
-  return (HacknetNodeConstants.BaseCost / 2) * totalMultiplier * costMult;
+  return HacknetNodeConstants.LevelBaseCost * totalMultiplier * costMult;
 }
 
 export function calculateRamUpgradeCost(startingRam: number, extraLevels = 1, costMult = 1): number {

@@ -2,7 +2,7 @@ export const HacknetNodeConstants = {
   MoneyGainPerLevel: 1.5,
 
   BaseCost: 1000,
-  LevelBaseCost: 1,
+  LevelBaseCost: 500,
   RamBaseCost: 30e3,
   CoreBaseCost: 500e3,
 
