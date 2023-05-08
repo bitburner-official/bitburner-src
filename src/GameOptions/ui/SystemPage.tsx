@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Settings } from "../../Settings/Settings";
 import { GameOptionsPage } from "./GameOptionsPage";
 import { OptionsSlider } from "./OptionsSlider";
+import { AutoexecInput } from "./AutoexecInput";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
 export const SystemPage = (): React.ReactElement => {
@@ -45,6 +46,16 @@ export const SystemPage = (): React.ReactElement => {
     <GameOptionsPage title="System">
       {/* Wrap in a React fragment to prevent the sliders from breaking as list items */}
       <>
+        <AutoexecInput
+          label="Autoexec Script + Args"
+          tooltip={
+            <>
+              Path to a script (with optional args) to run on game load. The script will be run on home, launched before
+              any saved running scripts. It will have the "temporary" setting, so if it stays running it won't be saved.
+            </>
+          }
+        />
+        <br />
         <OptionsSlider
           label=".script exec time (ms)"
           initialValue={execTime}
@@ -148,7 +159,8 @@ export const SystemPage = (): React.ReactElement => {
         tooltip={
           <>
             If this is set, the save file will exclude all running scripts. This is only useful if your save is lagging
-            a lot. You'll have to restart your script every time you launch the game.
+            a lot. You'll have to restart your script every time you launch the game, possibly by using the "autoexec"
+            option.
           </>
         }
       />

@@ -28,6 +28,7 @@ import { roundToTwo } from "./utils/helpers/roundToTwo";
 
 import { parse } from "acorn";
 import { simple as walksimple } from "acorn-walk";
+import { parseCommand } from "./Terminal/Parser";
 import { Terminal } from "./Terminal";
 import { ScriptArg } from "@nsdefs";
 import { handleUnknownError, CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
@@ -284,7 +285,7 @@ function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseS
   const ramAvailable = server.maxRam - server.ramUsed;
   // Check failure conditions before generating the workersScript and return false
   if (ramUsage > ramAvailable + 0.001) {
-    dialogBoxCreate(
+    deferredError(
       `Not enough RAM to run script ${runningScriptObj.filename} with args ${arrayToString(runningScriptObj.args)}.\n` +
         `This can occur when you reload the game and the script's RAM usage has increased (either because of an update to the game or ` +
         `your changes to the script).\nThis can also occur if you have attempted to launch a script from a tail window with insufficient RAM. `,
@@ -295,7 +296,7 @@ function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseS
   // Get the pid
   const pid = generateNextPid();
   if (pid === -1) {
-    dialogBoxCreate(
+    deferredError(
       `Failed to start script because could not find available PID. This is most ` +
         `because you have too many scripts running.`,
     );
@@ -340,6 +341,42 @@ export function updateOnlineScriptTimes(numCycles = 1): void {
   }
 }
 
+// Needed for popping dialog boxes in functions that run *before* the UI is
+// created, and thus before AlertManager exists to listen to the alerts we
+// create.
+function deferredError(msg: string) {
+  setTimeout(() => dialogBoxCreate(msg), 0);
+}
+
+function createAutoexec(server: BaseServer): RunningScript | null {
+  const args = parseCommand(Settings.AutoexecScript);
+  if (args.length === 0) return null;
+
+  const cmd = String(args[0]);
+  const scriptPath = resolveScriptFilePath(cmd);
+  if (!scriptPath) {
+    deferredError(`While running autoexec script:
+"${cmd}" does not end in .js or .script!`);
+    return null;
+  }
+  const script = server.scripts.get(scriptPath);
+  if (!script) {
+    deferredError(`While running autoexec script:
+"${cmd}" does not exist!`);
+    return null;
+  }
+  const ramUsage = script.getRamUsage(server.scripts);
+  if (ramUsage === null) {
+    deferredError(`While running autoexec script:
+"${cmd}" has errors!`);
+    return null;
+  }
+  args.shift();
+  const rs = new RunningScript(script, ramUsage, args);
+  rs.temporary = true;
+  return rs;
+}
+
 /**
  * Called when the game is loaded. Loads all running scripts (from all servers)
  * into worker scripts so that they will start running
@@ -359,6 +396,13 @@ export function loadAllRunningScripts(): void {
     if (skipScriptLoad || !rsList) {
       // Start game with no scripts
       continue;
+    }
+    if (server.hostname === "home") {
+      // Push autoexec script onto the front of the list
+      const runningScript = createAutoexec(server);
+      if (runningScript) {
+        rsList.unshift(runningScript);
+      }
     }
     for (const runningScript of rsList) {
       startWorkerScript(runningScript, server);
