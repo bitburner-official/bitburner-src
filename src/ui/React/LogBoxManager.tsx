@@ -83,7 +83,7 @@ export function LogBoxManager(): React.ReactElement {
   useEffect(
     () =>
       LogBoxEvents.subscribe((script: RunningScript) => {
-        if (logs.find((l) => l.id === script.pid)) return;
+        if (logs.some((l) => l.script.pid === script.pid)) return;
         logs.push({
           id: script.pid,
           script: script,
@@ -116,7 +116,6 @@ export function LogBoxManager(): React.ReactElement {
   }
 
   //Close tail windows by their pid.
-  //This closes *all* windows if there are multiple.
   function closePid(pid: number): void {
     logs = logs.filter((log) => log.script.pid !== pid);
     rerender();
@@ -167,19 +166,8 @@ function LogWindow(props: IProps): React.ReactElement {
   const container = useRef<HTMLDivElement>(null);
   const textArea = useRef<HTMLDivElement>(null);
   const rerender = useRerender(1000);
-  // Subtle initialization issue: We only want to set script.tailProps the
-  // *first* time the component is created. It wouldn't matter if there was
-  // only one log box, but it is possible to create *multiple* independent log
-  // windows for the same script by using the kill/run button. This way, only
-  // the most recent is the one reported to scripts.
-  const tmpRef = useRef<LogBoxProperties | null>(null);
-  if (tmpRef.current === null) {
-    tmpRef.current = new LogBoxProperties(rerender, rootRef);
-    script.tailProps = tmpRef.current;
-  }
-  // The types here are awful; RefObject is the mutable version and
-  // MutableRefObject is (sometimes) the immutable version.
-  const propsRef = tmpRef as React.MutableRefObject<LogBoxProperties>;
+  const propsRef = useRef(new LogBoxProperties(rerender, rootRef));
+  script.tailProps = propsRef.current;
   const [minimized, setMinimized] = useState(false);
 
   const textAreaKeyDown = (e: React.KeyboardEvent) => {
@@ -224,7 +212,13 @@ function LogWindow(props: IProps): React.ReactElement {
       if (!ramUsage) {
         return dialogBoxCreate(`Could not calculate ram usage for ${script.filename} on ${server.hostname}.`);
       }
+      // Reset some things, because we're reusing the RunningScript instance
       script.ramUsage = ramUsage;
+      script.dataMap = {};
+      script.onlineExpMade = 0;
+      script.onlineMoneyMade = 0;
+      script.onlineRunningTime = 0.01;
+
       startWorkerScript(script, server);
       rerender();
     } else {

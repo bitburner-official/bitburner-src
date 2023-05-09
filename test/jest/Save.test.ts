@@ -77,6 +77,7 @@ function loadStandardServers() {
             "ramUsage": 1.6,
             "server": "home",
             "scriptKey": "script.js*[]",
+            "title": "Awesome Script",
             "dependencies": [
               {
                 "filename": "script.js",
