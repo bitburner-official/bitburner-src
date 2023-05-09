@@ -10,6 +10,8 @@ export const Settings = {
   ActiveScriptsServerPageSize: 10,
   /** How many scripts per page */
   ActiveScriptsScriptPageSize: 10,
+  /** Script + args to launch on game load */
+  AutoexecScript: "",
   /** How often the game should autosave the player's progress, in seconds. */
   AutosaveInterval: 60,
   /** How many milliseconds between execution points for Netscript 1 statements. */
