@@ -215,7 +215,7 @@ function LogWindow(props: IProps): React.ReactElement {
       // Reset some things, because we're reusing the RunningScript instance
       script.ramUsage = ramUsage;
       script.dataMap = {};
-      script.onlineExpMade = 0;
+      script.onlineExpGained = 0;
       script.onlineMoneyMade = 0;
       script.onlineRunningTime = 0.01;
 
