@@ -23,6 +23,7 @@ import { Settings } from "./Settings/Settings";
 import { generate } from "escodegen";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
+import { formatRam } from "./ui/formatNumber";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
 
@@ -286,7 +287,9 @@ function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseS
   // Check failure conditions before generating the workersScript and return false
   if (ramUsage > ramAvailable + 0.001) {
     deferredError(
-      `Not enough RAM to run script ${runningScriptObj.filename} with args ${arrayToString(runningScriptObj.args)}.
+      `Not enough RAM to run script ${runningScriptObj.filename} with args ${arrayToString(
+        runningScriptObj.args,
+      )}, needed ${formatRam(ramUsage)} but only have ${formatRam(ramAvailable)} free
 If you are seeing this on startup, likely causes are that the autoexec script is too big to fit in RAM, or it took up too much space and other previously running scripts couldn't fit on home.
 Otherwise, this can also occur if you have attempted to launch a script from a tail window with insufficient RAM.`,
     );
