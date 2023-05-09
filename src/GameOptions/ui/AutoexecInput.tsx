@@ -3,7 +3,7 @@ import { Box, InputAdornment, TextField, Tooltip, Typography } from "@mui/materi
 import { Settings } from "../../Settings/Settings";
 import { parseCommand } from "../../Terminal/Parser";
 import { resolveScriptFilePath } from "../../Paths/ScriptFilePath";
-import { GetServer } from "../../Server/AllServers";
+import { formatRam } from "../../ui/formatNumber";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import WarningIcon from "@mui/icons-material/Warning";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -37,19 +37,12 @@ export const AutoexecInput = (props: IProps): React.ReactElement => {
     const scriptPath = resolveScriptFilePath(cmd);
     if (!scriptPath) {
       return (
-        <Tooltip title={<Typography>{cmd} does not end in .js or .script!</Typography>}>
+        <Tooltip title={<Typography>"{cmd}" is invalid for a script name (maybe missing suffix?)</Typography>}>
           <ErrorIcon color="error" />
         </Tooltip>
       );
     }
-    const home = GetServer("home");
-    if (!home) {
-      return (
-        <Tooltip title={<Typography>Internal error: Can't find home!</Typography>}>
-          <ErrorIcon color="error" />
-        </Tooltip>
-      );
-    }
+    const home = Player.getHomeComputer();
     const script = home.scripts.get(scriptPath);
     if (!script) {
       return (
@@ -73,7 +66,7 @@ export const AutoexecInput = (props: IProps): React.ReactElement => {
         <Tooltip
           title={
             <Typography>
-              {cmd} costs {ramUsage}GB
+              {cmd} costs {formatRam(ramUsage)}
             </Typography>
           }
         >
@@ -85,7 +78,7 @@ export const AutoexecInput = (props: IProps): React.ReactElement => {
         <Tooltip
           title={
             <Typography>
-              {cmd} costs {ramUsage}GB, you might only have {minRam}GB on home!
+              {cmd} costs {formatRam(ramUsage)}, you might only have {formatRam(minRam)} on home!
             </Typography>
           }
         >

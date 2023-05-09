@@ -286,9 +286,9 @@ function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseS
   // Check failure conditions before generating the workersScript and return false
   if (ramUsage > ramAvailable + 0.001) {
     deferredError(
-      `Not enough RAM to run script ${runningScriptObj.filename} with args ${arrayToString(runningScriptObj.args)}.\n` +
-        `This can occur when you reload the game and the script's RAM usage has increased (either because of an update to the game or ` +
-        `your changes to the script).\nThis can also occur if you have attempted to launch a script from a tail window with insufficient RAM. `,
+      `Not enough RAM to run script ${runningScriptObj.filename} with args ${arrayToString(runningScriptObj.args)}.
+If you are seeing this on startup, likely causes are that the autoexec script is too big to fit in RAM, or it took up too much space and other previously running scripts couldn't fit on home.
+Otherwise, this can also occur if you have attempted to launch a script from a tail window with insufficient RAM.`,
     );
     return false;
   }
@@ -356,7 +356,7 @@ function createAutoexec(server: BaseServer): RunningScript | null {
   const scriptPath = resolveScriptFilePath(cmd);
   if (!scriptPath) {
     deferredError(`While running autoexec script:
-"${cmd}" does not end in .js or .script!`);
+"${cmd}" is invalid for a script name (maybe missing suffix?)`);
     return null;
   }
   const script = server.scripts.get(scriptPath);
