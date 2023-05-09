@@ -27,6 +27,8 @@ interface RunningScript
 |  [pid](./bitburner.runningscript.pid.md) |  | number | Process ID. Must be an integer |
 |  [ramUsage](./bitburner.runningscript.ramusage.md) |  | number | How much RAM this script uses for ONE thread |
 |  [server](./bitburner.runningscript.server.md) |  | string | Hostname of the server on which this script runs |
+|  [tailProperties](./bitburner.runningscript.tailproperties.md) |  | [TailProperties](./bitburner.tailproperties.md) \| null | Properties of the tail window, or null if it is not shown |
 |  [temporary](./bitburner.runningscript.temporary.md) |  | boolean | Whether this RunningScript is excluded from saves |
 |  [threads](./bitburner.runningscript.threads.md) |  | number | Number of threads that this script runs with |
+|  [title](./bitburner.runningscript.title.md) |  | string \| React.ReactElement | The title, as shown in the script's log box. Defaults to the name + args, but can be changed by the user. If it is set to a React element (only by the user), that will not be persisted, and will be restored to default on load. |
 
