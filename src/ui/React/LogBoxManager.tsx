@@ -4,13 +4,18 @@ import { RunningScript } from "../../Script/RunningScript";
 import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Draggable, { DraggableEvent } from "react-draggable";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
+import IconButton from "@mui/material/IconButton";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import CloseIcon from "@mui/icons-material/Close";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { startWorkerScript } from "../../NetscriptWorker";
 import { GetServer } from "../../Server/AllServers";
@@ -18,7 +23,6 @@ import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 import { debounce } from "lodash";
 import { Settings } from "../../Settings/Settings";
 import { ANSIITypography } from "./ANSIITypography";
-import { ScriptArg } from "../../Netscript/ScriptArg";
 import { useRerender } from "./hooks";
 import { dialogBoxCreate } from "./DialogBox";
 
@@ -28,27 +32,47 @@ export const LogBoxEvents = new EventEmitter<[RunningScript]>();
 export const LogBoxCloserEvents = new EventEmitter<[number]>();
 export const LogBoxClearEvents = new EventEmitter<[]>();
 
-interface LogBoxUIEvent<T> {
-  pid: number;
-  data: T;
+// Dynamic properties (size, position) bound to a specific rendered instance of a LogBox
+export class LogBoxProperties {
+  x = window.innerWidth * 0.4;
+  y = window.innerHeight * 0.3;
+  width = 500;
+  height = 500;
+
+  rerender: () => void;
+  rootRef: React.RefObject<Draggable>;
+
+  constructor(rerender: () => void, rootRef: React.RefObject<Draggable>) {
+    this.rerender = rerender;
+    this.rootRef = rootRef;
+  }
+
+  updateDOM(): void {
+    if (!this.rootRef.current) return;
+    const state = this.rootRef.current.state as { x: number; y: number };
+    state.x = this.x;
+    state.y = this.y;
+  }
+
+  setPosition(x: number, y: number): void {
+    this.x = x;
+    this.y = y;
+    this.updateDOM();
+  }
+
+  setSize(width: number, height: number): void {
+    this.width = width;
+    this.height = height;
+    this.rerender();
+  }
+
+  isVisible(): boolean {
+    return this.rootRef.current !== null;
+  }
 }
-
-interface LogBoxPositionData {
-  x: number;
-  y: number;
-}
-
-export const LogBoxPositionEvents = new EventEmitter<[LogBoxUIEvent<LogBoxPositionData>]>();
-
-interface LogBoxResizeData {
-  w: number;
-  h: number;
-}
-
-export const LogBoxSizeEvents = new EventEmitter<[LogBoxUIEvent<LogBoxResizeData>]>();
 
 interface Log {
-  id: string;
+  id: number; // The PID of the script *when the window was first opened*
   script: RunningScript;
 }
 
@@ -59,10 +83,9 @@ export function LogBoxManager(): React.ReactElement {
   useEffect(
     () =>
       LogBoxEvents.subscribe((script: RunningScript) => {
-        const id = script.server + "-" + script.filename + script.args.map((x: ScriptArg): string => `${x}`).join("-");
-        if (logs.find((l) => l.id === id)) return;
+        if (logs.find((l) => l.id === script.pid)) return;
         logs.push({
-          id: id,
+          id: script.pid,
           script: script,
         });
         rerender();
@@ -87,21 +110,22 @@ export function LogBoxManager(): React.ReactElement {
   );
 
   //Close tail windows by their id
-  function close(id: string): void {
+  function close(id: number): void {
     logs = logs.filter((l) => l.id !== id);
     rerender();
   }
 
-  //Close tail windows by their pid
+  //Close tail windows by their pid.
+  //This closes *all* windows if there are multiple.
   function closePid(pid: number): void {
-    logs = logs.filter((log) => log.script.pid != pid);
+    logs = logs.filter((log) => log.script.pid !== pid);
     rerender();
   }
 
   return (
     <>
       {logs.map((log) => (
-        <LogWindow key={log.id} script={log.script} id={log.id} onClose={() => close(log.id)} />
+        <LogWindow key={log.id} script={log.script} onClose={() => close(log.id)} />
       ))}
     </>
   );
@@ -109,7 +133,6 @@ export function LogBoxManager(): React.ReactElement {
 
 interface IProps {
   script: RunningScript;
-  id: string;
   onClose: () => void;
 }
 
@@ -124,7 +147,11 @@ const useStyles = makeStyles(() =>
       wordWrap: "break-word",
     },
     titleButton: {
-      padding: "1px 0",
+      borderWidth: "0 0 0 1px",
+      borderColor: Settings.theme.welllight,
+      borderStyle: "solid",
+      borderRadius: "0",
+      padding: "0",
       height: "100%",
     },
   }),
@@ -135,12 +162,24 @@ export const logBoxBaseZIndex = 1500;
 function LogWindow(props: IProps): React.ReactElement {
   const draggableRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<Draggable>(null);
-  const [script, setScript] = useState(props.script);
+  const script = props.script;
   const classes = useStyles();
   const container = useRef<HTMLDivElement>(null);
   const textArea = useRef<HTMLDivElement>(null);
   const rerender = useRerender(1000);
-  const [size, setSize] = useState<[number, number]>([500, 500]);
+  // Subtle initialization issue: We only want to set script.tailProps the
+  // *first* time the component is created. It wouldn't matter if there was
+  // only one log box, but it is possible to create *multiple* independent log
+  // windows for the same script by using the kill/run button. This way, only
+  // the most recent is the one reported to scripts.
+  const tmpRef = useRef<LogBoxProperties | null>(null);
+  if (tmpRef.current === null) {
+    tmpRef.current = new LogBoxProperties(rerender, rootRef);
+    script.tailProps = tmpRef.current;
+  }
+  // The types here are awful; RefObject is the mutable version and
+  // MutableRefObject is (sometimes) the immutable version.
+  const propsRef = tmpRef as React.MutableRefObject<LogBoxProperties>;
   const [minimized, setMinimized] = useState(false);
 
   const textAreaKeyDown = (e: React.KeyboardEvent) => {
@@ -157,46 +196,17 @@ function LogWindow(props: IProps): React.ReactElement {
   };
 
   const onResize = (e: React.SyntheticEvent, { size }: ResizeCallbackData) => {
-    setSize([size.width, size.height]);
+    propsRef.current.setSize(size.width, size.height);
   };
-
-  const setPosition = ({ x, y }: LogBoxPositionData) => {
-    const node = rootRef.current;
-    if (!node) return;
-    const state = node.state as { x: number; y: number };
-    state.x = x;
-    state.y = y;
-  };
-
-  // Listen to Logbox positioning events.
-  useEffect(
-    () =>
-      LogBoxPositionEvents.subscribe((e) => {
-        if (e.pid !== props.script.pid) return;
-        setPosition(e.data);
-      }),
-    [],
-  );
-
-  // Listen to Logbox resizing events.
-  useEffect(
-    () =>
-      LogBoxSizeEvents.subscribe((e) => {
-        if (e.pid !== props.script.pid) return;
-        setSize([e.data.w, e.data.h]);
-      }),
-    [],
-  );
-
-  // initial position if 40%/30%
-  useEffect(() => setPosition({ x: window.innerWidth * 0.4, y: window.innerHeight * 0.3 }), []);
 
   useEffect(() => {
+    propsRef.current.updateDOM();
     updateLayer();
   }, []);
 
   function kill(): void {
     killWorkerScriptByPid(script.pid);
+    rerender();
   }
 
   function run(): void {
@@ -216,8 +226,9 @@ function LogWindow(props: IProps): React.ReactElement {
       }
       script.ramUsage = ramUsage;
       startWorkerScript(script, server);
+      rerender();
     } else {
-      setScript(s);
+      console.warn(`Tried to rerun pid ${script.pid} that was already running!`);
     }
   }
 
@@ -229,13 +240,20 @@ function LogWindow(props: IProps): React.ReactElement {
     rerender();
   }
 
-  function title(full = false): string {
-    const maxLength = 30;
-    const t = `${script.filename} ${script.args.join(" ")}`;
-    if (full || t.length <= maxLength) {
+  function title(): React.ReactElement {
+    const t = script.title;
+    if (typeof t !== "string") {
       return t;
     }
-    return t.slice(0, maxLength - 3) + "...";
+    return (
+      <Typography
+        variant="h6"
+        sx={{ marginRight: "auto", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}
+        title={t}
+      >
+        {t}
+      </Typography>
+    );
   }
 
   function minimize(): void {
@@ -271,7 +289,7 @@ function LogWindow(props: IProps): React.ReactElement {
     if (!node) return;
 
     if (!isOnScreen(node)) {
-      setPosition({ x: 0, y: 0 });
+      propsRef.current.setPosition(0, 0);
     }
   }, 100);
 
@@ -290,7 +308,7 @@ function LogWindow(props: IProps): React.ReactElement {
   };
 
   // Max [width, height]
-  const minConstraints: [number, number] = [250, 33];
+  const minConstraints: [number, number] = [150, 33];
 
   return (
     <Draggable handle=".drag" onDrag={boundToBody} ref={rootRef} onMouseDown={updateLayer}>
@@ -316,8 +334,8 @@ function LogWindow(props: IProps): React.ReactElement {
         ref={container}
       >
         <ResizableBox
-          width={size[0]}
-          height={size[1]}
+          width={propsRef.current.width}
+          height={propsRef.current.height}
           onResize={onResize}
           minConstraints={minConstraints}
           handle={
@@ -336,30 +354,24 @@ function LogWindow(props: IProps): React.ReactElement {
         >
           <>
             <Paper className="drag" sx={{ display: "flex", alignItems: "center", cursor: "grab" }} ref={draggableRef}>
-              <Typography
-                variant="h6"
-                sx={{ marginRight: "auto", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}
-                title={title(true)}
-              >
-                {title(true)}
-              </Typography>
+              {title()}
 
               <span style={{ minWidth: "fit-content", height: `${minConstraints[1]}px` }}>
                 {!workerScripts.has(script.pid) ? (
-                  <Button className={classes.titleButton} onClick={run} onTouchEnd={run}>
-                    Run
-                  </Button>
+                  <IconButton className={classes.titleButton} onClick={run} onTouchEnd={run}>
+                    <PlayCircleIcon />
+                  </IconButton>
                 ) : (
-                  <Button className={classes.titleButton} onClick={kill} onTouchEnd={kill}>
-                    Kill
-                  </Button>
+                  <IconButton className={classes.titleButton} onClick={kill} onTouchEnd={kill}>
+                    <StopCircleIcon color="error" />
+                  </IconButton>
                 )}
-                <Button className={classes.titleButton} onClick={minimize} onTouchEnd={minimize}>
-                  {minimized ? "\u{1F5D6}" : "\u{1F5D5}"}
-                </Button>
-                <Button className={classes.titleButton} onClick={props.onClose} onTouchEnd={props.onClose}>
-                  Close
-                </Button>
+                <IconButton className={classes.titleButton} onClick={minimize} onTouchEnd={minimize}>
+                  {minimized ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+                </IconButton>
+                <IconButton className={classes.titleButton} onClick={props.onClose} onTouchEnd={props.onClose}>
+                  <CloseIcon />
+                </IconButton>
               </span>
             </Paper>
 

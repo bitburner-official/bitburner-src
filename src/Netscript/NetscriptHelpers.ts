@@ -736,6 +736,7 @@ function getCannotFindRunningScriptErrorMessage(ident: ScriptIdentifier): string
  * @returns A sanitized, NS-facing copy of the RunningScript
  */
 function createPublicRunningScript(runningScript: RunningScript): IRunningScript {
+  const logProps = runningScript.tailProps;
   return {
     args: runningScript.args.slice(),
     filename: runningScript.filename,
@@ -749,6 +750,16 @@ function createPublicRunningScript(runningScript: RunningScript): IRunningScript
     pid: runningScript.pid,
     ramUsage: runningScript.ramUsage,
     server: runningScript.server,
+    tailProperties:
+      !logProps || !logProps.isVisible()
+        ? null
+        : {
+            x: logProps.x,
+            y: logProps.y,
+            width: logProps.width,
+            height: logProps.height,
+          },
+    title: runningScript.title,
     threads: runningScript.threads,
     temporary: runningScript.temporary,
   };
