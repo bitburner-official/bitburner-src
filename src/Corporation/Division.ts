@@ -14,13 +14,7 @@ import { Warehouse } from "./Warehouse";
 import { Corporation } from "./Corporation";
 import { CorpMaterialName, CorpResearchName, CorpStateName } from "@nsdefs";
 import { JSONSet } from "../Types/Jsonable";
-import {
-  PartialRecord,
-  createPartialRecordFromEntries,
-  getRecordEntries,
-  getRecordKeys,
-  getRecordValues,
-} from "../Types/Record";
+import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from "../Types/Record";
 import { Material } from "./Material";
 
 interface DivisionParams {

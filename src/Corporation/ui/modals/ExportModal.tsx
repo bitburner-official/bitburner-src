@@ -63,7 +63,11 @@ export function ExportModal(props: IProps): React.ReactElement {
 
   function removeExport(exp: Export): void {
     for (let i = 0; i < props.mat.exports.length; ++i) {
-      if (props.mat.exports[i].division !== exp.division || props.mat.exports[i].city !== exp.city || props.mat.exports[i].amount !== exp.amount)
+      if (
+        props.mat.exports[i].division !== exp.division ||
+        props.mat.exports[i].city !== exp.city ||
+        props.mat.exports[i].amount !== exp.amount
+      )
         continue;
       props.mat.exports.splice(i, 1);
       break;

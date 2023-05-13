@@ -40,7 +40,6 @@ import { TextFile } from "./TextFile";
 import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
 import { Directory, resolveDirectory } from "./Paths/Directory";
 import { TextFilePath, resolveTextFilePath } from "./Paths/TextFilePath";
-import { Division } from "./Corporation/Division";
 import { Corporation } from "./Corporation/Corporation";
 import { Terminal } from "./Terminal";
 
@@ -326,9 +325,6 @@ function evaluateVersionCompatibility(ver: string | number): void {
       if (anyPlayer.gang === 0) {
         anyPlayer.gang = null;
       }
-      if (anyPlayer.corporation === 0) {
-        anyPlayer.corporation = null;
-      }
       // convert all Messages to just filename to save space.
       const home = anyPlayer.getHomeComputer();
       for (let i = 0; i < home.messages.length; i++) {
@@ -376,19 +372,6 @@ function evaluateVersionCompatibility(ver: string | number): void {
   }
   if (ver < 3) {
     anyPlayer.money = parseFloat(anyPlayer.money);
-    if (anyPlayer.corporation) {
-      anyPlayer.corporation.funds = parseFloat(anyPlayer.corporation.funds);
-      anyPlayer.corporation.revenue = parseFloat(anyPlayer.corporation.revenue);
-      anyPlayer.corporation.expenses = parseFloat(anyPlayer.corporation.expenses);
-
-      for (let i = 0; i < anyPlayer.corporation.divisions.length; ++i) {
-        const ind = anyPlayer.corporation.divisions[i];
-        ind.lastCycleRevenue = parseFloat(ind.lastCycleRevenue);
-        ind.lastCycleExpenses = parseFloat(ind.lastCycleExpenses);
-        ind.thisCycleRevenue = parseFloat(ind.thisCycleRevenue);
-        ind.thisCycleExpenses = parseFloat(ind.thisCycleExpenses);
-      }
-    }
   }
   if (ver < 9) {
     if (Object.hasOwn(StockMarket, "Joes Guns")) {
@@ -721,11 +704,11 @@ function evaluateVersionCompatibility(ver: string | number): void {
       }
     }
     // Reset corporation to new format.
-    const oldCorp = anyPlayer.corporation as Corporation | null;
+    const oldCorp = anyPlayer.corporation as Corporation | null | 0;
     if (oldCorp && Array.isArray(oldCorp.divisions)) {
       // Corp needs to be reset to new format, just keep some valuation data
       let valuation = oldCorp.valuation * 2 + oldCorp.revenue * 100;
-      if (isNaN(valuation)) valuation = 150e9;
+      if (isNaN(valuation)) valuation = 300e9;
       Player.startCorporation(String(oldCorp.name), !!oldCorp.seedFunded);
       Player.corporation?.addFunds(valuation);
       Terminal.warn("Loading corporation from version prior to 2.3. Corporation has been reset.");

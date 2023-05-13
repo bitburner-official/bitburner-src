@@ -64,8 +64,9 @@ export function ProductMarketTaModal(props: IProps): React.ReactElement {
       <>
         <Typography variant="h4">Market-TA.I</Typography>
         <Typography>
-          The maximum sale price you can mark this up to is {formatMoney(props.product.productionCost + markupLimit)}. This means
-          that if you set the sale price higher than this, you will begin to experience a loss in number of sales
+          The maximum sale price you can mark this up to is {formatMoney(props.product.productionCost + markupLimit)}.
+          This means that if you set the sale price higher than this, you will begin to experience a loss in number of
+          sales
           <br></br>
           <br></br>
           If this is enabled, then this product will automatically be sold at the price identified by Market-TA.I (i.e.

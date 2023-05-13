@@ -8,7 +8,6 @@ import { OfficeSpace } from "./OfficeSpace";
 import { Material } from "./Material";
 import { Product } from "./Product";
 import { Warehouse } from "./Warehouse";
-import { Cities } from "../Locations/Cities";
 import { IndustryType } from "./data/Enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
@@ -177,9 +176,6 @@ export function SellProduct(product: Product, city: CityName, amt: string, price
     }
     product.sellPrices[city] = cost;
   }
-
-  // Array of all cities. Used later
-  const cities = Object.keys(Cities);
 
   // Parse quantity
   amt = amt.toUpperCase();

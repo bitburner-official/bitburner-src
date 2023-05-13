@@ -129,5 +129,5 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
     x10: 10 as PositiveInteger,
     x50: 50 as PositiveInteger,
     x100: 100 as PositiveInteger,
-    MAX: "MAX" as "MAX",
+    MAX: "MAX" as const,
   };
