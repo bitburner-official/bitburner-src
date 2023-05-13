@@ -12,11 +12,11 @@ import { MaterialInfo } from "../MaterialInfo";
 import { formatBigNumber, formatMaterialSize } from "../../ui/formatNumber";
 
 import { Corporation } from "../Corporation";
-import { Industry } from "../Industry";
+import { Division } from "../Division";
 import { MoneyCost } from "./MoneyCost";
 import { isRelevantMaterial } from "./Helpers";
 import { IndustryProductEquation } from "./IndustryProductEquation";
-import { PurchaseWarehouse } from "../Actions";
+import { purchaseWarehouse } from "../Actions";
 import { useCorporation, useDivision } from "./Context";
 
 import Typography from "@mui/material/Typography";
@@ -27,11 +27,12 @@ import Box from "@mui/material/Box";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 import { CityName } from "../../Enums";
+import { CorpUnlockName } from "../data/Enums";
 
 interface IProps {
   corp: Corporation;
-  division: Industry;
-  warehouse: Warehouse | 0;
+  division: Division;
+  warehouse?: Warehouse;
   currentCity: CityName;
   rerender: () => void;
 }
@@ -48,14 +49,13 @@ function WarehouseRoot(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
   const [smartSupplyOpen, setSmartSupplyOpen] = useState(false);
-  if (props.warehouse === 0) return <></>;
+  if (!props.warehouse) return <></>;
 
   // Upgrade Warehouse size button
   const sizeUpgradeCost = corpConstants.warehouseSizeUpgradeCostBase * Math.pow(1.07, props.warehouse.level + 1);
   const canAffordUpgrade = corp.funds > sizeUpgradeCost;
   function upgradeWarehouseOnClick(): void {
-    if (division === null) return;
-    if (props.warehouse === 0) return;
+    if (!props.warehouse) return;
     if (!canAffordUpgrade) return;
     ++props.warehouse.level;
     props.warehouse.updateSize(corp, division);
@@ -93,7 +93,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
   for (const matName of Object.values(corpConstants.materialNames)) {
     if (!props.warehouse.materials[matName]) continue;
     // Only create UI for materials that are relevant for the industry or in stock
-    const isInStock = props.warehouse.materials[matName].qty > 0;
+    const isInStock = props.warehouse.materials[matName].quantity > 0;
     const isRelevant = isRelevantMaterial(matName, division);
     if (!isInStock && !isRelevant) continue;
     mats.push(
@@ -123,10 +123,10 @@ function WarehouseRoot(props: IProps): React.ReactElement {
   for (const matName of Object.values(corpConstants.materialNames)) {
     const mat = props.warehouse.materials[matName];
     if (!Object.hasOwn(MaterialInfo, matName)) continue;
-    if (mat.qty === 0) continue;
+    if (mat.quantity === 0) continue;
     breakdownItems.push(
       <>
-        {matName}: {formatMaterialSize(mat.qty * MaterialInfo[matName].size)}
+        {matName}: {formatMaterialSize(mat.quantity * MaterialInfo[matName].size)}
       </>,
     );
   }
@@ -136,7 +136,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
     if (prod === undefined) continue;
     breakdownItems.push(
       <>
-        {prodName}: {formatMaterialSize(prod.data[props.warehouse.loc][0] * prod.siz)}
+        {prodName}: {formatMaterialSize(prod.data[props.warehouse.loc].inventory * prod.size)}
       </>,
     );
   }
@@ -196,7 +196,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
 
       <Typography className={classes.retainHeight}>{stateText}</Typography>
 
-      {corp.unlockUpgrades[1] && (
+      {corp.unlocks.has(CorpUnlockName.SmartSupply) && (
         <>
           <Button onClick={() => setSmartSupplyOpen(true)}>Configure Smart Supply</Button>
           <SmartSupplyModal
@@ -231,14 +231,14 @@ function EmptyWarehouse(props: IEmptyProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
   const disabled = corp.funds < corpConstants.warehouseInitialCost;
-  function purchaseWarehouse(): void {
+  function newWarehouse(): void {
     if (disabled) return;
-    PurchaseWarehouse(corp, division, props.city);
+    purchaseWarehouse(corp, division, props.city);
     props.rerender();
   }
   return (
     <Paper>
-      <Button onClick={purchaseWarehouse} disabled={disabled}>
+      <Button onClick={newWarehouse} disabled={disabled}>
         Purchase Warehouse (
         <MoneyCost money={corpConstants.warehouseInitialCost} corp={corp} />)
       </Button>

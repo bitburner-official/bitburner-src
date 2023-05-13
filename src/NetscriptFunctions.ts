@@ -86,11 +86,13 @@ import { cloneDeep, escapeRegExp } from "lodash";
 import { FactionWorkType } from "./Enums";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort } from "./NetscriptPort";
-import { FilePath } from "./Paths/FilePath";
+import { FilePath, isFilePath, resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
 import { ContentFilePath } from "./Paths/ContentFile";
 import { LiteratureName } from "./Literature/data/LiteratureNames";
+import { hasProgramExtension } from "./Paths/ProgramFilePath";
+import { hasContractExtension } from "./Paths/ContractFilePath";
 
 export const enums: NSEnums = {
   CityName,
@@ -1104,19 +1106,13 @@ export const ns: InternalAPI<NSFull> = {
       const filename = helpers.string(ctx, "filename", _filename);
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const server = helpers.getServer(ctx, hostname);
-      if (server.scripts.has(filename) || server.textFiles.has(filename)) return true;
-      for (let i = 0; i < server.programs.length; ++i) {
-        if (filename.toLowerCase() == server.programs[i].toLowerCase()) {
-          return true;
-        }
-      }
-      for (let i = 0; i < server.messages.length; ++i) {
-        if (filename.toLowerCase() === server.messages[i].toLowerCase()) {
-          return true;
-        }
-      }
-      const contract = server.contracts.find((c) => c.fn.toLowerCase() === filename.toLowerCase());
-      if (contract) return true;
+      const path = resolveFilePath(filename, ctx.workerScript.name);
+      if (!path) return false;
+      if (hasScriptExtension(path)) return server.scripts.has(path);
+      if (hasTextExtension(path)) return server.textFiles.has(path);
+      if (hasProgramExtension(path)) return server.programs.includes(path);
+      if (path.endsWith(".lit") || path.endsWith(".msg")) return server.messages.includes(path as any);
+      if (hasContractExtension(path)) return !!server.contracts.find(({ fn }) => fn === path);
       return false;
     },
   isRunning:

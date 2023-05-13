@@ -1,18 +1,18 @@
 import { Material } from "./Material";
 import { Corporation } from "./Corporation";
-import { Industry } from "./Industry";
+import { Division } from "./Division";
 import { MaterialInfo } from "./MaterialInfo";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { CityName } from "../Enums";
-import { CorpMaterialName } from "@nsdefs";
 import { materialNames } from "./data/Constants";
+import { createFullRecordFromEntries, getRecordEntries } from "../Types/Record";
+import { CorpUnlockName } from "./data/Enums";
+import { Player } from "@player";
 
 interface IConstructorParams {
-  corp?: Corporation;
-  industry?: Industry;
-  loc?: CityName;
-  size?: number;
+  division: Division;
+  loc: CityName;
+  size: number;
 }
 
 export class Warehouse {
@@ -20,13 +20,13 @@ export class Warehouse {
   level = 1;
 
   // City that this Warehouse is in
-  loc: CityName;
+  loc = CityName.Sector12;
 
   // Map of Materials held by this Warehouse
-  materials: Record<CorpMaterialName, Material>;
+  materials = createFullRecordFromEntries(materialNames.map((matName) => [matName, new Material({ name: matName })]));
 
   // Maximum amount warehouse can hold
-  size: number;
+  size = 0;
 
   // Amount of space currently used by warehouse
   sizeUsed = 0;
@@ -35,30 +35,22 @@ export class Warehouse {
   smartSupplyEnabled = false;
 
   // Decide if smart supply should use the amount of materials imported into account when deciding on the amount to buy.
-  smartSupplyOptions: Record<CorpMaterialName, string>;
+  smartSupplyOptions = createFullRecordFromEntries(materialNames.map((matName) => [matName, "leftovers"]));
 
   // Stores the amount of product to be produced. Used for Smart Supply unlock.
   // The production tracked by smart supply is always based on the previous cycle,
   // so it will always trail the "true" production by 1 cycle
   smartSupplyStore = 0;
 
-  constructor(params: IConstructorParams = {}) {
-    this.loc = params.loc ? params.loc : CityName.Sector12;
-    this.size = params.size ? params.size : 0;
-
-    this.materials = {} as Record<CorpMaterialName, Material>;
-    this.smartSupplyOptions = {} as Record<CorpMaterialName, string>;
-    for (const matName of materialNames) {
-      this.materials[matName] = new Material({ name: matName });
-      this.smartSupplyOptions[matName] = "leftovers";
-    }
-
-    if (params.corp && params.industry) {
-      this.updateSize(params.corp, params.industry);
-    }
+  constructor(params: IConstructorParams | null = null) {
+    const corp = Player.corporation;
+    if (!corp || params === null) return;
+    this.loc = params.loc;
+    this.size = params.size;
+    this.updateSize(corp, params.division);
 
     // Default smart supply to being enabled if the upgrade is unlocked
-    if (params.corp?.unlockUpgrades[1]) {
+    if (corp.unlocks.has(CorpUnlockName.SmartSupply)) {
       this.smartSupplyEnabled = true;
     }
   }
@@ -66,21 +58,16 @@ export class Warehouse {
   // Re-calculate how much space is being used by this Warehouse
   updateMaterialSizeUsed(): void {
     this.sizeUsed = 0;
-    for (const matName of Object.values(materialNames)) {
-      const mat = this.materials[matName];
-      this.sizeUsed += mat.qty * MaterialInfo[matName].size;
+    for (const [matName, mat] of getRecordEntries(this.materials)) {
+      this.sizeUsed += mat.quantity * MaterialInfo[matName].size;
     }
     if (this.sizeUsed > this.size) {
       console.warn("Warehouse size used greater than capacity, something went wrong");
     }
   }
 
-  updateSize(corporation: Corporation, industry: Industry): void {
-    try {
-      this.size = this.level * 100 * corporation.getStorageMultiplier() * industry.getStorageMultiplier();
-    } catch (e: unknown) {
-      exceptionAlert(e);
-    }
+  updateSize(corporation: Corporation, division: Division): void {
+    this.size = this.level * 100 * corporation.getStorageMultiplier() * division.getStorageMultiplier();
   }
 
   // Serialize the current object to a JSON save state.
@@ -90,19 +77,6 @@ export class Warehouse {
 
   // Initializes a Warehouse object from a JSON save state.
   static fromJSON(value: IReviverValue): Warehouse {
-    //Gracefully load saves where AICores and RealEstate material names sometimes did not use spaces
-    if (value.data?.materials?.AICores) {
-      value.data.materials["AI Cores"] = value.data.materials.AICores;
-      value.data.smartSupplyUseLeftovers["AI Cores"] = value.data.smartSupplyUseLeftovers.AICores;
-      delete value.data.materials.AICores;
-      delete value.data.smartSupplyUseLeftovers.AICores;
-    }
-    if (value.data?.materials?.RealEstate) {
-      value.data.materials["Real Estate"] = value.data.materials.RealEstate;
-      value.data.smartSupplyUseLeftovers["Real Estate"] = value.data.smartSupplyUseLeftovers.RealEstate;
-      delete value.data.materials.RealEstate;
-      delete value.data.smartSupplyUseLeftovers.RealEstate;
-    }
     return Generic_fromJSON(Warehouse, value.data);
   }
 }

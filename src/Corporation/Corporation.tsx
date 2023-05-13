@@ -1,8 +1,8 @@
 import { CorporationState } from "./CorporationState";
-import { CorporationUnlockUpgrade, CorporationUnlockUpgrades } from "./data/CorporationUnlockUpgrades";
-import { CorporationUpgrade, CorporationUpgrades } from "./data/CorporationUpgrades";
+import { CorpUnlocks } from "./data/CorporationUnlocks";
+import { CorpUpgrades } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
-import { Industry } from "./Industry";
+import { Division } from "./Division";
 
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { showLiterature } from "../Literature/LiteratureHelpers";
@@ -11,10 +11,13 @@ import { Player } from "@player";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { CityName } from "../Enums";
 import { CorpStateName } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
-import { JSONMap } from "../Types/Jsonable";
+import { JSONMap, JSONSet } from "../Types/Jsonable";
+import { CorpUnlockName, CorpUpgradeName } from "./data/Enums";
+import { formatMoney } from "../ui/formatNumber";
+import { isPositiveInteger } from "../types";
+import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 
 interface IParams {
   name?: string;
@@ -25,7 +28,7 @@ export class Corporation {
   name = "The Corporation";
 
   /** Map keyed by division name */
-  divisions = new JSONMap<string, Industry>();
+  divisions = new JSONMap<string, Division>();
   maxDivisions = 20 * BitNodeMultipliers.CorporationDivisions;
 
   //Financial stats
@@ -45,9 +48,12 @@ export class Corporation {
   sharePrice = 0;
   storedCycles = 0;
 
-  unlockUpgrades: number[];
-  upgrades: number[];
-  upgradeMultipliers: number[];
+  unlocks = new JSONSet<CorpUnlockName>();
+  upgrades = createEnumKeyedRecord(CorpUpgradeName, (name) => ({
+    level: 0,
+    // For dreamsense, value is not a multiplier so it starts at 0
+    value: name === CorpUpgradeName.DreamSense ? 0 : 1,
+  }));
 
   cycleValuation = 0;
   valuationsList = [0];
@@ -59,11 +65,6 @@ export class Corporation {
 
   constructor(params: IParams = {}) {
     this.name = params.name ? params.name : "The Corporation";
-    const numUnlockUpgrades = Object.keys(CorporationUnlockUpgrades).length;
-    const numUpgrades = Object.keys(CorporationUpgrades).length;
-    this.unlockUpgrades = Array(numUnlockUpgrades).fill(0);
-    this.upgrades = Array(numUpgrades).fill(0);
-    this.upgradeMultipliers = Array(numUpgrades).fill(1);
     this.seedFunded = params.seedFunded ?? false;
   }
 
@@ -132,8 +133,6 @@ export class Corporation {
           this.funds = 150e9;
         }
 
-        // Process dividends
-        this.updateDividendTax();
         if (this.dividendRate > 0 && cycleProfit > 0) {
           // Validate input again, just to be safe
           if (isNaN(this.dividendRate) || this.dividendRate < 0 || this.dividendRate > corpConstants.dividendMaxRate) {
@@ -152,16 +151,6 @@ export class Corporation {
       }
 
       this.state.nextState();
-    }
-  }
-
-  updateDividendTax(): void {
-    this.dividendTax = 1 - BitNodeMultipliers.CorporationSoftcap + 0.15;
-    if (this.unlockUpgrades[5] === 1) {
-      this.dividendTax -= 0.05;
-    }
-    if (this.unlockUpgrades[6] === 1) {
-      this.dividendTax -= 0.1;
     }
   }
 
@@ -291,142 +280,81 @@ export class Corporation {
     }
   }
 
-  //One time upgrades that unlock new features
-  unlock(upgrade: CorporationUnlockUpgrade): void {
-    const upgN = upgrade.index,
-      price = upgrade.price;
-    while (this.unlockUpgrades.length <= upgN) {
-      this.unlockUpgrades.push(0);
-    }
-    if (this.funds < price) {
-      dialogBoxCreate("You don't have enough funds to unlock this!");
-      return;
-    }
-    this.unlockUpgrades[upgN] = 1;
-    this.funds = this.funds - price;
+  /** Purchasing a one-time unlock
+   * @returns A string on failure, indicating the reason for failure. */
+  purchaseUnlock(unlockName: CorpUnlockName): string | void {
+    if (this.unlocks.has(unlockName)) return `The corporation has already unlocked ${unlockName}`;
+    const price = CorpUnlocks[unlockName].price;
+    if (this.funds < price) return `Insufficient funds to purchase ${unlockName}, requires ${formatMoney(price)}`;
+    this.funds -= price;
+    this.unlocks.add(unlockName);
 
-    // Apply effects for one-time upgrades
-    this.updateDividendTax();
+    // Apply effects for one-time unlocks
+    if (unlockName === CorpUnlockName.ShadyAccounting) this.dividendTax -= 0.05;
+    if (unlockName === CorpUnlockName.GovernmentPartnership) this.dividendTax -= 0.1;
   }
 
-  //Levelable upgrades
-  upgrade(upgrade: CorporationUpgrade, amount: number): void {
-    if (amount < 1) amount = 1;
-    const upgN = upgrade.index,
-      upgradeAmt = upgrade.benefit; //Amount by which the upgrade multiplier gets increased (additive)
-    while (this.upgrades.length <= upgN) {
-      this.upgrades.push(0);
+  /** Purchasing a levelable upgrade
+   * @returns A string on failure, indicating the reason for failure. */
+  purchaseUpgrade(upgradeName: CorpUpgradeName, amount = 1): string | void {
+    if (!isPositiveInteger(amount)) {
+      return `Number of upgrade levels purchased must be a positive integer (attempted: ${amount}).`;
     }
-    while (this.upgradeMultipliers.length <= upgN) {
-      this.upgradeMultipliers.push(1);
-    }
+    const upgrade = CorpUpgrades[upgradeName];
     const totalCost = calculateUpgradeCost(this, upgrade, amount);
-    if (this.funds < totalCost) {
-      dialogBoxCreate("You don't have enough funds to purchase this!");
-      return;
-    }
-    this.upgrades[upgN] += amount;
-    this.funds = this.funds - totalCost;
+    if (this.funds < totalCost) return `Not enough funds to purchase ${amount} of upgrade ${upgradeName}.`;
+    this.funds -= totalCost;
+    this.upgrades[upgradeName].level += amount;
+    this.upgrades[upgradeName].value += upgrade.benefit;
 
-    //Increase upgrade multiplier
-    this.upgradeMultipliers[upgN] = 1 + this.upgrades[upgN] * upgradeAmt;
-
-    //If storage size is being updated, update values in Warehouse objects
-    if (upgN === 1) {
-      for (const industry of this.divisions.values()) {
-        for (const city of Object.values(CityName)) {
-          const warehouse = industry.warehouses[city];
-          if (warehouse === 0) continue;
-          warehouse.updateSize(this, industry);
+    // Apply effects for upgrades
+    if (upgradeName === CorpUpgradeName.SmartStorage) {
+      for (const division of this.divisions.values()) {
+        for (const warehouse of getRecordValues(division.warehouses)) {
+          warehouse.updateSize(this, division);
         }
       }
     }
   }
 
   getProductionMultiplier(): number {
-    const mult = this.upgradeMultipliers[0];
-    if (isNaN(mult) || mult < 1) {
-      return 1;
-    } else {
-      return mult;
-    }
+    return this.upgrades[CorpUpgradeName.SmartFactories].value;
   }
 
   getStorageMultiplier(): number {
-    const mult = this.upgradeMultipliers[1];
-    if (isNaN(mult) || mult < 1) {
-      return 1;
-    } else {
-      return mult;
-    }
+    return this.upgrades[CorpUpgradeName.SmartStorage].value;
   }
 
   getDreamSenseGain(): number {
-    const gain = this.upgradeMultipliers[2] - 1;
-    return gain <= 0 ? 0 : gain;
+    return this.upgrades[CorpUpgradeName.DreamSense].value;
   }
 
   getAdvertisingMultiplier(): number {
-    const mult = this.upgradeMultipliers[3];
-    if (isNaN(mult) || mult < 1) {
-      return 1;
-    } else {
-      return mult;
-    }
+    return this.upgrades[CorpUpgradeName.WilsonAnalytics].value;
   }
 
   getEmployeeCreMultiplier(): number {
-    const mult = this.upgradeMultipliers[4];
-    if (isNaN(mult) || mult < 1) {
-      return 1;
-    } else {
-      return mult;
-    }
+    return this.upgrades[CorpUpgradeName.NuoptimalNootropicInjectorImplants].value;
   }
 
-  getEmployeeChaMultiplier(): number {
-    const mult = this.upgradeMultipliers[5];
-    if (isNaN(mult) || mult < 1) {
-      return 1;
-    } else {
-      return mult;
-    }
+  getEmployeeChaMult(): number {
+    return this.upgrades[CorpUpgradeName.SpeechProcessorImplants].value;
   }
 
-  getEmployeeIntMultiplier(): number {
-    const mult = this.upgradeMultipliers[6];
-    if (isNaN(mult) || mult < 1) {
-      return 1;
-    } else {
-      return mult;
-    }
+  getEmployeeIntMult(): number {
+    return this.upgrades[CorpUpgradeName.NeuralAccelerators].value;
   }
 
-  getEmployeeEffMultiplier(): number {
-    const mult = this.upgradeMultipliers[7];
-    if (isNaN(mult) || mult < 1) {
-      return 1;
-    } else {
-      return mult;
-    }
+  getEmployeeEffMult(): number {
+    return this.upgrades[CorpUpgradeName.FocusWires].value;
   }
 
-  getSalesMultiplier(): number {
-    const mult = this.upgradeMultipliers[8];
-    if (isNaN(mult) || mult < 1) {
-      return 1;
-    } else {
-      return mult;
-    }
+  getSalesMult(): number {
+    return this.upgrades[CorpUpgradeName.ABCSalesBots].value;
   }
 
-  getScientificResearchMultiplier(): number {
-    const mult = this.upgradeMultipliers[9];
-    if (isNaN(mult) || mult < 1) {
-      return 1;
-    } else {
-      return mult;
-    }
+  getScientificResearchMult(): number {
+    return this.upgrades[CorpUpgradeName.ProjectInsight].value;
   }
 
   // Adds the Corporation Handbook (Starter Guide) to the player's home computer.

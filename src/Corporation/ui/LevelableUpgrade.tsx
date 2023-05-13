@@ -2,8 +2,7 @@
 import React from "react";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { CorporationUpgrade } from "../data/CorporationUpgrades";
-import { LevelUpgrade } from "../Actions";
+import { CorpUpgrades } from "../data/CorporationUpgrades";
 import { MoneyCost } from "./MoneyCost";
 import { useCorporation } from "./Context";
 import Typography from "@mui/material/Typography";
@@ -12,30 +11,28 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { calculateMaxAffordableUpgrade, calculateUpgradeCost } from "../helpers";
+import { CorpUpgradeName } from "../data/Enums";
+import { PositiveInteger } from "../../types";
 
 interface IProps {
-  upgrade: CorporationUpgrade;
-  amount: number | "MAX";
+  upgradeName: CorpUpgradeName;
+  amount: PositiveInteger | "MAX";
   rerender: () => void;
 }
 
-export function LevelableUpgrade(props: IProps): React.ReactElement {
+export function LevelableUpgrade({ upgradeName, amount, rerender }: IProps): React.ReactElement {
   const corp = useCorporation();
-  const data = props.upgrade;
-  const level = corp.upgrades[data.index];
-  const amount = props.amount;
+  const data = CorpUpgrades[upgradeName];
+  const level = corp.upgrades[upgradeName].level;
 
   const maxUpgrades = amount === "MAX" ? calculateMaxAffordableUpgrade(corp, data, amount) : amount;
-  const cost = calculateUpgradeCost(corp, data, maxUpgrades);
+  const cost = maxUpgrades === 0 ? 0 : calculateUpgradeCost(corp, data, maxUpgrades);
   const tooltip = data.desc;
   function onClick(): void {
     if (corp.funds < cost) return;
-    try {
-      LevelUpgrade(corp, props.upgrade, maxUpgrades);
-    } catch (err) {
-      dialogBoxCreate(err + "");
-    }
-    props.rerender();
+    const message = corp.purchaseUpgrade(upgradeName, maxUpgrades);
+    if (message) dialogBoxCreate(`Could not upgrade ${upgradeName} ${maxUpgrades} times:\n${message}`);
+    rerender();
   }
 
   return (

@@ -59,7 +59,7 @@ export function Corporation(): React.ReactElement {
       Object.keys(div.products).forEach((prod) => {
         const product = div.products[prod];
         if (product === undefined) throw new Error("Impossible product undefined");
-        product.prog = 99.9;
+        product.progress = 99.9;
       });
     });
   }
@@ -67,7 +67,7 @@ export function Corporation(): React.ReactElement {
   function addCorporationResearch(): void {
     if (!Player.corporation) return;
     Player.corporation.divisions.forEach((div) => {
-      div.sciResearch += 1e10;
+      div.researchPoints += 1e10;
     });
   }
 

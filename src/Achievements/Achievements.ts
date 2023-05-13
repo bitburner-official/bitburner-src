@@ -2,7 +2,7 @@ import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { SkillNames } from "../Bladeburner/data/SkillNames";
 import { Skills } from "../Bladeburner/Skills";
 import { CONSTANTS } from "../Constants";
-import { IndustryType } from "../Corporation/data/Enums";
+import { CorpUnlockName, IndustryType } from "../Corporation/data/Enums";
 import { Exploit } from "../Exploits/Exploit";
 import { Factions } from "../Faction/Factions";
 import { AllGangs } from "../Gang/AllGangs";
@@ -441,7 +441,7 @@ export const achievements: Record<string, Achievement> = {
     ...achievementData.CORPORATION_BRIBE,
     Icon: "CORPLOBBY",
     Visible: () => hasAccessToSF(Player, 3),
-    Condition: () => Player.corporation !== null && Player.corporation.unlockUpgrades[6] === 1,
+    Condition: () => !!Player.corporation && Player.corporation.unlocks.has(CorpUnlockName.GovernmentPartnership),
   },
   CORPORATION_PROD_1000: {
     ...achievementData.CORPORATION_PROD_1000,

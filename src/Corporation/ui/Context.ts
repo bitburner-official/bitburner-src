@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { Corporation } from "../Corporation";
-import { Industry } from "../Industry";
+import { Division } from "../Division";
 
 export const Context = {
   Corporation: React.createContext<Corporation>({} as Corporation),
-  Division: React.createContext<Industry>({} as Industry),
+  Division: React.createContext<Division>({} as Division),
 };
 
 export const useCorporation = (): Corporation => useContext(Context.Corporation);
-export const useDivision = (): Industry => useContext(Context.Division);
+export const useDivision = (): Division => useContext(Context.Division);

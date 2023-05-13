@@ -8,7 +8,8 @@ import {
   CorpUpgradeName,
 } from "@nsdefs";
 import { CONSTANTS } from "../../Constants";
-import { IndustryType, EmployeePositions } from "./Enums";
+import { IndustryType, CorpEmployeeJob } from "./Enums";
+import { PositiveInteger } from "../../types";
 
 // For typed strings, we need runtime objects to do API typechecking against.
 
@@ -18,7 +19,7 @@ import { IndustryType, EmployeePositions } from "./Enums";
 export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "EXPORT", "SALE"],
   // TODO: remove IndustryType and EmployeePositions enums and just use the typed strings.
   /** Names of all corporation employee positions */
-  employeePositions: CorpEmployeePosition[] = Object.values(EmployeePositions),
+  employeePositions: CorpEmployeePosition[] = Object.values(CorpEmployeeJob),
   /** Names of all industries. */
   industryNames: CorpIndustryName[] = Object.values(IndustryType),
   /** Names of all materials */
@@ -66,7 +67,6 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
     "AutoBrew",
     "AutoPartyManager",
     "Automatic Drug Administration",
-    "Bulk Purchasing",
     "CPH4 Injections",
     "Drones",
     "Drones - Assembly",
@@ -123,19 +123,11 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   minEmployeeDecay = 10,
   /**smart supply ot */
   smartSupplyUseOptions = ["leftovers", "imports", "none"],
-  PurchaseMultipliers: {
-    [key: string]: number | "MAX" | undefined;
-    x1: number;
-    x5: number;
-    x10: number;
-    x50: number;
-    x100: number;
-    MAX: "MAX";
-  } = {
-    x1: 1,
-    x5: 5,
-    x10: 10,
-    x50: 50,
-    x100: 100,
-    MAX: "MAX",
+  PurchaseMultipliers = {
+    x1: 1 as PositiveInteger,
+    x5: 5 as PositiveInteger,
+    x10: 10 as PositiveInteger,
+    x50: 50 as PositiveInteger,
+    x100: 100 as PositiveInteger,
+    MAX: "MAX" as "MAX",
   };

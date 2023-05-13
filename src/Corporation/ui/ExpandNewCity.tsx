@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as corpConstants from "../data/Constants";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { NewCity } from "../Actions";
+import { purchaseOffice } from "../Actions";
 import { MoneyCost } from "./MoneyCost";
 import { useCorporation, useDivision } from "./Context";
 import Typography from "@mui/material/Typography";
@@ -17,7 +17,7 @@ interface IProps {
 export function ExpandNewCity(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
-  const possibleCities = Object.values(CityName).filter((cityName) => division.offices[cityName] === 0);
+  const possibleCities = Object.values(CityName).filter((cityName) => !(cityName in division.offices));
   const [city, setCity] = useState(possibleCities[0]);
 
   const disabled = corp.funds < corpConstants.officeInitialCost;
@@ -28,7 +28,7 @@ export function ExpandNewCity(props: IProps): React.ReactElement {
 
   function expand(): void {
     try {
-      NewCity(corp, division, city);
+      purchaseOffice(corp, division, city);
     } catch (err) {
       dialogBoxCreate(err + "");
       return;

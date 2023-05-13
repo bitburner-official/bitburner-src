@@ -63,7 +63,7 @@ export function MaterialMarketTaModal(props: IProps): React.ReactElement {
       <>
         <Typography variant="h4">Market-TA.I</Typography>
         <Typography>
-          The maximum sale price you can mark this up to is {formatMoney(props.mat.bCost + markupLimit)}. This means
+          The maximum sale price you can mark this up to is {formatMoney(props.mat.marketPrice + markupLimit)}. This means
           that if you set the sale price higher than this, you will begin to experience a loss in number of sales
           <br></br>
           <br></br>

@@ -532,7 +532,7 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
           return false;
         }
         for (const division of corp.divisions.values()) {
-          division.sciResearch += upg.value * count;
+          division.researchPoints += upg.value * count;
         }
         break;
       }

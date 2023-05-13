@@ -2,14 +2,12 @@ import { Player } from "@player";
 import { MaterialInfo } from "./MaterialInfo";
 import { Corporation } from "./Corporation";
 import { IndustryResearchTrees, IndustriesData } from "./IndustryData";
-import { Industry } from "./Industry";
+import { Division } from "./Division";
 import * as corpConstants from "./data/Constants";
 import { OfficeSpace } from "./OfficeSpace";
 import { Material } from "./Material";
 import { Product } from "./Product";
 import { Warehouse } from "./Warehouse";
-import { CorporationUnlockUpgrade } from "./data/CorporationUnlockUpgrades";
-import { CorporationUpgrade } from "./data/CorporationUpgrades";
 import { Cities } from "../Locations/Cities";
 import { IndustryType } from "./data/Enums";
 import { ResearchMap } from "./ResearchMap";
@@ -17,8 +15,8 @@ import { isRelevantMaterial } from "./ui/Helpers";
 import { CityName } from "../Enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { CorpResearchName } from "@nsdefs";
-import { calculateUpgradeCost } from "./helpers";
 import { isInteger } from "lodash";
+import { getRecordValues } from "../Types/Record";
 
 export function NewIndustry(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.size >= corporation.maxDivisions)
@@ -39,7 +37,7 @@ export function NewIndustry(corporation: Corporation, industry: IndustryType, na
     corporation.funds = corporation.funds - cost;
     corporation.divisions.set(
       name,
-      new Industry({
+      new Division({
         corp: corporation,
         name: name,
         type: industry,
@@ -53,7 +51,7 @@ export function removeIndustry(corporation: Corporation, name: string) {
   corporation.divisions.delete(name);
 }
 
-export function NewCity(corporation: Corporation, division: Industry, city: CityName): void {
+export function purchaseOffice(corporation: Corporation, division: Division, city: CityName): void {
   if (corporation.funds < corpConstants.officeInitialCost) {
     throw new Error("You don't have enough company funds to open a new office!");
   }
@@ -62,28 +60,9 @@ export function NewCity(corporation: Corporation, division: Industry, city: City
   }
   corporation.funds = corporation.funds - corpConstants.officeInitialCost;
   division.offices[city] = new OfficeSpace({
-    loc: city,
+    city: city,
     size: corpConstants.officeInitialSize,
   });
-}
-
-export function UnlockUpgrade(corporation: Corporation, upgrade: CorporationUnlockUpgrade): void {
-  if (corporation.funds < upgrade.price) {
-    throw new Error("Insufficient funds");
-  }
-  if (corporation.unlockUpgrades[upgrade.index] === 1) {
-    throw new Error(`You have already unlocked the ${upgrade.name} upgrade!`);
-  }
-  corporation.unlock(upgrade);
-}
-
-export function LevelUpgrade(corporation: Corporation, upgrade: CorporationUpgrade, amount: number): void {
-  const cost = calculateUpgradeCost(corporation, upgrade, amount);
-  if (corporation.funds < cost) {
-    throw new Error("Insufficient funds");
-  } else {
-    corporation.upgrade(upgrade, amount);
-  }
 }
 
 export function IssueDividends(corporation: Corporation, rate: number): void {
@@ -121,9 +100,9 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
   return [profit, amount, privateShares];
 }
 
-export function SellMaterial(mat: Material, amt: string, price: string): void {
+export function SellMaterial(material: Material, amount: string, price: string): void {
   if (price === "") price = "0";
-  if (amt === "") amt = "0";
+  if (amount === "") amount = "0";
   let cost = price.replace(/\s+/g, "");
   cost = cost.replace(/[^-()\d/*+.MPe]/g, ""); //Sanitize cost
   let temp = cost.replace(/MP/, "1.234e5");
@@ -139,19 +118,19 @@ export function SellMaterial(mat: Material, amt: string, price: string): void {
   }
 
   if (cost.includes("MP")) {
-    mat.sCost = cost; //Dynamically evaluated
+    material.sellPrice = cost; //Dynamically evaluated
   } else {
-    mat.sCost = temp;
+    material.sellPrice = temp;
   }
 
   //Parse quantity
-  amt = amt.toUpperCase();
-  if (amt.includes("MAX") || amt.includes("PROD") || amt.includes("INV")) {
-    let q = amt.replace(/\s+/g, "");
+  amount = amount.toUpperCase();
+  if (amount.includes("MAX") || amount.includes("PROD") || amount.includes("INV")) {
+    let q = amount.replace(/\s+/g, "");
     q = q.replace(/[^-()\d/*+.MAXPRODINV]/g, "");
-    let tempQty = q.replace(/MAX/g, mat.maxsll.toString());
-    tempQty = tempQty.replace(/PROD/g, mat.prd.toString());
-    tempQty = tempQty.replace(/INV/g, mat.prd.toString());
+    let tempQty = q.replace(/MAX/g, material.maxSellPerCycle.toString());
+    tempQty = tempQty.replace(/PROD/g, material.productionAmount.toString());
+    tempQty = tempQty.replace(/INV/g, material.productionAmount.toString());
     try {
       tempQty = eval(tempQty);
     } catch (e) {
@@ -161,26 +140,19 @@ export function SellMaterial(mat: Material, amt: string, price: string): void {
     if (tempQty == null || isNaN(parseFloat(tempQty))) {
       throw new Error("Invalid value or expression for sell quantity field");
     }
-    mat.sllman[0] = true;
-    mat.sllman[1] = q; //Use sanitized input
-  } else if (isNaN(parseFloat(amt)) || parseFloat(amt) < 0) {
+    material.desiredSellAmount = q; //Use sanitized input
+  } else if (isNaN(parseFloat(amount)) || parseFloat(amount) < 0) {
     throw new Error("Invalid value for sell quantity field! Must be numeric or 'PROD' or 'MAX'");
   } else {
-    let q = parseFloat(amt);
+    let q = parseFloat(amount);
     if (isNaN(q)) {
       q = 0;
     }
-    if (q === 0) {
-      mat.sllman[0] = false;
-      mat.sllman[1] = 0;
-    } else {
-      mat.sllman[0] = true;
-      mat.sllman[1] = q;
-    }
+    material.desiredSellAmount = q;
   }
 }
 
-export function SellProduct(product: Product, city: string, amt: string, price: string, all: boolean): void {
+export function SellProduct(product: Product, city: CityName, amt: string, price: string, all: boolean): void {
   //Parse price
   if (price.includes("MP")) {
     //Dynamically evaluated quantity. First test to make sure its valid
@@ -197,13 +169,13 @@ export function SellProduct(product: Product, city: string, amt: string, price: 
     if (temp == null || isNaN(parseFloat(temp))) {
       throw new Error("Invalid value or expression for sell price field.");
     }
-    product.sCost[city] = price; //Use sanitized price
+    product.sellPrices[city] = price; //Use sanitized price
   } else {
     const cost = parseFloat(price);
     if (isNaN(cost)) {
       throw new Error("Invalid value for sell price field");
     }
-    product.sCost[city] = cost;
+    product.sellPrices[city] = cost;
   }
 
   // Array of all cities. Used later
@@ -216,8 +188,8 @@ export function SellProduct(product: Product, city: string, amt: string, price: 
     let qty = amt.replace(/\s+/g, "");
     qty = qty.replace(/[^-()\d/*+.MAXPRODINV]/g, "");
     let temp = qty.replace(/MAX/g, product.maxsll.toString());
-    temp = temp.replace(/PROD/g, product.data[city][1].toString());
-    temp = temp.replace(/INV/g, product.data[city][0].toString());
+    temp = temp.replace(/PROD/g, product.data[city].productionAmount.toString());
+    temp = temp.replace(/INV/g, product.data[city].inventory.toString());
     try {
       temp = eval(temp);
     } catch (e) {
@@ -228,14 +200,11 @@ export function SellProduct(product: Product, city: string, amt: string, price: 
       throw new Error("Invalid value or expression for sell quantity field");
     }
     if (all) {
-      for (let i = 0; i < cities.length; ++i) {
-        const tempCity = cities[i];
-        product.sllman[tempCity][0] = true;
-        product.sllman[tempCity][1] = qty; //Use sanitized input
+      for (const cityName of Object.values(CityName)) {
+        product.desiredSellAmount[cityName] = qty; //Use sanitized input
       }
     } else {
-      product.sllman[city][0] = true;
-      product.sllman[city][1] = qty; //Use sanitized input
+      product.desiredSellAmount[city] = qty; //Use sanitized input
     }
   } else if (isNaN(parseFloat(amt)) || parseFloat(amt) < 0) {
     throw new Error("Invalid value for sell quantity field! Must be numeric or 'PROD' or 'MAX'");
@@ -246,24 +215,18 @@ export function SellProduct(product: Product, city: string, amt: string, price: 
     }
     if (qty === 0) {
       if (all) {
-        for (let i = 0; i < cities.length; ++i) {
-          const tempCity = cities[i];
-          product.sllman[tempCity][0] = false;
-          product.sllman[tempCity][1] = "";
+        for (const cityName of Object.values(CityName)) {
+          product.desiredSellAmount[cityName] = 0;
         }
       } else {
-        product.sllman[city][0] = false;
-        product.sllman[city][1] = "";
+        product.desiredSellAmount[city] = 0;
       }
     } else if (all) {
-      for (let i = 0; i < cities.length; ++i) {
-        const tempCity = cities[i];
-        product.sllman[tempCity][0] = true;
-        product.sllman[tempCity][1] = qty;
+      for (const cityName of Object.values(CityName)) {
+        product.desiredSellAmount[cityName] = qty;
       }
     } else {
-      product.sllman[city][0] = true;
-      product.sllman[city][1] = qty;
+      product.desiredSellAmount[city] = qty;
     }
   }
 }
@@ -283,7 +246,7 @@ export function BuyMaterial(material: Material, amt: number): void {
   if (isNaN(amt) || amt < 0) {
     throw new Error(`Invalid amount '${amt}' to buy material '${material.name}'`);
   }
-  material.buy = amt;
+  material.buyAmount = amt;
 }
 
 export function BulkPurchase(corp: Corporation, warehouse: Warehouse, material: Material, amt: number): void {
@@ -295,10 +258,10 @@ export function BulkPurchase(corp: Corporation, warehouse: Warehouse, material: 
   if (amt > maxAmount) {
     throw new Error(`You do not have enough warehouse size to fit this purchase`);
   }
-  const cost = amt * material.bCost;
+  const cost = amt * material.marketPrice;
   if (corp.funds >= cost) {
     corp.funds = corp.funds - cost;
-    material.qty += amt;
+    material.quantity += amt;
   } else {
     throw new Error(`You cannot afford this purchase.`);
   }
@@ -375,16 +338,15 @@ export function ThrowParty(corp: Corporation, office: OfficeSpace, costPerEmploy
   return mult;
 }
 
-export function PurchaseWarehouse(corp: Corporation, division: Industry, city: CityName): void {
+export function purchaseWarehouse(corp: Corporation, division: Division, city: CityName): void {
   if (corp.funds < corpConstants.warehouseInitialCost) return;
   if (division.warehouses[city]) return;
+  corp.funds = corp.funds - corpConstants.warehouseInitialCost;
   division.warehouses[city] = new Warehouse({
-    corp: corp,
-    industry: division,
+    division: division,
     loc: city,
     size: corpConstants.warehouseInitialSize,
   });
-  corp.funds = corp.funds - corpConstants.warehouseInitialCost;
 }
 
 export function UpgradeWarehouseCost(warehouse: Warehouse, amt: number): number {
@@ -394,7 +356,7 @@ export function UpgradeWarehouseCost(warehouse: Warehouse, amt: number): number 
   );
 }
 
-export function UpgradeWarehouse(corp: Corporation, division: Industry, warehouse: Warehouse, amt = 1): void {
+export function UpgradeWarehouse(corp: Corporation, division: Division, warehouse: Warehouse, amt = 1): void {
   const sizeUpgradeCost = UpgradeWarehouseCost(warehouse, amt);
   if (corp.funds < sizeUpgradeCost) return;
   warehouse.level += amt;
@@ -402,7 +364,7 @@ export function UpgradeWarehouse(corp: Corporation, division: Industry, warehous
   corp.funds = corp.funds - sizeUpgradeCost;
 }
 
-export function HireAdVert(corp: Corporation, division: Industry): void {
+export function HireAdVert(corp: Corporation, division: Division): void {
   const cost = division.getAdVertCost();
   if (corp.funds < cost) return;
   corp.funds = corp.funds - cost;
@@ -411,7 +373,7 @@ export function HireAdVert(corp: Corporation, division: Industry): void {
 
 export function MakeProduct(
   corp: Corporation,
-  division: Industry,
+  division: Division,
   city: CityName,
   productName: string,
   designInvest: number,
@@ -452,8 +414,8 @@ export function MakeProduct(
   const product = new Product({
     name: productName.replace(/[<>]/g, "").trim(), //Sanitize for HTMl elements
     createCity: city,
-    designCost: designInvest,
-    advCost: marketingInvest,
+    designInvestment: designInvest,
+    advertisingInvestment: marketingInvest,
   });
   if (products[product.name]) {
     throw new Error(`You already have a product with this name!`);
@@ -463,34 +425,28 @@ export function MakeProduct(
   products[product.name] = product;
 }
 
-export function Research(division: Industry, researchName: CorpResearchName): void {
+export function Research(division: Division, researchName: CorpResearchName): void {
+  const corp = Player.corporation;
+  if (!corp) return;
   const researchTree = IndustryResearchTrees[division.type];
   if (researchTree === undefined) throw new Error(`No research tree for industry '${division.type}'`);
-  const allResearch = researchTree.getAllNodes();
-  if (!allResearch.includes(researchName)) throw new Error(`No research named '${researchName}'`);
   const research = ResearchMap[researchName];
 
-  if (division.researched[researchName]) return;
-  if (division.sciResearch < research.cost)
+  if (division.researched.has(researchName)) return;
+  if (division.researchPoints < research.cost)
     throw new Error(`You do not have enough Scientific Research for ${research.name}`);
-  division.sciResearch -= research.cost;
+  division.researchPoints -= research.cost;
 
   // Get the Node from the Research Tree and set its 'researched' property
   researchTree.research(researchName);
-  division.researched[researchName] = true;
+  division.researched.add(researchName);
 
   // I couldn't figure out where else to put this so that warehouse size would get updated instantly
   // whether research is done by script or UI. All other stats gets calculated in every cycle
   // Warehouse size gets updated only when something increases it.
   if (researchName == "Drones - Transport") {
-    for (const city of Object.values(CityName)) {
-      const warehouse = division.warehouses[city];
-      if (!warehouse) continue;
-
-      if (Player.corporation) {
-        // Stores cycles in a "buffer". Processed separately using Engine Counters
-        warehouse.updateSize(Player.corporation, division);
-      }
+    for (const warehouse of getRecordValues(division.warehouses)) {
+      warehouse.updateSize(corp, division);
     }
   }
 }
@@ -500,7 +456,7 @@ export function ExportMaterial(
   cityName: CityName,
   material: Material,
   amt: string,
-  division?: Industry,
+  division?: Division,
 ): void {
   // Sanitize amt
   let sanitizedAmt = amt.replace(/\s+/g, "").toUpperCase();
@@ -526,36 +482,36 @@ export function ExportMaterial(
     throw new Error(`You cannot export material: ${material.name} to division: ${divisionName}!`);
   }
 
-  const exportObj = { ind: divisionName, city: cityName, amt: sanitizedAmt };
-  material.exp.push(exportObj);
+  const exportObj = { division: divisionName, city: cityName, amount: sanitizedAmt };
+  material.exports.push(exportObj);
 }
 
 export function CancelExportMaterial(divisionName: string, cityName: string, material: Material, amt: string): void {
-  for (let i = 0; i < material.exp.length; ++i) {
-    if (material.exp[i].ind !== divisionName || material.exp[i].city !== cityName || material.exp[i].amt !== amt)
+  for (let i = 0; i < material.exports.length; ++i) {
+    if (
+      material.exports[i].division !== divisionName ||
+      material.exports[i].city !== cityName ||
+      material.exports[i].amount !== amt
+    )
       continue;
-    material.exp.splice(i, 1);
+    material.exports.splice(i, 1);
     break;
   }
 }
 
-export function LimitProductProduction(product: Product, cityName: string, qty: number): void {
-  if (qty < 0 || isNaN(qty)) {
-    product.prdman[cityName][0] = false;
-    product.prdman[cityName][1] = 0;
+export function LimitProductProduction(product: Product, cityName: CityName, quantity: number): void {
+  if (quantity < 0 || isNaN(quantity)) {
+    product.productionLimit[cityName] = null;
   } else {
-    product.prdman[cityName][0] = true;
-    product.prdman[cityName][1] = qty;
+    product.productionLimit[cityName] = quantity;
   }
 }
 
-export function LimitMaterialProduction(material: Material, qty: number): void {
-  if (qty < 0 || isNaN(qty)) {
-    material.prdman[0] = false;
-    material.prdman[1] = 0;
+export function LimitMaterialProduction(material: Material, quantity: number): void {
+  if (quantity < 0 || isNaN(quantity)) {
+    material.productionLimit = null;
   } else {
-    material.prdman[0] = true;
-    material.prdman[1] = qty;
+    material.productionLimit = quantity;
   }
 }
 

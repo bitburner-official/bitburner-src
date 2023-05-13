@@ -1,7 +1,6 @@
 import { CorpResearchName } from "@nsdefs";
-import { researchNames } from "./data/Constants";
 
-export interface IConstructorParams {
+export interface ResearchParams {
   name: CorpResearchName;
   cost: number;
   desc: string;
@@ -19,7 +18,7 @@ export interface IConstructorParams {
 
 export class Research {
   // Name of research. This will be used to identify researches in the Research Tree
-  name: CorpResearchName;
+  name: CorpResearchName = "AutoBrew";
 
   // How much scientific research it costs to unlock this
   cost = 0;
@@ -39,39 +38,20 @@ export class Research {
   sciResearchMult = 1;
   storageMult = 1;
 
-  constructor(p: IConstructorParams = { name: researchNames[0], cost: 0, desc: "" }) {
+  constructor(p: ResearchParams | null = null) {
+    if (!p) return;
     this.name = p.name;
     this.cost = p.cost;
     this.desc = p.desc;
-    if (p.advertisingMult) {
-      this.advertisingMult = p.advertisingMult;
-    }
-    if (p.employeeChaMult) {
-      this.employeeChaMult = p.employeeChaMult;
-    }
-    if (p.employeeCreMult) {
-      this.employeeCreMult = p.employeeCreMult;
-    }
-    if (p.employeeEffMult) {
-      this.employeeEffMult = p.employeeEffMult;
-    }
-    if (p.employeeIntMult) {
-      this.employeeIntMult = p.employeeIntMult;
-    }
-    if (p.productionMult) {
-      this.productionMult = p.productionMult;
-    }
-    if (p.productProductionMult) {
-      this.productProductionMult = p.productProductionMult;
-    }
-    if (p.salesMult) {
-      this.salesMult = p.salesMult;
-    }
-    if (p.sciResearchMult) {
-      this.sciResearchMult = p.sciResearchMult;
-    }
-    if (p.storageMult) {
-      this.storageMult = p.storageMult;
-    }
+    this.advertisingMult = p.advertisingMult ?? 1;
+    this.employeeChaMult = p.employeeChaMult ?? 1;
+    this.employeeCreMult = p.employeeCreMult ?? 1;
+    this.employeeEffMult = p.employeeEffMult ?? 1;
+    this.employeeIntMult = p.employeeIntMult ?? 1;
+    this.productionMult = p.productionMult ?? 1;
+    this.productProductionMult = p.productProductionMult ?? 1;
+    this.salesMult = p.salesMult ?? 1;
+    this.sciResearchMult = p.sciResearchMult ?? 1;
+    this.storageMult = p.storageMult ?? 1;
   }
 }

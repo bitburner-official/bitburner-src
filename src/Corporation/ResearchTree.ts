@@ -4,14 +4,13 @@
 // not an actual Research object. The name can be used to obtain a reference
 // to the corresponding Research object using the ResearchMap
 import { CorpResearchName } from "@nsdefs";
-import { researchNames } from "./data/Constants";
 import { Research } from "./Research";
 import { ResearchMap } from "./ResearchMap";
 
 interface IConstructorParams {
   children?: Node[];
   cost: number;
-  text: CorpResearchName;
+  researchName: CorpResearchName;
   parent?: Node | null;
 }
 
@@ -34,14 +33,10 @@ export class Node {
   parent: Node | null = null;
 
   // Name of the Research held in this Node
-  text: CorpResearchName;
+  researchName: CorpResearchName;
 
-  constructor(p: IConstructorParams = { cost: 0, text: researchNames[0] }) {
-    if (ResearchMap[p.text] == null) {
-      throw new Error(`Invalid Research name used when constructing ResearchTree Node: ${p.text}`);
-    }
-
-    this.text = p.text;
+  constructor(p: IConstructorParams) {
+    this.researchName = p.researchName;
     this.cost = p.cost;
 
     if (p.children && p.children.length > 0) {
@@ -59,16 +54,16 @@ export class Node {
   }
 
   // Recursive function for finding a Node with the specified text
-  findNode(text: string): Node | null {
+  findNode(name: CorpResearchName): Node | null {
     // Is this the Node?
-    if (this.text === text) {
+    if (this.researchName === name) {
       return this;
     }
 
     // Recursively search children
     let res = null;
     for (let i = 0; i < this.children.length; ++i) {
-      res = this.children[i].findNode(text);
+      res = this.children[i].findNode(name);
       if (res != null) {
         return res;
       }
@@ -86,7 +81,7 @@ export class Node {
 // The root node in a Research Tree must always be the "Hi-Tech R&D Laboratory"
 export class ResearchTree {
   // Object containing names of all acquired Research by name
-  researched: Record<string, boolean> = {};
+  researched = new Set<CorpResearchName>();
 
   // Root Node
   root: Node | null = null;
@@ -107,7 +102,7 @@ export class ResearchTree {
         continue;
       }
 
-      res.push(node.text);
+      res.push(node.researchName);
       for (let i = 0; i < node.children.length; ++i) {
         queue.push(node.children[i]);
       }
@@ -175,11 +170,11 @@ export class ResearchTree {
         continue;
       }
 
-      const research: Research | null = ResearchMap[node.text];
+      const research: Research | null = ResearchMap[node.researchName];
 
       // Safety checks
       if (research == null) {
-        console.warn(`Invalid Research name in node: ${node.text}`);
+        console.warn(`Invalid Research name in node: ${node.researchName}`);
         continue;
       }
 
@@ -197,7 +192,7 @@ export class ResearchTree {
           storageMult: research.storageMult,
         }[propName] ?? null;
 
-      if (mult == null) {
+      if (mult === null) {
         console.warn(`Invalid propName specified in ResearchTree.getMultiplierHelper: ${propName}`);
         continue;
       }
@@ -230,13 +225,11 @@ export class ResearchTree {
     queue.push(this.root);
     while (queue.length !== 0) {
       const node: Node | undefined = queue.shift();
-      if (node == null) {
-        continue;
-      }
+      if (!node) continue;
 
-      if (node.text === name) {
+      if (node.researchName === name) {
         node.researched = true;
-        this.researched[name] = true;
+        this.researched.add(name);
         return;
       }
 

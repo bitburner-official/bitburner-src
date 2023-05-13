@@ -7129,12 +7129,12 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   /** Check if you have a one time unlockable upgrade
    * @param upgradeName - Name of the upgrade
    * @returns true if unlocked and false if not */
-  hasUnlockUpgrade(upgradeName: string): boolean;
+  hasUnlock(upgradeName: string): boolean;
 
   /** Gets the cost to unlock a one time unlockable upgrade
    * @param upgradeName - Name of the upgrade
    * @returns cost of the upgrade */
-  getUnlockUpgradeCost(upgradeName: string): number;
+  getUnlockCost(upgradeName: string): number;
 
   /** Get the level of a levelable upgrade
    * @param upgradeName - Name of the upgrade
@@ -7198,7 +7198,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
 
   /** Unlock an upgrade
    * @param upgradeName - Name of the upgrade */
-  unlockUpgrade(upgradeName: string): void;
+  purchaseUnlock(upgradeName: string): void;
 
   /** Level an upgrade.
    * @param upgradeName - Name of the upgrade */
@@ -7408,7 +7408,6 @@ type CorpResearchName =
   | "AutoBrew"
   | "AutoPartyManager"
   | "Automatic Drug Administration"
-  | "Bulk Purchasing"
   | "CPH4 Injections"
   | "Drones"
   | "Drones - Assembly"
@@ -7416,7 +7415,6 @@ type CorpResearchName =
   | "Go-Juice"
   | "HRBuddy-Recruitment"
   | "HRBuddy-Training"
-  | "JoyWire"
   | "Market-TA.I"
   | "Market-TA.II"
   | "Overclock"
@@ -7488,9 +7486,9 @@ interface Product {
   /** Production cost */
   pCost: number;
   /** Sell cost, can be "MP+5" */
-  sCost: string;
+  sCost: string | number;
   /** Sell amount, can be "PROD/2" */
-  sAmt: string;
+  sAmt: string | number;
   /** Amount of product  */
   qty: number;
   /** Amount of product produced  */

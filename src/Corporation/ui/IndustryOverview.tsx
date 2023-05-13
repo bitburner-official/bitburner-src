@@ -2,7 +2,7 @@
 // (top-left panel in the Industry UI)
 import React, { useState } from "react";
 
-import { IndustryType } from "../data/Enums";
+import { CorpUnlockName, IndustryType } from "../data/Enums";
 import { HireAdVert } from "../Actions";
 import { formatBigNumber } from "../../ui/formatNumber";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
@@ -100,7 +100,6 @@ export function IndustryOverview(props: IProps): React.ReactElement {
   const division = useDivision();
   const [helpOpen, setHelpOpen] = useState(false);
   const [researchOpen, setResearchOpen] = useState(false);
-  const vechain = corp.unlockUpgrades[4] === 1;
   const profit = division.lastCycleRevenue - division.lastCycleExpenses;
 
   let advertisingInfo = false;
@@ -109,7 +108,7 @@ export function IndustryOverview(props: IProps): React.ReactElement {
   const popularityFac = advertisingFactors[2];
   const ratioFac = advertisingFactors[3];
   const totalAdvertisingFac = advertisingFactors[0];
-  if (vechain) {
+  if (corp.unlocks.has(CorpUnlockName.VeChain)) {
     advertisingInfo = true;
   }
 
@@ -207,7 +206,7 @@ export function IndustryOverview(props: IProps): React.ReactElement {
             </Typography>
           }
         >
-          <Typography>Scientific Research: {formatBigNumber(division.sciResearch)}</Typography>
+          <Typography>Scientific Research: {formatBigNumber(division.researchPoints)}</Typography>
         </Tooltip>
         <Button sx={{ mx: 1 }} onClick={() => setResearchOpen(true)}>
           Research

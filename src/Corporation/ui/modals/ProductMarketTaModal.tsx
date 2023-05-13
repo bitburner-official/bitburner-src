@@ -48,7 +48,7 @@ interface IProps {
 
 // Create a popup that lets the player use the Market TA research for Products
 export function ProductMarketTaModal(props: IProps): React.ReactElement {
-  const markupLimit = props.product.rat / props.product.mku;
+  const markupLimit = props.product.overallRating / props.product.markup;
   const setRerender = useState(false)[1];
   function rerender(): void {
     setRerender((old) => !old);
@@ -64,7 +64,7 @@ export function ProductMarketTaModal(props: IProps): React.ReactElement {
       <>
         <Typography variant="h4">Market-TA.I</Typography>
         <Typography>
-          The maximum sale price you can mark this up to is {formatMoney(props.product.pCost + markupLimit)}. This means
+          The maximum sale price you can mark this up to is {formatMoney(props.product.productionCost + markupLimit)}. This means
           that if you set the sale price higher than this, you will begin to experience a loss in number of sales
           <br></br>
           <br></br>

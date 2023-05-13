@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal } from "../../../ui/React/Modal";
 import { IndustryResearchTrees } from "../../IndustryData";
 import * as corpConstants from "../../data/Constants";
-import { Industry } from "../../Industry";
+import { Division } from "../../Division";
 import { Research } from "../../Actions";
 import { Node } from "../../ResearchTree";
 import { ResearchMap } from "../../ResearchMap";
@@ -20,13 +20,13 @@ import CheckIcon from "@mui/icons-material/Check";
 
 interface INodeProps {
   n: Node | null;
-  division: Industry;
+  division: Division;
 }
 function Upgrade({ n, division }: INodeProps): React.ReactElement {
   const [open, setOpen] = useState(false);
   if (n === null) return <></>;
-  const r = ResearchMap[n.text];
-  let disabled = division.sciResearch < r.cost || n.researched;
+  const r = ResearchMap[n.researchName];
+  let disabled = division.researchPoints < r.cost || n.researched;
   const parent = n.parent;
   if (parent !== null) {
     disabled = disabled || !parent.researched;
@@ -35,14 +35,14 @@ function Upgrade({ n, division }: INodeProps): React.ReactElement {
   function research(): void {
     if (n === null || disabled) return;
     try {
-      Research(division, n.text);
+      Research(division, n.researchName);
     } catch (err) {
       dialogBoxCreate(err + "");
       return;
     }
 
     dialogBoxCreate(
-      `Researched ${n.text}. It may take a market cycle (~${corpConstants.secondsPerMarketCycle} seconds) before the effects of the Research apply.`,
+      `Researched ${n.researchName}. It may take a market cycle (~${corpConstants.secondsPerMarketCycle} seconds) before the effects of the Research apply.`,
     );
   }
 
@@ -78,7 +78,7 @@ function Upgrade({ n, division }: INodeProps): React.ReactElement {
             style={{ width: "100%", textAlign: "left", justifyContent: "unset" }}
           >
             {n.researched && <CheckIcon sx={{ mr: 1 }} />}
-            {n.text}
+            {n.researchName}
           </Button>
         </span>,
       )}
@@ -104,7 +104,7 @@ function Upgrade({ n, division }: INodeProps): React.ReactElement {
               }}
             >
               {n.researched && <CheckIcon sx={{ mr: 1 }} />}
-              {n.text}
+              {n.researchName}
             </Button>
           </span>,
         )}
@@ -118,7 +118,7 @@ function Upgrade({ n, division }: INodeProps): React.ReactElement {
       <Collapse in={open} unmountOnExit>
         <Box m={1}>
           {n.children.map((m) => (
-            <Upgrade key={m.text} division={division} n={m} />
+            <Upgrade key={m.researchName} division={division} n={m} />
           ))}
         </Box>
       </Collapse>
@@ -129,7 +129,7 @@ function Upgrade({ n, division }: INodeProps): React.ReactElement {
 interface IProps {
   open: boolean;
   onClose: () => void;
-  industry: Industry;
+  industry: Division;
 }
 
 // Create the Research Tree UI for this Industry
@@ -141,7 +141,7 @@ export function ResearchModal(props: IProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <Upgrade division={props.industry} n={researchTree.root} />
       <Typography sx={{ mt: 1 }}>
-        Research points: {props.industry.sciResearch.toFixed(3)}
+        Research points: {props.industry.researchPoints.toFixed(3)}
         <br />
         Multipliers from research:
         <br />* Advertising Multiplier: x{researchTree.getAdvertisingMultiplier()}

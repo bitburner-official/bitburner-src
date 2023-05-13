@@ -31,7 +31,7 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
 
   function BulkPurchaseText(props: IBulkPurchaseTextProps): React.ReactElement {
     const parsedAmt = parseFloat(props.amount);
-    const cost = parsedAmt * props.mat.bCost;
+    const cost = parsedAmt * props.mat.marketPrice;
 
     const matSize = MaterialInfo[props.mat.name].size;
     const maxAmount = (props.warehouse.size - props.warehouse.sizeUsed) / matSize;
@@ -110,7 +110,7 @@ interface IProps {
 
 // Create a popup that lets the player purchase a Material
 export function PurchaseMaterialModal(props: IProps): React.ReactElement {
-  const [buyAmt, setBuyAmt] = useState(props.mat.buy ? props.mat.buy : 0);
+  const [buyAmt, setBuyAmt] = useState(props.mat.buyAmount ? props.mat.buyAmount : 0);
 
   function purchaseMaterial(): void {
     if (buyAmt === null) return;
@@ -124,7 +124,7 @@ export function PurchaseMaterialModal(props: IProps): React.ReactElement {
   }
 
   function clearPurchase(): void {
-    props.mat.buy = 0;
+    props.mat.buyAmount = 0;
     props.onClose();
   }
 

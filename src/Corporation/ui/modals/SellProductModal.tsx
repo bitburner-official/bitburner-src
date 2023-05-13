@@ -10,9 +10,10 @@ import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { KEY } from "../../../utils/helpers/keyCodes";
+import { CityName } from "../../../Enums";
 
-function initialPrice(product: Product, city: string): string {
-  let val = product.sCost[city] ? product.sCost[city] + "" : "";
+function initialPrice(product: Product, city: CityName): string {
+  let val = product.sellPrices[city] ? product.sellPrices[city] + "" : "";
   if (product.marketTa2) {
     val += " (Market-TA.II)";
   } else if (product.marketTa1) {
@@ -25,15 +26,13 @@ interface IProps {
   open: boolean;
   onClose: () => void;
   product: Product;
-  city: string;
+  city: CityName;
 }
 
 // Create a popup that let the player manage sales of a material
 export function SellProductModal(props: IProps): React.ReactElement {
   const [checked, setChecked] = useState(true);
-  const [iQty, setQty] = useState<string>(
-    props.product.sllman[props.city][1] ? props.product.sllman[props.city][1] : "",
-  );
+  const [iQty, setQty] = useState<string>((props.product.desiredSellAmount[props.city] ?? "").toString());
   const [px, setPx] = useState<string>(initialPrice(props.product, props.city));
 
   function onCheckedChange(event: React.ChangeEvent<HTMLInputElement>): void {

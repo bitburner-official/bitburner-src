@@ -1,7 +1,7 @@
 // Class definition for a single Augmentation object
 import * as React from "react";
 
-import type { CompletedProgramName } from "src/Programs/Programs";
+import type { CompletedProgramName } from "../Programs/Programs";
 import { Faction } from "../Faction/Faction";
 import { Factions } from "../Faction/Factions";
 import { formatPercent } from "../ui/formatNumber";

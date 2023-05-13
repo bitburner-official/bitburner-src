@@ -12,8 +12,7 @@ import { GoPublicModal } from "./modals/GoPublicModal";
 import { Factions } from "../../Faction/Factions";
 
 import * as corpConstants from "../data/Constants";
-import { CorporationUnlockUpgrade, CorporationUnlockUpgrades } from "../data/CorporationUnlockUpgrades";
-import { CorporationUpgrade, CorporationUpgradeIndex, CorporationUpgrades } from "../data/CorporationUpgrades";
+import { CorpUnlocks } from "../data/CorporationUnlocks";
 
 import { CONSTANTS } from "../../Constants";
 import { formatCorpStat, formatPercent, formatShares } from "../../ui/formatNumber";
@@ -32,6 +31,8 @@ import Grid from "@mui/material/Grid";
 import { MultiplierButtons } from "./MultiplierButtons";
 import { SellCorporationModal } from "./modals/SellCorporationModal";
 import { SellDivisionModal } from "./modals/SellDivisionModal";
+import { getRecordKeys } from "../../Types/Record";
+import { PositiveInteger } from "../../types";
 
 interface IProps {
   rerender: () => void;
@@ -50,11 +51,11 @@ export function Overview({ rerender }: IProps): React.ReactElement {
   appendMult("Storage Multiplier: ", corp.getStorageMultiplier());
   appendMult("Advertising Multiplier: ", corp.getAdvertisingMultiplier());
   appendMult("Empl. Creativity Multiplier: ", corp.getEmployeeCreMultiplier());
-  appendMult("Empl. Charisma Multiplier: ", corp.getEmployeeChaMultiplier());
-  appendMult("Empl. Intelligence Multiplier: ", corp.getEmployeeIntMultiplier());
-  appendMult("Empl. Efficiency Multiplier: ", corp.getEmployeeEffMultiplier());
-  appendMult("Sales Multiplier: ", corp.getSalesMultiplier());
-  appendMult("Scientific Research Multiplier: ", corp.getScientificResearchMultiplier());
+  appendMult("Empl. Charisma Multiplier: ", corp.getEmployeeChaMult());
+  appendMult("Empl. Intelligence Multiplier: ", corp.getEmployeeIntMult());
+  appendMult("Empl. Efficiency Multiplier: ", corp.getEmployeeEffMult());
+  appendMult("Sales Multiplier: ", corp.getSalesMult());
+  appendMult("Scientific Research Multiplier: ", corp.getScientificResearchMult());
 
   return (
     <>
@@ -161,7 +162,9 @@ function Upgrades({ rerender }: IUpgradeProps): React.ReactElement {
     return <Typography variant="h4">Upgrades are unlocked once you create an industry.</Typography>;
   }
 
-  const [purchaseMultiplier, setPurchaseMultiplier] = useState<number | "MAX">(corpConstants.PurchaseMultipliers.x1);
+  const [purchaseMultiplier, setPurchaseMultiplier] = useState<PositiveInteger | "MAX">(
+    corpConstants.PurchaseMultipliers.x1,
+  );
 
   // onClick event handlers for purchase multiplier buttons
   const purchaseMultiplierOnClicks = [
@@ -173,14 +176,16 @@ function Upgrades({ rerender }: IUpgradeProps): React.ReactElement {
     () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.MAX),
   ];
 
+  const unlocksNotOwned = Object.values(CorpUnlocks)
+    .filter((unlock) => !corp.unlocks.has(unlock.name))
+    .map(({ name }) => <UnlockUpgrade rerender={rerender} name={name} key={name} />);
+
   return (
     <>
       <Paper sx={{ p: 1, my: 1 }}>
         <Typography variant="h4">Unlocks</Typography>
         <Grid container>
-          {Object.values(CorporationUnlockUpgrades).map((upgrade: CorporationUnlockUpgrade) => (
-            <UnlockUpgrade rerender={rerender} upgradeData={upgrade} key={upgrade.index} />
-          ))}
+          {unlocksNotOwned.length ? unlocksNotOwned : <Typography>All unlocks are owned.</Typography>}
         </Grid>
       </Paper>
       <Paper sx={{ p: 1, my: 1 }}>
@@ -191,11 +196,9 @@ function Upgrades({ rerender }: IUpgradeProps): React.ReactElement {
           </Grid>
         </Grid>
         <Grid container>
-          {corp.upgrades
-            .map((level: number, i: number) => CorporationUpgrades[i as CorporationUpgradeIndex])
-            .map((upgrade: CorporationUpgrade) => (
-              <LevelableUpgrade rerender={rerender} upgrade={upgrade} key={upgrade.index} amount={purchaseMultiplier} />
-            ))}
+          {getRecordKeys(corp.upgrades).map((name) => (
+            <LevelableUpgrade rerender={rerender} upgradeName={name} key={name} amount={purchaseMultiplier} />
+          ))}
         </Grid>
       </Paper>
     </>

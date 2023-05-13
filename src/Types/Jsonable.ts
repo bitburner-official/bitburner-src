@@ -1,9 +1,6 @@
 import type { IReviverValue } from "../utils/JSONReviver";
+// Versions of js builtin classes that can be converted to and from JSON for use in save files
 
-// Loosened type requirements on input for has, also has provides typecheck info.
-export interface JSONSet<T> {
-  has: (value: unknown) => value is T;
-}
 export class JSONSet<T> extends Set<T> {
   toJSON(): IReviverValue {
     return { ctor: "JSONSet", data: Array.from(this) };
@@ -13,10 +10,6 @@ export class JSONSet<T> extends Set<T> {
   }
 }
 
-// Loosened type requirements on input for has. has also provides typecheck info.
-export interface JSONMap<K, __V> {
-  has: (key: unknown) => key is K;
-}
 export class JSONMap<K, __V> extends Map<K, __V> {
   toJSON(): IReviverValue {
     return { ctor: "JSONMap", data: Array.from(this) };

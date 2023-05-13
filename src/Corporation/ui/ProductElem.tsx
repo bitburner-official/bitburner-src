@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import type { CityName } from "src/Enums";
 import * as corpConstants from "../data/Constants";
 import { Product } from "../Product";
 import { DiscontinueProductModal } from "./modals/DiscontinueProductModal";
@@ -19,9 +20,10 @@ import Tooltip from "@mui/material/Tooltip";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import { CorpUnlockName } from "../data/Enums";
 
 interface IProductProps {
-  city: string;
+  city: CityName;
   product: Product;
   rerender: () => void;
 }
@@ -41,21 +43,22 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   const hasUpgradeDashboard = division.hasResearch("uPgrade: Dashboard");
 
   // Total product gain = production - sale
-  const totalGain = product.data[city][1] - product.data[city][2];
+  const totalGain = product.data[city].productionAmount - product.data[city].actualSellAmount;
 
   // Sell button
   let sellButtonText: JSX.Element;
-  if (product.sllman[city][0]) {
-    if (isString(product.sllman[city][1])) {
+  const desiredSellAmount = product.desiredSellAmount[city];
+  if (desiredSellAmount !== null) {
+    if (isString(desiredSellAmount)) {
       sellButtonText = (
         <>
-          Sell ({formatBigNumber(product.data[city][2])}/{product.sllman[city][1]})
+          Sell ({formatBigNumber(product.data[city].actualSellAmount)}/{desiredSellAmount})
         </>
       );
     } else {
       sellButtonText = (
         <>
-          Sell ({formatBigNumber(product.data[city][2])}/{formatBigNumber(product.sllman[city][1])})
+          Sell ({formatBigNumber(product.data[city].actualSellAmount)}/{formatBigNumber(desiredSellAmount)})
         </>
       );
     }
@@ -70,15 +73,18 @@ export function ProductElem(props: IProductProps): React.ReactElement {
       </>
     );
   } else if (product.marketTa1) {
-    const markupLimit = product.rat / product.mku;
+    const markupLimit = product.overallRating / product.markup;
     sellButtonText = (
       <>
-        {sellButtonText} @ <Money money={product.pCost + markupLimit} />
+        {sellButtonText} @ <Money money={product.productionCost + markupLimit} />
       </>
     );
-  } else if (product.sCost[city]) {
-    if (isString(product.sCost[city])) {
-      const sCost = (product.sCost[city] as string).replace(/MP/g, product.pCost + product.rat / product.mku + "");
+  } else if (product.sellPrices[city]) {
+    if (isString(product.sellPrices[city])) {
+      const sCost = (product.sellPrices[city] as string).replace(
+        /MP/g,
+        product.productionCost + product.overallRating / product.markup + "",
+      );
       sellButtonText = (
         <>
           {sellButtonText} @ <Money money={eval(sCost)} />
@@ -87,27 +93,26 @@ export function ProductElem(props: IProductProps): React.ReactElement {
     } else {
       sellButtonText = (
         <>
-          {sellButtonText} @ <Money money={product.sCost[city]} />
+          {sellButtonText} @ <Money money={product.sellPrices[city]} />
         </>
       );
     }
   }
 
   // Limit Production button
-  let limitProductionButtonText = "Limit Production";
-  if (product.prdman[city][0]) {
-    limitProductionButtonText += " (" + formatCorpStat(product.prdman[city][1]) + ")";
-  }
+  const productionLimit = product.productionLimit[city];
+  const limitProductionButtonText =
+    "Limit Production" + (productionLimit !== null ? " (" + formatCorpStat(productionLimit) + ")" : "");
 
   return (
     <Paper>
-      {!product.fin ? (
+      {!product.finished ? (
         <>
           <Typography>
-            Designing {product.name} (req. Operations/Engineers in {product.createCity})...
+            Designing {product.name} (req. Operations/Engineers in {product.creationCity})...
           </Typography>
           <br />
-          <Typography>{formatPercent(product.prog / 100, 2)} complete</Typography>
+          <Typography>{formatPercent(product.progress / 100, 2)} complete</Typography>
           <Button onClick={() => setCancelOpen(true)}>Cancel</Button>
           <CancelProductModal
             product={product}
@@ -122,14 +127,14 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  Prod: {formatBigNumber(product.data[city][1])}/s
+                  Prod: {formatBigNumber(product.data[city].productionAmount)}/s
                   <br />
-                  Sell: {formatBigNumber(product.data[city][2])} /s
+                  Sell: {formatBigNumber(product.data[city].actualSellAmount)} /s
                 </Typography>
               }
             >
               <Typography>
-                {product.name}: {formatBigNumber(product.data[city][0])} ({formatBigNumber(totalGain)}
+                {product.name}: {formatBigNumber(product.data[city].inventory)} ({formatBigNumber(totalGain)}
                 /s)
               </Typography>
             </Tooltip>
@@ -139,27 +144,35 @@ export function ProductElem(props: IProductProps): React.ReactElement {
               title={
                 <Typography>
                   Effective rating is calculated from product rating and the quality of materials used <br />
-                  Rating: {formatCorpStat(product.rat)} <br /> <br />
-                  Quality: {formatCorpStat(product.qlt)} <br />
-                  Performance: {formatCorpStat(product.per)} <br />
-                  Durability: {formatCorpStat(product.dur)} <br />
-                  Reliability: {formatCorpStat(product.rel)} <br />
-                  Aesthetics: {formatCorpStat(product.aes)} <br />
-                  Features: {formatCorpStat(product.fea)}
-                  {corp.unlockUpgrades[2] === 1 && <br />}
-                  {corp.unlockUpgrades[2] === 1 && "Demand: " + formatCorpStat(product.dmd)}
-                  {corp.unlockUpgrades[3] === 1 && <br />}
-                  {corp.unlockUpgrades[3] === 1 && "Competition: " + formatCorpStat(product.cmp)}
+                  Rating: {formatCorpStat(product.overallRating)} <br /> <br />
+                  Quality: {formatCorpStat(product.quality)} <br />
+                  Performance: {formatCorpStat(product.performance)} <br />
+                  Durability: {formatCorpStat(product.durability)} <br />
+                  Reliability: {formatCorpStat(product.reliability)} <br />
+                  Aesthetics: {formatCorpStat(product.aesthetics)} <br />
+                  Features: {formatCorpStat(product.features)}
+                  {corp.unlocks.has(CorpUnlockName.MarketResearchDemand) && (
+                    <>
+                      <br />
+                      {"Demand: " + formatCorpStat(product.demand)}
+                    </>
+                  )}
+                  {corp.unlocks.has(CorpUnlockName.MarketDataCompetition) && (
+                    <>
+                      <br />
+                      {"Competition: " + formatCorpStat(product.competition)}
+                    </>
+                  )}
                 </Typography>
               }
             >
-              <Typography>Effective rating: {formatCorpStat(product.data[city][3])}</Typography>
+              <Typography>Effective rating: {formatCorpStat(product.data[city].effectiveRating)}</Typography>
             </Tooltip>
           </Box>
           <Box display="flex">
             <Tooltip title={<Typography>An estimate of the material cost it takes to create this Product.</Typography>}>
               <Typography>
-                Est. Production Cost: {formatMoney(product.pCost / corpConstants.baseProductProfitMult)}
+                Est. Production Cost: {formatMoney(product.productionCost / corpConstants.baseProductProfitMult)}
               </Typography>
             </Tooltip>
           </Box>
@@ -172,7 +185,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
                 </Typography>
               }
             >
-              <Typography>Est. Market Price: {formatMoney(product.pCost)}</Typography>
+              <Typography>Est. Market Price: {formatMoney(product.productionCost)}</Typography>
             </Tooltip>
           </Box>
           <Button onClick={() => setDiscontinueOpen(true)}>Discontinue</Button>
@@ -185,7 +198,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
         </>
       )}
 
-      {(hasUpgradeDashboard || product.fin) && (
+      {(hasUpgradeDashboard || product.finished) && (
         <>
           <Button onClick={() => setSellOpen(true)}>{sellButtonText}</Button>
           <SellProductModal product={product} city={city} open={sellOpen} onClose={() => setSellOpen(false)} />

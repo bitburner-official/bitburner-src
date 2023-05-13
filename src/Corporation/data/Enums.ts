@@ -16,7 +16,7 @@ export enum IndustryType {
   RealEstate = "Real Estate",
 }
 
-export enum EmployeePositions {
+export enum CorpEmployeeJob {
   Operations = "Operations",
   Engineer = "Engineer",
   Business = "Business",
@@ -24,4 +24,29 @@ export enum EmployeePositions {
   RandD = "Research & Development",
   Intern = "Intern",
   Unassigned = "Unassigned",
+}
+
+export enum CorpUnlockName {
+  Export = "Export",
+  SmartSupply = "Smart Supply",
+  MarketResearchDemand = "Market Research - Demand",
+  MarketDataCompetition = "Market Data - Competition",
+  VeChain = "VeChain",
+  ShadyAccounting = "Shady Accounting",
+  GovernmentPartnership = "Government Partnership",
+  WarehouseAPI = "Warehouse API",
+  OfficeAPI = "Office API",
+}
+
+export enum CorpUpgradeName {
+  SmartFactories = "Smart Factories",
+  SmartStorage = "Smart Storage",
+  DreamSense = "DreamSense",
+  WilsonAnalytics = "Wilson Analytics",
+  NuoptimalNootropicInjectorImplants = "Nuoptimal Nootropic Injector Implants",
+  SpeechProcessorImplants = "Speech Processor Implants",
+  NeuralAccelerators = "Neural Accelerators",
+  FocusWires = "FocusWires",
+  ABCSalesBots = "ABC SalesBots",
+  ProjectInsight = "Project Insight",
 }

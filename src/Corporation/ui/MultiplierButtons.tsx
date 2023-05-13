@@ -7,6 +7,8 @@ import React from "react";
 
 import { PurchaseMultipliers } from "../data/Constants";
 import Button from "@mui/material/Button";
+import { PositiveInteger } from "../../types";
+import { getRecordKeys } from "../../Types/Record";
 
 interface IMultiplierProps {
   disabled: boolean;
@@ -23,7 +25,7 @@ function MultiplierButton(props: IMultiplierProps): React.ReactElement {
 }
 
 interface IProps {
-  purchaseMultiplier: number | string;
+  purchaseMultiplier: PositiveInteger | "MAX";
   onClicks: (() => void)[];
 }
 
@@ -32,7 +34,7 @@ export function MultiplierButtons(props: IProps): React.ReactElement {
     throw new Error(`MultiplierButtons constructed without required props`);
   }
 
-  const mults = ["x1", "x5", "x10", "x50", "x100", "MAX"];
+  const mults = getRecordKeys(PurchaseMultipliers);
   const onClicks = props.onClicks;
   const buttons = [];
   for (let i = 0; i < mults.length; ++i) {
