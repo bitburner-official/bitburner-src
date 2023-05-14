@@ -20,7 +20,7 @@ export class Warehouse {
   level = 1;
 
   // City that this Warehouse is in
-  loc = CityName.Sector12;
+  city = CityName.Sector12;
 
   // Map of Materials held by this Warehouse
   materials = createFullRecordFromEntries(materialNames.map((matName) => [matName, new Material({ name: matName })]));
@@ -45,7 +45,7 @@ export class Warehouse {
   constructor(params: IConstructorParams | null = null) {
     const corp = Player.corporation;
     if (!corp || params === null) return;
-    this.loc = params.loc;
+    this.city = params.loc;
     this.size = params.size;
     this.updateSize(corp, params.division);
 
@@ -59,7 +59,7 @@ export class Warehouse {
   updateMaterialSizeUsed(): void {
     this.sizeUsed = 0;
     for (const [matName, mat] of getRecordEntries(this.materials)) {
-      this.sizeUsed += mat.quantity * MaterialInfo[matName].size;
+      this.sizeUsed += mat.stored * MaterialInfo[matName].size;
     }
     if (this.sizeUsed > this.size) {
       console.warn("Warehouse size used greater than capacity, something went wrong");

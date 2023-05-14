@@ -93,7 +93,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
   for (const matName of Object.values(corpConstants.materialNames)) {
     if (!props.warehouse.materials[matName]) continue;
     // Only create UI for materials that are relevant for the industry or in stock
-    const isInStock = props.warehouse.materials[matName].quantity > 0;
+    const isInStock = props.warehouse.materials[matName].stored > 0;
     const isRelevant = isRelevantMaterial(matName, division);
     if (!isInStock && !isRelevant) continue;
     mats.push(
@@ -108,50 +108,39 @@ function WarehouseRoot(props: IProps): React.ReactElement {
   }
 
   // Create React components for products
-  const products = [];
-  if (division.makesProducts && Object.keys(division.products).length > 0) {
-    for (const productName of Object.keys(division.products)) {
-      const product = division.products[productName];
-      if (!product) continue;
-      products.push(
+  const productElements = [];
+  if (division.makesProducts && division.products.size > 0) {
+    for (const [productName, product] of division.products) {
+      productElements.push(
         <ProductElem rerender={props.rerender} city={props.currentCity} key={productName} product={product} />,
       );
     }
   }
 
-  const breakdownItems: JSX.Element[] = [];
-  for (const matName of Object.values(corpConstants.materialNames)) {
+  const breakdownItems: string[] = [];
+  for (const matName of corpConstants.materialNames) {
     const mat = props.warehouse.materials[matName];
-    if (!Object.hasOwn(MaterialInfo, matName)) continue;
-    if (mat.quantity === 0) continue;
-    breakdownItems.push(
-      <>
-        {matName}: {formatMaterialSize(mat.quantity * MaterialInfo[matName].size)}
-      </>,
-    );
+    if (mat.stored === 0) continue;
+    breakdownItems.push(`${matName}: ${formatMaterialSize(mat.stored * MaterialInfo[matName].size)}`);
   }
 
-  for (const prodName of Object.keys(division.products)) {
-    const prod = division.products[prodName];
-    if (prod === undefined) continue;
+  for (const [prodName, product] of division.products) {
     breakdownItems.push(
-      <>
-        {prodName}: {formatMaterialSize(prod.data[props.warehouse.loc].inventory * prod.size)}
-      </>,
+      `${prodName}: ${formatMaterialSize(product.cityData[props.currentCity].stored * product.size)}`,
     );
   }
 
   let breakdown;
-  if (breakdownItems && breakdownItems.length > 0) {
+  if (breakdownItems.length > 0) {
     breakdown = breakdownItems.reduce(
-      (previous: JSX.Element, current: JSX.Element): JSX.Element =>
-        (previous && (
-          <>
-            {previous}
-            <br />
-            {current}
-          </>
-        )) || <>{current}</>,
+      (previous: JSX.Element, current: string): JSX.Element => (
+        <>
+          {previous}
+          <br />
+          {current}
+        </>
+      ),
+      <></>,
     );
   } else {
     breakdown = <>No items in storage.</>;
@@ -209,7 +198,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
 
       {mats}
 
-      {products}
+      {productElements}
     </Paper>
   );
 }

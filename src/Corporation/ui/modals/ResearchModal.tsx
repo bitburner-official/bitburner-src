@@ -58,7 +58,7 @@ function Upgrade({ n, division }: INodeProps): React.ReactElement {
           <Typography>
             Research points: {r.cost}
             <br />
-            {r.desc}
+            {r.description}
           </Typography>
         }
       >

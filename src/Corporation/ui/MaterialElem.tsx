@@ -51,7 +51,8 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   }
 
   // Total gain or loss of this material (per second)
-  const totalGain = mat.buyAmount + mat.productionAmount + mat.importAmount - mat.actualSellAmount - mat.totalExp;
+  const totalGain =
+    mat.buyAmount + mat.productionAmount + mat.importAmount - mat.actualSellAmount - mat.exportedLastCycle;
 
   // Flag that determines whether this industry is "new" and the current material should be
   // marked with flashing-red lights
@@ -93,9 +94,9 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
           {sellButtonText} @ <Money money={mat.marketPrice + markupLimit} />
         </>
       );
-    } else if (mat.sellPrice) {
-      if (isString(mat.sellPrice)) {
-        const sCost = mat.sellPrice.replace(/MP/g, mat.marketPrice + "");
+    } else if (mat.desiredSellPrice) {
+      if (isString(mat.desiredSellPrice)) {
+        const sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice + "");
         sellButtonText = (
           <>
             {sellButtonText} @ <Money money={eval(sCost)} />
@@ -104,7 +105,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
       } else {
         sellButtonText = (
           <>
-            {sellButtonText} @ <Money money={mat.sellPrice} />
+            {sellButtonText} @ <Money money={mat.desiredSellPrice} />
           </>
         );
       }
@@ -129,7 +130,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
                 Buy: {mat.buyAmount >= 1e33 ? mat.buyAmount.toExponential(3) : formatBigNumber(mat.buyAmount)} <br />
                 Prod: {formatBigNumber(mat.productionAmount)} <br />
                 Sell: {formatBigNumber(mat.actualSellAmount)} <br />
-                Export: {formatBigNumber(mat.totalExp)} <br />
+                Export: {formatBigNumber(mat.exportedLastCycle)} <br />
                 Import: {formatBigNumber(mat.importAmount)}
                 {corp.unlocks.has(CorpUnlockName.MarketResearchDemand) && (
                   <>
@@ -147,7 +148,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
             }
           >
             <Typography>
-              {mat.name}: {formatBigNumber(mat.quantity)} (
+              {mat.name}: {formatBigNumber(mat.stored)} (
               {totalGain >= 1e33 ? totalGain.toExponential(3) : formatBigNumber(totalGain)}/s)
             </Typography>
           </Tooltip>

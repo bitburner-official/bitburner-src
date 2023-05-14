@@ -76,7 +76,7 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
         <br></br>- Warehouses:{getRecordKeys(divisionToSell.warehouses).length}
         {divisionToSell.makesProducts ?? (
           <Typography>
-            <br />- Products: {divisionToSell.products.length}
+            <br />- Products: {divisionToSell.products.size}
           </Typography>
         )}
         <br></br>

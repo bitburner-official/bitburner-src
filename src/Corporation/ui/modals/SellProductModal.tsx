@@ -13,7 +13,7 @@ import { KEY } from "../../../utils/helpers/keyCodes";
 import { CityName } from "../../../Enums";
 
 function initialPrice(product: Product, city: CityName): string {
-  let val = product.sellPrices[city] ? product.sellPrices[city] + "" : "";
+  let val = String(product.cityData[city].desiredSellPrice || "");
   if (product.marketTa2) {
     val += " (Market-TA.II)";
   } else if (product.marketTa1) {
@@ -32,7 +32,7 @@ interface IProps {
 // Create a popup that let the player manage sales of a material
 export function SellProductModal(props: IProps): React.ReactElement {
   const [checked, setChecked] = useState(true);
-  const [iQty, setQty] = useState<string>((props.product.desiredSellAmount[props.city] ?? "").toString());
+  const [iQty, setQty] = useState<string>((props.product.cityData[props.city].desiredSellAmount ?? "").toString());
   const [px, setPx] = useState<string>(initialPrice(props.product, props.city));
 
   function onCheckedChange(event: React.ChangeEvent<HTMLInputElement>): void {

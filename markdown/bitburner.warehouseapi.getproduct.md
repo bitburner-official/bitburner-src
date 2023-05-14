@@ -9,7 +9,7 @@ Get product data
 **Signature:**
 
 ```typescript
-getProduct(divisionName: string, city: CityName | `${CityName}`, productName: string): Product;
+getProduct(divisionName: string, cityName: CityName | `${CityName}`, productName: string): Product;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ getProduct(divisionName: string, city: CityName | `${CityName}`, productName: st
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
+|  cityName | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` |  |
 |  productName | string | Name of the product |
 
 **Returns:**

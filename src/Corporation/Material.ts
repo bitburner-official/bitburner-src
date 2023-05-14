@@ -13,7 +13,7 @@ export class Material {
   name: CorpMaterialName;
 
   // Amount of material owned
-  quantity = 0;
+  stored = 0;
 
   // Material's "quality". Unbounded
   quality = 1;
@@ -47,17 +47,17 @@ export class Material {
   exports: Export[] = [];
 
   // Total amount of this material exported in the last cycle
-  totalExp = 0;
+  exportedLastCycle = 0;
 
   // Cost / sec to buy this material. AKA Market Price
   marketPrice = 0;
 
-  // Cost / sec to sell this material
-  sellPrice: string | number = 0;
-
-  /** null if there is no limit set on production */
+  /** null if there is no limit set on production. 0 actually limits production to 0. */
   productionLimit: number | null = null;
-  desiredSellAmount: string | number = 0; // Sale
+
+  // Player inputs for sell price and amount.
+  desiredSellAmount: string | number = 0;
+  desiredSellPrice: string | number = 0;
 
   // Flags that signal whether automatic sale pricing through Market TA is enabled
   marketTa1 = false;

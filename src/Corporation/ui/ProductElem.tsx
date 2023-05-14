@@ -43,22 +43,22 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   const hasUpgradeDashboard = division.hasResearch("uPgrade: Dashboard");
 
   // Total product gain = production - sale
-  const totalGain = product.data[city].productionAmount - product.data[city].actualSellAmount;
+  const totalGain = product.cityData[city].productionAmount - product.cityData[city].actualSellAmount;
 
   // Sell button
   let sellButtonText: JSX.Element;
-  const desiredSellAmount = product.desiredSellAmount[city];
+  const desiredSellAmount = product.cityData[city].desiredSellAmount;
   if (desiredSellAmount !== null) {
     if (isString(desiredSellAmount)) {
       sellButtonText = (
         <>
-          Sell ({formatBigNumber(product.data[city].actualSellAmount)}/{desiredSellAmount})
+          Sell ({formatBigNumber(product.cityData[city].actualSellAmount)}/{desiredSellAmount})
         </>
       );
     } else {
       sellButtonText = (
         <>
-          Sell ({formatBigNumber(product.data[city].actualSellAmount)}/{formatBigNumber(desiredSellAmount)})
+          Sell ({formatBigNumber(product.cityData[city].actualSellAmount)}/{formatBigNumber(desiredSellAmount)})
         </>
       );
     }
@@ -73,18 +73,16 @@ export function ProductElem(props: IProductProps): React.ReactElement {
       </>
     );
   } else if (product.marketTa1) {
-    const markupLimit = product.overallRating / product.markup;
+    const markupLimit = product.rating / product.markup;
     sellButtonText = (
       <>
         {sellButtonText} @ <Money money={product.productionCost + markupLimit} />
       </>
     );
-  } else if (product.sellPrices[city]) {
-    if (isString(product.sellPrices[city])) {
-      const sCost = (product.sellPrices[city] as string).replace(
-        /MP/g,
-        product.productionCost + product.overallRating / product.markup + "",
-      );
+  } else if (product.cityData[city].desiredSellPrice) {
+    const desiredSellPrice = product.cityData[city].desiredSellPrice;
+    if (isString(desiredSellPrice)) {
+      const sCost = desiredSellPrice.replace(/MP/g, product.productionCost + product.rating / product.markup + "");
       sellButtonText = (
         <>
           {sellButtonText} @ <Money money={eval(sCost)} />
@@ -93,14 +91,14 @@ export function ProductElem(props: IProductProps): React.ReactElement {
     } else {
       sellButtonText = (
         <>
-          {sellButtonText} @ <Money money={product.sellPrices[city]} />
+          {sellButtonText} @ <Money money={product.cityData[city].desiredSellPrice} />
         </>
       );
     }
   }
 
   // Limit Production button
-  const productionLimit = product.productionLimit[city];
+  const productionLimit = product.cityData[city].productionLimit;
   const limitProductionButtonText =
     "Limit Production" + (productionLimit !== null ? " (" + formatCorpStat(productionLimit) + ")" : "");
 
@@ -112,7 +110,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             Designing {product.name} (req. Operations/Engineers in {product.creationCity})...
           </Typography>
           <br />
-          <Typography>{formatPercent(product.progress / 100, 2)} complete</Typography>
+          <Typography>{formatPercent(product.developmentProgress / 100, 2)} complete</Typography>
           <Button onClick={() => setCancelOpen(true)}>Cancel</Button>
           <CancelProductModal
             product={product}
@@ -127,14 +125,14 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  Prod: {formatBigNumber(product.data[city].productionAmount)}/s
+                  Prod: {formatBigNumber(product.cityData[city].productionAmount)}/s
                   <br />
-                  Sell: {formatBigNumber(product.data[city].actualSellAmount)} /s
+                  Sell: {formatBigNumber(product.cityData[city].actualSellAmount)} /s
                 </Typography>
               }
             >
               <Typography>
-                {product.name}: {formatBigNumber(product.data[city].inventory)} ({formatBigNumber(totalGain)}
+                {product.name}: {formatBigNumber(product.cityData[city].stored)} ({formatBigNumber(totalGain)}
                 /s)
               </Typography>
             </Tooltip>
@@ -144,13 +142,13 @@ export function ProductElem(props: IProductProps): React.ReactElement {
               title={
                 <Typography>
                   Effective rating is calculated from product rating and the quality of materials used <br />
-                  Rating: {formatCorpStat(product.overallRating)} <br /> <br />
-                  Quality: {formatCorpStat(product.quality)} <br />
-                  Performance: {formatCorpStat(product.performance)} <br />
-                  Durability: {formatCorpStat(product.durability)} <br />
-                  Reliability: {formatCorpStat(product.reliability)} <br />
-                  Aesthetics: {formatCorpStat(product.aesthetics)} <br />
-                  Features: {formatCorpStat(product.features)}
+                  Rating: {formatCorpStat(product.rating)} <br /> <br />
+                  Quality: {formatCorpStat(product.stats.quality)} <br />
+                  Performance: {formatCorpStat(product.stats.performance)} <br />
+                  Durability: {formatCorpStat(product.stats.durability)} <br />
+                  Reliability: {formatCorpStat(product.stats.reliability)} <br />
+                  Aesthetics: {formatCorpStat(product.stats.aesthetics)} <br />
+                  Features: {formatCorpStat(product.stats.features)}
                   {corp.unlocks.has(CorpUnlockName.MarketResearchDemand) && (
                     <>
                       <br />
@@ -166,7 +164,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
                 </Typography>
               }
             >
-              <Typography>Effective rating: {formatCorpStat(product.data[city].effectiveRating)}</Typography>
+              <Typography>Effective rating: {formatCorpStat(product.cityData[city].effectiveRating)}</Typography>
             </Tooltip>
           </Box>
           <Box display="flex">

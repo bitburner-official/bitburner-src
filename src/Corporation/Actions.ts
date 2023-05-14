@@ -117,9 +117,9 @@ export function SellMaterial(material: Material, amount: string, price: string):
   }
 
   if (cost.includes("MP")) {
-    material.sellPrice = cost; //Dynamically evaluated
+    material.desiredSellPrice = cost; //Dynamically evaluated
   } else {
-    material.sellPrice = temp;
+    material.desiredSellPrice = temp;
   }
 
   //Parse quantity
@@ -168,13 +168,13 @@ export function SellProduct(product: Product, city: CityName, amt: string, price
     if (temp == null || isNaN(parseFloat(temp))) {
       throw new Error("Invalid value or expression for sell price field.");
     }
-    product.sellPrices[city] = price; //Use sanitized price
+    product.cityData[city].desiredSellPrice = price; //Use sanitized price
   } else {
     const cost = parseFloat(price);
     if (isNaN(cost)) {
       throw new Error("Invalid value for sell price field");
     }
-    product.sellPrices[city] = cost;
+    product.cityData[city].desiredSellPrice = cost;
   }
 
   // Parse quantity
@@ -183,9 +183,9 @@ export function SellProduct(product: Product, city: CityName, amt: string, price
     //Dynamically evaluated quantity. First test to make sure its valid
     let qty = amt.replace(/\s+/g, "");
     qty = qty.replace(/[^-()\d/*+.MAXPRODINV]/g, "");
-    let temp = qty.replace(/MAX/g, product.maxsll.toString());
-    temp = temp.replace(/PROD/g, product.data[city].productionAmount.toString());
-    temp = temp.replace(/INV/g, product.data[city].inventory.toString());
+    let temp = qty.replace(/MAX/g, product.maxSellAmount.toString());
+    temp = temp.replace(/PROD/g, product.cityData[city].productionAmount.toString());
+    temp = temp.replace(/INV/g, product.cityData[city].stored.toString());
     try {
       temp = eval(temp);
     } catch (e) {
@@ -197,10 +197,10 @@ export function SellProduct(product: Product, city: CityName, amt: string, price
     }
     if (all) {
       for (const cityName of Object.values(CityName)) {
-        product.desiredSellAmount[cityName] = qty; //Use sanitized input
+        product.cityData[cityName].desiredSellAmount = qty; //Use sanitized input
       }
     } else {
-      product.desiredSellAmount[city] = qty; //Use sanitized input
+      product.cityData[city].desiredSellAmount = qty; //Use sanitized input
     }
   } else if (isNaN(parseFloat(amt)) || parseFloat(amt) < 0) {
     throw new Error("Invalid value for sell quantity field! Must be numeric or 'PROD' or 'MAX'");
@@ -212,17 +212,17 @@ export function SellProduct(product: Product, city: CityName, amt: string, price
     if (qty === 0) {
       if (all) {
         for (const cityName of Object.values(CityName)) {
-          product.desiredSellAmount[cityName] = 0;
+          product.cityData[cityName].desiredSellAmount = 0;
         }
       } else {
-        product.desiredSellAmount[city] = 0;
+        product.cityData[city].desiredSellAmount = 0;
       }
     } else if (all) {
       for (const cityName of Object.values(CityName)) {
-        product.desiredSellAmount[cityName] = qty;
+        product.cityData[cityName].desiredSellAmount = qty;
       }
     } else {
-      product.desiredSellAmount[city] = qty;
+      product.cityData[city].desiredSellAmount = qty;
     }
   }
 }
@@ -257,7 +257,7 @@ export function BulkPurchase(corp: Corporation, warehouse: Warehouse, material: 
   const cost = amt * material.marketPrice;
   if (corp.funds >= cost) {
     corp.funds = corp.funds - cost;
-    material.quantity += amt;
+    material.stored += amt;
   } else {
     throw new Error(`You cannot afford this purchase.`);
   }
@@ -321,7 +321,7 @@ export function BuyTea(corp: Corporation, office: OfficeSpace): boolean {
 
 export function ThrowParty(corp: Corporation, office: OfficeSpace, costPerEmployee: number): number {
   const mult = 1 + costPerEmployee / 10e6;
-  const cost = costPerEmployee * office.totalEmployees;
+  const cost = costPerEmployee * office.numEmployees;
   if (corp.funds < cost) {
     return 0;
   }
@@ -402,8 +402,7 @@ export function MakeProduct(
   } else if (division.hasResearch("uPgrade: Capacity.I")) {
     maxProducts = 4;
   }
-  const products = division.products;
-  if (Object.keys(products).length >= maxProducts) {
+  if (division.products.size >= maxProducts) {
     throw new Error(`You are already at the max products (${maxProducts}) for division: ${division.name}!`);
   }
 
@@ -413,12 +412,12 @@ export function MakeProduct(
     designInvestment: designInvest,
     advertisingInvestment: marketingInvest,
   });
-  if (products[product.name]) {
+  if (division.products.has(product.name)) {
     throw new Error(`You already have a product with this name!`);
   }
 
   corp.funds = corp.funds - (designInvest + marketingInvest);
-  products[product.name] = product;
+  division.products.set(product.name, product);
 }
 
 export function Research(division: Division, researchName: CorpResearchName): void {
@@ -497,9 +496,9 @@ export function CancelExportMaterial(divisionName: string, cityName: string, mat
 
 export function LimitProductProduction(product: Product, cityName: CityName, quantity: number): void {
   if (quantity < 0 || isNaN(quantity)) {
-    product.productionLimit[cityName] = null;
+    product.cityData[cityName].productionLimit = null;
   } else {
-    product.productionLimit[cityName] = quantity;
+    product.cityData[cityName].productionLimit = quantity;
   }
 }
 

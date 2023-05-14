@@ -24,7 +24,7 @@ export class Research {
   cost = 0;
 
   // Description of what the Research does
-  desc = "";
+  description = "";
 
   // All possible generic upgrades for the company, in the form of multipliers
   advertisingMult = 1;
@@ -42,7 +42,7 @@ export class Research {
     if (!p) return;
     this.name = p.name;
     this.cost = p.cost;
-    this.desc = p.desc;
+    this.description = p.desc;
     this.advertisingMult = p.advertisingMult ?? 1;
     this.employeeChaMult = p.employeeChaMult ?? 1;
     this.employeeCreMult = p.employeeCreMult ?? 1;

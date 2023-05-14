@@ -30,15 +30,15 @@ export interface Corporation extends WarehouseAPI, OfficeAPI
 |  [getIndustryData(industryName)](./bitburner.corporation.getindustrydata.md) | Get constant industry definition data for a specific industry |
 |  [getInvestmentOffer()](./bitburner.corporation.getinvestmentoffer.md) | Get an offer for investment based on you companies current valuation |
 |  [getMaterialData(materialName)](./bitburner.corporation.getmaterialdata.md) | Get constant data for a specific material |
-|  [getUnlockUpgradeCost(upgradeName)](./bitburner.corporation.getunlockupgradecost.md) | Gets the cost to unlock a one time unlockable upgrade |
+|  [getUnlockCost(upgradeName)](./bitburner.corporation.getunlockcost.md) | Gets the cost to unlock a one time unlockable upgrade |
 |  [getUpgradeLevel(upgradeName)](./bitburner.corporation.getupgradelevel.md) | Get the level of a levelable upgrade |
 |  [getUpgradeLevelCost(upgradeName)](./bitburner.corporation.getupgradelevelcost.md) | Gets the cost to unlock the next level of a levelable upgrade |
 |  [goPublic(numShares)](./bitburner.corporation.gopublic.md) | Go public |
 |  [hasCorporation()](./bitburner.corporation.hascorporation.md) | Returns whether the player has a corporation. Does not require API access. |
-|  [hasUnlockUpgrade(upgradeName)](./bitburner.corporation.hasunlockupgrade.md) | Check if you have a one time unlockable upgrade |
+|  [hasUnlock(upgradeName)](./bitburner.corporation.hasunlock.md) | Check if you have a one time unlockable upgrade |
 |  [issueDividends(rate)](./bitburner.corporation.issuedividends.md) | Issue dividends |
 |  [issueNewShares(amount)](./bitburner.corporation.issuenewshares.md) | Issue new shares |
 |  [levelUpgrade(upgradeName)](./bitburner.corporation.levelupgrade.md) | Level an upgrade. |
+|  [purchaseUnlock(upgradeName)](./bitburner.corporation.purchaseunlock.md) | Unlock an upgrade |
 |  [sellShares(amount)](./bitburner.corporation.sellshares.md) | Sell Shares |
-|  [unlockUpgrade(upgradeName)](./bitburner.corporation.unlockupgrade.md) | Unlock an upgrade |
 

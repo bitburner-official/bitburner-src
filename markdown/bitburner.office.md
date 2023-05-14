@@ -16,14 +16,14 @@ export interface Office
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [avgEne](./bitburner.office.avgene.md) |  | number | Average energy of the employees |
-|  [avgMor](./bitburner.office.avgmor.md) |  | number | Average morale of the employees |
+|  [avgEnergy](./bitburner.office.avgenergy.md) |  | number | Average energy of the employees |
+|  [avgMorale](./bitburner.office.avgmorale.md) |  | number | Average morale of the employees |
+|  [city](./bitburner.office.city.md) |  | [CityName](./bitburner.cityname.md) | City of the office |
 |  [employeeJobs](./bitburner.office.employeejobs.md) |  | Record&lt;[CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->, number&gt; | Positions of the employees |
-|  [employeeProd](./bitburner.office.employeeprod.md) |  | Record&lt;[CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->, number&gt; | Production of the employees |
-|  [employees](./bitburner.office.employees.md) |  | number | Amount of employees |
-|  [loc](./bitburner.office.loc.md) |  | [CityName](./bitburner.cityname.md) | City of the office |
-|  [maxEne](./bitburner.office.maxene.md) |  | number | Maximum amount of energy of the employees |
-|  [maxMor](./bitburner.office.maxmor.md) |  | number | Maximum morale of the employees |
+|  [employeeProductionByJob](./bitburner.office.employeeproductionbyjob.md) |  | Record&lt;[CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->, number&gt; | Production of the employees |
+|  [maxEnergy](./bitburner.office.maxenergy.md) |  | number | Maximum amount of energy of the employees |
+|  [maxMorale](./bitburner.office.maxmorale.md) |  | number | Maximum morale of the employees |
+|  [numEmployees](./bitburner.office.numemployees.md) |  | number | Amount of employees |
 |  [size](./bitburner.office.size.md) |  | number | Maximum number of employee |
 |  [totalExperience](./bitburner.office.totalexperience.md) |  | number | Total experience of all employees |
 

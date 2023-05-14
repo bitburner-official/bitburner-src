@@ -16,7 +16,7 @@ interface IndustryData
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [cost](./bitburner.industrydata.cost.md) |  | number | Cost to expand to the division |
+|  [cost](./bitburner.industrydata.cost.md) |  | number | Cost to make a new division of this industry type |
 |  [makesMaterials](./bitburner.industrydata.makesmaterials.md) |  | boolean | Whether the division makes materials |
 |  [makesProducts](./bitburner.industrydata.makesproducts.md) |  | boolean | Whether the division makes products |
 |  [producedMaterials?](./bitburner.industrydata.producedmaterials.md) |  | string\[\] | _(Optional)_ Materials produced |

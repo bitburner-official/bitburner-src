@@ -130,7 +130,7 @@ function AutoManagement(props: IProps): React.ReactElement {
             <Typography>Avg Employee Experience:</Typography>
           </TableCell>
           <TableCell align="right">
-            <Typography>{formatCorpStat(props.office.totalExperience / props.office.totalEmployees || 0)}</Typography>
+            <Typography>{formatCorpStat(props.office.totalExperience / props.office.numEmployees || 0)}</Typography>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -267,7 +267,7 @@ export function IndustryOffice(props: IProps): React.ReactElement {
     <Paper>
       <Typography>Office Space</Typography>
       <Typography>
-        Size: {props.office.totalEmployees} / {props.office.size} employees
+        Size: {props.office.numEmployees} / {props.office.size} employees
       </Typography>
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr", width: "fit-content" }}>
         <Box sx={{ gridTemplateColumns: "repeat(3, 1fr)" }}>

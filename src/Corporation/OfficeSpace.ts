@@ -28,7 +28,7 @@ export class OfficeSpace {
   avgEfficiency = 75;
 
   totalExperience = 0;
-  totalEmployees = 0;
+  numEmployees = 0;
   totalSalary = 0;
 
   autoTea = false;
@@ -36,7 +36,7 @@ export class OfficeSpace {
   teaPending = false;
   partyMult = 1;
 
-  employeeProd = { total: 0, ...createEnumKeyedRecord(CorpEmployeeJob, () => 0) };
+  employeeProductionByJob = { total: 0, ...createEnumKeyedRecord(CorpEmployeeJob, () => 0) };
   employeeJobs = createEnumKeyedRecord(CorpEmployeeJob, () => 0);
   employeeNextJobs = createEnumKeyedRecord(CorpEmployeeJob, () => 0);
 
@@ -47,7 +47,7 @@ export class OfficeSpace {
   }
 
   atCapacity(): boolean {
-    return this.totalEmployees >= this.size;
+    return this.numEmployees >= this.size;
   }
 
   process(marketCycles = 1, corporation: Corporation, industry: Division): number {
@@ -72,13 +72,13 @@ export class OfficeSpace {
     if (industry.hasResearch("AutoBrew")) this.autoTea = true;
     if (industry.hasResearch("AutoPartyManager")) this.autoParty = true;
 
-    if (this.totalEmployees > 0) {
+    if (this.numEmployees > 0) {
       /** Multiplier for employee morale/energy based on company performance */
       let perfMult = 1.002;
-      if (this.totalEmployees >= 9) {
+      if (this.numEmployees >= 9) {
         perfMult = Math.pow(
           1 +
-            0.002 * Math.min(1 / 9, this.employeeJobs.Intern / this.totalEmployees - 1 / 9) * 9 -
+            0.002 * Math.min(1 / 9, this.employeeJobs.Intern / this.numEmployees - 1 / 9) * 9 -
             (corporation.funds < 0 && industry.lastCycleRevenue < industry.lastCycleExpenses ? 0.001 : 0),
           marketCycles,
         );
@@ -113,21 +113,21 @@ export class OfficeSpace {
     this.totalExperience +=
       0.0015 *
       marketCycles *
-      (this.totalEmployees -
+      (this.numEmployees -
         this.employeeJobs[CorpEmployeeJob.Unassigned] +
         this.employeeJobs[CorpEmployeeJob.Intern] * 9);
 
     this.calculateEmployeeProductivity(corporation, industry);
-    if (this.totalEmployees === 0) {
+    if (this.numEmployees === 0) {
       this.totalSalary = 0;
     } else {
       this.totalSalary =
         corpConstants.employeeSalaryMultiplier *
         marketCycles *
-        this.totalEmployees *
+        this.numEmployees *
         (this.avgIntelligence +
           this.avgCharisma +
-          this.totalExperience / this.totalEmployees +
+          this.totalExperience / this.numEmployees +
           this.avgCreativity +
           this.avgEfficiency);
     }
@@ -142,8 +142,8 @@ export class OfficeSpace {
     const prodBase = this.avgMorale * this.avgEnergy * 1e-4;
 
     let total = 0;
-    const exp = this.totalExperience / this.totalEmployees || 0;
-    for (const name of getRecordKeys(this.employeeProd)) {
+    const exp = this.totalExperience / this.numEmployees || 0;
+    for (const name of getRecordKeys(this.employeeProductionByJob)) {
       let prodMult = 0;
       switch (name) {
         case CorpEmployeeJob.Operations:
@@ -169,31 +169,30 @@ export class OfficeSpace {
           console.error(`Invalid employee position: ${name}`);
           break;
       }
-      this.employeeProd[name] = this.employeeJobs[name] * prodMult * prodBase;
-      total += this.employeeProd[name];
+      this.employeeProductionByJob[name] = this.employeeJobs[name] * prodMult * prodBase;
+      total += this.employeeProductionByJob[name];
     }
 
-    this.employeeProd.total = total;
+    this.employeeProductionByJob.total = total;
   }
 
   hireRandomEmployee(position: CorpEmployeeJob): boolean {
     if (this.atCapacity()) return false;
     if (document.getElementById("cmpy-mgmt-hire-employee-popup") != null) return false;
 
-    ++this.totalEmployees;
+    ++this.numEmployees;
     ++this.employeeJobs[position];
     ++this.employeeNextJobs[position];
 
     this.totalExperience += getRandomInt(50, 100);
 
-    this.avgMorale = (this.avgMorale * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
-    this.avgEnergy = (this.avgEnergy * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
+    this.avgMorale = (this.avgMorale * this.numEmployees + getRandomInt(50, 100)) / (this.numEmployees + 1);
+    this.avgEnergy = (this.avgEnergy * this.numEmployees + getRandomInt(50, 100)) / (this.numEmployees + 1);
 
-    this.avgIntelligence =
-      (this.avgIntelligence * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
-    this.avgCharisma = (this.avgCharisma * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
-    this.avgCreativity = (this.avgCreativity * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
-    this.avgEfficiency = (this.avgEfficiency * this.totalEmployees + getRandomInt(50, 100)) / (this.totalEmployees + 1);
+    this.avgIntelligence = (this.avgIntelligence * this.numEmployees + getRandomInt(50, 100)) / (this.numEmployees + 1);
+    this.avgCharisma = (this.avgCharisma * this.numEmployees + getRandomInt(50, 100)) / (this.numEmployees + 1);
+    this.avgCreativity = (this.avgCreativity * this.numEmployees + getRandomInt(50, 100)) / (this.numEmployees + 1);
+    this.avgEfficiency = (this.avgEfficiency * this.numEmployees + getRandomInt(50, 100)) / (this.numEmployees + 1);
     return true;
   }
 
@@ -215,11 +214,11 @@ export class OfficeSpace {
   }
 
   getTeaCost(): number {
-    return corpConstants.teaCostPerEmployee * this.totalEmployees;
+    return corpConstants.teaCostPerEmployee * this.numEmployees;
   }
 
   setTea(): boolean {
-    if (!this.teaPending && !this.autoTea && this.totalEmployees > 0) {
+    if (!this.teaPending && !this.autoTea && this.numEmployees > 0) {
       this.teaPending = true;
       return true;
     }
@@ -227,7 +226,7 @@ export class OfficeSpace {
   }
 
   setParty(mult: number): boolean {
-    if (mult > 1 && this.partyMult === 1 && !this.autoParty && this.totalEmployees > 0) {
+    if (mult > 1 && this.partyMult === 1 && !this.autoParty && this.numEmployees > 0) {
       this.partyMult = mult;
       return true;
     }
@@ -244,9 +243,9 @@ export class OfficeSpace {
       const empCopy: [{ data: { mor: number; ene: number; exp: number } }] = value.data.employees;
       delete value.data.employees;
       const ret = Generic_fromJSON(OfficeSpace, value.data);
-      ret.totalEmployees = empCopy.length;
-      ret.avgMorale = empCopy.reduce((a, b) => a + b.data.mor, 0) / ret.totalEmployees || 75;
-      ret.avgEnergy = empCopy.reduce((a, b) => a + b.data.ene, 0) / ret.totalEmployees || 75;
+      ret.numEmployees = empCopy.length;
+      ret.avgMorale = empCopy.reduce((a, b) => a + b.data.mor, 0) / ret.numEmployees || 75;
+      ret.avgEnergy = empCopy.reduce((a, b) => a + b.data.ene, 0) / ret.numEmployees || 75;
       ret.totalExperience = empCopy.reduce((a, b) => a + b.data.exp, 0);
       return ret;
     }

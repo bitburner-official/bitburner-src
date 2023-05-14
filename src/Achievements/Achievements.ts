@@ -27,6 +27,7 @@ import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { workerScripts } from "../Netscript/WorkerScripts";
 
 import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
+import { getRecordValues } from "../Types/Record";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
 const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;
@@ -462,10 +463,7 @@ export const achievements: Record<string, Achievement> = {
     Condition: (): boolean => {
       if (!Player.corporation) return false;
       for (const division of Player.corporation.divisions.values()) {
-        let totalEmployees = 0;
-        for (const office of Object.values(division.offices)) {
-          if (office && office.totalEmployees) totalEmployees += office.totalEmployees;
-        }
+        const totalEmployees = getRecordValues(division.offices).reduce((a, b) => a + b.numEmployees, 0);
         if (totalEmployees >= 3000) return true;
       }
       return false;

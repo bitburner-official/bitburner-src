@@ -30,7 +30,7 @@ function MakeProductButton(): React.ReactElement {
   const hasMaxProducts = division.hasMaximumNumberProducts();
 
   function shouldFlash(): boolean {
-    return Object.keys(division.products).length === 0;
+    return division.products.size === 0;
   }
 
   function onButtonClick() {

@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import { KEY } from "../../../utils/helpers/keyCodes";
 
 function initialPrice(mat: Material): string {
-  let val = mat.sellPrice ? mat.sellPrice + "" : "";
+  let val = mat.desiredSellPrice ? mat.desiredSellPrice + "" : "";
   if (mat.marketTa2) {
     val += " (Market-TA.II)";
   } else if (mat.marketTa1) {

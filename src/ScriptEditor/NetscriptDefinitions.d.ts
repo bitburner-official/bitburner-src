@@ -6958,21 +6958,19 @@ export interface WarehouseAPI {
    * @param amt - Amount of material to buy
    */
   bulkPurchase(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: number): void;
-  /**
-   * Get warehouse data
+
+  /** Get warehouse data
    * @param divisionName - Name of the division
    * @param city - Name of the city
-   * @returns warehouse data
-   */
+   * @returns warehouse data */
   getWarehouse(divisionName: string, city: CityName | `${CityName}`): Warehouse;
-  /**
-   * Get product data
+
+  /** Get product data
    * @param divisionName - Name of the division
    * @param city - Name of the city
    * @param productName - Name of the product
-   * @returns product data
-   */
-  getProduct(divisionName: string, city: CityName | `${CityName}`, productName: string): Product;
+   * @returns product data */
+  getProduct(divisionName: string, cityName: CityName | `${CityName}`, productName: string): Product;
   /**
    * Get material data
    * @param divisionName - Name of the division
@@ -6997,22 +6995,18 @@ export interface WarehouseAPI {
    * @param on - market ta enabled
    */
   setMaterialMarketTA2(divisionName: string, city: CityName | `${CityName}`, materialName: string, on: boolean): void;
-  /**
-   * Set market TA 1 for a product.
+
+  /** * Set market TA 1 for a product.
    * @param divisionName - Name of the division
-   * @param city - Name of the city
    * @param productName - Name of the product
-   * @param on - market ta enabled
-   */
-  setProductMarketTA1(divisionName: string, city: CityName | `${CityName}`, productName: string, on: boolean): void;
-  /**
-   * Set market TA 2 for a product.
+   * @param on - market ta enabled */
+  setProductMarketTA1(divisionName: string, productName: string, on: boolean): void;
+
+  /** Set market TA 2 for a product.
    * @param divisionName - Name of the division
-   * @param city - Name of the city
    * @param productName - Name of the product
-   * @param on - market ta enabled
-   */
-  setProductMarketTA2(divisionName: string, city: CityName | `${CityName}`, productName: string, on: boolean): void;
+   * @param on - market ta enabled */
+  setProductMarketTA2(divisionName: string, productName: string, on: boolean): void;
   /**
    * Set material export data
    * @param sourceDivision - Source division
@@ -7452,7 +7446,7 @@ interface CorpMaterialConstantData {
 interface IndustryData {
   /** Industry type */
   type: CorpIndustryName;
-  /** Cost to expand to the division */
+  /** Cost to make a new division of this industry type */
   cost: number;
   /** Materials required for production and their amounts */
   requiredMaterials: Record<string, number>;
@@ -7474,28 +7468,35 @@ interface Product {
   /** Name of the product */
   name: string;
   /** Demand for the product, only present if "Market Research - Demand" unlocked */
-  dmd: number | undefined;
+  demand: number | undefined;
   /** Competition for the product, only present if "Market Research - Competition" unlocked */
-  cmp: number | undefined;
-  /** Product Rating */
-  rat: number;
-  /** Effective rating  */
-  effRat: number;
-  /** Product Properties. The data is \{qlt, per, dur, rel, aes, fea\} */
-  properties: { [key: string]: number };
+  competition: number | undefined;
+  /** Rating based on stats */
+  rating: number;
+  /** Effective rating in the specific city */
+  effectiveRating: number;
+  /** Product stats */
+  stats: {
+    quality: number;
+    performance: number;
+    durability: number;
+    reliability: number;
+    aesthetics: number;
+    features: number;
+  };
   /** Production cost */
-  pCost: number;
-  /** Sell cost, can be "MP+5" */
-  sCost: string | number;
-  /** Sell amount, can be "PROD/2" */
-  sAmt: string | number;
-  /** Amount of product  */
-  qty: number;
-  /** Amount of product produced  */
-  prod: number;
-  /** Amount of product sold */
-  sell: number;
-  /** Creation progress - A number between 0-100 representing percentage */
+  productionCost: number;
+  /** Desired sell price, can be "MP+5" */
+  desiredSellPrice: string | number;
+  /** Desired sell amount, e.g. "PROD/2" */
+  desiredSellAmount: string | number;
+  /** Amount of product stored in warehouse*/
+  stored: number;
+  /** Amount of product produced last cycle */
+  productionAmount: number;
+  /** Amount of product sold last cycle */
+  actualSellAmount: number;
+  /** A number between 0-100 representing percentage completion */
   developmentProgress: number;
 }
 
@@ -7507,25 +7508,25 @@ interface Material {
   /** Name of the material */
   name: CorpMaterialName;
   /** Amount of material  */
-  qty: number;
+  stored: number;
   /** Quality of the material */
-  qlt: number;
+  quality: number;
   /** Demand for the material, only present if "Market Research - Demand" unlocked */
-  dmd: number | undefined;
+  demand: number | undefined;
   /** Competition for the material, only present if "Market Research - Competition" unlocked */
-  cmp: number | undefined;
-  /** Amount of material produced  */
-  prod: number;
-  /** Amount of material sold */
-  sell: number;
+  competition: number | undefined;
+  /** Amount of material produced last cycle */
+  productionAmount: number;
+  /** Amount of material sold last cycle */
+  actualSellAmount: number;
   /** Cost to buy material */
-  cost: number;
+  marketPrice: number;
   /** Sell cost, can be "MP+5" */
-  sCost: string | number;
+  desiredSellPrice: string | number;
   /** Sell amount, can be "PROD/2" */
-  sAmt: string | number;
+  desiredSellAmount: string | number;
   /** Export orders */
-  exp: Export[];
+  exports: Export[];
 }
 
 /**
@@ -7534,11 +7535,11 @@ interface Material {
  */
 interface Export {
   /** Division the material is being exported to */
-  div: string;
+  division: string;
   /** City the material is being exported to */
-  loc: CityName;
+  city: CityName;
   /** Amount of material exported */
-  amt: string;
+  amount: string;
 }
 
 /**
@@ -7549,7 +7550,7 @@ interface Warehouse {
   /** Amount of size upgrade bought */
   level: number;
   /** City in which the warehouse is located */
-  loc: CityName;
+  city: CityName;
   /** Total space in the warehouse */
   size: number;
   /** Used space in the warehouse */
@@ -7564,23 +7565,23 @@ interface Warehouse {
  */
 export interface Office {
   /** City of the office */
-  loc: CityName;
+  city: CityName;
   /** Maximum number of employee */
   size: number;
   /** Maximum amount of energy of the employees */
-  maxEne: number;
+  maxEnergy: number;
   /** Maximum morale of the employees */
-  maxMor: number;
+  maxMorale: number;
   /** Amount of employees */
-  employees: number;
+  numEmployees: number;
   /** Average energy of the employees */
-  avgEne: number;
+  avgEnergy: number;
   /** Average morale of the employees */
-  avgMor: number;
+  avgMorale: number;
   /** Total experience of all employees */
   totalExperience: number;
   /** Production of the employees */
-  employeeProd: Record<CorpEmployeePosition, number>;
+  employeeProductionByJob: Record<CorpEmployeePosition, number>;
   /** Positions of the employees */
   employeeJobs: Record<CorpEmployeePosition, number>;
 }
@@ -7599,9 +7600,9 @@ interface Division {
   /** Popularity of the division */
   popularity: number;
   /** Production multiplier */
-  prodMult: number;
+  productionMult: number;
   /** Amount of research in that division */
-  research: number;
+  researchPoints: number;
   /** Revenue last cycle */
   lastCycleRevenue: number;
   /** Expenses last cycle */
@@ -7610,11 +7611,11 @@ interface Division {
   thisCycleRevenue: number;
   /** Expenses this cycle */
   thisCycleExpenses: number;
-  /** All research bought */
-  upgrades: number[];
+  /** Number of times AdVert has been bought */
+  numAdVerts: number;
   /** Cities in which this division has expanded */
   cities: CityName[];
-  /** Products developed by this division */
+  /** Names of Products developed by this division */
   products: string[];
   /** Whether the industry this division is in is capable of making products */
   makesProducts: boolean;
