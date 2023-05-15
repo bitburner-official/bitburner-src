@@ -22,6 +22,7 @@ import { useCorporation, useDivision } from "./Context";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Paper from "@mui/material/Paper";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import makeStyles from "@mui/styles/makeStyles";
@@ -132,16 +133,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
 
   let breakdown;
   if (breakdownItems.length > 0) {
-    breakdown = breakdownItems.reduce(
-      (previous: JSX.Element, current: string): JSX.Element => (
-        <>
-          {previous}
-          <br />
-          {current}
-        </>
-      ),
-      <></>,
-    );
+    breakdown = breakdownItems.map((item, i) => <p key={i}>{item}</p>);
   } else {
     breakdown = <>No items in storage.</>;
   }
@@ -149,27 +141,20 @@ function WarehouseRoot(props: IProps): React.ReactElement {
   return (
     <Paper>
       <Box display="flex" alignItems="center">
-        <Tooltip
-          title={
-            props.warehouse.sizeUsed !== 0 ? (
-              <Typography>
-                <>{breakdown}</>
-              </Typography>
-            ) : (
-              ""
-            )
-          }
-        >
+        <Tooltip title={breakdown}>
           <Typography color={props.warehouse.sizeUsed >= props.warehouse.size ? "error" : "primary"}>
             Storage: {formatBigNumber(props.warehouse.sizeUsed)} / {formatBigNumber(props.warehouse.size)}
           </Typography>
         </Tooltip>
       </Box>
 
-      <Button disabled={!canAffordUpgrade} onClick={upgradeWarehouseOnClick}>
+      <ButtonWithTooltip
+        disabledTooltip={canAffordUpgrade ? "" : "Insufficient corporation funds"}
+        onClick={upgradeWarehouseOnClick}
+      >
         Upgrade Warehouse Size -&nbsp;
         <MoneyCost money={sizeUpgradeCost} corp={corp} />
-      </Button>
+      </ButtonWithTooltip>
 
       <Typography>This industry uses the following equation for its production: </Typography>
       <br />
@@ -219,18 +204,18 @@ interface IEmptyProps {
 function EmptyWarehouse(props: IEmptyProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
-  const disabled = corp.funds < corpConstants.warehouseInitialCost;
+  const disabledText = corp.funds < corpConstants.warehouseInitialCost ? "Insufficient corporation funds" : "";
   function newWarehouse(): void {
-    if (disabled) return;
+    if (disabledText) return;
     purchaseWarehouse(corp, division, props.city);
     props.rerender();
   }
   return (
     <Paper>
-      <Button onClick={newWarehouse} disabled={disabled}>
+      <ButtonWithTooltip onClick={newWarehouse} disabledTooltip={disabledText}>
         Purchase Warehouse (
         <MoneyCost money={corpConstants.warehouseInitialCost} corp={corp} />)
-      </Button>
+      </ButtonWithTooltip>
     </Paper>
   );
 }

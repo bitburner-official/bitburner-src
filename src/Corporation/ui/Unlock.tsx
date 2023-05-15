@@ -12,12 +12,12 @@ import Grid from "@mui/material/Grid";
 import { CorpUnlockName } from "../data/Enums";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
-interface IProps {
+interface UnlockProps {
   name: CorpUnlockName;
   rerender: () => void;
 }
 
-export function UnlockUpgrade(props: IProps): React.ReactElement {
+export function Unlock(props: UnlockProps): React.ReactElement {
   const corp = useCorporation();
   const data = CorpUnlocks[props.name];
   const tooltip = data.desc;

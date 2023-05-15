@@ -8,45 +8,21 @@ import React from "react";
 import { PurchaseMultipliers } from "../data/Constants";
 import Button from "@mui/material/Button";
 import { PositiveInteger } from "../../types";
-import { getRecordKeys } from "../../Types/Record";
-
-interface IMultiplierProps {
-  disabled: boolean;
-  onClick: () => void;
-  text: string;
-}
-
-function MultiplierButton(props: IMultiplierProps): React.ReactElement {
-  return (
-    <Button disabled={props.disabled} onClick={props.onClick}>
-      {props.text}
-    </Button>
-  );
-}
+import { getRecordEntries } from "../../Types/Record";
 
 interface IProps {
-  purchaseMultiplier: PositiveInteger | "MAX";
-  onClicks: (() => void)[];
+  selectedMultiplier: PositiveInteger | "MAX";
+  setMultiplier: (mult: PositiveInteger | "MAX") => void;
 }
 
-export function MultiplierButtons(props: IProps): React.ReactElement {
-  if (props.purchaseMultiplier == null) {
-    throw new Error(`MultiplierButtons constructed without required props`);
-  }
-
-  const mults = getRecordKeys(PurchaseMultipliers);
-  const onClicks = props.onClicks;
-  const buttons = [];
-  for (let i = 0; i < mults.length; ++i) {
-    const mult = mults[i];
-    const btnProps = {
-      disabled: props.purchaseMultiplier === PurchaseMultipliers[mult],
-      onClick: onClicks[i],
-      text: mult,
-    };
-
-    buttons.push(<MultiplierButton key={mult} {...btnProps} />);
-  }
-
-  return <>{buttons}</>;
+export function MultiplierButtons({ selectedMultiplier, setMultiplier }: IProps): JSX.Element {
+  return (
+    <>
+      {getRecordEntries<string, PositiveInteger | "MAX">(PurchaseMultipliers).map(([text, mult]) => (
+        <Button key={text} onClick={() => setMultiplier(mult)} disabled={mult === selectedMultiplier}>
+          {text}
+        </Button>
+      ))}
+    </>
+  );
 }

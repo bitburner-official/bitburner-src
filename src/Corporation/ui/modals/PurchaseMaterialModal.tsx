@@ -138,29 +138,27 @@ export function PurchaseMaterialModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <>
-        <Typography>
-          Enter the amount of {props.mat.name} you would like to purchase per second. This material's cost changes
-          constantly.
-          {props.disablePurchaseLimit ? "Note: Purchase amount is disabled as smart supply is enabled" : ""}
-        </Typography>
-        <TextField
-          value={buyAmt}
-          onChange={onChange}
-          autoFocus={true}
-          placeholder="Purchase amount"
-          type="number"
-          disabled={props.disablePurchaseLimit}
-          onKeyDown={onKeyDown}
-        />
-        <Button disabled={props.disablePurchaseLimit} onClick={purchaseMaterial}>
-          Confirm
-        </Button>
-        <Button disabled={props.disablePurchaseLimit} onClick={clearPurchase}>
-          Clear Purchase
-        </Button>
-        {<BulkPurchaseSection onClose={props.onClose} mat={props.mat} warehouse={props.warehouse} />}
-      </>
+      <Typography>
+        Enter the amount of {props.mat.name} you would like to purchase per second. This material's cost changes
+        constantly.
+        {props.disablePurchaseLimit ? "Note: Purchase amount is disabled as smart supply is enabled" : ""}
+      </Typography>
+      <TextField
+        value={buyAmt}
+        onChange={onChange}
+        autoFocus={true}
+        placeholder="Purchase amount"
+        type="number"
+        disabled={props.disablePurchaseLimit}
+        onKeyDown={onKeyDown}
+      />
+      <Button disabled={props.disablePurchaseLimit} onClick={purchaseMaterial}>
+        Confirm
+      </Button>
+      <Button disabled={props.disablePurchaseLimit} onClick={clearPurchase}>
+        Clear Purchase
+      </Button>
+      {<BulkPurchaseSection onClose={props.onClose} mat={props.mat} warehouse={props.warehouse} />}
     </Modal>
   );
 }

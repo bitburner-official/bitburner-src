@@ -15,7 +15,7 @@ import { Money } from "../../ui/React/Money";
 import { useCorporation, useDivision } from "./Context";
 
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -263,6 +263,17 @@ export function IndustryOffice(props: IProps): React.ReactElement {
     props.rerender();
   }
 
+  const hireEmployeeDisabledText = props.office.atCapacity() ? "Insufficient office space" : "";
+  const teaDisabledText =
+    corp.funds < props.office.getTeaCost()
+      ? "Insufficient corporation funds"
+      : props.office.teaPending
+      ? "Tea is already pending for this cycle"
+      : "";
+  const partyPending = props.office.partyMult > 1;
+  const partyDisabledText =
+    corp.funds < 0 ? "Insufficient corporation funds" : partyPending ? "A party is already pending for this cycle" : "";
+
   return (
     <Paper>
       <Typography>Office Space</Typography>
@@ -271,20 +282,15 @@ export function IndustryOffice(props: IProps): React.ReactElement {
       </Typography>
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr", width: "fit-content" }}>
         <Box sx={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-          <Tooltip title={<Typography>Hires an employee</Typography>}>
-            <span>
-              <Button disabled={props.office.atCapacity()} onClick={autohireEmployeeButtonOnClick}>
-                Hire Employee
-              </Button>
-            </span>
-          </Tooltip>
-          <Tooltip title={<Typography>Upgrade the office's size so that it can hold more employees!</Typography>}>
-            <span>
-              <Button disabled={corp.funds < 0} onClick={() => setUpgradeOfficeSizeOpen(true)}>
-                Upgrade size
-              </Button>
-            </span>
-          </Tooltip>
+          <ButtonWithTooltip disabledTooltip={hireEmployeeDisabledText} onClick={autohireEmployeeButtonOnClick}>
+            Hire Employee
+          </ButtonWithTooltip>
+          <ButtonWithTooltip
+            normalTooltip={"Upgrade the office's size so that it can hold more employees!"}
+            onClick={() => setUpgradeOfficeSizeOpen(true)}
+          >
+            Upgrade size
+          </ButtonWithTooltip>
           <UpgradeOfficeSizeModal
             rerender={props.rerender}
             office={props.office}
@@ -293,44 +299,32 @@ export function IndustryOffice(props: IProps): React.ReactElement {
           />
 
           {!division.hasResearch("AutoBrew") && (
-            <>
-              <Tooltip
-                title={
-                  <Typography>
-                    Provide your employees with tea, increasing their energy by half the difference to 100%, plus 1.5%
-                  </Typography>
-                }
-              >
-                <span>
-                  <Button
-                    disabled={corp.funds < props.office.getTeaCost() || props.office.teaPending}
-                    onClick={() => BuyTea(corp, props.office)}
-                  >
-                    {props.office.teaPending ? (
-                      "Buying tea..."
-                    ) : (
-                      <span>
-                        Buy Tea - <MoneyCost money={props.office.getTeaCost()} corp={corp} />
-                      </span>
-                    )}
-                  </Button>
-                </span>
-              </Tooltip>
-            </>
+            <ButtonWithTooltip
+              normalTooltip={
+                "Provide your employees with tea, increasing their energy by half the difference to 100%, plus 1.5%"
+              }
+              disabledTooltip={teaDisabledText}
+              onClick={() => BuyTea(corp, props.office)}
+            >
+              {props.office.teaPending ? (
+                "Buying Tea"
+              ) : (
+                <>
+                  Buy Tea - <MoneyCost money={props.office.getTeaCost()} corp={corp} />
+                </>
+              )}
+            </ButtonWithTooltip>
           )}
 
           {!division.hasResearch("AutoPartyManager") && (
             <>
-              <Tooltip title={<Typography>Throw an office party to increase your employee's morale</Typography>}>
-                <span>
-                  <Button
-                    disabled={corp.funds < 0 || props.office.partyMult > 1}
-                    onClick={() => setThrowPartyOpen(true)}
-                  >
-                    {props.office.partyMult > 1 ? "Throwing Party..." : "Throw Party"}
-                  </Button>
-                </span>
-              </Tooltip>
+              <ButtonWithTooltip
+                normalTooltip={"Throw an office party to increase your employees' morale"}
+                disabledTooltip={partyDisabledText}
+                onClick={() => setThrowPartyOpen(true)}
+              >
+                {props.office.partyMult > 1 ? "Throwing Party..." : "Throw Party"}
+              </ButtonWithTooltip>
               <ThrowPartyModal
                 rerender={props.rerender}
                 office={props.office}

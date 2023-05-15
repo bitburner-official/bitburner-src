@@ -6,13 +6,12 @@ import { useCorporation } from "./Context";
 import { NewIndustry } from "../Actions";
 
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { KEY } from "../../utils/helpers/keyCodes";
-
 interface IProps {
   setDivisionName: (name: string) => void;
 }
@@ -26,10 +25,15 @@ export function ExpandIndustryTab(props: IProps): React.ReactElement {
   const data = IndustriesData[industry];
   if (!data) return <></>;
 
-  const disabled = corp.funds < data.startingCost && corp.divisions.size < corp.maxDivisions;
+  const disabledText =
+    corp.divisions.size >= corp.maxDivisions
+      ? "Corporation already has the maximum number of divisions"
+      : corp.funds < data.startingCost
+      ? "Insufficient corporation funds"
+      : "";
 
   function newIndustry(): void {
-    if (disabled) return;
+    if (disabledText) return;
     try {
       NewIndustry(corp, industry, name);
     } catch (err) {
@@ -60,7 +64,7 @@ export function ExpandIndustryTab(props: IProps): React.ReactElement {
   return (
     <>
       <Typography>
-        {corp.name} has {corp.divisions.size}/{corp.maxDivisions} divisions.
+        {corp.name} has {corp.divisions.size} of {corp.maxDivisions} divisions.
       </Typography>
       <Typography>Create a new division to expand into a new industry:</Typography>
       <Select value={industry} onChange={onIndustryChange}>
@@ -77,20 +81,10 @@ export function ExpandIndustryTab(props: IProps): React.ReactElement {
       <Typography>Division name:</Typography>
 
       <Box display="flex" alignItems="center">
-        <TextField
-          autoFocus={true}
-          value={name}
-          onChange={onNameChange}
-          onKeyDown={onKeyDown}
-          type="text"
-          InputProps={{
-            endAdornment: (
-              <Button disabled={disabled} sx={{ mx: 1 }} onClick={newIndustry}>
-                Expand
-              </Button>
-            ),
-          }}
-        />
+        <TextField autoFocus={true} value={name} onChange={onNameChange} onKeyDown={onKeyDown} type="text"></TextField>{" "}
+        <ButtonWithTooltip disabledTooltip={disabledText} onClick={newIndustry}>
+          Expand
+        </ButtonWithTooltip>
       </Box>
     </>
   );

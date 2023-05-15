@@ -55,37 +55,30 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>
-        Would you like to sell a division?
-        <br></br>
-        You'll get back half the money you've spent on starting the division and expanding to offices and warehouses.
-      </Typography>
-
-      <Select value={divisionToSell.name} onChange={onDivisionChange}>
-        {allDivisions.map((div) => (
-          <MenuItem key={div.name} value={div.name}>
-            {div.name}
-          </MenuItem>
-        ))}
-      </Select>
-      <Typography>
-        Division {divisionToSell.name} has:
-        <br></br>- Profit: {formatMoney((divisionToSell.lastCycleRevenue - divisionToSell.lastCycleExpenses) / 10)} /
-        sec
-        <br></br>- Cities:{getRecordKeys(divisionToSell.offices).length}
-        <br></br>- Warehouses:{getRecordKeys(divisionToSell.warehouses).length}
-        {divisionToSell.makesProducts ?? (
-          <Typography>
-            <br />- Products: {divisionToSell.products.size}
-          </Typography>
-        )}
-        <br></br>
-        <br></br>
-        Sell price: {formatMoney(price)}
-      </Typography>
-      <Button disabled={false} onClick={sellDivision}>
-        Sell division
-      </Button>
+      <>
+        <Typography>
+          Would you like to sell a division?
+          <br></br>
+          You'll get back half the money you've spent on starting the division and expanding to offices and warehouses.
+        </Typography>
+        <Select value={divisionToSell.name} onChange={onDivisionChange}>
+          {allDivisions.map((div) => (
+            <MenuItem key={div.name} value={div.name}>
+              {div.name}
+            </MenuItem>
+          ))}
+        </Select>
+        <Typography>Division {divisionToSell.name} has:</Typography>
+        <Typography>
+          Profit: {formatMoney((divisionToSell.lastCycleRevenue - divisionToSell.lastCycleExpenses) / 10)} / sec{" "}
+        </Typography>
+        <Typography>Cities:{getRecordKeys(divisionToSell.offices).length}</Typography>
+        <Typography>Warehouses:{getRecordKeys(divisionToSell.warehouses).length}</Typography>
+        {divisionToSell.makesProducts ?? <Typography>Products: {divisionToSell.products.size}</Typography>}
+        <br />
+        <Typography>Sell price: {formatMoney(price)}</Typography>
+        <Button onClick={sellDivision}>Sell division</Button>
+      </>
     </Modal>
   );
 }

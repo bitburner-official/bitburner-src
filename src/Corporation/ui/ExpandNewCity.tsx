@@ -7,7 +7,7 @@ import { useCorporation, useDivision } from "./Context";
 import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Button from "@mui/material/Button";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { CityName } from "../../Enums";
 
 interface IProps {
@@ -20,7 +20,7 @@ export function ExpandNewCity(props: IProps): React.ReactElement {
   const possibleCities = Object.values(CityName).filter((cityName) => !(cityName in division.offices));
   const [city, setCity] = useState(possibleCities[0]);
 
-  const disabled = corp.funds < corpConstants.officeInitialCost;
+  const disabledText = corp.funds < corpConstants.officeInitialCost ? "Insufficient corporation funds" : "";
 
   function onCityChange(event: SelectChangeEvent): void {
     setCity(event.target.value as CityName);
@@ -44,21 +44,16 @@ export function ExpandNewCity(props: IProps): React.ReactElement {
         Would you like to expand into a new city by opening an office? This would cost{" "}
         <MoneyCost money={corpConstants.officeInitialCost} corp={corp} />
       </Typography>
-      <Select
-        endAdornment={
-          <Button onClick={expand} disabled={disabled}>
-            Confirm
-          </Button>
-        }
-        value={city}
-        onChange={onCityChange}
-      >
+      <Select value={city} onChange={onCityChange}>
         {possibleCities.map((cityName: string) => (
           <MenuItem key={cityName} value={cityName}>
             {cityName}
           </MenuItem>
         ))}
       </Select>
+      <ButtonWithTooltip onClick={expand} disabledTooltip={disabledText}>
+        Confirm
+      </ButtonWithTooltip>
     </>
   );
 }
