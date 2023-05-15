@@ -227,13 +227,14 @@ export const CONSTANTS: {
 
   Donations: 79,
 
+  // Also update doc/src/changelog.rst
   LatestUpdate: `
 v2.3 Dev - SF3 rework and performance improvements (28 Apr 2023)
 ----------------------------------------------------------------
 
 BREAKING CHANGES: These changes may require changes to your scripts.
 
-* Major changes to the SF3 mechanic. See the related section below for the full (spoiler) changes.
+* Major changes to the SF3 mechanic. See the related section below for more detailed info on the changes.
 * The same script filename can now be ran multiple times with the same args. If running a script from another script (ns.run/ns.exec/etc), this limitation can be re-imposed with the preventDuplicates RunOption (see general section for info on RunOptions).
 * The same .js script will now be the same js module whether the script was ran directly or used as an import. This means top-level variables (variables defined outside of any function) are shared across all instances of the script.
 * The js module for a script will also be reused by any script that has the exact same compiled text, even if that script is on another server or has a different filename. This can lead to unexpected results when using top-level variables.
@@ -246,6 +247,7 @@ PERFORMANCE:
 * Minimize impact of unavoidable memory leak when modules are created, by reusing modules as much as possible (@d0sboots)
 * Internal data structure changes (@d0sboots, @Snarling)
 * Fix memory leak when initializing large number of netscript ports (@Snarling)
+* Improve performance while on the Active Scripts page if many scripts are launching/starting. (@d0sboots)
 
 NETSCRIPT GENERAL:
 
@@ -262,6 +264,7 @@ NETSCRIPT GENERAL:
 
 GENERAL / MISC:
 
+* There is now an autoexec setting to specify a script on home to automatically run when loading the game. (@d0sboots)
 * Monaco script editor updated to a newer version and has more config options available now. (@Snarling)
 * Improve Electron's handling of external links (@Snarling) 
 * Improved support for ANSI color codes (@d0sboots)
@@ -288,6 +291,9 @@ SF2:
 
 SF3:
 
+* Many Corporation API changes, due to functionality changes and due to property name changes. See documentation for correct usage.
+* Can now have multiple divisions within the same industry. (@Mughur)
+* Can now sell a division or sell the entire corporation. (@Mughur)
 * Product quality now depends on material quality (@Mughur)
 * Product price can be set separately per-city (@Mughur)
 * Exports can be set relative to inventory or production (@Mughur)
@@ -301,7 +307,8 @@ SF3:
 * More options for SmartSupply (@Mughur)
 * Advertising nerf (@Mughur)
 * Nerfed investors and reduced effectiveness of "fraud" (@Mughur)
-* Various other changes (@Mughur)
+* Fixed React errors, renamed most corp object properties (@Snarling)
+* Various other changes (@Mughur, @Snarling)
 
 SF4:
 
