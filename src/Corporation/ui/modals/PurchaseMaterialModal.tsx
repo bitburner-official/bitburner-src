@@ -31,7 +31,7 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
 
   function BulkPurchaseText(props: IBulkPurchaseTextProps): React.ReactElement {
     const parsedAmt = parseFloat(props.amount);
-    const cost = parsedAmt * props.mat.bCost;
+    const cost = parsedAmt * props.mat.marketPrice;
 
     const matSize = MaterialInfo[props.mat.name].size;
     const maxAmount = (props.warehouse.size - props.warehouse.sizeUsed) / matSize;
@@ -110,7 +110,7 @@ interface IProps {
 
 // Create a popup that lets the player purchase a Material
 export function PurchaseMaterialModal(props: IProps): React.ReactElement {
-  const [buyAmt, setBuyAmt] = useState(props.mat.buy ? props.mat.buy : 0);
+  const [buyAmt, setBuyAmt] = useState(props.mat.buyAmount ? props.mat.buyAmount : 0);
 
   function purchaseMaterial(): void {
     if (buyAmt === null) return;
@@ -124,7 +124,7 @@ export function PurchaseMaterialModal(props: IProps): React.ReactElement {
   }
 
   function clearPurchase(): void {
-    props.mat.buy = 0;
+    props.mat.buyAmount = 0;
     props.onClose();
   }
 
@@ -138,29 +138,27 @@ export function PurchaseMaterialModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <>
-        <Typography>
-          Enter the amount of {props.mat.name} you would like to purchase per second. This material's cost changes
-          constantly.
-          {props.disablePurchaseLimit ? "Note: Purchase amount is disabled as smart supply is enabled" : ""}
-        </Typography>
-        <TextField
-          value={buyAmt}
-          onChange={onChange}
-          autoFocus={true}
-          placeholder="Purchase amount"
-          type="number"
-          disabled={props.disablePurchaseLimit}
-          onKeyDown={onKeyDown}
-        />
-        <Button disabled={props.disablePurchaseLimit} onClick={purchaseMaterial}>
-          Confirm
-        </Button>
-        <Button disabled={props.disablePurchaseLimit} onClick={clearPurchase}>
-          Clear Purchase
-        </Button>
-        {<BulkPurchaseSection onClose={props.onClose} mat={props.mat} warehouse={props.warehouse} />}
-      </>
+      <Typography>
+        Enter the amount of {props.mat.name} you would like to purchase per second. This material's cost changes
+        constantly.
+        {props.disablePurchaseLimit ? "Note: Purchase amount is disabled as smart supply is enabled" : ""}
+      </Typography>
+      <TextField
+        value={buyAmt}
+        onChange={onChange}
+        autoFocus={true}
+        placeholder="Purchase amount"
+        type="number"
+        disabled={props.disablePurchaseLimit}
+        onKeyDown={onKeyDown}
+      />
+      <Button disabled={props.disablePurchaseLimit} onClick={purchaseMaterial}>
+        Confirm
+      </Button>
+      <Button disabled={props.disablePurchaseLimit} onClick={clearPurchase}>
+        Clear Purchase
+      </Button>
+      {<BulkPurchaseSection onClose={props.onClose} mat={props.mat} warehouse={props.warehouse} />}
     </Modal>
   );
 }

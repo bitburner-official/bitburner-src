@@ -1,12 +1,12 @@
 import React from "react";
-import { ResearchTree } from "./ResearchTree";
 import { Corporation } from "./Corporation";
 import { getBaseResearchTreeCopy, getProductIndustryResearchTreeCopy } from "./data/BaseResearchTree";
 import { MoneyCost } from "./ui/MoneyCost";
-import { CorpIndustryData, CorpIndustryName } from "@nsdefs";
+import { CorpIndustryData } from "@nsdefs";
 import { IndustryType } from "./data/Enums";
+import { createFullRecordFromEntries } from "../Types/Record";
 
-export const IndustriesData: Record<CorpIndustryName, CorpIndustryData> = {
+export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   [IndustryType.Agriculture]: {
     startingCost: 40e9,
     description: "Cultivate crops and breed livestock to produce food.",
@@ -315,9 +315,14 @@ export const IndustryDescriptions = (industry: IndustryType, corp: Corporation) 
   );
 };
 
-export const IndustryResearchTrees = {} as Record<IndustryType, ResearchTree>;
-resetIndustryResearchTrees();
-
+export const IndustryResearchTrees = createFullRecordFromEntries(
+  Object.values(IndustryType).map((industryType) => {
+    return [
+      industryType,
+      IndustriesData[industryType].product ? getProductIndustryResearchTreeCopy() : getBaseResearchTreeCopy(),
+    ];
+  }),
+);
 export function resetIndustryResearchTrees() {
   Object.values(IndustryType).forEach(
     (ind) =>

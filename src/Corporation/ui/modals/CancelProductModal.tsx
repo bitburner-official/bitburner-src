@@ -17,7 +17,7 @@ interface IProps {
 export function CancelProductModal(props: IProps): React.ReactElement {
   const division = useDivision();
   function cancel(): void {
-    division.discontinueProduct(props.product);
+    division.discontinueProduct(props.product.name);
     props.onClose();
     props.rerender();
   }

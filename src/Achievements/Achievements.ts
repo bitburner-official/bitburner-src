@@ -2,7 +2,7 @@ import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { SkillNames } from "../Bladeburner/data/SkillNames";
 import { Skills } from "../Bladeburner/Skills";
 import { CONSTANTS } from "../Constants";
-import { IndustryType } from "../Corporation/data/Enums";
+import { CorpUnlockName, IndustryType } from "../Corporation/data/Enums";
 import { Exploit } from "../Exploits/Exploit";
 import { Factions } from "../Faction/Factions";
 import { AllGangs } from "../Gang/AllGangs";
@@ -27,6 +27,7 @@ import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { workerScripts } from "../Netscript/WorkerScripts";
 
 import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
+import { getRecordValues } from "../Types/Record";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
 const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;
@@ -441,23 +442,28 @@ export const achievements: Record<string, Achievement> = {
     ...achievementData.CORPORATION_BRIBE,
     Icon: "CORPLOBBY",
     Visible: () => hasAccessToSF(Player, 3),
-    Condition: () => Player.corporation !== null && Player.corporation.unlockUpgrades[6] === 1,
+    Condition: () => !!Player.corporation && Player.corporation.unlocks.has(CorpUnlockName.GovernmentPartnership),
   },
   CORPORATION_PROD_1000: {
     ...achievementData.CORPORATION_PROD_1000,
     Icon: "CORP1000",
     Visible: () => hasAccessToSF(Player, 3),
-    Condition: () => Player.corporation !== null && Player.corporation.divisions.some((d) => d.prodMult >= 1000),
+    Condition: () => {
+      if (!Player.corporation) return false;
+      for (const division of Player.corporation.divisions.values()) {
+        if (division.productionMult >= 1000) return true;
+      }
+      return false;
+    },
   },
   CORPORATION_EMPLOYEE_3000: {
     ...achievementData.CORPORATION_EMPLOYEE_3000,
     Icon: "CORPCITY",
     Visible: () => hasAccessToSF(Player, 3),
     Condition: (): boolean => {
-      if (Player.corporation === null) return false;
-      for (const d of Player.corporation.divisions) {
-        let totalEmployees = 0;
-        for (const o of Object.values(d.offices)) if (o && o.totalEmployees) totalEmployees += o.totalEmployees;
+      if (!Player.corporation) return false;
+      for (const division of Player.corporation.divisions.values()) {
+        const totalEmployees = getRecordValues(division.offices).reduce((a, b) => a + b.numEmployees, 0);
         if (totalEmployees >= 3000) return true;
       }
       return false;
@@ -469,8 +475,13 @@ export const achievements: Record<string, Achievement> = {
     Name: "Own the land",
     Description: "Expand to the Real Estate division.",
     Visible: () => hasAccessToSF(Player, 3),
-    Condition: () =>
-      Player.corporation !== null && Player.corporation.divisions.some((d) => d.type === IndustryType.RealEstate),
+    Condition: () => {
+      if (!Player.corporation) return false;
+      for (const division of Player.corporation.divisions.values()) {
+        if (division.type === IndustryType.RealEstate) return true;
+      }
+      return false;
+    },
   },
   INTELLIGENCE_255: {
     ...achievementData.INTELLIGENCE_255,

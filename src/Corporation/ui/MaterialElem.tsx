@@ -22,6 +22,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { LimitMaterialProductionModal } from "./modals/LimitMaterialProductionModal";
 import { CityName } from "../../Enums";
+import { CorpUnlockName } from "../data/Enums";
 
 interface IMaterialProps {
   warehouse: Warehouse;
@@ -50,29 +51,33 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   }
 
   // Total gain or loss of this material (per second)
-  const totalGain = mat.buy + mat.prd + mat.imp - mat.sll - mat.totalExp;
+  const totalGain =
+    mat.buyAmount + mat.productionAmount + mat.importAmount - mat.actualSellAmount - mat.exportedLastCycle;
 
   // Flag that determines whether this industry is "new" and the current material should be
   // marked with flashing-red lights
   const tutorial =
-    division.newInd && Object.keys(division.reqMats).includes(mat.name) && mat.buy === 0 && mat.imp === 0;
+    division.newInd &&
+    Object.keys(division.requiredMaterials).includes(mat.name) &&
+    mat.buyAmount === 0 &&
+    mat.importAmount === 0;
 
   // Purchase material button
-  const purchaseButtonText = `Buy (${formatBigNumber(mat.buy)})`;
+  const purchaseButtonText = `Buy (${formatBigNumber(mat.buyAmount)})`;
 
   // Sell material button
   let sellButtonText: JSX.Element;
-  if (mat.sllman[0]) {
-    if (isString(mat.sllman[1])) {
+  if (mat.desiredSellAmount) {
+    if (isString(mat.desiredSellAmount)) {
       sellButtonText = (
         <>
-          Sell ({formatBigNumber(mat.sll)}/{mat.sllman[1]})
+          Sell ({formatBigNumber(mat.actualSellAmount)}/{mat.desiredSellAmount[1]})
         </>
       );
     } else {
       sellButtonText = (
         <>
-          Sell ({formatBigNumber(mat.sll)}/{formatBigNumber(mat.sllman[1])})
+          Sell ({formatBigNumber(mat.actualSellAmount)}/{formatBigNumber(mat.desiredSellAmount)})
         </>
       );
     }
@@ -86,12 +91,12 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
     } else if (mat.marketTa1) {
       sellButtonText = (
         <>
-          {sellButtonText} @ <Money money={mat.bCost + markupLimit} />
+          {sellButtonText} @ <Money money={mat.marketPrice + markupLimit} />
         </>
       );
-    } else if (mat.sCost) {
-      if (isString(mat.sCost)) {
-        const sCost = mat.sCost.replace(/MP/g, mat.bCost + "");
+    } else if (mat.desiredSellPrice) {
+      if (isString(mat.desiredSellPrice)) {
+        const sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice + "");
         sellButtonText = (
           <>
             {sellButtonText} @ <Money money={eval(sCost)} />
@@ -100,7 +105,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
       } else {
         sellButtonText = (
           <>
-            {sellButtonText} @ <Money money={mat.sCost} />
+            {sellButtonText} @ <Money money={mat.desiredSellPrice} />
           </>
         );
       }
@@ -111,8 +116,8 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
 
   // Limit Production button
   let limitMaterialButtonText = "Limit Material";
-  if (mat.prdman[0]) {
-    limitMaterialButtonText += " (" + formatCorpStat(mat.prdman[1]) + ")";
+  if (mat.productionLimit !== null) {
+    limitMaterialButtonText += " (" + formatCorpStat(mat.productionLimit) + ")";
   }
 
   return (
@@ -122,20 +127,28 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
           <Tooltip
             title={
               <Typography>
-                Buy: {mat.buy >= 1e33 ? mat.buy.toExponential(3) : formatBigNumber(mat.buy)} <br />
-                Prod: {formatBigNumber(mat.prd)} <br />
-                Sell: {formatBigNumber(mat.sll)} <br />
-                Export: {formatBigNumber(mat.totalExp)} <br />
-                Import: {formatBigNumber(mat.imp)}
-                {corp.unlockUpgrades[2] === 1 && <br />}
-                {corp.unlockUpgrades[2] === 1 && "Demand: " + formatCorpStat(mat.dmd)}
-                {corp.unlockUpgrades[3] === 1 && <br />}
-                {corp.unlockUpgrades[3] === 1 && "Competition: " + formatCorpStat(mat.cmp)}
+                Buy: {mat.buyAmount >= 1e33 ? mat.buyAmount.toExponential(3) : formatBigNumber(mat.buyAmount)} <br />
+                Prod: {formatBigNumber(mat.productionAmount)} <br />
+                Sell: {formatBigNumber(mat.actualSellAmount)} <br />
+                Export: {formatBigNumber(mat.exportedLastCycle)} <br />
+                Import: {formatBigNumber(mat.importAmount)}
+                {corp.unlocks.has(CorpUnlockName.MarketResearchDemand) && (
+                  <>
+                    <br />
+                    Demand: {formatCorpStat(mat.demand)}
+                  </>
+                )}
+                {corp.unlocks.has(CorpUnlockName.MarketDataCompetition) && (
+                  <>
+                    <br />
+                    Competition: {formatCorpStat(mat.competition)}
+                  </>
+                )}
               </Typography>
             }
           >
             <Typography>
-              {mat.name}: {formatBigNumber(mat.qty)} (
+              {mat.name}: {formatBigNumber(mat.stored)} (
               {totalGain >= 1e33 ? totalGain.toExponential(3) : formatBigNumber(totalGain)}/s)
             </Typography>
           </Tooltip>
@@ -146,12 +159,12 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
               </Typography>
             }
           >
-            <Typography>MP: {formatMoney(mat.bCost)}</Typography>
+            <Typography>MP: {formatMoney(mat.marketPrice)}</Typography>
           </Tooltip>
           <Tooltip
             title={<Typography>The quality of your material. Higher quality will lead to more sales</Typography>}
           >
-            <Typography>Quality: {formatQuality(mat.qlt)}</Typography>
+            <Typography>Quality: {formatQuality(mat.quality)}</Typography>
           </Tooltip>
         </Box>
 
@@ -167,13 +180,11 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
             mat={mat}
             warehouse={warehouse}
             open={purchaseMaterialOpen}
-            disablePurchaseLimit={
-              props.warehouse.smartSupplyEnabled && Object.keys(division.reqMats).includes(props.mat.name)
-            }
+            disablePurchaseLimit={props.warehouse.smartSupplyEnabled && props.mat.name in division.requiredMaterials}
             onClose={() => setPurchaseMaterialOpen(false)}
           />
 
-          {corp.unlockUpgrades[0] === 1 && (
+          {corp.unlocks.has(CorpUnlockName.Export) && (
             <>
               <Button onClick={() => setExportOpen(true)}>Export</Button>
 
@@ -182,7 +193,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
           )}
 
           <Button
-            color={division.prodMats.includes(props.mat.name) && !mat.sllman[0] ? "error" : "primary"}
+            color={division.producedMaterials.includes(props.mat.name) && !mat.desiredSellAmount ? "error" : "primary"}
             onClick={() => setSellMaterialOpen(true)}
           >
             {sellButtonText}

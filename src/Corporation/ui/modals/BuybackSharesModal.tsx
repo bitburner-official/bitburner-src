@@ -4,11 +4,12 @@ import { formatBigNumber, formatMoney } from "../../../ui/formatNumber";
 import { Player } from "@player";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { BuyBackShares } from "../../Actions";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { KEY } from "../../../utils/helpers/keyCodes";
+import { isPositiveInteger } from "../../../types";
 
 interface IProps {
   open: boolean;
@@ -24,15 +25,16 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
 
   const currentStockPrice = corp.sharePrice;
   const buybackPrice = currentStockPrice * 1.1;
-  const disabled =
-    shares === null ||
-    isNaN(shares) ||
-    shares <= 0 ||
-    shares > corp.issuedShares ||
-    shares * buybackPrice > Player.money;
+  const disabledText = !isPositiveInteger(shares)
+    ? "Number of shares must be a positive integer"
+    : shares > corp.issuedShares
+    ? "There are not enough shares available to buyback this many"
+    : shares * buybackPrice > Player.money
+    ? "Insufficient player funds"
+    : "";
 
   function buy(): void {
-    if (disabled) return;
+    if (disabledText) return;
     try {
       BuyBackShares(corp, shares);
     } catch (err) {
@@ -82,9 +84,9 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
       <CostIndicator />
       <br />
       <NumberInput autoFocus={true} placeholder="Shares to buyback" onChange={setShares} onKeyDown={onKeyDown} />
-      <Button disabled={disabled} onClick={buy}>
+      <ButtonWithTooltip disabledTooltip={disabledText} onClick={buy}>
         Buy shares
-      </Button>
+      </ButtonWithTooltip>
     </Modal>
   );
 }

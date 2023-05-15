@@ -8,6 +8,7 @@ import { useDivision } from "./Context";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { CityName } from "../../Enums";
+import { getRecordKeys } from "../../Types/Record";
 
 interface IProps {
   city: CityName | "Expand";
@@ -23,7 +24,7 @@ export function CityTabs(props: IProps): React.ReactElement {
     mainContent = <ExpandNewCity cityStateSetter={setCity} />;
   } else {
     const office = division.offices[city];
-    if (office === 0) {
+    if (!office) {
       setCity(CityName.Sector12);
       return <></>;
     }
@@ -31,7 +32,7 @@ export function CityTabs(props: IProps): React.ReactElement {
       <Industry rerender={props.rerender} city={city} warehouse={division.warehouses[city]} office={office} />
     );
   }
-  const canExpand = Object.values(CityName).filter((cityName) => division.offices[cityName] === 0).length > 0;
+  const canExpand = Object.values(CityName).length > getRecordKeys(division.offices).length;
   function handleChange(event: React.SyntheticEvent, tab: CityName | "Expand"): void {
     setCity(tab);
   }
@@ -40,7 +41,8 @@ export function CityTabs(props: IProps): React.ReactElement {
     <>
       <Tabs variant="fullWidth" value={city} onChange={handleChange} sx={{ maxWidth: "65vw" }}>
         {Object.values(division.offices).map(
-          (office: OfficeSpace | 0) => office !== 0 && <Tab key={office.loc} label={office.loc} value={office.loc} />,
+          (office: OfficeSpace | 0) =>
+            office !== 0 && <Tab key={office.city} label={office.city} value={office.city} />,
         )}
         {canExpand && <Tab label={"Expand"} value={"Expand"} />}
       </Tabs>

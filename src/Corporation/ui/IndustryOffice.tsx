@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 import { OfficeSpace } from "../OfficeSpace";
-import { EmployeePositions } from "../data/Enums";
+import { CorpUnlockName, CorpEmployeeJob } from "../data/Enums";
 import { BuyTea } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
@@ -15,7 +15,7 @@ import { Money } from "../../ui/React/Money";
 import { useCorporation, useDivision } from "./Context";
 
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -35,7 +35,7 @@ interface IProps {
 
 interface IAutoAssignProps {
   office: OfficeSpace;
-  job: EmployeePositions;
+  job: CorpEmployeeJob;
   desc: string;
   rerender: () => void;
 }
@@ -53,7 +53,7 @@ function EmployeeCount(props: { num: number; next: number }): React.ReactElement
 function AutoAssignJob(props: IAutoAssignProps): React.ReactElement {
   const currJob = props.office.employeeJobs[props.job];
   const nextJob = props.office.employeeNextJobs[props.job];
-  const nextUna = props.office.employeeNextJobs[EmployeePositions.Unassigned];
+  const nextUna = props.office.employeeNextJobs[CorpEmployeeJob.Unassigned];
 
   function assignEmployee(): void {
     if (nextUna <= 0) return console.warn("Cannot assign employee. No unassigned employees available");
@@ -94,10 +94,9 @@ function AutoAssignJob(props: IAutoAssignProps): React.ReactElement {
 function AutoManagement(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
-  const vechain = corp.unlockUpgrades[4] === 1; // Has Vechain upgrade
 
-  const currUna = props.office.employeeJobs[EmployeePositions.Unassigned];
-  const nextUna = props.office.employeeNextJobs[EmployeePositions.Unassigned];
+  const currUna = props.office.employeeJobs[CorpEmployeeJob.Unassigned];
+  const nextUna = props.office.employeeNextJobs[CorpEmployeeJob.Unassigned];
 
   return (
     <Table padding="none">
@@ -115,7 +114,7 @@ function AutoManagement(props: IProps): React.ReactElement {
             <Typography>Avg Employee Morale:</Typography>
           </TableCell>
           <TableCell align="right">
-            <Typography>{formatCorpStat(props.office.avgMor)}</Typography>
+            <Typography>{formatCorpStat(props.office.avgMorale)}</Typography>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -123,7 +122,7 @@ function AutoManagement(props: IProps): React.ReactElement {
             <Typography>Avg Employee Energy:</Typography>
           </TableCell>
           <TableCell align="right">
-            <Typography>{formatCorpStat(props.office.avgEne)}</Typography>
+            <Typography>{formatCorpStat(props.office.avgEnergy)}</Typography>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -131,7 +130,7 @@ function AutoManagement(props: IProps): React.ReactElement {
             <Typography>Avg Employee Experience:</Typography>
           </TableCell>
           <TableCell align="right">
-            <Typography>{formatCorpStat(props.office.totalExp / props.office.totalEmployees || 0)}</Typography>
+            <Typography>{formatCorpStat(props.office.totalExperience / props.office.numEmployees || 0)}</Typography>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -144,7 +143,7 @@ function AutoManagement(props: IProps): React.ReactElement {
             </Typography>
           </TableCell>
         </TableRow>
-        {vechain && (
+        {corp.unlocks.has(CorpUnlockName.VeChain) && (
           <>
             <TableRow>
               <TableCell>
@@ -201,14 +200,14 @@ function AutoManagement(props: IProps): React.ReactElement {
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.Operations}
+          job={CorpEmployeeJob.Operations}
           desc={"Manages supply chain operations. Improves the amount of Materials and Products you produce."}
         />
 
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.Engineer}
+          job={CorpEmployeeJob.Engineer}
           desc={
             "Develops and maintains products and production systems. Increases the quality of everything you produce. Also increases the amount you produce (not as much as Operations, however)."
           }
@@ -217,14 +216,14 @@ function AutoManagement(props: IProps): React.ReactElement {
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.Business}
+          job={CorpEmployeeJob.Business}
           desc={"Handles sales and finances. Improves the amount of Materials and Products you can sell."}
         />
 
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.Management}
+          job={CorpEmployeeJob.Management}
           desc={
             "Leads and oversees employees and office operations. Improves the effectiveness of Engineer and Operations employees."
           }
@@ -233,7 +232,7 @@ function AutoManagement(props: IProps): React.ReactElement {
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.RandD}
+          job={CorpEmployeeJob.RandD}
           desc={
             "Research new innovative ways to improve the company. Generates Scientific Research. Also increases the quality of everything you produce (not as much as Engineer, however)."
           }
@@ -242,7 +241,7 @@ function AutoManagement(props: IProps): React.ReactElement {
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
-          job={EmployeePositions.Intern}
+          job={CorpEmployeeJob.Intern}
           desc={
             "Set employee to intern, which will increase some of their stats. Employees in intern do not affect any company operations, but gain increased exp and improve morale and energy."
           }
@@ -260,32 +259,38 @@ export function IndustryOffice(props: IProps): React.ReactElement {
 
   function autohireEmployeeButtonOnClick(): void {
     if (props.office.atCapacity()) return;
-    props.office.hireRandomEmployee(EmployeePositions.Unassigned);
+    props.office.hireRandomEmployee(CorpEmployeeJob.Unassigned);
     props.rerender();
   }
+
+  const hireEmployeeDisabledText = props.office.atCapacity() ? "Insufficient office space" : "";
+  const teaDisabledText =
+    corp.funds < props.office.getTeaCost()
+      ? "Insufficient corporation funds"
+      : props.office.teaPending
+      ? "Tea is already pending for this cycle"
+      : "";
+  const partyPending = props.office.partyMult > 1;
+  const partyDisabledText =
+    corp.funds < 0 ? "Insufficient corporation funds" : partyPending ? "A party is already pending for this cycle" : "";
 
   return (
     <Paper>
       <Typography>Office Space</Typography>
       <Typography>
-        Size: {props.office.totalEmployees} / {props.office.size} employees
+        Size: {props.office.numEmployees} / {props.office.size} employees
       </Typography>
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr", width: "fit-content" }}>
         <Box sx={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-          <Tooltip title={<Typography>Hires an employee</Typography>}>
-            <span>
-              <Button disabled={props.office.atCapacity()} onClick={autohireEmployeeButtonOnClick}>
-                Hire Employee
-              </Button>
-            </span>
-          </Tooltip>
-          <Tooltip title={<Typography>Upgrade the office's size so that it can hold more employees!</Typography>}>
-            <span>
-              <Button disabled={corp.funds < 0} onClick={() => setUpgradeOfficeSizeOpen(true)}>
-                Upgrade size
-              </Button>
-            </span>
-          </Tooltip>
+          <ButtonWithTooltip disabledTooltip={hireEmployeeDisabledText} onClick={autohireEmployeeButtonOnClick}>
+            Hire Employee
+          </ButtonWithTooltip>
+          <ButtonWithTooltip
+            normalTooltip={"Upgrade the office's size so that it can hold more employees!"}
+            onClick={() => setUpgradeOfficeSizeOpen(true)}
+          >
+            Upgrade size
+          </ButtonWithTooltip>
           <UpgradeOfficeSizeModal
             rerender={props.rerender}
             office={props.office}
@@ -294,44 +299,32 @@ export function IndustryOffice(props: IProps): React.ReactElement {
           />
 
           {!division.hasResearch("AutoBrew") && (
-            <>
-              <Tooltip
-                title={
-                  <Typography>
-                    Provide your employees with tea, increasing their energy by half the difference to 100%, plus 1.5%
-                  </Typography>
-                }
-              >
-                <span>
-                  <Button
-                    disabled={corp.funds < props.office.getTeaCost() || props.office.teaPending}
-                    onClick={() => BuyTea(corp, props.office)}
-                  >
-                    {props.office.teaPending ? (
-                      "Buying tea..."
-                    ) : (
-                      <span>
-                        Buy Tea - <MoneyCost money={props.office.getTeaCost()} corp={corp} />
-                      </span>
-                    )}
-                  </Button>
-                </span>
-              </Tooltip>
-            </>
+            <ButtonWithTooltip
+              normalTooltip={
+                "Provide your employees with tea, increasing their energy by half the difference to 100%, plus 1.5%"
+              }
+              disabledTooltip={teaDisabledText}
+              onClick={() => BuyTea(corp, props.office)}
+            >
+              {props.office.teaPending ? (
+                "Buying Tea"
+              ) : (
+                <>
+                  Buy Tea - <MoneyCost money={props.office.getTeaCost()} corp={corp} />
+                </>
+              )}
+            </ButtonWithTooltip>
           )}
 
           {!division.hasResearch("AutoPartyManager") && (
             <>
-              <Tooltip title={<Typography>Throw an office party to increase your employee's morale</Typography>}>
-                <span>
-                  <Button
-                    disabled={corp.funds < 0 || props.office.partyMult > 1}
-                    onClick={() => setThrowPartyOpen(true)}
-                  >
-                    {props.office.partyMult > 1 ? "Throwing Party..." : "Throw Party"}
-                  </Button>
-                </span>
-              </Tooltip>
+              <ButtonWithTooltip
+                normalTooltip={"Throw an office party to increase your employees' morale"}
+                disabledTooltip={partyDisabledText}
+                onClick={() => setThrowPartyOpen(true)}
+              >
+                {props.office.partyMult > 1 ? "Throwing Party..." : "Throw Party"}
+              </ButtonWithTooltip>
               <ThrowPartyModal
                 rerender={props.rerender}
                 office={props.office}

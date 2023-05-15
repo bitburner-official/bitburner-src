@@ -2,49 +2,48 @@
 import React from "react";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { CorporationUpgrade } from "../data/CorporationUpgrades";
-import { LevelUpgrade } from "../Actions";
+import { CorpUpgrades } from "../data/CorporationUpgrades";
 import { MoneyCost } from "./MoneyCost";
 import { useCorporation } from "./Context";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
-import Button from "@mui/material/Button";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { calculateMaxAffordableUpgrade, calculateUpgradeCost } from "../helpers";
+import { CorpUpgradeName } from "../data/Enums";
+import { PositiveInteger } from "../../types";
 
 interface IProps {
-  upgrade: CorporationUpgrade;
-  amount: number | "MAX";
+  upgradeName: CorpUpgradeName;
+  mult: PositiveInteger | "MAX";
   rerender: () => void;
 }
 
-export function LevelableUpgrade(props: IProps): React.ReactElement {
+export function LevelableUpgrade({ upgradeName, mult, rerender }: IProps): React.ReactElement {
   const corp = useCorporation();
-  const data = props.upgrade;
-  const level = corp.upgrades[data.index];
-  const amount = props.amount;
+  const data = CorpUpgrades[upgradeName];
+  const level = corp.upgrades[upgradeName].level;
 
-  const maxUpgrades = amount === "MAX" ? calculateMaxAffordableUpgrade(corp, data, amount) : amount;
-  const cost = calculateUpgradeCost(corp, data, maxUpgrades);
+  const amount = mult === "MAX" ? calculateMaxAffordableUpgrade(corp, data, mult) : mult;
+  const cost = amount === 0 ? 0 : calculateUpgradeCost(corp, data, amount);
   const tooltip = data.desc;
   function onClick(): void {
     if (corp.funds < cost) return;
-    try {
-      LevelUpgrade(corp, props.upgrade, maxUpgrades);
-    } catch (err) {
-      dialogBoxCreate(err + "");
-    }
-    props.rerender();
+    const message = corp.purchaseUpgrade(upgradeName, amount);
+    if (message) dialogBoxCreate(`Could not upgrade ${upgradeName} ${amount} times:\n${message}`);
+    rerender();
   }
 
   return (
     <Grid item xs={4}>
       <Box display="flex" alignItems="center" flexDirection="row-reverse">
-        <Button disabled={corp.funds < cost} sx={{ mx: 1 }} onClick={onClick}>
-          +{maxUpgrades} -&nbsp;
-          <MoneyCost money={cost} corp={corp} />
-        </Button>
+        <ButtonWithTooltip
+          disabledTooltip={corp.funds < cost || amount === 0 ? "Insufficient corporation funds" : ""}
+          onClick={onClick}
+        >
+          +{amount} -&nbsp; <MoneyCost money={cost} corp={corp} />
+        </ButtonWithTooltip>
         <Tooltip title={tooltip}>
           <Typography>
             {data.name} - lvl {level}

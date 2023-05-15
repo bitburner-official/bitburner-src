@@ -82,7 +82,7 @@ export function SmartSupplyModal(props: IProps): React.ReactElement {
   const mats = [];
   for (const matName of Object.values(materialNames)) {
     if (!props.warehouse.materials[matName]) continue;
-    if (!Object.keys(division.reqMats).includes(matName)) continue;
+    if (!Object.keys(division.requiredMaterials).includes(matName)) continue;
     mats.push(<SSoption key={matName} warehouse={props.warehouse} matName={matName} />);
   }
 

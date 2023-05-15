@@ -37,6 +37,7 @@ import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportW
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { CityName } from "../Enums";
 import { getRandomMember } from "../utils/helpers/enum";
+import { createEnumKeyedRecord } from "../Types/Record";
 
 export interface BlackOpsAttempt {
   error?: string;
@@ -70,7 +71,7 @@ export class Bladeburner {
     type: ActionTypes.Idle,
   });
 
-  cities: Record<CityName, City>;
+  cities = createEnumKeyedRecord(CityName, (name) => new City(name));
   city = CityName.Sector12;
   // Todo: better types for all these Record<string, etc> types. Will need custom types or enums for the named string categories (e.g. skills).
   skills: Record<string, number> = {};
@@ -101,10 +102,6 @@ export class Bladeburner {
   consoleLogs: string[] = ["Bladeburner Console", "Type 'help' to see console commands"];
 
   constructor() {
-    this.cities = {} as Record<CityName, City>;
-    // This for loop ensures the above type is met for this.cities.
-    for (const city of Object.values(CityName)) this.cities[city] = new City(city);
-
     this.updateSkillMultipliers(); // Calls resetSkillMultipliers()
 
     // Max Stamina is based on stats and Bladeburner-specific bonuses

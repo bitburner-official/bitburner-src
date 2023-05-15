@@ -1,8 +1,5 @@
+import { CorpUnlockName } from "../../Corporation/data/Enums";
 import { Corporation } from "../../Corporation/Corporation";
-import {
-  CorporationUnlockUpgradeIndex,
-  CorporationUnlockUpgrades,
-} from "../../Corporation/data/CorporationUnlockUpgrades";
 import { resetIndustryResearchTrees } from "../../Corporation/IndustryData";
 
 import type { PlayerObject } from "./PlayerObject";
@@ -20,11 +17,8 @@ export function startCorporation(this: PlayerObject, corpName: string, seedFunde
   resetIndustryResearchTrees();
 
   if (this.bitNodeN === 3 || this.sourceFileLvl(3) === 3) {
-    const warehouseApi = CorporationUnlockUpgrades[CorporationUnlockUpgradeIndex.WarehouseAPI].index;
-    const OfficeApi = CorporationUnlockUpgrades[CorporationUnlockUpgradeIndex.OfficeAPI].index;
-
-    this.corporation.unlockUpgrades[warehouseApi] = 1;
-    this.corporation.unlockUpgrades[OfficeApi] = 1;
+    this.corporation.unlocks.add(CorpUnlockName.WarehouseAPI);
+    this.corporation.unlocks.add(CorpUnlockName.OfficeAPI);
   }
 
   this.corporation.totalShares += seedFunded ? 500_000_000 : 0;

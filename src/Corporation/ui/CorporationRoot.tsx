@@ -3,7 +3,6 @@
 // divisions, see an overview of your corporation, or create a new industry
 import React, { useState } from "react";
 import { MainPanel } from "./MainPanel";
-import { IndustryType } from "../data/Enums";
 import { ExpandIndustryTab } from "./ExpandIndustryTab";
 import { Player } from "@player";
 import { Context } from "./Context";
@@ -22,16 +21,13 @@ export function CorporationRoot(): React.ReactElement {
     setDivisionName(tab);
   }
 
-  const canExpand =
-    Object.values(IndustryType).filter(
-      (industryType) => corporation.divisions.find((division) => division.type === industryType) === undefined,
-    ).length > 0;
+  const canExpand = corporation.divisions.size < corporation.maxDivisions;
 
   return (
     <Context.Corporation.Provider value={corporation}>
       <Tabs variant="scrollable" value={divisionName} onChange={handleChange} sx={{ maxWidth: "65vw" }} scrollButtons>
         <Tab label={corporation.name} value={"Overview"} />
-        {corporation.divisions.map((div) => (
+        {[...corporation.divisions.values()].map((div) => (
           <Tab key={div.name} label={div.name} value={div.name} />
         ))}
         {canExpand && <Tab label={"Expand"} value={-1} />}

@@ -2,7 +2,7 @@
 // (top-left panel in the Industry UI)
 import React, { useState } from "react";
 
-import { IndustryType } from "../data/Enums";
+import { CorpUnlockName, IndustryType } from "../data/Enums";
 import { HireAdVert } from "../Actions";
 import { formatBigNumber } from "../../ui/formatNumber";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
@@ -16,6 +16,7 @@ import { MoneyCost } from "./MoneyCost";
 import { useCorporation, useDivision } from "./Context";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import Tooltip from "@mui/material/Tooltip";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
@@ -30,7 +31,7 @@ function MakeProductButton(): React.ReactElement {
   const hasMaxProducts = division.hasMaximumNumberProducts();
 
   function shouldFlash(): boolean {
-    return Object.keys(division.products).length === 0;
+    return division.products.size === 0;
   }
 
   function onButtonClick() {
@@ -69,38 +70,35 @@ function MakeProductButton(): React.ReactElement {
       return <></>;
   }
 
+  const disabledText = hasMaxProducts
+    ? `${division.name} already has the maximum number of products (${division.getMaximumNumberProducts()})`
+    : corp.funds < 0
+    ? "Insufficient corporation funds"
+    : "";
+
   return (
     <>
-      <Tooltip
-        title={
-          hasMaxProducts ? (
-            <Typography>
-              You have reached the maximum number of products: {division.getMaximumNumberProducts()}
-            </Typography>
-          ) : (
-            ""
-          )
-        }
+      <ButtonWithTooltip
+        disabledTooltip={disabledText}
+        onClick={onButtonClick}
+        buttonProps={{ color: shouldFlash() ? "error" : "primary" }}
       >
-        <Button color={shouldFlash() ? "error" : "primary"} onClick={onButtonClick} disabled={corp.funds < 0}>
-          {createProductButtonText}
-        </Button>
-      </Tooltip>
+        {createProductButtonText}
+      </ButtonWithTooltip>
       <MakeProductModal open={makeOpen} onClose={() => setMakeOpen(false)} />
     </>
   );
 }
 
-interface IProps {
+interface IndustryOverviewProps {
   rerender: () => void;
 }
 
-export function IndustryOverview(props: IProps): React.ReactElement {
+export function IndustryOverview(props: IndustryOverviewProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
   const [helpOpen, setHelpOpen] = useState(false);
   const [researchOpen, setResearchOpen] = useState(false);
-  const vechain = corp.unlockUpgrades[4] === 1;
   const profit = division.lastCycleRevenue - division.lastCycleExpenses;
 
   let advertisingInfo = false;
@@ -109,7 +107,7 @@ export function IndustryOverview(props: IProps): React.ReactElement {
   const popularityFac = advertisingFactors[2];
   const ratioFac = advertisingFactors[3];
   const totalAdvertisingFac = advertisingFactors[0];
-  if (vechain) {
+  if (corp.unlocks.has(CorpUnlockName.VeChain)) {
     advertisingInfo = true;
   }
 
@@ -162,13 +160,13 @@ export function IndustryOverview(props: IProps): React.ReactElement {
       <Box display="flex" alignItems="center">
         <Tooltip
           title={
-            <Typography>
+            <>
               Production gain from owning production-boosting materials such as hardware, Robots, AI Cores, and Real
               Estate.
-            </Typography>
+            </>
           }
         >
-          <Typography>Production Multiplier: {formatBigNumber(division.prodMult)}</Typography>
+          <Typography>Production Multiplier: {formatBigNumber(division.productionMult)}</Typography>
         </Tooltip>
         <IconButton onClick={() => setHelpOpen(true)}>
           <HelpIcon />
@@ -189,25 +187,19 @@ export function IndustryOverview(props: IProps): React.ReactElement {
             multiplier (Bigger bars = more effective):
             <br />
             <br />
-            Hardware:&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.hwFac)}
+            Hardware:&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.hardwareFactor)}
             <br />
-            Robots:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.robFac)}
+            Robots:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.robotFactor)}
             <br />
-            AI Cores:&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.aiFac)}
+            AI Cores:&nbsp;&nbsp;&nbsp; {convertEffectFacToGraphic(division.aiCoreFactor)}
             <br />
-            Real Estate: {convertEffectFacToGraphic(division.reFac)}
+            Real Estate: {convertEffectFacToGraphic(division.realEstateFactor)}
           </Typography>
         </StaticModal>
       </Box>
       <Box display="flex" alignItems="center">
-        <Tooltip
-          title={
-            <Typography>
-              Scientific Research increases the quality of the materials and products that you produce.
-            </Typography>
-          }
-        >
-          <Typography>Scientific Research: {formatBigNumber(division.sciResearch)}</Typography>
+        <Tooltip title={"Scientific Research increases the quality of the materials and products that you produce."}>
+          <Typography>Scientific Research: {formatBigNumber(division.researchPoints)}</Typography>
         </Tooltip>
         <Button sx={{ mx: 1 }} onClick={() => setResearchOpen(true)}>
           Research
@@ -216,26 +208,23 @@ export function IndustryOverview(props: IProps): React.ReactElement {
       </Box>
       <br />
       <Box display="flex" alignItems="center">
-        <Tooltip
-          title={
-            <Typography>
+        <ButtonWithTooltip
+          normalTooltip={
+            <>
               Hire AdVert.Inc to advertise your company. Each level of this upgrade grants your company a static
-              increase of 3 and 1 to its awareness and popularity, respectively. It will then increase your company's
+              increase of 3 and 1 to its awareness and popularity, respectively. It will then increase your company's" +
               awareness by 1%, and its popularity by a random percentage between 1% and 3%. These effects are increased
               by other upgrades that increase the power of your advertising.
-            </Typography>
+            </>
           }
+          disabledTooltip={division.getAdVertCost() > corp.funds ? "Insufficient corporation funds" : ""}
+          onClick={() => {
+            HireAdVert(corp, division);
+            props.rerender();
+          }}
         >
-          <Button
-            disabled={division.getAdVertCost() > corp.funds}
-            onClick={function () {
-              HireAdVert(corp, division);
-              props.rerender();
-            }}
-          >
-            Hire AdVert -&nbsp; <MoneyCost money={division.getAdVertCost()} corp={corp} />
-          </Button>
-        </Tooltip>
+          Hire AdVert -&nbsp; <MoneyCost money={division.getAdVertCost()} corp={corp} />
+        </ButtonWithTooltip>
         {division.makesProducts && <MakeProductButton />}
       </Box>
     </Paper>

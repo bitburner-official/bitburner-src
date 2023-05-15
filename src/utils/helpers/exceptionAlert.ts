@@ -35,5 +35,6 @@ export function exceptionAlert(e: unknown): void {
       "message as well as details about how to reproduce the bug.<br><br>" +
       "If you want to be safe, I suggest refreshing the game WITHOUT saving so that your " +
       "save doesn't get corrupted",
+    true,
   );
 }

@@ -13,6 +13,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { CityName } from "../../../Enums";
+import { getRecordKeys } from "../../../Types/Record";
 
 interface IProps {
   open: boolean;
@@ -34,8 +35,8 @@ function productPlaceholder(type: string): string {
 export function MakeProductModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
-  const allCities = Object.values(CityName).filter((cityName) => division.offices[cityName] !== 0);
-  const [city, setCity] = useState(allCities.length > 0 ? allCities[0] : CityName.Sector12);
+  const availableCities = getRecordKeys(division.offices);
+  const [city, setCity] = useState(availableCities.length > 0 ? availableCities[0] : CityName.Sector12);
   const [name, setName] = useState("");
   const [design, setDesign] = useState<number>(NaN);
   const [marketing, setMarketing] = useState<number>(NaN);
@@ -80,7 +81,7 @@ export function MakeProductModal(props: IProps): React.ReactElement {
         will result in a superior product. Investing money in marketing the product will help the product's sales.
       </Typography>
       <Select style={{ margin: "5px" }} onChange={onCityChange} defaultValue={city}>
-        {allCities.map((cityName: string) => (
+        {availableCities.map((cityName: string) => (
           <MenuItem key={cityName} value={cityName}>
             {cityName}
           </MenuItem>

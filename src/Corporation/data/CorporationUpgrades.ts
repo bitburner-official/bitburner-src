@@ -1,59 +1,43 @@
-export interface CorporationUpgrade {
-  index: number;
+import { CorpUpgradeName } from "./Enums";
+
+export interface CorpUpgrade {
+  name: CorpUpgradeName;
   basePrice: number;
   priceMult: number;
   benefit: number;
-  name: string;
   desc: string;
 }
 
-export enum CorporationUpgradeIndex {
-  SmartFactories = 0,
-  SmartStorage = 1,
-  DreamSense = 2,
-  WilsonAnalytics = 3,
-  NuoptimalNootropicInjectorImplants = 4,
-  SpeechProcessorImplants = 5,
-  NeuralAccelerators = 6,
-  FocusWires = 7,
-  ABCSalesBots = 8,
-  ProjectInsight = 9,
-}
-
-// Corporation Upgrades
-// Upgrades for entire corporation, levelable upgrades
-export const CorporationUpgrades: Record<CorporationUpgradeIndex, CorporationUpgrade> = {
+/** Levelable upgrades that affect the entire corporation */
+export const CorpUpgrades: Record<CorpUpgradeName, CorpUpgrade> = {
   //Smart factories, increases production
-  [CorporationUpgradeIndex.SmartFactories]: {
-    index: CorporationUpgradeIndex.SmartFactories,
+  [CorpUpgradeName.SmartFactories]: {
+    name: CorpUpgradeName.SmartFactories,
     basePrice: 2e9,
     priceMult: 1.06,
     benefit: 0.03,
-    name: "Smart Factories",
     desc:
       "Advanced AI automatically optimizes the operation and productivity " +
       "of factories. Each level of this upgrade increases your global production by 3% (additive).",
   },
 
   //Smart warehouses, increases storage size
-  [CorporationUpgradeIndex.SmartStorage]: {
-    index: CorporationUpgradeIndex.SmartStorage,
+  [CorpUpgradeName.SmartStorage]: {
+    name: CorpUpgradeName.SmartStorage,
     basePrice: 2e9,
     priceMult: 1.06,
     benefit: 0.1,
-    name: "Smart Storage",
     desc:
       "Advanced AI automatically optimizes your warehouse storage methods. " +
       "Each level of this upgrade increases your global warehouse storage size by 10% (additive).",
   },
 
   //Advertise through dreams, passive popularity/ awareness gain
-  [CorporationUpgradeIndex.DreamSense]: {
-    index: CorporationUpgradeIndex.DreamSense,
+  [CorpUpgradeName.DreamSense]: {
+    name: CorpUpgradeName.DreamSense,
     basePrice: 4e9,
     priceMult: 1.1,
     benefit: 0.001,
-    name: "DreamSense",
     desc:
       "Use DreamSense LCC Technologies to advertise your corporation " +
       "to consumers through their dreams. Each level of this upgrade provides a passive " +
@@ -63,12 +47,11 @@ export const CorporationUpgrades: Record<CorporationUpgradeIndex, CorporationUpg
   },
 
   //Makes advertising more effective
-  [CorporationUpgradeIndex.WilsonAnalytics]: {
-    index: CorporationUpgradeIndex.WilsonAnalytics,
+  [CorpUpgradeName.WilsonAnalytics]: {
+    name: CorpUpgradeName.WilsonAnalytics,
     basePrice: 4e9,
     priceMult: 2,
     benefit: 0.005,
-    name: "Wilson Analytics",
     desc:
       "Purchase data and analysis from Wilson, a marketing research " +
       "firm. Each level of this upgrade increases the effectiveness of your " +
@@ -76,12 +59,11 @@ export const CorporationUpgrades: Record<CorporationUpgradeIndex, CorporationUpg
   },
 
   //Augmentation for employees, increases cre
-  [CorporationUpgradeIndex.NuoptimalNootropicInjectorImplants]: {
-    index: CorporationUpgradeIndex.NuoptimalNootropicInjectorImplants,
+  [CorpUpgradeName.NuoptimalNootropicInjectorImplants]: {
+    name: CorpUpgradeName.NuoptimalNootropicInjectorImplants,
     basePrice: 1e9,
     priceMult: 1.06,
     benefit: 0.1,
-    name: "Nuoptimal Nootropic Injector Implants",
     desc:
       "Purchase the Nuoptimal Nootropic " +
       "Injector augmentation for your employees. Each level of this upgrade " +
@@ -89,24 +71,22 @@ export const CorporationUpgrades: Record<CorporationUpgradeIndex, CorporationUpg
   },
 
   //Augmentation for employees, increases cha
-  [CorporationUpgradeIndex.SpeechProcessorImplants]: {
-    index: CorporationUpgradeIndex.SpeechProcessorImplants,
+  [CorpUpgradeName.SpeechProcessorImplants]: {
+    name: CorpUpgradeName.SpeechProcessorImplants,
     basePrice: 1e9,
     priceMult: 1.06,
     benefit: 0.1,
-    name: "Speech Processor Implants",
     desc:
       "Purchase the Speech Processor augmentation for your employees. " +
       "Each level of this upgrade globally increases the charisma of your employees by 10% (additive).",
   },
 
   //Augmentation for employees, increases int
-  [CorporationUpgradeIndex.NeuralAccelerators]: {
-    index: CorporationUpgradeIndex.NeuralAccelerators,
+  [CorpUpgradeName.NeuralAccelerators]: {
+    name: CorpUpgradeName.NeuralAccelerators,
     basePrice: 1e9,
     priceMult: 1.06,
     benefit: 0.1,
-    name: "Neural Accelerators",
     desc:
       "Purchase the Neural Accelerator augmentation for your employees. " +
       "Each level of this upgrade globally increases the intelligence of your employees " +
@@ -114,24 +94,22 @@ export const CorporationUpgrades: Record<CorporationUpgradeIndex, CorporationUpg
   },
 
   //Augmentation for employees, increases eff
-  [CorporationUpgradeIndex.FocusWires]: {
-    index: CorporationUpgradeIndex.FocusWires,
+  [CorpUpgradeName.FocusWires]: {
+    name: CorpUpgradeName.FocusWires,
     basePrice: 1e9,
     priceMult: 1.06,
     benefit: 0.1,
-    name: "FocusWires",
     desc:
       "Purchase the FocusWire augmentation for your employees. Each level " +
       "of this upgrade globally increases the efficiency of your employees by 10% (additive).",
   },
 
   //Improves sales of materials/products
-  [CorporationUpgradeIndex.ABCSalesBots]: {
-    index: CorporationUpgradeIndex.ABCSalesBots,
+  [CorpUpgradeName.ABCSalesBots]: {
+    name: CorpUpgradeName.ABCSalesBots,
     basePrice: 1e9,
     priceMult: 1.07,
     benefit: 0.01,
-    name: "ABC SalesBots",
     desc:
       "Always Be Closing. Purchase these robotic salesmen to increase the amount of " +
       "materials and products you sell. Each level of this upgrade globally increases your sales " +
@@ -139,12 +117,11 @@ export const CorporationUpgrades: Record<CorporationUpgradeIndex, CorporationUpg
   },
 
   //Improves scientific research rate
-  [CorporationUpgradeIndex.ProjectInsight]: {
-    index: CorporationUpgradeIndex.ProjectInsight,
+  [CorpUpgradeName.ProjectInsight]: {
+    name: CorpUpgradeName.ProjectInsight,
     basePrice: 5e9,
     priceMult: 1.07,
     benefit: 0.05,
-    name: "Project Insight",
     desc:
       "Purchase 'Project Insight', a R&D service provided by the secretive " +
       "Fulcrum Technologies. Each level of this upgrade globally increases the amount of " +

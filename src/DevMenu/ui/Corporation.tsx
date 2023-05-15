@@ -55,19 +55,17 @@ export function Corporation(): React.ReactElement {
 
   function finishCorporationProducts(): void {
     if (!Player.corporation) return;
-    Player.corporation.divisions.forEach((div) => {
-      Object.keys(div.products).forEach((prod) => {
-        const product = div.products[prod];
-        if (product === undefined) throw new Error("Impossible product undefined");
-        product.prog = 99.9;
-      });
-    });
+    for (const division of Player.corporation.divisions.values()) {
+      for (const product of division.products.values()) {
+        product.developmentProgress = 99.9;
+      }
+    }
   }
 
   function addCorporationResearch(): void {
     if (!Player.corporation) return;
     Player.corporation.divisions.forEach((div) => {
-      div.sciResearch += 1e10;
+      div.researchPoints += 1e10;
     });
   }
 

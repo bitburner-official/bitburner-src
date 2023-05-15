@@ -6,7 +6,7 @@ import { Router } from "../../../ui/GameRoot";
 import { Page } from "../../../ui/Router";
 import { Player } from "@player";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import TextField from "@mui/material/TextField";
 
 interface IProps {
@@ -16,12 +16,15 @@ interface IProps {
 
 export function CreateCorporationModal(props: IProps): React.ReactElement {
   const canSelfFund = Player.canAfford(150e9);
+  const [name, setName] = useState("");
+
   if (!Player.canAccessCorporation() || Player.corporation) {
     props.onClose();
     return <></>;
   }
 
-  const [name, setName] = useState("");
+  const disabledTextForNoName = name === "" ? "Enter a name for the corporation" : "";
+
   function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setName(event.target.value);
   }
@@ -62,13 +65,16 @@ export function CreateCorporationModal(props: IProps): React.ReactElement {
       </Typography>
       <TextField autoFocus={true} placeholder="Corporation Name" onChange={onChange} value={name} />
       {Player.bitNodeN === 3 && (
-        <Button onClick={seed} disabled={name == ""}>
+        <ButtonWithTooltip onClick={seed} disabledTooltip={disabledTextForNoName}>
           Use seed money
-        </Button>
+        </ButtonWithTooltip>
       )}
-      <Button onClick={selfFund} disabled={name == "" || !canSelfFund}>
+      <ButtonWithTooltip
+        onClick={selfFund}
+        disabledTooltip={disabledTextForNoName || canSelfFund ? "" : "Insufficient player funds"}
+      >
         Self-Fund (<Money money={150e9} forPurchase={true} />)
-      </Button>
+      </ButtonWithTooltip>
     </Modal>
   );
 }

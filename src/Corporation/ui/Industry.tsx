@@ -13,7 +13,7 @@ import { CityName } from "../../Enums";
 
 interface IProps {
   city: CityName;
-  warehouse: Warehouse | 0;
+  warehouse?: Warehouse;
   office: OfficeSpace;
   rerender: () => void;
 }
