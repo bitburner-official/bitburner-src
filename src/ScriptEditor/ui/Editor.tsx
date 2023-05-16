@@ -2,8 +2,6 @@ import * as monaco from "monaco-editor";
 import * as React from "react";
 import { useEffect, useRef } from "react";
 
-export type Monaco = typeof monaco;
-
 interface EditorProps {
   /** Editor options */
   options: monaco.editor.IEditorOptions;

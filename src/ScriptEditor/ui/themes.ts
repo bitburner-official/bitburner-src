@@ -1,5 +1,5 @@
-import * as monaco from "monaco-editor";
-import type { Monaco } from "./Editor";
+import type { editor } from "monaco-editor";
+type DefineThemeFn = typeof editor.defineTheme;
 
 export interface IScriptEditorTheme {
   base: "vs" | "vs-dark" | "hc-black";
@@ -93,7 +93,7 @@ export const sanitizeTheme = (theme: IScriptEditorTheme): void => {
   }
 };
 
-export function makeTheme(theme: IScriptEditorTheme): monaco.editor.IStandaloneThemeData {
+export function makeTheme(theme: IScriptEditorTheme): editor.IStandaloneThemeData {
   const themeRules = [
     {
       token: "",
@@ -208,8 +208,8 @@ export function makeTheme(theme: IScriptEditorTheme): monaco.editor.IStandaloneT
   return { base: theme.base, inherit: theme.inherit, rules: themeRules, colors: themeColors };
 }
 
-export async function loadThemes(monaco: Monaco): Promise<void> {
-  monaco.editor.defineTheme("monokai", {
+export async function loadThemes(defineTheme: DefineThemeFn): Promise<void> {
+  defineTheme("monokai", {
     base: "vs-dark",
     inherit: true,
     rules: [
@@ -274,7 +274,7 @@ export async function loadThemes(monaco: Monaco): Promise<void> {
     },
   });
 
-  monaco.editor.defineTheme("solarized-dark", {
+  defineTheme("solarized-dark", {
     base: "vs-dark",
     inherit: true,
     rules: [
@@ -351,7 +351,7 @@ export async function loadThemes(monaco: Monaco): Promise<void> {
     },
   });
 
-  monaco.editor.defineTheme("solarized-light", {
+  defineTheme("solarized-light", {
     base: "vs",
     inherit: true,
     rules: [
@@ -429,7 +429,7 @@ export async function loadThemes(monaco: Monaco): Promise<void> {
     },
   });
 
-  monaco.editor.defineTheme("dracula", {
+  defineTheme("dracula", {
     base: "vs-dark",
     inherit: true,
     rules: [
@@ -525,7 +525,7 @@ export async function loadThemes(monaco: Monaco): Promise<void> {
     },
   });
 
-  monaco.editor.defineTheme("one-dark", {
+  defineTheme("one-dark", {
     base: "vs-dark",
     inherit: true,
     rules: [

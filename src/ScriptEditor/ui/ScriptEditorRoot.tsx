@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Editor, Monaco } from "./Editor";
+import { Editor } from "./Editor";
 import * as monaco from "monaco-editor";
 // @ts-expect-error This library does not have types.
 import * as MonacoVim from "monaco-vim";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
-type EditorDecorations = monaco.editor.IEditorDecorationsCollection;
 type ITextModel = monaco.editor.ITextModel;
 import { OptionsModal } from "./OptionsModal";
 import { Options } from "./Options";
@@ -321,7 +320,7 @@ export function Root(props: IProps): React.ReactElement {
     const source = (libSource + "").replace(/export /g, "");
     monaco.languages.typescript.javascriptDefaults.addExtraLib(source, "netscript.d.ts");
     monaco.languages.typescript.typescriptDefaults.addExtraLib(source, "netscript.d.ts");
-    loadThemes(monaco);
+    loadThemes(monaco.editor.defineTheme);
     sanitizeTheme(Settings.EditorTheme);
     monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
   }
