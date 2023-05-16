@@ -794,7 +794,7 @@ function loadGame(saveString: string): boolean {
     try {
       const ver = JSON.parse(saveObj.VersionSave, Reviver);
       evaluateVersionCompatibility(ver);
-      if (window.location.href.toLowerCase().includes("bitburner-src")) {
+      if (CONSTANTS.isDevBranch) {
         // Beta branch, always show changes
         createBetaUpdateText();
       } else if (ver !== CONSTANTS.VersionNumber) {

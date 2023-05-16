@@ -5,6 +5,7 @@
  */
 export const CONSTANTS: {
   VersionString: string;
+  isDevBranch: boolean;
   VersionNumber: number;
   MaxSkillLevel: number;
   MilliPerCycle: number;
@@ -88,6 +89,7 @@ export const CONSTANTS: {
   LatestUpdate: string;
 } = {
   VersionString: "2.3.0",
+  isDevBranch: true,
   VersionNumber: 30,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
