@@ -35,7 +35,7 @@ export class CustomBoundary extends React.Component<PlayerBoundaryProps, PlayerB
  * correctly by the PlayerBoundary. This function checks the tree for a function before render. */
 function probeChildrenForFunction(tree: string[], children: unknown): undefined | Error {
   switch (typeof children) {
-    case "function":
+    case "function": {
       const error = new Error(
         `React content tree contains a function (invalid): ${[...tree, "function"].join(" -> ")}.`,
       );
@@ -47,6 +47,7 @@ function probeChildrenForFunction(tree: string[], children: unknown): undefined 
         "If this is a function component, render it using React.createElement instead of rendering the function directly.",
       );
       return error;
+    }
     case "object":
       if (Array.isArray(children)) {
         for (const child of children) {
