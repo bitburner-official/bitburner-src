@@ -192,10 +192,15 @@ function parseOnlyRamCalculate(otherScripts: Map<ScriptFilePath, Script>, code: 
 }
 
 export function checkInfiniteLoop(code: string): number {
-  const ast = parse(code, { sourceType: "module", ecmaVersion: "latest" });
-
+  let ast: acorn.Node;
+  try {
+    ast = parse(code, { sourceType: "module", ecmaVersion: "latest" });
+  } catch (e) {
+    // If code cannot be parsed, do not provide infinite loop detection warning
+    return -1;
+  }
   function nodeHasTrueTest(node: acorn.Node): boolean {
-    return node.type === "Literal" && (node as any).raw === "true";
+    return node.type === "Literal" && "raw" in node && node.raw === "true";
   }
 
   function hasAwait(ast: acorn.Node): boolean {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Editor } from "./Editor";
+import { Editor, Monaco } from "./Editor";
 import * as monaco from "monaco-editor";
 // @ts-expect-error This library does not have types.
 import * as MonacoVim from "monaco-vim";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
+type EditorDecorations = monaco.editor.IEditorDecorationsCollection;
 type ITextModel = monaco.editor.ITextModel;
 import { OptionsModal } from "./OptionsModal";
 import { Options } from "./Options";
@@ -101,14 +102,12 @@ export function Root(props: IProps): React.ReactElement {
   const vimStatusRef = useRef<HTMLElement>(null);
   // monaco-vim does not have types, so this is an any
   const [vimEditor, setVimEditor] = useState<any>(null);
-  const [editor, setEditor] = useState<IStandaloneCodeEditor | null>(null);
   const [filter, setFilter] = useState("");
   const [searchExpanded, setSearchExpanded] = useState(false);
 
   const [ram, setRAM] = useState("RAM: ???");
   const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
   const [updatingRam, setUpdatingRam] = useState(false);
-  const [decorations, setDecorations] = useState<string[]>([]);
 
   const [optionsOpen, setOptionsOpen] = useState(false);
   const [options, setOptions] = useState<Options>({
@@ -125,6 +124,8 @@ export function Root(props: IProps): React.ReactElement {
 
   const [ramInfoOpen, setRamInfoOpen] = useState(false);
 
+  let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
+
   // Prevent Crash if script is open on deleted server
   for (let i = openScripts.length - 1; i >= 0; i--) {
     GetServer(openScripts[i].hostname) === null && openScripts.splice(i, 1);
@@ -137,7 +138,7 @@ export function Root(props: IProps): React.ReactElement {
     if (currentScript !== null) {
       const tabIndex = currentTabIndex();
       if (typeof tabIndex === "number") onTabClick(tabIndex);
-      updateRAM(currentScript.code);
+      parseCode(currentScript.code);
     }
   }, []);
 
@@ -163,10 +164,10 @@ export function Root(props: IProps): React.ReactElement {
 
   useEffect(() => {
     // setup monaco-vim
-    if (options.vim && editor && !vimEditor) {
+    if (options.vim && editorRef.current && !vimEditor) {
       // Using try/catch because MonacoVim does not have types.
       try {
-        setVimEditor(MonacoVim.initVimMode(editor, vimStatusRef.current));
+        setVimEditor(MonacoVim.initVimMode(editorRef.current, vimStatusRef.current));
         MonacoVim.VimMode.Vim.defineEx("write", "w", function () {
           // your own implementation on what you want to do when :w is pressed
           save();
@@ -208,7 +209,7 @@ export function Root(props: IProps): React.ReactElement {
         });
         MonacoVim.VimMode.Vim.mapCommand("gt", "action", "nextTabs", {}, { context: "normal" });
         MonacoVim.VimMode.Vim.mapCommand("gT", "action", "prevTabs", {}, { context: "normal" });
-        editor.focus();
+        editorRef.current.focus();
       } catch (e) {
         console.error("An error occurred while loading monaco-vim:");
         console.error(e);
@@ -222,17 +223,22 @@ export function Root(props: IProps): React.ReactElement {
     return () => {
       vimEditor?.dispose();
     };
-  }, [options, editorRef, editor, vimEditor]);
+  }, [options, editorRef.current, vimEditor]);
 
   // Generates a new model for the script
   function regenerateModel(script: OpenScript): void {
     script.model = monaco.editor.createModel(script.code, script.isTxt ? "plaintext" : "javascript");
   }
 
-  const debouncedUpdateRAM = debounce((newCode: string) => {
+  const debouncedCodeParsing = debounce((newCode: string) => {
+    infLoop(newCode);
     updateRAM(newCode);
     setUpdatingRam(false);
   }, 300);
+  function parseCode(newCode: string) {
+    setUpdatingRam(true);
+    debouncedCodeParsing(newCode);
+  }
 
   function updateRAM(newCode: string): void {
     if (!currentScript || currentScript.isTxt) {
@@ -324,11 +330,7 @@ export function Root(props: IProps): React.ReactElement {
   function onMount(editor: IStandaloneCodeEditor): void {
     // Required when switching between site navigation (e.g. from Script Editor -> Terminal and back)
     // the `useEffect()` for vim mode is called before editor is mounted.
-    setEditor(editor);
-
     editorRef.current = editor;
-
-    if (!editorRef.current) return;
 
     if (!props.files && currentScript !== null) {
       // Open currentscript
@@ -336,7 +338,7 @@ export function Root(props: IProps): React.ReactElement {
       editorRef.current.setModel(currentScript.model);
       editorRef.current.setPosition(currentScript.lastPosition);
       editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
-      updateRAM(currentScript.code);
+      parseCode(currentScript.code);
       editorRef.current.focus();
       return;
     }
@@ -361,7 +363,7 @@ export function Root(props: IProps): React.ReactElement {
           editorRef.current.setModel(openScript.model);
           editorRef.current.setPosition(openScript.lastPosition);
           editorRef.current.revealLineInCenter(openScript.lastPosition.lineNumber);
-          updateRAM(openScript.code);
+          parseCode(openScript.code);
         } else {
           // Open script
           const newScript = new OpenScript(
@@ -374,7 +376,7 @@ export function Root(props: IProps): React.ReactElement {
           openScripts.push(newScript);
           currentScript = newScript;
           editorRef.current.setModel(newScript.model);
-          updateRAM(newScript.code);
+          parseCode(newScript.code);
         }
       }
     }
@@ -384,10 +386,11 @@ export function Root(props: IProps): React.ReactElement {
 
   function infLoop(newCode: string): void {
     if (editorRef.current === null || currentScript === null) return;
+    if (!decorations) decorations = editorRef.current.createDecorationsCollection();
     if (!currentScript.path.endsWith(".js")) return;
     const awaitWarning = checkInfiniteLoop(newCode);
     if (awaitWarning !== -1) {
-      const newDecorations = editorRef.current.deltaDecorations(decorations, [
+      decorations.set([
         {
           range: {
             startLineNumber: awaitWarning,
@@ -404,30 +407,20 @@ export function Root(props: IProps): React.ReactElement {
           },
         },
       ]);
-      setDecorations(newDecorations);
-    } else {
-      const newDecorations = editorRef.current.deltaDecorations(decorations, []);
-      setDecorations(newDecorations);
-    }
+    } else decorations.clear();
   }
 
   // When the code is updated within the editor
   function updateCode(newCode?: string): void {
     if (newCode === undefined) return;
-    setUpdatingRam(true);
-    debouncedUpdateRAM(newCode);
+    // parseCode includes ram check and infinite loop detection
+    parseCode(newCode);
     if (editorRef.current === null) return;
     const newPos = editorRef.current.getPosition();
     if (newPos === null) return;
     if (currentScript !== null) {
       currentScript.code = newCode;
       currentScript.lastPosition = newPos;
-    }
-    try {
-      infLoop(newCode);
-    } catch (err) {
-      console.error("An error occurred during infinite loop detection in the script editor:");
-      console.error(err);
     }
   }
 
@@ -507,10 +500,9 @@ export function Root(props: IProps): React.ReactElement {
         regenerateModel(currentScript);
       }
       editorRef.current.setModel(currentScript.model);
-
       editorRef.current.setPosition(currentScript.lastPosition);
       editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
-      updateRAM(currentScript.code);
+      parseCode(currentScript.code);
       editorRef.current.focus();
     }
   }
@@ -585,7 +577,7 @@ export function Root(props: IProps): React.ReactElement {
               editorRef.current.setModel(openScript.model);
 
               editorRef.current.setValue(openScript.code);
-              updateRAM(openScript.code);
+              parseCode(openScript.code);
               editorRef.current.focus();
             }
           }
@@ -820,7 +812,7 @@ export function Root(props: IProps): React.ReactElement {
           save={(options: Options) => {
             sanitizeTheme(Settings.EditorTheme);
             monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
-            editor?.updateOptions(options);
+            editorRef.current?.updateOptions(options);
             setOptions(options);
             Settings.MonacoTheme = options.theme;
             Settings.MonacoInsertSpaces = options.insertSpaces;
