@@ -13,7 +13,7 @@ import { Player } from "@player";
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { defaultMultipliers, mergeMultipliers, Multipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { getKeyList } from "src/utils/helpers/getKeyList";
+import { getKeyList } from "../utils/helpers/getKeyList";
 
 export class StaneksGift extends BaseGift {
   isBonusCharging = false;
