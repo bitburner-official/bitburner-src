@@ -1,5 +1,5 @@
-import { Typography } from "@mui/material";
 import React from "react";
+import Typography from "@mui/material/Typography";
 
 interface PlayerBoundaryProps {
   children: React.ReactNode;
@@ -13,18 +13,7 @@ export class CustomBoundary extends React.Component<PlayerBoundaryProps, PlayerB
   state: PlayerBoundaryState;
   constructor(props: PlayerBoundaryProps) {
     super(props);
-    let error: Error | undefined = undefined;
-    const childCheck = probeChildrenForFunction([], props.children);
-    if (childCheck) {
-      error = new Error(`React content tree contains a function (invalid): ${childCheck.tree.join(" -> ")}.`);
-      console.warn("Error in custom react content:");
-      console.error(error);
-      console.warn("Function content:");
-      console.error(childCheck.function);
-      console.warn(
-        "If this is a function component, render it using React.createElement instead of rendering the function directly.",
-      );
-    }
+    const error = probeChildrenForFunction([], props.children);
     this.state = { error };
   }
   componentDidCatch(error: Error): void {
@@ -44,26 +33,36 @@ export class CustomBoundary extends React.Component<PlayerBoundaryProps, PlayerB
 
 /** Attempting to render a react tree containing a function as a child will cause an error that doesn't get displayed
  * correctly by the PlayerBoundary. This function checks the tree for a function before render. */
-function probeChildrenForFunction(tree: string[], children: unknown): false | { tree: string[]; function: Function } {
+function probeChildrenForFunction(tree: string[], children: unknown): undefined | Error {
   switch (typeof children) {
     case "function":
-      return { tree: [...tree, "function"], function: children };
+      const error = new Error(
+        `React content tree contains a function (invalid): ${[...tree, "function"].join(" -> ")}.`,
+      );
+      console.warn("Error in custom react content:");
+      console.error(error);
+      console.warn("Function content:");
+      console.error(children);
+      console.warn(
+        "If this is a function component, render it using React.createElement instead of rendering the function directly.",
+      );
+      return error;
     case "object":
       if (Array.isArray(children)) {
         for (const child of children) {
           const probeResult = probeChildrenForFunction([...tree, "Array"], child);
           if (probeResult) return probeResult;
         }
-        return false;
+        return;
       }
-      if (children === null) return false;
+      if (children === null) return;
       if ("props" in children && typeof children.props === "object" && children.props && "children" in children.props) {
         const name = getObjectName(children);
         return probeChildrenForFunction([...tree, name], children.props.children);
       }
-      return false;
+      return;
     default:
-      return false;
+      return;
   }
 }
 /** Gets the component name from a react child that is a component */
