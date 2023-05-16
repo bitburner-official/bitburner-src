@@ -31,6 +31,9 @@ export function Reviver(_key: string, value: unknown): any {
       case "AllServersMap":
         console.warn("Converting AllServersMap for v0.43.1");
         return value.data;
+      case "Industry":
+        console.warn("Converting a corp from pre-2.3");
+        return value.data; // Will immediately be overwritten by v2.3 save migration code
     }
     // Missing constructor with no special handling. Throw error.
     throw new Error(`Could not locate constructor named ${value.ctor}. If the save data is valid, this is a bug.`);
