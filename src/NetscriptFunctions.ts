@@ -1683,7 +1683,7 @@ export const ns: InternalAPI<NSFull> = {
       },
       bitNodeN: {
         identifier: "ns.getPlayer().bitNodeN",
-        message: "Use ns.getResetInto().currentNode instead",
+        message: "Use ns.getResetInfo().currentNode instead",
         value: Player.bitNodeN,
       },
     });
