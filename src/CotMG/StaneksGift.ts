@@ -13,10 +13,11 @@ import { Player } from "@player";
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { defaultMultipliers, mergeMultipliers, Multipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import { getKeyList } from "src/utils/helpers/getKeyList";
 
 export class StaneksGift extends BaseGift {
   isBonusCharging = false;
-  justCharged = false;
+  justCharged = true;
   storedCycles = 0;
   constructor() {
     super();
@@ -244,14 +245,16 @@ export class StaneksGift extends BaseGift {
     this.storedCycles = 0;
   }
 
+  static includedProperties = getKeyList(StaneksGift, { removedKeys: ["justCharged"] });
+
   /** Serialize Staneks Gift to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("StaneksGift", this);
+    return Generic_toJSON("StaneksGift", this, StaneksGift.includedProperties);
   }
 
   /** Initializes Staneks Gift from a JSON save state */
   static fromJSON(value: IReviverValue): StaneksGift {
-    return Generic_fromJSON(StaneksGift, value.data);
+    return Generic_fromJSON(StaneksGift, value.data, StaneksGift.includedProperties);
   }
 }
 
