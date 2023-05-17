@@ -548,7 +548,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   alterReality: 0,
   rainbow: 0,
   heart: { break: 0 },
-  iKnowWhatImDoing: 0,
+  tprintRaw: 0,
   printRaw: 0,
 
   formulas: {
