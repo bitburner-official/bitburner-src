@@ -1,14 +1,17 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
+interface CustomBoundaryProps {
+  children: React.ReactNode;
+}
 interface CustomBoundaryState {
   error?: Error;
 }
 /** Error boundary for custom content printed by the player using printRaw-like functions.
  * Error boundaries are required to be class components due to no hook equivalent to componentDidCatch. */
-export class CustomBoundary extends React.Component<{}, CustomBoundaryState> {
+export class CustomBoundary extends React.Component<CustomBoundaryProps, CustomBoundaryState> {
   state: CustomBoundaryState;
-  constructor(props: {}) {
+  constructor(props: CustomBoundaryProps) {
     super(props);
     this.state = { error: undefined };
   }
