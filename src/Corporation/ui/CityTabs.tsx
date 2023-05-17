@@ -2,7 +2,7 @@
 // These allow player to navigate between different cities for each industry
 import React, { useState } from "react";
 import { OfficeSpace } from "../OfficeSpace";
-import { Division } from "./Industry";
+import { Division } from "./Division";
 import { ExpandNewCity } from "./ExpandNewCity";
 import { useDivision } from "./Context";
 import Tabs from "@mui/material/Tabs";

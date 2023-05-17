@@ -3,7 +3,7 @@
 // divisions, see an overview of your corporation, or create a new industry
 import React, { useState } from "react";
 import { MainPanel } from "./MainPanel";
-import { NewDivisionTab } from "./ExpandIndustryTab";
+import { NewDivisionTab } from "./NewDivisionTab";
 import { Player } from "@player";
 import { Context } from "./Context";
 import { Overview } from "./Overview";
