@@ -2405,10 +2405,10 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of levels to purchase. Must be positive. Rounded to nearest integer.
+   * @param n - Number of levels to purchase. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s level is successfully upgraded, false otherwise.
    */
-  upgradeLevel(index: number, n: number): boolean;
+  upgradeLevel(index: number, n?: number): boolean;
 
   /**
    * Upgrade the RAM of a hacknet node.
@@ -2425,10 +2425,10 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade RAM. Must be positive. Rounded to nearest integer.
+   * @param n - Number of times to upgrade RAM. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s RAM is successfully upgraded, false otherwise.
    */
-  upgradeRam(index: number, n: number): boolean;
+  upgradeRam(index: number, n?: number): boolean;
 
   /**
    * Upgrade the core of a hacknet node.
@@ -2443,10 +2443,10 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of cores to purchase. Must be positive. Rounded to nearest integer.
+   * @param n - Number of cores to purchase. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s cores are successfully purchased, false otherwise.
    */
-  upgradeCore(index: number, n: number): boolean;
+  upgradeCore(index: number, n?: number): boolean;
 
   /**
    * Upgrade the cache of a hacknet node.
@@ -2463,10 +2463,10 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of cache levels to purchase. Must be positive. Rounded to nearest integer.
+   * @param n - Number of cache levels to purchase. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s cache level is successfully upgraded, false otherwise.
    */
-  upgradeCache(index: number, n: number): boolean;
+  upgradeCache(index: number, n?: number): boolean;
 
   /**
    * Calculate the cost of upgrading hacknet node levels.
@@ -2479,10 +2479,10 @@ export interface Hacknet {
    * If the specified Hacknet Node is already at max level, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of levels to upgrade. Must be positive. Rounded to nearest integer.
+   * @param n - Number of levels to upgrade. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node.
    */
-  getLevelUpgradeCost(index: number, n: number): number;
+  getLevelUpgradeCost(index: number, n?: number): number;
 
   /**
    * Calculate the cost of upgrading hacknet node RAM.
@@ -2495,10 +2495,10 @@ export interface Hacknet {
    * If the specified Hacknet Node already has max RAM, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade RAM. Must be positive. Rounded to nearest integer.
+   * @param n - Number of times to upgrade RAM. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node's RAM.
    */
-  getRamUpgradeCost(index: number, n: number): number;
+  getRamUpgradeCost(index: number, n?: number): number;
 
   /**
    * Calculate the cost of upgrading hacknet node cores.
@@ -2511,10 +2511,10 @@ export interface Hacknet {
    * If the specified Hacknet Node is already at max level, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade cores. Must be positive. Rounded to nearest integer.
+   * @param n - Number of times to upgrade cores. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node's number of cores.
    */
-  getCoreUpgradeCost(index: number, n: number): number;
+  getCoreUpgradeCost(index: number, n?: number): number;
 
   /**
    * Calculate the cost of upgrading hacknet node cache.
@@ -2529,10 +2529,10 @@ export interface Hacknet {
    * If the specified Hacknet Node is already at max level, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade cache. Must be positive. Rounded to nearest integer.
+   * @param n - Number of times to upgrade cache. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node's cache.
    */
-  getCacheUpgradeCost(index: number, n: number): number;
+  getCacheUpgradeCost(index: number, n?: number): number;
 
   /**
    * Get the total number of hashes stored.
