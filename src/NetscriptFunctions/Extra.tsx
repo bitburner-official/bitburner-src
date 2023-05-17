@@ -21,7 +21,7 @@ export interface INetscriptExtra {
   bypass(doc: Document): void;
   alterReality(): void;
   rainbow(guess: string): void;
-  iKnowWhatImDoing(): void;
+  tprintRaw(value: React.ReactNode): void;
   printRaw(value: React.ReactNode): void;
 }
 
@@ -71,12 +71,10 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
       Player.giveExploit(Exploit.INeedARainbow);
       return true;
     },
-    iKnowWhatImDoing: (ctx) => () => {
-      helpers.log(ctx, () => "Unlocking unsupported feature: window.tprintRaw");
-      // @ts-expect-error window has no tprintRaw property defined
-      window.tprintRaw = (value: React.ReactNode) => {
-        Terminal.printRaw(<CustomBoundary key={`PlayerContent${customElementKey++}`} children={value} />);
-      };
+    tprintRaw: () => (value) => {
+      Terminal.printRaw(
+        <CustomBoundary key={`PlayerContent${customElementKey++}`} children={value as React.ReactNode} />,
+      );
     },
     printRaw: (ctx) => (value) => {
       ctx.workerScript.print(
