@@ -17,7 +17,7 @@ import { CorpResearchName } from "@nsdefs";
 import { isInteger } from "lodash";
 import { getRecordValues } from "../Types/Record";
 
-export function NewIndustry(corporation: Corporation, industry: IndustryType, name: string): void {
+export function NewDivision(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.size >= corporation.maxDivisions)
     throw new Error(`Cannot expand into ${industry} industry, too many divisions!`);
 
@@ -45,7 +45,7 @@ export function NewIndustry(corporation: Corporation, industry: IndustryType, na
   }
 }
 
-export function removeIndustry(corporation: Corporation, name: string) {
+export function removeDivision(corporation: Corporation, name: string) {
   if (!corporation.divisions.has(name)) throw new Error("There is no division called " + name);
   corporation.divisions.delete(name);
 }

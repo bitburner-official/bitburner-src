@@ -2,9 +2,9 @@
 // This Industry component does NOT include the city tabs at the top
 import React from "react";
 
-import { IndustryOffice } from "./IndustryOffice";
-import { IndustryOverview } from "./IndustryOverview";
-import { IndustryWarehouse } from "./IndustryWarehouse";
+import { DivisionOffice } from "./DivisionOffice";
+import { DivisionOverview } from "./DivisionOverview";
+import { DivisionWarehouse } from "./DivisionWarehouse";
 import { Warehouse } from "../Warehouse";
 import { OfficeSpace } from "../OfficeSpace";
 import { useCorporation, useDivision } from "./Context";
@@ -18,17 +18,17 @@ interface IProps {
   rerender: () => void;
 }
 
-export function Industry(props: IProps): React.ReactElement {
+export function Division(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
   return (
     <Box display="flex">
       <Box sx={{ width: "50%" }}>
-        <IndustryOverview rerender={props.rerender} />
-        <IndustryOffice rerender={props.rerender} office={props.office} />
+        <DivisionOverview rerender={props.rerender} />
+        <DivisionOffice rerender={props.rerender} office={props.office} />
       </Box>
       <Box sx={{ width: "50%" }}>
-        <IndustryWarehouse
+        <DivisionWarehouse
           rerender={props.rerender}
           corp={corp}
           currentCity={props.city}

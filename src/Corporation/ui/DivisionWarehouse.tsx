@@ -30,7 +30,7 @@ import createStyles from "@mui/styles/createStyles";
 import { CityName } from "../../Enums";
 import { CorpUnlockName } from "../data/Enums";
 
-interface IProps {
+interface WarehouseProps {
   corp: Corporation;
   division: Division;
   warehouse?: Warehouse;
@@ -46,7 +46,7 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-function WarehouseRoot(props: IProps): React.ReactElement {
+function WarehouseRoot(props: WarehouseProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
   const [smartSupplyOpen, setSmartSupplyOpen] = useState(false);
@@ -188,7 +188,7 @@ function WarehouseRoot(props: IProps): React.ReactElement {
   );
 }
 
-export function IndustryWarehouse(props: IProps): React.ReactElement {
+export function DivisionWarehouse(props: WarehouseProps): React.ReactElement {
   if (props.warehouse) {
     return <WarehouseRoot {...props} />;
   } else {

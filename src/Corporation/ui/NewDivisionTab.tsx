@@ -3,7 +3,7 @@ import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { IndustryDescriptions, IndustriesData } from "../IndustryData";
 import { IndustryType } from "../data/Enums";
 import { useCorporation } from "./Context";
-import { NewIndustry } from "../Actions";
+import { NewDivision } from "../Actions";
 
 import Typography from "@mui/material/Typography";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
@@ -16,7 +16,7 @@ interface IProps {
   setDivisionName: (name: string) => void;
 }
 
-export function ExpandIndustryTab(props: IProps): React.ReactElement {
+export function NewDivisionTab(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const allIndustries = Object.values(IndustryType).sort();
   const [industry, setIndustry] = useState(allIndustries[0]);
@@ -32,10 +32,10 @@ export function ExpandIndustryTab(props: IProps): React.ReactElement {
       ? "Insufficient corporation funds"
       : "";
 
-  function newIndustry(): void {
+  function newDivision(): void {
     if (disabledText) return;
     try {
-      NewIndustry(corp, industry, name);
+      NewDivision(corp, industry, name);
     } catch (err) {
       dialogBoxCreate(err + "");
       return;
@@ -51,7 +51,7 @@ export function ExpandIndustryTab(props: IProps): React.ReactElement {
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
-    if (event.key === KEY.ENTER) newIndustry();
+    if (event.key === KEY.ENTER) newDivision();
   }
 
   function onIndustryChange(event: SelectChangeEvent): void {
@@ -59,7 +59,7 @@ export function ExpandIndustryTab(props: IProps): React.ReactElement {
   }
 
   const desc = IndustryDescriptions(industry, corp);
-  if (desc === undefined) throw new Error(`Trying to create an industry that doesn't exists: '${industry}'`);
+  if (desc === undefined) throw new Error(`Desired industry for new division doesn't exists: '${industry}'`);
 
   return (
     <>
@@ -82,7 +82,7 @@ export function ExpandIndustryTab(props: IProps): React.ReactElement {
 
       <Box display="flex" alignItems="center">
         <TextField autoFocus={true} value={name} onChange={onNameChange} onKeyDown={onKeyDown} type="text"></TextField>{" "}
-        <ButtonWithTooltip disabledTooltip={disabledText} onClick={newIndustry}>
+        <ButtonWithTooltip disabledTooltip={disabledText} onClick={newDivision}>
           Expand
         </ButtonWithTooltip>
       </Box>

@@ -1,5 +1,5 @@
-// React Component for displaying an Industry's overview information
-// (top-left panel in the Industry UI)
+// React Component for displaying an Division's overview information
+// (top-left panel in the Division UI)
 import React, { useState } from "react";
 
 import { CorpUnlockName, IndustryType } from "../data/Enums";
@@ -90,11 +90,11 @@ function MakeProductButton(): React.ReactElement {
   );
 }
 
-interface IndustryOverviewProps {
+interface DivisionOverviewProps {
   rerender: () => void;
 }
 
-export function IndustryOverview(props: IndustryOverviewProps): React.ReactElement {
+export function DivisionOverview(props: DivisionOverviewProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
   const [helpOpen, setHelpOpen] = useState(false);

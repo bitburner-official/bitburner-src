@@ -28,7 +28,7 @@ import TableRow from "@mui/material/TableRow";
 import { TableCell } from "../../ui/React/Table";
 import { Box } from "@mui/material";
 
-interface IProps {
+interface OfficeProps {
   office: OfficeSpace;
   rerender: () => void;
 }
@@ -91,7 +91,7 @@ function AutoAssignJob(props: IAutoAssignProps): React.ReactElement {
   );
 }
 
-function AutoManagement(props: IProps): React.ReactElement {
+function AutoManagement(props: OfficeProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
 
@@ -251,7 +251,7 @@ function AutoManagement(props: IProps): React.ReactElement {
   );
 }
 
-export function IndustryOffice(props: IProps): React.ReactElement {
+export function DivisionOffice(props: OfficeProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
   const [upgradeOfficeSizeOpen, setUpgradeOfficeSizeOpen] = useState(false);
@@ -300,9 +300,7 @@ export function IndustryOffice(props: IProps): React.ReactElement {
 
           {!division.hasResearch("AutoBrew") && (
             <ButtonWithTooltip
-              normalTooltip={
-                "Provide your employees with tea, increasing their energy by half the difference to 100%, plus 1.5%"
-              }
+              normalTooltip={"Provide your employees with tea to increase their energy"}
               disabledTooltip={teaDisabledText}
               onClick={() => BuyTea(corp, props.office)}
             >

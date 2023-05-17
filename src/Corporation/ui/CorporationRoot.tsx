@@ -3,7 +3,7 @@
 // divisions, see an overview of your corporation, or create a new industry
 import React, { useState } from "react";
 import { MainPanel } from "./MainPanel";
-import { ExpandIndustryTab } from "./ExpandIndustryTab";
+import { NewDivisionTab } from "./ExpandIndustryTab";
 import { Player } from "@player";
 import { Context } from "./Context";
 import { Overview } from "./Overview";
@@ -33,7 +33,7 @@ export function CorporationRoot(): React.ReactElement {
         {canExpand && <Tab label={"Expand"} value={-1} />}
       </Tabs>
       {divisionName === "Overview" && <Overview rerender={rerender} />}
-      {divisionName === -1 && <ExpandIndustryTab setDivisionName={setDivisionName} />}
+      {divisionName === -1 && <NewDivisionTab setDivisionName={setDivisionName} />}
       {typeof divisionName === "string" && divisionName !== "Overview" && (
         <MainPanel rerender={rerender} divisionName={divisionName + ""} />
       )}

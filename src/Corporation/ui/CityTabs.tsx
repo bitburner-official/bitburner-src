@@ -2,7 +2,7 @@
 // These allow player to navigate between different cities for each industry
 import React, { useState } from "react";
 import { OfficeSpace } from "../OfficeSpace";
-import { Industry } from "./Industry";
+import { Division } from "./Industry";
 import { ExpandNewCity } from "./ExpandNewCity";
 import { useDivision } from "./Context";
 import Tabs from "@mui/material/Tabs";
@@ -29,7 +29,7 @@ export function CityTabs(props: IProps): React.ReactElement {
       return <></>;
     }
     mainContent = (
-      <Industry rerender={props.rerender} city={city} warehouse={division.warehouses[city]} office={office} />
+      <Division rerender={props.rerender} city={city} warehouse={division.warehouses[city]} office={office} />
     );
   }
   const canExpand = Object.values(CityName).length > getRecordKeys(division.offices).length;

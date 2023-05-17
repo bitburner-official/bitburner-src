@@ -19,7 +19,7 @@ import {
 } from "@nsdefs";
 
 import {
-  NewIndustry,
+  NewDivision,
   purchaseOffice,
   IssueDividends,
   IssueNewShares,
@@ -712,7 +712,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       }
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const corporation = getCorporation();
-      NewIndustry(corporation, industryName, divisionName);
+      NewDivision(corporation, industryName, divisionName);
     },
     expandCity: (ctx) => (_divisionName, _cityName) => {
       checkAccess(ctx);

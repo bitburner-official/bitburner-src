@@ -9,7 +9,7 @@ import { useCorporation } from "../../ui/Context";
 import { CityName } from "../../../Enums";
 import * as corpConstants from "../../data/Constants";
 import { formatMoney } from "../../../ui/formatNumber";
-import { removeIndustry as removeDivision } from "../../Actions";
+import { removeDivision as removeDivision } from "../../Actions";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { getRecordKeys } from "../../../Types/Record";
 
