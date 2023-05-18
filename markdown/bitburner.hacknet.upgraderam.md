@@ -9,7 +9,7 @@ Upgrade the RAM of a hacknet node.
 **Signature:**
 
 ```typescript
-upgradeRam(index: number, n: number): boolean;
+upgradeRam(index: number, n?: number): boolean;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ upgradeRam(index: number, n: number): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  index | number | Index/Identifier of Hacknet Node. |
-|  n | number | Number of times to upgrade RAM. Must be positive. Rounded to nearest integer. |
+|  n | number | _(Optional)_ Number of times to upgrade RAM. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified. |
 
 **Returns:**
 

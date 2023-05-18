@@ -9,7 +9,7 @@ Calculate the cost of upgrading hacknet node cores.
 **Signature:**
 
 ```typescript
-getCoreUpgradeCost(index: number, n: number): number;
+getCoreUpgradeCost(index: number, n?: number): number;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ getCoreUpgradeCost(index: number, n: number): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  index | number | Index/Identifier of Hacknet Node. |
-|  n | number | Number of times to upgrade cores. Must be positive. Rounded to nearest integer. |
+|  n | number | _(Optional)_ Number of times to upgrade cores. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified. |
 
 **Returns:**
 

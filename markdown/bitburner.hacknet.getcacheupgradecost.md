@@ -9,7 +9,7 @@ Calculate the cost of upgrading hacknet node cache.
 **Signature:**
 
 ```typescript
-getCacheUpgradeCost(index: number, n: number): number;
+getCacheUpgradeCost(index: number, n?: number): number;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ getCacheUpgradeCost(index: number, n: number): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  index | number | Index/Identifier of Hacknet Node. |
-|  n | number | Number of times to upgrade cache. Must be positive. Rounded to nearest integer. |
+|  n | number | _(Optional)_ Number of times to upgrade cache. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified. |
 
 **Returns:**
 

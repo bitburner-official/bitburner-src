@@ -9,7 +9,7 @@ Upgrade the core of a hacknet node.
 **Signature:**
 
 ```typescript
-upgradeCore(index: number, n: number): boolean;
+upgradeCore(index: number, n?: number): boolean;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ upgradeCore(index: number, n: number): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  index | number | Index/Identifier of Hacknet Node. |
-|  n | number | Number of cores to purchase. Must be positive. Rounded to nearest integer. |
+|  n | number | _(Optional)_ Number of cores to purchase. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified. |
 
 **Returns:**
 
