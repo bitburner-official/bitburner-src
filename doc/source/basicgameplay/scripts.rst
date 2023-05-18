@@ -86,7 +86,7 @@ with scripts:
 Prints the logs of the script specified by the name and arguments to
 Terminal. Arguments should be separated by a space. Remember that scripts
 are uniquely identified by their arguments as well as their name. For
-example, if you ran a script `foo.hs` with the argument `foodnstuff`
+example, if you ran a script `foo.js` with the argument `foodnstuff`
 then in order to 'check' it you must also add the `foodnstuff` argument
 to the check command::
 
