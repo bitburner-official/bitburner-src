@@ -23,7 +23,7 @@ The `free`, `scan-analyze`, and `analyze` Terminal commands
 can be used to check how much RAM a server has.
 
 Some servers have some randomized statistics, such as RAM, max Money or 
-required hacking level. These statistics are randomly genererated from a range of values.
+required hacking level. These statistics are randomly generated from a range of values.
 
 Identifying Servers
 ^^^^^^^^^^^^^^^^^^^
