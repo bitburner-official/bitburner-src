@@ -15,7 +15,7 @@ available crimes. Simply select one of the options to begin attempting that
 crime. Attempting to commit a crime takes a certain amount of time. This time
 varies between crimes. 
 
-While doing criemes, you can click “Do something else simultaneously” 
+While doing crimes, you can click “Do something else simultaneously” 
 to be able to do things while you continue to do crimes in the background. There is a 
 20% penalty to the related gains. Clicking the “Focus” button under the overview 
 will return you to the current task.
