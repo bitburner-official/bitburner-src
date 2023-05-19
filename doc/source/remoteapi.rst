@@ -10,7 +10,7 @@ in order to make writing scripts easier, or even use typescript.
 To make use of this Remote API through the official server, look here: https://github.com/bitburner-official/typescript-template.
 If you want to make your own server, see below for API details.
 
-This API uses the JSON RCP 2.0 protocol. Inputs are in the following form:
+This API uses the JSON RPC 2.0 protocol. Inputs are in the following form:
 
     .. code-block:: javascript
 
