@@ -293,7 +293,7 @@ The list contains the name of (i.e. the value returned by
 |                                         | | 3Blue1Brown for more information\n",                                                   |
 |                                         | | Note 3: There's a ~55% chance for an altered Bit. So... MAYBE                          |
 |                                         | | there is an altered Bit 😉\n",                                                         |
-|                                         | | Extranote for automation: return the decimal value as a string",                       |
+|                                         | | Extra note for automation: return the decimal value as a string",                       |
 +-----------------------------------------+------------------------------------------------------------------------------------------+
 | Proper 2-Coloring of a Graph            | | You are given data, representing a graph. Note that "graph", as used here, refers to   |
 |                                         | | the field of graph theory, and has no relation to statistics or plotting.              |

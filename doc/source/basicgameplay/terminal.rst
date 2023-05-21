@@ -145,7 +145,7 @@ backdoor
 Installs a backdoor on the current server. Root access is required to do this.
 
 Servers will give different bonuses when you install a backdoor.
-This can pass faction tests or give bonsues such as discounts from companies.
+This can pass faction tests or give bonuses such as discounts from companies.
 
 buy
 ^^^

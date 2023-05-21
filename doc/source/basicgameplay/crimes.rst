@@ -2,7 +2,7 @@
 
 Crimes
 ======
-Commiting crimes is an active gameplay mechanic that allows the player to train
+Committing crimes is an active gameplay mechanic that allows the player to train
 their stats and potentially earn money. The player can attempt to commit crimes
 by visiting 'The Slums' through the 'City' tab (:ref:`Keyboard shortcut <shortcuts>` Alt + w).
 'The Slums' is available in every city.
@@ -15,7 +15,7 @@ available crimes. Simply select one of the options to begin attempting that
 crime. Attempting to commit a crime takes a certain amount of time. This time
 varies between crimes. 
 
-While doing criemes, you can click “Do something else simultaneously” 
+While doing crimes, you can click “Do something else simultaneously” 
 to be able to do things while you continue to do crimes in the background. There is a 
 20% penalty to the related gains. Clicking the “Focus” button under the overview 
 will return you to the current task.
