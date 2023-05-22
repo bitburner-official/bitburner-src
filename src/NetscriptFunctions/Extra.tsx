@@ -1,4 +1,4 @@
-import type React from "react";
+import React from "react";
 import { Player } from "../Player";
 import { Exploit } from "../Exploits/Exploit";
 import * as bcrypt from "bcryptjs";
@@ -7,6 +7,10 @@ import { InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Terminal } from "../Terminal";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
+import { CustomBoundary } from "../ui/Components/CustomBoundary";
+
+// Incrementing value for custom element keys
+let customElementKey = 0;
 
 export interface INetscriptExtra {
   heart: {
@@ -17,7 +21,7 @@ export interface INetscriptExtra {
   bypass(doc: Document): void;
   alterReality(): void;
   rainbow(guess: string): void;
-  iKnowWhatImDoing(): void;
+  tprintRaw(value: React.ReactNode): void;
   printRaw(value: React.ReactNode): void;
 }
 
@@ -67,14 +71,15 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
       Player.giveExploit(Exploit.INeedARainbow);
       return true;
     },
-    iKnowWhatImDoing: (ctx) => () => {
-      helpers.log(ctx, () => "Unlocking unsupported feature: window.tprintRaw");
-      // @ts-expect-error window has no tprintRaw property defined
-      window.tprintRaw = Terminal.printRaw.bind(Terminal);
+    tprintRaw: () => (value) => {
+      Terminal.printRaw(
+        <CustomBoundary key={`PlayerContent${customElementKey++}`} children={value as React.ReactNode} />,
+      );
     },
     printRaw: (ctx) => (value) => {
-      // Using this voids the warranty on your tail log
-      ctx.workerScript.print(value as React.ReactNode);
+      ctx.workerScript.print(
+        <CustomBoundary key={`PlayerContent${customElementKey++}`} children={value as React.ReactNode} />,
+      );
     },
   };
 }
