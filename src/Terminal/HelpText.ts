@@ -267,7 +267,7 @@ export const HelpTexts: Record<string, string[]> = {
   ],
   hostname: ["Usage: hostname", " ", "Prints the hostname of the current server", " "],
   kill: [
-    "Usage: kill [script name] [args...] or kill [pid",
+    "Usage: kill [script name] [args...] or kill [pid]",
     " ",
     "Kill the script specified by the script name and arguments OR by its PID.",
     " ",
