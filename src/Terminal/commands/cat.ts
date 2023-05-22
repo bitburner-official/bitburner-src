@@ -26,10 +26,10 @@ export function cat(args: (string | number | boolean)[], server: BaseServer): vo
 
   // Message
   if (checkEnum(MessageFilename, path)) {
-    if (server.messages.includes(path)) showMessage(path);
+    if (server.messages.includes(path)) return showMessage(path);
   }
   if (checkEnum(LiteratureName, path)) {
-    if (server.messages.includes(path)) showLiterature(path);
+    if (server.messages.includes(path)) return showLiterature(path);
   }
   Terminal.error(`No file at path ${path}`);
 }
