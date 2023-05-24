@@ -93,6 +93,7 @@ import { ContentFilePath } from "./Paths/ContentFile";
 import { LiteratureName } from "./Literature/data/LiteratureNames";
 import { hasProgramExtension } from "./Paths/ProgramFilePath";
 import { hasContractExtension } from "./Paths/ContractFilePath";
+import { getRamCost } from "./Netscript/RamCostGenerator";
 
 export const enums: NSEnums = {
   CityName,
@@ -1735,6 +1736,10 @@ export const ns: InternalAPI<NSFull> = {
     lastNodeReset: Player.lastNodeReset,
     currentNode: Player.bitNodeN,
   }),
+  getFunctionRamCost: (ctx) => (_name) => {
+    const name = helpers.string(ctx, "name", _name);
+    return getRamCost(...name.split("."));
+  },
   flags: Flags,
   ...NetscriptExtra(),
 };

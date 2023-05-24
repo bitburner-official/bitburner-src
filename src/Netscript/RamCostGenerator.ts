@@ -534,6 +534,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   getMoneySources: RamCostConstants.GetMoneySourcesCost,
   mv: 0,
   getResetInfo: 1,
+  getFunctionRamCost: 0,
   tail: 0,
   toast: 0,
   moveTail: 0,

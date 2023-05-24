@@ -6511,6 +6511,18 @@ export interface NS {
   getResetInfo(): ResetInfo;
 
   /**
+   * Get the ram cost of a netscript function.
+   *
+   * If the given function does not exist, the function will return 0.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param name - The function name. Also works with interfaces: `stock.getPosition`
+   */
+  getFunctionRamCost(name: string): number;
+
+  /**
    * Parse command line flags.
    * @remarks
    * RAM cost: 0 GB
