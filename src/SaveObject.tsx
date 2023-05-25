@@ -668,8 +668,11 @@ function evaluateVersionCompatibility(ver: string | number): void {
       anyPlayer.lastNodeReset = anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastBitnode;
     }
 
+    Terminal.warn("Migrating to 2.3.0, loading with no scripts.");
     const newDirectory = resolveDirectory("v2.3FileChanges/") as Directory;
     for (const server of GetAllServers()) {
+      // Do not load saved scripts on migration
+      server.savedScripts = [];
       let invalidScriptCount = 0;
       // There was a brief dev window where Server.scripts was already a map but the filepath changes weren't in yet.
       const oldScripts = Array.isArray(server.scripts) ? (server.scripts as Script[]) : [...server.scripts.values()];
