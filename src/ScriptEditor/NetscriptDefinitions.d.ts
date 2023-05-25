@@ -5281,7 +5281,7 @@ export interface NS {
    * RAM cost: 1.3 GB
    *
    * Run a script as a separate process on a specified server. This is similar to the function {@link NS.run | run}
-   * except that it can be used to run a script on any server, instead of just the current server.
+   * except that it can be used to run a script that already exists on any server, instead of just the current server.
    *
    * If the script was successfully started, then this function returns the PID of that script.
    * Otherwise, it returns 0.
@@ -5307,7 +5307,7 @@ export interface NS {
    * // arguments to the script.
    * ns.exec("foo.js", "foodnstuff", 5, 1, "test");
    * ```
-   * @param script - Filename of script to execute.
+   * @param script - Filename of script to execute. This file must already exist on the target server.
    * @param hostname - Hostname of the `target server` on which to execute the script.
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument threadOrOptions must be filled in with a value.
