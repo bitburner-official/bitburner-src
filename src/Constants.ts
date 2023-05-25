@@ -89,8 +89,8 @@ export const CONSTANTS: {
   LatestUpdate: string;
 } = {
   VersionString: "2.3.0",
-  isDevBranch: true,
-  VersionNumber: 30,
+  isDevBranch: false,
+  VersionNumber: 31,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -229,9 +229,9 @@ export const CONSTANTS: {
 
   Donations: 79,
 
-  // Also update doc/src/changelog.rst
+  // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3 Dev - SF3 rework and performance improvements (28 Apr 2023)
+v2.3.0 - SF3 rework and performance improvements (25 May 2023)
 ----------------------------------------------------------------
 
 BREAKING CHANGES: These changes may require changes to your scripts.
@@ -241,23 +241,25 @@ BREAKING CHANGES: These changes may require changes to your scripts.
 * The same .js script will now be the same js module whether the script was ran directly or used as an import. This means top-level variables (variables defined outside of any function) are shared across all instances of the script.
 * The js module for a script will also be reused by any script that has the exact same compiled text, even if that script is on another server or has a different filename. This can lead to unexpected results when using top-level variables.
 * Some properties removed from ns.getPlayer and added to a separate function ns.getResetInfo. These are still accessible from getPlayer but will produce a warning message the first time they are accessed per game session.
-* hackAnalyzeThreads now returns -1, instead of 0, when no money can be hacked from the targeted server. 
+* hackAnalyzeThreads now returns -1, instead of 0, when no money can be hacked from the targeted server.
+* ns.iKnowWhatImDoing has been removed, replaced by ns.tprintRaw for printing custom react content to the terminal (limited support).
 
 PERFORMANCE:
 
-* Remove requirement for args to be unique. (@d0sboots)
 * Minimize impact of unavoidable memory leak when modules are created, by reusing modules as much as possible (@d0sboots)
 * Internal data structure changes (@d0sboots, @Snarling)
 * Fix memory leak when initializing large number of netscript ports (@Snarling)
-* Improve performance while on the Active Scripts page if many scripts are launching/starting. (@d0sboots)
+* Improve performance while on the Active Scripts page if many scripts are starting/ending. (@d0sboots)
 
 NETSCRIPT GENERAL:
 
+* Remove requirement for script args to be unique. This was also related to performance improvements. (@d0sboots)
 * ns.hackAnalyzeThreads no longer indicates infinity any time a single thread would hack less than $1 (@Snarling)
 * ns.renamePurchasedServer no longer crashes if player is connected to the server being renamed (@Snarling)
 * ns.hackAnalyzeThreads now return -1 (instead of 0) if no money can be hacked from the targeted server. (@d0sboots)
 * Fix a possible infinite atExit loop if a script killed itself. (@Snarling)
 * Static timestamps of last resets can be obtained via ns.getResetInfo, replacing playtimeSinceLastX from ns.getPlayer (@G4mingJon4s)
+* Improved support for printing react content directly to the terminal (ns.tprintRaw) or to a script log (ns.printRaw).
 * Added RunOptions, which can optionally replace the "threads" argument for ns.run/ns.exec/ns.spawn. (@d0sboots)
   * RunOptions.threads: Provide a thread count (since RunOptions can replace the threads argument)
   * RunOptions.temporary: Prevents the script execution from being included in the save file.
@@ -266,6 +268,7 @@ NETSCRIPT GENERAL:
 
 GENERAL / MISC:
 
+* Fixed a bug that could cause the overview skill bars to become desynced (@d0sboots)
 * There is now an autoexec setting to specify a script on home to automatically run when loading the game. (@d0sboots)
 * Monaco script editor updated to a newer version and has more config options available now. (@Snarling)
 * Improve Electron's handling of external links (@Snarling) 
@@ -337,7 +340,7 @@ SF10:
 
 SF12:
 
-* Fix inconsistency in how BN12 multipliers were calculated 
+* Fix inconsistency in how BN12 multipliers were calculated
 
 SF13:
 
