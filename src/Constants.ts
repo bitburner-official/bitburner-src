@@ -88,8 +88,8 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.3.0",
-  isDevBranch: false,
+  VersionString: "2.3.1",
+  isDevBranch: true,
   VersionNumber: 31,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
@@ -231,119 +231,11 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3.0 - SF3 rework and performance improvements (25 May 2023)
-----------------------------------------------------------------
-
-BREAKING CHANGES: These changes may require changes to your scripts.
-
-* Major changes to the SF3 mechanic. See the related section below for more detailed info on the changes.
-* The same script filename can now be ran multiple times with the same args. If running a script from another script (ns.run/ns.exec/etc), this limitation can be re-imposed with the preventDuplicates RunOption (see general section for info on RunOptions).
-* The same .js script will now be the same js module whether the script was ran directly or used as an import. This means top-level variables (variables defined outside of any function) are shared across all instances of the script.
-* The js module for a script will also be reused by any script that has the exact same compiled text, even if that script is on another server or has a different filename. This can lead to unexpected results when using top-level variables.
-* Some properties removed from ns.getPlayer and added to a separate function ns.getResetInfo. These are still accessible from getPlayer but will produce a warning message the first time they are accessed per game session.
-* hackAnalyzeThreads now returns -1, instead of 0, when no money can be hacked from the targeted server.
-* ns.iKnowWhatImDoing has been removed, replaced by ns.tprintRaw for printing custom react content to the terminal (limited support).
-
-PERFORMANCE:
-
-* Minimize impact of unavoidable memory leak when modules are created, by reusing modules as much as possible (@d0sboots)
-* Internal data structure changes (@d0sboots, @Snarling)
-* Fix memory leak when initializing large number of netscript ports (@Snarling)
-* Improve performance while on the Active Scripts page if many scripts are starting/ending. (@d0sboots)
-
-NETSCRIPT GENERAL:
-
-* Remove requirement for script args to be unique. This was also related to performance improvements. (@d0sboots)
-* ns.hackAnalyzeThreads no longer indicates infinity any time a single thread would hack less than $1 (@Snarling)
-* ns.renamePurchasedServer no longer crashes if player is connected to the server being renamed (@Snarling)
-* ns.hackAnalyzeThreads now return -1 (instead of 0) if no money can be hacked from the targeted server. (@d0sboots)
-* Fix a possible infinite atExit loop if a script killed itself. (@Snarling)
-* Static timestamps of last resets can be obtained via ns.getResetInfo, replacing playtimeSinceLastX from ns.getPlayer (@G4mingJon4s)
-* Improved support for printing react content directly to the terminal (ns.tprintRaw) or to a script log (ns.printRaw).
-* Added RunOptions, which can optionally replace the "threads" argument for ns.run/ns.exec/ns.spawn. (@d0sboots)
-  * RunOptions.threads: Provide a thread count (since RunOptions can replace the threads argument)
-  * RunOptions.temporary: Prevents the script execution from being included in the save file.
-  * RunOptions.ramOverride: Provide a static ram cost for the script to override what is calculated by the game. Dynamic ram checking is still enforced.
-  * RunOptions.preventDuplicates: Fail to launch the script if the args are identical to a script already running.
+v2.3.1 dev
+----------
 
 GENERAL / MISC:
 
-* Fixed a bug that could cause the overview skill bars to become desynced (@d0sboots)
-* There is now an autoexec setting to specify a script on home to automatically run when loading the game. (@d0sboots)
-* Monaco script editor updated to a newer version and has more config options available now. (@Snarling)
-* Improve Electron's handling of external links (@Snarling) 
-* Improved support for ANSI color codes (@d0sboots)
-* Improved consistency of file paths. Correct names for files no longer start with a / even if they are in a directory. (@Snarling)
-* All Math Expressions contract no longer accepts wrong answers (@Snarling)
-* Faction invites now trigger immediately when backdooring a server. (@Snarling)
-* Fixed issue where duplicate programs could be created. (@Minzenkatze)
-* UI improvements to create program page (@Minzenkatze)
-* Fix inconsistency in skill xp to skill level conversion (@hydroflame)
-* Updated blood donation counter to reflect number of confirmed blood donations. (@hydroflame)
-* Minor improvements to ram calculation process (@Snarling)
-* Improved terminal arguments detection (@Snarling)
-* Improved display for ls terminal command. (@Snarling)
-* Added more internal tests and improved test quality (@d0sboots)
-* Various codebase improvements (@Snarling, @d0sboots)
-* Documentation improvements (Many contributors)
 * Nerf noodle bar
-
-SPOILER SECTIONS:
-
-SF2:
-
-* Corrected the "Next equipment unlock" text for member upgrades. (@LiamGeorge1999)
-
-SF3:
-
-* Many Corporation API changes, due to functionality changes and due to property name changes. See documentation for correct usage.
-* Can now have multiple divisions within the same industry. (@Mughur)
-* Can now sell a division or sell the entire corporation. (@Mughur)
-* Product quality now depends on material quality (@Mughur)
-* Product price can be set separately per-city (@Mughur)
-* Exports can be set relative to inventory or production (@Mughur)
-* ns.corporation.getProduct is city-specific (@Mughur)
-* Bulk purchasing is available from the start (@Mughur)
-* Can buy multiple upgrades at a time, similar to hacknet node upgrades (@Mughur)
-* Various UI changes (@Mughur)
-* Removed happiness from employees (@Mughur)
-* Coffee renamed to tea (@Mughur)
-* Training position renamed to intern (@Mughur)
-* More options for SmartSupply (@Mughur)
-* Advertising nerf (@Mughur)
-* Nerfed investors and reduced effectiveness of "fraud" (@Mughur)
-* Fixed React errors, renamed most corp object properties (@Snarling)
-* Various other changes (@Mughur, @Snarling)
-
-SF4:
-
-* Faction invites trigger immediately when running ns.singularity.getFactionInvitations (@Snarling)
-* Added ns.singularity.getCompanyPositionInfo (@jeek)
-
-SF6:
-
-* Failing a contract or operation now consumes the action (@Zelow79)
-
-SF9:
-
-* The SF9.3 bonus is also given to the player when inside of BN9. (@Zelow79)
-* Adjusted the SF1 bonus for hacknet costs (slight nerf), and raised the SF9 bonus to compensate. (@d0sboots)
-* Added option to purchase company favor using hashes. (@jeek)
-
-SF10:
-
-* Sleeve shock recovery now scales with intelligence. (@Tyasuh)
-* Sleeve kills during crimes count towards numPeopleKilled (@Zelow79)
-* Fix a misspelled moneySourceTracker call for sleeves (@zerbosh)
-* ns.sleeve.getTask return value now includes cyclesNeeded where applicable (@Snarling)
-* Internal type refactoring on Sleeve Work. (@Snarling)
-
-SF12:
-
-* Fix inconsistency in how BN12 multipliers were calculated
-
-SF13:
-
-* Improve performance of Stanek's gift update cycle, and rework (buff) bonus time handling. (@Snarling)
 `,
 };
