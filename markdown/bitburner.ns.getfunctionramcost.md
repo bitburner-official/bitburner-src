@@ -6,8 +6,6 @@
 
 Get the ram cost of a netscript function.
 
-If the given function does not exist, the function will return 0.
-
 **Signature:**
 
 ```typescript

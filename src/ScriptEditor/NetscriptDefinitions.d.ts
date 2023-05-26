@@ -6513,8 +6513,6 @@ export interface NS {
   /**
    * Get the ram cost of a netscript function.
    *
-   * If the given function does not exist, the function will return 0.
-   *
    * @remarks
    * RAM cost: 0 GB
    *
