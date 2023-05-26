@@ -6,6 +6,11 @@ Changelog
 v2.3.0 - SF3 rework and performance improvements (25 May 2023)
 --------------------------------------------------------------
 
+HOTFIXES (as of 26 May 2023):
+
+* Prevent scripts from loading during intial migration to 2.3.0 save format, to prevent a crash that could occur.
+* Fix scp logging (hostname was being logged incorrectly in multiple places and showing as [Object object])
+
 BREAKING CHANGES: These changes may require changes to your scripts.
 
 * Major changes to the SF3 mechanic. See the related section below for more detailed info on the changes.
