@@ -20,5 +20,5 @@ export function alias(args: (string | number | boolean)[]): void {
       }
     }
   }
-  Terminal.error('Incorrect usage of alias command. Usage: alias [-g] [aliasname="value"]');
+  Terminal.error('Incorrect usage of alias command. Usage: alias [-g] ["aliasname=value"]');
 }
