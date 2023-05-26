@@ -132,7 +132,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     )();
     const fullPath = combinePath(baseDirectory, props.path);
     function onClick() {
-      const code = server.scripts.get(props.path)?.content ?? "";
+      const code = server.scripts.get(fullPath)?.content ?? "";
       const map = new Map<ContentFilePath, string>();
       map.set(fullPath, code);
       Router.toScriptEditor(map);
