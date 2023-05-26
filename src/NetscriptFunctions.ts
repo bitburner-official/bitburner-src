@@ -37,7 +37,7 @@ import { runScriptFromScript } from "./NetscriptWorker";
 import { killWorkerScript, killWorkerScriptByPid } from "./Netscript/killWorkerScript";
 import { workerScripts } from "./Netscript/WorkerScripts";
 import { WorkerScript } from "./Netscript/WorkerScript";
-import { helpers, assertObjectType } from "./Netscript/NetscriptHelpers";
+import { helpers, assertObjectType, wrapUserNode } from "./Netscript/NetscriptHelpers";
 import {
   formatExp,
   formatNumberNoSuffix,
@@ -49,7 +49,7 @@ import {
   formatNumber,
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
-import { LogBoxEvents, LogBoxCloserEvents, LogBoxPositionEvents, LogBoxSizeEvents } from "./ui/React/LogBoxManager";
+import { LogBoxEvents, LogBoxCloserEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { NetscriptGang } from "./NetscriptFunctions/Gang";
 import { NetscriptSleeve } from "./NetscriptFunctions/Sleeve";
@@ -557,7 +557,12 @@ export const ns: InternalAPI<NSFull> = {
       const x = helpers.number(ctx, "x", _x);
       const y = helpers.number(ctx, "y", _y);
       const pid = helpers.number(ctx, "pid", _pid);
-      LogBoxPositionEvents.emit({ pid, data: { x, y } });
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.tailProps?.setPosition(x, y);
     },
   resizeTail:
     (ctx) =>
@@ -565,7 +570,12 @@ export const ns: InternalAPI<NSFull> = {
       const w = helpers.number(ctx, "w", _w);
       const h = helpers.number(ctx, "h", _h);
       const pid = helpers.number(ctx, "pid", _pid);
-      LogBoxSizeEvents.emit({ pid, data: { w, h } });
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.tailProps?.setSize(w, h);
     },
   closeTail:
     (ctx) =>
@@ -573,6 +583,18 @@ export const ns: InternalAPI<NSFull> = {
       const pid = helpers.number(ctx, "pid", _pid);
       //Emit an event to tell the game to close the tail window if it exists
       LogBoxCloserEvents.emit(pid);
+    },
+  setTitle:
+    (ctx) =>
+    (title, _pid = ctx.workerScript.scriptRef.pid) => {
+      const pid = helpers.number(ctx, "pid", _pid);
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
+      runningScriptObj.tailProps?.rerender();
     },
   nuke: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);

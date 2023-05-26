@@ -236,6 +236,7 @@ v2.3.1 dev
 
 GENERAL / MISC:
 
+* Tail window overhaul, ability to set tail title with ns.setTitle, other tail bugfixes and improvements. (@d0sboots)
 * Nerf noodle bar
 `,
 };

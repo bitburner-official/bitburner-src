@@ -84,6 +84,7 @@
 |  [Player](./bitburner.player.md) |  |
 |  [ProcessInfo](./bitburner.processinfo.md) | A single process on a server. |
 |  [Product](./bitburner.product.md) | Product in a warehouse |
+|  [ReactElement](./bitburner.reactelement.md) | A stand-in for the real React.ReactElement, which API-extractor doesn't know about. Don't try to create one of these by hand; use React.createElement(). |
 |  [RecentScript](./bitburner.recentscript.md) |  |
 |  [ReputationFormulas](./bitburner.reputationformulas.md) | Reputation formulas |
 |  [ResetInfo](./bitburner.resetinfo.md) | Various info about resets |
@@ -99,6 +100,7 @@
 |  [Stanek](./bitburner.stanek.md) | Stanek's Gift API. |
 |  [StockOrder](./bitburner.stockorder.md) | <p>Return value of [getOrders](./bitburner.tix.getorders.md)</p><p>Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md)</p> |
 |  [StockOrderObject](./bitburner.stockorderobject.md) | Value in map of [StockOrder](./bitburner.stockorder.md) |
+|  [TailProperties](./bitburner.tailproperties.md) |  |
 |  [TIX](./bitburner.tix.md) | Stock market API |
 |  [UserInterface](./bitburner.userinterface.md) | User Interface API. |
 |  [UserInterfaceTheme](./bitburner.userinterfacetheme.md) | Interface Theme |
