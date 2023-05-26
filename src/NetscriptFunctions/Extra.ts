@@ -1,16 +1,11 @@
-import React from "react";
 import { Player } from "../Player";
 import { Exploit } from "../Exploits/Exploit";
 import * as bcrypt from "bcryptjs";
 import { Apr1Events as devMenu } from "../ui/Apr1";
 import { InternalAPI } from "../Netscript/APIWrapper";
-import { helpers } from "../Netscript/NetscriptHelpers";
+import { helpers, wrapUserNode } from "../Netscript/NetscriptHelpers";
 import { Terminal } from "../Terminal";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
-import { CustomBoundary } from "../ui/Components/CustomBoundary";
-
-// Incrementing value for custom element keys
-let customElementKey = 0;
 
 export interface INetscriptExtra {
   heart: {
@@ -72,14 +67,10 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
       return true;
     },
     tprintRaw: () => (value) => {
-      Terminal.printRaw(
-        <CustomBoundary key={`PlayerContent${customElementKey++}`} children={value as React.ReactNode} />,
-      );
+      Terminal.printRaw(wrapUserNode(value));
     },
     printRaw: (ctx) => (value) => {
-      ctx.workerScript.print(
-        <CustomBoundary key={`PlayerContent${customElementKey++}`} children={value as React.ReactNode} />,
-      );
+      ctx.workerScript.print(wrapUserNode(value));
     },
   };
 }

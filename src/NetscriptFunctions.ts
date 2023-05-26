@@ -37,7 +37,7 @@ import { runScriptFromScript } from "./NetscriptWorker";
 import { killWorkerScript, killWorkerScriptByPid } from "./Netscript/killWorkerScript";
 import { workerScripts } from "./Netscript/WorkerScripts";
 import { WorkerScript } from "./Netscript/WorkerScript";
-import { helpers, assertObjectType } from "./Netscript/NetscriptHelpers";
+import { helpers, assertObjectType, wrapUserNode } from "./Netscript/NetscriptHelpers";
 import {
   formatExp,
   formatNumberNoSuffix,
@@ -585,18 +585,14 @@ export const ns: InternalAPI<NSFull> = {
     },
   setTitle:
     (ctx) =>
-    (_title, _pid = ctx.workerScript.scriptRef.pid) => {
-      const title =
-        _title !== null && typeof _title === "object" && "type" in _title && "props" in _title && "key" in _title
-          ? (_title as React.ReactElement)
-          : helpers.string(ctx, "title", _title);
+    (title, _pid = ctx.workerScript.scriptRef.pid) => {
       const pid = helpers.number(ctx, "pid", _pid);
       const runningScriptObj = helpers.getRunningScript(ctx, pid);
       if (runningScriptObj == null) {
         helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
         return;
       }
-      runningScriptObj.title = title;
+      runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
       runningScriptObj.tailProps?.rerender();
     },
   nuke: (ctx) => (_hostname) => {

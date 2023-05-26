@@ -9,5 +9,5 @@ The title, as shown in the script's log box. Defaults to the name + args, but ca
 **Signature:**
 
 ```typescript
-title: string | React.ReactElement;
+title: string | ReactElement;
 ```

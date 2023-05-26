@@ -181,6 +181,17 @@ interface TailProperties {
   height: number;
 }
 
+/**
+ * @public
+ * A stand-in for the real React.ReactElement, which API-extractor doesn't know about.
+ * Don't try to create one of these by hand; use React.createElement().
+ */
+interface ReactElement {
+  type: string | ((props: any) => ReactElement | null) | (new (props: any) => object);
+  props: any;
+  key: string | number | null;
+}
+
 /** @public */
 interface RunningScript {
   /** Arguments the script was called with */
@@ -218,7 +229,7 @@ interface RunningScript {
    * the user), that will not be persisted, and will be restored to default on
    * load.
    */
-  title: string | React.ReactElement;
+  title: string | ReactElement;
   /** Number of threads that this script runs with */
   threads: number;
   /** Whether this RunningScript is excluded from saves */
@@ -5132,18 +5143,20 @@ export interface NS {
    * This sets the title to the given string, and also forces an update of the
    * tail window's contents.
    *
-   * It is possible to pass a React Element instead, but this is mostly
-   * unsupported and may cause glitches or weird behavior - use at your own risk!
-   *
    * The title is saved across restarts, but only if it is a simple string.
    *
    * If the pid is unspecified, it will modify the current script’s logs.
    *
    * Otherwise, the pid argument can be used to change the logs from another script.
    *
+   * It is possible to pass a React Element instead of a string. Get these by calling
+   * React.createElement() with appropriate parameters. You should either know
+   * or be willing to learn about the React UI library if you go down this
+   * route, and there will likely be rough edges.
+   *
    * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
    */
-  setTitle(title: string | React.ReactElement, pid?: number): void;
+  setTitle(title: string | ReactElement, pid?: number): void;
 
   /**
    * Get the list of servers connected to a server.

@@ -9,14 +9,14 @@ Set the title of the tail window of a script.
 **Signature:**
 
 ```typescript
-setTitle(title: string | React.ReactElement, pid?: number): void;
+setTitle(title: string | ReactElement, pid?: number): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  title | string \| React.ReactElement |  |
+|  title | string \| [ReactElement](./bitburner.reactelement.md) |  |
 |  pid | number | _(Optional)_ Optional. PID of the script having its tail closed. If omitted, the current script is used. |
 
 **Returns:**
@@ -29,11 +29,11 @@ RAM cost: 0 GB
 
 This sets the title to the given string, and also forces an update of the tail window's contents.
 
-It is possible to pass a React Element instead, but this is mostly unsupported and may cause glitches or weird behavior - use at your own risk!
-
 The title is saved across restarts, but only if it is a simple string.
 
 If the pid is unspecified, it will modify the current script’s logs.
 
 Otherwise, the pid argument can be used to change the logs from another script.
+
+It is possible to pass a React Element instead of a string. Get these by calling React.createElement() with appropriate parameters. You should either know or be willing to learn about the React UI library if you go down this route, and there will likely be rough edges.
 

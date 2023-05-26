@@ -235,17 +235,14 @@ function LogWindow(props: IProps): React.ReactElement {
   }
 
   function title(): React.ReactElement {
-    const t = script.title;
-    if (typeof t !== "string") {
-      return t;
-    }
+    const title_str = script.title === "string" ? script.title : `${script.filename} ${script.args.join(" ")}`;
     return (
       <Typography
         variant="h6"
         sx={{ marginRight: "auto", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}
-        title={t}
+        title={title_str}
       >
-        {t}
+        {script.title}
       </Typography>
     );
   }

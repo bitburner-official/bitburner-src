@@ -1,3 +1,4 @@
+import React from "react";
 import { NetscriptContext } from "./APIWrapper";
 import { WorkerScript } from "./WorkerScript";
 import { killWorkerScript } from "./killWorkerScript";
@@ -38,6 +39,7 @@ import { isPositiveInteger, PositiveInteger, Unknownify } from "../types";
 import { Engine } from "../engine";
 import { resolveFilePath, FilePath } from "../Paths/FilePath";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
+import { CustomBoundary } from "../ui/Components/CustomBoundary";
 
 export const helpers = {
   string,
@@ -810,4 +812,15 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | ScriptDeath | 
     e = ws ? makeBasicErrorMsg(ws, msg, "UNKNOWN") : msg;
   }
   dialogBoxCreate(initialText + e);
+}
+
+// Incrementing value for custom element keys
+let customElementKey = 0;
+
+/**
+ * Wrap a user-provided React Element (or maybe invalid junk) in an Error-catching component,
+ * so the game won't crash and the user gets sensible messages.
+ */
+export function wrapUserNode(value: unknown) {
+  return <CustomBoundary key={`PlayerContent${customElementKey++}`} children={value as React.ReactNode} />;
 }
