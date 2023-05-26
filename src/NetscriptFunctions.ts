@@ -838,8 +838,10 @@ export const ns: InternalAPI<NSFull> = {
       }
       // Overwrite script if it already exists
       const result = destServer.writeToContentFile(contentFilePath, sourceContentFile.content);
-      helpers.log(ctx, () => `Copied file ${contentFilePath} from ${sourceServer} to ${destServer}`);
-      if (result.overwritten) helpers.log(ctx, () => `Warning: ${contentFilePath} was overwritten on ${destServer}`);
+      helpers.log(ctx, () => `Copied file ${contentFilePath} from ${sourceServer.hostname} to ${destServer.hostname}`);
+      if (result.overwritten) {
+        helpers.log(ctx, () => `Warning: ${contentFilePath} was overwritten on ${destServer.hostname}`);
+      }
     }
 
     // --- Literature Files ---
