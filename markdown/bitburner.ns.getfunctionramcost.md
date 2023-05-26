@@ -16,7 +16,7 @@ getFunctionRamCost(name: string): number;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  name | string | The function name. Also works with interfaces: <code>stock.getPosition</code> |
+|  name | string | The fully-qualified function name, without the leading <code>ns</code>. Example inputs: <code>hack</code>, <code>tprint</code>, <code>stock.getPosition</code>. |
 
 **Returns:**
 

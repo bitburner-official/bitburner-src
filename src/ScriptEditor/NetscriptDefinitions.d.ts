@@ -6516,7 +6516,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * @param name - The function name. Also works with interfaces: `stock.getPosition`
+   * @param name - The fully-qualified function name, without the leading `ns`. Example inputs: `hack`, `tprint`, `stock.getPosition`.
    */
   getFunctionRamCost(name: string): number;
 
