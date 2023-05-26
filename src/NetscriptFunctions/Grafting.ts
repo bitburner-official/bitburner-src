@@ -22,11 +22,14 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
     }
   };
 
+  const isValidGraftingAugName = (augName: string) =>
+    getGraftingAvailableAugs().includes(augName) && augmentationExists(augName);
+
   return {
     getAugmentationGraftPrice: (ctx) => (_augName) => {
       const augName = helpers.string(ctx, "augName", _augName);
       checkGraftingAPIAccess(ctx);
-      if (!getGraftingAvailableAugs().includes(augName) || augmentationExists(augName)) {
+      if (!isValidGraftingAugName(augName)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid aug: ${augName}`);
       }
       const graftableAug = new GraftableAugmentation(StaticAugmentations[augName]);
@@ -36,7 +39,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
     getAugmentationGraftTime: (ctx) => (_augName) => {
       const augName = helpers.string(ctx, "augName", _augName);
       checkGraftingAPIAccess(ctx);
-      if (!getGraftingAvailableAugs().includes(augName) || !augmentationExists(augName)) {
+      if (!isValidGraftingAugName(augName)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid aug: ${augName}`);
       }
       const graftableAug = new GraftableAugmentation(StaticAugmentations[augName]);
@@ -58,7 +61,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
         if (player.city !== CityName.NewTokyo) {
           throw helpers.makeRuntimeErrorMsg(ctx, "You must be in New Tokyo to begin grafting an Augmentation.");
         }
-        if (!getGraftingAvailableAugs().includes(augName) || !augmentationExists(augName)) {
+        if (!isValidGraftingAugName(augName)) {
           helpers.log(ctx, () => `Invalid aug: ${augName}`);
           return false;
         }
