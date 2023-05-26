@@ -11,6 +11,8 @@ import { LiteratureName } from "../Literature/data/LiteratureNames";
 import { Person as IPerson } from "@nsdefs";
 import { isValidNumber } from "../utils/helpers/isValidNumber";
 import { Server as IServer } from "@nsdefs";
+import { workerScripts } from "../Netscript/WorkerScripts";
+import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 
 /**
  * Constructs a new server, while also ensuring that the new server
@@ -263,7 +265,16 @@ export function prestigeHomeComputer(homeComp: Server): void {
   homeComp.messages.length = 0; //Remove .lit and .msg files
   homeComp.messages.push(LiteratureName.HackersStartingHandbook);
   if (homeComp.runningScriptMap.size !== 0) {
-    throw new Error("All programs weren't already killed!");
+    // Temporary verbose logging section to gather data on a bug
+    console.error("Some runningScripts were still present on home during prestige");
+    for (const [scriptKey, byPidMap] of homeComp.runningScriptMap) {
+      console.error(`script key: ${scriptKey}: ${byPidMap.size} scripts`);
+      for (const pid of byPidMap.keys()) {
+        if (workerScripts.has(pid)) killWorkerScriptByPid(pid);
+      }
+      byPidMap.clear();
+    }
+    homeComp.runningScriptMap.clear();
   }
 }
 

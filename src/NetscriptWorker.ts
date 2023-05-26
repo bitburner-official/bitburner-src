@@ -261,6 +261,13 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
  * it is active
  */
 export function startWorkerScript(runningScript: RunningScript, server: BaseServer, parent?: WorkerScript): number {
+  if (server.hostname !== runningScript.server) {
+    // Temporarily adding a check here to see if this ever triggers
+    console.error(
+      `Tried to launch a worker script on a different server ${server.hostname} than the runningScript's server ${runningScript.server}`,
+    );
+    return 0;
+  }
   if (createAndAddWorkerScript(runningScript, server, parent)) {
     // Push onto runningScripts.
     // This has to come after createAndAddWorkerScript() because that fn updates RAM usage

@@ -305,7 +305,7 @@ export class Corporation {
     if (this.funds < totalCost) return `Not enough funds to purchase ${amount} of upgrade ${upgradeName}.`;
     this.funds -= totalCost;
     this.upgrades[upgradeName].level += amount;
-    this.upgrades[upgradeName].value += upgrade.benefit;
+    this.upgrades[upgradeName].value += upgrade.benefit * amount;
 
     // Apply effects for upgrades
     if (upgradeName === CorpUpgradeName.SmartStorage) {
