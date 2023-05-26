@@ -534,6 +534,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   getMoneySources: RamCostConstants.GetMoneySourcesCost,
   mv: 0,
   getResetInfo: 1,
+  getFunctionRamCost: 0,
   tail: 0,
   toast: 0,
   moveTail: 0,
@@ -613,15 +614,13 @@ export const RamCosts: RamCostTree<NSFull> = {
 
 export function getRamCost(...args: string[]): number {
   if (args.length === 0) {
-    console.warn(`No arguments passed to getRamCost()`);
-    return 0;
+    throw new Error(`No arguments passed to getRamCost()`);
   }
 
   let curr = RamCosts[args[0] as keyof typeof RamCosts];
   for (let i = 1; i < args.length; ++i) {
     if (curr == null) {
-      console.warn(`Invalid function passed to getRamCost: ${args}`);
-      return 0;
+      throw new Error(`Invalid function passed to getRamCost: ${args.join(".")}`);
     }
 
     const currType = typeof curr;
@@ -640,6 +639,5 @@ export function getRamCost(...args: string[]): number {
     return curr();
   }
 
-  console.warn(`Unexpected type (${curr}) for value [${args}]`);
-  return 0;
+  throw new Error(`Invalid function passed to getRamCost: ${args.join(".")}`);
 }

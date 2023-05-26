@@ -6511,6 +6511,16 @@ export interface NS {
   getResetInfo(): ResetInfo;
 
   /**
+   * Get the ram cost of a netscript function.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param name - The fully-qualified function name, without the leading `ns`. Example inputs: `hack`, `tprint`, `stock.getPosition`.
+   */
+  getFunctionRamCost(name: string): number;
+
+  /**
    * Parse command line flags.
    * @remarks
    * RAM cost: 0 GB
