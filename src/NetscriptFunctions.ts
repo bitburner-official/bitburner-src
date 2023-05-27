@@ -1102,21 +1102,19 @@ export const ns: InternalAPI<NSFull> = {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     return GetServer(hostname) !== null;
   },
-  fileExists:
-    (ctx) =>
-    (_filename, _hostname = ctx.workerScript.hostname) => {
-      const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const server = helpers.getServer(ctx, hostname);
-      const path = resolveFilePath(filename, ctx.workerScript.name);
-      if (!path) return false;
-      if (hasScriptExtension(path)) return server.scripts.has(path);
-      if (hasTextExtension(path)) return server.textFiles.has(path);
-      if (hasProgramExtension(path)) return server.programs.includes(path);
-      if (path.endsWith(".lit") || path.endsWith(".msg")) return server.messages.includes(path as any);
-      if (hasContractExtension(path)) return !!server.contracts.find(({ fn }) => fn === path);
-      return false;
-    },
+  fileExists: (ctx) => (_filename, _hostname) => {
+    const filename = helpers.string(ctx, "filename", _filename);
+    const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+    const server = helpers.getServer(ctx, hostname);
+    const path = resolveFilePath(filename, ctx.workerScript.name);
+    if (!path) return false;
+    if (hasScriptExtension(path)) return server.scripts.has(path);
+    if (hasTextExtension(path)) return server.textFiles.has(path);
+    if (path.endsWith(".lit") || path.endsWith(".msg")) return server.messages.includes(path as any);
+    if (hasContractExtension(path)) return !!server.contracts.find(({ fn }) => fn === path);
+    const lowerPath = path.toLowerCase();
+    return server.programs.map((programName) => programName.toLowerCase()).includes(lowerPath);
+  },
   isRunning:
     (ctx) =>
     (fn, hostname, ...scriptArgs) => {

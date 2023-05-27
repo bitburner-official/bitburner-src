@@ -5695,12 +5695,9 @@ export interface NS {
    * RAM cost: 0.1 GB
    *
    * Returns a boolean indicating whether the specified file exists on the target server.
-   * The filename for scripts is case-sensitive, but for other types of files it is not.
+   * The filename for programs is case insensitive, other file types are case sensitive.
    * For example, fileExists(“brutessh.exe”) will work fine, even though the actual program
    * is named 'BruteSSH.exe'.
-   *
-   * If the hostname/ip argument is omitted, then the function will search through the current
-   * server (the server running the script that calls this function) for the file.
    *
    * * @example
    * ```js
@@ -5711,7 +5708,7 @@ export interface NS {
    * ns.fileExists("ftpcrack.exe");
    * ```
    * @param filename - Filename of file to check.
-   * @param host - Host of target server. This is optional. If it is not specified then the function will use the current server as the target server.
+   * @param host - Host of target server. Optional, defaults to the server the script is running on.
    * @returns True if specified file exists, and false otherwise.
    */
   fileExists(filename: string, host?: string): boolean;
