@@ -425,7 +425,7 @@ export class Division {
             if (producableFrac > 0 && prod > 0) {
               const requiredMatsEntries = getRecordEntries(this.requiredMaterials);
               let avgQlt = 0;
-              let divider = requiredMatsEntries.length;
+              const divider = requiredMatsEntries.length;
               for (const [reqMatName, reqMat] of requiredMatsEntries) {
                 const reqMatQtyNeeded = reqMat * prod * producableFrac;
                 warehouse.materials[reqMatName].stored -= reqMatQtyNeeded;
