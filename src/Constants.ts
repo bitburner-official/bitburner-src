@@ -238,6 +238,11 @@ HOTFIXES:
 
 * Prevent scripts from loading during intial migration to 2.3.0 save format, to prevent a crash that could occur.
 * Fix scp logging (hostname was being logged incorrectly in multiple places and showing as [Object object])
+* Update alias help text to show updated usage.
+* Fix clickable script links from ls command not working outside root directory
+* Fix some issues with 2.3.0 save migration
+* Fix SF3 "Spring Water" industry
+* Reverted undocumented change that program filenames were case sensitive for ns.fileExists. They are case insensitive again.
 
 BREAKING CHANGES: These changes may require changes to your scripts.
 
