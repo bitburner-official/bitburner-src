@@ -238,17 +238,6 @@ export class OfficeSpace {
   }
 
   static fromJSON(value: IReviverValue): OfficeSpace {
-    // Convert employees from the old version
-    if (Object.hasOwn(value.data, "employees")) {
-      const empCopy: [{ data: { mor: number; ene: number; exp: number } }] = value.data.employees;
-      delete value.data.employees;
-      const ret = Generic_fromJSON(OfficeSpace, value.data);
-      ret.numEmployees = empCopy.length;
-      ret.avgMorale = empCopy.reduce((a, b) => a + b.data.mor, 0) / ret.numEmployees || 75;
-      ret.avgEnergy = empCopy.reduce((a, b) => a + b.data.ene, 0) / ret.numEmployees || 75;
-      ret.totalExperience = empCopy.reduce((a, b) => a + b.data.exp, 0);
-      return ret;
-    }
     return Generic_fromJSON(OfficeSpace, value.data);
   }
 }

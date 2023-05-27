@@ -478,6 +478,51 @@ function evaluateVersionCompatibility(ver: string | number): void {
     const graft = anyPlayer.graftAugmentationName;
     if (graft) Player.augmentations.push({ name: graft, level: 1 });
   }
+  if (ver < 31) {
+    // This section of 2.3.0 changes is intentionally OUT-OF-ORDER.
+    // This is because it upgrades how files and paths are handled, and other
+    // (old) upgrade sections have come to depend on the new format, via
+    // standard helper functions.
+    // Other 2.3.0 changes are in their regular place.
+    Terminal.warn("Migrating to 2.3.0, loading with no scripts.");
+    const newDirectory = resolveDirectory("v2.3FileChanges/") as Directory;
+    for (const server of GetAllServers()) {
+      // Do not load saved scripts on migration
+      server.savedScripts = [];
+      let invalidScriptCount = 0;
+      // There was a brief dev window where Server.scripts was already a map but the filepath changes weren't in yet.
+      const oldScripts = Array.isArray(server.scripts) ? (server.scripts as Script[]) : [...server.scripts.values()];
+      server.scripts = new JSONMap();
+      // In case somehow there are previously valid filenames that can't be sanitized, they will go in a new directory with a note.
+      for (const script of oldScripts) {
+        let newFilePath = resolveScriptFilePath(script.filename);
+        if (!newFilePath) {
+          newFilePath = `${newDirectory}script${++invalidScriptCount}.js` as ScriptFilePath;
+          script.content = `// Original path: ${script.filename}. Path was no longer valid\n` + script.content;
+        }
+        script.filename = newFilePath;
+        server.scripts.set(newFilePath, script);
+      }
+      // Handle changing textFiles to a map as well as FilePath changes at the same time.
+      if (Array.isArray(server.textFiles)) {
+        const oldTextFiles = server.textFiles as (TextFile & { fn?: string })[];
+        server.textFiles = new JSONMap();
+        let invalidTextCount = 0;
+        for (const textFile of oldTextFiles) {
+          const oldName = textFile.fn ?? textFile.filename;
+          delete textFile.fn;
+
+          let newFilePath = resolveTextFilePath(oldName);
+          if (!newFilePath) {
+            newFilePath = `${newDirectory}text${++invalidTextCount}.txt` as TextFilePath;
+            textFile.content = `// Original path: ${textFile.filename}. Path was no longer valid\n` + textFile.content;
+          }
+          textFile.filename = newFilePath;
+          server.textFiles.set(newFilePath, textFile);
+        }
+      }
+    }
+  }
   if (ver < 22) {
     v22PlayerBreak();
     v2APIBreak();
@@ -668,44 +713,6 @@ function evaluateVersionCompatibility(ver: string | number): void {
       anyPlayer.lastNodeReset = anyPlayer.lastUpdate - anyPlayer.playtimeSinceLastBitnode;
     }
 
-    Terminal.warn("Migrating to 2.3.0, loading with no scripts.");
-    const newDirectory = resolveDirectory("v2.3FileChanges/") as Directory;
-    for (const server of GetAllServers()) {
-      // Do not load saved scripts on migration
-      server.savedScripts = [];
-      let invalidScriptCount = 0;
-      // There was a brief dev window where Server.scripts was already a map but the filepath changes weren't in yet.
-      const oldScripts = Array.isArray(server.scripts) ? (server.scripts as Script[]) : [...server.scripts.values()];
-      server.scripts = new JSONMap();
-      // In case somehow there are previously valid filenames that can't be sanitized, they will go in a new directory with a note.
-      for (const script of oldScripts) {
-        let newFilePath = resolveScriptFilePath(script.filename);
-        if (!newFilePath) {
-          newFilePath = `${newDirectory}script${++invalidScriptCount}.js` as ScriptFilePath;
-          script.content = `// Original path: ${script.filename}. Path was no longer valid\n` + script.content;
-        }
-        script.filename = newFilePath;
-        server.scripts.set(newFilePath, script);
-      }
-      // Handle changing textFiles to a map as well as FilePath changes at the same time.
-      if (Array.isArray(server.textFiles)) {
-        const oldTextFiles = server.textFiles as (TextFile & { fn?: string })[];
-        server.textFiles = new JSONMap();
-        let invalidTextCount = 0;
-        for (const textFile of oldTextFiles) {
-          const oldName = textFile.fn ?? textFile.filename;
-          delete textFile.fn;
-
-          let newFilePath = resolveTextFilePath(oldName);
-          if (!newFilePath) {
-            newFilePath = `${newDirectory}text${++invalidTextCount}.txt` as TextFilePath;
-            textFile.content = `// Original path: ${textFile.filename}. Path was no longer valid\n` + textFile.content;
-          }
-          textFile.filename = newFilePath;
-          server.textFiles.set(newFilePath, textFile);
-        }
-      }
-    }
     // Reset corporation to new format.
     const oldCorp = anyPlayer.corporation as Corporation | null | 0;
     if (oldCorp && Array.isArray(oldCorp.divisions)) {
@@ -764,6 +771,7 @@ function loadGame(saveString: string): boolean {
     try {
       loadStockMarket(saveObj.StockMarketSave);
     } catch (e) {
+      console.error("Couldn't load stock market:", e);
       loadStockMarket("");
     }
   } else {
@@ -804,6 +812,7 @@ function loadGame(saveString: string): boolean {
         createNewUpdateText();
       }
     } catch (e) {
+      console.error("Error upgrading versions:", e);
       createNewUpdateText();
     }
   } else {
