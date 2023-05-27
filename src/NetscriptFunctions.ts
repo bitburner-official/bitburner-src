@@ -91,7 +91,6 @@ import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
 import { ContentFilePath } from "./Paths/ContentFile";
 import { LiteratureName } from "./Literature/data/LiteratureNames";
-import { hasProgramExtension } from "./Paths/ProgramFilePath";
 import { hasContractExtension } from "./Paths/ContractFilePath";
 import { getRamCost } from "./Netscript/RamCostGenerator";
 
