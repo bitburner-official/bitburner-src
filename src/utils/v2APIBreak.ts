@@ -229,7 +229,7 @@ export const v2APIBreak = () => {
   }
 
   // API break function is called before the version31 2.3.0 changes, scripts are still an array.
-  for (const script of home.scripts as unknown as Script[]) {
+  for (const script of home.scripts.values() as unknown as Script[]) {
     processScript(rules, script);
   }
 
