@@ -106,19 +106,10 @@ export function TerminalRoot(): React.ReactElement {
                 </Typography>
               )}
               {item instanceof Link && (
-                <>
-                  <Typography>{item.dashes}&gt;&nbsp;</Typography>
-                  <MuiLink
-                    classes={{ root: classes.preformatted }}
-                    color={"secondary"}
-                    paragraph={false}
-                    onClick={() => Terminal.connectToServer(item.hostname)}
-                  >
-                    <Typography sx={{ textDecoration: "underline", "&:hover": { textDecoration: "none" } }}>
-                      {item.hostname}
-                    </Typography>
-                  </MuiLink>
-                </>
+                <Typography>
+                  {item.dashes + "> "}
+                  <MuiLink onClick={() => Terminal.connectToServer(item.hostname)}>{item.hostname}</MuiLink>
+                </Typography>
               )}
             </ListItem>
           ))}
