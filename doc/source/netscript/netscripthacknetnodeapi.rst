@@ -87,21 +87,21 @@ it gradually upgrades those Node's to level 80, 16 GB RAM, and 8 cores
             const cnt = 8;
 
             while (ns.hacknet.numNodes() < cnt) {
-                res = ns.hacknet.purchaseNode();
+                var res = ns.hacknet.purchaseNode();
                 if (res != -1) ns.print("Purchased hacknet Node with index " + res);
                 await ns.sleep(1000);
             };
 
             ns.tprint("All " + cnt + " nodes purchased")
 
-            for (const i = 0; i < cnt; i++) {
+            for (var i = 0; i < cnt; i++) {
                 while (ns.hacknet.getNodeStats(i).level <= 80) {
                     var cost = ns.hacknet.getLevelUpgradeCost(i, 1);
                     while (myMoney() < cost) {
                         ns.print("Need $" + cost + " . Have $" + myMoney());
                         await ns.sleep(3000);
                     }
-                    res = ns.hacknet.upgradeLevel(i, 1);
+                    var res = ns.hacknet.upgradeLevel(i, 1);
                 };
             };
 
@@ -114,7 +114,7 @@ it gradually upgrades those Node's to level 80, 16 GB RAM, and 8 cores
                         ns.print("Need $" + cost + " . Have $" + myMoney());
                         await ns.sleep(3000);
                     }
-                    res = ns.hacknet.upgradeRam(i, 1);
+                    var res = ns.hacknet.upgradeRam(i, 1);
                 };
             };
 
@@ -127,7 +127,7 @@ it gradually upgrades those Node's to level 80, 16 GB RAM, and 8 cores
                         ns.print("Need $" + cost + " . Have $" + myMoney());
                         await ns.sleep(3000);
                     }
-                    res = ns.hacknet.upgradeCore(i, 1);
+                    var res = ns.hacknet.upgradeCore(i, 1);
                 };
             };
 
