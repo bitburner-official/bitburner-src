@@ -423,19 +423,18 @@ export class Division {
 
             // Make our materials if they are producable
             if (producableFrac > 0 && prod > 0) {
+              const requiredMatsEntries = getRecordEntries(this.requiredMaterials);
               let avgQlt = 0;
-              let divider = 0;
-              for (const [reqMatName, reqMat] of getRecordEntries(this.requiredMaterials)) {
+              let divider = requiredMatsEntries.length;
+              for (const [reqMatName, reqMat] of requiredMatsEntries) {
                 const reqMatQtyNeeded = reqMat * prod * producableFrac;
                 warehouse.materials[reqMatName].stored -= reqMatQtyNeeded;
                 warehouse.materials[reqMatName].productionAmount = 0;
                 warehouse.materials[reqMatName].productionAmount -=
                   reqMatQtyNeeded / (corpConstants.secondsPerMarketCycle * marketCycles);
 
-                avgQlt += warehouse.materials[reqMatName].quality;
-                divider++;
+                avgQlt += warehouse.materials[reqMatName].quality / divider;
               }
-              avgQlt /= divider;
               avgQlt = Math.max(avgQlt, 1);
               for (let j = 0; j < this.producedMaterials.length; ++j) {
                 let tempQlt =

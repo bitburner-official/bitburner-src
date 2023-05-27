@@ -23,6 +23,7 @@ import Box from "@mui/material/Box";
 import { LimitMaterialProductionModal } from "./modals/LimitMaterialProductionModal";
 import { CityName } from "../../Enums";
 import { CorpUnlockName } from "../data/Enums";
+import { getRecordKeys } from "../../Types/Record";
 
 interface IMaterialProps {
   warehouse: Warehouse;
@@ -57,10 +58,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   // Flag that determines whether this industry is "new" and the current material should be
   // marked with flashing-red lights
   const tutorial =
-    division.newInd &&
-    Object.keys(division.requiredMaterials).includes(mat.name) &&
-    mat.buyAmount === 0 &&
-    mat.importAmount === 0;
+    division.newInd && mat.name in division.requiredMaterials && mat.buyAmount === 0 && mat.importAmount === 0;
 
   // Purchase material button
   const purchaseButtonText = `Buy (${formatBigNumber(mat.buyAmount)})`;

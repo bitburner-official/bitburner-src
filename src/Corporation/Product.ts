@@ -133,8 +133,8 @@ export class Product {
     }
   }
 
-  // @param industry - Industry object. Reference to industry that makes this Product
-  finishProduct(industry: Division): void {
+  // @param division - Division object. Reference to division that makes this Product
+  finishProduct(division: Division): void {
     this.finished = true;
 
     // Calculate properties
@@ -147,7 +147,7 @@ export class Product {
 
     const designMult = 1 + Math.pow(this.designInvestment, 0.1) / 100;
     const balanceMult = 1.2 * engrRatio + 0.9 * mgmtRatio + 1.3 * rndRatio + 1.5 * opsRatio + busRatio;
-    const sciMult = 1 + Math.pow(industry.researchPoints, industry.researchFactor) / 800;
+    const sciMult = 1 + Math.pow(division.researchPoints, division.researchFactor) / 800;
     const totalMult = balanceMult * designMult * sciMult;
 
     this.stats.quality =
@@ -192,7 +192,7 @@ export class Product {
         0.02 * this.creationJobFactors[CorpEmployeeJob.RandD] +
         0.05 * this.creationJobFactors[CorpEmployeeJob.Operations] +
         0.05 * this.creationJobFactors[CorpEmployeeJob.Business]);
-    this.calculateRating(industry);
+    this.calculateRating(division);
     const advMult = 1 + Math.pow(this.advertisingInvestment, 0.1) / 100;
     const busmgtgRatio = Math.max(busRatio + mgmtRatio, 1 / totalProd);
     this.markup = 100 / (advMult * Math.pow(this.stats.quality + 0.001, 0.65) * busmgtgRatio);
@@ -202,12 +202,12 @@ export class Product {
     if (this.markup === 0 || !isFinite(this.markup)) this.markup = 1;
 
     this.demand =
-      industry.awareness === 0 ? 20 : Math.min(100, advMult * (100 * (industry.popularity / industry.awareness)));
+      division.awareness === 0 ? 20 : Math.min(100, advMult * (100 * (division.popularity / division.awareness)));
     this.competition = getRandomInt(0, 70);
 
     //Calculate the product's required materials and size
     this.size = 0;
-    for (const [matName, reqQty] of getRecordEntries(industry.requiredMaterials)) {
+    for (const [matName, reqQty] of getRecordEntries(division.requiredMaterials)) {
       this.requiredMaterials[matName] = reqQty;
       this.size += MaterialInfo[matName].size * reqQty;
     }

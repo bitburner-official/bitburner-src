@@ -9,8 +9,8 @@ import Typography from "@mui/material/Typography";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { CorpMaterialName } from "@nsdefs";
-import { materialNames } from "../../data/Constants";
 import { useRerender } from "../../../ui/React/hooks";
+import { getRecordKeys } from "../../../Types/Record";
 
 interface ISSoptionProps {
   matName: CorpMaterialName;
@@ -80,9 +80,8 @@ export function SmartSupplyModal(props: IProps): React.ReactElement {
 
   // Create React components for materials
   const mats = [];
-  for (const matName of Object.values(materialNames)) {
+  for (const matName of getRecordKeys(division.requiredMaterials)) {
     if (!props.warehouse.materials[matName]) continue;
-    if (!Object.keys(division.requiredMaterials).includes(matName)) continue;
     mats.push(<SSoption key={matName} warehouse={props.warehouse} matName={matName} />);
   }
 
