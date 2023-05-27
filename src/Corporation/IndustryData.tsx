@@ -31,7 +31,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     aiCoreFactor: 0.1,
     advertisingFactor: 0.03,
     requiredMaterials: {},
-    producedMaterials: ["Plants", "Food"],
+    producedMaterials: ["Water"],
   },
   [IndustryType.Refinery]: {
     startingCost: 50e9,

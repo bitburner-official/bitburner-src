@@ -131,11 +131,9 @@ export class Material {
 
   // Initializes a Material object from a JSON save state.
   static fromJSON(value: IReviverValue): Material {
-    // Gracefully load save files from when Scientific Research was considered a Material (pre 2.2).
-    if (value.data.name === "Scientific Research") return value.data.qty;
-    if (value.data.name === "RealEstate") value.data.name = "Real Estate";
-    if (value.data.name === "AICores") value.data.name = "AI Cores";
-    return Generic_fromJSON(Material, value.data);
+    const material = Generic_fromJSON(Material, value.data);
+    if (isNaN(material.quality)) material.quality = 1;
+    return material;
   }
 }
 
