@@ -1,12 +1,11 @@
 import React from "react";
 import { SourceFile } from "./SourceFile";
-import { initBitNodes, initBitNodeMultipliers } from "../BitNode/BitNode";
+import { initBitNodes } from "../BitNode/BitNode";
 
 export const SourceFiles: Record<string, SourceFile> = {};
 /** Engine initializer for SourceFiles, BitNodes, and BitNodeMultipliers. Run once at engine load. */
 export function initSourceFiles() {
   initBitNodes();
-  initBitNodeMultipliers();
   SourceFiles.SourceFile1 = new SourceFile(
     1,
     (

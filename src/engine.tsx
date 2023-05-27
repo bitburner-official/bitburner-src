@@ -1,6 +1,7 @@
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { initAugmentations } from "./Augmentation/AugmentationHelpers";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
+import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { initSourceFiles } from "./SourceFile/SourceFiles";
 import { generateRandomContract } from "./CodingContractGenerator";
 import { initCompanies } from "./Company/Companies";
@@ -229,11 +230,14 @@ const Engine: {
   load: function (saveString) {
     startExploits();
     setupUncaughtPromiseHandler();
+    // Source files must be initialized early because save-game translation in
+    // loadGame() needs them sometimes.
+    initSourceFiles();
     // Load game from save or create new game
 
     if (loadGame(saveString)) {
       FormatsNeedToChange.emit();
-      initSourceFiles();
+      initBitNodeMultipliers();
       initAugmentations(); // Also calls Player.reapplyAllAugmentations()
       Player.reapplyAllSourceFiles();
       if (Player.hasWseAccount) {
@@ -374,7 +378,7 @@ const Engine: {
     } else {
       // No save found, start new game
       FormatsNeedToChange.emit();
-      initSourceFiles();
+      initBitNodeMultipliers();
       Engine.start(); // Run main game loop and Scripts loop
       Player.init();
       initForeignServers(Player.getHomeComputer());
