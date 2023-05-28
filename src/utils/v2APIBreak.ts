@@ -227,9 +227,8 @@ export const v2APIBreak = () => {
       offenders: [],
     });
   }
-
-  // API break function is called before the version31 2.3.0 changes, scripts are still an array.
-  for (const script of home.scripts.values() as unknown as Script[]) {
+  // V31/2.3.0 conversion of scripts to map has already occurred.
+  for (const script of home.scripts.values()) {
     processScript(rules, script);
   }
 

@@ -3,6 +3,7 @@ import { MinHeap } from "../utils/Heap";
 
 import { comprGenChar, comprLZGenerate, comprLZEncode, comprLZDecode } from "../utils/CompressionContracts";
 import { HammingEncode, HammingDecode, HammingEncodeProperly } from "../utils/HammingCodeTools";
+import { filterTruthy } from "../utils/helpers/ArrayHelpers";
 
 /* Function that generates a valid 'data' for a contract type */
 export type GeneratorFunc = () => unknown;
@@ -1258,7 +1259,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       }
 
       const sanitizedPlayerAns: string = removeBracketsFromArrayString(ans);
-      const sanitizedPlayerAnsArr: string[] = sanitizedPlayerAns.split(",");
+      // Don't include any "" entries in the parsed array
+      const sanitizedPlayerAnsArr: string[] = filterTruthy(sanitizedPlayerAns.split(","));
       for (let i = 0; i < sanitizedPlayerAnsArr.length; ++i) {
         sanitizedPlayerAnsArr[i] = removeQuotesFromString(sanitizedPlayerAnsArr[i]).replace(/\s/g, "");
       }

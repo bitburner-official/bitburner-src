@@ -22,6 +22,6 @@ export function arrayToString(a: unknown[]): string {
   return `[${vals.join(", ")}]`;
 }
 
-export function FilterTruthy<T>(input: T[]): Truthy<T>[] {
+export function filterTruthy<T>(input: T[]): Truthy<T>[] {
   return input.filter(Boolean) as Truthy<T>[];
 }

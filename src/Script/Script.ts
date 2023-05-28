@@ -75,19 +75,6 @@ export class Script implements ContentFile {
     this.dependencies = new Map();
   }
 
-  /**
-   * Save a script from the script editor
-   * @param filename The new filepath for this Script
-   * @param code The unformatted code to save
-   * @param hostname The server to save the script to
-   */
-  saveScript(filename: ScriptFilePath, code: string, hostname: string): void {
-    this.code = code;
-    this.invalidateModule();
-    this.filename = filename;
-    this.server = hostname;
-  }
-
   /** Gets the ram usage, while also attempting to update it if it's currently null */
   getRamUsage(otherScripts: Map<ScriptFilePath, Script>): number | null {
     if (this.ramUsage) return this.ramUsage;

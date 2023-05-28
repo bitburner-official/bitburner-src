@@ -13,7 +13,7 @@ import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { checkEnum } from "../utils/helpers/enum";
 import { LocationName } from "../Enums";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { FilterTruthy } from "../utils/helpers/ArrayHelpers";
+import { filterTruthy } from "../utils/helpers/ArrayHelpers";
 
 export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
   const getLocationsWithInfiltrations = Object.values(Locations).filter(
@@ -42,7 +42,7 @@ export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
   };
   return {
     getPossibleLocations: () => () => {
-      return FilterTruthy(
+      return filterTruthy(
         getLocationsWithInfiltrations.map((l) => {
           if (!l.city) return false;
           return {
