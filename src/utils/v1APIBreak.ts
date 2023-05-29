@@ -98,11 +98,8 @@ export function v1APIBreak(): void {
   for (const server of GetAllServers()) {
     for (const change of detect) {
       const s: IFileLine[] = [];
-      const scriptsArray: Script[] = Array.isArray(server.scripts)
-        ? (server.scripts as Script[])
-        : [...server.scripts.values()];
 
-      for (const script of scriptsArray) {
+      for (const script of server.scripts.values()) {
         const lines = script.code.split("\n");
         for (let i = 0; i < lines.length; i++) {
           if (lines[i].includes(change[0])) {
@@ -130,10 +127,8 @@ export function v1APIBreak(): void {
     home.writeToTextFile(textPath, txt);
   }
 
-  // API break function is called before version31 / 2.3.0 changes - scripts is still an array
-  for (const server of GetAllServers() as unknown as { scripts: Script[] }[]) {
-    const backups: Script[] = [];
-    for (const script of server.scripts) {
+  for (const server of GetAllServers()) {
+    for (const script of server.scripts.values()) {
       if (!hasChanges(script.code)) continue;
       // Sanitize first before combining
       const oldFilename = resolveScriptFilePath(script.filename);
@@ -142,9 +137,8 @@ export function v1APIBreak(): void {
         console.error(`Unexpected error resolving backup path for ${script.filename}`);
         continue;
       }
-      backups.push(new Script(filename, script.code, script.server));
+      server.scripts.set(filename, new Script(filename, script.code, script.server));
       script.code = convert(script.code);
     }
-    server.scripts = server.scripts.concat(backups);
   }
 }
