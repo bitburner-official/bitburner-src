@@ -31,7 +31,7 @@ export function parseCommands(commandsText: string): string[] {
 /** get a commandArgs array from a single command string */
 export function parseCommand(command: string): (string | number | boolean)[] {
   // Match every command arg in a given command string
-  const argDetection = /(?:("[^"]*"|'[^']*'|[^\s]+))/g;
+  const argDetection = /(?:([^ ;"']*"[^"]*"|[^ ;"']*'[^']*'|[^\s]+))/g;
   const commandArgs = command.match(argDetection);
   if (!commandArgs) return [];
   return commandArgs.map(parseArg);
