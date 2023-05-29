@@ -1,3 +1,4 @@
+import { trimQuotes } from "../utils/helpers/string";
 import { substituteAliases } from "../Alias";
 // Helper function to parse individual arguments into number/boolean/string as appropriate
 function parseArg(arg: string): string | number | boolean {
@@ -5,11 +6,7 @@ function parseArg(arg: string): string | number | boolean {
   if (arg === "false") return false;
   const argAsNumber = Number(arg);
   if (!isNaN(argAsNumber)) return argAsNumber;
-  // For quoted strings just return the inner string
-  if ((arg.startsWith('"') && arg.endsWith('"')) || (arg.startsWith("'") && arg.endsWith("'"))) {
-    return arg.substring(1, arg.length - 1);
-  }
-  return arg;
+  return trimQuotes(arg);
 }
 
 /** split a commands string into a commands array */
@@ -31,7 +28,7 @@ export function parseCommands(commandsText: string): string[] {
 /** get a commandArgs array from a single command string */
 export function parseCommand(command: string): (string | number | boolean)[] {
   // Match every command arg in a given command string
-  const argDetection = /(?:("[^"]*"|'[^']*'|[^\s]+))/g;
+  const argDetection = /(?:([^ ;"']*"[^"]*"|[^ ;"']*'[^']*'|[^\s]+))/g;
   const commandArgs = command.match(argDetection);
   if (!commandArgs) return [];
   return commandArgs.map(parseArg);
