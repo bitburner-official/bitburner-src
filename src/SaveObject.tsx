@@ -26,6 +26,7 @@ import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
 import { PlayerOwnedAugmentation } from "./Augmentation/PlayerOwnedAugmentation";
+import { initAugmentations } from "./Augmentation/AugmentationHelpers";
 import { LocationName } from "./Enums";
 import { pushGameSaved } from "./Electron";
 import { defaultMonacoTheme } from "./ScriptEditor/ui/themes";
@@ -34,12 +35,6 @@ import { Faction } from "./Faction/Faction";
 import { safelyCreateUniqueServer } from "./Server/ServerHelpers";
 import { SpecialServers } from "./Server/data/SpecialServers";
 import { v2APIBreak } from "./utils/v2APIBreak";
-import { Script } from "./Script/Script";
-import { JSONMap } from "./Types/Jsonable";
-import { TextFile } from "./TextFile";
-import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
-import { Directory, resolveDirectory } from "./Paths/Directory";
-import { TextFilePath, resolveTextFilePath } from "./Paths/TextFilePath";
 import { Corporation } from "./Corporation/Corporation";
 import { Terminal } from "./Terminal";
 
@@ -87,7 +82,7 @@ class BitburnerSaveObject {
   SettingsSave = "";
   VersionSave = "";
   AllGangsSave = "";
-  LastExportBonus = "";
+  LastExportBonus = "0";
   StaneksGiftSave = "";
 
   getSaveString(forceExcludeRunningScripts = false): string {
@@ -355,8 +350,8 @@ function evaluateVersionCompatibility(ver: string | number): void {
         [/purchase4SMarketData/g, "stock.purchase4SMarketData"],
         [/purchase4SMarketDataTixApi/g, "stock.purchase4SMarketDataTixApi"],
       ];
-      for (const server of GetAllServers() as unknown as { scripts: Script[] }[]) {
-        for (const script of server.scripts) {
+      for (const server of GetAllServers()) {
+        for (const script of server.scripts.values()) {
           script.content = convert(script.code, changes);
         }
       }
@@ -367,7 +362,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
   if (typeof ver !== "number") return;
   if (ver < 2) {
     AwardNFG(10);
-    Player.reapplyAllAugmentations(true);
+    initAugmentations();
     Player.reapplyAllSourceFiles();
   }
   if (ver < 3) {
@@ -450,7 +445,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
     ];
 
     v22PlayerBreak();
-    Player.reapplyAllAugmentations(true);
+    initAugmentations();
     Player.reapplyAllSourceFiles();
   }
 
@@ -477,51 +472,6 @@ function evaluateVersionCompatibility(ver: string | number): void {
     if (create) Player.getHomeComputer().pushProgram(create);
     const graft = anyPlayer.graftAugmentationName;
     if (graft) Player.augmentations.push({ name: graft, level: 1 });
-  }
-  if (ver < 31) {
-    // This section of 2.3.0 changes is intentionally OUT-OF-ORDER.
-    // This is because it upgrades how files and paths are handled, and other
-    // (old) upgrade sections have come to depend on the new format, via
-    // standard helper functions.
-    // Other 2.3.0 changes are in their regular place.
-    Terminal.warn("Migrating to 2.3.0, loading with no scripts.");
-    const newDirectory = resolveDirectory("v2.3FileChanges/") as Directory;
-    for (const server of GetAllServers()) {
-      // Do not load saved scripts on migration
-      server.savedScripts = [];
-      let invalidScriptCount = 0;
-      // There was a brief dev window where Server.scripts was already a map but the filepath changes weren't in yet.
-      const oldScripts = Array.isArray(server.scripts) ? (server.scripts as Script[]) : [...server.scripts.values()];
-      server.scripts = new JSONMap();
-      // In case somehow there are previously valid filenames that can't be sanitized, they will go in a new directory with a note.
-      for (const script of oldScripts) {
-        let newFilePath = resolveScriptFilePath(script.filename);
-        if (!newFilePath) {
-          newFilePath = `${newDirectory}script${++invalidScriptCount}.js` as ScriptFilePath;
-          script.content = `// Original path: ${script.filename}. Path was no longer valid\n` + script.content;
-        }
-        script.filename = newFilePath;
-        server.scripts.set(newFilePath, script);
-      }
-      // Handle changing textFiles to a map as well as FilePath changes at the same time.
-      if (Array.isArray(server.textFiles)) {
-        const oldTextFiles = server.textFiles as (TextFile & { fn?: string })[];
-        server.textFiles = new JSONMap();
-        let invalidTextCount = 0;
-        for (const textFile of oldTextFiles) {
-          const oldName = textFile.fn ?? textFile.filename;
-          delete textFile.fn;
-
-          let newFilePath = resolveTextFilePath(oldName);
-          if (!newFilePath) {
-            newFilePath = `${newDirectory}text${++invalidTextCount}.txt` as TextFilePath;
-            textFile.content = `// Original path: ${textFile.filename}. Path was no longer valid\n` + textFile.content;
-          }
-          textFile.filename = newFilePath;
-          server.textFiles.set(newFilePath, textFile);
-        }
-      }
-    }
   }
   if (ver < 22) {
     v22PlayerBreak();
@@ -703,6 +653,11 @@ function evaluateVersionCompatibility(ver: string | number): void {
     for (const sleeve of Player.sleeves) sleeve.shock = 100 - sleeve.shock;
   }
   if (ver < 31) {
+    Terminal.warn("Migrating to 2.3.0, loading with no scripts.");
+    for (const server of GetAllServers()) {
+      // Do not load any saved scripts on migration
+      server.savedScripts = [];
+    }
     if (anyPlayer.hashManager?.upgrades) {
       anyPlayer.hashManager.upgrades["Company Favor"] ??= 0;
     }
