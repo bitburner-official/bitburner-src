@@ -1,4 +1,5 @@
 import { Terminal } from "./Terminal";
+import { trimQuotes } from "./utils/helpers/string";
 
 export const Aliases = new Map<string, string>();
 export const GlobalAliases = new Map<string, string>();
@@ -34,6 +35,7 @@ export function parseAliasDeclaration(dec: string, global = false): boolean {
   if (matches == null || matches.length != 3) {
     return false;
   }
+  matches[2] = trimQuotes(matches[2]);
 
   if (global) {
     addGlobalAlias(matches[1], matches[2]);

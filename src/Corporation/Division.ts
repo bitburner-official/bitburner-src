@@ -8,7 +8,7 @@ import { calculateEffectWithFactors } from "../utils/calculateEffectWithFactors"
 import { OfficeSpace } from "./OfficeSpace";
 import { Product } from "./Product";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { isString } from "../utils/helpers/isString";
+import { isString } from "../utils/helpers/string";
 import { MaterialInfo } from "./MaterialInfo";
 import { Warehouse } from "./Warehouse";
 import { Corporation } from "./Corporation";
