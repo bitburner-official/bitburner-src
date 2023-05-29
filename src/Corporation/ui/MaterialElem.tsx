@@ -11,7 +11,7 @@ import { PurchaseMaterialModal } from "./modals/PurchaseMaterialModal";
 
 import { formatBigNumber, formatCorpStat, formatMoney, formatQuality } from "../../ui/formatNumber";
 
-import { isString } from "../../utils/helpers/isString";
+import { isString } from "../../utils/helpers/string";
 import { Money } from "../../ui/React/Money";
 import { useCorporation, useDivision } from "./Context";
 
