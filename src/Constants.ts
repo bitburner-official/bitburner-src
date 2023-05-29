@@ -231,12 +231,26 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3.1 dev
-----------
+v2.3.1 dev - Changelog updated 29 May 2023
+------------------------------------------
 
 GENERAL / MISC:
 
-* Tail window overhaul, ability to set tail title with ns.setTitle, other tail bugfixes and improvements. (@d0sboots)
+NETSCRIPT:
+
+* Added ns.setTitle, which sets the titlebar of a script's tail window (@d0sboots)
+* Added ns.getFunctionRamCost, which gets the ramcost of a netscript function (@G4mingJon4s)
+
+GENERAL / MISC:
+
+* Changed tail window buttons into icon buttons, plus tail window bugfixes (@d0sboots)
+* Terminal no longer scrolls to the bottom constantly while an action is being performed (@bezrodnov)
+* Added a close button to modals (@bezrodnov)
+* Documentation fixes (various)
 * Nerf noodle bar
+
+SPOILER SECTIONS:
+
+No spoilered changes yet.
 `,
 };
