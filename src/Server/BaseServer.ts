@@ -316,14 +316,15 @@ export abstract class BaseServer implements IServer {
   static fromJSONBase<T extends BaseServer>(value: IReviverValue, ctor: new () => T, keys: readonly (keyof T)[]): T {
     const server = Generic_fromJSON(ctor, value.data, keys);
     server.savedScripts = value.data.runningScripts;
-    // Possibly migrate to using maps for scripts and textfiles.
-    // This is done here, directly at load, instead of the usual upgrade
-    // logic, for two reasons:
-    // 1) Our utility functions depend on it, so the upgrade logic itself needs
-    //    the data to be in maps, even the logic written earlier than 2.3!
-    // 2) If the upgrade logic throws, and then you soft-reset at the recovery screen (or
-    //    maybe don't even see the recovery screen), you can end up with a "migrated"
-    //    save that still has arrays.
+    // If textFiles is not an array, we've already done the 2.3 migration to textFiles and scripts as maps + path changes.
+    if (!Array.isArray(server.textFiles)) return server;
+
+    // Migrate to using maps for scripts and textfiles. This is done here, directly at load, instead of the
+    // usual upgrade logic, for two reasons:
+    // 1) Our utility functions depend on it, so the upgrade logic itself needs the data to be in maps, even the logic
+    //    written earlier than 2.3!
+    // 2) If the upgrade logic throws, and then you soft-reset at the recovery screen (or maybe don't even see the
+    //    recovery screen), you can end up with a "migrated" save that still has arrays.
     const newDirectory = resolveDirectory("v2.3FileChanges/") as Directory;
     let invalidScriptCount = 0;
     // There was a brief dev window where Server.scripts was already a map but the filepath changes weren't in yet.
@@ -341,22 +342,20 @@ export abstract class BaseServer implements IServer {
       server.scripts.set(newFilePath, script);
     }
     let invalidTextCount = 0;
-    // Handle changing textFiles to a map as well as FilePath changes at the same time.
-    if (Array.isArray(server.textFiles)) {
-      const oldTextFiles = server.textFiles as (TextFile & { fn?: string })[];
-      server.textFiles = new JSONMap();
-      for (const textFile of oldTextFiles) {
-        const oldName = textFile.fn ?? textFile.filename;
-        delete textFile.fn;
 
-        let newFilePath = resolveTextFilePath(oldName);
-        if (!newFilePath) {
-          newFilePath = `${newDirectory}text${++invalidTextCount}.txt` as TextFilePath;
-          textFile.content = `// Original path: ${textFile.filename}. Path was no longer valid\n` + textFile.content;
-        }
-        textFile.filename = newFilePath;
-        server.textFiles.set(newFilePath, textFile);
+    const oldTextFiles = server.textFiles as (TextFile & { fn?: string })[];
+    server.textFiles = new JSONMap();
+    for (const textFile of oldTextFiles) {
+      const oldName = textFile.fn ?? textFile.filename;
+      delete textFile.fn;
+
+      let newFilePath = resolveTextFilePath(oldName);
+      if (!newFilePath) {
+        newFilePath = `${newDirectory}text${++invalidTextCount}.txt` as TextFilePath;
+        textFile.content = `// Original path: ${textFile.filename}. Path was no longer valid\n` + textFile.content;
       }
+      textFile.filename = newFilePath;
+      server.textFiles.set(newFilePath, textFile);
     }
     if (invalidScriptCount || invalidTextCount) {
       // If we had to migrate names, don't run scripts for this server.
