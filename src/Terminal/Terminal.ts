@@ -102,7 +102,6 @@ export class Terminal {
     if (this.action === null) return;
     this.action.timeLeft -= (CONSTANTS.MilliPerCycle * cycles) / 1000;
     if (this.action.timeLeft < 0.01) this.finishAction(false);
-    TerminalEvents.emit();
   }
 
   append(item: Output | Link | RawOutput): void {
