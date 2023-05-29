@@ -6,7 +6,7 @@ import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
 import { CompletedProgramName } from "../Programs/Programs";
 import { CodingContractResult } from "../CodingContracts";
-import { TerminalEvents, TerminalClearEvents, TerminalProcessEvents } from "./TerminalEvents";
+import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
 
 import { TextFile } from "../TextFile";
 import { Script } from "../Script/Script";
@@ -102,7 +102,6 @@ export class Terminal {
     if (this.action === null) return;
     this.action.timeLeft -= (CONSTANTS.MilliPerCycle * cycles) / 1000;
     if (this.action.timeLeft < 0.01) this.finishAction(false);
-    TerminalProcessEvents.emit();
   }
 
   append(item: Output | Link | RawOutput): void {

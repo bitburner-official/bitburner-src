@@ -1,21 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Typography from "@mui/material/Typography";
 
 import { useRerender } from "../../ui/React/hooks";
 import { Terminal } from "../../Terminal";
-import { TerminalProcessEvents } from "../TerminalEvents";
 
 export function TerminalActionTimer(): React.ReactElement {
-  const rerender = useRerender();
+  useRerender(200);
 
-  useEffect(() => {
-    const unsubscribe = TerminalProcessEvents.subscribe(rerender);
-    return unsubscribe;
-  }, []);
-
-  return (
-    <Typography color="primary" paragraph={false}>
-      {Terminal.getProgressText()}
-    </Typography>
-  );
+  return <Typography color="primary">{Terminal.getProgressText()}</Typography>;
 }
