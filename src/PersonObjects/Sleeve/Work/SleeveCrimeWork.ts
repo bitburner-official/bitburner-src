@@ -1,15 +1,16 @@
 import { Player } from "@player";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
-import { Sleeve } from "../Sleeve";
-import { applySleeveGains, Work, WorkType } from "./Work";
-import { CrimeType } from "../../../Enums";
-import { Crimes } from "../../../Crime/Crimes";
-import { Crime } from "../../../Crime/Crime";
-import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
+
 import { CONSTANTS } from "../../../Constants";
-import { checkEnum } from "../../../utils/helpers/enum";
-import { calculateCrimeWorkStats } from "../../../Work/Formulas";
+import { Crime } from "../../../Crime/Crime";
 import { findCrime } from "../../../Crime/CrimeHelpers";
+import { Crimes } from "../../../Crime/Crimes";
+import { CrimeType } from "../../../Enums";
+import { calculateCrimeWorkStats } from "../../../Work/Formulas";
+import { WorkStats, scaleWorkStats } from "../../../Work/WorkStats";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
+import { checkEnum } from "../../../utils/helpers/enum";
+import { Sleeve } from "../Sleeve";
+import { Work, WorkType, applySleeveGains } from "./Work";
 
 export const isSleeveCrimeWork = (w: Work | null): w is SleeveCrimeWork => w !== null && w.type === WorkType.CRIME;
 

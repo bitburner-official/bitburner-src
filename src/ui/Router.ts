@@ -1,7 +1,7 @@
-import { ScriptFilePath } from "../Paths/ScriptFilePath";
-import { TextFilePath } from "../Paths/TextFilePath";
 import { Faction } from "../Faction/Faction";
 import { Location } from "../Locations/Location";
+import { ScriptFilePath } from "../Paths/ScriptFilePath";
+import { TextFilePath } from "../Paths/TextFilePath";
 
 /**
  * The full-screen page the player is currently be on.

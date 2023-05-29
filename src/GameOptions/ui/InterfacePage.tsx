@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+
 import { TextField, Tooltip, Typography } from "@mui/material";
+
 import { Settings } from "../../Settings/Settings";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
-import { GameOptionsPage } from "./GameOptionsPage";
 import { formatTime } from "../../utils/helpers/formatTime";
+import { GameOptionsPage } from "./GameOptionsPage";
 
 export const InterfacePage = (): React.ReactElement => {
   const [timestampFormat, setTimestampFormat] = useState(Settings.TimestampsFormat);

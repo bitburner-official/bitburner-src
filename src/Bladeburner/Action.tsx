@@ -1,10 +1,10 @@
-import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { addOffset } from "../utils/helpers/addOffset";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { BladeburnerConstants } from "./data/Constants";
-import { Bladeburner } from "./Bladeburner";
 import { Person } from "../PersonObjects/Person";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { addOffset } from "../utils/helpers/addOffset";
+import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { Bladeburner } from "./Bladeburner";
+import { BladeburnerConstants } from "./data/Constants";
 
 interface ISuccessChanceParams {
   est: boolean;

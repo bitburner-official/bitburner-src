@@ -4,10 +4,11 @@
  * all/portfolio mode, etc)
  */
 import * as React from "react";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
+
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 export enum TickerDisplayMode {
   AllStocks,

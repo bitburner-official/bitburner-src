@@ -8,20 +8,20 @@
  *
  * TODO unplanned Should probably split the different types of functions into their own modules
  */
+import { Player } from "@player";
+
+import { generateRandomContract } from "../CodingContractGenerator";
+import { Companies } from "../Company/Companies";
+import { ITutorial, iTutorialNextStep, iTutorialSteps } from "../InteractiveTutorial";
+import { GetServer } from "../Server/AllServers";
+import { Server } from "../Server/Server";
 import { HacknetNode } from "./HacknetNode";
-import { calculateNodeCost } from "./formulas/HacknetNodes";
-import { calculateServerCost } from "./formulas/HacknetServers";
-import { HacknetNodeConstants, HacknetServerConstants } from "./data/Constants";
 import { HacknetServer } from "./HacknetServer";
 import { HashManager } from "./HashManager";
 import { HashUpgrades } from "./HashUpgrades";
-
-import { generateRandomContract } from "../CodingContractGenerator";
-import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../InteractiveTutorial";
-import { Player } from "@player";
-import { GetServer } from "../Server/AllServers";
-import { Server } from "../Server/Server";
-import { Companies } from "../Company/Companies";
+import { HacknetNodeConstants, HacknetServerConstants } from "./data/Constants";
+import { calculateNodeCost } from "./formulas/HacknetNodes";
+import { calculateServerCost } from "./formulas/HacknetServers";
 
 // Returns a boolean indicating whether the player has Hacknet Servers
 // (the upgraded form of Hacknet Nodes)

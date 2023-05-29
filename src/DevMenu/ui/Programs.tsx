@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-import Typography from "@mui/material/Typography";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
 import Button from "@mui/material/Button";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { Player } from "@player";
 import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
 import { CompletedProgramName } from "../../Programs/Programs";
 
 export function Programs(): React.ReactElement {

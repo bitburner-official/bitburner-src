@@ -1,8 +1,10 @@
 import React from "react";
-import { OptionSwitch } from "../../ui/React/OptionSwitch";
-import { Settings } from "../../Settings/Settings";
-import { GameOptionsPage } from "./GameOptionsPage";
+
 import { Player } from "@player";
+
+import { Settings } from "../../Settings/Settings";
+import { OptionSwitch } from "../../ui/React/OptionSwitch";
+import { GameOptionsPage } from "./GameOptionsPage";
 
 export const GameplayPage = (): React.ReactElement => {
   return (

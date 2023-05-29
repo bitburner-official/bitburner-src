@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { formatMoney, formatShares } from "../../../ui/formatNumber";
+
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
-import { useCorporation } from "../Context";
-import Typography from "@mui/material/Typography";
 import { NumberInput } from "../../../ui/React/NumberInput";
-import Button from "@mui/material/Button";
+import { formatMoney, formatShares } from "../../../ui/formatNumber";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { IssueNewShares } from "../../Actions";
+import { useCorporation } from "../Context";
 
 interface IEffectTextProps {
   shares: number | null;

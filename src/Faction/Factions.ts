@@ -2,10 +2,9 @@
  * Initialization and manipulation of the Factions object, which stores data
  * about all Factions in the game
  */
+import { Reviver } from "../utils/JSONReviver";
 import { Faction } from "./Faction";
 import { FactionInfos } from "./FactionInfo";
-
-import { Reviver } from "../utils/JSONReviver";
 
 export let Factions: Record<string, Faction> = {};
 

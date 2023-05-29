@@ -3,26 +3,21 @@
  * Add police clashes
  * balance point to keep them from running out of control
  */
+import { Player } from "@player";
 
+import { CONSTANTS } from "../Constants";
 import { Factions } from "../Faction/Factions";
-
+import { WorkerScript } from "../Netscript/WorkerScript";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-
-import { GangMemberUpgrade } from "./GangMemberUpgrade";
-import { GangConstants } from "./data/Constants";
-import { CONSTANTS } from "../Constants";
-import { GangMemberTasks } from "./GangMemberTasks";
-import { IAscensionResult } from "./IAscensionResult";
-
 import { AllGangs } from "./AllGangs";
 import { GangMember } from "./GangMember";
-
-import { WorkerScript } from "../Netscript/WorkerScript";
-import { Player } from "@player";
+import { GangMemberTasks } from "./GangMemberTasks";
+import { GangMemberUpgrade } from "./GangMemberUpgrade";
+import { IAscensionResult } from "./IAscensionResult";
+import { GangConstants } from "./data/Constants";
 import { PowerMultiplier } from "./data/power";
 
 export class Gang {

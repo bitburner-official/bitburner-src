@@ -5,14 +5,14 @@
  */
 import React, { useState } from "react";
 
-import { BadRNG } from "./RNG";
-import { win, reachedLimit } from "./Game";
-import { trusted } from "./utils";
-
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
+import { reachedLimit, win } from "./Game";
+import { BadRNG } from "./RNG";
+import { trusted } from "./utils";
 
 const minPlay = 0;
 const maxPlay = 10e3;

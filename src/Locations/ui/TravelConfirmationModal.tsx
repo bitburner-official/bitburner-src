@@ -1,9 +1,11 @@
 import React from "react";
-import { CONSTANTS } from "../../Constants";
-import { Money } from "../../ui/React/Money";
-import { Modal } from "../../ui/React/Modal";
-import Typography from "@mui/material/Typography";
+
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
+import { CONSTANTS } from "../../Constants";
+import { Modal } from "../../ui/React/Modal";
+import { Money } from "../../ui/React/Money";
 
 interface IProps {
   city: string;

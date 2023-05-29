@@ -1,6 +1,6 @@
-import { Terminal } from "../../Terminal";
-import { BaseServer } from "../../Server/BaseServer";
 import { directoryExistsOnServer, resolveDirectory } from "../../Paths/Directory";
+import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
 
 export function cd(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length > 1) return Terminal.error("Incorrect number of arguments. Usage: cd [dir]");

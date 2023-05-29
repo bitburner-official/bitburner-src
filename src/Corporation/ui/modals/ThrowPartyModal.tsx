@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { formatMultiplier, formatPercent } from "../../../ui/formatNumber";
-import { dialogBoxCreate } from "../../../ui/React/DialogBox";
-import { OfficeSpace } from "../../OfficeSpace";
-import { ThrowParty } from "../../Actions";
-import { Money } from "../../../ui/React/Money";
-import { Modal } from "../../../ui/React/Modal";
-import { useCorporation } from "../Context";
-import Typography from "@mui/material/Typography";
+
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+import { Modal } from "../../../ui/React/Modal";
+import { Money } from "../../../ui/React/Money";
+import { formatMultiplier, formatPercent } from "../../../ui/formatNumber";
 import { KEY } from "../../../utils/helpers/keyCodes";
+import { ThrowParty } from "../../Actions";
+import { OfficeSpace } from "../../OfficeSpace";
+import { useCorporation } from "../Context";
 
 interface IProps {
   open: boolean;

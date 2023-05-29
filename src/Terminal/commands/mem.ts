@@ -1,7 +1,7 @@
+import { BaseServer } from "../../Server/BaseServer";
+import { Settings } from "../../Settings/Settings";
 import { Terminal } from "../../Terminal";
 import { formatRam } from "../../ui/formatNumber";
-import { Settings } from "../../Settings/Settings";
-import { BaseServer } from "../../Server/BaseServer";
 
 export function mem(args: (string | number | boolean)[], server: BaseServer): void {
   try {

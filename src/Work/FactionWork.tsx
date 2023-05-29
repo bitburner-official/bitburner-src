@@ -1,18 +1,20 @@
 import React from "react";
-import { Work, WorkType } from "./Work";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+
 import { Player } from "@player";
-import { FactionNames } from "../Faction/data/FactionNames";
-import { Factions } from "../Faction/Factions";
+
+import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { CONSTANTS } from "../Constants";
+import { FactionWorkType } from "../Enums";
 import { Faction } from "../Faction/Faction";
-import { applyWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
+import { Factions } from "../Faction/Factions";
+import { FactionNames } from "../Faction/data/FactionNames";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reputation } from "../ui/React/Reputation";
-import { CONSTANTS } from "../Constants";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
-import { calculateFactionExp, calculateFactionRep } from "./Formulas";
-import { FactionWorkType } from "../Enums";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { findEnumMember } from "../utils/helpers/enum";
+import { calculateFactionExp, calculateFactionRep } from "./Formulas";
+import { Work, WorkType } from "./Work";
+import { WorkStats, applyWorkStats, scaleWorkStats } from "./WorkStats";
 
 interface FactionWorkParams {
   singularity: boolean;

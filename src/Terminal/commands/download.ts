@@ -1,11 +1,12 @@
-import { Terminal } from "../../Terminal";
-import { BaseServer } from "../../Server/BaseServer";
 import FileSaver from "file-saver";
 import JSZip from "jszip";
+
 import { root } from "../../Paths/Directory";
+import { getGlobbedFileMap } from "../../Paths/GlobbedFiles";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
-import { getGlobbedFileMap } from "../../Paths/GlobbedFiles";
+import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
 
 // Basic globbing implementation only supporting * and ?. Can be broken out somewhere else later.
 export function exportScripts(pattern: string, server: BaseServer, currDir = root): void {

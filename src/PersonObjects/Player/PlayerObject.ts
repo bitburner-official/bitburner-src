@@ -1,3 +1,23 @@
+import { Player as IPlayer } from "@nsdefs";
+import { Work } from "src/Work/Work";
+
+import { PlayerAchievement } from "../../Achievements/Achievements";
+import { Bladeburner } from "../../Bladeburner/Bladeburner";
+import { CONSTANTS } from "../../Constants";
+import { Corporation } from "../../Corporation/Corporation";
+import { LocationName } from "../../Enums";
+import { Exploit } from "../../Exploits/Exploit";
+import { Gang } from "../../Gang/Gang";
+import { HacknetNode } from "../../Hacknet/HacknetNode";
+import { HashManager } from "../../Hacknet/HashManager";
+import { setPlayer } from "../../Player";
+import { JSONMap } from "../../Types/Jsonable";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
+import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
+import { cyrb53 } from "../../utils/StringHelperFunctions";
+import { getRandomInt } from "../../utils/helpers/getRandomInt";
+import { Person } from "../Person";
+import { Sleeve } from "../Sleeve/Sleeve";
 import * as augmentationMethods from "./PlayerObjectAugmentationMethods";
 import * as bladeburnerMethods from "./PlayerObjectBladeburnerMethods";
 import * as corporationMethods from "./PlayerObjectCorporationMethods";
@@ -5,29 +25,6 @@ import * as gangMethods from "./PlayerObjectGangMethods";
 import * as generalMethods from "./PlayerObjectGeneralMethods";
 import * as serverMethods from "./PlayerObjectServerMethods";
 import * as workMethods from "./PlayerObjectWorkMethods";
-
-import { setPlayer } from "../../Player";
-import { Sleeve } from "../Sleeve/Sleeve";
-import { Exploit } from "../../Exploits/Exploit";
-
-import { LocationName } from "../../Enums";
-import { Corporation } from "../../Corporation/Corporation";
-import { Gang } from "../../Gang/Gang";
-import { Bladeburner } from "../../Bladeburner/Bladeburner";
-import { HacknetNode } from "../../Hacknet/HacknetNode";
-
-import { HashManager } from "../../Hacknet/HashManager";
-
-import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
-import { JSONMap } from "../../Types/Jsonable";
-import { PlayerAchievement } from "../../Achievements/Achievements";
-import { cyrb53 } from "../../utils/StringHelperFunctions";
-import { getRandomInt } from "../../utils/helpers/getRandomInt";
-import { CONSTANTS } from "../../Constants";
-import { Work } from "src/Work/Work";
-import { Person } from "../Person";
-import { Player as IPlayer } from "@nsdefs";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties

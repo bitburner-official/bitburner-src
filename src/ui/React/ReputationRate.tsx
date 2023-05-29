@@ -1,4 +1,5 @@
 import React from "react";
+
 import { formatReputation } from "../formatNumber";
 import { Reputation } from "./Reputation";
 

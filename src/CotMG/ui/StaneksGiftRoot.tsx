@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { CONSTANTS } from "../../Constants";
-import { StaneksGiftEvents } from "../StaneksGiftEvents";
-import { MainBoard } from "./MainBoard";
-import { StaneksGift } from "../StaneksGift";
+
 import { Info } from "@mui/icons-material";
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+
+import { CONSTANTS } from "../../Constants";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { useRerender } from "../../ui/React/hooks";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { ActiveFragment } from "../ActiveFragment";
 import { Fragments } from "../Fragment";
+import { StaneksGift } from "../StaneksGift";
+import { StaneksGiftEvents } from "../StaneksGiftEvents";
 import { DummyGrid } from "./DummyGrid";
-import Container from "@mui/material/Container";
-import { useRerender } from "../../ui/React/hooks";
+import { MainBoard } from "./MainBoard";
 
 interface IProps {
   staneksGift: StaneksGift;

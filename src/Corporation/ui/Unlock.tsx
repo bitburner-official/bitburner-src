@@ -1,16 +1,17 @@
 // React Components for the Unlock upgrade buttons on the overview page
 import React from "react";
 
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { CorpUnlocks } from "../data/CorporationUnlocks";
+import { CorpUnlockName } from "../data/Enums";
 import { useCorporation } from "./Context";
 import { MoneyCost } from "./MoneyCost";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import { CorpUnlockName } from "../data/Enums";
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 interface UnlockProps {
   name: CorpUnlockName;

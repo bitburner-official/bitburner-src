@@ -2,14 +2,15 @@
 // This Industry component does NOT include the city tabs at the top
 import React from "react";
 
+import Box from "@mui/material/Box";
+
+import { CityName } from "../../Enums";
+import { OfficeSpace } from "../OfficeSpace";
+import { Warehouse } from "../Warehouse";
+import { useCorporation, useDivision } from "./Context";
 import { DivisionOffice } from "./DivisionOffice";
 import { DivisionOverview } from "./DivisionOverview";
 import { DivisionWarehouse } from "./DivisionWarehouse";
-import { Warehouse } from "../Warehouse";
-import { OfficeSpace } from "../OfficeSpace";
-import { useCorporation, useDivision } from "./Context";
-import Box from "@mui/material/Box";
-import { CityName } from "../../Enums";
 
 interface IProps {
   city: CityName;

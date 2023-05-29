@@ -1,11 +1,12 @@
 import React from "react";
+
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
+import { Modal } from "../../../ui/React/Modal";
 import { formatMoney, formatPercent, formatShares } from "../../../ui/formatNumber";
 import * as corpConstants from "../../data/Constants";
-import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
-
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 
 interface IProps {
   open: boolean;

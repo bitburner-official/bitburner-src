@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 
-import { Warehouse } from "../../Warehouse";
-import { SetSmartSupply, SetSmartSupplyOption } from "../../Actions";
-import { dialogBoxCreate } from "../../../ui/React/DialogBox";
-import { Modal } from "../../../ui/React/Modal";
-import { useDivision } from "../Context";
-import Typography from "@mui/material/Typography";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
 import { CorpMaterialName } from "@nsdefs";
-import { useRerender } from "../../../ui/React/hooks";
+
 import { getRecordKeys } from "../../../Types/Record";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+import { Modal } from "../../../ui/React/Modal";
+import { useRerender } from "../../../ui/React/hooks";
+import { SetSmartSupply, SetSmartSupplyOption } from "../../Actions";
+import { Warehouse } from "../../Warehouse";
+import { useDivision } from "../Context";
 
 interface ISSoptionProps {
   matName: CorpMaterialName;

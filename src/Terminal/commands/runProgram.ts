@@ -1,8 +1,9 @@
-import { Terminal } from "../../Terminal";
 import { Player } from "@player";
-import { BaseServer } from "../../Server/BaseServer";
-import { CompletedProgramName, Programs } from "../../Programs/Programs";
+
 import { ProgramFilePath } from "../../Paths/ProgramFilePath";
+import { CompletedProgramName, Programs } from "../../Programs/Programs";
+import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
 
 export function runProgram(path: ProgramFilePath, args: (string | number | boolean)[], server: BaseServer): void {
   // Check if you have the program on your computer. If you do, execute it, otherwise

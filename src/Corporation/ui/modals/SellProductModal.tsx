@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { dialogBoxCreate } from "../../../ui/React/DialogBox";
-import { Product } from "../../Product";
-import { SellProduct } from "../../Actions";
-import { Modal } from "../../../ui/React/Modal";
 
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { KEY } from "../../../utils/helpers/keyCodes";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
 import { CityName } from "../../../Enums";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+import { Modal } from "../../../ui/React/Modal";
+import { KEY } from "../../../utils/helpers/keyCodes";
+import { SellProduct } from "../../Actions";
+import { Product } from "../../Product";
 
 function initialPrice(product: Product, city: CityName): string {
   let val = String(product.cityData[city].desiredSellPrice || "");

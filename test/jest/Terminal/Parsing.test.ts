@@ -1,4 +1,5 @@
 import { parseCommand } from "../../../src/Terminal/Parser";
+
 test("parseCommand Tests", () => {
   const expectedParsings = {
     // A quoted string that is not the entire argument should retain the quotes

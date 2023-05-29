@@ -1,7 +1,9 @@
 import React from "react";
-import { Modal } from "./Modal";
-import Typography from "@mui/material/Typography";
+
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
+import { Modal } from "./Modal";
 
 interface IProps {
   open: boolean;

@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { Fragments, Fragment, NoneFragment, DeleteFragment } from "../Fragment";
-import { FragmentType, Effect } from "../FragmentType";
+
+import Box from "@mui/material/Box";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
+
+import { formatStaneksGiftPower } from "../../ui/formatNumber";
+import { DeleteFragment, Fragment, Fragments, NoneFragment } from "../Fragment";
+import { Effect, FragmentType } from "../FragmentType";
 import { StaneksGift } from "../StaneksGift";
 import { FragmentPreview } from "./FragmentPreview";
-import { formatStaneksGiftPower } from "../../ui/formatNumber";
-
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 
 interface IOptionProps {
   gift: StaneksGift;

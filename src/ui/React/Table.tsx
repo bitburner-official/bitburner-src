@@ -1,6 +1,6 @@
 import React from "react";
-import { TableCell as MuiTableCell, TableCellProps, Table as MuiTable, TableProps } from "@mui/material";
 
+import { Table as MuiTable, TableCell as MuiTableCell, TableCellProps, TableProps } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 
 const useStyles = makeStyles({

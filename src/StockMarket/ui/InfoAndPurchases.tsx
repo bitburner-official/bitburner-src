@@ -5,22 +5,21 @@
  */
 import React, { useState } from "react";
 
-import { getStockMarket4SDataCost, getStockMarket4STixApiCost } from "../StockMarketCosts";
+import CheckIcon from "@mui/icons-material/Check";
+import HelpIcon from "@mui/icons-material/Help";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
 
 import { CONSTANTS } from "../../Constants";
-import { Player } from "@player";
-import { Money } from "../../ui/React/Money";
-import { initStockMarket } from "../StockMarket";
-
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
-import HelpIcon from "@mui/icons-material/Help";
-import CheckIcon from "@mui/icons-material/Check";
-import { StaticModal } from "../../ui/React/StaticModal";
 import { FactionNames } from "../../Faction/data/FactionNames";
+import { Money } from "../../ui/React/Money";
+import { StaticModal } from "../../ui/React/StaticModal";
+import { initStockMarket } from "../StockMarket";
+import { getStockMarket4SDataCost, getStockMarket4STixApiCost } from "../StockMarketCosts";
 
 interface IProps {
   rerender: () => void;

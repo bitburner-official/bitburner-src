@@ -1,9 +1,11 @@
 import React from "react";
-import { Action } from "../Action";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
+
 import Box from "@mui/material/Box";
 import Switch from "@mui/material/Switch";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import { Action } from "../Action";
 
 interface IProps {
   action: Action;

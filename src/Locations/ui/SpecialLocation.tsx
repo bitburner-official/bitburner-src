@@ -11,32 +11,31 @@
  * properties
  */
 import React, { useState } from "react";
-import Typography from "@mui/material/Typography";
+
 import Button from "@mui/material/Button";
-
-import { Location } from "../Location";
-import { CreateCorporationModal } from "../../Corporation/ui/modals/CreateCorporationModal";
-import { LocationName } from "../../Enums";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
-import { Factions } from "../../Faction/Factions";
-import { joinFaction } from "../../Faction/FactionHelpers";
-
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import Typography from "@mui/material/Typography";
 import { Player } from "@player";
 
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
-import { N00dles } from "../../utils/helpers/N00dles";
-import { Exploit } from "../../Exploits/Exploit";
+import { ArcadeRoot } from "../../Arcade/ui/ArcadeRoot";
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { CreateCorporationModal } from "../../Corporation/ui/modals/CreateCorporationModal";
+import { LocationName } from "../../Enums";
+import { Exploit } from "../../Exploits/Exploit";
+import { joinFaction } from "../../Faction/FactionHelpers";
+import { Factions } from "../../Faction/Factions";
+import { FactionNames } from "../../Faction/data/FactionNames";
 import { HacknetNode } from "../../Hacknet/HacknetNode";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { GetServer } from "../../Server/AllServers";
-import { ArcadeRoot } from "../../Arcade/ui/ArcadeRoot";
-import { FactionNames } from "../../Faction/data/FactionNames";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { Router } from "../../ui/GameRoot";
+import { CorruptableText } from "../../ui/React/CorruptableText";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
+import { Page } from "../../ui/Router";
+import { N00dles } from "../../utils/helpers/N00dles";
+import { Location } from "../Location";
 
 interface IProps {
   loc: Location;

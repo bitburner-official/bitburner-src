@@ -1,11 +1,12 @@
 import React from "react";
-import { Stats } from "./Stats";
-import { Console } from "./Console";
-import { AllPages } from "./AllPages";
 
-import { Player } from "@player";
 import Box from "@mui/material/Box";
+import { Player } from "@player";
+
 import { useRerender } from "../../ui/React/hooks";
+import { AllPages } from "./AllPages";
+import { Console } from "./Console";
+import { Stats } from "./Stats";
 
 export function BladeburnerRoot(): React.ReactElement {
   useRerender(200);

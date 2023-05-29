@@ -1,5 +1,5 @@
-import { Terminal } from "../../Terminal";
 import { parseAliasDeclaration, printAliases } from "../../Alias";
+import { Terminal } from "../../Terminal";
 
 export function alias(args: (string | number | boolean)[]): void {
   if (args.length === 0) {

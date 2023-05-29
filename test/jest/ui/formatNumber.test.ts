@@ -1,11 +1,11 @@
 import { Settings } from "../../../src/Settings/Settings";
 import {
-  formatBigNumber,
-  formatPercent,
-  parseBigNumber,
   FormatsNeedToChange,
+  formatBigNumber,
   formatNumber,
+  formatPercent,
   formatRam,
+  parseBigNumber,
 } from "../../../src/ui/formatNumber";
 
 describe("Suffix rounding test", () => {

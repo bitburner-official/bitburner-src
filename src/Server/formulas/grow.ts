@@ -1,6 +1,7 @@
-import { CONSTANTS } from "../../Constants";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 import { Person as IPerson, Server as IServer } from "@nsdefs";
+
+import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { CONSTANTS } from "../../Constants";
 
 export function calculateServerGrowth(server: IServer, threads: number, p: IPerson, cores = 1): number {
   if (!server.serverGrowth) return 0;

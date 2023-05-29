@@ -1,5 +1,6 @@
-import { FormControlLabel, Switch, Tooltip, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+
+import { FormControlLabel, Switch, Tooltip, Typography } from "@mui/material";
 
 interface IProps {
   checked: boolean;

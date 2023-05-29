@@ -1,6 +1,7 @@
+import { Player } from "@player";
+
 import { root } from "../../Paths/Directory";
 import { Terminal } from "../../Terminal";
-import { Player } from "@player";
 
 export function home(args: (string | number | boolean)[]): void {
   if (args.length !== 0) {

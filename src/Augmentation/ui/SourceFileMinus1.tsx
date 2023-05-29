@@ -4,17 +4,17 @@
  */
 import React, { useState } from "react";
 
-import { Player } from "@player";
-import { Exploit, ExploitName } from "../../Exploits/Exploit";
-
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import Box from "@mui/material/Box";
+import Collapse from "@mui/material/Collapse";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import Collapse from "@mui/material/Collapse";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import ExpandLess from "@mui/icons-material/ExpandLess";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { Exploit, ExploitName } from "../../Exploits/Exploit";
 
 export function SourceFileMinus1(): React.ReactElement {
   const [open, setOpen] = useState(false);

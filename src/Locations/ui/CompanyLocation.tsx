@@ -4,28 +4,26 @@
  * This subcomponent renders all of the buttons for applying to jobs at a company
  */
 import React, { useState } from "react";
-import Typography from "@mui/material/Typography";
+
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
-
-import { ApplyToJobButton } from "./ApplyToJobButton";
-
-import { Locations } from "../Locations";
-import { LocationName } from "../../Enums";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
 
 import { Companies } from "../../Company/Companies";
 import { CompanyPositions } from "../../Company/CompanyPositions";
 import * as posNames from "../../Company/data/JobTracks";
-
-import { Reputation } from "../../ui/React/Reputation";
-import { Favor } from "../../ui/React/Favor";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
-import { Player } from "@player";
 import { QuitJobModal } from "../../Company/ui/QuitJobModal";
+import { LocationName } from "../../Enums";
 import { CompanyWork } from "../../Work/CompanyWork";
+import { Router } from "../../ui/GameRoot";
+import { Favor } from "../../ui/React/Favor";
+import { Reputation } from "../../ui/React/Reputation";
 import { useRerender } from "../../ui/React/hooks";
+import { Page } from "../../ui/Router";
+import { Locations } from "../Locations";
+import { ApplyToJobButton } from "./ApplyToJobButton";
 
 interface IProps {
   locName: LocationName;

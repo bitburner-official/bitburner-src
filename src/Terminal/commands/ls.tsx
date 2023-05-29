@@ -1,16 +1,15 @@
+import React from "react";
+
 import { Theme } from "@mui/material/styles";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import React from "react";
-import { BaseServer } from "../../Server/BaseServer";
-import { Router } from "../../ui/GameRoot";
-import { Terminal } from "../../Terminal";
 import libarg from "arg";
+
 import { showLiterature } from "../../Literature/LiteratureHelpers";
+import { LiteratureName } from "../../Literature/data/LiteratureNames";
 import { MessageFilename, showMessage } from "../../Message/MessageHelpers";
-import { ScriptFilePath } from "../../Paths/ScriptFilePath";
-import { FilePath, combinePath, removeDirectoryFromPath } from "../../Paths/FilePath";
 import { ContentFilePath } from "../../Paths/ContentFile";
+import { ContractFilePath } from "../../Paths/ContractFilePath";
 import {
   Directory,
   directoryExistsOnServer,
@@ -18,11 +17,14 @@ import {
   resolveDirectory,
   root,
 } from "../../Paths/Directory";
-import { TextFilePath } from "../../Paths/TextFilePath";
-import { ContractFilePath } from "../../Paths/ContractFilePath";
+import { FilePath, combinePath, removeDirectoryFromPath } from "../../Paths/FilePath";
 import { ProgramFilePath } from "../../Paths/ProgramFilePath";
+import { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { TextFilePath } from "../../Paths/TextFilePath";
+import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
+import { Router } from "../../ui/GameRoot";
 import { checkEnum } from "../../utils/helpers/enum";
-import { LiteratureName } from "../../Literature/data/LiteratureNames";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer): void {
   interface LSFlags {

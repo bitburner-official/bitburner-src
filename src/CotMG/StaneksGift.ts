@@ -1,19 +1,20 @@
-import { FactionNames } from "../Faction/data/FactionNames";
-import { Fragment } from "./Fragment";
-import { ActiveFragment } from "./ActiveFragment";
-import { FragmentType } from "./FragmentType";
-import { BaseGift } from "./BaseGift";
-import { Factions } from "../Faction/Factions";
-import { CalculateEffect } from "./formulas/effect";
-import { StaneksGiftEvents } from "./StaneksGiftEvents";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { StanekConstants } from "./data/Constants";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
-import { defaultMultipliers, mergeMultipliers, Multipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
+
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { Factions } from "../Faction/Factions";
+import { FactionNames } from "../Faction/data/FactionNames";
+import { Multipliers, defaultMultipliers, mergeMultipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { getKeyList } from "../utils/helpers/getKeyList";
+import { ActiveFragment } from "./ActiveFragment";
+import { BaseGift } from "./BaseGift";
+import { Fragment } from "./Fragment";
+import { FragmentType } from "./FragmentType";
+import { StaneksGiftEvents } from "./StaneksGiftEvents";
+import { StanekConstants } from "./data/Constants";
+import { CalculateEffect } from "./formulas/effect";
 
 export class StaneksGift extends BaseGift {
   isBonusCharging = false;

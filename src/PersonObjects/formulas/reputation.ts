@@ -1,7 +1,8 @@
-import { CONSTANTS } from "../../Constants";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
-import { CalculateShareMult } from "../../NetworkShare/Share";
 import { Person as IPerson } from "@nsdefs";
+
+import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { CONSTANTS } from "../../Constants";
+import { CalculateShareMult } from "../../NetworkShare/Share";
 import { calculateIntelligenceBonus } from "./intelligence";
 
 function mult(favor: number): number {

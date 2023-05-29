@@ -1,18 +1,20 @@
 import React from "react";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+
 import { Player } from "@player";
-import { Work, WorkType } from "./Work";
-import { influenceStockThroughCompanyWork } from "../StockMarket/PlayerInfluencing";
-import { LocationName } from "../Enums";
-import { calculateCompanyWorkStats } from "./Formulas";
+
+import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { Companies } from "../Company/Companies";
-import { applyWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
 import { Company } from "../Company/Company";
+import { CompanyPositions } from "../Company/CompanyPositions";
+import { CONSTANTS } from "../Constants";
+import { LocationName } from "../Enums";
+import { influenceStockThroughCompanyWork } from "../StockMarket/PlayerInfluencing";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reputation } from "../ui/React/Reputation";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
-import { CONSTANTS } from "../Constants";
-import { CompanyPositions } from "../Company/CompanyPositions";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { calculateCompanyWorkStats } from "./Formulas";
+import { Work, WorkType } from "./Work";
+import { WorkStats, applyWorkStats, scaleWorkStats } from "./WorkStats";
 
 interface CompanyWorkParams {
   companyName: string;

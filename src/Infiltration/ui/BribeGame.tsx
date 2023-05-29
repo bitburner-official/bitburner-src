@@ -1,7 +1,9 @@
-import { Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+
+import { Paper, Typography } from "@mui/material";
 import { Player } from "@player";
+
+import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { Settings } from "../../Settings/Settings";
 import { KEY } from "../../utils/helpers/keyCodes";
 import { downArrowSymbol, upArrowSymbol } from "../utils";

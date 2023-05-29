@@ -1,13 +1,14 @@
-import { Terminal } from "../../Terminal";
-import { BaseServer } from "../../Server/BaseServer";
-import { LogBoxEvents } from "../../ui/React/LogBoxManager";
-import { startWorkerScript } from "../../NetscriptWorker";
-import { RunningScript } from "../../Script/RunningScript";
-import * as libarg from "arg";
-import { formatRam } from "../../ui/formatNumber";
 import { ScriptArg } from "@nsdefs";
-import { isPositiveInteger } from "../../types";
+import * as libarg from "arg";
+
+import { startWorkerScript } from "../../NetscriptWorker";
 import { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { RunningScript } from "../../Script/RunningScript";
+import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
+import { isPositiveInteger } from "../../types";
+import { LogBoxEvents } from "../../ui/React/LogBoxManager";
+import { formatRam } from "../../ui/formatNumber";
 
 export function runScript(path: ScriptFilePath, commandArgs: (string | number | boolean)[], server: BaseServer): void {
   // This takes in the absolute filepath, see "run.ts"

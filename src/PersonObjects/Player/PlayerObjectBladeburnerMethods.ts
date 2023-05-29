@@ -1,5 +1,4 @@
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
-
 import type { PlayerObject } from "./PlayerObject";
 
 export function canAccessBladeburner(this: PlayerObject): boolean {

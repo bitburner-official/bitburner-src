@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Typography from "@mui/material/Typography";
+import { MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
 import Button from "@mui/material/Button";
-import { Money } from "../../ui/React/Money";
+import Typography from "@mui/material/Typography";
 import { Player } from "@player";
-import { Router } from "../../ui/GameRoot";
-import { MenuItem, SelectChangeEvent, TextField, Select } from "@mui/material";
+
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
-import { GangConstants } from "../../Gang/data/Constants";
 import { FactionNames } from "../../Faction/data/FactionNames";
+import { GangConstants } from "../../Gang/data/Constants";
 import { checkForMessagesToSend } from "../../Message/MessageHelpers";
 import { ThemeEvents } from "../../Themes/ui/Theme";
+import { Router } from "../../ui/GameRoot";
+import { Money } from "../../ui/React/Money";
 
 export function General(): React.ReactElement {
   const [error, setError] = useState(false);

@@ -1,13 +1,13 @@
-import { CorpEmployeeJob } from "./data/Enums";
-import { MaterialInfo } from "./MaterialInfo";
-import { Division } from "./Division";
-import { IndustriesData } from "./IndustryData";
+import { CorpMaterialName } from "@nsdefs";
 
+import { CityName } from "../Enums";
+import { PartialRecord, createEnumKeyedRecord, getRecordEntries, getRecordKeys } from "../Types/Record";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { CityName } from "../Enums";
-import { CorpMaterialName } from "@nsdefs";
-import { PartialRecord, createEnumKeyedRecord, getRecordEntries, getRecordKeys } from "../Types/Record";
+import { Division } from "./Division";
+import { IndustriesData } from "./IndustryData";
+import { MaterialInfo } from "./MaterialInfo";
+import { CorpEmployeeJob } from "./data/Enums";
 
 interface IConstructorParams {
   name: string;

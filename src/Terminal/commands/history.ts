@@ -1,5 +1,6 @@
-import { Terminal } from "../../Terminal";
 import { Player } from "@player";
+
+import { Terminal } from "../../Terminal";
 
 export function history(args: (string | number | boolean)[]): void {
   if (args.length === 0) {

@@ -1,5 +1,5 @@
+import { FormatsHaveChanged, formatPercent } from "../ui/formatNumber";
 import { IMults, UpgradeType } from "./data/upgrades";
-import { formatPercent, FormatsHaveChanged } from "../ui/formatNumber";
 
 export class GangMemberUpgrade {
   name: string;

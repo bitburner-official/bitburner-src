@@ -1,6 +1,7 @@
 import React from "react";
-import { OperationElem } from "./OperationElem";
+
 import { Bladeburner } from "../Bladeburner";
+import { OperationElem } from "./OperationElem";
 
 interface IProps {
   bladeburner: Bladeburner;

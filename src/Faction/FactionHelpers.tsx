@@ -1,24 +1,23 @@
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import { Player } from "@player";
+
 import { Augmentation } from "../Augmentation/Augmentation";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
+import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-
+import { SFC32RNG } from "../Casino/RNG";
+import {
+  getFactionFieldWorkRepGain,
+  getFactionSecurityWorkRepGain,
+  getHackingWorkRepGain,
+} from "../PersonObjects/formulas/reputation";
+import { Settings } from "../Settings/Settings";
+import { isFactionWork } from "../Work/FactionWork";
+import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Faction } from "./Faction";
 import { Factions } from "./Factions";
-import { Player } from "@player";
-import { Settings } from "../Settings/Settings";
-import {
-  getHackingWorkRepGain,
-  getFactionSecurityWorkRepGain,
-  getFactionFieldWorkRepGain,
-} from "../PersonObjects/formulas/reputation";
-
-import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { InvitationEvent } from "./ui/InvitationModal";
 import { FactionNames } from "./data/FactionNames";
-import { SFC32RNG } from "../Casino/RNG";
-import { isFactionWork } from "../Work/FactionWork";
+import { InvitationEvent } from "./ui/InvitationModal";
 
 export function inviteToFaction(faction: Faction): void {
   Player.receiveInvite(faction.name);

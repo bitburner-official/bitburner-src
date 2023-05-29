@@ -1,18 +1,18 @@
-import { GetServer, createUniqueRandomIp, ipExists } from "./AllServers";
-import { Server, IConstructorParams } from "./Server";
-import { BaseServer } from "./BaseServer";
-import { calculateServerGrowth } from "./formulas/grow";
+import { Person as IPerson } from "@nsdefs";
+import { Server as IServer } from "@nsdefs";
+import { Player } from "@player";
 
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
-import { Player } from "@player";
-import { CompletedProgramName } from "../Programs/Programs";
 import { LiteratureName } from "../Literature/data/LiteratureNames";
-import { Person as IPerson } from "@nsdefs";
-import { isValidNumber } from "../utils/helpers/isValidNumber";
-import { Server as IServer } from "@nsdefs";
 import { workerScripts } from "../Netscript/WorkerScripts";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
+import { CompletedProgramName } from "../Programs/Programs";
+import { isValidNumber } from "../utils/helpers/isValidNumber";
+import { GetServer, createUniqueRandomIp, ipExists } from "./AllServers";
+import { BaseServer } from "./BaseServer";
+import { IConstructorParams, Server } from "./Server";
+import { calculateServerGrowth } from "./formulas/grow";
 
 /**
  * Constructs a new server, while also ensuring that the new server

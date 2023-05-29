@@ -3,6 +3,7 @@
  * and provides information about all of the player's scripts that are currently running
  */
 import React from "react";
+
 import Typography from "@mui/material/Typography";
 
 import { recentScripts } from "../../Netscript/RecentScripts";

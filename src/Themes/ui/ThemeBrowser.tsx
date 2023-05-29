@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Typography from "@mui/material/Typography";
+
+import { Box, Button, ButtonGroup } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import { ThemeEvents } from "./Theme";
+import Typography from "@mui/material/Typography";
+
 import { Settings } from "../../Settings/Settings";
-import { getPredefinedThemes, IPredefinedTheme } from "../Themes";
-import { Box, ButtonGroup, Button } from "@mui/material";
-import { ThemeEditorButton } from "./ThemeEditorButton";
-import { StyleEditorButton } from "./StyleEditorButton";
-import { ThemeEntry } from "./ThemeEntry";
-import { ThemeCollaborate } from "./ThemeCollaborate";
 import { Modal } from "../../ui/React/Modal";
 import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
+import { IPredefinedTheme, getPredefinedThemes } from "../Themes";
+import { StyleEditorButton } from "./StyleEditorButton";
+import { ThemeEvents } from "./Theme";
+import { ThemeCollaborate } from "./ThemeCollaborate";
+import { ThemeEditorButton } from "./ThemeEditorButton";
+import { ThemeEntry } from "./ThemeEntry";
 
 // Everything dies when the theme gets reloaded, so we'll keep the current scroll to not jump around.
 let previousScrollY = 0;

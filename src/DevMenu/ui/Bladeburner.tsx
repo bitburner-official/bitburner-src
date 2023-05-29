@@ -1,23 +1,25 @@
 import React, { useState } from "react";
+
+import DeleteIcon from "@mui/icons-material/Delete";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
-  Tooltip,
-  Typography,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  FormControl,
   IconButton,
   InputLabel,
   MenuItem,
-  FormControl,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
+  Tooltip,
+  Typography,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
-import { CityName } from "../../Enums";
+
 import { Skills as AllSkills } from "../../Bladeburner/Skills";
 import { SkillNames } from "../../Bladeburner/data/SkillNames";
+import { CityName } from "../../Enums";
+import { Adjuster } from "./Adjuster";
 
 const bigNumber = 1e27;
 

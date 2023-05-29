@@ -1,17 +1,16 @@
 import React, { useEffect } from "react";
+
+import { Check, Create, Lock } from "@mui/icons-material";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import { Player } from "@player";
 import { find } from "lodash";
 
-import { Box, Typography, Button, Container, Paper } from "@mui/material";
-import { Check, Lock, Create } from "@mui/icons-material";
-
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
-import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-
-import { Programs } from "../Programs";
 import { CreateProgramWork, isCreateProgramWork } from "../../Work/CreateProgramWork";
+import { Router } from "../../ui/GameRoot";
 import { useRerender } from "../../ui/React/hooks";
+import { Page } from "../../ui/Router";
+import { Programs } from "../Programs";
 
 export const ProgramsSeen: string[] = [];
 

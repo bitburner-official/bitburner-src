@@ -1,5 +1,4 @@
 import commandLineArgs from "command-line-args";
-
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";

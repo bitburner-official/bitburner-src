@@ -1,7 +1,8 @@
-import { toNative } from "./toNative";
 import libarg from "arg";
-import { ScriptArg } from "../Netscript/ScriptArg";
+
 import { NetscriptContext } from "../Netscript/APIWrapper";
+import { ScriptArg } from "../Netscript/ScriptArg";
+import { toNative } from "./toNative";
 
 type FlagType = StringConstructor | NumberConstructor | BooleanConstructor | StringConstructor[];
 type FlagsRet = Record<string, ScriptArg | string[]>;

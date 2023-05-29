@@ -1,16 +1,17 @@
-import { Program } from "./Program";
+import { Player } from "@player";
+
+import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { BitFlumeEvent } from "../BitNode/ui/BitFlumeModal";
 import { CONSTANTS } from "../Constants";
+import { FactionNames } from "../Faction/data/FactionNames";
+import { calculateGrowTime, calculateHackingTime, calculateWeakenTime } from "../Hacking";
+import { GetServer } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
 import { Terminal } from "../Terminal";
-import { Player } from "@player";
-import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-import { GetServer } from "../Server/AllServers";
 import { formatMoney } from "../ui/formatNumber";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { BitFlumeEvent } from "../BitNode/ui/BitFlumeModal";
-import { calculateHackingTime, calculateGrowTime, calculateWeakenTime } from "../Hacking";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
+import { Program } from "./Program";
 
 function requireHackingLevel(lvl: number) {
   return function () {

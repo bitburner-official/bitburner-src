@@ -1,51 +1,47 @@
+import { ProgramFilePath } from "src/Paths/ProgramFilePath";
+
+import { achievements } from "../../Achievements/Achievements";
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
 import { PlayerOwnedAugmentation } from "../../Augmentation/PlayerOwnedAugmentation";
 import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 import { CodingContractRewardType, ICodingContractReward } from "../../CodingContracts";
-import { Company } from "../../Company/Company";
 import { Companies } from "../../Company/Companies";
-import { getNextCompanyPositionHelper } from "../../Company/GetNextCompanyPosition";
-import { getJobRequirementText } from "../../Company/GetJobRequirementText";
-import { CompanyPositions } from "../../Company/CompanyPositions";
+import { Company } from "../../Company/Company";
 import { CompanyPosition } from "../../Company/CompanyPosition";
+import { CompanyPositions } from "../../Company/CompanyPositions";
+import { getJobRequirementText } from "../../Company/GetJobRequirementText";
+import { getNextCompanyPositionHelper } from "../../Company/GetNextCompanyPosition";
 import * as posNames from "../../Company/data/JobTracks";
 import { CONSTANTS } from "../../Constants";
-import { CompletedProgramName } from "../../Programs/Programs";
+import { CityName, LocationName } from "../../Enums";
 import { Exploit } from "../../Exploits/Exploit";
+import { applyExploit } from "../../Exploits/applyExploits";
 import { Faction } from "../../Faction/Faction";
 import { Factions } from "../../Faction/Factions";
+import { FactionNames } from "../../Faction/data/FactionNames";
 import { resetGangs } from "../../Gang/AllGangs";
+import { HacknetServer } from "../../Hacknet/HacknetServer";
+import { getHospitalizationCost } from "../../Hospital/Hospital";
 import { Cities } from "../../Locations/Cities";
 import { Locations } from "../../Locations/Locations";
-import { CityName, LocationName } from "../../Enums";
-import { Sleeve } from "../Sleeve/Sleeve";
-import { isSleeveCompanyWork } from "../Sleeve/Work/SleeveCompanyWork";
-import { calculateSkillProgress as calculateSkillProgressF, ISkillProgress } from "../formulas/skill";
-import { GetServer, AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
+import { CompletedProgramName } from "../../Programs/Programs";
+import { AddToAllServers, GetServer, createUniqueRandomIp } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
 import { safelyCreateUniqueServer } from "../../Server/ServerHelpers";
-
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { applySourceFile } from "../../SourceFile/applySourceFile";
-import { applyExploit } from "../../Exploits/applyExploits";
+import { serverMetadata } from "../../Server/data/servers";
 import { SourceFiles } from "../../SourceFile/SourceFiles";
-import { getHospitalizationCost } from "../../Hospital/Hospital";
-import { HacknetServer } from "../../Hacknet/HacknetServer";
-
+import { applySourceFile } from "../../SourceFile/applySourceFile";
+import { isCompanyWork } from "../../Work/CompanyWork";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
 import { formatMoney } from "../../ui/formatNumber";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
-
-import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
-import { achievements } from "../../Achievements/Achievements";
-import { FactionNames } from "../../Faction/data/FactionNames";
-
-import { isCompanyWork } from "../../Work/CompanyWork";
-import { serverMetadata } from "../../Server/data/servers";
-
+import { Sleeve } from "../Sleeve/Sleeve";
+import { isSleeveCompanyWork } from "../Sleeve/Work/SleeveCompanyWork";
+import { ISkillProgress, calculateSkillProgress as calculateSkillProgressF } from "../formulas/skill";
 import type { PlayerObject } from "./PlayerObject";
-import { ProgramFilePath } from "src/Paths/ProgramFilePath";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */

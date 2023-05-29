@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Theme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Fade from "@mui/material/Fade";
@@ -5,7 +7,6 @@ import M from "@mui/material/Modal";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import { SxProps } from "@mui/system";
-import React from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

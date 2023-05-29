@@ -5,9 +5,21 @@
  * location that is being rendered and then creates the proper component(s) for that.
  */
 import * as React from "react";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 
+import { Tooltip } from "@mui/material";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
+import { GetServer } from "../../Server/AllServers";
+import { isBackdoorInstalled } from "../../Server/ServerHelpers";
+import { serverMetadata } from "../../Server/data/servers";
+import { Settings } from "../../Settings/Settings";
+import { Router } from "../../ui/GameRoot";
+import { CorruptableText } from "../../ui/React/CorruptableText";
+import { Page } from "../../ui/Router";
+import { Location } from "../Location";
+import { LocationType } from "../LocationTypeEnum";
+import { CasinoLocation } from "./CasinoLocation";
 import { CompanyLocation } from "./CompanyLocation";
 import { GymLocation } from "./GymLocation";
 import { HospitalLocation } from "./HospitalLocation";
@@ -16,21 +28,6 @@ import { SpecialLocation } from "./SpecialLocation";
 import { TechVendorLocation } from "./TechVendorLocation";
 import { TravelAgencyRoot } from "./TravelAgencyRoot";
 import { UniversityLocation } from "./UniversityLocation";
-import { CasinoLocation } from "./CasinoLocation";
-
-import { Location } from "../Location";
-import { LocationType } from "../LocationTypeEnum";
-
-import { Settings } from "../../Settings/Settings";
-
-import { isBackdoorInstalled } from "../../Server/ServerHelpers";
-import { GetServer } from "../../Server/AllServers";
-
-import { CorruptableText } from "../../ui/React/CorruptableText";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
-import { serverMetadata } from "../../Server/data/servers";
-import { Tooltip } from "@mui/material";
 
 interface IProps {
   loc: Location;

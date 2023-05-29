@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import * as corpConstants from "../data/Constants";
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { purchaseOffice } from "../Actions";
-import { MoneyCost } from "./MoneyCost";
-import { useCorporation, useDivision } from "./Context";
-import Typography from "@mui/material/Typography";
+
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
+import Typography from "@mui/material/Typography";
+
 import { CityName } from "../../Enums";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { purchaseOffice } from "../Actions";
+import * as corpConstants from "../data/Constants";
+import { useCorporation, useDivision } from "./Context";
+import { MoneyCost } from "./MoneyCost";
 
 interface IProps {
   cityStateSetter: (city: CityName | "Expand") => void;

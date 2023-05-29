@@ -1,19 +1,21 @@
-import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { FactionWorkType } from "../../../Enums";
-import { CONSTANTS } from "../../../Constants";
+
+import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import { Player } from "@player";
-import { formatPercent } from "../../../ui/formatNumber";
+
+import { CONSTANTS } from "../../../Constants";
+import { findCrime } from "../../../Crime/CrimeHelpers";
+import { FactionWorkType } from "../../../Enums";
+import { CrimeType } from "../../../Enums";
 import { ProgressBar } from "../../../ui/React/Progress";
+import { formatPercent } from "../../../ui/formatNumber";
 import { Sleeve } from "../Sleeve";
+import { WorkType } from "../Work/Work";
 import { MoreStatsModal } from "./MoreStatsModal";
 import { SleeveAugmentationsModal } from "./SleeveAugmentationsModal";
 import { EarningsElement, StatsElement } from "./StatsElement";
 import { TaskSelector } from "./TaskSelector";
 import { TravelModal } from "./TravelModal";
-import { findCrime } from "../../../Crime/CrimeHelpers";
-import { CrimeType } from "../../../Enums";
-import { WorkType } from "../Work/Work";
 
 function getWorkDescription(sleeve: Sleeve, progress: number): string {
   const work = sleeve.currentWork;

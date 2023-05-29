@@ -1,9 +1,9 @@
 import React, { ErrorInfo } from "react";
 
 import { IErrorData, getErrorForDisplay } from "../utils/ErrorHelper";
+import { Router } from "./GameRoot";
 import { RecoveryRoot } from "./React/RecoveryRoot";
 import { Page } from "./Router";
-import { Router } from "./GameRoot";
 
 interface IProps {
   softReset: () => void;

@@ -1,11 +1,13 @@
+import React from "react";
+
+import { Player } from "@player";
+
+import { WHRNG } from "../../Casino/RNG";
+import { CONSTANTS } from "../../Constants";
+import { FactionNames } from "../../Faction/data/FactionNames";
+import { CompletedProgramName } from "../../Programs/Programs";
 import { Augmentation, IConstructorParams } from "../Augmentation";
 import { AugmentationNames } from "./AugmentationNames";
-import { Player } from "@player";
-import { CompletedProgramName } from "../../Programs/Programs";
-import { WHRNG } from "../../Casino/RNG";
-import React from "react";
-import { FactionNames } from "../../Faction/data/FactionNames";
-import { CONSTANTS } from "../../Constants";
 
 interface CircadianBonus {
   bonuses: {

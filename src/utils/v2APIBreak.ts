@@ -2,8 +2,8 @@ import { TextFilePath } from "../Paths/TextFilePath";
 import { saveObject } from "../SaveObject";
 import { Script } from "../Script/Script";
 import { GetAllServers, GetServer } from "../Server/AllServers";
-import { IFileLine } from "./v1APIBreak";
 import { openV2Modal } from "./V2Modal";
+import { IFileLine } from "./v1APIBreak";
 
 const singularity = [
   "applyToCompany",

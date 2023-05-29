@@ -1,7 +1,7 @@
+import { FactionNames } from "../Faction/data/FactionNames";
 import { CityName } from "./../Enums";
 import { Literature } from "./Literature";
 import { LiteratureName } from "./data/LiteratureNames";
-import { FactionNames } from "../Faction/data/FactionNames";
 
 export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.HackersStartingHandbook]: new Literature({

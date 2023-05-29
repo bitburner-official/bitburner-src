@@ -2,9 +2,11 @@
  * React component for displaying all of the player's purchased (but not installed)
  * Augmentations on the Augmentations UI.
  */
-import { List, ListItemText, Paper, Tooltip, Typography } from "@mui/material";
 import * as React from "react";
+
+import { List, ListItemText, Paper, Tooltip, Typography } from "@mui/material";
 import { Player } from "@player";
+
 import { StaticAugmentations } from "../StaticAugmentations";
 import { AugmentationNames } from "../data/AugmentationNames";
 

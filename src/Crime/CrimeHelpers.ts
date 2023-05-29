@@ -1,10 +1,10 @@
-import { Crimes } from "./Crimes";
-import { Crime } from "./Crime";
 import { Player } from "@player";
 
+import { CrimeType } from "../Enums";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { checkEnum } from "../utils/helpers/enum";
-import { CrimeType } from "../Enums";
+import { Crime } from "./Crime";
+import { Crimes } from "./Crimes";
 
 //This is only used for the player
 export function determineCrimeSuccess(type: string): boolean {

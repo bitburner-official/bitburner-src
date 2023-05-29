@@ -1,13 +1,14 @@
-import { Player } from "@player";
-import { Bladeburner } from "../Bladeburner/Bladeburner";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Bladeburner as INetscriptBladeburner } from "@nsdefs";
+import { Player } from "@player";
 import { Action } from "src/Bladeburner/Action";
 import { InternalAPI, NetscriptContext } from "src/Netscript/APIWrapper";
+
+import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { BlackOperation } from "../Bladeburner/BlackOperation";
+import { Bladeburner } from "../Bladeburner/Bladeburner";
+import { CityName } from "../Enums";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { checkEnum } from "../utils/helpers/enum";
-import { CityName } from "../Enums";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {

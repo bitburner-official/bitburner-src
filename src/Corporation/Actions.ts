@@ -1,21 +1,22 @@
-import { Player } from "@player";
-import { MaterialInfo } from "./MaterialInfo";
-import { Corporation } from "./Corporation";
-import { IndustryResearchTrees, IndustriesData } from "./IndustryData";
-import { Division } from "./Division";
-import * as corpConstants from "./data/Constants";
-import { OfficeSpace } from "./OfficeSpace";
-import { Material } from "./Material";
-import { Product } from "./Product";
-import { Warehouse } from "./Warehouse";
-import { IndustryType } from "./data/Enums";
-import { ResearchMap } from "./ResearchMap";
-import { isRelevantMaterial } from "./ui/Helpers";
-import { CityName } from "../Enums";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { CorpResearchName } from "@nsdefs";
+import { Player } from "@player";
 import { isInteger } from "lodash";
+
+import { CityName } from "../Enums";
 import { getRecordValues } from "../Types/Record";
+import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { Corporation } from "./Corporation";
+import { Division } from "./Division";
+import { IndustriesData, IndustryResearchTrees } from "./IndustryData";
+import { Material } from "./Material";
+import { MaterialInfo } from "./MaterialInfo";
+import { OfficeSpace } from "./OfficeSpace";
+import { Product } from "./Product";
+import { ResearchMap } from "./ResearchMap";
+import { Warehouse } from "./Warehouse";
+import * as corpConstants from "./data/Constants";
+import { IndustryType } from "./data/Enums";
+import { isRelevantMaterial } from "./ui/Helpers";
 
 export function NewDivision(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.size >= corporation.maxDivisions)

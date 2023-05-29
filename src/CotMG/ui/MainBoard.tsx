@@ -1,17 +1,19 @@
 import * as React from "react";
-import { Fragment, NoneFragment } from "../Fragment";
-import { FragmentType } from "../FragmentType";
-import { StaneksGift } from "../StaneksGift";
-import { FragmentInspector } from "./FragmentInspector";
-import { FragmentSelector } from "./FragmentSelector";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { Table } from "../../ui/React/Table";
-import { Grid } from "./Grid";
-import { zeros } from "../Helper";
-import { ActiveFragmentSummary } from "./ActiveFragmentSummary";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+
+import { Table } from "../../ui/React/Table";
+import { Fragment, NoneFragment } from "../Fragment";
+import { FragmentType } from "../FragmentType";
+import { zeros } from "../Helper";
+import { StaneksGift } from "../StaneksGift";
+import { ActiveFragmentSummary } from "./ActiveFragmentSummary";
+import { FragmentInspector } from "./FragmentInspector";
+import { FragmentSelector } from "./FragmentSelector";
+import { Grid } from "./Grid";
 
 interface IProps {
   gift: StaneksGift;

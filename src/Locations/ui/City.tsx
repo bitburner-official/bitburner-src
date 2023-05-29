@@ -5,22 +5,22 @@
  */
 import * as React from "react";
 
-import { City } from "../City";
-import { Cities } from "../Cities";
-import { LocationName } from "../../Enums";
-import { Locations } from "../Locations";
-import { Location } from "../Location";
-import { Settings } from "../../Settings/Settings";
-
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { Theme } from "@mui/material/styles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import { Player } from "@player";
+
+import { LocationName } from "../../Enums";
+import { Settings } from "../../Settings/Settings";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { Cities } from "../Cities";
+import { City } from "../City";
+import { Location } from "../Location";
 import { LocationType } from "../LocationTypeEnum";
-import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { Locations } from "../Locations";
 
 interface IProps {
   city: City;

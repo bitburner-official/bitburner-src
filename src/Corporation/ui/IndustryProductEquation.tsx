@@ -1,7 +1,9 @@
 import React from "react";
-import { Division } from "../Division";
+
 import { MathJax } from "better-react-mathjax";
+
 import { getRecordEntries } from "../../Types/Record";
+import { Division } from "../Division";
 
 interface IProps {
   division: Division;

@@ -2,18 +2,20 @@
  * React component for displaying a single augmentation for purchase through
  * the faction UI
  */
+import React, { useState } from "react";
+
 import { CheckBox, CheckBoxOutlineBlank, CheckCircle, NewReleases, Report } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { Faction } from "../../Faction/Faction";
 import { Player } from "@player";
+
+import { Faction } from "../../Faction/Faction";
+import { FactionNames } from "../../Faction/data/FactionNames";
 import { Settings } from "../../Settings/Settings";
 import { formatMoney, formatReputation } from "../../ui/formatNumber";
 import { Augmentation } from "../Augmentation";
-import { AugmentationNames } from "../data/AugmentationNames";
 import { StaticAugmentations } from "../StaticAugmentations";
+import { AugmentationNames } from "../data/AugmentationNames";
 import { PurchaseAugmentationModal } from "./PurchaseAugmentationModal";
-import { FactionNames } from "../../Faction/data/FactionNames";
 
 interface IPreReqsProps {
   aug: Augmentation;

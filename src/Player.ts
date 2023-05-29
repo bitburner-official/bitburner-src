@@ -1,8 +1,6 @@
 import { sanitizeExploits } from "./Exploits/Exploit";
-
-import { Reviver } from "./utils/JSONReviver";
-
 import type { PlayerObject } from "./PersonObjects/Player/PlayerObject";
+import { Reviver } from "./utils/JSONReviver";
 
 export let Player: PlayerObject;
 

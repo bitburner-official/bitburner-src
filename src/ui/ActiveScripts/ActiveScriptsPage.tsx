@@ -4,12 +4,11 @@
  */
 import React from "react";
 
-import { ScriptProduction } from "./ScriptProduction";
-import { ServerAccordions } from "./ServerAccordions";
+import Typography from "@mui/material/Typography";
 
 import { WorkerScript } from "../../Netscript/WorkerScript";
-
-import Typography from "@mui/material/Typography";
+import { ScriptProduction } from "./ScriptProduction";
+import { ServerAccordions } from "./ServerAccordions";
 
 interface IProps {
   workerScripts: Map<number, WorkerScript>;

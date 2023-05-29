@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { Options, WordWrapOptions } from "./Options";
-import { Modal } from "../../ui/React/Modal";
 
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Select from "@mui/material/Select";
-import Switch from "@mui/material/Switch";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Switch from "@mui/material/Switch";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
+import { Modal } from "../../ui/React/Modal";
+import { Options, WordWrapOptions } from "./Options";
 import { ThemeEditorModal } from "./ThemeEditorModal";
 
 interface IProps {

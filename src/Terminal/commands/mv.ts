@@ -1,7 +1,7 @@
-import { Terminal } from "../../Terminal";
-import { BaseServer } from "../../Server/BaseServer";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
+import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
 
 export function mv(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 2) {

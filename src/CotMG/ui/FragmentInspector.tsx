@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { ActiveFragment } from "../ActiveFragment";
-import { StaneksGift } from "../StaneksGift";
-import { FragmentType, Effect } from "../FragmentType";
-import { formatPercent, formatStaneksGiftCharge, formatStaneksGiftPower } from "../../ui/formatNumber";
+import React, { useEffect, useState } from "react";
 
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+
+import { formatPercent, formatStaneksGiftCharge, formatStaneksGiftPower } from "../../ui/formatNumber";
+import { ActiveFragment } from "../ActiveFragment";
+import { Effect, FragmentType } from "../FragmentType";
+import { StaneksGift } from "../StaneksGift";
 
 interface IProps {
   gift: StaneksGift;

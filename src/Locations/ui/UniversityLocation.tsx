@@ -4,20 +4,19 @@
  * This subcomponent renders all of the buttons for studying/taking courses
  */
 import * as React from "react";
-import Tooltip from "@mui/material/Tooltip";
-import Button from "@mui/material/Button";
 
-import { Location } from "../Location";
-
-import { Money } from "../../ui/React/Money";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
-import { Player } from "@player";
 import { Box } from "@mui/material";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import { Player } from "@player";
 
+import { UniversityClassType } from "../../Enums";
 import { ClassWork, Classes } from "../../Work/ClassWork";
 import { calculateCost } from "../../Work/Formulas";
-import { UniversityClassType } from "../../Enums";
+import { Router } from "../../ui/GameRoot";
+import { Money } from "../../ui/React/Money";
+import { Page } from "../../ui/Router";
+import { Location } from "../Location";
 
 interface IProps {
   loc: Location;

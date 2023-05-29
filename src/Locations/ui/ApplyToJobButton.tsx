@@ -1,12 +1,12 @@
 import * as React from "react";
 
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import { Player } from "@player";
+
 import { Company } from "../../Company/Company";
 import { CompanyPosition } from "../../Company/CompanyPosition";
 import { getJobRequirementText } from "../../Company/GetJobRequirementText";
-
-import { Player } from "@player";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 
 interface IProps {
   company: Company;

@@ -1,10 +1,11 @@
 import React from "react";
 
-import { Table, TableCell } from "./Table";
-import TableBody from "@mui/material/TableBody";
 import { Table as MuiTable } from "@mui/material";
+import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
+
+import { Table, TableCell } from "./Table";
 
 interface IProps {
   rows: React.ReactNode[][];

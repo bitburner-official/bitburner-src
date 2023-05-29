@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 
-import { Box, Typography, Button, Container } from "@mui/material";
-
+import { Box, Button, Container, Typography } from "@mui/material";
 import { Player } from "@player";
 
-import { SleeveElem } from "./SleeveElem";
-import { FAQModal } from "./FAQModal";
 import { useRerender } from "../../../ui/React/hooks";
+import { FAQModal } from "./FAQModal";
+import { SleeveElem } from "./SleeveElem";
 
 export function SleeveRoot(): React.ReactElement {
   const [FAQOpen, setFAQOpen] = useState(false);

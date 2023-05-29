@@ -1,10 +1,11 @@
-import { Milestone } from "./Milestone";
 import { Player } from "@player";
-import { Factions } from "../Faction/Factions";
+
 import { Faction } from "../Faction/Faction";
-import { GetServer } from "../Server/AllServers";
+import { Factions } from "../Faction/Factions";
 import { FactionNames } from "../Faction/data/FactionNames";
+import { GetServer } from "../Server/AllServers";
 import { Server } from "../Server/Server";
+import { Milestone } from "./Milestone";
 
 function allFactionAugs(f: Faction): boolean {
   const factionAugs = f.augmentations.slice().filter((aug) => aug !== "NeuroFlux Governor");

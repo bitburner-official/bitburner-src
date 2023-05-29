@@ -1,10 +1,11 @@
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
-import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { Player } from "@player";
+
+import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
+import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
+import { resolveTextFilePath } from "../Paths/TextFilePath";
 import { Script } from "../Script/Script";
 import { GetAllServers } from "../Server/AllServers";
-import { resolveTextFilePath } from "../Paths/TextFilePath";
-import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
 
 const detect: [string, string][] = [
   ["getHackTime", "returns milliseconds"],

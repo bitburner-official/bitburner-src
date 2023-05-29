@@ -1,9 +1,10 @@
 import React, { FC } from "react";
-import { Card, Suit } from "./Card";
 
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
 import Paper from "@mui/material/Paper";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
+import { Card, Suit } from "./Card";
 
 interface Props {
   card: Card;

@@ -1,33 +1,35 @@
+import React from "react";
+
 import { Box, Container, Paper, Table, TableBody, Tooltip } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { Player } from "@player";
 import { uniqueId } from "lodash";
-import React from "react";
+
 import { Companies } from "../Company/Companies";
 import { CONSTANTS } from "../Constants";
 import { LocationName } from "../Enums";
+import { FactionWorkType } from "../Enums";
 import { Locations } from "../Locations/Locations";
 import { Settings } from "../Settings/Settings";
+import { isClassWork } from "../Work/ClassWork";
+import { isCompanyWork } from "../Work/CompanyWork";
+import { isCreateProgramWork } from "../Work/CreateProgramWork";
+import { isCrimeWork } from "../Work/CrimeWork";
+import { isFactionWork } from "../Work/FactionWork";
+import { isGraftingWork } from "../Work/GraftingWork";
+import { WorkStats } from "../Work/WorkStats";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-import { Player } from "@player";
 import { Router } from "./GameRoot";
-import { Page } from "./Router";
-import { formatExp, formatPercent } from "./formatNumber";
 import { Money } from "./React/Money";
 import { MoneyRate } from "./React/MoneyRate";
 import { ProgressBar } from "./React/Progress";
 import { Reputation } from "./React/Reputation";
 import { ReputationRate } from "./React/ReputationRate";
 import { StatsRow } from "./React/StatsRow";
-import { isCrimeWork } from "../Work/CrimeWork";
-import { isClassWork } from "../Work/ClassWork";
-import { WorkStats } from "../Work/WorkStats";
-import { isCreateProgramWork } from "../Work/CreateProgramWork";
-import { isGraftingWork } from "../Work/GraftingWork";
-import { isFactionWork } from "../Work/FactionWork";
-import { FactionWorkType } from "../Enums";
-import { isCompanyWork } from "../Work/CompanyWork";
 import { useRerender } from "./React/hooks";
+import { Page } from "./Router";
+import { formatExp, formatPercent } from "./formatNumber";
 
 const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
 

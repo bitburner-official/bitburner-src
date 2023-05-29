@@ -1,7 +1,7 @@
-import { Terminal } from "../../Terminal";
-import { BaseServer } from "../../Server/BaseServer";
-import { findRunningScripts } from "../../Script/ScriptHelpers";
 import { hasScriptExtension, validScriptExtensions } from "../../Paths/ScriptFilePath";
+import { findRunningScripts } from "../../Script/ScriptHelpers";
+import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
 
 export function check(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length < 1) {

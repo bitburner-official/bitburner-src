@@ -1,6 +1,6 @@
-import type { CompletedProgramName } from "./Programs";
 import { ProgramFilePath, asProgramFilePath } from "../Paths/ProgramFilePath";
 import { BaseServer } from "../Server/BaseServer";
+import type { CompletedProgramName } from "./Programs";
 
 export interface IProgramCreate {
   level: number;

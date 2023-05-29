@@ -5,16 +5,15 @@
  * recursively walk through that AST, calculating RAM usage along
  * the way
  */
-import * as walk from "acorn-walk";
 import acorn, { parse } from "acorn";
+import * as walk from "acorn-walk";
 
-import { RamCalculationErrorCode } from "./RamCalculationErrorCodes";
-
-import { RamCosts, RamCostConstants } from "../Netscript/RamCostGenerator";
-import { Script } from "./Script";
+import { RamCostConstants, RamCosts } from "../Netscript/RamCostGenerator";
 import { Node } from "../NetscriptJSEvaluator";
-import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
+import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
+import { RamCalculationErrorCode } from "./RamCalculationErrorCodes";
+import { Script } from "./Script";
 
 export interface RamUsageEntry {
   type: "ns" | "dom" | "fn" | "misc";

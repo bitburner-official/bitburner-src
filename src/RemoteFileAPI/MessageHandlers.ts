@@ -1,18 +1,18 @@
+import libSource from "!!raw-loader!../ScriptEditor/NetscriptDefinitions.d.ts";
+
 import { resolveFilePath } from "../Paths/FilePath";
-import { hasTextExtension } from "../Paths/TextFilePath";
 import { hasScriptExtension } from "../Paths/ScriptFilePath";
+import { hasTextExtension } from "../Paths/TextFilePath";
 import { GetServer } from "../Server/AllServers";
 import {
-  RFAMessage,
-  FileData,
   FileContent,
-  isFileServer,
-  isFileLocation,
+  FileData,
   FileLocation,
+  RFAMessage,
   isFileData,
+  isFileLocation,
+  isFileServer,
 } from "./MessageDefinitions";
-
-import libSource from "!!raw-loader!../ScriptEditor/NetscriptDefinitions.d.ts";
 
 function error(errorMsg: string, { id }: RFAMessage): RFAMessage {
   return new RFAMessage({ error: errorMsg, id: id });

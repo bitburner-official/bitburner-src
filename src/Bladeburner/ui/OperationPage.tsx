@@ -1,7 +1,9 @@
 import * as React from "react";
-import { OperationList } from "./OperationList";
-import { Bladeburner } from "../Bladeburner";
+
 import Typography from "@mui/material/Typography";
+
+import { Bladeburner } from "../Bladeburner";
+import { OperationList } from "./OperationList";
 
 interface IProps {
   bladeburner: Bladeburner;

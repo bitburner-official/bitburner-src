@@ -1,4 +1,5 @@
 import { Player } from "@player";
+
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 
 const gainLimit = 10e9;

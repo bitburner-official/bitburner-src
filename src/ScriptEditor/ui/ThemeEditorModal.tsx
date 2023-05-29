@@ -1,14 +1,16 @@
+import React, { useState } from "react";
+
 import { History, Reply, Save } from "@mui/icons-material";
 import { Box, Button, Paper, TextField, Tooltip, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import _ from "lodash";
 import { Color, ColorPicker } from "material-ui-color";
-import React, { useState } from "react";
-import { useRerender } from "../../ui/React/hooks";
+
 import { Settings } from "../../Settings/Settings";
 import { Modal } from "../../ui/React/Modal";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
-import { defaultMonacoTheme, IScriptEditorTheme } from "./themes";
+import { useRerender } from "../../ui/React/hooks";
+import { IScriptEditorTheme, defaultMonacoTheme } from "./themes";
 
 interface IProps {
   onClose: () => void;

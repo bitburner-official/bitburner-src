@@ -1,7 +1,9 @@
-import { Box, Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+
+import { Box, Paper, Typography } from "@mui/material";
 import { Player } from "@player";
+
+import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { KEY } from "../../utils/helpers/keyCodes";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";

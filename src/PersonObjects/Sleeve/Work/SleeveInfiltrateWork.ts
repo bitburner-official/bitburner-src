@@ -1,8 +1,9 @@
 import { Player } from "@player";
+
+import { CONSTANTS } from "../../../Constants";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { Work, WorkType } from "./Work";
-import { CONSTANTS } from "../../../Constants";
 
 const infiltrateCycles = 60000 / CONSTANTS.MilliPerCycle;
 

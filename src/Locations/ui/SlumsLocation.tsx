@@ -4,18 +4,18 @@
  * This subcomponent renders all of the buttons for committing crimes
  */
 import React from "react";
+
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-
-import { Crimes } from "../../Crime/Crimes";
-
-import { formatPercent } from "../../ui/formatNumber";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
 import { Player } from "@player";
-import { Box } from "@mui/material";
+
 import { Crime } from "../../Crime/Crime";
+import { Crimes } from "../../Crime/Crimes";
+import { Router } from "../../ui/GameRoot";
 import { useRerender } from "../../ui/React/hooks";
+import { Page } from "../../ui/Router";
+import { formatPercent } from "../../ui/formatNumber";
 
 export function SlumsLocation(): React.ReactElement {
   useRerender(1000);

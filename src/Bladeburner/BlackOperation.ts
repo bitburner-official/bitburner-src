@@ -1,5 +1,5 @@
-import { Operation, IOperationParams } from "./Operation";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { IOperationParams, Operation } from "./Operation";
 
 export class BlackOperation extends Operation {
   constructor(params: IOperationParams | null = null) {

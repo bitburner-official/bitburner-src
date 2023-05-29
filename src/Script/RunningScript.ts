@@ -3,21 +3,21 @@
  * A Script can have multiple active instances
  */
 import type React from "react";
-import { Script } from "./Script";
-import { ScriptURL } from "./LoadedModule";
+
+import { ScriptArg } from "@nsdefs";
+
+import { RamCostConstants } from "../Netscript/RamCostGenerator";
+import { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { Settings } from "../Settings/Settings";
 import { Terminal } from "../Terminal";
-
+import { PositiveInteger } from "../types";
+import type { LogBoxProperties } from "../ui/React/LogBoxManager";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { formatTime } from "../utils/helpers/formatTime";
-import { ScriptArg } from "@nsdefs";
-import { RamCostConstants } from "../Netscript/RamCostGenerator";
-import { PositiveInteger } from "../types";
 import { getKeyList } from "../utils/helpers/getKeyList";
-import { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ScriptKey, scriptKey } from "../utils/helpers/scriptKey";
-
-import type { LogBoxProperties } from "../ui/React/LogBoxManager";
+import { ScriptURL } from "./LoadedModule";
+import { Script } from "./Script";
 
 export class RunningScript {
   // Script arguments

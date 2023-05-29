@@ -1,4 +1,5 @@
 import { FactionNames } from "../../Faction/data/FactionNames";
+
 export const PowerMultiplier: Record<string, number | undefined> = {
   [FactionNames.SlumSnakes]: 1,
   [FactionNames.Tetrads]: 2,

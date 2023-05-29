@@ -1,5 +1,6 @@
-import { Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+
+import { Paper, Typography } from "@mui/material";
 
 interface IProps {
   onFinish: () => void;

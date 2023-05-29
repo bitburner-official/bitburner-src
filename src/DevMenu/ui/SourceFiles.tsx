@@ -1,14 +1,13 @@
 import React from "react";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-import Typography from "@mui/material/Typography";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
 import Button from "@mui/material/Button";
-import { Player } from "@player";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
 
 // Update as additional BitNodes get implemented
 const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];

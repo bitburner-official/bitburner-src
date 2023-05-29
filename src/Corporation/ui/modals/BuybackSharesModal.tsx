@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { Modal } from "../../../ui/React/Modal";
-import { formatBigNumber, formatMoney } from "../../../ui/formatNumber";
-import { Player } from "@player";
-import { useCorporation } from "../Context";
+
 import Typography from "@mui/material/Typography";
-import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
-import { NumberInput } from "../../../ui/React/NumberInput";
-import { BuyBackShares } from "../../Actions";
-import { dialogBoxCreate } from "../../../ui/React/DialogBox";
-import { KEY } from "../../../utils/helpers/keyCodes";
+import { Player } from "@player";
+
 import { isPositiveInteger } from "../../../types";
+import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+import { Modal } from "../../../ui/React/Modal";
+import { NumberInput } from "../../../ui/React/NumberInput";
+import { formatBigNumber, formatMoney } from "../../../ui/formatNumber";
+import { KEY } from "../../../utils/helpers/keyCodes";
+import { BuyBackShares } from "../../Actions";
+import { useCorporation } from "../Context";
 
 interface IProps {
   open: boolean;

@@ -1,6 +1,7 @@
 import React from "react";
-import { FactionNames } from "../../Faction/data/FactionNames";
+
 import { CityName } from "../../Enums";
+import { FactionNames } from "../../Faction/data/FactionNames";
 import { BlackOperationNames } from "./BlackOperationNames";
 
 interface IBlackOp {

@@ -1,20 +1,21 @@
 import React from "react";
+
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { CopyableText } from "../../ui/React/CopyableText";
+import { useRerender } from "../../ui/React/hooks";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { ActionTypes } from "../data/ActionTypes";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
-import { TeamSizeButton } from "./TeamSizeButton";
-import { Bladeburner } from "../Bladeburner";
 import { BlackOperation } from "../BlackOperation";
+import { Bladeburner } from "../Bladeburner";
+import { ActionTypes } from "../data/ActionTypes";
 import { BlackOperations } from "../data/BlackOperations";
-import { Player } from "@player";
-import { CopyableText } from "../../ui/React/CopyableText";
-import { SuccessChance } from "./SuccessChance";
 import { StartButton } from "./StartButton";
-
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import { useRerender } from "../../ui/React/hooks";
+import { SuccessChance } from "./SuccessChance";
+import { TeamSizeButton } from "./TeamSizeButton";
 
 interface IProps {
   bladeburner: Bladeburner;

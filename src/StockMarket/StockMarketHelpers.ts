@@ -1,6 +1,6 @@
+import { CONSTANTS } from "../Constants";
 import { Stock } from "./Stock";
 import { PositionTypes } from "./data/PositionTypes";
-import { CONSTANTS } from "../Constants";
 
 // Amount by which a stock's forecast changes during each price movement
 export const forecastChangePerPriceMovement = 0.006;

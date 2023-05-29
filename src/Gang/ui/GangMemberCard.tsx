@@ -1,11 +1,11 @@
 import React from "react";
-import { GangMember } from "../GangMember";
-import { GangMemberCardContent } from "./GangMemberCardContent";
 
 import Box from "@mui/material/Box";
-
 import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
+
+import { GangMember } from "../GangMember";
+import { GangMemberCardContent } from "./GangMemberCardContent";
 
 interface IProps {
   member: GangMember;

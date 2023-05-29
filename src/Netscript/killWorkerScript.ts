@@ -2,16 +2,15 @@
  * Stops an actively-running script (represented by a WorkerScript object)
  * and removes it from the global pool of active scripts.
  */
+import { ITutorial } from "../InteractiveTutorial";
+import { GetServer } from "../Server/AllServers";
+import { AlertEvents } from "../ui/React/AlertManager";
+import { roundToTwo } from "../utils/helpers/roundToTwo";
+import { handleUnknownError } from "./NetscriptHelpers";
+import { AddRecentScript } from "./RecentScripts";
 import { ScriptDeath } from "./ScriptDeath";
 import { WorkerScript } from "./WorkerScript";
 import { workerScripts } from "./WorkerScripts";
-
-import { GetServer } from "../Server/AllServers";
-import { AddRecentScript } from "./RecentScripts";
-import { ITutorial } from "../InteractiveTutorial";
-import { AlertEvents } from "../ui/React/AlertManager";
-import { handleUnknownError } from "./NetscriptHelpers";
-import { roundToTwo } from "../utils/helpers/roundToTwo";
 
 export function killWorkerScript(ws: WorkerScript): boolean {
   if (ITutorial.isRunning) {

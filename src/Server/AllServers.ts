@@ -1,18 +1,17 @@
-import { Server } from "./Server";
-import { BaseServer } from "./BaseServer";
-import { serverMetadata } from "./data/servers";
-
+import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { HacknetServer } from "../Hacknet/HacknetServer";
-
+import "../Script/RunningScript";
+import { IPAddress, isIPAddress } from "../Types/strings";
 import { IMinMaxRange } from "../types";
 import { createRandomIp } from "../utils/IPAddress";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { Reviver } from "../utils/JSONReviver";
+import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { BaseServer } from "./BaseServer";
+import { Server } from "./Server";
 import { SpecialServers } from "./data/SpecialServers";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { IPAddress, isIPAddress } from "../Types/strings";
+import { serverMetadata } from "./data/servers";
 
-import "../Script/RunningScript"; // For reviver side-effect
+// For reviver side-effect
 
 /**
  * Map of all Servers that exist in the game

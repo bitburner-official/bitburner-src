@@ -1,6 +1,6 @@
-import { SourceFiles } from "./SourceFiles";
-
 import { Player } from "@player";
+
+import { SourceFiles } from "./SourceFiles";
 
 export function applySourceFile(bn: number, lvl: number): void {
   const srcFileKey = "SourceFile" + bn;

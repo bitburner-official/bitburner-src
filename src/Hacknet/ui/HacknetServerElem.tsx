@@ -4,36 +4,35 @@
  */
 import React from "react";
 
-import { HacknetServerConstants } from "../data/Constants";
-import {
-  getMaxNumberLevelUpgrades,
-  getMaxNumberRamUpgrades,
-  getMaxNumberCoreUpgrades,
-  getMaxNumberCacheUpgrades,
-  purchaseLevelUpgrade,
-  purchaseRamUpgrade,
-  purchaseCoreUpgrade,
-  purchaseCacheUpgrade,
-  updateHashManagerCapacity,
-} from "../HacknetHelpers";
-
-import { Player } from "@player";
-import { HacknetServer } from "../HacknetServer";
-
-import { Money } from "../../ui/React/Money";
-import { Hashes } from "../../ui/React/Hashes";
-import { HashRate } from "../../ui/React/HashRate";
-import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
-import { TableCell } from "../../ui/React/Table";
-import TableBody from "@mui/material/TableBody";
 import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
-import { formatRam } from "../../ui/formatNumber";
-import { calculateHashGainRate } from "../formulas/HacknetServers";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { HashRate } from "../../ui/React/HashRate";
+import { Hashes } from "../../ui/React/Hashes";
+import { Money } from "../../ui/React/Money";
+import { TableCell } from "../../ui/React/Table";
+import { formatRam } from "../../ui/formatNumber";
+import {
+  getMaxNumberCacheUpgrades,
+  getMaxNumberCoreUpgrades,
+  getMaxNumberLevelUpgrades,
+  getMaxNumberRamUpgrades,
+  purchaseCacheUpgrade,
+  purchaseCoreUpgrade,
+  purchaseLevelUpgrade,
+  purchaseRamUpgrade,
+  updateHashManagerCapacity,
+} from "../HacknetHelpers";
+import { HacknetServer } from "../HacknetServer";
+import { HacknetServerConstants } from "../data/Constants";
+import { calculateHashGainRate } from "../formulas/HacknetServers";
 
 interface IProps {
   node: HacknetServer;

@@ -1,8 +1,9 @@
 import { CorpMaterialName } from "@nsdefs";
+
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { materialNames } from "./data/Constants";
 import { Export } from "./Export";
 import { MaterialInfo } from "./MaterialInfo";
+import { materialNames } from "./data/Constants";
 
 interface IConstructorParams {
   name: CorpMaterialName;

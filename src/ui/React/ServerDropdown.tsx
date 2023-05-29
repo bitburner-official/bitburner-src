@@ -4,14 +4,15 @@
  * Configurable to only contain certain types of servers
  */
 import React from "react";
-import { GetAllServers } from "../../Server/AllServers";
-import { Server } from "../../Server/Server";
-import { BaseServer } from "../../Server/BaseServer";
+
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import { HacknetServer } from "../../Hacknet/HacknetServer";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
+import { GetAllServers } from "../../Server/AllServers";
+import { BaseServer } from "../../Server/BaseServer";
+import { Server } from "../../Server/Server";
 
 // TODO make this an enum when this gets converted to TypeScript
 export const ServerType = {

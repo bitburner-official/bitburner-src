@@ -1,21 +1,22 @@
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { CityName } from "../Enums";
-import { IndustryResearchTrees, IndustriesData } from "./IndustryData";
-import * as corpConstants from "./data/Constants";
-import { CorpEmployeeJob, IndustryType } from "./data/Enums";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { calculateEffectWithFactors } from "../utils/calculateEffectWithFactors";
-import { OfficeSpace } from "./OfficeSpace";
-import { Product } from "./Product";
-import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { isString } from "../utils/helpers/string";
-import { MaterialInfo } from "./MaterialInfo";
-import { Warehouse } from "./Warehouse";
-import { Corporation } from "./Corporation";
 import { CorpMaterialName, CorpResearchName, CorpStateName } from "@nsdefs";
+
+import { CityName } from "../Enums";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from "../Types/Record";
+import { dialogBoxCreate } from "../ui/React/DialogBox";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { calculateEffectWithFactors } from "../utils/calculateEffectWithFactors";
+import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { isString } from "../utils/helpers/string";
+import { Corporation } from "./Corporation";
+import { IndustriesData, IndustryResearchTrees } from "./IndustryData";
 import { Material } from "./Material";
+import { MaterialInfo } from "./MaterialInfo";
+import { OfficeSpace } from "./OfficeSpace";
+import { Product } from "./Product";
+import { Warehouse } from "./Warehouse";
+import * as corpConstants from "./data/Constants";
+import { CorpEmployeeJob, IndustryType } from "./data/Enums";
 
 interface DivisionParams {
   name: string;

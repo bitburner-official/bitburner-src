@@ -1,12 +1,13 @@
-import * as personMethods from "./PersonMethods";
+import { Person as IPerson } from "@nsdefs";
+
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { CityName } from "../Enums";
-import { calculateSkill } from "./formulas/skill";
-import { defaultMultipliers } from "./Multipliers";
-import { Skills } from "./Skills";
-import { HP } from "./HP";
-import { Person as IPerson } from "@nsdefs";
 import { IReviverValue } from "../utils/JSONReviver";
+import { HP } from "./HP";
+import { defaultMultipliers } from "./Multipliers";
+import * as personMethods from "./PersonMethods";
+import { Skills } from "./Skills";
+import { calculateSkill } from "./formulas/skill";
 
 // Base class representing a person-like object
 export abstract class Person implements IPerson {

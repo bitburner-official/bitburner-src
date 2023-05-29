@@ -1,9 +1,10 @@
 import React from "react";
+
 import { FactionNames } from "../../Faction/data/FactionNames";
 import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
 import { CinematicText } from "../../ui/React/CinematicText";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { Page } from "../../ui/Router";
 
 export function BladeburnerCinematic(): React.ReactElement {
   return (

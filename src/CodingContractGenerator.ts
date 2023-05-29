@@ -1,3 +1,5 @@
+import { Player } from "@player";
+
 import {
   CodingContract,
   CodingContractRewardType,
@@ -5,14 +7,12 @@ import {
   ICodingContractReward,
 } from "./CodingContracts";
 import { Factions } from "./Faction/Factions";
-import { Player } from "@player";
-import { GetServer, GetAllServers } from "./Server/AllServers";
-import { SpecialServers } from "./Server/data/SpecialServers";
-import { Server } from "./Server/Server";
-import { BaseServer } from "./Server/BaseServer";
-
-import { getRandomInt } from "./utils/helpers/getRandomInt";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
+import { GetAllServers, GetServer } from "./Server/AllServers";
+import { BaseServer } from "./Server/BaseServer";
+import { Server } from "./Server/Server";
+import { SpecialServers } from "./Server/data/SpecialServers";
+import { getRandomInt } from "./utils/helpers/getRandomInt";
 
 export function generateRandomContract(): void {
   // First select a random problem type

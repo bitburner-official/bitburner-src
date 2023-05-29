@@ -4,29 +4,29 @@
  */
 import React, { useState } from "react";
 
+import { Info } from "@mui/icons-material";
+import { Link } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Paper from "@mui/material/Paper";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { CONSTANTS } from "../../Constants";
+import { canGetBonus } from "../../ExportBonus";
+import { Settings } from "../../Settings/Settings";
+import { AlertEvents } from "../../ui/React/AlertManager";
+import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
+import { useRerender } from "../../ui/React/hooks";
+import { formatNumberNoSuffix } from "../../ui/formatNumber";
+import { StaticAugmentations } from "../StaticAugmentations";
+import { AugmentationNames } from "../data/AugmentationNames";
 import { InstalledAugmentations } from "./InstalledAugmentations";
 import { PlayerMultipliers } from "./PlayerMultipliers";
 import { PurchasedAugmentations } from "./PurchasedAugmentations";
 import { SourceFilesElement } from "./SourceFiles";
-
-import { canGetBonus } from "../../ExportBonus";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Container from "@mui/material/Container";
-import { Settings } from "../../Settings/Settings";
-import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
-import { Player } from "@player";
-import { AugmentationNames } from "../data/AugmentationNames";
-import { StaticAugmentations } from "../StaticAugmentations";
-import { CONSTANTS } from "../../Constants";
-import { formatNumberNoSuffix } from "../../ui/formatNumber";
-import { Info } from "@mui/icons-material";
-import { Link } from "@mui/material";
-import { AlertEvents } from "../../ui/React/AlertManager";
-import { useRerender } from "../../ui/React/hooks";
 
 const NeuroFluxDisplay = (): React.ReactElement => {
   const level = Player.augmentations.find((e) => e.name === AugmentationNames.NeuroFluxGovernor)?.level ?? 0;

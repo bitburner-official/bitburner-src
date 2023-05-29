@@ -1,9 +1,8 @@
-import { Terminal } from "../../Terminal";
-import { findRunningScripts } from "../../Script/ScriptHelpers";
 import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
-
+import { findRunningScripts } from "../../Script/ScriptHelpers";
 import type { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
 
 export function kill(args: (string | number | boolean)[], server: BaseServer): void {
   try {

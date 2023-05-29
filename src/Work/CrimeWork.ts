@@ -1,15 +1,16 @@
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { Crime } from "../Crime/Crime";
+import { Player } from "@player";
+
 import { CONSTANTS } from "../Constants";
+import { Crime } from "../Crime/Crime";
 import { determineCrimeSuccess, findCrime } from "../Crime/CrimeHelpers";
 import { Crimes } from "../Crime/Crimes";
-import { Player } from "@player";
-import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { CrimeType } from "../Enums";
-import { Work, WorkType } from "./Work";
-import { scaleWorkStats, WorkStats } from "./WorkStats";
-import { calculateCrimeWorkStats } from "./Formulas";
+import { dialogBoxCreate } from "../ui/React/DialogBox";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { checkEnum } from "../utils/helpers/enum";
+import { calculateCrimeWorkStats } from "./Formulas";
+import { Work, WorkType } from "./Work";
+import { WorkStats, scaleWorkStats } from "./WorkStats";
 
 interface CrimeWorkParams {
   crimeType: CrimeType;

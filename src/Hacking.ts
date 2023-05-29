@@ -1,7 +1,8 @@
-import { BitNodeMultipliers } from "./BitNode/BitNodeMultipliers";
 import { Person as IPerson } from "@nsdefs";
-import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { Server as IServer } from "@nsdefs";
+
+import { BitNodeMultipliers } from "./BitNode/BitNodeMultipliers";
+import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 
 /** Returns the chance the person has to successfully hack a server */
 export function calculateHackingChance(server: IServer, person: IPerson): number {

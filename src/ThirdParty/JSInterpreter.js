@@ -1,4 +1,5 @@
 import * as acorn from "acorn";
+
 /**
  * @license
  * JavaScript Interpreter

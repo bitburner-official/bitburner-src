@@ -1,5 +1,7 @@
-import { Box, Container, Typography } from "@mui/material";
 import React, { useState } from "react";
+
+import { Box, Container, Typography } from "@mui/material";
+
 import { GameOptionsSidebar } from "./GameOptionsSidebar";
 import { GameplayPage } from "./GameplayPage";
 import { InterfacePage } from "./InterfacePage";

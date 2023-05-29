@@ -1,16 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-import Typography from "@mui/material/Typography";
-import { saveObject } from "../../SaveObject";
-import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
 import { Upload } from "@mui/icons-material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Button } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Typography from "@mui/material/Typography";
+
+import { saveObject } from "../../SaveObject";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
+import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
 
 export function SaveFile(): React.ReactElement {
   const importInput = useRef<HTMLInputElement>(null);

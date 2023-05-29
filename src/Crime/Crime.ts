@@ -1,10 +1,11 @@
-import { CONSTANTS } from "../Constants";
-import { Player } from "@player";
 import { Person as IPerson } from "@nsdefs";
-import { WorkerScript } from "../Netscript/WorkerScript";
+import { Player } from "@player";
+
+import { CONSTANTS } from "../Constants";
 import { CrimeType } from "../Enums";
-import { CrimeWork } from "../Work/CrimeWork";
+import { WorkerScript } from "../Netscript/WorkerScript";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
+import { CrimeWork } from "../Work/CrimeWork";
 
 interface IConstructorParams {
   hacking_success_weight?: number;

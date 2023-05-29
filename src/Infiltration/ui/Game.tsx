@@ -1,9 +1,11 @@
-import { Button, Container, Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
+
+import { Button, Container, Paper, Typography } from "@mui/material";
+import { Player } from "@player";
+
 import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { Player } from "@player";
 import { BackwardGame } from "./BackwardGame";
 import { BracketGame } from "./BracketGame";
 import { BribeGame } from "./BribeGame";

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+
 import { Button, Link, TextField, Tooltip, Typography } from "@mui/material";
-import { GameOptionsPage } from "./GameOptionsPage";
+
+import { isRemoteFileApiConnectionLive, newRemoteFileApiConnection } from "../../RemoteFileAPI/RemoteFileAPI";
 import { Settings } from "../../Settings/Settings";
 import { ConnectionBauble } from "./ConnectionBauble";
-import { isRemoteFileApiConnectionLive, newRemoteFileApiConnection } from "../../RemoteFileAPI/RemoteFileAPI";
+import { GameOptionsPage } from "./GameOptionsPage";
 
 export const RemoteAPIPage = (): React.ReactElement => {
   const [remoteFileApiPort, setRemoteFileApiPort] = useState(Settings.RemoteFileApiPort);

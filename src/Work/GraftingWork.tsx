@@ -1,15 +1,17 @@
 import React from "react";
-import { CONSTANTS } from "../Constants";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
-import { GraftableAugmentations } from "../PersonObjects/Grafting/ui/GraftingRoot";
+
 import { Player } from "@player";
-import { Work, WorkType } from "./Work";
-import { graftingIntBonus } from "../PersonObjects/Grafting/GraftingHelpers";
+
 import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
-import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { CONSTANTS } from "../Constants";
+import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
+import { graftingIntBonus } from "../PersonObjects/Grafting/GraftingHelpers";
+import { GraftableAugmentations } from "../PersonObjects/Grafting/ui/GraftingRoot";
+import { dialogBoxCreate } from "../ui/React/DialogBox";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { Work, WorkType } from "./Work";
 
 export const isGraftingWork = (w: Work | null): w is GraftingWork => w !== null && w.type === WorkType.GRAFTING;
 

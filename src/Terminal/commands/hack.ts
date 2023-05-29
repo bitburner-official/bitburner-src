@@ -1,6 +1,7 @@
-import { Terminal } from "../../Terminal";
 import { Player } from "@player";
+
 import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
 
 export function hack(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 0) return Terminal.error("Incorrect usage of hack command. Usage: hack");

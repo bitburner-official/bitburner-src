@@ -5,27 +5,24 @@
  */
 import React, { useState } from "react";
 
-import { AugmentationsPage } from "./AugmentationsPage";
-import { DonateOption } from "./DonateOption";
-import { Info } from "./Info";
-import { Option } from "./Option";
-
-import { CONSTANTS } from "../../Constants";
-
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
-import { Faction } from "../Faction";
-
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
+import { Button, Typography } from "@mui/material";
 import { Player } from "@player";
 
-import { Typography, Button } from "@mui/material";
-import { CovenantPurchasesRoot } from "../../PersonObjects/Sleeve/ui/CovenantPurchasesRoot";
-import { FactionNames } from "../data/FactionNames";
-import { GangButton } from "./GangButton";
-import { FactionWork } from "../../Work/FactionWork";
+import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { CONSTANTS } from "../../Constants";
 import { FactionWorkType } from "../../Enums";
+import { CovenantPurchasesRoot } from "../../PersonObjects/Sleeve/ui/CovenantPurchasesRoot";
+import { FactionWork } from "../../Work/FactionWork";
+import { Router } from "../../ui/GameRoot";
 import { useRerender } from "../../ui/React/hooks";
+import { Page } from "../../ui/Router";
+import { Faction } from "../Faction";
+import { FactionNames } from "../data/FactionNames";
+import { AugmentationsPage } from "./AugmentationsPage";
+import { DonateOption } from "./DonateOption";
+import { GangButton } from "./GangButton";
+import { Info } from "./Info";
+import { Option } from "./Option";
 
 interface IProps {
   faction: Faction;

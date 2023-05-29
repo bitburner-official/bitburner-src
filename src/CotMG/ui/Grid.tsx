@@ -1,8 +1,10 @@
-import { TableBody, TableRow } from "@mui/material";
 import * as React from "react";
+
+import { TableBody, TableRow } from "@mui/material";
+
 import { ActiveFragment } from "../ActiveFragment";
-import { calculateGrid } from "../Helper";
 import { BaseGift } from "../BaseGift";
+import { calculateGrid } from "../Helper";
 import { Cell } from "./Cell";
 
 interface IProps {

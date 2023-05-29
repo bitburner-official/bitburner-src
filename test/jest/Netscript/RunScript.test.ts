@@ -1,14 +1,14 @@
-import type { Script } from "../../../src/Script/Script";
-import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
-import { startWorkerScript } from "../../../src/NetscriptWorker";
 import { workerScripts } from "../../../src/Netscript/WorkerScripts";
 import { config as EvaluatorConfig } from "../../../src/NetscriptJSEvaluator";
-import { Server } from "../../../src/Server/Server";
+import { startWorkerScript } from "../../../src/NetscriptWorker";
+import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { RunningScript } from "../../../src/Script/RunningScript";
+import type { Script } from "../../../src/Script/Script";
 import { AddToAllServers, DeleteServer } from "../../../src/Server/AllServers";
+import { Server } from "../../../src/Server/Server";
 import { AlertEvents } from "../../../src/ui/React/AlertManager";
 
-declare const importActual: typeof EvaluatorConfig["doImport"];
+declare const importActual: (typeof EvaluatorConfig)["doImport"];
 
 // Replace Blob/ObjectURL functions, because they don't work natively in Jest
 global.Blob = class extends Blob {

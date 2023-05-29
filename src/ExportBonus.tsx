@@ -1,5 +1,6 @@
-import { Factions } from "./Faction/Factions";
 import { Player } from "@player";
+
+import { Factions } from "./Faction/Factions";
 
 export let LastExportBonus = 0;
 

@@ -4,19 +4,18 @@
  * This subcomponent renders all of the buttons for training at the gym
  */
 import * as React from "react";
+
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
-
-import { Location } from "../Location";
-
 import { Player } from "@player";
 
-import { Money } from "../../ui/React/Money";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
-import { Box } from "@mui/material";
+import { GymType } from "../../Enums";
 import { ClassWork, Classes } from "../../Work/ClassWork";
 import { calculateCost } from "../../Work/Formulas";
-import { GymType } from "../../Enums";
+import { Router } from "../../ui/GameRoot";
+import { Money } from "../../ui/React/Money";
+import { Page } from "../../ui/Router";
+import { Location } from "../Location";
 
 interface IProps {
   loc: Location;

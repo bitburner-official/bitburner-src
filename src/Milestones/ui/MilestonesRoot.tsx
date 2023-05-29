@@ -1,9 +1,10 @@
-import { Milestones } from "../Milestones";
-import { Milestone } from "../Milestone";
 import * as React from "react";
 
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
+import { Milestone } from "../Milestone";
+import { Milestones } from "../Milestones";
 
 function highestMilestone(milestones: Milestone[]): number {
   let n = -1;

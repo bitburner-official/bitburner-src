@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { formatMoney } from "../../../ui/formatNumber";
+
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { isInteger } from "lodash";
+
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
-import { useCorporation } from "../Context";
-import { Corporation } from "../../Corporation";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import { Money } from "../../../ui/React/Money";
-import { SellShares } from "../../Actions";
-import { KEY } from "../../../utils/helpers/keyCodes";
 import { NumberInput } from "../../../ui/React/NumberInput";
-import { isInteger } from "lodash";
+import { formatMoney } from "../../../ui/formatNumber";
+import { KEY } from "../../../utils/helpers/keyCodes";
+import { SellShares } from "../../Actions";
+import { Corporation } from "../../Corporation";
+import { useCorporation } from "../Context";
+
 interface IProps {
   open: boolean;
   onClose: () => void;

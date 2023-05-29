@@ -1,26 +1,24 @@
 import React, { useState } from "react";
 
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import type { CityName } from "src/Enums";
-import * as corpConstants from "../data/Constants";
+
+import { Money } from "../../ui/React/Money";
+import { formatBigNumber, formatCorpStat, formatMoney, formatPercent } from "../../ui/formatNumber";
+import { isString } from "../../utils/helpers/string";
 import { Product } from "../Product";
+import * as corpConstants from "../data/Constants";
+import { CorpUnlockName } from "../data/Enums";
+import { useCorporation, useDivision } from "./Context";
+import { CancelProductModal } from "./modals/CancelProductModal";
 import { DiscontinueProductModal } from "./modals/DiscontinueProductModal";
 import { LimitProductProductionModal } from "./modals/LimitProductProductionModal";
-import { SellProductModal } from "./modals/SellProductModal";
 import { ProductMarketTaModal } from "./modals/ProductMarketTaModal";
-import { CancelProductModal } from "./modals/CancelProductModal";
-
-import { formatBigNumber, formatCorpStat, formatMoney, formatPercent } from "../../ui/formatNumber";
-
-import { isString } from "../../utils/helpers/string";
-import { Money } from "../../ui/React/Money";
-import { useCorporation, useDivision } from "./Context";
-
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import { CorpUnlockName } from "../data/Enums";
+import { SellProductModal } from "./modals/SellProductModal";
 
 interface IProductProps {
   city: CityName;

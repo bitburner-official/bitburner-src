@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 
-import { CinematicLine } from "./CinematicLine";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
+import { CinematicLine } from "./CinematicLine";
 
 interface IProps {
   lines: string[];

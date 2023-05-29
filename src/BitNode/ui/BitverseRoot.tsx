@@ -1,15 +1,17 @@
 import React, { useState } from "react";
+
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import { Player } from "@player";
+
+import { Settings } from "../../Settings/Settings";
+import { CinematicText } from "../../ui/React/CinematicText";
 import { BitNodes } from "../BitNode";
 import { PortalModal } from "./PortalModal";
-import { CinematicText } from "../../ui/React/CinematicText";
-import { Player } from "@player";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import { Settings } from "../../Settings/Settings";
-import Button from "@mui/material/Button";
 
 const useStyles = makeStyles(() =>
   createStyles({

@@ -3,10 +3,9 @@
 // be filled with whatever is needed based on the routing/navigation
 import React from "react";
 
+import { CityName } from "../../Enums";
 import { CityTabs } from "./CityTabs";
 import { Context, useCorporation } from "./Context";
-
-import { CityName } from "../../Enums";
 
 interface IProps {
   divisionName: string;

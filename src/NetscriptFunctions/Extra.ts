@@ -1,11 +1,12 @@
-import { Player } from "../Player";
-import { Exploit } from "../Exploits/Exploit";
 import * as bcrypt from "bcryptjs";
-import { Apr1Events as devMenu } from "../ui/Apr1";
+
+import { Exploit } from "../Exploits/Exploit";
 import { InternalAPI } from "../Netscript/APIWrapper";
 import { helpers, wrapUserNode } from "../Netscript/NetscriptHelpers";
-import { Terminal } from "../Terminal";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
+import { Player } from "../Player";
+import { Terminal } from "../Terminal";
+import { Apr1Events as devMenu } from "../ui/Apr1";
 
 export interface INetscriptExtra {
   heart: {

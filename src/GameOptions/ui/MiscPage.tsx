@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Settings } from "../../Settings/Settings";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { GameOptionsPage } from "./GameOptionsPage";

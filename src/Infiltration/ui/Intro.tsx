@@ -1,6 +1,8 @@
+import React from "react";
+
 import { Report } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography } from "@mui/material";
-import React from "react";
+
 import { Location } from "../../Locations/Location";
 import { Settings } from "../../Settings/Settings";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";

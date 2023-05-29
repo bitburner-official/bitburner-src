@@ -1,9 +1,11 @@
 import * as React from "react";
-import { formatMoney } from "../formatNumber";
-import { Player } from "@player";
+
 import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import { Player } from "@player";
+
+import { formatMoney } from "../formatNumber";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

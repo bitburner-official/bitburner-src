@@ -1,21 +1,61 @@
+import { BasicHGWOptions, NS, NSEnums, ProcessInfo, RecentScript } from "@nsdefs";
+import { Player } from "@player";
 import $ from "jquery";
-import { vsprintf, sprintf } from "sprintf-js";
+import { cloneDeep, escapeRegExp } from "lodash";
+import numeral from "numeral";
+import { sprintf, vsprintf } from "sprintf-js";
+
+import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { BitNodeMultipliers, IBitNodeMultipliers } from "./BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "./Constants";
+import { CityName, CrimeType, GymType, JobName, LocationName, UniversityClassType } from "./Enums";
+import { FactionWorkType } from "./Enums";
 import {
+  calculateGrowTime,
   calculateHackingChance,
   calculateHackingExpGain,
-  calculatePercentMoneyHacked,
   calculateHackingTime,
-  calculateGrowTime,
+  calculatePercentMoneyHacked,
   calculateWeakenTime,
 } from "./Hacking";
 import { netscriptCanGrow, netscriptCanWeaken } from "./Hacking/netscriptCanHack";
-import { Terminal } from "./Terminal";
-import { Player } from "@player";
+import { LiteratureName } from "./Literature/data/LiteratureNames";
+import { InternalAPI, NSProxy, removedFunction } from "./Netscript/APIWrapper";
+import { assertObjectType, helpers, wrapUserNode } from "./Netscript/NetscriptHelpers";
+import { getRamCost } from "./Netscript/RamCostGenerator";
+import { recentScripts } from "./Netscript/RecentScripts";
+import { ScriptDeath } from "./Netscript/ScriptDeath";
+import { WorkerScript } from "./Netscript/WorkerScript";
+import { workerScripts } from "./Netscript/WorkerScripts";
+import { killWorkerScript, killWorkerScriptByPid } from "./Netscript/killWorkerScript";
+import { NetscriptBladeburner } from "./NetscriptFunctions/Bladeburner";
+import { NetscriptCodingContract } from "./NetscriptFunctions/CodingContract";
+import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
+import { NetscriptExtra } from "./NetscriptFunctions/Extra";
+import { INetscriptExtra } from "./NetscriptFunctions/Extra";
+import { Flags } from "./NetscriptFunctions/Flags";
+import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
+import { NetscriptGang } from "./NetscriptFunctions/Gang";
+import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
+import { NetscriptHacknet } from "./NetscriptFunctions/Hacknet";
+import { NetscriptInfiltration } from "./NetscriptFunctions/Infiltration";
+import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
+import { NetscriptSleeve } from "./NetscriptFunctions/Sleeve";
+import { NetscriptStanek } from "./NetscriptFunctions/Stanek";
+import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
+import { NetscriptUserInterface } from "./NetscriptFunctions/UserInterface";
+import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort } from "./NetscriptPort";
+import { runScriptFromScript } from "./NetscriptWorker";
+import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
+import { ContentFilePath } from "./Paths/ContentFile";
+import { hasContractExtension } from "./Paths/ContractFilePath";
+import { FilePath, resolveFilePath } from "./Paths/FilePath";
+import { hasScriptExtension } from "./Paths/ScriptFilePath";
+import { hasTextExtension } from "./Paths/TextFilePath";
+import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { CompletedProgramName } from "./Programs/Programs";
-import { PromptEvent } from "./ui/React/PromptManager";
-import { GetServer, DeleteServer, AddToAllServers, createUniqueRandomIp } from "./Server/AllServers";
+import { AddToAllServers, DeleteServer, GetServer, createUniqueRandomIp } from "./Server/AllServers";
+import { Server } from "./Server/Server";
 import {
   getServerOnNetwork,
   numCycleForGrowth,
@@ -24,75 +64,34 @@ import {
   safelyCreateUniqueServer,
 } from "./Server/ServerHelpers";
 import {
-  getPurchasedServerUpgradeCost,
   getPurchaseServerCost,
   getPurchaseServerLimit,
   getPurchaseServerMaxRam,
+  getPurchasedServerUpgradeCost,
   renamePurchasedServer,
   upgradePurchasedServer,
 } from "./Server/ServerPurchases";
-import { Server } from "./Server/Server";
 import { influenceStockThroughServerGrow } from "./StockMarket/PlayerInfluencing";
-import { runScriptFromScript } from "./NetscriptWorker";
-import { killWorkerScript, killWorkerScriptByPid } from "./Netscript/killWorkerScript";
-import { workerScripts } from "./Netscript/WorkerScripts";
-import { WorkerScript } from "./Netscript/WorkerScript";
-import { helpers, assertObjectType, wrapUserNode } from "./Netscript/NetscriptHelpers";
+import { Terminal } from "./Terminal";
+import { dialogBoxCreate } from "./ui/React/DialogBox";
+import { LogBoxCloserEvents, LogBoxEvents } from "./ui/React/LogBoxManager";
+import { PromptEvent } from "./ui/React/PromptManager";
+import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
 import {
   formatExp,
-  formatNumberNoSuffix,
   formatMoney,
+  formatNumber,
+  formatNumberNoSuffix,
   formatPercent,
   formatRam,
   formatSecurity,
   formatThreads,
-  formatNumber,
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
-import { LogBoxEvents, LogBoxCloserEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
-import { NetscriptGang } from "./NetscriptFunctions/Gang";
-import { NetscriptSleeve } from "./NetscriptFunctions/Sleeve";
-import { NetscriptExtra } from "./NetscriptFunctions/Extra";
-import { NetscriptHacknet } from "./NetscriptFunctions/Hacknet";
-import { NetscriptStanek } from "./NetscriptFunctions/Stanek";
-import { NetscriptInfiltration } from "./NetscriptFunctions/Infiltration";
-import { NetscriptUserInterface } from "./NetscriptFunctions/UserInterface";
-import { NetscriptBladeburner } from "./NetscriptFunctions/Bladeburner";
-import { NetscriptCodingContract } from "./NetscriptFunctions/CodingContract";
-import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
-import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
-import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
-import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums } from "@nsdefs";
-import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
-
-import { dialogBoxCreate } from "./ui/React/DialogBox";
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
 import { checkEnum } from "./utils/helpers/enum";
 import { matchScriptPathExact } from "./utils/helpers/scriptKey";
-
-import { Flags } from "./NetscriptFunctions/Flags";
-import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
-import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
-import { recentScripts } from "./Netscript/RecentScripts";
-import { InternalAPI, removedFunction, NSProxy } from "./Netscript/APIWrapper";
-import { INetscriptExtra } from "./NetscriptFunctions/Extra";
-import { ScriptDeath } from "./Netscript/ScriptDeath";
-import { getBitNodeMultipliers } from "./BitNode/BitNode";
-import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
-import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassType } from "./Enums";
-import { cloneDeep, escapeRegExp } from "lodash";
-import { FactionWorkType } from "./Enums";
-import numeral from "numeral";
-import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort } from "./NetscriptPort";
-import { FilePath, resolveFilePath } from "./Paths/FilePath";
-import { hasScriptExtension } from "./Paths/ScriptFilePath";
-import { hasTextExtension } from "./Paths/TextFilePath";
-import { ContentFilePath } from "./Paths/ContentFile";
-import { LiteratureName } from "./Literature/data/LiteratureNames";
-import { hasContractExtension } from "./Paths/ContractFilePath";
-import { getRamCost } from "./Netscript/RamCostGenerator";
+import { arrayAssert, assert, objectAssert, stringAssert } from "./utils/helpers/typeAssertion";
 
 export const enums: NSEnums = {
   CityName,

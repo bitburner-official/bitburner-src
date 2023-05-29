@@ -1,7 +1,6 @@
-import "../../src/Player";
-
-import { loadAllServers, saveAllServers } from "../../src/Server/AllServers";
 import { loadAllRunningScripts } from "../../src/NetscriptWorker";
+import "../../src/Player";
+import { loadAllServers, saveAllServers } from "../../src/Server/AllServers";
 import { Settings } from "../../src/Settings/Settings";
 
 jest.useFakeTimers();

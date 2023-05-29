@@ -6,13 +6,14 @@
  */
 import React from "react";
 
-import { hasHacknetServers } from "../HacknetHelpers";
+import Typography from "@mui/material/Typography";
 import { Player } from "@player";
-import { Money } from "../../ui/React/Money";
-import { MoneyRate } from "../../ui/React/MoneyRate";
+
 import { HashRate } from "../../ui/React/HashRate";
 import { Hashes } from "../../ui/React/Hashes";
-import Typography from "@mui/material/Typography";
+import { Money } from "../../ui/React/Money";
+import { MoneyRate } from "../../ui/React/MoneyRate";
+import { hasHacknetServers } from "../HacknetHelpers";
 
 interface IProps {
   totalProduction: number;

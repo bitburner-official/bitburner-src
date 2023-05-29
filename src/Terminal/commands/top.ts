@@ -1,5 +1,5 @@
-import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
 import { formatRam } from "../../ui/formatNumber";
 
 export function top(args: (string | number | boolean)[], server: BaseServer): void {

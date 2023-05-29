@@ -1,12 +1,13 @@
 /** Implementation for what happens when you destroy a BitNode */
 import React from "react";
-import { Player } from "@player";
-import { SourceFiles } from "./SourceFile/SourceFiles";
 
-import { dialogBoxCreate } from "./ui/React/DialogBox";
-import { Router } from "./ui/GameRoot";
-import { Page } from "./ui/Router";
+import { Player } from "@player";
+
+import { SourceFiles } from "./SourceFile/SourceFiles";
 import { Engine } from "./engine";
+import { Router } from "./ui/GameRoot";
+import { dialogBoxCreate } from "./ui/React/DialogBox";
+import { Page } from "./ui/Router";
 
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();

@@ -5,12 +5,11 @@
  */
 import React, { useState } from "react";
 
-import { StockTicker } from "./StockTicker";
-import { StockTickersConfig, TickerDisplayMode } from "./StockTickersConfig";
-
+import { useRerender } from "../../ui/React/hooks";
 import { IStockMarket } from "../IStockMarket";
 import { Stock } from "../Stock";
-import { useRerender } from "../../ui/React/hooks";
+import { StockTicker } from "./StockTicker";
+import { StockTickersConfig, TickerDisplayMode } from "./StockTickersConfig";
 
 interface IProps {
   stockMarket: IStockMarket;

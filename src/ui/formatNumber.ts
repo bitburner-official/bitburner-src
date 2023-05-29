@@ -1,6 +1,6 @@
+import { Settings } from "../Settings/Settings";
 import { ThemeEvents } from "../Themes/ui/Theme";
 import { EventEmitter } from "../utils/EventEmitter";
-import { Settings } from "../Settings/Settings";
 
 const numberSuffixList = ["", "k", "m", "b", "t", "q", "Q", "s", "S", "o", "n"];
 // exponents associated with each suffix

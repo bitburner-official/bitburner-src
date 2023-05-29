@@ -1,26 +1,28 @@
+import React, { useState } from "react";
+
 import { CheckBox, CheckBoxOutlineBlank, Construction } from "@mui/icons-material";
 import { Box, Button, Container, List, ListItemButton, Paper, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { GraftingWork } from "../../../Work/GraftingWork";
+import { Player } from "@player";
+
 import { Augmentation } from "../../../Augmentation/Augmentation";
-import { AugmentationNames } from "../../../Augmentation/data/AugmentationNames";
 import { StaticAugmentations } from "../../../Augmentation/StaticAugmentations";
+import { AugmentationNames } from "../../../Augmentation/data/AugmentationNames";
 import { CONSTANTS } from "../../../Constants";
-import { hasAugmentationPrereqs } from "../../../Faction/FactionHelpers";
 import { LocationName } from "../../../Enums";
+import { hasAugmentationPrereqs } from "../../../Faction/FactionHelpers";
 import { Locations } from "../../../Locations/Locations";
 import { PurchaseAugmentationsOrderSetting } from "../../../Settings/SettingEnums";
 import { Settings } from "../../../Settings/Settings";
+import { GraftingWork } from "../../../Work/GraftingWork";
 import { Router } from "../../../ui/GameRoot";
-import { Page } from "../../../ui/Router";
 import { ConfirmationModal } from "../../../ui/React/ConfirmationModal";
 import { Money } from "../../../ui/React/Money";
+import { useRerender } from "../../../ui/React/hooks";
+import { Page } from "../../../ui/Router";
 import { formatNumberNoSuffix } from "../../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
-import { Player } from "@player";
 import { GraftableAugmentation } from "../GraftableAugmentation";
 import { calculateGraftingTimeWithBonus, getGraftingAvailableAugs } from "../GraftingHelpers";
-import { useRerender } from "../../../ui/React/hooks";
 
 export const GraftableAugmentations = (): Record<string, GraftableAugmentation> => {
   const gAugs: Record<string, GraftableAugmentation> = {};

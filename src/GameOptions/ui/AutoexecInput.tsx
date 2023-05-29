@@ -1,13 +1,15 @@
 import React, { useState } from "react";
+
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
+import WarningIcon from "@mui/icons-material/Warning";
 import { Box, InputAdornment, TextField, Tooltip, Typography } from "@mui/material";
+import { Player } from "@player";
+
+import { resolveScriptFilePath } from "../../Paths/ScriptFilePath";
 import { Settings } from "../../Settings/Settings";
 import { parseCommand } from "../../Terminal/Parser";
-import { resolveScriptFilePath } from "../../Paths/ScriptFilePath";
 import { formatRam } from "../../ui/formatNumber";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import WarningIcon from "@mui/icons-material/Warning";
-import ErrorIcon from "@mui/icons-material/Error";
-import { Player } from "@player";
 
 interface IProps {
   tooltip: React.ReactElement;

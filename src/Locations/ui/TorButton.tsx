@@ -1,13 +1,12 @@
 import React from "react";
+
 import Button from "@mui/material/Button";
-
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { GetServer } from "../../Server/AllServers";
-import { SpecialServers } from "../../Server/data/SpecialServers";
-
-import { CONSTANTS } from "../../Constants";
 import { Player } from "@player";
 
+import { CONSTANTS } from "../../Constants";
+import { GetServer } from "../../Server/AllServers";
+import { SpecialServers } from "../../Server/data/SpecialServers";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { Money } from "../../ui/React/Money";
 
 /** Attempt to purchase a TOR router using the button. */

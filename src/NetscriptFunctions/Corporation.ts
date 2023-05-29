@@ -1,70 +1,68 @@
-import { Player, Player as player } from "../Player";
-
-import { OfficeSpace } from "../Corporation/OfficeSpace";
-import { Product } from "../Corporation/Product";
-import { Material } from "../Corporation/Material";
-import { Warehouse } from "../Corporation/Warehouse";
-import { Division } from "../Corporation/Division";
-import { Corporation } from "../Corporation/Corporation";
-import { cloneDeep, omit } from "lodash";
-
 import {
+  CorpMaterialName,
+  CorpResearchName,
+  InvestmentOffer,
   Corporation as NSCorporation,
   Division as NSDivision,
-  WarehouseAPI,
   OfficeAPI,
-  InvestmentOffer,
-  CorpResearchName,
-  CorpMaterialName,
+  WarehouseAPI,
 } from "@nsdefs";
+import { cloneDeep, omit } from "lodash";
 
+import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import {
-  NewDivision,
-  purchaseOffice,
+  BulkPurchase,
+  BuyBackShares,
+  BuyMaterial,
+  BuyTea,
+  CancelExportMaterial,
+  ExportMaterial,
+  HireAdVert,
   IssueDividends,
   IssueNewShares,
+  LimitMaterialProduction,
+  LimitProductProduction,
+  MakeProduct,
+  NewDivision,
+  Research,
   SellMaterial,
   SellProduct,
-  SetSmartSupply,
-  BuyMaterial,
-  UpgradeOfficeSize,
-  purchaseWarehouse,
-  UpgradeWarehouse,
-  BuyTea,
-  ThrowParty,
-  HireAdVert,
-  MakeProduct,
-  Research,
-  ExportMaterial,
-  CancelExportMaterial,
+  SellShares,
   SetMaterialMarketTA1,
   SetMaterialMarketTA2,
   SetProductMarketTA1,
   SetProductMarketTA2,
-  BulkPurchase,
-  SellShares,
-  BuyBackShares,
+  SetSmartSupply,
   SetSmartSupplyOption,
-  LimitMaterialProduction,
-  LimitProductProduction,
+  ThrowParty,
+  UpgradeOfficeSize,
+  UpgradeWarehouse,
   UpgradeWarehouseCost,
+  purchaseOffice,
+  purchaseWarehouse,
 } from "../Corporation/Actions";
+import { Corporation } from "../Corporation/Corporation";
+import { Division } from "../Corporation/Division";
+import { IndustriesData, IndustryResearchTrees } from "../Corporation/IndustryData";
+import { Material } from "../Corporation/Material";
+import { MaterialInfo } from "../Corporation/MaterialInfo";
+import { OfficeSpace } from "../Corporation/OfficeSpace";
+import { Product } from "../Corporation/Product";
+import { ResearchMap } from "../Corporation/ResearchMap";
+import { Warehouse } from "../Corporation/Warehouse";
+import * as corpConstants from "../Corporation/data/Constants";
 import { CorpUnlocks } from "../Corporation/data/CorporationUnlocks";
 import { CorpUpgrades } from "../Corporation/data/CorporationUpgrades";
-import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, IndustryType } from "../Corporation/data/Enums";
-import { IndustriesData, IndustryResearchTrees } from "../Corporation/IndustryData";
-import * as corpConstants from "../Corporation/data/Constants";
-import { ResearchMap } from "../Corporation/ResearchMap";
+import { CorpEmployeeJob, CorpUnlockName, CorpUpgradeName, IndustryType } from "../Corporation/data/Enums";
+import { calculateUpgradeCost } from "../Corporation/helpers";
+import { CityName } from "../Enums";
 import { Factions } from "../Faction/Factions";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { assertMember, helpers } from "../Netscript/NetscriptHelpers";
-import { checkEnum } from "../utils/helpers/enum";
-import { CityName } from "../Enums";
-import { MaterialInfo } from "../Corporation/MaterialInfo";
-import { calculateUpgradeCost } from "../Corporation/helpers";
-import { PositiveInteger } from "../types";
+import { Player, Player as player } from "../Player";
 import { getRecordKeys } from "../Types/Record";
+import { PositiveInteger } from "../types";
+import { checkEnum } from "../utils/helpers/enum";
 
 export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   function createCorporation(corporationName: string, selfFund = true): boolean {

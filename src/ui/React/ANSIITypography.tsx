@@ -1,8 +1,10 @@
-import { Typography } from "@mui/material";
 import React from "react";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+
+import { Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
 import { Settings } from "../../Settings/Settings";
 
 // This particular eslint-disable is correct.

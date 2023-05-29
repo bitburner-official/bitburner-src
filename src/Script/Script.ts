@@ -1,11 +1,11 @@
+import { RamCostConstants } from "../Netscript/RamCostGenerator";
+import { ContentFile } from "../Paths/ContentFile";
+import { ScriptFilePath } from "../Paths/ScriptFilePath";
 import type { BaseServer } from "../Server/BaseServer";
-import { calculateRamUsage, RamUsageEntry } from "./RamCalculations";
-import { LoadedModule, ScriptURL } from "./LoadedModule";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
-import { RamCostConstants } from "../Netscript/RamCostGenerator";
-import { ScriptFilePath } from "../Paths/ScriptFilePath";
-import { ContentFile } from "../Paths/ContentFile";
+import { LoadedModule, ScriptURL } from "./LoadedModule";
+import { RamUsageEntry, calculateRamUsage } from "./RamCalculations";
 
 /** A script file as a file on a server.
  * For the execution of a script, see RunningScript and WorkerScript */

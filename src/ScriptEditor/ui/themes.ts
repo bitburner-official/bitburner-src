@@ -1,4 +1,5 @@
 import type { editor } from "monaco-editor";
+
 type DefineThemeFn = typeof editor.defineTheme;
 
 export interface IScriptEditorTheme {

@@ -4,19 +4,19 @@
  */
 import React, { useState } from "react";
 
-import { ServerAccordion } from "./ServerAccordion";
-
-import TextField from "@mui/material/TextField";
+import SearchIcon from "@mui/icons-material/Search";
 import List from "@mui/material/List";
 import TablePagination from "@mui/material/TablePagination";
+import TextField from "@mui/material/TextField";
+import lodash from "lodash";
+
 import { WorkerScript } from "../../Netscript/WorkerScript";
 import { GetServer } from "../../Server/AllServers";
 import { BaseServer } from "../../Server/BaseServer";
 import { Settings } from "../../Settings/Settings";
-import { TablePaginationActionsAll } from "../React/TablePaginationActionsAll";
-import SearchIcon from "@mui/icons-material/Search";
 import { matchScriptPathUnanchored } from "../../utils/helpers/scriptKey";
-import lodash from "lodash";
+import { TablePaginationActionsAll } from "../React/TablePaginationActionsAll";
+import { ServerAccordion } from "./ServerAccordion";
 
 // Map of server hostname -> all workerscripts on that server for all active scripts
 interface IServerData {

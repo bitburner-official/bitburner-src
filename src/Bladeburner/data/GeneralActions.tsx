@@ -1,5 +1,6 @@
 import React from "react";
-import { newWorkStats, WorkStats } from "../../Work/WorkStats";
+
+import { WorkStats, newWorkStats } from "../../Work/WorkStats";
 
 interface IGeneral {
   desc: JSX.Element;

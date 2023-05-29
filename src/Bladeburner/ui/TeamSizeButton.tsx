@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { Operation } from "../Operation";
-import { Bladeburner } from "../Bladeburner";
-import { TeamSizeModal } from "./TeamSizeModal";
-import { formatNumberNoSuffix } from "../../ui/formatNumber";
+
 import Button from "@mui/material/Button";
+
+import { formatNumberNoSuffix } from "../../ui/formatNumber";
+import { Bladeburner } from "../Bladeburner";
+import { Operation } from "../Operation";
+import { TeamSizeModal } from "./TeamSizeModal";
+
 interface IProps {
   action: Operation;
   bladeburner: Bladeburner;

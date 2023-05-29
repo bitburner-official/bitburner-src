@@ -1,31 +1,29 @@
 import React, { useState } from "react";
 
-import { GeneralInfo } from "./GeneralInfo";
-import { HacknetNodeElem } from "./HacknetNodeElem";
-import { HacknetServerElem } from "./HacknetServerElem";
-import { HacknetNode } from "../HacknetNode";
-import { HacknetServer } from "../HacknetServer";
-import { HashUpgradeModal } from "./HashUpgradeModal";
-import { MultiplierButtons } from "./MultiplierButtons";
-import { PlayerInfo } from "./PlayerInfo";
-import { PurchaseButton } from "./PurchaseButton";
-import { PurchaseMultipliers } from "../data/Constants";
+import { Box } from "@mui/material";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
 
+import { GetServer } from "../../Server/AllServers";
+import { useRerender } from "../../ui/React/hooks";
 import {
   getCostOfNextHacknetNode,
   getCostOfNextHacknetServer,
   hasHacknetServers,
   purchaseHacknet,
 } from "../HacknetHelpers";
-
-import { Player } from "@player";
-import { GetServer } from "../../Server/AllServers";
-
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import { Box } from "@mui/material";
-import { useRerender } from "../../ui/React/hooks";
+import { HacknetNode } from "../HacknetNode";
+import { HacknetServer } from "../HacknetServer";
+import { PurchaseMultipliers } from "../data/Constants";
+import { GeneralInfo } from "./GeneralInfo";
+import { HacknetNodeElem } from "./HacknetNodeElem";
+import { HacknetServerElem } from "./HacknetServerElem";
+import { HashUpgradeModal } from "./HashUpgradeModal";
+import { MultiplierButtons } from "./MultiplierButtons";
+import { PlayerInfo } from "./PlayerInfo";
+import { PurchaseButton } from "./PurchaseButton";
 
 /** Root React Component for the Hacknet Node UI */
 export function HacknetRoot(): React.ReactElement {

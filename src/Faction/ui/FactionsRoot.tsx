@@ -1,15 +1,17 @@
+import React, { useEffect } from "react";
+
 import { Explore, Info, LastPage, LocalPolice, NewReleases, Report, SportsMma } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography, useTheme } from "@mui/material";
-import React, { useEffect } from "react";
 import { Player } from "@player";
+
 import { Settings } from "../../Settings/Settings";
-import { formatFavor, formatReputation } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
-import { FactionNames } from "../data/FactionNames";
+import { useRerender } from "../../ui/React/hooks";
+import { formatFavor, formatReputation } from "../../ui/formatNumber";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
-import { useRerender } from "../../ui/React/hooks";
+import { FactionNames } from "../data/FactionNames";
 
 export const InvitationsSeen: string[] = [];
 

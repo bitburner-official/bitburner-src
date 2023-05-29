@@ -4,19 +4,18 @@
  */
 import * as React from "react";
 
-import { Money } from "../React/Money";
-import { MoneyRate } from "../React/MoneyRate";
-import { Player } from "@player";
-
-import Typography from "@mui/material/Typography";
-
-import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
+import { Theme } from "@mui/material/styles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import { Player } from "@player";
+
+import { Money } from "../React/Money";
+import { MoneyRate } from "../React/MoneyRate";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

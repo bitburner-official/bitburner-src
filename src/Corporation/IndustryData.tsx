@@ -1,10 +1,12 @@
 import React from "react";
+
+import { CorpIndustryData } from "@nsdefs";
+
+import { createFullRecordFromEntries } from "../Types/Record";
 import { Corporation } from "./Corporation";
 import { getBaseResearchTreeCopy, getProductIndustryResearchTreeCopy } from "./data/BaseResearchTree";
-import { MoneyCost } from "./ui/MoneyCost";
-import { CorpIndustryData } from "@nsdefs";
 import { IndustryType } from "./data/Enums";
-import { createFullRecordFromEntries } from "../Types/Record";
+import { MoneyCost } from "./ui/MoneyCost";
 
 export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   [IndustryType.Agriculture]: {

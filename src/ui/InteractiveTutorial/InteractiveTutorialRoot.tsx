@@ -1,33 +1,32 @@
 import React, { useEffect } from "react";
 
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import ArrowBackIos from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIos from "@mui/icons-material/ArrowForwardIos";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
+import HelpIcon from "@mui/icons-material/Help";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
+import StorageIcon from "@mui/icons-material/Storage";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import ListItem from "@mui/material/ListItem";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
-import ArrowForwardIos from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIos from "@mui/icons-material/ArrowBackIos";
-import { ITutorialEvents } from "./ITutorialEvents";
-import { CopyableText } from "../React/CopyableText";
-
-import ListItem from "@mui/material/ListItem";
-import EqualizerIcon from "@mui/icons-material/Equalizer";
-import LastPageIcon from "@mui/icons-material/LastPage";
-import HelpIcon from "@mui/icons-material/Help";
-import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import StorageIcon from "@mui/icons-material/Storage";
-import LocationCityIcon from "@mui/icons-material/LocationCity";
 import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 
 import {
-  iTutorialPrevStep,
-  iTutorialNextStep,
   ITutorial,
-  iTutorialSteps,
   iTutorialEnd,
+  iTutorialNextStep,
+  iTutorialPrevStep,
+  iTutorialSteps,
 } from "../../InteractiveTutorial";
+import { CopyableText } from "../React/CopyableText";
 import { useRerender } from "../React/hooks";
+import { ITutorialEvents } from "./ITutorialEvents";
 
 interface IContent {
   content: React.ReactElement;

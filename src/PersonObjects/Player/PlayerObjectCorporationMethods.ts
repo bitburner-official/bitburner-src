@@ -1,7 +1,6 @@
-import { CorpUnlockName } from "../../Corporation/data/Enums";
 import { Corporation } from "../../Corporation/Corporation";
 import { resetIndustryResearchTrees } from "../../Corporation/IndustryData";
-
+import { CorpUnlockName } from "../../Corporation/data/Enums";
 import type { PlayerObject } from "./PlayerObject";
 
 export function canAccessCorporation(this: PlayerObject): boolean {

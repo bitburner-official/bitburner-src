@@ -2,11 +2,12 @@
  * Creates a dropdown (select HTML element) with company names as options
  */
 import React from "react";
-import { companiesMetadata } from "../../Company/data/CompaniesMetadata";
 
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+
+import { companiesMetadata } from "../../Company/data/CompaniesMetadata";
 
 interface IProps {
   purchase: () => void;

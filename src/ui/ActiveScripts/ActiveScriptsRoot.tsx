@@ -3,13 +3,14 @@
  * and provides information about all of the player's scripts that are currently running
  */
 import React, { useState } from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 
-import { ActiveScriptsPage } from "./ActiveScriptsPage";
-import { RecentScriptsPage } from "./RecentScriptsPage";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+
 import { WorkerScript } from "../../Netscript/WorkerScript";
 import { useRerender } from "../React/hooks";
+import { ActiveScriptsPage } from "./ActiveScriptsPage";
+import { RecentScriptsPage } from "./RecentScriptsPage";
 
 interface IProps {
   workerScripts: Map<number, WorkerScript>;

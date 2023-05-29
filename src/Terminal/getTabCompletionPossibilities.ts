@@ -1,15 +1,16 @@
+import { AutocompleteData } from "@nsdefs";
+import { Player } from "@player";
+import * as libarg from "arg";
+
 import { Aliases, GlobalAliases } from "../Alias";
 import { DarkWebItems } from "../DarkWeb/DarkWebItems";
-import { Player } from "@player";
-import { GetAllServers } from "../Server/AllServers";
-import { parseCommand, parseCommands } from "./Parser";
-import { HelpTexts } from "./HelpText";
-import { compile } from "../NetscriptJSEvaluator";
 import { Flags } from "../NetscriptFunctions/Flags";
-import { AutocompleteData } from "@nsdefs";
-import * as libarg from "arg";
+import { compile } from "../NetscriptJSEvaluator";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
+import { GetAllServers } from "../Server/AllServers";
+import { HelpTexts } from "./HelpText";
+import { parseCommand, parseCommands } from "./Parser";
 
 // TODO: this shouldn't be hardcoded in two places with no typechecks to verify equivalence
 // An array of all Terminal commands

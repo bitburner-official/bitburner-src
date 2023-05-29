@@ -3,18 +3,18 @@
  * Contains skills and exp.
  */
 import React from "react";
-import { useGang } from "./Context";
 
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
-import { formatMultiplier, formatRespect, formatWanted } from "../../ui/formatNumber";
-import { GangMember } from "../GangMember";
 import { Settings } from "../../Settings/Settings";
+import { characterOverviewStyles as useStyles } from "../../ui/React/CharacterOverview";
 import { MoneyRate } from "../../ui/React/MoneyRate";
 import { StatsRow } from "../../ui/React/StatsRow";
-import { characterOverviewStyles as useStyles } from "../../ui/React/CharacterOverview";
+import { formatMultiplier, formatRespect, formatWanted } from "../../ui/formatNumber";
+import { GangMember } from "../GangMember";
+import { useGang } from "./Context";
 
 interface IProps {
   member: GangMember;

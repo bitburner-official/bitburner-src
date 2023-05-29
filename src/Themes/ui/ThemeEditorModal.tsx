@@ -1,22 +1,24 @@
 import React, { useState } from "react";
-import { Modal } from "../../ui/React/Modal";
+
+import HistoryIcon from "@mui/icons-material/History";
+import PaletteSharpIcon from "@mui/icons-material/PaletteSharp";
+import ReplyIcon from "@mui/icons-material/Reply";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
-import IconButton from "@mui/material/IconButton";
-import ReplyIcon from "@mui/icons-material/Reply";
-import PaletteSharpIcon from "@mui/icons-material/PaletteSharp";
-import HistoryIcon from "@mui/icons-material/History";
-import { Color, ColorPicker } from "material-ui-color";
-import { ThemeEvents } from "./Theme";
-import { Settings } from "../../Settings/Settings";
-import { defaultTheme } from "../Themes";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import { UserInterfaceTheme } from "@nsdefs";
+import { Color, ColorPicker } from "material-ui-color";
+
+import { Settings } from "../../Settings/Settings";
 import { Router } from "../../ui/GameRoot";
+import { Modal } from "../../ui/React/Modal";
 import { Page } from "../../ui/Router";
+import { defaultTheme } from "../Themes";
+import { ThemeEvents } from "./Theme";
 import { ThemeCollaborate } from "./ThemeCollaborate";
 
 interface IProps {

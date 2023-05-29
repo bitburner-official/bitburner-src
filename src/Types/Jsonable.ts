@@ -1,4 +1,5 @@
 import type { IReviverValue } from "../utils/JSONReviver";
+
 // Versions of js builtin classes that can be converted to and from JSON for use in save files
 
 export class JSONSet<T> extends Set<T> {

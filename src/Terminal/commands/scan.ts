@@ -1,6 +1,6 @@
-import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { getServerOnNetwork } from "../../Server/ServerHelpers";
+import { Terminal } from "../../Terminal";
 import { IPAddress } from "../../Types/strings";
 
 export function scan(args: (string | number | boolean)[], currServ: BaseServer): void {

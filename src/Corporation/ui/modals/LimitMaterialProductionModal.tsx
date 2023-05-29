@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { LimitMaterialProduction } from "../../Actions";
-import { Modal } from "../../../ui/React/Modal";
-import Typography from "@mui/material/Typography";
+
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
+import { Modal } from "../../../ui/React/Modal";
 import { KEY } from "../../../utils/helpers/keyCodes";
+import { LimitMaterialProduction } from "../../Actions";
 import { Material } from "../../Material";
 
 interface IProps {

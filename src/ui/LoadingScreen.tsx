@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
+import React, { useEffect, useState } from "react";
 
-import { load } from "../db";
-import { Engine } from "../engine";
-import { GameRoot } from "./GameRoot";
+import CircularProgress from "@mui/material/CircularProgress";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 import { CONSTANTS } from "../Constants";
-import { ActivateRecoveryMode } from "./React/RecoveryRoot";
-import { hash } from "../hash/hash";
 import { pushGameReady } from "../Electron";
+import { load } from "../db";
+import { Engine } from "../engine";
+import { hash } from "../hash/hash";
+import { GameRoot } from "./GameRoot";
+import { ActivateRecoveryMode } from "./React/RecoveryRoot";
 
 export function LoadingScreen(): React.ReactElement {
   const [show, setShow] = useState(false);

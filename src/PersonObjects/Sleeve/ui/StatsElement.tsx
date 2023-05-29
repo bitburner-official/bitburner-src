@@ -1,9 +1,14 @@
 import React from "react";
 
-import { Typography, Table, TableBody, TableCell, TableRow } from "@mui/material";
+import { Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 
 import { CONSTANTS } from "../../../Constants";
-
+import { Settings } from "../../../Settings/Settings";
+import { characterOverviewStyles as useStyles } from "../../../ui/React/CharacterOverview";
+import { Money } from "../../../ui/React/Money";
+import { MoneyRate } from "../../../ui/React/MoneyRate";
+import { ReputationRate } from "../../../ui/React/ReputationRate";
+import { StatsRow } from "../../../ui/React/StatsRow";
 import {
   formatExp,
   formatHp,
@@ -11,18 +16,11 @@ import {
   formatSleeveShock,
   formatSleeveSynchro,
 } from "../../../ui/formatNumber";
-import { Settings } from "../../../Settings/Settings";
-import { StatsRow } from "../../../ui/React/StatsRow";
-import { characterOverviewStyles as useStyles } from "../../../ui/React/CharacterOverview";
-import { Money } from "../../../ui/React/Money";
-import { MoneyRate } from "../../../ui/React/MoneyRate";
-import { ReputationRate } from "../../../ui/React/ReputationRate";
-
 import { Sleeve } from "../Sleeve";
 import { isSleeveClassWork } from "../Work/SleeveClassWork";
-import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
 import { isSleeveCrimeWork } from "../Work/SleeveCrimeWork";
+import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
 
 const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
 

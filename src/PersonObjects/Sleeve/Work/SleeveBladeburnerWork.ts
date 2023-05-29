@@ -1,10 +1,11 @@
 import { Player } from "@player";
+
+import { GeneralActions } from "../../../Bladeburner/data/GeneralActions";
+import { CONSTANTS } from "../../../Constants";
+import { scaleWorkStats } from "../../../Work/WorkStats";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { applySleeveGains, Work, WorkType } from "./Work";
-import { CONSTANTS } from "../../../Constants";
-import { GeneralActions } from "../../../Bladeburner/data/GeneralActions";
-import { scaleWorkStats } from "../../../Work/WorkStats";
+import { Work, WorkType, applySleeveGains } from "./Work";
 
 interface SleeveBladeburnerWorkParams {
   type: "General" | "Contracts";

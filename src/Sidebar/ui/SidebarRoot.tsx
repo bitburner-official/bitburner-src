@@ -1,60 +1,80 @@
-import React, { useMemo, useCallback, useState, useEffect } from "react";
-import { KEYCODE } from "../../utils/helpers/keyCodes";
-import { styled, Theme, CSSObject } from "@mui/material/styles";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
-import MuiDrawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import Tooltip from "@mui/material/Tooltip";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+
+// Achievements
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+// Augmentations
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+// City
+import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
+// Active Scripts
+import BugReportIcon from "@mui/icons-material/BugReport";
+// Bladeburner
+import BusinessIcon from "@mui/icons-material/Business";
+// Gang
+import CheckIcon from "@mui/icons-material/Check";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ComputerIcon from "@mui/icons-material/Computer";
+// Stats
+import ContactsIcon from "@mui/icons-material/Contacts";
+// Terminal
+import CreateIcon from "@mui/icons-material/Create";
+// options
+import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard";
+// Factions
+import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
+// Dev
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+// Create Program
+import EqualizerIcon from "@mui/icons-material/Equalizer";
+// Stock Market
+import FormatBoldIcon from "@mui/icons-material/FormatBold";
+// Milestones
+import HelpIcon from "@mui/icons-material/Help";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import LiveHelpIcon from "@mui/icons-material/LiveHelp";
+// Sleeves
+import LocationCityIcon from "@mui/icons-material/LocationCity";
+// Hacknet
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import PublicIcon from "@mui/icons-material/Public";
+// Tutorial
+import SettingsIcon from "@mui/icons-material/Settings";
+// Corp
+import SportsMmaIcon from "@mui/icons-material/SportsMma";
+// Create Script
+import StorageIcon from "@mui/icons-material/Storage";
+// Job
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+// Travel
+import WorkIcon from "@mui/icons-material/Work";
+import Divider from "@mui/material/Divider";
+import MuiDrawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-
-import ComputerIcon from "@mui/icons-material/Computer";
-import LastPageIcon from "@mui/icons-material/LastPage"; // Terminal
-import CreateIcon from "@mui/icons-material/Create"; // Create Script
-import StorageIcon from "@mui/icons-material/Storage"; // Active Scripts
-import BugReportIcon from "@mui/icons-material/BugReport"; // Create Program
-import EqualizerIcon from "@mui/icons-material/Equalizer"; // Stats
-import ContactsIcon from "@mui/icons-material/Contacts"; // Factions
-import DoubleArrowIcon from "@mui/icons-material/DoubleArrow"; // Augmentations
-import AccountTreeIcon from "@mui/icons-material/AccountTree"; // Hacknet
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt"; // Sleeves
-import LocationCityIcon from "@mui/icons-material/LocationCity"; // City
-import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive"; // Travel
-import WorkIcon from "@mui/icons-material/Work"; // Job
-import TrendingUpIcon from "@mui/icons-material/TrendingUp"; // Stock Market
-import FormatBoldIcon from "@mui/icons-material/FormatBold"; // Bladeburner
-import BusinessIcon from "@mui/icons-material/Business"; // Corp
-import SportsMmaIcon from "@mui/icons-material/SportsMma"; // Gang
-import CheckIcon from "@mui/icons-material/Check"; // Milestones
-import HelpIcon from "@mui/icons-material/Help"; // Tutorial
-import SettingsIcon from "@mui/icons-material/Settings"; // options
-import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard"; // Dev
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"; // Achievements
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import PublicIcon from "@mui/icons-material/Public";
-import LiveHelpIcon from "@mui/icons-material/LiveHelp";
-
-import { Router } from "../../ui/GameRoot";
-import { Page, SimplePage } from "../../ui/Router";
-import { SidebarAccordion } from "./SidebarAccordion";
+import { CSSObject, Theme, styled } from "@mui/material/styles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import { Player } from "@player";
-import { CONSTANTS } from "../../Constants";
-import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../../InteractiveTutorial";
-import { getAvailableCreatePrograms } from "../../Programs/ProgramHelpers";
-import { Settings } from "../../Settings/Settings";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 
-import { ProgramsSeen } from "../../Programs/ui/ProgramsRoot";
+import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { CONSTANTS } from "../../Constants";
 import { InvitationsSeen } from "../../Faction/ui/FactionsRoot";
-import { hash } from "../../hash/hash";
+import { ITutorial, iTutorialNextStep, iTutorialSteps } from "../../InteractiveTutorial";
 import { Locations } from "../../Locations/Locations";
+import { getAvailableCreatePrograms } from "../../Programs/ProgramHelpers";
+import { ProgramsSeen } from "../../Programs/ui/ProgramsRoot";
+import { Settings } from "../../Settings/Settings";
+import { hash } from "../../hash/hash";
+import { Router } from "../../ui/GameRoot";
 import { useRerender } from "../../ui/React/hooks";
+import { Page, SimplePage } from "../../ui/Router";
+import { KEYCODE } from "../../utils/helpers/keyCodes";
+import { SidebarAccordion } from "./SidebarAccordion";
 
 const RotatedDoubleArrowIcon = React.forwardRef((props: { color: "primary" | "secondary" | "error" }, __ref) => (
   <DoubleArrowIcon color={props.color} style={{ transform: "rotate(-90deg)" }} />

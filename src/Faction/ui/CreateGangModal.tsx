@@ -1,10 +1,12 @@
 import React from "react";
-import { Modal } from "../../ui/React/Modal";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
-import { Player } from "@player";
-import Typography from "@mui/material/Typography";
+
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { Router } from "../../ui/GameRoot";
+import { Modal } from "../../ui/React/Modal";
+import { Page } from "../../ui/Router";
 import { KEY } from "../../utils/helpers/keyCodes";
 import { FactionNames } from "../data/FactionNames";
 

@@ -1,4 +1,5 @@
 import { RunningScript } from "src/Script/RunningScript";
+
 import { Settings } from "../Settings/Settings";
 import { WorkerScript } from "./WorkerScript";
 

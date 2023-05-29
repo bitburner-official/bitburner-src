@@ -1,14 +1,14 @@
 import * as React from "react";
 
-import { Order } from "../Order";
-import { PositionTypes } from "../data/PositionTypes";
-
-import { formatShares } from "../../ui/formatNumber";
-import { Money } from "../../ui/React/Money";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
+import { Money } from "../../ui/React/Money";
+import { formatShares } from "../../ui/formatNumber";
+import { Order } from "../Order";
 import { cancelOrder } from "../StockMarket";
+import { PositionTypes } from "../data/PositionTypes";
 
 interface IProps {
   order: Order;

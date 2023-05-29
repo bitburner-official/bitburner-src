@@ -1,5 +1,5 @@
-import { Terminal } from "../../Terminal";
 import { removeAlias } from "../../Alias";
+import { Terminal } from "../../Terminal";
 
 export function unalias(args: (string | number | boolean)[]): void {
   if (args.length !== 1) {

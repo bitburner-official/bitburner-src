@@ -1,5 +1,5 @@
-import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
 
 export function sudov(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 0) {

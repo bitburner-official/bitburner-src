@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+
 import { Settings } from "../../Settings/Settings";
+import { OptionSwitch } from "../../ui/React/OptionSwitch";
+import { AutoexecInput } from "./AutoexecInput";
 import { GameOptionsPage } from "./GameOptionsPage";
 import { OptionsSlider } from "./OptionsSlider";
-import { AutoexecInput } from "./AutoexecInput";
-import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
 export const SystemPage = (): React.ReactElement => {
   const [execTime, setExecTime] = useState(Settings.CodeInstructionRunTime);

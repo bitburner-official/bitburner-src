@@ -4,12 +4,14 @@
  * This subcomponent renders all of the buttons for training at the gym
  */
 import React, { useState } from "react";
+
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
+
 import { Blackjack, DECK_COUNT } from "../../Casino/Blackjack";
 import { CoinFlip } from "../../Casino/CoinFlip";
 import { Roulette } from "../../Casino/Roulette";
 import { SlotMachine } from "../../Casino/SlotMachine";
-import { Box } from "@mui/material";
 
 enum GameType {
   None = "none",

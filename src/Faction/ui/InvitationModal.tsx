@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { joinFaction } from "../FactionHelpers";
-import { Faction } from "../Faction";
-import { Modal } from "../../ui/React/Modal";
-import { Player } from "@player";
-import { EventEmitter } from "../../utils/EventEmitter";
-import Typography from "@mui/material/Typography";
+import React, { useEffect, useState } from "react";
+
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { Modal } from "../../ui/React/Modal";
+import { EventEmitter } from "../../utils/EventEmitter";
+import { Faction } from "../Faction";
+import { joinFaction } from "../FactionHelpers";
 
 export const InvitationEvent = new EventEmitter<[Faction]>();
 

@@ -2,33 +2,31 @@
 // (right-side panel in the Industry UI)
 import React, { useState } from "react";
 
-import * as corpConstants from "../data/Constants";
-import { Warehouse } from "../Warehouse";
-import { SmartSupplyModal } from "./modals/SmartSupplyModal";
-import { ProductElem } from "./ProductElem";
-import { MaterialElem } from "./MaterialElem";
-import { MaterialInfo } from "../MaterialInfo";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 
+import { CityName } from "../../Enums";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { formatBigNumber, formatMaterialSize } from "../../ui/formatNumber";
-
+import { purchaseWarehouse } from "../Actions";
 import { Corporation } from "../Corporation";
 import { Division } from "../Division";
-import { MoneyCost } from "./MoneyCost";
+import { MaterialInfo } from "../MaterialInfo";
+import { Warehouse } from "../Warehouse";
+import * as corpConstants from "../data/Constants";
+import { CorpUnlockName } from "../data/Enums";
+import { useCorporation, useDivision } from "./Context";
 import { isRelevantMaterial } from "./Helpers";
 import { IndustryProductEquation } from "./IndustryProductEquation";
-import { purchaseWarehouse } from "../Actions";
-import { useCorporation, useDivision } from "./Context";
-
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Paper from "@mui/material/Paper";
-import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
-import { CityName } from "../../Enums";
-import { CorpUnlockName } from "../data/Enums";
+import { MaterialElem } from "./MaterialElem";
+import { MoneyCost } from "./MoneyCost";
+import { ProductElem } from "./ProductElem";
+import { SmartSupplyModal } from "./modals/SmartSupplyModal";
 
 interface WarehouseProps {
   corp: Corporation;

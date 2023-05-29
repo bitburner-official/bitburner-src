@@ -1,35 +1,32 @@
 import React, { useState } from "react";
 
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import Box from "@mui/material/Box";
+import Collapse from "@mui/material/Collapse";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import MenuItem from "@mui/material/MenuItem";
+import Paper from "@mui/material/Paper";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import { Player } from "@player";
+
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { Money } from "../../ui/React/Money";
+import { formatShares } from "../../ui/formatNumber";
+import { buyStock, sellShort, sellStock, shortStock } from "../BuyingAndSelling";
+import { Order } from "../Order";
+import { Stock } from "../Stock";
+import { placeOrder } from "../StockMarket";
+import { calculateBuyMaxAmount, getBuyTransactionCost, getSellTransactionGain } from "../StockMarketHelpers";
+import { OrderTypes } from "../data/OrderTypes";
+import { PositionTypes } from "../data/PositionTypes";
+import { PlaceOrderModal } from "./PlaceOrderModal";
 import { StockTickerHeaderText } from "./StockTickerHeaderText";
 import { StockTickerOrderList } from "./StockTickerOrderList";
 import { StockTickerPositionText } from "./StockTickerPositionText";
 import { StockTickerTxButton } from "./StockTickerTxButton";
-import { PlaceOrderModal } from "./PlaceOrderModal";
-
-import { Order } from "../Order";
-import { Stock } from "../Stock";
-import { getBuyTransactionCost, getSellTransactionGain, calculateBuyMaxAmount } from "../StockMarketHelpers";
-import { OrderTypes } from "../data/OrderTypes";
-import { PositionTypes } from "../data/PositionTypes";
-import { placeOrder } from "../StockMarket";
-import { buyStock, shortStock, sellStock, sellShort } from "../BuyingAndSelling";
-
-import { Player } from "@player";
-import { formatShares } from "../../ui/formatNumber";
-import { Money } from "../../ui/React/Money";
-
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import Paper from "@mui/material/Paper";
-import Collapse from "@mui/material/Collapse";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import ExpandLess from "@mui/icons-material/ExpandLess";
 
 enum SelectorOrderType {
   Market = "Market Order",

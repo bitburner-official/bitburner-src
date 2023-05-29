@@ -1,21 +1,23 @@
 import React from "react";
-import { ActionTypes } from "../data/ActionTypes";
-import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
+
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { CopyableText } from "../../ui/React/CopyableText";
+import { useRerender } from "../../ui/React/hooks";
+import { formatBigNumber, formatNumberNoSuffix } from "../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { SuccessChance } from "./SuccessChance";
+import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
+import { Bladeburner } from "../Bladeburner";
+import { Operation } from "../Operation";
+import { ActionTypes } from "../data/ActionTypes";
+import { Operations } from "../data/Operations";
 import { ActionLevel } from "./ActionLevel";
 import { Autolevel } from "./Autolevel";
 import { StartButton } from "./StartButton";
+import { SuccessChance } from "./SuccessChance";
 import { TeamSizeButton } from "./TeamSizeButton";
-import { Bladeburner } from "../Bladeburner";
-import { Operation } from "../Operation";
-import { Operations } from "../data/Operations";
-import { Player } from "@player";
-import { CopyableText } from "../../ui/React/CopyableText";
-import { formatNumberNoSuffix, formatBigNumber } from "../../ui/formatNumber";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
   bladeburner: Bladeburner;

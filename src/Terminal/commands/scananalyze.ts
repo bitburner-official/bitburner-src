@@ -1,6 +1,7 @@
-import { Terminal } from "../../Terminal";
 import { Player } from "@player";
+
 import { CompletedProgramName } from "../../Programs/Programs";
+import { Terminal } from "../../Terminal";
 
 export function scananalyze(args: (string | number | boolean)[]): void {
   if (args.length === 0) {

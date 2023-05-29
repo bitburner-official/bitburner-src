@@ -1,10 +1,11 @@
 import React from "react";
 
-import { Product } from "../../Product";
-import { Modal } from "../../../ui/React/Modal";
-import { useDivision } from "../Context";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
+import { Modal } from "../../../ui/React/Modal";
+import { Product } from "../../Product";
+import { useDivision } from "../Context";
 
 interface IProps {
   open: boolean;

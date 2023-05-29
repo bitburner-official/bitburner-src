@@ -1,38 +1,38 @@
 // React Component for displaying Corporation Overview info
 import React, { useState } from "react";
-import { LevelableUpgrade } from "./LevelableUpgrade";
-import { Unlock } from "./Unlock";
-import { BribeFactionModal } from "./modals/BribeFactionModal";
-import { SellSharesModal } from "./modals/SellSharesModal";
-import { BuybackSharesModal } from "./modals/BuybackSharesModal";
-import { IssueDividendsModal } from "./modals/IssueDividendsModal";
-import { IssueNewSharesModal } from "./modals/IssueNewSharesModal";
-import { FindInvestorsModal } from "./modals/FindInvestorsModal";
-import { GoPublicModal } from "./modals/GoPublicModal";
-import { Factions } from "../../Faction/Factions";
 
-import * as corpConstants from "../data/Constants";
-import { CorpUnlocks } from "../data/CorporationUnlocks";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
 
 import { CONSTANTS } from "../../Constants";
-import { formatCorpStat, formatPercent, formatShares } from "../../ui/formatNumber";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { Money } from "../../ui/React/Money";
-import { MoneyRate } from "../../ui/React/MoneyRate";
-import { StatsTable } from "../../ui/React/StatsTable";
-import { Player } from "@player";
-import { useCorporation } from "./Context";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import { MultiplierButtons } from "./MultiplierButtons";
-import { SellCorporationModal } from "./modals/SellCorporationModal";
-import { SellDivisionModal } from "./modals/SellDivisionModal";
+import { Factions } from "../../Faction/Factions";
 import { getRecordKeys } from "../../Types/Record";
 import { PositiveInteger } from "../../types";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
+import { Money } from "../../ui/React/Money";
+import { MoneyRate } from "../../ui/React/MoneyRate";
+import { StatsTable } from "../../ui/React/StatsTable";
+import { formatCorpStat, formatPercent, formatShares } from "../../ui/formatNumber";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import * as corpConstants from "../data/Constants";
+import { CorpUnlocks } from "../data/CorporationUnlocks";
+import { useCorporation } from "./Context";
+import { LevelableUpgrade } from "./LevelableUpgrade";
+import { MultiplierButtons } from "./MultiplierButtons";
+import { Unlock } from "./Unlock";
+import { BribeFactionModal } from "./modals/BribeFactionModal";
+import { BuybackSharesModal } from "./modals/BuybackSharesModal";
+import { FindInvestorsModal } from "./modals/FindInvestorsModal";
+import { GoPublicModal } from "./modals/GoPublicModal";
+import { IssueDividendsModal } from "./modals/IssueDividendsModal";
+import { IssueNewSharesModal } from "./modals/IssueNewSharesModal";
+import { SellCorporationModal } from "./modals/SellCorporationModal";
+import { SellDivisionModal } from "./modals/SellDivisionModal";
+import { SellSharesModal } from "./modals/SellSharesModal";
 
 interface IProps {
   rerender: () => void;

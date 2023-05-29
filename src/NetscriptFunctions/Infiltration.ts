@@ -1,19 +1,20 @@
 import { Infiltration as IInfiltration, InfiltrationLocation } from "@nsdefs";
-import { Location } from "../Locations/Location";
-import { Locations } from "../Locations/Locations";
+
+import { LocationName } from "../Enums";
+import { Factions } from "../Faction/Factions";
+import { FactionNames } from "../Faction/data/FactionNames";
 import { calculateDifficulty, calculateReward } from "../Infiltration/formulas/game";
 import {
   calculateInfiltratorsRepReward,
   calculateSellInformationCashReward,
   calculateTradeInformationRepReward,
 } from "../Infiltration/formulas/victory";
-import { FactionNames } from "../Faction/data/FactionNames";
-import { Factions } from "../Faction/Factions";
+import { Location } from "../Locations/Location";
+import { Locations } from "../Locations/Locations";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { checkEnum } from "../utils/helpers/enum";
-import { LocationName } from "../Enums";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { filterTruthy } from "../utils/helpers/ArrayHelpers";
+import { checkEnum } from "../utils/helpers/enum";
 
 export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
   const getLocationsWithInfiltrations = Object.values(Locations).filter(

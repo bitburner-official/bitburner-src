@@ -1,8 +1,9 @@
-import { Terminal } from "../../Terminal";
 import { Player } from "@player";
+
+import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
-import { HacknetServer } from "../../Hacknet/HacknetServer";
+import { Terminal } from "../../Terminal";
 
 export function backdoor(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 0) {

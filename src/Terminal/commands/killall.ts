@@ -1,6 +1,6 @@
-import { Terminal } from "../../Terminal";
-import { BaseServer } from "../../Server/BaseServer";
 import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
+import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
 
 export function killall(_args: (string | number | boolean)[], server: BaseServer): void {
   Terminal.print("Killing all running scripts");

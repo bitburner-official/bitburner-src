@@ -1,5 +1,5 @@
-import { gangMemberUpgradesMetadata } from "./data/upgrades";
 import { GangMemberUpgrade } from "./GangMemberUpgrade";
+import { gangMemberUpgradesMetadata } from "./data/upgrades";
 
 export const GangMemberUpgrades: Record<string, GangMemberUpgrade> = {};
 

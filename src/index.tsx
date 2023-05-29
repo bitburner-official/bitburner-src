@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import { initElectron } from "./Electron";
+import { newRemoteFileApiConnection } from "./RemoteFileAPI/RemoteFileAPI";
 import { TTheme as Theme, ThemeEvents, refreshTheme } from "./Themes/ui/Theme";
 import { LoadingScreen } from "./ui/LoadingScreen";
-import { initElectron } from "./Electron";
-
-import { newRemoteFileApiConnection } from "./RemoteFileAPI/RemoteFileAPI";
 
 initElectron();
 globalThis.React = React;

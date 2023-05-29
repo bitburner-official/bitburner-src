@@ -1,6 +1,6 @@
+import { SnackbarEvents, ToastVariant } from "../ui/React/Snackbar";
 import { RFAMessage } from "./MessageDefinitions";
 import { RFARequestHandler } from "./MessageHandlers";
-import { SnackbarEvents, ToastVariant } from "../ui/React/Snackbar";
 
 export class Remote {
   connection?: WebSocket;

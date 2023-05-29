@@ -2,39 +2,36 @@
  * Functions for handling WorkerScripts, which are the underlying mechanism
  * that allows for scripts to run
  */
-import { killWorkerScript } from "./Netscript/killWorkerScript";
+import { ScriptArg } from "@nsdefs";
+import { parse } from "acorn";
+import { simple as walksimple } from "acorn-walk";
+import { generate } from "escodegen";
+
+import { CONSTANTS } from "./Constants";
+import { CompleteRunOptions, getRunningScriptsByArgs, handleUnknownError } from "./Netscript/NetscriptHelpers";
+import { generateNextPid } from "./Netscript/Pid";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { WorkerScript } from "./Netscript/WorkerScript";
 import { workerScripts } from "./Netscript/WorkerScripts";
-import { generateNextPid } from "./Netscript/Pid";
-
-import { CONSTANTS } from "./Constants";
-import { Interpreter } from "./ThirdParty/JSInterpreter";
+import { killWorkerScript } from "./Netscript/killWorkerScript";
 import { NetscriptFunctions } from "./NetscriptFunctions";
-import { compile, Node } from "./NetscriptJSEvaluator";
+import { Node, compile } from "./NetscriptJSEvaluator";
 import { Port, PortNumber } from "./NetscriptPort";
+import { root } from "./Paths/Directory";
+import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
 import { RunningScript } from "./Script/RunningScript";
-import { scriptCalculateOfflineProduction } from "./Script/ScriptHelpers";
 import { Script } from "./Script/Script";
+import { scriptCalculateOfflineProduction } from "./Script/ScriptHelpers";
 import { GetAllServers } from "./Server/AllServers";
 import { BaseServer } from "./Server/BaseServer";
 import { Settings } from "./Settings/Settings";
-
-import { generate } from "escodegen";
-
+import { Terminal } from "./Terminal";
+import { parseCommand } from "./Terminal/Parser";
+import { Interpreter } from "./ThirdParty/JSInterpreter";
 import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { formatRam } from "./ui/formatNumber";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
-
-import { parse } from "acorn";
-import { simple as walksimple } from "acorn-walk";
-import { parseCommand } from "./Terminal/Parser";
-import { Terminal } from "./Terminal";
-import { ScriptArg } from "@nsdefs";
-import { handleUnknownError, CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
-import { resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
-import { root } from "./Paths/Directory";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
 

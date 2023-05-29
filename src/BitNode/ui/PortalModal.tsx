@@ -1,10 +1,11 @@
 import React from "react";
 
-import { enterBitNode } from "../../RedPill";
-import { BitNodes } from "../BitNode";
-import { Modal } from "../../ui/React/Modal";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
+import { enterBitNode } from "../../RedPill";
+import { Modal } from "../../ui/React/Modal";
+import { BitNodes } from "../BitNode";
 import { BitnodeMultiplierDescription } from "./BitnodeMultipliersDescription";
 
 interface IProps {

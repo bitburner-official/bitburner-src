@@ -1,6 +1,7 @@
-import { Settings } from "./Settings/Settings";
 import { NetscriptPort } from "@nsdefs";
+
 import { NetscriptPorts } from "./NetscriptWorker";
+import { Settings } from "./Settings/Settings";
 import { PositiveInteger } from "./types";
 
 type PortData = string | number;

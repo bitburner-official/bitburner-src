@@ -1,14 +1,15 @@
 import { Player } from "@player";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
-import { Sleeve } from "../Sleeve";
-import { applySleeveGains, Work, WorkType } from "./Work";
+
 import { FactionWorkType } from "../../../Enums";
-import { FactionNames } from "../../../Faction/data/FactionNames";
-import { Factions } from "../../../Faction/Factions";
-import { calculateFactionExp, calculateFactionRep } from "../../../Work/Formulas";
 import { Faction } from "../../../Faction/Faction";
-import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
+import { Factions } from "../../../Faction/Factions";
+import { FactionNames } from "../../../Faction/data/FactionNames";
+import { calculateFactionExp, calculateFactionRep } from "../../../Work/Formulas";
+import { WorkStats, scaleWorkStats } from "../../../Work/WorkStats";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { findEnumMember } from "../../../utils/helpers/enum";
+import { Sleeve } from "../Sleeve";
+import { Work, WorkType, applySleeveGains } from "./Work";
 
 interface SleeveFactionWorkParams {
   factionWorkType: FactionWorkType;

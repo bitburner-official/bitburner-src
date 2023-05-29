@@ -1,6 +1,7 @@
 import React from "react";
-import { SourceFile } from "./SourceFile";
+
 import { initBitNodes } from "../BitNode/BitNode";
+import { SourceFile } from "./SourceFile";
 
 export const SourceFiles: Record<string, SourceFile> = {};
 /** Engine initializer for SourceFiles, BitNodes, and BitNodeMultipliers. Run once at engine load. */

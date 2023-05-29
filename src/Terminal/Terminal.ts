@@ -1,44 +1,51 @@
-import { Output, Link, RawOutput, TTimer } from "./OutputTypes";
-import { Router } from "../ui/GameRoot";
 import { Player } from "@player";
-import { HacknetServer } from "../Hacknet/HacknetServer";
-import { BaseServer } from "../Server/BaseServer";
-import { Server } from "../Server/Server";
-import { CompletedProgramName } from "../Programs/Programs";
+
+import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { CodingContractResult } from "../CodingContracts";
-import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
-
-import { TextFile } from "../TextFile";
-import { Script } from "../Script/Script";
-import { hasScriptExtension } from "../Paths/ScriptFilePath";
 import { CONSTANTS } from "../Constants";
-import { GetServer, GetAllServers } from "../Server/AllServers";
-
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
-import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
-import { getServerOnNetwork, processSingleServerGrowth } from "../Server/ServerHelpers";
-import { parseCommand, parseCommands } from "./Parser";
-import { SpecialServers } from "../Server/data/SpecialServers";
-import { Settings } from "../Settings/Settings";
-import { createProgressBarText } from "../utils/helpers/createProgressBarText";
 import {
+  calculateGrowTime,
   calculateHackingChance,
   calculateHackingExpGain,
-  calculatePercentMoneyHacked,
   calculateHackingTime,
-  calculateGrowTime,
+  calculatePercentMoneyHacked,
   calculateWeakenTime,
 } from "../Hacking";
+import { HacknetServer } from "../Hacknet/HacknetServer";
+import { ITutorial, iTutorialNextStep, iTutorialSteps } from "../InteractiveTutorial";
+import { ContractFilePath } from "../Paths/ContractFilePath";
+import { Directory, resolveDirectory, root } from "../Paths/Directory";
+import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
+import { hasScriptExtension } from "../Paths/ScriptFilePath";
+import { hasTextExtension } from "../Paths/TextFilePath";
+import { CompletedProgramName } from "../Programs/Programs";
+import { Script } from "../Script/Script";
+import { GetAllServers, GetServer } from "../Server/AllServers";
+import { BaseServer } from "../Server/BaseServer";
+import { Server } from "../Server/Server";
+import { getServerOnNetwork, processSingleServerGrowth } from "../Server/ServerHelpers";
+import { SpecialServers } from "../Server/data/SpecialServers";
+import { Settings } from "../Settings/Settings";
+import { TextFile } from "../TextFile";
+import { Engine } from "../engine";
+import { hash } from "../hash/hash";
+import { Router } from "../ui/GameRoot";
 import { formatExp, formatMoney, formatPercent, formatRam, formatSecurity } from "../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-
+import { createProgressBarText } from "../utils/helpers/createProgressBarText";
+import { Link, Output, RawOutput, TTimer } from "./OutputTypes";
+import { parseCommand, parseCommands } from "./Parser";
+import { TerminalClearEvents, TerminalEvents } from "./TerminalEvents";
 // TODO: Does every terminal function really need its own file...?
 import { alias } from "./commands/alias";
 import { analyze } from "./commands/analyze";
+import { apr1 } from "./commands/apr1";
 import { backdoor } from "./commands/backdoor";
 import { buy } from "./commands/buy";
 import { cat } from "./commands/cat";
 import { cd } from "./commands/cd";
+import { changelog } from "./commands/changelog";
 import { check } from "./commands/check";
 import { connect } from "./commands/connect";
 import { cp } from "./commands/cp";
@@ -71,15 +78,6 @@ import { unalias } from "./commands/unalias";
 import { vim } from "./commands/vim";
 import { weaken } from "./commands/weaken";
 import { wget } from "./commands/wget";
-import { hash } from "../hash/hash";
-import { apr1 } from "./commands/apr1";
-import { changelog } from "./commands/changelog";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { Engine } from "../engine";
-import { Directory, resolveDirectory, root } from "../Paths/Directory";
-import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
-import { hasTextExtension } from "../Paths/TextFilePath";
-import { ContractFilePath } from "../Paths/ContractFilePath";
 
 export class Terminal {
   // Flags to determine whether the player is currently running a hack or an analyze

@@ -1,22 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
-import Typography from "@mui/material/Typography";
+import React, { useEffect, useRef, useState } from "react";
+
+import { Link as MuiLink } from "@mui/material";
+import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import { Link as MuiLink } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
-import Box from "@mui/material/Box";
-import { Output, Link, RawOutput } from "../OutputTypes";
-import { Terminal } from "../../Terminal";
-import { TerminalInput } from "./TerminalInput";
-import { TerminalEvents, TerminalClearEvents } from "../TerminalEvents";
-import { BitFlumeModal } from "../../BitNode/ui/BitFlumeModal";
-import { CodingContractModal } from "../../ui/React/CodingContractModal";
-
+import makeStyles from "@mui/styles/makeStyles";
 import _ from "lodash";
+
+import { BitFlumeModal } from "../../BitNode/ui/BitFlumeModal";
+import { Terminal } from "../../Terminal";
 import { ANSIITypography } from "../../ui/React/ANSIITypography";
+import { CodingContractModal } from "../../ui/React/CodingContractModal";
 import { useRerender } from "../../ui/React/hooks";
+import { Link, Output, RawOutput } from "../OutputTypes";
+import { TerminalClearEvents, TerminalEvents } from "../TerminalEvents";
+import { TerminalInput } from "./TerminalInput";
 
 function ActionTimer(): React.ReactElement {
   return (

@@ -1,12 +1,14 @@
 import * as React from "react";
-import { BlackOpList } from "./BlackOpList";
-import { Bladeburner } from "../Bladeburner";
+
+import { Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
+
 import { FactionNames } from "../../Faction/data/FactionNames";
 import { Router } from "../../ui/GameRoot";
-import { BlackOperationNames } from "../data/BlackOperationNames";
-import { Button } from "@mui/material";
 import { CorruptableText } from "../../ui/React/CorruptableText";
+import { Bladeburner } from "../Bladeburner";
+import { BlackOperationNames } from "../data/BlackOperationNames";
+import { BlackOpList } from "./BlackOpList";
 
 interface IProps {
   bladeburner: Bladeburner;

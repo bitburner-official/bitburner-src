@@ -2,26 +2,27 @@
 // (top-left panel in the Division UI)
 import React, { useState } from "react";
 
-import { CorpUnlockName, IndustryType } from "../data/Enums";
-import { HireAdVert } from "../Actions";
-import { formatBigNumber } from "../../ui/formatNumber";
-import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
-import { MakeProductModal } from "./modals/MakeProductModal";
-import { ResearchModal } from "./modals/ResearchModal";
-import { Money } from "../../ui/React/Money";
-import { MoneyRate } from "../../ui/React/MoneyRate";
-import { StatsTable } from "../../ui/React/StatsTable";
-import { StaticModal } from "../../ui/React/StaticModal";
-import { MoneyCost } from "./MoneyCost";
-import { useCorporation, useDivision } from "./Context";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
-import Tooltip from "@mui/material/Tooltip";
-import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
 import HelpIcon from "@mui/icons-material/Help";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
+import { Money } from "../../ui/React/Money";
+import { MoneyRate } from "../../ui/React/MoneyRate";
+import { StaticModal } from "../../ui/React/StaticModal";
+import { StatsTable } from "../../ui/React/StatsTable";
+import { formatBigNumber } from "../../ui/formatNumber";
+import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
+import { HireAdVert } from "../Actions";
+import { CorpUnlockName, IndustryType } from "../data/Enums";
+import { useCorporation, useDivision } from "./Context";
+import { MoneyCost } from "./MoneyCost";
+import { MakeProductModal } from "./modals/MakeProductModal";
+import { ResearchModal } from "./modals/ResearchModal";
 
 function MakeProductButton(): React.ReactElement {
   const corp = useCorporation();

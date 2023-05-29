@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { purchaseServer } from "../../Server/ServerPurchases";
-import { formatRam } from "../../ui/formatNumber";
-import { Money } from "../../ui/React/Money";
-import { Modal } from "../../ui/React/Modal";
-import { Player } from "@player";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
+
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { purchaseServer } from "../../Server/ServerPurchases";
+import { Modal } from "../../ui/React/Modal";
+import { Money } from "../../ui/React/Money";
+import { formatRam } from "../../ui/formatNumber";
 import { KEY } from "../../utils/helpers/keyCodes";
 
 interface IProps {

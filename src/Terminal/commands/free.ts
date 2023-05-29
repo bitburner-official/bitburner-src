@@ -1,5 +1,5 @@
-import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
 import { formatPercent, formatRam } from "../../ui/formatNumber";
 
 export function free(args: (string | number | boolean)[], server: BaseServer): void {

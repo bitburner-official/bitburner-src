@@ -1,4 +1,5 @@
 import { Player } from "@player";
+
 import { CONSTANTS } from "../Constants";
 
 export function getHospitalizationCost(): number {

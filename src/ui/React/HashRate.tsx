@@ -1,4 +1,5 @@
 import React from "react";
+
 import { formatHashes } from "../formatNumber";
 import { Hashes } from "./Hashes";
 

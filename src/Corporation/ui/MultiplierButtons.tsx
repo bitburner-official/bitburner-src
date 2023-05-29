@@ -5,10 +5,11 @@
  */
 import React from "react";
 
-import { PurchaseMultipliers } from "../data/Constants";
 import Button from "@mui/material/Button";
-import { PositiveInteger } from "../../types";
+
 import { getRecordEntries } from "../../Types/Record";
+import { PositiveInteger } from "../../types";
+import { PurchaseMultipliers } from "../data/Constants";
 
 interface IProps {
   selectedMultiplier: PositiveInteger | "MAX";

@@ -1,7 +1,9 @@
-import { Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+
+import { Paper, Typography } from "@mui/material";
 import { Player } from "@player";
+
+import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { KEY } from "../../utils/helpers/keyCodes";
 import { random } from "../utils";
 import { BlinkingCursor } from "./BlinkingCursor";

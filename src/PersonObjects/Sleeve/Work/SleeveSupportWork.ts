@@ -1,4 +1,5 @@
 import { Player } from "@player";
+
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Work, WorkType } from "./Work";
 

@@ -1,7 +1,7 @@
-import { Terminal } from "../../Terminal";
+import { GetServer } from "../../Server/AllServers";
 import { BaseServer } from "../../Server/BaseServer";
 import { getServerOnNetwork } from "../../Server/ServerHelpers";
-import { GetServer } from "../../Server/AllServers";
+import { Terminal } from "../../Terminal";
 
 export function connect(args: (string | number | boolean)[], server: BaseServer): void {
   // Disconnect from current server in Terminal and connect to new one

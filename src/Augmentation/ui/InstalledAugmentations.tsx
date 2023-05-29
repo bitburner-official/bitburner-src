@@ -5,17 +5,19 @@
  * It also contains 'configuration' buttons that allow you to change how the
  * Augs/SF's are displayed
  */
+import React, { useState } from "react";
+
 import { Box, ListItemButton, Paper, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import Tooltip from "@mui/material/Tooltip";
-import React, { useState } from "react";
+import { Player } from "@player";
+
 import { OwnedAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
-import { Player } from "@player";
+import { useRerender } from "../../ui/React/hooks";
 import { StaticAugmentations } from "../StaticAugmentations";
 import { AugmentationNames } from "../data/AugmentationNames";
-import { useRerender } from "../../ui/React/hooks";
 
 export function InstalledAugmentations(): React.ReactElement {
   const rerender = useRerender();

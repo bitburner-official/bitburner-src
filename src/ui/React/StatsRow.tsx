@@ -1,10 +1,10 @@
 import React from "react";
 
-import { Typography, TableCell, TableRow } from "@mui/material";
+import { ClassNameMap } from "@material-ui/core/styles/withStyles";
+import { TableCell, TableRow, Typography } from "@mui/material";
 
 import { formatExp, formatNumberNoSuffix } from "../formatNumber";
 import { characterOverviewStyles as useStyles } from "./CharacterOverview";
-import { ClassNameMap } from "@material-ui/core/styles/withStyles";
 
 interface ITableRowData {
   content?: string;

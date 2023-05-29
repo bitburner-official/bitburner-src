@@ -1,7 +1,8 @@
 import { Person as IPerson } from "@nsdefs";
+
 import { CONSTANTS } from "../Constants";
-import * as names from "./data/JobTracks";
 import { JobName } from "../Enums";
+import * as names from "./data/JobTracks";
 
 export interface IConstructorParams {
   name: JobName;

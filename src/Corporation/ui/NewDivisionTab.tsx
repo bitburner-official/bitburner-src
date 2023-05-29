@@ -1,17 +1,19 @@
 import React, { useState } from "react";
+
+import Box from "@mui/material/Box";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { IndustryDescriptions, IndustriesData } from "../IndustryData";
+import { KEY } from "../../utils/helpers/keyCodes";
+import { NewDivision } from "../Actions";
+import { IndustriesData, IndustryDescriptions } from "../IndustryData";
 import { IndustryType } from "../data/Enums";
 import { useCorporation } from "./Context";
-import { NewDivision } from "../Actions";
 
-import Typography from "@mui/material/Typography";
-import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Box from "@mui/material/Box";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { KEY } from "../../utils/helpers/keyCodes";
 interface IProps {
   setDivisionName: (name: string) => void;
 }

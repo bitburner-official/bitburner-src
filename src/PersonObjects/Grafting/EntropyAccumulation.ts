@@ -1,6 +1,6 @@
-import { CONSTANTS } from "../../Constants";
-
 import { Player } from "@player";
+
+import { CONSTANTS } from "../../Constants";
 import { Multipliers } from "../Multipliers";
 
 export const calculateEntropy = (stacks = 1): Multipliers => {

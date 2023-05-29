@@ -1,9 +1,8 @@
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { comprGenChar, comprLZDecode, comprLZEncode, comprLZGenerate } from "../utils/CompressionContracts";
+import { HammingDecode, HammingEncode, HammingEncodeProperly } from "../utils/HammingCodeTools";
 import { MinHeap } from "../utils/Heap";
-
-import { comprGenChar, comprLZGenerate, comprLZEncode, comprLZDecode } from "../utils/CompressionContracts";
-import { HammingEncode, HammingDecode, HammingEncodeProperly } from "../utils/HammingCodeTools";
 import { filterTruthy } from "../utils/helpers/ArrayHelpers";
+import { getRandomInt } from "../utils/helpers/getRandomInt";
 
 /* Function that generates a valid 'data' for a contract type */
 export type GeneratorFunc = () => unknown;

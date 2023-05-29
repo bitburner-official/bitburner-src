@@ -4,14 +4,13 @@
  * This subcomponent renders all of the buttons for hospital options
  */
 import * as React from "react";
+
 import Button from "@mui/material/Button";
-
 import { Player } from "@player";
+
 import { getHospitalizationCost } from "../../Hospital/Hospital";
-
-import { Money } from "../../ui/React/Money";
-
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { Money } from "../../ui/React/Money";
 import { useRerender } from "../../ui/React/hooks";
 
 export function HospitalLocation(): React.ReactElement {

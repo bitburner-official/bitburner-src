@@ -1,5 +1,6 @@
-import { Slider, Tooltip, Typography, Box } from "@mui/material";
 import React, { useState } from "react";
+
+import { Box, Slider, Tooltip, Typography } from "@mui/material";
 
 interface IProps {
   initialValue: number;

@@ -1,5 +1,5 @@
-import { gangMemberTasksMetadata } from "./data/tasks";
 import { GangMemberTask } from "./GangMemberTask";
+import { gangMemberTasksMetadata } from "./data/tasks";
 
 export const GangMemberTasks: Record<string, GangMemberTask> = {};
 

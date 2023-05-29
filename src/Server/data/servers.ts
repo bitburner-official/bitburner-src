@@ -1,11 +1,10 @@
+import { LocationName } from "../../Enums";
 import { FactionNames } from "../../Faction/data/FactionNames";
-
+import { LiteratureName } from "../../Literature/data/LiteratureNames";
+import { ServerName } from "../../Types/strings";
 // This could actually be a JSON file as it should be constant metadata to be imported...
 import { IMinMaxRange } from "../../types";
-import { LocationName } from "../../Enums";
-import { LiteratureName } from "../../Literature/data/LiteratureNames";
 import { SpecialServers } from "./SpecialServers";
-import { ServerName } from "../../Types/strings";
 
 /**
  * The metadata describing the base state of servers on the network.

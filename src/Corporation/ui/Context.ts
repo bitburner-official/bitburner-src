@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+
 import { Corporation } from "../Corporation";
 import { Division } from "../Division";
 

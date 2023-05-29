@@ -1,10 +1,12 @@
-import { Container, Typography, Paper } from "@mui/material";
 import React from "react";
-import { PurchasableAugmentations } from "../../../Augmentation/ui/PurchasableAugmentations";
+
+import { Container, Paper, Typography } from "@mui/material";
 import { Player } from "@player";
+
+import { PurchasableAugmentations } from "../../../Augmentation/ui/PurchasableAugmentations";
 import { Modal } from "../../../ui/React/Modal";
-import { Sleeve } from "../Sleeve";
 import { useRerender } from "../../../ui/React/hooks";
+import { Sleeve } from "../Sleeve";
 
 interface IProps {
   open: boolean;

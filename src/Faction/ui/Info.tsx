@@ -4,19 +4,18 @@
  */
 import React from "react";
 
-import { Faction } from "../Faction";
-import { FactionInfo } from "../FactionInfo";
-
-import { Reputation } from "../../ui/React/Reputation";
-import { Favor } from "../../ui/React/Favor";
+import Box from "@mui/material/Box";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import { MathJax } from "better-react-mathjax";
 
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
+import { Favor } from "../../ui/React/Favor";
+import { Reputation } from "../../ui/React/Reputation";
 import { useRerender } from "../../ui/React/hooks";
+import { Faction } from "../Faction";
+import { FactionInfo } from "../FactionInfo";
 
 interface IProps {
   faction: Faction;

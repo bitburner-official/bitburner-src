@@ -1,17 +1,18 @@
+import { SleeveTask } from "@nsdefs";
 import { Player } from "@player";
+
+import { WorkStats, applyWorkStatsExp } from "../../../Work/WorkStats";
 import { IReviverValue } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { applyWorkStatsExp, WorkStats } from "../../../Work/WorkStats";
-import { SleeveTask } from "@nsdefs";
-import { SleeveCompanyWork } from "./SleeveCompanyWork";
-import { SleeveFactionWork } from "./SleeveFactionWork";
-import { SleeveCrimeWork } from "./SleeveCrimeWork";
-import { SleeveClassWork } from "./SleeveClassWork";
-import { SleeveRecoveryWork } from "./SleeveRecoveryWork";
-import { SleeveSynchroWork } from "./SleeveSynchroWork";
 import { SleeveBladeburnerWork } from "./SleeveBladeburnerWork";
+import { SleeveClassWork } from "./SleeveClassWork";
+import { SleeveCompanyWork } from "./SleeveCompanyWork";
+import { SleeveCrimeWork } from "./SleeveCrimeWork";
+import { SleeveFactionWork } from "./SleeveFactionWork";
 import { SleeveInfiltrateWork } from "./SleeveInfiltrateWork";
+import { SleeveRecoveryWork } from "./SleeveRecoveryWork";
 import { SleeveSupportWork } from "./SleeveSupportWork";
+import { SleeveSynchroWork } from "./SleeveSynchroWork";
 
 export const applySleeveGains = (sleeve: Sleeve, shockedStats: WorkStats, mult = 1): void => {
   applyWorkStatsExp(sleeve, shockedStats, mult);

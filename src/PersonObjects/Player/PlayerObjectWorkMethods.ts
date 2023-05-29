@@ -1,5 +1,4 @@
 import { Work } from "../../Work/Work";
-
 import type { PlayerObject } from "./PlayerObject";
 
 export function startWork(this: PlayerObject, w: Work): void {

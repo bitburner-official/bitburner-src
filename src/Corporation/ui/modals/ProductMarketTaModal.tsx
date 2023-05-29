@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { formatMoney } from "../../../ui/formatNumber";
-import { Product } from "../../Product";
-import { Modal } from "../../../ui/React/Modal";
-import { useDivision } from "../Context";
-import Typography from "@mui/material/Typography";
+
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
+
+import { Modal } from "../../../ui/React/Modal";
 import { useRerender } from "../../../ui/React/hooks";
+import { formatMoney } from "../../../ui/formatNumber";
+import { Product } from "../../Product";
+import { useDivision } from "../Context";
 
 interface ITa2Props {
   product: Product;

@@ -1,9 +1,8 @@
-import { Factions } from "../../Faction/Factions";
 import { Faction } from "../../Faction/Faction";
+import { Factions } from "../../Faction/Factions";
 import { Gang } from "../../Gang/Gang";
 import { GangConstants } from "../../Gang/data/Constants";
 import { isFactionWork } from "../../Work/FactionWork";
-
 import type { PlayerObject } from "./PlayerObject";
 
 export function canAccessGang(this: PlayerObject): boolean {

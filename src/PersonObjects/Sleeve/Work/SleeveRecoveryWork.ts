@@ -1,7 +1,7 @@
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
+import { calculateIntelligenceBonus } from "../../formulas/intelligence";
 import { Sleeve } from "../Sleeve";
 import { Work, WorkType } from "./Work";
-import { calculateIntelligenceBonus } from "../../formulas/intelligence";
 
 export const isSleeveRecoveryWork = (w: Work | null): w is SleeveRecoveryWork =>
   w !== null && w.type === WorkType.RECOVERY;

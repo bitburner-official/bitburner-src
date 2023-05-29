@@ -1,13 +1,14 @@
 import { UserInterface as IUserInterface } from "@nsdefs";
-import { Settings } from "../Settings/Settings";
-import { ThemeEvents } from "../Themes/ui/Theme";
-import { defaultTheme } from "../Themes/Themes";
-import { defaultStyles } from "../Themes/Styles";
-import { CONSTANTS } from "../Constants";
-import { hash } from "../hash/hash";
-import { InternalAPI } from "../Netscript/APIWrapper";
+
 import { Terminal } from "../../src/Terminal";
-import { helpers, assertObjectType } from "../Netscript/NetscriptHelpers";
+import { CONSTANTS } from "../Constants";
+import { InternalAPI } from "../Netscript/APIWrapper";
+import { assertObjectType, helpers } from "../Netscript/NetscriptHelpers";
+import { Settings } from "../Settings/Settings";
+import { defaultStyles } from "../Themes/Styles";
+import { defaultTheme } from "../Themes/Themes";
+import { ThemeEvents } from "../Themes/ui/Theme";
+import { hash } from "../hash/hash";
 
 export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
   return {

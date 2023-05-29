@@ -4,32 +4,30 @@
  */
 import React from "react";
 
-import { HacknetNodeConstants } from "../data/Constants";
-import {
-  getMaxNumberLevelUpgrades,
-  getMaxNumberRamUpgrades,
-  getMaxNumberCoreUpgrades,
-  purchaseLevelUpgrade,
-  purchaseRamUpgrade,
-  purchaseCoreUpgrade,
-} from "../HacknetHelpers";
-
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import { Player } from "@player";
-import { HacknetNode } from "../HacknetNode";
 
 import { Money } from "../../ui/React/Money";
 import { MoneyRate } from "../../ui/React/MoneyRate";
-
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
 import { TableCell } from "../../ui/React/Table";
-import TableBody from "@mui/material/TableBody";
-import Table from "@mui/material/Table";
-import TableRow from "@mui/material/TableRow";
-import Tooltip from "@mui/material/Tooltip";
 import { formatRam } from "../../ui/formatNumber";
+import {
+  getMaxNumberCoreUpgrades,
+  getMaxNumberLevelUpgrades,
+  getMaxNumberRamUpgrades,
+  purchaseCoreUpgrade,
+  purchaseLevelUpgrade,
+  purchaseRamUpgrade,
+} from "../HacknetHelpers";
+import { HacknetNode } from "../HacknetNode";
+import { HacknetNodeConstants } from "../data/Constants";
 import { calculateMoneyGainRate } from "../formulas/HacknetNodes";
 
 interface IProps {

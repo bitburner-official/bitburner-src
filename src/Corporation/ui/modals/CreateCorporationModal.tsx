@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 
-import { Money } from "../../../ui/React/Money";
-import { Modal } from "../../../ui/React/Modal";
-import { Router } from "../../../ui/GameRoot";
-import { Page } from "../../../ui/Router";
-import { Player } from "@player";
-import Typography from "@mui/material/Typography";
-import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
+import { Router } from "../../../ui/GameRoot";
+import { Modal } from "../../../ui/React/Modal";
+import { Money } from "../../../ui/React/Money";
+import { Page } from "../../../ui/Router";
 
 interface IProps {
   open: boolean;

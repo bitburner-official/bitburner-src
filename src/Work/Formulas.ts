@@ -1,25 +1,26 @@
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { Crime } from "../Crime/Crime";
-import { newWorkStats, scaleWorkStats, WorkStats, multWorkStats } from "./WorkStats";
 import { Person as IPerson } from "@nsdefs";
+import { Player } from "@player";
+
+import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { Company } from "../Company/Company";
+import { CompanyPosition } from "../Company/CompanyPosition";
 import { CONSTANTS } from "../Constants";
+import { Crime } from "../Crime/Crime";
 import { FactionWorkType, GymType } from "../Enums";
+import { LocationName } from "../Enums";
+import { Location } from "../Locations/Location";
+import { Locations } from "../Locations/Locations";
 import {
   getFactionFieldWorkRepGain,
   getFactionSecurityWorkRepGain,
   getHackingWorkRepGain,
 } from "../PersonObjects/formulas/reputation";
-import { Locations } from "../Locations/Locations";
-import { Location } from "../Locations/Location";
-import { Player } from "@player";
-import { Class, Classes, ClassType } from "./ClassWork";
-import { Server } from "../Server/Server";
 import { GetServer } from "../Server/AllServers";
+import { Server } from "../Server/Server";
 import { serverMetadata } from "../Server/data/servers";
-import { LocationName } from "../Enums";
-import { Company } from "../Company/Company";
-import { CompanyPosition } from "../Company/CompanyPosition";
 import { checkEnum } from "../utils/helpers/enum";
+import { Class, ClassType, Classes } from "./ClassWork";
+import { WorkStats, multWorkStats, newWorkStats, scaleWorkStats } from "./WorkStats";
 
 const gameCPS = 1000 / CONSTANTS.MilliPerCycle; // 5 cycles per second
 export const FactionWorkStats: Record<FactionWorkType, WorkStats> = {

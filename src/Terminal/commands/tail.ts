@@ -1,8 +1,8 @@
-import { Terminal } from "../../Terminal";
-import { BaseServer } from "../../Server/BaseServer";
-import { findRunningScripts, findRunningScriptByPid } from "../../Script/ScriptHelpers";
-import { LogBoxEvents } from "../../ui/React/LogBoxManager";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
+import { findRunningScriptByPid, findRunningScripts } from "../../Script/ScriptHelpers";
+import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
+import { LogBoxEvents } from "../../ui/React/LogBoxManager";
 
 export function tail(commandArray: (string | number | boolean)[], server: BaseServer): void {
   try {

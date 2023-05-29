@@ -3,17 +3,18 @@
  * money per second.
  */
 import React from "react";
-import { Factions } from "../../Faction/Factions";
 
-import { formatNumberNoSuffix, formatRespect, formatWanted } from "../../ui/formatNumber";
+import Box from "@mui/material/Box";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import { Factions } from "../../Faction/Factions";
 import { MoneyRate } from "../../ui/React/MoneyRate";
 import { Reputation } from "../../ui/React/Reputation";
+import { formatNumberNoSuffix, formatRespect, formatWanted } from "../../ui/formatNumber";
 import { AllGangs } from "../AllGangs";
 import { BonusTime } from "./BonusTime";
 import { useGang } from "./Context";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
 
 export function GangStats(): React.ReactElement {
   const gang = useGang();

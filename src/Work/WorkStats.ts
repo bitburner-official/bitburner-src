@@ -1,6 +1,7 @@
-import { Person } from "../PersonObjects/Person";
 import { Player } from "@player";
+
 import { Multipliers } from "../PersonObjects/Multipliers";
+import { Person } from "../PersonObjects/Person";
 
 export interface WorkStats {
   money: number;

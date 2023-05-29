@@ -1,8 +1,9 @@
 import { Player } from "@player";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
-import { LocationsMetadata } from "../../Locations/data/LocationsMetadata";
+
 import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 import { Faction } from "../../Faction/Faction";
+import { LocationsMetadata } from "../../Locations/data/LocationsMetadata";
 
 export function calculateSellInformationCashReward(reward: number, maxLevel: number, difficulty: number): number {
   const levelBonus = maxLevel * Math.pow(1.01, maxLevel);

@@ -1,23 +1,22 @@
-import { CorporationState } from "./CorporationState";
-import { CorpUnlocks } from "./data/CorporationUnlocks";
-import { CorpUpgrades } from "./data/CorporationUpgrades";
-import * as corpConstants from "./data/Constants";
-import { Division } from "./Division";
+import { CorpStateName } from "@nsdefs";
+import { Player } from "@player";
 
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { showLiterature } from "../Literature/LiteratureHelpers";
 import { LiteratureName } from "../Literature/data/LiteratureNames";
-import { Player } from "@player";
-
-import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { CorpStateName } from "@nsdefs";
-import { calculateUpgradeCost } from "./helpers";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
-import { CorpUnlockName, CorpUpgradeName } from "./data/Enums";
-import { formatMoney } from "../ui/formatNumber";
-import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
+import { isPositiveInteger } from "../types";
+import { dialogBoxCreate } from "../ui/React/DialogBox";
+import { formatMoney } from "../ui/formatNumber";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { CorporationState } from "./CorporationState";
+import { Division } from "./Division";
+import * as corpConstants from "./data/Constants";
+import { CorpUnlocks } from "./data/CorporationUnlocks";
+import { CorpUpgrades } from "./data/CorporationUpgrades";
+import { CorpUnlockName, CorpUpgradeName } from "./data/Enums";
+import { calculateUpgradeCost } from "./helpers";
 
 interface IParams {
   name?: string;

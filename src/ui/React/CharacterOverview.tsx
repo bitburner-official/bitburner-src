@@ -1,45 +1,42 @@
 // Root React Component for the Corporation UI
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
-import { Theme, useTheme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
-import { formatHp, formatMoney, formatSkill } from "../formatNumber";
-import { Reputation } from "./Reputation";
-import { KillScriptsModal } from "./KillScriptsModal";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-
+import ClearAllIcon from "@mui/icons-material/ClearAll";
+import SaveIcon from "@mui/icons-material/Save";
+import { Box, Tooltip } from "@mui/material";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import SaveIcon from "@mui/icons-material/Save";
-import ClearAllIcon from "@mui/icons-material/ClearAll";
-
-import { Settings } from "../../Settings/Settings";
-import { Router } from "../GameRoot";
-import { Page } from "../Router";
+import { Theme, useTheme } from "@mui/material/styles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import { Player } from "@player";
-import { StatsProgressOverviewCell } from "./StatsProgressBar";
+
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
-
-import { Box, Tooltip } from "@mui/material";
-
-import { isClassWork } from "../../Work/ClassWork";
-import { CONSTANTS } from "../../Constants";
-import { isCreateProgramWork } from "../../Work/CreateProgramWork";
-import { isGraftingWork } from "../../Work/GraftingWork";
-import { isFactionWork } from "../../Work/FactionWork";
-import { ReputationRate } from "./ReputationRate";
-import { isCompanyWork } from "../../Work/CompanyWork";
-import { isCrimeWork } from "../../Work/CrimeWork";
 import { ActionIdentifier } from "../../Bladeburner/ActionIdentifier";
+import { CONSTANTS } from "../../Constants";
 import { Skills } from "../../PersonObjects/Skills";
 import { calculateSkillProgress } from "../../PersonObjects/formulas/skill";
+import { Settings } from "../../Settings/Settings";
+import { isClassWork } from "../../Work/ClassWork";
+import { isCompanyWork } from "../../Work/CompanyWork";
+import { isCreateProgramWork } from "../../Work/CreateProgramWork";
+import { isCrimeWork } from "../../Work/CrimeWork";
+import { isFactionWork } from "../../Work/FactionWork";
+import { isGraftingWork } from "../../Work/GraftingWork";
 import { EventEmitter } from "../../utils/EventEmitter";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { Router } from "../GameRoot";
+import { Page } from "../Router";
+import { formatHp, formatMoney, formatSkill } from "../formatNumber";
+import { KillScriptsModal } from "./KillScriptsModal";
+import { Reputation } from "./Reputation";
+import { ReputationRate } from "./ReputationRate";
+import { StatsProgressOverviewCell } from "./StatsProgressBar";
 
 type SkillRowName = "Hack" | "Str" | "Def" | "Dex" | "Agi" | "Cha" | "Int";
 type RowName = SkillRowName | "HP" | "Money";

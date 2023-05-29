@@ -4,14 +4,14 @@
  */
 import * as React from "react";
 
-import { Stock } from "../Stock";
-
-import { Player } from "@player";
-import { formatPercent, formatShares } from "../../ui/formatNumber";
-import { Money } from "../../ui/React/Money";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { Money } from "../../ui/React/Money";
+import { formatPercent, formatShares } from "../../ui/formatNumber";
+import { Stock } from "../Stock";
 
 interface IProps {
   stock: Stock;

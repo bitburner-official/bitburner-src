@@ -5,13 +5,13 @@
  */
 import * as React from "react";
 
-import { Stock } from "../Stock";
-import { TickerHeaderFormatData } from "../data/TickerHeaderFormatData";
-
+import Typography from "@mui/material/Typography";
 import { Player } from "@player";
+
 import { Settings } from "../../Settings/Settings";
 import { formatMoney, formatPercent } from "../../ui/formatNumber";
-import Typography from "@mui/material/Typography";
+import { Stock } from "../Stock";
+import { TickerHeaderFormatData } from "../data/TickerHeaderFormatData";
 
 interface IProps {
   stock: Stock;

@@ -1,6 +1,7 @@
-import { Terminal } from "../../Terminal";
 import { Player } from "@player";
-import { listAllDarkwebItems, buyAllDarkwebItems, buyDarkwebItem } from "../../DarkWeb/DarkWeb";
+
+import { buyAllDarkwebItems, buyDarkwebItem, listAllDarkwebItems } from "../../DarkWeb/DarkWeb";
+import { Terminal } from "../../Terminal";
 
 export function buy(args: (string | number | boolean)[]): void {
   if (!Player.hasTorRouter()) {

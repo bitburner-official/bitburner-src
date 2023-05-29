@@ -1,20 +1,21 @@
+import { StockOrder, TIX } from "@nsdefs";
+
+import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import { helpers } from "../Netscript/NetscriptHelpers";
 import { Player as player } from "../Player";
-import { buyStock, sellStock, shortStock, sellShort } from "../StockMarket/BuyingAndSelling";
-import { StockMarket, SymbolToStockMap, placeOrder, cancelOrder, initStockMarket } from "../StockMarket/StockMarket";
+import { buyStock, sellShort, sellStock, shortStock } from "../StockMarket/BuyingAndSelling";
+import { Stock } from "../StockMarket/Stock";
+import { StockMarket, SymbolToStockMap, cancelOrder, initStockMarket, placeOrder } from "../StockMarket/StockMarket";
+import {
+  getStockMarket4SDataCost,
+  getStockMarket4STixApiCost,
+  getStockMarketTixApiCost,
+  getStockMarketWseCost,
+} from "../StockMarket/StockMarketCosts";
 import { getBuyTransactionCost, getSellTransactionGain } from "../StockMarket/StockMarketHelpers";
 import { OrderTypes } from "../StockMarket/data/OrderTypes";
 import { PositionTypes } from "../StockMarket/data/PositionTypes";
 import { StockSymbols } from "../StockMarket/data/StockSymbols";
-import {
-  getStockMarket4SDataCost,
-  getStockMarket4STixApiCost,
-  getStockMarketWseCost,
-  getStockMarketTixApiCost,
-} from "../StockMarket/StockMarketCosts";
-import { Stock } from "../StockMarket/Stock";
-import { StockOrder, TIX } from "@nsdefs";
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { helpers } from "../Netscript/NetscriptHelpers";
 
 export function NetscriptStockMarket(): InternalAPI<TIX> {
   /** Checks if the player has TIX API access. Throws an error if the player does not */

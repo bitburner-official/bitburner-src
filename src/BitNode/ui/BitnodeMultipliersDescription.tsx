@@ -1,11 +1,13 @@
+import React from "react";
+
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Box, Collapse, ListItemButton, ListItemText, Paper, Table, TableBody, Typography } from "@mui/material";
+import { Player } from "@player";
 import { uniqueId } from "lodash";
-import React from "react";
+
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Settings } from "../../Settings/Settings";
-import { Player } from "@player";
 import { StatsRow } from "../../ui/React/StatsRow";
 import { defaultMultipliers, getBitNodeMultipliers } from "../BitNode";
 import { IBitNodeMultipliers } from "../BitNodeMultipliers";

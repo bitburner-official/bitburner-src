@@ -1,14 +1,15 @@
 import React from "react";
 
-import { Augmentation } from "../Augmentation";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
 import { Faction } from "../../Faction/Faction";
 import { purchaseAugmentation } from "../../Faction/FactionHelpers";
-import { isRepeatableAug } from "../AugmentationHelpers";
-import { Money } from "../../ui/React/Money";
 import { Modal } from "../../ui/React/Modal";
-import { Player } from "@player";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { Money } from "../../ui/React/Money";
+import { Augmentation } from "../Augmentation";
+import { isRepeatableAug } from "../AugmentationHelpers";
 
 interface IProps {
   open: boolean;

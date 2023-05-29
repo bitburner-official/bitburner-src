@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { SkillList } from "./SkillList";
-import { BladeburnerConstants } from "../data/Constants";
-import { Bladeburner } from "../Bladeburner";
-import { formatBigNumber } from "../../ui/formatNumber";
+
 import Typography from "@mui/material/Typography";
+
+import { formatBigNumber } from "../../ui/formatNumber";
+import { Bladeburner } from "../Bladeburner";
+import { BladeburnerConstants } from "../data/Constants";
+import { SkillList } from "./SkillList";
+
 interface IProps {
   bladeburner: Bladeburner;
 }

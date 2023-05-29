@@ -1,14 +1,16 @@
 import React, { useState } from "react";
+
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
+import { isPositiveInteger } from "../../../types";
+import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
-import { formatMoney, formatShares } from "../../../ui/formatNumber";
-import { useCorporation } from "../Context";
-import Typography from "@mui/material/Typography";
-import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { NumberInput } from "../../../ui/React/NumberInput";
-import Box from "@mui/material/Box";
+import { formatMoney, formatShares } from "../../../ui/formatNumber";
 import { KEY } from "../../../utils/helpers/keyCodes";
-import { isPositiveInteger } from "../../../types";
+import { useCorporation } from "../Context";
 
 interface IProps {
   open: boolean;

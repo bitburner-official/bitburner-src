@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-import Typography from "@mui/material/Typography";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
 import Button from "@mui/material/Button";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { Companies as AllCompanies } from "../../Company/Companies";
 import MenuItem from "@mui/material/MenuItem";
-import { Adjuster } from "./Adjuster";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
+
+import { Companies as AllCompanies } from "../../Company/Companies";
 import { FactionNames } from "../../Faction/data/FactionNames";
+import { Adjuster } from "./Adjuster";
 
 const bigNumber = 1e12;
 

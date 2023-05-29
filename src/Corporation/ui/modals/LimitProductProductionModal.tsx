@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import type { CityName } from "../../../Enums";
-import type { Product } from "../../Product";
-import { LimitProductProduction } from "../../Actions";
-import { Modal } from "../../../ui/React/Modal";
-import Typography from "@mui/material/Typography";
+
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
+import type { CityName } from "../../../Enums";
+import { Modal } from "../../../ui/React/Modal";
 import { KEY } from "../../../utils/helpers/keyCodes";
+import { LimitProductProduction } from "../../Actions";
+import type { Product } from "../../Product";
 
 interface IProps {
   open: boolean;

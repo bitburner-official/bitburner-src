@@ -1,5 +1,5 @@
 import { Terminal } from "../../Terminal";
-import { TerminalHelpText, HelpTexts } from "../HelpText";
+import { HelpTexts, TerminalHelpText } from "../HelpText";
 
 export function help(args: (string | number | boolean)[]): void {
   if (args.length !== 0 && args.length !== 1) {

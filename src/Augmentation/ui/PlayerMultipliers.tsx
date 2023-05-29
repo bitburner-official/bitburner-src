@@ -1,9 +1,11 @@
+import * as React from "react";
+
 import { DoubleArrow } from "@mui/icons-material";
 import { List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
-import * as React from "react";
-import { Multipliers, defaultMultipliers, mergeMultipliers } from "../../PersonObjects/Multipliers";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
+
+import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { Multipliers, defaultMultipliers, mergeMultipliers } from "../../PersonObjects/Multipliers";
 import { Settings } from "../../Settings/Settings";
 import { formatPercent } from "../../ui/formatNumber";
 import { StaticAugmentations } from "../StaticAugmentations";

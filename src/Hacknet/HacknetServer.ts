@@ -1,22 +1,19 @@
+import { Player } from "@player";
+
 import { CONSTANTS } from "../Constants";
-
-import { IHacknetNode } from "./IHacknetNode";
-
 import { BaseServer } from "../Server/BaseServer";
+import { IPAddress } from "../Types/strings";
+import { createRandomIp } from "../utils/IPAddress";
+import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { IHacknetNode } from "./IHacknetNode";
 import { HacknetServerConstants } from "./data/Constants";
 import {
+  calculateCacheUpgradeCost,
+  calculateCoreUpgradeCost,
   calculateHashGainRate,
   calculateLevelUpgradeCost,
   calculateRamUpgradeCost,
-  calculateCoreUpgradeCost,
-  calculateCacheUpgradeCost,
 } from "./formulas/HacknetServers";
-
-import { IPAddress } from "../Types/strings";
-import { createRandomIp } from "../utils/IPAddress";
-
-import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { Player } from "@player";
 
 interface IConstructorParams {
   adminRights?: boolean;

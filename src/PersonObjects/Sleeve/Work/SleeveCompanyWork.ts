@@ -1,14 +1,15 @@
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
-import { Sleeve } from "../Sleeve";
-import { applySleeveGains, Work, WorkType } from "./Work";
-import { LocationName } from "../../../Enums";
+import { Player } from "@player";
+
 import { Companies } from "../../../Company/Companies";
 import { Company } from "../../../Company/Company";
-import { calculateCompanyWorkStats } from "../../../Work/Formulas";
-import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
-import { influenceStockThroughCompanyWork } from "../../../StockMarket/PlayerInfluencing";
-import { Player } from "@player";
 import { CompanyPositions } from "../../../Company/CompanyPositions";
+import { LocationName } from "../../../Enums";
+import { influenceStockThroughCompanyWork } from "../../../StockMarket/PlayerInfluencing";
+import { calculateCompanyWorkStats } from "../../../Work/Formulas";
+import { WorkStats, scaleWorkStats } from "../../../Work/WorkStats";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
+import { Sleeve } from "../Sleeve";
+import { Work, WorkType, applySleeveGains } from "./Work";
 
 export const isSleeveCompanyWork = (w: Work | null): w is SleeveCompanyWork =>
   w !== null && w.type === WorkType.COMPANY;

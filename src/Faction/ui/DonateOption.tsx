@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 
-import { CONSTANTS } from "../../Constants";
-import { Faction } from "../Faction";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 import { Player } from "@player";
-import { repFromDonation } from "../formulas/donation";
-import { Favor } from "../../ui/React/Favor";
-
-import { Money } from "../../ui/React/Money";
-import { Reputation } from "../../ui/React/Reputation";
-
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { MathJax } from "better-react-mathjax";
 
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
+import { CONSTANTS } from "../../Constants";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { Favor } from "../../ui/React/Favor";
+import { Money } from "../../ui/React/Money";
 import { NumberInput } from "../../ui/React/NumberInput";
+import { Reputation } from "../../ui/React/Reputation";
+import { Faction } from "../Faction";
+import { repFromDonation } from "../formulas/donation";
 
 interface IProps {
   faction: Faction;

@@ -1,18 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
-import Typography from "@mui/material/Typography";
-import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import React, { useEffect, useRef, useState } from "react";
+
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import TextField from "@mui/material/TextField";
-
-import { KEY, KEYCODE } from "../../utils/helpers/keyCodes";
-import { Terminal } from "../../Terminal";
+import Typography from "@mui/material/Typography";
+import { Theme } from "@mui/material/styles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import { Player } from "@player";
-import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities";
+
 import { Settings } from "../../Settings/Settings";
+import { Terminal } from "../../Terminal";
 import { longestCommonStart } from "../../utils/StringHelperFunctions";
+import { KEY, KEYCODE } from "../../utils/helpers/keyCodes";
+import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -1,8 +1,9 @@
 import React from "react";
-import { BlackOperations } from "../BlackOperations";
+
 import { BlackOperation } from "../BlackOperation";
-import { BlackOpElem } from "./BlackOpElem";
+import { BlackOperations } from "../BlackOperations";
 import { Bladeburner } from "../Bladeburner";
+import { BlackOpElem } from "./BlackOpElem";
 
 interface IProps {
   bladeburner: Bladeburner;

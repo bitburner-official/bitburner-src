@@ -1,15 +1,16 @@
 import React, { useMemo, useState } from "react";
+
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import { SidebarItem, ICreateProps as IItemProps } from "./SidebarItem";
 import type { Page } from "../../ui/Router";
+import { ICreateProps as IItemProps, SidebarItem } from "./SidebarItem";
 
 interface IProps {
   key_: string;

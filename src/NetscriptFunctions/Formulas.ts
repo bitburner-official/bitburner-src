@@ -1,57 +1,57 @@
-import { Player as player } from "../Player";
-import { calculateServerGrowth } from "../Server/formulas/grow";
-import { numCycleForGrowthCorrected } from "../Server/ServerHelpers";
+import { Formulas as IFormulas, Person as IPerson, Player as IPlayer } from "@nsdefs";
+
+import { Companies } from "../Company/Companies";
+import { CompanyPositions } from "../Company/CompanyPositions";
+import { findCrime } from "../Crime/CrimeHelpers";
+import { CityName, FactionWorkType, GymType, LocationName, UniversityClassType } from "../Enums";
+import { JobName } from "../Enums";
+import { repFromDonation } from "../Faction/formulas/donation";
+import { favorToRep as calculateFavorToRep, repToFavor as calculateRepToFavor } from "../Faction/formulas/favor";
 import {
-  calculateMoneyGainRate,
-  calculateLevelUpgradeCost,
-  calculateRamUpgradeCost,
+  calculateAscensionMult,
+  calculateAscensionPointsGain,
+  calculateMoneyGain,
+  calculateRespectGain,
+  calculateWantedLevelGain,
+  calculateWantedPenalty,
+} from "../Gang/formulas/formulas";
+import {
+  calculateGrowTime,
+  calculateHackingChance,
+  calculateHackingExpGain,
+  calculateHackingTime,
+  calculatePercentMoneyHacked,
+  calculateWeakenTime,
+} from "../Hacking";
+import { HacknetNodeConstants, HacknetServerConstants } from "../Hacknet/data/Constants";
+import {
   calculateCoreUpgradeCost,
+  calculateLevelUpgradeCost,
+  calculateMoneyGainRate,
   calculateNodeCost,
+  calculateRamUpgradeCost,
 } from "../Hacknet/formulas/HacknetNodes";
 import {
+  calculateCacheUpgradeCost as HScalculateCacheUpgradeCost,
+  calculateCoreUpgradeCost as HScalculateCoreUpgradeCost,
   calculateHashGainRate as HScalculateHashGainRate,
   calculateLevelUpgradeCost as HScalculateLevelUpgradeCost,
   calculateRamUpgradeCost as HScalculateRamUpgradeCost,
-  calculateCoreUpgradeCost as HScalculateCoreUpgradeCost,
-  calculateCacheUpgradeCost as HScalculateCacheUpgradeCost,
   calculateServerCost as HScalculateServerCost,
 } from "../Hacknet/formulas/HacknetServers";
-import { HacknetNodeConstants, HacknetServerConstants } from "../Hacknet/data/Constants";
-import { calculateSkill, calculateExp } from "../PersonObjects/formulas/skill";
-import {
-  calculateHackingChance,
-  calculateHackingExpGain,
-  calculatePercentMoneyHacked,
-  calculateHackingTime,
-  calculateGrowTime,
-  calculateWeakenTime,
-} from "../Hacking";
-import { CompletedProgramName } from "../Programs/Programs";
-import { Formulas as IFormulas, Player as IPlayer, Person as IPerson } from "@nsdefs";
-import {
-  calculateRespectGain,
-  calculateWantedLevelGain,
-  calculateMoneyGain,
-  calculateWantedPenalty,
-  calculateAscensionMult,
-  calculateAscensionPointsGain,
-} from "../Gang/formulas/formulas";
-import { favorToRep as calculateFavorToRep, repToFavor as calculateRepToFavor } from "../Faction/formulas/favor";
-import { repFromDonation } from "../Faction/formulas/donation";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
+import { defaultMultipliers } from "../PersonObjects/Multipliers";
+import { calculateExp, calculateSkill } from "../PersonObjects/formulas/skill";
+import { Player as player } from "../Player";
+import { CompletedProgramName } from "../Programs/Programs";
+import { numCycleForGrowthCorrected } from "../Server/ServerHelpers";
+import { calculateServerGrowth } from "../Server/formulas/grow";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { calculateCompanyWorkStats } from "../Work/Formulas";
-import { Companies } from "../Company/Companies";
 import { calculateClassEarnings } from "../Work/Formulas";
 import { calculateFactionExp, calculateFactionRep } from "../Work/Formulas";
-import { FactionWorkType, GymType, UniversityClassType, LocationName, CityName } from "../Enums";
-
-import { defaultMultipliers } from "../PersonObjects/Multipliers";
 import { checkEnum, findEnumMember } from "../utils/helpers/enum";
-import { JobName } from "../Enums";
-import { CompanyPositions } from "../Company/CompanyPositions";
-import { findCrime } from "../Crime/CrimeHelpers";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {

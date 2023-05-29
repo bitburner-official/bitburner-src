@@ -2,27 +2,25 @@
 // (right-side panel in the Industry UI)
 import React, { useState } from "react";
 
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import { CityName } from "../../Enums";
+import { Money } from "../../ui/React/Money";
+import { formatBigNumber, formatCorpStat, formatMoney, formatQuality } from "../../ui/formatNumber";
+import { isString } from "../../utils/helpers/string";
 import { Material } from "../Material";
 import { Warehouse } from "../Warehouse";
-import { ExportModal } from "./modals/ExportModal";
-import { MaterialMarketTaModal } from "./modals/MaterialMarketTaModal";
-import { SellMaterialModal } from "./modals/SellMaterialModal";
-import { PurchaseMaterialModal } from "./modals/PurchaseMaterialModal";
-
-import { formatBigNumber, formatCorpStat, formatMoney, formatQuality } from "../../ui/formatNumber";
-
-import { isString } from "../../utils/helpers/string";
-import { Money } from "../../ui/React/Money";
-import { useCorporation, useDivision } from "./Context";
-
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import { LimitMaterialProductionModal } from "./modals/LimitMaterialProductionModal";
-import { CityName } from "../../Enums";
 import { CorpUnlockName } from "../data/Enums";
+import { useCorporation, useDivision } from "./Context";
+import { ExportModal } from "./modals/ExportModal";
+import { LimitMaterialProductionModal } from "./modals/LimitMaterialProductionModal";
+import { MaterialMarketTaModal } from "./modals/MaterialMarketTaModal";
+import { PurchaseMaterialModal } from "./modals/PurchaseMaterialModal";
+import { SellMaterialModal } from "./modals/SellMaterialModal";
 
 interface IMaterialProps {
   warehouse: Warehouse;

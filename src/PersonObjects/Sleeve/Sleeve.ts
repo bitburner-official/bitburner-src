@@ -6,39 +6,35 @@
  *
  * Sleeves are unlocked in BitNode-10.
  */
-
+import { SleevePerson } from "@nsdefs";
 import { Player } from "@player";
-import { Person } from "../Person";
 
 import { Augmentation } from "../../Augmentation/Augmentation";
-
+import { Contracts } from "../../Bladeburner/data/Contracts";
 import { Companies } from "../../Company/Companies";
 import { Company } from "../../Company/Company";
 import { CompanyPosition } from "../../Company/CompanyPosition";
 import { CompanyPositions } from "../../Company/CompanyPositions";
-import { Contracts } from "../../Bladeburner/data/Contracts";
 import { CONSTANTS } from "../../Constants";
 import { CityName, CrimeType, GymType, LocationName, UniversityClassType } from "../../Enums";
-
-import { Factions } from "../../Faction/Factions";
-
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
-import { formatPercent } from "../../ui/formatNumber";
 import { FactionWorkType } from "../../Enums";
-import { SleeveWork } from "./Work/Work";
-import { SleeveClassWork } from "./Work/SleeveClassWork";
+import { Factions } from "../../Faction/Factions";
 import { ClassType } from "../../Work/ClassWork";
-import { SleeveSynchroWork } from "./Work/SleeveSynchroWork";
-import { SleeveRecoveryWork } from "./Work/SleeveRecoveryWork";
-import { SleeveFactionWork } from "./Work/SleeveFactionWork";
-import { SleeveCompanyWork } from "./Work/SleeveCompanyWork";
-import { SleeveInfiltrateWork } from "./Work/SleeveInfiltrateWork";
-import { SleeveSupportWork } from "./Work/SleeveSupportWork";
-import { SleeveBladeburnerWork } from "./Work/SleeveBladeburnerWork";
-import { SleeveCrimeWork } from "./Work/SleeveCrimeWork";
-import * as sleeveMethods from "./SleeveMethods";
-import { SleevePerson } from "@nsdefs";
+import { formatPercent } from "../../ui/formatNumber";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
+import { Person } from "../Person";
 import { calculateIntelligenceBonus } from "../formulas/intelligence";
+import * as sleeveMethods from "./SleeveMethods";
+import { SleeveBladeburnerWork } from "./Work/SleeveBladeburnerWork";
+import { SleeveClassWork } from "./Work/SleeveClassWork";
+import { SleeveCompanyWork } from "./Work/SleeveCompanyWork";
+import { SleeveCrimeWork } from "./Work/SleeveCrimeWork";
+import { SleeveFactionWork } from "./Work/SleeveFactionWork";
+import { SleeveInfiltrateWork } from "./Work/SleeveInfiltrateWork";
+import { SleeveRecoveryWork } from "./Work/SleeveRecoveryWork";
+import { SleeveSupportWork } from "./Work/SleeveSupportWork";
+import { SleeveSynchroWork } from "./Work/SleeveSynchroWork";
+import { SleeveWork } from "./Work/Work";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: SleeveWork | null = null;

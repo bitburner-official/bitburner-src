@@ -1,51 +1,49 @@
-import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
+import React from "react";
+
+import { Button, Typography } from "@mui/material";
+import { Player } from "@player";
+
+import { calculateAchievements } from "./Achievements/Achievements";
 import { initAugmentations } from "./Augmentation/AugmentationHelpers";
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
-import { initSourceFiles } from "./SourceFile/SourceFiles";
 import { generateRandomContract } from "./CodingContractGenerator";
 import { initCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
-import { Factions, initFactions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
-import { processPassiveFactionRepGain, inviteToFaction } from "./Faction/FactionHelpers";
-import { Router } from "./ui/GameRoot";
-import { Page } from "./ui/Router";
-import { SetupTextEditor } from "./ScriptEditor/ui/ScriptEditorRoot";
-import "./PersonObjects/Player/PlayerObject"; // For side-effect of creating Player
-
-import {
-  getHackingWorkRepGain,
-  getFactionSecurityWorkRepGain,
-  getFactionFieldWorkRepGain,
-} from "./PersonObjects/formulas/reputation";
+import { startExploits } from "./Exploits/loops";
+import { inviteToFaction, processPassiveFactionRepGain } from "./Faction/FactionHelpers";
+import { Factions, initFactions } from "./Faction/Factions";
 import { hasHacknetServers, processHacknetEarnings } from "./Hacknet/HacknetHelpers";
 import { iTutorialStart } from "./InteractiveTutorial";
 import { checkForMessagesToSend } from "./Message/MessageHelpers";
 import { loadAllRunningScripts, updateOnlineScriptTimes } from "./NetscriptWorker";
-import { Player } from "@player";
-import { saveObject, loadGame } from "./SaveObject";
+import "./PersonObjects/Player/PlayerObject";
+// For side-effect of creating Player
+import {
+  getFactionFieldWorkRepGain,
+  getFactionSecurityWorkRepGain,
+  getHackingWorkRepGain,
+} from "./PersonObjects/formulas/reputation";
+import { prestigeSourceFile } from "./Prestige";
+import { loadGame, saveObject } from "./SaveObject";
+import { SetupTextEditor } from "./ScriptEditor/ui/ScriptEditorRoot";
 import { initForeignServers } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
-import { FormatsNeedToChange } from "./ui/formatNumber";
+import { initSourceFiles } from "./SourceFile/SourceFiles";
 import { initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
 import { Terminal } from "./Terminal";
-
-import { Money } from "./ui/React/Money";
-import { Hashes } from "./ui/React/Hashes";
-import { Reputation } from "./ui/React/Reputation";
-
-import { AlertEvents } from "./ui/React/AlertManager";
-import { exceptionAlert } from "./utils/helpers/exceptionAlert";
-
-import { startExploits } from "./Exploits/loops";
-import { calculateAchievements } from "./Achievements/Achievements";
-
-import React from "react";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
-import { Button, Typography } from "@mui/material";
+import { Router } from "./ui/GameRoot";
+import { AlertEvents } from "./ui/React/AlertManager";
+import { Hashes } from "./ui/React/Hashes";
+import { Money } from "./ui/React/Money";
+import { Reputation } from "./ui/React/Reputation";
 import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
-import { prestigeSourceFile } from "./Prestige";
+import { Page } from "./ui/Router";
+import { FormatsNeedToChange } from "./ui/formatNumber";
+import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
+import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {

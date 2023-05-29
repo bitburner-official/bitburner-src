@@ -1,6 +1,7 @@
 import React from "react";
-import Tooltip, { TooltipProps } from "@mui/material/Tooltip";
+
 import Button, { ButtonProps } from "@mui/material/Button";
+import Tooltip, { TooltipProps } from "@mui/material/Tooltip";
 
 interface ButtonWithTooltipProps {
   /** "" if the button is not disabled. If this is truthy, the button is disabled and this tooltip is displayed. */

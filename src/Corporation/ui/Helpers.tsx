@@ -1,4 +1,5 @@
 import { CorpMaterialName } from "@nsdefs";
+
 import { Division } from "../Division";
 
 // Returns a boolean indicating whether the given material is relevant for the

@@ -1,3 +1,9 @@
+import { CONSTANTS } from "../Constants";
+import { NetscriptContext } from "../Netscript/APIWrapper";
+import { helpers } from "../Netscript/NetscriptHelpers";
+import { dialogBoxCreate } from "../ui/React/DialogBox";
+import { formatMoney } from "../ui/formatNumber";
+import { Reviver } from "../utils/JSONReviver";
 import { IOrderBook } from "./IOrderBook";
 import { IStockMarket } from "./IStockMarket";
 import { Order } from "./Order";
@@ -8,14 +14,6 @@ import { InitStockMetadata } from "./data/InitStockMetadata";
 import { OrderTypes } from "./data/OrderTypes";
 import { PositionTypes } from "./data/PositionTypes";
 import { StockSymbols } from "./data/StockSymbols";
-
-import { CONSTANTS } from "../Constants";
-import { formatMoney } from "../ui/formatNumber";
-
-import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { Reviver } from "../utils/JSONReviver";
-import { NetscriptContext } from "../Netscript/APIWrapper";
-import { helpers } from "../Netscript/NetscriptHelpers";
 
 export let StockMarket: IStockMarket = {
   lastUpdate: 0,

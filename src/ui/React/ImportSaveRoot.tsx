@@ -1,38 +1,36 @@
 import React, { useEffect, useState } from "react";
 
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
+import ThumbDownAlt from "@mui/icons-material/ThumbDownAlt";
+import ThumbUpAlt from "@mui/icons-material/ThumbUpAlt";
+import WarningIcon from "@mui/icons-material/Warning";
 import {
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableBody,
-  TableContainer,
-  TableCell,
-  Typography,
-  Tooltip,
   Box,
   Button,
   ButtonGroup,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
 } from "@mui/material";
-
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
 import { Theme } from "@mui/material/styles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 
-import ThumbUpAlt from "@mui/icons-material/ThumbUpAlt";
-import ThumbDownAlt from "@mui/icons-material/ThumbDownAlt";
-import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import WarningIcon from "@mui/icons-material/Warning";
-
+import { pushImportResult } from "../../Electron";
 import { ImportData, saveObject } from "../../SaveObject";
 import { Settings } from "../../Settings/Settings";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { formatMoney, formatNumberNoSuffix } from "../formatNumber";
-import { ConfirmationModal } from "./ConfirmationModal";
-import { pushImportResult } from "../../Electron";
 import { Router } from "../GameRoot";
 import { Page } from "../Router";
+import { formatMoney, formatNumberNoSuffix } from "../formatNumber";
+import { ConfirmationModal } from "./ConfirmationModal";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -1,8 +1,7 @@
-import { codingContractTypesMetadata, DescriptionFunc, GeneratorFunc, SolverFunc } from "./data/codingcontracttypes";
-
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
-import { CodingContractEvent } from "./ui/React/CodingContractModal";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
+import { DescriptionFunc, GeneratorFunc, SolverFunc, codingContractTypesMetadata } from "./data/codingcontracttypes";
+import { CodingContractEvent } from "./ui/React/CodingContractModal";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
 
 /* Represents different types of problems that a Coding Contract can have */
 class CodingContractType {

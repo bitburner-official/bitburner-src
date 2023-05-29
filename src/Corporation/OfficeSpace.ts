@@ -1,11 +1,11 @@
-import { CorpEmployeeJob } from "./data/Enums";
-import * as corpConstants from "./data/Constants";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { Division } from "./Division";
-import { Corporation } from "./Corporation";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { CityName } from "../Enums";
 import { createEnumKeyedRecord, getRecordKeys } from "../Types/Record";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { Corporation } from "./Corporation";
+import { Division } from "./Division";
+import * as corpConstants from "./data/Constants";
+import { CorpEmployeeJob } from "./data/Enums";
 
 interface IParams {
   city: CityName;

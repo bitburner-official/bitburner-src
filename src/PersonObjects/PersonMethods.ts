@@ -1,8 +1,9 @@
+import { WorkStats } from "@nsdefs";
+import { Player } from "@player";
+
+import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { Person } from "./Person";
 import { calculateSkill } from "./formulas/skill";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { Player } from "@player";
-import { WorkStats } from "@nsdefs";
 
 export function gainHackingExp(this: Person, exp: number): void {
   if (isNaN(exp)) {

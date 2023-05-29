@@ -1,26 +1,26 @@
-import { Player as player } from "../Player";
-import { HacknetServerConstants } from "../Hacknet/data/Constants";
+import { Hacknet as IHacknet, NodeStats } from "@nsdefs";
+
 import {
   getCostOfNextHacknetNode,
   getCostOfNextHacknetServer,
   hasHacknetServers,
+  purchaseCacheUpgrade,
+  purchaseCoreUpgrade,
   purchaseHacknet,
+  purchaseHashUpgrade,
   purchaseLevelUpgrade,
   purchaseRamUpgrade,
-  purchaseCoreUpgrade,
-  purchaseCacheUpgrade,
-  purchaseHashUpgrade,
   updateHashManagerCapacity,
 } from "../Hacknet/HacknetHelpers";
-import { HacknetServer } from "../Hacknet/HacknetServer";
 import { HacknetNode } from "../Hacknet/HacknetNode";
-import { HashUpgrades } from "../Hacknet/HashUpgrades";
+import { HacknetServer } from "../Hacknet/HacknetServer";
 import { HashUpgrade } from "../Hacknet/HashUpgrade";
-import { GetServer } from "../Server/AllServers";
-
-import { Hacknet as IHacknet, NodeStats } from "@nsdefs";
+import { HashUpgrades } from "../Hacknet/HashUpgrades";
+import { HacknetServerConstants } from "../Hacknet/data/Constants";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
+import { Player as player } from "../Player";
+import { GetServer } from "../Server/AllServers";
 
 export function NetscriptHacknet(): InternalAPI<IHacknet> {
   // Utility function to get Hacknet Node object

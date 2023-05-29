@@ -1,19 +1,21 @@
 import React, { useState } from "react";
-import { dialogBoxCreate } from "../../../ui/React/DialogBox";
-import { Modal } from "../../../ui/React/Modal";
-import { IndustriesData } from "../../IndustryData";
-import { IndustryType } from "../../data/Enums";
-import { MakeProduct } from "../../Actions";
-import { useCorporation, useDivision } from "../Context";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
+
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { KEY } from "../../../utils/helpers/keyCodes";
-import { NumberInput } from "../../../ui/React/NumberInput";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
 import { CityName } from "../../../Enums";
 import { getRecordKeys } from "../../../Types/Record";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+import { Modal } from "../../../ui/React/Modal";
+import { NumberInput } from "../../../ui/React/NumberInput";
+import { KEY } from "../../../utils/helpers/keyCodes";
+import { MakeProduct } from "../../Actions";
+import { IndustriesData } from "../../IndustryData";
+import { IndustryType } from "../../data/Enums";
+import { useCorporation, useDivision } from "../Context";
 
 interface IProps {
   open: boolean;

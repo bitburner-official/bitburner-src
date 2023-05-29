@@ -1,11 +1,13 @@
-import { Sleeve } from "../Sleeve";
+import React from "react";
+
+import { Typography } from "@mui/material";
+
+import { CONSTANTS } from "../../../Constants";
+import { Modal } from "../../../ui/React/Modal";
+import { StatsTable } from "../../../ui/React/StatsTable";
 import { formatExp, formatPercent } from "../../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
-import { CONSTANTS } from "../../../Constants";
-import { Typography } from "@mui/material";
-import { StatsTable } from "../../../ui/React/StatsTable";
-import { Modal } from "../../../ui/React/Modal";
-import React from "react";
+import { Sleeve } from "../Sleeve";
 
 interface IProps {
   open: boolean;

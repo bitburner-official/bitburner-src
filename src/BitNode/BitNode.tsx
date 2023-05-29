@@ -1,8 +1,10 @@
 import React from "react";
+
 import { Player } from "@player";
-import { BitNodeMultipliers, IBitNodeMultipliers } from "./BitNodeMultipliers";
-import { FactionNames } from "../Faction/data/FactionNames";
+
 import { CityName } from "../Enums";
+import { FactionNames } from "../Faction/data/FactionNames";
+import { BitNodeMultipliers, IBitNodeMultipliers } from "./BitNodeMultipliers";
 
 class BitNode {
   // A short description, or tagline, about the BitNode

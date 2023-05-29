@@ -1,16 +1,16 @@
-import { FactionNames } from "../Faction/data/FactionNames";
-import { GangConstants } from "../Gang/data/Constants";
+import { EquipmentStats, GangOtherInfoObject, Gang as IGang } from "@nsdefs";
 import { Player } from "@player";
-import { Gang } from "../Gang/Gang";
+
+import { FactionNames } from "../Faction/data/FactionNames";
 import { AllGangs } from "../Gang/AllGangs";
-import { GangMemberTasks } from "../Gang/GangMemberTasks";
-import { GangMemberUpgrades } from "../Gang/GangMemberUpgrades";
+import { Gang } from "../Gang/Gang";
 import { GangMember } from "../Gang/GangMember";
 import { GangMemberTask } from "../Gang/GangMemberTask";
-import { helpers } from "../Netscript/NetscriptHelpers";
-
-import { Gang as IGang, EquipmentStats, GangOtherInfoObject } from "@nsdefs";
+import { GangMemberTasks } from "../Gang/GangMemberTasks";
+import { GangMemberUpgrades } from "../Gang/GangMemberUpgrades";
+import { GangConstants } from "../Gang/data/Constants";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import { helpers } from "../Netscript/NetscriptHelpers";
 
 export function NetscriptGang(): InternalAPI<IGang> {
   /** Functions as an API check and also returns the gang object */

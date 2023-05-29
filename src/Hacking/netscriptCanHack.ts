@@ -4,10 +4,10 @@
  *
  * The returned status object's message should be used for logging in Netscript
  */
-import { IReturnStatus } from "../types";
-
 import { Player } from "@player";
+
 import { Server } from "../Server/Server";
+import { IReturnStatus } from "../types";
 
 function baseCheck(server: Server, fnName: string): IReturnStatus {
   const hostname = server.hostname;

@@ -1,17 +1,18 @@
+import { Player } from "@player";
+
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { Gang } from "./Gang";
 import { GangMemberTask } from "./GangMemberTask";
 import { GangMemberTasks } from "./GangMemberTasks";
 import { GangMemberUpgrade } from "./GangMemberUpgrade";
 import { GangMemberUpgrades } from "./GangMemberUpgrades";
 import { IAscensionResult } from "./IAscensionResult";
-import { Player } from "@player";
-import { Gang } from "./Gang";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import {
-  calculateRespectGain,
-  calculateMoneyGain,
-  calculateWantedLevelGain,
   calculateAscensionMult,
   calculateAscensionPointsGain,
+  calculateMoneyGain,
+  calculateRespectGain,
+  calculateWantedLevelGain,
 } from "./formulas/formulas";
 
 interface IMults {

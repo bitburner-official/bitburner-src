@@ -1,17 +1,17 @@
-import { Player } from "@player";
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { CityName } from "../Enums";
-import { findCrime } from "../Crime/CrimeHelpers";
-import { Augmentation } from "../Augmentation/Augmentation";
-
 import { Sleeve } from "@nsdefs";
-import { checkEnum } from "../utils/helpers/enum";
-import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
-import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
-import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
-import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
-import { helpers } from "../Netscript/NetscriptHelpers";
+import { Player } from "@player";
 import { cloneDeep } from "lodash";
+
+import { Augmentation } from "../Augmentation/Augmentation";
+import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import { findCrime } from "../Crime/CrimeHelpers";
+import { CityName } from "../Enums";
+import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
+import { helpers } from "../Netscript/NetscriptHelpers";
+import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
+import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
+import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
+import { checkEnum } from "../utils/helpers/enum";
 
 export function NetscriptSleeve(): InternalAPI<Sleeve> {
   const checkSleeveAPIAccess = function (ctx: NetscriptContext) {

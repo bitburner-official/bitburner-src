@@ -4,21 +4,18 @@
  * Hacknet Nodes are specialized machines that passively earn the player money over time.
  * They can be upgraded to increase their production
  */
-import { IHacknetNode } from "./IHacknetNode";
-
 import { CONSTANTS } from "../Constants";
-
-import {
-  calculateMoneyGainRate,
-  calculateLevelUpgradeCost,
-  calculateCoreUpgradeCost,
-  calculateRamUpgradeCost,
-} from "./formulas/HacknetNodes";
-import { HacknetNodeConstants } from "./data/Constants";
-
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { ObjectValidator, minMax } from "../utils/Validator";
+import { IHacknetNode } from "./IHacknetNode";
+import { HacknetNodeConstants } from "./data/Constants";
+import {
+  calculateCoreUpgradeCost,
+  calculateLevelUpgradeCost,
+  calculateMoneyGainRate,
+  calculateRamUpgradeCost,
+} from "./formulas/HacknetNodes";
 
 export class HacknetNode implements IHacknetNode {
   static validationData: ObjectValidator<HacknetNode> = {

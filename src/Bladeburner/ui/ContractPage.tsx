@@ -1,7 +1,9 @@
 import * as React from "react";
-import { ContractList } from "./ContractList";
-import { Bladeburner } from "../Bladeburner";
+
 import Typography from "@mui/material/Typography";
+
+import { Bladeburner } from "../Bladeburner";
+import { ContractList } from "./ContractList";
 
 interface IProps {
   bladeburner: Bladeburner;

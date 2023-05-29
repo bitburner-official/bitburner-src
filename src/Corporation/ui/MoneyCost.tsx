@@ -1,9 +1,11 @@
 import * as React from "react";
+
+import { Theme } from "@mui/material/styles";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
 import { formatMoney } from "../../ui/formatNumber";
 import { Corporation } from "../Corporation";
-import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

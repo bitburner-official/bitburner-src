@@ -1,14 +1,15 @@
-import { Player } from "../../../src/Player";
-import { NetscriptFunctions } from "../../../src/NetscriptFunctions";
-import { RamCosts, getRamCost, RamCostConstants, RamCostTree } from "../../../src/Netscript/RamCostGenerator";
+import { Singularity } from "@nsdefs";
+import { InternalAPI, NetscriptContext } from "src/Netscript/APIWrapper";
+
 import { Environment } from "../../../src/Netscript/Environment";
+import { RamCostConstants, RamCostTree, RamCosts, getRamCost } from "../../../src/Netscript/RamCostGenerator";
+import { WorkerScript } from "../../../src/Netscript/WorkerScript";
+import { NetscriptFunctions } from "../../../src/NetscriptFunctions";
+import { ns } from "../../../src/NetscriptFunctions";
+import { Player } from "../../../src/Player";
+import { calculateRamUsage } from "../../../src/Script/RamCalculations";
 import { RunningScript } from "../../../src/Script/RunningScript";
 import { Script } from "../../../src/Script/Script";
-import { WorkerScript } from "../../../src/Netscript/WorkerScript";
-import { calculateRamUsage } from "../../../src/Script/RamCalculations";
-import { ns } from "../../../src/NetscriptFunctions";
-import { InternalAPI, NetscriptContext } from "src/Netscript/APIWrapper";
-import { Singularity } from "@nsdefs";
 
 type PotentiallyAsyncFunction = (arg?: unknown) => { catch?: PotentiallyAsyncFunction };
 

@@ -2,15 +2,16 @@
 // These are the tabs at the top of the UI that let you switch to different
 // divisions, see an overview of your corporation, or create a new industry
 import React, { useState } from "react";
+
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import { Player } from "@player";
+
+import { useRerender } from "../../ui/React/hooks";
+import { Context } from "./Context";
 import { MainPanel } from "./MainPanel";
 import { NewDivisionTab } from "./NewDivisionTab";
-import { Player } from "@player";
-import { Context } from "./Context";
 import { Overview } from "./Overview";
-
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import { useRerender } from "../../ui/React/hooks";
 
 export function CorporationRoot(): React.ReactElement {
   const rerender = useRerender(200);

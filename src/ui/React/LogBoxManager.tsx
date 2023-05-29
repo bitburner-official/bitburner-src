@@ -1,30 +1,32 @@
-import React, { useState, useEffect, useRef } from "react";
-import { EventEmitter } from "../../utils/EventEmitter";
-import { RunningScript } from "../../Script/RunningScript";
-import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import React, { useEffect, useRef, useState } from "react";
 import Draggable, { DraggableEvent } from "react-draggable";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
-import IconButton from "@mui/material/IconButton";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import StopCircleIcon from "@mui/icons-material/StopCircle";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
-import { workerScripts } from "../../Netscript/WorkerScripts";
-import { startWorkerScript } from "../../NetscriptWorker";
-import { GetServer } from "../../Server/AllServers";
-import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
 import { debounce } from "lodash";
+
+import { workerScripts } from "../../Netscript/WorkerScripts";
+import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
+import { startWorkerScript } from "../../NetscriptWorker";
+import { RunningScript } from "../../Script/RunningScript";
+import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
+import { GetServer } from "../../Server/AllServers";
 import { Settings } from "../../Settings/Settings";
+import { EventEmitter } from "../../utils/EventEmitter";
 import { ANSIITypography } from "./ANSIITypography";
-import { useRerender } from "./hooks";
 import { dialogBoxCreate } from "./DialogBox";
+import { useRerender } from "./hooks";
 
 let layerCounter = 0;
 

@@ -1,27 +1,25 @@
-import { Augmentation } from "./Augmentation";
-import { StaticAugmentations } from "./StaticAugmentations";
-import { PlayerOwnedAugmentation } from "./PlayerOwnedAugmentation";
-import { AugmentationNames } from "./data/AugmentationNames";
+import { Player } from "@player";
 
 import { CONSTANTS } from "../Constants";
 import { Factions, factionExists } from "../Faction/Factions";
-import { Player } from "@player";
-import { prestigeAugmentation } from "../Prestige";
-
-import { dialogBoxCreate } from "../ui/React/DialogBox";
-
 import { FactionNames } from "../Faction/data/FactionNames";
+import { mergeMultipliers } from "../PersonObjects/Multipliers";
+import { prestigeAugmentation } from "../Prestige";
+import { Router } from "../ui/GameRoot";
+import { dialogBoxCreate } from "../ui/React/DialogBox";
+import { Page } from "../ui/Router";
+import { Augmentation } from "./Augmentation";
+import { PlayerOwnedAugmentation } from "./PlayerOwnedAugmentation";
+import { StaticAugmentations } from "./StaticAugmentations";
 import {
   initBladeburnerAugmentations,
   initChurchOfTheMachineGodAugmentations,
   initGeneralAugmentations,
-  initSoAAugmentations,
   initNeuroFluxGovernor,
+  initSoAAugmentations,
   initUnstableCircadianModulator,
 } from "./data/AugmentationCreator";
-import { Router } from "../ui/GameRoot";
-import { Page } from "../ui/Router";
-import { mergeMultipliers } from "../PersonObjects/Multipliers";
+import { AugmentationNames } from "./data/AugmentationNames";
 
 export function AddToStaticAugmentations(aug: Augmentation): void {
   const name = aug.name;

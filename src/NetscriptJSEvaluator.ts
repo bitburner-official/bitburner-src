@@ -2,13 +2,13 @@
  * Uses the acorn.js library to parse a script's code into an AST and
  * recursively walk through that AST to replace import urls with blobs
  */
-import * as walk from "acorn-walk";
 import { parse } from "acorn";
+import * as walk from "acorn-walk";
 
-import { LoadedModule, ScriptURL, ScriptModule } from "./Script/LoadedModule";
-import { Script } from "./Script/Script";
-import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
 import { root } from "./Paths/Directory";
+import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
+import { LoadedModule, ScriptModule, ScriptURL } from "./Script/LoadedModule";
+import { Script } from "./Script/Script";
 
 // Acorn type def is straight up incomplete so we have to fill with our own.
 export type Node = any;

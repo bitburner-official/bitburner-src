@@ -1,8 +1,8 @@
-import { OwnedAugmentationsOrderSetting, PurchaseAugmentationsOrderSetting } from "./SettingEnums";
-import { defaultTheme } from "../Themes/Themes";
-import { defaultStyles } from "../Themes/Styles";
 import { WordWrapOptions } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
+import { defaultStyles } from "../Themes/Styles";
+import { defaultTheme } from "../Themes/Themes";
+import { OwnedAugmentationsOrderSetting, PurchaseAugmentationsOrderSetting } from "./SettingEnums";
 
 /** The current options the player has customized to their play style. */
 export const Settings = {

@@ -1,22 +1,22 @@
 // Class definition for a single Augmentation object
 import * as React from "react";
 
-import type { CompletedProgramName } from "../Programs/Programs";
+import { Player } from "@player";
+
+import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { CONSTANTS } from "../Constants";
 import { Faction } from "../Faction/Faction";
 import { Factions } from "../Faction/Factions";
-import { formatPercent } from "../ui/formatNumber";
-import { Money } from "../ui/React/Money";
-
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { FactionNames } from "../Faction/data/FactionNames";
-import { Player } from "@player";
-import { AugmentationNames } from "./data/AugmentationNames";
-import { CONSTANTS } from "../Constants";
-import { StaticAugmentations } from "./StaticAugmentations";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { getBaseAugmentationPriceMultiplier, getGenericAugmentationPriceMultiplier } from "./AugmentationHelpers";
-import { initSoAAugmentations } from "./data/AugmentationCreator";
 import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
+import type { CompletedProgramName } from "../Programs/Programs";
+import { Money } from "../ui/React/Money";
+import { formatPercent } from "../ui/formatNumber";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { getBaseAugmentationPriceMultiplier, getGenericAugmentationPriceMultiplier } from "./AugmentationHelpers";
+import { StaticAugmentations } from "./StaticAugmentations";
+import { initSoAAugmentations } from "./data/AugmentationCreator";
+import { AugmentationNames } from "./data/AugmentationNames";
 
 export interface AugmentationCosts {
   moneyCost: number;

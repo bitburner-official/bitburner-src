@@ -4,20 +4,18 @@
  */
 import React from "react";
 
-import { CovenantSleeveMemoryUpgrade } from "./CovenantSleeveMemoryUpgrade";
-
-import { Sleeve } from "../Sleeve";
-import { BaseCostPerSleeve, MaxSleevesFromCovenant } from "../SleeveCovenantPurchases";
-
-import { Money } from "../../../ui/React/Money";
-import { Modal } from "../../../ui/React/Modal";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import { Player } from "@player";
 
-import { dialogBoxCreate } from "../../../ui/React/DialogBox";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import { FactionNames } from "../../../Faction/data/FactionNames";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+import { Modal } from "../../../ui/React/Modal";
+import { Money } from "../../../ui/React/Money";
 import { useRerender } from "../../../ui/React/hooks";
+import { Sleeve } from "../Sleeve";
+import { BaseCostPerSleeve, MaxSleevesFromCovenant } from "../SleeveCovenantPurchases";
+import { CovenantSleeveMemoryUpgrade } from "./CovenantSleeveMemoryUpgrade";
 
 interface IProps {
   open: boolean;

@@ -1,14 +1,12 @@
 // Server and HacknetServer-related methods for the Player class (PlayerObject)
-import { CONSTANTS } from "../../Constants";
-
 import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
-import { Server } from "../../Server/Server";
-import { BaseServer } from "../../Server/BaseServer";
-import { HacknetServer } from "../../Hacknet/HacknetServer";
-import { GetServer, AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
-import { SpecialServers } from "../../Server/data/SpecialServers";
+import { CONSTANTS } from "../../Constants";
 import { hasHacknetServers } from "../../Hacknet/HacknetHelpers";
-
+import { HacknetServer } from "../../Hacknet/HacknetServer";
+import { AddToAllServers, GetServer, createUniqueRandomIp } from "../../Server/AllServers";
+import { BaseServer } from "../../Server/BaseServer";
+import { Server } from "../../Server/Server";
+import { SpecialServers } from "../../Server/data/SpecialServers";
 import type { PlayerObject } from "./PlayerObject";
 
 export function hasTorRouter(this: PlayerObject): boolean {

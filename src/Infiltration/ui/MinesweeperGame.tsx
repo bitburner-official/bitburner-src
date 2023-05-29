@@ -1,9 +1,11 @@
+import React, { useEffect, useState } from "react";
+
 import { Close, Flag, Report } from "@mui/icons-material";
 import { Box, Paper, Typography } from "@mui/material";
-import { uniqueId } from "lodash";
-import React, { useEffect, useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { Player } from "@player";
+import { uniqueId } from "lodash";
+
+import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { Settings } from "../../Settings/Settings";
 import { KEY } from "../../utils/helpers/keyCodes";
 import { downArrowSymbol, getArrow, leftArrowSymbol, rightArrowSymbol, upArrowSymbol } from "../utils";

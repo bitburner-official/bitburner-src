@@ -1,10 +1,10 @@
-import { Terminal } from "../../Terminal";
-import { BaseServer } from "../../Server/BaseServer";
-import { runScript } from "./runScript";
-import { runProgram } from "./runProgram";
-import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasContractExtension } from "../../Paths/ContractFilePath";
 import { hasProgramExtension } from "../../Paths/ProgramFilePath";
+import { hasScriptExtension } from "../../Paths/ScriptFilePath";
+import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
+import { runProgram } from "./runProgram";
+import { runScript } from "./runScript";
 
 export function run(args: (string | number | boolean)[], server: BaseServer): void {
   // Run a program or a script

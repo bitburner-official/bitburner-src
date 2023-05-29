@@ -1,13 +1,14 @@
 import React from "react";
-import { ActiveFragment } from "../ActiveFragment";
-import { StaneksGift } from "../StaneksGift";
-import { FragmentType, Effect } from "../FragmentType";
-import { formatPercent } from "../../ui/formatNumber";
 
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import Table from "@mui/material/Table";
 import { TableBody, TableCell, TableRow } from "@mui/material";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import Typography from "@mui/material/Typography";
+
+import { formatPercent } from "../../ui/formatNumber";
+import { ActiveFragment } from "../ActiveFragment";
+import { Effect, FragmentType } from "../FragmentType";
+import { StaneksGift } from "../StaneksGift";
 
 interface IProps {
   gift: StaneksGift;

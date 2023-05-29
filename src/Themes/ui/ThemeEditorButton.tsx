@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+
+import ColorizeIcon from "@mui/icons-material/Colorize";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
+
 import { ThemeEditorModal } from "./ThemeEditorModal";
-import ColorizeIcon from "@mui/icons-material/Colorize";
 
 export function ThemeEditorButton(): React.ReactElement {
   const [themeEditorOpen, setThemeEditorOpen] = useState(false);

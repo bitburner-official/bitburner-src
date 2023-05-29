@@ -1,4 +1,3 @@
-import { FilePath, isFilePath } from "../../../src/Paths/FilePath";
 import {
   Directory,
   getFirstDirectoryInPath,
@@ -6,6 +5,7 @@ import {
   isDirectoryPath,
   resolveDirectory,
 } from "../../../src/Paths/Directory";
+import { FilePath, isFilePath } from "../../../src/Paths/FilePath";
 
 const validBaseDirectory = "foo/bar/";
 if (!isDirectoryPath(validBaseDirectory) || !isAbsolutePath(validBaseDirectory)) {

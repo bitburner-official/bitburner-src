@@ -1,11 +1,12 @@
 import React from "react";
 
-import { Bladeburner } from "../Bladeburner";
-import { BlackOperation } from "../BlackOperation";
-import { Player } from "@player";
 import Button from "@mui/material/Button";
+import { Player } from "@player";
+
 import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { ActionIdentifier } from "../ActionIdentifier";
+import { BlackOperation } from "../BlackOperation";
+import { Bladeburner } from "../Bladeburner";
 
 interface IProps {
   bladeburner: Bladeburner;

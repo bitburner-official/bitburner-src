@@ -4,10 +4,9 @@
  */
 import * as React from "react";
 
-import { StockTickerOrder } from "./StockTickerOrder";
-
 import { Order } from "../Order";
 import { Stock } from "../Stock";
+import { StockTickerOrder } from "./StockTickerOrder";
 
 interface IProps {
   orders: Order[];

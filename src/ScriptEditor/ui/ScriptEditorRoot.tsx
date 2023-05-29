@@ -1,52 +1,51 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Editor } from "./Editor";
+import React, { useEffect, useRef, useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+
+import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import SettingsIcon from "@mui/icons-material/Settings";
+import SyncIcon from "@mui/icons-material/Sync";
+import { TextField, Tooltip } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+import { debounce } from "lodash";
 import * as monaco from "monaco-editor";
 // @ts-expect-error This library does not have types.
 import * as MonacoVim from "monaco-vim";
+import { ContentFilePath } from "src/Paths/ContentFile";
+import { TextFilePath } from "src/Paths/TextFilePath";
+
+import { ITutorial, iTutorialNextStep, iTutorialSteps } from "../../InteractiveTutorial";
+import { enums, ns } from "../../NetscriptFunctions";
+import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
+import { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { saveObject } from "../../SaveObject";
+import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
+import { calculateRamUsage, checkInfiniteLoop } from "../../Script/RamCalculations";
+import { GetServer } from "../../Server/AllServers";
+import { Settings } from "../../Settings/Settings";
+import { Router } from "../../ui/GameRoot";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { Modal } from "../../ui/React/Modal";
+import { PromptEvent } from "../../ui/React/PromptManager";
+import { useRerender } from "../../ui/React/hooks";
+import { Page } from "../../ui/Router";
+import { formatRam } from "../../ui/formatNumber";
+import { Editor } from "./Editor";
+import { Options } from "./Options";
+import { OptionsModal } from "./OptionsModal";
+import { loadThemes, makeTheme, sanitizeTheme } from "./themes";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 type ITextModel = monaco.editor.ITextModel;
-import { OptionsModal } from "./OptionsModal";
-import { Options } from "./Options";
-import { Player } from "@player";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { ScriptFilePath } from "../../Paths/ScriptFilePath";
-import { calculateRamUsage, checkInfiniteLoop } from "../../Script/RamCalculations";
-import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
-import { formatRam } from "../../ui/formatNumber";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import SearchIcon from "@mui/icons-material/Search";
-
-import { ns, enums } from "../../NetscriptFunctions";
-import { Settings } from "../../Settings/Settings";
-import { iTutorialNextStep, ITutorial, iTutorialSteps } from "../../InteractiveTutorial";
-import { debounce } from "lodash";
-import { saveObject } from "../../SaveObject";
-import { loadThemes, makeTheme, sanitizeTheme } from "./themes";
-import { GetServer } from "../../Server/AllServers";
-
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Box from "@mui/material/Box";
-import SettingsIcon from "@mui/icons-material/Settings";
-import SyncIcon from "@mui/icons-material/Sync";
-import CloseIcon from "@mui/icons-material/Close";
-import Table from "@mui/material/Table";
-import TableCell from "@mui/material/TableCell";
-import TableRow from "@mui/material/TableRow";
-import TableBody from "@mui/material/TableBody";
-import { PromptEvent } from "../../ui/React/PromptManager";
-import { Modal } from "../../ui/React/Modal";
-
-import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
-import { TextField, Tooltip } from "@mui/material";
-import { useRerender } from "../../ui/React/hooks";
-import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
-import { TextFilePath } from "src/Paths/TextFilePath";
-import { ContentFilePath } from "src/Paths/ContentFile";
 
 interface IProps {
   // Map of filename -> code

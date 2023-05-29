@@ -1,20 +1,20 @@
 import React from "react";
-import { ActionTypes } from "../data/ActionTypes";
-import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
-import { formatNumberNoSuffix } from "../../ui/formatNumber";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { Bladeburner } from "../Bladeburner";
-import { Action } from "../Action";
-import { GeneralActions } from "../data/GeneralActions";
-import { Player } from "@player";
-import { CopyableText } from "../../ui/React/CopyableText";
 
-import { StartButton } from "./StartButton";
-
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { CopyableText } from "../../ui/React/CopyableText";
 import { useRerender } from "../../ui/React/hooks";
+import { formatNumberNoSuffix } from "../../ui/formatNumber";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
+import { Action } from "../Action";
+import { Bladeburner } from "../Bladeburner";
+import { ActionTypes } from "../data/ActionTypes";
+import { GeneralActions } from "../data/GeneralActions";
+import { StartButton } from "./StartButton";
 
 interface IProps {
   bladeburner: Bladeburner;

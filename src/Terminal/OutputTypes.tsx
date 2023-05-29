@@ -1,7 +1,8 @@
 import React from "react";
+
+import { BaseServer } from "../Server/BaseServer";
 import { Settings } from "../Settings/Settings";
 import { formatTime } from "../utils/helpers/formatTime";
-import { BaseServer } from "../Server/BaseServer";
 
 export class Output {
   text: string;

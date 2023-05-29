@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Cell } from "./Cell";
-
-import TableRow from "@mui/material/TableRow";
 
 import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+
 import { Table } from "../../ui/React/Table";
+import { Cell } from "./Cell";
 
 interface IProps {
   width: number;

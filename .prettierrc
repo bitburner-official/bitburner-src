@@ -2,5 +2,8 @@
   "trailingComma": "all",
   "endOfLine": "lf",
   "tabWidth": 2,
-  "printWidth": 120
+  "printWidth": 120,
+  "importOrder": ["^react*", "<THIRD_PARTY_MODULES>", "^components/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }

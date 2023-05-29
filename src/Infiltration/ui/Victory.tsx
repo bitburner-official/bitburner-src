@@ -1,13 +1,15 @@
-import { Box, Button, MenuItem, Paper, Select, SelectChangeEvent, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { FactionNames } from "../../Faction/data/FactionNames";
+
+import { Box, Button, MenuItem, Paper, Select, SelectChangeEvent, Typography } from "@mui/material";
+import { Player } from "@player";
+
 import { inviteToFaction } from "../../Faction/FactionHelpers";
 import { Factions } from "../../Faction/Factions";
+import { FactionNames } from "../../Faction/data/FactionNames";
 import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
-import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
 import { Reputation } from "../../ui/React/Reputation";
+import { Page } from "../../ui/Router";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import {
   calculateInfiltratorsRepReward,

@@ -1,12 +1,13 @@
 import {
-  Directory,
-  isAbsolutePath,
-  BasicDirectory,
-  resolveValidatedDirectory,
-  oneValidCharacter,
-  directoryRegexString,
   AbsolutePath,
+  BasicDirectory,
+  Directory,
+  directoryRegexString,
+  isAbsolutePath,
+  oneValidCharacter,
+  resolveValidatedDirectory,
 } from "./Directory";
+
 /** Filepath Rules:
  * 1. File extension cannot contain a "/"
  * 2. Last character before the extension cannot be a "/" as this would be a blank filename

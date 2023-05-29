@@ -1,12 +1,11 @@
 import React from "react";
 
+import { Player } from "@player";
+
+import { useRerender } from "../../ui/React/hooks";
+import { IStockMarket } from "../IStockMarket";
 import { InfoAndPurchases } from "./InfoAndPurchases";
 import { StockTickers } from "./StockTickers";
-
-import { IStockMarket } from "../IStockMarket";
-
-import { Player } from "@player";
-import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
   stockMarket: IStockMarket;

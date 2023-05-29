@@ -1,14 +1,16 @@
 // React Components for the Corporation UI's City navigation tabs
 // These allow player to navigate between different cities for each industry
 import React, { useState } from "react";
-import { OfficeSpace } from "../OfficeSpace";
-import { Division } from "./Division";
-import { ExpandNewCity } from "./ExpandNewCity";
-import { useDivision } from "./Context";
-import Tabs from "@mui/material/Tabs";
+
 import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+
 import { CityName } from "../../Enums";
 import { getRecordKeys } from "../../Types/Record";
+import { OfficeSpace } from "../OfficeSpace";
+import { useDivision } from "./Context";
+import { Division } from "./Division";
+import { ExpandNewCity } from "./ExpandNewCity";
 
 interface IProps {
   city: CityName | "Expand";

@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Sleeve } from "../Sleeve";
+
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Player } from "@player";
+
 import { Crimes } from "../../../Crime/Crimes";
 import { CityName, LocationName } from "../../../Enums";
-import { Factions } from "../../../Faction/Factions";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import { FactionNames } from "../../../Faction/data/FactionNames";
-import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
-import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
-import { isSleeveBladeburnerWork } from "../Work/SleeveBladeburnerWork";
 import { CrimeType, FactionWorkType, GymType } from "../../../Enums";
+import { Factions } from "../../../Faction/Factions";
+import { FactionNames } from "../../../Faction/data/FactionNames";
 import { checkEnum } from "../../../utils/helpers/enum";
+import { Sleeve } from "../Sleeve";
+import { isSleeveBladeburnerWork } from "../Work/SleeveBladeburnerWork";
+import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
+import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
 import { WorkType } from "../Work/Work";
 
 const universitySelectorOptions: string[] = [

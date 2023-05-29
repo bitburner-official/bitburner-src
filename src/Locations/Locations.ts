@@ -2,9 +2,9 @@
  * Map of all Locations in the game
  * Key = Location name, value = Location object
  */
-import { Cities } from "./Cities";
-import { Location, IConstructorParams } from "./Location";
 import { CityName } from "../Enums";
+import { Cities } from "./Cities";
+import { IConstructorParams, Location } from "./Location";
 import { LocationsMetadata } from "./data/LocationsMetadata";
 
 export const Locations: Record<string, Location> = {};

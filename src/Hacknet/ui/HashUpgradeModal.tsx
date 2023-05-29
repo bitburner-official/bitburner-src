@@ -1,13 +1,13 @@
 import React from "react";
 
-import { HashUpgrades } from "../HashUpgrades";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
 
 import { Hashes } from "../../ui/React/Hashes";
-import { HacknetUpgradeElem } from "./HacknetUpgradeElem";
 import { Modal } from "../../ui/React/Modal";
-import { Player } from "@player";
-import Typography from "@mui/material/Typography";
 import { useRerender } from "../../ui/React/hooks";
+import { HashUpgrades } from "../HashUpgrades";
+import { HacknetUpgradeElem } from "./HacknetUpgradeElem";
 
 interface IProps {
   open: boolean;

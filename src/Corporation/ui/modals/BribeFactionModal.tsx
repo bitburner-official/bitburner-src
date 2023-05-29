@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Factions } from "../../../Faction/Factions";
-import * as corpConstants from "../../data/Constants";
-import { formatReputation } from "../../../ui/formatNumber";
-import { dialogBoxCreate } from "../../../ui/React/DialogBox";
-import { Modal } from "../../../ui/React/Modal";
-import { Player } from "@player";
-import { useCorporation } from "../Context";
-import Typography from "@mui/material/Typography";
+
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import { NumberInput } from "../../../ui/React/NumberInput";
-import Box from "@mui/material/Box";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { Factions } from "../../../Faction/Factions";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+import { Modal } from "../../../ui/React/Modal";
+import { NumberInput } from "../../../ui/React/NumberInput";
+import { formatReputation } from "../../../ui/formatNumber";
+import * as corpConstants from "../../data/Constants";
+import { useCorporation } from "../Context";
 
 interface IProps {
   open: boolean;

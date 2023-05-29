@@ -1,14 +1,13 @@
-import { FactionNames } from "../../Faction/data/FactionNames";
-import { Sleeve } from "./Sleeve";
-
 import { Player } from "@player";
 
 import { Augmentation } from "../../Augmentation/Augmentation";
 import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
-import { Factions } from "../../Faction/Factions";
-import { mergeMultipliers, Multipliers } from "../Multipliers";
 import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
+import { Factions } from "../../Faction/Factions";
+import { FactionNames } from "../../Faction/data/FactionNames";
+import { Multipliers, mergeMultipliers } from "../Multipliers";
+import { Sleeve } from "./Sleeve";
 
 /** Updates this object's multipliers for the given augmentation */
 export function applyAugmentation(this: Sleeve, aug: Augmentation): void {

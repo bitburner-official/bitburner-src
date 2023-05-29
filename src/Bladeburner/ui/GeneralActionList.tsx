@@ -1,8 +1,9 @@
 import React from "react";
-import { GeneralActionElem } from "./GeneralActionElem";
+
 import { Action } from "../Action";
-import { GeneralActions } from "../GeneralActions";
 import { Bladeburner } from "../Bladeburner";
+import { GeneralActions } from "../GeneralActions";
+import { GeneralActionElem } from "./GeneralActionElem";
 
 interface IProps {
   bladeburner: Bladeburner;

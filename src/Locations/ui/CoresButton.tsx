@@ -1,12 +1,12 @@
 import React from "react";
+
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-
 import { Player } from "@player";
+import { MathJax } from "better-react-mathjax";
 
 import { Money } from "../../ui/React/Money";
-import { MathJax } from "better-react-mathjax";
 
 interface IProps {
   rerender: () => void;

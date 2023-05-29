@@ -1,16 +1,17 @@
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { hasAugmentationPrereqs } from "../Faction/FactionHelpers";
-import { CityName } from "../Enums";
-import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
-import { getGraftingAvailableAugs, calculateGraftingTimeWithBonus } from "../PersonObjects/Grafting/GraftingHelpers";
-import { Player as player } from "../Player";
 import { Grafting as IGrafting } from "@nsdefs";
+
+import { augmentationExists } from "../Augmentation/AugmentationHelpers";
+import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import { CityName } from "../Enums";
+import { hasAugmentationPrereqs } from "../Faction/FactionHelpers";
+import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import { helpers } from "../Netscript/NetscriptHelpers";
+import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
+import { calculateGraftingTimeWithBonus, getGraftingAvailableAugs } from "../PersonObjects/Grafting/GraftingHelpers";
+import { Player as player } from "../Player";
+import { GraftingWork } from "../Work/GraftingWork";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
-import { GraftingWork } from "../Work/GraftingWork";
-import { helpers } from "../Netscript/NetscriptHelpers";
-import { augmentationExists } from "../Augmentation/AugmentationHelpers";
 
 export function NetscriptGrafting(): InternalAPI<IGrafting> {
   const checkGraftingAPIAccess = (ctx: NetscriptContext): void => {

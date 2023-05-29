@@ -1,9 +1,11 @@
 import React from "react";
-import { Company } from "../Company";
-import { Player } from "@player";
-import { Modal } from "../../ui/React/Modal";
-import Typography from "@mui/material/Typography";
+
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { Modal } from "../../ui/React/Modal";
+import { Company } from "../Company";
 
 interface IProps {
   open: boolean;

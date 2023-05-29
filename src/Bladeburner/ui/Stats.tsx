@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { BladeburnerConstants } from "../data/Constants";
-import { Player } from "@player";
-import { Money } from "../../ui/React/Money";
-import { formatNumberNoSuffix, formatPopulation, formatBigNumber } from "../../ui/formatNumber";
-import { Factions } from "../../Faction/Factions";
-import { Router } from "../../ui/GameRoot";
-import { joinFaction } from "../../Faction/FactionHelpers";
-import { Bladeburner } from "../Bladeburner";
+import React, { useEffect, useState } from "react";
 
-import { TravelModal } from "./TravelModal";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { joinFaction } from "../../Faction/FactionHelpers";
+import { Factions } from "../../Faction/Factions";
 import { FactionNames } from "../../Faction/data/FactionNames";
+import { Router } from "../../ui/GameRoot";
+import { Money } from "../../ui/React/Money";
+import { formatBigNumber, formatNumberNoSuffix, formatPopulation } from "../../ui/formatNumber";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { Bladeburner } from "../Bladeburner";
+import { BladeburnerConstants } from "../data/Constants";
+import { TravelModal } from "./TravelModal";
 
 interface IProps {
   bladeburner: Bladeburner;

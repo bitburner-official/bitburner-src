@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 
-import { Container, Button, Paper, Box, Tooltip, Switch, FormControlLabel, Typography } from "@mui/material";
 import { Help } from "@mui/icons-material";
+import { Box, Button, Container, FormControlLabel, Paper, Switch, Tooltip, Typography } from "@mui/material";
 
 import { formatNumberNoSuffix, formatPercent } from "../../ui/formatNumber";
-
 import { AllGangs } from "../AllGangs";
-
 import { useGang } from "./Context";
 import { TerritoryInfoModal } from "./TerritoryInfoModal";
 

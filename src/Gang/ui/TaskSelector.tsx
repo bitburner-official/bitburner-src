@@ -3,14 +3,14 @@
  * the task selector as well as some stats.
  */
 import React, { useState } from "react";
-import { useGang } from "./Context";
-import { TaskDescription } from "./TaskDescription";
 
 import { Box } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import { GangMember } from "../GangMember";
+import { useGang } from "./Context";
+import { TaskDescription } from "./TaskDescription";
 
 interface IProps {
   member: GangMember;

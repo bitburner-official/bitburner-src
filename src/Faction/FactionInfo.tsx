@@ -1,9 +1,11 @@
 import React from "react";
-import { FactionNames } from "./data/FactionNames";
+
+import { Typography } from "@mui/material";
+
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
+import { FactionNames } from "./data/FactionNames";
 import { Option } from "./ui/Option";
-import { Typography } from "@mui/material";
 
 interface FactionInfoParams {
   infoText?: JSX.Element;

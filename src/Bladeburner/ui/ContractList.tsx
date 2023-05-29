@@ -1,6 +1,7 @@
 import React from "react";
-import { ContractElem } from "./ContractElem";
+
 import { Bladeburner } from "../Bladeburner";
+import { ContractElem } from "./ContractElem";
 
 interface IProps {
   bladeburner: Bladeburner;

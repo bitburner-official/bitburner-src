@@ -1,10 +1,10 @@
-import { Terminal } from "../../Terminal";
-import { BaseServer } from "../../Server/BaseServer";
-import { GetServer } from "../../Server/AllServers";
+import { LiteratureName } from "../../Literature/data/LiteratureNames";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
+import { GetServer } from "../../Server/AllServers";
+import { BaseServer } from "../../Server/BaseServer";
+import { Terminal } from "../../Terminal";
 import { checkEnum } from "../../utils/helpers/enum";
-import { LiteratureName } from "../../Literature/data/LiteratureNames";
 
 export function scp(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 2) {

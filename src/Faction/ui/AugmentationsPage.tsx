@@ -1,21 +1,22 @@
-import { Box, Button, Tooltip, Typography, Paper, Container } from "@mui/material";
 import React from "react";
 
-import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
+import { Box, Button, Container, Paper, Tooltip, Typography } from "@mui/material";
+import { Player } from "@player";
+
 import { getGenericAugmentationPriceMultiplier } from "../../Augmentation/AugmentationHelpers";
+import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
 import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { PurchasableAugmentations } from "../../Augmentation/ui/PurchasableAugmentations";
+import { CONSTANTS } from "../../Constants";
 import { PurchaseAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
-import { Player } from "@player";
-import { formatBigNumber } from "../../ui/formatNumber";
 import { Favor } from "../../ui/React/Favor";
 import { Reputation } from "../../ui/React/Reputation";
-import { FactionNames } from "../data/FactionNames";
+import { useRerender } from "../../ui/React/hooks";
+import { formatBigNumber } from "../../ui/formatNumber";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, hasAugmentationPrereqs, purchaseAugmentation } from "../FactionHelpers";
-import { CONSTANTS } from "../../Constants";
-import { useRerender } from "../../ui/React/hooks";
+import { FactionNames } from "../data/FactionNames";
 
 interface IProps {
   faction: Faction;

@@ -1,4 +1,5 @@
 import { Player } from "@player";
+
 import { NSFull } from "../NetscriptFunctions";
 
 /** The API does not include enums, args, or pid. */

@@ -1,10 +1,12 @@
 import React from "react";
+
+import { Player } from "@player";
+
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
-import { StealthIcon } from "./StealthIcon";
-import { KillIcon } from "./KillIcon";
 import { Action } from "../Action";
 import { Bladeburner } from "../Bladeburner";
-import { Player } from "@player";
+import { KillIcon } from "./KillIcon";
+import { StealthIcon } from "./StealthIcon";
 
 interface IProps {
   bladeburner: Bladeburner;

@@ -1,17 +1,16 @@
 import React from "react";
+
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-
-import { CONSTANTS } from "../../Constants";
 import { Player } from "@player";
-import { purchaseRamForHomeComputer } from "../../Server/ServerPurchases";
+import { MathJax } from "better-react-mathjax";
 
+import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { CONSTANTS } from "../../Constants";
+import { purchaseRamForHomeComputer } from "../../Server/ServerPurchases";
 import { Money } from "../../ui/React/Money";
 import { formatRam } from "../../ui/formatNumber";
-
-import { MathJax } from "better-react-mathjax";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 
 interface IProps {
   rerender: () => void;

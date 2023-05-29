@@ -1,17 +1,16 @@
-import { Player as player } from "../Player";
-
-import { staneksGift } from "../CotMG/Helper";
-import { Fragments, FragmentById } from "../CotMG/Fragment";
-import { FragmentType } from "../CotMG/FragmentType";
-
 import { Stanek as IStanek } from "@nsdefs";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
-import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
+
 import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { FragmentById, Fragments } from "../CotMG/Fragment";
+import { FragmentType } from "../CotMG/FragmentType";
+import { staneksGift } from "../CotMG/Helper";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { Factions } from "../Faction/Factions";
+import { FactionNames } from "../Faction/data/FactionNames";
+import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
+import { Player as player } from "../Player";
 
 export function NetscriptStanek(): InternalAPI<IStanek> {
   function checkStanekAPIAccess(ctx: NetscriptContext): void {

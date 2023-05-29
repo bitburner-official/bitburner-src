@@ -5,8 +5,9 @@
  */
 import React from "react";
 
-import { PurchaseMultipliers } from "../data/Constants";
 import Button from "@mui/material/Button";
+
+import { PurchaseMultipliers } from "../data/Constants";
 
 interface IMultiplierProps {
   disabled: boolean;

@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 
-import { Modal } from "../../../ui/React/Modal";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { useCorporation } from "../../ui/Context";
+import Typography from "@mui/material/Typography";
+
 import { CityName } from "../../../Enums";
-import * as corpConstants from "../../data/Constants";
-import { formatMoney } from "../../../ui/formatNumber";
-import { removeDivision as removeDivision } from "../../Actions";
-import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { getRecordKeys } from "../../../Types/Record";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+import { Modal } from "../../../ui/React/Modal";
+import { formatMoney } from "../../../ui/formatNumber";
+import { removeDivision } from "../../Actions";
+import * as corpConstants from "../../data/Constants";
+import { useCorporation } from "../../ui/Context";
 
 interface IProps {
   open: boolean;

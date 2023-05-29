@@ -1,10 +1,10 @@
 import React from "react";
 
-import { hasHacknetServers, hasMaxNumberHacknetServers } from "../HacknetHelpers";
-import { Player } from "@player";
-import { Money } from "../../ui/React/Money";
-
 import Button from "@mui/material/Button";
+import { Player } from "@player";
+
+import { Money } from "../../ui/React/Money";
+import { hasHacknetServers, hasMaxNumberHacknetServers } from "../HacknetHelpers";
 
 interface IProps {
   multiplier: number | string;

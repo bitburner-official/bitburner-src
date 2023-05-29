@@ -1,16 +1,18 @@
 import React from "react";
-import { Message } from "./Message";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
-import { Router } from "../ui/GameRoot";
-import { CompletedProgramName } from "../Programs/Programs";
+
 import { Player } from "@player";
-import { Page } from "../ui/Router";
+
+import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { FactionNames } from "../Faction/data/FactionNames";
+import { CompletedProgramName } from "../Programs/Programs";
 import { GetServer } from "../Server/AllServers";
+import { Server } from "../Server/Server";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
+import { Router } from "../ui/GameRoot";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { FactionNames } from "../Faction/data/FactionNames";
-import { Server } from "../Server/Server";
+import { Page } from "../ui/Router";
+import { Message } from "./Message";
 
 //Sends message to player, including a pop up
 function sendMessage(name: MessageFilename, forced = false): void {

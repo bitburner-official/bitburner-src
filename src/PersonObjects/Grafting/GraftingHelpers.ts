@@ -1,7 +1,8 @@
-import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
-import { GraftableAugmentation } from "./GraftableAugmentation";
 import { Player } from "@player";
+
+import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
 import { calculateIntelligenceBonus } from "../formulas/intelligence";
+import { GraftableAugmentation } from "./GraftableAugmentation";
 
 export const getGraftingAvailableAugs = (): string[] => {
   const augs: string[] = [];

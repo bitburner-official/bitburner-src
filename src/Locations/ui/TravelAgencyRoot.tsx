@@ -5,23 +5,21 @@
  */
 import React, { useState } from "react";
 
-import { CityName } from "../../Enums";
-import { TravelConfirmationModal } from "./TravelConfirmationModal";
-
-import { CONSTANTS } from "../../Constants";
-import { Player } from "@player";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
-import { Settings } from "../../Settings/Settings";
-
-import { Money } from "../../ui/React/Money";
-import { WorldMap } from "../../ui/React/WorldMap";
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
-
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { CONSTANTS } from "../../Constants";
+import { CityName } from "../../Enums";
+import { Settings } from "../../Settings/Settings";
+import { Router } from "../../ui/GameRoot";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { Money } from "../../ui/React/Money";
+import { WorldMap } from "../../ui/React/WorldMap";
 import { useRerender } from "../../ui/React/hooks";
+import { Page } from "../../ui/Router";
+import { TravelConfirmationModal } from "./TravelConfirmationModal";
 
 function travel(to: CityName): void {
   const cost = CONSTANTS.TravelCost;

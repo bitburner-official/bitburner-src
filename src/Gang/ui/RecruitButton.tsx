@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { RecruitModal } from "./RecruitModal";
-import { GangConstants } from "../data/Constants";
-import { formatRespect } from "../../ui/formatNumber";
-import { useGang } from "./Context";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
+import { formatRespect } from "../../ui/formatNumber";
+import { GangConstants } from "../data/Constants";
+import { useGang } from "./Context";
+import { RecruitModal } from "./RecruitModal";
 
 interface IProps {
   onRecruit: () => void;

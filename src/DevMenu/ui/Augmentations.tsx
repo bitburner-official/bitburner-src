@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import { Clear, ExpandMore, Reply, ReplyAll } from "@mui/icons-material";
 import {
   Accordion,
@@ -10,9 +12,9 @@ import {
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { Player } from "@player";
+
+import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 
 export function Augmentations(): React.ReactElement {
   const [augmentation, setAugmentation] = useState("Augmented Targeting I");

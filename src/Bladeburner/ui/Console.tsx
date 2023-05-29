@@ -1,17 +1,18 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Bladeburner } from "../Bladeburner";
-import { KEY } from "../../utils/helpers/keyCodes";
+import React, { useEffect, useRef, useState } from "react";
 
-import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+
 import { useRerender } from "../../ui/React/hooks";
+import { KEY } from "../../utils/helpers/keyCodes";
+import { Bladeburner } from "../Bladeburner";
 
 interface ILineProps {
   content: React.ReactNode;

@@ -4,17 +4,16 @@
  */
 import React, { useState } from "react";
 
-import { Sleeve } from "../Sleeve";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import { Player } from "@player";
 
-import { formatSleeveMemory } from "../../../ui/formatNumber";
 import { Money } from "../../../ui/React/Money";
-
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import { formatSleeveMemory } from "../../../ui/formatNumber";
+import { Sleeve } from "../Sleeve";
 
 interface IProps {
   index: number;

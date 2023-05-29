@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
-import * as corpConstants from "../../data/Constants";
-import { IssueDividends } from "../../Actions";
-import { useCorporation } from "../Context";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import { KEY } from "../../../utils/helpers/keyCodes";
+import { IssueDividends } from "../../Actions";
+import * as corpConstants from "../../data/Constants";
+import { useCorporation } from "../Context";
+
 interface IProps {
   open: boolean;
   onClose: () => void;

@@ -1,10 +1,12 @@
 import * as React from "react";
-import { Gang } from "../Gang";
+
+import Box from "@mui/material/Box";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
 import { CONSTANTS } from "../../Constants";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
+import { Gang } from "../Gang";
 
 interface IProps {
   gang: Gang;

@@ -1,7 +1,8 @@
-import { AlertEvents } from "./AlertManager";
-
 import React from "react";
+
 import { Typography } from "@mui/material";
+
+import { AlertEvents } from "./AlertManager";
 
 export function dialogBoxCreate(txt: string | JSX.Element, html = false): void {
   AlertEvents.emit(

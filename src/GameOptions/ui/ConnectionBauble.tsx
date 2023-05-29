@@ -1,7 +1,8 @@
-import { Typography } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import WifiIcon from "@mui/icons-material/Wifi";
 import WifiOffIcon from "@mui/icons-material/WifiOff";
+import { Typography } from "@mui/material";
 
 interface baubleProps {
   isConnected: () => boolean;

@@ -1,6 +1,6 @@
+import { helpers } from "./NetscriptHelpers";
 import { getRamCost } from "./RamCostGenerator";
 import type { WorkerScript } from "./WorkerScript";
-import { helpers } from "./NetscriptHelpers";
 
 /** Permissive type for the documented API functions */
 type APIFn = (...args: any[]) => unknown;

@@ -1,28 +1,28 @@
-import { Player } from "@player";
-import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
-
 import React, { useEffect } from "react";
 
-import { General } from "./DevMenu/ui/General";
-import { Stats } from "./DevMenu/ui/Stats";
-import { Factions } from "./DevMenu/ui/Factions";
-import { Augmentations } from "./DevMenu/ui/Augmentations";
-import { SourceFiles } from "./DevMenu/ui/SourceFiles";
-import { Programs } from "./DevMenu/ui/Programs";
-import { Servers } from "./DevMenu/ui/Servers";
-import { Companies } from "./DevMenu/ui/Companies";
-import { Bladeburner as BladeburnerElem } from "./DevMenu/ui/Bladeburner";
-import { Gang } from "./DevMenu/ui/Gang";
-import { Corporation } from "./DevMenu/ui/Corporation";
-import { CodingContracts } from "./DevMenu/ui/CodingContracts";
-import { StockMarket } from "./DevMenu/ui/StockMarket";
-import { Sleeves } from "./DevMenu/ui/Sleeves";
-import { Stanek } from "./DevMenu/ui/Stanek";
-import { TimeSkip } from "./DevMenu/ui/TimeSkip";
-import { SaveFile } from "./DevMenu/ui/SaveFile";
-import { Achievements } from "./DevMenu/ui/Achievements";
-import { Entropy } from "./DevMenu/ui/Entropy";
 import Typography from "@mui/material/Typography";
+import { Player } from "@player";
+
+import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
+import { Achievements } from "./DevMenu/ui/Achievements";
+import { Augmentations } from "./DevMenu/ui/Augmentations";
+import { Bladeburner as BladeburnerElem } from "./DevMenu/ui/Bladeburner";
+import { CodingContracts } from "./DevMenu/ui/CodingContracts";
+import { Companies } from "./DevMenu/ui/Companies";
+import { Corporation } from "./DevMenu/ui/Corporation";
+import { Entropy } from "./DevMenu/ui/Entropy";
+import { Factions } from "./DevMenu/ui/Factions";
+import { Gang } from "./DevMenu/ui/Gang";
+import { General } from "./DevMenu/ui/General";
+import { Programs } from "./DevMenu/ui/Programs";
+import { SaveFile } from "./DevMenu/ui/SaveFile";
+import { Servers } from "./DevMenu/ui/Servers";
+import { Sleeves } from "./DevMenu/ui/Sleeves";
+import { SourceFiles } from "./DevMenu/ui/SourceFiles";
+import { Stanek } from "./DevMenu/ui/Stanek";
+import { Stats } from "./DevMenu/ui/Stats";
+import { StockMarket } from "./DevMenu/ui/StockMarket";
+import { TimeSkip } from "./DevMenu/ui/TimeSkip";
 import { Exploit } from "./Exploits/Exploit";
 
 export function DevMenuRoot(): React.ReactElement {

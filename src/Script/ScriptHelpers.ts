@@ -1,15 +1,15 @@
-import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
+
+import { CONSTANTS } from "../Constants";
+import { workerScripts } from "../Netscript/WorkerScripts";
+import type { ScriptFilePath } from "../Paths/ScriptFilePath";
+import { GetServer } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
-import { RunningScript } from "./RunningScript";
 import { processSingleServerGrowth } from "../Server/ServerHelpers";
-import { GetServer } from "../Server/AllServers";
 import { formatPercent } from "../ui/formatNumber";
-import { workerScripts } from "../Netscript/WorkerScripts";
 import { scriptKey } from "../utils/helpers/scriptKey";
-
-import type { ScriptFilePath } from "../Paths/ScriptFilePath";
+import { RunningScript } from "./RunningScript";
 
 export function scriptCalculateOfflineProduction(runningScript: RunningScript): void {
   //The Player object stores the last update time from when we were online

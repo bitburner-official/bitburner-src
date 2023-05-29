@@ -1,14 +1,15 @@
-import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { Player } from "@player";
+
 import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { CONSTANTS } from "../Constants";
-import { Player } from "@player";
-import { Programs } from "../Programs/Programs";
-import { Work, WorkType } from "./Work";
-import { Program } from "../Programs/Program";
-import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
 import { asProgramFilePath } from "../Paths/ProgramFilePath";
+import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
+import { Program } from "../Programs/Program";
+import { Programs } from "../Programs/Programs";
 import { CompletedProgramName } from "../Programs/Programs";
+import { dialogBoxCreate } from "../ui/React/DialogBox";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { Work, WorkType } from "./Work";
 
 export const isCreateProgramWork = (w: Work | null): w is CreateProgramWork =>
   w !== null && w.type === WorkType.CREATE_PROGRAM;

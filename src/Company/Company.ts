@@ -1,8 +1,7 @@
+import { favorToRep, repToFavor } from "../Faction/formulas/favor";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { CompanyPosition } from "./CompanyPosition";
 import * as posNames from "./data/JobTracks";
-import { favorToRep, repToFavor } from "../Faction/formulas/favor";
-
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
 export interface IConstructorParams {
   name: string;

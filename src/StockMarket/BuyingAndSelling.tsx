@@ -2,26 +2,23 @@
  * Functions for buying/selling stocks. There are four functions total, two for
  * long positions and two for short positions.
  */
+import * as React from "react";
+
+import { Player } from "@player";
+
+import { CONSTANTS } from "../Constants";
+import { NetscriptContext } from "../Netscript/APIWrapper";
+import { helpers } from "../Netscript/NetscriptHelpers";
+import { dialogBoxCreate } from "../ui/React/DialogBox";
+import { Money } from "../ui/React/Money";
+import { formatMoney, formatShares } from "../ui/formatNumber";
 import { Stock } from "./Stock";
 import {
   getBuyTransactionCost,
   getSellTransactionGain,
   processTransactionForecastMovement,
 } from "./StockMarketHelpers";
-
 import { PositionTypes } from "./data/PositionTypes";
-
-import { CONSTANTS } from "../Constants";
-import { Player } from "@player";
-
-import { formatMoney, formatShares } from "../ui/formatNumber";
-import { Money } from "../ui/React/Money";
-
-import { dialogBoxCreate } from "../ui/React/DialogBox";
-
-import * as React from "react";
-import { NetscriptContext } from "../Netscript/APIWrapper";
-import { helpers } from "../Netscript/NetscriptHelpers";
 
 /** Each function takes an optional config object as its last argument */
 interface IOptions {
