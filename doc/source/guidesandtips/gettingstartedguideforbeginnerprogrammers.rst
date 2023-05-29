@@ -860,7 +860,7 @@ startup script. Feel free to adjust it to your liking.
             ns.scp("early-hack-template.js", serv);
             ns.brutessh(serv);
             ns.nuke(serv);
-            ns.exec("early-hack-template.sj", serv, 12);
+            ns.exec("early-hack-template.js", serv, 12);
         }
     }
     
