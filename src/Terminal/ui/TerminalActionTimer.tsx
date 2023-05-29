@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import _ from "lodash";
 import Typography from "@mui/material/Typography";
 
 import { useRerender } from "../../ui/React/hooks";
@@ -10,12 +9,8 @@ export function TerminalActionTimer(): React.ReactElement {
   const rerender = useRerender();
 
   useEffect(() => {
-    const debounced = _.debounce(rerender, 25, { maxWait: 50 });
-    const unsubscribe = TerminalProcessEvents.subscribe(debounced);
-    return () => {
-      debounced.cancel();
-      unsubscribe();
-    };
+    const unsubscribe = TerminalProcessEvents.subscribe(rerender);
+    return unsubscribe;
   }, []);
 
   return (
