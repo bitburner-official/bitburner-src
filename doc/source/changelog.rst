@@ -3,13 +3,22 @@
 Changelog
 =========
 
+v2.3.0 Hotfixes (last updated 29 May 2023)
+------------------------------------------
+
+* Several important fixes for savegame migration issues from older version (@d0sboots)
+* Prevent scripts from loading during intial migration to 2.3.0 save format, to prevent a crash that could occur. (@Snarling)
+* Fix scp logging (hostname was being logged incorrectly in multiple places and showing as [Object object]) (@Snarling)
+* Update alias help text to show new working syntax (outdated fix) (@Snarling)
+* Update terminal parsing logic so that the old syntax for alias works again. (@Snarling)
+* Fix clickable script links from ls command not working outside root directory (@Snarling)
+* Fix SF3 "Spring Water" industry (@Snarling)
+* Fix an issue with Find All Valid Math Expressions not accepting empty array when that was the solution. (@Snarling)
+* Fix an issue with scan-analyze display when the player had AutoLink.exe (@Snarling)
+* Reverted undocumented change that program filenames were case sensitive for ns.fileExists. They are case insensitive again. (@Snarling)
+
 v2.3.0 - SF3 rework and performance improvements (25 May 2023)
 --------------------------------------------------------------
-
-HOTFIXES (as of 26 May 2023):
-
-* Prevent scripts from loading during intial migration to 2.3.0 save format, to prevent a crash that could occur.
-* Fix scp logging (hostname was being logged incorrectly in multiple places and showing as [Object object])
 
 BREAKING CHANGES: These changes may require changes to your scripts.
 
