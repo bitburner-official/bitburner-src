@@ -652,6 +652,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
     // Prior to v2.2.0, sleeve shock was 0 to 100 internally but displayed as 100 to 0. This unifies them as 100 to 0.
     for (const sleeve of Player.sleeves) sleeve.shock = 100 - sleeve.shock;
   }
+  // Some 2.3 changes are actually in BaseServer.js fromJSONBase function
   if (ver < 31) {
     Terminal.warn("Migrating to 2.3.0, loading with no scripts.");
     for (const server of GetAllServers()) {
@@ -679,6 +680,20 @@ function evaluateVersionCompatibility(ver: string | number): void {
       Terminal.warn("Loading corporation from version prior to 2.3. Corporation has been reset.");
     }
     // End 2.3 changes
+  }
+  //2.3 hotfix changes and 2.3.1 changes
+  if (ver < 32) {
+    // Due to a bug from before 2.3, some scripts have the wrong server listed. In 2.3 this caused issues.
+    for (const server of GetAllServers()) {
+      for (const script of server.scripts.values()) {
+        if (script.server !== server.hostname) {
+          console.warn(
+            `Detected script ${script.filename} on ${server.hostname} with incorrect server property: ${script.server}. Repairing.`,
+          );
+          script.server = server.hostname;
+        }
+      }
+    }
   }
 }
 
