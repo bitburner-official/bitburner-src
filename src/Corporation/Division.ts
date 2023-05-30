@@ -16,6 +16,7 @@ import { CorpMaterialName, CorpResearchName, CorpStateName } from "@nsdefs";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from "../Types/Record";
 import { Material } from "./Material";
+import { getKeyList } from "../utils/helpers/getKeyList";
 
 interface DivisionParams {
   name: string;
@@ -29,6 +30,9 @@ export class Division {
   researchPoints = 0;
   researched = new JSONSet<CorpResearchName>();
   requiredMaterials: PartialRecord<CorpMaterialName, number> = {};
+
+  // Not included in save file. Just used for tracking whether research tree has been updated since game load.
+  treeInitialized = false;
 
   //An array of the name of materials being produced
   producedMaterials: CorpMaterialName[] = [];
@@ -1031,8 +1035,13 @@ export class Division {
   }
 
   updateResearchTree(): void {
+    if (this.treeInitialized) return;
     const researchTree = IndustryResearchTrees[this.type];
+    // Need to populate the tree in case we are loading a game.
     for (const research of this.researched) researchTree.research(research);
+    // Also need to load researches from the tree in case we are making a new division.
+    for (const research of researchTree.researched) this.researched.add(research);
+    this.treeInitialized = true;
   }
 
   // Get multipliers from Research
@@ -1098,13 +1107,15 @@ export class Division {
 
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Division", this);
+    return Generic_toJSON("Division", this, Division.includedKeys);
   }
 
   /** Initializes a Industry object from a JSON save state. */
   static fromJSON(value: IReviverValue): Division {
-    return Generic_fromJSON(Division, value.data);
+    return Generic_fromJSON(Division, value.data, Division.includedKeys);
   }
+
+  static includedKeys = getKeyList(Division, { removedKeys: ["treeInitialized"] });
 }
 
 constructorsForReviver.Division = Division;

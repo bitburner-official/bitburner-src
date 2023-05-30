@@ -217,9 +217,7 @@ export class ResearchTree {
 
   // Marks a Node as researched
   research(name: CorpResearchName): void {
-    if (this.root == null) {
-      return;
-    }
+    if (!this.root || this.researched.has(name)) return;
 
     const queue: Node[] = [];
     queue.push(this.root);
@@ -233,9 +231,7 @@ export class ResearchTree {
         return;
       }
 
-      for (let i = 0; i < node.children.length; ++i) {
-        queue.push(node.children[i]);
-      }
+      queue.push(...node.children);
     }
 
     console.warn(`ResearchTree.research() did not find the specified Research node for: ${name}`);
