@@ -420,28 +420,31 @@ export function MakeProduct(
   division.products.set(product.name, product);
 }
 
-export function Research(division: Division, researchName: CorpResearchName): void {
+export function Research(researchingDivision: Division, researchName: CorpResearchName): void {
   const corp = Player.corporation;
   if (!corp) return;
-  const researchTree = IndustryResearchTrees[division.type];
-  if (researchTree === undefined) throw new Error(`No research tree for industry '${division.type}'`);
+  const researchTree = IndustryResearchTrees[researchingDivision.type];
+  if (researchTree === undefined) throw new Error(`No research tree for industry '${researchingDivision.type}'`);
   const research = ResearchMap[researchName];
 
-  if (division.researched.has(researchName)) return;
-  if (division.researchPoints < research.cost)
+  if (researchingDivision.researched.has(researchName)) return;
+  if (researchingDivision.researchPoints < research.cost) {
     throw new Error(`You do not have enough Scientific Research for ${research.name}`);
-  division.researchPoints -= research.cost;
+  }
+  researchingDivision.researchPoints -= research.cost;
 
   // Get the Node from the Research Tree and set its 'researched' property
   researchTree.research(researchName);
-  division.researched.add(researchName);
-
-  // I couldn't figure out where else to put this so that warehouse size would get updated instantly
-  // whether research is done by script or UI. All other stats gets calculated in every cycle
-  // Warehouse size gets updated only when something increases it.
-  if (researchName == "Drones - Transport") {
-    for (const warehouse of getRecordValues(division.warehouses)) {
-      warehouse.updateSize(corp, division);
+  // All divisions of the same type as the researching division get the new research.
+  for (const division of corp.divisions.values()) {
+    if (division.type !== researchingDivision.type) continue;
+    division.researched.add(researchName);
+    // Handle researches that need to have their effects manually applied here.
+    // Warehouse size needs to be updated here because it is not recalculated during normal processing.
+    if (researchName == "Drones - Transport") {
+      for (const warehouse of getRecordValues(division.warehouses)) {
+        warehouse.updateSize(corp, division);
+      }
     }
   }
 }
