@@ -21,6 +21,7 @@ interface Division
 |  [lastCycleExpenses](./bitburner.division.lastcycleexpenses.md) |  | number | Expenses last cycle |
 |  [lastCycleRevenue](./bitburner.division.lastcyclerevenue.md) |  | number | Revenue last cycle |
 |  [makesProducts](./bitburner.division.makesproducts.md) |  | boolean | Whether the industry this division is in is capable of making products |
+|  [maxProducts](./bitburner.division.maxproducts.md) |  | number | How many products this division can support |
 |  [name](./bitburner.division.name.md) |  | string | Name of the division |
 |  [numAdVerts](./bitburner.division.numadverts.md) |  | number | Number of times AdVert has been bought |
 |  [popularity](./bitburner.division.popularity.md) |  | number | Popularity of the division |

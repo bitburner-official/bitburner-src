@@ -35,7 +35,9 @@ export class Division {
 
   products = new JSONMap<string, Product>();
   makesProducts = false;
-  get maxProducts() { return this.getMaximumNumberProducts()}
+  get maxProducts() {
+    return this.getMaximumNumberProducts();
+  }
 
   awareness = 0;
   popularity = 0;
