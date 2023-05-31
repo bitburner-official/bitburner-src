@@ -90,14 +90,14 @@ export const sanitizeTheme = (theme: IScriptEditorTheme): void => {
     }
 
     const block = theme[themeKey];
-    function repairBlock<T extends Record<string, unknown>>(block: T) {
+    const repairBlock = <T extends Record<string, unknown>>(block: T) => {
       for (const [blockKey, blockValue] of Object.entries(block) as [keyof T, unknown][]) {
         if (!blockValue || (typeof blockValue !== "string" && typeof blockValue !== "object"))
           (block[blockKey] as string) = "FF0000";
         else if (typeof blockValue === "object") repairBlock(block);
         else if (!blockValue.match(colorRegExp)) (block[blockKey] as string) = "FF0000";
       }
-    }
+    };
     // Type assertion is to something less specific.
     repairBlock(block);
   }
