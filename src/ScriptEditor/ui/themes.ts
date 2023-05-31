@@ -1,6 +1,7 @@
 import type { editor } from "monaco-editor";
 import { getRecordKeys } from "../../Types/Record";
 import { Settings } from "../../Settings/Settings";
+import { cloneDeep } from "lodash";
 type DefineThemeFn = typeof editor.defineTheme;
 
 export interface IScriptEditorTheme {
@@ -75,7 +76,7 @@ const colorRegExp = /^#?([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?$/;
 // Invalid data will be replaced with FF0000 (bright red)
 export const sanitizeTheme = (theme: IScriptEditorTheme): void => {
   if (typeof theme !== "object") {
-    Settings.EditorTheme = defaultMonacoTheme;
+    Settings.EditorTheme = cloneDeep(defaultMonacoTheme);
     return;
   }
   for (const themeKey of getRecordKeys(theme)) {
@@ -94,7 +95,7 @@ export const sanitizeTheme = (theme: IScriptEditorTheme): void => {
       for (const [blockKey, blockValue] of Object.entries(block) as [keyof T, unknown][]) {
         if (!blockValue || (typeof blockValue !== "string" && typeof blockValue !== "object"))
           (block[blockKey] as string) = "FF0000";
-        else if (typeof blockValue === "object") repairBlock(block);
+        else if (typeof blockValue === "object") repairBlock(blockValue as Record<string, unknown>);
         else if (!blockValue.match(colorRegExp)) (block[blockKey] as string) = "FF0000";
       }
     };
