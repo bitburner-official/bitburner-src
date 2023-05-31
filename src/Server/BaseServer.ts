@@ -333,6 +333,8 @@ export abstract class BaseServer implements IServer {
     server.scripts = new JSONMap();
     // In case somehow there are previously valid filenames that can't be sanitized, they will go in a new directory with a note.
     for (const script of oldScripts) {
+      // We're about to do type validation on the filename anyway.
+      if (script.filename.endsWith(".ns")) script.filename = (script.filename + ".js") as any;
       let newFilePath = resolveScriptFilePath(script.filename);
       if (!newFilePath) {
         newFilePath = `${newDirectory}script${++invalidScriptCount}.js` as ScriptFilePath;

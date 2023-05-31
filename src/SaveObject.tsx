@@ -480,12 +480,6 @@ function evaluateVersionCompatibility(ver: string | number): void {
   if (ver < 23) {
     anyPlayer.currentWork = null;
   }
-  if (ver < 24) {
-    // Assert the relevant type that was in effect at this version.
-    (Player.getHomeComputer().scripts as unknown as { filename: string }[]).forEach(
-      (s) => s.filename.endsWith(".ns") && (s.filename += ".js"),
-    );
-  }
   if (ver < 25) {
     const removePlayerFields = [
       "hacking_chance_mult",

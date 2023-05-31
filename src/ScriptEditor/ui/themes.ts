@@ -1,4 +1,6 @@
 import type { editor } from "monaco-editor";
+import { getRecordKeys } from "../../Types/Record";
+import { Settings } from "../../Settings/Settings";
 type DefineThemeFn = typeof editor.defineTheme;
 
 export interface IScriptEditorTheme {
@@ -72,8 +74,13 @@ const colorRegExp = /^#?([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?$/;
 // Recursively sanitize the theme data to prevent errors
 // Invalid data will be replaced with FF0000 (bright red)
 export const sanitizeTheme = (theme: IScriptEditorTheme): void => {
-  for (const [k, v] of Object.entries(theme)) {
-    switch (k) {
+  if (typeof theme !== "object") {
+    Settings.EditorTheme = defaultMonacoTheme;
+    return;
+  }
+  for (const themeKey of getRecordKeys(theme)) {
+    if (typeof theme[themeKey] !== "object") delete theme[themeKey];
+    switch (themeKey) {
       case "base":
         if (!["vs-dark", "vs"].includes(theme.base)) theme.base = "vs-dark";
         continue;
@@ -82,14 +89,17 @@ export const sanitizeTheme = (theme: IScriptEditorTheme): void => {
         continue;
     }
 
-    const repairBlock = (block: Record<string, object | string>): void => {
-      for (const [k, v] of Object.entries(block)) {
-        if (typeof v === "object") {
-          repairBlock(v as Record<string, string>);
-        } else if (!v.match(colorRegExp)) block[k] = "FF0000";
+    const block = theme[themeKey];
+    function repairBlock<T extends Record<string, unknown>>(block: T) {
+      for (const [blockKey, blockValue] of Object.entries(block) as [keyof T, unknown][]) {
+        if (!blockValue || (typeof blockValue !== "string" && typeof blockValue !== "object"))
+          (block[blockKey] as string) = "FF0000";
+        else if (typeof blockValue === "object") repairBlock(block);
+        else if (!blockValue.match(colorRegExp)) (block[blockKey] as string) = "FF0000";
       }
-    };
-    repairBlock(v);
+    }
+    // Type assertion is to something less specific.
+    repairBlock(block);
   }
 };
 
