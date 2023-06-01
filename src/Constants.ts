@@ -231,8 +231,8 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3.1 dev - Changelog updated 29 May 2023
-------------------------------------------
+v2.3.1 dev - Changelog updated 1 Jun 2023
+-----------------------------------------
 
 GENERAL / MISC:
 
@@ -251,6 +251,8 @@ GENERAL / MISC:
 
 SPOILER SECTIONS:
 
-No spoilered changes yet.
+SF3:
+
+* Added "maxProducts" property to ns.corporation.getDivision return value (@kateract)
 `,
 };
