@@ -349,18 +349,28 @@ function LogWindow(props: IProps): React.ReactElement {
 
               <span style={{ minWidth: "fit-content", height: `${minConstraints[1]}px` }}>
                 {!workerScripts.has(script.pid) ? (
-                  <IconButton className={classes.titleButton} onClick={run} onTouchEnd={run}>
+                  <IconButton title="Re-run script" className={classes.titleButton} onClick={run} onTouchEnd={run}>
                     <PlayCircleIcon />
                   </IconButton>
                 ) : (
-                  <IconButton className={classes.titleButton} onClick={kill} onTouchEnd={kill}>
+                  <IconButton title="Stop script" className={classes.titleButton} onClick={kill} onTouchEnd={kill}>
                     <StopCircleIcon color="error" />
                   </IconButton>
                 )}
-                <IconButton className={classes.titleButton} onClick={minimize} onTouchEnd={minimize}>
+                <IconButton
+                  title={minimized ? "Expand" : "Collapse"}
+                  className={classes.titleButton}
+                  onClick={minimize}
+                  onTouchEnd={minimize}
+                >
                   {minimized ? <ExpandMoreIcon /> : <ExpandLessIcon />}
                 </IconButton>
-                <IconButton className={classes.titleButton} onClick={props.onClose} onTouchEnd={props.onClose}>
+                <IconButton
+                  title="Close window"
+                  className={classes.titleButton}
+                  onClick={props.onClose}
+                  onTouchEnd={props.onClose}
+                >
                   <CloseIcon />
                 </IconButton>
               </span>
