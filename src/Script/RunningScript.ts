@@ -163,6 +163,7 @@ export class RunningScript {
   static fromJSON(value: IReviverValue): RunningScript {
     const runningScript = Generic_fromJSON(RunningScript, value.data, includedProperties);
     if (!runningScript.scriptKey) runningScript.scriptKey = scriptKey(runningScript.filename, runningScript.args);
+    if (!runningScript.title) runningScript.title = `${runningScript.filename} ${runningScript.args.join(" ")}`;
     return runningScript;
   }
 }
