@@ -262,6 +262,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       cities: cities,
       products: [...division.products.keys()],
       makesProducts: division.makesProducts,
+      maxProducts: division.maxProducts,
     };
   }
 

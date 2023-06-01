@@ -396,14 +396,8 @@ export function MakeProduct(
   if (corp.funds < designInvest + marketingInvest) {
     throw new Error("You don't have enough company funds to make this large of an investment");
   }
-  let maxProducts = 3;
-  if (division.hasResearch("uPgrade: Capacity.II")) {
-    maxProducts = 5;
-  } else if (division.hasResearch("uPgrade: Capacity.I")) {
-    maxProducts = 4;
-  }
-  if (division.products.size >= maxProducts) {
-    throw new Error(`You are already at the max products (${maxProducts}) for division: ${division.name}!`);
+  if (division.products.size >= division.maxProducts) {
+    throw new Error(`You are already at the max products (${division.maxProducts}) for division: ${division.name}!`);
   }
 
   const product = new Product({

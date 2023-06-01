@@ -39,6 +39,16 @@ export class Division {
 
   products = new JSONMap<string, Product>();
   makesProducts = false;
+  get maxProducts() {
+    if (!this.makesProducts) return 0;
+
+    // Calculate additional number of allowed Products from Research/Upgrades
+    let additional = 0;
+    if (this.hasResearch("uPgrade: Capacity.I")) ++additional;
+    if (this.hasResearch("uPgrade: Capacity.II")) ++additional;
+
+    return corpConstants.maxProductsBase + additional;
+  }
 
   awareness = 0;
   popularity = 0;
@@ -103,19 +113,8 @@ export class Division {
     this.producedMaterials = data.producedMaterials ?? [];
   }
 
-  getMaximumNumberProducts(): number {
-    if (!this.makesProducts) return 0;
-
-    // Calculate additional number of allowed Products from Research/Upgrades
-    let additional = 0;
-    if (this.hasResearch("uPgrade: Capacity.I")) ++additional;
-    if (this.hasResearch("uPgrade: Capacity.II")) ++additional;
-
-    return corpConstants.maxProductsBase + additional;
-  }
-
   hasMaximumNumberProducts(): boolean {
-    return this.products.size >= this.getMaximumNumberProducts();
+    return this.products.size >= this.maxProducts;
   }
 
   //Calculates the values that factor into the production and properties of

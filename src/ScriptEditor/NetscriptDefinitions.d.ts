@@ -7681,6 +7681,8 @@ interface Division {
   products: string[];
   /** Whether the industry this division is in is capable of making products */
   makesProducts: boolean;
+  /** How many products this division can support */
+  maxProducts: number;
 }
 
 /**
