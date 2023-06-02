@@ -56,9 +56,8 @@ export function calculatePercentMoneyHacked(server: IServer, person: IPerson): n
 
 /** Returns time it takes to complete a hack on a server, in seconds */
 export function calculateHackingTime(server: IServer, person: IPerson): number {
-  const hackDifficulty = server.hackDifficulty;
-  const requiredHackingSkill = server.requiredHackingSkill;
-  if (!hackDifficulty || !requiredHackingSkill) return Infinity;
+  const { hackDifficulty, requiredHackingSkill } = server;
+  if (typeof hackDifficulty !== "number" || typeof requiredHackingSkill !== "number") return Infinity;
   const difficultyMult = requiredHackingSkill * hackDifficulty;
 
   const baseDiff = 500;
