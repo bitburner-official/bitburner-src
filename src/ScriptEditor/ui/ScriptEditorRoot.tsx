@@ -1,21 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Editor } from "./Editor";
 import * as monaco from "monaco-editor";
-// @ts-expect-error This library does not have types.
-import * as MonacoVim from "monaco-vim";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
-import { OptionsModal } from "./OptionsModal";
-import { Options } from "./Options";
-import { Player } from "@player";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { ScriptFilePath } from "../../Paths/ScriptFilePath";
-import { calculateRamUsage, checkInfiniteLoop } from "../../Script/RamCalculations";
-import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
-import { formatRam } from "../../ui/formatNumber";
+import { checkInfiniteLoop } from "../../Script/RamCalculations";
 
 import { ns, enums } from "../../NetscriptFunctions";
 import { Settings } from "../../Settings/Settings";
@@ -25,25 +18,20 @@ import { saveObject } from "../../SaveObject";
 import { loadThemes, makeTheme, sanitizeTheme } from "./themes";
 import { GetServer } from "../../Server/AllServers";
 
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Box from "@mui/material/Box";
-import SettingsIcon from "@mui/icons-material/Settings";
-import Table from "@mui/material/Table";
-import TableCell from "@mui/material/TableCell";
-import TableRow from "@mui/material/TableRow";
-import TableBody from "@mui/material/TableBody";
 import { PromptEvent } from "../../ui/React/PromptManager";
-import { Modal } from "../../ui/React/Modal";
 
 import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
 import { useRerender } from "../../ui/React/hooks";
 import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
 import { TextFilePath } from "src/Paths/TextFilePath";
-import { Tabs } from "./Tabs";
-import { OpenScript } from "./OpenScript";
+
 import { dirty, getServerCode } from "./utils";
+import { OpenScript } from "./OpenScript";
+import { Tabs } from "./Tabs";
+import { Toolbar } from "./Toolbar";
+import { NoOpenScripts } from "./NoOpenScripts";
+import { ScriptEditorContextProvider, useScriptEditorContext } from "./ScriptEditorContext";
+import { useVimEditor } from "./useVimEditor";
 
 interface IProps {
   // Map of filename -> code
@@ -72,32 +60,11 @@ export function SetupTextEditor(): void {
 const openScripts: OpenScript[] = [];
 let currentScript: OpenScript | null = null;
 
-// Called every time script editor is opened
-export function Root(props: IProps): React.ReactElement {
+function Root(props: IProps): React.ReactElement {
   const rerender = useRerender();
   const editorRef = useRef<IStandaloneCodeEditor | null>(null);
-  const vimStatusRef = useRef<HTMLElement>(null);
-  // monaco-vim does not have types, so this is an any
-  const [vimEditor, setVimEditor] = useState<any>(null);
 
-  const [ram, setRAM] = useState("RAM: ???");
-  const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
-  const [updatingRam, setUpdatingRam] = useState(false);
-
-  const [optionsOpen, setOptionsOpen] = useState(false);
-  const [options, setOptions] = useState<Options>({
-    theme: Settings.MonacoTheme,
-    insertSpaces: Settings.MonacoInsertSpaces,
-    tabSize: Settings.MonacoTabSize,
-    detectIndentation: Settings.MonacoDetectIndentation,
-    fontFamily: Settings.MonacoFontFamily,
-    fontSize: Settings.MonacoFontSize,
-    fontLigatures: Settings.MonacoFontLigatures,
-    wordWrap: Settings.MonacoWordWrap,
-    vim: props.vim || Settings.MonacoVim,
-  });
-
-  const [ramInfoOpen, setRamInfoOpen] = useState(false);
+  const { options, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
 
   let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
 
@@ -137,127 +104,46 @@ export function Root(props: IProps): React.ReactElement {
     return () => document.removeEventListener("keydown", keydown);
   });
 
-  useEffect(() => {
-    // setup monaco-vim
-    if (options.vim && editorRef.current && !vimEditor) {
-      // Using try/catch because MonacoVim does not have types.
-      try {
-        setVimEditor(MonacoVim.initVimMode(editorRef.current, vimStatusRef.current));
-        MonacoVim.VimMode.Vim.defineEx("write", "w", function () {
-          // your own implementation on what you want to do when :w is pressed
-          save();
-        });
-        MonacoVim.VimMode.Vim.defineEx("quit", "q", function () {
-          Router.toPage(Page.Terminal);
-        });
-
-        const saveNQuit = (): void => {
-          save();
-          Router.toPage(Page.Terminal);
-        };
-        // "wqriteandquit" &  "xriteandquit" are not typos, prefix must be found in full string
-        MonacoVim.VimMode.Vim.defineEx("wqriteandquit", "wq", saveNQuit);
-        MonacoVim.VimMode.Vim.defineEx("xriteandquit", "x", saveNQuit);
-
-        // Setup "go to next tab" and "go to previous tab". This is a little more involved
-        // since these aren't Ex commands (they run in normal mode, not after typing `:`)
-        MonacoVim.VimMode.Vim.defineAction("nextTabs", function (_cm: any, args: { repeat?: number }) {
-          const nTabs = args.repeat ?? 1;
-          // Go to the next tab (to the right). Wraps around when at the rightmost tab
-          const currIndex = currentTabIndex();
-          if (currIndex !== undefined) {
-            const nextIndex = (currIndex + nTabs) % openScripts.length;
-            onTabClick(nextIndex);
-          }
-        });
-        MonacoVim.VimMode.Vim.defineAction("prevTabs", function (_cm: any, args: { repeat?: number }) {
-          const nTabs = args.repeat ?? 1;
-          // Go to the previous tab (to the left). Wraps around when at the leftmost tab
-          const currIndex = currentTabIndex();
-          if (currIndex !== undefined) {
-            let nextIndex = currIndex - nTabs;
-            while (nextIndex < 0) {
-              nextIndex += openScripts.length;
-            }
-            onTabClick(nextIndex);
-          }
-        });
-        MonacoVim.VimMode.Vim.mapCommand("gt", "action", "nextTabs", {}, { context: "normal" });
-        MonacoVim.VimMode.Vim.mapCommand("gT", "action", "prevTabs", {}, { context: "normal" });
-        editorRef.current.focus();
-      } catch (e) {
-        console.error("An error occurred while loading monaco-vim:");
-        console.error(e);
-      }
-    } else if (!options.vim) {
-      // When vim mode is disabled
-      vimEditor?.dispose();
-      setVimEditor(null);
-    }
-
-    return () => {
-      vimEditor?.dispose();
-    };
-  }, [options, editorRef.current, vimEditor]);
-
   // Generates a new model for the script
   function regenerateModel(script: OpenScript): void {
     script.model = monaco.editor.createModel(script.code, script.isTxt ? "plaintext" : "javascript");
   }
 
+  function infLoop(newCode: string): void {
+    if (editorRef.current === null || currentScript === null) return;
+    if (!decorations) decorations = editorRef.current.createDecorationsCollection();
+    if (!currentScript.path.endsWith(".js")) return;
+    const awaitWarning = checkInfiniteLoop(newCode);
+    if (awaitWarning !== -1) {
+      decorations.set([
+        {
+          range: {
+            startLineNumber: awaitWarning,
+            startColumn: 1,
+            endLineNumber: awaitWarning,
+            endColumn: 10,
+          },
+          options: {
+            isWholeLine: true,
+            glyphMarginClassName: "myGlyphMarginClass",
+            glyphMarginHoverMessage: {
+              value: "Possible infinite loop, await something.",
+            },
+          },
+        },
+      ]);
+    } else decorations.clear();
+  }
+
   const debouncedCodeParsing = debounce((newCode: string) => {
     infLoop(newCode);
-    updateRAM(newCode);
-    setUpdatingRam(false);
+    updateRAM(!currentScript || currentScript.isTxt ? null : newCode);
+    finishUpdatingRAM();
   }, 300);
+
   function parseCode(newCode: string) {
-    setUpdatingRam(true);
+    startUpdatingRAM();
     debouncedCodeParsing(newCode);
-  }
-
-  function updateRAM(newCode: string): void {
-    if (!currentScript || currentScript.isTxt) {
-      setRAM("N/A");
-      setRamEntries([["N/A", ""]]);
-      return;
-    }
-    const codeCopy = newCode + "";
-    const ramUsage = calculateRamUsage(codeCopy, Player.getCurrentServer().scripts);
-    if (ramUsage.cost > 0) {
-      const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
-      const entriesDisp = [];
-      for (const entry of entries) {
-        entriesDisp.push([`${entry.name} (${entry.type})`, formatRam(entry.cost)]);
-      }
-
-      setRAM("RAM: " + formatRam(ramUsage.cost));
-      setRamEntries(entriesDisp);
-      return;
-    }
-    let RAM = "";
-    const entriesDisp = [];
-    switch (ramUsage.cost) {
-      case RamCalculationErrorCode.ImportError: {
-        RAM = "RAM: Import Error";
-        entriesDisp.push(["Import Error", ""]);
-        break;
-      }
-      case RamCalculationErrorCode.SyntaxError:
-      default: {
-        RAM = "RAM: Syntax Error";
-        entriesDisp.push(["Syntax Error", ""]);
-        break;
-      }
-    }
-    setRAM(RAM);
-    setRamEntries(entriesDisp);
-    return;
-  }
-
-  // Formats the code
-  function beautify(): void {
-    if (editorRef.current === null) return;
-    editorRef.current.getAction("editor.action.formatDocument")?.run();
   }
 
   // How to load function definition in monaco
@@ -357,32 +243,6 @@ export function Root(props: IProps): React.ReactElement {
     }
 
     editorRef.current.focus();
-  }
-
-  function infLoop(newCode: string): void {
-    if (editorRef.current === null || currentScript === null) return;
-    if (!decorations) decorations = editorRef.current.createDecorationsCollection();
-    if (!currentScript.path.endsWith(".js")) return;
-    const awaitWarning = checkInfiniteLoop(newCode);
-    if (awaitWarning !== -1) {
-      decorations.set([
-        {
-          range: {
-            startLineNumber: awaitWarning,
-            startColumn: 1,
-            endLineNumber: awaitWarning,
-            endColumn: 10,
-          },
-          options: {
-            isWholeLine: true,
-            glyphMarginClassName: "myGlyphMarginClass",
-            glyphMarginHoverMessage: {
-              value: "Possible infinite loop, await something.",
-            },
-          },
-        },
-      ]);
-    } else decorations.clear();
   }
 
   // When the code is updated within the editor
@@ -551,6 +411,35 @@ export function Root(props: IProps): React.ReactElement {
     }
   }
 
+  function onOpenNextTab(step: number): void {
+    // Go to the next tab (to the right). Wraps around when at the rightmost tab
+    const currIndex = currentTabIndex();
+    if (currIndex !== undefined) {
+      const nextIndex = (currIndex + step) % openScripts.length;
+      onTabClick(nextIndex);
+    }
+  }
+
+  function onOpenPreviousTab(step: number): void {
+    // Go to the previous tab (to the left). Wraps around when at the leftmost tab
+    const currIndex = currentTabIndex();
+    if (currIndex !== undefined) {
+      let nextIndex = currIndex - step;
+      while (nextIndex < 0) {
+        nextIndex += openScripts.length;
+      }
+      onTabClick(nextIndex);
+    }
+  }
+
+  const { VimStatus } = useVimEditor({
+    editor: editorRef.current,
+    vim: options.vim,
+    onSave: save,
+    onOpenNextTab,
+    onOpenPreviousTab,
+  });
+
   return (
     <>
       <div
@@ -569,115 +458,22 @@ export function Root(props: IProps): React.ReactElement {
           onTabUpdate={onTabUpdate}
         />
         <div style={{ flex: "0 0 5px" }} />
-        <Editor
-          beforeMount={beforeMount}
-          onMount={onMount}
-          onChange={updateCode}
-          options={{ ...options, glyphMargin: true }}
-        />
+        <Editor beforeMount={beforeMount} onMount={onMount} onChange={updateCode} />
 
-        <Box
-          ref={vimStatusRef}
-          className="vim-display"
-          display="flex"
-          flexGrow="0"
-          flexDirection="row"
-          sx={{ p: 1 }}
-          alignItems="center"
-        ></Box>
+        {VimStatus}
 
-        <Box display="flex" flexDirection="row" sx={{ m: 1 }} alignItems="center">
-          <Button startIcon={<SettingsIcon />} onClick={() => setOptionsOpen(true)} sx={{ mr: 1 }}>
-            Options
-          </Button>
-          <Button onClick={beautify}>Beautify</Button>
-          <Button
-            color={updatingRam ? "secondary" : "primary"}
-            sx={{ mx: 1 }}
-            onClick={() => {
-              setRamInfoOpen(true);
-            }}
-          >
-            {ram}
-          </Button>
-          <Button onClick={save}>Save (Ctrl/Cmd + s)</Button>
-          <Button sx={{ mx: 1 }} onClick={() => Router.toPage(Page.Terminal)}>
-            Terminal (Ctrl/Cmd + b)
-          </Button>
-          <Typography>
-            {" "}
-            <strong>Documentation:</strong>{" "}
-            <Link target="_blank" href="https://bitburner-official.readthedocs.io/en/latest/index.html">
-              Basic
-            </Link>
-            {" | "}
-            <Link
-              target="_blank"
-              href="https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md"
-            >
-              Full
-            </Link>
-          </Typography>
-        </Box>
-        <OptionsModal
-          open={optionsOpen}
-          onClose={() => {
-            sanitizeTheme(Settings.EditorTheme);
-            monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
-            setOptionsOpen(false);
-          }}
-          options={{ ...options }}
-          save={(options: Options) => {
-            sanitizeTheme(Settings.EditorTheme);
-            monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
-            editorRef.current?.updateOptions(options);
-            setOptions(options);
-            Settings.MonacoTheme = options.theme;
-            Settings.MonacoInsertSpaces = options.insertSpaces;
-            Settings.MonacoTabSize = options.tabSize;
-            Settings.MonacoDetectIndentation = options.detectIndentation;
-            Settings.MonacoFontFamily = options.fontFamily;
-            Settings.MonacoFontSize = options.fontSize;
-            Settings.MonacoFontLigatures = options.fontLigatures;
-            Settings.MonacoWordWrap = options.wordWrap;
-            Settings.MonacoVim = options.vim;
-          }}
-        />
-        <Modal open={ramInfoOpen} onClose={() => setRamInfoOpen(false)}>
-          <Table>
-            <TableBody>
-              {ramEntries.map(([n, r]) => (
-                <React.Fragment key={n + r}>
-                  <TableRow>
-                    <TableCell sx={{ color: Settings.theme.primary }}>{n}</TableCell>
-                    <TableCell align="right" sx={{ color: Settings.theme.primary }}>
-                      {r}
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
-              ))}
-            </TableBody>
-          </Table>
-        </Modal>
+        <Toolbar onSave={save} editor={editorRef.current} />
       </div>
-      <div
-        style={{
-          display: currentScript !== null ? "none" : "flex",
-          height: "100%",
-          width: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <span style={{ color: Settings.theme.primary, fontSize: "20px", textAlign: "center" }}>
-          <Typography variant="h4">No open files</Typography>
-          <Typography variant="h5">
-            Use <code>nano FILENAME</code> in
-            <br />
-            the terminal to open files
-          </Typography>
-        </span>
-      </div>
+      {!currentScript && <NoOpenScripts />}
     </>
+  );
+}
+
+// Called every time script editor is opened
+export function ScriptEditorRoot(props: IProps) {
+  return (
+    <ScriptEditorContextProvider vim={props.vim}>
+      <Root {...props} />
+    </ScriptEditorContextProvider>
   );
 }
