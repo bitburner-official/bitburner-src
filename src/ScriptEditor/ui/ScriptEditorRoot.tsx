@@ -5,7 +5,7 @@ import * as monaco from "monaco-editor";
 import * as MonacoVim from "monaco-vim";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
-type ITextModel = monaco.editor.ITextModel;
+
 import { OptionsModal } from "./OptionsModal";
 import { Options } from "./Options";
 import { Player } from "@player";
@@ -16,8 +16,6 @@ import { ScriptFilePath } from "../../Paths/ScriptFilePath";
 import { calculateRamUsage, checkInfiniteLoop } from "../../Script/RamCalculations";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { formatRam } from "../../ui/formatNumber";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import SearchIcon from "@mui/icons-material/Search";
 
 import { ns, enums } from "../../NetscriptFunctions";
 import { Settings } from "../../Settings/Settings";
@@ -32,8 +30,6 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import SettingsIcon from "@mui/icons-material/Settings";
-import SyncIcon from "@mui/icons-material/Sync";
-import CloseIcon from "@mui/icons-material/Close";
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -42,11 +38,12 @@ import { PromptEvent } from "../../ui/React/PromptManager";
 import { Modal } from "../../ui/React/Modal";
 
 import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
-import { TextField, Tooltip } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
 import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
 import { TextFilePath } from "src/Paths/TextFilePath";
-import { ContentFilePath } from "src/Paths/ContentFile";
+import { Tabs } from "./Tabs";
+import { OpenScript } from "./OpenScript";
+import { dirty, getServerCode } from "./utils";
 
 interface IProps {
   // Map of filename -> code
@@ -72,25 +69,6 @@ export function SetupTextEditor(): void {
   populate();
 }
 
-// Holds all the data for a open script
-class OpenScript {
-  path: ContentFilePath;
-  code: string;
-  hostname: string;
-  lastPosition: monaco.Position;
-  model: ITextModel;
-  isTxt: boolean;
-
-  constructor(path: ContentFilePath, code: string, hostname: string, lastPosition: monaco.Position, model: ITextModel) {
-    this.path = path;
-    this.code = code;
-    this.hostname = hostname;
-    this.lastPosition = lastPosition;
-    this.model = model;
-    this.isTxt = path.endsWith(".txt");
-  }
-}
-
 const openScripts: OpenScript[] = [];
 let currentScript: OpenScript | null = null;
 
@@ -101,8 +79,6 @@ export function Root(props: IProps): React.ReactElement {
   const vimStatusRef = useRef<HTMLElement>(null);
   // monaco-vim does not have types, so this is an any
   const [vimEditor, setVimEditor] = useState<any>(null);
-  const [filter, setFilter] = useState("");
-  const [searchExpanded, setSearchExpanded] = useState(false);
 
   const [ram, setRAM] = useState("RAM: ???");
   const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
@@ -429,7 +405,6 @@ export function Root(props: IProps): React.ReactElement {
     // This server helper already handles overwriting, etc.
     server.writeToContentFile(scriptToSave.path, scriptToSave.code);
     if (Settings.SaveGameOnFileSave) saveObject.saveGame();
-    Router.toPage(Page.Terminal);
   }
 
   function save(): void {
@@ -454,6 +429,7 @@ export function Root(props: IProps): React.ReactElement {
 
       //Save the script
       saveScript(currentScript);
+      Router.toPage(Page.Terminal);
 
       iTutorialNextStep();
 
@@ -465,17 +441,6 @@ export function Root(props: IProps): React.ReactElement {
     server.writeToContentFile(currentScript.path, currentScript.code);
     if (Settings.SaveGameOnFileSave) saveObject.saveGame();
     rerender();
-  }
-
-  function reorder(list: OpenScript[], startIndex: number, endIndex: number): void {
-    const [removed] = list.splice(startIndex, 1);
-    list.splice(endIndex, 0, removed);
-  }
-
-  function onDragEnd(result: any): void {
-    // Dropped outside of the list
-    if (!result.destination) return;
-    reorder(openScripts, result.source.index, result.destination.index);
   }
 
   function currentTabIndex(): number | undefined {
@@ -512,7 +477,7 @@ export function Root(props: IProps): React.ReactElement {
     const savedScriptCode = closingScript.code;
     const wasCurrentScript = openScripts[index] === currentScript;
 
-    if (dirty(index)) {
+    if (dirty(openScripts, index)) {
       PromptEvent.emit({
         txt: `Do you want to save changes to ${closingScript.path} on ${closingScript.hostname}?`,
         resolve: (result: boolean | string) => {
@@ -520,6 +485,7 @@ export function Root(props: IProps): React.ReactElement {
             // Save changes
             closingScript.code = savedScriptCode;
             saveScript(closingScript);
+            Router.toPage(Page.Terminal);
           }
         },
       });
@@ -552,7 +518,7 @@ export function Root(props: IProps): React.ReactElement {
 
   function onTabUpdate(index: number): void {
     const openScript = openScripts[index];
-    const serverScriptCode = getServerCode(index);
+    const serverScriptCode = getServerCode(openScripts, index);
     if (serverScriptCode === null) return;
 
     if (openScript.code !== serverScriptCode) {
@@ -585,35 +551,6 @@ export function Root(props: IProps): React.ReactElement {
     }
   }
 
-  function dirty(index: number): string {
-    const openScript = openScripts[index];
-    const serverData = getServerCode(index);
-    if (serverData === null) return " *";
-    return serverData !== openScript.code ? " *" : "";
-  }
-  function getServerCode(index: number): string | null {
-    const openScript = openScripts[index];
-    const server = GetServer(openScript.hostname);
-    if (server === null) throw new Error(`Server '${openScript.hostname}' should not be null, but it is.`);
-    const data = server.getContentFile(openScript.path)?.content ?? null;
-    return data;
-  }
-  function handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setFilter(event.target.value);
-  }
-  function handleExpandSearch(): void {
-    setFilter("");
-    setSearchExpanded(!searchExpanded);
-  }
-  const filteredOpenScripts = Object.values(openScripts).filter(
-    (script) => script.hostname.includes(filter) || script.path.includes(filter),
-  );
-
-  const tabsMaxWidth = 1640;
-  const tabMargin = 5;
-  const tabMaxWidth = filteredOpenScripts.length ? tabsMaxWidth / filteredOpenScripts.length - tabMargin : 0;
-  const tabIconWidth = 25;
-  const tabTextWidth = tabMaxWidth - tabIconWidth * 2;
   return (
     <>
       <div
@@ -624,131 +561,13 @@ export function Root(props: IProps): React.ReactElement {
           flexDirection: "column",
         }}
       >
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="tabs" direction="horizontal">
-            {(provided, snapshot) => (
-              <Box
-                maxWidth={`${tabsMaxWidth}px`}
-                display="flex"
-                flexGrow="0"
-                flexDirection="row"
-                alignItems="center"
-                whiteSpace="nowrap"
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  backgroundColor: snapshot.isDraggingOver
-                    ? Settings.theme.backgroundsecondary
-                    : Settings.theme.backgroundprimary,
-                  overflowX: "scroll",
-                }}
-              >
-                <Tooltip title={"Search Open Scripts"}>
-                  {searchExpanded ? (
-                    <TextField
-                      value={filter}
-                      onChange={handleFilterChange}
-                      autoFocus
-                      InputProps={{
-                        startAdornment: <SearchIcon />,
-                        spellCheck: false,
-                        endAdornment: <CloseIcon onClick={handleExpandSearch} />,
-                      }}
-                    />
-                  ) : (
-                    <Button onClick={handleExpandSearch}>
-                      <SearchIcon />
-                    </Button>
-                  )}
-                </Tooltip>
-                {filteredOpenScripts.map(({ path: fileName, hostname }, index) => {
-                  const editingCurrentScript =
-                    currentScript?.path === filteredOpenScripts[index].path &&
-                    currentScript.hostname === filteredOpenScripts[index].hostname;
-                  const externalScript = hostname !== "home";
-                  const colorProps = editingCurrentScript
-                    ? {
-                        background: Settings.theme.button,
-                        borderColor: Settings.theme.button,
-                        color: Settings.theme.primary,
-                      }
-                    : {
-                        background: Settings.theme.backgroundsecondary,
-                        borderColor: Settings.theme.backgroundsecondary,
-                        color: Settings.theme.secondary,
-                      };
-
-                  if (externalScript) {
-                    colorProps.color = Settings.theme.info;
-                  }
-                  const iconButtonStyle = {
-                    maxWidth: `${tabIconWidth}px`,
-                    minWidth: `${tabIconWidth}px`,
-                    minHeight: "38.5px",
-                    maxHeight: "38.5px",
-                    ...colorProps,
-                  };
-
-                  const scriptTabText = `${hostname}:~${fileName.startsWith("/") ? "" : "/"}${fileName} ${dirty(
-                    index,
-                  )}`;
-                  return (
-                    <Draggable
-                      key={fileName + hostname}
-                      draggableId={fileName + hostname}
-                      index={index}
-                      disableInteractiveElementBlocking={true}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            ...provided.draggableProps.style,
-                            maxWidth: `${tabMaxWidth}px`,
-                            marginRight: `${tabMargin}px`,
-                            flexShrink: 0,
-                            border: "1px solid " + Settings.theme.well,
-                          }}
-                        >
-                          <Tooltip title={scriptTabText}>
-                            <Button
-                              onClick={() => onTabClick(index)}
-                              onMouseDown={(e) => {
-                                e.preventDefault();
-                                if (e.button === 1) onTabClose(index);
-                              }}
-                              style={{
-                                maxWidth: `${tabTextWidth}px`,
-                                minHeight: "38.5px",
-                                overflow: "hidden",
-                                ...colorProps,
-                              }}
-                            >
-                              <span style={{ overflow: "hidden", direction: "rtl", textOverflow: "ellipsis" }}>
-                                {scriptTabText}
-                              </span>
-                            </Button>
-                          </Tooltip>
-                          <Tooltip title="Overwrite editor content with saved file content">
-                            <Button onClick={() => onTabUpdate(index)} style={iconButtonStyle}>
-                              <SyncIcon fontSize="small" />
-                            </Button>
-                          </Tooltip>
-                          <Button onClick={() => onTabClose(index)} style={iconButtonStyle}>
-                            <CloseIcon fontSize="small" />
-                          </Button>
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
-              </Box>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <Tabs
+          scripts={openScripts}
+          currentScript={currentScript}
+          onTabClick={onTabClick}
+          onTabClose={onTabClose}
+          onTabUpdate={onTabUpdate}
+        />
         <div style={{ flex: "0 0 5px" }} />
         <Editor
           beforeMount={beforeMount}
