@@ -78,7 +78,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
       );
     }
     <>
-      {sellButtonText} @ <Money money={mat.GUImarketPrice} />
+      {sellButtonText} @ <Money money={mat.uiMarketPrice} />
     </>;
   } else {
     sellButtonText = <>Sell (0.000/0.000)</>;

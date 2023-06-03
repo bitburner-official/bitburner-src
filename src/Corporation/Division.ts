@@ -552,7 +552,7 @@ export class Division {
             } else {
               sCost = mat.desiredSellPrice;
             }
-            mat.GUImarketPrice = sCost;
+            mat.uiMarketPrice = sCost;
 
             // Calculate how much of the material sells (per second)
             let markup = 1;
@@ -901,7 +901,7 @@ export class Division {
           } else {
             sCost = sellPrice;
           }
-          product.GUImarketPrice[city] = sCost;
+          product.uiMarketPrice[city] = sCost;
           let markup = 1;
           if (sCost > product.productionCost) {
             if (sCost - product.productionCost > markupLimit) {

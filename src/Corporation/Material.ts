@@ -62,7 +62,7 @@ export class Material {
   // Flags that signal whether automatic sale pricing through Market TA is enabled
   marketTa1 = false;
   marketTa2 = false;
-  GUImarketPrice = 0;
+  uiMarketPrice = 0;
 
   // Determines the maximum amount of this material that can be sold in one market cycle
   maxSellPerCycle = 0;

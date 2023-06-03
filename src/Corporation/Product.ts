@@ -93,7 +93,7 @@ export class Product {
   // Flags that signal whether automatic sale pricing through Market TA is enabled
   marketTa1 = false;
   marketTa2 = false;
-  GUImarketPrice = createEnumKeyedRecord(CityName, () => 0);
+  uiMarketPrice = createEnumKeyedRecord(CityName, () => 0);
 
   /** Effective number that "MAX" represents in a sell amount */
   maxSellAmount = 0;

@@ -68,7 +68,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
 
   sellButtonText = (
     <>
-      {sellButtonText} @ <Money money={product.GUImarketPrice[city]} />
+      {sellButtonText} @ <Money money={product.uiMarketPrice[city]} />
     </>
   );
   // Limit Production button
