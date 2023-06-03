@@ -45,13 +45,11 @@ import React from "react";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
 import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
-import { prestigeSourceFile } from "./Prestige";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
   _lastUpdate: number;
   updateGame: (numCycles?: number) => void;
-  nodeTransfer: boolean | undefined;
   Counters: {
     [key: string]: number | undefined;
     autoSaveCounter: number;
@@ -75,12 +73,7 @@ const Engine: {
 } = {
   // Time variables (milliseconds unix epoch time)
   _lastUpdate: new Date().getTime(),
-  nodeTransfer: undefined,
   updateGame: function (numCycles = 1) {
-    if (this.nodeTransfer != undefined) {
-      prestigeSourceFile(this.nodeTransfer);
-      this.nodeTransfer = undefined;
-    }
     const time = numCycles * CONSTANTS.MilliPerCycle;
     if (Player.totalPlaytime == null) {
       Player.totalPlaytime = 0;

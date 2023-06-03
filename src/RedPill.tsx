@@ -6,7 +6,7 @@ import { SourceFiles } from "./SourceFile/SourceFiles";
 import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
-import { Engine } from "./engine";
+import { prestigeSourceFile } from "./Prestige";
 
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();
@@ -48,8 +48,8 @@ function giveSourceFile(bitNodeNumber: number): void {
   }
 }
 
-export function enterBitNode(flume: boolean, destroyedBitNode: number, newBitNode: number): void {
-  if (!flume) {
+export function enterBitNode(isFlume: boolean, destroyedBitNode: number, newBitNode: number): void {
+  if (!isFlume) {
     giveSourceFile(destroyedBitNode);
   } else if (Player.sourceFileLvl(5) === 0 && newBitNode !== 5) {
     Player.skills.intelligence = 0;
@@ -66,5 +66,5 @@ export function enterBitNode(flume: boolean, destroyedBitNode: number, newBitNod
   } else {
     Router.toPage(Page.Terminal);
   }
-  Engine.nodeTransfer = flume;
+  prestigeSourceFile(isFlume);
 }
