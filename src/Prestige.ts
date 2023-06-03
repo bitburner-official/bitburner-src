@@ -31,6 +31,9 @@ import { CONSTANTS } from "./Constants";
 import { LogBoxClearEvents } from "./ui/React/LogBoxManager";
 
 const BitNode8StartingMoney = 250e6;
+function delayedDialog(message: string) {
+  setTimeout(() => dialogBoxCreate(message), 200);
+}
 
 // Prestige by purchasing augmentation
 export function prestigeAugmentation(): void {
@@ -233,7 +236,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   if (Player.bitNodeN === 3) {
     // Easiest way to comply with type constraint, instead of revalidating the enum member's file path
     homeComp.messages.push(LiteratureName.CorporationManagementHandbook);
-    dialogBoxCreate(
+    delayedDialog(
       "You received a copy of the Corporation Management Handbook on your home computer. " +
         "Read it if you need help getting started with Corporations!",
     );
@@ -241,7 +244,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // BitNode 6: Bladeburners and BitNode 7: Bladeburners 2079
   if (Player.bitNodeN === 6 || Player.bitNodeN === 7) {
-    dialogBoxCreate("NSA would like to have a word with you once you're ready.");
+    delayedDialog("NSA would like to have a word with you once you're ready.");
   }
 
   // BitNode 8: Ghost of Wall Street
@@ -255,18 +258,18 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // BitNode 10: Digital Carbon
   if (Player.bitNodeN === 10) {
-    dialogBoxCreate(
+    delayedDialog(
       "Seek out The Covenant if you'd like to purchase a new sleeve or two! And see what VitaLife in New Tokyo has to offer for you",
     );
   }
 
   // BitNode 12: Digital Carbon
   if (Player.bitNodeN === 12 && Player.sourceFileLvl(10) > 100) {
-    dialogBoxCreate("Saynt_Garmo is watching you");
+    delayedDialog("Saynt_Garmo is watching you");
   }
 
   if (Player.bitNodeN === 13) {
-    dialogBoxCreate(`Trouble is brewing in ${CityName.Chongqing}`);
+    delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
   }
 
   // Reset Stock market, gang, and corporation
