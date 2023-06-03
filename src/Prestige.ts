@@ -161,7 +161,7 @@ export function prestigeAugmentation(): void {
 }
 
 // Prestige by destroying Bit Node and gaining a Source File
-export function prestigeSourceFile(flume: boolean): void {
+export function prestigeSourceFile(isFlume: boolean): void {
   initBitNodeMultipliers();
 
   Player.prestigeSourceFile();
@@ -297,7 +297,7 @@ export function prestigeSourceFile(flume: boolean): void {
   staneksGift.prestigeSourceFile();
 
   // Gain int exp
-  if (Player.sourceFileLvl(5) !== 0 && !flume) Player.gainIntelligenceExp(300);
+  if (Player.sourceFileLvl(5) !== 0 && !isFlume) Player.gainIntelligenceExp(300);
 
   // Clear recent scripts
   recentScripts.splice(0, recentScripts.length);
