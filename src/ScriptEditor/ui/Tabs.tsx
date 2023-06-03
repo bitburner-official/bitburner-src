@@ -6,6 +6,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import SyncIcon from "@mui/icons-material/Sync";
 
+import { useRerender } from "../../ui/React/hooks";
 import { Settings } from "../../Settings/Settings";
 
 import { dirty, reorder } from "./utils";
@@ -27,11 +28,13 @@ interface IProps {
 export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpdate }: IProps) {
   const [filter, setFilter] = useState("");
   const [searchExpanded, setSearchExpanded] = useState(false);
+  const rerender = useRerender();
 
   function onDragEnd(result: any): void {
     // Dropped outside of the list
     if (!result.destination) return;
     reorder(scripts, result.source.index, result.destination.index);
+    rerender();
   }
 
   const filteredOpenScripts = Object.values(scripts).filter(
