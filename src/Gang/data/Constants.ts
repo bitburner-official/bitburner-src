@@ -1,4 +1,4 @@
-import { CONSTANTS } from "src/Constants";
+import { CONSTANTS } from "../../Constants";
 import { FactionNames } from "../../Faction/data/FactionNames";
 
 export const GangConstants = {

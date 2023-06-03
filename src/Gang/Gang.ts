@@ -14,7 +14,6 @@ import { getRandomInt } from "../utils/helpers/getRandomInt";
 
 import { GangMemberUpgrade } from "./GangMemberUpgrade";
 import { GangConstants } from "./data/Constants";
-import { CONSTANTS } from "../Constants";
 import { GangMemberTasks } from "./GangMemberTasks";
 import { IAscensionResult } from "./IAscensionResult";
 
