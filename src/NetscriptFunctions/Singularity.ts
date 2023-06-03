@@ -1206,7 +1206,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         : false;
       if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
       enterBitNode(true, Player.bitNodeN, nextBN);
-      if (cbScript) setTimeout(() => runAfterReset(cbScript), 0);
+      if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
     },
     destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript) => {
       helpers.checkSingularityAccess(ctx);
@@ -1239,7 +1239,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       wd.backdoorInstalled = true;
       calculateAchievements();
       enterBitNode(false, Player.bitNodeN, nextBN);
-      if (cbScript) setTimeout(() => runAfterReset(cbScript), 0);
+      if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
     },
     getCurrentWork: () => () => {
       if (!Player.currentWork) return null;
