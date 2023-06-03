@@ -496,8 +496,8 @@ export class Division {
             const adjustedQty = mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles);
             if (isString(mat.desiredSellAmount)) {
               //Dynamically evaluated
-              let tmp = mat.desiredSellAmount.replace(/MAX/g, (adjustedQty + "").toUpperCase());
-              tmp = tmp.replace(/PROD/g, mat.productionAmount + "");
+              let tmp = mat.desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
+              tmp = tmp.replace(/PROD/g, mat.productionAmount.toString());
               try {
                 sellAmt = eval(tmp);
               } catch (e) {
@@ -548,7 +548,7 @@ export class Division {
             } else if (mat.marketTa1) {
               sCost = mat.marketPrice + markupLimit;
             } else if (isString(mat.desiredSellPrice)) {
-              sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice + "");
+              sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice.toString());
               sCost = eval(sCost);
             } else {
               sCost = mat.desiredSellPrice;
@@ -619,7 +619,7 @@ export class Division {
 
                 let amtStr = exp.amount.replace(
                   /MAX/g,
-                  (mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles) + "").toUpperCase(),
+                  (mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles)).toString(),
                 );
                 amtStr = amtStr.replace(/EPROD/g, mat.productionAmount.toString());
                 amtStr = amtStr.replace(/IPROD/g, tempMaterial.productionAmount.toString());
@@ -879,7 +879,7 @@ export class Division {
               console.error(`mku is zero, reverting to 1 to avoid Infinity`);
               product.markup = 1;
             }
-            sCostString = sCostString.replace(/MP/g, product.productionCost + "");
+            sCostString = sCostString.replace(/MP/g, product.productionCost.toString());
             sCost = Math.max(product.productionCost, eval(sCostString));
           } else {
             sCost = sellPrice;
