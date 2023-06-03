@@ -578,7 +578,7 @@ export class Division {
               corporation.getSalesMult() *
               advertisingFactor *
               this.getSalesMultiplier();
-            
+
             sellAmt = Math.min(mat.maxSellPerCycle, sellAmt);
             sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
             sellAmt = Math.min(mat.stored, sellAmt);
