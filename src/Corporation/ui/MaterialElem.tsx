@@ -44,7 +44,6 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   const warehouse = props.warehouse;
   const city = props.city;
   const mat = props.mat;
-  const markupLimit = mat.getMarkupLimit();
   const office = division.offices[city];
   if (!office) {
     throw new Error(`Could not get OfficeSpace object for this city (${city})`);
@@ -68,7 +67,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
     if (isString(mat.desiredSellAmount)) {
       sellButtonText = (
         <>
-          Sell ({formatBigNumber(mat.actualSellAmount)}/{mat.desiredSellAmount[1]})
+          Sell ({formatBigNumber(mat.actualSellAmount)}/{mat.desiredSellAmount})
         </>
       );
     } else {
@@ -78,35 +77,9 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
         </>
       );
     }
-
-    if (mat.marketTa2) {
-      sellButtonText = (
-        <>
-          {sellButtonText} @ <Money money={mat.marketTa2Price} />
-        </>
-      );
-    } else if (mat.marketTa1) {
-      sellButtonText = (
-        <>
-          {sellButtonText} @ <Money money={mat.marketPrice + markupLimit} />
-        </>
-      );
-    } else if (mat.desiredSellPrice) {
-      if (isString(mat.desiredSellPrice)) {
-        const sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice + "");
-        sellButtonText = (
-          <>
-            {sellButtonText} @ <Money money={eval(sCost)} />
-          </>
-        );
-      } else {
-        sellButtonText = (
-          <>
-            {sellButtonText} @ <Money money={mat.desiredSellPrice} />
-          </>
-        );
-      }
-    }
+    <>
+      {sellButtonText} @ <Money money={mat.GUImarketPrice} />
+    </>;
   } else {
     sellButtonText = <>Sell (0.000/0.000)</>;
   }
