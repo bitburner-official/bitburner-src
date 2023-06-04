@@ -59,29 +59,31 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
   }
 
   return (
-    <Box display="flex" flexGrow="0" flexDirection="row">
+    <Box display="flex" flexGrow="0" flexDirection="row" alignItems="center">
       <Tooltip title={"Search Open Scripts"}>
-        {searchExpanded ? (
-          <TextField
-            value={filter}
-            onChange={handleFilterChange}
-            autoFocus
-            sx={{ minWidth: searchWidth, maxWidth: searchWidth }}
-            InputProps={{
-              startAdornment: <SearchIcon />,
-              spellCheck: false,
-              endAdornment: (
-                <IconButton onClick={handleExpandSearch}>
-                  <CloseIcon />
-                </IconButton>
-              ),
-            }}
-          />
-        ) : (
-          <Button onClick={handleExpandSearch}>
-            <SearchIcon />
-          </Button>
-        )}
+        <span style={{ marginRight: 5 }}>
+          {searchExpanded ? (
+            <TextField
+              value={filter}
+              onChange={handleFilterChange}
+              autoFocus
+              sx={{ minWidth: searchWidth, maxWidth: searchWidth }}
+              InputProps={{
+                startAdornment: <SearchIcon />,
+                spellCheck: false,
+                endAdornment: (
+                  <IconButton onClick={handleExpandSearch}>
+                    <CloseIcon />
+                  </IconButton>
+                ),
+              }}
+            />
+          ) : (
+            <Button onClick={handleExpandSearch}>
+              <SearchIcon />
+            </Button>
+          )}
+        </span>
       </Tooltip>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="tabs" direction="horizontal">
@@ -103,12 +105,14 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
               }}
               onWheel={handleScroll}
             >
-              {filteredOpenScripts.map(({ path: fileName, hostname }, index) => {
+              {filteredOpenScripts.map((script, index) => {
+                const { path: fileName, hostname } = script;
                 const isActive =
                   currentScript?.path === filteredOpenScripts[index].path &&
                   currentScript.hostname === filteredOpenScripts[index].hostname;
 
                 const title = `${hostname}:~${fileName.startsWith("/") ? "" : "/"}${fileName} ${dirty(scripts, index)}`;
+                const originalIndex = scripts.indexOf(script);
 
                 return (
                   <Draggable
@@ -123,9 +127,9 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
                         title={title}
                         isActive={isActive}
                         isExternal={hostname !== "home"}
-                        onClick={() => onTabClick(index)}
-                        onClose={() => onTabClose(index)}
-                        onUpdate={() => onTabUpdate(index)}
+                        onClick={() => onTabClick(originalIndex)}
+                        onClose={() => onTabClose(originalIndex)}
+                        onUpdate={() => onTabUpdate(originalIndex)}
                       />
                     )}
                   </Draggable>
