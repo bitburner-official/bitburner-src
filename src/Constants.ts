@@ -246,6 +246,7 @@ GENERAL / MISC:
 * Changed tail window buttons into icon buttons, plus tail window bugfixes (@d0sboots)
 * Terminal no longer scrolls to the bottom constantly while an action is being performed (@bezrodnov)
 * Added a close button to modals (@bezrodnov)
+* Fixes for Corp import/export issues, such as -IPROD and Smart Supply not working right (@d0sboots)
 * Documentation fixes (various)
 * Nerf noodle bar
 

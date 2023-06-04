@@ -355,7 +355,10 @@ export class Division {
             if (warehouse.smartSupplyOptions[matName] === "leftovers") {
               buyArray[0] = Math.max(0, buyArray[0] - mat.stored);
             } else {
-              buyArray[0] = Math.max(0, buyArray[0] - mat.importAmount);
+              buyArray[0] = Math.max(
+                0,
+                buyArray[0] - mat.importAmount * corpConstants.secondsPerMarketCycle * marketCycles,
+              );
             }
           }
 
@@ -365,7 +368,7 @@ export class Division {
             if (mat.stored + buyAmt != 0) mat.quality = (mat.quality * mat.stored + 1 * buyAmt) / (mat.stored + buyAmt);
             else mat.quality = 1;
             mat.stored += buyAmt;
-            mat.buyAmount = buyAmt / 10;
+            mat.buyAmount = buyAmt / (corpConstants.secondsPerMarketCycle * marketCycles);
             expenses += buyAmt * mat.marketPrice;
           }
           break;
@@ -639,8 +642,8 @@ export class Division {
                   /MAX/g,
                   (mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles) + "").toUpperCase(),
                 );
-                amtStr = amtStr.replace(/EPROD/g, mat.productionAmount.toString());
-                amtStr = amtStr.replace(/IPROD/g, tempMaterial.productionAmount.toString());
+                amtStr = amtStr.replace(/EPROD/g, "(" + mat.productionAmount + ")");
+                amtStr = amtStr.replace(/IPROD/g, "(" + tempMaterial.productionAmount + ")");
                 amtStr = amtStr.replace(/EINV/g, mat.stored.toString());
                 amtStr = amtStr.replace(/IINV/g, tempMaterial.stored.toString());
                 let amt = 0;
