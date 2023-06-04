@@ -93,10 +93,14 @@ export class Corporation {
       const gameCycles = marketCycles * corpConstants.gameCyclesPerCorpStateCycle;
       this.storedCycles -= gameCycles;
 
-      this.divisions.forEach((ind) => {
+      // Can't combine these loops, imports must be completely cleared before
+      // we start processing exports of any division.
+      for (const ind of this.divisions.values()) {
         ind.resetImports(state);
+      }
+      for (const ind of this.divisions.values()) {
         ind.process(marketCycles, state, this);
-      });
+      }
 
       // Process cooldowns
       if (this.shareSaleCooldown > 0) {
