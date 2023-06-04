@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -34,16 +34,20 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
   const [searchExpanded, setSearchExpanded] = useState(false);
   const rerender = useRerender();
 
-  function onDragEnd(result: any): void {
+  const filteredScripts = Object.values(scripts)
+    .map((script, originalIndex) => ({ script, originalIndex }))
+    .filter(({ script }) => script.hostname.includes(filter) || script.path.includes(filter));
+
+  function onDragEnd(result: DropResult): void {
     // Dropped outside of the list
     if (!result.destination) return;
-    reorder(scripts, result.source.index, result.destination.index);
+    reorder(
+      scripts,
+      filteredScripts[result.source.index].originalIndex,
+      filteredScripts[result.destination.index].originalIndex,
+    );
     rerender();
   }
-
-  const filteredOpenScripts = Object.values(scripts).filter(
-    (script) => script.hostname.includes(filter) || script.path.includes(filter),
-  );
 
   function handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setFilter(event.target.value);
@@ -105,14 +109,11 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
               }}
               onWheel={handleScroll}
             >
-              {filteredOpenScripts.map((script, index) => {
+              {filteredScripts.map(({ script, originalIndex }, index) => {
                 const { path: fileName, hostname } = script;
-                const isActive =
-                  currentScript?.path === filteredOpenScripts[index].path &&
-                  currentScript.hostname === filteredOpenScripts[index].hostname;
+                const isActive = currentScript?.path === script.path && currentScript.hostname === script.hostname;
 
                 const title = `${hostname}:~${fileName.startsWith("/") ? "" : "/"}${fileName} ${dirty(scripts, index)}`;
-                const originalIndex = scripts.indexOf(script);
 
                 return (
                   <Draggable
