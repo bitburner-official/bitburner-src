@@ -231,8 +231,8 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3.1 dev - Changelog updated 1 Jun 2023
------------------------------------------
+v2.3.1 dev - Changelog last updated 4 Jun 2023
+----------------------------------------------
 
 GENERAL / MISC:
 
@@ -243,17 +243,28 @@ NETSCRIPT:
 
 GENERAL / MISC:
 
+* Fixed several issues with script editor tabs (@bezrodnov)
 * Changed tail window buttons into icon buttons, plus tail window bugfixes (@d0sboots)
 * Terminal no longer scrolls to the bottom constantly while an action is being performed (@bezrodnov)
 * Added a close button to modals (@bezrodnov)
-* Fixes for Corp import/export issues, such as -IPROD and Smart Supply not working right (@d0sboots)
 * Documentation fixes (various)
 * Nerf noodle bar
 
 SPOILER SECTIONS:
 
+SF2:
+
+* Overall gang respect gain rate now reads accurately, instead of showing ~10x. (@Snarling)
+
 SF3:
 
 * Added "maxProducts" property to ns.corporation.getDivision return value (@kateract)
+* Fixed an issue with sell price parsing for materials (@zerbosh)
+* Fixed display of market price for materials and products (@zerbosh)
+* Fixes for Corp import/export issues, such as -IPROD and Smart Supply not working right (@d0sboots)
+
+SF4:
+
+* Fixed an issue that could cause singularity run-after-reset callback scripts to not launch correctly (@Snarling)
 `,
 };
