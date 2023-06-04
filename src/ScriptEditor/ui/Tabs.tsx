@@ -10,7 +10,7 @@ import Tooltip from "@mui/material/Tooltip";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 
-import { useRerender } from "../../ui/React/hooks";
+import { useBoolean, useRerender } from "../../ui/React/hooks";
 import { Settings } from "../../Settings/Settings";
 
 import { dirty, reorder } from "./utils";
@@ -18,7 +18,7 @@ import { OpenScript } from "./OpenScript";
 import { Tab } from "./Tab";
 
 const tabsMaxWidth = 1640;
-const searchWidth = 150;
+const searchWidth = 180;
 
 interface IProps {
   scripts: OpenScript[];
@@ -31,6 +31,7 @@ interface IProps {
 
 export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpdate }: IProps) {
   const [filter, setFilter] = useState("");
+  const [isSearchTooltipOpen, { on: openSearchTooltip, off: closeSearchTooltip }] = useBoolean(false);
   const [searchExpanded, setSearchExpanded] = useState(false);
   const rerender = useRerender();
 
@@ -53,9 +54,10 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
     setFilter(event.target.value);
   }
 
-  function handleExpandSearch(): void {
+  function toggleSearch(): void {
     setFilter("");
     setSearchExpanded(!searchExpanded);
+    closeSearchTooltip();
   }
 
   function handleScroll(e: React.WheelEvent<HTMLDivElement>): void {
@@ -64,7 +66,12 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
 
   return (
     <Box display="flex" flexGrow="0" flexDirection="row" alignItems="center">
-      <Tooltip title={"Search Open Scripts"}>
+      <Tooltip
+        title={"Search Open Scripts"}
+        open={isSearchTooltipOpen}
+        onOpen={openSearchTooltip}
+        onClose={closeSearchTooltip}
+      >
         <span style={{ marginRight: 5 }}>
           {searchExpanded ? (
             <TextField
@@ -76,14 +83,14 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
                 startAdornment: <SearchIcon />,
                 spellCheck: false,
                 endAdornment: (
-                  <IconButton onClick={handleExpandSearch}>
+                  <IconButton onClick={toggleSearch}>
                     <CloseIcon />
                   </IconButton>
                 ),
               }}
             />
           ) : (
-            <Button onClick={handleExpandSearch}>
+            <Button onClick={toggleSearch}>
               <SearchIcon />
             </Button>
           )}
