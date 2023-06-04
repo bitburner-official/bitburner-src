@@ -545,7 +545,6 @@ export class Division {
 
               // We'll store this "Optimal Price" in a property so that we don't have
               // to re-calculate it for the UI
-              mat.marketTa2Price = optimalPrice;
 
               sCost = optimalPrice;
             } else if (mat.marketTa1) {
@@ -556,6 +555,7 @@ export class Division {
             } else {
               sCost = mat.desiredSellPrice;
             }
+            mat.uiMarketPrice = sCost;
 
             // Calculate how much of the material sells (per second)
             let markup = 1;
@@ -890,7 +890,6 @@ export class Division {
             }
 
             // Store this "optimal Price" in a property so we don't have to re-calculate for UI
-            product.marketTa2Price[city] = optimalPrice;
             sCost = optimalPrice;
           } else if (product.marketTa1) {
             sCost = product.productionCost + markupLimit;
@@ -905,7 +904,7 @@ export class Division {
           } else {
             sCost = sellPrice;
           }
-
+          product.uiMarketPrice[city] = sCost;
           let markup = 1;
           if (sCost > product.productionCost) {
             if (sCost - product.productionCost > markupLimit) {

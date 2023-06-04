@@ -66,37 +66,11 @@ export function ProductElem(props: IProductProps): React.ReactElement {
     sellButtonText = <>Sell (0.000/0.000)</>;
   }
 
-  if (product.marketTa2) {
-    sellButtonText = (
-      <>
-        {sellButtonText} @ <Money money={product.marketTa2Price[city]} />
-      </>
-    );
-  } else if (product.marketTa1) {
-    const markupLimit = product.rating / product.markup;
-    sellButtonText = (
-      <>
-        {sellButtonText} @ <Money money={product.productionCost + markupLimit} />
-      </>
-    );
-  } else if (product.cityData[city].desiredSellPrice) {
-    const desiredSellPrice = product.cityData[city].desiredSellPrice;
-    if (isString(desiredSellPrice)) {
-      const sCost = desiredSellPrice.replace(/MP/g, product.productionCost + product.rating / product.markup + "");
-      sellButtonText = (
-        <>
-          {sellButtonText} @ <Money money={eval(sCost)} />
-        </>
-      );
-    } else {
-      sellButtonText = (
-        <>
-          {sellButtonText} @ <Money money={product.cityData[city].desiredSellPrice} />
-        </>
-      );
-    }
-  }
-
+  sellButtonText = (
+    <>
+      {sellButtonText} @ <Money money={product.uiMarketPrice[city]} />
+    </>
+  );
   // Limit Production button
   const productionLimit = product.cityData[city].productionLimit;
   const limitProductionButtonText =
