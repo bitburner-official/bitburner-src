@@ -499,8 +499,8 @@ export class Division {
             const adjustedQty = mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles);
             if (isString(mat.desiredSellAmount)) {
               //Dynamically evaluated
-              let tmp = mat.desiredSellAmount.replace(/MAX/g, (adjustedQty + "").toUpperCase());
-              tmp = tmp.replace(/PROD/g, mat.productionAmount + "");
+              let tmp = mat.desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
+              tmp = tmp.replace(/PROD/g, mat.productionAmount.toString());
               try {
                 sellAmt = eval(tmp);
               } catch (e) {
@@ -550,7 +550,7 @@ export class Division {
             } else if (mat.marketTa1) {
               sCost = mat.marketPrice + markupLimit;
             } else if (isString(mat.desiredSellPrice)) {
-              sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice + "");
+              sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice.toString());
               sCost = eval(sCost);
             } else {
               sCost = mat.desiredSellPrice;
@@ -581,25 +581,7 @@ export class Division {
               corporation.getSalesMult() *
               advertisingFactor *
               this.getSalesMultiplier();
-            if (isString(mat.desiredSellAmount)) {
-              //Dynamically evaluated
-              let tmp = mat.desiredSellAmount.replace(/MAX/g, (mat.maxSellPerCycle + "").toUpperCase());
-              tmp = tmp.replace(/PROD/g, mat.productionAmount + "");
 
-              try {
-                sellAmt = eval(tmp);
-              } catch (e) {
-                dialogBoxCreate(
-                  `Error evaluating your sell amount for material ${mat.name} in ${this.name}'s ${city} office. The sell amount is being set to zero, sellAmt is set to ${sellAmt}`,
-                );
-                sellAmt = 0;
-              }
-              sellAmt = Math.min(mat.maxSellPerCycle, sellAmt);
-              sellAmt = Math.max(sellAmt, 0);
-            } else {
-              //Player's input value is just a number
-              sellAmt = Math.min(mat.maxSellPerCycle, mat.desiredSellAmount);
-            }
             sellAmt = Math.min(mat.maxSellPerCycle, sellAmt);
             sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
             sellAmt = Math.min(mat.stored, sellAmt);
@@ -640,7 +622,7 @@ export class Division {
 
                 let amtStr = exp.amount.replace(
                   /MAX/g,
-                  (mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles) + "").toUpperCase(),
+                  (mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles)).toString(),
                 );
                 amtStr = amtStr.replace(/EPROD/g, "(" + mat.productionAmount + ")");
                 amtStr = amtStr.replace(/IPROD/g, "(" + tempMaterial.productionAmount + ")");
@@ -839,7 +821,7 @@ export class Division {
           const desiredSellAmount = product.cityData[city].desiredSellAmount;
           if (isString(desiredSellAmount)) {
             //Sell amount is dynamically evaluated
-            let tmp: number | string = desiredSellAmount.replace(/MAX/g, (adjustedQty + "").toUpperCase());
+            let tmp: number | string = desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
             tmp = tmp.replace(/PROD/g, product.cityData[city].productionAmount.toString());
             try {
               tmp = eval(tmp);
@@ -899,7 +881,7 @@ export class Division {
               console.error(`mku is zero, reverting to 1 to avoid Infinity`);
               product.markup = 1;
             }
-            sCostString = sCostString.replace(/MP/g, product.productionCost + "");
+            sCostString = sCostString.replace(/MP/g, product.productionCost.toString());
             sCost = Math.max(product.productionCost, eval(sCostString));
           } else {
             sCost = sellPrice;
