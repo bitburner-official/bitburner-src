@@ -25,7 +25,8 @@ export function LevelableUpgrade({ upgradeName, mult, rerender }: IProps): React
   const data = CorpUpgrades[upgradeName];
   const level = corp.upgrades[upgradeName].level;
 
-  const amount = calculateMaxAffordableUpgrade(corp, data, mult);
+  const amount = mult === "MAX" ? calculateMaxAffordableUpgrade(corp, data) : mult;
+
   const cost = amount === 0 ? 0 : calculateUpgradeCost(corp, data, amount);
   const tooltip = data.desc;
   function onClick(): void {

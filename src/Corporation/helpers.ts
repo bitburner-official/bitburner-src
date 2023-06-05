@@ -10,11 +10,7 @@ export function calculateUpgradeCost(corporation: Corporation, upgrade: CorpUpgr
   return cost;
 }
 
-export function calculateMaxAffordableUpgrade(
-  corp: Corporation,
-  upgrade: CorpUpgrade,
-  amount: PositiveInteger | "MAX",
-): 0 | PositiveInteger {
+export function calculateMaxAffordableUpgrade(corp: Corporation, upgrade: CorpUpgrade): 0 | PositiveInteger {
   const Lvl = corp.upgrades[upgrade.name].level;
   const Multi = upgrade.priceMult;
   const Base = upgrade.basePrice;
@@ -26,7 +22,10 @@ export function calculateMaxAffordableUpgrade(
     Multi^X >= 1 - FUNDS / Base / Multi^Lvl * (1 - Multi)
     X <= ln(1 - FUNDS / Base / Multi^Lvl * (1 - Multi)) / ln(Multi)
   */
-  const max = Math.floor(Math.log(1 - (corp.funds / Base / Math.pow(Multi, Lvl)) * (1 - Multi)) / Math.log(Multi));
-  const wanted = amount === "MAX" ? max : amount;
-  return Math.min(max, wanted) as PositiveInteger | 0;
+  const maxAffordableUpgrades = Math.floor(
+    Math.log(1 - (corp.funds / Base / Math.pow(Multi, Lvl)) * (1 - Multi)) / Math.log(Multi),
+  );
+
+  const sanitizedValue = maxAffordableUpgrades >= 0 ? maxAffordableUpgrades : 0;
+  return sanitizedValue as PositiveInteger | 0;
 }
