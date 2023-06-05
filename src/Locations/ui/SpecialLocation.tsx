@@ -305,7 +305,9 @@ export function SpecialLocation(props: IProps): React.ReactElement {
     return (
       <>
         <Typography>
-          <CorruptableText content={"An eerie aura surrounds this area. You feel you should leave."} />
+          <CorruptableText content={"An eerie aura surrounds this area. You feel you should leave IMMEDIATELY."} />
+          <br />
+          {Player.sourceFileLvl(10) > 1 && <Button disabled><CorruptableText content={"Explore the Myrian"} /></Button>}
         </Typography>
       </>
     );

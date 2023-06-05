@@ -1,0 +1,73 @@
+Lore (not important):
+
+After the player searched for weeks / months they finally found a spark of hope to get out of the control of the Enders. 
+Exploring the glitch in Ishima reveals an entrance to another world. That world was dubbed "The Myrian".
+The Myrian is the real world, where the Enders control . In the Myrian the player can fight The Enders directly.
+The player can bring Sleeves to The Myrian with them in order to explore it and perhaps find a way out for good.
+Due to gravity and atmosphere the stats of the sleeves and player are heavily nerfed. Also dying in The Myrian has
+far greater consequences than inside simulations.
+
+Big spoilers but it's a simulation, inside a simulation. There's no way out.
+
+Mechanics:
+
+The basic premise is that your sleeves go in The Myrian, walk and fight about on a 2d grid of tiles.
+Obstacles can be removed, structures can be built. Power ups discovered.
+
+The Myrian is a large grid of ~100x100 to 500x500 tiles, depending on performance, yet to be determined.
+Alternatively we might use a cell-based approach, like 10 cell by 10 cells that are 20x20 tiles in size.
+On that giant grid there is a starting point called the core.
+Yourself and Sleeves can only enter and leave The Myrian when they are directly adjacent to the core.
+
+Once both the player and a Sleeve is inside the Myrian, commands can be issued. The player cannot move
+as they must stay in the core in order to keep the connection alive. But they must also be in the core in order
+to be able to send commands to sleeves.
+
+It is not possible to see all of The Myrian at once. Tiles are covered in a fog of war that is only
+discovered when a sleeve gets close enough.
+
+Inside The Myrian all the stats are nerfed immensely. Something like myrianstat = log10(original).
+- Strength directly correlates to the amount of damage you deal in The Myrian, 2 strength = damage.
+- Defense reduces damage taken, 2 defense = reduce damage by 2.
+- Dexterity determines the speed of some `interact` calls, like attacking and breaking things.
+- Agility detemines the speed of the `move` call as well as affects how far away a sleeve provides vision. 2 agility means can see from 2 tiles away.
+- Hack determines the speed of some `interact` calls, like opening Power ups.
+- Cha does nothing, as usual.
+
+Each tile has 2 layers. The floor and the middle.
+The floor is used to determine the speed that a sleeve needs in order to leave that tile.
+A brick road is easier to naviguate on than a swampy tile.
+
+The tile middle can be occupied by a variety of things.
+Most common is empty. In that case something else can take it's place.
+- Sleeves themselves.
+- 1 core on the map.
+- enemies, which move on their own, will hunt down the player units and attack them.
+- buildings, which the player can place. Like turrets or walls.
+- rock-like objects, that can be destroyed with enough time.
+- Resource nodes. Which can be mined for materials used to build buildings.
+- Power ups. Which can be used to upgrade sleeves stats in The Myrian.
+
+The goal is to find the Ends core and destroy it. Ending the Bitnode.
+
+API: 
+    // interact is a very flexible function.
+    // Interacting with an enemy will attack it.
+    // With a chest will open it.
+    // A rock will try to break it.
+    async interact(sleeveId, x, y)
+
+    // move a sleeve to the given coordinate. That tile must be 1 tile away
+    // from the sleeves current position.
+    async move(sleeveId, x, y)
+
+    // Enter / leave The Myrian, give -1 or nothing for the player or something.
+    enter(sleeveId)
+    leave(sleeveId)
+
+    build(sleeveId, buildingId, x, y)
+
+    applyPowerup(sleeveId, stat)
+
+
+
