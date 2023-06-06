@@ -78,6 +78,7 @@ import { MathJaxContext } from "better-react-mathjax";
 import { useRerender } from "./React/hooks";
 import { ScriptFilePath } from "src/Paths/ScriptFilePath";
 import { TextFilePath } from "src/Paths/TextFilePath";
+import { MyrianRoot } from "../Myrian/ui/MyrianRoot";
 
 const htmlLocation = location;
 
@@ -119,6 +120,7 @@ export let Router: IRouter = {
 };
 
 function determineStartPage(): Page {
+  return Page.Myrian; // WRONG
   if (RecoveryMode) return Page.Recovery;
   if (Player.currentWork !== null) return Page.Work;
   return Page.Terminal;
@@ -295,6 +297,10 @@ export function GameRoot(): React.ReactElement {
     }
     case Page.StaneksGift: {
       mainPage = <StaneksGiftRoot staneksGift={staneksGift} />;
+      break;
+    }
+    case Page.Myrian: {
+      mainPage = <MyrianRoot />;
       break;
     }
     case Page.Stats: {
