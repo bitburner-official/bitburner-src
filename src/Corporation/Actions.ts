@@ -463,7 +463,7 @@ export function ExportMaterial(
   // Perform sanitization and tests
   let sanitizedAmt = amount.replace(/\s+/g, "").toUpperCase();
   sanitizedAmt = sanitizedAmt.replace(/[^-()\d/*+.MAXEPRODINV]/g, "");
-  for (const testReplacement of ["1.23", "-1.23", "1.23e1"]) {
+  for (const testReplacement of ["(1.23)", "(-1.23)"]) {
     const replaced = sanitizedAmt.replace(/(IPROD|EPROD|IINV|EINV)/g, testReplacement);
     let evaluated, error;
     try {
