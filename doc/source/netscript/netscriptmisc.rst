@@ -33,7 +33,7 @@ Now assume we ran the following simple script
 .. code:: javascript
 
     export async function main(ns) {
-        for (const i = 0; i < 10; ++i) {
+        for (var i = 0; i < 10; ++i) {
             ns.writePort(1, i); //Writes the value of i to port 1
         }
     }
@@ -47,7 +47,7 @@ Then, assume we run the following script
 .. code:: javascript
 
     export async function main(ns) {
-        for (const i = 0; i < 3; ++i) {
+        for (var i = 0; i < 3; ++i) {
             ns.print(ns.readPort(1)); //Reads a value from port 1 and then prints it
         }
     }
