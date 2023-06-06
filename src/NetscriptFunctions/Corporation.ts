@@ -465,17 +465,11 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         checkAccess(ctx, CorpUnlockName.WarehouseAPI);
         const sourceDivision = helpers.string(ctx, "sourceDivision", _sourceDivision);
         assertMember(ctx, CityName, "City", "sourceCity", sourceCity);
-        const targetDivision = helpers.string(ctx, "targetDivision", _targetDivision);
+        const targetDivision = getDivision(helpers.string(ctx, "targetDivision", _targetDivision));
         assertMember(ctx, CityName, "City", "targetCity", targetCity);
         assertMember(ctx, corpConstants.materialNames, "Material Name", "materialName", materialName);
         const amt = helpers.string(ctx, "amt", _amt);
-        ExportMaterial(
-          targetDivision,
-          targetCity,
-          getMaterial(sourceDivision, sourceCity, materialName),
-          amt + "",
-          getDivision(targetDivision),
-        );
+        ExportMaterial(targetDivision, targetCity, getMaterial(sourceDivision, sourceCity, materialName), amt);
       },
     cancelExportMaterial:
       (ctx) =>

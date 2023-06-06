@@ -54,7 +54,7 @@ export function ExportModal(props: IProps): React.ReactElement {
 
   function exportMaterial(): void {
     try {
-      ExportMaterial(targetDivision.name, targetCity, props.mat, exportAmount, targetDivision);
+      ExportMaterial(targetDivision, targetCity, props.mat, exportAmount);
     } catch (err) {
       dialogBoxCreate(err + "");
     }

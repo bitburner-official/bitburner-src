@@ -443,38 +443,47 @@ export function Research(researchingDivision: Division, researchName: CorpResear
   }
 }
 
+/** Set a new export for a material. Throw on any invalid input. */
 export function ExportMaterial(
-  divisionName: string,
-  cityName: CityName,
+  targetDivision: Division,
+  targetCity: CityName,
   material: Material,
-  amt: string,
-  division?: Division,
+  amount: string,
 ): void {
-  // Sanitize amt
-  let sanitizedAmt = amt.replace(/\s+/g, "").toUpperCase();
+  if (!isRelevantMaterial(material.name, targetDivision)) {
+    throw new Error(`You cannot export material: ${material.name} to division: ${targetDivision.name}!`);
+  }
+  if (!targetDivision.warehouses[targetCity]) {
+    throw new Error(`Cannot export to ${targetCity} in division ${targetDivision.name} because there is no warehouse.`);
+  }
+  if (material === targetDivision.warehouses[targetCity]?.materials[material.name]) {
+    throw new Error(`Source and target division/city cannot be the same.`);
+  }
+
+  // Perform sanitization and tests
+  let sanitizedAmt = amount.replace(/\s+/g, "").toUpperCase();
   sanitizedAmt = sanitizedAmt.replace(/[^-()\d/*+.MAXEPRODINV]/g, "");
-  let temp = sanitizedAmt.replace(/MAX/g, "1");
-  temp = temp.replace(/IPROD/g, "1");
-  temp = temp.replace(/EPROD/g, "1");
-  temp = temp.replace(/IINV/g, "1");
-  temp = temp.replace(/EINV/g, "1");
-  try {
-    temp = eval(temp);
-  } catch (e) {
-    throw new Error("Invalid expression entered for export amount: " + e);
+  for (const testReplacement of ["1.23", "-1.23", "1.23e1"]) {
+    const replaced = sanitizedAmt.replace(/(IPROD|EPROD|IINV|EINV)/g, testReplacement);
+    let evaluated, error;
+    try {
+      evaluated = eval(replaced);
+    } catch (e) {
+      error = e;
+    }
+    if (!error && isNaN(evaluated)) error = "evaluated value is NaN";
+    if (error) {
+      throw new Error(`Error while trying to set the exported amount of ${material.name}.
+Error occurred while testing keyword replacement with ${testReplacement}.
+Your input: ${amount}
+Sanitized input: ${sanitizedAmt}
+Input after replacement: ${replaced}
+Evaluated value: ${evaluated}
+Error encountered: ${error}`);
+    }
   }
 
-  const n = parseFloat(temp);
-
-  if (n == null || isNaN(n)) {
-    throw new Error("Invalid amount entered for export");
-  }
-
-  if (!division || !isRelevantMaterial(material.name, division)) {
-    throw new Error(`You cannot export material: ${material.name} to division: ${divisionName}!`);
-  }
-
-  const exportObj = { division: divisionName, city: cityName, amount: sanitizedAmt };
+  const exportObj = { division: targetDivision.name, city: targetCity, amount: sanitizedAmt };
   material.exports.push(exportObj);
 }
 

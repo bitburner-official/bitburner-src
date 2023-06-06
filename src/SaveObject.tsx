@@ -37,6 +37,8 @@ import { SpecialServers } from "./Server/data/SpecialServers";
 import { v2APIBreak } from "./utils/v2APIBreak";
 import { Corporation } from "./Corporation/Corporation";
 import { Terminal } from "./Terminal";
+import { getRecordValues } from "./Types/Record";
+import { ExportMaterial } from "./Corporation/Actions";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -688,6 +690,38 @@ function evaluateVersionCompatibility(ver: string | number): void {
         }
       }
     }
+    // Sanitize corporation exports
+    let anyExportsFailed = false;
+    if (Player.corporation) {
+      for (const division of Player.corporation.divisions.values()) {
+        for (const warehouse of getRecordValues(division.warehouses)) {
+          for (const material of getRecordValues(warehouse.materials)) {
+            const originalExports = material.exports;
+            // Clear all exports for the material
+            material.exports = [];
+            for (const originalExport of originalExports) {
+              // Throw if there was a failure re-establishing an export
+              try {
+                const targetDivision = Player.corporation.divisions.get(originalExport.division);
+                if (!targetDivision) throw new Error(`Target division ${originalExport.division} did not exist`);
+                // Set the export again. ExportMaterial throws on failure
+                ExportMaterial(targetDivision, originalExport.city, material, originalExport.amount);
+              } catch (e) {
+                anyExportsFailed = true;
+                // We just need the text error, not a full stack trace
+                console.error(`Failed to load export of material ${material.name} (${division.name} ${warehouse.city})
+Original export details: ${JSON.stringify(originalExport)}
+Error: ${e}`);
+              }
+            }
+          }
+        }
+      }
+    }
+    if (anyExportsFailed)
+      Terminal.error(
+        "Some material exports failed to validate while loading and have been removed. See console for more info.",
+      );
   }
 }
 
