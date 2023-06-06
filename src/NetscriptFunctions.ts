@@ -902,7 +902,7 @@ export const ns: InternalAPI<NSFull> = {
     ];
 
     if (!substring) return allFilenames.sort();
-    return allFilenames.filter((filename) => filename.includes(substring)).sort();
+    return allFilenames.filter((filename) => ("/" + filename).includes(substring)).sort();
   },
   getRecentScripts: () => (): RecentScript[] => {
     return recentScripts.map((rs) => ({
