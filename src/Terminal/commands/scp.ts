@@ -5,36 +5,62 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { checkEnum } from "../../utils/helpers/enum";
 import { LiteratureName } from "../../Literature/data/LiteratureNames";
+import { ContentFile } from "../../Paths/ContentFile";
 
 export function scp(args: (string | number | boolean)[], server: BaseServer): void {
-  if (args.length !== 2) {
+  if (args.length < 2) {
     return Terminal.error("Incorrect usage of scp command. Usage: scp [source filename] [destination hostname]");
   }
-  const [scriptname, destHostname] = args.map((arg) => arg + "");
 
-  const path = Terminal.getFilepath(scriptname);
-  if (!path) return Terminal.error(`Invalid file path: ${scriptname}`);
-
+  // Validate destination server
+  const destHostname = String(args.pop());
   const destServer = GetServer(destHostname);
-  if (!destServer) return Terminal.error(`Invalid destination server: ${args[1]}`);
+  if (!destServer) return Terminal.error(`Invalid destination server: ${destHostname}`);
 
-  // Lit files
-  if (path.endsWith(".lit")) {
-    if (!checkEnum(LiteratureName, path) || !server.messages.includes(path)) {
-      return Terminal.error(`No file at path ${path}`);
+  // Validate filepaths
+  const filenames = args.map(String);
+  const files: (LiteratureName | ContentFile)[] = [];
+
+  // File validation loop, handle all errors before copying any files
+  for (const filename of filenames) {
+    const path = Terminal.getFilepath(filename);
+    if (!path) return Terminal.error(`Invalid file path: ${filename}`);
+    // Validate .lit files
+    if (path.endsWith(".lit")) {
+      if (!checkEnum(LiteratureName, path) || !server.messages.includes(path)) {
+        return Terminal.error(`scp failed: ${path} does not exist on server ${server.hostname}`);
+      }
+      files.push(path);
+      continue;
     }
-    if (destServer.messages.includes(path)) return Terminal.print(`${path} was already on ${destHostname}`);
-    destServer.messages.push(path);
-    return Terminal.print(`Copied ${path} to ${destHostname}`);
+    // Error for invalid filetype
+    if (!hasScriptExtension(path) && !hasTextExtension(path)) {
+      return Terminal.error(
+        `scp failed: ${path} has invalid extension. scp only works for scripts (.js or .script), text files (.txt), and literature files (.lit)`,
+      );
+    }
+    const sourceContentFile = server.getContentFile(path);
+    if (!sourceContentFile) return Terminal.error(`scp failed: ${path} does not exist on server ${server.hostname}`);
+    files.push(sourceContentFile);
   }
 
-  if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-    return Terminal.error("scp only works for scripts, text files (.txt), and literature files (.lit)");
+  // Actually copy the files (no more errors possible)
+  for (const file of files) {
+    // Lit files, entire "file" is just the name
+    if (checkEnum(LiteratureName, file)) {
+      if (destServer.messages.includes(file)) {
+        Terminal.print(`${file} was already on ${destHostname}, file skipped`);
+        continue;
+      }
+      destServer.messages.push(file);
+      Terminal.print(`${file} copied to ${destHostname}`);
+      continue;
+    }
+
+    // Content files (script and txt)
+    const { filename, content } = file;
+    const { overwritten } = destServer.writeToContentFile(filename, content);
+    if (overwritten) Terminal.warn(`${filename} already existed on ${destHostname} and was overwritten`);
+    else Terminal.print(`${filename} copied to ${destHostname}`);
   }
-  // Text or script
-  const source = server.getContentFile(path);
-  if (!source) return Terminal.error(`No file at path ${path}`);
-  const { overwritten } = destServer.writeToContentFile(path, source.content);
-  if (overwritten) Terminal.warn(`${path} already exists on ${destHostname} and will be overwritten`);
-  Terminal.print(`${path} copied to ${destHostname}`);
 }

@@ -239,11 +239,12 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       return possibilities;
 
     case "scp":
-      if (onFirstCommandArg) {
-        addScripts();
-        addTextFiles();
-        addLiterature();
-      } else if (onSecondCommandArg) addServerNames();
+      if (!onFirstCommandArg) {
+        addServerNames();
+      }
+      addScripts();
+      addTextFiles();
+      addLiterature();
       return possibilities;
 
     case "rm":
