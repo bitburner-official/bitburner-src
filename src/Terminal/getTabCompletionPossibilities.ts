@@ -163,7 +163,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   // Just some booleans so the mismatch between command length and arg number are not as confusing.
   const onCommand = commandLength === 1;
   const onFirstCommandArg = commandLength === 2;
-  const onSecondCommandArg = commandLength === 3;
+  // const onSecondCommandArg = commandLength === 3; // unused
 
   // These are always added.
   addGlobalAliases();
