@@ -48,6 +48,17 @@ export function NewDivision(corporation: Corporation, industry: IndustryType, na
 export function removeDivision(corporation: Corporation, name: string) {
   if (!corporation.divisions.has(name)) throw new Error("There is no division called " + name);
   corporation.divisions.delete(name);
+  // We also need to remove any exports that were pointing to the old division
+  for (const otherDivision of corporation.divisions.values()) {
+    for (const warehouse of getRecordValues(otherDivision.warehouses)) {
+      for (const material of getRecordValues(warehouse.materials)) {
+        // Work backwards through exports array so splicing doesn't affect the loop
+        for (let i = material.exports.length - 1; i >= 0; i--) {
+          if (material.exports[i].division === name) material.exports.splice(i, 1);
+        }
+      }
+    }
+  }
 }
 
 export function purchaseOffice(corporation: Corporation, division: Division, city: CityName): void {
@@ -443,52 +454,62 @@ export function Research(researchingDivision: Division, researchName: CorpResear
   }
 }
 
+/** Set a new export for a material. Throw on any invalid input. */
 export function ExportMaterial(
-  divisionName: string,
-  cityName: CityName,
+  targetDivision: Division,
+  targetCity: CityName,
   material: Material,
-  amt: string,
-  division?: Division,
+  amount: string,
 ): void {
-  // Sanitize amt
-  let sanitizedAmt = amt.replace(/\s+/g, "").toUpperCase();
+  if (!isRelevantMaterial(material.name, targetDivision)) {
+    throw new Error(`You cannot export material: ${material.name} to division: ${targetDivision.name}!`);
+  }
+  if (!targetDivision.warehouses[targetCity]) {
+    throw new Error(`Cannot export to ${targetCity} in division ${targetDivision.name} because there is no warehouse.`);
+  }
+  if (material === targetDivision.warehouses[targetCity]?.materials[material.name]) {
+    throw new Error(`Source and target division/city cannot be the same.`);
+  }
+  for (const existingExport of material.exports) {
+    if (existingExport.division === targetDivision.name && existingExport.city === targetCity) {
+      throw new Error(`Tried to initialize an export to a duplicate warehouse.
+Target warehouse (division / city): ${existingExport.division} / ${existingExport.city}
+Existing export amount: ${existingExport.amount}
+Attempted export amount: ${amount}`);
+    }
+  }
+
+  // Perform sanitization and tests
+  let sanitizedAmt = amount.replace(/\s+/g, "").toUpperCase();
   sanitizedAmt = sanitizedAmt.replace(/[^-()\d/*+.MAXEPRODINV]/g, "");
-  let temp = sanitizedAmt.replace(/MAX/g, "1");
-  temp = temp.replace(/IPROD/g, "1");
-  temp = temp.replace(/EPROD/g, "1");
-  temp = temp.replace(/IINV/g, "1");
-  temp = temp.replace(/EINV/g, "1");
-  try {
-    temp = eval(temp);
-  } catch (e) {
-    throw new Error("Invalid expression entered for export amount: " + e);
+  for (const testReplacement of ["(1.23)", "(-1.23)"]) {
+    const replaced = sanitizedAmt.replace(/(IPROD|EPROD|IINV|EINV)/g, testReplacement);
+    let evaluated, error;
+    try {
+      evaluated = eval(replaced);
+    } catch (e) {
+      error = e;
+    }
+    if (!error && isNaN(evaluated)) error = "evaluated value is NaN";
+    if (error) {
+      throw new Error(`Error while trying to set the exported amount of ${material.name}.
+Error occurred while testing keyword replacement with ${testReplacement}.
+Your input: ${amount}
+Sanitized input: ${sanitizedAmt}
+Input after replacement: ${replaced}
+Evaluated value: ${evaluated}
+Error encountered: ${error}`);
+    }
   }
 
-  const n = parseFloat(temp);
-
-  if (n == null || isNaN(n)) {
-    throw new Error("Invalid amount entered for export");
-  }
-
-  if (!division || !isRelevantMaterial(material.name, division)) {
-    throw new Error(`You cannot export material: ${material.name} to division: ${divisionName}!`);
-  }
-
-  const exportObj = { division: divisionName, city: cityName, amount: sanitizedAmt };
+  const exportObj = { division: targetDivision.name, city: targetCity, amount: sanitizedAmt };
   material.exports.push(exportObj);
 }
 
-export function CancelExportMaterial(divisionName: string, cityName: string, material: Material, amt: string): void {
-  for (let i = 0; i < material.exports.length; ++i) {
-    if (
-      material.exports[i].division !== divisionName ||
-      material.exports[i].city !== cityName ||
-      material.exports[i].amount !== amt
-    )
-      continue;
-    material.exports.splice(i, 1);
-    break;
-  }
+export function CancelExportMaterial(divisionName: string, cityName: CityName, material: Material): void {
+  const index = material.exports.findIndex((exp) => exp.division === divisionName && exp.city === cityName);
+  if (index === -1) return;
+  material.exports.splice(index, 1);
 }
 
 export function LimitProductProduction(product: Product, cityName: CityName, quantity: number): void {

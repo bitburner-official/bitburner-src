@@ -7093,7 +7093,6 @@ export interface WarehouseAPI {
    * @param targetDivision - Target division
    * @param targetCity - Target city
    * @param materialName - Name of the material
-   * @param amt - Amount of material to export.
    */
   cancelExportMaterial(
     sourceDivision: string,
@@ -7101,7 +7100,6 @@ export interface WarehouseAPI {
     targetDivision: string,
     targetCity: CityName | `${CityName}`,
     materialName: string,
-    amt: number,
   ): void;
   /**
    * Purchase warehouse for a new city
