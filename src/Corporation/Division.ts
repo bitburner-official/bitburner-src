@@ -434,7 +434,12 @@ export class Division {
               const divider = requiredMatsEntries.length;
               for (const [reqMatName, reqMat] of requiredMatsEntries) {
                 const reqMatQtyNeeded = reqMat * prod * producableFrac;
-                warehouse.materials[reqMatName].stored -= reqMatQtyNeeded;
+                // producableFrac already takes into account that we have enough stored
+                // Math.max is used here to avoid stored becoming negative (which can lead to NaNs)
+                warehouse.materials[reqMatName].stored = Math.max(
+                  0,
+                  warehouse.materials[reqMatName].stored - reqMatQtyNeeded,
+                );
                 warehouse.materials[reqMatName].productionAmount = 0;
                 warehouse.materials[reqMatName].productionAmount -=
                   reqMatQtyNeeded / (corpConstants.secondsPerMarketCycle * marketCycles);
@@ -446,7 +451,7 @@ export class Division {
                 let tempQlt =
                   office.employeeProductionByJob[CorpEmployeeJob.Engineer] / 90 +
                   Math.pow(this.researchPoints, this.researchFactor) +
-                  Math.pow(warehouse.materials["AI Cores"].stored, this.aiCoreFactor) / 10e3;
+                  Math.pow(Math.max(0, warehouse.materials["AI Cores"].stored), this.aiCoreFactor) / 10e3;
                 const logQlt = Math.max(Math.pow(tempQlt, 0.5), 1);
                 tempQlt = Math.min(tempQlt, avgQlt * logQlt);
                 warehouse.materials[this.producedMaterials[j]].quality = Math.max(
