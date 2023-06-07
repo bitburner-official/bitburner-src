@@ -89,8 +89,8 @@ export const CONSTANTS: {
   LatestUpdate: string;
 } = {
   VersionString: "2.3.1",
-  isDevBranch: true,
-  VersionNumber: 31,
+  isDevBranch: false,
+  VersionNumber: 32,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -231,24 +231,40 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3.1 dev - Changelog last updated 4 Jun 2023
-----------------------------------------------
-
-GENERAL / MISC:
+v2.3.1 - Bugfixes 7 June 2023 
+-----------------------------
 
 NETSCRIPT:
 
 * Added ns.setTitle, which sets the titlebar of a script's tail window (@d0sboots)
 * Added ns.getFunctionRamCost, which gets the ramcost of a netscript function (@G4mingJon4s)
+* ns.ls results will filter as if the filenames have a leading slash (@Snarling)
 
 GENERAL / MISC:
 
-* Fixed several issues with script editor tabs (@bezrodnov)
-* Changed tail window buttons into icon buttons, plus tail window bugfixes (@d0sboots)
+* Changed tail window buttons into icon buttons, allow setting custom title, and tail window bugfixes. (@d0sboots)
 * Terminal no longer scrolls to the bottom constantly while an action is being performed (@bezrodnov)
 * Added a close button to modals (@bezrodnov)
-* Documentation fixes (various)
+* Fixed several issues with script editor tabs (@bezrodnov)
+* scp terminal command can copy multiple files at once, like help text indicates (@Snarling)
+* Root directory is no longer displayed as ~ in the terminal prompt, it is displayed as / (@Snarling)
+* cd with no arguments will change to the root directory (@Snarling)
+* Documentation updates (various)
 * Nerf noodle bar
+
+HOTFIXES (these were already backported to 2.3.0 before 2.3.1 release):
+
+* Several important fixes for savegame migration issues from older version (@d0sboots)
+* Prevent scripts from loading during intial migration to 2.3.0 save format, to prevent a crash that could occur. (@Snarling)
+* Fix scp logging (hostname was being logged incorrectly in multiple places and showing as [Object object]) (@Snarling)
+* Update terminal parsing logic so that the old syntax for alias works again. (@Snarling)
+* Fix clickable script links from ls command not working outside root directory (@Snarling)
+* Fix an issue with Find All Valid Math Expressions not accepting empty array when that was the solution. (@Snarling)
+* Fix an issue with scan-analyze display when the player had AutoLink.exe (@Snarling)
+* Reverted undocumented change that program filenames were case sensitive for ns.fileExists. They are case insensitive again. (@Snarling)
+* An issue from pre-2.3 could cause scripts to have the wrong "server" property. This caused issues in 2.3, and a fix now repairs any scripts with a mismatched server property. (@Snarling)
+* More fixes to help old savegames load correctly (@Snarling)
+* Servers can no longer have infinite time-to-hack. (@Snarling)
 
 SPOILER SECTIONS:
 
@@ -262,6 +278,13 @@ SF3:
 * Fixed an issue with sell price parsing for materials (@zerbosh)
 * Fixed display of market price for materials and products (@zerbosh)
 * Fixes for Corp import/export issues, such as -IPROD and Smart Supply not working right (@d0sboots)
+* Improvements to the max-affordable-upgrades calculation (@bezrodnov)
+* Perform additional validation when setting up an export. Exports are now unique per targeted division+city. (@Snarling)
+* ns.corporation.cancelExport no longer requires the exported amount (@Snarling)
+* Fix NaN bug that could impact Robot material in Robotics division (@Snarling, @kateract)
+* Can no longer commence product development in a city with no office (which would immediately error out the game loop) (@Snarling)
+* (Hotfix) Fix issue that could lead to SF3 research desync. (@Snarling)
+* (Hotfix) Fix SF3 "Spring Water" industry (@Snarling)
 
 SF4:
 
