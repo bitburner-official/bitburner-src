@@ -48,6 +48,17 @@ export function NewDivision(corporation: Corporation, industry: IndustryType, na
 export function removeDivision(corporation: Corporation, name: string) {
   if (!corporation.divisions.has(name)) throw new Error("There is no division called " + name);
   corporation.divisions.delete(name);
+  // We also need to remove any exports that were pointing to the old division
+  for (const otherDivision of corporation.divisions.values()) {
+    for (const warehouse of getRecordValues(otherDivision.warehouses)) {
+      for (const material of getRecordValues(warehouse.materials)) {
+        // Work backwards through exports array so splicing doesn't affect the loop
+        for (let i = material.exports.length - 1; i >= 0; i--) {
+          if (material.exports[i].division === name) material.exports.splice(i, 1);
+        }
+      }
+    }
+  }
 }
 
 export function purchaseOffice(corporation: Corporation, division: Division, city: CityName): void {
@@ -458,6 +469,14 @@ export function ExportMaterial(
   }
   if (material === targetDivision.warehouses[targetCity]?.materials[material.name]) {
     throw new Error(`Source and target division/city cannot be the same.`);
+  }
+  for (const existingExport of material.exports) {
+    if (existingExport.division === targetDivision.name && existingExport.city === targetCity) {
+      throw new Error(`Tried to initialize an export to a duplicate warehouse.
+Target warehouse (division / city): ${existingExport.division} / ${existingExport.city}
+Existing export amount: ${existingExport.amount}
+Attempted export amount: ${amount}`);
+    }
   }
 
   // Perform sanitization and tests
