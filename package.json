@@ -1,7 +1,7 @@
 {
   "name": "bitburner",
   "license": "SEE LICENSE IN license.txt",
-  "version": "2.3.1",
+  "version": "2.3.2dev",
   "main": "electron-main.js",
   "author": {
     "name": "Daniel Xie, Olivier Gagnon, et al."
