@@ -386,23 +386,18 @@ export function MakeProduct(
   designInvest: number,
   marketingInvest: number,
 ): void {
-  if (designInvest < 0) {
-    designInvest = 0;
-  }
-  if (marketingInvest < 0) {
-    marketingInvest = 0;
+  // For invalid investment inputs, just use 0
+  if (isNaN(designInvest) || designInvest < 0) designInvest = 0;
+  if (isNaN(marketingInvest) || marketingInvest < 0) marketingInvest = 0;
+
+  if (!division.offices[city]) {
+    throw new Error(`Cannot develop a product in a city without an office!`);
   }
   if (productName == null || productName === "") {
     throw new Error("You must specify a name for your product!");
   }
   if (!division.makesProducts) {
     throw new Error("You cannot create products for this industry!");
-  }
-  if (isNaN(designInvest)) {
-    throw new Error("Invalid value for design investment");
-  }
-  if (isNaN(marketingInvest)) {
-    throw new Error("Invalid value for marketing investment");
   }
   if (corp.funds < designInvest + marketingInvest) {
     throw new Error("You don't have enough company funds to make this large of an investment");
@@ -412,7 +407,7 @@ export function MakeProduct(
   }
 
   const product = new Product({
-    name: productName.replace(/[<>]/g, "").trim(), //Sanitize for HTMl elements
+    name: productName.replace(/[<>]/g, "").trim(), //Sanitize for HTMl elements?
     createCity: city,
     designInvestment: designInvest,
     advertisingInvestment: marketingInvest,
