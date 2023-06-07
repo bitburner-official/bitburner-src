@@ -506,17 +506,10 @@ Error encountered: ${error}`);
   material.exports.push(exportObj);
 }
 
-export function CancelExportMaterial(divisionName: string, cityName: string, material: Material, amt: string): void {
-  for (let i = 0; i < material.exports.length; ++i) {
-    if (
-      material.exports[i].division !== divisionName ||
-      material.exports[i].city !== cityName ||
-      material.exports[i].amount !== amt
-    )
-      continue;
-    material.exports.splice(i, 1);
-    break;
-  }
+export function CancelExportMaterial(divisionName: string, cityName: CityName, material: Material): void {
+  const index = material.exports.findIndex((exp) => exp.division === divisionName && exp.city === cityName);
+  if (index === -1) return;
+  material.exports.splice(index, 1);
 }
 
 export function LimitProductProduction(product: Product, cityName: CityName, quantity: number): void {
