@@ -7084,7 +7084,7 @@ export interface WarehouseAPI {
     targetDivision: string,
     targetCity: CityName | `${CityName}`,
     materialName: string,
-    amt: number,
+    amt: number | string,
   ): void;
   /**
    * Cancel material export
