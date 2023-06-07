@@ -1,7 +1,7 @@
 import { CorpEmployeeJob } from "./data/Enums";
+import { IndustriesData } from "./data/IndustryData";
 import { MaterialInfo } from "./MaterialInfo";
 import { Division } from "./Division";
-import { IndustriesData } from "./IndustryData";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { getRandomInt } from "../utils/helpers/getRandomInt";

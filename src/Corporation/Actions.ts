@@ -1,7 +1,7 @@
 import { Player } from "@player";
 import { MaterialInfo } from "./MaterialInfo";
 import { Corporation } from "./Corporation";
-import { IndustryResearchTrees, IndustriesData } from "./IndustryData";
+import { IndustryResearchTrees, IndustriesData } from "./data/IndustryData";
 import { Division } from "./Division";
 import * as corpConstants from "./data/Constants";
 import { OfficeSpace } from "./OfficeSpace";
@@ -206,6 +206,7 @@ export function SellProduct(product: Product, city: CityName, amt: string, price
     if (temp == null || isNaN(parseFloat(temp))) {
       throw new Error("Invalid value or expression for sell quantity field");
     }
+
     if (all) {
       for (const cityName of Object.values(CityName)) {
         product.cityData[cityName].desiredSellAmount = qty; //Use sanitized input
