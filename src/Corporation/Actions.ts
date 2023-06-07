@@ -478,7 +478,7 @@ Attempted export amount: ${amount}`);
   let sanitizedAmt = amount.replace(/\s+/g, "").toUpperCase();
   sanitizedAmt = sanitizedAmt.replace(/[^-()\d/*+.MAXEPRODINV]/g, "");
   for (const testReplacement of ["(1.23)", "(-1.23)"]) {
-    const replaced = sanitizedAmt.replace(/(IPROD|EPROD|IINV|EINV)/g, testReplacement);
+    const replaced = sanitizedAmt.replace(/(MAX|IPROD|EPROD|IINV|EINV)/g, testReplacement);
     let evaluated, error;
     try {
       evaluated = eval(replaced);
