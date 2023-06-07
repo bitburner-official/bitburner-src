@@ -713,8 +713,10 @@ export class Division {
         if (this.state !== "PRODUCTION") continue;
         const city = product.creationCity;
         const office = this.offices[city];
-        if (!office) throw new Error(`Product ${name} being created in a city without an office. This is a bug.`);
-
+        if (!office) {
+          console.error(`Product ${name} being created in a city without an office. This is a bug.`);
+          continue;
+        }
         product.createProduct(marketCycles, office.employeeProductionByJob);
         if (product.developmentProgress >= 100) {
           product.finishProduct(this);
