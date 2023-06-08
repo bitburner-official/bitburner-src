@@ -1,4 +1,4 @@
-mv() Netscript Function
+rm() Netscript Function
 ==============================
 
 .. js:function:: rm(Filename [,hostname = current hostname])
