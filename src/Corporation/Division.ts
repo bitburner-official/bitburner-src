@@ -430,8 +430,9 @@ export class Division {
             // Make our materials if they are producable
             if (producableFrac > 0 && prod > 0) {
               const requiredMatsEntries = getRecordEntries(this.requiredMaterials);
+              const totalMats = requiredMatsEntries.reduce((acc, [, reqMat]) => acc + reqMat, 0);
+
               let avgQlt = 0;
-              const divider = requiredMatsEntries.length;
               for (const [reqMatName, reqMat] of requiredMatsEntries) {
                 const reqMatQtyNeeded = reqMat * prod * producableFrac;
                 // producableFrac already takes into account that we have enough stored
@@ -444,9 +445,10 @@ export class Division {
                 warehouse.materials[reqMatName].productionAmount -=
                   reqMatQtyNeeded / (corpConstants.secondsPerMarketCycle * marketCycles);
 
-                avgQlt += warehouse.materials[reqMatName].quality / divider;
+                avgQlt += warehouse.materials[reqMatName].quality * reqMat;
               }
-              avgQlt = Math.max(avgQlt, 1);
+              avgQlt = Math.max(avgQlt / totalMats, 1);
+
               for (let j = 0; j < this.producedMaterials.length; ++j) {
                 let tempQlt =
                   office.employeeProductionByJob[CorpEmployeeJob.Engineer] / 90 +
@@ -781,23 +783,26 @@ export class Division {
 
           //Make our Products if they are producable
           if (producableFrac > 0 && prod > 0) {
-            let avgQlt = 1;
-            for (const [reqMatName, reqQty] of getRecordEntries(product.requiredMaterials)) {
-              const reqMatQtyNeeded = reqQty * prod * producableFrac;
-              warehouse.materials[reqMatName].stored -= reqMatQtyNeeded;
+            let avgQlt = 1; // leaving `1` here (instead of 0) as it was before
+            const requiredMatsEntries = getRecordEntries(product.requiredMaterials);
+            const totalMats = requiredMatsEntries.reduce((acc, [, reqQty]) => acc + reqQty, 0);
+
+            for (const [reqMatName, reqMat] of requiredMatsEntries) {
+              const reqMatQtyNeeded = reqMat * prod * producableFrac;
+              warehouse.materials[reqMatName].stored -= reqMatQtyNeeded; // what if this is negative?
               warehouse.materials[reqMatName].productionAmount -=
                 reqMatQtyNeeded / (corpConstants.secondsPerMarketCycle * marketCycles);
-              avgQlt += warehouse.materials[reqMatName].quality;
+              avgQlt += warehouse.materials[reqMatName].quality * reqMat;
             }
-            avgQlt /= Object.keys(product.requiredMaterials).length;
+            avgQlt /= totalMats;
             const tempEffRat = Math.min(product.rating, avgQlt * Math.pow(product.rating, 0.5));
-            //Effective Rating
-            product.cityData[city].effectiveRating =
-              (product.cityData[city].effectiveRating * product.cityData[city].stored +
-                tempEffRat * prod * producableFrac) /
-              (product.cityData[city].stored + prod * producableFrac);
-            //Quantity
-            product.cityData[city].stored += prod * producableFrac;
+
+            const cityData = product.cityData[city];
+            const { stored, effectiveRating } = cityData;
+            const newTotalStored = stored + prod * producableFrac;
+            // update Effective Rating and Quantity
+            cityData.effectiveRating = (effectiveRating * stored + tempEffRat * prod * producableFrac) / newTotalStored;
+            cityData.stored = newTotalStored;
           }
 
           //Keep track of production Per second
