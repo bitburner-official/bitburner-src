@@ -16,7 +16,6 @@ import {
   InvestmentOffer,
   CorpResearchName,
   CorpMaterialName,
-  CorpSmartSupplyOption,
 } from "@nsdefs";
 
 import {
@@ -414,9 +413,10 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const warehouse = getWarehouse(divisionName, cityName);
       const material = getMaterial(divisionName, cityName, materialName);
       const option = helpers.string(ctx, "option", _option);
+      assertMember(ctx, corpConstants.smartSupplyUseOptions, "Smart Supply Option", "option", option);
       if (!hasUnlock(CorpUnlockName.SmartSupply))
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not purchased the Smart Supply upgrade!`);
-      SetSmartSupplyOption(warehouse, material, option as CorpSmartSupplyOption);
+      SetSmartSupplyOption(warehouse, material, option);
     },
     buyMaterial: (ctx) => (_divisionName, _cityName, materialName, _amt) => {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);

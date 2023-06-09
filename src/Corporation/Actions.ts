@@ -245,14 +245,7 @@ export function SetSmartSupply(warehouse: Warehouse, smartSupply: boolean): void
   warehouse.smartSupplyEnabled = smartSupply;
 }
 
-function assertSmartSupplyOption(value: string): asserts value is CorpSmartSupplyOption {
-  if (!corpConstants.smartSupplyUseOptions.includes(value as CorpSmartSupplyOption)) {
-    throw new Error(`Invalid Smart Supply option '${value}'`);
-  }
-}
-
 export function SetSmartSupplyOption(warehouse: Warehouse, material: Material, useOption: CorpSmartSupplyOption): void {
-  assertSmartSupplyOption(useOption);
   warehouse.smartSupplyOptions[material.name] = useOption;
 }
 
