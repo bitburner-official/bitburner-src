@@ -6747,6 +6747,9 @@ type CorpIndustryName =
   | "Healthcare"
   | "Real Estate";
 
+/** @public */
+type CorpSmartSupplyOption = "leftovers" | "imports" | "none";
+
 /** Names of all cities
  * @public */
 declare enum CityName {
@@ -7002,7 +7005,7 @@ export interface WarehouseAPI {
     divisionName: string,
     city: CityName | `${CityName}`,
     materialName: string,
-    option: string,
+    option: CorpSmartSupplyOption,
   ): void;
   /**
    * Set material buy data
@@ -7369,6 +7372,8 @@ interface CorporationInfo {
 interface CorpConstants {
   /** Names of all corporation game states */
   stateNames: CorpStateName[];
+  /** Names of all employee positions */
+  employeePositions: CorpEmployeePosition[];
   /** Names of all industries */
   industryNames: CorpIndustryName[];
   /** Names of all materials */
@@ -7412,6 +7417,7 @@ interface CorpConstants {
   maxProductsBase: number;
   /** The minimum decay value for morale/energy */
   minEmployeeDecay: number;
+  smartSupplyOptions: CorpSmartSupplyOption[];
 }
 /** @public */
 type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "EXPORT" | "SALE";

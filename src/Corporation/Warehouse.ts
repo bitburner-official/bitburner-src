@@ -1,3 +1,6 @@
+import { Player } from "@player";
+import { CorpMaterialName, CorpSmartSupplyOption } from "@nsdefs";
+
 import { Material } from "./Material";
 import { Corporation } from "./Corporation";
 import { Division } from "./Division";
@@ -7,7 +10,6 @@ import { CityName } from "../Enums";
 import { materialNames } from "./data/Constants";
 import { createFullRecordFromEntries, getRecordEntries } from "../Types/Record";
 import { CorpUnlockName } from "./data/Enums";
-import { Player } from "@player";
 
 interface IConstructorParams {
   division: Division;
@@ -35,7 +37,9 @@ export class Warehouse {
   smartSupplyEnabled = false;
 
   // Decide if smart supply should use the amount of materials imported into account when deciding on the amount to buy.
-  smartSupplyOptions = createFullRecordFromEntries(materialNames.map((matName) => [matName, "leftovers"]));
+  smartSupplyOptions = createFullRecordFromEntries<CorpMaterialName, CorpSmartSupplyOption>(
+    materialNames.map((matName) => [matName, "leftovers"]),
+  );
 
   // Stores the amount of product to be produced. Used for Smart Supply unlock.
   // The production tracked by smart supply is always based on the previous cycle,

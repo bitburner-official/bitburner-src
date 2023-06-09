@@ -52,7 +52,7 @@ import {
 import { CorpUnlocks } from "../Corporation/data/CorporationUnlocks";
 import { CorpUpgrades } from "../Corporation/data/CorporationUpgrades";
 import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, IndustryType } from "../Corporation/data/Enums";
-import { IndustriesData, IndustryResearchTrees } from "../Corporation/IndustryData";
+import { IndustriesData, IndustryResearchTrees } from "../Corporation/data/IndustryData";
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
 import { Factions } from "../Faction/Factions";
@@ -413,6 +413,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const warehouse = getWarehouse(divisionName, cityName);
       const material = getMaterial(divisionName, cityName, materialName);
       const option = helpers.string(ctx, "option", _option);
+      assertMember(ctx, corpConstants.smartSupplyOptions, "Smart Supply Option", "option", option);
       if (!hasUnlock(CorpUnlockName.SmartSupply))
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not purchased the Smart Supply upgrade!`);
       SetSmartSupplyOption(warehouse, material, option);
@@ -682,8 +683,8 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       /* TODO 2.2: possibly just rework the whole corp constants structure to be more readable, and just use cloneDeep
        *           to provide it directly to player.
        * TODO 2.2: Roll product information into industriesData, there's no reason to look up a product separately */
-      return cloneDeep(omit(corpConstants, "fundingRoundShares", "fundingRoundMultiplier", "valuationLength"));
       // TODO: add functions for getting materialInfo and research info
+      return cloneDeep(omit(corpConstants, "fundingRoundShares", "fundingRoundMultiplier", "valuationLength"));
     },
     getIndustryData: (ctx) => (_industryName) => {
       checkAccess(ctx);

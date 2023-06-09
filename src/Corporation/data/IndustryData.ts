@@ -1,10 +1,8 @@
-import React from "react";
-import { Corporation } from "./Corporation";
-import { getBaseResearchTreeCopy, getProductIndustryResearchTreeCopy } from "./data/BaseResearchTree";
-import { MoneyCost } from "./ui/MoneyCost";
 import { CorpIndustryData } from "@nsdefs";
-import { IndustryType } from "./data/Enums";
-import { createFullRecordFromEntries } from "../Types/Record";
+
+import { createFullRecordFromEntries } from "../../Types/Record";
+import { IndustryType } from "./Enums";
+import { getBaseResearchTreeCopy, getProductIndustryResearchTreeCopy } from "./BaseResearchTree";
 
 export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   [IndustryType.Agriculture]: {
@@ -292,28 +290,6 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
 };
 
 export const IndustryStartingCosts = {};
-
-// Map of description for each industry
-export const IndustryDescriptions = (industry: IndustryType, corp: Corporation) => {
-  const data = IndustriesData[industry];
-  return (
-    <>
-      {data.description}
-      <br />
-      <br />
-      Required Materials: {Object.keys(data.requiredMaterials).toString().replace(/,/gi, ", ")}
-      <br />
-      Produces Materials: {data.producedMaterials ? data.producedMaterials.toString().replace(/,/gi, ", ") : "NONE"}
-      <br />
-      Produces products: {data.product ? "YES" : "NO"}
-      <br />
-      <br />
-      Starting cost: <MoneyCost money={data.startingCost} corp={corp} />
-      <br />
-      Recommended starting Industry: {data.recommendStarting ? "YES" : "NO"}
-    </>
-  );
-};
 
 export const IndustryResearchTrees = createFullRecordFromEntries(
   Object.values(IndustryType).map((industryType) => {

@@ -36,8 +36,10 @@ export class Corporation {
   revenue = 0;
   expenses = 0;
   fundingRound = 0;
-  public = false; //Publicly traded
-  totalShares = corpConstants.initialShares; // Total existing shares
+  /** Publicly traded */
+  public = false;
+  /** Total existing shares */
+  totalShares = corpConstants.initialShares;
   numShares = corpConstants.initialShares; // Total shares owned by player
   shareSalesUntilPriceUpdate = corpConstants.sharesPerPriceUpdate;
   shareSaleCooldown = 0; // Game cycles until player can sell shares again
@@ -64,7 +66,7 @@ export class Corporation {
   state = new CorporationState();
 
   constructor(params: IParams = {}) {
-    this.name = params.name ? params.name : "The Corporation";
+    this.name = params.name || "The Corporation";
     this.seedFunded = params.seedFunded ?? false;
   }
 
@@ -73,14 +75,14 @@ export class Corporation {
       console.error("Trying to add invalid amount of funds. Report to a developer.");
       return;
     }
-    this.funds = this.funds + amt;
+    this.funds += amt;
   }
 
   getState(): CorpStateName {
     return this.state.getState();
   }
 
-  storeCycles(numCycles = 1): void {
+  storeCycles(numCycles: number): void {
     this.storedCycles += numCycles;
   }
 

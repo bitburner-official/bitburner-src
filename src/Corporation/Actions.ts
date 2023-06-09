@@ -1,7 +1,11 @@
+import { isInteger } from "lodash";
+
 import { Player } from "@player";
+import { CorpResearchName, CorpSmartSupplyOption } from "@nsdefs";
+
 import { MaterialInfo } from "./MaterialInfo";
 import { Corporation } from "./Corporation";
-import { IndustryResearchTrees, IndustriesData } from "./IndustryData";
+import { IndustryResearchTrees, IndustriesData } from "./data/IndustryData";
 import { Division } from "./Division";
 import * as corpConstants from "./data/Constants";
 import { OfficeSpace } from "./OfficeSpace";
@@ -13,8 +17,6 @@ import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
 import { CityName } from "../Enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { CorpResearchName } from "@nsdefs";
-import { isInteger } from "lodash";
 import { getRecordValues } from "../Types/Record";
 
 export function NewDivision(corporation: Corporation, industry: IndustryType, name: string): void {
@@ -206,6 +208,7 @@ export function SellProduct(product: Product, city: CityName, amt: string, price
     if (temp == null || isNaN(parseFloat(temp))) {
       throw new Error("Invalid value or expression for sell quantity field");
     }
+
     if (all) {
       for (const cityName of Object.values(CityName)) {
         product.cityData[cityName].desiredSellAmount = qty; //Use sanitized input
@@ -242,10 +245,7 @@ export function SetSmartSupply(warehouse: Warehouse, smartSupply: boolean): void
   warehouse.smartSupplyEnabled = smartSupply;
 }
 
-export function SetSmartSupplyOption(warehouse: Warehouse, material: Material, useOption: string): void {
-  if (!corpConstants.smartSupplyUseOptions.includes(useOption)) {
-    throw new Error(`Invalid Smart Supply option '${useOption}'`);
-  }
+export function SetSmartSupplyOption(warehouse: Warehouse, material: Material, useOption: CorpSmartSupplyOption): void {
   warehouse.smartSupplyOptions[material.name] = useOption;
 }
 

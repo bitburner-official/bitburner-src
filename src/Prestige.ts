@@ -5,7 +5,7 @@ import { augmentationExists, initAugmentations } from "./Augmentation/Augmentati
 import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { Companies, initCompanies } from "./Company/Companies";
-import { resetIndustryResearchTrees } from "./Corporation/IndustryData";
+import { resetIndustryResearchTrees } from "./Corporation/data/IndustryData";
 import { CompletedProgramName } from "./Programs/Programs";
 import { Factions, initFactions } from "./Faction/Factions";
 import { joinFaction } from "./Faction/FactionHelpers";
