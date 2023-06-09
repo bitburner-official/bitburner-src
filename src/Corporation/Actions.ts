@@ -251,7 +251,7 @@ function assertSmartSupplyOption(value: string): asserts value is CorpSmartSuppl
   }
 }
 
-export function SetSmartSupplyOption(warehouse: Warehouse, material: Material, useOption: string): void {
+export function SetSmartSupplyOption(warehouse: Warehouse, material: Material, useOption: CorpSmartSupplyOption): void {
   assertSmartSupplyOption(useOption);
   warehouse.smartSupplyOptions[material.name] = useOption;
 }
