@@ -82,7 +82,7 @@ export class Corporation {
     return this.state.getState();
   }
 
-  storeCycles(numCycles = 1): void {
+  storeCycles(numCycles: number): void {
     this.storedCycles += numCycles;
   }
 

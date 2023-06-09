@@ -677,13 +677,19 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     ...warehouseAPI,
     ...officeAPI,
     hasCorporation: () => () => !!Player.corporation,
-    getConstants: (ctx) => () => {
-      checkAccess(ctx);
+    getConstants: (ctx) => {
       /* TODO 2.2: possibly just rework the whole corp constants structure to be more readable, and just use cloneDeep
        *           to provide it directly to player.
        * TODO 2.2: Roll product information into industriesData, there's no reason to look up a product separately */
-      return cloneDeep(omit(corpConstants, "fundingRoundShares", "fundingRoundMultiplier", "valuationLength"));
       // TODO: add functions for getting materialInfo and research info
+      const constants = cloneDeep(
+        omit(corpConstants, "fundingRoundShares", "fundingRoundMultiplier", "valuationLength"),
+      );
+
+      return () => {
+        checkAccess(ctx);
+        return constants;
+      };
     },
     getIndustryData: (ctx) => (_industryName) => {
       checkAccess(ctx);

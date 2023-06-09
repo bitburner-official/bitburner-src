@@ -3,6 +3,7 @@ import {
   CorpIndustryName,
   CorpMaterialName,
   CorpResearchName,
+  CorpSmartSupplyOption,
   CorpStateName,
   CorpUnlockName,
   CorpUpgradeName,
@@ -122,7 +123,7 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   /** Minimum decay value for employee morale/energy */
   minEmployeeDecay = 10,
   /**smart supply ot */
-  smartSupplyUseOptions = ["leftovers", "imports", "none"],
+  smartSupplyUseOptions: CorpSmartSupplyOption[] = ["leftovers", "imports", "none"],
   PurchaseMultipliers = {
     x1: 1 as PositiveInteger,
     x5: 5 as PositiveInteger,
