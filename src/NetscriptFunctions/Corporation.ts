@@ -413,7 +413,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const warehouse = getWarehouse(divisionName, cityName);
       const material = getMaterial(divisionName, cityName, materialName);
       const option = helpers.string(ctx, "option", _option);
-      assertMember(ctx, corpConstants.smartSupplyUseOptions, "Smart Supply Option", "option", option);
+      assertMember(ctx, corpConstants.smartSupplyOptions, "Smart Supply Option", "option", option);
       if (!hasUnlock(CorpUnlockName.SmartSupply))
         throw helpers.makeRuntimeErrorMsg(ctx, `You have not purchased the Smart Supply upgrade!`);
       SetSmartSupplyOption(warehouse, material, option);
