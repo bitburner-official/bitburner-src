@@ -4,7 +4,8 @@
     "paths": {
       "@player": ["src/Player"],
       "@enums": ["src/Enums"],
-      "@nsdefs": ["src/ScriptEditor/NetscriptDefinitions"]
+      "@nsdefs": ["src/ScriptEditor/NetscriptDefinitions"],
+      "@i18n": ["src/i18n"]
     },
     "esModuleInterop": true,
     "isolatedModules": true,

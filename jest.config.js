@@ -14,6 +14,7 @@ module.exports = {
     "@player": "<rootDir>/src/Player",
     "@enums": "<rootDir>/src/Enums",
     "@nsdefs": "<rootDir>/src/ScriptEditor/NetscriptDefinitions",
+    "@i18n": "<rootDir>/src/i18n",
     "^monaco-editor$": "<rootDir>/test/__mocks__/monacoMock.js",
     "^monaco-vim$": "<rootDir>/test/__mocks__/monacoMock.js",
   },

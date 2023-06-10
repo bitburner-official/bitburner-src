@@ -1,0 +1,88 @@
+{
+  "industry": {
+    "required-materials": "Required materials: {{requiredMaterials}}",
+    "produces-materials": "Produces materials: {{producesMaterials}}",
+    "produces-products": "Produces products: {{product}}",
+    "starting-cost": "Starting cost: <1></1>",
+    "recommended-start": "Recommended starting Industry: {{recommendedStart}}",
+    "none": "NONE",
+    "yes": "YES",
+    "no": "NO"
+  },
+  "industries": {
+    "Water Utilities": {
+      "title": "Water Utilities",
+      "description": "Distribute water and provide wastewater services."
+    },
+    "Spring Water": {
+      "title": "Spring Water",
+      "description": "Gather water through passive means."
+    },
+    "Agriculture": {
+      "title": "Agriculture",
+      "description": "Cultivate crops and breed livestock to produce food."
+    },
+    "Fishing": {
+      "title": "Fishing",
+      "description": "Produce food through the breeding and processing of fish and fish products."
+    },
+    "Mining": {
+      "title": "Mining",
+      "description": "Extract and process metals from the earth."
+    },
+    "Refinery": {
+      "title": "Refinery",
+      "description": "Refine ore into usable metal."
+    },
+    "Restaurant": {
+      "title": "Restaurant",
+      "description": "Create your own restaurants all around the world."
+    },
+    "Tobacco": {
+      "title": "Tobacco",
+      "description": "Create and distribute tobacco and tobacco-related products."
+    },
+    "Chemical": {
+      "title": "Chemical",
+      "description": "Produce industrial chemicals."
+    },
+    "Pharmaceutical": {
+      "title": "Pharmaceutical",
+      "description": "Discover, develop, and create new pharmaceutical drugs."
+    },
+    "Computer Hardware": {
+      "title": "Computer Hardware",
+      "description": "Develop and manufacture new computer hardware and networking infrastructures."
+    },
+    "Robotics": {
+      "title": "Robotics",
+      "description": "Develop and create robots."
+    },
+    "Software": {
+      "title": "Software",
+      "description": "Develop computer software and create AI Cores."
+    },
+    "Healthcare": {
+      "title": "Healthcare",
+      "description": "Create and manage hospitals."
+    },
+    "Real Estate": {
+      "title": "Real Estate",
+      "description": "Develop and manage real estate properties."
+    }
+  },
+  "materials": {
+    "Minerals": "Minerals",
+    "Ore": "Ore",
+    "Water": "Water",
+    "Food": "Food",
+    "Plants": "Plants",
+    "Metal": "Metal",
+    "Hardware": "Hardware",
+    "Chemicals": "Chemicals",
+    "Drugs": "Drugs",
+    "Robots": "Robots",
+    "AI Cores": "AI Cores",
+    "Real Estate": "Real Estate"
+  }
+}

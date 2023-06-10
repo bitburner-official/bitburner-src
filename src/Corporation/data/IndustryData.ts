@@ -1,13 +1,18 @@
+import { i18n } from "@i18n";
 import { CorpIndustryData } from "@nsdefs";
 
 import { createFullRecordFromEntries } from "../../Types/Record";
 import { IndustryType } from "@enums";
 import { getBaseResearchTreeCopy, getProductIndustryResearchTreeCopy } from "./BaseResearchTree";
 
+// translates industry type to english
+const tDescription = (industryType: IndustryType) =>
+  i18n.t(`corp:industries.${industryType}.description`, { lng: "en" });
+
 export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   [IndustryType.Agriculture]: {
     startingCost: 40e9,
-    description: "Cultivate crops and breed livestock to produce food.",
+    description: tDescription(IndustryType.Agriculture),
     recommendStarting: true,
     realEstateFactor: 0.72,
     scienceFactor: 0.5,
@@ -20,7 +25,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Spring]: {
     startingCost: 10e9,
-    description: "Gather water through passive means.",
+    description: tDescription(IndustryType.Spring),
     recommendStarting: false,
     realEstateFactor: 0.2,
     scienceFactor: 0.1,
@@ -33,7 +38,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Refinery]: {
     startingCost: 50e9,
-    description: "Refine ore into usable metal.",
+    description: tDescription(IndustryType.Refinery),
     recommendStarting: true,
     realEstateFactor: 0.3,
     scienceFactor: 0.5,
@@ -46,7 +51,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Chemical]: {
     startingCost: 70e9,
-    description: "Produce industrial chemicals.",
+    description: tDescription(IndustryType.Chemical),
     recommendStarting: false,
     realEstateFactor: 0.25,
     scienceFactor: 0.75,
@@ -59,7 +64,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Computers]: {
     startingCost: 500e9,
-    description: "Develop and manufacture new computer hardware and networking infrastructures.",
+    description: tDescription(IndustryType.Computers),
     product: {
       name: "Product",
       verb: "Create",
@@ -84,7 +89,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Fishing]: {
     startingCost: 80e9,
-    description: "Produce food through the breeding and processing of fish and fish products.",
+    description: tDescription(IndustryType.Fishing),
     recommendStarting: false,
     realEstateFactor: 0.15,
     scienceFactor: 0.35,
@@ -97,7 +102,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Restaurant]: {
     startingCost: 10e9,
-    description: "Create your own restaurants all around the world.",
+    description: tDescription(IndustryType.Restaurant),
     product: {
       name: "Restaurant",
       verb: "Build",
@@ -119,7 +124,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Healthcare]: {
     startingCost: 750e9,
-    description: "Create and manage hospitals.",
+    description: tDescription(IndustryType.Healthcare),
     product: {
       name: "Hospital",
       verb: "Build",
@@ -143,7 +148,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Mining]: {
     startingCost: 300e9,
-    description: "Extract and process metals from the earth.",
+    description: tDescription(IndustryType.Mining),
     recommendStarting: false,
     realEstateFactor: 0.3,
     scienceFactor: 0.26,
@@ -156,7 +161,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Pharmaceutical]: {
     startingCost: 200e9,
-    description: "Discover, develop, and create new pharmaceutical drugs.",
+    description: tDescription(IndustryType.Pharmaceutical),
     product: {
       name: "Drug",
       verb: "Develop",
@@ -181,7 +186,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.RealEstate]: {
     startingCost: 600e9,
-    description: "Develop and manage real estate properties.",
+    description: tDescription(IndustryType.RealEstate),
     product: {
       name: "Property",
       verb: "Develop",
@@ -205,7 +210,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Robotics]: {
     startingCost: 1e12,
-    description: "Develop and create robots.",
+    description: tDescription(IndustryType.Robotics),
     product: {
       name: "Robot",
       verb: "Design",
@@ -230,7 +235,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Software]: {
     startingCost: 25e9,
-    description: "Develop computer software and create AI Cores.",
+    description: tDescription(IndustryType.Software),
     product: {
       name: "Software",
       verb: "Develop",
@@ -255,7 +260,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Tobacco]: {
     startingCost: 20e9,
-    description: "Create and distribute tobacco and tobacco-related products.",
+    description: tDescription(IndustryType.Tobacco),
     product: {
       name: "Product",
       verb: "Create",
@@ -277,7 +282,7 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
   },
   [IndustryType.Water]: {
     startingCost: 150e9,
-    description: "Distribute water and provide wastewater services.",
+    description: tDescription(IndustryType.Water),
     recommendStarting: false,
     realEstateFactor: 0.5,
     scienceFactor: 0.6,

@@ -1,11 +1,15 @@
 import React from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 import Typography from "@mui/material/Typography";
 
-import { MoneyCost } from "./MoneyCost";
-import { Corporation } from "../Corporation";
+import { CorpMaterialName } from "@nsdefs";
 import { IndustryType } from "@enums";
+
 import { IndustriesData } from "../data/IndustryData";
+import { getRecordKeys } from "../../Types/Record";
+import { Corporation } from "../Corporation";
+import { MoneyCost } from "./MoneyCost";
 
 interface IProps {
   industry: IndustryType;
@@ -13,22 +17,36 @@ interface IProps {
 }
 
 export const IndustryDescription = ({ industry, corp }: IProps) => {
+  const { t } = useTranslation("corp");
+
+  const translateMaterials = (materials: CorpMaterialName[] = []) => {
+    const labels = materials.map((material) => t(`materials.${material}`));
+    return labels.length ? labels.join(", ") : t("industry.none");
+  };
+
   const data = IndustriesData[industry];
+  const requiredMaterials = translateMaterials(getRecordKeys(data.requiredMaterials));
+  const producesMaterials = translateMaterials(data.producedMaterials);
+  const product = t(data.product ? "industry.yes" : "industry.no");
+  const recommendedStart = t(data.recommendStarting ? "industry.yes" : "industry.no");
+
   return (
     <Typography>
-      {data.description}
+      {t(`industries.${industry}.description`)}
       <br />
       <br />
-      Required Materials: {Object.keys(data.requiredMaterials).toString().replace(/,/gi, ", ")}
+      {t("industry.required-materials", { requiredMaterials })}
       <br />
-      Produces Materials: {data.producedMaterials ? data.producedMaterials.toString().replace(/,/gi, ", ") : "NONE"}
+      {t("industry.produces-materials", { producesMaterials })}
       <br />
-      Produces products: {data.product ? "YES" : "NO"}
+      {t("industry.produces-products", { product })}
       <br />
       <br />
-      Starting cost: <MoneyCost money={data.startingCost} corp={corp} />
+      <Trans t={t} i18nKey="industry.starting-cost">
+        Starting cost: <MoneyCost money={data.startingCost} corp={corp} />
+      </Trans>
       <br />
-      Recommended starting Industry: {data.recommendStarting ? "YES" : "NO"}
+      {t("industry.recommended-start", { recommendedStart })}
     </Typography>
   );
 };

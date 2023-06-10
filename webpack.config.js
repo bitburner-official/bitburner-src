@@ -183,6 +183,7 @@ module.exports = (env, argv) => {
         "@player": path.resolve(__dirname, "src/Player"),
         "@enums": path.resolve(__dirname, "src/Enums"),
         "@nsdefs": path.resolve(__dirname, "src/ScriptEditor/NetscriptDefinitions.d.ts"),
+        "@i18n": path.resolve(__dirname, "src/i18n"),
       },
       fallback: { crypto: false },
     },

@@ -66,7 +66,7 @@ export function LoadingScreen(): React.ReactElement {
         <CircularProgress size={150} color="primary" />
       </Grid>
       <Grid item>
-        <Typography variant="h3">{t("loading-screen.message", "hmm", { version })}</Typography>
+        <Typography variant="h3">{t("loading-screen.message", { version })}</Typography>
       </Grid>
       {show && (
         <Grid item>
