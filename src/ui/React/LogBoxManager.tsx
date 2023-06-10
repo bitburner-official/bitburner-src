@@ -290,7 +290,9 @@ function LogWindow(props: IProps): React.ReactElement {
     return !(bounds.right < 0 || bounds.bottom < 0 || bounds.left > innerWidth || bounds.top > outerWidth);
   };
 
-  const boundToBody = (e: DraggableEvent): void | false => {
+  const onDrag = (e: DraggableEvent): void | false => {
+    e.preventDefault();
+    // bound to body
     if (
       e instanceof MouseEvent &&
       (e.clientX < 0 || e.clientY < 0 || e.clientX > innerWidth || e.clientY > innerHeight)
@@ -302,7 +304,7 @@ function LogWindow(props: IProps): React.ReactElement {
   const minConstraints: [number, number] = [150, 33];
 
   return (
-    <Draggable handle=".drag" onDrag={boundToBody} ref={rootRef} onMouseDown={updateLayer}>
+    <Draggable handle=".drag" onDrag={onDrag} ref={rootRef} onMouseDown={updateLayer}>
       <Box
         display="flex"
         sx={{
