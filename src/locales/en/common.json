@@ -1,0 +1,6 @@
+{
+  "loading-screen": {
+    "message": "Loading Bitburner {{version}}",
+    "hint": "If the game fails to load, consider <1>killing all scripts</1>"
+  }
+}

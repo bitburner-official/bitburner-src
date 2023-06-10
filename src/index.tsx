@@ -1,9 +1,10 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 
 import { TTheme as Theme, ThemeEvents, refreshTheme } from "./Themes/ui/Theme";
 import { LoadingScreen } from "./ui/LoadingScreen";
 import { initElectron } from "./Electron";
+import "./i18n";
 
 import { newRemoteFileApiConnection } from "./RemoteFileAPI/RemoteFileAPI";
 
@@ -11,9 +12,11 @@ initElectron();
 globalThis.React = React;
 globalThis.ReactDOM = ReactDOM;
 ReactDOM.render(
-  <Theme>
-    <LoadingScreen />
-  </Theme>,
+  <Suspense fallback="loading">
+    <Theme>
+      <LoadingScreen />
+    </Theme>
+  </Suspense>,
   document.getElementById("root"),
 );
 
@@ -22,9 +25,11 @@ setTimeout(newRemoteFileApiConnection, 2000);
 function rerender(): void {
   refreshTheme();
   ReactDOM.render(
-    <Theme>
-      <LoadingScreen />
-    </Theme>,
+    <Suspense fallback="loading">
+      <Theme>
+        <LoadingScreen />
+      </Theme>
+    </Suspense>,
     document.getElementById("root"),
   );
 }

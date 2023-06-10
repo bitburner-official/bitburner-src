@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Trans, useTranslation } from "react-i18next";
+
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -13,6 +15,15 @@ import { hash } from "../hash/hash";
 import { pushGameReady } from "../Electron";
 
 export function LoadingScreen(): React.ReactElement {
+  const { t, i18n } = useTranslation("common");
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      i18n.changeLanguage(i18n.language === "en" ? "ru" : "en");
+    }, 2000);
+    return () => clearInterval(intervalId);
+  }, [i18n]);
+
   const [show, setShow] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
@@ -38,12 +49,12 @@ export function LoadingScreen(): React.ReactElement {
             Engine.load(saveString);
           } catch (err: unknown) {
             ActivateRecoveryMode();
-            setLoaded(true);
+            //setLoaded(true);
             throw err;
           }
 
           pushGameReady();
-          setLoaded(true);
+          //setLoaded(true);
         })
         .catch((reason) => {
           console.error(reason);
@@ -62,12 +73,14 @@ export function LoadingScreen(): React.ReactElement {
         <CircularProgress size={150} color="primary" />
       </Grid>
       <Grid item>
-        <Typography variant="h3">Loading Bitburner {version}</Typography>
+        <Typography variant="h3">{t("loading-screen.message", "hmm", { version })}</Typography>
       </Grid>
       {show && (
         <Grid item>
           <Typography>
-            If the game fails to load, consider <a href="?noScripts">killing all scripts</a>
+            <Trans t={t} i18nKey="loading-screen.hint">
+              If the game fails to load, consider <a href="?noScripts">killing all scripts</a>
+            </Trans>
           </Typography>
         </Grid>
       )}
