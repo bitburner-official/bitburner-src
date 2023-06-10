@@ -15,14 +15,7 @@ import { hash } from "../hash/hash";
 import { pushGameReady } from "../Electron";
 
 export function LoadingScreen(): React.ReactElement {
-  const { t, i18n } = useTranslation("common");
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      i18n.changeLanguage(i18n.language === "en" ? "ru" : "en");
-    }, 2000);
-    return () => clearInterval(intervalId);
-  }, [i18n]);
+  const { t } = useTranslation("common");
 
   const [show, setShow] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -49,12 +42,12 @@ export function LoadingScreen(): React.ReactElement {
             Engine.load(saveString);
           } catch (err: unknown) {
             ActivateRecoveryMode();
-            //setLoaded(true);
+            setLoaded(true);
             throw err;
           }
 
           pushGameReady();
-          //setLoaded(true);
+          setLoaded(true);
         })
         .catch((reason) => {
           console.error(reason);
