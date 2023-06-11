@@ -19,22 +19,22 @@ import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 import { Theme } from "@mui/material/styles";
 
-import ThumbUpAlt from "@mui/icons-material/ThumbUpAlt";
-import ThumbDownAlt from "@mui/icons-material/ThumbDownAlt";
+import WarningIcon from "@mui/icons-material/Warning";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import WarningIcon from "@mui/icons-material/Warning";
 
 import { Skills } from "@nsdefs";
 
-import { ImportData, saveObject } from "../../SaveObject";
-import { Settings } from "../../Settings/Settings";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { formatMoney, formatNumberNoSuffix } from "../formatNumber";
-import { ConfirmationModal } from "./ConfirmationModal";
-import { pushImportResult } from "../../Electron";
-import { Router } from "../GameRoot";
-import { Page } from "../Router";
+import { ImportData, saveObject } from "../../../SaveObject";
+import { Settings } from "../../../Settings/Settings";
+import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
+import { formatMoney, formatNumberNoSuffix } from "../../formatNumber";
+import { ConfirmationModal } from "../ConfirmationModal";
+import { pushImportResult } from "../../../Electron";
+import { Router } from "../../GameRoot";
+import { Page } from "../../Router";
+
+import { ComparisonIcon } from "./ComparisonIcon";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -81,61 +81,29 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-function ComparisonIcon({ isBetter }: { isBetter: boolean }): JSX.Element {
-  if (isBetter) {
-    return (
-      <Tooltip
-        title={
-          <>
-            Imported value is <b>larger</b>!
-          </>
-        }
-      >
-        <ThumbUpAlt color="success" />
-      </Tooltip>
-    );
-  } else {
-    return (
-      <Tooltip
-        title={
-          <>
-            Imported value is <b>smaller</b>!
-          </>
-        }
-      >
-        <ThumbDownAlt color="error" />
-      </Tooltip>
-    );
-  }
-}
-
+// TODO: move to game constants and/or extract as an enum
 const playerSkills: (keyof Skills)[] = ["hacking", "strength", "defense", "dexterity", "agility", "charisma"];
-
-export interface IProps {
-  importString: string;
-  automatic: boolean;
-}
 
 let initialAutosave = 0;
 
-export function ImportSaveRoot(props: IProps): JSX.Element {
+export const ImportSave = (props: { importString: string; automatic: boolean }): JSX.Element => {
   const classes = useStyles();
   const [importData, setImportData] = useState<ImportData | undefined>();
   const [currentData, setCurrentData] = useState<ImportData | undefined>();
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [headback, setHeadback] = useState(false);
 
-  function handleGoBack(): void {
+  const handleGoBack = (): void => {
     Settings.AutosaveInterval = initialAutosave;
     pushImportResult(false);
     Router.allowRouting(true);
     setHeadback(true);
-  }
+  };
 
-  async function handleImport(): Promise<void> {
+  const handleImport = async (): Promise<void> => {
     await saveObject.importGame(props.importString, true);
     pushImportResult(true);
-  }
+  };
 
   useEffect(() => {
     // We want to disable autosave while we're in this mode
@@ -361,4 +329,4 @@ export function ImportSaveRoot(props: IProps): JSX.Element {
       </Box>
     </Box>
   );
-}
+};
