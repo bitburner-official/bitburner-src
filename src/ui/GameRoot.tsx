@@ -1,7 +1,8 @@
+import React, { Suspense, useState, useEffect } from "react";
+
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 import type { TextFilePath } from "../Paths/TextFilePath";
 
-import React, { useState, useEffect } from "react";
 import { createStyles, makeStyles } from "@mui/styles";
 import { Box, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
@@ -440,14 +441,14 @@ export function GameRoot(): React.ReactElement {
                 )
               }
             </Overview>
-            {withSidebar ? (
-              <Box display="flex" flexDirection="row" width="100%">
-                <SidebarRoot page={page} />
-                <Box className={classes.root}>{mainPage}</Box>
+
+            <Box display="flex" flexDirection="row" width="100%">
+              {withSidebar && <SidebarRoot page={page} />}
+              <Box className={classes.root}>
+                <Suspense fallback="loading">{mainPage}</Suspense>
               </Box>
-            ) : (
-              <Box className={classes.root}>{mainPage}</Box>
-            )}
+            </Box>
+
             <Unclickable />
             {withPopups && (
               <>
