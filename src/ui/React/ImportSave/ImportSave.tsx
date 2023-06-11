@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableBody,
-  TableContainer,
-  TableCell,
-  Typography,
-  Tooltip,
-  Box,
-  Button,
-  ButtonGroup,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import TableCell from "@mui/material/TableCell";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
@@ -22,6 +22,8 @@ import { Theme } from "@mui/material/styles";
 import WarningIcon from "@mui/icons-material/Warning";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 import { Skills } from "@nsdefs";
 
@@ -33,6 +35,7 @@ import { ConfirmationModal } from "../ConfirmationModal";
 import { pushImportResult } from "../../../Electron";
 import { Router } from "../../GameRoot";
 import { Page } from "../../Router";
+import { useBoolean } from "../hooks";
 
 import { ComparisonIcon } from "./ComparisonIcon";
 
@@ -90,7 +93,8 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
   const classes = useStyles();
   const [importData, setImportData] = useState<ImportData | undefined>();
   const [currentData, setCurrentData] = useState<ImportData | undefined>();
-  const [importModalOpen, setImportModalOpen] = useState(false);
+  const [isImportModalOpen, { on: openImportModal, off: closeImportModal }] = useBoolean(false);
+  const [isSkillsExpanded, { toggle: toggleSkillsExpand }] = useBoolean(true);
   const [headback, setHeadback] = useState(false);
 
   const handleGoBack = (): void => {
@@ -153,7 +157,7 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
               <TableCell></TableCell>
               <TableCell>Current Game</TableCell>
               <TableCell>Being Imported</TableCell>
-              <TableCell></TableCell>
+              <TableCell width={56}></TableCell>
             </TableRow>
           </TableHead>
 
@@ -218,21 +222,43 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
                 )}
               </TableCell>
             </TableRow>
-
-            {playerSkills.map((skill) => {
-              const currentSkill = currentData.playerData?.skills[skill] ?? 0;
-              const importSkill = importData.playerData?.skills[skill] ?? 0;
-              return (
-                <TableRow key={skill}>
-                  <TableCell className={classes.skillTitle}>{skill}</TableCell>
-                  <TableCell>{formatNumberNoSuffix(currentSkill, 0)}</TableCell>
-                  <TableCell>{formatNumberNoSuffix(importSkill, 0)}</TableCell>
-                  <TableCell>
-                    {currentSkill !== importSkill && <ComparisonIcon isBetter={importSkill > currentSkill} />}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            <TableRow>
+              <TableCell colSpan={4}>
+                <IconButton aria-label="expand row" size="small" onClick={toggleSkillsExpand}>
+                  {isSkillsExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+                Skills
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell colSpan={4} padding="none">
+                <Collapse in={isSkillsExpanded}>
+                  <Table>
+                    <TableBody>
+                      <TableRow>{/* empty row to keep even/odd coloring */}</TableRow>
+                      {playerSkills.map((skill) => {
+                        const currentSkill = currentData.playerData?.skills[skill] ?? 0;
+                        const importSkill = importData.playerData?.skills[skill] ?? 0;
+                        return (
+                          <TableRow key={skill}>
+                            <TableCell className={classes.skillTitle}>{skill}</TableCell>
+                            <TableCell>{formatNumberNoSuffix(currentSkill, 0)}</TableCell>
+                            <TableCell>{formatNumberNoSuffix(importSkill, 0)}</TableCell>
+                            <TableCell width={56}>
+                              {currentSkill !== importSkill && <ComparisonIcon isBetter={importSkill > currentSkill} />}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                      {playerSkills.length % 2 === 1 && (
+                        <TableRow>{/* empty row to keep even/odd coloring */}</TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </Collapse>
+              </TableCell>
+            </TableRow>
+            <TableRow>{/* empty row to keep even/odd coloring */}</TableRow>
 
             <TableRow>
               <TableCell>Augmentations</TableCell>
@@ -306,18 +332,13 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
           <Button onClick={handleGoBack} sx={{ my: 2 }} startIcon={<ArrowBackIcon />} color="secondary">
             Take me back!
           </Button>
-          <Button
-            onClick={() => setImportModalOpen(true)}
-            sx={{ my: 2 }}
-            startIcon={<DirectionsRunIcon />}
-            color="warning"
-          >
+          <Button onClick={openImportModal} sx={{ my: 2 }} startIcon={<DirectionsRunIcon />} color="warning">
             Proceed with import
           </Button>
         </ButtonGroup>
         <ConfirmationModal
-          open={importModalOpen}
-          onClose={() => setImportModalOpen(false)}
+          open={isImportModalOpen}
+          onClose={closeImportModal}
           onConfirm={handleImport}
           confirmationText={
             <>
