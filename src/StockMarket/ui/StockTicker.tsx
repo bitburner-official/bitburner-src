@@ -9,8 +9,7 @@ import { PlaceOrderModal } from "./PlaceOrderModal";
 import { Order } from "../Order";
 import { Stock } from "../Stock";
 import { getBuyTransactionCost, getSellTransactionGain, calculateBuyMaxAmount } from "../StockMarketHelpers";
-import { OrderTypes } from "../data/OrderTypes";
-import { PositionTypes } from "../data/PositionTypes";
+import { PositionType, OrderType } from "@enums";
 import { placeOrder } from "../StockMarket";
 import { buyStock, shortStock, sellStock, sellShort } from "../BuyingAndSelling";
 
@@ -46,7 +45,7 @@ interface IProps {
 /** React Component for a single stock ticker in the Stock Market UI */
 export function StockTicker(props: IProps): React.ReactElement {
   const [orderType, setOrderType] = useState(SelectorOrderType.Market);
-  const [position, setPosition] = useState(PositionTypes.Long);
+  const [position, setPosition] = useState(PositionType.Long);
   const [qty, setQty] = useState("");
   const [open, setOpen] = useState(false);
   const [tickerOpen, setTicketOpen] = useState(false);
@@ -75,7 +74,7 @@ export function StockTicker(props: IProps): React.ReactElement {
 
     return (
       <>
-        Purchasing {formatShares(qty)} shares ({position === PositionTypes.Long ? "Long" : "Short"}
+        Purchasing {formatShares(qty)} shares ({position === PositionType.Long ? "Long" : "Short"}
         ) will cost <Money money={cost} />.
       </>
     );
@@ -92,7 +91,7 @@ export function StockTicker(props: IProps): React.ReactElement {
       return null;
     }
 
-    if (position === PositionTypes.Long) {
+    if (position === PositionType.Long) {
       if (qty > stock.playerShares) {
         return <>You do not have this many shares in the Long position</>;
       }
@@ -107,7 +106,7 @@ export function StockTicker(props: IProps): React.ReactElement {
 
     return (
       <>
-        Selling {formatShares(qty)} shares ({position === PositionTypes.Long ? "Long" : "Short"}) will result in a gain
+        Selling {formatShares(qty)} shares ({position === PositionType.Long ? "Long" : "Short"}) will result in a gain
         of <Money money={cost} />.
       </>
     );
@@ -122,7 +121,7 @@ export function StockTicker(props: IProps): React.ReactElement {
 
     switch (orderType) {
       case SelectorOrderType.Market: {
-        if (position === PositionTypes.Short) {
+        if (position === PositionType.Short) {
           shortStock(props.stock, shares);
         } else {
           buyStock(props.stock, shares);
@@ -135,7 +134,7 @@ export function StockTicker(props: IProps): React.ReactElement {
         setModalProps({
           text: "Enter the price for your Limit Order",
           placeText: "Place Buy Limit Order",
-          place: (price: number) => placeOrder(props.stock, shares, price, OrderTypes.LimitBuy, position),
+          place: (price: number) => placeOrder(props.stock, shares, price, OrderType.LimitBuy, position),
         });
         break;
       }
@@ -144,7 +143,7 @@ export function StockTicker(props: IProps): React.ReactElement {
         setModalProps({
           text: "Enter the price for your Stop Order",
           placeText: "Place Buy Stop Order",
-          place: (price: number) => placeOrder(props.stock, shares, price, OrderTypes.StopBuy, position),
+          place: (price: number) => placeOrder(props.stock, shares, price, OrderType.StopBuy, position),
         });
         break;
       }
@@ -162,7 +161,7 @@ export function StockTicker(props: IProps): React.ReactElement {
 
     switch (orderType) {
       case SelectorOrderType.Market: {
-        if (position === PositionTypes.Short) {
+        if (position === PositionType.Short) {
           shortStock(stock, maxShares);
         } else {
           buyStock(stock, maxShares);
@@ -198,10 +197,10 @@ export function StockTicker(props: IProps): React.ReactElement {
   function handlePositionTypeChange(e: SelectChangeEvent): void {
     const val = e.target.value;
 
-    if (val === PositionTypes.Short) {
-      setPosition(PositionTypes.Short);
+    if (val === PositionType.Short) {
+      setPosition(PositionType.Short);
     } else {
-      setPosition(PositionTypes.Long);
+      setPosition(PositionType.Long);
     }
   }
 
@@ -218,7 +217,7 @@ export function StockTicker(props: IProps): React.ReactElement {
 
     switch (orderType) {
       case SelectorOrderType.Market: {
-        if (position === PositionTypes.Short) {
+        if (position === PositionType.Short) {
           sellShort(props.stock, shares);
         } else {
           sellStock(props.stock, shares);
@@ -231,7 +230,7 @@ export function StockTicker(props: IProps): React.ReactElement {
         setModalProps({
           text: "Enter the price for your Limit Order",
           placeText: "Place Sell Limit Order",
-          place: (price: number) => placeOrder(props.stock, shares, price, OrderTypes.LimitSell, position),
+          place: (price: number) => placeOrder(props.stock, shares, price, OrderType.LimitSell, position),
         });
         break;
       }
@@ -240,7 +239,7 @@ export function StockTicker(props: IProps): React.ReactElement {
         setModalProps({
           text: "Enter the price for your Stop Order",
           placeText: "Place Sell Stop Order",
-          place: (price: number) => placeOrder(props.stock, shares, price, OrderTypes.StopSell, position),
+          place: (price: number) => placeOrder(props.stock, shares, price, OrderType.StopSell, position),
         });
         break;
       }
@@ -254,7 +253,7 @@ export function StockTicker(props: IProps): React.ReactElement {
 
     switch (orderType) {
       case SelectorOrderType.Market: {
-        if (position === PositionTypes.Short) {
+        if (position === PositionType.Short) {
           sellShort(stock, stock.playerShortShares);
         } else {
           sellStock(stock, stock.playerShares);
@@ -290,8 +289,8 @@ export function StockTicker(props: IProps): React.ReactElement {
           <Box display="flex" alignItems="center">
             <TextField onChange={handleQuantityChange} placeholder="Quantity (Shares)" value={qty} />
             <Select onChange={handlePositionTypeChange} value={position}>
-              <MenuItem value={PositionTypes.Long}>Long</MenuItem>
-              {hasShortAccess() && <MenuItem value={PositionTypes.Short}>Short</MenuItem>}
+              <MenuItem value={PositionType.Long}>Long</MenuItem>
+              {hasShortAccess() && <MenuItem value={PositionType.Short}>Short</MenuItem>}
             </Select>
             <Select onChange={handleOrderTypeChange} value={orderType}>
               <MenuItem value={SelectorOrderType.Market}>{SelectorOrderType.Market}</MenuItem>

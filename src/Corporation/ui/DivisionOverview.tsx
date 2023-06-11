@@ -2,7 +2,7 @@
 // (top-left panel in the Division UI)
 import React, { useState } from "react";
 
-import { CorpUnlockName, IndustryType } from "../data/Enums";
+import { CorpUnlockName, IndustryType } from "@enums";
 import { HireAdVert } from "../Actions";
 import { formatBigNumber } from "../../ui/formatNumber";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";

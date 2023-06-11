@@ -1,4 +1,5 @@
-import { FactionNames } from "../Faction/data/FactionNames";
+import { Player } from "@player";
+import { AugmentationName, FactionName } from "@enums";
 import { Fragment } from "./Fragment";
 import { ActiveFragment } from "./ActiveFragment";
 import { FragmentType } from "./FragmentType";
@@ -9,8 +10,6 @@ import { StaneksGiftEvents } from "./StaneksGiftEvents";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { StanekConstants } from "./data/Constants";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { Player } from "@player";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { defaultMultipliers, mergeMultipliers, Multipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
 import { getKeyList } from "../utils/helpers/getKeyList";
@@ -42,7 +41,7 @@ export class StaneksGift extends BaseGift {
       af.numCharge += threads / af.highestCharge;
     }
 
-    const cotmg = Factions[FactionNames.ChurchOfTheMachineGod];
+    const cotmg = Factions[FactionName.ChurchOfTheMachineGod];
     cotmg.playerReputation += (Player.mults.faction_rep * (Math.pow(threads, 0.95) * (cotmg.favor + 100))) / 1000;
     this.justCharged = true;
   }
@@ -52,7 +51,7 @@ export class StaneksGift extends BaseGift {
   }
 
   process(numCycles = 1): void {
-    if (!Player.hasAugmentation(AugmentationNames.StaneksGift1)) return;
+    if (!Player.hasAugmentation(AugmentationName.StaneksGift1)) return;
     this.storedCycles += numCycles;
     const usedCycles = this.isBonusCharging ? 5 : 1;
     this.isBonusCharging = false;
@@ -217,13 +216,13 @@ export class StaneksGift extends BaseGift {
     const mults = this.calculateMults();
     Player.mults = mergeMultipliers(Player.mults, mults);
     Player.updateSkillLevels();
-    const zoeAmt = Player.sleeves.reduce((n, sleeve) => n + (sleeve.hasAugmentation(AugmentationNames.ZOE) ? 1 : 0), 0);
+    const zoeAmt = Player.sleeves.reduce((n, sleeve) => n + (sleeve.hasAugmentation(AugmentationName.ZOE) ? 1 : 0), 0);
     if (zoeAmt === 0) return;
     // Less powerful for each copy.
     const scaling = 3 / (zoeAmt + 2);
     const sleeveMults = scaleMultipliers(mults, scaling);
     for (const sleeve of Player.sleeves) {
-      if (!sleeve.hasAugmentation(AugmentationNames.ZOE)) continue;
+      if (!sleeve.hasAugmentation(AugmentationName.ZOE)) continue;
       sleeve.resetMultipliers();
       //reapplying augmentation's multiplier
       for (let i = 0; i < sleeve.augmentations.length; ++i) {

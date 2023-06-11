@@ -1,8 +1,8 @@
+import { CorpMaterialName, CorpResearchName, CorpStateName } from "@nsdefs";
+import { CityName, CorpEmployeeJob, IndustryType } from "@enums";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { CityName } from "../Enums";
 import { IndustryResearchTrees, IndustriesData } from "./data/IndustryData";
 import * as corpConstants from "./data/Constants";
-import { CorpEmployeeJob, IndustryType } from "./data/Enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { calculateEffectWithFactors } from "../utils/calculateEffectWithFactors";
 import { OfficeSpace } from "./OfficeSpace";
@@ -12,7 +12,6 @@ import { isString } from "../utils/helpers/string";
 import { MaterialInfo } from "./MaterialInfo";
 import { Warehouse } from "./Warehouse";
 import { Corporation } from "./Corporation";
-import { CorpMaterialName, CorpResearchName, CorpStateName } from "@nsdefs";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from "../Types/Record";
 import { Material } from "./Material";

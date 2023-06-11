@@ -26,7 +26,15 @@ import {
   calculateGrowTime,
   calculateWeakenTime,
 } from "../Hacking";
-import { CompletedProgramName } from "../Programs/Programs";
+import {
+  CityName,
+  CompletedProgramName,
+  FactionWorkType,
+  GymType,
+  JobName,
+  LocationName,
+  UniversityClassType,
+} from "@enums";
 import { Formulas as IFormulas, Player as IPlayer, Person as IPerson } from "@nsdefs";
 import {
   calculateRespectGain,
@@ -45,11 +53,9 @@ import { calculateCompanyWorkStats } from "../Work/Formulas";
 import { Companies } from "../Company/Companies";
 import { calculateClassEarnings } from "../Work/Formulas";
 import { calculateFactionExp, calculateFactionRep } from "../Work/Formulas";
-import { FactionWorkType, GymType, UniversityClassType, LocationName, CityName } from "../Enums";
 
 import { defaultMultipliers } from "../PersonObjects/Multipliers";
 import { checkEnum, findEnumMember } from "../utils/helpers/enum";
-import { JobName } from "../Enums";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { findCrime } from "../Crime/CrimeHelpers";
 

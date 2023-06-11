@@ -14,12 +14,12 @@ import { OwnedAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
 import { StaticAugmentations } from "../StaticAugmentations";
-import { AugmentationNames } from "../data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { useRerender } from "../../ui/React/hooks";
 
 export function InstalledAugmentations(): React.ReactElement {
   const rerender = useRerender();
-  const sourceAugs = Player.augmentations.slice().filter((aug) => aug.name !== AugmentationNames.NeuroFluxGovernor);
+  const sourceAugs = Player.augmentations.slice().filter((aug) => aug.name !== AugmentationName.NeuroFluxGovernor);
 
   const [selectedAug, setSelectedAug] = useState(sourceAugs[0]);
 

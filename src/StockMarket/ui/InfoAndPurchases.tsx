@@ -20,7 +20,7 @@ import IconButton from "@mui/material/IconButton";
 import HelpIcon from "@mui/icons-material/Help";
 import CheckIcon from "@mui/icons-material/Check";
 import { StaticModal } from "../../ui/React/StaticModal";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "@enums";
 
 interface IProps {
   rerender: () => void;
@@ -190,10 +190,10 @@ export function InfoAndPurchases(props: IProps): React.ReactElement {
       </Typography>
       <PurchaseTixApiAccessButton {...props} />
       <Typography variant="h5" color="primary">
-        {FactionNames.FourSigma} (4S) Market Data Feed
+        {FactionName.FourSigma} (4S) Market Data Feed
       </Typography>
       <Typography>
-        {FactionNames.FourSigma}'s (4S) Market Data Feed provides information about stocks that will help your trading
+        {FactionName.FourSigma}'s (4S) Market Data Feed provides information about stocks that will help your trading
         strategies.
         <IconButton onClick={() => setHelpOpen(true)}>
           <HelpIcon />

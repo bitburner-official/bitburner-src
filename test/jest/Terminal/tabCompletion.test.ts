@@ -10,8 +10,7 @@ import { asFilePath } from "../../../src/Paths/FilePath";
 import { Directory, isAbsolutePath, isDirectoryPath, root } from "../../../src/Paths/Directory";
 import { hasTextExtension } from "../../../src/Paths/TextFilePath";
 import { hasScriptExtension } from "../../../src/Paths/ScriptFilePath";
-import { LiteratureName } from "../../../src/Literature/data/LiteratureNames";
-import { MessageFilename } from "../../../src/Message/MessageHelpers";
+import { LiteratureName, MessageFilename } from "../../../src/Enums";
 import { Terminal } from "../../../src/Terminal";
 import { IPAddress } from "../../../src/Types/strings";
 

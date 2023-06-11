@@ -1,5 +1,5 @@
 import { DarkWebItem } from "./DarkWebItem";
-import { CompletedProgramName } from "../Programs/Programs";
+import { CompletedProgramName } from "@enums";
 
 export const DarkWebItems = {
   BruteSSHProgram: new DarkWebItem(CompletedProgramName.bruteSsh, 500e3, "Opens up SSH Ports."),

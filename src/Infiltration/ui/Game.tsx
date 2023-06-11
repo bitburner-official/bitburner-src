@@ -1,6 +1,6 @@
 import { Button, Container, Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { Player } from "@player";
@@ -92,7 +92,7 @@ export function Game(props: IProps): React.ReactElement {
     // it's clear they're not meant to
     const damage = options?.automated
       ? Player.hp.current
-      : props.StartingDifficulty * 3 * (Player.hasAugmentation(AugmentationNames.WKSharmonizer, true) ? 0.5 : 1);
+      : props.StartingDifficulty * 3 * (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 0.5 : 1);
     if (Player.takeDamage(damage)) {
       Router.toPage(Page.City);
       return;

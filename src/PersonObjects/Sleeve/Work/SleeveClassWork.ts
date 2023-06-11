@@ -1,23 +1,23 @@
+import { ClassType, GymType, LocationName, UniversityClassType } from "@enums";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
-import { applySleeveGains, Work, WorkType } from "./Work";
-import { Classes, ClassType } from "../../../Work/ClassWork";
-import { LocationName } from "../../../Enums";
+import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
+import { Classes } from "../../../Work/ClassWork";
 import { calculateClassEarnings } from "../../../Work/Formulas";
 import { Sleeve } from "../Sleeve";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
-import { GymType, UniversityClassType } from "../../../Enums";
 import { checkEnum } from "../../../utils/helpers/enum";
 import { Locations } from "../../../Locations/Locations";
 
-export const isSleeveClassWork = (w: Work | null): w is SleeveClassWork => w !== null && w.type === WorkType.CLASS;
+export const isSleeveClassWork = (w: SleeveWorkClass | null): w is SleeveClassWork =>
+  w !== null && w.type === SleeveWorkType.CLASS;
 
 interface ClassWorkParams {
   classType: ClassType;
   location: LocationName;
 }
 
-export class SleeveClassWork extends Work {
-  type: WorkType.CLASS = WorkType.CLASS;
+export class SleeveClassWork extends SleeveWorkClass {
+  type: SleeveWorkType.CLASS = SleeveWorkType.CLASS;
   classType: ClassType;
   location: LocationName;
 
@@ -42,7 +42,7 @@ export class SleeveClassWork extends Work {
 
   APICopy() {
     return {
-      type: WorkType.CLASS as "CLASS",
+      type: SleeveWorkType.CLASS as "CLASS",
       classType: this.classType,
       location: this.location,
     };

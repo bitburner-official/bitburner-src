@@ -7,7 +7,7 @@ import * as React from "react";
 
 import { City } from "../City";
 import { Cities } from "../Cities";
-import { LocationName } from "../../Enums";
+import { LocationName, LocationType } from "@enums";
 import { Locations } from "../Locations";
 import { Location } from "../Location";
 import { Settings } from "../../Settings/Settings";
@@ -17,7 +17,6 @@ import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { LocationType } from "../LocationTypeEnum";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";

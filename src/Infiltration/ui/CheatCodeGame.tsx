@@ -1,6 +1,6 @@
 import { Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import {
   downArrowSymbol,
@@ -41,7 +41,7 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
   const timer = difficulty.timer;
   const [code] = useState(generateCode(difficulty));
   const [index, setIndex] = useState(0);
-  const hasAugment = Player.hasAugmentation(AugmentationNames.TrickeryOfHermes, true);
+  const hasAugment = Player.hasAugmentation(AugmentationName.TrickeryOfHermes, true);
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();

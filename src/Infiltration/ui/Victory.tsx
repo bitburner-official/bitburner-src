@@ -1,6 +1,6 @@
 import { Box, Button, MenuItem, Paper, Select, SelectChangeEvent, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "@enums";
 import { inviteToFaction } from "../../Faction/FactionHelpers";
 import { Factions } from "../../Faction/Factions";
 import { Router } from "../../ui/GameRoot";
@@ -30,12 +30,12 @@ export function Victory(props: IProps): React.ReactElement {
     Router.toPage(Page.City);
   }
 
-  const soa = Factions[FactionNames.ShadowsOfAnarchy];
+  const soa = Factions[FactionName.ShadowsOfAnarchy];
   const repGain = calculateTradeInformationRepReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
   const moneyGain = calculateSellInformationCashReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
   const infiltrationRepGain = calculateInfiltratorsRepReward(soa, props.StartingDifficulty);
 
-  const isMemberOfInfiltrators = Player.factions.includes(FactionNames.ShadowsOfAnarchy);
+  const isMemberOfInfiltrators = Player.factions.includes(FactionName.ShadowsOfAnarchy);
 
   function sell(): void {
     Player.gainMoney(moneyGain, "infiltration");
@@ -53,7 +53,7 @@ export function Victory(props: IProps): React.ReactElement {
   }
 
   function handleInfiltrators(): void {
-    inviteToFaction(Factions[FactionNames.ShadowsOfAnarchy]);
+    inviteToFaction(Factions[FactionName.ShadowsOfAnarchy]);
     if (isMemberOfInfiltrators) {
       soa.playerReputation += infiltrationRepGain;
     }
@@ -66,7 +66,7 @@ export function Victory(props: IProps): React.ReactElement {
         You{" "}
         {isMemberOfInfiltrators ? (
           <>
-            have gained {formatNumberNoSuffix(infiltrationRepGain, 2)} rep for {FactionNames.ShadowsOfAnarchy} and{" "}
+            have gained {formatNumberNoSuffix(infiltrationRepGain, 2)} rep for {FactionName.ShadowsOfAnarchy} and{" "}
           </>
         ) : (
           <></>

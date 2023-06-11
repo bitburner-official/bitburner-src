@@ -7,17 +7,17 @@
  * RunningScript objects
  */
 import type React from "react";
+import type { BaseServer } from "../Server/BaseServer";
+import type { NSFull } from "../NetscriptFunctions";
+import type { ScriptFilePath } from "../Paths/ScriptFilePath";
+import type { RunningScript } from "../Script/RunningScript";
+import type { Script } from "../Script/Script";
+import type { ScriptArg } from "./ScriptArg";
+import type { ScriptDeath } from "./ScriptDeath";
+
 import { Environment } from "./Environment";
 import { RamCostConstants } from "./RamCostGenerator";
-
-import { RunningScript } from "../Script/RunningScript";
-import { Script } from "../Script/Script";
 import { GetServer } from "../Server/AllServers";
-import { BaseServer } from "../Server/BaseServer";
-import { ScriptDeath } from "./ScriptDeath";
-import { ScriptArg } from "./ScriptArg";
-import { NSFull } from "../NetscriptFunctions";
-import { ScriptFilePath } from "src/Paths/ScriptFilePath";
 
 export class WorkerScript {
   /** Script's arguments */

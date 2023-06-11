@@ -2,9 +2,7 @@ import { Player as player } from "../Player";
 import { buyStock, sellStock, shortStock, sellShort } from "../StockMarket/BuyingAndSelling";
 import { StockMarket, SymbolToStockMap, placeOrder, cancelOrder, initStockMarket } from "../StockMarket/StockMarket";
 import { getBuyTransactionCost, getSellTransactionGain } from "../StockMarket/StockMarketHelpers";
-import { OrderTypes } from "../StockMarket/data/OrderTypes";
-import { PositionTypes } from "../StockMarket/data/PositionTypes";
-import { StockSymbols } from "../StockMarket/data/StockSymbols";
+import { PositionType, OrderType, StockSymbol } from "@enums";
 import {
   getStockMarket4SDataCost,
   getStockMarket4STixApiCost,
@@ -51,7 +49,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     getSymbols: (ctx) => () => {
       checkTixApiAccess(ctx);
-      return Object.values(StockSymbols);
+      return Object.values(StockSymbol);
     },
     getPrice: (ctx) => (_symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
@@ -108,9 +106,9 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       let pos;
       const sanitizedPosType = posType.toLowerCase();
       if (sanitizedPosType.includes("l")) {
-        pos = PositionTypes.Long;
+        pos = PositionType.Long;
       } else if (sanitizedPosType.includes("s")) {
-        pos = PositionTypes.Short;
+        pos = PositionType.Short;
       } else {
         return Infinity;
       }
@@ -133,9 +131,9 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       let pos;
       const sanitizedPosType = posType.toLowerCase();
       if (sanitizedPosType.includes("l")) {
-        pos = PositionTypes.Long;
+        pos = PositionType.Long;
       } else if (sanitizedPosType.includes("s")) {
-        pos = PositionTypes.Short;
+        pos = PositionType.Short;
       } else {
         return 0;
       }
@@ -219,22 +217,22 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       let orderPos;
       const ltype = type.toLowerCase();
       if (ltype.includes("limit") && ltype.includes("buy")) {
-        orderType = OrderTypes.LimitBuy;
+        orderType = OrderType.LimitBuy;
       } else if (ltype.includes("limit") && ltype.includes("sell")) {
-        orderType = OrderTypes.LimitSell;
+        orderType = OrderType.LimitSell;
       } else if (ltype.includes("stop") && ltype.includes("buy")) {
-        orderType = OrderTypes.StopBuy;
+        orderType = OrderType.StopBuy;
       } else if (ltype.includes("stop") && ltype.includes("sell")) {
-        orderType = OrderTypes.StopSell;
+        orderType = OrderType.StopSell;
       } else {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid order type: ${type}`);
       }
 
       const lpos = pos.toLowerCase();
       if (lpos.includes("l")) {
-        orderPos = PositionTypes.Long;
+        orderPos = PositionType.Long;
       } else if (lpos.includes("s")) {
-        orderPos = PositionTypes.Short;
+        orderPos = PositionType.Short;
       } else {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position type: ${pos}`);
       }
@@ -267,22 +265,22 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       let orderPos;
       const ltype = type.toLowerCase();
       if (ltype.includes("limit") && ltype.includes("buy")) {
-        orderType = OrderTypes.LimitBuy;
+        orderType = OrderType.LimitBuy;
       } else if (ltype.includes("limit") && ltype.includes("sell")) {
-        orderType = OrderTypes.LimitSell;
+        orderType = OrderType.LimitSell;
       } else if (ltype.includes("stop") && ltype.includes("buy")) {
-        orderType = OrderTypes.StopBuy;
+        orderType = OrderType.StopBuy;
       } else if (ltype.includes("stop") && ltype.includes("sell")) {
-        orderType = OrderTypes.StopSell;
+        orderType = OrderType.StopSell;
       } else {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid order type: ${type}`);
       }
 
       const lpos = pos.toLowerCase();
       if (lpos.includes("l")) {
-        orderPos = PositionTypes.Long;
+        orderPos = PositionType.Long;
       } else if (lpos.includes("s")) {
-        orderPos = PositionTypes.Short;
+        orderPos = PositionType.Short;
       } else {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position type: ${pos}`);
       }

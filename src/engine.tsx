@@ -1,6 +1,6 @@
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { initAugmentations } from "./Augmentation/AugmentationHelpers";
-import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
+import { AugmentationName, ToastVariant } from "@enums";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { initSourceFiles } from "./SourceFile/SourceFiles";
 import { generateRandomContract } from "./CodingContractGenerator";
@@ -44,7 +44,7 @@ import { calculateAchievements } from "./Achievements/Achievements";
 import React from "react";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
+import { SnackbarEvents } from "./ui/React/Snackbar";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -189,7 +189,7 @@ const Engine: {
 
     if (Engine.Counters.messages <= 0) {
       checkForMessagesToSend();
-      if (Player.hasAugmentation(AugmentationNames.TheRedPill)) {
+      if (Player.hasAugmentation(AugmentationName.TheRedPill)) {
         Engine.Counters.messages = 4500; // 15 minutes for Red pill message
       } else {
         Engine.Counters.messages = 150;

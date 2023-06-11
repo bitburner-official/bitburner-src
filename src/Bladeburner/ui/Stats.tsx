@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
+import { Player } from "@player";
+import { FactionName } from "@enums";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { BladeburnerConstants } from "../data/Constants";
-import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
 import { formatNumberNoSuffix, formatPopulation, formatBigNumber } from "../../ui/formatNumber";
 import { Factions } from "../../Faction/Factions";
@@ -10,12 +12,6 @@ import { joinFaction } from "../../Faction/FactionHelpers";
 import { Bladeburner } from "../Bladeburner";
 
 import { TravelModal } from "./TravelModal";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
-import { FactionNames } from "../../Faction/data/FactionNames";
 
 interface IProps {
   bladeburner: Bladeburner;
@@ -33,7 +29,7 @@ export function Stats(props: IProps): React.ReactElement {
 
   function openFaction(): void {
     if (!inFaction) return;
-    const faction = Factions[FactionNames.Bladeburners];
+    const faction = Factions[FactionName.Bladeburners];
     if (!faction.isMember) {
       joinFaction(faction);
     }

@@ -55,6 +55,7 @@ for (const md of codingContractTypesMetadata) {
   );
 }
 
+// Numeric enum
 /** Enum representing the different types of rewards a Coding Contract can give */
 export enum CodingContractRewardType {
   FactionReputation,
@@ -63,6 +64,7 @@ export enum CodingContractRewardType {
   Money, // This must always be the last reward type
 }
 
+// Numeric enum
 /** Enum representing the result when trying to solve the Contract */
 export enum CodingContractResult {
   Success,

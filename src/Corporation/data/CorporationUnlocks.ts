@@ -1,4 +1,4 @@
-import { CorpUnlockName } from "./Enums";
+import { CorpUnlockName } from "@enums";
 
 export interface CorpUnlock {
   name: CorpUnlockName;

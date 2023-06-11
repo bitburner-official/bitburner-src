@@ -1,7 +1,8 @@
 import { Player } from "@player";
 import { Router } from "./ui/GameRoot";
 import { Terminal } from "./Terminal";
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
+import { SnackbarEvents } from "./ui/React/Snackbar";
+import { ToastVariant } from "@enums";
 import { IReturnStatus } from "./types";
 import { GetServer } from "./Server/AllServers";
 import { ImportPlayerData, SaveData, saveObject } from "./SaveObject";

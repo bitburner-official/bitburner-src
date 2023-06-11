@@ -1,8 +1,17 @@
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
+
+import {
+  AugmentationName,
+  BlackOperationName,
+  CityName,
+  CompletedProgramName,
+  CorpUnlockName,
+  FactionName,
+  IndustryType,
+} from "@enums";
 import { SkillNames } from "../Bladeburner/data/SkillNames";
 import { Skills } from "../Bladeburner/Skills";
 import { CONSTANTS } from "../Constants";
-import { CorpUnlockName, IndustryType } from "../Corporation/data/Enums";
 import { Exploit } from "../Exploits/Exploit";
 import { Factions } from "../Faction/Factions";
 import { AllGangs } from "../Gang/AllGangs";
@@ -11,22 +20,17 @@ import { HacknetNodeConstants, HacknetServerConstants } from "../Hacknet/data/Co
 import { hasHacknetServers } from "../Hacknet/HacknetHelpers";
 import { HacknetNode } from "../Hacknet/HacknetNode";
 import { HacknetServer } from "../Hacknet/HacknetServer";
-import { CityName } from "../Enums";
 import { Player } from "@player";
-import { CompletedProgramName } from "../Programs/Programs";
 import { GetAllServers, GetServer } from "../Server/AllServers";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Server } from "../Server/Server";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import data from "./AchievementData.json";
-import { FactionNames } from "../Faction/data/FactionNames";
-import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
 import { isClassWork } from "../Work/ClassWork";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { workerScripts } from "../Netscript/WorkerScripts";
 
-import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { getRecordValues } from "../Types/Record";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
@@ -62,7 +66,7 @@ function bitNodeFinishedState(): boolean {
   const wd = GetServer(SpecialServers.WorldDaemon);
   if (!(wd instanceof Server)) return false;
   if (wd.backdoorInstalled) return true;
-  return Player.bladeburner !== null && BlackOperationNames.OperationDaedalus in Player.bladeburner.blackops;
+  return Player.bladeburner !== null && BlackOperationName.OperationDaedalus in Player.bladeburner.blackops;
 }
 
 function hasAccessToSF(player: PlayerObject, bn: number): boolean {
@@ -88,40 +92,40 @@ function sfAchievement(): Achievement[] {
 }
 
 export const achievements: Record<string, Achievement> = {
-  [FactionNames.CyberSec.toUpperCase()]: {
-    ...achievementData[FactionNames.CyberSec.toUpperCase()],
+  [FactionName.CyberSec.toUpperCase()]: {
+    ...achievementData[FactionName.CyberSec.toUpperCase()],
     Icon: "CSEC",
-    Condition: () => Player.factions.includes(FactionNames.CyberSec),
+    Condition: () => Player.factions.includes(FactionName.CyberSec),
   },
-  [FactionNames.NiteSec.toUpperCase()]: {
-    ...achievementData[FactionNames.NiteSec.toUpperCase()],
-    Icon: FactionNames.NiteSec,
-    Condition: () => Player.factions.includes(FactionNames.NiteSec),
+  [FactionName.NiteSec.toUpperCase()]: {
+    ...achievementData[FactionName.NiteSec.toUpperCase()],
+    Icon: FactionName.NiteSec,
+    Condition: () => Player.factions.includes(FactionName.NiteSec),
   },
   THE_BLACK_HAND: {
     ...achievementData.THE_BLACK_HAND,
     Icon: "TBH",
-    Condition: () => Player.factions.includes(FactionNames.TheBlackHand),
+    Condition: () => Player.factions.includes(FactionName.TheBlackHand),
   },
-  [FactionNames.BitRunners.toUpperCase()]: {
-    ...achievementData[FactionNames.BitRunners.toUpperCase()],
-    Icon: FactionNames.BitRunners.toLowerCase(),
-    Condition: () => Player.factions.includes(FactionNames.BitRunners),
+  [FactionName.BitRunners.toUpperCase()]: {
+    ...achievementData[FactionName.BitRunners.toUpperCase()],
+    Icon: FactionName.BitRunners.toLowerCase(),
+    Condition: () => Player.factions.includes(FactionName.BitRunners),
   },
-  [FactionNames.Daedalus.toUpperCase()]: {
-    ...achievementData[FactionNames.Daedalus.toUpperCase()],
-    Icon: FactionNames.Daedalus.toLowerCase(),
-    Condition: () => Player.factions.includes(FactionNames.Daedalus),
+  [FactionName.Daedalus.toUpperCase()]: {
+    ...achievementData[FactionName.Daedalus.toUpperCase()],
+    Icon: FactionName.Daedalus.toLowerCase(),
+    Condition: () => Player.factions.includes(FactionName.Daedalus),
   },
   THE_COVENANT: {
     ...achievementData.THE_COVENANT,
-    Icon: FactionNames.TheCovenant.toLowerCase().replace(/ /g, ""),
-    Condition: () => Player.factions.includes(FactionNames.TheCovenant),
+    Icon: FactionName.TheCovenant.toLowerCase().replace(/ /g, ""),
+    Condition: () => Player.factions.includes(FactionName.TheCovenant),
   },
-  [FactionNames.Illuminati.toUpperCase()]: {
-    ...achievementData[FactionNames.Illuminati.toUpperCase()],
-    Icon: FactionNames.Illuminati.toLowerCase(),
-    Condition: () => Player.factions.includes(FactionNames.Illuminati),
+  [FactionName.Illuminati.toUpperCase()]: {
+    ...achievementData[FactionName.Illuminati.toUpperCase()],
+    Icon: FactionName.Illuminati.toLowerCase(),
+    Condition: () => Player.factions.includes(FactionName.Illuminati),
   },
   "BRUTESSH.EXE": {
     ...achievementData["BRUTESSH.EXE"],
@@ -269,7 +273,7 @@ export const achievements: Record<string, Achievement> = {
   NEUROFLUX_255: {
     ...achievementData.NEUROFLUX_255,
     Icon: "nf255",
-    Condition: () => Player.augmentations.some((a) => a.name === AugmentationNames.NeuroFluxGovernor && a.level >= 255),
+    Condition: () => Player.augmentations.some((a) => a.name === AugmentationName.NeuroFluxGovernor && a.level >= 255),
   },
   NS2: {
     ...achievementData.NS2,
@@ -730,7 +734,7 @@ export const achievements: Record<string, Achievement> = {
     Condition: () =>
       Player.bitNodeN === 13 &&
       bitNodeFinishedState() &&
-      !Player.augmentations.some((a) => a.name === AugmentationNames.StaneksGift1),
+      !Player.augmentations.some((a) => a.name === AugmentationName.StaneksGift1),
   },
   DEVMENU: {
     ...achievementData.DEVMENU,

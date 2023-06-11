@@ -1,6 +1,6 @@
-import * as monaco from "monaco-editor";
+import type { ContentFilePath } from "../../Paths/ContentFile";
 
-import { ContentFilePath } from "src/Paths/ContentFile";
+import * as monaco from "monaco-editor";
 
 type ITextModel = monaco.editor.ITextModel;
 

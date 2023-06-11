@@ -1,6 +1,6 @@
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { FactionWorkType } from "../../../Enums";
+import { CrimeType, FactionWorkType } from "@enums";
 import { CONSTANTS } from "../../../Constants";
 import { Player } from "@player";
 import { formatPercent } from "../../../ui/formatNumber";
@@ -12,29 +12,28 @@ import { EarningsElement, StatsElement } from "./StatsElement";
 import { TaskSelector } from "./TaskSelector";
 import { TravelModal } from "./TravelModal";
 import { findCrime } from "../../../Crime/CrimeHelpers";
-import { CrimeType } from "../../../Enums";
-import { WorkType } from "../Work/Work";
+import { SleeveWorkType } from "../Work/Work";
 
 function getWorkDescription(sleeve: Sleeve, progress: number): string {
   const work = sleeve.currentWork;
   if (!work) return "This sleeve is currently idle.";
   switch (work.type) {
-    case WorkType.COMPANY:
+    case SleeveWorkType.COMPANY:
       return `This sleeve is currently working your job at ${work.companyName}`;
-    case WorkType.SUPPORT:
+    case SleeveWorkType.SUPPORT:
       return "This sleeve is currently supporting you in your bladeburner activities.";
-    case WorkType.CLASS:
+    case SleeveWorkType.CLASS:
       return `This sleeve is currently ${work.isGym() ? "working out" : "studying"} at ${work.location}`;
-    case WorkType.RECOVERY:
+    case SleeveWorkType.RECOVERY:
       return "This sleeve is currently set to focus on shock recovery. This causes the Sleeve's shock to decrease at a faster rate.";
-    case WorkType.SYNCHRO:
+    case SleeveWorkType.SYNCHRO:
       return "This sleeve is currently set to synchronize with the original consciousness. This causes the Sleeve's synchronization to increase.";
-    case WorkType.BLADEBURNER:
+    case SleeveWorkType.BLADEBURNER:
       return (
         `This sleeve is currently attempting to perform ${work.actionName}.\n\n` +
         `Progress: ${formatPercent(progress)}`
       );
-    case WorkType.CRIME: {
+    case SleeveWorkType.CRIME: {
       const crime = work.getCrime();
       return (
         `This sleeve is currently attempting ${crime.workName} (Success Rate: ${formatPercent(
@@ -42,7 +41,7 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
         )}).\n\n` + `Progress: ${formatPercent(progress)}`
       );
     }
-    case WorkType.FACTION: {
+    case SleeveWorkType.FACTION: {
       // This isn't the way this should be handled...
       const workNames = {
         [FactionWorkType.field]: "Field Work",
@@ -52,7 +51,7 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
       const doing = workNames[work.factionWorkType] ?? "nothing";
       return `This sleeve is currently doing ${doing} for ${work.factionName}.`;
     }
-    case WorkType.INFILTRATE:
+    case SleeveWorkType.INFILTRATE:
       return (
         "This sleeve is currently attempting to infiltrate synthoid communities to generate additional contracts and operations.\nThis activity is less efficient the more sleeves are assigned to it.\n\n" +
         `Progress: ${formatPercent(progress)}`
@@ -109,9 +108,9 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
   const work = props.sleeve.currentWork;
   if (work) {
     switch (work.type) {
-      case WorkType.BLADEBURNER:
-      case WorkType.CRIME:
-      case WorkType.INFILTRATE:
+      case SleeveWorkType.BLADEBURNER:
+      case SleeveWorkType.CRIME:
+      case SleeveWorkType.INFILTRATE:
         progress = work.cyclesWorked / work.cyclesNeeded(props.sleeve);
         percentBar = <ProgressBar variant="determinate" value={progress * 100} color="primary" />;
     }

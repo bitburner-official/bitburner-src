@@ -6,14 +6,14 @@ import { List, ListItemText, Paper, Tooltip, Typography } from "@mui/material";
 import * as React from "react";
 import { Player } from "@player";
 import { StaticAugmentations } from "../StaticAugmentations";
-import { AugmentationNames } from "../data/AugmentationNames";
+import { AugmentationName } from "@enums";
 
 export function PurchasedAugmentations(): React.ReactElement {
   const augs: React.ReactElement[] = [];
   // Only render the last NeuroFlux (there are no findLastIndex btw)
   let nfgIndex = -1;
   for (let i = Player.queuedAugmentations.length - 1; i >= 0; i--) {
-    if (Player.queuedAugmentations[i].name === AugmentationNames.NeuroFluxGovernor) {
+    if (Player.queuedAugmentations[i].name === AugmentationName.NeuroFluxGovernor) {
       nfgIndex = i;
       break;
     }
@@ -22,11 +22,11 @@ export function PurchasedAugmentations(): React.ReactElement {
     const ownedAug = Player.queuedAugmentations[i];
     let displayName = ownedAug.name;
 
-    if (ownedAug.name === AugmentationNames.NeuroFluxGovernor && i !== nfgIndex) continue;
+    if (ownedAug.name === AugmentationName.NeuroFluxGovernor && i !== nfgIndex) continue;
     const aug = StaticAugmentations[ownedAug.name];
 
     let level = null;
-    if (ownedAug.name === AugmentationNames.NeuroFluxGovernor) {
+    if (ownedAug.name === AugmentationName.NeuroFluxGovernor) {
       level = ownedAug.level;
       displayName += ` - Level ${level}`;
     }

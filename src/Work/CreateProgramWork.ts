@@ -1,6 +1,6 @@
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { AugmentationName, CompletedProgramName } from "@enums";
 import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
 import { Programs } from "../Programs/Programs";
@@ -8,7 +8,6 @@ import { Work, WorkType } from "./Work";
 import { Program } from "../Programs/Program";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
 import { asProgramFilePath } from "../Paths/ProgramFilePath";
-import { CompletedProgramName } from "../Programs/Programs";
 
 export const isCreateProgramWork = (w: Work | null): w is CreateProgramWork =>
   w !== null && w.type === WorkType.CREATE_PROGRAM;
@@ -57,7 +56,7 @@ export class CreateProgramWork extends Work {
 
   process(cycles: number): boolean {
     let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationNames.NeuroreceptorManager, true)) {
+    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
       focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
     }
     //Higher hacking skill will allow you to create programs faster

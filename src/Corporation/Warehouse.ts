@@ -1,15 +1,14 @@
+import type { Corporation } from "./Corporation";
+import type { Division } from "./Division";
+
 import { Player } from "@player";
 import { CorpMaterialName, CorpSmartSupplyOption } from "@nsdefs";
-
+import { CityName, CorpUnlockName } from "@enums";
 import { Material } from "./Material";
-import { Corporation } from "./Corporation";
-import { Division } from "./Division";
 import { MaterialInfo } from "./MaterialInfo";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { CityName } from "../Enums";
 import { materialNames } from "./data/Constants";
 import { createFullRecordFromEntries, getRecordEntries } from "../Types/Record";
-import { CorpUnlockName } from "./data/Enums";
 
 interface IConstructorParams {
   division: Division;

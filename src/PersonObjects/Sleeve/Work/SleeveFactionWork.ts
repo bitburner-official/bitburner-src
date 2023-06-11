@@ -1,9 +1,8 @@
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { applySleeveGains, Work, WorkType } from "./Work";
-import { FactionWorkType } from "../../../Enums";
-import { FactionNames } from "../../../Faction/data/FactionNames";
+import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
+import { FactionName, FactionWorkType } from "@enums";
 import { Factions } from "../../../Faction/Factions";
 import { calculateFactionExp, calculateFactionRep } from "../../../Work/Formulas";
 import { Faction } from "../../../Faction/Faction";
@@ -15,18 +14,18 @@ interface SleeveFactionWorkParams {
   factionName: string;
 }
 
-export const isSleeveFactionWork = (w: Work | null): w is SleeveFactionWork =>
-  w !== null && w.type === WorkType.FACTION;
+export const isSleeveFactionWork = (w: SleeveWorkClass | null): w is SleeveFactionWork =>
+  w !== null && w.type === SleeveWorkType.FACTION;
 
-export class SleeveFactionWork extends Work {
-  type: WorkType.FACTION = WorkType.FACTION;
+export class SleeveFactionWork extends SleeveWorkClass {
+  type: SleeveWorkType.FACTION = SleeveWorkType.FACTION;
   factionWorkType: FactionWorkType;
   factionName: string;
 
   constructor(params?: SleeveFactionWorkParams) {
     super();
     this.factionWorkType = params?.factionWorkType ?? FactionWorkType.hacking;
-    this.factionName = params?.factionName ?? FactionNames.Sector12;
+    this.factionName = params?.factionName ?? FactionName.Sector12;
   }
 
   getExpRates(sleeve: Sleeve): WorkStats {
@@ -54,7 +53,7 @@ export class SleeveFactionWork extends Work {
 
   APICopy() {
     return {
-      type: WorkType.FACTION as "FACTION",
+      type: SleeveWorkType.FACTION as "FACTION",
       factionWorkType: this.factionWorkType,
       factionName: this.factionName,
     };

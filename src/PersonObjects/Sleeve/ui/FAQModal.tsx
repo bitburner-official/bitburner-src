@@ -2,7 +2,7 @@ import React from "react";
 
 import { Modal } from "../../../ui/React/Modal";
 import Typography from "@mui/material/Typography";
-import { FactionNames } from "../../../Faction/data/FactionNames";
+import { FactionName } from "@enums";
 
 interface IProps {
   open: boolean;
@@ -84,8 +84,8 @@ export function FAQModal({ open, onClose }: IProps): React.ReactElement {
         <Typography variant="h4">Why can't I buy the X Augmentation for my sleeve?</Typography>
         <br />
         <Typography>
-          Certain Augmentations, like {FactionNames.Bladeburners}-specific ones and NeuroFlux Governor, are not
-          available for sleeves. You also need enough current reputation on some faction that offers that Augmentation.
+          Certain Augmentations, like {FactionName.Bladeburners}-specific ones and NeuroFlux Governor, are not available
+          for sleeves. You also need enough current reputation on some faction that offers that Augmentation.
         </Typography>
         <br />
         <br />
@@ -107,7 +107,7 @@ export function FAQModal({ open, onClose }: IProps): React.ReactElement {
         <br />
         <br />
         <Typography>
-          Memory can only be increased by purchasing upgrades from {FactionNames.TheCovenant}. It is a persistent stat,
+          Memory can only be increased by purchasing upgrades from {FactionName.TheCovenant}. It is a persistent stat,
           meaning it never gets resets back to 1. The maximum possible value for a sleeve's memory is 100.
         </Typography>
       </>

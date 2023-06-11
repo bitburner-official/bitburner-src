@@ -1,12 +1,9 @@
-import { FactionNames } from "./Faction/data/FactionNames";
-import { CityName } from "./Enums";
+import { AugmentationName, CityName, CompletedProgramName, FactionName, LiteratureName } from "@enums";
 import { StaticAugmentations } from "./Augmentation/StaticAugmentations";
 import { augmentationExists, initAugmentations } from "./Augmentation/AugmentationHelpers";
-import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { Companies, initCompanies } from "./Company/Companies";
 import { resetIndustryResearchTrees } from "./Corporation/data/IndustryData";
-import { CompletedProgramName } from "./Programs/Programs";
 import { Factions, initFactions } from "./Faction/Factions";
 import { joinFaction } from "./Faction/FactionHelpers";
 import { updateHashManagerCapacity } from "./Hacknet/HacknetHelpers";
@@ -14,7 +11,6 @@ import { prestigeWorkerScripts } from "./NetscriptWorker";
 import { Player } from "@player";
 import { recentScripts } from "./Netscript/RecentScripts";
 import { resetPidCounter } from "./Netscript/Pid";
-import { LiteratureName } from "./Literature/data/LiteratureNames";
 
 import { GetServer, AddToAllServers, initForeignServers, prestigeAllServers } from "./Server/AllServers";
 import { prestigeHomeComputer } from "./Server/ServerHelpers";
@@ -55,15 +51,15 @@ export function prestigeAugmentation(): void {
   AddToAllServers(homeComp);
   prestigeHomeComputer(homeComp);
 
-  if (augmentationExists(AugmentationNames.Neurolink) && Player.hasAugmentation(AugmentationNames.Neurolink, true)) {
+  if (augmentationExists(AugmentationName.Neurolink) && Player.hasAugmentation(AugmentationName.Neurolink, true)) {
     homeComp.programs.push(CompletedProgramName.ftpCrack);
     homeComp.programs.push(CompletedProgramName.relaySmtp);
   }
-  if (augmentationExists(AugmentationNames.CashRoot) && Player.hasAugmentation(AugmentationNames.CashRoot, true)) {
+  if (augmentationExists(AugmentationName.CashRoot) && Player.hasAugmentation(AugmentationName.CashRoot, true)) {
     Player.setMoney(1e6);
     homeComp.programs.push(CompletedProgramName.bruteSsh);
   }
-  if (augmentationExists(AugmentationNames.PCMatrix) && Player.hasAugmentation(AugmentationNames.PCMatrix, true)) {
+  if (augmentationExists(AugmentationName.PCMatrix) && Player.hasAugmentation(AugmentationName.PCMatrix, true)) {
     homeComp.programs.push(CompletedProgramName.deepScan1);
     homeComp.programs.push(CompletedProgramName.autoLink);
   }
@@ -140,7 +136,7 @@ export function prestigeAugmentation(): void {
   }
 
   // Red Pill
-  if (augmentationExists(AugmentationNames.TheRedPill) && Player.hasAugmentation(AugmentationNames.TheRedPill, true)) {
+  if (augmentationExists(AugmentationName.TheRedPill) && Player.hasAugmentation(AugmentationName.TheRedPill, true)) {
     const WorldDaemon = GetServer(SpecialServers.WorldDaemon);
     const DaedalusServer = GetServer(SpecialServers.DaedalusServer);
     if (WorldDaemon && DaedalusServer) {
@@ -150,10 +146,10 @@ export function prestigeAugmentation(): void {
   }
 
   if (
-    augmentationExists(AugmentationNames.StaneksGift1) &&
-    Player.hasAugmentation(AugmentationNames.StaneksGift1, true)
+    augmentationExists(AugmentationName.StaneksGift1) &&
+    Player.hasAugmentation(AugmentationName.StaneksGift1, true)
   ) {
-    joinFaction(Factions[FactionNames.ChurchOfTheMachineGod]);
+    joinFaction(Factions[FactionName.ChurchOfTheMachineGod]);
   }
 
   staneksGift.prestigeAugmentation();
@@ -217,7 +213,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // Give levels of NeuroFluxGovernor for Source-File 12. Must be done here before Augmentations are recalculated
   if (Player.sourceFileLvl(12) > 0) {
     Player.augmentations.push({
-      name: AugmentationNames.NeuroFluxGovernor,
+      name: AugmentationName.NeuroFluxGovernor,
       level: Player.sourceFileLvl(12),
     });
   }

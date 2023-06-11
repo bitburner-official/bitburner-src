@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 
 import React, { useEffect } from "react";
 
@@ -52,7 +52,7 @@ export function DevMenuRoot(): React.ReactElement {
       {Player.hasWseAccount && <StockMarket />}
 
       {Player.sleeves.length > 0 && <Sleeves />}
-      {Player.augmentations.some((aug) => aug.name === AugmentationNames.StaneksGift1) && <Stanek />}
+      {Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1) && <Stanek />}
 
       <TimeSkip />
       <Achievements />

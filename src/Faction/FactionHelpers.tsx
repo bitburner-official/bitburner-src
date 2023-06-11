@@ -1,7 +1,7 @@
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
 import { Augmentation } from "../Augmentation/Augmentation";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { AugmentationName, FactionName } from "@enums";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 
 import { Faction } from "./Faction";
@@ -16,7 +16,6 @@ import {
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { InvitationEvent } from "./ui/InvitationModal";
-import { FactionNames } from "./data/FactionNames";
 import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
 
@@ -32,7 +31,7 @@ export function joinFaction(faction: Faction): void {
   if (faction.isMember) return;
   faction.isMember = true;
   Player.factions.push(faction.name);
-  const allFactions = Object.values(FactionNames).map((faction) => faction as string);
+  const allFactions = Object.values(FactionName).map((faction) => faction as string);
   Player.factions.sort((a, b) => allFactions.indexOf(a) - allFactions.indexOf(b));
   const factionInfo = faction.getInfo();
 
@@ -80,7 +79,7 @@ export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = fal
     dialogBoxCreate(txt);
   } else if (augCosts.moneyCost === 0 || Player.money >= augCosts.moneyCost) {
     const queuedAugmentation = new PlayerOwnedAugmentation(aug.name);
-    if (aug.name == AugmentationNames.NeuroFluxGovernor) {
+    if (aug.name == AugmentationName.NeuroFluxGovernor) {
       queuedAugmentation.level = aug.getLevel();
     }
     Player.queuedAugmentations.push(queuedAugmentation);
@@ -138,11 +137,11 @@ export const getFactionAugmentationsFiltered = (faction: Faction): string[] => {
     let augs = Object.values(StaticAugmentations);
 
     // Remove special augs
-    augs = augs.filter((a) => !a.isSpecial && a.name !== AugmentationNames.CongruityImplant);
+    augs = augs.filter((a) => !a.isSpecial && a.name !== AugmentationName.CongruityImplant);
 
     if (Player.bitNodeN === 2) {
       // TRP is not available outside of BN2 for Gangs
-      augs.push(StaticAugmentations[AugmentationNames.TheRedPill]);
+      augs.push(StaticAugmentations[AugmentationName.TheRedPill]);
     }
 
     const rng = SFC32RNG(`BN${Player.bitNodeN}.${Player.sourceFileLvl(Player.bitNodeN)}`);

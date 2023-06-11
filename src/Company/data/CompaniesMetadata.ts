@@ -1,8 +1,9 @@
 import * as posNames from "./JobTracks";
 import { IConstructorParams } from "../Company";
 
-import { LocationName } from "../../Enums";
+import { LocationName } from "@enums";
 
+// These are grossly typed, need to address
 // Create Objects containing Company Positions by category
 // Will help in metadata construction later
 const AllSoftwarePositions: Record<string, boolean> = {};

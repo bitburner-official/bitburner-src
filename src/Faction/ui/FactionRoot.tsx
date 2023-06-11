@@ -21,10 +21,9 @@ import { Player } from "@player";
 
 import { Typography, Button } from "@mui/material";
 import { CovenantPurchasesRoot } from "../../PersonObjects/Sleeve/ui/CovenantPurchasesRoot";
-import { FactionNames } from "../data/FactionNames";
+import { FactionName, FactionWorkType } from "@enums";
 import { GangButton } from "./GangButton";
 import { FactionWork } from "../../Work/FactionWork";
-import { FactionWorkType } from "../../Enums";
 import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
@@ -111,7 +110,7 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
   const favorToDonate = Math.floor(CONSTANTS.BaseFavorToDonate * BitNodeMultipliers.RepToDonateToFaction);
   const canDonate = faction.favor >= favorToDonate;
 
-  const canPurchaseSleeves = faction.name === FactionNames.TheCovenant && Player.bitNodeN === 10;
+  const canPurchaseSleeves = faction.name === FactionName.TheCovenant && Player.bitNodeN === 10;
 
   return (
     <>

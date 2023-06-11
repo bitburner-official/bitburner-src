@@ -10,7 +10,7 @@ import { formatMoney } from "../ui/formatNumber";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { BitFlumeEvent } from "../BitNode/ui/BitFlumeModal";
 import { calculateHackingTime, calculateGrowTime, calculateWeakenTime } from "../Hacking";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { CompletedProgramName, FactionName } from "@enums";
 
 function requireHackingLevel(lvl: number) {
   return function () {
@@ -22,22 +22,6 @@ function bitFlumeRequirements() {
   return function () {
     return Player.sourceFiles.size > 0 && Player.skills.hacking >= 1;
   };
-}
-
-export enum CompletedProgramName {
-  nuke = "NUKE.exe",
-  bruteSsh = "BruteSSH.exe",
-  ftpCrack = "FTPCrack.exe",
-  relaySmtp = "relaySMTP.exe",
-  httpWorm = "HTTPWorm.exe",
-  sqlInject = "SQLInject.exe",
-  deepScan1 = "DeepscanV1.exe",
-  deepScan2 = "DeepscanV2.exe",
-  serverProfiler = "ServerProfiler.exe",
-  autoLink = "AutoLink.exe",
-  formulas = "Formulas.exe",
-  bitFlume = "b1t_flum3.exe",
-  flight = "fl1ght.exe",
 }
 
 export const Programs: Record<CompletedProgramName, Program> = {
@@ -313,7 +297,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
       }
 
       Terminal.print("We will contact you.");
-      Terminal.print(`-- ${FactionNames.Daedalus} --`);
+      Terminal.print(`-- ${FactionName.Daedalus} --`);
     },
   }),
 };

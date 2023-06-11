@@ -13,7 +13,18 @@ import {
 import { netscriptCanGrow, netscriptCanWeaken } from "./Hacking/netscriptCanHack";
 import { Terminal } from "./Terminal";
 import { Player } from "@player";
-import { CompletedProgramName } from "./Programs/Programs";
+import {
+  CityName,
+  CompletedProgramName,
+  CrimeType,
+  FactionWorkType,
+  GymType,
+  JobName,
+  LiteratureName,
+  LocationName,
+  ToastVariant,
+  UniversityClassType,
+} from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer, DeleteServer, AddToAllServers, createUniqueRandomIp } from "./Server/AllServers";
 import {
@@ -68,7 +79,7 @@ import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums } from "@nsdefs
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
+import { SnackbarEvents } from "./ui/React/Snackbar";
 import { checkEnum } from "./utils/helpers/enum";
 import { matchScriptPathExact } from "./utils/helpers/scriptKey";
 
@@ -81,16 +92,13 @@ import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
-import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassType } from "./Enums";
 import { cloneDeep, escapeRegExp } from "lodash";
-import { FactionWorkType } from "./Enums";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort } from "./NetscriptPort";
 import { FilePath, resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
 import { ContentFilePath } from "./Paths/ContentFile";
-import { LiteratureName } from "./Literature/data/LiteratureNames";
 import { hasContractExtension } from "./Paths/ContractFilePath";
 import { getRamCost } from "./Netscript/RamCostGenerator";
 
@@ -99,8 +107,8 @@ export const enums: NSEnums = {
   CrimeType,
   FactionWorkType,
   GymType,
-  LocationName,
   JobName,
+  LocationName,
   ToastVariant,
   UniversityClassType,
 };

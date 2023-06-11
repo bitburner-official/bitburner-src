@@ -1,10 +1,10 @@
 import { Player } from "@player";
+import type { Sleeve as NetscriptSleeve } from "@nsdefs";
+import { CityName } from "@enums";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { CityName } from "../Enums";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { Augmentation } from "../Augmentation/Augmentation";
 
-import { Sleeve } from "@nsdefs";
 import { checkEnum } from "../utils/helpers/enum";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
@@ -13,7 +13,7 @@ import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyW
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { cloneDeep } from "lodash";
 
-export function NetscriptSleeve(): InternalAPI<Sleeve> {
+export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
   const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
     if (Player.bitNodeN !== 10 && !Player.sourceFileLvl(10)) {
       throw helpers.makeRuntimeErrorMsg(
@@ -31,7 +31,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
     }
   };
 
-  const sleeveFunctions: InternalAPI<Sleeve> = {
+  const sleeveFunctions: InternalAPI<NetscriptSleeve> = {
     getNumSleeves: (ctx) => () => {
       checkSleeveAPIAccess(ctx);
       return Player.sleeves.length;

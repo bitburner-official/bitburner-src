@@ -19,7 +19,7 @@ import { UniversityLocation } from "./UniversityLocation";
 import { CasinoLocation } from "./CasinoLocation";
 
 import { Location } from "../Location";
-import { LocationType } from "../LocationTypeEnum";
+import { LocationType } from "@enums";
 
 import { Settings } from "../../Settings/Settings";
 

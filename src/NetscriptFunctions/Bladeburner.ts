@@ -1,13 +1,14 @@
+import type { Bladeburner as INetscriptBladeburner } from "@nsdefs";
+import type { Action } from "../Bladeburner/Action";
+import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+
 import { Player } from "@player";
+import { CityName } from "@enums";
 import { Bladeburner } from "../Bladeburner/Bladeburner";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { Bladeburner as INetscriptBladeburner } from "@nsdefs";
-import { Action } from "src/Bladeburner/Action";
-import { InternalAPI, NetscriptContext } from "src/Netscript/APIWrapper";
 import { BlackOperation } from "../Bladeburner/BlackOperation";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { checkEnum } from "../utils/helpers/enum";
-import { CityName } from "../Enums";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {

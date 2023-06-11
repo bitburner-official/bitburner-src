@@ -51,7 +51,7 @@ import {
 } from "../Corporation/Actions";
 import { CorpUnlocks } from "../Corporation/data/CorporationUnlocks";
 import { CorpUpgrades } from "../Corporation/data/CorporationUpgrades";
-import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, IndustryType } from "../Corporation/data/Enums";
+import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName, IndustryType } from "@enums";
 import { IndustriesData, IndustryResearchTrees } from "../Corporation/data/IndustryData";
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
@@ -60,7 +60,6 @@ import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { assertMember, helpers } from "../Netscript/NetscriptHelpers";
 import { checkEnum } from "../utils/helpers/enum";
-import { CityName } from "../Enums";
 import { MaterialInfo } from "../Corporation/MaterialInfo";
 import { calculateUpgradeCost } from "../Corporation/helpers";
 import { PositiveInteger } from "../types";

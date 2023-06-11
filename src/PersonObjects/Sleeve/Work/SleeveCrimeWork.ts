@@ -1,8 +1,8 @@
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { applySleeveGains, Work, WorkType } from "./Work";
-import { CrimeType } from "../../../Enums";
+import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
+import { CrimeType } from "@enums";
 import { Crimes } from "../../../Crime/Crimes";
 import { Crime } from "../../../Crime/Crime";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
@@ -11,10 +11,11 @@ import { checkEnum } from "../../../utils/helpers/enum";
 import { calculateCrimeWorkStats } from "../../../Work/Formulas";
 import { findCrime } from "../../../Crime/CrimeHelpers";
 
-export const isSleeveCrimeWork = (w: Work | null): w is SleeveCrimeWork => w !== null && w.type === WorkType.CRIME;
+export const isSleeveCrimeWork = (w: SleeveWorkClass | null): w is SleeveCrimeWork =>
+  w !== null && w.type === SleeveWorkType.CRIME;
 
-export class SleeveCrimeWork extends Work {
-  type: WorkType.CRIME = WorkType.CRIME;
+export class SleeveCrimeWork extends SleeveWorkClass {
+  type: SleeveWorkType.CRIME = SleeveWorkType.CRIME;
   crimeType: CrimeType;
   cyclesWorked = 0;
   constructor(crimeType?: CrimeType) {
@@ -52,7 +53,7 @@ export class SleeveCrimeWork extends Work {
 
   APICopy() {
     return {
-      type: WorkType.CRIME as "CRIME",
+      type: SleeveWorkType.CRIME as "CRIME",
       crimeType: this.crimeType,
       cyclesWorked: this.cyclesWorked,
       cyclesNeeded: this.cyclesNeeded(),

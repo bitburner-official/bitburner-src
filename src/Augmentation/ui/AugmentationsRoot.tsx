@@ -19,7 +19,7 @@ import Container from "@mui/material/Container";
 import { Settings } from "../../Settings/Settings";
 import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
 import { Player } from "@player";
-import { AugmentationNames } from "../data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { StaticAugmentations } from "../StaticAugmentations";
 import { CONSTANTS } from "../../Constants";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
@@ -29,7 +29,7 @@ import { AlertEvents } from "../../ui/React/AlertManager";
 import { useRerender } from "../../ui/React/hooks";
 
 const NeuroFluxDisplay = (): React.ReactElement => {
-  const level = Player.augmentations.find((e) => e.name === AugmentationNames.NeuroFluxGovernor)?.level ?? 0;
+  const level = Player.augmentations.find((e) => e.name === AugmentationName.NeuroFluxGovernor)?.level ?? 0;
 
   const openBloodDonation = () => {
     AlertEvents.emit(
@@ -50,10 +50,10 @@ const NeuroFluxDisplay = (): React.ReactElement => {
         NeuroFlux Governor - Level {level}
       </Typography>
       <Typography color={Settings.theme.info}>
-        {StaticAugmentations[AugmentationNames.NeuroFluxGovernor].stats}
+        {StaticAugmentations[AugmentationName.NeuroFluxGovernor].stats}
       </Typography>
       <Typography color={Settings.theme.info}>
-        The power of {AugmentationNames.NeuroFluxGovernor} increases with blood donations from players in real life.
+        The power of {AugmentationName.NeuroFluxGovernor} increases with blood donations from players in real life.
         Learn more <Link onClick={openBloodDonation}>here</Link>
       </Typography>
     </Paper>
@@ -199,7 +199,7 @@ export function AugmentationsRoot(props: IProps): React.ReactElement {
           my: 1,
           display: "grid",
           gridTemplateColumns: `repeat(${
-            +!!((Player.augmentations.find((e) => e.name === AugmentationNames.NeuroFluxGovernor)?.level ?? 0) > 0) +
+            +!!((Player.augmentations.find((e) => e.name === AugmentationName.NeuroFluxGovernor)?.level ?? 0) > 0) +
             +!!(Player.entropy > 0)
           }, 1fr)`,
           gap: 1,

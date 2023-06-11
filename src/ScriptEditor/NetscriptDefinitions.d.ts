@@ -342,13 +342,13 @@ interface AugmentPair {
 }
 
 /** @public */
-declare enum PositionTypes {
+declare enum PositionType {
   Long = "L",
   Short = "S",
 }
 
 /** @public */
-declare enum OrderTypes {
+declare enum OrderType {
   LimitBuy = "Limit Buy Order",
   LimitSell = "Limit Sell Order",
   StopBuy = "Stop Buy Order",
@@ -365,9 +365,9 @@ interface StockOrderObject {
   /** Price per share */
   price: number;
   /** Order type */
-  type: OrderTypes;
+  type: OrderType;
   /** Order position */
-  position: PositionTypes;
+  position: PositionType;
 }
 
 /**

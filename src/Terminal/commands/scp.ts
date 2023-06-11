@@ -4,7 +4,7 @@ import { GetServer } from "../../Server/AllServers";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { checkEnum } from "../../utils/helpers/enum";
-import { LiteratureName } from "../../Literature/data/LiteratureNames";
+import { LiteratureName } from "@enums";
 import { ContentFile } from "../../Paths/ContentFile";
 
 export function scp(args: (string | number | boolean)[], server: BaseServer): void {

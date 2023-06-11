@@ -1,3 +1,4 @@
+// Numeric enum
 /** Allowed values for the 'OwnedAugmentationsOrder' setting */
 export enum PurchaseAugmentationsOrderSetting {
   Cost,
@@ -6,6 +7,7 @@ export enum PurchaseAugmentationsOrderSetting {
   Purchasable,
 }
 
+// Numeric enum
 /** Allowed values for the 'OwnedAugmentationsOrder' setting */
 export enum OwnedAugmentationsOrderSetting {
   Alphabetically,

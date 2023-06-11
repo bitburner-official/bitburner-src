@@ -1,10 +1,8 @@
-import { Augmentation, IConstructorParams } from "../Augmentation";
-import { AugmentationNames } from "./AugmentationNames";
-import { Player } from "@player";
-import { CompletedProgramName } from "../../Programs/Programs";
-import { WHRNG } from "../../Casino/RNG";
 import React from "react";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { Player } from "@player";
+import { AugmentationName, CompletedProgramName, FactionName } from "@enums";
+import { Augmentation, IConstructorParams } from "../Augmentation";
+import { WHRNG } from "../../Casino/RNG";
 import { CONSTANTS } from "../../Constants";
 
 interface CircadianBonus {
@@ -130,11 +128,11 @@ function getRandomBonus(): CircadianBonus {
 
 export const initSoAAugmentations = (): Augmentation[] => [
   new Augmentation({
-    name: AugmentationNames.WKSharmonizer,
+    name: AugmentationName.WKSharmonizer,
     repCost: 1e4,
     moneyCost: 1e6,
     info:
-      `A copy of the WKS harmonizer from the MIA leader of the ${FactionNames.ShadowsOfAnarchy} ` +
+      `A copy of the WKS harmonizer from the MIA leader of the ${FactionName.ShadowsOfAnarchy} ` +
       "injects *Γ-based cells that provides general enhancement to the body.",
     stats: (
       <>
@@ -143,10 +141,10 @@ export const initSoAAugmentations = (): Augmentation[] => [
       </>
     ),
     isSpecial: true,
-    factions: [FactionNames.ShadowsOfAnarchy],
+    factions: [FactionName.ShadowsOfAnarchy],
   }),
   new Augmentation({
-    name: AugmentationNames.MightOfAres,
+    name: AugmentationName.MightOfAres,
     repCost: 1e4,
     moneyCost: 1e6,
     info:
@@ -156,28 +154,28 @@ export const initSoAAugmentations = (): Augmentation[] => [
       <>This augmentation makes the Slash minigame easier by showing you via an indicator when the slash in coming.</>
     ),
     isSpecial: true,
-    factions: [FactionNames.ShadowsOfAnarchy],
+    factions: [FactionName.ShadowsOfAnarchy],
   }),
   new Augmentation({
-    name: AugmentationNames.WisdomOfAthena,
+    name: AugmentationName.WisdomOfAthena,
     repCost: 1e4,
     moneyCost: 1e6,
     info: "A connective brain implant to SASHA that focuses on pattern recognition and predictive templating.",
     stats: <>This augmentation makes the Bracket minigame easier by removing all '[' ']'.</>,
     isSpecial: true,
-    factions: [FactionNames.ShadowsOfAnarchy],
+    factions: [FactionName.ShadowsOfAnarchy],
   }),
   new Augmentation({
-    name: AugmentationNames.ChaosOfDionysus,
+    name: AugmentationName.ChaosOfDionysus,
     repCost: 1e4,
     moneyCost: 1e6,
     info: "Opto-occipito implant to process visual signals before brain interpretation.",
     stats: <>This augmentation makes the Backwards minigame easier by flipping the words.</>,
     isSpecial: true,
-    factions: [FactionNames.ShadowsOfAnarchy],
+    factions: [FactionName.ShadowsOfAnarchy],
   }),
   new Augmentation({
-    name: AugmentationNames.BeautyOfAphrodite,
+    name: AugmentationName.BeautyOfAphrodite,
     repCost: 1e4,
     moneyCost: 1e6,
     info:
@@ -185,28 +183,28 @@ export const initSoAAugmentations = (): Augmentation[] => [
       "make conversational partners more agreeable.",
     stats: <>This augmentation makes the Bribe minigame easier by indicating the incorrect paths.</>,
     isSpecial: true,
-    factions: [FactionNames.ShadowsOfAnarchy],
+    factions: [FactionName.ShadowsOfAnarchy],
   }),
   new Augmentation({
-    name: AugmentationNames.TrickeryOfHermes,
+    name: AugmentationName.TrickeryOfHermes,
     repCost: 1e4,
     moneyCost: 1e6,
     info: "Penta-dynamo-neurovascular-valve inserted in the carpal ligament, enhances dexterity.",
     stats: <>This augmentation makes the Cheat Code minigame easier by allowing the opposite character.</>,
     isSpecial: true,
-    factions: [FactionNames.ShadowsOfAnarchy],
+    factions: [FactionName.ShadowsOfAnarchy],
   }),
   new Augmentation({
-    name: AugmentationNames.FloodOfPoseidon,
+    name: AugmentationName.FloodOfPoseidon,
     repCost: 1e4,
     moneyCost: 1e6,
     info: "Transtinatium VVD reticulator used in optico-sterbing recognition.",
     stats: <>This augmentation makes the Symbol matching minigame easier by indicating the correct choice.</>,
     isSpecial: true,
-    factions: [FactionNames.ShadowsOfAnarchy],
+    factions: [FactionName.ShadowsOfAnarchy],
   }),
   new Augmentation({
-    name: AugmentationNames.HuntOfArtemis,
+    name: AugmentationName.HuntOfArtemis,
     repCost: 1e4,
     moneyCost: 1e6,
     info: "magneto-turboencabulator based on technology by Micha Eike Siemon, increases the user's electro-magnetic sensitivity.",
@@ -217,22 +215,22 @@ export const initSoAAugmentations = (): Augmentation[] => [
       </>
     ),
     isSpecial: true,
-    factions: [FactionNames.ShadowsOfAnarchy],
+    factions: [FactionName.ShadowsOfAnarchy],
   }),
   new Augmentation({
-    name: AugmentationNames.KnowledgeOfApollo,
+    name: AugmentationName.KnowledgeOfApollo,
     repCost: 1e4,
     moneyCost: 1e6,
     info: "Neodynic retention fjengeln spoofer using -φ karmions, net positive effect on implantee's delta wave.",
     stats: <>This augmentation makes the Wire Cutting minigame easier by indicating the incorrect wires.</>,
     isSpecial: true,
-    factions: [FactionNames.ShadowsOfAnarchy],
+    factions: [FactionName.ShadowsOfAnarchy],
   }),
 ];
 
 export const initGeneralAugmentations = (): Augmentation[] => [
   new Augmentation({
-    name: AugmentationNames.HemoRecirculator,
+    name: AugmentationName.HemoRecirculator,
     moneyCost: 4.5e7,
     repCost: 1e4,
     info: "A heart implant that greatly increases the body's ability to effectively use and pump blood.",
@@ -240,10 +238,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     defense: 1.08,
     agility: 1.08,
     dexterity: 1.08,
-    factions: [FactionNames.Tetrads, FactionNames.TheDarkArmy, FactionNames.TheSyndicate],
+    factions: [FactionName.Tetrads, FactionName.TheDarkArmy, FactionName.TheSyndicate],
   }),
   new Augmentation({
-    name: AugmentationNames.Targeting1,
+    name: AugmentationName.Targeting1,
     moneyCost: 1.5e7,
     repCost: 5e3,
     info:
@@ -251,52 +249,52 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "and enhances balance and hand-eye coordination.",
     dexterity: 1.1,
     factions: [
-      FactionNames.SlumSnakes,
-      FactionNames.TheDarkArmy,
-      FactionNames.TheSyndicate,
-      FactionNames.Sector12,
-      FactionNames.Ishima,
-      FactionNames.OmniTekIncorporated,
-      FactionNames.KuaiGongInternational,
-      FactionNames.BladeIndustries,
+      FactionName.SlumSnakes,
+      FactionName.TheDarkArmy,
+      FactionName.TheSyndicate,
+      FactionName.Sector12,
+      FactionName.Ishima,
+      FactionName.OmniTekIncorporated,
+      FactionName.KuaiGongInternational,
+      FactionName.BladeIndustries,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.Targeting2,
+    name: AugmentationName.Targeting2,
     moneyCost: 4.25e7,
     repCost: 8.75e3,
     info:
       "This upgraded version of the 'Augmented Targeting' implant is capable of augmenting " +
       "reality by digitally displaying weaknesses and vital signs of threats.",
-    prereqs: [AugmentationNames.Targeting1],
+    prereqs: [AugmentationName.Targeting1],
     dexterity: 1.2,
     factions: [
-      FactionNames.TheDarkArmy,
-      FactionNames.TheSyndicate,
-      FactionNames.Sector12,
-      FactionNames.OmniTekIncorporated,
-      FactionNames.KuaiGongInternational,
-      FactionNames.BladeIndustries,
+      FactionName.TheDarkArmy,
+      FactionName.TheSyndicate,
+      FactionName.Sector12,
+      FactionName.OmniTekIncorporated,
+      FactionName.KuaiGongInternational,
+      FactionName.BladeIndustries,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.Targeting3,
+    name: AugmentationName.Targeting3,
     moneyCost: 1.15e8,
     repCost: 2.75e4,
     info: "The latest version of the 'Augmented Targeting' implant adds the ability to lock-on and track threats.",
-    prereqs: [AugmentationNames.Targeting2, AugmentationNames.Targeting1],
+    prereqs: [AugmentationName.Targeting2, AugmentationName.Targeting1],
     dexterity: 1.3,
     factions: [
-      FactionNames.TheDarkArmy,
-      FactionNames.TheSyndicate,
-      FactionNames.OmniTekIncorporated,
-      FactionNames.KuaiGongInternational,
-      FactionNames.BladeIndustries,
-      FactionNames.TheCovenant,
+      FactionName.TheDarkArmy,
+      FactionName.TheSyndicate,
+      FactionName.OmniTekIncorporated,
+      FactionName.KuaiGongInternational,
+      FactionName.BladeIndustries,
+      FactionName.TheCovenant,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.SyntheticHeart,
+    name: AugmentationName.SyntheticHeart,
     moneyCost: 2.875e9,
     repCost: 7.5e5,
     info:
@@ -305,17 +303,17 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     agility: 1.5,
     strength: 1.5,
     factions: [
-      FactionNames.KuaiGongInternational,
-      FactionNames.FulcrumSecretTechnologies,
-      FactionNames.SpeakersForTheDead,
-      FactionNames.NWO,
-      FactionNames.TheCovenant,
-      FactionNames.Daedalus,
-      FactionNames.Illuminati,
+      FactionName.KuaiGongInternational,
+      FactionName.FulcrumSecretTechnologies,
+      FactionName.SpeakersForTheDead,
+      FactionName.NWO,
+      FactionName.TheCovenant,
+      FactionName.Daedalus,
+      FactionName.Illuminati,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.SynfibrilMuscle,
+    name: AugmentationName.SynfibrilMuscle,
     repCost: 4.375e5,
     moneyCost: 1.125e9,
     info:
@@ -325,18 +323,18 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     strength: 1.3,
     defense: 1.3,
     factions: [
-      FactionNames.KuaiGongInternational,
-      FactionNames.FulcrumSecretTechnologies,
-      FactionNames.SpeakersForTheDead,
-      FactionNames.NWO,
-      FactionNames.TheCovenant,
-      FactionNames.Daedalus,
-      FactionNames.Illuminati,
-      FactionNames.BladeIndustries,
+      FactionName.KuaiGongInternational,
+      FactionName.FulcrumSecretTechnologies,
+      FactionName.SpeakersForTheDead,
+      FactionName.NWO,
+      FactionName.TheCovenant,
+      FactionName.Daedalus,
+      FactionName.Illuminati,
+      FactionName.BladeIndustries,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.CombatRib1,
+    name: AugmentationName.CombatRib1,
     repCost: 7.5e3,
     moneyCost: 2.375e7,
     info:
@@ -345,56 +343,56 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     strength: 1.1,
     defense: 1.1,
     factions: [
-      FactionNames.SlumSnakes,
-      FactionNames.TheDarkArmy,
-      FactionNames.TheSyndicate,
-      FactionNames.Volhaven,
-      FactionNames.Ishima,
-      FactionNames.OmniTekIncorporated,
-      FactionNames.KuaiGongInternational,
-      FactionNames.BladeIndustries,
+      FactionName.SlumSnakes,
+      FactionName.TheDarkArmy,
+      FactionName.TheSyndicate,
+      FactionName.Volhaven,
+      FactionName.Ishima,
+      FactionName.OmniTekIncorporated,
+      FactionName.KuaiGongInternational,
+      FactionName.BladeIndustries,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.CombatRib2,
+    name: AugmentationName.CombatRib2,
     repCost: 1.875e4,
     moneyCost: 6.5e7,
     info:
       "An upgraded version of the 'Combat Rib' augmentation that adds potent stimulants which " +
       "improve focus and endurance while decreasing reaction time and fatigue.",
-    prereqs: [AugmentationNames.CombatRib1],
+    prereqs: [AugmentationName.CombatRib1],
     strength: 1.14,
     defense: 1.14,
     factions: [
-      FactionNames.TheDarkArmy,
-      FactionNames.TheSyndicate,
-      FactionNames.Volhaven,
-      FactionNames.OmniTekIncorporated,
-      FactionNames.KuaiGongInternational,
-      FactionNames.BladeIndustries,
+      FactionName.TheDarkArmy,
+      FactionName.TheSyndicate,
+      FactionName.Volhaven,
+      FactionName.OmniTekIncorporated,
+      FactionName.KuaiGongInternational,
+      FactionName.BladeIndustries,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.CombatRib3,
+    name: AugmentationName.CombatRib3,
     repCost: 3.5e4,
     moneyCost: 1.2e8,
     info:
       "The latest version of the 'Combat Rib' augmentation releases advanced anabolic steroids that " +
       "improve muscle mass and physical performance while being safe and free of side effects.",
-    prereqs: [AugmentationNames.CombatRib2, AugmentationNames.CombatRib1],
+    prereqs: [AugmentationName.CombatRib2, AugmentationName.CombatRib1],
     strength: 1.18,
     defense: 1.18,
     factions: [
-      FactionNames.TheDarkArmy,
-      FactionNames.TheSyndicate,
-      FactionNames.OmniTekIncorporated,
-      FactionNames.KuaiGongInternational,
-      FactionNames.BladeIndustries,
-      FactionNames.TheCovenant,
+      FactionName.TheDarkArmy,
+      FactionName.TheSyndicate,
+      FactionName.OmniTekIncorporated,
+      FactionName.KuaiGongInternational,
+      FactionName.BladeIndustries,
+      FactionName.TheCovenant,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.NanofiberWeave,
+    name: AugmentationName.NanofiberWeave,
     repCost: 3.75e4,
     moneyCost: 1.25e8,
     info:
@@ -403,17 +401,17 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     strength: 1.2,
     defense: 1.2,
     factions: [
-      FactionNames.TheDarkArmy,
-      FactionNames.TheSyndicate,
-      FactionNames.OmniTekIncorporated,
-      FactionNames.BladeIndustries,
-      FactionNames.TianDiHui,
-      FactionNames.SpeakersForTheDead,
-      FactionNames.FulcrumSecretTechnologies,
+      FactionName.TheDarkArmy,
+      FactionName.TheSyndicate,
+      FactionName.OmniTekIncorporated,
+      FactionName.BladeIndustries,
+      FactionName.TianDiHui,
+      FactionName.SpeakersForTheDead,
+      FactionName.FulcrumSecretTechnologies,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.SubdermalArmor,
+    name: AugmentationName.SubdermalArmor,
     repCost: 8.75e5,
     moneyCost: 3.25e9,
     info:
@@ -424,15 +422,15 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "mitigate damage from any fire or electrical traumas.",
     defense: 2.2,
     factions: [
-      FactionNames.TheSyndicate,
-      FactionNames.FulcrumSecretTechnologies,
-      FactionNames.Illuminati,
-      FactionNames.Daedalus,
-      FactionNames.TheCovenant,
+      FactionName.TheSyndicate,
+      FactionName.FulcrumSecretTechnologies,
+      FactionName.Illuminati,
+      FactionName.Daedalus,
+      FactionName.TheCovenant,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.WiredReflexes,
+    name: AugmentationName.WiredReflexes,
     repCost: 1.25e3,
     moneyCost: 2.5e6,
     info:
@@ -441,28 +439,28 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     agility: 1.05,
     dexterity: 1.05,
     factions: [
-      FactionNames.TianDiHui,
-      FactionNames.SlumSnakes,
-      FactionNames.Sector12,
-      FactionNames.Volhaven,
-      FactionNames.Aevum,
-      FactionNames.Ishima,
-      FactionNames.TheSyndicate,
-      FactionNames.TheDarkArmy,
-      FactionNames.SpeakersForTheDead,
+      FactionName.TianDiHui,
+      FactionName.SlumSnakes,
+      FactionName.Sector12,
+      FactionName.Volhaven,
+      FactionName.Aevum,
+      FactionName.Ishima,
+      FactionName.TheSyndicate,
+      FactionName.TheDarkArmy,
+      FactionName.SpeakersForTheDead,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.GrapheneBoneLacings,
+    name: AugmentationName.GrapheneBoneLacings,
     repCost: 1.125e6,
     moneyCost: 4.25e9,
     info: "Graphene is grafted and fused into the skeletal structure, enhancing bone density and tensile strength.",
     strength: 1.7,
     defense: 1.7,
-    factions: [FactionNames.FulcrumSecretTechnologies, FactionNames.TheCovenant],
+    factions: [FactionName.FulcrumSecretTechnologies, FactionName.TheCovenant],
   }),
   new Augmentation({
-    name: AugmentationNames.BionicSpine,
+    name: AugmentationName.BionicSpine,
     repCost: 4.5e4,
     moneyCost: 1.25e8,
     info:
@@ -475,54 +473,54 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     agility: 1.15,
     dexterity: 1.15,
     factions: [
-      FactionNames.SpeakersForTheDead,
-      FactionNames.TheSyndicate,
-      FactionNames.KuaiGongInternational,
-      FactionNames.OmniTekIncorporated,
-      FactionNames.BladeIndustries,
+      FactionName.SpeakersForTheDead,
+      FactionName.TheSyndicate,
+      FactionName.KuaiGongInternational,
+      FactionName.OmniTekIncorporated,
+      FactionName.BladeIndustries,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.GrapheneBionicSpine,
+    name: AugmentationName.GrapheneBionicSpine,
     repCost: 1.625e6,
     moneyCost: 6e9,
     info:
       "An upgrade to the 'Bionic Spine' augmentation. The spine is fused with graphene " +
       "which enhances durability and supercharges all body functions.",
-    prereqs: [AugmentationNames.BionicSpine],
+    prereqs: [AugmentationName.BionicSpine],
     strength: 1.6,
     defense: 1.6,
     agility: 1.6,
     dexterity: 1.6,
-    factions: [FactionNames.FulcrumSecretTechnologies, FactionNames.ECorp],
+    factions: [FactionName.FulcrumSecretTechnologies, FactionName.ECorp],
   }),
   new Augmentation({
-    name: AugmentationNames.BionicLegs,
+    name: AugmentationName.BionicLegs,
     repCost: 1.5e5,
     moneyCost: 3.75e8,
     info: "Cybernetic legs, created from plasteel and carbon fibers, enhance running speed.",
     agility: 1.6,
     factions: [
-      FactionNames.SpeakersForTheDead,
-      FactionNames.TheSyndicate,
-      FactionNames.KuaiGongInternational,
-      FactionNames.OmniTekIncorporated,
-      FactionNames.BladeIndustries,
+      FactionName.SpeakersForTheDead,
+      FactionName.TheSyndicate,
+      FactionName.KuaiGongInternational,
+      FactionName.OmniTekIncorporated,
+      FactionName.BladeIndustries,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.GrapheneBionicLegs,
+    name: AugmentationName.GrapheneBionicLegs,
     repCost: 7.5e5,
     moneyCost: 4.5e9,
     info:
       "An upgrade to the 'Bionic Legs' augmentation. The legs are fused " +
       "with graphene, greatly enhancing jumping ability.",
-    prereqs: [AugmentationNames.BionicLegs],
+    prereqs: [AugmentationName.BionicLegs],
     agility: 2.5,
-    factions: [FactionNames.MegaCorp, FactionNames.ECorp, FactionNames.FulcrumSecretTechnologies],
+    factions: [FactionName.MegaCorp, FactionName.ECorp, FactionName.FulcrumSecretTechnologies],
   }),
   new Augmentation({
-    name: AugmentationNames.SpeechProcessor,
+    name: AugmentationName.SpeechProcessor,
     repCost: 7.5e3,
     moneyCost: 5e7,
     info:
@@ -531,18 +529,18 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "and inflection, to pick up on subtle cues and aid in social interactions.",
     charisma: 1.2,
     factions: [
-      FactionNames.TianDiHui,
-      FactionNames.Chongqing,
-      FactionNames.Sector12,
-      FactionNames.NewTokyo,
-      FactionNames.Aevum,
-      FactionNames.Ishima,
-      FactionNames.Volhaven,
-      FactionNames.Silhouette,
+      FactionName.TianDiHui,
+      FactionName.Chongqing,
+      FactionName.Sector12,
+      FactionName.NewTokyo,
+      FactionName.Aevum,
+      FactionName.Ishima,
+      FactionName.Volhaven,
+      FactionName.Silhouette,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.TITN41Injection,
+    name: AugmentationName.TITN41Injection,
     repCost: 2.5e4,
     moneyCost: 1.9e8,
     info:
@@ -551,10 +549,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "outgoing and sociable.",
     charisma: 1.15,
     charisma_exp: 1.15,
-    factions: [FactionNames.Silhouette],
+    factions: [FactionName.Silhouette],
   }),
   new Augmentation({
-    name: AugmentationNames.EnhancedSocialInteractionImplant,
+    name: AugmentationName.EnhancedSocialInteractionImplant,
     repCost: 3.75e5,
     moneyCost: 1.375e9,
     info:
@@ -566,25 +564,25 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     charisma: 1.6,
     charisma_exp: 1.6,
     factions: [
-      FactionNames.BachmanAssociates,
-      FactionNames.NWO,
-      FactionNames.ClarkeIncorporated,
-      FactionNames.OmniTekIncorporated,
-      FactionNames.FourSigma,
+      FactionName.BachmanAssociates,
+      FactionName.NWO,
+      FactionName.ClarkeIncorporated,
+      FactionName.OmniTekIncorporated,
+      FactionName.FourSigma,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.BitWire,
+    name: AugmentationName.BitWire,
     repCost: 3.75e3,
     moneyCost: 1e7,
     info:
       "A small brain implant embedded in the cerebrum. This regulates and improves the brain's computing " +
       "capabilities.",
     hacking: 1.05,
-    factions: [FactionNames.CyberSec, FactionNames.NiteSec],
+    factions: [FactionName.CyberSec, FactionName.NiteSec],
   }),
   new Augmentation({
-    name: AugmentationNames.ArtificialBioNeuralNetwork,
+    name: AugmentationName.ArtificialBioNeuralNetwork,
     repCost: 2.75e5,
     moneyCost: 3e9,
     info:
@@ -596,10 +594,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     hacking_speed: 1.03,
     hacking_money: 1.15,
     hacking: 1.12,
-    factions: [FactionNames.BitRunners, FactionNames.FulcrumSecretTechnologies],
+    factions: [FactionName.BitRunners, FactionName.FulcrumSecretTechnologies],
   }),
   new Augmentation({
-    name: AugmentationNames.ArtificialSynapticPotentiation,
+    name: AugmentationName.ArtificialSynapticPotentiation,
     repCost: 6.25e3,
     moneyCost: 8e7,
     info:
@@ -608,10 +606,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     hacking_speed: 1.02,
     hacking_chance: 1.05,
     hacking_exp: 1.05,
-    factions: [FactionNames.TheBlackHand, FactionNames.NiteSec],
+    factions: [FactionName.TheBlackHand, FactionName.NiteSec],
   }),
   new Augmentation({
-    name: AugmentationNames.EnhancedMyelinSheathing,
+    name: AugmentationName.EnhancedMyelinSheathing,
     repCost: 1e5,
     moneyCost: 1.375e9,
     info:
@@ -622,30 +620,30 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     hacking_speed: 1.03,
     hacking_exp: 1.1,
     hacking: 1.08,
-    factions: [FactionNames.FulcrumSecretTechnologies, FactionNames.BitRunners, FactionNames.TheBlackHand],
+    factions: [FactionName.FulcrumSecretTechnologies, FactionName.BitRunners, FactionName.TheBlackHand],
   }),
   new Augmentation({
-    name: AugmentationNames.SynapticEnhancement,
+    name: AugmentationName.SynapticEnhancement,
     repCost: 2e3,
     moneyCost: 7.5e6,
     info:
       "A small cranial implant that continuously uses weak electrical signals to stimulate the brain and " +
       "induce stronger synaptic activity. This improves the user's cognitive abilities.",
     hacking_speed: 1.03,
-    factions: [FactionNames.CyberSec, FactionNames.Aevum],
+    factions: [FactionName.CyberSec, FactionName.Aevum],
   }),
   new Augmentation({
-    name: AugmentationNames.NeuralRetentionEnhancement,
+    name: AugmentationName.NeuralRetentionEnhancement,
     repCost: 2e4,
     moneyCost: 2.5e8,
     info:
       "Chemical injections are used to permanently alter and strengthen the brain's neuronal " +
       "circuits, strengthening the ability to retain information.",
     hacking_exp: 1.25,
-    factions: [FactionNames.NiteSec],
+    factions: [FactionName.NiteSec],
   }),
   new Augmentation({
-    name: AugmentationNames.DataJack,
+    name: AugmentationName.DataJack,
     repCost: 1.125e5,
     moneyCost: 4.5e8,
     info:
@@ -654,15 +652,15 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "and delete it.",
     hacking_money: 1.25,
     factions: [
-      FactionNames.BitRunners,
-      FactionNames.TheBlackHand,
-      FactionNames.NiteSec,
-      FactionNames.Chongqing,
-      FactionNames.NewTokyo,
+      FactionName.BitRunners,
+      FactionName.TheBlackHand,
+      FactionName.NiteSec,
+      FactionName.Chongqing,
+      FactionName.NewTokyo,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.ENM,
+    name: AugmentationName.ENM,
     repCost: 1.5e4,
     moneyCost: 2.5e8,
     info:
@@ -673,41 +671,41 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "control the traffic on a network.",
     hacking: 1.08,
     factions: [
-      FactionNames.BitRunners,
-      FactionNames.TheBlackHand,
-      FactionNames.NiteSec,
-      FactionNames.ECorp,
-      FactionNames.MegaCorp,
-      FactionNames.FulcrumSecretTechnologies,
-      FactionNames.NWO,
-      FactionNames.BladeIndustries,
+      FactionName.BitRunners,
+      FactionName.TheBlackHand,
+      FactionName.NiteSec,
+      FactionName.ECorp,
+      FactionName.MegaCorp,
+      FactionName.FulcrumSecretTechnologies,
+      FactionName.NWO,
+      FactionName.BladeIndustries,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.ENMCore,
+    name: AugmentationName.ENMCore,
     repCost: 175e3,
     moneyCost: 2.5e9,
     info:
       "The Core library is an implant that upgrades the firmware of the Embedded Netburner Module. " +
       "This upgrade allows the Embedded Netburner Module to generate its own data on a network.",
-    prereqs: [AugmentationNames.ENM],
+    prereqs: [AugmentationName.ENM],
     hacking_speed: 1.03,
     hacking_money: 1.1,
     hacking_chance: 1.03,
     hacking_exp: 1.07,
     hacking: 1.07,
     factions: [
-      FactionNames.BitRunners,
-      FactionNames.TheBlackHand,
-      FactionNames.ECorp,
-      FactionNames.MegaCorp,
-      FactionNames.FulcrumSecretTechnologies,
-      FactionNames.NWO,
-      FactionNames.BladeIndustries,
+      FactionName.BitRunners,
+      FactionName.TheBlackHand,
+      FactionName.ECorp,
+      FactionName.MegaCorp,
+      FactionName.FulcrumSecretTechnologies,
+      FactionName.NWO,
+      FactionName.BladeIndustries,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.ENMCoreV2,
+    name: AugmentationName.ENMCoreV2,
     repCost: 1e6,
     moneyCost: 4.5e9,
     info:
@@ -715,89 +713,89 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "This upgraded firmware allows the Embedded Netburner Module to control information on " +
       "a network by re-routing traffic, spoofing IP addresses, and altering the data inside network " +
       "packets.",
-    prereqs: [AugmentationNames.ENMCore, AugmentationNames.ENM],
+    prereqs: [AugmentationName.ENMCore, AugmentationName.ENM],
     hacking_speed: 1.05,
     hacking_money: 1.3,
     hacking_chance: 1.05,
     hacking_exp: 1.15,
     hacking: 1.08,
     factions: [
-      FactionNames.BitRunners,
-      FactionNames.ECorp,
-      FactionNames.MegaCorp,
-      FactionNames.FulcrumSecretTechnologies,
-      FactionNames.NWO,
-      FactionNames.BladeIndustries,
-      FactionNames.OmniTekIncorporated,
-      FactionNames.KuaiGongInternational,
+      FactionName.BitRunners,
+      FactionName.ECorp,
+      FactionName.MegaCorp,
+      FactionName.FulcrumSecretTechnologies,
+      FactionName.NWO,
+      FactionName.BladeIndustries,
+      FactionName.OmniTekIncorporated,
+      FactionName.KuaiGongInternational,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.ENMCoreV3,
+    name: AugmentationName.ENMCoreV3,
     repCost: 1.75e6,
     moneyCost: 7.5e9,
     info:
       "The Core V3 library is an implant that upgrades the firmware of the Embedded Netburner Module. " +
       "This upgraded firmware allows the Embedded Netburner Module to seamlessly inject code into " +
       "any device on a network.",
-    prereqs: [AugmentationNames.ENMCoreV2, AugmentationNames.ENMCore, AugmentationNames.ENM],
+    prereqs: [AugmentationName.ENMCoreV2, AugmentationName.ENMCore, AugmentationName.ENM],
     hacking_speed: 1.05,
     hacking_money: 1.4,
     hacking_chance: 1.1,
     hacking_exp: 1.25,
     hacking: 1.1,
     factions: [
-      FactionNames.ECorp,
-      FactionNames.MegaCorp,
-      FactionNames.FulcrumSecretTechnologies,
-      FactionNames.NWO,
-      FactionNames.Daedalus,
-      FactionNames.TheCovenant,
-      FactionNames.Illuminati,
+      FactionName.ECorp,
+      FactionName.MegaCorp,
+      FactionName.FulcrumSecretTechnologies,
+      FactionName.NWO,
+      FactionName.Daedalus,
+      FactionName.TheCovenant,
+      FactionName.Illuminati,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.ENMAnalyzeEngine,
+    name: AugmentationName.ENMAnalyzeEngine,
     repCost: 6.25e5,
     moneyCost: 6e9,
     info:
       "Installs the Analyze Engine for the Embedded Netburner Module, which is a CPU cluster " +
       "that vastly outperforms the Netburner Module's native single-core processor.",
-    prereqs: [AugmentationNames.ENM],
+    prereqs: [AugmentationName.ENM],
     hacking_speed: 1.1,
     factions: [
-      FactionNames.ECorp,
-      FactionNames.MegaCorp,
-      FactionNames.FulcrumSecretTechnologies,
-      FactionNames.NWO,
-      FactionNames.Daedalus,
-      FactionNames.TheCovenant,
-      FactionNames.Illuminati,
+      FactionName.ECorp,
+      FactionName.MegaCorp,
+      FactionName.FulcrumSecretTechnologies,
+      FactionName.NWO,
+      FactionName.Daedalus,
+      FactionName.TheCovenant,
+      FactionName.Illuminati,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.ENMDMA,
+    name: AugmentationName.ENMDMA,
     repCost: 1e6,
     moneyCost: 7e9,
     info:
       "This implant installs a Direct Memory Access (DMA) controller into the " +
       "Embedded Netburner Module. This allows the Module to send and receive data " +
       "directly to and from the main memory of devices on a network.",
-    prereqs: [AugmentationNames.ENM],
+    prereqs: [AugmentationName.ENM],
     hacking_money: 1.4,
     hacking_chance: 1.2,
     factions: [
-      FactionNames.ECorp,
-      FactionNames.MegaCorp,
-      FactionNames.FulcrumSecretTechnologies,
-      FactionNames.NWO,
-      FactionNames.Daedalus,
-      FactionNames.TheCovenant,
-      FactionNames.Illuminati,
+      FactionName.ECorp,
+      FactionName.MegaCorp,
+      FactionName.FulcrumSecretTechnologies,
+      FactionName.NWO,
+      FactionName.Daedalus,
+      FactionName.TheCovenant,
+      FactionName.Illuminati,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.Neuralstimulator,
+    name: AugmentationName.Neuralstimulator,
     repCost: 5e4,
     moneyCost: 3e9,
     info:
@@ -807,20 +805,20 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     hacking_chance: 1.1,
     hacking_exp: 1.12,
     factions: [
-      FactionNames.TheBlackHand,
-      FactionNames.Chongqing,
-      FactionNames.Sector12,
-      FactionNames.NewTokyo,
-      FactionNames.Aevum,
-      FactionNames.Ishima,
-      FactionNames.Volhaven,
-      FactionNames.BachmanAssociates,
-      FactionNames.ClarkeIncorporated,
-      FactionNames.FourSigma,
+      FactionName.TheBlackHand,
+      FactionName.Chongqing,
+      FactionName.Sector12,
+      FactionName.NewTokyo,
+      FactionName.Aevum,
+      FactionName.Ishima,
+      FactionName.Volhaven,
+      FactionName.BachmanAssociates,
+      FactionName.ClarkeIncorporated,
+      FactionName.FourSigma,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.NeuralAccelerator,
+    name: AugmentationName.NeuralAccelerator,
     repCost: 2e5,
     moneyCost: 1.75e9,
     info:
@@ -829,10 +827,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     hacking: 1.1,
     hacking_exp: 1.15,
     hacking_money: 1.2,
-    factions: [FactionNames.BitRunners],
+    factions: [FactionName.BitRunners],
   }),
   new Augmentation({
-    name: AugmentationNames.CranialSignalProcessorsG1,
+    name: AugmentationName.CranialSignalProcessorsG1,
     repCost: 1e4,
     moneyCost: 7e7,
     info:
@@ -842,10 +840,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "so that the brain doesn't have to.",
     hacking_speed: 1.01,
     hacking: 1.05,
-    factions: [FactionNames.CyberSec, FactionNames.NiteSec],
+    factions: [FactionName.CyberSec, FactionName.NiteSec],
   }),
   new Augmentation({
-    name: AugmentationNames.CranialSignalProcessorsG2,
+    name: AugmentationName.CranialSignalProcessorsG2,
     repCost: 1.875e4,
     moneyCost: 1.25e8,
     info:
@@ -853,14 +851,14 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "are a set of specialized microprocessors that are attached to " +
       "neurons in the brain. These chips process neural signals to quickly and automatically perform specific computations " +
       "so that the brain doesn't have to.",
-    prereqs: [AugmentationNames.CranialSignalProcessorsG1],
+    prereqs: [AugmentationName.CranialSignalProcessorsG1],
     hacking_speed: 1.02,
     hacking_chance: 1.05,
     hacking: 1.07,
-    factions: [FactionNames.CyberSec, FactionNames.NiteSec],
+    factions: [FactionName.CyberSec, FactionName.NiteSec],
   }),
   new Augmentation({
-    name: AugmentationNames.CranialSignalProcessorsG3,
+    name: AugmentationName.CranialSignalProcessorsG3,
     repCost: 5e4,
     moneyCost: 5.5e8,
     info:
@@ -868,14 +866,14 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "are a set of specialized microprocessors that are attached to " +
       "neurons in the brain. These chips process neural signals to quickly and automatically perform specific computations " +
       "so that the brain doesn't have to.",
-    prereqs: [AugmentationNames.CranialSignalProcessorsG2, AugmentationNames.CranialSignalProcessorsG1],
+    prereqs: [AugmentationName.CranialSignalProcessorsG2, AugmentationName.CranialSignalProcessorsG1],
     hacking_speed: 1.02,
     hacking_money: 1.15,
     hacking: 1.09,
-    factions: [FactionNames.NiteSec, FactionNames.TheBlackHand, FactionNames.BitRunners],
+    factions: [FactionName.NiteSec, FactionName.TheBlackHand, FactionName.BitRunners],
   }),
   new Augmentation({
-    name: AugmentationNames.CranialSignalProcessorsG4,
+    name: AugmentationName.CranialSignalProcessorsG4,
     repCost: 1.25e5,
     moneyCost: 1.1e9,
     info:
@@ -884,17 +882,17 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "neurons in the brain. These chips process neural signals to quickly and automatically perform specific computations " +
       "so that the brain doesn't have to.",
     prereqs: [
-      AugmentationNames.CranialSignalProcessorsG3,
-      AugmentationNames.CranialSignalProcessorsG2,
-      AugmentationNames.CranialSignalProcessorsG1,
+      AugmentationName.CranialSignalProcessorsG3,
+      AugmentationName.CranialSignalProcessorsG2,
+      AugmentationName.CranialSignalProcessorsG1,
     ],
     hacking_speed: 1.02,
     hacking_money: 1.2,
     hacking_grow: 1.25,
-    factions: [FactionNames.TheBlackHand, FactionNames.BitRunners],
+    factions: [FactionName.TheBlackHand, FactionName.BitRunners],
   }),
   new Augmentation({
-    name: AugmentationNames.CranialSignalProcessorsG5,
+    name: AugmentationName.CranialSignalProcessorsG5,
     repCost: 2.5e5,
     moneyCost: 2.25e9,
     info:
@@ -903,18 +901,18 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "neurons in the brain. These chips process neural signals to quickly and automatically perform specific computations " +
       "so that the brain doesn't have to.",
     prereqs: [
-      AugmentationNames.CranialSignalProcessorsG4,
-      AugmentationNames.CranialSignalProcessorsG3,
-      AugmentationNames.CranialSignalProcessorsG2,
-      AugmentationNames.CranialSignalProcessorsG1,
+      AugmentationName.CranialSignalProcessorsG4,
+      AugmentationName.CranialSignalProcessorsG3,
+      AugmentationName.CranialSignalProcessorsG2,
+      AugmentationName.CranialSignalProcessorsG1,
     ],
     hacking: 1.3,
     hacking_money: 1.25,
     hacking_grow: 1.75,
-    factions: [FactionNames.BitRunners],
+    factions: [FactionName.BitRunners],
   }),
   new Augmentation({
-    name: AugmentationNames.NeuronalDensification,
+    name: AugmentationName.NeuronalDensification,
     repCost: 1.875e5,
     moneyCost: 1.375e9,
     info:
@@ -924,10 +922,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     hacking: 1.15,
     hacking_exp: 1.1,
     hacking_speed: 1.03,
-    factions: [FactionNames.ClarkeIncorporated],
+    factions: [FactionName.ClarkeIncorporated],
   }),
   new Augmentation({
-    name: AugmentationNames.NuoptimalInjectorImplant,
+    name: AugmentationName.NuoptimalInjectorImplant,
     repCost: 5e3,
     moneyCost: 2e7,
     info:
@@ -936,17 +934,17 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "cognitive enhancements.",
     company_rep: 1.2,
     factions: [
-      FactionNames.TianDiHui,
-      FactionNames.Volhaven,
-      FactionNames.NewTokyo,
-      FactionNames.Chongqing,
-      FactionNames.ClarkeIncorporated,
-      FactionNames.FourSigma,
-      FactionNames.BachmanAssociates,
+      FactionName.TianDiHui,
+      FactionName.Volhaven,
+      FactionName.NewTokyo,
+      FactionName.Chongqing,
+      FactionName.ClarkeIncorporated,
+      FactionName.FourSigma,
+      FactionName.BachmanAssociates,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.SpeechEnhancement,
+    name: AugmentationName.SpeechEnhancement,
     repCost: 2.5e3,
     moneyCost: 1.25e7,
     info:
@@ -956,16 +954,16 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     company_rep: 1.1,
     charisma: 1.1,
     factions: [
-      FactionNames.TianDiHui,
-      FactionNames.SpeakersForTheDead,
-      FactionNames.FourSigma,
-      FactionNames.KuaiGongInternational,
-      FactionNames.ClarkeIncorporated,
-      FactionNames.BachmanAssociates,
+      FactionName.TianDiHui,
+      FactionName.SpeakersForTheDead,
+      FactionName.FourSigma,
+      FactionName.KuaiGongInternational,
+      FactionName.ClarkeIncorporated,
+      FactionName.BachmanAssociates,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.FocusWire,
+    name: AugmentationName.FocusWire,
     repCost: 7.5e4,
     moneyCost: 9e8,
     info: "A cranial implant that stops procrastination by blocking specific neural pathways in the brain.",
@@ -978,14 +976,14 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     company_rep: 1.1,
     work_money: 1.2,
     factions: [
-      FactionNames.BachmanAssociates,
-      FactionNames.ClarkeIncorporated,
-      FactionNames.FourSigma,
-      FactionNames.KuaiGongInternational,
+      FactionName.BachmanAssociates,
+      FactionName.ClarkeIncorporated,
+      FactionName.FourSigma,
+      FactionName.KuaiGongInternational,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.PCDNI,
+    name: AugmentationName.PCDNI,
     repCost: 3.75e5,
     moneyCost: 3.75e9,
     info:
@@ -994,28 +992,23 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "it using the brain's electrochemical signals.",
     company_rep: 1.3,
     hacking: 1.08,
-    factions: [
-      FactionNames.FourSigma,
-      FactionNames.OmniTekIncorporated,
-      FactionNames.ECorp,
-      FactionNames.BladeIndustries,
-    ],
+    factions: [FactionName.FourSigma, FactionName.OmniTekIncorporated, FactionName.ECorp, FactionName.BladeIndustries],
   }),
   new Augmentation({
-    name: AugmentationNames.PCDNIOptimizer,
+    name: AugmentationName.PCDNIOptimizer,
     repCost: 5e5,
     moneyCost: 4.5e9,
     info:
       "This is a submodule upgrade to the PC Direct-Neural Interface augmentation. It " +
       "improves the performance of the interface and gives the user more control options " +
       "to a connected computer.",
-    prereqs: [AugmentationNames.PCDNI],
+    prereqs: [AugmentationName.PCDNI],
     company_rep: 1.75,
     hacking: 1.1,
-    factions: [FactionNames.FulcrumSecretTechnologies, FactionNames.ECorp, FactionNames.BladeIndustries],
+    factions: [FactionName.FulcrumSecretTechnologies, FactionName.ECorp, FactionName.BladeIndustries],
   }),
   new Augmentation({
-    name: AugmentationNames.PCDNINeuralNetwork,
+    name: AugmentationName.PCDNINeuralNetwork,
     repCost: 1.5e6,
     moneyCost: 7.5e9,
     info:
@@ -1023,14 +1016,14 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "PC Direct-Neural Interface augmentation. When connected to a computer, " +
       "the Neural Network upgrade allows the user to use their own brain's " +
       "processing power to aid the computer in computational tasks.",
-    prereqs: [AugmentationNames.PCDNI],
+    prereqs: [AugmentationName.PCDNI],
     company_rep: 2,
     hacking: 1.1,
     hacking_speed: 1.05,
-    factions: [FactionNames.FulcrumSecretTechnologies],
+    factions: [FactionName.FulcrumSecretTechnologies],
   }),
   new Augmentation({
-    name: AugmentationNames.ADRPheromone1,
+    name: AugmentationName.ADRPheromone1,
     repCost: 3.75e3,
     moneyCost: 1.75e7,
     info:
@@ -1040,15 +1033,15 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     company_rep: 1.1,
     faction_rep: 1.1,
     factions: [
-      FactionNames.TianDiHui,
-      FactionNames.TheSyndicate,
-      FactionNames.NWO,
-      FactionNames.MegaCorp,
-      FactionNames.FourSigma,
+      FactionName.TianDiHui,
+      FactionName.TheSyndicate,
+      FactionName.NWO,
+      FactionName.MegaCorp,
+      FactionName.FourSigma,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.ADRPheromone2,
+    name: AugmentationName.ADRPheromone2,
     repCost: 6.25e4,
     moneyCost: 5.5e8,
     info:
@@ -1058,14 +1051,14 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     company_rep: 1.2,
     faction_rep: 1.2,
     factions: [
-      FactionNames.Silhouette,
-      FactionNames.FourSigma,
-      FactionNames.BachmanAssociates,
-      FactionNames.ClarkeIncorporated,
+      FactionName.Silhouette,
+      FactionName.FourSigma,
+      FactionName.BachmanAssociates,
+      FactionName.ClarkeIncorporated,
     ],
   }),
   new Augmentation({
-    name: AugmentationNames.ShadowsSimulacrum,
+    name: AugmentationName.ShadowsSimulacrum,
     repCost: 3.75e4,
     moneyCost: 4e8,
     info:
@@ -1076,10 +1069,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "espionage and surveillance work.",
     company_rep: 1.15,
     faction_rep: 1.15,
-    factions: [FactionNames.TheSyndicate, FactionNames.TheDarkArmy, FactionNames.SpeakersForTheDead],
+    factions: [FactionName.TheSyndicate, FactionName.TheDarkArmy, FactionName.SpeakersForTheDead],
   }),
   new Augmentation({
-    name: AugmentationNames.HacknetNodeCPUUpload,
+    name: AugmentationName.HacknetNodeCPUUpload,
     repCost: 3.75e3,
     moneyCost: 1.1e7,
     info:
@@ -1088,10 +1081,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "for the Hacknet Node that provides better performance.",
     hacknet_node_money: 1.15,
     hacknet_node_purchase_cost: 0.85,
-    factions: [FactionNames.Netburners],
+    factions: [FactionName.Netburners],
   }),
   new Augmentation({
-    name: AugmentationNames.HacknetNodeCacheUpload,
+    name: AugmentationName.HacknetNodeCacheUpload,
     repCost: 2.5e3,
     moneyCost: 5.5e6,
     info:
@@ -1100,10 +1093,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "Hacknet Node that offers better performance.",
     hacknet_node_money: 1.1,
     hacknet_node_level_cost: 0.85,
-    factions: [FactionNames.Netburners],
+    factions: [FactionName.Netburners],
   }),
   new Augmentation({
-    name: AugmentationNames.HacknetNodeNICUpload,
+    name: AugmentationName.HacknetNodeNICUpload,
     repCost: 1.875e3,
     moneyCost: 4.5e6,
     info:
@@ -1112,10 +1105,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "offers better performance.",
     hacknet_node_money: 1.1,
     hacknet_node_purchase_cost: 0.9,
-    factions: [FactionNames.Netburners],
+    factions: [FactionName.Netburners],
   }),
   new Augmentation({
-    name: AugmentationNames.HacknetNodeKernelDNI,
+    name: AugmentationName.HacknetNodeKernelDNI,
     repCost: 7.5e3,
     moneyCost: 4e7,
     info:
@@ -1123,10 +1116,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "Hacknet Node. This lets the user access and manipulate the Node's kernel using " +
       "electrochemical signals.",
     hacknet_node_money: 1.25,
-    factions: [FactionNames.Netburners],
+    factions: [FactionName.Netburners],
   }),
   new Augmentation({
-    name: AugmentationNames.HacknetNodeCoreDNI,
+    name: AugmentationName.HacknetNodeCoreDNI,
     repCost: 1.25e4,
     moneyCost: 6e7,
     info:
@@ -1134,10 +1127,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "to a Hacknet Node. This lets the user access and manipulate the Node's processing logic using " +
       "electrochemical signals.",
     hacknet_node_money: 1.45,
-    factions: [FactionNames.Netburners],
+    factions: [FactionName.Netburners],
   }),
   new Augmentation({
-    name: AugmentationNames.Neurotrainer1,
+    name: AugmentationName.Neurotrainer1,
     repCost: 1e3,
     moneyCost: 4e6,
     info:
@@ -1151,10 +1144,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     dexterity_exp: 1.1,
     agility_exp: 1.1,
     charisma_exp: 1.1,
-    factions: [FactionNames.CyberSec, FactionNames.Aevum],
+    factions: [FactionName.CyberSec, FactionName.Aevum],
   }),
   new Augmentation({
-    name: AugmentationNames.Neurotrainer2,
+    name: AugmentationName.Neurotrainer2,
     repCost: 1e4,
     moneyCost: 4.5e7,
     info:
@@ -1167,10 +1160,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     dexterity_exp: 1.15,
     agility_exp: 1.15,
     charisma_exp: 1.15,
-    factions: [FactionNames.BitRunners, FactionNames.NiteSec],
+    factions: [FactionName.BitRunners, FactionName.NiteSec],
   }),
   new Augmentation({
-    name: AugmentationNames.Neurotrainer3,
+    name: AugmentationName.Neurotrainer3,
     repCost: 2.5e4,
     moneyCost: 1.3e8,
     info:
@@ -1183,10 +1176,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     dexterity_exp: 1.2,
     agility_exp: 1.2,
     charisma_exp: 1.2,
-    factions: [FactionNames.NWO, FactionNames.FourSigma],
+    factions: [FactionName.NWO, FactionName.FourSigma],
   }),
   new Augmentation({
-    name: AugmentationNames.Hypersight,
+    name: AugmentationName.Hypersight,
     repCost: 1.5e5,
     moneyCost: 2.75e9,
     info:
@@ -1196,10 +1189,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     dexterity: 1.4,
     hacking_speed: 1.03,
     hacking_money: 1.1,
-    factions: [FactionNames.BladeIndustries, FactionNames.KuaiGongInternational],
+    factions: [FactionName.BladeIndustries, FactionName.KuaiGongInternational],
   }),
   new Augmentation({
-    name: AugmentationNames.LuminCloaking1,
+    name: AugmentationName.LuminCloaking1,
     repCost: 1.5e3,
     moneyCost: 5e6,
     info:
@@ -1208,10 +1201,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "around the skin, making the user much harder to see with the naked eye.",
     agility: 1.05,
     crime_money: 1.1,
-    factions: [FactionNames.SlumSnakes, FactionNames.Tetrads],
+    factions: [FactionName.SlumSnakes, FactionName.Tetrads],
   }),
   new Augmentation({
-    name: AugmentationNames.LuminCloaking2,
+    name: AugmentationName.LuminCloaking2,
     repCost: 5e3,
     moneyCost: 3e7,
     info:
@@ -1219,24 +1212,24 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "reinforces the skin with highly-advanced synthetic cells. These " +
       "cells, when powered, are capable of not only bending light but also of bending heat, " +
       "making the user more resilient as well as stealthy.",
-    prereqs: [AugmentationNames.LuminCloaking1],
+    prereqs: [AugmentationName.LuminCloaking1],
     agility: 1.1,
     defense: 1.1,
     crime_money: 1.25,
-    factions: [FactionNames.SlumSnakes, FactionNames.Tetrads],
+    factions: [FactionName.SlumSnakes, FactionName.Tetrads],
   }),
   new Augmentation({
-    name: AugmentationNames.SmartSonar,
+    name: AugmentationName.SmartSonar,
     repCost: 2.25e4,
     moneyCost: 7.5e7,
     info: "A cochlear implant that helps the player detect and locate enemies using sound propagation.",
     dexterity: 1.1,
     dexterity_exp: 1.15,
     crime_money: 1.25,
-    factions: [FactionNames.SlumSnakes],
+    factions: [FactionName.SlumSnakes],
   }),
   new Augmentation({
-    name: AugmentationNames.PowerRecirculator,
+    name: AugmentationName.PowerRecirculator,
     repCost: 2.5e4,
     moneyCost: 1.8e8,
     info:
@@ -1255,24 +1248,24 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     dexterity_exp: 1.1,
     agility_exp: 1.1,
     charisma_exp: 1.1,
-    factions: [FactionNames.Tetrads, FactionNames.TheDarkArmy, FactionNames.TheSyndicate, FactionNames.NWO],
+    factions: [FactionName.Tetrads, FactionName.TheDarkArmy, FactionName.TheSyndicate, FactionName.NWO],
   }),
   new Augmentation({
-    name: AugmentationNames.QLink,
+    name: AugmentationName.QLink,
     repCost: 1.875e6,
     moneyCost: 2.5e13,
     info:
-      `A brain implant that wirelessly connects you to the ${FactionNames.Illuminati}'s ` +
+      `A brain implant that wirelessly connects you to the ${FactionName.Illuminati}'s ` +
       "quantum supercomputer, allowing you to access and use its incredible " +
       "computing power.",
     hacking: 1.75,
     hacking_speed: 2,
     hacking_chance: 2.5,
     hacking_money: 4,
-    factions: [FactionNames.Illuminati],
+    factions: [FactionName.Illuminati],
   }),
   new Augmentation({
-    name: AugmentationNames.SPTN97,
+    name: AugmentationName.SPTN97,
     repCost: 1.25e6,
     moneyCost: 4.875e9,
     info:
@@ -1285,31 +1278,31 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     dexterity: 1.75,
     agility: 1.75,
     hacking: 1.15,
-    factions: [FactionNames.TheCovenant],
+    factions: [FactionName.TheCovenant],
   }),
   new Augmentation({
-    name: AugmentationNames.HiveMind,
+    name: AugmentationName.HiveMind,
     repCost: 1.5e6,
     moneyCost: 5.5e9,
     info:
-      `A brain implant developed by ${FactionNames.ECorp}. They do not reveal what ` +
+      `A brain implant developed by ${FactionName.ECorp}. They do not reveal what ` +
       "exactly the implant does, but they promise that it will greatly " +
       "enhance your abilities.",
     hacking_grow: 3,
     stats: null,
-    factions: [FactionNames.ECorp],
+    factions: [FactionName.ECorp],
   }),
   new Augmentation({
-    name: AugmentationNames.TheRedPill,
+    name: AugmentationName.TheRedPill,
     repCost: 2.5e6,
     moneyCost: 0,
     info: "It's time to leave the cave.",
     stats: null,
     isSpecial: true,
-    factions: [FactionNames.Daedalus],
+    factions: [FactionName.Daedalus],
   }),
   new Augmentation({
-    name: AugmentationNames.CordiARCReactor,
+    name: AugmentationName.CordiARCReactor,
     repCost: 1.125e6,
     moneyCost: 5e9,
     info:
@@ -1325,10 +1318,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     defense_exp: 1.35,
     dexterity_exp: 1.35,
     agility_exp: 1.35,
-    factions: [FactionNames.MegaCorp],
+    factions: [FactionName.MegaCorp],
   }),
   new Augmentation({
-    name: AugmentationNames.SmartJaw,
+    name: AugmentationName.SmartJaw,
     repCost: 3.75e5,
     moneyCost: 2.75e9,
     info:
@@ -1339,10 +1332,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     charisma_exp: 1.5,
     company_rep: 1.25,
     faction_rep: 1.25,
-    factions: [FactionNames.BachmanAssociates],
+    factions: [FactionName.BachmanAssociates],
   }),
   new Augmentation({
-    name: AugmentationNames.Neotra,
+    name: AugmentationName.Neotra,
     repCost: 5.625e5,
     moneyCost: 2.875e9,
     info:
@@ -1352,10 +1345,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "and restructure themselves.",
     strength: 1.55,
     defense: 1.55,
-    factions: [FactionNames.BladeIndustries],
+    factions: [FactionName.BladeIndustries],
   }),
   new Augmentation({
-    name: AugmentationNames.Xanipher,
+    name: AugmentationName.Xanipher,
     repCost: 8.75e5,
     moneyCost: 4.25e9,
     info:
@@ -1374,10 +1367,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     dexterity_exp: 1.15,
     agility_exp: 1.15,
     charisma_exp: 1.15,
-    factions: [FactionNames.NWO],
+    factions: [FactionName.NWO],
   }),
   new Augmentation({
-    name: AugmentationNames.HydroflameLeftArm,
+    name: AugmentationName.HydroflameLeftArm,
     repCost: 1.25e6,
     moneyCost: 2.5e12,
     info:
@@ -1386,10 +1379,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "Even though it contains no weapons, the advanced tungsten titanium " +
       "alloy increases the user's strength to unbelievable levels.",
     strength: 2.8,
-    factions: [FactionNames.NWO],
+    factions: [FactionName.NWO],
   }),
   new Augmentation({
-    name: AugmentationNames.nextSENS,
+    name: AugmentationName.nextSENS,
     repCost: 4.375e5,
     moneyCost: 1.925e9,
     info:
@@ -1402,10 +1395,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     dexterity: 1.2,
     agility: 1.2,
     charisma: 1.2,
-    factions: [FactionNames.ClarkeIncorporated],
+    factions: [FactionName.ClarkeIncorporated],
   }),
   new Augmentation({
-    name: AugmentationNames.OmniTekInfoLoad,
+    name: AugmentationName.OmniTekInfoLoad,
     repCost: 6.25e5,
     moneyCost: 2.875e9,
     info:
@@ -1414,10 +1407,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "hacking abilities.",
     hacking: 1.2,
     hacking_exp: 1.25,
-    factions: [FactionNames.OmniTekIncorporated],
+    factions: [FactionName.OmniTekIncorporated],
   }),
   new Augmentation({
-    name: AugmentationNames.PhotosyntheticCells,
+    name: AugmentationName.PhotosyntheticCells,
     repCost: 5.625e5,
     moneyCost: 2.75e9,
     info:
@@ -1428,25 +1421,25 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     strength: 1.4,
     defense: 1.4,
     agility: 1.4,
-    factions: [FactionNames.KuaiGongInternational],
+    factions: [FactionName.KuaiGongInternational],
   }),
   new Augmentation({
-    name: AugmentationNames.Neurolink,
+    name: AugmentationName.Neurolink,
     repCost: 8.75e5,
     moneyCost: 4.375e9,
     info:
       "A brain implant that provides a high-bandwidth, direct neural link between your " +
-      `mind and the ${FactionNames.BitRunners}' data servers, which reportedly contain ` +
+      `mind and the ${FactionName.BitRunners}' data servers, which reportedly contain ` +
       "the largest database of hacking tools and information in the world.",
     hacking: 1.15,
     hacking_exp: 1.2,
     hacking_chance: 1.1,
     hacking_speed: 1.05,
     programs: [CompletedProgramName.ftpCrack, CompletedProgramName.relaySmtp],
-    factions: [FactionNames.BitRunners],
+    factions: [FactionName.BitRunners],
   }),
   new Augmentation({
-    name: AugmentationNames.TheBlackHand,
+    name: AugmentationName.TheBlackHand,
     repCost: 1e5,
     moneyCost: 5.5e8,
     info:
@@ -1459,10 +1452,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     hacking: 1.1,
     hacking_speed: 1.02,
     hacking_money: 1.1,
-    factions: [FactionNames.TheBlackHand],
+    factions: [FactionName.TheBlackHand],
   }),
   new Augmentation({
-    name: AugmentationNames.CRTX42AA,
+    name: AugmentationName.CRTX42AA,
     repCost: 4.5e4,
     moneyCost: 2.25e8,
     info:
@@ -1471,10 +1464,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "cortex and improves cognitive abilities.",
     hacking: 1.08,
     hacking_exp: 1.15,
-    factions: [FactionNames.NiteSec],
+    factions: [FactionName.NiteSec],
   }),
   new Augmentation({
-    name: AugmentationNames.Neuregen,
+    name: AugmentationName.Neuregen,
     repCost: 3.75e4,
     moneyCost: 3.75e8,
     info:
@@ -1482,10 +1475,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "resulting in neurons that never die, continuously " +
       "regenerate, and strengthen themselves.",
     hacking_exp: 1.4,
-    factions: [FactionNames.Chongqing],
+    factions: [FactionName.Chongqing],
   }),
   new Augmentation({
-    name: AugmentationNames.CashRoot,
+    name: AugmentationName.CashRoot,
     repCost: 1.25e4,
     moneyCost: 1.25e8,
     info: (
@@ -1496,10 +1489,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     ),
     startingMoney: 1e6,
     programs: [CompletedProgramName.bruteSsh],
-    factions: [FactionNames.Sector12],
+    factions: [FactionName.Sector12],
   }),
   new Augmentation({
-    name: AugmentationNames.NutriGen,
+    name: AugmentationName.NutriGen,
     repCost: 6.25e3,
     moneyCost: 2.5e6,
     info:
@@ -1511,10 +1504,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     defense_exp: 1.2,
     dexterity_exp: 1.2,
     agility_exp: 1.2,
-    factions: [FactionNames.NewTokyo],
+    factions: [FactionName.NewTokyo],
   }),
   new Augmentation({
-    name: AugmentationNames.PCMatrix,
+    name: AugmentationName.PCMatrix,
     repCost: 100e3,
     moneyCost: 2e9,
     info:
@@ -1529,20 +1522,20 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     crime_success: 1.0777,
     crime_money: 1.0777,
     programs: [CompletedProgramName.deepScan1, CompletedProgramName.autoLink],
-    factions: [FactionNames.Aevum],
+    factions: [FactionName.Aevum],
   }),
   new Augmentation({
-    name: AugmentationNames.INFRARet,
+    name: AugmentationName.INFRARet,
     repCost: 7.5e3,
     moneyCost: 3e7,
     info: "A tiny chip that sits behind the retina. This implant lets the user visually detect infrared radiation.",
     crime_success: 1.25,
     crime_money: 1.1,
     dexterity: 1.1,
-    factions: [FactionNames.Ishima],
+    factions: [FactionName.Ishima],
   }),
   new Augmentation({
-    name: AugmentationNames.DermaForce,
+    name: AugmentationName.DermaForce,
     repCost: 1.5e4,
     moneyCost: 5e7,
     info:
@@ -1550,38 +1543,38 @@ export const initGeneralAugmentations = (): Augmentation[] => [
       "millions of nanobots capable of projecting high-density muon beams, " +
       "creating an energy barrier around the user.",
     defense: 1.4,
-    factions: [FactionNames.Volhaven],
+    factions: [FactionName.Volhaven],
   }),
   new Augmentation({
-    name: AugmentationNames.GrapheneBrachiBlades,
+    name: AugmentationName.GrapheneBrachiBlades,
     repCost: 2.25e5,
     moneyCost: 2.5e9,
     info:
       "An upgrade to the BrachiBlades augmentation. It infuses " +
       "the retractable blades with an advanced graphene material " +
       "making them stronger and lighter.",
-    prereqs: [AugmentationNames.BrachiBlades],
+    prereqs: [AugmentationName.BrachiBlades],
     strength: 1.4,
     defense: 1.4,
     crime_success: 1.1,
     crime_money: 1.3,
-    factions: [FactionNames.SpeakersForTheDead],
+    factions: [FactionName.SpeakersForTheDead],
   }),
   new Augmentation({
-    name: AugmentationNames.GrapheneBionicArms,
+    name: AugmentationName.GrapheneBionicArms,
     repCost: 5e5,
     moneyCost: 3.75e9,
     info:
       "An upgrade to the Bionic Arms augmentation. It infuses the " +
       "prosthetic arms with an advanced graphene material " +
       "to make them stronger and lighter.",
-    prereqs: [AugmentationNames.BionicArms],
+    prereqs: [AugmentationName.BionicArms],
     strength: 1.85,
     dexterity: 1.85,
-    factions: [FactionNames.TheDarkArmy],
+    factions: [FactionName.TheDarkArmy],
   }),
   new Augmentation({
-    name: AugmentationNames.BrachiBlades,
+    name: AugmentationName.BrachiBlades,
     repCost: 1.25e4,
     moneyCost: 9e7,
     info: "A set of retractable plasteel blades that are implanted in the arm, underneath the skin.",
@@ -1589,19 +1582,19 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     defense: 1.15,
     crime_success: 1.1,
     crime_money: 1.15,
-    factions: [FactionNames.TheSyndicate],
+    factions: [FactionName.TheSyndicate],
   }),
   new Augmentation({
-    name: AugmentationNames.BionicArms,
+    name: AugmentationName.BionicArms,
     repCost: 6.25e4,
     moneyCost: 2.75e8,
     info: "Cybernetic arms created from plasteel and carbon fibers that completely replace the user's organic arms.",
     strength: 1.3,
     dexterity: 1.3,
-    factions: [FactionNames.Tetrads],
+    factions: [FactionName.Tetrads],
   }),
   new Augmentation({
-    name: AugmentationNames.SNA,
+    name: AugmentationName.SNA,
     repCost: 6.25e3,
     moneyCost: 3e7,
     info:
@@ -1610,10 +1603,10 @@ export const initGeneralAugmentations = (): Augmentation[] => [
     work_money: 1.1,
     company_rep: 1.15,
     faction_rep: 1.15,
-    factions: [FactionNames.TianDiHui],
+    factions: [FactionName.TianDiHui],
   }),
   new Augmentation({
-    name: AugmentationNames.NeuroreceptorManager,
+    name: AugmentationName.NeuroreceptorManager,
     repCost: 0.75e5,
     moneyCost: 5.5e8,
     info:
@@ -1627,7 +1620,7 @@ export const initGeneralAugmentations = (): Augmentation[] => [
         faction.
       </>
     ),
-    factions: [FactionNames.TianDiHui],
+    factions: [FactionName.TianDiHui],
   }),
 
   // new Augmentation({
@@ -1642,7 +1635,7 @@ export const initGeneralAugmentations = (): Augmentation[] => [
 
   // Grafting-exclusive Augmentation
   new Augmentation({
-    name: AugmentationNames.CongruityImplant,
+    name: AugmentationName.CongruityImplant,
     repCost: Infinity,
     moneyCost: 50e12,
     info: (
@@ -1661,7 +1654,7 @@ export const initGeneralAugmentations = (): Augmentation[] => [
 
   // Sleeve exclusive augmentations
   new Augmentation({
-    name: AugmentationNames.ZOE,
+    name: AugmentationName.ZOE,
     isSpecial: true,
     repCost: Infinity,
     moneyCost: 1e12,
@@ -1678,7 +1671,7 @@ export const initGeneralAugmentations = (): Augmentation[] => [
 
 export const initBladeburnerAugmentations = (): Augmentation[] => [
   new Augmentation({
-    name: AugmentationNames.EsperEyewear,
+    name: AugmentationName.EsperEyewear,
     repCost: 1.25e3,
     moneyCost: 1.65e8,
     info:
@@ -1693,10 +1686,10 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
     bladeburner_success_chance: 1.03,
     dexterity: 1.05,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.EMS4Recombination,
+    name: AugmentationName.EMS4Recombination,
     repCost: 2.5e3,
     moneyCost: 2.75e8,
     info:
@@ -1708,10 +1701,10 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
     bladeburner_analysis: 1.05,
     bladeburner_stamina_gain: 1.02,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.OrionShoulder,
+    name: AugmentationName.OrionShoulder,
     repCost: 6.25e3,
     moneyCost: 5.5e8,
     info:
@@ -1724,10 +1717,10 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
     dexterity: 1.05,
     bladeburner_success_chance: 1.04,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.HyperionV1,
+    name: AugmentationName.HyperionV1,
     repCost: 1.25e4,
     moneyCost: 2.75e9,
     info:
@@ -1739,10 +1732,10 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
       "and concussive force.",
     bladeburner_success_chance: 1.06,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.HyperionV2,
+    name: AugmentationName.HyperionV2,
     repCost: 2.5e4,
     moneyCost: 5.5e9,
     info:
@@ -1750,13 +1743,13 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
       "is more advanced and powerful than the original V1 model. This V2 model is " +
       "more power-efficient, more accurate, and can fire plasma bolts at a much " +
       "higher velocity than the V1 model.",
-    prereqs: [AugmentationNames.HyperionV1],
+    prereqs: [AugmentationName.HyperionV1],
     bladeburner_success_chance: 1.08,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.GolemSerum,
+    name: AugmentationName.GolemSerum,
     repCost: 3.125e4,
     moneyCost: 1.1e10,
     info:
@@ -1770,10 +1763,10 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
     agility: 1.07,
     bladeburner_stamina_gain: 1.05,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.VangelisVirus,
+    name: AugmentationName.VangelisVirus,
     repCost: 1.875e4,
     moneyCost: 2.75e9,
     info:
@@ -1783,10 +1776,10 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
     bladeburner_analysis: 1.1,
     bladeburner_success_chance: 1.04,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.VangelisVirus3,
+    name: AugmentationName.VangelisVirus3,
     repCost: 3.75e4,
     moneyCost: 1.1e10,
     info:
@@ -1794,16 +1787,16 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
       "injected into human brain tissue. On top of the benefits of the original " +
       "virus, this also grants accelerated healing and enhanced " +
       "reflexes.",
-    prereqs: [AugmentationNames.VangelisVirus],
+    prereqs: [AugmentationName.VangelisVirus],
     defense_exp: 1.1,
     dexterity_exp: 1.1,
     bladeburner_analysis: 1.15,
     bladeburner_success_chance: 1.05,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.INTERLINKED,
+    name: AugmentationName.INTERLINKED,
     repCost: 2.5e4,
     moneyCost: 5.5e9,
     info:
@@ -1817,14 +1810,14 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
     agility_exp: 1.05,
     bladeburner_max_stamina: 1.1,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.BladeRunner,
+    name: AugmentationName.BladeRunner,
     repCost: 2e4,
     moneyCost: 8.25e9,
     info:
-      `A cybernetic foot augmentation that was specifically created for ${FactionNames.Bladeburners} ` +
+      `A cybernetic foot augmentation that was specifically created for ${FactionName.Bladeburners} ` +
       "during the Synthoid Uprising. The organic musculature of the human foot " +
       "is enhanced with flexible carbon nanotube matrices that are controlled by " +
       "intelligent servo-motors.",
@@ -1832,14 +1825,14 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
     bladeburner_max_stamina: 1.05,
     bladeburner_stamina_gain: 1.05,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.BladeArmor,
+    name: AugmentationName.BladeArmor,
     repCost: 1.25e4,
     moneyCost: 1.375e9,
     info:
-      `A powered exoskeleton suit designed as armor for ${FactionNames.Bladeburners} units. This ` +
+      `A powered exoskeleton suit designed as armor for ${FactionName.Bladeburners} units. This ` +
       "exoskeleton is incredibly adaptable and can protect the wearer from blunt, piercing, " +
       "concussive, thermal, chemical, and electric trauma. It also enhances the user's " +
       "physical abilities.",
@@ -1850,50 +1843,50 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
     bladeburner_stamina_gain: 1.02,
     bladeburner_success_chance: 1.03,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.BladeArmorPowerCells,
+    name: AugmentationName.BladeArmorPowerCells,
     repCost: 1.875e4,
     moneyCost: 2.75e9,
     info:
       "Upgrades the BLADE-51b Tesla Armor with Ion Power Cells, which are capable of " +
       "more efficiently storing and using power.",
-    prereqs: [AugmentationNames.BladeArmor],
+    prereqs: [AugmentationName.BladeArmor],
     bladeburner_success_chance: 1.05,
     bladeburner_stamina_gain: 1.02,
     bladeburner_max_stamina: 1.05,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.BladeArmorEnergyShielding,
+    name: AugmentationName.BladeArmorEnergyShielding,
     repCost: 2.125e4,
     moneyCost: 5.5e9,
     info:
       "Upgrades the BLADE-51b Tesla Armor with a plasma energy propulsion system " +
       "that is capable of projecting an energy shielding force field.",
-    prereqs: [AugmentationNames.BladeArmor],
+    prereqs: [AugmentationName.BladeArmor],
     defense: 1.05,
     bladeburner_success_chance: 1.06,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.BladeArmorUnibeam,
+    name: AugmentationName.BladeArmorUnibeam,
     repCost: 3.125e4,
     moneyCost: 1.65e10,
     info:
       "Upgrades the BLADE-51b Tesla Armor with a concentrated deuterium-fluoride laser " +
       "weapon. It's precision and accuracy makes it useful for quickly neutralizing " +
       "threats while keeping casualties to a minimum.",
-    prereqs: [AugmentationNames.BladeArmor],
+    prereqs: [AugmentationName.BladeArmor],
     bladeburner_success_chance: 1.08,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.BladeArmorOmnibeam,
+    name: AugmentationName.BladeArmorOmnibeam,
     repCost: 6.25e4,
     moneyCost: 2.75e10,
     info:
@@ -1901,27 +1894,27 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
       "multiple-fiber system. This upgraded weapon uses multiple fiber laser " +
       "modules that combine together to form a single, more powerful beam of up to " +
       "2000MW.",
-    prereqs: [AugmentationNames.BladeArmorUnibeam],
+    prereqs: [AugmentationName.BladeArmorUnibeam],
     bladeburner_success_chance: 1.1,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.BladeArmorIPU,
+    name: AugmentationName.BladeArmorIPU,
     repCost: 1.5e4,
     moneyCost: 1.1e9,
     info:
       "Upgrades the BLADE-51b Tesla Armor with an AI Information Processing " +
       "Unit that was specially designed to analyze Synthoid related data and " +
       "information.",
-    prereqs: [AugmentationNames.BladeArmor],
+    prereqs: [AugmentationName.BladeArmor],
     bladeburner_analysis: 1.15,
     bladeburner_success_chance: 1.02,
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
   new Augmentation({
-    name: AugmentationNames.BladesSimulacrum,
+    name: AugmentationName.BladesSimulacrum,
     repCost: 1.25e3,
     moneyCost: 1.5e11,
     info:
@@ -1937,13 +1930,13 @@ export const initBladeburnerAugmentations = (): Augmentation[] => [
       </>
     ),
     isSpecial: true,
-    factions: [FactionNames.Bladeburners],
+    factions: [FactionName.Bladeburners],
   }),
 ];
 
 export const initChurchOfTheMachineGodAugmentations = (): Augmentation[] => [
   new Augmentation({
-    name: AugmentationNames.StaneksGift1,
+    name: AugmentationName.StaneksGift1,
     repCost: 0,
     moneyCost: 0,
     info:
@@ -1979,17 +1972,17 @@ export const initChurchOfTheMachineGodAugmentations = (): Augmentation[] => [
     hacknet_node_level_cost: 1.1,
     work_money: 0.9,
     stats: <>Its unstable nature decreases all your stats by 10%</>,
-    factions: [FactionNames.ChurchOfTheMachineGod],
+    factions: [FactionName.ChurchOfTheMachineGod],
   }),
   new Augmentation({
-    name: AugmentationNames.StaneksGift2,
+    name: AugmentationName.StaneksGift2,
     repCost: 1e6,
     moneyCost: 0,
     info:
       "The next evolution is near, a coming together of man and machine. A synthesis greater than the birth of the human " +
       "organism. Time spent with the gift has allowed for acclimatization of the invasive augment and the toll it takes upon " +
       "your frame granting a 5% reduced penalty to all stats.",
-    prereqs: [AugmentationNames.StaneksGift1],
+    prereqs: [AugmentationName.StaneksGift1],
     isSpecial: true,
     hacking_chance: 0.95 / 0.9,
     hacking_speed: 0.95 / 0.9,
@@ -2018,10 +2011,10 @@ export const initChurchOfTheMachineGodAugmentations = (): Augmentation[] => [
     hacknet_node_level_cost: 1.05 / 1.1,
     work_money: 0.95 / 0.9,
     stats: <>The penalty for the gift is reduced to 5%</>,
-    factions: [FactionNames.ChurchOfTheMachineGod],
+    factions: [FactionName.ChurchOfTheMachineGod],
   }),
   new Augmentation({
-    name: AugmentationNames.StaneksGift3,
+    name: AugmentationName.StaneksGift3,
     repCost: 1e8,
     moneyCost: 0,
     info:
@@ -2029,7 +2022,7 @@ export const initChurchOfTheMachineGodAugmentations = (): Augmentation[] => [
       "You will become greater than the sum of our parts. As One. Embrace your gift " +
       "fully and wholly free of it's accursed toll. Serenity brings tranquility in the form " +
       "of no longer suffering a stat penalty. ",
-    prereqs: [AugmentationNames.StaneksGift2, AugmentationNames.StaneksGift1],
+    prereqs: [AugmentationName.StaneksGift2, AugmentationName.StaneksGift1],
     isSpecial: true,
     hacking_chance: 1 / 0.95,
     hacking_speed: 1 / 0.95,
@@ -2058,10 +2051,10 @@ export const initChurchOfTheMachineGodAugmentations = (): Augmentation[] => [
     hacknet_node_level_cost: 1 / 1.05,
     work_money: 1 / 0.95,
     stats: <>Stanek's Gift has no penalty.</>,
-    factions: [FactionNames.ChurchOfTheMachineGod],
+    factions: [FactionName.ChurchOfTheMachineGod],
   }),
   new Augmentation({
-    name: AugmentationNames.BigDsBigBrain,
+    name: AugmentationName.BigDsBigBrain,
     isSpecial: true,
     factions: [],
     repCost: Infinity,
@@ -2121,7 +2114,7 @@ export const initChurchOfTheMachineGodAugmentations = (): Augmentation[] => [
 export function initNeuroFluxGovernor(): Augmentation {
   const donationBonus = CONSTANTS.Donations / 1e6 / 100; // 1 millionth of a percent per donation
   return new Augmentation({
-    name: AugmentationNames.NeuroFluxGovernor,
+    name: AugmentationName.NeuroFluxGovernor,
     repCost: 500,
     moneyCost: 750e3,
     info:
@@ -2161,9 +2154,9 @@ export function initNeuroFluxGovernor(): Augmentation {
     hacknet_node_core_cost: 1 / (1.01 + donationBonus),
     hacknet_node_level_cost: 1 / (1.01 + donationBonus),
     work_money: 1.01 + donationBonus,
-    factions: Object.values(FactionNames).filter(
+    factions: Object.values(FactionName).filter(
       (factionName) =>
-        ![FactionNames.ShadowsOfAnarchy, FactionNames.Bladeburners, FactionNames.ChurchOfTheMachineGod].includes(
+        ![FactionName.ShadowsOfAnarchy, FactionName.Bladeburners, FactionName.ChurchOfTheMachineGod].includes(
           factionName,
         ),
     ),
@@ -2175,13 +2168,13 @@ export function initUnstableCircadianModulator(): Augmentation {
   const randomBonuses = getRandomBonus();
 
   const UnstableCircadianModulatorParams: IConstructorParams = {
-    name: AugmentationNames.UnstableCircadianModulator,
+    name: AugmentationName.UnstableCircadianModulator,
     moneyCost: 5e9,
     repCost: 3.625e5,
     info:
       "An experimental nanobot injection. Its unstable nature leads to " +
       "unpredictable results based on your circadian rhythm.",
-    factions: [FactionNames.SpeakersForTheDead],
+    factions: [FactionName.SpeakersForTheDead],
   };
   Object.keys(randomBonuses.bonuses).forEach(
     (key) => ((UnstableCircadianModulatorParams as any)[key] = randomBonuses.bonuses[key]),

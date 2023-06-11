@@ -23,8 +23,8 @@ export const applySleeveGains = (sleeve: Sleeve, shockedStats: WorkStats, mult =
   Player.sleeves.forEach((s) => s !== sleeve && applyWorkStatsExp(s, shockedStats, mult * sync * s.shockBonus()));
 };
 
-export abstract class Work {
-  abstract type: WorkType;
+export abstract class SleeveWorkClass {
+  abstract type: SleeveWorkType;
   abstract process(sleeve: Sleeve, cycles: number): void;
   abstract APICopy(sleeve: Sleeve): SleeveTask;
   abstract toJSON(): IReviverValue;
@@ -33,7 +33,7 @@ export abstract class Work {
   }
 }
 
-export enum WorkType {
+export enum SleeveWorkType {
   COMPANY = "COMPANY",
   FACTION = "FACTION",
   CRIME = "CRIME",

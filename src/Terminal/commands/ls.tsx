@@ -1,3 +1,9 @@
+import type { TextFilePath } from "../../Paths/TextFilePath";
+import type { ContractFilePath } from "../../Paths/ContractFilePath";
+import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
+import type { ContentFilePath } from "../../Paths/ContentFile";
+import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
+
 import { Theme } from "@mui/material/styles";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
@@ -7,10 +13,8 @@ import { Router } from "../../ui/GameRoot";
 import { Terminal } from "../../Terminal";
 import libarg from "arg";
 import { showLiterature } from "../../Literature/LiteratureHelpers";
-import { MessageFilename, showMessage } from "../../Message/MessageHelpers";
-import { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { showMessage } from "../../Message/MessageHelpers";
 import { FilePath, combinePath, removeDirectoryFromPath } from "../../Paths/FilePath";
-import { ContentFilePath } from "../../Paths/ContentFile";
 import {
   Directory,
   directoryExistsOnServer,
@@ -18,11 +22,8 @@ import {
   resolveDirectory,
   root,
 } from "../../Paths/Directory";
-import { TextFilePath } from "../../Paths/TextFilePath";
-import { ContractFilePath } from "../../Paths/ContractFilePath";
-import { ProgramFilePath } from "../../Paths/ProgramFilePath";
 import { checkEnum } from "../../utils/helpers/enum";
-import { LiteratureName } from "../../Literature/data/LiteratureNames";
+import { LiteratureName, MessageFilename } from "@enums";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer): void {
   interface LSFlags {

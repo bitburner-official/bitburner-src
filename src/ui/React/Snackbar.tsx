@@ -1,3 +1,5 @@
+import type { ToastVariant } from "@enums";
+
 import React, { useEffect } from "react";
 import { useSnackbar, SnackbarProvider as SB } from "notistack";
 import makeStyles from "@mui/styles/makeStyles";
@@ -8,13 +10,6 @@ import { logBoxBaseZIndex } from "./LogBoxManager";
 
 interface IProps {
   children: React.ReactNode | React.ReactNode[];
-}
-
-export enum ToastVariant {
-  SUCCESS = "success",
-  WARNING = "warning",
-  ERROR = "error",
-  INFO = "info",
 }
 
 const useStyles = makeStyles(() => ({

@@ -1,6 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { KEY } from "../../utils/helpers/keyCodes";
@@ -63,7 +63,7 @@ export function WireCuttingGame(props: IMinigameProps): React.ReactElement {
   const [wires] = useState(generateWires(difficulty));
   const [cutWires, setCutWires] = useState(new Array(wires.length).fill(false));
   const [questions] = useState(generateQuestion(wires, difficulty));
-  const hasAugment = Player.hasAugmentation(AugmentationNames.KnowledgeOfApollo, true);
+  const hasAugment = Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true);
 
   function checkWire(wireNum: number): boolean {
     return questions.some((q) => q.shouldCut(wires[wireNum - 1], wireNum - 1));

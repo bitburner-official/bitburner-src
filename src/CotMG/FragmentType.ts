@@ -1,3 +1,4 @@
+// Numeric enum
 export enum FragmentType {
   // Special fragments for the UI
   None,

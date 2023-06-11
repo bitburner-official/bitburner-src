@@ -17,7 +17,7 @@ import { Box } from "@mui/material";
 
 import { ClassWork, Classes } from "../../Work/ClassWork";
 import { calculateCost } from "../../Work/Formulas";
-import { UniversityClassType } from "../../Enums";
+import { UniversityClassType } from "@enums";
 
 interface IProps {
   loc: Location;

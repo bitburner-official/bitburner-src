@@ -3,7 +3,7 @@ import { Crime } from "../Crime/Crime";
 import { newWorkStats, scaleWorkStats, WorkStats, multWorkStats } from "./WorkStats";
 import { Person as IPerson } from "@nsdefs";
 import { CONSTANTS } from "../Constants";
-import { FactionWorkType, GymType } from "../Enums";
+import { ClassType, FactionWorkType, GymType, LocationName } from "@enums";
 import {
   getFactionFieldWorkRepGain,
   getFactionSecurityWorkRepGain,
@@ -12,11 +12,10 @@ import {
 import { Locations } from "../Locations/Locations";
 import { Location } from "../Locations/Location";
 import { Player } from "@player";
-import { Class, Classes, ClassType } from "./ClassWork";
+import { Class, Classes } from "./ClassWork";
 import { Server } from "../Server/Server";
 import { GetServer } from "../Server/AllServers";
 import { serverMetadata } from "../Server/data/servers";
-import { LocationName } from "../Enums";
 import { Company } from "../Company/Company";
 import { CompanyPosition } from "../Company/CompanyPosition";
 import { checkEnum } from "../utils/helpers/enum";

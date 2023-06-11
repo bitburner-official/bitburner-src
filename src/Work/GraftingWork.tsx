@@ -1,6 +1,6 @@
 import React from "react";
 import { CONSTANTS } from "../Constants";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { GraftableAugmentations } from "../PersonObjects/Grafting/ui/GraftingRoot";
 import { Player } from "@player";
 import { Work, WorkType } from "./Work";
@@ -25,7 +25,7 @@ export class GraftingWork extends Work {
   constructor(params?: GraftingWorkParams) {
     super(WorkType.GRAFTING, params?.singularity ?? true);
     this.unitCompleted = 0;
-    this.augmentation = params?.augmentation ?? AugmentationNames.Targeting1;
+    this.augmentation = params?.augmentation ?? AugmentationName.Targeting1;
     const gAugs = GraftableAugmentations();
     if (params) Player.loseMoney(gAugs[this.augmentation].cost, "augmentations");
   }
@@ -36,7 +36,7 @@ export class GraftingWork extends Work {
 
   process(cycles: number): boolean {
     let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationNames.NeuroreceptorManager, true)) {
+    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
       focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
     }
 
@@ -51,7 +51,7 @@ export class GraftingWork extends Work {
     if (!cancelled) {
       applyAugmentation({ name: augName, level: 1 });
 
-      if (!Player.hasAugmentation(AugmentationNames.CongruityImplant, true)) {
+      if (!Player.hasAugmentation(AugmentationName.CongruityImplant, true)) {
         Player.entropy += 1;
         Player.applyEntropy(Player.entropy);
       }
@@ -61,7 +61,7 @@ export class GraftingWork extends Work {
           <>
             You've finished grafting {augName}.<br />
             The augmentation has been applied to your body{" "}
-            {Player.hasAugmentation(AugmentationNames.CongruityImplant, true) ? "." : ", but you feel a bit off."}
+            {Player.hasAugmentation(AugmentationName.CongruityImplant, true) ? "." : ", but you feel a bit off."}
           </>,
         );
       }

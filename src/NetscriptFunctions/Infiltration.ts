@@ -1,4 +1,6 @@
-import { Infiltration as IInfiltration, InfiltrationLocation } from "@nsdefs";
+import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import { Infiltration as NetscriptInfiltation, InfiltrationLocation } from "@nsdefs";
+import { FactionName, LocationName } from "@enums";
 import { Location } from "../Locations/Location";
 import { Locations } from "../Locations/Locations";
 import { calculateDifficulty, calculateReward } from "../Infiltration/formulas/game";
@@ -7,15 +9,12 @@ import {
   calculateSellInformationCashReward,
   calculateTradeInformationRepReward,
 } from "../Infiltration/formulas/victory";
-import { FactionNames } from "../Faction/data/FactionNames";
 import { Factions } from "../Faction/Factions";
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { checkEnum } from "../utils/helpers/enum";
-import { LocationName } from "../Enums";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { filterTruthy } from "../utils/helpers/ArrayHelpers";
 
-export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
+export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
   const getLocationsWithInfiltrations = Object.values(Locations).filter(
     (location: Location) => location.infiltrationData,
   );
@@ -35,7 +34,7 @@ export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
       reward: {
         tradeRep: calculateTradeInformationRepReward(reward, maxLevel, startingSecurityLevel),
         sellCash: calculateSellInformationCashReward(reward, maxLevel, startingSecurityLevel),
-        SoARep: calculateInfiltratorsRepReward(Factions[FactionNames.ShadowsOfAnarchy], startingSecurityLevel),
+        SoARep: calculateInfiltratorsRepReward(Factions[FactionName.ShadowsOfAnarchy], startingSecurityLevel),
       },
       difficulty: difficulty,
     };

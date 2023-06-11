@@ -1,8 +1,8 @@
 import React from "react";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { CONSTANTS } from "../Constants";
-import { LocationName } from "../Enums";
 import { formatExp } from "../ui/formatNumber";
+import { ClassType, GymType, LocationName, UniversityClassType } from "@enums";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Money } from "../ui/React/Money";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
@@ -10,10 +10,7 @@ import { Player } from "@player";
 import { calculateClassEarnings as calculateClassEarningsRate } from "./Formulas";
 import { Work, WorkType } from "./Work";
 import { applyWorkStats, newWorkStats, sumWorkStats, WorkStats } from "./WorkStats";
-import { GymType, UniversityClassType } from "../Enums";
 import { checkEnum, findEnumMember } from "../utils/helpers/enum";
-
-export type ClassType = UniversityClassType | GymType;
 
 export interface Class {
   type: ClassType;

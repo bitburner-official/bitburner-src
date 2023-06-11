@@ -1,8 +1,9 @@
-import { ScriptFilePath } from "../Paths/ScriptFilePath";
-import { TextFilePath } from "../Paths/TextFilePath";
-import { Faction } from "../Faction/Faction";
-import { Location } from "../Locations/Location";
+import type { ScriptFilePath } from "../Paths/ScriptFilePath";
+import type { TextFilePath } from "../Paths/TextFilePath";
+import type { Faction } from "../Faction/Faction";
+import type { Location } from "../Locations/Location";
 
+// These enums don't need enum helper support for now
 /**
  * The full-screen page the player is currently be on.
  * These are "simple" pages that don't require any extra parameters to

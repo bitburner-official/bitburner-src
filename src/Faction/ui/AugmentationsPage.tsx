@@ -3,7 +3,7 @@ import React from "react";
 
 import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
 import { getGenericAugmentationPriceMultiplier } from "../../Augmentation/AugmentationHelpers";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName, FactionName } from "@enums";
 import { PurchasableAugmentations } from "../../Augmentation/ui/PurchasableAugmentations";
 import { PurchaseAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
@@ -11,7 +11,6 @@ import { Player } from "@player";
 import { formatBigNumber } from "../../ui/formatNumber";
 import { Favor } from "../../ui/React/Favor";
 import { Reputation } from "../../ui/React/Reputation";
-import { FactionNames } from "../data/FactionNames";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, hasAugmentationPrereqs, purchaseAugmentation } from "../FactionHelpers";
 import { CONSTANTS } from "../../Constants";
@@ -121,13 +120,13 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
   const augs = getAugsSorted();
   const purchasable = augs.filter(
     (aug: string) =>
-      aug === AugmentationNames.NeuroFluxGovernor ||
+      aug === AugmentationName.NeuroFluxGovernor ||
       (!Player.augmentations.some((a) => a.name === aug) && !Player.queuedAugmentations.some((a) => a.name === aug)),
   );
   const owned = augs.filter((aug: string) => !purchasable.includes(aug));
 
   const multiplierComponent =
-    props.faction.name !== FactionNames.ShadowsOfAnarchy ? (
+    props.faction.name !== FactionName.ShadowsOfAnarchy ? (
       <Tooltip
         title={
           <Typography>
@@ -144,7 +143,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            This price multiplier increases for each {FactionNames.ShadowsOfAnarchy} augmentation already purchased. The
+            This price multiplier increases for each {FactionName.ShadowsOfAnarchy} augmentation already purchased. The
             multiplier is NOT reset when installing augmentations.
           </Typography>
         }
@@ -183,7 +182,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: `repeat(${props.faction.name === FactionNames.ShadowsOfAnarchy ? "2" : "3"}, 1fr)`,
+              gridTemplateColumns: `repeat(${props.faction.name === FactionName.ShadowsOfAnarchy ? "2" : "3"}, 1fr)`,
               justifyItems: "center",
               my: 1,
             }}

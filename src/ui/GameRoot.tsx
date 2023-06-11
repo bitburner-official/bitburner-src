@@ -1,10 +1,16 @@
+import type { ScriptFilePath } from "../Paths/ScriptFilePath";
+import type { TextFilePath } from "../Paths/TextFilePath";
+
 import React, { useState, useEffect } from "react";
+import { createStyles, makeStyles } from "@mui/styles";
+import { Box, Typography } from "@mui/material";
+import { Theme } from "@mui/material/styles";
 
 import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { saveObject } from "../SaveObject";
 import { onExport } from "../ExportBonus";
-import { LocationName } from "../Enums";
+import { LocationName } from "@enums";
 import { Location } from "../Locations/Location";
 import { ITutorial, iTutorialStart } from "../InteractiveTutorial";
 import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutorialRoot";
@@ -16,12 +22,6 @@ import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
 import { Factions } from "../Faction/Factions";
 import { StockMarket } from "../StockMarket/StockMarket";
-
-import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 
 import { Page, SimplePage, IRouter } from "./Router";
 import { Overview } from "./React/Overview";
@@ -76,8 +76,6 @@ import { isFactionWork } from "../Work/FactionWork";
 import { V2Modal } from "../utils/V2Modal";
 import { MathJaxContext } from "better-react-mathjax";
 import { useRerender } from "./React/hooks";
-import { ScriptFilePath } from "src/Paths/ScriptFilePath";
-import { TextFilePath } from "src/Paths/TextFilePath";
 
 const htmlLocation = location;
 
