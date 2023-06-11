@@ -1,24 +1,27 @@
-import { Box, Container, Paper, Table, TableBody, Tooltip } from "@mui/material";
+import React from "react";
+
+import { Box, Container, Paper, Table, TableBody, TableRow, TableCell, Tooltip } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { uniqueId } from "lodash";
-import React from "react";
-import { Companies } from "../Company/Companies";
-import { CONSTANTS } from "../Constants";
-import { FactionWorkType, LocationName } from "@enums";
-import { Locations } from "../Locations/Locations";
-import { Settings } from "../Settings/Settings";
-import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
+
 import { Player } from "@player";
-import { Router } from "./GameRoot";
-import { Page } from "./Router";
-import { formatExp, formatPercent } from "./formatNumber";
+import { FactionWorkType, LocationName } from "@enums";
+
 import { Money } from "./React/Money";
 import { MoneyRate } from "./React/MoneyRate";
 import { ProgressBar } from "./React/Progress";
 import { Reputation } from "./React/Reputation";
 import { ReputationRate } from "./React/ReputationRate";
 import { StatsRow } from "./React/StatsRow";
+import { useRerender } from "./React/hooks";
+
+import { Companies } from "../Company/Companies";
+import { CONSTANTS } from "../Constants";
+import { Locations } from "../Locations/Locations";
+import { Settings } from "../Settings/Settings";
+import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
+import { filterTruthy } from "../utils/helpers/ArrayHelpers";
+
 import { isCrimeWork } from "../Work/CrimeWork";
 import { isClassWork } from "../Work/ClassWork";
 import { WorkStats } from "../Work/WorkStats";
@@ -26,7 +29,9 @@ import { isCreateProgramWork } from "../Work/CreateProgramWork";
 import { isGraftingWork } from "../Work/GraftingWork";
 import { isFactionWork } from "../Work/FactionWork";
 import { isCompanyWork } from "../Work/CompanyWork";
-import { useRerender } from "./React/hooks";
+import { Router } from "./GameRoot";
+import { Page } from "./Router";
+import { formatExp, formatPercent } from "./formatNumber";
 
 const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
 
@@ -38,7 +43,7 @@ interface IWorkInfo {
   title: string | React.ReactElement;
 
   description?: string | React.ReactElement;
-  gains?: (string | React.ReactElement)[];
+  gains?: React.ReactElement[];
   progress?: {
     elapsed?: number;
     remaining?: number;
@@ -50,146 +55,134 @@ interface IWorkInfo {
 }
 
 function ExpRows(rate: WorkStats): React.ReactElement[] {
-  return [
-    rate.hackExp > 0 ? (
+  return filterTruthy([
+    rate.hackExp > 0 && (
       <StatsRow
+        key="hack"
         name="Hacking Exp"
         color={Settings.theme.hack}
         data={{
           content: `${formatExp(rate.hackExp * CYCLES_PER_SEC)} / sec`,
         }}
       />
-    ) : (
-      <></>
     ),
-    rate.strExp > 0 ? (
+    rate.strExp > 0 && (
       <StatsRow
+        key="str"
         name="Strength Exp"
         color={Settings.theme.combat}
         data={{
           content: `${formatExp(rate.strExp * CYCLES_PER_SEC)} / sec`,
         }}
       />
-    ) : (
-      <></>
     ),
-    rate.defExp > 0 ? (
+    rate.defExp > 0 && (
       <StatsRow
+        key="def"
         name="Defense Exp"
         color={Settings.theme.combat}
         data={{
           content: `${formatExp(rate.defExp * CYCLES_PER_SEC)} / sec`,
         }}
       />
-    ) : (
-      <></>
     ),
-    rate.dexExp > 0 ? (
+    rate.dexExp > 0 && (
       <StatsRow
+        key="dex"
         name="Dexterity Exp"
         color={Settings.theme.combat}
         data={{
           content: `${formatExp(rate.dexExp * CYCLES_PER_SEC)} / sec`,
         }}
       />
-    ) : (
-      <></>
     ),
-    rate.agiExp > 0 ? (
+    rate.agiExp > 0 && (
       <StatsRow
+        key="agi"
         name="Agility Exp"
         color={Settings.theme.combat}
         data={{
           content: `${formatExp(rate.agiExp * CYCLES_PER_SEC)} / sec`,
         }}
       />
-    ) : (
-      <></>
     ),
-    rate.chaExp > 0 ? (
+    rate.chaExp > 0 && (
       <StatsRow
+        key="cha"
         name="Charisma Exp"
         color={Settings.theme.cha}
         data={{
           content: `${formatExp(rate.chaExp * CYCLES_PER_SEC)} / sec`,
         }}
       />
-    ) : (
-      <></>
     ),
-  ];
+  ]);
 }
 
 /* Because crime exp is given all at once at the end, we don't care about the cycles per second. */
 function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
-  return [
-    rate.hackExp > 0 ? (
+  return filterTruthy([
+    rate.hackExp > 0 && (
       <StatsRow
+        key="hack"
         name="Hacking Exp"
         color={Settings.theme.hack}
         data={{
           content: `${formatExp(rate.hackExp)}`,
         }}
       />
-    ) : (
-      <></>
     ),
-    rate.strExp > 0 ? (
+    rate.strExp > 0 && (
       <StatsRow
+        key="str"
         name="Strength Exp"
         color={Settings.theme.combat}
         data={{
           content: `${formatExp(rate.strExp)}`,
         }}
       />
-    ) : (
-      <></>
     ),
-    rate.defExp > 0 ? (
+    rate.defExp > 0 && (
       <StatsRow
+        key="def"
         name="Defense Exp"
         color={Settings.theme.combat}
         data={{
           content: `${formatExp(rate.defExp)}`,
         }}
       />
-    ) : (
-      <></>
     ),
-    rate.dexExp > 0 ? (
+    rate.dexExp > 0 && (
       <StatsRow
+        key="dex"
         name="Dexterity Exp"
         color={Settings.theme.combat}
         data={{
           content: `${formatExp(rate.dexExp)}`,
         }}
       />
-    ) : (
-      <></>
     ),
-    rate.agiExp > 0 ? (
+    rate.agiExp > 0 && (
       <StatsRow
+        key="agi"
         name="Agility Exp"
         color={Settings.theme.combat}
         data={{
           content: `${formatExp(rate.agiExp)}`,
         }}
       />
-    ) : (
-      <></>
     ),
-    rate.chaExp > 0 ? (
+    rate.chaExp > 0 && (
       <StatsRow
+        key="cha"
         name="Charisma Exp"
         color={Settings.theme.cha}
         data={{
           content: `${formatExp(rate.chaExp)}`,
         }}
       />
-    ) : (
-      <></>
     ),
-  ];
+  ]);
 }
 
 export function WorkInProgressRoot(): React.ReactElement {
@@ -227,9 +220,15 @@ export function WorkInProgressRoot(): React.ReactElement {
       title: `You are attempting ${crime.workName}`,
 
       gains: [
-        <Typography>Success chance: {formatPercent(successChance)}</Typography>,
-        <Typography>Gains (on success)</Typography>,
-        <StatsRow name="Money:" color={Settings.theme.money}>
+        <TableRow key="header">
+          <TableCell>
+            <Typography>Success chance: ${formatPercent(successChance)}</Typography>
+          </TableCell>
+          <TableCell>
+            <Typography>Gains (on success)</Typography>
+          </TableCell>
+        </TableRow>,
+        <StatsRow key="money" name="Money:" color={Settings.theme.money}>
           <Typography>
             <Money money={gains.money} />
           </Typography>
@@ -274,7 +273,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       ),
 
       gains: [
-        <StatsRow name="Total Cost" color={Settings.theme.money}>
+        <StatsRow key="totalCost" name="Total Cost" color={Settings.theme.money}>
           <Typography>
             <Money money={classWork.earnings.money} /> (<MoneyRate money={rates.money * CYCLES_PER_SEC} />)
           </Typography>
@@ -451,12 +450,12 @@ export function WorkInProgressRoot(): React.ReactElement {
         </>
       ),
       gains: [
-        <StatsRow name="Money" color={Settings.theme.money}>
+        <StatsRow key="money" name="Money" color={Settings.theme.money}>
           <Typography>
             <MoneyRate money={gains.money * CYCLES_PER_SEC} />
           </Typography>
         </StatsRow>,
-        <StatsRow name="Company Reputation" color={Settings.theme.rep}>
+        <StatsRow key="reputation" name="Company Reputation" color={Settings.theme.rep}>
           <Typography>
             <ReputationRate reputation={gains.reputation * CYCLES_PER_SEC} />
           </Typography>
@@ -492,11 +491,7 @@ export function WorkInProgressRoot(): React.ReactElement {
         <Typography>{workInfo.description}</Typography>
         {workInfo.gains && (
           <Table sx={{ mt: 1 }}>
-            <TableBody>
-              {workInfo.gains.map((row) => (
-                <React.Fragment key={uniqueId()}>{row}</React.Fragment>
-              ))}
-            </TableBody>
+            <TableBody>{workInfo.gains}</TableBody>
           </Table>
         )}
       </Paper>
