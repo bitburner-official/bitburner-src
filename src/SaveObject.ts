@@ -1,3 +1,5 @@
+import { Skills } from "@nsdefs";
+
 import { loadAliases, loadGlobalAliases, Aliases, GlobalAliases } from "./Alias";
 import { Companies, loadCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
@@ -60,7 +62,7 @@ export interface ImportPlayerData {
   totalPlaytime: number;
 
   money: number;
-  hacking: number;
+  skills: Skills;
 
   augmentations: number;
   factions: number;
@@ -222,7 +224,7 @@ class BitburnerSaveObject {
       totalPlaytime: importedPlayer.totalPlaytime,
 
       money: importedPlayer.money,
-      hacking: importedPlayer.skills.hacking,
+      skills: importedPlayer.skills,
 
       augmentations: importedPlayer.augmentations?.reduce<number>((total, current) => (total += current.level), 0) ?? 0,
       factions: importedPlayer.factions?.length ?? 0,

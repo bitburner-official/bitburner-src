@@ -25,6 +25,8 @@ import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import WarningIcon from "@mui/icons-material/Warning";
 
+import { Skills } from "@nsdefs";
+
 import { ImportData, saveObject } from "../../SaveObject";
 import { Settings } from "../../Settings/Settings";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
@@ -72,6 +74,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
+
+    skillTitle: {
+      textTransform: "capitalize",
+    },
   }),
 );
 
@@ -102,6 +108,8 @@ function ComparisonIcon({ isBetter }: { isBetter: boolean }): JSX.Element {
     );
   }
 }
+
+const playerSkills: (keyof Skills)[] = ["hacking", "strength", "defense", "dexterity", "agility", "charisma"];
 
 export interface IProps {
   importString: string;
@@ -154,6 +162,7 @@ export function ImportSaveRoot(props: IProps): JSX.Element {
   }, [props.importString]);
 
   if (!importData || !currentData) return <></>;
+
   return (
     <Box className={classes.root}>
       <Typography variant="h4" sx={{ mb: 2 }}>
@@ -242,18 +251,20 @@ export function ImportSaveRoot(props: IProps): JSX.Element {
               </TableCell>
             </TableRow>
 
-            <TableRow>
-              <TableCell>Hacking</TableCell>
-              <TableCell>{formatNumberNoSuffix(currentData.playerData?.hacking ?? 0, 0)}</TableCell>
-              <TableCell>{formatNumberNoSuffix(importData.playerData?.hacking ?? 0, 0)}</TableCell>
-              <TableCell>
-                {importData.playerData?.hacking !== currentData.playerData?.hacking && (
-                  <ComparisonIcon
-                    isBetter={(importData.playerData?.hacking ?? 0) > (currentData.playerData?.hacking ?? 0)}
-                  />
-                )}
-              </TableCell>
-            </TableRow>
+            {playerSkills.map((skill) => {
+              const currentSkill = currentData.playerData?.skills[skill] ?? 0;
+              const importSkill = importData.playerData?.skills[skill] ?? 0;
+              return (
+                <TableRow key={skill}>
+                  <TableCell className={classes.skillTitle}>{skill}</TableCell>
+                  <TableCell>{formatNumberNoSuffix(currentSkill, 0)}</TableCell>
+                  <TableCell>{formatNumberNoSuffix(importSkill, 0)}</TableCell>
+                  <TableCell>
+                    {currentSkill !== importSkill && <ComparisonIcon isBetter={importSkill > currentSkill} />}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
 
             <TableRow>
               <TableCell>Augmentations</TableCell>
