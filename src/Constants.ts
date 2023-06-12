@@ -231,15 +231,16 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3.2 dev - Changelog updated 6/10/2023
+v2.3.2 dev - Changelog updated 6/12/2023
 ----------------------------------------
 
 Also see 2.3.1 release notes: https://github.com/bitburner-official/bitburner-src/releases/tag/v2.3.1
 
 GENERAL / MISC:
 * Fixed a bug where dragging a tail window titlebar would sometimes scroll the tail window content (@bezrodnov)
-* Internal code refactors (@bezrodnov)
-* Documentation fixes (@tdnzr)
+* Show more info in the savegame comparison tool (@bezrodnov)
+* Internal code refactors (@bezrodnov, @Snarling)
+* Documentation fixes (@tdnzr, @amuck-gorilla)
 * Nerf noodle bar
 `,
 };
