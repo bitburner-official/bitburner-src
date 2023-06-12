@@ -11,7 +11,6 @@ import {
   FactionName,
   FactionWorkType,
   GymType,
-  JobName,
   LocationName,
   UniversityClassType,
 } from "@enums";

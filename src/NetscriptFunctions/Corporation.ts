@@ -51,7 +51,7 @@ import {
 } from "../Corporation/Actions";
 import { CorpUnlocks } from "../Corporation/data/CorporationUnlocks";
 import { CorpUpgrades } from "../Corporation/data/CorporationUpgrades";
-import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName, IndustryType } from "@enums";
+import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName } from "@enums";
 import { IndustriesData, IndustryResearchTrees } from "../Corporation/data/IndustryData";
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";

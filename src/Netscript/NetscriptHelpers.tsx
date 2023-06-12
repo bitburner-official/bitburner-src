@@ -7,7 +7,6 @@ import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
 import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
 import { ScriptArg } from "./ScriptArg";
-import { CityName } from "@enums";
 import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson, Server as IServer } from "@nsdefs";
 import { Server } from "../Server/Server";
 import {
