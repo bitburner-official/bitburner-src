@@ -628,10 +628,10 @@ export class Division {
                   /MAX/g,
                   (mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles)).toString(),
                 );
-                amtStr = amtStr.replace(/EPROD/g, "(" + mat.productionAmount + ")");
-                amtStr = amtStr.replace(/IPROD/g, "(" + tempMaterial.productionAmount + ")");
-                amtStr = amtStr.replace(/EINV/g, mat.stored.toString());
-                amtStr = amtStr.replace(/IINV/g, tempMaterial.stored.toString());
+                amtStr = amtStr.replace(/EPROD/g, `(${mat.productionAmount})`);
+                amtStr = amtStr.replace(/IPROD/g, `(${tempMaterial.productionAmount})`);
+                amtStr = amtStr.replace(/EINV/g, `(${mat.stored})`);
+                amtStr = amtStr.replace(/IINV/g, `(${tempMaterial.stored})`);
                 let amt = 0;
                 try {
                   amt = eval(amtStr);
