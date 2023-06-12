@@ -4,7 +4,7 @@ import { Player } from "@player";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
-import { CompletedProgramName } from "../Programs/Programs";
+import { CompletedProgramName } from "@enums";
 import { CodingContractResult } from "../CodingContracts";
 import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
 

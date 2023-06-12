@@ -48,7 +48,7 @@ import { CONSTANTS } from "../../Constants";
 import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../../InteractiveTutorial";
 import { getAvailableCreatePrograms } from "../../Programs/ProgramHelpers";
 import { Settings } from "../../Settings/Settings";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 
 import { ProgramsSeen } from "../../Programs/ui/ProgramsRoot";
 import { InvitationsSeen } from "../../Faction/ui/FactionsRoot";
@@ -158,7 +158,7 @@ export function SidebarRoot(props: IProps): React.ReactElement {
   const canJob = Object.values(Player.jobs).length > 0;
   const canStockMarket = Player.hasWseAccount;
   const canBladeburner = !!Player.bladeburner;
-  const canStaneksGift = Player.augmentations.some((aug) => aug.name === AugmentationNames.StaneksGift1);
+  const canStaneksGift = Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1);
 
   useEffect(() => {
     // Shortcuts to navigate through the game

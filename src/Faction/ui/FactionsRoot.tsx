@@ -5,7 +5,7 @@ import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { formatFavor, formatReputation } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
-import { FactionNames } from "../data/FactionNames";
+import { FactionName } from "@enums";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
@@ -175,7 +175,7 @@ export function FactionsRoot(): React.ReactElement {
     });
   }, []);
 
-  const allFactions = Object.values(FactionNames).map((faction) => faction as string);
+  const allFactions = Object.values(FactionName).map((faction) => faction as string);
   const allJoinedFactions = [...Player.factions];
   allJoinedFactions.sort((a, b) => allFactions.indexOf(a) - allFactions.indexOf(b));
   const invitations = Player.factionInvitations;

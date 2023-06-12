@@ -8,8 +8,7 @@ import { IStockMarket } from "./IStockMarket";
 import { Order } from "./Order";
 import { Stock } from "./Stock";
 
-import { OrderTypes } from "./data/OrderTypes";
-import { PositionTypes } from "./data/PositionTypes";
+import { PositionType, OrderType } from "@enums";
 
 import { formatShares } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
@@ -27,14 +26,14 @@ export interface IProcessOrderRefs {
 /**
  * Search for all orders of a specific type and execute them if appropriate
  * @param {Stock} stock - Stock for which orders should be processed
- * @param {OrderTypes} orderType - Type of order to check (Limit/Stop buy/sell)
- * @param {PositionTypes} posType - Long or short
+ * @param {OrderType} orderType - Type of order to check (Limit/Stop buy/sell)
+ * @param {PositionType} posType - Long or short
  * @param {IProcessOrderRefs} refs - References to objects/functions that are required for this function
  */
 export function processOrders(
   stock: Stock,
-  orderType: OrderTypes,
-  posType: PositionTypes,
+  orderType: OrderType,
+  posType: PositionType,
   refs: IProcessOrderRefs,
 ): void {
   const orderBook = refs.stockMarket.Orders;
@@ -60,31 +59,31 @@ export function processOrders(
   for (const order of stockOrders) {
     if (order.type === orderType && order.pos === posType) {
       switch (order.type) {
-        case OrderTypes.LimitBuy:
-          if (order.pos === PositionTypes.Long && stock.price <= order.price) {
+        case OrderType.LimitBuy:
+          if (order.pos === PositionType.Long && stock.price <= order.price) {
             executeOrder(/*66*/ order, refs);
-          } else if (order.pos === PositionTypes.Short && stock.price >= order.price) {
-            executeOrder(/*66*/ order, refs);
-          }
-          break;
-        case OrderTypes.LimitSell:
-          if (order.pos === PositionTypes.Long && stock.price >= order.price) {
-            executeOrder(/*66*/ order, refs);
-          } else if (order.pos === PositionTypes.Short && stock.price <= order.price) {
+          } else if (order.pos === PositionType.Short && stock.price >= order.price) {
             executeOrder(/*66*/ order, refs);
           }
           break;
-        case OrderTypes.StopBuy:
-          if (order.pos === PositionTypes.Long && stock.price >= order.price) {
+        case OrderType.LimitSell:
+          if (order.pos === PositionType.Long && stock.price >= order.price) {
             executeOrder(/*66*/ order, refs);
-          } else if (order.pos === PositionTypes.Short && stock.price <= order.price) {
+          } else if (order.pos === PositionType.Short && stock.price <= order.price) {
             executeOrder(/*66*/ order, refs);
           }
           break;
-        case OrderTypes.StopSell:
-          if (order.pos === PositionTypes.Long && stock.price <= order.price) {
+        case OrderType.StopBuy:
+          if (order.pos === PositionType.Long && stock.price >= order.price) {
             executeOrder(/*66*/ order, refs);
-          } else if (order.pos === PositionTypes.Short && stock.price >= order.price) {
+          } else if (order.pos === PositionType.Short && stock.price <= order.price) {
+            executeOrder(/*66*/ order, refs);
+          }
+          break;
+        case OrderType.StopSell:
+          if (order.pos === PositionType.Long && stock.price <= order.price) {
+            executeOrder(/*66*/ order, refs);
+          } else if (order.pos === PositionType.Short && stock.price >= order.price) {
             executeOrder(/*66*/ order, refs);
           }
           break;
@@ -120,20 +119,20 @@ function executeOrder(order: Order, refs: IProcessOrderRefs): void {
   let res = true;
   let isBuy = false;
   switch (order.type) {
-    case OrderTypes.LimitBuy:
-    case OrderTypes.StopBuy:
+    case OrderType.LimitBuy:
+    case OrderType.StopBuy:
       isBuy = true;
-      if (order.pos === PositionTypes.Long) {
+      if (order.pos === PositionType.Long) {
         res = buyStock(stock, order.shares, null, opts) && res;
-      } else if (order.pos === PositionTypes.Short) {
+      } else if (order.pos === PositionType.Short) {
         res = shortStock(stock, order.shares, null, opts) && res;
       }
       break;
-    case OrderTypes.LimitSell:
-    case OrderTypes.StopSell:
-      if (order.pos === PositionTypes.Long) {
+    case OrderType.LimitSell:
+    case OrderType.StopSell:
+      if (order.pos === PositionType.Long) {
         res = sellStock(stock, order.shares, null, opts) && res;
-      } else if (order.pos === PositionTypes.Short) {
+      } else if (order.pos === PositionType.Short) {
         res = sellShort(stock, order.shares, null, opts) && res;
       }
       break;
@@ -143,7 +142,7 @@ function executeOrder(order: Order, refs: IProcessOrderRefs): void {
   }
 
   // Position type, for logging/message purposes
-  const pos = order.pos === PositionTypes.Long ? "Long" : "Short";
+  const pos = order.pos === PositionType.Long ? "Long" : "Short";
 
   if (res) {
     for (let i = 0; i < stockOrders.length; ++i) {

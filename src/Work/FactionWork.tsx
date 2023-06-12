@@ -2,16 +2,14 @@ import React from "react";
 import { Work, WorkType } from "./Work";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { Player } from "@player";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { AugmentationName, FactionName, FactionWorkType } from "@enums";
 import { Factions } from "../Faction/Factions";
 import { Faction } from "../Faction/Faction";
 import { applyWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reputation } from "../ui/React/Reputation";
 import { CONSTANTS } from "../Constants";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { calculateFactionExp, calculateFactionRep } from "./Formulas";
-import { FactionWorkType } from "../Enums";
 import { findEnumMember } from "../utils/helpers/enum";
 
 interface FactionWorkParams {
@@ -29,7 +27,7 @@ export class FactionWork extends Work {
   constructor(params?: FactionWorkParams) {
     super(WorkType.FACTION, params?.singularity ?? true);
     this.factionWorkType = params?.factionWorkType ?? FactionWorkType.hacking;
-    this.factionName = params?.faction ?? FactionNames.Sector12;
+    this.factionName = params?.faction ?? FactionName.Sector12;
   }
 
   getFaction(): Faction {
@@ -40,7 +38,7 @@ export class FactionWork extends Work {
 
   getReputationRate(): number {
     let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationNames.NeuroreceptorManager, true)) {
+    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
       focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
     }
     return calculateFactionRep(Player, this.factionWorkType, this.getFaction().favor) * focusBonus;
@@ -48,7 +46,7 @@ export class FactionWork extends Work {
 
   getExpRates(): WorkStats {
     let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationNames.NeuroreceptorManager, true)) {
+    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
       focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
     }
     const rate = calculateFactionExp(Player, this.factionWorkType);

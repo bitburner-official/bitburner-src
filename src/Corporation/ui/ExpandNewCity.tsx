@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import * as corpConstants from "../data/Constants";
+import { CityName } from "@enums";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { purchaseOffice } from "../Actions";
 import { MoneyCost } from "./MoneyCost";
@@ -8,7 +9,6 @@ import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
-import { CityName } from "../../Enums";
 
 interface IProps {
   cityStateSetter: (city: CityName | "Expand") => void;

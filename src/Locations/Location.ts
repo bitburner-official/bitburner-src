@@ -1,5 +1,4 @@
-import { CityName, LocationName } from "../Enums";
-import { LocationType } from "./LocationTypeEnum";
+import { CityName, LocationName, LocationType } from "@enums";
 
 interface IInfiltrationMetadata {
   maxClearanceLevel: number;

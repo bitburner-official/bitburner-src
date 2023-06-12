@@ -9,7 +9,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { CorpUnlockName } from "../data/Enums";
+import { CorpUnlockName } from "@enums";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 interface UnlockProps {

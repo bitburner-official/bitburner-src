@@ -1,7 +1,21 @@
-import { LocationName } from "../../Enums";
+// Direct import from Locations instead of the barrel file, to avoid circular dependency
+import { LocationName } from "@enums";
 
-//Enum-like object because some keys are created via code and have spaces. Membership can still be checked with checkEnum.
-export const StockSymbols = {
+// Does not need an enum helper for now
+export enum OrderType {
+  LimitBuy = "Limit Buy Order",
+  LimitSell = "Limit Sell Order",
+  StopBuy = "Stop Buy Order",
+  StopSell = "Stop Sell Order",
+}
+
+export enum PositionType {
+  Long = "L",
+  Short = "S",
+}
+
+//Enum-like object because some keys are created via code and have spaces. Still works with an EnumHelper.
+export const StockSymbol = {
   // Stocks for companies at which you can work
   [LocationName.AevumECorp]: "ECP",
   [LocationName.Sector12MegaCorp]: "MGCP",
@@ -39,3 +53,4 @@ export const StockSymbols = {
   ["Microdyne Technologies"]: "MDYN",
   ["Titan Laboratories"]: "TITN",
 } as const;
+export type StockSymbol = typeof StockSymbol[keyof typeof StockSymbol];

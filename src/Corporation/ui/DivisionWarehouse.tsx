@@ -1,8 +1,10 @@
 // React Component for displaying an Industry's warehouse information
 // (right-side panel in the Industry UI)
 import React, { useState } from "react";
-
+import { createStyles, makeStyles } from "@mui/styles";
+import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import * as corpConstants from "../data/Constants";
+import { CityName, CorpUnlockName } from "@enums";
 import { Warehouse } from "../Warehouse";
 import { SmartSupplyModal } from "./modals/SmartSupplyModal";
 import { ProductElem } from "./ProductElem";
@@ -19,16 +21,7 @@ import { IndustryProductEquation } from "./IndustryProductEquation";
 import { purchaseWarehouse } from "../Actions";
 import { useCorporation, useDivision } from "./Context";
 
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Paper from "@mui/material/Paper";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
-import { CityName } from "../../Enums";
-import { CorpUnlockName } from "../data/Enums";
 
 interface WarehouseProps {
   corp: Corporation;

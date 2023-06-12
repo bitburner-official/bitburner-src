@@ -16,7 +16,7 @@ import { Settings } from "./Settings/Settings";
 import { loadStockMarket, StockMarket } from "./StockMarket/StockMarket";
 import { staneksGift, loadStaneksGift } from "./CotMG/Helper";
 
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
+import { SnackbarEvents } from "./ui/React/Snackbar";
 
 import * as ExportBonus from "./ExportBonus";
 
@@ -24,13 +24,11 @@ import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { Reviver, constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "./utils/JSONReviver";
 import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
-import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
+import { AugmentationName, FactionName, LocationName, ToastVariant } from "@enums";
 import { PlayerOwnedAugmentation } from "./Augmentation/PlayerOwnedAugmentation";
 import { initAugmentations } from "./Augmentation/AugmentationHelpers";
-import { LocationName } from "./Enums";
 import { pushGameSaved } from "./Electron";
 import { defaultMonacoTheme } from "./ScriptEditor/ui/themes";
-import { FactionNames } from "./Faction/data/FactionNames";
 import { Faction } from "./Faction/Faction";
 import { safelyCreateUniqueServer } from "./Server/ServerHelpers";
 import { SpecialServers } from "./Server/data/SpecialServers";
@@ -400,7 +398,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
   }
   //Fix contract names
   if (ver < 16) {
-    Factions[FactionNames.ShadowsOfAnarchy] = new Faction(FactionNames.ShadowsOfAnarchy);
+    Factions[FactionName.ShadowsOfAnarchy] = new Faction(FactionName.ShadowsOfAnarchy);
     //Iterate over all contracts on all servers
     for (const server of GetAllServers()) {
       for (const contract of server.contracts) {
@@ -433,8 +431,8 @@ function evaluateVersionCompatibility(ver: string | number): void {
   // Fix bugged NFG accumulation in owned augmentations
   if (ver < 17) {
     let ownedNFGs = [...Player.augmentations];
-    ownedNFGs = ownedNFGs.filter((aug) => aug.name === AugmentationNames.NeuroFluxGovernor);
-    const newNFG = new PlayerOwnedAugmentation(AugmentationNames.NeuroFluxGovernor);
+    ownedNFGs = ownedNFGs.filter((aug) => aug.name === AugmentationName.NeuroFluxGovernor);
+    const newNFG = new PlayerOwnedAugmentation(AugmentationName.NeuroFluxGovernor);
     newNFG.level = 0;
 
     for (const nfg of ownedNFGs) {
@@ -442,7 +440,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
     }
 
     Player.augmentations = [
-      ...Player.augmentations.filter((aug) => aug.name !== AugmentationNames.NeuroFluxGovernor),
+      ...Player.augmentations.filter((aug) => aug.name !== AugmentationName.NeuroFluxGovernor),
       newNFG,
     ];
 

@@ -1,4 +1,6 @@
-import { JobName } from "../../Enums";
+import { JobName } from "@enums";
+
+// This entire file can be reworked to
 export const SoftwareCompanyPositions: JobName[] = [
   JobName.software0,
   JobName.software1,

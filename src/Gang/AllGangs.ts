@@ -1,4 +1,4 @@
-import { FactionNames } from "../Faction/data/FactionNames";
+import { FactionName } from "@enums";
 import { Reviver } from "../utils/JSONReviver";
 
 interface GangTerritory {
@@ -7,31 +7,31 @@ interface GangTerritory {
 }
 
 export let AllGangs: Record<string, GangTerritory> = {
-  [FactionNames.SlumSnakes]: {
+  [FactionName.SlumSnakes]: {
     power: 1,
     territory: 1 / 7,
   },
-  [FactionNames.Tetrads]: {
+  [FactionName.Tetrads]: {
     power: 1,
     territory: 1 / 7,
   },
-  [FactionNames.TheSyndicate]: {
+  [FactionName.TheSyndicate]: {
     power: 1,
     territory: 1 / 7,
   },
-  [FactionNames.TheDarkArmy]: {
+  [FactionName.TheDarkArmy]: {
     power: 1,
     territory: 1 / 7,
   },
-  [FactionNames.SpeakersForTheDead]: {
+  [FactionName.SpeakersForTheDead]: {
     power: 1,
     territory: 1 / 7,
   },
-  [FactionNames.NiteSec]: {
+  [FactionName.NiteSec]: {
     power: 1,
     territory: 1 / 7,
   },
-  [FactionNames.TheBlackHand]: {
+  [FactionName.TheBlackHand]: {
     power: 1,
     territory: 1 / 7,
   },
@@ -39,31 +39,31 @@ export let AllGangs: Record<string, GangTerritory> = {
 
 export function resetGangs(): void {
   AllGangs = {
-    [FactionNames.SlumSnakes]: {
+    [FactionName.SlumSnakes]: {
       power: 1,
       territory: 1 / 7,
     },
-    [FactionNames.Tetrads]: {
+    [FactionName.Tetrads]: {
       power: 1,
       territory: 1 / 7,
     },
-    [FactionNames.TheSyndicate]: {
+    [FactionName.TheSyndicate]: {
       power: 1,
       territory: 1 / 7,
     },
-    [FactionNames.TheDarkArmy]: {
+    [FactionName.TheDarkArmy]: {
       power: 1,
       territory: 1 / 7,
     },
-    [FactionNames.SpeakersForTheDead]: {
+    [FactionName.SpeakersForTheDead]: {
       power: 1,
       territory: 1 / 7,
     },
-    [FactionNames.NiteSec]: {
+    [FactionName.NiteSec]: {
       power: 1,
       territory: 1 / 7,
     },
-    [FactionNames.TheBlackHand]: {
+    [FactionName.TheBlackHand]: {
       power: 1,
       territory: 1 / 7,
     },

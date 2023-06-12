@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "@player": ["src/Player"],
+      "@enums": ["src/Enums"],
       "@nsdefs": ["src/ScriptEditor/NetscriptDefinitions"]
     },
     "esModuleInterop": true,

@@ -1,13 +1,15 @@
+import type { Augmentation } from "../../../Augmentation/Augmentation";
+
+import React, { useState } from "react";
 import { CheckBox, CheckBoxOutlineBlank, Construction } from "@mui/icons-material";
 import { Box, Button, Container, List, ListItemButton, Paper, Typography } from "@mui/material";
-import React, { useState } from "react";
+
+import { Player } from "@player";
+import { AugmentationName, LocationName } from "@enums";
 import { GraftingWork } from "../../../Work/GraftingWork";
-import { Augmentation } from "../../../Augmentation/Augmentation";
-import { AugmentationNames } from "../../../Augmentation/data/AugmentationNames";
 import { StaticAugmentations } from "../../../Augmentation/StaticAugmentations";
 import { CONSTANTS } from "../../../Constants";
 import { hasAugmentationPrereqs } from "../../../Faction/FactionHelpers";
-import { LocationName } from "../../../Enums";
 import { Locations } from "../../../Locations/Locations";
 import { PurchaseAugmentationsOrderSetting } from "../../../Settings/SettingEnums";
 import { Settings } from "../../../Settings/Settings";
@@ -17,7 +19,6 @@ import { ConfirmationModal } from "../../../ui/React/ConfirmationModal";
 import { Money } from "../../../ui/React/Money";
 import { formatNumberNoSuffix } from "../../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
-import { Player } from "@player";
 import { GraftableAugmentation } from "../GraftableAugmentation";
 import { calculateGraftingTimeWithBonus, getGraftingAvailableAugs } from "../GraftingHelpers";
 import { useRerender } from "../../../ui/React/hooks";
@@ -158,7 +159,7 @@ export const GraftingRoot = (): React.ReactElement => {
                   <>
                     Cancelling grafting will <b>not</b> save grafting progress, and the money you spend will <b>not</b>{" "}
                     be returned.
-                    {!Player.hasAugmentation(AugmentationNames.CongruityImplant) && (
+                    {!Player.hasAugmentation(AugmentationName.CongruityImplant) && (
                       <>
                         <br />
                         <br />

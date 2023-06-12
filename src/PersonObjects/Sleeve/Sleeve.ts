@@ -18,16 +18,14 @@ import { CompanyPosition } from "../../Company/CompanyPosition";
 import { CompanyPositions } from "../../Company/CompanyPositions";
 import { Contracts } from "../../Bladeburner/data/Contracts";
 import { CONSTANTS } from "../../Constants";
-import { CityName, CrimeType, GymType, LocationName, UniversityClassType } from "../../Enums";
+import { ClassType, CityName, CrimeType, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
 
 import { Factions } from "../../Faction/Factions";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
 import { formatPercent } from "../../ui/formatNumber";
-import { FactionWorkType } from "../../Enums";
 import { SleeveWork } from "./Work/Work";
 import { SleeveClassWork } from "./Work/SleeveClassWork";
-import { ClassType } from "../../Work/ClassWork";
 import { SleeveSynchroWork } from "./Work/SleeveSynchroWork";
 import { SleeveRecoveryWork } from "./Work/SleeveRecoveryWork";
 import { SleeveFactionWork } from "./Work/SleeveFactionWork";

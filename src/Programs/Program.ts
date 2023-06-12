@@ -1,4 +1,4 @@
-import type { CompletedProgramName } from "./Programs";
+import type { CompletedProgramName } from "@enums";
 import { ProgramFilePath, asProgramFilePath } from "../Paths/ProgramFilePath";
 import { BaseServer } from "../Server/BaseServer";
 

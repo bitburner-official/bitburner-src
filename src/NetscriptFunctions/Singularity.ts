@@ -1,20 +1,29 @@
+import type { Singularity as ISingularity } from "@nsdefs";
+import type { Augmentation } from "../Augmentation/Augmentation";
+import type { Company } from "../Company/Company";
+import type { Faction } from "../Faction/Faction";
+
 import { Player } from "@player";
+import {
+  AugmentationName,
+  BlackOperationName,
+  CityName,
+  FactionName,
+  FactionWorkType,
+  GymType,
+  LocationName,
+  UniversityClassType,
+} from "@enums";
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
-import { Augmentation } from "../Augmentation/Augmentation";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
 import { augmentationExists, installAugmentations } from "../Augmentation/AugmentationHelpers";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { CONSTANTS } from "../Constants";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";
-
-import { Singularity as ISingularity } from "@nsdefs";
-
 import { findCrime } from "../Crime/CrimeHelpers";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { DarkWebItems } from "../DarkWeb/DarkWebItems";
-import { CityName, LocationName, JobName } from "../Enums";
 import { Router } from "../ui/GameRoot";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Page } from "../ui/Router";
@@ -23,11 +32,9 @@ import { GetServer } from "../Server/AllServers";
 import { Programs } from "../Programs/Programs";
 import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { Company } from "../Company/Company";
 import { Companies } from "../Company/Companies";
 import { companiesMetadata } from "../Company/data/CompaniesMetadata";
 import { Factions, factionExists } from "../Faction/Factions";
-import { Faction } from "../Faction/Faction";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { getServerOnNetwork } from "../Server/ServerHelpers";
@@ -37,20 +44,17 @@ import { Server } from "../Server/Server";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { FactionInfos } from "../Faction/FactionInfo";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
-import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
 import { enterBitNode } from "../RedPill";
-import { FactionNames } from "../Faction/data/FactionNames";
 import { ClassWork } from "../Work/ClassWork";
 import { CreateProgramWork, isCreateProgramWork } from "../Work/CreateProgramWork";
 import { FactionWork } from "../Work/FactionWork";
-import { FactionWorkType, GymType, UniversityClassType } from "../Enums";
 import { CompanyWork } from "../Work/CompanyWork";
 import { canGetBonus, onExport } from "../ExportBonus";
 import { saveObject } from "../SaveObject";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { findEnumMember } from "../utils/helpers/enum";
 import { Engine } from "../engine";
-import { checkEnum } from "../utils/helpers/enum";
+import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
 
@@ -170,7 +174,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         return false;
       }
 
-      const isNeuroflux = aug.name === AugmentationNames.NeuroFluxGovernor;
+      const isNeuroflux = aug.name === AugmentationName.NeuroFluxGovernor;
       if (!isNeuroflux) {
         for (let j = 0; j < Player.queuedAugmentations.length; ++j) {
           if (Player.queuedAugmentations[j].name === aug.name) {
@@ -405,7 +409,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
     travelToCity: (ctx) => (_cityName) => {
       helpers.checkSingularityAccess(ctx);
-      const cityName = helpers.city(ctx, "cityName", _cityName);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
 
       switch (cityName) {
         case CityName.Aevum:
@@ -698,16 +702,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     getCompanyPositionInfo: (ctx) => (_companyName, _positionName) => {
       helpers.checkSingularityAccess(ctx);
       const companyName = helpers.string(ctx, "companyName", _companyName);
-      const positionName = helpers.string(ctx, "positionName", _positionName);
+      const positionName = getEnumHelper("JobName").nsGetMember(ctx, _positionName, "positionName");
 
       // Make sure its a valid company
       if (!(companyName in Companies)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
-      }
-
-      // Make sure its a valid position
-      if (!checkEnum(JobName, positionName)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: '${positionName}'`);
       }
 
       if (!Companies[companyName].hasPosition(positionName)) {
@@ -1025,7 +1024,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(ctx, () => `You can't donate to '${facName}' because youre managing a gang for it`);
         return false;
       }
-      if (faction.name === FactionNames.ChurchOfTheMachineGod || faction.name === FactionNames.Bladeburners) {
+      if (faction.name === FactionName.ChurchOfTheMachineGod || faction.name === FactionName.Bladeburners) {
         helpers.log(ctx, () => `You can't donate to '${facName}' because they do not accept donations`);
         return false;
       }
@@ -1228,7 +1227,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       };
       const bladeburnerRequirements = () => {
         if (!Player.bladeburner) return false;
-        return Player.bladeburner.blackops[BlackOperationNames.OperationDaedalus];
+        return Player.bladeburner.blackops[BlackOperationName.OperationDaedalus];
       };
 
       if (!hackingRequirements() && !bladeburnerRequirements()) {

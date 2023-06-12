@@ -1,5 +1,5 @@
 import { Stock } from "./Stock";
-import { PositionTypes } from "./data/PositionTypes";
+import { PositionType } from "@enums";
 import { CONSTANTS } from "../Constants";
 
 // Amount by which a stock's forecast changes during each price movement
@@ -9,10 +9,10 @@ export const forecastChangePerPriceMovement = 0.006;
  * Calculate the total cost of a "buy" transaction. This accounts for spread and commission.
  * @param {Stock} stock - Stock being purchased
  * @param {number} shares - Number of shares being transacted
- * @param {PositionTypes} posType - Long or short position
+ * @param {PositionType} posType - Long or short position
  * @returns {number | null} Total transaction cost. Returns null for an invalid transaction
  */
-export function getBuyTransactionCost(stock: Stock, shares: number, posType: PositionTypes): number | null {
+export function getBuyTransactionCost(stock: Stock, shares: number, posType: PositionType): number | null {
   if (isNaN(shares) || shares <= 0 || !(stock instanceof Stock)) {
     return null;
   }
@@ -21,7 +21,7 @@ export function getBuyTransactionCost(stock: Stock, shares: number, posType: Pos
   // hanging in the case when a really big number is passed in
   shares = Math.min(shares, stock.maxShares);
 
-  const isLong = posType === PositionTypes.Long;
+  const isLong = posType === PositionType.Long;
 
   // If the number of shares doesn't trigger a price movement, its a simple calculation
   if (isLong) {
@@ -36,10 +36,10 @@ export function getBuyTransactionCost(stock: Stock, shares: number, posType: Pos
  * for spread and commission.
  * @param {Stock} stock - Stock being sold
  * @param {number} shares - Number of shares being transacted
- * @param {PositionTypes} posType - Long or short position
+ * @param {PositionType} posType - Long or short position
  * @returns {number | null} Amount of money gained from transaction. Returns null for an invalid transaction
  */
-export function getSellTransactionGain(stock: Stock, shares: number, posType: PositionTypes): number | null {
+export function getSellTransactionGain(stock: Stock, shares: number, posType: PositionType): number | null {
   if (isNaN(shares) || shares <= 0 || !(stock instanceof Stock)) {
     return null;
   }
@@ -48,7 +48,7 @@ export function getSellTransactionGain(stock: Stock, shares: number, posType: Po
   // hanging in the case when a really big number is passed in
   shares = Math.min(shares, stock.maxShares);
 
-  const isLong = posType === PositionTypes.Long;
+  const isLong = posType === PositionType.Long;
   if (isLong) {
     return shares * stock.getBidPrice() - CONSTANTS.StockMarketCommission;
   } else {
@@ -65,7 +65,7 @@ export function getSellTransactionGain(stock: Stock, shares: number, posType: Po
  * whenever it is transacted
  * @param {Stock} stock - Stock being sold
  * @param {number} shares - Number of shares being transacted
- * @param {PositionTypes} posType - Long or short position
+ * @param {PositionType} posType - Long or short position
  */
 export function processTransactionForecastMovement(stock: Stock, shares: number): void {
   if (isNaN(shares) || shares <= 0 || !(stock instanceof Stock)) {
@@ -113,16 +113,16 @@ export function processTransactionForecastMovement(stock: Stock, shares: number)
  * Handles mid-transaction price movements, both L and S positions, etc.
  * Used for the "Buy Max" button in the UI
  * @param {Stock} stock - Stock being purchased
- * @param {PositionTypes} posType - Long or short position
+ * @param {PositionType} posType - Long or short position
  * @param {number} money - Amount of money player has
  * @returns maximum number of shares that the player can purchase
  */
-export function calculateBuyMaxAmount(stock: Stock, posType: PositionTypes, money: number): number {
+export function calculateBuyMaxAmount(stock: Stock, posType: PositionType, money: number): number {
   if (!(stock instanceof Stock)) {
     return 0;
   }
 
-  const isLong = posType === PositionTypes.Long;
+  const isLong = posType === PositionType.Long;
 
   const remainingMoney = money - CONSTANTS.StockMarketCommission;
   const currPrice = isLong ? stock.getAskPrice() : stock.getBidPrice();

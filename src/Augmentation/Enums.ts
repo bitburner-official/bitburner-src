@@ -1,4 +1,4 @@
-export enum AugmentationNames {
+export enum AugmentationName {
   Targeting1 = "Augmented Targeting I",
   Targeting2 = "Augmented Targeting II",
   Targeting3 = "Augmented Targeting III",

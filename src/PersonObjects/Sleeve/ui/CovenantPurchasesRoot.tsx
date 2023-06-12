@@ -16,7 +16,7 @@ import { Player } from "@player";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { FactionNames } from "../../../Faction/data/FactionNames";
+import { FactionName } from "@enums";
 import { useRerender } from "../../../ui/React/hooks";
 
 interface IProps {
@@ -68,7 +68,7 @@ export function CovenantPurchasesRoot(props: IProps): React.ReactElement {
           <>
             <Typography>
               Purchase an additional Sleeves. These Duplicate Sleeves are permanent (they persist through BitNodes). You
-              can purchase a total of {MaxSleevesFromCovenant} from {FactionNames.TheCovenant}.
+              can purchase a total of {MaxSleevesFromCovenant} from {FactionName.TheCovenant}.
             </Typography>
             <Button disabled={purchaseDisabled} onClick={purchaseOnClick}>
               Purchase -&nbsp;

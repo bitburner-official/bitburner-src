@@ -1,4 +1,4 @@
-import type { CompletedProgramName } from "../Programs/Programs";
+import type { CompletedProgramName } from "@enums";
 
 export class DarkWebItem {
   program: CompletedProgramName;

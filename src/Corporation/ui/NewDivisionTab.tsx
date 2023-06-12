@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { IndustriesData } from "../data/IndustryData";
-import { IndustryType } from "../data/Enums";
+import { IndustryType } from "@enums";
 import { useCorporation } from "./Context";
 import { NewDivision } from "../Actions";
 

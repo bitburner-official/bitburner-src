@@ -7,6 +7,7 @@ export interface IMults {
   cha?: number;
 }
 
+// Does not need an enum helper, not in an enums file
 export enum UpgradeType {
   Weapon = "w",
   Armor = "a",

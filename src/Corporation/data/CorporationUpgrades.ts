@@ -1,4 +1,4 @@
-import { CorpUpgradeName } from "./Enums";
+import { CorpUpgradeName } from "@enums";
 
 export interface CorpUpgrade {
   name: CorpUpgradeName;

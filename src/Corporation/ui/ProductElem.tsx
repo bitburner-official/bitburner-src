@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-
-import type { CityName } from "src/Enums";
+import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
+import { CityName, CorpUnlockName } from "@enums";
 import * as corpConstants from "../data/Constants";
 import { Product } from "../Product";
 import { DiscontinueProductModal } from "./modals/DiscontinueProductModal";
@@ -14,13 +14,6 @@ import { formatBigNumber, formatCorpStat, formatMoney, formatPercent } from "../
 import { isString } from "../../utils/helpers/string";
 import { Money } from "../../ui/React/Money";
 import { useCorporation, useDivision } from "./Context";
-
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import { CorpUnlockName } from "../data/Enums";
 
 interface IProductProps {
   city: CityName;

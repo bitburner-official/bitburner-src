@@ -48,7 +48,7 @@ export function SourceFileMinus1(): React.ReactElement {
 
           <Typography>You have found the following exploits:</Typography>
           <Box mx={2}>
-            {exploits.map((c: Exploit) => (
+            {exploits.map((c) => (
               <Typography key={c}>* {ExploitName(c)}</Typography>
             ))}
           </Box>

@@ -1,28 +1,30 @@
 import React, { useState } from "react";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+import { Player } from "@player";
+import { FactionName } from "@enums";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Button,
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Adjuster } from "./Adjuster";
-import { Player } from "@player";
 import { Factions as AllFaction } from "../../Faction/Factions";
-import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
-import IconButton from "@mui/material/IconButton";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import ReplyIcon from "@mui/icons-material/Reply";
-import InputLabel from "@mui/material/InputLabel";
-import { FactionNames } from "../../Faction/data/FactionNames";
 
 const bigNumber = 1e12;
 
 export function Factions(): React.ReactElement {
-  const [faction, setFaction] = useState(FactionNames.Illuminati as string);
+  const [faction, setFaction] = useState(FactionName.Illuminati as string);
 
   function setFactionDropdown(event: SelectChangeEvent): void {
     setFaction(event.target.value);
@@ -33,7 +35,7 @@ export function Factions(): React.ReactElement {
   }
 
   function receiveAllInvites(): void {
-    Object.values(FactionNames).forEach((faction) => Player.receiveInvite(faction));
+    Object.values(FactionName).forEach((faction) => Player.receiveInvite(faction));
   }
 
   function modifyFactionRep(modifier: number): (x: number) => void {

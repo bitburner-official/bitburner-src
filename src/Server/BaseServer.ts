@@ -1,4 +1,8 @@
 import type { Server as IServer } from "@nsdefs";
+import type { CompletedProgramName, LiteratureName, MessageFilename } from "@enums";
+import type { IPAddress, ServerName } from "../Types/strings";
+import type { FilePath } from "../Paths/FilePath";
+
 import { CodingContract } from "../CodingContracts";
 import { RunningScript } from "../Script/RunningScript";
 import { Script } from "../Script/Script";
@@ -13,13 +17,8 @@ import { matchScriptPathExact } from "../utils/helpers/scriptKey";
 
 import { createRandomIp } from "../utils/IPAddress";
 import { JSONMap } from "../Types/Jsonable";
-import { IPAddress, ServerName } from "../Types/strings";
-import { FilePath } from "../Paths/FilePath";
 import { ContentFile, ContentFilePath } from "../Paths/ContentFile";
 import { ProgramFilePath, hasProgramExtension } from "../Paths/ProgramFilePath";
-import { MessageFilename } from "src/Message/MessageHelpers";
-import { LiteratureName } from "src/Literature/data/LiteratureNames";
-import { CompletedProgramName } from "src/Programs/Programs";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import lodash from "lodash";
 import { Settings } from "../Settings/Settings";

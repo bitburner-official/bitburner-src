@@ -1,16 +1,14 @@
 // Class definition for a single Augmentation object
 import * as React from "react";
 
-import type { CompletedProgramName } from "../Programs/Programs";
+import { AugmentationName, CompletedProgramName, FactionName } from "@enums";
 import { Faction } from "../Faction/Faction";
 import { Factions } from "../Faction/Factions";
 import { formatPercent } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { FactionNames } from "../Faction/data/FactionNames";
 import { Player } from "@player";
-import { AugmentationNames } from "./data/AugmentationNames";
 import { CONSTANTS } from "../Constants";
 import { StaticAugmentations } from "./StaticAugmentations";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
@@ -532,7 +530,7 @@ export class Augmentation {
     let moneyCost = augmentationReference.baseCost;
     let repCost = augmentationReference.baseRepRequirement;
 
-    if (augmentationReference.name === AugmentationNames.NeuroFluxGovernor) {
+    if (augmentationReference.name === AugmentationName.NeuroFluxGovernor) {
       let nextLevel = this.getLevel();
       --nextLevel;
       const multiplier = Math.pow(CONSTANTS.NeuroFluxGovernorLevelMult, nextLevel);
@@ -542,7 +540,7 @@ export class Augmentation {
       for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
         moneyCost *= getBaseAugmentationPriceMultiplier();
       }
-    } else if (augmentationReference.factions.includes(FactionNames.ShadowsOfAnarchy)) {
+    } else if (augmentationReference.factions.includes(FactionName.ShadowsOfAnarchy)) {
       const soaAugmentationNames = initSoAAugmentations().map((augmentation) => augmentation.name);
       const soaAugCount = soaAugmentationNames.filter((augmentationName) =>
         Player.hasAugmentation(augmentationName),
@@ -563,17 +561,17 @@ export class Augmentation {
 
   getLevel(): number {
     // Get current Neuroflux level based on Player's augmentations
-    if (this.name === AugmentationNames.NeuroFluxGovernor) {
+    if (this.name === AugmentationName.NeuroFluxGovernor) {
       let currLevel = 0;
       for (let i = 0; i < Player.augmentations.length; ++i) {
-        if (Player.augmentations[i].name === AugmentationNames.NeuroFluxGovernor) {
+        if (Player.augmentations[i].name === AugmentationName.NeuroFluxGovernor) {
           currLevel = Player.augmentations[i].level;
         }
       }
 
       // Account for purchased but uninstalled Augmentations
       for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
-        if (Player.queuedAugmentations[i].name == AugmentationNames.NeuroFluxGovernor) {
+        if (Player.queuedAugmentations[i].name == AugmentationName.NeuroFluxGovernor) {
           ++currLevel;
         }
       }

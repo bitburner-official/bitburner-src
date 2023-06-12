@@ -3,8 +3,8 @@ import { BaseServer } from "../../Server/BaseServer";
 import { GetServer } from "../../Server/AllServers";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
-import { checkEnum } from "../../utils/helpers/enum";
-import { LiteratureName } from "../../Literature/data/LiteratureNames";
+import { isMember } from "../../utils/EnumHelper";
+import { LiteratureName } from "@enums";
 import { ContentFile } from "../../Paths/ContentFile";
 
 export function scp(args: (string | number | boolean)[], server: BaseServer): void {
@@ -27,7 +27,7 @@ export function scp(args: (string | number | boolean)[], server: BaseServer): vo
     if (!path) return Terminal.error(`Invalid file path: ${filename}`);
     // Validate .lit files
     if (path.endsWith(".lit")) {
-      if (!checkEnum(LiteratureName, path) || !server.messages.includes(path)) {
+      if (!isMember("LiteratureName", path) || !server.messages.includes(path)) {
         return Terminal.error(`scp failed: ${path} does not exist on server ${server.hostname}`);
       }
       files.push(path);
@@ -47,7 +47,7 @@ export function scp(args: (string | number | boolean)[], server: BaseServer): vo
   // Actually copy the files (no more errors possible)
   for (const file of files) {
     // Lit files, entire "file" is just the name
-    if (checkEnum(LiteratureName, file)) {
+    if (isMember("LiteratureName", file)) {
       if (destServer.messages.includes(file)) {
         Terminal.print(`${file} was already on ${destHostname}, file skipped`);
         continue;

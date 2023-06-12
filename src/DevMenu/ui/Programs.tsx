@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Player } from "@player";
 import MenuItem from "@mui/material/MenuItem";
-import { CompletedProgramName } from "../../Programs/Programs";
+import { CompletedProgramName } from "@enums";
 
 export function Programs(): React.ReactElement {
   const [program, setProgram] = useState(CompletedProgramName.bruteSsh);

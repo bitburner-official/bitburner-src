@@ -10,10 +10,9 @@ import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { formatMoney, formatReputation } from "../../ui/formatNumber";
 import { Augmentation } from "../Augmentation";
-import { AugmentationNames } from "../data/AugmentationNames";
+import { AugmentationName, FactionName } from "@enums";
 import { StaticAugmentations } from "../StaticAugmentations";
 import { PurchaseAugmentationModal } from "./PurchaseAugmentationModal";
-import { FactionNames } from "../../Faction/data/FactionNames";
 
 interface IPreReqsProps {
   aug: Augmentation;
@@ -90,8 +89,8 @@ const Exclusive = (props: IExclusiveProps): React.ReactElement => {
                 </li>
               )}
               {Player.canAccessGrafting() &&
-                (!props.aug.isSpecial || props.aug.factions.includes(FactionNames.Bladeburners)) &&
-                props.aug.name !== AugmentationNames.TheRedPill && (
+                (!props.aug.isSpecial || props.aug.factions.includes(FactionName.Bladeburners)) &&
+                props.aug.name !== AugmentationName.TheRedPill && (
                   <li>
                     <b>Grafting</b>
                   </li>
@@ -210,7 +209,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
                   <>
                     <Typography variant="h5">
                       {props.augName}
-                      {props.augName === AugmentationNames.NeuroFluxGovernor && ` - Level ${aug.getLevel()}`}
+                      {props.augName === AugmentationName.NeuroFluxGovernor && ` - Level ${aug.getLevel()}`}
                     </Typography>
                     <Typography>{description}</Typography>
                   </>
@@ -227,7 +226,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
                   }}
                 >
                   {aug.name}
-                  {aug.name === AugmentationNames.NeuroFluxGovernor && ` - Level ${aug.getLevel()}`}
+                  {aug.name === AugmentationName.NeuroFluxGovernor && ` - Level ${aug.getLevel()}`}
                 </Typography>
               </Tooltip>
 

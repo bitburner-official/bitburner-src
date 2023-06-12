@@ -1,20 +1,20 @@
+import { Player } from "@player";
+import { LocationName } from "@enums";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { applySleeveGains, Work, WorkType } from "./Work";
-import { LocationName } from "../../../Enums";
+import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
 import { Companies } from "../../../Company/Companies";
 import { Company } from "../../../Company/Company";
 import { calculateCompanyWorkStats } from "../../../Work/Formulas";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 import { influenceStockThroughCompanyWork } from "../../../StockMarket/PlayerInfluencing";
-import { Player } from "@player";
 import { CompanyPositions } from "../../../Company/CompanyPositions";
 
-export const isSleeveCompanyWork = (w: Work | null): w is SleeveCompanyWork =>
-  w !== null && w.type === WorkType.COMPANY;
+export const isSleeveCompanyWork = (w: SleeveWorkClass | null): w is SleeveCompanyWork =>
+  w !== null && w.type === SleeveWorkType.COMPANY;
 
-export class SleeveCompanyWork extends Work {
-  type: WorkType.COMPANY = WorkType.COMPANY;
+export class SleeveCompanyWork extends SleeveWorkClass {
+  type: SleeveWorkType.COMPANY = SleeveWorkType.COMPANY;
   companyName: string;
 
   constructor(companyName?: string) {
@@ -47,7 +47,7 @@ export class SleeveCompanyWork extends Work {
 
   APICopy() {
     return {
-      type: WorkType.COMPANY as "COMPANY",
+      type: SleeveWorkType.COMPANY as "COMPANY",
       companyName: this.companyName,
     };
   }

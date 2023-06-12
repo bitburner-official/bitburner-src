@@ -2,9 +2,8 @@
  * Metadata for constructing Location objects for all Locations
  * in the game
  */
-import { CityName, LocationName } from "../../Enums";
+import { CityName, LocationName, LocationType } from "@enums";
 import { IConstructorParams } from "../Location";
-import { LocationType } from "../LocationTypeEnum";
 
 export const LocationsMetadata: IConstructorParams[] = [
   {

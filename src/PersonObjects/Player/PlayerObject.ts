@@ -1,3 +1,13 @@
+import type { Player as IPlayer } from "@nsdefs";
+import type { PlayerAchievement } from "../../Achievements/Achievements";
+import type { Bladeburner } from "../../Bladeburner/Bladeburner";
+import type { Corporation } from "../../Corporation/Corporation";
+import type { Exploit } from "../../Exploits/Exploit";
+import type { Gang } from "../../Gang/Gang";
+import type { HacknetNode } from "../../Hacknet/HacknetNode";
+import type { Sleeve } from "../Sleeve/Sleeve";
+import type { Work } from "../../Work/Work";
+
 import * as augmentationMethods from "./PlayerObjectAugmentationMethods";
 import * as bladeburnerMethods from "./PlayerObjectBladeburnerMethods";
 import * as corporationMethods from "./PlayerObjectCorporationMethods";
@@ -7,27 +17,15 @@ import * as serverMethods from "./PlayerObjectServerMethods";
 import * as workMethods from "./PlayerObjectWorkMethods";
 
 import { setPlayer } from "../../Player";
-import { Sleeve } from "../Sleeve/Sleeve";
-import { Exploit } from "../../Exploits/Exploit";
-
-import { LocationName } from "../../Enums";
-import { Corporation } from "../../Corporation/Corporation";
-import { Gang } from "../../Gang/Gang";
-import { Bladeburner } from "../../Bladeburner/Bladeburner";
-import { HacknetNode } from "../../Hacknet/HacknetNode";
-
+import { LocationName } from "@enums";
 import { HashManager } from "../../Hacknet/HashManager";
-
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
 import { JSONMap } from "../../Types/Jsonable";
-import { PlayerAchievement } from "../../Achievements/Achievements";
 import { cyrb53 } from "../../utils/StringHelperFunctions";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { CONSTANTS } from "../../Constants";
-import { Work } from "src/Work/Work";
 import { Person } from "../Person";
-import { Player as IPlayer } from "@nsdefs";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties

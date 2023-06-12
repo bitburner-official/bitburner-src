@@ -1,7 +1,7 @@
 import { CorpIndustryData } from "@nsdefs";
 
 import { createFullRecordFromEntries } from "../../Types/Record";
-import { IndustryType } from "./Enums";
+import { IndustryType } from "@enums";
 import { getBaseResearchTreeCopy, getProductIndustryResearchTreeCopy } from "./BaseResearchTree";
 
 export const IndustriesData: Record<IndustryType, CorpIndustryData> = {

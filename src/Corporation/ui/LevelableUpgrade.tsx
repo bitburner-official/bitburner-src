@@ -11,7 +11,7 @@ import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { calculateMaxAffordableUpgrade, calculateUpgradeCost } from "../helpers";
-import { CorpUpgradeName } from "../data/Enums";
+import { CorpUpgradeName } from "@enums";
 import { PositiveInteger } from "../../types";
 
 interface IProps {

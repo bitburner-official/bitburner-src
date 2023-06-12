@@ -4,19 +4,19 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { Companies as AllCompanies } from "../../Company/Companies";
 import MenuItem from "@mui/material/MenuItem";
+
+import { FactionName } from "@enums";
+import { Companies as AllCompanies } from "../../Company/Companies";
 import { Adjuster } from "./Adjuster";
-import { FactionNames } from "../../Faction/data/FactionNames";
 
 const bigNumber = 1e12;
 
 export function Companies(): React.ReactElement {
-  const [company, setCompany] = useState(FactionNames.ECorp as string);
+  const [company, setCompany] = useState(FactionName.ECorp as string);
   function setCompanyDropdown(event: SelectChangeEvent): void {
     setCompany(event.target.value);
   }

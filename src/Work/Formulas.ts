@@ -3,7 +3,7 @@ import { Crime } from "../Crime/Crime";
 import { newWorkStats, scaleWorkStats, WorkStats, multWorkStats } from "./WorkStats";
 import { Person as IPerson } from "@nsdefs";
 import { CONSTANTS } from "../Constants";
-import { FactionWorkType, GymType } from "../Enums";
+import { ClassType, FactionWorkType, LocationName } from "@enums";
 import {
   getFactionFieldWorkRepGain,
   getFactionSecurityWorkRepGain,
@@ -12,14 +12,13 @@ import {
 import { Locations } from "../Locations/Locations";
 import { Location } from "../Locations/Location";
 import { Player } from "@player";
-import { Class, Classes, ClassType } from "./ClassWork";
+import { Class, Classes } from "./ClassWork";
 import { Server } from "../Server/Server";
 import { GetServer } from "../Server/AllServers";
 import { serverMetadata } from "../Server/data/servers";
-import { LocationName } from "../Enums";
 import { Company } from "../Company/Company";
 import { CompanyPosition } from "../Company/CompanyPosition";
-import { checkEnum } from "../utils/helpers/enum";
+import { isMember } from "../utils/EnumHelper";
 
 const gameCPS = 1000 / CONSTANTS.MilliPerCycle; // 5 cycles per second
 export const FactionWorkStats: Record<FactionWorkType, WorkStats> = {
@@ -96,7 +95,7 @@ export function calculateClassEarnings(person: IPerson, type: ClassType, locatio
   const classs = Classes[type];
   const location = Locations[locationName];
 
-  const hashMult = checkEnum(GymType, type) ? hashManager.getTrainingMult() : hashManager.getStudyMult();
+  const hashMult = isMember("GymType", type) ? hashManager.getTrainingMult() : hashManager.getStudyMult();
 
   const earnings = multWorkStats(
     scaleWorkStats(classs.earnings, (location.expMult / gameCPS) * hashMult, false),

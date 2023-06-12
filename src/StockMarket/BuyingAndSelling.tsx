@@ -9,7 +9,7 @@ import {
   processTransactionForecastMovement,
 } from "./StockMarketHelpers";
 
-import { PositionTypes } from "./data/PositionTypes";
+import { PositionType } from "@enums";
 
 import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
@@ -59,7 +59,7 @@ export function buyStock(
   }
 
   // Does player have enough money?
-  const totalPrice = getBuyTransactionCost(stock, shares, PositionTypes.Long);
+  const totalPrice = getBuyTransactionCost(stock, shares, PositionType.Long);
   if (totalPrice == null) {
     return false;
   }
@@ -162,7 +162,7 @@ export function sellStock(
     return false;
   }
 
-  const gains = getSellTransactionGain(stock, shares, PositionTypes.Long);
+  const gains = getSellTransactionGain(stock, shares, PositionType.Long);
   if (gains == null) {
     return false;
   }
@@ -236,7 +236,7 @@ export function shortStock(
   }
 
   // Does the player have enough money?
-  const totalPrice = getBuyTransactionCost(stock, shares, PositionTypes.Short);
+  const totalPrice = getBuyTransactionCost(stock, shares, PositionType.Short);
   if (totalPrice == null) {
     return false;
   }
@@ -340,7 +340,7 @@ export function sellShort(
   }
 
   const origCost = shares * stock.playerAvgShortPx;
-  const totalGain = getSellTransactionGain(stock, shares, PositionTypes.Short);
+  const totalGain = getSellTransactionGain(stock, shares, PositionType.Short);
   if (totalGain == null || isNaN(totalGain) || origCost == null) {
     if (ctx) {
       helpers.log(

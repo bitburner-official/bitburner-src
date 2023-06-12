@@ -1,13 +1,10 @@
-import { FactionNames } from "../../Faction/data/FactionNames";
-import { Sleeve } from "./Sleeve";
-
 import { Player } from "@player";
-
+import { AugmentationName, FactionName } from "@enums";
+import { Sleeve } from "./Sleeve";
 import { Augmentation } from "../../Augmentation/Augmentation";
 import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
 import { Factions } from "../../Faction/Factions";
 import { mergeMultipliers, Multipliers } from "../Multipliers";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
 
 /** Updates this object's multipliers for the given augmentation */
@@ -74,8 +71,8 @@ export function findPurchasableAugs(this: Sleeve): Augmentation[] {
   }
 
   for (const facName of Player.factions) {
-    if (facName === FactionNames.Bladeburners) continue;
-    if (facName === FactionNames.Netburners) continue;
+    if (facName === FactionName.Bladeburners) continue;
+    if (facName === FactionName.Netburners) continue;
     const fac = Factions[facName];
     if (!fac) continue;
 
@@ -90,8 +87,8 @@ export function findPurchasableAugs(this: Sleeve): Augmentation[] {
   }
 
   // Add the stanek sleeve aug
-  if (!ownedAugNames.includes(AugmentationNames.ZOE) && Player.factions.includes(FactionNames.ChurchOfTheMachineGod)) {
-    const aug = StaticAugmentations[AugmentationNames.ZOE];
+  if (!ownedAugNames.includes(AugmentationName.ZOE) && Player.factions.includes(FactionName.ChurchOfTheMachineGod)) {
+    const aug = StaticAugmentations[AugmentationName.ZOE];
     availableAugs.push(aug);
   }
 

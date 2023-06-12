@@ -1,4 +1,4 @@
-import { FactionNames } from "../Faction/data/FactionNames";
+import { FactionName } from "@enums";
 import { GangConstants } from "../Gang/data/Constants";
 import { Player } from "@player";
 import { Gang } from "../Gang/Gang";
@@ -43,7 +43,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       if (Player.gang) return false;
       if (!Player.factions.includes(faction)) return false;
 
-      const isHacking = faction === FactionNames.NiteSec || faction === FactionNames.TheBlackHand;
+      const isHacking = faction === FactionName.NiteSec || faction === FactionName.TheBlackHand;
       Player.startGang(faction, isHacking);
       return true;
     },

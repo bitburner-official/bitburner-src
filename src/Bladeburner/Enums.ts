@@ -1,4 +1,4 @@
-export enum BlackOperationNames {
+export enum BlackOperationName {
   OperationTyphoon = "Operation Typhoon",
   OperationZero = "Operation Zero",
   OperationX = "Operation X",

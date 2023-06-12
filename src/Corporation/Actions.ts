@@ -12,10 +12,10 @@ import { OfficeSpace } from "./OfficeSpace";
 import { Material } from "./Material";
 import { Product } from "./Product";
 import { Warehouse } from "./Warehouse";
-import { IndustryType } from "./data/Enums";
+import { IndustryType } from "@enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
-import { CityName } from "../Enums";
+import { CityName } from "@enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { getRecordValues } from "../Types/Record";
 

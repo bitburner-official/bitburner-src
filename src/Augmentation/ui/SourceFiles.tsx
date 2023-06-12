@@ -31,7 +31,7 @@ const safeGetSf = (sfNum: number): SourceFile | SfMinus1 | null => {
           You have found the following exploits:
           <br />
           <br />
-          {Player.exploits.map((c: Exploit) => (
+          {Player.exploits.map((c) => (
             <React.Fragment key={c}>
               * {ExploitName(c)}
               <br />

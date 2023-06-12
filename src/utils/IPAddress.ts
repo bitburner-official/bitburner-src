@@ -1,4 +1,4 @@
-import { IPAddress } from "src/Types/strings";
+import type { IPAddress } from "../Types/strings";
 import { getRandomByte } from "./helpers/getRandomByte";
 
 /**

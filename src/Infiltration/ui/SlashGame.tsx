@@ -1,6 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { KEY } from "../../utils/helpers/keyCodes";
 import { interpolate } from "./Difficulty";
@@ -39,7 +39,7 @@ export function SlashGame(props: IMinigameProps): React.ReactElement {
       props.onSuccess();
     }
   }
-  const hasAugment = Player.hasAugmentation(AugmentationNames.MightOfAres, true);
+  const hasAugment = Player.hasAugmentation(AugmentationName.MightOfAres, true);
   const guardingTime = Math.random() * 3250 + 1500 - (250 + difficulty.window);
   const preparingTime = difficulty.window;
   const attackingTime = 250;

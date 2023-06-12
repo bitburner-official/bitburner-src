@@ -11,7 +11,7 @@ import { Router } from "../../ui/GameRoot";
 import { MenuItem, SelectChangeEvent, TextField, Select } from "@mui/material";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { GangConstants } from "../../Gang/data/Constants";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "@enums";
 import { checkForMessagesToSend } from "../../Message/MessageHelpers";
 import { ThemeEvents } from "../../Themes/ui/Theme";
 
@@ -61,7 +61,7 @@ export function General(): React.ReactElement {
 
   // Gang functions
   const startGang = () => {
-    const isHacking = gangFaction === FactionNames.NiteSec || gangFaction === FactionNames.TheBlackHand;
+    const isHacking = gangFaction === FactionName.NiteSec || gangFaction === FactionName.TheBlackHand;
     Player.startGang(gangFaction, isHacking);
     // Rerender so the gang menu option will show up immediately on the devmenu page selection
     ThemeEvents.emit();

@@ -1,4 +1,4 @@
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { Player } from "@player";
 import { Script } from "../Script/Script";
@@ -77,11 +77,11 @@ function convert(code: string): string {
 }
 
 export function AwardNFG(n = 1): void {
-  const nf = Player.augmentations.find((a) => a.name === AugmentationNames.NeuroFluxGovernor);
+  const nf = Player.augmentations.find((a) => a.name === AugmentationName.NeuroFluxGovernor);
   if (nf) {
     nf.level += n;
   } else {
-    const nf = new PlayerOwnedAugmentation(AugmentationNames.NeuroFluxGovernor);
+    const nf = new PlayerOwnedAugmentation(AugmentationName.NeuroFluxGovernor);
     nf.level = n;
     Player.augmentations.push(nf);
   }

@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { ProgressBar } from "../../ui/React/Progress";
 
@@ -14,7 +14,7 @@ interface IProps {
 export function GameTimer(props: IProps): React.ReactElement {
   const [v, setV] = useState(100);
   const totalMillis =
-    (!props.ignoreAugment_WKSharmonizer && Player.hasAugmentation(AugmentationNames.WKSharmonizer, true) ? 1.3 : 1) *
+    (!props.ignoreAugment_WKSharmonizer && Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 1.3 : 1) *
     props.millis;
 
   const tick = 200;

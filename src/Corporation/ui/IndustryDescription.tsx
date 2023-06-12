@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 
 import { MoneyCost } from "./MoneyCost";
 import { Corporation } from "../Corporation";
-import { IndustryType } from "../data/Enums";
+import { IndustryType } from "@enums";
 import { IndustriesData } from "../data/IndustryData";
 
 interface IProps {
