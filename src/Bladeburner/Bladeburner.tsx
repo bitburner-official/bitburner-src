@@ -34,7 +34,7 @@ import { KEY } from "../utils/helpers/keyCodes";
 import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfiltrateWork";
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
-import { getRandomMember } from "../utils/helpers/enum";
+import { getEnumHelper } from "../utils/EnumHelper";
 import { createEnumKeyedRecord } from "../Types/Record";
 
 export interface BlackOpsAttempt {
@@ -847,8 +847,9 @@ export class Bladeburner {
   }
 
   triggerMigration(sourceCityName: CityName): void {
-    let destCityName = getRandomMember(CityName);
-    while (destCityName === sourceCityName) destCityName = getRandomMember(CityName);
+    const cityHelper = getEnumHelper("CityName");
+    let destCityName = cityHelper.random();
+    while (destCityName === sourceCityName) destCityName = cityHelper.random();
 
     const destCity = this.cities[destCityName];
     const sourceCity = this.cities[sourceCityName];
@@ -881,13 +882,14 @@ export class Bladeburner {
 
   randomEvent(): void {
     const chance = Math.random();
+    const cityHelper = getEnumHelper("CityName");
 
     // Choose random source/destination city for events
-    const sourceCityName = getRandomMember(CityName);
+    const sourceCityName = cityHelper.random();
     const sourceCity = this.cities[sourceCityName];
 
-    let destCityName = getRandomMember(CityName);
-    while (destCityName === sourceCityName) destCityName = getRandomMember(CityName);
+    let destCityName = cityHelper.random();
+    while (destCityName === sourceCityName) destCityName = cityHelper.random();
     const destCity = this.cities[destCityName];
 
     if (chance <= 0.05) {

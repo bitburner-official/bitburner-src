@@ -50,3 +50,9 @@ export enum CorpUpgradeName {
   ABCSalesBots = "ABC SalesBots",
   ProjectInsight = "Project Insight",
 }
+
+export {
+  materialNames as CorpMaterialName,
+  smartSupplyOptions as SmartSupplyOption,
+  researchNames as CorpResearchName,
+} from "./data/Constants";

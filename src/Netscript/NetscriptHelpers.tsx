@@ -33,7 +33,6 @@ import { arrayToString } from "../utils/helpers/ArrayHelpers";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { checkEnum } from "../utils/helpers/enum";
 import { RamCostConstants } from "./RamCostGenerator";
 import { isPositiveInteger, PositiveInteger, Unknownify } from "../types";
 import { Engine } from "../engine";
@@ -55,7 +54,6 @@ export const helpers = {
   checkSingularityAccess,
   netscriptDelay,
   updateDynamicRam,
-  city,
   getServer,
   scriptIdentifier,
   hack,
@@ -81,17 +79,6 @@ export interface CompleteRunOptions {
   temporary: boolean;
   ramOverride?: number;
   preventDuplicates: boolean;
-}
-
-export function assertMember<T extends string>(
-  ctx: NetscriptContext,
-  obj: Record<string, T> | T[],
-  typeName: string,
-  argName: string,
-  v: unknown,
-): asserts v is T {
-  assertString(ctx, argName, v);
-  if (!checkEnum(obj, v)) throw makeRuntimeErrorMsg(ctx, `${argName}: ${v} is not a valid ${typeName}.`, "TYPE");
 }
 
 export function assertString(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {
@@ -410,13 +397,6 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
     killWorkerScript(ws);
     throw err;
   }
-}
-
-/** Validates the input v as being a CityName. Throws an error if it is not. */
-function city(ctx: NetscriptContext, argName: string, v: unknown): CityName {
-  if (typeof v !== "string" || !checkEnum(CityName, v))
-    throw makeRuntimeErrorMsg(ctx, `${argName} should be a city name.`);
-  return v;
 }
 
 function scriptIdentifier(

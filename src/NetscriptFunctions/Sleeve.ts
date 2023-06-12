@@ -1,11 +1,10 @@
 import { Player } from "@player";
 import type { Sleeve as NetscriptSleeve } from "@nsdefs";
-import { CityName } from "@enums";
 import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { Augmentation } from "../Augmentation/Augmentation";
 
-import { checkEnum } from "../utils/helpers/enum";
+import { getEnumHelper } from "../utils/EnumHelper";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
 import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
@@ -73,14 +72,10 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
     },
     travel: (ctx) => (_sleeveNumber, _cityName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const cityName = helpers.string(ctx, "cityName", _cityName);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
-      if (checkEnum(CityName, cityName)) {
-        return Player.sleeves[sleeveNumber].travel(cityName);
-      } else {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid city name: '${cityName}'.`);
-      }
+      return Player.sleeves[sleeveNumber].travel(cityName);
     },
     setToCompanyWork: (ctx) => (_sleeveNumber, acompanyName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);

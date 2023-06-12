@@ -7,7 +7,6 @@ import { Crimes } from "../../../Crime/Crimes";
 import { Crime } from "../../../Crime/Crime";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 import { CONSTANTS } from "../../../Constants";
-import { checkEnum } from "../../../utils/helpers/enum";
 import { calculateCrimeWorkStats } from "../../../Work/Formulas";
 import { findCrime } from "../../../Crime/CrimeHelpers";
 
@@ -24,7 +23,6 @@ export class SleeveCrimeWork extends SleeveWorkClass {
   }
 
   getCrime(): Crime {
-    if (!checkEnum(CrimeType, this.crimeType)) throw new Error("crime should not be undefined");
     return Crimes[this.crimeType];
   }
 

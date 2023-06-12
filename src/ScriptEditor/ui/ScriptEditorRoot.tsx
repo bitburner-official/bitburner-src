@@ -23,7 +23,7 @@ import { PromptEvent } from "../../ui/React/PromptManager";
 import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
 import { useRerender } from "../../ui/React/hooks";
 import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
-import { TextFilePath } from "src/Paths/TextFilePath";
+import { TextFilePath } from "../../Paths/TextFilePath";
 
 import { dirty, getServerCode } from "./utils";
 import { OpenScript } from "./OpenScript";

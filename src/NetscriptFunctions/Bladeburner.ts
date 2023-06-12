@@ -3,12 +3,11 @@ import type { Action } from "../Bladeburner/Action";
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { Player } from "@player";
-import { CityName } from "@enums";
 import { Bladeburner } from "../Bladeburner/Bladeburner";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { BlackOperation } from "../Bladeburner/BlackOperation";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { checkEnum } from "../utils/helpers/enum";
+import { getEnumHelper } from "../utils/EnumHelper";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {
@@ -267,20 +266,17 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     getCityEstimatedPopulation: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
-      const cityName = helpers.string(ctx, "cityName", _cityName);
-      if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city: ${cityName}`);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       return bladeburner.cities[cityName].popEst;
     },
     getCityCommunities: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
-      const cityName = helpers.string(ctx, "cityName", _cityName);
-      if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city: ${cityName}`);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       return bladeburner.cities[cityName].comms;
     },
     getCityChaos: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
-      const cityName = helpers.string(ctx, "cityName", _cityName);
-      if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city: ${cityName}`);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       return bladeburner.cities[cityName].chaos;
     },
     getCity: (ctx) => () => {
@@ -289,8 +285,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     switchCity: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
-      const cityName = helpers.string(ctx, "cityName", _cityName);
-      if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city: ${cityName}`);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       bladeburner.city = cityName;
       return true;
     },

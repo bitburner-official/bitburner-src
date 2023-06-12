@@ -10,7 +10,7 @@ import {
   calculateTradeInformationRepReward,
 } from "../Infiltration/formulas/victory";
 import { Factions } from "../Faction/Factions";
-import { checkEnum } from "../utils/helpers/enum";
+import { getEnumHelper } from "../utils/EnumHelper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { filterTruthy } from "../utils/helpers/ArrayHelpers";
 
@@ -19,8 +19,7 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
     (location: Location) => location.infiltrationData,
   );
 
-  const calculateInfiltrationData = (ctx: NetscriptContext, locationName: string): InfiltrationLocation => {
-    if (!checkEnum(LocationName, locationName)) throw new Error(`Location '${locationName}' does not exists.`);
+  const calculateInfiltrationData = (ctx: NetscriptContext, locationName: LocationName): InfiltrationLocation => {
     const location = Locations[locationName];
     if (location === undefined) throw helpers.makeRuntimeErrorMsg(ctx, `Location '${location}' does not exists.`);
     if (location.infiltrationData === undefined)
@@ -51,9 +50,9 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
         }),
       );
     },
-    getInfiltration: (ctx) => (_location) => {
-      const location = helpers.string(ctx, "location", _location);
-      return calculateInfiltrationData(ctx, location);
+    getInfiltration: (ctx) => (_locationName) => {
+      const locationName = getEnumHelper("LocationName").nsGetMember(ctx, _locationName);
+      return calculateInfiltrationData(ctx, locationName);
     },
   };
 }

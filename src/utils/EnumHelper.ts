@@ -7,11 +7,13 @@ import { getRandomInt } from "./helpers/getRandomInt";
 
 class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & string> {
   name: string; // Name, for including in error text
+  defaultArgName: string; // Used as default for for validating ns arg name
   valueArray: Array<EnumMember>;
   valueSet: Set<EnumMember>; // For quick isMember typecheck
   fuzzMap: Map<string, EnumMember>; // For fuzzy lookup
   constructor(obj: EnumObj, name: string) {
     this.name = name;
+    this.defaultArgName = name.charAt(0).toLowerCase() + name.slice(1);
     this.valueArray = Object.values(obj);
     this.valueSet = new Set(this.valueArray);
     this.fuzzMap = new Map(this.valueArray.map((val) => [val.toLowerCase().replace(/[ -]+/g, ""), val]));
@@ -22,7 +24,7 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
     return (this.valueSet.has as (value: unknown) => boolean)(toValidate);
   }
   /** Take an unknown input from a player script, either return an enum member or throw */
-  nsGetMember(ctx: NetscriptContext, argName: string, toValidate: unknown): EnumMember {
+  nsGetMember(ctx: NetscriptContext, toValidate: unknown, argName = this.defaultArgName): EnumMember {
     if (this.isMember(toValidate)) return toValidate;
     // assertString is just called so if the user didn't even pass in a string, they get a different error message
     assertString(ctx, argName, toValidate);
@@ -36,8 +38,8 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
     );
   }
   /** Provides case insensitivty and ignores spaces and dashes, and can always match the input */
+  fuzzyGetMember(input: string): EnumMember | undefined;
   fuzzyGetMember(input: string, alwaysMatch: true): EnumMember;
-  fuzzyGetMember(input: string, alwaysMatch: false): EnumMember | undefined;
   fuzzyGetMember(input: string, alwaysMatch = false) {
     return this.fuzzMap.get(input.toLowerCase().replace(/[ -]+/g, "")) ?? alwaysMatch ? this.valueArray[0] : undefined;
   }
@@ -65,3 +67,8 @@ Object.entries(allEnums).forEach(([enumName, enumObj]) => {
 export const getEnumHelper: <Name extends EnumName, Enum extends typeof allEnums[Name]>(
   name: Name,
 ) => EnumHelper<Enum, Member<Enum>> = enumHelpers.get.bind(enumHelpers);
+
+export const isMember = <Name extends EnumName, Enum extends typeof allEnums[Name]>(
+  name: Name,
+  value: unknown,
+): value is Member<Enum> => getEnumHelper(name).isMember(value);

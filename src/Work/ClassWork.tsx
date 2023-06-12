@@ -10,7 +10,8 @@ import { Player } from "@player";
 import { calculateClassEarnings as calculateClassEarningsRate } from "./Formulas";
 import { Work, WorkType } from "./Work";
 import { applyWorkStats, newWorkStats, sumWorkStats, WorkStats } from "./WorkStats";
-import { checkEnum, findEnumMember } from "../utils/helpers/enum";
+import { findEnumMember } from "../utils/helpers/enum";
+import { isMember } from "../utils/EnumHelper";
 
 export interface Class {
   type: ClassType;
@@ -91,7 +92,7 @@ export class ClassWork extends Work {
   }
 
   isGym(): boolean {
-    return checkEnum(GymType, this.classType);
+    return isMember("GymType", this.classType);
   }
 
   getClass(): Class {

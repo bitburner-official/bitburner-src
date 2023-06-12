@@ -55,7 +55,7 @@ import { saveObject } from "../SaveObject";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { findEnumMember } from "../utils/helpers/enum";
 import { Engine } from "../engine";
-import { checkEnum } from "../utils/helpers/enum";
+import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
 
@@ -410,7 +410,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
     travelToCity: (ctx) => (_cityName) => {
       helpers.checkSingularityAccess(ctx);
-      const cityName = helpers.city(ctx, "cityName", _cityName);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
 
       switch (cityName) {
         case CityName.Aevum:
@@ -703,16 +703,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     getCompanyPositionInfo: (ctx) => (_companyName, _positionName) => {
       helpers.checkSingularityAccess(ctx);
       const companyName = helpers.string(ctx, "companyName", _companyName);
-      const positionName = helpers.string(ctx, "positionName", _positionName);
+      const positionName = getEnumHelper("JobName").nsGetMember(ctx, _positionName, "positionName");
 
       // Make sure its a valid company
       if (!(companyName in Companies)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
-      }
-
-      // Make sure its a valid position
-      if (!checkEnum(JobName, positionName)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: '${positionName}'`);
       }
 
       if (!Companies[companyName].hasPosition(positionName)) {

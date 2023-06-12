@@ -1,12 +1,12 @@
-import { ClassType, GymType, LocationName, UniversityClassType } from "@enums";
+import { ClassType, LocationName, UniversityClassType } from "@enums";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
 import { Classes } from "../../../Work/ClassWork";
 import { calculateClassEarnings } from "../../../Work/Formulas";
 import { Sleeve } from "../Sleeve";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
-import { checkEnum } from "../../../utils/helpers/enum";
 import { Locations } from "../../../Locations/Locations";
+import { isMember } from "../../../utils/EnumHelper";
 
 export const isSleeveClassWork = (w: SleeveWorkClass | null): w is SleeveClassWork =>
   w !== null && w.type === SleeveWorkType.CLASS;
@@ -32,7 +32,7 @@ export class SleeveClassWork extends SleeveWorkClass {
   }
 
   isGym(): boolean {
-    return checkEnum(GymType, this.classType);
+    return isMember("GymType", this.classType);
   }
 
   process(sleeve: Sleeve, cycles: number) {

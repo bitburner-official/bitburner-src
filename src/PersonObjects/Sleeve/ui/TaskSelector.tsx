@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { Sleeve } from "../Sleeve";
 import { Player } from "@player";
 import { Crimes } from "../../../Crime/Crimes";
-import { CityName, CrimeType, FactionName, FactionWorkType, GymType, LocationName } from "@enums";
+import { CityName, FactionName, FactionWorkType, GymType, LocationName } from "@enums";
 import { Factions } from "../../../Faction/Factions";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
 import { isSleeveBladeburnerWork } from "../Work/SleeveBladeburnerWork";
-import { checkEnum } from "../../../utils/helpers/enum";
+import { getEnumHelper } from "../../../utils/EnumHelper";
 import { SleeveWorkType } from "../Work/Work";
 
 const universitySelectorOptions: string[] = [
@@ -271,7 +271,7 @@ function getABC(sleeve: Sleeve): [string, string, string] {
       return ["Workout at Gym", gymNames[work.classType as GymType], work.location];
     }
     case SleeveWorkType.CRIME:
-      return ["Commit Crime", checkEnum(CrimeType, work.crimeType) ? work.crimeType : "Shoplift", "------"];
+      return ["Commit Crime", getEnumHelper("CrimeType").fuzzyGetMember(work.crimeType, true), "------"];
     case SleeveWorkType.SUPPORT:
       return ["Perform Bladeburner Actions", "Support main sleeve", "------"];
     case SleeveWorkType.INFILTRATE:

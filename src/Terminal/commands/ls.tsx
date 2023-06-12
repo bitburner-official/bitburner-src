@@ -22,8 +22,7 @@ import {
   resolveDirectory,
   root,
 } from "../../Paths/Directory";
-import { checkEnum } from "../../utils/helpers/enum";
-import { LiteratureName, MessageFilename } from "@enums";
+import { isMember } from "../../utils/EnumHelper";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer): void {
   interface LSFlags {
@@ -159,9 +158,9 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
         return Terminal.error(`File is not on this server, connect to ${server.hostname} and try again`);
       }
       // Message and lit files are always in root, no need to combine path with base directory
-      if (checkEnum(MessageFilename, props.path)) {
+      if (isMember("MessageFilename", props.path)) {
         showMessage(props.path);
-      } else if (checkEnum(LiteratureName, props.path)) {
+      } else if (isMember("LiteratureName", props.path)) {
         showLiterature(props.path);
       }
     }

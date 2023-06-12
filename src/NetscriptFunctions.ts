@@ -80,7 +80,6 @@ import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { SnackbarEvents } from "./ui/React/Snackbar";
-import { checkEnum } from "./utils/helpers/enum";
 import { matchScriptPathExact } from "./utils/helpers/scriptKey";
 
 import { Flags } from "./NetscriptFunctions/Flags";
@@ -101,6 +100,7 @@ import { hasTextExtension } from "./Paths/TextFilePath";
 import { ContentFilePath } from "./Paths/ContentFile";
 import { hasContractExtension } from "./Paths/ContractFilePath";
 import { getRamCost } from "./Netscript/RamCostGenerator";
+import { getEnumHelper } from "./utils/EnumHelper";
 
 export const enums: NSEnums = {
   CityName,
@@ -1608,10 +1608,8 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_message, _variant = ToastVariant.SUCCESS, _duration = 2000) => {
       const message = helpers.string(ctx, "message", _message);
-      const variant = helpers.string(ctx, "variant", _variant);
+      const variant = getEnumHelper("ToastVariant").nsGetMember(ctx, _variant);
       const duration = _duration === null ? null : helpers.number(ctx, "duration", _duration);
-      if (!checkEnum(ToastVariant, variant))
-        throw new Error(`variant must be one of ${Object.values(ToastVariant).join(", ")}`);
       SnackbarEvents.emit(message, variant as ToastVariant, duration);
     },
   prompt: (ctx) => (_txt, _options) => {
