@@ -164,6 +164,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
   const [open, setOpen] = useState(false);
 
   const aug = StaticAugmentations[props.augName];
+  if (!aug) return <></>;
   const augCosts = aug.getCost();
   const cost = props.parent.sleeveAugs ? aug.baseCost : augCosts.moneyCost;
   const repCost = augCosts.repCost;
