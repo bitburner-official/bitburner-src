@@ -13,6 +13,9 @@ export type Unknownify<T> = {
   [key in keyof T]?: unknown;
 };
 
+/** Get the member type of either an array or an object */
+export type Member<T> = T extends (infer arrayMember)[] ? arrayMember : T[keyof T];
+
 /** Status object for functions that return a boolean indicating success/failure
  * and an optional message */
 export interface IReturnStatus {
