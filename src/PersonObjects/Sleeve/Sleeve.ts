@@ -214,23 +214,25 @@ export class Sleeve extends Person implements SleevePerson {
 
     // Set experience/money gains based on class
     let classType: ClassType | undefined;
+    // TODO: why lower case??? It's not effecient, not typesafe and in general a bad idea
     switch (className.toLowerCase()) {
-      case "study computer science":
+      case "study computer science": // deprecated, leave it here for backwards compatibility
+      case ClassType.computerScience.toLowerCase():
         classType = UniversityClassType.computerScience;
         break;
-      case "data structures":
+      case ClassType.dataStructures.toLowerCase():
         classType = UniversityClassType.dataStructures;
         break;
-      case "networks":
+      case ClassType.networks.toLowerCase():
         classType = UniversityClassType.networks;
         break;
-      case "algorithms":
+      case ClassType.algorithms.toLowerCase():
         classType = UniversityClassType.algorithms;
         break;
-      case "management":
+      case ClassType.management.toLowerCase():
         classType = UniversityClassType.management;
         break;
-      case "leadership":
+      case ClassType.leadership.toLowerCase():
         classType = UniversityClassType.leadership;
         break;
     }
