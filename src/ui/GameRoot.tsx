@@ -68,7 +68,7 @@ import { RecoveryMode, RecoveryRoot } from "./React/RecoveryRoot";
 import { AchievementsRoot } from "../Achievements/AchievementsRoot";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { ThemeBrowser } from "../Themes/ui/ThemeBrowser";
-import { ImportSaveRoot } from "./React/ImportSaveRoot";
+import { ImportSave } from "./React/ImportSave";
 import { BypassWrapper } from "./React/BypassWrapper";
 
 import { Apr1 } from "./Apr1";
@@ -415,7 +415,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.ImportSave: {
-      mainPage = <ImportSaveRoot importString={importString} automatic={importAutomatic} />;
+      mainPage = <ImportSave importString={importString} automatic={importAutomatic} />;
       withSidebar = false;
       withPopups = false;
       bypassGame = true;

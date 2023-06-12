@@ -1,38 +1,43 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableBody,
-  TableContainer,
-  TableCell,
-  Typography,
-  Tooltip,
-  Box,
-  Button,
-  ButtonGroup,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import TableCell from "@mui/material/TableCell";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 import { Theme } from "@mui/material/styles";
 
-import ThumbUpAlt from "@mui/icons-material/ThumbUpAlt";
-import ThumbDownAlt from "@mui/icons-material/ThumbDownAlt";
+import WarningIcon from "@mui/icons-material/Warning";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import WarningIcon from "@mui/icons-material/Warning";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
-import { ImportData, saveObject } from "../../SaveObject";
-import { Settings } from "../../Settings/Settings";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { formatMoney, formatNumberNoSuffix } from "../formatNumber";
-import { ConfirmationModal } from "./ConfirmationModal";
-import { pushImportResult } from "../../Electron";
-import { Router } from "../GameRoot";
-import { Page } from "../Router";
+import { Skills } from "@nsdefs";
+
+import { ImportData, saveObject } from "../../../SaveObject";
+import { Settings } from "../../../Settings/Settings";
+import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
+import { formatMoney, formatNumberNoSuffix } from "../../formatNumber";
+import { ConfirmationModal } from "../ConfirmationModal";
+import { pushImportResult } from "../../../Electron";
+import { Router } from "../../GameRoot";
+import { Page } from "../../Router";
+import { useBoolean } from "../hooks";
+
+import { ComparisonIcon } from "./ComparisonIcon";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -72,62 +77,37 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
+
+    skillTitle: {
+      textTransform: "capitalize",
+    },
   }),
 );
 
-function ComparisonIcon({ isBetter }: { isBetter: boolean }): JSX.Element {
-  if (isBetter) {
-    return (
-      <Tooltip
-        title={
-          <>
-            Imported value is <b>larger</b>!
-          </>
-        }
-      >
-        <ThumbUpAlt color="success" />
-      </Tooltip>
-    );
-  } else {
-    return (
-      <Tooltip
-        title={
-          <>
-            Imported value is <b>smaller</b>!
-          </>
-        }
-      >
-        <ThumbDownAlt color="error" />
-      </Tooltip>
-    );
-  }
-}
-
-export interface IProps {
-  importString: string;
-  automatic: boolean;
-}
+// TODO: move to game constants and/or extract as an enum
+const playerSkills: (keyof Skills)[] = ["hacking", "strength", "defense", "dexterity", "agility", "charisma"];
 
 let initialAutosave = 0;
 
-export function ImportSaveRoot(props: IProps): JSX.Element {
+export const ImportSave = (props: { importString: string; automatic: boolean }): JSX.Element => {
   const classes = useStyles();
   const [importData, setImportData] = useState<ImportData | undefined>();
   const [currentData, setCurrentData] = useState<ImportData | undefined>();
-  const [importModalOpen, setImportModalOpen] = useState(false);
+  const [isImportModalOpen, { on: openImportModal, off: closeImportModal }] = useBoolean(false);
+  const [isSkillsExpanded, { toggle: toggleSkillsExpand }] = useBoolean(true);
   const [headback, setHeadback] = useState(false);
 
-  function handleGoBack(): void {
+  const handleGoBack = (): void => {
     Settings.AutosaveInterval = initialAutosave;
     pushImportResult(false);
     Router.allowRouting(true);
     setHeadback(true);
-  }
+  };
 
-  async function handleImport(): Promise<void> {
+  const handleImport = async (): Promise<void> => {
     await saveObject.importGame(props.importString, true);
     pushImportResult(true);
-  }
+  };
 
   useEffect(() => {
     // We want to disable autosave while we're in this mode
@@ -154,6 +134,7 @@ export function ImportSaveRoot(props: IProps): JSX.Element {
   }, [props.importString]);
 
   if (!importData || !currentData) return <></>;
+
   return (
     <Box className={classes.root}>
       <Typography variant="h4" sx={{ mb: 2 }}>
@@ -176,7 +157,7 @@ export function ImportSaveRoot(props: IProps): JSX.Element {
               <TableCell></TableCell>
               <TableCell>Current Game</TableCell>
               <TableCell>Being Imported</TableCell>
-              <TableCell></TableCell>
+              <TableCell width={56}></TableCell>
             </TableRow>
           </TableHead>
 
@@ -241,19 +222,43 @@ export function ImportSaveRoot(props: IProps): JSX.Element {
                 )}
               </TableCell>
             </TableRow>
-
             <TableRow>
-              <TableCell>Hacking</TableCell>
-              <TableCell>{formatNumberNoSuffix(currentData.playerData?.hacking ?? 0, 0)}</TableCell>
-              <TableCell>{formatNumberNoSuffix(importData.playerData?.hacking ?? 0, 0)}</TableCell>
-              <TableCell>
-                {importData.playerData?.hacking !== currentData.playerData?.hacking && (
-                  <ComparisonIcon
-                    isBetter={(importData.playerData?.hacking ?? 0) > (currentData.playerData?.hacking ?? 0)}
-                  />
-                )}
+              <TableCell colSpan={4}>
+                <IconButton aria-label="expand row" size="small" onClick={toggleSkillsExpand}>
+                  {isSkillsExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+                Skills
               </TableCell>
             </TableRow>
+            <TableRow>
+              <TableCell colSpan={4} padding="none">
+                <Collapse in={isSkillsExpanded}>
+                  <Table>
+                    <TableBody>
+                      <TableRow>{/* empty row to keep even/odd coloring */}</TableRow>
+                      {playerSkills.map((skill) => {
+                        const currentSkill = currentData.playerData?.skills[skill] ?? 0;
+                        const importSkill = importData.playerData?.skills[skill] ?? 0;
+                        return (
+                          <TableRow key={skill}>
+                            <TableCell className={classes.skillTitle}>{skill}</TableCell>
+                            <TableCell>{formatNumberNoSuffix(currentSkill, 0)}</TableCell>
+                            <TableCell>{formatNumberNoSuffix(importSkill, 0)}</TableCell>
+                            <TableCell width={56}>
+                              {currentSkill !== importSkill && <ComparisonIcon isBetter={importSkill > currentSkill} />}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                      {playerSkills.length % 2 === 1 && (
+                        <TableRow>{/* empty row to keep even/odd coloring */}</TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </Collapse>
+              </TableCell>
+            </TableRow>
+            <TableRow>{/* empty row to keep even/odd coloring */}</TableRow>
 
             <TableRow>
               <TableCell>Augmentations</TableCell>
@@ -327,18 +332,13 @@ export function ImportSaveRoot(props: IProps): JSX.Element {
           <Button onClick={handleGoBack} sx={{ my: 2 }} startIcon={<ArrowBackIcon />} color="secondary">
             Take me back!
           </Button>
-          <Button
-            onClick={() => setImportModalOpen(true)}
-            sx={{ my: 2 }}
-            startIcon={<DirectionsRunIcon />}
-            color="warning"
-          >
+          <Button onClick={openImportModal} sx={{ my: 2 }} startIcon={<DirectionsRunIcon />} color="warning">
             Proceed with import
           </Button>
         </ButtonGroup>
         <ConfirmationModal
-          open={importModalOpen}
-          onClose={() => setImportModalOpen(false)}
+          open={isImportModalOpen}
+          onClose={closeImportModal}
           onConfirm={handleImport}
           confirmationText={
             <>
@@ -350,4 +350,4 @@ export function ImportSaveRoot(props: IProps): JSX.Element {
       </Box>
     </Box>
   );
-}
+};
