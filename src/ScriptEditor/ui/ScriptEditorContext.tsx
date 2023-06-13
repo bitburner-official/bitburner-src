@@ -1,19 +1,18 @@
 import React, { useContext, useState } from "react";
 
-import { Player } from "@player";
-
 import { Settings } from "../../Settings/Settings";
 import { calculateRamUsage } from "../../Script/RamCalculations";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { formatRam } from "../../ui/formatNumber";
 import { useBoolean } from "../../ui/React/hooks";
+import { BaseServer } from "../../Server/BaseServer";
 
 import { Options } from "./Options";
 
 export interface ScriptEditorContextShape {
   ram: string;
   ramEntries: string[][];
-  updateRAM: (newCode: string | null) => void;
+  updateRAM: (newCode: string | null, server: BaseServer | null) => void;
 
   isUpdatingRAM: boolean;
   startUpdatingRAM: () => void;
@@ -25,23 +24,18 @@ export interface ScriptEditorContextShape {
 
 const ScriptEditorContext = React.createContext({} as ScriptEditorContextShape);
 
-interface IProps {
-  children: React.ReactNode;
-  vim: boolean;
-}
-
-export function ScriptEditorContextProvider({ children, vim }: IProps) {
+export function ScriptEditorContextProvider({ children, vim }: { children: React.ReactNode; vim: boolean }) {
   const [ram, setRAM] = useState("RAM: ???");
   const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
 
-  function updateRAM(newCode: string | null): void {
-    if (newCode === null) {
+  const updateRAM: ScriptEditorContextShape["updateRAM"] = (newCode, server) => {
+    if (newCode === null || server === null) {
       setRAM("N/A");
       setRamEntries([["N/A", ""]]);
       return;
     }
     const codeCopy = newCode + "";
-    const ramUsage = calculateRamUsage(codeCopy, Player.getCurrentServer().scripts);
+    const ramUsage = calculateRamUsage(codeCopy, server.scripts);
     if (ramUsage.cost > 0) {
       const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
       const entriesDisp = [];
@@ -71,7 +65,7 @@ export function ScriptEditorContextProvider({ children, vim }: IProps) {
     }
     setRAM(RAM);
     setRamEntries(entriesDisp);
-  }
+  };
 
   const [isUpdatingRAM, { on: startUpdatingRAM, off: finishUpdatingRAM }] = useBoolean(false);
 
