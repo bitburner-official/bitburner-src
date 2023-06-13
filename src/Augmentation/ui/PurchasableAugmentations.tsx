@@ -166,6 +166,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
 
   const aug = Augmentations[props.augName];
   if (!aug) return <></>;
+  const augLevel = aug.getLevel();
   const augCosts = getAugCost(aug);
   const cost = props.parent.sleeveAugs ? aug.baseCost : augCosts.moneyCost;
   const repCost = augCosts.repCost;
@@ -210,8 +211,8 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
                 title={
                   <>
                     <Typography variant="h5">
-                      {props.augName}
-                      {props.augName === AugmentationName.NeuroFluxGovernor && ` - Level ${aug.getLevel()}`}
+                      {aug.name}
+                      {aug.name === AugmentationName.NeuroFluxGovernor && ` - Level ${augLevel + 1}`}
                     </Typography>
                     <Typography>{description}</Typography>
                   </>
@@ -228,7 +229,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
                   }}
                 >
                   {aug.name}
-                  {aug.name === AugmentationName.NeuroFluxGovernor && ` - Level ${aug.getLevel()}`}
+                  {aug.name === AugmentationName.NeuroFluxGovernor && ` - Level ${augLevel + 1}`}
                 </Typography>
               </Tooltip>
 
