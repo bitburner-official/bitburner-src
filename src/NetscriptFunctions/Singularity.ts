@@ -1,5 +1,4 @@
 import type { Singularity as ISingularity } from "@nsdefs";
-import type { Augmentation } from "../Augmentation/Augmentation";
 import type { Company } from "../Company/Company";
 import type { Faction } from "../Faction/Faction";
 
@@ -17,7 +16,7 @@ import {
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
-import { augmentationExists, installAugmentations } from "../Augmentation/AugmentationHelpers";
+import { installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { CONSTANTS } from "../Constants";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";

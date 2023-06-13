@@ -23,8 +23,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
     }
   };
 
-  const isValidGraftingAugName = (augName: AugmentationName) =>
-    getGraftingAvailableAugs().includes(augName);
+  const isValidGraftingAugName = (augName: AugmentationName) => getGraftingAvailableAugs().includes(augName);
 
   return {
     getAugmentationGraftPrice: (ctx) => (_augName) => {
