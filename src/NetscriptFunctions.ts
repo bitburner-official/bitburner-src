@@ -1,6 +1,6 @@
 import $ from "jquery";
 import { vsprintf, sprintf } from "sprintf-js";
-import { BitNodeMultipliers, IBitNodeMultipliers } from "./BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "./Constants";
 import {
   calculateHackingChance,
@@ -407,7 +407,7 @@ export const ns: InternalAPI<NSFull> = {
         ctx.workerScript.scriptRef.onlineExpGained += expGain;
         Player.gainHackingExp(expGain);
         // Account for hidden multiplier in Server.weaken()
-        return Promise.resolve(weakenAmt * BitNodeMultipliers.ServerWeakenRate);
+        return Promise.resolve(weakenAmt * currentNodeMults.ServerWeakenRate);
       });
     },
   weakenAnalyze:
@@ -416,7 +416,7 @@ export const ns: InternalAPI<NSFull> = {
       const threads = helpers.number(ctx, "threads", _threads);
       const cores = helpers.number(ctx, "cores", _cores);
       const coreBonus = 1 + (cores - 1) / 16;
-      return CONSTANTS.ServerWeakenAmount * threads * coreBonus * BitNodeMultipliers.ServerWeakenRate;
+      return CONSTANTS.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
     },
   share: (ctx) => () => {
     helpers.log(ctx, () => "Sharing this computer.");
@@ -967,7 +967,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   getBitNodeMultipliers:
     (ctx) =>
-    (_n = Player.bitNodeN, _lvl = Player.sourceFileLvl(Player.bitNodeN) + 1): IBitNodeMultipliers => {
+    (_n = Player.bitNodeN, _lvl = Player.sourceFileLvl(Player.bitNodeN) + 1) => {
       if (Player.sourceFileLvl(5) <= 0 && Player.bitNodeN !== 5)
         throw helpers.makeRuntimeErrorMsg(ctx, "Requires Source-File 5 to run.");
       const n = Math.round(helpers.number(ctx, "n", _n));
@@ -1679,7 +1679,7 @@ export const ns: InternalAPI<NSFull> = {
     });
   },
   getFavorToDonate: () => () => {
-    return Math.floor(CONSTANTS.BaseFavorToDonate * BitNodeMultipliers.RepToDonateToFaction);
+    return Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.RepToDonateToFaction);
   },
   getPlayer: () => () => {
     const data = {

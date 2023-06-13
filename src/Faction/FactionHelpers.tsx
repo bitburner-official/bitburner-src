@@ -2,7 +2,7 @@ import { Augmentations } from "../Augmentation/Augmentations";
 import { Augmentation } from "../Augmentation/Augmentation";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { AugmentationName, FactionName } from "@enums";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 import { Faction } from "./Faction";
 import { Factions } from "./Factions";
@@ -128,7 +128,7 @@ export function processPassiveFactionRepGain(numCycles: number): void {
     const fRep = getFactionFieldWorkRepGain(Player, faction.favor);
     const rate = Math.max(hRep * favorMult, sRep * favorMult, fRep * favorMult, 1 / 120);
 
-    faction.playerReputation += rate * numCycles * Player.mults.faction_rep * BitNodeMultipliers.FactionPassiveRepGain;
+    faction.playerReputation += rate * numCycles * Player.mults.faction_rep * currentNodeMults.FactionPassiveRepGain;
   }
 }
 
@@ -157,7 +157,7 @@ export const getFactionAugmentationsFiltered = (faction: Faction): AugmentationN
         return true;
       }
 
-      return rng() >= 1 - BitNodeMultipliers.GangUniqueAugs;
+      return rng() >= 1 - currentNodeMults.GangUniqueAugs;
     };
     augs = augs.filter(uniqueFilter);
 

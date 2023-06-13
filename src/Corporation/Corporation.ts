@@ -6,7 +6,7 @@ import { CorpUpgrades } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
 import { Division } from "./Division";
 
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { showLiterature } from "../Literature/LiteratureHelpers";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
@@ -28,7 +28,7 @@ export class Corporation {
 
   /** Map keyed by division name */
   divisions = new JSONMap<string, Division>();
-  maxDivisions = 20 * BitNodeMultipliers.CorporationDivisions;
+  maxDivisions = 20 * currentNodeMults.CorporationDivisions;
 
   //Financial stats
   funds = 150e9;
@@ -44,7 +44,7 @@ export class Corporation {
   shareSaleCooldown = 0; // Game cycles until player can sell shares again
   issueNewSharesCooldown = 0; // Game cycles until player can issue shares again
   dividendRate = 0;
-  dividendTax = 1 - BitNodeMultipliers.CorporationSoftcap + 0.15;
+  dividendTax = 1 - currentNodeMults.CorporationSoftcap + 0.15;
   issuedShares = 0;
   sharePrice = 0;
   storedCycles = 0;
@@ -188,7 +188,7 @@ export class Corporation {
       val *= Math.pow(1.1, this.divisions.size);
       val -= val % 1e6; //Round down to nearest millionth
     }
-    return val * BitNodeMultipliers.CorporationValuation;
+    return val * currentNodeMults.CorporationValuation;
   }
 
   determineValuation(): void {

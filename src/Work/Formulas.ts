@@ -1,4 +1,4 @@
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Crime } from "../Crime/Crime";
 import { newWorkStats, scaleWorkStats, WorkStats, multWorkStats } from "./WorkStats";
 import { Person as IPerson } from "@nsdefs";
@@ -55,9 +55,9 @@ export function calculateCrimeWorkStats(person: IPerson, crime: Crime): WorkStat
         intExp: crime.intelligence_exp,
       }),
       person.mults,
-      person.mults.crime_money * BitNodeMultipliers.CrimeMoney,
+      person.mults.crime_money * currentNodeMults.CrimeMoney,
     ),
-    BitNodeMultipliers.CrimeExpGain,
+    currentNodeMults.CrimeExpGain,
     false,
   );
   return gains;
@@ -77,7 +77,7 @@ export const calculateFactionRep = (person: IPerson, type: FactionWorkType, favo
 export function calculateFactionExp(person: IPerson, type: FactionWorkType): WorkStats {
   return scaleWorkStats(
     multWorkStats(FactionWorkStats[type], person.mults),
-    BitNodeMultipliers.FactionWorkExpGain / gameCPS,
+    currentNodeMults.FactionWorkExpGain / gameCPS,
   );
 }
 
@@ -119,7 +119,7 @@ export const calculateCompanyWorkStats = (
   const gains = scaleWorkStats(
     multWorkStats(
       {
-        money: companyPosition.baseSalary * company.salaryMultiplier * bn11Mult * BitNodeMultipliers.CompanyWorkMoney,
+        money: companyPosition.baseSalary * company.salaryMultiplier * bn11Mult * currentNodeMults.CompanyWorkMoney,
         hackExp: companyPosition.hackingExpGain,
         strExp: companyPosition.strengthExpGain,
         defExp: companyPosition.defenseExpGain,
@@ -130,7 +130,7 @@ export const calculateCompanyWorkStats = (
       worker.mults,
       worker.mults.work_money,
     ),
-    company.expMultiplier * BitNodeMultipliers.CompanyWorkExpGain,
+    company.expMultiplier * currentNodeMults.CompanyWorkExpGain,
     false,
   );
 

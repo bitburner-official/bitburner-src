@@ -74,7 +74,7 @@ import { wget } from "./commands/wget";
 import { hash } from "../hash/hash";
 import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Engine } from "../engine";
 import { Directory, resolveDirectory, root } from "../Paths/Directory";
 import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
@@ -213,7 +213,7 @@ export class Terminal {
       Engine.Counters.checkFactionInvitations = 0;
       Engine.checkCounters();
 
-      let moneyGained = calculatePercentMoneyHacked(server, Player) * BitNodeMultipliers.ManualHackMoney;
+      let moneyGained = calculatePercentMoneyHacked(server, Player) * currentNodeMults.ManualHackMoney;
       moneyGained = Math.floor(server.moneyAvailable * moneyGained);
 
       if (moneyGained <= 0) {

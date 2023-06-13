@@ -5,7 +5,7 @@ import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
 import { PlayerOwnedAugmentation } from "../../Augmentation/PlayerOwnedAugmentation";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { CodingContractRewardType, ICodingContractReward } from "../../CodingContracts";
 import { Company } from "../../Company/Company";
 import { Companies } from "../../Company/Companies";
@@ -639,7 +639,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !daedalusFac.isBanned &&
     !daedalusFac.isMember &&
     !daedalusFac.alreadyInvited &&
-    numAugmentations >= BitNodeMultipliers.DaedalusAugsRequirement &&
+    numAugmentations >= currentNodeMults.DaedalusAugsRequirement &&
     this.money >= 100000000000 &&
     (this.skills.hacking >= 2500 ||
       (this.skills.strength >= 1500 &&
@@ -1147,7 +1147,7 @@ export function gainCodingContractReward(
     }
     case CodingContractRewardType.Money:
     default: {
-      const moneyGain = CONSTANTS.CodingContractBaseMoneyGain * difficulty * BitNodeMultipliers.CodingContractMoney;
+      const moneyGain = CONSTANTS.CodingContractBaseMoneyGain * difficulty * currentNodeMults.CodingContractMoney;
       this.gainMoney(moneyGain, "codingcontract");
       return `Gained ${formatMoney(moneyGain)}`;
     }

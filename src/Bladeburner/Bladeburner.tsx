@@ -21,7 +21,7 @@ import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { BladeburnerConstants } from "./data/Constants";
 import { formatExp, formatMoney, formatPercent, formatBigNumber, formatStamina } from "../ui/formatNumber";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { addOffset } from "../utils/helpers/addOffset";
 import { Factions, factionExists } from "../Faction/Factions";
 import { calculateHospitalizationCost } from "../Hospital/Hospital";
@@ -1281,7 +1281,7 @@ export class Bladeburner {
               action.setMaxLevel(BladeburnerConstants.ContractSuccessesPerLevel);
             }
             if (action.rankGain) {
-              const gain = addOffset(action.rankGain * rewardMultiplier * BitNodeMultipliers.BladeburnerRank, 10);
+              const gain = addOffset(action.rankGain * rewardMultiplier * currentNodeMults.BladeburnerRank, 10);
               this.changeRank(person, gain);
               if (isOperation && this.logging.ops) {
                 this.log(
@@ -1365,7 +1365,7 @@ export class Bladeburner {
             this.blackops[action.name] = true;
             let rankGain = 0;
             if (action.rankGain) {
-              rankGain = addOffset(action.rankGain * BitNodeMultipliers.BladeburnerRank, 10);
+              rankGain = addOffset(action.rankGain * currentNodeMults.BladeburnerRank, 10);
               this.changeRank(person, rankGain);
             }
             teamLossMax = Math.ceil(teamCount / 2);
@@ -1481,7 +1481,7 @@ export class Bladeburner {
         }
         const hackingExpGain = 20 * person.mults.hacking_exp;
         const charismaExpGain = 20 * person.mults.charisma_exp;
-        const rankGain = 0.1 * BitNodeMultipliers.BladeburnerRank;
+        const rankGain = 0.1 * currentNodeMults.BladeburnerRank;
         retValue.hackExp = hackingExpGain;
         retValue.chaExp = charismaExpGain;
         retValue.intExp = BladeburnerConstants.BaseIntGain;

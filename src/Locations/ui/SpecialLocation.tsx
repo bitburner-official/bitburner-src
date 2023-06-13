@@ -34,7 +34,7 @@ import { HacknetNode } from "../../Hacknet/HacknetNode";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { GetServer } from "../../Server/AllServers";
 import { ArcadeRoot } from "../../Arcade/ui/ArcadeRoot";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 
 interface SpecialLocationProps {
   loc: Location;
@@ -75,7 +75,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
   }
 
   function renderBladeburner(): React.ReactElement {
-    if (!Player.canAccessBladeburner() || BitNodeMultipliers.BladeburnerRank === 0) {
+    if (!Player.canAccessBladeburner() || currentNodeMults.BladeburnerRank === 0) {
       return <></>;
     }
     const text = Player.bladeburner ? "Enter Bladeburner Headquarters" : "Apply to Bladeburner Division";
@@ -314,7 +314,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       return renderGrafting();
     }
     case LocationName.Sector12CityHall: {
-      return (BitNodeMultipliers.CorporationSoftcap < 0.15 && <></>) || <CreateCorporation />;
+      return (currentNodeMults.CorporationSoftcap < 0.15 && <></>) || <CreateCorporation />;
     }
     case LocationName.Sector12NSA: {
       return renderBladeburner();

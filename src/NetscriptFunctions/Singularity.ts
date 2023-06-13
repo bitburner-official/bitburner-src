@@ -30,7 +30,7 @@ import { Locations } from "../Locations/Locations";
 import { GetServer } from "../Server/AllServers";
 import { Programs } from "../Programs/Programs";
 import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Companies } from "../Company/Companies";
 import { companiesMetadata } from "../Company/data/CompaniesMetadata";
 import { Factions, factionExists } from "../Faction/Factions";
@@ -126,7 +126,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const aug = Augmentations[augName];
-      return aug.baseCost * BitNodeMultipliers.AugmentationMoneyCost;
+      return aug.baseCost * currentNodeMults.AugmentationMoneyCost;
     },
     getAugmentationPrice: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
@@ -1027,7 +1027,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(ctx, () => `You do not have enough money to donate ${formatMoney(amt)} to '${facName}'`);
         return false;
       }
-      const repNeededToDonate = Math.floor(CONSTANTS.BaseFavorToDonate * BitNodeMultipliers.RepToDonateToFaction);
+      const repNeededToDonate = Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.RepToDonateToFaction);
       if (faction.favor < repNeededToDonate) {
         helpers.log(
           ctx,

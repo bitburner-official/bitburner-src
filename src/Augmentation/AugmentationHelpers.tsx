@@ -11,7 +11,7 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { mergeMultipliers } from "../PersonObjects/Multipliers";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 export function getBaseAugmentationPriceMultiplier(): number {
   return CONSTANTS.MultipleAugMultiplier * [1, 0.96, 0.94, 0.93][Player.sourceFileLvl(11)];
@@ -109,8 +109,8 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
     // Special cost for NFG
     case AugmentationName.NeuroFluxGovernor: {
       const multiplier = Math.pow(CONSTANTS.NeuroFluxGovernorLevelMult, aug.getLevel());
-      repCost = aug.baseRepRequirement * multiplier * BitNodeMultipliers.AugmentationRepCost;
-      moneyCost = aug.baseCost * multiplier * BitNodeMultipliers.AugmentationMoneyCost;
+      repCost = aug.baseRepRequirement * multiplier * currentNodeMults.AugmentationRepCost;
+      moneyCost = aug.baseCost * multiplier * currentNodeMults.AugmentationMoneyCost;
       moneyCost *= getBaseAugmentationPriceMultiplier() ** Player.queuedAugmentations.length;
       break;
     }
@@ -142,8 +142,8 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
     }
     // Standard cost
     default:
-      moneyCost = aug.baseCost * getGenericAugmentationPriceMultiplier() * BitNodeMultipliers.AugmentationMoneyCost;
-      repCost = aug.baseRepRequirement * BitNodeMultipliers.AugmentationRepCost;
+      moneyCost = aug.baseCost * getGenericAugmentationPriceMultiplier() * currentNodeMults.AugmentationMoneyCost;
+      repCost = aug.baseRepRequirement * currentNodeMults.AugmentationRepCost;
   }
   return { moneyCost, repCost };
 }

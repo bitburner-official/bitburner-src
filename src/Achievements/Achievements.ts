@@ -28,7 +28,7 @@ import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import data from "./AchievementData.json";
 import { isClassWork } from "../Work/ClassWork";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { workerScripts } from "../Netscript/WorkerScripts";
 
 import { getRecordValues } from "../Types/Record";
@@ -384,7 +384,7 @@ export const achievements: Record<string, Achievement> = {
     Icon: "donation",
     Condition: () =>
       Object.values(Factions).some(
-        (f) => f.favor >= Math.floor(CONSTANTS.BaseFavorToDonate * BitNodeMultipliers.RepToDonateToFaction),
+        (f) => f.favor >= Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.RepToDonateToFaction),
       ),
   },
   TRAVEL: {

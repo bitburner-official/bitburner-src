@@ -7,7 +7,7 @@ import { Player } from "@player";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { GetServer } from "../Server/AllServers";
 import { formatMoney } from "../ui/formatNumber";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BitFlumeEvent } from "../BitNode/ui/BitFlumeModal";
 import { calculateHackingTime, calculateGrowTime, calculateWeakenTime } from "../Hacking";
 import { CompletedProgramName, FactionName } from "@enums";
@@ -286,7 +286,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     name: CompletedProgramName.flight,
     create: null,
     run: (): void => {
-      const numAugReq = BitNodeMultipliers.DaedalusAugsRequirement;
+      const numAugReq = currentNodeMults.DaedalusAugsRequirement;
       const fulfilled =
         Player.augmentations.length >= numAugReq && Player.money > 1e11 && Player.skills.hacking >= 2500;
       if (!fulfilled) {

@@ -1,5 +1,5 @@
 import { CONSTANTS } from "../../Constants";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { Person as IPerson, Server as IServer } from "@nsdefs";
 
 export function calculateServerGrowth(server: IServer, threads: number, p: IPerson, cores = 1): number {
@@ -17,7 +17,7 @@ export function calculateServerGrowth(server: IServer, threads: number, p: IPers
   //Calculate adjusted server growth rate based on parameters
   const serverGrowthPercentage = server.serverGrowth / 100;
   const numServerGrowthCyclesAdjusted =
-    numServerGrowthCycles * serverGrowthPercentage * BitNodeMultipliers.ServerGrowthRate;
+    numServerGrowthCycles * serverGrowthPercentage * currentNodeMults.ServerGrowthRate;
 
   //Apply serverGrowth for the calculated number of growth cycles
   const coreBonus = 1 + (cores - 1) / 16;
