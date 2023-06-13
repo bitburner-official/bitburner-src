@@ -1,5 +1,4 @@
 import { AugmentationName, CityName, CompletedProgramName, FactionName, LiteratureName } from "@enums";
-import { initAugmentations } from "./Augmentation/AugmentationHelpers";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { Companies, initCompanies } from "./Company/Companies";
 import { resetIndustryResearchTrees } from "./Corporation/data/IndustryData";
@@ -85,7 +84,7 @@ export function prestigeAugmentation(): void {
   initFactions(); // Factions must be initialized before augmentations
 
   Player.factionInvitations = Player.factionInvitations.concat(maintainMembership);
-  initAugmentations(); // Calls reapplyAllAugmentations() and resets Player multipliers
+  Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
   Player.hp.current = Player.hp.max;
   initCompanies();
@@ -211,7 +210,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // Re-initialize things - This will update any changes
   initFactions(); // Factions must be initialized before augmentations
-  initAugmentations(); // Calls reapplyAllAugmentations() and resets Player multipliers
+  Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
   initCompanies();
 

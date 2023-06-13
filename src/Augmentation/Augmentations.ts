@@ -1900,6 +1900,12 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
   });
 })();
 
+export function initCircadianModulator() {
+  const params = getUnstableCircadianModulatorParams() as AugmentationCtorParams;
+  params.name = AugmentationName.UnstableCircadianModulator;
+  Augmentations[AugmentationName.UnstableCircadianModulator] = new Augmentation(params);
+}
+
 // new Augmentation({
 //   name: AugmentationNames.UnnamedAug2,
 //   repCost: 500e3,

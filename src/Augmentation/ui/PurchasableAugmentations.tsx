@@ -13,6 +13,7 @@ import { Augmentation } from "../Augmentation";
 import { AugmentationName, FactionName } from "@enums";
 import { Augmentations } from "../Augmentations";
 import { PurchaseAugmentationModal } from "./PurchaseAugmentationModal";
+import { getAugCost } from "../AugmentationHelpers";
 
 interface IPreReqsProps {
   aug: Augmentation;
@@ -165,7 +166,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
 
   const aug = Augmentations[props.augName];
   if (!aug) return <></>;
-  const augCosts = aug.getCost();
+  const augCosts = getAugCost(aug);
   const cost = props.parent.sleeveAugs ? aug.baseCost : augCosts.moneyCost;
   const repCost = augCosts.repCost;
   const info = typeof aug.info === "string" ? <span>{aug.info}</span> : aug.info;

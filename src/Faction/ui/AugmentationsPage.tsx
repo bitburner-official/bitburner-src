@@ -2,7 +2,7 @@ import { Box, Button, Tooltip, Typography, Paper, Container } from "@mui/materia
 import React from "react";
 
 import { Augmentations } from "../../Augmentation/Augmentations";
-import { getGenericAugmentationPriceMultiplier } from "../../Augmentation/AugmentationHelpers";
+import { getAugCost, getGenericAugmentationPriceMultiplier } from "../../Augmentation/AugmentationHelpers";
 import { AugmentationName, FactionName } from "@enums";
 import { PurchasableAugmentations } from "../../Augmentation/ui/PurchasableAugmentations";
 import { PurchaseAugmentationsOrderSetting } from "../../Settings/SettingEnums";
@@ -54,7 +54,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
         throw new Error("Invalid Augmentation Names");
       }
 
-      return aug1.getCost().moneyCost - aug2.getCost().moneyCost;
+      return getAugCost(aug1).moneyCost - getAugCost(aug2).moneyCost;
     });
 
     return augs;
@@ -64,7 +64,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
     const augs = getAugs();
     function canBuy(augName: AugmentationName): boolean {
       const aug = Augmentations[augName];
-      const augCosts = aug.getCost();
+      const augCosts = getAugCost(aug);
       const repCost = augCosts.repCost;
       const hasReq = props.faction.playerReputation >= repCost;
       const hasRep = hasAugmentationPrereqs(aug);
@@ -78,7 +78,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
         throw new Error("Invalid Augmentation Names");
       }
 
-      return aug1.getCost().moneyCost - aug2.getCost().moneyCost;
+      return getAugCost(aug1).moneyCost - getAugCost(aug2).moneyCost;
     });
     const cantBuy = augs
       .filter((aug) => !canBuy(aug))
@@ -88,7 +88,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
         if (aug1 == null || aug2 == null) {
           throw new Error("Invalid Augmentation Names");
         }
-        return aug1.getCost().repCost - aug2.getCost().repCost;
+        return getAugCost(aug1).repCost - getAugCost(aug2).repCost;
       });
 
     return buy.concat(cantBuy);
@@ -102,7 +102,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
       if (aug1 == null || aug2 == null) {
         throw new Error("Invalid Augmentation Names");
       }
-      return aug1.getCost().repCost - aug2.getCost().repCost;
+      return getAugCost(aug1).repCost - getAugCost(aug2).repCost;
     });
 
     return augs;
@@ -213,7 +213,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
         augNames={purchasable}
         ownedAugNames={owned}
         canPurchase={(aug) => {
-          const costs = aug.getCost();
+          const costs = getAugCost(aug);
           return (
             hasAugmentationPrereqs(aug) &&
             props.faction.playerReputation >= costs.repCost &&

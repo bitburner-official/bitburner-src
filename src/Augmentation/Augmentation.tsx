@@ -1,10 +1,6 @@
 // Class definition for a single Augmentation object
 import { Player } from "@player";
 import { AugmentationName, CompletedProgramName, FactionName } from "@enums";
-import { getBaseAugmentationPriceMultiplier, getGenericAugmentationPriceMultiplier } from "./AugmentationHelpers";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { CONSTANTS } from "../Constants";
-import { Factions } from "../Faction/Factions";
 import { formatPercent } from "../ui/formatNumber";
 import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
 import { getRecordKeys } from "../Types/Record";
@@ -219,65 +215,6 @@ export class Augmentation {
     if (params.stats === undefined)
       this.stats = generateStatsDescription(this.mults, params.programs, params.startingMoney);
     else this.stats = params.stats;
-  }
-
-  // Adds this Augmentation to the specified Factions
-  addToFactions(factionList: FactionName[]): void {
-    for (const factionName of factionList) {
-      const faction = Factions[factionName];
-      if (!faction) {
-        console.error(`In Augmentation.addToFactions(), could not find faction with this name: ${factionName}`);
-        continue;
-      }
-      faction.augmentations.push(this.name);
-    }
-  }
-
-  getCost(): AugmentationCosts {
-    let moneyCost = this.baseCost;
-    let repCost = this.baseRepRequirement;
-
-    switch (this.name) {
-      // Special cost for NFG
-      case AugmentationName.NeuroFluxGovernor: {
-        const multiplier = Math.pow(CONSTANTS.NeuroFluxGovernorLevelMult, this.getLevel());
-        repCost = this.baseRepRequirement * multiplier * BitNodeMultipliers.AugmentationRepCost;
-        moneyCost = this.baseCost * multiplier * BitNodeMultipliers.AugmentationMoneyCost;
-        moneyCost *= getBaseAugmentationPriceMultiplier() ** Player.queuedAugmentations.length;
-        break;
-      }
-      // SOA Augments use a unique cost method
-      case AugmentationName.BeautyOfAphrodite:
-      case AugmentationName.ChaosOfDionysus:
-      case AugmentationName.FloodOfPoseidon:
-      case AugmentationName.HuntOfArtemis:
-      case AugmentationName.KnowledgeOfApollo:
-      case AugmentationName.MightOfAres:
-      case AugmentationName.TrickeryOfHermes:
-      case AugmentationName.WKSharmonizer:
-      case AugmentationName.WisdomOfAthena: {
-        const soaAugmentationNames = [
-          AugmentationName.BeautyOfAphrodite,
-          AugmentationName.ChaosOfDionysus,
-          AugmentationName.FloodOfPoseidon,
-          AugmentationName.HuntOfArtemis,
-          AugmentationName.KnowledgeOfApollo,
-          AugmentationName.MightOfAres,
-          AugmentationName.TrickeryOfHermes,
-          AugmentationName.WKSharmonizer,
-          AugmentationName.WisdomOfAthena,
-        ];
-        const soaAugCount = soaAugmentationNames.filter((augName) => Player.hasAugmentation(augName)).length;
-        moneyCost = this.baseCost * Math.pow(CONSTANTS.SoACostMult, soaAugCount);
-        repCost = this.baseRepRequirement * Math.pow(CONSTANTS.SoARepMult, soaAugCount);
-        break;
-      }
-      // Standard cost
-      default:
-        moneyCost = this.baseCost * getGenericAugmentationPriceMultiplier() * BitNodeMultipliers.AugmentationMoneyCost;
-        repCost = this.baseRepRequirement * BitNodeMultipliers.AugmentationRepCost;
-    }
-    return { moneyCost, repCost };
   }
 
   /** Get the current level of an augmentation before buying. Currently only relevant for NFG. */

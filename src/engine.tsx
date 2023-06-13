@@ -1,5 +1,4 @@
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
-import { initAugmentations } from "./Augmentation/AugmentationHelpers";
 import { AugmentationName, ToastVariant } from "@enums";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { initSourceFiles } from "./SourceFile/SourceFiles";
@@ -231,7 +230,7 @@ const Engine: {
     if (loadGame(saveString)) {
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
-      initAugmentations(); // Also calls Player.reapplyAllAugmentations()
+      Player.reapplyAllAugmentations();
       Player.reapplyAllSourceFiles();
       if (Player.hasWseAccount) {
         initSymbolToStockMap();
@@ -377,7 +376,7 @@ const Engine: {
       initForeignServers(Player.getHomeComputer());
       initCompanies();
       initFactions();
-      initAugmentations();
+      Player.reapplyAllAugmentations();
 
       // Start interactive tutorial
       iTutorialStart();

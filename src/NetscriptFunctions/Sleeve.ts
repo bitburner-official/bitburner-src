@@ -11,6 +11,7 @@ import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionW
 import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { cloneDeep } from "lodash";
+import { getAugCost } from "../Augmentation/AugmentationHelpers";
 
 export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
   const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
@@ -223,7 +224,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       checkSleeveAPIAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const aug: Augmentation = Augmentations[augName];
-      return aug.getCost().repCost;
+      return getAugCost(aug).repCost;
     },
     setToBladeburnerAction: (ctx) => (_sleeveNumber, _action, _contract?) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);

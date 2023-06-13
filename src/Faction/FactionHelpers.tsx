@@ -18,6 +18,7 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { InvitationEvent } from "./ui/InvitationModal";
 import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
+import { getAugCost } from "../Augmentation/AugmentationHelpers";
 
 export function inviteToFaction(faction: Faction): void {
   Player.receiveInvite(faction.name);
@@ -55,7 +56,7 @@ export function hasAugmentationPrereqs(aug: Augmentation): boolean {
 
 export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = false): string {
   const hasPrereqs = hasAugmentationPrereqs(aug);
-  const augCosts = aug.getCost();
+  const augCosts = getAugCost(aug);
   if (!hasPrereqs) {
     const txt = `You must first purchase or install ${aug.prereqs
       .filter((req) => !Player.hasAugmentation(req))

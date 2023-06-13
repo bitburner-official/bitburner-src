@@ -16,7 +16,7 @@ import {
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
-import { installAugmentations } from "../Augmentation/AugmentationHelpers";
+import { getAugCost, installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { CONSTANTS } from "../Constants";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";
@@ -132,13 +132,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const aug = Augmentations[augName];
-      return aug.getCost().moneyCost;
+      return getAugCost(aug).moneyCost;
     },
     getAugmentationRepReq: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const aug = Augmentations[augName];
-      return aug.getCost().repCost;
+      return getAugCost(aug).repCost;
     },
     getAugmentationStats: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
@@ -181,7 +181,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         }
       }
 
-      if (fac.playerReputation < aug.getCost().repCost) {
+      if (fac.playerReputation < getAugCost(aug).repCost) {
         helpers.log(ctx, () => `You do not have enough reputation with '${fac.name}'.`);
         return false;
       }

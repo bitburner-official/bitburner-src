@@ -6,6 +6,7 @@ import { Augmentations } from "../../Augmentation/Augmentations";
 import { Factions } from "../../Faction/Factions";
 import { mergeMultipliers, Multipliers } from "../Multipliers";
 import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
+import { getAugCost } from "../../Augmentation/AugmentationHelpers";
 
 /** Updates this object's multipliers for the given augmentation */
 export function applyAugmentation(this: Sleeve, aug: Augmentation): void {
@@ -64,7 +65,7 @@ export function findPurchasableAugs(this: Sleeve): Augmentation[] {
       const aug = Augmentations[augName];
       if (!isAvailableForSleeve(aug)) continue;
 
-      if (fac.playerReputation > aug.getCost().repCost) {
+      if (fac.playerReputation > getAugCost(aug).repCost) {
         availableAugs.push(aug);
       }
     }
@@ -80,7 +81,7 @@ export function findPurchasableAugs(this: Sleeve): Augmentation[] {
       const aug = Augmentations[augName];
       if (!isAvailableForSleeve(aug)) continue;
 
-      if (fac.playerReputation > aug.getCost().repCost) {
+      if (fac.playerReputation > getAugCost(aug).repCost) {
         availableAugs.push(aug);
       }
     }

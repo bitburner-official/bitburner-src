@@ -28,7 +28,6 @@ import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
 import { AugmentationName, FactionName, LocationName, ToastVariant } from "@enums";
 import { PlayerOwnedAugmentation } from "./Augmentation/PlayerOwnedAugmentation";
-import { initAugmentations } from "./Augmentation/AugmentationHelpers";
 import { pushGameSaved } from "./Electron";
 import { defaultMonacoTheme } from "./ScriptEditor/ui/themes";
 import { Faction } from "./Faction/Faction";
@@ -364,7 +363,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
   if (typeof ver !== "number") return;
   if (ver < 2) {
     AwardNFG(10);
-    initAugmentations();
+    Player.reapplyAllAugmentations();
     Player.reapplyAllSourceFiles();
   }
   if (ver < 3) {
@@ -447,7 +446,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
     ];
 
     v22PlayerBreak();
-    initAugmentations();
+    Player.reapplyAllAugmentations();
     Player.reapplyAllSourceFiles();
   }
 

@@ -1,10 +1,9 @@
-import { Augmentation, AugmentationCtorParams } from "./Augmentation";
+import { Augmentation } from "./Augmentation";
 import { Augmentations } from "./Augmentations";
 import { PlayerOwnedAugmentation } from "./PlayerOwnedAugmentation";
 import { AugmentationName } from "@enums";
 
 import { CONSTANTS } from "../Constants";
-import { Factions } from "../Faction/Factions";
 import { Player } from "@player";
 import { prestigeAugmentation } from "../Prestige";
 
@@ -12,21 +11,7 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { mergeMultipliers } from "../PersonObjects/Multipliers";
-import { getUnstableCircadianModulatorParams } from "./CircadianModulator";
-import { getRecordValues } from "../Types/Record";
-
-function initCircadianModulator() {
-  const params = getUnstableCircadianModulatorParams() as AugmentationCtorParams;
-  params.name = AugmentationName.UnstableCircadianModulator;
-  Augmentations[AugmentationName.UnstableCircadianModulator] = new Augmentation(params);
-}
-
-function initAugmentations(): void {
-  initCircadianModulator();
-  for (const faction of getRecordValues(Factions)) faction.augmentations = [];
-  for (const aug of getRecordValues(Augmentations)) aug.addToFactions(aug.factions);
-  Player.reapplyAllAugmentations();
-}
+import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 
 export function getBaseAugmentationPriceMultiplier(): number {
   return CONSTANTS.MultipleAugMultiplier * [1, 0.96, 0.94, 0.93][Player.sourceFileLvl(11)];
@@ -35,7 +20,7 @@ export function getGenericAugmentationPriceMultiplier(): number {
   return Math.pow(getBaseAugmentationPriceMultiplier(), Player.queuedAugmentations.length);
 }
 
-function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false): void {
+export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false): void {
   const staticAugmentation = Augmentations[aug.name];
 
   // Apply multipliers
@@ -62,7 +47,7 @@ function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false): void 
   }
 }
 
-function installAugmentations(force?: boolean): boolean {
+export function installAugmentations(force?: boolean): boolean {
   if (Player.queuedAugmentations.length == 0 && !force) {
     dialogBoxCreate("You have not purchased any Augmentations to install!");
     return false;
@@ -106,13 +91,59 @@ function installAugmentations(force?: boolean): boolean {
   return true;
 }
 
-function augmentationExists(name: string): boolean {
-  return Object.hasOwn(Augmentations, name);
-}
-
 export function isRepeatableAug(aug: Augmentation | string): boolean {
   const augName = typeof aug === "string" ? aug : aug.name;
   return augName === AugmentationName.NeuroFluxGovernor;
 }
 
-export { installAugmentations, initAugmentations, applyAugmentation, augmentationExists };
+export interface AugmentationCosts {
+  moneyCost: number;
+  repCost: number;
+}
+
+export function getAugCost(aug: Augmentation): AugmentationCosts {
+  let moneyCost = aug.baseCost;
+  let repCost = aug.baseRepRequirement;
+
+  switch (aug.name) {
+    // Special cost for NFG
+    case AugmentationName.NeuroFluxGovernor: {
+      const multiplier = Math.pow(CONSTANTS.NeuroFluxGovernorLevelMult, aug.getLevel());
+      repCost = aug.baseRepRequirement * multiplier * BitNodeMultipliers.AugmentationRepCost;
+      moneyCost = aug.baseCost * multiplier * BitNodeMultipliers.AugmentationMoneyCost;
+      moneyCost *= getBaseAugmentationPriceMultiplier() ** Player.queuedAugmentations.length;
+      break;
+    }
+    // SOA Augments use a unique cost method
+    case AugmentationName.BeautyOfAphrodite:
+    case AugmentationName.ChaosOfDionysus:
+    case AugmentationName.FloodOfPoseidon:
+    case AugmentationName.HuntOfArtemis:
+    case AugmentationName.KnowledgeOfApollo:
+    case AugmentationName.MightOfAres:
+    case AugmentationName.TrickeryOfHermes:
+    case AugmentationName.WKSharmonizer:
+    case AugmentationName.WisdomOfAthena: {
+      const soaAugmentationNames = [
+        AugmentationName.BeautyOfAphrodite,
+        AugmentationName.ChaosOfDionysus,
+        AugmentationName.FloodOfPoseidon,
+        AugmentationName.HuntOfArtemis,
+        AugmentationName.KnowledgeOfApollo,
+        AugmentationName.MightOfAres,
+        AugmentationName.TrickeryOfHermes,
+        AugmentationName.WKSharmonizer,
+        AugmentationName.WisdomOfAthena,
+      ];
+      const soaAugCount = soaAugmentationNames.filter((augName) => Player.hasAugmentation(augName)).length;
+      moneyCost = aug.baseCost * Math.pow(CONSTANTS.SoACostMult, soaAugCount);
+      repCost = aug.baseRepRequirement * Math.pow(CONSTANTS.SoARepMult, soaAugCount);
+      break;
+    }
+    // Standard cost
+    default:
+      moneyCost = aug.baseCost * getGenericAugmentationPriceMultiplier() * BitNodeMultipliers.AugmentationMoneyCost;
+      repCost = aug.baseRepRequirement * BitNodeMultipliers.AugmentationRepCost;
+  }
+  return { moneyCost, repCost };
+}
