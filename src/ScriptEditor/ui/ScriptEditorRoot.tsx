@@ -25,6 +25,9 @@ import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
 import { useRerender } from "../../ui/React/hooks";
 import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
 import { TextFilePath } from "../../Paths/TextFilePath";
+import { runScript } from "../../Terminal/commands/runScript";
+import { parseCommand } from "../../Terminal/Parser";
+import { Terminal } from "../../Terminal";
 
 import { dirty, getServerCode } from "./utils";
 import { OpenScript } from "./OpenScript";
@@ -34,12 +37,12 @@ import { NoOpenScripts } from "./NoOpenScripts";
 import { ScriptEditorContextProvider, useScriptEditorContext } from "./ScriptEditorContext";
 import { useVimEditor } from "./useVimEditor";
 
-interface IProps {
+type ScriptEditorProps = {
   // Map of filename -> code
   files: Map<ScriptFilePath | TextFilePath, string>;
   hostname: string;
   vim: boolean;
-}
+};
 
 // TODO: try to remove global symbols
 let symbolsLoaded = false;
@@ -61,7 +64,7 @@ export function SetupTextEditor(): void {
 const openScripts: OpenScript[] = [];
 let currentScript: OpenScript | null = null;
 
-function Root(props: IProps): React.ReactElement {
+function Root(props: ScriptEditorProps): React.ReactElement {
   const rerender = useRerender();
   const editorRef = useRef<IStandaloneCodeEditor | null>(null);
 
@@ -436,6 +439,18 @@ function Root(props: IProps): React.ReactElement {
     }
   }
 
+  const onRun = (args: string): void => {
+    if (currentScript) {
+      const server = GetServer(currentScript.hostname);
+      if (server) {
+        Terminal.print(`run ${currentScript.path} ${args}`);
+
+        const scriptArgs = parseCommand(args);
+        runScript(currentScript.path as ScriptFilePath, scriptArgs, server);
+      }
+    }
+  };
+
   const { VimStatus } = useVimEditor({
     editor: editorRef.current,
     vim: options.vim,
@@ -466,7 +481,7 @@ function Root(props: IProps): React.ReactElement {
 
         {VimStatus}
 
-        <Toolbar onSave={save} editor={editorRef.current} />
+        <Toolbar onSave={save} onRun={onRun} editor={editorRef.current} />
       </div>
       {!currentScript && <NoOpenScripts />}
     </>
@@ -474,7 +489,7 @@ function Root(props: IProps): React.ReactElement {
 }
 
 // Called every time script editor is opened
-export function ScriptEditorRoot(props: IProps) {
+export function ScriptEditorRoot(props: ScriptEditorProps) {
   return (
     <ScriptEditorContextProvider vim={props.vim}>
       <Root {...props} />

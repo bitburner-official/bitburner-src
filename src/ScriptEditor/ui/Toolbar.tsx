@@ -21,15 +21,19 @@ import { useBoolean } from "../../ui/React/hooks";
 import { Settings } from "../../Settings/Settings";
 import { OptionsModal, OptionsModalProps } from "./OptionsModal";
 import { useScriptEditorContext } from "./ScriptEditorContext";
+import { RunScriptButton } from "./RunScriptButton";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
-interface IProps {
+export function Toolbar({
+  editor,
+  onSave,
+  onRun,
+}: {
   editor: IStandaloneCodeEditor | null;
   onSave: () => void;
-}
-
-export function Toolbar({ editor, onSave }: IProps) {
+  onRun: (args: string) => void;
+}) {
   const [ramInfoOpen, { on: openRAMInfo, off: closeRAMInfo }] = useBoolean(false);
   const [optionsOpen, { on: openOptions, off: closeOptions }] = useBoolean(false);
 
@@ -65,6 +69,7 @@ export function Toolbar({ editor, onSave }: IProps) {
           {ram}
         </Button>
         <Button onClick={onSave}>Save (Ctrl/Cmd + s)</Button>
+        <RunScriptButton sx={{ ml: 1 }} onRun={onRun} />
         <Button sx={{ mx: 1 }} onClick={() => Router.toPage(Page.Terminal)}>
           Terminal (Ctrl/Cmd + b)
         </Button>
