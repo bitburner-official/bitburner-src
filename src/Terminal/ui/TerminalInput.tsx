@@ -194,11 +194,11 @@ export function TerminalInput(): React.ReactElement {
   async function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): Promise<void> {
     const ref = terminalInput.current;
 
-    // Run command or insert newline.
+    // Run command or insert newline
     if (event.key === KEY.ENTER) {
       event.preventDefault();
       Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${value}`);
-      if (value !== "") {
+      if (value) {
         Terminal.executeCommands(value);
         saveValue("");
       }
