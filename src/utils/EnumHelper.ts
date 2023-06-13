@@ -41,7 +41,11 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
   fuzzyGetMember(input: string): EnumMember | undefined;
   fuzzyGetMember(input: string, alwaysMatch: true): EnumMember;
   fuzzyGetMember(input: string, alwaysMatch = false) {
-    return this.fuzzMap.get(input.toLowerCase().replace(/[ -]+/g, "")) ?? alwaysMatch ? this.valueArray[0] : undefined;
+    const matchedValue = this.fuzzMap.get(input.toLowerCase().replace(/[ -]+/g, ""));
+    if (matchedValue) {
+      return matchedValue;
+    }
+    return alwaysMatch ? this.valueArray[0] : undefined;
   }
   /** Provide a case sensitive match, or undefined if */
   getMember(input: unknown): EnumMember | undefined {
