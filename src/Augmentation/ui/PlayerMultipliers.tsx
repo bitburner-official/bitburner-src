@@ -6,12 +6,12 @@ import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { formatPercent } from "../../ui/formatNumber";
-import { StaticAugmentations } from "../StaticAugmentations";
+import { Augmentations } from "../Augmentations";
 
 function calculateAugmentedStats(): Multipliers {
   let augP: Multipliers = defaultMultipliers();
   for (const aug of Player.queuedAugmentations) {
-    const augObj = StaticAugmentations[aug.name];
+    const augObj = Augmentations[aug.name];
     augP = mergeMultipliers(augP, augObj.mults);
   }
   return augP;

@@ -20,7 +20,7 @@ import { Settings } from "../../Settings/Settings";
 import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
 import { Player } from "@player";
 import { AugmentationName } from "@enums";
-import { StaticAugmentations } from "../StaticAugmentations";
+import { Augmentations } from "../Augmentations";
 import { CONSTANTS } from "../../Constants";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { Info } from "@mui/icons-material";
@@ -50,7 +50,7 @@ const NeuroFluxDisplay = (): React.ReactElement => {
         NeuroFlux Governor - Level {level}
       </Typography>
       <Typography color={Settings.theme.info}>
-        {StaticAugmentations[AugmentationName.NeuroFluxGovernor].stats}
+        {Augmentations[AugmentationName.NeuroFluxGovernor].stats}
       </Typography>
       <Typography color={Settings.theme.info}>
         The power of {AugmentationName.NeuroFluxGovernor} increases with blood donations from players in real life.

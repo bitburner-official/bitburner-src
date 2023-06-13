@@ -16,7 +16,7 @@ import {
 } from "@enums";
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import { Augmentations } from "../Augmentation/Augmentations";
 import { augmentationExists, installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { CONSTANTS } from "../Constants";
 import { RunningScript } from "../Script/RunningScript";
@@ -59,14 +59,6 @@ import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
-  const getAugmentation = function (ctx: NetscriptContext, name: string): Augmentation {
-    if (!augmentationExists(name)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid augmentation: '${name}'`);
-    }
-
-    return StaticAugmentations[name];
-  };
-
   const getFaction = function (ctx: NetscriptContext, name: string): Faction {
     if (!factionExists(name)) {
       throw helpers.makeRuntimeErrorMsg(ctx, `Invalid faction name: '${name}`);
@@ -127,40 +119,40 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     getAugmentationPrereq: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
       return aug.prereqs.slice();
     },
     getAugmentationBasePrice: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
       return aug.baseCost * BitNodeMultipliers.AugmentationMoneyCost;
     },
     getAugmentationPrice: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
       return aug.getCost().moneyCost;
     },
     getAugmentationRepReq: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
       return aug.getCost().repCost;
     },
     getAugmentationStats: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
       return Object.assign({}, aug.mults);
     },
     purchaseAugmentation: (ctx) => (_facName, _augName) => {
       helpers.checkSingularityAccess(ctx);
       const facName = helpers.string(ctx, "facName", _facName);
-      const augName = helpers.string(ctx, "augName", _augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const fac = getFaction(ctx, facName);
-      const aug = getAugmentation(ctx, augName);
+      const aug = Augmentations[augName];
 
       const augs = getFactionAugmentationsFiltered(fac);
 

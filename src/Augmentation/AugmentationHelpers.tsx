@@ -1,51 +1,30 @@
-import { Augmentation } from "./Augmentation";
-import { StaticAugmentations } from "./StaticAugmentations";
+import { Augmentation, AugmentationCtorParams } from "./Augmentation";
+import { Augmentations } from "./Augmentations";
 import { PlayerOwnedAugmentation } from "./PlayerOwnedAugmentation";
-import { AugmentationName, FactionName } from "@enums";
+import { AugmentationName } from "@enums";
 
 import { CONSTANTS } from "../Constants";
-import { Factions, factionExists } from "../Faction/Factions";
+import { Factions } from "../Faction/Factions";
 import { Player } from "@player";
 import { prestigeAugmentation } from "../Prestige";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-
-import {
-  initBladeburnerAugmentations,
-  initChurchOfTheMachineGodAugmentations,
-  initGeneralAugmentations,
-  initSoAAugmentations,
-  initNeuroFluxGovernor,
-  initUnstableCircadianModulator,
-} from "./data/AugmentationCreator";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { mergeMultipliers } from "../PersonObjects/Multipliers";
+import { getUnstableCircadianModulatorParams } from "./CircadianModulator";
+import { getRecordValues } from "../Types/Record";
 
-export function AddToStaticAugmentations(aug: Augmentation): void {
-  const name = aug.name;
-  StaticAugmentations[name] = aug;
-}
-
-function createAugmentations(): void {
-  [
-    initNeuroFluxGovernor(),
-    initUnstableCircadianModulator(),
-    ...initGeneralAugmentations(),
-    ...initSoAAugmentations(),
-    ...(factionExists(FactionName.Bladeburners) ? initBladeburnerAugmentations() : []),
-    ...(factionExists(FactionName.ChurchOfTheMachineGod) ? initChurchOfTheMachineGodAugmentations() : []),
-  ].map(resetAugmentation);
-}
-
-function resetFactionAugmentations(): void {
-  for (const faction of Object.values(Factions)) faction.augmentations = [];
+function initCircadianModulator() {
+  const params = getUnstableCircadianModulatorParams() as AugmentationCtorParams;
+  params.name = AugmentationName.UnstableCircadianModulator;
+  Augmentations[AugmentationName.UnstableCircadianModulator] = new Augmentation(params);
 }
 
 function initAugmentations(): void {
-  resetFactionAugmentations();
-  for (const augName of Object.getOwnPropertyNames(StaticAugmentations)) delete StaticAugmentations[augName];
-  createAugmentations();
+  initCircadianModulator();
+  for (const faction of getRecordValues(Factions)) faction.augmentations = [];
+  for (const aug of getRecordValues(Augmentations)) aug.addToFactions(aug.factions);
   Player.reapplyAllAugmentations();
 }
 
@@ -56,18 +35,8 @@ export function getGenericAugmentationPriceMultiplier(): number {
   return Math.pow(getBaseAugmentationPriceMultiplier(), Player.queuedAugmentations.length);
 }
 
-//Resets an Augmentation during (re-initialization)
-function resetAugmentation(aug: Augmentation): void {
-  aug.addToFactions(aug.factions);
-  const name = aug.name;
-  if (augmentationExists(name)) {
-    delete StaticAugmentations[name];
-  }
-  AddToStaticAugmentations(aug);
-}
-
 function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false): void {
-  const staticAugmentation = StaticAugmentations[aug.name];
+  const staticAugmentation = Augmentations[aug.name];
 
   // Apply multipliers
   Player.mults = mergeMultipliers(Player.mults, staticAugmentation.mults);
@@ -108,7 +77,7 @@ function installAugmentations(force?: boolean): boolean {
   }
   for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
     const ownedAug = Player.queuedAugmentations[i];
-    const aug = StaticAugmentations[ownedAug.name];
+    const aug = Augmentations[ownedAug.name];
     if (aug == null) {
       console.error(`Invalid augmentation: ${ownedAug.name}`);
       continue;
@@ -138,7 +107,7 @@ function installAugmentations(force?: boolean): boolean {
 }
 
 function augmentationExists(name: string): boolean {
-  return Object.hasOwn(StaticAugmentations, name);
+  return Object.hasOwn(Augmentations, name);
 }
 
 export function isRepeatableAug(aug: Augmentation | string): boolean {

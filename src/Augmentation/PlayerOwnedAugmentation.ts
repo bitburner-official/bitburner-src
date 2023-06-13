@@ -1,8 +1,10 @@
+import type { AugmentationName } from "./Enums";
+
 export class PlayerOwnedAugmentation {
   level = 1;
-  name = "";
+  name: AugmentationName;
 
-  constructor(name = "") {
+  constructor(name: AugmentationName) {
     this.name = name;
   }
 }

@@ -24,7 +24,7 @@ interface IProps {
 
 export function AugmentationAccordion(props: IProps): React.ReactElement {
   const [open, setOpen] = useState(false);
-  let displayName = props.aug.name;
+  let displayName: string = props.aug.name;
   if (props.level != null) {
     if (props.aug.name === AugmentationName.NeuroFluxGovernor) {
       displayName += ` - Level ${props.level}`;

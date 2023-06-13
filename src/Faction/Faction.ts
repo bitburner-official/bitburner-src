@@ -1,3 +1,4 @@
+import type { AugmentationName } from "@enums";
 import { FactionInfo, FactionInfos } from "./FactionInfo";
 import { favorToRep, repToFavor } from "./formulas/favor";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
@@ -10,7 +11,7 @@ export class Faction {
   alreadyInvited = false;
 
   /** Holds names of all augmentations that this Faction offers */
-  augmentations: string[] = [];
+  augmentations: AugmentationName[] = [];
 
   /** Amount of favor the player has with this faction. */
   favor = 0;

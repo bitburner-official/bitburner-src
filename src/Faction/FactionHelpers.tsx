@@ -1,4 +1,4 @@
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import { Augmentations } from "../Augmentation/Augmentations";
 import { Augmentation } from "../Augmentation/Augmentation";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { AugmentationName, FactionName } from "@enums";
@@ -131,17 +131,17 @@ export function processPassiveFactionRepGain(numCycles: number): void {
   }
 }
 
-export const getFactionAugmentationsFiltered = (faction: Faction): string[] => {
+export const getFactionAugmentationsFiltered = (faction: Faction): AugmentationName[] => {
   // If player has a gang with this faction, return (almost) all augmentations
   if (Player.hasGangWith(faction.name)) {
-    let augs = Object.values(StaticAugmentations);
+    let augs = Object.values(Augmentations);
 
     // Remove special augs
     augs = augs.filter((a) => !a.isSpecial && a.name !== AugmentationName.CongruityImplant);
 
     if (Player.bitNodeN === 2) {
       // TRP is not available outside of BN2 for Gangs
-      augs.push(StaticAugmentations[AugmentationName.TheRedPill]);
+      augs.push(Augmentations[AugmentationName.TheRedPill]);
     }
 
     const rng = SFC32RNG(`BN${Player.bitNodeN}.${Player.sourceFileLvl(Player.bitNodeN)}`);

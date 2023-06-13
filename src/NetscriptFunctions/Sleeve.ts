@@ -1,9 +1,9 @@
-import { Player } from "@player";
+import type { Augmentation } from "../Augmentation/Augmentation";
 import type { Sleeve as NetscriptSleeve } from "@nsdefs";
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { findCrime } from "../Crime/CrimeHelpers";
-import { Augmentation } from "../Augmentation/Augmentation";
 
+import { Player } from "@player";
+import { Augmentations } from "../Augmentation/Augmentations";
+import { findCrime } from "../Crime/CrimeHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
@@ -198,7 +198,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
     },
     purchaseSleeveAug: (ctx) => (_sleeveNumber, _augName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const augName = helpers.string(ctx, "augName", _augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 
@@ -206,7 +206,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
         throw helpers.makeRuntimeErrorMsg(ctx, `Sleeve shock too high: Sleeve ${sleeveNumber}`);
       }
 
-      const aug = StaticAugmentations[augName];
+      const aug = Augmentations[augName];
       if (!aug) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid aug: ${augName}`);
       }
@@ -215,14 +215,14 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
     },
     getSleeveAugmentationPrice: (ctx) => (_augName) => {
       checkSleeveAPIAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug: Augmentation = StaticAugmentations[augName];
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug: Augmentation = Augmentations[augName];
       return aug.baseCost;
     },
     getSleeveAugmentationRepReq: (ctx) => (_augName) => {
       checkSleeveAPIAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug: Augmentation = StaticAugmentations[augName];
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug: Augmentation = Augmentations[augName];
       return aug.getCost().repCost;
     },
     setToBladeburnerAction: (ctx) => (_sleeveNumber, _action, _contract?) => {

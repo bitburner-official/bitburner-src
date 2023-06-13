@@ -11,7 +11,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { StanekConstants } from "./data/Constants";
 import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
 import { defaultMultipliers, mergeMultipliers, Multipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import { Augmentations } from "../Augmentation/Augmentations";
 import { getKeyList } from "../utils/helpers/getKeyList";
 
 export class StaneksGift extends BaseGift {
@@ -226,7 +226,7 @@ export class StaneksGift extends BaseGift {
       sleeve.resetMultipliers();
       //reapplying augmentation's multiplier
       for (let i = 0; i < sleeve.augmentations.length; ++i) {
-        const aug = StaticAugmentations[sleeve.augmentations[i].name];
+        const aug = Augmentations[sleeve.augmentations[i].name];
         sleeve.applyAugmentation(aug);
       }
       //applying stanek multiplier

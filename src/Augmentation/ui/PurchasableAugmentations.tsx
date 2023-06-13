@@ -11,7 +11,7 @@ import { Settings } from "../../Settings/Settings";
 import { formatMoney, formatReputation } from "../../ui/formatNumber";
 import { Augmentation } from "../Augmentation";
 import { AugmentationName, FactionName } from "@enums";
-import { StaticAugmentations } from "../StaticAugmentations";
+import { Augmentations } from "../Augmentations";
 import { PurchaseAugmentationModal } from "./PurchaseAugmentationModal";
 
 interface IPreReqsProps {
@@ -126,8 +126,8 @@ const Requirement = (props: IReqProps): React.ReactElement => {
 };
 
 interface IPurchasableAugsProps {
-  augNames: string[];
-  ownedAugNames: string[];
+  augNames: AugmentationName[];
+  ownedAugNames: AugmentationName[];
 
   canPurchase: (aug: Augmentation) => boolean;
   purchaseAugmentation: (aug: Augmentation, showModal: (open: boolean) => void) => void;
@@ -144,10 +144,10 @@ export const PurchasableAugmentations = (props: IPurchasableAugsProps): React.Re
       disableGutters
       sx={{ mx: 0, display: "grid", gridTemplateColumns: "repeat(1, 1fr)", gap: 0.75 }}
     >
-      {props.augNames.map((augName: string) => (
+      {props.augNames.map((augName) => (
         <PurchasableAugmentation key={augName} parent={props} augName={augName} owned={false} />
       ))}
-      {props.ownedAugNames.map((augName: string) => (
+      {props.ownedAugNames.map((augName) => (
         <PurchasableAugmentation key={augName} parent={props} augName={augName} owned={true} />
       ))}
     </Container>
@@ -156,14 +156,14 @@ export const PurchasableAugmentations = (props: IPurchasableAugsProps): React.Re
 
 interface IPurchasableAugProps {
   parent: IPurchasableAugsProps;
-  augName: string;
+  augName: AugmentationName;
   owned: boolean;
 }
 
 export function PurchasableAugmentation(props: IPurchasableAugProps): React.ReactElement {
   const [open, setOpen] = useState(false);
 
-  const aug = StaticAugmentations[props.augName];
+  const aug = Augmentations[props.augName];
   if (!aug) return <></>;
   const augCosts = aug.getCost();
   const cost = props.parent.sleeveAugs ? aug.baseCost : augCosts.moneyCost;
