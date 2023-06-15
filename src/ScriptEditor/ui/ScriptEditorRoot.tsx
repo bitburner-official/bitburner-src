@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
-import { Editor } from "./Editor";
 import * as monaco from "monaco-editor";
+
+import { Editor } from "./Editor";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 

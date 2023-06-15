@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -11,7 +11,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useBoolean } from "../../ui/React/hooks";
 import { Modal } from "../../ui/React/Modal";
 import { ThemeEditorModal } from "./ThemeEditorModal";
-import { Options } from "./Options";
+import { CursorBlinking, CursorStyle, Options } from "./Options";
+
+const CURSOR_STYLES: CursorStyle[] = ["line", "block", "underline", "line-thin", "block-outline", "underline-thin"];
+const CURSOR_BLINKING_MODES: CursorBlinking[] = ["blink", "smooth", "phase", "expand", "solid"];
 
 export type OptionsModalProps = {
   open: boolean;
@@ -21,7 +24,7 @@ export type OptionsModalProps = {
   onThemeChange: () => void;
 };
 
-export function OptionsModal(props: OptionsModalProps): React.ReactElement {
+export function OptionsModal(props: OptionsModalProps): ReactElement {
   const [themeEditorOpen, { on: openThemeEditor, off: closeThemeEditor }] = useBoolean(false);
 
   const onFontSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,6 +118,34 @@ export function OptionsModal(props: OptionsModalProps): React.ReactElement {
           onChange={(e) => props.onOptionChange("fontLigatures", e.target.checked)}
           checked={props.options.fontLigatures}
         />
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Cursor style: </Typography>
+        <Select
+          onChange={(event) => props.onOptionChange("cursorStyle", event.target.value)}
+          value={props.options.cursorStyle}
+        >
+          {CURSOR_STYLES.map((cursorStyle) => (
+            <MenuItem key={cursorStyle} value={cursorStyle}>
+              {cursorStyle}
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Cursor blinking: </Typography>
+        <Select
+          onChange={(event) => props.onOptionChange("cursorBlinking", event.target.value as CursorBlinking)}
+          value={props.options.cursorBlinking}
+        >
+          {CURSOR_BLINKING_MODES.map((cursorBlinking) => (
+            <MenuItem key={cursorBlinking} value={cursorBlinking}>
+              {cursorBlinking}
+            </MenuItem>
+          ))}
+        </Select>
       </div>
     </Modal>
   );

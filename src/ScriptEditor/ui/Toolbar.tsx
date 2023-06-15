@@ -41,7 +41,11 @@ export function Toolbar({ editor, onSave }: IProps) {
 
   const onOptionChange: OptionsModalProps["onOptionChange"] = (option, value) => {
     saveOptions({ ...options, [option]: value });
-    editor?.updateOptions(options);
+    // delaying editor options update to avoid an issue
+    // where switching between vim and regular modes causes some settings to be reset
+    setTimeout(() => {
+      editor?.updateOptions(options);
+    }, 100);
   };
 
   const onThemeChange = () => {

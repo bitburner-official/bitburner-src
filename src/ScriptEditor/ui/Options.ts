@@ -1,4 +1,10 @@
+import type { editor } from "monaco-editor";
+
 export type WordWrapOptions = "on" | "off" | "bounded" | "wordWrapColumn";
+
+export type CursorStyle = editor.IEditorOptions["cursorStyle"];
+export type CursorBlinking = editor.IEditorOptions["cursorBlinking"];
+
 export interface Options {
   theme: string;
   insertSpaces: boolean;
@@ -9,4 +15,6 @@ export interface Options {
   fontLigatures: boolean;
   wordWrap: WordWrapOptions;
   vim: boolean;
+  cursorStyle: CursorStyle;
+  cursorBlinking: CursorBlinking;
 }

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 // @ts-expect-error This library does not have types.
 import * as MonacoVim from "monaco-vim";
-import * as monaco from "monaco-editor";
-type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
+import type { editor } from "monaco-editor";
+type IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 
 import Box from "@mui/material/Box";
 
