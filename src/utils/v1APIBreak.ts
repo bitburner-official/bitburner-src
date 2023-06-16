@@ -137,7 +137,7 @@ export function v1APIBreak(): void {
         console.error(`Unexpected error resolving backup path for ${script.filename}`);
         continue;
       }
-      server.scripts.set(filename, new Script(filename, script.code, script.server));
+      server.writeToScriptFile(filename, script.code);
       script.code = convert(script.code);
     }
   }

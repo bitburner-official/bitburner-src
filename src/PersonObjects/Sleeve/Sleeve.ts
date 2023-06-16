@@ -7,14 +7,17 @@
  * Sleeves are unlocked in BitNode-10.
  */
 
+import type { SleevePerson } from "@nsdefs";
+import type { Augmentation } from "../../Augmentation/Augmentation";
+import type { Company } from "../../Company/Company";
+import type { CompanyPosition } from "../../Company/CompanyPosition";
+import type { SleeveWork } from "./Work/Work";
+
 import { Player } from "@player";
 import { Person } from "../Person";
 
-import { Augmentation } from "../../Augmentation/Augmentation";
 
 import { Companies } from "../../Company/Companies";
-import { Company } from "../../Company/Company";
-import { CompanyPosition } from "../../Company/CompanyPosition";
 import { CompanyPositions } from "../../Company/CompanyPositions";
 import { Contracts } from "../../Bladeburner/data/Contracts";
 import { CONSTANTS } from "../../Constants";
@@ -24,7 +27,6 @@ import { Factions } from "../../Faction/Factions";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
 import { formatPercent } from "../../ui/formatNumber";
-import { SleeveWork } from "./Work/Work";
 import { SleeveClassWork } from "./Work/SleeveClassWork";
 import { SleeveSynchroWork } from "./Work/SleeveSynchroWork";
 import { SleeveRecoveryWork } from "./Work/SleeveRecoveryWork";
@@ -35,8 +37,8 @@ import { SleeveSupportWork } from "./Work/SleeveSupportWork";
 import { SleeveBladeburnerWork } from "./Work/SleeveBladeburnerWork";
 import { SleeveCrimeWork } from "./Work/SleeveCrimeWork";
 import * as sleeveMethods from "./SleeveMethods";
-import { SleevePerson } from "@nsdefs";
 import { calculateIntelligenceBonus } from "../formulas/intelligence";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: SleeveWork | null = null;
@@ -475,8 +477,17 @@ export class Sleeve extends Person implements SleevePerson {
 
   /** Initializes a Sleeve object from a JSON save state. */
   static fromJSON(value: IReviverValue): Sleeve {
-    if (!value.data.hp?.current || !value.data.hp?.max) value.data.hp = { current: 10, max: 10 };
-    return Generic_fromJSON(Sleeve, value.data);
+    const sleeve = Generic_fromJSON(Sleeve, value.data);
+    if (!sleeve.hp?.current || !sleeve.hp?.max) sleeve.hp = { current: 10, max: 10 };
+    // Remove any invalid aug names on game load
+    sleeve.augmentations = sleeve.augmentations.filter((ownedAug) =>
+      getEnumHelper("AugmentationName").isMember(ownedAug.name),
+    );
+    sleeve.queuedAugmentations = sleeve.queuedAugmentations.filter((ownedAug) =>
+      getEnumHelper("AugmentationName").isMember(ownedAug.name),
+    );
+
+    return sleeve;
   }
 }
 

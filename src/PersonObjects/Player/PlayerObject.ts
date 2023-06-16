@@ -26,6 +26,7 @@ import { cyrb53 } from "../../utils/StringHelperFunctions";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { CONSTANTS } from "../../Constants";
 import { Person } from "../Person";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -167,9 +168,19 @@ export class PlayerObject extends Person implements IPlayer {
   /** Initializes a PlayerObject object from a JSON save state. */
   static fromJSON(value: IReviverValue): PlayerObject {
     const player = Generic_fromJSON(PlayerObject, value.data);
+    // Any statistics that could be infinite would be serialized as null (JSON.stringify(Infinity) is "null")
     player.hp = { current: player.hp?.current ?? 10, max: player.hp?.max ?? 10 };
     player.money ??= 0;
+    // Just remove from the save file any augs that have invalid name
+    player.augmentations = player.augmentations.filter((ownedAug) =>
+      getEnumHelper("AugmentationName").isMember(ownedAug.name),
+    );
+    player.queuedAugmentations = player.queuedAugmentations.filter((ownedAug) =>
+      getEnumHelper("AugmentationName").isMember(ownedAug.name),
+    );
     player.updateSkillLevels();
+    // Converstion code for Player.sourceFiles is here instead of normal save conversion area because it needs
+    // to happen earlier for use in the savegame comparison tool.
     if (Array.isArray(player.sourceFiles)) {
       // Expect pre-2.3 sourcefile format here.
       type OldSourceFiles = { n: number; lvl: number }[];
