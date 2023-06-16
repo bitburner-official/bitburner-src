@@ -325,6 +325,17 @@ const stanek = {
   acceptGift: RamCostConstants.StanekAcceptGift,
 } as const;
 
+const myr = {
+  ianInteract: 5.9,
+  ianMove: 3.4,
+  ianGetTask: 1.1,
+  ianCancelTask: 1.2,
+  ianEnter: 0.2,
+  ianLeave: 0.2,
+  ianBuild: 4.1,
+  ianApplyPowerup: 10.9,
+}
+
 // UI API
 const ui = {
   getTheme: 0,
@@ -426,6 +437,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   stanek,
   ui,
   grafting,
+  myr,
 
   sprintf: 0,
   vsprintf: 0,

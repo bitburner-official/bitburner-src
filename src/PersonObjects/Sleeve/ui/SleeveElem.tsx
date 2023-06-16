@@ -57,6 +57,8 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
         "This sleeve is currently attempting to infiltrate synthoid communities to generate additional contracts and operations.\nThis activity is less efficient the more sleeves are assigned to it.\n\n" +
         `Progress: ${formatPercent(progress)}`
       );
+    case WorkType.MYRIAN:
+      return "This sleeve is currently in The Myrian."
   }
 }
 

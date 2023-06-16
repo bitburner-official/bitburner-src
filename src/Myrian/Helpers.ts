@@ -1,3 +1,3 @@
 import { Myrian } from "./Myrian";
 
-export let myrian = new Myrian();
+export const myrian = new Myrian();

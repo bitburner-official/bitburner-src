@@ -12,6 +12,7 @@ import { SleeveSynchroWork } from "./SleeveSynchroWork";
 import { SleeveBladeburnerWork } from "./SleeveBladeburnerWork";
 import { SleeveInfiltrateWork } from "./SleeveInfiltrateWork";
 import { SleeveSupportWork } from "./SleeveSupportWork";
+import { SleeveMyrianWork } from "./SleeveMyrianWork";
 
 export const applySleeveGains = (sleeve: Sleeve, shockedStats: WorkStats, mult = 1): void => {
   applyWorkStatsExp(sleeve, shockedStats, mult);
@@ -43,6 +44,7 @@ export enum WorkType {
   BLADEBURNER = "BLADEBURNER",
   INFILTRATE = "INFILTRATE",
   SUPPORT = "SUPPORT",
+  MYRIAN = "MYRIAN",
 }
 
 export type SleeveWork =
@@ -54,4 +56,5 @@ export type SleeveWork =
   | SleeveSynchroWork
   | SleeveBladeburnerWork
   | SleeveInfiltrateWork
-  | SleeveSupportWork;
+  | SleeveSupportWork
+  | SleeveMyrianWork;

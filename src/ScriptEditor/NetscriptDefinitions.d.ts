@@ -971,6 +971,9 @@ type SleeveSupportTask = { type: "SUPPORT" };
 /** @public */
 type SleeveSynchroTask = { type: "SYNCHRO" };
 
+/** @public */
+type SleeveMyrianTask = { type: "MYRIAN" };
+
 /** Object representing a sleeve current task.
  * @public */
 export type SleeveTask =
@@ -982,7 +985,8 @@ export type SleeveTask =
   | SleeveInfiltrateTask
   | SleeveRecoveryTask
   | SleeveSupportTask
-  | SleeveSynchroTask;
+  | SleeveSynchroTask
+  | SleeveMyrianTask;
 
 /** Object representing a port. A port is a serialized queue.
  * @public */
@@ -2704,7 +2708,7 @@ export interface Myr {
   /**
   * Interact with an object in The Myrian.
   * @remarks
-  * RAM cost: 5.9 GB
+  f
   *
   * The effect is different depending on the object.
   * Interacting with an enemy will attack it.
@@ -2719,7 +2723,7 @@ export interface Myr {
   /**
   * Move a sleeve in the Myrian.
   * @remarks
-  * RAM cost: 3.4 GB
+  f
   *
   * The target tile must be 1 tile away from the sleeves current tile.
   *
@@ -2730,7 +2734,7 @@ export interface Myr {
   /**
   * Get that sleeves current task in the Myrian.
   * @remarks
-  * RAM cost: 1.1 GB
+  f
   *
   *
   * @returns The task currently being performed.
@@ -2740,7 +2744,7 @@ export interface Myr {
   /**
   * Cancel a sleeves current Myrian task.
   * @remarks
-  * RAM cost: 1.2 GB
+  f
   *
   * @returns true if a task was cancelled.
   */
@@ -2749,7 +2753,7 @@ export interface Myr {
   /**
   * Makes the player or a sleeve enter The Myrian.
   * @remarks
-  * RAM cost: 0.2 GB
+  f
   *
   * @returns true if the person is now in The Myrian.
   */
@@ -2758,7 +2762,7 @@ export interface Myr {
   /**
   * Makes the player or a sleeve leave The Myrian.
   * @remarks
-  * RAM cost: 0.2 GB
+  f
   *
   * Sleeves must be 1 tile away from the core.
   * 
@@ -2769,7 +2773,7 @@ export interface Myr {
   /**
   * Build an entity in The Myrian.
   * @remarks
-  * RAM cost: 4.1 GB
+  f
   *
   * Sleeves must be 1 tile away from the target tile and the player must have enough resources to build the entity.
   * 
@@ -2780,7 +2784,7 @@ export interface Myr {
   /**
   * Apply a Myrian powerup to a sleeve.
   * @remarks
-  * RAM cost: 10.9 GB
+  f
   *
   * Must have at least 1 powerup to apply.
   * 
@@ -4676,6 +4680,12 @@ export interface NS {
    * @remarks RAM cost: 0 GB
    */
   readonly grafting: Grafting;
+
+  /**
+   * Namespace for myrian functions. Contains spoilers.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly myr: Myr;
 
   /**
    * Arguments passed into the script.

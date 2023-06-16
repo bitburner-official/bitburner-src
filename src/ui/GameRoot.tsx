@@ -79,6 +79,7 @@ import { useRerender } from "./React/hooks";
 import { ScriptFilePath } from "src/Paths/ScriptFilePath";
 import { TextFilePath } from "src/Paths/TextFilePath";
 import { MyrianRoot } from "../Myrian/ui/MyrianRoot";
+import { myrian } from "../Myrian/Helpers";
 
 const htmlLocation = location;
 
@@ -300,7 +301,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.Myrian: {
-      mainPage = <MyrianRoot />;
+      mainPage = <MyrianRoot myrian={myrian} />;
       break;
     }
     case Page.Stats: {

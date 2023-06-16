@@ -93,6 +93,7 @@ import { ContentFilePath } from "./Paths/ContentFile";
 import { LiteratureName } from "./Literature/data/LiteratureNames";
 import { hasContractExtension } from "./Paths/ContractFilePath";
 import { getRamCost } from "./Netscript/RamCostGenerator";
+import { NetscriptMyrian } from "./NetscriptFunctions/Myrian";
 
 export const enums: NSEnums = {
   CityName,
@@ -123,6 +124,7 @@ export const ns: InternalAPI<NSFull> = {
   stock: NetscriptStockMarket(),
   grafting: NetscriptGrafting(),
   hacknet: NetscriptHacknet(),
+  myr: NetscriptMyrian(),
   sprintf: () => sprintf,
   vsprintf: () => vsprintf,
   scan: (ctx) => (_hostname) => {
@@ -142,13 +144,13 @@ export const ns: InternalAPI<NSFull> = {
   hasTorRouter: () => () => Player.hasTorRouter(),
   hack:
     (ctx) =>
-    (_hostname, opts = {}) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      // TODO 2.2: better type safety rework for functions using assertObjectType, then remove function.
-      const optsValidator: BasicHGWOptions = {};
-      assertObjectType(ctx, "opts", opts, optsValidator);
-      return helpers.hack(ctx, hostname, false, opts);
-    },
+      (_hostname, opts = {}) => {
+        const hostname = helpers.string(ctx, "hostname", _hostname);
+        // TODO 2.2: better type safety rework for functions using assertObjectType, then remove function.
+        const optsValidator: BasicHGWOptions = {};
+        assertObjectType(ctx, "opts", opts, optsValidator);
+        return helpers.hack(ctx, hostname, false, opts);
+      },
   hackAnalyzeThreads: (ctx) => (_hostname, _hackAmount) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const hackAmount = helpers.number(ctx, "hackAmount", _hackAmount);
@@ -224,192 +226,192 @@ export const ns: InternalAPI<NSFull> = {
   },
   sleep:
     (ctx) =>
-    (_time = 0) => {
-      const time = helpers.number(ctx, "time", _time);
-      helpers.log(ctx, () => `Sleeping for ${time} milliseconds`);
-      return helpers.netscriptDelay(ctx, time).then(function () {
-        return Promise.resolve(true);
-      });
-    },
+      (_time = 0) => {
+        const time = helpers.number(ctx, "time", _time);
+        helpers.log(ctx, () => `Sleeping for ${time} milliseconds`);
+        return helpers.netscriptDelay(ctx, time).then(function () {
+          return Promise.resolve(true);
+        });
+      },
   asleep:
     (ctx) =>
-    (_time = 0) => {
-      const time = helpers.number(ctx, "time", _time);
-      helpers.log(ctx, () => `Sleeping for ${time} milliseconds`);
-      return new Promise((resolve) => setTimeout(() => resolve(true), time));
-    },
+      (_time = 0) => {
+        const time = helpers.number(ctx, "time", _time);
+        helpers.log(ctx, () => `Sleeping for ${time} milliseconds`);
+        return new Promise((resolve) => setTimeout(() => resolve(true), time));
+      },
   grow:
     (ctx) =>
-    (_hostname, opts = {}) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const optsValidator: BasicHGWOptions = {};
-      assertObjectType(ctx, "opts", opts, optsValidator);
-      const threads = helpers.resolveNetscriptRequestedThreads(ctx, opts.threads);
-      const additionalMsec = helpers.number(ctx, "opts.additionalMsec", opts.additionalMsec ?? 0);
-      if (additionalMsec < 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `additionalMsec must be non-negative, got ${additionalMsec}`);
-      }
-
-      const server = helpers.getServer(ctx, hostname);
-      if (!(server instanceof Server)) {
-        helpers.log(ctx, () => "Cannot be executed on this server.");
-        return Promise.resolve(0);
-      }
-
-      const host = GetServer(ctx.workerScript.hostname);
-      if (host === null) {
-        throw new Error("Workerscript host is null");
-      }
-
-      // No root access or skill level too low
-      const canHack = netscriptCanGrow(server);
-      if (!canHack.res) {
-        throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
-      }
-
-      const growTime = calculateGrowTime(server, Player) + additionalMsec / 1000.0;
-      helpers.log(
-        ctx,
-        () =>
-          `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
-            growTime * 1000,
-            true,
-          )} (t=${formatThreads(threads)}).`,
-      );
-      return helpers.netscriptDelay(ctx, growTime * 1000).then(function () {
-        const moneyBefore = server.moneyAvailable <= 0 ? 1 : server.moneyAvailable;
-        processSingleServerGrowth(server, threads, host.cpuCores);
-        const moneyAfter = server.moneyAvailable;
-        ctx.workerScript.scriptRef.recordGrow(server.hostname, threads);
-        const expGain = calculateHackingExpGain(server, Player) * threads;
-        const logGrowPercent = moneyAfter / moneyBefore - 1;
-        helpers.log(
-          ctx,
-          () =>
-            `Available money on '${server.hostname}' grown by ${formatPercent(logGrowPercent, 6)}. Gained ${formatExp(
-              expGain,
-            )} hacking exp (t=${formatThreads(threads)}).`,
-        );
-        ctx.workerScript.scriptRef.onlineExpGained += expGain;
-        Player.gainHackingExp(expGain);
-        if (opts.stock) {
-          influenceStockThroughServerGrow(server, moneyAfter - moneyBefore);
-        }
-        return Promise.resolve(moneyAfter / moneyBefore);
-      });
-    },
-  growthAnalyze:
-    (ctx) =>
-    (_host, _multiplier, _cores = 1) => {
-      const host = helpers.string(ctx, "hostname", _host);
-      const mult = helpers.number(ctx, "multiplier", _multiplier);
-      const cores = helpers.number(ctx, "cores", _cores);
-
-      // Check argument validity
-      const server = helpers.getServer(ctx, host);
-      if (!(server instanceof Server)) {
-        // Todo 2.3: Make this throw instead of returning 0?
-        helpers.log(ctx, () => `${host} is not a hackable server. Returning 0.`);
-        return 0;
-      }
-      if (mult < 1 || !isFinite(mult)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: multiplier must be finite and >= 1, is ${mult}.`);
-      }
-      // TODO 2.3: Add assertion function for positive integer, there are a lot of places everywhere that can use this
-      if (!Number.isInteger(cores) || cores < 1) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Cores should be a positive integer. Cores provided: ${cores}`);
-      }
-
-      return numCycleForGrowth(server, mult, cores);
-    },
-  growthAnalyzeSecurity:
-    (ctx) =>
-    (_threads, _hostname?, _cores = 1) => {
-      let threads = helpers.number(ctx, "threads", _threads);
-      if (_hostname) {
-        const cores = helpers.number(ctx, "cores", _cores);
+      (_hostname, opts = {}) => {
         const hostname = helpers.string(ctx, "hostname", _hostname);
-        const server = helpers.getServer(ctx, hostname);
+        const optsValidator: BasicHGWOptions = {};
+        assertObjectType(ctx, "opts", opts, optsValidator);
+        const threads = helpers.resolveNetscriptRequestedThreads(ctx, opts.threads);
+        const additionalMsec = helpers.number(ctx, "opts.additionalMsec", opts.additionalMsec ?? 0);
+        if (additionalMsec < 0) {
+          throw helpers.makeRuntimeErrorMsg(ctx, `additionalMsec must be non-negative, got ${additionalMsec}`);
+        }
 
+        const server = helpers.getServer(ctx, hostname);
         if (!(server instanceof Server)) {
           helpers.log(ctx, () => "Cannot be executed on this server.");
-          return 0;
-        }
-
-        const maxThreadsNeeded = Math.ceil(
-          numCycleForGrowthCorrected(server, server.moneyMax, server.moneyAvailable, cores),
-        );
-
-        threads = Math.min(threads, maxThreadsNeeded);
-      }
-
-      return 2 * CONSTANTS.ServerFortifyAmount * threads;
-    },
-  weaken:
-    (ctx) =>
-    async (_hostname, opts = {}) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const optsValidator: BasicHGWOptions = {};
-      assertObjectType(ctx, "opts", opts, optsValidator);
-      const threads = helpers.resolveNetscriptRequestedThreads(ctx, opts.threads);
-      const additionalMsec = helpers.number(ctx, "opts.additionalMsec", opts.additionalMsec ?? 0);
-      if (additionalMsec < 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `additionalMsec must be non-negative, got ${additionalMsec}`);
-      }
-
-      const server = helpers.getServer(ctx, hostname);
-      if (!(server instanceof Server)) {
-        helpers.log(ctx, () => "Cannot be executed on this server.");
-        return Promise.resolve(0);
-      }
-
-      // No root access or skill level too low
-      const canHack = netscriptCanWeaken(server);
-      if (!canHack.res) {
-        throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
-      }
-
-      const weakenTime = calculateWeakenTime(server, Player) + additionalMsec / 1000.0;
-      helpers.log(
-        ctx,
-        () =>
-          `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
-            weakenTime * 1000,
-            true,
-          )} (t=${formatThreads(threads)})`,
-      );
-      return helpers.netscriptDelay(ctx, weakenTime * 1000).then(function () {
-        const host = GetServer(ctx.workerScript.hostname);
-        if (host === null) {
-          helpers.log(ctx, () => "Server is null, did it die?");
           return Promise.resolve(0);
         }
-        const coreBonus = 1 + (host.cpuCores - 1) / 16;
-        const weakenAmt = CONSTANTS.ServerWeakenAmount * threads * coreBonus;
-        server.weaken(weakenAmt);
-        ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
-        const expGain = calculateHackingExpGain(server, Player) * threads;
+
+        const host = GetServer(ctx.workerScript.hostname);
+        if (host === null) {
+          throw new Error("Workerscript host is null");
+        }
+
+        // No root access or skill level too low
+        const canHack = netscriptCanGrow(server);
+        if (!canHack.res) {
+          throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
+        }
+
+        const growTime = calculateGrowTime(server, Player) + additionalMsec / 1000.0;
         helpers.log(
           ctx,
           () =>
-            `'${server.hostname}' security level weakened to ${server.hackDifficulty}. Gained ${formatExp(
-              expGain,
-            )} hacking exp (t=${formatThreads(threads)})`,
+            `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
+              growTime * 1000,
+              true,
+            )} (t=${formatThreads(threads)}).`,
         );
-        ctx.workerScript.scriptRef.onlineExpGained += expGain;
-        Player.gainHackingExp(expGain);
-        // Account for hidden multiplier in Server.weaken()
-        return Promise.resolve(weakenAmt * BitNodeMultipliers.ServerWeakenRate);
-      });
-    },
+        return helpers.netscriptDelay(ctx, growTime * 1000).then(function () {
+          const moneyBefore = server.moneyAvailable <= 0 ? 1 : server.moneyAvailable;
+          processSingleServerGrowth(server, threads, host.cpuCores);
+          const moneyAfter = server.moneyAvailable;
+          ctx.workerScript.scriptRef.recordGrow(server.hostname, threads);
+          const expGain = calculateHackingExpGain(server, Player) * threads;
+          const logGrowPercent = moneyAfter / moneyBefore - 1;
+          helpers.log(
+            ctx,
+            () =>
+              `Available money on '${server.hostname}' grown by ${formatPercent(logGrowPercent, 6)}. Gained ${formatExp(
+                expGain,
+              )} hacking exp (t=${formatThreads(threads)}).`,
+          );
+          ctx.workerScript.scriptRef.onlineExpGained += expGain;
+          Player.gainHackingExp(expGain);
+          if (opts.stock) {
+            influenceStockThroughServerGrow(server, moneyAfter - moneyBefore);
+          }
+          return Promise.resolve(moneyAfter / moneyBefore);
+        });
+      },
+  growthAnalyze:
+    (ctx) =>
+      (_host, _multiplier, _cores = 1) => {
+        const host = helpers.string(ctx, "hostname", _host);
+        const mult = helpers.number(ctx, "multiplier", _multiplier);
+        const cores = helpers.number(ctx, "cores", _cores);
+
+        // Check argument validity
+        const server = helpers.getServer(ctx, host);
+        if (!(server instanceof Server)) {
+          // Todo 2.3: Make this throw instead of returning 0?
+          helpers.log(ctx, () => `${host} is not a hackable server. Returning 0.`);
+          return 0;
+        }
+        if (mult < 1 || !isFinite(mult)) {
+          throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: multiplier must be finite and >= 1, is ${mult}.`);
+        }
+        // TODO 2.3: Add assertion function for positive integer, there are a lot of places everywhere that can use this
+        if (!Number.isInteger(cores) || cores < 1) {
+          throw helpers.makeRuntimeErrorMsg(ctx, `Cores should be a positive integer. Cores provided: ${cores}`);
+        }
+
+        return numCycleForGrowth(server, mult, cores);
+      },
+  growthAnalyzeSecurity:
+    (ctx) =>
+      (_threads, _hostname?, _cores = 1) => {
+        let threads = helpers.number(ctx, "threads", _threads);
+        if (_hostname) {
+          const cores = helpers.number(ctx, "cores", _cores);
+          const hostname = helpers.string(ctx, "hostname", _hostname);
+          const server = helpers.getServer(ctx, hostname);
+
+          if (!(server instanceof Server)) {
+            helpers.log(ctx, () => "Cannot be executed on this server.");
+            return 0;
+          }
+
+          const maxThreadsNeeded = Math.ceil(
+            numCycleForGrowthCorrected(server, server.moneyMax, server.moneyAvailable, cores),
+          );
+
+          threads = Math.min(threads, maxThreadsNeeded);
+        }
+
+        return 2 * CONSTANTS.ServerFortifyAmount * threads;
+      },
+  weaken:
+    (ctx) =>
+      async (_hostname, opts = {}) => {
+        const hostname = helpers.string(ctx, "hostname", _hostname);
+        const optsValidator: BasicHGWOptions = {};
+        assertObjectType(ctx, "opts", opts, optsValidator);
+        const threads = helpers.resolveNetscriptRequestedThreads(ctx, opts.threads);
+        const additionalMsec = helpers.number(ctx, "opts.additionalMsec", opts.additionalMsec ?? 0);
+        if (additionalMsec < 0) {
+          throw helpers.makeRuntimeErrorMsg(ctx, `additionalMsec must be non-negative, got ${additionalMsec}`);
+        }
+
+        const server = helpers.getServer(ctx, hostname);
+        if (!(server instanceof Server)) {
+          helpers.log(ctx, () => "Cannot be executed on this server.");
+          return Promise.resolve(0);
+        }
+
+        // No root access or skill level too low
+        const canHack = netscriptCanWeaken(server);
+        if (!canHack.res) {
+          throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
+        }
+
+        const weakenTime = calculateWeakenTime(server, Player) + additionalMsec / 1000.0;
+        helpers.log(
+          ctx,
+          () =>
+            `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
+              weakenTime * 1000,
+              true,
+            )} (t=${formatThreads(threads)})`,
+        );
+        return helpers.netscriptDelay(ctx, weakenTime * 1000).then(function () {
+          const host = GetServer(ctx.workerScript.hostname);
+          if (host === null) {
+            helpers.log(ctx, () => "Server is null, did it die?");
+            return Promise.resolve(0);
+          }
+          const coreBonus = 1 + (host.cpuCores - 1) / 16;
+          const weakenAmt = CONSTANTS.ServerWeakenAmount * threads * coreBonus;
+          server.weaken(weakenAmt);
+          ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
+          const expGain = calculateHackingExpGain(server, Player) * threads;
+          helpers.log(
+            ctx,
+            () =>
+              `'${server.hostname}' security level weakened to ${server.hackDifficulty}. Gained ${formatExp(
+                expGain,
+              )} hacking exp (t=${formatThreads(threads)})`,
+          );
+          ctx.workerScript.scriptRef.onlineExpGained += expGain;
+          Player.gainHackingExp(expGain);
+          // Account for hidden multiplier in Server.weaken()
+          return Promise.resolve(weakenAmt * BitNodeMultipliers.ServerWeakenRate);
+        });
+      },
   weakenAnalyze:
     (ctx) =>
-    (_threads, _cores = 1) => {
-      const threads = helpers.number(ctx, "threads", _threads);
-      const cores = helpers.number(ctx, "cores", _cores);
-      const coreBonus = 1 + (cores - 1) / 16;
-      return CONSTANTS.ServerWeakenAmount * threads * coreBonus * BitNodeMultipliers.ServerWeakenRate;
-    },
+      (_threads, _cores = 1) => {
+        const threads = helpers.number(ctx, "threads", _threads);
+        const cores = helpers.number(ctx, "cores", _cores);
+        const coreBonus = 1 + (cores - 1) / 16;
+        return CONSTANTS.ServerWeakenAmount * threads * coreBonus * BitNodeMultipliers.ServerWeakenRate;
+      },
   share: (ctx) => () => {
     helpers.log(ctx, () => "Sharing this computer.");
     const end = StartSharing(
@@ -425,70 +427,70 @@ export const ns: InternalAPI<NSFull> = {
   },
   print:
     (ctx) =>
-    (...args) => {
-      if (args.length === 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, "Takes at least 1 argument.");
-      }
-      ctx.workerScript.print(helpers.argsToString(args));
-    },
+      (...args) => {
+        if (args.length === 0) {
+          throw helpers.makeRuntimeErrorMsg(ctx, "Takes at least 1 argument.");
+        }
+        ctx.workerScript.print(helpers.argsToString(args));
+      },
   printf:
     (ctx) =>
-    (_format, ...args) => {
-      const format = helpers.string(ctx, "format", _format);
-      if (typeof format !== "string") {
-        throw helpers.makeRuntimeErrorMsg(ctx, "First argument must be string for the format.");
-      }
-      ctx.workerScript.print(vsprintf(format, args));
-    },
+      (_format, ...args) => {
+        const format = helpers.string(ctx, "format", _format);
+        if (typeof format !== "string") {
+          throw helpers.makeRuntimeErrorMsg(ctx, "First argument must be string for the format.");
+        }
+        ctx.workerScript.print(vsprintf(format, args));
+      },
   tprint:
     (ctx) =>
-    (...args) => {
-      if (args.length === 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, "Takes at least 1 argument.");
-      }
-      const str = helpers.argsToString(args);
-      if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
-        Terminal.error(`${ctx.workerScript.name}: ${str}`);
-        return;
-      }
-      if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${ctx.workerScript.name}: ${str}`);
-        return;
-      }
-      if (str.startsWith("WARN")) {
-        Terminal.warn(`${ctx.workerScript.name}: ${str}`);
-        return;
-      }
-      if (str.startsWith("INFO")) {
-        Terminal.info(`${ctx.workerScript.name}: ${str}`);
-        return;
-      }
-      Terminal.print(`${ctx.workerScript.name}: ${str}`);
-    },
+      (...args) => {
+        if (args.length === 0) {
+          throw helpers.makeRuntimeErrorMsg(ctx, "Takes at least 1 argument.");
+        }
+        const str = helpers.argsToString(args);
+        if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
+          Terminal.error(`${ctx.workerScript.name}: ${str}`);
+          return;
+        }
+        if (str.startsWith("SUCCESS")) {
+          Terminal.success(`${ctx.workerScript.name}: ${str}`);
+          return;
+        }
+        if (str.startsWith("WARN")) {
+          Terminal.warn(`${ctx.workerScript.name}: ${str}`);
+          return;
+        }
+        if (str.startsWith("INFO")) {
+          Terminal.info(`${ctx.workerScript.name}: ${str}`);
+          return;
+        }
+        Terminal.print(`${ctx.workerScript.name}: ${str}`);
+      },
   tprintf:
     (ctx) =>
-    (_format, ...args) => {
-      const format = helpers.string(ctx, "format", _format);
-      const str = vsprintf(format, args);
+      (_format, ...args) => {
+        const format = helpers.string(ctx, "format", _format);
+        const str = vsprintf(format, args);
 
-      if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
-        Terminal.error(`${str}`);
-        return;
-      }
-      if (str.startsWith("SUCCESS")) {
-        Terminal.success(`${str}`);
-        return;
-      }
-      if (str.startsWith("WARN")) {
-        Terminal.warn(`${str}`);
-        return;
-      }
-      if (str.startsWith("INFO")) {
-        Terminal.info(`${str}`);
-        return;
-      }
-      Terminal.print(`${str}`);
-    },
+        if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
+          Terminal.error(`${str}`);
+          return;
+        }
+        if (str.startsWith("SUCCESS")) {
+          Terminal.success(`${str}`);
+          return;
+        }
+        if (str.startsWith("WARN")) {
+          Terminal.warn(`${str}`);
+          return;
+        }
+        if (str.startsWith("INFO")) {
+          Terminal.info(`${str}`);
+          return;
+        }
+        Terminal.print(`${str}`);
+      },
   clearLog: (ctx) => () => {
     ctx.workerScript.scriptRef.clearLog();
   },
@@ -528,73 +530,73 @@ export const ns: InternalAPI<NSFull> = {
   },
   getScriptLogs:
     (ctx) =>
-    (scriptID, hostname, ...scriptArgs) => {
-      const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
-      const runningScriptObj = helpers.getRunningScript(ctx, ident);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
-        return [] as string[];
-      }
+      (scriptID, hostname, ...scriptArgs) => {
+        const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
+        const runningScriptObj = helpers.getRunningScript(ctx, ident);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+          return [] as string[];
+        }
 
-      return runningScriptObj.logs.map((x) => "" + x);
-    },
+        return runningScriptObj.logs.map((x) => "" + x);
+      },
   tail:
     (ctx) =>
-    (scriptID, hostname, ...scriptArgs) => {
-      const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
-      const runningScriptObj = helpers.getRunningScript(ctx, ident);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
-        return;
-      }
+      (scriptID, hostname, ...scriptArgs) => {
+        const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
+        const runningScriptObj = helpers.getRunningScript(ctx, ident);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+          return;
+        }
 
-      LogBoxEvents.emit(runningScriptObj);
-    },
+        LogBoxEvents.emit(runningScriptObj);
+      },
   moveTail:
     (ctx) =>
-    (_x, _y, _pid = ctx.workerScript.scriptRef.pid) => {
-      const x = helpers.number(ctx, "x", _x);
-      const y = helpers.number(ctx, "y", _y);
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.tailProps?.setPosition(x, y);
-    },
+      (_x, _y, _pid = ctx.workerScript.scriptRef.pid) => {
+        const x = helpers.number(ctx, "x", _x);
+        const y = helpers.number(ctx, "y", _y);
+        const pid = helpers.number(ctx, "pid", _pid);
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        runningScriptObj.tailProps?.setPosition(x, y);
+      },
   resizeTail:
     (ctx) =>
-    (_w, _h, _pid = ctx.workerScript.scriptRef.pid) => {
-      const w = helpers.number(ctx, "w", _w);
-      const h = helpers.number(ctx, "h", _h);
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.tailProps?.setSize(w, h);
-    },
+      (_w, _h, _pid = ctx.workerScript.scriptRef.pid) => {
+        const w = helpers.number(ctx, "w", _w);
+        const h = helpers.number(ctx, "h", _h);
+        const pid = helpers.number(ctx, "pid", _pid);
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        runningScriptObj.tailProps?.setSize(w, h);
+      },
   closeTail:
     (ctx) =>
-    (_pid = ctx.workerScript.scriptRef.pid) => {
-      const pid = helpers.number(ctx, "pid", _pid);
-      //Emit an event to tell the game to close the tail window if it exists
-      LogBoxCloserEvents.emit(pid);
-    },
+      (_pid = ctx.workerScript.scriptRef.pid) => {
+        const pid = helpers.number(ctx, "pid", _pid);
+        //Emit an event to tell the game to close the tail window if it exists
+        LogBoxCloserEvents.emit(pid);
+      },
   setTitle:
     (ctx) =>
-    (title, _pid = ctx.workerScript.scriptRef.pid) => {
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
-      runningScriptObj.tailProps?.rerender();
-    },
+      (title, _pid = ctx.workerScript.scriptRef.pid) => {
+        const pid = helpers.number(ctx, "pid", _pid);
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
+        runningScriptObj.tailProps?.rerender();
+      },
   nuke: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
 
@@ -714,115 +716,115 @@ export const ns: InternalAPI<NSFull> = {
   },
   run:
     (ctx) =>
-    (_scriptname, _thread_or_opt = 1, ..._args) => {
-      const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
-      const runOpts = helpers.runOptions(ctx, _thread_or_opt);
-      const args = helpers.scriptArgs(ctx, _args);
-      const scriptServer = ctx.workerScript.getServer();
+      (_scriptname, _thread_or_opt = 1, ..._args) => {
+        const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
+        const runOpts = helpers.runOptions(ctx, _thread_or_opt);
+        const args = helpers.scriptArgs(ctx, _args);
+        const scriptServer = ctx.workerScript.getServer();
 
-      return runScriptFromScript("run", scriptServer, path, args, ctx.workerScript, runOpts);
-    },
+        return runScriptFromScript("run", scriptServer, path, args, ctx.workerScript, runOpts);
+      },
   exec:
     (ctx) =>
-    (_scriptname, _hostname, _thread_or_opt = 1, ..._args) => {
-      const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const runOpts = helpers.runOptions(ctx, _thread_or_opt);
-      const args = helpers.scriptArgs(ctx, _args);
-      const server = helpers.getServer(ctx, hostname);
-      return runScriptFromScript("exec", server, path, args, ctx.workerScript, runOpts);
-    },
+      (_scriptname, _hostname, _thread_or_opt = 1, ..._args) => {
+        const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
+        const hostname = helpers.string(ctx, "hostname", _hostname);
+        const runOpts = helpers.runOptions(ctx, _thread_or_opt);
+        const args = helpers.scriptArgs(ctx, _args);
+        const server = helpers.getServer(ctx, hostname);
+        return runScriptFromScript("exec", server, path, args, ctx.workerScript, runOpts);
+      },
   spawn:
     (ctx) =>
-    (_scriptname, _thread_or_opt = 1, ..._args) => {
-      const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
-      const runOpts = helpers.runOptions(ctx, _thread_or_opt);
-      const args = helpers.scriptArgs(ctx, _args);
-      const spawnDelay = 10;
-      setTimeout(() => {
-        const scriptServer = GetServer(ctx.workerScript.hostname);
-        if (scriptServer == null) {
-          throw helpers.makeRuntimeErrorMsg(ctx, "Could not find server. This is a bug. Report to dev");
+      (_scriptname, _thread_or_opt = 1, ..._args) => {
+        const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
+        const runOpts = helpers.runOptions(ctx, _thread_or_opt);
+        const args = helpers.scriptArgs(ctx, _args);
+        const spawnDelay = 10;
+        setTimeout(() => {
+          const scriptServer = GetServer(ctx.workerScript.hostname);
+          if (scriptServer == null) {
+            throw helpers.makeRuntimeErrorMsg(ctx, "Could not find server. This is a bug. Report to dev");
+          }
+
+          return runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
+        }, spawnDelay * 1e3);
+
+        helpers.log(ctx, () => `Will execute '${path}' in ${spawnDelay} seconds`);
+
+        if (killWorkerScript(ctx.workerScript)) {
+          helpers.log(ctx, () => "Exiting...");
         }
-
-        return runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
-      }, spawnDelay * 1e3);
-
-      helpers.log(ctx, () => `Will execute '${path}' in ${spawnDelay} seconds`);
-
-      if (killWorkerScript(ctx.workerScript)) {
-        helpers.log(ctx, () => "Exiting...");
-      }
-    },
+      },
   kill:
     (ctx) =>
-    (scriptID, hostname = ctx.workerScript.hostname, ...scriptArgs) => {
-      const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
-      let res;
-      const killByPid = typeof ident === "number";
-      if (killByPid) {
-        // Kill by pid
-        res = killWorkerScriptByPid(ident);
-      } else {
-        // Kill by filename/hostname
-        if (scriptID === undefined) {
-          throw helpers.makeRuntimeErrorMsg(ctx, "Usage: kill(scriptname, server, [arg1], [arg2]...)");
+      (scriptID, hostname = ctx.workerScript.hostname, ...scriptArgs) => {
+        const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
+        let res;
+        const killByPid = typeof ident === "number";
+        if (killByPid) {
+          // Kill by pid
+          res = killWorkerScriptByPid(ident);
+        } else {
+          // Kill by filename/hostname
+          if (scriptID === undefined) {
+            throw helpers.makeRuntimeErrorMsg(ctx, "Usage: kill(scriptname, server, [arg1], [arg2]...)");
+          }
+
+          const byPid = helpers.getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
+          if (byPid === null) {
+            helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+            return false;
+          }
+
+          res = true;
+          for (const pid of byPid.keys()) {
+            res &&= killWorkerScriptByPid(pid);
+          }
         }
 
-        const byPid = helpers.getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
-        if (byPid === null) {
-          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+        if (res) {
+          if (killByPid) {
+            helpers.log(ctx, () => `Killing script with PID ${ident}`);
+          } else {
+            helpers.log(ctx, () => `Killing '${scriptID}' on '${hostname}' with args: ${arrayToString(scriptArgs)}.`);
+          }
+          return true;
+        } else {
+          if (killByPid) {
+            helpers.log(ctx, () => `No script with PID ${ident}`);
+          } else {
+            helpers.log(
+              ctx,
+              () => `Internal error killing '${scriptID}' on '${hostname}' with args: ${arrayToString(scriptArgs)}`,
+            );
+          }
           return false;
         }
-
-        res = true;
-        for (const pid of byPid.keys()) {
-          res &&= killWorkerScriptByPid(pid);
-        }
-      }
-
-      if (res) {
-        if (killByPid) {
-          helpers.log(ctx, () => `Killing script with PID ${ident}`);
-        } else {
-          helpers.log(ctx, () => `Killing '${scriptID}' on '${hostname}' with args: ${arrayToString(scriptArgs)}.`);
-        }
-        return true;
-      } else {
-        if (killByPid) {
-          helpers.log(ctx, () => `No script with PID ${ident}`);
-        } else {
-          helpers.log(
-            ctx,
-            () => `Internal error killing '${scriptID}' on '${hostname}' with args: ${arrayToString(scriptArgs)}`,
-          );
-        }
-        return false;
-      }
-    },
+      },
   killall:
     (ctx) =>
-    (_hostname = ctx.workerScript.hostname, _safetyguard = true) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const safetyguard = !!_safetyguard;
-      const server = helpers.getServer(ctx, hostname);
+      (_hostname = ctx.workerScript.hostname, _safetyguard = true) => {
+        const hostname = helpers.string(ctx, "hostname", _hostname);
+        const safetyguard = !!_safetyguard;
+        const server = helpers.getServer(ctx, hostname);
 
-      let scriptsKilled = 0;
+        let scriptsKilled = 0;
 
-      for (const byPid of server.runningScriptMap.values()) {
-        for (const pid of byPid.keys()) {
-          if (safetyguard && pid == ctx.workerScript.pid) continue;
-          killWorkerScriptByPid(pid);
-          ++scriptsKilled;
+        for (const byPid of server.runningScriptMap.values()) {
+          for (const pid of byPid.keys()) {
+            if (safetyguard && pid == ctx.workerScript.pid) continue;
+            killWorkerScriptByPid(pid);
+            ++scriptsKilled;
+          }
         }
-      }
-      helpers.log(
-        ctx,
-        () => `Killing all scripts on '${server.hostname}'. May take a few minutes for the scripts to die.`,
-      );
+        helpers.log(
+          ctx,
+          () => `Killing all scripts on '${server.hostname}'. May take a few minutes for the scripts to die.`,
+        );
 
-      return scriptsKilled > 0;
-    },
+        return scriptsKilled > 0;
+      },
   exit: (ctx) => () => {
     helpers.log(ctx, () => "Exiting...");
     killWorkerScript(ctx.workerScript);
@@ -912,23 +914,23 @@ export const ns: InternalAPI<NSFull> = {
   },
   ps:
     (ctx) =>
-    (_hostname = ctx.workerScript.hostname) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const server = helpers.getServer(ctx, hostname);
-      const processes: ProcessInfo[] = [];
-      for (const byPid of server.runningScriptMap.values()) {
-        for (const script of byPid.values()) {
-          processes.push({
-            filename: script.filename,
-            threads: script.threads,
-            args: script.args.slice(),
-            pid: script.pid,
-            temporary: script.temporary,
-          });
+      (_hostname = ctx.workerScript.hostname) => {
+        const hostname = helpers.string(ctx, "hostname", _hostname);
+        const server = helpers.getServer(ctx, hostname);
+        const processes: ProcessInfo[] = [];
+        for (const byPid of server.runningScriptMap.values()) {
+          for (const script of byPid.values()) {
+            processes.push({
+              filename: script.filename,
+              threads: script.threads,
+              args: script.args.slice(),
+              pid: script.pid,
+              temporary: script.temporary,
+            });
+          }
         }
-      }
-      return processes;
-    },
+        return processes;
+      },
   hasRootAccess: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const server = helpers.getServer(ctx, hostname);
@@ -959,16 +961,16 @@ export const ns: InternalAPI<NSFull> = {
   },
   getBitNodeMultipliers:
     (ctx) =>
-    (_n = Player.bitNodeN, _lvl = Player.sourceFileLvl(Player.bitNodeN) + 1): IBitNodeMultipliers => {
-      if (Player.sourceFileLvl(5) <= 0 && Player.bitNodeN !== 5)
-        throw helpers.makeRuntimeErrorMsg(ctx, "Requires Source-File 5 to run.");
-      const n = Math.round(helpers.number(ctx, "n", _n));
-      const lvl = Math.round(helpers.number(ctx, "lvl", _lvl));
-      if (n < 1 || n > 13) throw new Error("n must be between 1 and 13");
-      if (lvl < 1) throw new Error("lvl must be >= 1");
+      (_n = Player.bitNodeN, _lvl = Player.sourceFileLvl(Player.bitNodeN) + 1): IBitNodeMultipliers => {
+        if (Player.sourceFileLvl(5) <= 0 && Player.bitNodeN !== 5)
+          throw helpers.makeRuntimeErrorMsg(ctx, "Requires Source-File 5 to run.");
+        const n = Math.round(helpers.number(ctx, "n", _n));
+        const lvl = Math.round(helpers.number(ctx, "lvl", _lvl));
+        if (n < 1 || n > 13) throw new Error("n must be between 1 and 13");
+        if (lvl < 1) throw new Error("lvl must be >= 1");
 
-      return Object.assign({}, getBitNodeMultipliers(n, lvl));
-    },
+        return Object.assign({}, getBitNodeMultipliers(n, lvl));
+      },
   getServer: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
     const server = helpers.getServer(ctx, hostname);
@@ -1139,10 +1141,10 @@ export const ns: InternalAPI<NSFull> = {
   },
   isRunning:
     (ctx) =>
-    (fn, hostname, ...scriptArgs) => {
-      const ident = helpers.scriptIdentifier(ctx, fn, hostname, scriptArgs);
-      return helpers.getRunningScript(ctx, ident) !== null;
-    },
+      (fn, hostname, ...scriptArgs) => {
+        const ident = helpers.scriptIdentifier(ctx, fn, hostname, scriptArgs);
+        return helpers.getRunningScript(ctx, ident) !== null;
+      },
   getPurchasedServerLimit: () => () => {
     return getPurchaseServerLimit();
   },
@@ -1461,57 +1463,57 @@ export const ns: InternalAPI<NSFull> = {
   },
   getRunningScript:
     (ctx) =>
-    (fn, hostname, ...args) => {
-      const ident = helpers.scriptIdentifier(ctx, fn, hostname, args);
-      const runningScript = helpers.getRunningScript(ctx, ident);
-      if (runningScript === null) return null;
-      return helpers.createPublicRunningScript(runningScript);
-    },
+      (fn, hostname, ...args) => {
+        const ident = helpers.scriptIdentifier(ctx, fn, hostname, args);
+        const runningScript = helpers.getRunningScript(ctx, ident);
+        if (runningScript === null) return null;
+        return helpers.createPublicRunningScript(runningScript);
+      },
   getHackTime:
     (ctx) =>
-    (_hostname = ctx.workerScript.hostname) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const server = helpers.getServer(ctx, hostname);
-      if (!(server instanceof Server)) {
-        helpers.log(ctx, () => "invalid for this kind of server");
-        return Infinity;
-      }
-      if (helpers.failOnHacknetServer(ctx, server)) {
-        return Infinity;
-      }
+      (_hostname = ctx.workerScript.hostname) => {
+        const hostname = helpers.string(ctx, "hostname", _hostname);
+        const server = helpers.getServer(ctx, hostname);
+        if (!(server instanceof Server)) {
+          helpers.log(ctx, () => "invalid for this kind of server");
+          return Infinity;
+        }
+        if (helpers.failOnHacknetServer(ctx, server)) {
+          return Infinity;
+        }
 
-      return calculateHackingTime(server, Player) * 1000;
-    },
+        return calculateHackingTime(server, Player) * 1000;
+      },
   getGrowTime:
     (ctx) =>
-    (_hostname = ctx.workerScript.hostname) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const server = helpers.getServer(ctx, hostname);
-      if (!(server instanceof Server)) {
-        helpers.log(ctx, () => "invalid for this kind of server");
-        return Infinity;
-      }
-      if (helpers.failOnHacknetServer(ctx, server)) {
-        return Infinity;
-      }
+      (_hostname = ctx.workerScript.hostname) => {
+        const hostname = helpers.string(ctx, "hostname", _hostname);
+        const server = helpers.getServer(ctx, hostname);
+        if (!(server instanceof Server)) {
+          helpers.log(ctx, () => "invalid for this kind of server");
+          return Infinity;
+        }
+        if (helpers.failOnHacknetServer(ctx, server)) {
+          return Infinity;
+        }
 
-      return calculateGrowTime(server, Player) * 1000;
-    },
+        return calculateGrowTime(server, Player) * 1000;
+      },
   getWeakenTime:
     (ctx) =>
-    (_hostname = ctx.workerScript.hostname) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const server = helpers.getServer(ctx, hostname);
-      if (!(server instanceof Server)) {
-        helpers.log(ctx, () => "invalid for this kind of server");
-        return Infinity;
-      }
-      if (helpers.failOnHacknetServer(ctx, server)) {
-        return Infinity;
-      }
+      (_hostname = ctx.workerScript.hostname) => {
+        const hostname = helpers.string(ctx, "hostname", _hostname);
+        const server = helpers.getServer(ctx, hostname);
+        if (!(server instanceof Server)) {
+          helpers.log(ctx, () => "invalid for this kind of server");
+          return Infinity;
+        }
+        if (helpers.failOnHacknetServer(ctx, server)) {
+          return Infinity;
+        }
 
-      return calculateWeakenTime(server, Player) * 1000;
-    },
+        return calculateWeakenTime(server, Player) * 1000;
+      },
   getTotalScriptIncome: () => () => {
     // First element is total income of all currently running scripts
     let total = 0;
@@ -1523,15 +1525,15 @@ export const ns: InternalAPI<NSFull> = {
   },
   getScriptIncome:
     (ctx) =>
-    (fn, hostname, ...args) => {
-      const ident = helpers.scriptIdentifier(ctx, fn, hostname, args);
-      const runningScript = helpers.getRunningScript(ctx, ident);
-      if (runningScript == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
-        return -1;
-      }
-      return runningScript.onlineMoneyMade / runningScript.onlineRunningTime;
-    },
+      (fn, hostname, ...args) => {
+        const ident = helpers.scriptIdentifier(ctx, fn, hostname, args);
+        const runningScript = helpers.getRunningScript(ctx, ident);
+        if (runningScript == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+          return -1;
+        }
+        return runningScript.onlineMoneyMade / runningScript.onlineRunningTime;
+      },
   getTotalScriptExpGain: () => () => {
     let total = 0;
     for (const ws of workerScripts.values()) {
@@ -1541,38 +1543,38 @@ export const ns: InternalAPI<NSFull> = {
   },
   getScriptExpGain:
     (ctx) =>
-    (fn, hostname, ...args) => {
-      const ident = helpers.scriptIdentifier(ctx, fn, hostname, args);
-      const runningScript = helpers.getRunningScript(ctx, ident);
-      if (runningScript == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
-        return -1;
-      }
-      return runningScript.onlineExpGained / runningScript.onlineRunningTime;
-    },
+      (fn, hostname, ...args) => {
+        const ident = helpers.scriptIdentifier(ctx, fn, hostname, args);
+        const runningScript = helpers.getRunningScript(ctx, ident);
+        if (runningScript == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+          return -1;
+        }
+        return runningScript.onlineExpGained / runningScript.onlineRunningTime;
+      },
   formatNumber:
     (ctx) =>
-    (_n, _fractionalDigits = 3, _suffixStart = 1000, isInteger) => {
-      const n = helpers.number(ctx, "n", _n);
-      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      const suffixStart = helpers.number(ctx, "suffixStart", _suffixStart);
-      return formatNumber(n, fractionalDigits, suffixStart, !!isInteger);
-    },
+      (_n, _fractionalDigits = 3, _suffixStart = 1000, isInteger) => {
+        const n = helpers.number(ctx, "n", _n);
+        const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
+        const suffixStart = helpers.number(ctx, "suffixStart", _suffixStart);
+        return formatNumber(n, fractionalDigits, suffixStart, !!isInteger);
+      },
   formatRam:
     (ctx) =>
-    (_n, _fractionalDigits = 2) => {
-      const n = helpers.number(ctx, "n", _n);
-      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      return formatRam(n, fractionalDigits);
-    },
+      (_n, _fractionalDigits = 2) => {
+        const n = helpers.number(ctx, "n", _n);
+        const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
+        return formatRam(n, fractionalDigits);
+      },
   formatPercent:
     (ctx) =>
-    (_n, _fractionalDigits = 2, _multStart = 1e6) => {
-      const n = helpers.number(ctx, "n", _n);
-      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      const multStart = helpers.number(ctx, "multStart", _multStart);
-      return formatPercent(n, fractionalDigits, multStart);
-    },
+      (_n, _fractionalDigits = 2, _multStart = 1e6) => {
+        const n = helpers.number(ctx, "n", _n);
+        const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
+        const multStart = helpers.number(ctx, "multStart", _multStart);
+        return formatPercent(n, fractionalDigits, multStart);
+      },
   // Todo: Remove function for real though in 2.4. Until then it just directly wraps numeral.
   nFormat: (ctx) => (_n, _format) => {
     deprecationWarning(
@@ -1598,14 +1600,14 @@ export const ns: InternalAPI<NSFull> = {
   },
   toast:
     (ctx) =>
-    (_message, _variant = ToastVariant.SUCCESS, _duration = 2000) => {
-      const message = helpers.string(ctx, "message", _message);
-      const variant = helpers.string(ctx, "variant", _variant);
-      const duration = _duration === null ? null : helpers.number(ctx, "duration", _duration);
-      if (!checkEnum(ToastVariant, variant))
-        throw new Error(`variant must be one of ${Object.values(ToastVariant).join(", ")}`);
-      SnackbarEvents.emit(message, variant as ToastVariant, duration);
-    },
+      (_message, _variant = ToastVariant.SUCCESS, _duration = 2000) => {
+        const message = helpers.string(ctx, "message", _message);
+        const variant = helpers.string(ctx, "variant", _variant);
+        const duration = _duration === null ? null : helpers.number(ctx, "duration", _duration);
+        if (!checkEnum(ToastVariant, variant))
+          throw new Error(`variant must be one of ${Object.values(ToastVariant).join(", ")}`);
+        SnackbarEvents.emit(message, variant as ToastVariant, duration);
+      },
   prompt: (ctx) => (_txt, _options) => {
     const options: { type?: string; choices?: string[] } = {};
     _options ??= options;

@@ -1,6 +1,9 @@
 
 import { Myr as IMyrian } from "@nsdefs";
 import { InternalAPI } from "src/Netscript/APIWrapper";
+import { helpers } from "../Netscript/NetscriptHelpers";
+import { Player as player } from "../Player";
+import { SleeveMyrianWork } from "../PersonObjects/Sleeve/Work/SleeveMyrianWork";
 
 export function NetscriptMyrian(): InternalAPI<IMyrian> {
     return {
@@ -18,7 +21,13 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
                 (sleeveId) => { throw new Error("Unimplemented"); },
         ianEnter:
             (ctx) =>
-                (sleeveId?) => { throw new Error("Unimplemented"); },
+                (sleeveId?) => {
+                    const id = sleeveId === undefined ? undefined : helpers.number(ctx, "sleeveId", sleeveId);
+                    if (id === undefined) return false; // skip player handling for now.
+                    // handle sleeve entering the myrian.
+                    player.sleeves[id].startWork(new SleeveMyrianWork());
+                    return true;
+                },
         ianLeave:
             (ctx) =>
                 (sleeveId?) => { throw new Error("Unimplemented"); },

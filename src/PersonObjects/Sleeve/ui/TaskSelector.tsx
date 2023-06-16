@@ -123,6 +123,7 @@ const tasks: {
   ["Perform Bladeburner Actions"]: (sleeve: Sleeve) => ITaskDetails;
   ["Shock Recovery"]: (sleeve: Sleeve) => ITaskDetails;
   ["Synchronize"]: (sleeve: Sleeve) => ITaskDetails;
+  ["In The Myrian"]: (sleeve: Sleeve) => ITaskDetails;
 } = {
   "------": (): ITaskDetails => {
     return { first: ["------"], second: () => ["------"] };
@@ -217,6 +218,9 @@ const tasks: {
   Synchronize: (): ITaskDetails => {
     return { first: ["------"], second: () => ["------"] };
   },
+  ["In The Myrian"]: (): ITaskDetails => {
+    return { first: ["------"], second: () => ["------"] };
+  }
 };
 
 const canDo: {
@@ -230,6 +234,7 @@ const canDo: {
   ["Perform Bladeburner Actions"]: (sleeve: Sleeve) => boolean;
   ["Shock Recovery"]: (sleeve: Sleeve) => boolean;
   ["Synchronize"]: (sleeve: Sleeve) => boolean;
+  ["In The Myrian"]: (sleeve: Sleeve) => boolean;
 } = {
   "------": () => true,
   "Work for Company": (sleeve: Sleeve) => possibleJobs(sleeve).length > 0,
@@ -241,6 +246,7 @@ const canDo: {
   "Perform Bladeburner Actions": () => !!Player.bladeburner,
   "Shock Recovery": (sleeve: Sleeve) => sleeve.shock > 0,
   Synchronize: (sleeve: Sleeve) => sleeve.sync < 100,
+  ["In The Myrian"]: (sleeve: Sleeve) => true,
 };
 
 function getABC(sleeve: Sleeve): [string, string, string] {
@@ -282,6 +288,8 @@ function getABC(sleeve: Sleeve): [string, string, string] {
       return ["Shock Recovery", "------", "------"];
     case WorkType.SYNCHRO:
       return ["Synchronize", "------", "------"];
+    case WorkType.MYRIAN:
+      return ["In The Myrian", "------", "------"];
   }
 }
 
