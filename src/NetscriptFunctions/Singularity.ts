@@ -42,6 +42,7 @@ import { calculateHackingTime } from "../Hacking";
 import { Server } from "../Server/Server";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { FactionInfos } from "../Faction/FactionInfo";
+import { donate, repNeededToDonate } from "../Faction/formulas/donation";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { enterBitNode } from "../RedPill";
 import { ClassWork } from "../Work/ClassWork";
@@ -1027,18 +1028,18 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(ctx, () => `You do not have enough money to donate ${formatMoney(amt)} to '${facName}'`);
         return false;
       }
-      const repNeededToDonate = Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.RepToDonateToFaction);
-      if (faction.favor < repNeededToDonate) {
+
+      if (faction.favor < repNeededToDonate()) {
         helpers.log(
           ctx,
           () =>
-            `You do not have enough favor to donate to this faction. Have ${faction.favor}, need ${repNeededToDonate}`,
+            `You do not have enough favor to donate to this faction. Have ${
+              faction.favor
+            }, need ${repNeededToDonate()}`,
         );
         return false;
       }
-      const repGain = (amt / CONSTANTS.DonateMoneyToRepDivisor) * Player.mults.faction_rep;
-      faction.playerReputation += repGain;
-      Player.loseMoney(amt, "other");
+      const repGain = donate(amt, Player, faction);
       helpers.log(ctx, () => `${formatMoney(amt)} donated to '${facName}' for ${formatReputation(repGain)} reputation`);
       return true;
     },
