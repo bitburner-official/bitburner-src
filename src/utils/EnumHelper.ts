@@ -28,13 +28,17 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
     if (this.isMember(toValidate)) return toValidate;
     // assertString is just called so if the user didn't even pass in a string, they get a different error message
     assertString(ctx, argName, toValidate);
+    // Don't display all possibilities for large enums
+    let allowableValues = `Allowable values: ${this.valueArray.map((val) => `"${val}"`).join(", ")}`;
+    if (this.valueArray.length > 10) {
+      console.warn(
+        `Provided value ${toValidate} was not a valid option for enum type ${this.name}.\n${allowableValues}`,
+      );
+      allowableValues = `See the developer console for allowable values.`;
+    }
     throw helpers.makeRuntimeErrorMsg(
       ctx,
-      `Argument ${argName} should be a ${
-        this.name
-      } enum member.\nProvided value: "${toValidate}".\nAllowable values: ${this.valueArray
-        .map((val) => `"${val}"`)
-        .join(", ")}`,
+      `Argument ${argName} should be a ${this.name} enum member.\nProvided value: "${toValidate}".\n${allowableValues}`,
     );
   }
   /** Provides case insensitivty and ignores spaces and dashes, and can always match the input */
