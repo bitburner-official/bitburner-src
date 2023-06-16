@@ -16,7 +16,6 @@ import type { SleeveWork } from "./Work/Work";
 import { Player } from "@player";
 import { Person } from "../Person";
 
-
 import { Companies } from "../../Company/Companies";
 import { CompanyPositions } from "../../Company/CompanyPositions";
 import { Contracts } from "../../Bladeburner/data/Contracts";

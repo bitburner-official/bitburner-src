@@ -1,7 +1,6 @@
 import { AugmentationName } from "@enums";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { Player } from "@player";
-import { Script } from "../Script/Script";
 import { GetAllServers } from "../Server/AllServers";
 import { resolveTextFilePath } from "../Paths/TextFilePath";
 import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
