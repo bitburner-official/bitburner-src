@@ -1,13 +1,14 @@
 import type { Augmentation } from "../../../Augmentation/Augmentation";
 
+import { Player } from "@player";
+import { AugmentationName, LocationName } from "@enums";
+
 import React, { useState } from "react";
 import { CheckBox, CheckBoxOutlineBlank, Construction } from "@mui/icons-material";
 import { Box, Button, Container, List, ListItemButton, Paper, Typography } from "@mui/material";
 
-import { Player } from "@player";
-import { AugmentationName, LocationName } from "@enums";
 import { GraftingWork } from "../../../Work/GraftingWork";
-import { StaticAugmentations } from "../../../Augmentation/StaticAugmentations";
+import { Augmentations } from "../../../Augmentation/Augmentations";
 import { CONSTANTS } from "../../../Constants";
 import { hasAugmentationPrereqs } from "../../../Faction/FactionHelpers";
 import { Locations } from "../../../Locations/Locations";
@@ -25,7 +26,7 @@ import { useRerender } from "../../../ui/React/hooks";
 
 export const GraftableAugmentations = (): Record<string, GraftableAugmentation> => {
   const gAugs: Record<string, GraftableAugmentation> = {};
-  for (const aug of Object.values(StaticAugmentations)) {
+  for (const aug of Object.values(Augmentations)) {
     const name = aug.name;
     const graftableAug = new GraftableAugmentation(aug);
     gAugs[name] = graftableAug;
@@ -66,10 +67,10 @@ export const GraftingRoot = (): React.ReactElement => {
 
   const [selectedAug, setSelectedAug] = useState(getGraftingAvailableAugs()[0]);
   const [graftOpen, setGraftOpen] = useState(false);
-  const selectedAugmentation = StaticAugmentations[selectedAug];
+  const selectedAugmentation = Augmentations[selectedAug];
   const rerender = useRerender(200);
 
-  const getAugsSorted = (): string[] => {
+  const getAugsSorted = (): AugmentationName[] => {
     const augs = getGraftingAvailableAugs();
     switch (Settings.PurchaseAugmentationsOrder) {
       case PurchaseAugmentationsOrderSetting.Cost:

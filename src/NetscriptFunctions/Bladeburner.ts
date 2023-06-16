@@ -4,7 +4,7 @@ import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { Player } from "@player";
 import { Bladeburner } from "../Bladeburner/Bladeburner";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BlackOperation } from "../Bladeburner/BlackOperation";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
@@ -139,7 +139,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const action = getBladeburnerActionObject(ctx, type, name);
       const level = _level === undefined ? action.level : helpers.number(ctx, "level", _level);
       const rewardMultiplier = Math.pow(action.rewardFac, level - 1);
-      return action.rankGain * rewardMultiplier * BitNodeMultipliers.BladeburnerRank;
+      return action.rankGain * rewardMultiplier * currentNodeMults.BladeburnerRank;
     },
     getActionCountRemaining: (ctx) => (_type, _name) => {
       const bladeburner = getBladeburner(ctx);
@@ -299,7 +299,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     joinBladeburnerDivision: (ctx) => () => {
       if (Player.bitNodeN === 7 || Player.sourceFileLvl(7) > 0) {
-        if (BitNodeMultipliers.BladeburnerRank === 0) {
+        if (currentNodeMults.BladeburnerRank === 0) {
           return false; // Disabled in this bitnode
         }
         if (Player.bladeburner) {

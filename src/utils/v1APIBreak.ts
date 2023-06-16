@@ -1,7 +1,6 @@
 import { AugmentationName } from "@enums";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { Player } from "@player";
-import { Script } from "../Script/Script";
 import { GetAllServers } from "../Server/AllServers";
 import { resolveTextFilePath } from "../Paths/TextFilePath";
 import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
@@ -137,7 +136,7 @@ export function v1APIBreak(): void {
         console.error(`Unexpected error resolving backup path for ${script.filename}`);
         continue;
       }
-      server.scripts.set(filename, new Script(filename, script.code, script.server));
+      server.writeToScriptFile(filename, script.code);
       script.code = convert(script.code);
     }
   }

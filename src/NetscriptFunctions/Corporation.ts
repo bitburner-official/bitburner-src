@@ -56,7 +56,7 @@ import { IndustriesData, IndustryResearchTrees } from "../Corporation/data/Indus
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
 import { Factions } from "../Faction/Factions";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
@@ -70,7 +70,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     if (!player.canAccessCorporation() || player.corporation) return false;
     if (!corporationName) return false;
     if (player.bitNodeN !== 3 && !selfFund) throw new Error("cannot use seed funds outside of BitNode 3");
-    if (BitNodeMultipliers.CorporationSoftcap < 0.15)
+    if (currentNodeMults.CorporationSoftcap < 0.15)
       throw new Error(`You cannot create a corporation in Bitnode ${player.bitNodeN}`);
 
     if (selfFund) {

@@ -28,7 +28,6 @@ import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
 import { AugmentationName, FactionName, LocationName, ToastVariant } from "@enums";
 import { PlayerOwnedAugmentation } from "./Augmentation/PlayerOwnedAugmentation";
-import { initAugmentations } from "./Augmentation/AugmentationHelpers";
 import { pushGameSaved } from "./Electron";
 import { defaultMonacoTheme } from "./ScriptEditor/ui/themes";
 import { Faction } from "./Faction/Faction";
@@ -364,7 +363,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
   if (typeof ver !== "number") return;
   if (ver < 2) {
     AwardNFG(10);
-    initAugmentations();
+    Player.reapplyAllAugmentations();
     Player.reapplyAllSourceFiles();
   }
   if (ver < 3) {
@@ -447,7 +446,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
     ];
 
     v22PlayerBreak();
-    initAugmentations();
+    Player.reapplyAllAugmentations();
     Player.reapplyAllSourceFiles();
   }
 
@@ -679,17 +678,6 @@ function evaluateVersionCompatibility(ver: string | number): void {
   }
   //2.3 hotfix changes and 2.3.1 changes
   if (ver < 32) {
-    // Due to a bug from before 2.3, some scripts have the wrong server listed. In 2.3 this caused issues.
-    for (const server of GetAllServers()) {
-      for (const script of server.scripts.values()) {
-        if (script.server !== server.hostname) {
-          console.warn(
-            `Detected script ${script.filename} on ${server.hostname} with incorrect server property: ${script.server}. Repairing.`,
-          );
-          script.server = server.hostname;
-        }
-      }
-    }
     // Sanitize corporation exports
     let anyExportsFailed = false;
     if (Player.corporation) {
@@ -722,6 +710,19 @@ Error: ${e}`);
       Terminal.error(
         "Some material exports failed to validate while loading and have been removed. See console for more info.",
       );
+  }
+  if (ver < 33) {
+    // 2.3.2 fixed what should be the last issue with scripts having the wrong server assigned..
+    for (const server of GetAllServers()) {
+      for (const script of server.scripts.values()) {
+        if (script.server !== server.hostname) {
+          console.warn(
+            `Detected script ${script.filename} on ${server.hostname} with incorrect server property: ${script.server}. Repairing.`,
+          );
+          script.server = server.hostname;
+        }
+      }
+    }
   }
 }
 

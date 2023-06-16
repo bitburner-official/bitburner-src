@@ -2,10 +2,11 @@ import { Player } from "@player";
 import { AugmentationName, FactionName } from "@enums";
 import { Sleeve } from "./Sleeve";
 import { Augmentation } from "../../Augmentation/Augmentation";
-import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
+import { Augmentations } from "../../Augmentation/Augmentations";
 import { Factions } from "../../Faction/Factions";
 import { mergeMultipliers, Multipliers } from "../Multipliers";
 import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
+import { getAugCost } from "../../Augmentation/AugmentationHelpers";
 
 /** Updates this object's multipliers for the given augmentation */
 export function applyAugmentation(this: Sleeve, aug: Augmentation): void {
@@ -61,10 +62,10 @@ export function findPurchasableAugs(this: Sleeve): Augmentation[] {
     const gangAugs = getFactionAugmentationsFiltered(fac);
 
     for (const augName of gangAugs) {
-      const aug = StaticAugmentations[augName];
+      const aug = Augmentations[augName];
       if (!isAvailableForSleeve(aug)) continue;
 
-      if (fac.playerReputation > aug.getCost().repCost) {
+      if (fac.playerReputation > getAugCost(aug).repCost) {
         availableAugs.push(aug);
       }
     }
@@ -77,10 +78,10 @@ export function findPurchasableAugs(this: Sleeve): Augmentation[] {
     if (!fac) continue;
 
     for (const augName of fac.augmentations) {
-      const aug = StaticAugmentations[augName];
+      const aug = Augmentations[augName];
       if (!isAvailableForSleeve(aug)) continue;
 
-      if (fac.playerReputation > aug.getCost().repCost) {
+      if (fac.playerReputation > getAugCost(aug).repCost) {
         availableAugs.push(aug);
       }
     }
@@ -88,7 +89,7 @@ export function findPurchasableAugs(this: Sleeve): Augmentation[] {
 
   // Add the stanek sleeve aug
   if (!ownedAugNames.includes(AugmentationName.ZOE) && Player.factions.includes(FactionName.ChurchOfTheMachineGod)) {
-    const aug = StaticAugmentations[AugmentationName.ZOE];
+    const aug = Augmentations[AugmentationName.ZOE];
     availableAugs.push(aug);
   }
 

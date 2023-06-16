@@ -9,17 +9,17 @@ import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import { Augmentations } from "../Augmentation/Augmentations";
 
 export const isGraftingWork = (w: Work | null): w is GraftingWork => w !== null && w.type === WorkType.GRAFTING;
 
 interface GraftingWorkParams {
-  augmentation: string;
+  augmentation: AugmentationName;
   singularity: boolean;
 }
 
 export class GraftingWork extends Work {
-  augmentation: string;
+  augmentation: AugmentationName;
   unitCompleted: number;
 
   constructor(params?: GraftingWorkParams) {
@@ -31,7 +31,7 @@ export class GraftingWork extends Work {
   }
 
   unitNeeded(): number {
-    return new GraftableAugmentation(StaticAugmentations[this.augmentation]).time;
+    return new GraftableAugmentation(Augmentations[this.augmentation]).time;
   }
 
   process(cycles: number): boolean {

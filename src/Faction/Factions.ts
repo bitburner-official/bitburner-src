@@ -6,6 +6,8 @@ import { Faction } from "./Faction";
 import { FactionInfos } from "./FactionInfo";
 
 import { Reviver } from "../utils/JSONReviver";
+import { getRecordValues } from "../Types/Record";
+import { Augmentations, initCircadianModulator } from "../Augmentation/Augmentations";
 
 export let Factions: Record<string, Faction> = {};
 
@@ -47,4 +49,16 @@ function resetFaction(newFactionObject: Faction): void {
     delete Factions[factionName];
   }
   AddToFactions(newFactionObject);
+  // All factions are added, this is a good place to add augs back to factions.
+  initCircadianModulator();
+  for (const aug of getRecordValues(Augmentations)) {
+    for (const factionName of aug.factions) {
+      const faction = Factions[factionName];
+      if (!faction) {
+        console.error(`Faction ${factionName} did not exist while adding augs to factions`);
+        continue;
+      }
+      faction.augmentations.push(aug.name);
+    }
+  }
 }

@@ -1,5 +1,4 @@
 import type { Singularity as ISingularity } from "@nsdefs";
-import type { Augmentation } from "../Augmentation/Augmentation";
 import type { Company } from "../Company/Company";
 import type { Faction } from "../Faction/Faction";
 
@@ -16,8 +15,8 @@ import {
 } from "@enums";
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { augmentationExists, installAugmentations } from "../Augmentation/AugmentationHelpers";
+import { Augmentations } from "../Augmentation/Augmentations";
+import { getAugCost, installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { CONSTANTS } from "../Constants";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";
@@ -31,7 +30,7 @@ import { Locations } from "../Locations/Locations";
 import { GetServer } from "../Server/AllServers";
 import { Programs } from "../Programs/Programs";
 import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Companies } from "../Company/Companies";
 import { companiesMetadata } from "../Company/data/CompaniesMetadata";
 import { Factions, factionExists } from "../Faction/Factions";
@@ -59,14 +58,6 @@ import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
-  const getAugmentation = function (ctx: NetscriptContext, name: string): Augmentation {
-    if (!augmentationExists(name)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid augmentation: '${name}'`);
-    }
-
-    return StaticAugmentations[name];
-  };
-
   const getFaction = function (ctx: NetscriptContext, name: string): Faction {
     if (!factionExists(name)) {
       throw helpers.makeRuntimeErrorMsg(ctx, `Invalid faction name: '${name}`);
@@ -127,40 +118,40 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     getAugmentationPrereq: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
       return aug.prereqs.slice();
     },
     getAugmentationBasePrice: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
-      return aug.baseCost * BitNodeMultipliers.AugmentationMoneyCost;
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
+      return aug.baseCost * currentNodeMults.AugmentationMoneyCost;
     },
     getAugmentationPrice: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
-      return aug.getCost().moneyCost;
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
+      return getAugCost(aug).moneyCost;
     },
     getAugmentationRepReq: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
-      return aug.getCost().repCost;
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
+      return getAugCost(aug).repCost;
     },
     getAugmentationStats: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
       return Object.assign({}, aug.mults);
     },
     purchaseAugmentation: (ctx) => (_facName, _augName) => {
       helpers.checkSingularityAccess(ctx);
       const facName = helpers.string(ctx, "facName", _facName);
-      const augName = helpers.string(ctx, "augName", _augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const fac = getFaction(ctx, facName);
-      const aug = getAugmentation(ctx, augName);
+      const aug = Augmentations[augName];
 
       const augs = getFactionAugmentationsFiltered(fac);
 
@@ -190,7 +181,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         }
       }
 
-      if (fac.playerReputation < aug.getCost().repCost) {
+      if (fac.playerReputation < getAugCost(aug).repCost) {
         helpers.log(ctx, () => `You do not have enough reputation with '${fac.name}'.`);
         return false;
       }
@@ -1036,7 +1027,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(ctx, () => `You do not have enough money to donate ${formatMoney(amt)} to '${facName}'`);
         return false;
       }
-      const repNeededToDonate = Math.floor(CONSTANTS.BaseFavorToDonate * BitNodeMultipliers.RepToDonateToFaction);
+      const repNeededToDonate = Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.RepToDonateToFaction);
       if (faction.favor < repNeededToDonate) {
         helpers.log(
           ctx,

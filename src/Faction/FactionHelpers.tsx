@@ -1,8 +1,8 @@
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import { Augmentations } from "../Augmentation/Augmentations";
 import { Augmentation } from "../Augmentation/Augmentation";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { AugmentationName, FactionName } from "@enums";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 import { Faction } from "./Faction";
 import { Factions } from "./Factions";
@@ -18,6 +18,7 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { InvitationEvent } from "./ui/InvitationModal";
 import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
+import { getAugCost } from "../Augmentation/AugmentationHelpers";
 
 export function inviteToFaction(faction: Faction): void {
   Player.receiveInvite(faction.name);
@@ -55,7 +56,7 @@ export function hasAugmentationPrereqs(aug: Augmentation): boolean {
 
 export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = false): string {
   const hasPrereqs = hasAugmentationPrereqs(aug);
-  const augCosts = aug.getCost();
+  const augCosts = getAugCost(aug);
   if (!hasPrereqs) {
     const txt = `You must first purchase or install ${aug.prereqs
       .filter((req) => !Player.hasAugmentation(req))
@@ -127,21 +128,21 @@ export function processPassiveFactionRepGain(numCycles: number): void {
     const fRep = getFactionFieldWorkRepGain(Player, faction.favor);
     const rate = Math.max(hRep * favorMult, sRep * favorMult, fRep * favorMult, 1 / 120);
 
-    faction.playerReputation += rate * numCycles * Player.mults.faction_rep * BitNodeMultipliers.FactionPassiveRepGain;
+    faction.playerReputation += rate * numCycles * Player.mults.faction_rep * currentNodeMults.FactionPassiveRepGain;
   }
 }
 
-export const getFactionAugmentationsFiltered = (faction: Faction): string[] => {
+export const getFactionAugmentationsFiltered = (faction: Faction): AugmentationName[] => {
   // If player has a gang with this faction, return (almost) all augmentations
   if (Player.hasGangWith(faction.name)) {
-    let augs = Object.values(StaticAugmentations);
+    let augs = Object.values(Augmentations);
 
     // Remove special augs
     augs = augs.filter((a) => !a.isSpecial && a.name !== AugmentationName.CongruityImplant);
 
     if (Player.bitNodeN === 2) {
       // TRP is not available outside of BN2 for Gangs
-      augs.push(StaticAugmentations[AugmentationName.TheRedPill]);
+      augs.push(Augmentations[AugmentationName.TheRedPill]);
     }
 
     const rng = SFC32RNG(`BN${Player.bitNodeN}.${Player.sourceFileLvl(Player.bitNodeN)}`);
@@ -156,7 +157,7 @@ export const getFactionAugmentationsFiltered = (faction: Faction): string[] => {
         return true;
       }
 
-      return rng() >= 1 - BitNodeMultipliers.GangUniqueAugs;
+      return rng() >= 1 - currentNodeMults.GangUniqueAugs;
     };
     augs = augs.filter(uniqueFilter);
 

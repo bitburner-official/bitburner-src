@@ -1,6 +1,4 @@
 import { AugmentationName, CityName, CompletedProgramName, FactionName, LiteratureName } from "@enums";
-import { StaticAugmentations } from "./Augmentation/StaticAugmentations";
-import { augmentationExists, initAugmentations } from "./Augmentation/AugmentationHelpers";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { Companies, initCompanies } from "./Company/Companies";
 import { resetIndustryResearchTrees } from "./Corporation/data/IndustryData";
@@ -51,15 +49,15 @@ export function prestigeAugmentation(): void {
   AddToAllServers(homeComp);
   prestigeHomeComputer(homeComp);
 
-  if (augmentationExists(AugmentationName.Neurolink) && Player.hasAugmentation(AugmentationName.Neurolink, true)) {
+  if (Player.hasAugmentation(AugmentationName.Neurolink, true)) {
     homeComp.programs.push(CompletedProgramName.ftpCrack);
     homeComp.programs.push(CompletedProgramName.relaySmtp);
   }
-  if (augmentationExists(AugmentationName.CashRoot) && Player.hasAugmentation(AugmentationName.CashRoot, true)) {
+  if (Player.hasAugmentation(AugmentationName.CashRoot, true)) {
     Player.setMoney(1e6);
     homeComp.programs.push(CompletedProgramName.bruteSsh);
   }
-  if (augmentationExists(AugmentationName.PCMatrix) && Player.hasAugmentation(AugmentationName.PCMatrix, true)) {
+  if (Player.hasAugmentation(AugmentationName.PCMatrix, true)) {
     homeComp.programs.push(CompletedProgramName.deepScan1);
     homeComp.programs.push(CompletedProgramName.autoLink);
   }
@@ -86,7 +84,7 @@ export function prestigeAugmentation(): void {
   initFactions(); // Factions must be initialized before augmentations
 
   Player.factionInvitations = Player.factionInvitations.concat(maintainMembership);
-  initAugmentations(); // Calls reapplyAllAugmentations() and resets Player multipliers
+  Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
   Player.hp.current = Player.hp.max;
   initCompanies();
@@ -136,7 +134,7 @@ export function prestigeAugmentation(): void {
   }
 
   // Red Pill
-  if (augmentationExists(AugmentationName.TheRedPill) && Player.hasAugmentation(AugmentationName.TheRedPill, true)) {
+  if (Player.hasAugmentation(AugmentationName.TheRedPill, true)) {
     const WorldDaemon = GetServer(SpecialServers.WorldDaemon);
     const DaedalusServer = GetServer(SpecialServers.DaedalusServer);
     if (WorldDaemon && DaedalusServer) {
@@ -145,10 +143,7 @@ export function prestigeAugmentation(): void {
     }
   }
 
-  if (
-    augmentationExists(AugmentationName.StaneksGift1) &&
-    Player.hasAugmentation(AugmentationName.StaneksGift1, true)
-  ) {
+  if (Player.hasAugmentation(AugmentationName.StaneksGift1, true)) {
     joinFaction(Factions[FactionName.ChurchOfTheMachineGod]);
   }
 
@@ -205,11 +200,6 @@ export function prestigeSourceFile(isFlume: boolean): void {
     Terminal.finishAction(true);
   }
 
-  // Delete all Augmentations
-  for (const name of Object.getOwnPropertyNames(StaticAugmentations)) {
-    delete StaticAugmentations[name];
-  }
-
   // Give levels of NeuroFluxGovernor for Source-File 12. Must be done here before Augmentations are recalculated
   if (Player.sourceFileLvl(12) > 0) {
     Player.augmentations.push({
@@ -220,7 +210,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // Re-initialize things - This will update any changes
   initFactions(); // Factions must be initialized before augmentations
-  initAugmentations(); // Calls reapplyAllAugmentations() and resets Player multipliers
+  Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
   initCompanies();
 

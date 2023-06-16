@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import { OwnedAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
-import { StaticAugmentations } from "../StaticAugmentations";
+import { Augmentations } from "../Augmentations";
 import { AugmentationName } from "@enums";
 import { useRerender } from "../../ui/React/hooks";
 
@@ -73,7 +73,7 @@ export function InstalledAugmentations(): React.ReactElement {
             </Typography>
             <Typography sx={{ maxHeight: 350, overflowY: "scroll" }}>
               {(() => {
-                const aug = StaticAugmentations[selectedAug.name];
+                const aug = Augmentations[selectedAug.name];
 
                 const info = typeof aug.info === "string" ? <span>{aug.info}</span> : aug.info;
                 const tooltip = (

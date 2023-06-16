@@ -1,7 +1,7 @@
 import React from "react";
 import { Player } from "@player";
-import { BitNodeMultipliers, IBitNodeMultipliers } from "./BitNodeMultipliers";
 import { CityName, FactionName } from "@enums";
+import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
 
 class BitNode {
   // A short description, or tagline, about the BitNode
@@ -447,82 +447,16 @@ export function initBitNodes() {
   );
 }
 
-export const defaultMultipliers: IBitNodeMultipliers = {
-  HackingLevelMultiplier: 1,
-  StrengthLevelMultiplier: 1,
-  DefenseLevelMultiplier: 1,
-  DexterityLevelMultiplier: 1,
-  AgilityLevelMultiplier: 1,
-  CharismaLevelMultiplier: 1,
-
-  ServerGrowthRate: 1,
-  ServerMaxMoney: 1,
-  ServerStartingMoney: 1,
-  ServerStartingSecurity: 1,
-  ServerWeakenRate: 1,
-
-  HomeComputerRamCost: 1,
-
-  PurchasedServerCost: 1,
-  PurchasedServerSoftcap: 1,
-  PurchasedServerLimit: 1,
-  PurchasedServerMaxRam: 1,
-
-  CompanyWorkMoney: 1,
-  CrimeMoney: 1,
-  HacknetNodeMoney: 1,
-  ManualHackMoney: 1,
-  ScriptHackMoney: 1,
-  ScriptHackMoneyGain: 1,
-  CodingContractMoney: 1,
-
-  ClassGymExpGain: 1,
-  CompanyWorkExpGain: 1,
-  CrimeExpGain: 1,
-  FactionWorkExpGain: 1,
-  HackExpGain: 1,
-
-  FactionPassiveRepGain: 1,
-  FactionWorkRepGain: 1,
-  RepToDonateToFaction: 1,
-
-  AugmentationMoneyCost: 1,
-  AugmentationRepCost: 1,
-
-  InfiltrationMoney: 1,
-  InfiltrationRep: 1,
-
-  FourSigmaMarketDataCost: 1,
-  FourSigmaMarketDataApiCost: 1,
-
-  CorporationValuation: 1,
-  CorporationSoftcap: 1,
-  CorporationDivisions: 1,
-
-  BladeburnerRank: 1,
-  BladeburnerSkillCost: 1,
-
-  GangSoftcap: 1,
-  GangUniqueAugs: 1,
-
-  DaedalusAugsRequirement: 30,
-
-  StaneksGiftPowerMultiplier: 1,
-  StaneksGiftExtraSize: 0,
-
-  WorldDaemonDifficulty: 1,
-};
-
+export const defaultMultipliers = new BitNodeMultipliers();
 Object.freeze(defaultMultipliers);
 
-export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultipliers {
-  const mults = Object.assign({}, defaultMultipliers);
+export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultipliers {
   switch (n) {
     case 1: {
-      return mults;
+      return new BitNodeMultipliers();
     }
     case 2: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.8,
 
         ServerGrowthRate: 0.8,
@@ -546,7 +480,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 3: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.8,
 
         ServerGrowthRate: 0.2,
@@ -578,7 +512,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 4: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         ServerMaxMoney: 0.1125,
         ServerStartingMoney: 0.75,
 
@@ -606,7 +540,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 5: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         ServerStartingSecurity: 2,
         ServerStartingMoney: 0.5,
 
@@ -635,7 +569,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 6: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.35,
 
         ServerMaxMoney: 0.2,
@@ -669,7 +603,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 7: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.35,
 
         ServerMaxMoney: 0.2,
@@ -711,7 +645,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 8: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         PurchasedServerSoftcap: 4,
 
         CompanyWorkMoney: 0,
@@ -739,7 +673,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 9: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.5,
         StrengthLevelMultiplier: 0.45,
         DefenseLevelMultiplier: 0.45,
@@ -780,7 +714,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 10: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.35,
         StrengthLevelMultiplier: 0.4,
         DefenseLevelMultiplier: 0.4,
@@ -823,7 +757,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 11: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.6,
 
         ServerGrowthRate: 0.2,
@@ -861,8 +795,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       const inc = Math.pow(1.02, lvl);
       const dec = 1 / inc;
 
-      return Object.assign(mults, {
-        DaedalusAugsRequirement: Math.floor(Math.min(mults.DaedalusAugsRequirement + inc, 40)),
+      return new BitNodeMultipliers({
+        DaedalusAugsRequirement: Math.floor(Math.min(defaultMultipliers.DaedalusAugsRequirement + inc, 40)),
 
         HackingLevelMultiplier: dec,
         StrengthLevelMultiplier: dec,
@@ -929,7 +863,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 13: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.25,
         StrengthLevelMultiplier: 0.7,
         DefenseLevelMultiplier: 0.7,
@@ -982,5 +916,5 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
 }
 
 export function initBitNodeMultipliers(): void {
-  Object.assign(BitNodeMultipliers, getBitNodeMultipliers(Player.bitNodeN, Player.sourceFileLvl(Player.bitNodeN) + 1));
+  replaceCurrentNodeMults(getBitNodeMultipliers(Player.bitNodeN, Player.sourceFileLvl(Player.bitNodeN) + 1));
 }

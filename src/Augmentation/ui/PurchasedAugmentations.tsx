@@ -5,7 +5,7 @@
 import { List, ListItemText, Paper, Tooltip, Typography } from "@mui/material";
 import * as React from "react";
 import { Player } from "@player";
-import { StaticAugmentations } from "../StaticAugmentations";
+import { Augmentations } from "../Augmentations";
 import { AugmentationName } from "@enums";
 
 export function PurchasedAugmentations(): React.ReactElement {
@@ -20,10 +20,10 @@ export function PurchasedAugmentations(): React.ReactElement {
   }
   for (let i = 0; i < Player.queuedAugmentations.length; i++) {
     const ownedAug = Player.queuedAugmentations[i];
-    let displayName = ownedAug.name;
+    let displayName: string = ownedAug.name;
 
     if (ownedAug.name === AugmentationName.NeuroFluxGovernor && i !== nfgIndex) continue;
-    const aug = StaticAugmentations[ownedAug.name];
+    const aug = Augmentations[ownedAug.name];
 
     let level = null;
     if (ownedAug.name === AugmentationName.NeuroFluxGovernor) {

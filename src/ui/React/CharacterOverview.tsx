@@ -24,7 +24,7 @@ import { Router } from "../GameRoot";
 import { Page } from "../Router";
 import { Player } from "@player";
 import { StatsProgressOverviewCell } from "./StatsProgressBar";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 
 import { Box, Tooltip } from "@mui/material";
 
@@ -73,12 +73,12 @@ const formattedVals: Record<RowName, () => string> = {
 
 const skillMultUpdaters: Record<SkillRowName, () => number> = {
   //Used by skill bars to calculate the mult
-  Hack: () => Player.mults.hacking * BitNodeMultipliers.HackingLevelMultiplier,
-  Str: () => Player.mults.strength * BitNodeMultipliers.StrengthLevelMultiplier,
-  Def: () => Player.mults.defense * BitNodeMultipliers.DefenseLevelMultiplier,
-  Dex: () => Player.mults.dexterity * BitNodeMultipliers.DexterityLevelMultiplier,
-  Agi: () => Player.mults.agility * BitNodeMultipliers.AgilityLevelMultiplier,
-  Cha: () => Player.mults.charisma * BitNodeMultipliers.CharismaLevelMultiplier,
+  Hack: () => Player.mults.hacking * currentNodeMults.HackingLevelMultiplier,
+  Str: () => Player.mults.strength * currentNodeMults.StrengthLevelMultiplier,
+  Def: () => Player.mults.defense * currentNodeMults.DefenseLevelMultiplier,
+  Dex: () => Player.mults.dexterity * currentNodeMults.DexterityLevelMultiplier,
+  Agi: () => Player.mults.agility * currentNodeMults.AgilityLevelMultiplier,
+  Cha: () => Player.mults.charisma * currentNodeMults.CharismaLevelMultiplier,
   Int: () => 1,
 };
 

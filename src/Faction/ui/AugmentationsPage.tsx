@@ -1,8 +1,8 @@
 import { Box, Button, Tooltip, Typography, Paper, Container } from "@mui/material";
 import React from "react";
 
-import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
-import { getGenericAugmentationPriceMultiplier } from "../../Augmentation/AugmentationHelpers";
+import { Augmentations } from "../../Augmentation/Augmentations";
+import { getAugCost, getGenericAugmentationPriceMultiplier } from "../../Augmentation/AugmentationHelpers";
 import { AugmentationName, FactionName } from "@enums";
 import { PurchasableAugmentations } from "../../Augmentation/ui/PurchasableAugmentations";
 import { PurchaseAugmentationsOrderSetting } from "../../Settings/SettingEnums";
@@ -25,11 +25,11 @@ interface IProps {
 export function AugmentationsPage(props: IProps): React.ReactElement {
   const rerender = useRerender();
 
-  function getAugs(): string[] {
+  function getAugs(): AugmentationName[] {
     return getFactionAugmentationsFiltered(props.faction);
   }
 
-  function getAugsSorted(): string[] {
+  function getAugsSorted(): AugmentationName[] {
     switch (Settings.PurchaseAugmentationsOrder) {
       case PurchaseAugmentationsOrderSetting.Cost: {
         return getAugsSortedByCost();
@@ -45,26 +45,26 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
     }
   }
 
-  function getAugsSortedByCost(): string[] {
+  function getAugsSortedByCost(): AugmentationName[] {
     const augs = getAugs();
     augs.sort((augName1, augName2) => {
-      const aug1 = StaticAugmentations[augName1],
-        aug2 = StaticAugmentations[augName2];
+      const aug1 = Augmentations[augName1],
+        aug2 = Augmentations[augName2];
       if (aug1 == null || aug2 == null) {
         throw new Error("Invalid Augmentation Names");
       }
 
-      return aug1.getCost().moneyCost - aug2.getCost().moneyCost;
+      return getAugCost(aug1).moneyCost - getAugCost(aug2).moneyCost;
     });
 
     return augs;
   }
 
-  function getAugsSortedByPurchasable(): string[] {
+  function getAugsSortedByPurchasable(): AugmentationName[] {
     const augs = getAugs();
-    function canBuy(augName: string): boolean {
-      const aug = StaticAugmentations[augName];
-      const augCosts = aug.getCost();
+    function canBuy(augName: AugmentationName): boolean {
+      const aug = Augmentations[augName];
+      const augCosts = getAugCost(aug);
       const repCost = augCosts.repCost;
       const hasReq = props.faction.playerReputation >= repCost;
       const hasRep = hasAugmentationPrereqs(aug);
@@ -72,43 +72,43 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
       return hasCost && hasReq && hasRep;
     }
     const buy = augs.filter(canBuy).sort((augName1, augName2) => {
-      const aug1 = StaticAugmentations[augName1],
-        aug2 = StaticAugmentations[augName2];
+      const aug1 = Augmentations[augName1],
+        aug2 = Augmentations[augName2];
       if (aug1 == null || aug2 == null) {
         throw new Error("Invalid Augmentation Names");
       }
 
-      return aug1.getCost().moneyCost - aug2.getCost().moneyCost;
+      return getAugCost(aug1).moneyCost - getAugCost(aug2).moneyCost;
     });
     const cantBuy = augs
       .filter((aug) => !canBuy(aug))
       .sort((augName1, augName2) => {
-        const aug1 = StaticAugmentations[augName1],
-          aug2 = StaticAugmentations[augName2];
+        const aug1 = Augmentations[augName1],
+          aug2 = Augmentations[augName2];
         if (aug1 == null || aug2 == null) {
           throw new Error("Invalid Augmentation Names");
         }
-        return aug1.getCost().repCost - aug2.getCost().repCost;
+        return getAugCost(aug1).repCost - getAugCost(aug2).repCost;
       });
 
     return buy.concat(cantBuy);
   }
 
-  function getAugsSortedByReputation(): string[] {
+  function getAugsSortedByReputation(): AugmentationName[] {
     const augs = getAugs();
     augs.sort((augName1, augName2) => {
-      const aug1 = StaticAugmentations[augName1],
-        aug2 = StaticAugmentations[augName2];
+      const aug1 = Augmentations[augName1],
+        aug2 = Augmentations[augName2];
       if (aug1 == null || aug2 == null) {
         throw new Error("Invalid Augmentation Names");
       }
-      return aug1.getCost().repCost - aug2.getCost().repCost;
+      return getAugCost(aug1).repCost - getAugCost(aug2).repCost;
     });
 
     return augs;
   }
 
-  function getAugsSortedByDefault(): string[] {
+  function getAugsSortedByDefault(): AugmentationName[] {
     return getAugs();
   }
 
@@ -123,7 +123,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
       aug === AugmentationName.NeuroFluxGovernor ||
       (!Player.augmentations.some((a) => a.name === aug) && !Player.queuedAugmentations.some((a) => a.name === aug)),
   );
-  const owned = augs.filter((aug: string) => !purchasable.includes(aug));
+  const owned = augs.filter((aug) => !purchasable.includes(aug));
 
   const multiplierComponent =
     props.faction.name !== FactionName.ShadowsOfAnarchy ? (
@@ -213,7 +213,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
         augNames={purchasable}
         ownedAugNames={owned}
         canPurchase={(aug) => {
-          const costs = aug.getCost();
+          const costs = getAugCost(aug);
           return (
             hasAugmentationPrereqs(aug) &&
             props.faction.playerReputation >= costs.repCost &&

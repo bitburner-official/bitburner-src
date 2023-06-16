@@ -17,7 +17,7 @@ import {
 } from "../Hacking";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { influenceStockThroughServerHack } from "../StockMarket/PlayerInfluencing";
 import { PortNumber } from "../NetscriptPort";
@@ -506,9 +506,9 @@ function hack(
         server.moneyAvailable = 0;
       }
 
-      let moneyGained = moneyDrained * BitNodeMultipliers.ScriptHackMoneyGain;
+      let moneyGained = moneyDrained * currentNodeMults.ScriptHackMoneyGain;
       if (manual) {
-        moneyGained = moneyDrained * BitNodeMultipliers.ManualHackMoney;
+        moneyGained = moneyDrained * currentNodeMults.ManualHackMoney;
       }
 
       Player.gainMoney(moneyGained, "hacking");

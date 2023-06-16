@@ -1,10 +1,11 @@
+import { AugmentationName, CityName, CompletedProgramName, FactionName, LocationName, ToastVariant } from "@enums";
+
 import type { PlayerObject } from "./PlayerObject";
 import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
 import { PlayerOwnedAugmentation } from "../../Augmentation/PlayerOwnedAugmentation";
-import { AugmentationName, CityName, CompletedProgramName, FactionName, LocationName, ToastVariant } from "@enums";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { CodingContractRewardType, ICodingContractReward } from "../../CodingContracts";
 import { Company } from "../../Company/Company";
 import { Companies } from "../../Company/Companies";
@@ -548,22 +549,16 @@ export function reapplyAllAugmentations(this: PlayerObject, resetMultipliers = t
     this.resetMultipliers();
   }
 
-  for (let i = 0; i < this.augmentations.length; ++i) {
-    //Compatibility with new version
-    if (this.augmentations[i].name === "HacknetNode NIC Architecture Neural-Upload") {
-      this.augmentations[i].name = "Hacknet Node NIC Architecture Neural-Upload";
-    }
-
-    const playerAug = this.augmentations[i];
+  for (const playerAug of this.augmentations) {
     const augName = playerAug.name;
 
     if (augName == AugmentationName.NeuroFluxGovernor) {
-      for (let j = 0; j < playerAug.level; ++j) {
-        applyAugmentation(this.augmentations[i], true);
+      for (let i = 0; i < playerAug.level; ++i) {
+        applyAugmentation(playerAug, true);
       }
       continue;
     }
-    applyAugmentation(this.augmentations[i], true);
+    applyAugmentation(playerAug, true);
   }
 
   this.updateSkillLevels();
@@ -644,7 +639,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !daedalusFac.isBanned &&
     !daedalusFac.isMember &&
     !daedalusFac.alreadyInvited &&
-    numAugmentations >= BitNodeMultipliers.DaedalusAugsRequirement &&
+    numAugmentations >= currentNodeMults.DaedalusAugsRequirement &&
     this.money >= 100000000000 &&
     (this.skills.hacking >= 2500 ||
       (this.skills.strength >= 1500 &&
@@ -1080,7 +1075,7 @@ export function setBitNodeNumber(this: PlayerObject, n: number): void {
   this.bitNodeN = n;
 }
 
-export function queueAugmentation(this: PlayerObject, name: string): void {
+export function queueAugmentation(this: PlayerObject, name: AugmentationName): void {
   for (const aug of this.queuedAugmentations) {
     if (aug.name == name) {
       console.warn(`tried to queue ${name} twice, this may be a bug`);
@@ -1152,7 +1147,7 @@ export function gainCodingContractReward(
     }
     case CodingContractRewardType.Money:
     default: {
-      const moneyGain = CONSTANTS.CodingContractBaseMoneyGain * difficulty * BitNodeMultipliers.CodingContractMoney;
+      const moneyGain = CONSTANTS.CodingContractBaseMoneyGain * difficulty * currentNodeMults.CodingContractMoney;
       this.gainMoney(moneyGain, "codingcontract");
       return `Gained ${formatMoney(moneyGain)}`;
     }

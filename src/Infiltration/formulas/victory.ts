@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { LocationsMetadata } from "../../Locations/data/LocationsMetadata";
 import { AugmentationName } from "@enums";
 import { Faction } from "../../Faction/Faction";
@@ -13,7 +13,7 @@ export function calculateSellInformationCashReward(reward: number, maxLevel: num
     3e3 *
     levelBonus *
     (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 1.5 : 1) *
-    BitNodeMultipliers.InfiltrationMoney
+    currentNodeMults.InfiltrationMoney
   );
 }
 
@@ -26,7 +26,7 @@ export function calculateTradeInformationRepReward(reward: number, maxLevel: num
     30 *
     levelBonus *
     (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 1.5 : 1) *
-    BitNodeMultipliers.InfiltrationRep
+    currentNodeMults.InfiltrationRep
   );
 }
 

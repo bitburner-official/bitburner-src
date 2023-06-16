@@ -15,10 +15,10 @@ import {
 import { AugmentationName } from "@enums";
 
 export function Augmentations(): React.ReactElement {
-  const [augmentation, setAugmentation] = useState("Augmented Targeting I");
+  const [augmentation, setAugmentation] = useState(AugmentationName.Targeting1);
 
   function setAugmentationDropdown(event: SelectChangeEvent): void {
-    setAugmentation(event.target.value);
+    setAugmentation(event.target.value as AugmentationName);
   }
   function queueAug(): void {
     Player.queueAugmentation(augmentation);
