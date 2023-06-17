@@ -1,8 +1,5 @@
 import React from "react";
-
-import { Box, Container, Paper, Table, TableBody, TableRow, TableCell, Tooltip } from "@mui/material";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { Box, Button, Container, Paper, Table, TableBody, Tooltip, Typography } from "@mui/material";
 
 import { Player } from "@player";
 import { FactionWorkType, LocationName } from "@enums";
@@ -220,14 +217,12 @@ export function WorkInProgressRoot(): React.ReactElement {
       title: `You are attempting ${crime.workName}`,
 
       gains: [
-        <TableRow key="header">
-          <TableCell>
-            <Typography>Success chance: ${formatPercent(successChance)}</Typography>
-          </TableCell>
-          <TableCell>
+        <tr key="header">
+          <td>
+            <Typography>Success chance: {formatPercent(successChance)}</Typography>
             <Typography>Gains (on success)</Typography>
-          </TableCell>
-        </TableRow>,
+          </td>
+        </tr>,
         <StatsRow key="money" name="Money:" color={Settings.theme.money}>
           <Typography>
             <Money money={gains.money} />
