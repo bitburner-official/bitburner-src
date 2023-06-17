@@ -40,11 +40,12 @@ export function Toolbar({ editor, onSave }: IProps) {
   const { ram, ramEntries, isUpdatingRAM, options, saveOptions } = useScriptEditorContext();
 
   const onOptionChange: OptionsModalProps["onOptionChange"] = (option, value) => {
-    saveOptions({ ...options, [option]: value });
+    const newOptions = { ...options, [option]: value };
+    saveOptions(newOptions);
     // delaying editor options update to avoid an issue
     // where switching between vim and regular modes causes some settings to be reset
     setTimeout(() => {
-      editor?.updateOptions(options);
+      editor?.updateOptions(newOptions);
     }, 100);
   };
 
