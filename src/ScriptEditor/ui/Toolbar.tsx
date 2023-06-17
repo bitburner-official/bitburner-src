@@ -76,17 +76,15 @@ export function Toolbar({ editor, onSave }: IProps) {
       </Box>
       <OptionsModal
         open={optionsOpen}
+        options={options}
         onClose={() => {
           sanitizeTheme(Settings.EditorTheme);
           monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
           setOptionsOpen(false);
         }}
-        options={{ ...options }}
-        save={(options: Options) => {
-          sanitizeTheme(Settings.EditorTheme);
-          monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
+        onChange={(option: keyof Options, value: Options[keyof Options]) => {
+          saveOptions({ ...options, [option]: value });
           editor?.updateOptions(options);
-          saveOptions(options);
         }}
       />
       <Modal open={ramInfoOpen} onClose={() => setRamInfoOpen(false)}>
