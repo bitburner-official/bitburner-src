@@ -79,19 +79,21 @@ import { useRerender } from "./React/hooks";
 
 const htmlLocation = location;
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      "-ms-overflow-style": "none" /* for Internet Explorer, Edge */,
-      "scrollbar-width": "none" /* for Firefox */,
-      margin: theme.spacing(0),
-      flexGrow: 1,
-      padding: "8px",
-      minHeight: "100vh",
-      boxSizing: "border-box",
-      width: "1px",
-    },
-  }),
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      root: {
+        "-ms-overflow-style": "none" /* for Internet Explorer, Edge */,
+        "scrollbar-width": "none" /* for Firefox */,
+        margin: theme.spacing(0),
+        flexGrow: 1,
+        padding: "8px",
+        minHeight: "100vh",
+        boxSizing: "border-box",
+        width: "1px",
+      },
+    }),
+  { name: "GameRoot" },
 );
 
 const uninitialized = (): void => {

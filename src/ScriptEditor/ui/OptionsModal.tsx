@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { Options } from "./Options";
-import { Modal } from "../../ui/React/Modal";
+import React from "react";
 
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -10,36 +8,40 @@ import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import EditIcon from "@mui/icons-material/Edit";
 
+import { useBoolean } from "../../ui/React/hooks";
+import { Modal } from "../../ui/React/Modal";
 import { ThemeEditorModal } from "./ThemeEditorModal";
+import { Options } from "./Options";
 
-interface IProps {
+export type OptionsModalProps = {
   open: boolean;
   options: Options;
   onClose: () => void;
-  onChange: (option: keyof Options, value: Options[keyof Options]) => void;
-}
+  onOptionChange: (option: keyof Options, value: Options[keyof Options]) => void;
+  onThemeChange: () => void;
+};
 
-export function OptionsModal(props: IProps): React.ReactElement {
-  const [themeEditorOpen, setThemeEditorOpen] = useState(false);
+export function OptionsModal(props: OptionsModalProps): React.ReactElement {
+  const [themeEditorOpen, { on: openThemeEditor, off: closeThemeEditor }] = useBoolean(false);
 
-  function onFontSizeChange(event: React.ChangeEvent<HTMLInputElement>): void {
+  const onFontSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fontSize = parseInt(event.target.value);
     if (!Number.isFinite(fontSize) || fontSize < 1) return;
-    props.onChange("fontSize", fontSize);
-  }
+    props.onOptionChange("fontSize", fontSize);
+  };
 
-  function onTabSizeChange(event: React.ChangeEvent<HTMLInputElement>): void {
+  const onTabSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const tabSize = parseInt(event.target.value);
     if (!Number.isFinite(tabSize) || tabSize < 1) return;
-    props.onChange("tabSize", tabSize);
-  }
+    props.onOptionChange("tabSize", tabSize);
+  };
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <ThemeEditorModal open={themeEditorOpen} onClose={() => setThemeEditorOpen(false)} />
+      <ThemeEditorModal open={themeEditorOpen} onChange={props.onThemeChange} onClose={closeThemeEditor} />
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography>Theme: </Typography>
-        <Select onChange={(event) => props.onChange("theme", event.target.value)} value={props.options.theme}>
+        <Select onChange={(event) => props.onOptionChange("theme", event.target.value)} value={props.options.theme}>
           <MenuItem value="monokai">monokai</MenuItem>
           <MenuItem value="solarized-dark">solarized-dark</MenuItem>
           <MenuItem value="solarized-light">solarized-light</MenuItem>
@@ -49,7 +51,7 @@ export function OptionsModal(props: IProps): React.ReactElement {
           <MenuItem value="one-dark">one-dark</MenuItem>
           <MenuItem value="customTheme">Custom theme</MenuItem>
         </Select>
-        <Button onClick={() => setThemeEditorOpen(true)} sx={{ ml: 1 }} startIcon={<EditIcon />}>
+        <Button onClick={openThemeEditor} sx={{ ml: 1 }} startIcon={<EditIcon />}>
           Edit custom theme
         </Button>
       </div>
@@ -57,7 +59,7 @@ export function OptionsModal(props: IProps): React.ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Indent using tabs: </Typography>
         <Switch
-          onChange={(e) => props.onChange("insertSpaces", e.target.checked)}
+          onChange={(e) => props.onOptionChange("insertSpaces", e.target.checked)}
           checked={props.options.insertSpaces}
         />
       </div>
@@ -70,14 +72,17 @@ export function OptionsModal(props: IProps): React.ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Auto-detect indentation: </Typography>
         <Switch
-          onChange={(e) => props.onChange("detectIndentation", e.target.checked)}
+          onChange={(e) => props.onOptionChange("detectIndentation", e.target.checked)}
           checked={props.options.detectIndentation}
         />
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Word wrap: </Typography>
-        <Select onChange={(event) => props.onChange("wordWrap", event.target.value)} value={props.options.wordWrap}>
+        <Select
+          onChange={(event) => props.onOptionChange("wordWrap", event.target.value)}
+          value={props.options.wordWrap}
+        >
           <MenuItem value={"off"}>Off</MenuItem>
           <MenuItem value={"on"}>On</MenuItem>
           <MenuItem value={"bounded"}>Bounded</MenuItem>
@@ -87,7 +92,7 @@ export function OptionsModal(props: IProps): React.ReactElement {
 
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Enable vim mode: </Typography>
-        <Switch onChange={(e) => props.onChange("vim", e.target.checked)} checked={props.options.vim} />
+        <Switch onChange={(e) => props.onOptionChange("vim", e.target.checked)} checked={props.options.vim} />
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -95,7 +100,7 @@ export function OptionsModal(props: IProps): React.ReactElement {
         <TextField
           type="text"
           value={props.options.fontFamily}
-          onChange={(e) => props.onChange("fontFamily", e.target.value)}
+          onChange={(e) => props.onOptionChange("fontFamily", e.target.value)}
         />
       </div>
 
@@ -107,7 +112,7 @@ export function OptionsModal(props: IProps): React.ReactElement {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Enable font ligatures: </Typography>
         <Switch
-          onChange={(e) => props.onChange("fontLigatures", e.target.checked)}
+          onChange={(e) => props.onOptionChange("fontLigatures", e.target.checked)}
           checked={props.options.fontLigatures}
         />
       </div>
