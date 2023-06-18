@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 
 import { Settings } from "../../Settings/Settings";
-import { calculateRamUsage, isRamCalculationFailure, isRamCalculationSuccess } from "../../Script/RamCalculations";
+import { calculateRamUsage } from "../../Script/RamCalculations";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { formatRam } from "../../ui/formatNumber";
 import { useBoolean } from "../../ui/React/hooks";
@@ -36,7 +36,7 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
     }
 
     const ramUsage = calculateRamUsage(newCode, server.scripts);
-    if (isRamCalculationSuccess(ramUsage) && ramUsage.cost > 0) {
+    if (ramUsage.cost && ramUsage.cost > 0) {
       const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
       const entriesDisp = [];
       for (const entry of entries) {
@@ -48,7 +48,7 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
       return;
     }
 
-    if (isRamCalculationFailure(ramUsage)) {
+    if (ramUsage.errorCode !== undefined) {
       if (ramUsage.errorCode === RamCalculationErrorCode.ImportError) {
         setRAM("RAM: Import Error");
         setRamEntries([["Import Error", ""]]);

@@ -1,5 +1,5 @@
 import type { BaseServer } from "../Server/BaseServer";
-import { calculateRamUsage, isRamCalculationFailure, isRamCalculationSuccess, RamUsageEntry } from "./RamCalculations";
+import { calculateRamUsage, RamUsageEntry } from "./RamCalculations";
 import { LoadedModule, ScriptURL } from "./LoadedModule";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
@@ -90,7 +90,7 @@ export class Script implements ContentFile {
    */
   updateRamUsage(otherScripts: Map<ScriptFilePath, Script>): void {
     const ramCalc = calculateRamUsage(this.code, otherScripts, this.filename.endsWith(".script"));
-    if (isRamCalculationSuccess(ramCalc) && ramCalc.cost >= RamCostConstants.Base) {
+    if (ramCalc.cost && ramCalc.cost >= RamCostConstants.Base) {
       this.ramUsage = roundToTwo(ramCalc.cost);
       this.ramUsageEntries = ramCalc.entries as RamUsageEntry[];
       this.ramCalculationError = null;
@@ -98,7 +98,7 @@ export class Script implements ContentFile {
     }
 
     this.ramUsage = null;
-    this.ramCalculationError = isRamCalculationFailure(ramCalc) ? ramCalc.error ?? null : null;
+    this.ramCalculationError = ramCalc.error ?? null;
   }
 
   /** Remove script from server. Fails if the provided server isn't the server for this script. */

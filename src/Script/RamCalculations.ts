@@ -25,9 +25,13 @@ export interface RamUsageEntry {
 export type RamCalculationSuccess = {
   cost: number;
   entries: RamUsageEntry[];
+  error?: never;
+  errorCode?: never;
 };
 
 export type RamCalculationFailure = {
+  cost?: never;
+  entries?: never;
   errorCode: RamCalculationErrorCode;
   error?: Error;
 };
@@ -378,12 +382,4 @@ export function calculateRamUsage(
     console.error(e);
     return { errorCode: RamCalculationErrorCode.SyntaxError, error: e instanceof Error ? e : undefined };
   }
-}
-
-export function isRamCalculationFailure(ramCalculation: RamCalculation): ramCalculation is RamCalculationFailure {
-  return "errorCode" in ramCalculation;
-}
-
-export function isRamCalculationSuccess(ramCalculation: RamCalculation): ramCalculation is RamCalculationSuccess {
-  return "cost" in ramCalculation;
 }
