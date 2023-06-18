@@ -362,17 +362,17 @@ function parseOnlyCalculateDeps(code: string, currentModule: string): ParseDepsR
 
 /**
  * Calculate's a scripts RAM Usage
- * @param {string} codeCopy - The script's code
+ * @param {string} code - The script's code
  * @param {Script[]} otherScripts - All other scripts on the server.
  *                                  Used to account for imported scripts
  */
 export function calculateRamUsage(
-  codeCopy: string,
+  code: string,
   otherScripts: Map<ScriptFilePath, Script>,
   ns1?: boolean,
 ): RamCalculation {
   try {
-    return parseOnlyRamCalculate(otherScripts, codeCopy, ns1);
+    return parseOnlyRamCalculate(otherScripts, code, ns1);
   } catch (e) {
     console.error(`Failed to parse script for RAM calculations:`);
     console.error(e);
