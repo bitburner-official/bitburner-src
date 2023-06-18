@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 
 import { Settings } from "../../Settings/Settings";
-import { calculateRamUsage } from "../../Script/RamCalculations";
+import { calculateRamUsage, isRamCalculationFailure, isRamCalculationSuccess } from "../../Script/RamCalculations";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { formatRam } from "../../ui/formatNumber";
 import { useBoolean } from "../../ui/React/hooks";
@@ -36,7 +36,7 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
     }
     const codeCopy = newCode + "";
     const ramUsage = calculateRamUsage(codeCopy, server.scripts);
-    if (ramUsage.cost > 0) {
+    if (isRamCalculationSuccess(ramUsage) && ramUsage.cost > 0) {
       const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
       const entriesDisp = [];
       for (const entry of entries) {
@@ -48,23 +48,18 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
       return;
     }
 
-    let RAM = "";
-    const entriesDisp = [];
-    switch (ramUsage.cost) {
-      case RamCalculationErrorCode.ImportError: {
-        RAM = "RAM: Import Error";
-        entriesDisp.push(["Import Error", ""]);
-        break;
+    if (isRamCalculationFailure(ramUsage)) {
+      if (ramUsage.errorCode === RamCalculationErrorCode.ImportError) {
+        setRAM("RAM: Import Error");
+        setRamEntries([["Import Error", ""]]);
+      } else if (ramUsage.errorCode === RamCalculationErrorCode.SyntaxError) {
+        setRAM("RAM: Syntax Error");
+        setRamEntries([["Syntax Error", ramUsage.error?.message ?? ""]]);
       }
-      case RamCalculationErrorCode.SyntaxError:
-      default: {
-        RAM = "RAM: Syntax Error";
-        entriesDisp.push(["Syntax Error", ""]);
-        break;
-      }
+    } else {
+      setRAM("RAM: Syntax Error");
+      setRamEntries([["Syntax Error", ""]]);
     }
-    setRAM(RAM);
-    setRamEntries(entriesDisp);
   };
 
   const [isUpdatingRAM, { on: startUpdatingRAM, off: finishUpdatingRAM }] = useBoolean(false);
