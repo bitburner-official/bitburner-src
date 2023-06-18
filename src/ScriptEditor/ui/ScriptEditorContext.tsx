@@ -49,12 +49,14 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
     }
 
     if (ramUsage.errorCode !== undefined) {
-      if (ramUsage.errorCode === RamCalculationErrorCode.ImportError) {
-        setRAM("RAM: Import Error");
-        setRamEntries([["Import Error", ""]]);
-      } else if (ramUsage.errorCode === RamCalculationErrorCode.SyntaxError) {
-        setRAM("RAM: Syntax Error");
-        setRamEntries([["Syntax Error", ramUsage.error?.message ?? ""]]);
+      setRamEntries([["Syntax Error", ramUsage.errorMessage ?? ""]]);
+      switch (ramUsage.errorCode) {
+        case RamCalculationErrorCode.ImportError:
+          setRAM("RAM: Import Error");
+          break;
+        case RamCalculationErrorCode.SyntaxError:
+          setRAM("RAM: Syntax Error");
+          break;
       }
     } else {
       setRAM("RAM: Syntax Error");

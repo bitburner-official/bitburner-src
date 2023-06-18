@@ -31,7 +31,7 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
 
   const singleRamUsage = script.getRamUsage(server.scripts);
   if (!singleRamUsage) {
-    return Terminal.error(`Error while calculating ram usage for this script. ${script.ramCalculationError?.message}`);
+    return Terminal.error(`Error while calculating ram usage for this script. ${script.ramCalculationError}`);
   }
 
   const ramUsage = singleRamUsage * numThreads;

@@ -25,15 +25,15 @@ export interface RamUsageEntry {
 export type RamCalculationSuccess = {
   cost: number;
   entries: RamUsageEntry[];
-  error?: never;
   errorCode?: never;
+  errorMessage?: never;
 };
 
 export type RamCalculationFailure = {
   cost?: never;
   entries?: never;
   errorCode: RamCalculationErrorCode;
-  error?: Error;
+  errorMessage?: string;
 };
 
 export type RamCalculation = RamCalculationSuccess | RamCalculationFailure;
@@ -103,9 +103,13 @@ function parseOnlyRamCalculate(otherScripts: Map<ScriptFilePath, Script>, code: 
 
     // Using root as the path base right now. Difficult to implement
     const filename = resolveScriptFilePath(nextModule, root, ns1 ? ".script" : ".js");
-    if (!filename) return { errorCode: RamCalculationErrorCode.ImportError }; // Invalid import path
+    if (!filename) {
+      return { errorCode: RamCalculationErrorCode.ImportError, errorMessage: `Invalid import path: "${nextModule}"` };
+    }
     const script = otherScripts.get(filename);
-    if (!script) return { errorCode: RamCalculationErrorCode.ImportError }; // No such file on server
+    if (!script) {
+      return { errorCode: RamCalculationErrorCode.ImportError, errorMessage: `No such file on server: "${filename}"` };
+    }
 
     parseCode(script.code, nextModule);
   }
@@ -380,6 +384,6 @@ export function calculateRamUsage(
   } catch (e) {
     console.error(`Failed to parse script for RAM calculations:`);
     console.error(e);
-    return { errorCode: RamCalculationErrorCode.SyntaxError, error: e instanceof Error ? e : undefined };
+    return { errorCode: RamCalculationErrorCode.SyntaxError, errorMessage: e instanceof Error ? e.message : undefined };
   }
 }

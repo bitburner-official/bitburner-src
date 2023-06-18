@@ -17,7 +17,7 @@ export class Script implements ContentFile {
   // Ram calculation, only exists after first poll of ram cost after updating
   ramUsage: number | null = null;
   ramUsageEntries: RamUsageEntry[] = [];
-  ramCalculationError?: Error | null = null;
+  ramCalculationError?: string | null = null;
 
   // Runtime data that only exists when the script has been initiated. Cleared when script or a dependency script is updated.
   mod: LoadedModule | null = null;
@@ -98,7 +98,7 @@ export class Script implements ContentFile {
     }
 
     this.ramUsage = null;
-    this.ramCalculationError = ramCalc.error ?? null;
+    this.ramCalculationError = ramCalc.errorMessage ?? null;
   }
 
   /** Remove script from server. Fails if the provided server isn't the server for this script. */
