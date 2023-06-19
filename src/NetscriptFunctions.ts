@@ -584,6 +584,17 @@ export const ns: InternalAPI<NSFull> = {
       }
       runningScriptObj.tailProps?.setSize(w, h);
     },
+  setTailSizeLocked:
+    (ctx) =>
+    (isLocked, _pid = ctx.workerScript.scriptRef.pid) => {
+      const pid = helpers.number(ctx, "pid", _pid);
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.tailProps?.setSizeLocked(!!isLocked);
+    },
   closeTail:
     (ctx) =>
     (_pid = ctx.workerScript.scriptRef.pid) => {

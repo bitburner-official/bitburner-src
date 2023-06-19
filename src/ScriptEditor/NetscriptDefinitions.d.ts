@@ -5121,6 +5121,13 @@ export interface NS {
   resizeTail(width: number, height: number, pid?: number): void;
 
   /**
+   * Locks or unlocks tail window size
+   * @param isLocked - true to disable resizing, false to enable resizing
+   * @param pid - Optional. PID of the script having its tail resized. If omitted, the current script is used.
+   */
+  setTailSizeLocked(isLocked: boolean, pid?: number): void;
+
+  /**
    * Close the tail window of a script.
    * @remarks
    * RAM cost: 0 GB

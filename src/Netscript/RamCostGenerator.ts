@@ -539,6 +539,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   toast: 0,
   moveTail: 0,
   resizeTail: 0,
+  setTailSizeLocked: 0,
   closeTail: 0,
   setTitle: 0,
   clearPort: 0,

@@ -16,6 +16,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import LockIcon from "@mui/icons-material/Lock";
+import UnlockIcon from "@mui/icons-material/LockOpen";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { startWorkerScript } from "../../NetscriptWorker";
 import { GetServer } from "../../Server/AllServers";
@@ -38,6 +40,7 @@ export class LogBoxProperties {
   y = window.innerHeight * 0.3;
   width = 500;
   height = 500;
+  isSizeLocked = false;
 
   rerender: () => void;
   rootRef: React.RefObject<Draggable>;
@@ -61,8 +64,14 @@ export class LogBoxProperties {
   }
 
   setSize(width: number, height: number): void {
+    if (this.isSizeLocked) return;
     this.width = width;
     this.height = height;
+    this.rerender();
+  }
+
+  setSizeLocked(isLocked: boolean): void {
+    this.isSizeLocked = isLocked;
     this.rerender();
   }
 
@@ -167,7 +176,9 @@ function LogWindow(props: IProps): React.ReactElement {
   const textArea = useRef<HTMLDivElement>(null);
   const rerender = useRerender(1000);
   const propsRef = useRef(new LogBoxProperties(rerender, rootRef));
-  script.tailProps = propsRef.current;
+  const logBox = propsRef.current;
+  script.tailProps = logBox;
+
   const [minimized, setMinimized] = useState(false);
 
   const textAreaKeyDown = (e: React.KeyboardEvent) => {
@@ -184,11 +195,11 @@ function LogWindow(props: IProps): React.ReactElement {
   };
 
   const onResize = (e: React.SyntheticEvent, { size }: ResizeCallbackData) => {
-    propsRef.current.setSize(size.width, size.height);
+    logBox.setSize(size.width, size.height);
   };
 
   useEffect(() => {
-    propsRef.current.updateDOM();
+    logBox.updateDOM();
     updateLayer();
   }, []);
 
@@ -280,7 +291,7 @@ function LogWindow(props: IProps): React.ReactElement {
     if (!node) return;
 
     if (!isOnScreen(node)) {
-      propsRef.current.setPosition(0, 0);
+      logBox.setPosition(0, 0);
     }
   }, 100);
 
@@ -300,7 +311,11 @@ function LogWindow(props: IProps): React.ReactElement {
       return false;
   };
 
-  // Max [width, height]
+  const toggleLogBoxResize = () => {
+    logBox.setSizeLocked(!logBox.isSizeLocked);
+  };
+
+  // Min [width, height]
   const minConstraints: [number, number] = [150, 33];
 
   return (
@@ -327,8 +342,8 @@ function LogWindow(props: IProps): React.ReactElement {
         ref={container}
       >
         <ResizableBox
-          width={propsRef.current.width}
-          height={propsRef.current.height}
+          width={logBox.width}
+          height={logBox.height}
           onResize={onResize}
           minConstraints={minConstraints}
           handle={
@@ -338,7 +353,7 @@ function LogWindow(props: IProps): React.ReactElement {
                 right: "-10px",
                 bottom: "-16px",
                 cursor: "nw-resize",
-                display: minimized ? "none" : "inline-block",
+                display: minimized || logBox.isSizeLocked ? "none" : "inline-block",
               }}
             >
               <ArrowForwardIosIcon color="primary" style={{ transform: "rotate(45deg)", fontSize: "1.75rem" }} />
@@ -350,6 +365,14 @@ function LogWindow(props: IProps): React.ReactElement {
               {title()}
 
               <span style={{ minWidth: "fit-content", height: `${minConstraints[1]}px` }}>
+                <IconButton
+                  title={logBox.isSizeLocked ? "Unlock window resize" : "Lock window resize"}
+                  className={classes.titleButton}
+                  onClick={toggleLogBoxResize}
+                  onTouchEnd={toggleLogBoxResize}
+                >
+                  {logBox.isSizeLocked ? <LockIcon /> : <UnlockIcon />}
+                </IconButton>
                 {!workerScripts.has(script.pid) ? (
                   <IconButton title="Re-run script" className={classes.titleButton} onClick={run} onTouchEnd={run}>
                     <PlayCircleIcon />

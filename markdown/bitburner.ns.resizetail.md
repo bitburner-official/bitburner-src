@@ -11,6 +11,15 @@ Resize a tail window.
 ```typescript
 resizeTail(width: number, height: number, pid?: number): void;
 ```
+## NS.setTailSizeLocked() method
+
+Locks or unlocks tail window resize.
+
+**Signature:**
+
+```typescript
+setTailSizeLocked(isLocked: boolean, pid?: number): void;
+```
 
 ## Parameters
 

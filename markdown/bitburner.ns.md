@@ -9,7 +9,7 @@ Collection of all functions passed to scripts
 **Signature:**
 
 ```typescript
-export interface NS 
+export interface NS
 ```
 
 ## Remarks
@@ -145,6 +145,7 @@ export async function main(ns) {
 |  [relaysmtp(host)](./bitburner.ns.relaysmtp.md) | Runs relaySMTP.exe on a server. |
 |  [renamePurchasedServer(hostname, newName)](./bitburner.ns.renamepurchasedserver.md) | Rename a purchased server. |
 |  [resizeTail(width, height, pid)](./bitburner.ns.resizetail.md) | Resize a tail window. |
+|  [setTailSizeLocked(isLocked, pid)](./bitburner.ns.setTailSizeLocked.md) | Resize a tail window. |
 |  [rm(name, host)](./bitburner.ns.rm.md) | Delete a file. |
 |  [run(script, threadOrOptions, args)](./bitburner.ns.run.md) | Start another script on the current server. |
 |  [scan(host)](./bitburner.ns.scan.md) | Get the list of servers connected to a server. |
