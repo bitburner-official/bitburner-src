@@ -382,8 +382,9 @@ export function calculateRamUsage(
   try {
     return parseOnlyRamCalculate(otherScripts, code, ns1);
   } catch (e) {
-    console.error(`Failed to parse script for RAM calculations:`);
-    console.error(e);
-    return { errorCode: RamCalculationErrorCode.SyntaxError, errorMessage: e instanceof Error ? e.message : undefined };
+    return {
+      errorCode: RamCalculationErrorCode.SyntaxError,
+      errorMessage: e instanceof Error ? e.message : undefined,
+    };
   }
 }
