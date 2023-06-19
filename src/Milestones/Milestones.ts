@@ -7,13 +7,8 @@ import { FactionName } from "@enums";
 import { Server } from "../Server/Server";
 
 function allFactionAugs(f: Faction): boolean {
-  const factionAugs = f.augmentations.slice().filter((aug) => aug !== "NeuroFlux Governor");
-  for (const factionAug of factionAugs) {
-    if (
-      !Player.augmentations.some((aug) => {
-        return aug.name == factionAug;
-      })
-    )
+  for (const factionAug of f.augmentations) {
+    if (factionAug !== "NeuroFlux Governor" && !Player.augmentations.some((aug) => aug.name == factionAug))
       return false;
   }
   return true;
