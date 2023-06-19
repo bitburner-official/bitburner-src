@@ -79,6 +79,8 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
     fontLigatures: Settings.MonacoFontLigatures,
     wordWrap: Settings.MonacoWordWrap,
     vim: vim || Settings.MonacoVim,
+    cursorStyle: Settings.MonacoCursorStyle,
+    cursorBlinking: Settings.MonacoCursorBlinking,
   });
 
   function saveOptions(options: Options) {
@@ -90,6 +92,8 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
     Settings.MonacoFontFamily = options.fontFamily;
     Settings.MonacoFontSize = options.fontSize;
     Settings.MonacoFontLigatures = options.fontLigatures;
+    Settings.MonacoCursorStyle = options.cursorStyle;
+    Settings.MonacoCursorBlinking = options.cursorBlinking;
     Settings.MonacoWordWrap = options.wordWrap;
     Settings.MonacoVim = options.vim;
   }
