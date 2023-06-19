@@ -10,21 +10,19 @@ import { DonateOption } from "./DonateOption";
 import { Info } from "./Info";
 import { Option } from "./Option";
 
-import { CONSTANTS } from "../../Constants";
-
-import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { Faction } from "../Faction";
 
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { Player } from "@player";
-
 import { Typography, Button } from "@mui/material";
+
 import { CovenantPurchasesRoot } from "../../PersonObjects/Sleeve/ui/CovenantPurchasesRoot";
 import { FactionName, FactionWorkType } from "@enums";
 import { GangButton } from "./GangButton";
 import { FactionWork } from "../../Work/FactionWork";
 import { useRerender } from "../../ui/React/hooks";
+import { repNeededToDonate } from "../formulas/donation";
 
 interface IProps {
   faction: Faction;
@@ -107,9 +105,8 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
 
   // Flags for whether special options (gang, sleeve purchases, donate, etc.)
   // should be shown
-  const favorToDonate = Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.RepToDonateToFaction);
+  const favorToDonate = repNeededToDonate();
   const canDonate = faction.favor >= favorToDonate;
-
   const canPurchaseSleeves = faction.name === FactionName.TheCovenant && Player.bitNodeN === 10;
 
   return (
