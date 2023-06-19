@@ -34,9 +34,9 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
       setRamEntries([["N/A", ""]]);
       return;
     }
-    const codeCopy = newCode + "";
-    const ramUsage = calculateRamUsage(codeCopy, server.scripts);
-    if (ramUsage.cost > 0) {
+
+    const ramUsage = calculateRamUsage(newCode, server.scripts);
+    if (ramUsage.cost && ramUsage.cost > 0) {
       const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
       const entriesDisp = [];
       for (const entry of entries) {
@@ -48,23 +48,20 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
       return;
     }
 
-    let RAM = "";
-    const entriesDisp = [];
-    switch (ramUsage.cost) {
-      case RamCalculationErrorCode.ImportError: {
-        RAM = "RAM: Import Error";
-        entriesDisp.push(["Import Error", ""]);
-        break;
+    if (ramUsage.errorCode !== undefined) {
+      setRamEntries([["Syntax Error", ramUsage.errorMessage ?? ""]]);
+      switch (ramUsage.errorCode) {
+        case RamCalculationErrorCode.ImportError:
+          setRAM("RAM: Import Error");
+          break;
+        case RamCalculationErrorCode.SyntaxError:
+          setRAM("RAM: Syntax Error");
+          break;
       }
-      case RamCalculationErrorCode.SyntaxError:
-      default: {
-        RAM = "RAM: Syntax Error";
-        entriesDisp.push(["Syntax Error", ""]);
-        break;
-      }
+    } else {
+      setRAM("RAM: Syntax Error");
+      setRamEntries([["Syntax Error", ""]]);
     }
-    setRAM(RAM);
-    setRamEntries(entriesDisp);
   };
 
   const [isUpdatingRAM, { on: startUpdatingRAM, off: finishUpdatingRAM }] = useBoolean(false);

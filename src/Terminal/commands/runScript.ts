@@ -24,17 +24,18 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   if (!isPositiveInteger(numThreads)) {
     return Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
   }
+  if (!server.hasAdminRights) return Terminal.error("Need root access to run script");
 
   // Todo: Switch out arg for something with typescript support
   const args = flags._ as ScriptArg[];
 
   const singleRamUsage = script.getRamUsage(server.scripts);
-  if (!singleRamUsage) return Terminal.error("Error while calculating ram usage for this script.");
+  if (!singleRamUsage) {
+    return Terminal.error(`Error while calculating ram usage for this script. ${script.ramCalculationError}`);
+  }
 
   const ramUsage = singleRamUsage * numThreads;
   const ramAvailable = server.maxRam - server.ramUsed;
-
-  if (!server.hasAdminRights) return Terminal.error("Need root access to run script");
 
   if (ramUsage > ramAvailable + 0.001) {
     return Terminal.error(

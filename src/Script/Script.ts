@@ -17,6 +17,7 @@ export class Script implements ContentFile {
   // Ram calculation, only exists after first poll of ram cost after updating
   ramUsage: number | null = null;
   ramUsageEntries: RamUsageEntry[] = [];
+  ramCalculationError: string | null = null;
 
   // Runtime data that only exists when the script has been initiated. Cleared when script or a dependency script is updated.
   mod: LoadedModule | null = null;
@@ -65,6 +66,7 @@ export class Script implements ContentFile {
     // Always clear ram usage
     this.ramUsage = null;
     this.ramUsageEntries.length = 0;
+    this.ramCalculationError = null;
     // Early return if there's already no URL
     if (!this.mod) return;
     this.mod = null;
@@ -88,12 +90,15 @@ export class Script implements ContentFile {
    */
   updateRamUsage(otherScripts: Map<ScriptFilePath, Script>): void {
     const ramCalc = calculateRamUsage(this.code, otherScripts, this.filename.endsWith(".script"));
-    if (ramCalc.cost >= RamCostConstants.Base) {
+    if (ramCalc.cost && ramCalc.cost >= RamCostConstants.Base) {
       this.ramUsage = roundToTwo(ramCalc.cost);
       this.ramUsageEntries = ramCalc.entries as RamUsageEntry[];
-    } else {
-      this.ramUsage = null;
+      this.ramCalculationError = null;
+      return;
     }
+
+    this.ramUsage = null;
+    this.ramCalculationError = ramCalc.errorMessage ?? null;
   }
 
   /** Remove script from server. Fails if the provided server isn't the server for this script. */
