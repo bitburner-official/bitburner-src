@@ -1039,7 +1039,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         );
         return false;
       }
-      const repGain = donate(amt, Player, faction);
+      const repGain = donate(amt, faction);
       helpers.log(ctx, () => `${formatMoney(amt)} donated to '${facName}' for ${formatReputation(repGain)} reputation`);
       return true;
     },

@@ -1,11 +1,11 @@
-import { Person } from "@nsdefs";
+import { Person as IPerson } from "@nsdefs";
+import { Player } from "@player";
 
 import { CONSTANTS } from "../../Constants";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-import { PlayerObject } from "../../PersonObjects/Player/PlayerObject";
 import { Faction } from "../Faction";
 
-export function repFromDonation(amt: number, person: Person): number {
+export function repFromDonation(amt: number, person: IPerson): number {
   return (amt / CONSTANTS.DonateMoneyToRepDivisor) * person.mults.faction_rep * currentNodeMults.FactionWorkRepGain;
 }
 
@@ -13,18 +13,18 @@ export function repNeededToDonate(): number {
   return Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.RepToDonateToFaction);
 }
 
-export function canDonate(amt: number, player: PlayerObject): boolean {
-  return !isNaN(amt) && amt > 0 && player.money >= amt;
+export function canDonate(amt: number): boolean {
+  return !isNaN(amt) && amt > 0 && Player.money >= amt;
 }
 
 /** Donates money to the faction provided and returns repuation gained */
-export function donate(amt: number, player: PlayerObject, faction: Faction) {
-  if (!canDonate(amt, player)) {
+export function donate(amt: number, faction: Faction) {
+  if (!canDonate(amt)) {
     return 0;
   }
 
-  const repGain = repFromDonation(amt, player);
-  player.loseMoney(amt, "other");
+  const repGain = repFromDonation(amt, Player);
+  Player.loseMoney(amt, "other");
   faction.playerReputation += repGain;
 
   return repGain;

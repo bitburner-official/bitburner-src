@@ -30,7 +30,7 @@ export function DonateOption({ faction, favorToDonate, disabled, rerender }: Don
   const digits = (CONSTANTS.DonateMoneyToRepDivisor + "").length - 1;
 
   function onDonate(): void {
-    const repGain = donate(donateAmt, Player, faction);
+    const repGain = donate(donateAmt, faction);
     if (repGain > 0) {
       dialogBoxCreate(
         <>
@@ -44,7 +44,7 @@ export function DonateOption({ faction, favorToDonate, disabled, rerender }: Don
 
   function Status(): React.ReactElement {
     if (isNaN(donateAmt)) return <></>;
-    if (!canDonate(donateAmt, Player)) {
+    if (!canDonate(donateAmt)) {
       if (Player.money < donateAmt) return <Typography>Insufficient funds</Typography>;
       return <Typography>Invalid donate amount entered!</Typography>;
     }
@@ -70,7 +70,7 @@ export function DonateOption({ faction, favorToDonate, disabled, rerender }: Don
             disabled={disabled}
             InputProps={{
               endAdornment: (
-                <Button onClick={onDonate} disabled={disabled || !canDonate(donateAmt, Player)}>
+                <Button onClick={onDonate} disabled={disabled || !canDonate(donateAmt)}>
                   donate
                 </Button>
               ),
