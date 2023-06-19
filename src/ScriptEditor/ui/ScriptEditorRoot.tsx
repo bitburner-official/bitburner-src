@@ -27,7 +27,6 @@ import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
 import { TextFilePath } from "../../Paths/TextFilePath";
 import { runScript } from "../../Terminal/commands/runScript";
 import { parseCommand } from "../../Terminal/Parser";
-import { Terminal } from "../../Terminal";
 
 import { dirty, getServerCode } from "./utils";
 import { OpenScript } from "./OpenScript";
@@ -68,7 +67,7 @@ function Root(props: ScriptEditorProps): React.ReactElement {
   const rerender = useRerender();
   const editorRef = useRef<IStandaloneCodeEditor | null>(null);
 
-  const { options, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
+  const { isValidScript, options, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
 
   let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
 
@@ -440,11 +439,9 @@ function Root(props: ScriptEditorProps): React.ReactElement {
   }
 
   const onRun = (args: string): void => {
-    if (currentScript) {
+    if (currentScript && isValidScript) {
       const server = GetServer(currentScript.hostname);
       if (server) {
-        Terminal.print(`run ${currentScript.path} ${args}`);
-
         const scriptArgs = parseCommand(args);
         runScript(currentScript.path as ScriptFilePath, scriptArgs, server);
       }

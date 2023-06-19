@@ -12,6 +12,7 @@ import { Options } from "./Options";
 export interface ScriptEditorContextShape {
   ram: string;
   ramEntries: string[][];
+  isValidScript: boolean;
   updateRAM: (newCode: string | null, server: BaseServer | null) => void;
 
   isUpdatingRAM: boolean;
@@ -27,11 +28,13 @@ const ScriptEditorContext = React.createContext({} as ScriptEditorContextShape);
 export function ScriptEditorContextProvider({ children, vim }: { children: React.ReactNode; vim: boolean }) {
   const [ram, setRAM] = useState("RAM: ???");
   const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
+  const [isValidScript, setIsValidScript] = useState(false);
 
   const updateRAM: ScriptEditorContextShape["updateRAM"] = (newCode, server) => {
     if (newCode === null || server === null) {
       setRAM("N/A");
       setRamEntries([["N/A", ""]]);
+      setIsValidScript(false);
       return;
     }
 
@@ -45,9 +48,11 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
 
       setRAM("RAM: " + formatRam(ramUsage.cost));
       setRamEntries(entriesDisp);
+      setIsValidScript(true);
       return;
     }
 
+    setIsValidScript(false);
     if (ramUsage.errorCode !== undefined) {
       setRamEntries([["Syntax Error", ramUsage.errorMessage ?? ""]]);
       switch (ramUsage.errorCode) {
@@ -97,7 +102,17 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
 
   return (
     <ScriptEditorContext.Provider
-      value={{ ram, ramEntries, updateRAM, isUpdatingRAM, startUpdatingRAM, finishUpdatingRAM, options, saveOptions }}
+      value={{
+        ram,
+        ramEntries,
+        isValidScript,
+        updateRAM,
+        isUpdatingRAM,
+        startUpdatingRAM,
+        finishUpdatingRAM,
+        options,
+        saveOptions,
+      }}
     >
       {children}
     </ScriptEditorContext.Provider>

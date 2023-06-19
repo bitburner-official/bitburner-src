@@ -41,7 +41,7 @@ export function Toolbar({
     editor?.getAction("editor.action.formatDocument")?.run();
   }
 
-  const { ram, ramEntries, isUpdatingRAM, options, saveOptions } = useScriptEditorContext();
+  const { ram, ramEntries, isUpdatingRAM, isValidScript, options, saveOptions } = useScriptEditorContext();
 
   const onOptionChange: OptionsModalProps["onOptionChange"] = (option, value) => {
     const newOptions = { ...options, [option]: value };
@@ -69,7 +69,7 @@ export function Toolbar({
           {ram}
         </Button>
         <Button onClick={onSave}>Save (Ctrl/Cmd + s)</Button>
-        <RunScriptButton sx={{ ml: 1 }} onRun={onRun} />
+        <RunScriptButton sx={{ ml: 1 }} onRun={onRun} disabled={!isValidScript} />
         <Button sx={{ mx: 1 }} onClick={() => Router.toPage(Page.Terminal)}>
           Terminal (Ctrl/Cmd + b)
         </Button>
