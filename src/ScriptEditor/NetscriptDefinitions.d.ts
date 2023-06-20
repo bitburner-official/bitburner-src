@@ -5482,7 +5482,7 @@ export interface NS {
    * ns.scp("foo.lit", "home", "helios" );
    *
    * //Tries to copy three files from rothman-uni to home computer:
-   * files = ["foo1.lit", "foo2.txt", "foo3.js"];
+   * const files = ["foo1.lit", "foo2.txt", "foo3.js"];
    * ns.scp(files, "home", "rothman-uni");
    * ```
    * @example
