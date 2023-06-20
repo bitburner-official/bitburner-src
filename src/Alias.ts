@@ -76,6 +76,7 @@ export function substituteAliases(origCommand: string): string {
 
     let somethingSubstituted = true;
     let depth = 0;
+    let lastAlias;
 
     while (somethingSubstituted && depth < 10) {
       depth++;
@@ -88,8 +89,9 @@ export function substituteAliases(origCommand: string): string {
       }
       for (let i = 0; i < commandArray.length; ++i) {
         const alias = GlobalAliases.get(commandArray[i])?.split(" ");
-        if (alias !== undefined) {
+        if (alias !== undefined && (commandArray[i] != lastAlias || somethingSubstituted)) {
           somethingSubstituted = true;
+          lastAlias = commandArray[i];
           commandArray.splice(i, 1, ...alias);
           i += alias.length - 1;
           //commandArray[i] = alias;
