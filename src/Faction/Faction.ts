@@ -12,7 +12,7 @@ export class Faction {
   alreadyInvited = false;
 
   /** Holds names of all augmentations that this Faction offers */
-  augmentations: Set<AugmentationName> = new Set();
+  augmentations: AugmentationName[] = [];
 
   /** Amount of favor the player has with this faction. */
   favor = 0;
@@ -72,9 +72,7 @@ export class Faction {
     const faction = Generic_fromJSON(Faction, value.data);
     // Remove invalid augs from faction. Augs are repopulated with correct augs during any reset.
     const augHelper = getEnumHelper("AugmentationName");
-    faction.augmentations = new Set(
-      Array.from(faction.augmentations.values()).filter((augName) => augHelper.isMember(augName)),
-    );
+    faction.augmentations = faction.augmentations.filter((augName) => augHelper.isMember(augName));
     return faction;
   }
 }

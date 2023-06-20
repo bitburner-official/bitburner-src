@@ -58,7 +58,7 @@ function resetFaction(newFactionObject: Faction): void {
         console.error(`Faction ${factionName} did not exist while adding augs to factions`);
         continue;
       }
-      faction.augmentations.add(aug.name);
+      faction.augmentations.push(aug.name);
     }
   }
 }
