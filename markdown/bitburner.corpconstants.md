@@ -20,6 +20,7 @@ interface CorpConstants
 |  [bribeAmountPerReputation](./bitburner.corpconstants.bribeamountperreputation.md) |  | number |  |
 |  [bribeThreshold](./bitburner.corpconstants.bribethreshold.md) |  | number |  |
 |  [dividendMaxRate](./bitburner.corpconstants.dividendmaxrate.md) |  | number |  |
+|  [employeePositions](./bitburner.corpconstants.employeepositions.md) |  | [CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->\[\] | Names of all employee positions |
 |  [employeeRaiseAmount](./bitburner.corpconstants.employeeraiseamount.md) |  | number |  |
 |  [employeeSalaryMultiplier](./bitburner.corpconstants.employeesalarymultiplier.md) |  | number | Conversion factor for employee stats to initial salary |
 |  [gameCyclesPerCorpStateCycle](./bitburner.corpconstants.gamecyclespercorpstatecycle.md) |  | number |  |
@@ -40,6 +41,7 @@ interface CorpConstants
 |  [secondsPerMarketCycle](./bitburner.corpconstants.secondspermarketcycle.md) |  | number |  |
 |  [sellSharesCooldown](./bitburner.corpconstants.sellsharescooldown.md) |  | number | Cooldown for selling shares in game cycles (1 game cycle = 200ms) |
 |  [sharesPerPriceUpdate](./bitburner.corpconstants.sharesperpriceupdate.md) |  | number | When selling large number of shares, price is dynamically updated for every batch of this amount |
+|  [smartSupplyOptions](./bitburner.corpconstants.smartsupplyoptions.md) |  | [CorpSmartSupplyOption](./bitburner.corpsmartsupplyoption.md)<!-- -->\[\] |  |
 |  [stateNames](./bitburner.corpconstants.statenames.md) |  | [CorpStateName](./bitburner.corpstatename.md)<!-- -->\[\] | Names of all corporation game states |
 |  [teaCostPerEmployee](./bitburner.corpconstants.teacostperemployee.md) |  | number |  |
 |  [unlockNames](./bitburner.corpconstants.unlocknames.md) |  | [CorpUnlockName](./bitburner.corpunlockname.md)<!-- -->\[\] | Names of all one-time corporation-wide unlocks |

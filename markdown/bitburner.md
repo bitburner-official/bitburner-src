@@ -14,8 +14,8 @@
 |  [GymType](./bitburner.gymtype.md) |  |
 |  [JobName](./bitburner.jobname.md) |  |
 |  [LocationName](./bitburner.locationname.md) | Names of all locations |
-|  [OrderTypes](./bitburner.ordertypes.md) |  |
-|  [PositionTypes](./bitburner.positiontypes.md) |  |
+|  [OrderType](./bitburner.ordertype.md) |  |
+|  [PositionType](./bitburner.positiontype.md) |  |
 |  [ToastVariant](./bitburner.toastvariant.md) |  |
 |  [UniversityClassType](./bitburner.universityclasstype.md) |  |
 
@@ -118,6 +118,7 @@
 |  [CorpIndustryName](./bitburner.corpindustryname.md) |  |
 |  [CorpMaterialName](./bitburner.corpmaterialname.md) |  |
 |  [CorpResearchName](./bitburner.corpresearchname.md) |  |
+|  [CorpSmartSupplyOption](./bitburner.corpsmartsupplyoption.md) |  |
 |  [CorpStateName](./bitburner.corpstatename.md) |  |
 |  [CorpUnlockName](./bitburner.corpunlockname.md) |  |
 |  [CorpUpgradeName](./bitburner.corpupgradename.md) |  |
