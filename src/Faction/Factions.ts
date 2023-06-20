@@ -37,18 +37,6 @@ export function initFactions(): void {
   for (const name of Object.keys(FactionInfos)) {
     resetFaction(new Faction(name));
   }
-}
-
-//Resets a faction during (re-)initialization. Saves the favor in the new
-//Faction object and deletes the old Faction Object from "Factions". Then
-//reinserts the new Faction object
-function resetFaction(newFactionObject: Faction): void {
-  const factionName: string = newFactionObject.name;
-  if (factionExists(factionName)) {
-    newFactionObject.favor = Factions[factionName].favor;
-    delete Factions[factionName];
-  }
-  AddToFactions(newFactionObject);
   // All factions are added, this is a good place to add augs back to factions.
   initCircadianModulator();
   for (const aug of getRecordValues(Augmentations)) {
@@ -61,4 +49,16 @@ function resetFaction(newFactionObject: Faction): void {
       faction.augmentations.push(aug.name);
     }
   }
+}
+
+//Resets a faction during (re-)initialization. Saves the favor in the new
+//Faction object and deletes the old Faction Object from "Factions". Then
+//reinserts the new Faction object
+function resetFaction(newFactionObject: Faction): void {
+  const factionName: string = newFactionObject.name;
+  if (factionExists(factionName)) {
+    newFactionObject.favor = Factions[factionName].favor;
+    delete Factions[factionName];
+  }
+  AddToFactions(newFactionObject);
 }

@@ -70,9 +70,12 @@ export class Faction {
   /** Initializes a Faction object from a JSON save state. */
   static fromJSON(value: IReviverValue): Faction {
     const faction = Generic_fromJSON(Faction, value.data);
+    if (!Array.isArray(faction.augmentations)) faction.augmentations = [];
     // Remove invalid augs from faction. Augs are repopulated with correct augs during any reset.
     const augHelper = getEnumHelper("AugmentationName");
     faction.augmentations = faction.augmentations.filter((augName) => augHelper.isMember(augName));
+    // Fix broken saves, this will soon be removed when better fix is implemented
+    faction.augmentations = [...new Set(faction.augmentations)];
     return faction;
   }
 }
