@@ -153,7 +153,7 @@ export const getFactionAugmentationsFiltered = (faction: Faction): AugmentationN
         return true;
       }
       // Keep all the ones that this faction has anyway.
-      if (faction.augmentations.includes(a.name)) {
+      if (faction.augmentations.has(a.name)) {
         return true;
       }
 
@@ -164,5 +164,5 @@ export const getFactionAugmentationsFiltered = (faction: Faction): AugmentationN
     return augs.map((a) => a.name);
   }
 
-  return faction.augmentations.slice();
+  return Array.from(faction.augmentations);
 };
