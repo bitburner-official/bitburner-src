@@ -401,6 +401,4 @@ function BladeburnerUI({ bladeburner }: { bladeburner: Bladeburner }): React.Rea
   );
 }
 
-const BladeburnerWrapper = () => (Player.bladeburner ? <BladeburnerUI bladeburner={Player.bladeburner} /> : <></>);
-
-export { BladeburnerWrapper as Bladeburner };
+export { BladeburnerUI as Bladeburner };

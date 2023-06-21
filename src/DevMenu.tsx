@@ -41,7 +41,7 @@ export function DevMenuRoot(): React.ReactElement {
       <Servers />
       <Companies />
 
-      {Player.bladeburner && <BladeburnerElem />}
+      {Player.bladeburner && <BladeburnerElem bladeburner={Player.bladeburner} />}
 
       {Player.gang && <Gang />}
 
