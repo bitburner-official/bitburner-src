@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { find } from "lodash";
 
 import { Box, Typography, Button, Container, Paper } from "@mui/material";
@@ -33,8 +33,9 @@ export function ProgramsRoot(): React.ReactElement {
       return (a.create?.level ?? 0) - (b.create?.level ?? 0);
     });
 
+  const programsRef = useRef(programs);
   useEffect(() => {
-    programs.forEach((p) => {
+    programsRef.current.forEach((p) => {
       if (ProgramsSeen.includes(p.name)) return;
       ProgramsSeen.push(p.name);
     });

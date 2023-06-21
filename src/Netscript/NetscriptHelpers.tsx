@@ -801,5 +801,5 @@ let customElementKey = 0;
  * so the game won't crash and the user gets sensible messages.
  */
 export function wrapUserNode(value: unknown) {
-  return <CustomBoundary key={`PlayerContent${customElementKey++}`} children={value as React.ReactNode} />;
+  return <CustomBoundary key={`PlayerContent${customElementKey++}`}>{value}</CustomBoundary>;
 }

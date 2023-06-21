@@ -18,13 +18,11 @@ import { Player } from "@player";
 import { CityName } from "@enums";
 import { Skills as AllSkills } from "../../Bladeburner/Skills";
 import { SkillNames } from "../../Bladeburner/data/SkillNames";
+import { Bladeburner } from "../../Bladeburner/Bladeburner";
 
 const bigNumber = 1e27;
 
-export function Bladeburner(): React.ReactElement {
-  if (!Player.bladeburner) return <></>;
-  const bladeburner = Player.bladeburner;
-
+function BladeburnerUI({ bladeburner }: { bladeburner: Bladeburner }): React.ReactElement {
   // Rank functions
   const modifyBladeburnerRank = (modify: number) => (rank: number) => bladeburner.changeRank(Player, rank * modify);
   const resetBladeburnerRank = () => {
@@ -402,3 +400,7 @@ export function Bladeburner(): React.ReactElement {
     </Accordion>
   );
 }
+
+const BladeburnerWrapper = () => (Player.bladeburner ? <BladeburnerUI bladeburner={Player.bladeburner} /> : <></>);
+
+export { BladeburnerWrapper as Bladeburner };

@@ -52,7 +52,7 @@ const AugPreReqsChecklist = (props: IProps): React.ReactElement => {
       <b>Pre-Requisites:</b>
       <br />
       {aug.prereqs.map((preAug) => (
-        <span style={{ display: "flex", alignItems: "center" }}>
+        <span key={preAug} style={{ display: "flex", alignItems: "center" }}>
           {Player.hasAugmentation(preAug) ? <CheckBox sx={{ mr: 1 }} /> : <CheckBoxOutlineBlank sx={{ mr: 1 }} />}
           {preAug}
         </span>

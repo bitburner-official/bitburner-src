@@ -151,9 +151,9 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
       <br />
       <StatsTable
         rows={[
-          ["Revenue:", <MoneyRate money={division.lastCycleRevenue} />],
-          ["Expenses:", <MoneyRate money={division.lastCycleExpenses} />],
-          ["Profit:", <MoneyRate money={profit} />],
+          ["Revenue:", <MoneyRate key="revenue" money={division.lastCycleRevenue} />],
+          ["Expenses:", <MoneyRate key="expenses" money={division.lastCycleExpenses} />],
+          ["Profit:", <MoneyRate key="profit" money={profit} />],
         ]}
       />
       <br />

@@ -4,7 +4,7 @@ function replace(str: string, i: number, char: string): string {
   return str.substring(0, i) + char + str.substring(i + 1);
 }
 
-interface IProps {
+interface CorruptableTextProps {
   content: string;
 }
 
@@ -20,7 +20,7 @@ function randomize(char: string): string {
   return randFrom(other);
 }
 
-export function CorruptableText(props: IProps): JSX.Element {
+export function CorruptableText(props: CorruptableTextProps): JSX.Element {
   const [content, setContent] = useState(props.content);
 
   useEffect(() => {
@@ -30,8 +30,8 @@ export function CorruptableText(props: IProps): JSX.Element {
       counter--;
       if (counter > 0) return;
       counter = Math.random() * 5;
-      const index = Math.random() * content.length;
-      const letter = content.charAt(index);
+      const index = Math.random() * props.content.length;
+      const letter = props.content.charAt(index);
       setContent((content) => replace(content, index, randomize(letter)));
       timers.push(
         window.setTimeout(() => {
@@ -44,7 +44,7 @@ export function CorruptableText(props: IProps): JSX.Element {
       clearInterval(intervalId);
       timers.forEach((timerId) => clearTimeout(timerId));
     };
-  }, []);
+  }, [props.content]);
 
   return <span>{content}</span>;
 }

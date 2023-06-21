@@ -60,12 +60,12 @@ const lineClass = (classes: Record<string, string>, s: string): string => {
   return lineClassMap[s] || classes.primary;
 };
 
-interface IProps {
+type ANSIITypographyProps = {
   text: unknown;
   color: "primary" | "error" | "success" | "info" | "warn";
-}
+};
 
-export const ANSIITypography = React.memo((props: IProps): React.ReactElement => {
+export const ANSIITypography = React.memo(function ANSIITypography(props: ANSIITypographyProps): React.ReactElement {
   const text = String(props.text);
   const classes = useStyles();
   const parts = [];

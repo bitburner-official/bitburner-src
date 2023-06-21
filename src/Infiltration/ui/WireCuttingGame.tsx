@@ -1,5 +1,6 @@
+import React, { useEffect, useState, useRef } from "react";
+
 import { Box, Paper, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
@@ -51,49 +52,50 @@ interface Question {
   shouldCut: (wire: Wire, index: number) => boolean;
 }
 
-export function WireCuttingGame(props: IMinigameProps): React.ReactElement {
+export function WireCuttingGame({ onSuccess, onFailure, ...otherProps }: IMinigameProps): React.ReactElement {
   const difficulty: Difficulty = {
     timer: 0,
     wiresmin: 0,
     wiresmax: 0,
     rules: 0,
   };
-  interpolate(difficulties, props.difficulty, difficulty);
+  interpolate(difficulties, otherProps.difficulty, difficulty);
   const timer = difficulty.timer;
-  const [wires] = useState(generateWires(difficulty));
-  const [cutWires, setCutWires] = useState(new Array(wires.length).fill(false));
-  const [questions] = useState(generateQuestion(wires, difficulty));
-  const hasAugment = Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true);
+  const wiresRef = useRef(generateWires(difficulty));
+  const questionsRef = useRef(generateQuestion(wiresRef.current, difficulty));
 
-  function checkWire(wireNum: number): boolean {
-    return questions.some((q) => q.shouldCut(wires[wireNum - 1], wireNum - 1));
-  }
+  const [cutWires, setCutWires] = useState(new Array(wiresRef.current.length).fill(false));
+  const hasAugment = Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true);
 
   useEffect(() => {
     // check if we won
     const wiresToBeCut = [];
-    for (let j = 0; j < wires.length; j++) {
+    for (let j = 0; j < wiresRef.current.length; j++) {
       let shouldBeCut = false;
-      for (let i = 0; i < questions.length; i++) {
-        shouldBeCut = shouldBeCut || questions[i].shouldCut(wires[j], j);
+      for (let i = 0; i < questionsRef.current.length; i++) {
+        shouldBeCut = shouldBeCut || questionsRef.current[i].shouldCut(wiresRef.current[j], j);
       }
       wiresToBeCut.push(shouldBeCut);
     }
     if (wiresToBeCut.every((b, i) => b === cutWires[i])) {
-      props.onSuccess();
+      onSuccess();
     }
-  }, [cutWires]);
+  }, [cutWires, onSuccess]);
+
+  function checkWire(wireNum: number): boolean {
+    return questionsRef.current.some((q) => q.shouldCut(wiresRef.current[wireNum - 1], wireNum - 1));
+  }
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();
     const wireNum = parseInt(event.key);
 
-    if (wireNum < 1 || wireNum > wires.length || isNaN(wireNum)) return;
+    if (wireNum < 1 || wireNum > wiresRef.current.length || isNaN(wireNum)) return;
     setCutWires((old) => {
       const next = [...old];
       next[wireNum - 1] = true;
       if (!checkWire(wireNum)) {
-        props.onFailure();
+        onFailure();
       }
 
       return next;
@@ -102,23 +104,23 @@ export function WireCuttingGame(props: IMinigameProps): React.ReactElement {
 
   return (
     <>
-      <GameTimer millis={timer} onExpire={props.onFailure} />
+      <GameTimer millis={timer} onExpire={onFailure} />
       <Paper sx={{ display: "grid", justifyItems: "center", pb: 1 }}>
         <Typography variant="h4" sx={{ width: "75%", textAlign: "center" }}>
           Cut the wires with the following properties! (keyboard 1 to 9)
         </Typography>
-        {questions.map((question, i) => (
+        {questionsRef.current.map((question, i) => (
           <Typography key={i}>{question.toString()}</Typography>
         ))}
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: `repeat(${wires.length}, 1fr)`,
+            gridTemplateColumns: `repeat(${wiresRef.current.length}, 1fr)`,
             columnGap: 3,
             justifyItems: "center",
           }}
         >
-          {new Array(wires.length).fill(0).map((_, i) => {
+          {Array.from({ length: wiresRef.current.length }).map((_, i) => {
             const isCorrectWire = checkWire(i + 1);
             const color = hasAugment && !isCorrectWire ? Settings.theme.disabled : Settings.theme.primary;
             return (
@@ -129,7 +131,7 @@ export function WireCuttingGame(props: IMinigameProps): React.ReactElement {
           })}
           {new Array(8).fill(0).map((_, i) => (
             <React.Fragment key={i}>
-              {wires.map((wire, j) => {
+              {wiresRef.current.map((wire, j) => {
                 if ((i === 3 || i === 4) && cutWires[j]) {
                   return <Typography key={j}></Typography>;
                 }
@@ -145,7 +147,7 @@ export function WireCuttingGame(props: IMinigameProps): React.ReactElement {
             </React.Fragment>
           ))}
         </Box>
-        <KeyHandler onKeyDown={press} onFailure={props.onFailure} />
+        <KeyHandler onKeyDown={press} onFailure={onFailure} />
       </Paper>
     </>
   );

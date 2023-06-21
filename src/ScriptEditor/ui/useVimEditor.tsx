@@ -23,6 +23,9 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
 
   const vimStatusRef = useRef<HTMLElement>(null);
 
+  const actionsRef = useRef({ save: onSave, openNextTab: onOpenNextTab, openPreviousTab: onOpenPreviousTab });
+  actionsRef.current = { save: onSave, openNextTab: onOpenNextTab, openPreviousTab: onOpenPreviousTab };
+
   useEffect(() => {
     // setup monaco-vim
     if (vim && editor && !vimEditor) {
@@ -31,14 +34,14 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
         setVimEditor(MonacoVim.initVimMode(editor, vimStatusRef.current));
         MonacoVim.VimMode.Vim.defineEx("write", "w", function () {
           // your own implementation on what you want to do when :w is pressed
-          onSave();
+          actionsRef.current.save();
         });
         MonacoVim.VimMode.Vim.defineEx("quit", "q", function () {
           Router.toPage(Page.Terminal);
         });
 
         const saveNQuit = (): void => {
-          onSave();
+          actionsRef.current.save();
           Router.toPage(Page.Terminal);
         };
         // "wqriteandquit" &  "xriteandquit" are not typos, prefix must be found in full string
@@ -48,10 +51,10 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
         // Setup "go to next tab" and "go to previous tab". This is a little more involved
         // since these aren't Ex commands (they run in normal mode, not after typing `:`)
         MonacoVim.VimMode.Vim.defineAction("nextTabs", function (_cm: any, { repeat = 1 }: { repeat?: number }) {
-          onOpenNextTab(repeat);
+          actionsRef.current.openNextTab(repeat);
         });
         MonacoVim.VimMode.Vim.defineAction("prevTabs", function (_cm: any, { repeat = 1 }: { repeat?: number }) {
-          onOpenPreviousTab(repeat);
+          actionsRef.current.openPreviousTab(repeat);
         });
         MonacoVim.VimMode.Vim.mapCommand("gt", "action", "nextTabs", {}, { context: "normal" });
         MonacoVim.VimMode.Vim.mapCommand("gT", "action", "prevTabs", {}, { context: "normal" });

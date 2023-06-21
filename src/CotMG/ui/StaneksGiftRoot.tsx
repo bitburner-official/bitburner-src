@@ -19,7 +19,7 @@ interface IProps {
 
 export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
   const rerender = useRerender();
-  useEffect(() => StaneksGiftEvents.subscribe(rerender), []);
+  useEffect(() => StaneksGiftEvents.subscribe(rerender), [rerender]);
   return (
     <Container maxWidth="lg" disableGutters sx={{ mx: 0 }}>
       <Typography variant="h4">

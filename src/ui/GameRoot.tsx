@@ -141,7 +141,7 @@ export function GameRoot(): React.ReactElement {
 
   useEffect(() => {
     return ITutorialEvents.subscribe(rerender);
-  }, []);
+  }, [rerender]);
 
   function killAllScripts(): void {
     for (const server of GetAllServers()) {

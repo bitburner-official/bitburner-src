@@ -13,7 +13,7 @@ import {
 } from "../../../ui/formatNumber";
 import { Settings } from "../../../Settings/Settings";
 import { StatsRow } from "../../../ui/React/StatsRow";
-import { characterOverviewStyles as useStyles } from "../../../ui/React/CharacterOverview";
+import { useStyles as useStyles } from "../../../ui/React/CharacterOverview";
 import { Money } from "../../../ui/React/Money";
 import { MoneyRate } from "../../../ui/React/MoneyRate";
 import { ReputationRate } from "../../../ui/React/ReputationRate";
@@ -106,7 +106,7 @@ export function EarningsElement(props: IProps): React.ReactElement {
   if (isSleeveCrimeWork(props.sleeve.currentWork)) {
     const gains = props.sleeve.currentWork.getExp(props.sleeve);
     data = [
-      [`Money:`, <Money money={gains.money} />],
+      [`Money:`, <Money key="money" money={gains.money} />],
       [`Hacking Exp:`, `${formatExp(gains.hackExp)}`],
       [`Strength Exp:`, `${formatExp(gains.strExp)}`],
       [`Defense Exp:`, `${formatExp(gains.defExp)}`],
@@ -118,7 +118,7 @@ export function EarningsElement(props: IProps): React.ReactElement {
   if (isSleeveClassWork(props.sleeve.currentWork)) {
     const rates = props.sleeve.currentWork.calculateRates(props.sleeve);
     data = [
-      [`Money:`, <MoneyRate money={CYCLES_PER_SEC * rates.money} />],
+      [`Money:`, <MoneyRate key="money-rate" money={CYCLES_PER_SEC * rates.money} />],
       [`Hacking Exp:`, `${formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
       [`Strength Exp:`, `${formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
       [`Defense Exp:`, `${formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
@@ -137,21 +137,21 @@ export function EarningsElement(props: IProps): React.ReactElement {
       [`Dexterity Exp:`, `${formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
       [`Agility Exp:`, `${formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
       [`Charisma Exp:`, `${formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
-      [`Reputation:`, <ReputationRate reputation={CYCLES_PER_SEC * repGain} />],
+      [`Reputation:`, <ReputationRate key="reputation" reputation={CYCLES_PER_SEC * repGain} />],
     ];
   }
 
   if (isSleeveCompanyWork(props.sleeve.currentWork)) {
     const rates = props.sleeve.currentWork.getGainRates(props.sleeve);
     data = [
-      [`Money:`, <MoneyRate money={CYCLES_PER_SEC * rates.money} />],
+      [`Money:`, <MoneyRate key="money-rate" money={CYCLES_PER_SEC * rates.money} />],
       [`Hacking Exp:`, `${formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
       [`Strength Exp:`, `${formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
       [`Defense Exp:`, `${formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
       [`Dexterity Exp:`, `${formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
       [`Agility Exp:`, `${formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
       [`Charisma Exp:`, `${formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
-      [`Reputation:`, <ReputationRate reputation={CYCLES_PER_SEC * rates.reputation} />],
+      [`Reputation:`, <ReputationRate key="reputation-rate" reputation={CYCLES_PER_SEC * rates.reputation} />],
     ];
   }
 

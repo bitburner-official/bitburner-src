@@ -541,6 +541,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <a
             href="https://bitburner-official.readthedocs.io/en/latest/guidesandtips/gettingstartedguideforbeginnerprogrammers.html"
             target="_blank"
+            rel="noreferrer"
           >
             Getting Started
           </a>{" "}
@@ -560,7 +561,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
 
   useEffect(() => {
     return ITutorialEvents.subscribe(rerender);
-  }, []);
+  }, [rerender]);
+
   const step = ITutorial.currStep;
   const content = contents[step];
   if (content === undefined) throw new Error("error in the tutorial");

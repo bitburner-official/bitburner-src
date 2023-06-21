@@ -1,5 +1,5 @@
 import { Box, Paper, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { KEY } from "../../utils/helpers/keyCodes";
@@ -28,6 +28,7 @@ const difficulties: {
 export function SlashGame(props: IMinigameProps): React.ReactElement {
   const difficulty: Difficulty = { window: 0 };
   interpolate(difficulties, props.difficulty, difficulty);
+
   const [phase, setPhase] = useState(0);
 
   function press(this: Document, event: KeyboardEvent): void {
@@ -39,24 +40,27 @@ export function SlashGame(props: IMinigameProps): React.ReactElement {
       props.onSuccess();
     }
   }
-  const hasAugment = Player.hasAugmentation(AugmentationName.MightOfAres, true);
-  const guardingTime = Math.random() * 3250 + 1500 - (250 + difficulty.window);
-  const preparingTime = difficulty.window;
-  const attackingTime = 250;
+
+  const guardingTimeRef = useRef(Math.random() * 3250 + 1500 - (250 + difficulty.window));
 
   useEffect(() => {
+    const preparingTime = difficulty.window;
+    const attackingTime = 250;
+
     let id = window.setTimeout(() => {
       setPhase(1);
       id = window.setTimeout(() => {
         setPhase(2);
         id = window.setTimeout(() => props.onFailure(), attackingTime);
       }, preparingTime);
-    }, guardingTime);
+    }, guardingTimeRef.current);
+
     return () => {
       clearInterval(id);
     };
-  }, []);
+  }, [difficulty.window, props]);
 
+  const hasAugment = Player.hasAugmentation(AugmentationName.MightOfAres, true);
   return (
     <>
       <GameTimer millis={5000} onExpire={props.onFailure} />
@@ -66,7 +70,7 @@ export function SlashGame(props: IMinigameProps): React.ReactElement {
         {hasAugment ? (
           <Box sx={{ my: 1 }}>
             <Typography variant="h5">Guard will drop in...</Typography>
-            <GameTimer millis={guardingTime} onExpire={() => null} ignoreAugment_WKSharmonizer noPaper />
+            <GameTimer millis={guardingTimeRef.current} onExpire={() => null} ignoreAugment_WKSharmonizer noPaper />
           </Box>
         ) : (
           <></>

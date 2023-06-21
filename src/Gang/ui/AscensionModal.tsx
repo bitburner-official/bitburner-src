@@ -1,31 +1,28 @@
-/**
- * React Component for the content of the popup before the player confirms the
- * ascension of a gang member.
- */
-import React, { useState, useEffect } from "react";
+import React from "react";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+
 import { GangMember } from "../GangMember";
 import { formatPreciseMultiplier, formatRespect } from "../../ui/formatNumber";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { Modal } from "../../ui/React/Modal";
 import { useGang } from "./Context";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { useRerender } from "../../ui/React/hooks";
 
-interface IProps {
+type AscensionModalProps = {
   open: boolean;
   onClose: () => void;
   member: GangMember;
   onAscend: () => void;
-}
+};
 
-export function AscensionModal(props: IProps): React.ReactElement {
+/**
+ * React Component for the content of the popup before the player confirms the
+ * ascension of a gang member.
+ */
+export function AscensionModal(props: AscensionModalProps): React.ReactElement {
   const gang = useGang();
-  const setRerender = useState(false)[1];
-
-  useEffect(() => {
-    const id = setInterval(() => setRerender((old) => !old), 1000);
-    return () => clearInterval(id);
-  }, []);
+  useRerender(1000);
 
   function confirm(): void {
     props.onAscend();

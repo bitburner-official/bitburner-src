@@ -13,31 +13,34 @@ interface EditorProps {
   onChange: (newCode?: string) => void;
 }
 
-export function Editor({ beforeMount, onMount, onChange }: EditorProps) {
+export function Editor(props: EditorProps) {
   const containerDiv = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const subscription = useRef<monaco.IDisposable | null>(null);
 
   const { options } = useScriptEditorContext();
 
+  const propsRef = useRef(props);
+  const initialOptionsRef = useRef(options);
+
   useEffect(() => {
     if (!containerDiv.current) return;
     // Before initializing monaco editor
-    beforeMount();
+    propsRef.current.beforeMount();
 
     // Initialize monaco editor
     editorRef.current = monaco.editor.create(containerDiv.current, {
       value: "",
       automaticLayout: true,
       language: "javascript",
-      ...options,
+      ...initialOptionsRef.current,
       glyphMargin: true,
     });
 
     // After initializing monaco editor
-    onMount(editorRef.current);
+    propsRef.current.onMount(editorRef.current);
     subscription.current = editorRef.current.onDidChangeModelContent(() => {
-      onChange(editorRef.current?.getValue());
+      propsRef.current.onChange(editorRef.current?.getValue());
     });
 
     // Unmounting

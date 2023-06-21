@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Draggable, { DraggableEventHandler } from "react-draggable";
 import makeStyles from "@mui/styles/makeStyles";
 import Collapse from "@mui/material/Collapse";
@@ -82,8 +82,25 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
     Settings.overview = { x, y, opened: open };
   }, [open, x, y]);
 
+  const fakeDrag = useMemo(
+    () =>
+      debounce((): void => {
+        const node = draggableRef.current;
+        if (!node) return;
+
+        // No official way to trigger an onChange to recompute the bounds
+        // See: https://github.com/react-grid-layout/react-draggable/issues/363#issuecomment-947751127
+        triggerMouseEvent(node, "mouseover");
+        triggerMouseEvent(node, "mousedown");
+        triggerMouseEvent(document, "mousemove");
+        triggerMouseEvent(node, "mouseup");
+        triggerMouseEvent(node, "click");
+      }, 100),
+    [],
+  );
+
   // Trigger fakeDrag once to make sure loaded data is not outside bounds
-  useEffect(() => fakeDrag(), []);
+  useEffect(() => fakeDrag(), [fakeDrag]);
 
   // And trigger fakeDrag when the window is resized
   useEffect(() => {
@@ -91,20 +108,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
     return () => {
       window.removeEventListener("resize", fakeDrag);
     };
-  }, []);
-
-  const fakeDrag = debounce((): void => {
-    const node = draggableRef.current;
-    if (!node) return;
-
-    // No official way to trigger an onChange to recompute the bounds
-    // See: https://github.com/react-grid-layout/react-draggable/issues/363#issuecomment-947751127
-    triggerMouseEvent(node, "mouseover");
-    triggerMouseEvent(node, "mousedown");
-    triggerMouseEvent(document, "mousemove");
-    triggerMouseEvent(node, "mouseup");
-    triggerMouseEvent(node, "click");
-  }, 100);
+  }, [fakeDrag]);
 
   const triggerMouseEvent = (node: HTMLDivElement | Document, eventType: string): void => {
     const clickEvent = document.createEvent("MouseEvents");

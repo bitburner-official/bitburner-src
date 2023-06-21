@@ -1,7 +1,7 @@
 import * as React from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import { TableCell, Tooltip, Typography } from "@mui/material";
-import { characterOverviewStyles } from "./CharacterOverview";
+import { useStyles } from "./CharacterOverview";
 import { ISkillProgress } from "../../PersonObjects/formulas/skill";
 import { formatExp } from "../formatNumber";
 
@@ -54,7 +54,7 @@ export function StatsProgressBar({
 }
 
 export function StatsProgressOverviewCell({ progress: skill, color }: IStatsOverviewCellProps): React.ReactElement {
-  const classes = characterOverviewStyles();
+  const classes = useStyles();
   return (
     <TableCell
       component="th"
