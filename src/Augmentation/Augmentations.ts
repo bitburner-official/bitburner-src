@@ -1110,7 +1110,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "monitors and regulates all aspects of the human body, essentially 'governing' the body. " +
         "By doing so, it improves the users performance for most actions.",
       stats:
-        "This special augmentation can be leveled up infinitely. Each level of this augmentation increases MOST multipliers by 1% (+{(donationBonus * 100).toFixed(6)}%), stacking multiplicatively.",
+        `This special augmentation can be leveled up infinitely. Each level of this augmentation increases MOST multipliers by 1% (+${(donationBonus * 100).toFixed(6)}%), stacking multiplicatively.`,
       isSpecial: true,
       hacking_chance: 1.01 + donationBonus,
       hacking_speed: 1.01 + donationBonus,
