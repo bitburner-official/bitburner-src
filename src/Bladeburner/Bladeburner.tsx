@@ -23,7 +23,7 @@ import { BladeburnerConstants } from "./data/Constants";
 import { formatExp, formatMoney, formatPercent, formatBigNumber, formatStamina } from "../ui/formatNumber";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { addOffset } from "../utils/helpers/addOffset";
-import { Factions, factionExists } from "../Faction/Factions";
+import { Factions } from "../Faction/Factions";
 import { calculateHospitalizationCost } from "../Hospital/Hospital";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Settings } from "../Settings/Settings";
@@ -1608,18 +1608,11 @@ export class Bladeburner {
     this.maxRank = Math.max(this.rank, this.maxRank);
 
     const bladeburnersFactionName = FactionName.Bladeburners;
-    if (factionExists(bladeburnersFactionName)) {
-      const bladeburnerFac = Factions[bladeburnersFactionName];
-      if (!bladeburnerFac) {
-        throw new Error(
-          `Could not properly get ${FactionName.Bladeburners} Faction object in ${FactionName.Bladeburners} UI Overview Faction button`,
-        );
-      }
-      if (bladeburnerFac.isMember) {
-        const favorBonus = 1 + bladeburnerFac.favor / 100;
-        bladeburnerFac.playerReputation +=
-          BladeburnerConstants.RankToFactionRepFactor * change * person.mults.faction_rep * favorBonus;
-      }
+    const bladeburnerFac = Factions[bladeburnersFactionName];
+    if (bladeburnerFac.isMember) {
+      const favorBonus = 1 + bladeburnerFac.favor / 100;
+      bladeburnerFac.playerReputation +=
+        BladeburnerConstants.RankToFactionRepFactor * change * person.mults.faction_rep * favorBonus;
     }
 
     // Gain skill points

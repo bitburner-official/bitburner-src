@@ -23,9 +23,10 @@ import { GangMember } from "./GangMember";
 import { WorkerScript } from "../Netscript/WorkerScript";
 import { Player } from "@player";
 import { PowerMultiplier } from "./data/power";
+import { FactionName } from "@enums";
 
 export class Gang {
-  facName: string;
+  facName: FactionName;
   members: GangMember[];
   wanted: number;
   respect: number;
@@ -48,7 +49,7 @@ export class Gang {
 
   notifyMemberDeath: boolean;
 
-  constructor(facName = "", hacking = false) {
+  constructor(facName = FactionName.SlumSnakes, hacking = false) {
     this.facName = facName;
     this.members = [];
     this.wanted = 1;

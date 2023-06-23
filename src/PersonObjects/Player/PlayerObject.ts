@@ -17,7 +17,7 @@ import * as serverMethods from "./PlayerObjectServerMethods";
 import * as workMethods from "./PlayerObjectWorkMethods";
 
 import { setPlayer } from "../../Player";
-import { LocationName } from "@enums";
+import { FactionName, LocationName } from "@enums";
 import { HashManager } from "../../Hacknet/HashManager";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
@@ -35,8 +35,8 @@ export class PlayerObject extends Person implements IPlayer {
   gang: Gang | null = null;
   bladeburner: Bladeburner | null = null;
   currentServer = "";
-  factions: string[] = [];
-  factionInvitations: string[] = [];
+  factions: FactionName[] = [];
+  factionInvitations: FactionName[] = [];
   hacknetNodes: (HacknetNode | string)[] = []; // HacknetNode object or hostname of Hacknet Server
   has4SData = false;
   has4SDataTixApi = false;

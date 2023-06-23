@@ -1,11 +1,13 @@
-import { Box, Button, MenuItem, Paper, Select, SelectChangeEvent, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { Box, Button, MenuItem, Paper, Select, SelectChangeEvent, Typography } from "@mui/material";
+
+import { Player } from "@player";
 import { FactionName } from "@enums";
+
 import { inviteToFaction } from "../../Faction/FactionHelpers";
 import { Factions } from "../../Faction/Factions";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
 import { Reputation } from "../../ui/React/Reputation";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
@@ -14,6 +16,7 @@ import {
   calculateSellInformationCashReward,
   calculateTradeInformationRepReward,
 } from "../formulas/victory";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 interface IProps {
   StartingDifficulty: number;
@@ -23,7 +26,7 @@ interface IProps {
 }
 
 export function Victory(props: IProps): React.ReactElement {
-  const [faction, setFaction] = useState("none");
+  const [factionName, setFactionName] = useState("none");
 
   function quitInfiltration(): void {
     handleInfiltrators();
@@ -43,13 +46,13 @@ export function Victory(props: IProps): React.ReactElement {
   }
 
   function trade(): void {
-    if (faction === "none") return;
-    Factions[faction].playerReputation += repGain;
+    if (!getEnumHelper("FactionName").isMember(factionName)) return;
+    Factions[factionName].playerReputation += repGain;
     quitInfiltration();
   }
 
   function changeDropdown(event: SelectChangeEvent): void {
-    setFaction(event.target.value);
+    setFactionName(event.target.value);
   }
 
   function handleInfiltrators(): void {
@@ -75,7 +78,7 @@ export function Victory(props: IProps): React.ReactElement {
       </Typography>
       <Box sx={{ width: "fit-content" }}>
         <Box sx={{ width: "100%" }}>
-          <Select value={faction} onChange={changeDropdown} sx={{ mr: 1 }}>
+          <Select value={factionName} onChange={changeDropdown} sx={{ mr: 1 }}>
             <MenuItem key={"none"} value={"none"}>
               {"none"}
             </MenuItem>

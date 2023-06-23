@@ -1,4 +1,4 @@
-import type { AugmentationName } from "@enums";
+import { AugmentationName, FactionName } from "@enums";
 import { FactionInfo, FactionInfos } from "./FactionInfo";
 import { favorToRep, repToFavor } from "./formulas/favor";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
@@ -24,12 +24,12 @@ export class Faction {
   isMember = false;
 
   /** Name of faction */
-  name = "";
+  name: FactionName;
 
   /** Amount of reputation player has with this faction */
   playerReputation = 0;
 
-  constructor(name = "") {
+  constructor(name = FactionName.Sector12) {
     this.name = name;
   }
 
@@ -44,11 +44,17 @@ export class Faction {
     return info;
   }
 
+  /** Reset favor and reputation after a source file prestige */
+  resetFavor() {
+    this.favor = 0;
+    this.playerReputation = 0;
+  }
+
+  /** Apply favor and reset reputation after an aug install */
   gainFavor(): void {
-    if (this.favor == null) {
-      this.favor = 0;
-    }
+    if (this.favor == null) this.favor = 0;
     this.favor += this.getFavorGain();
+    this.playerReputation = 0;
   }
 
   //Returns an array with [How much favor would be gained, how much rep would be left over]

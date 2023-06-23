@@ -1,17 +1,17 @@
+import type { FactionName } from "@enums";
+
 import React, { useState } from "react";
+import { Box, Button, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+
+import { Player } from "@player";
 import { Factions } from "../../../Faction/Factions";
 import * as corpConstants from "../../data/Constants";
 import { formatReputation } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
-import { Player } from "@player";
 import { useCorporation } from "../Context";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
 import { NumberInput } from "../../../ui/React/NumberInput";
-import Box from "@mui/material/Box";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { getEnumHelper } from "../../../utils/EnumHelper";
 
 interface IProps {
   open: boolean;
@@ -19,7 +19,7 @@ interface IProps {
 }
 
 export function BribeFactionModal(props: IProps): React.ReactElement {
-  const factions = Player.factions.filter((name: string) => {
+  const factions = Player.factions.filter((name) => {
     const info = Factions[name].getInfo();
     if (!info.offersWork()) return false;
     if (Player.hasGangWith(name)) return false;
@@ -27,10 +27,11 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
   });
   const corp = useCorporation();
   const [money, setMoney] = useState<number>(NaN);
-  const [selectedFaction, setSelectedFaction] = useState(factions.length > 0 ? factions[0] : "");
+  const [selectedFaction, setSelectedFaction] = useState<FactionName | "">(factions.length > 0 ? factions[0] : "");
   const disabled = money === 0 || isNaN(money) || money < 0 || corp.funds < money;
 
   function changeFaction(event: SelectChangeEvent): void {
+    if (!getEnumHelper("FactionName").isMember(event.target.value)) return;
     setSelectedFaction(event.target.value);
   }
 
@@ -52,6 +53,7 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
   }
 
   function bribe(money: number): void {
+    if (!selectedFaction) return;
     const fac = Factions[selectedFaction];
     if (disabled) return;
     const rep = repGain(money);
@@ -69,7 +71,7 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
       <Box display="flex" alignItems="center">
         <Typography>Faction:</Typography>
         <Select value={selectedFaction} onChange={changeFaction}>
-          {factions.map((name: string) => {
+          {factions.map((name) => {
             const info = Factions[name].getInfo();
             if (!info.offersWork()) return;
             if (Player.hasGangWith(name)) return;

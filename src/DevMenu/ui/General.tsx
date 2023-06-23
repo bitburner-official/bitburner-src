@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Button,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { Money } from "../../ui/React/Money";
+
 import { Player } from "@player";
+import { FactionName } from "@enums";
+import { Money } from "../../ui/React/Money";
 import { Router } from "../../ui/GameRoot";
-import { MenuItem, SelectChangeEvent, TextField, Select } from "@mui/material";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { GangConstants } from "../../Gang/data/Constants";
-import { FactionName } from "@enums";
 import { checkForMessagesToSend } from "../../Message/MessageHelpers";
 import { ThemeEvents } from "../../Themes/ui/Theme";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 export function General(): React.ReactElement {
   const [error, setError] = useState(false);
   const [corporationName, setCorporationName] = useState("");
-  const [gangFaction, setGangFaction] = useState("Slum Snakes");
+  const [gangFaction, setGangFaction] = useState(FactionName.SlumSnakes);
   const [devMoney, setDevMoney] = useState(0);
 
   // Money functions
@@ -71,7 +78,11 @@ export function General(): React.ReactElement {
     // Rerender so the gang menu option will be removed immediately on the devmenu page selection
     ThemeEvents.emit();
   };
-  const setGangFactionDropdown = (event: SelectChangeEvent) => setGangFaction(event.target.value);
+  const setGangFactionDropdown = (event: SelectChangeEvent) => {
+    // Todo: Make this a more specific check when a GangName enumlike is added
+    if (!getEnumHelper("FactionName").isMember(event.target.value)) return;
+    setGangFaction(event.target.value);
+  };
 
   // Misc functions
   const checkMessages = () => checkForMessagesToSend();

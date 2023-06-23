@@ -2,7 +2,7 @@ import { AugmentationName, CityName, CompletedProgramName, FactionName, Literatu
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { Companies, initCompanies } from "./Company/Companies";
 import { resetIndustryResearchTrees } from "./Corporation/data/IndustryData";
-import { Factions, initFactions } from "./Faction/Factions";
+import { Factions } from "./Faction/Factions";
 import { joinFaction } from "./Faction/FactionHelpers";
 import { updateHashManagerCapacity } from "./Hacknet/HacknetHelpers";
 import { prestigeWorkerScripts } from "./NetscriptWorker";
@@ -23,6 +23,7 @@ import { ProgramsSeen } from "./Programs/ui/ProgramsRoot";
 import { InvitationsSeen } from "./Faction/ui/FactionsRoot";
 import { CONSTANTS } from "./Constants";
 import { LogBoxClearEvents } from "./ui/React/LogBoxManager";
+import { initCircadianModulator } from "./Augmentation/Augmentations";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string) {
@@ -80,8 +81,8 @@ export function prestigeAugmentation(): void {
   Terminal.clear();
   LogBoxClearEvents.emit();
 
-  // Re-initialize things - This will update any changes
-  initFactions(); // Factions must be initialized before augmentations
+  // Recalculate the bonus for circadian modulator aug
+  initCircadianModulator();
 
   Player.factionInvitations = Player.factionInvitations.concat(maintainMembership);
   Player.reapplyAllAugmentations();
@@ -193,7 +194,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // Reset favor for Companies and Factions
   for (const company of Object.values(Companies)) company.favor = 0;
-  for (const faction of Object.values(Factions)) faction.favor = 0;
+  for (const faction of Object.values(Factions)) faction.resetFavor();
 
   // Stop a Terminal action if there is one
   if (Terminal.action !== null) {
@@ -208,8 +209,8 @@ export function prestigeSourceFile(isFlume: boolean): void {
     });
   }
 
-  // Re-initialize things - This will update any changes
-  initFactions(); // Factions must be initialized before augmentations
+  initCircadianModulator();
+
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
   initCompanies();

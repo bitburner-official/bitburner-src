@@ -11,7 +11,7 @@ import { FactionName } from "@enums";
 interface IProps {
   open: boolean;
   onClose: () => void;
-  facName: string;
+  facName: FactionName;
 }
 
 /** React Component for the popup used to create a new gang. */
@@ -27,7 +27,7 @@ export function CreateGangModal(props: IProps): React.ReactElement {
     "is not as important.";
 
   function isHacking(): boolean {
-    return [FactionName.NiteSec as string, FactionName.TheBlackHand as string].includes(props.facName);
+    return [FactionName.NiteSec, FactionName.TheBlackHand].includes(props.facName);
   }
 
   function createGang(): void {

@@ -1,16 +1,17 @@
+import type { Gang as IGang, EquipmentStats, GangOtherInfoObject } from "@nsdefs";
+import type { Gang } from "../Gang/Gang";
+import type { GangMember } from "../Gang/GangMember";
+import type { GangMemberTask } from "../Gang/GangMemberTask";
+import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+
+import { Player } from "@player";
 import { FactionName } from "@enums";
 import { GangConstants } from "../Gang/data/Constants";
-import { Player } from "@player";
-import { Gang } from "../Gang/Gang";
 import { AllGangs } from "../Gang/AllGangs";
 import { GangMemberTasks } from "../Gang/GangMemberTasks";
 import { GangMemberUpgrades } from "../Gang/GangMemberUpgrades";
-import { GangMember } from "../Gang/GangMember";
-import { GangMemberTask } from "../Gang/GangMemberTask";
 import { helpers } from "../Netscript/NetscriptHelpers";
-
-import { Gang as IGang, EquipmentStats, GangOtherInfoObject } from "@nsdefs";
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import { getEnumHelper } from "../utils/EnumHelper";
 
 export function NetscriptGang(): InternalAPI<IGang> {
   /** Functions as an API check and also returns the gang object */
@@ -36,9 +37,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
 
   return {
     createGang: (ctx) => (_faction) => {
-      const faction = helpers.string(ctx, "faction", _faction);
-      // this list is copied from Faction/ui/Root.tsx
-
+      const faction = getEnumHelper("FactionName").nsGetMember(ctx, _faction);
       if (!Player.canAccessGang() || !GangConstants.Names.includes(faction)) return false;
       if (Player.gang) return false;
       if (!Player.factions.includes(faction)) return false;

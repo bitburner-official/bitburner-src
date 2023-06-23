@@ -7,7 +7,7 @@ import { Typography } from "@mui/material";
 
 interface FactionInfoParams {
   infoText?: JSX.Element;
-  enemies?: string[];
+  enemies?: FactionName[];
   offerHackingWork?: boolean;
   offerFieldWork?: boolean;
   offerSecurityWork?: boolean;
@@ -19,7 +19,7 @@ interface FactionInfoParams {
 /** Contains the "information" property for all the Factions, which is just a description of each faction */
 export class FactionInfo {
   /** The names of all other factions considered to be enemies to this faction. */
-  enemies: string[];
+  enemies: FactionName[];
 
   /** The descriptive text to show on the faction's page. */
   infoText: JSX.Element;

@@ -5,7 +5,7 @@ import { initSourceFiles } from "./SourceFile/SourceFiles";
 import { generateRandomContract } from "./CodingContractGenerator";
 import { initCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
-import { Factions, initFactions } from "./Faction/Factions";
+import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
 import { processPassiveFactionRepGain, inviteToFaction } from "./Faction/FactionHelpers";
 import { Router } from "./ui/GameRoot";
@@ -375,7 +375,6 @@ const Engine: {
       Player.init();
       initForeignServers(Player.getHomeComputer());
       initCompanies();
-      initFactions();
       Player.reapplyAllAugmentations();
 
       // Start interactive tutorial

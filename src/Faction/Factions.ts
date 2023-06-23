@@ -2,63 +2,47 @@
  * Initialization and manipulation of the Factions object, which stores data
  * about all Factions in the game
  */
+import { FactionName } from "@enums";
 import { Faction } from "./Faction";
-import { FactionInfos } from "./FactionInfo";
 
 import { Reviver } from "../utils/JSONReviver";
-import { getRecordValues } from "../Types/Record";
-import { Augmentations, initCircadianModulator } from "../Augmentation/Augmentations";
+import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
+import { Augmentations } from "../Augmentation/Augmentations";
+import { getEnumHelper } from "../utils/EnumHelper";
 
-export let Factions: Record<string, Faction> = {};
+/** The static list of all factions. Initialized once and never modified. */
+export const Factions = createEnumKeyedRecord(FactionName, (name) => new Faction(name));
+// Add the associated augs to every faction
+for (const aug of getRecordValues(Augmentations)) {
+  for (const factionName of aug.factions) {
+    const faction = Factions[factionName];
+    faction.augmentations.push(aug.name);
+  }
+}
 
 export function loadFactions(saveString: string): void {
-  Factions = JSON.parse(saveString, Reviver);
-  // safety check for when we load older save file that don't have newer factions
-  for (const faction of Object.keys(Factions)) {
-    try {
-      Factions[faction].getInfo();
-    } catch (err) {
-      console.error("deleting " + faction);
-      delete Factions[faction];
+  // The only information that should be loaded from player save is
+  const loadedFactions = JSON.parse(saveString, Reviver) as unknown;
+  // This loading method allows invalid data in player save, but just ignores anything invalid
+  if (!loadedFactions) return;
+  if (typeof loadedFactions !== "object") return;
+  for (const [loadedFactionName, loadedFaction] of Object.entries(loadedFactions) as [string, unknown][]) {
+    if (!getEnumHelper("FactionName").isMember(loadedFactionName)) continue;
+    if (!loadedFaction) continue;
+    const faction = Factions[loadedFactionName];
+    if (typeof loadedFaction !== "object") continue;
+    if ("favor" in loadedFaction && typeof loadedFaction.favor === "number" && loadedFaction.favor > 0) {
+      faction.favor = loadedFaction.favor;
     }
-  }
-}
-
-function AddToFactions(faction: Faction): void {
-  const name: string = faction.name;
-  Factions[name] = faction;
-}
-
-export function factionExists(name: string): boolean {
-  return Object.hasOwn(Factions, name);
-}
-
-export function initFactions(): void {
-  for (const name of Object.keys(FactionInfos)) {
-    resetFaction(new Faction(name));
-  }
-  // All factions are added, this is a good place to add augs back to factions.
-  initCircadianModulator();
-  for (const aug of getRecordValues(Augmentations)) {
-    for (const factionName of aug.factions) {
-      const faction = Factions[factionName];
-      if (!faction) {
-        console.error(`Faction ${factionName} did not exist while adding augs to factions`);
-        continue;
-      }
-      faction.augmentations.push(aug.name);
+    if (
+      "playerReputation" in loadedFaction &&
+      typeof loadedFaction.playerReputation === "number" &&
+      loadedFaction.playerReputation > 0
+    ) {
+      faction.playerReputation = loadedFaction.playerReputation;
     }
+    if ("alreadyInvited" in loadedFaction && loadedFaction.alreadyInvited) faction.alreadyInvited = true;
+    if ("isBanned" in loadedFaction && loadedFaction.isBanned) faction.isBanned = true;
+    if ("isMember" in loadedFaction && loadedFaction.isMember) faction.isMember = true;
   }
-}
-
-//Resets a faction during (re-)initialization. Saves the favor in the new
-//Faction object and deletes the old Faction Object from "Factions". Then
-//reinserts the new Faction object
-function resetFaction(newFactionObject: Faction): void {
-  const factionName: string = newFactionObject.name;
-  if (factionExists(factionName)) {
-    newFactionObject.favor = Factions[factionName].favor;
-    delete Factions[factionName];
-  }
-  AddToFactions(newFactionObject);
 }
