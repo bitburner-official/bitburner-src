@@ -2,7 +2,7 @@ import { AugmentationName, FactionName } from "@enums";
 import { FactionInfo, FactionInfos } from "./FactionInfo";
 import { favorToRep, repToFavor } from "./formulas/favor";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { getEnumHelper } from "../utils/EnumHelper";
+import { getKeyList } from "../utils/helpers/getKeyList";
 
 export class Faction {
   /**
@@ -68,21 +68,16 @@ export class Faction {
     return newFavor - this.favor;
   }
 
+  static savedKeys = getKeyList(Faction, { removedKeys: ["augmentations"] });
+
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Faction", this);
+    return Generic_toJSON("Faction", this, Faction.savedKeys);
   }
 
   /** Initializes a Faction object from a JSON save state. */
   static fromJSON(value: IReviverValue): Faction {
-    const faction = Generic_fromJSON(Faction, value.data);
-    if (!Array.isArray(faction.augmentations)) faction.augmentations = [];
-    // Remove invalid augs from faction. Augs are repopulated with correct augs during any reset.
-    const augHelper = getEnumHelper("AugmentationName");
-    faction.augmentations = faction.augmentations.filter((augName) => augHelper.isMember(augName));
-    // Fix broken saves, this will soon be removed when better fix is implemented
-    faction.augmentations = [...new Set(faction.augmentations)];
-    return faction;
+    return Generic_fromJSON(Faction, value.data, Faction.savedKeys);
   }
 }
 
