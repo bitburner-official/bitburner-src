@@ -60,7 +60,7 @@ export class FactionInfo {
 }
 
 /** A map of all factions and associated info to them. */
-export const FactionInfos: Record<string, FactionInfo> = {
+export const FactionInfos: Record<FactionName, FactionInfo> = {
   // Endgame
   [FactionName.Illuminati]: new FactionInfo({
     infoText: (
