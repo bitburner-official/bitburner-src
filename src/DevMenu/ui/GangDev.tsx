@@ -11,7 +11,7 @@ import { Player } from "@player";
 
 const bigNumber = 1e27;
 
-export function Gang(): React.ReactElement {
+export function GangDev(): React.ReactElement {
   function addTonsGangCycles(): void {
     if (Player.gang) {
       Player.gang.storedCycles = bigNumber;

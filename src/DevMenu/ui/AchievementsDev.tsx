@@ -15,7 +15,7 @@ import { Player } from "@player";
 import { achievements } from "../../Achievements/Achievements";
 import { Engine } from "../../engine";
 
-export function Achievements(): React.ReactElement {
+export function AchievementsDev(): React.ReactElement {
   const [playerAchievement, setPlayerAchievements] = useState(Player.achievements.map((m) => m.ID));
 
   function grantAchievement(id: string): void {

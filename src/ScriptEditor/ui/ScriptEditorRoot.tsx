@@ -436,17 +436,14 @@ function Root(props: IProps): React.ReactElement {
     onOpenPreviousTab,
   });
 
-  const onTabClickRef = useRef(onTabClick);
-  onTabClickRef.current = onTabClick;
-  const parseCodeRef = useRef(parseCode);
-  parseCodeRef.current = parseCode;
-
   useEffect(() => {
     if (currentScript !== null) {
       const tabIndex = currentTabIndex();
-      if (typeof tabIndex === "number") onTabClickRef.current(tabIndex);
-      parseCodeRef.current(currentScript.code);
+      if (typeof tabIndex === "number") onTabClick(tabIndex);
+      parseCode(currentScript.code);
     }
+    // disable eslint because we want to run this only once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

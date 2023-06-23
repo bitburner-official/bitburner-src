@@ -9,9 +9,9 @@ import Typography from "@mui/material/Typography";
 import { Player } from "@player";
 import { Adjuster } from "./Adjuster";
 
-// Update as additional BitNodes get implemented
+// TODO: Update as additional BitNodes get implemented
 
-export function Entropy(): React.ReactElement {
+export function EntropyDev(): React.ReactElement {
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>

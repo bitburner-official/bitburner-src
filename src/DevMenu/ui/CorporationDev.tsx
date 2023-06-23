@@ -12,7 +12,7 @@ import { Player } from "@player";
 
 const bigNumber = 1e27;
 
-export function Corporation(): React.ReactElement {
+export function CorporationDev(): React.ReactElement {
   function addTonsCorporationFunds(): void {
     if (Player.corporation) {
       Player.corporation.funds = Player.corporation.funds + bigNumber;

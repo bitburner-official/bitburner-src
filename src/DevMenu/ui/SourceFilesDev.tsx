@@ -13,7 +13,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 // Update as additional BitNodes get implemented
 const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 
-export function SourceFiles(): React.ReactElement {
+export function SourceFilesDev(): React.ReactElement {
   function setSF(sfN: number, sfLvl: number) {
     return function () {
       if (sfN === 9) {

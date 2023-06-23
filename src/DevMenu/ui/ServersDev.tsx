@@ -12,7 +12,7 @@ import { GetServer, GetAllServers } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
 import MenuItem from "@mui/material/MenuItem";
 
-export function Servers(): React.ReactElement {
+export function ServersDev(): React.ReactElement {
   const [server, setServer] = useState("home");
   function setServerDropdown(event: SelectChangeEvent): void {
     setServer(event.target.value);

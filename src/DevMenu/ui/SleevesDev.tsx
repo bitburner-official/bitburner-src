@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import { Player } from "@player";
 import { Adjuster } from "./Adjuster";
 
-export function Sleeves(): React.ReactElement {
+export function SleevesDev(): React.ReactElement {
   function sleeveMaxAllShock(): void {
     for (let i = 0; i < Player.sleeves.length; ++i) {
       Player.sleeves[i].shock = 100;

@@ -22,7 +22,7 @@ import { Bladeburner } from "../../Bladeburner/Bladeburner";
 
 const bigNumber = 1e27;
 
-function BladeburnerUI({ bladeburner }: { bladeburner: Bladeburner }): React.ReactElement {
+export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): React.ReactElement {
   // Rank functions
   const modifyBladeburnerRank = (modify: number) => (rank: number) => bladeburner.changeRank(Player, rank * modify);
   const resetBladeburnerRank = () => {
@@ -400,5 +400,3 @@ function BladeburnerUI({ bladeburner }: { bladeburner: Bladeburner }): React.Rea
     </Accordion>
   );
 }
-
-export { BladeburnerUI as Bladeburner };

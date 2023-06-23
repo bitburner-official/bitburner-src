@@ -13,7 +13,7 @@ import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { StockMarket as SM } from "../../StockMarket/StockMarket";
 import { Stock } from "../../StockMarket/Stock";
 
-export function StockMarket(): React.ReactElement {
+export function StockMarketDev(): React.ReactElement {
   const [stockPrice, setStockPrice] = useState(0);
   const [stockSymbol, setStockSymbol] = useState("");
 
