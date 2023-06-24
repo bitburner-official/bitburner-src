@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Check Save File Continuity Factions continuity 1`] = `
+exports[`Check Save File Continuity FactionsSave continuity 1`] = `
 {
   "Aevum": {
     "ctor": "Faction",
@@ -787,7 +787,7 @@ exports[`Check Save File Continuity Factions continuity 1`] = `
 }
 `;
 
-exports[`Check Save File Continuity Player continuity 1`] = `
+exports[`Check Save File Continuity PlayerSave continuity 1`] = `
 {
   "ctor": "PlayerObject",
   "data": {

@@ -12,15 +12,13 @@ describe("Check Save File Continuity", () => {
   // Calling getSaveString forces save info to update
   saveObject.getSaveString();
 
-  // Just starting with Player and Factions for now
-  test(`Factions continuity`, () => {
-    const parsed = JSON.parse(saveObject.FactionsSave);
-    expect(parsed).toMatchSnapshot();
-  });
-  test(`Player continuity`, () => {
-    const parsed = JSON.parse(saveObject.PlayerSave);
-    expect(parsed).toMatchSnapshot();
-  });
+  const savesToTest = ["FactionsSave", "PlayerSave"] as const;
+  for (const saveToTest of savesToTest) {
+    test(`${saveToTest} continuity`, () => {
+      const parsed = JSON.parse(saveObject[saveToTest]);
+      expect(parsed).toMatchSnapshot();
+    });
+  }
 });
 
 function establishInitialConditions() {
