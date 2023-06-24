@@ -35,7 +35,7 @@ export function joinFaction(faction: Faction): void {
   faction.isMember = true;
   Player.factions.push(faction.name);
   let i = 0;
-  const factionIndexes = createEnumKeyedRecord(FactionName, (_) => i++);
+  const factionIndexes = createEnumKeyedRecord(FactionName, (__) => i++);
   Player.factions.sort((a, b) => factionIndexes[a] - factionIndexes[b]);
   const factionInfo = faction.getInfo();
 
