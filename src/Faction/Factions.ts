@@ -5,7 +5,7 @@
 import { FactionName } from "@enums";
 import { Faction } from "./Faction";
 
-import { Reviver } from "../utils/JSONReviver";
+import { Reviver, assertLoadingType } from "../utils/JSONReviver";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { getEnumHelper } from "../utils/EnumHelper";
@@ -31,18 +31,13 @@ export function loadFactions(saveString: string): void {
     if (!loadedFaction) continue;
     const faction = Factions[loadedFactionName];
     if (typeof loadedFaction !== "object") continue;
-    if ("favor" in loadedFaction && typeof loadedFaction.favor === "number" && loadedFaction.favor > 0) {
-      faction.favor = loadedFaction.favor;
-    }
-    if (
-      "playerReputation" in loadedFaction &&
-      typeof loadedFaction.playerReputation === "number" &&
-      loadedFaction.playerReputation > 0
-    ) {
+    assertLoadingType<Faction>(loadedFaction);
+    if (typeof loadedFaction.playerReputation === "number" && loadedFaction.playerReputation > 0) {
       faction.playerReputation = loadedFaction.playerReputation;
     }
-    if ("alreadyInvited" in loadedFaction && loadedFaction.alreadyInvited) faction.alreadyInvited = true;
-    if ("isBanned" in loadedFaction && loadedFaction.isBanned) faction.isBanned = true;
-    if ("isMember" in loadedFaction && loadedFaction.isMember) faction.isMember = true;
+    if (typeof loadedFaction.favor === "number" && loadedFaction.favor > 0) faction.favor = loadedFaction.favor;
+    if (loadedFaction.alreadyInvited) faction.alreadyInvited = true;
+    if (loadedFaction.isBanned) faction.isBanned = true;
+    if (loadedFaction.isMember) faction.isMember = true;
   }
 }

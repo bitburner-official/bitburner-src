@@ -1,6 +1,7 @@
 /* Generic Reviver, toJSON, and fromJSON functions used for saving and loading objects */
 import { ObjectValidator, validateObject } from "./Validator";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
+import { Unknownify } from "src/types";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
   fromJSON: (value: IReviverValue) => any;
@@ -102,3 +103,6 @@ export function Generic_fromJSON<T extends Record<string, any>>(
   for (const [key, val] of Object.entries(data) as [keyof T, T[keyof T]][]) obj[key] = val;
   return obj;
 }
+
+// No function content because asserting a general object into any Unknownified-specific-object requires no typeguarding.
+export function assertLoadingType<T extends object>(val: object): asserts val is Unknownify<T> {}
