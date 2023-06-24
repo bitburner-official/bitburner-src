@@ -34,6 +34,7 @@ function establishInitialConditions() {
   // Game initializers
   setPlayer(new PlayerObject());
   Player.init();
+  Player.identifier = "Overwritten identifier";
   initFactions();
   Player.sleevesFromCovenant = 1;
   Player.sourceFiles.set(10, 1);

@@ -1459,7 +1459,7 @@ exports[`Check Save File Continuity Player continuity 1`] = `
       "current": 10,
       "max": 10,
     },
-    "identifier": "92f512d31ce51",
+    "identifier": "Overwritten identifier",
     "jobs": {},
     "karma": 0,
     "lastAugReset": 1687611703623,
