@@ -1,7 +1,8 @@
 /* Generic Reviver, toJSON, and fromJSON functions used for saving and loading objects */
+import type { Unknownify } from "../types";
+
 import { ObjectValidator, validateObject } from "./Validator";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
-import { Unknownify } from "src/types";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
   fromJSON: (value: IReviverValue) => any;
@@ -104,5 +105,6 @@ export function Generic_fromJSON<T extends Record<string, any>>(
   return obj;
 }
 
-// No function content because asserting a general object into any Unknownified-specific-object requires no typeguarding.
+// This function is empty because Unknownify<T> is a typesafe assertion on any object with no runtime checks needed.
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 export function assertLoadingType<T extends object>(val: object): asserts val is Unknownify<T> {}
