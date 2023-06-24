@@ -72,7 +72,7 @@ export function prestigeAugmentation(): void {
 
   // Gain favor for Companies and Factions
   for (const company of Object.values(Companies)) company.gainFavor();
-  for (const faction of Object.values(Factions)) faction.gainFavor();
+  for (const faction of Object.values(Factions)) faction.prestigeAugmentation();
 
   // Stop a Terminal action if there is one.
   if (Terminal.action !== null) {
@@ -85,6 +85,7 @@ export function prestigeAugmentation(): void {
   initCircadianModulator();
 
   Player.factionInvitations = Player.factionInvitations.concat(maintainMembership);
+  for (const factionName of maintainMembership) Factions[factionName].alreadyInvited = true;
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
   Player.hp.current = Player.hp.max;
@@ -194,7 +195,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // Reset favor for Companies and Factions
   for (const company of Object.values(Companies)) company.favor = 0;
-  for (const faction of Object.values(Factions)) faction.resetFavor();
+  for (const faction of Object.values(Factions)) faction.prestigeSourceFile();
 
   // Stop a Terminal action if there is one
   if (Terminal.action !== null) {

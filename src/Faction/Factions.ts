@@ -32,10 +32,10 @@ export function loadFactions(saveString: string): void {
     const faction = Factions[loadedFactionName];
     if (typeof loadedFaction !== "object") continue;
     assertLoadingType<Faction>(loadedFaction);
-    if (typeof loadedFaction.playerReputation === "number" && loadedFaction.playerReputation > 0) {
-      faction.playerReputation = loadedFaction.playerReputation;
-    }
-    if (typeof loadedFaction.favor === "number" && loadedFaction.favor > 0) faction.favor = loadedFaction.favor;
+    const { playerReputation: loadedRep, favor: loadedFavor } = loadedFaction;
+    if (typeof loadedRep === "number" && loadedRep > 0) faction.playerReputation = loadedRep;
+    if (typeof loadedFavor === "number" && loadedFavor > 0) faction.favor = loadedFavor;
+    // Todo, these 3 will be removed from Faction object and savedata after a separate PR changes some data structures on Player to make this unnecessary info to save
     if (loadedFaction.alreadyInvited) faction.alreadyInvited = true;
     if (loadedFaction.isBanned) faction.isBanned = true;
     if (loadedFaction.isMember) faction.isMember = true;

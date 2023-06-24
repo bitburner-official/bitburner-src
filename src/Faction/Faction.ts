@@ -44,17 +44,24 @@ export class Faction {
     return info;
   }
 
-  /** Reset favor and reputation after a source file prestige */
-  resetFavor() {
+  prestigeSourceFile() {
+    // Reset favor, reputation, and flags
     this.favor = 0;
     this.playerReputation = 0;
+    this.alreadyInvited = false;
+    this.isMember = false;
+    this.isBanned = false;
   }
 
-  /** Apply favor and reset reputation after an aug install */
-  gainFavor(): void {
+  prestigeAugmentation(): void {
+    // Gain favor
     if (this.favor == null) this.favor = 0;
     this.favor += this.getFavorGain();
+    // Reset reputation and flags
     this.playerReputation = 0;
+    this.alreadyInvited = false;
+    this.isMember = false;
+    this.isBanned = false;
   }
 
   //Returns an array with [How much favor would be gained, how much rep would be left over]
@@ -68,7 +75,7 @@ export class Faction {
     return newFavor - this.favor;
   }
 
-  static savedKeys = getKeyList(Faction, { removedKeys: ["augmentations"] });
+  static savedKeys = getKeyList(Faction, { removedKeys: ["augmentations", "name"] });
 
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
