@@ -25,9 +25,9 @@ const difficulties: {
   Impossible: { window: 150 },
 };
 
-export function SlashGame(props: IMinigameProps): React.ReactElement {
+export function SlashGame({ difficulty: _difficulty, onSuccess, onFailure }: IMinigameProps): React.ReactElement {
   const difficulty: Difficulty = { window: 0 };
-  interpolate(difficulties, props.difficulty, difficulty);
+  interpolate(difficulties, _difficulty, difficulty);
 
   const [phase, setPhase] = useState(0);
 
@@ -35,9 +35,9 @@ export function SlashGame(props: IMinigameProps): React.ReactElement {
     event.preventDefault();
     if (event.key !== KEY.SPACE) return;
     if (phase !== 1) {
-      props.onFailure();
+      onFailure();
     } else {
-      props.onSuccess();
+      onSuccess();
     }
   }
 
@@ -51,19 +51,19 @@ export function SlashGame(props: IMinigameProps): React.ReactElement {
       setPhase(1);
       id = window.setTimeout(() => {
         setPhase(2);
-        id = window.setTimeout(() => props.onFailure(), attackingTime);
+        id = window.setTimeout(() => onFailure(), attackingTime);
       }, preparingTime);
     }, guardingTimeRef.current);
 
     return () => {
       clearInterval(id);
     };
-  }, [difficulty.window, props]);
+  }, [difficulty.window, onFailure]);
 
   const hasAugment = Player.hasAugmentation(AugmentationName.MightOfAres, true);
   return (
     <>
-      <GameTimer millis={5000} onExpire={props.onFailure} />
+      <GameTimer millis={5000} onExpire={onFailure} />
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
         <Typography variant="h4">Attack when his guard is down!</Typography>
 
@@ -79,7 +79,7 @@ export function SlashGame(props: IMinigameProps): React.ReactElement {
         {phase === 0 && <Typography variant="h4">Guarding ...</Typography>}
         {phase === 1 && <Typography variant="h4">Preparing?</Typography>}
         {phase === 2 && <Typography variant="h4">ATTACKING!</Typography>}
-        <KeyHandler onKeyDown={press} onFailure={props.onFailure} />
+        <KeyHandler onKeyDown={press} onFailure={onFailure} />
       </Paper>
     </>
   );
