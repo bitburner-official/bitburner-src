@@ -20,7 +20,7 @@ import { InvitationEvent } from "./ui/InvitationModal";
 import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
 import { getAugCost } from "../Augmentation/AugmentationHelpers";
-import { getRecordKeys } from "../Types/Record";
+import { createEnumKeyedRecord, getRecordKeys } from "../Types/Record";
 
 export function inviteToFaction(faction: Faction): void {
   Player.receiveInvite(faction.name);
@@ -34,8 +34,9 @@ export function joinFaction(faction: Faction): void {
   if (faction.isMember) return;
   faction.isMember = true;
   Player.factions.push(faction.name);
-  const allFactions = Object.values(FactionName).map((faction) => faction as string);
-  Player.factions.sort((a, b) => allFactions.indexOf(a) - allFactions.indexOf(b));
+  let i = 0;
+  const factionIndexes = createEnumKeyedRecord(FactionName, (_) => i++);
+  Player.factions.sort((a, b) => factionIndexes[a] - factionIndexes[b]);
   const factionInfo = faction.getInfo();
 
   //Determine what factions you are banned from now that you have joined this faction
