@@ -8,6 +8,7 @@ import { Money } from "../../ui/React/Money";
 import { formatNumberNoSuffix, formatPopulation, formatBigNumber } from "../../ui/formatNumber";
 import { Factions } from "../../Faction/Factions";
 import { Router } from "../../ui/GameRoot";
+import { Page } from "../../ui/Router";
 import { joinFaction } from "../../Faction/FactionHelpers";
 import { Bladeburner } from "../Bladeburner";
 
@@ -34,7 +35,7 @@ export function Stats(props: IProps): React.ReactElement {
       joinFaction(faction);
     }
 
-    Router.toFaction(faction);
+    Router.toPage(Page.Faction, { faction });
   }
 
   return (

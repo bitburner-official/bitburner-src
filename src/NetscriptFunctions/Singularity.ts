@@ -23,8 +23,8 @@ import { findCrime } from "../Crime/CrimeHelpers";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { DarkWebItems } from "../DarkWeb/DarkWebItems";
 import { Router } from "../ui/GameRoot";
-import { SpecialServers } from "../Server/data/SpecialServers";
 import { Page } from "../ui/Router";
+import { SpecialServers } from "../Server/data/SpecialServers";
 import { Locations } from "../Locations/Locations";
 import { GetServer } from "../Server/AllServers";
 import { Programs } from "../Programs/Programs";
@@ -231,7 +231,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       } else if (location.name === LocationName.WorldStockExchange) {
         Router.toPage(Page.StockMarket);
       } else {
-        Router.toLocation(location);
+        Router.toPage(Page.Location, { location });
       }
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 50000);
       return true;
@@ -559,7 +559,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         server.backdoorInstalled = true;
 
         if (SpecialServers.WorldDaemon === server.hostname) {
-          return Router.toBitVerse(false, false);
+          return Router.toPage(Page.BitVerse, { flume: false, quick: false });
         }
         // Manunally check for faction invites
         Engine.Counters.checkFactionInvitations = 0;

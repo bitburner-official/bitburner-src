@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "../../ui/React/Modal";
 import { Router } from "../../ui/GameRoot";
+import { Page } from "../../ui/Router";
 import { EventEmitter } from "../../utils/EventEmitter";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -10,7 +11,7 @@ export const BitFlumeEvent = new EventEmitter<[]>();
 export function BitFlumeModal(): React.ReactElement {
   const [open, setOpen] = useState(false);
   function flume(): void {
-    Router.toBitVerse(true, false);
+    Router.toPage(Page.BitVerse, { flume: true, quick: false });
     setOpen(false);
   }
 

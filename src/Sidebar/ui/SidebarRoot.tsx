@@ -41,7 +41,7 @@ import PublicIcon from "@mui/icons-material/Public";
 import LiveHelpIcon from "@mui/icons-material/LiveHelp";
 
 import { Router } from "../../ui/GameRoot";
-import { Page, SimplePage } from "../../ui/Router";
+import { Page, isSimplePage } from "../../ui/Router";
 import { SidebarAccordion } from "./SidebarAccordion";
 import { Player } from "@player";
 import { CONSTANTS } from "../../Constants";
@@ -104,11 +104,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-interface IProps {
-  page: Page;
-}
-
-export function SidebarRoot(props: IProps): React.ReactElement {
+export function SidebarRoot(props: { page: Page }): React.ReactElement {
   useRerender(200);
 
   let flash: Page | null = null;
@@ -239,11 +235,11 @@ export function SidebarRoot(props: IProps): React.ReactElement {
   const clickPage = useCallback(
     (page: Page) => {
       if (page === Page.Job) {
-        Router.toJob(Locations[Object.keys(Player.jobs)[0]]);
+        Router.toPage(page, { location: Locations[Object.keys(Player.jobs)[0]] });
       } else if (page == Page.ScriptEditor) {
-        Router.toScriptEditor();
-      } else if ((Object.values(SimplePage) as Page[]).includes(page)) {
-        Router.toPage(page as SimplePage);
+        Router.toPage(page, {});
+      } else if (isSimplePage(page)) {
+        Router.toPage(page);
       } else {
         throw new Error("Can't handle click on Page " + page);
       }

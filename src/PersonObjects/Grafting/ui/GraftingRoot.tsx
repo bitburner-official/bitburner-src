@@ -1,7 +1,7 @@
 import type { Augmentation } from "../../../Augmentation/Augmentation";
 
 import { Player } from "@player";
-import { AugmentationName, LocationName } from "@enums";
+import { AugmentationName } from "@enums";
 
 import React, { useState } from "react";
 import { CheckBox, CheckBoxOutlineBlank, Construction } from "@mui/icons-material";
@@ -11,7 +11,6 @@ import { GraftingWork } from "../../../Work/GraftingWork";
 import { Augmentations } from "../../../Augmentation/Augmentations";
 import { CONSTANTS } from "../../../Constants";
 import { hasAugmentationPrereqs } from "../../../Faction/FactionHelpers";
-import { Locations } from "../../../Locations/Locations";
 import { PurchaseAugmentationsOrderSetting } from "../../../Settings/SettingEnums";
 import { Settings } from "../../../Settings/Settings";
 import { Router } from "../../../ui/GameRoot";
@@ -87,7 +86,7 @@ export const GraftingRoot = (): React.ReactElement => {
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
-      <Button onClick={() => Router.toLocation(Locations[LocationName.NewTokyoVitaLife])}>Back</Button>
+      <Button onClick={() => Router.back()}>Back</Button>
       <Typography variant="h4">Grafting Laboratory</Typography>
       <Typography>
         You find yourself in a secret laboratory, owned by a mysterious researcher.

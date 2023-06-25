@@ -4,6 +4,7 @@ import { BlackOperationName, FactionName } from "@enums";
 import { BlackOpList } from "./BlackOpList";
 import { Bladeburner } from "../Bladeburner";
 import { Router } from "../../ui/GameRoot";
+import { Page } from "../../ui/Router";
 import { CorruptableText } from "../../ui/React/CorruptableText";
 
 interface IProps {
@@ -28,7 +29,7 @@ export function BlackOpPage(props: IProps): React.ReactElement {
         losses.
       </Typography>
       {props.bladeburner.blackops[BlackOperationName.OperationDaedalus] ? (
-        <Button sx={{ my: 1, p: 1 }} onClick={() => Router.toBitVerse(false, false)}>
+        <Button sx={{ my: 1, p: 1 }} onClick={() => Router.toPage(Page.BitVerse, { flume: false, quick: false })}>
           <CorruptableText content="Destroy w0rld_d34mon"></CorruptableText>
         </Button>
       ) : (

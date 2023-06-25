@@ -5,7 +5,6 @@
  */
 import React, { useState } from "react";
 
-import { AugmentationsPage } from "./AugmentationsPage";
 import { DonateOption } from "./DonateOption";
 import { Info } from "./Info";
 import { Option } from "./Option";
@@ -24,10 +23,9 @@ import { FactionWork } from "../../Work/FactionWork";
 import { useRerender } from "../../ui/React/hooks";
 import { repNeededToDonate } from "../formulas/donation";
 
-interface IProps {
+type FactionRootProps = {
   faction: Faction;
-  augPage: boolean;
-}
+};
 
 // Info text for all options on the UI
 const hackingContractsInfo =
@@ -148,11 +146,8 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
   );
 }
 
-export function FactionRoot(props: IProps): React.ReactElement {
+export function FactionRoot({ faction }: FactionRootProps): React.ReactElement {
   const rerender = useRerender(200);
-  const [purchasingAugs, setPurchasingAugs] = useState(props.augPage);
-
-  const faction = props.faction;
 
   if (!Player.factions.includes(faction.name)) {
     return (
@@ -165,9 +160,11 @@ export function FactionRoot(props: IProps): React.ReactElement {
     );
   }
 
-  return purchasingAugs ? (
-    <AugmentationsPage faction={faction} routeToMainPage={() => setPurchasingAugs(false)} />
-  ) : (
-    <MainPage rerender={rerender} faction={faction} onAugmentations={() => setPurchasingAugs(true)} />
+  return (
+    <MainPage
+      rerender={rerender}
+      faction={faction}
+      onAugmentations={() => Router.toPage(Page.FactionAugmentations, { faction })}
+    />
   );
 }

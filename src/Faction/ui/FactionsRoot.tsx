@@ -1,16 +1,18 @@
-import type { Faction } from "../Faction";
-
 import React, { useEffect } from "react";
 import { Explore, Info, LastPage, LocalPolice, NewReleases, Report, SportsMma } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography, useTheme } from "@mui/material";
+
 import { Player } from "@player";
+import { FactionName } from "@enums";
+
 import { Settings } from "../../Settings/Settings";
 import { formatFavor, formatReputation } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
-import { FactionName } from "@enums";
+import { Page } from "../../ui/Router";
+import { useRerender } from "../../ui/React/hooks";
+import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
-import { useRerender } from "../../ui/React/hooks";
 
 export const InvitationsSeen: string[] = [];
 
@@ -53,11 +55,11 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
   const augsLeft = getFactionAugmentationsFiltered(props.faction).filter((aug) => !Player.hasAugmentation(aug)).length;
 
   function openFaction(faction: Faction): void {
-    Router.toFaction(faction);
+    Router.toPage(Page.Faction, { faction });
   }
 
   function openFactionAugPage(faction: Faction): void {
-    Router.toFaction(faction, true);
+    Router.toPage(Page.FactionAugmentations, { faction });
   }
 
   function acceptInvitation(event: React.MouseEvent<HTMLButtonElement>, faction: FactionName): void {

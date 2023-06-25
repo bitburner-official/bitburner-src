@@ -43,7 +43,7 @@ function toLocation(location: Location): void {
   } else if (location.name === LocationName.WorldStockExchange) {
     Router.toPage(Page.StockMarket);
   } else {
-    Router.toLocation(location);
+    Router.toPage(Page.Location, { location });
   }
 }
 

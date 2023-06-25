@@ -95,7 +95,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
 
   function compareSaveGame(): void {
     if (!importData) return;
-    Router.toImportSave(importData.base64);
+    Router.toPage(Page.ImportSave, { base64Save: importData.base64 });
     setImportSaveOpen(false);
     setImportData(null);
   }

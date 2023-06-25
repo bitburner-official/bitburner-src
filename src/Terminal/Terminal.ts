@@ -1,5 +1,6 @@
 import { Output, Link, RawOutput, TTimer } from "./OutputTypes";
 import { Router } from "../ui/GameRoot";
+import { Page } from "../ui/Router";
 import { Player } from "@player";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
@@ -206,7 +207,7 @@ export class Terminal {
       // Success!
       server.backdoorInstalled = true;
       if (SpecialServers.WorldDaemon === server.hostname) {
-        Router.toBitVerse(false, false);
+        Router.toPage(Page.BitVerse, { flume: false, quick: false });
         return;
       }
       // Manunally check for faction invites
@@ -301,7 +302,7 @@ export class Terminal {
         if (Player.bitNodeN == null) {
           Player.bitNodeN = 1;
         }
-        Router.toBitVerse(false, false);
+        Router.toPage(Page.BitVerse, { flume: false, quick: false });
         return;
       }
       // Manunally check for faction invites

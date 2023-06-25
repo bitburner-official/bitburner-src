@@ -16,6 +16,7 @@ import { Player } from "@player";
 import { FactionName } from "@enums";
 import { Money } from "../../ui/React/Money";
 import { Router } from "../../ui/GameRoot";
+import { Page } from "../../ui/Router";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { GangConstants } from "../../Gang/data/Constants";
 import { checkForMessagesToSend } from "../../Message/MessageHelpers";
@@ -37,10 +38,10 @@ export function General(): React.ReactElement {
   const upgradeRam = () => (Player.getHomeComputer().maxRam *= 2);
 
   // Node-clearing functions
-  const quickB1tFlum3 = () => Router.toBitVerse(true, true);
-  const b1tflum3 = () => Router.toBitVerse(true, false);
-  const quickHackW0r1dD43m0n = () => Router.toBitVerse(false, true);
-  const hackW0r1dD43m0n = () => Router.toBitVerse(false, false);
+  const quickB1tFlum3 = () => Router.toPage(Page.BitVerse, { flume: true, quick: true });
+  const b1tflum3 = () => Router.toPage(Page.BitVerse, { flume: true, quick: false });
+  const quickHackW0r1dD43m0n = () => Router.toPage(Page.BitVerse, { flume: false, quick: true });
+  const hackW0r1dD43m0n = () => Router.toPage(Page.BitVerse, { flume: false, quick: false });
 
   // Corp functions
   const createCorporation = () => {
