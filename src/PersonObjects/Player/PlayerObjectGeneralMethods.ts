@@ -158,7 +158,7 @@ export function prestigeSourceFile(this: PlayerObject): void {
   this.augmentations = [];
 }
 
-export function receiveInvite(this: PlayerObject, factionName: string): void {
+export function receiveInvite(this: PlayerObject, factionName: FactionName): void {
   if (this.factionInvitations.includes(factionName) || this.factions.includes(factionName)) {
     return;
   }
@@ -1099,34 +1099,34 @@ export function gainCodingContractReward(
   reward: ICodingContractReward | null,
   difficulty = 1,
 ): string {
-  if (reward == null || reward.type == null) {
-    return `No reward for this contract`;
-  }
+  if (!reward) return `No reward for this contract`;
 
   /* eslint-disable no-case-declarations */
   switch (reward.type) {
-    case CodingContractRewardType.FactionReputation:
-      if (reward.name == null || !Factions[reward.name]) {
-        // If no/invalid faction was designated, just give rewards to all factions
-        reward.type = CodingContractRewardType.FactionReputationAll;
-        return this.gainCodingContractReward(reward);
+    case CodingContractRewardType.FactionReputation: {
+      if (!Factions[reward.name]) {
+        return this.gainCodingContractReward({ type: CodingContractRewardType.FactionReputationAll });
       }
       const repGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty;
       Factions[reward.name].playerReputation += repGain;
       return `Gained ${repGain} faction reputation for ${reward.name}`;
-    case CodingContractRewardType.FactionReputationAll:
+    }
+    case CodingContractRewardType.FactionReputationAll: {
       const totalGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty;
 
       // Ignore Bladeburners and other special factions for this calculation
-      const specialFactions = [FactionName.Bladeburners as string];
+      const specialFactions = [
+        FactionName.Bladeburners,
+        FactionName.ShadowsOfAnarchy,
+        FactionName.ChurchOfTheMachineGod,
+      ];
       const factions = this.factions.slice().filter((f) => {
         return !specialFactions.includes(f);
       });
 
       // If the player was only part of the special factions, we'll just give money
       if (factions.length == 0) {
-        reward.type = CodingContractRewardType.Money;
-        return this.gainCodingContractReward(reward, difficulty);
+        return this.gainCodingContractReward({ type: CodingContractRewardType.Money }, difficulty);
       }
 
       const gainPerFaction = Math.floor(totalGain / factions.length);
@@ -1135,11 +1135,11 @@ export function gainCodingContractReward(
         Factions[facName].playerReputation += gainPerFaction;
       }
       return `Gained ${gainPerFaction} reputation for each of the following factions: ${factions.join(", ")}`;
+    }
     case CodingContractRewardType.CompanyReputation: {
-      if (reward.name == null || !Companies[reward.name]) {
+      if (!Companies[reward.name]) {
         //If no/invalid company was designated, just give rewards to all factions
-        reward.type = CodingContractRewardType.FactionReputationAll;
-        return this.gainCodingContractReward(reward);
+        return this.gainCodingContractReward({ type: CodingContractRewardType.FactionReputationAll });
       }
       const repGain = CONSTANTS.CodingContractBaseCompanyRepGain * difficulty;
       Companies[reward.name].playerReputation += repGain;

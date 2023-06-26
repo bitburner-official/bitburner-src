@@ -1,10 +1,11 @@
+import type { PlayerObject } from "./PlayerObject";
+import type { FactionName } from "@enums";
+import type { Faction } from "../../Faction/Faction";
+
 import { Factions } from "../../Faction/Factions";
-import { Faction } from "../../Faction/Faction";
 import { Gang } from "../../Gang/Gang";
 import { GangConstants } from "../../Gang/data/Constants";
 import { isFactionWork } from "../../Work/FactionWork";
-
-import type { PlayerObject } from "./PlayerObject";
 
 export function canAccessGang(this: PlayerObject): boolean {
   if (this.bitNodeN === 2) {
@@ -36,12 +37,12 @@ export function getGangName(this: PlayerObject): string {
   return gang ? gang.facName : "";
 }
 
-export function hasGangWith(this: PlayerObject, facName: string): boolean {
+export function hasGangWith(this: PlayerObject, facName: FactionName): boolean {
   const gang = this.gang;
   return gang ? gang.facName === facName : false;
 }
 
-export function startGang(this: PlayerObject, factionName: string, hacking: boolean): void {
+export function startGang(this: PlayerObject, factionName: FactionName, hacking: boolean): void {
   // isFactionWork handles null internally, finishWork might need to be run with true
   if (isFactionWork(this.currentWork) && this.currentWork.factionName === factionName) this.finishWork(false);
 

@@ -1,8 +1,8 @@
-import type { AugmentationName } from "@enums";
+import { AugmentationName, FactionName } from "@enums";
 import { FactionInfo, FactionInfos } from "./FactionInfo";
 import { favorToRep, repToFavor } from "./formulas/favor";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { getEnumHelper } from "../utils/EnumHelper";
+import { getKeyList } from "../utils/helpers/getKeyList";
 
 export class Faction {
   /**
@@ -24,12 +24,12 @@ export class Faction {
   isMember = false;
 
   /** Name of faction */
-  name = "";
+  name: FactionName;
 
   /** Amount of reputation player has with this faction */
   playerReputation = 0;
 
-  constructor(name = "") {
+  constructor(name = FactionName.Sector12) {
     this.name = name;
   }
 
@@ -44,11 +44,24 @@ export class Faction {
     return info;
   }
 
-  gainFavor(): void {
-    if (this.favor == null) {
-      this.favor = 0;
-    }
+  prestigeSourceFile() {
+    // Reset favor, reputation, and flags
+    this.favor = 0;
+    this.playerReputation = 0;
+    this.alreadyInvited = false;
+    this.isMember = false;
+    this.isBanned = false;
+  }
+
+  prestigeAugmentation(): void {
+    // Gain favor
+    if (this.favor == null) this.favor = 0;
     this.favor += this.getFavorGain();
+    // Reset reputation and flags
+    this.playerReputation = 0;
+    this.alreadyInvited = false;
+    this.isMember = false;
+    this.isBanned = false;
   }
 
   //Returns an array with [How much favor would be gained, how much rep would be left over]
@@ -62,21 +75,16 @@ export class Faction {
     return newFavor - this.favor;
   }
 
+  static savedKeys = getKeyList(Faction, { removedKeys: ["augmentations", "name"] });
+
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Faction", this);
+    return Generic_toJSON("Faction", this, Faction.savedKeys);
   }
 
   /** Initializes a Faction object from a JSON save state. */
   static fromJSON(value: IReviverValue): Faction {
-    const faction = Generic_fromJSON(Faction, value.data);
-    if (!Array.isArray(faction.augmentations)) faction.augmentations = [];
-    // Remove invalid augs from faction. Augs are repopulated with correct augs during any reset.
-    const augHelper = getEnumHelper("AugmentationName");
-    faction.augmentations = faction.augmentations.filter((augName) => augHelper.isMember(augName));
-    // Fix broken saves, this will soon be removed when better fix is implemented
-    faction.augmentations = [...new Set(faction.augmentations)];
-    return faction;
+    return Generic_fromJSON(Faction, value.data, Faction.savedKeys);
   }
 }
 

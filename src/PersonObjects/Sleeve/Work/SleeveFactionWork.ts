@@ -7,11 +7,11 @@ import { Factions } from "../../../Faction/Factions";
 import { calculateFactionExp, calculateFactionRep } from "../../../Work/Formulas";
 import { Faction } from "../../../Faction/Faction";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
-import { findEnumMember } from "../../../utils/helpers/enum";
+import { getEnumHelper } from "../../../utils/EnumHelper";
 
 interface SleeveFactionWorkParams {
   factionWorkType: FactionWorkType;
-  factionName: string;
+  factionName: FactionName;
 }
 
 export const isSleeveFactionWork = (w: SleeveWorkClass | null): w is SleeveFactionWork =>
@@ -20,7 +20,7 @@ export const isSleeveFactionWork = (w: SleeveWorkClass | null): w is SleeveFacti
 export class SleeveFactionWork extends SleeveWorkClass {
   type: SleeveWorkType.FACTION = SleeveWorkType.FACTION;
   factionWorkType: FactionWorkType;
-  factionName: string;
+  factionName: FactionName;
 
   constructor(params?: SleeveFactionWorkParams) {
     super();
@@ -67,8 +67,8 @@ export class SleeveFactionWork extends SleeveWorkClass {
   /** Initializes a FactionWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveFactionWork {
     const factionWork = Generic_fromJSON(SleeveFactionWork, value.data);
-    factionWork.factionWorkType =
-      findEnumMember(FactionWorkType, factionWork.factionWorkType) ?? FactionWorkType.hacking;
+    factionWork.factionWorkType = getEnumHelper("FactionWorkType").fuzzyGetMember(factionWork.factionWorkType, true);
+    factionWork.factionName = getEnumHelper("FactionName").fuzzyGetMember(factionWork.factionName, true);
     return factionWork;
   }
 }

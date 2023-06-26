@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-
-import { Player } from "@player";
-import { FactionName } from "@enums";
 import {
   Accordion,
   AccordionSummary,
@@ -11,27 +8,33 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
+  Select,
+  SelectChangeEvent,
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { Adjuster } from "./Adjuster";
-import { Factions as AllFaction } from "../../Faction/Factions";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import ReplyIcon from "@mui/icons-material/Reply";
 
+import { Player } from "@player";
+import { FactionName } from "@enums";
+import { Adjuster } from "./Adjuster";
+import { Factions } from "../../Faction/Factions";
+import { getRecordValues } from "../../Types/Record";
+import { getEnumHelper } from "../../utils/EnumHelper";
+
 const bigNumber = 1e12;
 
-export function Factions(): React.ReactElement {
-  const [faction, setFaction] = useState(FactionName.Illuminati as string);
+export function FactionsDev(): React.ReactElement {
+  const [factionName, setFactionName] = useState(FactionName.Illuminati);
 
   function setFactionDropdown(event: SelectChangeEvent): void {
-    setFaction(event.target.value);
+    if (!getEnumHelper("FactionName").isMember(event.target.value)) return;
+    setFactionName(event.target.value);
   }
 
   function receiveInvite(): void {
-    Player.receiveInvite(faction);
+    Player.receiveInvite(factionName);
   }
 
   function receiveAllInvites(): void {
@@ -40,57 +43,53 @@ export function Factions(): React.ReactElement {
 
   function modifyFactionRep(modifier: number): (x: number) => void {
     return function (reputation: number): void {
-      const fac = AllFaction[faction];
-      if (fac != null && !isNaN(reputation)) {
+      const fac = Factions[factionName];
+      if (!isNaN(reputation)) {
         fac.playerReputation += reputation * modifier;
       }
     };
   }
 
   function resetFactionRep(): void {
-    const fac = AllFaction[faction];
-    if (fac != null) {
-      fac.playerReputation = 0;
-    }
+    const fac = Factions[factionName];
+    fac.playerReputation = 0;
   }
 
   function modifyFactionFavor(modifier: number): (x: number) => void {
     return function (favor: number): void {
-      const fac = AllFaction[faction];
-      if (fac != null && !isNaN(favor)) {
+      const fac = Factions[factionName];
+      if (!isNaN(favor)) {
         fac.favor += favor * modifier;
       }
     };
   }
 
   function resetFactionFavor(): void {
-    const fac = AllFaction[faction];
-    if (fac != null) {
-      fac.favor = 0;
-    }
+    const fac = Factions[factionName];
+    fac.favor = 0;
   }
 
   function tonsOfRep(): void {
-    for (const i of Object.keys(AllFaction)) {
-      AllFaction[i].playerReputation = bigNumber;
+    for (const faction of getRecordValues(Factions)) {
+      faction.playerReputation = bigNumber;
     }
   }
 
   function resetAllRep(): void {
-    for (const i of Object.keys(AllFaction)) {
-      AllFaction[i].playerReputation = 0;
+    for (const faction of getRecordValues(Factions)) {
+      faction.playerReputation = 0;
     }
   }
 
   function tonsOfFactionFavor(): void {
-    for (const i of Object.keys(AllFaction)) {
-      AllFaction[i].favor = bigNumber;
+    for (const faction of getRecordValues(Factions)) {
+      faction.favor = bigNumber;
     }
   }
 
   function resetAllFactionFavor(): void {
-    for (const i of Object.keys(AllFaction)) {
-      AllFaction[i].favor = 0;
+    for (const faction of getRecordValues(Factions)) {
+      faction.favor = 0;
     }
   }
 
@@ -113,7 +112,7 @@ export function Factions(): React.ReactElement {
                     labelId="factions-select"
                     id="factions-dropdown"
                     onChange={setFactionDropdown}
-                    value={faction}
+                    value={factionName}
                     startAdornment={
                       <>
                         <IconButton onClick={receiveAllInvites} size="large" arial-label="receive-all-invitation">
@@ -125,7 +124,7 @@ export function Factions(): React.ReactElement {
                       </>
                     }
                   >
-                    {Object.values(AllFaction).map((faction) => (
+                    {Object.values(Factions).map((faction) => (
                       <MenuItem key={faction.name} value={faction.name}>
                         {faction.name}
                       </MenuItem>

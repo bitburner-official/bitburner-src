@@ -1,12 +1,13 @@
+import type { Augmentation } from "../Augmentation/Augmentation";
+import type { Faction } from "./Faction";
+
 import { Augmentations } from "../Augmentation/Augmentations";
-import { Augmentation } from "../Augmentation/Augmentation";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { AugmentationName, FactionName } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
-import { Faction } from "./Faction";
-import { Factions } from "./Factions";
 import { Player } from "@player";
+import { Factions } from "./Factions";
 import { Settings } from "../Settings/Settings";
 import {
   getHackingWorkRepGain,
@@ -19,6 +20,7 @@ import { InvitationEvent } from "./ui/InvitationModal";
 import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
 import { getAugCost } from "../Augmentation/AugmentationHelpers";
+import { createEnumKeyedRecord, getRecordKeys } from "../Types/Record";
 
 export function inviteToFaction(faction: Faction): void {
   Player.receiveInvite(faction.name);
@@ -32,8 +34,9 @@ export function joinFaction(faction: Faction): void {
   if (faction.isMember) return;
   faction.isMember = true;
   Player.factions.push(faction.name);
-  const allFactions = Object.values(FactionName).map((faction) => faction as string);
-  Player.factions.sort((a, b) => allFactions.indexOf(a) - allFactions.indexOf(b));
+  let i = 0;
+  const factionIndexes = createEnumKeyedRecord(FactionName, (__) => i++);
+  Player.factions.sort((a, b) => factionIndexes[a] - factionIndexes[b]);
   const factionInfo = faction.getInfo();
 
   //Determine what factions you are banned from now that you have joined this faction
@@ -108,9 +111,8 @@ export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = fal
 
 export function processPassiveFactionRepGain(numCycles: number): void {
   if (Player.bitNodeN === 2) return;
-  for (const name of Object.keys(Factions)) {
+  for (const name of getRecordKeys(Factions)) {
     if (isFactionWork(Player.currentWork) && name === Player.currentWork.factionName) continue;
-    if (!Object.hasOwn(Factions, name)) continue;
     const faction = Factions[name];
     if (!faction.isMember) continue;
     // No passive rep for special factions

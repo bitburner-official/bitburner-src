@@ -1,12 +1,13 @@
+import type { Faction } from "../Faction";
+
+import React, { useEffect } from "react";
 import { Explore, Info, LastPage, LocalPolice, NewReleases, Report, SportsMma } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography, useTheme } from "@mui/material";
-import React, { useEffect } from "react";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { formatFavor, formatReputation } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
 import { FactionName } from "@enums";
-import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
 import { useRerender } from "../../ui/React/hooks";
@@ -59,7 +60,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
     Router.toFaction(faction, true);
   }
 
-  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement>, faction: string): void {
+  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement>, faction: FactionName): void {
     if (!event.isTrusted) return;
     joinFaction(Factions[faction]);
     props.rerender();

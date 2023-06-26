@@ -1,6 +1,5 @@
 import type { Singularity as ISingularity } from "@nsdefs";
 import type { Company } from "../Company/Company";
-import type { Faction } from "../Faction/Faction";
 
 import { Player } from "@player";
 import {
@@ -33,7 +32,7 @@ import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Companies } from "../Company/Companies";
 import { companiesMetadata } from "../Company/data/CompaniesMetadata";
-import { Factions, factionExists } from "../Faction/Factions";
+import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { getServerOnNetwork } from "../Server/ServerHelpers";
@@ -59,14 +58,6 @@ import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
-  const getFaction = function (ctx: NetscriptContext, name: string): Faction {
-    if (!factionExists(name)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid faction name: '${name}`);
-    }
-
-    return Factions[name];
-  };
-
   const getCompany = function (ctx: NetscriptContext, name: string): Company {
     const company = Companies[name];
     if (!company) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company name: '${name}'`);
@@ -112,9 +103,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     getAugmentationsFromFaction: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
-      const faction = getFaction(ctx, facName);
-
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      const faction = Factions[facName];
       return getFactionAugmentationsFiltered(faction);
     },
     getAugmentationPrereq: (ctx) => (_augName) => {
@@ -149,19 +139,19 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     purchaseAugmentation: (ctx) => (_facName, _augName) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
-      const fac = getFaction(ctx, facName);
+      const fac = Factions[facName];
       const aug = Augmentations[augName];
 
-      const augs = getFactionAugmentationsFiltered(fac);
+      const factionAugs = getFactionAugmentationsFiltered(fac);
 
-      if (!Player.factions.includes(fac.name)) {
+      if (!Player.factions.includes(facName)) {
         helpers.log(ctx, () => `You can't purchase augmentations from '${facName}' because you aren't a member`);
         return false;
       }
 
-      if (!augs.includes(augName)) {
+      if (!factionAugs.includes(augName)) {
         helpers.log(ctx, () => `Faction '${facName}' does not have the '${augName}' augmentation.`);
         return false;
       }
@@ -867,8 +857,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     joinFaction: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
-      getFaction(ctx, facName);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
 
       if (!Player.factionInvitations.includes(facName)) {
         helpers.log(ctx, () => `You have not been invited by faction '${facName}'`);
@@ -892,10 +881,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       (ctx) =>
       (_facName, _type, _focus = true) => {
         helpers.checkSingularityAccess(ctx);
-        const facName = helpers.string(ctx, "facName", _facName);
+        const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
         const type = helpers.string(ctx, "type", _type);
         const focus = !!_focus;
-        const faction = getFaction(ctx, facName);
+        const faction = Factions[facName];
 
         // if the player is in a gang and the target faction is any of the gang faction, fail
         if (Player.gang && faction.name === Player.getGangFaction().name) {
@@ -987,27 +976,27 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       },
     getFactionRep: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
-      const faction = getFaction(ctx, facName);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      const faction = Factions[facName];
       return faction.playerReputation;
     },
     getFactionFavor: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
-      const faction = getFaction(ctx, facName);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      const faction = Factions[facName];
       return faction.favor;
     },
     getFactionFavorGain: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
-      const faction = getFaction(ctx, facName);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      const faction = Factions[facName];
       return faction.getFavorGain();
     },
     donateToFaction: (ctx) => (_facName, _amt) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const amt = helpers.number(ctx, "amt", _amt);
-      const faction = getFaction(ctx, facName);
+      const faction = Factions[facName];
       if (!Player.factions.includes(faction.name)) {
         helpers.log(ctx, () => `You can't donate to '${facName}' because you aren't a member`);
         return false;

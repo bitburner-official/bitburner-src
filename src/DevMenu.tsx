@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 
 import { General } from "./DevMenu/ui/General";
 import { Stats } from "./DevMenu/ui/Stats";
-import { Factions } from "./DevMenu/ui/Factions";
+import { FactionsDev } from "./DevMenu/ui/FactionsDev";
 import { Augmentations } from "./DevMenu/ui/Augmentations";
 import { SourceFiles } from "./DevMenu/ui/SourceFiles";
 import { Programs } from "./DevMenu/ui/Programs";
@@ -34,7 +34,7 @@ export function DevMenuRoot(): React.ReactElement {
       <Typography>Development Menu - Only meant to be used for testing/debugging</Typography>
       <General />
       <Stats />
-      <Factions />
+      <FactionsDev />
       <Augmentations />
       <SourceFiles />
       <Programs />

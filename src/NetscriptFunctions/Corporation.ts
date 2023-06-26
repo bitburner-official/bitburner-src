@@ -51,7 +51,7 @@ import {
 } from "../Corporation/Actions";
 import { CorpUnlocks } from "../Corporation/data/CorporationUnlocks";
 import { CorpUpgrades } from "../Corporation/data/CorporationUpgrades";
-import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName } from "@enums";
+import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName, FactionName } from "@enums";
 import { IndustriesData, IndustryResearchTrees } from "../Corporation/data/IndustryData";
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
@@ -174,8 +174,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     return division.researched.has(researchName);
   }
 
-  function bribe(factionName: string, amountCash: number): boolean {
-    if (!player.factions.includes(factionName)) throw new Error("Invalid faction name");
+  function bribe(factionName: FactionName, amountCash: number): boolean {
     if (isNaN(amountCash) || amountCash < 0)
       throw new Error("Invalid value for amount field! Must be numeric, greater than 0.");
 
@@ -825,7 +824,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     },
     bribe: (ctx) => (_factionName, _amountCash) => {
       checkAccess(ctx);
-      const factionName = helpers.string(ctx, "factionName", _factionName);
+      const factionName = getEnumHelper("FactionName").nsGetMember(ctx, _factionName);
       const amountCash = helpers.number(ctx, "amountCash", _amountCash);
       return bribe(factionName, amountCash);
     },

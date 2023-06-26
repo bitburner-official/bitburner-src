@@ -1,3 +1,4 @@
+import type { FactionName } from "@enums";
 import { codingContractTypesMetadata, DescriptionFunc, GeneratorFunc, SolverFunc } from "./data/codingcontracttypes";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
@@ -73,11 +74,21 @@ export enum CodingContractResult {
 }
 
 /** A class that represents the type of reward a contract gives */
-export interface ICodingContractReward {
-  /* Name of Company/Faction name for reward, if applicable */
-  name?: string;
-  type: CodingContractRewardType;
-}
+export type ICodingContractReward =
+  | {
+      type: CodingContractRewardType.Money;
+    }
+  | {
+      type: CodingContractRewardType.FactionReputationAll;
+    }
+  | {
+      type: CodingContractRewardType.CompanyReputation;
+      name: string;
+    }
+  | {
+      type: CodingContractRewardType.FactionReputation;
+      name: FactionName;
+    };
 
 /**
  * A Coding Contract is a file that poses a programming-related problem to the Player.

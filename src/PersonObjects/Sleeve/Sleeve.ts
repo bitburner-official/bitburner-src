@@ -292,38 +292,31 @@ export class Sleeve extends Person implements SleevePerson {
     return true;
   }
 
-  /**
-   * Start work for one of the player's factions
-   * Returns boolean indicating success
-   */
-  workForFaction(factionName: string, workType: string): boolean {
+  /** TODO 2.4: Make this take in type correct data */
+  workForFaction(_factionName: string, _workType: string): boolean {
+    const factionName = getEnumHelper("FactionName").fuzzyGetMember(_factionName);
+    if (!factionName) return false;
     const faction = Factions[factionName];
-    if (factionName === "" || !faction || !Player.factions.includes(factionName)) {
-      return false;
-    }
-
+    const workType = getEnumHelper("FactionWorkType").fuzzyGetMember(_workType);
+    if (!workType) return false;
     const factionInfo = faction.getInfo();
 
-    // Set type of work (hacking/field/security), and the experience gains
-    const sanitizedWorkType = workType.toLowerCase();
-    let factionWorkType: FactionWorkType;
-    if (sanitizedWorkType.includes("hack")) {
-      if (!factionInfo.offerHackingWork) return false;
-      factionWorkType = FactionWorkType.hacking;
-    } else if (sanitizedWorkType.includes("field")) {
-      if (!factionInfo.offerFieldWork) return false;
-      factionWorkType = FactionWorkType.field;
-    } else if (sanitizedWorkType.includes("security")) {
-      if (!factionInfo.offerSecurityWork) return false;
-      factionWorkType = FactionWorkType.security;
-    } else {
-      return false;
+    switch (workType) {
+      case FactionWorkType.field:
+        if (!factionInfo.offerFieldWork) return false;
+        break;
+      case FactionWorkType.hacking:
+        if (!factionInfo.offerHackingWork) return false;
+        break;
+      case FactionWorkType.security:
+        if (!factionInfo.offerSecurityWork) return false;
+        break;
     }
 
     this.startWork(
       new SleeveFactionWork({
-        factionWorkType: factionWorkType,
-        factionName: faction.name,
+        factionWorkType: workType,
+        factionName: factionName,
       }),
     );
 

@@ -137,10 +137,9 @@ const tasks: {
 
     return {
       first: factions,
-      second: (s1: string) => {
+      second: (s1) => {
+        if (!getEnumHelper("FactionName").isMember(s1)) return ["------"];
         const faction = Factions[s1];
-        if (!faction) return ["------"];
-
         const facInfo = faction.getInfo();
         const options: string[] = [];
         if (facInfo.offerHackingWork) {

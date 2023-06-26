@@ -3,15 +3,15 @@ import { Player } from "@player";
 import { Factions } from "../Faction/Factions";
 import { Faction } from "../Faction/Faction";
 import { GetServer } from "../Server/AllServers";
-import { FactionName } from "@enums";
+import { AugmentationName, FactionName } from "@enums";
 import { Server } from "../Server/Server";
 
-function allFactionAugs(f: Faction): boolean {
-  const factionAugs = f.augmentations.slice().filter((aug) => aug !== "NeuroFlux Governor");
-  for (const factionAug of factionAugs) {
+function allFactionAugs(faction: Faction): boolean {
+  for (const factionAugName of faction.augmentations) {
+    if (factionAugName === AugmentationName.NeuroFluxGovernor) continue;
     if (
       !Player.augmentations.some((aug) => {
-        return aug.name == factionAug;
+        return aug.name == factionAugName;
       })
     )
       return false;

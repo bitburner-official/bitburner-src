@@ -1,5 +1,5 @@
 import { saveObject } from "../../src/SaveObject";
-import { Factions, initFactions } from "../../src/Faction/Factions";
+import { Factions } from "../../src/Faction/Factions";
 import { Player, setPlayer } from "../../src/Player";
 import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
 import { joinFaction } from "../../src/Faction/FactionHelpers";
@@ -33,7 +33,6 @@ function establishInitialConditions() {
   setPlayer(new PlayerObject());
   Player.init();
   Player.identifier = "Overwritten identifier";
-  initFactions();
   Player.sleevesFromCovenant = 1;
   Player.sourceFiles.set(10, 1);
   Player.prestigeAugmentation();
