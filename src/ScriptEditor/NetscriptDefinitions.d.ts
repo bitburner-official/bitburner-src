@@ -911,17 +911,17 @@ interface GangMemberInfo {
 interface GangMemberAscension {
   /** Amount of respect lost from ascending */
   respect: number;
-  /** Hacking multiplier gained from ascending */
+  /** Factor by which the hacking ascension multiplier was increased (newMult / oldMult) */
   hack: number;
-  /** Strength multiplier gained from ascending */
+  /** Factor by which the strength ascension multiplier was increased (newMult / oldMult) */
   str: number;
-  /** Defense multiplier gained from ascending */
+  /** Factor by which the defense ascension multiplier was increased (newMult / oldMult) */
   def: number;
-  /** Dexterity multiplier gained from ascending */
+  /** Factor by which the dexterity ascension multiplier was increased (newMult / oldMult) */
   dex: number;
-  /** Agility multiplier gained from ascending */
+  /** Factor by which the agility ascension multiplier was increased (newMult / oldMult) */
   agi: number;
-  /** Charisma multiplier gained from ascending */
+  /** Factor by which the charisma ascension multiplier was increased (newMult / oldMult) */
   cha: number;
 }
 
@@ -3508,7 +3508,7 @@ export interface Gang {
    * Ascend the specified Gang Member.
    *
    * @param memberName - Name of member to ascend.
-   * @returns Object with info about the ascension results. Undefined if ascension did not occur.
+   * @returns Object with info about the ascension results, or undefined if ascension did not occur.
    */
   ascendMember(memberName: string): GangMemberAscension | undefined;
 
@@ -3517,10 +3517,10 @@ export interface Gang {
    * @remarks
    * RAM cost: 2 GB
    *
-   * Get the result of an ascension without ascending.
+   * Get a {@link GangMemberAscension} result for ascending a gang member without performing the ascension.
    *
    * @param memberName - Name of member.
-   * @returns Object with info about the ascension results. Undefined if ascension is impossible.
+   * @returns Object with info about the ascension results, or undefined if ascension is not possible.
    */
   getAscensionResult(memberName: string): GangMemberAscension | undefined;
 

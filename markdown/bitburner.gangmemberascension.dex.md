@@ -4,7 +4,7 @@
 
 ## GangMemberAscension.dex property
 
-Dexterity multiplier gained from ascending
+Factor by which the dexterity ascension multiplier was increased (newMult / oldMult)
 
 **Signature:**
 
