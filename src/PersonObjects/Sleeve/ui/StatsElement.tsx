@@ -13,7 +13,7 @@ import {
 } from "../../../ui/formatNumber";
 import { Settings } from "../../../Settings/Settings";
 import { StatsRow } from "../../../ui/React/StatsRow";
-import { useStyles as useStyles } from "../../../ui/React/CharacterOverview";
+import { useStyles } from "../../../ui/React/CharacterOverview";
 import { Money } from "../../../ui/React/Money";
 import { MoneyRate } from "../../../ui/React/MoneyRate";
 import { ReputationRate } from "../../../ui/React/ReputationRate";

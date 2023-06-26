@@ -3,7 +3,7 @@ import React from "react";
 import { Typography, TableCell, TableRow } from "@mui/material";
 
 import { formatExp, formatNumberNoSuffix } from "../formatNumber";
-import { useStyles as useStyles } from "./CharacterOverview";
+import { useStyles } from "./CharacterOverview";
 
 interface ITableRowData {
   content?: string;
