@@ -67,6 +67,7 @@ export function WireCuttingGame({ onSuccess, onFailure, ...otherProps }: IMiniga
   const [cutWires, setCutWires] = useState(new Array(wiresRef.current.length).fill(false));
   const hasAugment = Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true);
 
+  // TODO: refactor, move the code from this effect to a `press` function
   useEffect(() => {
     // check if we won
     const wiresToBeCut = [];
