@@ -1,11 +1,13 @@
-import { CompanyPosition } from "./CompanyPosition";
+import type { CompanyPosition } from "./CompanyPosition";
+
+import { CompanyName } from "@enums";
 import * as posNames from "./data/JobTracks";
 import { favorToRep, repToFavor } from "../Faction/formulas/favor";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
 export interface IConstructorParams {
-  name: string;
+  name: CompanyName;
   info: string;
   companyPositions: Record<string, boolean>;
   expMultiplier: number;
@@ -14,24 +16,15 @@ export interface IConstructorParams {
   isMegacorp?: boolean;
 }
 
-const DefaultConstructorParams: IConstructorParams = {
-  name: "",
-  info: "",
-  companyPositions: {},
-  expMultiplier: 1,
-  salaryMultiplier: 1,
-  jobStatReqOffset: 0,
-};
-
 export class Company {
-  /** Company name */
-  name: string;
+  // Type explicitly defined because CompanyName isn't a real enum.
+  name: CompanyName = CompanyName.NoodleBar;
 
   /** Description and general information about company */
-  info: string;
+  info = "";
 
   /** Has faction associated. */
-  isMegacorp: boolean;
+  isMegacorp = false;
 
   /**
    * Object that holds all available positions in this Company.
@@ -40,11 +33,11 @@ export class Company {
    *
    * Must match names of Company Positions, defined in data/companypositionnames.ts
    */
-  companyPositions: Record<string, boolean>;
+  companyPositions: Record<string, boolean> = {};
 
   /** Company-specific multiplier for earnings */
-  expMultiplier: number;
-  salaryMultiplier: number;
+  expMultiplier = 1;
+  salaryMultiplier = 1;
 
   /**
    * The additional levels of stats you need to quality for a job
@@ -53,14 +46,15 @@ export class Company {
    * For example, the base stat requirement for an intern position is 1.
    * But if a company has a offset of 200, then you would need stat(s) of 201
    */
-  jobStatReqOffset: number;
+  jobStatReqOffset = 0;
 
   /** Properties to track the player's progress in this company */
-  isPlayerEmployed: boolean;
-  playerReputation: number;
-  favor: number;
+  isPlayerEmployed = false;
+  playerReputation = 0;
+  favor = 0;
 
-  constructor(p: IConstructorParams = DefaultConstructorParams) {
+  constructor(p?: IConstructorParams) {
+    if (!p) return;
     this.name = p.name;
     this.info = p.info;
     this.companyPositions = p.companyPositions;

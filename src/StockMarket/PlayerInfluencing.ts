@@ -74,9 +74,7 @@ export function influenceStockThroughCompanyWork(
 ): void {
   const compName = company.name;
   let stock: Stock | null = null;
-  if (typeof compName === "string" && compName !== "") {
-    stock = StockMarket[compName];
-  }
+  stock = StockMarket[compName];
   if (!(stock instanceof Stock)) {
     return;
   }
