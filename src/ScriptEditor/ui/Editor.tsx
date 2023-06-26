@@ -20,27 +20,24 @@ export function Editor(props: EditorProps) {
 
   const { options } = useScriptEditorContext();
 
-  const propsRef = useRef(props);
-  const initialOptionsRef = useRef(options);
-
   useEffect(() => {
     if (!containerDiv.current) return;
     // Before initializing monaco editor
-    propsRef.current.beforeMount();
+    props.beforeMount();
 
     // Initialize monaco editor
     editorRef.current = monaco.editor.create(containerDiv.current, {
       value: "",
       automaticLayout: true,
       language: "javascript",
-      ...initialOptionsRef.current,
+      ...options,
       glyphMargin: true,
     });
 
     // After initializing monaco editor
-    propsRef.current.onMount(editorRef.current);
+    props.onMount(editorRef.current);
     subscription.current = editorRef.current.onDidChangeModelContent(() => {
-      propsRef.current.onChange(editorRef.current?.getValue());
+      props.onChange(editorRef.current?.getValue());
     });
 
     // Unmounting
@@ -49,6 +46,8 @@ export function Editor(props: EditorProps) {
       editorRef.current?.getModel()?.dispose();
       editorRef.current?.dispose();
     };
+    // this eslint ignore instruction can potentially cause unobvious bugs (e.g. if `props.onChange` starts using a prop or state).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <div ref={containerDiv} style={{ height: "1px", width: "100%", flexGrow: 1 }} />;
