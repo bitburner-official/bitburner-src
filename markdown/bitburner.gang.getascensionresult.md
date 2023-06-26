@@ -4,7 +4,7 @@
 
 ## Gang.getAscensionResult() method
 
-Get the result of an ascension without ascending.
+Get the result of an ascension without ascending. Theses multipliers are gains made from the possible ascension; present_stat + ascension_result_stat = new_stat.
 
 **Signature:**
 
