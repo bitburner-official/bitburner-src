@@ -152,8 +152,8 @@ export function prestigeAugmentation(): void {
   staneksGift.prestigeAugmentation();
 
   resetPidCounter();
-  ProgramsSeen.splice(0, ProgramsSeen.length);
-  InvitationsSeen.splice(0, InvitationsSeen.length);
+  ProgramsSeen.clear();
+  InvitationsSeen.clear();
 }
 
 // Prestige by destroying Bit Node and gaining a Source File

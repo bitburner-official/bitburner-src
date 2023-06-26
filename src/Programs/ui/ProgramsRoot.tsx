@@ -13,7 +13,7 @@ import { Programs } from "../Programs";
 import { CreateProgramWork, isCreateProgramWork } from "../../Work/CreateProgramWork";
 import { useRerender } from "../../ui/React/hooks";
 
-export const ProgramsSeen: string[] = [];
+export const ProgramsSeen = new Set<string>();
 
 export function ProgramsRoot(): React.ReactElement {
   useRerender(200);
@@ -35,8 +35,7 @@ export function ProgramsRoot(): React.ReactElement {
 
   useEffect(() => {
     programs.forEach((p) => {
-      if (ProgramsSeen.includes(p.name)) return;
-      ProgramsSeen.push(p.name);
+      ProgramsSeen.add(p.name);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

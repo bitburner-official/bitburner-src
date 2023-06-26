@@ -14,7 +14,7 @@ import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
 
-export const InvitationsSeen: string[] = [];
+export const InvitationsSeen = new Set<FactionName>();
 
 const fontSize = "small";
 const marginRight = 0.5;
@@ -173,8 +173,7 @@ export function FactionsRoot(): React.ReactElement {
   const rerender = useRerender(200);
   useEffect(() => {
     Player.factionInvitations.forEach((faction) => {
-      if (InvitationsSeen.includes(faction)) return;
-      InvitationsSeen.push(faction);
+      InvitationsSeen.add(faction);
     });
   }, []);
 

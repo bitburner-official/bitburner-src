@@ -134,8 +134,8 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   }
 
   const augmentationCount = Player.queuedAugmentations.length;
-  const invitationsCount = Player.factionInvitations.filter((f) => !InvitationsSeen.includes(f)).length;
-  const programCount = getAvailableCreatePrograms().length - ProgramsSeen.length;
+  const invitationsCount = Player.factionInvitations.filter((f) => !InvitationsSeen.has(f)).length;
+  const programCount = getAvailableCreatePrograms().length - ProgramsSeen.size;
 
   const canOpenFactions =
     Player.factionInvitations.length > 0 ||
