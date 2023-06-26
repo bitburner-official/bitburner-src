@@ -4,7 +4,7 @@
 
 ## GangMemberAscension.str property
 
-Strength multiplier gained from ascending
+Factor by which the strength ascension multiplier was increased (newMult / oldMult)
 
 **Signature:**
 

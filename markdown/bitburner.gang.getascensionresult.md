@@ -22,11 +22,11 @@ getAscensionResult(memberName: string): GangMemberAscension | undefined;
 
 [GangMemberAscension](./bitburner.gangmemberascension.md) \| undefined
 
-Object with info about the ascension results. Undefined if ascension is impossible.
+Object with info about the ascension results, or undefined if ascension is not possible.
 
 ## Remarks
 
 RAM cost: 2 GB
 
-Get the result of an ascension without ascending.
+Get a [GangMemberAscension](./bitburner.gangmemberascension.md) result for ascending a gang member without performing the ascension.
 
