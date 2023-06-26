@@ -206,7 +206,7 @@ export function WorkInProgressRoot(): React.ReactElement {
     workInfo = {
       buttons: {
         cancel: () => {
-          Router.toLocation(Locations[LocationName.Slums]);
+          Router.toPage(Page.Location, { location: Locations[LocationName.Slums] });
           Player.finishWork(true);
         },
         unfocus: () => {
@@ -374,11 +374,11 @@ export function WorkInProgressRoot(): React.ReactElement {
     workInfo = {
       buttons: {
         cancel: () => {
-          Router.toFaction(faction);
+          Router.toPage(Page.Faction, { faction });
           Player.finishWork(true);
         },
         unfocus: () => {
-          Router.toFaction(faction);
+          Router.toPage(Page.Faction, { faction });
           Player.stopFocusing();
         },
       },
@@ -426,11 +426,11 @@ export function WorkInProgressRoot(): React.ReactElement {
       buttons: {
         cancel: () => {
           Player.finishWork(true);
-          Router.toJob(Locations[comp.name]);
+          Router.toPage(Page.Job, { location: Locations[comp.name] });
         },
         unfocus: () => {
           Player.stopFocusing();
-          Router.toJob(Locations[comp.name]);
+          Router.toPage(Page.Job, { location: Locations[comp.name] });
         },
       },
       title: (

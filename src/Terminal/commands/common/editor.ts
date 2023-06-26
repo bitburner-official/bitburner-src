@@ -1,5 +1,5 @@
 import { Terminal } from "../../../Terminal";
-import { ScriptEditorRouteOptions } from "../../../ui/Router";
+import { ScriptEditorRouteOptions, Page } from "../../../ui/Router";
 import { Router } from "../../../ui/GameRoot";
 import { BaseServer } from "../../../Server/BaseServer";
 import { CursorPositions } from "../../../ScriptEditor/CursorPositions";
@@ -26,17 +26,17 @@ export async function main(ns) {
 export function commonEditor(
   command: string,
   { args, server }: EditorParameters,
-  scriptEditorRouteOptions?: ScriptEditorRouteOptions,
+  options?: ScriptEditorRouteOptions,
 ): void {
   if (args.length < 1) return Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`);
-  const filesToOpen = new Map<ScriptFilePath | TextFilePath, string>();
+  const files = new Map<ScriptFilePath | TextFilePath, string>();
   for (const arg of args) {
     const pattern = String(arg);
 
     // Glob of existing files
     if (pattern.includes("*") || pattern.includes("?")) {
       for (const [path, file] of getGlobbedFileMap(pattern, server, Terminal.currDir)) {
-        filesToOpen.set(path, file.content);
+        files.set(path, file.content);
       }
       continue;
     }
@@ -49,8 +49,8 @@ export function commonEditor(
     }
     const file = server.getContentFile(path);
     const content = file ? file.content : isNs2(path) ? newNs2Template : "";
-    filesToOpen.set(path, content);
+    files.set(path, content);
     if (content === newNs2Template) CursorPositions.saveCursor(path, { row: 3, column: 5 });
   }
-  Router.toScriptEditor(filesToOpen, scriptEditorRouteOptions);
+  Router.toPage(Page.ScriptEditor, { files, options });
 }
