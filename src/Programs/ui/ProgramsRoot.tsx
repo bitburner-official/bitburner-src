@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { find } from "lodash";
 
 import { Box, Typography, Button, Container, Paper } from "@mui/material";
@@ -33,12 +33,12 @@ export function ProgramsRoot(): React.ReactElement {
       return (a.create?.level ?? 0) - (b.create?.level ?? 0);
     });
 
-  const programsRef = useRef(programs);
   useEffect(() => {
-    programsRef.current.forEach((p) => {
+    programs.forEach((p) => {
       if (ProgramsSeen.includes(p.name)) return;
       ProgramsSeen.push(p.name);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getHackingLevelRemaining = (lvl: number): number => {
