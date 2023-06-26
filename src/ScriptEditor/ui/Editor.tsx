@@ -13,7 +13,7 @@ interface EditorProps {
   onChange: (newCode?: string) => void;
 }
 
-export function Editor(props: EditorProps) {
+export function Editor({ beforeMount, onMount, onChange }: EditorProps) {
   const containerDiv = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const subscription = useRef<monaco.IDisposable | null>(null);
@@ -23,7 +23,7 @@ export function Editor(props: EditorProps) {
   useEffect(() => {
     if (!containerDiv.current) return;
     // Before initializing monaco editor
-    props.beforeMount();
+    beforeMount();
 
     // Initialize monaco editor
     editorRef.current = monaco.editor.create(containerDiv.current, {
@@ -35,9 +35,9 @@ export function Editor(props: EditorProps) {
     });
 
     // After initializing monaco editor
-    props.onMount(editorRef.current);
+    onMount(editorRef.current);
     subscription.current = editorRef.current.onDidChangeModelContent(() => {
-      props.onChange(editorRef.current?.getValue());
+      onChange(editorRef.current?.getValue());
     });
 
     // Unmounting
@@ -46,7 +46,8 @@ export function Editor(props: EditorProps) {
       editorRef.current?.getModel()?.dispose();
       editorRef.current?.dispose();
     };
-    // this eslint ignore instruction can potentially cause unobvious bugs (e.g. if `props.onChange` starts using a prop or state).
+    // this eslint ignore instruction can potentially cause unobvious bugs
+    // (e.g. if `onChange` starts using a prop or state in parent component).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
