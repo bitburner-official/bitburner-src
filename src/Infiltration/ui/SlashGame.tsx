@@ -1,5 +1,5 @@
 import { Box, Paper, Typography } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { KEY } from "../../utils/helpers/keyCodes";
@@ -25,11 +25,34 @@ const difficulties: {
   Impossible: { window: 150 },
 };
 
-export function SlashGame({ difficulty: _difficulty, onSuccess, onFailure }: IMinigameProps): React.ReactElement {
-  const difficulty: Difficulty = { window: 0 };
-  interpolate(difficulties, _difficulty, difficulty);
+export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps): React.ReactElement {
+  const timingWindow = useMemo(() => {
+    const out: Difficulty = { window: 0 };
+    interpolate(difficulties, difficulty, out);
+    return out.window;
+  }, [difficulty]);
+
+  const guardingTime = useMemo(() => Math.random() * 3250 + 1500 - (250 + timingWindow), [timingWindow]);
+  const hasAugment = useMemo(() => Player.hasAugmentation(AugmentationName.MightOfAres, true), []);
 
   const [phase, setPhase] = useState(0);
+
+  useEffect(() => {
+    const preparingTime = timingWindow;
+    const attackingTime = 250;
+
+    let id = setTimeout(() => {
+      setPhase(1);
+      id = setTimeout(() => {
+        setPhase(2);
+        id = setTimeout(() => onFailure(), attackingTime);
+      }, preparingTime);
+    }, guardingTime);
+
+    return () => {
+      clearInterval(id);
+    };
+  }, [timingWindow, onFailure, guardingTime]);
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();
@@ -41,26 +64,6 @@ export function SlashGame({ difficulty: _difficulty, onSuccess, onFailure }: IMi
     }
   }
 
-  const guardingTimeRef = useRef(Math.random() * 3250 + 1500 - (250 + difficulty.window));
-
-  useEffect(() => {
-    const preparingTime = difficulty.window;
-    const attackingTime = 250;
-
-    let id = window.setTimeout(() => {
-      setPhase(1);
-      id = window.setTimeout(() => {
-        setPhase(2);
-        id = window.setTimeout(() => onFailure(), attackingTime);
-      }, preparingTime);
-    }, guardingTimeRef.current);
-
-    return () => {
-      clearInterval(id);
-    };
-  }, [difficulty.window, onFailure]);
-
-  const hasAugment = Player.hasAugmentation(AugmentationName.MightOfAres, true);
   return (
     <>
       <GameTimer millis={5000} onExpire={onFailure} />
@@ -70,7 +73,7 @@ export function SlashGame({ difficulty: _difficulty, onSuccess, onFailure }: IMi
         {hasAugment ? (
           <Box sx={{ my: 1 }}>
             <Typography variant="h5">Guard will drop in...</Typography>
-            <GameTimer millis={guardingTimeRef.current} onExpire={() => null} ignoreAugment_WKSharmonizer noPaper />
+            <GameTimer millis={guardingTime} onExpire={() => null} ignoreAugment_WKSharmonizer noPaper />
           </Box>
         ) : (
           <></>
