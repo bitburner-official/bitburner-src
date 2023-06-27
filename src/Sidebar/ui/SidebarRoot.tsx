@@ -56,9 +56,12 @@ import { hash } from "../../hash/hash";
 import { Locations } from "../../Locations/Locations";
 import { useRerender } from "../../ui/React/hooks";
 
-const RotatedDoubleArrowIcon = React.forwardRef((props: { color: "primary" | "secondary" | "error" }, __ref) => (
-  <DoubleArrowIcon color={props.color} style={{ transform: "rotate(-90deg)" }} />
-));
+const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
+  props: { color: "primary" | "secondary" | "error" },
+  __ref: React.ForwardedRef<SVGSVGElement>,
+) {
+  return <DoubleArrowIcon color={props.color} style={{ transform: "rotate(-90deg)" }} ref={__ref} />;
+});
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: theme.spacing(31),
@@ -131,8 +134,8 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   }
 
   const augmentationCount = Player.queuedAugmentations.length;
-  const invitationsCount = Player.factionInvitations.filter((f) => !InvitationsSeen.includes(f)).length;
-  const programCount = getAvailableCreatePrograms().length - ProgramsSeen.length;
+  const invitationsCount = Player.factionInvitations.filter((f) => !InvitationsSeen.has(f)).length;
+  const programCount = getAvailableCreatePrograms().length - ProgramsSeen.size;
 
   const canOpenFactions =
     Player.factionInvitations.length > 0 ||
@@ -155,6 +158,24 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const canStockMarket = Player.hasWseAccount;
   const canBladeburner = !!Player.bladeburner;
   const canStaneksGift = Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1);
+
+  const clickPage = useCallback(
+    (page: Page) => {
+      if (page === Page.Job) {
+        Router.toPage(page, { location: Locations[Object.keys(Player.jobs)[0]] });
+      } else if (page == Page.ScriptEditor) {
+        Router.toPage(page, {});
+      } else if (isSimplePage(page)) {
+        Router.toPage(page);
+      } else {
+        throw new Error("Can't handle click on Page " + page);
+      }
+      if (flash === page) {
+        iTutorialNextStep();
+      }
+    },
+    [flash],
+  );
 
   useEffect(() => {
     // Shortcuts to navigate through the game
@@ -230,25 +251,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
 
     document.addEventListener("keydown", handleShortcuts);
     return () => document.removeEventListener("keydown", handleShortcuts);
-  }, []);
-
-  const clickPage = useCallback(
-    (page: Page) => {
-      if (page === Page.Job) {
-        Router.toPage(page, { location: Locations[Object.keys(Player.jobs)[0]] });
-      } else if (page == Page.ScriptEditor) {
-        Router.toPage(page, {});
-      } else if (isSimplePage(page)) {
-        Router.toPage(page);
-      } else {
-        throw new Error("Can't handle click on Page " + page);
-      }
-      if (flash === page) {
-        iTutorialNextStep();
-      }
-    },
-    [flash],
-  );
+  }, [canJob, clickPage, props.page]);
 
   const classes = useStyles();
   const [open, setOpen] = useState(Settings.IsSidebarOpened);
@@ -280,7 +283,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             />
           </ListItem>
         ),
-        [li_classes, open],
+        [ChevronOpenClose, li_classes],
       )}
       <Divider />
       <List>

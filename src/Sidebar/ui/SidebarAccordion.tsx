@@ -11,7 +11,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { SidebarItem, ICreateProps as IItemProps } from "./SidebarItem";
 import type { Page } from "../../ui/Router";
 
-interface IProps {
+type SidebarAccordionProps = {
   key_: string;
   page: Page;
   clickPage: (page: Page) => void;
@@ -20,7 +20,7 @@ interface IProps {
   icon: React.ReactElement["type"];
   sidebarOpen: boolean;
   classes: any;
-}
+};
 
 // We can't useCallback for this, because in the items map it would be
 // called a changing number of times, and hooks can't be called in loops. So
@@ -42,9 +42,18 @@ function getClickFn(toWrap: (page: Page) => void, page: Page) {
 }
 
 // This can't be usefully memoized, because props.items is a new array every time.
-export function SidebarAccordion(props: IProps): React.ReactElement {
+export function SidebarAccordion({
+  classes,
+  icon: Icon,
+  sidebarOpen,
+  key_,
+  items,
+  page,
+  clickPage,
+  flash,
+}: SidebarAccordionProps): React.ReactElement {
   const [open, setOpen] = useState(true);
-  const li_classes = useMemo(() => ({ root: props.classes.listitem }), [props.classes.listitem]);
+  const li_classes = useMemo(() => ({ root: classes.listitem }), [classes.listitem]);
 
   // Explicitily useMemo() to save rerendering deep chunks of this tree.
   // memo() can't be (easily) used on components like <List>, because the
@@ -55,18 +64,18 @@ export function SidebarAccordion(props: IProps): React.ReactElement {
         () => (
           <ListItem classes={li_classes} button onClick={() => setOpen((open) => !open)}>
             <ListItemIcon>
-              <Tooltip title={!props.sidebarOpen ? props.key_ : ""}>
-                <props.icon color={"primary"} />
+              <Tooltip title={!sidebarOpen ? key_ : ""}>
+                <Icon color={"primary"} />
               </Tooltip>
             </ListItemIcon>
-            <ListItemText primary={<Typography>{props.key_}</Typography>} />
+            <ListItemText primary={<Typography>{key_}</Typography>} />
             {open ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
           </ListItem>
         ),
-        [li_classes, props.sidebarOpen, props.key_, open, props.icon],
+        [li_classes, sidebarOpen, key_, open, Icon],
       )}
       <Collapse in={open} timeout="auto" unmountOnExit>
-        {props.items.map((x) => {
+        {items.map((x) => {
           if (typeof x !== "object") return null;
           const { key_, icon, count, active } = x;
           return (
@@ -75,11 +84,11 @@ export function SidebarAccordion(props: IProps): React.ReactElement {
               key_={key_}
               icon={icon}
               count={count}
-              active={active ?? props.page === key_}
-              clickFn={getClickFn(props.clickPage, key_)}
-              flash={props.flash === key_}
-              classes={props.classes}
-              sidebarOpen={props.sidebarOpen}
+              active={active ?? page === key_}
+              clickFn={getClickFn(clickPage, key_)}
+              flash={flash === key_}
+              classes={classes}
+              sidebarOpen={sidebarOpen}
             />
           );
         })}

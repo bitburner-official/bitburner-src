@@ -13,7 +13,7 @@ import { Upload } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
-export function SaveFile(): React.ReactElement {
+export function SaveFileDev(): React.ReactElement {
   const importInput = useRef<HTMLInputElement>(null);
   const [saveFile, setSaveFile] = useState("");
   const [restoreScripts, setRestoreScripts] = useState(true);

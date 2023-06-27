@@ -9,57 +9,54 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-interface IProps {
+interface CodingContractProps {
   c: CodingContract;
   onClose: () => void;
   onAttempt: (answer: string) => void;
 }
 
-export const CodingContractEvent = new EventEmitter<[IProps]>();
+export const CodingContractEvent = new EventEmitter<[CodingContractProps]>();
 
 export function CodingContractModal(): React.ReactElement {
-  const [props, setProps] = useState<IProps | null>(null);
+  const [contract, setContract] = useState<CodingContractProps | null>(null);
   const [answer, setAnswer] = useState("");
 
   useEffect(() => {
-    CodingContractEvent.subscribe((props) => setProps(props));
+    CodingContractEvent.subscribe((props) => setContract(props));
   });
-  if (props === null) return <></>;
+  if (contract === null) return <></>;
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setAnswer(event.target.value);
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
-    if (props === null) return;
-    // React just won't cooperate on this one.
-    // "React.KeyboardEvent<HTMLInputElement>" seems like the right type but
-    // whatever ...
-    const value = (event.target as any).value;
+    if (contract === null) return;
+    const value = event.currentTarget.value;
 
     if (event.key === KEY.ENTER && value !== "") {
       event.preventDefault();
-      props.onAttempt(answer);
+      contract.onAttempt(answer);
       setAnswer("");
       close();
     }
   }
 
   function close(): void {
-    if (props === null) return;
-    props.onClose();
-    setProps(null);
+    if (contract === null) return;
+    contract.onClose();
+    setContract(null);
   }
 
-  const contractType = CodingContractTypes[props.c.type];
+  const contractType = CodingContractTypes[contract.c.type];
   const description = [];
-  for (const [i, value] of contractType.desc(props.c.data).split("\n").entries())
+  for (const [i, value] of contractType.desc(contract.c.data).split("\n").entries())
     description.push(<span key={i} dangerouslySetInnerHTML={{ __html: value + "<br />" }}></span>);
   return (
-    <Modal open={props !== null} onClose={close}>
-      <CopyableText variant="h4" value={props.c.type} />
+    <Modal open={contract !== null} onClose={close}>
+      <CopyableText variant="h4" value={contract.c.type} />
       <Typography>
-        You are attempting to solve a Coding Contract. You have {props.c.getMaxNumTries() - props.c.tries} tries
+        You are attempting to solve a Coding Contract. You have {contract.c.getMaxNumTries() - contract.c.tries} tries
         remaining, after which the contract will self-destruct.
       </Typography>
       <br />
@@ -75,7 +72,7 @@ export function CodingContractModal(): React.ReactElement {
           endAdornment: (
             <Button
               onClick={() => {
-                props.onAttempt(answer);
+                contract.onAttempt(answer);
                 setAnswer("");
                 close();
               }}

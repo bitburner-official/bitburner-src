@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { AugmentationName } from "@enums";
 
-export function Augmentations(): React.ReactElement {
+export function AugmentationsDev(): React.ReactElement {
   const [augmentation, setAugmentation] = useState(AugmentationName.Targeting1);
 
   function setAugmentationDropdown(event: SelectChangeEvent): void {

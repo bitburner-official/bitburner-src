@@ -78,14 +78,6 @@ function Root(props: IProps): React.ReactElement {
   }
 
   useEffect(() => {
-    if (currentScript !== null) {
-      const tabIndex = currentTabIndex();
-      if (typeof tabIndex === "number") onTabClick(tabIndex);
-      parseCode(currentScript.code);
-    }
-  }, []);
-
-  useEffect(() => {
     function keydown(event: KeyboardEvent): void {
       if (Settings.DisableHotkeys) return;
       //Ctrl + b
@@ -145,10 +137,10 @@ function Root(props: IProps): React.ReactElement {
     finishUpdatingRAM();
   }, 300);
 
-  function parseCode(newCode: string) {
+  const parseCode = (newCode: string) => {
     startUpdatingRAM();
     debouncedCodeParsing(newCode);
-  }
+  };
 
   // How to load function definition in monaco
   // https://github.com/Microsoft/monaco-editor/issues/1415
@@ -443,6 +435,16 @@ function Root(props: IProps): React.ReactElement {
     onOpenNextTab,
     onOpenPreviousTab,
   });
+
+  useEffect(() => {
+    if (currentScript !== null) {
+      const tabIndex = currentTabIndex();
+      if (typeof tabIndex === "number") onTabClick(tabIndex);
+      parseCode(currentScript.code);
+    }
+    // disable eslint because we want to run this only once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

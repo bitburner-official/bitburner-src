@@ -4,13 +4,16 @@ import { useCallback, useEffect, useState } from "react";
  * @param autoRerenderTime: Optional. If provided and nonzero, used as the ms interval to automatically call the rerender function.
  */
 export function useRerender(autoRerenderTime?: number) {
-  const setRerender = useState(false)[1];
-  const rerender = () => setRerender((old) => !old);
+  const [__, setRerender] = useState(false);
+
+  const rerender = useCallback(() => setRerender((old) => !old), []);
+
   useEffect(() => {
     if (!autoRerenderTime) return;
     const intervalID = setInterval(rerender, autoRerenderTime);
     return () => clearInterval(intervalID);
-  }, []);
+  }, [rerender, autoRerenderTime]);
+
   return rerender;
 }
 

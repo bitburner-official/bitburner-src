@@ -40,6 +40,7 @@ const useStyles = makeStyles(() =>
 );
 
 function WarehouseRoot(props: WarehouseProps): React.ReactElement {
+  const classes = useStyles();
   const corp = useCorporation();
   const division = useDivision();
   const [smartSupplyOpen, setSmartSupplyOpen] = useState(false);
@@ -56,8 +57,6 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
     corp.funds = corp.funds - sizeUpgradeCost;
     props.rerender();
   }
-
-  const classes = useStyles();
 
   // Current State:
   let stateText;

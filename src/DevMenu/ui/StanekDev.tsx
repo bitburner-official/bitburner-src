@@ -10,7 +10,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
 import { Adjuster } from "./Adjuster";
 
-export function Stanek(): React.ReactElement {
+export function StanekDev(): React.ReactElement {
   function addCycles(): void {
     staneksGift.storedCycles = 1e6;
   }

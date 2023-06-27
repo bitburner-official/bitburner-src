@@ -32,7 +32,9 @@ export function ButtonWithTooltip({
   return (
     <Tooltip {...tooltipProps} title={tooltipText}>
       <span>
-        <Button {...buttonProps} disabled={disabled} onClick={onClick} children={children} />
+        <Button {...buttonProps} disabled={disabled} onClick={onClick}>
+          {children}
+        </Button>
       </span>
     </Tooltip>
   );

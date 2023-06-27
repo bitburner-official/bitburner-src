@@ -151,7 +151,7 @@ export class CodingContract {
   /** Creates a popup to prompt the player to solve the problem */
   async prompt(): Promise<CodingContractResult> {
     return new Promise<CodingContractResult>((resolve) => {
-      const props = {
+      CodingContractEvent.emit({
         c: this,
         onClose: () => {
           resolve(CodingContractResult.Cancelled);
@@ -163,8 +163,7 @@ export class CodingContract {
             resolve(CodingContractResult.Failure);
           }
         },
-      };
-      CodingContractEvent.emit(props);
+      });
     });
   }
 

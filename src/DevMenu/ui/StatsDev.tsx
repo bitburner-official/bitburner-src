@@ -12,7 +12,7 @@ import { Player } from "@player";
 
 const bigNumber = 1e27;
 
-export function Stats(): React.ReactElement {
+export function StatsDev(): React.ReactElement {
   function modifyExp(stat: string, modifier: number) {
     return function (exp: number) {
       switch (stat) {

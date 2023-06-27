@@ -40,6 +40,7 @@ import { ActionIdentifier } from "../../Bladeburner/ActionIdentifier";
 import { Skills } from "../../PersonObjects/Skills";
 import { calculateSkillProgress } from "../../PersonObjects/formulas/skill";
 import { EventEmitter } from "../../utils/EventEmitter";
+import { useRerender } from "./hooks";
 
 type SkillRowName = "Hack" | "Str" | "Def" | "Dex" | "Agi" | "Cha" | "Int";
 type RowName = SkillRowName | "HP" | "Money";
@@ -103,8 +104,10 @@ function SkillBar({ name, color }: SkillBarProps): React.ReactElement {
       const mult = skillMultUpdaters[name]();
       setProgress(calculateSkillProgress(Player.exp[skillNameMap[name]], mult));
     });
+
     return clearSubscription;
-  }, []);
+  }, [name]);
+
   return (
     <TableRow>
       <StatsProgressOverviewCell progress={progress} color={color} />
@@ -118,11 +121,12 @@ interface ValProps {
 }
 export function Val({ name, color }: ValProps): React.ReactElement {
   //val isn't actually used here, the update of val just forces a refresh of the formattedVal that gets shown
-  const setVal = useState(valUpdaters[name]())[1];
+  const [__, setVal] = useState(valUpdaters[name]());
   useEffect(() => {
     const clearSubscription = OverviewEventEmitter.subscribe(() => setVal(valUpdaters[name]()));
     return clearSubscription;
-  }, []);
+  }, [name]);
+
   return <Typography color={color}>{formattedVals[name]()}</Typography>;
 }
 
@@ -249,11 +253,11 @@ function ActionText(props: { action: ActionIdentifier }): React.ReactElement {
 
 function BladeburnerText(): React.ReactElement {
   const classes = useStyles();
-  const setRerender = useState(false)[1];
+  const rerender = useRerender();
   useEffect(() => {
-    const clearSubscription = OverviewEventEmitter.subscribe(() => setRerender((old) => !old));
+    const clearSubscription = OverviewEventEmitter.subscribe(rerender);
     return clearSubscription;
-  }, []);
+  }, [rerender]);
 
   const action = Player.bladeburner?.action;
   return useMemo(
@@ -276,7 +280,7 @@ function BladeburnerText(): React.ReactElement {
           </TableRow>
         </>
       ),
-    [action?.type, action?.name, classes.cellNone],
+    [action, classes.cellNone],
   );
 }
 
@@ -325,11 +329,11 @@ function WorkInProgressOverview({ tooltip, children, header }: WorkInProgressOve
 }
 
 function Work(): React.ReactElement {
-  const setRerender = useState(false)[1];
+  const rerender = useRerender();
   useEffect(() => {
-    const clearSubscription = OverviewEventEmitter.subscribe(() => setRerender((old) => !old));
+    const clearSubscription = OverviewEventEmitter.subscribe(rerender);
     return clearSubscription;
-  }, []);
+  }, [rerender]);
 
   if (Player.currentWork === null || Player.focus) return <></>;
 
@@ -461,4 +465,4 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export { useStyles as characterOverviewStyles };
+export { useStyles };

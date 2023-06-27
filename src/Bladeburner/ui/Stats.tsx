@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import { Player } from "@player";
 import { FactionName } from "@enums";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { BladeburnerConstants } from "../data/Constants";
 import { Money } from "../../ui/React/Money";
+import { useRerender } from "../../ui/React/hooks";
 import { formatNumberNoSuffix, formatPopulation, formatBigNumber } from "../../ui/formatNumber";
 import { Factions } from "../../Faction/Factions";
 import { Router } from "../../ui/GameRoot";
@@ -20,13 +21,9 @@ interface IProps {
 
 export function Stats(props: IProps): React.ReactElement {
   const [travelOpen, setTravelOpen] = useState(false);
-  const setRerender = useState(false)[1];
+  useRerender(1000);
 
   const inFaction = props.bladeburner.rank >= BladeburnerConstants.RankNeededForFaction;
-  useEffect(() => {
-    const id = setInterval(() => setRerender((old) => !old), 1000);
-    return () => clearInterval(id);
-  }, []);
 
   function openFaction(): void {
     if (!inFaction) return;

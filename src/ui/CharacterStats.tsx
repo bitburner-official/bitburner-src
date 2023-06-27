@@ -106,60 +106,60 @@ interface IMoneyModalProps {
 
 function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
   function convertMoneySourceTrackerToString(src: MoneySourceTracker): React.ReactElement {
-    const parts: [string, JSX.Element][] = [[`Total:`, <Money money={src.total} />]];
+    const parts: [string, JSX.Element][] = [[`Total:`, <Money key="total" money={src.total} />]];
     if (src.augmentations) {
-      parts.push([`Augmentations:`, <Money money={src.augmentations} />]);
+      parts.push([`Augmentations:`, <Money key="aug" money={src.augmentations} />]);
     }
     if (src.bladeburner) {
-      parts.push([`Bladeburner:`, <Money money={src.bladeburner} />]);
+      parts.push([`Bladeburner:`, <Money key="blade" money={src.bladeburner} />]);
     }
     if (src.casino) {
-      parts.push([`Casino:`, <Money money={src.casino} />]);
+      parts.push([`Casino:`, <Money key="casino" money={src.casino} />]);
     }
     if (src.codingcontract) {
-      parts.push([`Coding Contracts:`, <Money money={src.codingcontract} />]);
+      parts.push([`Coding Contracts:`, <Money key="coding-contract" money={src.codingcontract} />]);
     }
     if (src.work) {
-      parts.push([`Company Work:`, <Money money={src.work} />]);
+      parts.push([`Company Work:`, <Money key="company-work" money={src.work} />]);
     }
     if (src.class) {
-      parts.push([`Class:`, <Money money={src.class} />]);
+      parts.push([`Class:`, <Money key="class" money={src.class} />]);
     }
     if (src.corporation) {
-      parts.push([`Corporation:`, <Money money={src.corporation} />]);
+      parts.push([`Corporation:`, <Money key="corp" money={src.corporation} />]);
     }
     if (src.crime) {
-      parts.push([`Crimes:`, <Money money={src.crime} />]);
+      parts.push([`Crimes:`, <Money key="crime" money={src.crime} />]);
     }
     if (src.gang) {
-      parts.push([`Gang:`, <Money money={src.gang} />]);
+      parts.push([`Gang:`, <Money key="gang" money={src.gang} />]);
     }
     if (src.hacking) {
-      parts.push([`Hacking:`, <Money money={src.hacking} />]);
+      parts.push([`Hacking:`, <Money key="hacking" money={src.hacking} />]);
     }
     if (src.hacknet) {
-      parts.push([`Hacknet Nodes:`, <Money money={src.hacknet} />]);
+      parts.push([`Hacknet Nodes:`, <Money key="hacknet" money={src.hacknet} />]);
     }
     if (src.hacknet_expenses) {
-      parts.push([`Hacknet Nodes Expenses:`, <Money money={src.hacknet_expenses} />]);
+      parts.push([`Hacknet Nodes Expenses:`, <Money key="hacknet-expenses" money={src.hacknet_expenses} />]);
     }
     if (src.hospitalization) {
-      parts.push([`Hospitalization:`, <Money money={src.hospitalization} />]);
+      parts.push([`Hospitalization:`, <Money key="hospital" money={src.hospitalization} />]);
     }
     if (src.infiltration) {
-      parts.push([`Infiltration:`, <Money money={src.infiltration} />]);
+      parts.push([`Infiltration:`, <Money key="infiltration" money={src.infiltration} />]);
     }
     if (src.servers) {
-      parts.push([`Servers:`, <Money money={src.servers} />]);
+      parts.push([`Servers:`, <Money key="servers" money={src.servers} />]);
     }
     if (src.stock) {
-      parts.push([`Stock Market:`, <Money money={src.stock} />]);
+      parts.push([`Stock Market:`, <Money key="market" money={src.stock} />]);
     }
     if (src.sleeves) {
-      parts.push([`Sleeves:`, <Money money={src.sleeves} />]);
+      parts.push([`Sleeves:`, <Money key="sleeves" money={src.sleeves} />]);
     }
     if (src.other) {
-      parts.push([`Other:`, <Money money={src.other} />]);
+      parts.push([`Other:`, <Money key="other" money={src.other} />]);
     }
 
     return <StatsTable rows={parts} wide />;

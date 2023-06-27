@@ -12,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { generateContract, generateRandomContract, generateRandomContractOnHome } from "../../CodingContractGenerator";
 import { CodingContractTypes } from "../../CodingContracts";
 
-export function CodingContracts(): React.ReactElement {
+export function CodingContractsDev(): React.ReactElement {
   const [codingcontract, setCodingcontract] = useState("Find Largest Prime Factor");
   function setCodingcontractDropdown(event: SelectChangeEvent): void {
     setCodingcontract(event.target.value);

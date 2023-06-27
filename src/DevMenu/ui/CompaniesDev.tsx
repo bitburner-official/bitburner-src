@@ -15,7 +15,7 @@ import { Adjuster } from "./Adjuster";
 
 const bigNumber = 1e12;
 
-export function Companies(): React.ReactElement {
+export function CompaniesDev(): React.ReactElement {
   const [company, setCompany] = useState(FactionName.ECorp as string);
   function setCompanyDropdown(event: SelectChangeEvent): void {
     setCompany(event.target.value);

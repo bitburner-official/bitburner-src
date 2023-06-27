@@ -12,7 +12,7 @@ import { Player } from "@player";
 import MenuItem from "@mui/material/MenuItem";
 import { CompletedProgramName } from "@enums";
 
-export function Programs(): React.ReactElement {
+export function ProgramsDev(): React.ReactElement {
   const [program, setProgram] = useState(CompletedProgramName.bruteSsh);
   function setProgramDropdown(event: SelectChangeEvent): void {
     setProgram(event.target.value as CompletedProgramName);

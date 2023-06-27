@@ -3,8 +3,7 @@ import React from "react";
 import { Typography, TableCell, TableRow } from "@mui/material";
 
 import { formatExp, formatNumberNoSuffix } from "../formatNumber";
-import { characterOverviewStyles as useStyles } from "./CharacterOverview";
-import { ClassNameMap } from "@material-ui/core/styles/withStyles";
+import { useStyles } from "./CharacterOverview";
 
 interface ITableRowData {
   content?: string;
@@ -15,14 +14,14 @@ interface ITableRowData {
 interface IProps {
   name: string;
   color: string;
-  classes?: ClassNameMap;
   data?: ITableRowData;
   children?: React.ReactElement;
 }
 
-export const StatsRow = ({ name, color, classes = useStyles(), children, data }: IProps): React.ReactElement => {
-  let content = "";
+export const StatsRow = ({ name, color, children, data }: IProps): React.ReactElement => {
+  const classes = useStyles();
 
+  let content = "";
   if (data) {
     if (data.content !== undefined) {
       content = data.content;
@@ -39,7 +38,7 @@ export const StatsRow = ({ name, color, classes = useStyles(), children, data }:
         <Typography style={{ color: color }}>{name}</Typography>
       </TableCell>
       <TableCell align="right" classes={{ root: classes.cellNone }}>
-        {content ? <Typography style={{ color: color }}>{content}</Typography> : <></>}
+        {content && <Typography style={{ color: color }}>{content}</Typography>}
         {children}
       </TableCell>
     </TableRow>
