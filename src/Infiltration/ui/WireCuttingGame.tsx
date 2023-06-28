@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Box, Paper, Typography } from "@mui/material";
 import { AugmentationName } from "@enums";
@@ -10,6 +10,7 @@ import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
+import { isPositiveInteger } from "../../types";
 
 interface Difficulty {
   [key: string]: number;
@@ -43,7 +44,7 @@ const colorNames: Record<string, string> = {
 };
 
 interface Wire {
-  tpe: string;
+  wireType: string;
   colors: string[];
 }
 
@@ -52,55 +53,66 @@ interface Question {
   shouldCut: (wire: Wire, index: number) => boolean;
 }
 
-export function WireCuttingGame({ onSuccess, onFailure, ...otherProps }: IMinigameProps): React.ReactElement {
-  const difficulty: Difficulty = {
-    timer: 0,
-    wiresmin: 0,
-    wiresmax: 0,
-    rules: 0,
-  };
-  interpolate(difficulties, otherProps.difficulty, difficulty);
-  const timer = difficulty.timer;
-  const wiresRef = useRef(generateWires(difficulty));
-  const questionsRef = useRef(generateQuestion(wiresRef.current, difficulty));
+export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameProps): React.ReactElement {
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [wires, setWires] = useState<Wire[]>([]);
+  const [timer, setTimer] = useState(0);
+  const [cutWires, setCutWires] = useState<boolean[]>([]);
+  const [wiresToCut, setWiresToCut] = useState(new Set<number>());
+  const [hasAugment, setHasAugment] = useState(false);
 
-  const [cutWires, setCutWires] = useState(new Array(wiresRef.current.length).fill(false));
-  const hasAugment = Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true);
-
-  // TODO: refactor, move the code from this effect to a `press` function
   useEffect(() => {
-    // check if we won
-    const wiresToBeCut = [];
-    for (let j = 0; j < wiresRef.current.length; j++) {
-      let shouldBeCut = false;
-      for (let i = 0; i < questionsRef.current.length; i++) {
-        shouldBeCut = shouldBeCut || questionsRef.current[i].shouldCut(wiresRef.current[j], j);
-      }
-      wiresToBeCut.push(shouldBeCut);
-    }
-    if (wiresToBeCut.every((b, i) => b === cutWires[i])) {
-      onSuccess();
-    }
-  }, [cutWires, onSuccess]);
+    // Determine game difficulty
+    const gameDifficulty: Difficulty = {
+      timer: 0,
+      wiresmin: 0,
+      wiresmax: 0,
+      rules: 0,
+    };
+    interpolate(difficulties, difficulty, gameDifficulty);
 
-  function checkWire(wireNum: number): boolean {
-    return questionsRef.current.some((q) => q.shouldCut(wiresRef.current[wireNum - 1], wireNum - 1));
-  }
+    // Calculate initial game data
+    const gameWires = generateWires(gameDifficulty);
+    const gameQuestions = generateQuestion(gameWires, gameDifficulty);
+    const gameWiresToCut = new Set<number>();
+    gameWires.forEach((wire, index) => {
+      for (const question of gameQuestions) {
+        if (question.shouldCut(wire, index)) {
+          gameWiresToCut.add(index + 1);
+          return; // go to next wire
+        }
+      }
+    });
+
+    // Initialize the game state
+    setTimer(gameDifficulty.timer);
+    setWires(gameWires);
+    setCutWires(gameWires.map((__) => false));
+    setQuestions(gameQuestions);
+    setWiresToCut(gameWiresToCut);
+    setHasAugment(Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true));
+  }, [difficulty]);
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();
     const wireNum = parseInt(event.key);
+    if (!isPositiveInteger(wireNum) || wireNum > wires.length) return;
 
-    if (wireNum < 1 || wireNum > wiresRef.current.length || isNaN(wireNum)) return;
-    setCutWires((old) => {
-      const next = [...old];
-      next[wireNum - 1] = true;
-      if (!checkWire(wireNum)) {
-        onFailure();
-      }
+    const wireIndex = wireNum - 1;
+    if (cutWires[wireIndex]) return;
 
-      return next;
-    });
+    // Check if game has been lost
+    if (!wiresToCut.has(wireIndex)) return onFailure();
+
+    // Check if game has been won
+    const newWiresToCut = new Set(wiresToCut);
+    newWiresToCut.delete(wireIndex);
+    if (newWiresToCut.size === 0) return onSuccess();
+
+    // Rerender with new state if game has not been won or lost yet
+    const newCutWires = cutWires.map((old, i) => (i === wireIndex ? true : old));
+    setWiresToCut(newWiresToCut);
+    setCutWires(newCutWires);
   }
 
   return (
@@ -110,19 +122,19 @@ export function WireCuttingGame({ onSuccess, onFailure, ...otherProps }: IMiniga
         <Typography variant="h4" sx={{ width: "75%", textAlign: "center" }}>
           Cut the wires with the following properties! (keyboard 1 to 9)
         </Typography>
-        {questionsRef.current.map((question, i) => (
+        {questions.map((question, i) => (
           <Typography key={i}>{question.toString()}</Typography>
         ))}
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: `repeat(${wiresRef.current.length}, 1fr)`,
+            gridTemplateColumns: `repeat(${wires.length}, 1fr)`,
             columnGap: 3,
             justifyItems: "center",
           }}
         >
-          {Array.from({ length: wiresRef.current.length }).map((_, i) => {
-            const isCorrectWire = checkWire(i + 1);
+          {Array.from({ length: wires.length }).map((_, i) => {
+            const isCorrectWire = cutWires[i + 1] || wiresToCut.has(i + 1);
             const color = hasAugment && !isCorrectWire ? Settings.theme.disabled : Settings.theme.primary;
             return (
               <Typography key={i} style={{ color: color }}>
@@ -132,16 +144,16 @@ export function WireCuttingGame({ onSuccess, onFailure, ...otherProps }: IMiniga
           })}
           {new Array(8).fill(0).map((_, i) => (
             <React.Fragment key={i}>
-              {wiresRef.current.map((wire, j) => {
+              {wires.map((wire, j) => {
                 if ((i === 3 || i === 4) && cutWires[j]) {
                   return <Typography key={j}></Typography>;
                 }
-                const isCorrectWire = checkWire(j + 1);
+                const isCorrectWire = cutWires[j + 1] || wiresToCut.has(j + 1);
                 const wireColor =
                   hasAugment && !isCorrectWire ? Settings.theme.disabled : wire.colors[i % wire.colors.length];
                 return (
                   <Typography key={j} style={{ color: wireColor }}>
-                    |{wire.tpe}|
+                    |{wire.wireType}|
                   </Typography>
                 );
               })}
@@ -198,7 +210,7 @@ function generateWires(difficulty: Difficulty): Wire[] {
       wireColors.push(colors[Math.floor(Math.random() * colors.length)]);
     }
     wires.push({
-      tpe: types[Math.floor(Math.random() * types.length)],
+      wireType: types[Math.floor(Math.random() * types.length)],
       colors: wireColors,
     });
   }
