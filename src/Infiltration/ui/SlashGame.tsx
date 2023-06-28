@@ -31,14 +31,19 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
   const [guardingTime, setGuardingTime] = useState(0);
 
   useEffect(() => {
+    // Determine timeframes for game phase changes
     const newDifficulty: Difficulty = { window: 0 };
     interpolate(difficulties, difficulty, newDifficulty);
     const timePreparing = newDifficulty.window;
     const timeAttacking = 250;
     const timeGuarding = Math.random() * 3250 + 1500 - (timeAttacking + timePreparing);
+
+    // Set initial game state
+    setPhase(0);
     setGuardingTime(timeGuarding);
     setHasAugment(Player.hasAugmentation(AugmentationName.MightOfAres, true));
 
+    // Setup timer for game phases
     let id = setTimeout(() => {
       setPhase(1);
       id = setTimeout(() => {
@@ -65,7 +70,6 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
       <GameTimer millis={5000} onExpire={onFailure} />
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
         <Typography variant="h4">Attack when his guard is down!</Typography>
-
         {hasAugment && (
           <Box sx={{ my: 1 }}>
             <Typography variant="h5">Guard will drop in...</Typography>
