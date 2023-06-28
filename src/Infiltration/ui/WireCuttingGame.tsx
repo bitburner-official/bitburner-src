@@ -78,7 +78,7 @@ export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameP
     gameWires.forEach((wire, index) => {
       for (const question of gameQuestions) {
         if (question.shouldCut(wire, index)) {
-          gameWiresToCut.add(index + 1);
+          gameWiresToCut.add(index);
           return; // go to next wire
         }
       }
