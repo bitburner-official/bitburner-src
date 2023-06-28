@@ -491,7 +491,7 @@ function hack(
         maxThreadNeeded = 1e6;
       }
 
-      let moneyDrained = Math.floor(server.moneyAvailable * percentHacked) * threads;
+      let moneyDrained = server.moneyAvailable * percentHacked * threads;
 
       // Over-the-top safety checks
       if (moneyDrained <= 0) {
