@@ -36,7 +36,7 @@ import { getHospitalizationCost } from "../../Hospital/Hospital";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 
 import { formatMoney } from "../../ui/formatNumber";
-import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
+import { MoneySource, MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 import { SnackbarEvents } from "../../ui/React/Snackbar";
@@ -183,7 +183,7 @@ export function setMoney(this: PlayerObject, money: number): void {
   this.money = money;
 }
 
-export function gainMoney(this: PlayerObject, money: number, source: string): void {
+export function gainMoney(this: PlayerObject, money: number, source: MoneySource): void {
   if (isNaN(money)) {
     console.error("NaN passed into Player.gainMoney()");
     return;
@@ -193,7 +193,7 @@ export function gainMoney(this: PlayerObject, money: number, source: string): vo
   this.recordMoneySource(money, source);
 }
 
-export function loseMoney(this: PlayerObject, money: number, source: string): void {
+export function loseMoney(this: PlayerObject, money: number, source: MoneySource): void {
   if (isNaN(money)) {
     console.error("NaN passed into Player.loseMoney()");
     return;
@@ -211,7 +211,7 @@ export function canAfford(this: PlayerObject, cost: number): boolean {
   return this.money >= cost;
 }
 
-export function recordMoneySource(this: PlayerObject, amt: number, source: string): void {
+export function recordMoneySource(this: PlayerObject, amt: number, source: MoneySource): void {
   if (!(this.moneySourceA instanceof MoneySourceTracker)) {
     console.warn(`Player.moneySourceA was not properly initialized. Resetting`);
     this.moneySourceA = new MoneySourceTracker();
@@ -1101,7 +1101,6 @@ export function gainCodingContractReward(
 ): string {
   if (!reward) return `No reward for this contract`;
 
-  /* eslint-disable no-case-declarations */
   switch (reward.type) {
     case CodingContractRewardType.FactionReputation: {
       if (!Factions[reward.name]) {
@@ -1152,7 +1151,6 @@ export function gainCodingContractReward(
       return `Gained ${formatMoney(moneyGain)}`;
     }
   }
-  /* eslint-enable no-case-declarations */
 }
 
 export function travel(this: PlayerObject, to: CityName): boolean {

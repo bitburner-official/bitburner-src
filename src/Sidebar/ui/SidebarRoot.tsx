@@ -60,7 +60,7 @@ const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
   props: { color: "primary" | "secondary" | "error" },
   __ref: React.ForwardedRef<SVGSVGElement>,
 ) {
-  return <DoubleArrowIcon color={props.color} style={{ transform: "rotate(-90deg)" }} ref={__ref} />;
+  return <DoubleArrowIcon {...props} style={{ transform: "rotate(-90deg)" }} ref={__ref} />;
 });
 
 const openedMixin = (theme: Theme): CSSObject => ({

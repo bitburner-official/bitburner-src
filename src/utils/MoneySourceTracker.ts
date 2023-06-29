@@ -1,13 +1,10 @@
-/**
- * This is an object that is used to keep track of where all of the player's
- * money is coming from (or going to)
- */
+import type { TypedKeys } from "../types";
+
 import { Generic_fromJSON, Generic_toJSON, constructorsForReviver, IReviverValue } from "./JSONReviver";
 
-export class MoneySourceTracker {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  [key: string]: number | Function;
+export type MoneySource = TypedKeys<MoneySourceTracker, number>;
 
+export class MoneySourceTracker {
   bladeburner = 0;
   casino = 0;
   class = 0;
@@ -29,14 +26,8 @@ export class MoneySourceTracker {
   augmentations = 0;
 
   // Record money earned
-  record(amt: number, source: string): void {
-    const sanitizedSource = source.toLowerCase();
-    if (typeof this[sanitizedSource] !== "number" && this[sanitizedSource] !== null) {
-      console.warn(`MoneySourceTracker.record() called with invalid source: ${source}`);
-      return;
-    }
-
-    (this[sanitizedSource] as number) += amt;
+  record(amt: number, source: MoneySource): void {
+    this[source] += amt;
     this.total += amt;
   }
 
