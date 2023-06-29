@@ -1101,7 +1101,6 @@ export function gainCodingContractReward(
 ): string {
   if (!reward) return `No reward for this contract`;
 
-  /* eslint-disable no-case-declarations */
   switch (reward.type) {
     case CodingContractRewardType.FactionReputation: {
       if (!Factions[reward.name]) {
@@ -1152,7 +1151,6 @@ export function gainCodingContractReward(
       return `Gained ${formatMoney(moneyGain)}`;
     }
   }
-  /* eslint-enable no-case-declarations */
 }
 
 export function travel(this: PlayerObject, to: CityName): boolean {
