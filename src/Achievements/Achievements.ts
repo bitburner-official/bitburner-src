@@ -75,16 +75,16 @@ function knowsAboutBitverse(): boolean {
   return Player.sourceFiles.size > 0;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function sfAchievement(): Achievement[] {
-  const achs: Achievement[] = [];
-  for (let i = 0; i <= 11; i++) {
-    for (let j = 1; j <= 3; j++) {
-      achs.push({
-        ID: `SF${i}.${j}`,
-        Condition: () => Player.sourceFileLvl(i) >= j,
-      });
-    }
+function sfAchievements(): Record<string, Achievement> {
+  const achs: Record<string, Achievement> = {};
+  for (let i = 1; i <= 12; i++) {
+    const ID = `SF${i}.1`;
+    achs[ID] = {
+      ...achievementData[ID],
+      Icon: ID,
+      Visible: knowsAboutBitverse,
+      Condition: () => Player.sourceFileLvl(i) >= 1,
+    };
   }
   return achs;
 }
@@ -156,78 +156,7 @@ export const achievements: Record<string, Achievement> = {
     Icon: "formulas",
     Condition: () => Player.getHomeComputer().programs.includes(CompletedProgramName.formulas),
   },
-  "SF1.1": {
-    ...achievementData["SF1.1"],
-    Icon: "SF1.1",
-    Visible: knowsAboutBitverse,
-    Condition: () => Player.sourceFileLvl(1) >= 1,
-  },
-  "SF2.1": {
-    ...achievementData["SF2.1"],
-    Icon: "SF2.1",
-    Visible: knowsAboutBitverse,
-    Condition: () => Player.sourceFileLvl(2) >= 1,
-  },
-  "SF3.1": {
-    ...achievementData["SF3.1"],
-    Icon: "SF3.1",
-    Visible: knowsAboutBitverse,
-    Condition: () => Player.sourceFileLvl(3) >= 1,
-  },
-  "SF4.1": {
-    ...achievementData["SF4.1"],
-    Icon: "SF4.1",
-    Visible: knowsAboutBitverse,
-    Condition: () => Player.sourceFileLvl(4) >= 1,
-  },
-  "SF5.1": {
-    ...achievementData["SF5.1"],
-    Icon: "SF5.1",
-    Visible: knowsAboutBitverse,
-    Condition: () => Player.sourceFileLvl(5) >= 1,
-  },
-  "SF6.1": {
-    ...achievementData["SF6.1"],
-    Icon: "SF6.1",
-    Visible: knowsAboutBitverse,
-    Condition: () => Player.sourceFileLvl(6) >= 1,
-  },
-  "SF7.1": {
-    ...achievementData["SF7.1"],
-    Icon: "SF7.1",
-    Visible: knowsAboutBitverse,
-    Condition: () => Player.sourceFileLvl(7) >= 1,
-  },
-  "SF8.1": {
-    ...achievementData["SF8.1"],
-    Icon: "SF8.1",
-    Visible: knowsAboutBitverse,
-    Condition: () => Player.sourceFileLvl(8) >= 1,
-  },
-  "SF9.1": {
-    ...achievementData["SF9.1"],
-    Icon: "SF9.1",
-    Visible: knowsAboutBitverse,
-    Condition: () => Player.sourceFileLvl(9) >= 1,
-  },
-  "SF10.1": {
-    ...achievementData["SF10.1"],
-    Icon: "SF10.1",
-    Visible: knowsAboutBitverse,
-    Condition: () => Player.sourceFileLvl(10) >= 1,
-  },
-  "SF11.1": {
-    ...achievementData["SF11.1"],
-    Icon: "SF11.1",
-    Visible: knowsAboutBitverse,
-    Condition: () => Player.sourceFileLvl(11) >= 1,
-  },
-  "SF12.1": {
-    ...achievementData["SF12.1"],
-    Icon: "SF12.1",
-    Visible: knowsAboutBitverse,
-    Condition: () => Player.sourceFileLvl(12) >= 1,
-  },
+  ...sfAchievements(),
   MONEY_1Q: {
     ...achievementData.MONEY_1Q,
     Icon: "$1Q",
