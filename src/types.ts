@@ -17,7 +17,7 @@ export type Unknownify<T> = {
 export type Member<T> = T extends (infer arrayMember)[] ? arrayMember : T[keyof T];
 
 //** Get the keys of an object where the values match a given type */
-export type TypedKeys<Obj, T> = {[K in keyof Obj]-?: Obj[K] extends T ? K : never}[keyof Obj];
+export type TypedKeys<Obj, T> = { [K in keyof Obj]-?: Obj[K] extends T ? K : never }[keyof Obj];
 
 /** Status object for functions that return a boolean indicating success/failure
  * and an optional message */
