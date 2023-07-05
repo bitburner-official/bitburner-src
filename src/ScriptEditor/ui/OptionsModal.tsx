@@ -60,7 +60,7 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Indent using tabs: </Typography>
+        <Typography marginRight={"auto"}>Indent using spaces: </Typography>
         <Switch
           onChange={(e) => props.onOptionChange("insertSpaces", e.target.checked)}
           checked={props.options.insertSpaces}
