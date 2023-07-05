@@ -16,27 +16,30 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useRerender } from "../../../ui/React/hooks";
 import { getRecordKeys } from "../../../Types/Record";
+import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 
-interface IProps {
+interface ExportModalProps {
   open: boolean;
   onClose: () => void;
   mat: Material;
 }
 
 // Create a popup that lets the player manage exports
-export function ExportModal(props: IProps): React.ReactElement {
+export function ExportModal(props: ExportModalProps): React.ReactElement {
   const corp = useCorporation();
+  const [exportAmount, setExportAmount] = useState("");
+  const rerender = useRerender();
+
   const possibleDivisions = [...corp.divisions.values()].filter((division: Division) => {
     return isRelevantMaterial(props.mat.name, division);
   });
-  if (possibleDivisions.length === 0) throw new Error("Export popup created with no divisions.");
-  const defaultDivision = possibleDivisions[0];
-  if (Object.keys(defaultDivision.warehouses).length === 0)
-    throw new Error("Export popup created in a division with no warehouses.");
-  const [targetDivision, setTargetDivision] = useState(defaultDivision);
-  const [targetCity, setTargetCity] = useState(CityName.Sector12);
-  const [exportAmount, setExportAmount] = useState("");
-  const rerender = useRerender();
+  // This weird assignment is used because ts thinks possibleDivisions[0] is always a division
+  const defaultDivision = possibleDivisions.length ? possibleDivisions[0] : null;
+  const [targetDivision, setTargetDivision] = useState<Division | null>(defaultDivision);
+
+  const possibleCities = targetDivision ? getRecordKeys(targetDivision.warehouses) : [];
+  const defaultCity = possibleCities.length ? possibleCities[0] : null;
+  const [targetCity, setTargetCity] = useState(defaultCity);
 
   function onCityChange(event: SelectChangeEvent<CityName>): void {
     setTargetCity(event.target.value as CityName);
@@ -54,6 +57,7 @@ export function ExportModal(props: IProps): React.ReactElement {
 
   function exportMaterial(): void {
     try {
+      if (!targetDivision || !targetCity) return;
       ExportMaterial(targetDivision, targetCity, props.mat, exportAmount);
     } catch (err) {
       dialogBoxCreate(err + "");
@@ -75,9 +79,8 @@ export function ExportModal(props: IProps): React.ReactElement {
     rerender();
   }
 
-  const possibleCities = getRecordKeys(targetDivision.warehouses);
-  if (possibleCities.length > 0 && !possibleCities.includes(targetCity)) {
-    setTargetCity(possibleCities[0]);
+  if (targetCity && !possibleCities.includes(targetCity as CityName)) {
+    setTargetCity(possibleCities.length ? possibleCities[0] : null);
   }
 
   return (
@@ -104,16 +107,14 @@ export function ExportModal(props: IProps): React.ReactElement {
         <br />
         For example: setting the amount "(EINV-20)/10" would try to export all except 20 of the material.
       </Typography>
-      <Select onChange={onTargetDivisionChange} value={targetDivision.name}>
-        {[...corp.divisions.values()]
-          .filter((division) => isRelevantMaterial(props.mat.name, division))
-          .map((division) => (
-            <MenuItem key={division.name} value={division.name}>
-              {division.name}
-            </MenuItem>
-          ))}
+      <Select onChange={onTargetDivisionChange} value={targetDivision?.name ?? ""}>
+        {possibleDivisions.map((division) => (
+          <MenuItem key={division.name} value={division.name}>
+            {division.name}
+          </MenuItem>
+        ))}
       </Select>
-      <Select onChange={onCityChange} value={targetCity}>
+      <Select onChange={onCityChange} value={targetCity ?? ""}>
         {possibleCities.map((cityName) => (
           <MenuItem key={cityName} value={cityName}>
             {cityName}
@@ -121,7 +122,12 @@ export function ExportModal(props: IProps): React.ReactElement {
         ))}
       </Select>
       <TextField placeholder="Export amount / s" onChange={onAmtChange} value={exportAmount} />
-      <Button onClick={exportMaterial}>Export</Button>
+      <ButtonWithTooltip
+        disabledTooltip={!targetDivision ? "No target division selected" : !targetCity ? "No target city selected" : ""}
+        onClick={exportMaterial}
+      >
+        Export
+      </ButtonWithTooltip>
       <Typography>
         Below is a list of all current exports of this material from this warehouse. Clicking on one of the exports
         below will REMOVE that export.

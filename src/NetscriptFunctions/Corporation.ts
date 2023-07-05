@@ -416,24 +416,28 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     buyMaterial: (ctx) => (_divisionName, _cityName, _materialName, _amt) => {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
+      const division = getCorporation().divisions.get(divisionName);
+      if (!division) throw helpers.makeRuntimeErrorMsg(ctx, `No division with provided name ${divisionName}`);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const amt = helpers.number(ctx, "amt", _amt);
       if (amt < 0 || !Number.isFinite(amt))
         throw new Error("Invalid value for amount field! Must be numeric and greater than 0");
       const material = getMaterial(divisionName, cityName, materialName);
-      BuyMaterial(material, amt);
+      BuyMaterial(division, material, amt);
     },
     bulkPurchase: (ctx) => (_divisionName, _cityName, _materialName, _amt) => {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
+      const division = getCorporation().divisions.get(divisionName);
+      if (!division) throw helpers.makeRuntimeErrorMsg(ctx, `No division with provided name ${divisionName}`);
       const corporation = getCorporation();
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const amt = helpers.number(ctx, "amt", _amt);
       const warehouse = getWarehouse(divisionName, cityName);
       const material = getMaterial(divisionName, cityName, materialName);
-      BulkPurchase(corporation, warehouse, material, amt);
+      BulkPurchase(corporation, division, warehouse, material, amt);
     },
     makeProduct:
       (ctx) =>

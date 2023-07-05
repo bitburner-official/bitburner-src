@@ -249,14 +249,26 @@ export function SetSmartSupplyOption(warehouse: Warehouse, material: Material, u
   warehouse.smartSupplyOptions[material.name] = useOption;
 }
 
-export function BuyMaterial(material: Material, amt: number): void {
+export function BuyMaterial(division: Division, material: Material, amt: number): void {
+  if (!isRelevantMaterial(material.name, division)) {
+    throw new Error(`${material.name} is not a relevant material for industry ${division.type}`);
+  }
   if (isNaN(amt) || amt < 0) {
     throw new Error(`Invalid amount '${amt}' to buy material '${material.name}'`);
   }
   material.buyAmount = amt;
 }
 
-export function BulkPurchase(corp: Corporation, warehouse: Warehouse, material: Material, amt: number): void {
+export function BulkPurchase(
+  corp: Corporation,
+  division: Division,
+  warehouse: Warehouse,
+  material: Material,
+  amt: number,
+): void {
+  if (!isRelevantMaterial(material.name, division)) {
+    throw new Error(`${material.name} is not a relevant material for industry ${division.type}`);
+  }
   const matSize = MaterialInfo[material.name].size;
   const maxAmount = (warehouse.size - warehouse.sizeUsed) / matSize;
   if (isNaN(amt) || amt < 0) {
