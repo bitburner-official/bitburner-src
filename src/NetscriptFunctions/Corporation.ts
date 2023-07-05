@@ -340,6 +340,8 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         productionAmount: cityData.productionAmount,
         actualSellAmount: cityData.actualSellAmount,
         developmentProgress: product.developmentProgress,
+        advertisingInvestment: product.advertisingInvestment,
+        designInvestment: product.designInvestment,
       };
     },
     purchaseWarehouse: (ctx) => (_divisionName, _cityName) => {

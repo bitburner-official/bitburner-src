@@ -7564,6 +7564,10 @@ interface Product {
   actualSellAmount: number;
   /** A number between 0-100 representing percentage completion */
   developmentProgress: number;
+  /** Funds that were spent on advertising the product */
+  advertisingInvestment: number;
+  /** Funds that were spent on designing the product */
+  designInvestment: number;
 }
 
 /**
