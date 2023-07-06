@@ -5,6 +5,8 @@ import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
+import { MD } from "../../ui/MD/MD";
+import { markdownSample } from "./rawmd";
 
 interface IProps {
   reactivateTutorial: () => void;
@@ -14,6 +16,7 @@ export function TutorialRoot(props: IProps): React.ReactElement {
   const [confirmResetOpen, setConfirmResetOpen] = useState(false);
   return (
     <>
+      <MD md={markdownSample} />
       <Typography variant="h4">Tutorial / Documentation</Typography>
       <Box m={2}>
         <Button onClick={() => setConfirmResetOpen(true)}>Soft reset and Restart tutorial</Button>
