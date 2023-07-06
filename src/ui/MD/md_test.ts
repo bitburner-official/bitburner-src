@@ -55,4 +55,4 @@ const all =
   horizontalRules +
   YoutubeVideos;
 
-export const markdownSample = codeAndSyntaxHighlighing;
+export const markdownSample = all;

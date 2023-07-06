@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
@@ -6,17 +6,39 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
 import { MD } from "../../ui/MD/MD";
-import { markdownSample } from "./rawmd";
+
+import { Root, getPage } from "./root";
 
 interface IProps {
   reactivateTutorial: () => void;
 }
 
+interface Navigator {
+  navigate: (s: string) => void;
+}
+
+export const Context = {
+  Navigator: React.createContext<Navigator>({ navigate() {} }),
+};
+
+export const useNavigator = (): Navigator => useContext(Context.Navigator);
+
 export function TutorialRoot(props: IProps): React.ReactElement {
   const [confirmResetOpen, setConfirmResetOpen] = useState(false);
+  const [page, setPage] = useState(Root);
+  const navigator = {
+    navigate(title: string) {
+      console.log(title);
+      setPage(getPage(title));
+    },
+  };
+  return (
+    <Context.Navigator.Provider value={navigator}>
+      <MD md={page.content + ""} />
+    </Context.Navigator.Provider>
+  );
   return (
     <>
-      <MD md={markdownSample} />
       <Typography variant="h4">Tutorial / Documentation</Typography>
       <Box m={2}>
         <Button onClick={() => setConfirmResetOpen(true)}>Soft reset and Restart tutorial</Button>
