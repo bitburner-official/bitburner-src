@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { LocationName } from "@enums";
+import { CompanyName } from "@enums";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
@@ -9,23 +9,23 @@ import { calculateCompanyWorkStats } from "../../../Work/Formulas";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 import { influenceStockThroughCompanyWork } from "../../../StockMarket/PlayerInfluencing";
 import { CompanyPositions } from "../../../Company/CompanyPositions";
+import { isMember } from "../../../utils/EnumHelper";
+import { invalidWork } from "../../../Work/InvalidWork";
 
 export const isSleeveCompanyWork = (w: SleeveWorkClass | null): w is SleeveCompanyWork =>
   w !== null && w.type === SleeveWorkType.COMPANY;
 
 export class SleeveCompanyWork extends SleeveWorkClass {
   type: SleeveWorkType.COMPANY = SleeveWorkType.COMPANY;
-  companyName: string;
+  companyName: CompanyName;
 
-  constructor(companyName?: string) {
+  constructor(companyName = CompanyName.NoodleBar) {
     super();
-    this.companyName = companyName ?? LocationName.NewTokyoNoodleBar;
+    this.companyName = companyName;
   }
 
   getCompany(): Company {
-    const c = Companies[this.companyName];
-    if (!c) throw new Error(`Company not found: '${this.companyName}'`);
-    return c;
+    return Companies[this.companyName];
   }
 
   getGainRates(sleeve: Sleeve): WorkStats {
@@ -59,7 +59,9 @@ export class SleeveCompanyWork extends SleeveWorkClass {
 
   /** Initializes a CompanyWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveCompanyWork {
-    return Generic_fromJSON(SleeveCompanyWork, value.data);
+    const work = Generic_fromJSON(SleeveCompanyWork, value.data);
+    if (!isMember("CompanyName", work.companyName)) return invalidWork();
+    return work;
   }
 }
 

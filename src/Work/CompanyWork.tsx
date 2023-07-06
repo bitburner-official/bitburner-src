@@ -3,7 +3,7 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { Player } from "@player";
 import { Work, WorkType } from "./Work";
 import { influenceStockThroughCompanyWork } from "../StockMarket/PlayerInfluencing";
-import { AugmentationName, LocationName } from "@enums";
+import { AugmentationName, CompanyName } from "@enums";
 import { calculateCompanyWorkStats } from "./Formulas";
 import { Companies } from "../Company/Companies";
 import { applyWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
@@ -12,25 +12,25 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reputation } from "../ui/React/Reputation";
 import { CONSTANTS } from "../Constants";
 import { CompanyPositions } from "../Company/CompanyPositions";
+import { isMember } from "../utils/EnumHelper";
+import { invalidWork } from "./InvalidWork";
 
 interface CompanyWorkParams {
-  companyName: string;
+  companyName: CompanyName;
   singularity: boolean;
 }
 
 export const isCompanyWork = (w: Work | null): w is CompanyWork => w !== null && w.type === WorkType.COMPANY;
 
 export class CompanyWork extends Work {
-  companyName: string;
+  companyName: CompanyName;
   constructor(params?: CompanyWorkParams) {
     super(WorkType.COMPANY, params?.singularity ?? false);
-    this.companyName = params?.companyName ?? LocationName.NewTokyoNoodleBar;
+    this.companyName = params?.companyName ?? CompanyName.NoodleBar;
   }
 
   getCompany(): Company {
-    const c = Companies[this.companyName];
-    if (!c) throw new Error(`Company not found: '${this.companyName}'`);
-    return c;
+    return Companies[this.companyName];
   }
 
   getGainRates(): WorkStats {
@@ -81,7 +81,9 @@ export class CompanyWork extends Work {
 
   /** Initializes a CompanyWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): CompanyWork {
-    return Generic_fromJSON(CompanyWork, value.data);
+    const work = Generic_fromJSON(CompanyWork, value.data);
+    if (!isMember("CompanyName", work.companyName)) return invalidWork();
+    return work;
   }
 }
 

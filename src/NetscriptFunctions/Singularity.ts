@@ -718,24 +718,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       (ctx) =>
       (_companyName, _focus = true) => {
         helpers.checkSingularityAccess(ctx);
-        const companyName = helpers.string(ctx, "companyName", _companyName);
+        const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
         const focus = !!_focus;
 
-        // Make sure its a valid company
-        if (companyName == null || companyName === "" || !Companies[companyName]) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
-        }
-
+        const jobName = Player.jobs[companyName];
         // Make sure player is actually employed at the company
-        if (!Object.keys(Player.jobs).includes(companyName)) {
+        if (!jobName) {
           throw helpers.makeRuntimeErrorMsg(ctx, `You do not have a job at: '${companyName}'`);
-        }
-
-        // Check to make sure company position data is valid
-        const companyPositionName = Player.jobs[companyName];
-        const companyPosition = CompanyPositions[companyPositionName];
-        if (companyPositionName === "" || !companyPosition) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `You do not have a job`);
         }
 
         const wasFocused = Player.focus;
@@ -753,7 +742,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           Player.stopFocusing();
           Router.toPage(Page.Terminal);
         }
-        helpers.log(ctx, () => `Began working at '${companyName}' with position '${companyPositionName}'`);
+        helpers.log(ctx, () => `Began working at '${companyName}' with position '${jobName}'`);
         return true;
       },
     applyToCompany: (ctx) => (_companyName, _field) => {

@@ -1,7 +1,7 @@
 import * as posNames from "./JobTracks";
 import { IConstructorParams } from "../Company";
 
-import { LocationName } from "@enums";
+import { CompanyName } from "@enums";
 
 // These are grossly typed, need to address
 // Create Objects containing Company Positions by category
@@ -90,7 +90,7 @@ CEOOnly[posNames.BusinessCompanyPositions[5]] = true;
 // Metadata
 export const companiesMetadata: IConstructorParams[] = [
   {
-    name: LocationName.AevumECorp,
+    name: CompanyName.ECorp,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
     expMultiplier: 3,
@@ -98,7 +98,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 249,
   },
   {
-    name: LocationName.Sector12MegaCorp,
+    name: CompanyName.MegaCorp,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
     expMultiplier: 3,
@@ -106,7 +106,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 249,
   },
   {
-    name: LocationName.AevumBachmanAndAssociates,
+    name: CompanyName.BachmanAndAssociates,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
     expMultiplier: 2.6,
@@ -114,7 +114,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 224,
   },
   {
-    name: LocationName.Sector12BladeIndustries,
+    name: CompanyName.BladeIndustries,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
     expMultiplier: 2.75,
@@ -122,7 +122,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 224,
   },
   {
-    name: LocationName.VolhavenNWO,
+    name: CompanyName.NWO,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
     expMultiplier: 2.75,
@@ -130,7 +130,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 249,
   },
   {
-    name: LocationName.AevumClarkeIncorporated,
+    name: CompanyName.ClarkeIncorporated,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
     expMultiplier: 2.25,
@@ -138,7 +138,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 224,
   },
   {
-    name: LocationName.VolhavenOmniTekIncorporated,
+    name: CompanyName.OmniTekIncorporated,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
     expMultiplier: 2.25,
@@ -146,7 +146,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 224,
   },
   {
-    name: LocationName.Sector12FourSigma,
+    name: CompanyName.FourSigma,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
     expMultiplier: 2.5,
@@ -154,7 +154,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 224,
   },
   {
-    name: LocationName.ChongqingKuaiGongInternational,
+    name: CompanyName.KuaiGongInternational,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
     expMultiplier: 2.2,
@@ -162,7 +162,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 224,
   },
   {
-    name: LocationName.AevumFulcrumTechnologies,
+    name: CompanyName.FulcrumTechnologies,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions),
     expMultiplier: 2,
@@ -170,7 +170,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 224,
   },
   {
-    name: LocationName.IshimaStormTechnologies,
+    name: CompanyName.StormTechnologies,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllSoftwareConsultantPositions, AllBusinessPositions),
     expMultiplier: 1.8,
@@ -178,7 +178,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 199,
   },
   {
-    name: LocationName.NewTokyoDefComm,
+    name: CompanyName.DefComm,
     info: "",
     companyPositions: Object.assign({}, CEOOnly, AllTechnologyPositions, AllSoftwareConsultantPositions),
     expMultiplier: 1.75,
@@ -186,7 +186,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 199,
   },
   {
-    name: LocationName.VolhavenHeliosLabs,
+    name: CompanyName.HeliosLabs,
     info: "",
     companyPositions: Object.assign({}, CEOOnly, AllTechnologyPositions, AllSoftwareConsultantPositions),
     expMultiplier: 1.8,
@@ -194,7 +194,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 199,
   },
   {
-    name: LocationName.NewTokyoVitaLife,
+    name: CompanyName.VitaLife,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSoftwareConsultantPositions),
     expMultiplier: 1.8,
@@ -202,7 +202,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 199,
   },
   {
-    name: LocationName.Sector12IcarusMicrosystems,
+    name: CompanyName.IcarusMicrosystems,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSoftwareConsultantPositions),
     expMultiplier: 1.9,
@@ -210,7 +210,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 199,
   },
   {
-    name: LocationName.Sector12UniversalEnergy,
+    name: CompanyName.UniversalEnergy,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSoftwareConsultantPositions),
     expMultiplier: 2,
@@ -218,7 +218,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 199,
   },
   {
-    name: LocationName.AevumGalacticCybersystems,
+    name: CompanyName.GalacticCybersystems,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSoftwareConsultantPositions),
     expMultiplier: 1.9,
@@ -226,7 +226,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 199,
   },
   {
-    name: LocationName.AevumAeroCorp,
+    name: CompanyName.AeroCorp,
     info: "",
     companyPositions: Object.assign({}, CEOOnly, OperationsManagerOnly, AllTechnologyPositions, AllSecurityPositions),
     expMultiplier: 1.7,
@@ -234,7 +234,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 199,
   },
   {
-    name: LocationName.VolhavenOmniaCybersystems,
+    name: CompanyName.OmniaCybersystems,
     info: "",
     companyPositions: Object.assign({}, CEOOnly, OperationsManagerOnly, AllTechnologyPositions, AllSecurityPositions),
     expMultiplier: 1.7,
@@ -242,7 +242,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 199,
   },
   {
-    name: LocationName.ChongqingSolarisSpaceSystems,
+    name: CompanyName.SolarisSpaceSystems,
     info: "",
     companyPositions: Object.assign({}, CEOOnly, OperationsManagerOnly, AllTechnologyPositions, AllSecurityPositions),
     expMultiplier: 1.7,
@@ -250,7 +250,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 199,
   },
   {
-    name: LocationName.Sector12DeltaOne,
+    name: CompanyName.DeltaOne,
     info: "",
     companyPositions: Object.assign({}, CEOOnly, OperationsManagerOnly, AllTechnologyPositions, AllSecurityPositions),
     expMultiplier: 1.6,
@@ -258,7 +258,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 199,
   },
   {
-    name: LocationName.NewTokyoGlobalPharmaceuticals,
+    name: CompanyName.GlobalPharmaceuticals,
     info: "",
     companyPositions: Object.assign(
       {},
@@ -272,7 +272,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 224,
   },
   {
-    name: LocationName.IshimaNovaMedical,
+    name: CompanyName.NovaMedical,
     info: "",
     companyPositions: Object.assign(
       {},
@@ -286,7 +286,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 199,
   },
   {
-    name: LocationName.Sector12CIA,
+    name: CompanyName.CIA,
     info: "",
     companyPositions: Object.assign(
       {},
@@ -302,7 +302,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 149,
   },
   {
-    name: LocationName.Sector12NSA,
+    name: CompanyName.NSA,
     info: "",
     companyPositions: Object.assign(
       {},
@@ -318,7 +318,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 149,
   },
   {
-    name: LocationName.AevumWatchdogSecurity,
+    name: CompanyName.WatchdogSecurity,
     info: "",
     companyPositions: Object.assign(
       {},
@@ -334,7 +334,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 124,
   },
   {
-    name: LocationName.VolhavenLexoCorp,
+    name: CompanyName.LexoCorp,
     info: "",
     companyPositions: Object.assign(
       {},
@@ -348,7 +348,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 99,
   },
   {
-    name: LocationName.AevumRhoConstruction,
+    name: CompanyName.RhoConstruction,
     info: "",
     companyPositions: Object.assign({}, SoftwarePositionsUpToLeadDeveloper, BusinessPositionsUpToOperationsManager),
     expMultiplier: 1.3,
@@ -356,7 +356,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 49,
   },
   {
-    name: LocationName.Sector12AlphaEnterprises,
+    name: CompanyName.AlphaEnterprises,
     info: "",
     companyPositions: Object.assign(
       {},
@@ -369,7 +369,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 99,
   },
   {
-    name: LocationName.AevumPolice,
+    name: CompanyName.Police,
     info: "",
     companyPositions: Object.assign({}, AllSecurityPositions, SoftwarePositionsUpToLeadDeveloper),
     expMultiplier: 1.3,
@@ -377,7 +377,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 99,
   },
   {
-    name: LocationName.VolhavenSysCoreSecurities,
+    name: CompanyName.SysCoreSecurities,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions),
     expMultiplier: 1.3,
@@ -385,7 +385,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 124,
   },
   {
-    name: LocationName.VolhavenCompuTek,
+    name: CompanyName.CompuTek,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions),
     expMultiplier: 1.2,
@@ -393,7 +393,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 74,
   },
   {
-    name: LocationName.AevumNetLinkTechnologies,
+    name: CompanyName.NetLinkTechnologies,
     info: "",
     companyPositions: Object.assign({}, AllTechnologyPositions),
     expMultiplier: 1.2,
@@ -401,7 +401,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 99,
   },
   {
-    name: LocationName.Sector12CarmichaelSecurity,
+    name: CompanyName.CarmichaelSecurity,
     info: "",
     companyPositions: Object.assign(
       {},
@@ -415,7 +415,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 74,
   },
   {
-    name: LocationName.Sector12FoodNStuff,
+    name: CompanyName.FoodNStuff,
     info: "",
     companyPositions: Object.assign({}, EmployeeOnly, PartTimeEmployeeOnly),
     expMultiplier: 1,
@@ -423,7 +423,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 0,
   },
   {
-    name: LocationName.Sector12JoesGuns,
+    name: CompanyName.JoesGuns,
     info: "",
     companyPositions: Object.assign({}, EmployeeOnly, PartTimeEmployeeOnly),
     expMultiplier: 1,
@@ -431,7 +431,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 0,
   },
   {
-    name: LocationName.IshimaOmegaSoftware,
+    name: CompanyName.OmegaSoftware,
     info: "",
     companyPositions: Object.assign({}, AllSoftwarePositions, AllSoftwareConsultantPositions, AllITPositions),
     expMultiplier: 1.1,
@@ -439,7 +439,7 @@ export const companiesMetadata: IConstructorParams[] = [
     jobStatReqOffset: 49,
   },
   {
-    name: LocationName.NewTokyoNoodleBar,
+    name: CompanyName.NoodleBar,
     info: "",
     companyPositions: Object.assign({}, WaiterOnly, PartTimeWaiterOnly),
     expMultiplier: 1,

@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import { ApplyToJobButton } from "./ApplyToJobButton";
 
 import { Locations } from "../Locations";
-import { LocationName } from "@enums";
+import { CompanyName } from "@enums";
 
 import { Companies } from "../../Company/Companies";
 import { CompanyPositions } from "../../Company/CompanyPositions";
@@ -26,9 +26,10 @@ import { Player } from "@player";
 import { QuitJobModal } from "../../Company/ui/QuitJobModal";
 import { CompanyWork } from "../../Work/CompanyWork";
 import { useRerender } from "../../ui/React/hooks";
+import { companyNameAsLocationName } from "../../Company/utils";
 
 interface IProps {
-  locName: LocationName;
+  companyName: CompanyName;
 }
 
 export function CompanyLocation(props: IProps): React.ReactElement {
@@ -39,17 +40,18 @@ export function CompanyLocation(props: IProps): React.ReactElement {
    * We'll keep a reference to the Company that this component is being rendered for,
    * so we don't have to look it up every time
    */
-  const company = Companies[props.locName];
-  if (company == null) throw new Error(`CompanyLocation component constructed with invalid company: ${props.locName}`);
+  const company = Companies[props.companyName];
+  if (company == null)
+    throw new Error(`CompanyLocation component constructed with invalid company: ${props.companyName}`);
 
   /** Reference to the Location that this component is being rendered for */
-  const location = Locations[props.locName];
+  const location = Locations[props.companyName];
   if (location == null) {
-    throw new Error(`CompanyLocation component constructed with invalid location: ${props.locName}`);
+    throw new Error(`CompanyLocation component constructed with invalid location: ${props.companyName}`);
   }
 
   /** Name of company position that player holds, if applicable */
-  const jobTitle = Player.jobs[props.locName] ? Player.jobs[props.locName] : null;
+  const jobTitle = Player.jobs[props.companyName] ? Player.jobs[props.companyName] : null;
 
   /**
    * CompanyPosition object for the job that the player holds at this company
@@ -57,7 +59,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
    */
   const companyPosition = jobTitle ? CompanyPositions[jobTitle] : null;
 
-  Player.location = props.locName;
+  Player.location = companyNameAsLocationName(props.companyName);
 
   function applyForAgentJob(e: React.MouseEvent<HTMLElement>): void {
     if (!e.isTrusted) {
@@ -152,7 +154,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
       return;
     }
     if (!location.infiltrationData)
-      throw new Error(`trying to start infiltration at ${props.locName} but the infiltrationData is null`);
+      throw new Error(`trying to start infiltration at ${props.companyName} but the infiltrationData is null`);
 
     Router.toPage(Page.Infiltration, { location });
   }
@@ -167,7 +169,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
       Player.startWork(
         new CompanyWork({
           singularity: false,
-          companyName: props.locName,
+          companyName: props.companyName,
         }),
       );
       Player.startFocusing();
@@ -224,7 +226,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             <Button onClick={work}>Work</Button>
             <Button onClick={() => setQuitOpen(true)}>Quit</Button>
             <QuitJobModal
-              locName={props.locName}
+              locName={props.companyName}
               company={company}
               onQuit={rerender}
               open={quitOpen}
