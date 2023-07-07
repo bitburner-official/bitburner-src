@@ -184,12 +184,12 @@ interface TailProperties {
 /**
  * @public
  * A stand-in for the real React.ReactNode.
- * Boolean values are ignored and not rendered.
- * null and undefined are ignored and not rendered.
- * ReactElement, number, and string are displayed directly.
- * An array of ReactNodes will display all members of that array.
+ * A {@link ReactElement} is rendered dynamically with React.
+ * number and string are displayed directly.
+ * boolean, null, and undefined are ignored and not rendered.
+ * An array of ReactNodes will display all members of that array sequentially.
  *
- * Use React.createElement to make the ReactElement type.
+ * Use React.createElement to make the ReactElement type, see {@link https://react.dev/reference/react/createElement#creating-an-element-without-jsx | creating an element without jsx} from the official React documentation.
  */
 type ReactNode = ReactElement | string | number | null | undefined | boolean | ReactNode[];
 
