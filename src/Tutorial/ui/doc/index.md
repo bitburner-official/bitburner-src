@@ -8,3 +8,5 @@
 - [Changelog](changelog.md)
 - [v1.0.0 script migration guide](migrations/v1.md)
 - [v2.0.0 script migration guide](migrations/v2.md)
+- [BitNodes](advance/bitnodes.md)
+- [Intelligence](advance/intelligence.md)
