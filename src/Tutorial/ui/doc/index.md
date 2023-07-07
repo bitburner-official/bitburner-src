@@ -1,6 +1,6 @@
 # Documentation
 
-- [Learn to program](learn)
+- [Learn to program](programming/learn.md)
 - Basic Gameplay <basicgameplay>
 - Advanced Gameplay <advancedgameplay>
 - Remote API <remoteapi.rst>
@@ -9,5 +9,5 @@
 - Guides & Tips <guidesandtips>
 - Tools & Resources <toolsandresources>
 - Changelog <changelog>
-- [v1.0.0 script migration guide](v1migration)
-- [v2.0.0 script migration guide](v2migration)
+- [v1.0.0 script migration guide](migrations/v1.md)
+- [v2.0.0 script migration guide](migrations/v2.md)

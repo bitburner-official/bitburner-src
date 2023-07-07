@@ -127,6 +127,7 @@
     "preversion": "npm install && npm run test",
     "version": "sh ./tools/build-release.sh && git add --all",
     "postversion": "git push -u origin dev && git push --tags",
-    "changelog": "node tools/fetch-changelog/index.js --from=$(cat last_changelog_hash) > changelog.md"
+    "changelog": "node tools/fetch-changelog/index.js --from=$(cat last_changelog_hash) > changelog.md",
+    "bundle-doc": "node tools/bundle-doc/index.js"
   }
 }
