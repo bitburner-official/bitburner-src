@@ -231,18 +231,31 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3.2 dev - Changelog updated 6/19/2023
-----------------------------------------
+v2.3.2 dev - Changelog updated 7/7/2023
+---------------------------------------
 
 Also see 2.3.1 release notes: https://github.com/bitburner-official/bitburner-src/releases/tag/v2.3.1
 
 GENERAL / MISC:
 * Syntax errors now show details in the script editor and when attempting to run the script (@bezrodnov)
+* Fix issue that could cause a script's ram to free up twice if it was killed during its own atExit (@d0sboots)
+* ns.printRaw and ns.tprintRaw are now documented functions. (@Snarling)
+* "Back" button from faction augs page now navigates to correct previous page in all cases (@bezrodnov)
+* Addressed an issue where money hacked was being Math.floored incorrectly (@MeggalBozale)
+* Aliases that reference their own name stop expanding after first replacement. (@NilsRamstoeck)
 * Hitting enter at the terminal with nothing typed in will print out an empty line (@rqzcho)
 * Fixed a bug where dragging a tail window titlebar would sometimes scroll the tail window content (@bezrodnov)
 * Show more info in the savegame comparison tool (@bezrodnov)
+* Fixed Script Editor indent option having backwards behavior. (@Snarling)
 * Internal code refactors (@bezrodnov, @Snarling)
-* Documentation fixes (@tdnzr, @amuck-gorilla)
+* Documentation fixes (@tdnzr, @amuck-gorilla, @rodneygauna, @Snarling)
 * Nerf noodle bar
+
+SPOILER SECTIONS:
+
+CORPORATION:
+
+* Fixed an issue where invalid materials for a division could be bought through the API. (@Snarling)
+* Added investment amount info to return value for getProduct (@Snarling)
 `,
 };
