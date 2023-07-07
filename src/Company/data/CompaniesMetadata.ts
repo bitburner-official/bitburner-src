@@ -1,449 +1,382 @@
 import * as posNames from "./JobTracks";
 import { IConstructorParams } from "../Company";
 
-import { CompanyName } from "@enums";
+import { CompanyName, JobName } from "@enums";
 
-// These are grossly typed, need to address
-// Create Objects containing Company Positions by category
-// Will help in metadata construction later
-const AllSoftwarePositions: Record<string, boolean> = {};
-const AllITPositions: Record<string, boolean> = {};
-const AllNetworkEngineerPositions: Record<string, boolean> = {};
-const SecurityEngineerPositions: Record<string, boolean> = {};
-const AllTechnologyPositions: Record<string, boolean> = {};
-const AllBusinessPositions: Record<string, boolean> = {};
-const AllAgentPositions: Record<string, boolean> = {};
-const AllSecurityPositions: Record<string, boolean> = {};
-const AllSoftwareConsultantPositions: Record<string, boolean> = {};
-const AllBusinessConsultantPositions: Record<string, boolean> = {};
-const SoftwarePositionsUpToHeadOfEngineering: Record<string, boolean> = {};
-const SoftwarePositionsUpToLeadDeveloper: Record<string, boolean> = {};
-const BusinessPositionsUpToOperationsManager: Record<string, boolean> = {};
-const WaiterOnly: Record<string, boolean> = {};
-const EmployeeOnly: Record<string, boolean> = {};
-const PartTimeWaiterOnly: Record<string, boolean> = {};
-const PartTimeEmployeeOnly: Record<string, boolean> = {};
-const OperationsManagerOnly: Record<string, boolean> = {};
-const CEOOnly: Record<string, boolean> = {};
+export function getCompaniesMetadata(): Record<CompanyName, IConstructorParams> {
+  const AllSoftwarePositions: JobName[] = posNames.SoftwareCompanyPositions;
+  const AllITPositions: JobName[] = posNames.ITCompanyPositions;
+  const AllNetworkEngineerPositions: JobName[] = posNames.NetworkEngineerCompanyPositions;
+  const SecurityEngineerPositions: JobName[] = posNames.SecurityEngineerCompanyPositions;
+  const AllTechnologyPositions: JobName[] = [
+    ...posNames.SoftwareCompanyPositions,
+    ...posNames.ITCompanyPositions,
+    ...posNames.NetworkEngineerCompanyPositions,
+    ...posNames.SecurityEngineerCompanyPositions,
+  ];
+  const AllBusinessPositions: JobName[] = posNames.BusinessCompanyPositions;
+  const AllAgentPositions: JobName[] = posNames.AgentCompanyPositions;
+  const AllSecurityPositions: JobName[] = posNames.SecurityCompanyPositions;
+  const AllSoftwareConsultantPositions: JobName[] = posNames.SoftwareConsultantCompanyPositions;
+  const SoftwarePositionsUpToHeadOfEngineering: JobName[] = posNames.SoftwareCompanyPositions.slice(0, 6);
+  const SoftwarePositionsUpToLeadDeveloper: JobName[] = posNames.SoftwareCompanyPositions.slice(0, 4);
+  const BusinessPositionsUpToOperationsManager: JobName[] = posNames.BusinessCompanyPositions.slice(0, 4);
+  const WaiterOnly: JobName[] = [JobName.waiter, JobName.waiterPT];
+  const EmployeeOnly: JobName[] = [JobName.employee, JobName.employeePT];
+  const PartTimeWaiterOnly: JobName[] = [];
+  const PartTimeEmployeeOnly: JobName[] = [];
+  const OperationsManagerOnly: JobName[] = [JobName.business3];
+  const CEOOnly: JobName[] = [JobName.business5];
 
-posNames.SoftwareCompanyPositions.forEach((e) => {
-  AllSoftwarePositions[e] = true;
-  AllTechnologyPositions[e] = true;
-});
-
-posNames.ITCompanyPositions.forEach((e) => {
-  AllITPositions[e] = true;
-  AllTechnologyPositions[e] = true;
-});
-
-posNames.NetworkEngineerCompanyPositions.forEach((e) => {
-  AllNetworkEngineerPositions[e] = true;
-  AllTechnologyPositions[e] = true;
-});
-
-AllTechnologyPositions[posNames.SecurityEngineerCompanyPositions[0]] = true;
-SecurityEngineerPositions[posNames.SecurityEngineerCompanyPositions[0]] = true;
-
-posNames.BusinessCompanyPositions.forEach((e) => {
-  AllBusinessPositions[e] = true;
-});
-
-posNames.SecurityCompanyPositions.forEach((e) => {
-  AllSecurityPositions[e] = true;
-});
-
-posNames.AgentCompanyPositions.forEach((e) => {
-  AllAgentPositions[e] = true;
-});
-
-posNames.SoftwareConsultantCompanyPositions.forEach((e) => {
-  AllSoftwareConsultantPositions[e] = true;
-});
-
-posNames.BusinessConsultantCompanyPositions.forEach((e) => {
-  AllBusinessConsultantPositions[e] = true;
-});
-
-for (let i = 0; i < posNames.SoftwareCompanyPositions.length; ++i) {
-  const e = posNames.SoftwareCompanyPositions[i];
-  if (i <= 5) {
-    SoftwarePositionsUpToHeadOfEngineering[e] = true;
-  }
-  if (i <= 3) {
-    SoftwarePositionsUpToLeadDeveloper[e] = true;
-  }
+  return {
+    [CompanyName.ECorp]: {
+      name: CompanyName.ECorp,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSecurityPositions],
+      expMultiplier: 3,
+      salaryMultiplier: 3,
+      jobStatReqOffset: 249,
+    },
+    [CompanyName.MegaCorp]: {
+      name: CompanyName.MegaCorp,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSecurityPositions],
+      expMultiplier: 3,
+      salaryMultiplier: 3,
+      jobStatReqOffset: 249,
+    },
+    [CompanyName.BachmanAndAssociates]: {
+      name: CompanyName.BachmanAndAssociates,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSecurityPositions],
+      expMultiplier: 2.6,
+      salaryMultiplier: 2.6,
+      jobStatReqOffset: 224,
+    },
+    [CompanyName.BladeIndustries]: {
+      name: CompanyName.BladeIndustries,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSecurityPositions],
+      expMultiplier: 2.75,
+      salaryMultiplier: 2.75,
+      jobStatReqOffset: 224,
+    },
+    [CompanyName.NWO]: {
+      name: CompanyName.NWO,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSecurityPositions],
+      expMultiplier: 2.75,
+      salaryMultiplier: 2.75,
+      jobStatReqOffset: 249,
+    },
+    [CompanyName.ClarkeIncorporated]: {
+      name: CompanyName.ClarkeIncorporated,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSecurityPositions],
+      expMultiplier: 2.25,
+      salaryMultiplier: 2.25,
+      jobStatReqOffset: 224,
+    },
+    [CompanyName.OmniTekIncorporated]: {
+      name: CompanyName.OmniTekIncorporated,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSecurityPositions],
+      expMultiplier: 2.25,
+      salaryMultiplier: 2.25,
+      jobStatReqOffset: 224,
+    },
+    [CompanyName.FourSigma]: {
+      name: CompanyName.FourSigma,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSecurityPositions],
+      expMultiplier: 2.5,
+      salaryMultiplier: 2.5,
+      jobStatReqOffset: 224,
+    },
+    [CompanyName.KuaiGongInternational]: {
+      name: CompanyName.KuaiGongInternational,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSecurityPositions],
+      expMultiplier: 2.2,
+      salaryMultiplier: 2.2,
+      jobStatReqOffset: 224,
+    },
+    [CompanyName.FulcrumTechnologies]: {
+      name: CompanyName.FulcrumTechnologies,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions],
+      expMultiplier: 2,
+      salaryMultiplier: 2,
+      jobStatReqOffset: 224,
+    },
+    [CompanyName.StormTechnologies]: {
+      name: CompanyName.StormTechnologies,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllSoftwareConsultantPositions, ...AllBusinessPositions],
+      expMultiplier: 1.8,
+      salaryMultiplier: 1.8,
+      jobStatReqOffset: 199,
+    },
+    [CompanyName.DefComm]: {
+      name: CompanyName.DefComm,
+      info: "",
+      companyPositions: [...CEOOnly, ...AllTechnologyPositions, ...AllSoftwareConsultantPositions],
+      expMultiplier: 1.75,
+      salaryMultiplier: 1.75,
+      jobStatReqOffset: 199,
+    },
+    [CompanyName.HeliosLabs]: {
+      name: CompanyName.HeliosLabs,
+      info: "",
+      companyPositions: [...CEOOnly, ...AllTechnologyPositions, ...AllSoftwareConsultantPositions],
+      expMultiplier: 1.8,
+      salaryMultiplier: 1.8,
+      jobStatReqOffset: 199,
+    },
+    [CompanyName.VitaLife]: {
+      name: CompanyName.VitaLife,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSoftwareConsultantPositions],
+      expMultiplier: 1.8,
+      salaryMultiplier: 1.8,
+      jobStatReqOffset: 199,
+    },
+    [CompanyName.IcarusMicrosystems]: {
+      name: CompanyName.IcarusMicrosystems,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSoftwareConsultantPositions],
+      expMultiplier: 1.9,
+      salaryMultiplier: 1.9,
+      jobStatReqOffset: 199,
+    },
+    [CompanyName.UniversalEnergy]: {
+      name: CompanyName.UniversalEnergy,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSoftwareConsultantPositions],
+      expMultiplier: 2,
+      salaryMultiplier: 2,
+      jobStatReqOffset: 199,
+    },
+    [CompanyName.GalacticCybersystems]: {
+      name: CompanyName.GalacticCybersystems,
+      info: "",
+      companyPositions: [...AllTechnologyPositions, ...AllBusinessPositions, ...AllSoftwareConsultantPositions],
+      expMultiplier: 1.9,
+      salaryMultiplier: 1.9,
+      jobStatReqOffset: 199,
+    },
+    [CompanyName.AeroCorp]: {
+      name: CompanyName.AeroCorp,
+      info: "",
+      companyPositions: [...CEOOnly, ...OperationsManagerOnly, ...AllTechnologyPositions, ...AllSecurityPositions],
+      expMultiplier: 1.7,
+      salaryMultiplier: 1.7,
+      jobStatReqOffset: 199,
+    },
+    [CompanyName.OmniaCybersystems]: {
+      name: CompanyName.OmniaCybersystems,
+      info: "",
+      companyPositions: [...CEOOnly, ...OperationsManagerOnly, ...AllTechnologyPositions, ...AllSecurityPositions],
+      expMultiplier: 1.7,
+      salaryMultiplier: 1.7,
+      jobStatReqOffset: 199,
+    },
+    [CompanyName.SolarisSpaceSystems]: {
+      name: CompanyName.SolarisSpaceSystems,
+      info: "",
+      companyPositions: [...CEOOnly, ...OperationsManagerOnly, ...AllTechnologyPositions, ...AllSecurityPositions],
+      expMultiplier: 1.7,
+      salaryMultiplier: 1.7,
+      jobStatReqOffset: 199,
+    },
+    [CompanyName.DeltaOne]: {
+      name: CompanyName.DeltaOne,
+      info: "",
+      companyPositions: [...CEOOnly, ...OperationsManagerOnly, ...AllTechnologyPositions, ...AllSecurityPositions],
+      expMultiplier: 1.6,
+      salaryMultiplier: 1.6,
+      jobStatReqOffset: 199,
+    },
+    [CompanyName.GlobalPharmaceuticals]: {
+      name: CompanyName.GlobalPharmaceuticals,
+      info: "",
+      companyPositions: [
+        ...AllTechnologyPositions,
+        ...AllBusinessPositions,
+        ...AllSoftwareConsultantPositions,
+        ...AllSecurityPositions,
+      ],
+      expMultiplier: 1.8,
+      salaryMultiplier: 1.8,
+      jobStatReqOffset: 224,
+    },
+    [CompanyName.NovaMedical]: {
+      name: CompanyName.NovaMedical,
+      info: "",
+      companyPositions: [
+        ...AllTechnologyPositions,
+        ...AllBusinessPositions,
+        ...AllSoftwareConsultantPositions,
+        ...AllSecurityPositions,
+      ],
+      expMultiplier: 1.75,
+      salaryMultiplier: 1.75,
+      jobStatReqOffset: 199,
+    },
+    [CompanyName.CIA]: {
+      name: CompanyName.CIA,
+      info: "",
+      companyPositions: [
+        ...SoftwarePositionsUpToHeadOfEngineering,
+        ...AllNetworkEngineerPositions,
+        ...SecurityEngineerPositions,
+        ...AllITPositions,
+        ...AllSecurityPositions,
+        ...AllAgentPositions,
+      ],
+      expMultiplier: 2,
+      salaryMultiplier: 2,
+      jobStatReqOffset: 149,
+    },
+    [CompanyName.NSA]: {
+      name: CompanyName.NSA,
+      info: "",
+      companyPositions: [
+        ...SoftwarePositionsUpToHeadOfEngineering,
+        ...AllNetworkEngineerPositions,
+        ...SecurityEngineerPositions,
+        ...AllITPositions,
+        ...AllSecurityPositions,
+        ...AllAgentPositions,
+      ],
+      expMultiplier: 2,
+      salaryMultiplier: 2,
+      jobStatReqOffset: 149,
+    },
+    [CompanyName.WatchdogSecurity]: {
+      name: CompanyName.WatchdogSecurity,
+      info: "",
+      companyPositions: [
+        ...SoftwarePositionsUpToHeadOfEngineering,
+        ...AllNetworkEngineerPositions,
+        ...AllITPositions,
+        ...AllSecurityPositions,
+        ...AllAgentPositions,
+        ...AllSoftwareConsultantPositions,
+      ],
+      expMultiplier: 1.5,
+      salaryMultiplier: 1.5,
+      jobStatReqOffset: 124,
+    },
+    [CompanyName.LexoCorp]: {
+      name: CompanyName.LexoCorp,
+      info: "",
+      companyPositions: [
+        ...AllTechnologyPositions,
+        ...AllSoftwareConsultantPositions,
+        ...AllBusinessPositions,
+        ...AllSecurityPositions,
+      ],
+      expMultiplier: 1.4,
+      salaryMultiplier: 1.4,
+      jobStatReqOffset: 99,
+    },
+    [CompanyName.RhoConstruction]: {
+      name: CompanyName.RhoConstruction,
+      info: "",
+      companyPositions: [...SoftwarePositionsUpToLeadDeveloper, ...BusinessPositionsUpToOperationsManager],
+      expMultiplier: 1.3,
+      salaryMultiplier: 1.3,
+      jobStatReqOffset: 49,
+    },
+    [CompanyName.AlphaEnterprises]: {
+      name: CompanyName.AlphaEnterprises,
+      info: "",
+      companyPositions: [
+        ...SoftwarePositionsUpToLeadDeveloper,
+        ...BusinessPositionsUpToOperationsManager,
+        ...AllSoftwareConsultantPositions,
+      ],
+      expMultiplier: 1.5,
+      salaryMultiplier: 1.5,
+      jobStatReqOffset: 99,
+    },
+    [CompanyName.Police]: {
+      name: CompanyName.Police,
+      info: "",
+      companyPositions: [...AllSecurityPositions, ...SoftwarePositionsUpToLeadDeveloper],
+      expMultiplier: 1.3,
+      salaryMultiplier: 1.3,
+      jobStatReqOffset: 99,
+    },
+    [CompanyName.SysCoreSecurities]: {
+      name: CompanyName.SysCoreSecurities,
+      info: "",
+      companyPositions: [...AllTechnologyPositions],
+      expMultiplier: 1.3,
+      salaryMultiplier: 1.3,
+      jobStatReqOffset: 124,
+    },
+    [CompanyName.CompuTek]: {
+      name: CompanyName.CompuTek,
+      info: "",
+      companyPositions: [...AllTechnologyPositions],
+      expMultiplier: 1.2,
+      salaryMultiplier: 1.2,
+      jobStatReqOffset: 74,
+    },
+    [CompanyName.NetLinkTechnologies]: {
+      name: CompanyName.NetLinkTechnologies,
+      info: "",
+      companyPositions: [...AllTechnologyPositions],
+      expMultiplier: 1.2,
+      salaryMultiplier: 1.2,
+      jobStatReqOffset: 99,
+    },
+    [CompanyName.CarmichaelSecurity]: {
+      name: CompanyName.CarmichaelSecurity,
+      info: "",
+      companyPositions: [
+        ...AllTechnologyPositions,
+        ...AllSoftwareConsultantPositions,
+        ...AllAgentPositions,
+        ...AllSecurityPositions,
+      ],
+      expMultiplier: 1.2,
+      salaryMultiplier: 1.2,
+      jobStatReqOffset: 74,
+    },
+    [CompanyName.FoodNStuff]: {
+      name: CompanyName.FoodNStuff,
+      info: "",
+      companyPositions: [...EmployeeOnly, ...PartTimeEmployeeOnly],
+      expMultiplier: 1,
+      salaryMultiplier: 1,
+      jobStatReqOffset: 0,
+    },
+    [CompanyName.JoesGuns]: {
+      name: CompanyName.JoesGuns,
+      info: "",
+      companyPositions: [...EmployeeOnly, ...PartTimeEmployeeOnly],
+      expMultiplier: 1,
+      salaryMultiplier: 1,
+      jobStatReqOffset: 0,
+    },
+    [CompanyName.OmegaSoftware]: {
+      name: CompanyName.OmegaSoftware,
+      info: "",
+      companyPositions: [...AllSoftwarePositions, ...AllSoftwareConsultantPositions, ...AllITPositions],
+      expMultiplier: 1.1,
+      salaryMultiplier: 1.1,
+      jobStatReqOffset: 49,
+    },
+    [CompanyName.NoodleBar]: {
+      name: CompanyName.NoodleBar,
+      info: "",
+      companyPositions: [...WaiterOnly, ...PartTimeWaiterOnly],
+      expMultiplier: 1,
+      salaryMultiplier: 1,
+      jobStatReqOffset: 0,
+    },
+  };
 }
-for (let i = 0; i < posNames.BusinessCompanyPositions.length; ++i) {
-  const e = posNames.BusinessCompanyPositions[i];
-  if (i <= 3) {
-    BusinessPositionsUpToOperationsManager[e] = true;
-  }
-}
-
-WaiterOnly[posNames.MiscCompanyPositions[0]] = true;
-EmployeeOnly[posNames.MiscCompanyPositions[1]] = true;
-PartTimeWaiterOnly[posNames.PartTimeCompanyPositions[0]] = true;
-PartTimeEmployeeOnly[posNames.PartTimeCompanyPositions[1]] = true;
-OperationsManagerOnly[posNames.BusinessCompanyPositions[3]] = true;
-CEOOnly[posNames.BusinessCompanyPositions[5]] = true;
-
-// Metadata
-export const companiesMetadata: IConstructorParams[] = [
-  {
-    name: CompanyName.ECorp,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
-    expMultiplier: 3,
-    salaryMultiplier: 3,
-    jobStatReqOffset: 249,
-  },
-  {
-    name: CompanyName.MegaCorp,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
-    expMultiplier: 3,
-    salaryMultiplier: 3,
-    jobStatReqOffset: 249,
-  },
-  {
-    name: CompanyName.BachmanAndAssociates,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
-    expMultiplier: 2.6,
-    salaryMultiplier: 2.6,
-    jobStatReqOffset: 224,
-  },
-  {
-    name: CompanyName.BladeIndustries,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
-    expMultiplier: 2.75,
-    salaryMultiplier: 2.75,
-    jobStatReqOffset: 224,
-  },
-  {
-    name: CompanyName.NWO,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
-    expMultiplier: 2.75,
-    salaryMultiplier: 2.75,
-    jobStatReqOffset: 249,
-  },
-  {
-    name: CompanyName.ClarkeIncorporated,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
-    expMultiplier: 2.25,
-    salaryMultiplier: 2.25,
-    jobStatReqOffset: 224,
-  },
-  {
-    name: CompanyName.OmniTekIncorporated,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
-    expMultiplier: 2.25,
-    salaryMultiplier: 2.25,
-    jobStatReqOffset: 224,
-  },
-  {
-    name: CompanyName.FourSigma,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
-    expMultiplier: 2.5,
-    salaryMultiplier: 2.5,
-    jobStatReqOffset: 224,
-  },
-  {
-    name: CompanyName.KuaiGongInternational,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSecurityPositions),
-    expMultiplier: 2.2,
-    salaryMultiplier: 2.2,
-    jobStatReqOffset: 224,
-  },
-  {
-    name: CompanyName.FulcrumTechnologies,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions),
-    expMultiplier: 2,
-    salaryMultiplier: 2,
-    jobStatReqOffset: 224,
-  },
-  {
-    name: CompanyName.StormTechnologies,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllSoftwareConsultantPositions, AllBusinessPositions),
-    expMultiplier: 1.8,
-    salaryMultiplier: 1.8,
-    jobStatReqOffset: 199,
-  },
-  {
-    name: CompanyName.DefComm,
-    info: "",
-    companyPositions: Object.assign({}, CEOOnly, AllTechnologyPositions, AllSoftwareConsultantPositions),
-    expMultiplier: 1.75,
-    salaryMultiplier: 1.75,
-    jobStatReqOffset: 199,
-  },
-  {
-    name: CompanyName.HeliosLabs,
-    info: "",
-    companyPositions: Object.assign({}, CEOOnly, AllTechnologyPositions, AllSoftwareConsultantPositions),
-    expMultiplier: 1.8,
-    salaryMultiplier: 1.8,
-    jobStatReqOffset: 199,
-  },
-  {
-    name: CompanyName.VitaLife,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSoftwareConsultantPositions),
-    expMultiplier: 1.8,
-    salaryMultiplier: 1.8,
-    jobStatReqOffset: 199,
-  },
-  {
-    name: CompanyName.IcarusMicrosystems,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSoftwareConsultantPositions),
-    expMultiplier: 1.9,
-    salaryMultiplier: 1.9,
-    jobStatReqOffset: 199,
-  },
-  {
-    name: CompanyName.UniversalEnergy,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSoftwareConsultantPositions),
-    expMultiplier: 2,
-    salaryMultiplier: 2,
-    jobStatReqOffset: 199,
-  },
-  {
-    name: CompanyName.GalacticCybersystems,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions, AllBusinessPositions, AllSoftwareConsultantPositions),
-    expMultiplier: 1.9,
-    salaryMultiplier: 1.9,
-    jobStatReqOffset: 199,
-  },
-  {
-    name: CompanyName.AeroCorp,
-    info: "",
-    companyPositions: Object.assign({}, CEOOnly, OperationsManagerOnly, AllTechnologyPositions, AllSecurityPositions),
-    expMultiplier: 1.7,
-    salaryMultiplier: 1.7,
-    jobStatReqOffset: 199,
-  },
-  {
-    name: CompanyName.OmniaCybersystems,
-    info: "",
-    companyPositions: Object.assign({}, CEOOnly, OperationsManagerOnly, AllTechnologyPositions, AllSecurityPositions),
-    expMultiplier: 1.7,
-    salaryMultiplier: 1.7,
-    jobStatReqOffset: 199,
-  },
-  {
-    name: CompanyName.SolarisSpaceSystems,
-    info: "",
-    companyPositions: Object.assign({}, CEOOnly, OperationsManagerOnly, AllTechnologyPositions, AllSecurityPositions),
-    expMultiplier: 1.7,
-    salaryMultiplier: 1.7,
-    jobStatReqOffset: 199,
-  },
-  {
-    name: CompanyName.DeltaOne,
-    info: "",
-    companyPositions: Object.assign({}, CEOOnly, OperationsManagerOnly, AllTechnologyPositions, AllSecurityPositions),
-    expMultiplier: 1.6,
-    salaryMultiplier: 1.6,
-    jobStatReqOffset: 199,
-  },
-  {
-    name: CompanyName.GlobalPharmaceuticals,
-    info: "",
-    companyPositions: Object.assign(
-      {},
-      AllTechnologyPositions,
-      AllBusinessPositions,
-      AllSoftwareConsultantPositions,
-      AllSecurityPositions,
-    ),
-    expMultiplier: 1.8,
-    salaryMultiplier: 1.8,
-    jobStatReqOffset: 224,
-  },
-  {
-    name: CompanyName.NovaMedical,
-    info: "",
-    companyPositions: Object.assign(
-      {},
-      AllTechnologyPositions,
-      AllBusinessPositions,
-      AllSoftwareConsultantPositions,
-      AllSecurityPositions,
-    ),
-    expMultiplier: 1.75,
-    salaryMultiplier: 1.75,
-    jobStatReqOffset: 199,
-  },
-  {
-    name: CompanyName.CIA,
-    info: "",
-    companyPositions: Object.assign(
-      {},
-      SoftwarePositionsUpToHeadOfEngineering,
-      AllNetworkEngineerPositions,
-      SecurityEngineerPositions,
-      AllITPositions,
-      AllSecurityPositions,
-      AllAgentPositions,
-    ),
-    expMultiplier: 2,
-    salaryMultiplier: 2,
-    jobStatReqOffset: 149,
-  },
-  {
-    name: CompanyName.NSA,
-    info: "",
-    companyPositions: Object.assign(
-      {},
-      SoftwarePositionsUpToHeadOfEngineering,
-      AllNetworkEngineerPositions,
-      SecurityEngineerPositions,
-      AllITPositions,
-      AllSecurityPositions,
-      AllAgentPositions,
-    ),
-    expMultiplier: 2,
-    salaryMultiplier: 2,
-    jobStatReqOffset: 149,
-  },
-  {
-    name: CompanyName.WatchdogSecurity,
-    info: "",
-    companyPositions: Object.assign(
-      {},
-      SoftwarePositionsUpToHeadOfEngineering,
-      AllNetworkEngineerPositions,
-      AllITPositions,
-      AllSecurityPositions,
-      AllAgentPositions,
-      AllSoftwareConsultantPositions,
-    ),
-    expMultiplier: 1.5,
-    salaryMultiplier: 1.5,
-    jobStatReqOffset: 124,
-  },
-  {
-    name: CompanyName.LexoCorp,
-    info: "",
-    companyPositions: Object.assign(
-      {},
-      AllTechnologyPositions,
-      AllSoftwareConsultantPositions,
-      AllBusinessPositions,
-      AllSecurityPositions,
-    ),
-    expMultiplier: 1.4,
-    salaryMultiplier: 1.4,
-    jobStatReqOffset: 99,
-  },
-  {
-    name: CompanyName.RhoConstruction,
-    info: "",
-    companyPositions: Object.assign({}, SoftwarePositionsUpToLeadDeveloper, BusinessPositionsUpToOperationsManager),
-    expMultiplier: 1.3,
-    salaryMultiplier: 1.3,
-    jobStatReqOffset: 49,
-  },
-  {
-    name: CompanyName.AlphaEnterprises,
-    info: "",
-    companyPositions: Object.assign(
-      {},
-      SoftwarePositionsUpToLeadDeveloper,
-      BusinessPositionsUpToOperationsManager,
-      AllSoftwareConsultantPositions,
-    ),
-    expMultiplier: 1.5,
-    salaryMultiplier: 1.5,
-    jobStatReqOffset: 99,
-  },
-  {
-    name: CompanyName.Police,
-    info: "",
-    companyPositions: Object.assign({}, AllSecurityPositions, SoftwarePositionsUpToLeadDeveloper),
-    expMultiplier: 1.3,
-    salaryMultiplier: 1.3,
-    jobStatReqOffset: 99,
-  },
-  {
-    name: CompanyName.SysCoreSecurities,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions),
-    expMultiplier: 1.3,
-    salaryMultiplier: 1.3,
-    jobStatReqOffset: 124,
-  },
-  {
-    name: CompanyName.CompuTek,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions),
-    expMultiplier: 1.2,
-    salaryMultiplier: 1.2,
-    jobStatReqOffset: 74,
-  },
-  {
-    name: CompanyName.NetLinkTechnologies,
-    info: "",
-    companyPositions: Object.assign({}, AllTechnologyPositions),
-    expMultiplier: 1.2,
-    salaryMultiplier: 1.2,
-    jobStatReqOffset: 99,
-  },
-  {
-    name: CompanyName.CarmichaelSecurity,
-    info: "",
-    companyPositions: Object.assign(
-      {},
-      AllTechnologyPositions,
-      AllSoftwareConsultantPositions,
-      AllAgentPositions,
-      AllSecurityPositions,
-    ),
-    expMultiplier: 1.2,
-    salaryMultiplier: 1.2,
-    jobStatReqOffset: 74,
-  },
-  {
-    name: CompanyName.FoodNStuff,
-    info: "",
-    companyPositions: Object.assign({}, EmployeeOnly, PartTimeEmployeeOnly),
-    expMultiplier: 1,
-    salaryMultiplier: 1,
-    jobStatReqOffset: 0,
-  },
-  {
-    name: CompanyName.JoesGuns,
-    info: "",
-    companyPositions: Object.assign({}, EmployeeOnly, PartTimeEmployeeOnly),
-    expMultiplier: 1,
-    salaryMultiplier: 1,
-    jobStatReqOffset: 0,
-  },
-  {
-    name: CompanyName.OmegaSoftware,
-    info: "",
-    companyPositions: Object.assign({}, AllSoftwarePositions, AllSoftwareConsultantPositions, AllITPositions),
-    expMultiplier: 1.1,
-    salaryMultiplier: 1.1,
-    jobStatReqOffset: 49,
-  },
-  {
-    name: CompanyName.NoodleBar,
-    info: "",
-    companyPositions: Object.assign({}, WaiterOnly, PartTimeWaiterOnly),
-    expMultiplier: 1,
-    salaryMultiplier: 1,
-    jobStatReqOffset: 0,
-  },
-];

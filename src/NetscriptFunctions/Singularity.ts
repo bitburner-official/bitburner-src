@@ -1,5 +1,4 @@
 import type { Singularity as ISingularity } from "@nsdefs";
-import type { Company } from "../Company/Company";
 
 import { Player } from "@player";
 import {
@@ -31,7 +30,6 @@ import { Programs } from "../Programs/Programs";
 import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Companies } from "../Company/Companies";
-import { companiesMetadata } from "../Company/data/CompaniesMetadata";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
@@ -42,7 +40,7 @@ import { Server } from "../Server/Server";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { FactionInfos } from "../Faction/FactionInfo";
 import { donate, repNeededToDonate } from "../Faction/formulas/donation";
-import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
+import { InternalAPI, removedFunction } from "../Netscript/APIWrapper";
 import { enterBitNode } from "../RedPill";
 import { ClassWork } from "../Work/ClassWork";
 import { CreateProgramWork, isCreateProgramWork } from "../Work/CreateProgramWork";
@@ -56,14 +54,9 @@ import { Engine } from "../engine";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
+import { companyNameAsLocationName } from "../Company/utils";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
-  const getCompany = function (ctx: NetscriptContext, name: string): Company {
-    const company = Companies[name];
-    if (!company) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company name: '${name}'`);
-    return company;
-  };
-
   const runAfterReset = function (cbScript: ScriptFilePath) {
     //Run a script after reset
     if (!cbScript) return;
@@ -670,12 +663,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     getCompanyPositions: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
-
-      // Make sure its a valid company
-      if (companyName == null || companyName === "" || !Companies[companyName]) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
-      }
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
 
       return Object.entries(CompanyPositions)
         .filter((_position) => Companies[companyName].hasPosition(_position[0]))
@@ -683,32 +671,27 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     getCompanyPositionInfo: (ctx) => (_companyName, _positionName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       const positionName = getEnumHelper("JobName").nsGetMember(ctx, _positionName, "positionName");
+      const company = Companies[companyName];
 
-      // Make sure its a valid company
-      if (!(companyName in Companies)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
-      }
-
-      if (!Companies[companyName].hasPosition(positionName)) {
+      if (!company.hasPosition(positionName)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Company '${companyName}' does not have position '${positionName}'`);
       }
 
-      const c = CompanyPositions[positionName];
-      const n = companiesMetadata.filter((company) => company.name === companyName)[0];
+      const job = CompanyPositions[positionName];
       const res = {
         name: CompanyPositions[positionName].name,
         nextPosition: CompanyPositions[positionName].nextPosition,
-        salary: CompanyPositions[positionName].baseSalary * n.salaryMultiplier,
+        salary: CompanyPositions[positionName].baseSalary * company.salaryMultiplier,
         requiredReputation: CompanyPositions[positionName].requiredReputation,
         requiredSkills: {
-          hacking: c.requiredHacking > 0 ? c.requiredHacking + n.jobStatReqOffset : 0,
-          strength: c.requiredStrength > 0 ? c.requiredStrength + n.jobStatReqOffset : 0,
-          defense: c.requiredDefense > 0 ? c.requiredDefense + n.jobStatReqOffset : 0,
-          dexterity: c.requiredDexterity > 0 ? c.requiredDexterity + n.jobStatReqOffset : 0,
-          agility: c.requiredAgility > 0 ? c.requiredAgility + n.jobStatReqOffset : 0,
-          charisma: c.requiredCharisma > 0 ? c.requiredCharisma + n.jobStatReqOffset : 0,
+          hacking: job.requiredHacking > 0 ? job.requiredHacking + company.jobStatReqOffset : 0,
+          strength: job.requiredStrength > 0 ? job.requiredStrength + company.jobStatReqOffset : 0,
+          defense: job.requiredDefense > 0 ? job.requiredDefense + company.jobStatReqOffset : 0,
+          dexterity: job.requiredDexterity > 0 ? job.requiredDexterity + company.jobStatReqOffset : 0,
+          agility: job.requiredAgility > 0 ? job.requiredAgility + company.jobStatReqOffset : 0,
+          charisma: job.requiredCharisma > 0 ? job.requiredCharisma + company.jobStatReqOffset : 0,
           intelligence: 0,
         },
       };
@@ -747,11 +730,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       },
     applyToCompany: (ctx) => (_companyName, _field) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       const field = helpers.string(ctx, "field", _field);
-      getCompany(ctx, companyName);
 
-      Player.location = companyName as LocationName;
+      Player.location = companyNameAsLocationName(companyName);
       let res;
       switch (field.toLowerCase()) {
         case "software":
@@ -815,26 +797,23 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     quitJob: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       Player.quitJob(companyName);
     },
     getCompanyRep: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
-      const company = getCompany(ctx, companyName);
-      return company.playerReputation;
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
+      return Companies[companyName].playerReputation;
     },
     getCompanyFavor: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
-      const company = getCompany(ctx, companyName);
-      return company.favor;
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
+      return Companies[companyName].favor;
     },
     getCompanyFavorGain: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
-      const company = getCompany(ctx, companyName);
-      return company.getFavorGain();
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
+      return Companies[companyName].getFavorGain();
     },
     checkFactionInvitations: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);

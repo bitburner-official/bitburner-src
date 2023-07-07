@@ -31,7 +31,7 @@ import {
   getSellTransactionGain,
   processTransactionForecastMovement,
 } from "../../src/StockMarket/StockMarketHelpers";
-import { OrderType, PositionType } from "../../src/Enums";
+import { CompanyName, OrderType, PositionType } from "../../src/Enums";
 
 jest.mock(`!!raw-loader!../NetscriptDefinitions.d.ts`, () => "", {
   virtual: true,
@@ -1255,9 +1255,9 @@ describe("Stock Market Tests", function () {
     });
 
     const company = new Company({
-      name: "MockStock",
+      name: "MockStock" as CompanyName,
       info: "",
-      companyPositions: {},
+      companyPositions: [],
       expMultiplier: 1,
       salaryMultiplier: 1,
       jobStatReqOffset: 1,

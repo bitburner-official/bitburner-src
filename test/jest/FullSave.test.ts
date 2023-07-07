@@ -6,7 +6,7 @@ import { joinFaction } from "../../src/Faction/FactionHelpers";
 import { AugmentationName, CompanyName, CrimeType, FactionName } from "../../src/Enums";
 import { Augmentations } from "../../src/Augmentation/Augmentations";
 import { SleeveCrimeWork } from "../../src/PersonObjects/Sleeve/Work/SleeveCrimeWork";
-import { Companies, initCompanies } from "../../src/Company/Companies";
+import { Companies } from "../../src/Company/Companies";
 
 describe("Check Save File Continuity", () => {
   establishInitialConditions();
@@ -60,7 +60,6 @@ function establishInitialConditions() {
   csec.favor = 20;
 
   // Companies
-  initCompanies()
   const noodleBar = Companies[CompanyName.NoodleBar];
   noodleBar.favor = 100;
   noodleBar.playerReputation = 100000;

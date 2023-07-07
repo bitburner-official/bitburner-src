@@ -1,4 +1,12 @@
-import { AugmentationName, CityName, CompletedProgramName, FactionName, LocationName, ToastVariant } from "@enums";
+import {
+  AugmentationName,
+  CityName,
+  CompanyName,
+  CompletedProgramName,
+  FactionName,
+  LocationName,
+  ToastVariant,
+} from "@enums";
 
 import type { PlayerObject } from "./PlayerObject";
 import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
@@ -44,6 +52,7 @@ import { achievements } from "../../Achievements/Achievements";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { serverMetadata } from "../../Server/data/servers";
+import { getEnumHelper, isMember } from "../../utils/EnumHelper";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -262,12 +271,9 @@ export function hospitalize(this: PlayerObject): number {
 //The 'sing' argument designates whether or not this is being called from
 //the applyToCompany() Netscript Singularity function
 export function applyForJob(this: PlayerObject, entryPosType: CompanyPosition, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
-  if (!company) {
-    console.error(`Could not find company that matches the location: ${this.location}. Player.applyToCompany() failed`);
-    return false;
-  }
-
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName]; //Company being applied to
   let pos = entryPosType;
 
   if (!this.isQualified(company, pos)) {
@@ -347,7 +353,7 @@ export function getNextCompanyPosition(
   return entryPosType;
 }
 
-export function quitJob(this: PlayerObject, company: string): void {
+export function quitJob(this: PlayerObject, company: CompanyName): void {
   if (isCompanyWork(this.currentWork) && this.currentWork.companyName === company) {
     this.finishWork(true);
   }
@@ -382,7 +388,9 @@ export function applyForItJob(this: PlayerObject, sing = false): boolean {
 }
 
 export function applyForSecurityEngineerJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
   if (this.isQualified(company, CompanyPositions[posNames.SecurityEngineerCompanyPositions[0]])) {
     return this.applyForJob(CompanyPositions[posNames.SecurityEngineerCompanyPositions[0]], sing);
   } else {
@@ -394,7 +402,9 @@ export function applyForSecurityEngineerJob(this: PlayerObject, sing = false): b
 }
 
 export function applyForNetworkEngineerJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
   if (this.isQualified(company, CompanyPositions[posNames.NetworkEngineerCompanyPositions[0]])) {
     const pos = CompanyPositions[posNames.NetworkEngineerCompanyPositions[0]];
     return this.applyForJob(pos, sing);
@@ -421,7 +431,9 @@ export function applyForSecurityJob(this: PlayerObject, sing = false): boolean {
 }
 
 export function applyForAgentJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
   if (this.isQualified(company, CompanyPositions[posNames.AgentCompanyPositions[0]])) {
     const pos = CompanyPositions[posNames.AgentCompanyPositions[0]];
     return this.applyForJob(pos, sing);
@@ -434,7 +446,9 @@ export function applyForAgentJob(this: PlayerObject, sing = false): boolean {
 }
 
 export function applyForEmployeeJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
   const position = posNames.MiscCompanyPositions[1];
   // Check if this company has the position
   if (!company.hasPosition(position)) {
@@ -458,7 +472,9 @@ export function applyForEmployeeJob(this: PlayerObject, sing = false): boolean {
 }
 
 export function applyForPartTimeEmployeeJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
   const position = posNames.PartTimeCompanyPositions[1];
   // Check if this company has the position
   if (!company.hasPosition(position)) {
@@ -481,7 +497,9 @@ export function applyForPartTimeEmployeeJob(this: PlayerObject, sing = false): b
 }
 
 export function applyForWaiterJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
   const position = posNames.MiscCompanyPositions[0];
   // Check if this company has the position
   if (!company.hasPosition(position)) {
@@ -502,7 +520,9 @@ export function applyForWaiterJob(this: PlayerObject, sing = false): boolean {
 }
 
 export function applyForPartTimeWaiterJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
   const position = posNames.PartTimeCompanyPositions[0];
   // Check if this company has the position
   if (!company.hasPosition(position)) {
@@ -594,20 +614,16 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   const allPositions = Object.values(this.jobs);
 
   // Given a company name, safely returns the reputation (returns 0 if invalid company is specified)
-  function getCompanyRep(companyName: string): number {
+  function getCompanyRep(companyName: CompanyName): number {
     const company = Companies[companyName];
-    if (company == null) {
-      return 0;
-    } else {
-      return company.playerReputation;
-    }
+    return company.playerReputation;
   }
 
   // Helper function that returns a boolean indicating whether the Player meets
   // the requirements for the specified company. There are two requirements:
   //      1. High enough reputation
   //      2. Player is employed at the company
-  function checkMegacorpRequirements(companyName: string): boolean {
+  function checkMegacorpRequirements(companyName: CompanyName): boolean {
     const serverMeta = serverMetadata.find((s) => s.specialName === companyName);
     const server = GetServer(serverMeta ? serverMeta.hostname : "");
     const bonus = (server as Server).backdoorInstalled ? -100e3 : 0;
@@ -673,7 +689,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !ecorpFac.isBanned &&
     !ecorpFac.isMember &&
     !ecorpFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.AevumECorp)
+    checkMegacorpRequirements(CompanyName.ECorp)
   ) {
     invitedFactions.push(ecorpFac);
   }
@@ -684,7 +700,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !megacorpFac.isBanned &&
     !megacorpFac.isMember &&
     !megacorpFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.Sector12MegaCorp)
+    checkMegacorpRequirements(CompanyName.MegaCorp)
   ) {
     invitedFactions.push(megacorpFac);
   }
@@ -695,7 +711,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !bachmanandassociatesFac.isBanned &&
     !bachmanandassociatesFac.isMember &&
     !bachmanandassociatesFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.AevumBachmanAndAssociates)
+    checkMegacorpRequirements(CompanyName.BachmanAndAssociates)
   ) {
     invitedFactions.push(bachmanandassociatesFac);
   }
@@ -706,19 +722,14 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !bladeindustriesFac.isBanned &&
     !bladeindustriesFac.isMember &&
     !bladeindustriesFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.Sector12BladeIndustries)
+    checkMegacorpRequirements(CompanyName.BladeIndustries)
   ) {
     invitedFactions.push(bladeindustriesFac);
   }
 
   //NWO
   const nwoFac = Factions[FactionName.NWO];
-  if (
-    !nwoFac.isBanned &&
-    !nwoFac.isMember &&
-    !nwoFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.VolhavenNWO)
-  ) {
+  if (!nwoFac.isBanned && !nwoFac.isMember && !nwoFac.alreadyInvited && checkMegacorpRequirements(CompanyName.NWO)) {
     invitedFactions.push(nwoFac);
   }
 
@@ -728,7 +739,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !clarkeincorporatedFac.isBanned &&
     !clarkeincorporatedFac.isMember &&
     !clarkeincorporatedFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.AevumClarkeIncorporated)
+    checkMegacorpRequirements(CompanyName.ClarkeIncorporated)
   ) {
     invitedFactions.push(clarkeincorporatedFac);
   }
@@ -739,7 +750,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !omnitekincorporatedFac.isBanned &&
     !omnitekincorporatedFac.isMember &&
     !omnitekincorporatedFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.VolhavenOmniTekIncorporated)
+    checkMegacorpRequirements(CompanyName.OmniTekIncorporated)
   ) {
     invitedFactions.push(omnitekincorporatedFac);
   }
@@ -750,7 +761,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !foursigmaFac.isBanned &&
     !foursigmaFac.isMember &&
     !foursigmaFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.Sector12FourSigma)
+    checkMegacorpRequirements(CompanyName.FourSigma)
   ) {
     invitedFactions.push(foursigmaFac);
   }
@@ -761,7 +772,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !kuaigonginternationalFac.isBanned &&
     !kuaigonginternationalFac.isMember &&
     !kuaigonginternationalFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.ChongqingKuaiGongInternational)
+    checkMegacorpRequirements(CompanyName.KuaiGongInternational)
   ) {
     invitedFactions.push(kuaigonginternationalFac);
   }
@@ -778,7 +789,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !fulcrumsecrettechonologiesFac.isMember &&
     !fulcrumsecrettechonologiesFac.alreadyInvited &&
     fulcrumSecretServer.backdoorInstalled &&
-    checkMegacorpRequirements(LocationName.AevumFulcrumTechnologies)
+    checkMegacorpRequirements(CompanyName.FulcrumTechnologies)
   ) {
     invitedFactions.push(fulcrumsecrettechonologiesFac);
   }
@@ -1136,8 +1147,7 @@ export function gainCodingContractReward(
       return `Gained ${gainPerFaction} reputation for each of the following factions: ${factions.join(", ")}`;
     }
     case CodingContractRewardType.CompanyReputation: {
-      if (!Companies[reward.name]) {
-        //If no/invalid company was designated, just give rewards to all factions
+      if (!isMember("CompanyName", reward.name)) {
         return this.gainCodingContractReward({ type: CodingContractRewardType.FactionReputationAll });
       }
       const repGain = CONSTANTS.CodingContractBaseCompanyRepGain * difficulty;

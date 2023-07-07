@@ -270,28 +270,6 @@ function evaluateVersionCompatibility(ver: string | number): void {
           anyPlayer.companyPosition = "";
         }
       }
-
-      // The "companyName" property of all Companies is renamed to "name"
-      interface Company0_41_2 {
-        name: string | number;
-        companyName: string;
-        companyPositions: Record<number, boolean>;
-      }
-      for (const companyName of Object.keys(Companies)) {
-        const company = Companies[companyName] as unknown as Company0_41_2;
-        if (company.name == 0 && company.companyName != null) {
-          company.name = company.companyName;
-        }
-
-        if (company.companyPositions instanceof Array) {
-          const pos: Record<number, boolean> = {};
-
-          for (let i = 0; i < company.companyPositions.length; ++i) {
-            pos[company.companyPositions[i]] = true;
-          }
-          company.companyPositions = pos;
-        }
-      }
     }
 
     // This version allowed players to hold multiple jobs

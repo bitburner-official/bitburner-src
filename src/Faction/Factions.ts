@@ -21,7 +21,6 @@ for (const aug of getRecordValues(Augmentations)) {
 }
 
 export function loadFactions(saveString: string): void {
-  // The only information that should be loaded from player save is
   const loadedFactions = JSON.parse(saveString, Reviver) as unknown;
   // This loading method allows invalid data in player save, but just ignores anything invalid
   if (!loadedFactions) return;

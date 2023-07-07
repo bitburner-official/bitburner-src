@@ -226,7 +226,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             <Button onClick={work}>Work</Button>
             <Button onClick={() => setQuitOpen(true)}>Quit</Button>
             <QuitJobModal
-              locName={props.companyName}
+              companyName={props.companyName}
               company={company}
               onQuit={rerender}
               open={quitOpen}

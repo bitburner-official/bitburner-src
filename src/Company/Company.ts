@@ -1,6 +1,6 @@
 import type { CompanyPosition } from "./CompanyPosition";
 
-import { CompanyName } from "@enums";
+import { CompanyName, JobName } from "@enums";
 import * as posNames from "./data/JobTracks";
 import { favorToRep, repToFavor } from "../Faction/formulas/favor";
 
@@ -9,30 +9,21 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 export interface IConstructorParams {
   name: CompanyName;
   info: string;
-  companyPositions: Record<string, boolean>;
+  companyPositions: JobName[];
   expMultiplier: number;
   salaryMultiplier: number;
   jobStatReqOffset: number;
-  isMegacorp?: boolean;
+  hasFaction?: boolean;
 }
 
 export class Company {
-  // Type explicitly defined because CompanyName isn't a real enum.
-  name: CompanyName = CompanyName.NoodleBar;
+  // Static info, initialized once at game load.
 
-  /** Description and general information about company */
+  name = CompanyName.NoodleBar;
   info = "";
+  hasFaction = false;
 
-  /** Has faction associated. */
-  isMegacorp = false;
-
-  /**
-   * Object that holds all available positions in this Company.
-   * Position names are held in keys.
-   * The values for the keys don't matter, but we'll make them booleans
-   *
-   * Must match names of Company Positions, defined in data/companypositionnames.ts
-   */
+  // Todo for current PR: convert this into a set of jobnames
   companyPositions: Record<string, boolean> = {};
 
   /** Company-specific multiplier for earnings */
@@ -48,8 +39,7 @@ export class Company {
    */
   jobStatReqOffset = 0;
 
-  /** Properties to track the player's progress in this company */
-  isPlayerEmployed = false;
+  // Dynamic info, loaded from save and updated during game.
   playerReputation = 0;
   favor = 0;
 
@@ -57,16 +47,15 @@ export class Company {
     if (!p) return;
     this.name = p.name;
     this.info = p.info;
-    this.companyPositions = p.companyPositions;
+    p.companyPositions.forEach((jobName) => (this.companyPositions[jobName] = true));
     this.expMultiplier = p.expMultiplier;
     this.salaryMultiplier = p.salaryMultiplier;
     this.jobStatReqOffset = p.jobStatReqOffset;
 
-    this.isPlayerEmployed = false;
     this.playerReputation = 1;
     this.favor = 0;
-    this.isMegacorp = false;
-    if (p.isMegacorp) this.isMegacorp = true;
+    this.hasFaction = false;
+    if (p.hasFaction) this.hasFaction = true;
   }
 
   hasPosition(pos: CompanyPosition | string): boolean {
@@ -109,17 +98,19 @@ export class Company {
     return this.companyPositions[posNames.MiscCompanyPositions[0]] != null;
   }
 
-  gainFavor(): void {
-    if (this.favor == null) {
-      this.favor = 0;
-    }
+  prestigeAugmentation(): void {
+    if (this.favor == null) this.favor = 0;
     this.favor += this.getFavorGain();
+    this.playerReputation = 0;
+  }
+
+  prestigeSourceFile() {
+    this.favor = 0;
+    this.playerReputation = 0;
   }
 
   getFavorGain(): number {
-    if (this.favor == null) {
-      this.favor = 0;
-    }
+    if (this.favor == null) this.favor = 0;
     const storedRep = Math.max(0, favorToRep(this.favor));
     const totalRep = storedRep + this.playerReputation;
     const newFavor = repToFavor(totalRep);
@@ -128,13 +119,16 @@ export class Company {
 
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Company", this);
+    return Generic_toJSON("Company", this, Company.includedKeys);
   }
 
   /** Initializes a Company from a JSON save state. */
   static fromJSON(value: IReviverValue): Company {
-    return Generic_fromJSON(Company, value.data);
+    return Generic_fromJSON(Company, value.data, Company.includedKeys);
   }
+
+  // Only these 3 keys are relevant to the save file
+  static includedKeys = ["favor", "playerReputation"] as const;
 }
 
 constructorsForReviver.Company = Company;
