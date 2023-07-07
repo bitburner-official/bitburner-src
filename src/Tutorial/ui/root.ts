@@ -20,7 +20,6 @@ const pages: Map<string, DocumentationPage> = new Map();
 
 export const registerPage = (title: string, page: typeof index, condition?: (p: Player) => boolean) => {
   pages.set(title, { content: page, condition: condition });
-  console.log(pages);
 };
 
 export const getPage = (title: string): DocumentationPage => pages.get(title) ?? notFound;

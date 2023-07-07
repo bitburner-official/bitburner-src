@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const pre = (props: React.PropsWithChildren<{}>): React.ReactElement => {
+export const Pre = (props: React.PropsWithChildren<object>): React.ReactElement => {
   const classes = useStyles();
   return (
     <Typography component="span" classes={{ root: classes.pre }}>

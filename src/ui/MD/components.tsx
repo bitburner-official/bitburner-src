@@ -2,16 +2,7 @@ import React from "react";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
-import {
-  List,
-  ListItemText,
-  Table,
-  TableCell,
-  TableCellBaseProps,
-  TableCellProps,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { ListItemText, Table, TableCell, TableCellProps, TableRow, Typography } from "@mui/material";
 import { LiProps, TableDataCellProps, TableHeaderCellProps } from "react-markdown/lib/ast-to-react";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,27 +19,27 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const h1 = (props: React.PropsWithChildren<{}>): React.ReactElement => (
+export const h1 = (props: React.PropsWithChildren<object>): React.ReactElement => (
   <Typography variant="h1">{props.children}</Typography>
 );
 
-export const h2 = (props: React.PropsWithChildren<{}>): React.ReactElement => (
+export const h2 = (props: React.PropsWithChildren<object>): React.ReactElement => (
   <Typography variant="h2">{props.children}</Typography>
 );
 
-export const h3 = (props: React.PropsWithChildren<{}>): React.ReactElement => (
+export const h3 = (props: React.PropsWithChildren<object>): React.ReactElement => (
   <Typography variant="h3">{props.children}</Typography>
 );
 
-export const h4 = (props: React.PropsWithChildren<{}>): React.ReactElement => (
+export const h4 = (props: React.PropsWithChildren<object>): React.ReactElement => (
   <Typography variant="h4">{props.children}</Typography>
 );
 
-export const h5 = (props: React.PropsWithChildren<{}>): React.ReactElement => (
+export const h5 = (props: React.PropsWithChildren<object>): React.ReactElement => (
   <Typography variant="h5">{props.children}</Typography>
 );
 
-export const h6 = (props: React.PropsWithChildren<{}>): React.ReactElement => (
+export const h6 = (props: React.PropsWithChildren<object>): React.ReactElement => (
   <Typography variant="h6">{props.children}</Typography>
 );
 
@@ -76,7 +67,7 @@ const fixAlign = (align: React.CSSProperties["textAlign"]): TableCellProps["alig
   return align;
 };
 
-export const td = (props: React.PropsWithChildren<TableDataCellProps>): React.ReactElement => {
+export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.ReactElement => {
   const classes = useStyles();
   const align = fixAlign(props.style?.textAlign);
   return (
@@ -88,7 +79,7 @@ export const td = (props: React.PropsWithChildren<TableDataCellProps>): React.Re
   );
 };
 
-export const th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.ReactElement => {
+export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.ReactElement => {
   const classes = useStyles();
   const align = fixAlign(props.style?.textAlign);
   return (
@@ -100,15 +91,15 @@ export const th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.
   );
 };
 
-export const table = (props: React.PropsWithChildren<{}>): React.ReactElement => {
+export const table = (props: React.PropsWithChildren<object>): React.ReactElement => {
   return <Table sx={{ width: "inherit" }}>{props.children}</Table>;
 };
 
-export const tr = (props: React.PropsWithChildren<{}>): React.ReactElement => {
+export const tr = (props: React.PropsWithChildren<object>): React.ReactElement => {
   return <TableRow>{props.children}</TableRow>;
 };
 
-export const blockquote = (props: React.PropsWithChildren<{}>): React.ReactElement => {
+export const Blockquote = (props: React.PropsWithChildren<object>): React.ReactElement => {
   const classes = useStyles();
   return <blockquote className={classes.blockquote}>{props.children}</blockquote>;
 };

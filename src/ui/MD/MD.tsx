@@ -2,9 +2,9 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import { TableHead, Typography } from "@mui/material";
 import remarkGfm from "remark-gfm";
-import { h1, h2, h3, h4, h5, h6, li, td, th, table, tr, blockquote } from "./components";
-import { code, pre } from "./code";
-import { a } from "./a";
+import { h1, h2, h3, h4, h5, h6, li, Td, Th, table, tr, Blockquote } from "./components";
+import { code, Pre } from "./code";
+import { A } from "./a";
 
 export function MD(props: { md: string }): React.ReactElement {
   return (
@@ -16,18 +16,18 @@ export function MD(props: { md: string }): React.ReactElement {
         h4: h4,
         h5: h5,
         h6: h6,
-        pre: pre,
+        pre: Pre,
         p: Typography,
         code: code,
         li: li,
 
-        th: th,
-        td: td,
+        th: Th,
+        td: Td,
         table: table,
         thead: TableHead,
         tr: tr,
-        blockquote: blockquote,
-        a: a,
+        blockquote: Blockquote,
+        a: A,
       }}
       remarkPlugins={[remarkGfm]}
     >

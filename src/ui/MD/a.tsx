@@ -1,10 +1,10 @@
 import { Link } from "@mui/material";
 import React from "react";
-import { useNavigator } from "../../Tutorial/ui/TutorialRoot";
+import { useNavigator } from "../../Tutorial/ui/DocumentationRoot";
 import { isSpoiler } from "../../Tutorial/ui/spoilers";
 import { CorruptableText } from "../React/CorruptableText";
 
-export const a = (props: React.PropsWithChildren<{ href?: string }>): React.ReactElement => {
+export const A = (props: React.PropsWithChildren<{ href?: string }>): React.ReactElement => {
   const navigator = useNavigator();
   const ref = props.href ?? "";
   if (ref.startsWith("http"))
