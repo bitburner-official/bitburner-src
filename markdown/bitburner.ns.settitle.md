@@ -9,14 +9,14 @@ Set the title of the tail window of a script.
 **Signature:**
 
 ```typescript
-setTitle(title: string | ReactElement, pid?: number): void;
+setTitle(title: string | ReactNode, pid?: number): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  title | string \| [ReactElement](./bitburner.reactelement.md) |  |
+|  title | string \| [ReactNode](./bitburner.reactnode.md) |  |
 |  pid | number | _(Optional)_ Optional. PID of the script having its tail closed. If omitted, the current script is used. |
 
 **Returns:**
@@ -35,5 +35,5 @@ If the pid is unspecified, it will modify the current script’s logs.
 
 Otherwise, the pid argument can be used to change the logs from another script.
 
-It is possible to pass a React Element instead of a string. Get these by calling React.createElement() with appropriate parameters. You should either know or be willing to learn about the React UI library if you go down this route, and there will likely be rough edges.
+It is possible to pass any React Node instead of a string. See [ReactElement](./bitburner.reactelement.md) and [ReactNode](./bitburner.reactnode.md) types for additional info.
 

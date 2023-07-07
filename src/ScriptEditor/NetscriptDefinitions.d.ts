@@ -183,8 +183,21 @@ interface TailProperties {
 
 /**
  * @public
- * A stand-in for the real React.ReactElement, which API-extractor doesn't know about.
- * Don't try to create one of these by hand; use React.createElement().
+ * A stand-in for the real React.ReactNode.
+ * A {@link ReactElement} is rendered dynamically with React.
+ * number and string are displayed directly.
+ * boolean, null, and undefined are ignored and not rendered.
+ * An array of ReactNodes will display all members of that array sequentially.
+ *
+ * Use React.createElement to make the ReactElement type, see {@link https://react.dev/reference/react/createElement#creating-an-element-without-jsx | creating an element without jsx} from the official React documentation.
+ */
+type ReactNode = ReactElement | string | number | null | undefined | boolean | ReactNode[];
+
+/**
+ * @public
+ * A stand-in for the real React.ReactElement.
+ * Use React.createElement to make these.
+ * See {@link https://react.dev/reference/react/createElement#creating-an-element-without-jsx | creating an element without jsx} from the official React documentation.
  */
 interface ReactElement {
   type: string | ((props: any) => ReactElement | null) | (new (props: any) => object);
@@ -4919,6 +4932,15 @@ export interface NS {
    */
   print(...args: any[]): void;
 
+  /** Prints a ReactNode to the script logs.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * See {@link ReactNode} type for the acceptable values.
+   *
+   * @param node - The react node to be printed. */
+  printRaw(node: ReactNode): void;
+
   /**
    * Prints a formatted string to the script’s logs.
    * @remarks
@@ -4956,6 +4978,15 @@ export interface NS {
    * @param args - Value(s) to be printed.
    */
   tprint(...args: any[]): void;
+
+  /** Prints a ReactNode to the terminal.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * See {@link ReactNode} type for the acceptable values.
+   *
+   * @param node - The react node to be printed. */
+  tprintRaw(node: ReactNode): void;
 
   /**
    * Prints a raw value or a variable to the Terminal.
@@ -5149,14 +5180,12 @@ export interface NS {
    *
    * Otherwise, the pid argument can be used to change the logs from another script.
    *
-   * It is possible to pass a React Element instead of a string. Get these by calling
-   * React.createElement() with appropriate parameters. You should either know
-   * or be willing to learn about the React UI library if you go down this
-   * route, and there will likely be rough edges.
+   * It is possible to pass any React Node instead of a string.
+   * See {@link ReactElement} and {@link ReactNode} types for additional info.
    *
    * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
    */
-  setTitle(title: string | ReactElement, pid?: number): void;
+  setTitle(title: string | ReactNode, pid?: number): void;
 
   /**
    * Get the list of servers connected to a server.

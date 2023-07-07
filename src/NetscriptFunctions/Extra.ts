@@ -3,8 +3,7 @@ import { Exploit } from "../Exploits/Exploit";
 import * as bcrypt from "bcryptjs";
 import { Apr1Events as devMenu } from "../ui/Apr1";
 import { InternalAPI } from "../Netscript/APIWrapper";
-import { helpers, wrapUserNode } from "../Netscript/NetscriptHelpers";
-import { Terminal } from "../Terminal";
+import { helpers } from "../Netscript/NetscriptHelpers";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 
 export interface INetscriptExtra {
@@ -16,8 +15,6 @@ export interface INetscriptExtra {
   bypass(doc: Document): void;
   alterReality(): void;
   rainbow(guess: string): void;
-  tprintRaw(value: React.ReactNode): void;
-  printRaw(value: React.ReactNode): void;
 }
 
 export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
@@ -65,12 +62,6 @@ export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
       if (!verified) return false;
       Player.giveExploit(Exploit.INeedARainbow);
       return true;
-    },
-    tprintRaw: () => (value) => {
-      Terminal.printRaw(wrapUserNode(value));
-    },
-    printRaw: (ctx) => (value) => {
-      ctx.workerScript.print(wrapUserNode(value));
     },
   };
 }

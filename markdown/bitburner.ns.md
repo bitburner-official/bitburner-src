@@ -137,6 +137,7 @@ export async function main(ns) {
 |  [peek(portNumber)](./bitburner.ns.peek.md) | Get a copy of the data from a port without popping it. |
 |  [print(args)](./bitburner.ns.print.md) | Prints one or more values or variables to the script’s logs. |
 |  [printf(format, args)](./bitburner.ns.printf.md) | Prints a formatted string to the script’s logs. |
+|  [printRaw(node)](./bitburner.ns.printraw.md) | Prints a ReactNode to the script logs. |
 |  [prompt(txt, options)](./bitburner.ns.prompt.md) | Prompt the player with an input modal. |
 |  [ps(host)](./bitburner.ns.ps.md) | List running scripts on a server. |
 |  [purchaseServer(hostname, ram)](./bitburner.ns.purchaseserver.md) | Purchase a server. |
@@ -163,6 +164,7 @@ export async function main(ns) {
 |  [toast(msg, variant, duration)](./bitburner.ns.toast.md) | Queue a toast (bottom-right notification). |
 |  [tprint(args)](./bitburner.ns.tprint.md) | Prints one or more values or variables to the Terminal. |
 |  [tprintf(format, values)](./bitburner.ns.tprintf.md) | Prints a raw value or a variable to the Terminal. |
+|  [tprintRaw(node)](./bitburner.ns.tprintraw.md) | Prints a ReactNode to the terminal. |
 |  [tryWritePort(portNumber, data)](./bitburner.ns.trywriteport.md) | Attempt to write to a port. |
 |  [upgradePurchasedServer(hostname, ram)](./bitburner.ns.upgradepurchasedserver.md) | Upgrade a purchased server's RAM. |
 |  [vsprintf(format, args)](./bitburner.ns.vsprintf.md) | Format a string with an array of arguments. |
