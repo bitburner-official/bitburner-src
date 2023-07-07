@@ -84,7 +84,7 @@
 |  [Player](./bitburner.player.md) |  |
 |  [ProcessInfo](./bitburner.processinfo.md) | A single process on a server. |
 |  [Product](./bitburner.product.md) | Product in a warehouse |
-|  [ReactElement](./bitburner.reactelement.md) | A stand-in for the real React.ReactElement, which API-extractor doesn't know about. Don't try to create one of these by hand; use React.createElement(). |
+|  [ReactElement](./bitburner.reactelement.md) | A stand-in for the real React.ReactElement. Use React.createElement to make these. See [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation. |
 |  [RecentScript](./bitburner.recentscript.md) |  |
 |  [ReputationFormulas](./bitburner.reputationformulas.md) | Reputation formulas |
 |  [ResetInfo](./bitburner.resetinfo.md) | Various info about resets |
@@ -125,6 +125,7 @@
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
 |  [NSEnums](./bitburner.nsenums.md) |  |
 |  [PortData](./bitburner.portdata.md) |  |
+|  [ReactNode](./bitburner.reactnode.md) | <p>A stand-in for the real React.ReactNode. Boolean values are ignored and not rendered. null and undefined are ignored and not rendered. ReactElement, number, and string are displayed directly. An array of ReactNodes will display all members of that array.</p><p>Use React.createElement to make the ReactElement type.</p> |
 |  [ScriptArg](./bitburner.scriptarg.md) |  |
 |  [SleeveBladeburnerTask](./bitburner.sleevebladeburnertask.md) |  |
 |  [SleeveClassTask](./bitburner.sleeveclasstask.md) |  |

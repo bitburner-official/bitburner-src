@@ -1767,6 +1767,12 @@ export const ns: InternalAPI<NSFull> = {
     const name = helpers.string(ctx, "name", _name);
     return getRamCost(...name.split("."));
   },
+  tprintRaw: () => (value) => {
+    Terminal.printRaw(wrapUserNode(value));
+  },
+  printRaw: (ctx) => (value) => {
+    ctx.workerScript.print(wrapUserNode(value));
+  },
   flags: Flags,
   ...NetscriptExtra(),
 };
