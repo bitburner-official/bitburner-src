@@ -524,13 +524,13 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           </Typography>
           <ListItem>
             <HelpIcon color={"error"} />
-            <Typography color={"error"}>Tutorial</Typography>
+            <Typography color={"error"}>Documentation</Typography>
           </ListItem>
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TutorialPageInfo as number]: {
+    [iTutorialSteps.DocumentationPageInfo as number]: {
       content: (
         <Typography>
           This page contains a lot of different documentation about the game's content and mechanics. I know it's a lot,
@@ -570,7 +570,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     <>
       <Paper square sx={{ maxWidth: "70vw", p: 2 }}>
         {content.content}
-        {step !== iTutorialSteps.TutorialPageInfo && (
+        {step !== iTutorialSteps.DocumentationPageInfo && (
           <>
             {step !== iTutorialSteps.Start && (
               <IconButton onClick={iTutorialPrevStep} aria-label="previous">
@@ -587,7 +587,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <br />
         <br />
         <Button onClick={iTutorialEnd}>
-          {step !== iTutorialSteps.TutorialPageInfo ? "SKIP TUTORIAL" : "FINISH TUTORIAL"}
+          {step !== iTutorialSteps.DocumentationPageInfo ? "SKIP TUTORIAL" : "FINISH TUTORIAL"}
         </Button>
       </Paper>
     </>

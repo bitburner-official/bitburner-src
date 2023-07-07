@@ -23,7 +23,7 @@ export const Context = {
 
 export const useNavigator = (): Navigator => useContext(Context.Navigator);
 
-export function TutorialRoot(props: IProps): React.ReactElement {
+export function DocumentationRoot(props: IProps): React.ReactElement {
   const [confirmResetOpen, setConfirmResetOpen] = useState(false);
   const [page, setPage] = useState(Root);
   const navigator = {

@@ -28,7 +28,7 @@ export enum SimplePage {
   StockMarket = "Stock Market",
   Terminal = "Terminal",
   Travel = "Travel",
-  Tutorial = "Tutorial",
+  Documentation = "Documentation",
   Work = "Work",
   BladeburnerCinematic = "Bladeburner Cinematic",
   Loading = "Loading",

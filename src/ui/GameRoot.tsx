@@ -37,7 +37,7 @@ import { ProgramsRoot } from "../Programs/ui/ProgramsRoot";
 import { ScriptEditorRoot } from "../ScriptEditor/ui/ScriptEditorRoot";
 import { MilestonesRoot } from "../Milestones/ui/MilestonesRoot";
 import { TerminalRoot } from "../Terminal/ui/TerminalRoot";
-import { TutorialRoot } from "../Tutorial/ui/TutorialRoot";
+import { DocumentationRoot } from "../Tutorial/ui/TutorialRoot";
 import { ActiveScriptsRoot } from "./ActiveScripts/ActiveScriptsRoot";
 import { FactionsRoot } from "../Faction/ui/FactionsRoot";
 import { FactionRoot } from "../Faction/ui/FactionRoot";
@@ -277,9 +277,9 @@ export function GameRoot(): React.ReactElement {
       mainPage = <MilestonesRoot />;
       break;
     }
-    case Page.Tutorial: {
+    case Page.Documentation: {
       mainPage = (
-        <TutorialRoot
+        <DocumentationRoot
           reactivateTutorial={() => {
             prestigeAugmentation();
             Router.toPage(Page.Terminal);
