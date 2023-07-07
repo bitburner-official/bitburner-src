@@ -1,57 +1,52 @@
-.. \_gameplay_scripts:
-
 # Scripts
 
 Scripts are programs that can be used to automate the hacking process
 and almost every other part of the game. Scripts must be written
-in the :ref:`netscript` language.
+in javascript.
 
 It is highly recommended that you have a basic background in programming
 to start writing scripts. You by no means need to be an expert. All you
 need is some familiarity with basic programming constructs like
 for/while loops, conditionals (if/else), functions, variables, etc.
 If you'd like to learn a little bit about programming, see
-:ref:`netscriptlearntoprogram`.
+LEARNTOPROGRAM.
 
-Script Arguments
-^^^^^^^^^^^^^^^^
+## Script Arguments
+
 When running a script, you can choose to pass arguments to that script.
 The script's logic can access and act on these arguments. This allows
 for flexibility in your scripts. For more details, see
-:ref:`netscript_script_arguments`.
+arguments.
 
 For information on how to run scripts with arguments, see
-:ref:`gameplay_working_with_scripts_in_terminal` and
-:ref:`gameplay_working_with_scripts_in_netscript` below.
+SCRIPTS
 
-Identifying a Script
-^^^^^^^^^^^^^^^^^^^^
+## Identifying a Script
+
 Many commands and functions act on an executing script
 (i.e. a script that is running). Therefore, there must
 be a way to specify which script you want those commands & functions
 to act on.
 
 The best way to identify a script is by its PID (Process IDentifier). This
-unique number is returned from :js:func:`run`, :js:func:`exec`, etc., and also
+unique number is returned from `run`, `exec`, etc., and also
 shows in the output of "ps".
 
 A secondary way to identify scripts is by name **and** arguments. However (by
 default) you can run a multiple copies of a script with the same arguments, so
 this does not necessarily **uniquely** identify a script. In case of multiple
 matches, most functions will return an arbitrary one (typically the first one
-to be started). An exception is :js:func:`kill`, which will kill all the
+to be started). An exception is `kill`, which will kill all the
 matching scripts.
 
 The arguments must be an **exact** match. This means that both
 the order and type of the arguments matter.
 
-.. \_gameplay_scripts_multithreadingscripts:
+## Multithreading scripts
 
-Multithreading scripts
-^^^^^^^^^^^^^^^^^^^^^^
 A script can be run with multiple threads. This is also called multithreading.
 The effect of multithreading is that every call to the
-:js:func:`hack`, :js:func:`grow`, and :js:func:`weaken` Netscript functions
+`hack`, `grow`, and `weaken` Netscript functions
 will have their results multiplied by the number of threads.
 For example, if a normal single-threaded script
 is able to hack $10,000, then running the same script with 5 threads would
@@ -65,20 +60,18 @@ When multithreading a script, the total RAM cost can be calculated by
 simply multiplying the base RAM cost of the script with the number of
 threads, where the base cost refers to the amount of RAM required to
 run the script single-threaded. In the terminal, you can run the
-:ref:`mem_terminal_command` Terminal command to see how much RAM a script
+`mem` Terminal command to see how much RAM a script
 requires with `n` threads::
 
     $ mem [scriptname] -t n
 
-.. \_gameplay_working_with_scripts_in_terminal:
+## Working with Scripts in Terminal
 
-Working with Scripts in Terminal
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Running a script requires RAM. The more complex a script is, the more
 RAM it requires to run. Scripts can be run on any server you have root
 access to.
 
-Here are some :ref:`terminal` commands that are useful when working
+Here are some terminal commands that are useful when working
 with scripts:
 
 **check [script] [args...]**
@@ -161,14 +154,8 @@ so: tail foo.js foodnstuff
 
 Displays all active scripts and their RAM usage
 
-.. \_gameplay_working_with_scripts_in_netscript:
+## Notes about how Scripts Work Offline
 
-Working with Scripts in Netscript
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TODO/Coming Soon...
-
-Notes about how Scripts Work Offline
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The scripts that you write and execute are interpreted in Javascript.
 For this reason, it is not possible for these scripts to run while
 offline (when the game is closed). It is important to note that for

@@ -1,12 +1,10 @@
-.. \_gameplay_stats:
-
 # Stats
 
 The player has several stats that can be increased in order to progress
 in the game.
 
-Hacking
-^^^^^^^
+## Hacking
+
 Represents the player's ability to code and hack.
 
 Affects:
@@ -29,8 +27,8 @@ Gain experience by:
 - Working certain jobs at a company
 - Studying at a university
 
-Strength
-^^^^^^^^
+## Strength
+
 Represents the player's physical offensive power
 
 Affects:
@@ -46,8 +44,8 @@ Gain experience by:
 - Doing Security/Field Work for a faction
 - Working certain jobs at a company
 
-Defense
-^^^^^^^
+## Defense
+
 Represents the player's ability to withstand damage
 
 Affects:
@@ -64,8 +62,8 @@ Gain experience by:
 - Doing Security/Field Work for a faction
 - Working certain jobs at a company
 
-Dexterity
-^^^^^^^^^
+## Dexterity
+
 Represents the player's skill and adeptness in performing certain tasks
 
 Affects:
@@ -81,8 +79,8 @@ Gain experience by:
 - Doing Security/Field Work for a faction
 - Working certain jobs at a company
 
-Agility
-^^^^^^^
+## Agility
+
 Represents the player's speed and ability to move
 
 Affects:
@@ -98,8 +96,8 @@ Gain experience by:
 - Doing Security/Field Work for a faction
 - Working certain jobs at a company
 
-Charisma
-^^^^^^^^
+## Charisma
+
 Represents the player's social abilities
 
 Affects:

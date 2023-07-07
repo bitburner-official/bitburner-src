@@ -17,10 +17,10 @@ the `Character` page (Alt + c).
 Because of how powerful Augmentations are, the technology behind them
 is kept private and secret by the corporations and organizations that
 create them. Therefore, the only way for the player to obtain
-Augmentations is through Factions. After joining a Faction and earning
+Augmentations is through [Factions](factions.md). After joining a Faction and earning
 enough reputation in it, you will be able to purchase its Augmentations.
-Different Factions offer different Augmentations. Augmentations must be
-purchased in order to be installed, and they are fairly expensive.
+Different [Factions](factions.md) offer different Augmentations. Augmentations must be
+purchased in order to be installed, and they are fairly expensive. They also require reputation from a [Factions](factions.md) before they will let you purchase their Augmentations.
 
 ## Installing Augmentations
 
@@ -35,7 +35,7 @@ money. You will have to start over, but you will have all of the
 Augmentations you have installed to help you progress. This is the
 game's "soft reset" or "prestige" mechanic.
 
-To summarize, here is a list of everything you will LOSE when you install
+To summarize, here is a list of everything you will **LOSE** when you install
 an Augmentation:
 
 - Stats/Skills
@@ -43,7 +43,7 @@ an Augmentation:
 - Scripts on all servers EXCEPT your home computer
 - Purchased servers
 - Hacknet Nodes
-- Company/faction reputation
+- Company/faction reputation, but you gain reputation.
 - Jobs and Faction memberships
 - Programs
 - Stocks
@@ -53,7 +53,7 @@ Here is everything you will KEEP when you install an Augmentation:
 
 - Every Augmentation you have installed
 - Scripts on your home computer
-- RAM/Core Upgrades on your home computer
+- RAM / Core Upgrades on your home computer
 - World Stock Exchange account and TIX API Access
 - Previously installed Augmentations
 
@@ -61,8 +61,8 @@ Here is everything you will KEEP when you install an Augmentation:
 
 You do not have to install an Augmentation right after you purchase it.
 You can purchase as many Augmentations as you'd like before you choose to
-install them. When you install your purchased Augmentations they will ALL
-get installed.
+install them. When you install your purchased Augmentations they will **ALL**
+get installed at once.
 
 There are a few drawbacks to this, however. First, obviously, you won't
 gain the benefits of your purchased Augmentations until after you install
@@ -72,5 +72,5 @@ you purchase an Augmentation, the price of purchasing another Augmentation
 doubles. This multiplier stacks for each Augmentation you
 purchase. Once you install your purchased Augmentations, their costs
 are reset back to the original prices. You can only purchase each augmentation
-once, with the exception of NeuroFlux Governor, which can be purchased infinitely
+once, with the exception of `NeuroFlux Governor`, which can be purchased infinitely
 at increasing cost.

@@ -1,14 +1,9 @@
-.. \_terminal:
-
 # Terminal
 
 The Terminal is a console emulator program that lets you interface with all of the
 Servers in the game. The Terminal can be accessed by clicking the 'Terminal' tab
 on the navigation menu on the left-hand side of the game (you may need to expand
-the 'Hacking' header in order to see the 'Terminal' tab). Alternatively, the :ref:`keyboard
-shortcut <shortcuts>` Alt + t can be used to open the Terminal.
-
-.. \_terminal_filesystem:
+the 'Hacking' header in order to see the 'Terminal' tab). Alternatively, the shortcut Alt + t can be used to open the Terminal.
 
 ## Filesystem (Directories)
 
@@ -20,18 +15,18 @@ filesystem do not exist.
 
 Here are the Terminal commands you'll commonly use when dealing with the filesystem.
 
-- :ref:`ls_terminal_command`
-- :ref:`cd_terminal_command`
-- :ref:`mv_terminal_command`
+- ls (view all files in the current folder)
+- cd (change folder)
+- mv (rename a file)
 
-Directories
-^^^^^^^^^^^
+## Directories
+
 In order to create a directory, simply name a file using a full absolute Linux-style path::
 
     /scripts/myScript.js
 
-This will automatically create a "directory" called :code:`scripts`. This will also work
-for subdirectories::
+This will automatically create a "directory" called `scripts`. This will also work
+for subdirectories:
 
     /scripts/hacking/helpers/myHelperScripts.js
 
@@ -43,8 +38,8 @@ Note that there is no way to manually create or remove directories. The creation
 deletion of directories is automatically handled as you name/rename/delete
 files.
 
-Absolute vs Relative Paths
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+## Absolute vs Relative Paths
+
 Many Terminal commands accept both absolute and relative paths for specifying a
 file.
 
@@ -65,31 +60,28 @@ Linux-style dot symbols will work for relative paths::
     $ nano ../scripts/myScript.js
     $ nano ../../helper.js
 
-Netscript
-^^^^^^^^^
-Note that in order to reference a file, :ref:`netscript` functions require the
-**full** absolute file path. For example
+## Netscript
 
-.. code:: javascript
+Note that in order to reference a file, `functions` require the
+**full** absolute file path. For example
 
     ns.run("/scripts/hacking/helpers.myHelperScripts.js");
     ns.rm("/logs/myHackingLogs.txt");
     ns.rm("thisIsAFileInTheRootDirectory.txt");
 
-.. note:: A full file path **must** begin with a forward slash (/) if that file
+A full file path **must** begin with a forward slash (/) if that file
 is not in the root directory.
 
-Missing Features
-^^^^^^^^^^^^^^^^
+## Missing Features
+
 These features that are typically in Linux filesystems have not yet been added to the game:
 
 - Tab autocompletion does not work with relative paths
-- :code:`mv` only accepts full filepaths for the destination argument. It does not accept directories
+- `mv` only accepts full filepaths for the destination argument. It does not accept directories
 
 ## Commands
 
-alias
-^^^^^
+## alias
 
     $ alias [-g] [name="value"]
 
@@ -125,12 +117,9 @@ a Terminal command.
 Entering just the command 'alias' without any arguments prints the list of all
 defined aliases in the reusable form 'alias NAME=VALUE' on the Terminal.
 
-The :ref:`unalias_terminal_command` Terminal command can be used to remove aliases.
+The `unalias` Terminal command can be used to remove aliases.
 
-.. \_analyze_terminal_command:
-
-analyze
-^^^^^^^
+## analyze
 
 Prints details and statistics about the current server. The information that is
 printed includes basic server details such as the hostname, whether the player
@@ -138,38 +127,35 @@ has root access, what ports are opened/closed, and also hacking-related informat
 such as an estimated chance to successfully hack, an estimate of how much money is
 available on the server, etc.
 
-backdoor
-^^^^^^^^
+## backdoor
 
 Installs a backdoor on the current server. Root access is required to do this.
 
 Servers will give different bonuses when you install a backdoor.
 This can pass faction tests or give bonuses such as discounts from companies.
 
-buy
-^^^
+## buy
 
     $ buy [-l/-a/program]
 
 Purchase a program through the Dark Web. Requires a TOR Router to use.
 
-If this command is ran with the '-l' flag, it will display a list of all programs
+If this command is ran with the `-l` flag, it will display a list of all programs
 that can be purchased through the Dark Web, as well as their costs.
 
-If this command is ran with the '-a' flag, it will attempt to buy all programs
+If this command is ran with the `-a` flag, it will attempt to buy all programs
 that can be purchased through the Dark Web and if the player can't afford all of them
 none will be bought.
 
 Otherwise, the name of the program must be passed in as a parameter. This name
-is NOT case-sensitive::
+is NOT case-sensitive:
 
     $ buy brutessh.exe
 
 Note that you do not need to be connected to the actual dark web server in order
 to run this command. You can use this command at any time on the Terminal.
 
-cat
-^^^
+## cat
 
     $ cat [filename]
 
@@ -179,16 +165,13 @@ Display a message (.msg), literature (.lit), or text (.txt) file::
     $ cat foo.lit
     $ cat servers.txt
 
-.. \_cd_terminal_command:
-
-cd
-^^
+## cd
 
     $ cd [dir]
 
 Change to the specified directory.
 
-See :ref:`terminal_filesystem` for details on directories.
+See terminal for details on directories.
 
 Note that this command works even for directories that don't exist. If you change
 to a directory that doesn't exist, it will not be created. A directory is only created
@@ -198,8 +181,7 @@ once there is a file in it::
     $ cd /logs
     $ cd ..
 
-check
-^^^^^
+## check
 
     $ check [script name] [args...]
 
@@ -214,8 +196,7 @@ Then to run the 'check' command on this script you would have to pass the same a
 
     $ check foo.js 1 2 foodnstuff
 
-clear/cls
-^^^^^^^^^
+## clear/cls
 
 Clear the Terminal screen, deleting all of the text. Note that this does not
 delete the user's command history, so using the up and down arrow keys is
@@ -225,10 +206,7 @@ Both 'clear' and 'cls' do the same thing::
     $ clear
     $ cls
 
-.. \_connect_terminal_command:
-
-connect
-^^^^^^^
+## connect
 
     $ connect [hostname/ip]
 
@@ -237,8 +215,7 @@ be given as the argument to this command. Note that only servers that are immedi
 adjacent to the current server in the network can be connected to. To see which
 servers can be connected to, use the 'scan' command.
 
-download
-^^^^^^^^
+## download
 
 Downloads a script or text file to your computer (your real-life computer)::
 
@@ -252,34 +229,30 @@ Terminal commands::
     $ download *.script
     $ download *.txt
 
-expr
-^^^^
+## expr
 
     $ expr [math expression]
 
 Evaluate a mathematical expression. The expression is evaluated in JavaScript,
 and therefore all JavaScript operators should be supported.
 
-Examples::
+Examples:
 
     $ expr 5.6 * 10 - 123
     $ expr 3 ** 3
 
-free
-^^^^
+## free
 
 Display's the memory usage on the current machine. Print the amount of RAM that
 is available on the current server as well as how much of it is being used.
 
-hack
-^^^^
+## hack
 
 Attempt to hack the current server. Requires root access in order to be run.
 
-Related: Hacking Mechanics :ref:`hacking`
+Related: Hacking Mechanics hacking
 
-help
-^^^^
+## help
 
     $ help [command]
 
@@ -291,20 +264,15 @@ detailed information about the Terminal command. Examples::
     $ help alias
     $ help scan-analyze
 
-.. \_home_terminal_command:
-
-home
-^^^^
+## home
 
 Connect to your home computer. This will work no matter what server you are currently connected to.
 
-hostname
-^^^^^^^^
+## hostname
 
 Prints the hostname of the server you are currently connected to.
 
-kill
-^^^^
+## kill
 
     $ kill [script name] [args...]
     $ kill [pid]
@@ -312,7 +280,7 @@ kill
 Kill the script specified by the script filename and arguments OR by its PID. If
 filename and arguments are used the kill is server-specific, so if you're connected
 to home and want to kill a script running on n00dles, you have to either use it's PID
-or :code:`connect` to n00dles first and then use the the kill command.
+or `connect` to n00dles first and then use the the kill command.
 
 If you are killing the script using its filename and arguments, then each argument
 must be separated by a space. Remember that a running script is identified
@@ -330,15 +298,11 @@ of them will be killed.
 
 If you are killing the script using its PID, then the PID argument must be numeric.
 
-killall
-^^^^^^^
+## killall
 
 Kills all scripts on the current server.
 
-.. \_ls_terminal_command:
-
-ls
-^^
+## ls
 
     $ ls [dir] [--grep pattern]
 
@@ -348,15 +312,15 @@ If this command is run with no arguments, then it prints all files and directori
 server to the Terminal screen. Directories will be printed first in alphabetical order,
 followed by the files (also in alphabetical order).
 
-The :code:`dir` optional parameter allows you to specify the directory for which to display
+The `dir` optional parameter allows you to specify the directory for which to display
 files.
 
-The :code:`--grep pattern` optional parameter allows you to only display files and directories
+The `--grep pattern` optional parameter allows you to only display files and directories
 with a certain pattern in their names.
 
-The :code:`-l` optional parameter allows you to force each item onto a single line.
+The `-l` optional parameter allows you to force each item onto a single line.
 
-Examples::
+Examples:
 
     // List files/directories with the '.script' extension in the current directory
     $ ls -l --grep .script
@@ -367,15 +331,11 @@ Examples::
     // List files/directories with the word 'purchase' in the name, in the 'scripts' directory
     $ ls scripts -l --grep purchase
 
-lscpu
-^^^^^
+## lscpu
 
 Prints the number of CPU cores the current server has.
 
-.. \_mem_terminal_command:
-
-mem
-^^^
+## mem
 
     $ mem [script name] [-t] [num threads]
 
@@ -392,30 +352,26 @@ The first example above will print the amount of RAM needed to run 'foo.js'
 with a single thread. The second example above will print the amount of RAM needed
 to run 'foo.js' with 50 threads.
 
-.. \_mv_terminal_command:
-
-mv
-^^
+## mv
 
     $ mv [source] [destination]
 
 Move the source file to the specified destination in the filesystem.
-See :ref:`terminal_filesystem` for more details about the Terminal's filesystem.
+See terminal for more details about the Terminal's filesystem.
 This command only works for scripts and text files (.txt). It cannot, however, be used
 to convert from script to text file, or vice versa.
 
 This function can also be used to rename files.
 
-.. note:: Unlike the Linux :code:`mv` command, the _destination_ argument must be the
+Unlike the Linux `mv` command, the `destination` argument must be the
 full filepath. It cannot be a directory.
 
-Examples::
+Examples:
 
     $ mv hacking.script scripts/hacking.script
     $ mv myScript.js myOldScript.js
 
-nano
-^^^^
+## nano
 
     $ nano [filename]
 
@@ -423,16 +379,14 @@ Opens up the specified file in the Text Editor. Only scripts (.script, .js) and
 text files (.txt) can be edited. If the file does not already exist, then a new
 empty file will be created.
 
-ps
-^^
+## ps
 
     $ ps [-g, --grep pattern]
 
 Prints all scripts that are currently running on the current server.
-The :code:`-g, --grep pattern` option will only output running scripts where the name matches the provided pattern.
+The `-g, --grep pattern` option will only output running scripts where the name matches the provided pattern.
 
-rm
-^^
+## rm
 
     $ rm [filename]
 
@@ -441,14 +395,11 @@ except literature files (.lit).
 
 **WARNING: This is permanent and cannot be undone**
 
-.. \_run_terminal_command:
-
-run
-^^^
+## run
 
     $ run [file name] [-t] [num threads] [args...]
 
-Execute a program, script, or :ref:`codingcontracts`.
+Execute a program, script, or coding contracts.
 
 The '[-t]', '[num threads]', and '[args...]' arguments are only valid when
 running a script. The '-t' flag is used to indicate that the script should
@@ -463,41 +414,37 @@ argument must be separated by a space.
 
 **Examples**
 
-Run a program::
+Run a program:
 
     $ run BruteSSH.exe
 
-Run _foo.js_ with 50 threads and the arguments [1e3, 0.5, foodnstuff]::
+Run `foo.js` with 50 threads and the arguments [1e3, 0.5, foodnstuff]:
 
     $ run foo.js -t 50 1e3 0.5 foodnstuff
 
-Run a Coding Contract::
+Run a Coding Contract:
 
     $ run foo-contract.cct
 
-scan
-^^^^
+## scan
 
 Prints all immediately-available network connections. This will print a list
 of all servers that you can currently connect to using the 'connect' Terminal command.
 
-.. \_scan_analyze_terminal_command:
-
-scan-analyze
-^^^^^^^^^^^^
+## scan-analyze
 
     $ scan-analyze [depth]
 
-Prints detailed information about all servers up to _[depth]_ nodes away on the
-network. Calling 'scan-analyze 1' will display information for the same servers
+Prints detailed information about all servers up to `depth` nodes away on the
+network. Calling `scan-analyze 1` will display information for the same servers
 that are shown by the 'scan' Terminal command. This command also shows the
 relative paths to reach each server.
 
-By default, the maximum depth that can be specified for 'scan-analyze' is 3.
-However, once you have the _DeepscanV1.exe_ and _DeepscanV2.exe_ programs, you can
-execute 'scan-analyze' with a depth up to 5 and 10, respectively.
+By default, the maximum depth that can be specified for `scan-analyze` is 3.
+However, once you have the `DeepscanV1.exe` and `DeepscanV2.exe` programs, you can
+execute `scan-analyze` with a depth up to 5 and 10, respectively.
 
-The information 'scan-analyze' displays about each server includes whether or
+The information `scan-analyze` displays about each server includes whether or
 not you have root access to it, its required hacking level, the number of open
 ports required to run NUKE.exe on it, and how much RAM it has. When used the
 information is structured like:
@@ -517,28 +464,21 @@ information is structured like:
     --Number of open ports required to NUKE: 0
     --RAM: 16.00GB
 
-In this case :code:`n00dles` and :code:`foodnstuff` are connected to the current server
-and :code:`zer0` is connected to :code:`n00dles`.
+In this case `n00dles` and `foodnstuff` are connected to the current server
+and `zer0` is connected to `n00dles`.
 
-.. \_scp_terminal_command:
-
-scp
-^^^
+## scp
 
     $ scp [script name] [target server]
 
 Copies the specified script from the current server to the target server.
 The second argument passed in must be the hostname or IP of the target server.
 
-sudov
-^^^^^
+## sudov
 
 Prints whether or not you have root access to the current server.
 
-.. \_tail_terminal_command:
-
-tail
-^^^^
+## tail
 
     $ tail [pid]
     or
@@ -555,16 +495,12 @@ Then in order to check its logs with 'tail' the same arguments must be used::
 
     $ tail foo.js 10 50000
 
-top
-^^^
+## top
 
 Prints a list of all scripts running on the current server as well as their
 thread count and how much RAM they are using in total.
 
-.. \_unalias_terminal_command:
-
-unalias
-^^^^^^^
+## unalias
 
     $ unalias "[alias name]"
 
@@ -578,10 +514,9 @@ Then it could be removed using::
 
     $ unalias "r"
 
-It is not necessary to differentiate between global and non-global aliases when using 'unalias'
+It is not necessary to differentiate between global and non-global aliases when using `unalias`
 
-wget
-^^^^
+## wget
 
     $ wget [url] [target file]
 
@@ -610,7 +545,7 @@ There are two main points:
 2. Anything that can represent a number is automatically cast to a number, unless its
    surrounded by quotation marks.
 
-Here's an example to show how these rules work. Consider the following script `argType.js`::
+Here's an example to show how these rules work. Consider the following script `argType.js`:
 
     export async function main(ns) {
         ns.tprint("Number of args: " + ns.args.length);
@@ -619,11 +554,11 @@ Here's an example to show how these rules work. Consider the following script `a
         }
     }
 
-Then if we run the following terminal command::
+Then if we run the following terminal command:
 
     $ run argType.js 123 1e3 "5" "this is a single argument"
 
-We'll see the following in the Terminal::
+We'll see the following in the Terminal:
 
     Running script with 1 thread(s) and args: [123, 1000, "5", "this is a single argument"].
     May take a few seconds to start up the process...
@@ -642,5 +577,5 @@ Example::
 
     $ run foo.js; tail foo.js
 
-This does _not_ wait for commands with a delay to finish executing, so it
-generally doesn't work with things like :code:`hack`, :code:`wget`, etc.
+This does `not` wait for commands with a delay to finish executing, so it
+generally doesn't work with things like `hack`, `wget`, etc.

@@ -31,15 +31,15 @@ In this introductory tutorial you created a script called `n00dles.js` and ran i
 on the `n00dles` server. Right now, we'll kill this script. There are two ways
 to do this:
 
-1. You can go to the Terminal and enter::
+1. You can go to the Terminal and enter:
 
    $ kill n00dles.js
 
-2. You can go to the `Active Scripts` page (|Keyboard shortcut| Alt + s) and
+2. You can go to the `Active Scripts` page (Alt + s) and
    press the "Kill Script" button for `n00dles.js`.
 
 If you skipped the introductory tutorial, then ignore the part above. Instead, go to the
-`Hacknet Nodes` page (|Keyboard shortcut| Alt + h) and purchase a
+`Hacknet Nodes` page (Alt + h) and purchase a
 Hacknet Node to start generating some passive income.
 
 ## Creating our First Script
@@ -49,8 +49,8 @@ entire game, if you want).
 
 Before we write the script, here are some things you'll want to familiarize yourself with:
 
-- `gameplay_hacking_generalhackingmechanics`
-- `gameplay_hacking_serversecurity`
+- `hacking`
+- `security`
 - `hack`
 - `grow`
 - `weaken`
@@ -67,14 +67,13 @@ used to decrease a server's security level.
 
 Now let's move on to actually creating the script.
 Go to your home computer and then create a script called `early-hack-template.js` by
-going to Terminal and entering the following two commands::
+going to Terminal and entering the following two commands:
 
     $ home
     $ nano early-hack-template.js
 
 This will take you to the script editor, which you can use to code and create
-`gameplay_scripts`. It will be helpful to consult the `netscript` documentation.
-Specifically, you'll want to take a look at `netscriptfunctions`.
+`scripts`. It will be helpful to take a look at `functions`.
 
 Enter the following code in the script editor:
 
@@ -85,13 +84,13 @@ Enter the following code in the script editor:
         const target = "n00dles";
 
         // Defines how much money a server should have before we hack it
-        // In this case, it is set to 75% of the server's max money
-        const moneyThresh = ns.getServerMaxMoney(target) * 0.75;
+        // In this case, it is set to the maximum amount of money.
+        const moneyThresh = ns.getServerMaxMoney(target);
 
         // Defines the maximum security level the target server can
         // have. If the target's security level is higher than this,
         // we'll weaken it before doing anything else
-        const securityThresh = ns.getServerMinSecurityLevel(target) + 5;
+        const securityThresh = ns.getServerMinSecurityLevel(target);
 
         // If we have the BruteSSH.exe program, use it to open the SSH Port
         // on the target server
@@ -128,16 +127,16 @@ server with a required hacking level of 1. If you want to hack a different serve
 simply change this
 variable to be the hostname of another server.
 
-    const moneyThresh = ns.getServerMaxMoney(target) * 0.75;
+    const moneyThresh = ns.getServerMaxMoney(target);
 
 This second command defines a numerical value representing the minimum
 amount of money that must be available on the target server in order for our script
 to hack it. If the money available on the target server is less than this value,
 then our script will `grow` the server rather than hacking it.
-It is set to 75% of the maximum amount of money that can be available on the server.
+It is set to the maximum amount of money that can be available on the server.
 The `getServerMaxMoney` Netscript function is used to find this value
 
-    const securityThresh = ns.getServerMinSecurityLevel(target) + 5;
+    const securityThresh = ns.getServerMinSecurityLevel(target);
 
 This third command defines a numerical value representing the maximum security level
 the target server can have. If the target server's security level is higher than
@@ -173,7 +172,7 @@ The await keyword is needed for `hack` / `grow` / `weaken` because these command
 time to execute, unlike the others. If you forget to await these commands, you will get
 an exception saying you tried to do multiple things at once, because your code will
 immediately finish the function call without waiting for the operation to be done. Also
-important is that await can only be used in functions marked async (which main() is).
+important is that await can only be used in functions marked async (which `main()` is).
 
 ## Running our Scripts
 
@@ -181,13 +180,13 @@ Now we want to start running our hacking script so that it can start earning us
 money and experience. Our home computer only has 8GB of RAM and we'll be using it for
 something else later. So instead, we'll take advantage of the RAM on other machines.
 
-Go to `Terminal` and enter the following command::
+Go to `Terminal` and enter the following command:
 
     $ scan-analyze 2
 
 This will show detailed information about some servers on the network. The
 **network is randomized so it will be different for every person**.
-Here's what mine showed at the time I made this::
+Here's what mine showed at the time I made this:
 
     [home ~]> scan-analyze 2
     ~~~~~~~~~~ Beginning scan-analyze ~~~~~~~~~~
@@ -249,34 +248,34 @@ Here's what mine showed at the time I made this::
 
 Take note of the following servers:
 
-- |sigma-cosmetics|
-- |joesguns|
-- |nectar-net|
-- |hong-fang-tea|
-- |harakiri-sushi|
+- `sigma-cosmetics`
+- `joesguns`
+- `nectar-net`
+- `hong-fang-tea`
+- `harakiri-sushi`
 
 All of these servers have 16GB of RAM. Furthermore, all of these servers do not require
 any open ports in order to NUKE. In other words, we can gain root access to all of these
 servers and then run scripts on them.
 
 First, let's determine how many threads of our hacking script we can run.
-`Read more about multithreading scripts here <gameplay_scripts_multithreadingscripts>`
+`Read more about multithreading scripts here`
 The script we wrote
-uses 2.6GB of RAM. You can check this using the following |Terminal| command::
+uses 2.6GB of RAM. You can check this using the following `Terminal` command:
 
     $ mem early-hack-template.js
 
 This means we can run 6 threads on a 16GB server. Now, to run our scripts on all of these
 servers, we have to do the following:
 
-1. Use the `scp_terminal_command` |Terminal| command to copy our script to each server.
-2. Use the `connect_terminal_command` |Terminal| command to connect to a server.
-3. Use the `run_terminal_command` |Terminal| command to run the `NUKE.exe` program and
+1. Use the `scp` command to copy our script to each server.
+2. Use the `connect` command to connect to a server.
+3. Use the `run` command to run the `NUKE.exe` program and
    gain root access.
-4. Use the `run_terminal_command` |Terminal| command again to run our script.
+4. Use the `run` command again to run our script.
 5. Repeat steps 2-4 for each server.
 
-Here's the sequence of |Terminal| commands I used in order to achieve this::
+Here's the sequence of `Terminal` commands I used in order to achieve this:
 
     $ home
     $ scp early-hack-template.js n00dles
@@ -310,43 +309,40 @@ Here's the sequence of |Terminal| commands I used in order to achieve this::
     $ run NUKE.exe
     $ run early-hack-template.js -t 6
 
-.. note::
+Pressing the `Tab` key in the middle of a Terminal command will attempt to
+auto-complete the command. For example, if you type in `scp ea` and then
+hit `Tab`, the rest of the script's name should automatically be filled in.
+This works for most commands in the game!
 
-    Pressing the `Tab` key in the middle of a Terminal command will attempt to
-    auto-complete the command. For example, if you type in `scp ea` and then
-    hit `Tab`, the rest of the script's name should automatically be filled in.
-    This works for most commands in the game!
-
-The `home_terminal_command` |Terminal| command is used to connect to the home
+The `home` command is used to connect to the home
 computer. When running our scripts with the `run early-hack-template.js -t 6`
 command, the `-t 6` specifies that the script should be run with 6 threads.
 
-Note that the |nectar-net| server isn't in the home computer's immediate network.
+Note that the `nectar-net` server isn't in the home computer's immediate network.
 This means you can't directly connect to it from home. You will have to search for it
 inside the network. The results of the `scan-analyze 2` command we ran before
 will show where it is. In my case, I could connect to it by going from
-`hong-fang-tea -> nectar-net`. However, this will probably be different for you.
+`hong-fang-tea` -> `nectar-net`. However, this will probably be different for you.
 
-After running all of these |Terminal| commands, our scripts are now up and running.
+After running all of these `Terminal` commands, our scripts are now up and running.
 These will earn money and hacking experience over time. These gains will be
 really slow right now, but they will increase once our hacking skill rises and
 we start running more scripts.
 
 ## Increasing Hacking Level
 
-There are many servers besides |n00dles| that can be hacked, but they have
+There are many servers besides `n00dles` that can be hacked, but they have
 higher required hacking levels. Therefore, we should raise our hacking level. Not only
 will this let us hack more servers, but it will also increase the effectiveness of our hacking
-against |n00dles|.
+against `n00dles`.
 
 The easiest way to train your hacking level is to visit Rothman University. You can do this by
-clicking the `City` tab on the left-hand navigation menu, or you can use the
-`keyboard shortcut <shortcuts>` Alt + w. Rothman University should be one of the buttons
+clicking the `City` tab on the left-hand navigation menu, or you can use Alt + w. Rothman University should be one of the buttons
 near the top. Click the button to go to the location.
 
 Once you go to Rothman University, you should see a screen with several options. These
 options describe different courses you can take. You should click the first button, which
-says: "Study Computer Science (free)".
+says: `Study Computer Science (free)`.
 
 After you click the button, you will start studying and earning hacking experience. While you
 are doing this, you cannot interact with any other part of the game until you click the button
@@ -354,7 +350,7 @@ that says "Stop taking course".
 
 Right now, we want a hacking level of 10. You need approximately 174 hacking experience to reach
 level 10. You can check how much hacking experience you have by clicking the `Stats` tab
-on the left-hand navigation menu, or by using |Keyboard shortcut| Alt + c.
+on the left-hand navigation menu, or by using Alt + c.
 Since studying at Rothman University earns you 1 experience per second, this will take
 174 seconds, or approximately 3 minutes. Feel free to do something in the meantime!
 
@@ -364,7 +360,7 @@ Now that we have a hacking level of 10, we can hack the `joesguns` server. This 
 will be slightly more profitable than `n00dles`. Therefore, we want to change our hacking
 script to target `joesguns` instead of `n00dles`.
 
-Go to |Terminal| and edit the hacking script by entering::
+Go to `Terminal` and edit the hacking script by entering:
 
     $ home
     $ nano early-hack-template.js
@@ -383,7 +379,7 @@ servers will be used to run many scripts. Running this script will initially be 
 expensive since purchasing a server costs money, but it will pay off in the long run.
 
 In order to create this script, you should familiarize yourself with the following
-Netscript functions:
+functions:
 
 - `purchaseServer`
 - `getPurchasedServerCost`
@@ -392,7 +388,7 @@ Netscript functions:
 - `scp`
 - `exec`
 
-Create the script by going to |Terminal| and typing::
+Create the script by going to `Terminal` and typing:
 
     $ home
     $ nano purchase-server-8gb.js
@@ -439,7 +435,7 @@ Whenever the script purchases a new server, it uses the `scp` function to copy
 our script onto that new server, and then it uses the `exec` function to
 execute it on that server.
 
-To run this script, go to |Terminal| and type::
+To run this script, go to `Terminal` and type:
 
     $ run purchase-server-8gb.js
 
@@ -447,12 +443,10 @@ This purchase will continuously run until it has purchased the maximum number of
 When this happens, it'll mean that you have a bunch of new servers that are all running
 hacking scripts against the `joesguns` server!
 
-.. note::
-
-    The reason we're using so many scripts to hack `joesguns` instead of targeting other
-    servers is because it's more effective. This early in the game, we don't have enough RAM
-    to efficiently hack multiple targets, and trying to do so would be slow as we'd be spread
-    too thin. You should definitely do this later on, though!
+The reason we're using so many scripts to hack `joesguns` instead of targeting other
+servers is because it's more effective. This early in the game, we don't have enough RAM
+to efficiently hack multiple targets, and trying to do so would be slow as we'd be spread
+too thin. You should definitely do this later on, though!
 
 Note that purchasing a server is fairly expensive, and purchasing the maximum amount of
 servers even more so. At the time of writing this guide, the script above requires
@@ -464,8 +458,8 @@ up the process! These are covered in the next section.
 
 There are other ways to gain money in this game besides scripts & hacking.
 
-Hacknet Nodes
-^^^^^^^^^^^^^
+## Hacknet Nodes
+
 If you completed the introductory tutorial, you were already introduced to this method: Hacknet Nodes.
 Once you have enough money, you can start upgrading your Hacknet Nodes in order to increase
 your passive income stream. This is completely optional. Since each Hacknet Node upgrade
@@ -477,22 +471,20 @@ their effectiveness tapers off later on. If you do wind up purchasing and upgrad
 I would suggest only upgrading their levels for now. I wouldn't bother with RAM and Core
 upgrades until later on.
 
-Crime
-^^^^^
-The best source of income right now is from `committing crimes <gameplay_crimes>`.
+## Crime
+
+The best source of income right now is from crimes.
 This is because it not only gives you a large amount of money, but it also raises your
 hacking level. To commit crimes, click on the `City` tab on the left-hand
-navigation menu or use the |Keyboard shortcut| Alt + w.
+navigation menu or use the Alt + w.
 Then, click on the link that says `The Slums`.
 
 In the Slums, you can attempt to commit a variety of crimes, each of which gives certain
-types of experience and money if successful. See `gameplay_crimes` for more details.
+types of experience and money if successful. See crimes for more details.
 
-.. note::
-
-    You are not always successful when you attempt to commit a crime. Nothing bad happens
-    if you fail a crime, but you won't earn any money and the experience gained will be
-    reduced. Raising your stats improves your chance of successfully committing a crime.
+You are not always successful when you attempt to commit a crime. Nothing bad happens
+if you fail a crime, but you won't earn any money and the experience gained will be
+reduced. Raising your stats improves your chance of successfully committing a crime.
 
 Right now, the best option is the `Rob Store` crime. This takes 60 seconds to attempt
 and gives $400k if successful. I suggest this crime because you don't have to click or check
@@ -504,10 +496,10 @@ and gives $15k if successful. This crime is slightly easier and is more profitab
 than `Rob Store`, but it requires constant clicking and it doesn't give
 hacking experience.
 
-Work for a Company
-^^^^^^^^^^^^^^^^^^
+## Work for a Company
+
 If you don't want to constantly check in on the game to commit crimes, there's another option
-that's much more passive: working for a `company <gameplay_companies>`.
+that's much more passive: working for a company.
 This will not be nearly as profitable as crimes, but it's completely passive.
 
 Go to the `City` tab on the left-hand navigation menu and then go to
@@ -528,14 +520,14 @@ Once your hacking hits level 75, you can visit `Carmichael Security` in the city
 and get a software job there. This job offers higher pay and also earns you
 hacking experience.
 
-There are many more companies in the |City tab| that offer more pay and also more gameplay
+There are many more companies in the `City` tab that offer more pay and also more gameplay
 features. Feel free to explore!
 
 ## After you Purchase your New Servers
 
 After you've made a total of $11 million, your automatic server-purchasing script should
 finish running. This will free up some RAM on your home computer. We don't want this RAM
-to go to waste, so we'll make use of it. Go to |Terminal| and enter the following commands::
+to go to waste, so we'll make use of it. Go to `Terminal` and enter the following commands:
 
     $ home
     $ run early-hack-template.js -t 3
@@ -544,11 +536,11 @@ to go to waste, so we'll make use of it. Go to |Terminal| and enter the followin
 
 Once you reach a hacking level of 50, two new important parts of the game open up.
 
-Creating your first program: BruteSSH.exe
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+## Creating your first program: BruteSSH.exe
+
 On the left-hand navigation menu you will notice a `Create Programs` tab with a
 red notification icon. This indicates that there are programs available to be created.
-Click on that tab (or use |Keyboard shortcut| Alt + p) and you'll see a
+Click on that tab (or use Alt + p) and you'll see a
 list of all the programs you can currently create. Hovering over a program will give a
 brief description of its function. Simply click on a program to start creating it.
 
@@ -562,17 +554,17 @@ Feel free to cancel your work on creating a program at any time, as your progres
 be saved and can be picked back up later. `BruteSSH.exe` takes about
 10 minutes to complete.
 
-Optional: Create AutoLink.exe
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+## Optional: Create AutoLink.exe
+
 On the `Create Programs` page, you will notice another program you can create
 called `AutoLink.exe`. If you don't mind waiting another 10-15 minutes, you should
 go ahead and create this program. It makes it much less tedious to connect to other servers,
 but it's not necessary for progressing.
 
-Joining your first faction: CyberSec
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+## Joining your first faction: CyberSec
+
 Shortly after you reached level 50 hacking, you should have received a message that
-said this::
+said this:
 
     Message received from unknown sender:
 
@@ -586,7 +578,7 @@ said this::
     This message was saved as csec-test.msg onto your home computer.
 
 If you didn't, or if you accidentally closed it, that's okay! Messages get saved onto
-your home computer. Enter the following |Terminal| commands to view the message::
+your home computer. Enter the following `Terminal` commands to view the message:
 
     $ home
     $ cat csec-test.msg
@@ -594,16 +586,16 @@ your home computer. Enter the following |Terminal| commands to view the message:
 This message is part of the game's main "quest-line". It is a message from the
 |CyberSec faction| that is asking you to pass their test.
 Passing their test is simple, you just have to find their server and hack it through
-the |Terminal|. Their server is called `CSEC`.
-To do this, we'll use the `scan_analyze_terminal_command`
-Terminal command, just like we did before::
+the `Terminal`. Their server is called `CSEC`.
+To do this, we'll use the `scan-analyze`
+Terminal command, just like we did before:
 
     $ home
     $ scan-analyze 2
 
 This will show you the network for all servers that are up to 2 "nodes" away from
 your home computer. Remember that the network is randomly generated so it'll look
-different for everyone. Here's the relevant part of my `scan-analyze` results::
+different for everyone. Here's the relevant part of my `scan-analyze` results:
 
     >iron-gym
     --Root Access: NO, Required hacking skill: 100
@@ -620,38 +612,34 @@ different for everyone. Here's the relevant part of my `scan-analyze` results::
     ------Number of open ports required to NUKE: 1
     ------RAM: 8
 
-This tells me that I can reach `CSEC` by going through `iron-gym`::
+This tells me that I can reach `CSEC` by going through `iron-gym`:
 
     $ connect iron-gym
     $ connect CSEC
 
-.. note::
+If you created the `AutoLink.exe` program earlier, then there is an easier
+method of connecting to `CSEC`. You'll notice that in the `scan-analyze`
+results, all of the server hostnames are white and underlined. You can simply
+click one of the server hostnames in order to connect to it. So, simply click
+`CSEC`!
 
-    If you created the `AutoLink.exe` program earlier, then there is an easier
-    method of connecting to `CSEC`. You'll notice that in the `scan-analyze`
-    results, all of the server hostnames are white and underlined. You can simply
-    click one of the server hostnames in order to connect to it. So, simply click
-    `CSEC`!
-
-.. note::
-
-    Make sure you notice the required hacking skill for the `CSEC` server.
-    This is a random value between 51 and 60. Although you receive the message
-    from CSEC once you hit 50 hacking, you cannot actually pass their test
-    until your hacking is high enough to install a backdoor on their server.
+Make sure you notice the required hacking skill for the `CSEC` server.
+This is a random value between 51 and 60. Although you receive the message
+from CSEC once you hit 50 hacking, you cannot actually pass their test
+until your hacking is high enough to install a backdoor on their server.
 
 After you are connected to the `CSEC` server, you can backdoor it. Note that this
 server requires one open port in order to gain root access. We can open the SSH port
-using the `BruteSSH.exe` program we created earlier. In |Terminal|::
+using the `BruteSSH.exe` program we created earlier. In `Terminal`:
 
     $ run BruteSSH.exe
     $ run NUKE.exe
     $ backdoor
 
 After you successfully install the backdoor, you should receive a faction
-invitation from |CyberSec| shortly afterwards. Accept it. If you accidentally
+invitation from `CyberSec` shortly afterwards. Accept it. If you accidentally
 reject the invitation, that's okay. Just go to the `Factions` tab
-(|Keyboard shortcut| Alt + f) and you should see an option that lets you
+(Alt + f) and you should see an option that lets you
 accept the invitation.
 
 Congrats! You just joined your first faction. Don't worry about doing anything
@@ -659,13 +647,13 @@ with this faction yet, we can come back to it later.
 
 ## Using Additional Servers to Hack Joesguns
 
-Once you have the |BruteSSH| program, you will be able to gain root access
+Once you have the `BruteSSH` program, you will be able to gain root access
 to several additional servers. These servers have more RAM that you can use to
 run scripts. We'll use the RAM on these servers to run more scripts that target
 `joesguns`.
 
-Copying our Scripts
-^^^^^^^^^^^^^^^^^^^
+## Copying our Scripts
+
 The server's we'll be using to run our scripts are:
 
 - `neo-net`
@@ -673,9 +661,9 @@ The server's we'll be using to run our scripts are:
 - `max-hardware`
 - `iron-gym`
 
-All of these servers have 32GB of RAM. You can use the |Terminal| command
+All of these servers have 32GB of RAM. You can use the `Terminal` command
 `scan-analyze 3` to see for yourself. To copy our hacking scripts onto these servers,
-go to |Terminal| and run::
+go to `Terminal` and run:
 
     $ home
     $ scp early-hack-template.js neo-net
@@ -685,39 +673,37 @@ go to |Terminal| and run::
 
 Since each of these servers has 32GB of RAM, we can run our hacking script with 12 threads
 on each server. By now, you should know how to connect to servers. So find and connect to
-each of the servers above using the `scan-analyze 3` |Terminal| command. Then, use
-following |Terminal| command to run our hacking
-script with 12 threads::
+each of the servers above using the `scan-analyze 3` `Terminal` command. Then, use
+following `Terminal` command to run our hacking
+script with 12 threads:
 
     $ run early-hack-template.js -t 12
 
-Remember that if you have the |AutoLink| program, you can simply click on the hostname of a server
-after running `scan_analyze_terminal_command` to connect to it.
+Remember that if you have the `AutoLink` program, you can simply click on the hostname of a server
+after running `scan-analyze` to connect to it.
 
 ## Profiting from Scripts & Gaining Reputation with CyberSec
 
 Now it's time to play the waiting game. It will take some time for your scripts to start
-earning money. Remember that most of your scripts are targeting |joesguns|. It will take a
+earning money. Remember that most of your scripts are targeting `joesguns`. It will take a
 bit for them to `grow` and `weaken` the server to the appropriate values
 before they start hacking it. Once they do, however, the scripts will be very profitable.
 
-.. note::
+For reference, in about two hours after starting my first script, my scripts had a
+production rate of $20k per second and had earned a total of $70 million.
+(You can see these stats on the `Active Scripts` tab).
 
-    For reference, in about two hours after starting my first script, my scripts had a
-    production rate of $20k per second and had earned a total of $70 million.
-    (You can see these stats on the `Active Scripts` tab).
+After another 15 minutes, the production rate had increased to $25k per second
+and the scripts had made an additional $55 million.
 
-    After another 15 minutes, the production rate had increased to $25k per second
-    and the scripts had made an additional $55 million.
+Your results will vary based on how fast you earned money from crime/working/hacknet nodes,
+but this will hopefully give you a good indication of how much the scripts can earn.
 
-    Your results will vary based on how fast you earned money from crime/working/hacknet nodes,
-    but this will hopefully give you a good indication of how much the scripts can earn.
-
-In the meantime, we are going to be gaining reputation with the |CyberSec faction|.
-Go to the |Factions tab| on the left-hand
-navigation menu, and from there select |CyberSec|. In the middle of
+In the meantime, we are going to be gaining reputation with the `CyberSec` faction.
+Go to the `Factions` tab on the left-hand
+navigation menu, and from there select `CyberSec`. In the middle of
 the page there should be a button for `Hacking Contracts`.
-Click it to start earning reputation for the |CyberSec| faction (as well
+Click it to start earning reputation for the `CyberSec` faction (as well
 as some hacking experience). The higher your hacking level, the more reputation you
 will gain. Note that while you are working for a faction, you can choose to not interact
 with the rest of the game in any way to gain reputation at full speed. You can also select to
@@ -729,29 +715,29 @@ You can cancel your faction work at any time with no penalty to your reputation 
 As I mentioned before, within 1-2 hours I had earned over $200 million. Now, it's time
 to spend all of this money on some persistent upgrades to help progress!
 
-Upgrading RAM on Home computer
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+## Upgrading RAM on Home computer
+
 The most important thing to upgrade right now is the RAM on your home computer. This
 will allow you to run more scripts.
 
-To upgrade your RAM, go to the |City tab| and visit the company |Alpha Enterprises|.
+To upgrade your RAM, go to the `City` tab and visit the company `Alpha Enterprises`.
 There will be an option that says `Purchase additional RAM for Home Computer`.
 Click it and follow the dialog box to upgrade your RAM.
 
-I recommend getting your home computer's RAM to _at least_ 128GB. Getting it even
+I recommend getting your home computer's RAM to **at least** 128GB. Getting it even
 higher would be better.
 
-Purchasing your First Augmentations
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Once you get ~1000 reputation with the |CyberSec faction|, you can purchase
-your first `Augmentation <gameplay_augmentations>` from them.
+## Purchasing your First Augmentations
 
-To do this, go to the |Factions tab| on the left-hand navigation menu
-(|Keyboard shortcut| Alt + f) and select |CyberSec|. There is an button
+Once you get ~1000 reputation with the `CyberSec` faction, you can purchase
+your first `Augmentation` from them.
+
+To do this, go to the `Factions` tab on the left-hand navigation menu
+(Alt + f) and select `CyberSec`. There is an button
 near the bottom that says `Purchase Augmentations`. This will bring up a
-page that displays all of the Augmentations available from |CyberSec|. Some of them
+page that displays all of the Augmentations available from `CyberSec`. Some of them
 may be locked right now. To unlock these, you will need to earn more
-reputation with |CyberSec|.
+reputation with `CyberSec`.
 
 Augmentations give persistent upgrades in the form of multipliers. These aren't very
 powerful early in the game because the multipliers are small. However, the effects
@@ -763,10 +749,10 @@ than Augmentations early on. Having enough RAM to run many scripts will allow yo
 much more money, and then you can come back later on and get all these Augmentations.
 
 Right now, I suggest purchasing at the very least the `Neurotrainer I` Augmentation from
-|CyberSec|. If you have the money to spare, I would also suggest getting `BitWire` and
+`CyberSec`. If you have the money to spare, I would also suggest getting `BitWire` and
 several levels of the `NeuroFlux Governor` (`NFG`) Augmentations. Note that each time
 you purchase an Augmentation,
-`the price of purchasing another increases by 90% <gameplay_augmentations_purchasingmultiple>`,
+**the price of purchasing another increases by 90%**,
 so make sure you buy the most expensive Augmentation first. Don't worry, once you choose to
 install Augmentations, their prices will reset back to their original values.
 
@@ -776,25 +762,25 @@ That's the end of the walkthrough portion of this guide! You should continue to 
 what the game has to offer. There's quite a few features that aren't covered or mentioned
 in this guide, and even more that get unlocked as you continue to play!
 
-Also, check out the `netscript` documentation to see what it has to offer. Writing
+Also, check out the api documentation to see what it has to offer. Writing
 scripts to perform and automate various tasks is where most of the fun in the game comes
 from (in my opinion)!
 
 The following are a few things you may want to consider doing in the near future.
 
-Installing Augmentations (and Resetting)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-If you've purchased any `gameplay_augmentations`, you'll need to install them before you
-actually gain their effects. Installing Augmentations is the game's "soft-reset" or "prestige"
-mechanic. You can `read more details about it here <gameplay_augmentations_installing>`.
+## Installing Augmentations (and Resetting)
 
-To install your Augmentations, click the |Augmentations tab| on the left-hand navigation
-menu (|Keyboard shortcut| Alt + a). You will see a list of all of the Augmentations
+If you've purchased any Augmentations, you'll need to install them before you
+actually gain their effects. Installing Augmentations is the game's "soft-reset" or "prestige"
+mechanic. You can [read more details about it here]().
+
+To install your Augmentations, click the `Augmentations` tab on the left-hand navigation
+menu (Alt + a). You will see a list of all of the Augmentations
 you have purchased. Below that, you will see a button that says `Install Augmentations`.
 Be warned, after clicking this there is no way to undo it (unless you load an earlier save).
 
-Automating the Script Startup Process
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+## Automating the Script Startup Process
+
 Whenever you install Augmentations, all of your scripts are killed and you'll have to
 re-run them. Doing this every time you install Augmentations would be very tedious and annoying,
 so you should write a script to automate the process. Here's a simple example for a
@@ -861,22 +847,3 @@ startup script. Feel free to adjust it to your liking.
   stat exp.
 - As a rule of thumb, your hacking target should be the server with highest max money that's
   required hacking level is under 1/2 of your hacking level.
-
-.. Substitution definitions
-.. |Alpha Enterprises| replace:: `Alpha Enterprises`
-.. |Augmentations tab| replace:: `Augmentations` tab
-.. |AutoLink| replace:: `AutoLink.exe`
-.. |BruteSSH| replace:: `BruteSSH.exe`
-.. |City tab| replace:: `City` tab
-.. |CyberSec| replace:: `CyberSec`
-.. |CyberSec faction| replace:: `CyberSec` `faction <gameplay_factions>`
-.. |Factions tab| replace:: `Factions` tab
-.. |Keyboard shortcut| replace:: `Keyboard shortcut <shortcuts>`
-.. |NUKE| replace:: `NUKE.exe`
-.. |Terminal| replace:: `Terminal`
-.. |n00dles| replace:: `n00dles`
-.. |harakiri-sushi| replace:: `harakiri-sushi`
-.. |hong-fang-tea| replace:: `hong-fang-tea`
-.. |joesguns| replace:: `joesguns`
-.. |nectar-net| replace:: `nectar-net`
-.. |sigma-cosmetics| replace:: `sigma-cosmetics`
