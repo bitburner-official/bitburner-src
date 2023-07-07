@@ -1,6 +1,6 @@
 import { Player } from "@nsdefs";
 import index from "!!raw-loader!./doc/index.md";
-import notfound from "!!raw-loader!./doc/mechanics/servers.md";
+import notfound from "!!raw-loader!./doc/notfound.md";
 import { registerPages } from "./pages";
 
 export interface DocumentationPage {

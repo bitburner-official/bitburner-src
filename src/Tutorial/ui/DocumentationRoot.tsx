@@ -20,11 +20,18 @@ export const Context = {
 
 export const useNavigator = (): Navigator => useContext(Context.Navigator);
 
+const resolvePath = (currentPath: string, newPath: string): string => {
+  if (!newPath.startsWith("../")) return newPath;
+  return currentPath;
+};
+
 export function DocumentationRoot(props: IProps): React.ReactElement {
   const [confirmResetOpen, setConfirmResetOpen] = useState(false);
   const [page, setPage] = useState(Root);
+  const [title, setTitle] = useState("index.md");
   const navigator = {
     navigate(title: string) {
+      setTitle(title);
       setPage(getPage(title));
     },
   };
