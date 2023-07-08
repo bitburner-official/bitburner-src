@@ -1,14 +1,13 @@
 import type { CompanyPosition } from "./CompanyPosition";
 
 import { CompanyName, JobName } from "@enums";
-import * as posNames from "./data/JobTracks";
 import { favorToRep, repToFavor } from "../Faction/formulas/favor";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
-export interface IConstructorParams {
+export interface CompanyCtorParams {
   name: CompanyName;
-  info: string;
+  info?: string;
   companyPositions: JobName[];
   expMultiplier: number;
   salaryMultiplier: number;
@@ -23,8 +22,7 @@ export class Company {
   info = "";
   hasFaction = false;
 
-  // Todo for current PR: convert this into a set of jobnames
-  companyPositions: Record<string, boolean> = {};
+  companyPositions = new Set<JobName>();
 
   /** Company-specific multiplier for earnings */
   expMultiplier = 1;
@@ -43,59 +41,55 @@ export class Company {
   playerReputation = 0;
   favor = 0;
 
-  constructor(p?: IConstructorParams) {
+  constructor(p?: CompanyCtorParams) {
     if (!p) return;
     this.name = p.name;
-    this.info = p.info;
-    p.companyPositions.forEach((jobName) => (this.companyPositions[jobName] = true));
+    if (p.info) this.info = p.info;
+    p.companyPositions.forEach((jobName) => this.companyPositions.add(jobName));
     this.expMultiplier = p.expMultiplier;
     this.salaryMultiplier = p.salaryMultiplier;
     this.jobStatReqOffset = p.jobStatReqOffset;
-
-    this.playerReputation = 1;
-    this.favor = 0;
-    this.hasFaction = false;
     if (p.hasFaction) this.hasFaction = true;
   }
 
-  hasPosition(pos: CompanyPosition | string): boolean {
-    return this.companyPositions[typeof pos === "string" ? pos : pos.name] != null;
+  hasPosition(pos: CompanyPosition | JobName): boolean {
+    return this.companyPositions.has(typeof pos === "string" ? pos : pos.name);
   }
 
   hasAgentPositions(): boolean {
-    return this.companyPositions[posNames.AgentCompanyPositions[0]] != null;
+    return this.companyPositions.has(JobName.agent0);
   }
 
   hasBusinessConsultantPositions(): boolean {
-    return this.companyPositions[posNames.BusinessConsultantCompanyPositions[0]] != null;
+    return this.companyPositions.has(JobName.businessConsult0);
   }
 
   hasBusinessPositions(): boolean {
-    return this.companyPositions[posNames.BusinessCompanyPositions[0]] != null;
+    return this.companyPositions.has(JobName.business0);
   }
 
   hasEmployeePositions(): boolean {
-    return this.companyPositions[posNames.MiscCompanyPositions[1]] != null;
+    return this.companyPositions.has(JobName.employee);
   }
 
   hasITPositions(): boolean {
-    return this.companyPositions[posNames.ITCompanyPositions[0]] != null;
+    return this.companyPositions.has(JobName.IT0);
   }
 
   hasSecurityPositions(): boolean {
-    return this.companyPositions[posNames.SecurityCompanyPositions[2]] != null;
+    return this.companyPositions.has(JobName.security0);
   }
 
   hasSoftwareConsultantPositions(): boolean {
-    return this.companyPositions[posNames.SoftwareConsultantCompanyPositions[0]] != null;
+    return this.companyPositions.has(JobName.softwareConsult0);
   }
 
   hasSoftwarePositions(): boolean {
-    return this.companyPositions[posNames.SoftwareCompanyPositions[0]] != null;
+    return this.companyPositions.has(JobName.software0);
   }
 
   hasWaiterPositions(): boolean {
-    return this.companyPositions[posNames.MiscCompanyPositions[0]] != null;
+    return this.companyPositions.has(JobName.waiter);
   }
 
   prestigeAugmentation(): void {

@@ -4,6 +4,7 @@ import {
   CompanyName,
   CompletedProgramName,
   FactionName,
+  JobName,
   LocationName,
   ToastVariant,
 } from "@enums";
@@ -21,7 +22,6 @@ import { getNextCompanyPositionHelper } from "../../Company/GetNextCompanyPositi
 import { getJobRequirementText } from "../../Company/GetJobRequirementText";
 import { CompanyPositions } from "../../Company/CompanyPositions";
 import { CompanyPosition } from "../../Company/CompanyPosition";
-import * as posNames from "../../Company/data/JobTracks";
 import { CONSTANTS } from "../../Constants";
 import { Exploit } from "../../Exploits/Exploit";
 import { Faction } from "../../Faction/Faction";
@@ -376,23 +376,23 @@ export function hasJob(this: PlayerObject): boolean {
 }
 
 export function applyForSoftwareJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[posNames.SoftwareCompanyPositions[0]], sing);
+  return this.applyForJob(CompanyPositions[JobName.software0], sing);
 }
 
 export function applyForSoftwareConsultantJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[posNames.SoftwareConsultantCompanyPositions[0]], sing);
+  return this.applyForJob(CompanyPositions[JobName.softwareConsult0], sing);
 }
 
 export function applyForItJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[posNames.ITCompanyPositions[0]], sing);
+  return this.applyForJob(CompanyPositions[JobName.IT0], sing);
 }
 
 export function applyForSecurityEngineerJob(this: PlayerObject, sing = false): boolean {
   const companyName = getEnumHelper("CompanyName").getMember(this.location);
   if (!companyName) return false;
   const company = Companies[companyName];
-  if (this.isQualified(company, CompanyPositions[posNames.SecurityEngineerCompanyPositions[0]])) {
-    return this.applyForJob(CompanyPositions[posNames.SecurityEngineerCompanyPositions[0]], sing);
+  if (this.isQualified(company, CompanyPositions[JobName.securityEng])) {
+    return this.applyForJob(CompanyPositions[JobName.securityEng], sing);
   } else {
     if (!sing) {
       dialogBoxCreate("Unfortunately, you do not qualify for this position");
@@ -405,8 +405,8 @@ export function applyForNetworkEngineerJob(this: PlayerObject, sing = false): bo
   const companyName = getEnumHelper("CompanyName").getMember(this.location);
   if (!companyName) return false;
   const company = Companies[companyName];
-  if (this.isQualified(company, CompanyPositions[posNames.NetworkEngineerCompanyPositions[0]])) {
-    const pos = CompanyPositions[posNames.NetworkEngineerCompanyPositions[0]];
+  if (this.isQualified(company, CompanyPositions[JobName.networkEng0])) {
+    const pos = CompanyPositions[JobName.networkEng0];
     return this.applyForJob(pos, sing);
   } else {
     if (!sing) {
@@ -417,25 +417,25 @@ export function applyForNetworkEngineerJob(this: PlayerObject, sing = false): bo
 }
 
 export function applyForBusinessJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[posNames.BusinessCompanyPositions[0]], sing);
+  return this.applyForJob(CompanyPositions[JobName.business0], sing);
 }
 
 export function applyForBusinessConsultantJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[posNames.BusinessConsultantCompanyPositions[0]], sing);
+  return this.applyForJob(CompanyPositions[JobName.businessConsult0], sing);
 }
 
 export function applyForSecurityJob(this: PlayerObject, sing = false): boolean {
   // TODO Police Jobs
   // Indexing starts at 2 because 0 is for police officer
-  return this.applyForJob(CompanyPositions[posNames.SecurityCompanyPositions[2]], sing);
+  return this.applyForJob(CompanyPositions[JobName.security0], sing);
 }
 
 export function applyForAgentJob(this: PlayerObject, sing = false): boolean {
   const companyName = getEnumHelper("CompanyName").getMember(this.location);
   if (!companyName) return false;
   const company = Companies[companyName];
-  if (this.isQualified(company, CompanyPositions[posNames.AgentCompanyPositions[0]])) {
-    const pos = CompanyPositions[posNames.AgentCompanyPositions[0]];
+  if (this.isQualified(company, CompanyPositions[JobName.agent0])) {
+    const pos = CompanyPositions[JobName.agent0];
     return this.applyForJob(pos, sing);
   } else {
     if (!sing) {
@@ -449,7 +449,7 @@ export function applyForEmployeeJob(this: PlayerObject, sing = false): boolean {
   const companyName = getEnumHelper("CompanyName").getMember(this.location);
   if (!companyName) return false;
   const company = Companies[companyName];
-  const position = posNames.MiscCompanyPositions[1];
+  const position = JobName.employee;
   // Check if this company has the position
   if (!company.hasPosition(position)) {
     return false;
@@ -475,7 +475,7 @@ export function applyForPartTimeEmployeeJob(this: PlayerObject, sing = false): b
   const companyName = getEnumHelper("CompanyName").getMember(this.location);
   if (!companyName) return false;
   const company = Companies[companyName];
-  const position = posNames.PartTimeCompanyPositions[1];
+  const position = JobName.employeePT;
   // Check if this company has the position
   if (!company.hasPosition(position)) {
     return false;
@@ -500,7 +500,7 @@ export function applyForWaiterJob(this: PlayerObject, sing = false): boolean {
   const companyName = getEnumHelper("CompanyName").getMember(this.location);
   if (!companyName) return false;
   const company = Companies[companyName];
-  const position = posNames.MiscCompanyPositions[0];
+  const position = JobName.waiter;
   // Check if this company has the position
   if (!company.hasPosition(position)) {
     return false;
@@ -523,7 +523,7 @@ export function applyForPartTimeWaiterJob(this: PlayerObject, sing = false): boo
   const companyName = getEnumHelper("CompanyName").getMember(this.location);
   if (!companyName) return false;
   const company = Companies[companyName];
-  const position = posNames.PartTimeCompanyPositions[0];
+  const position = JobName.waiterPT;
   // Check if this company has the position
   if (!company.hasPosition(position)) {
     return false;
@@ -977,9 +977,9 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !silhouetteFac.isBanned &&
     !silhouetteFac.isMember &&
     !silhouetteFac.alreadyInvited &&
-    (allPositions.includes("Chief Technology Officer") ||
-      allPositions.includes("Chief Financial Officer") ||
-      allPositions.includes("Chief Executive Officer")) &&
+    (allPositions.includes(JobName.software7) || // CTO
+      allPositions.includes(JobName.business4) || // CFO
+      allPositions.includes(JobName.business5)) && // CEO
     this.money >= 15000000 &&
     this.karma <= -22
   ) {

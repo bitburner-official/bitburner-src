@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { CompanyName } from "@enums";
+import { CompanyName, JobName } from "@enums";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
 import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
@@ -28,10 +28,10 @@ export class SleeveCompanyWork extends SleeveWorkClass {
     return Companies[this.companyName];
   }
 
-  getGainRates(sleeve: Sleeve): WorkStats {
+  getGainRates(sleeve: Sleeve, job: JobName): WorkStats {
     const company = this.getCompany();
     return scaleWorkStats(
-      calculateCompanyWorkStats(sleeve, company, CompanyPositions[Player.jobs[company.name]], company.favor),
+      calculateCompanyWorkStats(sleeve, company, CompanyPositions[job], company.favor),
       sleeve.shockBonus(),
       false,
     );
@@ -39,7 +39,9 @@ export class SleeveCompanyWork extends SleeveWorkClass {
 
   process(sleeve: Sleeve, cycles: number) {
     const company = this.getCompany();
-    const gains = this.getGainRates(sleeve);
+    const job = Player.jobs[this.companyName];
+    if (!job) return sleeve.stopWork();
+    const gains = this.getGainRates(sleeve, job);
     applySleeveGains(sleeve, gains, cycles);
     company.playerReputation += gains.reputation * cycles;
     influenceStockThroughCompanyWork(company, gains.reputation, cycles);

@@ -3,7 +3,7 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { Player } from "@player";
 import { Work, WorkType } from "./Work";
 import { influenceStockThroughCompanyWork } from "../StockMarket/PlayerInfluencing";
-import { AugmentationName, CompanyName } from "@enums";
+import { AugmentationName, CompanyName, JobName } from "@enums";
 import { calculateCompanyWorkStats } from "./Formulas";
 import { Companies } from "../Company/Companies";
 import { applyWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
@@ -33,22 +33,21 @@ export class CompanyWork extends Work {
     return Companies[this.companyName];
   }
 
-  getGainRates(): WorkStats {
+  getGainRates(job: JobName): WorkStats {
     let focusBonus = 1;
     if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
       focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
     }
     const company = this.getCompany();
-    return scaleWorkStats(
-      calculateCompanyWorkStats(Player, company, CompanyPositions[Player.jobs[company.name]], company.favor),
-      focusBonus,
-    );
+    return scaleWorkStats(calculateCompanyWorkStats(Player, company, CompanyPositions[job], company.favor), focusBonus);
   }
 
   process(cycles: number): boolean {
     this.cyclesWorked += cycles;
     const company = this.getCompany();
-    const gains = this.getGainRates();
+    const job = Player.jobs[this.companyName];
+    if (!job) return true;
+    const gains = this.getGainRates(job);
     applyWorkStats(Player, gains, cycles, "work");
     company.playerReputation += gains.reputation * cycles;
     influenceStockThroughCompanyWork(company, gains.reputation, cycles);

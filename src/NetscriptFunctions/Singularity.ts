@@ -55,6 +55,7 @@ import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
 import { companyNameAsLocationName } from "../Company/utils";
+import { getRecordEntries } from "../Types/Record";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -665,7 +666,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
 
-      return Object.entries(CompanyPositions)
+      return getRecordEntries(CompanyPositions)
         .filter((_position) => Companies[companyName].hasPosition(_position[0]))
         .map((_position) => _position[1].name);
     },
