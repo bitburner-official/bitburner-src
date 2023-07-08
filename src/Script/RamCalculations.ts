@@ -360,6 +360,18 @@ function parseOnlyCalculateDeps(code: string, currentModule: string): ParseDepsR
           const key = currentModule + "." + (node.id === null ? "__SPECIAL_DEFAULT_EXPORT__" : node.id.name);
           walk.recursive(node, { key: key }, commonVisitors());
         },
+        ExportNamedDeclaration: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+          if (node.declaration !== null) {
+            // if this is true, the statement is not a named export, but rather a exported function/variable
+            walkDeeper(node.declaration, st);
+            return;
+          }
+          const specifiers = node.specifiers;
+
+          for (const specifier of specifiers) {
+            addRef(st.key, specifier.local.name);
+          }
+        },
       },
       commonVisitors(),
     ),
