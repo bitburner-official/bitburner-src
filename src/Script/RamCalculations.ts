@@ -370,8 +370,11 @@ function parseOnlyCalculateDeps(code: string, currentModule: string): ParseDepsR
 
           for (const specifier of specifiers) {
             // for every dependency with the local name, add a version with the exported name
-            const localDep = dependencyMap[currentModule + "." + specifier.local.name];
-            dependencyMap[currentModule + "." + specifier.exported.name] = localDep;
+
+						const localDepName = currentModule + "." + specifier.local.name;
+						const exportedDepName = currentModule + "." + specifier.exported.name;
+            const localDep = (dependencyMap[localDepName] || (dependencyMap[localDepName] = new Set<string>()));
+            dependencyMap[exportedDepName] = localDep;
           }
         },
       },
