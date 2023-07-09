@@ -270,13 +270,13 @@ function parseOnlyCalculateDeps(code: string, currentModule: string): ParseDepsR
 
   // References get added pessimistically. They are added for thisModule.name, name, and for
   // any aliases.
-  function addRef(key: string, name: string): void {
+  function addRef(key: string, name: string, module = currentModule): void {
     const s = dependencyMap[key] || (dependencyMap[key] = new Set());
     const external = internalToExternal[name];
     if (external !== undefined) {
       s.add(external);
     }
-    s.add(currentModule + "." + name);
+    s.add(module + "." + name);
     s.add(name); // For builtins like hack.
   }
 
@@ -366,15 +366,19 @@ function parseOnlyCalculateDeps(code: string, currentModule: string): ParseDepsR
             walkDeeper(node.declaration, st);
             return;
           }
-          const specifiers = node.specifiers;
 
-          for (const specifier of specifiers) {
-            // for every dependency with the local name, add a version with the exported name
-
-            const localDepName = currentModule + "." + specifier.local.name;
+          for (const specifier of node.specifiers) {
             const exportedDepName = currentModule + "." + specifier.exported.name;
-            const localDep = dependencyMap[localDepName] || (dependencyMap[localDepName] = new Set<string>());
-            dependencyMap[exportedDepName] = localDep;
+
+            if (node.source !== null) {
+              // if this is true, we are re-exporting something
+              addRef(exportedDepName, specifier.local.name, node.source.value);
+              additionalModules.push(node.source.value);
+            } else if (specifier.exported.name !== specifier.local.name) {
+              // this makes sure we are not refering to ourselves
+              // if this is not true, we don't need to add anything
+              addRef(exportedDepName, specifier.local.name);
+            }
           }
         },
       },
