@@ -23,8 +23,6 @@ export const Provider = HistoryContext.Provider;
 export const useHistory = (): History => useContext(HistoryContext);
 
 const onPush = (h: History, p: string): History => {
-  console.log(`Pushing page: ${p}`);
-  console.log([...h.pages, h.page]);
   return {
     ...h,
     page: p,
@@ -34,8 +32,6 @@ const onPush = (h: History, p: string): History => {
 
 const onPop = (h: History): History => {
   const page = h.pages.pop() ?? defaultPage;
-  console.log(`Popped page ${page}`);
-  console.log(h.pages);
   return {
     ...h,
     page: page,

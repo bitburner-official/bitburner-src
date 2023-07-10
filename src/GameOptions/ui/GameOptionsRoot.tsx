@@ -13,6 +13,7 @@ interface IProps {
   export: () => void;
   forceKill: () => void;
   softReset: () => void;
+  reactivateTutorial: () => void;
 }
 export type OptionsTabName = "System" | "Interface" | "Numeric Display" | "Gameplay" | "Misc" | "Remote API";
 const tabs: Record<OptionsTabName, React.ReactNode> = {
@@ -26,7 +27,6 @@ const tabs: Record<OptionsTabName, React.ReactNode> = {
 
 export function GameOptionsRoot(props: IProps): React.ReactElement {
   const [currentTab, setCurrentTab] = useState<OptionsTabName>("System");
-
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
       <Typography variant="h4">Options</Typography>
@@ -38,6 +38,7 @@ export function GameOptionsRoot(props: IProps): React.ReactElement {
           export={props.export}
           forceKill={props.forceKill}
           softReset={props.softReset}
+          reactivateTutorial={props.reactivateTutorial}
         />
         {tabs[currentTab]}
       </Box>

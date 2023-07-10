@@ -279,15 +279,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.Documentation: {
-      mainPage = (
-        <DocumentationRoot
-          reactivateTutorial={() => {
-            prestigeAugmentation();
-            Router.toPage(Page.Terminal);
-            iTutorialStart();
-          }}
-        />
-      );
+      mainPage = <DocumentationRoot />;
       break;
     }
     case Page.DevMenu: {
@@ -338,6 +330,11 @@ export function GameRoot(): React.ReactElement {
           }}
           forceKill={killAllScripts}
           softReset={softReset}
+          reactivateTutorial={() => {
+            prestigeAugmentation();
+            Router.toPage(Page.Terminal);
+            iTutorialStart();
+          }}
         />
       );
       break;

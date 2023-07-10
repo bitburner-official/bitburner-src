@@ -1,15 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Button from "@mui/material/Button";
-import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
 import { MD } from "../../ui/MD/MD";
 
 import { getPage } from "./root";
 import { Navigator, useHistory } from "../../ui/React/Documentation";
-
-interface IProps {
-  reactivateTutorial: () => void;
-}
 
 const resolveRelativePath = (folder: string, relative: string): string => {
   const noLastSlash = folder.endsWith("/") ? folder.slice(0, folder.length - 1) : folder;
@@ -27,8 +22,7 @@ const resolvePath = (currentPath: string, newPath: string): string => {
   return resolveRelativePath(folder, newPath);
 };
 
-export function DocumentationRoot(props: IProps): React.ReactElement {
-  const [confirmResetOpen, setConfirmResetOpen] = useState(false);
+export function DocumentationRoot(): React.ReactElement {
   const history = useHistory();
   const page = getPage(history.page);
   const navigator = {
@@ -39,14 +33,7 @@ export function DocumentationRoot(props: IProps): React.ReactElement {
   };
   return (
     <>
-      <Button onClick={() => setConfirmResetOpen(true)}>Soft reset and Restart tutorial</Button>
       <Button onClick={() => history.pop()}>Back</Button>
-      <ConfirmationModal
-        open={confirmResetOpen}
-        onClose={() => setConfirmResetOpen(false)}
-        onConfirm={props.reactivateTutorial}
-        confirmationText={"This will reset all your stats to 1 and money to 1k. Are you sure?"}
-      />
       <Navigator.Provider value={navigator}>
         <MD md={page.content + ""} />
       </Navigator.Provider>

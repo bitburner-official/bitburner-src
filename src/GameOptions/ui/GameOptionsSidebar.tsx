@@ -33,6 +33,7 @@ interface IProps {
   export: () => void;
   forceKill: () => void;
   softReset: () => void;
+  reactivateTutorial: () => void;
 }
 
 interface ITabProps {
@@ -57,6 +58,8 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
   const [diagnosticOpen, setDiagnosticOpen] = useState(false);
   const [importSaveOpen, setImportSaveOpen] = useState(false);
   const [importData, setImportData] = useState<ImportData | null>(null);
+
+  const [confirmResetOpen, setConfirmResetOpen] = useState(false);
 
   function startImport(): void {
     if (!window.File || !window.FileReader || !window.FileList || !window.Blob) return;
@@ -237,8 +240,8 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
             gridArea: "links",
             display: "grid",
             gridTemplateAreas: `"bug changelog"
-        "docs docs"
         "discord reddit"
+        "tut tut"
         "plaza plaza"`,
             gridTemplateColumns: "1fr 1fr",
             my: 1,
@@ -260,13 +263,8 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           >
             Changelog
           </Button>
-          <Button
-            startIcon={<LibraryBooks />}
-            href="https://bitburner-official.readthedocs.io/en/latest/index.html"
-            target="_blank"
-            sx={{ gridArea: "docs" }}
-          >
-            Documentation
+          <Button startIcon={<LibraryBooks />} onClick={() => setConfirmResetOpen(true)} sx={{ gridArea: "tut" }}>
+            Reset tutorial
           </Button>
           <Button startIcon={<Chat />} href="https://discord.gg/TFc3hKD" target="_blank" sx={{ gridArea: "discord" }}>
             Discord
@@ -282,6 +280,13 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
         </Box>
       </Box>
       <FileDiagnosticModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
+
+      <ConfirmationModal
+        open={confirmResetOpen}
+        onClose={() => setConfirmResetOpen(false)}
+        onConfirm={props.reactivateTutorial}
+        confirmationText={"This will reset all your stats to 1 and money to 1k. Are you sure?"}
+      />
     </Box>
   );
 };
