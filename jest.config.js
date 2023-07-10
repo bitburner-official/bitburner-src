@@ -4,6 +4,9 @@ module.exports = {
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
+  transformIgnorePatterns: [
+    "node_modules/react-markdown"
+  ] ,
   testPathIgnorePatterns: [".cypress", "node_modules", "dist"],
   testEnvironment: "./FixJSDOMEnvironment.ts",
   moduleNameMapper: {
