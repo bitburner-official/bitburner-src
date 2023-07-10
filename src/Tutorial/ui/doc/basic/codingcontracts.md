@@ -12,8 +12,8 @@ provide the wrong answer too many times and exceed the
 number of attempts, the contract will self destruct (delete itself)
 
 Currently, Coding Contracts are randomly generated and
-spawned over time. They can appear on any server (including your
-home computer), except for your purchased servers.
+spawned over time. They can appear on any [server](servers.md) (including your
+home computer), except for your purchased [servers](servers.md).
 
 ## Running in Terminal
 
@@ -30,16 +30,16 @@ an area to provide an answer.
 
 See the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md).
 Interacting with Coding Contracts via the [Terminal](terminal.md) can be tedious the more
-contracts you solve. Consider using the API to automate various aspects of
+contracts you solve. Consider using the [API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md) to automate various aspects of
 your solution. For example, some contracts have long solutions while others
-have even longer solutions. You might want to use the API to automate the
+have even longer solutions. You might want to use the [API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md) to automate the
 process of submitting your solution rather than copy and paste a long
 solution into an answer box.
 
 However, using the [API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md) comes at a cost. Like most functions in other APIs,
 each function in the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md) has a RAM cost. Depending on which
-function you use, the initial RAM on your home server might not be enough
-to allow you to use various [API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md) functions. Plan on upgrading the RAM on your
+function you use, the initial [RAM](ram.md) on your home server might not be enough
+to allow you to use various [API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md) functions. Plan on upgrading the [RAM](ram.md) on your
 home server if you want to use the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md).
 
 ## Submitting Solutions
@@ -72,12 +72,12 @@ Numeric solutions should be submitted normally, as expected
 
 There are currently four possible rewards for solving a Coding Contract:
 
-- Faction Reputation for a specific Faction
-- Faction Reputation for all Factions that you are a member of
-- Company reputation for a specific Company
+- [Faction](factions.md) [Reputation](reputation.md) for a specific [Faction](factions.md)
+- [Faction](factions.md) [Reputation](reputation.md) for all [Factions](factions.md) that you are a member of
+- [Company](companies.md) [Reputation](reputation.md) for a specific [Company](companies.md)
 - Money
 
-The 'amount' of the reward varies based on the difficulty of the problem
+The `amount` of the reward varies based on the difficulty of the problem
 posed by the Coding Contract. There is no way to know what a
 Coding Contract's exact reward will be until it is solved.
 

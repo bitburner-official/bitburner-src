@@ -15,7 +15,7 @@ Pros:
 Cons:
 
 - Limits income generation
-- Extremely RAM inefficient
+- Extremely [RAM](../basic/ram.md) inefficient
 - Utilizes script online time poorly
 - Risk of over hacking
 

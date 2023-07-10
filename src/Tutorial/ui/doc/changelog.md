@@ -7,7 +7,7 @@
 NETSCRIPT:
 
 - Added ns.setTitle, which sets the titlebar of a script's tail window (@d0sboots)
-- Added ns.getFunctionRamCost, which gets the ramcost of a netscript function (@G4mingJon4s)
+- Added ns.getFunctionRamCost, which gets the ramcost of a function (@G4mingJon4s)
 - ns.ls results will filter as if the filenames have a leading slash (@Snarling)
 
 GENERAL / MISC:

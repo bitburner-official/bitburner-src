@@ -3,7 +3,7 @@
 The Stock Market refers to the World Stock Exchange (WSE), through which you can
 buy and sell stocks in order to make money.
 
-The WSE can be found in the 'City' tab, and is accessible in every city.
+The WSE can be found in the `City` tab, and is accessible in every city.
 
 ## Fundamentals
 
@@ -30,13 +30,13 @@ game.
 
 A stock's forecast is its likelihood of increasing or decreasing in value. The
 forecast is typically represented by its probability of increasing in either
-a decimal or percentage form. For example, a forecast of 70% means the stock
-has a 70% chance of increasing and a 30% chance of decreasing.
+a decimal or percentage form. For example, a forecast of `70%` means the stock
+has a `70%` chance of increasing and a `30%` chance of decreasing.
 
 A stock's second-order forecast is the target value that its forecast trends towards.
-For example, if a stock has a forecast of 60% and a second-order forecast of 70%,
-then the stock's forecast should slowly trend towards 70% over time. However, this is
-determined by RNG so there is a chance that it may never reach 70%.
+For example, if a stock has a forecast of `60%` and a second-order forecast of `70%`,
+then the stock's forecast should slowly trend towards `70%` over time. However, this is
+determined by RNG so there is a chance that it may never reach `70%`.
 
 Both the forecast and the second-order forecast change over time.
 
@@ -137,7 +137,7 @@ stock), then hacking that server can decrease the stock's second-order
 forecast. This causes the corresponding stock's forecast to trend downwards in value
 over time.
 
-This effect only occurs if you set the _stock_ option to
+This effect only occurs if you set the stock option to
 true when calling the `hack` function. The chance that hacking a
 server will cause this effect is based on what percentage of the
 server's total money you steal.
@@ -146,13 +146,14 @@ A single hack will have a minor
 effect, but continuously hacking a server for lots of money over time
 will have a noticeable effect in making the stock's forecast trend downwards.
 
-Growing
+## Growing
+
 If a server has a corresponding stock (e.g. `foodnstuff` server -> FoodNStuff
 stock), then growing that server's money can increase the stock's
 second-order forecast. This causes the corresponding stock's
 forecast to trend upwards in value over time.
 
-This effect only occurs if you set the _stock_ option to true when calling the
+This effect only occurs if you set the `stock` option to true when calling the
 `grow` function. The chance that growing a server will cause this
 effect is based on what percentage of the server's total money to add to it.
 
@@ -160,13 +161,14 @@ A single grow operation will have a minor effect, but continuously growing
 a server for lots of money over time will have a noticeable effect in making
 the stock's forecast trend upwards.
 
-Working for a Company
-If a company has a corresponding stock, then working for that company will
+## Working for a Company
+
+If a [Company](companies.md) has a corresponding stock, then working for that [Company](companies.md) will
 increase the corresponding stock's second-order forecast. This will
 cause the stock's forecast to (slowly) trend upwards in value
 over time.
 
-The potency of this effect is based on how "effective" you are when you work
+The potency of this effect is based on how effective you are when you work
 (i.e. its based on your stats and multipliers).
 
 ## Automating the Stock Market
@@ -178,7 +180,7 @@ See [TIX API](https://github.com/bitburner-official/bitburner-src/blob/dev/markd
 
 Stock prices are updated every ~6 seconds.
 
-Whether a stock's price moves up or down is determined by RNG. However,
+Whether a stock's price moves up or down is random. However,
 stocks have properties that can influence the way their price moves. These properties
 are hidden, although some of them can be made visible by purchasing the
 Four Sigma (4S) Market Data upgrade. Some examples of these properties are:
@@ -196,5 +198,5 @@ Each stock has its own unique values for these properties.
 
 The Stock Market does not change or process anything while the game has closed.
 However, it does accumulate time when offline. This accumulated time allows
-the stock market to run 50% faster when the game is opened again. This means
+the stock market to run `50%` faster when the game is opened again. This means
 that stock prices will update every ~4 seconds instead of 6.

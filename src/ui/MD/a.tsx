@@ -1,8 +1,10 @@
 import { Link } from "@mui/material";
 import React from "react";
-import { useNavigator } from "../../Tutorial/ui/DocumentationRoot";
-import { isSpoiler } from "../../Tutorial/ui/spoilers";
+import { useNavigator } from "../React/Documentation";
 import { CorruptableText } from "../React/CorruptableText";
+import { Player } from "@player";
+
+export const isSpoiler = (title: string): boolean => title.startsWith("advanced/") && Player.sourceFileLvl(1) === 0;
 
 export const A = (props: React.PropsWithChildren<{ href?: string }>): React.ReactElement => {
   const navigator = useNavigator();

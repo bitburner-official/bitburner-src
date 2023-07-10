@@ -8,26 +8,24 @@ user's physical and mental faculties.
 
 Augmentations provide persistent upgrades in the form of multipliers.
 These multipliers apply to a wide variety of things such as stats,
-experience gain, and hacking, just to name a few. The effects of
+experience gain, and [hacking](hacking.md), just to name a few. The effects of
 Augmentations stack multiplicatively. Your multipliers can be viewed in
-the `Character` page (Alt + c).
+the `Character` pages.
 
 ## How to acquire Augmentations
 
 Because of how powerful Augmentations are, the technology behind them
 is kept private and secret by the corporations and organizations that
 create them. Therefore, the only way for the player to obtain
-Augmentations is through [Factions](factions.md). After joining a Faction and earning
-enough reputation in it, you will be able to purchase its Augmentations.
+Augmentations is through [Factions](factions.md). After joining a [Faction](factions.md) and earning
+enough [Reputation](reputation.md) in it, you will be able to purchase its Augmentations.
 Different [Factions](factions.md) offer different Augmentations. Augmentations must be
-purchased in order to be installed, and they are fairly expensive. They also require reputation from a [Factions](factions.md) before they will let you purchase their Augmentations.
+purchased in order to be installed, and they are fairly expensive. They also require [Reputation](reputation.md) from a [Factions](factions.md) before they will let you purchase their Augmentations.
 
 ## Installing Augmentations
 
-You will not gain the benefits of your purchased Augmentations until you
-actually install them. You can choose to install Augmentations through
-the `Augmentations` menu tab (Found under `Character`. Alternatively,
-use the keyboard shortcut Alt + a).
+You will not gain the benefits of your purchased Augmentations until you install them. You can choose to install Augmentations through
+the `Augmentations` menu tab, found under `Character`.
 
 Unfortunately, installing Augmentations has side effects. You will lose
 most of the progress you've made, including your skills, stats, and
@@ -40,21 +38,21 @@ an Augmentation:
 
 - Stats/Skills
 - Money
-- Scripts on all servers EXCEPT your home computer
-- Purchased servers
-- Hacknet Nodes
-- Company/faction reputation, but you gain reputation.
-- Jobs and Faction memberships
+- [Scripts](scripts.md) on all [servers](servers.md) EXCEPT your home computer
+- Purchased [servers](servers.md)
+- [Hacknet Nodes](hacknet_nodes.md)
+- [Company](companies.md) / [Faction](factions.md) [Reputation](reputation.md), but you gain [Reputation](reputation.md).
+- Jobs and [Faction](factions.md) memberships
 - Programs
-- Stocks
+- [Stocks](stockmarket.md)
 - TOR router
 
 Here is everything you will KEEP when you install an Augmentation:
 
 - Every Augmentation you have installed
-- Scripts on your home computer
-- RAM / Core Upgrades on your home computer
-- World Stock Exchange account and TIX API Access
+- [Scripts](scripts.md) on your home computer
+- [RAM](ram.md) / Core Upgrades on your home computer
+- [World Stock Exchange account](stockmarket.md) and [TIX API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.tix.md) Access
 - Previously installed Augmentations
 
 ## Purchasing Multiple Augmentations

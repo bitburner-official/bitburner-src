@@ -1,31 +1,31 @@
 # Infiltration
 
 Infiltration is a gameplay mechanic that allows you to infiltrate a
-company's facility to try and steal the company's classified secrets.
-These secrets can be sold for money or for reputation with a faction.
+[Company](companies.md)'s facility to try and steal the [Company](companies.md)'s classified secrets.
+These secrets can be sold for money or for [Reputation](reputation.md) with a [Faction](factions.md).
 
 ## Overview
 
 Many companies have facilities that you can attempt to infiltrate.
-By infiltrating, you can steal classified company secrets and then sell
-these for money or for faction reputation. To try and infiltrate a company,
-visit a company through the 'World' menu. There will be an option that
-says 'Infiltrate Company'.
+By infiltrating, you can steal classified [Company](companies.md) secrets and then sell
+these for money or for [Faction](factions.md) [Reputation](reputation.md). To try and infiltrate a [Company](companies.md),
+visit a [Company](companies.md) through the [World](world.md) menu. There will be an option that
+says 'Infiltrate [Company](companies.md)'.
 
-When infiltrating a company you will be presented with short active challenges.
+When infiltrating a [Company](companies.md) you will be presented with short active challenges.
 None of the challenges use the mouse.
 
 The difficulty at the top lowers with better combat stats and charisma. It is not recommended
 to attempt infiltrations above mid-normal.
 
-The "maximum level" is the number of challenges you will need to pass to receive
+The `maximum level` is the number of challenges you will need to pass to receive
 the infiltration reward.
 
 Every time you fail an infiltration challenge, you will take damage based on the
-difficulty of the infiltration. If you are reduced to 0 hp or below, the
+difficulty of the infiltration. If you are reduced to `0` hp or below, the
 infiltration will immediately end.
 
-- Most use spacebar as "action"
+- Most use spacebar as `action`
 - Some use WASD or arrows interchangeably.
 - A few others use the rest of the keyboard.
 
@@ -64,5 +64,5 @@ Then move the cursor and press space to mark the mines on the board.
 
 ### Cut the wires
 
-Follow the instructions and press the numbers 1 through 9 to cut the appropriate
+Follow the instructions and press the numbers `1` through `9` to cut the appropriate
 wires.

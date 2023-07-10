@@ -1,14 +1,14 @@
 # Game Frozen or Stuck?
 
-## Infinite Loop in NetscriptJS
+## Infinite Loop in Scripts
 
 If your game is frozen or stuck in any way, then the most likely culprit is an
-infinitely running loop in your script`. To get past the freezing, run the game with
+infinitely running loop in your script. To get past the freezing, run the game with
 `?noScripts` in the URL:
 
-[no freeze](https://danielyxie.github.io/bitburner/?noScripts)
+[Link to no freeze](https://danielyxie.github.io/bitburner/?noScripts)
 
-Then, to fix your script, make sure you have a sleep or any other timed function like `hack()` or
+Then, to fix your script, make sure you have a `sleep()` or any other timed function like `hack()` or
 `grow()` in any infinite loops:
 
     while(true) {
@@ -17,7 +17,7 @@ Then, to fix your script, make sure you have a sleep or any other timed function
         await ns.sleep(1000); // Add a 1s sleep to prevent freezing
     }
 
-Also make sure that each while loop gets to the `await`ed function or `break`, for example the next snippet has a sleep
+Also make sure that each while loop gets to the `await`ed function or `break`, for example the next snippet has a `sleep()`
 function, but it nor any possible conditional breaks are never reached and therefore will crash the game:
 
     while(true) {
@@ -31,7 +31,7 @@ function, but it nor any possible conditional breaks are never reached and there
         }
     }
 
-If `n00dles` current money is, for example, 75% of the maximum money, the script will reach neither `grow` nor `break` and the game will crash.
+If `n00dles` current money is, for example, 75% of the maximum money, the script will reach neither `grow()` nor `break` and the game will crash.
 Adding a sleep like in the first example, or changing the code so that the `awaited` function or `break` is always reached, would prevent the crash.
 
 Common infinite loop when translating the server purchasing script in starting guide to scripts is to have a
@@ -50,7 +50,7 @@ while loop, where the condition's change is conditional:
     }
 
 If the player does not currently have enough money to purchase a server, the `if`'s condition will be false and `++i` will not be reached.
-Since the script doesn't have `sleep` and value `i` will not change without the `if` being true, this will crash the game. Adding a `sleep`
+Since the script doesn't have `sleep()` and value `i` will not change without the `if` being true, this will crash the game. Adding a `sleep()`
 that is always reached would prevent the crash.
 
 ## Blackscreen

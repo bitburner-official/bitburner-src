@@ -70,6 +70,7 @@ import { Apr1 } from "./Apr1";
 import { V2Modal } from "../utils/V2Modal";
 import { MathJaxContext } from "better-react-mathjax";
 import { useRerender } from "./React/hooks";
+import { HistoryProvider } from "./React/Documentation";
 
 const htmlLocation = location;
 
@@ -376,40 +377,42 @@ export function GameRoot(): React.ReactElement {
     <MathJaxContext version={3} src={"dist/ext/MathJax-3.2.2/es5/tex-chtml.js"}>
       <ErrorBoundary key={errorBoundaryKey} softReset={softReset}>
         <BypassWrapper content={bypassGame ? mainPage : null}>
-          <SnackbarProvider>
-            <Overview mode={ITutorial.isRunning ? "tutorial" : "overview"}>
-              {(parentOpen) =>
-                !ITutorial.isRunning ? (
-                  <CharacterOverview
-                    parentOpen={parentOpen}
-                    save={() => saveObject.saveGame()}
-                    killScripts={killAllScripts}
-                  />
-                ) : (
-                  <InteractiveTutorialRoot />
-                )
-              }
-            </Overview>
-            {withSidebar ? (
-              <Box display="flex" flexDirection="row" width="100%">
-                <SidebarRoot page={pageWithContext.page} />
+          <HistoryProvider>
+            <SnackbarProvider>
+              <Overview mode={ITutorial.isRunning ? "tutorial" : "overview"}>
+                {(parentOpen) =>
+                  !ITutorial.isRunning ? (
+                    <CharacterOverview
+                      parentOpen={parentOpen}
+                      save={() => saveObject.saveGame()}
+                      killScripts={killAllScripts}
+                    />
+                  ) : (
+                    <InteractiveTutorialRoot />
+                  )
+                }
+              </Overview>
+              {withSidebar ? (
+                <Box display="flex" flexDirection="row" width="100%">
+                  <SidebarRoot page={pageWithContext.page} />
+                  <Box className={classes.root}>{mainPage}</Box>
+                </Box>
+              ) : (
                 <Box className={classes.root}>{mainPage}</Box>
-              </Box>
-            ) : (
-              <Box className={classes.root}>{mainPage}</Box>
-            )}
-            <Unclickable />
-            {withPopups && (
-              <>
-                <LogBoxManager />
-                <AlertManager />
-                <PromptManager />
-                <InvitationModal />
-                <Snackbar />
-              </>
-            )}
-            <Apr1 />
-          </SnackbarProvider>
+              )}
+              <Unclickable />
+              {withPopups && (
+                <>
+                  <LogBoxManager />
+                  <AlertManager />
+                  <PromptManager />
+                  <InvitationModal />
+                  <Snackbar />
+                </>
+              )}
+              <Apr1 />
+            </SnackbarProvider>
+          </HistoryProvider>
         </BypassWrapper>
       </ErrorBoundary>
       <V2Modal />
