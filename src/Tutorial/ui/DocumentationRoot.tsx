@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 
 import Button from "@mui/material/Button";
 import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
 import { MD } from "../../ui/MD/MD";
 
-import { Root, getPage } from "./root";
+import { getPage } from "./root";
 import { Navigator, useHistory } from "../../ui/React/Documentation";
 
 interface IProps {

@@ -42,7 +42,7 @@ const onPop = (h: History): History => {
   };
 };
 
-export const HistoryProvider = (props: React.PropsWithChildren<{}>): React.ReactElement => {
+export const HistoryProvider = (props: React.PropsWithChildren<object>): React.ReactElement => {
   const [history, setHistory] = useState<History>({
     page: defaultPage,
     pages: [],
