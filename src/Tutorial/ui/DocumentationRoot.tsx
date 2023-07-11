@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Button from "@mui/material/Button";
-import { MD } from "../../ui/MD/MD";
+import { MD } from "../../ui/md/md";
 
 import { getPage } from "./root";
 import { Navigator, useHistory } from "../../ui/React/Documentation";
@@ -26,16 +26,28 @@ export function DocumentationRoot(): React.ReactElement {
   const history = useHistory();
   const page = getPage(history.page);
   const navigator = {
-    navigate(relPath: string) {
+    navigate(relPath: string, external: boolean) {
       const newPath = resolvePath(history.page, relPath);
+      if (external) {
+        const url = `https://github.com/bitburner-official/bitburner-src/blob/stable/src/Tutorial/ui/doc/${newPath}`;
+        window.open(url, "_newtab");
+        return;
+      }
       history.push(newPath);
+
+      // Reset scroll to the top of the page.
+      window.scrollTo(0, 0);
     },
   };
+
+  // Reset scroll.
+  useEffect(() => {});
   return (
     <>
       <Button onClick={() => history.pop()}>Back</Button>
+      <Button onClick={() => history.home()}>Home</Button>
       <Navigator.Provider value={navigator}>
-        <MD md={page.content + ""} />
+        <MD md={page + ""} />
       </Navigator.Provider>
     </>
   );

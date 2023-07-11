@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 
 interface Navigator {
-  navigate: (s: string) => void;
+  navigate: (s: string, external: boolean) => void;
 }
 
 export const Navigator = React.createContext<Navigator>({ navigate: () => undefined });
@@ -13,11 +13,18 @@ interface History {
   page: string;
   push(p: string): void;
   pop(): void;
+  home(): void;
 }
 
 const defaultPage = "index.md";
 
-const HistoryContext = React.createContext<History>({ page: "", pages: [], push: () => undefined, pop: () => "" });
+const HistoryContext = React.createContext<History>({
+  page: "",
+  pages: [],
+  push: () => undefined,
+  pop: () => undefined,
+  home: () => undefined,
+});
 
 export const Provider = HistoryContext.Provider;
 export const useHistory = (): History => useContext(HistoryContext);
@@ -38,6 +45,14 @@ const onPop = (h: History): History => {
   };
 };
 
+const onHome = (h: History): History => {
+  return {
+    ...h,
+    page: defaultPage,
+    pages: [],
+  };
+};
+
 export const HistoryProvider = (props: React.PropsWithChildren<object>): React.ReactElement => {
   const [history, setHistory] = useState<History>({
     page: defaultPage,
@@ -47,6 +62,9 @@ export const HistoryProvider = (props: React.PropsWithChildren<object>): React.R
     },
     pop() {
       setHistory((h) => onPop(h));
+    },
+    home() {
+      setHistory((h) => onHome(h));
     },
   });
   return <Provider value={history}>{props.children}</Provider>;

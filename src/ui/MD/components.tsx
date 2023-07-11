@@ -20,26 +20,32 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const h1 = (props: React.PropsWithChildren<object>): React.ReactElement => (
-  <Typography variant="h1">{props.children}</Typography>
-);
-
-export const h2 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+  // We are just going to cheat and lower every h# by 1.
   <Typography variant="h2">{props.children}</Typography>
 );
 
-export const h3 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+export const h2 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+  // We are just going to cheat and lower every h# by 1.
   <Typography variant="h3">{props.children}</Typography>
 );
 
-export const h4 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+export const h3 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+  // We are just going to cheat and lower every h# by 1.
   <Typography variant="h4">{props.children}</Typography>
 );
 
-export const h5 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+export const h4 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+  // We are just going to cheat and lower every h# by 1.
   <Typography variant="h5">{props.children}</Typography>
 );
 
+export const h5 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+  // We are just going to cheat and lower every h# by 1.
+  <Typography variant="h6">{props.children}</Typography>
+);
+
 export const h6 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+  // Except for h6, that's going to stay h6. If there's complaints we'll figure it out.
   <Typography variant="h6">{props.children}</Typography>
 );
 

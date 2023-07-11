@@ -1,4 +1,5 @@
 // This file contains almost all features that markdown ever uses. It is split by section to be better able to test different features.
+// This file isn't used at the moment but should be included when we verify that Markdown is rendered correctly.
 
 const headers =
   "# Headers\r\n\r\n```\r\n# h1 Heading 8-)\r\n## h2 Heading\r\n### h3 Heading\r\n#### h4 Heading\r\n##### h5 Heading\r\n###### h6 Heading\r\n\r\nAlternatively, for H1 and H2, an underline-ish style:\r\n\r\nAlt-H1\r\n======\r\n\r\nAlt-H2\r\n------\r\n```\t\r\n\r\n# h1 Heading 8-)\r\n## h2 Heading\r\n### h3 Heading\r\n#### h4 Heading\r\n##### h5 Heading\r\n###### h6 Heading\r\n\r\nAlternatively, for H1 and H2, an underline-ish style:\r\n\r\nAlt-H1\r\n======\r\n\r\nAlt-H2\r\n------\r\n\r\n------\r\n\r\n";
