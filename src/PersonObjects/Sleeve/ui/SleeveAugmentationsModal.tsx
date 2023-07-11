@@ -48,6 +48,7 @@ export function SleeveAugmentationsModal(props: IProps): React.ReactElement {
           props.sleeve.tryBuyAugmentation(aug);
           rerender();
         }}
+        rerender={rerender}
         sleeveAugs
       />
     </Modal>

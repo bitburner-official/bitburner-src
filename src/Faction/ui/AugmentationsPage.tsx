@@ -224,6 +224,7 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
             rerender();
           }
         }}
+        rerender={rerender}
         rep={faction.playerReputation}
         faction={faction}
       />

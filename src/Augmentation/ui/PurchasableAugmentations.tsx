@@ -4,7 +4,7 @@
  */
 import { CheckBox, CheckBoxOutlineBlank, CheckCircle, NewReleases, Report } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Faction } from "../../Faction/Faction";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
@@ -14,6 +14,7 @@ import { AugmentationName, FactionName } from "@enums";
 import { Augmentations } from "../Augmentations";
 import { PurchaseAugmentationModal } from "./PurchaseAugmentationModal";
 import { getAugCost } from "../AugmentationHelpers";
+import { useRerender } from "../../ui/React/hooks";
 
 interface IPreReqsProps {
   aug: Augmentation;
@@ -132,6 +133,7 @@ interface IPurchasableAugsProps {
 
   canPurchase: (aug: Augmentation) => boolean;
   purchaseAugmentation: (aug: Augmentation, showModal: (open: boolean) => void) => void;
+  rerender: () => void;
 
   rep?: number;
   sleeveAugs?: boolean;
@@ -163,6 +165,13 @@ interface IPurchasableAugProps {
 
 export function PurchasableAugmentation(props: IPurchasableAugProps): React.ReactElement {
   const [open, setOpen] = useState(false);
+  const rerender = useRerender();
+  useEffect(() => {
+    // No need to rerender augs that are owned
+    if (props.owned) return;
+    const interval = setInterval(rerender, 600);
+    return () => clearInterval(interval);
+  }, [props.owned, rerender]);
 
   const aug = Augmentations[props.augName];
   if (!aug) return <></>;
@@ -259,7 +268,10 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
         {Settings.SuppressBuyAugmentationConfirmation || (
           <PurchaseAugmentationModal
             open={open}
-            onClose={() => setOpen(false)}
+            onClose={() => {
+              setOpen(false);
+              props.parent.rerender();
+            }}
             faction={props.parent.faction}
             aug={aug}
           />
