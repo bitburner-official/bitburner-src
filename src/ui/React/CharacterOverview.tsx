@@ -1,5 +1,5 @@
 // Root React Component for the Corporation UI
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, ReactNode } from "react";
 
 import { Theme, useTheme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
@@ -337,9 +337,9 @@ function Work(): React.ReactElement {
 
   if (Player.currentWork === null || Player.focus) return <></>;
 
-  let details = <></>;
-  let header = <></>;
-  let innerText = <></>;
+  let details: ReactNode = "";
+  let header: ReactNode = "";
+  let innerText: ReactNode = "";
   if (isCrimeWork(Player.currentWork)) {
     const crime = Player.currentWork.getCrime();
     const perc = (Player.currentWork.unitCompleted / crime.time) * 100;
@@ -391,11 +391,14 @@ function Work(): React.ReactElement {
   }
   if (isCompanyWork(Player.currentWork)) {
     const companyWork = Player.currentWork;
+    const job = Player.jobs[companyWork.companyName];
+    if (!job) return <></>;
     details = (
       <>
-        {Player.jobs[companyWork.companyName]} at <strong>{companyWork.companyName}</strong>
+        {job} at <strong>{companyWork.companyName}</strong>
       </>
     );
+
     header = (
       <>
         Working at <strong>{companyWork.companyName}</strong>
@@ -405,7 +408,7 @@ function Work(): React.ReactElement {
       <>
         <Reputation reputation={companyWork.getCompany().playerReputation} /> rep
         <br />(
-        <ReputationRate reputation={companyWork.getGainRates().reputation * (1000 / CONSTANTS.MilliPerCycle)} />)
+        <ReputationRate reputation={companyWork.getGainRates(job).reputation * (1000 / CONSTANTS.MilliPerCycle)} />)
       </>
     );
   }

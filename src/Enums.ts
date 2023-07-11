@@ -2,6 +2,7 @@
 
 export * from "./Augmentation/Enums";
 export * from "./Bladeburner/Enums";
+export * from "./Company/Enums";
 export * from "./Corporation/Enums";
 export * from "./Crime/Enums";
 export * from "./Faction/Enums";

@@ -13,6 +13,7 @@ import { TaskSelector } from "./TaskSelector";
 import { TravelModal } from "./TravelModal";
 import { findCrime } from "../../../Crime/CrimeHelpers";
 import { SleeveWorkType } from "../Work/Work";
+import { getEnumHelper } from "../../../utils/EnumHelper";
 
 function getWorkDescription(sleeve: Sleeve, progress: number): string {
   const work = sleeve.currentWork;
@@ -75,7 +76,8 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
       case "------":
         break;
       case "Work for Company":
-        props.sleeve.workForCompany(abc[1]);
+        if (getEnumHelper("CompanyName").isMember(abc[1])) props.sleeve.workForCompany(abc[1]);
+        else console.error(`Invalid company name in setSleeveTask: ${abc[1]}`);
         break;
       case "Work for Faction":
         props.sleeve.workForFaction(abc[1], abc[2]);

@@ -1,16 +1,10 @@
-// Constructs all CompanyPosition objects using the metadata in data/companypositions.ts
-import { companyPositionMetadata } from "./data/CompanyPositionsMetadata";
-import { CompanyPosition, IConstructorParams } from "./CompanyPosition";
+import { JobName } from "@enums";
 
-export const CompanyPositions: Record<string, CompanyPosition> = {};
+import { getCompanyPositionMetadata } from "./data/CompanyPositionsMetadata";
+import { CompanyPosition } from "./CompanyPosition";
+import { createEnumKeyedRecord } from "../Types/Record";
 
-function addCompanyPosition(params: IConstructorParams): void {
-  if (CompanyPositions[params.name] != null) {
-    console.warn(`Duplicate Company Position being defined: ${params.name}`);
-  }
-  CompanyPositions[params.name] = new CompanyPosition(params);
-}
-
-companyPositionMetadata.forEach((e) => {
-  addCompanyPosition(e);
-});
+export const CompanyPositions: Record<JobName, CompanyPosition> = (() => {
+  const metadata = getCompanyPositionMetadata();
+  return createEnumKeyedRecord(JobName, (name) => new CompanyPosition(name, metadata[name]));
+})();

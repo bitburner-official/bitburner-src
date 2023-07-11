@@ -3,7 +3,6 @@ import { AugmentationName, ToastVariant } from "@enums";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { initSourceFiles } from "./SourceFile/SourceFiles";
 import { generateRandomContract } from "./CodingContractGenerator";
-import { initCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
 import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
@@ -374,7 +373,6 @@ const Engine: {
       Engine.start(); // Run main game loop and Scripts loop
       Player.init();
       initForeignServers(Player.getHomeComputer());
-      initCompanies();
       Player.reapplyAllAugmentations();
 
       // Start interactive tutorial

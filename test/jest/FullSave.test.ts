@@ -3,16 +3,17 @@ import { Factions } from "../../src/Faction/Factions";
 import { Player, setPlayer } from "../../src/Player";
 import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
 import { joinFaction } from "../../src/Faction/FactionHelpers";
-import { AugmentationName, CrimeType, FactionName } from "../../src/Enums";
+import { AugmentationName, CompanyName, CrimeType, FactionName } from "../../src/Enums";
 import { Augmentations } from "../../src/Augmentation/Augmentations";
 import { SleeveCrimeWork } from "../../src/PersonObjects/Sleeve/Work/SleeveCrimeWork";
+import { Companies } from "../../src/Company/Companies";
 
 describe("Check Save File Continuity", () => {
   establishInitialConditions();
   // Calling getSaveString forces save info to update
   saveObject.getSaveString();
 
-  const savesToTest = ["FactionsSave", "PlayerSave"] as const;
+  const savesToTest = ["FactionsSave", "PlayerSave", "CompaniesSave"] as const;
   for (const saveToTest of savesToTest) {
     test(`${saveToTest} continuity`, () => {
       const parsed = JSON.parse(saveObject[saveToTest]);
@@ -44,9 +45,6 @@ function establishInitialConditions() {
   initForeignServers(Player.getHomeComputer());
   */
 
-  // not comparing companies yet
-  // initCompanies()
-
   // Sleeves (already added in game initializers section)
   Player.sleeves[0].installAugmentation(Augmentations[AugmentationName.BionicArms]);
   Player.sleeves[0].startWork(new SleeveCrimeWork(CrimeType.homicide));
@@ -60,6 +58,11 @@ function establishInitialConditions() {
   joinFaction(slumSnakes);
   csec.playerReputation = 1e6;
   csec.favor = 20;
+
+  // Companies
+  const noodleBar = Companies[CompanyName.NoodleBar];
+  noodleBar.favor = 100;
+  noodleBar.playerReputation = 100000;
 
   // Bladeburner. Adding rank will also add bladeburner faction rep.
   Player.startBladeburner();

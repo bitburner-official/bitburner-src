@@ -78,9 +78,9 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       checkSleeveNumber(ctx, sleeveNumber);
       return Player.sleeves[sleeveNumber].travel(cityName);
     },
-    setToCompanyWork: (ctx) => (_sleeveNumber, acompanyName) => {
+    setToCompanyWork: (ctx) => (_sleeveNumber, _companyName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const companyName = helpers.string(ctx, "companyName", acompanyName);
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 

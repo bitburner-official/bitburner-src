@@ -9,64 +9,67 @@ import Button from "@mui/material/Button";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
-import { FactionName } from "@enums";
-import { Companies as AllCompanies } from "../../Company/Companies";
+import { CompanyName } from "@enums";
+import { Companies } from "../../Company/Companies";
 import { Adjuster } from "./Adjuster";
+import { isMember } from "../../utils/EnumHelper";
+import { getRecordValues } from "../../Types/Record";
 
 const bigNumber = 1e12;
 
 export function CompaniesDev(): React.ReactElement {
-  const [company, setCompany] = useState(FactionName.ECorp as string);
+  const [companyName, setCompanyName] = useState(CompanyName.ECorp);
   function setCompanyDropdown(event: SelectChangeEvent): void {
-    setCompany(event.target.value);
+    if (!isMember("CompanyName", event.target.value)) return;
+    setCompanyName(event.target.value);
   }
   function resetCompanyRep(): void {
-    AllCompanies[company].playerReputation = 0;
+    Companies[companyName].playerReputation = 0;
   }
 
   function modifyCompanyRep(modifier: number): (x: number) => void {
     return function (reputation: number): void {
-      const c = AllCompanies[company];
-      if (c != null && !isNaN(reputation)) {
-        c.playerReputation += reputation * modifier;
+      const company = Companies[companyName];
+      if (!isNaN(reputation)) {
+        company.playerReputation += reputation * modifier;
       }
     };
   }
 
   function modifyCompanyFavor(modifier: number): (x: number) => void {
     return function (favor: number): void {
-      const c = AllCompanies[company];
-      if (c != null && !isNaN(favor)) {
-        c.favor += favor * modifier;
+      const company = Companies[companyName];
+      if (!isNaN(favor)) {
+        company.favor += favor * modifier;
       }
     };
   }
 
   function resetCompanyFavor(): void {
-    AllCompanies[company].favor = 0;
+    Companies[companyName].favor = 0;
   }
 
   function tonsOfRepCompanies(): void {
-    for (const c of Object.keys(AllCompanies)) {
-      AllCompanies[c].playerReputation = bigNumber;
+    for (const company of getRecordValues(Companies)) {
+      company.playerReputation = bigNumber;
     }
   }
 
   function resetAllRepCompanies(): void {
-    for (const c of Object.keys(AllCompanies)) {
-      AllCompanies[c].playerReputation = 0;
+    for (const company of getRecordValues(Companies)) {
+      company.playerReputation = 0;
     }
   }
 
   function tonsOfFavorCompanies(): void {
-    for (const c of Object.keys(AllCompanies)) {
-      AllCompanies[c].favor = bigNumber;
+    for (const company of getRecordValues(Companies)) {
+      company.favor = bigNumber;
     }
   }
 
   function resetAllFavorCompanies(): void {
-    for (const c of Object.keys(AllCompanies)) {
-      AllCompanies[c].favor = 0;
+    for (const company of getRecordValues(Companies)) {
+      company.favor = 0;
     }
   }
 
@@ -83,8 +86,8 @@ export function CompaniesDev(): React.ReactElement {
                 <Typography>Company:</Typography>
               </td>
               <td colSpan={3}>
-                <Select id="dev-companies-dropdown" onChange={setCompanyDropdown} value={company}>
-                  {Object.values(AllCompanies).map((company) => (
+                <Select id="dev-companies-dropdown" onChange={setCompanyDropdown} value={companyName}>
+                  {Object.values(Companies).map((company) => (
                     <MenuItem key={company.name} value={company.name}>
                       {company.name}
                     </MenuItem>

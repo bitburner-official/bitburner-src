@@ -17,7 +17,7 @@ import * as serverMethods from "./PlayerObjectServerMethods";
 import * as workMethods from "./PlayerObjectWorkMethods";
 
 import { setPlayer } from "../../Player";
-import { FactionName, LocationName } from "@enums";
+import { CompanyName, FactionName, JobName, LocationName } from "@enums";
 import { HashManager } from "../../Hacknet/HashManager";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
@@ -26,7 +26,8 @@ import { cyrb53 } from "../../utils/StringHelperFunctions";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { CONSTANTS } from "../../Constants";
 import { Person } from "../Person";
-import { getEnumHelper } from "../../utils/EnumHelper";
+import { isMember } from "../../utils/EnumHelper";
+import { PartialRecord } from "../../Types/Record";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -43,7 +44,7 @@ export class PlayerObject extends Person implements IPlayer {
   hashManager = new HashManager();
   hasTixApiAccess = false;
   hasWseAccount = false;
-  jobs: Record<string, string> = {};
+  jobs: PartialRecord<CompanyName, JobName> = {};
   karma = 0;
   numPeopleKilled = 0;
   location = LocationName.TravelAgency;
@@ -172,11 +173,9 @@ export class PlayerObject extends Person implements IPlayer {
     player.hp = { current: player.hp?.current ?? 10, max: player.hp?.max ?? 10 };
     player.money ??= 0;
     // Just remove from the save file any augs that have invalid name
-    player.augmentations = player.augmentations.filter((ownedAug) =>
-      getEnumHelper("AugmentationName").isMember(ownedAug.name),
-    );
+    player.augmentations = player.augmentations.filter((ownedAug) => isMember("AugmentationName", ownedAug.name));
     player.queuedAugmentations = player.queuedAugmentations.filter((ownedAug) =>
-      getEnumHelper("AugmentationName").isMember(ownedAug.name),
+      isMember("AugmentationName", ownedAug.name),
     );
     player.updateSkillLevels();
     // Converstion code for Player.sourceFiles is here instead of normal save conversion area because it needs
@@ -185,6 +184,12 @@ export class PlayerObject extends Person implements IPlayer {
       // Expect pre-2.3 sourcefile format here.
       type OldSourceFiles = { n: number; lvl: number }[];
       player.sourceFiles = new JSONMap((player.sourceFiles as OldSourceFiles).map(({ n, lvl }) => [n, lvl]));
+    }
+    // Remove any invalid jobs
+    for (const [loadedCompanyName, loadedJobName] of Object.entries(player.jobs)) {
+      if (!isMember("CompanyName", loadedCompanyName) || !isMember("JobName", loadedJobName)) {
+        delete player.jobs[loadedCompanyName as CompanyName];
+      }
     }
     return player;
   }

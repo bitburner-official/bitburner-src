@@ -1,6 +1,6 @@
 import { AugmentationName, CityName, CompletedProgramName, FactionName, LiteratureName } from "@enums";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
-import { Companies, initCompanies } from "./Company/Companies";
+import { Companies } from "./Company/Companies";
 import { resetIndustryResearchTrees } from "./Corporation/data/IndustryData";
 import { Factions } from "./Faction/Factions";
 import { joinFaction } from "./Faction/FactionHelpers";
@@ -71,7 +71,7 @@ export function prestigeAugmentation(): void {
   initForeignServers(Player.getHomeComputer());
 
   // Gain favor for Companies and Factions
-  for (const company of Object.values(Companies)) company.gainFavor();
+  for (const company of Object.values(Companies)) company.prestigeAugmentation();
   for (const faction of Object.values(Factions)) faction.prestigeAugmentation();
 
   // Stop a Terminal action if there is one.
@@ -89,7 +89,6 @@ export function prestigeAugmentation(): void {
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
   Player.hp.current = Player.hp.max;
-  initCompanies();
 
   // Apply entropy from grafting
   Player.applyEntropy(Player.entropy);
@@ -194,7 +193,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   homeComp.cpuCores = 1;
 
   // Reset favor for Companies and Factions
-  for (const company of Object.values(Companies)) company.favor = 0;
+  for (const company of Object.values(Companies)) company.prestigeSourceFile();
   for (const faction of Object.values(Factions)) faction.prestigeSourceFile();
 
   // Stop a Terminal action if there is one
@@ -214,7 +213,6 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
-  initCompanies();
 
   if (Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) {
     homeComp.programs.push(CompletedProgramName.formulas);

@@ -2,6 +2,8 @@ import React from "react";
 
 import { Typography, Table, TableBody, TableCell, TableRow } from "@mui/material";
 
+import { Player } from "@player";
+
 import { CONSTANTS } from "../../../Constants";
 
 import {
@@ -141,8 +143,10 @@ export function EarningsElement(props: IProps): React.ReactElement {
     ];
   }
 
-  if (isSleeveCompanyWork(props.sleeve.currentWork)) {
-    const rates = props.sleeve.currentWork.getGainRates(props.sleeve);
+  companyWork: if (isSleeveCompanyWork(props.sleeve.currentWork)) {
+    const job = Player.jobs[props.sleeve.currentWork.companyName];
+    if (!job) break companyWork;
+    const rates = props.sleeve.currentWork.getGainRates(props.sleeve, job);
     data = [
       [`Money:`, <MoneyRate key="money-rate" money={CYCLES_PER_SEC * rates.money} />],
       [`Hacking Exp:`, `${formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],

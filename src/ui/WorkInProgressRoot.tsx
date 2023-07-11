@@ -411,7 +411,7 @@ export function WorkInProgressRoot(): React.ReactElement {
           cancel: () => Router.toPage(Page.Terminal),
         },
         title:
-          `You cannot work for ${Player.currentWork.companyName || "(Company not found)"} at this time,` +
+          `You cannot work for ${Player.currentWork.companyName} at this time,` +
           " please try again if you think this should have worked",
 
         stopText: "Back to Terminal",
@@ -421,7 +421,8 @@ export function WorkInProgressRoot(): React.ReactElement {
     const companyRep = comp.playerReputation;
 
     const position = Player.jobs[Player.currentWork.companyName];
-    const gains = Player.currentWork.getGainRates();
+    if (!position) return <></>;
+    const gains = Player.currentWork.getGainRates(position);
     workInfo = {
       buttons: {
         cancel: () => {

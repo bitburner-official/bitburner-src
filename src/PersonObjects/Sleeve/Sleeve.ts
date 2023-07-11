@@ -9,18 +9,23 @@
 
 import type { SleevePerson } from "@nsdefs";
 import type { Augmentation } from "../../Augmentation/Augmentation";
-import type { Company } from "../../Company/Company";
-import type { CompanyPosition } from "../../Company/CompanyPosition";
 import type { SleeveWork } from "./Work/Work";
 
 import { Player } from "@player";
 import { Person } from "../Person";
 
-import { Companies } from "../../Company/Companies";
-import { CompanyPositions } from "../../Company/CompanyPositions";
 import { Contracts } from "../../Bladeburner/data/Contracts";
 import { CONSTANTS } from "../../Constants";
-import { ClassType, CityName, CrimeType, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
+import {
+  ClassType,
+  CityName,
+  CrimeType,
+  FactionWorkType,
+  GymType,
+  LocationName,
+  UniversityClassType,
+  CompanyName,
+} from "@enums";
 
 import { Factions } from "../../Faction/Factions";
 
@@ -277,18 +282,11 @@ export class Sleeve extends Person implements SleevePerson {
    * Start work for one of the player's companies
    * Returns boolean indicating success
    */
-  workForCompany(companyName: string): boolean {
-    if (!Companies[companyName] || Player.jobs[companyName] == null) {
-      return false;
-    }
-
-    const company: Company | null = Companies[companyName];
-    const companyPosition: CompanyPosition | null = CompanyPositions[Player.jobs[companyName]];
-    if (company == null) return false;
-    if (companyPosition == null) return false;
+  workForCompany(companyName: CompanyName): boolean {
+    const companyPositionName = Player.jobs[companyName];
+    if (!companyPositionName) return false;
 
     this.startWork(new SleeveCompanyWork(companyName));
-
     return true;
   }
 
