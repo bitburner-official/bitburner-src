@@ -37,7 +37,6 @@ import file34 from "!!raw-loader!./doc/programming/hackingalgorithms.md";
 import file35 from "!!raw-loader!./doc/programming/learn.md";
 import file36 from "!!raw-loader!./doc/programming/remote_api.md";
 
-
 interface Document {
   default: string;
 }
