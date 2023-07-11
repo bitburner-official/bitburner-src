@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import Button from "@mui/material/Button";
-import { MD } from "../../ui/md/md";
+import { MD } from "../../ui/md/MD";
 
 import { getPage } from "./root";
 import { Navigator, useHistory } from "../../ui/React/Documentation";
@@ -40,8 +40,6 @@ export function DocumentationRoot(): React.ReactElement {
     },
   };
 
-  // Reset scroll.
-  useEffect(() => {});
   return (
     <>
       <Button onClick={() => history.pop()}>Back</Button>
