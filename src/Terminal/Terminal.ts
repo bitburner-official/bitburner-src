@@ -13,11 +13,11 @@ import { TextFile } from "../TextFile";
 import { Script } from "../Script/Script";
 import { hasScriptExtension } from "../Paths/ScriptFilePath";
 import { CONSTANTS } from "../Constants";
-import { GetServer, GetAllServers } from "../Server/AllServers";
+import { GetServer } from "../Server/AllServers";
 
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
-import { getServerOnNetwork, processSingleServerGrowth } from "../Server/ServerHelpers";
+import { processSingleServerGrowth } from "../Server/ServerHelpers";
 import { parseCommand, parseCommands } from "./Parser";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
@@ -527,60 +527,6 @@ export class Terminal {
     };
 
     printOutput(root);
-
-    // Map of all servers to keep track of which have been visited
-    // const visited: Record<string, number | undefined> = {};
-    // for (const server of GetAllServers()) {
-    //   visited[server.hostname] = 0;
-    // }
-
-    // const stack: BaseServer[] = [];
-    // const depthQueue: number[] = [0];
-    // const currServ = Player.getCurrentServer();
-    // stack.push(currServ);
-    // while (stack.length != 0) {
-    //   const s = stack.pop();
-    //   if (!s) continue;
-    //   const d = depthQueue.pop();
-    //   if (d === undefined) continue;
-    //   const isHacknet = s instanceof HacknetServer;
-    //   if (!all && s.purchasedByPlayer && s.hostname != "home") {
-    //     continue; // Purchased server
-    //   } else if (visited[s.hostname] || d > depth) {
-    //     continue; // Already visited or out-of-depth
-    //   } else if (!all && isHacknet) {
-    //     continue; // Hacknet Server
-    //   } else {
-    //     visited[s.hostname] = 1;
-    //   }
-    //   for (let i = s.serversOnNetwork.length - 1; i >= 0; --i) {
-    //     const newS = getServerOnNetwork(s, i);
-    //     if (newS === null) continue;
-    //     stack.push(newS);
-    //     depthQueue.push(d + 1);
-    //   }
-    //   if (d == 0) {
-    //     continue;
-    //   } // Don't print current server
-    //   const nbsp = " ";
-    //   const titleDashes = Array((d - 1) * 4 + 1).join(nbsp);
-    //   const extra = d === 1 ? "" : "└ ";
-    //   if (Player.hasProgram(CompletedProgramName.autoLink)) {
-    //     this.append(new Link(titleDashes + extra, s.hostname));
-    //   } else {
-    //     this.print(titleDashes + extra + s.hostname);
-    //   }
-
-    //   const dashes = titleDashes + "| ";
-    //   const ramDashes = titleDashes + "└ ";
-    //   let admin = s.hasAdminRights ? "YES" : "NO";
-    //   if (s instanceof Server) {
-    //     this.print(`${dashes}Root Access: ${admin}, Required hacking skill: ${s.requiredHackingSkill}`);
-    //     this.print(`${dashes}Number of open ports required to NUKE: ${s.numOpenPortsRequired}`);
-    //   }
-    //   this.print(ramDashes + "RAM: " + formatRam(s.maxRam));
-    //   this.print(" ");
-    // }
   }
 
   connectToServer(server: string): void {
