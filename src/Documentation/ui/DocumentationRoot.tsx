@@ -29,7 +29,7 @@ export function DocumentationRoot(): React.ReactElement {
     navigate(relPath: string, external: boolean) {
       const newPath = resolvePath(history.page, relPath);
       if (external) {
-        const url = `https://github.com/bitburner-official/bitburner-src/blob/stable/src/Tutorial/ui/doc/${newPath}`;
+        const url = `https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/ui/doc/${newPath}`;
         window.open(url, "_newtab");
         return;
       }

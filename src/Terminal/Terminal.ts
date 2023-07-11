@@ -482,63 +482,105 @@ export class Terminal {
   }
 
   executeScanAnalyzeCommand(depth = 1, all = false): void {
-    // TODO Using array as stack for now, can make more efficient
-    this.print("~~~~~~~~~~ Beginning scan-analyze ~~~~~~~~~~");
-    this.print(" ");
+    interface Node {
+      hostname: string;
+      children: Node[];
+    }
+
+    const ignoreServer = (s: BaseServer, d: number): boolean =>
+      (!all && s.purchasedByPlayer && s.hostname != "home") || d > depth || (!all && s instanceof HacknetServer);
+
+    const makeNode = (parent: string, s: BaseServer, d = 1): Node => ({
+      hostname: s.hostname,
+      children: s.serversOnNetwork
+        .filter((h) => h != parent)
+        .map((s) => GetServer(s))
+        .filter((v): v is BaseServer => !!v)
+        .filter((v) => !ignoreServer(v, d))
+        .map((h) => makeNode(s.hostname, h, d + 1)),
+    });
+
+    const root = makeNode(Player.getCurrentServer().hostname, Player.getCurrentServer());
+
+    const printOutput = (node: Node, prefix = ["  "], last = true) => {
+      const titlePrefix = prefix.slice(0, prefix.length - 1).join("") + (last ? "┕ " : "┣ ");
+      const infoPrefix = prefix.join("") + (node.children.length > 0 ? "┃   " : "    ");
+      if (Player.hasProgram(CompletedProgramName.autoLink)) {
+        this.append(new Link(titlePrefix, node.hostname));
+      } else {
+        this.print(titlePrefix + node.hostname + "\n");
+      }
+
+      const server = GetServer(node.hostname);
+      if (!server) return;
+      if (server instanceof Server) {
+        const hasRoot = server.hasAdminRights ? "YES" : "NO";
+        this.print(
+          `${infoPrefix}Root Access: ${hasRoot}, Required hacking skill: ${server.requiredHackingSkill}` + "\n",
+        );
+        this.print(`${infoPrefix}Number of open ports required to NUKE: ${server.numOpenPortsRequired}` + "\n");
+      }
+      this.print(`${infoPrefix}RAM: ${formatRam(server.maxRam)}` + "\n");
+      node.children.forEach((n, i) =>
+        printOutput(n, [...prefix, i === node.children.length - 1 ? "  " : "┃ "], i === node.children.length - 1),
+      );
+    };
+
+    printOutput(root);
 
     // Map of all servers to keep track of which have been visited
-    const visited: Record<string, number | undefined> = {};
-    for (const server of GetAllServers()) {
-      visited[server.hostname] = 0;
-    }
+    // const visited: Record<string, number | undefined> = {};
+    // for (const server of GetAllServers()) {
+    //   visited[server.hostname] = 0;
+    // }
 
-    const stack: BaseServer[] = [];
-    const depthQueue: number[] = [0];
-    const currServ = Player.getCurrentServer();
-    stack.push(currServ);
-    while (stack.length != 0) {
-      const s = stack.pop();
-      if (!s) continue;
-      const d = depthQueue.pop();
-      if (d === undefined) continue;
-      const isHacknet = s instanceof HacknetServer;
-      if (!all && s.purchasedByPlayer && s.hostname != "home") {
-        continue; // Purchased server
-      } else if (visited[s.hostname] || d > depth) {
-        continue; // Already visited or out-of-depth
-      } else if (!all && isHacknet) {
-        continue; // Hacknet Server
-      } else {
-        visited[s.hostname] = 1;
-      }
-      for (let i = s.serversOnNetwork.length - 1; i >= 0; --i) {
-        const newS = getServerOnNetwork(s, i);
-        if (newS === null) continue;
-        stack.push(newS);
-        depthQueue.push(d + 1);
-      }
-      if (d == 0) {
-        continue;
-      } // Don't print current server
-      const titleDashes = Array((d - 1) * 4 + 1).join("-");
-      if (Player.hasProgram(CompletedProgramName.autoLink)) {
-        this.append(new Link(titleDashes, s.hostname));
-      } else {
-        this.print(titleDashes + s.hostname);
-      }
+    // const stack: BaseServer[] = [];
+    // const depthQueue: number[] = [0];
+    // const currServ = Player.getCurrentServer();
+    // stack.push(currServ);
+    // while (stack.length != 0) {
+    //   const s = stack.pop();
+    //   if (!s) continue;
+    //   const d = depthQueue.pop();
+    //   if (d === undefined) continue;
+    //   const isHacknet = s instanceof HacknetServer;
+    //   if (!all && s.purchasedByPlayer && s.hostname != "home") {
+    //     continue; // Purchased server
+    //   } else if (visited[s.hostname] || d > depth) {
+    //     continue; // Already visited or out-of-depth
+    //   } else if (!all && isHacknet) {
+    //     continue; // Hacknet Server
+    //   } else {
+    //     visited[s.hostname] = 1;
+    //   }
+    //   for (let i = s.serversOnNetwork.length - 1; i >= 0; --i) {
+    //     const newS = getServerOnNetwork(s, i);
+    //     if (newS === null) continue;
+    //     stack.push(newS);
+    //     depthQueue.push(d + 1);
+    //   }
+    //   if (d == 0) {
+    //     continue;
+    //   } // Don't print current server
+    //   const nbsp = " ";
+    //   const titleDashes = Array((d - 1) * 4 + 1).join(nbsp);
+    //   const extra = d === 1 ? "" : "└ ";
+    //   if (Player.hasProgram(CompletedProgramName.autoLink)) {
+    //     this.append(new Link(titleDashes + extra, s.hostname));
+    //   } else {
+    //     this.print(titleDashes + extra + s.hostname);
+    //   }
 
-      const dashes = titleDashes + "--";
-      let c = "NO";
-      if (s.hasAdminRights) {
-        c = "YES";
-      }
-      if (s instanceof Server) {
-        this.print(`${dashes}Root Access: ${c}, Required hacking skill: ${s.requiredHackingSkill}`);
-        this.print(`${dashes}Number of open ports required to NUKE: ${s.numOpenPortsRequired}`);
-      }
-      this.print(dashes + "RAM: " + formatRam(s.maxRam));
-      this.print(" ");
-    }
+    //   const dashes = titleDashes + "| ";
+    //   const ramDashes = titleDashes + "└ ";
+    //   let admin = s.hasAdminRights ? "YES" : "NO";
+    //   if (s instanceof Server) {
+    //     this.print(`${dashes}Root Access: ${admin}, Required hacking skill: ${s.requiredHackingSkill}`);
+    //     this.print(`${dashes}Number of open ports required to NUKE: ${s.numOpenPortsRequired}`);
+    //   }
+    //   this.print(ramDashes + "RAM: " + formatRam(s.maxRam));
+    //   this.print(" ");
+    // }
   }
 
   connectToServer(server: string): void {

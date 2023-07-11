@@ -189,62 +189,54 @@ This will show detailed information about some [Servers](../basic/servers.md) on
 Here's what mine showed at the time I made this:
 
     [home ~]> scan-analyze 2
-    ~~~~~~~~~~ Beginning scan-analyze ~~~~~~~~~~
-
-    n00dles
-    --Root Access: YES, Required hacking skill: 1
-    --Number of open ports required to NUKE: 0
-    --RAM: 4.00GB
-
-    ----zer0
-    ------Root Access: NO, Required hacking skill: 75
-    ------Number of open ports required to NUKE: 1
-    ------RAM: 32.00GB
-
-    foodnstuff
-    --Root Access: NO, Required hacking skill: 1
-    --Number of open ports required to NUKE: 0
-    --RAM: 16.00GB
-
-    sigma-cosmetics
-    --Root Access: NO, Required hacking skill: 5
-    --Number of open ports required to NUKE: 0
-    --RAM: 16.00GB
-
-    joesguns
-    --Root Access: NO, Required hacking skill: 10
-    --Number of open ports required to NUKE: 0
-    --RAM: 16.00GB
-
-    ----max-hardware
-    ------Root Access: NO, Required hacking skill: 80
-    ------Number of open ports required to NUKE: 1
-    ------RAM: 32.00GB
-
-    ----CSEC
-    ------Root Access: NO, Required hacking skill: 54
-    ------Number of open ports required to NUKE: 1
-    ------RAM: 8.00GB
-
-    hong-fang-tea
-    --Root Access: NO, Required hacking skill: 30
-    --Number of open ports required to NUKE: 0
-    --RAM: 16.00GB
-
-    ----nectar-net
-    ------Root Access: NO, Required hacking skill: 20
-    ------Number of open ports required to NUKE: 0
-    ------RAM: 16.00GB
-
-    harakiri-sushi
-    --Root Access: NO, Required hacking skill: 40
-    --Number of open ports required to NUKE: 0
-    --RAM: 16.00GB
-
-    iron-gym
-    --Root Access: NO, Required hacking skill: 100
-    --Number of open ports required to NUKE: 1
-    --RAM: 32.00GB
+    ┕ home
+      ┃   Root Access: YES, Required hacking skill: 1
+      ┃   Number of open ports required to NUKE: 5
+      ┃   RAM: 8.00GB
+      ┣ n00dles
+      ┃ ┃   Root Access: YES, Required hacking skill: 1
+      ┃ ┃   Number of open ports required to NUKE: 0
+      ┃ ┃   RAM: 4.00GB
+      ┃ ┕ nectar-net
+      ┃       Root Access: NO, Required hacking skill: 20
+      ┃       Number of open ports required to NUKE: 0
+      ┃       RAM: 16.00GB
+      ┣ foodnstuff
+      ┃ ┃   Root Access: NO, Required hacking skill: 1
+      ┃ ┃   Number of open ports required to NUKE: 0
+      ┃ ┃   RAM: 16.00GB
+      ┃ ┕ zer0
+      ┃       Root Access: NO, Required hacking skill: 75
+      ┃       Number of open ports required to NUKE: 1
+      ┃       RAM: 32.00GB
+      ┣ sigma-cosmetics
+      ┃ ┃   Root Access: NO, Required hacking skill: 5
+      ┃ ┃   Number of open ports required to NUKE: 0
+      ┃ ┃   RAM: 16.00GB
+      ┃ ┕ max-hardware
+      ┃       Root Access: NO, Required hacking skill: 80
+      ┃       Number of open ports required to NUKE: 1
+      ┃       RAM: 32.00GB
+      ┣ joesguns
+      ┃     Root Access: NO, Required hacking skill: 10
+      ┃     Number of open ports required to NUKE: 0
+      ┃     RAM: 16.00GB
+      ┣ hong-fang-tea
+      ┃     Root Access: NO, Required hacking skill: 30
+      ┃     Number of open ports required to NUKE: 0
+      ┃     RAM: 16.00GB
+      ┣ harakiri-sushi
+      ┃     Root Access: NO, Required hacking skill: 40
+      ┃     Number of open ports required to NUKE: 0
+      ┃     RAM: 16.00GB
+      ┕ iron-gym
+        ┃   Root Access: NO, Required hacking skill: 100
+        ┃   Number of open ports required to NUKE: 1
+        ┃   RAM: 32.00GB
+        ┕ CSEC
+                Root Access: NO, Required hacking skill: 55
+              Number of open ports required to NUKE: 1
+              RAM: 8.00GB
 
 Take note of the following servers:
 
@@ -597,20 +589,22 @@ This will show you the network for all [Servers](../basic/servers.md) that are u
 your home computer. Remember that the network is randomly generated so it'll look
 different for everyone. Here's the relevant part of my `scan-analyze` results:
 
-    >iron-gym
-    --Root Access: NO, Required hacking skill: 100
-    --Number of open ports required to NUKE: 1
-    --RAM: 32
-
-    ---->zer0
-    ------Root Access: NO, Required hacking skill: 75
-    ------Number of open ports required to NUKE: 1
-    ------RAM: 32
-
-    ---->CSEC
-    ------Root Access: NO, Required hacking skill: 54
-    ------Number of open ports required to NUKE: 1
-    ------RAM: 8
+    ┕ home
+      ┃   Root Access: YES, Required hacking skill: 1
+      ┃   Number of open ports required to NUKE: 5
+      ┃   RAM: 8.00GB
+      ┣ harakiri-sushi
+      ┃     Root Access: NO, Required hacking skill: 40
+      ┃     Number of open ports required to NUKE: 0
+      ┃     RAM: 16.00GB
+      ┕ iron-gym
+        ┃   Root Access: NO, Required hacking skill: 100
+        ┃   Number of open ports required to NUKE: 1
+        ┃   RAM: 32.00GB
+        ┕ CSEC
+                  Root Access: NO, Required hacking skill: 55
+              Number of open ports required to NUKE: 1
+              RAM: 8.00GB
 
 This tells me that I can reach `CSEC` by going through `iron-gym`:
 

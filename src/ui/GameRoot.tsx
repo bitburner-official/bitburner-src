@@ -37,7 +37,7 @@ import { ProgramsRoot } from "../Programs/ui/ProgramsRoot";
 import { ScriptEditorRoot } from "../ScriptEditor/ui/ScriptEditorRoot";
 import { MilestonesRoot } from "../Milestones/ui/MilestonesRoot";
 import { TerminalRoot } from "../Terminal/ui/TerminalRoot";
-import { DocumentationRoot } from "../Tutorial/ui/DocumentationRoot";
+import { DocumentationRoot } from "../Documentation/ui/DocumentationRoot";
 import { ActiveScriptsRoot } from "./ActiveScripts/ActiveScriptsRoot";
 import { FactionsRoot } from "../Faction/ui/FactionsRoot";
 import { FactionRoot } from "../Faction/ui/FactionRoot";
