@@ -33,7 +33,7 @@ export const A = (props: React.PropsWithChildren<{ href?: string }>): React.Reac
 
   if (isSpoiler(ref)) return <CorruptableText content="UNKNOWN" />;
   return (
-    <Link classes={{ root: classes.link }} onClick={onClick} component="button">
+    <Link classes={{ root: classes.link }} onClick={onClick} component="button" variant="body1" fontSize="inherit">
       {props.children}
     </Link>
   );
