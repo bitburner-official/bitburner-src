@@ -598,8 +598,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         );
       return office.autoAssignJob(job, amount);
     },
-    hireEmployee: (ctx) => (_divisionName, _cityName, _position?) => {
+    hireEmployee: (ctx) => (_divisionName, _cityName, _position) => {
       checkAccess(ctx, CorpUnlockName.OfficeAPI);
+      _position ??= CorpEmployeeJob.Unassigned;
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const position = getEnumHelper("CorpEmployeeJob").nsGetMember(ctx, _position, "position");
