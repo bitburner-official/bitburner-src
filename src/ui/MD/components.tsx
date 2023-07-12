@@ -50,8 +50,8 @@ export const h6 = (props: React.PropsWithChildren<object>): React.ReactElement =
 );
 
 export const p = (props: React.PropsWithChildren<object>): React.ReactElement => (
-  <Typography sx={{mb:1}}>{props.children}</Typography>
-)
+  <Typography sx={{ mb: 1 }}>{props.children}</Typography>
+);
 
 export const li = (props: React.PropsWithChildren<LiProps>): React.ReactElement => {
   const prefix = props.ordered ? `${props.index + 1}. ` : "· ";
