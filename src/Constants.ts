@@ -231,31 +231,38 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3.2 dev - Changelog updated 7/7/2023
----------------------------------------
+v2.3.2 dev - Changelog updated 7/12/2023
+----------------------------------------
 
 Also see 2.3.1 release notes: https://github.com/bitburner-official/bitburner-src/releases/tag/v2.3.1
 
 GENERAL / MISC:
-* Syntax errors now show details in the script editor and when attempting to run the script (@bezrodnov)
-* Fix issue that could cause a script's ram to free up twice if it was killed during its own atExit (@d0sboots)
+
+* Added documentation browser ingame. This is the new primary location for game documentation. (@hydroflame)
+* Syntax errors now show helpful details at script editor / terminal (@bezrodnov)
+* A script's ram will no longer free up twice if it was killed during its own atExit (@d0sboots)
+* Ram calculation should now be able to handle barrel files and renamed exports. (@G4mingJon4s)
 * ns.printRaw and ns.tprintRaw are now documented functions. (@Snarling)
-* "Back" button from faction augs page now navigates to correct previous page in all cases (@bezrodnov)
+* "Back" button from faction augs leads to previous page, instead of always to main faction screen (@bezrodnov)
 * Addressed an issue where money hacked was being Math.floored incorrectly (@MeggalBozale)
 * Aliases that reference their own name stop expanding after first replacement. (@NilsRamstoeck)
 * Hitting enter at the terminal with nothing typed in will print out an empty line (@rqzcho)
-* Fixed a bug where dragging a tail window titlebar would sometimes scroll the tail window content (@bezrodnov)
+* Fixed a bug where dragging a tail window titlebar could also scroll the tail window content (@bezrodnov)
 * Show more info in the savegame comparison tool (@bezrodnov)
 * Fixed Script Editor indent option having backwards behavior. (@Snarling)
 * Internal code refactors (@bezrodnov, @Snarling)
-* Documentation fixes (@tdnzr, @amuck-gorilla, @rodneygauna, @Snarling)
+* Documentation fixes (@tdnzr, @amuck-gorilla, @rodneygauna, @hydroflame, @Snarling)
 * Nerf noodle bar
 
 SPOILER SECTIONS:
 
+------------
+
 CORPORATION:
 
-* Fixed an issue where invalid materials for a division could be bought through the API. (@Snarling)
-* Added investment amount info to return value for getProduct (@Snarling)
+* ns.corporation.hireEmployee now actually defaults to Unassigned instead of failing. (@Snarling)
+* ns.corporation.getProduct now provides investment amounts (@Snarling)
+* Invalid materials for a division can no longer be bought through the API. (@Snarling)
+* Fixed a React error that could occur if a division had invalid materials. (@Snarling)
 `,
 };
