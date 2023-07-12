@@ -2,7 +2,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import { TableHead, Typography } from "@mui/material";
 import remarkGfm from "remark-gfm";
-import { h1, h2, h3, h4, h5, h6, li, Td, Th, table, tr, Blockquote } from "./components";
+import { h1, h2, h3, h4, h5, h6, li, Td, Th, table, tr, Blockquote, p } from "./components";
 import { code, Pre } from "./code";
 import { A } from "./a";
 
@@ -17,7 +17,7 @@ export function MD(props: { md: string }): React.ReactElement {
         h5: h5,
         h6: h6,
         pre: Pre,
-        p: Typography,
+        p: p,
         code: code,
         li: li,
 

@@ -1,7 +1,7 @@
 import React from "react";
 
 import Button from "@mui/material/Button";
-import { MD } from "../../ui/Markdown/MD";
+import { MD } from "../../ui/MD/MD";
 
 import { getPage } from "./root";
 import { Navigator, useHistory } from "../../ui/React/Documentation";
