@@ -97,8 +97,8 @@ export function TerminalRoot(): React.ReactElement {
                 </Typography>
               )}
               {item instanceof Link && (
-                <Typography>
-                  {item.dashes + "> "}
+                <Typography classes={{ root: classes.preformatted }}>
+                  {item.dashes}
                   <MuiLink onClick={() => Terminal.connectToServer(item.hostname)}>{item.hostname}</MuiLink>
                 </Typography>
               )}

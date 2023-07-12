@@ -129,7 +129,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       flash = Page.City;
       break;
     case iTutorialSteps.WorldDescription:
-      flash = Page.Tutorial;
+      flash = Page.Documentation;
       break;
   }
 
@@ -236,7 +236,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         clickPage(Page.Augmentations);
       } else if (event.code === KEYCODE.U && event.altKey) {
         event.preventDefault();
-        clickPage(Page.Tutorial);
+        clickPage(Page.Documentation);
       } else if (event.code === KEYCODE.O && event.altKey) {
         event.preventDefault();
         clickPage(Page.Options);
@@ -363,7 +363,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
           classes={classes}
           items={[
             { key_: Page.Milestones, icon: CheckIcon },
-            { key_: Page.Tutorial, icon: HelpIcon },
+            { key_: Page.Documentation, icon: HelpIcon },
             { key_: Page.Achievements, icon: EmojiEventsIcon },
             { key_: Page.Options, icon: SettingsIcon },
             process.env.NODE_ENV === "development" && { key_: Page.DevMenu, icon: DeveloperBoardIcon },

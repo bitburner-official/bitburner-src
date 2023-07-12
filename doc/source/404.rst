@@ -1,6 +1,0 @@
-Hi there, hello
-===============
-
-It looks like you found a page that doesn't exist!
-
-If you're looking for documentation of the Netscript API, it moved  `here <https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md>`_.
