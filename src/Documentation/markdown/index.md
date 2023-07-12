@@ -40,7 +40,7 @@
 - [Learn to program](programming/learn.md)
 - [Remote API](programming/remote_api.md)
 - [Game Frozen or Stuck?](programming/game_frozen.md)
-- [Tools & Resources](tools_and_resources.md)
+- [Tools & Resources](help/tools_and_resources.md)
 - [Changelog](changelog.md)
 
 ## Migration
