@@ -13,10 +13,5 @@ mv markdown/ src/Documentation/markdown/netscriptDefinitions
 rm input/bitburner.api.json
 rm -r input
 
-# Prevent git from committing every file due to different EOF markers
-# Even though this is a git add, the effect is removing unchanged files from the commit.
-git add src/Documentation/markdown/api
-git add tsdoc-metadata.json
-
 # Run the autogenerator for ingame docs.
 node tools/bundle-doc/index.js
