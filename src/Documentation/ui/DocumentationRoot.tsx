@@ -6,29 +6,18 @@ import { MD } from "../../ui/MD/MD";
 import { getPage } from "./root";
 import { Navigator, useHistory } from "../../ui/React/Documentation";
 import { CONSTANTS } from "../../Constants";
-
-const resolveRelativePath = (folder: string, relative: string): string => {
-  const noLastSlash = folder.endsWith("/") ? folder.slice(0, folder.length - 1) : folder;
-  const lastIndex = noLastSlash.lastIndexOf("/");
-  const prefix = lastIndex === -1 ? "" : noLastSlash.slice(0, lastIndex + 1);
-  const suffix = relative.slice("../".length);
-  return prefix + suffix;
-};
-
-const resolvePath = (currentPath: string, newPath: string): string => {
-  const lastIndex = currentPath.lastIndexOf("/");
-  const folder = lastIndex === -1 ? "" : currentPath.slice(0, lastIndex + 1);
-  if (!newPath.startsWith("../")) return folder + newPath;
-
-  return resolveRelativePath(folder, newPath);
-};
+import { resolveFilePath } from "../../Paths/FilePath";
 
 export function DocumentationRoot(): React.ReactElement {
   const history = useHistory();
   const page = getPage(history.page);
   const navigator = {
     navigate(relPath: string, external: boolean) {
-      const newPath = resolvePath(history.page, relPath);
+      const newPath = resolveFilePath("./" + relPath, history.page);
+      if (!newPath) {
+        console.error(`Bad path ${relPath} from ${history.page} while navigating docs.`);
+        return;
+      }
       if (external) {
         const ver = CONSTANTS.isDevBranch ? "dev" : "stable";
         const url = `https://github.com/bitburner-official/bitburner-src/blob/${ver}/src/Documentation/ui/doc/${newPath}`;
