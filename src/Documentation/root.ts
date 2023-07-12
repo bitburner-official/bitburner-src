@@ -1,4 +1,4 @@
-import index from "!!raw-loader!./doc/index.md";
+import index from "!!raw-loader!./markdown/index.md";
 import { AllPages } from "./pages";
 
 export type Document = typeof index;

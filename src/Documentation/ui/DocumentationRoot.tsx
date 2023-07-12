@@ -3,7 +3,7 @@ import React from "react";
 import Button from "@mui/material/Button";
 import { MD } from "../../ui/MD/MD";
 
-import { getPage } from "./root";
+import { getPage } from "../root";
 import { Navigator, useHistory } from "../../ui/React/Documentation";
 
 const resolveRelativePath = (folder: string, relative: string): string => {
@@ -29,7 +29,7 @@ export function DocumentationRoot(): React.ReactElement {
     navigate(relPath: string, external: boolean) {
       const newPath = resolvePath(history.page, relPath);
       if (external) {
-        const url = `https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/ui/doc/${newPath}`;
+        const url = `https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/markdown/${newPath}`;
         window.open(url, "_newtab");
         return;
       }

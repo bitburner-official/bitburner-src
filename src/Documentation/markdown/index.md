@@ -36,6 +36,7 @@
 
 ## Resources
 
+- [Technical API Documentation](netscriptDefinitions/bitburner.ns.md)
 - [Learn to program](programming/learn.md)
 - [Remote API](programming/remote_api.md)
 - [Game Frozen or Stuck?](programming/game_frozen.md)
