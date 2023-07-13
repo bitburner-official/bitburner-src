@@ -187,7 +187,7 @@ const singularity = {
   getCrimeChance: SF4Cost(RamCostConstants.SingularityFn3),
   getCrimeStats: SF4Cost(RamCostConstants.SingularityFn3),
   getOwnedAugmentations: SF4Cost(RamCostConstants.SingularityFn3),
-  getOwnedSourceFiles: SF4Cost(RamCostConstants.SingularityFn3),
+  getOwnedSourceFiles: RamCostConstants.SingularityFn3, // Intentionally not SF4Cost, since it doesn't require SF4
   getAugmentationsFromFaction: SF4Cost(RamCostConstants.SingularityFn3),
   getAugmentationPrereq: SF4Cost(RamCostConstants.SingularityFn3),
   getAugmentationPrice: SF4Cost(RamCostConstants.SingularityFn3 / 2),
