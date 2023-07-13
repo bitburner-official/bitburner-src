@@ -503,7 +503,7 @@ export class Terminal {
     const root = makeNode(Player.getCurrentServer().hostname, Player.getCurrentServer());
 
     const printOutput = (node: Node, prefix = ["  "], last = true) => {
-      const titlePrefix = prefix.slice(0, prefix.length - 1).join("") + (last ? "┕ " : "┣ ");
+      const titlePrefix = prefix.slice(0, prefix.length - 1).join("") + (last ? "┗ " : "┣ ");
       const infoPrefix = prefix.join("") + (node.children.length > 0 ? "┃   " : "    ");
       if (Player.hasProgram(CompletedProgramName.autoLink)) {
         this.append(new Link(titlePrefix, node.hostname));
