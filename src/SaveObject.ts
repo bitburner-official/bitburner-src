@@ -38,6 +38,7 @@ import { Corporation } from "./Corporation/Corporation";
 import { Terminal } from "./Terminal";
 import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
+import { loadMyrian, myrian } from "./Myrian/Helpers";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -85,6 +86,7 @@ class BitburnerSaveObject {
   AllGangsSave = "";
   LastExportBonus = "0";
   StaneksGiftSave = "";
+  myrianSave = "";
 
   getSaveString(forceExcludeRunningScripts = false): string {
     this.PlayerSave = JSON.stringify(Player);
@@ -104,6 +106,7 @@ class BitburnerSaveObject {
     this.VersionSave = JSON.stringify(CONSTANTS.VersionNumber);
     this.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
     this.StaneksGiftSave = JSON.stringify(staneksGift);
+    this.myrianSave = JSON.stringify(myrian);
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
 
@@ -716,6 +719,12 @@ function loadGame(saveString: string): boolean {
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave);
 
+  if (Object.hasOwn(saveObj, "myrianSave")) {
+    loadMyrian(saveObj.myrianSave);
+  } else {
+    console.warn(`Could not load Staneks Gift from save`);
+    loadMyrian("");
+  }
   if (Object.hasOwn(saveObj, "StaneksGiftSave")) {
     loadStaneksGift(saveObj.StaneksGiftSave);
   } else {
@@ -811,9 +820,9 @@ function createNewUpdateText() {
     () =>
       dialogBoxCreate(
         "New update!\n" +
-        "Please report any bugs/issues through the GitHub repository " +
-        "or the Bitburner subreddit (reddit.com/r/bitburner).\n\n" +
-        CONSTANTS.LatestUpdate,
+          "Please report any bugs/issues through the GitHub repository " +
+          "or the Bitburner subreddit (reddit.com/r/bitburner).\n\n" +
+          CONSTANTS.LatestUpdate,
       ),
     1000,
   );

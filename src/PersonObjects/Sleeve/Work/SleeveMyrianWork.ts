@@ -1,29 +1,28 @@
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { Work, WorkType } from "./Work";
-import { calculateIntelligenceBonus } from "../../formulas/intelligence";
+import { SleeveWork, SleeveWorkClass, SleeveWorkType } from "./Work";
 
-export const isSleeveMyrianWork = (w: Work | null): w is SleeveMyrianWork =>
-    w !== null && w.type === WorkType.MYRIAN;
+export const isSleeveMyrianWork = (w: SleeveWork | null): w is SleeveMyrianWork =>
+  w !== null && w.type === SleeveWorkType.MYRIAN;
 
-export class SleeveMyrianWork extends Work {
-    type: WorkType.MYRIAN = WorkType.MYRIAN;
+export class SleeveMyrianWork extends SleeveWorkClass {
+  type: SleeveWorkType.MYRIAN = SleeveWorkType.MYRIAN;
 
-    process(sleeve: Sleeve, cycles: number) { }
+  process(sleeve: Sleeve, cycles: number) {}
 
-    APICopy() {
-        return { type: WorkType.MYRIAN as "MYRIAN" };
-    }
+  APICopy() {
+    return { type: SleeveWorkType.MYRIAN as "MYRIAN" };
+  }
 
-    /** Serialize the current object to a JSON save state. */
-    toJSON(): IReviverValue {
-        return Generic_toJSON("SleeveRecoveryWork", this);
-    }
+  /** Serialize the current object to a JSON save state. */
+  toJSON(): IReviverValue {
+    return Generic_toJSON("SleeveRecoveryWork", this);
+  }
 
-    /** Initializes a RecoveryWork object from a JSON save state. */
-    static fromJSON(value: IReviverValue): SleeveMyrianWork {
-        return Generic_fromJSON(SleeveMyrianWork, value.data);
-    }
+  /** Initializes a RecoveryWork object from a JSON save state. */
+  static fromJSON(value: IReviverValue): SleeveMyrianWork {
+    return Generic_fromJSON(SleeveMyrianWork, value.data);
+  }
 }
 
 constructorsForReviver.SleeveMyrianWork = SleeveMyrianWork;

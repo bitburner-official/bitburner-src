@@ -217,7 +217,7 @@ const tasks: {
   },
   ["In The Myrian"]: (): ITaskDetails => {
     return { first: ["------"], second: () => ["------"] };
-  }
+  },
 };
 
 const canDo: {
@@ -243,7 +243,7 @@ const canDo: {
   "Perform Bladeburner Actions": () => !!Player.bladeburner,
   "Shock Recovery": (sleeve: Sleeve) => sleeve.shock > 0,
   Synchronize: (sleeve: Sleeve) => sleeve.sync < 100,
-  ["In The Myrian"]: (sleeve: Sleeve) => true,
+  ["In The Myrian"]: () => true,
 };
 
 function getABC(sleeve: Sleeve): [string, string, string] {
@@ -285,7 +285,7 @@ function getABC(sleeve: Sleeve): [string, string, string] {
       return ["Shock Recovery", "------", "------"];
     case SleeveWorkType.SYNCHRO:
       return ["Synchronize", "------", "------"];
-    case WorkType.MYRIAN:
+    case SleeveWorkType.MYRIAN:
       return ["In The Myrian", "------", "------"];
   }
 }

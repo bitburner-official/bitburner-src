@@ -326,15 +326,15 @@ const stanek = {
 } as const;
 
 const myr = {
-  ianInteract: 5.9,
+  ianUse: 5.9,
   ianMove: 3.4,
   ianGetTask: 1.1,
   ianCancelTask: 1.2,
   ianEnter: 0.2,
   ianLeave: 0.2,
-  ianBuild: 4.1,
+  ianDeploy: 4.1,
   ianApplyPowerup: 10.9,
-}
+};
 
 // UI API
 const ui = {

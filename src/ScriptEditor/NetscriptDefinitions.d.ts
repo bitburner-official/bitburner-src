@@ -2719,90 +2719,82 @@ export interface Hacknet {
  */
 export interface Myr {
   /**
-  * Interact with an object in The Myrian.
-  * @remarks
-  f
-  *
-  * The effect is different depending on the object.
-  * Interacting with an enemy will attack it.
-  * With a resource node will mine it.
-  * With a power up will collect it.
-  * With a rock will try to break it.
-  *
-  * @returns Amount of milliseconds the operation will take.
-  */
-  ianInteract(sleeveId: number, x: number, y: number): number;
+   * Interact with an object in The Myrian.
+   * @remarks
+   *
+   * The effect is different depending on the object.
+   * Interacting with an enemy will attack it.
+   * With a resource node will mine it.
+   * With a power up will collect it.
+   * With a rock will try to break it.
+   *
+   * @returns Amount of milliseconds the operation will take.
+   */
+  ianUse(sleeveId: number, x: number, y: number): number;
 
   /**
-  * Move a sleeve in the Myrian.
-  * @remarks
-  f
-  *
-  * The target tile must be 1 tile away from the sleeves current tile.
-  *
-  * @returns Amount of milliseconds the operation will take.
-  */
-  ianMove(sleeveId: number, x: number, y: number): number;
+   * Move a sleeve in the Myrian.
+   * @remarks
+   *
+   * The target tile must be 1 tile away from the sleeves current tile.
+   *
+   * @returns Amount of milliseconds the operation will take.
+   */
+  ianMove(sleeveId: number, x: number, y: number): Promise<void>;
 
   /**
-  * Get that sleeves current task in the Myrian.
-  * @remarks
-  f
-  *
-  *
-  * @returns The task currently being performed.
-  */
+   * Get that sleeves current task in the Myrian.
+   * @remarks
+   *
+   *
+   * @returns The task currently being performed.
+   */
   ianGetTask(sleeveId): any;
 
   /**
-  * Cancel a sleeves current Myrian task.
-  * @remarks
-  f
-  *
-  * @returns true if a task was cancelled.
-  */
+   * Cancel a sleeves current Myrian task.
+   * @remarks
+   *
+   * @returns true if a task was cancelled.
+   */
   ianCancelTask(sleeveId): boolean;
 
   /**
-  * Makes the player or a sleeve enter The Myrian.
-  * @remarks
-  f
-  *
-  * @returns true if the person is now in The Myrian.
-  */
+   * Makes the player or a sleeve enter The Myrian.
+   * @remarks
+   *
+   * @returns true if the person is now in The Myrian.
+   */
   ianEnter(sleeveId?: number): boolean;
 
   /**
-  * Makes the player or a sleeve leave The Myrian.
-  * @remarks
-  f
-  *
-  * Sleeves must be 1 tile away from the core.
-  * 
-  * @returns true if the person is now in the simulated world.
-  */
+   * Makes the player or a sleeve leave The Myrian.
+   * @remarks
+   *
+   * Sleeves must be 1 tile away from the core.
+   *
+   * @returns true if the person is now in the simulated world.
+   */
   ianLeave(sleeveId?: number): boolean;
 
   /**
-  * Build an entity in The Myrian.
-  * @remarks
-  f
-  *
-  * Sleeves must be 1 tile away from the target tile and the player must have enough resources to build the entity.
-  * 
-  * @returns The amount of milliseconds needed to complete the operation.  or -1 if failed.
-  */
-  ianBuild(sleeveId: number, buildingId: number, x: number, y: number): number;
+   * Deploy an entity in The Myrian.
+   * @remarks
+   *
+   * Sleeves must be 1 tile away from the target tile and the player must have enough resources to build the entity.
+   *
+   * @returns The amount of milliseconds needed to complete the operation.  or -1 if failed.
+   */
+  ianDeploy(sleeveId: number, deploymentId: number, x: number, y: number): number;
 
   /**
-  * Apply a Myrian powerup to a sleeve.
-  * @remarks
-  f
-  *
-  * Must have at least 1 powerup to apply.
-  * 
-  * @returns True if the powerup was applied.
-  */
+   * Apply a Myrian powerup to a sleeve.
+   * @remarks
+   *
+   * Must have at least 1 powerup to apply.
+   *
+   * @returns True if the powerup was applied.
+   */
   ianApplyPowerup(sleeveId: number, stat: string): boolean;
 }
 

@@ -113,7 +113,7 @@ export let Router: IRouter = {
   },
 };
 
-function determineStartPage(): Page {
+function determineStartPage() {
   return Page.Myrian; // WRONG
   if (RecoveryMode) return Page.Recovery;
   if (Player.currentWork !== null) return Page.Work;

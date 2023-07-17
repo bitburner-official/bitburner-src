@@ -39,6 +39,7 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"; // Achievements
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PublicIcon from "@mui/icons-material/Public";
 import LiveHelpIcon from "@mui/icons-material/LiveHelp";
+import BrokenImageIcon from "@mui/icons-material/BrokenImage";
 
 import { Router } from "../../ui/GameRoot";
 import { Page, isSimplePage } from "../../ui/Router";
@@ -350,6 +351,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canBladeburner && { key_: Page.Bladeburner, icon: FormatBoldIcon },
             canCorporation && { key_: Page.Corporation, icon: BusinessIcon },
             canGang && { key_: Page.Gang, icon: SportsMmaIcon },
+            { key_: Page.Myrian, icon: BrokenImageIcon },
           ]}
         />
         <Divider />
