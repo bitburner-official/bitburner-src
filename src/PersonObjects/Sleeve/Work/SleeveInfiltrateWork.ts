@@ -1,16 +1,16 @@
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { Work, WorkType } from "./Work";
+import { SleeveWorkClass, SleeveWorkType } from "./Work";
 import { CONSTANTS } from "../../../Constants";
 
 const infiltrateCycles = 60000 / CONSTANTS.MilliPerCycle;
 
-export const isSleeveInfiltrateWork = (w: Work | null): w is SleeveInfiltrateWork =>
-  w !== null && w.type === WorkType.INFILTRATE;
+export const isSleeveInfiltrateWork = (w: SleeveWorkClass | null): w is SleeveInfiltrateWork =>
+  w !== null && w.type === SleeveWorkType.INFILTRATE;
 
-export class SleeveInfiltrateWork extends Work {
-  type: WorkType.INFILTRATE = WorkType.INFILTRATE;
+export class SleeveInfiltrateWork extends SleeveWorkClass {
+  type: SleeveWorkType.INFILTRATE = SleeveWorkType.INFILTRATE;
   cyclesWorked = 0;
 
   cyclesNeeded(): number {
@@ -28,7 +28,7 @@ export class SleeveInfiltrateWork extends Work {
 
   APICopy() {
     return {
-      type: WorkType.INFILTRATE as "INFILTRATE",
+      type: SleeveWorkType.INFILTRATE as "INFILTRATE",
       cyclesWorked: this.cyclesWorked,
       cyclesNeeded: this.cyclesNeeded(),
     };

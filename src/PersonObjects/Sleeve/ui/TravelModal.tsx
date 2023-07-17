@@ -1,15 +1,14 @@
 import React from "react";
+import { Button, Typography } from "@mui/material";
+import { Player } from "@player";
+import { CityName } from "@enums";
 import { Sleeve } from "../Sleeve";
 import { CONSTANTS } from "../../../Constants";
 import { Money } from "../../../ui/React/Money";
 import { WorldMap } from "../../../ui/React/WorldMap";
-import { CityName } from "../../../Enums";
 import { Settings } from "../../../Settings/Settings";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
-import { Player } from "@player";
 import { Modal } from "../../../ui/React/Modal";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 
 interface IProps {
   open: boolean;

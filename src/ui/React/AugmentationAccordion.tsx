@@ -7,7 +7,7 @@
 import React, { useState } from "react";
 
 import { Augmentation } from "../../Augmentation/Augmentation";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
@@ -24,9 +24,9 @@ interface IProps {
 
 export function AugmentationAccordion(props: IProps): React.ReactElement {
   const [open, setOpen] = useState(false);
-  let displayName = props.aug.name;
+  let displayName: string = props.aug.name;
   if (props.level != null) {
-    if (props.aug.name === AugmentationNames.NeuroFluxGovernor) {
+    if (props.aug.name === AugmentationName.NeuroFluxGovernor) {
       displayName += ` - Level ${props.level}`;
     }
   }

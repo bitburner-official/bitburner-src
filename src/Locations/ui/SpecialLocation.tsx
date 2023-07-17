@@ -16,8 +16,7 @@ import Button from "@mui/material/Button";
 
 import { Location } from "../Location";
 import { CreateCorporationModal } from "../../Corporation/ui/modals/CreateCorporationModal";
-import { LocationName } from "../../Enums";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName, FactionName, LocationName, ToastVariant } from "@enums";
 import { Factions } from "../../Faction/Factions";
 import { joinFaction } from "../../Faction/FactionHelpers";
 
@@ -26,7 +25,7 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
+import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { N00dles } from "../../utils/helpers/N00dles";
 import { Exploit } from "../../Exploits/Exploit";
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
@@ -35,14 +34,13 @@ import { HacknetNode } from "../../Hacknet/HacknetNode";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { GetServer } from "../../Server/AllServers";
 import { ArcadeRoot } from "../../Arcade/ui/ArcadeRoot";
-import { FactionNames } from "../../Faction/data/FactionNames";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 
-interface IProps {
+interface SpecialLocationProps {
   loc: Location;
 }
 
-export function SpecialLocation(props: IProps): React.ReactElement {
+export function SpecialLocation(props: SpecialLocationProps): React.ReactElement {
   const setRerender = useState(false)[1];
 
   /** Click handler for Bladeburner button at Sector-12 NSA */
@@ -77,7 +75,7 @@ export function SpecialLocation(props: IProps): React.ReactElement {
   }
 
   function renderBladeburner(): React.ReactElement {
-    if (!Player.canAccessBladeburner() || BitNodeMultipliers.BladeburnerRank === 0) {
+    if (!Player.canAccessBladeburner() || currentNodeMults.BladeburnerRank === 0) {
       return <></>;
     }
     const text = Player.bladeburner ? "Enter Bladeburner Headquarters" : "Apply to Bladeburner Division";
@@ -163,15 +161,15 @@ export function SpecialLocation(props: IProps): React.ReactElement {
   }
 
   function handleCotMG(): void {
-    const faction = Factions[FactionNames.ChurchOfTheMachineGod];
-    if (!Player.factions.includes(FactionNames.ChurchOfTheMachineGod)) {
+    const faction = Factions[FactionName.ChurchOfTheMachineGod];
+    if (!Player.factions.includes(FactionName.ChurchOfTheMachineGod)) {
       joinFaction(faction);
     }
     if (
-      !Player.augmentations.some((a) => a.name === AugmentationNames.StaneksGift1) &&
-      !Player.queuedAugmentations.some((a) => a.name === AugmentationNames.StaneksGift1)
+      !Player.augmentations.some((a) => a.name === AugmentationName.StaneksGift1) &&
+      !Player.queuedAugmentations.some((a) => a.name === AugmentationName.StaneksGift1)
     ) {
-      applyAugmentation({ name: AugmentationNames.StaneksGift1, level: 1 });
+      applyAugmentation({ name: AugmentationName.StaneksGift1, level: 1 });
     }
 
     Router.toPage(Page.StaneksGift);
@@ -209,7 +207,7 @@ export function SpecialLocation(props: IProps): React.ReactElement {
       {"    sNNo-.`.-omNy`           "}<br />
       {"     -smNNNNmdo-             "}<br />
       {"        `..`                 "}</Typography>
-    if (Player.hasAugmentation(AugmentationNames.StaneksGift3, true)) {
+    if (Player.hasAugmentation(AugmentationName.StaneksGift3, true)) {
       return (
         <>
           <Typography>
@@ -226,7 +224,7 @@ export function SpecialLocation(props: IProps): React.ReactElement {
         </>
       );
     }
-    if (Player.hasAugmentation(AugmentationNames.StaneksGift2, true)) {
+    if (Player.hasAugmentation(AugmentationName.StaneksGift2, true)) {
       return (
         <>
           <Typography>
@@ -243,7 +241,7 @@ export function SpecialLocation(props: IProps): React.ReactElement {
         </>
       );
     }
-    if (Player.factions.includes(FactionNames.ChurchOfTheMachineGod)) {
+    if (Player.factions.includes(FactionName.ChurchOfTheMachineGod)) {
       return (
         <>
           <Typography>
@@ -272,8 +270,8 @@ export function SpecialLocation(props: IProps): React.ReactElement {
     }
 
     if (
-      Player.augmentations.filter((a) => a.name !== AugmentationNames.NeuroFluxGovernor).length > 0 ||
-      Player.queuedAugmentations.filter((a) => a.name !== AugmentationNames.NeuroFluxGovernor).length > 0
+      Player.augmentations.filter((a) => a.name !== AugmentationName.NeuroFluxGovernor).length > 0 ||
+      Player.queuedAugmentations.filter((a) => a.name !== AugmentationName.NeuroFluxGovernor).length > 0
     ) {
       return (
         <>
@@ -318,7 +316,7 @@ export function SpecialLocation(props: IProps): React.ReactElement {
       return renderGrafting();
     }
     case LocationName.Sector12CityHall: {
-      return (BitNodeMultipliers.CorporationSoftcap < 0.15 && <></>) || <CreateCorporation />;
+      return (currentNodeMults.CorporationSoftcap < 0.15 && <></>) || <CreateCorporation />;
     }
     case LocationName.Sector12NSA: {
       return renderBladeburner();

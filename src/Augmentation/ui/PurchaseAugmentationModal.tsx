@@ -3,7 +3,7 @@ import React from "react";
 import { Augmentation } from "../Augmentation";
 import { Faction } from "../../Faction/Faction";
 import { purchaseAugmentation } from "../../Faction/FactionHelpers";
-import { isRepeatableAug } from "../AugmentationHelpers";
+import { getAugCost, isRepeatableAug } from "../AugmentationHelpers";
 import { Money } from "../../ui/React/Money";
 import { Modal } from "../../ui/React/Modal";
 import { Player } from "@player";
@@ -33,7 +33,7 @@ export function PurchaseAugmentationModal({ aug, faction, onClose, open }: IProp
         <br />
         <br />
         Would you like to purchase the {aug.name} Augmentation for&nbsp;
-        <Money money={aug.getCost().moneyCost} />?
+        <Money money={getAugCost(aug).moneyCost} />?
         <br />
         <br />
       </Typography>

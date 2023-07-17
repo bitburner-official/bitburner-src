@@ -1,11 +1,13 @@
-import { Box, Button, MenuItem, Paper, Select, SelectChangeEvent, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { Box, Button, MenuItem, Paper, Select, SelectChangeEvent, Typography } from "@mui/material";
+
+import { Player } from "@player";
+import { FactionName } from "@enums";
+
 import { inviteToFaction } from "../../Faction/FactionHelpers";
 import { Factions } from "../../Faction/Factions";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
 import { Reputation } from "../../ui/React/Reputation";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
@@ -14,6 +16,7 @@ import {
   calculateSellInformationCashReward,
   calculateTradeInformationRepReward,
 } from "../formulas/victory";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 interface IProps {
   StartingDifficulty: number;
@@ -23,19 +26,19 @@ interface IProps {
 }
 
 export function Victory(props: IProps): React.ReactElement {
-  const [faction, setFaction] = useState("none");
+  const [factionName, setFactionName] = useState("none");
 
   function quitInfiltration(): void {
     handleInfiltrators();
     Router.toPage(Page.City);
   }
 
-  const soa = Factions[FactionNames.ShadowsOfAnarchy];
+  const soa = Factions[FactionName.ShadowsOfAnarchy];
   const repGain = calculateTradeInformationRepReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
   const moneyGain = calculateSellInformationCashReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
   const infiltrationRepGain = calculateInfiltratorsRepReward(soa, props.StartingDifficulty);
 
-  const isMemberOfInfiltrators = Player.factions.includes(FactionNames.ShadowsOfAnarchy);
+  const isMemberOfInfiltrators = Player.factions.includes(FactionName.ShadowsOfAnarchy);
 
   function sell(): void {
     Player.gainMoney(moneyGain, "infiltration");
@@ -43,17 +46,17 @@ export function Victory(props: IProps): React.ReactElement {
   }
 
   function trade(): void {
-    if (faction === "none") return;
-    Factions[faction].playerReputation += repGain;
+    if (!getEnumHelper("FactionName").isMember(factionName)) return;
+    Factions[factionName].playerReputation += repGain;
     quitInfiltration();
   }
 
   function changeDropdown(event: SelectChangeEvent): void {
-    setFaction(event.target.value);
+    setFactionName(event.target.value);
   }
 
   function handleInfiltrators(): void {
-    inviteToFaction(Factions[FactionNames.ShadowsOfAnarchy]);
+    inviteToFaction(Factions[FactionName.ShadowsOfAnarchy]);
     if (isMemberOfInfiltrators) {
       soa.playerReputation += infiltrationRepGain;
     }
@@ -66,7 +69,7 @@ export function Victory(props: IProps): React.ReactElement {
         You{" "}
         {isMemberOfInfiltrators ? (
           <>
-            have gained {formatNumberNoSuffix(infiltrationRepGain, 2)} rep for {FactionNames.ShadowsOfAnarchy} and{" "}
+            have gained {formatNumberNoSuffix(infiltrationRepGain, 2)} rep for {FactionName.ShadowsOfAnarchy} and{" "}
           </>
         ) : (
           <></>
@@ -75,7 +78,7 @@ export function Victory(props: IProps): React.ReactElement {
       </Typography>
       <Box sx={{ width: "fit-content" }}>
         <Box sx={{ width: "100%" }}>
-          <Select value={faction} onChange={changeDropdown} sx={{ mr: 1 }}>
+          <Select value={factionName} onChange={changeDropdown} sx={{ mr: 1 }}>
             <MenuItem key={"none"} value={"none"}>
               {"none"}
             </MenuItem>

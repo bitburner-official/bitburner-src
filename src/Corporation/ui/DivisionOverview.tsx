@@ -2,7 +2,7 @@
 // (top-left panel in the Division UI)
 import React, { useState } from "react";
 
-import { CorpUnlockName, IndustryType } from "../data/Enums";
+import { CorpUnlockName, IndustryType } from "@enums";
 import { HireAdVert } from "../Actions";
 import { formatBigNumber } from "../../ui/formatNumber";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
@@ -151,9 +151,9 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
       <br />
       <StatsTable
         rows={[
-          ["Revenue:", <MoneyRate money={division.lastCycleRevenue} />],
-          ["Expenses:", <MoneyRate money={division.lastCycleExpenses} />],
-          ["Profit:", <MoneyRate money={profit} />],
+          ["Revenue:", <MoneyRate key="revenue" money={division.lastCycleRevenue} />],
+          ["Expenses:", <MoneyRate key="expenses" money={division.lastCycleExpenses} />],
+          ["Profit:", <MoneyRate key="profit" money={profit} />],
         ]}
       />
       <br />

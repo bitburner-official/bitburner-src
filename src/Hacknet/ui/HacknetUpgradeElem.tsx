@@ -15,8 +15,9 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { SelectChangeEvent } from "@mui/material/Select";
-import { FactionNames } from "../../Faction/data/FactionNames";
-import { companiesMetadata } from "../../Company/data/CompaniesMetadata";
+import { CompanyName, FactionName } from "@enums";
+import { PartialRecord } from "../../Types/Record";
+import { isMember } from "../../utils/EnumHelper";
 
 interface IProps {
   hashManager: HashManager;
@@ -24,21 +25,21 @@ interface IProps {
   rerender: () => void;
 }
 
+// Key is the hash upgrade name
 const serversMap: Record<string, string> = {};
-const companiesMap: Record<string, string> = {};
+const companiesMap: PartialRecord<string, CompanyName> = {};
 
 export function HacknetUpgradeElem(props: IProps): React.ReactElement {
   const [selectedServer, setSelectedServer] = useState(
-    serversMap[props.upg.name] ? serversMap[props.upg.name] : FactionNames.ECorp.toLowerCase(),
+    serversMap[props.upg.name] ? serversMap[props.upg.name] : FactionName.ECorp.toLowerCase(),
   );
   function changeTargetServer(event: SelectChangeEvent): void {
     setSelectedServer(event.target.value);
     serversMap[props.upg.name] = event.target.value;
   }
-  const [selectedCompany, setSelectedCompany] = useState(
-    companiesMap[props.upg.name] ? companiesMap[props.upg.name] : companiesMetadata[0].name,
-  );
-  function changeTargetCompany(event: SelectChangeEvent): void {
+  const [selectedCompany, setSelectedCompany] = useState(companiesMap[props.upg.name] ?? CompanyName.NoodleBar);
+  function changeTargetCompany(event: SelectChangeEvent<CompanyName>): void {
+    if (!isMember("CompanyName", event.target.value)) return;
     setSelectedCompany(event.target.value);
     companiesMap[props.upg.name] = event.target.value;
   }

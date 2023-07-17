@@ -60,12 +60,12 @@ const lineClass = (classes: Record<string, string>, s: string): string => {
   return lineClassMap[s] || classes.primary;
 };
 
-interface IProps {
+type ANSIITypographyProps = {
   text: unknown;
   color: "primary" | "error" | "success" | "info" | "warn";
-}
+};
 
-export const ANSIITypography = React.memo((props: IProps): React.ReactElement => {
+export const ANSIITypography = React.memo(function ANSIITypography(props: ANSIITypographyProps): React.ReactElement {
   const text = String(props.text);
   const classes = useStyles();
   const parts = [];
@@ -147,7 +147,6 @@ function ansiCodeStyle(code: string | null): Record<string, any> {
         return [codeParts.length - startIdx, "inherit"];
       }
       const code = codeParts[startIdx + 1];
-      /* eslint-disable yoda */
       if (0 <= code && code < 8) {
         // x8 RGB
         return [2, COLOR_MAP_DARK[code]];
@@ -210,7 +209,6 @@ function ansiCodeStyle(code: string | null): Record<string, any> {
     } else if (codePart === 4) {
       style.textDecoration = "underline";
     }
-    /* eslint-disable yoda */
     // Foreground Color (x8)
     else if (30 <= codePart && codePart < 38) {
       style.color = COLOR_MAP_BRIGHT[codePart - 30];

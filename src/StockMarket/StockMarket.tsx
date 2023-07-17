@@ -1,13 +1,11 @@
-import { IOrderBook } from "./IOrderBook";
-import { IStockMarket } from "./IStockMarket";
+import type { IOrderBook } from "./IOrderBook";
+import type { IStockMarket } from "./IStockMarket";
 import { Order } from "./Order";
 import { processOrders } from "./OrderProcessing";
 import { Stock } from "./Stock";
 import { TicksPerCycle } from "./StockMarketConstants";
 import { InitStockMetadata } from "./data/InitStockMetadata";
-import { OrderTypes } from "./data/OrderTypes";
-import { PositionTypes } from "./data/PositionTypes";
-import { StockSymbols } from "./data/StockSymbols";
+import { PositionType, OrderType, StockSymbol } from "@enums";
 
 import { CONSTANTS } from "../Constants";
 import { formatMoney } from "../ui/formatNumber";
@@ -23,14 +21,15 @@ export let StockMarket: IStockMarket = {
   storedCycles: 0,
   ticksUntilCycle: 0,
 } as IStockMarket; // Maps full stock name -> Stock object
+// Gross type, needs to be addressed
 export const SymbolToStockMap: Record<string, Stock> = {}; // Maps symbol -> Stock object
 
 export function placeOrder(
   stock: Stock,
   shares: number,
   price: number,
-  type: OrderTypes,
-  position: PositionTypes,
+  type: OrderType,
+  position: PositionType,
   ctx?: NetscriptContext,
 ): boolean {
   if (!(stock instanceof Stock)) {
@@ -77,11 +76,11 @@ export function placeOrder(
 // Returns true if successfully cancels an order, false otherwise
 export interface ICancelOrderParams {
   order?: Order;
-  pos?: PositionTypes;
+  pos?: PositionType;
   price?: number;
   shares?: number;
   stock?: Stock;
-  type?: OrderTypes;
+  type?: OrderType;
 }
 export function cancelOrder(params: ICancelOrderParams, ctx?: NetscriptContext): boolean {
   if (StockMarket.Orders == null) return false;
@@ -171,7 +170,7 @@ export function initStockMarket(): void {
 }
 
 export function initSymbolToStockMap(): void {
-  for (const [name, symbol] of Object.entries(StockSymbols)) {
+  for (const [name, symbol] of Object.entries(StockSymbol)) {
     const stock = StockMarket[name];
     if (stock == null) {
       console.error(`Could not find Stock for ${name}`);
@@ -254,16 +253,16 @@ export function processStockPrices(numCycles = 1): void {
     };
     if (c < chc) {
       stock.changePrice(stock.price * (1 + av));
-      processOrders(stock, OrderTypes.LimitBuy, PositionTypes.Short, processOrderRefs);
-      processOrders(stock, OrderTypes.LimitSell, PositionTypes.Long, processOrderRefs);
-      processOrders(stock, OrderTypes.StopBuy, PositionTypes.Long, processOrderRefs);
-      processOrders(stock, OrderTypes.StopSell, PositionTypes.Short, processOrderRefs);
+      processOrders(stock, OrderType.LimitBuy, PositionType.Short, processOrderRefs);
+      processOrders(stock, OrderType.LimitSell, PositionType.Long, processOrderRefs);
+      processOrders(stock, OrderType.StopBuy, PositionType.Long, processOrderRefs);
+      processOrders(stock, OrderType.StopSell, PositionType.Short, processOrderRefs);
     } else {
       stock.changePrice(stock.price / (1 + av));
-      processOrders(stock, OrderTypes.LimitBuy, PositionTypes.Long, processOrderRefs);
-      processOrders(stock, OrderTypes.LimitSell, PositionTypes.Short, processOrderRefs);
-      processOrders(stock, OrderTypes.StopBuy, PositionTypes.Short, processOrderRefs);
-      processOrders(stock, OrderTypes.StopSell, PositionTypes.Long, processOrderRefs);
+      processOrders(stock, OrderType.LimitBuy, PositionType.Long, processOrderRefs);
+      processOrders(stock, OrderType.LimitSell, PositionType.Short, processOrderRefs);
+      processOrders(stock, OrderType.StopBuy, PositionType.Short, processOrderRefs);
+      processOrders(stock, OrderType.StopSell, PositionType.Long, processOrderRefs);
     }
 
     let otlkMagChange = stock.otlkMag * av;

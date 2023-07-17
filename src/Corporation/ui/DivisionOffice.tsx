@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 import { OfficeSpace } from "../OfficeSpace";
-import { CorpUnlockName, CorpEmployeeJob } from "../data/Enums";
+import { CorpUnlockName, CorpEmployeeJob } from "@enums";
 import { BuyTea } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";

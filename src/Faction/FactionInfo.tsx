@@ -1,5 +1,5 @@
 import React from "react";
-import { FactionNames } from "./data/FactionNames";
+import { FactionName } from "@enums";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { Option } from "./ui/Option";
@@ -7,7 +7,7 @@ import { Typography } from "@mui/material";
 
 interface FactionInfoParams {
   infoText?: JSX.Element;
-  enemies?: string[];
+  enemies?: FactionName[];
   offerHackingWork?: boolean;
   offerFieldWork?: boolean;
   offerSecurityWork?: boolean;
@@ -19,7 +19,7 @@ interface FactionInfoParams {
 /** Contains the "information" property for all the Factions, which is just a description of each faction */
 export class FactionInfo {
   /** The names of all other factions considered to be enemies to this faction. */
-  enemies: string[];
+  enemies: FactionName[];
 
   /** The descriptive text to show on the faction's page. */
   infoText: JSX.Element;
@@ -60,9 +60,9 @@ export class FactionInfo {
 }
 
 /** A map of all factions and associated info to them. */
-export const FactionInfos: Record<string, FactionInfo> = {
+export const FactionInfos: Record<FactionName, FactionInfo> = {
   // Endgame
-  [FactionNames.Illuminati]: new FactionInfo({
+  [FactionName.Illuminati]: new FactionInfo({
     infoText: (
       <>
         Humanity never changes. No matter how civilized society becomes, it will eventually fall back into chaos. And
@@ -73,13 +73,13 @@ export const FactionInfos: Record<string, FactionInfo> = {
     offerFieldWork: true,
   }),
 
-  [FactionNames.Daedalus]: new FactionInfo({
+  [FactionName.Daedalus]: new FactionInfo({
     infoText: <>Yesterday we obeyed kings and bent our necks to emperors. Today we kneel only to truth.</>,
     offerHackingWork: true,
     offerFieldWork: true,
   }),
 
-  [FactionNames.TheCovenant]: new FactionInfo({
+  [FactionName.TheCovenant]: new FactionInfo({
     infoText: (
       <>
         Surrender yourself. Give up your empty individuality to become part of something great, something eternal.
@@ -94,11 +94,11 @@ export const FactionInfos: Record<string, FactionInfo> = {
   }),
 
   // Megacorporations, each forms its own faction
-  [FactionNames.ECorp]: new FactionInfo({
+  [FactionName.ECorp]: new FactionInfo({
     infoText: (
       <>
-        {FactionNames.ECorp}'s mission is simple: to connect the world of today with the technology of tomorrow. With
-        our wide range of Internet-related software and commercial hardware, {FactionNames.ECorp} makes the world's
+        {FactionName.ECorp}'s mission is simple: to connect the world of today with the technology of tomorrow. With our
+        wide range of Internet-related software and commercial hardware, {FactionName.ECorp} makes the world's
         information universally accessible.
       </>
     ),
@@ -108,15 +108,15 @@ export const FactionInfos: Record<string, FactionInfo> = {
     keepOnInstall: true,
   }),
 
-  [FactionNames.MegaCorp]: new FactionInfo({
+  [FactionName.MegaCorp]: new FactionInfo({
     infoText: (
       <>
-        {FactionNames.MegaCorp} does what no other dares to do. We imagine. We create. We invent. We create what others
+        {FactionName.MegaCorp} does what no other dares to do. We imagine. We create. We invent. We create what others
         have never even dreamed of. Our work fills the world's needs for food, water, power, and transportation on an
         unprecedented scale, in ways that no other company can.
         <br />
         <br />
-        In our labs and factories and on the ground with customers, {FactionNames.MegaCorp} is ushering in a new era for
+        In our labs and factories and on the ground with customers, {FactionName.MegaCorp} is ushering in a new era for
         the world.
       </>
     ),
@@ -126,7 +126,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
     keepOnInstall: true,
   }),
 
-  [FactionNames.BachmanAssociates]: new FactionInfo({
+  [FactionName.BachmanAssociates]: new FactionInfo({
     infoText: (
       <>
         Where Law and Business meet - that's where we are.
@@ -141,7 +141,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
     keepOnInstall: true,
   }),
 
-  [FactionNames.BladeIndustries]: new FactionInfo({
+  [FactionName.BladeIndustries]: new FactionInfo({
     infoText: <>Augmentation is Salvation.</>,
     offerHackingWork: true,
     offerFieldWork: true,
@@ -149,7 +149,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
     keepOnInstall: true,
   }),
 
-  [FactionNames.NWO]: new FactionInfo({
+  [FactionName.NWO]: new FactionInfo({
     infoText: (
       <>
         Humans don't truly desire freedom. They want to be observed, understood, and judged. They want to be given
@@ -163,7 +163,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
     keepOnInstall: true,
   }),
 
-  [FactionNames.ClarkeIncorporated]: new FactionInfo({
+  [FactionName.ClarkeIncorporated]: new FactionInfo({
     infoText: <>The Power of the Genome - Unlocked.</>,
     offerHackingWork: true,
     offerFieldWork: true,
@@ -171,7 +171,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
     keepOnInstall: true,
   }),
 
-  [FactionNames.OmniTekIncorporated]: new FactionInfo({
+  [FactionName.OmniTekIncorporated]: new FactionInfo({
     infoText: <>Simply put, our mission is to design and build robots that make a difference.</>,
     offerHackingWork: true,
     offerFieldWork: true,
@@ -179,11 +179,11 @@ export const FactionInfos: Record<string, FactionInfo> = {
     keepOnInstall: true,
   }),
 
-  [FactionNames.FourSigma]: new FactionInfo({
+  [FactionName.FourSigma]: new FactionInfo({
     infoText: (
       <>
         The scientific method is the best way to approach investing. Big strategies backed up with big data. Driven by
-        deep learning and innovative ideas. And improved by iteration. That's {FactionNames.FourSigma}.
+        deep learning and innovative ideas. And improved by iteration. That's {FactionName.FourSigma}.
       </>
     ),
     offerHackingWork: true,
@@ -192,7 +192,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
     keepOnInstall: true,
   }),
 
-  [FactionNames.KuaiGongInternational]: new FactionInfo({
+  [FactionName.KuaiGongInternational]: new FactionInfo({
     infoText: <>Dream big. Work hard. Make history.</>,
     offerHackingWork: true,
     offerFieldWork: true,
@@ -201,7 +201,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
   }),
 
   // Other Corporations
-  [FactionNames.FulcrumSecretTechnologies]: new FactionInfo({
+  [FactionName.FulcrumSecretTechnologies]: new FactionInfo({
     infoText: (
       <>
         The human organism has an innate desire to worship. That is why they created gods. If there were no gods, it
@@ -214,7 +214,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
   }),
 
   // Hacker groups
-  [FactionNames.BitRunners]: new FactionInfo({
+  [FactionName.BitRunners]: new FactionInfo({
     infoText: (
       <>
         Our entire lives are controlled by bits. All of our actions, our thoughts, our personal information. It's all
@@ -230,7 +230,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
     offerHackingWork: true,
   }),
 
-  [FactionNames.TheBlackHand]: new FactionInfo({
+  [FactionName.TheBlackHand]: new FactionInfo({
     infoText: (
       <>
         The world, so afraid of strong government, now has no government. Only power - Digital power. Financial power.
@@ -246,7 +246,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
   }),
 
   // prettier-ignore
-  [FactionNames.NiteSec]: new FactionInfo({
+  [FactionName.NiteSec]: new FactionInfo({
   infoText:(<>
     {"                  __..__               "}<br />
     {"                _.nITESECNIt.            "}<br />
@@ -291,77 +291,71 @@ export const FactionInfos: Record<string, FactionInfo> = {
   }),
 
   // City factions, essentially governments
-  [FactionNames.Aevum]: new FactionInfo({
+  [FactionName.Aevum]: new FactionInfo({
     infoText: <>The Silicon City.</>,
-    enemies: [FactionNames.Chongqing, FactionNames.NewTokyo, FactionNames.Ishima, FactionNames.Volhaven],
+    enemies: [FactionName.Chongqing, FactionName.NewTokyo, FactionName.Ishima, FactionName.Volhaven],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
-  [FactionNames.Chongqing]: new FactionInfo({
+  [FactionName.Chongqing]: new FactionInfo({
     infoText: <>Serve the People.</>,
-    enemies: [FactionNames.Sector12, FactionNames.Aevum, FactionNames.Volhaven],
+    enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
-  [FactionNames.Ishima]: new FactionInfo({
+  [FactionName.Ishima]: new FactionInfo({
     infoText: <>The East Asian Order of the Future.</>,
-    enemies: [FactionNames.Sector12, FactionNames.Aevum, FactionNames.Volhaven],
+    enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
-  [FactionNames.NewTokyo]: new FactionInfo({
+  [FactionName.NewTokyo]: new FactionInfo({
     infoText: <>Asia's World City.</>,
-    enemies: [FactionNames.Sector12, FactionNames.Aevum, FactionNames.Volhaven],
+    enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
-  [FactionNames.Sector12]: new FactionInfo({
+  [FactionName.Sector12]: new FactionInfo({
     infoText: <>The City of the Future.</>,
-    enemies: [FactionNames.Chongqing, FactionNames.NewTokyo, FactionNames.Ishima, FactionNames.Volhaven],
+    enemies: [FactionName.Chongqing, FactionName.NewTokyo, FactionName.Ishima, FactionName.Volhaven],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
-  [FactionNames.Volhaven]: new FactionInfo({
+  [FactionName.Volhaven]: new FactionInfo({
     infoText: <>Benefit, Honor, and Glory.</>,
-    enemies: [
-      FactionNames.Chongqing,
-      FactionNames.Sector12,
-      FactionNames.NewTokyo,
-      FactionNames.Aevum,
-      FactionNames.Ishima,
-    ],
+    enemies: [FactionName.Chongqing, FactionName.Sector12, FactionName.NewTokyo, FactionName.Aevum, FactionName.Ishima],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
 
   // Criminal Organizations/Gangs
-  [FactionNames.SpeakersForTheDead]: new FactionInfo({
+  [FactionName.SpeakersForTheDead]: new FactionInfo({
     infoText: <>It is better to reign in Hell than to serve in Heaven.</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
 
-  [FactionNames.TheDarkArmy]: new FactionInfo({
+  [FactionName.TheDarkArmy]: new FactionInfo({
     infoText: <>The World doesn't care about right or wrong. It only cares about power.</>,
     offerHackingWork: true,
     offerFieldWork: true,
   }),
 
-  [FactionNames.TheSyndicate]: new FactionInfo({
+  [FactionName.TheSyndicate]: new FactionInfo({
     infoText: <>Honor holds you back.</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
 
-  [FactionNames.Silhouette]: new FactionInfo({
+  [FactionName.Silhouette]: new FactionInfo({
     infoText: (
       <>
         Corporations have filled the void of power left behind by the collapse of Western government. The issue is
@@ -376,34 +370,34 @@ export const FactionInfos: Record<string, FactionInfo> = {
     offerFieldWork: true,
   }),
 
-  [FactionNames.Tetrads]: new FactionInfo({
+  [FactionName.Tetrads]: new FactionInfo({
     infoText: <>Following the mandate of Heaven and carrying out the way.</>,
 
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
 
-  [FactionNames.SlumSnakes]: new FactionInfo({
-    infoText: <>{FactionNames.SlumSnakes} rule!</>,
+  [FactionName.SlumSnakes]: new FactionInfo({
+    infoText: <>{FactionName.SlumSnakes} rule!</>,
 
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
 
   // Early game factions - factions the player will prestige with early on that don't belong in other categories.
-  [FactionNames.Netburners]: new FactionInfo({
+  [FactionName.Netburners]: new FactionInfo({
     infoText: <>{"~~//*>H4CK||3T 8URN3R5**>?>\\~~"}</>,
     offerHackingWork: true,
   }),
 
-  [FactionNames.TianDiHui]: new FactionInfo({
+  [FactionName.TianDiHui]: new FactionInfo({
     infoText: <>Obey Heaven and work righteously.</>,
     offerHackingWork: true,
 
     offerSecurityWork: true,
   }),
 
-  [FactionNames.CyberSec]: new FactionInfo({
+  [FactionName.CyberSec]: new FactionInfo({
     infoText: (
       <>
         The Internet is the first thing that was built that we don't fully understand, the largest experiment in anarchy
@@ -415,14 +409,14 @@ export const FactionInfos: Record<string, FactionInfo> = {
   }),
 
   // Special Factions
-  [FactionNames.Bladeburners]: new FactionInfo({
+  [FactionName.Bladeburners]: new FactionInfo({
     infoText: (
       <>
         It's too bad they won't live. But then again, who does?
         <br />
         <br />
-        Note that for this faction, reputation can only be gained through {FactionNames.Bladeburners} actions.{" "}
-        Completing {FactionNames.Bladeburners} contracts/operations will increase your reputation.
+        Note that for this faction, reputation can only be gained through {FactionName.Bladeburners} actions. Completing{" "}
+        {FactionName.Bladeburners} contracts/operations will increase your reputation.
       </>
     ),
 
@@ -438,7 +432,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
     },
   }),
 
-  [FactionNames.ChurchOfTheMachineGod]: new FactionInfo({
+  [FactionName.ChurchOfTheMachineGod]: new FactionInfo({
     // prettier-ignore
     infoText:(<>
     {"                 ``          "}<br />
@@ -489,7 +483,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
       );
     },
   }),
-  [FactionNames.ShadowsOfAnarchy]: new FactionInfo({
+  [FactionName.ShadowsOfAnarchy]: new FactionInfo({
     infoText: (
       <>
         The government is ruled by the corporations that we have allowed to consume it. To release the world from its
@@ -499,7 +493,7 @@ export const FactionInfos: Record<string, FactionInfo> = {
     special: true,
     keepOnInstall: true,
     assignment: (): React.ReactElement => {
-      return <Typography>{FactionNames.ShadowsOfAnarchy} can only gain reputation by infiltrating.</Typography>;
+      return <Typography>{FactionName.ShadowsOfAnarchy} can only gain reputation by infiltrating.</Typography>;
     },
   }),
 };

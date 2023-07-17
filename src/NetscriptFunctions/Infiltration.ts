@@ -1,4 +1,6 @@
-import { Infiltration as IInfiltration, InfiltrationLocation } from "@nsdefs";
+import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import { Infiltration as NetscriptInfiltation, InfiltrationLocation } from "@nsdefs";
+import { FactionName, LocationName } from "@enums";
 import { Location } from "../Locations/Location";
 import { Locations } from "../Locations/Locations";
 import { calculateDifficulty, calculateReward } from "../Infiltration/formulas/game";
@@ -7,21 +9,17 @@ import {
   calculateSellInformationCashReward,
   calculateTradeInformationRepReward,
 } from "../Infiltration/formulas/victory";
-import { FactionNames } from "../Faction/data/FactionNames";
 import { Factions } from "../Faction/Factions";
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { checkEnum } from "../utils/helpers/enum";
-import { LocationName } from "../Enums";
+import { getEnumHelper } from "../utils/EnumHelper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { filterTruthy } from "../utils/helpers/ArrayHelpers";
 
-export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
+export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
   const getLocationsWithInfiltrations = Object.values(Locations).filter(
     (location: Location) => location.infiltrationData,
   );
 
-  const calculateInfiltrationData = (ctx: NetscriptContext, locationName: string): InfiltrationLocation => {
-    if (!checkEnum(LocationName, locationName)) throw new Error(`Location '${locationName}' does not exists.`);
+  const calculateInfiltrationData = (ctx: NetscriptContext, locationName: LocationName): InfiltrationLocation => {
     const location = Locations[locationName];
     if (location === undefined) throw helpers.makeRuntimeErrorMsg(ctx, `Location '${location}' does not exists.`);
     if (location.infiltrationData === undefined)
@@ -35,7 +33,7 @@ export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
       reward: {
         tradeRep: calculateTradeInformationRepReward(reward, maxLevel, startingSecurityLevel),
         sellCash: calculateSellInformationCashReward(reward, maxLevel, startingSecurityLevel),
-        SoARep: calculateInfiltratorsRepReward(Factions[FactionNames.ShadowsOfAnarchy], startingSecurityLevel),
+        SoARep: calculateInfiltratorsRepReward(Factions[FactionName.ShadowsOfAnarchy], startingSecurityLevel),
       },
       difficulty: difficulty,
     };
@@ -52,9 +50,9 @@ export function NetscriptInfiltration(): InternalAPI<IInfiltration> {
         }),
       );
     },
-    getInfiltration: (ctx) => (_location) => {
-      const location = helpers.string(ctx, "location", _location);
-      return calculateInfiltrationData(ctx, location);
+    getInfiltration: (ctx) => (_locationName) => {
+      const locationName = getEnumHelper("LocationName").nsGetMember(ctx, _locationName);
+      return calculateInfiltrationData(ctx, locationName);
     },
   };
 }

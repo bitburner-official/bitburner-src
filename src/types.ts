@@ -3,7 +3,7 @@ export type Integer = number & { __Integer: true };
 export type PositiveNumber = number & { __Positive: true };
 export type PositiveInteger = Integer & PositiveNumber;
 
-// Numeric typechecking functions
+// Numeric typechecking functions - these should be moved somewhere else
 export const isInteger = (n: unknown): n is Integer => Number.isInteger(n);
 export const isPositiveInteger = (n: unknown): n is PositiveInteger => isInteger(n) && n > 0;
 
@@ -12,6 +12,12 @@ export const isPositiveInteger = (n: unknown): n is PositiveInteger => isInteger
 export type Unknownify<T> = {
   [key in keyof T]?: unknown;
 };
+
+/** Get the member type of either an array or an object */
+export type Member<T> = T extends (infer arrayMember)[] ? arrayMember : T[keyof T];
+
+//** Get the keys of an object where the values match a given type */
+export type TypedKeys<Obj, T> = { [K in keyof Obj]-?: Obj[K] extends T ? K : never }[keyof Obj];
 
 /** Status object for functions that return a boolean indicating success/failure
  * and an optional message */

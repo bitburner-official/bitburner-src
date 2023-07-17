@@ -4,18 +4,19 @@ import { Player } from "@player";
 import { Modal } from "../../ui/React/Modal";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { CompanyName } from "../Enums";
 
 interface IProps {
   open: boolean;
   onClose: () => void;
-  locName: string;
+  companyName: CompanyName;
   company: Company;
   onQuit: () => void;
 }
 
 export function QuitJobModal(props: IProps): React.ReactElement {
   function quit(): void {
-    Player.quitJob(props.locName);
+    Player.quitJob(props.companyName);
     props.onQuit();
     props.onClose();
   }

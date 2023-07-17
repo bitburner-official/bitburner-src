@@ -1,7 +1,20 @@
+import {
+  AugmentationName,
+  CityName,
+  CompanyName,
+  CompletedProgramName,
+  FactionName,
+  JobName,
+  LocationName,
+  ToastVariant,
+} from "@enums";
+
+import type { PlayerObject } from "./PlayerObject";
+import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
+
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
 import { PlayerOwnedAugmentation } from "../../Augmentation/PlayerOwnedAugmentation";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { CodingContractRewardType, ICodingContractReward } from "../../CodingContracts";
 import { Company } from "../../Company/Company";
 import { Companies } from "../../Company/Companies";
@@ -9,16 +22,13 @@ import { getNextCompanyPositionHelper } from "../../Company/GetNextCompanyPositi
 import { getJobRequirementText } from "../../Company/GetJobRequirementText";
 import { CompanyPositions } from "../../Company/CompanyPositions";
 import { CompanyPosition } from "../../Company/CompanyPosition";
-import * as posNames from "../../Company/data/JobTracks";
 import { CONSTANTS } from "../../Constants";
-import { CompletedProgramName } from "../../Programs/Programs";
 import { Exploit } from "../../Exploits/Exploit";
 import { Faction } from "../../Faction/Faction";
 import { Factions } from "../../Faction/Factions";
 import { resetGangs } from "../../Gang/AllGangs";
 import { Cities } from "../../Locations/Cities";
 import { Locations } from "../../Locations/Locations";
-import { CityName, LocationName } from "../../Enums";
 import { Sleeve } from "../Sleeve/Sleeve";
 import { isSleeveCompanyWork } from "../Sleeve/Work/SleeveCompanyWork";
 import { calculateSkillProgress as calculateSkillProgressF, ISkillProgress } from "../formulas/skill";
@@ -34,18 +44,15 @@ import { getHospitalizationCost } from "../../Hospital/Hospital";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 
 import { formatMoney } from "../../ui/formatNumber";
-import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
+import { MoneySource, MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
-import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
+import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { achievements } from "../../Achievements/Achievements";
-import { FactionNames } from "../../Faction/data/FactionNames";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { serverMetadata } from "../../Server/data/servers";
-
-import type { PlayerObject } from "./PlayerObject";
-import { ProgramFilePath } from "src/Paths/ProgramFilePath";
+import { getEnumHelper, isMember } from "../../utils/EnumHelper";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -160,7 +167,7 @@ export function prestigeSourceFile(this: PlayerObject): void {
   this.augmentations = [];
 }
 
-export function receiveInvite(this: PlayerObject, factionName: string): void {
+export function receiveInvite(this: PlayerObject, factionName: FactionName): void {
   if (this.factionInvitations.includes(factionName) || this.factions.includes(factionName)) {
     return;
   }
@@ -185,7 +192,7 @@ export function setMoney(this: PlayerObject, money: number): void {
   this.money = money;
 }
 
-export function gainMoney(this: PlayerObject, money: number, source: string): void {
+export function gainMoney(this: PlayerObject, money: number, source: MoneySource): void {
   if (isNaN(money)) {
     console.error("NaN passed into Player.gainMoney()");
     return;
@@ -195,7 +202,7 @@ export function gainMoney(this: PlayerObject, money: number, source: string): vo
   this.recordMoneySource(money, source);
 }
 
-export function loseMoney(this: PlayerObject, money: number, source: string): void {
+export function loseMoney(this: PlayerObject, money: number, source: MoneySource): void {
   if (isNaN(money)) {
     console.error("NaN passed into Player.loseMoney()");
     return;
@@ -213,7 +220,7 @@ export function canAfford(this: PlayerObject, cost: number): boolean {
   return this.money >= cost;
 }
 
-export function recordMoneySource(this: PlayerObject, amt: number, source: string): void {
+export function recordMoneySource(this: PlayerObject, amt: number, source: MoneySource): void {
   if (!(this.moneySourceA instanceof MoneySourceTracker)) {
     console.warn(`Player.moneySourceA was not properly initialized. Resetting`);
     this.moneySourceA = new MoneySourceTracker();
@@ -264,12 +271,9 @@ export function hospitalize(this: PlayerObject): number {
 //The 'sing' argument designates whether or not this is being called from
 //the applyToCompany() Netscript Singularity function
 export function applyForJob(this: PlayerObject, entryPosType: CompanyPosition, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
-  if (!company) {
-    console.error(`Could not find company that matches the location: ${this.location}. Player.applyToCompany() failed`);
-    return false;
-  }
-
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName]; //Company being applied to
   let pos = entryPosType;
 
   if (!this.isQualified(company, pos)) {
@@ -349,7 +353,7 @@ export function getNextCompanyPosition(
   return entryPosType;
 }
 
-export function quitJob(this: PlayerObject, company: string): void {
+export function quitJob(this: PlayerObject, company: CompanyName): void {
   if (isCompanyWork(this.currentWork) && this.currentWork.companyName === company) {
     this.finishWork(true);
   }
@@ -372,21 +376,23 @@ export function hasJob(this: PlayerObject): boolean {
 }
 
 export function applyForSoftwareJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[posNames.SoftwareCompanyPositions[0]], sing);
+  return this.applyForJob(CompanyPositions[JobName.software0], sing);
 }
 
 export function applyForSoftwareConsultantJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[posNames.SoftwareConsultantCompanyPositions[0]], sing);
+  return this.applyForJob(CompanyPositions[JobName.softwareConsult0], sing);
 }
 
 export function applyForItJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[posNames.ITCompanyPositions[0]], sing);
+  return this.applyForJob(CompanyPositions[JobName.IT0], sing);
 }
 
 export function applyForSecurityEngineerJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
-  if (this.isQualified(company, CompanyPositions[posNames.SecurityEngineerCompanyPositions[0]])) {
-    return this.applyForJob(CompanyPositions[posNames.SecurityEngineerCompanyPositions[0]], sing);
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
+  if (this.isQualified(company, CompanyPositions[JobName.securityEng])) {
+    return this.applyForJob(CompanyPositions[JobName.securityEng], sing);
   } else {
     if (!sing) {
       dialogBoxCreate("Unfortunately, you do not qualify for this position");
@@ -396,9 +402,11 @@ export function applyForSecurityEngineerJob(this: PlayerObject, sing = false): b
 }
 
 export function applyForNetworkEngineerJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
-  if (this.isQualified(company, CompanyPositions[posNames.NetworkEngineerCompanyPositions[0]])) {
-    const pos = CompanyPositions[posNames.NetworkEngineerCompanyPositions[0]];
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
+  if (this.isQualified(company, CompanyPositions[JobName.networkEng0])) {
+    const pos = CompanyPositions[JobName.networkEng0];
     return this.applyForJob(pos, sing);
   } else {
     if (!sing) {
@@ -409,23 +417,25 @@ export function applyForNetworkEngineerJob(this: PlayerObject, sing = false): bo
 }
 
 export function applyForBusinessJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[posNames.BusinessCompanyPositions[0]], sing);
+  return this.applyForJob(CompanyPositions[JobName.business0], sing);
 }
 
 export function applyForBusinessConsultantJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[posNames.BusinessConsultantCompanyPositions[0]], sing);
+  return this.applyForJob(CompanyPositions[JobName.businessConsult0], sing);
 }
 
 export function applyForSecurityJob(this: PlayerObject, sing = false): boolean {
   // TODO Police Jobs
   // Indexing starts at 2 because 0 is for police officer
-  return this.applyForJob(CompanyPositions[posNames.SecurityCompanyPositions[2]], sing);
+  return this.applyForJob(CompanyPositions[JobName.security0], sing);
 }
 
 export function applyForAgentJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
-  if (this.isQualified(company, CompanyPositions[posNames.AgentCompanyPositions[0]])) {
-    const pos = CompanyPositions[posNames.AgentCompanyPositions[0]];
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
+  if (this.isQualified(company, CompanyPositions[JobName.agent0])) {
+    const pos = CompanyPositions[JobName.agent0];
     return this.applyForJob(pos, sing);
   } else {
     if (!sing) {
@@ -436,8 +446,10 @@ export function applyForAgentJob(this: PlayerObject, sing = false): boolean {
 }
 
 export function applyForEmployeeJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
-  const position = posNames.MiscCompanyPositions[1];
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
+  const position = JobName.employee;
   // Check if this company has the position
   if (!company.hasPosition(position)) {
     return false;
@@ -460,8 +472,10 @@ export function applyForEmployeeJob(this: PlayerObject, sing = false): boolean {
 }
 
 export function applyForPartTimeEmployeeJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
-  const position = posNames.PartTimeCompanyPositions[1];
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
+  const position = JobName.employeePT;
   // Check if this company has the position
   if (!company.hasPosition(position)) {
     return false;
@@ -483,8 +497,10 @@ export function applyForPartTimeEmployeeJob(this: PlayerObject, sing = false): b
 }
 
 export function applyForWaiterJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
-  const position = posNames.MiscCompanyPositions[0];
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
+  const position = JobName.waiter;
   // Check if this company has the position
   if (!company.hasPosition(position)) {
     return false;
@@ -504,8 +520,10 @@ export function applyForWaiterJob(this: PlayerObject, sing = false): boolean {
 }
 
 export function applyForPartTimeWaiterJob(this: PlayerObject, sing = false): boolean {
-  const company = Companies[this.location]; //Company being applied to
-  const position = posNames.PartTimeCompanyPositions[0];
+  const companyName = getEnumHelper("CompanyName").getMember(this.location);
+  if (!companyName) return false;
+  const company = Companies[companyName];
+  const position = JobName.waiterPT;
   // Check if this company has the position
   if (!company.hasPosition(position)) {
     return false;
@@ -551,22 +569,16 @@ export function reapplyAllAugmentations(this: PlayerObject, resetMultipliers = t
     this.resetMultipliers();
   }
 
-  for (let i = 0; i < this.augmentations.length; ++i) {
-    //Compatibility with new version
-    if (this.augmentations[i].name === "HacknetNode NIC Architecture Neural-Upload") {
-      this.augmentations[i].name = "Hacknet Node NIC Architecture Neural-Upload";
-    }
-
-    const playerAug = this.augmentations[i];
+  for (const playerAug of this.augmentations) {
     const augName = playerAug.name;
 
-    if (augName == AugmentationNames.NeuroFluxGovernor) {
-      for (let j = 0; j < playerAug.level; ++j) {
-        applyAugmentation(this.augmentations[i], true);
+    if (augName == AugmentationName.NeuroFluxGovernor) {
+      for (let i = 0; i < playerAug.level; ++i) {
+        applyAugmentation(playerAug, true);
       }
       continue;
     }
-    applyAugmentation(this.augmentations[i], true);
+    applyAugmentation(playerAug, true);
   }
 
   this.updateSkillLevels();
@@ -602,20 +614,16 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   const allPositions = Object.values(this.jobs);
 
   // Given a company name, safely returns the reputation (returns 0 if invalid company is specified)
-  function getCompanyRep(companyName: string): number {
+  function getCompanyRep(companyName: CompanyName): number {
     const company = Companies[companyName];
-    if (company == null) {
-      return 0;
-    } else {
-      return company.playerReputation;
-    }
+    return company.playerReputation;
   }
 
   // Helper function that returns a boolean indicating whether the Player meets
   // the requirements for the specified company. There are two requirements:
   //      1. High enough reputation
   //      2. Player is employed at the company
-  function checkMegacorpRequirements(companyName: string): boolean {
+  function checkMegacorpRequirements(companyName: CompanyName): boolean {
     const serverMeta = serverMetadata.find((s) => s.specialName === companyName);
     const server = GetServer(serverMeta ? serverMeta.hostname : "");
     const bonus = (server as Server).backdoorInstalled ? -100e3 : 0;
@@ -625,7 +633,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Illuminati
-  const illuminatiFac = Factions[FactionNames.Illuminati];
+  const illuminatiFac = Factions[FactionName.Illuminati];
   if (
     !illuminatiFac.isBanned &&
     !illuminatiFac.isMember &&
@@ -642,12 +650,12 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Daedalus
-  const daedalusFac = Factions[FactionNames.Daedalus];
+  const daedalusFac = Factions[FactionName.Daedalus];
   if (
     !daedalusFac.isBanned &&
     !daedalusFac.isMember &&
     !daedalusFac.alreadyInvited &&
-    numAugmentations >= BitNodeMultipliers.DaedalusAugsRequirement &&
+    numAugmentations >= currentNodeMults.DaedalusAugsRequirement &&
     this.money >= 100000000000 &&
     (this.skills.hacking >= 2500 ||
       (this.skills.strength >= 1500 &&
@@ -659,7 +667,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //The Covenant
-  const covenantFac = Factions[FactionNames.TheCovenant];
+  const covenantFac = Factions[FactionName.TheCovenant];
   if (
     !covenantFac.isBanned &&
     !covenantFac.isMember &&
@@ -676,127 +684,122 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //ECorp
-  const ecorpFac = Factions[FactionNames.ECorp];
+  const ecorpFac = Factions[FactionName.ECorp];
   if (
     !ecorpFac.isBanned &&
     !ecorpFac.isMember &&
     !ecorpFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.AevumECorp)
+    checkMegacorpRequirements(CompanyName.ECorp)
   ) {
     invitedFactions.push(ecorpFac);
   }
 
   //MegaCorp
-  const megacorpFac = Factions[FactionNames.MegaCorp];
+  const megacorpFac = Factions[FactionName.MegaCorp];
   if (
     !megacorpFac.isBanned &&
     !megacorpFac.isMember &&
     !megacorpFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.Sector12MegaCorp)
+    checkMegacorpRequirements(CompanyName.MegaCorp)
   ) {
     invitedFactions.push(megacorpFac);
   }
 
   //Bachman & Associates
-  const bachmanandassociatesFac = Factions[FactionNames.BachmanAssociates];
+  const bachmanandassociatesFac = Factions[FactionName.BachmanAssociates];
   if (
     !bachmanandassociatesFac.isBanned &&
     !bachmanandassociatesFac.isMember &&
     !bachmanandassociatesFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.AevumBachmanAndAssociates)
+    checkMegacorpRequirements(CompanyName.BachmanAndAssociates)
   ) {
     invitedFactions.push(bachmanandassociatesFac);
   }
 
   //Blade Industries
-  const bladeindustriesFac = Factions[FactionNames.BladeIndustries];
+  const bladeindustriesFac = Factions[FactionName.BladeIndustries];
   if (
     !bladeindustriesFac.isBanned &&
     !bladeindustriesFac.isMember &&
     !bladeindustriesFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.Sector12BladeIndustries)
+    checkMegacorpRequirements(CompanyName.BladeIndustries)
   ) {
     invitedFactions.push(bladeindustriesFac);
   }
 
   //NWO
-  const nwoFac = Factions[FactionNames.NWO];
-  if (
-    !nwoFac.isBanned &&
-    !nwoFac.isMember &&
-    !nwoFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.VolhavenNWO)
-  ) {
+  const nwoFac = Factions[FactionName.NWO];
+  if (!nwoFac.isBanned && !nwoFac.isMember && !nwoFac.alreadyInvited && checkMegacorpRequirements(CompanyName.NWO)) {
     invitedFactions.push(nwoFac);
   }
 
   //Clarke Incorporated
-  const clarkeincorporatedFac = Factions[FactionNames.ClarkeIncorporated];
+  const clarkeincorporatedFac = Factions[FactionName.ClarkeIncorporated];
   if (
     !clarkeincorporatedFac.isBanned &&
     !clarkeincorporatedFac.isMember &&
     !clarkeincorporatedFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.AevumClarkeIncorporated)
+    checkMegacorpRequirements(CompanyName.ClarkeIncorporated)
   ) {
     invitedFactions.push(clarkeincorporatedFac);
   }
 
   //OmniTek Incorporated
-  const omnitekincorporatedFac = Factions[FactionNames.OmniTekIncorporated];
+  const omnitekincorporatedFac = Factions[FactionName.OmniTekIncorporated];
   if (
     !omnitekincorporatedFac.isBanned &&
     !omnitekincorporatedFac.isMember &&
     !omnitekincorporatedFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.VolhavenOmniTekIncorporated)
+    checkMegacorpRequirements(CompanyName.OmniTekIncorporated)
   ) {
     invitedFactions.push(omnitekincorporatedFac);
   }
 
   //Four Sigma
-  const foursigmaFac = Factions[FactionNames.FourSigma];
+  const foursigmaFac = Factions[FactionName.FourSigma];
   if (
     !foursigmaFac.isBanned &&
     !foursigmaFac.isMember &&
     !foursigmaFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.Sector12FourSigma)
+    checkMegacorpRequirements(CompanyName.FourSigma)
   ) {
     invitedFactions.push(foursigmaFac);
   }
 
   //KuaiGong International
-  const kuaigonginternationalFac = Factions[FactionNames.KuaiGongInternational];
+  const kuaigonginternationalFac = Factions[FactionName.KuaiGongInternational];
   if (
     !kuaigonginternationalFac.isBanned &&
     !kuaigonginternationalFac.isMember &&
     !kuaigonginternationalFac.alreadyInvited &&
-    checkMegacorpRequirements(LocationName.ChongqingKuaiGongInternational)
+    checkMegacorpRequirements(CompanyName.KuaiGongInternational)
   ) {
     invitedFactions.push(kuaigonginternationalFac);
   }
 
   //Fulcrum Secret Technologies - If you've unlocked fulcrum secret technologies server and have a high rep with the company
-  const fulcrumsecrettechonologiesFac = Factions[FactionNames.FulcrumSecretTechnologies];
+  const fulcrumsecrettechonologiesFac = Factions[FactionName.FulcrumSecretTechnologies];
   const fulcrumSecretServer = GetServer(SpecialServers.FulcrumSecretTechnologies);
   if (!(fulcrumSecretServer instanceof Server))
-    throw new Error(`${FactionNames.FulcrumSecretTechnologies} should be normal server`);
+    throw new Error(`${FactionName.FulcrumSecretTechnologies} should be normal server`);
   if (fulcrumSecretServer == null) {
-    console.error(`Could not find ${FactionNames.FulcrumSecretTechnologies} Server`);
+    console.error(`Could not find ${FactionName.FulcrumSecretTechnologies} Server`);
   } else if (
     !fulcrumsecrettechonologiesFac.isBanned &&
     !fulcrumsecrettechonologiesFac.isMember &&
     !fulcrumsecrettechonologiesFac.alreadyInvited &&
     fulcrumSecretServer.backdoorInstalled &&
-    checkMegacorpRequirements(LocationName.AevumFulcrumTechnologies)
+    checkMegacorpRequirements(CompanyName.FulcrumTechnologies)
   ) {
     invitedFactions.push(fulcrumsecrettechonologiesFac);
   }
 
   //BitRunners
-  const bitrunnersFac = Factions[FactionNames.BitRunners];
+  const bitrunnersFac = Factions[FactionName.BitRunners];
   const bitrunnersServer = GetServer(SpecialServers.BitRunnersServer);
-  if (!(bitrunnersServer instanceof Server)) throw new Error(`${FactionNames.BitRunners} should be normal server`);
+  if (!(bitrunnersServer instanceof Server)) throw new Error(`${FactionName.BitRunners} should be normal server`);
   if (bitrunnersServer == null) {
-    console.error(`Could not find ${FactionNames.BitRunners} Server`);
+    console.error(`Could not find ${FactionName.BitRunners} Server`);
   } else if (
     !bitrunnersFac.isBanned &&
     !bitrunnersFac.isMember &&
@@ -808,11 +811,11 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
 
   //The Black Hand
 
-  const theblackhandFac = Factions[FactionNames.TheBlackHand];
+  const theblackhandFac = Factions[FactionName.TheBlackHand];
   const blackhandServer = GetServer(SpecialServers.TheBlackHandServer);
-  if (!(blackhandServer instanceof Server)) throw new Error(`${FactionNames.TheBlackHand} should be normal server`);
+  if (!(blackhandServer instanceof Server)) throw new Error(`${FactionName.TheBlackHand} should be normal server`);
   if (blackhandServer == null) {
-    console.error(`Could not find ${FactionNames.TheBlackHand} Server`);
+    console.error(`Could not find ${FactionName.TheBlackHand} Server`);
   } else if (
     !theblackhandFac.isBanned &&
     !theblackhandFac.isMember &&
@@ -823,11 +826,11 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //NiteSec
-  const nitesecFac = Factions[FactionNames.NiteSec];
+  const nitesecFac = Factions[FactionName.NiteSec];
   const nitesecServer = GetServer(SpecialServers.NiteSecServer);
-  if (!(nitesecServer instanceof Server)) throw new Error(`${FactionNames.NiteSec} should be normal server`);
+  if (!(nitesecServer instanceof Server)) throw new Error(`${FactionName.NiteSec} should be normal server`);
   if (nitesecServer == null) {
-    console.error(`Could not find ${FactionNames.NiteSec} Server`);
+    console.error(`Could not find ${FactionName.NiteSec} Server`);
   } else if (
     !nitesecFac.isBanned &&
     !nitesecFac.isMember &&
@@ -838,7 +841,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Chongqing
-  const chongqingFac = Factions[FactionNames.Chongqing];
+  const chongqingFac = Factions[FactionName.Chongqing];
   if (
     !chongqingFac.isBanned &&
     !chongqingFac.isMember &&
@@ -850,7 +853,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Sector-12
-  const sector12Fac = Factions[FactionNames.Sector12];
+  const sector12Fac = Factions[FactionName.Sector12];
   if (
     !sector12Fac.isBanned &&
     !sector12Fac.isMember &&
@@ -862,7 +865,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //New Tokyo
-  const newtokyoFac = Factions[FactionNames.NewTokyo];
+  const newtokyoFac = Factions[FactionName.NewTokyo];
   if (
     !newtokyoFac.isBanned &&
     !newtokyoFac.isMember &&
@@ -874,7 +877,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Aevum
-  const aevumFac = Factions[FactionNames.Aevum];
+  const aevumFac = Factions[FactionName.Aevum];
   if (
     !aevumFac.isBanned &&
     !aevumFac.isMember &&
@@ -886,7 +889,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Ishima
-  const ishimaFac = Factions[FactionNames.Ishima];
+  const ishimaFac = Factions[FactionName.Ishima];
   if (
     !ishimaFac.isBanned &&
     !ishimaFac.isMember &&
@@ -898,7 +901,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Volhaven
-  const volhavenFac = Factions[FactionNames.Volhaven];
+  const volhavenFac = Factions[FactionName.Volhaven];
   if (
     !volhavenFac.isBanned &&
     !volhavenFac.isMember &&
@@ -910,7 +913,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Speakers for the Dead
-  const speakersforthedeadFac = Factions[FactionNames.SpeakersForTheDead];
+  const speakersforthedeadFac = Factions[FactionName.SpeakersForTheDead];
   if (
     !speakersforthedeadFac.isBanned &&
     !speakersforthedeadFac.isMember &&
@@ -929,7 +932,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //The Dark Army
-  const thedarkarmyFac = Factions[FactionNames.TheDarkArmy];
+  const thedarkarmyFac = Factions[FactionName.TheDarkArmy];
   if (
     !thedarkarmyFac.isBanned &&
     !thedarkarmyFac.isMember &&
@@ -949,7 +952,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //The Syndicate
-  const thesyndicateFac = Factions[FactionNames.TheSyndicate];
+  const thesyndicateFac = Factions[FactionName.TheSyndicate];
   if (
     !thesyndicateFac.isBanned &&
     !thesyndicateFac.isMember &&
@@ -969,14 +972,14 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Silhouette
-  const silhouetteFac = Factions[FactionNames.Silhouette];
+  const silhouetteFac = Factions[FactionName.Silhouette];
   if (
     !silhouetteFac.isBanned &&
     !silhouetteFac.isMember &&
     !silhouetteFac.alreadyInvited &&
-    (allPositions.includes("Chief Technology Officer") ||
-      allPositions.includes("Chief Financial Officer") ||
-      allPositions.includes("Chief Executive Officer")) &&
+    (allPositions.includes(JobName.software7) || // CTO
+      allPositions.includes(JobName.business4) || // CFO
+      allPositions.includes(JobName.business5)) && // CEO
     this.money >= 15000000 &&
     this.karma <= -22
   ) {
@@ -984,7 +987,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Tetrads
-  const tetradsFac = Factions[FactionNames.Tetrads];
+  const tetradsFac = Factions[FactionName.Tetrads];
   if (
     !tetradsFac.isBanned &&
     !tetradsFac.isMember &&
@@ -1000,7 +1003,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //SlumSnakes
-  const slumsnakesFac = Factions[FactionNames.SlumSnakes];
+  const slumsnakesFac = Factions[FactionName.SlumSnakes];
   if (
     !slumsnakesFac.isBanned &&
     !slumsnakesFac.isMember &&
@@ -1016,7 +1019,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Netburners
-  const netburnersFac = Factions[FactionNames.Netburners];
+  const netburnersFac = Factions[FactionName.Netburners];
   let totalHacknetRam = 0;
   let totalHacknetCores = 0;
   let totalHacknetLevels = 0;
@@ -1048,7 +1051,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //Tian Di Hui
-  const tiandihuiFac = Factions[FactionNames.TianDiHui];
+  const tiandihuiFac = Factions[FactionName.TianDiHui];
   if (
     !tiandihuiFac.isBanned &&
     !tiandihuiFac.isMember &&
@@ -1061,11 +1064,11 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   }
 
   //CyberSec
-  const cybersecFac = Factions[FactionNames.CyberSec];
+  const cybersecFac = Factions[FactionName.CyberSec];
   const cybersecServer = GetServer(SpecialServers.CyberSecServer);
-  if (!(cybersecServer instanceof Server)) throw new Error(`${FactionNames.CyberSec} should be normal server`);
+  if (!(cybersecServer instanceof Server)) throw new Error(`${FactionName.CyberSec} should be normal server`);
   if (cybersecServer == null) {
-    console.error(`Could not find ${FactionNames.CyberSec} Server`);
+    console.error(`Could not find ${FactionName.CyberSec} Server`);
   } else if (
     !cybersecFac.isBanned &&
     !cybersecFac.isMember &&
@@ -1083,7 +1086,7 @@ export function setBitNodeNumber(this: PlayerObject, n: number): void {
   this.bitNodeN = n;
 }
 
-export function queueAugmentation(this: PlayerObject, name: string): void {
+export function queueAugmentation(this: PlayerObject, name: AugmentationName): void {
   for (const aug of this.queuedAugmentations) {
     if (aug.name == name) {
       console.warn(`tried to queue ${name} twice, this may be a bug`);
@@ -1107,34 +1110,33 @@ export function gainCodingContractReward(
   reward: ICodingContractReward | null,
   difficulty = 1,
 ): string {
-  if (reward == null || reward.type == null) {
-    return `No reward for this contract`;
-  }
+  if (!reward) return `No reward for this contract`;
 
-  /* eslint-disable no-case-declarations */
   switch (reward.type) {
-    case CodingContractRewardType.FactionReputation:
-      if (reward.name == null || !Factions[reward.name]) {
-        // If no/invalid faction was designated, just give rewards to all factions
-        reward.type = CodingContractRewardType.FactionReputationAll;
-        return this.gainCodingContractReward(reward);
+    case CodingContractRewardType.FactionReputation: {
+      if (!Factions[reward.name]) {
+        return this.gainCodingContractReward({ type: CodingContractRewardType.FactionReputationAll });
       }
       const repGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty;
       Factions[reward.name].playerReputation += repGain;
       return `Gained ${repGain} faction reputation for ${reward.name}`;
-    case CodingContractRewardType.FactionReputationAll:
+    }
+    case CodingContractRewardType.FactionReputationAll: {
       const totalGain = CONSTANTS.CodingContractBaseFactionRepGain * difficulty;
 
       // Ignore Bladeburners and other special factions for this calculation
-      const specialFactions = [FactionNames.Bladeburners as string];
+      const specialFactions = [
+        FactionName.Bladeburners,
+        FactionName.ShadowsOfAnarchy,
+        FactionName.ChurchOfTheMachineGod,
+      ];
       const factions = this.factions.slice().filter((f) => {
         return !specialFactions.includes(f);
       });
 
       // If the player was only part of the special factions, we'll just give money
       if (factions.length == 0) {
-        reward.type = CodingContractRewardType.Money;
-        return this.gainCodingContractReward(reward, difficulty);
+        return this.gainCodingContractReward({ type: CodingContractRewardType.Money }, difficulty);
       }
 
       const gainPerFaction = Math.floor(totalGain / factions.length);
@@ -1143,11 +1145,10 @@ export function gainCodingContractReward(
         Factions[facName].playerReputation += gainPerFaction;
       }
       return `Gained ${gainPerFaction} reputation for each of the following factions: ${factions.join(", ")}`;
+    }
     case CodingContractRewardType.CompanyReputation: {
-      if (reward.name == null || !Companies[reward.name]) {
-        //If no/invalid company was designated, just give rewards to all factions
-        reward.type = CodingContractRewardType.FactionReputationAll;
-        return this.gainCodingContractReward(reward);
+      if (!isMember("CompanyName", reward.name)) {
+        return this.gainCodingContractReward({ type: CodingContractRewardType.FactionReputationAll });
       }
       const repGain = CONSTANTS.CodingContractBaseCompanyRepGain * difficulty;
       Companies[reward.name].playerReputation += repGain;
@@ -1155,12 +1156,11 @@ export function gainCodingContractReward(
     }
     case CodingContractRewardType.Money:
     default: {
-      const moneyGain = CONSTANTS.CodingContractBaseMoneyGain * difficulty * BitNodeMultipliers.CodingContractMoney;
+      const moneyGain = CONSTANTS.CodingContractBaseMoneyGain * difficulty * currentNodeMults.CodingContractMoney;
       this.gainMoney(moneyGain, "codingcontract");
       return `Gained ${formatMoney(moneyGain)}`;
     }
   }
-  /* eslint-enable no-case-declarations */
 }
 
 export function travel(this: PlayerObject, to: CityName): boolean {
@@ -1217,7 +1217,7 @@ export function sourceFileLvl(this: PlayerObject, n: number): number {
 
 export function focusPenalty(this: PlayerObject): number {
   let focus = 1;
-  if (!this.hasAugmentation(AugmentationNames.NeuroreceptorManager, true)) {
+  if (!this.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
     focus = this.focus ? 1 : CONSTANTS.BaseFocusBonus;
   }
   return focus;

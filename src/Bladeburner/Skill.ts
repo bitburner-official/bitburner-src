@@ -1,4 +1,4 @@
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 interface ISkillParams {
   name: string;
@@ -138,10 +138,10 @@ export class Skill {
     //be possible for it to run with them. For the sake of not crashing the game,
     const recursiveMode = (currentLevel: number, count: number): number => {
       if (count <= 1) {
-        return Math.floor((this.baseCost + currentLevel * this.costInc) * BitNodeMultipliers.BladeburnerSkillCost);
+        return Math.floor((this.baseCost + currentLevel * this.costInc) * currentNodeMults.BladeburnerSkillCost);
       } else {
         const thisUpgrade = Math.floor(
-          (this.baseCost + currentLevel * this.costInc) * BitNodeMultipliers.BladeburnerSkillCost,
+          (this.baseCost + currentLevel * this.costInc) * currentNodeMults.BladeburnerSkillCost,
         );
         return this.calculateCost(currentLevel + 1, count - 1) + thisUpgrade;
       }
@@ -161,7 +161,7 @@ export class Skill {
       //(this.baseCost + currentLevel * this.costInc) * BitNodeMultipliers.BladeburnerSkillCost
       //being repeated for increasing currentLevel
       const preMult = (count * (2 * this.baseCost + this.costInc * (2 * currentLevel + count + 1))) / 2;
-      const unFloored = preMult * BitNodeMultipliers.BladeburnerSkillCost - count / 2;
+      const unFloored = preMult * currentNodeMults.BladeburnerSkillCost - count / 2;
       return Math.floor(unFloored);
     }
   }

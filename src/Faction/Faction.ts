@@ -1,6 +1,8 @@
+import { AugmentationName, FactionName } from "@enums";
 import { FactionInfo, FactionInfos } from "./FactionInfo";
 import { favorToRep, repToFavor } from "./formulas/favor";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { getKeyList } from "../utils/helpers/getKeyList";
 
 export class Faction {
   /**
@@ -10,7 +12,7 @@ export class Faction {
   alreadyInvited = false;
 
   /** Holds names of all augmentations that this Faction offers */
-  augmentations: string[] = [];
+  augmentations: AugmentationName[] = [];
 
   /** Amount of favor the player has with this faction. */
   favor = 0;
@@ -22,12 +24,12 @@ export class Faction {
   isMember = false;
 
   /** Name of faction */
-  name = "";
+  name: FactionName;
 
   /** Amount of reputation player has with this faction */
   playerReputation = 0;
 
-  constructor(name = "") {
+  constructor(name = FactionName.Sector12) {
     this.name = name;
   }
 
@@ -42,11 +44,24 @@ export class Faction {
     return info;
   }
 
-  gainFavor(): void {
-    if (this.favor == null) {
-      this.favor = 0;
-    }
+  prestigeSourceFile() {
+    // Reset favor, reputation, and flags
+    this.favor = 0;
+    this.playerReputation = 0;
+    this.alreadyInvited = false;
+    this.isMember = false;
+    this.isBanned = false;
+  }
+
+  prestigeAugmentation(): void {
+    // Gain favor
+    if (this.favor == null) this.favor = 0;
     this.favor += this.getFavorGain();
+    // Reset reputation and flags
+    this.playerReputation = 0;
+    this.alreadyInvited = false;
+    this.isMember = false;
+    this.isBanned = false;
   }
 
   //Returns an array with [How much favor would be gained, how much rep would be left over]
@@ -60,14 +75,16 @@ export class Faction {
     return newFavor - this.favor;
   }
 
+  static savedKeys = getKeyList(Faction, { removedKeys: ["augmentations", "name"] });
+
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Faction", this);
+    return Generic_toJSON("Faction", this, Faction.savedKeys);
   }
 
   /** Initializes a Faction object from a JSON save state. */
   static fromJSON(value: IReviverValue): Faction {
-    return Generic_fromJSON(Faction, value.data);
+    return Generic_fromJSON(Faction, value.data, Faction.savedKeys);
   }
 }
 

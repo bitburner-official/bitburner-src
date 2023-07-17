@@ -1,6 +1,6 @@
 import { Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { KEY } from "../../utils/helpers/keyCodes";
@@ -46,7 +46,7 @@ export function BribeGame(props: IMinigameProps): React.ReactElement {
   let upColor = defaultColor;
   let downColor = defaultColor;
   let choiceColor = defaultColor;
-  const hasAugment = Player.hasAugmentation(AugmentationNames.BeautyOfAphrodite, true);
+  const hasAugment = Player.hasAugmentation(AugmentationName.BeautyOfAphrodite, true);
 
   if (hasAugment) {
     const upIndex = index + 1 >= choices.length ? 0 : index + 1;

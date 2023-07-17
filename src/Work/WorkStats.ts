@@ -1,3 +1,5 @@
+import type { MoneySource } from "../utils/MoneySourceTracker";
+
 import { Person } from "../PersonObjects/Person";
 import { Player } from "@player";
 import { Multipliers } from "../PersonObjects/Multipliers";
@@ -59,7 +61,12 @@ export const scaleWorkStats = (w: WorkStats, n: number, scaleMoney = true): Work
   };
 };
 
-export const applyWorkStats = (target: Person, workStats: WorkStats, cycles: number, source: string): WorkStats => {
+export const applyWorkStats = (
+  target: Person,
+  workStats: WorkStats,
+  cycles: number,
+  source: MoneySource,
+): WorkStats => {
   const expStats = applyWorkStatsExp(target, workStats, cycles);
   const gains = {
     money: workStats.money * cycles,

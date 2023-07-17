@@ -1,46 +1,43 @@
+import type { Faction } from "../Faction/Faction";
+
 import React from "react";
 import { Work, WorkType } from "./Work";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { Player } from "@player";
-import { FactionNames } from "../Faction/data/FactionNames";
+import { AugmentationName, FactionName, FactionWorkType } from "@enums";
 import { Factions } from "../Faction/Factions";
-import { Faction } from "../Faction/Faction";
 import { applyWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reputation } from "../ui/React/Reputation";
 import { CONSTANTS } from "../Constants";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { calculateFactionExp, calculateFactionRep } from "./Formulas";
-import { FactionWorkType } from "../Enums";
-import { findEnumMember } from "../utils/helpers/enum";
+import { getEnumHelper } from "../utils/EnumHelper";
 
 interface FactionWorkParams {
   singularity: boolean;
   factionWorkType: FactionWorkType;
-  faction: string;
+  faction: FactionName;
 }
 
 export const isFactionWork = (w: Work | null): w is FactionWork => w !== null && w.type === WorkType.FACTION;
 
 export class FactionWork extends Work {
   factionWorkType: FactionWorkType;
-  factionName: string;
+  factionName: FactionName;
 
   constructor(params?: FactionWorkParams) {
     super(WorkType.FACTION, params?.singularity ?? true);
     this.factionWorkType = params?.factionWorkType ?? FactionWorkType.hacking;
-    this.factionName = params?.faction ?? FactionNames.Sector12;
+    this.factionName = params?.faction ?? FactionName.Sector12;
   }
 
   getFaction(): Faction {
-    const f = Factions[this.factionName];
-    if (!f) throw new Error(`Faction work started with invalid / unknown faction: '${this.factionName}'`);
-    return f;
+    return Factions[this.factionName];
   }
 
   getReputationRate(): number {
     let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationNames.NeuroreceptorManager, true)) {
+    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
       focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
     }
     return calculateFactionRep(Player, this.factionWorkType, this.getFaction().favor) * focusBonus;
@@ -48,7 +45,7 @@ export class FactionWork extends Work {
 
   getExpRates(): WorkStats {
     let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationNames.NeuroreceptorManager, true)) {
+    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
       focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
     }
     const rate = calculateFactionExp(Player, this.factionWorkType);
@@ -94,8 +91,8 @@ export class FactionWork extends Work {
   /** Initializes a FactionWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): FactionWork {
     const factionWork = Generic_fromJSON(FactionWork, value.data);
-    factionWork.factionWorkType =
-      findEnumMember(FactionWorkType, factionWork.factionWorkType) ?? FactionWorkType.hacking;
+    factionWork.factionWorkType = getEnumHelper("FactionWorkType").fuzzyGetMember(factionWork.factionWorkType, true);
+    factionWork.factionName = getEnumHelper("FactionName").fuzzyGetMember(factionWork.factionName, true);
     return factionWork;
   }
 }

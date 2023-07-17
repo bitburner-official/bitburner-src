@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal } from "../../../ui/React/Modal";
-import { IndustryResearchTrees } from "../../IndustryData";
+import { IndustryResearchTrees } from "../../data/IndustryData";
 import * as corpConstants from "../../data/Constants";
 import { Division } from "../../Division";
 import { Research } from "../../Actions";

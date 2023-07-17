@@ -4,7 +4,7 @@
 
 ## BasicHGWOptions.additionalMsec property
 
-Number of additional milliseconds that will be spent waiting between the start of the function and when it completes. Experimental in 2.2.2, may be removed in 2.3.
+Number of additional milliseconds that will be spent waiting between the start of the function and when it completes.
 
 **Signature:**
 

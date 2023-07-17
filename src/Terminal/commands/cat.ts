@@ -1,12 +1,11 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { MessageFilename, showMessage } from "../../Message/MessageHelpers";
+import { showMessage } from "../../Message/MessageHelpers";
 import { showLiterature } from "../../Literature/LiteratureHelpers";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { checkEnum } from "../../utils/helpers/enum";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
-import { LiteratureName } from "../../Literature/data/LiteratureNames";
+import { isMember } from "../../utils/EnumHelper";
 
 export function cat(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 1) return Terminal.error("Incorrect usage of cat command. Usage: cat [file]");
@@ -25,10 +24,10 @@ export function cat(args: (string | number | boolean)[], server: BaseServer): vo
   }
 
   // Message
-  if (checkEnum(MessageFilename, path)) {
+  if (isMember("MessageFilename", path)) {
     if (server.messages.includes(path)) return showMessage(path);
   }
-  if (checkEnum(LiteratureName, path)) {
+  if (isMember("LiteratureName", path)) {
     if (server.messages.includes(path)) return showLiterature(path);
   }
   Terminal.error(`No file at path ${path}`);

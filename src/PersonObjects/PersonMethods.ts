@@ -1,6 +1,6 @@
 import { Person } from "./Person";
 import { calculateSkill } from "./formulas/skill";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
 import { WorkStats } from "@nsdefs";
 
@@ -14,10 +14,7 @@ export function gainHackingExp(this: Person, exp: number): void {
     this.exp.hacking = 0;
   }
 
-  this.skills.hacking = calculateSkill(
-    this.exp.hacking,
-    this.mults.hacking * BitNodeMultipliers.HackingLevelMultiplier,
-  );
+  this.skills.hacking = calculateSkill(this.exp.hacking, this.mults.hacking * currentNodeMults.HackingLevelMultiplier);
 }
 
 export function gainStrengthExp(this: Person, exp: number): void {
@@ -32,7 +29,7 @@ export function gainStrengthExp(this: Person, exp: number): void {
 
   this.skills.strength = calculateSkill(
     this.exp.strength,
-    this.mults.strength * BitNodeMultipliers.StrengthLevelMultiplier,
+    this.mults.strength * currentNodeMults.StrengthLevelMultiplier,
   );
 }
 
@@ -46,10 +43,7 @@ export function gainDefenseExp(this: Person, exp: number): void {
     this.exp.defense = 0;
   }
 
-  this.skills.defense = calculateSkill(
-    this.exp.defense,
-    this.mults.defense * BitNodeMultipliers.DefenseLevelMultiplier,
-  );
+  this.skills.defense = calculateSkill(this.exp.defense, this.mults.defense * currentNodeMults.DefenseLevelMultiplier);
   const ratio = this.hp.current / this.hp.max;
   this.hp.max = Math.floor(10 + this.skills.defense / 10);
   this.hp.current = Math.round(this.hp.max * ratio);
@@ -67,7 +61,7 @@ export function gainDexterityExp(this: Person, exp: number): void {
 
   this.skills.dexterity = calculateSkill(
     this.exp.dexterity,
-    this.mults.dexterity * BitNodeMultipliers.DexterityLevelMultiplier,
+    this.mults.dexterity * currentNodeMults.DexterityLevelMultiplier,
   );
 }
 
@@ -81,10 +75,7 @@ export function gainAgilityExp(this: Person, exp: number): void {
     this.exp.agility = 0;
   }
 
-  this.skills.agility = calculateSkill(
-    this.exp.agility,
-    this.mults.agility * BitNodeMultipliers.AgilityLevelMultiplier,
-  );
+  this.skills.agility = calculateSkill(this.exp.agility, this.mults.agility * currentNodeMults.AgilityLevelMultiplier);
 }
 
 export function gainCharismaExp(this: Person, exp: number): void {
@@ -99,7 +90,7 @@ export function gainCharismaExp(this: Person, exp: number): void {
 
   this.skills.charisma = calculateSkill(
     this.exp.charisma,
-    this.mults.charisma * BitNodeMultipliers.CharismaLevelMultiplier,
+    this.mults.charisma * currentNodeMults.CharismaLevelMultiplier,
   );
 }
 
@@ -164,33 +155,29 @@ export function regenerateHp(this: Person, amt: number): void {
 export function updateSkillLevels(this: Person): void {
   this.skills.hacking = Math.max(
     1,
-    Math.floor(this.calculateSkill(this.exp.hacking, this.mults.hacking * BitNodeMultipliers.HackingLevelMultiplier)),
+    Math.floor(this.calculateSkill(this.exp.hacking, this.mults.hacking * currentNodeMults.HackingLevelMultiplier)),
   );
   this.skills.strength = Math.max(
     1,
-    Math.floor(
-      this.calculateSkill(this.exp.strength, this.mults.strength * BitNodeMultipliers.StrengthLevelMultiplier),
-    ),
+    Math.floor(this.calculateSkill(this.exp.strength, this.mults.strength * currentNodeMults.StrengthLevelMultiplier)),
   );
   this.skills.defense = Math.max(
     1,
-    Math.floor(this.calculateSkill(this.exp.defense, this.mults.defense * BitNodeMultipliers.DefenseLevelMultiplier)),
+    Math.floor(this.calculateSkill(this.exp.defense, this.mults.defense * currentNodeMults.DefenseLevelMultiplier)),
   );
   this.skills.dexterity = Math.max(
     1,
     Math.floor(
-      this.calculateSkill(this.exp.dexterity, this.mults.dexterity * BitNodeMultipliers.DexterityLevelMultiplier),
+      this.calculateSkill(this.exp.dexterity, this.mults.dexterity * currentNodeMults.DexterityLevelMultiplier),
     ),
   );
   this.skills.agility = Math.max(
     1,
-    Math.floor(this.calculateSkill(this.exp.agility, this.mults.agility * BitNodeMultipliers.AgilityLevelMultiplier)),
+    Math.floor(this.calculateSkill(this.exp.agility, this.mults.agility * currentNodeMults.AgilityLevelMultiplier)),
   );
   this.skills.charisma = Math.max(
     1,
-    Math.floor(
-      this.calculateSkill(this.exp.charisma, this.mults.charisma * BitNodeMultipliers.CharismaLevelMultiplier),
-    ),
+    Math.floor(this.calculateSkill(this.exp.charisma, this.mults.charisma * currentNodeMults.CharismaLevelMultiplier)),
   );
 
   const ratio: number = Math.min(this.hp.current / this.hp.max, 1);

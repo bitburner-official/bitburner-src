@@ -1,16 +1,22 @@
+import React from "react";
 import { Theme } from "@mui/material/styles";
+
+import type { TextFilePath } from "../../Paths/TextFilePath";
+import type { ContractFilePath } from "../../Paths/ContractFilePath";
+import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
+import type { ContentFilePath } from "../../Paths/ContentFile";
+import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
+
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import React from "react";
 import { BaseServer } from "../../Server/BaseServer";
 import { Router } from "../../ui/GameRoot";
+import { Page } from "../../ui/Router";
 import { Terminal } from "../../Terminal";
 import libarg from "arg";
 import { showLiterature } from "../../Literature/LiteratureHelpers";
-import { MessageFilename, showMessage } from "../../Message/MessageHelpers";
-import { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { showMessage } from "../../Message/MessageHelpers";
 import { FilePath, combinePath, removeDirectoryFromPath } from "../../Paths/FilePath";
-import { ContentFilePath } from "../../Paths/ContentFile";
 import {
   Directory,
   directoryExistsOnServer,
@@ -18,11 +24,7 @@ import {
   resolveDirectory,
   root,
 } from "../../Paths/Directory";
-import { TextFilePath } from "../../Paths/TextFilePath";
-import { ContractFilePath } from "../../Paths/ContractFilePath";
-import { ProgramFilePath } from "../../Paths/ProgramFilePath";
-import { checkEnum } from "../../utils/helpers/enum";
-import { LiteratureName } from "../../Literature/data/LiteratureNames";
+import { isMember } from "../../utils/EnumHelper";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer): void {
   interface LSFlags {
@@ -133,9 +135,9 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     const fullPath = combinePath(baseDirectory, props.path);
     function onClick() {
       const code = server.scripts.get(fullPath)?.content ?? "";
-      const map = new Map<ContentFilePath, string>();
-      map.set(fullPath, code);
-      Router.toScriptEditor(map);
+      const files = new Map<ContentFilePath, string>();
+      files.set(fullPath, code);
+      Router.toPage(Page.ScriptEditor, { files });
     }
     return (
       <span>
@@ -158,9 +160,9 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
         return Terminal.error(`File is not on this server, connect to ${server.hostname} and try again`);
       }
       // Message and lit files are always in root, no need to combine path with base directory
-      if (checkEnum(MessageFilename, props.path)) {
+      if (isMember("MessageFilename", props.path)) {
         showMessage(props.path);
-      } else if (checkEnum(LiteratureName, props.path)) {
+      } else if (isMember("LiteratureName", props.path)) {
         showLiterature(props.path);
       }
     }

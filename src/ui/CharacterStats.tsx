@@ -1,8 +1,8 @@
 import { Paper, Table, TableBody, Box, IconButton, Typography, Container, Tooltip } from "@mui/material";
 import { MoreHoriz, Info } from "@mui/icons-material";
 import React, { useState } from "react";
-import { BitNodes, defaultMultipliers, getBitNodeMultipliers } from "../BitNode/BitNode";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { BitNodes } from "../BitNode/BitNode";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BitNodeMultipliersDisplay } from "../BitNode/ui/BitnodeMultipliersDescription";
 import { HacknetServerConstants } from "../Hacknet/data/Constants";
 import { getPurchaseServerLimit } from "../Server/ServerPurchases";
@@ -15,7 +15,6 @@ import { Modal } from "./React/Modal";
 import { Money } from "./React/Money";
 import { StatsRow } from "./React/StatsRow";
 import { StatsTable } from "./React/StatsTable";
-import { isEqual } from "lodash";
 import { useRerender } from "./React/hooks";
 
 interface EmployersModalProps {
@@ -107,60 +106,60 @@ interface IMoneyModalProps {
 
 function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
   function convertMoneySourceTrackerToString(src: MoneySourceTracker): React.ReactElement {
-    const parts: [string, JSX.Element][] = [[`Total:`, <Money money={src.total} />]];
+    const parts: [string, JSX.Element][] = [[`Total:`, <Money key="total" money={src.total} />]];
     if (src.augmentations) {
-      parts.push([`Augmentations:`, <Money money={src.augmentations} />]);
+      parts.push([`Augmentations:`, <Money key="aug" money={src.augmentations} />]);
     }
     if (src.bladeburner) {
-      parts.push([`Bladeburner:`, <Money money={src.bladeburner} />]);
+      parts.push([`Bladeburner:`, <Money key="blade" money={src.bladeburner} />]);
     }
     if (src.casino) {
-      parts.push([`Casino:`, <Money money={src.casino} />]);
+      parts.push([`Casino:`, <Money key="casino" money={src.casino} />]);
     }
     if (src.codingcontract) {
-      parts.push([`Coding Contracts:`, <Money money={src.codingcontract} />]);
+      parts.push([`Coding Contracts:`, <Money key="coding-contract" money={src.codingcontract} />]);
     }
     if (src.work) {
-      parts.push([`Company Work:`, <Money money={src.work} />]);
+      parts.push([`Company Work:`, <Money key="company-work" money={src.work} />]);
     }
     if (src.class) {
-      parts.push([`Class:`, <Money money={src.class} />]);
+      parts.push([`Class:`, <Money key="class" money={src.class} />]);
     }
     if (src.corporation) {
-      parts.push([`Corporation:`, <Money money={src.corporation} />]);
+      parts.push([`Corporation:`, <Money key="corp" money={src.corporation} />]);
     }
     if (src.crime) {
-      parts.push([`Crimes:`, <Money money={src.crime} />]);
+      parts.push([`Crimes:`, <Money key="crime" money={src.crime} />]);
     }
     if (src.gang) {
-      parts.push([`Gang:`, <Money money={src.gang} />]);
+      parts.push([`Gang:`, <Money key="gang" money={src.gang} />]);
     }
     if (src.hacking) {
-      parts.push([`Hacking:`, <Money money={src.hacking} />]);
+      parts.push([`Hacking:`, <Money key="hacking" money={src.hacking} />]);
     }
     if (src.hacknet) {
-      parts.push([`Hacknet Nodes:`, <Money money={src.hacknet} />]);
+      parts.push([`Hacknet Nodes:`, <Money key="hacknet" money={src.hacknet} />]);
     }
     if (src.hacknet_expenses) {
-      parts.push([`Hacknet Nodes Expenses:`, <Money money={src.hacknet_expenses} />]);
+      parts.push([`Hacknet Nodes Expenses:`, <Money key="hacknet-expenses" money={src.hacknet_expenses} />]);
     }
     if (src.hospitalization) {
-      parts.push([`Hospitalization:`, <Money money={src.hospitalization} />]);
+      parts.push([`Hospitalization:`, <Money key="hospital" money={src.hospitalization} />]);
     }
     if (src.infiltration) {
-      parts.push([`Infiltration:`, <Money money={src.infiltration} />]);
+      parts.push([`Infiltration:`, <Money key="infiltration" money={src.infiltration} />]);
     }
     if (src.servers) {
-      parts.push([`Servers:`, <Money money={src.servers} />]);
+      parts.push([`Servers:`, <Money key="servers" money={src.servers} />]);
     }
     if (src.stock) {
-      parts.push([`Stock Market:`, <Money money={src.stock} />]);
+      parts.push([`Stock Market:`, <Money key="market" money={src.stock} />]);
     }
     if (src.sleeves) {
-      parts.push([`Sleeves:`, <Money money={src.sleeves} />]);
+      parts.push([`Sleeves:`, <Money key="sleeves" money={src.sleeves} />]);
     }
     if (src.other) {
-      parts.push([`Other:`, <Money money={src.other} />]);
+      parts.push([`Other:`, <Money key="other" money={src.other} />]);
     }
 
     return <StatsTable rows={parts} wide />;
@@ -211,12 +210,7 @@ export function CharacterStats(): React.ReactElement {
   timeRows.push(["Total", convertTimeMsToTimeElapsedString(Player.totalPlaytime)]);
 
   let showBitNodeMults = false;
-  if (Player.sourceFileLvl(5) > 0) {
-    const n = Player.bitNodeN;
-    const maxSfLevel = n === 12 ? Infinity : 3;
-    const mults = getBitNodeMultipliers(n, Math.min(Player.sourceFileLvl(n) + 1, maxSfLevel));
-    showBitNodeMults = !isEqual(mults, defaultMultipliers);
-  }
+  if (Player.sourceFileLvl(5) > 0) showBitNodeMults = true;
   return (
     <Container maxWidth="lg" disableGutters sx={{ mx: 0 }}>
       <Typography variant="h4">Stats</Typography>
@@ -355,12 +349,12 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Hacking Money",
                   value: Player.mults.hacking_money,
-                  effValue: Player.mults.hacking_money * BitNodeMultipliers.ScriptHackMoney,
+                  effValue: Player.mults.hacking_money * currentNodeMults.ScriptHackMoney,
                 },
                 {
                   mult: "Hacking Growth",
                   value: Player.mults.hacking_grow,
-                  effValue: Player.mults.hacking_grow * BitNodeMultipliers.ServerGrowthRate,
+                  effValue: Player.mults.hacking_grow * currentNodeMults.ServerGrowthRate,
                 },
               ]}
               color={Settings.theme.hack}
@@ -370,12 +364,12 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Hacking Level",
                   value: Player.mults.hacking,
-                  effValue: Player.mults.hacking * BitNodeMultipliers.HackingLevelMultiplier,
+                  effValue: Player.mults.hacking * currentNodeMults.HackingLevelMultiplier,
                 },
                 {
                   mult: "Hacking Experience",
                   value: Player.mults.hacking_exp,
-                  effValue: Player.mults.hacking_exp * BitNodeMultipliers.HackExpGain,
+                  effValue: Player.mults.hacking_exp * currentNodeMults.HackExpGain,
                 },
               ]}
               color={Settings.theme.hack}
@@ -385,7 +379,7 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Strength Level",
                   value: Player.mults.strength,
-                  effValue: Player.mults.strength * BitNodeMultipliers.StrengthLevelMultiplier,
+                  effValue: Player.mults.strength * currentNodeMults.StrengthLevelMultiplier,
                 },
                 {
                   mult: "Strength Experience",
@@ -399,7 +393,7 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Defense Level",
                   value: Player.mults.defense,
-                  effValue: Player.mults.defense * BitNodeMultipliers.DefenseLevelMultiplier,
+                  effValue: Player.mults.defense * currentNodeMults.DefenseLevelMultiplier,
                 },
                 {
                   mult: "Defense Experience",
@@ -413,7 +407,7 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Dexterity Level",
                   value: Player.mults.dexterity,
-                  effValue: Player.mults.dexterity * BitNodeMultipliers.DexterityLevelMultiplier,
+                  effValue: Player.mults.dexterity * currentNodeMults.DexterityLevelMultiplier,
                 },
                 {
                   mult: "Dexterity Experience",
@@ -427,7 +421,7 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Agility Level",
                   value: Player.mults.agility,
-                  effValue: Player.mults.agility * BitNodeMultipliers.AgilityLevelMultiplier,
+                  effValue: Player.mults.agility * currentNodeMults.AgilityLevelMultiplier,
                 },
                 {
                   mult: "Agility Experience",
@@ -441,7 +435,7 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Charisma Level",
                   value: Player.mults.charisma,
-                  effValue: Player.mults.charisma * BitNodeMultipliers.CharismaLevelMultiplier,
+                  effValue: Player.mults.charisma * currentNodeMults.CharismaLevelMultiplier,
                 },
                 {
                   mult: "Charisma Experience",
@@ -459,7 +453,7 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Hacknet Node Production",
                   value: Player.mults.hacknet_node_money,
-                  effValue: Player.mults.hacknet_node_money * BitNodeMultipliers.HacknetNodeMoney,
+                  effValue: Player.mults.hacknet_node_money * currentNodeMults.HacknetNodeMoney,
                 },
                 {
                   mult: "Hacknet Node Purchase Cost",
@@ -490,13 +484,13 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Faction Reputation Gain",
                   value: Player.mults.faction_rep,
-                  effValue: Player.mults.faction_rep * BitNodeMultipliers.FactionWorkRepGain,
+                  effValue: Player.mults.faction_rep * currentNodeMults.FactionWorkRepGain,
                   color: Settings.theme.rep,
                 },
                 {
                   mult: "Salary",
                   value: Player.mults.work_money,
-                  effValue: Player.mults.work_money * BitNodeMultipliers.CompanyWorkMoney,
+                  effValue: Player.mults.work_money * currentNodeMults.CompanyWorkMoney,
                   color: Settings.theme.money,
                 },
               ]}
@@ -511,13 +505,13 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Crime Money",
                   value: Player.mults.crime_money,
-                  effValue: Player.mults.crime_money * BitNodeMultipliers.CrimeMoney,
+                  effValue: Player.mults.crime_money * currentNodeMults.CrimeMoney,
                   color: Settings.theme.money,
                 },
               ]}
               color={Settings.theme.combat}
             />
-            {Player.canAccessBladeburner() && BitNodeMultipliers.BladeburnerRank > 0 && (
+            {Player.canAccessBladeburner() && currentNodeMults.BladeburnerRank > 0 && (
               <MultiplierTable
                 rows={[
                   {

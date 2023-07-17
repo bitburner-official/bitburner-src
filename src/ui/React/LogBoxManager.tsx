@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { EventEmitter } from "../../utils/EventEmitter";
 import { RunningScript } from "../../Script/RunningScript";
 import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
@@ -80,6 +80,16 @@ let logs: Log[] = [];
 
 export function LogBoxManager(): React.ReactElement {
   const rerender = useRerender();
+
+  //Close tail windows by their pid.
+  const closePid = useCallback(
+    (pid: number) => {
+      logs = logs.filter((log) => log.script.pid !== pid);
+      rerender();
+    },
+    [rerender],
+  );
+
   useEffect(
     () =>
       LogBoxEvents.subscribe((script: RunningScript) => {
@@ -90,7 +100,7 @@ export function LogBoxManager(): React.ReactElement {
         });
         rerender();
       }),
-    [],
+    [rerender],
   );
 
   //Event used by ns.closeTail to close tail windows
@@ -99,25 +109,21 @@ export function LogBoxManager(): React.ReactElement {
       LogBoxCloserEvents.subscribe((pid: number) => {
         closePid(pid);
       }),
-    [],
+    [closePid],
   );
 
-  useEffect(() =>
-    LogBoxClearEvents.subscribe(() => {
-      logs = [];
-      rerender();
-    }),
+  useEffect(
+    () =>
+      LogBoxClearEvents.subscribe(() => {
+        logs = [];
+        rerender();
+      }),
+    [rerender],
   );
 
   //Close tail windows by their id
   function close(id: number): void {
     logs = logs.filter((l) => l.id !== id);
-    rerender();
-  }
-
-  //Close tail windows by their pid.
-  function closePid(pid: number): void {
-    logs = logs.filter((log) => log.script.pid !== pid);
     rerender();
   }
 
@@ -130,7 +136,7 @@ export function LogBoxManager(): React.ReactElement {
   );
 }
 
-interface IProps {
+interface LogWindowProps {
   script: RunningScript;
   onClose: () => void;
 }
@@ -158,7 +164,7 @@ const useStyles = makeStyles(() =>
 
 export const logBoxBaseZIndex = 1500;
 
-function LogWindow(props: IProps): React.ReactElement {
+function LogWindow(props: LogWindowProps): React.ReactElement {
   const draggableRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<Draggable>(null);
   const script = props.script;
@@ -187,10 +193,18 @@ function LogWindow(props: IProps): React.ReactElement {
     propsRef.current.setSize(size.width, size.height);
   };
 
+  const updateLayer = useCallback(() => {
+    const c = container.current;
+    if (c === null) return;
+    c.style.zIndex = logBoxBaseZIndex + layerCounter + "";
+    layerCounter++;
+    rerender();
+  }, [rerender]);
+
   useEffect(() => {
     propsRef.current.updateDOM();
     updateLayer();
-  }, []);
+  }, [updateLayer]);
 
   function kill(): void {
     killWorkerScriptByPid(script.pid);
@@ -226,14 +240,6 @@ function LogWindow(props: IProps): React.ReactElement {
     }
   }
 
-  function updateLayer(): void {
-    const c = container.current;
-    if (c === null) return;
-    c.style.zIndex = logBoxBaseZIndex + layerCounter + "";
-    layerCounter++;
-    rerender();
-  }
-
   function title(): React.ReactElement {
     const title_str = script.title === "string" ? script.title : `${script.filename} ${script.args.join(" ")}`;
     return (
@@ -267,22 +273,26 @@ function LogWindow(props: IProps): React.ReactElement {
     return "primary";
   }
 
+  const onWindowResize = useMemo(
+    () =>
+      debounce((): void => {
+        const node = draggableRef.current;
+        if (!node) return;
+
+        if (!isOnScreen(node)) {
+          propsRef.current.setPosition(0, 0);
+        }
+      }, 100),
+    [],
+  );
+
   // And trigger fakeDrag when the window is resized
   useEffect(() => {
     window.addEventListener("resize", onWindowResize);
     return () => {
       window.removeEventListener("resize", onWindowResize);
     };
-  }, []);
-
-  const onWindowResize = debounce((): void => {
-    const node = draggableRef.current;
-    if (!node) return;
-
-    if (!isOnScreen(node)) {
-      propsRef.current.setPosition(0, 0);
-    }
-  }, 100);
+  }, [onWindowResize]);
 
   const isOnScreen = (node: HTMLDivElement): boolean => {
     const bounds = node.getBoundingClientRect();
@@ -290,7 +300,9 @@ function LogWindow(props: IProps): React.ReactElement {
     return !(bounds.right < 0 || bounds.bottom < 0 || bounds.left > innerWidth || bounds.top > outerWidth);
   };
 
-  const boundToBody = (e: DraggableEvent): void | false => {
+  const onDrag = (e: DraggableEvent): void | false => {
+    e.preventDefault();
+    // bound to body
     if (
       e instanceof MouseEvent &&
       (e.clientX < 0 || e.clientY < 0 || e.clientX > innerWidth || e.clientY > innerHeight)
@@ -302,7 +314,7 @@ function LogWindow(props: IProps): React.ReactElement {
   const minConstraints: [number, number] = [150, 33];
 
   return (
-    <Draggable handle=".drag" onDrag={boundToBody} ref={rootRef} onMouseDown={updateLayer}>
+    <Draggable handle=".drag" onDrag={onDrag} ref={rootRef} onMouseDown={updateLayer}>
       <Box
         display="flex"
         sx={{

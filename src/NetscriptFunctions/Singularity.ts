@@ -1,33 +1,36 @@
+import type { Singularity as ISingularity } from "@nsdefs";
+
 import { Player } from "@player";
+import {
+  AugmentationName,
+  BlackOperationName,
+  CityName,
+  FactionName,
+  FactionWorkType,
+  GymType,
+  LocationName,
+  UniversityClassType,
+} from "@enums";
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
-import { Augmentation } from "../Augmentation/Augmentation";
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { augmentationExists, installAugmentations } from "../Augmentation/AugmentationHelpers";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { Augmentations } from "../Augmentation/Augmentations";
+import { getAugCost, installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { CONSTANTS } from "../Constants";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";
-
-import { Singularity as ISingularity } from "@nsdefs";
-
 import { findCrime } from "../Crime/CrimeHelpers";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { DarkWebItems } from "../DarkWeb/DarkWebItems";
-import { CityName, LocationName, JobName } from "../Enums";
 import { Router } from "../ui/GameRoot";
-import { SpecialServers } from "../Server/data/SpecialServers";
 import { Page } from "../ui/Router";
+import { SpecialServers } from "../Server/data/SpecialServers";
 import { Locations } from "../Locations/Locations";
 import { GetServer } from "../Server/AllServers";
 import { Programs } from "../Programs/Programs";
 import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { Company } from "../Company/Company";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Companies } from "../Company/Companies";
-import { companiesMetadata } from "../Company/data/CompaniesMetadata";
-import { Factions, factionExists } from "../Faction/Factions";
-import { Faction } from "../Faction/Faction";
+import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { getServerOnNetwork } from "../Server/ServerHelpers";
@@ -36,47 +39,25 @@ import { calculateHackingTime } from "../Hacking";
 import { Server } from "../Server/Server";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { FactionInfos } from "../Faction/FactionInfo";
-import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
-import { BlackOperationNames } from "../Bladeburner/data/BlackOperationNames";
+import { donate, repNeededToDonate } from "../Faction/formulas/donation";
+import { InternalAPI, removedFunction } from "../Netscript/APIWrapper";
 import { enterBitNode } from "../RedPill";
-import { FactionNames } from "../Faction/data/FactionNames";
 import { ClassWork } from "../Work/ClassWork";
 import { CreateProgramWork, isCreateProgramWork } from "../Work/CreateProgramWork";
 import { FactionWork } from "../Work/FactionWork";
-import { FactionWorkType, GymType, UniversityClassType } from "../Enums";
 import { CompanyWork } from "../Work/CompanyWork";
 import { canGetBonus, onExport } from "../ExportBonus";
 import { saveObject } from "../SaveObject";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { findEnumMember } from "../utils/helpers/enum";
 import { Engine } from "../engine";
-import { checkEnum } from "../utils/helpers/enum";
+import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
+import { companyNameAsLocationName } from "../Company/utils";
+import { getRecordEntries } from "../Types/Record";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
-  const getAugmentation = function (ctx: NetscriptContext, name: string): Augmentation {
-    if (!augmentationExists(name)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid augmentation: '${name}'`);
-    }
-
-    return StaticAugmentations[name];
-  };
-
-  const getFaction = function (ctx: NetscriptContext, name: string): Faction {
-    if (!factionExists(name)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid faction name: '${name}`);
-    }
-
-    return Factions[name];
-  };
-
-  const getCompany = function (ctx: NetscriptContext, name: string): Company {
-    const company = Companies[name];
-    if (!company) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company name: '${name}'`);
-    return company;
-  };
-
   const runAfterReset = function (cbScript: ScriptFilePath) {
     //Run a script after reset
     if (!cbScript) return;
@@ -116,61 +97,60 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     getAugmentationsFromFaction: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
-      const faction = getFaction(ctx, facName);
-
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      const faction = Factions[facName];
       return getFactionAugmentationsFiltered(faction);
     },
     getAugmentationPrereq: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
       return aug.prereqs.slice();
     },
     getAugmentationBasePrice: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
-      return aug.baseCost * BitNodeMultipliers.AugmentationMoneyCost;
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
+      return aug.baseCost * currentNodeMults.AugmentationMoneyCost;
     },
     getAugmentationPrice: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
-      return aug.getCost().moneyCost;
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
+      return getAugCost(aug).moneyCost;
     },
     getAugmentationRepReq: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
-      return aug.getCost().repCost;
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
+      return getAugCost(aug).repCost;
     },
     getAugmentationStats: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug = getAugmentation(ctx, augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
       return Object.assign({}, aug.mults);
     },
     purchaseAugmentation: (ctx) => (_facName, _augName) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const fac = getFaction(ctx, facName);
-      const aug = getAugmentation(ctx, augName);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const fac = Factions[facName];
+      const aug = Augmentations[augName];
 
-      const augs = getFactionAugmentationsFiltered(fac);
+      const factionAugs = getFactionAugmentationsFiltered(fac);
 
-      if (!Player.factions.includes(fac.name)) {
+      if (!Player.factions.includes(facName)) {
         helpers.log(ctx, () => `You can't purchase augmentations from '${facName}' because you aren't a member`);
         return false;
       }
 
-      if (!augs.includes(augName)) {
+      if (!factionAugs.includes(augName)) {
         helpers.log(ctx, () => `Faction '${facName}' does not have the '${augName}' augmentation.`);
         return false;
       }
 
-      const isNeuroflux = aug.name === AugmentationNames.NeuroFluxGovernor;
+      const isNeuroflux = aug.name === AugmentationName.NeuroFluxGovernor;
       if (!isNeuroflux) {
         for (let j = 0; j < Player.queuedAugmentations.length; ++j) {
           if (Player.queuedAugmentations[j].name === aug.name) {
@@ -186,7 +166,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         }
       }
 
-      if (fac.playerReputation < aug.getCost().repCost) {
+      if (fac.playerReputation < getAugCost(aug).repCost) {
         helpers.log(ctx, () => `You do not have enough reputation with '${fac.name}'.`);
         return false;
       }
@@ -245,7 +225,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       } else if (location.name === LocationName.WorldStockExchange) {
         Router.toPage(Page.StockMarket);
       } else {
-        Router.toLocation(location);
+        Router.toPage(Page.Location, { location });
       }
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 50000);
       return true;
@@ -405,7 +385,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
     travelToCity: (ctx) => (_cityName) => {
       helpers.checkSingularityAccess(ctx);
-      const cityName = helpers.city(ctx, "cityName", _cityName);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
 
       switch (cityName) {
         case CityName.Aevum:
@@ -573,7 +553,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         server.backdoorInstalled = true;
 
         if (SpecialServers.WorldDaemon === server.hostname) {
-          return Router.toBitVerse(false, false);
+          return Router.toPage(Page.BitVerse, { flume: false, quick: false });
         }
         // Manunally check for faction invites
         Engine.Counters.checkFactionInvitations = 0;
@@ -684,50 +664,35 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     getCompanyPositions: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
 
-      // Make sure its a valid company
-      if (companyName == null || companyName === "" || !Companies[companyName]) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
-      }
-
-      return Object.entries(CompanyPositions)
+      return getRecordEntries(CompanyPositions)
         .filter((_position) => Companies[companyName].hasPosition(_position[0]))
         .map((_position) => _position[1].name);
     },
     getCompanyPositionInfo: (ctx) => (_companyName, _positionName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
-      const positionName = helpers.string(ctx, "positionName", _positionName);
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
+      const positionName = getEnumHelper("JobName").nsGetMember(ctx, _positionName, "positionName");
+      const company = Companies[companyName];
 
-      // Make sure its a valid company
-      if (!(companyName in Companies)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
-      }
-
-      // Make sure its a valid position
-      if (!checkEnum(JobName, positionName)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid position: '${positionName}'`);
-      }
-
-      if (!Companies[companyName].hasPosition(positionName)) {
+      if (!company.hasPosition(positionName)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Company '${companyName}' does not have position '${positionName}'`);
       }
 
-      const c = CompanyPositions[positionName];
-      const n = companiesMetadata.filter((company) => company.name === companyName)[0];
+      const job = CompanyPositions[positionName];
       const res = {
         name: CompanyPositions[positionName].name,
         nextPosition: CompanyPositions[positionName].nextPosition,
-        salary: CompanyPositions[positionName].baseSalary * n.salaryMultiplier,
+        salary: CompanyPositions[positionName].baseSalary * company.salaryMultiplier,
         requiredReputation: CompanyPositions[positionName].requiredReputation,
         requiredSkills: {
-          hacking: c.requiredHacking > 0 ? c.requiredHacking + n.jobStatReqOffset : 0,
-          strength: c.requiredStrength > 0 ? c.requiredStrength + n.jobStatReqOffset : 0,
-          defense: c.requiredDefense > 0 ? c.requiredDefense + n.jobStatReqOffset : 0,
-          dexterity: c.requiredDexterity > 0 ? c.requiredDexterity + n.jobStatReqOffset : 0,
-          agility: c.requiredAgility > 0 ? c.requiredAgility + n.jobStatReqOffset : 0,
-          charisma: c.requiredCharisma > 0 ? c.requiredCharisma + n.jobStatReqOffset : 0,
+          hacking: job.requiredHacking > 0 ? job.requiredHacking + company.jobStatReqOffset : 0,
+          strength: job.requiredStrength > 0 ? job.requiredStrength + company.jobStatReqOffset : 0,
+          defense: job.requiredDefense > 0 ? job.requiredDefense + company.jobStatReqOffset : 0,
+          dexterity: job.requiredDexterity > 0 ? job.requiredDexterity + company.jobStatReqOffset : 0,
+          agility: job.requiredAgility > 0 ? job.requiredAgility + company.jobStatReqOffset : 0,
+          charisma: job.requiredCharisma > 0 ? job.requiredCharisma + company.jobStatReqOffset : 0,
           intelligence: 0,
         },
       };
@@ -737,24 +702,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       (ctx) =>
       (_companyName, _focus = true) => {
         helpers.checkSingularityAccess(ctx);
-        const companyName = helpers.string(ctx, "companyName", _companyName);
+        const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
         const focus = !!_focus;
 
-        // Make sure its a valid company
-        if (companyName == null || companyName === "" || !Companies[companyName]) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `Invalid company: '${companyName}'`);
-        }
-
+        const jobName = Player.jobs[companyName];
         // Make sure player is actually employed at the company
-        if (!Object.keys(Player.jobs).includes(companyName)) {
+        if (!jobName) {
           throw helpers.makeRuntimeErrorMsg(ctx, `You do not have a job at: '${companyName}'`);
-        }
-
-        // Check to make sure company position data is valid
-        const companyPositionName = Player.jobs[companyName];
-        const companyPosition = CompanyPositions[companyPositionName];
-        if (companyPositionName === "" || !companyPosition) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `You do not have a job`);
         }
 
         const wasFocused = Player.focus;
@@ -772,16 +726,15 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           Player.stopFocusing();
           Router.toPage(Page.Terminal);
         }
-        helpers.log(ctx, () => `Began working at '${companyName}' with position '${companyPositionName}'`);
+        helpers.log(ctx, () => `Began working at '${companyName}' with position '${jobName}'`);
         return true;
       },
     applyToCompany: (ctx) => (_companyName, _field) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       const field = helpers.string(ctx, "field", _field);
-      getCompany(ctx, companyName);
 
-      Player.location = companyName as LocationName;
+      Player.location = companyNameAsLocationName(companyName);
       let res;
       switch (field.toLowerCase()) {
         case "software":
@@ -845,26 +798,23 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     quitJob: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       Player.quitJob(companyName);
     },
     getCompanyRep: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
-      const company = getCompany(ctx, companyName);
-      return company.playerReputation;
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
+      return Companies[companyName].playerReputation;
     },
     getCompanyFavor: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
-      const company = getCompany(ctx, companyName);
-      return company.favor;
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
+      return Companies[companyName].favor;
     },
     getCompanyFavorGain: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
-      const companyName = helpers.string(ctx, "companyName", _companyName);
-      const company = getCompany(ctx, companyName);
-      return company.getFavorGain();
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
+      return Companies[companyName].getFavorGain();
     },
     checkFactionInvitations: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
@@ -876,8 +826,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     joinFaction: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
-      getFaction(ctx, facName);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
 
       if (!Player.factionInvitations.includes(facName)) {
         helpers.log(ctx, () => `You have not been invited by faction '${facName}'`);
@@ -901,10 +850,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       (ctx) =>
       (_facName, _type, _focus = true) => {
         helpers.checkSingularityAccess(ctx);
-        const facName = helpers.string(ctx, "facName", _facName);
+        const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
         const type = helpers.string(ctx, "type", _type);
         const focus = !!_focus;
-        const faction = getFaction(ctx, facName);
+        const faction = Factions[facName];
 
         // if the player is in a gang and the target faction is any of the gang faction, fail
         if (Player.gang && faction.name === Player.getGangFaction().name) {
@@ -996,27 +945,27 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       },
     getFactionRep: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
-      const faction = getFaction(ctx, facName);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      const faction = Factions[facName];
       return faction.playerReputation;
     },
     getFactionFavor: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
-      const faction = getFaction(ctx, facName);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      const faction = Factions[facName];
       return faction.favor;
     },
     getFactionFavorGain: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
-      const faction = getFaction(ctx, facName);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      const faction = Factions[facName];
       return faction.getFavorGain();
     },
     donateToFaction: (ctx) => (_facName, _amt) => {
       helpers.checkSingularityAccess(ctx);
-      const facName = helpers.string(ctx, "facName", _facName);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const amt = helpers.number(ctx, "amt", _amt);
-      const faction = getFaction(ctx, facName);
+      const faction = Factions[facName];
       if (!Player.factions.includes(faction.name)) {
         helpers.log(ctx, () => `You can't donate to '${facName}' because you aren't a member`);
         return false;
@@ -1025,7 +974,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(ctx, () => `You can't donate to '${facName}' because youre managing a gang for it`);
         return false;
       }
-      if (faction.name === FactionNames.ChurchOfTheMachineGod || faction.name === FactionNames.Bladeburners) {
+      if (faction.name === FactionName.ChurchOfTheMachineGod || faction.name === FactionName.Bladeburners) {
         helpers.log(ctx, () => `You can't donate to '${facName}' because they do not accept donations`);
         return false;
       }
@@ -1037,18 +986,18 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(ctx, () => `You do not have enough money to donate ${formatMoney(amt)} to '${facName}'`);
         return false;
       }
-      const repNeededToDonate = Math.floor(CONSTANTS.BaseFavorToDonate * BitNodeMultipliers.RepToDonateToFaction);
-      if (faction.favor < repNeededToDonate) {
+
+      if (faction.favor < repNeededToDonate()) {
         helpers.log(
           ctx,
           () =>
-            `You do not have enough favor to donate to this faction. Have ${faction.favor}, need ${repNeededToDonate}`,
+            `You do not have enough favor to donate to this faction. Have ${
+              faction.favor
+            }, need ${repNeededToDonate()}`,
         );
         return false;
       }
-      const repGain = (amt / CONSTANTS.DonateMoneyToRepDivisor) * Player.mults.faction_rep;
-      faction.playerReputation += repGain;
-      Player.loseMoney(amt, "other");
+      const repGain = donate(amt, faction);
       helpers.log(ctx, () => `${formatMoney(amt)} donated to '${facName}' for ${formatReputation(repGain)} reputation`);
       return true;
     },
@@ -1228,7 +1177,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       };
       const bladeburnerRequirements = () => {
         if (!Player.bladeburner) return false;
-        return Player.bladeburner.blackops[BlackOperationNames.OperationDaedalus];
+        return Player.bladeburner.blackops[BlackOperationName.OperationDaedalus];
       };
 
       if (!hackingRequirements() && !bladeburnerRequirements()) {

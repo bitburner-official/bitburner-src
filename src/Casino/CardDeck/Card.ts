@@ -1,3 +1,4 @@
+// No enum helper needed, does not need to be in an Enums.ts
 // Enum values are lowercased to match css classes
 export enum Suit {
   Clubs = "clubs",

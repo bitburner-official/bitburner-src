@@ -1,10 +1,11 @@
 import { Output, Link, RawOutput, TTimer } from "./OutputTypes";
 import { Router } from "../ui/GameRoot";
+import { Page } from "../ui/Router";
 import { Player } from "@player";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
-import { CompletedProgramName } from "../Programs/Programs";
+import { CompletedProgramName } from "@enums";
 import { CodingContractResult } from "../CodingContracts";
 import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
 
@@ -12,11 +13,11 @@ import { TextFile } from "../TextFile";
 import { Script } from "../Script/Script";
 import { hasScriptExtension } from "../Paths/ScriptFilePath";
 import { CONSTANTS } from "../Constants";
-import { GetServer, GetAllServers } from "../Server/AllServers";
+import { GetServer } from "../Server/AllServers";
 
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
-import { getServerOnNetwork, processSingleServerGrowth } from "../Server/ServerHelpers";
+import { processSingleServerGrowth } from "../Server/ServerHelpers";
 import { parseCommand, parseCommands } from "./Parser";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
@@ -74,7 +75,7 @@ import { wget } from "./commands/wget";
 import { hash } from "../hash/hash";
 import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Engine } from "../engine";
 import { Directory, resolveDirectory, root } from "../Paths/Directory";
 import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
@@ -206,14 +207,14 @@ export class Terminal {
       // Success!
       server.backdoorInstalled = true;
       if (SpecialServers.WorldDaemon === server.hostname) {
-        Router.toBitVerse(false, false);
+        Router.toPage(Page.BitVerse, { flume: false, quick: false });
         return;
       }
       // Manunally check for faction invites
       Engine.Counters.checkFactionInvitations = 0;
       Engine.checkCounters();
 
-      let moneyGained = calculatePercentMoneyHacked(server, Player) * BitNodeMultipliers.ManualHackMoney;
+      let moneyGained = calculatePercentMoneyHacked(server, Player) * currentNodeMults.ManualHackMoney;
       moneyGained = Math.floor(server.moneyAvailable * moneyGained);
 
       if (moneyGained <= 0) {
@@ -301,7 +302,7 @@ export class Terminal {
         if (Player.bitNodeN == null) {
           Player.bitNodeN = 1;
         }
-        Router.toBitVerse(false, false);
+        Router.toPage(Page.BitVerse, { flume: false, quick: false });
         return;
       }
       // Manunally check for faction invites
@@ -481,63 +482,51 @@ export class Terminal {
   }
 
   executeScanAnalyzeCommand(depth = 1, all = false): void {
-    // TODO Using array as stack for now, can make more efficient
-    this.print("~~~~~~~~~~ Beginning scan-analyze ~~~~~~~~~~");
-    this.print(" ");
-
-    // Map of all servers to keep track of which have been visited
-    const visited: Record<string, number | undefined> = {};
-    for (const server of GetAllServers()) {
-      visited[server.hostname] = 0;
+    interface Node {
+      hostname: string;
+      children: Node[];
     }
 
-    const stack: BaseServer[] = [];
-    const depthQueue: number[] = [0];
-    const currServ = Player.getCurrentServer();
-    stack.push(currServ);
-    while (stack.length != 0) {
-      const s = stack.pop();
-      if (!s) continue;
-      const d = depthQueue.pop();
-      if (d === undefined) continue;
-      const isHacknet = s instanceof HacknetServer;
-      if (!all && s.purchasedByPlayer && s.hostname != "home") {
-        continue; // Purchased server
-      } else if (visited[s.hostname] || d > depth) {
-        continue; // Already visited or out-of-depth
-      } else if (!all && isHacknet) {
-        continue; // Hacknet Server
-      } else {
-        visited[s.hostname] = 1;
-      }
-      for (let i = s.serversOnNetwork.length - 1; i >= 0; --i) {
-        const newS = getServerOnNetwork(s, i);
-        if (newS === null) continue;
-        stack.push(newS);
-        depthQueue.push(d + 1);
-      }
-      if (d == 0) {
-        continue;
-      } // Don't print current server
-      const titleDashes = Array((d - 1) * 4 + 1).join("-");
+    const ignoreServer = (s: BaseServer, d: number): boolean =>
+      (!all && s.purchasedByPlayer && s.hostname != "home") || d > depth || (!all && s instanceof HacknetServer);
+
+    const makeNode = (parent: string, s: BaseServer, d = 1): Node => ({
+      hostname: s.hostname,
+      children: s.serversOnNetwork
+        .filter((h) => h != parent)
+        .map((s) => GetServer(s))
+        .filter((v): v is BaseServer => !!v)
+        .filter((v) => !ignoreServer(v, d))
+        .map((h) => makeNode(s.hostname, h, d + 1)),
+    });
+
+    const root = makeNode(Player.getCurrentServer().hostname, Player.getCurrentServer());
+
+    const printOutput = (node: Node, prefix = ["  "], last = true) => {
+      const titlePrefix = prefix.slice(0, prefix.length - 1).join("") + (last ? "┗ " : "┣ ");
+      const infoPrefix = prefix.join("") + (node.children.length > 0 ? "┃   " : "    ");
       if (Player.hasProgram(CompletedProgramName.autoLink)) {
-        this.append(new Link(titleDashes, s.hostname));
+        this.append(new Link(titlePrefix, node.hostname));
       } else {
-        this.print(titleDashes + s.hostname);
+        this.print(titlePrefix + node.hostname + "\n");
       }
 
-      const dashes = titleDashes + "--";
-      let c = "NO";
-      if (s.hasAdminRights) {
-        c = "YES";
+      const server = GetServer(node.hostname);
+      if (!server) return;
+      if (server instanceof Server) {
+        const hasRoot = server.hasAdminRights ? "YES" : "NO";
+        this.print(
+          `${infoPrefix}Root Access: ${hasRoot}, Required hacking skill: ${server.requiredHackingSkill}` + "\n",
+        );
+        this.print(`${infoPrefix}Number of open ports required to NUKE: ${server.numOpenPortsRequired}` + "\n");
       }
-      if (s instanceof Server) {
-        this.print(`${dashes}Root Access: ${c}, Required hacking skill: ${s.requiredHackingSkill}`);
-        this.print(`${dashes}Number of open ports required to NUKE: ${s.numOpenPortsRequired}`);
-      }
-      this.print(dashes + "RAM: " + formatRam(s.maxRam));
-      this.print(" ");
-    }
+      this.print(`${infoPrefix}RAM: ${formatRam(server.maxRam)}` + "\n");
+      node.children.forEach((n, i) =>
+        printOutput(n, [...prefix, i === node.children.length - 1 ? "  " : "┃ "], i === node.children.length - 1),
+      );
+    };
+
+    printOutput(root);
   }
 
   connectToServer(server: string): void {

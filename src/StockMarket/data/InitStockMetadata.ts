@@ -8,9 +8,8 @@
  *  - Lower price -> Bigger spread
  *  - Share tx required for movement used for balancing
  */
-import { StockSymbols } from "./StockSymbols";
+import { LocationName, StockSymbol } from "@enums";
 import { IConstructorParams } from "../Stock";
-import { LocationName } from "../../Enums";
 
 export const InitStockMetadata: IConstructorParams[] = [
   {
@@ -36,7 +35,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 90e3,
       min: 30e3,
     },
-    symbol: StockSymbols[LocationName.AevumECorp],
+    symbol: StockSymbol[LocationName.AevumECorp],
   },
 
   {
@@ -62,7 +61,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 90e3,
       min: 30e3,
     },
-    symbol: StockSymbols[LocationName.Sector12MegaCorp],
+    symbol: StockSymbol[LocationName.Sector12MegaCorp],
   },
 
   {
@@ -88,7 +87,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 90e3,
       min: 30e3,
     },
-    symbol: StockSymbols[LocationName.Sector12BladeIndustries],
+    symbol: StockSymbol[LocationName.Sector12BladeIndustries],
   },
 
   {
@@ -114,7 +113,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 90e3,
       min: 30e3,
     },
-    symbol: StockSymbols[LocationName.AevumClarkeIncorporated],
+    symbol: StockSymbol[LocationName.AevumClarkeIncorporated],
   },
 
   {
@@ -140,7 +139,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 90e3,
       min: 30e3,
     },
-    symbol: StockSymbols[LocationName.VolhavenOmniTekIncorporated],
+    symbol: StockSymbol[LocationName.VolhavenOmniTekIncorporated],
   },
 
   {
@@ -166,7 +165,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 90e3,
       min: 30e3,
     },
-    symbol: StockSymbols[LocationName.Sector12FourSigma],
+    symbol: StockSymbol[LocationName.Sector12FourSigma],
   },
 
   {
@@ -192,7 +191,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 90e3,
       min: 30e3,
     },
-    symbol: StockSymbols[LocationName.ChongqingKuaiGongInternational],
+    symbol: StockSymbol[LocationName.ChongqingKuaiGongInternational],
   },
 
   {
@@ -218,7 +217,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 90e3,
       min: 30e3,
     },
-    symbol: StockSymbols[LocationName.AevumFulcrumTechnologies],
+    symbol: StockSymbol[LocationName.AevumFulcrumTechnologies],
   },
 
   {
@@ -244,7 +243,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 108e3,
       min: 36e3,
     },
-    symbol: StockSymbols[LocationName.IshimaStormTechnologies],
+    symbol: StockSymbol[LocationName.IshimaStormTechnologies],
   },
 
   {
@@ -270,7 +269,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 108e3,
       min: 36e3,
     },
-    symbol: StockSymbols[LocationName.NewTokyoDefComm],
+    symbol: StockSymbol[LocationName.NewTokyoDefComm],
   },
 
   {
@@ -296,7 +295,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 108e3,
       min: 36e3,
     },
-    symbol: StockSymbols[LocationName.VolhavenHeliosLabs],
+    symbol: StockSymbol[LocationName.VolhavenHeliosLabs],
   },
 
   {
@@ -322,7 +321,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 108e3,
       min: 36e3,
     },
-    symbol: StockSymbols[LocationName.NewTokyoVitaLife],
+    symbol: StockSymbol[LocationName.NewTokyoVitaLife],
   },
 
   {
@@ -348,7 +347,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 108e3,
       min: 36e3,
     },
-    symbol: StockSymbols[LocationName.Sector12IcarusMicrosystems],
+    symbol: StockSymbol[LocationName.Sector12IcarusMicrosystems],
   },
 
   {
@@ -374,7 +373,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 108e3,
       min: 36e3,
     },
-    symbol: StockSymbols[LocationName.Sector12UniversalEnergy],
+    symbol: StockSymbol[LocationName.Sector12UniversalEnergy],
   },
 
   {
@@ -400,7 +399,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 126e3,
       min: 42e3,
     },
-    symbol: StockSymbols[LocationName.AevumAeroCorp],
+    symbol: StockSymbol[LocationName.AevumAeroCorp],
   },
 
   {
@@ -426,7 +425,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 126e3,
       min: 42e3,
     },
-    symbol: StockSymbols[LocationName.VolhavenOmniaCybersystems],
+    symbol: StockSymbol[LocationName.VolhavenOmniaCybersystems],
   },
 
   {
@@ -452,7 +451,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 126e3,
       min: 42e3,
     },
-    symbol: StockSymbols[LocationName.ChongqingSolarisSpaceSystems],
+    symbol: StockSymbol[LocationName.ChongqingSolarisSpaceSystems],
   },
 
   {
@@ -478,7 +477,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 126e3,
       min: 42e3,
     },
-    symbol: StockSymbols[LocationName.NewTokyoGlobalPharmaceuticals],
+    symbol: StockSymbol[LocationName.NewTokyoGlobalPharmaceuticals],
   },
 
   {
@@ -504,7 +503,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 126e3,
       min: 42e3,
     },
-    symbol: StockSymbols[LocationName.IshimaNovaMedical],
+    symbol: StockSymbol[LocationName.IshimaNovaMedical],
   },
 
   {
@@ -530,7 +529,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 54e3,
       min: 12e3,
     },
-    symbol: StockSymbols[LocationName.AevumWatchdogSecurity],
+    symbol: StockSymbol[LocationName.AevumWatchdogSecurity],
   },
 
   {
@@ -556,7 +555,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 108e3,
       min: 36e3,
     },
-    symbol: StockSymbols[LocationName.VolhavenLexoCorp],
+    symbol: StockSymbol[LocationName.VolhavenLexoCorp],
   },
 
   {
@@ -582,7 +581,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 126e3,
       min: 60e3,
     },
-    symbol: StockSymbols[LocationName.AevumRhoConstruction],
+    symbol: StockSymbol[LocationName.AevumRhoConstruction],
   },
 
   {
@@ -608,7 +607,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 90e3,
       min: 30e3,
     },
-    symbol: StockSymbols[LocationName.Sector12AlphaEnterprises],
+    symbol: StockSymbol[LocationName.Sector12AlphaEnterprises],
   },
 
   {
@@ -634,7 +633,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 90e3,
       min: 15e3,
     },
-    symbol: StockSymbols[LocationName.VolhavenSysCoreSecurities],
+    symbol: StockSymbol[LocationName.VolhavenSysCoreSecurities],
   },
 
   {
@@ -660,7 +659,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 126e3,
       min: 60e3,
     },
-    symbol: StockSymbols[LocationName.VolhavenCompuTek],
+    symbol: StockSymbol[LocationName.VolhavenCompuTek],
   },
 
   {
@@ -686,7 +685,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 54e3,
       min: 18e3,
     },
-    symbol: StockSymbols[LocationName.AevumNetLinkTechnologies],
+    symbol: StockSymbol[LocationName.AevumNetLinkTechnologies],
   },
 
   {
@@ -712,7 +711,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 90e3,
       min: 30e3,
     },
-    symbol: StockSymbols[LocationName.IshimaOmegaSoftware],
+    symbol: StockSymbol[LocationName.IshimaOmegaSoftware],
   },
 
   {
@@ -738,7 +737,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 180e3,
       min: 60e3,
     },
-    symbol: StockSymbols[LocationName.Sector12FoodNStuff],
+    symbol: StockSymbol[LocationName.Sector12FoodNStuff],
   },
 
   {
@@ -764,7 +763,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 70e3,
       min: 20e3,
     },
-    symbol: StockSymbols["Sigma Cosmetics"],
+    symbol: StockSymbol["Sigma Cosmetics"],
   },
 
   {
@@ -790,7 +789,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 52e3,
       min: 15e3,
     },
-    symbol: StockSymbols[LocationName.Sector12JoesGuns],
+    symbol: StockSymbol[LocationName.Sector12JoesGuns],
   },
 
   {
@@ -816,7 +815,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 72e3,
       min: 24e3,
     },
-    symbol: StockSymbols["Catalyst Ventures"],
+    symbol: StockSymbol["Catalyst Ventures"],
   },
 
   {
@@ -842,7 +841,7 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 216e3,
       min: 90e3,
     },
-    symbol: StockSymbols["Microdyne Technologies"],
+    symbol: StockSymbol["Microdyne Technologies"],
   },
 
   {
@@ -868,6 +867,6 @@ export const InitStockMetadata: IConstructorParams[] = [
       max: 216e3,
       min: 90e3,
     },
-    symbol: StockSymbols["Titan Laboratories"],
+    symbol: StockSymbol["Titan Laboratories"],
   },
 ];

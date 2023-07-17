@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 import { find } from "lodash";
-
 import { Box, Typography, Button, Container, Paper } from "@mui/material";
 import { Check, Lock, Create } from "@mui/icons-material";
 
+import { Player } from "@player";
+import { CompletedProgramName } from "@enums";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 
 import { Programs } from "../Programs";
 import { CreateProgramWork, isCreateProgramWork } from "../../Work/CreateProgramWork";
 import { useRerender } from "../../ui/React/hooks";
 
-export const ProgramsSeen: string[] = [];
+export const ProgramsSeen = new Set<string>();
 
 export function ProgramsRoot(): React.ReactElement {
   useRerender(200);
@@ -22,7 +22,7 @@ export function ProgramsRoot(): React.ReactElement {
     .filter((prog) => {
       const create = prog.create;
       if (create === null) return false;
-      if (prog.name === "b1t_flum3.exe") {
+      if (prog.name === CompletedProgramName.bitFlume) {
         return create.req();
       }
       return true;
@@ -35,10 +35,9 @@ export function ProgramsRoot(): React.ReactElement {
 
   useEffect(() => {
     programs.forEach((p) => {
-      if (ProgramsSeen.includes(p.name)) return;
-      ProgramsSeen.push(p.name);
+      ProgramsSeen.add(p.name);
     });
-  }, []);
+  });
 
   const getHackingLevelRemaining = (lvl: number): number => {
     return Math.ceil(Math.max(lvl - (Player.skills.hacking + Player.skills.intelligence / 2), 0));

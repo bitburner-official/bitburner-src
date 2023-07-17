@@ -9,6 +9,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
+// numeric enum
 export enum TickerDisplayMode {
   AllStocks,
   Portfolio,

@@ -124,38 +124,29 @@ function getRandomProblemType(): string {
 }
 
 function getRandomReward(): ICodingContractReward {
-  const reward: ICodingContractReward = {
-    name: "",
-    type: getRandomInt(0, CodingContractRewardType.Money),
-  };
-  reward.type = sanitizeRewardType(reward.type);
+  const rewardType = sanitizeRewardType(getRandomInt(0, CodingContractRewardType.Money));
 
   // Add additional information based on the reward type
   const factionsThatAllowHacking = Player.factions.filter((fac) => Factions[fac].getInfo().offerHackingWork);
 
-  switch (reward.type) {
+  switch (rewardType) {
     case CodingContractRewardType.FactionReputation: {
       // Get a random faction that player is a part of. That
       // faction must allow hacking contracts
       const numFactions = factionsThatAllowHacking.length;
       const randFaction = factionsThatAllowHacking[getRandomInt(0, numFactions - 1)];
-      reward.name = randFaction;
-      break;
+      return { type: rewardType, name: randFaction };
     }
     case CodingContractRewardType.CompanyReputation: {
       const allJobs = Object.keys(Player.jobs);
       if (allJobs.length > 0) {
-        reward.name = allJobs[getRandomInt(0, allJobs.length - 1)];
-      } else {
-        reward.type = CodingContractRewardType.Money;
+        return { type: CodingContractRewardType.CompanyReputation, name: allJobs[getRandomInt(0, allJobs.length - 1)] };
       }
-      break;
+      return { type: CodingContractRewardType.Money };
     }
     default:
-      break;
+      return { type: rewardType };
   }
-
-  return reward;
 }
 
 function getRandomServer(): BaseServer {
@@ -182,7 +173,7 @@ function getRandomServer(): BaseServer {
 
 function getRandomFilename(
   server: BaseServer,
-  reward: ICodingContractReward = { name: "", type: 0 },
+  reward: ICodingContractReward = { type: CodingContractRewardType.Money },
 ): ContractFilePath {
   let contractFn = `contract-${getRandomInt(0, 1e6)}`;
 
@@ -197,7 +188,7 @@ function getRandomFilename(
     contractFn = `contract-${getRandomInt(0, 1e6)}`;
   }
 
-  if (reward.name) {
+  if ("name" in reward) {
     // Only alphanumeric characters in the reward name.
     contractFn += `-${reward.name.replace(/[^a-zA-Z0-9]/g, "")}`;
   }

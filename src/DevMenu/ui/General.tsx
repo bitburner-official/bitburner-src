@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Button,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { Money } from "../../ui/React/Money";
+
 import { Player } from "@player";
+import { FactionName } from "@enums";
+import { Money } from "../../ui/React/Money";
 import { Router } from "../../ui/GameRoot";
-import { MenuItem, SelectChangeEvent, TextField, Select } from "@mui/material";
+import { Page } from "../../ui/Router";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { GangConstants } from "../../Gang/data/Constants";
-import { FactionNames } from "../../Faction/data/FactionNames";
 import { checkForMessagesToSend } from "../../Message/MessageHelpers";
 import { ThemeEvents } from "../../Themes/ui/Theme";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 export function General(): React.ReactElement {
   const [error, setError] = useState(false);
   const [corporationName, setCorporationName] = useState("");
-  const [gangFaction, setGangFaction] = useState("Slum Snakes");
+  const [gangFaction, setGangFaction] = useState(FactionName.SlumSnakes);
   const [devMoney, setDevMoney] = useState(0);
 
   // Money functions
@@ -30,10 +38,10 @@ export function General(): React.ReactElement {
   const upgradeRam = () => (Player.getHomeComputer().maxRam *= 2);
 
   // Node-clearing functions
-  const quickB1tFlum3 = () => Router.toBitVerse(true, true);
-  const b1tflum3 = () => Router.toBitVerse(true, false);
-  const quickHackW0r1dD43m0n = () => Router.toBitVerse(false, true);
-  const hackW0r1dD43m0n = () => Router.toBitVerse(false, false);
+  const quickB1tFlum3 = () => Router.toPage(Page.BitVerse, { flume: true, quick: true });
+  const b1tflum3 = () => Router.toPage(Page.BitVerse, { flume: true, quick: false });
+  const quickHackW0r1dD43m0n = () => Router.toPage(Page.BitVerse, { flume: false, quick: true });
+  const hackW0r1dD43m0n = () => Router.toPage(Page.BitVerse, { flume: false, quick: false });
 
   // Corp functions
   const createCorporation = () => {
@@ -61,7 +69,7 @@ export function General(): React.ReactElement {
 
   // Gang functions
   const startGang = () => {
-    const isHacking = gangFaction === FactionNames.NiteSec || gangFaction === FactionNames.TheBlackHand;
+    const isHacking = gangFaction === FactionName.NiteSec || gangFaction === FactionName.TheBlackHand;
     Player.startGang(gangFaction, isHacking);
     // Rerender so the gang menu option will show up immediately on the devmenu page selection
     ThemeEvents.emit();
@@ -71,7 +79,11 @@ export function General(): React.ReactElement {
     // Rerender so the gang menu option will be removed immediately on the devmenu page selection
     ThemeEvents.emit();
   };
-  const setGangFactionDropdown = (event: SelectChangeEvent) => setGangFaction(event.target.value);
+  const setGangFactionDropdown = (event: SelectChangeEvent) => {
+    // Todo: Make this a more specific check when a GangName enumlike is added
+    if (!getEnumHelper("FactionName").isMember(event.target.value)) return;
+    setGangFaction(event.target.value);
+  };
 
   // Misc functions
   const checkMessages = () => checkForMessagesToSend();

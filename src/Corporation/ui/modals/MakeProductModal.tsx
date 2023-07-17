@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
-import { IndustriesData } from "../../IndustryData";
-import { IndustryType } from "../../data/Enums";
+import { IndustriesData } from "../../data/IndustryData";
+import { IndustryType } from "@enums";
 import { MakeProduct } from "../../Actions";
 import { useCorporation, useDivision } from "../Context";
 import Typography from "@mui/material/Typography";
@@ -12,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { NumberInput } from "../../../ui/React/NumberInput";
-import { CityName } from "../../../Enums";
+import { CityName } from "@enums";
 import { getRecordKeys } from "../../../Types/Record";
 
 interface IProps {

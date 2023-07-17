@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useCorporation } from "../../ui/Context";
-import { CityName } from "../../../Enums";
+import { CityName } from "@enums";
 import * as corpConstants from "../../data/Constants";
 import { formatMoney } from "../../../ui/formatNumber";
 import { removeDivision as removeDivision } from "../../Actions";

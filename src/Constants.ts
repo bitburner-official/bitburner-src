@@ -88,9 +88,9 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.3.1",
+  VersionString: "2.3.2",
   isDevBranch: true,
-  VersionNumber: 31,
+  VersionNumber: 32,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -231,40 +231,38 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3.1 dev - Changelog last updated 4 Jun 2023
-----------------------------------------------
+v2.3.2 dev - Changelog updated 7/12/2023
+----------------------------------------
+
+Also see 2.3.1 release notes: https://github.com/bitburner-official/bitburner-src/releases/tag/v2.3.1
 
 GENERAL / MISC:
 
-NETSCRIPT:
-
-* Added ns.setTitle, which sets the titlebar of a script's tail window (@d0sboots)
-* Added ns.getFunctionRamCost, which gets the ramcost of a netscript function (@G4mingJon4s)
-
-GENERAL / MISC:
-
-* Fixed several issues with script editor tabs (@bezrodnov)
-* Changed tail window buttons into icon buttons, plus tail window bugfixes (@d0sboots)
-* Terminal no longer scrolls to the bottom constantly while an action is being performed (@bezrodnov)
-* Added a close button to modals (@bezrodnov)
-* Documentation fixes (various)
+* Added documentation browser ingame. This is the new primary location for game documentation. (@hydroflame)
+* Syntax errors now show helpful details at script editor / terminal (@bezrodnov)
+* A script's ram will no longer free up twice if it was killed during its own atExit (@d0sboots)
+* Ram calculation should now be able to handle barrel files and renamed exports. (@G4mingJon4s)
+* ns.printRaw and ns.tprintRaw are now documented functions. (@Snarling)
+* "Back" button from faction augs leads to previous page, instead of always to main faction screen (@bezrodnov)
+* Addressed an issue where money hacked was being Math.floored incorrectly (@MeggalBozale)
+* Aliases that reference their own name stop expanding after first replacement. (@NilsRamstoeck)
+* Hitting enter at the terminal with nothing typed in will print out an empty line (@rqzcho)
+* Fixed a bug where dragging a tail window titlebar could also scroll the tail window content (@bezrodnov)
+* Show more info in the savegame comparison tool (@bezrodnov)
+* Fixed Script Editor indent option having backwards behavior. (@Snarling)
+* Internal code refactors (@bezrodnov, @Snarling)
+* Documentation fixes (@tdnzr, @amuck-gorilla, @rodneygauna, @hydroflame, @Snarling)
 * Nerf noodle bar
 
 SPOILER SECTIONS:
 
-SF2:
+------------
 
-* Overall gang respect gain rate now reads accurately, instead of showing ~10x. (@Snarling)
+CORPORATION:
 
-SF3:
-
-* Added "maxProducts" property to ns.corporation.getDivision return value (@kateract)
-* Fixed an issue with sell price parsing for materials (@zerbosh)
-* Fixed display of market price for materials and products (@zerbosh)
-* Fixes for Corp import/export issues, such as -IPROD and Smart Supply not working right (@d0sboots)
-
-SF4:
-
-* Fixed an issue that could cause singularity run-after-reset callback scripts to not launch correctly (@Snarling)
+* ns.corporation.hireEmployee now actually defaults to Unassigned instead of failing. (@Snarling)
+* ns.corporation.getProduct now provides investment amounts (@Snarling)
+* Invalid materials for a division can no longer be bought through the API. (@Snarling)
+* Fixed a React error that could occur if a division had invalid materials. (@Snarling)
 `,
 };

@@ -1,9 +1,9 @@
-import { Box, Button, Tooltip, Typography, Paper, Container } from "@mui/material";
 import React from "react";
+import { Box, Button, Tooltip, Typography, Paper, Container } from "@mui/material";
 
-import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
-import { getGenericAugmentationPriceMultiplier } from "../../Augmentation/AugmentationHelpers";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { Augmentations } from "../../Augmentation/Augmentations";
+import { getAugCost, getGenericAugmentationPriceMultiplier } from "../../Augmentation/AugmentationHelpers";
+import { AugmentationName, FactionName } from "@enums";
 import { PurchasableAugmentations } from "../../Augmentation/ui/PurchasableAugmentations";
 import { PurchaseAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
@@ -11,26 +11,21 @@ import { Player } from "@player";
 import { formatBigNumber } from "../../ui/formatNumber";
 import { Favor } from "../../ui/React/Favor";
 import { Reputation } from "../../ui/React/Reputation";
-import { FactionNames } from "../data/FactionNames";
+import { Router } from "../../ui/GameRoot";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, hasAugmentationPrereqs, purchaseAugmentation } from "../FactionHelpers";
 import { CONSTANTS } from "../../Constants";
 import { useRerender } from "../../ui/React/hooks";
 
-interface IProps {
-  faction: Faction;
-  routeToMainPage: () => void;
-}
-
 /** Root React Component for displaying a faction's "Purchase Augmentations" page */
-export function AugmentationsPage(props: IProps): React.ReactElement {
+export function AugmentationsPage({ faction }: { faction: Faction }): React.ReactElement {
   const rerender = useRerender();
 
-  function getAugs(): string[] {
-    return getFactionAugmentationsFiltered(props.faction);
+  function getAugs(): AugmentationName[] {
+    return getFactionAugmentationsFiltered(faction);
   }
 
-  function getAugsSorted(): string[] {
+  function getAugsSorted(): AugmentationName[] {
     switch (Settings.PurchaseAugmentationsOrder) {
       case PurchaseAugmentationsOrderSetting.Cost: {
         return getAugsSortedByCost();
@@ -46,70 +41,70 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
     }
   }
 
-  function getAugsSortedByCost(): string[] {
+  function getAugsSortedByCost(): AugmentationName[] {
     const augs = getAugs();
     augs.sort((augName1, augName2) => {
-      const aug1 = StaticAugmentations[augName1],
-        aug2 = StaticAugmentations[augName2];
+      const aug1 = Augmentations[augName1],
+        aug2 = Augmentations[augName2];
       if (aug1 == null || aug2 == null) {
         throw new Error("Invalid Augmentation Names");
       }
 
-      return aug1.getCost().moneyCost - aug2.getCost().moneyCost;
+      return getAugCost(aug1).moneyCost - getAugCost(aug2).moneyCost;
     });
 
     return augs;
   }
 
-  function getAugsSortedByPurchasable(): string[] {
+  function getAugsSortedByPurchasable(): AugmentationName[] {
     const augs = getAugs();
-    function canBuy(augName: string): boolean {
-      const aug = StaticAugmentations[augName];
-      const augCosts = aug.getCost();
+    function canBuy(augName: AugmentationName): boolean {
+      const aug = Augmentations[augName];
+      const augCosts = getAugCost(aug);
       const repCost = augCosts.repCost;
-      const hasReq = props.faction.playerReputation >= repCost;
+      const hasReq = faction.playerReputation >= repCost;
       const hasRep = hasAugmentationPrereqs(aug);
       const hasCost = augCosts.moneyCost !== 0 && Player.money > augCosts.moneyCost;
       return hasCost && hasReq && hasRep;
     }
     const buy = augs.filter(canBuy).sort((augName1, augName2) => {
-      const aug1 = StaticAugmentations[augName1],
-        aug2 = StaticAugmentations[augName2];
+      const aug1 = Augmentations[augName1],
+        aug2 = Augmentations[augName2];
       if (aug1 == null || aug2 == null) {
         throw new Error("Invalid Augmentation Names");
       }
 
-      return aug1.getCost().moneyCost - aug2.getCost().moneyCost;
+      return getAugCost(aug1).moneyCost - getAugCost(aug2).moneyCost;
     });
     const cantBuy = augs
       .filter((aug) => !canBuy(aug))
       .sort((augName1, augName2) => {
-        const aug1 = StaticAugmentations[augName1],
-          aug2 = StaticAugmentations[augName2];
+        const aug1 = Augmentations[augName1],
+          aug2 = Augmentations[augName2];
         if (aug1 == null || aug2 == null) {
           throw new Error("Invalid Augmentation Names");
         }
-        return aug1.getCost().repCost - aug2.getCost().repCost;
+        return getAugCost(aug1).repCost - getAugCost(aug2).repCost;
       });
 
     return buy.concat(cantBuy);
   }
 
-  function getAugsSortedByReputation(): string[] {
+  function getAugsSortedByReputation(): AugmentationName[] {
     const augs = getAugs();
     augs.sort((augName1, augName2) => {
-      const aug1 = StaticAugmentations[augName1],
-        aug2 = StaticAugmentations[augName2];
+      const aug1 = Augmentations[augName1],
+        aug2 = Augmentations[augName2];
       if (aug1 == null || aug2 == null) {
         throw new Error("Invalid Augmentation Names");
       }
-      return aug1.getCost().repCost - aug2.getCost().repCost;
+      return getAugCost(aug1).repCost - getAugCost(aug2).repCost;
     });
 
     return augs;
   }
 
-  function getAugsSortedByDefault(): string[] {
+  function getAugsSortedByDefault(): AugmentationName[] {
     return getAugs();
   }
 
@@ -121,13 +116,13 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
   const augs = getAugsSorted();
   const purchasable = augs.filter(
     (aug: string) =>
-      aug === AugmentationNames.NeuroFluxGovernor ||
+      aug === AugmentationName.NeuroFluxGovernor ||
       (!Player.augmentations.some((a) => a.name === aug) && !Player.queuedAugmentations.some((a) => a.name === aug)),
   );
-  const owned = augs.filter((aug: string) => !purchasable.includes(aug));
+  const owned = augs.filter((aug) => !purchasable.includes(aug));
 
   const multiplierComponent =
-    props.faction.name !== FactionNames.ShadowsOfAnarchy ? (
+    faction.name !== FactionName.ShadowsOfAnarchy ? (
       <Tooltip
         title={
           <Typography>
@@ -144,7 +139,7 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            This price multiplier increases for each {FactionNames.ShadowsOfAnarchy} augmentation already purchased. The
+            This price multiplier increases for each {FactionName.ShadowsOfAnarchy} augmentation already purchased. The
             multiplier is NOT reset when installing augmentations.
           </Typography>
         }
@@ -172,27 +167,27 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
   return (
     <>
       <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
-        <Button onClick={props.routeToMainPage}>Back</Button>
-        <Typography variant="h4">Faction Augmentations - {props.faction.name}</Typography>
+        <Button onClick={() => Router.back()}>Back</Button>
+        <Typography variant="h4">Faction Augmentations - {faction.name}</Typography>
         <Paper sx={{ p: 1, mb: 1 }}>
           <Typography>
-            These are all of the Augmentations that are available to purchase from <b>{props.faction.name}</b>.
-            Augmentations are powerful upgrades that will enhance your abilities.
+            These are all of the Augmentations that are available to purchase from <b>{faction.name}</b>. Augmentations
+            are powerful upgrades that will enhance your abilities.
             <br />
           </Typography>
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: `repeat(${props.faction.name === FactionNames.ShadowsOfAnarchy ? "2" : "3"}, 1fr)`,
+              gridTemplateColumns: `repeat(${faction.name === FactionName.ShadowsOfAnarchy ? "2" : "3"}, 1fr)`,
               justifyItems: "center",
               my: 1,
             }}
           >
             <>{multiplierComponent}</>
             <Typography>
-              <b>Reputation:</b> <Reputation reputation={props.faction.playerReputation} />
+              <b>Reputation:</b> <Reputation reputation={faction.playerReputation} />
               <br />
-              <b>Favor:</b> <Favor favor={Math.floor(props.faction.favor)} />
+              <b>Favor:</b> <Favor favor={Math.floor(faction.favor)} />
             </Typography>
           </Box>
           <Box sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
@@ -214,10 +209,10 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
         augNames={purchasable}
         ownedAugNames={owned}
         canPurchase={(aug) => {
-          const costs = aug.getCost();
+          const costs = getAugCost(aug);
           return (
             hasAugmentationPrereqs(aug) &&
-            props.faction.playerReputation >= costs.repCost &&
+            faction.playerReputation >= costs.repCost &&
             (costs.moneyCost === 0 || Player.money > costs.moneyCost)
           );
         }}
@@ -225,12 +220,13 @@ export function AugmentationsPage(props: IProps): React.ReactElement {
           if (!Settings.SuppressBuyAugmentationConfirmation) {
             showModal(true);
           } else {
-            purchaseAugmentation(aug, props.faction);
+            purchaseAugmentation(aug, faction);
             rerender();
           }
         }}
-        rep={props.faction.playerReputation}
-        faction={props.faction}
+        rerender={rerender}
+        rep={faction.playerReputation}
+        faction={faction}
       />
     </>
   );

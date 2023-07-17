@@ -9,7 +9,7 @@ import { createRandomIp } from "../utils/IPAddress";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { Reviver } from "../utils/JSONReviver";
 import { SpecialServers } from "./data/SpecialServers";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
@@ -159,7 +159,7 @@ export function initForeignServers(homeComputer: Server): void {
     }
 
     if (server.hostname === SpecialServers.WorldDaemon) {
-      server.requiredHackingSkill *= BitNodeMultipliers.WorldDaemonDifficulty;
+      server.requiredHackingSkill *= currentNodeMults.WorldDaemonDifficulty;
     }
     AddToAllServers(server);
     if (metadata.networkLayer !== undefined) {

@@ -1,6 +1,6 @@
 import { Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { KEY } from "../../utils/helpers/keyCodes";
 import { random } from "../utils";
@@ -35,7 +35,7 @@ export function BackwardGame(props: IMinigameProps): React.ReactElement {
   const timer = difficulty.timer;
   const [answer] = useState(makeAnswer(difficulty));
   const [guess, setGuess] = useState("");
-  const hasAugment = Player.hasAugmentation(AugmentationNames.ChaosOfDionysus, true);
+  const hasAugment = Player.hasAugmentation(AugmentationName.ChaosOfDionysus, true);
 
   function ignorableKeyboardEvent(event: KeyboardEvent): boolean {
     return event.key === KEY.BACKSPACE || (event.shiftKey && event.key === "Shift") || event.ctrlKey || event.altKey;

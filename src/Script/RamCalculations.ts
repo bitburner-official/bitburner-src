@@ -22,10 +22,21 @@ export interface RamUsageEntry {
   cost: number;
 }
 
-export interface RamCalculation {
+export type RamCalculationSuccess = {
   cost: number;
-  entries?: RamUsageEntry[];
-}
+  entries: RamUsageEntry[];
+  errorCode?: never;
+  errorMessage?: never;
+};
+
+export type RamCalculationFailure = {
+  cost?: never;
+  entries?: never;
+  errorCode: RamCalculationErrorCode;
+  errorMessage?: string;
+};
+
+export type RamCalculation = RamCalculationSuccess | RamCalculationFailure;
 
 // These special strings are used to reference the presence of a given logical
 // construct within a user script.
@@ -80,115 +91,112 @@ function parseOnlyRamCalculate(otherScripts: Map<ScriptFilePath, Script>, code: 
     dependencyMap = Object.assign(dependencyMap, result.dependencyMap);
   }
 
-  try {
-    // Parse the initial module, which is the "main" script that is being run
-    const initialModule = "__SPECIAL_INITIAL_MODULE__";
-    parseCode(code, initialModule);
+  // Parse the initial module, which is the "main" script that is being run
+  const initialModule = "__SPECIAL_INITIAL_MODULE__";
+  parseCode(code, initialModule);
 
-    // Process additional modules, which occurs if the "main" script has any imports
-    while (parseQueue.length > 0) {
-      const nextModule = parseQueue.shift();
-      if (nextModule === undefined) throw new Error("nextModule should not be undefined");
-      if (nextModule.startsWith("https://") || nextModule.startsWith("http://")) continue;
+  // Process additional modules, which occurs if the "main" script has any imports
+  while (parseQueue.length > 0) {
+    const nextModule = parseQueue.shift();
+    if (nextModule === undefined) throw new Error("nextModule should not be undefined");
+    if (nextModule.startsWith("https://") || nextModule.startsWith("http://")) continue;
 
-      // Using root as the path base right now. Difficult to implement
-      const filename = resolveScriptFilePath(nextModule, root, ns1 ? ".script" : ".js");
-      if (!filename) return { cost: RamCalculationErrorCode.ImportError }; // Invalid import path
-      const script = otherScripts.get(filename);
-      if (!script) return { cost: RamCalculationErrorCode.ImportError }; // No such file on server
-
-      parseCode(script.code, nextModule);
+    // Using root as the path base right now. Difficult to implement
+    const filename = resolveScriptFilePath(nextModule, root, ns1 ? ".script" : ".js");
+    if (!filename) {
+      return { errorCode: RamCalculationErrorCode.ImportError, errorMessage: `Invalid import path: "${nextModule}"` };
+    }
+    const script = otherScripts.get(filename);
+    if (!script) {
+      return { errorCode: RamCalculationErrorCode.ImportError, errorMessage: `No such file on server: "${filename}"` };
     }
 
-    // Finally, walk the reference map and generate a ram cost. The initial set of keys to scan
-    // are those that start with __SPECIAL_INITIAL_MODULE__.
-    let ram = RamCostConstants.Base;
-    const detailedCosts: RamUsageEntry[] = [{ type: "misc", name: "baseCost", cost: RamCostConstants.Base }];
-    const unresolvedRefs = Object.keys(dependencyMap).filter((s) => s.startsWith(initialModule));
-    const resolvedRefs = new Set();
-    const loadedFns: Record<string, boolean> = {};
-    while (unresolvedRefs.length > 0) {
-      const ref = unresolvedRefs.shift();
-      if (ref === undefined) throw new Error("ref should not be undefined");
+    parseCode(script.code, nextModule);
+  }
 
-      // Check if this is one of the special keys, and add the appropriate ram cost if so.
-      if (ref === "hacknet" && !resolvedRefs.has("hacknet")) {
-        ram += RamCostConstants.HacknetNodes;
-        detailedCosts.push({ type: "ns", name: "hacknet", cost: RamCostConstants.HacknetNodes });
-      }
-      if (ref === "document" && !resolvedRefs.has("document")) {
-        ram += RamCostConstants.Dom;
-        detailedCosts.push({ type: "dom", name: "document", cost: RamCostConstants.Dom });
-      }
-      if (ref === "window" && !resolvedRefs.has("window")) {
-        ram += RamCostConstants.Dom;
-        detailedCosts.push({ type: "dom", name: "window", cost: RamCostConstants.Dom });
-      }
+  // Finally, walk the reference map and generate a ram cost. The initial set of keys to scan
+  // are those that start with __SPECIAL_INITIAL_MODULE__.
+  let ram = RamCostConstants.Base;
+  const detailedCosts: RamUsageEntry[] = [{ type: "misc", name: "baseCost", cost: RamCostConstants.Base }];
+  const unresolvedRefs = Object.keys(dependencyMap).filter((s) => s.startsWith(initialModule));
+  const resolvedRefs = new Set();
+  const loadedFns: Record<string, boolean> = {};
+  while (unresolvedRefs.length > 0) {
+    const ref = unresolvedRefs.shift();
+    if (ref === undefined) throw new Error("ref should not be undefined");
 
-      resolvedRefs.add(ref);
+    // Check if this is one of the special keys, and add the appropriate ram cost if so.
+    if (ref === "hacknet" && !resolvedRefs.has("hacknet")) {
+      ram += RamCostConstants.HacknetNodes;
+      detailedCosts.push({ type: "ns", name: "hacknet", cost: RamCostConstants.HacknetNodes });
+    }
+    if (ref === "document" && !resolvedRefs.has("document")) {
+      ram += RamCostConstants.Dom;
+      detailedCosts.push({ type: "dom", name: "document", cost: RamCostConstants.Dom });
+    }
+    if (ref === "window" && !resolvedRefs.has("window")) {
+      ram += RamCostConstants.Dom;
+      detailedCosts.push({ type: "dom", name: "window", cost: RamCostConstants.Dom });
+    }
 
-      if (ref.endsWith(".*")) {
-        // A prefix reference. We need to find all matching identifiers.
-        const prefix = ref.slice(0, ref.length - 2);
-        for (const ident of Object.keys(dependencyMap).filter((k) => k.startsWith(prefix))) {
-          for (const dep of dependencyMap[ident] || []) {
-            if (!resolvedRefs.has(dep)) unresolvedRefs.push(dep);
-          }
-        }
-      } else {
-        // An exact reference. Add all dependencies of this ref.
-        for (const dep of dependencyMap[ref] || []) {
+    resolvedRefs.add(ref);
+
+    if (ref.endsWith(".*")) {
+      // A prefix reference. We need to find all matching identifiers.
+      const prefix = ref.slice(0, ref.length - 2);
+      for (const ident of Object.keys(dependencyMap).filter((k) => k.startsWith(prefix))) {
+        for (const dep of dependencyMap[ident] || []) {
           if (!resolvedRefs.has(dep)) unresolvedRefs.push(dep);
         }
       }
-
-      // Check if this identifier is a function in the workerScript environment.
-      // If it is, then we need to get its RAM cost.
-      try {
-        // Only count each function once
-        if (loadedFns[ref]) {
-          continue;
-        }
-        loadedFns[ref] = true;
-
-        // This accounts for namespaces (Bladeburner, CodingContract, etc.)
-        const findFunc = (
-          prefix: string,
-          obj: object,
-          ref: string,
-        ): { func: () => number | number; refDetail: string } | undefined => {
-          if (!obj) return;
-          const elem = Object.entries(obj).find(([key]) => key === ref);
-          if (elem !== undefined && (typeof elem[1] === "function" || typeof elem[1] === "number")) {
-            return { func: elem[1], refDetail: `${prefix}${ref}` };
-          }
-          for (const [key, value] of Object.entries(obj)) {
-            const found = findFunc(`${key}.`, value, ref);
-            if (found) return found;
-          }
-          return undefined;
-        };
-
-        const details = findFunc("", RamCosts, ref);
-        const fnRam = getNumericCost(details?.func ?? 0);
-        ram += fnRam;
-        detailedCosts.push({ type: "fn", name: details?.refDetail ?? "", cost: fnRam });
-      } catch (error) {
-        console.error(error);
-        continue;
+    } else {
+      // An exact reference. Add all dependencies of this ref.
+      for (const dep of dependencyMap[ref] || []) {
+        if (!resolvedRefs.has(dep)) unresolvedRefs.push(dep);
       }
     }
-    if (ram > RamCostConstants.Max) {
-      ram = RamCostConstants.Max;
-      detailedCosts.push({ type: "misc", name: "Max Ram Cap", cost: RamCostConstants.Max });
+
+    // Check if this identifier is a function in the workerScript environment.
+    // If it is, then we need to get its RAM cost.
+    try {
+      // Only count each function once
+      if (loadedFns[ref]) {
+        continue;
+      }
+      loadedFns[ref] = true;
+
+      // This accounts for namespaces (Bladeburner, CodingContract, etc.)
+      const findFunc = (
+        prefix: string,
+        obj: object,
+        ref: string,
+      ): { func: () => number | number; refDetail: string } | undefined => {
+        if (!obj) return;
+        const elem = Object.entries(obj).find(([key]) => key === ref);
+        if (elem !== undefined && (typeof elem[1] === "function" || typeof elem[1] === "number")) {
+          return { func: elem[1], refDetail: `${prefix}${ref}` };
+        }
+        for (const [key, value] of Object.entries(obj)) {
+          const found = findFunc(`${key}.`, value, ref);
+          if (found) return found;
+        }
+        return undefined;
+      };
+
+      const details = findFunc("", RamCosts, ref);
+      const fnRam = getNumericCost(details?.func ?? 0);
+      ram += fnRam;
+      detailedCosts.push({ type: "fn", name: details?.refDetail ?? "", cost: fnRam });
+    } catch (error) {
+      console.error(error);
+      continue;
     }
-    return { cost: ram, entries: detailedCosts.filter((e) => e.cost > 0) };
-  } catch (error) {
-    // console.info("parse or eval error: ", error);
-    // This is not unexpected. The user may be editing a script, and it may be in
-    // a transitory invalid state.
-    return { cost: RamCalculationErrorCode.SyntaxError };
   }
+  if (ram > RamCostConstants.Max) {
+    ram = RamCostConstants.Max;
+    detailedCosts.push({ type: "misc", name: "Max Ram Cap", cost: RamCostConstants.Max });
+  }
+  return { cost: ram, entries: detailedCosts.filter((e) => e.cost > 0) };
 }
 
 export function checkInfiniteLoop(code: string): number {
@@ -262,13 +270,13 @@ function parseOnlyCalculateDeps(code: string, currentModule: string): ParseDepsR
 
   // References get added pessimistically. They are added for thisModule.name, name, and for
   // any aliases.
-  function addRef(key: string, name: string): void {
+  function addRef(key: string, name: string, module = currentModule): void {
     const s = dependencyMap[key] || (dependencyMap[key] = new Set());
     const external = internalToExternal[name];
     if (external !== undefined) {
       s.add(external);
     }
-    s.add(currentModule + "." + name);
+    s.add(module + "." + name);
     s.add(name); // For builtins like hack.
   }
 
@@ -352,6 +360,27 @@ function parseOnlyCalculateDeps(code: string, currentModule: string): ParseDepsR
           const key = currentModule + "." + (node.id === null ? "__SPECIAL_DEFAULT_EXPORT__" : node.id.name);
           walk.recursive(node, { key: key }, commonVisitors());
         },
+        ExportNamedDeclaration: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+          if (node.declaration !== null) {
+            // if this is true, the statement is not a named export, but rather a exported function/variable
+            walkDeeper(node.declaration, st);
+            return;
+          }
+
+          for (const specifier of node.specifiers) {
+            const exportedDepName = currentModule + "." + specifier.exported.name;
+
+            if (node.source !== null) {
+              // if this is true, we are re-exporting something
+              addRef(exportedDepName, specifier.local.name, node.source.value);
+              additionalModules.push(node.source.value);
+            } else if (specifier.exported.name !== specifier.local.name) {
+              // this makes sure we are not refering to ourselves
+              // if this is not true, we don't need to add anything
+              addRef(exportedDepName, specifier.local.name);
+            }
+          }
+        },
       },
       commonVisitors(),
     ),
@@ -362,20 +391,21 @@ function parseOnlyCalculateDeps(code: string, currentModule: string): ParseDepsR
 
 /**
  * Calculate's a scripts RAM Usage
- * @param {string} codeCopy - The script's code
+ * @param {string} code - The script's code
  * @param {Script[]} otherScripts - All other scripts on the server.
  *                                  Used to account for imported scripts
  */
 export function calculateRamUsage(
-  codeCopy: string,
+  code: string,
   otherScripts: Map<ScriptFilePath, Script>,
   ns1?: boolean,
 ): RamCalculation {
   try {
-    return parseOnlyRamCalculate(otherScripts, codeCopy, ns1);
+    return parseOnlyRamCalculate(otherScripts, code, ns1);
   } catch (e) {
-    console.error(`Failed to parse script for RAM calculations:`);
-    console.error(e);
-    return { cost: RamCalculationErrorCode.SyntaxError };
+    return {
+      errorCode: RamCalculationErrorCode.SyntaxError,
+      errorMessage: e instanceof Error ? e.message : undefined,
+    };
   }
 }

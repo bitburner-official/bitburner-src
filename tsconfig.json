@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "@player": ["src/Player"],
+      "@enums": ["src/Enums"],
       "@nsdefs": ["src/ScriptEditor/NetscriptDefinitions"]
     },
     "esModuleInterop": true,
@@ -16,5 +17,5 @@
     "strict": true,
     "target": "es2022"
   },
-  "include": ["src/**/*", "electron/**/*", ".eslintrc.js", "node_modules/monaco-editor/monaco.d.ts"]
+  "include": ["src/**/*", "electron/**/*", "node_modules/monaco-editor/monaco.d.ts"]
 }

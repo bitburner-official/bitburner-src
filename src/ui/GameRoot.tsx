@@ -1,29 +1,23 @@
 import React, { useState, useEffect } from "react";
+import { createStyles, makeStyles } from "@mui/styles";
+import { Box, Typography } from "@mui/material";
+import { Theme } from "@mui/material/styles";
 
 import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { saveObject } from "../SaveObject";
 import { onExport } from "../ExportBonus";
-import { LocationName } from "../Enums";
-import { Location } from "../Locations/Location";
+import { LocationName } from "@enums";
 import { ITutorial, iTutorialStart } from "../InteractiveTutorial";
 import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutorialRoot";
 import { ITutorialEvents } from "./InteractiveTutorial/ITutorialEvents";
 
-import { Faction } from "../Faction/Faction";
 import { prestigeAugmentation } from "../Prestige";
 import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
-import { Factions } from "../Faction/Factions";
 import { StockMarket } from "../StockMarket/StockMarket";
 
-import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-
-import { Page, SimplePage, IRouter } from "./Router";
+import { Page, PageWithContext, IRouter, ComplexPage, PageContext } from "./Router";
 import { Overview } from "./React/Overview";
 import { SidebarRoot } from "../Sidebar/ui/SidebarRoot";
 import { AugmentationsRoot } from "../Augmentation/ui/AugmentationsRoot";
@@ -43,10 +37,11 @@ import { ProgramsRoot } from "../Programs/ui/ProgramsRoot";
 import { ScriptEditorRoot } from "../ScriptEditor/ui/ScriptEditorRoot";
 import { MilestonesRoot } from "../Milestones/ui/MilestonesRoot";
 import { TerminalRoot } from "../Terminal/ui/TerminalRoot";
-import { TutorialRoot } from "../Tutorial/ui/TutorialRoot";
+import { DocumentationRoot } from "../Documentation/ui/DocumentationRoot";
 import { ActiveScriptsRoot } from "./ActiveScripts/ActiveScriptsRoot";
 import { FactionsRoot } from "../Faction/ui/FactionsRoot";
 import { FactionRoot } from "../Faction/ui/FactionRoot";
+import { AugmentationsPage as FactionAugmentations } from "../Faction/ui/AugmentationsPage";
 import { CharacterStats } from "./CharacterStats";
 import { TravelAgencyRoot } from "../Locations/ui/TravelAgencyRoot";
 import { StockMarketRoot } from "../StockMarket/ui/StockMarketRoot";
@@ -68,39 +63,41 @@ import { RecoveryMode, RecoveryRoot } from "./React/RecoveryRoot";
 import { AchievementsRoot } from "../Achievements/AchievementsRoot";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { ThemeBrowser } from "../Themes/ui/ThemeBrowser";
-import { ImportSaveRoot } from "./React/ImportSaveRoot";
+import { ImportSave } from "./React/ImportSave";
 import { BypassWrapper } from "./React/BypassWrapper";
 
 import { Apr1 } from "./Apr1";
-import { isFactionWork } from "../Work/FactionWork";
 import { V2Modal } from "../utils/V2Modal";
 import { MathJaxContext } from "better-react-mathjax";
 import { useRerender } from "./React/hooks";
-import { ScriptFilePath } from "src/Paths/ScriptFilePath";
-import { TextFilePath } from "src/Paths/TextFilePath";
+import { HistoryProvider } from "./React/Documentation";
 import { MyrianRoot } from "../Myrian/ui/MyrianRoot";
 import { myrian } from "../Myrian/Helpers";
 
 const htmlLocation = location;
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      "-ms-overflow-style": "none" /* for Internet Explorer, Edge */,
-      "scrollbar-width": "none" /* for Firefox */,
-      margin: theme.spacing(0),
-      flexGrow: 1,
-      padding: "8px",
-      minHeight: "100vh",
-      boxSizing: "border-box",
-      width: "1px",
-    },
-  }),
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      root: {
+        "-ms-overflow-style": "none" /* for Internet Explorer, Edge */,
+        "scrollbar-width": "none" /* for Firefox */,
+        margin: theme.spacing(0),
+        flexGrow: 1,
+        padding: "8px",
+        minHeight: "100vh",
+        boxSizing: "border-box",
+        width: "1px",
+      },
+    }),
+  { name: "GameRoot" },
 );
 
 const uninitialized = (): void => {
   throw new Error("Router called before initialization");
 };
+
+const MAX_PAGES_IN_HISTORY = 10;
 
 export let Router: IRouter = {
   isInitialized: false,
@@ -111,13 +108,9 @@ export let Router: IRouter = {
   toPage: () => {
     throw new Error("Router called before initialization");
   },
-  toBitVerse: uninitialized,
-  toFaction: uninitialized,
-  toInfiltration: uninitialized,
-  toJob: uninitialized,
-  toScriptEditor: uninitialized,
-  toLocation: uninitialized,
-  toImportSave: uninitialized,
+  back: () => {
+    throw new Error("Router called before initialization");
+  },
 };
 
 function determineStartPage(): Page {
@@ -129,35 +122,20 @@ function determineStartPage(): Page {
 
 export function GameRoot(): React.ReactElement {
   const classes = useStyles();
-  const [{ files, vim }, setEditorOptions] = useState<{
-    files: Map<ScriptFilePath | TextFilePath, string>;
-    vim: boolean;
-  }>({
-    files: new Map(),
-    vim: false,
-  });
-  const [page, setPage] = useState(determineStartPage());
+
+  const [pages, setPages] = useState<PageWithContext[]>(() => [{ page: determineStartPage() }]);
+  const pageWithContext = pages[0];
+
+  const setNextPage = (pageWithContext: PageWithContext) =>
+    setPages((prev) => {
+      const next = [pageWithContext, ...prev];
+      next.length = Math.min(next.length, MAX_PAGES_IN_HISTORY);
+      return next;
+    });
+
   const rerender = useRerender();
-  const [augPage, setAugPage] = useState<boolean>(false);
-  const [faction, setFaction] = useState<Faction>(
-    isFactionWork(Player.currentWork) ? Factions[Player.currentWork.factionName] : (undefined as unknown as Faction),
-  );
-  if (faction === undefined && page === Page.Faction)
-    throw new Error("Trying to go to a page without the proper setup");
 
-  const [flume, setFlume] = useState<boolean>(false);
-  const [quick, setQuick] = useState<boolean>(false);
-  const [location, setLocation] = useState<Location>(undefined as unknown as Location);
-  if (location === undefined && (page === Page.Infiltration || page === Page.Location || page === Page.Job))
-    throw new Error("Trying to go to a page without the proper setup");
-
-  const [cinematicText, setCinematicText] = useState("");
   const [errorBoundaryKey, setErrorBoundaryKey] = useState<number>(0);
-
-  const [importString, setImportString] = useState<string>(undefined as unknown as string);
-  const [importAutomatic, setImportAutomatic] = useState<boolean>(false);
-  if (importString === undefined && page === Page.ImportSave)
-    throw new Error("Trying to go to a page without the proper setup");
 
   const [allowRoutingCalls, setAllowRoutingCalls] = useState(true);
 
@@ -167,7 +145,7 @@ export function GameRoot(): React.ReactElement {
 
   useEffect(() => {
     return ITutorialEvents.subscribe(rerender);
-  }, []);
+  }, [rerender]);
 
   function killAllScripts(): void {
     for (const server of GetAllServers()) {
@@ -183,67 +161,28 @@ export function GameRoot(): React.ReactElement {
 
   Router = {
     isInitialized: true,
-    page: () => page,
+    page: () => pageWithContext.page,
     allowRouting: (value: boolean) => setAllowRoutingCalls(value),
-    toPage: (page: SimplePage) => {
+    toPage: (page: Page, context?: PageContext<ComplexPage>) => {
       if (!allowRoutingCalls) return attemptedForbiddenRouting("toPage");
       switch (page) {
         case Page.Travel:
           Player.gotoLocation(LocationName.TravelAgency);
           break;
-        case Page.BladeburnerCinematic:
-          setPage(page);
-          setCinematicText(cinematicText);
-          return;
+        case Page.BitVerse:
+          calculateAchievements();
+          break;
       }
-      setPage(page);
+      setNextPage({ page, ...context } as PageWithContext);
     },
-    toFaction: (faction: Faction, augPage = false) => {
-      if (!allowRoutingCalls) return attemptedForbiddenRouting("toFaction");
-      setAugPage(augPage);
-      setPage(Page.Faction);
-      if (faction) setFaction(faction);
-    },
-    toScriptEditor: (files = new Map(), options) => {
-      if (!allowRoutingCalls) return attemptedForbiddenRouting("toScriptEditor");
-      setEditorOptions({
-        files,
-        vim: !!options?.vim,
-      });
-      setPage(Page.ScriptEditor);
-    },
-    toJob: (location: Location) => {
-      if (!allowRoutingCalls) return attemptedForbiddenRouting("toJob");
-      setLocation(location);
-      setPage(Page.Job);
-    },
-    toBitVerse: (flume: boolean, quick: boolean) => {
-      if (!allowRoutingCalls) return attemptedForbiddenRouting("toBitVerse");
-      setFlume(flume);
-      setQuick(quick);
-      calculateAchievements();
-      setPage(Page.BitVerse);
-    },
-    toInfiltration: (location: Location) => {
-      if (!allowRoutingCalls) return attemptedForbiddenRouting("toInfiltration");
-      setLocation(location);
-      setPage(Page.Infiltration);
-    },
-    toLocation: (location: Location) => {
-      if (!allowRoutingCalls) return attemptedForbiddenRouting("toLocation");
-      setLocation(location);
-      setPage(Page.Location);
-    },
-    toImportSave: (base64save: string, automatic = false) => {
-      if (!allowRoutingCalls) return attemptedForbiddenRouting("toImportSave");
-      setImportString(base64save);
-      setImportAutomatic(automatic);
-      setPage(Page.ImportSave);
+    back: () => {
+      if (!allowRoutingCalls) return attemptedForbiddenRouting("back");
+      setPages((pages) => pages.slice(1));
     },
   };
 
   useEffect(() => {
-    if (page !== Page.Terminal) window.scrollTo(0, 0);
+    if (pageWithContext.page !== Page.Terminal) window.scrollTo(0, 0);
   });
 
   function softReset(): void {
@@ -257,7 +196,7 @@ export function GameRoot(): React.ReactElement {
   let withSidebar = true;
   let withPopups = true;
   let bypassGame = false;
-  switch (page) {
+  switch (pageWithContext.page) {
     case Page.Recovery: {
       mainPage = <RecoveryRoot softReset={softReset} />;
       withSidebar = false;
@@ -266,13 +205,13 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.BitVerse: {
-      mainPage = <BitverseRoot flume={flume} quick={quick} />;
+      mainPage = <BitverseRoot flume={pageWithContext.flume} quick={pageWithContext.quick} />;
       withSidebar = false;
       withPopups = false;
       break;
     }
     case Page.Infiltration: {
-      mainPage = <InfiltrationRoot location={location} />;
+      mainPage = <InfiltrationRoot location={pageWithContext.location} />;
       withSidebar = false;
       withPopups = false;
       break;
@@ -309,7 +248,13 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.ScriptEditor: {
-      mainPage = <ScriptEditorRoot files={files} hostname={Player.getCurrentServer().hostname} vim={vim} />;
+      mainPage = (
+        <ScriptEditorRoot
+          files={pageWithContext.files ?? new Map()}
+          hostname={Player.getCurrentServer().hostname}
+          vim={!!pageWithContext.options?.vim}
+        />
+      );
       break;
     }
     case Page.ActiveScripts: {
@@ -329,23 +274,19 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.Faction: {
-      mainPage = <FactionRoot faction={faction} augPage={augPage} />;
+      mainPage = <FactionRoot faction={pageWithContext.faction} />;
+      break;
+    }
+    case Page.FactionAugmentations: {
+      mainPage = <FactionAugmentations faction={pageWithContext.faction} />;
       break;
     }
     case Page.Milestones: {
       mainPage = <MilestonesRoot />;
       break;
     }
-    case Page.Tutorial: {
-      mainPage = (
-        <TutorialRoot
-          reactivateTutorial={() => {
-            prestigeAugmentation();
-            Router.toPage(Page.Terminal);
-            iTutorialStart();
-          }}
-        />
-      );
+    case Page.Documentation: {
+      mainPage = <DocumentationRoot />;
       break;
     }
     case Page.DevMenu: {
@@ -382,7 +323,7 @@ export function GameRoot(): React.ReactElement {
     }
     case Page.Job:
     case Page.Location: {
-      mainPage = <GenericLocation loc={location} />;
+      mainPage = <GenericLocation loc={pageWithContext.location} />;
       break;
     }
     case Page.Options: {
@@ -396,6 +337,11 @@ export function GameRoot(): React.ReactElement {
           }}
           forceKill={killAllScripts}
           softReset={softReset}
+          reactivateTutorial={() => {
+            prestigeAugmentation();
+            Router.toPage(Page.Terminal);
+            iTutorialStart();
+          }}
         />
       );
       break;
@@ -424,7 +370,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.ImportSave: {
-      mainPage = <ImportSaveRoot importString={importString} automatic={importAutomatic} />;
+      mainPage = <ImportSave importString={pageWithContext.base64Save} automatic={!!pageWithContext.automatic} />;
       withSidebar = false;
       withPopups = false;
       bypassGame = true;
@@ -435,40 +381,42 @@ export function GameRoot(): React.ReactElement {
     <MathJaxContext version={3} src={"dist/ext/MathJax-3.2.2/es5/tex-chtml.js"}>
       <ErrorBoundary key={errorBoundaryKey} softReset={softReset}>
         <BypassWrapper content={bypassGame ? mainPage : null}>
-          <SnackbarProvider>
-            <Overview mode={ITutorial.isRunning ? "tutorial" : "overview"}>
-              {(parentOpen) =>
-                !ITutorial.isRunning ? (
-                  <CharacterOverview
-                    parentOpen={parentOpen}
-                    save={() => saveObject.saveGame()}
-                    killScripts={killAllScripts}
-                  />
-                ) : (
-                  <InteractiveTutorialRoot />
-                )
-              }
-            </Overview>
-            {withSidebar ? (
-              <Box display="flex" flexDirection="row" width="100%">
-                <SidebarRoot page={page} />
+          <HistoryProvider>
+            <SnackbarProvider>
+              <Overview mode={ITutorial.isRunning ? "tutorial" : "overview"}>
+                {(parentOpen) =>
+                  !ITutorial.isRunning ? (
+                    <CharacterOverview
+                      parentOpen={parentOpen}
+                      save={() => saveObject.saveGame()}
+                      killScripts={killAllScripts}
+                    />
+                  ) : (
+                    <InteractiveTutorialRoot />
+                  )
+                }
+              </Overview>
+              {withSidebar ? (
+                <Box display="flex" flexDirection="row" width="100%">
+                  <SidebarRoot page={pageWithContext.page} />
+                  <Box className={classes.root}>{mainPage}</Box>
+                </Box>
+              ) : (
                 <Box className={classes.root}>{mainPage}</Box>
-              </Box>
-            ) : (
-              <Box className={classes.root}>{mainPage}</Box>
-            )}
-            <Unclickable />
-            {withPopups && (
-              <>
-                <LogBoxManager />
-                <AlertManager />
-                <PromptManager />
-                <InvitationModal />
-                <Snackbar />
-              </>
-            )}
-            <Apr1 />
-          </SnackbarProvider>
+              )}
+              <Unclickable />
+              {withPopups && (
+                <>
+                  <LogBoxManager />
+                  <AlertManager />
+                  <PromptManager />
+                  <InvitationModal />
+                  <Snackbar />
+                </>
+              )}
+              <Apr1 />
+            </SnackbarProvider>
+          </HistoryProvider>
         </BypassWrapper>
       </ErrorBoundary>
       <V2Modal />

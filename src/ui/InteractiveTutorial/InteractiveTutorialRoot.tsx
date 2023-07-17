@@ -326,10 +326,6 @@ export function InteractiveTutorialRoot(): React.ReactElement {
 
           <Typography>Scripts must end with the .js extension. Let's make a script now by entering </Typography>
           <Typography classes={{ root: classes.textfield }}>{`[home ~/]> nano ${tutorialScriptName}`}</Typography>
-
-          <Typography>
-            after the hack command finishes running (Sidenote: Pressing ctrl + c will end a command like hack early)
-          </Typography>
         </>
       ),
       canNext: false,
@@ -338,8 +334,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            This is the script editor. You can use it to program your scripts. Copy and paste the following code into
-            the script editor: <br />
+            This is the script editor. You can use it to program your scripts. Click this text to copy it and paste it
+            into the text editor: <br />
           </Typography>
 
           <Typography classes={{ root: classes.code }}>
@@ -358,7 +354,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             continuously hack the n00dles server.
             <br />
             <br />
-            To save and close the script editor, press the button in the bottom left, or press ctrl + s then ctrl + b.
+            To save and close the script editor, press the button at the bottom.
           </Typography>
         </>
       ),
@@ -458,7 +454,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           </Typography>
           <ListItem>
             <HelpIcon color={"primary"} />
-            <Typography color={"primary"}>Tutorial</Typography>
+            <Typography color={"primary"}>Documentation</Typography>
           </ListItem>
           <Typography>
             in the main navigation menu to look at the documentation.
@@ -524,27 +520,20 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           </Typography>
           <ListItem>
             <HelpIcon color={"error"} />
-            <Typography color={"error"}>Tutorial</Typography>
+            <Typography color={"error"}>Documentation</Typography>
           </ListItem>
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TutorialPageInfo as number]: {
+    [iTutorialSteps.DocumentationPageInfo as number]: {
       content: (
         <Typography>
           This page contains a lot of different documentation about the game's content and mechanics. I know it's a lot,
           but I highly suggest you read (or at least skim) through this before you start playing.
           <br />
           <br />
-          The{" "}
-          <a
-            href="https://bitburner-official.readthedocs.io/en/latest/guidesandtips/gettingstartedguideforbeginnerprogrammers.html"
-            target="_blank"
-          >
-            Getting Started
-          </a>{" "}
-          contains the guide for new players, navigating you through most of early game.
+          The Beginner's Guide contains the guide for new players, navigating you through most of early game.
           <br />
           <br />
           That's the end of the tutorial. Hope you enjoy the game!
@@ -560,7 +549,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
 
   useEffect(() => {
     return ITutorialEvents.subscribe(rerender);
-  }, []);
+  }, [rerender]);
+
   const step = ITutorial.currStep;
   const content = contents[step];
   if (content === undefined) throw new Error("error in the tutorial");
@@ -568,7 +558,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     <>
       <Paper square sx={{ maxWidth: "70vw", p: 2 }}>
         {content.content}
-        {step !== iTutorialSteps.TutorialPageInfo && (
+        {step !== iTutorialSteps.DocumentationPageInfo && (
           <>
             {step !== iTutorialSteps.Start && (
               <IconButton onClick={iTutorialPrevStep} aria-label="previous">
@@ -585,7 +575,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <br />
         <br />
         <Button onClick={iTutorialEnd}>
-          {step !== iTutorialSteps.TutorialPageInfo ? "SKIP TUTORIAL" : "FINISH TUTORIAL"}
+          {step !== iTutorialSteps.DocumentationPageInfo ? "SKIP TUTORIAL" : "FINISH TUTORIAL"}
         </Button>
       </Paper>
     </>

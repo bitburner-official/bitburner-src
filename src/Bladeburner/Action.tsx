@@ -184,14 +184,12 @@ export class Action {
     return Math.ceil(baseTime * this.getActionTimePenalty());
   }
 
-  // For actions that have teams. To be implemented by subtypes.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getTeamSuccessBonus(inst: Bladeburner): number {
+  // Subtypes of Action implement these differently
+  getTeamSuccessBonus(__inst: Bladeburner): number {
     return 1;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getActionTypeSkillSuccessBonus(inst: Bladeburner): number {
+  getActionTypeSkillSuccessBonus(__inst: Bladeburner): number {
     return 1;
   }
 

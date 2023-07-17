@@ -7,7 +7,6 @@ import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
 import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
 import { ScriptArg } from "./ScriptArg";
-import { CityName } from "../Enums";
 import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson, Server as IServer } from "@nsdefs";
 import { Server } from "../Server/Server";
 import {
@@ -18,7 +17,7 @@ import {
 } from "../Hacking";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { influenceStockThroughServerHack } from "../StockMarket/PlayerInfluencing";
 import { PortNumber } from "../NetscriptPort";
@@ -33,7 +32,6 @@ import { arrayToString } from "../utils/helpers/ArrayHelpers";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { checkEnum } from "../utils/helpers/enum";
 import { RamCostConstants } from "./RamCostGenerator";
 import { isPositiveInteger, PositiveInteger, Unknownify } from "../types";
 import { Engine } from "../engine";
@@ -55,7 +53,6 @@ export const helpers = {
   checkSingularityAccess,
   netscriptDelay,
   updateDynamicRam,
-  city,
   getServer,
   scriptIdentifier,
   hack,
@@ -81,17 +78,6 @@ export interface CompleteRunOptions {
   temporary: boolean;
   ramOverride?: number;
   preventDuplicates: boolean;
-}
-
-export function assertMember<T extends string>(
-  ctx: NetscriptContext,
-  obj: Record<string, T> | T[],
-  typeName: string,
-  argName: string,
-  v: unknown,
-): asserts v is T {
-  assertString(ctx, argName, v);
-  if (!checkEnum(obj, v)) throw makeRuntimeErrorMsg(ctx, `${argName}: ${v} is not a valid ${typeName}.`, "TYPE");
 }
 
 export function assertString(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {
@@ -412,13 +398,6 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
   }
 }
 
-/** Validates the input v as being a CityName. Throws an error if it is not. */
-function city(ctx: NetscriptContext, argName: string, v: unknown): CityName {
-  if (typeof v !== "string" || !checkEnum(CityName, v))
-    throw makeRuntimeErrorMsg(ctx, `${argName} should be a city name.`);
-  return v;
-}
-
 function scriptIdentifier(
   ctx: NetscriptContext,
   scriptID: unknown,
@@ -512,7 +491,7 @@ function hack(
         maxThreadNeeded = 1e6;
       }
 
-      let moneyDrained = Math.floor(server.moneyAvailable * percentHacked) * threads;
+      let moneyDrained = server.moneyAvailable * percentHacked * threads;
 
       // Over-the-top safety checks
       if (moneyDrained <= 0) {
@@ -527,9 +506,9 @@ function hack(
         server.moneyAvailable = 0;
       }
 
-      let moneyGained = moneyDrained * BitNodeMultipliers.ScriptHackMoneyGain;
+      let moneyGained = moneyDrained * currentNodeMults.ScriptHackMoneyGain;
       if (manual) {
-        moneyGained = moneyDrained * BitNodeMultipliers.ManualHackMoney;
+        moneyGained = moneyDrained * currentNodeMults.ManualHackMoney;
       }
 
       Player.gainMoney(moneyGained, "hacking");
@@ -822,5 +801,5 @@ let customElementKey = 0;
  * so the game won't crash and the user gets sensible messages.
  */
 export function wrapUserNode(value: unknown) {
-  return <CustomBoundary key={`PlayerContent${customElementKey++}`} children={value as React.ReactNode} />;
+  return <CustomBoundary key={`PlayerContent${customElementKey++}`}>{value}</CustomBoundary>;
 }

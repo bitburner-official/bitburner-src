@@ -1,14 +1,16 @@
+import React from "react";
+import { uniqueId } from "lodash";
+import { Box, Collapse, ListItemButton, ListItemText, Paper, Table, TableBody, Typography } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { Box, Collapse, ListItemButton, ListItemText, Paper, Table, TableBody, Typography } from "@mui/material";
-import { uniqueId } from "lodash";
-import React from "react";
+
+import { Player } from "@player";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Settings } from "../../Settings/Settings";
-import { Player } from "@player";
 import { StatsRow } from "../../ui/React/StatsRow";
 import { defaultMultipliers, getBitNodeMultipliers } from "../BitNode";
-import { IBitNodeMultipliers } from "../BitNodeMultipliers";
+import { BitNodeMultipliers } from "../BitNodeMultipliers";
+import { PartialRecord, getRecordEntries } from "../../Types/Record";
 
 interface IProps {
   n: number;
@@ -60,8 +62,8 @@ export const BitNodeMultipliersDisplay = ({ n, level }: IProps): React.ReactElem
   );
 };
 
-type IBNMultRows = Record<
-  string,
+type IBNMultRows = PartialRecord<
+  keyof BitNodeMultipliers,
   {
     name: string;
     content?: string;
@@ -72,11 +74,11 @@ type IBNMultRows = Record<
 interface IBNMultTableProps {
   sectionName: string;
   rowData: IBNMultRows;
-  mults: IBitNodeMultipliers;
+  mults: BitNodeMultipliers;
 }
 
 const BNMultTable = (props: IBNMultTableProps): React.ReactElement => {
-  const rowsArray = Object.entries(props.rowData)
+  const rowsArray = getRecordEntries(props.rowData)
     .filter(([key]) => props.mults[key] !== defaultMultipliers[key])
     .map(([key, value]) => (
       <StatsRow
@@ -101,7 +103,7 @@ const BNMultTable = (props: IBNMultTableProps): React.ReactElement => {
 
 interface IMultsProps {
   n: number;
-  mults: IBitNodeMultipliers;
+  mults: BitNodeMultipliers;
 }
 
 function GeneralMults({ mults }: IMultsProps): React.ReactElement {

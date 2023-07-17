@@ -1,8 +1,7 @@
 import React from "react";
 import { Player } from "@player";
-import { BitNodeMultipliers, IBitNodeMultipliers } from "./BitNodeMultipliers";
-import { FactionNames } from "../Faction/data/FactionNames";
-import { CityName } from "../Enums";
+import { CityName, FactionName } from "@enums";
+import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
 
 class BitNode {
   // A short description, or tagline, about the BitNode
@@ -72,9 +71,8 @@ export function initBitNodes() {
         and savagery. The organized crime factions quickly rose to the top of the modern world.
         <br />
         <br />
-        Certain Factions ({FactionNames.SlumSnakes}, {FactionNames.Tetrads}, {FactionNames.TheSyndicate},{" "}
-        {FactionNames.TheDarkArmy}, {FactionNames.SpeakersForTheDead}, {FactionNames.NiteSec},{" "}
-        {FactionNames.TheBlackHand}
+        Certain Factions ({FactionName.SlumSnakes}, {FactionName.Tetrads}, {FactionName.TheSyndicate},{" "}
+        {FactionName.TheDarkArmy}, {FactionName.SpeakersForTheDead}, {FactionName.NiteSec}, {FactionName.TheBlackHand}
         ) give the player the ability to form and manage their own gangs. These gangs will earn the player money and
         reputation with the corresponding Faction
         <br />
@@ -188,23 +186,23 @@ export function initBitNodes() {
   BitNodes.BitNode6 = new BitNode(
     6,
     1,
-    FactionNames.Bladeburners,
+    FactionName.Bladeburners,
     "Like Tears in Rain",
     (
       <>
-        In the middle of the 21st century, {FactionNames.OmniTekIncorporated} began designing and manufacturing advanced
+        In the middle of the 21st century, {FactionName.OmniTekIncorporated} began designing and manufacturing advanced
         synthetic androids, or Synthoids for short. They achieved a major technological breakthrough in the sixth
         generation of their Synthoid design, called MK-VI, by developing a hyperintelligent AI. Many argue that this was
         the first sentient AI ever created. This resulted in Synthoid models that were stronger, faster, and more
         intelligent than the humans that had created them.
         <br />
         <br />
-        In this BitNode you will be able to access the {FactionNames.Bladeburners} Division at the NSA, which provides a
+        In this BitNode you will be able to access the {FactionName.Bladeburners} Division at the NSA, which provides a
         new mechanic for progression.
         <br />
         <br />
         Destroying this BitNode will give you Source-File 6, or if you already have this Source-File it will upgrade its
-        level up to a maximum of 3. This Source-File allows you to access the NSA's {FactionNames.Bladeburners} Division
+        level up to a maximum of 3. This Source-File allows you to access the NSA's {FactionName.Bladeburners} Division
         in other BitNodes. In addition, this Source-File will raise both the level and experience gain rate of all your
         combat stats by:
         <br />
@@ -220,24 +218,24 @@ export function initBitNodes() {
   BitNodes.BitNode7 = new BitNode(
     7,
     2,
-    `${FactionNames.Bladeburners} 2079`,
+    `${FactionName.Bladeburners} 2079`,
     "More human than humans",
     (
       <>
-        In the middle of the 21st century, you were doing cutting-edge work at {FactionNames.OmniTekIncorporated} as
-        part of the AI design team for advanced synthetic androids, or Synthoids for short. You helped achieve a major
+        In the middle of the 21st century, you were doing cutting-edge work at {FactionName.OmniTekIncorporated} as part
+        of the AI design team for advanced synthetic androids, or Synthoids for short. You helped achieve a major
         technological breakthrough in the sixth generation of the company's Synthoid design, called MK-VI, by developing
         a hyperintelligent AI. Many argue that this was the first sentient AI ever created. This resulted in Synthoid
         models that were stronger, faster, and more intelligent than the humans that had created them.
         <br />
         <br />
-        In this BitNode you will be able to access the {FactionNames.Bladeburners} API, which allows you to access{" "}
-        {FactionNames.Bladeburners} functionality through Netscript.
+        In this BitNode you will be able to access the {FactionName.Bladeburners} API, which allows you to access{" "}
+        {FactionName.Bladeburners} functionality through Netscript.
         <br />
         <br />
         Destroying this BitNode will give you Source-File 7, or if you already have this Source-File it will upgrade its
-        level up to a maximum of 3. This Source-File allows you to access the {FactionNames.Bladeburners} Netscript API
-        in other BitNodes. In addition, this Source-File will increase all of your {FactionNames.Bladeburners}{" "}
+        level up to a maximum of 3. This Source-File allows you to access the {FactionName.Bladeburners} Netscript API
+        in other BitNodes. In addition, this Source-File will increase all of your {FactionName.Bladeburners}{" "}
         multipliers by:
         <br />
         <br />
@@ -297,9 +295,9 @@ export function initBitNodes() {
     "Hacknet Unleashed",
     (
       <>
-        When {FactionNames.FulcrumSecretTechnologies} released their open-source Linux distro Chapeau, it quickly became
+        When {FactionName.FulcrumSecretTechnologies} released their open-source Linux distro Chapeau, it quickly became
         the OS of choice for the underground hacking community. Chapeau became especially notorious for powering the
-        Hacknet, a global, decentralized network used for nefarious purposes. {FactionNames.FulcrumSecretTechnologies}{" "}
+        Hacknet, a global, decentralized network used for nefarious purposes. {FactionName.FulcrumSecretTechnologies}{" "}
         quickly abandoned the project and dissociated themselves from it.
         <br />
         <br />
@@ -431,7 +429,7 @@ export function initBitNodes() {
     (
       <>
         With the invention of Augmentations in the 2040s a religious group known as the{" "}
-        {FactionNames.ChurchOfTheMachineGod} has rallied far more support than anyone would have hoped.
+        {FactionName.ChurchOfTheMachineGod} has rallied far more support than anyone would have hoped.
         <br />
         <br />
         Their leader, Allison "Mother" Stanek is said to have created her own Augmentation whose power goes beyond any
@@ -439,7 +437,7 @@ export function initBitNodes() {
         <br />
         <br />
         Destroying this BitNode will give you Source-File 13, or if you already have this Source-File it will upgrade
-        its level up to a maximum of 3. This Source-File lets the {FactionNames.ChurchOfTheMachineGod} appear in other
+        its level up to a maximum of 3. This Source-File lets the {FactionName.ChurchOfTheMachineGod} appear in other
         BitNodes.
         <br />
         <br />
@@ -449,82 +447,16 @@ export function initBitNodes() {
   );
 }
 
-export const defaultMultipliers: IBitNodeMultipliers = {
-  HackingLevelMultiplier: 1,
-  StrengthLevelMultiplier: 1,
-  DefenseLevelMultiplier: 1,
-  DexterityLevelMultiplier: 1,
-  AgilityLevelMultiplier: 1,
-  CharismaLevelMultiplier: 1,
-
-  ServerGrowthRate: 1,
-  ServerMaxMoney: 1,
-  ServerStartingMoney: 1,
-  ServerStartingSecurity: 1,
-  ServerWeakenRate: 1,
-
-  HomeComputerRamCost: 1,
-
-  PurchasedServerCost: 1,
-  PurchasedServerSoftcap: 1,
-  PurchasedServerLimit: 1,
-  PurchasedServerMaxRam: 1,
-
-  CompanyWorkMoney: 1,
-  CrimeMoney: 1,
-  HacknetNodeMoney: 1,
-  ManualHackMoney: 1,
-  ScriptHackMoney: 1,
-  ScriptHackMoneyGain: 1,
-  CodingContractMoney: 1,
-
-  ClassGymExpGain: 1,
-  CompanyWorkExpGain: 1,
-  CrimeExpGain: 1,
-  FactionWorkExpGain: 1,
-  HackExpGain: 1,
-
-  FactionPassiveRepGain: 1,
-  FactionWorkRepGain: 1,
-  RepToDonateToFaction: 1,
-
-  AugmentationMoneyCost: 1,
-  AugmentationRepCost: 1,
-
-  InfiltrationMoney: 1,
-  InfiltrationRep: 1,
-
-  FourSigmaMarketDataCost: 1,
-  FourSigmaMarketDataApiCost: 1,
-
-  CorporationValuation: 1,
-  CorporationSoftcap: 1,
-  CorporationDivisions: 1,
-
-  BladeburnerRank: 1,
-  BladeburnerSkillCost: 1,
-
-  GangSoftcap: 1,
-  GangUniqueAugs: 1,
-
-  DaedalusAugsRequirement: 30,
-
-  StaneksGiftPowerMultiplier: 1,
-  StaneksGiftExtraSize: 0,
-
-  WorldDaemonDifficulty: 1,
-};
-
+export const defaultMultipliers = new BitNodeMultipliers();
 Object.freeze(defaultMultipliers);
 
-export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultipliers {
-  const mults = Object.assign({}, defaultMultipliers);
+export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultipliers {
   switch (n) {
     case 1: {
-      return mults;
+      return new BitNodeMultipliers();
     }
     case 2: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.8,
 
         ServerGrowthRate: 0.8,
@@ -548,7 +480,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 3: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.8,
 
         ServerGrowthRate: 0.2,
@@ -580,7 +512,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 4: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         ServerMaxMoney: 0.1125,
         ServerStartingMoney: 0.75,
 
@@ -608,7 +540,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 5: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         ServerStartingSecurity: 2,
         ServerStartingMoney: 0.5,
 
@@ -637,7 +569,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 6: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.35,
 
         ServerMaxMoney: 0.2,
@@ -671,7 +603,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 7: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.35,
 
         ServerMaxMoney: 0.2,
@@ -713,7 +645,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 8: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         PurchasedServerSoftcap: 4,
 
         CompanyWorkMoney: 0,
@@ -741,7 +673,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 9: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.5,
         StrengthLevelMultiplier: 0.45,
         DefenseLevelMultiplier: 0.45,
@@ -782,7 +714,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 10: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.35,
         StrengthLevelMultiplier: 0.4,
         DefenseLevelMultiplier: 0.4,
@@ -825,7 +757,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 11: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.6,
 
         ServerGrowthRate: 0.2,
@@ -863,8 +795,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       const inc = Math.pow(1.02, lvl);
       const dec = 1 / inc;
 
-      return Object.assign(mults, {
-        DaedalusAugsRequirement: Math.floor(Math.min(mults.DaedalusAugsRequirement + inc, 40)),
+      return new BitNodeMultipliers({
+        DaedalusAugsRequirement: Math.floor(Math.min(defaultMultipliers.DaedalusAugsRequirement + inc, 40)),
 
         HackingLevelMultiplier: dec,
         StrengthLevelMultiplier: dec,
@@ -931,7 +863,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
       });
     }
     case 13: {
-      return Object.assign(mults, {
+      return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.25,
         StrengthLevelMultiplier: 0.7,
         DefenseLevelMultiplier: 0.7,
@@ -984,5 +916,5 @@ export function getBitNodeMultipliers(n: number, lvl: number): IBitNodeMultiplie
 }
 
 export function initBitNodeMultipliers(): void {
-  Object.assign(BitNodeMultipliers, getBitNodeMultipliers(Player.bitNodeN, Player.sourceFileLvl(Player.bitNodeN) + 1));
+  replaceCurrentNodeMults(getBitNodeMultipliers(Player.bitNodeN, Player.sourceFileLvl(Player.bitNodeN) + 1));
 }

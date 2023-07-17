@@ -1,3 +1,4 @@
+import type { FactionName } from "@enums";
 import { codingContractTypesMetadata, DescriptionFunc, GeneratorFunc, SolverFunc } from "./data/codingcontracttypes";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
@@ -55,6 +56,7 @@ for (const md of codingContractTypesMetadata) {
   );
 }
 
+// Numeric enum
 /** Enum representing the different types of rewards a Coding Contract can give */
 export enum CodingContractRewardType {
   FactionReputation,
@@ -63,6 +65,7 @@ export enum CodingContractRewardType {
   Money, // This must always be the last reward type
 }
 
+// Numeric enum
 /** Enum representing the result when trying to solve the Contract */
 export enum CodingContractResult {
   Success,
@@ -71,11 +74,21 @@ export enum CodingContractResult {
 }
 
 /** A class that represents the type of reward a contract gives */
-export interface ICodingContractReward {
-  /* Name of Company/Faction name for reward, if applicable */
-  name?: string;
-  type: CodingContractRewardType;
-}
+export type ICodingContractReward =
+  | {
+      type: CodingContractRewardType.Money;
+    }
+  | {
+      type: CodingContractRewardType.FactionReputationAll;
+    }
+  | {
+      type: CodingContractRewardType.CompanyReputation;
+      name: string;
+    }
+  | {
+      type: CodingContractRewardType.FactionReputation;
+      name: FactionName;
+    };
 
 /**
  * A Coding Contract is a file that poses a programming-related problem to the Player.
@@ -138,7 +151,7 @@ export class CodingContract {
   /** Creates a popup to prompt the player to solve the problem */
   async prompt(): Promise<CodingContractResult> {
     return new Promise<CodingContractResult>((resolve) => {
-      const props = {
+      CodingContractEvent.emit({
         c: this,
         onClose: () => {
           resolve(CodingContractResult.Cancelled);
@@ -150,8 +163,7 @@ export class CodingContract {
             resolve(CodingContractResult.Failure);
           }
         },
-      };
-      CodingContractEvent.emit(props);
+      });
     });
   }
 

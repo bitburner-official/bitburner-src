@@ -2,24 +2,23 @@
  * Represents a Limit or Buy Order on the stock market. Does not represent
  * a Market Order since those are just executed immediately
  */
-import { OrderTypes } from "./data/OrderTypes";
-import { PositionTypes } from "./data/PositionTypes";
+import { PositionType, OrderType } from "@enums";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
 export class Order {
-  readonly pos: PositionTypes;
+  readonly pos: PositionType;
   readonly price: number;
   shares: number;
   readonly stockSymbol: string;
-  readonly type: OrderTypes;
+  readonly type: OrderType;
 
   constructor(
     stockSymbol = "",
     shares = 0,
     price = 0,
-    typ: OrderTypes = OrderTypes.LimitBuy,
-    pos: PositionTypes = PositionTypes.Long,
+    typ: OrderType = OrderType.LimitBuy,
+    pos: PositionType = PositionType.Long,
   ) {
     // Validate arguments
     let invalidArgs = false;

@@ -4,7 +4,7 @@
 
 ## GangMemberAscension.hack property
 
-Hacking multiplier gained from ascending
+Factor by which the hacking ascension multiplier was increased (newMult / oldMult)
 
 **Signature:**
 

@@ -5,7 +5,7 @@
  */
 import React, { useState } from "react";
 
-import { CityName } from "../../Enums";
+import { CityName } from "@enums";
 import { TravelConfirmationModal } from "./TravelConfirmationModal";
 
 import { CONSTANTS } from "../../Constants";

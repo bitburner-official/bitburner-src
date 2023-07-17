@@ -1,12 +1,13 @@
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { Augmentation } from "../Augmentation/Augmentation";
-import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import type { Augmentation } from "../Augmentation/Augmentation";
+import type { Faction } from "./Faction";
 
-import { Faction } from "./Faction";
-import { Factions } from "./Factions";
+import { Augmentations } from "../Augmentation/Augmentations";
+import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
+import { AugmentationName, FactionName } from "@enums";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+
 import { Player } from "@player";
+import { Factions } from "./Factions";
 import { Settings } from "../Settings/Settings";
 import {
   getHackingWorkRepGain,
@@ -16,9 +17,10 @@ import {
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { InvitationEvent } from "./ui/InvitationModal";
-import { FactionNames } from "./data/FactionNames";
 import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
+import { getAugCost } from "../Augmentation/AugmentationHelpers";
+import { createEnumKeyedRecord, getRecordKeys } from "../Types/Record";
 
 export function inviteToFaction(faction: Faction): void {
   Player.receiveInvite(faction.name);
@@ -32,8 +34,9 @@ export function joinFaction(faction: Faction): void {
   if (faction.isMember) return;
   faction.isMember = true;
   Player.factions.push(faction.name);
-  const allFactions = Object.values(FactionNames).map((faction) => faction as string);
-  Player.factions.sort((a, b) => allFactions.indexOf(a) - allFactions.indexOf(b));
+  let i = 0;
+  const factionIndexes = createEnumKeyedRecord(FactionName, (__) => i++);
+  Player.factions.sort((a, b) => factionIndexes[a] - factionIndexes[b]);
   const factionInfo = faction.getInfo();
 
   //Determine what factions you are banned from now that you have joined this faction
@@ -56,7 +59,7 @@ export function hasAugmentationPrereqs(aug: Augmentation): boolean {
 
 export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = false): string {
   const hasPrereqs = hasAugmentationPrereqs(aug);
-  const augCosts = aug.getCost();
+  const augCosts = getAugCost(aug);
   if (!hasPrereqs) {
     const txt = `You must first purchase or install ${aug.prereqs
       .filter((req) => !Player.hasAugmentation(req))
@@ -80,7 +83,7 @@ export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = fal
     dialogBoxCreate(txt);
   } else if (augCosts.moneyCost === 0 || Player.money >= augCosts.moneyCost) {
     const queuedAugmentation = new PlayerOwnedAugmentation(aug.name);
-    if (aug.name == AugmentationNames.NeuroFluxGovernor) {
+    if (aug.name == AugmentationName.NeuroFluxGovernor) {
       queuedAugmentation.level = aug.getLevel();
     }
     Player.queuedAugmentations.push(queuedAugmentation);
@@ -108,9 +111,8 @@ export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = fal
 
 export function processPassiveFactionRepGain(numCycles: number): void {
   if (Player.bitNodeN === 2) return;
-  for (const name of Object.keys(Factions)) {
+  for (const name of getRecordKeys(Factions)) {
     if (isFactionWork(Player.currentWork) && name === Player.currentWork.factionName) continue;
-    if (!Object.hasOwn(Factions, name)) continue;
     const faction = Factions[name];
     if (!faction.isMember) continue;
     // No passive rep for special factions
@@ -128,21 +130,21 @@ export function processPassiveFactionRepGain(numCycles: number): void {
     const fRep = getFactionFieldWorkRepGain(Player, faction.favor);
     const rate = Math.max(hRep * favorMult, sRep * favorMult, fRep * favorMult, 1 / 120);
 
-    faction.playerReputation += rate * numCycles * Player.mults.faction_rep * BitNodeMultipliers.FactionPassiveRepGain;
+    faction.playerReputation += rate * numCycles * Player.mults.faction_rep * currentNodeMults.FactionPassiveRepGain;
   }
 }
 
-export const getFactionAugmentationsFiltered = (faction: Faction): string[] => {
+export const getFactionAugmentationsFiltered = (faction: Faction): AugmentationName[] => {
   // If player has a gang with this faction, return (almost) all augmentations
   if (Player.hasGangWith(faction.name)) {
-    let augs = Object.values(StaticAugmentations);
+    let augs = Object.values(Augmentations);
 
     // Remove special augs
-    augs = augs.filter((a) => !a.isSpecial && a.name !== AugmentationNames.CongruityImplant);
+    augs = augs.filter((a) => !a.isSpecial && a.name !== AugmentationName.CongruityImplant);
 
     if (Player.bitNodeN === 2) {
       // TRP is not available outside of BN2 for Gangs
-      augs.push(StaticAugmentations[AugmentationNames.TheRedPill]);
+      augs.push(Augmentations[AugmentationName.TheRedPill]);
     }
 
     const rng = SFC32RNG(`BN${Player.bitNodeN}.${Player.sourceFileLvl(Player.bitNodeN)}`);
@@ -157,7 +159,7 @@ export const getFactionAugmentationsFiltered = (faction: Faction): string[] => {
         return true;
       }
 
-      return rng() >= 1 - BitNodeMultipliers.GangUniqueAugs;
+      return rng() >= 1 - currentNodeMults.GangUniqueAugs;
     };
     augs = augs.filter(uniqueFilter);
 

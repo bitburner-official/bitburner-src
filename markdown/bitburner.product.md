@@ -17,8 +17,10 @@ interface Product
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [actualSellAmount](./bitburner.product.actualsellamount.md) |  | number | Amount of product sold last cycle |
+|  [advertisingInvestment](./bitburner.product.advertisinginvestment.md) |  | number | Funds that were spent on advertising the product |
 |  [competition](./bitburner.product.competition.md) |  | number \| undefined | Competition for the product, only present if "Market Research - Competition" unlocked |
 |  [demand](./bitburner.product.demand.md) |  | number \| undefined | Demand for the product, only present if "Market Research - Demand" unlocked |
+|  [designInvestment](./bitburner.product.designinvestment.md) |  | number | Funds that were spent on designing the product |
 |  [desiredSellAmount](./bitburner.product.desiredsellamount.md) |  | string \| number | Desired sell amount, e.g. "PROD/2" |
 |  [desiredSellPrice](./bitburner.product.desiredsellprice.md) |  | string \| number | Desired sell price, can be "MP+5" |
 |  [developmentProgress](./bitburner.product.developmentprogress.md) |  | number | A number between 0-100 representing percentage completion |

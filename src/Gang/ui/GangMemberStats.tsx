@@ -14,7 +14,7 @@ import { GangMember } from "../GangMember";
 import { Settings } from "../../Settings/Settings";
 import { MoneyRate } from "../../ui/React/MoneyRate";
 import { StatsRow } from "../../ui/React/StatsRow";
-import { characterOverviewStyles as useStyles } from "../../ui/React/CharacterOverview";
+import { useStyles } from "../../ui/React/CharacterOverview";
 
 interface IProps {
   member: GangMember;
@@ -34,7 +34,7 @@ export function GangMemberStats(props: IProps): React.ReactElement {
 
   const gang = useGang();
   const data = [
-    [`Money:`, <MoneyRate money={5 * props.member.calculateMoneyGain(gang)} />],
+    [`Money:`, <MoneyRate key="money" money={5 * props.member.calculateMoneyGain(gang)} />],
     [`Respect:`, `${formatRespect(5 * props.member.calculateRespectGain(gang))} / sec`],
     [`Wanted Level:`, `${formatWanted(5 * props.member.calculateWantedLevelGain(gang))} / sec`],
     [`Total Respect:`, `${formatRespect(props.member.earnedRespect)}`],

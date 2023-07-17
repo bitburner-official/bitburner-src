@@ -1,19 +1,19 @@
-import * as monaco from "monaco-editor";
+import type { editor, Position } from "monaco-editor";
 
-import { ContentFilePath } from "src/Paths/ContentFile";
+import type { ContentFilePath } from "../../Paths/ContentFile";
 
-type ITextModel = monaco.editor.ITextModel;
+type ITextModel = editor.ITextModel;
 
 // Holds all the data for a open script
 export class OpenScript {
   path: ContentFilePath;
   code: string;
   hostname: string;
-  lastPosition: monaco.Position;
+  lastPosition: Position;
   model: ITextModel;
   isTxt: boolean;
 
-  constructor(path: ContentFilePath, code: string, hostname: string, lastPosition: monaco.Position, model: ITextModel) {
+  constructor(path: ContentFilePath, code: string, hostname: string, lastPosition: Position, model: ITextModel) {
     this.path = path;
     this.code = code;
     this.hostname = hostname;

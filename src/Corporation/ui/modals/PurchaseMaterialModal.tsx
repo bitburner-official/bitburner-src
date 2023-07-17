@@ -6,7 +6,7 @@ import { Material } from "../../Material";
 import { formatMatPurchaseAmount, formatMoney } from "../../../ui/formatNumber";
 import { BulkPurchase, BuyMaterial } from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
-import { useCorporation } from "../Context";
+import { useCorporation, useDivision } from "../Context";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -26,6 +26,7 @@ interface IBPProps {
 
 function BulkPurchaseSection(props: IBPProps): React.ReactElement {
   const corp = useCorporation();
+  const division = useDivision();
   const [buyAmt, setBuyAmt] = useState("");
   const [disabled, setDisabled] = useState(false);
 
@@ -64,7 +65,7 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
 
   function bulkPurchase(): void {
     try {
-      BulkPurchase(corp, props.warehouse, props.mat, parseFloat(buyAmt));
+      BulkPurchase(corp, division, props.warehouse, props.mat, parseFloat(buyAmt));
     } catch (err) {
       dialogBoxCreate(err + "");
     }
@@ -110,12 +111,13 @@ interface IProps {
 
 // Create a popup that lets the player purchase a Material
 export function PurchaseMaterialModal(props: IProps): React.ReactElement {
+  const division = useDivision();
   const [buyAmt, setBuyAmt] = useState(props.mat.buyAmount ? props.mat.buyAmount : 0);
 
   function purchaseMaterial(): void {
     if (buyAmt === null) return;
     try {
-      BuyMaterial(props.mat, buyAmt);
+      BuyMaterial(division, props.mat, buyAmt);
     } catch (err) {
       dialogBoxCreate(err + "");
     }

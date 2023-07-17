@@ -1,12 +1,10 @@
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
-import { initAugmentations } from "./Augmentation/AugmentationHelpers";
-import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
+import { AugmentationName, ToastVariant } from "@enums";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { initSourceFiles } from "./SourceFile/SourceFiles";
 import { generateRandomContract } from "./CodingContractGenerator";
-import { initCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
-import { Factions, initFactions } from "./Faction/Factions";
+import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
 import { processPassiveFactionRepGain, inviteToFaction } from "./Faction/FactionHelpers";
 import { Router } from "./ui/GameRoot";
@@ -44,7 +42,7 @@ import { calculateAchievements } from "./Achievements/Achievements";
 import React from "react";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
+import { SnackbarEvents } from "./ui/React/Snackbar";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -189,7 +187,7 @@ const Engine: {
 
     if (Engine.Counters.messages <= 0) {
       checkForMessagesToSend();
-      if (Player.hasAugmentation(AugmentationNames.TheRedPill)) {
+      if (Player.hasAugmentation(AugmentationName.TheRedPill)) {
         Engine.Counters.messages = 4500; // 15 minutes for Red pill message
       } else {
         Engine.Counters.messages = 150;
@@ -231,7 +229,7 @@ const Engine: {
     if (loadGame(saveString)) {
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
-      initAugmentations(); // Also calls Player.reapplyAllAugmentations()
+      Player.reapplyAllAugmentations();
       Player.reapplyAllSourceFiles();
       if (Player.hasWseAccount) {
         initSymbolToStockMap();
@@ -375,9 +373,7 @@ const Engine: {
       Engine.start(); // Run main game loop and Scripts loop
       Player.init();
       initForeignServers(Player.getHomeComputer());
-      initCompanies();
-      initFactions();
-      initAugmentations();
+      Player.reapplyAllAugmentations();
 
       // Start interactive tutorial
       iTutorialStart();

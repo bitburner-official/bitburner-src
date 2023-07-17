@@ -4,16 +4,17 @@
  */
 import { CheckBox, CheckBoxOutlineBlank, CheckCircle, NewReleases, Report } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Faction } from "../../Faction/Faction";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { formatMoney, formatReputation } from "../../ui/formatNumber";
 import { Augmentation } from "../Augmentation";
-import { AugmentationNames } from "../data/AugmentationNames";
-import { StaticAugmentations } from "../StaticAugmentations";
+import { AugmentationName, FactionName } from "@enums";
+import { Augmentations } from "../Augmentations";
 import { PurchaseAugmentationModal } from "./PurchaseAugmentationModal";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { getAugCost } from "../AugmentationHelpers";
+import { useRerender } from "../../ui/React/hooks";
 
 interface IPreReqsProps {
   aug: Augmentation;
@@ -90,8 +91,8 @@ const Exclusive = (props: IExclusiveProps): React.ReactElement => {
                 </li>
               )}
               {Player.canAccessGrafting() &&
-                (!props.aug.isSpecial || props.aug.factions.includes(FactionNames.Bladeburners)) &&
-                props.aug.name !== AugmentationNames.TheRedPill && (
+                (!props.aug.isSpecial || props.aug.factions.includes(FactionName.Bladeburners)) &&
+                props.aug.name !== AugmentationName.TheRedPill && (
                   <li>
                     <b>Grafting</b>
                   </li>
@@ -127,11 +128,12 @@ const Requirement = (props: IReqProps): React.ReactElement => {
 };
 
 interface IPurchasableAugsProps {
-  augNames: string[];
-  ownedAugNames: string[];
+  augNames: AugmentationName[];
+  ownedAugNames: AugmentationName[];
 
   canPurchase: (aug: Augmentation) => boolean;
   purchaseAugmentation: (aug: Augmentation, showModal: (open: boolean) => void) => void;
+  rerender: () => void;
 
   rep?: number;
   sleeveAugs?: boolean;
@@ -145,10 +147,10 @@ export const PurchasableAugmentations = (props: IPurchasableAugsProps): React.Re
       disableGutters
       sx={{ mx: 0, display: "grid", gridTemplateColumns: "repeat(1, 1fr)", gap: 0.75 }}
     >
-      {props.augNames.map((augName: string) => (
+      {props.augNames.map((augName) => (
         <PurchasableAugmentation key={augName} parent={props} augName={augName} owned={false} />
       ))}
-      {props.ownedAugNames.map((augName: string) => (
+      {props.ownedAugNames.map((augName) => (
         <PurchasableAugmentation key={augName} parent={props} augName={augName} owned={true} />
       ))}
     </Container>
@@ -157,15 +159,24 @@ export const PurchasableAugmentations = (props: IPurchasableAugsProps): React.Re
 
 interface IPurchasableAugProps {
   parent: IPurchasableAugsProps;
-  augName: string;
+  augName: AugmentationName;
   owned: boolean;
 }
 
 export function PurchasableAugmentation(props: IPurchasableAugProps): React.ReactElement {
   const [open, setOpen] = useState(false);
+  const rerender = useRerender();
+  useEffect(() => {
+    // No need to rerender augs that are owned
+    if (props.owned) return;
+    const interval = setInterval(rerender, 600);
+    return () => clearInterval(interval);
+  }, [props.owned, rerender]);
 
-  const aug = StaticAugmentations[props.augName];
-  const augCosts = aug.getCost();
+  const aug = Augmentations[props.augName];
+  if (!aug) return <></>;
+  const augLevel = aug.getLevel();
+  const augCosts = getAugCost(aug);
   const cost = props.parent.sleeveAugs ? aug.baseCost : augCosts.moneyCost;
   const repCost = augCosts.repCost;
   const info = typeof aug.info === "string" ? <span>{aug.info}</span> : aug.info;
@@ -209,8 +220,8 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
                 title={
                   <>
                     <Typography variant="h5">
-                      {props.augName}
-                      {props.augName === AugmentationNames.NeuroFluxGovernor && ` - Level ${aug.getLevel()}`}
+                      {aug.name}
+                      {aug.name === AugmentationName.NeuroFluxGovernor && ` - Level ${augLevel + 1}`}
                     </Typography>
                     <Typography>{description}</Typography>
                   </>
@@ -227,7 +238,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
                   }}
                 >
                   {aug.name}
-                  {aug.name === AugmentationNames.NeuroFluxGovernor && ` - Level ${aug.getLevel()}`}
+                  {aug.name === AugmentationName.NeuroFluxGovernor && ` - Level ${augLevel + 1}`}
                 </Typography>
               </Tooltip>
 
@@ -257,7 +268,10 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
         {Settings.SuppressBuyAugmentationConfirmation || (
           <PurchaseAugmentationModal
             open={open}
-            onClose={() => setOpen(false)}
+            onClose={() => {
+              setOpen(false);
+              props.parent.rerender();
+            }}
             faction={props.parent.faction}
             aug={aug}
           />

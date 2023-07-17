@@ -14,8 +14,8 @@
 |  [GymType](./bitburner.gymtype.md) |  |
 |  [JobName](./bitburner.jobname.md) |  |
 |  [LocationName](./bitburner.locationname.md) | Names of all locations |
-|  [OrderTypes](./bitburner.ordertypes.md) |  |
-|  [PositionTypes](./bitburner.positiontypes.md) |  |
+|  [OrderType](./bitburner.ordertype.md) |  |
+|  [PositionType](./bitburner.positiontype.md) |  |
 |  [ToastVariant](./bitburner.toastvariant.md) |  |
 |  [UniversityClassType](./bitburner.universityclasstype.md) |  |
 
@@ -84,7 +84,7 @@
 |  [Player](./bitburner.player.md) |  |
 |  [ProcessInfo](./bitburner.processinfo.md) | A single process on a server. |
 |  [Product](./bitburner.product.md) | Product in a warehouse |
-|  [ReactElement](./bitburner.reactelement.md) | A stand-in for the real React.ReactElement, which API-extractor doesn't know about. Don't try to create one of these by hand; use React.createElement(). |
+|  [ReactElement](./bitburner.reactelement.md) | A stand-in for the real React.ReactElement. Use React.createElement to make these. See [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation. |
 |  [RecentScript](./bitburner.recentscript.md) |  |
 |  [ReputationFormulas](./bitburner.reputationformulas.md) | Reputation formulas |
 |  [ResetInfo](./bitburner.resetinfo.md) | Various info about resets |
@@ -118,12 +118,14 @@
 |  [CorpIndustryName](./bitburner.corpindustryname.md) |  |
 |  [CorpMaterialName](./bitburner.corpmaterialname.md) |  |
 |  [CorpResearchName](./bitburner.corpresearchname.md) |  |
+|  [CorpSmartSupplyOption](./bitburner.corpsmartsupplyoption.md) |  |
 |  [CorpStateName](./bitburner.corpstatename.md) |  |
 |  [CorpUnlockName](./bitburner.corpunlockname.md) |  |
 |  [CorpUpgradeName](./bitburner.corpupgradename.md) |  |
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
 |  [NSEnums](./bitburner.nsenums.md) |  |
 |  [PortData](./bitburner.portdata.md) |  |
+|  [ReactNode](./bitburner.reactnode.md) | <p>A stand-in for the real React.ReactNode. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. number and string are displayed directly. boolean, null, and undefined are ignored and not rendered. An array of ReactNodes will display all members of that array sequentially.</p><p>Use React.createElement to make the ReactElement type, see [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.</p> |
 |  [ScriptArg](./bitburner.scriptarg.md) |  |
 |  [SleeveBladeburnerTask](./bitburner.sleevebladeburnertask.md) |  |
 |  [SleeveClassTask](./bitburner.sleeveclasstask.md) |  |

@@ -1,13 +1,13 @@
+import type { Bladeburner as INetscriptBladeburner } from "@nsdefs";
+import type { Action } from "../Bladeburner/Action";
+import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+
 import { Player } from "@player";
 import { Bladeburner } from "../Bladeburner/Bladeburner";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
-import { Bladeburner as INetscriptBladeburner } from "@nsdefs";
-import { Action } from "src/Bladeburner/Action";
-import { InternalAPI, NetscriptContext } from "src/Netscript/APIWrapper";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BlackOperation } from "../Bladeburner/BlackOperation";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { checkEnum } from "../utils/helpers/enum";
-import { CityName } from "../Enums";
+import { getEnumHelper } from "../utils/EnumHelper";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {
@@ -139,7 +139,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const action = getBladeburnerActionObject(ctx, type, name);
       const level = _level === undefined ? action.level : helpers.number(ctx, "level", _level);
       const rewardMultiplier = Math.pow(action.rewardFac, level - 1);
-      return action.rankGain * rewardMultiplier * BitNodeMultipliers.BladeburnerRank;
+      return action.rankGain * rewardMultiplier * currentNodeMults.BladeburnerRank;
     },
     getActionCountRemaining: (ctx) => (_type, _name) => {
       const bladeburner = getBladeburner(ctx);
@@ -266,20 +266,17 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     getCityEstimatedPopulation: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
-      const cityName = helpers.string(ctx, "cityName", _cityName);
-      if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city: ${cityName}`);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       return bladeburner.cities[cityName].popEst;
     },
     getCityCommunities: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
-      const cityName = helpers.string(ctx, "cityName", _cityName);
-      if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city: ${cityName}`);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       return bladeburner.cities[cityName].comms;
     },
     getCityChaos: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
-      const cityName = helpers.string(ctx, "cityName", _cityName);
-      if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city: ${cityName}`);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       return bladeburner.cities[cityName].chaos;
     },
     getCity: (ctx) => () => {
@@ -288,8 +285,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     switchCity: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
-      const cityName = helpers.string(ctx, "cityName", _cityName);
-      if (!checkEnum(CityName, cityName)) throw new Error(`Invalid city: ${cityName}`);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       bladeburner.city = cityName;
       return true;
     },
@@ -303,7 +299,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     joinBladeburnerDivision: (ctx) => () => {
       if (Player.bitNodeN === 7 || Player.sourceFileLvl(7) > 0) {
-        if (BitNodeMultipliers.BladeburnerRank === 0) {
+        if (currentNodeMults.BladeburnerRank === 0) {
           return false; // Disabled in this bitnode
         }
         if (Player.bladeburner) {

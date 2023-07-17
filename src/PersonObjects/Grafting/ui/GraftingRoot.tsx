@@ -1,14 +1,16 @@
+import type { Augmentation } from "../../../Augmentation/Augmentation";
+
+import { Player } from "@player";
+import { AugmentationName } from "@enums";
+
+import React, { useState } from "react";
 import { CheckBox, CheckBoxOutlineBlank, Construction } from "@mui/icons-material";
 import { Box, Button, Container, List, ListItemButton, Paper, Typography } from "@mui/material";
-import React, { useState } from "react";
+
 import { GraftingWork } from "../../../Work/GraftingWork";
-import { Augmentation } from "../../../Augmentation/Augmentation";
-import { AugmentationNames } from "../../../Augmentation/data/AugmentationNames";
-import { StaticAugmentations } from "../../../Augmentation/StaticAugmentations";
+import { Augmentations } from "../../../Augmentation/Augmentations";
 import { CONSTANTS } from "../../../Constants";
 import { hasAugmentationPrereqs } from "../../../Faction/FactionHelpers";
-import { LocationName } from "../../../Enums";
-import { Locations } from "../../../Locations/Locations";
 import { PurchaseAugmentationsOrderSetting } from "../../../Settings/SettingEnums";
 import { Settings } from "../../../Settings/Settings";
 import { Router } from "../../../ui/GameRoot";
@@ -17,14 +19,13 @@ import { ConfirmationModal } from "../../../ui/React/ConfirmationModal";
 import { Money } from "../../../ui/React/Money";
 import { formatNumberNoSuffix } from "../../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
-import { Player } from "@player";
 import { GraftableAugmentation } from "../GraftableAugmentation";
 import { calculateGraftingTimeWithBonus, getGraftingAvailableAugs } from "../GraftingHelpers";
 import { useRerender } from "../../../ui/React/hooks";
 
 export const GraftableAugmentations = (): Record<string, GraftableAugmentation> => {
   const gAugs: Record<string, GraftableAugmentation> = {};
-  for (const aug of Object.values(StaticAugmentations)) {
+  for (const aug of Object.values(Augmentations)) {
     const name = aug.name;
     const graftableAug = new GraftableAugmentation(aug);
     gAugs[name] = graftableAug;
@@ -51,7 +52,7 @@ const AugPreReqsChecklist = (props: IProps): React.ReactElement => {
       <b>Pre-Requisites:</b>
       <br />
       {aug.prereqs.map((preAug) => (
-        <span style={{ display: "flex", alignItems: "center" }}>
+        <span key={preAug} style={{ display: "flex", alignItems: "center" }}>
           {Player.hasAugmentation(preAug) ? <CheckBox sx={{ mr: 1 }} /> : <CheckBoxOutlineBlank sx={{ mr: 1 }} />}
           {preAug}
         </span>
@@ -65,10 +66,10 @@ export const GraftingRoot = (): React.ReactElement => {
 
   const [selectedAug, setSelectedAug] = useState(getGraftingAvailableAugs()[0]);
   const [graftOpen, setGraftOpen] = useState(false);
-  const selectedAugmentation = StaticAugmentations[selectedAug];
+  const selectedAugmentation = Augmentations[selectedAug];
   const rerender = useRerender(200);
 
-  const getAugsSorted = (): string[] => {
+  const getAugsSorted = (): AugmentationName[] => {
     const augs = getGraftingAvailableAugs();
     switch (Settings.PurchaseAugmentationsOrder) {
       case PurchaseAugmentationsOrderSetting.Cost:
@@ -85,7 +86,7 @@ export const GraftingRoot = (): React.ReactElement => {
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0 }}>
-      <Button onClick={() => Router.toLocation(Locations[LocationName.NewTokyoVitaLife])}>Back</Button>
+      <Button onClick={() => Router.back()}>Back</Button>
       <Typography variant="h4">Grafting Laboratory</Typography>
       <Typography>
         You find yourself in a secret laboratory, owned by a mysterious researcher.
@@ -158,7 +159,7 @@ export const GraftingRoot = (): React.ReactElement => {
                   <>
                     Cancelling grafting will <b>not</b> save grafting progress, and the money you spend will <b>not</b>{" "}
                     be returned.
-                    {!Player.hasAugmentation(AugmentationNames.CongruityImplant) && (
+                    {!Player.hasAugmentation(AugmentationName.CongruityImplant) && (
                       <>
                         <br />
                         <br />

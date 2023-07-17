@@ -1,14 +1,16 @@
-import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
-import { GraftableAugmentation } from "./GraftableAugmentation";
 import { Player } from "@player";
+import { AugmentationName, FactionName } from "@enums";
+import { Augmentations } from "../../Augmentation/Augmentations";
 import { calculateIntelligenceBonus } from "../formulas/intelligence";
+import { GraftableAugmentation } from "./GraftableAugmentation";
+import { getRecordEntries } from "../../Types/Record";
 
-export const getGraftingAvailableAugs = (): string[] => {
-  const augs: string[] = [];
+export const getGraftingAvailableAugs = (): AugmentationName[] => {
+  const augs: AugmentationName[] = [];
 
-  for (const [augName, aug] of Object.entries(StaticAugmentations)) {
-    if (Player.factions.includes("Bladeburners")) {
-      if (aug.isSpecial && !aug.factions.includes("Bladeburners")) continue;
+  for (const [augName, aug] of getRecordEntries(Augmentations)) {
+    if (Player.factions.includes(FactionName.Bladeburners)) {
+      if (aug.isSpecial && !aug.factions.includes(FactionName.Bladeburners)) continue;
     } else {
       if (aug.isSpecial) continue;
     }

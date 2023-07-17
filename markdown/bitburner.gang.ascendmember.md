@@ -22,7 +22,7 @@ ascendMember(memberName: string): GangMemberAscension | undefined;
 
 [GangMemberAscension](./bitburner.gangmemberascension.md) \| undefined
 
-Object with info about the ascension results. Undefined if ascension did not occur.
+Object with info about the ascension results, or undefined if ascension did not occur.
 
 ## Remarks
 

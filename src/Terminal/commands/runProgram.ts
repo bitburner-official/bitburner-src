@@ -1,8 +1,9 @@
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
 import { BaseServer } from "../../Server/BaseServer";
-import { CompletedProgramName, Programs } from "../../Programs/Programs";
+import { Programs } from "../../Programs/Programs";
 import { ProgramFilePath } from "../../Paths/ProgramFilePath";
+import { getRecordKeys } from "../../Types/Record";
 
 export function runProgram(path: ProgramFilePath, args: (string | number | boolean)[], server: BaseServer): void {
   // Check if you have the program on your computer. If you do, execute it, otherwise
@@ -10,7 +11,7 @@ export function runProgram(path: ProgramFilePath, args: (string | number | boole
   const programLowered = path.toLowerCase();
   // Support lowercase even though it's an enum
 
-  const realProgramName = Object.values(CompletedProgramName).find((name) => name.toLowerCase() === programLowered);
+  const realProgramName = getRecordKeys(Programs).find((name) => name.toLowerCase() === programLowered);
   if (!realProgramName || !Player.hasProgram(realProgramName)) {
     Terminal.error(
       `No such (exe, script, js, or cct) file! (Only finished programs that exist on your home computer or scripts on ${server.hostname} can be run)`,

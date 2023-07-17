@@ -1,46 +1,30 @@
 // Constructs all CompanyPosition objects using the metadata in data/companypositions.ts
-import { companiesMetadata } from "./data/CompaniesMetadata";
-import { Company, IConstructorParams } from "./Company";
-import { Reviver } from "../utils/JSONReviver";
+import { getCompaniesMetadata } from "./data/CompaniesMetadata";
+import { Company } from "./Company";
+import { Reviver, assertLoadingType } from "../utils/JSONReviver";
+import { CompanyName } from "./Enums";
+import { createEnumKeyedRecord } from "../Types/Record";
+import { getEnumHelper } from "../utils/EnumHelper";
 
-export let Companies: Record<string, Company> = {};
-
-function addCompany(params: IConstructorParams): void {
-  if (Companies[params.name] != null) {
-    console.warn(`Duplicate Company Position being defined: ${params.name}`);
-  }
-  Companies[params.name] = new Company(params);
-}
-
-// Used to initialize new Company objects for the Companies map
-// Called when creating new game or after a prestige/reset
-export function initCompanies(): void {
-  // Save Old Company data for 'favor'
-  const oldCompanies = Companies;
-
-  // Re-construct all Companies
-  Companies = {};
-  companiesMetadata.forEach((e) => {
-    addCompany(e);
-  });
-
-  // Reset data
-  for (const companyName of Object.keys(Companies)) {
-    const company = Companies[companyName];
-    const oldCompany = oldCompanies[companyName];
-    if (!oldCompany) {
-      // New game, so no OldCompanies data
-      company.favor = 0;
-    } else {
-      company.favor = oldCompanies[companyName].favor;
-      if (isNaN(company.favor)) {
-        company.favor = 0;
-      }
-    }
-  }
-}
+export const Companies: Record<CompanyName, Company> = (() => {
+  const metadata = getCompaniesMetadata();
+  return createEnumKeyedRecord(CompanyName, (name) => new Company(metadata[name]));
+})();
 
 // Used to load Companies map from a save
 export function loadCompanies(saveString: string): void {
-  Companies = JSON.parse(saveString, Reviver);
+  const loadedCompanies = JSON.parse(saveString, Reviver) as unknown;
+  // This loading method allows invalid data in player save, but just ignores anything invalid
+  if (!loadedCompanies) return;
+  if (typeof loadedCompanies !== "object") return;
+  for (const [loadedCompanyName, loadedCompany] of Object.entries(loadedCompanies) as [string, unknown][]) {
+    if (!getEnumHelper("CompanyName").isMember(loadedCompanyName)) continue;
+    if (!loadedCompany) continue;
+    if (typeof loadedCompany !== "object") continue;
+    const company = Companies[loadedCompanyName];
+    assertLoadingType<Company>(loadedCompany);
+    const { playerReputation: loadedRep, favor: loadedFavor } = loadedCompany;
+    if (typeof loadedRep === "number" && loadedRep > 0) company.playerReputation = loadedRep;
+    if (typeof loadedFavor === "number" && loadedFavor > 0) company.favor = loadedFavor;
+  }
 }

@@ -1,0 +1,301 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 0 to 1 1`] = `1000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 0 to 2 1`] = `2069999999.9999986`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 0 to 3 1`] = `3214900000.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 0 to 4 1`] = `4439942999.999999`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 0 to 5 1`] = `5750739010.000001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 1 to 2 1`] = `2214899999.999999`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 1 to 3 1`] = `3439943000.0000024`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 1 to 4 1`] = `4750739010`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 1 to 5 1`] = `6153290740.700001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 2 to 3 1`] = `3680739010.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 2 to 4 1`] = `5083290740.7`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 2 to 5 1`] = `6584021092.549001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 3 to 4 1`] = `5439121092.549`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 3 to 5 1`] = `7044902569.027432`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 4 to 5 1`] = `7538045748.859352`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 0 to 1 1`] = `4000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 0 to 2 1`] = `8400000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 0 to 3 1`] = `13240000000.000006`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 0 to 4 1`] = `18564000000.000008`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 0 to 5 1`] = `24420400000.000004`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 1 to 2 1`] = `9240000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 1 to 3 1`] = `14564000000.000004`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 1 to 4 1`] = `20420400000.00001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 1 to 5 1`] = `26862440000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 2 to 3 1`] = `16020400000.00001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 2 to 4 1`] = `22462440000.000015`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 2 to 5 1`] = `29548684000.000008`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 3 to 4 1`] = `24708684000.00002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 3 to 5 1`] = `32503552400.000015`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 4 to 5 1`] = `35753907640.000015`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 0 to 1 1`] = `1000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 0 to 2 1`] = `2060000000.0000007`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 0 to 3 1`] = `3183600000.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 0 to 4 1`] = `4374616000.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 0 to 5 1`] = `5637092959.999999`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 1 to 2 1`] = `2183600000.000001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 1 to 3 1`] = `3374616000.0000024`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 1 to 4 1`] = `4637092960.000001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 1 to 5 1`] = `5975318537.599999`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 2 to 3 1`] = `3577092960.0000033`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 2 to 4 1`] = `4915318537.600002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 2 to 5 1`] = `6333837649.856001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 3 to 4 1`] = `5210237649.856003`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 3 to 5 1`] = `6713867908.847361`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 4 to 5 1`] = `7116699983.378202`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 0 to 1 1`] = `1000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 0 to 2 1`] = `2060000000.0000007`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 0 to 3 1`] = `3183600000.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 0 to 4 1`] = `4374616000.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 0 to 5 1`] = `5637092959.999999`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 1 to 2 1`] = `2183600000.000001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 1 to 3 1`] = `3374616000.0000024`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 1 to 4 1`] = `4637092960.000001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 1 to 5 1`] = `5975318537.599999`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 2 to 3 1`] = `3577092960.0000033`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 2 to 4 1`] = `4915318537.600002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 2 to 5 1`] = `6333837649.856001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 3 to 4 1`] = `5210237649.856003`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 3 to 5 1`] = `6713867908.847361`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Neural Accelerators: from 4 to 5 1`] = `7116699983.378202`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 0 to 1 1`] = `1000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 0 to 2 1`] = `2060000000.0000007`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 0 to 3 1`] = `3183600000.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 0 to 4 1`] = `4374616000.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 0 to 5 1`] = `5637092959.999999`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 1 to 2 1`] = `2183600000.000001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 1 to 3 1`] = `3374616000.0000024`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 1 to 4 1`] = `4637092960.000001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 1 to 5 1`] = `5975318537.599999`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 2 to 3 1`] = `3577092960.0000033`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 2 to 4 1`] = `4915318537.600002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 2 to 5 1`] = `6333837649.856001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 3 to 4 1`] = `5210237649.856003`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 3 to 5 1`] = `6713867908.847361`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Nuoptimal Nootropic Injector Implants: from 4 to 5 1`] = `7116699983.378202`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 0 to 1 1`] = `5000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 0 to 2 1`] = `10349999999.999992`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 0 to 3 1`] = `16074500000.00001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 0 to 4 1`] = `22199714999.999996`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 0 to 5 1`] = `28753695050`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 1 to 2 1`] = `11074499999.999992`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 1 to 3 1`] = `17199715000.000008`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 1 to 4 1`] = `23753695049.999996`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 1 to 5 1`] = `30766453703.500004`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 2 to 3 1`] = `18403695050.00001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 2 to 4 1`] = `25416453703.499996`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 2 to 5 1`] = `32920105462.745003`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 3 to 4 1`] = `27195605462.745007`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 3 to 5 1`] = `35224512845.13716`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Project Insight: from 4 to 5 1`] = `37690228744.29675`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 0 to 1 1`] = `2000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 0 to 2 1`] = `4120000000.0000014`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 0 to 3 1`] = `6367200000.000004`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 0 to 4 1`] = `8749232000.000004`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 0 to 5 1`] = `11274185919.999998`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 1 to 2 1`] = `4367200000.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 1 to 3 1`] = `6749232000.000005`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 1 to 4 1`] = `9274185920.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 1 to 5 1`] = `11950637075.199999`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 2 to 3 1`] = `7154185920.000007`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 2 to 4 1`] = `9830637075.200005`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 2 to 5 1`] = `12667675299.712002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 3 to 4 1`] = `10420475299.712006`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 3 to 5 1`] = `13427735817.694721`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Factories: from 4 to 5 1`] = `14233399966.756405`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 0 to 1 1`] = `2000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 0 to 2 1`] = `4120000000.0000014`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 0 to 3 1`] = `6367200000.000004`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 0 to 4 1`] = `8749232000.000004`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 0 to 5 1`] = `11274185919.999998`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 1 to 2 1`] = `4367200000.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 1 to 3 1`] = `6749232000.000005`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 1 to 4 1`] = `9274185920.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 1 to 5 1`] = `11950637075.199999`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 2 to 3 1`] = `7154185920.000007`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 2 to 4 1`] = `9830637075.200005`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 2 to 5 1`] = `12667675299.712002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 3 to 4 1`] = `10420475299.712006`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 3 to 5 1`] = `13427735817.694721`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Smart Storage: from 4 to 5 1`] = `14233399966.756405`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 0 to 1 1`] = `1000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 0 to 2 1`] = `2060000000.0000007`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 0 to 3 1`] = `3183600000.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 0 to 4 1`] = `4374616000.000002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 0 to 5 1`] = `5637092959.999999`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 1 to 2 1`] = `2183600000.000001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 1 to 3 1`] = `3374616000.0000024`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 1 to 4 1`] = `4637092960.000001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 1 to 5 1`] = `5975318537.599999`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 2 to 3 1`] = `3577092960.0000033`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 2 to 4 1`] = `4915318537.600002`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 2 to 5 1`] = `6333837649.856001`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 3 to 4 1`] = `5210237649.856003`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 3 to 5 1`] = `6713867908.847361`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Speech Processor Implants: from 4 to 5 1`] = `7116699983.378202`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 0 to 1 1`] = `4000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 0 to 2 1`] = `12000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 0 to 3 1`] = `28000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 0 to 4 1`] = `60000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 0 to 5 1`] = `124000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 1 to 2 1`] = `24000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 1 to 3 1`] = `56000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 1 to 4 1`] = `120000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 1 to 5 1`] = `248000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 2 to 3 1`] = `112000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 2 to 4 1`] = `240000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 2 to 5 1`] = `496000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 3 to 4 1`] = `480000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 3 to 5 1`] = `992000000000`;
+
+exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: Wilson Analytics: from 4 to 5 1`] = `1984000000000`;

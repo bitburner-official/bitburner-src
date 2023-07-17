@@ -194,12 +194,14 @@ export function TerminalInput(): React.ReactElement {
   async function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): Promise<void> {
     const ref = terminalInput.current;
 
-    // Run command.
-    if (event.key === KEY.ENTER && value !== "") {
+    // Run command or insert newline
+    if (event.key === KEY.ENTER) {
       event.preventDefault();
-      Terminal.print(`[${Player.getCurrentServer().hostname} ~${Terminal.cwd()}]> ${value}`);
-      Terminal.executeCommands(value);
-      saveValue("");
+      Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${value}`);
+      if (value) {
+        Terminal.executeCommands(value);
+        saveValue("");
+      }
       return;
     }
 
@@ -282,7 +284,7 @@ export function TerminalInput(): React.ReactElement {
     if (Settings.EnableBashHotkeys) {
       if (event.code === KEYCODE.C && event.ctrlKey && ref && ref.selectionStart === ref.selectionEnd) {
         event.preventDefault();
-        Terminal.print(`[${Player.getCurrentServer().hostname} ~${Terminal.cwd()}]> ${value}`);
+        Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${value}`);
         modifyInput("clearall");
       }
 
@@ -361,7 +363,7 @@ export function TerminalInput(): React.ReactElement {
           className: classes.input,
           startAdornment: (
             <Typography color={Terminal.action === null ? "primary" : "secondary"} flexShrink={0}>
-              [{Player.getCurrentServer().hostname}&nbsp;~{Terminal.cwd()}]&gt;&nbsp;
+              [{Player.getCurrentServer().hostname}&nbsp;/{Terminal.cwd()}]&gt;&nbsp;
             </Typography>
           ),
           spellCheck: false,

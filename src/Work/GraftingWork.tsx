@@ -1,6 +1,6 @@
 import React from "react";
 import { CONSTANTS } from "../Constants";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { GraftableAugmentations } from "../PersonObjects/Grafting/ui/GraftingRoot";
 import { Player } from "@player";
 import { Work, WorkType } from "./Work";
@@ -9,34 +9,34 @@ import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import { Augmentations } from "../Augmentation/Augmentations";
 
 export const isGraftingWork = (w: Work | null): w is GraftingWork => w !== null && w.type === WorkType.GRAFTING;
 
 interface GraftingWorkParams {
-  augmentation: string;
+  augmentation: AugmentationName;
   singularity: boolean;
 }
 
 export class GraftingWork extends Work {
-  augmentation: string;
+  augmentation: AugmentationName;
   unitCompleted: number;
 
   constructor(params?: GraftingWorkParams) {
     super(WorkType.GRAFTING, params?.singularity ?? true);
     this.unitCompleted = 0;
-    this.augmentation = params?.augmentation ?? AugmentationNames.Targeting1;
+    this.augmentation = params?.augmentation ?? AugmentationName.Targeting1;
     const gAugs = GraftableAugmentations();
     if (params) Player.loseMoney(gAugs[this.augmentation].cost, "augmentations");
   }
 
   unitNeeded(): number {
-    return new GraftableAugmentation(StaticAugmentations[this.augmentation]).time;
+    return new GraftableAugmentation(Augmentations[this.augmentation]).time;
   }
 
   process(cycles: number): boolean {
     let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationNames.NeuroreceptorManager, true)) {
+    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
       focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
     }
 
@@ -51,7 +51,7 @@ export class GraftingWork extends Work {
     if (!cancelled) {
       applyAugmentation({ name: augName, level: 1 });
 
-      if (!Player.hasAugmentation(AugmentationNames.CongruityImplant, true)) {
+      if (!Player.hasAugmentation(AugmentationName.CongruityImplant, true)) {
         Player.entropy += 1;
         Player.applyEntropy(Player.entropy);
       }
@@ -61,7 +61,7 @@ export class GraftingWork extends Work {
           <>
             You've finished grafting {augName}.<br />
             The augmentation has been applied to your body{" "}
-            {Player.hasAugmentation(AugmentationNames.CongruityImplant, true) ? "." : ", but you feel a bit off."}
+            {Player.hasAugmentation(AugmentationName.CongruityImplant, true) ? "." : ", but you feel a bit off."}
           </>,
         );
       }

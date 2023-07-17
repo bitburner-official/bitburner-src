@@ -1,20 +1,21 @@
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
+import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+
+import { Player } from "@player";
+import { Grafting as IGrafting } from "@nsdefs";
+import { AugmentationName, CityName } from "@enums";
+import { Augmentations } from "../Augmentation/Augmentations";
 import { hasAugmentationPrereqs } from "../Faction/FactionHelpers";
-import { CityName } from "../Enums";
 import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
 import { getGraftingAvailableAugs, calculateGraftingTimeWithBonus } from "../PersonObjects/Grafting/GraftingHelpers";
-import { Player as player } from "../Player";
-import { Grafting as IGrafting } from "@nsdefs";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { GraftingWork } from "../Work/GraftingWork";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { augmentationExists } from "../Augmentation/AugmentationHelpers";
+import { getEnumHelper } from "../utils/EnumHelper";
 
 export function NetscriptGrafting(): InternalAPI<IGrafting> {
   const checkGraftingAPIAccess = (ctx: NetscriptContext): void => {
-    if (!player.canAccessGrafting()) {
+    if (!Player.canAccessGrafting()) {
       throw helpers.makeRuntimeErrorMsg(
         ctx,
         "You do not currently have access to the Grafting API. This is either because you are not in BitNode 10 or because you do not have Source-File 10",
@@ -22,27 +23,26 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
     }
   };
 
-  const isValidGraftingAugName = (augName: string) =>
-    getGraftingAvailableAugs().includes(augName) && augmentationExists(augName);
+  const isValidGraftingAugName = (augName: AugmentationName) => getGraftingAvailableAugs().includes(augName);
 
   return {
     getAugmentationGraftPrice: (ctx) => (_augName) => {
-      const augName = helpers.string(ctx, "augName", _augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       checkGraftingAPIAccess(ctx);
       if (!isValidGraftingAugName(augName)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid aug: ${augName}`);
       }
-      const graftableAug = new GraftableAugmentation(StaticAugmentations[augName]);
+      const graftableAug = new GraftableAugmentation(Augmentations[augName]);
       return graftableAug.cost;
     },
 
     getAugmentationGraftTime: (ctx) => (_augName) => {
-      const augName = helpers.string(ctx, "augName", _augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       checkGraftingAPIAccess(ctx);
       if (!isValidGraftingAugName(augName)) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid aug: ${augName}`);
       }
-      const graftableAug = new GraftableAugmentation(StaticAugmentations[augName]);
+      const graftableAug = new GraftableAugmentation(Augmentations[augName]);
       return calculateGraftingTimeWithBonus(graftableAug);
     },
 
@@ -55,10 +55,10 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
     graftAugmentation:
       (ctx) =>
       (_augName, _focus = true) => {
-        const augName = helpers.string(ctx, "augName", _augName);
+        const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
         const focus = !!_focus;
         checkGraftingAPIAccess(ctx);
-        if (player.city !== CityName.NewTokyo) {
+        if (Player.city !== CityName.NewTokyo) {
           throw helpers.makeRuntimeErrorMsg(ctx, "You must be in New Tokyo to begin grafting an Augmentation.");
         }
         if (!isValidGraftingAugName(augName)) {
@@ -66,10 +66,10 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
           return false;
         }
 
-        const wasFocusing = player.focus;
+        const wasFocusing = Player.focus;
 
-        const craftableAug = new GraftableAugmentation(StaticAugmentations[augName]);
-        if (player.money < craftableAug.cost) {
+        const craftableAug = new GraftableAugmentation(Augmentations[augName]);
+        if (Player.money < craftableAug.cost) {
           helpers.log(ctx, () => `You don't have enough money to craft ${augName}`);
           return false;
         }
@@ -79,7 +79,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
           return false;
         }
 
-        player.startWork(
+        Player.startWork(
           new GraftingWork({
             singularity: true,
             augmentation: augName,
@@ -87,10 +87,10 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
         );
 
         if (focus) {
-          player.startFocusing();
+          Player.startFocusing();
           Router.toPage(Page.Work);
         } else if (wasFocusing) {
-          player.stopFocusing();
+          Player.stopFocusing();
           Router.toPage(Page.Terminal);
         }
 

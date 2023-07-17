@@ -1,4 +1,4 @@
-import { CityName } from "../Enums";
+import type { CityName } from "@enums";
 
 export interface Export {
   division: string;

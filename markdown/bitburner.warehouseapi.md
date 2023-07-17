@@ -22,7 +22,7 @@ Requires the Warehouse API upgrade from your corporation.
 |  --- | --- |
 |  [bulkPurchase(divisionName, city, materialName, amt)](./bitburner.warehouseapi.bulkpurchase.md) | Set material to bulk buy |
 |  [buyMaterial(divisionName, city, materialName, amt)](./bitburner.warehouseapi.buymaterial.md) | Set material buy data |
-|  [cancelExportMaterial(sourceDivision, sourceCity, targetDivision, targetCity, materialName, amt)](./bitburner.warehouseapi.cancelexportmaterial.md) | Cancel material export |
+|  [cancelExportMaterial(sourceDivision, sourceCity, targetDivision, targetCity, materialName)](./bitburner.warehouseapi.cancelexportmaterial.md) | Cancel material export |
 |  [discontinueProduct(divisionName, productName)](./bitburner.warehouseapi.discontinueproduct.md) | Discontinue a product. |
 |  [exportMaterial(sourceDivision, sourceCity, targetDivision, targetCity, materialName, amt)](./bitburner.warehouseapi.exportmaterial.md) | Set material export data |
 |  [getMaterial(divisionName, city, materialName)](./bitburner.warehouseapi.getmaterial.md) | Get material data |

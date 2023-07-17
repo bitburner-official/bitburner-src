@@ -6,7 +6,7 @@ import React from "react";
 import { CityTabs } from "./CityTabs";
 import { Context, useCorporation } from "./Context";
 
-import { CityName } from "../../Enums";
+import { CityName } from "@enums";
 
 interface IProps {
   divisionName: string;

@@ -4,7 +4,7 @@
  */
 import { Cities } from "./Cities";
 import { Location, IConstructorParams } from "./Location";
-import { CityName } from "../Enums";
+import { CityName } from "@enums";
 import { LocationsMetadata } from "./data/LocationsMetadata";
 
 export const Locations: Record<string, Location> = {};

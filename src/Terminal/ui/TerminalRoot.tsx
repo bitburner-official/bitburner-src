@@ -44,10 +44,6 @@ export function TerminalRoot(): React.ReactElement {
   const rerender = useRerender();
   const [key, setKey] = useState(0);
 
-  function clear(): void {
-    setKey((key) => key + 1);
-  }
-
   useEffect(() => {
     const debounced = _.debounce(async () => rerender(), 25, { maxWait: 50 });
     const unsubscribe = TerminalEvents.subscribe(debounced);
@@ -55,9 +51,10 @@ export function TerminalRoot(): React.ReactElement {
       debounced.cancel();
       unsubscribe();
     };
-  }, []);
+  }, [rerender]);
 
   useEffect(() => {
+    const clear = () => setKey((key) => key + 1);
     const debounced = _.debounce(async () => clear(), 25, { maxWait: 50 });
     const unsubscribe = TerminalClearEvents.subscribe(debounced);
     return () => {
@@ -100,8 +97,8 @@ export function TerminalRoot(): React.ReactElement {
                 </Typography>
               )}
               {item instanceof Link && (
-                <Typography>
-                  {item.dashes + "> "}
+                <Typography classes={{ root: classes.preformatted }}>
+                  {item.dashes}
                   <MuiLink onClick={() => Terminal.connectToServer(item.hostname)}>{item.hostname}</MuiLink>
                 </Typography>
               )}

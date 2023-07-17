@@ -1,17 +1,20 @@
 import React, { useState } from "react";
+
+import Box from "@mui/material/Box";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { IndustryDescriptions, IndustriesData } from "../IndustryData";
-import { IndustryType } from "../data/Enums";
+import { IndustriesData } from "../data/IndustryData";
+import { IndustryType } from "@enums";
 import { useCorporation } from "./Context";
 import { NewDivision } from "../Actions";
 
-import Typography from "@mui/material/Typography";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Box from "@mui/material/Box";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { KEY } from "../../utils/helpers/keyCodes";
+import { IndustryDescription } from "./IndustryDescription";
 interface IProps {
   setDivisionName: (name: string) => void;
 }
@@ -58,9 +61,6 @@ export function NewDivisionTab(props: IProps): React.ReactElement {
     setIndustry(event.target.value as IndustryType);
   }
 
-  const desc = IndustryDescriptions(industry, corp);
-  if (desc === undefined) throw new Error(`Desired industry for new division doesn't exists: '${industry}'`);
-
   return (
     <>
       <Typography>
@@ -74,7 +74,7 @@ export function NewDivisionTab(props: IProps): React.ReactElement {
           </MenuItem>
         ))}
       </Select>
-      <Typography>{desc}</Typography>
+      <IndustryDescription industry={industry} corp={corp} />
       <br />
       <br />
 

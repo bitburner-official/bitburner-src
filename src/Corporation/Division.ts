@@ -1,8 +1,8 @@
+import { CorpMaterialName, CorpResearchName, CorpStateName } from "@nsdefs";
+import { CityName, CorpEmployeeJob, IndustryType } from "@enums";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { CityName } from "../Enums";
-import { IndustryResearchTrees, IndustriesData } from "./IndustryData";
+import { IndustryResearchTrees, IndustriesData } from "./data/IndustryData";
 import * as corpConstants from "./data/Constants";
-import { CorpEmployeeJob, IndustryType } from "./data/Enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { calculateEffectWithFactors } from "../utils/calculateEffectWithFactors";
 import { OfficeSpace } from "./OfficeSpace";
@@ -12,7 +12,6 @@ import { isString } from "../utils/helpers/string";
 import { MaterialInfo } from "./MaterialInfo";
 import { Warehouse } from "./Warehouse";
 import { Corporation } from "./Corporation";
-import { CorpMaterialName, CorpResearchName, CorpStateName } from "@nsdefs";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from "../Types/Record";
 import { Material } from "./Material";
@@ -434,7 +433,12 @@ export class Division {
               const divider = requiredMatsEntries.length;
               for (const [reqMatName, reqMat] of requiredMatsEntries) {
                 const reqMatQtyNeeded = reqMat * prod * producableFrac;
-                warehouse.materials[reqMatName].stored -= reqMatQtyNeeded;
+                // producableFrac already takes into account that we have enough stored
+                // Math.max is used here to avoid stored becoming negative (which can lead to NaNs)
+                warehouse.materials[reqMatName].stored = Math.max(
+                  0,
+                  warehouse.materials[reqMatName].stored - reqMatQtyNeeded,
+                );
                 warehouse.materials[reqMatName].productionAmount = 0;
                 warehouse.materials[reqMatName].productionAmount -=
                   reqMatQtyNeeded / (corpConstants.secondsPerMarketCycle * marketCycles);
@@ -446,7 +450,7 @@ export class Division {
                 let tempQlt =
                   office.employeeProductionByJob[CorpEmployeeJob.Engineer] / 90 +
                   Math.pow(this.researchPoints, this.researchFactor) +
-                  Math.pow(warehouse.materials["AI Cores"].stored, this.aiCoreFactor) / 10e3;
+                  Math.pow(Math.max(0, warehouse.materials["AI Cores"].stored), this.aiCoreFactor) / 10e3;
                 const logQlt = Math.max(Math.pow(tempQlt, 0.5), 1);
                 tempQlt = Math.min(tempQlt, avgQlt * logQlt);
                 warehouse.materials[this.producedMaterials[j]].quality = Math.max(
@@ -624,10 +628,10 @@ export class Division {
                   /MAX/g,
                   (mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles)).toString(),
                 );
-                amtStr = amtStr.replace(/EPROD/g, "(" + mat.productionAmount + ")");
-                amtStr = amtStr.replace(/IPROD/g, "(" + tempMaterial.productionAmount + ")");
-                amtStr = amtStr.replace(/EINV/g, mat.stored.toString());
-                amtStr = amtStr.replace(/IINV/g, tempMaterial.stored.toString());
+                amtStr = amtStr.replace(/EPROD/g, `(${mat.productionAmount})`);
+                amtStr = amtStr.replace(/IPROD/g, `(${tempMaterial.productionAmount})`);
+                amtStr = amtStr.replace(/EINV/g, `(${mat.stored})`);
+                amtStr = amtStr.replace(/IINV/g, `(${tempMaterial.stored})`);
                 let amt = 0;
                 try {
                   amt = eval(amtStr);
@@ -708,8 +712,10 @@ export class Division {
         if (this.state !== "PRODUCTION") continue;
         const city = product.creationCity;
         const office = this.offices[city];
-        if (!office) throw new Error(`Product ${name} being created in a city without an office. This is a bug.`);
-
+        if (!office) {
+          console.error(`Product ${name} being created in a city without an office. This is a bug.`);
+          continue;
+        }
         product.createProduct(marketCycles, office.employeeProductionByJob);
         if (product.developmentProgress >= 100) {
           product.finishProduct(this);

@@ -31,7 +31,7 @@ const safeGetSf = (sfNum: number): SourceFile | SfMinus1 | null => {
           You have found the following exploits:
           <br />
           <br />
-          {Player.exploits.map((c: Exploit) => (
+          {Player.exploits.map((c) => (
             <React.Fragment key={c}>
               * {ExploitName(c)}
               <br />
@@ -83,12 +83,15 @@ export function SourceFilesElement(): React.ReactElement {
     sfList.sort(([n1, __lvl1], [n2, __lvl2]) => n1 - n2);
   }
 
-  if (sfList.length === 0) {
+  const [selectedSf, setSelectedSf] = useState(() => {
+    if (sfList.length === 0) return null;
+    const [n, lvl] = sfList[0];
+    return { n, lvl };
+  });
+
+  if (!selectedSf) {
     return <></>;
   }
-
-  const firstEle = sfList[0];
-  const [selectedSf, setSelectedSf] = useState({ n: firstEle[0], lvl: firstEle[1] });
 
   return (
     <Box sx={{ width: "100%", mt: 1 }}>

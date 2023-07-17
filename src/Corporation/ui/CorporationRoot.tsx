@@ -14,10 +14,12 @@ import { useRerender } from "../../ui/React/hooks";
 
 export function CorporationRoot(): React.ReactElement {
   const rerender = useRerender(200);
+  const [divisionName, setDivisionName] = useState<string | number>("Overview");
+
   const corporation = Player.corporation;
   if (corporation === null) return <></>;
-  const [divisionName, setDivisionName] = useState<string | number>("Overview");
-  function handleChange(event: React.SyntheticEvent, tab: string | number): void {
+
+  function handleChange(_event: React.SyntheticEvent, tab: string | number): void {
     setDivisionName(tab);
   }
 

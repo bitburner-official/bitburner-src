@@ -13,9 +13,10 @@ interface ITa2Props {
 }
 
 function MarketTA2(props: ITa2Props): React.ReactElement {
+  const rerender = useRerender();
+
   const division = useDivision();
   if (!division.hasResearch("Market-TA.II")) return <></>;
-  const rerender = useRerender();
 
   function onCheckedChange(event: React.ChangeEvent<HTMLInputElement>): void {
     props.product.marketTa2 = event.target.checked;

@@ -13,13 +13,13 @@ import React, { useState } from "react";
 import { OwnedAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
-import { StaticAugmentations } from "../StaticAugmentations";
-import { AugmentationNames } from "../data/AugmentationNames";
+import { Augmentations } from "../Augmentations";
+import { AugmentationName } from "@enums";
 import { useRerender } from "../../ui/React/hooks";
 
 export function InstalledAugmentations(): React.ReactElement {
   const rerender = useRerender();
-  const sourceAugs = Player.augmentations.slice().filter((aug) => aug.name !== AugmentationNames.NeuroFluxGovernor);
+  const sourceAugs = Player.augmentations.slice().filter((aug) => aug.name !== AugmentationName.NeuroFluxGovernor);
 
   const [selectedAug, setSelectedAug] = useState(sourceAugs[0]);
 
@@ -73,7 +73,7 @@ export function InstalledAugmentations(): React.ReactElement {
             </Typography>
             <Typography sx={{ maxHeight: 350, overflowY: "scroll" }}>
               {(() => {
-                const aug = StaticAugmentations[selectedAug.name];
+                const aug = Augmentations[selectedAug.name];
 
                 const info = typeof aug.info === "string" ? <span>{aug.info}</span> : aug.info;
                 const tooltip = (

@@ -11,7 +11,7 @@ import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { calculateMaxAffordableUpgrade, calculateUpgradeCost } from "../helpers";
-import { CorpUpgradeName } from "../data/Enums";
+import { CorpUpgradeName } from "@enums";
 import { PositiveInteger } from "../../types";
 
 interface IProps {
@@ -25,7 +25,8 @@ export function LevelableUpgrade({ upgradeName, mult, rerender }: IProps): React
   const data = CorpUpgrades[upgradeName];
   const level = corp.upgrades[upgradeName].level;
 
-  const amount = mult === "MAX" ? calculateMaxAffordableUpgrade(corp, data, mult) : mult;
+  const amount = mult === "MAX" ? calculateMaxAffordableUpgrade(corp, data) : mult;
+
   const cost = amount === 0 ? 0 : calculateUpgradeCost(corp, data, amount);
   const tooltip = data.desc;
   function onClick(): void {

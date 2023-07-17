@@ -1,11 +1,10 @@
 import React from "react";
+import { Button, Typography } from "@mui/material";
+import { CityName } from "@enums";
 import { Bladeburner } from "../Bladeburner";
 import { WorldMap } from "../../ui/React/WorldMap";
 import { Modal } from "../../ui/React/Modal";
-import { CityName } from "../../Enums";
 import { Settings } from "../../Settings/Settings";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 
 interface IProps {
   bladeburner: Bladeburner;

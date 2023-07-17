@@ -1,6 +1,6 @@
-import { CorpUnlockName } from "../../Corporation/data/Enums";
+import { CorpUnlockName } from "@enums";
+import { resetIndustryResearchTrees } from "../../Corporation/data/IndustryData";
 import { Corporation } from "../../Corporation/Corporation";
-import { resetIndustryResearchTrees } from "../../Corporation/IndustryData";
 
 import type { PlayerObject } from "./PlayerObject";
 

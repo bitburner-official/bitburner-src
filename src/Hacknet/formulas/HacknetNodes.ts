@@ -1,4 +1,4 @@
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { HacknetNodeConstants } from "../data/Constants";
 
 export function calculateMoneyGainRate(level: number, ram: number, cores: number, mult: number): number {
@@ -7,7 +7,7 @@ export function calculateMoneyGainRate(level: number, ram: number, cores: number
   const levelMult = level * gainPerLevel;
   const ramMult = Math.pow(1.035, ram - 1);
   const coresMult = (cores + 5) / 6;
-  return levelMult * ramMult * coresMult * mult * BitNodeMultipliers.HacknetNodeMoney;
+  return levelMult * ramMult * coresMult * mult * currentNodeMults.HacknetNodeMoney;
 }
 
 export function calculateLevelUpgradeCost(startingLevel: number, extraLevels = 1, costMult = 1): number {

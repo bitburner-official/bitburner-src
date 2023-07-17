@@ -1,6 +1,7 @@
+import React, { useEffect, useRef } from "react";
+
 import * as monaco from "monaco-editor";
-import * as React from "react";
-import { useEffect, useRef } from "react";
+
 import { useScriptEditorContext } from "./ScriptEditorContext";
 
 interface EditorProps {
@@ -45,6 +46,9 @@ export function Editor({ beforeMount, onMount, onChange }: EditorProps) {
       editorRef.current?.getModel()?.dispose();
       editorRef.current?.dispose();
     };
+    // this eslint ignore instruction can potentially cause unobvious bugs
+    // (e.g. if `onChange` starts using a prop or state in parent component).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <div ref={containerDiv} style={{ height: "1px", width: "100%", flexGrow: 1 }} />;

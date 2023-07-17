@@ -1,54 +1,17 @@
 import { Augmentation } from "./Augmentation";
-import { StaticAugmentations } from "./StaticAugmentations";
+import { Augmentations } from "./Augmentations";
 import { PlayerOwnedAugmentation } from "./PlayerOwnedAugmentation";
-import { AugmentationNames } from "./data/AugmentationNames";
+import { AugmentationName } from "@enums";
 
 import { CONSTANTS } from "../Constants";
-import { Factions, factionExists } from "../Faction/Factions";
 import { Player } from "@player";
 import { prestigeAugmentation } from "../Prestige";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-
-import { FactionNames } from "../Faction/data/FactionNames";
-import {
-  initBladeburnerAugmentations,
-  initChurchOfTheMachineGodAugmentations,
-  initGeneralAugmentations,
-  initSoAAugmentations,
-  initNeuroFluxGovernor,
-  initUnstableCircadianModulator,
-} from "./data/AugmentationCreator";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { mergeMultipliers } from "../PersonObjects/Multipliers";
-
-export function AddToStaticAugmentations(aug: Augmentation): void {
-  const name = aug.name;
-  StaticAugmentations[name] = aug;
-}
-
-function createAugmentations(): void {
-  [
-    initNeuroFluxGovernor(),
-    initUnstableCircadianModulator(),
-    ...initGeneralAugmentations(),
-    ...initSoAAugmentations(),
-    ...(factionExists(FactionNames.Bladeburners) ? initBladeburnerAugmentations() : []),
-    ...(factionExists(FactionNames.ChurchOfTheMachineGod) ? initChurchOfTheMachineGodAugmentations() : []),
-  ].map(resetAugmentation);
-}
-
-function resetFactionAugmentations(): void {
-  for (const faction of Object.values(Factions)) faction.augmentations = [];
-}
-
-function initAugmentations(): void {
-  resetFactionAugmentations();
-  for (const augName of Object.getOwnPropertyNames(StaticAugmentations)) delete StaticAugmentations[augName];
-  createAugmentations();
-  Player.reapplyAllAugmentations();
-}
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 export function getBaseAugmentationPriceMultiplier(): number {
   return CONSTANTS.MultipleAugMultiplier * [1, 0.96, 0.94, 0.93][Player.sourceFileLvl(11)];
@@ -57,31 +20,21 @@ export function getGenericAugmentationPriceMultiplier(): number {
   return Math.pow(getBaseAugmentationPriceMultiplier(), Player.queuedAugmentations.length);
 }
 
-//Resets an Augmentation during (re-initialization)
-function resetAugmentation(aug: Augmentation): void {
-  aug.addToFactions(aug.factions);
-  const name = aug.name;
-  if (augmentationExists(name)) {
-    delete StaticAugmentations[name];
-  }
-  AddToStaticAugmentations(aug);
-}
-
-function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false): void {
-  const staticAugmentation = StaticAugmentations[aug.name];
+export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false): void {
+  const staticAugmentation = Augmentations[aug.name];
 
   // Apply multipliers
   Player.mults = mergeMultipliers(Player.mults, staticAugmentation.mults);
 
   // Special logic for Congruity Implant
-  if (aug.name === AugmentationNames.CongruityImplant && !reapply) {
+  if (aug.name === AugmentationName.CongruityImplant && !reapply) {
     Player.entropy = 0;
     Player.applyEntropy(Player.entropy);
   }
 
   // Special logic for NeuroFlux Governor
-  const ownedNfg = Player.augmentations.find((pAug) => pAug.name === AugmentationNames.NeuroFluxGovernor);
-  if (aug.name === AugmentationNames.NeuroFluxGovernor && !reapply && ownedNfg) {
+  const ownedNfg = Player.augmentations.find((pAug) => pAug.name === AugmentationName.NeuroFluxGovernor);
+  if (aug.name === AugmentationName.NeuroFluxGovernor && !reapply && ownedNfg) {
     ownedNfg.level = aug.level;
     return;
   }
@@ -94,7 +47,7 @@ function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false): void 
   }
 }
 
-function installAugmentations(force?: boolean): boolean {
+export function installAugmentations(force?: boolean): boolean {
   if (Player.queuedAugmentations.length == 0 && !force) {
     dialogBoxCreate("You have not purchased any Augmentations to install!");
     return false;
@@ -102,24 +55,24 @@ function installAugmentations(force?: boolean): boolean {
   let augmentationList = "";
   let nfgIndex = -1;
   for (let i = Player.queuedAugmentations.length - 1; i >= 0; i--) {
-    if (Player.queuedAugmentations[i].name === AugmentationNames.NeuroFluxGovernor) {
+    if (Player.queuedAugmentations[i].name === AugmentationName.NeuroFluxGovernor) {
       nfgIndex = i;
       break;
     }
   }
   for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
     const ownedAug = Player.queuedAugmentations[i];
-    const aug = StaticAugmentations[ownedAug.name];
+    const aug = Augmentations[ownedAug.name];
     if (aug == null) {
       console.error(`Invalid augmentation: ${ownedAug.name}`);
       continue;
     }
 
     applyAugmentation(Player.queuedAugmentations[i]);
-    if (ownedAug.name === AugmentationNames.NeuroFluxGovernor && i !== nfgIndex) continue;
+    if (ownedAug.name === AugmentationName.NeuroFluxGovernor && i !== nfgIndex) continue;
 
     let level = "";
-    if (ownedAug.name === AugmentationNames.NeuroFluxGovernor) {
+    if (ownedAug.name === AugmentationName.NeuroFluxGovernor) {
       level = ` - ${ownedAug.level}`;
     }
     augmentationList += aug.name + level + "\n";
@@ -138,13 +91,59 @@ function installAugmentations(force?: boolean): boolean {
   return true;
 }
 
-function augmentationExists(name: string): boolean {
-  return Object.hasOwn(StaticAugmentations, name);
-}
-
 export function isRepeatableAug(aug: Augmentation | string): boolean {
   const augName = typeof aug === "string" ? aug : aug.name;
-  return augName === AugmentationNames.NeuroFluxGovernor;
+  return augName === AugmentationName.NeuroFluxGovernor;
 }
 
-export { installAugmentations, initAugmentations, applyAugmentation, augmentationExists };
+export interface AugmentationCosts {
+  moneyCost: number;
+  repCost: number;
+}
+
+export function getAugCost(aug: Augmentation): AugmentationCosts {
+  let moneyCost = aug.baseCost;
+  let repCost = aug.baseRepRequirement;
+
+  switch (aug.name) {
+    // Special cost for NFG
+    case AugmentationName.NeuroFluxGovernor: {
+      const multiplier = Math.pow(CONSTANTS.NeuroFluxGovernorLevelMult, aug.getLevel());
+      repCost = aug.baseRepRequirement * multiplier * currentNodeMults.AugmentationRepCost;
+      moneyCost = aug.baseCost * multiplier * currentNodeMults.AugmentationMoneyCost;
+      moneyCost *= getBaseAugmentationPriceMultiplier() ** Player.queuedAugmentations.length;
+      break;
+    }
+    // SOA Augments use a unique cost method
+    case AugmentationName.BeautyOfAphrodite:
+    case AugmentationName.ChaosOfDionysus:
+    case AugmentationName.FloodOfPoseidon:
+    case AugmentationName.HuntOfArtemis:
+    case AugmentationName.KnowledgeOfApollo:
+    case AugmentationName.MightOfAres:
+    case AugmentationName.TrickeryOfHermes:
+    case AugmentationName.WKSharmonizer:
+    case AugmentationName.WisdomOfAthena: {
+      const soaAugmentationNames = [
+        AugmentationName.BeautyOfAphrodite,
+        AugmentationName.ChaosOfDionysus,
+        AugmentationName.FloodOfPoseidon,
+        AugmentationName.HuntOfArtemis,
+        AugmentationName.KnowledgeOfApollo,
+        AugmentationName.MightOfAres,
+        AugmentationName.TrickeryOfHermes,
+        AugmentationName.WKSharmonizer,
+        AugmentationName.WisdomOfAthena,
+      ];
+      const soaAugCount = soaAugmentationNames.filter((augName) => Player.hasAugmentation(augName)).length;
+      moneyCost = aug.baseCost * Math.pow(CONSTANTS.SoACostMult, soaAugCount);
+      repCost = aug.baseRepRequirement * Math.pow(CONSTANTS.SoARepMult, soaAugCount);
+      break;
+    }
+    // Standard cost
+    default:
+      moneyCost = aug.baseCost * getGenericAugmentationPriceMultiplier() * currentNodeMults.AugmentationMoneyCost;
+      repCost = aug.baseRepRequirement * currentNodeMults.AugmentationRepCost;
+  }
+  return { moneyCost, repCost };
+}

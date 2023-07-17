@@ -5,32 +5,27 @@
  */
 import React, { useState } from "react";
 
-import { AugmentationsPage } from "./AugmentationsPage";
 import { DonateOption } from "./DonateOption";
 import { Info } from "./Info";
 import { Option } from "./Option";
 
-import { CONSTANTS } from "../../Constants";
-
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
 import { Faction } from "../Faction";
 
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { Player } from "@player";
-
 import { Typography, Button } from "@mui/material";
+
 import { CovenantPurchasesRoot } from "../../PersonObjects/Sleeve/ui/CovenantPurchasesRoot";
-import { FactionNames } from "../data/FactionNames";
+import { FactionName, FactionWorkType } from "@enums";
 import { GangButton } from "./GangButton";
 import { FactionWork } from "../../Work/FactionWork";
-import { FactionWorkType } from "../../Enums";
 import { useRerender } from "../../ui/React/hooks";
+import { repNeededToDonate } from "../formulas/donation";
 
-interface IProps {
+type FactionRootProps = {
   faction: Faction;
-  augPage: boolean;
-}
+};
 
 // Info text for all options on the UI
 const hackingContractsInfo =
@@ -108,10 +103,9 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
 
   // Flags for whether special options (gang, sleeve purchases, donate, etc.)
   // should be shown
-  const favorToDonate = Math.floor(CONSTANTS.BaseFavorToDonate * BitNodeMultipliers.RepToDonateToFaction);
+  const favorToDonate = repNeededToDonate();
   const canDonate = faction.favor >= favorToDonate;
-
-  const canPurchaseSleeves = faction.name === FactionNames.TheCovenant && Player.bitNodeN === 10;
+  const canPurchaseSleeves = faction.name === FactionName.TheCovenant && Player.bitNodeN === 10;
 
   return (
     <>
@@ -152,11 +146,8 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
   );
 }
 
-export function FactionRoot(props: IProps): React.ReactElement {
+export function FactionRoot({ faction }: FactionRootProps): React.ReactElement {
   const rerender = useRerender(200);
-  const [purchasingAugs, setPurchasingAugs] = useState(props.augPage);
-
-  const faction = props.faction;
 
   if (!Player.factions.includes(faction.name)) {
     return (
@@ -169,9 +160,11 @@ export function FactionRoot(props: IProps): React.ReactElement {
     );
   }
 
-  return purchasingAugs ? (
-    <AugmentationsPage faction={faction} routeToMainPage={() => setPurchasingAugs(false)} />
-  ) : (
-    <MainPage rerender={rerender} faction={faction} onAugmentations={() => setPurchasingAugs(true)} />
+  return (
+    <MainPage
+      rerender={rerender}
+      faction={faction}
+      onAugmentations={() => Router.toPage(Page.FactionAugmentations, { faction })}
+    />
   );
 }

@@ -19,7 +19,7 @@ import { UniversityLocation } from "./UniversityLocation";
 import { CasinoLocation } from "./CasinoLocation";
 
 import { Location } from "../Location";
-import { LocationType } from "../LocationTypeEnum";
+import { LocationType } from "@enums";
 
 import { Settings } from "../../Settings/Settings";
 
@@ -31,6 +31,7 @@ import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { serverMetadata } from "../../Server/data/servers";
 import { Tooltip } from "@mui/material";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 interface IProps {
   loc: Location;
@@ -45,7 +46,10 @@ export function GenericLocation({ loc }: IProps): React.ReactElement {
     const content: React.ReactNode[] = [];
 
     if (loc.types.includes(LocationType.Company)) {
-      content.push(<CompanyLocation key="CompanyLocation" locName={loc.name} />);
+      if (!getEnumHelper("CompanyName").isMember(loc.name)) {
+        throw new Error(`Location name ${loc.name} is for a company but is not a company name.`);
+      }
+      content.push(<CompanyLocation key="CompanyLocation" companyName={loc.name} />);
     }
 
     if (loc.types.includes(LocationType.Gym)) {

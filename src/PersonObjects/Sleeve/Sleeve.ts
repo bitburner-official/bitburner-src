@@ -7,27 +7,31 @@
  * Sleeves are unlocked in BitNode-10.
  */
 
+import type { SleevePerson } from "@nsdefs";
+import type { Augmentation } from "../../Augmentation/Augmentation";
+import type { SleeveWork } from "./Work/Work";
+
 import { Player } from "@player";
 import { Person } from "../Person";
 
-import { Augmentation } from "../../Augmentation/Augmentation";
-
-import { Companies } from "../../Company/Companies";
-import { Company } from "../../Company/Company";
-import { CompanyPosition } from "../../Company/CompanyPosition";
-import { CompanyPositions } from "../../Company/CompanyPositions";
 import { Contracts } from "../../Bladeburner/data/Contracts";
 import { CONSTANTS } from "../../Constants";
-import { CityName, CrimeType, GymType, LocationName, UniversityClassType } from "../../Enums";
+import {
+  ClassType,
+  CityName,
+  CrimeType,
+  FactionWorkType,
+  GymType,
+  LocationName,
+  UniversityClassType,
+  CompanyName,
+} from "@enums";
 
 import { Factions } from "../../Faction/Factions";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
 import { formatPercent } from "../../ui/formatNumber";
-import { FactionWorkType } from "../../Enums";
-import { SleeveWork } from "./Work/Work";
 import { SleeveClassWork } from "./Work/SleeveClassWork";
-import { ClassType } from "../../Work/ClassWork";
 import { SleeveSynchroWork } from "./Work/SleeveSynchroWork";
 import { SleeveRecoveryWork } from "./Work/SleeveRecoveryWork";
 import { SleeveFactionWork } from "./Work/SleeveFactionWork";
@@ -37,8 +41,8 @@ import { SleeveSupportWork } from "./Work/SleeveSupportWork";
 import { SleeveBladeburnerWork } from "./Work/SleeveBladeburnerWork";
 import { SleeveCrimeWork } from "./Work/SleeveCrimeWork";
 import * as sleeveMethods from "./SleeveMethods";
-import { SleevePerson } from "@nsdefs";
 import { calculateIntelligenceBonus } from "../formulas/intelligence";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: SleeveWork | null = null;
@@ -216,23 +220,25 @@ export class Sleeve extends Person implements SleevePerson {
 
     // Set experience/money gains based on class
     let classType: ClassType | undefined;
+    // TODO: why lower case??? It's not effecient, not typesafe and in general a bad idea
     switch (className.toLowerCase()) {
-      case "study computer science":
+      case "study computer science": // deprecated, leave it here for backwards compatibility
+      case ClassType.computerScience.toLowerCase():
         classType = UniversityClassType.computerScience;
         break;
-      case "data structures":
+      case ClassType.dataStructures.toLowerCase():
         classType = UniversityClassType.dataStructures;
         break;
-      case "networks":
+      case ClassType.networks.toLowerCase():
         classType = UniversityClassType.networks;
         break;
-      case "algorithms":
+      case ClassType.algorithms.toLowerCase():
         classType = UniversityClassType.algorithms;
         break;
-      case "management":
+      case ClassType.management.toLowerCase():
         classType = UniversityClassType.management;
         break;
-      case "leadership":
+      case ClassType.leadership.toLowerCase():
         classType = UniversityClassType.leadership;
         break;
     }
@@ -276,53 +282,45 @@ export class Sleeve extends Person implements SleevePerson {
    * Start work for one of the player's companies
    * Returns boolean indicating success
    */
-  workForCompany(companyName: string): boolean {
-    if (!Companies[companyName] || Player.jobs[companyName] == null) {
-      return false;
-    }
-
-    const company: Company | null = Companies[companyName];
-    const companyPosition: CompanyPosition | null = CompanyPositions[Player.jobs[companyName]];
-    if (company == null) return false;
-    if (companyPosition == null) return false;
+  workForCompany(companyName: CompanyName): boolean {
+    const companyPositionName = Player.jobs[companyName];
+    if (!companyPositionName) return false;
 
     this.startWork(new SleeveCompanyWork(companyName));
-
     return true;
   }
 
-  /**
-   * Start work for one of the player's factions
-   * Returns boolean indicating success
-   */
-  workForFaction(factionName: string, workType: string): boolean {
+  /** TODO 2.4: Make this take in type correct data */
+  workForFaction(_factionName: string, _workType: string): boolean {
+    const workTypeConversion: Record<string, string> = {
+      "Hacking Contracts": "hacking",
+      "Field Work": "field",
+      "Security Work": "security",
+    };
+    if (workTypeConversion[_workType]) _workType = workTypeConversion[_workType];
+    const factionName = getEnumHelper("FactionName").fuzzyGetMember(_factionName);
+    if (!factionName) return false;
     const faction = Factions[factionName];
-    if (factionName === "" || !faction || !Player.factions.includes(factionName)) {
-      return false;
-    }
-
+    const workType = getEnumHelper("FactionWorkType").fuzzyGetMember(_workType);
+    if (!workType) return false;
     const factionInfo = faction.getInfo();
 
-    // Set type of work (hacking/field/security), and the experience gains
-    const sanitizedWorkType = workType.toLowerCase();
-    let factionWorkType: FactionWorkType;
-    if (sanitizedWorkType.includes("hack")) {
-      if (!factionInfo.offerHackingWork) return false;
-      factionWorkType = FactionWorkType.hacking;
-    } else if (sanitizedWorkType.includes("field")) {
-      if (!factionInfo.offerFieldWork) return false;
-      factionWorkType = FactionWorkType.field;
-    } else if (sanitizedWorkType.includes("security")) {
-      if (!factionInfo.offerSecurityWork) return false;
-      factionWorkType = FactionWorkType.security;
-    } else {
-      return false;
+    switch (workType) {
+      case FactionWorkType.field:
+        if (!factionInfo.offerFieldWork) return false;
+        break;
+      case FactionWorkType.hacking:
+        if (!factionInfo.offerHackingWork) return false;
+        break;
+      case FactionWorkType.security:
+        if (!factionInfo.offerSecurityWork) return false;
+        break;
     }
 
     this.startWork(
       new SleeveFactionWork({
-        factionWorkType: factionWorkType,
-        factionName: faction.name,
+        factionWorkType: workType,
+        factionName: factionName,
       }),
     );
 
@@ -475,8 +473,17 @@ export class Sleeve extends Person implements SleevePerson {
 
   /** Initializes a Sleeve object from a JSON save state. */
   static fromJSON(value: IReviverValue): Sleeve {
-    if (!value.data.hp?.current || !value.data.hp?.max) value.data.hp = { current: 10, max: 10 };
-    return Generic_fromJSON(Sleeve, value.data);
+    const sleeve = Generic_fromJSON(Sleeve, value.data);
+    if (!sleeve.hp?.current || !sleeve.hp?.max) sleeve.hp = { current: 10, max: 10 };
+    // Remove any invalid aug names on game load
+    sleeve.augmentations = sleeve.augmentations.filter((ownedAug) =>
+      getEnumHelper("AugmentationName").isMember(ownedAug.name),
+    );
+    sleeve.queuedAugmentations = sleeve.queuedAugmentations.filter((ownedAug) =>
+      getEnumHelper("AugmentationName").isMember(ownedAug.name),
+    );
+
+    return sleeve;
   }
 }
 

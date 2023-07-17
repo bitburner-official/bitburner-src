@@ -1,7 +1,7 @@
 import { OwnedAugmentationsOrderSetting, PurchaseAugmentationsOrderSetting } from "./SettingEnums";
 import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
-import { WordWrapOptions } from "../ScriptEditor/ui/Options";
+import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 
 /** The current options the player has customized to their play style. */
@@ -96,6 +96,10 @@ export const Settings = {
   MonacoVim: false,
   /** Word wrap setting for Script Editor. */
   MonacoWordWrap: "off" as WordWrapOptions,
+  /** Control the cursor style*/
+  MonacoCursorStyle: "line" as CursorStyle,
+  /** Control the cursor animation style */
+  MonacoCursorBlinking: "blink" as CursorBlinking,
   /** Whether to hide trailing zeroes on fractional part of decimal */
   hideTrailingDecimalZeros: false,
   /** Whether to hide thousands separators. */

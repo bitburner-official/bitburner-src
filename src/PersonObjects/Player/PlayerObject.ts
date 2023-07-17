@@ -1,3 +1,13 @@
+import type { Player as IPlayer } from "@nsdefs";
+import type { PlayerAchievement } from "../../Achievements/Achievements";
+import type { Bladeburner } from "../../Bladeburner/Bladeburner";
+import type { Corporation } from "../../Corporation/Corporation";
+import type { Exploit } from "../../Exploits/Exploit";
+import type { Gang } from "../../Gang/Gang";
+import type { HacknetNode } from "../../Hacknet/HacknetNode";
+import type { Sleeve } from "../Sleeve/Sleeve";
+import type { Work } from "../../Work/Work";
+
 import * as augmentationMethods from "./PlayerObjectAugmentationMethods";
 import * as bladeburnerMethods from "./PlayerObjectBladeburnerMethods";
 import * as corporationMethods from "./PlayerObjectCorporationMethods";
@@ -7,27 +17,17 @@ import * as serverMethods from "./PlayerObjectServerMethods";
 import * as workMethods from "./PlayerObjectWorkMethods";
 
 import { setPlayer } from "../../Player";
-import { Sleeve } from "../Sleeve/Sleeve";
-import { Exploit } from "../../Exploits/Exploit";
-
-import { LocationName } from "../../Enums";
-import { Corporation } from "../../Corporation/Corporation";
-import { Gang } from "../../Gang/Gang";
-import { Bladeburner } from "../../Bladeburner/Bladeburner";
-import { HacknetNode } from "../../Hacknet/HacknetNode";
-
+import { CompanyName, FactionName, JobName, LocationName } from "@enums";
 import { HashManager } from "../../Hacknet/HashManager";
-
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
 import { JSONMap } from "../../Types/Jsonable";
-import { PlayerAchievement } from "../../Achievements/Achievements";
 import { cyrb53 } from "../../utils/StringHelperFunctions";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { CONSTANTS } from "../../Constants";
-import { Work } from "src/Work/Work";
 import { Person } from "../Person";
-import { Player as IPlayer } from "@nsdefs";
+import { isMember } from "../../utils/EnumHelper";
+import { PartialRecord } from "../../Types/Record";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -36,15 +36,15 @@ export class PlayerObject extends Person implements IPlayer {
   gang: Gang | null = null;
   bladeburner: Bladeburner | null = null;
   currentServer = "";
-  factions: string[] = [];
-  factionInvitations: string[] = [];
+  factions: FactionName[] = [];
+  factionInvitations: FactionName[] = [];
   hacknetNodes: (HacknetNode | string)[] = []; // HacknetNode object or hostname of Hacknet Server
   has4SData = false;
   has4SDataTixApi = false;
   hashManager = new HashManager();
   hasTixApiAccess = false;
   hasWseAccount = false;
-  jobs: Record<string, string> = {};
+  jobs: PartialRecord<CompanyName, JobName> = {};
   karma = 0;
   numPeopleKilled = 0;
   location = LocationName.TravelAgency;
@@ -169,13 +169,27 @@ export class PlayerObject extends Person implements IPlayer {
   /** Initializes a PlayerObject object from a JSON save state. */
   static fromJSON(value: IReviverValue): PlayerObject {
     const player = Generic_fromJSON(PlayerObject, value.data);
+    // Any statistics that could be infinite would be serialized as null (JSON.stringify(Infinity) is "null")
     player.hp = { current: player.hp?.current ?? 10, max: player.hp?.max ?? 10 };
     player.money ??= 0;
+    // Just remove from the save file any augs that have invalid name
+    player.augmentations = player.augmentations.filter((ownedAug) => isMember("AugmentationName", ownedAug.name));
+    player.queuedAugmentations = player.queuedAugmentations.filter((ownedAug) =>
+      isMember("AugmentationName", ownedAug.name),
+    );
     player.updateSkillLevels();
+    // Converstion code for Player.sourceFiles is here instead of normal save conversion area because it needs
+    // to happen earlier for use in the savegame comparison tool.
     if (Array.isArray(player.sourceFiles)) {
       // Expect pre-2.3 sourcefile format here.
       type OldSourceFiles = { n: number; lvl: number }[];
       player.sourceFiles = new JSONMap((player.sourceFiles as OldSourceFiles).map(({ n, lvl }) => [n, lvl]));
+    }
+    // Remove any invalid jobs
+    for (const [loadedCompanyName, loadedJobName] of Object.entries(player.jobs)) {
+      if (!isMember("CompanyName", loadedCompanyName) || !isMember("JobName", loadedJobName)) {
+        delete player.jobs[loadedCompanyName as CompanyName];
+      }
     }
     return player;
   }

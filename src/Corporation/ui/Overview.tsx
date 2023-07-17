@@ -61,13 +61,13 @@ export function Overview({ rerender }: IProps): React.ReactElement {
     <>
       <StatsTable
         rows={[
-          ["Total Funds:", <Money money={corp.funds} />],
-          ["Total Revenue:", <MoneyRate money={corp.revenue} />],
-          ["Total Expenses:", <MoneyRate money={corp.expenses} />],
-          ["Total Profit:", <MoneyRate money={corp.revenue - corp.expenses} />],
+          ["Total Funds:", <Money key="funds" money={corp.funds} />],
+          ["Total Revenue:", <MoneyRate key="revenue" money={corp.revenue} />],
+          ["Total Expenses:", <MoneyRate key="expenses" money={corp.expenses} />],
+          ["Total Profit:", <MoneyRate key="profit" money={corp.revenue - corp.expenses} />],
           ["Publicly Traded:", corp.public ? "Yes" : "No"],
           ["Owned Stock Shares:", formatShares(corp.numShares)],
-          ["Stock Price:", corp.public ? <Money money={corp.sharePrice} /> : "N/A"],
+          ["Stock Price:", corp.public ? <Money key="price" money={corp.sharePrice} /> : "N/A"],
         ]}
       />
       <br />
@@ -160,15 +160,15 @@ interface IUpgradeProps {
 }
 // Render the UI for Corporation upgrades
 function Upgrades({ rerender }: IUpgradeProps): React.ReactElement {
+  const [purchaseMultiplier, setPurchaseMultiplier] = useState<PositiveInteger | "MAX">(
+    corpConstants.PurchaseMultipliers.x1,
+  );
+
   const corp = useCorporation();
   // Don't show upgrades
   if (corp.divisions.size === 0) {
     return <Typography variant="h4">Upgrades are unlocked once you create an industry.</Typography>;
   }
-
-  const [purchaseMultiplier, setPurchaseMultiplier] = useState<PositiveInteger | "MAX">(
-    corpConstants.PurchaseMultipliers.x1,
-  );
 
   const unlocksNotOwned = Object.values(CorpUnlocks)
     .filter((unlock) => !corp.unlocks.has(unlock.name))
@@ -332,10 +332,10 @@ function DividendsStats({ profit }: IDividendsStatsProps): React.ReactElement {
   return (
     <StatsTable
       rows={[
-        ["Retained Profits (after dividends):", <MoneyRate money={retainedEarnings} />],
+        ["Retained Profits (after dividends):", <MoneyRate key="profits" money={retainedEarnings} />],
         ["Dividend Percentage:", formatPercent(corp.dividendRate, 0)],
-        ["Dividends per share:", <MoneyRate money={dividendsPerShare} />],
-        ["Your earnings as a shareholder:", <MoneyRate money={playerEarnings} />],
+        ["Dividends per share:", <MoneyRate key="dividends" money={dividendsPerShare} />],
+        ["Your earnings as a shareholder:", <MoneyRate key="earnings" money={playerEarnings} />],
       ]}
     />
   );

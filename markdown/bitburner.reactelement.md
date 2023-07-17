@@ -4,7 +4,7 @@
 
 ## ReactElement interface
 
-A stand-in for the real React.ReactElement, which API-extractor doesn't know about. Don't try to create one of these by hand; use React.createElement().
+A stand-in for the real React.ReactElement. Use React.createElement to make these. See [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.
 
 **Signature:**
 

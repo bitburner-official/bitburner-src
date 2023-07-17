@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
-import { Editor } from "./Editor";
 import * as monaco from "monaco-editor";
+
+import { Editor } from "./Editor";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
@@ -23,7 +24,7 @@ import { PromptEvent } from "../../ui/React/PromptManager";
 import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
 import { useRerender } from "../../ui/React/hooks";
 import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
-import { TextFilePath } from "src/Paths/TextFilePath";
+import { TextFilePath } from "../../Paths/TextFilePath";
 
 import { dirty, getServerCode } from "./utils";
 import { OpenScript } from "./OpenScript";
@@ -75,14 +76,6 @@ function Root(props: IProps): React.ReactElement {
   if (currentScript && GetServer(currentScript.hostname) === null) {
     currentScript = openScripts[0] ?? null;
   }
-
-  useEffect(() => {
-    if (currentScript !== null) {
-      const tabIndex = currentTabIndex();
-      if (typeof tabIndex === "number") onTabClick(tabIndex);
-      parseCode(currentScript.code);
-    }
-  }, []);
 
   useEffect(() => {
     function keydown(event: KeyboardEvent): void {
@@ -137,14 +130,17 @@ function Root(props: IProps): React.ReactElement {
 
   const debouncedCodeParsing = debounce((newCode: string) => {
     infLoop(newCode);
-    updateRAM(!currentScript || currentScript.isTxt ? null : newCode);
+    updateRAM(
+      !currentScript || currentScript.isTxt ? null : newCode,
+      currentScript && GetServer(currentScript.hostname),
+    );
     finishUpdatingRAM();
   }, 300);
 
-  function parseCode(newCode: string) {
+  const parseCode = (newCode: string) => {
     startUpdatingRAM();
     debouncedCodeParsing(newCode);
-  }
+  };
 
   // How to load function definition in monaco
   // https://github.com/Microsoft/monaco-editor/issues/1415
@@ -439,6 +435,16 @@ function Root(props: IProps): React.ReactElement {
     onOpenNextTab,
     onOpenPreviousTab,
   });
+
+  useEffect(() => {
+    if (currentScript !== null) {
+      const tabIndex = currentTabIndex();
+      if (typeof tabIndex === "number") onTabClick(tabIndex);
+      parseCode(currentScript.code);
+    }
+    // disable eslint because we want to run this only once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

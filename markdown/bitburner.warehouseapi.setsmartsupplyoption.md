@@ -13,7 +13,7 @@ setSmartSupplyOption(
     divisionName: string,
     city: CityName | `${CityName}`,
     materialName: string,
-    option: string,
+    option: CorpSmartSupplyOption,
   ): void;
 ```
 
@@ -24,7 +24,7 @@ setSmartSupplyOption(
 |  divisionName | string | Name of the division |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
 |  materialName | string | Name of the material |
-|  option | string | smart supply option, "leftovers" to use leftovers, "imports" to use only imported materials, "none" to not use materials from store |
+|  option | [CorpSmartSupplyOption](./bitburner.corpsmartsupplyoption.md) | smart supply option, "leftovers" to use leftovers, "imports" to use only imported materials, "none" to not use materials from store |
 
 **Returns:**
 

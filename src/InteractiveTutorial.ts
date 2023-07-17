@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { LiteratureName } from "./Literature/data/LiteratureNames";
+import { LiteratureName } from "@enums";
 import { ITutorialEvents } from "./ui/InteractiveTutorial/ITutorialEvents";
 
 // Ordered array of keys to Interactive Tutorial Steps
@@ -32,7 +32,7 @@ enum iTutorialSteps {
   HacknetNodesIntroduction,
   HacknetNodesGoToWorldPage,
   WorldDescription,
-  TutorialPageInfo,
+  DocumentationPageInfo,
   End,
 }
 
@@ -70,7 +70,7 @@ const ITutorial = {
     [iTutorialSteps.HacknetNodesIntroduction]: false,
     [iTutorialSteps.HacknetNodesGoToWorldPage]: false,
     [iTutorialSteps.WorldDescription]: false,
-    [iTutorialSteps.TutorialPageInfo]: false,
+    [iTutorialSteps.DocumentationPageInfo]: false,
     [iTutorialSteps.End]: false,
   },
 };

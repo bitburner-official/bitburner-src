@@ -5,27 +5,26 @@ import { RecoveryRoot } from "./React/RecoveryRoot";
 import { Page } from "./Router";
 import { Router } from "./GameRoot";
 
-interface IProps {
+type ErrorBoundaryProps = {
   softReset: () => void;
-}
+  children: React.ReactNode;
+};
 
-interface IState {
+type ErrorBoundaryState = {
   error?: Error;
   errorInfo?: React.ErrorInfo;
   page?: Page;
   hasError: boolean;
-}
+};
 
-export class ErrorBoundary extends React.Component<IProps, IState> {
-  state: IState;
-
-  constructor(props: IProps) {
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false } as IState;
+    this.state = { hasError: false };
   }
 
   reset(): void {
-    this.setState({ hasError: false } as IState);
+    this.setState({ hasError: false });
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
@@ -35,6 +34,7 @@ export class ErrorBoundary extends React.Component<IProps, IState> {
     });
     console.error(error, errorInfo);
   }
+
   render(): React.ReactNode {
     if (this.state.hasError) {
       let errorData: IErrorData | undefined;
@@ -51,7 +51,8 @@ export class ErrorBoundary extends React.Component<IProps, IState> {
     }
     return this.props.children;
   }
-  static getDerivedStateFromError(error: Error): IState {
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 }

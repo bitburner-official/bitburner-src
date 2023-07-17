@@ -3,53 +3,51 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { Player } from "@player";
 import { Work, WorkType } from "./Work";
 import { influenceStockThroughCompanyWork } from "../StockMarket/PlayerInfluencing";
-import { LocationName } from "../Enums";
+import { AugmentationName, CompanyName, JobName } from "@enums";
 import { calculateCompanyWorkStats } from "./Formulas";
 import { Companies } from "../Company/Companies";
 import { applyWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
 import { Company } from "../Company/Company";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reputation } from "../ui/React/Reputation";
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
 import { CONSTANTS } from "../Constants";
 import { CompanyPositions } from "../Company/CompanyPositions";
+import { isMember } from "../utils/EnumHelper";
+import { invalidWork } from "./InvalidWork";
 
 interface CompanyWorkParams {
-  companyName: string;
+  companyName: CompanyName;
   singularity: boolean;
 }
 
 export const isCompanyWork = (w: Work | null): w is CompanyWork => w !== null && w.type === WorkType.COMPANY;
 
 export class CompanyWork extends Work {
-  companyName: string;
+  companyName: CompanyName;
   constructor(params?: CompanyWorkParams) {
     super(WorkType.COMPANY, params?.singularity ?? false);
-    this.companyName = params?.companyName ?? LocationName.NewTokyoNoodleBar;
+    this.companyName = params?.companyName ?? CompanyName.NoodleBar;
   }
 
   getCompany(): Company {
-    const c = Companies[this.companyName];
-    if (!c) throw new Error(`Company not found: '${this.companyName}'`);
-    return c;
+    return Companies[this.companyName];
   }
 
-  getGainRates(): WorkStats {
+  getGainRates(job: JobName): WorkStats {
     let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationNames.NeuroreceptorManager, true)) {
+    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
       focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
     }
     const company = this.getCompany();
-    return scaleWorkStats(
-      calculateCompanyWorkStats(Player, company, CompanyPositions[Player.jobs[company.name]], company.favor),
-      focusBonus,
-    );
+    return scaleWorkStats(calculateCompanyWorkStats(Player, company, CompanyPositions[job], company.favor), focusBonus);
   }
 
   process(cycles: number): boolean {
     this.cyclesWorked += cycles;
     const company = this.getCompany();
-    const gains = this.getGainRates();
+    const job = Player.jobs[this.companyName];
+    if (!job) return true;
+    const gains = this.getGainRates(job);
     applyWorkStats(Player, gains, cycles, "work");
     company.playerReputation += gains.reputation * cycles;
     influenceStockThroughCompanyWork(company, gains.reputation, cycles);
@@ -82,7 +80,9 @@ export class CompanyWork extends Work {
 
   /** Initializes a CompanyWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): CompanyWork {
-    return Generic_fromJSON(CompanyWork, value.data);
+    const work = Generic_fromJSON(CompanyWork, value.data);
+    if (!isMember("CompanyName", work.companyName)) return invalidWork();
+    return work;
   }
 }
 

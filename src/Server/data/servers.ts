@@ -1,11 +1,8 @@
-import { FactionNames } from "../../Faction/data/FactionNames";
+import type { ServerName } from "../../Types/strings";
 
-// This could actually be a JSON file as it should be constant metadata to be imported...
-import { IMinMaxRange } from "../../types";
-import { LocationName } from "../../Enums";
-import { LiteratureName } from "../../Literature/data/LiteratureNames";
+import { FactionName, LiteratureName, LocationName } from "@enums";
 import { SpecialServers } from "./SpecialServers";
-import { ServerName } from "../../Types/strings";
+import { IMinMaxRange } from "../../types";
 
 /**
  * The metadata describing the base state of servers on the network.
@@ -1478,7 +1475,7 @@ export const serverMetadata: IServerMetadata[] = [
     moneyAvailable: 0,
     networkLayer: 4,
     numOpenPortsRequired: 2,
-    organizationName: FactionNames.NiteSec,
+    organizationName: FactionName.NiteSec,
     requiredHackingSkill: {
       max: 220,
       min: 202,
@@ -1509,7 +1506,7 @@ export const serverMetadata: IServerMetadata[] = [
     moneyAvailable: 0,
     networkLayer: 2,
     numOpenPortsRequired: 1,
-    organizationName: FactionNames.CyberSec,
+    organizationName: FactionName.CyberSec,
     requiredHackingSkill: {
       max: 60,
       min: 51,
