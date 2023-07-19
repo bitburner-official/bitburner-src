@@ -31,3 +31,4 @@ dist/*.worker.*
 *.bundle.*
 index.html
 tsdoc-metadata.json
+/.vs

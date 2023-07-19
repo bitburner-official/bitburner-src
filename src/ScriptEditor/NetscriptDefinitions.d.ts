@@ -6856,10 +6856,50 @@ declare enum LocationName {
   Void = "The Void",
 }
 
+/** Name of all Factions
+ *  @public */
+declare enum FactionName {
+  Aevum = "Aevum",
+  BachmanAssociates = "Bachman & Associates",
+  TheBlackHand = "The Black Hand",
+  Bladeburners = "Bladeburners",
+  BladeIndustries = "Blade Industries",
+  BitRunners = "BitRunners",
+  Chongqing = "Chongqing",
+  ChurchOfTheMachineGod = "Church of the Machine God",
+  ClarkeIncorporated = "Clarke Incorporated",
+  TheCovenant = "The Covenant",
+  CyberSec = "CyberSec",
+  Daedalus = "Daedalus",
+  TheDarkArmy = "The Dark Army",
+  ECorp = "ECorp",
+  FourSigma = "Four Sigma",
+  FulcrumSecretTechnologies = "Fulcrum Secret Technologies",
+  Illuminati = "Illuminati",
+  Ishima = "Ishima",
+  KuaiGongInternational = "KuaiGong International",
+  MegaCorp = "MegaCorp",
+  Netburners = "Netburners",
+  NewTokyo = "New Tokyo",
+  NiteSec = "NiteSec",
+  NWO = "NWO",
+  OmniTekIncorporated = "OmniTek Incorporated",
+  Sector12 = "Sector-12",
+  ShadowsOfAnarchy = "Shadows of Anarchy",
+  Silhouette = "Silhouette",
+  SlumSnakes = "Slum Snakes",
+  SpeakersForTheDead = "Speakers for the Dead",
+  TheSyndicate = "The Syndicate",
+  Tetrads = "Tetrads",
+  TianDiHui = "Tian Di Hui",
+  Volhaven = "Volhaven",
+}
+
 /** @public */
 export type NSEnums = {
   CityName: typeof CityName;
   CrimeType: typeof CrimeType;
+  FactionName: typeof FactionName;
   FactionWorkType: typeof FactionWorkType;
   GymType: typeof GymType;
   JobName: typeof JobName;
