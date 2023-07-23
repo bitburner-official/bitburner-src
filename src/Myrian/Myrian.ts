@@ -1,7 +1,7 @@
 import { SleeveMyrianWork } from "../PersonObjects/Sleeve/Work/SleeveMyrianWork";
-import { DefaultWorld } from "./World";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { Player } from "@player";
+import { DefaultWorld } from "./World";
 
 interface MyrianSleeve {
   index: number;
@@ -38,7 +38,8 @@ export class Myrian {
 
   /** Initializes a Myrian object from a JSON save state. */
   static fromJSON(value: IReviverValue): Myrian {
-    return Generic_fromJSON(Myrian, value.data);
+    const v = Generic_fromJSON(Myrian, value.data);
+    return v;
   }
 }
 

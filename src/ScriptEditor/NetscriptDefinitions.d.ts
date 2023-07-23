@@ -1,5 +1,7 @@
 /** All netscript definitions */
 
+import { string } from "prop-types";
+
 /** @public */
 interface HP {
   current: number;
@@ -2710,6 +2712,20 @@ export interface Hacknet {
   getTrainingMult(): number;
 }
 
+export interface MyrianTile {
+  Content: string;
+}
+
+export interface MyrianSleeve {
+  x: number;
+  y: number;
+  inside: boolean;
+}
+
+export declare enum MyrianActions {
+  MOVE = "MOVE",
+}
+
 /**
  * Myrian API
  * @remarks
@@ -2719,28 +2735,18 @@ export interface Hacknet {
  */
 export interface Myr {
   /**
-   * Interact with an object in The Myrian.
-   * @remarks
+   * Take an action in The Myrian.
    *
-   * The effect is different depending on the object.
-   * Interacting with an enemy will attack it.
-   * With a resource node will mine it.
-   * With a power up will collect it.
-   * With a rock will try to break it.
-   *
-   * @returns Amount of milliseconds the operation will take.
+   * @returns A promise to be resolved when the action is over.
    */
-  ianUse(sleeveId: number, x: number, y: number): number;
+  ianAct(action: MyrianActions, sleeveId: number, x: number, y: number): Promise<void>;
 
   /**
-   * Move a sleeve in the Myrian.
-   * @remarks
+   * Get the content of a tile.
    *
-   * The target tile must be 1 tile away from the sleeves current tile.
-   *
-   * @returns Amount of milliseconds the operation will take.
+   * @returns The content of the tile.
    */
-  ianMove(sleeveId: number, x: number, y: number): Promise<void>;
+  ianGetTile(x: number, y: number): MyrianTile;
 
   /**
    * Get that sleeves current task in the Myrian.
@@ -2760,6 +2766,18 @@ export interface Myr {
   ianCancelTask(sleeveId): boolean;
 
   /**
+   * Get the size of the world.
+   * @returns [width, height] of the world.
+   */
+  ianWorldSize(): [number, number];
+
+  /**
+   * Get information about a sleeve and it's property related to The Myrian.
+   * @returns Information about a sleeve in The Myrian.
+   */
+  ianGetSleeve(sleeveId: number): MyrianSleeve;
+
+  /**
    * Makes the player or a sleeve enter The Myrian.
    * @remarks
    *
@@ -2776,16 +2794,6 @@ export interface Myr {
    * @returns true if the person is now in the simulated world.
    */
   ianLeave(sleeveId?: number): boolean;
-
-  /**
-   * Deploy an entity in The Myrian.
-   * @remarks
-   *
-   * Sleeves must be 1 tile away from the target tile and the player must have enough resources to build the entity.
-   *
-   * @returns The amount of milliseconds needed to complete the operation.  or -1 if failed.
-   */
-  ianDeploy(sleeveId: number, deploymentId: number, x: number, y: number): number;
 
   /**
    * Apply a Myrian powerup to a sleeve.
@@ -6964,6 +6972,7 @@ export type NSEnums = {
   LocationName: typeof LocationName;
   ToastVariant: typeof ToastVariant;
   UniversityClassType: typeof UniversityClassType;
+  MyrianActions: typeof MyrianActions;
 };
 
 /**

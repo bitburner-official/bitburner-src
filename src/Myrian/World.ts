@@ -1,12 +1,38 @@
-const e = ''; // empty
-const c = 'c'; // core
-const b = 'b'; // battery
-const d = 'd'; // depleted
+const e = " "; // empty
+const c = "c"; // core
+const b = "b"; // battery
+const d = "d"; // depleted
 
-export const DefaultWorld = [
-    [b, b, b, b, b],
-    [e, e, e, e, e],
-    [e, e, c, e, e],
-    [e, e, e, e, e],
-    [b, b, b, d, d],
-];
+const raw = `                              
+                              
+ mmmmmmm                       
+   mmmmmmmm                   
+          mmmmmmmmmmmm        
+           bbbb   mmmmm       
+                   mmmm       
+              c    mmmm       
+                   mmmm       
+       ddddd       mmmm       
+                              
+         mmmmmmmmmm           
+                mmmmmmmm      
+  mmmmmmmm     mmmm           
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              `;
+
+export const DefaultWorld = raw.split("\n").map((l) => l.split(""));
+console.log(DefaultWorld);

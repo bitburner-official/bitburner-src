@@ -1,9 +1,23 @@
 import { Player } from "@player";
-import { NSFull } from "../NetscriptFunctions";
+import { NS } from "@nsdefs";
+import { INetscriptExtra } from "../NetscriptFunctions/Extra";
 
-/** The API does not include enums, args, or pid. */
+// Made with the help of this question
+// https://stackoverflow.com/questions/76723668/how-to-make-a-typescript-utility-type-representing-only-the-functions-of-an-obje?noredirect=1#comment135264239_76723668
+type EmptyObjToNever<T> = {} extends T ? never : T;
+
+type PickFuncs<T> = T extends Function
+  ? T
+  : T extends readonly any[]
+  ? never
+  : T extends object
+  ? EmptyObjToNever<{ [K in keyof T as PickFuncs<T[K]> extends never ? never : K]: PickFuncs<T[K]> }>
+  : never;
+
 export type RamCostTree<API> = {
-  [key in keyof API]: API[key] extends () => unknown ? number | (() => number) : RamCostTree<API[key]>;
+  [key in keyof PickFuncs<API>]: PickFuncs<API>[key] extends () => unknown
+    ? number | (() => number)
+    : RamCostTree<PickFuncs<API>[key]>;
 };
 
 /** Constants for assigning costs to ns functions */
@@ -326,15 +340,16 @@ const stanek = {
 } as const;
 
 const myr = {
-  ianUse: 5.9,
-  ianMove: 3.4,
+  ianAct: 5.9,
+  ianGetTile: 1.4,
+  ianWorldSize: 3.333,
+  ianGetSleeve: 2,
   ianGetTask: 1.1,
   ianCancelTask: 1.2,
   ianEnter: 0.2,
   ianLeave: 0.2,
-  ianDeploy: 4.1,
   ianApplyPowerup: 10.9,
-};
+} as const;
 
 // UI API
 const ui = {
@@ -424,7 +439,7 @@ const corporation = {
  *  An error will be generated if there are missing OR additional ram costs defined.
  *  To avoid errors, define every function in NetscriptDefinition.d.ts and NetscriptFunctions,
  *  and have a ram cost associated here. */
-export const RamCosts: RamCostTree<NSFull> = {
+export const RamCosts: RamCostTree<NS & INetscriptExtra> = {
   corporation,
   hacknet,
   stock,

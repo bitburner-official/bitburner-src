@@ -1,28 +1,56 @@
 import { Myr as IMyrian } from "@nsdefs";
-import { InternalAPI } from "src/Netscript/APIWrapper";
+import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Player as player } from "../Player";
 import { myrian } from "../Myrian/Helpers";
+import { MyrianActions } from "@enums";
+
+const move = (ctx: NetscriptContext, id: number, x: number, y: number) => {
+  if (!player.sleeves[id]) throw new Error(`No sleeve with index ${id}`);
+  const myrSleeve = myrian.sleeves.find((s) => s.index === id);
+  if (!myrSleeve) throw new Error("Invalid move");
+  const dist = Math.abs(myrSleeve.x - x) + Math.abs(myrSleeve.y - y);
+  if (dist > 1) throw new Error("Invalid move");
+  return helpers.netscriptDelay(ctx, 100).then(function () {
+    myrSleeve.x = x;
+    myrSleeve.y = y;
+    return Promise.resolve();
+  });
+};
 
 export function NetscriptMyrian(): InternalAPI<IMyrian> {
   return {
-    ianUse: (ctx) => (_sleeveId, _x, _y) => {
-      throw new Error("Unimplemented");
-    },
-    ianMove: (ctx) => async (_sleeveId, _x, _y) => {
-      const id = helpers.number(ctx, "sleeveId", _sleeveId);
+    ianAct: (ctx) => (_action, _sleeveId, _x, _y) => {
+      const action = helpers.string(ctx, "action", _action);
       const x = helpers.number(ctx, "x", _x);
       const y = helpers.number(ctx, "y", _y);
-      if (!player.sleeves[id]) throw new Error(`No sleeve with index ${id}`);
-      const myrSleeve = myrian.sleeves.find((s) => s.index === id);
-      if (!myrSleeve) return Promise.resolve();
-      const dist = Math.abs(myrSleeve.x - x) + Math.abs(myrSleeve.y - y);
-      if (dist > 1) return Promise.resolve();
-      return helpers.netscriptDelay(ctx, 1000).then(function () {
-        myrSleeve.x = x;
-        myrSleeve.y = y;
-        return Promise.resolve();
-      });
+      const sleeveId = helpers.number(ctx, "sleeveId", _sleeveId);
+      switch (action) {
+        case MyrianActions.MOVE:
+          return move(ctx, sleeveId, x, y);
+      }
+      return Promise.reject("Invalid action");
+    },
+
+    ianWorldSize: (ctx) => () => {
+      return [myrian.world.length, myrian.world[0].length];
+    },
+
+    ianGetSleeve: (ctx) => (_sleeveId) => {
+      const sleeveId = helpers.number(ctx, "sleeveId", _sleeveId);
+      const sl = myrian.sleeves.find((s) => s.index === sleeveId);
+      if (!sl) {
+        return { inside: false, x: 0, y: 0 };
+      }
+      return { inside: true, x: sl.x, y: sl.y };
+    },
+
+    ianGetTile: (ctx) => (_x, _y) => {
+      const x = helpers.number(ctx, "x", _x);
+      const y = helpers.number(ctx, "y", _y);
+      return {
+        Content: myrian.world[y][x],
+      };
     },
     ianGetTask: (ctx) => (_sleeveId) => {
       throw new Error("Unimplemented");
@@ -39,9 +67,6 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       return true;
     },
     ianLeave: (ctx) => (_sleeveId?) => {
-      throw new Error("Unimplemented");
-    },
-    ianDeploy: (ctx) => (_sleeveId, _deploymentId, _x, _y) => {
       throw new Error("Unimplemented");
     },
     ianApplyPowerup: (ctx) => (_sleeveId, _stat) => {

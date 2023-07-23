@@ -7,6 +7,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import Battery20Icon from "@mui/icons-material/Battery20";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import LandscapeIcon from "@mui/icons-material/Landscape";
 
 const iterator = (i: number): number[] => {
   return Array(i).fill(0);
@@ -26,17 +27,20 @@ const Cell = ({ tile }: ICellProps): React.ReactElement => {
   return (
     <div
       style={{
+        minWidth: x + "px",
         width: x + "px",
+        minHeight: x + "px",
         height: x + "px",
         margin: "0px",
         padding: "0px",
       }}
     >
-      {tile === "" && <div />}
+      {tile === "&nbsp;" && <div />}
       {tile === "b" && <BatteryFullIcon sx={sx} />}
       {tile === "d" && <Battery20Icon sx={sx} />}
       {tile === "c" && <FavoriteIcon sx={sx} />}
       {tile === "s" && <PersonIcon sx={sx} />}
+      {tile === "m" && <LandscapeIcon sx={sx} />}
     </div>
   );
 };
@@ -49,7 +53,7 @@ export function MyrianRoot({ myrian }: IProps): React.ReactElement {
   const [, setRerender] = useState(false);
   const rerender = () => setRerender((old) => !old);
   useEffect(() => {
-    const intervalID = setInterval(rerender, 200);
+    const intervalID = setInterval(rerender, 20);
     return () => clearInterval(intervalID);
   }, []);
 

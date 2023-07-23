@@ -9,6 +9,7 @@ export * from "./Faction/Enums";
 export * from "./Literature/Enums";
 export * from "./Locations/Enums";
 export * from "./Message/Enums";
+export * from "./Myrian/Enums";
 export * from "./Programs/Enums";
 export * from "./StockMarket/Enums";
 export * from "./ui/Enums";
