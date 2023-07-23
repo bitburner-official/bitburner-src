@@ -3,7 +3,7 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { Player } from "@player";
 import { DefaultWorld } from "./World";
 
-interface MyrianSleeve {
+export interface MyrianSleeve {
   index: number;
   x: number;
   y: number;

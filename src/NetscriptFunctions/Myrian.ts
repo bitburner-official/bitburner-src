@@ -3,20 +3,9 @@ import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Player as player } from "../Player";
 import { myrian } from "../Myrian/Helpers";
-import { MyrianActions } from "@enums";
-
-const move = (ctx: NetscriptContext, id: number, x: number, y: number) => {
-  if (!player.sleeves[id]) throw new Error(`No sleeve with index ${id}`);
-  const myrSleeve = myrian.sleeves.find((s) => s.index === id);
-  if (!myrSleeve) throw new Error("Invalid move");
-  const dist = Math.abs(myrSleeve.x - x) + Math.abs(myrSleeve.y - y);
-  if (dist > 1) throw new Error("Invalid move");
-  return helpers.netscriptDelay(ctx, 100).then(function () {
-    myrSleeve.x = x;
-    myrSleeve.y = y;
-    return Promise.resolve();
-  });
-};
+import { MyrianActionTypes } from "@enums";
+import { MyrianSleeve } from "../Myrian/Myrian";
+import { actions } from "../Myrian/actions";
 
 export function NetscriptMyrian(): InternalAPI<IMyrian> {
   return {
@@ -25,10 +14,11 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       const x = helpers.number(ctx, "x", _x);
       const y = helpers.number(ctx, "y", _y);
       const sleeveId = helpers.number(ctx, "sleeveId", _sleeveId);
-      switch (action) {
-        case MyrianActions.MOVE:
-          return move(ctx, sleeveId, x, y);
-      }
+      if (!player.sleeves[sleeveId]) throw new Error(`No sleeve with index ${sleeveId}`);
+      const myrSleeve = myrian.sleeves.find((s) => s.index === sleeveId);
+      if (!myrSleeve) throw new Error(`Sleeve ${sleeveId} is not in The Myrian`);
+      const f = actions[action];
+      if (f) return f(ctx, myrSleeve, x, y);
       return Promise.reject("Invalid action");
     },
 

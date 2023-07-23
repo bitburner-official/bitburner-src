@@ -2724,6 +2724,7 @@ export interface MyrianSleeve {
 
 export declare enum MyrianActions {
   MOVE = "MOVE",
+  DRAIN = "DRAIN",
 }
 
 /**
