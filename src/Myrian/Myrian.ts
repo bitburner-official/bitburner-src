@@ -13,6 +13,7 @@ export class Myrian {
   world: string[][] = [];
   resources = 0;
   sleeves: MyrianSleeve[] = [];
+  storedCycles = 0;
 
   constructor() {
     this.world = DefaultWorld;
@@ -29,6 +30,30 @@ export class Myrian {
   findSleeveSpawnPoint(): [number, number] {
     // Wrong but will do for now
     return [1, 1];
+  }
+
+  /** Main process function called by the engine loop every game cycle */
+  process(numCycles = 1): void {
+    const CYCLE_CHUNK = 10;
+    this.storedCycles += numCycles;
+    if (this.storedCycles < CYCLE_CHUNK) return;
+
+    // Calculate how many cycles to actually process.
+    const cycles = Math.min(this.storedCycles, CYCLE_CHUNK);
+
+    try {
+      for (let x = 0; x < this.world.length; x++) {
+        for (let y = 0; y < this.world[x].length; y++) {
+          const tile = this.world[x][y];
+          if (tile === "d" && Math.random() > 0.99) {
+            this.world[x][y] = "b";
+          }
+        }
+      }
+      this.storedCycles -= cycles;
+    } catch (e: unknown) {
+      console.error(`Exception caught when processing Gang: ${e}`);
+    }
   }
 
   /** Serialize the current object to a JSON save state. */

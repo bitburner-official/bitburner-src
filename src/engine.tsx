@@ -43,6 +43,7 @@ import React from "react";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
 import { SnackbarEvents } from "./ui/React/Snackbar";
+import { myrian } from "./Myrian/Helpers";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -100,6 +101,8 @@ const Engine: {
 
     // Staneks gift
     staneksGift.process(numCycles);
+
+    myrian.process(numCycles);
 
     // Corporation
     if (Player.corporation) {

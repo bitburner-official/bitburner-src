@@ -17,7 +17,10 @@ const move = async (ctx: NetscriptContext, sleeve: MyrianSleeve, x: number, y: n
 };
 
 const drain = async (ctx: NetscriptContext, sleeve: MyrianSleeve, x: number, y: number) => {
+  const tile = myrian.world[y][x];
+  if (tile !== "b") throw new Error(`Invalid tile. Must be 'b' but is ${tile}`);
   return helpers.netscriptDelay(ctx, 100).then(() => {
+    myrian.world[y][x] = "d";
     return Promise.resolve();
   });
 };
