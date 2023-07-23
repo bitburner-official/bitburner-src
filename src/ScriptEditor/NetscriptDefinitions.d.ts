@@ -2722,7 +2722,7 @@ export interface MyrianSleeve {
   inside: boolean;
 }
 
-export declare enum MyrianActions {
+export declare enum MyrianActionTypes {
   MOVE = "MOVE",
   DRAIN = "DRAIN",
 }
@@ -6973,7 +6973,7 @@ export type NSEnums = {
   LocationName: typeof LocationName;
   ToastVariant: typeof ToastVariant;
   UniversityClassType: typeof UniversityClassType;
-  MyrianActions: typeof MyrianActions;
+  MyrianActions: typeof MyrianActionTypes;
 };
 
 /**

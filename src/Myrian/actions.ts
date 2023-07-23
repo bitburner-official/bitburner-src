@@ -2,11 +2,13 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 import { NetscriptContext } from "../Netscript/APIWrapper";
 import { myrian } from "./Helpers";
 import { MyrianSleeve } from "./Myrian";
+import { MyrianActionTypes } from "./Enums";
 
 const move = async (ctx: NetscriptContext, sleeve: MyrianSleeve, x: number, y: number) => {
   const dist = Math.abs(sleeve.x - x) + Math.abs(sleeve.y - y);
-  if (dist > 1) throw new Error("Invalid move");
-  if (myrian.world[y][x] !== " ") throw new Error("Invalid move");
+  if (dist > 1) throw new Error(`Invalid move, target must be 1 tile away, is ${dist}`);
+  const tile = myrian.world[y][x];
+  if (tile !== " ") throw new Error(`Invalid move, cannot enter tile [${x}, ${y}] because the content is ${tile}`);
   return helpers.netscriptDelay(ctx, 100).then(() => {
     sleeve.x = x;
     sleeve.y = y;
@@ -24,6 +26,6 @@ export const actions: Record<
   string,
   (ctx: NetscriptContext, sleeve: MyrianSleeve, x: number, y: number) => Promise<void>
 > = {
-  move: move,
-  drain: drain,
+  [MyrianActionTypes.MOVE]: move,
+  [MyrianActionTypes.DRAIN]: drain,
 };
