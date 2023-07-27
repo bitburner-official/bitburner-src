@@ -1,7 +1,6 @@
 # Stats
 
-The player has several stats that can be increased in order to progress
-in the game.
+The player has several stats that can be increased in order to progress in the game.
 
 ## Hacking
 
