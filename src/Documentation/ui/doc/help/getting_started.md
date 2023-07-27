@@ -1,6 +1,6 @@
 # Getting Started Guide for Beginner Programmers
 
-note: Note that the [Scripts](../basic/scripts.md) and strategies given in this guide aren't necessarily optimal.
+_Note_: The [Scripts](../basic/scripts.md) and strategies given in this guide aren't necessarily optimal.
 They're just meant to introduce you to the game and help you get started.
 
 This is an introductory guide to getting started with Bitburner.
@@ -26,11 +26,8 @@ I'm going to assume you followed the introductory tutorial when you first began 
 In this introductory tutorial, you created a [Script](../basic/scripts.md) called `n00dles.js` and ran it on the `n00dles` server.
 Right now, we'll kill this [Script](../basic/scripts.md). There are two ways to do this:
 
-1. You can go to the Terminal and enter:
-
-   $ kill n00dles.js
-
-2. You can go to the `Active Scripts` page (Alt + s) and press the `Kill Script` button for `n00dles.js`.
+- You can go to the Terminal and enter: `$ kill n00dles.js`
+- You can go to the `Active Scripts` page (Alt + s) and press the `Kill Script` button for `n00dles.js`.
 
 If you skipped the introductory tutorial, then ignore the part above.
 Instead, go to the `Hacknet Nodes` page (Alt + h) and purchase a [Hacknet Node](../basic/hacknet_nodes.md) to start generating some passive income.
@@ -306,7 +303,7 @@ Therefore, we should raise our hacking level.
 Not only will this let us hack more [Servers](../basic/servers.md), but it will also increase the effectiveness of our [hacking](../basic/hacking.md) against `n00dles`.
 
 The easiest way to train your hacking level is to visit Rothman University.
-You can do this from the `City` tab on the left-hand navigation menu (click on it or press Alt + w).
+You can do this from the `City` tab (Alt + w) on the left-hand navigation menu.
 Rothman University should be the "U" near the bottom-right.
 Click the "U" to go to the location.
 
@@ -315,11 +312,11 @@ These options describe different courses you can take.
 You should click the first button, which says: `Study Computer Science (free)`.
 
 After you click the button, you will start studying and earning hacking experience.
-While you are doing this, you cannot interact with any other part of the game until you click either "Stop taking course" or "Do something else simultaneously".
+While you are doing this, you cannot interact with any other part of the game until you click either `Stop taking course` or `Do something else simultaneously`.
 
 Right now, we want a hacking level of 10.
 You need approximately 174 hacking experience to reach level 10.
-You can check how much hacking experience you have by either hovering over the progress bar in the overview window or going to the `Stats` tab on the left-hand navigation menu (click on it or press Alt + c).
+You can check how much hacking experience you have by going to the `Stats` tab (Alt + c) on the left-hand navigation menu.
 Since studying at Rothman University earns you 1 experience per second, this will take 174 seconds, or approximately 3 minutes.
 Feel free to do something in the meantime!
 
@@ -339,7 +336,7 @@ At the top of the [Script](../basic/scripts.md), change the `target` variable to
     const target = "joesguns";
 
 Note that this will **NOT** affect any instances of the [Script](../basic/scripts.md) that are already running.
-This will only affect instances of the [Script](../basic/scripts.md) that are ran from this point forward.
+This will only affect instances of the [Script](../basic/scripts.md) that are run from this point forward.
 
 ## Creating a New Script to Purchase New Servers
 
@@ -435,7 +432,7 @@ I wouldn't bother with [RAM](../basic/ram.md) and Core upgrades until later on.
 
 The best source of income right now is from [crimes](../basic/crimes.md).
 This is because it not only gives you a large amount of money, but it also raises your hacking level.
-To commit [crimes](../basic/crimes.md), click on the `City` tab on the left-hand navigation menu or press Alt + w.
+To commit [crimes](../basic/crimes.md), go to the `City` tab (Alt + w).
 Then, click on the link that says `The Slums`.
 
 In the Slums, you can attempt to commit a variety of [crimes](../basic/crimes.md), each of which gives certain types of experience and money if successful.
@@ -454,8 +451,8 @@ This [crime](../basic/crimes.md) is slightly easier and more profitable than `Ro
 
 ## Work for a Company
 
-If you don't want to commit [crimes](../basic/crimes.md), there's another option - working for a [company](../basic/companies.md)
-This will not be nearly as profitable as [crimes](../basic/crimes.md), but will provide [company](../basic/companies.md) [reputation](../basic/reputation.md)
+If you don't want to commit [crimes](../basic/crimes.md), there's another option - working for a [company](../basic/companies.md).
+This will not be nearly as profitable as [crimes](../basic/crimes.md), but will provide [company](../basic/companies.md) [reputation](../basic/reputation.md).
 
 Go to the `City` tab on the left-hand navigation menu and then go to `Joe's Guns`.
 At `Joe's Guns`, there will be an option that says `Apply to be an Employee`.
@@ -492,10 +489,9 @@ Once you reach a hacking level of 50, two new important parts of the game open u
 
 ## Creating your first program: BruteSSH.exe
 
-On the left-hand navigation menu you will notice a `Create Programs` tab with a red notification icon.
+On the left-hand navigation menu you will notice a `Create Program` tab (Alt + p) with a red notification icon.
 This indicates that there are programs available to be created.
-Click on that tab (or use Alt + p) and you'll see a
-list of all the programs you can currently create.
+Go to that tab, and you'll see a list of all the programs you can currently create.
 Hovering over a program will give a brief description of its function.
 Simply click on a program to start creating it.
 
@@ -647,7 +643,7 @@ After another 15 minutes, the production rate had increased to $25k per second a
 Your results will vary based on how fast you earned money from [crime](../basic/crimes.md)/[working](../basic/companies.md)/[hacknet nodes](../basic/hacknet_nodes.md), but this will hopefully give you a good indication of how much the [Scripts](../basic/scripts.md) can earn.
 
 In the meantime, we are going to be gaining reputation with the `CyberSec` [faction](../basic/factions.md).
-Go to the `Factions` tab on the left-hand navigation menu (Alt + F), and from there select `CyberSec`.
+Go to the `Factions` tab (Alt + f) on the left-hand navigation menu, and from there select `CyberSec`.
 In the middle of the page there should be a button for `Hacking Contracts`.
 Click it to start earning [reputation](../basic/reputation.md) for the `CyberSec` [faction](../basic/factions.md) (as well as some hacking experience).
 The higher your hacking level, the more [reputation](../basic/reputation.md) you will gain.
@@ -710,7 +706,7 @@ The following are a few things you may want to consider doing in the near future
 If you've purchased any [Augmentations](../basic/augmentations.md), you'll need to install them before you actually gain their effects.
 Installing [Augmentations](../basic/augmentations.md) is the game's "soft-reset" or "prestige" mechanic.
 
-To install your [Augmentations](../basic/augmentations.md), click the `Augmentations` tab on the left-hand navigation menu (Alt + a).
+To install your [Augmentations](../basic/augmentations.md), go to the `Augmentations` tab (Alt + a) on the left-hand navigation menu.
 You will see a list of all of the [Augmentations](../basic/augmentations.md) you have purchased.
 Below that, you will see a button that says `Install Augmentations`.
 Be warned, after clicking this there is no way to undo it (unless you load an earlier save).
@@ -771,7 +767,7 @@ Feel free to adjust it to your liking.
 ## Random Tips
 
 - Early on in the game, it's better to spend your money on upgrading [RAM](../basic/ram.md) and purchasing new [Servers](../basic/servers.md) rather than spending it on [Augmentations](../basic/augmentations.md)
-- The more money available on a [Server](../basic/servers.md), the more effective the `hack()` and   `grow()` functions will be.
+- The more money available on a [Server](../basic/servers.md), the more effective the `hack()` and `grow()` functions will be.
   This is because both of these functions use percentages rather than flat values.
   `hack()` steals a percentage of a [Server](../basic/servers.md)'s total available money, and `grow()` increases a [Server](../basic/servers.md)'s money by X%.
 - There is a limit to how much money can exist on a [Server](../basic/servers.md).

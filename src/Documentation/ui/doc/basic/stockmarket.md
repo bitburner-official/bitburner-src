@@ -114,7 +114,7 @@ A Stop Order to sell will execute if the stock's price >= order's price.
 
 It is possible for your actions elsewhere in the game to influence the stock market.
 
-Hacking
+### Hacking
 
 If a server has a corresponding stock (e.g. _foodnstuff_ server -> FoodNStuff stock), then hacking that server can decrease the stock's second-order forecast.
 This causes the corresponding stock's forecast to trend downwards in value over time.
@@ -124,7 +124,7 @@ The chance that hacking a server will cause this effect is based on what percent
 
 A single hack will have a minor effect, but continuously hacking a server for lots of money over time will have a noticeable effect in making the stock's forecast trend downwards.
 
-## Growing
+### Growing
 
 If a server has a corresponding stock (e.g. `foodnstuff` server -> FoodNStuff stock), then growing that server's money can increase the stock's second-order forecast.
 This causes the corresponding stock's forecast to trend upwards in value over time.
@@ -134,12 +134,12 @@ The chance that growing a server will cause this effect is based on what percent
 
 A single grow operation will have a minor effect, but continuously growing a server for lots of money over time will have a noticeable effect in making the stock's forecast trend upwards.
 
-## Working for a Company
+### Working for a Company
 
 If a [Company](companies.md) has a corresponding stock, then working for that [Company](companies.md) will increase the corresponding stock's second-order forecast.
 This will cause the stock's forecast to (slowly) trend upwards in value over time.
 
-The potency of this effect is based on how effective you are when you work (i.e. its based on your stats and multipliers).
+The potency of this effect is based on how effective you are when you work (i.e. it's based on your stats and multipliers).
 
 ## Automating the Stock Market
 

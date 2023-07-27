@@ -20,7 +20,7 @@ Different BitNodes grant different [Source-Files](sourcefiles.md).
 
 Each BitNode has unique characteristics that are related to varying backstories.
 For example, in one BitNode the world is in the middle of a financial catastrophe with a collapsing market.
-In another BitNode, most forms of income such as working at a [Company](../basic/companies.md) or [Hacknet Nodes](../basic/hacknet_nodes.md) are significantly less profitable.
+In this BitNode, most forms of income such as working at a [Company](../basic/companies.md) or [Hacknet Nodes](../basic/hacknet_nodes.md) are significantly less profitable.
 [Servers](../basic/servers.md) have less money on them and lowered growth rates, but it is easier to lower their security level using the `weaken` function.
 
 Furthermore, some BitNodes introduce new content and mechanics.

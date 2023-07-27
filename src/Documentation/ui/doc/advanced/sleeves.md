@@ -28,12 +28,12 @@ Duplicate Sleeves are **not** reset when installing [Augmentations](../basic/aug
 
 There are two methods of obtaining Duplicate Sleeves:
 
-1. Destroy [BitNode-10](bitnodes.md).
-   Each completion gives you one additional Duplicate Sleeve.
-2. Purchase Duplicate Sleeves from The Covenant.
-   This is only available in [BitNode-10](bitnodes.md).
-   Sleeves purchased this way are **permanent** (they persist through [BitNodes](bitnodes.md)).
-   You can purchase up to 5 Duplicate Sleeves from The Covenant.
+- Destroy [BitNode-10](bitnodes.md).
+  Each completion gives you one additional Duplicate Sleeve.
+- Purchase Duplicate Sleeves from The Covenant.
+  This is only available in [BitNode-10](bitnodes.md).
+  Sleeves purchased this way are **permanent** (they persist through [BitNodes](bitnodes.md)).
+  You can purchase up to 5 Duplicate Sleeves from The Covenant.
 
 ## Synchronization
 

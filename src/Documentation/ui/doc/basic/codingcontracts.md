@@ -2,7 +2,7 @@
 
 Coding Contracts are a mechanic that lets players earn rewards in exchange for solving programming problems.
 
-Coding Contracts are files with the `.cct` extensions.
+Coding Contracts are files with the `.cct` extension.
 They can be accessed through the [Terminal](terminal.md) or through [Scripts](scripts.md) using the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md).
 
 Each contract has a limited number of attempts.
@@ -45,15 +45,12 @@ Otherwise, follow these rules when submitting solutions:
 - Array-type solutions should be submitted with each element in the array separated by commas.
   Brackets are optional.
   For example, both of the following are valid solution formats:
-
   - `1,2,3`
   - `[1,2,3]`
-
-However, if the solution is a multidimensional array, then all arrays that are not the outer-most array DO require the brackets.
-For example, an array of arrays can be submitted as one of the following:
-
-- `[1,2],[3,4]`
-- `[[1,2],[3,4]]`
+- If the solution is a multidimensional array, then all arrays that are not the outer-most array DO require the brackets.
+  For example, an array of arrays can be submitted as one of the following:
+  - `[1,2],[3,4]`
+  - `[[1,2],[3,4]]`
 
 Numeric solutions should be submitted normally, as expected
 

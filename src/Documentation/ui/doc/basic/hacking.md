@@ -20,24 +20,20 @@ These programs can be coded once your hacking skill gets high enough, or they ca
 
 **There are two ways to execute port-opening programs and the NUKE virus:**
 
-1.  Connect to the target [server](servers.md) through the [Terminal](terminal.md) and use the `run` command:
-
-         $ run [programName]
-
-1.  Use a function:
-
-- `nuke`
-- `brutessh`
-- `ftpcrack`
-- `relaysmtp`
-- `httpworm`
-- `sqlinject`
+- Connect to the target [server](servers.md) through the [Terminal](terminal.md) and use the `run` command: `$ run [programName]`
+- Use a function:
+  - `nuke`
+  - `brutessh`
+  - `ftpcrack`
+  - `relaysmtp`
+  - `httpworm`
+  - `sqlinject`
 
 **There are two ways to determine how many ports need to be opened
 on a [server](servers.md) in order to successfully NUKE it:**
 
-1. Connect to that [server](servers.md) through the [Terminal](terminal.md) and use the `analyze` command.
-1. Use the `getServerNumPortsRequired` function.
+- Connect to that [server](servers.md) through the [Terminal](terminal.md) and use the `analyze` command.
+- Use the `getServerNumPortsRequired` function.
 
 Once you have enough ports opened on a [server](servers.md) and have ran the NUKE virus to gain root access, you will be able to hack it.
 
@@ -79,7 +75,7 @@ This means that a [server](servers.md)'s security level will not fall below this
 
 ## Backdoors
 
-[server](servers.md) that can be hacked can also have backdoors installed.
+[Servers](servers.md) that can be hacked can also have backdoors installed.
 These backdoors will provide you with a benefit - the services may be cheaper, penalties may be reduced or there may be other results.
 Honeypots exist and will let factions know when you have succeeded at backdooring their system.
 Once you have a backdoor installed, you can connect to that [server](servers.md) directly.

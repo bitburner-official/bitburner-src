@@ -34,12 +34,11 @@ The player starts with a single server: his/her home computer.
 This server will have the hostname `home`.
 The player's home computer is special for a variety of reasons:
 
-1. The home computer's [RAM](ram.md) can be upgraded.
-   This can be done by visiting certain locations in the [World](world.md).
-
-2. The home computer persists through [Augmentation](augmentations.md) installations.
-   This means that you will not lose any [RAM](ram.md) upgrades or [Scripts](scripts.md) on your home computer when you install [Augmentations](augmentations.md)
-   (you will, however, lose programs and messages on your home computer).
+- The home computer's [RAM](ram.md) can be upgraded.
+  This can be done by visiting certain locations in the [World](world.md).
+- The home computer persists through [Augmentation](augmentations.md) installations.
+  This means that you will not lose any [RAM](ram.md) upgrades or [Scripts](scripts.md) on your home computer when you install [Augmentations](augmentations.md)
+  (you will, however, lose programs and messages on your home computer).
 
 The player can also purchase additional servers.
 This can be done by visiting certain locations in the [World](world.md), or it can be done automatically through a script using the `purchaseServer` function.

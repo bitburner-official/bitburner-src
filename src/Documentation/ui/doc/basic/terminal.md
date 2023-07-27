@@ -84,11 +84,9 @@ For most terminal commands, this is all you need to know.
 When running scripts, however, it is important to know in more detail how arguments are parsed.
 There are two main points:
 
-1. Quotation marks can be used to wrap a single argument and force it to be parsed as
-   a string. Any whitespace inside the quotation marks will not cause a new argument
-   to be parsed.
-2. Anything that can represent a number is automatically cast to a number, unless it's
-   surrounded by quotation marks.
+- Quotation marks can be used to wrap a single argument and force it to be parsed as a string.
+  Any whitespace inside the quotation marks will not cause a new argument to be parsed.
+- Anything that can represent a number is automatically cast to a number, unless it's surrounded by quotation marks.
 
 Here's an example to show how these rules work.
 Consider the following script `argType.js`:

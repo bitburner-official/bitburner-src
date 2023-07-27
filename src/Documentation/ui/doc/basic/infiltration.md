@@ -28,10 +28,12 @@ If you are reduced to `0` hp or below, the infiltration will immediately end.
 ### Slash when his guard is down!
 
 Press space when the guard is preparing to attack you.
-There are 3 phases
-The first is guarding, where attacking back will result in failure.
-The 2nd is preparing, where attacking will result in a victory.
-The 3rd is attack, where the guard will attack you resulting in failure.
+
+There are 3 phases:
+
+1. guarding - attacking back will result in failure.
+2. preparing - attacking will result in a victory.
+3. attacking - the guard will attack you resulting in failure.
 
 ### Close the brackets
 
@@ -55,8 +57,8 @@ Move the cursor to the matching symbol and press space to confirm.
 
 ### Remember all the mines!
 
-At first, the cursor cannot be moved - remember the positions of the mines.
-Then move the cursor and press space to mark the mines on the board.
+At first, the cursor cannot be moved - remember the positions of the mines.  
+Next, move the cursor and press space to mark the mines on the board.
 
 ### Cut the wires
 

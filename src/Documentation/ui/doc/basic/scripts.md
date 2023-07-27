@@ -41,7 +41,7 @@ For example, if a normal single-threaded script is able to hack $10,000, then ru
 Scripts will not actually become multithreaded in the real-world sense.)
 
 When multithreading a script, the total [RAM](ram.md) cost can be calculated by simply multiplying the base [RAM](ram.md) cost of the script with the number of threads, where the base cost refers to the amount of [RAM](ram.md) required to run the script single-threaded.
-In the [terminal](terminal.md), you can run the `mem` [Terminal](terminal.md) command to see how much [RAM](ram.md) a script requires with `n` threads::
+In the [terminal](terminal.md), you can run the `mem` [Terminal](terminal.md) command to see how much [RAM](ram.md) a script requires with `n` threads:
 
     $ mem [scriptname] -t n
 

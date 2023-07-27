@@ -1,7 +1,7 @@
 # Stanek
 
 Allison is a bit crazy.
-But her special [Augmentation](../basic/augmentations.md) is very useful despites its ~~bugs~~ features.
+But her special [Augmentation](../basic/augmentations.md) is very useful despite its ~~bugs~~ features.
 The Gift consists of a grid of squares in which tetris-like pieces called fragments can be placed.
 Each fragment boost a different player multiplier.
 However, the fragments are not very powerful by themselves.
