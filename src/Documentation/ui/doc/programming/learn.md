@@ -1,4 +1,4 @@
-# Learn to Program in Javascript
+# Learn to Program in JavaScript
 
 ## For Beginner Programmers
 
@@ -32,5 +32,5 @@ is important further down.
 - [MDN Introduction to JS](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
 - [Eloquent JavaScript (ES6+)](http://eloquentjavascript.net/)
   Recommended Chapters: Introduction, 1-6
-- [Modern Javascript Tutorial (ES6+)](https://javascript.info/)
+- [Modern JavaScript Tutorial (ES6+)](https://javascript.info/)
   Recommended Chapters: 2, 4-6

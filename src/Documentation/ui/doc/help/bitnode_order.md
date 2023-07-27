@@ -17,15 +17,15 @@ These paths do not recommend the absolute fastest path, since speed of progressi
 highly dependant on playing style.
 
 1. Repeat BN-1 until you max out its [Source-File](../advanced/sourcefiles.md). Its [Source-File](../advanced/sourcefiles.md)
-   is extremely powerful, as it raises all multipliers by a significant amount. This also a let's you
+   is extremely powerful, as it raises all multipliers by a significant amount. This also allows you to
    get used to augments and other features resetting.
 
 2. Do BN-3 at least once to unlock the [Corporation](../advanced/corporations.md) mechanic, finishing all
-   3 levels unlocks the full API for free allowing fully scripted corp. This mechanic has highest
+   3 levels unlocks the full API for free, allowing fully scripted corp. This mechanic has the highest
    profit potential in the game.
 
 3. Do BN-10 once to unlock [Sleeves](../advanced/sleeves.md) and [Grafting](../advanced/grafting.md). [Sleeves](../advanced/sleeves.md) are useful in all nodes
-   and grafting can be useful in future [BitNodes](../advanced/bitnodes.md) (especially 8). It's recommended to buy all purchasable [Sleeves](../advanced/sleeves.md) and
+   and grafting can be useful in future [BitNodes](../advanced/bitnodes.md), especially BN-8. It's recommended to buy all purchasable [Sleeves](../advanced/sleeves.md) and
    their memory during the first run.
 
    The ordering of the next three is dependant on playing style and wants/needs.
@@ -36,8 +36,8 @@ highly dependant on playing style.
    strong because [hacking](../basic/hacking.md) is typically one of the best ways of earning money.
 
 5. Do BN-4. Its [Source-File](../advanced/sourcefiles.md) does not directly make you
-   more powerful in any way, but it does unlock the [Singularity API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.singularity.md) which
-   let you automate significantly more aspects of the game. Consider repeating until Level 3,
+   more powerful in any way, but unlocks the [Singularity API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.singularity.md).
+   This API allows you to automate significantly more aspects of the game. Consider repeating until Level 3,
    since each level decreases the [RAM](../basic/ram.md) cost of the functions.
 
 6. Do BN-2 once to unlock the [Gang](../advanced/gang.md) mechanic. This mechanic
@@ -105,12 +105,12 @@ simple money-generator to a more interesting mechanic.
 BN-10 unlocks two new mechanics: [Sleeves](../advanced/sleeves.md) and [Grafting](../advanced/grafting.md)
 
 BN-13 unlocks [Stanek's Gift](../advanced/stanek.md). This gift can improve skills,
-[hacknet](../basic/hacknet_nodes.md) production and costs, working and [crime](../basic/crimes.md) gains as well [hacking](../basic/hacking.md) power and speed.
+[hacknet](../basic/hacknet_nodes.md) production and costs, working and [crime](../basic/crimes.md) gains, and [hacking](../basic/hacking.md) power and speed.
 
 ## For a Challenge
 
 In general, the higher [BitNodes](../advanced/bitnodes.md) are more difficult than the lower ones.
 BN-12 is an obvious exception as it gets progressively harder.
 
-BN-8 provides a unique challenge as the only method
+BN-8 provides a unique challenge, as the only method
 of earning money in that [BitNode](../advanced/bitnodes.md) is through trading at the stock market.

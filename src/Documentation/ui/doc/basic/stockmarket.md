@@ -19,7 +19,7 @@ world. So these concepts below should seem similar, but won't be exactly the sam
 When making a transaction on the stock market, there are two types of positions:
 Long and Short. A Long position is the typical scenario where you buy a stock and
 earn a profit if the price of that stock increases. Meanwhile, a Short position
-is the exact opposite. In a Short position you purchase shares of a stock and
+is the exact opposite. In a Short position, you purchase shares of a stock and
 earn a profit if the price of that stock decreases. This is also called 'shorting'
 a stock.
 

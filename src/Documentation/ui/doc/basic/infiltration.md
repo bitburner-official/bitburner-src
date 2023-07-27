@@ -12,7 +12,7 @@ these for money or for [Faction](factions.md) [Reputation](reputation.md). To tr
 visit a [Company](companies.md) through the [World](world.md) menu. There will be an option that
 says 'Infiltrate [Company](companies.md)'.
 
-When infiltrating a [Company](companies.md) you will be presented with short active challenges.
+When infiltrating a [Company](companies.md), you will be presented with short active challenges.
 None of the challenges use the mouse.
 
 The difficulty at the top lowers with better combat stats and charisma. It is not recommended
@@ -32,7 +32,7 @@ infiltration will immediately end.
 ### Slash when his guard is down!
 
 Press space when the guard is preparing to attack you.
-There's 3 phases
+There are 3 phases
 The first is guarding, where attacking back will result in failure.
 The 2nd is preparing, where attacking will result in a victory.
 The 3rd is attack, where the guard will attack you resulting in failure.
@@ -51,7 +51,7 @@ Use the arrows to find a compliment for the guard.
 
 ### Enter the Code!
 
-Match the arrows as they appears.
+Match the arrows as they appear.
 
 ### Match the symbols!
 
@@ -59,7 +59,7 @@ Move the cursor to the matching symbol and press space to confirm.
 
 ### Remember all the mines!
 
-At first the cursor cannot be moved, remember the positions of the X.
+At first, the cursor cannot be moved - remember the positions of the mines.
 Then move the cursor and press space to mark the mines on the board.
 
 ### Cut the wires

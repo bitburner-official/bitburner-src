@@ -11,7 +11,7 @@ the Enders, using virtual simulations that trapped the minds of humans.
 
 However, the Enders didn't just create a single virtual reality to enslave humans, but many
 different simulations. In other words, there are many different BitNodes that exist.
-These BitNode are very different from each other.
+These BitNodes are very different from each other.
 
 jump3r tells you that the only hope for humanity is to destroy all of these BitNodes.
 Therefore, the end goal for the player is to enter and then destroy each BitNode.

@@ -20,7 +20,7 @@ create them. Therefore, the only way for the player to obtain
 Augmentations is through [Factions](factions.md). After joining a [Faction](factions.md) and earning
 enough [Reputation](reputation.md) in it, you will be able to purchase its Augmentations.
 Different [Factions](factions.md) offer different Augmentations. Augmentations must be
-purchased in order to be installed, and they are fairly expensive. They also require [Reputation](reputation.md) from a [Factions](factions.md) before they will let you purchase their Augmentations.
+purchased in order to be installed, and they are fairly expensive. They also require [Reputation](reputation.md) with a [Faction](factions.md) before they will let you purchase their Augmentations.
 
 ## Installing Augmentations
 
@@ -41,7 +41,7 @@ an Augmentation:
 - [Scripts](scripts.md) on all [servers](servers.md) EXCEPT your home computer
 - Purchased [servers](servers.md)
 - [Hacknet Nodes](hacknet_nodes.md)
-- [Company](companies.md) / [Faction](factions.md) [Reputation](reputation.md), but you gain [Reputation](reputation.md).
+- [Company](companies.md) / [Faction](factions.md) [Reputation](reputation.md), but you gain [Favor](reputation.md).
 - Jobs and [Faction](factions.md) memberships
 - Programs
 - [Stocks](stockmarket.md)
@@ -49,11 +49,10 @@ an Augmentation:
 
 Here is everything you will KEEP when you install an Augmentation:
 
-- Every Augmentation you have installed
+- Every Augmentation you have previously installed
 - [Scripts](scripts.md) on your home computer
 - [RAM](ram.md) / Core Upgrades on your home computer
 - [World Stock Exchange account](stockmarket.md) and [TIX API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.tix.md) Access
-- Previously installed Augmentations
 
 ## Purchasing Multiple Augmentations
 

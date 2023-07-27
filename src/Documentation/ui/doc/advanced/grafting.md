@@ -12,5 +12,5 @@ Be warned, some who have tested grafting have reported an unidentified malware. 
 `Entropy`, this virus seems to grow in potency as more [Augmentations](../basic/augmentations.md) are grafted,
 causing unpredictable affects to the victim.
 
-Note that when crafting an [Augmentation](../basic/augmentations.md), cancelling will **not** save your progress,
+Note that when grafting an [Augmentation](../basic/augmentations.md), cancelling will **not** save your progress,
 and the money spent will **not** be returned.

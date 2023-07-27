@@ -2,7 +2,7 @@
 
 Scripts are programs that can be used to automate the hacking process
 and almost every other part of the game. Scripts must be written
-in javascript.
+in JavaScript.
 
 It is highly recommended that you have a basic background in programming
 to start writing scripts. You by no means need to be an expert. All you
@@ -16,9 +16,6 @@ If you'd like to learn a little bit about programming, see
 When running a script, you can choose to pass arguments to that script.
 The script's logic can access and act on these arguments. This allows
 for flexibility in your scripts.
-
-For information on how to run scripts with arguments, see
-[Scripts](scripts.md)
 
 ## Identifying a Script
 
@@ -154,7 +151,7 @@ Displays all active scripts and their [RAM](ram.md) usage
 
 ## Notes about how Scripts work offline
 
-The scripts that you write and execute are in Javascript.
+The scripts that you write and execute are in JavaScript.
 For this reason, it is not possible for these scripts to run while
 offline (when the game is closed). It is important to note that for
 this reason, conditionals such as `if`/`else` statements and certain
@@ -173,7 +170,7 @@ when the game is online. These calculated rates are used to determine
 how many times these function calls would be made while the game is
 offline.
 
-Also, note that because of the way the javascript engine works, whenever you reload or re-open the game all of the
+Also, note that because of the way the JavaScript engine works, whenever you reload or re-open the game all of the
 scripts that you are running will start running from the BEGINNING
 of the code. The game does not keep track of where exactly the
 execution of a script is when it saves/loads.

@@ -17,8 +17,8 @@ Bitburner is a cyberpunk-themed incremental RPG. The player progresses by raisin
 their [Stats](../basic/stats.md), earning money, and climbing the corporate ladder.
 Eventually, after reaching certain criteria, the player will begin receiving invitations
 from [Factions](../basic/factions.md). Joining these [Factions](../basic/factions.md) and working for them will unlock
-[Augmentations](../basic/augmentations.md). Purchasing and installing [Augmentations](../basic/augmentations.md) provide persistent
-upgrades and are necessary for progressing in the game.
+[Augmentations](../basic/augmentations.md). Purchasing and installing [Augmentations](../basic/augmentations.md) provides persistent
+upgrades and is necessary for progressing in the game.
 
 The game has a minimal story/quest-line that can be followed to reach the end of the game.
 Since this guide is only about getting started with Bitburner, it will not cover the
@@ -27,7 +27,7 @@ entire "quest-line".
 ## First Steps
 
 I'm going to assume you followed the introductory tutorial when you first began the game.
-In this introductory tutorial you created a [Script](../basic/scripts.md) called `n00dles.js` and ran it
+In this introductory tutorial, you created a [Script](../basic/scripts.md) called `n00dles.js` and ran it
 on the `n00dles` server. Right now, we'll kill this [Script](../basic/scripts.md). There are two ways
 to do this:
 
@@ -57,7 +57,7 @@ Before we write the [Script](../basic/scripts.md), here are some things you'll w
 - `brutessh`
 - `nuke`
 
-To briefly summarize the information from the links above: Each [Server](../basic/servers.md) has a
+To briefly summarize: Each [Server](../basic/servers.md) has a
 security level that affects how difficult it is to hack. Each [Server](../basic/servers.md) also has a
 certain amount of money, as well as a maximum amount of money it can hold. [Hacking](../basic/hacking.md) a
 [Server](../basic/servers.md) steals a percentage of that [Server](../basic/servers.md)'s money. The `hack()` function
@@ -117,7 +117,7 @@ Enter the following code in the [Script](../basic/scripts.md) editor:
     }
 
 The [Script](../basic/scripts.md) above contains comments that document what it does, but let's go through it
-step-by-step anyways.
+step-by-step anyway.
 
     const target = "n00dles";
 
@@ -138,7 +138,7 @@ The `getServerMaxMoney()` function is used to find this value
 
     const securityThresh = ns.getServerMinSecurityLevel(target);
 
-This third command defines a numerical value representing the maximum security level
+This third command defines a numerical value representing the minimum security level
 the target [Server](../basic/servers.md) can have. If the target [Server](../basic/servers.md)'s security level is higher than
 this value, then our [Script](../basic/scripts.md) will `weaken()` the [Script](../basic/scripts.md) before doing anything else.
 
@@ -177,8 +177,8 @@ important is that await can only be used in functions marked `async` (note that 
 ## Running our Scripts
 
 Now we want to start running our [hacking](../basic/hacking.md) [Script](../basic/scripts.md) so that it can start earning us
-money and experience. Our home computer only has 8GB of [RAM](../basic/ram.md) and we'll be using it for
-something else later. So instead, we'll take advantage of the [RAM](../basic/ram.md) on other machines.
+money and experience. Our home computer only has 8GB of [RAM](../basic/ram.md), and we'll be using it for
+something else later. Instead, we'll take advantage of the [RAM](../basic/ram.md) on other machines.
 
 Go to `Terminal` and enter the following command:
 
@@ -234,7 +234,7 @@ Here's what mine showed at the time I made this:
         ┃   Number of open ports required to NUKE: 1
         ┃   RAM: 32.00GB
         ┕ CSEC
-                Root Access: NO, Required hacking skill: 55
+              Root Access: NO, Required hacking skill: 55
               Number of open ports required to NUKE: 1
               RAM: 8.00GB
 
@@ -251,7 +251,8 @@ any open ports in order to NUKE. In other words, we can gain root access to all 
 servers and then run [Scripts](../basic/scripts.md) on them.
 
 First, let's determine how many threads of our [hacking](../basic/hacking.md) [Script](../basic/scripts.md) we can run.
-`Read more about multithreading scripts here`
+(See the page on [scripts](../basic/scripts.md) for more information on multithreading.)
+
 The [Script](../basic/scripts.md) we wrote
 uses 2.6GB of [RAM](../basic/ram.md). You can check this using the following `Terminal` command:
 
@@ -328,21 +329,21 @@ higher required hacking levels. Therefore, we should raise our hacking level. No
 will this let us hack more [Servers](../basic/servers.md), but it will also increase the effectiveness of our [hacking](../basic/hacking.md)
 against `n00dles`.
 
-The easiest way to train your hacking level is to visit Rothman University. You can do this by
-clicking the `City` tab on the left-hand navigation menu, or you can use Alt + w. Rothman University should be one of the buttons
-near the top. Click the button to go to the location.
+The easiest way to train your hacking level is to visit Rothman University. You can do this
+from the `City` tab on the left-hand navigation menu (click on it or press Alt + w). Rothman University should be the "U"
+near the bottom-right. Click the "U" to go to the location.
 
 Once you go to Rothman University, you should see a screen with several options. These
 options describe different courses you can take. You should click the first button, which
 says: `Study Computer Science (free)`.
 
 After you click the button, you will start studying and earning hacking experience. While you
-are doing this, you cannot interact with any other part of the game until you click the button
-that says "Stop taking course".
+are doing this, you cannot interact with any other part of the game until you click
+either "Stop taking course" or "Do something else simultaneously".
 
 Right now, we want a hacking level of 10. You need approximately 174 hacking experience to reach
-level 10. You can check how much hacking experience you have by clicking the `Stats` tab
-on the left-hand navigation menu, or by using Alt + c.
+level 10. You can check how much hacking experience you have by either hovering over the progress bar in the overview window
+or going to the `Stats` tab on the left-hand navigation menu (click on it or press Alt + c).
 Since studying at Rothman University earns you 1 experience per second, this will take
 174 seconds, or approximately 3 minutes. Feel free to do something in the meantime!
 
@@ -452,47 +453,43 @@ There are other ways to gain money in this game besides [Scripts](../basic/scrip
 
 ## Hacknet Nodes
 
-If you completed the introductory tutorial, you were already introduced to this method: Hacknet Nodes.
-Once you have enough money, you can start upgrading your Hacknet Nodes in order to increase
-your passive income stream. This is completely optional. Since each Hacknet Node upgrade
+If you completed the introductory tutorial, you were already introduced to this method: [Hacknet Nodes](../basic/hacknet_nodes.md).
+Once you have enough money, you can start upgrading your [Hacknet Nodes](../basic/hacknet_nodes.md) in order to increase
+your passive income stream. This is completely optional. Since each [Hacknet Node](../basic/hacknet_nodes.md) upgrade
 takes a certain amount of time to "pay itself off", it may not necessarily be in your best
 interest to use these.
 
-Nonetheless, Hacknet Nodes are a good source of income early in the game, although
-their effectiveness tapers off later on. If you do wind up purchasing and upgrading Hacknet Nodes,
+Nonetheless, [Hacknet Nodes](../basic/hacknet_nodes.md) are a good source of income early in the game, although
+their effectiveness tapers off later on. If you do wind up purchasing and upgrading [Hacknet Nodes](../basic/hacknet_nodes.md),
 I would suggest only upgrading their levels for now. I wouldn't bother with [RAM](../basic/ram.md) and Core
 upgrades until later on.
 
 ## Crime
 
-The best source of income right now is from crimes.
+The best source of income right now is from [crimes](../basic/crimes.md).
 This is because it not only gives you a large amount of money, but it also raises your
-hacking level. To commit crimes, click on the `City` tab on the left-hand
-navigation menu or use the Alt + w.
+hacking level. To commit [crimes](../basic/crimes.md), click on the `City` tab on the left-hand
+navigation menu or press Alt + w.
 Then, click on the link that says `The Slums`.
 
-In the Slums, you can attempt to commit a variety of crimes, each of which gives certain
-types of experience and money if successful. See crimes for more details.
+In the Slums, you can attempt to commit a variety of [crimes](../basic/crimes.md), each of which gives certain
+types of experience and money if successful. See [crimes](../basic/crimes.md) for more details.
 
 You are not always successful when you attempt to commit a crime. Nothing bad happens
-if you fail a crime, but you won't earn any money and the experience gained will be
-reduced. Raising your stats improves your chance of successfully committing a crime.
+if you fail a [crime](../basic/crimes.md), but you won't earn any money and the experience gained will be
+reduced. Raising your stats improves your chance of successfully committing a [crime](../basic/crimes.md).
 
-Right now, the best option is the `Rob Store` crime. This takes 60 seconds to attempt
-and gives $400k if successful. I suggest this crime because you don't have to click or check
-in too often since it takes a whole minute to attempt. Furthermore, it gives hacking experience,
-which is very important right now.
+Right now, the best option is the `Rob Store` [crime](../basic/crimes.md). This takes 60 seconds to attempt,
+gives $400k if successful, and gives hacking experience (which is very important right now).
 
-Alternatively, you can also use the `Shoplift` crime. This takes 2 seconds to attempt
-and gives $15k if successful. This crime is slightly easier and is more profitable
-than `Rob Store`, but it requires constant clicking and it doesn't give
-hacking experience.
+Alternatively, you can also use the `Shoplift` [crime](../basic/crimes.md). This takes 2 seconds to attempt
+and gives $15k if successful. This [crime](../basic/crimes.md) is slightly easier and more profitable
+than `Rob Store`, but doesn't give hacking experience.
 
 ## Work for a Company
 
-If you don't want to constantly check in on the game to commit crimes, there's another option
-that's much more passive: working for a company.
-This will not be nearly as profitable as crimes, but it's completely passive.
+If you don't want to commit [crimes](../basic/crimes.md), there's another option - working for a [company](../basic/companies.md)
+This will not be nearly as profitable as [crimes](../basic/crimes.md), but will provide [company](../basic/companies.md) [reputation](../basic/reputation.md)
 
 Go to the `City` tab on the left-hand navigation menu and then go to
 `Joe's Guns`. At `Joe's Guns`, there will be an option that says
@@ -501,12 +498,10 @@ will appear that simply says `Work`. Click this to start working.
 Working at `Joe's Guns` earns $110 per second and also grants some experience
 for every stat except hacking.
 
-Working for a company is completely passive. You can choose to focus on your work, do
+Working for a [company](../basic/companies.md), like [crime](../basic/crimes.md), is completely passive. You can choose to focus on your work, do
 something else simultaneously, or switch between those two. While you focus on work,
-you will not be able to do anything else in the game. If you do something else meanwhile,
-you will not gain reputation at the same speed. You can cancel working at any time.
-You'll notice that cancelling your work early causes you to lose out on some reputation
-gains, but you shouldn't worry about this. Company reputation isn't important right now.
+you will not be able to do anything else in the game. If you do something else simultaneously,
+you will not gain [reputation](../basic/reputation.md) at the same speed. You can cancel working at any time.
 
 Once your hacking hits level 75, you can visit `Carmichael Security` in the city
 and get a software job there. This job offers higher pay and also earns you
@@ -541,7 +536,6 @@ to open up SSH ports on [Servers](../basic/servers.md). This will allow you to h
 as many [Servers](../basic/servers.md) in the game require a certain number of opened ports in order for
 `NUKE.exe` to gain root access.
 
-When you are creating a program, you cannot interact with any other part of the game.
 Feel free to cancel your work on creating a program at any time, as your progress will
 be saved and can be picked back up later. `BruteSSH.exe` takes about
 10 minutes to complete.
@@ -551,7 +545,7 @@ be saved and can be picked back up later. `BruteSSH.exe` takes about
 On the `Create Programs` page, you will notice another program you can create
 called `AutoLink.exe`. If you don't mind waiting another 10-15 minutes, you should
 go ahead and create this program. It makes it much less tedious to connect to other [Servers](../basic/servers.md),
-but it's not necessary for progressing.
+but it's not necessary for progression.
 
 ## Joining your first faction: CyberSec
 
@@ -560,10 +554,11 @@ said this:
 
     Message received from unknown sender:
 
-    We've been watching you. Your skills are very impressive. But you're wasting
-    your talents. If you join us, you can put your skills to good use and change
-    the world for the better. If you join us, we can unlock your full potential.
-    But first, you must pass our test. Find and hack our server using the Terminal.
+    We've been watching you. Your skills are very impressive. But you're wasting your talents.
+    If you join us, you can put your skills to good use and change the world for the better.
+    If you join us, we can unlock your full potential.
+
+    But first, you must pass our test. Find and install the backdoor on our server.
 
     -CyberSec
 
@@ -576,9 +571,9 @@ your home computer. Enter the following `Terminal` commands to view the message:
     $ cat csec-test.msg
 
 This message is part of the game's main "quest-line". It is a message from the
-|CyberSec faction| that is asking you to pass their test.
-Passing their test is simple, you just have to find their [Server](../basic/servers.md) and hack it through
-the `Terminal`. Their [Server](../basic/servers.md) is called `CSEC`.
+`CyberSec` [faction](../basic/factions.md) that is asking you to pass their test.
+Passing their test is simple, you just have to find their [Server](../basic/servers.md), hack it, and
+install a backdoor through the `Terminal`. Their [Server](../basic/servers.md) is called `CSEC`.
 To do this, we'll use the `scan-analyze`
 Terminal command, just like we did before:
 
@@ -630,14 +625,14 @@ using the `BruteSSH.exe` program we created earlier. In `Terminal`:
     $ run NUKE.exe
     $ backdoor
 
-After you successfully install the backdoor, you should receive a faction
+After you successfully install the backdoor, you should receive a [faction](../basic/factions.md)
 invitation from `CyberSec` shortly afterwards. Accept it. If you accidentally
 reject the invitation, that's okay. Just go to the `Factions` tab
 (Alt + f) and you should see an option that lets you
 accept the invitation.
 
-Congrats! You just joined your first faction. Don't worry about doing anything
-with this faction yet, we can come back to it later.
+Congrats! You just joined your first [faction](../basic/factions.md). Don't worry about doing anything
+with this [faction](../basic/factions.md) yet, we can come back to it later.
 
 ## Using Additional Servers to Hack Joesguns
 
@@ -648,7 +643,7 @@ run [Scripts](../basic/scripts.md). We'll use the [RAM](../basic/ram.md) on thes
 
 ## Copying our Scripts
 
-The [Server](../basic/servers.md)'s we'll be using to run our [Scripts](../basic/scripts.md) are:
+The [Servers](../basic/servers.md) we'll be using to run our [Scripts](../basic/scripts.md) are:
 
 - `neo-net`
 - `zer0`
@@ -690,19 +685,19 @@ production rate of $20k per second and had earned a total of $70 million.
 After another 15 minutes, the production rate had increased to $25k per second
 and the [Scripts](../basic/scripts.md) had made an additional $55 million.
 
-Your results will vary based on how fast you earned money from crime/working/hacknet nodes,
+Your results will vary based on how fast you earned money from [crime](../basic/crimes.md)/[working](../basic/companies.md)/[hacknet nodes](../basic/hacknet_nodes.md),
 but this will hopefully give you a good indication of how much the [Scripts](../basic/scripts.md) can earn.
 
-In the meantime, we are going to be gaining reputation with the `CyberSec` faction.
+In the meantime, we are going to be gaining reputation with the `CyberSec` [faction](../basic/factions.md).
 Go to the `Factions` tab on the left-hand
-navigation menu, and from there select `CyberSec`. In the middle of
+navigation menu (Alt + F), and from there select `CyberSec`. In the middle of
 the page there should be a button for `Hacking Contracts`.
-Click it to start earning reputation for the `CyberSec` faction (as well
-as some hacking experience). The higher your hacking level, the more reputation you
-will gain. Note that while you are working for a faction, you can choose to not interact
-with the rest of the game in any way to gain reputation at full speed. You can also select to
-do something else simultaneously, gaining reputation a bit more slowly, until you focus again.
-You can cancel your faction work at any time with no penalty to your reputation gained so far.
+Click it to start earning [reputation](../basic/reputation.md) for the `CyberSec` [faction](../basic/factions.md)
+(as well as some hacking experience). The higher your hacking level, the more [reputation](../basic/reputation.md) you
+will gain. Note that while you are working for a [faction](../basic/factions.md), you can choose to not interact
+with the rest of the game in any way to gain [reputation](../basic/reputation.md) at full speed. You can also select to
+do something else simultaneously, gaining [reputation](../basic/reputation.md) a bit more slowly, until you focus again.
+You can cancel your [faction](../basic/factions.md) work at any time with no penalty to your [reputation](../basic/reputation.md) gained so far.
 
 ## Purchasing Upgrades and Augmentations
 
@@ -715,40 +710,40 @@ The most important thing to upgrade right now is the [RAM](../basic/ram.md) on y
 will allow you to run more [Scripts](../basic/scripts.md).
 
 To upgrade your [RAM](../basic/ram.md), go to the `City` tab and visit the company `Alpha Enterprises`.
-There will be an option that says `Purchase additional RAM for Home Computer`.
-Click it and follow the dialog box to upgrade your [RAM](../basic/ram.md).
+There will be a button that says `Upgrade 'home' RAM (8.00GB -> 16.00GB) - $1.010m`.
+Click it to upgrade your [RAM](../basic/ram.md).
 
 I recommend getting your home computer's [RAM](../basic/ram.md) to **at least** 128GB. Getting it even
 higher would be better.
 
 ## Purchasing your First Augmentations
 
-Once you get ~1000 reputation with the `CyberSec` faction, you can purchase
-your first `Augmentation` from them.
+Once you get ~1000 [reputation](../basic/reputation.md) with the `CyberSec` [faction](../basic/factions.md), you can purchase
+your first [Augmentation](../basic/augmentations.md) from them.
 
 To do this, go to the `Factions` tab on the left-hand navigation menu
 (Alt + f) and select `CyberSec`. There is an button
 near the bottom that says `Purchase Augmentations`. This will bring up a
-page that displays all of the Augmentations available from `CyberSec`. Some of them
+page that displays all of the [Augmentations](../basic/augmentations.md) available from `CyberSec`. Some of them
 may be locked right now. To unlock these, you will need to earn more
-reputation with `CyberSec`.
+[reputation](../basic/reputation.md) with `CyberSec`.
 
-Augmentations give persistent upgrades in the form of multipliers. These aren't very
+[Augmentations](../basic/augmentations.md) give persistent upgrades in the form of multipliers. These aren't very
 powerful early in the game because the multipliers are small. However, the effects
-of Augmentations stack multiplicatively **with each other**, so as you continue to install
-many Augmentations their effects will increase significantly.
+of [Augmentations](../basic/augmentations.md) stack multiplicatively **with each other**, so as you continue to install
+many [Augmentations](../basic/augmentations.md), their effects will increase significantly.
 
 Because of this, I would recommend investing more in [RAM](../basic/ram.md) upgrades for your home computer rather
-than Augmentations early on. Having enough [RAM](../basic/ram.md) to run many [Scripts](../basic/scripts.md) will allow you to make
-much more money, and then you can come back later on and get all these Augmentations.
+than [Augmentations](../basic/augmentations.md) early on. Having enough [RAM](../basic/ram.md) to run many [Scripts](../basic/scripts.md) will allow you to make
+much more money, and then you can come back later on and get all these [Augmentations](../basic/augmentations.md).
 
-Right now, I suggest purchasing at the very least the `Neurotrainer I` Augmentation from
+Right now, I suggest purchasing at the very least the `Neurotrainer I` [Augmentation](../basic/augmentations.md) from
 `CyberSec`. If you have the money to spare, I would also suggest getting `BitWire` and
-several levels of the `NeuroFlux Governor` (`NFG`) Augmentations. Note that each time
-you purchase an Augmentation,
+several levels of the `NeuroFlux Governor` (`NFG`) [Augmentations](../basic/augmentations.md). Note that each time
+you purchase an [Augmentation](../basic/augmentations.md),
 **the price of purchasing another increases by 90%**,
-so make sure you buy the most expensive Augmentation first. Don't worry, once you choose to
-install Augmentations, their prices will reset back to their original values.
+so make sure you buy the most expensive [Augmentation](../basic/augmentations.md) first. Don't worry, once you choose to
+install [Augmentations](../basic/augmentations.md), their prices will reset back to their original values.
 
 ## Next Steps
 
@@ -764,19 +759,19 @@ The following are a few things you may want to consider doing in the near future
 
 ## Installing Augmentations (and Resetting)
 
-If you've purchased any Augmentations, you'll need to install them before you
-actually gain their effects. Installing Augmentations is the game's "soft-reset" or "prestige"
-mechanic. You can [read more details about it here]().
+If you've purchased any [Augmentations](../basic/augmentations.md), you'll need to install them before you
+actually gain their effects. Installing [Augmentations](../basic/augmentations.md) is the game's "soft-reset" or "prestige"
+mechanic.
 
-To install your Augmentations, click the `Augmentations` tab on the left-hand navigation
-menu (Alt + a). You will see a list of all of the Augmentations
+To install your [Augmentations](../basic/augmentations.md), click the `Augmentations` tab on the left-hand navigation
+menu (Alt + a). You will see a list of all of the [Augmentations](../basic/augmentations.md)
 you have purchased. Below that, you will see a button that says `Install Augmentations`.
 Be warned, after clicking this there is no way to undo it (unless you load an earlier save).
 
 ## Automating the Script Startup Process
 
-Whenever you install Augmentations, all of your [Scripts](../basic/scripts.md) are killed and you'll have to
-re-run them. Doing this every time you install Augmentations would be very tedious and annoying,
+Whenever you install [Augmentations](../basic/augmentations.md), all of your [Scripts](../basic/scripts.md) are killed and you'll have to
+re-run them. Doing this every time you install [Augmentations](../basic/augmentations.md) would be very tedious and annoying,
 so you should write a [Script](../basic/scripts.md) to automate the process. Here's a simple example for a
 startup [Script](../basic/scripts.md). Feel free to adjust it to your liking.
 
@@ -829,7 +824,7 @@ startup [Script](../basic/scripts.md). Feel free to adjust it to your liking.
 ## Random Tips
 
 - Early on in the game, it's better to spend your money on upgrading [RAM](../basic/ram.md) and purchasing
-  new [Servers](../basic/servers.md) rather than spending it on Augmentations
+  new [Servers](../basic/servers.md) rather than spending it on [Augmentations](../basic/augmentations.md)
 - The more money available on a [Server](../basic/servers.md), the more effective the `hack()` and
   `grow()` functions will be. This is because both of these functions
   use percentages rather than flat values. `hack()` steals a percentage of a [Server](../basic/servers.md)'s

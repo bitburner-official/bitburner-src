@@ -113,4 +113,4 @@ It is also important that these 4 scripts finish in the order specified above, a
 
 Batches only function predictably when the target server is at minimum security and maximum money, so your script must also handle preparing a server for your batches. You can utilize batches to prepare a server by using no hack threads during preparation.
 
-Depending on your computer's performance as well as a few other factors, the necessary delay between script execution times may range between 20ms and 200ms, you want to fine-tune this value to be as low as possible while also avoiding your scripts finishing out of order. Anything lower than 20ms will not work due to javascript limitations.
+Depending on your computer's performance as well as a few other factors, the necessary delay between script execution times may range between 20ms and 200ms, you want to fine-tune this value to be as low as possible while also avoiding your scripts finishing out of order. Anything lower than 20ms will not work due to JavaScript limitations.
