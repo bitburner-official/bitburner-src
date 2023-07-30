@@ -1,29 +1,25 @@
 # Infiltration
 
-Infiltration is a gameplay mechanic that allows you to infiltrate a
-[Company](companies.md)'s facility to try and steal the [Company](companies.md)'s classified secrets.
+Infiltration is a gameplay mechanic that allows you to infiltrate a [Company](companies.md)'s facility to try and steal the [Company](companies.md)'s classified secrets.
 These secrets can be sold for money or for [Reputation](reputation.md) with a [Faction](factions.md).
 
 ## Overview
 
 Many companies have facilities that you can attempt to infiltrate.
-By infiltrating, you can steal classified [Company](companies.md) secrets and then sell
-these for money or for [Faction](factions.md) [Reputation](reputation.md). To try and infiltrate a [Company](companies.md),
-visit a [Company](companies.md) through the [World](world.md) menu. There will be an option that
-says 'Infiltrate [Company](companies.md)'.
+By infiltrating, you can steal classified [Company](companies.md) secrets and then sell these for money or for [Faction](factions.md) [Reputation](reputation.md).
+To try and infiltrate a [Company](companies.md), visit a [Company](companies.md) through the [World](world.md) menu.
+There will be an option that says 'Infiltrate [Company](companies.md)'.
 
-When infiltrating a [Company](companies.md) you will be presented with short active challenges.
+When infiltrating a [Company](companies.md), you will be presented with short active challenges.
 None of the challenges use the mouse.
 
-The difficulty at the top lowers with better combat stats and charisma. It is not recommended
-to attempt infiltrations above mid-normal.
+The difficulty at the top lowers with better combat stats and charisma.
+It is not recommended to attempt infiltrations above mid-normal.
 
-The `maximum level` is the number of challenges you will need to pass to receive
-the infiltration reward.
+The `maximum level` is the number of challenges you will need to pass to receive the infiltration reward.
 
-Every time you fail an infiltration challenge, you will take damage based on the
-difficulty of the infiltration. If you are reduced to `0` hp or below, the
-infiltration will immediately end.
+Every time you fail an infiltration challenge, you will take damage based on the difficulty of the infiltration.
+If you are reduced to `0` hp or below, the infiltration will immediately end.
 
 - Most use spacebar as `action`
 - Some use WASD or arrows interchangeably.
@@ -32,10 +28,12 @@ infiltration will immediately end.
 ### Slash when his guard is down!
 
 Press space when the guard is preparing to attack you.
-There's 3 phases
-The first is guarding, where attacking back will result in failure.
-The 2nd is preparing, where attacking will result in a victory.
-The 3rd is attack, where the guard will attack you resulting in failure.
+
+There are 3 phases:
+
+1. guarding - attacking back will result in failure.
+2. preparing - attacking will result in a victory.
+3. attacking - the guard will attack you resulting in failure.
 
 ### Close the brackets
 
@@ -51,7 +49,7 @@ Use the arrows to find a compliment for the guard.
 
 ### Enter the Code!
 
-Match the arrows as they appears.
+Match the arrows as they appear.
 
 ### Match the symbols!
 
@@ -59,8 +57,8 @@ Move the cursor to the matching symbol and press space to confirm.
 
 ### Remember all the mines!
 
-At first the cursor cannot be moved, remember the positions of the X.
-Then move the cursor and press space to mark the mines on the board.
+At first, the cursor cannot be moved - remember the positions of the mines.  
+Next, move the cursor and press space to mark the mines on the board.
 
 ### Cut the wires
 

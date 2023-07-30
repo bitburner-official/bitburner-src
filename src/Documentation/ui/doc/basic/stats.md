@@ -1,7 +1,6 @@
 # Stats
 
-The player has several stats that can be increased in order to progress
-in the game.
+The player has several stats that can be increased in order to progress in the game.
 
 ## Hacking
 
@@ -12,7 +11,7 @@ Affects:
 - Time it takes to hack a server
 - Time it takes to execute the `grow()` and `weaken()` function
 - Chance to successfully hack a server
-- Percent money stolen when hacking a server
+- Percent of money stolen when hacking a server
 - Success rate of certain [crimes](crimes.md)
 - Time it takes to create a program
 - [Faction](factions.md) [Reputation](reputation.md) gain when carrying out Hacking Contracts or Field Work
