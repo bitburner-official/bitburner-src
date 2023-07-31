@@ -52,7 +52,7 @@ Create or update a file.
 
 ## `getFile`
 
-Read a file and it's content.
+Read a file and its content.
 
         {
             "jsonrpc": "2.0",
