@@ -1,4 +1,4 @@
-import { StockMarketConstants } from "src/StockMarket/data/Constants";
+import { StockMarketConstants } from "../../src/StockMarket/data/Constants";
 import { Player } from "../../src/Player";
 
 import { Company } from "../../src/Company/Company";
