@@ -31,11 +31,6 @@ export const CONSTANTS: {
   PurchasedServerMaxRam: number;
   MultipleAugMultiplier: number;
   TorRouterCost: number;
-  WSEAccountCost: number;
-  TIXAPICost: number;
-  MarketData4SCost: number;
-  MarketDataTixApi4SCost: number;
-  StockMarketCommission: number;
   HospitalCostPerHp: number;
   IntelligenceCrimeWeight: number;
   IntelligenceInfiltrationWeight: number;
@@ -140,14 +135,7 @@ export const CONSTANTS: {
   // TOR Router
   TorRouterCost: 200e3,
 
-  // Stock market
-  WSEAccountCost: 200e6,
-  TIXAPICost: 5e9,
-  MarketData4SCost: 1e9,
-  MarketDataTixApi4SCost: 25e9,
-  StockMarketCommission: 100e3,
-
-  // Hospital/Health
+   // Hospital/Health
   HospitalCostPerHp: 100e3,
 
   // Intelligence-related constants
