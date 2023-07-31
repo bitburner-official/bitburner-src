@@ -135,7 +135,7 @@ export const CONSTANTS: {
   // TOR Router
   TorRouterCost: 200e3,
 
-   // Hospital/Health
+  // Hospital/Health
   HospitalCostPerHp: 100e3,
 
   // Intelligence-related constants

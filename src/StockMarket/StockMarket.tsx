@@ -195,7 +195,6 @@ function stockMarketCycle(): void {
   }
 }
 
-
 const cyclesPerStockUpdate = StockMarketConstants.msPerStockUpdate / CONSTANTS.MilliPerCycle;
 export function processStockPrices(numCycles = 1): void {
   if (StockMarket.storedCycles == null || isNaN(StockMarket.storedCycles)) {
