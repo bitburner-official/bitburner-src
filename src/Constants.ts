@@ -88,9 +88,9 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.3.2",
+  VersionString: "2.4.0",
   isDevBranch: true,
-  VersionNumber: 32,
+  VersionNumber: 33,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -227,42 +227,53 @@ export const CONSTANTS: {
 
   InfiniteLoopLimit: 2000,
 
-  Donations: 79,
+  Donations: 113,
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3.2 dev - Changelog updated 7/12/2023
-----------------------------------------
+## v2.4.0 - Death to readthedocs
 
-Also see 2.3.1 release notes: https://github.com/bitburner-official/bitburner-src/releases/tag/v2.3.1
+NETSCRIPT:
 
-GENERAL / MISC:
+- Added ns.getFunctionRamCost
+- Added run and install identifier
 
-* Added documentation browser ingame. This is the new primary location for game documentation. (@hydroflame)
-* Syntax errors now show helpful details at script editor / terminal (@bezrodnov)
-* A script's ram will no longer free up twice if it was killed during its own atExit (@d0sboots)
-* Ram calculation should now be able to handle barrel files and renamed exports. (@G4mingJon4s)
-* ns.printRaw and ns.tprintRaw are now documented functions. (@Snarling)
-* "Back" button from faction augs leads to previous page, instead of always to main faction screen (@bezrodnov)
-* Addressed an issue where money hacked was being Math.floored incorrectly (@MeggalBozale)
-* Aliases that reference their own name stop expanding after first replacement. (@NilsRamstoeck)
-* Hitting enter at the terminal with nothing typed in will print out an empty line (@rqzcho)
-* Fixed a bug where dragging a tail window titlebar could also scroll the tail window content (@bezrodnov)
-* Show more info in the savegame comparison tool (@bezrodnov)
-* Fixed Script Editor indent option having backwards behavior. (@Snarling)
-* Internal code refactors (@bezrodnov, @Snarling)
-* Documentation fixes (@tdnzr, @amuck-gorilla, @rodneygauna, @hydroflame, @Snarling)
-* Nerf noodle bar
+CORP:
 
-SPOILER SECTIONS:
+- Add product investment info to API
+- Prevent issues with invalid materials in warehouse
+- Update exportMaterial amount to number | string
+- Validate city with office for starting product development
 
-------------
+DOCUMENTATION:
 
-CORPORATION:
+- readthedoc.bitburner.whatever has been fully deprecated.
+  That documentation is now available in-game. This will make
+  documentation easier to maintain and easier to keep locked
+  with the specific version of the game you're playing.
+  It's also in .md, which is more common than .rst
+- Add printRaw and tprintRaw docs
+- Better docs for ascension result
+- Complete the spec for hamming codes enhancement
+- Fix example code for scp
 
-* ns.corporation.hireEmployee now actually defaults to Unassigned instead of failing. (@Snarling)
-* ns.corporation.getProduct now provides investment amounts (@Snarling)
-* Invalid materials for a division can no longer be bought through the API. (@Snarling)
-* Fixed a React error that could occur if a division had invalid materials. (@Snarling)
-`,
+MISC.
+
+- Fixed a bug where RAM calculation would be innacurate for near copy of scripts on different servers
+- Fix mislead error message about ram miscalculation when script contains syntax errors.
+- Fix bug in calculating faction donation amount
+- Fix bug where Sleeve would have difficulty doing certain University activities.
+- Fix regression for crime in progress
+- Prevent log scrolling on Active Script window drag
+- show all skills in import save comparison tool
+- Fix extremely minor calculation error where money drained after hack was being floor()
+- Fix ram evaluation to include more edge-cases
+- Fix potential double-free in atExit()
+
+CODEBASE:
+
+- Work on Enum Helper + Reorganise
+- enforce eslint react checks
+- corp code style improvement
+- Added a lot of typesafety`,
 };

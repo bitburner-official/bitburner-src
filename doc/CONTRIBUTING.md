@@ -60,12 +60,8 @@ called `npm` is installed as well.
 
 Not all code contributions will be accepted. The safest way to ensure
 that you don't waste time working on something that gets rejected is to
-run your idea(s)/plan(s) past [danielyxie](https://github.com/danielyxie) first.
-You can contact him through:
-
-- Github
-- Discord
-- [Reddit](https://www.reddit.com/user/chapt3r/)
+run your idea(s)/plan(s) past the developpers first.
+You can contact him through Discord.
 
 Otherwise, here are some general guidelines for determining what types of
 changes are okay to contribute:

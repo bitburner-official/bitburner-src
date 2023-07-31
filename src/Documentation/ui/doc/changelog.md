@@ -1,6 +1,50 @@
-.. \_changelog:
-
 # Changelog
+
+## v2.4.0 - Death to readthedocs
+
+NETSCRIPT:
+
+- Added ns.getFunctionRamCost
+- Added run and install identifier
+
+CORP:
+
+- Add product investment info to API
+- Prevent issues with invalid materials in warehouse
+- Update exportMaterial amount to `number | string`
+- Validate city with office for starting product development
+
+DOCUMENTATION:
+
+- readthedoc.bitburner.whatever has been fully deprecated.
+  That documentation is now available in-game. This will make
+  documentation easier to maintain and easier to keep locked
+  with the specific version of the game you're playing.
+  It's also in `.md`, which is more common than `.rst`
+- Add `printRaw` and `tprintRaw` docs
+- Better docs for `ascension` result
+- Complete the spec for hamming codes enhancement
+- Fix example code for `scp`
+
+MISC.
+
+- Fixed a bug where RAM calculation would be innacurate for near copy of scripts on different servers
+- Fix mislead error message about ram miscalculation when script contains syntax errors.
+- Fix bug in calculating faction donation amount
+- Fix bug where Sleeve would have difficulty doing certain University activities.
+- Fix regression for crime in progress
+- Prevent log scrolling on Active Script window drag
+- show all skills in import save comparison tool
+- Fix extremely minor calculation error where money drained after hack was being floor()
+- Fix ram evaluation to include more edge-cases
+- Fix potential double-free in atExit()
+
+CODEBASE:
+
+- Work on Enum Helper + Reorganise
+- enforce eslint react checks
+- corp code style improvement
+- Added a lot of typesafety
 
 ## v2.3.1 - Bugfixes 7 June 2023
 
@@ -457,8 +501,8 @@ API
 - Corp functions now return copy of constant arrays instead of the original (by @Mughur)
 - All the player sub-objects need to be copied for `getPlayer`. (by @MageKing17)
 - add corp get<constant> functions, UI (by @Mughur)
-- [danielyxie/bitburner#3860] destroyW0r1dD43m0n now properly gives achievements
-- [danielyxie/bitburner#3890] favor now properly syncs across pages and the Donate achievement is now given correctly (by @Aerophia)
+- destroyW0r1dD43m0n now properly gives achievements
+- favor now properly syncs across pages and the Donate achievement is now given correctly (by @Aerophia)
 - getCrimeStats use bitnode multipliers in the output of crime stats (by @phyzical)
 - add singularity function for exporting game save back (by @phyzical)
 
@@ -466,11 +510,11 @@ CODING CONTRACTS
 
 - inconsistent probability for generation between online and offline (by @quacksouls)
 - Don't stringify answer if already a string (by @alainbryden)
-- [danielyxie/bitburner#3755] change input handling for contract attempts (by @Snarling)
+- change input handling for contract attempts (by @Snarling)
 
 CORPORATION
 
-- [danielyxie/bitburner#3880], [danielyxie/bitburner#3876], [danielyxie/bitburner#3322], [danielyxie/bitburner#3138] Bunch of corporation fixes (by @Mughur)
+- Bunch of corporation fixes (by @Mughur)
 - Gave investors some economics classes (by @Mughur)
 - Limit shareholder priority on newly issued shares (by @Undeemiss)
 - dont take research points for something already researched via api (by @phyzical)
@@ -478,14 +522,14 @@ CORPORATION
 CORPORATION API
 
 - Fix up param order for limitProductProduction to match docs (by @phyzical)
-- [danielyxie/bitburner#3655] Expose exports from Material (by @Rasmoh)
+- Expose exports from Material (by @Rasmoh)
 
 DOCUMENTATION
 
 - update docs a bit more, amending some BN and SF texts (by @Mughur)
 - Fixed Argument order for scp() (by @njalooo)
 - Some typo fixes in Netscript functions (by @quacksouls)
-- [danielyxie/bitburner#4033] Why use Coding Contract API (by @quacksouls)
+- Why use Coding Contract API (by @quacksouls)
 - typo fix in description of Caesar cipher (by @quacksouls)
 - typo fix in terminal.rst (by @BugiDev)
 - Update bitburner.sleeve.settobladeburneraction.md (by @borisflagell)
@@ -496,32 +540,31 @@ DOCUMENTATION
 NETSCRIPT
 
 - Added functions to resize, move, and close tail windows
-- [danielyxie/bitburner#2376] ns.exit now exits immediately (by @Snarling)
-- [danielyxie/bitburner#4055] Fix dynamic ram check (by @Snarling)
-- [danielyxie/bitburner#4037] ns1 wraps deeper layers correctly. (by @Snarling)
-- [danielyxie/bitburner#3963] Prevent bladeburner.setActionLevel from setting invalid action levels (by @MPJ-K)
+- ns.exit now exits immediately (by @Snarling)
+- Fix dynamic ram check (by @Snarling)
+- ns1 wraps deeper layers correctly. (by @Snarling)
+- Prevent bladeburner.setActionLevel from setting invalid action levels (by @MPJ-K)
 - Typo fixes in CodingContract, Hacknet, Singularity APIs (by @quacksouls)
 - Fix a typo in doc of Singularity.travelToCity() (by @quacksouls)
 - Update netscript definition file for scp, write, read, and flags (by @Snarling)
 - Correct missing ! for boolean coercion in Corporation.createCorporation(). (by @Risenafis)
 - Normalized Stock API logging (by @Snarling)
-- [danielyxie/bitburner#3992] allow null duration in toast ns function (by @RollerKnobster)
+- allow null duration in toast ns function (by @RollerKnobster)
 - Correct missing `!` for boolean coercion in `singularity.workForCompany()`. (by @MageKing17)
 - ns.scp and ns.write are now synchronous + fix exec race condition (by @Snarling)
-- [danielyxie/bitburner#2931] atExit now allows synchronous ns functions (by @Snarling)
+- atExit now allows synchronous ns functions (by @Snarling)
 - Improve real life CPU and memory performance of scripts. (by @Snarling)
 - Prompt Add user friendly message to avoid throwing recovery screen for invalid choices (by @phyzical)
-- [danielyxie/bitburner#4081] Rerunning a script from tail window recalculates ram usage (by @Snarling)
-- [danielyxie/bitburner#3962] The correct script will be closed even if the player modifies args (v2.0) (by @Snarling)
+- Rerunning a script from tail window recalculates ram usage (by @Snarling)
+- The correct script will be closed even if the player modifies args (v2.0) (by @Snarling)
 - Corrected ns formula for infiltration rewards (by @ezylot)
 - Add singularity check for finishing company work (by @Snarling)
 
 SLEEVES
 
-- [danielyxie/bitburner#3819] Allow using the regeneration chamber with sleeves to heal them. (by @coderanger)
-- [danielyxie/bitburner#4063] fix crash when player tries to assign more than 3 sleeves to Bladeburner contracts (by @Snarling)
-- [danielyxie/bitburner#4051] Sleeves no longer crash when player quits company sleeve was working (by @Snarling)
-- [danielyxie/bitburner#4022], [danielyxie/bitburner#4024], [danielyxie/bitburner#4025], [danielyxie/bitburner#3998] (by @Mughur)
+- Allow using the regeneration chamber with sleeves to heal them. (by @coderanger)
+- fix crash when player tries to assign more than 3 sleeves to Bladeburner contracts (by @Snarling)
+- Sleeves no longer crash when player quits company sleeve was working (by @Snarling)
 - Sleeve crime gain bitnode multiplier fix (by @Mughur)
 
 REMOTE FILE API
@@ -531,30 +574,30 @@ REMOTE FILE API
 
 UI
 
-- [danielyxie/bitburner#2962] add a setting to display middle time unit in Time Elapsed String (by @hydroflame)
-- [danielyxie/bitburner#4106] fix incorrect experience display in Crime UI. (by @SilverNexus)
+- add a setting to display middle time unit in Time Elapsed String (by @hydroflame)
+- fix incorrect experience display in Crime UI. (by @SilverNexus)
 - Bitnode stats now show if BB/Corporation are disabled (by @Kelenius)
 - Removed three empty lines from BB status screen (by @Kelenius)
 - Add missing space to BN7 description (by @hex7cd)
 - Improvements to crime work UI (by @Kelenius)
-- [danielyxie/bitburner#3975], [danielyxie/bitburner#3882] Script Editor more responsive on resize, and fix dirty file indicator (by @Snarling)
+- Script Editor more responsive on resize, and fix dirty file indicator (by @Snarling)
 
 MISC
 
 - Added weight to GangMemberTask construction call (by @ezylot)
 - Fix ANSI display bugs (by @Snarling)
 - Debounce updateRAM calls in script editor. (by @Snarling)
-- [danielyxie/bitburner#3979] Allow characters & and ' in filenames (by @Snarling)
-- [danielyxie/bitburner#3965] Corrected tutorial text (by @mihilt)
+- Allow characters & and ' in filenames (by @Snarling)
+- Corrected tutorial text (by @mihilt)
 - Fix infil definitions.d.ts (by @phyzical)
 - Modify PR template (by @Hoekstraa)
 - crime gains, sleeve gang augs and faq (by @Mughur)
-- [danielyxie/bitburner#3649] Preventing server starting security level from going above 100 (by @Shiiyu)
+- Preventing server starting security level from going above 100 (by @Shiiyu)
 - Adds Shadows of Anarchy (by @Lagicrus)
 - Added intormation about hacking managers to hacking algorithms page (by @Kelenius)
 - Fix Jest CI Error (by @geggleto)
 - multiple hasAugmentation checks didn't check if the augment was installed (by @Mughur)
-- [danielyxie/bitburner#2442] & [danielyxie/bitburner#2795] (by @G4mingJon4s)
+- & (by @G4mingJon4s)
 - Adds info regarding augments and focus (by @Lagicrus)
 - Removed console.log line (by @dhosborne)
 - Update some doc (by @hydroflame)
@@ -1213,7 +1256,7 @@ Stanek Gift
 ** Documentation **
 
 - The new documentation for the netscript API is available at
-  https://github.com/danielyxie/bitburner/blob/dev/markdown/bitburner.ns.md
+  https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md
   This documentation is used in-game to validate the code, in-editor to autocomplete, and
   for users to reference. This is a huge quality of life improvements for me.
 
@@ -3078,7 +3121,7 @@ Stanek Gift
 - Added 'var' declarations in Netscript 1.0 (only works with 'var', not 'let' or 'const')
 - Script base RAM cost is now 1.6 GB (increased from 1.4 GB)
 - While/for loops and if statements no longer cost RAM in scripts
-- Made short-circuit evaluation logic more consistent in Netscript 1.0 (see https://github.com/danielyxie/bitburner/issues/308)
+- Made short-circuit evaluation logic more consistent in Netscript 1.0
 - Changelog button in the Options menu now links to the new Changelog URL (by Github user thePalindrome)
 - Skill level calculation is now 'smoother' (by Github user hydroflame)
 - Added a button to 'beautify' scripts in the text editor (by Github user hydroflame)

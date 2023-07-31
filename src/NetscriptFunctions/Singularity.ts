@@ -780,12 +780,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           helpers.log(ctx, () => `Invalid job: '${field}'.`);
           return false;
       }
-      // TODO https://github.com/danielyxie/bitburner/issues/1378
-      // The player object's applyForJob function can return string with special error messages
-      // if (isString(res)) {
-      //   helpers.log(ctx,"applyToCompany",()=> res);
-      //   return false;
-      // }
       if (res) {
         helpers.log(
           ctx,

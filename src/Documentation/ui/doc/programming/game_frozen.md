@@ -6,7 +6,7 @@ If your game is frozen or stuck in any way, then the most likely culprit is an
 infinitely running loop in your script. To get past the freezing, run the game with
 `?noScripts` in the URL:
 
-[Link to no freeze](https://danielyxie.github.io/bitburner/?noScripts)
+[Link to no freeze](https://bitburner-official.github.io?noScripts)
 
 Then, to fix your script, make sure you have a `sleep()` or any other timed function like `hack()` or
 `grow()` in any infinite loops:
