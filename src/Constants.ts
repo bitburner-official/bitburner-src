@@ -236,5 +236,10 @@ export const CONSTANTS: {
 See 2.4.0 changelog at:
 https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/ui/doc/changelog.md
 
-No changes since 2.4.0`,
+Changes below include spoilers.
+
+### NETSCRIPT:
+
+* ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined. (@Snarling)
+`,
 };
