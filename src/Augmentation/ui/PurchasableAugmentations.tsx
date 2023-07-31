@@ -223,7 +223,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
                       {aug.name}
                       {aug.name === AugmentationName.NeuroFluxGovernor && ` - Level ${augLevel + 1}`}
                     </Typography>
-                    <Typography>{description}</Typography>
+                    <Typography whiteSpace={"pre-wrap"}>{description}</Typography>
                   </>
                 }
               >

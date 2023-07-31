@@ -25,7 +25,7 @@ export function PurchaseAugmentationModal({ aug, faction, onClose, open }: IProp
   return (
     <Modal open={open} onClose={onClose}>
       <Typography variant="h4">{aug.name}</Typography>
-      <Typography>
+      <Typography whiteSpace={"pre-wrap"}>
         {aug.info}
         <br />
         <br />

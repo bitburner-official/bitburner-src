@@ -71,7 +71,7 @@ export function InstalledAugmentations(): React.ReactElement {
             <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
               {selectedAug.name}
             </Typography>
-            <Typography sx={{ maxHeight: 350, overflowY: "scroll" }}>
+            <Typography sx={{ maxHeight: 350, overflowY: "scroll", whiteSpace: "pre-wrap" }}>
               {(() => {
                 const aug = Augmentations[selectedAug.name];
 

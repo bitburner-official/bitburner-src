@@ -182,7 +182,7 @@ export const GraftingRoot = (): React.ReactElement => {
 
                 <br />
 
-                <Typography>
+                <Typography whiteSpace={"pre-wrap"}>
                   {(() => {
                     const info =
                       typeof selectedAugmentation.info === "string" ? (

@@ -1,4 +1,5 @@
 export enum AugmentationName {
+  NeuroFluxGovernor = "NeuroFlux Governor",
   Targeting1 = "Augmented Targeting I",
   Targeting2 = "Augmented Targeting II",
   Targeting3 = "Augmented Targeting III",
@@ -55,7 +56,6 @@ export enum AugmentationName {
   HacknetNodeNICUpload = "Hacknet Node NIC Architecture Neural-Upload",
   HacknetNodeKernelDNI = "Hacknet Node Kernel Direct-Neural Interface",
   HacknetNodeCoreDNI = "Hacknet Node Core Direct-Neural Interface",
-  NeuroFluxGovernor = "NeuroFlux Governor",
   Neurotrainer1 = "Neurotrainer I",
   Neurotrainer2 = "Neurotrainer II",
   Neurotrainer3 = "Neurotrainer III",

@@ -89,7 +89,7 @@ export const CONSTANTS: {
   LatestUpdate: string;
 } = {
   VersionString: "2.4.0",
-  isDevBranch: true,
+  isDevBranch: false,
   VersionNumber: 33,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
