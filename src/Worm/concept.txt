@@ -1,0 +1,66 @@
+## Lore (HIGHLY WIP):
+Player found BN with a spreading virus. The intruder seems to have great control over the simulation. Analysing the virus showed that emulating a similar version of the worm grants significant bonuses.
+
+Phrasing / idea not final. May (likely) be scrapped.
+
+## Mechanic:
+
+The "worm" is a x number long series of numbers in the range of [0, 1] (or [-1, 1] ?).
+The player can guess a series they provide and get a value of how close the guess is.
+The player can set their guess to a provided series and get bonuses according to the similarity of the guess and the actual series.
+Every x amounts of time, the worm slightly changes.
+The player can specify multiple difficulties. This changes how fast and how much the worm changes and how many formulas make up the worm.
+This allows for the player to either guess manually with slow and small changes to the worm,
+while allowing the player to use advanced algorithms for higher bonuses.
+
+## Difficulties:
+The difficulties can change these aspects:
+ - rate of change (both speed and amount)
+ - number of formulas making up the worm
+ - (length of worm)
+
+Possible difficulties:
+ - Manual mode
+	Very weak bonuses
+	Long window between changes
+	Tiny changes to the worm
+	Intended to allow the player to guess manually
+ - Normal mode
+  Average bonuses
+	Normal window between changes
+	Tiny changes to the worm
+	Other difficulties are based on this difficulty
+ - Fast mode
+  Strong bonuses
+	Fast changes to the worm
+	Big changes to the worm
+	Intended to be used with scripts
+
+
+## UI:
+Requirements:
+- Description and explanation of the Mechanic
+- Feedback on the fitness (similarity) of the guess
+- Manual input field
+
+Ideas for visuals:
+- The fitness of the worm could be a simple progress bar (more is better)
+- (It could also be a snake walking on a hamiltonian cycle (faster is better))
+
+## API:
+- "testGuess", which doesn't set the worm and only gives a fitness value
+ (like 1 if it's the exact series and 0 if it is completely off)
+- "setGuess", which sets the guess to be used.
+- "setDifficulty", which sets the difficulty to be used.
+- "setBonus", which sets the bonus to be used.
+
+## Bonuses:
+- Stanek charge increase:
+ Increases the charges acquired per thread by some percentage
+
+- Hacking time multiplier:
+ Don't know how to phrase this:
+ Weaken-time is 4x Hack-time and Grow-time is 3.2x Hack-time (or something like that)
+ This decreases the time difference by some percentage
+ Like 4x -> 2x, 3.2x -> 1.6x (highly exaggerated)
+
