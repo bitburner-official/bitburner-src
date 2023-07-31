@@ -88,8 +88,8 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.4.0",
-  isDevBranch: false,
+  VersionString: "2.4.1dev",
+  isDevBranch: true,
   VersionNumber: 33,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
@@ -231,49 +231,10 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.4.0 - Death to readthedocs
+## v2.4.1dev - Last changelog update 7/31/23
 
-NETSCRIPT:
+See 2.4.0 changelog at:
+https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/ui/doc/changelog.md
 
-- Added ns.getFunctionRamCost
-- Added run and install identifier
-
-CORP:
-
-- Add product investment info to API
-- Prevent issues with invalid materials in warehouse
-- Update exportMaterial amount to number | string
-- Validate city with office for starting product development
-
-DOCUMENTATION:
-
-- readthedoc.bitburner.whatever has been fully deprecated.
-  That documentation is now available in-game. This will make
-  documentation easier to maintain and easier to keep locked
-  with the specific version of the game you're playing.
-  It's also in .md, which is more common than .rst
-- Add printRaw and tprintRaw docs
-- Better docs for ascension result
-- Complete the spec for hamming codes enhancement
-- Fix example code for scp
-
-MISC.
-
-- Fixed a bug where RAM calculation would be innacurate for near copy of scripts on different servers
-- Fix mislead error message about ram miscalculation when script contains syntax errors.
-- Fix bug in calculating faction donation amount
-- Fix bug where Sleeve would have difficulty doing certain University activities.
-- Fix regression for crime in progress
-- Prevent log scrolling on Active Script window drag
-- show all skills in import save comparison tool
-- Fix extremely minor calculation error where money drained after hack was being floor()
-- Fix ram evaluation to include more edge-cases
-- Fix potential double-free in atExit()
-
-CODEBASE:
-
-- Work on Enum Helper + Reorganise
-- enforce eslint react checks
-- corp code style improvement
-- Added a lot of typesafety`,
+No changes since 2.4.0`,
 };
