@@ -118,6 +118,7 @@ const hacknet = {
 
 // Stock API
 const stock = {
+  getConstants: 0,
   hasWSEAccount: 0.05,
   hasTIXAPIAccess: 0.05,
   has4SData: 0.05,
@@ -348,7 +349,7 @@ const grafting = {
 
 const corporation = {
   hasCorporation: 0, // This one is free
-  getConstants: RamCostConstants.Corporation,
+  getConstants: 0,
   getIndustryData: RamCostConstants.Corporation,
   getMaterialData: RamCostConstants.Corporation,
   issueNewShares: RamCostConstants.Corporation,

@@ -228,6 +228,11 @@ Changes below include spoilers.
 
 ### NETSCRIPT:
 
+* Added ns.stock.getConstants (@Snarling)
 * ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined. (@Snarling)
+
+### Internal Code Refactors
+
+* Reorganize game constants (@zerbosh)
 `,
 };
