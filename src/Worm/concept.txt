@@ -1,5 +1,5 @@
 ## Lore (HIGHLY WIP):
-Player found BN with a spreading virus. The intruder seems to have great control over the simulation. Analysing the virus showed that emulating a similar version of the worm grants significant bonuses.
+As the player explored a complex simulation, they came across a mysterious virus spreading rapidly within its virtual world. Surprisingly, this elusive intruder seemed to have unmatched control over the simulation, suggesting a deep understanding of its workings. While examining its encrypted code, they made an interesting discovery: creating a similar version of the worm could provide substantial benefits. The virus had secretly built a large network of connected nodes throughout the virtual landscape, offering the player access to a wealth of resources and information.
 
 Phrasing / idea not final. May (likely) be scrapped.
 
@@ -35,7 +35,6 @@ Possible difficulties:
 	Fast changes to the worm
 	Big changes to the worm
 	Intended to be used with scripts
-
 
 ## UI:
 Requirements:
