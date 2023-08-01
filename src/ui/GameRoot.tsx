@@ -238,7 +238,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
 		case Page.Worm: {
-			mainPage = <WormRoot />;
+			mainPage = <WormRoot worm={Player.worm}/>;
 			break;
 		}
     case Page.Stats: {
