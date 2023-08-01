@@ -7,8 +7,6 @@ import { Server } from "../../src/Server/Server";
 import { buyStock, sellStock, shortStock, sellShort } from "../../src/StockMarket/BuyingAndSelling";
 import { Order } from "../../src/StockMarket/Order";
 import {
-  forecastForecastChangeFromCompanyWork,
-  forecastForecastChangeFromHack,
   influenceStockThroughCompanyWork,
   influenceStockThroughServerGrow,
   influenceStockThroughServerHack,
@@ -26,7 +24,6 @@ import {
   SymbolToStockMap,
 } from "../../src/StockMarket/StockMarket";
 import {
-  forecastChangePerPriceMovement,
   getBuyTransactionCost,
   getSellTransactionGain,
   processTransactionForecastMovement,
@@ -580,15 +577,17 @@ describe("Stock Market Tests", function () {
   describe("Forecast Movement Processor Function", function () {
     // N = 1 is the original forecast
     function getNthForecast(origForecast: number, n: number): number {
-      return origForecast - forecastChangePerPriceMovement * (n - 1);
+      return origForecast - StockMarketConstants.forecastChangePerPriceMovement * (n - 1);
     }
 
     function getNthForecastForecast(origForecastForecast: number, n: number): number {
       if (stock.otlkMagForecast > 50) {
-        const expected = origForecastForecast - forecastChangePerPriceMovement * (n - 1) * (stock.mv / 100);
+        const expected =
+          origForecastForecast - StockMarketConstants.forecastChangePerPriceMovement * (n - 1) * (stock.mv / 100);
         return expected < 50 ? 50 : expected;
       } else if (stock.otlkMagForecast < 50) {
-        const expected = origForecastForecast + forecastChangePerPriceMovement * (n - 1) * (stock.mv / 100);
+        const expected =
+          origForecastForecast + StockMarketConstants.forecastChangePerPriceMovement * (n - 1) * (stock.mv / 100);
         return expected > 50 ? 50 : expected;
       } else {
         return 50;
@@ -1274,7 +1273,9 @@ describe("Stock Market Tests", function () {
       it("should decrease a stock's second-order forecast when all of its money is hacked", function () {
         const oldSecondOrderForecast = stock.otlkMagForecast;
         influenceStockThroughServerHack(server, server.moneyMax);
-        expect(stock.otlkMagForecast).toEqual(oldSecondOrderForecast - forecastForecastChangeFromHack);
+        expect(stock.otlkMagForecast).toEqual(
+          oldSecondOrderForecast - StockMarketConstants.forecastForecastChangeFromHack,
+        );
       });
 
       it("should not decrease the stock's second-order forecast when no money is stolen", function () {
@@ -1288,7 +1289,9 @@ describe("Stock Market Tests", function () {
       it("should increase a stock's second-order forecast when all of its money is grown", function () {
         const oldSecondOrderForecast = stock.otlkMagForecast;
         influenceStockThroughServerGrow(server, server.moneyMax);
-        expect(stock.otlkMagForecast).toEqual(oldSecondOrderForecast + forecastForecastChangeFromHack);
+        expect(stock.otlkMagForecast).toEqual(
+          oldSecondOrderForecast + StockMarketConstants.forecastForecastChangeFromHack,
+        );
       });
 
       it("should not increase the stock's second-order forecast when no money is grown", function () {
@@ -1305,7 +1308,9 @@ describe("Stock Market Tests", function () {
         // Use 1e3 for numCycles to force a change
         // (This may break later if numbers are rebalanced);
         influenceStockThroughCompanyWork(company, 1, 500);
-        expect(stock.otlkMagForecast).toEqual(oldSecondOrderForecast + forecastForecastChangeFromCompanyWork);
+        expect(stock.otlkMagForecast).toEqual(
+          oldSecondOrderForecast + StockMarketConstants.forecastForecastChangeFromCompanyWork,
+        );
       });
 
       it("should be affected by performanceMult", function () {
@@ -1314,7 +1319,9 @@ describe("Stock Market Tests", function () {
         // Use 1e3 for numCycles to force a change
         // (This may break later if numbers are rebalanced);
         influenceStockThroughCompanyWork(company, 4, 1e3);
-        expect(stock.otlkMagForecast).toEqual(oldSecondOrderForecast + 4 * forecastForecastChangeFromCompanyWork);
+        expect(stock.otlkMagForecast).toEqual(
+          oldSecondOrderForecast + 4 * StockMarketConstants.forecastForecastChangeFromCompanyWork,
+        );
       });
     });
   });
