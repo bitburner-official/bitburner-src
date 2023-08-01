@@ -13,6 +13,8 @@ import { Stock } from "../StockMarket/Stock";
 import { StockOrder, TIX } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
+import { cloneDeep } from "lodash";
+import { StockMarketConstants } from "../StockMarket/data/Constants";
 
 export function NetscriptStockMarket(): InternalAPI<TIX> {
   /** Checks if the player has TIX API access. Throws an error if the player does not */
@@ -35,6 +37,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
   };
 
   return {
+    getConstants: () => () => cloneDeep(StockMarketConstants),
     hasWSEAccount: () => () => {
       return player.hasWseAccount;
     },

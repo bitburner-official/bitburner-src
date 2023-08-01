@@ -118,6 +118,7 @@ const hacknet = {
 
 // Stock API
 const stock = {
+  getConstants: 0,
   hasWSEAccount: 0.05,
   hasTIXAPIAccess: 0.05,
   has4SData: 0.05,
