@@ -206,7 +206,7 @@ export function processStockPrices(numCycles = 1): void {
     return;
   }
 
-  // We can process the update every 1 seconds as long as there are enough
+  // We can process the update every 4 seconds as long as there are enough
   // stored cycles. This lets us account for offline time
   const timeNow = new Date().getTime();
   if (timeNow - StockMarket.lastUpdate < StockMarketConstants.msPerStockUpdateMin) return;
