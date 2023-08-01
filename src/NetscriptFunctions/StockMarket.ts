@@ -1,4 +1,4 @@
-import { Player as player } from "../Player";
+import { Player } from "../Player";
 import { buyStock, sellStock, shortStock, sellShort } from "../StockMarket/BuyingAndSelling";
 import { StockMarket, SymbolToStockMap, placeOrder, cancelOrder, initStockMarket } from "../StockMarket/StockMarket";
 import { getBuyTransactionCost, getSellTransactionGain } from "../StockMarket/StockMarketHelpers";
@@ -19,10 +19,10 @@ import { StockMarketConstants } from "../StockMarket/data/Constants";
 export function NetscriptStockMarket(): InternalAPI<TIX> {
   /** Checks if the player has TIX API access. Throws an error if the player does not */
   const checkTixApiAccess = function (ctx: NetscriptContext): void {
-    if (!player.hasWseAccount) {
+    if (!Player.hasWseAccount) {
       throw helpers.makeRuntimeErrorMsg(ctx, `You don't have WSE Access! Cannot use ${ctx.function}()`);
     }
-    if (!player.hasTixApiAccess) {
+    if (!Player.hasTixApiAccess) {
       throw helpers.makeRuntimeErrorMsg(ctx, `You don't have TIX API Access! Cannot use ${ctx.function}()`);
     }
   };
@@ -37,19 +37,13 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
   };
 
   return {
+    // Functions that intentionally do not check for API access
     getConstants: () => () => cloneDeep(StockMarketConstants),
-    hasWSEAccount: () => () => {
-      return player.hasWseAccount;
-    },
-    hasTIXAPIAccess: () => () => {
-      return player.hasTixApiAccess;
-    },
-    has4SData: () => () => {
-      return player.has4SData;
-    },
-    has4SDataTIXAPI: () => () => {
-      return player.has4SDataTixApi;
-    },
+    hasWSEAccount: () => () => Player.hasWseAccount,
+    hasTIXAPIAccess: () => () => Player.hasTixApiAccess,
+    has4SData: () => () => Player.has4SData,
+    has4SDataTIXAPI: () => () => Player.has4SDataTixApi,
+    // All other functions check for API access
     getSymbols: (ctx) => () => {
       checkTixApiAccess(ctx);
       return Object.values(StockSymbol);
@@ -169,8 +163,8 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       checkTixApiAccess(ctx);
-      if (player.bitNodeN !== 8) {
-        if (player.sourceFileLvl(8) <= 1) {
+      if (Player.bitNodeN !== 8) {
+        if (Player.sourceFileLvl(8) <= 1) {
           throw helpers.makeRuntimeErrorMsg(
             ctx,
             "You must either be in BitNode-8 or you must have Source-File 8 Level 2.",
@@ -186,8 +180,8 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       checkTixApiAccess(ctx);
-      if (player.bitNodeN !== 8) {
-        if (player.sourceFileLvl(8) <= 1) {
+      if (Player.bitNodeN !== 8) {
+        if (Player.sourceFileLvl(8) <= 1) {
           throw helpers.makeRuntimeErrorMsg(
             ctx,
             "You must either be in BitNode-8 or you must have Source-File 8 Level 2.",
@@ -206,8 +200,8 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       const type = helpers.string(ctx, "type", _type);
       const pos = helpers.string(ctx, "pos", _pos);
       checkTixApiAccess(ctx);
-      if (player.bitNodeN !== 8) {
-        if (player.sourceFileLvl(8) <= 2) {
+      if (Player.bitNodeN !== 8) {
+        if (Player.sourceFileLvl(8) <= 2) {
           throw helpers.makeRuntimeErrorMsg(
             ctx,
             "You must either be in BitNode-8 or you must have Source-File 8 Level 3.",
@@ -249,8 +243,8 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       const type = helpers.string(ctx, "type", _type);
       const pos = helpers.string(ctx, "pos", _pos);
       checkTixApiAccess(ctx);
-      if (player.bitNodeN !== 8) {
-        if (player.sourceFileLvl(8) <= 2) {
+      if (Player.bitNodeN !== 8) {
+        if (Player.sourceFileLvl(8) <= 2) {
           throw helpers.makeRuntimeErrorMsg(
             ctx,
             "You must either be in BitNode-8 or you must have Source-File 8 Level 3.",
@@ -298,8 +292,8 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     getOrders: (ctx) => () => {
       checkTixApiAccess(ctx);
-      if (player.bitNodeN !== 8) {
-        if (player.sourceFileLvl(8) <= 2) {
+      if (Player.bitNodeN !== 8) {
+        if (Player.sourceFileLvl(8) <= 2) {
           throw helpers.makeRuntimeErrorMsg(ctx, "You must either be in BitNode-8 or have Source-File 8 Level 3.");
         }
       }
@@ -326,7 +320,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     getVolatility: (ctx) => (_symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
-      if (!player.has4SDataTixApi) {
+      if (!Player.has4SDataTixApi) {
         throw helpers.makeRuntimeErrorMsg(ctx, "You don't have 4S Market Data TIX API Access!");
       }
       const stock = getStockFromSymbol(ctx, symbol);
@@ -335,7 +329,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     getForecast: (ctx) => (_symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
-      if (!player.has4SDataTixApi) {
+      if (!Player.has4SDataTixApi) {
         throw helpers.makeRuntimeErrorMsg(ctx, "You don't have 4S Market Data TIX API Access!");
       }
       const stock = getStockFromSymbol(ctx, symbol);
@@ -345,69 +339,69 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       return forecast / 100; // Convert from percentage to decimal
     },
     purchase4SMarketData: (ctx) => () => {
-      if (player.has4SData) {
+      if (Player.has4SData) {
         helpers.log(ctx, () => "Already purchased 4S Market Data.");
         return true;
       }
 
-      if (player.money < getStockMarket4SDataCost()) {
+      if (Player.money < getStockMarket4SDataCost()) {
         helpers.log(ctx, () => "Not enough money to purchase 4S Market Data.");
         return false;
       }
 
-      player.has4SData = true;
-      player.loseMoney(getStockMarket4SDataCost(), "stock");
+      Player.has4SData = true;
+      Player.loseMoney(getStockMarket4SDataCost(), "stock");
       helpers.log(ctx, () => "Purchased 4S Market Data");
       return true;
     },
     purchase4SMarketDataTixApi: (ctx) => () => {
       checkTixApiAccess(ctx);
 
-      if (player.has4SDataTixApi) {
+      if (Player.has4SDataTixApi) {
         helpers.log(ctx, () => "Already purchased 4S Market Data TIX API");
         return true;
       }
 
-      if (player.money < getStockMarket4STixApiCost()) {
+      if (Player.money < getStockMarket4STixApiCost()) {
         helpers.log(ctx, () => "Not enough money to purchase 4S Market Data TIX API");
         return false;
       }
 
-      player.has4SDataTixApi = true;
-      player.loseMoney(getStockMarket4STixApiCost(), "stock");
+      Player.has4SDataTixApi = true;
+      Player.loseMoney(getStockMarket4STixApiCost(), "stock");
       helpers.log(ctx, () => "Purchased 4S Market Data TIX API");
       return true;
     },
     purchaseWseAccount: (ctx) => () => {
-      if (player.hasWseAccount) {
+      if (Player.hasWseAccount) {
         helpers.log(ctx, () => "Already purchased WSE Account");
         return true;
       }
 
-      if (player.money < getStockMarketWseCost()) {
+      if (Player.money < getStockMarketWseCost()) {
         helpers.log(ctx, () => "Not enough money to purchase WSE Account Access");
         return false;
       }
 
-      player.hasWseAccount = true;
+      Player.hasWseAccount = true;
       initStockMarket();
-      player.loseMoney(getStockMarketWseCost(), "stock");
+      Player.loseMoney(getStockMarketWseCost(), "stock");
       helpers.log(ctx, () => "Purchased WSE Account Access");
       return true;
     },
     purchaseTixApi: (ctx) => () => {
-      if (player.hasTixApiAccess) {
+      if (Player.hasTixApiAccess) {
         helpers.log(ctx, () => "Already purchased TIX API");
         return true;
       }
 
-      if (player.money < getStockMarketTixApiCost()) {
+      if (Player.money < getStockMarketTixApiCost()) {
         helpers.log(ctx, () => "Not enough money to purchase TIX API Access");
         return false;
       }
 
-      player.hasTixApiAccess = true;
-      player.loseMoney(getStockMarketTixApiCost(), "stock");
+      Player.hasTixApiAccess = true;
+      Player.loseMoney(getStockMarketTixApiCost(), "stock");
       helpers.log(ctx, () => "Purchased TIX API");
       return true;
     },
