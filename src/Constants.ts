@@ -229,7 +229,8 @@ Changes below include spoilers.
 ### NETSCRIPT:
 
 * Added ns.stock.getConstants (@Snarling)
-* ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined. (@Snarling)
+* ns.corporation.getConstants now has a ram cost of 0 (@Snarling)
+* ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined (@Snarling)
 
 ### Internal Code Refactors
 
