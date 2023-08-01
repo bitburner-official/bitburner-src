@@ -1,18 +1,18 @@
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { CONSTANTS } from "../Constants";
+import { StockMarketConstants } from "./data/Constants";
 
 export function getStockMarket4SDataCost(): number {
-  return CONSTANTS.MarketData4SCost * currentNodeMults.FourSigmaMarketDataCost;
+  return StockMarketConstants.MarketData4SCost * currentNodeMults.FourSigmaMarketDataCost;
 }
 
 export function getStockMarket4STixApiCost(): number {
-  return CONSTANTS.MarketDataTixApi4SCost * currentNodeMults.FourSigmaMarketDataApiCost;
+  return StockMarketConstants.MarketDataTixApi4SCost * currentNodeMults.FourSigmaMarketDataApiCost;
 }
 
 export function getStockMarketWseCost(): number {
-  return CONSTANTS.WSEAccountCost;
+  return StockMarketConstants.WSEAccountCost;
 }
 
 export function getStockMarketTixApiCost(): number {
-  return CONSTANTS.TIXAPICost;
+  return StockMarketConstants.TIXAPICost;
 }
