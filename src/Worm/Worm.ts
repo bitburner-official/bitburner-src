@@ -1,8 +1,8 @@
+import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { BonusType } from "./BonusType";
 import { Difficulty } from "./Difficulty";
 import { difficulties } from "./data/difficulties";
-import { calculateFitness } from "./helpers/calculations";
 
 export class Worm {
 	wormLength = 1024;
@@ -32,30 +32,24 @@ export class Worm {
 		this.storedCycles -= cyclesNeeded;
 		this.processCount++;
 
-		this.applyBonus();
+		this.updateMults();
+	}
+
+	updateMults() {
+		Player.reapplyMultipliers();
 	}
 
 	setGuess(guess: number[]) {
+		// if new guess is too short, pad 0s at the start. If new guess is too long, remvoe the end
 		this.guess = [
 			...Array.from({ length: Math.max(0, this.wormLength - guess.length) }, () => 0),
 			...guess.slice(0, this.wormLength)
 		];
 	}
 
-	calculateBonus() {
-		const fitness = calculateFitness(this);
-		const bonus = fitness; // * 15 * this.difficulty.bonusMultiplier;
-		return bonus;
-	}
-
-	applyBonus() {
-		const bonus = this.calculateBonus();
-
-		console.log("APPLY BONUS", bonus);
-	}
-
 	setDifficulty(difficulty: Difficulty) {
 		this.difficulty = difficulty;
+		// in future, might include setting formulas
 	}
 
 	toJSON(): IReviverValue {

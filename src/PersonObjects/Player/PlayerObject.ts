@@ -117,6 +117,7 @@ export class PlayerObject extends Person implements IPlayer {
   loseMoney = generalMethods.loseMoney;
   reapplyAllAugmentations = generalMethods.reapplyAllAugmentations;
   reapplyAllSourceFiles = generalMethods.reapplyAllSourceFiles;
+	reapplyMultipliers = generalMethods.reapplyMultipliers;
   recordMoneySource = generalMethods.recordMoneySource;
   setMoney = generalMethods.setMoney;
   startBladeburner = bladeburnerMethods.startBladeburner;
