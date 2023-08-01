@@ -1,7 +1,7 @@
 {
   "name": "bitburner",
   "license": "SEE LICENSE IN license.txt",
-  "version": "2.4.0dev",
+  "version": "2.4.1dev",
   "main": "electron-main.js",
   "author": {
     "name": "Daniel Xie, Olivier Gagnon, et al."
@@ -108,7 +108,7 @@
     "url": "git+https://github.com/bitburner-official/bitburner-src.git"
   },
   "scripts": {
-    "doc": "npx api-extractor run && npx api-documenter markdown && rm input/bitburner.api.json && rm -r input && git add markdown/ && git add tsdoc-metadata.json",
+    "doc": "bash ./tools/doc.sh",
     "format": "prettier -c --write .",
     "format:report": "prettier -c .",
     "start": "cd .app && http-server -p 8000",
@@ -127,7 +127,6 @@
     "preversion": "npm install && npm run test",
     "version": "sh ./tools/build-release.sh && git add --all",
     "postversion": "git push -u origin dev && git push --tags",
-    "changelog": "node tools/fetch-changelog/index.js --from=$(cat last_changelog_hash) > changelog.md",
-    "bundle-doc": "node tools/bundle-doc/index.js"
+    "changelog": "node tools/fetch-changelog/index.js --from=$(cat last_changelog_hash) > changelog.md"
   }
 }
