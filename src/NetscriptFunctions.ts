@@ -1762,6 +1762,8 @@ export const ns: InternalAPI<NSFull> = {
     lastAugReset: Player.lastAugReset,
     lastNodeReset: Player.lastNodeReset,
     currentNode: Player.bitNodeN,
+    ownedAugs: new Map(Player.augmentations.map((aug) => [aug.name, aug.level])),
+    ownedSF: new Map(Player.sourceFiles),
   }),
   getFunctionRamCost: (ctx) => (_name) => {
     const name = helpers.string(ctx, "name", _name);

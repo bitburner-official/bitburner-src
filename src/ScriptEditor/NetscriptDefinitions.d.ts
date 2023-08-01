@@ -74,6 +74,10 @@ interface ResetInfo {
   lastNodeReset: number;
   /** The current bitnode */
   currentNode: number;
+  /** A map of owned augmentations to their levels. Keyed by the augmentation name. Map values are the augmentation level (e.g. for NeuroFlux governor). */
+  ownedAugs: Map<string, number>;
+  /** A map of owned SF to their levels. Keyed by the SF number. Map values are the SF level. */
+  ownedSF: Map<number, number>;
 }
 
 /** @public */
