@@ -4,15 +4,9 @@
  */
 import { Stock } from "./Stock";
 import { StockMarket } from "./StockMarket";
-
+import { StockMarketConstants } from "./data/Constants";
 import { Company } from "../Company/Company";
 import { Server } from "../Server/Server";
-
-// Change in second-order forecast due to hacks/grows
-export const forecastForecastChangeFromHack = 0.1;
-
-// Change in second-order forecast due to company work
-export const forecastForecastChangeFromCompanyWork = 0.001;
 
 /**
  * Potentially decreases a stock's second-order forecast when its corresponding
@@ -33,7 +27,7 @@ export function influenceStockThroughServerHack(server: Server, moneyHacked: num
 
   const percTotalMoneyHacked = moneyHacked / server.moneyMax;
   if (Math.random() < percTotalMoneyHacked) {
-    stock.changeForecastForecast(stock.otlkMagForecast - forecastForecastChangeFromHack);
+    stock.changeForecastForecast(stock.otlkMagForecast - StockMarketConstants.forecastForecastChangeFromHack);
   }
 }
 
@@ -56,7 +50,7 @@ export function influenceStockThroughServerGrow(server: Server, moneyGrown: numb
 
   const percTotalMoneyGrown = moneyGrown / server.moneyMax;
   if (Math.random() < percTotalMoneyGrown) {
-    stock.changeForecastForecast(stock.otlkMagForecast + forecastForecastChangeFromHack);
+    stock.changeForecastForecast(stock.otlkMagForecast + StockMarketConstants.forecastForecastChangeFromHack);
   }
 }
 
@@ -80,7 +74,7 @@ export function influenceStockThroughCompanyWork(
   }
 
   if (Math.random() < 0.002 * cyclesOfWork) {
-    const change = forecastForecastChangeFromCompanyWork * performanceMult;
+    const change = StockMarketConstants.forecastForecastChangeFromCompanyWork * performanceMult;
     stock.changeForecastForecast(stock.otlkMagForecast + change);
   }
 }

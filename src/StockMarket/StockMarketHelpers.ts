@@ -2,9 +2,6 @@ import { Stock } from "./Stock";
 import { PositionType } from "@enums";
 import { StockMarketConstants } from "./data/Constants";
 
-// Amount by which a stock's forecast changes during each price movement
-export const forecastChangePerPriceMovement = 0.006;
-
 /**
  * Calculate the total cost of a "buy" transaction. This accounts for spread and commission.
  * @param {Stock} stock - Stock being purchased
@@ -82,8 +79,8 @@ export function processTransactionForecastMovement(stock: Stock, shares: number)
     stock.shareTxUntilMovement -= shares;
     if (stock.shareTxUntilMovement <= 0) {
       stock.shareTxUntilMovement = stock.shareTxForMovement;
-      stock.influenceForecast(forecastChangePerPriceMovement);
-      stock.influenceForecastForecast(forecastChangePerPriceMovement * (stock.mv / 100));
+      stock.influenceForecast(StockMarketConstants.forecastChangePerPriceMovement);
+      stock.influenceForecastForecast(StockMarketConstants.forecastChangePerPriceMovement * (stock.mv / 100));
     }
 
     return;
@@ -102,7 +99,7 @@ export function processTransactionForecastMovement(stock: Stock, shares: number)
   }
 
   // Forecast always decreases in magnitude
-  const forecastChange = forecastChangePerPriceMovement * (numIterations - 1);
+  const forecastChange = StockMarketConstants.forecastChangePerPriceMovement * (numIterations - 1);
   const forecastForecastChange = forecastChange * (stock.mv / 100);
   stock.influenceForecast(forecastChange);
   stock.influenceForecastForecast(forecastForecastChange);

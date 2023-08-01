@@ -416,6 +416,12 @@ interface StockMarketConstants {
   MarketDataTixApi4SCost: number;
   /** Commission fee for transactions */
   StockMarketCommission: number;
+  /** Amount by which a stock's forecast changes during each price movement */
+  forecastChangePerPriceMovement: number;
+  /** Change in second-order forecast due to hacks/grows */
+  forecastForecastChangeFromHack: number;
+  /** Change in second-order forecast due to company work */
+  forecastForecastChangeFromCompanyWork: number;
 }
 
 /**
