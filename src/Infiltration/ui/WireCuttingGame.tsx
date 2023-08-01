@@ -134,7 +134,7 @@ export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameP
           }}
         >
           {Array.from({ length: wires.length }).map((_, i) => {
-            const isCorrectWire = cutWires[i + 1] || wiresToCut.has(i + 1);
+            const isCorrectWire = cutWires[i] || wiresToCut.has(i);
             const color = hasAugment && !isCorrectWire ? Settings.theme.disabled : Settings.theme.primary;
             return (
               <Typography key={i} style={{ color: color }}>
@@ -148,7 +148,7 @@ export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameP
                 if ((i === 3 || i === 4) && cutWires[j]) {
                   return <Typography key={j}></Typography>;
                 }
-                const isCorrectWire = cutWires[j + 1] || wiresToCut.has(j + 1);
+                const isCorrectWire = cutWires[j] || wiresToCut.has(j);
                 const wireColor =
                   hasAugment && !isCorrectWire ? Settings.theme.disabled : wire.colors[i % wire.colors.length];
                 return (
