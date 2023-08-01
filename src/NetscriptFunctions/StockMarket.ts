@@ -37,13 +37,11 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
   };
 
   return {
-    // Functions that intentionally do not check for API access
     getConstants: () => () => cloneDeep(StockMarketConstants),
     hasWSEAccount: () => () => Player.hasWseAccount,
     hasTIXAPIAccess: () => () => Player.hasTixApiAccess,
     has4SData: () => () => Player.has4SData,
     has4SDataTIXAPI: () => () => Player.has4SDataTixApi,
-    // All other functions check for API access
     getSymbols: (ctx) => () => {
       checkTixApiAccess(ctx);
       return Object.values(StockSymbol);
