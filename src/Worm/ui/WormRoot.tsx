@@ -1,18 +1,25 @@
 import { Info } from '@mui/icons-material';
-import { Container, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { Container, Stack, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { dialogBoxCreate } from '../../ui/React/DialogBox';
 import { BonusTime } from './BonusTime';
 import { BonusSelector } from './BonusSelector';
 import { BonusType } from '../BonusType';
 import { Worm } from '../Worm';
 import { WormInput } from './WormInput';
+import { WormFitness } from './WormFitness';
+import { useRerender } from '../../ui/React/hooks';
+import { WormEvents } from '../WormEvents';
+import { DifficultySelector } from './DifficultySelector';
 
 interface IProps {
 	worm: Worm | null;
 }
 
 export function WormRoot({ worm }: IProps): React.ReactElement {
+	const rerender = useRerender();
+	useEffect(() => WormEvents.subscribe(rerender), [rerender]);
+
 	const [bonus, setBonus] = useState<BonusType>("None" as unknown as BonusType);
 
 	if (worm === null) return <Typography>You shouldn't be here...</Typography>;
@@ -48,10 +55,14 @@ export function WormRoot({ worm }: IProps): React.ReactElement {
 			<Typography>
 				Some description here
 			</Typography>
-			<BonusSelector setBonus={setBonus}/>
+			<Stack direction="row" spacing={2}>
+				<DifficultySelector setDifficulty={worm.setDifficulty}/>
+				<BonusSelector setBonus={setBonus}/>
+			</Stack>
 			<Typography>
 				Current effect of {bonus}: 0%. Not implemented, duh
 			</Typography>
+			<WormFitness worm={worm}/>
 			<BonusTime worm={worm}/>
 			<WormInput worm={worm}/>
 		</Container>

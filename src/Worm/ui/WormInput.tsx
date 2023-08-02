@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { Worm } from '../Worm';
-import { Button, Table, TableBody, TableRow, TextField } from '@mui/material';
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material';
 import { isValidNumber } from '../helpers/calculations';
 
 interface IProps {
@@ -42,7 +42,16 @@ export function WormInput({ worm }: IProps) {
 
   return (
     <>
-      <Table>
+      <Table sx={{ width: "432px", height: "192px" }}>
+				<TableHead>
+					<TableRow>
+						<TableCell colSpan={4}>
+							<Typography textAlign="center">
+								Manual Inputs
+							</Typography>
+						</TableCell>
+					</TableRow>
+				</TableHead>
         <TableBody>
           {input.reduce<string[][]>((acc, cur, i) => {
 						acc[Math.floor(i / 4)] ??= [];
@@ -51,15 +60,19 @@ export function WormInput({ worm }: IProps) {
 					}, []).map((arr, i) => (
             <TableRow key={i}>
               {arr.map((cur, j) => (
-                <td key={i + " " + j }>
-								<TextField
-									sx={{ width: "100px", margin: "4px" }}
-									error={!isValid(Number(input[4 * i + j]))}
-									color={isSaved(4 * i + j, Number(input)) ? "primary" : "warning"}
-									value={cur}
-									onChange={event => handleChange(i * 4 + j, event.target.value)}
-								/>
-                </td>
+                <TableCell 
+									key={i + " " + j }
+									sx={{ margin: 0, padding: "4px" }}
+								>
+									<TextField
+										error={!isValid(Number(cur))}
+										// not working at the moment
+										// color={isSaved(4 * i + j, Number(cur)) ? "primary" : "warning"}
+										focused={!isSaved(4 * i + j, Number(cur))}
+										value={cur}
+										onChange={event => handleChange(i * 4 + j, event.target.value)}
+									/>
+                </TableCell>
               ))}
             </TableRow>
           ))}

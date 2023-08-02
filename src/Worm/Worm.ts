@@ -3,6 +3,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { BonusType } from "./BonusType";
 import { Difficulty } from "./Difficulty";
 import { difficulties } from "./data/difficulties";
+import { WormEvents } from "./WormEvents";
 
 export class Worm {
 	wormLength = 16;
@@ -35,6 +36,8 @@ export class Worm {
 		this.processCount++;
 
 		this.updateMults();
+
+		WormEvents.emit();
 	}
 
 	updateMults() {
