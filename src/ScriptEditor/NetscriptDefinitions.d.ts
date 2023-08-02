@@ -2104,6 +2104,21 @@ export interface Singularity {
   getOwnedSourceFiles(): SourceFileLvl[];
 
   /**
+  * Get a list of faction(s) that have a specific Augmentation.
+  * @remarks
+  * RAM cost: 5 GB * 16/4/1
+  *
+  *
+  * Returns an array containing the names (as strings) of all factions
+  * that offer the specified Augmentation.
+  * If no factions offer the Augmentation, a blank array is returned.
+  *
+  * @param augName - Name of Augmentation.
+  * @returns Array containing the names of all factions.
+  */
+  getAugmentationFactions(augName: string): string[]
+
+  /**
    * Get a list of augmentation available from a faction.
    * @remarks
    * RAM cost: 5 GB * 16/4/1
