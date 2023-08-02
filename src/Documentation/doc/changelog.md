@@ -284,7 +284,7 @@ GRAFTING:
 DOCUMENTATION
 
 - Many documentation updates (@Mughur, @d0sboots, @Snarling, @teauxfu).
-- Official non-markdown docs are at http://bitburner-official.readthedocs.io/
+- Official non-markdown docs are at https://github.com/bitburner-official/bitburner-src/tree/dev/src/Documentation/doc
 - Official dev version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md
 - Official stable version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md
 - Dev version documentation is now kept up to date as changes are made. (@Snarling)
@@ -1306,7 +1306,7 @@ Stanek Gift
 ** Announcement **
 
 - Several API breaks have been implemented.
-- See the v1.0.0 migration guide https://bitburner.readthedocs.io/en/latest/v1.0.0_migration.html
+- See the v1.0.0 migration guide under Documentation
 - Everyone gets 10 free neuroflux level.
 
 ** Netscript **
@@ -2685,8 +2685,6 @@ Stanek Gift
 
 - Added a very rudimentary directory system to the Terminal
 
-  - Details here: https://bitburner.readthedocs.io/en/latest/basicgameplay/terminal.html#filesystem-directories
-
 - Added numHashes(), hashCost(), and spendHashes() functions to the Netscript Hacknet Node API
 - 'Generate Coding Contract' hash upgrade is now more expensive
 - 'Generate Coding Contract' hash upgrade now generates the contract randomly on the server, rather than on home computer
@@ -3180,7 +3178,7 @@ Stanek Gift
 
 ## v0.37.0 - 5/20/2018
 
-- NetscriptJS (Netscript 2.0) released (Documentation here: http://bitburner.readthedocs.io/en/latest/netscriptjs.html)
+- NetscriptJS (Netscript 2.0) released
 - Running the game with the '?noScripts' query will start the game without loading any of your scripts. This should be used if you accidentally write a script that crashes your game
 
 ## v0.36.1 - 5/11/2018
