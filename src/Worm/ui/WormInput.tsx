@@ -44,7 +44,7 @@ export function WormInput({ worm }: IProps) {
     <>
       <Table>
         <TableBody>
-          {guess.reduce<number[][]>((acc, cur, i) => {
+          {input.reduce<string[][]>((acc, cur, i) => {
 						acc[Math.floor(i / 4)] ??= [];
 						acc[Math.floor(i / 4)].push(cur);
 						return acc;
