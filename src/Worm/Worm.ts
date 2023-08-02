@@ -5,7 +5,9 @@ import { Difficulty } from "./Difficulty";
 import { difficulties } from "./data/difficulties";
 
 export class Worm {
-	wormLength = 1024;
+	wormLength = 16;
+	minValue = 0;
+	maxValue = 1;
 
 	guess: number[];
 	difficulty: Difficulty;

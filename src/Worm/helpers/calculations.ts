@@ -1,6 +1,16 @@
 import { Multipliers, defaultMultipliers } from "../../PersonObjects/Multipliers";
 import { Worm } from "../Worm";
 
+export function isValidGuess(worm: Worm, guess: number[]) {
+	const isRightLength = guess.length === worm.wormLength;
+	const allNumbersValid = guess.every(num => isValidNumber(worm, num));
+	return isRightLength && allNumbersValid;
+}
+
+export function isValidNumber(worm: Worm, number: number) {
+	return worm.minValue <= number && number <= worm.maxValue
+}
+
 export function calculatePerfectWorm(wormLength: number) {
 	return Array.from({ length: wormLength }, () => Math.random());
 }
