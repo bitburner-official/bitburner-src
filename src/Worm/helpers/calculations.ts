@@ -23,8 +23,11 @@ export function calculatePerfectWorm(worm: Worm) {
 }
 
 // to alter the evaluation of the fitness, change this function.
-// the current formula is (2-x)/(2+x*k), where k can be any number above -1.
-export const fitnessFunction = (difference: number) => (1 - difference) / (1 + difference * 8);
+// the current formula is (1-x)/(1+x*k), where k can be any number above -1.
+// the formula needs to have these requirements:
+// 1. Domain [0, 1]
+// 2. Range [0, 1]
+export const fitnessFunction = (difference: number) => (1 - difference) / (1 + difference * 16);
 
 export function calculateFitness(worm: Worm) {
 	const perfectWorm = calculatePerfectWorm(worm);
@@ -32,7 +35,8 @@ export function calculateFitness(worm: Worm) {
 	// console.log(perfectWorm);
 
 	const difference = perfectWorm.reduce((acc, val, i) => acc + Math.abs(val - worm.guess[i]), 0);
-	const fitness = fitnessFunction(difference / (2 * worm.length));
+	const percentage = difference / (2 * worm.length)
+	const fitness = fitnessFunction(percentage);
 
 	return fitness;
 }
