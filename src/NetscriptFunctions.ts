@@ -824,10 +824,7 @@ export const ns: InternalAPI<NSFull> = {
           ++scriptsKilled;
         }
       }
-      helpers.log(
-        ctx,
-        () => `Killing all scripts on '${server.hostname}'. May take a few minutes for the scripts to die.`,
-      );
+      helpers.log(ctx, () => `Killing all scripts on '${server.hostname}'.`);
 
       return scriptsKilled > 0;
     },
