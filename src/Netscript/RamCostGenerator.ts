@@ -325,6 +325,14 @@ const stanek = {
   acceptGift: RamCostConstants.StanekAcceptGift,
 } as const;
 
+// Worm API
+const worm = {
+	setGuess: 10,
+	getLength: 0,
+	getCurrentFitness: 2,
+	getCurrentGuess: 2,
+} as const;
+
 // UI API
 const ui = {
   getTheme: 0,
@@ -424,6 +432,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   codingcontract,
   sleeve,
   stanek,
+	worm,
   ui,
   grafting,
 

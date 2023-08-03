@@ -31,11 +31,10 @@ export function calculateFitness(worm: Worm) {
 
 	// console.log(perfectWorm);
 
-	const fitness = perfectWorm.reduce((acc, val, i) => acc + fitnessFunction(Math.abs(val - worm.guess[i])), 0);
+	const difference = perfectWorm.reduce((acc, val, i) => acc + Math.abs(val - worm.guess[i]), 0);
+	const fitness = fitnessFunction(difference / (2 * worm.length));
 
-	console.log(fitness);
-
-	return fitness / worm.length;
+	return fitness;
 }
 
 export function calculateBonus(fitness: number, difficultyMultiplier: number) {

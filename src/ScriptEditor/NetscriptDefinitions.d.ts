@@ -4363,6 +4363,50 @@ interface Stanek {
   acceptGift(): boolean;
 }
 
+/**
+ * Worm API.
+ * @public
+ */
+interface Worm {
+	/**
+	 * Set the guess for the best worm.
+	 * @remarks
+	 * RAM cost: 10 GB
+	 * 
+	 * @param guess - The guess to set. Has to be the exact length of the worm.
+	 * @returns The fitness value for that guess.
+	 */
+	setGuess(guess: number[]): number;
+
+	/**
+	 * Get the length of the worm.
+	 * @remarks
+	 * RAM cost: 0 GB
+	 * 
+	 * @returns The length of the worm.
+	 */
+	getLength(): number;
+
+	/**
+	 * Get the current fitness of the guess.
+	 * The fitness value is a value between 0 and 1, indicating how good a guess is.
+	 * @remarks
+	 * RAM cost: 2 GB
+	 * 
+	 * @returns The current fitness value.
+	 */
+	getCurrentFitness(): number;
+
+	/**
+	 * Get the current guess. The guess will always be the length of the worm.
+	 * @remarks
+	 * RAM cost: 2 GB
+	 * 
+	 * @returns The current guess.
+	 */
+	getCurrentGuess(): number[];
+}
+
 /** @public */
 interface InfiltrationReward {
   tradeRep: number;
@@ -4563,6 +4607,11 @@ export interface NS {
    * @remarks RAM cost: 0 GB
    */
   readonly stanek: Stanek;
+
+	/**
+	 * Namespace for worm functions.
+	 */
+	readonly worm: Worm;
 
   /**
    * Namespace for infiltration functions.

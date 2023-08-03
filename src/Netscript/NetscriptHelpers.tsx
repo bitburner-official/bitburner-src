@@ -42,6 +42,7 @@ import { CustomBoundary } from "../ui/Components/CustomBoundary";
 export const helpers = {
   string,
   number,
+	array,
   positiveInteger,
   scriptArgs,
   runOptions,
@@ -159,6 +160,16 @@ function number(ctx: NetscriptContext, argName: string, v: unknown): number {
   }
   throw makeRuntimeErrorMsg(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
 }
+
+function array<T>(ctx: NetscriptContext, argName: string, v: unknown, converter: (ctx: NetscriptContext, argName: string, a: unknown) => T): T[] {
+	if (typeof v === "object" && Array.isArray(v)) {
+		const arr: T[] = [];
+		for (let i = 0; i < v.length; i++) arr.push(converter(ctx, `${argName}[${i}]`, v[i]));
+		return arr;
+	}
+	throw makeRuntimeErrorMsg(ctx, `'${argName}' should be an array. ${debugType(v)}`, "TYPE");
+}
+
 
 /** Convert provided value v for argument argName to a positive integer, throwing if it looks like something else. */
 function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): PositiveInteger {
