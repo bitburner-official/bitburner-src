@@ -3,6 +3,6 @@ export interface Difficulty {
 
 	formulasUsed: number;
 	amountOfChange: number;
-	speedOfChange: number;
+	windowBetweenChange: number;
 	bonusMultiplier: number;
 }

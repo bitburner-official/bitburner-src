@@ -4,6 +4,7 @@ import { BonusType } from "./BonusType";
 import { Difficulty } from "./Difficulty";
 import { difficulties } from "./data/difficulties";
 import { WormEvents } from "./WormEvents";
+import { isValidGuess } from "./helpers/calculations";
 
 export class Worm {
 	length = 16;
@@ -31,11 +32,13 @@ export class Worm {
 		this.storedCycles += numCycles;
 
 		const cyclesNeeded = 50;
-		if (this.storedCycles < cyclesNeeded) return;
-		this.storedCycles -= cyclesNeeded;
-		this.processCount++;
+		if (this.storedCycles >= cyclesNeeded) {
+			this.storedCycles -= cyclesNeeded;
 
-		this.updateMults();
+			if (this.processCount++ % this.difficulty.windowBetweenChange === 0) this.updateFormula();
+
+			this.updateMults();
+		}
 
 		WormEvents.emit();
 	}
@@ -44,16 +47,21 @@ export class Worm {
 		this.amplitudes = Array.from({ length: this.difficulty.formulasUsed }, () => Math.random());
 	}
 
+	updateFormula(numCycles = 1) {
+		for (let i = 0; i < numCycles; i++) {
+			const amount = this.difficulty.amountOfChange;
+			const change = (prev: number) => Math.max(0, Math.min(1, prev + (amount * (Math.random() - 0.5) / 5)));
+			this.amplitudes = this.amplitudes.map(change);
+		}
+	}
+
 	updateMults() {
 		Player.reapplyMultipliers();
 	}
 
 	setGuess(guess: number[]) {
-		// if new guess is too short, pad 0s at the start. If new guess is too long, remvoe the end
-		this.guess = [
-			...Array.from({ length: Math.max(0, this.length - guess.length) }, () => 0),
-			...guess.slice(0, this.length)
-		];
+		if (!isValidGuess(this, guess)) throw new Error("Not a valid guess.");
+		this.guess = guess;
 	}
 
 	setDifficulty(difficulty: Difficulty) {

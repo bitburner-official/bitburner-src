@@ -10,7 +10,7 @@ interface IProps {
 
 export function BonusTime(props: IProps): React.ReactElement {
   const CyclesPerSecond = 1000 / CONSTANTS.MilliPerCycle;
-  if ((props.worm.storedCycles / CyclesPerSecond) * 1000 <= 5000) return <></>;
+  if ((props.worm.storedCycles / CyclesPerSecond) <= 10) return <></>;
   const bonusMillis = (props.worm.storedCycles / CyclesPerSecond) * 1000;
   return (
     <Box display="flex">

@@ -36,7 +36,7 @@ export function DifficultyItem({ difficulty }: { difficulty: Difficulty }) {
 		<Typography component="div">
 			<Box sx={{ fontWeight: "bold" }}>{difficulty.name}</Box>
 			Formulas: {difficulty.formulasUsed}<br/>
-			Time between changes: {difficulty.speedOfChange * 100}%<br/>
+			Time between changes: {difficulty.windowBetweenChange * 100}%<br/>
 			Amount of change: {difficulty.amountOfChange * 100}%<br/>
 		</Typography>
 		</>
