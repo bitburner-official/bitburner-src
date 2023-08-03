@@ -38,9 +38,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
     ianGetTile: (ctx) => (_x, _y) => {
       const x = helpers.number(ctx, "x", _x);
       const y = helpers.number(ctx, "y", _y);
-      return {
-        Content: myrian.world[y][x],
-      };
+      return myrian.getTile(x, y);
     },
     ianGetTask: (ctx) => (_sleeveId) => {
       throw new Error("Unimplemented");

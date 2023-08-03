@@ -2,6 +2,7 @@ import { SleeveMyrianWork } from "../PersonObjects/Sleeve/Work/SleeveMyrianWork"
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { Player } from "@player";
 import { DefaultWorld } from "./World";
+import { MyrianTile } from "@nsdefs";
 
 export interface MyrianSleeve {
   index: number;
@@ -54,6 +55,13 @@ export class Myrian {
     } catch (e: unknown) {
       console.error(`Exception caught when processing Gang: ${e}`);
     }
+  }
+
+  getTile(x: number, y: number): MyrianTile {
+    if (x < 0 || y < 0 || y > this.world.length || x > this.world[y].length) return { Content: "?" };
+    return {
+      Content: this.world[y][x],
+    };
   }
 
   /** Serialize the current object to a JSON save state. */

@@ -25,10 +25,10 @@ const iterator = (i: number, offset = 0): number[] => {
 
 interface ICellProps {
   tile: string;
+  tileSize: number;
 }
 
-const Cell = ({ tile }: ICellProps): React.ReactElement => {
-  const x = 50;
+const Cell = ({ tile, tileSize: x }: ICellProps): React.ReactElement => {
   const sx = {
     display: "block",
     color: "white",
@@ -59,9 +59,37 @@ interface IProps {
   myrian: Myrian;
 }
 
+const calcTiles = (v: number) => Math.floor((50 * 11) / v);
+
 export function MyrianRoot({ myrian }: IProps): React.ReactElement {
-  const [center, setCenter] = useState([myrian.world[0].length / 2, myrian.world.length / 2]);
-  const [size, setSize] = useState(11);
+  const [center, rawSetCenter] = useState<[number, number]>([14, 8]);
+  const [size, rawSetSize] = useState(60);
+  const tiles = calcTiles(size);
+  const [dragging, setDragging] = useState(false);
+  const [dragScreenPos, setDragScreenPos] = useState<[number, number]>([0, 0]);
+  const [dragCenter, setDragCenter] = useState<[number, number]>([0, 0]);
+
+  const setCenter = (v: [number, number], tiles: number) => {
+    rawSetCenter(() => {
+      v[0] = Math.max(Math.floor(tiles / 2), v[0]);
+      v[1] = Math.max(Math.floor(tiles / 2), v[1]);
+      v[0] = Math.min(myrian.world[0].length - Math.floor(tiles / 2), v[0]);
+      v[1] = Math.min(myrian.world.length - Math.floor(tiles / 2), v[1]);
+      return v;
+    });
+  };
+
+  const setSize = (px: number) => {
+    const newTiles = calcTiles(px);
+    if (newTiles > 25) {
+      px = calcTiles(25);
+    }
+    if (newTiles < 5) {
+      px = calcTiles(5);
+    }
+    rawSetSize(px);
+    return px;
+  };
   const [, setRerender] = useState(false);
   const rerender = () => setRerender((old) => !old);
   useEffect(() => {
@@ -72,37 +100,68 @@ export function MyrianRoot({ myrian }: IProps): React.ReactElement {
   const sleeves = Object.fromEntries(myrian.sleeves.map((s) => [`${s.x}_${s.y}`, s]));
 
   const move = (x: number, y: number) => () => {
-    setCenter((c) => [Math.max(Math.floor(size / 2), c[0] + x), Math.max(Math.floor(size / 2), c[1] + y)]);
+    setCenter([center[0] + x, center[1] + y], tiles);
   };
 
   const zoom = (size: number) => () => {
-    setSize((s) => s + size);
+    // setSize((s) => s + size);
   };
+
+  const onMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setDragging(true);
+    setDragScreenPos([event.screenX, event.screenY]);
+    setDragCenter(center);
+  };
+  const onStopDragging = () => setDragging(false);
+
+  const onMouseMove = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!dragging) return;
+    const dx = event.screenX - dragScreenPos[0] + size / 2;
+    const dy = event.screenY - dragScreenPos[1] + size / 2;
+    setCenter([dragCenter[0] - Math.floor(dx / size), dragCenter[1] - Math.floor(dy / size)], tiles);
+  };
+
+  const onWheel = (event: React.WheelEvent) => {
+    const newSize = setSize(size * (1 + event.deltaY / 500));
+    const newTiles = calcTiles(newSize);
+    setCenter(center, newTiles);
+  };
+
   return (
     <Container maxWidth="lg" disableGutters sx={{ mx: 0, display: "flex", flexDirection: "column" }}>
       <Box sx={{ display: "flex" }}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            m: 0,
-            p: 0,
-            borderColor: "white",
-            borderStyle: "solid",
-            borderWidth: "1px",
-          }}
+        <div
+          style={{ cursor: dragging ? "grabbing" : "grab" }}
+          onMouseDown={onMouseDown}
+          onMouseUp={onStopDragging}
+          onMouseMove={onMouseMove}
+          onMouseLeave={onStopDragging}
+          onWheel={onWheel}
         >
-          {iterator(size, center[1] - Math.floor(size / 2)).map((j) => (
-            <Box key={myrian.world[j].join("") + j} sx={{ display: "flex", flexDirection: "row" }}>
-              {iterator(size, center[0] - Math.floor(size / 2)).map((i) => (
-                <Cell
-                  key={i + "" + j + "" + myrian.world[j][i]}
-                  tile={sleeves[`${i}_${j}`] ? "s" : myrian.world[j][i]}
-                />
-              ))}
-            </Box>
-          ))}
-        </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              m: 0,
+              p: 0,
+              borderColor: "white",
+              borderStyle: "solid",
+              borderWidth: "1px",
+            }}
+          >
+            {iterator(tiles, center[1] - Math.floor(tiles / 2)).map((j) => (
+              <Box key={myrian.world[j].join("") + j} sx={{ display: "flex", flexDirection: "row" }}>
+                {iterator(tiles, center[0] - Math.floor(tiles / 2)).map((i) => (
+                  <Cell
+                    key={i + "" + j + "" + myrian.world[j][i]}
+                    tileSize={size}
+                    tile={sleeves[`${i}_${j}`] ? "s" : myrian.world[j][i]}
+                  />
+                ))}
+              </Box>
+            ))}
+          </Box>
+        </div>
       </Box>
 
       <Box sx={{ display: "flex" }}>
