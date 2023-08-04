@@ -13,19 +13,19 @@ export function isValidNumber(worm: Worm, number: number) {
 }
 
 export function calculatePerfectWorm(worm: Worm) {
-	// The function used is a simplified form of a fourier series. (1 / numWaves) * globalScalar * [ sum_{1}^{numWaves} amplitude[numWave] * sin(numWave * frequency * (x + 1)) ]
-	// Shifted to the left by 1, f(-1) = 0, for all variables
+	// \frac{1}{\operatorname{length}\left(l\right)}\sum_{n=1}^{\operatorname{length}\left(l\right)}l\left[n\right]\sin\left(nw\left(x+s\right)\right)
+	// s = worm.shift
+	// l = worm.amplitudes
+	// w = worm.frequency
 	const evalute = (x: number) =>
 		(1 / worm.amplitudes.length)
 		* worm.amplitude
-		* worm.amplitudes.reduce((acc, cur, i) => acc + (cur * Math.sin(i * worm.frequency * (x + 1))), 0);
+		* worm.amplitudes.reduce((acc, cur, i) => acc + (cur * Math.sin(i * worm.frequency * (x + worm.shift))), 0);
 
 	return Array.from({ length: worm.length }, (_, i) => evalute(i));
 }
 
-// to alter the evaluation of the fitness, change this function.
-// the current formula is (1-x)/(1+x*k), where k can be any number above -1.
-// the formula needs to have these requirements:
+// The formula needs to have these requirements:
 // 1. Domain [0, 1]
 // 2. Range [0, 1]
 // 3. (strictly) monotonically decreasing

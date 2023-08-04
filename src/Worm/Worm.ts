@@ -17,6 +17,7 @@ export class Worm {
 	
 	frequency = 0.1;
 	amplitude = 1;
+	shift = 1;
 	amplitudes: number[] = [];
 	guess: number[];
 
@@ -37,6 +38,7 @@ export class Worm {
 
 	resetFormula() {
 		this.amplitudes = Array.from({ length: Math.pow(2, 5 + this.difficulty.complexity) }, () => Math.random());
+		this.shift = Math.random() * Math.PI * 2 / this.frequency;
 	}
 
 	updateFormula(numCycles = 1) {
