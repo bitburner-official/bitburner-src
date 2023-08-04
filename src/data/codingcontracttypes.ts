@@ -537,7 +537,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       }
 
       const sanitizedAns: string = removeBracketsFromArrayString(ans).replace(/\s/g, "");
-      const ansArr: string[] = sanitizedAns.split(",").map((ip) => ip.replace(/^"|"$/g, ""));
+      const ansArr: string[] = sanitizedAns.split(",").map((ip) => ip.replace(/^['"]|['"]$/g, ""));
       if (ansArr.length !== ret.length) {
         return false;
       }
