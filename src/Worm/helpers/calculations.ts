@@ -27,6 +27,7 @@ export function calculatePerfectWorm(worm: Worm) {
 // the formula needs to have these requirements:
 // 1. Domain [0, 1]
 // 2. Range [0, 1]
+// 3. (strictly) monotonically decreasing
 export const fitnessFunction = (difference: number) => (1 - difference) / (1 + difference * 16);
 
 export function calculateFitness(worm: Worm) {

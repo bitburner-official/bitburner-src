@@ -2,7 +2,6 @@ import { Info } from '@mui/icons-material';
 import { Container, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { dialogBoxCreate } from '../../ui/React/DialogBox';
-import { BonusTime } from './BonusTime';
 import { BonusSelector } from './BonusSelector';
 import { BonusType } from '../BonusType';
 import { Worm } from '../Worm';
@@ -63,7 +62,6 @@ export function WormRoot({ worm }: IProps): React.ReactElement {
 				Current effect of {bonus}: 0%. Not implemented, duh
 			</Typography>
 			<WormFitness worm={worm}/>
-			<BonusTime worm={worm}/>
 			<WormInput worm={worm}/>
 		</Container>
 	)

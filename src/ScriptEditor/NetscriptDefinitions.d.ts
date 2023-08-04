@@ -4370,13 +4370,14 @@ interface Stanek {
 interface Worm {
 	/**
 	 * Set the guess for the best worm.
+	 * The time it takes depends on the number of threads used.
 	 * @remarks
 	 * RAM cost: 10 GB
 	 * 
 	 * @param guess - The guess to set. Has to be the exact length of the worm.
 	 * @returns The fitness value for that guess.
 	 */
-	setGuess(guess: number[]): number;
+	setGuess(guess: number[]): Promise<number>;
 
 	/**
 	 * Get the length of the worm.

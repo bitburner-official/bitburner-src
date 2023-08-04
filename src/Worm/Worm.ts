@@ -11,6 +11,7 @@ export class Worm {
 	minValue = -1;
 	maxValue = 1;
 	
+	baseTime = 20;
 	difficulty: Difficulty = difficulties[0];
 	bonus: BonusType = BonusType.None;
 	
@@ -19,7 +20,6 @@ export class Worm {
 	amplitudes: number[] = [];
 	guess: number[];
 
-	storedCycles = 0;
 	processCount = 0;
 
 	constructor() {
@@ -28,17 +28,9 @@ export class Worm {
 		this.setDifficulty(difficulties[0]);
 	}
 
-	process(numCycles = 1) {
-		this.storedCycles += numCycles;
-
-		const cyclesNeeded = 50;
-		if (this.storedCycles >= cyclesNeeded) {
-			this.storedCycles -= cyclesNeeded;
-
-			if (this.processCount++ % this.difficulty.windowBetweenChange === 0) this.updateFormula();
-
-			this.updateMults();
-		}
+	process() {
+		if (this.processCount++ % (this.difficulty.windowBetweenChange * this.baseTime) === 0) this.updateFormula();
+		this.updateMults();
 
 		WormEvents.emit();
 	}
@@ -53,6 +45,8 @@ export class Worm {
 			const change = (prev: number) => Math.max(0, Math.min(1, prev + (amount * (Math.random() - 0.5) / 5)));
 			this.amplitudes = this.amplitudes.map(change);
 		}
+
+		console.log(this.amplitudes);
 	}
 
 	updateMults() {
