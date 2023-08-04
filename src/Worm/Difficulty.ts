@@ -1,7 +1,7 @@
 export interface Difficulty {
 	name: string;
 
-	formulasUsed: number;
+	complexity: number;
 	amountOfChange: number;
 	windowBetweenChange: number;
 	bonusMultiplier: number;

@@ -36,7 +36,7 @@ export class Worm {
 	}
 
 	resetFormula() {
-		this.amplitudes = Array.from({ length: this.difficulty.formulasUsed }, () => Math.random());
+		this.amplitudes = Array.from({ length: Math.pow(2, 5 + this.difficulty.complexity) }, () => Math.random());
 	}
 
 	updateFormula(numCycles = 1) {

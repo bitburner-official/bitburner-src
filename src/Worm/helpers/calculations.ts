@@ -1,4 +1,5 @@
 import { Multipliers, defaultMultipliers } from "../../PersonObjects/Multipliers";
+import { getMultiplier } from "../BonusType";
 import { Worm } from "../Worm";
 
 export function isValidGuess(worm: Worm, guess: number[]) {
@@ -44,12 +45,11 @@ export function calculateFitness(worm: Worm) {
 
 export function calculateBonus(fitness: number, difficultyMultiplier: number) {
 	// PLACEHOLDER
-	return fitness * difficultyMultiplier * 15;
+	return 1 + fitness * difficultyMultiplier;
 }
 
 export function calculateWormMults(worm: Worm | null): Multipliers {
-	const mults = defaultMultipliers();
-	if (worm === null) return mults;
+	if (worm === null) return defaultMultipliers();
 
-	return mults;
+	return getMultiplier(worm.bonus, calculateFitness(worm), worm.difficulty);
 }

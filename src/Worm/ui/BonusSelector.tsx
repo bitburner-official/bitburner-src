@@ -1,31 +1,25 @@
 import { Box, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material'
-import React, { useState } from 'react'
-import { Bonus, BonusType, bonusTypeStrings } from '../BonusType'
+import React from 'react'
+import { Bonus, BonusType, bonusTypeNumbers } from '../BonusType'
 
 interface IProps {
+	bonus: BonusType;
 	setBonus(value: BonusType): void;
 }
 
 export function BonusSelector(props: IProps) {
-	const [value, setValue] = useState<string>("None");
-
 	function onChange(event: SelectChangeEvent) {
-		const value = event.target.value;
-		setValue(value);
+		const value = Number(event.target.value);
+		if (!Object.values(BonusType).includes(value)) throw new Error(`Chosen BonusType "${value}" does not exist.`);
 
-		const index = bonusTypeStrings.indexOf(value);
-		if (index === -1) throw new Error(`Chosen BonusType is not a valid BonusType. VALUE, INDEX: ${value}, ${index}`);
-		console.log(event.target.value, index);
-
-		const bonusType = BonusType[index] as unknown as BonusType;
-		props.setBonus(bonusType);
+		props.setBonus(value);
 	}
 
 	return (
-		<Select onChange={onChange} value={value}>
-			{bonusTypeStrings.map(string => (
-				<MenuItem key={string} value={string}>
-					<BonusItem bonus={string}/>
+		<Select onChange={onChange} value={String(props.bonus)}>
+			{bonusTypeNumbers.map(i => (
+				<MenuItem key={i} value={i}>
+					<BonusItem bonus={BonusType[Number(i)]}/>
 				</MenuItem>
 			))}
 		</Select>
