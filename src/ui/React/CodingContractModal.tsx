@@ -24,6 +24,12 @@ export function CodingContractModal(): React.ReactElement {
   useEffect(() => {
     CodingContractEvent.subscribe((props) => setContract(props));
   });
+  useEffect(() => {
+    return () => {
+      contract?.onClose();
+    };
+  }, [contract]);
+
   if (contract === null) return <></>;
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
