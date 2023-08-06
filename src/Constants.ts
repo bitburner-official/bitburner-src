@@ -219,7 +219,7 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.4.1dev - Last changelog update 8/1/23
+## v2.4.1dev - Last changelog update 8/6/23
 
 See 2.4.0 changelog at:
 https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/ui/doc/changelog.md
@@ -228,9 +228,18 @@ Changes below include spoilers.
 
 ### NETSCRIPT:
 
+* Added ns.singularity.getAugmentationFactions to provide a list of factions that has a given augmentation. (@myCatsName)
 * Added ns.stock.getConstants (@Snarling)
+* Added ownedAugs and ownedSF properties to ns.getResetInfo return value (@Snarling)
 * ns.corporation.getConstants now has a ram cost of 0 (@Snarling)
 * ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined (@Snarling)
+
+### UI:
+
+* Fixed an issue that could cause the Coding Contract UI to become unreachable. (@myCatsName)
+* Updated an outdated message on ns.killall logs (@myCatsName)
+* Removed more references to ReadTheDocs that remained after 2.4.0 (@hydroflame) 
+* Fixed some typos/spacing (@myCatsName)
 
 ### INFILTRATION:
 
