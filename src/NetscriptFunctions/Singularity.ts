@@ -40,7 +40,7 @@ import { Server } from "../Server/Server";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { FactionInfos } from "../Faction/FactionInfo";
 import { donate, repNeededToDonate } from "../Faction/formulas/donation";
-import { InternalAPI, removedFunction } from "../Netscript/APIWrapper";
+import { InternalAPI, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { enterBitNode } from "../RedPill";
 import { ClassWork } from "../Work/ClassWork";
 import { CreateProgramWork, isCreateProgramWork } from "../Work/CreateProgramWork";
@@ -1204,11 +1204,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       return canGetBonus();
     },
   };
-  Object.assign(singularityAPI, {
-    getAugmentationCost: removedFunction(
-      "v2.2.0",
-      "singularity.getAugmentationPrice and singularity.getAugmentationRepReq",
-    ),
+
+  // Removed functions
+  setRemovedFunctions(singularityAPI, {
+    getAugmentationCost: {
+      version: "2.2.0",
+      replacement: "singularity.getAugmentationPrice and singularity.getAugmentationRepReq",
+    },
   });
   return singularityAPI;
 }
