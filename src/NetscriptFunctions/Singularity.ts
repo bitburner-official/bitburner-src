@@ -95,6 +95,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     getOwnedSourceFiles: () => () => {
       return [...Player.sourceFiles].map(([n, lvl]) => ({ n, lvl }));
     },
+    getAugmentationFactions: (ctx) => (_augName) => {
+      helpers.checkSingularityAccess(ctx);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
+      return aug.factions.slice();
+    },
     getAugmentationsFromFaction: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
