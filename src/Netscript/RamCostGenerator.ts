@@ -637,5 +637,5 @@ export function getRamCost(tree: string[], throwOnUndefined = false): number {
 
     return typeof next === "function" ? next() : next;
   }
-  throw new Error(`Tried to get the a ram cost but did not reach end of ram cost tree: ns.${tree.join(".")}`);
+  throw new Error(`Tried to get the ram cost, but did not reach the end of the ram cost tree: ns.${tree.join(".")}`);
 }
