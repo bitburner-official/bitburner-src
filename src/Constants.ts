@@ -224,30 +224,29 @@ export const CONSTANTS: {
 See 2.4.0 changelog at:
 https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/ui/doc/changelog.md
 
-Changes below include spoilers.
+Some changes below include spoilers.
 
-### NETSCRIPT:
+### BUGFIX:
 
-* Added ns.singularity.getAugmentationFactions to provide a list of factions that has a given augmentation. (@myCatsName)
+* Fixed a bug where buying NeuroFlux Governor would buy one less level than expected (@zerbosh)
+* Fixed an issue that could cause the Coding Contract UI to become unreachable (@myCatsName)
+* Knowledge of Apollo aug no longer highlights the incorrect wires (@Snarling)
+* ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined (@Snarling)
+
+### API CHANGES:
+
+* Added ns.singularity.getAugmentationFactions to provide a list of factions that has a given augmentation (@myCatsName)
 * Added ns.stock.getConstants (@Snarling)
 * Added ownedAugs and ownedSF properties to ns.getResetInfo return value (@Snarling)
 * ns.corporation.getConstants now has a ram cost of 0 (@Snarling)
-* ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined (@Snarling)
 
-### UI:
-
-* Fixed an issue that could cause the Coding Contract UI to become unreachable. (@myCatsName)
-* Updated an outdated message on ns.killall logs (@myCatsName)
-* Removed more references to ReadTheDocs that remained after 2.4.0 (@hydroflame) 
-* Fixed some typos/spacing (@myCatsName)
-
-### INFILTRATION:
-
-* Knowledge of Apollo aug highlights the correct wires again (@Snarling)
-
-### CODEBASE:
+### CODEBASE / DOCS / MISC:
 
 * Reorganize game constants (@zerbosh)
 * Reorganize ingame documentation folder structure, simplify documentation bundling (@Snarling)
+* IP Address coding contract accepts single-quoted entries (@myCatsName)
+* Updated an outdated message on ns.killall logs (@myCatsName)
+* Removed more references to ReadTheDocs that remained after 2.4.0 (@hydroflame) 
+* Fixed some typos/spacing (@myCatsName)
 `,
 };
