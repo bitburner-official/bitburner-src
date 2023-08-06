@@ -78,7 +78,7 @@ class NSProxyHandler<API extends GenericAPI<API>> {
       const wrappedFunction = function (...args: unknown[]): unknown {
         // What remains *must* be called every time.
         helpers.checkEnvFlags(ctx);
-        helpers.updateDynamicRam(ctx, getRamCost(...arrayPath));
+        helpers.updateDynamicRam(ctx, getRamCost(arrayPath));
         return func(...args);
       };
       Object.defineProperty(this.memoed, key, { ...descriptor, value: wrappedFunction });

@@ -617,7 +617,7 @@ export const RamCosts: RamCostTree<NSFull> = {
 
 type RamTreeGeneric = { [key: string]: number | (() => number) | RamTreeGeneric | undefined };
 
-export function getRamCost(...tree: string[]): number {
+export function getRamCost(tree: string[], throwOnUndefined = false): number {
   if (tree.length === 0) throw new Error(`No arguments passed to getRamCost()`);
 
   let obj: RamTreeGeneric = RamCosts;
@@ -626,7 +626,8 @@ export function getRamCost(...tree: string[]): number {
     const next = obj[branch];
     if (next === undefined) {
       // If no ram cost is defined (e.g. for removed functions), the cost is 0.
-      console.error(`Invalid branch while navigating ram cost tree (ns.${tree.join(".")})`);
+      const errorText = `No ram cost is defined for (ns.${tree.join(".")})`;
+      if (throwOnUndefined) throw errorText;
       return 0;
     }
     if (next && typeof next === "object") {
@@ -636,5 +637,5 @@ export function getRamCost(...tree: string[]): number {
 
     return typeof next === "function" ? next() : next;
   }
-  throw new Error(`Invalid type for ram cost of ns.${tree.join(".")}`);
+  throw new Error(`Tried to get the a ram cost but did not reach end of ram cost tree: ns.${tree.join(".")}`);
 }

@@ -1764,7 +1764,7 @@ export const ns: InternalAPI<NSFull> = {
   }),
   getFunctionRamCost: (ctx) => (_name) => {
     const name = helpers.string(ctx, "name", _name);
-    return getRamCost(...name.split("."));
+    return getRamCost(name.split("."), true);
   },
   tprintRaw: () => (value) => {
     Terminal.printRaw(wrapUserNode(value));
