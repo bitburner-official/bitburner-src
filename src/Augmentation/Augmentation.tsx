@@ -227,4 +227,8 @@ export class Augmentation {
     const queuedNFGLevel = Player.queuedAugmentations.filter((aug) => aug.name === this.name).length;
     return ownedNFGLevel + queuedNFGLevel;
   }
+  /** Get the next level of an augmentation to buy. Currently only relevant for NFG. */
+  getNextLevel(): number {
+    return this.getLevel() + 1;
+  }
 }
