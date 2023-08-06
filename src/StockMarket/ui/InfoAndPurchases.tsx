@@ -13,7 +13,6 @@ import { Money } from "../../ui/React/Money";
 import { initStockMarket } from "../StockMarket";
 
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
@@ -171,14 +170,10 @@ function Purchase4SMarketDataButton(props: IProps): React.ReactElement {
 
 export function InfoAndPurchases(props: IProps): React.ReactElement {
   const [helpOpen, setHelpOpen] = useState(false);
-  const documentationLink = "https://bitburner-official.readthedocs.io/en/latest/basicgameplay/stockmarket.html";
   return (
     <>
-      <Typography>Welcome to the World Stock Exchange (WSE)!</Typography>
-      <Link href={documentationLink} target={"_blank"}>
-        <Typography>Investopedia</Typography>
-      </Link>
-      <br />
+      <Typography variant="h4">Welcome to the World Stock Exchange (WSE)!</Typography>
+
       <PurchaseWseAccountButton {...props} />
 
       <Typography variant="h5" color="primary">
