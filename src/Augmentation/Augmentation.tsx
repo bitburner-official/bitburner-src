@@ -40,12 +40,16 @@ export interface AugmentationCtorParams {
   faction_rep?: number;
   crime_money?: number;
   crime_success?: number;
+	crime_karma_impact?: number;
   work_money?: number;
   hacknet_node_money?: number;
   hacknet_node_purchase_cost?: number;
   hacknet_node_ram_cost?: number;
   hacknet_node_core_cost?: number;
   hacknet_node_level_cost?: number;
+	server_cost?: number;
+	home_ram_cost?: number;
+	home_core_cost?: number;
   bladeburner_max_stamina?: number;
   bladeburner_stamina_gain?: number;
   bladeburner_analysis?: number;

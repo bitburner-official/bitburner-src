@@ -75,7 +75,7 @@ export class CrimeWork extends Work {
     Player.gainDexterityExp(gains.dexExp);
     Player.gainAgilityExp(gains.agiExp);
     Player.gainCharismaExp(gains.chaExp);
-    Player.karma -= karma * focusPenalty;
+    Player.karma -= karma * focusPenalty * Player.mults.crime_karma_impact;
   }
 
   finish(): void {

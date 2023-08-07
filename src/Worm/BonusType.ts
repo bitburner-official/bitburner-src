@@ -5,6 +5,7 @@ import { calculateBonus } from "./helpers/calculations";
 export enum BonusType {
 	None,
 	
+	// Mock
 	Bladeburner,
 	Rep,
 	Hacking,
@@ -13,9 +14,13 @@ export enum BonusType {
 	Agility,
 	Dexterity,
 	Charisma,
+
+	// Actual
+	"Cardinal sin",
+	"Favorable appearance",
+	"Synthetic black friday"
 }
 
-// All strings of the bonusType, like "None", "Bladeburner" etc.
 export const bonusTypeNumbers = Object.keys(BonusType).filter(value =>
 	typeof BonusType[value as keyof typeof BonusType] !== "number"
 );
@@ -64,6 +69,29 @@ export function getMultiplier(type: BonusType, fitness: number, difficulty: Diff
 			mult.bladeburner_success_chance *= power;
 			break;
 		}
+
+		case BonusType["Cardinal sin"]: {
+			mult.crime_karma_impact *= power;
+			break;
+		}
+		case BonusType["Favorable appearance"]: {
+			mult.faction_rep *= power;
+			mult.company_rep *= power;
+			break;
+		}
+		case BonusType["Synthetic black friday"]: {
+			mult.hacknet_node_core_cost /= power;
+			mult.hacknet_node_level_cost /= power;
+			mult.hacknet_node_purchase_cost /= power;
+			mult.hacknet_node_ram_cost /= power;
+
+			mult.server_cost /= power;
+			mult.home_ram_cost /= power;
+			mult.home_core_cost /= power;
+			
+			break;
+		}
+
 		default: throw new Error(`Bonus "${type}" doesn't have a multiplier`);
 	}
 
@@ -99,6 +127,16 @@ export function Bonus(type: BonusType): string {
     case BonusType.Bladeburner: {
       return "+x% all bladeburner stats";
     }
+
+		case BonusType["Cardinal sin"]: {
+			return "+x% crime impact on karma"; // "+x% karma gain" "+x% karma loss"
+		}
+		case BonusType["Favorable appearance"]: {
+			return "+x% reputation from factions and companies";
+		}
+		case BonusType["Synthetic black friday"]: {
+			return "-x% hacknet costs, purchased server costs, home ram and home core costs";
+		}
   }
   throw new Error("Calling bonus for BonusType that doesn't have an bonus: " + type);
 }

@@ -35,7 +35,8 @@ export function getPurchaseServerCost(ram: number): number {
     sanitizedRam *
     CONSTANTS.BaseCostFor1GBOfRamServer *
     currentNodeMults.PurchasedServerCost *
-    Math.pow(currentNodeMults.PurchasedServerSoftcap, upg)
+    Math.pow(currentNodeMults.PurchasedServerSoftcap, upg) * 
+		Player.mults.server_cost
   );
 }
 

@@ -147,6 +147,8 @@ interface Multipliers {
   crime_money: number;
   /** Multiplier to crime success rate */
   crime_success: number;
+	/** Multiplier to crime karma impact */
+	crime_karma_impact: number;
   /** Multiplier to amount of money gained from working */
   work_money: number;
   /** Multiplier to amount of money produced by Hacknet Nodes */
@@ -159,6 +161,12 @@ interface Multipliers {
   hacknet_node_core_cost: number;
   /** Multiplier to cost of leveling up a Hacknet Node */
   hacknet_node_level_cost: number;
+	/** Multiplier to cost of purchasable servers */
+	server_cost: number;
+	/** Multiplier to cost of ram upgrade for home */
+	home_ram_cost: number;
+	/** Multiplier to cost of core upgrade for home */
+	home_core_cost: number;
   /** Multiplier to Bladeburner max stamina */
   bladeburner_max_stamina: number;
   /** Multiplier to Bladeburner stamina gain rate */

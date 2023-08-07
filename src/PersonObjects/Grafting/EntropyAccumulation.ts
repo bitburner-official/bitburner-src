@@ -30,12 +30,17 @@ export const calculateEntropy = (stacks = 1): Multipliers => {
 
     crime_money: Player.mults.crime_money * nerf,
     crime_success: Player.mults.crime_success * nerf,
+		crime_karma_impact: Player.mults.crime_karma_impact * nerf,
 
     hacknet_node_money: Player.mults.hacknet_node_money * nerf,
     hacknet_node_purchase_cost: Player.mults.hacknet_node_purchase_cost * nerf,
     hacknet_node_ram_cost: Player.mults.hacknet_node_ram_cost * nerf,
     hacknet_node_core_cost: Player.mults.hacknet_node_core_cost * nerf,
     hacknet_node_level_cost: Player.mults.hacknet_node_level_cost * nerf,
+
+		server_cost: Player.mults.server_cost * nerf,
+		home_ram_cost: Player.mults.home_ram_cost * nerf,
+		home_core_cost: Player.mults.home_core_cost * nerf,
 
     work_money: Player.mults.work_money * nerf,
 

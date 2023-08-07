@@ -42,7 +42,7 @@ export class SleeveCrimeWork extends SleeveWorkClass {
     const gains = this.getExp(sleeve);
     const success = Math.random() < crime.successRate(sleeve);
     if (success) {
-      Player.karma -= crime.karma * sleeve.syncBonus();
+      Player.karma -= crime.karma * sleeve.syncBonus() * Player.mults.crime_karma_impact;
       Player.numPeopleKilled += crime.kills;
     } else gains.money = 0;
     applySleeveGains(sleeve, gains, success ? 1 : 0.25);
