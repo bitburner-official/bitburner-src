@@ -7,7 +7,7 @@ import { Script } from "../../../src/Script/Script";
 import { WorkerScript } from "../../../src/Netscript/WorkerScript";
 import { calculateRamUsage } from "../../../src/Script/RamCalculations";
 import { ns } from "../../../src/NetscriptFunctions";
-import { InternalAPI, NetscriptContext } from "src/Netscript/APIWrapper";
+import { InternalAPI } from "src/Netscript/APIWrapper";
 import { Singularity } from "@nsdefs";
 
 type PotentiallyAsyncFunction = (arg?: unknown) => { catch?: PotentiallyAsyncFunction };
@@ -21,9 +21,6 @@ function grabCost<API>(ramEntry: RamCostTree<API>[keyof API]) {
   if (typeof ramEntry === "function") return ramEntry();
   if (typeof ramEntry === "number") return ramEntry;
   throw new Error("Invalid ramcost: " + ramEntry);
-}
-function isRemovedFunction(ctx: NetscriptContext, fn: (ctx: NetscriptContext) => (...__: unknown[]) => unknown) {
-  return /REMOVED FUNCTION/.test(fn(ctx) + "");
 }
 
 describe("Netscript RAM Calculation/Generation Tests", function () {
@@ -74,7 +71,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     const fnName = fnPath[fnPath.length - 1];
 
     //check imported getRamCost fn vs. expected ram from test
-    expect(getRamCost(...fnPath)).toEqual(expectedRamCost);
+    expect(getRamCost(fnPath, true)).toEqual(expectedRamCost);
 
     // Static ram check
     const staticCost = calculateRamUsage(code, new Map()).cost;
@@ -118,8 +115,6 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
         for (const [key, val] of Object.entries(internalLayer) as [keyof API, InternalAPI<API>[keyof API]][]) {
           const newPath = [...path, key as string];
           if (typeof val === "function") {
-            // Removed functions have no ram cost and should be skipped.
-            if (isRemovedFunction({ workerScript }, val)) return;
             const fn = getFunction(externalLayer[key]);
             const fnName = newPath.join(".");
             if (!(key in ramLayer)) {
@@ -150,7 +145,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     const singObjects = (
       Object.entries(ns.singularity) as [keyof Singularity, InternalAPI<Singularity>[keyof Singularity]][]
     )
-      .filter(([__, v]) => typeof v === "function" && !isRemovedFunction({ workerScript }, v))
+      .filter(([__, v]) => typeof v === "function")
       .map(([name]) => {
         return {
           name,

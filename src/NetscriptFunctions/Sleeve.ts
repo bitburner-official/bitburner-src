@@ -5,7 +5,7 @@ import { Player } from "@player";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
-import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
+import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
 import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
@@ -262,11 +262,11 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return Player.sleeves[sleeveNumber].bladeburner(action, contract);
     },
   };
-  // Removed undocumented functions added using Object.assign because typescript.
-  // TODO: Remove these at 3.0
-  Object.assign(sleeveFunctions, {
-    getSleeveStats: removedFunction("v2.2.0", "sleeve.getSleeve"),
-    getInformation: removedFunction("v2.2.0", "sleeve.getSleeve"),
+
+  // Removed functions
+  setRemovedFunctions(sleeveFunctions, {
+    getSleeveStats: { version: "2.2.0", replacement: "sleeve.getSleeve" },
+    getInformation: { version: "2.2.0", replacement: "sleeve.getSleeve" },
   });
   return sleeveFunctions;
 }

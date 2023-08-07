@@ -86,7 +86,7 @@ import { Flags } from "./NetscriptFunctions/Flags";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
-import { InternalAPI, removedFunction, NSProxy } from "./Netscript/APIWrapper";
+import { InternalAPI, setRemovedFunctions, NSProxy } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
@@ -1764,7 +1764,7 @@ export const ns: InternalAPI<NSFull> = {
   }),
   getFunctionRamCost: (ctx) => (_name) => {
     const name = helpers.string(ctx, "name", _name);
-    return getRamCost(...name.split("."));
+    return getRamCost(name.split("."), true);
   },
   tprintRaw: () => (value) => {
     Terminal.printRaw(wrapUserNode(value));
@@ -1775,9 +1775,10 @@ export const ns: InternalAPI<NSFull> = {
   flags: Flags,
   ...NetscriptExtra(),
 };
-// Object.assign to bypass ts for removedFunctions which have no documentation or ramcost
-Object.assign(ns, {
-  getServerRam: removedFunction("v2.2.0", "getServerMaxRam and getServerUsedRam"),
+
+// Removed functions
+setRemovedFunctions(ns, {
+  getServerRam: { version: "2.2.0", replacement: "getServerMaxRam and getServerUsedRam" },
 });
 
 export function NetscriptFunctions(ws: WorkerScript): NSFull {

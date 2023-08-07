@@ -46,7 +46,7 @@ import {
 } from "../Gang/formulas/formulas";
 import { favorToRep as calculateFavorToRep, repToFavor as calculateRepToFavor } from "../Faction/formulas/favor";
 import { repFromDonation } from "../Faction/formulas/donation";
-import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
+import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { calculateCompanyWorkStats } from "../Work/Formulas";
@@ -427,10 +427,10 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       },
     },
   };
-  // Removed undocumented functions added using Object.assign because typescript.
-  // TODO: Remove these at 3.0
-  Object.assign(formulasFunctions.work, {
-    classGains: removedFunction("2.2.0", "formulas.work.universityGains or formulas.work.gymGains"),
+
+  // Removed functions
+  setRemovedFunctions(formulasFunctions.work, {
+    classGains: { version: "2.2.0", replacement: "formulas.work.universityGains or formulas.work.gymGains" },
   });
   return formulasFunctions;
 }
