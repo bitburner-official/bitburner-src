@@ -18,7 +18,8 @@ export enum BonusType {
 	// Actual
 	"Cardinal sin",
 	"Favorable appearance",
-	"Synthetic black friday"
+	"Synthetic black friday",
+	"Increased mainframe voltage"
 }
 
 export const bonusTypeNumbers = Object.keys(BonusType).filter(value =>
@@ -91,6 +92,10 @@ export function getMultiplier(type: BonusType, fitness: number, difficulty: Diff
 			
 			break;
 		}
+		case BonusType["Increased mainframe voltage"]: {
+			mult.game_tick_speed *= power;
+			break;
+		}
 
 		default: throw new Error(`Bonus "${type}" doesn't have a multiplier`);
 	}
@@ -136,6 +141,9 @@ export function Bonus(type: BonusType): string {
 		}
 		case BonusType["Synthetic black friday"]: {
 			return "-x% hacknet costs, purchased server costs, home ram and home core costs";
+		}
+		case BonusType["Increased mainframe voltage"]: {
+			return "+x% game cycles per process";
 		}
   }
   throw new Error("Calling bonus for BonusType that doesn't have an bonus: " + type);

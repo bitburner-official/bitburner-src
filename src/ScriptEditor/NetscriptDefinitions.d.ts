@@ -175,6 +175,8 @@ interface Multipliers {
   bladeburner_analysis: number;
   /** Multiplier to success chance in Bladeburner contracts/operations */
   bladeburner_success_chance: number;
+	/** Multiplier to the game tick speed */
+	game_tick_speed: number;
 }
 
 /** @public */

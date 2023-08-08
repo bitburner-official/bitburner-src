@@ -54,6 +54,7 @@ export interface AugmentationCtorParams {
   bladeburner_stamina_gain?: number;
   bladeburner_analysis?: number;
   bladeburner_success_chance?: number;
+	game_tick_speed?: number;
 
   startingMoney?: number;
   programs?: CompletedProgramName[];

@@ -48,5 +48,7 @@ export const calculateEntropy = (stacks = 1): Multipliers => {
     bladeburner_stamina_gain: Player.mults.bladeburner_stamina_gain * nerf,
     bladeburner_analysis: Player.mults.bladeburner_analysis * nerf,
     bladeburner_success_chance: Player.mults.bladeburner_success_chance * nerf,
+
+		game_tick_speed: Player.mults.game_tick_speed * nerf,
   };
 };
