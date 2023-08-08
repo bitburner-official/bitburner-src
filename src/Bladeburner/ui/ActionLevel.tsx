@@ -41,8 +41,8 @@ export function ActionLevel({ action, isActive, bladeburner, rerender }: IProps)
         <Tooltip
           title={
             <Typography>
-              {action.getSuccessesNeededForNextLevel(BladeburnerConstants.ContractSuccessesPerLevel)} successes needed
-              for next level
+              {action.getSuccessesNeededForNextLevel(BladeburnerConstants.ContractSuccessesPerLevel) - action.successes}{" "}
+              successes needed for next level
             </Typography>
           }
         >
