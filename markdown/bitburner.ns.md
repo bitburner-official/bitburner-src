@@ -26,7 +26,6 @@ export async function main(ns) {
  await ns.hack('n00dles');
 }
 ```
-[ns2 in-game docs](https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html) <hr> For (deprecated) .script usage, see: [ns1 in-game docs](https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html) <hr>
 
 ## Properties
 
