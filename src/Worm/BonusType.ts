@@ -1,73 +1,40 @@
 import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
 import { Difficulty } from "./Difficulty";
-import { calculateBonus } from "./helpers/calculations";
 
 export enum BonusType {
 	None,
-	
-	// Mock
-	Bladeburner,
-	Rep,
-	Hacking,
-	Strength,
-	Defense,
-	Agility,
-	Dexterity,
-	Charisma,
 
-	// Actual
 	"Cardinal sin",
 	"Favorable appearance",
 	"Synthetic black friday",
 	"Increased mainframe voltage"
 }
 
+// Maps every BonusType to a percentage value (100 being 100%)
+export const bonusTypePower: Record<BonusType, number> = {
+	[BonusType.None]: 0,
+	[BonusType["Cardinal sin"]]: 40,
+	[BonusType["Favorable appearance"]]: 75,
+	[BonusType["Synthetic black friday"]]: 15,
+	[BonusType["Increased mainframe voltage"]]: 10,
+};
+
 export const bonusTypeNumbers = Object.keys(BonusType).filter(value =>
 	typeof BonusType[value as keyof typeof BonusType] !== "number"
 );
 
+export const stringIsBonusTypeKey = (s: string): s is keyof typeof BonusType => Object.values(BonusType).indexOf(s) !== -1;
+
+export function getCurrentBonusPower(type: BonusType, fitness: number, bonusMultiplier: number) {
+	return 1 + fitness * bonusMultiplier * (bonusTypePower[type] / 100);
+}
+
 export function getMultiplier(type: BonusType, fitness: number, difficulty: Difficulty): Multipliers {
 	const mult = defaultMultipliers();
-	const power = calculateBonus(fitness, difficulty.bonusMultiplier);
+	const power = getCurrentBonusPower(type, fitness, difficulty.bonusMultiplier);
 
 	switch (type) {
 		case BonusType.None: {
-			break;
-		}
-		case BonusType.Hacking: {
-			mult.hacking *= power;
-			break;
-		}
-		case BonusType.Strength: {
-			mult.strength *= power;
-			break;
-		}
-		case BonusType.Defense: {
-			mult.defense *= power;
-			break;
-		}
-		case BonusType.Agility: {
-			mult.agility *= power;
-			break;
-		}
-		case BonusType.Dexterity: {
-			mult.dexterity *= power;
-			break;
-		}
-		case BonusType.Charisma: {
-			mult.charisma *= power;
-			break;
-		}
-		case BonusType.Rep: {
-			mult.company_rep *= power;
-			mult.faction_rep *= power;
-			break;
-		}
-		case BonusType.Bladeburner: {
-			mult.bladeburner_analysis *= power;
-			mult.bladeburner_max_stamina *= power;
-			mult.bladeburner_stamina_gain *= power;
-			mult.bladeburner_success_chance *= power;
 			break;
 		}
 
@@ -108,30 +75,6 @@ export function Bonus(type: BonusType): string {
 		case BonusType.None: {
 			return "no benefit";
 		}
-    case BonusType.Hacking: {
-      return "+x% hacking skill";
-    }
-    case BonusType.Strength: {
-      return "+x% strength skill";
-    }
-    case BonusType.Defense: {
-      return "+x% defense skill";
-    }
-    case BonusType.Dexterity: {
-      return "+x% dexterity skill";
-    }
-    case BonusType.Agility: {
-      return "+x% agility skill";
-    }
-    case BonusType.Charisma: {
-      return "+x% charisma skill";
-    }
-    case BonusType.Rep: {
-      return "+x% reputation from factions and companies";
-    }
-    case BonusType.Bladeburner: {
-      return "+x% all bladeburner stats";
-    }
 
 		case BonusType["Cardinal sin"]: {
 			return "+x% crime impact on karma"; // "+x% karma gain" "+x% karma loss"

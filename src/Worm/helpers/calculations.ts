@@ -43,11 +43,6 @@ export function calculateFitness(worm: Worm) {
 	return fitness;
 }
 
-export function calculateBonus(fitness: number, difficultyMultiplier: number) {
-	// PLACEHOLDER
-	return 1 + fitness * difficultyMultiplier;
-}
-
 export function calculateWormMults(worm: Worm | null): Multipliers {
 	if (worm === null) return defaultMultipliers();
 
