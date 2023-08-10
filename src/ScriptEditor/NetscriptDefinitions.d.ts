@@ -6894,6 +6894,49 @@ declare enum LocationName {
   Void = "The Void",
 }
 
+/** Names of all companies
+ * @public */
+declare enum CompanyName {
+  ECorp = "ECorp",
+  MegaCorp = "MegaCorp",
+  BachmanAndAssociates = "Bachman & Associates",
+  BladeIndustries = "Blade Industries",
+  NWO = "NWO",
+  ClarkeIncorporated = "Clarke Incorporated",
+  OmniTekIncorporated = "OmniTek Incorporated",
+  FourSigma = "Four Sigma",
+  KuaiGongInternational = "KuaiGong International",
+  FulcrumTechnologies = "Fulcrum Technologies",
+  StormTechnologies = "Storm Technologies",
+  DefComm = "DefComm",
+  HeliosLabs = "Helios Labs",
+  VitaLife = "VitaLife",
+  IcarusMicrosystems = "Icarus Microsystems",
+  UniversalEnergy = "Universal Energy",
+  GalacticCybersystems = "Galactic Cybersystems",
+  AeroCorp = "AeroCorp",
+  OmniaCybersystems = "Omnia Cybersystems",
+  SolarisSpaceSystems = "Solaris Space Systems",
+  DeltaOne = "DeltaOne",
+  GlobalPharmaceuticals = "Global Pharmaceuticals",
+  NovaMedical = "Nova Medical",
+  CIA = "Central Intelligence Agency",
+  NSA = "National Security Agency",
+  WatchdogSecurity = "Watchdog Security",
+  LexoCorp = "LexoCorp",
+  RhoConstruction = "Rho Construction",
+  AlphaEnterprises = "Alpha Enterprises",
+  Police = "Aevum Police Headquarters",
+  SysCoreSecurities = "SysCore Securities",
+  CompuTek = "CompuTek",
+  NetLinkTechnologies = "NetLink Technologies",
+  CarmichaelSecurity = "Carmichael Security",
+  FoodNStuff = "FoodNStuff",
+  JoesGuns = "Joe's Guns",
+  OmegaSoftware = "Omega Software",
+  NoodleBar = "Noodle Bar",
+}
+
 /** @public */
 export type NSEnums = {
   CityName: typeof CityName;
@@ -6904,6 +6947,7 @@ export type NSEnums = {
   LocationName: typeof LocationName;
   ToastVariant: typeof ToastVariant;
   UniversityClassType: typeof UniversityClassType;
+  CompanyName: typeof CompanyName;
 };
 
 /**
