@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { Worm } from '../Worm';
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material';
-import { isValidNumber } from '../helpers/calculations';
+import { formatWormNumber, isValidNumber } from '../helpers/calculations';
 
 interface IProps {
 	worm: Worm;
@@ -16,7 +16,7 @@ export function WormInput({ worm }: IProps) {
 	const isSaved = useCallback((index: number, val: number) => val === worm.guess[index], [worm]);
 
   const handleChange = useCallback((index: number, value: string) => {
-		const number = Number(value);
+		const number = formatWormNumber(Number(value));
 
 		setInput(arr => {
 			arr[index] = value;
@@ -27,6 +27,19 @@ export function WormInput({ worm }: IProps) {
 			return arr.slice();
 		});
   }, [isValid, setGuess, setInput]);
+
+	const handleBlur = useCallback((index: number) => {
+		const number = formatWormNumber(Number(input[index]));
+
+		setInput(arr => {
+			arr[index] = String(number);
+			return arr.slice();
+		});
+		if (isValid(number)) setGuess(arr => {
+			arr[index] = number;
+			return arr.slice();
+		});
+  }, [input, isValid, setGuess, setInput]);
 
 	const handleReset = useCallback(() => {
 		setGuess(worm.guess.slice());
@@ -71,6 +84,7 @@ export function WormInput({ worm }: IProps) {
 										focused={!isSaved(4 * i + j, Number(cur))}
 										value={cur}
 										onChange={event => handleChange(i * 4 + j, event.target.value)}
+										onBlur={() => handleBlur(i * 4 + j)}
 									/>
                 </TableCell>
               ))}

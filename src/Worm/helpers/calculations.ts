@@ -8,6 +8,10 @@ export function isValidGuess(worm: Worm, guess: number[]) {
 	return isRightLength && allNumbersValid;
 }
 
+export function formatWormNumber(number: number) {
+	return Math.round(number * 1000) / 1000;
+}
+
 export function isValidNumber(worm: Worm, number: number) {
 	return worm.minValue <= number && number <= worm.maxValue
 }
