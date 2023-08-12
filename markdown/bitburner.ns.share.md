@@ -19,5 +19,5 @@ Promise&lt;void&gt;
 
 RAM cost: 2.4 GB
 
-Increases your rep gain of all faction work types while share is called. Scales with thread count.
+Increases rep/second for all faction work while share is running. Each cycle of ns.share() is 10 seconds. Scales with thread count, but at a sharply decreasing rate.
 

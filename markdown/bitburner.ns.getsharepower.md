@@ -4,7 +4,7 @@
 
 ## NS.getSharePower() method
 
-Calculate your share power. Based on all the active share calls.
+Share Power has a multiplicative effect on rep/second while doing work for a faction. Share Power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
 
 **Signature:**
 
