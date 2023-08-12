@@ -4,7 +4,7 @@ import { Worm as IWorm } from "@nsdefs";
 import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Worm } from "../Worm/Worm";
-import { calculateFitness } from "../Worm/helpers/calculations";
+import { calculateFitness, getGuessTime } from "../Worm/helpers/calculations";
 import { arrayToString } from "../utils/helpers/ArrayHelpers";
 
 export function NetscriptWorm(): InternalAPI<IWorm> {
@@ -31,7 +31,7 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 		setGuess: (ctx) => (_guess) => {
 			checkWormAPIAccess(ctx);
 			const guess = helpers.array(ctx, "guess", _guess, helpers.number);
-			const time = 60 * 1000 / ctx.workerScript.scriptRef.threads;
+			const time = getGuessTime(ctx.workerScript.scriptRef.threads);
 			return helpers.netscriptDelay(ctx, time).then(() => {
 				getWorm().setGuess(guess);
 				helpers.log(ctx, () => `Set guess to ${arrayToString(guess)}`);

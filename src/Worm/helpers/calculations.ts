@@ -29,11 +29,13 @@ export function calculatePerfectWorm(worm: Worm) {
 	return Array.from({ length: worm.length }, (_, i) => evalute(i));
 }
 
+export const getGuessTime = (threads: number) => 60 * 1000 / threads;
+
 // The formula needs to have these requirements:
-// 1. Domain [0, 1]
-// 2. Range [0, 1]
+// f(0) = 0
+// 2. Range [0, 1] for x >= 0
 // 3. (strictly) monotonically decreasing
-export const fitnessFunction = (difference: number) => (1 - difference) / (1 + difference * 16);
+export const fitnessFunction = (difference: number) => 1 / Math.exp(5 * difference);
 
 export function calculateFitness(worm: Worm) {
 	const perfectWorm = calculatePerfectWorm(worm);
@@ -41,8 +43,7 @@ export function calculateFitness(worm: Worm) {
 	// console.log(perfectWorm);
 
 	const difference = perfectWorm.reduce((acc, val, i) => acc + Math.abs(val - worm.guess[i]), 0);
-	const percentage = difference / (2 * worm.length)
-	const fitness = fitnessFunction(percentage);
+	const fitness = fitnessFunction(difference);
 
 	return fitness;
 }
