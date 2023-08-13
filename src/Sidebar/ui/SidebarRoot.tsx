@@ -159,7 +159,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const canStockMarket = Player.hasWseAccount;
   const canBladeburner = !!Player.bladeburner;
   const canStaneksGift = Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1);
-	const canWorm = true;
+	const canWorm = Player.worm !== null;
 
   const clickPage = useCallback(
     (page: Page) => {

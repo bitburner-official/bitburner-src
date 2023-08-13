@@ -24,6 +24,7 @@ import { InvitationsSeen } from "./Faction/ui/FactionsRoot";
 import { CONSTANTS } from "./Constants";
 import { LogBoxClearEvents } from "./ui/React/LogBoxManager";
 import { initCircadianModulator } from "./Augmentation/Augmentations";
+import { Worm } from "./Worm/Worm";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string) {
@@ -257,6 +258,12 @@ export function prestigeSourceFile(isFlume: boolean): void {
   if (Player.bitNodeN === 13) {
     delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
   }
+
+	if (Player.bitNodeN === 16 || Player.sourceFileLvl(16) > 0) {
+		Player.worm = new Worm();
+	} else {
+		Player.worm = null;
+	}
 
   // Reset Stock market, gang, and corporation
   if (Player.hasWseAccount) {

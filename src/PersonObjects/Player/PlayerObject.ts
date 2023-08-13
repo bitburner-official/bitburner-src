@@ -36,7 +36,7 @@ export class PlayerObject extends Person implements IPlayer {
   corporation: Corporation | null = null;
   gang: Gang | null = null;
   bladeburner: Bladeburner | null = null;
-	worm: Worm | null = new Worm();
+	worm: Worm | null = null;
   currentServer = "";
   factions: FactionName[] = [];
   factionInvitations: FactionName[] = [];
