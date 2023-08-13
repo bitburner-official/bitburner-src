@@ -105,6 +105,7 @@ import { getEnumHelper } from "./utils/EnumHelper";
 export const enums: NSEnums = {
   CityName,
   CrimeType,
+  FactionName,
   FactionWorkType,
   GymType,
   JobName,
