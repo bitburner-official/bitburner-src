@@ -9,9 +9,10 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Player } from "@player";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import { Worm } from "../../Worm/Worm";
 
 // Update as additional BitNodes get implemented
-const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16];
 
 export function SourceFilesDev(): React.ReactElement {
   function setSF(sfN: number, sfLvl: number) {
@@ -19,6 +20,10 @@ export function SourceFilesDev(): React.ReactElement {
       if (sfN === 9) {
         Player.hacknetNodes = [];
       }
+			if (sfN === 16) {
+				if (sfLvl === 0) Player.worm = null;
+				else Player.worm = new Worm();
+			}
       if (sfLvl === 0) {
         Player.sourceFiles.delete(sfN);
         return;
