@@ -32,7 +32,7 @@ export function calculatePerfectWorm(worm: Worm) {
 export const getGuessTime = (threads: number) => 60 * 1000 / threads;
 
 // The formula needs to have these requirements:
-// f(0) = 0
+// f(0) = 1
 // 2. Range [0, 1] for x >= 0
 // 3. (strictly) monotonically decreasing
 export const fitnessFunction = (difference: number) => 1 / Math.exp(5 * difference);

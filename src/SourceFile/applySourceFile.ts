@@ -167,6 +167,9 @@ export function applySourceFile(bn: number, lvl: number): void {
     case 13: // They're Lunatics
       // Grants more space on Stanek's Gift.
       break;
+		case 16: // The Worm
+			// Increases time between changes to the worm.
+			break;
     default:
       console.error(`Invalid source file number: ${bn}`);
       break;

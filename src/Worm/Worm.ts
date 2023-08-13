@@ -30,10 +30,17 @@ export class Worm {
 	}
 
 	process() {
-		if (this.processCount++ % (this.difficulty.windowBetweenChange * this.baseTime) === 0) this.updateFormula();
+		if (++this.processCount % this.processCountBetweenChanges === 0) this.updateFormula();
 		this.updateMults();
 
 		WormEvents.emit();
+	}
+
+	get processCountBetweenChanges() {
+		return Math.ceil(
+			this.baseTime *
+			this.difficulty.windowBetweenChange *
+			(1 + Math.log10(Player.sourceFileLvl(16))));
 	}
 
 	resetFormula() {

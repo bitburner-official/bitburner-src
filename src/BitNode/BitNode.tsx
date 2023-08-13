@@ -445,6 +445,23 @@ export function initBitNodes() {
       </>
     ),
   );
+	BitNodes.BitNode16 = new BitNode(
+		16,
+		2,
+		"The Worm",
+		"Decipher, adapt, conquer.",
+		<>
+			As the player explored a complex simulation, they came across a mysterious virus spreading rapidly within its virtual world.
+			Surprisingly, this elusive intruder seemed to have unmatched control over the simulation, suggesting a deep understanding of its workings. While examining its encrypted code, they made an interesting discovery: creating a similar version of the worm could provide substantial benefits. The Worm had secretly built a large network of connected nodes, offering the player access to a wealth of resources and information.
+			<br />
+			<br />
+			Destroying this BitNode will give you Source-File 16, or if you already have this Source-File it will upgrade
+			its level up to a maximum of 3. This Source-File lets the Worm appear in other BitNodes.
+			<br />
+			<br />
+			Each level of this Source-File increases the time between changes to the Worm.
+		</>
+	);
 }
 
 export const defaultMultipliers = new BitNodeMultipliers();
@@ -909,6 +926,37 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         WorldDaemonDifficulty: 3,
       });
     }
+		case 16: {
+			return new BitNodeMultipliers({
+				HackingLevelMultiplier: 0.2,
+				StrengthLevelMultiplier: 0.2,
+				DefenseLevelMultiplier: 0.2,
+				DexterityLevelMultiplier: 0.2,
+				AgilityLevelMultiplier: 0.2,
+
+				PurchasedServerSoftcap: 2,
+				PurchasedServerMaxRam: 2,
+
+				RepToDonateToFaction: 2,
+				FactionWorkRepGain: 0.5,
+
+				GangSoftcap: 1.5,
+				GangUniqueAugs: 1.3,
+
+				CorporationValuation: 0.6,
+				CorporationSoftcap: 0.9,
+				CorporationDivisions: 0.8,
+
+				BladeburnerRank: 0.4,
+				BladeburnerSkillCost: 1.2,
+
+				StaneksGiftPowerMultiplier: 0.5,
+				StaneksGiftExtraSize: 3,
+				
+				WorldDaemonDifficulty: 1.5,
+				HacknetNodeMoney: 1.5,
+			});
+		}
     default: {
       throw new Error("Invalid BitNodeN");
     }
