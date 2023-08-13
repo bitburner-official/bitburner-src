@@ -80,7 +80,8 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
         else console.error(`Invalid company name in setSleeveTask: ${abc[1]}`);
         break;
       case "Work for Faction":
-        props.sleeve.workForFaction(abc[1], abc[2]);
+        if (getEnumHelper("FactionName").isMember(abc[1])) props.sleeve.workForFaction(abc[1], abc[2]);
+        else console.error(`Invalid faction name in setSleeveTask: ${abc[1]}`);
         break;
       case "Commit Crime":
         props.sleeve.commitCrime(findCrime(abc[1])?.type ?? CrimeType.shoplift);

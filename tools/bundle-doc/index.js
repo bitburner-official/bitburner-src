@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 const files = [];
-const docRoot = "./src/Documentation/ui/doc";
+const docRoot = "./src/Documentation/doc";
 const processDir = (dir) => {
   console.log(dir);
   for (const file of fs.readdirSync(dir)) {

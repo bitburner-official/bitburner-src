@@ -34,12 +34,10 @@ declare enum JobName
 |  IT3 | <code>&quot;Systems Administrator&quot;</code> |  |
 |  networkEng0 | <code>&quot;Network Engineer&quot;</code> |  |
 |  networkEng1 | <code>&quot;Network Administrator&quot;</code> |  |
-|  security0 | <code>&quot;Police Officer&quot;</code> |  |
-|  security1 | <code>&quot;Police Chief&quot;</code> |  |
-|  security2 | <code>&quot;Security Guard&quot;</code> |  |
-|  security3 | <code>&quot;Security Officer&quot;</code> |  |
-|  security4 | <code>&quot;Security Supervisor&quot;</code> |  |
-|  security5 | <code>&quot;Head of Security&quot;</code> |  |
+|  security0 | <code>&quot;Security Guard&quot;</code> |  |
+|  security1 | <code>&quot;Security Officer&quot;</code> |  |
+|  security2 | <code>&quot;Security Supervisor&quot;</code> |  |
+|  security3 | <code>&quot;Head of Security&quot;</code> |  |
 |  securityEng | <code>&quot;Security Engineer&quot;</code> |  |
 |  software0 | <code>&quot;Software Engineering Intern&quot;</code> |  |
 |  software1 | <code>&quot;Junior Software Engineer&quot;</code> |  |

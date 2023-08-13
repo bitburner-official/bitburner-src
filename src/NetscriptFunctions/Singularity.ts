@@ -40,7 +40,7 @@ import { Server } from "../Server/Server";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { FactionInfos } from "../Faction/FactionInfo";
 import { donate, repNeededToDonate } from "../Faction/formulas/donation";
-import { InternalAPI, removedFunction } from "../Netscript/APIWrapper";
+import { InternalAPI, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { enterBitNode } from "../RedPill";
 import { ClassWork } from "../Work/ClassWork";
 import { CreateProgramWork, isCreateProgramWork } from "../Work/CreateProgramWork";
@@ -94,6 +94,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     getOwnedSourceFiles: () => () => {
       return [...Player.sourceFiles].map(([n, lvl]) => ({ n, lvl }));
+    },
+    getAugmentationFactions: (ctx) => (_augName) => {
+      helpers.checkSingularityAccess(ctx);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug = Augmentations[augName];
+      return aug.factions.slice();
     },
     getAugmentationsFromFaction: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
@@ -780,12 +786,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           helpers.log(ctx, () => `Invalid job: '${field}'.`);
           return false;
       }
-      // TODO https://github.com/danielyxie/bitburner/issues/1378
-      // The player object's applyForJob function can return string with special error messages
-      // if (isString(res)) {
-      //   helpers.log(ctx,"applyToCompany",()=> res);
-      //   return false;
-      // }
       if (res) {
         helpers.log(
           ctx,
@@ -1204,11 +1204,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       return canGetBonus();
     },
   };
-  Object.assign(singularityAPI, {
-    getAugmentationCost: removedFunction(
-      "v2.2.0",
-      "singularity.getAugmentationPrice and singularity.getAugmentationRepReq",
-    ),
+
+  // Removed functions
+  setRemovedFunctions(singularityAPI, {
+    getAugmentationCost: {
+      version: "2.2.0",
+      replacement: "singularity.getAugmentationPrice and singularity.getAugmentationRepReq",
+    },
   });
   return singularityAPI;
 }

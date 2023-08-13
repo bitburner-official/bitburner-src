@@ -45,7 +45,7 @@ export function AugmentationAccordion(props: IProps): React.ReactElement {
               <>
                 <br />
                 <br />
-                <Typography>{props.aug.stats}</Typography>
+                <Typography whiteSpace={"pre-wrap"}>{props.aug.stats}</Typography>
               </>
             )}
           </Box>
@@ -62,7 +62,7 @@ export function AugmentationAccordion(props: IProps): React.ReactElement {
       </ListItemButton>
       <Collapse in={open} unmountOnExit>
         <Box m={4}>
-          <Typography>
+          <Typography whiteSpace={"pre-wrap"}>
             {props.aug.info}
             {props.aug.stats && (
               <>

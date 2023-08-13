@@ -5,13 +5,14 @@ import { Player } from "@player";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
-import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
+import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
 import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { cloneDeep } from "lodash";
 import { getAugCost } from "../Augmentation/AugmentationHelpers";
+import { Factions } from "../Faction/Factions";
 
 export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
   const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
@@ -102,10 +103,14 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
     },
     setToFactionWork: (ctx) => (_sleeveNumber, _factionName, _workType) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const factionName = helpers.string(ctx, "factionName", _factionName);
+      const factionName = getEnumHelper("FactionName").nsGetMember(ctx, _factionName);
       const workType = helpers.string(ctx, "workType", _workType);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
+
+      if (!Factions[factionName].isMember) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Cannot work for faction ${factionName} without being a member.`);
+      }
 
       // Cannot work at the same faction that another sleeve is working at
       for (let i = 0; i < Player.sleeves.length; ++i) {
@@ -257,11 +262,11 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       return Player.sleeves[sleeveNumber].bladeburner(action, contract);
     },
   };
-  // Removed undocumented functions added using Object.assign because typescript.
-  // TODO: Remove these at 3.0
-  Object.assign(sleeveFunctions, {
-    getSleeveStats: removedFunction("v2.2.0", "sleeve.getSleeve"),
-    getInformation: removedFunction("v2.2.0", "sleeve.getSleeve"),
+
+  // Removed functions
+  setRemovedFunctions(sleeveFunctions, {
+    getSleeveStats: { version: "2.2.0", replacement: "sleeve.getSleeve" },
+    getInformation: { version: "2.2.0", replacement: "sleeve.getSleeve" },
   });
   return sleeveFunctions;
 }

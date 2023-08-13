@@ -1,9 +1,9 @@
 import type { IOrderBook } from "./IOrderBook";
 import type { IStockMarket } from "./IStockMarket";
 import { Order } from "./Order";
+import { StockMarketConstants } from "./data/Constants";
 import { processOrders } from "./OrderProcessing";
 import { Stock } from "./Stock";
-import { TicksPerCycle } from "./StockMarketConstants";
 import { InitStockMetadata } from "./data/InitStockMetadata";
 import { PositionType, OrderType, StockSymbol } from "@enums";
 
@@ -165,7 +165,7 @@ export function initStockMarket(): void {
 
   StockMarket.storedCycles = 0;
   StockMarket.lastUpdate = 0;
-  StockMarket.ticksUntilCycle = TicksPerCycle;
+  StockMarket.ticksUntilCycle = StockMarketConstants.TicksPerCycle;
   initSymbolToStockMap();
 }
 
@@ -191,13 +191,11 @@ function stockMarketCycle(): void {
       stock.flipForecastForecast();
     }
 
-    StockMarket.ticksUntilCycle = TicksPerCycle;
+    StockMarket.ticksUntilCycle = StockMarketConstants.TicksPerCycle;
   }
 }
 
-// Stock prices updated every 6 seconds
-const msPerStockUpdate = 6e3;
-const cyclesPerStockUpdate = msPerStockUpdate / CONSTANTS.MilliPerCycle;
+const cyclesPerStockUpdate = StockMarketConstants.msPerStockUpdate / CONSTANTS.MilliPerCycle;
 export function processStockPrices(numCycles = 1): void {
   if (StockMarket.storedCycles == null || isNaN(StockMarket.storedCycles)) {
     StockMarket.storedCycles = 0;
@@ -211,14 +209,14 @@ export function processStockPrices(numCycles = 1): void {
   // We can process the update every 4 seconds as long as there are enough
   // stored cycles. This lets us account for offline time
   const timeNow = new Date().getTime();
-  if (timeNow - StockMarket.lastUpdate < 4e3) return;
+  if (timeNow - StockMarket.lastUpdate < StockMarketConstants.msPerStockUpdateMin) return;
 
   StockMarket.lastUpdate = timeNow;
   StockMarket.storedCycles -= cyclesPerStockUpdate;
 
   // Cycle
   if (StockMarket.ticksUntilCycle == null || typeof StockMarket.ticksUntilCycle !== "number") {
-    StockMarket.ticksUntilCycle = TicksPerCycle;
+    StockMarket.ticksUntilCycle = StockMarketConstants.TicksPerCycle;
   }
   --StockMarket.ticksUntilCycle;
   if (StockMarket.ticksUntilCycle <= 0) stockMarketCycle();

@@ -34,7 +34,7 @@ export function PurchasedAugmentations(): React.ReactElement {
     augs.push(
       <Tooltip
         title={
-          <Typography>
+          <Typography whiteSpace={"pre-wrap"}>
             {(() => {
               const info = typeof aug.info === "string" ? <span>{aug.info}</span> : aug.info;
               const tooltip = (

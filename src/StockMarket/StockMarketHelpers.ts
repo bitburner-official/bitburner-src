@@ -1,6 +1,6 @@
 import { Stock } from "./Stock";
 import { PositionType } from "@enums";
-import { CONSTANTS } from "../Constants";
+import { StockMarketConstants } from "./data/Constants";
 
 // Amount by which a stock's forecast changes during each price movement
 export const forecastChangePerPriceMovement = 0.006;
@@ -25,9 +25,9 @@ export function getBuyTransactionCost(stock: Stock, shares: number, posType: Pos
 
   // If the number of shares doesn't trigger a price movement, its a simple calculation
   if (isLong) {
-    return shares * stock.getAskPrice() + CONSTANTS.StockMarketCommission;
+    return shares * stock.getAskPrice() + StockMarketConstants.StockMarketCommission;
   } else {
-    return shares * stock.getBidPrice() + CONSTANTS.StockMarketCommission;
+    return shares * stock.getBidPrice() + StockMarketConstants.StockMarketCommission;
   }
 }
 
@@ -50,11 +50,11 @@ export function getSellTransactionGain(stock: Stock, shares: number, posType: Po
 
   const isLong = posType === PositionType.Long;
   if (isLong) {
-    return shares * stock.getBidPrice() - CONSTANTS.StockMarketCommission;
+    return shares * stock.getBidPrice() - StockMarketConstants.StockMarketCommission;
   } else {
     // Calculating gains for a short position requires calculating the profit made
     const origCost = shares * stock.playerAvgShortPx;
-    const profit = (stock.playerAvgShortPx - stock.getAskPrice()) * shares - CONSTANTS.StockMarketCommission;
+    const profit = (stock.playerAvgShortPx - stock.getAskPrice()) * shares - StockMarketConstants.StockMarketCommission;
 
     return origCost + profit;
   }
@@ -124,7 +124,7 @@ export function calculateBuyMaxAmount(stock: Stock, posType: PositionType, money
 
   const isLong = posType === PositionType.Long;
 
-  const remainingMoney = money - CONSTANTS.StockMarketCommission;
+  const remainingMoney = money - StockMarketConstants.StockMarketCommission;
   const currPrice = isLong ? stock.getAskPrice() : stock.getBidPrice();
 
   return Math.floor(remainingMoney / currPrice);

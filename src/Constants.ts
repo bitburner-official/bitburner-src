@@ -31,11 +31,6 @@ export const CONSTANTS: {
   PurchasedServerMaxRam: number;
   MultipleAugMultiplier: number;
   TorRouterCost: number;
-  WSEAccountCost: number;
-  TIXAPICost: number;
-  MarketData4SCost: number;
-  MarketDataTixApi4SCost: number;
-  StockMarketCommission: number;
   HospitalCostPerHp: number;
   IntelligenceCrimeWeight: number;
   IntelligenceInfiltrationWeight: number;
@@ -88,9 +83,9 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.3.2",
+  VersionString: "2.4.1dev",
   isDevBranch: true,
-  VersionNumber: 32,
+  VersionNumber: 33,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -139,13 +134,6 @@ export const CONSTANTS: {
 
   // TOR Router
   TorRouterCost: 200e3,
-
-  // Stock market
-  WSEAccountCost: 200e6,
-  TIXAPICost: 5e9,
-  MarketData4SCost: 1e9,
-  MarketDataTixApi4SCost: 25e9,
-  StockMarketCommission: 100e3,
 
   // Hospital/Health
   HospitalCostPerHp: 100e3,
@@ -227,42 +215,38 @@ export const CONSTANTS: {
 
   InfiniteLoopLimit: 2000,
 
-  Donations: 79,
+  Donations: 113,
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3.2 dev - Changelog updated 7/12/2023
-----------------------------------------
+## v2.4.1dev - Last changelog update 8/6/23
 
-Also see 2.3.1 release notes: https://github.com/bitburner-official/bitburner-src/releases/tag/v2.3.1
+See 2.4.0 changelog at:
+https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/ui/doc/changelog.md
 
-GENERAL / MISC:
+Some changes below include spoilers.
 
-* Added documentation browser ingame. This is the new primary location for game documentation. (@hydroflame)
-* Syntax errors now show helpful details at script editor / terminal (@bezrodnov)
-* A script's ram will no longer free up twice if it was killed during its own atExit (@d0sboots)
-* Ram calculation should now be able to handle barrel files and renamed exports. (@G4mingJon4s)
-* ns.printRaw and ns.tprintRaw are now documented functions. (@Snarling)
-* "Back" button from faction augs leads to previous page, instead of always to main faction screen (@bezrodnov)
-* Addressed an issue where money hacked was being Math.floored incorrectly (@MeggalBozale)
-* Aliases that reference their own name stop expanding after first replacement. (@NilsRamstoeck)
-* Hitting enter at the terminal with nothing typed in will print out an empty line (@rqzcho)
-* Fixed a bug where dragging a tail window titlebar could also scroll the tail window content (@bezrodnov)
-* Show more info in the savegame comparison tool (@bezrodnov)
-* Fixed Script Editor indent option having backwards behavior. (@Snarling)
-* Internal code refactors (@bezrodnov, @Snarling)
-* Documentation fixes (@tdnzr, @amuck-gorilla, @rodneygauna, @hydroflame, @Snarling)
-* Nerf noodle bar
+### BUGFIX:
 
-SPOILER SECTIONS:
+* Fixed a bug where buying NeuroFlux Governor would buy one less level than expected (@zerbosh)
+* Fixed an issue that could cause the Coding Contract UI to become unreachable (@myCatsName)
+* Knowledge of Apollo aug no longer highlights the incorrect wires (@Snarling)
+* ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined (@Snarling)
 
-------------
+### API CHANGES:
 
-CORPORATION:
+* Added ns.singularity.getAugmentationFactions to provide a list of factions that has a given augmentation (@myCatsName)
+* Added ns.stock.getConstants (@Snarling)
+* Added ownedAugs and ownedSF properties to ns.getResetInfo return value (@Snarling)
+* ns.corporation.getConstants now has a ram cost of 0 (@Snarling)
 
-* ns.corporation.hireEmployee now actually defaults to Unassigned instead of failing. (@Snarling)
-* ns.corporation.getProduct now provides investment amounts (@Snarling)
-* Invalid materials for a division can no longer be bought through the API. (@Snarling)
-* Fixed a React error that could occur if a division had invalid materials. (@Snarling)
+### CODEBASE / DOCS / MISC:
+
+* Reorganize game constants (@zerbosh)
+* Reorganize ingame documentation folder structure, simplify documentation bundling (@Snarling)
+* IP Address coding contract accepts single-quoted entries (@myCatsName)
+* Updated an outdated message on ns.killall logs (@myCatsName)
+* Removed more references to ReadTheDocs that remained after 2.4.0 (@hydroflame) 
+* Fixed some typos/spacing (@myCatsName)
 `,
 };

@@ -1,4 +1,4 @@
-import { CONSTANTS } from "../../src/Constants";
+import { StockMarketConstants } from "../../src/StockMarket/data/Constants";
 import { Player } from "../../src/Player";
 
 import { Company } from "../../src/Company/Company";
@@ -42,7 +42,7 @@ jest.mock(`!!raw-loader!../NetscriptDefinitions.d.ts`, () => "", {
 // }));
 
 describe("Stock Market Tests", function () {
-  const commission = CONSTANTS.StockMarketCommission;
+  const commission = StockMarketConstants.StockMarketCommission;
 
   // Generic Stock object that can be used by each test
   let stock: Stock;

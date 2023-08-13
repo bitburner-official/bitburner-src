@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { FilePath, asFilePath } from "../../Paths/FilePath";
 
 interface Navigator {
   navigate: (s: string, external: boolean) => void;
@@ -9,17 +10,17 @@ export const Navigator = React.createContext<Navigator>({ navigate: () => undefi
 export const useNavigator = (): Navigator => useContext(Navigator);
 
 interface History {
-  pages: string[];
-  page: string;
-  push(p: string): void;
+  pages: FilePath[];
+  page: FilePath;
+  push(p: FilePath): void;
   pop(): void;
   home(): void;
 }
 
-const defaultPage = "index.md";
+const defaultPage = asFilePath("index.md");
 
 const HistoryContext = React.createContext<History>({
-  page: "",
+  page: defaultPage,
   pages: [],
   push: () => undefined,
   pop: () => undefined,
@@ -29,7 +30,7 @@ const HistoryContext = React.createContext<History>({
 export const Provider = HistoryContext.Provider;
 export const useHistory = (): History => useContext(HistoryContext);
 
-const onPush = (h: History, p: string): History => {
+const onPush = (h: History, p: FilePath): History => {
   return {
     ...h,
     page: p,
@@ -57,7 +58,7 @@ export const HistoryProvider = (props: React.PropsWithChildren<object>): React.R
   const [history, setHistory] = useState<History>({
     page: defaultPage,
     pages: [],
-    push(p: string) {
+    push(p: FilePath) {
       setHistory((h) => onPush(h, p));
     },
     pop() {

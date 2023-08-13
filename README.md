@@ -6,15 +6,14 @@
 
 Bitburner is a programming-based [incremental game](https://en.wikipedia.org/wiki/Incremental_game)
 that revolves around hacking and cyberpunk themes.
-The game can be played at https://danielyxie.github.io/bitburner/ (release build), https://bitburner-official.github.io/bitburner-src/ (development build), or installed through [Steam](https://store.steampowered.com/app/1812820/Bitburner/).
+The game can be played at https://bitburner-official.github.io/ (release build), https://bitburner-official.github.io/bitburner-src/ (development build), or installed through [Steam](https://store.steampowered.com/app/1812820/Bitburner/).
 The location of the release build may change in the near future.
 
 See the [frequently asked questions](./doc/FAQ.md) for more information . To discuss the game or get help, join the [official Discord server](https://discord.gg/TFc3hKD).
 
 # Documentation
 
-The game's official documentation can be found on [Read The
-Docs](http://bitburner-official.readthedocs.io/). Please note that this is still a work-in-progress.
+The game's official documentation can be found in-game.
 
 The [in-game documentation](./markdown/bitburner.md) is generated from the [TypeScript definitions](./src/ScriptEditor/NetscriptDefinitions.d.ts).
 

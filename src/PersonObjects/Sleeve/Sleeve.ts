@@ -25,6 +25,7 @@ import {
   LocationName,
   UniversityClassType,
   CompanyName,
+  FactionName,
 } from "@enums";
 
 import { Factions } from "../../Faction/Factions";
@@ -291,15 +292,13 @@ export class Sleeve extends Person implements SleevePerson {
   }
 
   /** TODO 2.4: Make this take in type correct data */
-  workForFaction(_factionName: string, _workType: string): boolean {
+  workForFaction(factionName: FactionName, _workType: string): boolean {
     const workTypeConversion: Record<string, string> = {
       "Hacking Contracts": "hacking",
       "Field Work": "field",
       "Security Work": "security",
     };
     if (workTypeConversion[_workType]) _workType = workTypeConversion[_workType];
-    const factionName = getEnumHelper("FactionName").fuzzyGetMember(_factionName);
-    if (!factionName) return false;
     const faction = Factions[factionName];
     const workType = getEnumHelper("FactionWorkType").fuzzyGetMember(_workType);
     if (!workType) return false;

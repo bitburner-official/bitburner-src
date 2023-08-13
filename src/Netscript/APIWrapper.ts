@@ -46,7 +46,9 @@ class NSProxyHandler<API extends GenericAPI<API>> {
 
   getOwnPropertyDescriptor(__target: unknown, key: keyof API & string): PropertyDescriptor | undefined {
     if (!this.has(__target, key)) return undefined;
-    return { value: this.get(__target, key, this), configurable: true, enumerable: true, writable: false };
+    if (Object.hasOwn(this.memoed, key)) return Object.getOwnPropertyDescriptor(this.memoed, key);
+    this.get(__target, key, this);
+    return Object.getOwnPropertyDescriptor(this.memoed, key);
   }
 
   defineProperty(__target: unknown, __key: unknown, __attrs: unknown): boolean {
@@ -62,8 +64,9 @@ class NSProxyHandler<API extends GenericAPI<API>> {
     const ours = this.memoed[key];
     if (ours) return ours;
 
-    const field = this.ns[key];
-    if (!field) return field;
+    const descriptor = Object.getOwnPropertyDescriptor(this.ns, key);
+    if (!descriptor) return descriptor;
+    const field = descriptor.value;
 
     if (typeof field === "function") {
       const arrayPath = [...this.tree, key];
@@ -75,10 +78,11 @@ class NSProxyHandler<API extends GenericAPI<API>> {
       const wrappedFunction = function (...args: unknown[]): unknown {
         // What remains *must* be called every time.
         helpers.checkEnvFlags(ctx);
-        helpers.updateDynamicRam(ctx, getRamCost(...arrayPath));
+        helpers.updateDynamicRam(ctx, getRamCost(arrayPath));
         return func(...args);
       };
-      return ((this.memoed[key] as APIFn) = wrappedFunction);
+      Object.defineProperty(this.memoed, key, { ...descriptor, value: wrappedFunction });
+      return wrappedFunction;
     }
     if (typeof field === "object") {
       return ((this.memoed[key] as GenericAPI<API[keyof API]>) = NSProxy(
@@ -105,12 +109,26 @@ export function NSProxy<API extends GenericAPI<API>>(
 }
 
 /** Specify when a function was removed from the game, and its replacement function. */
-export function removedFunction(version: string, replacement: string, replaceMsg?: boolean) {
-  return (ctx: NetscriptContext) => () => {
-    throw helpers.makeRuntimeErrorMsg(
-      ctx,
-      `Function removed in ${version}. ${replaceMsg ? replacement : `Please use ${replacement} instead.`}`,
-      "REMOVED FUNCTION",
-    );
-  };
+interface RemovedFunctionInfo {
+  /** The version in which the function was removed */
+  version: string;
+  /** The replacement function to use, or the entire replacement message if replaceMsg is true. */
+  replacement: string;
+  /** If set, replacement is treated as a full replacement message. */
+  replaceMsg?: true;
+}
+export function setRemovedFunctions(api: object, infos: Record<string, RemovedFunctionInfo>) {
+  for (const [key, { version, replacement, replaceMsg }] of Object.entries(infos)) {
+    Object.defineProperty(api, key, {
+      value: (ctx: NetscriptContext) => () => {
+        throw helpers.makeRuntimeErrorMsg(
+          ctx,
+          `Function removed in ${version}. ${replaceMsg ? replacement : `Please use ${replacement} instead.`}`,
+          "REMOVED FUNCTION",
+        );
+      },
+      configurable: true,
+      enumerable: false,
+    });
+  }
 }

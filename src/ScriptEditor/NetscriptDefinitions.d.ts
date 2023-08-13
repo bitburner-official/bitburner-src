@@ -74,6 +74,10 @@ interface ResetInfo {
   lastNodeReset: number;
   /** The current bitnode */
   currentNode: number;
+  /** A map of owned augmentations to their levels. Keyed by the augmentation name. Map values are the augmentation level (e.g. for NeuroFlux governor). */
+  ownedAugs: Map<string, number>;
+  /** A map of owned SF to their levels. Keyed by the SF number. Map values are the SF level. */
+  ownedSF: Map<number, number>;
 }
 
 /** @public */
@@ -391,6 +395,27 @@ interface StockOrderObject {
  */
 interface StockOrder {
   [key: string]: StockOrderObject[];
+}
+
+/** Constants used for the stockmarket game mechanic.
+ * @public */
+interface StockMarketConstants {
+  /** Normal time in ms between stock market updates */
+  msPerStockUpdate: number;
+  /** Minimum time in ms between stock market updates if there is stored offline/bonus time */
+  msPerStockUpdateMin: number;
+  /** An internal constant used while determining when to flip a stock's forecast */
+  TicksPerCycle: number;
+  /** Cost of the WSE account */
+  WSEAccountCost: number;
+  /** Cost of the TIX API */
+  TIXAPICost: number;
+  /** Cost of the 4S Market Data */
+  MarketData4SCost: number;
+  /** Cost of the 4S Market Data TIX API integration */
+  MarketDataTixApi4SCost: number;
+  /** Commission fee for transactions */
+  StockMarketCommission: number;
 }
 
 /**
@@ -1077,6 +1102,9 @@ export interface NetscriptPort {
  * @public
  */
 export interface TIX {
+  /** Get game constants for the stock market mechanic.
+   *  @remarks RAM cost: 0 GB */
+  getConstants(): StockMarketConstants;
   /**
    * Returns true if the player has access to a WSE Account
    * @remarks RAM cost: 0.05 GB
@@ -2074,6 +2102,21 @@ export interface Singularity {
    * @returns Array containing an object with number and level of the source file.
    */
   getOwnedSourceFiles(): SourceFileLvl[];
+
+  /**
+   * Get a list of faction(s) that have a specific Augmentation.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   *
+   * Returns an array containing the names (as strings) of all factions
+   * that offer the specified Augmentation.
+   * If no factions offer the Augmentation, a blank array is returned.
+   *
+   * @param augName - Name of Augmentation.
+   * @returns Array containing the names of all factions.
+   */
+  getAugmentationFactions(augName: string): string[];
 
   /**
    * Get a list of augmentation available from a faction.
@@ -4510,10 +4553,6 @@ interface UserInterface {
  *  await ns.hack('n00dles');
  * }
  * ```
- * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
- * <hr>
- * For (deprecated) .script usage, see: {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
- * <hr>
  */
 export interface NS {
   /**
@@ -6091,7 +6130,6 @@ export interface NS {
    *
    * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
    *
-   * @see https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptmisc.html#netscript-ports
    * @param portNumber - Port number. Must be an integer between 1 and 20.
    */
   getPortHandle(portNumber: number): NetscriptPort;

@@ -49,7 +49,9 @@ const NeuroFluxDisplay = (): React.ReactElement => {
       <Typography variant="h5" color={Settings.theme.info}>
         NeuroFlux Governor - Level {level}
       </Typography>
-      <Typography color={Settings.theme.info}>{Augmentations[AugmentationName.NeuroFluxGovernor].stats}</Typography>
+      <Typography color={Settings.theme.info} whiteSpace={"pre-wrap"}>
+        {Augmentations[AugmentationName.NeuroFluxGovernor].stats}
+      </Typography>
       <Typography color={Settings.theme.info}>
         The power of {AugmentationName.NeuroFluxGovernor} increases with blood donations from players in real life.
         Learn more <Link onClick={openBloodDonation}>here</Link>
