@@ -445,6 +445,13 @@ export function CharacterStats(): React.ReactElement {
               color={Settings.theme.cha}
               noMargin
             />
+						<MultiplierTable
+							rows={[{
+								mult: "Game Tick Speed",
+								value: Player.mults.game_tick_speed,
+							}]}
+							color={Settings.theme.primary}
+						/>
           </Box>
 
           <Box>
@@ -471,6 +478,18 @@ export function CharacterStats(): React.ReactElement {
                   mult: "Hacknet Node Level Upgrade Cost",
                   value: Player.mults.hacknet_node_level_cost,
                 },
+								{
+									mult: "Purchased Server Cost",
+									value: Player.mults.server_cost,
+								},
+								{
+									mult: "Home Ram Cost",
+									value: Player.mults.home_ram_cost,
+								},
+								{
+									mult: "Home Core Cost",
+									value: Player.mults.home_core_cost,
+								}
               ]}
               color={Settings.theme.primary}
             />
@@ -508,6 +527,10 @@ export function CharacterStats(): React.ReactElement {
                   effValue: Player.mults.crime_money * currentNodeMults.CrimeMoney,
                   color: Settings.theme.money,
                 },
+								{
+									mult: "Crime Karma Impact",
+									value: Player.mults.crime_karma_impact
+								}
               ]}
               color={Settings.theme.combat}
             />

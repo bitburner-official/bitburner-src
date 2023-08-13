@@ -188,6 +188,11 @@ export function PlayerMultipliers(): React.ReactElement {
       augmented: Player.mults.charisma_exp * mults.charisma_exp,
       color: Settings.theme.cha,
     },
+		{
+			mult: "Game Tick Speed",
+			current: Player.mults.game_tick_speed,
+			augmented: Player.mults.game_tick_speed * mults.game_tick_speed,
+		}
   ];
   const rightColData: MultiplierListItemData[] = [
     {
@@ -216,6 +221,22 @@ export function PlayerMultipliers(): React.ReactElement {
       current: Player.mults.hacknet_node_level_cost,
       augmented: Player.mults.hacknet_node_level_cost * mults.hacknet_node_level_cost,
     },
+		{
+			mult: "Purchased Server Cost",
+			current: Player.mults.server_cost,
+			augmented: Player.mults.server_cost * mults.server_cost,
+		},
+		{
+			mult: "Home Ram Cost",
+			current: Player.mults.home_ram_cost,
+			augmented: Player.mults.home_ram_cost * mults.home_ram_cost,
+			bnMult: currentNodeMults.HomeComputerRamCost,
+		},
+		{
+			mult: "Home Core Cost",
+			current: Player.mults.home_core_cost,
+			augmented: Player.mults.home_core_cost * mults.home_core_cost,
+		},
     {
       mult: "Company Reputation Gain",
       current: Player.mults.company_rep,
@@ -249,6 +270,12 @@ export function PlayerMultipliers(): React.ReactElement {
       bnMult: currentNodeMults.CrimeMoney,
       color: Settings.theme.money,
     },
+		{
+			mult: "Crime Karma Impact",
+			current: Player.mults.crime_karma_impact,
+			augmented: Player.mults.crime_karma_impact,
+			color: Settings.theme.combat
+		}
   ];
 
   if (Player.canAccessBladeburner() && currentNodeMults.BladeburnerRank > 0) {
