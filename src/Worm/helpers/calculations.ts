@@ -26,7 +26,7 @@ export function calculatePerfectWorm(worm: Worm) {
 		* worm.amplitude
 		* worm.amplitudes.reduce((acc, cur, i) => acc + (cur * Math.sin(i * worm.frequency * (x + worm.shift))), 0);
 
-	return Array.from({ length: worm.length }, (_, i) => evalute(i));
+	return Array.from({ length: worm.length }, (_, i) => formatWormNumber(evalute(i)));
 }
 
 export const getGuessTime = (threads: number) => 60 * 1000 / threads;
