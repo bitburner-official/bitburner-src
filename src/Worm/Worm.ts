@@ -4,7 +4,7 @@ import { BonusType } from "./BonusType";
 import { Difficulty } from "./Difficulty";
 import { difficulties } from "./data/difficulties";
 import { WormEvents } from "./WormEvents";
-import { formatWormNumber, isValidGuess } from "./helpers/calculations";
+import { checkValidGuess, formatWormNumber } from "./helpers/calculations";
 
 export class Worm {
 	length = 16;
@@ -63,7 +63,7 @@ export class Worm {
 	}
 
 	setGuess(guess: number[]) {
-		if (!isValidGuess(this, guess)) throw new Error("Not a valid guess.");
+		checkValidGuess(this, guess);
 		this.guess = guess.map(formatWormNumber);
 	}
 

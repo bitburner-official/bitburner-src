@@ -8,6 +8,18 @@ export function isValidGuess(worm: Worm, guess: number[]) {
 	return isRightLength && allNumbersValid;
 }
 
+export function checkValidGuess(worm: Worm, guess: number[]) {
+	const isRightLength = guess.length === worm.length;
+
+	if (!isRightLength) throw new Error(`Guess is not the right length, is: ${guess.length}, needs to be: ${worm.length}`);
+
+	const allNumbersValid = guess.every(num => isValidNumber(worm, num));
+	if (!allNumbersValid) {
+		const pos = guess.find(num => !isValidNumber(worm, num));
+		throw new Error(`Guess has invalid entries. At pos ${pos}, val: ${pos !== undefined ? guess[pos] : undefined}`);
+	}
+}
+
 export function formatWormNumber(number: number) {
 	return Math.round(number * 1000) / 1000;
 }
@@ -35,7 +47,7 @@ export const getGuessTime = (threads: number) => 60 * 1000 / threads;
 // f(0) = 1
 // 2. Range [0, 1] for x >= 0
 // 3. (strictly) monotonically decreasing
-export const fitnessFunction = (difference: number) => 1 / Math.exp(5 * difference);
+export const fitnessFunction = (difference: number) => 1 / Math.exp(difference);
 
 export function calculateFitness(worm: Worm) {
 	const perfectWorm = calculatePerfectWorm(worm);

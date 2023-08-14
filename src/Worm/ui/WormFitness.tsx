@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { Worm } from '../Worm'
 import { calculateFitness } from '../helpers/calculations';
+import { formatPercent } from '../../ui/formatNumber';
 
 interface IProps {
 	worm: Worm;
@@ -12,7 +13,7 @@ export function WormFitness({ worm }: IProps) {
 	return (
 		<Box>
 			<Typography>
-				Worm fitness: {Math.round(fitness * 100 * 100) / 100}%
+				Worm fitness: {formatPercent(fitness)}
 			</Typography>
 		</Box>
 	)
