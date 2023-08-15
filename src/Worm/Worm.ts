@@ -5,6 +5,7 @@ import { Difficulty } from "./Difficulty";
 import { difficulties } from "./data/difficulties";
 import { WormEvents } from "./WormEvents";
 import { checkValidGuess, formatWormNumber } from "./helpers/calculations";
+import { FormulaData, FormulaDataFactory, updateFormulaData } from "./Formula";
 
 export class Worm {
 	length = 16;
@@ -12,13 +13,11 @@ export class Worm {
 	maxValue = 1;
 	
 	baseTime = 20;
-	difficulty: Difficulty = difficulties[0];
+	difficulty: Difficulty;
 	bonus: BonusType = BonusType.None;
 	
-	frequency = 0.1;
-	amplitude = 1;
-	shift = 1;
-	amplitudes: number[] = [];
+	formulaData: FormulaData;
+
 	guess: number[];
 
 	processCount = 0;
@@ -26,7 +25,9 @@ export class Worm {
 	constructor() {
 		this.guess = Array.from({ length: this.length }, () => 0);
 
-		this.setDifficulty(difficulties[0]);
+		this.difficulty = difficulties[0];
+		
+		this.formulaData = FormulaDataFactory(this.numFormulas);
 	}
 
 	process() {
@@ -40,22 +41,22 @@ export class Worm {
 		return Math.ceil(
 			this.baseTime *
 			this.difficulty.windowBetweenChange *
-			(1 + Math.log10(Player.sourceFileLvl(16))));
+			(1 + Math.log10(Player.sourceFileLvl(16)))
+		);
+	}
+
+	get numFormulas() {
+		return Math.pow(2, 4 + this.difficulty.complexity);
 	}
 
 	resetFormula() {
-		this.amplitudes = Array.from({ length: Math.pow(2, 5 + this.difficulty.complexity) }, () => Math.random());
-		this.shift = Math.random() * Math.PI * 2 / this.frequency;
+		this.formulaData = FormulaDataFactory(this.numFormulas);
 	}
 
 	updateFormula(numCycles = 1) {
-		for (let i = 0; i < numCycles; i++) {
-			const amount = this.difficulty.amountOfChange;
-			const change = (prev: number) => Math.max(0, Math.min(1, prev + (amount * (Math.random() - 0.5) / 5)));
-			this.amplitudes = this.amplitudes.map(change);
-		}
+		for (let i = 0; i < numCycles; i++) updateFormulaData(this.formulaData, this.difficulty.amountOfChange);
 
-		console.log(this.amplitudes);
+		console.log(this.formulaData);
 	}
 
 	updateMults() {
