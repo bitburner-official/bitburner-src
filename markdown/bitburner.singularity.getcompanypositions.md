@@ -9,14 +9,14 @@ Get List of Company Positions.
 **Signature:**
 
 ```typescript
-getCompanyPositions(companyName: string): JobName[];
+getCompanyPositions(companyName: CompanyName | `${CompanyName}`): JobName[];
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  companyName | string | Name of company to get the position list for. Must be an exact match. |
+|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` | Name of company to get the position list for. Must be an exact match. |
 
 **Returns:**
 

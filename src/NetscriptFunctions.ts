@@ -24,6 +24,7 @@ import {
   LocationName,
   ToastVariant,
   UniversityClassType,
+  CompanyName,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer, DeleteServer, AddToAllServers, createUniqueRandomIp } from "./Server/AllServers";
@@ -111,6 +112,7 @@ export const enums: NSEnums = {
   LocationName,
   ToastVariant,
   UniversityClassType,
+  CompanyName,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);

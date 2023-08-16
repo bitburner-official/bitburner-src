@@ -9,14 +9,14 @@ Quit jobs by company.
 **Signature:**
 
 ```typescript
-quitJob(companyName?: string): void;
+quitJob(companyName?: CompanyName | `${CompanyName}`): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  companyName | string | _(Optional)_ Name of the company. |
+|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` | _(Optional)_ Name of the company. |
 
 **Returns:**
 

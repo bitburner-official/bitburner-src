@@ -9,14 +9,14 @@ Work for a company.
 **Signature:**
 
 ```typescript
-workForCompany(companyName: string, focus?: boolean): boolean;
+workForCompany(companyName: CompanyName, focus?: boolean): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  companyName | string | Name of company to work for. Must be an exact match. Optional. If not specified, this argument defaults to the last job that you worked. |
+|  companyName | [CompanyName](./bitburner.companyname.md) | Name of company to work for. Must be an exact match. Optional. If not specified, this argument defaults to the last job that you worked. |
 |  focus | boolean | _(Optional)_ Acquire player focus on this work operation. Optional. Defaults to true. |
 
 **Returns:**

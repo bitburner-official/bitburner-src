@@ -9,6 +9,7 @@
 |  Enumeration | Description |
 |  --- | --- |
 |  [CityName](./bitburner.cityname.md) | Names of all cities |
+|  [CompanyName](./bitburner.companyname.md) | Names of all companies |
 |  [CrimeType](./bitburner.crimetype.md) |  |
 |  [FactionWorkType](./bitburner.factionworktype.md) |  |
 |  [GymType](./bitburner.gymtype.md) |  |
