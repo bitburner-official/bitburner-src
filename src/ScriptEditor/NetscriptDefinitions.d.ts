@@ -47,7 +47,7 @@ interface Player extends Person {
   money: number;
   numPeopleKilled: number;
   entropy: number;
-  jobs: Record<CompanyName, JobName>;
+  jobs: Partial<Record<CompanyName, JobName>>;
   factions: string[];
   totalPlaytime: number;
   location: string;

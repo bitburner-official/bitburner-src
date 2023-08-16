@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-jobs: Record<CompanyName, JobName>;
+jobs: Partial<Record<CompanyName, JobName>>;
 ```
