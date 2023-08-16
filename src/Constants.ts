@@ -219,7 +219,7 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.4.1dev - Last changelog update 8/6/23
+## v2.4.1dev - Last changelog update 8/16/23
 
 See 2.4.0 changelog at:
 https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/ui/doc/changelog.md
@@ -242,10 +242,14 @@ Some changes below include spoilers.
 
 ### CODEBASE / DOCS / MISC:
 
+* Added a new theme "zerenity" (@Zelow79)
+* Successes for next level is now accurate in the UI for Bladeburner operations (@myCatsName)
 * Reorganize game constants (@zerbosh)
 * Reorganize ingame documentation folder structure, simplify documentation bundling (@Snarling)
 * IP Address coding contract accepts single-quoted entries (@myCatsName)
 * Updated an outdated message on ns.killall logs (@myCatsName)
+* Updated documentation for ns.share and ns.getSharePower (@myCatsName)
+* Removed function (like ns.getServerRam) are no longer shown when enumerating ns entries. (@Snarling)
 * Removed more references to ReadTheDocs that remained after 2.4.0 (@hydroflame) 
 * Fixed some typos/spacing (@myCatsName)
 `,
