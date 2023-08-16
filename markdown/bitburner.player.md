@@ -18,7 +18,7 @@ interface Player extends Person
 |  --- | --- | --- | --- |
 |  [entropy](./bitburner.player.entropy.md) |  | number |  |
 |  [factions](./bitburner.player.factions.md) |  | string\[\] |  |
-|  [jobs](./bitburner.player.jobs.md) |  | Record&lt;string, string&gt; |  |
+|  [jobs](./bitburner.player.jobs.md) |  | Record&lt;[CompanyName](./bitburner.companyname.md)<!-- -->, [JobName](./bitburner.jobname.md)<!-- -->&gt; |  |
 |  [location](./bitburner.player.location.md) |  | string |  |
 |  [money](./bitburner.player.money.md) |  | number |  |
 |  [numPeopleKilled](./bitburner.player.numpeoplekilled.md) |  | number |  |

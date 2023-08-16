@@ -47,7 +47,7 @@ interface Player extends Person {
   money: number;
   numPeopleKilled: number;
   entropy: number;
-  jobs: Record<string, string>;
+  jobs: Record<CompanyName, JobName>;
   factions: string[];
   totalPlaytime: number;
   location: string;
@@ -1759,7 +1759,10 @@ export interface Singularity {
    * @param positionName - Name of position to get the requirements for. Must be an exact match.
    * @returns CompanyPositionInfo object.
    */
-  getCompanyPositionInfo(companyName: CompanyName, positionName: JobName): CompanyPositionInfo;
+  getCompanyPositionInfo(
+    companyName: CompanyName | `${CompanyName}`,
+    positionName: JobName | `${JobName}`,
+  ): CompanyPositionInfo;
 
   /**
    * Get List of Company Positions.
@@ -1779,7 +1782,7 @@ export interface Singularity {
    * @param companyName - Name of company to get the position list for. Must be an exact match.
    * @returns The position list if the company name is valid.
    */
-  getCompanyPositions(companyName: CompanyName): JobName[];
+  getCompanyPositions(companyName: CompanyName | `${CompanyName}`): JobName[];
 
   /**
    * Work for a company.
@@ -1816,7 +1819,7 @@ export interface Singularity {
    *
    * @param companyName - Name of the company.
    */
-  quitJob(companyName?: CompanyName): void;
+  quitJob(companyName?: CompanyName | `${CompanyName}`): void;
 
   /**
    * Apply for a job at a company.
@@ -1837,7 +1840,7 @@ export interface Singularity {
    * @param field - Field to which you want to apply.
    * @returns True if the player successfully get a job/promotion, and false otherwise.
    */
-  applyToCompany(companyName: CompanyName, field: string): boolean;
+  applyToCompany(companyName: CompanyName | `${CompanyName}`, field: string): boolean;
 
   /**
    * Get company reputation.
@@ -1851,7 +1854,7 @@ export interface Singularity {
    * @param companyName - Name of the company.
    * @returns Amount of reputation you have at the specified company.
    */
-  getCompanyRep(companyName: CompanyName): number;
+  getCompanyRep(companyName: CompanyName | `${CompanyName}`): number;
 
   /**
    * Get company favor.
@@ -1865,7 +1868,7 @@ export interface Singularity {
    * @param companyName - Name of the company.
    * @returns Amount of favor you have at the specified company.
    */
-  getCompanyFavor(companyName: CompanyName): number;
+  getCompanyFavor(companyName: CompanyName | `${CompanyName}`): number;
 
   /**
    * Get company favor gain.
@@ -1879,7 +1882,7 @@ export interface Singularity {
    * @param companyName - Name of the company.
    * @returns Amount of favor you gain at the specified company when you reset by installing Augmentations.
    */
-  getCompanyFavorGain(companyName: CompanyName): number;
+  getCompanyFavorGain(companyName: CompanyName | `${CompanyName}`): number;
 
   /**
    * List all current faction invitations.
@@ -3749,7 +3752,7 @@ export interface Sleeve {
    * @param companyName - Name of the company to work for.
    * @returns True if the sleeve started working for this company, false otherwise.
    */
-  setToCompanyWork(sleeveNumber: number, companyName: CompanyName): boolean;
+  setToCompanyWork(sleeveNumber: number, companyName: CompanyName | `${CompanyName}`): boolean;
 
   /**
    * Set a sleeve to take a class at a university.
@@ -3974,7 +3977,12 @@ interface WorkFormulas {
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified faction work. */
   factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified company work. */
-  companyGains(person: Person, companyName: CompanyName, workType: JobName | `${JobName}`, favor: number): WorkStats;
+  companyGains(
+    person: Person,
+    companyName: CompanyName | `${CompanyName}`,
+    workType: JobName | `${JobName}`,
+    favor: number,
+  ): WorkStats;
 }
 
 /**

@@ -9,14 +9,14 @@ Apply for a job at a company.
 **Signature:**
 
 ```typescript
-applyToCompany(companyName: string, field: string): boolean;
+applyToCompany(companyName: CompanyName | `${CompanyName}`, field: string): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  companyName | string | Name of company to apply to. |
+|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` | Name of company to apply to. |
 |  field | string | Field to which you want to apply. |
 
 **Returns:**
