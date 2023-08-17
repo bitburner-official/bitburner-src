@@ -1,5 +1,4 @@
 import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
-import { Difficulty } from "./Difficulty";
 
 export enum BonusType {
 	None,
@@ -29,9 +28,9 @@ export function getCurrentBonusPower(type: BonusType, fitness: number, bonusMult
 	return 1 + fitness * bonusMultiplier * (bonusTypePower[type] / 100);
 }
 
-export function getMultiplier(type: BonusType, fitness: number, difficulty: Difficulty): Multipliers {
+export function getMultiplier(type: BonusType, fitness: number, bonusMultiplier: number): Multipliers {
 	const mult = defaultMultipliers();
-	const power = getCurrentBonusPower(type, fitness, difficulty.bonusMultiplier);
+	const power = getCurrentBonusPower(type, fitness, bonusMultiplier);
 
 	switch (type) {
 		case BonusType.None: {

@@ -1,27 +1,27 @@
 import { Box, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material'
 import React from 'react'
-import { Difficulty } from '../Difficulty';
-import { difficulties } from '../data/difficulties';
+import { Difficulty, difficulties, DifficultyType } from '../Difficulty';
 import { formatPercent } from '../../ui/formatNumber';
 
 interface IProps {
-	difficulty: string;
-	setDifficulty(value: Difficulty): void;
+	difficulty: typeof Difficulty[keyof typeof Difficulty];
+	setDifficulty(value: DifficultyType): void;
 }
 
 export function DifficultySelector(props: IProps) {
 	function onChange(event: SelectChangeEvent) {
-		const value = event.target.value;
+		const value = Number(event.target.value);
+		if (isNaN(value)) throw new Error(`Value "${event.target.value}" is not a number.`);
 
-		const difficulty = difficulties.find(d => d.name === value);
+		const difficulty = difficulties.find(d => d.id === value);
 		if (difficulty === undefined) throw new Error(`Selected invalid difficulty "${value}"`);
 		props.setDifficulty(difficulty);
 	}
 
 	return (
-		<Select onChange={onChange} value={props.difficulty}>
+		<Select onChange={onChange} value={props.difficulty.toString()}>
 			{difficulties.map(v => (
-				<MenuItem key={v.name} value={v.name}>
+				<MenuItem key={v.id.toString()} value={v.id.toString()}>
 					<DifficultyItem difficulty={v}/>
 				</MenuItem>
 			))}
@@ -29,7 +29,7 @@ export function DifficultySelector(props: IProps) {
 	)
 }
 
-export function DifficultyItem({ difficulty }: { difficulty: Difficulty }) {
+export function DifficultyItem({ difficulty }: { difficulty: DifficultyType }) {
 	return (
 		<>
 		<Typography component="div">

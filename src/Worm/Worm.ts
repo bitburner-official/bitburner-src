@@ -1,8 +1,7 @@
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { BonusType } from "./BonusType";
-import { Difficulty } from "./Difficulty";
-import { difficulties } from "./data/difficulties";
+import { difficulties, DifficultyType } from "./Difficulty";
 import { WormEvents } from "./WormEvents";
 import { checkValidGuess, formatWormNumber } from "./helpers/calculations";
 import { FormulaData, FormulaDataFactory, updateFormulaData } from "./Formula";
@@ -13,7 +12,7 @@ export class Worm {
 	maxValue = 1;
 	
 	baseTime = 20;
-	difficulty: Difficulty;
+	difficulty: DifficultyType;
 	bonus: BonusType = BonusType.None;
 	
 	formulaData: FormulaData;
@@ -68,7 +67,7 @@ export class Worm {
 		this.guess = guess.map(formatWormNumber);
 	}
 
-	setDifficulty(difficulty: Difficulty) {
+	setDifficulty(difficulty: DifficultyType) {
 		this.difficulty = difficulty;
 		this.resetFormula();
 	}

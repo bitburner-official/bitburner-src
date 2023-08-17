@@ -57,5 +57,5 @@ export function calculateFitness(worm: Worm) {
 export function calculateWormMults(worm: Worm | null): Multipliers {
 	if (worm === null) return defaultMultipliers();
 
-	return getMultiplier(worm.bonus, calculateFitness(worm), worm.difficulty);
+	return getMultiplier(worm.bonus, calculateFitness(worm), worm.difficulty.bonusMultiplier);
 }
