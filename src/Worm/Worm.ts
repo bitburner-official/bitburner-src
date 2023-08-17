@@ -3,7 +3,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { BonusType, bonuses } from "./BonusType";
 import { difficulties, DifficultyType } from "./Difficulty";
 import { WormEvents } from "./WormEvents";
-import { checkValidGuess, formatWormNumber } from "./helpers/calculations";
+import { checkValidGuess, formatWormNumber } from "./calculations";
 import { FormulaData, FormulaDataFactory, updateFormulaData } from "./Formula";
 
 export class Worm {

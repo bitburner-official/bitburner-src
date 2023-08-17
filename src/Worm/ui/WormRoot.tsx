@@ -9,7 +9,7 @@ import { WormFitness } from './WormFitness';
 import { useRerender } from '../../ui/React/hooks';
 import { WormEvents } from '../WormEvents';
 import { DifficultySelector } from './DifficultySelector';
-import { calculateFitness } from '../helpers/calculations';
+import { calculateFitness } from '../calculations';
 
 interface IProps {
 	worm: Worm | null;

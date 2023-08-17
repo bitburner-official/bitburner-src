@@ -4,7 +4,7 @@ import { Worm as IWorm } from "@nsdefs";
 import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Worm } from "../Worm/Worm";
-import { calculateFitness, getGuessTime } from "../Worm/helpers/calculations";
+import { calculateFitness, getGuessTime } from "../Worm/calculations";
 import { arrayToString } from "../utils/helpers/ArrayHelpers";
 
 export function NetscriptWorm(): InternalAPI<IWorm> {

@@ -55,7 +55,7 @@ import { serverMetadata } from "../../Server/data/servers";
 import { getEnumHelper, isMember } from "../../utils/EnumHelper";
 import { staneksGift } from "../../CotMG/Helper";
 import { mergeMultipliers } from "../Multipliers";
-import { calculateWormMults } from "../../Worm/helpers/calculations";
+import { calculateWormMults } from "../../Worm/calculations";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */

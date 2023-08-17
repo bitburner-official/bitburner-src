@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { Worm } from '../Worm'
-import { calculateFitness } from '../helpers/calculations';
+import { calculateFitness } from '../calculations';
 import { formatPercent } from '../../ui/formatNumber';
 
 interface IProps {

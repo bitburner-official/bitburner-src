@@ -1,7 +1,7 @@
-import { Multipliers, defaultMultipliers } from "../../PersonObjects/Multipliers";
-import { getMultiplier } from "../BonusType";
-import { FormulaData, evaluate } from "../Formula";
-import { Worm } from "../Worm";
+import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
+import { getMultiplier } from "./BonusType";
+import { FormulaData, evaluate } from "./Formula";
+import { Worm } from "./Worm";
 
 export function isValidGuess(worm: Worm, guess: number[]) {
 	const isRightLength = guess.length === worm.length;

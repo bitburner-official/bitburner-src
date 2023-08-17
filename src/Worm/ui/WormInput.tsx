@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { Worm } from '../Worm';
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material';
-import { formatWormNumber, isValidNumber } from '../helpers/calculations';
+import { formatWormNumber, isValidNumber } from '../calculations';
 
 interface IProps {
 	worm: Worm;
