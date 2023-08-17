@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - run: npm run build
+      - run: npm run build:dev
       - uses: actions/upload-pages-artifact@v1
         with:
           path: ".app"
