@@ -1,6 +1,6 @@
 import { Box, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material'
 import React from 'react'
-import { Bonus, BonusType, bonusTypeNumbers, getCurrentBonusPower, stringIsBonusTypeKey } from '../BonusType'
+import { BonusType, bonuses, getCurrentBonusPower, numberIsBonusValue } from '../BonusType'
 import { formatPercent } from '../../ui/formatNumber';
 
 interface IProps {
@@ -10,44 +10,51 @@ interface IProps {
 	setBonus(value: BonusType): void;
 }
 
-function formatMultiplier(effect: number, type: BonusType): string {
-	const bonusText = Bonus(type);
-  if (bonusText.includes("+x%")) {
-    return bonusText.replace(/-*x%/, formatPercent(effect - 1));
-  } else if (bonusText.includes("-x%")) {
-    const perc = formatPercent(1 - effect);
-    return bonusText.replace(/-x%/, perc);
+function formatMultiplier(power: number, data: BonusType): string {
+  if (data.description.includes("+x%")) {
+    return data.description.replace(/-*x%/, formatPercent(power - 1));
+  } else if (data.description.includes("-x%")) {
+    const perc = formatPercent((1 / power) - 1);
+    return data.description.replace(/-x%/, perc);
   } else {
-    return bonusText;
+    return data.description;
   }
 }
 
 export function BonusSelector(props: IProps) {
 	function onChange(event: SelectChangeEvent) {
 		const value = Number(event.target.value);
-		if (!Object.values(BonusType).includes(value)) throw new Error(`Chosen BonusType "${value}" does not exist.`);
+		if (!numberIsBonusValue(value)) throw new Error(`Chosen Bonus "${value}" does not exist.`);
 
-		props.setBonus(value);
+		const data = bonuses.find(b => b.id === value);
+		if (data === undefined) throw new Error(`Chosen Bonus "${value}" does not exist.`);
+
+		props.setBonus(data);
 	}
 
 	return (
-		<Select onChange={onChange} value={String(props.bonus)}>
-			{bonusTypeNumbers.map(i => (
-				<MenuItem key={i} value={i}>
-					<BonusItem bonus={BonusType[Number(i)]} fitness={props.fitness} bonusMultiplier={props.bonusMultiplier}/>
+		<Select onChange={onChange} value={String(props.bonus.id)}>
+			{bonuses.map(b => (
+				<MenuItem key={String(b.id)} value={String(b.id)}>
+					<BonusItem bonus={b} fitness={props.fitness} bonusMultiplier={props.bonusMultiplier}/>
 				</MenuItem>
 			))}
 		</Select>
 	)
 }
 
-export function BonusItem({ bonus, fitness, bonusMultiplier }: { bonus: string, fitness: number, bonusMultiplier: number }) {
-	if (!stringIsBonusTypeKey(bonus)) throw new Error(`String "${bonus}" is not a key of BonusType.`);
+interface ItemProps {
+	bonus: BonusType,
+	fitness: number,
+	bonusMultiplier: number
+}
+
+export function BonusItem({ bonus, fitness, bonusMultiplier }: ItemProps) {
 	return (
 		<>
 		<Typography component="div">
-			<Box sx={{ fontWeight: "bold" }}>{bonus}</Box>
-			{formatMultiplier(getCurrentBonusPower(BonusType[bonus], fitness, bonusMultiplier), BonusType[bonus])}
+			<Box sx={{ fontWeight: "bold" }}>{bonus.name}</Box>
+			{formatMultiplier(getCurrentBonusPower(bonus, fitness, bonusMultiplier), bonus)}
 		</Typography>
 		</>
 	)
