@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Typography from "@mui/material/Typography";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
@@ -44,10 +44,7 @@ export function TerminalInput(): React.ReactElement {
   const [value, setValue] = useState(command);
   const [postUpdateValue, setPostUpdateValue] = useState<{ postUpdate: () => void } | null>();
   const [possibilities, setPossibilities] = useState<string[]>([]);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchResultsIndex, setSearchResultsIndex] = useState<number>(-1);
   const [searchResults, setSearchResults] = useState<string[]>([]);
-  const [currentSearchPossibility, setCurrentSearchPossibility] = useState<string>("");
   const [autofilledValue, setAutofilledValue] = useState<boolean>(false);
   const classes = useStyles();
 
@@ -78,13 +75,11 @@ export function TerminalInput(): React.ReactElement {
   function handleValueChange(event: React.ChangeEvent<HTMLInputElement>): void {
     saveValue(event.target.value);
     setPossibilities([]);
-    resetSearch();
+    setSearchResults([]);
+    setAutofilledValue(false);
   }
 
   function resetSearch(isAutofilled = false) {
-    setSearchTerm("");
-    setCurrentSearchPossibility("");
-    setSearchResultsIndex(-1);
     setSearchResults([]);
     setAutofilledValue(isAutofilled);
   }
@@ -222,14 +217,15 @@ export function TerminalInput(): React.ReactElement {
     // Autocomplete
     if (event.key === KEY.TAB) {
       event.preventDefault();
-      if (searchResultsIndex !== -1) {
-        saveValue(currentSearchPossibility);
+      if (searchResults.length) {
+        saveValue(searchResults[0]);
         resetSearch(true);
         return;
       }
       const possibilities = await getTabCompletionPossibilities(value, Terminal.cwd());
       if (possibilities.length === 0) return;
-      resetSearch(true);
+
+      setSearchResults([]);
       if (possibilities.length === 1) {
         saveValue(value.replace(/[^ ]*$/, possibilities[0]) + " ");
         return;
@@ -258,25 +254,24 @@ export function TerminalInput(): React.ReactElement {
         return;
       }
 
-      // If there is a partial command in the terminal, hitting up will filter the history
-      if(value && !autofilledValue && Settings.EnableHistorySearch) {
-        let results = searchResults;
-
-        let index;
-        if (searchTerm !== value) {
-          results = Terminal.commandHistory.filter(item => item?.startsWith(value));
-
+      // If there is a partial command in the terminal, hitting "up" will filter the history
+      if (value && !autofilledValue && Settings.EnableHistorySearch) {
+        if (searchResults.length > 1) {
+          const results = [...searchResults];
+          results.push(results.shift() ?? "");
           setSearchResults(results);
-          setSearchTerm(value);
-          setSearchResultsIndex(index = 0);
-        } else {
-          setSearchResultsIndex(index = (searchResultsIndex + 1) % results.length);
+          return;
         }
+        const newResults = [...new Set(Terminal.commandHistory.filter((item) => item?.startsWith(value)).reverse())];
 
-        const result = results[index];
-        setCurrentSearchPossibility(result)
-
-        return;
+        // If there is only one result, simply make that the value in the terminal
+        if (newResults.length === 1) {
+          saveValue(newResults[0]);
+          return;
+        } else if (newResults.length) {
+          setSearchResults(newResults);
+          return;
+        }
       }
 
       if (i < 0 || i > len) {
@@ -288,7 +283,7 @@ export function TerminalInput(): React.ReactElement {
       }
       const prevCommand = Terminal.commandHistory[Terminal.commandHistoryIndex];
       saveValue(prevCommand);
-      resetSearch( true);
+      resetSearch(true);
       if (ref) {
         setTimeout(function () {
           ref.selectionStart = ref.selectionEnd = 10000;
@@ -301,10 +296,10 @@ export function TerminalInput(): React.ReactElement {
       if (Settings.EnableBashHotkeys) {
         event.preventDefault();
       }
-      if (searchResultsIndex !== -1) {
-        const index = Math.max(searchResultsIndex - 1, 0);
-        setSearchResultsIndex(index);
-        setCurrentSearchPossibility(searchResults[index]);
+      if (searchResults.length > 1) {
+        const results = [...searchResults];
+        results.unshift(results.pop() ?? "");
+        setSearchResults(results);
         return;
       }
 
@@ -419,7 +414,10 @@ export function TerminalInput(): React.ReactElement {
             </Typography>
           ),
           spellCheck: false,
-          onBlur: () => setPossibilities([]),
+          onBlur: () => {
+            setPossibilities([]);
+            resetSearch();
+          },
           onKeyDown: onKeyDown,
         }}
       ></TextField>
@@ -439,7 +437,7 @@ export function TerminalInput(): React.ReactElement {
         </Paper>
       </Popper>
       <Popper
-        open={searchResultsIndex >= 0 && possibilities.length === 0}
+        open={!!searchResults.length && possibilities.length === 0}
         anchorEl={terminalInput.current}
         placement={"top"}
         sx={{ maxWidth: "75%" }}
@@ -449,7 +447,7 @@ export function TerminalInput(): React.ReactElement {
             Search result:
           </Typography>
           <Typography classes={{ root: classes.preformatted }} color={"primary"} paragraph={false}>
-            {`>  ${currentSearchPossibility}`}
+            {`>  ${searchResults[0]}`}
           </Typography>
         </Paper>
       </Popper>

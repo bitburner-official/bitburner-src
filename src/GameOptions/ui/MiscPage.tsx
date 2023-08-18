@@ -36,8 +36,8 @@ export const MiscPage = (): React.ReactElement => {
         text="Enable terminal history search with arrow keys"
         tooltip={
           <>
-            If there is text in the terminal, using the up arrow will search through the terminal history for
-            previous commands that start with the current text.
+            If there is text in the terminal, using the up arrow will search through the terminal history for previous
+            commands that start with the current text.
           </>
         }
       />

@@ -27,7 +27,7 @@ export const Settings = {
   /** Whether to enable bash hotkeys */
   EnableBashHotkeys: false,
   /** Whether to enable terminal history search */
-  EnableHistorySearch: true,
+  EnableHistorySearch: false,
   /** Timestamps format string */
   TimestampsFormat: "",
   /** Locale used for display numbers. */
