@@ -32,6 +32,15 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0),
       height: "100%",
     },
+    absolute: {
+      margin: theme.spacing(0),
+      position: "absolute",
+      bottom: "5px",
+      opacity: "0.5",
+      "max-width": "100%",
+      "white-space": "nowrap",
+      overflow: "hidden",
+    },
   }),
 );
 
@@ -207,7 +216,10 @@ export function TerminalInput(): React.ReactElement {
     if (event.key === KEY.ENTER) {
       event.preventDefault();
       Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${value}`);
-      if (value) {
+      if (searchResults.length) {
+        Terminal.executeCommands(searchResults[0]);
+        saveValue("");
+      } else if (value) {
         Terminal.executeCommands(value);
         saveValue("");
       }
@@ -416,7 +428,7 @@ export function TerminalInput(): React.ReactElement {
           spellCheck: false,
           onBlur: () => {
             setPossibilities([]);
-            resetSearch();
+            //resetSearch(); TODO: re-add this
           },
           onKeyDown: onKeyDown,
         }}
@@ -436,21 +448,9 @@ export function TerminalInput(): React.ReactElement {
           </Typography>
         </Paper>
       </Popper>
-      <Popper
-        open={!!searchResults.length && possibilities.length === 0}
-        anchorEl={terminalInput.current}
-        placement={"top"}
-        sx={{ maxWidth: "75%" }}
-      >
-        <Paper sx={{ m: 1, p: 2 }}>
-          <Typography classes={{ root: classes.preformatted }} color={"secondary"} paragraph={false}>
-            Search result:
-          </Typography>
-          <Typography classes={{ root: classes.preformatted }} color={"primary"} paragraph={false}>
-            {`>  ${searchResults[0]}`}
-          </Typography>
-        </Paper>
-      </Popper>
+      <Typography classes={{ root: classes.absolute }} color={"secondary"} paragraph={false}>
+        [{Player.getCurrentServer().hostname}&nbsp;/{Terminal.cwd()}]&gt;&nbsp;{searchResults[0]}
+      </Typography>
     </>
   );
 }
