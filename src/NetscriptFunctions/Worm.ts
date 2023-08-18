@@ -6,6 +6,8 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 import { Worm } from "../Worm/Worm";
 import { calculateFitness, getGuessTime } from "../Worm/calculations";
 import { arrayToString } from "../utils/helpers/ArrayHelpers";
+import { difficulties } from "../Worm/Difficulty";
+import { bonuses } from "../Worm/BonusType";
 
 export function NetscriptWorm(): InternalAPI<IWorm> {
   function checkWormAPIAccess(ctx: NetscriptContext): void {
@@ -42,6 +44,20 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 			checkWormAPIAccess(ctx);
 			const guess = getWorm().guess;
 			return guess;
+		},
+		setDifficulty: (ctx) => (_difficulty) => {
+			checkWormAPIAccess(ctx);
+			const difficulty = helpers.number(ctx, "difficulty", _difficulty);
+			const value = difficulties.find(d => d.id === difficulty);
+			if (value === undefined) throw new Error(`Value "${difficulty}" is not a valid difficulty. Valid: ${difficulties.map(d => d.id.toString()).join(", ")}`);
+			getWorm().setDifficulty(value);
+		},
+		setBonus: (ctx) => (_bonus) => {
+			checkWormAPIAccess(ctx);
+			const bonus = helpers.number(ctx, "bonus", _bonus);
+			const value = bonuses.find(b => b.id === bonus);
+			if (value === undefined) throw new Error(`Value "${bonus}" is not a valid bonus. Valid: ${bonuses.map(d => d.id.toString()).join(", ")}`);
+			getWorm().setBonus(value);
 		}
   }
 }

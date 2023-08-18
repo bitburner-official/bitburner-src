@@ -56,7 +56,7 @@ export function WormRoot({ worm }: IProps): React.ReactElement {
 				<DifficultySelector difficulty={worm.difficulty.id} setDifficulty={d => worm.setDifficulty(d)}/>
 				<BonusSelector // might want to pass entire worm
 					bonus={worm.bonus}
-					setBonus={bonus => worm.bonus = bonus}
+					setBonus={b => worm.setBonus(b)}
 					bonusMultiplier={worm.difficulty.bonusMultiplier}
 					fitness={calculateFitness(worm)}/>
 			</Stack>

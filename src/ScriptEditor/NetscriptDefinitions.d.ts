@@ -4416,6 +4416,22 @@ interface Worm {
 	 * @returns The current guess.
 	 */
 	getCurrentGuess(): number[];
+
+	/**
+	 * Set the difficulty of the worm.
+	 * Note, this resets the worm.
+	 * @remarks
+	 * RAM cost: 2 GB
+	 */
+	setDifficulty(difficulty: number): void;
+
+	/**
+	 * Set the bonus of the worm.
+	 * Note, this resets the worm.
+	 * @remarks
+	 * RAM cost: 2 GB
+	 */
+	setBonus(bonus: number): void;
 }
 
 /** @public */

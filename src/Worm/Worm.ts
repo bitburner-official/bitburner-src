@@ -73,6 +73,11 @@ export class Worm {
 		this.resetFormula();
 	}
 
+	setBonus(bonus: BonusType) {
+		this.bonus = bonus;
+		this.resetFormula();
+	}
+
 	toJSON(): IReviverValue {
 		return Generic_toJSON("Worm", this);
 	}
