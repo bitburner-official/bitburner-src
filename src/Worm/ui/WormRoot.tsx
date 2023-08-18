@@ -4,12 +4,12 @@ import React, { useEffect } from 'react';
 import { dialogBoxCreate } from '../../ui/React/DialogBox';
 import { BonusSelector } from './BonusSelector';
 import { Worm } from '../Worm';
-import { WormInput } from './WormInput';
-import { WormFitness } from './WormFitness';
+import { WormValues } from './WormValues';
 import { useRerender } from '../../ui/React/hooks';
 import { WormEvents } from '../WormEvents';
 import { DifficultySelector } from './DifficultySelector';
 import { calculateFitness } from '../calculations';
+import { WormInput } from './WormInput';
 
 interface IProps {
 	worm: Worm | null;
@@ -56,11 +56,12 @@ export function WormRoot({ worm }: IProps): React.ReactElement {
 				<DifficultySelector difficulty={worm.difficulty.id} setDifficulty={d => worm.setDifficulty(d)}/>
 				<BonusSelector // might want to pass entire worm
 					bonus={worm.bonus}
+					insight={worm.insight}
 					setBonus={b => worm.setBonus(b)}
 					bonusMultiplier={worm.difficulty.bonusMultiplier}
 					fitness={calculateFitness(worm)}/>
 			</Stack>
-			<WormFitness worm={worm}/>
+			<WormValues worm={worm}/>
 			<WormInput worm={worm}/>
 		</Container>
 	)

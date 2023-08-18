@@ -3,11 +3,12 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { BonusType, bonuses } from "./BonusType";
 import { difficulties, DifficultyType } from "./Difficulty";
 import { WormEvents } from "./WormEvents";
-import { checkValidGuess, formatWormNumber } from "./calculations";
+import { calculateFitness, checkValidGuess, formatWormNumber } from "./calculations";
 import { FormulaData, FormulaDataFactory, updateFormulaData } from "./Formula";
 
 export class Worm {
 	length = 16;
+	insightCount = 20;
 	minValue = -1;
 	maxValue = 1;
 	
@@ -18,11 +19,14 @@ export class Worm {
 	formulaData: FormulaData;
 
 	guess: number[];
+	insightQueue: number[];
+	minFitness: number | null = null;
 
 	processCount = 0;
 
 	constructor() {
 		this.guess = Array.from({ length: this.length }, () => 0);
+		this.insightQueue = [];
 
 		this.difficulty = difficulties[0];
 		this.bonus = bonuses[0];
@@ -49,12 +53,25 @@ export class Worm {
 		return Math.pow(2, 4 + this.difficulty.complexity);
 	}
 
-	resetFormula() {
-		this.formulaData = FormulaDataFactory(this.numFormulas);
+	get insight() {
+		return this.insightQueue.length > 0 ? this.insightQueue.reduce((a, b) => a + b) / this.insightQueue.length: 0;
 	}
 
-	updateFormula(numCycles = 1) {
-		for (let i = 0; i < numCycles; i++) updateFormulaData(this.formulaData, this.difficulty.amountOfChange);
+	resetFormula() {
+		this.formulaData = FormulaDataFactory(this.numFormulas);
+		this.insightQueue = [];
+	}
+
+	addInsight() {
+		this.insightQueue.push(this.minFitness ?? calculateFitness(this));
+		while (this.insightQueue.length > this.insightCount) this.insightQueue.shift();
+		this.minFitness = null;
+	}
+
+	updateFormula() {
+		this.addInsight();
+
+		updateFormulaData(this.formulaData, this.difficulty.amountOfChange);
 
 		console.log(this.formulaData);
 	}

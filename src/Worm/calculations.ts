@@ -37,7 +37,7 @@ export function calculatePerfectWorm(data: FormulaData, length: number) {
 	return Array.from({ length }, (_, i) => formatWormNumber(wormFunction(i)));
 }
 
-export const getGuessTime = (threads: number) => 10 * 60 * 1000 / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1));
+export const getGuessTime = (threads: number) => 60 * 1000 / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1));
 
 // The formula needs to have these requirements:
 // f(0) = 1
@@ -53,11 +53,13 @@ export function calculateFitness(worm: Worm) {
 	const difference = perfectWorm.reduce((acc, val, i) => acc + Math.abs(val - worm.guess[i]), 0);
 	const fitness = fitnessFunction(difference * Math.max(1, worm.difficulty.complexity));
 
+	worm.minFitness = worm.minFitness === null ? fitness : Math.min(fitness, worm.minFitness);
+
 	return fitness;
 }
 
 export function calculateWormMults(worm: Worm | null): Multipliers {
 	if (worm === null) return defaultMultipliers();
 
-	return getMultiplier(worm.bonus, calculateFitness(worm), worm.difficulty.bonusMultiplier);
+	return getMultiplier(worm.bonus, worm.insight, calculateFitness(worm), worm.difficulty.bonusMultiplier);
 }

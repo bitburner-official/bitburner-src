@@ -8,12 +8,13 @@ interface IProps {
 	worm: Worm;
 }
 
-export function WormFitness({ worm }: IProps) {
+export function WormValues({ worm }: IProps) {
 	const fitness = calculateFitness(worm);
 	return (
 		<Box>
 			<Typography>
-				Worm fitness: {formatPercent(fitness)}
+				Worm fitness: {formatPercent(fitness)}<br />
+				Worm insight: {formatPercent(worm.insight)}
 			</Typography>
 		</Box>
 	)
