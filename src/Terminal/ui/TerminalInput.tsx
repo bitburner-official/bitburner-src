@@ -37,9 +37,10 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "absolute",
       bottom: "5px",
       opacity: "0.5",
-      "max-width": "100%",
-      "white-space": "nowrap",
+      maxWidth: "100%",
+      whiteSpace: "nowrap",
       overflow: "hidden",
+      pointerEvents: "none",
     },
   }),
 );
@@ -54,7 +55,7 @@ export function TerminalInput(): React.ReactElement {
   const [postUpdateValue, setPostUpdateValue] = useState<{ postUpdate: () => void } | null>();
   const [possibilities, setPossibilities] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<string[]>([]);
-  const [autofilledValue, setAutofilledValue] = useState<boolean>(false);
+  const [autofilledValue, setAutofilledValue] = useState(false);
   const classes = useStyles();
 
   // If we have no data in the current terminal history, let's initialize it from the player save
@@ -268,7 +269,7 @@ export function TerminalInput(): React.ReactElement {
 
       // If there is a partial command in the terminal, hitting "up" will filter the history
       if (value && !autofilledValue && Settings.EnableHistorySearch) {
-        if (searchResults.length > 1) {
+        if (searchResults.length > 0) {
           const results = [...searchResults];
           results.push(results.shift() ?? "");
           setSearchResults(results);
@@ -276,11 +277,7 @@ export function TerminalInput(): React.ReactElement {
         }
         const newResults = [...new Set(Terminal.commandHistory.filter((item) => item?.startsWith(value)).reverse())];
 
-        // If there is only one result, simply make that the value in the terminal
-        if (newResults.length === 1) {
-          saveValue(newResults[0]);
-          return;
-        } else if (newResults.length) {
+        if (newResults.length) {
           setSearchResults(newResults);
           return;
         }
@@ -308,7 +305,7 @@ export function TerminalInput(): React.ReactElement {
       if (Settings.EnableBashHotkeys) {
         event.preventDefault();
       }
-      if (searchResults.length > 1) {
+      if (searchResults.length > 0) {
         const results = [...searchResults];
         results.unshift(results.pop() ?? "");
         setSearchResults(results);
