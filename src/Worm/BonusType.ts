@@ -66,9 +66,9 @@ export const bonusMult = (power: number): Record<typeof Bonus[keyof typeof Bonus
 export const stringIsBonusKey = (s: string): s is keyof typeof Bonus => Object.keys(Bonus).indexOf(s) !== -1;
 export const numberIsBonusValue = (n: number): n is typeof Bonus[keyof typeof Bonus] => Object.values(Bonus).indexOf(n as typeof Bonus[keyof typeof Bonus]) !== -1;
 
-export function getCurrentBonusPower(data: BonusType, minFitness: number, fitness: number, bonusMultiplier: number) {
+export function getCurrentBonusPower(data: BonusType, insight: number, fitness: number, bonusMultiplier: number) {
 	return 1 + (
-		((fitness * 0.6) + (minFitness * 0.4)) *
+		((fitness * 0.6) + (insight * 0.4)) *
 		bonusMultiplier *
 		(data.power / 100)
 	);
