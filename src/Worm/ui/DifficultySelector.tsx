@@ -33,7 +33,7 @@ export function DifficultyItem({ difficulty }: { difficulty: DifficultyType }) {
 	return (
 		<>
 		<Typography component="div">
-			<Box sx={{ fontWeight: "bold" }}>{difficulty.name}</Box>
+			<Box sx={{ fontWeight: "bold" }}>{difficulty.id} - {difficulty.name}</Box>
 			Multiplier: {formatPercent(difficulty.bonusMultiplier)}<br/>
 			Complexity: {difficulty.complexity}<br/>
 			Time between changes: {formatPercent(difficulty.windowBetweenChange)}<br/>

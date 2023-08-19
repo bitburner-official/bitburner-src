@@ -60,7 +60,7 @@ export function BonusItem({ bonus, insight, fitness, bonusMultiplier }: ItemProp
 	return (
 		<>
 		<Typography component="div">
-			<Box sx={{ fontWeight: "bold" }}>{bonus.name}</Box>
+			<Box sx={{ fontWeight: "bold" }}>{bonus.id} - {bonus.name}</Box>
 			{formatMultiplier(getCurrentBonusPower(bonus, insight, fitness, bonusMultiplier), bonus)}
 		</Typography>
 		</>
