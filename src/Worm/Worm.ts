@@ -1,6 +1,6 @@
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { BonusType, bonuses } from "./BonusType";
+import { BonusType, applySpecialBonus, bonuses } from "./BonusType";
 import { difficulties, DifficultyType } from "./Difficulty";
 import { WormEvents } from "./WormEvents";
 import { calculateFitness, checkValidGuess, formatWormNumber } from "./calculations";
@@ -34,9 +34,10 @@ export class Worm {
 		this.formulaData = FormulaDataFactory(this.numFormulas);
 	}
 
-	process() {
+	process(numCycles = 1) {
 		if (++this.processCount % this.processCountBetweenChanges === 0) this.updateFormula();
 		this.updateMults();
+		applySpecialBonus(this, numCycles);
 
 		WormEvents.emit();
 	}

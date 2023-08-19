@@ -61,5 +61,11 @@ export function calculateFitness(worm: Worm) {
 export function calculateWormMults(worm: Worm | null): Multipliers {
 	if (worm === null) return defaultMultipliers();
 
-	return getMultiplier(worm.bonus, worm.insight, calculateFitness(worm), worm.difficulty.bonusMultiplier);
+	const effect = getMultiplier(worm.bonus, worm.insight, calculateFitness(worm), worm.difficulty.bonusMultiplier);
+
+	if (effect === null) {
+		return defaultMultipliers();
+	} else {
+		return effect;
+	}
 }
