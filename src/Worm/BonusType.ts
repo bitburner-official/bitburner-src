@@ -1,4 +1,6 @@
-import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
+import { Player } from "@player";
+import { Multipliers, defaultMultipliers, mergeMultipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
+import { Augmentations } from "../Augmentation/Augmentations";
 
 export interface BonusType {
 	id: typeof Bonus[keyof typeof Bonus];
@@ -14,7 +16,8 @@ export const Bonus = {
 	CARDINAL_SIN: 1,
 	FAVORABLE_APPEARANCE: 2,
 	SYNTHETIC_BLACK_FRIDAY: 3,
-	INCREASED_MAINFRAME_VOLTAGE: 4
+	INCREASED_MAINFRAME_VOLTAGE: 4,
+	RAPID_ASSIMILATION: 5,
 } as const;
 
 export const bonuses: BonusType[] = [
@@ -43,6 +46,11 @@ export const bonuses: BonusType[] = [
 		name: "Increased mainframe voltage",
 		description: "+x% game cycles per process",
 		power: 10
+	},{
+		id: Bonus.RAPID_ASSIMILATION,
+		name: "Rapid assimilation",
+		description: "applies queued augmentations immediately. x% queued augmentation effect",
+		power: 20
 	}
 ];
 
@@ -61,6 +69,11 @@ export const bonusMult = (power: number): Record<typeof Bonus[keyof typeof Bonus
 		home_core_cost: 1 / power,
 	},
 	[Bonus.INCREASED_MAINFRAME_VOLTAGE]: { game_tick_speed: power },
+	[Bonus.RAPID_ASSIMILATION]: (() => {
+		let mults = defaultMultipliers();
+		for (const queued of Player.queuedAugmentations) mults = mergeMultipliers(mults, Augmentations[queued.name].mults);
+		return scaleMultipliers(mults, power - 1);
+	})()
 });
 
 export const stringIsBonusKey = (s: string): s is keyof typeof Bonus => Object.keys(Bonus).indexOf(s) !== -1;

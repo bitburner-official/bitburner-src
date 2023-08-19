@@ -18,7 +18,7 @@ function formatMultiplier(power: number, data: BonusType): string {
     const perc = formatPercent((1 / power) - 1);
     return data.description.replace(/-x%/, perc);
   } else {
-    return data.description;
+    return data.description.replace(/x%/, formatPercent(power - 1));
   }
 }
 
