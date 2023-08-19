@@ -333,6 +333,7 @@ const worm = {
 	getCurrentGuess: 2,
 	setDifficulty: 2,
 	setBonus: 2,
+	getCurrentInsight: 2,
 } as const;
 
 // UI API

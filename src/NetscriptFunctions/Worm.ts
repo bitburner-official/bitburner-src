@@ -58,6 +58,10 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 			const value = bonuses.find(b => b.id === bonus);
 			if (value === undefined) throw new Error(`Value "${bonus}" is not a valid bonus. Valid: ${bonuses.map(d => d.id.toString()).join(", ")}`);
 			getWorm().setBonus(value);
+		},
+		getCurrentInsight: (ctx) => () => {
+			checkWormAPIAccess(ctx);
+			return getWorm().insight;
 		}
   }
 }

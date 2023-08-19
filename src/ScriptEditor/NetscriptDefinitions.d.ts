@@ -4432,6 +4432,13 @@ interface Worm {
 	 * RAM cost: 2 GB
 	 */
 	setBonus(bonus: number): void;
+
+	/**
+	 * Get the current insight of the worm.
+	 * @remarks
+	 * RAM cost: 1 GB
+	 */
+	getCurrentInsight(): number;
 }
 
 /** @public */
