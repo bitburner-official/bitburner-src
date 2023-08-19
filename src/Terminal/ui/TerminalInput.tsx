@@ -55,6 +55,7 @@ export function TerminalInput(): React.ReactElement {
   const [postUpdateValue, setPostUpdateValue] = useState<{ postUpdate: () => void } | null>();
   const [possibilities, setPossibilities] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [searchResultsIndex, setSearchResultsIndex] = useState(0);
   const [autofilledValue, setAutofilledValue] = useState(false);
   const classes = useStyles();
 
@@ -92,6 +93,7 @@ export function TerminalInput(): React.ReactElement {
   function resetSearch(isAutofilled = false) {
     setSearchResults([]);
     setAutofilledValue(isAutofilled);
+    setSearchResultsIndex(0);
   }
 
   function modifyInput(mod: string): void {
@@ -218,7 +220,7 @@ export function TerminalInput(): React.ReactElement {
       event.preventDefault();
       Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${value}`);
       if (searchResults.length) {
-        Terminal.executeCommands(searchResults[0]);
+        Terminal.executeCommands(searchResults[searchResultsIndex]);
         saveValue("");
       } else if (value) {
         Terminal.executeCommands(value);
@@ -231,7 +233,7 @@ export function TerminalInput(): React.ReactElement {
     if (event.key === KEY.TAB) {
       event.preventDefault();
       if (searchResults.length) {
-        saveValue(searchResults[0]);
+        saveValue(searchResults[searchResultsIndex]);
         resetSearch(true);
         return;
       }
@@ -270,9 +272,7 @@ export function TerminalInput(): React.ReactElement {
       // If there is a partial command in the terminal, hitting "up" will filter the history
       if (value && !autofilledValue && Settings.EnableHistorySearch) {
         if (searchResults.length > 0) {
-          const results = [...searchResults];
-          results.push(results.shift() ?? "");
-          setSearchResults(results);
+          setSearchResultsIndex((searchResultsIndex + 1) % searchResults.length);
           return;
         }
         const newResults = [...new Set(Terminal.commandHistory.filter((item) => item?.startsWith(value)).reverse())];
@@ -306,9 +306,7 @@ export function TerminalInput(): React.ReactElement {
         event.preventDefault();
       }
       if (searchResults.length > 0) {
-        const results = [...searchResults];
-        results.unshift(results.pop() ?? "");
-        setSearchResults(results);
+        setSearchResultsIndex(searchResultsIndex === 0 ? searchResults.length - 1 : searchResultsIndex - 1);
         return;
       }
 
@@ -425,7 +423,7 @@ export function TerminalInput(): React.ReactElement {
           spellCheck: false,
           onBlur: () => {
             setPossibilities([]);
-            //resetSearch(); TODO: re-add this
+            resetSearch();
           },
           onKeyDown: onKeyDown,
         }}
@@ -446,7 +444,7 @@ export function TerminalInput(): React.ReactElement {
         </Paper>
       </Popper>
       <Typography classes={{ root: classes.absolute }} color={"secondary"} paragraph={false}>
-        [{Player.getCurrentServer().hostname}&nbsp;/{Terminal.cwd()}]&gt;&nbsp;{searchResults[0]}
+        [{Player.getCurrentServer().hostname}&nbsp;/{Terminal.cwd()}]&gt;&nbsp;{searchResults[searchResultsIndex]}
       </Typography>
     </>
   );
