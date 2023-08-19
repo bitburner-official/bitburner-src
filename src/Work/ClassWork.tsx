@@ -111,8 +111,8 @@ export class ClassWork extends Work {
     return false;
   }
 
-  finish(): void {
-    if (!this.singularity) {
+  finish(cancelled: boolean, suppressDialog?: boolean): void {
+    if (!this.singularity && !suppressDialog) {
       dialogBoxCreate(
         <>
           After {this.getClass().youAreCurrently} for{" "}

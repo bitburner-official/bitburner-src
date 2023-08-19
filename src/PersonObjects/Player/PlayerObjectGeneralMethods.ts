@@ -130,7 +130,7 @@ export function prestigeAugmentation(this: PlayerObject): void {
   this.reapplyAllAugmentations(true);
   this.hp.current = this.hp.max;
 
-  this.finishWork(true);
+  this.finishWork(true, true);
 }
 
 export function prestigeSourceFile(this: PlayerObject): void {
