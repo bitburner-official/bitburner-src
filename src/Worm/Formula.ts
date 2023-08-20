@@ -3,7 +3,7 @@ export interface FormulaData {
 	shift: number;
 	
 	amplitudes: number[];
-	chosenFormulas: number[];
+	chosenFormulas: (typeof Formulas[keyof typeof Formulas])[];
 }
 
 export const FormulaDataFactory = (numFormulas: number): FormulaData => ({
@@ -34,17 +34,18 @@ export const Formulas = {
 	SIN_DIVX: 5,
 } as const;
 
-export function equation(formula: number): (x: number) => number {
-	switch (formula) {
-		case Formulas.SIN: return x => Math.sin(x);
-		case Formulas.SIN_SQRT: return x => Math.sin(Math.sqrt(x));
-		case Formulas.SIN_POW2: return x => Math.sin(Math.pow(x, 2));
-		case Formulas.SIN_POL1: return x => Math.sin((x + 5.64) * (x - 3.07) * (x - 19.23) / -333.34);
-		case Formulas.SIN_POL2: return x => Math.sin(x * x * (x + 8) * (x - 24) / -5903 + 2);
-		case Formulas.SIN_DIVX: return x => Math.sin(x) / x;
-		default: throw new Error(`Formula #${formula} not implemented!`);
-	}
-}
+export const formulaEquation: Record<typeof Formulas[keyof typeof Formulas], (x: number) => number> = {
+	[Formulas.SIN]: x => Math.sin(x),
+	[Formulas.SIN_SQRT]: x => Math.sin(Math.sqrt(x)),
+	[Formulas.SIN_POW2]: x => Math.sin(Math.pow(x, 2)),
+	[Formulas.SIN_POL1]: x => Math.sin((x + 5.64) * (x - 3.07) * (x - 19.23) / -333.34),
+	[Formulas.SIN_POL2]: x => Math.sin(x * x * (x + 8) * (x - 24) / -5903 + 2),
+	[Formulas.SIN_DIVX]: x => Math.sin(x) / x,
+} as const;
 
 export const evaluate = (data: FormulaData) => (x: number) => 
-	(1 / data.chosenFormulas.length) * data.chosenFormulas.reduce((acc, cur, i) => acc + data.amplitudes[i] * equation(cur)(data.frequency * (x + data.shift)), 0);
+	(1 / data.chosenFormulas.length) *
+	data.chosenFormulas.reduce<number>(
+		(acc, cur, i) => acc + data.amplitudes[i] * formulaEquation[cur](data.frequency * (x + data.shift)),
+		0
+	);
