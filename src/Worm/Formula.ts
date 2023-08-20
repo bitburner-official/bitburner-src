@@ -34,6 +34,8 @@ export const Formulas = {
 	SIN_DIVX: 5,
 } as const;
 
+// Equation requirements:
+// 1. Range [-1, 1] for x >= 0
 export const formulaEquation: Record<typeof Formulas[keyof typeof Formulas], (x: number) => number> = {
 	[Formulas.SIN]: x => Math.sin(x),
 	[Formulas.SIN_SQRT]: x => Math.sin(Math.sqrt(x)),
