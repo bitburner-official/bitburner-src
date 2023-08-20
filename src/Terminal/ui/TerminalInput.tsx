@@ -36,9 +36,9 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(0),
       position: "absolute",
       bottom: "5px",
-      opacity: "0.5",
+      opacity: "0.75",
       maxWidth: "100%",
-      whiteSpace: "nowrap",
+      "white-space": "nowrap break-spaces",
       overflow: "hidden",
       pointerEvents: "none",
     },
@@ -94,6 +94,12 @@ export function TerminalInput(): React.ReactElement {
     setSearchResults([]);
     setAutofilledValue(isAutofilled);
     setSearchResultsIndex(0);
+  }
+
+  function getSearchSuggestionPrespace() {
+    const currentPrefix = `[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> `;
+    const prefixLength = `${currentPrefix}${value}`.length;
+    return Array(prefixLength).fill(" ");
   }
 
   function modifyInput(mod: string): void {
@@ -218,13 +224,12 @@ export function TerminalInput(): React.ReactElement {
     // Run command or insert newline
     if (event.key === KEY.ENTER) {
       event.preventDefault();
-      Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${value}`);
-      if (searchResults.length) {
-        Terminal.executeCommands(searchResults[searchResultsIndex]);
+      const command = searchResults.length ? searchResults[searchResultsIndex] : value;
+      Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${command}`);
+      if (command) {
+        Terminal.executeCommands(command);
         saveValue("");
-      } else if (value) {
-        Terminal.executeCommands(value);
-        saveValue("");
+        resetSearch();
       }
       return;
     }
@@ -332,6 +337,10 @@ export function TerminalInput(): React.ReactElement {
         saveValue(prevCommand);
         resetSearch(true);
       }
+    }
+
+    if (event.key === KEY.ESC && searchResults.length) {
+      resetSearch();
     }
 
     // Extra Bash Emulation Hotkeys, must be enabled through options
@@ -443,8 +452,9 @@ export function TerminalInput(): React.ReactElement {
           </Typography>
         </Paper>
       </Popper>
-      <Typography classes={{ root: classes.absolute }} color={"secondary"} paragraph={false}>
-        [{Player.getCurrentServer().hostname}&nbsp;/{Terminal.cwd()}]&gt;&nbsp;{searchResults[searchResultsIndex]}
+      <Typography classes={{ root: classes.absolute }} color={"primary"} paragraph={false}>
+        {getSearchSuggestionPrespace()}
+        {(searchResults[searchResultsIndex] ?? "").substring(value.length)}
       </Typography>
     </>
   );
