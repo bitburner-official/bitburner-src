@@ -284,8 +284,10 @@ export function TerminalInput(): React.ReactElement {
 
         if (newResults.length) {
           setSearchResults(newResults);
-          return;
         }
+        // Prevent moving through the history when the user has a search term even if there are
+        // no search results, to be consistent with zsh-type terminal behavior
+        return;
       }
 
       if (i < 0 || i > len) {
