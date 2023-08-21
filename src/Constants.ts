@@ -219,12 +219,16 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.4.1dev - Last changelog update 8/16/23
+## v2.4.1dev - Last changelog update 8/21/23
 
 See 2.4.0 changelog at:
 https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/ui/doc/changelog.md
 
 Some changes below include spoilers.
+
+### MAJOR ADDITIONS:
+
+* Added "Enable terminal history search with arrow keys" option in Misc options category, inspired by similar functionality in shells like zsh. (@ficocelliguy)
 
 ### BUGFIX:
 
