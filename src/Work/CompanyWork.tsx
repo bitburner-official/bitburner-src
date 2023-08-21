@@ -14,6 +14,7 @@ import { CONSTANTS } from "../Constants";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { isMember } from "../utils/EnumHelper";
 import { invalidWork } from "./InvalidWork";
+import { Settings } from "../Settings/Settings";
 
 interface CompanyWorkParams {
   companyName: CompanyName;
@@ -54,7 +55,7 @@ export class CompanyWork extends Work {
     return false;
   }
   finish(cancelled: boolean, suppressDialog?: boolean): void {
-    if (!this.singularity && !suppressDialog) {
+    if (!this.singularity && !suppressDialog && Settings.SuppressAugWorkFinishedPopup) {
       dialogBoxCreate(
         <>
           You finished working for {this.companyName}

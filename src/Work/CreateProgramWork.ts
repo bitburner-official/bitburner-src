@@ -8,6 +8,7 @@ import { Work, WorkType } from "./Work";
 import { Program } from "../Programs/Program";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
 import { asProgramFilePath } from "../Paths/ProgramFilePath";
+import { Settings } from "../Settings/Settings";
 
 export const isCreateProgramWork = (w: Work | null): w is CreateProgramWork =>
   w !== null && w.type === WorkType.CREATE_PROGRAM;
@@ -80,7 +81,7 @@ export class CreateProgramWork extends Work {
       Player.gainIntelligenceExp(
         (CONSTANTS.IntelligenceProgramBaseExpGain * this.cyclesWorked * CONSTANTS.MilliPerCycle) / 1000,
       );
-      if (!this.singularity && !suppressDialog) {
+      if (!this.singularity && !suppressDialog && Settings.SuppressAugWorkFinishedPopup) {
         const lines = [
           `You've finished creating ${programName}!`,
           "The new program can be found on your home computer.",

@@ -47,6 +47,14 @@ export const GameplayPage = (): React.ReactElement => {
         tooltip={<>If this is set, the confirmation message before buying augmentation will not show up.</>}
       />
       <OptionSwitch
+        checked={Settings.SuppressAugWorkFinishedPopup}
+        onChange={(newValue) => (Settings.SuppressTIXPopup = newValue)}
+        text="Suppress work finished messages after installing augmentations"
+        tooltip={
+          <>If this is set, the "You finished working for..." dialog will not pop up after installing augmentations.</>
+        }
+      />
+      <OptionSwitch
         checked={Settings.SuppressTIXPopup}
         onChange={(newValue) => (Settings.SuppressTIXPopup = newValue)}
         text="Suppress TIX messages"

@@ -12,6 +12,7 @@ import { Work, WorkType } from "./Work";
 import { applyWorkStats, newWorkStats, sumWorkStats, WorkStats } from "./WorkStats";
 import { findEnumMember } from "../utils/helpers/enum";
 import { isMember } from "../utils/EnumHelper";
+import { Settings } from "../Settings/Settings";
 
 export interface Class {
   type: ClassType;
@@ -112,7 +113,7 @@ export class ClassWork extends Work {
   }
 
   finish(cancelled: boolean, suppressDialog?: boolean): void {
-    if (!this.singularity && !suppressDialog) {
+    if (!this.singularity && !suppressDialog && Settings.SuppressAugWorkFinishedPopup) {
       dialogBoxCreate(
         <>
           After {this.getClass().youAreCurrently} for{" "}

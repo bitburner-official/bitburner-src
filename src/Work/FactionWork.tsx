@@ -12,6 +12,7 @@ import { Reputation } from "../ui/React/Reputation";
 import { CONSTANTS } from "../Constants";
 import { calculateFactionExp, calculateFactionRep } from "./Formulas";
 import { getEnumHelper } from "../utils/EnumHelper";
+import { Settings } from "../Settings/Settings";
 
 interface FactionWorkParams {
   singularity: boolean;
@@ -63,7 +64,7 @@ export class FactionWork extends Work {
   }
 
   finish(cancelled: boolean, suppressDialog?: boolean): void {
-    if (!this.singularity && !suppressDialog) {
+    if (!this.singularity && !suppressDialog && Settings.SuppressAugWorkFinishedPopup) {
       dialogBoxCreate(
         <>
           You worked for {this.getFaction().name}.

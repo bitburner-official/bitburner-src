@@ -42,6 +42,8 @@ export const Settings = {
   RemoteFileApiPort: 0,
   /** Whether to save the game when the player saves any file. */
   SaveGameOnFileSave: true,
+  /** Whether to hide dialogs for stock work competed upon augmentation install. */
+  SuppressAugWorkFinishedPopup: false,
   /** Whether to hide the confirmation dialog for augmentation purchases. */
   SuppressBuyAugmentationConfirmation: false,
   /** Whether to hide the dialog showing new faction invites. */
