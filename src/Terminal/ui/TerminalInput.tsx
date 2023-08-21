@@ -32,6 +32,16 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0),
       height: "100%",
     },
+    absolute: {
+      margin: theme.spacing(0),
+      position: "absolute",
+      bottom: "5px",
+      opacity: "0.75",
+      maxWidth: "100%",
+      "white-space": "nowrap break-spaces",
+      overflow: "hidden",
+      pointerEvents: "none",
+    },
   }),
 );
 
@@ -44,6 +54,9 @@ export function TerminalInput(): React.ReactElement {
   const [value, setValue] = useState(command);
   const [postUpdateValue, setPostUpdateValue] = useState<{ postUpdate: () => void } | null>();
   const [possibilities, setPossibilities] = useState<string[]>([]);
+  const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [searchResultsIndex, setSearchResultsIndex] = useState(0);
+  const [autofilledValue, setAutofilledValue] = useState(false);
   const classes = useStyles();
 
   // If we have no data in the current terminal history, let's initialize it from the player save
@@ -73,6 +86,20 @@ export function TerminalInput(): React.ReactElement {
   function handleValueChange(event: React.ChangeEvent<HTMLInputElement>): void {
     saveValue(event.target.value);
     setPossibilities([]);
+    setSearchResults([]);
+    setAutofilledValue(false);
+  }
+
+  function resetSearch(isAutofilled = false) {
+    setSearchResults([]);
+    setAutofilledValue(isAutofilled);
+    setSearchResultsIndex(0);
+  }
+
+  function getSearchSuggestionPrespace() {
+    const currentPrefix = `[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> `;
+    const prefixLength = `${currentPrefix}${value}`.length;
+    return Array(prefixLength).fill(" ");
   }
 
   function modifyInput(mod: string): void {
@@ -197,10 +224,12 @@ export function TerminalInput(): React.ReactElement {
     // Run command or insert newline
     if (event.key === KEY.ENTER) {
       event.preventDefault();
-      Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${value}`);
-      if (value) {
-        Terminal.executeCommands(value);
+      const command = searchResults.length ? searchResults[searchResultsIndex] : value;
+      Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${command}`);
+      if (command) {
+        Terminal.executeCommands(command);
         saveValue("");
+        resetSearch();
       }
       return;
     }
@@ -208,8 +237,15 @@ export function TerminalInput(): React.ReactElement {
     // Autocomplete
     if (event.key === KEY.TAB) {
       event.preventDefault();
+      if (searchResults.length) {
+        saveValue(searchResults[searchResultsIndex]);
+        resetSearch(true);
+        return;
+      }
       const possibilities = await getTabCompletionPossibilities(value, Terminal.cwd());
       if (possibilities.length === 0) return;
+
+      setSearchResults([]);
       if (possibilities.length === 1) {
         saveValue(value.replace(/[^ ]*$/, possibilities[0]) + " ");
         return;
@@ -228,7 +264,7 @@ export function TerminalInput(): React.ReactElement {
 
     // Select previous command.
     if (event.key === KEY.UP_ARROW || (Settings.EnableBashHotkeys && event.key === KEY.P && event.ctrlKey)) {
-      if (Settings.EnableBashHotkeys) {
+      if (Settings.EnableBashHotkeys || (Settings.EnableHistorySearch && value)) {
         event.preventDefault();
       }
       const i = Terminal.commandHistoryIndex;
@@ -237,6 +273,23 @@ export function TerminalInput(): React.ReactElement {
       if (len == 0) {
         return;
       }
+
+      // If there is a partial command in the terminal, hitting "up" will filter the history
+      if (value && !autofilledValue && Settings.EnableHistorySearch) {
+        if (searchResults.length > 0) {
+          setSearchResultsIndex((searchResultsIndex + 1) % searchResults.length);
+          return;
+        }
+        const newResults = [...new Set(Terminal.commandHistory.filter((item) => item?.startsWith(value)).reverse())];
+
+        if (newResults.length) {
+          setSearchResults(newResults);
+        }
+        // Prevent moving through the history when the user has a search term even if there are
+        // no search results, to be consistent with zsh-type terminal behavior
+        return;
+      }
+
       if (i < 0 || i > len) {
         Terminal.commandHistoryIndex = len;
       }
@@ -246,6 +299,7 @@ export function TerminalInput(): React.ReactElement {
       }
       const prevCommand = Terminal.commandHistory[Terminal.commandHistoryIndex];
       saveValue(prevCommand);
+      resetSearch(true);
       if (ref) {
         setTimeout(function () {
           ref.selectionStart = ref.selectionEnd = 10000;
@@ -258,6 +312,11 @@ export function TerminalInput(): React.ReactElement {
       if (Settings.EnableBashHotkeys) {
         event.preventDefault();
       }
+      if (searchResults.length > 0) {
+        setSearchResultsIndex(searchResultsIndex === 0 ? searchResults.length - 1 : searchResultsIndex - 1);
+        return;
+      }
+
       const i = Terminal.commandHistoryIndex;
       const len = Terminal.commandHistory.length;
 
@@ -272,12 +331,18 @@ export function TerminalInput(): React.ReactElement {
       if (i == len || i == len - 1) {
         Terminal.commandHistoryIndex = len;
         saveValue("");
+        resetSearch();
       } else {
         ++Terminal.commandHistoryIndex;
         const prevCommand = Terminal.commandHistory[Terminal.commandHistoryIndex];
 
         saveValue(prevCommand);
+        resetSearch(true);
       }
+    }
+
+    if (event.key === KEY.ESC && searchResults.length) {
+      resetSearch();
     }
 
     // Extra Bash Emulation Hotkeys, must be enabled through options
@@ -367,7 +432,10 @@ export function TerminalInput(): React.ReactElement {
             </Typography>
           ),
           spellCheck: false,
-          onBlur: () => setPossibilities([]),
+          onBlur: () => {
+            setPossibilities([]);
+            resetSearch();
+          },
           onKeyDown: onKeyDown,
         }}
       ></TextField>
@@ -386,6 +454,10 @@ export function TerminalInput(): React.ReactElement {
           </Typography>
         </Paper>
       </Popper>
+      <Typography classes={{ root: classes.absolute }} color={"primary"} paragraph={false}>
+        {getSearchSuggestionPrespace()}
+        {(searchResults[searchResultsIndex] ?? "").substring(value.length)}
+      </Typography>
     </>
   );
 }
