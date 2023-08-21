@@ -3,6 +3,8 @@ import { Multipliers, defaultMultipliers, mergeMultipliers, scaleMultipliers } f
 import { Augmentations } from "../Augmentation/Augmentations";
 import { Worm } from "./Worm";
 import { calculateFitness } from "./calculations";
+import { Growths } from "../Bladeburner/data/Growths";
+import { BladeburnerConstants } from "../Bladeburner/data/Constants";
 
 export interface BonusType {
 	id: typeof Bonus[keyof typeof Bonus];
@@ -21,6 +23,7 @@ export const Bonus = {
 	INCREASED_MAINFRAME_VOLTAGE: 4,
 	RAPID_ASSIMILATION: 5,
 	TEMPORAL_RESONATOR: 6,
+	RECORDLESS_CONTRACTING: 7
 } as const;
 
 export const bonuses: BonusType[] = [
@@ -59,6 +62,11 @@ export const bonuses: BonusType[] = [
 		name: "Temporal resonator",
 		description: "transfers +x% cycles of the worm to all sleeves",
 		power: 200
+	},{
+		id: Bonus.RECORDLESS_CONTRACTING,
+		name: "Recordless contracting",
+		description: "Generates an additional +x% bladeburner contracts and operations",
+		power: 100
 	}
 ];
 
@@ -82,7 +90,8 @@ export const bonusMult = (effect: number): Record<typeof Bonus[keyof typeof Bonu
 		for (const queued of Player.queuedAugmentations) mults = mergeMultipliers(mults, Augmentations[queued.name].mults);
 		return scaleMultipliers(mults, effect - 1);
 	})(),
-	[Bonus.TEMPORAL_RESONATOR]: null
+	[Bonus.TEMPORAL_RESONATOR]: null,
+	[Bonus.RECORDLESS_CONTRACTING]: null,
 });
 
 export function applySpecialBonus(worm: Worm, numCycles = 1) {
@@ -94,6 +103,23 @@ export function applySpecialBonus(worm: Worm, numCycles = 1) {
 	switch (worm.bonus.id) {
 		case Bonus.TEMPORAL_RESONATOR: {
 			for (const sleeve of Player.sleeves) sleeve.storedCycles += numCycles * (power - 1);
+			break;
+		}
+		case Bonus.RECORDLESS_CONTRACTING: {
+			if (Player.bladeburner === null) return;
+
+			// Count increase for contracts/operations
+			for (const contract of Object.values(Player.bladeburner.contracts)) {
+				const growthF = Growths[contract.name];
+				if (growthF === undefined) throw new Error(`growth formula for action '${contract.name}' is undefined`);
+
+				contract.count += (numCycles / BladeburnerConstants.CyclesPerSecond) * growthF() * (power - 1) / BladeburnerConstants.ActionCountGrowthPeriod;
+			}
+			for (const op of Object.values(Player.bladeburner.operations)) {
+				const growthF = Growths[op.name];
+				if (growthF === undefined) throw new Error(`growth formula for action '${op.name}' is undefined`);
+				op.count += (numCycles / BladeburnerConstants.CyclesPerSecond) * growthF() * (power - 1) / BladeburnerConstants.ActionCountGrowthPeriod;
+			}
 			break;
 		}
 		default: throw new Error(`Bonus #${worm.bonus.id} does not have a special implementation`);
