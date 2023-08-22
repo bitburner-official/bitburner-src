@@ -20,7 +20,7 @@ export function DocumentationRoot(): React.ReactElement {
       }
       if (external) {
         const ver = CONSTANTS.isDevBranch ? "dev" : "stable";
-        const url = `https://github.com/bitburner-official/bitburner-src/blob/${ver}/src/Documentation/ui/doc/${newPath}`;
+        const url = `https://github.com/bitburner-official/bitburner-src/blob/${ver}/src/Documentation/doc/${newPath}`;
         window.open(url, "_newtab");
         return;
       }
