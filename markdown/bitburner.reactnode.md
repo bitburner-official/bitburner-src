@@ -4,9 +4,9 @@
 
 ## ReactNode type
 
-A stand-in for the real React.ReactNode. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. number and string are displayed directly. boolean, null, and undefined are ignored and not rendered. An array of ReactNodes will display all members of that array sequentially.
+A stand-in for the real `React.ReactNode` type. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. ReactNodes of `number` and `string` types are displayed directly, while `boolean`, `null`, and `undefined` types are ignored and not rendered. Rendering an array of ReactNodes will display all members of that array sequentially.
 
-Use React.createElement to make the ReactElement type, see [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.
+Use `React.createElement` to create a React element object; see [createElement](https://react.dev/reference/react/createElement) for the official React documentation on this method.
 
 **Signature:**
 
@@ -14,4 +14,3 @@ Use React.createElement to make the ReactElement type, see [creating an element 
 type ReactNode = ReactElement | string | number | null | undefined | boolean | ReactNode[];
 ```
 **References:** [ReactElement](./bitburner.reactelement.md)<!-- -->, [ReactNode](./bitburner.reactnode.md)
-
