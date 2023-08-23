@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
       bottom: "5px",
       opacity: "0.75",
       maxWidth: "100%",
-      "white-space": "nowrap break-spaces",
+      whiteSpace: "pre",
       overflow: "hidden",
       pointerEvents: "none",
     },
