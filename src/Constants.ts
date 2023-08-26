@@ -223,40 +223,40 @@ export const CONSTANTS: {
 
 ### FEATURE ADDITIONS:
 
-* Added "Enable terminal history search with arrow keys" option in Misc options category, inspired by similar functionality in shells like zsh. (@ficocelliguy)
+- Added "Enable terminal history search with arrow keys" option in Misc options category, inspired by similar functionality in shells like zsh. (@ficocelliguy)
 
 ### BUGFIX:
 
-* Fixed a bug where buying NeuroFlux Governor would buy one less level than expected (@zerbosh)
-* Fixed an issue that could cause the Coding Contract UI to become unreachable (@myCatsName)
-* Infiltration: Knowledge of Apollo aug no longer highlights the incorrect wires (@Snarling)
+- Fixed a bug where buying NeuroFlux Governor would buy one less level than expected (@zerbosh)
+- Fixed an issue that could cause the Coding Contract UI to become unreachable (@myCatsName)
+- Infiltration: Knowledge of Apollo aug no longer highlights the incorrect wires (@Snarling)
 
 ### CODEBASE / DOCS / MISC:
 
-* Added a new theme "zerenity" (@Zelow79)
-* Reorganize game constants (@zerbosh)
-* Reorganize ingame documentation folder structure, simplify documentation bundling (@Snarling)
-* IP Address coding contract accepts single-quoted entries (@myCatsName)
-* Updated an outdated message on ns.killall logs (@myCatsName)
-* Updated documentation for ns.share and ns.getSharePower (@myCatsName)
-* Removed functions (like ns.getServerRam) are no longer shown when enumerating ns entries. (@Snarling)
-* Removed more references to ReadTheDocs that remained after 2.4.0 (@hydroflame) 
-* Fixed some typos/spacing (@myCatsName)
-* Fixed an issue with incorrect React keys in active scripts page (@zornlemma)
+- Added a new theme "zerenity" (@Zelow79)
+- Reorganize game constants (@zerbosh)
+- Reorganize ingame documentation folder structure, simplify documentation bundling (@Snarling)
+- IP Address coding contract accepts single-quoted entries (@myCatsName)
+- Updated an outdated message on ns.killall logs (@myCatsName)
+- Updated documentation for ns.share and ns.getSharePower (@myCatsName)
+- Removed functions (like ns.getServerRam) are no longer shown when enumerating ns entries. (@Snarling)
+- Removed more references to ReadTheDocs that remained after 2.4.0 (@hydroflame) 
+- Fixed some typos/spacing (@myCatsName)
+- Fixed an issue with incorrect React keys in active scripts page (@zornlemma)
 
 ### API CHANGES (NON-SPOILER)
 
-* Added ns.stock.getConstants (@Snarling)
-* Added ownedAugs and ownedSF properties to return data of ns.getResetInfo (@Snarling)
+- Added ns.stock.getConstants (@Snarling)
+- Added ownedAugs and ownedSF properties to return data of ns.getResetInfo (@Snarling)
 
 ### API CHANGES (SPOILERS):
 
-* Added ns.singularity.getAugmentationFactions to provide a list of factions that have a given augmentation (@myCatsName)
-* ns.corporation.getConstants now has a ram cost of 0 (@Snarling)
+- Added ns.singularity.getAugmentationFactions to provide a list of factions that have a given augmentation (@myCatsName)
+- ns.corporation.getConstants now has a ram cost of 0 (@Snarling)
 
 ### OTHER CHANGES (SPOILERS):
 
-* Successes for next level is now accurate in the UI for Bladeburner operations (@myCatsName)
-* ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined (@Snarling)
+- Successes for next level is now accurate in the UI for Bladeburner operations (@myCatsName)
+- ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined (@Snarling)
 `,
 };
