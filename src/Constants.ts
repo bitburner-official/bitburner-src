@@ -223,7 +223,6 @@ export const CONSTANTS: {
 
 See 2.4.1 changelog: https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
 
-- Removed more references to ReadTheDocs that remained after 2.4.0 (@hydroflame) 
 No changes yet since 2.4.1 release.
 `,
 };
