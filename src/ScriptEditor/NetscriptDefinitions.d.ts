@@ -5101,7 +5101,7 @@ export interface NS {
    * Note that there is a maximum number of lines that a script stores in its logs. This is configurable in the game’s options.
    * If the function is called with no arguments, it will return the current script’s logs.
    *
-   * Otherwise, the fn, hostname/ip, and args… arguments can be used to get the logs from another script.
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get logs from another script.
    * Remember that scripts are uniquely identified by both their names and arguments.
    *
    * @example
@@ -5115,12 +5115,12 @@ export interface NS {
    * //Open logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
    * ns.getScriptLogs("foo.js", "foodnstuff", 1, "test");
    * ```
-   * @param fn - Optional. Filename of script to get logs from.
+   * @param fn - Optional. Filename or PID of script to get logs from.
    * @param host - Optional. Hostname of the server that the script is on.
    * @param args - Arguments to identify which scripts to get logs for.
    * @returns Returns a string array, where each line is an element in the array. The most recently logged line is at the end of the array.
    */
-  getScriptLogs(fn?: string, host?: string, ...args: (string | number | boolean)[]): string[];
+  getScriptLogs(fn?: FilenameOrPID, host?: string, ...args: (string | number | boolean)[]): string[];
 
   /**
    * Get an array of recently killed scripts across all servers.
@@ -5152,7 +5152,7 @@ export interface NS {
    *
    * If the function is called with no arguments, it will open the current script’s logs.
    *
-   * Otherwise, the fn, hostname/ip, and args… arguments can be used to get the logs from another script.
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get the logs from another script.
    * Remember that scripts are uniquely identified by both their names and arguments.
    *
    * @example
