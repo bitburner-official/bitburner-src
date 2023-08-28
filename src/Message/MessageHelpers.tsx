@@ -58,7 +58,10 @@ function checkForMessagesToSend(): void {
       throw new Error("The world daemon is not a server???? Please un-break reality");
     }
     //If the daemon can be hacked, send the player icarus.msg
-    if (Player.skills.hacking >= worldDaemon.requiredHackingSkill) {
+    if (
+      Player.skills.hacking >= worldDaemon.requiredHackingSkill &&
+      (Player.sourceFiles.size === 0 || !recvd(MessageFilename.RedPill))
+    ) {
       sendMessage(MessageFilename.RedPill, Player.sourceFiles.size === 0);
     }
     //If the daemon cannot be hacked, send the player truthgazer.msg a single time.
