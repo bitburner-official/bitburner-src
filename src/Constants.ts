@@ -83,9 +83,9 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.4.1dev",
+  VersionString: "2.4.2dev",
   isDevBranch: true,
-  VersionNumber: 33,
+  VersionNumber: 34,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -219,42 +219,10 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.4.1dev - Last changelog update 8/21/23
+## v2.4.2 dev changelog (last updated 8/26/23)
 
-See 2.4.0 changelog at:
-https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/ui/doc/changelog.md
+See 2.4.1 changelog: https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
 
-Some changes below include spoilers.
-
-### MAJOR ADDITIONS:
-
-* Added "Enable terminal history search with arrow keys" option in Misc options category, inspired by similar functionality in shells like zsh. (@ficocelliguy)
-
-### BUGFIX:
-
-* Fixed a bug where buying NeuroFlux Governor would buy one less level than expected (@zerbosh)
-* Fixed an issue that could cause the Coding Contract UI to become unreachable (@myCatsName)
-* Knowledge of Apollo aug no longer highlights the incorrect wires (@Snarling)
-* ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined (@Snarling)
-
-### API CHANGES:
-
-* Added ns.singularity.getAugmentationFactions to provide a list of factions that has a given augmentation (@myCatsName)
-* Added ns.stock.getConstants (@Snarling)
-* Added ownedAugs and ownedSF properties to ns.getResetInfo return value (@Snarling)
-* ns.corporation.getConstants now has a ram cost of 0 (@Snarling)
-
-### CODEBASE / DOCS / MISC:
-
-* Added a new theme "zerenity" (@Zelow79)
-* Successes for next level is now accurate in the UI for Bladeburner operations (@myCatsName)
-* Reorganize game constants (@zerbosh)
-* Reorganize ingame documentation folder structure, simplify documentation bundling (@Snarling)
-* IP Address coding contract accepts single-quoted entries (@myCatsName)
-* Updated an outdated message on ns.killall logs (@myCatsName)
-* Updated documentation for ns.share and ns.getSharePower (@myCatsName)
-* Removed function (like ns.getServerRam) are no longer shown when enumerating ns entries. (@Snarling)
-* Removed more references to ReadTheDocs that remained after 2.4.0 (@hydroflame) 
-* Fixed some typos/spacing (@myCatsName)
+No changes yet since 2.4.1 release.
 `,
 };
