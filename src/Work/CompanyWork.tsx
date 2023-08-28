@@ -55,7 +55,7 @@ export class CompanyWork extends Work {
     return false;
   }
   finish(cancelled: boolean, suppressDialog?: boolean): void {
-    if (!this.singularity && !suppressDialog && Settings.SuppressAugWorkFinishedPopup) {
+    if (!this.singularity && !suppressDialog) {
       dialogBoxCreate(
         <>
           You finished working for {this.companyName}

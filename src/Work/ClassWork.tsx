@@ -113,7 +113,7 @@ export class ClassWork extends Work {
   }
 
   finish(cancelled: boolean, suppressDialog?: boolean): void {
-    if (!this.singularity && !suppressDialog && Settings.SuppressAugWorkFinishedPopup) {
+    if (!this.singularity && !suppressDialog) {
       dialogBoxCreate(
         <>
           After {this.getClass().youAreCurrently} for{" "}

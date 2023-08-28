@@ -81,7 +81,7 @@ export class CreateProgramWork extends Work {
       Player.gainIntelligenceExp(
         (CONSTANTS.IntelligenceProgramBaseExpGain * this.cyclesWorked * CONSTANTS.MilliPerCycle) / 1000,
       );
-      if (!this.singularity && !suppressDialog && Settings.SuppressAugWorkFinishedPopup) {
+      if (!this.singularity && !suppressDialog) {
         const lines = [
           `You've finished creating ${programName}!`,
           "The new program can be found on your home computer.",

@@ -64,7 +64,7 @@ export class FactionWork extends Work {
   }
 
   finish(cancelled: boolean, suppressDialog?: boolean): void {
-    if (!this.singularity && !suppressDialog && Settings.SuppressAugWorkFinishedPopup) {
+    if (!this.singularity && !suppressDialog) {
       dialogBoxCreate(
         <>
           You worked for {this.getFaction().name}.
