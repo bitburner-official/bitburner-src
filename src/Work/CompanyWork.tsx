@@ -53,8 +53,8 @@ export class CompanyWork extends Work {
     influenceStockThroughCompanyWork(company, gains.reputation, cycles);
     return false;
   }
-  finish(): void {
-    if (!this.singularity) {
+  finish(cancelled: boolean, suppressDialog?: boolean): void {
+    if (!this.singularity && !suppressDialog) {
       dialogBoxCreate(
         <>
           You finished working for {this.companyName}
