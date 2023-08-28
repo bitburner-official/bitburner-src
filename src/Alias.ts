@@ -94,10 +94,7 @@ function applyAliases(origCommand: string, depth = 0, currentlyProcessingAliases
   // (unless there are any reference loops or the reference chain is too deep)
   const localAlias = Aliases.get(commandArray[0]);
   if (localAlias && !currentlyProcessingAliases.includes(localAlias)) {
-    const appliedAlias = applyAliases(localAlias, depth + 1, [
-      commandArray[0],
-      ...currentlyProcessingAliases,
-    ]);
+    const appliedAlias = applyAliases(localAlias, depth + 1, [commandArray[0], ...currentlyProcessingAliases]);
     commandArray.splice(0, 1, ...appliedAlias.split(" "));
   }
 
