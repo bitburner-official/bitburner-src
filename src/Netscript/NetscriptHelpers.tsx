@@ -234,7 +234,7 @@ function argsToString(args: unknown[]): string {
       return (out += JSON.stringify(nativeArg));
     }
 
-    return out;
+    return (out += `${nativeArg}`);
   }, "") as string;
 }
 
