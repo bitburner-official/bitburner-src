@@ -219,10 +219,19 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.4.2 dev changelog (last updated 8/26/23)
+## v2.4.2 dev changelog (last updated 8/28/23)
 
 See 2.4.1 changelog: https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
 
-No changes yet since 2.4.1 release.
+### BUGFIX
+- UI: Faction augmentation page no longer ends up with stale data (@zerbosh)
+- Terminal: Prevent recursive aliases from being resolved (@ficocelliguy)
+
+### MISC
+- Icarus message no longer shows repeatedly for players that are in the endgame. (@ficocelliguy)
+- Updated documentation for ns.tail and ns.getScriptLogs to make it clear a PID can be used. (@myCatsName)
+- Improved error messages for ns.getPurchasedServer (@ficocelliguy)
+- Remove work completion dialogs when performing an augmentation install (@ficocelliguy)
+- Added initial ingame documentation for Bladeburner (@myCatsName)
 `,
 };
