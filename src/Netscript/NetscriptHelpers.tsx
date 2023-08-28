@@ -220,15 +220,20 @@ function argsToString(args: unknown[]): string {
     const nativeArg = toNative(arg);
 
     // Handle Map formatting, since it does not JSON stringify or toString in a helpful way
-    // output is  "< key1 => value1, key2 => value2, >"
+    // output is  "< Map: key1 => value1; key2 => value2 >"
     if (nativeArg instanceof Map && [...nativeArg].length) {
-      out += "<";
-      nativeArg.forEach((key, value) => (out += ` ${key} => ${value},`));
-      return (out += " >");
+      const formattedMap = [...nativeArg]
+        .map((m) => {
+          const key = argsToString([m[0]]);
+          const value = argsToString([m[1]]);
+          return `${key} => ${value}`;
+        })
+        .join("; ");
+      return (out += `< Map: ${formattedMap} >`);
     }
     // Handle Set formatting, since it does not JSON stringify or toString in a helpful way
     if (nativeArg instanceof Set) {
-      return (out += `${[...nativeArg]}`);
+      return (out += `< Set: ${[...nativeArg].join("; ")} >`);
     }
     if (typeof nativeArg === "object") {
       return (out += JSON.stringify(nativeArg));
