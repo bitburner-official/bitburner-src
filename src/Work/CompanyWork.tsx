@@ -14,7 +14,6 @@ import { CONSTANTS } from "../Constants";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { isMember } from "../utils/EnumHelper";
 import { invalidWork } from "./InvalidWork";
-import { Settings } from "../Settings/Settings";
 
 interface CompanyWorkParams {
   companyName: CompanyName;

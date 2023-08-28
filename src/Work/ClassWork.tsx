@@ -12,7 +12,6 @@ import { Work, WorkType } from "./Work";
 import { applyWorkStats, newWorkStats, sumWorkStats, WorkStats } from "./WorkStats";
 import { findEnumMember } from "../utils/helpers/enum";
 import { isMember } from "../utils/EnumHelper";
-import { Settings } from "../Settings/Settings";
 
 export interface Class {
   type: ClassType;

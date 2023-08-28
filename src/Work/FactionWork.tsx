@@ -12,7 +12,6 @@ import { Reputation } from "../ui/React/Reputation";
 import { CONSTANTS } from "../Constants";
 import { calculateFactionExp, calculateFactionRep } from "./Formulas";
 import { getEnumHelper } from "../utils/EnumHelper";
-import { Settings } from "../Settings/Settings";
 
 interface FactionWorkParams {
   singularity: boolean;
