@@ -49,14 +49,4 @@ describe("substituteAliases Tests", () => {
     const result = substituteAliases("a");
     expect(result).toEqual("e");
   });
-
-  it("Should replace chained aliases only up to the maxDepth", () => {
-    parseAliasDeclaration("a=b", true);
-    parseAliasDeclaration("b=c", true);
-    parseAliasDeclaration("c=d", true);
-    parseAliasDeclaration("d=e", true);
-
-    const result = substituteAliases("a b c d", 2);
-    expect(result).toEqual("c d e e");
-  });
 });

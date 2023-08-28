@@ -66,10 +66,9 @@ export function removeAlias(name: string): boolean {
  * Returns the original string with any aliases substituted in.
  * Aliases are only applied to "whole words", one level deep
  * @param origCommand the original command string
- * @param maxDepth the maximum depth that alias chains are permitted (default 10)
  */
-export function substituteAliases(origCommand: string, maxDepth = 10): string {
-  return applyAliases(origCommand, maxDepth);
+export function substituteAliases(origCommand: string): string {
+  return applyAliases(origCommand);
 }
 
 /**
@@ -77,13 +76,11 @@ export function substituteAliases(origCommand: string, maxDepth = 10): string {
  * unless there are any reference loops or the reference chain is too deep
  * @param origCommand the original command string
  * @param depth the current recursion depth
- * @param maxDepth the maximum depth that alias chains are permitted
  * @param currentlyProcessingAliases any aliases that have been applied in the recursive evaluation leading to this point
  * @return { string } the provided command with all of its referenced aliases evaluated
  */
-function applyAliases(origCommand: string, maxDepth = 10, depth = 0, currentlyProcessingAliases: string[] = []) {
-  // Prevent extremely deep alias chains
-  if (depth >= maxDepth || !origCommand) {
+function applyAliases(origCommand: string, depth = 0, currentlyProcessingAliases: string[] = []) {
+  if (!origCommand) {
     return origCommand;
   }
   const commandArray = origCommand.split(" ");
@@ -97,7 +94,7 @@ function applyAliases(origCommand: string, maxDepth = 10, depth = 0, currentlyPr
   // (unless there are any reference loops or the reference chain is too deep)
   const localAlias = Aliases.get(commandArray[0]);
   if (localAlias && !currentlyProcessingAliases.includes(localAlias)) {
-    const appliedAlias = applyAliases(localAlias, maxDepth, depth + 1, [
+    const appliedAlias = applyAliases(localAlias, depth + 1, [
       commandArray[0],
       ...currentlyProcessingAliases,
     ]);
@@ -108,7 +105,7 @@ function applyAliases(origCommand: string, maxDepth = 10, depth = 0, currentlyPr
   const processedCommands = commandArray.reduce((resolvedCommandArray: string[], command) => {
     const globalAlias = GlobalAliases.get(command);
     if (globalAlias && !currentlyProcessingAliases.includes(globalAlias)) {
-      const appliedAlias = applyAliases(globalAlias, maxDepth, depth + 1, [command, ...currentlyProcessingAliases]);
+      const appliedAlias = applyAliases(globalAlias, depth + 1, [command, ...currentlyProcessingAliases]);
       resolvedCommandArray.push(appliedAlias);
     } else {
       // If there is no alias, or if the alias has a circular reference, leave the command as-is
