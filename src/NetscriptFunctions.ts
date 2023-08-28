@@ -1161,7 +1161,11 @@ export const ns: InternalAPI<NSFull> = {
 
     const cost = getPurchaseServerCost(ram);
     if (cost === Infinity) {
-      helpers.log(ctx, () => `Invalid argument: ram='${ram}'`);
+      if (ram > getPurchaseServerMaxRam()) {
+        helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than getPurchaseServerMaxRam`);
+      } else {
+        helpers.log(ctx, () => `Invalid argument: ram='${ram}' must be a positive power of 2`);
+      }
       return Infinity;
     }
 
