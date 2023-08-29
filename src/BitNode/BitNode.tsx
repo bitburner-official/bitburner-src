@@ -74,8 +74,8 @@ export function initBitNodes() {
         Certain Factions ({FactionName.SlumSnakes}, {FactionName.Tetrads}, {FactionName.TheSyndicate},{" "}
         {FactionName.TheDarkArmy}, {FactionName.SpeakersForTheDead}, {FactionName.NiteSec}, {FactionName.TheBlackHand}
         ) give the player the ability to form and manage their own gang, which can earn the player money and
-        reputation with the corresponding Faction. Gangs offer more Augmentations than Factions, including a way to 
-        destroy the BitNode.
+        reputation with the corresponding Faction. Gangs offer more Augmentations than Factions, and in BitNode-2 offer
+        a way to destroy the BitNode.
         <br />
         <br />
         <br />
