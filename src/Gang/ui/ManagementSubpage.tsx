@@ -10,21 +10,21 @@ export function ManagementSubpage(): React.ReactElement {
   return (
     <>
       <Typography>
-        This page is used to manage your gang members and get an overview of your gang's stats.
+        This page is used to get an overview of your gang's stats and manage gang members.
         <br />
         <br />
-        If a gang member is not earning much money or respect, the task that you have assigned to that member might be
-        too difficult. Consider training that member's stats or choosing an easier task. The tasks closer to the top of
-        the dropdown list are generally easier. Alternatively, the gang member's low production might be due to the fact
-        that your wanted level is too high. Consider assigning a few members to the '
-        {gang.isHackingGang ? "Ethical Hacking" : "Vigilante Justice"}' task to lower your wanted level.
+        If a gang member is not earning much money or respect, the task you assigned might be
+        too difficult. Consider assigning an easier task, or training them. Tasks closer to the top of
+        the dropdown list are generally easier. Alternatively, low production might be a sign
+        that your wanted level is too high. Consider using the "Ethical Hacking" or "Vigilante Justice"
+        task to lower your wanted level.
         <br />
         <br />
-        Installing Augmentations does NOT reset your progress with your Gang. Furthermore, after installing
-        Augmentations, you will automatically be a member of whatever Faction you created your gang with.
+        Installing Augmentations does NOT reset progress with your Gang. Furthermore, after installing
+        Augmentations, you will automatically join whatever Faction you created your gang with.
         <br />
         <br />
-        You can also manage your gang programmatically through Netscript using the Gang API
+        You can also manage your gang programmatically through Netscript using the Gang API.
       </Typography>
       <br />
       <GangStats />
