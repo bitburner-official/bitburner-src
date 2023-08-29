@@ -21,8 +21,8 @@ getRunningScript(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  filename | [FilenameOrPID](./bitburner.filenameorpid.md) | _(Optional)_ Optional. Filename or PID of the script. |
-|  hostname | string | _(Optional)_ Optional. Name of host server the script is running on. |
-|  args | (string \| number \| boolean)\[\] | Arguments to identify the script |
+|  hostname | string | _(Optional)_ Hostname of target server. Optional, defaults to the server the calling script is running on. |
+|  args | (string \| number \| boolean)\[\] | Arguments to specify/identify the script. Optional, when looking for scripts run without arguments. |
 
 **Returns:**
 
@@ -34,5 +34,5 @@ The info about the running script if found, and null otherwise.
 
 RAM cost: 0.3 GB
 
-Running with no args returns current script. If you use a PID as the first parameter, the hostname and args parameters are unnecessary.
+Running with no args returns current script. If you use a PID as the first parameter, the hostname and args parameters are unnecessary. If hostname is omitted while filename is used as the first parameter, hostname defaults to the server the calling script is running on. Remember that a script is semi-uniquely identified by both its name and its arguments. (You can run multiple copies of scripts with the same arguments, but for the purposes of functions like this that check based on filename, the filename plus arguments forms the key.)
 
