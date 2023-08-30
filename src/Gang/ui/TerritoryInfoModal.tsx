@@ -16,14 +16,14 @@ export const TerritoryInfoModal = ({ open, onClose }: IProps): React.ReactElemen
         <Typography variant="h4">Clashing</Typography>
         <Typography>
           Every ~20 seconds, your gang has a chance to 'clash' with other gangs. Your chance to win a clash depends on
-          your gang's power, which is listed in the display below. Your gang's power slowly accumulates over time. The
-          accumulation rate is determined by the stats of all Gang members you have assigned to the 'Territory Warfare'
+          your gang's power, which can be found in the Territory display or with methods from the Gang API. Your gang's power slowly accumulates over time.
+          The accumulation rate is determined by the stats of all Gang members you have assigned to the 'Territory Warfare'
           task. Gang members that are not assigned to this task do not contribute to your gang's power. Your gang also
           loses a small amount of power whenever you lose a clash.
           <br />
           <br />
           NOTE: Gang members assigned to 'Territory Warfare' can be killed during clashes. This can happen regardless of
-          whether you win or lose the clash. A gang member being killed results in both respect and power loss for your
+          whether you win or lose the clash. A gang member being killed results in loss of both respect and power for your
           gang.
         </Typography>
         <br />

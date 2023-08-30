@@ -50,6 +50,7 @@ export function RecruitModal(props: IRecruitPopupProps): React.ReactElement {
         onChange={onChange}
         type="text"
         placeholder="unique name"
+        spellCheck="false"
         InputProps={{
           endAdornment: (
             <Button disabled={disabled} onClick={recruit}>

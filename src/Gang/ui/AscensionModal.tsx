@@ -8,6 +8,7 @@ import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { Modal } from "../../ui/React/Modal";
 import { useGang } from "./Context";
 import { useRerender } from "../../ui/React/hooks";
+import { Player } from "@player";
 
 type AscensionModalProps = {
   open: boolean;
@@ -29,12 +30,13 @@ export function AscensionModal(props: AscensionModalProps): React.ReactElement {
     const res = gang.ascendMember(props.member);
     dialogBoxCreate(
       <>
-        You ascended {props.member.name}!<br />
+        {props.member.name} ascended!<br />
         <br />
-        Your gang lost {formatRespect(res.respect)} respect.
+        Your gang, {Player.gang?.facName}, lost {formatRespect(res.respect)} respect.
         <br />
         <br />
         {props.member.name} gained the following stat multipliers for ascending:
+        <br />
         <br />
         Hacking: x{formatPreciseMultiplier(res.hack)}
         <br />
@@ -65,10 +67,11 @@ export function AscensionModal(props: AscensionModalProps): React.ReactElement {
         their non-Augmentation upgrades and their stats will reset back to 1.
         <br />
         <br />
-        Furthermore, your gang will lose {formatRespect(props.member.earnedRespect)} respect
+        Furthermore, your gang will lose {formatRespect(props.member.earnedRespect)} respect.
         <br />
         <br />
-        In return, they will gain the following permanent boost to stat multipliers:
+        In return, {props.member.name} will gain the following permanent boost to stat multipliers:
+        <br />
         <br />
         Hacking: x{formatPreciseMultiplier(preAscend.hack)} =&gt; x{formatPreciseMultiplier(postAscend.hack)}
         <br />
@@ -82,8 +85,10 @@ export function AscensionModal(props: AscensionModalProps): React.ReactElement {
         <br />
         Charisma: x{formatPreciseMultiplier(preAscend.cha)} =&gt; x{formatPreciseMultiplier(postAscend.cha)}
         <br />
+        <br />
       </Typography>
       <Button onClick={confirm}>Ascend</Button>
+      <Button onClick={props.onClose}>Cancel</Button>
     </Modal>
   );
 }

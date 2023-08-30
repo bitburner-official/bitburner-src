@@ -41,16 +41,16 @@ export function GangMemberCardContent(props: IProps): React.ReactElement {
           </Button>
           <StaticModal open={helpOpen} onClose={() => setHelpOpen(false)}>
             <Typography>
-              Ascending a Gang Member resets the member's progress and stats in exchange for a permanent boost to their
+              Ascending a Gang Member resets that member's progress and stats in exchange for a permanent boost to their
               stat multipliers.
               <br />
               <br />
-              The additional stat multiplier that the Gang Member gains upon ascension is based on the amount of exp
-              they have.
+              The stat boost a Gang Member gains upon ascension is based on the amount of exp they have, and will be shown before
+              you choose to ascend them.
               <br />
               <br />
-              Upon ascension, the member will lose all of its non-Augmentation Equipment and your gang will lose respect
-              equal to the total respect earned by the member.
+              Upon ascension, they will lose all of their non-Augmentation Equipment and your gang will lose respect
+              equal to the total respect earned by that member.
             </Typography>
           </StaticModal>
         </Box>
