@@ -9,8 +9,8 @@ import Typography from "@mui/material/Typography";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { CorpMaterialName } from "@nsdefs";
-import { materialNames } from "../../data/Constants";
 import { useRerender } from "../../../ui/React/hooks";
+import { getRecordKeys } from "../../../Types/Record";
 
 interface ISSoptionProps {
   matName: CorpMaterialName;
@@ -80,9 +80,8 @@ export function SmartSupplyModal(props: IProps): React.ReactElement {
 
   // Create React components for materials
   const mats = [];
-  for (const matName of Object.values(materialNames)) {
+  for (const matName of getRecordKeys(division.requiredMaterials)) {
     if (!props.warehouse.materials[matName]) continue;
-    if (!Object.keys(division.reqMats).includes(matName)) continue;
     mats.push(<SSoption key={matName} warehouse={props.warehouse} matName={matName} />);
   }
 
@@ -98,12 +97,20 @@ export function SmartSupplyModal(props: IProps): React.ReactElement {
         <br />
         <Typography>
           Options:
-          <br />
-          - Use leftovers takes the amount of that material already in storage into account when purchasing new ones.
-          <br />
-          - Use imported takes the amount of that materials that was imported in previous cycle into account.
-          <br />
-          if neither is toggled on, Smart Supply will ignore any materials in store and attempts to buy as much as is
+          <ul>
+            <li>
+              Use leftovers takes the amount of that material already in storage into account when purchasing new ones.
+              This also accounts for imports, since they are "leftovers" by the time purchasing happens.
+              <br />
+              <i>This is usually the option you want.</i>
+            </li>
+            <li>
+              Use imported takes <b>only</b> the amount of that materials that were imported in the previous cycle into
+              account. This is useful when dealing with specialty situations, like importing materials that also boost
+              production.
+            </li>
+          </ul>
+          If neither is toggled on, Smart Supply will ignore any materials stored and attempts to buy as much as is
           needed for production.
         </Typography>
         {mats}

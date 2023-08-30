@@ -1,16 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { EventEmitter } from "../../utils/EventEmitter";
 import { RunningScript } from "../../Script/RunningScript";
 import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Draggable, { DraggableEvent } from "react-draggable";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
+import IconButton from "@mui/material/IconButton";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import CloseIcon from "@mui/icons-material/Close";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { startWorkerScript } from "../../NetscriptWorker";
 import { GetServer } from "../../Server/AllServers";
@@ -18,7 +23,6 @@ import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 import { debounce } from "lodash";
 import { Settings } from "../../Settings/Settings";
 import { ANSIITypography } from "./ANSIITypography";
-import { ScriptArg } from "../../Netscript/ScriptArg";
 import { useRerender } from "./hooks";
 import { dialogBoxCreate } from "./DialogBox";
 
@@ -28,27 +32,47 @@ export const LogBoxEvents = new EventEmitter<[RunningScript]>();
 export const LogBoxCloserEvents = new EventEmitter<[number]>();
 export const LogBoxClearEvents = new EventEmitter<[]>();
 
-interface LogBoxUIEvent<T> {
-  pid: number;
-  data: T;
+// Dynamic properties (size, position) bound to a specific rendered instance of a LogBox
+export class LogBoxProperties {
+  x = window.innerWidth * 0.4;
+  y = window.innerHeight * 0.3;
+  width = 500;
+  height = 500;
+
+  rerender: () => void;
+  rootRef: React.RefObject<Draggable>;
+
+  constructor(rerender: () => void, rootRef: React.RefObject<Draggable>) {
+    this.rerender = rerender;
+    this.rootRef = rootRef;
+  }
+
+  updateDOM(): void {
+    if (!this.rootRef.current) return;
+    const state = this.rootRef.current.state as { x: number; y: number };
+    state.x = this.x;
+    state.y = this.y;
+  }
+
+  setPosition(x: number, y: number): void {
+    this.x = x;
+    this.y = y;
+    this.updateDOM();
+  }
+
+  setSize(width: number, height: number): void {
+    this.width = width;
+    this.height = height;
+    this.rerender();
+  }
+
+  isVisible(): boolean {
+    return this.rootRef.current !== null;
+  }
 }
-
-interface LogBoxPositionData {
-  x: number;
-  y: number;
-}
-
-export const LogBoxPositionEvents = new EventEmitter<[LogBoxUIEvent<LogBoxPositionData>]>();
-
-interface LogBoxResizeData {
-  w: number;
-  h: number;
-}
-
-export const LogBoxSizeEvents = new EventEmitter<[LogBoxUIEvent<LogBoxResizeData>]>();
 
 interface Log {
-  id: string;
+  id: number; // The PID of the script *when the window was first opened*
   script: RunningScript;
 }
 
@@ -56,18 +80,27 @@ let logs: Log[] = [];
 
 export function LogBoxManager(): React.ReactElement {
   const rerender = useRerender();
+
+  //Close tail windows by their pid.
+  const closePid = useCallback(
+    (pid: number) => {
+      logs = logs.filter((log) => log.script.pid !== pid);
+      rerender();
+    },
+    [rerender],
+  );
+
   useEffect(
     () =>
       LogBoxEvents.subscribe((script: RunningScript) => {
-        const id = script.server + "-" + script.filename + script.args.map((x: ScriptArg): string => `${x}`).join("-");
-        if (logs.find((l) => l.id === id)) return;
+        if (logs.some((l) => l.script.pid === script.pid)) return;
         logs.push({
-          id: id,
+          id: script.pid,
           script: script,
         });
         rerender();
       }),
-    [],
+    [rerender],
   );
 
   //Event used by ns.closeTail to close tail windows
@@ -76,40 +109,35 @@ export function LogBoxManager(): React.ReactElement {
       LogBoxCloserEvents.subscribe((pid: number) => {
         closePid(pid);
       }),
-    [],
+    [closePid],
   );
 
-  useEffect(() =>
-    LogBoxClearEvents.subscribe(() => {
-      logs = [];
-      rerender();
-    }),
+  useEffect(
+    () =>
+      LogBoxClearEvents.subscribe(() => {
+        logs = [];
+        rerender();
+      }),
+    [rerender],
   );
 
   //Close tail windows by their id
-  function close(id: string): void {
+  function close(id: number): void {
     logs = logs.filter((l) => l.id !== id);
-    rerender();
-  }
-
-  //Close tail windows by their pid
-  function closePid(pid: number): void {
-    logs = logs.filter((log) => log.script.pid != pid);
     rerender();
   }
 
   return (
     <>
       {logs.map((log) => (
-        <LogWindow key={log.id} script={log.script} id={log.id} onClose={() => close(log.id)} />
+        <LogWindow key={log.id} script={log.script} onClose={() => close(log.id)} />
       ))}
     </>
   );
 }
 
-interface IProps {
+interface LogWindowProps {
   script: RunningScript;
-  id: string;
   onClose: () => void;
 }
 
@@ -124,7 +152,11 @@ const useStyles = makeStyles(() =>
       wordWrap: "break-word",
     },
     titleButton: {
-      padding: "1px 0",
+      borderWidth: "0 0 0 1px",
+      borderColor: Settings.theme.welllight,
+      borderStyle: "solid",
+      borderRadius: "0",
+      padding: "0",
       height: "100%",
     },
   }),
@@ -132,15 +164,16 @@ const useStyles = makeStyles(() =>
 
 export const logBoxBaseZIndex = 1500;
 
-function LogWindow(props: IProps): React.ReactElement {
+function LogWindow(props: LogWindowProps): React.ReactElement {
   const draggableRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<Draggable>(null);
-  const [script, setScript] = useState(props.script);
+  const script = props.script;
   const classes = useStyles();
   const container = useRef<HTMLDivElement>(null);
   const textArea = useRef<HTMLDivElement>(null);
   const rerender = useRerender(1000);
-  const [size, setSize] = useState<[number, number]>([500, 500]);
+  const propsRef = useRef(new LogBoxProperties(rerender, rootRef));
+  script.tailProps = propsRef.current;
   const [minimized, setMinimized] = useState(false);
 
   const textAreaKeyDown = (e: React.KeyboardEvent) => {
@@ -157,46 +190,25 @@ function LogWindow(props: IProps): React.ReactElement {
   };
 
   const onResize = (e: React.SyntheticEvent, { size }: ResizeCallbackData) => {
-    setSize([size.width, size.height]);
+    propsRef.current.setSize(size.width, size.height);
   };
 
-  const setPosition = ({ x, y }: LogBoxPositionData) => {
-    const node = rootRef?.current;
-    if (!node) return;
-    const state = node.state as { x: number; y: number };
-    state.x = x;
-    state.y = y;
-  };
-
-  // Listen to Logbox positioning events.
-  useEffect(
-    () =>
-      LogBoxPositionEvents.subscribe((e) => {
-        if (e.pid !== props.script.pid) return;
-        setPosition(e.data);
-      }),
-    [],
-  );
-
-  // Listen to Logbox resizing events.
-  useEffect(
-    () =>
-      LogBoxSizeEvents.subscribe((e) => {
-        if (e.pid !== props.script.pid) return;
-        setSize([e.data.w, e.data.h]);
-      }),
-    [],
-  );
-
-  // initial position if 40%/30%
-  useEffect(() => setPosition({ x: window.innerWidth * 0.4, y: window.innerHeight * 0.3 }), []);
+  const updateLayer = useCallback(() => {
+    const c = container.current;
+    if (c === null) return;
+    c.style.zIndex = logBoxBaseZIndex + layerCounter + "";
+    layerCounter++;
+    rerender();
+  }, [rerender]);
 
   useEffect(() => {
+    propsRef.current.updateDOM();
     updateLayer();
-  }, []);
+  }, [updateLayer]);
 
   function kill(): void {
     killWorkerScriptByPid(script.pid);
+    rerender();
   }
 
   function run(): void {
@@ -214,28 +226,31 @@ function LogWindow(props: IProps): React.ReactElement {
       if (!ramUsage) {
         return dialogBoxCreate(`Could not calculate ram usage for ${script.filename} on ${server.hostname}.`);
       }
+      // Reset some things, because we're reusing the RunningScript instance
       script.ramUsage = ramUsage;
+      script.dataMap = {};
+      script.onlineExpGained = 0;
+      script.onlineMoneyMade = 0;
+      script.onlineRunningTime = 0.01;
+
       startWorkerScript(script, server);
+      rerender();
     } else {
-      setScript(s);
+      console.warn(`Tried to rerun pid ${script.pid} that was already running!`);
     }
   }
 
-  function updateLayer(): void {
-    const c = container.current;
-    if (c === null) return;
-    c.style.zIndex = logBoxBaseZIndex + layerCounter + "";
-    layerCounter++;
-    rerender();
-  }
-
-  function title(full = false): string {
-    const maxLength = 30;
-    const t = `${script.server}: ${script.filename} ${script.args.join(" ")}`;
-    if (full || t.length <= maxLength) {
-      return t;
-    }
-    return t.slice(0, maxLength - 3) + "...";
+  function title(): React.ReactElement {
+    const title_str = script.title === "string" ? script.title : `${script.filename} ${script.args.join(" ")}`;
+    return (
+      <Typography
+        variant="h6"
+        sx={{ marginRight: "auto", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}
+        title={title_str}
+      >
+        {script.title}
+      </Typography>
+    );
   }
 
   function minimize(): void {
@@ -258,22 +273,26 @@ function LogWindow(props: IProps): React.ReactElement {
     return "primary";
   }
 
+  const onWindowResize = useMemo(
+    () =>
+      debounce((): void => {
+        const node = draggableRef.current;
+        if (!node) return;
+
+        if (!isOnScreen(node)) {
+          propsRef.current.setPosition(0, 0);
+        }
+      }, 100),
+    [],
+  );
+
   // And trigger fakeDrag when the window is resized
   useEffect(() => {
     window.addEventListener("resize", onWindowResize);
     return () => {
       window.removeEventListener("resize", onWindowResize);
     };
-  }, []);
-
-  const onWindowResize = debounce((): void => {
-    const node = draggableRef?.current;
-    if (!node) return;
-
-    if (!isOnScreen(node)) {
-      setPosition({ x: 0, y: 0 });
-    }
-  }, 100);
+  }, [onWindowResize]);
 
   const isOnScreen = (node: HTMLDivElement): boolean => {
     const bounds = node.getBoundingClientRect();
@@ -281,7 +300,9 @@ function LogWindow(props: IProps): React.ReactElement {
     return !(bounds.right < 0 || bounds.bottom < 0 || bounds.left > innerWidth || bounds.top > outerWidth);
   };
 
-  const boundToBody = (e: DraggableEvent): void | false => {
+  const onDrag = (e: DraggableEvent): void | false => {
+    e.preventDefault();
+    // bound to body
     if (
       e instanceof MouseEvent &&
       (e.clientX < 0 || e.clientY < 0 || e.clientX > innerWidth || e.clientY > innerHeight)
@@ -290,10 +311,10 @@ function LogWindow(props: IProps): React.ReactElement {
   };
 
   // Max [width, height]
-  const minConstraints: [number, number] = [250, 33];
+  const minConstraints: [number, number] = [150, 33];
 
   return (
-    <Draggable handle=".drag" onDrag={boundToBody} ref={rootRef} onMouseDown={updateLayer}>
+    <Draggable handle=".drag" onDrag={onDrag} ref={rootRef} onMouseDown={updateLayer}>
       <Box
         display="flex"
         sx={{
@@ -316,8 +337,8 @@ function LogWindow(props: IProps): React.ReactElement {
         ref={container}
       >
         <ResizableBox
-          width={size[0]}
-          height={size[1]}
+          width={propsRef.current.width}
+          height={propsRef.current.height}
           onResize={onResize}
           minConstraints={minConstraints}
           handle={
@@ -336,30 +357,34 @@ function LogWindow(props: IProps): React.ReactElement {
         >
           <>
             <Paper className="drag" sx={{ display: "flex", alignItems: "center", cursor: "grab" }} ref={draggableRef}>
-              <Typography
-                variant="h6"
-                sx={{ marginRight: "auto", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}
-                title={title(true)}
-              >
-                {title(true)}
-              </Typography>
+              {title()}
 
               <span style={{ minWidth: "fit-content", height: `${minConstraints[1]}px` }}>
                 {!workerScripts.has(script.pid) ? (
-                  <Button className={classes.titleButton} onClick={run} onTouchEnd={run}>
-                    Run
-                  </Button>
+                  <IconButton title="Re-run script" className={classes.titleButton} onClick={run} onTouchEnd={run}>
+                    <PlayCircleIcon />
+                  </IconButton>
                 ) : (
-                  <Button className={classes.titleButton} onClick={kill} onTouchEnd={kill}>
-                    Kill
-                  </Button>
+                  <IconButton title="Stop script" className={classes.titleButton} onClick={kill} onTouchEnd={kill}>
+                    <StopCircleIcon color="error" />
+                  </IconButton>
                 )}
-                <Button className={classes.titleButton} onClick={minimize} onTouchEnd={minimize}>
-                  {minimized ? "\u{1F5D6}" : "\u{1F5D5}"}
-                </Button>
-                <Button className={classes.titleButton} onClick={props.onClose} onTouchEnd={props.onClose}>
-                  Close
-                </Button>
+                <IconButton
+                  title={minimized ? "Expand" : "Collapse"}
+                  className={classes.titleButton}
+                  onClick={minimize}
+                  onTouchEnd={minimize}
+                >
+                  {minimized ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+                </IconButton>
+                <IconButton
+                  title="Close window"
+                  className={classes.titleButton}
+                  onClick={props.onClose}
+                  onTouchEnd={props.onClose}
+                >
+                  <CloseIcon />
+                </IconButton>
               </span>
             </Paper>
 

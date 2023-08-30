@@ -4,7 +4,7 @@
 
 ## NS.asleep() method
 
-Suspends the script for n milliseconds. Doesn't block with concurrent calls. You should prefer 'sleep' over 'asleep' except when doing very complex UI work.
+Suspends the script for n milliseconds. Doesn't block with concurrent calls.
 
 **Signature:**
 
@@ -22,6 +22,7 @@ asleep(millis: number): Promise<true>;
 
 Promise&lt;true&gt;
 
+A promise that resolves to true when the sleep is completed.
 
 ## Remarks
 

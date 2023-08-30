@@ -12,7 +12,7 @@ export function run(args: (string | number | boolean)[], server: BaseServer): vo
   if (!arg) return Terminal.error("Usage: run [program/script] [-t] [num threads] [arg1] [arg2]...");
 
   const path = Terminal.getFilepath(String(arg));
-  if (!path) return Terminal.error(`${args[0]} is not a valid filepath.`);
+  if (!path) return Terminal.error(`${arg} is not a valid filepath.`);
   if (hasScriptExtension(path)) {
     return runScript(path, args, server);
   } else if (hasContractExtension(path)) {

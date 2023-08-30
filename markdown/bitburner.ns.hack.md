@@ -23,7 +23,7 @@ hack(host: string, opts?: BasicHGWOptions): Promise<number>;
 
 Promise&lt;number&gt;
 
-The amount of money stolen if the hack is successful, and zero otherwise.
+A promise that resolves to the amount of money stolen (which is zero if the hack is unsuccessful).
 
 ## Remarks
 
@@ -35,19 +35,10 @@ A script can hack a server from anywhere. It does not need to be running on the 
 
 A successful `hack()` on a server will raise that server’s security level by 0.002.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-var earnedMoney = hack("foodnstuff");
-```
-
-## Example 2
-
-
-```ts
-// NS2:
+```js
 let earnedMoney = await ns.hack("foodnstuff");
 ```
 

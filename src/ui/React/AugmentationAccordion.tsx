@@ -7,7 +7,7 @@
 import React, { useState } from "react";
 
 import { Augmentation } from "../../Augmentation/Augmentation";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
@@ -17,16 +17,16 @@ import Collapse from "@mui/material/Collapse";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 
-type IProps = {
+interface IProps {
   aug: Augmentation;
   level?: number | string | null;
-};
+}
 
 export function AugmentationAccordion(props: IProps): React.ReactElement {
   const [open, setOpen] = useState(false);
-  let displayName = props.aug.name;
+  let displayName: string = props.aug.name;
   if (props.level != null) {
-    if (props.aug.name === AugmentationNames.NeuroFluxGovernor) {
+    if (props.aug.name === AugmentationName.NeuroFluxGovernor) {
       displayName += ` - Level ${props.level}`;
     }
   }
@@ -45,7 +45,7 @@ export function AugmentationAccordion(props: IProps): React.ReactElement {
               <>
                 <br />
                 <br />
-                <Typography>{props.aug.stats}</Typography>
+                <Typography whiteSpace={"pre-wrap"}>{props.aug.stats}</Typography>
               </>
             )}
           </Box>
@@ -62,7 +62,7 @@ export function AugmentationAccordion(props: IProps): React.ReactElement {
       </ListItemButton>
       <Collapse in={open} unmountOnExit>
         <Box m={4}>
-          <Typography>
+          <Typography whiteSpace={"pre-wrap"}>
             {props.aug.info}
             {props.aug.stats && (
               <>

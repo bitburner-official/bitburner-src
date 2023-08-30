@@ -9,7 +9,7 @@ import { createRandomIp } from "../utils/IPAddress";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { Reviver } from "../utils/JSONReviver";
 import { SpecialServers } from "./data/SpecialServers";
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
@@ -44,7 +44,7 @@ function GetServerByHostname(hostname: string): BaseServer | null {
 
 //Get server by IP or hostname. Returns null if invalid
 export function GetServer(s: string): BaseServer | null {
-  if (AllServers.hasOwnProperty(s)) {
+  if (Object.hasOwn(AllServers, s)) {
     const server = AllServers[s];
     if (server) return server;
   }
@@ -159,7 +159,7 @@ export function initForeignServers(homeComputer: Server): void {
     }
 
     if (server.hostname === SpecialServers.WorldDaemon) {
-      server.requiredHackingSkill *= BitNodeMultipliers.WorldDaemonDifficulty;
+      server.requiredHackingSkill *= currentNodeMults.WorldDaemonDifficulty;
     }
     AddToAllServers(server);
     if (metadata.networkLayer !== undefined) {
@@ -199,13 +199,6 @@ export function loadAllServers(saveString: string): void {
   AllServers = JSON.parse(saveString, Reviver);
 }
 
-function excludeReplacer(key: string, value: any): any {
-  if (key === "runningScripts") {
-    return [];
-  }
-  return value;
-}
-
-export function saveAllServers(excludeRunningScripts = false): string {
-  return JSON.stringify(AllServers, excludeRunningScripts ? excludeReplacer : undefined);
+export function saveAllServers(): string {
+  return JSON.stringify(AllServers);
 }

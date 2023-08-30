@@ -1,11 +1,10 @@
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
-import { initAugmentations } from "./Augmentation/AugmentationHelpers";
-import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
+import { AugmentationName, ToastVariant } from "@enums";
+import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { initSourceFiles } from "./SourceFile/SourceFiles";
 import { generateRandomContract } from "./CodingContractGenerator";
-import { initCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
-import { Factions, initFactions } from "./Faction/Factions";
+import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
 import { processPassiveFactionRepGain, inviteToFaction } from "./Faction/FactionHelpers";
 import { Router } from "./ui/GameRoot";
@@ -43,14 +42,12 @@ import { calculateAchievements } from "./Achievements/Achievements";
 import React from "react";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
-import { prestigeSourceFile } from "./Prestige";
+import { SnackbarEvents } from "./ui/React/Snackbar";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
   _lastUpdate: number;
   updateGame: (numCycles?: number) => void;
-  nodeTransfer: boolean | undefined;
   Counters: {
     [key: string]: number | undefined;
     autoSaveCounter: number;
@@ -74,12 +71,7 @@ const Engine: {
 } = {
   // Time variables (milliseconds unix epoch time)
   _lastUpdate: new Date().getTime(),
-  nodeTransfer: undefined,
   updateGame: function (numCycles = 1) {
-    if (this.nodeTransfer != undefined) {
-      prestigeSourceFile(this.nodeTransfer);
-      this.nodeTransfer = undefined;
-    }
     const time = numCycles * CONSTANTS.MilliPerCycle;
     if (Player.totalPlaytime == null) {
       Player.totalPlaytime = 0;
@@ -195,7 +187,7 @@ const Engine: {
 
     if (Engine.Counters.messages <= 0) {
       checkForMessagesToSend();
-      if (Player.hasAugmentation(AugmentationNames.TheRedPill)) {
+      if (Player.hasAugmentation(AugmentationName.TheRedPill)) {
         Engine.Counters.messages = 4500; // 15 minutes for Red pill message
       } else {
         Engine.Counters.messages = 150;
@@ -229,12 +221,15 @@ const Engine: {
   load: function (saveString) {
     startExploits();
     setupUncaughtPromiseHandler();
+    // Source files must be initialized early because save-game translation in
+    // loadGame() needs them sometimes.
+    initSourceFiles();
     // Load game from save or create new game
 
     if (loadGame(saveString)) {
       FormatsNeedToChange.emit();
-      initSourceFiles();
-      initAugmentations(); // Also calls Player.reapplyAllAugmentations()
+      initBitNodeMultipliers();
+      Player.reapplyAllAugmentations();
       Player.reapplyAllSourceFiles();
       if (Player.hasWseAccount) {
         initSymbolToStockMap();
@@ -281,7 +276,7 @@ const Engine: {
       } else if (Player.bitNodeN !== 2) {
         for (let i = 0; i < Player.factions.length; i++) {
           const facName = Player.factions[i];
-          if (!Factions.hasOwnProperty(facName)) continue;
+          if (!Object.hasOwn(Factions, facName)) continue;
           const faction = Factions[facName];
           if (!faction.isMember) continue;
           // No rep for special factions.
@@ -374,13 +369,11 @@ const Engine: {
     } else {
       // No save found, start new game
       FormatsNeedToChange.emit();
-      initSourceFiles();
+      initBitNodeMultipliers();
       Engine.start(); // Run main game loop and Scripts loop
       Player.init();
       initForeignServers(Player.getHomeComputer());
-      initCompanies();
-      initFactions();
-      initAugmentations();
+      Player.reapplyAllAugmentations();
 
       // Start interactive tutorial
       iTutorialStart();

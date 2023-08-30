@@ -88,8 +88,6 @@ describe("Terminal Directory Tests", function () {
       expect(isValidDirectory(".a1/")).toBe(true);
       expect(isValidDirectory("._foo/")).toBe(true);
       expect(isValidDirectory("_foo/")).toBe(true);
-      // the changes made to support this broke mv
-      // see https://github.com/danielyxie/bitburner/pull/3653 if you try to re support
       expect(isValidDirectory("foo.dir/")).toBe(true);
       expect(isValidDirectory("foov1.0.0.1/")).toBe(true);
       expect(isValidDirectory("foov1..0..0..1/")).toBe(true);

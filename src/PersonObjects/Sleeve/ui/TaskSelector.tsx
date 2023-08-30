@@ -2,17 +2,15 @@ import React, { useState } from "react";
 import { Sleeve } from "../Sleeve";
 import { Player } from "@player";
 import { Crimes } from "../../../Crime/Crimes";
-import { CityName, LocationName } from "../../../Enums";
+import { CityName, FactionName, FactionWorkType, GymType, LocationName } from "@enums";
 import { Factions } from "../../../Faction/Factions";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { FactionNames } from "../../../Faction/data/FactionNames";
 import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
 import { isSleeveBladeburnerWork } from "../Work/SleeveBladeburnerWork";
-import { CrimeType, FactionWorkType, GymType } from "../../../Enums";
-import { checkEnum } from "../../../utils/helpers/enum";
-import { WorkType } from "../Work/Work";
+import { getEnumHelper } from "../../../utils/EnumHelper";
+import { SleeveWorkType } from "../Work/Work";
 
 const universitySelectorOptions: string[] = [
   "Computer Science",
@@ -63,7 +61,7 @@ function possibleJobs(sleeve: Sleeve): string[] {
 
 function possibleFactions(sleeve: Sleeve): string[] {
   // Array of all factions that other sleeves are working for
-  const forbiddenFactions = [FactionNames.Bladeburners as string, FactionNames.ShadowsOfAnarchy as string];
+  const forbiddenFactions = [FactionName.Bladeburners as string, FactionName.ShadowsOfAnarchy as string];
   if (Player.gang) {
     forbiddenFactions.push(Player.gang.facName);
   }
@@ -139,10 +137,9 @@ const tasks: {
 
     return {
       first: factions,
-      second: (s1: string) => {
+      second: (s1) => {
+        if (!getEnumHelper("FactionName").isMember(s1)) return ["------"];
         const faction = Factions[s1];
-        if (!faction) return ["------"];
-
         const facInfo = faction.getInfo();
         const options: string[] = [];
         if (facInfo.offerHackingWork) {
@@ -247,21 +244,22 @@ function getABC(sleeve: Sleeve): [string, string, string] {
   const work = sleeve.currentWork;
   if (work === null) return ["------", "------", "------"];
   switch (work.type) {
-    case WorkType.COMPANY:
+    case SleeveWorkType.COMPANY:
       return ["Work for Company", work.companyName, "------"];
-    case WorkType.FACTION:
+    case SleeveWorkType.FACTION: {
       const workNames = {
         [FactionWorkType.field]: "Field Work",
         [FactionWorkType.hacking]: "Hacking Contracts",
         [FactionWorkType.security]: "Security Work",
       };
       return ["Work for Faction", work.factionName, workNames[work.factionWorkType] ?? ""];
-    case WorkType.BLADEBURNER:
+    }
+    case SleeveWorkType.BLADEBURNER:
       if (work.actionType === "Contracts") {
         return ["Perform Bladeburner Actions", "Take on contracts", work.actionName];
       }
       return ["Perform Bladeburner Actions", work.actionName, "------"];
-    case WorkType.CLASS:
+    case SleeveWorkType.CLASS: {
       if (!work.isGym()) return ["Take University Course", work.classType, work.location];
       const gymNames: Record<GymType, string> = {
         [GymType.strength]: "Train Strength",
@@ -270,15 +268,16 @@ function getABC(sleeve: Sleeve): [string, string, string] {
         [GymType.agility]: "Train Agility",
       };
       return ["Workout at Gym", gymNames[work.classType as GymType], work.location];
-    case WorkType.CRIME:
-      return ["Commit Crime", checkEnum(CrimeType, work.crimeType) ? work.crimeType : "Shoplift", "------"];
-    case WorkType.SUPPORT:
+    }
+    case SleeveWorkType.CRIME:
+      return ["Commit Crime", getEnumHelper("CrimeType").fuzzyGetMember(work.crimeType, true), "------"];
+    case SleeveWorkType.SUPPORT:
       return ["Perform Bladeburner Actions", "Support main sleeve", "------"];
-    case WorkType.INFILTRATE:
+    case SleeveWorkType.INFILTRATE:
       return ["Perform Bladeburner Actions", "Infiltrate Synthoids", "------"];
-    case WorkType.RECOVERY:
+    case SleeveWorkType.RECOVERY:
       return ["Shock Recovery", "------", "------"];
-    case WorkType.SYNCHRO:
+    case SleeveWorkType.SYNCHRO:
       return ["Synchronize", "------", "------"];
   }
 }
@@ -305,7 +304,7 @@ export function TaskSelector(props: IProps): React.ReactElement {
     props.setABC([s0, s1, details2[0]]);
   }
 
-  function onS0Change(event: SelectChangeEvent<string>): void {
+  function onS0Change(event: SelectChangeEvent): void {
     const n = event.target.value;
     const detailsF = tasks[n];
     if (detailsF === undefined) throw new Error(`No function for task '${s0}'`);
@@ -317,12 +316,12 @@ export function TaskSelector(props: IProps): React.ReactElement {
     props.setABC([n, details.first[0], details2[0]]);
   }
 
-  function onS1Change(event: SelectChangeEvent<string>): void {
+  function onS1Change(event: SelectChangeEvent): void {
     setS1(event.target.value);
     props.setABC([s0, event.target.value, s2]);
   }
 
-  function onS2Change(event: SelectChangeEvent<string>): void {
+  function onS2Change(event: SelectChangeEvent): void {
     setS2(event.target.value);
     props.setABC([s0, s1, event.target.value]);
   }

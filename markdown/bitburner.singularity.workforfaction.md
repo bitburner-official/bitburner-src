@@ -34,25 +34,14 @@ This function will set you to start working for the specified faction. You must 
 
 This function will return true if you successfully start working for the specified faction, and false otherwise.
 
-## Example 1
+## Example
 
 
 ```js
-// NS1
-var FACTION_NAME = "CyberSec", WORK_TYPE = "hacking";
+const factionName = "CyberSec";
+const workType = "hacking";
 
-var success = singularity.workForFaction(FACTION_NAME, WORK_TYPE);
-if (!success) tprint("ERROR: Failed to start work for " + FACTION_NAME + " with work type " + WORK_TYPE);
-```
-
-## Example 2
-
-
-```js
-// NS2
-const FACTION_NAME = "CyberSec", WORK_TYPE = "hacking";
-
-let success = ns.singularity.workForFaction(FACTION_NAME, WORK_TYPE);
-if (!success) ns.tprint(`ERROR: Failed to start work for ${FACTION_NAME} with work type ${WORK_TYPE}.`)
+let success = ns.singularity.workForFaction(factionName, workType);
+if (!success) ns.tprint(`ERROR: Failed to start work for ${factionName} with work type ${workType}.`)
 ```
 

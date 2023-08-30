@@ -15,7 +15,7 @@ exportMaterial(
     targetDivision: string,
     targetCity: CityName | `${CityName}`,
     materialName: string,
-    amt: number,
+    amt: number | string,
   ): void;
 ```
 
@@ -28,7 +28,7 @@ exportMaterial(
 |  targetDivision | string | Target division |
 |  targetCity | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Target city |
 |  materialName | string | Name of the material |
-|  amt | number | Amount of material to export. |
+|  amt | number \| string | Amount of material to export. |
 
 **Returns:**
 

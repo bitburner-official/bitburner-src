@@ -181,6 +181,7 @@ module.exports = (env, argv) => {
       extensions: [".tsx", ".ts", ".js", ".jsx"],
       alias: {
         "@player": path.resolve(__dirname, "src/Player"),
+        "@enums": path.resolve(__dirname, "src/Enums"),
         "@nsdefs": path.resolve(__dirname, "src/ScriptEditor/NetscriptDefinitions.d.ts"),
       },
       fallback: { crypto: false },

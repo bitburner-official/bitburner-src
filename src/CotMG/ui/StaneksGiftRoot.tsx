@@ -13,13 +13,13 @@ import { DummyGrid } from "./DummyGrid";
 import Container from "@mui/material/Container";
 import { useRerender } from "../../ui/React/hooks";
 
-type IProps = {
+interface IProps {
   staneksGift: StaneksGift;
-};
+}
 
 export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
   const rerender = useRerender();
-  useEffect(() => StaneksGiftEvents.subscribe(rerender), []);
+  useEffect(() => StaneksGiftEvents.subscribe(rerender), [rerender]);
   return (
     <Container maxWidth="lg" disableGutters sx={{ mx: 0 }}>
       <Typography variant="h4">

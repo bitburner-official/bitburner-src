@@ -1,12 +1,14 @@
+import type { Script } from "../../../src/Script/Script";
+import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { startWorkerScript } from "../../../src/NetscriptWorker";
+import { workerScripts } from "../../../src/Netscript/WorkerScripts";
 import { config as EvaluatorConfig } from "../../../src/NetscriptJSEvaluator";
 import { Server } from "../../../src/Server/Server";
 import { RunningScript } from "../../../src/Script/RunningScript";
 import { AddToAllServers, DeleteServer } from "../../../src/Server/AllServers";
-import { WorkerScriptStartStopEventEmitter } from "../../../src/Netscript/WorkerScriptStartStopEventEmitter";
 import { AlertEvents } from "../../../src/ui/React/AlertManager";
-import type { Script } from "src/Script/Script";
-import { ScriptFilePath } from "src/Paths/ScriptFilePath";
+
+declare const importActual: typeof EvaluatorConfig["doImport"];
 
 // Replace Blob/ObjectURL functions, because they don't work natively in Jest
 global.Blob = class extends Blob {
@@ -97,23 +99,15 @@ test.each([
     const ramUsage = script.getRamUsage(server.scripts);
     if (!ramUsage) throw new Error(`ramUsage calculated to be ${ramUsage}`);
     const runningScript = new RunningScript(script, ramUsage as number);
-    expect(startWorkerScript(runningScript, server)).toBeGreaterThan(0);
-    // We don't care about start, so subscribe after that. Await script death.
-    const result = await Promise.race([
-      alerted,
-      new Promise((resolve) => {
-        eventDelete = WorkerScriptStartStopEventEmitter.subscribe(() => {
-          for (const byPid of server.runningScriptMap.values()) {
-            for (const rs of byPid.values()) {
-              if (rs === runningScript) return;
-            }
-          }
-          resolve(null);
-        });
-      }),
-    ]);
+    const pid = startWorkerScript(runningScript, server);
+    expect(pid).toBeGreaterThan(0);
+    // Manually attach an atExit to the now-created WorkerScript, so we can
+    // await script death.
+    const ws = workerScripts.get(pid);
+    expect(ws).toBeDefined();
+    const result = await Promise.race([alerted, new Promise((resolve) => (ws.atExit = resolve))]);
     // If an error alert was thrown, we catch it here.
-    expect(result).toBeNull();
+    expect(result).not.toBeDefined();
     expect(runningScript.logs).toEqual(expectedLog);
   } finally {
     eventDelete();

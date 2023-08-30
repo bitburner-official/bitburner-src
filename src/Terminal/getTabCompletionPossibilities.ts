@@ -120,8 +120,8 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     }
   }
 
-  const addAliases = () => addGeneric({ iterable: Object.keys(Aliases) });
-  const addGlobalAliases = () => addGeneric({ iterable: Object.keys(GlobalAliases) });
+  const addAliases = () => addGeneric({ iterable: Aliases.keys() });
+  const addGlobalAliases = () => addGeneric({ iterable: GlobalAliases.keys() });
   const addCommands = () => addGeneric({ iterable: gameCommands });
   const addDarkwebItems = () => addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
   const addServerNames = () => addGeneric({ iterable: GetAllServers().map((server) => server.hostname) });
@@ -163,7 +163,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   // Just some booleans so the mismatch between command length and arg number are not as confusing.
   const onCommand = commandLength === 1;
   const onFirstCommandArg = commandLength === 2;
-  const onSecondCommandArg = commandLength === 3;
+  // const onSecondCommandArg = commandLength === 3; // unused
 
   // These are always added.
   addGlobalAliases();
@@ -201,11 +201,8 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       if (onFirstCommandArg && !relativeDir) addDirectories();
       return possibilities;
 
-    case "check":
-    case "kill":
     case "mem":
-    case "tail":
-      addScripts();
+      if (onFirstCommandArg) addScripts();
       return possibilities;
 
     case "connect":
@@ -242,11 +239,12 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       return possibilities;
 
     case "scp":
-      if (onFirstCommandArg) {
-        addScripts();
-        addTextFiles();
-        addLiterature();
-      } else if (onSecondCommandArg) addServerNames();
+      if (!onFirstCommandArg) {
+        addServerNames();
+      }
+      addScripts();
+      addTextFiles();
+      addLiterature();
       return possibilities;
 
     case "rm":
@@ -261,8 +259,13 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       if (onFirstCommandArg) {
         addPrograms();
         addCodingContracts();
+        addScripts();
+      } else {
+        const options = await scriptAutocomplete();
+        if (options) addGeneric({ iterable: options, usePathing: false });
       }
-    // Spill over into next cases
+      return possibilities;
+
     case "check":
     case "tail":
     case "kill":

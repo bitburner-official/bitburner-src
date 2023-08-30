@@ -9,16 +9,17 @@ import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
+// numeric enum
 export enum TickerDisplayMode {
   AllStocks,
   Portfolio,
 }
 
-type IProps = {
+interface IProps {
   changeDisplayMode: () => void;
   changeWatchlistFilter: (e: React.ChangeEvent<HTMLInputElement>) => void;
   tickerDisplayMode: TickerDisplayMode;
-};
+}
 
 function DisplayModeButton(props: IProps): React.ReactElement {
   let txt = "";

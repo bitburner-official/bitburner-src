@@ -4,7 +4,7 @@
 
 ## IndustryData.cost property
 
-Cost to expand to the division
+Cost to make a new division of this industry type
 
 **Signature:**
 

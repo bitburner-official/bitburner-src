@@ -2,23 +2,22 @@ import { Crimes } from "./Crimes";
 import { Crime } from "./Crime";
 import { Player } from "@player";
 
-import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { checkEnum } from "../utils/helpers/enum";
-import { CrimeType } from "../Enums";
+import { getEnumHelper } from "../utils/EnumHelper";
+import { CrimeType } from "@enums";
 
 //This is only used for the player
-export function determineCrimeSuccess(type: string): boolean {
-  if (!checkEnum(CrimeType, type)) {
-    dialogBoxCreate(`ERR: Unrecognized crime type: ${type} This is probably a bug please contact the developer`);
-    return false;
-  }
+export function determineCrimeSuccess(type: CrimeType): boolean {
   const crime = Crimes[type];
   const chance = crime.successRate(Player);
   return Math.random() <= chance;
 }
 
 export function findCrime(roughName: string): Crime | null {
-  if (checkEnum(CrimeType, roughName)) return Crimes[roughName];
+  const helper = getEnumHelper("CrimeType");
+  if (helper.isMember(roughName)) return Crimes[roughName];
+  const fuzzMatch = getEnumHelper("CrimeType").fuzzyGetMember(roughName);
+  if (fuzzMatch) return Crimes[fuzzMatch];
+  // This can probably all be removed
   roughName = roughName.toLowerCase();
   if (roughName.includes("shoplift")) return Crimes[CrimeType.shoplift];
   else if (roughName.includes("rob") && roughName.includes("store")) return Crimes[CrimeType.robStore];
@@ -33,5 +32,6 @@ export function findCrime(roughName: string): Crime | null {
   else if (roughName.includes("kidnap")) return Crimes[CrimeType.kidnap];
   else if (roughName.includes("assassin")) return Crimes[CrimeType.assassination];
   else if (roughName.includes("heist")) return Crimes[CrimeType.heist];
+  //
   return null;
 }

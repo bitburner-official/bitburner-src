@@ -7,6 +7,8 @@ import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 import Box from "@mui/material/Box";
+import _ from "lodash";
+
 import { Output, Link, RawOutput } from "../OutputTypes";
 import { Terminal } from "../../Terminal";
 import { TerminalInput } from "./TerminalInput";
@@ -14,17 +16,9 @@ import { TerminalEvents, TerminalClearEvents } from "../TerminalEvents";
 import { BitFlumeModal } from "../../BitNode/ui/BitFlumeModal";
 import { CodingContractModal } from "../../ui/React/CodingContractModal";
 
-import _ from "lodash";
 import { ANSIITypography } from "../../ui/React/ANSIITypography";
 import { useRerender } from "../../ui/React/hooks";
-
-function ActionTimer(): React.ReactElement {
-  return (
-    <Typography color={"primary"} paragraph={false}>
-      {Terminal.getProgressText()}
-    </Typography>
-  );
-}
+import { TerminalActionTimer } from "./TerminalActionTimer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,10 +44,6 @@ export function TerminalRoot(): React.ReactElement {
   const rerender = useRerender();
   const [key, setKey] = useState(0);
 
-  function clear(): void {
-    setKey((key) => key + 1);
-  }
-
   useEffect(() => {
     const debounced = _.debounce(async () => rerender(), 25, { maxWait: 50 });
     const unsubscribe = TerminalEvents.subscribe(debounced);
@@ -61,9 +51,10 @@ export function TerminalRoot(): React.ReactElement {
       debounced.cancel();
       unsubscribe();
     };
-  }, []);
+  }, [rerender]);
 
   useEffect(() => {
+    const clear = () => setKey((key) => key + 1);
     const debounced = _.debounce(async () => clear(), 25, { maxWait: 50 });
     const unsubscribe = TerminalClearEvents.subscribe(debounced);
     return () => {
@@ -106,26 +97,17 @@ export function TerminalRoot(): React.ReactElement {
                 </Typography>
               )}
               {item instanceof Link && (
-                <>
-                  <Typography>{item.dashes}&gt;&nbsp;</Typography>
-                  <MuiLink
-                    classes={{ root: classes.preformatted }}
-                    color={"secondary"}
-                    paragraph={false}
-                    onClick={() => Terminal.connectToServer(item.hostname)}
-                  >
-                    <Typography sx={{ textDecoration: "underline", "&:hover": { textDecoration: "none" } }}>
-                      {item.hostname}
-                    </Typography>
-                  </MuiLink>
-                </>
+                <Typography classes={{ root: classes.preformatted }}>
+                  {item.dashes}
+                  <MuiLink onClick={() => Terminal.connectToServer(item.hostname)}>{item.hostname}</MuiLink>
+                </Typography>
               )}
             </ListItem>
           ))}
 
           {Terminal.action !== null && (
             <ListItem classes={{ root: classes.nopadding }}>
-              <ActionTimer />{" "}
+              <TerminalActionTimer />{" "}
             </ListItem>
           )}
         </List>

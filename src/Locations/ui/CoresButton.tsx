@@ -8,9 +8,9 @@ import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
 import { MathJax } from "better-react-mathjax";
 
-type IProps = {
+interface IProps {
   rerender: () => void;
-};
+}
 
 export function CoresButton(props: IProps): React.ReactElement {
   const homeComputer = Player.getHomeComputer();

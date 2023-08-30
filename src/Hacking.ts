@@ -1,4 +1,4 @@
-import { BitNodeMultipliers } from "./BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { Person as IPerson } from "@nsdefs";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { Server as IServer } from "@nsdefs";
@@ -32,7 +32,7 @@ export function calculateHackingExpGain(server: IServer, person: IPerson): numbe
   const diffFactor = 0.3;
   let expGain = baseExpGain;
   expGain += baseDifficulty * diffFactor;
-  return expGain * person.mults.hacking_exp * BitNodeMultipliers.HackExpGain;
+  return expGain * person.mults.hacking_exp * currentNodeMults.HackExpGain;
 }
 
 /**
@@ -49,23 +49,21 @@ export function calculatePercentMoneyHacked(server: IServer, person: IPerson): n
   const difficultyMult = (100 - hackDifficulty) / 100;
   const skillMult = (person.skills.hacking - (requiredHackingSkill - 1)) / person.skills.hacking;
   const percentMoneyHacked =
-    (difficultyMult * skillMult * person.mults.hacking_money * BitNodeMultipliers.ScriptHackMoney) / balanceFactor;
+    (difficultyMult * skillMult * person.mults.hacking_money * currentNodeMults.ScriptHackMoney) / balanceFactor;
 
   return Math.min(1, Math.max(percentMoneyHacked, 0));
 }
 
 /** Returns time it takes to complete a hack on a server, in seconds */
 export function calculateHackingTime(server: IServer, person: IPerson): number {
-  const hackDifficulty = server.hackDifficulty;
-  const requiredHackingSkill = server.requiredHackingSkill;
-  if (!hackDifficulty || !requiredHackingSkill) return Infinity;
+  const { hackDifficulty, requiredHackingSkill } = server;
+  if (typeof hackDifficulty !== "number" || typeof requiredHackingSkill !== "number") return Infinity;
   const difficultyMult = requiredHackingSkill * hackDifficulty;
 
   const baseDiff = 500;
   const baseSkill = 50;
   const diffFactor = 2.5;
   let skillFactor = diffFactor * difficultyMult + baseDiff;
-  // tslint:disable-next-line
   skillFactor /= person.skills.hacking + baseSkill;
 
   const hackTimeMultiplier = 5;

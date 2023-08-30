@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Order } from "../Order";
-import { PositionTypes } from "../data/PositionTypes";
+import { PositionType } from "@enums";
 
 import { formatShares } from "../../ui/formatNumber";
 import { Money } from "../../ui/React/Money";
@@ -10,9 +10,9 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { cancelOrder } from "../StockMarket";
 
-type IProps = {
+interface IProps {
   order: Order;
-};
+}
 
 /** React component for displaying a single order in a stock's order book */
 export function StockTickerOrder(props: IProps): React.ReactElement {
@@ -22,7 +22,7 @@ export function StockTickerOrder(props: IProps): React.ReactElement {
 
   const order = props.order;
 
-  const posTxt = order.pos === PositionTypes.Long ? "Long Position" : "Short Position";
+  const posTxt = order.pos === PositionType.Long ? "Long Position" : "Short Position";
   const txt = (
     <>
       {order.type} - {posTxt} - {formatShares(order.shares)} @ <Money money={order.price} />

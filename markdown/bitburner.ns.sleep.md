@@ -22,31 +22,19 @@ sleep(millis: number): Promise<true>;
 
 Promise&lt;true&gt;
 
+A promise that resolves to true when the sleep is completed.
 
 ## Remarks
 
 RAM cost: 0 GB
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
+```js
 // This will count from 1 to 10 in your terminal, with one number every 5 seconds
-for (var i=0; i<10; i++) {
-  tprint(i + 1);
-  sleep(5000);
-}
-```
-
-## Example 2
-
-
-```ts
-// NS2:
-// This will count from 1 to 10 in your terminal, with one number every 5 seconds
-for (var i=0; i<10; i++) {
-  ns.tprint(i + 1);
+for (var i = 1; i <= 10; i++) {
+  ns.tprint(i);
   await ns.sleep(5000);
 }
 ```

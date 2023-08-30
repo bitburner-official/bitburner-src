@@ -22,6 +22,7 @@ import { Player } from "@player";
 import { GetServer } from "../Server/AllServers";
 import { Server } from "../Server/Server";
 import { Companies } from "../Company/Companies";
+import { isMember } from "../utils/EnumHelper";
 
 // Returns a boolean indicating whether the player has Hacknet Servers
 // (the upgraded form of Hacknet Nodes)
@@ -531,8 +532,8 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
           Player.hashManager.refundUpgrade(upgName, count);
           return false;
         }
-        for (const division of corp.divisions) {
-          division.sciResearch += upg.value * count;
+        for (const division of corp.divisions.values()) {
+          division.researchPoints += upg.value * count;
         }
         break;
       }
@@ -564,7 +565,7 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
         break;
       }
       case "Company Favor": {
-        if (!(upgTarget in Companies)) {
+        if (!isMember("CompanyName", upgTarget)) {
           console.error(`Invalid target specified in purchaseHashUpgrade(): ${upgTarget}`);
           throw new Error(`'${upgTarget}' is not a company.`);
         }

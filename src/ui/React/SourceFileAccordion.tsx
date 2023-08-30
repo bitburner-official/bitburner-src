@@ -17,10 +17,10 @@ import Collapse from "@mui/material/Collapse";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 
-type IProps = {
+interface IProps {
   level: number;
   sf: SourceFile;
-};
+}
 
 export function SourceFileAccordion(props: IProps): React.ReactElement {
   const [open, setOpen] = useState(false);

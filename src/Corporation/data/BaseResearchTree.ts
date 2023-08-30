@@ -1,16 +1,13 @@
 // Defines the ResearchTree that is common to all Corporation Industries
 // i.e. all Industries have these types of Research available to unlock
+import { CorpResearchName } from "@nsdefs";
 import { Research } from "../Research";
 import { ResearchMap } from "../ResearchMap";
 import { ResearchTree, Node } from "../ResearchTree";
 
-function makeNode(name: string): Node {
-  const research: Research | null = ResearchMap[name];
-  if (research == null) {
-    throw new Error(`Invalid research name: ${name}`);
-  }
-
-  return new Node({ text: research.name, cost: research.cost });
+function makeNode(name: CorpResearchName): Node {
+  const research: Research = ResearchMap[name];
+  return new Node({ researchName: research.name, cost: research.cost });
 }
 
 // Creates the Nodes for the BaseResearchTree.

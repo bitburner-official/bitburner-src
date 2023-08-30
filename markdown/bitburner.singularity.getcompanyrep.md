@@ -9,14 +9,14 @@ Get company reputation.
 **Signature:**
 
 ```typescript
-getCompanyRep(companyName: string): number;
+getCompanyRep(companyName: CompanyName | `${CompanyName}`): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  companyName | string | Name of the company. |
+|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` | Name of the company. |
 
 **Returns:**
 

@@ -5,10 +5,10 @@ import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 import Paper from "@mui/material/Paper";
 
-type Props = {
+interface Props {
   card: Card;
   hidden?: boolean;
-};
+}
 
 const useStyles = makeStyles(() =>
   createStyles({

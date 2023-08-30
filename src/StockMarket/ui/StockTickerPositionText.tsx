@@ -13,9 +13,9 @@ import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 
-type IProps = {
+interface IProps {
   stock: Stock;
-};
+}
 
 function LongPosition(props: IProps): React.ReactElement {
   const stock = props.stock;

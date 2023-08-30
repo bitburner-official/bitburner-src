@@ -15,9 +15,9 @@ export function processWork(this: PlayerObject, cycles = 1): void {
     this.finishWork(false);
   }
 }
-export function finishWork(this: PlayerObject, cancelled: boolean): void {
+export function finishWork(this: PlayerObject, cancelled: boolean, suppressDialog?: boolean): void {
   if (this.currentWork === null) return;
-  this.currentWork.finish(cancelled);
+  this.currentWork.finish(cancelled, !!suppressDialog);
   this.currentWork = null;
   this.focus = false;
 }

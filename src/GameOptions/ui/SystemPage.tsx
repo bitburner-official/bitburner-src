@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Settings } from "../../Settings/Settings";
 import { GameOptionsPage } from "./GameOptionsPage";
 import { OptionsSlider } from "./OptionsSlider";
+import { AutoexecInput } from "./AutoexecInput";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
 export const SystemPage = (): React.ReactElement => {
@@ -12,50 +13,32 @@ export const SystemPage = (): React.ReactElement => {
   const [terminalSize, setTerminalSize] = useState(Settings.MaxTerminalCapacity);
   const [autosaveInterval, setAutosaveInterval] = useState(Settings.AutosaveInterval);
 
-  function handlePortSizeChange(
-    _event: Event | React.SyntheticEvent<Element, Event>,
-    newValue: number | number[],
-  ): void {
+  function handlePortSizeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setPortSize(newValue as number);
     Settings.MaxPortCapacity = newValue as number;
   }
 
-  function handleTerminalSizeChange(
-    _event: Event | React.SyntheticEvent<Element, Event>,
-    newValue: number | number[],
-  ): void {
+  function handleTerminalSizeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setTerminalSize(newValue as number);
     Settings.MaxTerminalCapacity = newValue as number;
   }
 
-  function handleExecTimeChange(
-    _event: Event | React.SyntheticEvent<Element, Event>,
-    newValue: number | number[],
-  ): void {
+  function handleExecTimeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setExecTime(newValue as number);
     Settings.CodeInstructionRunTime = newValue as number;
   }
 
-  function handleRecentScriptsSizeChange(
-    _event: Event | React.SyntheticEvent<Element, Event>,
-    newValue: number | number[],
-  ): void {
+  function handleRecentScriptsSizeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setRecentScriptsSize(newValue as number);
     Settings.MaxRecentScriptsCapacity = newValue as number;
   }
 
-  function handleLogSizeChange(
-    _event: Event | React.SyntheticEvent<Element, Event>,
-    newValue: number | number[],
-  ): void {
+  function handleLogSizeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setLogSize(newValue as number);
     Settings.MaxLogCapacity = newValue as number;
   }
 
-  function handleAutosaveIntervalChange(
-    _event: Event | React.SyntheticEvent<Element, Event>,
-    newValue: number | number[],
-  ): void {
+  function handleAutosaveIntervalChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setAutosaveInterval(newValue as number);
     Settings.AutosaveInterval = newValue as number;
   }
@@ -63,6 +46,16 @@ export const SystemPage = (): React.ReactElement => {
     <GameOptionsPage title="System">
       {/* Wrap in a React fragment to prevent the sliders from breaking as list items */}
       <>
+        <AutoexecInput
+          label="Autoexec Script + Args"
+          tooltip={
+            <>
+              Path to a script (with optional args) to run on game load. The script will be run on home, launched before
+              any saved running scripts. It will have the "temporary" setting, so if it stays running it won't be saved.
+            </>
+          }
+        />
+        <br />
         <OptionsSlider
           label=".script exec time (ms)"
           initialValue={execTime}
@@ -166,7 +159,8 @@ export const SystemPage = (): React.ReactElement => {
         tooltip={
           <>
             If this is set, the save file will exclude all running scripts. This is only useful if your save is lagging
-            a lot. You'll have to restart your script every time you launch the game.
+            a lot. You'll have to restart your script every time you launch the game, possibly by using the "autoexec"
+            option.
           </>
         }
       />

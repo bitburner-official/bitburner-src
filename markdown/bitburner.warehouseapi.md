@@ -22,11 +22,11 @@ Requires the Warehouse API upgrade from your corporation.
 |  --- | --- |
 |  [bulkPurchase(divisionName, city, materialName, amt)](./bitburner.warehouseapi.bulkpurchase.md) | Set material to bulk buy |
 |  [buyMaterial(divisionName, city, materialName, amt)](./bitburner.warehouseapi.buymaterial.md) | Set material buy data |
-|  [cancelExportMaterial(sourceDivision, sourceCity, targetDivision, targetCity, materialName, amt)](./bitburner.warehouseapi.cancelexportmaterial.md) | Cancel material export |
+|  [cancelExportMaterial(sourceDivision, sourceCity, targetDivision, targetCity, materialName)](./bitburner.warehouseapi.cancelexportmaterial.md) | Cancel material export |
 |  [discontinueProduct(divisionName, productName)](./bitburner.warehouseapi.discontinueproduct.md) | Discontinue a product. |
 |  [exportMaterial(sourceDivision, sourceCity, targetDivision, targetCity, materialName, amt)](./bitburner.warehouseapi.exportmaterial.md) | Set material export data |
 |  [getMaterial(divisionName, city, materialName)](./bitburner.warehouseapi.getmaterial.md) | Get material data |
-|  [getProduct(divisionName, city, productName)](./bitburner.warehouseapi.getproduct.md) | Get product data |
+|  [getProduct(divisionName, cityName, productName)](./bitburner.warehouseapi.getproduct.md) | Get product data |
 |  [getUpgradeWarehouseCost(divisionName, city, amt)](./bitburner.warehouseapi.getupgradewarehousecost.md) | Gets the cost to upgrade a warehouse to the next level |
 |  [getWarehouse(divisionName, city)](./bitburner.warehouseapi.getwarehouse.md) | Get warehouse data |
 |  [hasWarehouse(divisionName, city)](./bitburner.warehouseapi.haswarehouse.md) | Check if you have a warehouse in city |
@@ -38,8 +38,8 @@ Requires the Warehouse API upgrade from your corporation.
 |  [sellProduct(divisionName, city, productName, amt, price, all)](./bitburner.warehouseapi.sellproduct.md) | Set product sell data. |
 |  [setMaterialMarketTA1(divisionName, city, materialName, on)](./bitburner.warehouseapi.setmaterialmarketta1.md) | Set market TA 1 for a material. |
 |  [setMaterialMarketTA2(divisionName, city, materialName, on)](./bitburner.warehouseapi.setmaterialmarketta2.md) | Set market TA 2 for a material. |
-|  [setProductMarketTA1(divisionName, city, productName, on)](./bitburner.warehouseapi.setproductmarketta1.md) | Set market TA 1 for a product. |
-|  [setProductMarketTA2(divisionName, city, productName, on)](./bitburner.warehouseapi.setproductmarketta2.md) | Set market TA 2 for a product. |
+|  [setProductMarketTA1(divisionName, productName, on)](./bitburner.warehouseapi.setproductmarketta1.md) | \* Set market TA 1 for a product. |
+|  [setProductMarketTA2(divisionName, productName, on)](./bitburner.warehouseapi.setproductmarketta2.md) | Set market TA 2 for a product. |
 |  [setSmartSupply(divisionName, city, enabled)](./bitburner.warehouseapi.setsmartsupply.md) | Set smart supply |
 |  [setSmartSupplyOption(divisionName, city, materialName, option)](./bitburner.warehouseapi.setsmartsupplyoption.md) | Set whether smart supply uses leftovers before buying |
 |  [upgradeWarehouse(divisionName, city, amt)](./bitburner.warehouseapi.upgradewarehouse.md) | Upgrade warehouse |

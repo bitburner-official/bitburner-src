@@ -34,25 +34,10 @@ The organization associated with the corresponding stock symbol. This function r
 
 1. TIX API Access
 
-## Example 1
+## Example
 
 
-```ts
-// NS1
-stock.getOrganization("FSIG");
-
-// Choose the first stock symbol from the array of stock symbols. Get the
-// organization associated with the corresponding stock symbol
-var sym = stock.getSymbols()[0];
-tprint("Stock symbol: " + sym);
-tprint("Stock organization: " + stock.getOrganization(sym));
-```
-
-## Example 2
-
-
-```ts
-// NS2
+```js
 ns.stock.getOrganization("FSIG");
 
 // Choose the first stock symbol from the array of stock symbols. Get the

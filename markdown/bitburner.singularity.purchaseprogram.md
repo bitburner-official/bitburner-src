@@ -30,19 +30,12 @@ RAM cost: 2 GB \* 16/4/1
 
 This function allows you to automatically purchase programs. You MUST have a TOR router in order to use this function. The cost of purchasing programs using this function is the same as if you were purchasing them through the Dark Web using the Terminal buy command.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1
-purchaseProgram("brutessh.exe");
-```
-
-## Example 2
-
-
-```ts
-// NS2
-ns.purchaseProgram("brutessh.exe");
+```js
+const programName = "BruteSSH.exe"
+const success = ns.purchaseProgram(programName);
+if (!success) ns.tprint("ERROR: Failed to purchase ${programName}")
 ```
 

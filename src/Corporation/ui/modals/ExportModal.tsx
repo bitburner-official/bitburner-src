@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { CityName } from "@enums";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Material } from "../../Material";
 import { Export } from "../../Export";
-import { Industry } from "../../Industry";
+import { Division } from "../../Division";
 import { ExportMaterial } from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
@@ -13,45 +14,51 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { CityName } from "../../../Enums";
 import { useRerender } from "../../../ui/React/hooks";
+import { getRecordKeys } from "../../../Types/Record";
+import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 
-interface IProps {
+interface ExportModalProps {
   open: boolean;
   onClose: () => void;
   mat: Material;
 }
 
 // Create a popup that lets the player manage exports
-export function ExportModal(props: IProps): React.ReactElement {
+export function ExportModal(props: ExportModalProps): React.ReactElement {
   const corp = useCorporation();
-  const possibleDivisions = corp.divisions.filter((division: Industry) => isRelevantMaterial(props.mat.name, division));
-  if (possibleDivisions.length === 0) throw new Error("Export popup created with no divisions.");
-  const defaultDivision = possibleDivisions[0];
-  if (Object.keys(defaultDivision.warehouses).length === 0)
-    throw new Error("Export popup created in a division with no warehouses.");
-  const [industry, setIndustry] = useState<string>(defaultDivision.name);
-  const [city, setCity] = useState(Object.keys(defaultDivision.warehouses)[0] as CityName);
-  const [amt, setAmt] = useState("");
+  const [exportAmount, setExportAmount] = useState("");
   const rerender = useRerender();
 
-  function onCityChange(event: SelectChangeEvent<string>): void {
-    setCity(event.target.value as CityName);
+  const possibleDivisions = [...corp.divisions.values()].filter((division: Division) => {
+    return isRelevantMaterial(props.mat.name, division);
+  });
+  // This weird assignment is used because ts thinks possibleDivisions[0] is always a division
+  const defaultDivision = possibleDivisions.length ? possibleDivisions[0] : null;
+  const [targetDivision, setTargetDivision] = useState<Division | null>(defaultDivision);
+
+  const possibleCities = targetDivision ? getRecordKeys(targetDivision.warehouses) : [];
+  const defaultCity = possibleCities.length ? possibleCities[0] : null;
+  const [targetCity, setTargetCity] = useState(defaultCity);
+
+  function onCityChange(event: SelectChangeEvent<CityName>): void {
+    setTargetCity(event.target.value as CityName);
   }
 
-  function onIndustryChange(event: SelectChangeEvent<string>): void {
-    const div = event.target.value;
-    setIndustry(div);
-    setCity(Object.keys(corp.divisions[0].warehouses)[0] as CityName);
+  function onTargetDivisionChange(event: SelectChangeEvent): void {
+    const division = corp.divisions.get(event.target.value);
+    if (!division) return;
+    setTargetDivision(division);
   }
 
   function onAmtChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setAmt(event.target.value);
+    setExportAmount(event.target.value);
   }
 
   function exportMaterial(): void {
     try {
-      ExportMaterial(industry, city, props.mat, amt, currentDivision);
+      if (!targetDivision || !targetCity) return;
+      ExportMaterial(targetDivision, targetCity, props.mat, exportAmount);
     } catch (err) {
       dialogBoxCreate(err + "");
     }
@@ -59,23 +66,21 @@ export function ExportModal(props: IProps): React.ReactElement {
   }
 
   function removeExport(exp: Export): void {
-    for (let i = 0; i < props.mat.exp.length; ++i) {
-      if (props.mat.exp[i].ind !== exp.ind || props.mat.exp[i].city !== exp.city || props.mat.exp[i].amt !== exp.amt)
+    for (let i = 0; i < props.mat.exports.length; ++i) {
+      if (
+        props.mat.exports[i].division !== exp.division ||
+        props.mat.exports[i].city !== exp.city ||
+        props.mat.exports[i].amount !== exp.amount
+      )
         continue;
-      props.mat.exp.splice(i, 1);
+      props.mat.exports.splice(i, 1);
       break;
     }
     rerender();
   }
 
-  const currentDivision = corp.divisions.find((division: Industry) => division.name === industry);
-  if (currentDivision === undefined)
-    throw new Error(`Export popup somehow ended up with undefined division '${currentDivision}'`);
-  const possibleCities = (Object.keys(currentDivision.warehouses) as CityName[]).filter(
-    (city) => currentDivision.warehouses[city] !== 0,
-  );
-  if (possibleCities.length > 0 && !possibleCities.includes(city)) {
-    setCity(possibleCities[0]);
+  if (targetCity && !possibleCities.includes(targetCity as CityName)) {
+    setTargetCity(possibleCities.length ? possibleCities[0] : null);
   }
 
   return (
@@ -102,42 +107,42 @@ export function ExportModal(props: IProps): React.ReactElement {
         <br />
         For example: setting the amount "(EINV-20)/10" would try to export all except 20 of the material.
       </Typography>
-      <Select onChange={onIndustryChange} value={industry}>
-        {corp.divisions
-          .filter((division: Industry) => isRelevantMaterial(props.mat.name, division))
-          .map((division: Industry) => (
-            <MenuItem key={division.name} value={division.name}>
-              {division.name}
-            </MenuItem>
-          ))}
+      <Select onChange={onTargetDivisionChange} value={targetDivision?.name ?? ""}>
+        {possibleDivisions.map((division) => (
+          <MenuItem key={division.name} value={division.name}>
+            {division.name}
+          </MenuItem>
+        ))}
       </Select>
-      <Select onChange={onCityChange} value={city}>
-        {possibleCities.map((cityName) => {
-          if (currentDivision.warehouses[cityName] === 0) return;
-          return (
-            <MenuItem key={cityName} value={cityName}>
-              {cityName}
-            </MenuItem>
-          );
-        })}
+      <Select onChange={onCityChange} value={targetCity ?? ""}>
+        {possibleCities.map((cityName) => (
+          <MenuItem key={cityName} value={cityName}>
+            {cityName}
+          </MenuItem>
+        ))}
       </Select>
-      <TextField placeholder="Export amount / s" onChange={onAmtChange} value={amt} />
-      <Button onClick={exportMaterial}>Export</Button>
+      <TextField placeholder="Export amount / s" onChange={onAmtChange} value={exportAmount} />
+      <ButtonWithTooltip
+        disabledTooltip={!targetDivision ? "No target division selected" : !targetCity ? "No target city selected" : ""}
+        onClick={exportMaterial}
+      >
+        Export
+      </ButtonWithTooltip>
       <Typography>
         Below is a list of all current exports of this material from this warehouse. Clicking on one of the exports
         below will REMOVE that export.
       </Typography>
-      {props.mat.exp.map((exp: Export, index: number) => (
+      {props.mat.exports.map((exp: Export, index: number) => (
         <Box display="flex" alignItems="center" key={index}>
           <Button sx={{ mx: 2 }} onClick={() => removeExport(exp)}>
             delete
           </Button>
           <Typography>
-            Industry: {exp.ind}
+            Industry: {exp.division}
             <br />
             City: {exp.city}
             <br />
-            Amount/s: {exp.amt}
+            Amount/s: {exp.amount}
           </Typography>
         </Box>
       ))}

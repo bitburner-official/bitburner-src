@@ -9,7 +9,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
   const [remoteFileApiPort, setRemoteFileApiPort] = useState(Settings.RemoteFileApiPort);
 
   function handleRemoteFileApiPortChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setRemoteFileApiPort(Number(event.target.value) as number);
+    setRemoteFileApiPort(Number(event.target.value));
     Settings.RemoteFileApiPort = Number(event.target.value);
   }
 
@@ -20,7 +20,10 @@ export const RemoteAPIPage = (): React.ReactElement => {
         text editor and then upload files to the home server.
       </Typography>
       <Typography>
-        <Link href="https://bitburner-official.readthedocs.io/en/latest/remoteapi.html" target="_blank">
+        <Link
+          href="https://github.com/bitburner-official/bitburner-src/blob/dev/src/Documentation/doc/programming/remote_api.md"
+          target="_blank"
+        >
           Documentation
         </Link>
       </Typography>

@@ -26,7 +26,15 @@ import {
   calculateGrowTime,
   calculateWeakenTime,
 } from "../Hacking";
-import { CompletedProgramName } from "../Programs/Programs";
+import {
+  CityName,
+  CompletedProgramName,
+  FactionWorkType,
+  GymType,
+  JobName,
+  LocationName,
+  UniversityClassType,
+} from "@enums";
 import { Formulas as IFormulas, Player as IPlayer, Person as IPerson } from "@nsdefs";
 import {
   calculateRespectGain,
@@ -38,18 +46,17 @@ import {
 } from "../Gang/formulas/formulas";
 import { favorToRep as calculateFavorToRep, repToFavor as calculateRepToFavor } from "../Faction/formulas/favor";
 import { repFromDonation } from "../Faction/formulas/donation";
-import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
+import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { calculateCompanyWorkStats } from "../Work/Formulas";
 import { Companies } from "../Company/Companies";
 import { calculateClassEarnings } from "../Work/Formulas";
 import { calculateFactionExp, calculateFactionRep } from "../Work/Formulas";
-import { FactionWorkType, GymType, UniversityClassType, LocationName, CityName } from "../Enums";
 
 import { defaultMultipliers } from "../PersonObjects/Multipliers";
-import { checkEnum, findEnumMember } from "../utils/helpers/enum";
-import { JobName } from "../Enums";
+import { findEnumMember } from "../utils/helpers/enum";
+import { getEnumHelper } from "../utils/EnumHelper";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { findCrime } from "../Crime/CrimeHelpers";
 
@@ -384,8 +391,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const person = helpers.person(ctx, _person);
         const classType = findEnumMember(GymType, helpers.string(ctx, "classType", _classType));
         if (!classType) throw new Error(`Invalid gym training type: ${_classType}`);
-        const locationName = helpers.string(ctx, "locationName", _locationName);
-        if (!checkEnum(LocationName, locationName)) throw new Error(`Invalid location name: ${locationName}`);
+        const locationName = getEnumHelper("LocationName").nsGetMember(ctx, _locationName);
         return calculateClassEarnings(person, classType, locationName);
       },
       universityGains: (ctx) => (_person, _classType, _locationName) => {
@@ -393,8 +399,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const person = helpers.person(ctx, _person);
         const classType = findEnumMember(UniversityClassType, helpers.string(ctx, "classType", _classType));
         if (!classType) throw new Error(`Invalid university class type: ${_classType}`);
-        const locationName = helpers.string(ctx, "locationName", _locationName);
-        if (!checkEnum(LocationName, locationName)) throw new Error(`Invalid location name: ${locationName}`);
+        const locationName = getEnumHelper("LocationName").nsGetMember(ctx, _locationName);
         return calculateClassEarnings(person, classType, locationName);
       },
       factionGains: (ctx) => (_player, _workType, _favor) => {
@@ -422,10 +427,10 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       },
     },
   };
-  // Removed undocumented functions added using Object.assign because typescript.
-  // TODO: Remove these at 3.0
-  Object.assign(formulasFunctions.work, {
-    classGains: removedFunction("2.2.0", "formulas.work.universityGains or formulas.work.gymGains"),
+
+  // Removed functions
+  setRemovedFunctions(formulasFunctions.work, {
+    classGains: { version: "2.2.0", replacement: "formulas.work.universityGains or formulas.work.gymGains" },
   });
   return formulasFunctions;
 }

@@ -37,7 +37,7 @@ export function ServerAccordionContent(props: IProps): React.ReactElement {
       />
       <List dense disablePadding>
         {props.workerScripts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((ws) => (
-          <WorkerScriptAccordion key={`${ws.name}_${ws.args}`} workerScript={ws} />
+          <WorkerScriptAccordion key={`${ws.pid}`} workerScript={ws} />
         ))}
       </List>
     </>

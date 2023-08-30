@@ -17,11 +17,11 @@ import { Box } from "@mui/material";
 
 import { ClassWork, Classes } from "../../Work/ClassWork";
 import { calculateCost } from "../../Work/Formulas";
-import { UniversityClassType } from "../../Enums";
+import { UniversityClassType } from "@enums";
 
-type IProps = {
+interface IProps {
   loc: Location;
-};
+}
 
 export function UniversityLocation(props: IProps): React.ReactElement {
   function take(classType: UniversityClassType): void {

@@ -1,7 +1,7 @@
 // React Component for displaying Corporation Overview info
 import React, { useState } from "react";
 import { LevelableUpgrade } from "./LevelableUpgrade";
-import { UnlockUpgrade } from "./UnlockUpgrade";
+import { Unlock } from "./Unlock";
 import { BribeFactionModal } from "./modals/BribeFactionModal";
 import { SellSharesModal } from "./modals/SellSharesModal";
 import { BuybackSharesModal } from "./modals/BuybackSharesModal";
@@ -12,8 +12,7 @@ import { GoPublicModal } from "./modals/GoPublicModal";
 import { Factions } from "../../Faction/Factions";
 
 import * as corpConstants from "../data/Constants";
-import { CorporationUnlockUpgrade, CorporationUnlockUpgrades } from "../data/CorporationUnlockUpgrades";
-import { CorporationUpgrade, CorporationUpgradeIndex, CorporationUpgrades } from "../data/CorporationUpgrades";
+import { CorpUnlocks } from "../data/CorporationUnlocks";
 
 import { CONSTANTS } from "../../Constants";
 import { formatCorpStat, formatPercent, formatShares } from "../../ui/formatNumber";
@@ -25,13 +24,15 @@ import { Player } from "@player";
 import { useCorporation } from "./Context";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { MultiplierButtons } from "./MultiplierButtons";
 import { SellCorporationModal } from "./modals/SellCorporationModal";
 import { SellDivisionModal } from "./modals/SellDivisionModal";
+import { getRecordKeys } from "../../Types/Record";
+import { PositiveInteger } from "../../types";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 
 interface IProps {
   rerender: () => void;
@@ -50,23 +51,23 @@ export function Overview({ rerender }: IProps): React.ReactElement {
   appendMult("Storage Multiplier: ", corp.getStorageMultiplier());
   appendMult("Advertising Multiplier: ", corp.getAdvertisingMultiplier());
   appendMult("Empl. Creativity Multiplier: ", corp.getEmployeeCreMultiplier());
-  appendMult("Empl. Charisma Multiplier: ", corp.getEmployeeChaMultiplier());
-  appendMult("Empl. Intelligence Multiplier: ", corp.getEmployeeIntMultiplier());
-  appendMult("Empl. Efficiency Multiplier: ", corp.getEmployeeEffMultiplier());
-  appendMult("Sales Multiplier: ", corp.getSalesMultiplier());
-  appendMult("Scientific Research Multiplier: ", corp.getScientificResearchMultiplier());
+  appendMult("Empl. Charisma Multiplier: ", corp.getEmployeeChaMult());
+  appendMult("Empl. Intelligence Multiplier: ", corp.getEmployeeIntMult());
+  appendMult("Empl. Efficiency Multiplier: ", corp.getEmployeeEffMult());
+  appendMult("Sales Multiplier: ", corp.getSalesMult());
+  appendMult("Scientific Research Multiplier: ", corp.getScientificResearchMult());
 
   return (
     <>
       <StatsTable
         rows={[
-          ["Total Funds:", <Money money={corp.funds} />],
-          ["Total Revenue:", <MoneyRate money={corp.revenue} />],
-          ["Total Expenses:", <MoneyRate money={corp.expenses} />],
-          ["Total Profit:", <MoneyRate money={corp.revenue - corp.expenses} />],
+          ["Total Funds:", <Money key="funds" money={corp.funds} />],
+          ["Total Revenue:", <MoneyRate key="revenue" money={corp.revenue} />],
+          ["Total Expenses:", <MoneyRate key="expenses" money={corp.expenses} />],
+          ["Total Profit:", <MoneyRate key="profit" money={corp.revenue - corp.expenses} />],
           ["Publicly Traded:", corp.public ? "Yes" : "No"],
           ["Owned Stock Shares:", formatShares(corp.numShares)],
-          ["Stock Price:", corp.public ? <Money money={corp.sharePrice} /> : "N/A"],
+          ["Stock Price:", corp.public ? <Money key="price" money={corp.sharePrice} /> : "N/A"],
         ]}
       />
       <br />
@@ -90,23 +91,24 @@ export function Overview({ rerender }: IProps): React.ReactElement {
       <StatsTable rows={multRows} />
       <br />
       <BonusTime />
-      <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", width: "fit-content" }}>
-        <Tooltip
-          title={
-            <Typography>
+      <div>
+        <ButtonWithTooltip
+          normalTooltip={
+            <>
               Get a copy of and read 'The Complete Handbook for Creating a Successful Corporation.' This is a .lit file
               that guides you through the beginning of setting up a Corporation and provides some tips/pointers for
               helping you get started with managing it.
-            </Typography>
+            </>
           }
+          onClick={() => corp.getStarterGuide()}
         >
-          <Button onClick={() => corp.getStarterGuide()}>Getting Started Guide</Button>
-        </Tooltip>
-        {corp.public ? <PublicButtons rerender={rerender} /> : <PrivateButtons rerender={rerender} />}
+          Getting Started Guide
+        </ButtonWithTooltip>
         <BribeButton />
-        {corp.divisions.length != 0 ? <SellDivisionButton /> : <></>}
+        {corp.divisions.size > 0 && <SellDivisionButton />}
         <RestartButton />
-      </Box>
+      </div>
+      <div>{corp.public ? <PublicButtons rerender={rerender} /> : <PrivateButtons rerender={rerender} />}</div>
       <br />
       <Upgrades rerender={rerender} />
     </>
@@ -129,21 +131,24 @@ function PrivateButtons({ rerender }: IPrivateButtonsProps): React.ReactElement 
 
   return (
     <>
-      <Tooltip title={<Typography>{findInvestorsTooltip}</Typography>}>
-        <Button disabled={!fundingAvailable} onClick={() => setFindInvestorsopen(true)}>
-          Find Investors
-        </Button>
-      </Tooltip>
-      <Tooltip
-        title={
-          <Typography>
+      <ButtonWithTooltip
+        normalTooltip={findInvestorsTooltip}
+        disabledTooltip={fundingAvailable ? "" : "Max funding rounds already reached"}
+        onClick={() => setFindInvestorsopen(true)}
+      >
+        Find Investors
+      </ButtonWithTooltip>
+      <ButtonWithTooltip
+        normalTooltip={
+          <>
             Become a publicly traded and owned entity. Going public involves issuing shares for an IPO. Once you are a
             public company, your shares will be traded on the stock market.
-          </Typography>
+          </>
         }
+        onClick={() => setGoPublicopen(true)}
       >
-        <Button onClick={() => setGoPublicopen(true)}>Go Public</Button>
-      </Tooltip>
+        Go Public
+      </ButtonWithTooltip>
       <FindInvestorsModal open={findInvestorsopen} onClose={() => setFindInvestorsopen(false)} rerender={rerender} />
       <GoPublicModal open={goPublicopen} onClose={() => setGoPublicopen(false)} rerender={rerender} />
     </>
@@ -155,47 +160,39 @@ interface IUpgradeProps {
 }
 // Render the UI for Corporation upgrades
 function Upgrades({ rerender }: IUpgradeProps): React.ReactElement {
+  const [purchaseMultiplier, setPurchaseMultiplier] = useState<PositiveInteger | "MAX">(
+    corpConstants.PurchaseMultipliers.x1,
+  );
+
   const corp = useCorporation();
   // Don't show upgrades
-  if (corp.divisions.length <= 0) {
+  if (corp.divisions.size === 0) {
     return <Typography variant="h4">Upgrades are unlocked once you create an industry.</Typography>;
   }
 
-  const [purchaseMultiplier, setPurchaseMultiplier] = useState<number | "MAX">(corpConstants.PurchaseMultipliers.x1);
-
-  // onClick event handlers for purchase multiplier buttons
-  const purchaseMultiplierOnClicks = [
-    () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.x1),
-    () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.x5),
-    () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.x10),
-    () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.x50),
-    () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.x100),
-    () => setPurchaseMultiplier(corpConstants.PurchaseMultipliers.MAX),
-  ];
+  const unlocksNotOwned = Object.values(CorpUnlocks)
+    .filter((unlock) => !corp.unlocks.has(unlock.name))
+    .map(({ name }) => <Unlock rerender={rerender} name={name} key={name} />);
 
   return (
     <>
       <Paper sx={{ p: 1, my: 1 }}>
         <Typography variant="h4">Unlocks</Typography>
         <Grid container>
-          {Object.values(CorporationUnlockUpgrades).map((upgrade: CorporationUnlockUpgrade) => (
-            <UnlockUpgrade rerender={rerender} upgradeData={upgrade} key={upgrade.index} />
-          ))}
+          {unlocksNotOwned.length ? unlocksNotOwned : <Typography>All unlocks are owned.</Typography>}
         </Grid>
       </Paper>
       <Paper sx={{ p: 1, my: 1 }}>
         <Typography variant="h4">Upgrades</Typography>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <MultiplierButtons onClicks={purchaseMultiplierOnClicks} purchaseMultiplier={purchaseMultiplier} />
+            <MultiplierButtons setMultiplier={setPurchaseMultiplier} selectedMultiplier={purchaseMultiplier} />
           </Grid>
         </Grid>
         <Grid container>
-          {corp.upgrades
-            .map((level: number, i: number) => CorporationUpgrades[i as CorporationUpgradeIndex])
-            .map((upgrade: CorporationUpgrade) => (
-              <LevelableUpgrade rerender={rerender} upgrade={upgrade} key={upgrade.index} amount={purchaseMultiplier} />
-            ))}
+          {getRecordKeys(corp.upgrades).map((name) => (
+            <LevelableUpgrade rerender={rerender} upgradeName={name} key={name} mult={purchaseMultiplier} />
+          ))}
         </Grid>
       </Paper>
     </>
@@ -228,29 +225,36 @@ function PublicButtons({ rerender }: IPublicButtonsProps): React.ReactElement {
 
   return (
     <>
-      <Tooltip title={<Typography>{sellSharesTooltip}</Typography>}>
-        <Button disabled={sellSharesOnCd} onClick={() => setSellSharesOpen(true)}>
-          Sell Shares
-        </Button>
-      </Tooltip>
-      <SellSharesModal open={sellSharesOpen} onClose={() => setSellSharesOpen(false)} rerender={rerender} />
-      <Tooltip title={<Typography>Buy back shares you that previously issued or sold at market price.</Typography>}>
-        <Button disabled={corp.issuedShares < 1} onClick={() => setBuybackSharesOpen(true)}>
-          Buyback shares
-        </Button>
-      </Tooltip>
-      <BuybackSharesModal open={buybackSharesOpen} onClose={() => setBuybackSharesOpen(false)} rerender={rerender} />
-      <Tooltip title={<Typography>{issueNewSharesTooltip}</Typography>}>
-        <Button disabled={issueNewSharesOnCd} onClick={() => setIssueNewSharesOpen(true)}>
-          Issue New Shares
-        </Button>
-      </Tooltip>
-      <IssueNewSharesModal open={issueNewSharesOpen} onClose={() => setIssueNewSharesOpen(false)} />
-      <Tooltip
-        title={<Typography>Manage the dividends that are paid out to shareholders (including yourself)</Typography>}
+      <ButtonWithTooltip
+        normalTooltip={sellSharesTooltip}
+        disabledTooltip={sellSharesOnCd ? "On cooldown" : ""}
+        onClick={() => setSellSharesOpen(true)}
       >
-        <Button onClick={() => setIssueDividendsOpen(true)}>Issue Dividends</Button>
-      </Tooltip>
+        Sell Shares
+      </ButtonWithTooltip>
+      <SellSharesModal open={sellSharesOpen} onClose={() => setSellSharesOpen(false)} rerender={rerender} />
+      <ButtonWithTooltip
+        normalTooltip={"Buy back shares you that previously issued or sold at market price."}
+        disabledTooltip={corp.issuedShares < 1 ? "No shares available to buy back" : ""}
+        onClick={() => setBuybackSharesOpen(true)}
+      >
+        Buyback shares
+      </ButtonWithTooltip>
+      <BuybackSharesModal open={buybackSharesOpen} onClose={() => setBuybackSharesOpen(false)} rerender={rerender} />
+      <ButtonWithTooltip
+        normalTooltip={issueNewSharesTooltip}
+        disabledTooltip={issueNewSharesOnCd ? "On cooldown" : ""}
+        onClick={() => setIssueNewSharesOpen(true)}
+      >
+        Issue New Shares
+      </ButtonWithTooltip>
+      <IssueNewSharesModal open={issueNewSharesOpen} onClose={() => setIssueNewSharesOpen(false)} />
+      <ButtonWithTooltip
+        normalTooltip={"Manage the dividends that are paid out to shareholders (including yourself)"}
+        onClick={() => setIssueDividendsOpen(true)}
+      >
+        Issue Dividends
+      </ButtonWithTooltip>
       <IssueDividendsModal open={issueDividendsOpen} onClose={() => setIssueDividendsOpen(false)} />
     </>
   );
@@ -270,17 +274,13 @@ function BribeButton(): React.ReactElement {
 
   return (
     <>
-      <Tooltip
-        title={
-          canBribe
-            ? "Use your Corporations power and influence to bribe Faction leaders in exchange for reputation"
-            : "Your Corporation is not powerful enough to bribe Faction leaders"
-        }
+      <ButtonWithTooltip
+        normalTooltip={"Use your Corporations power and influence to bribe Faction leaders in exchange for reputation"}
+        disabledTooltip={canBribe ? "" : "Your Corporation is not powerful enough to bribe Faction leaders"}
+        onClick={openBribe}
       >
-        <Button disabled={!canBribe} onClick={openBribe}>
-          Bribe Factions
-        </Button>
-      </Tooltip>
+        Bribe Factions
+      </ButtonWithTooltip>
       <BribeFactionModal open={open} onClose={() => setOpen(false)} />
     </>
   );
@@ -294,9 +294,9 @@ function SellDivisionButton(): React.ReactElement {
   }
   return (
     <>
-      <Tooltip title={"Sell a division to make room for other divisions"}>
-        <Button onClick={sellDiv}>Sell division</Button>
-      </Tooltip>
+      <ButtonWithTooltip normalTooltip={"Sell a division to make room for other divisions"} onClick={sellDiv}>
+        Sell division
+      </ButtonWithTooltip>
       <SellDivisionModal open={open} onClose={() => setOpen(false)} />
     </>
   );
@@ -311,9 +311,9 @@ function RestartButton(): React.ReactElement {
 
   return (
     <>
-      <Tooltip title={"Sell corporation and start over"}>
-        <Button onClick={restart}>Sell CEO position</Button>
-      </Tooltip>
+      <ButtonWithTooltip normalTooltip={"Sell corporation and start over"} onClick={restart}>
+        Sell CEO position
+      </ButtonWithTooltip>
       <SellCorporationModal open={open} onClose={() => setOpen(false)} />
     </>
   );
@@ -332,10 +332,10 @@ function DividendsStats({ profit }: IDividendsStatsProps): React.ReactElement {
   return (
     <StatsTable
       rows={[
-        ["Retained Profits (after dividends):", <MoneyRate money={retainedEarnings} />],
+        ["Retained Profits (after dividends):", <MoneyRate key="profits" money={retainedEarnings} />],
         ["Dividend Percentage:", formatPercent(corp.dividendRate, 0)],
-        ["Dividends per share:", <MoneyRate money={dividendsPerShare} />],
-        ["Your earnings as a shareholder:", <MoneyRate money={playerEarnings} />],
+        ["Dividends per share:", <MoneyRate key="dividends" money={dividendsPerShare} />],
+        ["Your earnings as a shareholder:", <MoneyRate key="earnings" money={playerEarnings} />],
       ]}
     />
   );

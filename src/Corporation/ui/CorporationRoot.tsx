@@ -3,8 +3,7 @@
 // divisions, see an overview of your corporation, or create a new industry
 import React, { useState } from "react";
 import { MainPanel } from "./MainPanel";
-import { IndustryType } from "../data/Enums";
-import { ExpandIndustryTab } from "./ExpandIndustryTab";
+import { NewDivisionTab } from "./NewDivisionTab";
 import { Player } from "@player";
 import { Context } from "./Context";
 import { Overview } from "./Overview";
@@ -15,29 +14,28 @@ import { useRerender } from "../../ui/React/hooks";
 
 export function CorporationRoot(): React.ReactElement {
   const rerender = useRerender(200);
+  const [divisionName, setDivisionName] = useState<string | number>("Overview");
+
   const corporation = Player.corporation;
   if (corporation === null) return <></>;
-  const [divisionName, setDivisionName] = useState<string | number>("Overview");
-  function handleChange(event: React.SyntheticEvent, tab: string | number): void {
+
+  function handleChange(_event: React.SyntheticEvent, tab: string | number): void {
     setDivisionName(tab);
   }
 
-  const canExpand =
-    Object.values(IndustryType).filter(
-      (industryType) => corporation.divisions.find((division) => division.type === industryType) === undefined,
-    ).length > 0;
+  const canExpand = corporation.divisions.size < corporation.maxDivisions;
 
   return (
     <Context.Corporation.Provider value={corporation}>
       <Tabs variant="scrollable" value={divisionName} onChange={handleChange} sx={{ maxWidth: "65vw" }} scrollButtons>
         <Tab label={corporation.name} value={"Overview"} />
-        {corporation.divisions.map((div) => (
+        {[...corporation.divisions.values()].map((div) => (
           <Tab key={div.name} label={div.name} value={div.name} />
         ))}
         {canExpand && <Tab label={"Expand"} value={-1} />}
       </Tabs>
       {divisionName === "Overview" && <Overview rerender={rerender} />}
-      {divisionName === -1 && <ExpandIndustryTab setDivisionName={setDivisionName} />}
+      {divisionName === -1 && <NewDivisionTab setDivisionName={setDivisionName} />}
       {typeof divisionName === "string" && divisionName !== "Overview" && (
         <MainPanel rerender={rerender} divisionName={divisionName + ""} />
       )}

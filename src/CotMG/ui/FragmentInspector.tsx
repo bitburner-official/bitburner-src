@@ -7,12 +7,12 @@ import { formatPercent, formatStaneksGiftCharge, formatStaneksGiftPower } from "
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
-type IProps = {
+interface IProps {
   gift: StaneksGift;
   fragment: ActiveFragment | undefined;
   x: number;
   y: number;
-};
+}
 
 export function FragmentInspector(props: IProps): React.ReactElement {
   const [, setC] = useState(new Date());

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 interface IProps {
   initialValue: number;
-  callback: (event: Event | React.SyntheticEvent<Element, Event>, newValue: number | number[]) => void;
+  callback: (event: Event | React.SyntheticEvent, newValue: number | number[]) => void;
   step: number;
   min: number;
   max: number;
@@ -15,7 +15,7 @@ interface IProps {
 export const OptionsSlider = (props: IProps): React.ReactElement => {
   const [value, setValue] = useState(props.initialValue);
 
-  const onChange = (_evt: Event, newValue: number | Array<number>): void => {
+  const onChange = (_evt: Event, newValue: number | number[]): void => {
     if (typeof newValue === "number") setValue(newValue);
   };
 

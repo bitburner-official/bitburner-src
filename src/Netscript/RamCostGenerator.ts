@@ -118,6 +118,7 @@ const hacknet = {
 
 // Stock API
 const stock = {
+  getConstants: 0,
   hasWSEAccount: 0.05,
   hasTIXAPIAccess: 0.05,
   has4SData: 0.05,
@@ -188,6 +189,7 @@ const singularity = {
   getCrimeStats: SF4Cost(RamCostConstants.SingularityFn3),
   getOwnedAugmentations: SF4Cost(RamCostConstants.SingularityFn3),
   getOwnedSourceFiles: SF4Cost(RamCostConstants.SingularityFn3),
+  getAugmentationFactions: SF4Cost(RamCostConstants.SingularityFn3),
   getAugmentationsFromFaction: SF4Cost(RamCostConstants.SingularityFn3),
   getAugmentationPrereq: SF4Cost(RamCostConstants.SingularityFn3),
   getAugmentationPrice: SF4Cost(RamCostConstants.SingularityFn3 / 2),
@@ -348,13 +350,13 @@ const grafting = {
 
 const corporation = {
   hasCorporation: 0, // This one is free
-  getConstants: RamCostConstants.Corporation,
+  getConstants: 0,
   getIndustryData: RamCostConstants.Corporation,
   getMaterialData: RamCostConstants.Corporation,
   issueNewShares: RamCostConstants.Corporation,
   createCorporation: RamCostConstants.Corporation,
-  hasUnlockUpgrade: RamCostConstants.Corporation,
-  getUnlockUpgradeCost: RamCostConstants.Corporation,
+  hasUnlock: RamCostConstants.Corporation,
+  getUnlockCost: RamCostConstants.Corporation,
   getUpgradeLevel: RamCostConstants.Corporation,
   getUpgradeLevelCost: RamCostConstants.Corporation,
   getInvestmentOffer: RamCostConstants.Corporation,
@@ -365,7 +367,7 @@ const corporation = {
   getDivision: RamCostConstants.Corporation,
   expandIndustry: RamCostConstants.Corporation,
   expandCity: RamCostConstants.Corporation,
-  unlockUpgrade: RamCostConstants.Corporation,
+  purchaseUnlock: RamCostConstants.Corporation,
   levelUpgrade: RamCostConstants.Corporation,
   issueDividends: RamCostConstants.Corporation,
   buyBackShares: RamCostConstants.Corporation,
@@ -534,11 +536,13 @@ export const RamCosts: RamCostTree<NSFull> = {
   getMoneySources: RamCostConstants.GetMoneySourcesCost,
   mv: 0,
   getResetInfo: 1,
+  getFunctionRamCost: 0,
   tail: 0,
   toast: 0,
   moveTail: 0,
   resizeTail: 0,
   closeTail: 0,
+  setTitle: 0,
   clearPort: 0,
   openDevMenu: 0,
   alert: 0,
@@ -548,7 +552,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   alterReality: 0,
   rainbow: 0,
   heart: { break: 0 },
-  iKnowWhatImDoing: 0,
+  tprintRaw: 0,
   printRaw: 0,
 
   formulas: {
@@ -611,35 +615,27 @@ export const RamCosts: RamCostTree<NSFull> = {
   },
 } as const;
 
-export function getRamCost(...args: string[]): number {
-  if (args.length === 0) {
-    console.warn(`No arguments passed to getRamCost()`);
-    return 0;
-  }
+type RamTreeGeneric = { [key: string]: number | (() => number) | RamTreeGeneric | undefined };
 
-  let curr = RamCosts[args[0] as keyof typeof RamCosts];
-  for (let i = 1; i < args.length; ++i) {
-    if (curr == null) {
-      console.warn(`Invalid function passed to getRamCost: ${args}`);
+export function getRamCost(tree: string[], throwOnUndefined = false): number {
+  if (tree.length === 0) throw new Error(`No arguments passed to getRamCost()`);
+
+  let obj: RamTreeGeneric = RamCosts;
+
+  for (const branch of tree) {
+    const next = obj[branch];
+    if (next === undefined) {
+      // If no ram cost is defined (e.g. for removed functions), the cost is 0.
+      const errorText = `No ram cost is defined for (ns.${tree.join(".")})`;
+      if (throwOnUndefined) throw errorText;
       return 0;
     }
-
-    const currType = typeof curr;
-    if (currType === "function" || currType === "number") {
-      break;
+    if (next && typeof next === "object") {
+      obj = next;
+      continue;
     }
 
-    curr = curr[args[i] as keyof typeof curr];
+    return typeof next === "function" ? next() : next;
   }
-
-  if (typeof curr === "number") {
-    return curr;
-  }
-
-  if (typeof curr === "function") {
-    return curr();
-  }
-
-  console.warn(`Unexpected type (${curr}) for value [${args}]`);
-  return 0;
+  throw new Error(`Tried to get ram cost for ns.${tree.join(".")} but the value was an invalid type`);
 }

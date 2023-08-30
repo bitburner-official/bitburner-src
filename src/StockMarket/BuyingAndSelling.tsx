@@ -9,9 +9,9 @@ import {
   processTransactionForecastMovement,
 } from "./StockMarketHelpers";
 
-import { PositionTypes } from "./data/PositionTypes";
+import { PositionType } from "@enums";
 
-import { CONSTANTS } from "../Constants";
+import { StockMarketConstants } from "./data/Constants";
 import { Player } from "@player";
 
 import { formatMoney, formatShares } from "../ui/formatNumber";
@@ -59,7 +59,7 @@ export function buyStock(
   }
 
   // Does player have enough money?
-  const totalPrice = getBuyTransactionCost(stock, shares, PositionTypes.Long);
+  const totalPrice = getBuyTransactionCost(stock, shares, PositionType.Long);
   if (totalPrice == null) {
     return false;
   }
@@ -103,7 +103,7 @@ export function buyStock(
 
   const origTotal = stock.playerShares * stock.playerAvgPx;
   Player.loseMoney(totalPrice, "stock");
-  const newTotal = origTotal + totalPrice - CONSTANTS.StockMarketCommission;
+  const newTotal = origTotal + totalPrice - StockMarketConstants.StockMarketCommission;
   stock.playerShares = Math.round(stock.playerShares + shares);
   stock.playerAvgPx = newTotal / stock.playerShares;
   processTransactionForecastMovement(stock, shares);
@@ -114,13 +114,13 @@ export function buyStock(
   if (ctx) {
     const resultTxt = `Bought ${formatShares(shares)} shares of ${stock.symbol} for ${formatMoney(
       totalPrice,
-    )}. Paid ${formatMoney(CONSTANTS.StockMarketCommission)} in commission fees.`;
+    )}. Paid ${formatMoney(StockMarketConstants.StockMarketCommission)} in commission fees.`;
     helpers.log(ctx, () => resultTxt);
   } else if (opts.suppressDialog !== true) {
     dialogBoxCreate(
       <>
         Bought {formatShares(shares)} shares of {stock.symbol} for <Money money={totalPrice} />. Paid{" "}
-        <Money money={CONSTANTS.StockMarketCommission} /> in commission fees.
+        <Money money={StockMarketConstants.StockMarketCommission} /> in commission fees.
       </>,
     );
   }
@@ -162,7 +162,7 @@ export function sellStock(
     return false;
   }
 
-  const gains = getSellTransactionGain(stock, shares, PositionTypes.Long);
+  const gains = getSellTransactionGain(stock, shares, PositionType.Long);
   if (gains == null) {
     return false;
   }
@@ -236,7 +236,7 @@ export function shortStock(
   }
 
   // Does the player have enough money?
-  const totalPrice = getBuyTransactionCost(stock, shares, PositionTypes.Short);
+  const totalPrice = getBuyTransactionCost(stock, shares, PositionType.Short);
   if (totalPrice == null) {
     return false;
   }
@@ -278,7 +278,7 @@ export function shortStock(
 
   const origTotal = stock.playerShortShares * stock.playerAvgShortPx;
   Player.loseMoney(totalPrice, "stock");
-  const newTotal = origTotal + totalPrice - CONSTANTS.StockMarketCommission;
+  const newTotal = origTotal + totalPrice - StockMarketConstants.StockMarketCommission;
   stock.playerShortShares = Math.round(stock.playerShortShares + shares);
   stock.playerAvgShortPx = newTotal / stock.playerShortShares;
   processTransactionForecastMovement(stock, shares);
@@ -290,14 +290,14 @@ export function shortStock(
   if (ctx) {
     const resultTxt =
       `Bought a short position of ${formatShares(shares)} shares of ${stock.symbol} ` +
-      `for ${formatMoney(totalPrice)}. Paid ${formatMoney(CONSTANTS.StockMarketCommission)} ` +
+      `for ${formatMoney(totalPrice)}. Paid ${formatMoney(StockMarketConstants.StockMarketCommission)} ` +
       `in commission fees.`;
     helpers.log(ctx, () => resultTxt);
   } else if (!opts.suppressDialog) {
     dialogBoxCreate(
       <>
         Bought a short position of {formatShares(shares)} shares of {stock.symbol} for <Money money={totalPrice} />.
-        Paid <Money money={CONSTANTS.StockMarketCommission} /> in commission fees.
+        Paid <Money money={StockMarketConstants.StockMarketCommission} /> in commission fees.
       </>,
     );
   }
@@ -340,7 +340,7 @@ export function sellShort(
   }
 
   const origCost = shares * stock.playerAvgShortPx;
-  const totalGain = getSellTransactionGain(stock, shares, PositionTypes.Short);
+  const totalGain = getSellTransactionGain(stock, shares, PositionType.Short);
   if (totalGain == null || isNaN(totalGain) || origCost == null) {
     if (ctx) {
       helpers.log(

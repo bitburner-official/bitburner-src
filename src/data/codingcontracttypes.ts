@@ -3,7 +3,7 @@ import { MinHeap } from "../utils/Heap";
 
 import { comprGenChar, comprLZGenerate, comprLZEncode, comprLZDecode } from "../utils/CompressionContracts";
 import { HammingEncode, HammingDecode, HammingEncodeProperly } from "../utils/HammingCodeTools";
-/* tslint:disable:completed-docs no-magic-numbers arrow-return-shorthand */
+import { filterTruthy } from "../utils/helpers/ArrayHelpers";
 
 /* Function that generates a valid 'data' for a contract type */
 export type GeneratorFunc = () => unknown;
@@ -270,14 +270,16 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       let l = 0;
       let r: number = n - 1;
       let k = 0;
-      while (true) {
+      let done = false;
+      while (!done) {
         // Up
         for (let col: number = l; col <= r; col++) {
           spiral[k] = data[u][col];
           ++k;
         }
         if (++u > d) {
-          break;
+          done = true;
+          continue;
         }
 
         // Right
@@ -286,7 +288,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
           ++k;
         }
         if (--r < l) {
-          break;
+          done = true;
+          continue;
         }
 
         // Down
@@ -295,7 +298,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
           ++k;
         }
         if (--d < u) {
-          break;
+          done = true;
+          continue;
         }
 
         // Left
@@ -304,7 +308,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
           ++k;
         }
         if (++l > r) {
-          break;
+          done = true;
+          continue;
         }
       }
 
@@ -532,7 +537,9 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       }
 
       const sanitizedAns: string = removeBracketsFromArrayString(ans).replace(/\s/g, "");
-      const ansArr: string[] = sanitizedAns.split(",").map((ip) => ip.replace(/^"|"$/g, ""));
+      const ansArr: string[] = sanitizedAns
+        .split(",")
+        .map((ip) => ip.replace(/^(?<quote>['"])([\d.]*)\k<quote>$/g, "$2"));
       if (ansArr.length !== ret.length) {
         return false;
       }
@@ -1254,7 +1261,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       }
 
       const sanitizedPlayerAns: string = removeBracketsFromArrayString(ans);
-      const sanitizedPlayerAnsArr: string[] = sanitizedPlayerAns.split(",");
+      // Don't include any "" entries in the parsed array
+      const sanitizedPlayerAnsArr: string[] = filterTruthy(sanitizedPlayerAns.split(","));
       for (let i = 0; i < sanitizedPlayerAnsArr.length; ++i) {
         sanitizedPlayerAnsArr[i] = removeQuotesFromString(sanitizedPlayerAnsArr[i]).replace(/\s/g, "");
       }
@@ -1333,7 +1341,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     gen: (): string => {
       const _alteredBit = Math.round(Math.random());
-      const _buildArray: Array<string> = HammingEncodeProperly(
+      const _buildArray: string[] = HammingEncodeProperly(
         getRandomInt(Math.pow(2, 4), Math.pow(2, getRandomInt(1, 57))),
       ).split("");
       if (_alteredBit) {
@@ -1423,21 +1431,21 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       return [n + m, edges];
     },
     solver: (_data: unknown, ans: string): boolean => {
+      //Helper function to get neighbourhood of a vertex
+      function neighbourhood(vertex: number): number[] {
+        const adjLeft = data[1].filter(([a]) => a == vertex).map(([, b]) => b);
+        const adjRight = data[1].filter(([, b]) => b == vertex).map(([a]) => a);
+        return adjLeft.concat(adjRight);
+      }
+
       const data = _data as [number, [number, number][]];
 
       //Sanitize player input
-      const sanitizedPlayerAns: string = removeBracketsFromArrayString(ans);
+      const sanitizedPlayerAns = removeBracketsFromArrayString(ans);
 
       //Case where the player believes there is no solution.
       //Attempt to construct one to check if this is correct.
       if (sanitizedPlayerAns === "") {
-        //Helper function to get neighbourhood of a vertex
-        function neighbourhood(vertex: number): number[] {
-          const adjLeft = data[1].filter(([a]) => a == vertex).map(([, b]) => b);
-          const adjRight = data[1].filter(([, b]) => b == vertex).map(([a]) => a);
-          return adjLeft.concat(adjRight);
-        }
-
         //Verify that there is no solution by attempting to create a proper 2-coloring.
         const coloring: (number | undefined)[] = Array(data[0]).fill(undefined);
         while (coloring.some((val) => val === undefined)) {

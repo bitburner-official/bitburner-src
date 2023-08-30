@@ -1,14 +1,14 @@
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { Work, WorkType } from "./Work";
+import { SleeveWorkClass, SleeveWorkType } from "./Work";
 import { calculateIntelligenceBonus } from "../../formulas/intelligence";
 
-export const isSleeveSynchroWork = (w: Work | null): w is SleeveSynchroWork =>
-  w !== null && w.type === WorkType.SYNCHRO;
+export const isSleeveSynchroWork = (w: SleeveWorkClass | null): w is SleeveSynchroWork =>
+  w !== null && w.type === SleeveWorkType.SYNCHRO;
 
-export class SleeveSynchroWork extends Work {
-  type: WorkType.SYNCHRO = WorkType.SYNCHRO;
+export class SleeveSynchroWork extends SleeveWorkClass {
+  type: SleeveWorkType.SYNCHRO = SleeveWorkType.SYNCHRO;
 
   process(sleeve: Sleeve, cycles: number) {
     sleeve.sync = Math.min(
@@ -19,7 +19,7 @@ export class SleeveSynchroWork extends Work {
   }
 
   APICopy() {
-    return { type: WorkType.SYNCHRO as "SYNCHRO" };
+    return { type: SleeveWorkType.SYNCHRO as "SYNCHRO" };
   }
 
   /** Serialize the current object to a JSON save state. */

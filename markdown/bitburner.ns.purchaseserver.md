@@ -37,23 +37,11 @@ Note that there is a maximum limit to the amount of servers you can purchase.
 
 Returns the hostname of the newly purchased server as a string. If the function fails to purchase a server, then it will return an empty string. The function will fail if the arguments passed in are invalid, if the player does not have enough money to purchase the specified server, or if the player has exceeded the maximum amount of servers.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-var ram = 64;
-var prefix = "pserv-";
-for (i = 0; i < 5; ++i) {
-   purchaseServer(prefix + i, ram);
-}
-```
-
-## Example 2
-
-
-```ts
-// NS2:
+```js
+// Attempt to purchase 5 servers with 64GB of ram each
 const ram = 64;
 const prefix = "pserv-";
 for (i = 0; i < 5; ++i) {

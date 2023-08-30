@@ -15,14 +15,14 @@ export interface ICreateProps {
   active?: boolean;
 }
 
-export interface IProps extends ICreateProps {
+export interface SidebarItemProps extends ICreateProps {
   clickFn: () => void;
   flash: boolean;
   classes: any;
   sidebarOpen: boolean;
 }
 
-export const SidebarItem = memo(function (props: IProps): React.ReactElement {
+export const SidebarItem = memo(function SidebarItem(props: SidebarItemProps): React.ReactElement {
   const color = props.flash ? "error" : props.active ? "primary" : "secondary";
   return (
     <ListItem
@@ -40,7 +40,7 @@ export const SidebarItem = memo(function (props: IProps): React.ReactElement {
         </Badge>
       </ListItemIcon>
       <ListItemText>
-        <Typography color={color} children={props.key_} />
+        <Typography color={color}>{props.key_}</Typography>
       </ListItemText>
     </ListItem>
   );

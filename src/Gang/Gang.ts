@@ -14,7 +14,6 @@ import { getRandomInt } from "../utils/helpers/getRandomInt";
 
 import { GangMemberUpgrade } from "./GangMemberUpgrade";
 import { GangConstants } from "./data/Constants";
-import { CONSTANTS } from "../Constants";
 import { GangMemberTasks } from "./GangMemberTasks";
 import { IAscensionResult } from "./IAscensionResult";
 
@@ -24,17 +23,21 @@ import { GangMember } from "./GangMember";
 import { WorkerScript } from "../Netscript/WorkerScript";
 import { Player } from "@player";
 import { PowerMultiplier } from "./data/power";
+import { FactionName } from "@enums";
 
 export class Gang {
-  facName: string;
+  facName: FactionName;
   members: GangMember[];
   wanted: number;
   respect: number;
 
   isHackingGang: boolean;
 
+  /** Respect gain rate, per cycle */
   respectGainRate: number;
+  /** Wanted level gain rate, per cycle */
   wantedGainRate: number;
+  /** Money gain rate, per cycle */
   moneyGainRate: number;
 
   storedCycles: number;
@@ -46,7 +49,7 @@ export class Gang {
 
   notifyMemberDeath: boolean;
 
-  constructor(facName = "", hacking = false) {
+  constructor(facName = FactionName.SlumSnakes, hacking = false) {
     this.facName = facName;
     this.members = [];
     this.wanted = 1;
@@ -80,19 +83,16 @@ export class Gang {
     return AllGangs[this.facName].territory;
   }
 
+  /** Main process function called by the engine loop every game cycle */
   process(numCycles = 1): void {
-    // Run every cycle
-    const CyclesPerSecond = 1000 / CONSTANTS.MilliPerCycle;
-
     if (isNaN(numCycles)) {
       console.error(`NaN passed into Gang.process(): ${numCycles}`);
     }
     this.storedCycles += numCycles;
+    if (this.storedCycles < GangConstants.minCyclesToProcess) return;
 
-    // Only process if there are at least 2 seconds, and at most 5 seconds
-    // works out as 5 * 5 for 25x per cycle during bonus time
-    if (this.storedCycles < 2 * CyclesPerSecond) return;
-    const cycles = Math.min(this.storedCycles, 5 * CyclesPerSecond);
+    // Calculate how many cycles to actually process.
+    const cycles = Math.min(this.storedCycles, GangConstants.maxCyclesToProcess);
 
     try {
       this.processGains(cycles);
@@ -104,50 +104,62 @@ export class Gang {
     }
   }
 
-  processGains(numCycles = 1): void {
-    // Get gains per cycle
-    let moneyGains = 0;
-    let respectGains = 0;
-    let wantedLevelGains = 0;
+  /** Process respect/wanted/money gains
+   * @param numCycles The number of cycles to process. */
+  processGains(numCycles: number): void {
+    let moneyGainPerCycle = 0;
+    let wantedLevelGainPerCycle = 0;
+    let respectGainsTotal = 0;
+    /** Number of members performing actions that lower wanted level */
     let justice = 0;
-    for (let i = 0; i < this.members.length; ++i) {
-      respectGains += this.members[i].earnRespect(numCycles, this);
-      moneyGains += this.members[i].calculateMoneyGain(this);
-      const wantedLevelGain = this.members[i].calculateWantedLevelGain(this);
-      wantedLevelGains += wantedLevelGain;
-      if (this.members[i].getTask().baseWanted < 0) justice++; // this member is lowering wanted.
+
+    for (const member of this.members) {
+      respectGainsTotal += member.earnRespect(numCycles, this);
+      moneyGainPerCycle += member.calculateMoneyGain(this);
+      wantedLevelGainPerCycle += member.calculateWantedLevelGain(this);
+      if (member.getTask().baseWanted < 0) justice++;
     }
-    this.respectGainRate = respectGains;
-    this.wantedGainRate = wantedLevelGains;
-    this.moneyGainRate = moneyGains;
-    const gain = respectGains;
-    this.respect += gain;
+
+    this.respectGainRate = respectGainsTotal / numCycles;
+    this.wantedGainRate = wantedLevelGainPerCycle;
+    this.moneyGainRate = moneyGainPerCycle;
+    this.respect += respectGainsTotal;
+
     // Faction reputation gains is respect gain divided by some constant
-    const fac = Factions[this.facName];
-    if (!fac) {
+    const gangFaction = Factions[this.facName];
+    if (!gangFaction) {
       dialogBoxCreate(
         "ERROR: Could not get Faction associates with your gang. This is a bug, please report to game dev",
       );
       throw new Error("Could not find the faction associated with this gang.");
     }
-    const favorMult = 1 + fac.favor / 100;
+    const favorMult = 1 + gangFaction.favor / 100;
 
-    fac.playerReputation += (Player.mults.faction_rep * gain * favorMult) / GangConstants.GangRespectToReputationRatio;
+    gangFaction.playerReputation +=
+      (Player.mults.faction_rep * respectGainsTotal * favorMult) / GangConstants.GangRespectToReputationRatio;
 
-    if (!(this.wanted === 1 && wantedLevelGains < 0)) {
+    if (!(this.wanted === 1 && wantedLevelGainPerCycle < 0)) {
       const oldWanted = this.wanted;
-      let newWanted = oldWanted + wantedLevelGains * numCycles;
+      let newWanted = oldWanted + wantedLevelGainPerCycle * numCycles;
       newWanted = newWanted * (1 - justice * 0.001); // safeguard
       // Prevent overflow
-      if (wantedLevelGains <= 0 && newWanted > oldWanted) newWanted = 1;
+      if (wantedLevelGainPerCycle <= 0 && newWanted > oldWanted) newWanted = 1;
 
       this.wanted = newWanted;
       if (this.wanted < 1) this.wanted = 1;
     }
-    Player.gainMoney(moneyGains * numCycles, "gang");
+    Player.gainMoney(moneyGainPerCycle * numCycles, "gang");
   }
 
-  processTerritoryAndPowerGains(numCycles = 1): void {
+  /** Process Territory and Power
+   * @param numCycles The number of cycles to process. */
+  processTerritoryAndPowerGains(numCycles: number): void {
+    function calculateTerritoryGain(winGang: string, loseGang: string): number {
+      const powerBonus = Math.max(1, 1 + Math.log(AllGangs[winGang].power / AllGangs[loseGang].power) / Math.log(50));
+      const gains = Math.min(AllGangs[loseGang].territory, powerBonus * 0.0001 * (Math.random() + 0.5));
+      return gains;
+    }
+
     this.storedTerritoryAndPowerCycles += numCycles;
     if (this.storedTerritoryAndPowerCycles < GangConstants.CyclesPerTerritoryAndPowerUpdate) return;
     this.storedTerritoryAndPowerCycles -= GangConstants.CyclesPerTerritoryAndPowerUpdate;
@@ -155,7 +167,7 @@ export class Gang {
     // Process power first
     const gangName = this.facName;
     for (const name of Object.keys(AllGangs)) {
-      if (AllGangs.hasOwnProperty(name)) {
+      if (Object.hasOwn(AllGangs, name)) {
         if (name == gangName) {
           AllGangs[name].power += this.calculatePower();
         } else {
@@ -208,15 +220,6 @@ export class Gang {
         const otherPwr = AllGangs[otherGang].power;
         const thisChance = thisPwr / (thisPwr + otherPwr);
 
-        function calculateTerritoryGain(winGang: string, loseGang: string): number {
-          const powerBonus = Math.max(
-            1,
-            1 + Math.log(AllGangs[winGang].power / AllGangs[loseGang].power) / Math.log(50),
-          );
-          const gains = Math.min(AllGangs[loseGang].territory, powerBonus * 0.0001 * (Math.random() + 0.5));
-          return gains;
-        }
-
         if (Math.random() < thisChance) {
           if (AllGangs[otherGang].territory <= 0) return;
           const territoryGain = calculateTerritoryGain(thisGang, otherGang);
@@ -253,10 +256,12 @@ export class Gang {
     }
   }
 
-  processExperienceGains(numCycles = 1): void {
-    for (let i = 0; i < this.members.length; ++i) {
-      this.members[i].gainExperience(numCycles);
-      this.members[i].updateSkillLevels();
+  /** Process member experience gain
+   * @param numCycles The number of cycles to process. */
+  processExperienceGains(numCycles: number): void {
+    for (const member of this.members) {
+      member.gainExperience(numCycles);
+      member.updateSkillLevels();
     }
   }
 
@@ -320,8 +325,7 @@ export class Gang {
   calculatePower(): number {
     let memberTotal = 0;
     for (let i = 0; i < this.members.length; ++i) {
-      if (!GangMemberTasks.hasOwnProperty(this.members[i].task) || this.members[i].task !== "Territory Warfare")
-        continue;
+      if (this.members[i].task !== "Territory Warfare") continue;
       memberTotal += this.members[i].calculatePower();
     }
     return 0.015 * Math.max(0.002, this.getTerritory()) * memberTotal;

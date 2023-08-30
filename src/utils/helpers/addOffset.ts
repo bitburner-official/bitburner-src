@@ -18,6 +18,5 @@ export function addOffset(midpoint: number, percentage: number): number {
   const offset: number = midpoint * (percentage / maxPercent);
 
   // Double the range to account for both sides of the midpoint.
-  // tslint:disable-next-line:no-magic-numbers
   return midpoint + (Math.random() * (offset * 2) - offset);
 }

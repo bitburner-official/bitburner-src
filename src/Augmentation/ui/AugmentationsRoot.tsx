@@ -19,8 +19,8 @@ import Container from "@mui/material/Container";
 import { Settings } from "../../Settings/Settings";
 import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
 import { Player } from "@player";
-import { AugmentationNames } from "../data/AugmentationNames";
-import { StaticAugmentations } from "../StaticAugmentations";
+import { AugmentationName } from "@enums";
+import { Augmentations } from "../Augmentations";
 import { CONSTANTS } from "../../Constants";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { Info } from "@mui/icons-material";
@@ -29,7 +29,7 @@ import { AlertEvents } from "../../ui/React/AlertManager";
 import { useRerender } from "../../ui/React/hooks";
 
 const NeuroFluxDisplay = (): React.ReactElement => {
-  const level = Player.augmentations.find((e) => e.name === AugmentationNames.NeuroFluxGovernor)?.level ?? 0;
+  const level = Player.augmentations.find((e) => e.name === AugmentationName.NeuroFluxGovernor)?.level ?? 0;
 
   const openBloodDonation = () => {
     AlertEvents.emit(
@@ -49,11 +49,11 @@ const NeuroFluxDisplay = (): React.ReactElement => {
       <Typography variant="h5" color={Settings.theme.info}>
         NeuroFlux Governor - Level {level}
       </Typography>
-      <Typography color={Settings.theme.info}>
-        {StaticAugmentations[AugmentationNames.NeuroFluxGovernor].stats}
+      <Typography color={Settings.theme.info} whiteSpace={"pre-wrap"}>
+        {Augmentations[AugmentationName.NeuroFluxGovernor].stats}
       </Typography>
       <Typography color={Settings.theme.info}>
-        The power of {AugmentationNames.NeuroFluxGovernor} increases with blood donations from players in real life.
+        The power of {AugmentationName.NeuroFluxGovernor} increases with blood donations from players in real life.
         Learn more <Link onClick={openBloodDonation}>here</Link>
       </Typography>
     </Paper>
@@ -154,6 +154,7 @@ export function AugmentationsRoot(props: IProps): React.ReactElement {
                 <br />- skill / experience
                 <br />- every server except home
                 <br />- factions and reputation
+                <br />- current work activity
                 <br />
                 <br />
                 You will keep:
@@ -199,7 +200,7 @@ export function AugmentationsRoot(props: IProps): React.ReactElement {
           my: 1,
           display: "grid",
           gridTemplateColumns: `repeat(${
-            +!!((Player.augmentations.find((e) => e.name === AugmentationNames.NeuroFluxGovernor)?.level ?? 0) > 0) +
+            +!!((Player.augmentations.find((e) => e.name === AugmentationName.NeuroFluxGovernor)?.level ?? 0) > 0) +
             +!!(Player.entropy > 0)
           }, 1fr)`,
           gap: 1,

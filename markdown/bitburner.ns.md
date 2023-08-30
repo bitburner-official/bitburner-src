@@ -14,27 +14,18 @@ export interface NS
 
 ## Remarks
 
-<b>Basic ns1 usage example:</b>
+<b>Basic usage example:</b>
 
-```ts
- // Basic ns functions can be used directly
- getHostname();
- // Some related functions are gathered within a common namespace
- stock.getPrice();
-```
-[ns1 in-game docs](https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html) <hr> <b>Basic ns2 usage example:</b>
-
-```ts
+```js
 export async function main(ns) {
  // Basic ns functions can be accessed on the ns object
  ns.getHostname();
  // Some related functions are gathered under a sub-property of the ns object
  ns.stock.getPrice();
- // Some functions need to be awaited
+ // Most functions that return a promise need to be awaited.
  await ns.hack('n00dles');
 }
 ```
-[ns2 in-game docs](https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html) <hr>
 
 ## Properties
 
@@ -62,7 +53,7 @@ export async function main(ns) {
 |  Method | Description |
 |  --- | --- |
 |  [alert(msg)](./bitburner.ns.alert.md) | Open up a message box. |
-|  [asleep(millis)](./bitburner.ns.asleep.md) | Suspends the script for n milliseconds. Doesn't block with concurrent calls. You should prefer 'sleep' over 'asleep' except when doing very complex UI work. |
+|  [asleep(millis)](./bitburner.ns.asleep.md) | Suspends the script for n milliseconds. Doesn't block with concurrent calls. |
 |  [atExit(f)](./bitburner.ns.atexit.md) | Add callback function when the script dies |
 |  [brutessh(host)](./bitburner.ns.brutessh.md) | Runs BruteSSH.exe on a server. |
 |  [clear(handle)](./bitburner.ns.clear.md) | Clear data from a file. |
@@ -82,6 +73,7 @@ export async function main(ns) {
 |  [ftpcrack(host)](./bitburner.ns.ftpcrack.md) | Runs FTPCrack.exe on a server. |
 |  [getBitNodeMultipliers(n, lvl)](./bitburner.ns.getbitnodemultipliers.md) | Get the current Bitnode multipliers. |
 |  [getFavorToDonate()](./bitburner.ns.getfavortodonate.md) | Returns the amount of Faction favor required to be able to donate to a faction. |
+|  [getFunctionRamCost(name)](./bitburner.ns.getfunctionramcost.md) | Get the ram cost of a netscript function. |
 |  [getGrowTime(host)](./bitburner.ns.getgrowtime.md) | Get the execution time of a grow() call. |
 |  [getHackingLevel()](./bitburner.ns.gethackinglevel.md) | Returns the player’s current hacking level. |
 |  [getHackingMultipliers()](./bitburner.ns.gethackingmultipliers.md) | Get hacking related multipliers. |
@@ -115,7 +107,7 @@ export async function main(ns) {
 |  [getServerRequiredHackingLevel(host)](./bitburner.ns.getserverrequiredhackinglevel.md) | Returns the required hacking level of the target server. |
 |  [getServerSecurityLevel(host)](./bitburner.ns.getserversecuritylevel.md) | Get server security level. |
 |  [getServerUsedRam(host)](./bitburner.ns.getserverusedram.md) | Get the used RAM on a server. |
-|  [getSharePower()](./bitburner.ns.getsharepower.md) | Calculate your share power. Based on all the active share calls. |
+|  [getSharePower()](./bitburner.ns.getsharepower.md) | Share Power has a multiplicative effect on rep/second while doing work for a faction. Share Power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate. |
 |  [getTimeSinceLastAug()](./bitburner.ns.gettimesincelastaug.md) | Returns the amount of time in milliseconds that have passed since you last installed Augmentations. |
 |  [getTotalScriptExpGain()](./bitburner.ns.gettotalscriptexpgain.md) | Get the exp gain of all scripts. |
 |  [getTotalScriptIncome()](./bitburner.ns.gettotalscriptincome.md) | Get the income of all scripts. |
@@ -144,6 +136,7 @@ export async function main(ns) {
 |  [peek(portNumber)](./bitburner.ns.peek.md) | Get a copy of the data from a port without popping it. |
 |  [print(args)](./bitburner.ns.print.md) | Prints one or more values or variables to the script’s logs. |
 |  [printf(format, args)](./bitburner.ns.printf.md) | Prints a formatted string to the script’s logs. |
+|  [printRaw(node)](./bitburner.ns.printraw.md) | Prints a ReactNode to the script logs. |
 |  [prompt(txt, options)](./bitburner.ns.prompt.md) | Prompt the player with an input modal. |
 |  [ps(host)](./bitburner.ns.ps.md) | List running scripts on a server. |
 |  [purchaseServer(hostname, ram)](./bitburner.ns.purchaseserver.md) | Purchase a server. |
@@ -159,6 +152,7 @@ export async function main(ns) {
 |  [scriptKill(script, host)](./bitburner.ns.scriptkill.md) | Kill all scripts with a filename. |
 |  [scriptRunning(script, host)](./bitburner.ns.scriptrunning.md) | Check if any script with a filename is running. |
 |  [serverExists(host)](./bitburner.ns.serverexists.md) | Returns a boolean denoting whether or not the specified server exists. |
+|  [setTitle(title, pid)](./bitburner.ns.settitle.md) | Set the title of the tail window of a script. |
 |  [share()](./bitburner.ns.share.md) | Share the server's ram with your factions. |
 |  [sleep(millis)](./bitburner.ns.sleep.md) | Suspends the script for n milliseconds. |
 |  [spawn(script, threadOrOptions, args)](./bitburner.ns.spawn.md) | Terminate current script and start another in 10 seconds. |
@@ -169,6 +163,7 @@ export async function main(ns) {
 |  [toast(msg, variant, duration)](./bitburner.ns.toast.md) | Queue a toast (bottom-right notification). |
 |  [tprint(args)](./bitburner.ns.tprint.md) | Prints one or more values or variables to the Terminal. |
 |  [tprintf(format, values)](./bitburner.ns.tprintf.md) | Prints a raw value or a variable to the Terminal. |
+|  [tprintRaw(node)](./bitburner.ns.tprintraw.md) | Prints a ReactNode to the terminal. |
 |  [tryWritePort(portNumber, data)](./bitburner.ns.trywriteport.md) | Attempt to write to a port. |
 |  [upgradePurchasedServer(hostname, ram)](./bitburner.ns.upgradepurchasedserver.md) | Upgrade a purchased server's RAM. |
 |  [vsprintf(format, args)](./bitburner.ns.vsprintf.md) | Format a string with an array of arguments. |

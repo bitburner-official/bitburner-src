@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ManagementSubpage } from "./ManagementSubpage";
 import { TerritorySubpage } from "./TerritorySubpage";
 import { EquipmentsSubpage } from "./EquipmentsSubpage";
@@ -7,6 +7,8 @@ import { Context } from "./Context";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+
+import { useRerender } from "../../ui/React/hooks";
 
 /** React Component for all the gang stuff. */
 export function GangRoot(): React.ReactElement {
@@ -20,12 +22,7 @@ export function GangRoot(): React.ReactElement {
     setValue(tab);
   }
 
-  const setRerender = useState(false)[1];
-
-  useEffect(() => {
-    const id = setInterval(() => setRerender((old) => !old), 200);
-    return () => clearInterval(id);
-  }, []);
+  useRerender(200);
 
   return (
     <Context.Gang.Provider value={gang}>

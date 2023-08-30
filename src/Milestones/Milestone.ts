@@ -1,4 +1,4 @@
-export type Milestone = {
+export interface Milestone {
   title: string;
   fulfilled: () => boolean;
-};
+}

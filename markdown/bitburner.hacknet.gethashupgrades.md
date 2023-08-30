@@ -25,19 +25,10 @@ This function is only applicable for Hacknet Servers (the upgraded version of a 
 
 Returns the list of all available hash upgrades that can be used in the spendHashes function.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-var upgrades = hacknet.getHashUpgrades(); // ["Sell for Money","Sell for Corporation Funds",...]
-```
-
-## Example 2
-
-
-```ts
-// NS2:
+```js
 const upgrades = ns.hacknet.getHashUpgrades(); // ["Sell for Money","Sell for Corporation Funds",...]
 ```
 

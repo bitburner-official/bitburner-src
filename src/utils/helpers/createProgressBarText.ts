@@ -25,7 +25,6 @@ export function createProgressBarText(params: IProgressBarConfiguration): string
     totalTicks: 20,
   };
 
-  // tslint:disable-next-line:prefer-object-spread
   const derived: IProgressBarConfigurationMaterialized = Object.assign({}, defaultParams, params);
   // Ensure it is 0..1
   derived.progress = Math.max(Math.min(derived.progress, 1), 0);

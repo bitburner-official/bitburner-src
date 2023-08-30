@@ -9,10 +9,10 @@ import { StockTickerOrder } from "./StockTickerOrder";
 import { Order } from "../Order";
 import { Stock } from "../Stock";
 
-type IProps = {
+interface IProps {
   orders: Order[];
   stock: Stock;
-};
+}
 
 export function StockTickerOrderList(props: IProps): React.ReactElement {
   const orders: React.ReactElement[] = [];

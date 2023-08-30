@@ -1,26 +1,27 @@
 import type { Server as IServer } from "@nsdefs";
+import type { CompletedProgramName, LiteratureName, MessageFilename } from "@enums";
+import type { IPAddress, ServerName } from "../Types/strings";
+import type { FilePath } from "../Paths/FilePath";
+
 import { CodingContract } from "../CodingContracts";
 import { RunningScript } from "../Script/RunningScript";
 import { Script } from "../Script/Script";
 import { TextFile } from "../TextFile";
 import { IReturnStatus } from "../types";
 
-import { ScriptFilePath, hasScriptExtension } from "../Paths/ScriptFilePath";
-import { TextFilePath, hasTextExtension } from "../Paths/TextFilePath";
+import { ScriptFilePath, resolveScriptFilePath, hasScriptExtension } from "../Paths/ScriptFilePath";
+import { Directory, resolveDirectory } from "../Paths/Directory";
+import { TextFilePath, resolveTextFilePath, hasTextExtension } from "../Paths/TextFilePath";
 import { Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { matchScriptPathExact } from "../utils/helpers/scriptKey";
 
 import { createRandomIp } from "../utils/IPAddress";
 import { JSONMap } from "../Types/Jsonable";
-import { IPAddress, ServerName } from "../Types/strings";
-import { FilePath } from "../Paths/FilePath";
 import { ContentFile, ContentFilePath } from "../Paths/ContentFile";
 import { ProgramFilePath, hasProgramExtension } from "../Paths/ProgramFilePath";
-import { MessageFilename } from "src/Message/MessageHelpers";
-import { LiteratureName } from "src/Literature/data/LiteratureNames";
-import { CompletedProgramName } from "src/Programs/Programs";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import lodash from "lodash";
+import { Settings } from "../Settings/Settings";
 
 import type { ScriptKey } from "../utils/helpers/scriptKey";
 
@@ -82,14 +83,14 @@ export abstract class BaseServer implements IServer {
   ramUsed = 0;
 
   // RunningScript files on this server. Keyed first by name/args, then by PID.
-  runningScriptMap: Map<ScriptKey, Map<number, RunningScript>> = new Map();
+  runningScriptMap = new Map<ScriptKey, Map<number, RunningScript>>();
 
   // RunningScript files loaded from the savegame. Only stored here temporarily,
   // this field is undef while the game is running.
   savedScripts: RunningScript[] | undefined = undefined;
 
   // Script files on this Server
-  scripts: JSONMap<ScriptFilePath, Script> = new JSONMap();
+  scripts = new JSONMap<ScriptFilePath, Script>();
 
   // Contains the hostnames of all servers that are immediately
   // reachable from this one
@@ -105,7 +106,7 @@ export abstract class BaseServer implements IServer {
   sshPortOpen = false;
 
   // Text files on this server
-  textFiles: JSONMap<TextFilePath, TextFile> = new JSONMap();
+  textFiles = new JSONMap<TextFilePath, TextFile>();
 
   // Flag indicating whether this is a purchased server
   purchasedByPlayer = false;
@@ -252,7 +253,7 @@ export abstract class BaseServer implements IServer {
     // Check if the script already exists, and overwrite it if it does
     const script = this.scripts.get(filename);
     if (script) {
-      // content setter handles module invalidation and code formatting
+      // content setter handles module invalidation
       script.content = code;
       return { overwritten: true };
     }
@@ -292,6 +293,10 @@ export abstract class BaseServer implements IServer {
     // RunningScripts are stored as a simple array, both for backward compatibility,
     // compactness, and ease of filtering them here.
     const result = Generic_toJSON(ctorName, this, keys);
+    if (Settings.ExcludeRunningScriptsFromSave) {
+      result.data.runningScripts = [];
+      return result;
+    }
 
     const rsArray: RunningScript[] = [];
     for (const byPid of this.runningScriptMap.values()) {
@@ -308,9 +313,56 @@ export abstract class BaseServer implements IServer {
   // Initializes a Server Object from a JSON save state
   // Called by subclasses, not Reviver.
   static fromJSONBase<T extends BaseServer>(value: IReviverValue, ctor: new () => T, keys: readonly (keyof T)[]): T {
-    const result = Generic_fromJSON(ctor, value.data, keys);
-    result.savedScripts = value.data.runningScripts;
-    return result;
+    const server = Generic_fromJSON(ctor, value.data, keys);
+    server.savedScripts = value.data.runningScripts;
+    // If textFiles is not an array, we've already done the 2.3 migration to textFiles and scripts as maps + path changes.
+    if (!Array.isArray(server.textFiles)) return server;
+
+    // Migrate to using maps for scripts and textfiles. This is done here, directly at load, instead of the
+    // usual upgrade logic, for two reasons:
+    // 1) Our utility functions depend on it, so the upgrade logic itself needs the data to be in maps, even the logic
+    //    written earlier than 2.3!
+    // 2) If the upgrade logic throws, and then you soft-reset at the recovery screen (or maybe don't even see the
+    //    recovery screen), you can end up with a "migrated" save that still has arrays.
+    const newDirectory = resolveDirectory("v2.3FileChanges/") as Directory;
+    let invalidScriptCount = 0;
+    // There was a brief dev window where Server.scripts was already a map but the filepath changes weren't in yet.
+    // Thus, we can't skip this logic just because it's already a map.
+    const oldScripts = Array.isArray(server.scripts) ? (server.scripts as Script[]) : [...server.scripts.values()];
+    server.scripts = new JSONMap();
+    // In case somehow there are previously valid filenames that can't be sanitized, they will go in a new directory with a note.
+    for (const script of oldScripts) {
+      // We're about to do type validation on the filename anyway.
+      if (script.filename.endsWith(".ns")) script.filename = (script.filename + ".js") as any;
+      let newFilePath = resolveScriptFilePath(script.filename);
+      if (!newFilePath) {
+        newFilePath = `${newDirectory}script${++invalidScriptCount}.js` as ScriptFilePath;
+        script.content = `// Original path: ${script.filename}. Path was no longer valid\n` + script.content;
+      }
+      script.filename = newFilePath;
+      server.scripts.set(newFilePath, script);
+    }
+    let invalidTextCount = 0;
+
+    const oldTextFiles = server.textFiles as (TextFile & { fn?: string })[];
+    server.textFiles = new JSONMap();
+    for (const textFile of oldTextFiles) {
+      const oldName = textFile.fn ?? textFile.filename;
+      delete textFile.fn;
+
+      let newFilePath = resolveTextFilePath(oldName);
+      if (!newFilePath) {
+        newFilePath = `${newDirectory}text${++invalidTextCount}.txt` as TextFilePath;
+        textFile.content = `// Original path: ${textFile.filename}. Path was no longer valid\n` + textFile.content;
+      }
+      textFile.filename = newFilePath;
+      server.textFiles.set(newFilePath, textFile);
+    }
+    if (invalidScriptCount || invalidTextCount) {
+      // If we had to migrate names, don't run scripts for this server.
+      server.savedScripts = [];
+    }
+    return server;
   }
 
   // Customize a prune list for a subclass.

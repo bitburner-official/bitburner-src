@@ -1,5 +1,4 @@
 import { ITaskParams } from "../ITaskParams";
-/* tslint:disable:max-line-length */
 
 /**
  * Defines the parameters that can be used to initialize and describe a GangMemberTask

@@ -10,9 +10,9 @@ import { asFilePath } from "../../../src/Paths/FilePath";
 import { Directory, isAbsolutePath, isDirectoryPath, root } from "../../../src/Paths/Directory";
 import { hasTextExtension } from "../../../src/Paths/TextFilePath";
 import { hasScriptExtension } from "../../../src/Paths/ScriptFilePath";
-import { LiteratureName } from "../../../src/Literature/data/LiteratureNames";
-import { MessageFilename } from "../../../src/Message/MessageHelpers";
+import { LiteratureName, MessageFilename } from "../../../src/Enums";
 import { Terminal } from "../../../src/Terminal";
+import { IPAddress } from "../../../src/Types/strings";
 
 describe("getTabCompletionPossibilities", function () {
   let closeServer: Server;
@@ -23,7 +23,7 @@ describe("getTabCompletionPossibilities", function () {
     Player.init();
 
     closeServer = new Server({
-      ip: "8.8.8.8",
+      ip: "8.8.8.8" as IPAddress,
       hostname: "near",
       hackDifficulty: 1,
       moneyAvailable: 70000,
@@ -33,7 +33,7 @@ describe("getTabCompletionPossibilities", function () {
       serverGrowth: 3000,
     });
     farServer = new Server({
-      ip: "4.4.4.4",
+      ip: "4.4.4.4" as IPAddress,
       hostname: "far",
       hackDifficulty: 1,
       moneyAvailable: 70000,
@@ -87,23 +87,22 @@ describe("getTabCompletionPossibilities", function () {
   it("completes the scp command", async () => {
     writeFiles();
     let options = await getTabCompletionPossibilities("scp ", root);
-    expect(options.sort()).toEqual(
-      [
-        "note.txt",
-        "folder1/text.txt",
-        "folder1/text2.txt",
-        "hack.js",
-        "weaken.js",
-        "grow.js",
-        "old.script",
-        "folder1/test.js",
-        "anotherFolder/win.js",
-        LiteratureName.AGreenTomorrow,
-      ].sort(),
-    );
+    const filesToMatch = [
+      "note.txt",
+      "folder1/text.txt",
+      "folder1/text2.txt",
+      "hack.js",
+      "weaken.js",
+      "grow.js",
+      "old.script",
+      "folder1/test.js",
+      "anotherFolder/win.js",
+      LiteratureName.AGreenTomorrow,
+    ];
+    expect(options.sort()).toEqual(filesToMatch.sort());
     // Test the second command argument (server name)
     options = await getTabCompletionPossibilities("scp note.txt ", root);
-    expect(options).toEqual(["home", "near", "far"]);
+    expect(options.sort()).toEqual(["home", "near", "far", ...filesToMatch].sort());
   });
 
   it("completes the kill, tail, mem, and check commands", async () => {

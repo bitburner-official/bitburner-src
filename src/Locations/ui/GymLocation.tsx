@@ -16,11 +16,11 @@ import { Page } from "../../ui/Router";
 import { Box } from "@mui/material";
 import { ClassWork, Classes } from "../../Work/ClassWork";
 import { calculateCost } from "../../Work/Formulas";
-import { GymType } from "../../Enums";
+import { GymType } from "@enums";
 
-type IProps = {
+interface IProps {
   loc: Location;
-};
+}
 
 export function GymLocation(props: IProps): React.ReactElement {
   function train(stat: GymType): void {

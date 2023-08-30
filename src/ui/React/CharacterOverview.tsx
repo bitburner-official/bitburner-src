@@ -1,5 +1,5 @@
 // Root React Component for the Corporation UI
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, ReactNode } from "react";
 
 import { Theme, useTheme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
@@ -24,7 +24,7 @@ import { Router } from "../GameRoot";
 import { Page } from "../Router";
 import { Player } from "@player";
 import { StatsProgressOverviewCell } from "./StatsProgressBar";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 
 import { Box, Tooltip } from "@mui/material";
 
@@ -37,10 +37,10 @@ import { ReputationRate } from "./ReputationRate";
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isCrimeWork } from "../../Work/CrimeWork";
 import { ActionIdentifier } from "../../Bladeburner/ActionIdentifier";
-import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { Skills } from "../../PersonObjects/Skills";
 import { calculateSkillProgress } from "../../PersonObjects/formulas/skill";
 import { EventEmitter } from "../../utils/EventEmitter";
+import { useRerender } from "./hooks";
 
 type SkillRowName = "Hack" | "Str" | "Def" | "Dex" | "Agi" | "Cha" | "Int";
 type RowName = SkillRowName | "HP" | "Money";
@@ -74,12 +74,12 @@ const formattedVals: Record<RowName, () => string> = {
 
 const skillMultUpdaters: Record<SkillRowName, () => number> = {
   //Used by skill bars to calculate the mult
-  Hack: () => Player.mults.hacking * BitNodeMultipliers.HackingLevelMultiplier,
-  Str: () => Player.mults.strength * BitNodeMultipliers.StrengthLevelMultiplier,
-  Def: () => Player.mults.defense * BitNodeMultipliers.DefenseLevelMultiplier,
-  Dex: () => Player.mults.dexterity * BitNodeMultipliers.DexterityLevelMultiplier,
-  Agi: () => Player.mults.agility * BitNodeMultipliers.AgilityLevelMultiplier,
-  Cha: () => Player.mults.charisma * BitNodeMultipliers.CharismaLevelMultiplier,
+  Hack: () => Player.mults.hacking * currentNodeMults.HackingLevelMultiplier,
+  Str: () => Player.mults.strength * currentNodeMults.StrengthLevelMultiplier,
+  Def: () => Player.mults.defense * currentNodeMults.DefenseLevelMultiplier,
+  Dex: () => Player.mults.dexterity * currentNodeMults.DexterityLevelMultiplier,
+  Agi: () => Player.mults.agility * currentNodeMults.AgilityLevelMultiplier,
+  Cha: () => Player.mults.charisma * currentNodeMults.CharismaLevelMultiplier,
   Int: () => 1,
 };
 
@@ -98,15 +98,16 @@ interface SkillBarProps {
   color?: string;
 }
 function SkillBar({ name, color }: SkillBarProps): React.ReactElement {
-  const [mult, setMult] = useState(skillMultUpdaters[name]?.());
-  const [progress, setProgress] = useState(calculateSkillProgress(Player.exp[skillNameMap[name]], mult));
+  const [progress, setProgress] = useState(calculateSkillProgress(0));
   useEffect(() => {
     const clearSubscription = OverviewEventEmitter.subscribe(() => {
-      setMult(skillMultUpdaters[name]());
-      setProgress(calculateSkillProgress(Player.exp[skillNameMap[name] as keyof Skills], mult));
+      const mult = skillMultUpdaters[name]();
+      setProgress(calculateSkillProgress(Player.exp[skillNameMap[name]], mult));
     });
+
     return clearSubscription;
-  }, []);
+  }, [name]);
+
   return (
     <TableRow>
       <StatsProgressOverviewCell progress={progress} color={color} />
@@ -120,11 +121,12 @@ interface ValProps {
 }
 export function Val({ name, color }: ValProps): React.ReactElement {
   //val isn't actually used here, the update of val just forces a refresh of the formattedVal that gets shown
-  const setVal = useState(valUpdaters[name]())[1];
+  const [__, setVal] = useState(valUpdaters[name]());
   useEffect(() => {
     const clearSubscription = OverviewEventEmitter.subscribe(() => setVal(valUpdaters[name]()));
     return clearSubscription;
-  }, []);
+  }, [name]);
+
   return <Typography color={color}>{formattedVals[name]()}</Typography>;
 }
 
@@ -239,8 +241,9 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
 }
 
 function ActionText(props: { action: ActionIdentifier }): React.ReactElement {
-  // This component should never be called if Bladeburner is null, due to conditional checks in BladeburnerText
-  const action = (Player.bladeburner as Bladeburner).getTypeAndNameFromActionId(props.action);
+  const bladeburner = Player.bladeburner;
+  if (!bladeburner) return <></>;
+  const action = bladeburner.getTypeAndNameFromActionId(props.action);
   return (
     <Typography>
       {action.type}: {action.name}
@@ -250,11 +253,11 @@ function ActionText(props: { action: ActionIdentifier }): React.ReactElement {
 
 function BladeburnerText(): React.ReactElement {
   const classes = useStyles();
-  const setRerender = useState(false)[1];
+  const rerender = useRerender();
   useEffect(() => {
-    const clearSubscription = OverviewEventEmitter.subscribe(() => setRerender((old) => !old));
+    const clearSubscription = OverviewEventEmitter.subscribe(rerender);
     return clearSubscription;
-  }, []);
+  }, [rerender]);
 
   const action = Player.bladeburner?.action;
   return useMemo(
@@ -277,7 +280,7 @@ function BladeburnerText(): React.ReactElement {
           </TableRow>
         </>
       ),
-    [action?.type, action?.name, classes.cellNone],
+    [action, classes.cellNone],
   );
 }
 
@@ -326,17 +329,17 @@ function WorkInProgressOverview({ tooltip, children, header }: WorkInProgressOve
 }
 
 function Work(): React.ReactElement {
-  const setRerender = useState(false)[1];
+  const rerender = useRerender();
   useEffect(() => {
-    const clearSubscription = OverviewEventEmitter.subscribe(() => setRerender((old) => !old));
+    const clearSubscription = OverviewEventEmitter.subscribe(rerender);
     return clearSubscription;
-  }, []);
+  }, [rerender]);
 
   if (Player.currentWork === null || Player.focus) return <></>;
 
-  let details = <></>;
-  let header = <></>;
-  let innerText = <></>;
+  let details: ReactNode = "";
+  let header: ReactNode = "";
+  let innerText: ReactNode = "";
   if (isCrimeWork(Player.currentWork)) {
     const crime = Player.currentWork.getCrime();
     const perc = (Player.currentWork.unitCompleted / crime.time) * 100;
@@ -388,11 +391,14 @@ function Work(): React.ReactElement {
   }
   if (isCompanyWork(Player.currentWork)) {
     const companyWork = Player.currentWork;
+    const job = Player.jobs[companyWork.companyName];
+    if (!job) return <></>;
     details = (
       <>
-        {Player.jobs[companyWork.companyName]} at <strong>{companyWork.companyName}</strong>
+        {job} at <strong>{companyWork.companyName}</strong>
       </>
     );
+
     header = (
       <>
         Working at <strong>{companyWork.companyName}</strong>
@@ -402,7 +408,7 @@ function Work(): React.ReactElement {
       <>
         <Reputation reputation={companyWork.getCompany().playerReputation} /> rep
         <br />(
-        <ReputationRate reputation={companyWork.getGainRates().reputation * (1000 / CONSTANTS.MilliPerCycle)} />)
+        <ReputationRate reputation={companyWork.getGainRates(job).reputation * (1000 / CONSTANTS.MilliPerCycle)} />)
       </>
     );
   }
@@ -462,4 +468,4 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export { useStyles as characterOverviewStyles };
+export { useStyles };

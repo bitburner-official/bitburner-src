@@ -17,6 +17,8 @@ import { getKeyList } from "../utils/helpers/getKeyList";
 import { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ScriptKey, scriptKey } from "../utils/helpers/scriptKey";
 
+import type { LogBoxProperties } from "../ui/React/LogBoxManager";
+
 export class RunningScript {
   // Script arguments
   args: ScriptArg[] = [];
@@ -62,8 +64,16 @@ export class RunningScript {
   // hostname of the server on which this script is running
   server = "";
 
-  // Cached key for ByArgs lookups
-  scriptKey: ScriptKey = "";
+  // Cached key for ByArgs lookups. Will be overwritten by a correct ScriptKey in fromJSON or constructor
+  scriptKey = "" as ScriptKey;
+
+  // Access to properties of the tail window. Can be used to get/set size, position, etc.
+  tailProps = null as LogBoxProperties | null;
+
+  // The title, as shown in the script's log box. Defaults to the name + args,
+  // but can be changed by the user. If it is set to a React element (only by the user),
+  // that will not be persisted, and will be restored to default on load.
+  title = "" as string | React.ReactElement;
 
   // Number of threads that this script is running with
   threads = 1 as PositiveInteger;
@@ -72,7 +82,7 @@ export class RunningScript {
   temporary = false;
 
   // Script urls for the current running script for translating urls back to file names in errors
-  dependencies: Map<ScriptURL, Script> = new Map();
+  dependencies = new Map<ScriptURL, Script>();
 
   constructor(script?: Script, ramUsage?: number, args: ScriptArg[] = []) {
     if (!script) return;
@@ -83,6 +93,7 @@ export class RunningScript {
     this.server = script.server;
     this.ramUsage = ramUsage;
     this.dependencies = script.dependencies;
+    this.title = `${this.filename} ${args.join(" ")}`;
   }
 
   log(txt: React.ReactNode): void {
@@ -140,14 +151,25 @@ export class RunningScript {
 
   // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {
-    return Generic_toJSON("RunningScript", this, includedProperties);
+    // Omit the title if it's a ReactNode, it will be filled in with the default on load.
+    return Generic_toJSON(
+      "RunningScript",
+      this,
+      typeof this.title === "string" ? includedProperties : includedPropsNoTitle,
+    );
   }
 
   // Initializes a RunningScript Object from a JSON save state
   static fromJSON(value: IReviverValue): RunningScript {
-    return Generic_fromJSON(RunningScript, value.data, includedProperties);
+    const runningScript = Generic_fromJSON(RunningScript, value.data, includedProperties);
+    if (!runningScript.scriptKey) runningScript.scriptKey = scriptKey(runningScript.filename, runningScript.args);
+    if (!runningScript.title) runningScript.title = `${runningScript.filename} ${runningScript.args.join(" ")}`;
+    return runningScript;
   }
 }
-const includedProperties = getKeyList(RunningScript, { removedKeys: ["logs", "dependencies", "logUpd", "pid"] });
+const includedProperties = getKeyList(RunningScript, {
+  removedKeys: ["logs", "dependencies", "logUpd", "pid", "tailProps"],
+});
+const includedPropsNoTitle = includedProperties.filter((x) => x !== "title");
 
 constructorsForReviver.RunningScript = RunningScript;

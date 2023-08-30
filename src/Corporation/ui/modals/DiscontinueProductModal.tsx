@@ -17,7 +17,7 @@ interface IProps {
 export function DiscontinueProductModal(props: IProps): React.ReactElement {
   const division = useDivision();
   function discontinue(): void {
-    division.discontinueProduct(props.product);
+    division.discontinueProduct(props.product.name);
     props.onClose();
     props.rerender();
   }

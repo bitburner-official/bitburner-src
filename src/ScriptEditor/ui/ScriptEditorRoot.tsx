@@ -1,24 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Editor } from "./Editor";
+import React, { useEffect, useRef } from "react";
 import * as monaco from "monaco-editor";
-// @ts-expect-error This library does not have types.
-import * as MonacoVim from "monaco-vim";
+
+import { Editor } from "./Editor";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
-type ITextModel = monaco.editor.ITextModel;
-import { OptionsModal } from "./OptionsModal";
-import { Options } from "./Options";
-import { Player } from "@player";
+
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { ScriptFilePath } from "../../Paths/ScriptFilePath";
-import { Script } from "../../Script/Script";
-import { calculateRamUsage, checkInfiniteLoop } from "../../Script/RamCalculations";
-import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
-import { formatRam } from "../../ui/formatNumber";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import SearchIcon from "@mui/icons-material/Search";
+import { checkInfiniteLoop } from "../../Script/RamCalculations";
 
 import { ns, enums } from "../../NetscriptFunctions";
 import { Settings } from "../../Settings/Settings";
@@ -28,26 +19,20 @@ import { saveObject } from "../../SaveObject";
 import { loadThemes, makeTheme, sanitizeTheme } from "./themes";
 import { GetServer } from "../../Server/AllServers";
 
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Box from "@mui/material/Box";
-import SettingsIcon from "@mui/icons-material/Settings";
-import SyncIcon from "@mui/icons-material/Sync";
-import CloseIcon from "@mui/icons-material/Close";
-import Table from "@mui/material/Table";
-import TableCell from "@mui/material/TableCell";
-import TableRow from "@mui/material/TableRow";
-import TableBody from "@mui/material/TableBody";
 import { PromptEvent } from "../../ui/React/PromptManager";
-import { Modal } from "../../ui/React/Modal";
 
 import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
-import { TextField, Tooltip } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
 import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
-import { TextFilePath } from "src/Paths/TextFilePath";
-import { ContentFilePath } from "src/Paths/ContentFile";
+import { TextFilePath } from "../../Paths/TextFilePath";
+
+import { dirty, getServerCode } from "./utils";
+import { OpenScript } from "./OpenScript";
+import { Tabs } from "./Tabs";
+import { Toolbar } from "./Toolbar";
+import { NoOpenScripts } from "./NoOpenScripts";
+import { ScriptEditorContextProvider, useScriptEditorContext } from "./ScriptEditorContext";
+import { useVimEditor } from "./useVimEditor";
 
 interface IProps {
   // Map of filename -> code
@@ -73,58 +58,16 @@ export function SetupTextEditor(): void {
   populate();
 }
 
-// Holds all the data for a open script
-class OpenScript {
-  path: ContentFilePath;
-  code: string;
-  hostname: string;
-  lastPosition: monaco.Position;
-  model: ITextModel;
-  isTxt: boolean;
-
-  constructor(path: ContentFilePath, code: string, hostname: string, lastPosition: monaco.Position, model: ITextModel) {
-    this.path = path;
-    this.code = code;
-    this.hostname = hostname;
-    this.lastPosition = lastPosition;
-    this.model = model;
-    this.isTxt = path.endsWith(".txt");
-  }
-}
-
 const openScripts: OpenScript[] = [];
 let currentScript: OpenScript | null = null;
 
-// Called every time script editor is opened
-export function Root(props: IProps): React.ReactElement {
+function Root(props: IProps): React.ReactElement {
   const rerender = useRerender();
   const editorRef = useRef<IStandaloneCodeEditor | null>(null);
-  const vimStatusRef = useRef<HTMLElement>(null);
-  // monaco-vim does not have types, so this is an any
-  const [vimEditor, setVimEditor] = useState<any>(null);
-  const [editor, setEditor] = useState<IStandaloneCodeEditor | null>(null);
-  const [filter, setFilter] = useState("");
-  const [searchExpanded, setSearchExpanded] = useState(false);
 
-  const [ram, setRAM] = useState("RAM: ???");
-  const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
-  const [updatingRam, setUpdatingRam] = useState(false);
-  const [decorations, setDecorations] = useState<string[]>([]);
+  const { options, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
 
-  const [optionsOpen, setOptionsOpen] = useState(false);
-  const [options, setOptions] = useState<Options>({
-    theme: Settings.MonacoTheme,
-    insertSpaces: Settings.MonacoInsertSpaces,
-    tabSize: Settings.MonacoTabSize,
-    detectIndentation: Settings.MonacoDetectIndentation,
-    fontFamily: Settings.MonacoFontFamily,
-    fontSize: Settings.MonacoFontSize,
-    fontLigatures: Settings.MonacoFontLigatures,
-    wordWrap: Settings.MonacoWordWrap,
-    vim: props.vim || Settings.MonacoVim,
-  });
-
-  const [ramInfoOpen, setRamInfoOpen] = useState(false);
+  let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
 
   // Prevent Crash if script is open on deleted server
   for (let i = openScripts.length - 1; i >= 0; i--) {
@@ -133,14 +76,6 @@ export function Root(props: IProps): React.ReactElement {
   if (currentScript && GetServer(currentScript.hostname) === null) {
     currentScript = openScripts[0] ?? null;
   }
-
-  useEffect(() => {
-    if (currentScript !== null) {
-      const tabIndex = currentTabIndex();
-      if (typeof tabIndex === "number") onTabClick(tabIndex);
-      updateRAM(currentScript.code);
-    }
-  }, []);
 
   useEffect(() => {
     function keydown(event: KeyboardEvent): void {
@@ -162,120 +97,50 @@ export function Root(props: IProps): React.ReactElement {
     return () => document.removeEventListener("keydown", keydown);
   });
 
-  useEffect(() => {
-    // setup monaco-vim
-    if (options.vim && editor && !vimEditor) {
-      // Using try/catch because MonacoVim does not have types.
-      try {
-        setVimEditor(MonacoVim.initVimMode(editor, vimStatusRef.current));
-        MonacoVim.VimMode.Vim.defineEx("write", "w", function () {
-          // your own implementation on what you want to do when :w is pressed
-          save();
-        });
-        MonacoVim.VimMode.Vim.defineEx("quit", "q", function () {
-          Router.toPage(Page.Terminal);
-        });
-
-        const saveNQuit = (): void => {
-          save();
-          Router.toPage(Page.Terminal);
-        };
-        // "wqriteandquit" &  "xriteandquit" are not typos, prefix must be found in full string
-        MonacoVim.VimMode.Vim.defineEx("wqriteandquit", "wq", saveNQuit);
-        MonacoVim.VimMode.Vim.defineEx("xriteandquit", "x", saveNQuit);
-
-        // Setup "go to next tab" and "go to previous tab". This is a little more involved
-        // since these aren't Ex commands (they run in normal mode, not after typing `:`)
-        MonacoVim.VimMode.Vim.defineAction("nextTabs", function (_cm: any, args: { repeat?: number }) {
-          const nTabs = args.repeat ?? 1;
-          // Go to the next tab (to the right). Wraps around when at the rightmost tab
-          const currIndex = currentTabIndex();
-          if (currIndex !== undefined) {
-            const nextIndex = (currIndex + nTabs) % openScripts.length;
-            onTabClick(nextIndex);
-          }
-        });
-        MonacoVim.VimMode.Vim.defineAction("prevTabs", function (_cm: any, args: { repeat?: number }) {
-          const nTabs = args.repeat ?? 1;
-          // Go to the previous tab (to the left). Wraps around when at the leftmost tab
-          const currIndex = currentTabIndex();
-          if (currIndex !== undefined) {
-            let nextIndex = currIndex - nTabs;
-            while (nextIndex < 0) {
-              nextIndex += openScripts.length;
-            }
-            onTabClick(nextIndex);
-          }
-        });
-        MonacoVim.VimMode.Vim.mapCommand("gt", "action", "nextTabs", {}, { context: "normal" });
-        MonacoVim.VimMode.Vim.mapCommand("gT", "action", "prevTabs", {}, { context: "normal" });
-        editor.focus();
-      } catch {}
-    } else if (!options.vim) {
-      // When vim mode is disabled
-      vimEditor?.dispose();
-      setVimEditor(null);
-    }
-
-    return () => {
-      vimEditor?.dispose();
-    };
-  }, [options, editorRef, editor, vimEditor]);
-
   // Generates a new model for the script
   function regenerateModel(script: OpenScript): void {
     script.model = monaco.editor.createModel(script.code, script.isTxt ? "plaintext" : "javascript");
   }
 
-  const debouncedUpdateRAM = debounce((newCode: string) => {
-    updateRAM(newCode);
-    setUpdatingRam(false);
+  function infLoop(newCode: string): void {
+    if (editorRef.current === null || currentScript === null) return;
+    if (!decorations) decorations = editorRef.current.createDecorationsCollection();
+    if (!currentScript.path.endsWith(".js")) return;
+    const awaitWarning = checkInfiniteLoop(newCode);
+    if (awaitWarning !== -1) {
+      decorations.set([
+        {
+          range: {
+            startLineNumber: awaitWarning,
+            startColumn: 1,
+            endLineNumber: awaitWarning,
+            endColumn: 10,
+          },
+          options: {
+            isWholeLine: true,
+            glyphMarginClassName: "myGlyphMarginClass",
+            glyphMarginHoverMessage: {
+              value: "Possible infinite loop, await something.",
+            },
+          },
+        },
+      ]);
+    } else decorations.clear();
+  }
+
+  const debouncedCodeParsing = debounce((newCode: string) => {
+    infLoop(newCode);
+    updateRAM(
+      !currentScript || currentScript.isTxt ? null : newCode,
+      currentScript && GetServer(currentScript.hostname),
+    );
+    finishUpdatingRAM();
   }, 300);
 
-  function updateRAM(newCode: string): void {
-    if (!currentScript || currentScript.isTxt) {
-      setRAM("N/A");
-      setRamEntries([["N/A", ""]]);
-      return;
-    }
-    const codeCopy = newCode + "";
-    const ramUsage = calculateRamUsage(codeCopy, Player.getCurrentServer().scripts);
-    if (ramUsage.cost > 0) {
-      const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
-      const entriesDisp = [];
-      for (const entry of entries) {
-        entriesDisp.push([`${entry.name} (${entry.type})`, formatRam(entry.cost)]);
-      }
-
-      setRAM("RAM: " + formatRam(ramUsage.cost));
-      setRamEntries(entriesDisp);
-      return;
-    }
-    let RAM = "";
-    const entriesDisp = [];
-    switch (ramUsage.cost) {
-      case RamCalculationErrorCode.ImportError: {
-        RAM = "RAM: Import Error";
-        entriesDisp.push(["Import Error", ""]);
-        break;
-      }
-      case RamCalculationErrorCode.SyntaxError:
-      default: {
-        RAM = "RAM: Syntax Error";
-        entriesDisp.push(["Syntax Error", ""]);
-        break;
-      }
-    }
-    setRAM(RAM);
-    setRamEntries(entriesDisp);
-    return;
-  }
-
-  // Formats the code
-  function beautify(): void {
-    if (editorRef.current === null) return;
-    editorRef.current.getAction("editor.action.formatDocument")?.run();
-  }
+  const parseCode = (newCode: string) => {
+    startUpdatingRAM();
+    debouncedCodeParsing(newCode);
+  };
 
   // How to load function definition in monaco
   // https://github.com/Microsoft/monaco-editor/issues/1415
@@ -313,7 +178,7 @@ export function Root(props: IProps): React.ReactElement {
     const source = (libSource + "").replace(/export /g, "");
     monaco.languages.typescript.javascriptDefaults.addExtraLib(source, "netscript.d.ts");
     monaco.languages.typescript.typescriptDefaults.addExtraLib(source, "netscript.d.ts");
-    loadThemes(monaco);
+    loadThemes(monaco.editor.defineTheme);
     sanitizeTheme(Settings.EditorTheme);
     monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
   }
@@ -322,11 +187,7 @@ export function Root(props: IProps): React.ReactElement {
   function onMount(editor: IStandaloneCodeEditor): void {
     // Required when switching between site navigation (e.g. from Script Editor -> Terminal and back)
     // the `useEffect()` for vim mode is called before editor is mounted.
-    setEditor(editor);
-
     editorRef.current = editor;
-
-    if (!editorRef.current) return;
 
     if (!props.files && currentScript !== null) {
       // Open currentscript
@@ -334,7 +195,7 @@ export function Root(props: IProps): React.ReactElement {
       editorRef.current.setModel(currentScript.model);
       editorRef.current.setPosition(currentScript.lastPosition);
       editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
-      updateRAM(currentScript.code);
+      parseCode(currentScript.code);
       editorRef.current.focus();
       return;
     }
@@ -359,7 +220,7 @@ export function Root(props: IProps): React.ReactElement {
           editorRef.current.setModel(openScript.model);
           editorRef.current.setPosition(openScript.lastPosition);
           editorRef.current.revealLineInCenter(openScript.lastPosition.lineNumber);
-          updateRAM(openScript.code);
+          parseCode(openScript.code);
         } else {
           // Open script
           const newScript = new OpenScript(
@@ -372,7 +233,7 @@ export function Root(props: IProps): React.ReactElement {
           openScripts.push(newScript);
           currentScript = newScript;
           editorRef.current.setModel(newScript.model);
-          updateRAM(newScript.code);
+          parseCode(newScript.code);
         }
       }
     }
@@ -380,40 +241,11 @@ export function Root(props: IProps): React.ReactElement {
     editorRef.current.focus();
   }
 
-  function infLoop(newCode: string): void {
-    if (editorRef.current === null || currentScript === null) return;
-    if (!currentScript.path.endsWith(".js")) return;
-    const awaitWarning = checkInfiniteLoop(newCode);
-    if (awaitWarning !== -1) {
-      const newDecorations = editorRef.current.deltaDecorations(decorations, [
-        {
-          range: {
-            startLineNumber: awaitWarning,
-            startColumn: 1,
-            endLineNumber: awaitWarning,
-            endColumn: 10,
-          },
-          options: {
-            isWholeLine: true,
-            glyphMarginClassName: "myGlyphMarginClass",
-            glyphMarginHoverMessage: {
-              value: "Possible infinite loop, await something.",
-            },
-          },
-        },
-      ]);
-      setDecorations(newDecorations);
-    } else {
-      const newDecorations = editorRef.current.deltaDecorations(decorations, []);
-      setDecorations(newDecorations);
-    }
-  }
-
   // When the code is updated within the editor
   function updateCode(newCode?: string): void {
     if (newCode === undefined) return;
-    setUpdatingRam(true);
-    debouncedUpdateRAM(newCode);
+    // parseCode includes ram check and infinite loop detection
+    parseCode(newCode);
     if (editorRef.current === null) return;
     const newPos = editorRef.current.getPosition();
     if (newPos === null) return;
@@ -421,9 +253,6 @@ export function Root(props: IProps): React.ReactElement {
       currentScript.code = newCode;
       currentScript.lastPosition = newPos;
     }
-    try {
-      infLoop(newCode);
-    } catch (err) {}
   }
 
   function saveScript(scriptToSave: OpenScript): void {
@@ -432,7 +261,6 @@ export function Root(props: IProps): React.ReactElement {
     // This server helper already handles overwriting, etc.
     server.writeToContentFile(scriptToSave.path, scriptToSave.code);
     if (Settings.SaveGameOnFileSave) saveObject.saveGame();
-    Router.toPage(Page.Terminal);
   }
 
   function save(): void {
@@ -450,13 +278,14 @@ export function Root(props: IProps): React.ReactElement {
       const cleanCode = currentScript.code.replace(/\s/g, "");
       const ns1 = "while(true){hack('n00dles');}";
       const ns2 = `exportasyncfunctionmain(ns){while(true){awaitns.hack('n00dles');}}`;
-      if (cleanCode.indexOf(ns1) == -1 && cleanCode.indexOf(ns2) == -1) {
+      if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
         dialogBoxCreate("Please copy and paste the code from the tutorial!");
         return;
       }
 
       //Save the script
       saveScript(currentScript);
+      Router.toPage(Page.Terminal);
 
       iTutorialNextStep();
 
@@ -468,17 +297,6 @@ export function Root(props: IProps): React.ReactElement {
     server.writeToContentFile(currentScript.path, currentScript.code);
     if (Settings.SaveGameOnFileSave) saveObject.saveGame();
     rerender();
-  }
-
-  function reorder(list: OpenScript[], startIndex: number, endIndex: number): void {
-    const [removed] = list.splice(startIndex, 1);
-    list.splice(endIndex, 0, removed);
-  }
-
-  function onDragEnd(result: any): void {
-    // Dropped outside of the list
-    if (!result.destination) return;
-    reorder(openScripts, result.source.index, result.destination.index);
   }
 
   function currentTabIndex(): number | undefined {
@@ -502,10 +320,9 @@ export function Root(props: IProps): React.ReactElement {
         regenerateModel(currentScript);
       }
       editorRef.current.setModel(currentScript.model);
-
       editorRef.current.setPosition(currentScript.lastPosition);
       editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
-      updateRAM(currentScript.code);
+      parseCode(currentScript.code);
       editorRef.current.focus();
     }
   }
@@ -516,7 +333,7 @@ export function Root(props: IProps): React.ReactElement {
     const savedScriptCode = closingScript.code;
     const wasCurrentScript = openScripts[index] === currentScript;
 
-    if (dirty(index)) {
+    if (dirty(openScripts, index)) {
       PromptEvent.emit({
         txt: `Do you want to save changes to ${closingScript.path} on ${closingScript.hostname}?`,
         resolve: (result: boolean | string) => {
@@ -524,6 +341,7 @@ export function Root(props: IProps): React.ReactElement {
             // Save changes
             closingScript.code = savedScriptCode;
             saveScript(closingScript);
+            Router.toPage(Page.Terminal);
           }
         },
       });
@@ -556,7 +374,7 @@ export function Root(props: IProps): React.ReactElement {
 
   function onTabUpdate(index: number): void {
     const openScript = openScripts[index];
-    const serverScriptCode = getServerCode(index);
+    const serverScriptCode = getServerCode(openScripts, index);
     if (serverScriptCode === null) return;
 
     if (openScript.code !== serverScriptCode) {
@@ -580,7 +398,7 @@ export function Root(props: IProps): React.ReactElement {
               editorRef.current.setModel(openScript.model);
 
               editorRef.current.setValue(openScript.code);
-              updateRAM(openScript.code);
+              parseCode(openScript.code);
               editorRef.current.focus();
             }
           }
@@ -589,37 +407,45 @@ export function Root(props: IProps): React.ReactElement {
     }
   }
 
-  function dirty(index: number): string {
-    const openScript = openScripts[index];
-    const serverData = getServerCode(index);
-    if (serverData === null) return " *";
-    // For scripts, server code is stored with its starting & trailing whitespace removed
-    const code = openScript.isTxt ? openScript.code : Script.formatCode(openScript.code);
-    return serverData !== code ? " *" : "";
+  function onOpenNextTab(step: number): void {
+    // Go to the next tab (to the right). Wraps around when at the rightmost tab
+    const currIndex = currentTabIndex();
+    if (currIndex !== undefined) {
+      const nextIndex = (currIndex + step) % openScripts.length;
+      onTabClick(nextIndex);
+    }
   }
-  function getServerCode(index: number): string | null {
-    const openScript = openScripts[index];
-    const server = GetServer(openScript.hostname);
-    if (server === null) throw new Error(`Server '${openScript.hostname}' should not be null, but it is.`);
-    const data = server.getContentFile(openScript.path)?.content ?? null;
-    return data;
-  }
-  function handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setFilter(event.target.value);
-  }
-  function handleExpandSearch(): void {
-    setFilter("");
-    setSearchExpanded(!searchExpanded);
-  }
-  const filteredOpenScripts = Object.values(openScripts).filter(
-    (script) => script.hostname.includes(filter) || script.path.includes(filter),
-  );
 
-  const tabsMaxWidth = 1640;
-  const tabMargin = 5;
-  const tabMaxWidth = filteredOpenScripts.length ? tabsMaxWidth / filteredOpenScripts.length - tabMargin : 0;
-  const tabIconWidth = 25;
-  const tabTextWidth = tabMaxWidth - tabIconWidth * 2;
+  function onOpenPreviousTab(step: number): void {
+    // Go to the previous tab (to the left). Wraps around when at the leftmost tab
+    const currIndex = currentTabIndex();
+    if (currIndex !== undefined) {
+      let nextIndex = currIndex - step;
+      while (nextIndex < 0) {
+        nextIndex += openScripts.length;
+      }
+      onTabClick(nextIndex);
+    }
+  }
+
+  const { VimStatus } = useVimEditor({
+    editor: editorRef.current,
+    vim: options.vim,
+    onSave: save,
+    onOpenNextTab,
+    onOpenPreviousTab,
+  });
+
+  useEffect(() => {
+    if (currentScript !== null) {
+      const tabIndex = currentTabIndex();
+      if (typeof tabIndex === "number") onTabClick(tabIndex);
+      parseCode(currentScript.code);
+    }
+    // disable eslint because we want to run this only once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <div
@@ -630,241 +456,30 @@ export function Root(props: IProps): React.ReactElement {
           flexDirection: "column",
         }}
       >
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="tabs" direction="horizontal">
-            {(provided, snapshot) => (
-              <Box
-                maxWidth={`${tabsMaxWidth}px`}
-                display="flex"
-                flexGrow="0"
-                flexDirection="row"
-                alignItems="center"
-                whiteSpace="nowrap"
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  backgroundColor: snapshot.isDraggingOver
-                    ? Settings.theme.backgroundsecondary
-                    : Settings.theme.backgroundprimary,
-                  overflowX: "scroll",
-                }}
-              >
-                <Tooltip title={"Search Open Scripts"}>
-                  {searchExpanded ? (
-                    <TextField
-                      value={filter}
-                      onChange={handleFilterChange}
-                      autoFocus
-                      InputProps={{
-                        startAdornment: <SearchIcon />,
-                        spellCheck: false,
-                        endAdornment: <CloseIcon onClick={handleExpandSearch} />,
-                      }}
-                    />
-                  ) : (
-                    <Button onClick={handleExpandSearch}>
-                      <SearchIcon />
-                    </Button>
-                  )}
-                </Tooltip>
-                {filteredOpenScripts.map(({ path: fileName, hostname }, index) => {
-                  const editingCurrentScript =
-                    currentScript?.path === filteredOpenScripts[index].path &&
-                    currentScript?.hostname === filteredOpenScripts[index].hostname;
-                  const externalScript = hostname !== "home";
-                  const colorProps = editingCurrentScript
-                    ? {
-                        background: Settings.theme.button,
-                        borderColor: Settings.theme.button,
-                        color: Settings.theme.primary,
-                      }
-                    : {
-                        background: Settings.theme.backgroundsecondary,
-                        borderColor: Settings.theme.backgroundsecondary,
-                        color: Settings.theme.secondary,
-                      };
-
-                  if (externalScript) {
-                    colorProps.color = Settings.theme.info;
-                  }
-                  const iconButtonStyle = {
-                    maxWidth: `${tabIconWidth}px`,
-                    minWidth: `${tabIconWidth}px`,
-                    minHeight: "38.5px",
-                    maxHeight: "38.5px",
-                    ...colorProps,
-                  };
-
-                  const scriptTabText = `${hostname}:~${fileName.startsWith("/") ? "" : "/"}${fileName} ${dirty(
-                    index,
-                  )}`;
-                  return (
-                    <Draggable
-                      key={fileName + hostname}
-                      draggableId={fileName + hostname}
-                      index={index}
-                      disableInteractiveElementBlocking={true}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            ...provided.draggableProps.style,
-                            maxWidth: `${tabMaxWidth}px`,
-                            marginRight: `${tabMargin}px`,
-                            flexShrink: 0,
-                            border: "1px solid " + Settings.theme.well,
-                          }}
-                        >
-                          <Tooltip title={scriptTabText}>
-                            <Button
-                              onClick={() => onTabClick(index)}
-                              onMouseDown={(e) => {
-                                e.preventDefault();
-                                if (e.button === 1) onTabClose(index);
-                              }}
-                              style={{
-                                maxWidth: `${tabTextWidth}px`,
-                                minHeight: "38.5px",
-                                overflow: "hidden",
-                                ...colorProps,
-                              }}
-                            >
-                              <span style={{ overflow: "hidden", direction: "rtl", textOverflow: "ellipsis" }}>
-                                {scriptTabText}
-                              </span>
-                            </Button>
-                          </Tooltip>
-                          <Tooltip title="Overwrite editor content with saved file content">
-                            <Button onClick={() => onTabUpdate(index)} style={iconButtonStyle}>
-                              <SyncIcon fontSize="small" />
-                            </Button>
-                          </Tooltip>
-                          <Button onClick={() => onTabClose(index)} style={iconButtonStyle}>
-                            <CloseIcon fontSize="small" />
-                          </Button>
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
-              </Box>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <Tabs
+          scripts={openScripts}
+          currentScript={currentScript}
+          onTabClick={onTabClick}
+          onTabClose={onTabClose}
+          onTabUpdate={onTabUpdate}
+        />
         <div style={{ flex: "0 0 5px" }} />
-        <Editor
-          beforeMount={beforeMount}
-          onMount={onMount}
-          onChange={updateCode}
-          options={{ ...options, glyphMargin: true }}
-        />
+        <Editor beforeMount={beforeMount} onMount={onMount} onChange={updateCode} />
 
-        <Box
-          ref={vimStatusRef}
-          className="vim-display"
-          display="flex"
-          flexGrow="0"
-          flexDirection="row"
-          sx={{ p: 1 }}
-          alignItems="center"
-        ></Box>
+        {VimStatus}
 
-        <Box display="flex" flexDirection="row" sx={{ m: 1 }} alignItems="center">
-          <Button startIcon={<SettingsIcon />} onClick={() => setOptionsOpen(true)} sx={{ mr: 1 }}>
-            Options
-          </Button>
-          <Button onClick={beautify}>Beautify</Button>
-          <Button
-            color={updatingRam ? "secondary" : "primary"}
-            sx={{ mx: 1 }}
-            onClick={() => {
-              setRamInfoOpen(true);
-            }}
-          >
-            {ram}
-          </Button>
-          <Button onClick={save}>Save (Ctrl/Cmd + s)</Button>
-          <Button sx={{ mx: 1 }} onClick={() => Router.toPage(Page.Terminal)}>
-            Terminal (Ctrl/Cmd + b)
-          </Button>
-          <Typography>
-            {" "}
-            <strong>Documentation:</strong>{" "}
-            <Link target="_blank" href="https://bitburner-official.readthedocs.io/en/latest/index.html">
-              Basic
-            </Link>
-            {" | "}
-            <Link
-              target="_blank"
-              href="https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md"
-            >
-              Full
-            </Link>
-          </Typography>
-        </Box>
-        <OptionsModal
-          open={optionsOpen}
-          onClose={() => {
-            sanitizeTheme(Settings.EditorTheme);
-            monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
-            setOptionsOpen(false);
-          }}
-          options={{ ...options }}
-          save={(options: Options) => {
-            sanitizeTheme(Settings.EditorTheme);
-            monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
-            editor?.updateOptions(options);
-            setOptions(options);
-            Settings.MonacoTheme = options.theme;
-            Settings.MonacoInsertSpaces = options.insertSpaces;
-            Settings.MonacoTabSize = options.tabSize;
-            Settings.MonacoDetectIndentation = options.detectIndentation;
-            Settings.MonacoFontFamily = options.fontFamily;
-            Settings.MonacoFontSize = options.fontSize;
-            Settings.MonacoFontLigatures = options.fontLigatures;
-            Settings.MonacoWordWrap = options.wordWrap;
-            Settings.MonacoVim = options.vim;
-          }}
-        />
-        <Modal open={ramInfoOpen} onClose={() => setRamInfoOpen(false)}>
-          <Table>
-            <TableBody>
-              {ramEntries.map(([n, r]) => (
-                <React.Fragment key={n + r}>
-                  <TableRow>
-                    <TableCell sx={{ color: Settings.theme.primary }}>{n}</TableCell>
-                    <TableCell align="right" sx={{ color: Settings.theme.primary }}>
-                      {r}
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
-              ))}
-            </TableBody>
-          </Table>
-        </Modal>
+        <Toolbar onSave={save} editor={editorRef.current} />
       </div>
-      <div
-        style={{
-          display: currentScript !== null ? "none" : "flex",
-          height: "100%",
-          width: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <span style={{ color: Settings.theme.primary, fontSize: "20px", textAlign: "center" }}>
-          <Typography variant="h4">No open files</Typography>
-          <Typography variant="h5">
-            Use <code>nano FILENAME</code> in
-            <br />
-            the terminal to open files
-          </Typography>
-        </span>
-      </div>
+      {!currentScript && <NoOpenScripts />}
     </>
+  );
+}
+
+// Called every time script editor is opened
+export function ScriptEditorRoot(props: IProps) {
+  return (
+    <ScriptEditorContextProvider vim={props.vim}>
+      <Root {...props} />
+    </ScriptEditorContextProvider>
   );
 }

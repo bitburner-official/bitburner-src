@@ -5,13 +5,12 @@
 import { AddToAllServers, createUniqueRandomIp, GetServer, renameServer } from "./AllServers";
 import { safelyCreateUniqueServer } from "./ServerHelpers";
 
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { isPowerOfTwo } from "../utils/helpers/isPowerOfTwo";
-import { WorkerScript } from "../Netscript/WorkerScript";
 import { workerScripts } from "../Netscript/WorkerScripts";
 
 // Returns the cost of purchasing a server with the given RAM
@@ -35,8 +34,8 @@ export function getPurchaseServerCost(ram: number): number {
   return (
     sanitizedRam *
     CONSTANTS.BaseCostFor1GBOfRamServer *
-    BitNodeMultipliers.PurchasedServerCost *
-    Math.pow(BitNodeMultipliers.PurchasedServerSoftcap, upg)
+    currentNodeMults.PurchasedServerCost *
+    Math.pow(currentNodeMults.PurchasedServerSoftcap, upg)
   );
 }
 
@@ -76,8 +75,8 @@ export const renamePurchasedServer = (hostname: string, newName: string): void =
   for (const byPid of server.runningScriptMap.values()) {
     for (const r of byPid.values()) {
       r.server = newName;
-      // Lookup can't fail.
-      const ws = workerScripts.get(r.pid) as WorkerScript;
+      const ws = workerScripts.get(r.pid);
+      if (!ws) continue;
       ws.hostname = newName;
     }
   }
@@ -87,11 +86,11 @@ export const renamePurchasedServer = (hostname: string, newName: string): void =
 };
 
 export function getPurchaseServerLimit(): number {
-  return Math.round(CONSTANTS.PurchasedServerLimit * BitNodeMultipliers.PurchasedServerLimit);
+  return Math.round(CONSTANTS.PurchasedServerLimit * currentNodeMults.PurchasedServerLimit);
 }
 
 export function getPurchaseServerMaxRam(): number {
-  const ram = Math.round(CONSTANTS.PurchasedServerMaxRam * BitNodeMultipliers.PurchasedServerMaxRam);
+  const ram = Math.round(CONSTANTS.PurchasedServerMaxRam * currentNodeMults.PurchasedServerMaxRam);
 
   // Round this to the nearest power of 2
   return 1 << (31 - Math.clz32(ram));

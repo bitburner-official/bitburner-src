@@ -5,7 +5,6 @@
 import { ScriptDeath } from "./ScriptDeath";
 import { WorkerScript } from "./WorkerScript";
 import { workerScripts } from "./WorkerScripts";
-import { WorkerScriptStartStopEventEmitter } from "./WorkerScriptStartStopEventEmitter";
 
 import { GetServer } from "../Server/AllServers";
 import { AddRecentScript } from "./RecentScripts";
@@ -52,6 +51,10 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
     } catch (e: unknown) {
       handleUnknownError(e, ws, "Error running atExit function.\n\n");
     }
+    if (ws.env.stopFlag) {
+      // If atExit() kills the script, we'll already be stopped, don't stop again.
+      return;
+    }
   }
   ws.env.stopFlag = true;
   removeWorkerScript(ws);
@@ -91,5 +94,4 @@ function removeWorkerScript(workerScript: WorkerScript): void {
 
   workerScripts.delete(workerScript.pid);
   AddRecentScript(workerScript);
-  WorkerScriptStartStopEventEmitter.emit();
 }

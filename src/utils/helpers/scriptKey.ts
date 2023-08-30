@@ -4,7 +4,7 @@ import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
 // This needs to be high in the dependency graph, with few/no dependencies of
 // its own, since many key modules depend on it.
 
-export type ScriptKey = string /*& { __type: "ScriptKey" }*/;
+export type ScriptKey = string & { __type: "ScriptKey" };
 
 // The key used to lookup worker scripts in their map.
 export function scriptKey(path: ScriptFilePath, args: ScriptArg[]): ScriptKey {

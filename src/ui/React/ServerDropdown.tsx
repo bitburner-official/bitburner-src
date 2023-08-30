@@ -25,7 +25,7 @@ interface IProps {
   purchase: () => void;
   canPurchase: boolean;
   serverType: number;
-  onChange: (event: SelectChangeEvent<string>) => void;
+  onChange: (event: SelectChangeEvent) => void;
   value: string;
 }
 

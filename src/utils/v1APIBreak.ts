@@ -1,7 +1,6 @@
-import { AugmentationNames } from "../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { Player } from "@player";
-import { FormattedCode, Script } from "../Script/Script";
 import { GetAllServers } from "../Server/AllServers";
 import { resolveTextFilePath } from "../Paths/TextFilePath";
 import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
@@ -54,7 +53,7 @@ function hasChanges(code: string): boolean {
   return false;
 }
 
-function convert(code: string): FormattedCode {
+function convert(code: string): string {
   const lines = code.split("\n");
   const out: string[] = [];
   for (let i = 0; i < lines.length; i++) {
@@ -73,15 +72,15 @@ function convert(code: string): FormattedCode {
     out.push(line);
   }
   code = out.join("\n");
-  return Script.formatCode(code);
+  return code;
 }
 
 export function AwardNFG(n = 1): void {
-  const nf = Player.augmentations.find((a) => a.name === AugmentationNames.NeuroFluxGovernor);
+  const nf = Player.augmentations.find((a) => a.name === AugmentationName.NeuroFluxGovernor);
   if (nf) {
     nf.level += n;
   } else {
-    const nf = new PlayerOwnedAugmentation(AugmentationNames.NeuroFluxGovernor);
+    const nf = new PlayerOwnedAugmentation(AugmentationName.NeuroFluxGovernor);
     nf.level = n;
     Player.augmentations.push(nf);
   }
@@ -98,11 +97,8 @@ export function v1APIBreak(): void {
   for (const server of GetAllServers()) {
     for (const change of detect) {
       const s: IFileLine[] = [];
-      const scriptsArray: Script[] = Array.isArray(server.scripts)
-        ? (server.scripts as Script[])
-        : [...server.scripts.values()];
 
-      for (const script of scriptsArray) {
+      for (const script of server.scripts.values()) {
         const lines = script.code.split("\n");
         for (let i = 0; i < lines.length; i++) {
           if (lines[i].includes(change[0])) {
@@ -130,10 +126,8 @@ export function v1APIBreak(): void {
     home.writeToTextFile(textPath, txt);
   }
 
-  // API break function is called before version31 / 2.3.0 changes - scripts is still an array
-  for (const server of GetAllServers() as unknown as { scripts: Script[] }[]) {
-    const backups: Script[] = [];
-    for (const script of server.scripts) {
+  for (const server of GetAllServers()) {
+    for (const script of server.scripts.values()) {
       if (!hasChanges(script.code)) continue;
       // Sanitize first before combining
       const oldFilename = resolveScriptFilePath(script.filename);
@@ -142,9 +136,8 @@ export function v1APIBreak(): void {
         console.error(`Unexpected error resolving backup path for ${script.filename}`);
         continue;
       }
-      backups.push(new Script(filename, script.code, script.server));
+      server.writeToScriptFile(filename, script.code);
       script.code = convert(script.code);
     }
-    server.scripts = server.scripts.concat(backups);
   }
 }

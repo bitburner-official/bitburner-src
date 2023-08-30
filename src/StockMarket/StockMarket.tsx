@@ -1,13 +1,11 @@
-import { IOrderBook } from "./IOrderBook";
-import { IStockMarket } from "./IStockMarket";
+import type { IOrderBook } from "./IOrderBook";
+import type { IStockMarket } from "./IStockMarket";
 import { Order } from "./Order";
+import { StockMarketConstants } from "./data/Constants";
 import { processOrders } from "./OrderProcessing";
 import { Stock } from "./Stock";
-import { TicksPerCycle } from "./StockMarketConstants";
 import { InitStockMetadata } from "./data/InitStockMetadata";
-import { OrderTypes } from "./data/OrderTypes";
-import { PositionTypes } from "./data/PositionTypes";
-import { StockSymbols } from "./data/StockSymbols";
+import { PositionType, OrderType, StockSymbol } from "@enums";
 
 import { CONSTANTS } from "../Constants";
 import { formatMoney } from "../ui/formatNumber";
@@ -23,14 +21,15 @@ export let StockMarket: IStockMarket = {
   storedCycles: 0,
   ticksUntilCycle: 0,
 } as IStockMarket; // Maps full stock name -> Stock object
+// Gross type, needs to be addressed
 export const SymbolToStockMap: Record<string, Stock> = {}; // Maps symbol -> Stock object
 
 export function placeOrder(
   stock: Stock,
   shares: number,
   price: number,
-  type: OrderTypes,
-  position: PositionTypes,
+  type: OrderType,
+  position: PositionType,
   ctx?: NetscriptContext,
 ): boolean {
   if (!(stock instanceof Stock)) {
@@ -51,7 +50,7 @@ export function placeOrder(
   }
 
   const order = new Order(stock.symbol, shares, price, type, position);
-  if (StockMarket["Orders"] == null) {
+  if (StockMarket.Orders == null) {
     const orders: IOrderBook = {};
     for (const name of Object.keys(StockMarket)) {
       const stk = StockMarket[name];
@@ -60,9 +59,9 @@ export function placeOrder(
       }
       orders[stk.symbol] = [];
     }
-    StockMarket["Orders"] = orders;
+    StockMarket.Orders = orders;
   }
-  StockMarket["Orders"][stock.symbol].push(order);
+  StockMarket.Orders[stock.symbol].push(order);
 
   // Process to see if it should be executed immediately
   const processOrderRefs = {
@@ -77,18 +76,18 @@ export function placeOrder(
 // Returns true if successfully cancels an order, false otherwise
 export interface ICancelOrderParams {
   order?: Order;
-  pos?: PositionTypes;
+  pos?: PositionType;
   price?: number;
   shares?: number;
   stock?: Stock;
-  type?: OrderTypes;
+  type?: OrderType;
 }
 export function cancelOrder(params: ICancelOrderParams, ctx?: NetscriptContext): boolean {
-  if (StockMarket["Orders"] == null) return false;
+  if (StockMarket.Orders == null) return false;
   if (params.order && params.order instanceof Order) {
     const order = params.order;
     // An 'Order' object is passed in
-    const stockOrders = StockMarket["Orders"][order.stockSymbol];
+    const stockOrders = StockMarket.Orders[order.stockSymbol];
     for (let i = 0; i < stockOrders.length; ++i) {
       if (order == stockOrders[i]) {
         stockOrders.splice(i, 1);
@@ -105,7 +104,7 @@ export function cancelOrder(params: ICancelOrderParams, ctx?: NetscriptContext):
     params.stock instanceof Stock
   ) {
     // Order properties are passed in. Need to look for the order
-    const stockOrders = StockMarket["Orders"][params.stock.symbol];
+    const stockOrders = StockMarket.Orders[params.stock.symbol];
     const orderTxt = params.stock.symbol + " - " + params.shares + " @ " + formatMoney(params.price);
     for (let i = 0; i < stockOrders.length; ++i) {
       const order = stockOrders[i];
@@ -147,8 +146,8 @@ export function deleteStockMarket(): void {
 }
 
 export function initStockMarket(): void {
-  for (const stk of Object.keys(StockMarket)) {
-    if (StockMarket.hasOwnProperty(stk)) delete StockMarket[stk];
+  for (const stockName of Object.getOwnPropertyNames(StockMarket)) {
+    delete StockMarket[stockName];
   }
 
   for (const metadata of InitStockMetadata) {
@@ -162,16 +161,16 @@ export function initStockMarket(): void {
     if (!(stock instanceof Stock)) continue;
     orders[stock.symbol] = [];
   }
-  StockMarket["Orders"] = orders;
+  StockMarket.Orders = orders;
 
   StockMarket.storedCycles = 0;
   StockMarket.lastUpdate = 0;
-  StockMarket.ticksUntilCycle = TicksPerCycle;
+  StockMarket.ticksUntilCycle = StockMarketConstants.TicksPerCycle;
   initSymbolToStockMap();
 }
 
 export function initSymbolToStockMap(): void {
-  for (const [name, symbol] of Object.entries(StockSymbols)) {
+  for (const [name, symbol] of Object.entries(StockSymbol)) {
     const stock = StockMarket[name];
     if (stock == null) {
       console.error(`Could not find Stock for ${name}`);
@@ -192,13 +191,11 @@ function stockMarketCycle(): void {
       stock.flipForecastForecast();
     }
 
-    StockMarket.ticksUntilCycle = TicksPerCycle;
+    StockMarket.ticksUntilCycle = StockMarketConstants.TicksPerCycle;
   }
 }
 
-// Stock prices updated every 6 seconds
-const msPerStockUpdate = 6e3;
-const cyclesPerStockUpdate = msPerStockUpdate / CONSTANTS.MilliPerCycle;
+const cyclesPerStockUpdate = StockMarketConstants.msPerStockUpdate / CONSTANTS.MilliPerCycle;
 export function processStockPrices(numCycles = 1): void {
   if (StockMarket.storedCycles == null || isNaN(StockMarket.storedCycles)) {
     StockMarket.storedCycles = 0;
@@ -212,14 +209,14 @@ export function processStockPrices(numCycles = 1): void {
   // We can process the update every 4 seconds as long as there are enough
   // stored cycles. This lets us account for offline time
   const timeNow = new Date().getTime();
-  if (timeNow - StockMarket.lastUpdate < 4e3) return;
+  if (timeNow - StockMarket.lastUpdate < StockMarketConstants.msPerStockUpdateMin) return;
 
   StockMarket.lastUpdate = timeNow;
   StockMarket.storedCycles -= cyclesPerStockUpdate;
 
   // Cycle
   if (StockMarket.ticksUntilCycle == null || typeof StockMarket.ticksUntilCycle !== "number") {
-    StockMarket.ticksUntilCycle = TicksPerCycle;
+    StockMarket.ticksUntilCycle = StockMarketConstants.TicksPerCycle;
   }
   --StockMarket.ticksUntilCycle;
   if (StockMarket.ticksUntilCycle <= 0) stockMarketCycle();
@@ -254,16 +251,16 @@ export function processStockPrices(numCycles = 1): void {
     };
     if (c < chc) {
       stock.changePrice(stock.price * (1 + av));
-      processOrders(stock, OrderTypes.LimitBuy, PositionTypes.Short, processOrderRefs);
-      processOrders(stock, OrderTypes.LimitSell, PositionTypes.Long, processOrderRefs);
-      processOrders(stock, OrderTypes.StopBuy, PositionTypes.Long, processOrderRefs);
-      processOrders(stock, OrderTypes.StopSell, PositionTypes.Short, processOrderRefs);
+      processOrders(stock, OrderType.LimitBuy, PositionType.Short, processOrderRefs);
+      processOrders(stock, OrderType.LimitSell, PositionType.Long, processOrderRefs);
+      processOrders(stock, OrderType.StopBuy, PositionType.Long, processOrderRefs);
+      processOrders(stock, OrderType.StopSell, PositionType.Short, processOrderRefs);
     } else {
       stock.changePrice(stock.price / (1 + av));
-      processOrders(stock, OrderTypes.LimitBuy, PositionTypes.Long, processOrderRefs);
-      processOrders(stock, OrderTypes.LimitSell, PositionTypes.Short, processOrderRefs);
-      processOrders(stock, OrderTypes.StopBuy, PositionTypes.Short, processOrderRefs);
-      processOrders(stock, OrderTypes.StopSell, PositionTypes.Long, processOrderRefs);
+      processOrders(stock, OrderType.LimitBuy, PositionType.Long, processOrderRefs);
+      processOrders(stock, OrderType.LimitSell, PositionType.Short, processOrderRefs);
+      processOrders(stock, OrderType.StopBuy, PositionType.Short, processOrderRefs);
+      processOrders(stock, OrderType.StopSell, PositionType.Long, processOrderRefs);
     }
 
     let otlkMagChange = stock.otlkMag * av;

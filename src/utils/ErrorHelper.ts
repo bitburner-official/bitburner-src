@@ -55,7 +55,7 @@ export interface IErrorData {
 export const newIssueUrl = `https://github.com/bitburner-official/bitburner-src/issues/new`;
 
 function getErrorMetadata(error: Error, errorInfo?: React.ErrorInfo, page?: Page): IErrorMetadata {
-  const isElectron = navigator.userAgent.toLowerCase().indexOf(" electron/") > -1;
+  const isElectron = navigator.userAgent.toLowerCase().includes(" electron/");
   const env = process.env.NODE_ENV === "development" ? GameEnv.Development : GameEnv.Production;
   const version: GameVersion = {
     version: CONSTANTS.VersionString,
@@ -103,7 +103,7 @@ Please fill this information with details if relevant.
 
 ### Environment
 
-* Error: ${metadata.error?.toString() ?? "n/a"}
+* Error: ${metadata.error.toString() ?? "n/a"}
 * Page: ${metadata.page ?? "n/a"}
 * Version: ${metadata.version.toDisplay()}
 * Environment: ${GameEnv[metadata.environment]}

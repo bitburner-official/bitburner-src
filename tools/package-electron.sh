@@ -6,17 +6,17 @@ mkdir .package
 rm -rf .build
 mkdir .build
 
+# Install electron sub-dependencies
+cd electron
+npm install
+cd ..
+
 # .app should have the fully built game already after npm run build
 cp -r .app/* .package
 cp -r electron/* .package
 
 # steam_appid.txt would end up in the resource dir
 rm .package/steam_appid.txt
-
-# Install electron sub-dependencies
-cd electron
-npm install
-cd ..
 
 BUILD_PLATFORM="${1:-"all"}"
 # And finally build the app.

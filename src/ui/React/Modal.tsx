@@ -1,11 +1,13 @@
+import React from "react";
 import { Theme } from "@mui/material";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import Fade from "@mui/material/Fade";
 import M from "@mui/material/Modal";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import { SxProps } from "@mui/system";
-import React from "react";
+import CloseIcon from "@mui/icons-material/Close";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,6 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: "center",
     },
     paper: {
+      position: "relative",
       backgroundColor: theme.palette.background.default,
       border: "2px solid " + theme.palette.primary.main,
       boxShadow: `0px 3px 5px -1px ${theme.palette.primary.dark},0px 5px 8px 0px ${theme.palette.primary.dark},0px 1px 14px 0px ${theme.palette.primary.dark}`,
@@ -27,6 +30,13 @@ const useStyles = makeStyles((theme: Theme) =>
         display: "none",
       },
       scrollbarWidth: "none", // firefox
+    },
+    closeButton: {
+      position: "absolute",
+      right: 3,
+      top: 3,
+      width: 20,
+      height: 20,
     },
   }),
 );
@@ -54,6 +64,9 @@ export const Modal = (props: IProps): React.ReactElement => {
     >
       <Fade in={props.open}>
         <div className={classes.paper}>
+          <IconButton className={classes.closeButton} onClick={props.onClose}>
+            <CloseIcon />
+          </IconButton>
           <Box sx={{ m: 2 }}>{props.children}</Box>
         </div>
       </Fade>

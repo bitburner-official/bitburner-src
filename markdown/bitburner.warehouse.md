@@ -16,8 +16,8 @@ interface Warehouse
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [city](./bitburner.warehouse.city.md) |  | [CityName](./bitburner.cityname.md) | City in which the warehouse is located |
 |  [level](./bitburner.warehouse.level.md) |  | number | Amount of size upgrade bought |
-|  [loc](./bitburner.warehouse.loc.md) |  | [CityName](./bitburner.cityname.md) | City in which the warehouse is located |
 |  [size](./bitburner.warehouse.size.md) |  | number | Total space in the warehouse |
 |  [sizeUsed](./bitburner.warehouse.sizeused.md) |  | number | Used space in the warehouse |
 |  [smartSupplyEnabled](./bitburner.warehouse.smartsupplyenabled.md) |  | boolean | Smart Supply status in the warehouse |

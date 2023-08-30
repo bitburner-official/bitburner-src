@@ -9,13 +9,14 @@
 |  Enumeration | Description |
 |  --- | --- |
 |  [CityName](./bitburner.cityname.md) | Names of all cities |
+|  [CompanyName](./bitburner.companyname.md) | Names of all companies |
 |  [CrimeType](./bitburner.crimetype.md) |  |
 |  [FactionWorkType](./bitburner.factionworktype.md) |  |
 |  [GymType](./bitburner.gymtype.md) |  |
 |  [JobName](./bitburner.jobname.md) |  |
 |  [LocationName](./bitburner.locationname.md) | Names of all locations |
-|  [OrderTypes](./bitburner.ordertypes.md) |  |
-|  [PositionTypes](./bitburner.positiontypes.md) |  |
+|  [OrderType](./bitburner.ordertype.md) |  |
+|  [PositionType](./bitburner.positiontype.md) |  |
 |  [ToastVariant](./bitburner.toastvariant.md) |  |
 |  [UniversityClassType](./bitburner.universityclasstype.md) |  |
 
@@ -84,6 +85,7 @@
 |  [Player](./bitburner.player.md) |  |
 |  [ProcessInfo](./bitburner.processinfo.md) | A single process on a server. |
 |  [Product](./bitburner.product.md) | Product in a warehouse |
+|  [ReactElement](./bitburner.reactelement.md) | A stand-in for the real React.ReactElement. Use React.createElement to make these. See [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation. |
 |  [RecentScript](./bitburner.recentscript.md) |  |
 |  [ReputationFormulas](./bitburner.reputationformulas.md) | Reputation formulas |
 |  [ResetInfo](./bitburner.resetinfo.md) | Various info about resets |
@@ -97,8 +99,10 @@
 |  [SleevePerson](./bitburner.sleeveperson.md) |  |
 |  [SourceFileLvl](./bitburner.sourcefilelvl.md) |  |
 |  [Stanek](./bitburner.stanek.md) | Stanek's Gift API. |
+|  [StockMarketConstants](./bitburner.stockmarketconstants.md) | Constants used for the stockmarket game mechanic. |
 |  [StockOrder](./bitburner.stockorder.md) | <p>Return value of [getOrders](./bitburner.tix.getorders.md)</p><p>Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md)</p> |
 |  [StockOrderObject](./bitburner.stockorderobject.md) | Value in map of [StockOrder](./bitburner.stockorder.md) |
+|  [TailProperties](./bitburner.tailproperties.md) |  |
 |  [TIX](./bitburner.tix.md) | Stock market API |
 |  [UserInterface](./bitburner.userinterface.md) | User Interface API. |
 |  [UserInterfaceTheme](./bitburner.userinterfacetheme.md) | Interface Theme |
@@ -116,12 +120,14 @@
 |  [CorpIndustryName](./bitburner.corpindustryname.md) |  |
 |  [CorpMaterialName](./bitburner.corpmaterialname.md) |  |
 |  [CorpResearchName](./bitburner.corpresearchname.md) |  |
+|  [CorpSmartSupplyOption](./bitburner.corpsmartsupplyoption.md) |  |
 |  [CorpStateName](./bitburner.corpstatename.md) |  |
 |  [CorpUnlockName](./bitburner.corpunlockname.md) |  |
 |  [CorpUpgradeName](./bitburner.corpupgradename.md) |  |
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
 |  [NSEnums](./bitburner.nsenums.md) |  |
 |  [PortData](./bitburner.portdata.md) |  |
+|  [ReactNode](./bitburner.reactnode.md) | <p>A stand-in for the real React.ReactNode. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. number and string are displayed directly. boolean, null, and undefined are ignored and not rendered. An array of ReactNodes will display all members of that array sequentially.</p><p>Use React.createElement to make the ReactElement type, see [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.</p> |
 |  [ScriptArg](./bitburner.scriptarg.md) |  |
 |  [SleeveBladeburnerTask](./bitburner.sleevebladeburnertask.md) |  |
 |  [SleeveClassTask](./bitburner.sleeveclasstask.md) |  |

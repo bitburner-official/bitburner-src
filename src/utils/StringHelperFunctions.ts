@@ -1,5 +1,5 @@
 import { Settings } from "../Settings/Settings";
-import { isString } from "./helpers/isString";
+import { isString } from "./helpers/string";
 
 /*
 Converts a date representing time in milliseconds to a string with the format H hours M minutes and S seconds

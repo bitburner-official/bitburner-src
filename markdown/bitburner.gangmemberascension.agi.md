@@ -4,7 +4,7 @@
 
 ## GangMemberAscension.agi property
 
-Agility multiplier gained from ascending
+Factor by which the agility ascension multiplier was increased (newMult / oldMult)
 
 **Signature:**
 

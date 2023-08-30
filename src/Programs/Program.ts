@@ -1,4 +1,4 @@
-import type { CompletedProgramName } from "./Programs";
+import type { CompletedProgramName } from "@enums";
 import { ProgramFilePath, asProgramFilePath } from "../Paths/ProgramFilePath";
 import { BaseServer } from "../Server/BaseServer";
 
@@ -8,11 +8,11 @@ export interface IProgramCreate {
   time: number;
   tooltip: string;
 }
-type ProgramConstructorParams = {
+interface ProgramConstructorParams {
   name: CompletedProgramName;
   create: IProgramCreate | null;
   run: (args: string[], server: BaseServer) => void;
-};
+}
 
 export class Program {
   name: ProgramFilePath & CompletedProgramName;

@@ -17,7 +17,8 @@ export type NSEnums = {
   LocationName: typeof LocationName;
   ToastVariant: typeof ToastVariant;
   UniversityClassType: typeof UniversityClassType;
+  CompanyName: typeof CompanyName;
 };
 ```
-**References:** [CityName](./bitburner.cityname.md)<!-- -->, [CrimeType](./bitburner.crimetype.md)<!-- -->, [FactionWorkType](./bitburner.factionworktype.md)<!-- -->, [GymType](./bitburner.gymtype.md)<!-- -->, [JobName](./bitburner.jobname.md)<!-- -->, [LocationName](./bitburner.locationname.md)<!-- -->, [ToastVariant](./bitburner.toastvariant.md)<!-- -->, [UniversityClassType](./bitburner.universityclasstype.md)
+**References:** [CityName](./bitburner.cityname.md)<!-- -->, [CrimeType](./bitburner.crimetype.md)<!-- -->, [FactionWorkType](./bitburner.factionworktype.md)<!-- -->, [GymType](./bitburner.gymtype.md)<!-- -->, [JobName](./bitburner.jobname.md)<!-- -->, [LocationName](./bitburner.locationname.md)<!-- -->, [ToastVariant](./bitburner.toastvariant.md)<!-- -->, [UniversityClassType](./bitburner.universityclasstype.md)<!-- -->, [CompanyName](./bitburner.companyname.md)
 

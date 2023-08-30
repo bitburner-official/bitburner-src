@@ -1,6 +1,6 @@
 import { Button, Container, Paper, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import React, { useCallback, useState } from "react";
+import { AugmentationName } from "@enums";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { Player } from "@player";
@@ -15,12 +15,12 @@ import { SlashGame } from "./SlashGame";
 import { Victory } from "./Victory";
 import { WireCuttingGame } from "./WireCuttingGame";
 
-interface IProps {
+type GameProps = {
   StartingDifficulty: number;
   Difficulty: number;
   Reward: number;
   MaxLevel: number;
-}
+};
 
 enum Stage {
   Countdown = 0,
@@ -40,7 +40,7 @@ const minigames = [
   WireCuttingGame,
 ];
 
-export function Game(props: IProps): React.ReactElement {
+export function Game(props: GameProps): React.ReactElement {
   const [level, setLevel] = useState(1);
   const [stage, setStage] = useState(Stage.Countdown);
   const [results, setResults] = useState("");
@@ -49,32 +49,21 @@ export function Game(props: IProps): React.ReactElement {
     id: Math.floor(Math.random() * minigames.length),
   });
 
-  function nextGameId(): number {
-    let id = gameIds.lastGames[0];
-    const ids = [gameIds.lastGames[0], gameIds.lastGames[1], gameIds.id];
-    while (ids.includes(id)) {
-      id = Math.floor(Math.random() * minigames.length);
-    }
-    return id;
-  }
+  const setupNextGame = useCallback(() => {
+    const nextGameId = () => {
+      let id = gameIds.lastGames[0];
+      const ids = [gameIds.lastGames[0], gameIds.lastGames[1], gameIds.id];
+      while (ids.includes(id)) {
+        id = Math.floor(Math.random() * minigames.length);
+      }
+      return id;
+    };
 
-  function setupNextGame(): void {
     setGameIds({
       lastGames: [gameIds.lastGames[1], gameIds.id],
       id: nextGameId(),
     });
-  }
-
-  function success(): void {
-    pushResult(true);
-    if (level === props.MaxLevel) {
-      setStage(Stage.Sell);
-    } else {
-      setStage(Stage.Countdown);
-      setLevel(level + 1);
-    }
-    setupNextGame();
-  }
+  }, [gameIds]);
 
   function pushResult(win: boolean): void {
     setResults((old) => {
@@ -85,20 +74,34 @@ export function Game(props: IProps): React.ReactElement {
     });
   }
 
-  function failure(options?: { automated: boolean }): void {
-    setStage(Stage.Countdown);
-    pushResult(false);
-    // Kill the player immediately if they use automation, so
-    // it's clear they're not meant to
-    const damage = options?.automated
-      ? Player.hp.current
-      : props.StartingDifficulty * 3 * (Player.hasAugmentation(AugmentationNames.WKSharmonizer, true) ? 0.5 : 1);
-    if (Player.takeDamage(damage)) {
-      Router.toPage(Page.City);
-      return;
+  const onSuccess = useCallback(() => {
+    pushResult(true);
+    if (level === props.MaxLevel) {
+      setStage(Stage.Sell);
+    } else {
+      setStage(Stage.Countdown);
+      setLevel(level + 1);
     }
     setupNextGame();
-  }
+  }, [level, props.MaxLevel, setupNextGame]);
+
+  const onFailure = useCallback(
+    (options?: { automated: boolean }) => {
+      setStage(Stage.Countdown);
+      pushResult(false);
+      // Kill the player immediately if they use automation, so
+      // it's clear they're not meant to
+      const damage = options?.automated
+        ? Player.hp.current
+        : props.StartingDifficulty * 3 * (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 0.5 : 1);
+      if (Player.takeDamage(damage)) {
+        Router.toPage(Page.City);
+        return;
+      }
+      setupNextGame();
+    },
+    [props.StartingDifficulty, setupNextGame],
+  );
 
   function cancel(): void {
     Router.toPage(Page.City);
@@ -112,7 +115,9 @@ export function Game(props: IProps): React.ReactElement {
       break;
     case Stage.Minigame: {
       const MiniGame = minigames[gameIds.id];
-      stageComponent = <MiniGame onSuccess={success} onFailure={failure} difficulty={props.Difficulty + level / 50} />;
+      stageComponent = (
+        <MiniGame onSuccess={onSuccess} onFailure={onFailure} difficulty={props.Difficulty + level / 50} />
+      );
       break;
     }
     case Stage.Sell:

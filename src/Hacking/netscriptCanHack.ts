@@ -19,7 +19,7 @@ function baseCheck(server: Server, fnName: string): IReturnStatus {
     };
   }
 
-  if (server.hasAdminRights === false) {
+  if (!server.hasAdminRights) {
     return {
       res: false,
       msg: `Cannot ${fnName} ${hostname} server because you do not have root access`,

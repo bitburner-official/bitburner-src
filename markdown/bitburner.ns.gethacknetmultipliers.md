@@ -23,25 +23,12 @@ RAM cost: 0.25 GB
 
 Returns an object containing the Player’s hacknet related multipliers. These multipliers are returned in fractional forms, not percentages (e.g. 1.5 instead of 150%).
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-// Example of how this can be used:
-var mults = getHacknetMultipliers();
-print(mults.production);
-print(mults.purchaseCost);
-```
-
-## Example 2
-
-
-```ts
-// NS2:
-// Example of how this can be used:
-const {production, purchaseCost} = ns.getHacknetMultipliers();
-print(production);
-print(purchaseCost);
+```js
+const mults = ns.getHacknetMultipliers();
+ns.tprint(`production: ${mults.production}`);
+ns.tprint(`purchaseCost: ${mults.purchaseCost}`);
 ```
 

@@ -21,10 +21,10 @@ import { WorkerScript } from "../../Netscript/WorkerScript";
 
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 
-type IProps = {
+interface IProps {
   server: BaseServer;
   workerScripts: WorkerScript[];
-};
+}
 
 export function ServerAccordion(props: IProps): React.ReactElement {
   const [open, setOpen] = React.useState(false);

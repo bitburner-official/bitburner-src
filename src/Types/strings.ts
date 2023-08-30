@@ -6,7 +6,7 @@ export type ServerName = string /*& { __type: "ServerName" }*/;
 }*/
 
 // IP Address
-export type IPAddress = string /*& { __type: "IPAddress" }*/;
+export type IPAddress = string & { __type: "IPAddress" };
 export function isIPAddress(value: string): value is IPAddress {
   const regex =
     /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;

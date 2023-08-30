@@ -2,7 +2,7 @@ import { Close, Flag, Report } from "@mui/icons-material";
 import { Box, Paper, Typography } from "@mui/material";
 import { uniqueId } from "lodash";
 import React, { useEffect, useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { KEY } from "../../utils/helpers/keyCodes";
@@ -40,7 +40,7 @@ export function MinesweeperGame(props: IMinigameProps): React.ReactElement {
   const [answer, setAnswer] = useState(generateEmptyField(difficulty));
   const [pos, setPos] = useState([0, 0]);
   const [memoryPhase, setMemoryPhase] = useState(true);
-  const hasAugment = Player.hasAugmentation(AugmentationNames.HuntOfArtemis, true);
+  const hasAugment = Player.hasAugmentation(AugmentationName.HuntOfArtemis, true);
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();
     if (memoryPhase) return;

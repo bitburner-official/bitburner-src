@@ -1,11 +1,12 @@
 import { Player } from "@player";
 import { Router } from "./ui/GameRoot";
+import { Page } from "./ui/Router";
 import { Terminal } from "./Terminal";
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
+import { SnackbarEvents } from "./ui/React/Snackbar";
+import { ToastVariant } from "@enums";
 import { IReturnStatus } from "./types";
 import { GetServer } from "./Server/AllServers";
 import { ImportPlayerData, SaveData, saveObject } from "./SaveObject";
-import { Settings } from "./Settings/Settings";
 import { exportScripts } from "./Terminal/commands/download";
 import { CONSTANTS } from "./Constants";
 import { hash } from "./hash/hash";
@@ -28,8 +29,8 @@ declare global {
       triggerGameExport: () => void;
       triggerScriptsExport: () => void;
       getSaveData: () => { save: string; fileName: string };
-      getSaveInfo: (base64save: string) => Promise<ImportPlayerData | undefined>;
-      pushSaveData: (base64save: string, automatic?: boolean) => void;
+      getSaveInfo: (base64Save: string) => Promise<ImportPlayerData | undefined>;
+      pushSaveData: (base64Save: string, automatic?: boolean) => void;
     };
     electronBridge: {
       send: (channel: string, data?: unknown) => void;
@@ -45,7 +46,7 @@ declare global {
 
 export function initElectron(): void {
   const userAgent = navigator.userAgent.toLowerCase();
-  if (userAgent.indexOf(" electron/") > -1) {
+  if (userAgent.includes(" electron/")) {
     // Electron-specific code
     document.achievements = [];
     initWebserver();
@@ -133,20 +134,21 @@ function initSaveFunctions(): void {
     triggerScriptsExport: (): void => exportScripts("*", Player.getHomeComputer()),
     getSaveData: (): { save: string; fileName: string } => {
       return {
-        save: saveObject.getSaveString(Settings.ExcludeRunningScriptsFromSave),
+        save: saveObject.getSaveString(),
         fileName: saveObject.getSaveFileName(),
       };
     },
-    getSaveInfo: async (base64save: string): Promise<ImportPlayerData | undefined> => {
+    getSaveInfo: async (base64Save: string): Promise<ImportPlayerData | undefined> => {
       try {
-        const data = await saveObject.getImportDataFromString(base64save);
+        const data = await saveObject.getImportDataFromString(base64Save);
         return data.playerData;
       } catch (error) {
         console.error(error);
         return;
       }
     },
-    pushSaveData: (base64save: string, automatic = false): void => Router.toImportSave(base64save, automatic),
+    pushSaveData: (base64Save: string, automatic = false): void =>
+      Router.toPage(Page.ImportSave, { base64Save, automatic }),
   };
 
   // Will be consumed by the electron wrapper.

@@ -1,92 +1,42 @@
 import {
   CorpEmployeePosition,
   CorpIndustryName,
-  CorpMaterialName,
+  CorpMaterialName as APIMaterialName,
   CorpResearchName,
+  CorpSmartSupplyOption,
   CorpStateName,
-  CorpUnlockName,
-  CorpUpgradeName,
+  CorpUnlockName as APIUnlockName,
+  CorpUpgradeName as APIUpgradeName,
 } from "@nsdefs";
 import { CONSTANTS } from "../../Constants";
-import { IndustryType, EmployeePositions } from "./Enums";
-
-// For typed strings, we need runtime objects to do API typechecking against.
-
-// This structure + import * as corpConstants allows easier type definitions for individual properties.
+import {
+  IndustryType,
+  CorpEmployeeJob,
+  CorpMaterialName,
+  CorpUnlockName,
+  CorpUpgradeName,
+  SmartSupplyOption,
+  CorpBaseResearchName,
+  CorpProductResearchName,
+} from "@enums";
+import { PositiveInteger } from "../../types";
 
 /** Names of all corporation game states */
 export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "EXPORT", "SALE"],
   // TODO: remove IndustryType and EmployeePositions enums and just use the typed strings.
   /** Names of all corporation employee positions */
-  employeePositions: CorpEmployeePosition[] = Object.values(EmployeePositions),
+  employeePositions: CorpEmployeePosition[] = Object.values(CorpEmployeeJob),
   /** Names of all industries. */
   industryNames: CorpIndustryName[] = Object.values(IndustryType),
   /** Names of all materials */
-  materialNames: CorpMaterialName[] = [
-    "Water",
-    "Ore",
-    "Minerals",
-    "Food",
-    "Plants",
-    "Metal",
-    "Hardware",
-    "Chemicals",
-    "Drugs",
-    "Robots",
-    "AI Cores",
-    "Real Estate",
-  ],
+  materialNames: APIMaterialName[] = Object.values(CorpMaterialName),
   /** Names of all one-time corporation-wide unlocks */
-  unlockNames: CorpUnlockName[] = [
-    "Export",
-    "Smart Supply",
-    "Market Research - Demand",
-    "Market Data - Competition",
-    "VeChain",
-    "Shady Accounting",
-    "Government Partnership",
-    "Warehouse API",
-    "Office API",
-  ],
-  upgradeNames: CorpUpgradeName[] = [
-    "Smart Factories",
-    "Smart Storage",
-    "DreamSense",
-    "Wilson Analytics",
-    "Nuoptimal Nootropic Injector Implants",
-    "Speech Processor Implants",
-    "Neural Accelerators",
-    "FocusWires",
-    "ABC SalesBots",
-    "Project Insight",
-  ],
+  unlockNames: APIUnlockName[] = Object.values(CorpUnlockName),
+  upgradeNames: APIUpgradeName[] = Object.values(CorpUpgradeName),
   /** Names of all reasearches common to all industries */
-  researchNamesBase: CorpResearchName[] = [
-    "Hi-Tech R&D Laboratory",
-    "AutoBrew",
-    "AutoPartyManager",
-    "Automatic Drug Administration",
-    "Bulk Purchasing",
-    "CPH4 Injections",
-    "Drones",
-    "Drones - Assembly",
-    "Drones - Transport",
-    "Go-Juice",
-    "HRBuddy-Recruitment",
-    "HRBuddy-Training",
-    "Market-TA.I",
-    "Market-TA.II",
-    "Overclock",
-    "Self-Correcting Assemblers",
-    "Sti.mu",
-  ],
+  researchNamesBase: CorpResearchName[] = Object.values(CorpBaseResearchName),
   /** Names of all researches only available to product industries */
-  researchNamesProductOnly: CorpResearchName[] = [
-    "uPgrade: Capacity.I",
-    "uPgrade: Capacity.II",
-    "uPgrade: Dashboard",
-    "uPgrade: Fulcrum",
-  ],
+  researchNamesProductOnly: CorpResearchName[] = Object.values(CorpProductResearchName),
   /** Names of all researches */
   researchNames: CorpResearchName[] = [...researchNamesBase, ...researchNamesProductOnly],
   initialShares = 1e9,
@@ -121,21 +71,13 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   valuationLength = 10,
   /** Minimum decay value for employee morale/energy */
   minEmployeeDecay = 10,
-  /**smart supply ot */
-  smartSupplyUseOptions = ["leftovers", "imports", "none"],
-  PurchaseMultipliers: {
-    [key: string]: number | "MAX" | undefined;
-    x1: number;
-    x5: number;
-    x10: number;
-    x50: number;
-    x100: number;
-    MAX: "MAX";
-  } = {
-    x1: 1,
-    x5: 5,
-    x10: 10,
-    x50: 50,
-    x100: 100,
-    MAX: "MAX",
+  /** smart supply options */
+  smartSupplyOptions: CorpSmartSupplyOption[] = Object.values(SmartSupplyOption),
+  PurchaseMultipliers = {
+    x1: 1 as PositiveInteger,
+    x5: 5 as PositiveInteger,
+    x10: 10 as PositiveInteger,
+    x50: 50 as PositiveInteger,
+    x100: 100 as PositiveInteger,
+    MAX: "MAX" as const,
   };

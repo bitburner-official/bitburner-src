@@ -60,12 +60,8 @@ called `npm` is installed as well.
 
 Not all code contributions will be accepted. The safest way to ensure
 that you don't waste time working on something that gets rejected is to
-run your idea(s)/plan(s) past [danielyxie](https://github.com/danielyxie) first.
-You can contact him through:
-
-- Github
-- Discord
-- [Reddit](https://www.reddit.com/user/chapt3r/)
+run your idea(s)/plan(s) past the developpers first.
+You can contact him through Discord.
 
 Otherwise, here are some general guidelines for determining what types of
 changes are okay to contribute:
@@ -217,9 +213,8 @@ the following rules:
 
 ## As a Documenter
 
-To contribute to and view your changes to the BitBurner documentation on [Read The
-Docs](http://bitburner.readthedocs.io/), you will
-need to have Python installed, along with [Sphinx](http://www.sphinx-doc.org).
+To contribute to and view your changes to the BitBurner documentation in-game, you will
+need to edit the files in [this folder](https://github.com/bitburner-official/bitburner-src/tree/dev/src/Documentation/doc)
 
 To make change to the [in-game documentation](../markdown/bitburner.md), you will need to modify the [TypeScript definitions](../src/ScriptEditor/NetscriptDefinitions.d.ts), not the Markdown files.
 
@@ -234,8 +229,6 @@ rules:
 - Rebase your branch if necessary.
 - When submitting the pull request, make sure that the base fork is
   _bitburner-official/bitburner-src_ and the base is _dev_.
-- Do not check in any generated files under `doc\`. The documentation is built
-  automatically by ReadTheDocs.
 
 ## Deploying a new version
 

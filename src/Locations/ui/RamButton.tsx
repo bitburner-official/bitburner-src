@@ -11,11 +11,11 @@ import { Money } from "../../ui/React/Money";
 import { formatRam } from "../../ui/formatNumber";
 
 import { MathJax } from "better-react-mathjax";
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 
-type IProps = {
+interface IProps {
   rerender: () => void;
-};
+}
 
 export function RamButton(props: IProps): React.ReactElement {
   const homeComputer = Player.getHomeComputer();
@@ -30,7 +30,7 @@ export function RamButton(props: IProps): React.ReactElement {
     props.rerender();
   }
 
-  const bnMult = BitNodeMultipliers.HomeComputerRamCost === 1 ? "" : `\\cdot ${BitNodeMultipliers.HomeComputerRamCost}`;
+  const bnMult = currentNodeMults.HomeComputerRamCost === 1 ? "" : `\\cdot ${currentNodeMults.HomeComputerRamCost}`;
 
   return (
     <Tooltip

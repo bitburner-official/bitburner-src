@@ -1,28 +1,31 @@
-import { Player } from "@player";
-import { AugmentationNames } from "./Augmentation/data/AugmentationNames";
-
 import React, { useEffect } from "react";
 
-import { General } from "./DevMenu/ui/General";
-import { Stats } from "./DevMenu/ui/Stats";
-import { Factions } from "./DevMenu/ui/Factions";
-import { Augmentations } from "./DevMenu/ui/Augmentations";
-import { SourceFiles } from "./DevMenu/ui/SourceFiles";
-import { Programs } from "./DevMenu/ui/Programs";
-import { Servers } from "./DevMenu/ui/Servers";
-import { Companies } from "./DevMenu/ui/Companies";
-import { Bladeburner as BladeburnerElem } from "./DevMenu/ui/Bladeburner";
-import { Gang } from "./DevMenu/ui/Gang";
-import { Corporation } from "./DevMenu/ui/Corporation";
-import { CodingContracts } from "./DevMenu/ui/CodingContracts";
-import { StockMarket } from "./DevMenu/ui/StockMarket";
-import { Sleeves } from "./DevMenu/ui/Sleeves";
-import { Stanek } from "./DevMenu/ui/Stanek";
-import { TimeSkip } from "./DevMenu/ui/TimeSkip";
-import { SaveFile } from "./DevMenu/ui/SaveFile";
-import { Achievements } from "./DevMenu/ui/Achievements";
-import { Entropy } from "./DevMenu/ui/Entropy";
 import Typography from "@mui/material/Typography";
+
+import { Player } from "@player";
+import { AugmentationName } from "@enums";
+
+import { General } from "./DevMenu/ui/General";
+import { TimeSkip } from "./DevMenu/ui/TimeSkip";
+
+import { StatsDev } from "./DevMenu/ui/StatsDev";
+import { FactionsDev } from "./DevMenu/ui/FactionsDev";
+import { AugmentationsDev } from "./DevMenu/ui/AugmentationsDev";
+import { SourceFilesDev } from "./DevMenu/ui/SourceFilesDev";
+import { ProgramsDev } from "./DevMenu/ui/ProgramsDev";
+import { ServersDev } from "./DevMenu/ui/ServersDev";
+import { CompaniesDev } from "./DevMenu/ui/CompaniesDev";
+import { BladeburnerDev } from "./DevMenu/ui/BladeburnerDev";
+import { GangDev } from "./DevMenu/ui/GangDev";
+import { CorporationDev } from "./DevMenu/ui/CorporationDev";
+import { CodingContractsDev } from "./DevMenu/ui/CodingContractsDev";
+import { StockMarketDev } from "./DevMenu/ui/StockMarketDev";
+import { SleevesDev } from "./DevMenu/ui/SleevesDev";
+import { StanekDev } from "./DevMenu/ui/StanekDev";
+import { SaveFileDev } from "./DevMenu/ui/SaveFileDev";
+import { AchievementsDev } from "./DevMenu/ui/AchievementsDev";
+import { EntropyDev } from "./DevMenu/ui/EntropyDev";
+
 import { Exploit } from "./Exploits/Exploit";
 
 export function DevMenuRoot(): React.ReactElement {
@@ -33,31 +36,31 @@ export function DevMenuRoot(): React.ReactElement {
     <>
       <Typography>Development Menu - Only meant to be used for testing/debugging</Typography>
       <General />
-      <Stats />
-      <Factions />
-      <Augmentations />
-      <SourceFiles />
-      <Programs />
-      <Servers />
-      <Companies />
+      <StatsDev />
+      <FactionsDev />
+      <AugmentationsDev />
+      <SourceFilesDev />
+      <ProgramsDev />
+      <ServersDev />
+      <CompaniesDev />
 
-      {Player.bladeburner && <BladeburnerElem />}
+      {Player.bladeburner && <BladeburnerDev bladeburner={Player.bladeburner} />}
 
-      {Player.gang && <Gang />}
+      {Player.gang && <GangDev />}
 
-      {Player.corporation && <Corporation />}
+      {Player.corporation && <CorporationDev />}
 
-      <CodingContracts />
+      <CodingContractsDev />
 
-      {Player.hasWseAccount && <StockMarket />}
+      {Player.hasWseAccount && <StockMarketDev />}
 
-      {Player.sleeves.length > 0 && <Sleeves />}
-      {Player.augmentations.some((aug) => aug.name === AugmentationNames.StaneksGift1) && <Stanek />}
+      {Player.sleeves.length > 0 && <SleevesDev />}
+      {Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1) && <StanekDev />}
 
       <TimeSkip />
-      <Achievements />
-      <Entropy />
-      <SaveFile />
+      <AchievementsDev />
+      <EntropyDev />
+      <SaveFileDev />
     </>
   );
 }

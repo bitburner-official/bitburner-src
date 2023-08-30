@@ -42,7 +42,7 @@ export function influenceStockThroughServerHack(server: Server, moneyHacked: num
  * server is grown (grow()). The chance of the grow() to increase the stock's
  * second-order forecast is dependent on how much money is added to the server
  * @param {Server} server - Server being grow()n
- * @param {number} moneyHacked - Amount of money added to the server
+ * @param {number} moneyGrown - Amount of money added to the server
  */
 export function influenceStockThroughServerGrow(server: Server, moneyGrown: number): void {
   const orgName = server.organizationName;
@@ -74,9 +74,7 @@ export function influenceStockThroughCompanyWork(
 ): void {
   const compName = company.name;
   let stock: Stock | null = null;
-  if (typeof compName === "string" && compName !== "") {
-    stock = StockMarket[compName];
-  }
+  stock = StockMarket[compName];
   if (!(stock instanceof Stock)) {
     return;
   }

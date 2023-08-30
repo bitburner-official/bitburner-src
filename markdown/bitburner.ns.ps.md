@@ -30,27 +30,14 @@ RAM cost: 0.2 GB
 
 Returns an array with general information about all scripts running on the specified target server.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-var scripts = ps("home");
-for (var i = 0; i < scripts.length; ++i) {
-    tprint(scripts[i].filename + ' ' + scripts[i].threads);
-    tprint(scripts[i].args);
-}
-```
-
-## Example 2
-
-
-```ts
-// NS2:
+```js
 const ps = ns.ps("home");
 for (let script of ps) {
-    ns.tprint(`${script.filename} ${script.threads}`);
-    ns.tprint(script.args);
+  ns.tprint(`${script.filename} ${script.threads}`);
+  ns.tprint(script.args);
 }
 ```
 

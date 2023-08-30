@@ -28,19 +28,10 @@ RAM cost: 0.05 GB
 
 Running NUKE.exe on a target server gives you root access which means you can execute scripts on said server. NUKE.exe must exist on your home computer.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-nuke("foodnstuff");
-```
-
-## Example 2
-
-
-```ts
-// NS2:
+```js
 ns.nuke("foodnstuff");
 ```
 

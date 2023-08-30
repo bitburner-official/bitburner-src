@@ -9,14 +9,14 @@ Get all the logs of a script.
 **Signature:**
 
 ```typescript
-getScriptLogs(fn?: string, host?: string, ...args: (string | number | boolean)[]): string[];
+getScriptLogs(fn?: FilenameOrPID, host?: string, ...args: (string | number | boolean)[]): string[];
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  fn | string | _(Optional)_ Optional. Filename of script to get logs from. |
+|  fn | [FilenameOrPID](./bitburner.filenameorpid.md) | _(Optional)_ Optional. Filename or PID of script to get logs from. |
 |  host | string | _(Optional)_ Optional. Hostname of the server that the script is on. |
 |  args | (string \| number \| boolean)\[\] | Arguments to identify which scripts to get logs for. |
 
@@ -32,7 +32,7 @@ RAM cost: 0 GB
 
 Returns a script’s logs. The logs are returned as an array, where each line is an element in the array. The most recently logged line is at the end of the array. Note that there is a maximum number of lines that a script stores in its logs. This is configurable in the game’s options. If the function is called with no arguments, it will return the current script’s logs.
 
-Otherwise, the fn, hostname/ip, and args… arguments can be used to get the logs from another script. Remember that scripts are uniquely identified by both their names and arguments.
+Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get logs from another script. Remember that scripts are uniquely identified by both their names and arguments.
 
 ## Example
 

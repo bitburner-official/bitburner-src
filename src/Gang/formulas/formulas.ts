@@ -1,4 +1,4 @@
-import { BitNodeMultipliers } from "../../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { GangMember } from "../GangMember";
 import { GangMemberTask } from "../GangMemberTask";
 
@@ -24,7 +24,7 @@ export function calculateRespectGain(gang: FormulaGang, member: GangMember, task
   statWeight -= 4 * task.difficulty;
   if (statWeight <= 0) return 0;
   const territoryMult = Math.max(0.005, Math.pow(gang.territory * 100, task.territory.respect) / 100);
-  const territoryPenalty = (0.2 * gang.territory + 0.8) * BitNodeMultipliers.GangSoftcap;
+  const territoryPenalty = (0.2 * gang.territory + 0.8) * currentNodeMults.GangSoftcap;
   if (isNaN(territoryMult) || territoryMult <= 0) return 0;
   const respectMult = calculateWantedPenalty(gang);
   return Math.pow(11 * task.baseRespect * statWeight * territoryMult * respectMult, territoryPenalty);
@@ -68,7 +68,7 @@ export function calculateMoneyGain(gang: FormulaGang, member: GangMember, task: 
   const territoryMult = Math.max(0.005, Math.pow(gang.territory * 100, task.territory.money) / 100);
   if (isNaN(territoryMult) || territoryMult <= 0) return 0;
   const respectMult = calculateWantedPenalty(gang);
-  const territoryPenalty = (0.2 * gang.territory + 0.8) * BitNodeMultipliers.GangSoftcap;
+  const territoryPenalty = (0.2 * gang.territory + 0.8) * currentNodeMults.GangSoftcap;
   return Math.pow(5 * task.baseMoney * statWeight * territoryMult * respectMult, territoryPenalty);
 }
 

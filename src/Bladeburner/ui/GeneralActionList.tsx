@@ -11,7 +11,7 @@ interface IProps {
 export function GeneralActionList(props: IProps): React.ReactElement {
   const actions: Action[] = [];
   for (const name of Object.keys(GeneralActions)) {
-    if (GeneralActions.hasOwnProperty(name)) {
+    if (Object.hasOwn(GeneralActions, name)) {
       actions.push(GeneralActions[name]);
     }
   }

@@ -16,17 +16,19 @@ interface Product
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [cmp](./bitburner.product.cmp.md) |  | number \| undefined | Competition for the product, only present if "Market Research - Competition" unlocked |
-|  [developmentProgress](./bitburner.product.developmentprogress.md) |  | number | Creation progress - A number between 0-100 representing percentage |
-|  [dmd](./bitburner.product.dmd.md) |  | number \| undefined | Demand for the product, only present if "Market Research - Demand" unlocked |
-|  [effRat](./bitburner.product.effrat.md) |  | number | Effective rating |
+|  [actualSellAmount](./bitburner.product.actualsellamount.md) |  | number | Amount of product sold last cycle |
+|  [advertisingInvestment](./bitburner.product.advertisinginvestment.md) |  | number | Funds that were spent on advertising the product |
+|  [competition](./bitburner.product.competition.md) |  | number \| undefined | Competition for the product, only present if "Market Research - Competition" unlocked |
+|  [demand](./bitburner.product.demand.md) |  | number \| undefined | Demand for the product, only present if "Market Research - Demand" unlocked |
+|  [designInvestment](./bitburner.product.designinvestment.md) |  | number | Funds that were spent on designing the product |
+|  [desiredSellAmount](./bitburner.product.desiredsellamount.md) |  | string \| number | Desired sell amount, e.g. "PROD/2" |
+|  [desiredSellPrice](./bitburner.product.desiredsellprice.md) |  | string \| number | Desired sell price, can be "MP+5" |
+|  [developmentProgress](./bitburner.product.developmentprogress.md) |  | number | A number between 0-100 representing percentage completion |
+|  [effectiveRating](./bitburner.product.effectiverating.md) |  | number | Effective rating in the specific city |
 |  [name](./bitburner.product.name.md) |  | string | Name of the product |
-|  [pCost](./bitburner.product.pcost.md) |  | number | Production cost |
-|  [prod](./bitburner.product.prod.md) |  | number | Amount of product produced |
-|  [properties](./bitburner.product.properties.md) |  | { \[key: string\]: number } | Product Properties. The data is {<!-- -->qlt, per, dur, rel, aes, fea<!-- -->} |
-|  [qty](./bitburner.product.qty.md) |  | number | Amount of product |
-|  [rat](./bitburner.product.rat.md) |  | number | Product Rating |
-|  [sAmt](./bitburner.product.samt.md) |  | string | Sell amount, can be "PROD/2" |
-|  [sCost](./bitburner.product.scost.md) |  | string | Sell cost, can be "MP+5" |
-|  [sell](./bitburner.product.sell.md) |  | number | Amount of product sold |
+|  [productionAmount](./bitburner.product.productionamount.md) |  | number | Amount of product produced last cycle |
+|  [productionCost](./bitburner.product.productioncost.md) |  | number | Production cost |
+|  [rating](./bitburner.product.rating.md) |  | number | Rating based on stats |
+|  [stats](./bitburner.product.stats.md) |  | { quality: number; performance: number; durability: number; reliability: number; aesthetics: number; features: number; } | Product stats |
+|  [stored](./bitburner.product.stored.md) |  | number | Amount of product stored in warehouse |
 

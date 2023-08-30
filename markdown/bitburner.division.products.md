@@ -4,7 +4,7 @@
 
 ## Division.products property
 
-Products developed by this division
+Names of Products developed by this division
 
 **Signature:**
 

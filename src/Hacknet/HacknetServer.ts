@@ -12,6 +12,7 @@ import {
   calculateCacheUpgradeCost,
 } from "./formulas/HacknetServers";
 
+import { IPAddress } from "../Types/strings";
 import { createRandomIp } from "../utils/IPAddress";
 
 import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
@@ -20,7 +21,7 @@ import { Player } from "@player";
 interface IConstructorParams {
   adminRights?: boolean;
   hostname: string;
-  ip?: string;
+  ip?: IPAddress;
   isConnectedTo?: boolean;
   maxRam?: number;
   organizationName?: string;
@@ -103,9 +104,7 @@ export class HacknetServer extends BaseServer implements IHacknetNode {
   }
 
   upgradeRam(levels: number, prodMult: number): boolean {
-    for (let i = 0; i < levels; ++i) {
-      this.maxRam *= 2;
-    }
+    this.maxRam *= Math.pow(2, levels);
     this.maxRam = Math.min(HacknetServerConstants.MaxRam, Math.round(this.maxRam));
     this.updateHashRate(prodMult);
 

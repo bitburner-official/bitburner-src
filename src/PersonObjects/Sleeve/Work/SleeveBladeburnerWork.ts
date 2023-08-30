@@ -1,7 +1,7 @@
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
-import { applySleeveGains, Work, WorkType } from "./Work";
+import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
 import { CONSTANTS } from "../../../Constants";
 import { GeneralActions } from "../../../Bladeburner/data/GeneralActions";
 import { scaleWorkStats } from "../../../Work/WorkStats";
@@ -11,11 +11,11 @@ interface SleeveBladeburnerWorkParams {
   name: string;
 }
 
-export const isSleeveBladeburnerWork = (w: Work | null): w is SleeveBladeburnerWork =>
-  w !== null && w.type === WorkType.BLADEBURNER;
+export const isSleeveBladeburnerWork = (w: SleeveWorkClass | null): w is SleeveBladeburnerWork =>
+  w !== null && w.type === SleeveWorkType.BLADEBURNER;
 
-export class SleeveBladeburnerWork extends Work {
-  type: WorkType.BLADEBURNER = WorkType.BLADEBURNER;
+export class SleeveBladeburnerWork extends SleeveWorkClass {
+  type: SleeveWorkType.BLADEBURNER = SleeveWorkType.BLADEBURNER;
   cyclesWorked = 0;
   actionType: "General" | "Contracts";
   actionName: string;
@@ -65,7 +65,7 @@ export class SleeveBladeburnerWork extends Work {
 
   APICopy(sleeve: Sleeve) {
     return {
-      type: WorkType.BLADEBURNER as "BLADEBURNER",
+      type: SleeveWorkType.BLADEBURNER as "BLADEBURNER",
       actionType: this.actionType,
       actionName: this.actionName,
       cyclesWorked: this.cyclesWorked,

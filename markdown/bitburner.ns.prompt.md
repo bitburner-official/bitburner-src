@@ -42,39 +42,10 @@ Prompts the player with a dialog box. Here is an explanation of the various opti
 
 - `options.type` has value `"select"`<!-- -->. The player is shown a drop-down field. Choosing type `"select"` will require an array to be passed via the `options.choices` property. The array can be an array of strings, an array of numbers (not BigInt numbers), or a mixture of both numbers and strings. Any other types of array elements will result in an error or an undefined/unexpected behavior. The `options.choices` property will be ignored if `options.type` has a value other than `"select"`<!-- -->. The script's execution is halted until the player chooses one of the provided options and presses the "Confirm" button.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1
-// A Yes/No question. The default is to create a boolean dialog box.
-var queryA = "Do you enjoy Bitburner?";
-var resultA = prompt(queryA);
-tprint(queryA + " " + resultA);
-
-// Another Yes/No question. Can also create a boolean dialog box by explicitly
-// passing the option {"type": "boolean"}.
-var queryB = "Is programming fun?";
-var resultB = prompt(queryB, { type: "boolean" });
-tprint(queryB + " " + resultB);
-
-// Free-form text box.
-var resultC = prompt("Please enter your name.", { type: "text" });
-tprint("Hello, " + resultC + ".");
-
-// A drop-down list.
-var resultD = prompt("Please select your favorite fruit.", {
-    type: "select",
-    choices: ["Apple", "Banana", "Orange", "Pear", "Strawberry"]
-});
-tprint("Your favorite fruit is " + resultD.toLowerCase() + ".");
-```
-
-## Example 2
-
-
-```ts
-// NS2
+```js
 // A Yes/No question. The default is to create a boolean dialog box.
 const queryA = "Do you enjoy Bitburner?";
 const resultA = await ns.prompt(queryA);
@@ -92,8 +63,8 @@ ns.tprint(`Hello, ${resultC}.`);
 
 // A drop-down list.
 const resultD = await ns.prompt("Please select your favorite fruit.", {
-    type: "select",
-    choices: ["Apple", "Banana", "Orange", "Pear", "Strawberry"]
+  type: "select",
+  choices: ["Apple", "Banana", "Orange", "Pear", "Strawberry"]
 });
 ns.tprint(`Your favorite fruit is ${resultD.toLowerCase()}.`);
 ```

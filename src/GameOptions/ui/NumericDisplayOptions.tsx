@@ -8,7 +8,7 @@ import { FormatsNeedToChange } from "../../ui/formatNumber";
 export const NumericDisplayPage = (): React.ReactElement => {
   const [locale, setLocale] = useState(Settings.Locale);
 
-  function handleLocaleChange(event: SelectChangeEvent<string>): void {
+  function handleLocaleChange(event: SelectChangeEvent): void {
     setLocale(event.target.value);
     Settings.Locale = event.target.value;
     FormatsNeedToChange.emit();

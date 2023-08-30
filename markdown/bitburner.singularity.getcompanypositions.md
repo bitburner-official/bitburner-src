@@ -9,14 +9,14 @@ Get List of Company Positions.
 **Signature:**
 
 ```typescript
-getCompanyPositions(companyName: string): JobName[];
+getCompanyPositions(companyName: CompanyName | `${CompanyName}`): JobName[];
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  companyName | string | Name of company to get the position list for. Must be an exact match. |
+|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` | Name of company to get the position list for. Must be an exact match. |
 
 **Returns:**
 
@@ -32,23 +32,11 @@ This function will return a list of positions at a specific company.
 
 This function will return the position list if the company name is valid.
 
-## Example 1
+## Example
 
 
 ```js
-// NS1:
-var COMPANY_NAME = "Noodle Bar";
-
-var jobList = singularity.getCompanyPositions(COMPANY_NAME);
-```
-
-## Example 2
-
-
-```js
-// NS2:
-const COMPANY_NAME = "Noodle Bar";
-
-let jobList = ns.singularity.getCompanyPositions(COMPANY_NAME);
+const companyName = "Noodle Bar";
+const jobList = ns.singularity.getCompanyPositions(companyName);
 ```
 

@@ -30,7 +30,7 @@ export function PromptManager(): React.ReactElement {
 
   function close(): void {
     if (prompt === null) return;
-    if (["text", "select"].includes(prompt?.options?.type ?? "")) {
+    if (["text", "select"].includes(prompt.options?.type ?? "")) {
       prompt.resolve("");
     } else {
       prompt.resolve(false);
@@ -38,14 +38,14 @@ export function PromptManager(): React.ReactElement {
     setPrompt(null);
   }
 
-  const types: { [key: string]: (props: IContentProps) => React.ReactElement } = {
+  const types: Record<string, (props: IContentProps) => React.ReactElement> = {
     text: PromptMenuText,
     select: PromptMenuSelect,
   };
 
   let PromptContent = PromptMenuBoolean;
-  if (prompt?.options?.type && ["text", "select"].includes(prompt?.options?.type))
-    PromptContent = types[prompt?.options?.type];
+  if (prompt.options?.type && ["text", "select"].includes(prompt.options.type))
+    PromptContent = types[prompt.options.type];
   const resolve = (value: boolean | string): void => {
     prompt.resolve(value);
     setPrompt(null);
@@ -123,7 +123,7 @@ function PromptMenuSelect({ prompt, resolve }: IContentProps): React.ReactElemen
 
   const submit = (): void => resolve(value);
 
-  const onChange = (event: SelectChangeEvent<string>): void => {
+  const onChange = (event: SelectChangeEvent): void => {
     setValue(event.target.value);
   };
 
@@ -139,7 +139,7 @@ function PromptMenuSelect({ prompt, resolve }: IContentProps): React.ReactElemen
     return content;
   };
 
-  if (!Array.isArray(prompt?.options?.choices)) {
+  if (!Array.isArray(prompt.options?.choices)) {
     return <Typography>Error: Please provide an array of string choices</Typography>;
   }
 
@@ -147,7 +147,7 @@ function PromptMenuSelect({ prompt, resolve }: IContentProps): React.ReactElemen
     <>
       <div style={{ display: "flex", alignItems: "center", paddingTop: "10px" }}>
         <Select onChange={onChange} value={value} style={{ flex: "1 0 auto" }}>
-          {getItems(prompt?.options?.choices || [])}
+          {getItems(prompt.options?.choices || [])}
         </Select>
         <Button onClick={submit} disabled={value === ""}>
           Confirm

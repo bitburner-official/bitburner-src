@@ -15,14 +15,7 @@ export class CorporationState {
 
   // Transition to the next state
   nextState(): void {
-    if (this.state < 0 || this.state >= stateNames.length) {
-      this.state = 0;
-    }
-
-    ++this.state;
-    if (this.state >= stateNames.length) {
-      this.state = 0;
-    }
+    this.state = (this.state + 1) % stateNames.length;
   }
 
   // Serialize the current object to a JSON save state.

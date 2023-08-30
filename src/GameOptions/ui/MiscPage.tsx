@@ -30,6 +30,18 @@ export const MiscPage = (): React.ReactElement => {
           </>
         }
       />
+      <OptionSwitch
+        checked={Settings.EnableHistorySearch}
+        onChange={(newValue) => (Settings.EnableHistorySearch = newValue)}
+        text="Enable terminal history search with arrow keys"
+        tooltip={
+          <>
+            If there is user-entered text in the terminal, using the up arrow will search through the terminal history
+            for previous commands that start with the current text, instead of navigating to the most recent history
+            item. Search results can be executed immediately via 'enter', or autofilled into the terminal with 'tab'.
+          </>
+        }
+      />
     </GameOptionsPage>
   );
 };

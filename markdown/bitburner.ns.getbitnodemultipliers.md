@@ -33,23 +33,12 @@ Returns an object containing the current (or supplied) BitNode multipliers. This
 
 For example, if the CrimeMoney multiplier has a value of 0.1, then that means that committing crimes in the current BitNode will only give 10% of the money you would have received in BitNode-1.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-var mults = getBitNodeMultipliers();
-print(mults.ServerMaxMoney);
-print(mults.HackExpGain);
-```
-
-## Example 2
-
-
-```ts
-// NS2:
-const {ServerMaxMoney, HackExpGain} = ns.getBitNodeMultipliers();
-print(ServerMaxMoney);
-print(HackExpGain);
+```js
+const mults = ns.getBitNodeMultipliers();
+ns.tprint(`ServerMaxMoney: ${mults.ServerMaxMoney}`);
+ns.tprint(`HackExpGain: ${mults.HackExpGain}`);
 ```
 

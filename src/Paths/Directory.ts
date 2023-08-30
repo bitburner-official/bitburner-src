@@ -1,6 +1,7 @@
 import { allContentFiles } from "./ContentFile";
 import type { BaseServer } from "../Server/BaseServer";
 import type { FilePath } from "./FilePath";
+import { escapeRegExp } from "lodash";
 
 /** The directory part of a BasicFilePath. Everything up to and including the last /
  * e.g. "file.js" => "", or "dir/file.js" => "dir/", or "../test.js" => "../" */
@@ -14,15 +15,23 @@ export type AbsolutePath = string & { __absolutePath: true };
 export type Directory = BasicDirectory & AbsolutePath;
 export const root = "" as Directory;
 
-/** Regex string for a single valid path character. Invalid characters:
+/** Invalid characters in actual filepaths and directory names:
  * /: Invalid because it is the directory separator. It's allowed in the directory part, but only as the separator.
  * *, ?, [, and ]: Invalid in actual paths because they are used for globbing.
+ * !: Invalid because it conflicts with terminal history fetching
  * \: Invalid to avoid confusion with an escape character
+ * ~: Invalid because it might have a use in the terminal in the future.
+ * |: Invalid because it might have a use in the terminal in the future.
+ * #: Invalid because it might have a use in the terminal in the future.
+ * (quote marks): Invalid to avoid conflict with quote marks used in the terminal.
  * (space): Invalid to avoid confusion with terminal command separator */
-export const oneValidCharacter = "[^\\\\\\/* ?\\[\\]]";
+const invalidCharacters = ["/", "*", "?", "[", "]", "!", "\\", "~", "|", "#", '"', "'", " "];
+
+/** A valid character is any character that is not one of the invalid characters */
+export const oneValidCharacter = `[^${escapeRegExp(invalidCharacters.join(""))}]`;
 
 /** Regex string for matching the directory part of a valid filepath */
-export const directoryRegexString = `^(?<directory>(?:${oneValidCharacter}+\\\/)*)`;
+export const directoryRegexString = `^(?<directory>(?:${oneValidCharacter}+\\/)*)`;
 
 /** Actual RegExp for validating that an entire string is a BasicDirectory */
 const basicDirectoryRegex = new RegExp(directoryRegexString + "$");

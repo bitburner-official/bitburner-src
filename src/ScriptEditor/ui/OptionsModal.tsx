@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { Options, WordWrapOptions } from "./Options";
-import { Modal } from "../../ui/React/Modal";
+import React, { ReactElement } from "react";
 
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -9,62 +7,44 @@ import Switch from "@mui/material/Switch";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
 
+import { useBoolean } from "../../ui/React/hooks";
+import { Modal } from "../../ui/React/Modal";
 import { ThemeEditorModal } from "./ThemeEditorModal";
+import { CursorBlinking, CursorStyle, Options } from "./Options";
 
-interface IProps {
-  options: Options;
-  save: (options: Options) => void;
-  onClose: () => void;
+const CURSOR_STYLES: CursorStyle[] = ["line", "block", "underline", "line-thin", "block-outline", "underline-thin"];
+const CURSOR_BLINKING_MODES: CursorBlinking[] = ["blink", "smooth", "phase", "expand", "solid"];
+
+export type OptionsModalProps = {
   open: boolean;
-}
+  options: Options;
+  onClose: () => void;
+  onOptionChange: (option: keyof Options, value: Options[keyof Options]) => void;
+  onThemeChange: () => void;
+};
 
-export function OptionsModal(props: IProps): React.ReactElement {
-  const [theme, setTheme] = useState(props.options.theme);
-  const [insertSpaces, setInsertSpaces] = useState(props.options.insertSpaces);
-  const [tabSize, setTabSize] = useState(props.options.tabSize);
-  const [detectIndentation, setDetectIndentation] = useState(props.options.detectIndentation);
-  const [fontFamily, setFontFamily] = useState(props.options.fontFamily);
-  const [fontSize, setFontSize] = useState(props.options.fontSize);
-  const [fontLigatures, setFontLigatures] = useState(props.options.fontLigatures);
-  const [wordWrap, setWordWrap] = useState(props.options.wordWrap);
-  const [vim, setVim] = useState(props.options.vim);
-  const [themeEditorOpen, setThemeEditorOpen] = useState(false);
+export function OptionsModal(props: OptionsModalProps): ReactElement {
+  const [themeEditorOpen, { on: openThemeEditor, off: closeThemeEditor }] = useBoolean(false);
 
-  function save(): void {
-    props.save({
-      theme,
-      insertSpaces,
-      tabSize,
-      detectIndentation,
-      fontFamily,
-      fontSize,
-      fontLigatures,
-      wordWrap,
-      vim,
-    });
-    props.onClose();
-  }
+  const onFontSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fontSize = parseInt(event.target.value);
+    if (!Number.isFinite(fontSize) || fontSize < 1) return;
+    props.onOptionChange("fontSize", fontSize);
+  };
 
-  function onFontSizeChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    const n = parseInt(event.target.value);
-    if (!Number.isFinite(n) || n < 1) return;
-    setFontSize(n);
-  }
-
-  function onTabSizeChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    const n = parseInt(event.target.value);
-    if (!Number.isFinite(n) || n < 1) return;
-    setTabSize(n);
-  }
+  const onTabSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const tabSize = parseInt(event.target.value);
+    if (!Number.isFinite(tabSize) || tabSize < 1) return;
+    props.onOptionChange("tabSize", tabSize);
+  };
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <ThemeEditorModal open={themeEditorOpen} onClose={() => setThemeEditorOpen(false)} />
+      <ThemeEditorModal open={themeEditorOpen} onChange={props.onThemeChange} onClose={closeThemeEditor} />
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography>Theme: </Typography>
-        <Select onChange={(event) => setTheme(event.target.value)} value={theme}>
+        <Select onChange={(event) => props.onOptionChange("theme", event.target.value)} value={props.options.theme}>
           <MenuItem value="monokai">monokai</MenuItem>
           <MenuItem value="solarized-dark">solarized-dark</MenuItem>
           <MenuItem value="solarized-light">solarized-light</MenuItem>
@@ -74,29 +54,38 @@ export function OptionsModal(props: IProps): React.ReactElement {
           <MenuItem value="one-dark">one-dark</MenuItem>
           <MenuItem value="customTheme">Custom theme</MenuItem>
         </Select>
-        <Button onClick={() => setThemeEditorOpen(true)} sx={{ ml: 1 }} startIcon={<EditIcon />}>
+        <Button onClick={openThemeEditor} sx={{ ml: 1 }} startIcon={<EditIcon />}>
           Edit custom theme
         </Button>
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Indent using tabs: </Typography>
-        <Switch onChange={(e) => setInsertSpaces(e.target.checked)} checked={insertSpaces} />
+        <Typography marginRight={"auto"}>Indent using spaces: </Typography>
+        <Switch
+          onChange={(e) => props.onOptionChange("insertSpaces", e.target.checked)}
+          checked={props.options.insertSpaces}
+        />
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Tab size: </Typography>
-        <TextField type="number" value={tabSize} onChange={onTabSizeChange} />
+        <TextField type="number" value={props.options.tabSize} onChange={onTabSizeChange} />
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Auto-detect indentation: </Typography>
-        <Switch onChange={(e) => setDetectIndentation(e.target.checked)} checked={detectIndentation} />
+        <Switch
+          onChange={(e) => props.onOptionChange("detectIndentation", e.target.checked)}
+          checked={props.options.detectIndentation}
+        />
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Word wrap: </Typography>
-        <Select onChange={(event) => setWordWrap(event.target.value as WordWrapOptions)} value={wordWrap}>
+        <Select
+          onChange={(event) => props.onOptionChange("wordWrap", event.target.value)}
+          value={props.options.wordWrap}
+        >
           <MenuItem value={"off"}>Off</MenuItem>
           <MenuItem value={"on"}>On</MenuItem>
           <MenuItem value={"bounded"}>Bounded</MenuItem>
@@ -106,28 +95,58 @@ export function OptionsModal(props: IProps): React.ReactElement {
 
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Enable vim mode: </Typography>
-        <Switch onChange={(e) => setVim(e.target.checked)} checked={vim} />
+        <Switch onChange={(e) => props.onOptionChange("vim", e.target.checked)} checked={props.options.vim} />
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Font family: </Typography>
-        <TextField type="text" value={fontFamily} onChange={(e) => setFontFamily(e.target.value)} />
+        <TextField
+          type="text"
+          value={props.options.fontFamily}
+          onChange={(e) => props.onOptionChange("fontFamily", e.target.value)}
+        />
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Font size: </Typography>
-        <TextField type="number" value={fontSize} onChange={onFontSizeChange} />
+        <TextField type="number" value={props.options.fontSize} onChange={onFontSizeChange} />
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Enable font ligatures: </Typography>
-        <Switch onChange={(e) => setFontLigatures(e.target.checked)} checked={fontLigatures} />
+        <Switch
+          onChange={(e) => props.onOptionChange("fontLigatures", e.target.checked)}
+          checked={props.options.fontLigatures}
+        />
       </div>
 
-      <br />
-      <Button onClick={save} startIcon={<SaveIcon />}>
-        Save
-      </Button>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Cursor style: </Typography>
+        <Select
+          onChange={(event) => props.onOptionChange("cursorStyle", event.target.value)}
+          value={props.options.cursorStyle}
+        >
+          {CURSOR_STYLES.map((cursorStyle) => (
+            <MenuItem key={cursorStyle} value={cursorStyle}>
+              {cursorStyle}
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Cursor blinking: </Typography>
+        <Select
+          onChange={(event) => props.onOptionChange("cursorBlinking", event.target.value as CursorBlinking)}
+          value={props.options.cursorBlinking}
+        >
+          {CURSOR_BLINKING_MODES.map((cursorBlinking) => (
+            <MenuItem key={cursorBlinking} value={cursorBlinking}>
+              {cursorBlinking}
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
     </Modal>
   );
 }

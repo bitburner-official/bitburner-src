@@ -1,19 +1,20 @@
-import { Player } from "@player";
-import { StaticAugmentations } from "../Augmentation/StaticAugmentations";
-import { CityName } from "../Enums";
-import { findCrime } from "../Crime/CrimeHelpers";
-import { Augmentation } from "../Augmentation/Augmentation";
+import type { Augmentation } from "../Augmentation/Augmentation";
+import type { Sleeve as NetscriptSleeve } from "@nsdefs";
 
-import { Sleeve } from "@nsdefs";
-import { checkEnum } from "../utils/helpers/enum";
-import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
+import { Player } from "@player";
+import { Augmentations } from "../Augmentation/Augmentations";
+import { findCrime } from "../Crime/CrimeHelpers";
+import { getEnumHelper } from "../utils/EnumHelper";
+import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
 import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { cloneDeep } from "lodash";
+import { getAugCost } from "../Augmentation/AugmentationHelpers";
+import { Factions } from "../Faction/Factions";
 
-export function NetscriptSleeve(): InternalAPI<Sleeve> {
+export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
   const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
     if (Player.bitNodeN !== 10 && !Player.sourceFileLvl(10)) {
       throw helpers.makeRuntimeErrorMsg(
@@ -31,7 +32,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
     }
   };
 
-  const sleeveFunctions: InternalAPI<Sleeve> = {
+  const sleeveFunctions: InternalAPI<NetscriptSleeve> = {
     getNumSleeves: (ctx) => () => {
       checkSleeveAPIAccess(ctx);
       return Player.sleeves.length;
@@ -73,18 +74,14 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
     },
     travel: (ctx) => (_sleeveNumber, _cityName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const cityName = helpers.string(ctx, "cityName", _cityName);
+      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
-      if (checkEnum(CityName, cityName)) {
-        return Player.sleeves[sleeveNumber].travel(cityName);
-      } else {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid city name: '${cityName}'.`);
-      }
+      return Player.sleeves[sleeveNumber].travel(cityName);
     },
-    setToCompanyWork: (ctx) => (_sleeveNumber, acompanyName) => {
+    setToCompanyWork: (ctx) => (_sleeveNumber, _companyName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const companyName = helpers.string(ctx, "companyName", acompanyName);
+      const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 
@@ -106,10 +103,14 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
     },
     setToFactionWork: (ctx) => (_sleeveNumber, _factionName, _workType) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const factionName = helpers.string(ctx, "factionName", _factionName);
+      const factionName = getEnumHelper("FactionName").nsGetMember(ctx, _factionName);
       const workType = helpers.string(ctx, "workType", _workType);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
+
+      if (!Factions[factionName].isMember) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Cannot work for faction ${factionName} without being a member.`);
+      }
 
       // Cannot work at the same faction that another sleeve is working at
       for (let i = 0; i < Player.sleeves.length; ++i) {
@@ -203,7 +204,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
     },
     purchaseSleeveAug: (ctx) => (_sleeveNumber, _augName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const augName = helpers.string(ctx, "augName", _augName);
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 
@@ -211,7 +212,7 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
         throw helpers.makeRuntimeErrorMsg(ctx, `Sleeve shock too high: Sleeve ${sleeveNumber}`);
       }
 
-      const aug = StaticAugmentations[augName];
+      const aug = Augmentations[augName];
       if (!aug) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid aug: ${augName}`);
       }
@@ -220,15 +221,15 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
     },
     getSleeveAugmentationPrice: (ctx) => (_augName) => {
       checkSleeveAPIAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug: Augmentation = StaticAugmentations[augName];
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug: Augmentation = Augmentations[augName];
       return aug.baseCost;
     },
     getSleeveAugmentationRepReq: (ctx) => (_augName) => {
       checkSleeveAPIAccess(ctx);
-      const augName = helpers.string(ctx, "augName", _augName);
-      const aug: Augmentation = StaticAugmentations[augName];
-      return aug.getCost().repCost;
+      const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
+      const aug: Augmentation = Augmentations[augName];
+      return getAugCost(aug).repCost;
     },
     setToBladeburnerAction: (ctx) => (_sleeveNumber, _action, _contract?) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
@@ -261,11 +262,11 @@ export function NetscriptSleeve(): InternalAPI<Sleeve> {
       return Player.sleeves[sleeveNumber].bladeburner(action, contract);
     },
   };
-  // Removed undocumented functions added using Object.assign because typescript.
-  // TODO: Remove these at 3.0
-  Object.assign(sleeveFunctions, {
-    getSleeveStats: removedFunction("v2.2.0", "sleeve.getSleeve"),
-    getInformation: removedFunction("v2.2.0", "sleeve.getSleeve"),
+
+  // Removed functions
+  setRemovedFunctions(sleeveFunctions, {
+    getSleeveStats: { version: "2.2.0", replacement: "sleeve.getSleeve" },
+    getInformation: { version: "2.2.0", replacement: "sleeve.getSleeve" },
   });
   return sleeveFunctions;
 }

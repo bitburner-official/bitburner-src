@@ -122,7 +122,7 @@ export class Action {
     // Check to make sure weights are summed properly
     let sum = 0;
     for (const weight of Object.keys(this.weights)) {
-      if (this.weights.hasOwnProperty(weight)) {
+      if (Object.hasOwn(this.weights, weight)) {
         sum += this.weights[weight];
       }
     }
@@ -136,7 +136,7 @@ export class Action {
     }
 
     for (const decay of Object.keys(this.decays)) {
-      if (this.decays.hasOwnProperty(decay)) {
+      if (Object.hasOwn(this.decays, decay)) {
         if (this.decays[decay] > 1) {
           throw new Error(`Invalid decays when constructing Action ${this.name}. Decay value cannot be greater than 1`);
         }
@@ -184,14 +184,12 @@ export class Action {
     return Math.ceil(baseTime * this.getActionTimePenalty());
   }
 
-  // For actions that have teams. To be implemented by subtypes.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getTeamSuccessBonus(inst: Bladeburner): number {
+  // Subtypes of Action implement these differently
+  getTeamSuccessBonus(__inst: Bladeburner): number {
     return 1;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getActionTypeSkillSuccessBonus(inst: Bladeburner): number {
+  getActionTypeSkillSuccessBonus(__inst: Bladeburner): number {
     return 1;
   }
 
@@ -243,7 +241,7 @@ export class Action {
     let difficulty = this.getDifficulty();
     let competence = 0;
     for (const stat of Object.keys(this.weights)) {
-      if (this.weights.hasOwnProperty(stat)) {
+      if (Object.hasOwn(this.weights, stat)) {
         const playerStatLvl = person.queryStatFromString(stat);
         const key = "eff" + stat.charAt(0).toUpperCase() + stat.slice(1);
         let effMultiplier = inst.skillMultipliers[key];

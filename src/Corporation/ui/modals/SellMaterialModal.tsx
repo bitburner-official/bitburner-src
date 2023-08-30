@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import { KEY } from "../../../utils/helpers/keyCodes";
 
 function initialPrice(mat: Material): string {
-  let val = mat.sCost ? mat.sCost + "" : "";
+  let val = mat.desiredSellPrice ? mat.desiredSellPrice + "" : "";
   if (mat.marketTa2) {
     val += " (Market-TA.II)";
   } else if (mat.marketTa1) {
@@ -26,7 +26,7 @@ interface IProps {
 
 // Create a popup that let the player manage sales of a material
 export function SellMaterialModal(props: IProps): React.ReactElement {
-  const [amt, setAmt] = useState<string>(props.mat.sllman[1] ? props.mat.sllman[1] + "" : "");
+  const [amt, setAmt] = useState<string>(props.mat.desiredSellAmount + "");
   const [price, setPrice] = useState<string>(initialPrice(props.mat));
 
   function sellMaterial(): void {

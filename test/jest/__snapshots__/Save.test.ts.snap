@@ -74,6 +74,7 @@ exports[`load/saveAllServers 1`] = `
             "ramUsage": 1.6,
             "server": "home",
             "scriptKey": "script.js*[]",
+            "title": "Awesome Script",
             "threads": 1,
             "temporary": false
           }

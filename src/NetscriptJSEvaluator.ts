@@ -39,7 +39,7 @@ export const config = {
 // or changes a script and then changes it back).
 // Modules can never be garbage collected by Javascript, so it's good to try
 // to keep from making more than we need.
-const moduleCache: Map<string, WeakRef<LoadedModule>> = new Map();
+const moduleCache = new Map<string, WeakRef<LoadedModule>>();
 const cleanup = new FinalizationRegistry((mapKey: string) => {
   // A new entry can be created with the same key, before this callback is called.
   if (moduleCache.get(mapKey)?.deref() === undefined) {
@@ -122,7 +122,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   // Sort the nodes from last start index to first. This replaces the last import with a blob first,
   // preventing the ranges for other imports from being shifted.
   importNodes.sort((a, b) => b.start - a.start);
-  let newCode = script.code as string;
+  let newCode = script.code;
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
     const filename = resolveScriptFilePath(node.filename, root, ".js");
@@ -155,7 +155,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
       console.error(`Error occurred while attempting to compile ${script.filename} on ${script.server}:`);
       console.error(e);
       throw e;
-    }) as Promise<ScriptModule>;
+    });
     // We can *immediately* invalidate the Blob, because we've already started the fetch
     // by starting the import. From now on, any imports using the blob's URL *must*
     // directly return the module, without even attempting to fetch, due to the way

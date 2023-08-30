@@ -33,25 +33,13 @@ This function is only applicable for Hacknet Servers (the upgraded version of a 
 
 Returns the number of hashes required for the specified upgrade. The name of the upgrade must be an exact match.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-var upgradeName = "Sell for Corporation Funds";
-if (hacknet.numHashes() > hacknet.hashCost(upgradeName)) {
-   hacknet.spendHashes(upgradeName);
-}
-```
-
-## Example 2
-
-
-```ts
-// NS2:
+```js
 const upgradeName = "Sell for Corporation Funds";
 if (ns.hacknet.numHashes() > ns.hacknet.hashCost(upgradeName)) {
-   ns.hacknet.spendHashes(upgradeName);
+  ns.hacknet.spendHashes(upgradeName);
 }
 ```
 

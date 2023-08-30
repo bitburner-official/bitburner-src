@@ -26,19 +26,10 @@ void
 
 RAM cost: 0.05 GB
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-sqlinject("foodnstuff");
-```
-
-## Example 2
-
-
-```ts
-// NS2:
+```js
 ns.sqlinject("foodnstuff");
 ```
 

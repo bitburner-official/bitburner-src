@@ -32,7 +32,7 @@ Opens a script’s logs. This is functionally the same as the tail Terminal comm
 
 If the function is called with no arguments, it will open the current script’s logs.
 
-Otherwise, the fn, hostname/ip, and args… arguments can be used to get the logs from another script. Remember that scripts are uniquely identified by both their names and arguments.
+Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get the logs from another script. Remember that scripts are uniquely identified by both their names and arguments.
 
 ## Example
 

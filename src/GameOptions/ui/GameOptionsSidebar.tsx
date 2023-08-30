@@ -1,14 +1,4 @@
-import {
-  BugReport,
-  Chat,
-  Download,
-  LibraryBooks,
-  Palette,
-  Reddit,
-  Save,
-  SystemUpdateAlt,
-  Upload,
-} from "@mui/icons-material";
+import { BugReport, Chat, Download, LibraryBooks, Palette, Reddit, Save, Upload } from "@mui/icons-material";
 import { Box, Button, List, ListItemButton, Paper, Tooltip, Typography } from "@mui/material";
 import { default as React, useRef, useState } from "react";
 import { FileDiagnosticModal } from "../../Diagnostic/FileDiagnosticModal";
@@ -18,7 +8,8 @@ import { StyleEditorButton } from "../../Themes/ui/StyleEditorButton";
 import { ThemeEditorButton } from "../../Themes/ui/ThemeEditorButton";
 import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
 import { DeleteGameButton } from "../../ui/React/DeleteGameButton";
-import { SnackbarEvents, ToastVariant } from "../../ui/React/Snackbar";
+import { SnackbarEvents } from "../../ui/React/Snackbar";
+import { ToastVariant } from "@enums";
 import { SoftResetButton } from "../../ui/React/SoftResetButton";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
@@ -32,6 +23,7 @@ interface IProps {
   export: () => void;
   forceKill: () => void;
   softReset: () => void;
+  reactivateTutorial: () => void;
 }
 
 interface ITabProps {
@@ -56,6 +48,8 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
   const [diagnosticOpen, setDiagnosticOpen] = useState(false);
   const [importSaveOpen, setImportSaveOpen] = useState(false);
   const [importData, setImportData] = useState<ImportData | null>(null);
+
+  const [confirmResetOpen, setConfirmResetOpen] = useState(false);
 
   function startImport(): void {
     if (!window.File || !window.FileReader || !window.FileList || !window.Blob) return;
@@ -94,7 +88,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
 
   function compareSaveGame(): void {
     if (!importData) return;
-    Router.toImportSave(importData.base64);
+    Router.toPage(Page.ImportSave, { base64Save: importData.base64 });
     setImportSaveOpen(false);
     setImportData(null);
   }
@@ -235,9 +229,9 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           sx={{
             gridArea: "links",
             display: "grid",
-            gridTemplateAreas: `"bug changelog"
-        "docs docs"
+            gridTemplateAreas: `"bug bug"
         "discord reddit"
+        "tut tut"
         "plaza plaza"`,
             gridTemplateColumns: "1fr 1fr",
             my: 1,
@@ -251,21 +245,8 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           >
             Report Bug
           </Button>
-          <Button
-            startIcon={<SystemUpdateAlt />}
-            href="https://bitburner-official.readthedocs.io/en/latest/changelog.html"
-            target="_blank"
-            sx={{ gridArea: " changelog" }}
-          >
-            Changelog
-          </Button>
-          <Button
-            startIcon={<LibraryBooks />}
-            href="https://bitburner-official.readthedocs.io/en/latest/index.html"
-            target="_blank"
-            sx={{ gridArea: "docs" }}
-          >
-            Documentation
+          <Button startIcon={<LibraryBooks />} onClick={() => setConfirmResetOpen(true)} sx={{ gridArea: "tut" }}>
+            Reset tutorial
           </Button>
           <Button startIcon={<Chat />} href="https://discord.gg/TFc3hKD" target="_blank" sx={{ gridArea: "discord" }}>
             Discord
@@ -281,6 +262,13 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
         </Box>
       </Box>
       <FileDiagnosticModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
+
+      <ConfirmationModal
+        open={confirmResetOpen}
+        onClose={() => setConfirmResetOpen(false)}
+        onConfirm={props.reactivateTutorial}
+        confirmationText={"This will reset all your stats to 1 and money to 1k. Are you sure?"}
+      />
     </Box>
   );
 };

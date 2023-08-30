@@ -38,35 +38,10 @@ If the argument is a string, you can color code your message by prefixing your s
 
 For custom coloring, use ANSI escape sequences. The examples below use the Unicode escape code `\u001b`<!-- -->. The color coding also works if `\u001b` is replaced with the hexadecimal escape code `\x1b`<!-- -->. The Bash escape code `\e` is not supported. The octal escape code `\033` is not allowed because the game runs JavaScript in strict mode.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1
-// Default color coding.
-print("ERROR means something's wrong.");
-print("SUCCESS means everything's OK.");
-print("WARN Tread with caution!");
-print("WARNING, warning, danger, danger!");
-print("WARNing! Here be dragons.");
-print("INFO for your I's only (FYI).");
-print("INFOrmation overload!");
-// Custom color coding.
-var cyan = "\u001b[36m";
-var green = "\u001b[32m";
-var red = "\u001b[31m";
-var reset = "\u001b[0m";
-print(red + "Ugh! What a mess." + reset);
-print(green + "Well done!" + reset);
-print(cyan + "ERROR Should this be in red?" + reset);
-tail();
-```
-
-## Example 2
-
-
-```ts
-// NS2
+```js
 // Default color coding.
 ns.print("ERROR means something's wrong.");
 ns.print("SUCCESS means everything's OK.");

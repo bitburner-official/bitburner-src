@@ -1,13 +1,12 @@
 import React from "react";
 import { SourceFile } from "./SourceFile";
-import { initBitNodes, initBitNodeMultipliers } from "../BitNode/BitNode";
+import { initBitNodes } from "../BitNode/BitNode";
 
 export const SourceFiles: Record<string, SourceFile> = {};
 /** Engine initializer for SourceFiles, BitNodes, and BitNodeMultipliers. Run once at engine load. */
 export function initSourceFiles() {
   initBitNodes();
-  initBitNodeMultipliers();
-  SourceFiles["SourceFile1"] = new SourceFile(
+  SourceFiles.SourceFile1 = new SourceFile(
     1,
     (
       <>
@@ -23,7 +22,7 @@ export function initSourceFiles() {
       </>
     ),
   );
-  SourceFiles["SourceFile2"] = new SourceFile(
+  SourceFiles.SourceFile2 = new SourceFile(
     2,
     (
       <>
@@ -39,7 +38,7 @@ export function initSourceFiles() {
       </>
     ),
   );
-  SourceFiles["SourceFile3"] = new SourceFile(
+  SourceFiles.SourceFile3 = new SourceFile(
     3,
     (
       <>
@@ -55,7 +54,7 @@ export function initSourceFiles() {
       </>
     ),
   );
-  SourceFiles["SourceFile4"] = new SourceFile(
+  SourceFiles.SourceFile4 = new SourceFile(
     4,
     (
       <>
@@ -70,7 +69,7 @@ export function initSourceFiles() {
       </>
     ),
   );
-  SourceFiles["SourceFile5"] = new SourceFile(
+  SourceFiles.SourceFile5 = new SourceFile(
     5,
     (
       <>
@@ -99,7 +98,7 @@ export function initSourceFiles() {
       </>
     ),
   );
-  SourceFiles["SourceFile6"] = new SourceFile(
+  SourceFiles.SourceFile6 = new SourceFile(
     6,
     (
       <>
@@ -115,7 +114,7 @@ export function initSourceFiles() {
       </>
     ),
   );
-  SourceFiles["SourceFile7"] = new SourceFile(
+  SourceFiles.SourceFile7 = new SourceFile(
     7,
     (
       <>
@@ -131,7 +130,7 @@ export function initSourceFiles() {
       </>
     ),
   );
-  SourceFiles["SourceFile8"] = new SourceFile(
+  SourceFiles.SourceFile8 = new SourceFile(
     8,
     (
       <>
@@ -155,7 +154,7 @@ export function initSourceFiles() {
       </>
     ),
   );
-  SourceFiles["SourceFile9"] = new SourceFile(
+  SourceFiles.SourceFile9 = new SourceFile(
     9,
     (
       <>
@@ -183,7 +182,7 @@ export function initSourceFiles() {
       </>
     ),
   );
-  SourceFiles["SourceFile10"] = new SourceFile(
+  SourceFiles.SourceFile10 = new SourceFile(
     10,
     (
       <>
@@ -192,7 +191,7 @@ export function initSourceFiles() {
       </>
     ),
   );
-  SourceFiles["SourceFile11"] = new SourceFile(
+  SourceFiles.SourceFile11 = new SourceFile(
     11,
     (
       <>
@@ -219,11 +218,11 @@ export function initSourceFiles() {
       </>
     ),
   );
-  SourceFiles["SourceFile12"] = new SourceFile(
+  SourceFiles.SourceFile12 = new SourceFile(
     12,
     <>This Source-File lets the player start with Neuroflux Governor equal to the level of this Source-File.</>,
   );
-  SourceFiles["SourceFile13"] = new SourceFile(
+  SourceFiles.SourceFile13 = new SourceFile(
     13,
     <>Each level of this Source-File increases the size of Stanek's Gift.</>,
   );

@@ -1,14 +1,12 @@
-import { FactionNames } from "../../Faction/data/FactionNames";
-import { Sleeve } from "./Sleeve";
-
 import { Player } from "@player";
-
+import { AugmentationName, FactionName } from "@enums";
+import { Sleeve } from "./Sleeve";
 import { Augmentation } from "../../Augmentation/Augmentation";
-import { StaticAugmentations } from "../../Augmentation/StaticAugmentations";
+import { Augmentations } from "../../Augmentation/Augmentations";
 import { Factions } from "../../Faction/Factions";
 import { mergeMultipliers, Multipliers } from "../Multipliers";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
 import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
+import { getAugCost } from "../../Augmentation/AugmentationHelpers";
 
 /** Updates this object's multipliers for the given augmentation */
 export function applyAugmentation(this: Sleeve, aug: Augmentation): void {
@@ -64,34 +62,34 @@ export function findPurchasableAugs(this: Sleeve): Augmentation[] {
     const gangAugs = getFactionAugmentationsFiltered(fac);
 
     for (const augName of gangAugs) {
-      const aug = StaticAugmentations[augName];
+      const aug = Augmentations[augName];
       if (!isAvailableForSleeve(aug)) continue;
 
-      if (fac.playerReputation > aug.getCost().repCost) {
+      if (fac.playerReputation > getAugCost(aug).repCost) {
         availableAugs.push(aug);
       }
     }
   }
 
   for (const facName of Player.factions) {
-    if (facName === FactionNames.Bladeburners) continue;
-    if (facName === FactionNames.Netburners) continue;
+    if (facName === FactionName.Bladeburners) continue;
+    if (facName === FactionName.Netburners) continue;
     const fac = Factions[facName];
     if (!fac) continue;
 
     for (const augName of fac.augmentations) {
-      const aug = StaticAugmentations[augName];
+      const aug = Augmentations[augName];
       if (!isAvailableForSleeve(aug)) continue;
 
-      if (fac.playerReputation > aug.getCost().repCost) {
+      if (fac.playerReputation > getAugCost(aug).repCost) {
         availableAugs.push(aug);
       }
     }
   }
 
   // Add the stanek sleeve aug
-  if (!ownedAugNames.includes(AugmentationNames.ZOE) && Player.factions.includes(FactionNames.ChurchOfTheMachineGod)) {
-    const aug = StaticAugmentations[AugmentationNames.ZOE];
+  if (!ownedAugNames.includes(AugmentationName.ZOE) && Player.factions.includes(FactionName.ChurchOfTheMachineGod)) {
+    const aug = Augmentations[AugmentationName.ZOE];
     availableAugs.push(aug);
   }
 

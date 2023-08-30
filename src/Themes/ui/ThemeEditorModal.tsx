@@ -69,7 +69,7 @@ function ColorEditor({ name, onColorChange, color, defaultColor }: IColorEditorP
 }
 
 export function ThemeEditorModal(props: IProps): React.ReactElement {
-  const [customTheme, setCustomTheme] = useState<{ [key: string]: string | undefined }>({
+  const [customTheme, setCustomTheme] = useState<Record<string, string | undefined>>({
     ...Settings.theme,
   });
 
@@ -94,7 +94,7 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
   }
 
   function onColorChange(name: string, value: string): void {
-    setCustomTheme((old: { [key: string]: string | undefined }) => {
+    setCustomTheme((old: Record<string, string | undefined>) => {
       old[name] = value;
       return old;
     });
@@ -150,214 +150,194 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
         <ColorEditor
           name="primarylight"
           onColorChange={onColorChange}
-          color={customTheme["primarylight"]}
-          defaultColor={defaultTheme["primarylight"]}
+          color={customTheme.primarylight}
+          defaultColor={defaultTheme.primarylight}
         />
         <ColorEditor
           name="primary"
           onColorChange={onColorChange}
-          color={customTheme["primary"]}
-          defaultColor={defaultTheme["primary"]}
+          color={customTheme.primary}
+          defaultColor={defaultTheme.primary}
         />
         <ColorEditor
           name="primarydark"
           onColorChange={onColorChange}
-          color={customTheme["primarydark"]}
-          defaultColor={defaultTheme["primarydark"]}
+          color={customTheme.primarydark}
+          defaultColor={defaultTheme.primarydark}
         />
 
         <br />
         <ColorEditor
           name="successlight"
           onColorChange={onColorChange}
-          color={customTheme["successlight"]}
-          defaultColor={defaultTheme["successlight"]}
+          color={customTheme.successlight}
+          defaultColor={defaultTheme.successlight}
         />
         <ColorEditor
           name="success"
           onColorChange={onColorChange}
-          color={customTheme["success"]}
-          defaultColor={defaultTheme["success"]}
+          color={customTheme.success}
+          defaultColor={defaultTheme.success}
         />
         <ColorEditor
           name="successdark"
           onColorChange={onColorChange}
-          color={customTheme["successdark"]}
-          defaultColor={defaultTheme["successdark"]}
+          color={customTheme.successdark}
+          defaultColor={defaultTheme.successdark}
         />
 
         <br />
         <ColorEditor
           name="errorlight"
           onColorChange={onColorChange}
-          color={customTheme["errorlight"]}
-          defaultColor={defaultTheme["errorlight"]}
+          color={customTheme.errorlight}
+          defaultColor={defaultTheme.errorlight}
         />
         <ColorEditor
           name="error"
           onColorChange={onColorChange}
-          color={customTheme["error"]}
-          defaultColor={defaultTheme["error"]}
+          color={customTheme.error}
+          defaultColor={defaultTheme.error}
         />
         <ColorEditor
           name="errordark"
           onColorChange={onColorChange}
-          color={customTheme["errordark"]}
-          defaultColor={defaultTheme["errordark"]}
+          color={customTheme.errordark}
+          defaultColor={defaultTheme.errordark}
         />
 
         <br />
         <ColorEditor
           name="secondarylight"
           onColorChange={onColorChange}
-          color={customTheme["secondarylight"]}
-          defaultColor={defaultTheme["secondarylight"]}
+          color={customTheme.secondarylight}
+          defaultColor={defaultTheme.secondarylight}
         />
         <ColorEditor
           name="secondary"
           onColorChange={onColorChange}
-          color={customTheme["secondary"]}
-          defaultColor={defaultTheme["secondary"]}
+          color={customTheme.secondary}
+          defaultColor={defaultTheme.secondary}
         />
         <ColorEditor
           name="secondarydark"
           onColorChange={onColorChange}
-          color={customTheme["secondarydark"]}
-          defaultColor={defaultTheme["secondarydark"]}
+          color={customTheme.secondarydark}
+          defaultColor={defaultTheme.secondarydark}
         />
 
         <br />
         <ColorEditor
           name="warninglight"
           onColorChange={onColorChange}
-          color={customTheme["warninglight"]}
-          defaultColor={defaultTheme["warninglight"]}
+          color={customTheme.warninglight}
+          defaultColor={defaultTheme.warninglight}
         />
         <ColorEditor
           name="warning"
           onColorChange={onColorChange}
-          color={customTheme["warning"]}
-          defaultColor={defaultTheme["warning"]}
+          color={customTheme.warning}
+          defaultColor={defaultTheme.warning}
         />
         <ColorEditor
           name="warningdark"
           onColorChange={onColorChange}
-          color={customTheme["warningdark"]}
-          defaultColor={defaultTheme["warningdark"]}
+          color={customTheme.warningdark}
+          defaultColor={defaultTheme.warningdark}
         />
 
         <br />
         <ColorEditor
           name="infolight"
           onColorChange={onColorChange}
-          color={customTheme["infolight"]}
-          defaultColor={defaultTheme["infolight"]}
+          color={customTheme.infolight}
+          defaultColor={defaultTheme.infolight}
         />
         <ColorEditor
           name="info"
           onColorChange={onColorChange}
-          color={customTheme["info"]}
-          defaultColor={defaultTheme["info"]}
+          color={customTheme.info}
+          defaultColor={defaultTheme.info}
         />
         <ColorEditor
           name="infodark"
           onColorChange={onColorChange}
-          color={customTheme["infodark"]}
-          defaultColor={defaultTheme["infodark"]}
+          color={customTheme.infodark}
+          defaultColor={defaultTheme.infodark}
         />
 
         <br />
         <ColorEditor
           name="welllight"
           onColorChange={onColorChange}
-          color={customTheme["welllight"]}
-          defaultColor={defaultTheme["welllight"]}
+          color={customTheme.welllight}
+          defaultColor={defaultTheme.welllight}
         />
         <ColorEditor
           name="well"
           onColorChange={onColorChange}
-          color={customTheme["well"]}
-          defaultColor={defaultTheme["well"]}
+          color={customTheme.well}
+          defaultColor={defaultTheme.well}
         />
         <ColorEditor
           name="white"
           onColorChange={onColorChange}
-          color={customTheme["white"]}
-          defaultColor={defaultTheme["white"]}
+          color={customTheme.white}
+          defaultColor={defaultTheme.white}
         />
         <ColorEditor
           name="black"
           onColorChange={onColorChange}
-          color={customTheme["black"]}
-          defaultColor={defaultTheme["black"]}
+          color={customTheme.black}
+          defaultColor={defaultTheme.black}
         />
         <ColorEditor
           name="backgroundprimary"
           onColorChange={onColorChange}
-          color={customTheme["backgroundprimary"]}
-          defaultColor={defaultTheme["backgroundprimary"]}
+          color={customTheme.backgroundprimary}
+          defaultColor={defaultTheme.backgroundprimary}
         />
         <ColorEditor
           name="backgroundsecondary"
           onColorChange={onColorChange}
-          color={customTheme["backgroundsecondary"]}
-          defaultColor={defaultTheme["backgroundsecondary"]}
+          color={customTheme.backgroundsecondary}
+          defaultColor={defaultTheme.backgroundsecondary}
         />
         <ColorEditor
           name="button"
           onColorChange={onColorChange}
-          color={customTheme["button"]}
-          defaultColor={defaultTheme["button"]}
+          color={customTheme.button}
+          defaultColor={defaultTheme.button}
         />
 
         <br />
-        <ColorEditor
-          name="hp"
-          onColorChange={onColorChange}
-          color={customTheme["hp"]}
-          defaultColor={defaultTheme["hp"]}
-        />
+        <ColorEditor name="hp" onColorChange={onColorChange} color={customTheme.hp} defaultColor={defaultTheme.hp} />
         <ColorEditor
           name="money"
           onColorChange={onColorChange}
-          color={customTheme["money"]}
-          defaultColor={defaultTheme["money"]}
+          color={customTheme.money}
+          defaultColor={defaultTheme.money}
         />
         <ColorEditor
           name="hack"
           onColorChange={onColorChange}
-          color={customTheme["hack"]}
-          defaultColor={defaultTheme["hack"]}
+          color={customTheme.hack}
+          defaultColor={defaultTheme.hack}
         />
         <ColorEditor
           name="combat"
           onColorChange={onColorChange}
-          color={customTheme["combat"]}
-          defaultColor={defaultTheme["combat"]}
+          color={customTheme.combat}
+          defaultColor={defaultTheme.combat}
         />
-        <ColorEditor
-          name="cha"
-          onColorChange={onColorChange}
-          color={customTheme["cha"]}
-          defaultColor={defaultTheme["cha"]}
-        />
-        <ColorEditor
-          name="int"
-          onColorChange={onColorChange}
-          color={customTheme["int"]}
-          defaultColor={defaultTheme["int"]}
-        />
-        <ColorEditor
-          name="rep"
-          onColorChange={onColorChange}
-          color={customTheme["rep"]}
-          defaultColor={defaultTheme["rep"]}
-        />
+        <ColorEditor name="cha" onColorChange={onColorChange} color={customTheme.cha} defaultColor={defaultTheme.cha} />
+        <ColorEditor name="int" onColorChange={onColorChange} color={customTheme.int} defaultColor={defaultTheme.int} />
+        <ColorEditor name="rep" onColorChange={onColorChange} color={customTheme.rep} defaultColor={defaultTheme.rep} />
         <ColorEditor
           name="disabled"
           onColorChange={onColorChange}
-          color={customTheme["disabled"]}
-          defaultColor={defaultTheme["disabled"]}
+          color={customTheme.disabled}
+          defaultColor={defaultTheme.disabled}
         />
       </Paper>
 

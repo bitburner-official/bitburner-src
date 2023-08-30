@@ -1,6 +1,6 @@
 import { Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { AugmentationNames } from "../../Augmentation/data/AugmentationNames";
+import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { KEY } from "../../utils/helpers/keyCodes";
 import { random } from "../utils";
@@ -32,7 +32,7 @@ const difficulties: {
 function generateLeftSide(difficulty: Difficulty): string {
   let str = "";
   const options = [KEY.OPEN_BRACKET, KEY.LESS_THAN, KEY.OPEN_PARENTHESIS, KEY.OPEN_BRACE];
-  if (Player.hasAugmentation(AugmentationNames.WisdomOfAthena, true)) {
+  if (Player.hasAugmentation(AugmentationName.WisdomOfAthena, true)) {
     options.splice(0, 1);
   }
   const length = random(difficulty.min, difficulty.max);

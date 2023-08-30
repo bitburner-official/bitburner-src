@@ -10,10 +10,10 @@ interface PseudoObject {
 const isPseudoObject = (v: unknown): v is PseudoObject =>
   !!v &&
   typeof v === "object" &&
-  v.hasOwnProperty("properties") &&
-  v.hasOwnProperty("getter") &&
-  v.hasOwnProperty("setter") &&
-  v.hasOwnProperty("proto");
+  Object.hasOwn(v, "properties") &&
+  Object.hasOwn(v, "getter") &&
+  Object.hasOwn(v, "setter") &&
+  Object.hasOwn(v, "proto");
 
 // the acorn interpreter has a bug where it doesn't convert arrays correctly.
 // so we have to more or less copy it here.
@@ -23,7 +23,7 @@ export function toNative(pseudoObj: unknown): unknown {
     return pseudoObj; // it wasn't a pseudo object anyway.
   }
 
-  if (pseudoObj.hasOwnProperty("class") && pseudoObj.class === "Array") {
+  if (Object.hasOwn(pseudoObj, "class") && pseudoObj.class === "Array") {
     const arr: unknown[] = [];
     const length = defaultInterpreter.getProperty(pseudoObj, "length");
     if (typeof length === "number") {

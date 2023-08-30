@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
+import { Player } from "@player";
+import { FactionName } from "@enums";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { BladeburnerConstants } from "../data/Constants";
-import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
+import { useRerender } from "../../ui/React/hooks";
 import { formatNumberNoSuffix, formatPopulation, formatBigNumber } from "../../ui/formatNumber";
 import { Factions } from "../../Faction/Factions";
 import { Router } from "../../ui/GameRoot";
+import { Page } from "../../ui/Router";
 import { joinFaction } from "../../Faction/FactionHelpers";
 import { Bladeburner } from "../Bladeburner";
 
 import { TravelModal } from "./TravelModal";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
-import { FactionNames } from "../../Faction/data/FactionNames";
 
 interface IProps {
   bladeburner: Bladeburner;
@@ -23,22 +21,18 @@ interface IProps {
 
 export function Stats(props: IProps): React.ReactElement {
   const [travelOpen, setTravelOpen] = useState(false);
-  const setRerender = useState(false)[1];
+  useRerender(1000);
 
   const inFaction = props.bladeburner.rank >= BladeburnerConstants.RankNeededForFaction;
-  useEffect(() => {
-    const id = setInterval(() => setRerender((old) => !old), 1000);
-    return () => clearInterval(id);
-  }, []);
 
   function openFaction(): void {
     if (!inFaction) return;
-    const faction = Factions[FactionNames.Bladeburners];
+    const faction = Factions[FactionName.Bladeburners];
     if (!faction.isMember) {
       joinFaction(faction);
     }
 
-    Router.toFaction(faction);
+    Router.toPage(Page.Faction, { faction });
   }
 
   return (

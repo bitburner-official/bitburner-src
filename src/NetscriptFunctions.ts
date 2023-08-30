@@ -1,6 +1,6 @@
 import $ from "jquery";
 import { vsprintf, sprintf } from "sprintf-js";
-import { BitNodeMultipliers, IBitNodeMultipliers } from "./BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "./Constants";
 import {
   calculateHackingChance,
@@ -13,7 +13,19 @@ import {
 import { netscriptCanGrow, netscriptCanWeaken } from "./Hacking/netscriptCanHack";
 import { Terminal } from "./Terminal";
 import { Player } from "@player";
-import { CompletedProgramName } from "./Programs/Programs";
+import {
+  CityName,
+  CompletedProgramName,
+  CrimeType,
+  FactionWorkType,
+  GymType,
+  JobName,
+  LiteratureName,
+  LocationName,
+  ToastVariant,
+  UniversityClassType,
+  CompanyName,
+} from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer, DeleteServer, AddToAllServers, createUniqueRandomIp } from "./Server/AllServers";
 import {
@@ -37,7 +49,7 @@ import { runScriptFromScript } from "./NetscriptWorker";
 import { killWorkerScript, killWorkerScriptByPid } from "./Netscript/killWorkerScript";
 import { workerScripts } from "./Netscript/WorkerScripts";
 import { WorkerScript } from "./Netscript/WorkerScript";
-import { helpers, assertObjectType } from "./Netscript/NetscriptHelpers";
+import { helpers, assertObjectType, wrapUserNode } from "./Netscript/NetscriptHelpers";
 import {
   formatExp,
   formatNumberNoSuffix,
@@ -49,8 +61,8 @@ import {
   formatNumber,
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
-import { LogBoxEvents, LogBoxCloserEvents, LogBoxPositionEvents, LogBoxSizeEvents } from "./ui/React/LogBoxManager";
-import { arrayToString } from "./utils/helpers/arrayToString";
+import { LogBoxEvents, LogBoxCloserEvents } from "./ui/React/LogBoxManager";
+import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { NetscriptGang } from "./NetscriptFunctions/Gang";
 import { NetscriptSleeve } from "./NetscriptFunctions/Sleeve";
 import { NetscriptExtra } from "./NetscriptFunctions/Extra";
@@ -68,39 +80,39 @@ import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums } from "@nsdefs
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
-import { SnackbarEvents, ToastVariant } from "./ui/React/Snackbar";
-import { checkEnum } from "./utils/helpers/enum";
+import { SnackbarEvents } from "./ui/React/Snackbar";
 import { matchScriptPathExact } from "./utils/helpers/scriptKey";
 
 import { Flags } from "./NetscriptFunctions/Flags";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
-import { InternalAPI, removedFunction, NSProxy } from "./Netscript/APIWrapper";
+import { InternalAPI, setRemovedFunctions, NSProxy } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
-import { CityName, JobName, CrimeType, GymType, LocationName, UniversityClassType } from "./Enums";
 import { cloneDeep, escapeRegExp } from "lodash";
-import { FactionWorkType } from "./Enums";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort } from "./NetscriptPort";
-import { FilePath } from "./Paths/FilePath";
+import { FilePath, resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
 import { ContentFilePath } from "./Paths/ContentFile";
-import { LiteratureName } from "./Literature/data/LiteratureNames";
+import { hasContractExtension } from "./Paths/ContractFilePath";
+import { getRamCost } from "./Netscript/RamCostGenerator";
+import { getEnumHelper } from "./utils/EnumHelper";
 
 export const enums: NSEnums = {
   CityName,
   CrimeType,
   FactionWorkType,
   GymType,
-  LocationName,
   JobName,
+  LocationName,
   ToastVariant,
   UniversityClassType,
+  CompanyName,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
@@ -397,7 +409,7 @@ export const ns: InternalAPI<NSFull> = {
         ctx.workerScript.scriptRef.onlineExpGained += expGain;
         Player.gainHackingExp(expGain);
         // Account for hidden multiplier in Server.weaken()
-        return Promise.resolve(weakenAmt * BitNodeMultipliers.ServerWeakenRate);
+        return Promise.resolve(weakenAmt * currentNodeMults.ServerWeakenRate);
       });
     },
   weakenAnalyze:
@@ -406,7 +418,7 @@ export const ns: InternalAPI<NSFull> = {
       const threads = helpers.number(ctx, "threads", _threads);
       const cores = helpers.number(ctx, "cores", _cores);
       const coreBonus = 1 + (cores - 1) / 16;
-      return CONSTANTS.ServerWeakenAmount * threads * coreBonus * BitNodeMultipliers.ServerWeakenRate;
+      return CONSTANTS.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
     },
   share: (ctx) => () => {
     helpers.log(ctx, () => "Sharing this computer.");
@@ -554,7 +566,12 @@ export const ns: InternalAPI<NSFull> = {
       const x = helpers.number(ctx, "x", _x);
       const y = helpers.number(ctx, "y", _y);
       const pid = helpers.number(ctx, "pid", _pid);
-      LogBoxPositionEvents.emit({ pid, data: { x, y } });
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.tailProps?.setPosition(x, y);
     },
   resizeTail:
     (ctx) =>
@@ -562,7 +579,12 @@ export const ns: InternalAPI<NSFull> = {
       const w = helpers.number(ctx, "w", _w);
       const h = helpers.number(ctx, "h", _h);
       const pid = helpers.number(ctx, "pid", _pid);
-      LogBoxSizeEvents.emit({ pid, data: { w, h } });
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.tailProps?.setSize(w, h);
     },
   closeTail:
     (ctx) =>
@@ -570,6 +592,18 @@ export const ns: InternalAPI<NSFull> = {
       const pid = helpers.number(ctx, "pid", _pid);
       //Emit an event to tell the game to close the tail window if it exists
       LogBoxCloserEvents.emit(pid);
+    },
+  setTitle:
+    (ctx) =>
+    (title, _pid = ctx.workerScript.scriptRef.pid) => {
+      const pid = helpers.number(ctx, "pid", _pid);
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
+      runningScriptObj.tailProps?.rerender();
     },
   nuke: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -787,15 +821,12 @@ export const ns: InternalAPI<NSFull> = {
 
       for (const byPid of server.runningScriptMap.values()) {
         for (const pid of byPid.keys()) {
-          if (safetyguard === true && pid == ctx.workerScript.pid) continue;
+          if (safetyguard && pid == ctx.workerScript.pid) continue;
           killWorkerScriptByPid(pid);
           ++scriptsKilled;
         }
       }
-      helpers.log(
-        ctx,
-        () => `Killing all scripts on '${server.hostname}'. May take a few minutes for the scripts to die.`,
-      );
+      helpers.log(ctx, () => `Killing all scripts on '${server.hostname}'.`);
 
       return scriptsKilled > 0;
     },
@@ -836,8 +867,10 @@ export const ns: InternalAPI<NSFull> = {
       }
       // Overwrite script if it already exists
       const result = destServer.writeToContentFile(contentFilePath, sourceContentFile.content);
-      helpers.log(ctx, () => `Copied file ${contentFilePath} from ${sourceServer} to ${destServer}`);
-      if (result.overwritten) helpers.log(ctx, () => `Warning: ${contentFilePath} was overwritten on ${destServer}`);
+      helpers.log(ctx, () => `Copied file ${contentFilePath} from ${sourceServer.hostname} to ${destServer.hostname}`);
+      if (result.overwritten) {
+        helpers.log(ctx, () => `Warning: ${contentFilePath} was overwritten on ${destServer.hostname}`);
+      }
     }
 
     // --- Literature Files ---
@@ -851,13 +884,13 @@ export const ns: InternalAPI<NSFull> = {
 
       const destMessage = destServer.messages.find((message) => message === litFilePath);
       if (destMessage) {
-        helpers.log(ctx, () => `File '${litFilePath}' was already on '${destServer?.hostname}'.`);
+        helpers.log(ctx, () => `File '${litFilePath}' was already on '${destServer.hostname}'.`);
         continue;
       }
 
       // It exists in sourceServer.messages, so it's a valid name.
       destServer.messages.push(litFilePath as LiteratureName);
-      helpers.log(ctx, () => `File '${litFilePath}' copied over to '${destServer?.hostname}'.`);
+      helpers.log(ctx, () => `File '${litFilePath}' copied over to '${destServer.hostname}'.`);
       continue;
     }
     return noFailures;
@@ -876,7 +909,7 @@ export const ns: InternalAPI<NSFull> = {
     ];
 
     if (!substring) return allFilenames.sort();
-    return allFilenames.filter((filename) => filename.includes(substring)).sort();
+    return allFilenames.filter((filename) => ("/" + filename).includes(substring)).sort();
   },
   getRecentScripts: () => (): RecentScript[] => {
     return recentScripts.map((rs) => ({
@@ -933,7 +966,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   getBitNodeMultipliers:
     (ctx) =>
-    (_n = Player.bitNodeN, _lvl = Player.sourceFileLvl(Player.bitNodeN) + 1): IBitNodeMultipliers => {
+    (_n = Player.bitNodeN, _lvl = Player.sourceFileLvl(Player.bitNodeN) + 1) => {
       if (Player.sourceFileLvl(5) <= 0 && Player.bitNodeN !== 5)
         throw helpers.makeRuntimeErrorMsg(ctx, "Requires Source-File 5 to run.");
       const n = Math.round(helpers.number(ctx, "n", _n));
@@ -1098,27 +1131,19 @@ export const ns: InternalAPI<NSFull> = {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     return GetServer(hostname) !== null;
   },
-  fileExists:
-    (ctx) =>
-    (_filename, _hostname = ctx.workerScript.hostname) => {
-      const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const server = helpers.getServer(ctx, hostname);
-      if (server.scripts.has(filename) || server.textFiles.has(filename)) return true;
-      for (let i = 0; i < server.programs.length; ++i) {
-        if (filename.toLowerCase() == server.programs[i].toLowerCase()) {
-          return true;
-        }
-      }
-      for (let i = 0; i < server.messages.length; ++i) {
-        if (filename.toLowerCase() === server.messages[i].toLowerCase()) {
-          return true;
-        }
-      }
-      const contract = server.contracts.find((c) => c.fn.toLowerCase() === filename.toLowerCase());
-      if (contract) return true;
-      return false;
-    },
+  fileExists: (ctx) => (_filename, _hostname) => {
+    const filename = helpers.string(ctx, "filename", _filename);
+    const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+    const server = helpers.getServer(ctx, hostname);
+    const path = resolveFilePath(filename, ctx.workerScript.name);
+    if (!path) return false;
+    if (hasScriptExtension(path)) return server.scripts.has(path);
+    if (hasTextExtension(path)) return server.textFiles.has(path);
+    if (path.endsWith(".lit") || path.endsWith(".msg")) return server.messages.includes(path as any);
+    if (hasContractExtension(path)) return !!server.contracts.find(({ fn }) => fn === path);
+    const lowerPath = path.toLowerCase();
+    return server.programs.map((programName) => programName.toLowerCase()).includes(lowerPath);
+  },
   isRunning:
     (ctx) =>
     (fn, hostname, ...scriptArgs) => {
@@ -1136,7 +1161,11 @@ export const ns: InternalAPI<NSFull> = {
 
     const cost = getPurchaseServerCost(ram);
     if (cost === Infinity) {
-      helpers.log(ctx, () => `Invalid argument: ram='${ram}'`);
+      if (ram > getPurchaseServerMaxRam()) {
+        helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than getPurchaseServerMaxRam`);
+      } else {
+        helpers.log(ctx, () => `Invalid argument: ram='${ram}' must be a positive power of 2`);
+      }
       return Infinity;
     }
 
@@ -1582,10 +1611,8 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_message, _variant = ToastVariant.SUCCESS, _duration = 2000) => {
       const message = helpers.string(ctx, "message", _message);
-      const variant = helpers.string(ctx, "variant", _variant);
+      const variant = getEnumHelper("ToastVariant").nsGetMember(ctx, _variant);
       const duration = _duration === null ? null : helpers.number(ctx, "duration", _duration);
-      if (!checkEnum(ToastVariant, variant))
-        throw new Error(`variant must be one of ${Object.values(ToastVariant).join(", ")}`);
       SnackbarEvents.emit(message, variant as ToastVariant, duration);
     },
   prompt: (ctx) => (_txt, _options) => {
@@ -1626,9 +1653,9 @@ export const ns: InternalAPI<NSFull> = {
       });
     });
   },
-  wget: (ctx) => async (_url, _target, _hostname) => {
+  wget: (ctx) => (_url, _target, _hostname) => {
     const url = helpers.string(ctx, "url", _url);
-    const target = helpers.scriptPath(ctx, "target", _target);
+    const target = helpers.filePath(ctx, "target", _target);
     const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
     const server = helpers.getServer(ctx, hostname);
     if (!target || (!hasTextExtension(target) && !hasScriptExtension(target))) {
@@ -1639,12 +1666,7 @@ export const ns: InternalAPI<NSFull> = {
       $.get(
         url,
         function (data) {
-          let res;
-          if (hasScriptExtension(target)) {
-            res = server.writeToScriptFile(target, data);
-          } else {
-            res = server.writeToTextFile(target, data);
-          }
+          const res = server.writeToContentFile(target, data);
           if (res.overwritten) {
             helpers.log(ctx, () => `Successfully retrieved content and overwrote '${target}' on '${hostname}'`);
             return resolve(true);
@@ -1660,7 +1682,7 @@ export const ns: InternalAPI<NSFull> = {
     });
   },
   getFavorToDonate: () => () => {
-    return Math.floor(CONSTANTS.BaseFavorToDonate * BitNodeMultipliers.RepToDonateToFaction);
+    return Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.RepToDonateToFaction);
   },
   getPlayer: () => () => {
     const data = {
@@ -1692,7 +1714,7 @@ export const ns: InternalAPI<NSFull> = {
       },
       bitNodeN: {
         identifier: "ns.getPlayer().bitNodeN",
-        message: "Use ns.getResetInto().currentNode instead",
+        message: "Use ns.getResetInfo().currentNode instead",
         value: Player.bitNodeN,
       },
     });
@@ -1743,13 +1765,26 @@ export const ns: InternalAPI<NSFull> = {
     lastAugReset: Player.lastAugReset,
     lastNodeReset: Player.lastNodeReset,
     currentNode: Player.bitNodeN,
+    ownedAugs: new Map(Player.augmentations.map((aug) => [aug.name, aug.level])),
+    ownedSF: new Map(Player.sourceFiles),
   }),
+  getFunctionRamCost: (ctx) => (_name) => {
+    const name = helpers.string(ctx, "name", _name);
+    return getRamCost(name.split("."), true);
+  },
+  tprintRaw: () => (value) => {
+    Terminal.printRaw(wrapUserNode(value));
+  },
+  printRaw: (ctx) => (value) => {
+    ctx.workerScript.print(wrapUserNode(value));
+  },
   flags: Flags,
   ...NetscriptExtra(),
 };
-// Object.assign to bypass ts for removedFunctions which have no documentation or ramcost
-Object.assign(ns, {
-  getServerRam: removedFunction("v2.2.0", "getServerMaxRam and getServerUsedRam"),
+
+// Removed functions
+setRemovedFunctions(ns, {
+  getServerRam: { version: "2.2.0", replacement: "getServerMaxRam and getServerUsedRam" },
 });
 
 export function NetscriptFunctions(ws: WorkerScript): NSFull {

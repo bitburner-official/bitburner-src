@@ -5,6 +5,7 @@
  */
 export const CONSTANTS: {
   VersionString: string;
+  isDevBranch: boolean;
   VersionNumber: number;
   MaxSkillLevel: number;
   MilliPerCycle: number;
@@ -30,11 +31,6 @@ export const CONSTANTS: {
   PurchasedServerMaxRam: number;
   MultipleAugMultiplier: number;
   TorRouterCost: number;
-  WSEAccountCost: number;
-  TIXAPICost: number;
-  MarketData4SCost: number;
-  MarketDataTixApi4SCost: number;
-  StockMarketCommission: number;
   HospitalCostPerHp: number;
   IntelligenceCrimeWeight: number;
   IntelligenceInfiltrationWeight: number;
@@ -87,8 +83,9 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.3.0",
-  VersionNumber: 30,
+  VersionString: "2.4.2dev",
+  isDevBranch: true,
+  VersionNumber: 34,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -137,13 +134,6 @@ export const CONSTANTS: {
 
   // TOR Router
   TorRouterCost: 200e3,
-
-  // Stock market
-  WSEAccountCost: 200e6,
-  TIXAPICost: 5e9,
-  MarketData4SCost: 1e9,
-  MarketDataTixApi4SCost: 25e9,
-  StockMarketCommission: 100e3,
 
   // Hospital/Health
   HospitalCostPerHp: 100e3,
@@ -225,59 +215,23 @@ export const CONSTANTS: {
 
   InfiniteLoopLimit: 2000,
 
-  Donations: 79,
+  Donations: 113,
 
+  // Also update doc/source/changelog.rst
   LatestUpdate: `
-v2.3 Dev
+## v2.4.2 dev changelog (last updated 8/28/23)
 
-General:
-* Monaco script editor updated to a newer version + more config options. (@Snarling)
-* Revamp of script ram calculation process, should be more reliable now. (@Snarling)
-* Improve ns.scp filename recognition when leading slash discrepancy (@lucebac)
-* Fix memory leak when netscript ports were initialized and never used again. (@Snarling)
-* Fix a bug that could result in an infinite atExit loop if a script killed itself. (@Snarling)
-* Fix a bug where numeric terminal arguments were not being detected as strings when enclosed in quote marks. (@LiamGeorge1999)
-* Fix a bug with hackAnalyzeThreads where infinite threads would be indicated any time a single thread would hack less than $1 (@Snarling)
-* All Math Expressions contract no longer accepts wrong answers (@Snarling)
-* Improve Electron's handling of external links (@Snarling) 
-* Documentation improvements (@Mughur, @quacksouls, @Snarling, @AdityaHegde)
-* Performance improvements for shallow typechecking on objects sent into API (e.g. for formulas) (@Snarling)
-* Faction invites now trigger immediately when backdooring a server.
+See 2.4.1 changelog: https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
 
-SF2:
-* Corrected the "Next equipment unlock" text for member upgrades. (@LiamGeorge1999)
+### BUGFIX
+- UI: Faction augmentation page no longer ends up with stale data (@zerbosh)
+- Terminal: Prevent recursive aliases from being resolved (@ficocelliguy)
 
-SF4:
-* Faction invites trigger immediately when running ns.singularity.getFactionInvitations (@Snarling)
-
-SF6:
-* Failing a contract or operation now consumes the action (@Zelow79)
-
-SF9:
-* The SF9.3 bonus is also given to the player when inside of BN9. (@Zelow79)
-* Adjusted the SF1 bonus for hacknet costs (slight nerf), and raised the SF9 bonus to compensate. (@d0sboots)
-
-SF10:
-* Sleeve shock recovery now scales with intelligence. (@Tyasuh)
-* Sleeve kills during crimes count towards numPeopleKilled (@Zelow79)
-* Fix a misspelled moneySourceTracker call for sleeves (@zerbosh)
-* ns.sleeve.getTask return value now includes cyclesNeeded where applicable (@Snarling)
-* Internal type refactoring on Sleeve Work. (@Snarling)
-
-SF13:
-* Improve performance of Stanek's gift update cycle, and rework (buff) bonus time handling. (@Snarling)
-
-Misc:
-* Nerf noodle bar
-
-2.2.2 Hotfixes
-* Fix an issue that prevented the Electron API server from communicating with the VSCode plugin. (credit to u/AnyGiraffe4367 on reddit)
-
-Planned changes remaining in 2.3:
-* 2.3 will include a large planned rework to corporation. This may cause api breaks for any corporation scripts, and there will be large changes in how the corporation mechanic functions.
-* Enum changes, potentially causing API break with some enums. Enums will be more usable and there will be more of them.
-* Constants rework - interenal game constants will be reorganized and will be provided to the player as different categories of constants.
-* Further deprecation of ns1. Removal of more documentation, add ingame notice to prompt player to update scripts to .js.
-* Nerf noodle bar
+### MISC
+- Icarus message no longer shows repeatedly for players that are in the endgame. (@ficocelliguy)
+- Updated documentation for ns.tail and ns.getScriptLogs to make it clear a PID can be used. (@myCatsName)
+- Improved error messages for ns.getPurchasedServer (@ficocelliguy)
+- Remove work completion dialogs when performing an augmentation install (@ficocelliguy)
+- Added initial ingame documentation for Bladeburner (@myCatsName)
 `,
 };

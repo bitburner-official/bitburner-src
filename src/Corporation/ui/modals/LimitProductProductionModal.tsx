@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Product } from "../../Product";
+import type { CityName } from "@enums";
+import type { Product } from "../../Product";
 import { LimitProductProduction } from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
 import Typography from "@mui/material/Typography";
@@ -11,7 +12,7 @@ interface IProps {
   open: boolean;
   onClose: () => void;
   product: Product;
-  city: string;
+  city: CityName;
 }
 
 // Create a popup that lets the player limit the production of a product

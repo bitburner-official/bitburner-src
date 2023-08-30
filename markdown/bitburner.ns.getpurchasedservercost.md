@@ -30,23 +30,12 @@ RAM cost: 0.25 GB
 
 Returns the cost to purchase a server with the specified amount of ram.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-for (i = 1; i <= 20; i++) {
-    tprint(i + " -- " + getPurchasedServerCost(Math.pow(2, i)));
-}
-```
-
-## Example 2
-
-
-```ts
-// NS2:
-for (i = 1; i <= 20; i++) {
-    ns.tprint(i + " -- " + ns.getPurchasedServerCost(Math.pow(2, i)));
-}
+```js
+const ram = 2 ** 20;
+const cost = ns.getPurchasedServerCost(ram);
+ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs ${ns.formatMoney(cost)}`);
 ```
 

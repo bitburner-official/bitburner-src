@@ -23,7 +23,7 @@ weaken(host: string, opts?: BasicHGWOptions): Promise<number>;
 
 Promise&lt;number&gt;
 
-The amount by which the target server’s security level was decreased. This is equivalent to 0.05 multiplied by the number of script threads.
+A promise that resolves to the value by which security was reduced.
 
 ## Remarks
 
@@ -33,20 +33,10 @@ Use your hacking skills to attack a server’s security, lowering the server’s
 
 Like [hack](./bitburner.ns.hack.md) and [grow](./bitburner.ns.grow.md)<!-- -->, `weaken` can be called on any server, regardless of where the script is running. This function requires root access to the target server, but there is no required hacking level to run the function.
 
-## Example 1
+## Example
 
 
-```ts
-// NS1:
-var currentSecurity = getServerSecurityLevel("foodnstuff");
-currentSecurity = currentSecurity - weaken("foodnstuff");
-```
-
-## Example 2
-
-
-```ts
-// NS2:
+```js
 let currentSecurity = ns.getServerSecurityLevel("foodnstuff");
 currentSecurity -= await ns.weaken("foodnstuff");
 ```

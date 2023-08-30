@@ -21,6 +21,7 @@ export interface TIX
 |  [cancelOrder(sym, shares, price, type, pos)](./bitburner.tix.cancelorder.md) | Cancel order for stocks. |
 |  [getAskPrice(sym)](./bitburner.tix.getaskprice.md) | Returns the ask price of that stock. |
 |  [getBidPrice(sym)](./bitburner.tix.getbidprice.md) | Returns the bid price of that stock. |
+|  [getConstants()](./bitburner.tix.getconstants.md) | Get game constants for the stock market mechanic. |
 |  [getForecast(sym)](./bitburner.tix.getforecast.md) | Returns the probability that the specified stock’s price will increase (as opposed to decrease) during the next tick. |
 |  [getMaxShares(sym)](./bitburner.tix.getmaxshares.md) | Returns the maximum number of shares of a stock. |
 |  [getOrders()](./bitburner.tix.getorders.md) | Returns your order book for the stock market. |

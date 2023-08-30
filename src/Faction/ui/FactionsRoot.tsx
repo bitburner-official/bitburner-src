@@ -1,17 +1,20 @@
+import React, { useEffect } from "react";
 import { Explore, Info, LastPage, LocalPolice, NewReleases, Report, SportsMma } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography, useTheme } from "@mui/material";
-import React, { useEffect } from "react";
+
 import { Player } from "@player";
+import { FactionName } from "@enums";
+
 import { Settings } from "../../Settings/Settings";
 import { formatFavor, formatReputation } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
-import { FactionNames } from "../data/FactionNames";
+import { Page } from "../../ui/Router";
+import { useRerender } from "../../ui/React/hooks";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
-import { useRerender } from "../../ui/React/hooks";
 
-export const InvitationsSeen: string[] = [];
+export const InvitationsSeen = new Set<FactionName>();
 
 const fontSize = "small";
 const marginRight = 0.5;
@@ -52,14 +55,14 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
   const augsLeft = getFactionAugmentationsFiltered(props.faction).filter((aug) => !Player.hasAugmentation(aug)).length;
 
   function openFaction(faction: Faction): void {
-    Router.toFaction(faction);
+    Router.toPage(Page.Faction, { faction });
   }
 
   function openFactionAugPage(faction: Faction): void {
-    Router.toFaction(faction, true);
+    Router.toPage(Page.FactionAugmentations, { faction });
   }
 
-  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, faction: string): void {
+  function acceptInvitation(event: React.MouseEvent<HTMLButtonElement>, faction: FactionName): void {
     if (!event.isTrusted) return;
     joinFaction(Factions[faction]);
     props.rerender();
@@ -170,12 +173,11 @@ export function FactionsRoot(): React.ReactElement {
   const rerender = useRerender(200);
   useEffect(() => {
     Player.factionInvitations.forEach((faction) => {
-      if (InvitationsSeen.includes(faction)) return;
-      InvitationsSeen.push(faction);
+      InvitationsSeen.add(faction);
     });
   }, []);
 
-  const allFactions = Object.values(FactionNames).map((faction) => faction as string);
+  const allFactions = Object.values(FactionName).map((faction) => faction as string);
   const allJoinedFactions = [...Player.factions];
   allJoinedFactions.sort((a, b) => allFactions.indexOf(a) - allFactions.indexOf(b));
   const invitations = Player.factionInvitations;
@@ -218,7 +220,7 @@ export function FactionsRoot(): React.ReactElement {
             </Typography>
             <Box>
               {invitations.map((facName) => {
-                if (!Factions.hasOwnProperty(facName)) return null;
+                if (!Object.hasOwn(Factions, facName)) return null;
                 return <FactionElement key={facName} faction={Factions[facName]} joined={false} rerender={rerender} />;
               })}
             </Box>
@@ -232,7 +234,7 @@ export function FactionsRoot(): React.ReactElement {
           <Box>
             {allJoinedFactions.length > 0 ? (
               allJoinedFactions.map((facName) => {
-                if (!Factions.hasOwnProperty(facName)) return null;
+                if (!Object.hasOwn(Factions, facName)) return null;
                 return <FactionElement key={facName} faction={Factions[facName]} joined={true} rerender={rerender} />;
               })
             ) : (

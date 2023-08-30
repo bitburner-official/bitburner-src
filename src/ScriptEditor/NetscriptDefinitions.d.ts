@@ -1,5 +1,4 @@
-/* TODO: remove ns1-specific documentation for all functions, and just create a basic doc somewhere that says how to
- *       convert examples for use in .script files (e.g. no async/await, var instead of let/const, etc). */
+/** All netscript definitions */
 
 /** @public */
 interface HP {
@@ -48,7 +47,7 @@ interface Player extends Person {
   money: number;
   numPeopleKilled: number;
   entropy: number;
-  jobs: Record<string, string>;
+  jobs: Partial<Record<CompanyName, JobName>>;
   factions: string[];
   totalPlaytime: number;
   location: string;
@@ -75,6 +74,10 @@ interface ResetInfo {
   lastNodeReset: number;
   /** The current bitnode */
   currentNode: number;
+  /** A map of owned augmentations to their levels. Keyed by the augmentation name. Map values are the augmentation level (e.g. for NeuroFlux governor). */
+  ownedAugs: Map<string, number>;
+  /** A map of owned SF to their levels. Keyed by the SF number. Map values are the SF level. */
+  ownedSF: Map<number, number>;
 }
 
 /** @public */
@@ -171,6 +174,42 @@ interface Multipliers {
 }
 
 /** @public */
+interface TailProperties {
+  /** X-coordinate of the log window */
+  x: number;
+  /** Y-coordinate of the log window */
+  y: number;
+  /** Width of the log window content area */
+  width: number;
+  /** Height of the log window content area */
+  height: number;
+}
+
+/**
+ * @public
+ * A stand-in for the real React.ReactNode.
+ * A {@link ReactElement} is rendered dynamically with React.
+ * number and string are displayed directly.
+ * boolean, null, and undefined are ignored and not rendered.
+ * An array of ReactNodes will display all members of that array sequentially.
+ *
+ * Use React.createElement to make the ReactElement type, see {@link https://react.dev/reference/react/createElement#creating-an-element-without-jsx | creating an element without jsx} from the official React documentation.
+ */
+type ReactNode = ReactElement | string | number | null | undefined | boolean | ReactNode[];
+
+/**
+ * @public
+ * A stand-in for the real React.ReactElement.
+ * Use React.createElement to make these.
+ * See {@link https://react.dev/reference/react/createElement#creating-an-element-without-jsx | creating an element without jsx} from the official React documentation.
+ */
+interface ReactElement {
+  type: string | ((props: any) => ReactElement | null) | (new (props: any) => object);
+  props: any;
+  key: string | number | null;
+}
+
+/** @public */
 interface RunningScript {
   /** Arguments the script was called with */
   args: (string | number | boolean)[];
@@ -199,6 +238,15 @@ interface RunningScript {
   ramUsage: number;
   /** Hostname of the server on which this script runs */
   server: string;
+  /** Properties of the tail window, or null if it is not shown */
+  tailProperties: TailProperties | null;
+  /**
+   * The title, as shown in the script's log box. Defaults to the name + args,
+   * but can be changed by the user. If it is set to a React element (only by
+   * the user), that will not be persisted, and will be restored to default on
+   * load.
+   */
+  title: string | ReactElement;
   /** Number of threads that this script runs with */
   threads: number;
   /** Whether this RunningScript is excluded from saves */
@@ -295,7 +343,7 @@ interface BasicHGWOptions {
   /** Set to true this action will affect the stock market. */
   stock?: boolean;
   /** Number of additional milliseconds that will be spent waiting between the start of the function and when it
-   * completes. Experimental in 2.2.2, may be removed in 2.3. */
+   * completes. */
   additionalMsec?: number;
 }
 
@@ -311,13 +359,13 @@ interface AugmentPair {
 }
 
 /** @public */
-declare enum PositionTypes {
+declare enum PositionType {
   Long = "L",
   Short = "S",
 }
 
 /** @public */
-declare enum OrderTypes {
+declare enum OrderType {
   LimitBuy = "Limit Buy Order",
   LimitSell = "Limit Sell Order",
   StopBuy = "Stop Buy Order",
@@ -334,9 +382,9 @@ interface StockOrderObject {
   /** Price per share */
   price: number;
   /** Order type */
-  type: OrderTypes;
+  type: OrderType;
   /** Order position */
-  position: PositionTypes;
+  position: PositionType;
 }
 
 /**
@@ -347,6 +395,27 @@ interface StockOrderObject {
  */
 interface StockOrder {
   [key: string]: StockOrderObject[];
+}
+
+/** Constants used for the stockmarket game mechanic.
+ * @public */
+interface StockMarketConstants {
+  /** Normal time in ms between stock market updates */
+  msPerStockUpdate: number;
+  /** Minimum time in ms between stock market updates if there is stored offline/bonus time */
+  msPerStockUpdateMin: number;
+  /** An internal constant used while determining when to flip a stock's forecast */
+  TicksPerCycle: number;
+  /** Cost of the WSE account */
+  WSEAccountCost: number;
+  /** Cost of the TIX API */
+  TIXAPICost: number;
+  /** Cost of the 4S Market Data */
+  MarketData4SCost: number;
+  /** Cost of the 4S Market Data TIX API integration */
+  MarketDataTixApi4SCost: number;
+  /** Commission fee for transactions */
+  StockMarketCommission: number;
 }
 
 /**
@@ -880,17 +949,17 @@ interface GangMemberInfo {
 interface GangMemberAscension {
   /** Amount of respect lost from ascending */
   respect: number;
-  /** Hacking multiplier gained from ascending */
+  /** Factor by which the hacking ascension multiplier was increased (newMult / oldMult) */
   hack: number;
-  /** Strength multiplier gained from ascending */
+  /** Factor by which the strength ascension multiplier was increased (newMult / oldMult) */
   str: number;
-  /** Defense multiplier gained from ascending */
+  /** Factor by which the defense ascension multiplier was increased (newMult / oldMult) */
   def: number;
-  /** Dexterity multiplier gained from ascending */
+  /** Factor by which the dexterity ascension multiplier was increased (newMult / oldMult) */
   dex: number;
-  /** Agility multiplier gained from ascending */
+  /** Factor by which the agility ascension multiplier was increased (newMult / oldMult) */
   agi: number;
-  /** Charisma multiplier gained from ascending */
+  /** Factor by which the charisma ascension multiplier was increased (newMult / oldMult) */
   cha: number;
 }
 
@@ -911,7 +980,7 @@ type SleeveClassTask = {
 };
 
 /** @public */
-type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
+type SleeveCompanyTask = { type: "COMPANY"; companyName: CompanyName };
 
 /** @public */
 type SleeveCrimeTask = {
@@ -1033,6 +1102,9 @@ export interface NetscriptPort {
  * @public
  */
 export interface TIX {
+  /** Get game constants for the stock market mechanic.
+   *  @remarks RAM cost: 0 GB */
+  getConstants(): StockMarketConstants;
   /**
    * Returns true if the player has access to a WSE Account
    * @remarks RAM cost: 0.05 GB
@@ -1103,19 +1175,7 @@ export interface TIX {
    * 1. TIX API Access
    *
    * @example
-   * ```ts
-   * // NS1
-   * stock.getOrganization("FSIG");
-   *
-   * // Choose the first stock symbol from the array of stock symbols. Get the
-   * // organization associated with the corresponding stock symbol
-   * var sym = stock.getSymbols()[0];
-   * tprint("Stock symbol: " + sym);
-   * tprint("Stock organization: " + stock.getOrganization(sym));
-   * ```
-   * @example
-   * ```ts
-   * // NS2
+   * ```js
    * ns.stock.getOrganization("FSIG");
    *
    * // Choose the first stock symbol from the array of stock symbols. Get the
@@ -1164,18 +1224,8 @@ export interface TIX {
    * All elements in the returned array are numeric.
    *
    * @example
-   * ```ts
-   * // NS1
-   * var pos = stock.getPosition("ECP");
-   * var shares      = pos[0];
-   * var avgPx       = pos[1];
-   * var sharesShort = pos[2];
-   * var avgPxShort  = pos[3];
-   * ```
-   * @example
-   * ```ts
-   * // NS2
-   * const [shares, avgPx, sharesShort, avgPxShort] = ns.stock.getPosition("ECP");
+   * ```js
+   * const [sharesLong, avgLongPrice, sharesShort, avgShortPrice] = ns.stock.getPosition("ECP");
    * ```
    * @param sym - Stock symbol.
    * @returns Array of four elements that represents the player’s position in a stock.
@@ -1587,14 +1637,10 @@ export interface Singularity {
    * Web using the Terminal buy command.
    *
    * @example
-   * ```ts
-   * // NS1
-   * purchaseProgram("brutessh.exe");
-   * ```
-   * @example
-   * ```ts
-   * // NS2
-   * ns.purchaseProgram("brutessh.exe");
+   * ```js
+   * const programName = "BruteSSH.exe"
+   * const success = ns.purchaseProgram(programName);
+   * if (!success) ns.tprint("ERROR: Failed to purchase ${programName}")
    * ```
    * @param programName - Name of program to purchase.
    * @returns True if the specified program is purchased, and false otherwise.
@@ -1713,7 +1759,10 @@ export interface Singularity {
    * @param positionName - Name of position to get the requirements for. Must be an exact match.
    * @returns CompanyPositionInfo object.
    */
-  getCompanyPositionInfo(companyName: string, positionName: JobName): CompanyPositionInfo;
+  getCompanyPositionInfo(
+    companyName: CompanyName | `${CompanyName}`,
+    positionName: JobName | `${JobName}`,
+  ): CompanyPositionInfo;
 
   /**
    * Get List of Company Positions.
@@ -1727,22 +1776,13 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * // NS1:
-   * var COMPANY_NAME = "Noodle Bar";
-   *
-   * var jobList = singularity.getCompanyPositions(COMPANY_NAME);
-   * ```
-   * @example
-   * ```js
-   * // NS2:
-   * const COMPANY_NAME = "Noodle Bar";
-   *
-   * let jobList = ns.singularity.getCompanyPositions(COMPANY_NAME);
+   * const companyName = "Noodle Bar";
+   * const jobList = ns.singularity.getCompanyPositions(companyName);
    * ```
    * @param companyName - Name of company to get the position list for. Must be an exact match.
    * @returns The position list if the company name is valid.
    */
-  getCompanyPositions(companyName: string): JobName[];
+  getCompanyPositions(companyName: CompanyName | `${CompanyName}`): JobName[];
 
   /**
    * Work for a company.
@@ -1758,26 +1798,16 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * // NS1:
-   * var COMPANY_NAME = "Noodle Bar";
-   *
-   * var success = singularity.workForCompany(COMPANY_NAME);
-   * if (!success) tprint("ERROR: Failed to start work at " + COMPANY_NAME + ".");
-   * ```
-   * @example
-   * ```js
-   * // NS2:
-   * const COMPANY_NAME = "Noodle Bar";
-   *
-   * let success = ns.singularity.workForCompany(COMPANY_NAME);
-   * if (!success) ns.tprint(`ERROR: Failed to start work at ${COMPANY_NAME].`);
+   * const companyName = "Noodle Bar";
+   * const success = ns.singularity.workForCompany(companyName);
+   * if (!success) ns.tprint(`ERROR: Failed to start work at ${companyName}.`);
    * ```
    * @param companyName - Name of company to work for. Must be an exact match. Optional. If not specified, this
    *   argument defaults to the last job that you worked.
    * @param focus - Acquire player focus on this work operation. Optional. Defaults to true.
    * @returns True if the player starts working, and false otherwise.
    */
-  workForCompany(companyName: string, focus?: boolean): boolean;
+  workForCompany(companyName: CompanyName, focus?: boolean): boolean;
 
   /**
    * Quit jobs by company.
@@ -1789,7 +1819,7 @@ export interface Singularity {
    *
    * @param companyName - Name of the company.
    */
-  quitJob(companyName?: string): void;
+  quitJob(companyName?: CompanyName | `${CompanyName}`): void;
 
   /**
    * Apply for a job at a company.
@@ -1810,7 +1840,7 @@ export interface Singularity {
    * @param field - Field to which you want to apply.
    * @returns True if the player successfully get a job/promotion, and false otherwise.
    */
-  applyToCompany(companyName: string, field: string): boolean;
+  applyToCompany(companyName: CompanyName | `${CompanyName}`, field: string): boolean;
 
   /**
    * Get company reputation.
@@ -1824,7 +1854,7 @@ export interface Singularity {
    * @param companyName - Name of the company.
    * @returns Amount of reputation you have at the specified company.
    */
-  getCompanyRep(companyName: string): number;
+  getCompanyRep(companyName: CompanyName | `${CompanyName}`): number;
 
   /**
    * Get company favor.
@@ -1838,7 +1868,7 @@ export interface Singularity {
    * @param companyName - Name of the company.
    * @returns Amount of favor you have at the specified company.
    */
-  getCompanyFavor(companyName: string): number;
+  getCompanyFavor(companyName: CompanyName | `${CompanyName}`): number;
 
   /**
    * Get company favor gain.
@@ -1852,7 +1882,7 @@ export interface Singularity {
    * @param companyName - Name of the company.
    * @returns Amount of favor you gain at the specified company when you reset by installing Augmentations.
    */
-  getCompanyFavorGain(companyName: string): number;
+  getCompanyFavorGain(companyName: CompanyName | `${CompanyName}`): number;
 
   /**
    * List all current faction invitations.
@@ -1895,19 +1925,11 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * // NS1
-   * var FACTION_NAME = "CyberSec", WORK_TYPE = "hacking";
+   * const factionName = "CyberSec";
+   * const workType = "hacking";
    *
-   * var success = singularity.workForFaction(FACTION_NAME, WORK_TYPE);
-   * if (!success) tprint("ERROR: Failed to start work for " + FACTION_NAME + " with work type " + WORK_TYPE);
-   * ```
-   * @example
-   * ```js
-   * // NS2
-   * const FACTION_NAME = "CyberSec", WORK_TYPE = "hacking";
-   *
-   * let success = ns.singularity.workForFaction(FACTION_NAME, WORK_TYPE);
-   * if (!success) ns.tprint(`ERROR: Failed to start work for ${FACTION_NAME} with work type ${WORK_TYPE}.`)
+   * let success = ns.singularity.workForFaction(factionName, workType);
+   * if (!success) ns.tprint(`ERROR: Failed to start work for ${factionName} with work type ${workType}.`)
    * ```
    * @param faction - Name of faction to work for.
    * @param workType - Type of work to perform for the faction.
@@ -1998,14 +2020,10 @@ export interface Singularity {
    * * AutoLink.exe: 25
    *
    * @example
-   * ```ts
-   * // NS1:
-   * createProgram(“relaysmtp.exe”);
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * ns.createProgram(“relaysmtp.exe”);
+   * ```js
+   * const programName = "BruteSSH.exe";
+   * const success = ns.createProgram(programName);
+   * if (!success) ns.tprint("ERROR: Failed to start working on ${programName}")
    * ```
    * @param program - Name of program to create.
    * @param focus - Acquire player focus on this program creation. Optional. Defaults to true.
@@ -2087,6 +2105,21 @@ export interface Singularity {
    * @returns Array containing an object with number and level of the source file.
    */
   getOwnedSourceFiles(): SourceFileLvl[];
+
+  /**
+   * Get a list of faction(s) that have a specific Augmentation.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   *
+   * Returns an array containing the names (as strings) of all factions
+   * that offer the specified Augmentation.
+   * If no factions offer the Augmentation, a blank array is returned.
+   *
+   * @param augName - Name of Augmentation.
+   * @returns Array containing the names of all factions.
+   */
+  getAugmentationFactions(augName: string): string[];
 
   /**
    * Get a list of augmentation available from a faction.
@@ -2295,16 +2328,9 @@ export interface Singularity {
    * empty list.
    *
    * @example
-   * ```ts
-   * // NS1
-   * getDarkwebPrograms();
-   * // returns ['BruteSSH.exe', 'FTPCrack.exe'...etc]
-   * ```
-   * @example
-   * ```ts
-   * // NS2
-   * ns.getDarkwebPrograms();
-   * // returns ['BruteSSH.exe', 'FTPCrack.exe'...etc]
+   * ```js
+   * const programs = ns.getDarkwebPrograms();
+   * ns.tprint(`Available programs are: ${programs.split(", ")}`);
    * ```
    * @returns - a list of programs available for purchase on the dark web, or [] if Tor has not
    * been purchased
@@ -2328,14 +2354,10 @@ export interface Singularity {
    *
    *
    * @example
-   * ```ts
-   * // NS1
-   * getDarkwebProgramCost("brutessh.exe");
-   * ```
-   * @example
-   * ```ts
-   * // NS2
-   * ns.getDarkwebProgramCost("brutessh.exe");
+   * ```js
+   * const programName = "BruteSSH.exe";
+   * const cost = ns.getDarkwebProgramCost(programName);
+   * if (cost > 0) ns.tprint(`${programName} costs ${ns.formatMoney(cost)}`);
    * ```
    * @param programName - Name of program to check the price of
    * @returns Price of the specified darkweb program
@@ -2474,10 +2496,10 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of levels to purchase. Must be positive. Rounded to nearest integer.
+   * @param n - Number of levels to purchase. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s level is successfully upgraded, false otherwise.
    */
-  upgradeLevel(index: number, n: number): boolean;
+  upgradeLevel(index: number, n?: number): boolean;
 
   /**
    * Upgrade the RAM of a hacknet node.
@@ -2494,10 +2516,10 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade RAM. Must be positive. Rounded to nearest integer.
+   * @param n - Number of times to upgrade RAM. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s RAM is successfully upgraded, false otherwise.
    */
-  upgradeRam(index: number, n: number): boolean;
+  upgradeRam(index: number, n?: number): boolean;
 
   /**
    * Upgrade the core of a hacknet node.
@@ -2512,10 +2534,10 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of cores to purchase. Must be positive. Rounded to nearest integer.
+   * @param n - Number of cores to purchase. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s cores are successfully purchased, false otherwise.
    */
-  upgradeCore(index: number, n: number): boolean;
+  upgradeCore(index: number, n?: number): boolean;
 
   /**
    * Upgrade the cache of a hacknet node.
@@ -2532,10 +2554,10 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of cache levels to purchase. Must be positive. Rounded to nearest integer.
+   * @param n - Number of cache levels to purchase. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s cache level is successfully upgraded, false otherwise.
    */
-  upgradeCache(index: number, n: number): boolean;
+  upgradeCache(index: number, n?: number): boolean;
 
   /**
    * Calculate the cost of upgrading hacknet node levels.
@@ -2548,10 +2570,10 @@ export interface Hacknet {
    * If the specified Hacknet Node is already at max level, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of levels to upgrade. Must be positive. Rounded to nearest integer.
+   * @param n - Number of levels to upgrade. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node.
    */
-  getLevelUpgradeCost(index: number, n: number): number;
+  getLevelUpgradeCost(index: number, n?: number): number;
 
   /**
    * Calculate the cost of upgrading hacknet node RAM.
@@ -2564,10 +2586,10 @@ export interface Hacknet {
    * If the specified Hacknet Node already has max RAM, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade RAM. Must be positive. Rounded to nearest integer.
+   * @param n - Number of times to upgrade RAM. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node's RAM.
    */
-  getRamUpgradeCost(index: number, n: number): number;
+  getRamUpgradeCost(index: number, n?: number): number;
 
   /**
    * Calculate the cost of upgrading hacknet node cores.
@@ -2580,10 +2602,10 @@ export interface Hacknet {
    * If the specified Hacknet Node is already at max level, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade cores. Must be positive. Rounded to nearest integer.
+   * @param n - Number of times to upgrade cores. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node's number of cores.
    */
-  getCoreUpgradeCost(index: number, n: number): number;
+  getCoreUpgradeCost(index: number, n?: number): number;
 
   /**
    * Calculate the cost of upgrading hacknet node cache.
@@ -2598,10 +2620,10 @@ export interface Hacknet {
    * If the specified Hacknet Node is already at max level, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade cache. Must be positive. Rounded to nearest integer.
+   * @param n - Number of times to upgrade cache. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node's cache.
    */
-  getCacheUpgradeCost(index: number, n: number): number;
+  getCacheUpgradeCost(index: number, n?: number): number;
 
   /**
    * Get the total number of hashes stored.
@@ -2639,19 +2661,10 @@ export interface Hacknet {
    * Returns the number of hashes required for the specified upgrade. The name of the upgrade must be an exact match.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var upgradeName = "Sell for Corporation Funds";
-   * if (hacknet.numHashes() > hacknet.hashCost(upgradeName)) {
-   *    hacknet.spendHashes(upgradeName);
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * const upgradeName = "Sell for Corporation Funds";
    * if (ns.hacknet.numHashes() > ns.hacknet.hashCost(upgradeName)) {
-   *    ns.hacknet.spendHashes(upgradeName);
+   *   ns.hacknet.spendHashes(upgradeName);
    * }
    * ```
    * @param upgName - Name of the upgrade of Hacknet Node.
@@ -2675,15 +2688,10 @@ export interface Hacknet {
    * In this case, the `upgTarget` argument must be the hostname of the server.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * hacknet.spendHashes("Sell for Corporation Funds");
-   * hacknet.spendHashes("Increase Maximum Money", "foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * NS2:
+   * ```js
+   * // For upgrades where no target is required
    * ns.hacknet.spendHashes("Sell for Corporation Funds");
+   * // For upgrades requiring a target
    * ns.hacknet.spendHashes("Increase Maximum Money", "foodnstuff");
    * ```
    * @param upgName - Name of the upgrade of Hacknet Node.
@@ -2703,13 +2711,7 @@ export interface Hacknet {
    *
    * Returns the list of all available hash upgrades that can be used in the spendHashes function.
    * @example
-   * ```ts
-   * // NS1:
-   * var upgrades = hacknet.getHashUpgrades(); // ["Sell for Money","Sell for Corporation Funds",...]
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * const upgrades = ns.hacknet.getHashUpgrades(); // ["Sell for Money","Sell for Corporation Funds",...]
    * ```
    * @returns An array containing the available upgrades
@@ -3187,16 +3189,7 @@ export interface Bladeburner {
    * Returns an array with two elements:
    * * [Current stamina, Max stamina]
    * @example
-   * ```ts
-   * // NS1:
-   * function getStaminaPercentage() {
-   *    var res = bladeburner.getStamina();
-   *    return res[0] / res[1];
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * function getStaminaPercentage() {
    *    const [current, max] = ns.bladeburner.getStamina();
    *    return current / max;
@@ -3274,15 +3267,6 @@ export interface CodingContract {
    *
    * @example
    * ```js
-   * // NS1
-   * var reward = codingcontract.attempt(yourSolution, filename, hostname);
-   * if (reward) {
-   *   tprint("Contract solved successfully! Reward: " + reward)
-   * } else tprint("Failed to solve contract.")
-   * ```
-   * @example
-   * ```js
-   * // NS2
    * const reward = codingcontract.attempt(yourSolution, filename, hostname);
    * if (reward) {
    *   ns.tprint(`Contract solved successfully! Reward: ${reward}`)
@@ -3583,7 +3567,7 @@ export interface Gang {
    * Ascend the specified Gang Member.
    *
    * @param memberName - Name of member to ascend.
-   * @returns Object with info about the ascension results. Undefined if ascension did not occur.
+   * @returns Object with info about the ascension results, or undefined if ascension did not occur.
    */
   ascendMember(memberName: string): GangMemberAscension | undefined;
 
@@ -3592,10 +3576,10 @@ export interface Gang {
    * @remarks
    * RAM cost: 2 GB
    *
-   * Get the result of an ascension without ascending.
+   * Get a {@link GangMemberAscension} result for ascending a gang member without performing the ascension.
    *
    * @param memberName - Name of member.
-   * @returns Object with info about the ascension results. Undefined if ascension is impossible.
+   * @returns Object with info about the ascension results, or undefined if ascension is not possible.
    */
   getAscensionResult(memberName: string): GangMemberAscension | undefined;
 
@@ -3768,7 +3752,7 @@ export interface Sleeve {
    * @param companyName - Name of the company to work for.
    * @returns True if the sleeve started working for this company, false otherwise.
    */
-  setToCompanyWork(sleeveNumber: number, companyName: string): boolean;
+  setToCompanyWork(sleeveNumber: number, companyName: CompanyName | `${CompanyName}`): boolean;
 
   /**
    * Set a sleeve to take a class at a university.
@@ -3993,7 +3977,12 @@ interface WorkFormulas {
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified faction work. */
   factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified company work. */
-  companyGains(person: Person, companyName: string, workType: JobName | `${JobName}`, favor: number): WorkStats;
+  companyGains(
+    person: Person,
+    companyName: CompanyName | `${CompanyName}`,
+    workType: JobName | `${JobName}`,
+    favor: number,
+  ): WorkStats;
 }
 
 /**
@@ -4561,28 +4550,17 @@ interface UserInterface {
  * Collection of all functions passed to scripts
  * @public
  * @remarks
- * <b>Basic ns1 usage example:</b>
- * ```ts
- *  // Basic ns functions can be used directly
- *  getHostname();
- *  // Some related functions are gathered within a common namespace
- *  stock.getPrice();
- * ```
- * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
- * <hr>
- * <b>Basic ns2 usage example:</b>
- * ```ts
+ * <b>Basic usage example:</b>
+ * ```js
  * export async function main(ns) {
  *  // Basic ns functions can be accessed on the ns object
  *  ns.getHostname();
  *  // Some related functions are gathered under a sub-property of the ns object
  *  ns.stock.getPrice();
- *  // Some functions need to be awaited
+ *  // Most functions that return a promise need to be awaited.
  *  await ns.hack('n00dles');
  * }
  * ```
- * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
- * <hr>
  */
 export interface NS {
   /**
@@ -4710,18 +4688,12 @@ export interface NS {
    * A successful `hack()` on a server will raise that server’s security level by 0.002.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var earnedMoney = hack("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * let earnedMoney = await ns.hack("foodnstuff");
    * ```
    * @param host - Hostname of the target server to hack.
    * @param opts - Optional parameters for configuring function behavior.
-   * @returns The amount of money stolen if the hack is successful, and zero otherwise.
+   * @returns A promise that resolves to the amount of money stolen (which is zero if the hack is unsuccessful).
    */
   hack(host: string, opts?: BasicHGWOptions): Promise<number>;
 
@@ -4781,20 +4753,13 @@ export interface NS {
    * there is no required hacking level to run the function.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var currentSecurity = getServerSecurityLevel("foodnstuff");
-   * currentSecurity = currentSecurity - weaken("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * let currentSecurity = ns.getServerSecurityLevel("foodnstuff");
    * currentSecurity -= await ns.weaken("foodnstuff");
    * ```
    * @param host - Hostname of the target server to weaken.
    * @param opts - Optional parameters for configuring function behavior.
-   * @returns The amount by which the target server’s security level was decreased. This is equivalent to 0.05 multiplied by the number of script threads.
+   * @returns A promise that resolves to the value by which security was reduced.
    */
   weaken(host: string, opts?: BasicHGWOptions): Promise<number>;
 
@@ -4941,35 +4906,24 @@ export interface NS {
    *
    * @param millis - Number of milliseconds to sleep.
    * @example
-   * ```ts
-   * // NS1:
+   * ```js
    * // This will count from 1 to 10 in your terminal, with one number every 5 seconds
-   * for (var i=0; i<10; i++) {
-   *   tprint(i + 1);
-   *   sleep(5000);
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * // This will count from 1 to 10 in your terminal, with one number every 5 seconds
-   * for (var i=0; i<10; i++) {
-   *   ns.tprint(i + 1);
+   * for (var i = 1; i <= 10; i++) {
+   *   ns.tprint(i);
    *   await ns.sleep(5000);
    * }
    * ```
-   * @returns
+   * @returns A promise that resolves to true when the sleep is completed.
    */
   sleep(millis: number): Promise<true>;
 
   /**
    * Suspends the script for n milliseconds. Doesn't block with concurrent calls.
-   * You should prefer 'sleep' over 'asleep' except when doing very complex UI work.
    * @remarks
    * RAM cost: 0 GB
    *
    * @param millis - Number of milliseconds to sleep.
-   * @returns
+   * @returns A promise that resolves to true when the sleep is completed.
    */
   asleep(millis: number): Promise<true>;
 
@@ -5001,29 +4955,7 @@ export interface NS {
    * strict mode.
    *
    * @example
-   * ```ts
-   * // NS1
-   * // Default color coding.
-   * print("ERROR means something's wrong.");
-   * print("SUCCESS means everything's OK.");
-   * print("WARN Tread with caution!");
-   * print("WARNING, warning, danger, danger!");
-   * print("WARNing! Here be dragons.");
-   * print("INFO for your I's only (FYI).");
-   * print("INFOrmation overload!");
-   * // Custom color coding.
-   * var cyan = "\u001b[36m";
-   * var green = "\u001b[32m";
-   * var red = "\u001b[31m";
-   * var reset = "\u001b[0m";
-   * print(red + "Ugh! What a mess." + reset);
-   * print(green + "Well done!" + reset);
-   * print(cyan + "ERROR Should this be in red?" + reset);
-   * tail();
-   * ```
-   * @example
-   * ```ts
-   * // NS2
+   * ```js
    * // Default color coding.
    * ns.print("ERROR means something's wrong.");
    * ns.print("SUCCESS means everything's OK.");
@@ -5047,6 +4979,15 @@ export interface NS {
    */
   print(...args: any[]): void;
 
+  /** Prints a ReactNode to the script logs.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * See {@link ReactNode} type for the acceptable values.
+   *
+   * @param node - The react node to be printed. */
+  printRaw(node: ReactNode): void;
+
   /**
    * Prints a formatted string to the script’s logs.
    * @remarks
@@ -5057,21 +4998,7 @@ export interface NS {
    * - For more detail, see: https://github.com/alexei/sprintf.js
    *
    * @example
-   * ```ts
-   * // NS1
-   * var name = "Bit";
-   * var age = 4;
-   * printf("My name is %s.", name);
-   * printf("I'm %d seconds old.", age);
-   * printf("My age in binary is %b.", age);
-   * printf("My age in scientific notation is %e.", age);
-   * printf("In %d seconds, I'll be %s.", 6, "Byte");
-   * printf("Am I a nibble? %t", (4 == age));
-   * tail();
-   * ```
-   * @example
-   * ```ts
-   * // NS2
+   * ```js
    * const name = "Bit";
    * const age = 4;
    * ns.printf("My name is %s.", name);
@@ -5098,6 +5025,15 @@ export interface NS {
    * @param args - Value(s) to be printed.
    */
   tprint(...args: any[]): void;
+
+  /** Prints a ReactNode to the terminal.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * See {@link ReactNode} type for the acceptable values.
+   *
+   * @param node - The react node to be printed. */
+  tprintRaw(node: ReactNode): void;
 
   /**
    * Prints a raw value or a variable to the Terminal.
@@ -5165,7 +5101,7 @@ export interface NS {
    * Note that there is a maximum number of lines that a script stores in its logs. This is configurable in the game’s options.
    * If the function is called with no arguments, it will return the current script’s logs.
    *
-   * Otherwise, the fn, hostname/ip, and args… arguments can be used to get the logs from another script.
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get logs from another script.
    * Remember that scripts are uniquely identified by both their names and arguments.
    *
    * @example
@@ -5179,12 +5115,12 @@ export interface NS {
    * //Open logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
    * ns.getScriptLogs("foo.js", "foodnstuff", 1, "test");
    * ```
-   * @param fn - Optional. Filename of script to get logs from.
+   * @param fn - Optional. Filename or PID of script to get logs from.
    * @param host - Optional. Hostname of the server that the script is on.
    * @param args - Arguments to identify which scripts to get logs for.
    * @returns Returns a string array, where each line is an element in the array. The most recently logged line is at the end of the array.
    */
-  getScriptLogs(fn?: string, host?: string, ...args: (string | number | boolean)[]): string[];
+  getScriptLogs(fn?: FilenameOrPID, host?: string, ...args: (string | number | boolean)[]): string[];
 
   /**
    * Get an array of recently killed scripts across all servers.
@@ -5216,7 +5152,7 @@ export interface NS {
    *
    * If the function is called with no arguments, it will open the current script’s logs.
    *
-   * Otherwise, the fn, hostname/ip, and args… arguments can be used to get the logs from another script.
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get the logs from another script.
    * Remember that scripts are uniquely identified by both their names and arguments.
    *
    * @example
@@ -5278,6 +5214,27 @@ export interface NS {
   closeTail(pid?: number): void;
 
   /**
+   * Set the title of the tail window of a script.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This sets the title to the given string, and also forces an update of the
+   * tail window's contents.
+   *
+   * The title is saved across restarts, but only if it is a simple string.
+   *
+   * If the pid is unspecified, it will modify the current script’s logs.
+   *
+   * Otherwise, the pid argument can be used to change the logs from another script.
+   *
+   * It is possible to pass any React Node instead of a string.
+   * See {@link ReactElement} and {@link ReactNode} types for additional info.
+   *
+   * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
+   */
+  setTitle(title: string | ReactNode, pid?: number): void;
+
+  /**
    * Get the list of servers connected to a server.
    * @remarks
    * RAM cost: 0.2 GB
@@ -5287,25 +5244,7 @@ export interface NS {
    * array are strings.
    *
    * @example
-   * ```ts
-   * // NS1
-   * // All servers that are one hop from the current server.
-   * tprint("Neighbors of current server.");
-   * var neighbor = scan();
-   * for (var i = 0; i < neighbor.length; i++) {
-   *     tprint(neighbor[i]);
-   * }
-   * // All neighbors of n00dles.
-   * var target = "n00dles";
-   * neighbor = scan(target);
-   * tprintf("Neighbors of %s.", target);
-   * for (var i = 0; i < neighbor.length; i++) {
-   *     tprint(neighbor[i]);
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2
+   * ```js
    * // All servers that are one hop from the current server.
    * ns.tprint("Neighbors of current server.");
    * let neighbor = ns.scan();
@@ -5332,14 +5271,7 @@ export interface NS {
    *
    * @example
    * ```js
-   * // NS1:
-   * if (hasTorRouter()) tprint("TOR router detected.");
-   * ```
-   *
-   * @example
-   * ```js
-   * // NS2:
-   * if (ns.hasTorRouter()) tprint("TOR router detected.");
+   * if (ns.hasTorRouter()) ns.tprint("TOR router detected.");
    * ```
    *
    * @returns Whether player has access to the dark web. */
@@ -5353,13 +5285,7 @@ export interface NS {
    * Running NUKE.exe on a target server gives you root access which means you can execute scripts on said server. NUKE.exe must exist on your home computer.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * nuke("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.nuke("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
@@ -5374,13 +5300,7 @@ export interface NS {
    * Runs the BruteSSH.exe program on the target server. BruteSSH.exe must exist on your home computer.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * brutessh("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.brutessh("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
@@ -5395,13 +5315,7 @@ export interface NS {
    * Runs the FTPCrack.exe program on the target server. FTPCrack.exe must exist on your home computer.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * ftpcrack("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.ftpcrack("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
@@ -5416,13 +5330,7 @@ export interface NS {
    * Runs the relaySMTP.exe program on the target server. relaySMTP.exe must exist on your home computer.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * relaysmtp("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.relaysmtp("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
@@ -5437,13 +5345,7 @@ export interface NS {
    * Runs the HTTPWorm.exe program on the target server. HTTPWorm.exe must exist on your home computer.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * httpworm("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.httpworm("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
@@ -5458,13 +5360,7 @@ export interface NS {
    * Runs the SQLInject.exe program on the target server. SQLInject.exe must exist on your home computer.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * sqlinject("foodnstuff");
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.sqlinject("foodnstuff");
    * ```
    * @remarks RAM cost: 0.05 GB
@@ -5516,7 +5412,7 @@ export interface NS {
    * RAM cost: 1.3 GB
    *
    * Run a script as a separate process on a specified server. This is similar to the function {@link NS.run | run}
-   * except that it can be used to run a script on any server, instead of just the current server.
+   * except that it can be used to run a script that already exists on any server, instead of just the current server.
    *
    * If the script was successfully started, then this function returns the PID of that script.
    * Otherwise, it returns 0.
@@ -5542,7 +5438,7 @@ export interface NS {
    * // arguments to the script.
    * ns.exec("foo.js", "foodnstuff", 5, 1, "test");
    * ```
-   * @param script - Filename of script to execute.
+   * @param script - Filename of script to execute. This file must already exist on the target server.
    * @param hostname - Hostname of the `target server` on which to execute the script.
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument threadOrOptions must be filled in with a value.
@@ -5662,7 +5558,7 @@ export interface NS {
    * ns.scp("foo.lit", "home", "helios" );
    *
    * //Tries to copy three files from rothman-uni to home computer:
-   * files = ["foo1.lit", "foo2.txt", "foo3.js"];
+   * const files = ["foo1.lit", "foo2.txt", "foo3.js"];
    * ns.scp(files, "home", "rothman-uni");
    * ```
    * @example
@@ -5700,21 +5596,11 @@ export interface NS {
    * Returns an array with general information about all scripts running on the specified target server.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var scripts = ps("home");
-   * for (var i = 0; i < scripts.length; ++i) {
-   *     tprint(scripts[i].filename + ' ' + scripts[i].threads);
-   *     tprint(scripts[i].args);
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * const ps = ns.ps("home");
    * for (let script of ps) {
-   *     ns.tprint(`${script.filename} ${script.threads}`);
-   *     ns.tprint(script.args);
+   *   ns.tprint(`${script.filename} ${script.threads}`);
+   *   ns.tprint(script.args);
    * }
    * ```
    * @param host - Host address of the target server. If not specified, it will be the current server’s IP by default.
@@ -5730,17 +5616,9 @@ export interface NS {
    * Returns a boolean indicating whether or not the player has root access to the specified target server.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * if (hasRootAccess("foodnstuff") == false) {
-   *    nuke("foodnstuff");
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * if (ns.hasRootAccess("foodnstuff") == false) {
-   *    ns.nuke("foodnstuff");
+   * ```js
+   * if (!ns.hasRootAccess("foodnstuff")) {
+   *   ns.nuke("foodnstuff");
    * }
    * ```
    * @param host - Hostname of the target server.
@@ -5776,20 +5654,10 @@ export interface NS {
    * (e.g. 1.5 instead of 150%).
    *
    * @example
-   * ```ts
-   * // NS1:
-   * // Example of how this can be used:
-   * var mults = getHackingMultipliers();
-   * print(mults.chance);
-   * print(mults.growth);
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * // Example of how this can be used:
-   * const {chance, growth} = ns.getHackingMultipliers();
-   * print(chance);
-   * print(growth);
+   * ```js
+   * const mults = ns.getHackingMultipliers();
+   * print(`chance: ${mults.chance}`);
+   * print(`growthL ${mults.growth}`);
    * ```
    * @returns Object containing the Player’s hacking related multipliers.
    */
@@ -5805,20 +5673,10 @@ export interface NS {
    * (e.g. 1.5 instead of 150%).
    *
    * @example
-   * ```ts
-   * // NS1:
-   * // Example of how this can be used:
-   * var mults = getHacknetMultipliers();
-   * print(mults.production);
-   * print(mults.purchaseCost);
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * // Example of how this can be used:
-   * const {production, purchaseCost} = ns.getHacknetMultipliers();
-   * print(production);
-   * print(purchaseCost);
+   * ```js
+   * const mults = ns.getHacknetMultipliers();
+   * ns.tprint(`production: ${mults.production}`);
+   * ns.tprint(`purchaseCost: ${mults.purchaseCost}`);
    * ```
    * @returns Object containing the Player’s hacknet related multipliers.
    */
@@ -5843,14 +5701,7 @@ export interface NS {
    * Running this function on the home computer will return the player’s money.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * getServerMoneyAvailable("foodnstuff");
-   * getServerMoneyAvailable("home"); //Returns player's money
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
    * ns.getServerMoneyAvailable("foodnstuff");
    * ns.getServerMoneyAvailable("home"); // Returns player's money
    * ```
@@ -5975,12 +5826,9 @@ export interface NS {
    * RAM cost: 0.1 GB
    *
    * Returns a boolean indicating whether the specified file exists on the target server.
-   * The filename for scripts is case-sensitive, but for other types of files it is not.
+   * The filename for programs is case insensitive, other file types are case sensitive.
    * For example, fileExists(“brutessh.exe”) will work fine, even though the actual program
    * is named 'BruteSSH.exe'.
-   *
-   * If the hostname/ip argument is omitted, then the function will search through the current
-   * server (the server running the script that calls this function) for the file.
    *
    * * @example
    * ```js
@@ -5991,7 +5839,7 @@ export interface NS {
    * ns.fileExists("ftpcrack.exe");
    * ```
    * @param filename - Filename of file to check.
-   * @param host - Host of target server. This is optional. If it is not specified then the function will use the current server as the target server.
+   * @param host - Host of target server. Optional, defaults to the server the script is running on.
    * @returns True if specified file exists, and false otherwise.
    */
   fileExists(filename: string, host?: string): boolean;
@@ -6052,18 +5900,10 @@ export interface NS {
    * Returns the cost to purchase a server with the specified amount of ram.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * for (i = 1; i <= 20; i++) {
-   *     tprint(i + " -- " + getPurchasedServerCost(Math.pow(2, i)));
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * for (i = 1; i <= 20; i++) {
-   *     ns.tprint(i + " -- " + ns.getPurchasedServerCost(Math.pow(2, i)));
-   * }
+   * ```js
+   * const ram = 2 ** 20;
+   * const cost = ns.getPurchasedServerCost(ram);
+   * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs ${ns.formatMoney(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
    * @returns The cost to purchase a server with the specified amount of ram.
@@ -6095,17 +5935,8 @@ export interface NS {
    * amount of servers.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var ram = 64;
-   * var prefix = "pserv-";
-   * for (i = 0; i < 5; ++i) {
-   *    purchaseServer(prefix + i, ram);
-   * }
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
+   * ```js
+   * // Attempt to purchase 5 servers with 64GB of ram each
    * const ram = 64;
    * const prefix = "pserv-";
    * for (i = 0; i < 5; ++i) {
@@ -6307,7 +6138,6 @@ export interface NS {
    *
    * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
    *
-   * @see https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptmisc.html#netscript-ports
    * @param portNumber - Port number. Must be an integer between 1 and 20.
    */
   getPortHandle(portNumber: number): NetscriptPort;
@@ -6629,33 +6459,7 @@ export interface NS {
    *   chooses one of the provided options and presses the "Confirm" button.
    *
    * @example
-   * ```ts
-   * // NS1
-   * // A Yes/No question. The default is to create a boolean dialog box.
-   * var queryA = "Do you enjoy Bitburner?";
-   * var resultA = prompt(queryA);
-   * tprint(queryA + " " + resultA);
-   *
-   * // Another Yes/No question. Can also create a boolean dialog box by explicitly
-   * // passing the option {"type": "boolean"}.
-   * var queryB = "Is programming fun?";
-   * var resultB = prompt(queryB, { type: "boolean" });
-   * tprint(queryB + " " + resultB);
-   *
-   * // Free-form text box.
-   * var resultC = prompt("Please enter your name.", { type: "text" });
-   * tprint("Hello, " + resultC + ".");
-   *
-   * // A drop-down list.
-   * var resultD = prompt("Please select your favorite fruit.", {
-   *     type: "select",
-   *     choices: ["Apple", "Banana", "Orange", "Pear", "Strawberry"]
-   * });
-   * tprint("Your favorite fruit is " + resultD.toLowerCase() + ".");
-   * ```
-   * @example
-   * ```ts
-   * // NS2
+   * ```js
    * // A Yes/No question. The default is to create a boolean dialog box.
    * const queryA = "Do you enjoy Bitburner?";
    * const resultA = await ns.prompt(queryA);
@@ -6673,8 +6477,8 @@ export interface NS {
    *
    * // A drop-down list.
    * const resultD = await ns.prompt("Please select your favorite fruit.", {
-   *     type: "select",
-   *     choices: ["Apple", "Banana", "Orange", "Pear", "Strawberry"]
+   *   type: "select",
+   *   choices: ["Apple", "Banana", "Orange", "Pear", "Strawberry"]
    * });
    * ns.tprint(`Your favorite fruit is ${resultD.toLowerCase()}.`);
    * ```
@@ -6759,18 +6563,10 @@ export interface NS {
    * you would have received in BitNode-1.
    *
    * @example
-   * ```ts
-   * // NS1:
-   * var mults = getBitNodeMultipliers();
-   * print(mults.ServerMaxMoney);
-   * print(mults.HackExpGain);
-   * ```
-   * @example
-   * ```ts
-   * // NS2:
-   * const {ServerMaxMoney, HackExpGain} = ns.getBitNodeMultipliers();
-   * print(ServerMaxMoney);
-   * print(HackExpGain);
+   * ```js
+   * const mults = ns.getBitNodeMultipliers();
+   * ns.tprint(`ServerMaxMoney: ${mults.ServerMaxMoney}`);
+   * ns.tprint(`HackExpGain: ${mults.HackExpGain}`);
    * ```
    * @returns Object containing the current BitNode multipliers.
    */
@@ -6842,6 +6638,16 @@ export interface NS {
   getResetInfo(): ResetInfo;
 
   /**
+   * Get the ram cost of a netscript function.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param name - The fully-qualified function name, without the leading `ns`. Example inputs: `hack`, `tprint`, `stock.getPosition`.
+   */
+  getFunctionRamCost(name: string): number;
+
+  /**
    * Parse command line flags.
    * @remarks
    * RAM cost: 0 GB
@@ -6880,13 +6686,14 @@ export interface NS {
    * @remarks
    * RAM cost: 2.4 GB
    *
-   * Increases your rep gain of all faction work types while share is called.
-   * Scales with thread count.
+   * Increases rep/second for all faction work while share is running. Each cycle of ns.share() is 10 seconds.
+   * Scales with thread count, but at a sharply decreasing rate.
    */
   share(): Promise<void>;
 
   /**
-   * Calculate your share power. Based on all the active share calls.
+   * Share Power has a multiplicative effect on rep/second while doing work for a faction.
+   * Share Power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
    * @remarks
    * RAM cost: 0.2 GB
    */
@@ -6968,12 +6775,10 @@ declare enum JobName {
   business3 = "Operations Manager",
   business4 = "Chief Financial Officer",
   business5 = "Chief Executive Officer",
-  security0 = "Police Officer",
-  security1 = "Police Chief",
-  security2 = "Security Guard",
-  security3 = "Security Officer",
-  security4 = "Security Supervisor",
-  security5 = "Head of Security",
+  security0 = "Security Guard",
+  security1 = "Security Officer",
+  security2 = "Security Supervisor",
+  security3 = "Head of Security",
   agent0 = "Field Agent",
   agent1 = "Secret Agent",
   agent2 = "Special Operative",
@@ -7015,6 +6820,9 @@ type CorpIndustryName =
   | "Software"
   | "Healthcare"
   | "Real Estate";
+
+/** @public */
+type CorpSmartSupplyOption = "leftovers" | "imports" | "none";
 
 /** Names of all cities
  * @public */
@@ -7095,6 +6903,49 @@ declare enum LocationName {
   Void = "The Void",
 }
 
+/** Names of all companies
+ * @public */
+declare enum CompanyName {
+  ECorp = "ECorp",
+  MegaCorp = "MegaCorp",
+  BachmanAndAssociates = "Bachman & Associates",
+  BladeIndustries = "Blade Industries",
+  NWO = "NWO",
+  ClarkeIncorporated = "Clarke Incorporated",
+  OmniTekIncorporated = "OmniTek Incorporated",
+  FourSigma = "Four Sigma",
+  KuaiGongInternational = "KuaiGong International",
+  FulcrumTechnologies = "Fulcrum Technologies",
+  StormTechnologies = "Storm Technologies",
+  DefComm = "DefComm",
+  HeliosLabs = "Helios Labs",
+  VitaLife = "VitaLife",
+  IcarusMicrosystems = "Icarus Microsystems",
+  UniversalEnergy = "Universal Energy",
+  GalacticCybersystems = "Galactic Cybersystems",
+  AeroCorp = "AeroCorp",
+  OmniaCybersystems = "Omnia Cybersystems",
+  SolarisSpaceSystems = "Solaris Space Systems",
+  DeltaOne = "DeltaOne",
+  GlobalPharmaceuticals = "Global Pharmaceuticals",
+  NovaMedical = "Nova Medical",
+  CIA = "Central Intelligence Agency",
+  NSA = "National Security Agency",
+  WatchdogSecurity = "Watchdog Security",
+  LexoCorp = "LexoCorp",
+  RhoConstruction = "Rho Construction",
+  AlphaEnterprises = "Alpha Enterprises",
+  Police = "Aevum Police Headquarters",
+  SysCoreSecurities = "SysCore Securities",
+  CompuTek = "CompuTek",
+  NetLinkTechnologies = "NetLink Technologies",
+  CarmichaelSecurity = "Carmichael Security",
+  FoodNStuff = "FoodNStuff",
+  JoesGuns = "Joe's Guns",
+  OmegaSoftware = "Omega Software",
+  NoodleBar = "Noodle Bar",
+}
+
 /** @public */
 export type NSEnums = {
   CityName: typeof CityName;
@@ -7105,6 +6956,7 @@ export type NSEnums = {
   LocationName: typeof LocationName;
   ToastVariant: typeof ToastVariant;
   UniversityClassType: typeof UniversityClassType;
+  CompanyName: typeof CompanyName;
 };
 
 /**
@@ -7271,7 +7123,7 @@ export interface WarehouseAPI {
     divisionName: string,
     city: CityName | `${CityName}`,
     materialName: string,
-    option: string,
+    option: CorpSmartSupplyOption,
   ): void;
   /**
    * Set material buy data
@@ -7289,21 +7141,19 @@ export interface WarehouseAPI {
    * @param amt - Amount of material to buy
    */
   bulkPurchase(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: number): void;
-  /**
-   * Get warehouse data
+
+  /** Get warehouse data
    * @param divisionName - Name of the division
    * @param city - Name of the city
-   * @returns warehouse data
-   */
+   * @returns warehouse data */
   getWarehouse(divisionName: string, city: CityName | `${CityName}`): Warehouse;
-  /**
-   * Get product data
+
+  /** Get product data
    * @param divisionName - Name of the division
    * @param city - Name of the city
    * @param productName - Name of the product
-   * @returns product data
-   */
-  getProduct(divisionName: string, city: CityName | `${CityName}`, productName: string): Product;
+   * @returns product data */
+  getProduct(divisionName: string, cityName: CityName | `${CityName}`, productName: string): Product;
   /**
    * Get material data
    * @param divisionName - Name of the division
@@ -7328,22 +7178,18 @@ export interface WarehouseAPI {
    * @param on - market ta enabled
    */
   setMaterialMarketTA2(divisionName: string, city: CityName | `${CityName}`, materialName: string, on: boolean): void;
-  /**
-   * Set market TA 1 for a product.
+
+  /** * Set market TA 1 for a product.
    * @param divisionName - Name of the division
-   * @param city - Name of the city
    * @param productName - Name of the product
-   * @param on - market ta enabled
-   */
-  setProductMarketTA1(divisionName: string, city: CityName | `${CityName}`, productName: string, on: boolean): void;
-  /**
-   * Set market TA 2 for a product.
+   * @param on - market ta enabled */
+  setProductMarketTA1(divisionName: string, productName: string, on: boolean): void;
+
+  /** Set market TA 2 for a product.
    * @param divisionName - Name of the division
-   * @param city - Name of the city
    * @param productName - Name of the product
-   * @param on - market ta enabled
-   */
-  setProductMarketTA2(divisionName: string, city: CityName | `${CityName}`, productName: string, on: boolean): void;
+   * @param on - market ta enabled */
+  setProductMarketTA2(divisionName: string, productName: string, on: boolean): void;
   /**
    * Set material export data
    * @param sourceDivision - Source division
@@ -7359,7 +7205,7 @@ export interface WarehouseAPI {
     targetDivision: string,
     targetCity: CityName | `${CityName}`,
     materialName: string,
-    amt: number,
+    amt: number | string,
   ): void;
   /**
    * Cancel material export
@@ -7368,7 +7214,6 @@ export interface WarehouseAPI {
    * @param targetDivision - Target division
    * @param targetCity - Target city
    * @param materialName - Name of the material
-   * @param amt - Amount of material to export.
    */
   cancelExportMaterial(
     sourceDivision: string,
@@ -7376,7 +7221,6 @@ export interface WarehouseAPI {
     targetDivision: string,
     targetCity: CityName | `${CityName}`,
     materialName: string,
-    amt: number,
   ): void;
   /**
    * Purchase warehouse for a new city
@@ -7460,12 +7304,12 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   /** Check if you have a one time unlockable upgrade
    * @param upgradeName - Name of the upgrade
    * @returns true if unlocked and false if not */
-  hasUnlockUpgrade(upgradeName: string): boolean;
+  hasUnlock(upgradeName: string): boolean;
 
   /** Gets the cost to unlock a one time unlockable upgrade
    * @param upgradeName - Name of the upgrade
    * @returns cost of the upgrade */
-  getUnlockUpgradeCost(upgradeName: string): number;
+  getUnlockCost(upgradeName: string): number;
 
   /** Get the level of a levelable upgrade
    * @param upgradeName - Name of the upgrade
@@ -7529,7 +7373,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
 
   /** Unlock an upgrade
    * @param upgradeName - Name of the upgrade */
-  unlockUpgrade(upgradeName: string): void;
+  purchaseUnlock(upgradeName: string): void;
 
   /** Level an upgrade.
    * @param upgradeName - Name of the upgrade */
@@ -7646,6 +7490,8 @@ interface CorporationInfo {
 interface CorpConstants {
   /** Names of all corporation game states */
   stateNames: CorpStateName[];
+  /** Names of all employee positions */
+  employeePositions: CorpEmployeePosition[];
   /** Names of all industries */
   industryNames: CorpIndustryName[];
   /** Names of all materials */
@@ -7689,6 +7535,7 @@ interface CorpConstants {
   maxProductsBase: number;
   /** The minimum decay value for morale/energy */
   minEmployeeDecay: number;
+  smartSupplyOptions: CorpSmartSupplyOption[];
 }
 /** @public */
 type CorpStateName = "START" | "PURCHASE" | "PRODUCTION" | "EXPORT" | "SALE";
@@ -7739,7 +7586,6 @@ type CorpResearchName =
   | "AutoBrew"
   | "AutoPartyManager"
   | "Automatic Drug Administration"
-  | "Bulk Purchasing"
   | "CPH4 Injections"
   | "Drones"
   | "Drones - Assembly"
@@ -7747,7 +7593,6 @@ type CorpResearchName =
   | "Go-Juice"
   | "HRBuddy-Recruitment"
   | "HRBuddy-Training"
-  | "JoyWire"
   | "Market-TA.I"
   | "Market-TA.II"
   | "Overclock"
@@ -7785,7 +7630,7 @@ interface CorpMaterialConstantData {
 interface IndustryData {
   /** Industry type */
   type: CorpIndustryName;
-  /** Cost to expand to the division */
+  /** Cost to make a new division of this industry type */
   cost: number;
   /** Materials required for production and their amounts */
   requiredMaterials: Record<string, number>;
@@ -7807,29 +7652,40 @@ interface Product {
   /** Name of the product */
   name: string;
   /** Demand for the product, only present if "Market Research - Demand" unlocked */
-  dmd: number | undefined;
+  demand: number | undefined;
   /** Competition for the product, only present if "Market Research - Competition" unlocked */
-  cmp: number | undefined;
-  /** Product Rating */
-  rat: number;
-  /** Effective rating  */
-  effRat: number;
-  /** Product Properties. The data is \{qlt, per, dur, rel, aes, fea\} */
-  properties: { [key: string]: number };
+  competition: number | undefined;
+  /** Rating based on stats */
+  rating: number;
+  /** Effective rating in the specific city */
+  effectiveRating: number;
+  /** Product stats */
+  stats: {
+    quality: number;
+    performance: number;
+    durability: number;
+    reliability: number;
+    aesthetics: number;
+    features: number;
+  };
   /** Production cost */
-  pCost: number;
-  /** Sell cost, can be "MP+5" */
-  sCost: string;
-  /** Sell amount, can be "PROD/2" */
-  sAmt: string;
-  /** Amount of product  */
-  qty: number;
-  /** Amount of product produced  */
-  prod: number;
-  /** Amount of product sold */
-  sell: number;
-  /** Creation progress - A number between 0-100 representing percentage */
+  productionCost: number;
+  /** Desired sell price, can be "MP+5" */
+  desiredSellPrice: string | number;
+  /** Desired sell amount, e.g. "PROD/2" */
+  desiredSellAmount: string | number;
+  /** Amount of product stored in warehouse*/
+  stored: number;
+  /** Amount of product produced last cycle */
+  productionAmount: number;
+  /** Amount of product sold last cycle */
+  actualSellAmount: number;
+  /** A number between 0-100 representing percentage completion */
   developmentProgress: number;
+  /** Funds that were spent on advertising the product */
+  advertisingInvestment: number;
+  /** Funds that were spent on designing the product */
+  designInvestment: number;
 }
 
 /**
@@ -7840,25 +7696,25 @@ interface Material {
   /** Name of the material */
   name: CorpMaterialName;
   /** Amount of material  */
-  qty: number;
+  stored: number;
   /** Quality of the material */
-  qlt: number;
+  quality: number;
   /** Demand for the material, only present if "Market Research - Demand" unlocked */
-  dmd: number | undefined;
+  demand: number | undefined;
   /** Competition for the material, only present if "Market Research - Competition" unlocked */
-  cmp: number | undefined;
-  /** Amount of material produced  */
-  prod: number;
-  /** Amount of material sold */
-  sell: number;
+  competition: number | undefined;
+  /** Amount of material produced last cycle */
+  productionAmount: number;
+  /** Amount of material sold last cycle */
+  actualSellAmount: number;
   /** Cost to buy material */
-  cost: number;
+  marketPrice: number;
   /** Sell cost, can be "MP+5" */
-  sCost: string | number;
+  desiredSellPrice: string | number;
   /** Sell amount, can be "PROD/2" */
-  sAmt: string | number;
+  desiredSellAmount: string | number;
   /** Export orders */
-  exp: Export[];
+  exports: Export[];
 }
 
 /**
@@ -7867,11 +7723,11 @@ interface Material {
  */
 interface Export {
   /** Division the material is being exported to */
-  div: string;
+  division: string;
   /** City the material is being exported to */
-  loc: CityName;
+  city: CityName;
   /** Amount of material exported */
-  amt: string;
+  amount: string;
 }
 
 /**
@@ -7882,7 +7738,7 @@ interface Warehouse {
   /** Amount of size upgrade bought */
   level: number;
   /** City in which the warehouse is located */
-  loc: CityName;
+  city: CityName;
   /** Total space in the warehouse */
   size: number;
   /** Used space in the warehouse */
@@ -7897,23 +7753,23 @@ interface Warehouse {
  */
 export interface Office {
   /** City of the office */
-  loc: CityName;
+  city: CityName;
   /** Maximum number of employee */
   size: number;
   /** Maximum amount of energy of the employees */
-  maxEne: number;
+  maxEnergy: number;
   /** Maximum morale of the employees */
-  maxMor: number;
+  maxMorale: number;
   /** Amount of employees */
-  employees: number;
+  numEmployees: number;
   /** Average energy of the employees */
-  avgEne: number;
+  avgEnergy: number;
   /** Average morale of the employees */
-  avgMor: number;
+  avgMorale: number;
   /** Total experience of all employees */
   totalExperience: number;
   /** Production of the employees */
-  employeeProd: Record<CorpEmployeePosition, number>;
+  employeeProductionByJob: Record<CorpEmployeePosition, number>;
   /** Positions of the employees */
   employeeJobs: Record<CorpEmployeePosition, number>;
 }
@@ -7932,9 +7788,9 @@ interface Division {
   /** Popularity of the division */
   popularity: number;
   /** Production multiplier */
-  prodMult: number;
+  productionMult: number;
   /** Amount of research in that division */
-  research: number;
+  researchPoints: number;
   /** Revenue last cycle */
   lastCycleRevenue: number;
   /** Expenses last cycle */
@@ -7943,14 +7799,16 @@ interface Division {
   thisCycleRevenue: number;
   /** Expenses this cycle */
   thisCycleExpenses: number;
-  /** All research bought */
-  upgrades: number[];
+  /** Number of times AdVert has been bought */
+  numAdVerts: number;
   /** Cities in which this division has expanded */
   cities: CityName[];
-  /** Products developed by this division */
+  /** Names of Products developed by this division */
   products: string[];
   /** Whether the industry this division is in is capable of making products */
   makesProducts: boolean;
+  /** How many products this division can support */
+  maxProducts: number;
 }
 
 /**

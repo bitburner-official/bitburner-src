@@ -1,5 +1,8 @@
-import * as monaco from "monaco-editor";
-import type { Monaco } from "./Editor";
+import type { editor } from "monaco-editor";
+import { getRecordKeys } from "../../Types/Record";
+import { Settings } from "../../Settings/Settings";
+import { cloneDeep } from "lodash";
+type DefineThemeFn = typeof editor.defineTheme;
 
 export interface IScriptEditorTheme {
   base: "vs" | "vs-dark" | "hc-black";
@@ -72,8 +75,13 @@ const colorRegExp = /^#?([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?$/;
 // Recursively sanitize the theme data to prevent errors
 // Invalid data will be replaced with FF0000 (bright red)
 export const sanitizeTheme = (theme: IScriptEditorTheme): void => {
-  for (const [k, v] of Object.entries(theme)) {
-    switch (k) {
+  if (typeof theme !== "object") {
+    Settings.EditorTheme = cloneDeep(defaultMonacoTheme);
+    return;
+  }
+  for (const themeKey of getRecordKeys(theme)) {
+    if (typeof theme[themeKey] !== "object") delete theme[themeKey];
+    switch (themeKey) {
       case "base":
         if (!["vs-dark", "vs"].includes(theme.base)) theme.base = "vs-dark";
         continue;
@@ -82,18 +90,21 @@ export const sanitizeTheme = (theme: IScriptEditorTheme): void => {
         continue;
     }
 
-    const repairBlock = (block: { [key: string]: object | string }): void => {
-      for (const [k, v] of Object.entries(block)) {
-        if (typeof v === "object") {
-          repairBlock(v as { [key: string]: string });
-        } else if (!v.match(colorRegExp)) block[k] = "FF0000";
+    const block = theme[themeKey];
+    const repairBlock = <T extends Record<string, unknown>>(block: T) => {
+      for (const [blockKey, blockValue] of Object.entries(block) as [keyof T, unknown][]) {
+        if (!blockValue || (typeof blockValue !== "string" && typeof blockValue !== "object"))
+          (block[blockKey] as string) = "FF0000";
+        else if (typeof blockValue === "object") repairBlock(blockValue as Record<string, unknown>);
+        else if (!blockValue.match(colorRegExp)) (block[blockKey] as string) = "FF0000";
       }
     };
-    repairBlock(v);
+    // Type assertion is to something less specific.
+    repairBlock(block);
   }
 };
 
-export function makeTheme(theme: IScriptEditorTheme): monaco.editor.IStandaloneThemeData {
+export function makeTheme(theme: IScriptEditorTheme): editor.IStandaloneThemeData {
   const themeRules = [
     {
       token: "",
@@ -208,8 +219,8 @@ export function makeTheme(theme: IScriptEditorTheme): monaco.editor.IStandaloneT
   return { base: theme.base, inherit: theme.inherit, rules: themeRules, colors: themeColors };
 }
 
-export async function loadThemes(monaco: Monaco): Promise<void> {
-  monaco.editor.defineTheme("monokai", {
+export async function loadThemes(defineTheme: DefineThemeFn): Promise<void> {
+  defineTheme("monokai", {
     base: "vs-dark",
     inherit: true,
     rules: [
@@ -274,7 +285,7 @@ export async function loadThemes(monaco: Monaco): Promise<void> {
     },
   });
 
-  monaco.editor.defineTheme("solarized-dark", {
+  defineTheme("solarized-dark", {
     base: "vs-dark",
     inherit: true,
     rules: [
@@ -351,7 +362,7 @@ export async function loadThemes(monaco: Monaco): Promise<void> {
     },
   });
 
-  monaco.editor.defineTheme("solarized-light", {
+  defineTheme("solarized-light", {
     base: "vs",
     inherit: true,
     rules: [
@@ -429,7 +440,7 @@ export async function loadThemes(monaco: Monaco): Promise<void> {
     },
   });
 
-  monaco.editor.defineTheme("dracula", {
+  defineTheme("dracula", {
     base: "vs-dark",
     inherit: true,
     rules: [
@@ -525,7 +536,7 @@ export async function loadThemes(monaco: Monaco): Promise<void> {
     },
   });
 
-  monaco.editor.defineTheme("one-dark", {
+  defineTheme("one-dark", {
     base: "vs-dark",
     inherit: true,
     rules: [

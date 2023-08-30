@@ -13,9 +13,10 @@ interface IMarketTA2Props {
 }
 
 function MarketTA2(props: IMarketTA2Props): React.ReactElement {
+  const rerender = useRerender();
+
   const division = useDivision();
   if (!division.hasResearch("Market-TA.II")) return <></>;
-  const rerender = useRerender();
 
   function onMarketTA2(event: React.ChangeEvent<HTMLInputElement>): void {
     props.mat.marketTa2 = event.target.checked;
@@ -63,8 +64,8 @@ export function MaterialMarketTaModal(props: IProps): React.ReactElement {
       <>
         <Typography variant="h4">Market-TA.I</Typography>
         <Typography>
-          The maximum sale price you can mark this up to is {formatMoney(props.mat.bCost + markupLimit)}. This means
-          that if you set the sale price higher than this, you will begin to experience a loss in number of sales
+          The maximum sale price you can mark this up to is {formatMoney(props.mat.marketPrice + markupLimit)}. This
+          means that if you set the sale price higher than this, you will begin to experience a loss in number of sales
           <br></br>
           <br></br>
           If this is enabled, then this Material will automatically be sold at the price identified by Market-TA.I (i.e.

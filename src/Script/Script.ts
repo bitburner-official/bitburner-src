@@ -6,36 +6,34 @@ import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ContentFile } from "../Paths/ContentFile";
-/** Type for ensuring script code is always trimmed */
-export type FormattedCode = string & { __type: "FormattedCode" };
 
 /** A script file as a file on a server.
  * For the execution of a script, see RunningScript and WorkerScript */
 export class Script implements ContentFile {
-  code: FormattedCode;
+  code: string;
   filename: ScriptFilePath;
   server: string;
 
   // Ram calculation, only exists after first poll of ram cost after updating
   ramUsage: number | null = null;
   ramUsageEntries: RamUsageEntry[] = [];
+  ramCalculationError: string | null = null;
 
   // Runtime data that only exists when the script has been initiated. Cleared when script or a dependency script is updated.
   mod: LoadedModule | null = null;
   /** Scripts that directly import this one. Stored so we can invalidate these dependent scripts when this one is invalidated. */
-  dependents: Set<Script> = new Set();
+  dependents = new Set<Script>();
   /**
    * Scripts that we directly or indirectly import, including ourselves.
    * Stored only so RunningScript can use it, to translate urls in error messages.
    * Because RunningScript uses the reference directly (to reduce object copies), it must be immutable.
    */
-  dependencies: Map<ScriptURL, Script> = new Map();
+  dependencies = new Map<ScriptURL, Script>();
 
   get content() {
     return this.code;
   }
-  set content(code: string) {
-    const newCode = Script.formatCode(code);
+  set content(newCode: string) {
     if (this.code === newCode) return;
     this.code = newCode;
     this.invalidateModule();
@@ -43,7 +41,7 @@ export class Script implements ContentFile {
 
   constructor(fn = "default.js" as ScriptFilePath, code = "", server = "") {
     this.filename = fn;
-    this.code = Script.formatCode(code);
+    this.code = code;
     this.server = server; // hostname of server this script is on
   }
 
@@ -68,6 +66,7 @@ export class Script implements ContentFile {
     // Always clear ram usage
     this.ramUsage = null;
     this.ramUsageEntries.length = 0;
+    this.ramCalculationError = null;
     // Early return if there's already no URL
     if (!this.mod) return;
     this.mod = null;
@@ -76,19 +75,6 @@ export class Script implements ContentFile {
     // This will be mutated in compile(), but is immutable after that.
     // (No RunningScripts can access this copy before that point).
     this.dependencies = new Map();
-  }
-
-  /**
-   * Save a script from the script editor
-   * @param filename The new filepath for this Script
-   * @param code The unformatted code to save
-   * @param hostname The server to save the script to
-   */
-  saveScript(filename: ScriptFilePath, code: string, hostname: string): void {
-    this.code = Script.formatCode(code);
-    this.invalidateModule();
-    this.filename = filename;
-    this.server = hostname;
   }
 
   /** Gets the ram usage, while also attempting to update it if it's currently null */
@@ -104,12 +90,15 @@ export class Script implements ContentFile {
    */
   updateRamUsage(otherScripts: Map<ScriptFilePath, Script>): void {
     const ramCalc = calculateRamUsage(this.code, otherScripts, this.filename.endsWith(".script"));
-    if (ramCalc.cost >= RamCostConstants.Base) {
+    if (ramCalc.cost && ramCalc.cost >= RamCostConstants.Base) {
       this.ramUsage = roundToTwo(ramCalc.cost);
       this.ramUsageEntries = ramCalc.entries as RamUsageEntry[];
-    } else {
-      this.ramUsage = null;
+      this.ramCalculationError = null;
+      return;
     }
+
+    this.ramUsage = null;
+    this.ramCalculationError = ramCalc.errorMessage ?? null;
   }
 
   /** Remove script from server. Fails if the provided server isn't the server for this script. */
@@ -131,15 +120,6 @@ export class Script implements ContentFile {
   // Initializes a Script Object from a JSON save state
   static fromJSON(value: IReviverValue): Script {
     return Generic_fromJSON(Script, value.data, Script.savedKeys);
-  }
-
-  /**
-   * Formats code: Removes the starting & trailing whitespace
-   * @param {string} code - The code to format
-   * @returns The formatted code
-   */
-  static formatCode(code: string): FormattedCode {
-    return code.replace(/^\s+|\s+$/g, "") as FormattedCode;
   }
 }
 

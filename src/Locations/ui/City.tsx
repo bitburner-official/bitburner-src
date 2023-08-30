@@ -7,7 +7,7 @@ import * as React from "react";
 
 import { City } from "../City";
 import { Cities } from "../Cities";
-import { LocationName } from "../../Enums";
+import { LocationName, LocationType } from "@enums";
 import { Locations } from "../Locations";
 import { Location } from "../Location";
 import { Settings } from "../../Settings/Settings";
@@ -17,14 +17,13 @@ import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { LocationType } from "../LocationTypeEnum";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 
-type IProps = {
+interface IProps {
   city: City;
-};
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,7 +43,7 @@ function toLocation(location: Location): void {
   } else if (location.name === LocationName.WorldStockExchange) {
     Router.toPage(Page.StockMarket);
   } else {
-    Router.toLocation(location);
+    Router.toPage(Page.Location, { location });
   }
 }
 
@@ -70,9 +69,7 @@ function LocationLetter(location: Location, className: string): React.ReactEleme
 
 function ASCIICity(props: IProps): React.ReactElement {
   const locationLettersRegex = /[A-Z]/g;
-  const letterMap: {
-    [key: string]: number;
-  } = {
+  const letterMap: Record<string, number> = {
     A: 0,
     B: 1,
     C: 2,

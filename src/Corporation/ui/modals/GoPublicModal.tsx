@@ -4,10 +4,11 @@ import { Modal } from "../../../ui/React/Modal";
 import { formatMoney, formatShares } from "../../../ui/formatNumber";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import Box from "@mui/material/Box";
 import { KEY } from "../../../utils/helpers/keyCodes";
+import { isPositiveInteger } from "../../../types";
 
 interface IProps {
   open: boolean;
@@ -23,14 +24,7 @@ export function GoPublicModal(props: IProps): React.ReactElement {
 
   function goPublic(): void {
     const initialSharePrice = corp.valuation / corp.totalShares;
-    if (isNaN(shares)) {
-      dialogBoxCreate("Invalid value for number of issued shares");
-      return;
-    }
-    if (shares > corp.numShares) {
-      dialogBoxCreate("Error: You don't have that many shares to issue!");
-      return;
-    }
+    if (shares >= corp.numShares || (shares !== 0 && !isPositiveInteger(shares))) return;
     corp.public = true;
     corp.sharePrice = initialSharePrice;
     corp.issuedShares = shares;
@@ -47,6 +41,13 @@ export function GoPublicModal(props: IProps): React.ReactElement {
     if (event.key === KEY.ENTER) goPublic();
   }
 
+  const disabledText =
+    shares >= corp.numShares
+      ? "Cannot issue this many shares"
+      : shares !== 0 && !isPositiveInteger(shares)
+      ? "Must issue an non-negative integer number of shares"
+      : "";
+
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
@@ -55,13 +56,13 @@ export function GoPublicModal(props: IProps): React.ReactElement {
         be deposited directly into your Corporation's funds).
         <br />
         <br />
-        You have a total of {formatShares(corp.numShares)}-1 shares that you can issue. You cannot sell all your shares.
+        You can issue some, but not all, of your {formatShares(corp.numShares)} shares.
       </Typography>
       <Box display="flex" alignItems="center">
         <NumberInput onChange={setShares} autoFocus placeholder="Shares to issue" onKeyDown={onKeyDown} />
-        <Button disabled={shares < 0 || shares >= corp.numShares} sx={{ mx: 1 }} onClick={goPublic}>
+        <ButtonWithTooltip disabledTooltip={disabledText} onClick={goPublic}>
           Go Public
-        </Button>
+        </ButtonWithTooltip>
       </Box>
     </Modal>
   );

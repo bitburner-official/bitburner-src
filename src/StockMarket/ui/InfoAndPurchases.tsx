@@ -7,24 +7,23 @@ import React, { useState } from "react";
 
 import { getStockMarket4SDataCost, getStockMarket4STixApiCost } from "../StockMarketCosts";
 
-import { CONSTANTS } from "../../Constants";
+import { StockMarketConstants } from "../data/Constants";
 import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
 import { initStockMarket } from "../StockMarket";
 
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import HelpIcon from "@mui/icons-material/Help";
 import CheckIcon from "@mui/icons-material/Check";
 import { StaticModal } from "../../ui/React/StaticModal";
-import { FactionNames } from "../../Faction/data/FactionNames";
+import { FactionName } from "@enums";
 
-type IProps = {
+interface IProps {
   rerender: () => void;
-};
+}
 
 function Purchase4SMarketDataTixApiAccessButton(props: IProps): React.ReactElement {
   function purchase4SMarketDataTixApiAccess(): void {
@@ -83,16 +82,16 @@ function PurchaseWseAccountButton(props: IProps): React.ReactElement {
     if (Player.hasWseAccount) {
       return;
     }
-    if (!Player.canAfford(CONSTANTS.WSEAccountCost)) {
+    if (!Player.canAfford(StockMarketConstants.WSEAccountCost)) {
       return;
     }
     Player.hasWseAccount = true;
     initStockMarket();
-    Player.loseMoney(CONSTANTS.WSEAccountCost, "stock");
+    Player.loseMoney(StockMarketConstants.WSEAccountCost, "stock");
     props.rerender();
   }
 
-  const cost = CONSTANTS.WSEAccountCost;
+  const cost = StockMarketConstants.WSEAccountCost;
   return (
     <>
       <Typography>To begin trading, you must first purchase an account:</Typography>
@@ -109,11 +108,11 @@ function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
     if (Player.hasTixApiAccess) {
       return;
     }
-    if (!Player.canAfford(CONSTANTS.TIXAPICost)) {
+    if (!Player.canAfford(StockMarketConstants.TIXAPICost)) {
       return;
     }
     Player.hasTixApiAccess = true;
-    Player.loseMoney(CONSTANTS.TIXAPICost, "stock");
+    Player.loseMoney(StockMarketConstants.TIXAPICost, "stock");
     props.rerender();
   }
 
@@ -124,7 +123,7 @@ function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
       </Typography>
     );
   } else {
-    const cost = CONSTANTS.TIXAPICost;
+    const cost = StockMarketConstants.TIXAPICost;
     return (
       <Button disabled={!Player.canAfford(cost) || !Player.hasWseAccount} onClick={purchaseTixApiAccess}>
         Buy Trade Information eXchange (TIX) API Access -&nbsp;
@@ -171,14 +170,10 @@ function Purchase4SMarketDataButton(props: IProps): React.ReactElement {
 
 export function InfoAndPurchases(props: IProps): React.ReactElement {
   const [helpOpen, setHelpOpen] = useState(false);
-  const documentationLink = "https://bitburner-official.readthedocs.io/en/latest/basicgameplay/stockmarket.html";
   return (
     <>
-      <Typography>Welcome to the World Stock Exchange (WSE)!</Typography>
-      <Link href={documentationLink} target={"_blank"}>
-        <Typography>Investopedia</Typography>
-      </Link>
-      <br />
+      <Typography variant="h4">Welcome to the World Stock Exchange (WSE)!</Typography>
+
       <PurchaseWseAccountButton {...props} />
 
       <Typography variant="h5" color="primary">
@@ -190,10 +185,10 @@ export function InfoAndPurchases(props: IProps): React.ReactElement {
       </Typography>
       <PurchaseTixApiAccessButton {...props} />
       <Typography variant="h5" color="primary">
-        {FactionNames.FourSigma} (4S) Market Data Feed
+        {FactionName.FourSigma} (4S) Market Data Feed
       </Typography>
       <Typography>
-        {FactionNames.FourSigma}'s (4S) Market Data Feed provides information about stocks that will help your trading
+        {FactionName.FourSigma}'s (4S) Market Data Feed provides information about stocks that will help your trading
         strategies.
         <IconButton onClick={() => setHelpOpen(true)}>
           <HelpIcon />
@@ -203,7 +198,7 @@ export function InfoAndPurchases(props: IProps): React.ReactElement {
       <Purchase4SMarketDataButton {...props} />
       <Typography>
         Commission Fees: Every transaction you make has a{" "}
-        <Money money={CONSTANTS.StockMarketCommission} forPurchase={true} /> commission fee.
+        <Money money={StockMarketConstants.StockMarketCommission} forPurchase={true} /> commission fee.
       </Typography>
       <br />
       <Typography>

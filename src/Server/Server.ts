@@ -1,12 +1,12 @@
 // Class representing a single hackable Server
 import { BaseServer } from "./BaseServer";
 
-import { BitNodeMultipliers } from "../BitNode/BitNodeMultipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 import { createRandomString } from "../utils/helpers/createRandomString";
 import { createRandomIp } from "../utils/IPAddress";
 import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { IPAddress, ServerName } from "../Types/strings";
+import { IPAddress } from "../Types/strings";
 
 export interface IConstructorParams {
   adminRights?: boolean;
@@ -61,7 +61,7 @@ export class Server extends BaseServer {
 
     // "hacknet-node-X" hostnames are reserved for Hacknet Servers
     if (this.hostname.startsWith("hacknet-node-") || this.hostname.startsWith("hacknet-server-")) {
-      this.hostname = createRandomString(10) as ServerName;
+      this.hostname = createRandomString(10);
     }
 
     this.purchasedByPlayer = params.purchasedByPlayer != null ? params.purchasedByPlayer : false;
@@ -72,12 +72,12 @@ export class Server extends BaseServer {
     /* Hacking information (only valid for "foreign" aka non-purchased servers) */
     this.requiredHackingSkill = params.requiredHackingSkill != null ? params.requiredHackingSkill : 1;
     const baseMoney = params.moneyAvailable ?? 0;
-    this.moneyAvailable = baseMoney * BitNodeMultipliers.ServerStartingMoney;
-    this.moneyMax = 25 * baseMoney * BitNodeMultipliers.ServerMaxMoney;
+    this.moneyAvailable = baseMoney * currentNodeMults.ServerStartingMoney;
+    this.moneyMax = 25 * baseMoney * currentNodeMults.ServerMaxMoney;
 
     //Hack Difficulty is synonymous with server security. Base Difficulty = Starting difficulty
     const realDifficulty =
-      params.hackDifficulty != null ? params.hackDifficulty * BitNodeMultipliers.ServerStartingSecurity : 1;
+      params.hackDifficulty != null ? params.hackDifficulty * currentNodeMults.ServerStartingSecurity : 1;
     this.hackDifficulty = Math.min(realDifficulty, 100);
     this.baseDifficulty = this.hackDifficulty;
     this.minDifficulty = Math.min(Math.max(1, Math.round(realDifficulty / 3)), 100);
@@ -141,7 +141,7 @@ export class Server extends BaseServer {
 
   /** Lowers the server's security level (difficulty) by the specified amount) */
   weaken(amt: number): void {
-    this.hackDifficulty -= amt * BitNodeMultipliers.ServerWeakenRate;
+    this.hackDifficulty -= amt * currentNodeMults.ServerWeakenRate;
     this.capDifficulty();
   }
 
