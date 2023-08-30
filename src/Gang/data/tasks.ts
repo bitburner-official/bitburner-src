@@ -379,7 +379,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     params: { chaWeight: 100, difficulty: 8 },
   },
   {
-    desc: "Assign this gang member to engage in territorial warfare with other gangs. Members assigned to this task will help increase your gang's territory and will defend your territory from being taken.",
+    desc: "Assign this gang member to territorial warfare with other gangs. Members assigned to this task increase your gang's power and will fight for territory if 'Territory Warfare' is engaged. Note that gang members can be killed while assigned this task.",
     isCombat: true,
     isHacking: true,
     name: "Territory Warfare",
