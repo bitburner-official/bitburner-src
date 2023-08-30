@@ -45,8 +45,8 @@ export function GangMemberCardContent(props: IProps): React.ReactElement {
               stat multipliers.
               <br />
               <br />
-              The stat boost a Gang Member gains upon ascension is based on the amount of exp they have, and will be shown before
-              you choose to ascend them.
+              The stat boost a Gang Member gains upon ascension is based on the amount of exp they have, and will be
+              shown before you choose to ascend them.
               <br />
               <br />
               Upon ascension, they will lose all of their non-Augmentation Equipment and your gang will lose respect

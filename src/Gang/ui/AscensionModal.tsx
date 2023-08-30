@@ -30,7 +30,8 @@ export function AscensionModal(props: AscensionModalProps): React.ReactElement {
     const res = gang.ascendMember(props.member);
     dialogBoxCreate(
       <>
-        {props.member.name} ascended!<br />
+        {props.member.name} ascended!
+        <br />
         <br />
         Your gang, {Player.gang?.facName}, lost {formatRespect(res.respect)} respect.
         <br />
