@@ -7096,7 +7096,7 @@ export interface WarehouseAPI {
    * @param productName - Name of the product
    * @param amt - Amount to sell, can be "MAX"
    * @param price - Price to sell, can be "MP"
-   * @param all - Sell in all city
+   * @param all - Set sell amount and price in all cities
    */
   sellProduct(
     divisionName: string,
