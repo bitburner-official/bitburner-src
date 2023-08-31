@@ -166,6 +166,8 @@ export function SellMaterial(material: Material, amount: string, price: string):
 
 export function SellProduct(product: Product, city: CityName, amt: string, price: string, all: boolean): void {
   //Parse price
+  // initliaze newPrice with oldPrice as default
+  let newPrice = product.cityData[city].desiredSellPrice;
   if (price.includes("MP")) {
     //Dynamically evaluated quantity. First test to make sure its valid
     //Sanitize input, then replace dynamic variables with arbitrary numbers
@@ -181,17 +183,19 @@ export function SellProduct(product: Product, city: CityName, amt: string, price
     if (temp == null || isNaN(parseFloat(temp))) {
       throw new Error("Invalid value or expression for sell price field.");
     }
-    product.cityData[city].desiredSellPrice = price; //Use sanitized price
+    newPrice = price; //Use sanitized price
   } else {
     const cost = parseFloat(price);
     if (isNaN(cost)) {
       throw new Error("Invalid value for sell price field");
     }
-    product.cityData[city].desiredSellPrice = cost;
+    newPrice = cost;
   }
 
   // Parse quantity
   amt = amt.toUpperCase();
+  //initialize newAmount with old as default
+  let newAmount = product.cityData[city].desiredSellAmount;
   if (amt.includes("MAX") || amt.includes("PROD") || amt.includes("INV")) {
     //Dynamically evaluated quantity. First test to make sure its valid
     let qty = amt.replace(/\s+/g, "");
@@ -208,14 +212,7 @@ export function SellProduct(product: Product, city: CityName, amt: string, price
     if (temp == null || isNaN(parseFloat(temp))) {
       throw new Error("Invalid value or expression for sell quantity field");
     }
-
-    if (all) {
-      for (const cityName of Object.values(CityName)) {
-        product.cityData[cityName].desiredSellAmount = qty; //Use sanitized input
-      }
-    } else {
-      product.cityData[city].desiredSellAmount = qty; //Use sanitized input
-    }
+    newAmount = qty; //Use sanitized input
   } else if (isNaN(parseFloat(amt)) || parseFloat(amt) < 0) {
     throw new Error("Invalid value for sell quantity field! Must be numeric or 'PROD' or 'MAX'");
   } else {
@@ -223,21 +220,17 @@ export function SellProduct(product: Product, city: CityName, amt: string, price
     if (isNaN(qty)) {
       qty = 0;
     }
-    if (qty === 0) {
-      if (all) {
-        for (const cityName of Object.values(CityName)) {
-          product.cityData[cityName].desiredSellAmount = 0;
-        }
-      } else {
-        product.cityData[city].desiredSellAmount = 0;
-      }
-    } else if (all) {
-      for (const cityName of Object.values(CityName)) {
-        product.cityData[cityName].desiredSellAmount = qty;
-      }
-    } else {
-      product.cityData[city].desiredSellAmount = qty;
+    newAmount = qty;
+  }
+  //apply new price and amount to all or just current
+  if (all) {
+    for (const cityName of Object.values(CityName)) {
+      product.cityData[cityName].desiredSellAmount = newAmount;
+      product.cityData[cityName].desiredSellPrice = newPrice;
     }
+  } else {
+    product.cityData[city].desiredSellAmount = newAmount;
+    product.cityData[city].desiredSellPrice = newPrice;
   }
 }
 
