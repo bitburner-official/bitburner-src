@@ -379,9 +379,11 @@ export class Division {
           /* Process production of materials */
           if (this.producedMaterials.length > 0) {
             //ugly section to find limits
-            const limits = this.producedMaterials.map((matName) => warehouse.materials[matName].productionLimit)
+            const limits = this.producedMaterials.map((matName) => warehouse.materials[matName].productionLimit);
             //if any limit is null then we dont use any limit, if all limits are set we find the highest and limit the overall prod based on it
-            const globalLimit: number = limits.some((lim)=> !isDefined(lim)) ? -1 : Math.max(...limits.filter(isDefined));
+            const globalLimit: number = limits.some((lim) => !isDefined(lim))
+              ? -1
+              : Math.max(...limits.filter(isDefined));
             //Calculate the maximum production of this material based
             //on the office's productivity
             const maxProd =
