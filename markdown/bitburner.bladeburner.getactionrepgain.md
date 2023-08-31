@@ -18,7 +18,7 @@ getActionRepGain(type: string, name: string, level: number): number;
 |  --- | --- | --- |
 |  type | string | Type of action. |
 |  name | string | Name of action. Must be an exact match. |
-|  level | number | Optional action level at which to calculate the gain |
+|  level | number | Optional number. Action level at which to calculate the gain. Will be the action's current level if not given. |
 
 **Returns:**
 

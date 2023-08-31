@@ -223,7 +223,8 @@ export class Action {
     let low = real - diff;
     let high = real + diff;
     const city = inst.getCurrentCity();
-    const r = city.pop / city.popEst;
+    let r = city.pop / city.popEst;
+    if (Number.isNaN(r)) r = 0;
     if (r < 1) low *= r;
     else high *= r;
     return [clamp(low), clamp(high)];
