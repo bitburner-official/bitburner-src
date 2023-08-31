@@ -6,6 +6,8 @@ export type PositiveInteger = Integer & PositiveNumber;
 // Numeric typechecking functions - these should be moved somewhere else
 export const isInteger = (n: unknown): n is Integer => Number.isInteger(n);
 export const isPositiveInteger = (n: unknown): n is PositiveInteger => isInteger(n) && n > 0;
+//type guard for null
+export const isDefined = <T>(t: T | null | undefined): t is T => t != null;
 
 /** Utility type for typechecking objects. Makes all keys optional and sets values to unknown,
  * making it safe to assert a shape for the variable once it's known to be a non-null object */
