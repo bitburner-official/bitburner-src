@@ -16,7 +16,6 @@ import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from "../Types/Record";
 import { Material } from "./Material";
 import { getKeyList } from "../utils/helpers/getKeyList";
-import { isDefined } from "../types";
 
 interface DivisionParams {
   name: string;
@@ -378,10 +377,13 @@ export class Division {
 
           /* Process production of materials */
           if (this.producedMaterials.length > 0) {
-            //ugly section to find limits
-            const limits = this.producedMaterials.map((matName) => warehouse.materials[matName].productionLimit);
-            //if any limit is null then we dont use any limit, if all limits are set we find the highest and limit the overall prod based on it
-            const divLimit: number = limits.some((lim) => !isDefined(lim)) ? -1 : Math.max(...limits.filter(isDefined));
+            //if any limit is null then we use Number.MaxValue, if all limits are set we find the highest and limit the overall prod based on it
+            const divLimit = Math.max(
+              ...this.producedMaterials.map(
+                (matName) => warehouse.materials[matName].productionLimit ?? Number.MAX_VALUE,
+              ),
+            );
+
             //Calculate the maximum production of this material based
             //on the office's productivity
             const maxProd =
@@ -389,12 +391,9 @@ export class Division {
               this.productionMult * // Multiplier from materials
               corporation.getProductionMultiplier() *
               this.getProductionMultiplier(); // Multiplier from Research
-            let prod;
 
-            // If there is a limit set on production, apply the limit
-            prod = divLimit === -1 ? maxProd : Math.min(maxProd, divLimit);
-
-            prod *= corpConstants.secondsPerMarketCycle * marketCycles; //Convert production from per second to per market cycle
+            // If there is a limit set on production, apply the limit and convert production from per second to per market cycle
+            let prod = Math.min(maxProd, divLimit) * corpConstants.secondsPerMarketCycle * marketCycles;
 
             // Calculate net change in warehouse storage making the produced materials will cost
             let totalMatSize = 0;
