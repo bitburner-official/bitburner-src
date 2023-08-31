@@ -83,9 +83,9 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.4.1dev",
+  VersionString: "2.4.2dev",
   isDevBranch: true,
-  VersionNumber: 33,
+  VersionNumber: 34,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -219,26 +219,19 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.4.1dev - Last changelog update 8/1/23
+## v2.4.2 dev changelog (last updated 8/28/23)
 
-See 2.4.0 changelog at:
-https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/ui/doc/changelog.md
+See 2.4.1 changelog: https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
 
-Changes below include spoilers.
+### BUGFIX
+- UI: Faction augmentation page no longer ends up with stale data (@zerbosh)
+- Terminal: Prevent recursive aliases from being resolved (@ficocelliguy)
 
-### NETSCRIPT:
-
-* Added ns.stock.getConstants (@Snarling)
-* ns.corporation.getConstants now has a ram cost of 0 (@Snarling)
-* ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined (@Snarling)
-
-### INFILTRATION:
-
-* Knowledge of Apollo aug highlights the correct wires again (@Snarling)
-
-### CODEBASE:
-
-* Reorganize game constants (@zerbosh)
-* Reorganize ingame documentation folder structure, simplify documentation bundling (@Snarling)
+### MISC
+- Icarus message no longer shows repeatedly for players that are in the endgame. (@ficocelliguy)
+- Updated documentation for ns.tail and ns.getScriptLogs to make it clear a PID can be used. (@myCatsName)
+- Improved error messages for ns.getPurchasedServer (@ficocelliguy)
+- Remove work completion dialogs when performing an augmentation install (@ficocelliguy)
+- Added initial ingame documentation for Bladeburner (@myCatsName)
 `,
 };

@@ -1,5 +1,45 @@
 # Changelog
 
+## v2.4.1 Update (8/26/23)
+
+### FEATURE ADDITIONS:
+
+- Added "Enable terminal history search with arrow keys" option in Misc options category, inspired by similar functionality in shells like zsh. (@ficocelliguy)
+
+### BUGFIX:
+
+- Fixed a bug where buying NeuroFlux Governor would buy one less level than expected (@zerbosh)
+- Fixed an issue that could cause the Coding Contract UI to become unreachable (@myCatsName)
+- Infiltration: Knowledge of Apollo aug no longer highlights the incorrect wires (@Snarling)
+
+### CODEBASE / DOCS / MISC:
+
+- Added a new theme "zerenity" (@Zelow79)
+- Reorganize game constants (@zerbosh)
+- Reorganize ingame documentation folder structure, simplify documentation bundling (@Snarling)
+- IP Address coding contract accepts single-quoted entries (@myCatsName)
+- Updated an outdated message on ns.killall logs (@myCatsName)
+- Updated documentation for ns.share and ns.getSharePower (@myCatsName)
+- Removed functions (like ns.getServerRam) are no longer shown when enumerating ns entries. (@Snarling)
+- Removed more references to ReadTheDocs that remained after 2.4.0 (@hydroflame)
+- Fixed some typos/spacing (@myCatsName)
+- Fixed an issue with incorrect React keys in active scripts page (@zornlemma)
+
+### API CHANGES (NON-SPOILER)
+
+- Added ns.stock.getConstants (@Snarling)
+- Added ownedAugs and ownedSF properties to return data of ns.getResetInfo (@Snarling)
+
+### API CHANGES (SPOILERS):
+
+- Added ns.singularity.getAugmentationFactions to provide a list of factions that have a given augmentation (@myCatsName)
+- ns.corporation.getConstants now has a ram cost of 0 (@Snarling)
+
+### OTHER CHANGES (SPOILERS):
+
+- Successes for next level is now accurate in the UI for Bladeburner operations (@myCatsName)
+- ns.sleeve.setToFactionWork no longer allows working for factions the player has not joined (@Snarling)
+
 ## v2.4.0 - Death to readthedocs
 
 NETSCRIPT:
@@ -284,7 +324,7 @@ GRAFTING:
 DOCUMENTATION
 
 - Many documentation updates (@Mughur, @d0sboots, @Snarling, @teauxfu).
-- Official non-markdown docs are at http://bitburner-official.readthedocs.io/
+- Official non-markdown docs are at https://github.com/bitburner-official/bitburner-src/tree/dev/src/Documentation/doc
 - Official dev version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md
 - Official stable version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md
 - Dev version documentation is now kept up to date as changes are made. (@Snarling)
@@ -1306,7 +1346,7 @@ Stanek Gift
 ** Announcement **
 
 - Several API breaks have been implemented.
-- See the v1.0.0 migration guide https://bitburner.readthedocs.io/en/latest/v1.0.0_migration.html
+- See the v1.0.0 migration guide under Documentation
 - Everyone gets 10 free neuroflux level.
 
 ** Netscript **
@@ -2685,8 +2725,6 @@ Stanek Gift
 
 - Added a very rudimentary directory system to the Terminal
 
-  - Details here: https://bitburner.readthedocs.io/en/latest/basicgameplay/terminal.html#filesystem-directories
-
 - Added numHashes(), hashCost(), and spendHashes() functions to the Netscript Hacknet Node API
 - 'Generate Coding Contract' hash upgrade is now more expensive
 - 'Generate Coding Contract' hash upgrade now generates the contract randomly on the server, rather than on home computer
@@ -3180,7 +3218,7 @@ Stanek Gift
 
 ## v0.37.0 - 5/20/2018
 
-- NetscriptJS (Netscript 2.0) released (Documentation here: http://bitburner.readthedocs.io/en/latest/netscriptjs.html)
+- NetscriptJS (Netscript 2.0) released
 - Running the game with the '?noScripts' query will start the game without loading any of your scripts. This should be used if you accidentally write a script that crashes your game
 
 ## v0.36.1 - 5/11/2018

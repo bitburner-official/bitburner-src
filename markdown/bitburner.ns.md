@@ -26,7 +26,6 @@ export async function main(ns) {
  await ns.hack('n00dles');
 }
 ```
-[ns2 in-game docs](https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html) <hr> For (deprecated) .script usage, see: [ns1 in-game docs](https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html) <hr>
 
 ## Properties
 
@@ -108,7 +107,7 @@ export async function main(ns) {
 |  [getServerRequiredHackingLevel(host)](./bitburner.ns.getserverrequiredhackinglevel.md) | Returns the required hacking level of the target server. |
 |  [getServerSecurityLevel(host)](./bitburner.ns.getserversecuritylevel.md) | Get server security level. |
 |  [getServerUsedRam(host)](./bitburner.ns.getserverusedram.md) | Get the used RAM on a server. |
-|  [getSharePower()](./bitburner.ns.getsharepower.md) | Calculate your share power. Based on all the active share calls. |
+|  [getSharePower()](./bitburner.ns.getsharepower.md) | Share Power has a multiplicative effect on rep/second while doing work for a faction. Share Power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate. |
 |  [getTimeSinceLastAug()](./bitburner.ns.gettimesincelastaug.md) | Returns the amount of time in milliseconds that have passed since you last installed Augmentations. |
 |  [getTotalScriptExpGain()](./bitburner.ns.gettotalscriptexpgain.md) | Get the exp gain of all scripts. |
 |  [getTotalScriptIncome()](./bitburner.ns.gettotalscriptincome.md) | Get the income of all scripts. |

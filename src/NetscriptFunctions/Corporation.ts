@@ -57,7 +57,7 @@ import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
 import { Factions } from "../Faction/Factions";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { InternalAPI, NetscriptContext, removedFunction } from "../Netscript/APIWrapper";
+import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { MaterialInfo } from "../Corporation/MaterialInfo";
@@ -841,22 +841,26 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     },
   };
 
-  // TODO 3.0: Remove these removedFunctions warnings.
-  Object.assign(corpFunctions, {
-    assignJob: removedFunction(
-      "v2.2.0",
-      "Removed due to employees no longer being objects. Use ns.corporation.setAutoJobAssignment instead.",
-      true,
-    ),
-    getEmployee: removedFunction("v2.2.0", "Removed due to employees no longer being individual objects.", true),
-    getExpandCityCost: removedFunction("v2.2.0", "corporation.getConstants().officeInitialCost"),
-    getExpandIndustryCost: removedFunction("v2.2.0", "corporation.getIndustryData"),
-    getIndustryTypes: removedFunction("v2.2.0", "corporation.getConstants().industryNames"),
-    getMaterialNames: removedFunction("v2.2.0", "corporation.getConstants().materialNames"),
-    getPurchaseWarehouseCost: removedFunction("v2.2.0", "corporation.getConstants().warehouseInitialCost"),
-    getResearchNames: removedFunction("v2.2.0", "corporation.getConstants().researchNames"),
-    getUnlockables: removedFunction("v2.2.0", "corporation.getConstants().unlockNames"),
-    getUpgradeNames: removedFunction("v2.2.0", "corporation.getConstants().upgradeNames"),
+  // Removed functions
+  setRemovedFunctions(corpFunctions, {
+    assignJob: {
+      version: "2.2.0",
+      replacement: "Removed due to employees no longer being objects. Use ns.corporation.setAutoJobAssignment instead.",
+      replaceMsg: true,
+    },
+    getEmployee: {
+      version: "2.2.0",
+      replacement: "Removed due to employees no longer being individual objects.",
+      replaceMsg: true,
+    },
+    getExpandCityCost: { version: "2.2.0", replacement: "corporation.getConstants().officeInitialCost" },
+    getExpandIndustryCost: { version: "2.2.0", replacement: "corporation.getIndustryData" },
+    getIndustryTypes: { version: "2.2.0", replacement: "corporation.getConstants().industryNames" },
+    getMaterialNames: { version: "2.2.0", replacement: "corporation.getConstants().materialNames" },
+    getPurchaseWarehouseCost: { version: "2.2.0", replacement: "corporation.getConstants().warehouseInitialCost" },
+    getResearchNames: { version: "2.2.0", replacement: "corporation.getConstants().researchNames" },
+    getUnlockables: { version: "2.2.0", replacement: "corporation.getConstants().unlockNames" },
+    getUpgradeNames: { version: "2.2.0", replacement: "corporation.getConstants().upgradeNames" },
   });
   return corpFunctions;
 }

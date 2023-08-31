@@ -69,17 +69,11 @@ export function Toolbar({ editor, onSave }: IProps) {
           Terminal (Ctrl/Cmd + b)
         </Button>
         <Typography>
-          {" "}
-          <strong>Documentation:</strong>{" "}
-          <Link target="_blank" href="https://bitburner-official.readthedocs.io/en/latest/index.html">
-            Basic
-          </Link>
-          {" | "}
           <Link
             target="_blank"
             href="https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md"
           >
-            Full
+            Documentation
           </Link>
         </Typography>
       </Box>

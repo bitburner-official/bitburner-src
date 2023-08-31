@@ -154,6 +154,7 @@ export function AugmentationsRoot(props: IProps): React.ReactElement {
                 <br />- skill / experience
                 <br />- every server except home
                 <br />- factions and reputation
+                <br />- current work activity
                 <br />
                 <br />
                 You will keep:

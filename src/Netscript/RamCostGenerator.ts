@@ -189,6 +189,7 @@ const singularity = {
   getCrimeStats: SF4Cost(RamCostConstants.SingularityFn3),
   getOwnedAugmentations: SF4Cost(RamCostConstants.SingularityFn3),
   getOwnedSourceFiles: SF4Cost(RamCostConstants.SingularityFn3),
+  getAugmentationFactions: SF4Cost(RamCostConstants.SingularityFn3),
   getAugmentationsFromFaction: SF4Cost(RamCostConstants.SingularityFn3),
   getAugmentationPrereq: SF4Cost(RamCostConstants.SingularityFn3),
   getAugmentationPrice: SF4Cost(RamCostConstants.SingularityFn3 / 2),
@@ -614,32 +615,27 @@ export const RamCosts: RamCostTree<NSFull> = {
   },
 } as const;
 
-export function getRamCost(...args: string[]): number {
-  if (args.length === 0) {
-    throw new Error(`No arguments passed to getRamCost()`);
-  }
+type RamTreeGeneric = { [key: string]: number | (() => number) | RamTreeGeneric | undefined };
 
-  let curr = RamCosts[args[0] as keyof typeof RamCosts];
-  for (let i = 1; i < args.length; ++i) {
-    if (curr == null) {
-      throw new Error(`Invalid function passed to getRamCost: ${args.join(".")}`);
+export function getRamCost(tree: string[], throwOnUndefined = false): number {
+  if (tree.length === 0) throw new Error(`No arguments passed to getRamCost()`);
+
+  let obj: RamTreeGeneric = RamCosts;
+
+  for (const branch of tree) {
+    const next = obj[branch];
+    if (next === undefined) {
+      // If no ram cost is defined (e.g. for removed functions), the cost is 0.
+      const errorText = `No ram cost is defined for (ns.${tree.join(".")})`;
+      if (throwOnUndefined) throw errorText;
+      return 0;
+    }
+    if (next && typeof next === "object") {
+      obj = next;
+      continue;
     }
 
-    const currType = typeof curr;
-    if (currType === "function" || currType === "number") {
-      break;
-    }
-
-    curr = curr[args[i] as keyof typeof curr];
+    return typeof next === "function" ? next() : next;
   }
-
-  if (typeof curr === "number") {
-    return curr;
-  }
-
-  if (typeof curr === "function") {
-    return curr();
-  }
-
-  throw new Error(`Invalid function passed to getRamCost: ${args.join(".")}`);
+  throw new Error(`Tried to get ram cost for ns.${tree.join(".")} but the value was an invalid type`);
 }

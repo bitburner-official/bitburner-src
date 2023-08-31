@@ -19,7 +19,7 @@ import { useRerender } from "../../ui/React/hooks";
 
 /** Root React Component for displaying a faction's "Purchase Augmentations" page */
 export function AugmentationsPage({ faction }: { faction: Faction }): React.ReactElement {
-  const rerender = useRerender();
+  const rerender = useRerender(400);
 
   function getAugs(): AugmentationName[] {
     return getFactionAugmentationsFiltered(faction);

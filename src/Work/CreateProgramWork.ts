@@ -73,14 +73,14 @@ export class CreateProgramWork extends Work {
     }
     return false;
   }
-  finish(cancelled: boolean): void {
+  finish(cancelled: boolean, suppressDialog?: boolean): void {
     const programName = asProgramFilePath(this.programName);
     if (!cancelled) {
       //Complete case
       Player.gainIntelligenceExp(
         (CONSTANTS.IntelligenceProgramBaseExpGain * this.cyclesWorked * CONSTANTS.MilliPerCycle) / 1000,
       );
-      if (!this.singularity) {
+      if (!this.singularity && !suppressDialog) {
         const lines = [
           `You've finished creating ${programName}!`,
           "The new program can be found on your home computer.",

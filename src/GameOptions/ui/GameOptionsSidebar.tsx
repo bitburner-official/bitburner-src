@@ -1,14 +1,4 @@
-import {
-  BugReport,
-  Chat,
-  Download,
-  LibraryBooks,
-  Palette,
-  Reddit,
-  Save,
-  SystemUpdateAlt,
-  Upload,
-} from "@mui/icons-material";
+import { BugReport, Chat, Download, LibraryBooks, Palette, Reddit, Save, Upload } from "@mui/icons-material";
 import { Box, Button, List, ListItemButton, Paper, Tooltip, Typography } from "@mui/material";
 import { default as React, useRef, useState } from "react";
 import { FileDiagnosticModal } from "../../Diagnostic/FileDiagnosticModal";
@@ -239,7 +229,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           sx={{
             gridArea: "links",
             display: "grid",
-            gridTemplateAreas: `"bug changelog"
+            gridTemplateAreas: `"bug bug"
         "discord reddit"
         "tut tut"
         "plaza plaza"`,
@@ -254,14 +244,6 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
             sx={{ gridArea: "bug" }}
           >
             Report Bug
-          </Button>
-          <Button
-            startIcon={<SystemUpdateAlt />}
-            href="https://bitburner-official.readthedocs.io/en/latest/changelog.html"
-            target="_blank"
-            sx={{ gridArea: " changelog" }}
-          >
-            Changelog
           </Button>
           <Button startIcon={<LibraryBooks />} onClick={() => setConfirmResetOpen(true)} sx={{ gridArea: "tut" }}>
             Reset tutorial

@@ -47,7 +47,7 @@ interface Player extends Person {
   money: number;
   numPeopleKilled: number;
   entropy: number;
-  jobs: Record<string, string>;
+  jobs: Partial<Record<CompanyName, JobName>>;
   factions: string[];
   totalPlaytime: number;
   location: string;
@@ -986,7 +986,7 @@ type SleeveClassTask = {
 };
 
 /** @public */
-type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
+type SleeveCompanyTask = { type: "COMPANY"; companyName: CompanyName };
 
 /** @public */
 type SleeveCrimeTask = {
@@ -1765,7 +1765,10 @@ export interface Singularity {
    * @param positionName - Name of position to get the requirements for. Must be an exact match.
    * @returns CompanyPositionInfo object.
    */
-  getCompanyPositionInfo(companyName: string, positionName: JobName): CompanyPositionInfo;
+  getCompanyPositionInfo(
+    companyName: CompanyName | `${CompanyName}`,
+    positionName: JobName | `${JobName}`,
+  ): CompanyPositionInfo;
 
   /**
    * Get List of Company Positions.
@@ -1785,7 +1788,7 @@ export interface Singularity {
    * @param companyName - Name of company to get the position list for. Must be an exact match.
    * @returns The position list if the company name is valid.
    */
-  getCompanyPositions(companyName: string): JobName[];
+  getCompanyPositions(companyName: CompanyName | `${CompanyName}`): JobName[];
 
   /**
    * Work for a company.
@@ -1810,7 +1813,7 @@ export interface Singularity {
    * @param focus - Acquire player focus on this work operation. Optional. Defaults to true.
    * @returns True if the player starts working, and false otherwise.
    */
-  workForCompany(companyName: string, focus?: boolean): boolean;
+  workForCompany(companyName: CompanyName, focus?: boolean): boolean;
 
   /**
    * Quit jobs by company.
@@ -1822,7 +1825,7 @@ export interface Singularity {
    *
    * @param companyName - Name of the company.
    */
-  quitJob(companyName?: string): void;
+  quitJob(companyName?: CompanyName | `${CompanyName}`): void;
 
   /**
    * Apply for a job at a company.
@@ -1843,7 +1846,7 @@ export interface Singularity {
    * @param field - Field to which you want to apply.
    * @returns True if the player successfully get a job/promotion, and false otherwise.
    */
-  applyToCompany(companyName: string, field: string): boolean;
+  applyToCompany(companyName: CompanyName | `${CompanyName}`, field: string): boolean;
 
   /**
    * Get company reputation.
@@ -1857,7 +1860,7 @@ export interface Singularity {
    * @param companyName - Name of the company.
    * @returns Amount of reputation you have at the specified company.
    */
-  getCompanyRep(companyName: string): number;
+  getCompanyRep(companyName: CompanyName | `${CompanyName}`): number;
 
   /**
    * Get company favor.
@@ -1871,7 +1874,7 @@ export interface Singularity {
    * @param companyName - Name of the company.
    * @returns Amount of favor you have at the specified company.
    */
-  getCompanyFavor(companyName: string): number;
+  getCompanyFavor(companyName: CompanyName | `${CompanyName}`): number;
 
   /**
    * Get company favor gain.
@@ -1885,7 +1888,7 @@ export interface Singularity {
    * @param companyName - Name of the company.
    * @returns Amount of favor you gain at the specified company when you reset by installing Augmentations.
    */
-  getCompanyFavorGain(companyName: string): number;
+  getCompanyFavorGain(companyName: CompanyName | `${CompanyName}`): number;
 
   /**
    * List all current faction invitations.
@@ -2108,6 +2111,21 @@ export interface Singularity {
    * @returns Array containing an object with number and level of the source file.
    */
   getOwnedSourceFiles(): SourceFileLvl[];
+
+  /**
+   * Get a list of faction(s) that have a specific Augmentation.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   *
+   * Returns an array containing the names (as strings) of all factions
+   * that offer the specified Augmentation.
+   * If no factions offer the Augmentation, a blank array is returned.
+   *
+   * @param augName - Name of Augmentation.
+   * @returns Array containing the names of all factions.
+   */
+  getAugmentationFactions(augName: string): string[];
 
   /**
    * Get a list of augmentation available from a faction.
@@ -2889,7 +2907,7 @@ export interface Bladeburner {
    *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
-   * @param level - Optional action level at which to calculate the gain
+   * @param level - Optional number. Action level at which to calculate the gain. Will be the action's current level if not given.
    * @returns Average Bladeburner reputation gain for successfully completing the specified action.
    */
   getActionRepGain(type: string, name: string, level: number): number;
@@ -3740,7 +3758,7 @@ export interface Sleeve {
    * @param companyName - Name of the company to work for.
    * @returns True if the sleeve started working for this company, false otherwise.
    */
-  setToCompanyWork(sleeveNumber: number, companyName: string): boolean;
+  setToCompanyWork(sleeveNumber: number, companyName: CompanyName | `${CompanyName}`): boolean;
 
   /**
    * Set a sleeve to take a class at a university.
@@ -3965,7 +3983,12 @@ interface WorkFormulas {
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified faction work. */
   factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified company work. */
-  companyGains(person: Person, companyName: string, workType: JobName | `${JobName}`, favor: number): WorkStats;
+  companyGains(
+    person: Person,
+    companyName: CompanyName | `${CompanyName}`,
+    workType: JobName | `${JobName}`,
+    favor: number,
+  ): WorkStats;
 }
 
 /**
@@ -4544,10 +4567,6 @@ interface UserInterface {
  *  await ns.hack('n00dles');
  * }
  * ```
- * {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptjs.html| ns2 in-game docs}
- * <hr>
- * For (deprecated) .script usage, see: {@link https://bitburner-official.readthedocs.io/en/latest/netscript/netscript1.html| ns1 in-game docs}
- * <hr>
  */
 export interface NS {
   /**
@@ -5088,7 +5107,7 @@ export interface NS {
    * Note that there is a maximum number of lines that a script stores in its logs. This is configurable in the game’s options.
    * If the function is called with no arguments, it will return the current script’s logs.
    *
-   * Otherwise, the fn, hostname/ip, and args… arguments can be used to get the logs from another script.
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get logs from another script.
    * Remember that scripts are uniquely identified by both their names and arguments.
    *
    * @example
@@ -5102,12 +5121,12 @@ export interface NS {
    * //Open logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
    * ns.getScriptLogs("foo.js", "foodnstuff", 1, "test");
    * ```
-   * @param fn - Optional. Filename of script to get logs from.
+   * @param fn - Optional. Filename or PID of script to get logs from.
    * @param host - Optional. Hostname of the server that the script is on.
    * @param args - Arguments to identify which scripts to get logs for.
    * @returns Returns a string array, where each line is an element in the array. The most recently logged line is at the end of the array.
    */
-  getScriptLogs(fn?: string, host?: string, ...args: (string | number | boolean)[]): string[];
+  getScriptLogs(fn?: FilenameOrPID, host?: string, ...args: (string | number | boolean)[]): string[];
 
   /**
    * Get an array of recently killed scripts across all servers.
@@ -5139,7 +5158,7 @@ export interface NS {
    *
    * If the function is called with no arguments, it will open the current script’s logs.
    *
-   * Otherwise, the fn, hostname/ip, and args… arguments can be used to get the logs from another script.
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get the logs from another script.
    * Remember that scripts are uniquely identified by both their names and arguments.
    *
    * @example
@@ -5817,7 +5836,7 @@ export interface NS {
    * For example, fileExists(“brutessh.exe”) will work fine, even though the actual program
    * is named 'BruteSSH.exe'.
    *
-   * * @example
+   * @example
    * ```js
    * // The function call will return true if the script named foo.js exists on the foodnstuff server, and false otherwise.
    * ns.fileExists("foo.js", "foodnstuff");
@@ -5838,6 +5857,7 @@ export interface NS {
    *
    * Returns a boolean indicating whether the specified script is running on the target server.
    * If you use a PID instead of a filename, the hostname and args parameters are unnecessary.
+   * If hostname is omitted while filename is used as the first parameter, hostname defaults to the server the calling script is running on.
    * Remember that a script is semi-uniquely identified by both its name and its arguments.
    * (You can run multiple copies of scripts with the same arguments, but for the purposes of
    * functions like this that check based on filename, the filename plus arguments forms the key.)
@@ -5854,8 +5874,8 @@ export interface NS {
    * ns.isRunning("foo.js", "joesguns", 1, 5, "test");
    * ```
    * @param script - Filename or PID of script to check. This is case-sensitive.
-   * @param host - Hostname of target server.
-   * @param args - Arguments to specify/identify which scripts to search for.
+   * @param host - Hostname of target server. Optional, defaults to the server the calling script is running on.
+   * @param args - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns True if the specified script is running on the target server, and false otherwise.
    */
   isRunning(script: FilenameOrPID, host?: string, ...args: (string | number | boolean)[]): boolean;
@@ -5867,10 +5887,14 @@ export interface NS {
    *
    * Running with no args returns current script.
    * If you use a PID as the first parameter, the hostname and args parameters are unnecessary.
+   * If hostname is omitted while filename is used as the first parameter, hostname defaults to the server the calling script is running on.
+   * Remember that a script is semi-uniquely identified by both its name and its arguments.
+   * (You can run multiple copies of scripts with the same arguments, but for the purposes of
+   * functions like this that check based on filename, the filename plus arguments forms the key.)
    *
    * @param filename - Optional. Filename or PID of the script.
-   * @param hostname - Optional. Name of host server the script is running on.
-   * @param args  - Arguments to identify the script
+   * @param hostname - Hostname of target server. Optional, defaults to the server the calling script is running on.
+   * @param args  - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns The info about the running script if found, and null otherwise.
    */
   getRunningScript(
@@ -6125,7 +6149,6 @@ export interface NS {
    *
    * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
    *
-   * @see https://bitburner-official.readthedocs.io/en/latest/netscript/netscriptmisc.html#netscript-ports
    * @param portNumber - Port number. Must be an integer between 1 and 20.
    */
   getPortHandle(portNumber: number): NetscriptPort;
@@ -6674,13 +6697,14 @@ export interface NS {
    * @remarks
    * RAM cost: 2.4 GB
    *
-   * Increases your rep gain of all faction work types while share is called.
-   * Scales with thread count.
+   * Increases rep/second for all faction work while share is running. Each cycle of ns.share() is 10 seconds.
+   * Scales with thread count, but at a sharply decreasing rate.
    */
   share(): Promise<void>;
 
   /**
-   * Calculate your share power. Based on all the active share calls.
+   * Share Power has a multiplicative effect on rep/second while doing work for a faction.
+   * Share Power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
    * @remarks
    * RAM cost: 0.2 GB
    */
@@ -6890,6 +6914,49 @@ declare enum LocationName {
   Void = "The Void",
 }
 
+/** Names of all companies
+ * @public */
+declare enum CompanyName {
+  ECorp = "ECorp",
+  MegaCorp = "MegaCorp",
+  BachmanAndAssociates = "Bachman & Associates",
+  BladeIndustries = "Blade Industries",
+  NWO = "NWO",
+  ClarkeIncorporated = "Clarke Incorporated",
+  OmniTekIncorporated = "OmniTek Incorporated",
+  FourSigma = "Four Sigma",
+  KuaiGongInternational = "KuaiGong International",
+  FulcrumTechnologies = "Fulcrum Technologies",
+  StormTechnologies = "Storm Technologies",
+  DefComm = "DefComm",
+  HeliosLabs = "Helios Labs",
+  VitaLife = "VitaLife",
+  IcarusMicrosystems = "Icarus Microsystems",
+  UniversalEnergy = "Universal Energy",
+  GalacticCybersystems = "Galactic Cybersystems",
+  AeroCorp = "AeroCorp",
+  OmniaCybersystems = "Omnia Cybersystems",
+  SolarisSpaceSystems = "Solaris Space Systems",
+  DeltaOne = "DeltaOne",
+  GlobalPharmaceuticals = "Global Pharmaceuticals",
+  NovaMedical = "Nova Medical",
+  CIA = "Central Intelligence Agency",
+  NSA = "National Security Agency",
+  WatchdogSecurity = "Watchdog Security",
+  LexoCorp = "LexoCorp",
+  RhoConstruction = "Rho Construction",
+  AlphaEnterprises = "Alpha Enterprises",
+  Police = "Aevum Police Headquarters",
+  SysCoreSecurities = "SysCore Securities",
+  CompuTek = "CompuTek",
+  NetLinkTechnologies = "NetLink Technologies",
+  CarmichaelSecurity = "Carmichael Security",
+  FoodNStuff = "FoodNStuff",
+  JoesGuns = "Joe's Guns",
+  OmegaSoftware = "Omega Software",
+  NoodleBar = "Noodle Bar",
+}
+
 /** @public */
 export type NSEnums = {
   CityName: typeof CityName;
@@ -6900,6 +6967,7 @@ export type NSEnums = {
   LocationName: typeof LocationName;
   ToastVariant: typeof ToastVariant;
   UniversityClassType: typeof UniversityClassType;
+  CompanyName: typeof CompanyName;
 };
 
 /**

@@ -28,12 +28,6 @@ export function SleeveRoot(): React.ReactElement {
       </Container>
 
       <Button onClick={() => setFAQOpen(true)}>FAQ</Button>
-      <Button
-        href="https://bitburner-official.readthedocs.io/en/latest/advancedgameplay/sleeves.html#duplicate-sleeves"
-        target="_blank"
-      >
-        Wiki Documentation
-      </Button>
       <Box display="grid" sx={{ gridTemplateColumns: "repeat(2, 1fr)", mt: 1 }}>
         {Player.sleeves.map((sleeve, i) => (
           <SleeveElem key={i} rerender={rerender} sleeve={sleeve} />

@@ -25,11 +25,6 @@ export function ServerAccordionContent(props: IProps): React.ReactElement {
 
   return (
     <>
-      <List dense disablePadding>
-        {props.workerScripts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((ws) => (
-          <WorkerScriptAccordion key={`${ws.name}_${ws.args}`} workerScript={ws} />
-        ))}
-      </List>
       <TablePagination
         rowsPerPageOptions={[10, 15, 20, 100]}
         component="div"
@@ -40,6 +35,11 @@ export function ServerAccordionContent(props: IProps): React.ReactElement {
         onRowsPerPageChange={handleChangeRowsPerPage}
         ActionsComponent={TablePaginationActionsAll}
       />
+      <List dense disablePadding>
+        {props.workerScripts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((ws) => (
+          <WorkerScriptAccordion key={`${ws.pid}`} workerScript={ws} />
+        ))}
+      </List>
     </>
   );
 }

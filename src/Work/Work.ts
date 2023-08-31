@@ -12,7 +12,7 @@ export abstract class Work {
   }
 
   abstract process(cycles: number): boolean;
-  abstract finish(cancelled: boolean): void;
+  abstract finish(cancelled: boolean, suppressDialog?: boolean): void;
   abstract APICopy(): Record<string, unknown>;
   abstract toJSON(): IReviverValue;
 }

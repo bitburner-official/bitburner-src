@@ -8,5 +8,7 @@
 **Signature:**
 
 ```typescript
-type SleeveCompanyTask = { type: "COMPANY"; companyName: string };
+type SleeveCompanyTask = { type: "COMPANY"; companyName: CompanyName };
 ```
+**References:** [CompanyName](./bitburner.companyname.md)
+

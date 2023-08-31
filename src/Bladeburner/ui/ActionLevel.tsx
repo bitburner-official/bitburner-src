@@ -40,10 +40,17 @@ export function ActionLevel({ action, isActive, bladeburner, rerender }: IProps)
       <Box display="flex">
         <Tooltip
           title={
-            <Typography>
-              {action.getSuccessesNeededForNextLevel(BladeburnerConstants.ContractSuccessesPerLevel)} successes needed
-              for next level
-            </Typography>
+            action.constructor.name === "Contract" ? (
+              <Typography>
+                {action.getSuccessesNeededForNextLevel(BladeburnerConstants.ContractSuccessesPerLevel)} successes needed
+                for next level
+              </Typography>
+            ) : (
+              <Typography>
+                {action.getSuccessesNeededForNextLevel(BladeburnerConstants.OperationSuccessesPerLevel)} successes
+                needed for next level
+              </Typography>
+            )
           }
         >
           <Typography>

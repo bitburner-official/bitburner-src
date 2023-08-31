@@ -26,6 +26,8 @@ export const Settings = {
   DisableOverviewProgressBars: false,
   /** Whether to enable bash hotkeys */
   EnableBashHotkeys: false,
+  /** Whether to enable terminal history search */
+  EnableHistorySearch: false,
   /** Timestamps format string */
   TimestampsFormat: "",
   /** Locale used for display numbers. */

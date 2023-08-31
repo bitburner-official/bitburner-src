@@ -31,6 +31,7 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [exportGame()](./bitburner.singularity.exportgame.md) | Backup game save. |
 |  [exportGameBonus()](./bitburner.singularity.exportgamebonus.md) | Returns Backup save bonus availability. |
 |  [getAugmentationBasePrice(augName)](./bitburner.singularity.getaugmentationbaseprice.md) | Get base price of an augmentation. |
+|  [getAugmentationFactions(augName)](./bitburner.singularity.getaugmentationfactions.md) | Get a list of faction(s) that have a specific Augmentation. |
 |  [getAugmentationPrereq(augName)](./bitburner.singularity.getaugmentationprereq.md) | Get the pre-requisite of an augmentation. |
 |  [getAugmentationPrice(augName)](./bitburner.singularity.getaugmentationprice.md) | Get price of an augmentation. |
 |  [getAugmentationRepReq(augName)](./bitburner.singularity.getaugmentationrepreq.md) | Get reputation requirement of an augmentation. |
