@@ -67,7 +67,12 @@ export function ServerAccordions(props: IProps): React.ReactElement {
       };
       data = serverToScriptMap[server.hostname];
     }
-    if (data !== undefined) data.workerScripts.push(ws);
+    if (data !== undefined) {
+      // Add only scripts that correspond to the filter
+      if (ws.hostname.includes(filter) || ws.name.includes(filter)) {
+        data.workerScripts.push(ws);
+      }
+    }
   }
 
   // Match filter in the scriptname part of the key
@@ -92,15 +97,6 @@ export function ServerAccordions(props: IProps): React.ReactElement {
           spellCheck: false,
         }}
       />
-      <List dense={true}>
-        {filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((data) => {
-          return (
-            data && (
-              <ServerAccordion key={data.server.hostname} server={data.server} workerScripts={data.workerScripts} />
-            )
-          );
-        })}
-      </List>
       <TablePagination
         rowsPerPageOptions={[10, 15, 20, 100]}
         component="div"
@@ -111,6 +107,15 @@ export function ServerAccordions(props: IProps): React.ReactElement {
         onRowsPerPageChange={handleChangeRowsPerPage}
         ActionsComponent={TablePaginationActionsAll}
       />
+      <List dense={true}>
+        {filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((data) => {
+          return (
+            data && (
+              <ServerAccordion key={data.server.hostname} server={data.server} workerScripts={data.workerScripts} />
+            )
+          );
+        })}
+      </List>
     </>
   );
 }

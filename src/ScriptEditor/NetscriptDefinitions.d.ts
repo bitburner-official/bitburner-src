@@ -2901,7 +2901,7 @@ export interface Bladeburner {
    *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
-   * @param level - Optional action level at which to calculate the gain
+   * @param level - Optional number. Action level at which to calculate the gain. Will be the action's current level if not given.
    * @returns Average Bladeburner reputation gain for successfully completing the specified action.
    */
   getActionRepGain(type: string, name: string, level: number): number;
@@ -5830,7 +5830,7 @@ export interface NS {
    * For example, fileExists(“brutessh.exe”) will work fine, even though the actual program
    * is named 'BruteSSH.exe'.
    *
-   * * @example
+   * @example
    * ```js
    * // The function call will return true if the script named foo.js exists on the foodnstuff server, and false otherwise.
    * ns.fileExists("foo.js", "foodnstuff");
@@ -5851,6 +5851,7 @@ export interface NS {
    *
    * Returns a boolean indicating whether the specified script is running on the target server.
    * If you use a PID instead of a filename, the hostname and args parameters are unnecessary.
+   * If hostname is omitted while filename is used as the first parameter, hostname defaults to the server the calling script is running on.
    * Remember that a script is semi-uniquely identified by both its name and its arguments.
    * (You can run multiple copies of scripts with the same arguments, but for the purposes of
    * functions like this that check based on filename, the filename plus arguments forms the key.)
@@ -5867,8 +5868,8 @@ export interface NS {
    * ns.isRunning("foo.js", "joesguns", 1, 5, "test");
    * ```
    * @param script - Filename or PID of script to check. This is case-sensitive.
-   * @param host - Hostname of target server.
-   * @param args - Arguments to specify/identify which scripts to search for.
+   * @param host - Hostname of target server. Optional, defaults to the server the calling script is running on.
+   * @param args - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns True if the specified script is running on the target server, and false otherwise.
    */
   isRunning(script: FilenameOrPID, host?: string, ...args: (string | number | boolean)[]): boolean;
@@ -5880,10 +5881,14 @@ export interface NS {
    *
    * Running with no args returns current script.
    * If you use a PID as the first parameter, the hostname and args parameters are unnecessary.
+   * If hostname is omitted while filename is used as the first parameter, hostname defaults to the server the calling script is running on.
+   * Remember that a script is semi-uniquely identified by both its name and its arguments.
+   * (You can run multiple copies of scripts with the same arguments, but for the purposes of
+   * functions like this that check based on filename, the filename plus arguments forms the key.)
    *
    * @param filename - Optional. Filename or PID of the script.
-   * @param hostname - Optional. Name of host server the script is running on.
-   * @param args  - Arguments to identify the script
+   * @param hostname - Hostname of target server. Optional, defaults to the server the calling script is running on.
+   * @param args  - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns The info about the running script if found, and null otherwise.
    */
   getRunningScript(
