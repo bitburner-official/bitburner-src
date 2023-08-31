@@ -27,7 +27,7 @@ export function influenceStockThroughServerHack(server: Server, moneyHacked: num
 
   const percTotalMoneyHacked = moneyHacked / server.moneyMax;
   if (Math.random() < percTotalMoneyHacked) {
-    stock.changeForecastForecast(stock.otlkMagForecast - StockMarketConstants.forecastForecastChangeFromHack);
+    stock.changeForecastForecast(stock.otlkMagForecast - StockMarketConstants.hackFactor);
   }
 }
 
@@ -50,7 +50,7 @@ export function influenceStockThroughServerGrow(server: Server, moneyGrown: numb
 
   const percTotalMoneyGrown = moneyGrown / server.moneyMax;
   if (Math.random() < percTotalMoneyGrown) {
-    stock.changeForecastForecast(stock.otlkMagForecast + StockMarketConstants.forecastForecastChangeFromHack);
+    stock.changeForecastForecast(stock.otlkMagForecast + StockMarketConstants.hackFactor);
   }
 }
 
@@ -74,7 +74,7 @@ export function influenceStockThroughCompanyWork(
   }
 
   if (Math.random() < 0.002 * cyclesOfWork) {
-    const change = StockMarketConstants.forecastForecastChangeFromCompanyWork * performanceMult;
+    const change = StockMarketConstants.companyWorkFactor * performanceMult;
     stock.changeForecastForecast(stock.otlkMagForecast + change);
   }
 }

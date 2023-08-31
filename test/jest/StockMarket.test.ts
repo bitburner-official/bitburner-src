@@ -577,17 +577,17 @@ describe("Stock Market Tests", function () {
   describe("Forecast Movement Processor Function", function () {
     // N = 1 is the original forecast
     function getNthForecast(origForecast: number, n: number): number {
-      return origForecast - StockMarketConstants.forecastChangePerPriceMovement * (n - 1);
+      return origForecast - StockMarketConstants.priceMovementFactor * (n - 1);
     }
 
     function getNthForecastForecast(origForecastForecast: number, n: number): number {
       if (stock.otlkMagForecast > 50) {
         const expected =
-          origForecastForecast - StockMarketConstants.forecastChangePerPriceMovement * (n - 1) * (stock.mv / 100);
+          origForecastForecast - StockMarketConstants.priceMovementFactor * (n - 1) * (stock.mv / 100);
         return expected < 50 ? 50 : expected;
       } else if (stock.otlkMagForecast < 50) {
         const expected =
-          origForecastForecast + StockMarketConstants.forecastChangePerPriceMovement * (n - 1) * (stock.mv / 100);
+          origForecastForecast + StockMarketConstants.priceMovementFactor * (n - 1) * (stock.mv / 100);
         return expected > 50 ? 50 : expected;
       } else {
         return 50;
@@ -1274,7 +1274,7 @@ describe("Stock Market Tests", function () {
         const oldSecondOrderForecast = stock.otlkMagForecast;
         influenceStockThroughServerHack(server, server.moneyMax);
         expect(stock.otlkMagForecast).toEqual(
-          oldSecondOrderForecast - StockMarketConstants.forecastForecastChangeFromHack,
+          oldSecondOrderForecast - StockMarketConstants.hackFactor,
         );
       });
 
@@ -1290,7 +1290,7 @@ describe("Stock Market Tests", function () {
         const oldSecondOrderForecast = stock.otlkMagForecast;
         influenceStockThroughServerGrow(server, server.moneyMax);
         expect(stock.otlkMagForecast).toEqual(
-          oldSecondOrderForecast + StockMarketConstants.forecastForecastChangeFromHack,
+          oldSecondOrderForecast + StockMarketConstants.hackFactor,
         );
       });
 
@@ -1309,7 +1309,7 @@ describe("Stock Market Tests", function () {
         // (This may break later if numbers are rebalanced);
         influenceStockThroughCompanyWork(company, 1, 500);
         expect(stock.otlkMagForecast).toEqual(
-          oldSecondOrderForecast + StockMarketConstants.forecastForecastChangeFromCompanyWork,
+          oldSecondOrderForecast + StockMarketConstants.companyWorkFactor,
         );
       });
 
@@ -1320,7 +1320,7 @@ describe("Stock Market Tests", function () {
         // (This may break later if numbers are rebalanced);
         influenceStockThroughCompanyWork(company, 4, 1e3);
         expect(stock.otlkMagForecast).toEqual(
-          oldSecondOrderForecast + 4 * StockMarketConstants.forecastForecastChangeFromCompanyWork,
+          oldSecondOrderForecast + 4 * StockMarketConstants.companyWorkFactor,
         );
       });
     });

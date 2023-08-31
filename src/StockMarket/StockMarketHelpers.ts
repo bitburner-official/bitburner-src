@@ -79,8 +79,8 @@ export function processTransactionForecastMovement(stock: Stock, shares: number)
     stock.shareTxUntilMovement -= shares;
     if (stock.shareTxUntilMovement <= 0) {
       stock.shareTxUntilMovement = stock.shareTxForMovement;
-      stock.influenceForecast(StockMarketConstants.forecastChangePerPriceMovement);
-      stock.influenceForecastForecast(StockMarketConstants.forecastChangePerPriceMovement * (stock.mv / 100));
+      stock.influenceForecast(StockMarketConstants.priceMovementFactor);
+      stock.influenceForecastForecast(StockMarketConstants.priceMovementFactor * (stock.mv / 100));
     }
 
     return;
@@ -99,7 +99,7 @@ export function processTransactionForecastMovement(stock: Stock, shares: number)
   }
 
   // Forecast always decreases in magnitude
-  const forecastChange = StockMarketConstants.forecastChangePerPriceMovement * (numIterations - 1);
+  const forecastChange = StockMarketConstants.priceMovementFactor * (numIterations - 1);
   const forecastForecastChange = forecastChange * (stock.mv / 100);
   stock.influenceForecast(forecastChange);
   stock.influenceForecastForecast(forecastForecastChange);
