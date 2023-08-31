@@ -134,17 +134,28 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return gang.canRecruitMember();
     },
+    getRecruitsAvailable: (ctx) => () => {
+      const gang = getGang(ctx);
+      return gang.getRecruitsAvailable();
+    },
     recruitMember: (ctx) => (_memberName) => {
       const memberName = helpers.string(ctx, "memberName", _memberName);
       const gang = getGang(ctx);
       const recruited = gang.recruitMember(memberName);
-      if (recruited) {
+      // TODO : ns.gang.recruitMember() crashes with error, can use top return instead?
+      if (memberName === "") {
+        ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit Gang Member. Name must be provided.`);
+        return false;
+      } else if (recruited) {
         ctx.workerScript.log("gang.recruitMember", () => `Successfully recruited Gang Member '${memberName}'`);
+        return recruited;
       } else {
-        ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit Gang Member '${memberName}'`);
+        ctx.workerScript.log(
+          "gang.recruitMember",
+          () => `Failed to recruit Gang Member '${memberName}'. Name already used.`,
+        );
+        return recruited;
       }
-
-      return recruited;
     },
     getTaskNames: (ctx) => () => {
       const gang = getGang(ctx);
