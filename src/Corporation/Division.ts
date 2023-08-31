@@ -381,9 +381,7 @@ export class Division {
             //ugly section to find limits
             const limits = this.producedMaterials.map((matName) => warehouse.materials[matName].productionLimit);
             //if any limit is null then we dont use any limit, if all limits are set we find the highest and limit the overall prod based on it
-            const globalLimit: number = limits.some((lim) => !isDefined(lim))
-              ? -1
-              : Math.max(...limits.filter(isDefined));
+            const divLimit: number = limits.some((lim) => !isDefined(lim)) ? -1 : Math.max(...limits.filter(isDefined));
             //Calculate the maximum production of this material based
             //on the office's productivity
             const maxProd =
@@ -394,7 +392,7 @@ export class Division {
             let prod;
 
             // If there is a limit set on production, apply the limit
-            prod = globalLimit === -1 ? maxProd : Math.min(maxProd, globalLimit);
+            prod = divLimit === -1 ? maxProd : Math.min(maxProd, divLimit);
 
             prod *= corpConstants.secondsPerMarketCycle * marketCycles; //Convert production from per second to per market cycle
 
