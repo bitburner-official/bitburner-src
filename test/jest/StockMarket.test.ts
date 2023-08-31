@@ -582,12 +582,10 @@ describe("Stock Market Tests", function () {
 
     function getNthForecastForecast(origForecastForecast: number, n: number): number {
       if (stock.otlkMagForecast > 50) {
-        const expected =
-          origForecastForecast - StockMarketConstants.priceMovementFactor * (n - 1) * (stock.mv / 100);
+        const expected = origForecastForecast - StockMarketConstants.priceMovementFactor * (n - 1) * (stock.mv / 100);
         return expected < 50 ? 50 : expected;
       } else if (stock.otlkMagForecast < 50) {
-        const expected =
-          origForecastForecast + StockMarketConstants.priceMovementFactor * (n - 1) * (stock.mv / 100);
+        const expected = origForecastForecast + StockMarketConstants.priceMovementFactor * (n - 1) * (stock.mv / 100);
         return expected > 50 ? 50 : expected;
       } else {
         return 50;
@@ -1273,9 +1271,7 @@ describe("Stock Market Tests", function () {
       it("should decrease a stock's second-order forecast when all of its money is hacked", function () {
         const oldSecondOrderForecast = stock.otlkMagForecast;
         influenceStockThroughServerHack(server, server.moneyMax);
-        expect(stock.otlkMagForecast).toEqual(
-          oldSecondOrderForecast - StockMarketConstants.hackFactor,
-        );
+        expect(stock.otlkMagForecast).toEqual(oldSecondOrderForecast - StockMarketConstants.hackFactor);
       });
 
       it("should not decrease the stock's second-order forecast when no money is stolen", function () {
@@ -1289,9 +1285,7 @@ describe("Stock Market Tests", function () {
       it("should increase a stock's second-order forecast when all of its money is grown", function () {
         const oldSecondOrderForecast = stock.otlkMagForecast;
         influenceStockThroughServerGrow(server, server.moneyMax);
-        expect(stock.otlkMagForecast).toEqual(
-          oldSecondOrderForecast + StockMarketConstants.hackFactor,
-        );
+        expect(stock.otlkMagForecast).toEqual(oldSecondOrderForecast + StockMarketConstants.hackFactor);
       });
 
       it("should not increase the stock's second-order forecast when no money is grown", function () {
@@ -1308,9 +1302,7 @@ describe("Stock Market Tests", function () {
         // Use 1e3 for numCycles to force a change
         // (This may break later if numbers are rebalanced);
         influenceStockThroughCompanyWork(company, 1, 500);
-        expect(stock.otlkMagForecast).toEqual(
-          oldSecondOrderForecast + StockMarketConstants.companyWorkFactor,
-        );
+        expect(stock.otlkMagForecast).toEqual(oldSecondOrderForecast + StockMarketConstants.companyWorkFactor);
       });
 
       it("should be affected by performanceMult", function () {
@@ -1319,9 +1311,7 @@ describe("Stock Market Tests", function () {
         // Use 1e3 for numCycles to force a change
         // (This may break later if numbers are rebalanced);
         influenceStockThroughCompanyWork(company, 4, 1e3);
-        expect(stock.otlkMagForecast).toEqual(
-          oldSecondOrderForecast + 4 * StockMarketConstants.companyWorkFactor,
-        );
+        expect(stock.otlkMagForecast).toEqual(oldSecondOrderForecast + 4 * StockMarketConstants.companyWorkFactor);
       });
     });
   });
