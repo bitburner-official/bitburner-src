@@ -34,6 +34,7 @@ If you are not in BitNode-2, then you must have Source-File 2 in order to use th
 |  [getMemberInformation(name)](./bitburner.gang.getmemberinformation.md) | Get information about a specific gang member. |
 |  [getMemberNames()](./bitburner.gang.getmembernames.md) | List all gang members. |
 |  [getOtherGangInformation()](./bitburner.gang.getotherganginformation.md) | Get information about the other gangs. |
+|  [getRecruitsAvailable()](./bitburner.gang.getrecruitsavailable.md) | Check how many gang members you can currently recruit. |
 |  [getTaskNames()](./bitburner.gang.gettasknames.md) | List member task names. |
 |  [getTaskStats(name)](./bitburner.gang.gettaskstats.md) | Get stats of a task. |
 |  [inGang()](./bitburner.gang.ingang.md) | Check if you're in a gang. |

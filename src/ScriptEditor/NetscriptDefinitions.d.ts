@@ -3445,6 +3445,17 @@ export interface Gang {
   canRecruitMember(): boolean;
 
   /**
+   * Check how many gang members you can currently recruit.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @returns Number indicating how many members can be recruited,
+   * considering current reputation and gang size.
+   * Returns -1 if maximum gang size reached.
+   */
+  getRecruitsAvailable(): number;
+
+  /**
    * Recruit a new gang member.
    * @remarks
    * RAM cost: 2 GB

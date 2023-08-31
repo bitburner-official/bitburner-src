@@ -217,6 +217,7 @@ const gang = {
   getOtherGangInformation: RamCostConstants.GangApiBase / 2,
   getMemberInformation: RamCostConstants.GangApiBase / 2,
   canRecruitMember: RamCostConstants.GangApiBase / 4,
+  getRecruitsAvailable: RamCostConstants.GangApiBase / 4,
   recruitMember: RamCostConstants.GangApiBase / 2,
   getTaskNames: RamCostConstants.GangApiBase / 4,
   getTaskStats: RamCostConstants.GangApiBase / 4,
