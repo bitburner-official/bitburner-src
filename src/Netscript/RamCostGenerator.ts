@@ -213,6 +213,7 @@ const gang = {
   createGang: RamCostConstants.GangApiBase / 4,
   inGang: RamCostConstants.GangApiBase / 4,
   getMemberNames: RamCostConstants.GangApiBase / 4,
+  renameGangMember: 0,
   getGangInformation: RamCostConstants.GangApiBase / 2,
   getOtherGangInformation: RamCostConstants.GangApiBase / 2,
   getMemberInformation: RamCostConstants.GangApiBase / 2,

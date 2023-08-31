@@ -3392,6 +3392,18 @@ export interface Gang {
   getMemberNames(): string[];
 
   /**
+   * Rename a Gang member to a new unique name.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Rename a Gang Member if none already has the new name.
+   * @param memberName - Name of the member to change.
+   * @param newName - New name for that gang member.
+   * @returns True if successful, and false if not.
+   */
+  renameGangMember(memberName: string, newName: string): boolean;
+
+  /**
    * Get information about your gang.
    * @remarks
    * RAM cost: 2 GB

@@ -53,6 +53,39 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return gang.members.map((member) => member.name);
     },
+    renameGangMember: (ctx) => (_memberName, _newName) => {
+      const gang = getGang(ctx);
+      const memberName = helpers.string(ctx, "memberName", _memberName);
+      const newName = helpers.string(ctx, "newName", _newName);
+      const sameNames = gang.members.filter((m) => m.name === memberName);
+      if (memberName === "") {
+        ctx.workerScript.log("gang.renameGangMember", () => `Failed to rename gang member. Member name must be given.`);
+        return false;
+      }
+      if (newName === "") {
+        ctx.workerScript.log("gang.renameGangMember", () => `Failed to rename gang member. New name must be given.`);
+        return false;
+      }
+      if (sameNames.length < 1) {
+        ctx.workerScript.log("gang.renameGangMember", () => `Failed to rename gang member. No match found.`);
+        return false;
+      } else if (
+        gang.members
+          .filter((m) => m.name !== memberName)
+          .map((m) => m.name)
+          .includes(newName)
+      ) {
+        ctx.workerScript.log(
+          "gang.renameGangMember",
+          () => `Failed to rename gang member. A member already has the new name.`,
+        );
+        return false;
+      } else {
+        sameNames[0].name = newName;
+        ctx.workerScript.log("gang.renameGangMember", () => `Success.`);
+        return true;
+      }
+    },
     getGangInformation: (ctx) => () => {
       const gang = getGang(ctx);
       return {
