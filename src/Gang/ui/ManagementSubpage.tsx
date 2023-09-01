@@ -2,7 +2,7 @@ import React from "react";
 import { GangStats } from "./GangStats";
 import { GangMemberList } from "./GangMemberList";
 import { useGang } from "./Context";
-import {Typography,FormControlLabel,Switch,Tooltip} from "@mui/material";
+import { Typography, FormControlLabel, Switch, Tooltip } from "@mui/material";
 
 /** React Component for the subpage that manages gang members, the main page. */
 export function ManagementSubpage(): React.ReactElement {
@@ -31,25 +31,25 @@ export function ManagementSubpage(): React.ReactElement {
       <GangStats />
       <br />
       <FormControlLabel
-          control={
-            <Switch
-              checked={gang.territoryWarfareEngaged}
-              onChange={(event) => (gang.territoryWarfareEngaged = event.target.checked)}
-            />
-          }
-          label={
-            <Tooltip
-              title={
-                <Typography>
-                  Engaging in Territory Warfare sets your clash chance to 100%. Disengaging will cause your clash chance
-                  to gradually decrease until it reaches 0%. See the "Territory" subpage for more information.
-                </Typography>
-              }
-            >
-              <Typography>Engage in Territory Warfare</Typography>
-            </Tooltip>
-          }
-        />
+        control={
+          <Switch
+            checked={gang.territoryWarfareEngaged}
+            onChange={(event) => (gang.territoryWarfareEngaged = event.target.checked)}
+          />
+        }
+        label={
+          <Tooltip
+            title={
+              <Typography>
+                Engaging in Territory Warfare sets your clash chance to 100%. Disengaging will cause your clash chance
+                to gradually decrease until it reaches 0%. See the "Territory" subpage for more information.
+              </Typography>
+            }
+          >
+            <Typography>Engage in Territory Warfare</Typography>
+          </Tooltip>
+        }
+      />
       <GangMemberList />
     </>
   );
