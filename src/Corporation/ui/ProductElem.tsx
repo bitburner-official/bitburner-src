@@ -9,7 +9,7 @@ import { SellProductModal } from "./modals/SellProductModal";
 import { ProductMarketTaModal } from "./modals/ProductMarketTaModal";
 import { CancelProductModal } from "./modals/CancelProductModal";
 
-import { formatBigNumber, formatCorpStat, formatMoney, formatPercent } from "../../ui/formatNumber";
+import { formatBigNumber, formatMoney, formatPercent } from "../../ui/formatNumber";
 
 import { isString } from "../../utils/helpers/string";
 import { Money } from "../../ui/React/Money";
@@ -67,7 +67,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   // Limit Production button
   const productionLimit = product.cityData[city].productionLimit;
   const limitProductionButtonText =
-    "Limit Production" + (productionLimit !== null ? " (" + formatCorpStat(productionLimit) + ")" : "");
+    "Limit Production" + (productionLimit !== null ? " (" + formatBigNumber(productionLimit) + ")" : "");
 
   return (
     <Paper>
@@ -109,29 +109,29 @@ export function ProductElem(props: IProductProps): React.ReactElement {
               title={
                 <Typography>
                   Effective rating is calculated from product rating and the quality of materials used <br />
-                  Rating: {formatCorpStat(product.rating)} <br /> <br />
-                  Quality: {formatCorpStat(product.stats.quality)} <br />
-                  Performance: {formatCorpStat(product.stats.performance)} <br />
-                  Durability: {formatCorpStat(product.stats.durability)} <br />
-                  Reliability: {formatCorpStat(product.stats.reliability)} <br />
-                  Aesthetics: {formatCorpStat(product.stats.aesthetics)} <br />
-                  Features: {formatCorpStat(product.stats.features)}
+                  Rating: {formatBigNumber(product.rating)} <br /> <br />
+                  Quality: {formatBigNumber(product.stats.quality)} <br />
+                  Performance: {formatBigNumber(product.stats.performance)} <br />
+                  Durability: {formatBigNumber(product.stats.durability)} <br />
+                  Reliability: {formatBigNumber(product.stats.reliability)} <br />
+                  Aesthetics: {formatBigNumber(product.stats.aesthetics)} <br />
+                  Features: {formatBigNumber(product.stats.features)}
                   {corp.unlocks.has(CorpUnlockName.MarketResearchDemand) && (
                     <>
                       <br />
-                      {"Demand: " + formatCorpStat(product.demand)}
+                      {"Demand: " + formatBigNumber(product.demand)}
                     </>
                   )}
                   {corp.unlocks.has(CorpUnlockName.MarketDataCompetition) && (
                     <>
                       <br />
-                      {"Competition: " + formatCorpStat(product.competition)}
+                      {"Competition: " + formatBigNumber(product.competition)}
                     </>
                   )}
                 </Typography>
               }
             >
-              <Typography>Effective rating: {formatCorpStat(product.cityData[city].effectiveRating)}</Typography>
+              <Typography>Effective rating: {formatBigNumber(product.cityData[city].effectiveRating)}</Typography>
             </Tooltip>
           </Box>
           <Box display="flex">
