@@ -377,7 +377,13 @@ export class Division {
 
           /* Process production of materials */
           if (this.producedMaterials.length > 0) {
-            const mat = warehouse.materials[this.producedMaterials[0]];
+            //if any limit is null then we use Number.MaxValue, if all limits are set we find the highest and limit the overall prod based on it
+            const divLimit = Math.max(
+              ...this.producedMaterials.map(
+                (matName) => warehouse.materials[matName].productionLimit ?? Number.MAX_VALUE,
+              ),
+            );
+
             //Calculate the maximum production of this material based
             //on the office's productivity
             const maxProd =
@@ -385,12 +391,9 @@ export class Division {
               this.productionMult * // Multiplier from materials
               corporation.getProductionMultiplier() *
               this.getProductionMultiplier(); // Multiplier from Research
-            let prod;
 
-            // If there is a limit set on production, apply the limit
-            prod = mat.productionLimit === null ? maxProd : Math.min(maxProd, mat.productionLimit);
-
-            prod *= corpConstants.secondsPerMarketCycle * marketCycles; //Convert production from per second to per market cycle
+            // If there is a limit set on production, apply the limit and convert production from per second to per market cycle
+            let prod = Math.min(maxProd, divLimit) * corpConstants.secondsPerMarketCycle * marketCycles;
 
             // Calculate net change in warehouse storage making the produced materials will cost
             let totalMatSize = 0;
@@ -446,32 +449,32 @@ export class Division {
                 avgQlt += warehouse.materials[reqMatName].quality / divider;
               }
               avgQlt = Math.max(avgQlt, 1);
-              for (let j = 0; j < this.producedMaterials.length; ++j) {
+              for (const materialName of this.producedMaterials) {
                 let tempQlt =
                   office.employeeProductionByJob[CorpEmployeeJob.Engineer] / 90 +
                   Math.pow(this.researchPoints, this.researchFactor) +
                   Math.pow(Math.max(0, warehouse.materials["AI Cores"].stored), this.aiCoreFactor) / 10e3;
                 const logQlt = Math.max(Math.pow(tempQlt, 0.5), 1);
                 tempQlt = Math.min(tempQlt, avgQlt * logQlt);
-                warehouse.materials[this.producedMaterials[j]].quality = Math.max(
+                warehouse.materials[materialName].quality = Math.max(
                   1,
-                  (warehouse.materials[this.producedMaterials[j]].quality *
-                    warehouse.materials[this.producedMaterials[j]].stored +
+                  (warehouse.materials[materialName].quality * warehouse.materials[materialName].stored +
                     tempQlt * prod * producableFrac) /
-                    (warehouse.materials[this.producedMaterials[j]].stored + prod * producableFrac),
+                    (warehouse.materials[materialName].stored + prod * producableFrac),
                 );
-                warehouse.materials[this.producedMaterials[j]].stored += prod * producableFrac;
+                //material specific limit processing
+                const materialLimit = warehouse.materials[materialName].productionLimit;
+                const limitValue = materialLimit ? materialLimit * 10 : Number.MAX_VALUE;
+                const lastProd = Math.min(limitValue, prod * producableFrac);
+                warehouse.materials[materialName].stored += lastProd;
+                //per second for UI material specifc
+                warehouse.materials[materialName].productionAmount =
+                  lastProd / (corpConstants.secondsPerMarketCycle * marketCycles);
               }
             } else {
               for (const reqMatName of getRecordKeys(this.requiredMaterials)) {
                 warehouse.materials[reqMatName].productionAmount = 0;
               }
-            }
-
-            //Per second
-            const materialProduction = (prod * producableFrac) / (corpConstants.secondsPerMarketCycle * marketCycles);
-            for (const prodMatName of this.producedMaterials) {
-              warehouse.materials[prodMatName].productionAmount = materialProduction;
             }
           } else {
             //If this doesn't produce any materials, then it only creates
