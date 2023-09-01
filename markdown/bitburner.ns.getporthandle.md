@@ -16,7 +16,7 @@ getPortHandle(portNumber: number): NetscriptPort;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  portNumber | number | Port number. Must be an integer between 1 and 20. |
+|  portNumber | number | Port number. Must be an integer |
 
 **Returns:**
 
