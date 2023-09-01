@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
@@ -24,6 +24,16 @@ type AscensionModalProps = {
 export function AscensionModal(props: AscensionModalProps): React.ReactElement {
   const gang = useGang();
   useRerender(1000);
+
+  //Cleanup if modal is closed for other reasons, ie. ns.gang.ascendMember()
+  useEffect(() => {
+    return () => {
+      props.onClose();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // dependency array must be given and empty or modal will not open
+  // React error wants 'props' in dependency or don't use 'props'.
+  // See: https://stackoverflow.com/questions/55840294/how-to-fix-missing-dependency-warning-when-using-useeffect-react-hook
 
   function confirm(): void {
     props.onAscend();
