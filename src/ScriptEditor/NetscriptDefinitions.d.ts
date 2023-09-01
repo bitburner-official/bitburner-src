@@ -7474,6 +7474,8 @@ interface CorporationInfo {
   shareSaleCooldown: number;
   /** Amount of acquirable shares. */
   issuedShares: number;
+  /** Cooldown until new shares can be issued */
+  issueNewSharesCooldown: number;
   /** Price of the shares */
   sharePrice: number;
   /** Fraction of profits issued as dividends */
