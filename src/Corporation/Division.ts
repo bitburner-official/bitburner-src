@@ -35,6 +35,7 @@ export class Division {
 
   //An array of the name of materials being produced
   producedMaterials: CorpMaterialName[] = [];
+  makesMaterials = !!this.producedMaterials.length
 
   products = new JSONMap<string, Product>();
   makesProducts = false;
