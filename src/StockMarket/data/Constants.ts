@@ -9,4 +9,7 @@ export const StockMarketConstants: ConstantsType = {
   MarketData4SCost: 1e9,
   MarketDataTixApi4SCost: 25e9,
   StockMarketCommission: 100e3,
+  priceMovementFactor: 0.006,
+  hackFactor: 0.1,
+  companyWorkFactor: 0.001,
 };
