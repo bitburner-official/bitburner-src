@@ -7811,7 +7811,7 @@ interface Division {
   /** Cities in which this division has expanded */
   cities: CityName[];
   /** Whether the industry of this division is capable of producing materials */
-  makesMaterials : boolean;
+  makesMaterials: boolean;
   /** Names of Products developed by this division */
   products: string[];
   /** Whether the industry of this division is capable of developing and producing products */
