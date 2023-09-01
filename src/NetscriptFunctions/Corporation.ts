@@ -256,6 +256,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       thisCycleExpenses: division.thisCycleExpenses,
       numAdVerts: division.numAdVerts,
       cities: cities,
+      makesMaterials : division.makesMaterials,
       products: [...division.products.keys()],
       makesProducts: division.makesProducts,
       maxProducts: division.maxProducts,
