@@ -6086,7 +6086,7 @@ export interface NS {
    * first element in the specified port without removing that element. If
    * the port is empty, the string “NULL PORT DATA” will be returned.
    *
-   * @param portNumber - Port to peek. Must be an integer between 1 and 20.
+   * @param portNumber - Port to peek. Must be an integer
    * @returns Data in the specified port.
    */
   peek(portNumber: number): PortData;
@@ -6143,7 +6143,7 @@ export interface NS {
    *
    * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
    *
-   * @param portNumber - Port number. Must be an integer between 1 and 20.
+   * @param portNumber - Port number. Must be an integer
    */
   getPortHandle(portNumber: number): NetscriptPort;
 
