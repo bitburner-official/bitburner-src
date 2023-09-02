@@ -6056,7 +6056,7 @@ export interface NS {
    * If the port is full, the data will not be written.
    * Otherwise, the data will be written normally.
    *
-   * @param portNumber - Port or text file that will be written to.
+   * @param portNumber - Port to attempt to write to to. Must be a positive integer.
    * @param data - Data to write.
    * @returns True if the data is successfully written to the port, and false otherwise.
    */
@@ -6086,7 +6086,7 @@ export interface NS {
    * first element in the specified port without removing that element. If
    * the port is empty, the string “NULL PORT DATA” will be returned.
    *
-   * @param portNumber - Port to peek. Must be an integer
+   * @param portNumber - Port to peek. Must be a positive integer.
    * @returns Data in the specified port.
    */
   peek(portNumber: number): PortData;
@@ -6109,9 +6109,9 @@ export interface NS {
    *
    * Delete all data from the underlying queue.
    *
-   * @param handle - Port to clear.
+   * @param portNumber - Port to clear data from. Must be a positive integer.
    */
-  clearPort(handle: number): void;
+  clearPort(portNumber: number): void;
 
   /**
    * Write data to a port.
@@ -6119,6 +6119,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Write data to the given Netscript port.
+   * @param portNumber - Port to write to. Must be a positive integer.
    * @returns The data popped off the queue if it was full, or null if it was not full.
    */
   writePort(portNumber: number, data: string | number): PortData | null;
@@ -6130,6 +6131,7 @@ export interface NS {
    * Read data from that port. A port is a serialized queue.
    * This function will remove the first element from that queue and return it.
    * If the queue is empty, then the string “NULL PORT DATA” will be returned.
+   * @param portNumber - Port to read from. Must be a positive integer.
    * @returns The data read.
    */
   readPort(portNumber: number): PortData;
@@ -6143,7 +6145,7 @@ export interface NS {
    *
    * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
    *
-   * @param portNumber - Port number. Must be an integer
+   * @param portNumber - Port number. Must be a positive integer.
    */
   getPortHandle(portNumber: number): NetscriptPort;
 
