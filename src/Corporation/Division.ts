@@ -378,7 +378,7 @@ export class Division {
           /* Process production of materials */
           if (this.producedMaterials.length > 0) {
             //if any limit is null then we use Number.MaxValue, if all limits are set we find the highest and limit the overall prod based on it
-            const divLimit = Math.max(
+            const cityLimit = Math.max(
               ...this.producedMaterials.map(
                 (matName) => warehouse.materials[matName].productionLimit ?? Number.MAX_VALUE,
               ),
@@ -393,7 +393,7 @@ export class Division {
               this.getProductionMultiplier(); // Multiplier from Research
 
             // If there is a limit set on production, apply the limit and convert production from per second to per market cycle
-            let prod = Math.min(maxProd, divLimit) * corpConstants.secondsPerMarketCycle * marketCycles;
+            let prod = Math.min(maxProd, cityLimit) * corpConstants.secondsPerMarketCycle * marketCycles;
 
             // Calculate net change in warehouse storage making the produced materials will cost
             let totalMatSize = 0;
