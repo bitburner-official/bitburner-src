@@ -16,7 +16,7 @@ tryWritePort(portNumber: number, data: string | number): boolean;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  portNumber | number | Port or text file that will be written to. |
+|  portNumber | number | Port to attempt to write to to. Must be a positive integer. |
 |  data | string \| number | Data to write. |
 
 **Returns:**

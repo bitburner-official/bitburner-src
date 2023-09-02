@@ -16,7 +16,7 @@ readPort(portNumber: number): PortData;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  portNumber | number |  |
+|  portNumber | number | Port to read from. Must be a positive integer. |
 
 **Returns:**
 

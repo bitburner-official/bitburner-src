@@ -9,14 +9,14 @@ Clear data from a port.
 **Signature:**
 
 ```typescript
-clearPort(handle: number): void;
+clearPort(portNumber: number): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  handle | number | Port to clear. |
+|  portNumber | number | Port to clear data from. Must be a positive integer. |
 
 **Returns:**
 

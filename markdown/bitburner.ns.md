@@ -58,7 +58,7 @@ export async function main(ns) {
 |  [brutessh(host)](./bitburner.ns.brutessh.md) | Runs BruteSSH.exe on a server. |
 |  [clear(handle)](./bitburner.ns.clear.md) | Clear data from a file. |
 |  [clearLog()](./bitburner.ns.clearlog.md) | Clears the script’s logs. |
-|  [clearPort(handle)](./bitburner.ns.clearport.md) | Clear data from a port. |
+|  [clearPort(portNumber)](./bitburner.ns.clearport.md) | Clear data from a port. |
 |  [closeTail(pid)](./bitburner.ns.closetail.md) | Close the tail window of a script. |
 |  [deleteServer(host)](./bitburner.ns.deleteserver.md) | Delete a purchased server. |
 |  [disableLog(fn)](./bitburner.ns.disablelog.md) | Disables logging for the given function. |
