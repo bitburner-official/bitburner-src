@@ -29,5 +29,3 @@ The data popped off the queue if it was full, or null if it was not full.
 
 RAM cost: 0 GB
 
-Write data to the given Netscript port.
-
