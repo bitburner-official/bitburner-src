@@ -16,7 +16,7 @@ writePort(portNumber: number, data: string | number): PortData | null;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  portNumber | number | Port to write to. Must be a positive integer |
+|  portNumber | number | Port to write to. Must be a positive integer. |
 |  data | string \| number |  |
 
 **Returns:**
@@ -28,4 +28,6 @@ The data popped off the queue if it was full, or null if it was not full.
 ## Remarks
 
 RAM cost: 0 GB
+
+Write data to the given Netscript port.
 

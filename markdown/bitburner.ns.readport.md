@@ -16,7 +16,7 @@ readPort(portNumber: number): PortData;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  portNumber | number | Port to read from. Must be a positive integer |
+|  portNumber | number | Port to read from. Must be a positive integer. |
 
 **Returns:**
 
@@ -28,5 +28,5 @@ The data read.
 
 RAM cost: 0 GB
 
-This function is used to read data from a port. It returns the first element in the specified port while removing that element. If the port is empty, the string “NULL PORT DATA” will be returned.
+Read data from that port. A port is a serialized queue. This function will remove the first element from that queue and return it. If the queue is empty, then the string “NULL PORT DATA” will be returned.
 

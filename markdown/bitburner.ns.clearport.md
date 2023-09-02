@@ -16,7 +16,7 @@ clearPort(portNumber: number): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  portNumber | number | Port to clear. Must be a positive integer |
+|  portNumber | number | Port to clear data from. Must be a positive integer. |
 
 **Returns:**
 
@@ -26,5 +26,5 @@ void
 
 RAM cost: 0 GB
 
-Delete all data from a port.
+Delete all data from the underlying queue.
 

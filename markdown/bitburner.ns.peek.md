@@ -16,7 +16,7 @@ peek(portNumber: number): PortData;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  portNumber | number | Port to peek. Must be a positive integer |
+|  portNumber | number | Port to peek. Must be a positive integer. |
 
 **Returns:**
 
