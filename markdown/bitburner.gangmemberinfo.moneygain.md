@@ -4,6 +4,8 @@
 
 ## GangMemberInfo.moneyGain property
 
+Per Cycle Income for this gang member
+
 **Signature:**
 
 ```typescript

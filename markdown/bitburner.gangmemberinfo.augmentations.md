@@ -4,6 +4,8 @@
 
 ## GangMemberInfo.augmentations property
 
+List of all Augmentations currently installed on gang member
+
 **Signature:**
 
 ```typescript

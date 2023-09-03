@@ -870,6 +870,7 @@ interface GangMemberInfo {
   name: string;
   /** Currently assigned task */
   task: string;
+  /** Amount of Respect earned by member since they last Ascended */
   earnedRespect: number;
 
   /** Hack skill level */
@@ -937,11 +938,16 @@ interface GangMemberInfo {
   /** Total earned charisma experience */
   cha_asc_points: number;
 
+  /** List of all non-Augmentation Equipment owned by gang member */
   upgrades: string[];
+  /** List of all Augmentations currently installed on gang member */
   augmentations: string[];
 
+  /** Per Cycle Rate this member is currently gaining Respect */
   respectGain: number;
+  /** Per Cycle Rate by which this gang member is affecting your gang's Wanted Level */
   wantedLevelGain: number;
+  /** Per Cycle Income for this gang member */
   moneyGain: number;
 }
 
