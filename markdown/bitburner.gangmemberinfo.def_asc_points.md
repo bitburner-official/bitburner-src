@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.def\_asc\_points property
 
-Total earned defense experience
+Total Defense Ascension points accumulated
 
 **Signature:**
 

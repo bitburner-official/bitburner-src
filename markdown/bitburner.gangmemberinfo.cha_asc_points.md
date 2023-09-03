@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.cha\_asc\_points property
 
-Total earned charisma experience
+Total Charisma Ascension points accumulated
 
 **Signature:**
 

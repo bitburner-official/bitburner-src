@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.agi\_asc\_points property
 
-Total earned agility experience
+Total Agility Ascension points accumulated
 
 **Signature:**
 

@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.str\_asc\_points property
 
-Total earned strength experience
+Total Strength Ascension points accumulated
 
 **Signature:**
 

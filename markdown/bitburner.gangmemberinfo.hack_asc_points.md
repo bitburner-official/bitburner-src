@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.hack\_asc\_points property
 
-Total earned hack experience
+Total Hack Ascension points accumulated
 
 **Signature:**
 
