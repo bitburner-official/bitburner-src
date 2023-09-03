@@ -52,5 +52,5 @@ interface GangMemberInfo
 |  [str](./bitburner.gangmemberinfo.str.md) |  | number | Strength skill level |
 |  [task](./bitburner.gangmemberinfo.task.md) |  | string | Currently assigned task |
 |  [upgrades](./bitburner.gangmemberinfo.upgrades.md) |  | string\[\] | List of all non-Augmentation Equipment owned by gang member |
-|  [wantedLevelGain](./bitburner.gangmemberinfo.wantedlevelgain.md) |  | number | Per Cycle Rate by which this gang member is affecting your gang's Wanted Level |
+|  [wantedLevelGain](./bitburner.gangmemberinfo.wantedlevelgain.md) |  | number | Per Cycle Rate by which this member is affecting your gang's Wanted Level |
 
