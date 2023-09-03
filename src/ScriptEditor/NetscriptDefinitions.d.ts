@@ -945,7 +945,7 @@ interface GangMemberInfo {
 
   /** Per Cycle Rate this member is currently gaining Respect */
   respectGain: number;
-  /** Per Cycle Rate by which this gang member is affecting your gang's Wanted Level */
+  /** Per Cycle Rate by which this member is affecting your gang's Wanted Level */
   wantedLevelGain: number;
   /** Per Cycle Income for this gang member */
   moneyGain: number;
