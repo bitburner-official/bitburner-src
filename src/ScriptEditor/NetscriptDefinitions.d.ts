@@ -925,17 +925,17 @@ interface GangMemberInfo {
   /** Charisma multiplier from ascensions */
   cha_asc_mult: number;
 
-  /** Total earned hack experience */
+  /** Total Hack Ascension points accumulated */
   hack_asc_points: number;
-  /** Total earned strength experience */
+  /** Total Strength Ascension points accumulated */
   str_asc_points: number;
-  /** Total earned defense experience */
+  /** Total Defense Ascension points accumulated */
   def_asc_points: number;
-  /** Total earned dexterity experience */
+  /** Total Dexterity Ascension points accumulated */
   dex_asc_points: number;
-  /** Total earned agility experience */
+  /** Total Agility Ascension points accumulated */
   agi_asc_points: number;
-  /** Total earned charisma experience */
+  /** Total Charisma Ascension points accumulated */
   cha_asc_points: number;
 
   /** List of all non-Augmentation Equipment owned by gang member */

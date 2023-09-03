@@ -4,7 +4,7 @@
 
 ## GangMemberInfo.dex\_asc\_points property
 
-Total earned dexterity experience
+Total Dexterity Ascension points accumulated
 
 **Signature:**
 
