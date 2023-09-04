@@ -15,7 +15,7 @@ getRecruitsAvailable(): number;
 
 number
 
-Number indicating how many members can be recruited, considering current reputation and gang size. Returns -1 if maximum gang size reached.
+Number indicating how many members can be recruited, considering current reputation and gang size.
 
 ## Remarks
 

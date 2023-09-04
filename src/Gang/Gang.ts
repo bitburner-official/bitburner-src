@@ -298,6 +298,9 @@ export class Gang {
     // First N gang members are free (can be recruited at 0 respect)
     const numFreeMembers = 3;
     const recruitCostBase = 5;
+    if (this.members.length >= GangConstants.MaximumGangMembers) {
+      return Infinity;
+    }
     if (this.members.length < numFreeMembers) return 0;
 
     const i = this.members.length - (numFreeMembers - 1);
@@ -307,7 +310,6 @@ export class Gang {
   getRecruitsAvailable(): number {
     const numFreeMembers = 3;
     const recruitCostBase = 5;
-    if (this.members.length >= GangConstants.MaximumGangMembers) return -1; // to signal maximum reached
     if (this.members.length < numFreeMembers && this.respect < Math.pow(recruitCostBase, numFreeMembers))
       return numFreeMembers - this.members.length; // if the max possible is less than freeMembers
     return Math.floor(Math.log(this.respect) / Math.log(recruitCostBase)) + numFreeMembers - this.members.length; //else

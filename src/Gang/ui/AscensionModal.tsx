@@ -42,9 +42,13 @@ export function AscensionModal(props: AscensionModalProps): React.ReactElement {
       <>
         {props.member.name} ascended!
         <br />
-        <br />
-        Your gang, {Player.gang?.facName}, lost {formatRespect(res.respect)} respect.
-        <br />
+        {res.respect > 0 && (
+          <div>
+            <br />
+            Your gang, {Player.gang?.facName}, lost {formatRespect(res.respect)} respect.
+            <br />
+          </div>
+        )}
         <br />
         {props.member.name} gained the following stat multipliers for ascending:
         <br />
@@ -77,9 +81,13 @@ export function AscensionModal(props: AscensionModalProps): React.ReactElement {
         <br />
         their non-Augmentation upgrades and their stats will reset back to 1.
         <br />
-        <br />
-        Furthermore, your gang will lose {formatRespect(props.member.earnedRespect)} respect.
-        <br />
+        {props.member.earnedRespect > 0 && (
+          <div>
+            <br />
+            Furthermore, your gang will lose {formatRespect(props.member.earnedRespect)} respect.
+            <br />
+          </div>
+        )}
         <br />
         In return, {props.member.name} will gain the following permanent boost to stat multipliers:
         <br />

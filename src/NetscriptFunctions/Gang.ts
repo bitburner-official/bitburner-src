@@ -95,6 +95,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
         power: gang.getPower(),
         respect: gang.respect,
         respectGainRate: gang.respectGainRate,
+        respectToNextRecruit: gang.getRespectNeededToRecruitMember(),
         territory: gang.getTerritory(),
         territoryClashChance: gang.territoryClashChance,
         territoryWarfareEngaged: gang.territoryWarfareEngaged,
@@ -171,11 +172,14 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return gang.getRecruitsAvailable();
     },
+    respectToNextRecruit: (ctx) => () => {
+      const gang = getGang(ctx);
+      return gang.getRespectNeededToRecruitMember();
+    },
     recruitMember: (ctx) => (_memberName) => {
       const memberName = helpers.string(ctx, "memberName", _memberName);
       const gang = getGang(ctx);
       const recruited = gang.recruitMember(memberName);
-      // TODO : ns.gang.recruitMember() crashes with error, can use top return instead?
       if (memberName === "") {
         ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit Gang Member. Name must be provided.`);
         return false;
