@@ -17,14 +17,14 @@ export function RecruitButton(props: IProps): React.ReactElement {
   const recruitsAvailable = gang.getRecruitsAvailable();
 
   if (!gang.canRecruitMember()) {
-    const respect = gang.getRespectNeededToRecruitMember();
+    const respectNeeded = gang.getRespectNeededToRecruitMember();
     return (
       <Box display="flex" alignItems="center" sx={{ mx: 1 }}>
         <Button disabled>Recruit Gang Member</Button>
-        {respect === Infinity ? (
+        {respectNeeded === Infinity ? (
           <Typography sx={{ ml: 1 }}>Maximum gang members already recruited</Typography>
         ) : (
-          <Typography sx={{ ml: 1 }}>{formatRespect(respect)} respect needed to recruit next member</Typography>
+          <Typography sx={{ ml: 1 }}>{formatRespect(respectNeeded)} respect needed to recruit next member</Typography>
         )}
       </Box>
     );
