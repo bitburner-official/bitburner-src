@@ -15,7 +15,7 @@ respectToNextRecruit(): number;
 
 number
 
-The static number value of Respect needed for the next recruit, with consideration to your current gang size. Returns `Infinity` if have reached the gang size limit.
+The static number value of Respect needed for the next recruit, with consideration to your current gang size. Returns `Infinity` if you have reached the gang size limit.
 
 ## Remarks
 
