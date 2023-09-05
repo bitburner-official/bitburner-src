@@ -21,26 +21,19 @@ type AscensionModalProps = {
  * React Component for the content of the popup before the player confirms the
  * ascension of a gang member.
  */
-export function AscensionModal(props: AscensionModalProps): React.ReactElement {
+export function AscensionModal({ open, onClose, member, onAscend }: AscensionModalProps): React.ReactElement {
   const gang = useGang();
   useRerender(1000);
 
   //Cleanup if modal is closed for other reasons, ie. ns.gang.ascendMember()
-  useEffect(() => {
-    return () => {
-      props.onClose();
-    };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  // dependency array must be given and empty or modal will not open
-  // React error wants 'props' in dependency or don't use 'props'.
-  // See: https://stackoverflow.com/questions/55840294/how-to-fix-missing-dependency-warning-when-using-useeffect-react-hook
+  useEffect(() => onClose, [onClose]);
 
   function confirm(): void {
-    props.onAscend();
-    const res = gang.ascendMember(props.member);
+    onAscend();
+    const res = gang.ascendMember(member);
     dialogBoxCreate(
       <>
-        {props.member.name} ascended!
+        {member.name} ascended!
         <br />
         {res.respect > 0 && (
           <div>
@@ -50,7 +43,7 @@ export function AscensionModal(props: AscensionModalProps): React.ReactElement {
           </div>
         )}
         <br />
-        {props.member.name} gained the following stat multipliers for ascending:
+        {member.name} gained the following stat multipliers for ascending:
         <br />
         <br />
         Hacking: x{formatPreciseMultiplier(res.hack)}
@@ -67,29 +60,29 @@ export function AscensionModal(props: AscensionModalProps): React.ReactElement {
         <br />
       </>,
     );
-    props.onClose();
+    onClose();
   }
 
   // const ascendBenefits = props.member.getAscensionResults();
-  const preAscend = props.member.getCurrentAscensionMults();
-  const postAscend = props.member.getAscensionMultsAfterAscend();
+  const preAscend = member.getCurrentAscensionMults();
+  const postAscend = member.getAscensionMultsAfterAscend();
 
   return (
-    <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={open} onClose={onClose}>
       <Typography>
         Are you sure you want to ascend this member? They will lose all of
         <br />
         their non-Augmentation upgrades and their stats will reset back to 1.
         <br />
-        {props.member.earnedRespect > 0 && (
+        {member.earnedRespect > 0 && (
           <div>
             <br />
-            Furthermore, your gang will lose {formatRespect(props.member.earnedRespect)} respect.
+            Furthermore, your gang will lose {formatRespect(member.earnedRespect)} respect.
             <br />
           </div>
         )}
         <br />
-        In return, {props.member.name} will gain the following permanent boost to stat multipliers:
+        In return, {member.name} will gain the following permanent boost to stat multipliers:
         <br />
         <br />
         Hacking: x{formatPreciseMultiplier(preAscend.hack)} =&gt; x{formatPreciseMultiplier(postAscend.hack)}
@@ -107,7 +100,7 @@ export function AscensionModal(props: AscensionModalProps): React.ReactElement {
         <br />
       </Typography>
       <Button onClick={confirm}>Ascend</Button>
-      <Button onClick={props.onClose}>Cancel</Button>
+      <Button onClick={onClose}>Cancel</Button>
     </Modal>
   );
 }
