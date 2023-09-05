@@ -45,6 +45,7 @@ export class Corporation {
   issueNewSharesCooldown = 0; // Game cycles until player can issue shares again
   dividendRate = 0;
   dividendTax = 1 - currentNodeMults.CorporationSoftcap + 0.15;
+  investorShares = 0;
   issuedShares = 0;
   sharePrice = 0;
   storedCycles = 0;
@@ -200,9 +201,8 @@ export class Corporation {
   }
 
   getTargetSharePrice(): number {
-    // Note: totalShares - numShares is not the same as issuedShares because
-    // issuedShares does not account for private investors
-    return this.valuation / (2 * (this.totalShares - this.numShares) + 1);
+    // Share price is proportional to total corporation valuation.
+    return this.valuation / this.totalShares;
   }
 
   updateSharePrice(): void {

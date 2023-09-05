@@ -88,7 +88,7 @@ export function IssueDividends(corporation: Corporation, rate: number): void {
 export function IssueNewShares(corporation: Corporation, amount: number): [number, number, number] {
   const max = corporation.calculateMaxNewShares();
 
-  // Round to nearest ten-millionth
+  // Round to nearest ten-million
   amount = Math.round(amount / 10e6) * 10e6;
 
   if (isNaN(amount) || amount < 10e6 || amount > max) {
@@ -100,13 +100,14 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
   const profit = amount * newSharePrice;
   corporation.issueNewSharesCooldown = corpConstants.issueNewSharesCooldown;
 
-  const privateOwnedRatio = 1 - (corporation.numShares + corporation.issuedShares) / corporation.totalShares;
+  const privateOwnedRatio = corporation.investorShares / corporation.totalShares;
   const maxPrivateShares = Math.round((amount / 2) * privateOwnedRatio);
   const privateShares = Math.round(getRandomInt(0, maxPrivateShares) / 10e6) * 10e6;
 
   corporation.issuedShares += amount - privateShares;
+  corporation.investorShares += privateShares;
   corporation.totalShares += amount;
-  corporation.funds = corporation.funds + profit;
+  corporation.addFunds(profit);
   corporation.immediatelyUpdateSharePrice();
 
   return [profit, amount, privateShares];

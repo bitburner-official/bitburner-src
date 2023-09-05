@@ -21,5 +21,8 @@ export function startCorporation(this: PlayerObject, corpName: string, seedFunde
     this.corporation.unlocks.add(CorpUnlockName.OfficeAPI);
   }
 
-  this.corporation.totalShares += seedFunded ? 500_000_000 : 0;
+  if (seedFunded) {
+    this.corporation.investorShares += 500_000_000;
+    this.corporation.totalShares += 500_000_000;
+  }
 }

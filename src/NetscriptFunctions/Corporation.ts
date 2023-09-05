@@ -143,19 +143,21 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     const investShares = Math.floor(corpConstants.initialShares * percShares);
     corporation.fundingRound++;
     corporation.addFunds(funding);
+
     corporation.numShares -= investShares;
+    corporation.investorShares += investShares;
     return true;
   }
 
   function goPublic(numShares: number): boolean {
     const corporation = getCorporation();
-    const initialSharePrice = corporation.valuation / corporation.totalShares;
+    const initialSharePrice = corporation.getTargetSharePrice();
     if (isNaN(numShares)) throw new Error("Invalid value for number of issued shares");
     if (numShares < 0) throw new Error("Invalid value for number of issued shares");
     if (numShares > corporation.numShares) throw new Error("You don't have that many shares to issue!");
     corporation.public = true;
     corporation.sharePrice = initialSharePrice;
-    corporation.issuedShares = numShares;
+    corporation.issuedShares += numShares;
     corporation.numShares -= numShares;
     corporation.addFunds(numShares * initialSharePrice);
     return true;
@@ -768,6 +770,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         totalShares: corporation.totalShares,
         numShares: corporation.numShares,
         shareSaleCooldown: corporation.shareSaleCooldown,
+        investorShares: corporation.investorShares,
         issuedShares: corporation.issuedShares,
         sharePrice: corporation.sharePrice,
         dividendRate: corporation.dividendRate,
