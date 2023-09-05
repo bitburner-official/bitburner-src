@@ -19,7 +19,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI
 |  --- | --- |
 |  [acceptInvestmentOffer()](./bitburner.corporation.acceptinvestmentoffer.md) | Accept investment based on you companies current valuation |
 |  [bribe(factionName, amountCash)](./bitburner.corporation.bribe.md) | Bribe a faction |
-|  [buyBackShares(amount)](./bitburner.corporation.buybackshares.md) | Buyback Shares |
+|  [buyBackShares(amount)](./bitburner.corporation.buybackshares.md) | Buyback Shares. Spend money from the player's wallet to transfer shares from public traders to the CEO. |
 |  [createCorporation(corporationName, selfFund)](./bitburner.corporation.createcorporation.md) | Create a Corporation |
 |  [expandCity(divisionName, city)](./bitburner.corporation.expandcity.md) | Expand to a new city |
 |  [expandIndustry(industryType, divisionName)](./bitburner.corporation.expandindustry.md) | Expand to a new industry |
@@ -40,5 +40,5 @@ export interface Corporation extends WarehouseAPI, OfficeAPI
 |  [issueNewShares(amount)](./bitburner.corporation.issuenewshares.md) | Issue new shares |
 |  [levelUpgrade(upgradeName)](./bitburner.corporation.levelupgrade.md) | Level an upgrade. |
 |  [purchaseUnlock(upgradeName)](./bitburner.corporation.purchaseunlock.md) | Unlock an upgrade |
-|  [sellShares(amount)](./bitburner.corporation.sellshares.md) | Sell Shares |
+|  [sellShares(amount)](./bitburner.corporation.sellshares.md) | Sell Shares. Transfer shares from the CEO to public traders to receive money in the player's wallet. |
 

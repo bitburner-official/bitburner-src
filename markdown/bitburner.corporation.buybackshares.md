@@ -4,7 +4,7 @@
 
 ## Corporation.buyBackShares() method
 
-Buyback Shares
+Buyback Shares. Spend money from the player's wallet to transfer shares from public traders to the CEO.
 
 **Signature:**
 
