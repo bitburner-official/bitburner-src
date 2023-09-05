@@ -53,7 +53,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return gang.members.map((member) => member.name);
     },
-    renameGangMember: (ctx) => (_memberName, _newName) => {
+    renameMember: (ctx) => (_memberName, _newName) => {
       const gang = getGang(ctx);
       const memberName = helpers.string(ctx, "memberName", _memberName);
       const newName = helpers.string(ctx, "newName", _newName);

@@ -3403,7 +3403,7 @@ export interface Gang {
    * @param newName - New name for that gang member.
    * @returns True if successful, and false if not.
    */
-  renameGangMember(memberName: string, newName: string): boolean;
+  renameMember(memberName: string, newName: string): boolean;
 
   /**
    * Get information about your gang.
