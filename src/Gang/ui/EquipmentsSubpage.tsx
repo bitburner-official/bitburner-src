@@ -248,8 +248,8 @@ export function EquipmentsSubpage(): React.ReactElement {
       <Tooltip
         title={
           <Typography>
-            You get a discount on equipment and upgrades based on your gang's respect and power. More respect and power
-            leads to more discounts.
+            A discount on equipment and upgrades based on your gang's respect and power. More respect and power leads to
+            more discounts.
           </Typography>
         }
       >

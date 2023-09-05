@@ -65,8 +65,8 @@ export function TerritorySubpage(): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  If this is enabled, then you will receive a pop-up notifying you whenever one of your Gang Members
-                  dies in a territory clash.
+                  If this is enabled, you will receive a pop-up notifying you whenever one of your Gang Members dies in
+                  a territory clash.
                 </Typography>
               }
             >

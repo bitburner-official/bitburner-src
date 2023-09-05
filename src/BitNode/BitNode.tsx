@@ -73,16 +73,16 @@ export function initBitNodes() {
         <br />
         Certain Factions ({FactionName.SlumSnakes}, {FactionName.Tetrads}, {FactionName.TheSyndicate},{" "}
         {FactionName.TheDarkArmy}, {FactionName.SpeakersForTheDead}, {FactionName.NiteSec}, {FactionName.TheBlackHand}
-        ) give the player the ability to form and manage their own gangs. These gangs will earn the player money and
-        reputation with the corresponding Faction
+        ) give the player the ability to form and manage their own gang, which can earn the player money and reputation
+        with the corresponding Faction. Gangs offer more Augmentations than Factions, and in BitNode-2 offer a way to
+        destroy the BitNode.
         <br />
-        Every Augmentation in the game will be available through the Factions listed above
         <br />
         <br />
         Destroying this BitNode will give you Source-File 2, or if you already have this Source-File it will upgrade its
         level up to a maximum of 3. This Source-File allows you to form gangs in other BitNodes once your karma
-        decreases to a certain value. It also increases the player's crime success rate, crime money, and charisma
-        multipliers by:
+        decreases to a certain value. It also increases your crime success rate, crime money, and charisma multipliers
+        by:
         <br />
         <br />
         Level 1: 24%

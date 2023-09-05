@@ -23,12 +23,13 @@ export function RecruitModal(props: IRecruitPopupProps): React.ReactElement {
     if (disabled) return;
     // At this point, the only way this can fail is if you already
     // have a gang member with the same name
-    if (!gang.recruitMember(name)) {
+    if (!gang.recruitMember(name) && name !== "") {
       dialogBoxCreate("You already have a gang member with this name!");
       return;
     }
 
     props.onRecruit();
+    setName("");
     props.onClose();
   }
 
@@ -42,7 +43,7 @@ export function RecruitModal(props: IRecruitPopupProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>Enter a name for your new Gang member:</Typography>
+      <Typography>Enter a name for your new Gang Member:</Typography>
       <br />
       <TextField
         autoFocus
@@ -50,6 +51,7 @@ export function RecruitModal(props: IRecruitPopupProps): React.ReactElement {
         onChange={onChange}
         type="text"
         placeholder="unique name"
+        spellCheck="false"
         InputProps={{
           endAdornment: (
             <Button disabled={disabled} onClick={recruit}>

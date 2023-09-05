@@ -228,13 +228,28 @@ export function FactionsRoot(): React.ReactElement {
         )}
 
         <span>
+          {Player.inGang() && (
+            <Typography variant="h5" color="primary">
+              Your Gang
+            </Typography>
+          )}
+          {Player.inGang() && (
+            <Box>
+              <FactionElement
+                key={Player.getGangName()}
+                faction={Player.getGangFaction()}
+                joined={true}
+                rerender={rerender}
+              />
+            </Box>
+          )}
           <Typography variant="h5" color="primary">
             Your Factions
           </Typography>
           <Box>
             {allJoinedFactions.length > 0 ? (
               allJoinedFactions.map((facName) => {
-                if (!Object.hasOwn(Factions, facName)) return null;
+                if (!Object.hasOwn(Factions, facName) || Player.getGangName() === facName) return null;
                 return <FactionElement key={facName} faction={Factions[facName]} joined={true} rerender={rerender} />;
               })
             ) : (

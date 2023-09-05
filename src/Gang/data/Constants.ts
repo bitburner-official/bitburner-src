@@ -2,6 +2,10 @@ import { CONSTANTS } from "../../Constants";
 import { FactionName } from "@enums";
 
 export const GangConstants = {
+  /** Number of members that can be recruited with 0 respect. */
+  numFreeMembers: 3,
+  /** Exponential base used in determining the respect threshold for recruiting a new member. */
+  recruitThresholdBase: 5,
   // Respect is divided by this to get rep gain
   GangRespectToReputationRatio: 75,
   MaximumGangMembers: 12,

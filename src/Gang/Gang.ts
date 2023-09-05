@@ -291,16 +291,25 @@ export class Gang {
 
   canRecruitMember(): boolean {
     if (this.members.length >= GangConstants.MaximumGangMembers) return false;
-    return this.respect >= this.getRespectNeededToRecruitMember();
+    return this.respect >= this.respectForNextRecruit();
   }
 
-  getRespectNeededToRecruitMember(): number {
-    // First N gang members are free (can be recruited at 0 respect)
-    const numFreeMembers = 3;
-    if (this.members.length < numFreeMembers) return 0;
+  /** @returns The respect threshold needed for the next member recruitment. Infinity if already at or above max members. */
+  respectForNextRecruit(): number {
+    if (this.members.length < GangConstants.numFreeMembers) return 0;
+    if (this.members.length >= GangConstants.MaximumGangMembers) {
+      return Infinity;
+    }
+    const exponent = this.members.length - GangConstants.numFreeMembers + 1;
+    return Math.pow(GangConstants.recruitThresholdBase, exponent);
+  }
 
-    const i = this.members.length - (numFreeMembers - 1);
-    return Math.pow(5, i);
+  getRecruitsAvailable(): number {
+    const numFreeMembers = 3;
+    const recruitCostBase = 5;
+    if (this.members.length < numFreeMembers && this.respect < Math.pow(recruitCostBase, numFreeMembers))
+      return numFreeMembers - this.members.length; // if the max possible is less than freeMembers
+    return Math.floor(Math.log(this.respect) / Math.log(recruitCostBase)) + numFreeMembers - this.members.length; //else
   }
 
   recruitMember(name: string): boolean {

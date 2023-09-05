@@ -21,6 +21,7 @@ interface GangGenInfo
 |  [moneyGainRate](./bitburner.ganggeninfo.moneygainrate.md) |  | number | Money earned per game cycle |
 |  [power](./bitburner.ganggeninfo.power.md) |  | number | Gang's power for territory warfare |
 |  [respect](./bitburner.ganggeninfo.respect.md) |  | number | Gang's respect |
+|  [respectForNextRecruit](./bitburner.ganggeninfo.respectfornextrecruit.md) |  | number | Amount of Respect needed for next gang recruit, if possible |
 |  [respectGainRate](./bitburner.ganggeninfo.respectgainrate.md) |  | number | Respect earned per game cycle |
 |  [territory](./bitburner.ganggeninfo.territory.md) |  | number | Amount of territory held |
 |  [territoryClashChance](./bitburner.ganggeninfo.territoryclashchance.md) |  | number | Clash chance |
