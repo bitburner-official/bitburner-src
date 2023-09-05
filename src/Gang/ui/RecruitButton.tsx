@@ -17,7 +17,7 @@ export function RecruitButton(props: IProps): React.ReactElement {
   const recruitsAvailable = gang.getRecruitsAvailable();
 
   if (!gang.canRecruitMember()) {
-    const respectNeeded = gang.getRespectNeededToRecruitMember();
+    const respectNeeded = gang.respectForNextRecruit();
     return (
       <Box display="flex" alignItems="center" sx={{ mx: 1 }}>
         <Button disabled>Recruit Gang Member</Button>

@@ -772,7 +772,7 @@ interface GangGenInfo {
   /** Respect earned per game cycle */
   respectGainRate: number;
   /** Amount of Respect needed for next gang recruit, if possible */
-  respectToNextRecruit: number;
+  respectForNextRecruit: number;
   /** Amount of territory held */
   territory: number;
   /** Clash chance */
@@ -3477,7 +3477,7 @@ export interface Gang {
    * recruit, with consideration to your current gang size.
    * Returns `Infinity` if you have reached the gang size limit.
    */
-  respectToNextRecruit(): number;
+  respectForNextRecruit(): number;
   /**
    * Recruit a new gang member.
    * @remarks
