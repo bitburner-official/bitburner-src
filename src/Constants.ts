@@ -219,19 +219,33 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.4.2 dev changelog (last updated 8/28/23)
+## v2.4.2 dev changelog (last updated 9/5/23)
 
 See 2.4.1 changelog: https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
 
+### API CHANGES:
+#### GANG
+- Added ns.gang.getRecruitsAvailable: Gets the number of additional gang members that can currently be recruited (@myCatsName)
+- Added ns.gang.respectForNextRecruit: Gets the respect threshold for recruiting the next gang member (@myCatsName)
+- Added ns.gang.renameMember: Renames a gang member (@myCatsName)
+
 ### BUGFIX
-- UI: Faction augmentation page no longer ends up with stale data (@zerbosh)
+- UI: Faction augmentation page updates more reliably (@zerbosh)
+- Bladeburner UI: Fix an issue that could cause NaN success chance to display (@zerbosh)
 - Terminal: Prevent recursive aliases from being resolved (@ficocelliguy)
 
-### MISC
-- Icarus message no longer shows repeatedly for players that are in the endgame. (@ficocelliguy)
-- Updated documentation for ns.tail and ns.getScriptLogs to make it clear a PID can be used. (@myCatsName)
+### MISC / UI / DOCS
+- Tail windows now remain on the page, but hidden, when on pages like Infiltration where they should not be shown. This will impact any React content added via ns.printRaw, as the content will no longer be unmounted and remounted when navigating to/from Infiltration. (@ficocelliguy)
 - Improved error messages for ns.getPurchasedServer (@ficocelliguy)
+- Improved pagination of Active Scripts page (@Ookamiko, @ficocelliguy)
+- Various UI improvements for Gang (@myCatsName)
+- Icarus message no longer shows repeatedly for players that are in the endgame. (@ficocelliguy)
 - Remove work completion dialogs when performing an augmentation install (@ficocelliguy)
-- Added initial ingame documentation for Bladeburner (@myCatsName)
+- Tweaked some number formatting to look better in Corp and Stats page (@zerbosh)
+- Improve documentation for ports (@muesli4brekkies)
+- Updated documentation for ns.tail and ns.getScriptLogs to make it clear a PID can be used. (@myCatsName)
+- Improve documentation for FilenameOrPID functions (@VictorS)
+- Added initial ingame documentation for Bladeburner and Gang (@myCatsName)
+- Improve API documentation for Bladeburner and Gang functions (@myCatsName)
 `,
 };
