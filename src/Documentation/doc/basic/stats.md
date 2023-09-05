@@ -1,10 +1,9 @@
-# Stats
 
-The player has several stats that can be increased in order to progress in the game.
+These are some of the stats that will increase and be reset repeatedly as you progress through the game.
 
 ## Hacking
 
-Represents the player's ability to code and hack.
+Represents your current ability to code and hack.
 
 Affects:
 
