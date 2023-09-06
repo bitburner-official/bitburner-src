@@ -305,13 +305,21 @@ function SellDivisionButton(): React.ReactElement {
 function RestartButton(): React.ReactElement {
   const [open, setOpen] = useState(false);
 
+  const corp = useCorporation();
+  const sellSharesOnCd = corp.shareSaleCooldown > 0;
+  const issueNewSharesOnCd = corp.issueNewSharesCooldown > 0;
+
   function restart(): void {
     setOpen(true);
   }
 
   return (
     <>
-      <ButtonWithTooltip normalTooltip={"Sell corporation and start over"} onClick={restart}>
+      <ButtonWithTooltip
+        normalTooltip={"Sell corporation and start over"}
+        disabledTooltip={sellSharesOnCd || issueNewSharesOnCd ? "On cooldown" : ""}
+        onClick={restart}
+      >
         Sell CEO position
       </ButtonWithTooltip>
       <SellCorporationModal open={open} onClose={() => setOpen(false)} />
