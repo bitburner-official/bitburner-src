@@ -22,6 +22,7 @@ import {
   NewDivision,
   purchaseOffice,
   IssueDividends,
+  GoPublic,
   IssueNewShares,
   GetInvestmentOffer,
   AcceptInvestmentOffer,
@@ -104,20 +105,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     const corporation = getCorporation();
     const cost = calculateUpgradeCost(corporation, CorpUpgrades[upgradeName], 1 as PositiveInteger);
     return cost;
-  }
-
-  function goPublic(numShares: number): boolean {
-    const corporation = getCorporation();
-    const initialSharePrice = corporation.getTargetSharePrice();
-    if (isNaN(numShares)) throw new Error("Invalid value for number of issued shares");
-    if (numShares < 0) throw new Error("Invalid value for number of issued shares");
-    if (numShares > corporation.numShares) throw new Error("You don't have that many shares to issue!");
-    corporation.public = true;
-    corporation.sharePrice = initialSharePrice;
-    corporation.issuedShares += numShares;
-    corporation.numShares -= numShares;
-    corporation.addFunds(numShares * initialSharePrice);
-    return true;
   }
 
   function getResearchCost(division: Division, researchName: CorpResearchName): number {
@@ -779,7 +766,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const corporation = getCorporation();
       if (corporation.public) throw helpers.makeRuntimeErrorMsg(ctx, "corporation is already public");
       const numShares = helpers.number(ctx, "numShares", _numShares);
-      return goPublic(numShares);
+      return GoPublic(corporation, numShares);
     },
     sellShares: (ctx) => (_numShares) => {
       checkAccess(ctx);

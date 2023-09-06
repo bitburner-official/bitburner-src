@@ -9,6 +9,7 @@ import { NumberInput } from "../../../ui/React/NumberInput";
 import Box from "@mui/material/Box";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { isPositiveInteger } from "../../../types";
+import { GoPublic } from "../../Actions";
 
 interface IProps {
   open: boolean;
@@ -20,19 +21,16 @@ interface IProps {
 export function GoPublicModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
-  const initialSharePrice = corp.valuation / corp.totalShares;
+  const initialSharePrice = corp.getTargetSharePrice();
 
   function goPublic(): void {
-    const initialSharePrice = corp.valuation / corp.totalShares;
+    GoPublic(corp, shares);
     if (shares >= corp.numShares || (shares !== 0 && !isPositiveInteger(shares))) return;
-    corp.public = true;
-    corp.sharePrice = initialSharePrice;
-    corp.issuedShares = shares;
-    corp.numShares -= shares;
-    corp.addFunds(shares * initialSharePrice);
     props.rerender();
     dialogBoxCreate(
-      `You took your ${corp.name} public and earned ` + `${formatMoney(shares * initialSharePrice)} in your IPO`,
+      <Typography>
+        You took <b>{corp.name}</b> public and earned {formatMoney(shares * initialSharePrice)} in your IPO.
+      </Typography>
     );
     props.onClose();
   }

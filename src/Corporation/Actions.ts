@@ -85,6 +85,19 @@ export function IssueDividends(corporation: Corporation, rate: number): void {
   corporation.dividendRate = rate;
 }
 
+export function GoPublic(corporation: Corporation, numShares: number): boolean {
+  const initialSharePrice = corporation.getTargetSharePrice();
+  if (isNaN(numShares)) throw new Error("Invalid value for number of issued shares");
+  if (numShares < 0) throw new Error("Invalid value for number of issued shares");
+  if (numShares > corporation.numShares) throw new Error("You don't have that many shares to issue!");
+  corporation.public = true;
+  corporation.sharePrice = initialSharePrice;
+  corporation.issuedShares += numShares;
+  corporation.numShares -= numShares;
+  corporation.addFunds(numShares * initialSharePrice);
+  return true;
+}
+
 export function IssueNewShares(corporation: Corporation, amount: number): [number, number, number] {
   const max = corporation.calculateMaxNewShares();
 
