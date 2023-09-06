@@ -187,7 +187,7 @@ export class Corporation {
         val += profit * 315e3;
       }
       val *= Math.pow(1.1, this.divisions.size);
-      val -= val % 1e6; //Round down to nearest millionth
+      val -= val % 1e6; //Round down to nearest million
     }
     return val * currentNodeMults.CorporationValuation;
   }

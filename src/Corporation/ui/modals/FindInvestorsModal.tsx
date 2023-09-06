@@ -3,6 +3,7 @@ import { formatMoney, formatPercent, formatShares } from "../../../ui/formatNumb
 import * as corpConstants from "../../data/Constants";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
+import { GetInvestmentOffer, AcceptInvestmentOffer } from "../../Actions";
 
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -17,28 +18,22 @@ interface IProps {
 export function FindInvestorsModal(props: IProps): React.ReactElement {
   const corporation = useCorporation();
   const val = corporation.valuation;
-  if (
-    corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
-    corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length
-  )
+  const {funds, shares, round} = GetInvestmentOffer(corporation);
+  if (shares === 0) {
     return <></>;
+  }
   const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
-  const roundMultiplier = corpConstants.fundingRoundMultiplier[corporation.fundingRound];
-  const funding = val * percShares * roundMultiplier;
-  const investShares = Math.floor(corpConstants.initialShares * percShares);
 
   function findInvestors(): void {
-    corporation.fundingRound++;
-    corporation.addFunds(funding);
-    corporation.numShares -= investShares;
+    AcceptInvestmentOffer(corporation);
     props.rerender();
     props.onClose();
   }
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        An investment firm has offered you {formatMoney(funding)} in funding in exchange for a{" "}
-        {formatPercent(percShares, 3)} stake in the company ({formatShares(investShares)} shares).
+        An investment firm has offered you {formatMoney(funds)} in funding in exchange for a{" "}
+        {formatPercent(percShares, 3)} stake in the company ({formatShares(shares)} shares).
         <br />
         <br />
         Do you accept or reject this offer?

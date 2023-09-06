@@ -23,6 +23,8 @@ import {
   purchaseOffice,
   IssueDividends,
   IssueNewShares,
+  GetInvestmentOffer,
+  AcceptInvestmentOffer,
   SellMaterial,
   SellProduct,
   SetSmartSupply,
@@ -102,51 +104,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     const corporation = getCorporation();
     const cost = calculateUpgradeCost(corporation, CorpUpgrades[upgradeName], 1 as PositiveInteger);
     return cost;
-  }
-
-  function getInvestmentOffer(): InvestmentOffer {
-    const corporation = getCorporation();
-    if (
-      corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
-      corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
-      corporation.public
-    )
-      return {
-        funds: 0,
-        shares: 0,
-        round: corporation.fundingRound + 1, // Make more readable
-      }; // Don't throw an error here, no reason to have a second function to check if you can get investment.
-    const val = corporation.valuation;
-    const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
-    const roundMultiplier = corpConstants.fundingRoundMultiplier[corporation.fundingRound];
-    const funding = val * percShares * roundMultiplier;
-    const investShares = Math.floor(corpConstants.initialShares * percShares);
-    return {
-      funds: funding,
-      shares: investShares,
-      round: corporation.fundingRound + 1, // Make more readable
-    };
-  }
-
-  function acceptInvestmentOffer(): boolean {
-    const corporation = getCorporation();
-    if (
-      corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
-      corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
-      corporation.public
-    )
-      return false;
-    const val = corporation.valuation;
-    const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
-    const roundMultiplier = corpConstants.fundingRoundMultiplier[corporation.fundingRound];
-    const funding = val * percShares * roundMultiplier;
-    const investShares = Math.floor(corpConstants.initialShares * percShares);
-    corporation.fundingRound++;
-    corporation.addFunds(funding);
-
-    corporation.numShares -= investShares;
-    corporation.investorShares += investShares;
-    return true;
   }
 
   function goPublic(numShares: number): boolean {
@@ -809,11 +766,13 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     },
     getInvestmentOffer: (ctx) => () => {
       checkAccess(ctx);
-      return getInvestmentOffer();
+      const corporation = getCorporation();
+      return GetInvestmentOffer(corporation);
     },
     acceptInvestmentOffer: (ctx) => () => {
       checkAccess(ctx);
-      return acceptInvestmentOffer();
+      const corporation = getCorporation();
+      return AcceptInvestmentOffer(corporation);
     },
     goPublic: (ctx) => (_numShares) => {
       checkAccess(ctx);

@@ -1,7 +1,7 @@
 import { isInteger } from "lodash";
 
 import { Player } from "@player";
-import { CorpResearchName, CorpSmartSupplyOption } from "@nsdefs";
+import { CorpResearchName, CorpSmartSupplyOption, InvestmentOffer } from "@nsdefs";
 
 import { MaterialInfo } from "./MaterialInfo";
 import { Corporation } from "./Corporation";
@@ -111,6 +111,49 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
   corporation.immediatelyUpdateSharePrice();
 
   return [profit, amount, privateShares];
+}
+
+export function GetInvestmentOffer(corporation: Corporation): InvestmentOffer {
+  if (
+    corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
+    corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
+    corporation.public
+  )
+    return {
+      funds: 0,
+      shares: 0,
+      round: corporation.fundingRound + 1, // Make more readable
+    }; // Don't throw an error here, no reason to have a second function to check if you can get investment.
+  const val = corporation.valuation;
+  const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
+  const roundMultiplier = corpConstants.fundingRoundMultiplier[corporation.fundingRound];
+  const funding = val * percShares * roundMultiplier;
+  const investShares = Math.floor(corpConstants.initialShares * percShares);
+  return {
+    funds: funding,
+    shares: investShares,
+    round: corporation.fundingRound + 1, // Make more readable
+  };
+}
+
+export function AcceptInvestmentOffer(corporation: Corporation): boolean {
+  if (
+    corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
+    corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
+    corporation.public
+  )
+    return false;
+  const val = corporation.valuation;
+  const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
+  const roundMultiplier = corpConstants.fundingRoundMultiplier[corporation.fundingRound];
+  const funding = val * percShares * roundMultiplier;
+  const investShares = Math.floor(corpConstants.initialShares * percShares);
+  corporation.fundingRound++;
+  corporation.addFunds(funding);
+
+  corporation.numShares -= investShares;
+  corporation.investorShares += investShares;
+  return true;
 }
 
 export function SellMaterial(material: Material, amount: string, price: string): void {
