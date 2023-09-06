@@ -4,6 +4,8 @@
 
 ## CorpIndustryData.producedMaterials property
 
+Array of Materials produced
+
 **Signature:**
 
 ```typescript

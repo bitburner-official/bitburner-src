@@ -7490,7 +7490,12 @@ interface CorpIndustryData {
   aiCoreFactor?: number;
   /** Advertising factor (affects sales) */
   advertisingFactor?: number;
+  /** Array of Materials produced */
   producedMaterials?: CorpMaterialName[];
+  /** Whether the industry of this division is capable of producing materials */
+  makesMaterials: boolean;
+  /** Whether the industry of this division is capable of developing and producing products */
+  makesProducts: boolean;
 }
 
 /**
@@ -7852,8 +7857,6 @@ interface Division {
   numAdVerts: number;
   /** Cities in which this division has expanded */
   cities: CityName[];
-  /** Whether the industry of this division is capable of producing materials */
-  makesMaterials: boolean;
   /** Names of Products developed by this division */
   products: string[];
   /** Whether the industry of this division is capable of developing and producing products */

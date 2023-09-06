@@ -102,7 +102,7 @@ export class Division {
     // Loading data based on this division's industry type
     const data = IndustriesData[this.type];
     this.startingCost = data.startingCost;
-    this.makesProducts = data.product ? true : false;
+    this.makesProducts = data.makesProducts;
     this.realEstateFactor = data.realEstateFactor ?? 0;
     this.researchFactor = data.scienceFactor ?? 0;
     this.hardwareFactor = data.hardwareFactor ?? 0;
