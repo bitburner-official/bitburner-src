@@ -68,7 +68,9 @@ describe("Corporation", () => {
 
   describe("Corporation totalShares", () => {
     it("should equal the sum of each kind of shares", () => {
-      expect(corporation.totalShares).toEqual(corporation.numShares + corporation.investorShares + corporation.issuedShares);
+      expect(corporation.totalShares).toEqual(
+        corporation.numShares + corporation.investorShares + corporation.issuedShares,
+      );
     });
     it("should be preserved by seed funding", () => {
       const seedFunded = true;
@@ -78,31 +80,39 @@ describe("Corporation", () => {
     });
     it("should be preserved by acceptInvestmentOffer", () => {
       AcceptInvestmentOffer(corporation);
-      expect(corporation.totalShares).toEqual(corporation.numShares + corporation.investorShares + corporation.issuedShares);
+      expect(corporation.totalShares).toEqual(
+        corporation.numShares + corporation.investorShares + corporation.issuedShares,
+      );
     });
     it("should be preserved by goPublic", () => {
       const numShares = 1e8;
       GoPublic(corporation, numShares);
-      expect(corporation.totalShares).toEqual(corporation.numShares + corporation.investorShares + corporation.issuedShares);
+      expect(corporation.totalShares).toEqual(
+        corporation.numShares + corporation.investorShares + corporation.issuedShares,
+      );
     });
     it("should be preserved by IssueNewShares", () => {
-      corporation.issueNewSharesCooldown = 0;
       const numShares = 1e8;
+      corporation.issueNewSharesCooldown = 0;
       IssueNewShares(corporation, numShares);
-      expect(corporation.totalShares).toEqual(corporation.numShares + corporation.investorShares + corporation.issuedShares);
+      expect(corporation.totalShares).toEqual(
+        corporation.numShares + corporation.investorShares + corporation.issuedShares,
+      );
     });
     it("should be preserved by BuyBackShares", () => {
-      corporation.shareSaleCooldown = 0;
       const numShares = 1e8;
       BuyBackShares(corporation, numShares);
-      expect(corporation.totalShares).toEqual(corporation.numShares + corporation.investorShares + corporation.issuedShares);
+      expect(corporation.totalShares).toEqual(
+        corporation.numShares + corporation.investorShares + corporation.issuedShares,
+      );
     });
     it("should be preserved by SellShares", () => {
-      corporation.shareSaleCooldown = 0;
       const numShares = 1e8;
+      corporation.shareSaleCooldown = 0;
       SellShares(corporation, numShares);
-      expect(corporation.totalShares).toEqual(corporation.numShares + corporation.investorShares + corporation.issuedShares);
+      expect(corporation.totalShares).toEqual(
+        corporation.numShares + corporation.investorShares + corporation.issuedShares,
+      );
     });
   });
-
 });

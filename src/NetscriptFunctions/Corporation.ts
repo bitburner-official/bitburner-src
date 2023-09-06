@@ -13,7 +13,6 @@ import {
   Division as NSDivision,
   WarehouseAPI,
   OfficeAPI,
-  InvestmentOffer,
   CorpResearchName,
   CorpMaterialName,
 } from "@nsdefs";

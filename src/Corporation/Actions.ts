@@ -111,7 +111,9 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
     throw new Error(`Can't issue new shares, action on cooldown.`);
   }
   if (isNaN(amount) || amount < 10e6 || amount > maxNewShares) {
-    throw new Error(`Invalid amount of shares. Must be an number between 10m and ${maxNewShares} (20% of total shares)`);
+    throw new Error(
+      `Invalid amount of shares. Must be an number between 10m and ${maxNewShares} (20% of total shares)`,
+    );
   }
 
   const newSharePrice = Math.round(corporation.sharePrice * 0.8);

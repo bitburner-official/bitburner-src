@@ -30,7 +30,7 @@ export function GoPublicModal(props: IProps): React.ReactElement {
     dialogBoxCreate(
       <Typography>
         You took <b>{corp.name}</b> public and earned {formatMoney(shares * initialSharePrice)} in your IPO.
-      </Typography>
+      </Typography>,
     );
     props.onClose();
   }
