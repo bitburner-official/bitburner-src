@@ -224,9 +224,7 @@ function argsToString(args: unknown[]): string {
     if (nativeArg instanceof Map && [...nativeArg].length) {
       const formattedMap = [...nativeArg]
         .map((m) => {
-          const key = argsToString([m[0]]);
-          const value = argsToString([m[1]]);
-          return `${key} => ${value}`;
+          return `${m[0]} => ${m[1]}`;
         })
         .join("; ");
       return (out += `< Map: ${formattedMap} >`);
