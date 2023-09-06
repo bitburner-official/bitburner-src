@@ -6,11 +6,18 @@ If you'd like to first learn a bit about programming, see [this page](../program
 
 # Scripts
 
-Bitburner scripts are written in real, working JavaScript and can be used to automate basic hacking logic, and almost any mechanic in the game.
+Scripts you write in Bitburner are real, working JavaScript and can be used to automate basic hacking logic, and almost any mechanic in the game.
 
 Running any script requires in-game [RAM](ram.md), with a minimum cost of 1.6 GB per script.
 More complex scripts and API functions generally require more [RAM](ram.md), which you will gain in many ways.
 Scripts can be run on any [server](server.md) you have root access to, but not all servers you find will have useable RAM.
+
+## How Scripts work offline
+
+Being actual JavaScript, Bitburner also contains some quirks and limitations.
+For this reason, it is not possible for Bitburner scripts to run the same way at all times.
+However, you will continue to earn money and exp when Bitburner is not running, though at a slower rate.
+See [How Scripts Work Offline](../advanced/offlineandbonustime.md) for more details.
 
 ## Identifying a Script
 
@@ -25,6 +32,18 @@ However, you will probably run multiple copies of a script with the same argumen
 In case of multiple matches, most functions will return an arbitrary one (typically the oldest).
 
 If searching by filename, arguments must be an **exact** match - both the order and [type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof) of the arguments you supply matter.
+
+## Referencing Other Scripts
+
+In order to reference a file, `functions` require the **full** absolute file path.
+For example
+
+    ns.run("/scripts/hacking/helpers.myHelperScripts.js");
+    ns.rm("/logs/myHackingLogs.txt");
+    ns.rm("thisIsAFileInTheRootDirectory.txt");
+
+A full file path **must** begin with a forward slash (/) if that file is not in the root directory.
+For details on references in terminal commands, see [Terminal](terminal.md).
 
 ## Script Arguments
 
@@ -125,25 +144,6 @@ For example, if you ran a script `foo.js` with the argument `foodnstuff`, in ord
 
 **top**
 
-Displays all active scripts and their [RAM](ram.md) usage.
+Prints all scripts running on the server and their [RAM](ram.md) usage.
 
-## How Scripts work offline
-
-The scripts you write and execute in the BitVerse are real, working JavaScript.
-For this reason, it is not possible for Bitburner scripts to run when
-
-- the game is closed
-- the browser tab is inactive (if playing Bitburner in a web browser)
-- or your system is sleeping
-  all of which we call being "offline" for game purposes.
-
-It is important to know that logic such as `if`/`else` statements and many commands such as `ns.purchaseHacknetNode()` or `ns.nuke()` will not work while the game is offline.
-
-However, Scripts WILL continue to generate money and hacking exp for you while offline.
-This offline production is based on the average online production of all your hacking scripts since your last augmentation, as shown on your Active Scripts page.
-
-`ns.grow()` and `ns.weaken()` functions are also applied when the game is offline, although at a slower rate.
-This is done by having each script track the rate at which the `ns.grow()` and `ns.weaken()` commands are called while online.
-These calculated rates are used to determine how many calls would have been made while offline, and their effect is applied.
-
-Also, note that because of the way the JavaScript engine works, whenever you reload or re-open the game all of your Active Scripts will start again from the BEGINNING of their code. The game does not keep track of where exactly the execution of a script is when it saves/loads.
+    $ top

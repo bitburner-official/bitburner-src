@@ -1,30 +1,26 @@
 # Getting Started Guide for Beginner Programmers
 
-_Note_: The [Scripts](../basic/scripts.md) and strategies given in this guide aren't necessarily optimal.
-They're just meant to introduce you to the game and help you get started.
+_Note_: The [Scripts](../basic/scripts.md) and strategies in this guide aren't necessarily optimal or comperhensive.
+This guide is tailored to help those with minimal programming knowledge experience Bitburner during early stages of the game.
 
-This is an introductory guide to getting started with Bitburner.
-It is not meant to be a comprehensive guide for the entire game, only the early stages.
-If you are confused or overwhelmed by the game, especially the programming and scripting aspects, this guide is perfect for you!
-
-Note that this guide is tailored towards those with minimal programming experience.
+If you are confused or overwhelmed by the game, especially the coding and scripting aspects, this guide is perfect for you!
 
 ## Introduction
 
 Bitburner is a cyberpunk-themed incremental RPG.
-The player progresses by raising their [Stats](../basic/stats.md), earning money, and climbing the corporate ladder.
-Eventually, after reaching certain criteria, the player will begin receiving invitations from [Factions](../basic/factions.md).
-Joining these [Factions](../basic/factions.md) and working for them will unlock [Augmentations](../basic/augmentations.md).
-Purchasing and installing [Augmentations](../basic/augmentations.md) provides persistent upgrades and is necessary for progressing in the game.
+You will progress by raising your [Stats](../basic/stats.md), earning money, and with practice, advancing your real-world coding skills.
+After reaching certain criteria, you will receive invitations from in-game [Factions](../basic/factions.md).
+Joining [Factions](../basic/factions.md) and working for them will unlock various [Augmentations](../basic/augmentations.md),
+which are purchased and "installed," adding a persistent bonus to [stats](../basic/stats.md) and other abilities. Working with Factions and installing Augmentations is a basic step for progressing in Bitburner.
 
-The game has a minimal story/quest-line that can be followed to reach the end of the game.
-Since this guide is only about getting started with Bitburner, it will not cover the entire "quest-line".
+The game has an open, minimalistic storyline that can be played in multiple ways to reach your goals.
+Since this guide is written as a basic introduction to Bitburner, it will not expose the entire scope or storyline available.
 
 ## First Steps
 
 I'm going to assume you followed the introductory tutorial when you first began the game.
 In this introductory tutorial, you created a [Script](../basic/scripts.md) called `n00dles.js` and ran it on the `n00dles` server.
-Right now, we'll kill this [Script](../basic/scripts.md). There are two ways to do this:
+Now, we'll kill this [Script](../basic/scripts.md). There are two ways to do this:
 
 - You can go to the Terminal and enter: `$ kill n00dles.js`
 - You can go to the `Active Scripts` page (Alt + s) and press the `Kill Script` button for `n00dles.js`.

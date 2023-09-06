@@ -2,7 +2,7 @@
 
 ## [Beginners guide](help/getting_started.md)
 
-## Mechanics
+## Basic Mechanics
 
 - [stats](basic/stats.md)
 - [terminal](basic/terminal.md)
@@ -16,6 +16,7 @@
 - [factions](basic/factions.md)
 - [crimes](basic/crimes.md)
 - [infiltration](basic/infiltration.md)
+- [programs](basic/programs.md)
 - [reputation](basic/reputation.md)
 - [stockmarket](basic/stockmarket.md)
 - [world](basic/world.md)
@@ -30,6 +31,7 @@
 - [Grafting](advanced/grafting.md)
 - [Hacknet Servers](advanced/hacknetservers.md)
 - [Intelligence](advanced/intelligence.md)
+- [Offline Scripts and Bonus Time](advanced/offlineandbonustime.md)
 - [Sleeves](advanced/sleeves.md)
 - [Source-Files](advanced/sourcefiles.md)
 - [Stanek's Gift](advanced/stanek.md)
