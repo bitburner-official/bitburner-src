@@ -179,12 +179,13 @@ export class Corporation {
     }
 
     // Project profits in the next 24 hours
-    const forwardEarnings = profit * corpConstants.forwardEarningsPeriod;
     const synergyFactor = Math.pow(1.1, this.divisions.size);
+    const forwardEarnings = profit * corpConstants.forwardEarningsPeriod;
 
     val = this.funds + forwardEarnings * synergyFactor;
 
     val = Math.floor(val / 1e6) * 1e6; // Round down to nearest million
+    val = Math.max(1e6, val); // Prevent negative or infinitesimal valuation
     return val * currentNodeMults.CorporationValuation;
   }
 
