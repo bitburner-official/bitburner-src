@@ -227,9 +227,7 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
               startAdornment: <SearchIcon />,
               spellCheck: false,
             }}
-            style={{
-              paddingTop: "8px",
-            }}
+            sx={{ pt: 1 }}
           />
         </Paper>
       </Container>
