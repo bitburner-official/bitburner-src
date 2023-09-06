@@ -99,13 +99,19 @@ export function GoPublic(corporation: Corporation, numShares: number): boolean {
 }
 
 export function IssueNewShares(corporation: Corporation, amount: number): [number, number, number] {
-  const max = corporation.calculateMaxNewShares();
+  const maxNewShares = corporation.calculateMaxNewShares();
 
   // Round to nearest ten-million
   amount = Math.round(amount / 10e6) * 10e6;
 
-  if (isNaN(amount) || amount < 10e6 || amount > max) {
-    throw new Error(`Invalid value. Must be an number between 10m and ${max} (20% of total shares)`);
+  if (!corporation.public) {
+    throw new Error(`Can't issue new shares. The corporation has not gone public yet.`);
+  }
+  if (corporation.issueNewSharesCooldown > 0) {
+    throw new Error(`Can't issue new shares, action on cooldown.`);
+  }
+  if (isNaN(amount) || amount < 10e6 || amount > maxNewShares) {
+    throw new Error(`Invalid amount of shares. Must be an number between 10m and ${maxNewShares} (20% of total shares)`);
   }
 
   const newSharePrice = Math.round(corporation.sharePrice * 0.8);
