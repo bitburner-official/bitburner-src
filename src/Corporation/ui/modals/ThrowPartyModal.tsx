@@ -3,7 +3,7 @@ import { formatMultiplier, formatPercent } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { OfficeSpace } from "../../OfficeSpace";
 import { ThrowParty } from "../../Actions";
-import { Money } from "../../../ui/React/Money";
+import { MoneyCost } from "../MoneyCost";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
@@ -59,7 +59,7 @@ export function ThrowPartyModal(props: IProps): React.ReactElement {
     if (isNaN(cost) || cost < 0) return <Typography>Invalid value entered!</Typography>;
     return (
       <Typography>
-        Throwing this party will cost a total of <Money money={totalCost} />
+        Throwing this party will cost a total of <MoneyCost money={totalCost} corp={corp} />
       </Typography>
     );
   }

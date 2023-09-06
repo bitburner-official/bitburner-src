@@ -1,7 +1,8 @@
 import React from "react";
-import { formatMoney, formatPercent, formatShares } from "../../../ui/formatNumber";
+import { formatPercent, formatShares } from "../../../ui/formatNumber";
 import * as corpConstants from "../../data/Constants";
 import { Modal } from "../../../ui/React/Modal";
+import { Money } from "../../../ui/React/Money";
 import { useCorporation } from "../Context";
 import { GetInvestmentOffer, AcceptInvestmentOffer } from "../../Actions";
 
@@ -31,7 +32,7 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        An investment firm has offered you {formatMoney(funds)} in funding in exchange for a{" "}
+        An investment firm has offered you <Money money={funds} /> in funding in exchange for a{" "}
         {formatPercent(percShares, 3)} stake in the company ({formatShares(shares)} shares).
         <br />
         <br />

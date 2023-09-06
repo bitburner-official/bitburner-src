@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { formatMoney, formatShares } from "../../../ui/formatNumber";
+import { formatShares } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
+import { Money } from "../../../ui/React/Money";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
 import { NumberInput } from "../../../ui/React/NumberInput";
@@ -36,7 +37,7 @@ function EffectText(props: IEffectTextProps): React.ReactElement {
 
   return (
     <Typography>
-      Issue {formatShares(newShares)} new shares for {formatMoney(newShares * newSharePrice)}?
+      Issue {formatShares(newShares)} new shares for <Money money={newShares * newSharePrice} />?
     </Typography>
   );
 }
@@ -63,11 +64,17 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
 
     props.onClose();
 
-    let dialogContents =
-      `Issued ${formatShares(newShares)} new shares` + ` and raised ${formatMoney(profit)}.` + (privateShares > 0)
-        ? "\n" + formatShares(privateShares) + " of these shares were bought by private investors."
-        : "";
-    dialogContents += `\n\nStock price decreased to ${formatMoney(corp.sharePrice)}`;
+    const dialogContents = (
+      <Typography>
+        Issued {formatShares(newShares)} new share and raised <Money money={profit} />.
+        {privateShares > 0
+          ? "\n" + formatShares(privateShares) + " of these shares were bought by private investors."
+          : ""}
+        <br />
+        <br />
+        Stock price decreased to <Money money={corp.sharePrice} />;
+      </Typography>
+    );
     dialogBoxCreate(dialogContents);
   }
 

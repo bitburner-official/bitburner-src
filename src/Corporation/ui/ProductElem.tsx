@@ -9,7 +9,7 @@ import { SellProductModal } from "./modals/SellProductModal";
 import { ProductMarketTaModal } from "./modals/ProductMarketTaModal";
 import { CancelProductModal } from "./modals/CancelProductModal";
 
-import { formatBigNumber, formatMoney, formatPercent } from "../../ui/formatNumber";
+import { formatBigNumber, formatPercent } from "../../ui/formatNumber";
 
 import { isString } from "../../utils/helpers/string";
 import { Money } from "../../ui/React/Money";
@@ -137,7 +137,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
           <Box display="flex">
             <Tooltip title={<Typography>An estimate of the material cost it takes to create this Product.</Typography>}>
               <Typography>
-                Est. Production Cost: {formatMoney(product.productionCost / corpConstants.baseProductProfitMult)}
+                Est. Production Cost: <Money money={product.productionCost / corpConstants.baseProductProfitMult} />
               </Typography>
             </Tooltip>
           </Box>
@@ -150,7 +150,9 @@ export function ProductElem(props: IProductProps): React.ReactElement {
                 </Typography>
               }
             >
-              <Typography>Est. Market Price: {formatMoney(product.productionCost)}</Typography>
+              <Typography>
+                Est. Market Price: <Money money={product.productionCost} />
+              </Typography>
             </Tooltip>
           </Box>
           <Button onClick={() => setDiscontinueOpen(true)}>Discontinue</Button>

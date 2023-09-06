@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { formatMoney } from "../../../ui/formatNumber";
 import { Product } from "../../Product";
 import { Modal } from "../../../ui/React/Modal";
+import { Money } from "../../../ui/React/Money";
 import { useDivision } from "../Context";
 import Typography from "@mui/material/Typography";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -65,8 +65,8 @@ export function ProductMarketTaModal(props: IProps): React.ReactElement {
       <>
         <Typography variant="h4">Market-TA.I</Typography>
         <Typography>
-          The maximum sale price you can mark this up to is {formatMoney(props.product.productionCost + markupLimit)}.
-          This means that if you set the sale price higher than this, you will begin to experience a loss in number of
+          The maximum sale price you can mark this up to is <Money money={props.product.productionCost + markupLimit} />
+          . This means that if you set the sale price higher than this, you will begin to experience a loss in number of
           sales
           <br></br>
           <br></br>
