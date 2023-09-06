@@ -29,6 +29,6 @@ interface CorporationInfo
 |  [revenue](./bitburner.corporationinfo.revenue.md) |  | number | Revenue per second this cycle |
 |  [sharePrice](./bitburner.corporationinfo.shareprice.md) |  | number | Price of the shares |
 |  [shareSaleCooldown](./bitburner.corporationinfo.sharesalecooldown.md) |  | number | Cooldown until shares can be sold again |
-|  [state](./bitburner.corporationinfo.state.md) |  | string | State of the corporation. Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. |
+|  [state](./bitburner.corporationinfo.state.md) |  | string | <p>The next state to be processed.</p><p>I.e. when the state is PURCHASE, it means purchasing will occur during the next state transition.</p><p>Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.</p> |
 |  [totalShares](./bitburner.corporationinfo.totalshares.md) |  | number | Total number of shares issues by this corporation |
 

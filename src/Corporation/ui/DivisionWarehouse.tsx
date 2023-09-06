@@ -58,7 +58,7 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
     props.rerender();
   }
 
-  // Next state wich will be processed:
+  // Next state which will be processed:
   let stateText;
   switch (division.state) {
     case "START":

@@ -7524,7 +7524,11 @@ interface CorporationInfo {
   dividendTax: number;
   /** Your earnings as a shareholder per second this cycle */
   dividendEarnings: number;
-  /** The next state to be processed. Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. */
+  /** The next state to be processed.
+   *
+   *  I.e. when the state is PURCHASE, it means purchasing will occur during the next state transition.
+   *
+   *  Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. */
   state: string;
   /** Array of all division names */
   divisions: string[];
