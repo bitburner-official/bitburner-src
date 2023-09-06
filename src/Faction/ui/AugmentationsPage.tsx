@@ -1,5 +1,6 @@
-import React from "react";
-import { Box, Button, Tooltip, Typography, Paper, Container } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, Tooltip, Typography, Paper, Container, TextField } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 import { Augmentations } from "../../Augmentation/Augmentations";
 import { getAugCost, getGenericAugmentationPriceMultiplier } from "../../Augmentation/AugmentationHelpers";
@@ -20,10 +21,21 @@ import { useRerender } from "../../ui/React/hooks";
 /** Root React Component for displaying a faction's "Purchase Augmentations" page */
 export function AugmentationsPage({ faction }: { faction: Faction }): React.ReactElement {
   const rerender = useRerender(400);
+  const [filterText, setFilterText] = useState("");
 
   function getAugs(): AugmentationName[] {
-    return getFactionAugmentationsFiltered(faction);
+    return getFactionAugmentationsFiltered(faction).filter(
+      (aug: AugmentationName) =>
+        !filterText ||
+        matches(Augmentations[aug].name, filterText) ||
+        matches(Augmentations[aug].info, filterText) ||
+        matches(Augmentations[aug].stats, filterText),
+    );
   }
+
+  const matches = (s1: string, s2: string) => {
+    return s1.toLowerCase().indexOf(s2.toLowerCase()) !== -1;
+  };
 
   function getAugsSorted(): AugmentationName[] {
     switch (Settings.PurchaseAugmentationsOrder) {
@@ -111,6 +123,10 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
   function switchSortOrder(newOrder: PurchaseAugmentationsOrderSetting): void {
     Settings.PurchaseAugmentationsOrder = newOrder;
     rerender();
+  }
+
+  function handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    setFilterText(event.target.value);
   }
 
   const augs = getAugsSorted();
@@ -202,6 +218,19 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
               Sort by Purchasable
             </Button>
           </Box>
+          <TextField
+            value={filterText}
+            onChange={handleFilterChange}
+            autoFocus
+            placeholder="Filter augmentations"
+            InputProps={{
+              startAdornment: <SearchIcon />,
+              spellCheck: false,
+            }}
+            style={{
+              paddingTop: "8px",
+            }}
+          />
         </Paper>
       </Container>
 
