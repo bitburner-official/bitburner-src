@@ -69,6 +69,12 @@ export function CorporationDev(): React.ReactElement {
     });
   }
 
+  function resetCorporationCooldowns(): void {
+    if (!Player.corporation) return;
+    Player.corporation.shareSaleCooldown = 0;
+    Player.corporation.issueNewSharesCooldown = 0;
+  }
+
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -115,6 +121,11 @@ export function CorporationDev(): React.ReactElement {
             <tr>
               <td>
                 <Button onClick={addCorporationResearch}>Tons of research</Button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Button onClick={resetCorporationCooldowns}>Reset stock cooldowns</Button>
               </td>
             </tr>
           </tbody>
