@@ -359,10 +359,7 @@ export function SellShares(corporation: Corporation, numShares: number): number 
   if (numShares > 1e14) throw new Error("Invalid value for number of shares");
   if (!corporation.public) throw new Error("You haven't gone public!");
   if (corporation.shareSaleCooldown) throw new Error("Share sale on cooldown!");
-  const stockSaleResults = corporation.calculateShareSale(numShares);
-  const profit = stockSaleResults[0];
-  const newSharePrice = stockSaleResults[1];
-  const newSharesUntilUpdate = stockSaleResults[2];
+  const [profit, newSharePrice, newSharesUntilUpdate] = corporation.calculateShareSale(numShares);
 
   corporation.numShares -= numShares;
   corporation.issuedShares += numShares;

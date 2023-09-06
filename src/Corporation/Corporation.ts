@@ -200,9 +200,16 @@ export class Corporation {
     this.valuation = val;
   }
 
-  getTargetSharePrice(): number {
+  getTargetSharePrice(ceoConfidence: number | null = null): number {
     // Share price is proportional to total corporation valuation.
-    return this.valuation / this.totalShares;
+    // When the CEO owns 0% of the company, market cap is 0.5x valuation.
+    // When the CEO owns 25% of the company, market cap is 1.0x valuation.
+    // When the CEO owns 100% of shares, market cap is 1.5x valuation.
+    if (ceoConfidence === null) {
+      ceoConfidence = 0.5 + Math.sqrt(this.numShares / this.totalShares);
+    }
+    const marketCap = this.valuation * ceoConfidence;
+    return (marketCap / this.totalShares);
   }
 
   updateSharePrice(): void {
@@ -236,7 +243,6 @@ export class Corporation {
     let sharePrice = this.sharePrice;
     let sharesSold = 0;
     let profit = 0;
-    let targetPrice = this.getTargetSharePrice();
 
     const maxIterations = Math.ceil(numShares / corpConstants.sharesPerPriceUpdate);
     if (isNaN(maxIterations) || maxIterations > 10e6) {
@@ -256,8 +262,10 @@ export class Corporation {
         sharesUntilUpdate = corpConstants.sharesPerPriceUpdate;
         sharesTracker -= sharesUntilUpdate;
         sharesSold += sharesUntilUpdate;
-        targetPrice = this.valuation / (2 * (this.totalShares + sharesSold - this.numShares));
+        
         // Calculate what new share price would be
+        const ceoConfidence = 0.5 + Math.sqrt((this.numShares - sharesSold) / this.totalShares);
+        const targetPrice = this.getTargetSharePrice(ceoConfidence);
         if (sharePrice <= targetPrice) {
           sharePrice *= 1 + 0.5 * 0.01;
         } else {
