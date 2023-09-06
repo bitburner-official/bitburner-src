@@ -34,7 +34,7 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
   }
 
   const matches = (s1: string, s2: string) => {
-    return s1.toLowerCase().indexOf(s2.toLowerCase()) !== -1;
+    return s1.toLowerCase().includes(s2.toLowerCase());
   };
 
   function getAugsSorted(): AugmentationName[] {
