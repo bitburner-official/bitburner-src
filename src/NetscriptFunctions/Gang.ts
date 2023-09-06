@@ -53,6 +53,32 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return gang.members.map((member) => member.name);
     },
+    renameMember: (ctx) => (_memberName, _newName) => {
+      const gang = getGang(ctx);
+      const memberName = helpers.string(ctx, "memberName", _memberName);
+      const newName = helpers.string(ctx, "newName", _newName);
+      const member = gang.members.find((m) => m.name === memberName);
+      if (!memberName) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid memberName: "" (empty string)`);
+      }
+      if (!newName) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid newName: "" (empty string)`);
+      }
+      if (newName === memberName) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `newName and memberName must be different, but both were: ${newName}`);
+      }
+      if (!member) {
+        helpers.log(ctx, () => `Failed to rename member: No member exists with memberName: ${memberName}`);
+        return false;
+      }
+      if (gang.members.map((m) => m.name).includes(newName)) {
+        helpers.log(ctx, () => `Failed to rename member: A different member already has the newName: ${newName}`);
+        return false;
+      }
+      member.name = newName;
+      helpers.log(ctx, () => `Renamed member from memberName: ${memberName} to newName: ${newName}`);
+      return true;
+    },
     getGangInformation: (ctx) => () => {
       const gang = getGang(ctx);
       return {
@@ -62,6 +88,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
         power: gang.getPower(),
         respect: gang.respect,
         respectGainRate: gang.respectGainRate,
+        respectForNextRecruit: gang.respectForNextRecruit(),
         territory: gang.getTerritory(),
         territoryClashChance: gang.territoryClashChance,
         territoryWarfareEngaged: gang.territoryWarfareEngaged,
@@ -134,17 +161,31 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return gang.canRecruitMember();
     },
+    getRecruitsAvailable: (ctx) => () => {
+      const gang = getGang(ctx);
+      return gang.getRecruitsAvailable();
+    },
+    respectForNextRecruit: (ctx) => () => {
+      const gang = getGang(ctx);
+      return gang.respectForNextRecruit();
+    },
     recruitMember: (ctx) => (_memberName) => {
       const memberName = helpers.string(ctx, "memberName", _memberName);
       const gang = getGang(ctx);
       const recruited = gang.recruitMember(memberName);
-      if (recruited) {
+      if (memberName === "") {
+        ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit Gang Member. Name must be provided.`);
+        return false;
+      } else if (recruited) {
         ctx.workerScript.log("gang.recruitMember", () => `Successfully recruited Gang Member '${memberName}'`);
+        return recruited;
       } else {
-        ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit Gang Member '${memberName}'`);
+        ctx.workerScript.log(
+          "gang.recruitMember",
+          () => `Failed to recruit Gang Member '${memberName}'. Name already used.`,
+        );
+        return recruited;
       }
-
-      return recruited;
     },
     getTaskNames: (ctx) => () => {
       const gang = getGang(ctx);

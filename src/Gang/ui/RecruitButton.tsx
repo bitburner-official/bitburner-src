@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { RecruitModal } from "./RecruitModal";
-import { GangConstants } from "../data/Constants";
 import { formatRespect } from "../../ui/formatNumber";
 import { useGang } from "./Context";
 import Typography from "@mui/material/Typography";
@@ -15,24 +14,29 @@ interface IProps {
 export function RecruitButton(props: IProps): React.ReactElement {
   const gang = useGang();
   const [open, setOpen] = useState(false);
-  if (gang.members.length >= GangConstants.MaximumGangMembers) {
-    return <></>;
-  }
+  const recruitsAvailable = gang.getRecruitsAvailable();
 
   if (!gang.canRecruitMember()) {
-    const respect = gang.getRespectNeededToRecruitMember();
+    const respectNeeded = gang.respectForNextRecruit();
     return (
       <Box display="flex" alignItems="center" sx={{ mx: 1 }}>
         <Button disabled>Recruit Gang Member</Button>
-        <Typography sx={{ ml: 1 }}>{formatRespect(respect)} respect needed to recruit next member</Typography>
+        {respectNeeded === Infinity ? (
+          <Typography sx={{ ml: 1 }}>Maximum gang members already recruited</Typography>
+        ) : (
+          <Typography sx={{ ml: 1 }}>{formatRespect(respectNeeded)} respect needed to recruit next member</Typography>
+        )}
       </Box>
     );
   }
 
   return (
     <>
-      <Box sx={{ mx: 1 }}>
+      <Box display="flex" alignItems="center" sx={{ mx: 1 }}>
         <Button onClick={() => setOpen(true)}>Recruit Gang Member</Button>
+        <Typography sx={{ ml: 1 }}>
+          Can recruit {recruitsAvailable} more gang member{recruitsAvailable === 1 ? "" : "s"}
+        </Typography>
       </Box>
       <RecruitModal open={open} onClose={() => setOpen(false)} onRecruit={props.onRecruit} />
     </>

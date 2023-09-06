@@ -34,11 +34,14 @@ If you are not in BitNode-2, then you must have Source-File 2 in order to use th
 |  [getMemberInformation(name)](./bitburner.gang.getmemberinformation.md) | Get information about a specific gang member. |
 |  [getMemberNames()](./bitburner.gang.getmembernames.md) | List all gang members. |
 |  [getOtherGangInformation()](./bitburner.gang.getotherganginformation.md) | Get information about the other gangs. |
+|  [getRecruitsAvailable()](./bitburner.gang.getrecruitsavailable.md) | Check how many gang members you can currently recruit. |
 |  [getTaskNames()](./bitburner.gang.gettasknames.md) | List member task names. |
 |  [getTaskStats(name)](./bitburner.gang.gettaskstats.md) | Get stats of a task. |
 |  [inGang()](./bitburner.gang.ingang.md) | Check if you're in a gang. |
 |  [purchaseEquipment(memberName, equipName)](./bitburner.gang.purchaseequipment.md) | Purchase an equipment for a gang member. |
 |  [recruitMember(name)](./bitburner.gang.recruitmember.md) | Recruit a new gang member. |
+|  [renameMember(memberName, newName)](./bitburner.gang.renamemember.md) | Rename a Gang member to a new unique name. |
+|  [respectForNextRecruit()](./bitburner.gang.respectfornextrecruit.md) | Check the amount of Respect needed for your next gang recruit. |
 |  [setMemberTask(memberName, taskName)](./bitburner.gang.setmembertask.md) | Set gang member to task. |
 |  [setTerritoryWarfare(engage)](./bitburner.gang.setterritorywarfare.md) | Enable/Disable territory warfare. |
 

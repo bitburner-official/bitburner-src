@@ -17,13 +17,15 @@ interface IProps {
 /** React Component for the popup used to create a new gang. */
 export function CreateGangModal(props: IProps): React.ReactElement {
   const combatGangText =
-    "This is a COMBAT gang. Members in this gang will have different tasks than HACKING gangs. " +
-    "Compared to hacking gangs, progression with combat gangs can be more difficult as territory management " +
+    props.facName +
+    " is a COMBAT gang and its members will have different tasks than in HACKING gangs. " +
+    "Compared to hacking gangs, progression with a combat gang can be more difficult as territory management " +
     "is more important. However, well-managed combat gangs can progress faster than hacking ones.";
 
   const hackingGangText =
-    "This is a HACKING gang. Members in this gang will have different tasks than COMBAT gangs. " +
-    "Compared to combat gangs, progression with hacking gangs is more straightforward as territory warfare " +
+    props.facName +
+    " is a HACKING gang and its members will have different tasks than in COMBAT gangs. " +
+    "Compared to combat gangs, progression with a hacking gang is slower but more straightforward as territory warfare " +
     "is not as important.";
 
   function isHacking(): boolean {
@@ -46,19 +48,19 @@ export function CreateGangModal(props: IProps): React.ReactElement {
         Would you like to create a new Gang with {props.facName}?
         <br />
         <br />
-        Note that this will prevent you from creating a Gang with any other Faction until this BitNode is destroyed. It
-        also resets your reputation with this faction.
+        This will prevent you from creating a Gang with any other Faction until the BitNode is destroyed or abandoned.
+        It will also reset your reputation with {props.facName}.
         <br />
         <br />
         {isHacking() ? hackingGangText : combatGangText}
         <br />
         <br />
-        Other than hacking vs combat, there are NO differences between the Factions you can create a Gang with, and each
-        of these Factions have all Augmentations available.
+        Other than hacking vs combat and name, there are no differences between gangs.
       </Typography>
       <Button onClick={createGang} onKeyUp={onKeyUp} autoFocus>
         Create Gang
       </Button>
+      <Button onClick={props.onClose}>Cancel</Button>
     </Modal>
   );
 }
