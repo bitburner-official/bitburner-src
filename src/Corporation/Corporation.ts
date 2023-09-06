@@ -172,23 +172,19 @@ export class Corporation {
   determineCycleValuation(): number {
     let val,
       profit = this.revenue - this.expenses;
-    if (this.public) {
-      // Account for dividends
-      if (this.dividendRate > 0) {
-        profit *= 1 - this.dividendRate;
-      }
 
-      val = this.funds + profit * 85e3;
-      val *= Math.pow(1.1, this.divisions.size);
-      val = Math.max(val, 0);
-    } else {
-      val = 10e9 + Math.max(this.funds, 0) / 3; //Base valuation
-      if (profit > 0) {
-        val += profit * 315e3;
-      }
-      val *= Math.pow(1.1, this.divisions.size);
-      val -= val % 1e6; //Round down to nearest million
+    // Account for dividends
+    if (this.dividendRate > 0) {
+      profit *= 1 - this.dividendRate;
     }
+
+    // Project profits in the next 24 hours
+    const forwardEarnings = profit * corpConstants.forwardEarningsPeriod;
+    const synergyFactor = Math.pow(1.1, this.divisions.size);
+
+    val = this.funds + forwardEarnings * synergyFactor;
+
+    val = Math.floor(val / 1e6) * 1e6; // Round down to nearest million
     return val * currentNodeMults.CorporationValuation;
   }
 
@@ -209,7 +205,7 @@ export class Corporation {
       ceoConfidence = 0.5 + Math.sqrt(this.numShares / this.totalShares);
     }
     const marketCap = this.valuation * ceoConfidence;
-    return (marketCap / this.totalShares);
+    return marketCap / this.totalShares;
   }
 
   updateSharePrice(): void {
@@ -262,7 +258,7 @@ export class Corporation {
         sharesUntilUpdate = corpConstants.sharesPerPriceUpdate;
         sharesTracker -= sharesUntilUpdate;
         sharesSold += sharesUntilUpdate;
-        
+
         // Calculate what new share price would be
         const ceoConfidence = 0.5 + Math.sqrt((this.numShares - sharesSold) / this.totalShares);
         const targetPrice = this.getTargetSharePrice(ceoConfidence);

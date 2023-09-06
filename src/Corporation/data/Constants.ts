@@ -33,7 +33,7 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   /** Names of all one-time corporation-wide unlocks */
   unlockNames: APIUnlockName[] = Object.values(CorpUnlockName),
   upgradeNames: APIUpgradeName[] = Object.values(CorpUpgradeName),
-  /** Names of all reasearches common to all industries */
+  /** Names of all researches common to all industries */
   researchNamesBase: CorpResearchName[] = Object.values(CorpBaseResearchName),
   /** Names of all researches only available to product industries */
   researchNamesProductOnly: CorpResearchName[] = Object.values(CorpProductResearchName),
@@ -46,6 +46,8 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   issueNewSharesCooldown = 216e3,
   /** Cooldown for selling shares in game cycles. 1 hour. */
   sellSharesCooldown = 18e3,
+  /** Amount of time to project forward earnings for corp valuation. 24 hours. */
+  forwardEarningsPeriod = 432e3,
   teaCostPerEmployee = 500e3,
   gameCyclesPerMarketCycle = 50,
   gameCyclesPerCorpStateCycle = gameCyclesPerMarketCycle / stateNames.length,

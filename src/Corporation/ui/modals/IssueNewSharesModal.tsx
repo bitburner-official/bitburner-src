@@ -23,9 +23,8 @@ function EffectText(props: IEffectTextProps): React.ReactElement {
     return <Typography>Invalid input</Typography>;
   }
 
-  // Round to nearest ten-millionth
-  newShares /= 10e6;
-  newShares = Math.round(newShares) * 10e6;
+  // Round to nearest ten-million
+  newShares = Math.round(newShares / 10e6) * 10e6;
 
   if (newShares < 10e6) {
     return <Typography>Must issue at least 10 million new shares</Typography>;
