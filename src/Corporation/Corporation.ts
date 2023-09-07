@@ -6,7 +6,6 @@ import { CorpUpgrades } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
 import { IndustriesData } from "./data/IndustryData";
 import { Division } from "./Division";
-import { MaterialInfo } from "./MaterialInfo";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { showLiterature } from "../Literature/LiteratureHelpers";
@@ -18,7 +17,7 @@ import { calculateUpgradeCost } from "./helpers";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
-import { createEnumKeyedRecord, getRecordEntries, getRecordValues } from "../Types/Record";
+import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 
 interface IParams {
   name?: string;
@@ -174,10 +173,8 @@ export class Corporation {
   determineCycleValuation(): number {
     let val,
       assetDelta = this.totalAssets - this.previousTotalAssets;
-    if (!assetDelta) {
-      // Can happen if loading an old save
-      assetDelta = this.revenue - this.expenses;
-    }
+    // Handle pre-totalAssets saves
+    assetDelta ??= this.revenue - this.expenses;
     if (this.public) {
       // Account for dividends
       if (this.dividendRate > 0) {
@@ -213,7 +210,7 @@ export class Corporation {
       assets += IndustriesData[ind.type].startingCost;
       assets += ind.thisCycleRevenue - ind.thisCycleExpenses;
       for (const warehouse of getRecordValues(ind.warehouses)) {
-        for (const [matName, mat] of getRecordEntries(warehouse.materials)) {
+        for (const mat of getRecordValues(warehouse.materials)) {
           assets += mat.stored * mat.marketPrice;
         }
         for (const prod of ind.products.values()) {
