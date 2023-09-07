@@ -142,7 +142,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     const funding = val * percShares * roundMultiplier;
     const investShares = Math.floor(corpConstants.initialShares * percShares);
     corporation.fundingRound++;
-    corporation.addFunds(funding);
+    corporation.addNonIncomeFunds(funding);
     corporation.numShares -= investShares;
     return true;
   }
@@ -157,7 +157,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     corporation.sharePrice = initialSharePrice;
     corporation.issuedShares = numShares;
     corporation.numShares -= numShares;
-    corporation.addFunds(numShares * initialSharePrice);
+    corporation.addNonIncomeFunds(numShares * initialSharePrice);
     return true;
   }
 
