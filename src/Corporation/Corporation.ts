@@ -181,7 +181,7 @@ export class Corporation {
 
   determineCycleValuation(): number {
     let val,
-      assetDelta = (this.totalAssets - this.previousTotalAssets)/10;
+      assetDelta = (this.totalAssets - this.previousTotalAssets) / corpConstants.secondsPerMarketCycle;
     // Handle pre-totalAssets saves
     assetDelta ??= this.revenue - this.expenses;
     if (this.public) {
@@ -190,7 +190,7 @@ export class Corporation {
         assetDelta *= 1 - this.dividendRate;
       }
 
-      val = Math.max(this.funds, 0) + assetDelta * 85e3;
+      val = this.funds + assetDelta * 85e3;
       val *= Math.pow(1.1, this.divisions.size);
       val = Math.max(val, 0);
     } else {
