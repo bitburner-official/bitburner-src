@@ -62,6 +62,7 @@ export function Overview({ rerender }: IProps): React.ReactElement {
       <StatsTable
         rows={[
           ["Total Funds:", <Money key="funds" money={corp.funds} />],
+          ["Total Assets:", <Money key="assets" money={corp.totalAssets} />],
           ["Total Revenue:", <MoneyRate key="revenue" money={corp.revenue} />],
           ["Total Expenses:", <MoneyRate key="expenses" money={corp.expenses} />],
           ["Total Profit:", <MoneyRate key="profit" money={corp.revenue - corp.expenses} />],

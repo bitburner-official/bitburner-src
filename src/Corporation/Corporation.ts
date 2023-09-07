@@ -4,7 +4,9 @@ import { CorporationState } from "./CorporationState";
 import { CorpUnlocks } from "./data/CorporationUnlocks";
 import { CorpUpgrades } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
+import { IndustriesData } from "./data/IndustryData";
 import { Division } from "./Division";
+import { MaterialInfo } from "./MaterialInfo";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { showLiterature } from "../Literature/LiteratureHelpers";
@@ -16,7 +18,7 @@ import { calculateUpgradeCost } from "./helpers";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
-import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
+import { createEnumKeyedRecord, getRecordEntries, getRecordValues } from "../Types/Record";
 
 interface IParams {
   name?: string;
@@ -56,6 +58,8 @@ export class Corporation {
     value: name === CorpUpgradeName.DreamSense ? 0 : 1,
   }));
 
+  previousTotalAssets = 150e9;
+  totalAssets = 150e9;
   cycleValuation = 0;
   valuationsList = [0];
   valuation = 0;
@@ -126,8 +130,6 @@ export class Corporation {
           this.expenses = this.expenses + ind.lastCycleExpenses;
         });
         const profit = this.revenue - this.expenses;
-        this.cycleValuation = this.determineCycleValuation();
-        this.determineValuation();
         const cycleProfit = profit * (marketCycles * corpConstants.secondsPerMarketCycle);
         if (isNaN(this.funds) || this.funds === Infinity || this.funds === -Infinity) {
           dialogBoxCreate(
@@ -151,7 +153,9 @@ export class Corporation {
         } else {
           this.addFunds(cycleProfit);
         }
-
+        this.updateTotalAssets();
+        this.cycleValuation = this.determineCycleValuation();
+        this.determineValuation();
         this.updateSharePrice();
       }
 
@@ -170,20 +174,20 @@ export class Corporation {
 
   determineCycleValuation(): number {
     let val,
-      profit = this.revenue - this.expenses;
+      assetDelta = this.totalAssets - this.previousTotalAssets;
     if (this.public) {
       // Account for dividends
       if (this.dividendRate > 0) {
-        profit *= 1 - this.dividendRate;
+        assetDelta *= 1 - this.dividendRate;
       }
 
-      val = this.funds + profit * 85e3;
+      val = Math.max(this.funds, 0) + assetDelta * 85e3;
       val *= Math.pow(1.1, this.divisions.size);
       val = Math.max(val, 0);
     } else {
-      val = 10e9 + Math.max(this.funds, 0) / 3; //Base valuation
-      if (profit > 0) {
-        val += profit * 315e3;
+      val = 10e9 + this.funds / 3;
+      if (assetDelta > 0) {
+        val += assetDelta * 315e3;
       }
       val *= Math.pow(1.1, this.divisions.size);
       val -= val % 1e6; //Round down to nearest millionth
@@ -196,7 +200,25 @@ export class Corporation {
     if (this.valuationsList.length > corpConstants.valuationLength) this.valuationsList.shift();
     let val = this.valuationsList.reduce((a, b) => a + b); //Calculate valuations sum
     val /= corpConstants.valuationLength; //Calculate the average
+    if (val < 10e9) val = 10e9;  // Base valuation
     this.valuation = val;
+  }
+
+  updateTotalAssets(): void {
+    let assets = this.funds;
+    this.divisions.forEach((ind) => {
+      assets += IndustriesData[ind.type].startingCost;
+      for (const warehouse of getRecordValues(ind.warehouses)) {
+        for (const [matName, mat] of getRecordEntries(warehouse.materials)) {
+          assets += mat.stored * MaterialInfo[matName].baseCost;
+        }
+        for (const prod of ind.products.values()) {
+          assets += prod.cityData[warehouse.city].stored * prod.productionCost;
+        }
+      }
+    });
+    this.previousTotalAssets = this.totalAssets;
+    this.totalAssets = assets;
   }
 
   getTargetSharePrice(): number {
