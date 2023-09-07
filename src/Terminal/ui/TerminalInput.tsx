@@ -102,11 +102,6 @@ export function TerminalInput(): React.ReactElement {
     return Array(prefixLength).fill(" ");
   }
 
-  function resetSearchSuggestions() {
-    setSearchResults([]);
-    setSearchResultsIndex(0);
-  }
-
   function modifyInput(mod: Modification): void {
     const ref = terminalInput.current;
     if (!ref) return;
@@ -155,7 +150,7 @@ export function TerminalInput(): React.ReactElement {
         break;
       case "clearall": // Deletes everything in the input
         saveValue("");
-        resetSearchSuggestions();
+        resetSearch();
         break;
     }
   }
