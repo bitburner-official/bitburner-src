@@ -368,7 +368,10 @@ export class Division {
             if (mat.stored + buyAmt != 0) {
               mat.quality = (mat.quality * mat.stored + 1 * buyAmt) / (mat.stored + buyAmt);
               mat.averagePrice = (mat.averagePrice * mat.stored + mat.marketPrice * buyAmt) / (mat.stored + buyAmt);
-            } else mat.quality = 1;
+            } else {
+              mat.quality = 1;
+              mat.averagePrice = mat.marketPrice;
+            }
             mat.stored += buyAmt;
             mat.buyAmount = buyAmt / (corpConstants.secondsPerMarketCycle * marketCycles);
             expenses += buyAmt * mat.marketPrice;
