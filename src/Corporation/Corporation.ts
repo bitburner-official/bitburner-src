@@ -139,7 +139,9 @@ export class Corporation {
           );
           this.funds = 150e9;
         }
-
+        this.updateTotalAssets();
+        this.cycleValuation = this.determineCycleValuation();
+        this.determineValuation();
         if (this.dividendRate > 0 && cycleProfit > 0) {
           // Validate input again, just to be safe
           if (isNaN(this.dividendRate) || this.dividendRate < 0 || this.dividendRate > corpConstants.dividendMaxRate) {
@@ -153,9 +155,6 @@ export class Corporation {
         } else {
           this.addFunds(cycleProfit);
         }
-        this.updateTotalAssets();
-        this.cycleValuation = this.determineCycleValuation();
-        this.determineValuation();
         this.updateSharePrice();
       }
 
@@ -208,9 +207,10 @@ export class Corporation {
     let assets = this.funds;
     this.divisions.forEach((ind) => {
       assets += IndustriesData[ind.type].startingCost;
+      assets += (ind.thisCycleRevenue - ind.thisCycleExpenses);
       for (const warehouse of getRecordValues(ind.warehouses)) {
         for (const [matName, mat] of getRecordEntries(warehouse.materials)) {
-          assets += mat.stored * MaterialInfo[matName].baseCost;
+          assets += mat.stored * mat.marketPrice;
         }
         for (const prod of ind.products.values()) {
           assets += prod.cityData[warehouse.city].stored * prod.productionCost;
