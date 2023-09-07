@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Box, Button, Tooltip, Typography, Paper, Container, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -23,19 +23,23 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
   const rerender = useRerender(400);
   const [filterText, setFilterText] = useState("");
 
-  function getAugs(): AugmentationName[] {
-    return getFactionAugmentationsFiltered(faction).filter(
-      (aug: AugmentationName) =>
-        !filterText ||
-        matches(Augmentations[aug].name, filterText) ||
-        matches(Augmentations[aug].info, filterText) ||
-        matches(Augmentations[aug].stats, filterText),
-    );
-  }
+  const matches = (s1: string, s2: string) => s1.toLowerCase().includes(s2.toLowerCase());
+  const factionAugs = useMemo(() => getFactionAugmentationsFiltered(faction), [faction]);
+  const filteredFactionAugs = useMemo(
+    () =>
+      factionAugs.filter(
+        (aug: AugmentationName) =>
+          !filterText ||
+          matches(Augmentations[aug].name, filterText) ||
+          matches(Augmentations[aug].info, filterText) ||
+          matches(Augmentations[aug].stats, filterText),
+      ),
+    [filterText, factionAugs],
+  );
 
-  const matches = (s1: string, s2: string) => {
-    return s1.toLowerCase().includes(s2.toLowerCase());
-  };
+  function getAugs(): AugmentationName[] {
+    return filteredFactionAugs;
+  }
 
   function getAugsSorted(): AugmentationName[] {
     switch (Settings.PurchaseAugmentationsOrder) {
