@@ -9,9 +9,9 @@ For this reason, it is not possible for Bitburner scripts to run when
 
 all of which we call being "offline" for game purposes.
 
-It is important to know that logic such as `if`/`else` statements and many functions such as `ns.purchaseHacknetNode()` or `ns.nuke()` will not work while the game is offline.
+It is important to know that logic such as `if`/`else` statements and most functions such as `ns.purchaseHacknetNode()`, `ns.hack()`, and `ns.nuke()` will not work while the game is offline.
 
-However, Scripts WILL continue to generate money and hacking exp for you while offline.
+However, scripts WILL continue to generate money and hacking exp for you while offline.
 This offline production is based on the average online production of all your hacking scripts since your last augmentation, as shown on your Active Scripts page.
 
 `ns.grow()` and `ns.weaken()` methods are also applied when the game is offline, although at a slower rate.
