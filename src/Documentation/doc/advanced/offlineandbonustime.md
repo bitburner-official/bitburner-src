@@ -6,7 +6,8 @@ For this reason, it is not possible for Bitburner scripts to run when
 - the game is closed
 - the browser tab is inactive (if playing Bitburner in a web browser)
 - or your system is sleeping
-  all of which we call being "offline" for game purposes.
+
+all of which we call being "offline" for game purposes.
 
 It is important to know that logic such as `if`/`else` statements and many functions such as `ns.purchaseHacknetNode()` or `ns.nuke()` will not work while the game is offline.
 
