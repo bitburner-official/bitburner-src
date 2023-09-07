@@ -79,7 +79,7 @@ export class Corporation {
     }
     this.funds += amt;
   }
-  
+
   addNonIncomeFunds(amt: number): void {
     if (!isFinite(amt)) {
       console.error("Trying to add invalid amount of funds. Report to a developer.");

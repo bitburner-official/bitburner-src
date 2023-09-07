@@ -367,10 +367,8 @@ export class Division {
             const mat = warehouse.materials[matName];
             if (mat.stored + buyAmt != 0) {
               mat.quality = (mat.quality * mat.stored + 1 * buyAmt) / (mat.stored + buyAmt);
-              mat.averagePrice =
-                  (mat.averagePrice * mat.stored + mat.marketPrice * buyAmt) / (mat.stored + buyAmt);
-            }
-            else mat.quality = 1;
+              mat.averagePrice = (mat.averagePrice * mat.stored + mat.marketPrice * buyAmt) / (mat.stored + buyAmt);
+            } else mat.quality = 1;
             mat.stored += buyAmt;
             mat.buyAmount = buyAmt / (corpConstants.secondsPerMarketCycle * marketCycles);
             expenses += buyAmt * mat.marketPrice;
@@ -469,7 +467,7 @@ export class Division {
                   (warehouse.materials[this.producedMaterials[j]].averagePrice *
                     warehouse.materials[this.producedMaterials[j]].stored +
                     warehouse.materials[this.producedMaterials[j]].marketPrice * prod * producableFrac) /
-                    (warehouse.materials[this.producedMaterials[j]].stored + prod * producableFrac);
+                  (warehouse.materials[this.producedMaterials[j]].stored + prod * producableFrac);
                 warehouse.materials[this.producedMaterials[j]].stored += prod * producableFrac;
               }
             } else {
@@ -689,10 +687,9 @@ export class Division {
 
                 expWarehouse.materials[matName].stored += amt;
                 expWarehouse.materials[matName].averagePrice =
-                  (expWarehouse.materials[matName].averagePrice *
-                    expWarehouse.materials[matName].stored +
+                  (expWarehouse.materials[matName].averagePrice * expWarehouse.materials[matName].stored +
                     expWarehouse.materials[matName].marketPrice * amt) /
-                    (expWarehouse.materials[matName].stored + amt);
+                  (expWarehouse.materials[matName].stored + amt);
                 mat.stored -= amt;
                 mat.exportedLastCycle += amt;
                 expIndustry.updateWarehouseSizeUsed(expWarehouse);
