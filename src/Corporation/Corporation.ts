@@ -174,6 +174,10 @@ export class Corporation {
   determineCycleValuation(): number {
     let val,
       assetDelta = this.totalAssets - this.previousTotalAssets;
+    if (!assetDelta) {
+      // Can happen if loading an old save
+      assetDelta = this.revenue - this.expenses;
+    }
     if (this.public) {
       // Account for dividends
       if (this.dividendRate > 0) {
@@ -199,7 +203,7 @@ export class Corporation {
     if (this.valuationsList.length > corpConstants.valuationLength) this.valuationsList.shift();
     let val = this.valuationsList.reduce((a, b) => a + b); //Calculate valuations sum
     val /= corpConstants.valuationLength; //Calculate the average
-    if (val < 10e9) val = 10e9;  // Base valuation
+    if (val < 10e9) val = 10e9; // Base valuation
     this.valuation = val;
   }
 
@@ -207,7 +211,7 @@ export class Corporation {
     let assets = this.funds;
     this.divisions.forEach((ind) => {
       assets += IndustriesData[ind.type].startingCost;
-      assets += (ind.thisCycleRevenue - ind.thisCycleExpenses);
+      assets += ind.thisCycleRevenue - ind.thisCycleExpenses;
       for (const warehouse of getRecordValues(ind.warehouses)) {
         for (const [matName, mat] of getRecordEntries(warehouse.materials)) {
           assets += mat.stored * mat.marketPrice;

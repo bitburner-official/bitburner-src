@@ -1155,6 +1155,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "maxDivisions": 20,
         "name": "Test Corp",
         "numShares": 1000000000,
+        "previousTotalAssets": 150000000000,
         "public": false,
         "revenue": 0,
         "seedFunded": false,
@@ -1168,6 +1169,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
           },
         },
         "storedCycles": 0,
+        "totalAssets": 150000000000,
         "totalShares": 1000000000,
         "unlocks": {
           "ctor": "JSONSet",
