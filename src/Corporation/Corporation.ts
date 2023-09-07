@@ -181,7 +181,7 @@ export class Corporation {
 
   determineCycleValuation(): number {
     let val,
-      assetDelta = this.totalAssets - this.previousTotalAssets;
+      assetDelta = (this.totalAssets - this.previousTotalAssets)/10;
     // Handle pre-totalAssets saves
     assetDelta ??= this.revenue - this.expenses;
     if (this.public) {
