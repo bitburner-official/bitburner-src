@@ -219,7 +219,7 @@ export class Corporation {
       assets += IndustriesData[ind.type].startingCost;
       for (const warehouse of getRecordValues(ind.warehouses)) {
         for (const mat of getRecordValues(warehouse.materials)) {
-          assets += mat.stored * mat.marketPrice;
+          assets += mat.stored * mat.averagePrice;
         }
         for (const prod of ind.products.values()) {
           assets += prod.cityData[warehouse.city].stored * prod.productionCost;
