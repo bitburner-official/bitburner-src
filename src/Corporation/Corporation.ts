@@ -172,20 +172,23 @@ export class Corporation {
   determineCycleValuation(): number {
     let val,
       profit = this.revenue - this.expenses;
+    if (this.public) {
+      // Account for dividends
+      if (this.dividendRate > 0) {
+        profit *= 1 - this.dividendRate;
+      }
 
-    // Account for dividends
-    if (this.dividendRate > 0) {
-      profit *= 1 - this.dividendRate;
+      val = this.funds + profit * 85e3;
+      val *= Math.pow(1.1, this.divisions.size);
+      val = Math.max(val, 0);
+    } else {
+      val = 10e9 + Math.max(this.funds, 0) / 3; //Base valuation
+      if (profit > 0) {
+        val += profit * 315e3;
+      }
+      val *= Math.pow(1.1, this.divisions.size);
+      val -= val % 1e6; //Round down to nearest millionth
     }
-
-    // Project profits in the next 24 hours
-    const synergyFactor = Math.pow(1.1, this.divisions.size);
-    const forwardEarnings = profit * corpConstants.forwardEarningsPeriod;
-
-    val = this.funds + forwardEarnings * synergyFactor;
-
-    val = Math.floor(val / 1e6) * 1e6; // Round down to nearest million
-    val = Math.max(1e6, val); // Prevent negative or infinitesimal valuation
     return val * currentNodeMults.CorporationValuation;
   }
 

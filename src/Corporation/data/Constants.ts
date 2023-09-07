@@ -46,8 +46,6 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   issueNewSharesCooldown = 216e3,
   /** Cooldown for selling shares in game cycles. 1 hour. */
   sellSharesCooldown = 18e3,
-  /** Amount of time to project forward earnings for corp valuation. 24 hours. */
-  forwardEarningsPeriod = 432e3,
   teaCostPerEmployee = 500e3,
   gameCyclesPerMarketCycle = 50,
   gameCyclesPerCorpStateCycle = gameCyclesPerMarketCycle / stateNames.length,
