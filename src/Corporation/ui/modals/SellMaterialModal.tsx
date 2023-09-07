@@ -3,11 +3,11 @@ import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Material } from "../../Material";
 import { SellMaterial } from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { KEY } from "../../../utils/helpers/keyCodes";
-
+import { Typography, FormControlLabel, Switch, Tooltip } from "@mui/material";
+import { Division } from "src/Corporation/Division";
 function initialPrice(mat: Material): string {
   let val = mat.desiredSellPrice ? mat.desiredSellPrice + "" : "";
   if (mat.marketTa2) {
@@ -22,6 +22,7 @@ interface IProps {
   open: boolean;
   onClose: () => void;
   mat: Material;
+  div: Division;
 }
 
 // Create a popup that let the player manage sales of a material
@@ -83,7 +84,48 @@ export function SellMaterialModal(props: IProps): React.ReactElement {
         onKeyDown={onKeyDown}
       />
       <TextField value={price} type="text" placeholder="Sell price" onChange={onPriceChange} onKeyDown={onKeyDown} />
-      <Button onClick={sellMaterial}>Confirm</Button>
+      <Button onClick={sellMaterial} style={{ marginLeft: ".5rem", marginRight: ".5rem" }}>
+        Confirm
+      </Button>
+      {props.div.hasResearch("Market-TA.I") && (
+        <FormControlLabel
+          style={{ marginRight: "1rem" }}
+          control={
+            <Switch checked={props.mat.marketTa1} onChange={(event) => (props.mat.marketTa1 = event.target.checked)} />
+          }
+          label={
+            <Tooltip
+              title={
+                <Typography>
+                  If this is enabled, then this Material will automatically be sold at market price + markup
+                </Typography>
+              }
+            >
+              <Typography>Market-TA.I</Typography>
+            </Tooltip>
+          }
+        />
+      )}
+      {props.div.hasResearch("Market-TA.II") && (
+        <FormControlLabel
+          control={
+            <Switch checked={props.mat.marketTa2} onChange={(event) => (props.mat.marketTa2 = event.target.checked)} />
+          }
+          label={
+            <Tooltip
+              title={
+                <Typography>
+                  If this is enabled, then this Material will automatically be sold at the optimal price such that the
+                  amount sold matches the amount produced. (i.e. the highest possible price, while still ensuring that
+                  all produced materials will be sold)
+                </Typography>
+              }
+            >
+              <Typography>Market-TA.II</Typography>
+            </Tooltip>
+          }
+        />
+      )}
     </Modal>
   );
 }
