@@ -97,7 +97,9 @@ export function SellProductModal(props: IProps): React.ReactElement {
         onKeyDown={onKeyDown}
       />
       <TextField value={px} type="text" placeholder="Sell price" onChange={onPriceChange} onKeyDown={onKeyDown} />
-      <Button onClick={sellProduct} style={{ marginLeft: ".5rem", marginRight: ".5rem" }}>Confirm</Button>
+      <Button onClick={sellProduct} style={{ marginLeft: ".5rem", marginRight: ".5rem" }}>
+        Confirm
+      </Button>
       <FormControlLabel
         style={{ marginRight: ".5rem" }}
         control={<Switch checked={checked} onChange={onCheckedChange} />}
