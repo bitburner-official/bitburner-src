@@ -386,6 +386,7 @@ export function BuyBackShares(corporation: Corporation, numShares: number): bool
   if (Player.money < numShares * buybackPrice) throw new Error("You cant afford that many shares!");
   corporation.numShares += numShares;
   corporation.issuedShares -= numShares;
+  corporation.sharePrice = buybackPrice;
   Player.loseMoney(numShares * buybackPrice, "corporation");
   return true;
 }
