@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { formatMoney, formatShares } from "../../../ui/formatNumber";
+import { formatShares } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
@@ -26,27 +26,25 @@ export function SellSharesModal(props: IProps): React.ReactElement {
   const disabled = isNaN(shares) || shares <= 0 || shares >= corp.numShares;
 
   function ProfitIndicator(props: { shares: number | null; corp: Corporation }): React.ReactElement {
-    if (props.shares === null) return <></>;
-    let text = "";
-    if (isNaN(props.shares) || props.shares <= 0 || !isInteger(props.shares)) {
-      text = `ERROR: Invalid value entered for number of shares to sell`;
+    if (props.shares === null || isNaN(props.shares)) return <></>;
+    if (props.shares < 0 || !isInteger(props.shares)) {
+      return <Typography>ERROR: Invalid value entered for number of shares to sell</Typography>;
     } else if (props.shares > corp.numShares) {
-      text = `You don't have this many shares to sell!`;
+      return <Typography>You don't have this many shares to sell!</Typography>;
     } else if (props.shares === corp.numShares) {
-      text = `You can not sell all your shares!`;
+      return <Typography>You can not sell all your shares!</Typography>;
     } else if (props.shares > 1e14) {
-      text = `You can't sell more than 100t shares at once!`;
+      return <Typography>You can't sell more than 100t shares at once!</Typography>;
     } else {
-      const stockSaleResults = corp.calculateShareSale(props.shares);
-      const profit = stockSaleResults[0];
-      text = `Sell ${props.shares} shares for a total of ${formatMoney(profit)}`;
+      const [profit, sharePrice] = corp.calculateShareSale(props.shares);
+      return (
+        <Typography>
+          Sell {formatShares(props.shares)} shares for a total of <Money money={profit} />?
+          <br />
+          <b>{corp.name}</b>'s stock price will fall to <Money money={sharePrice} /> per share.
+        </Typography>
+      );
     }
-
-    return (
-      <Typography>
-        <small>{text}</small>
-      </Typography>
-    );
   }
 
   function sell(): void {
@@ -81,11 +79,12 @@ export function SellSharesModal(props: IProps): React.ReactElement {
           </li>
           <li>The money from selling your shares will go directly to you (NOT your Corporation).</li>
         </ul>
-        The current price of your company's stock is <Money money={corp.sharePrice} />
+        You currently have {formatShares(corp.numShares)} shares of <b>{corp.name}</b> stock, valued at{" "}
+        <Money money={corp.sharePrice} /> per share.
       </Typography>
       <br />
       <NumberInput
-        defaultValue={shares}
+        defaultValue={shares || ""}
         variant="standard"
         autoFocus
         placeholder="Shares to sell"
@@ -95,6 +94,8 @@ export function SellSharesModal(props: IProps): React.ReactElement {
       <Button disabled={disabled} onClick={sell} sx={{ mx: 1 }}>
         Sell shares
       </Button>
+      <br />
+      <br />
       <ProfitIndicator shares={shares} corp={corp} />
     </Modal>
   );

@@ -67,6 +67,7 @@ export function IssueDividendsModal(props: IProps): React.ReactElement {
         <MoneyRate money={40e6} /> will be paid as dividends. Since your corporation starts with 1 billion shares, every
         shareholder will be paid <Money money={0.04} /> per share per second before taxes.
       </Typography>
+      <br />
       <TextField
         autoFocus
         value={percent}

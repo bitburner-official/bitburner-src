@@ -76,9 +76,21 @@ export function Overview({ rerender }: IProps): React.ReactElement {
           title={
             <StatsTable
               rows={[
-                ["Owned Stock Shares:", formatShares(corp.numShares), `(${formatPercent(corp.numShares)})`],
-                ["Outstanding Shares:", formatShares(corp.issuedShares), `(${formatPercent(corp.issuedShares)})`],
-                ["Private Shares:", formatShares(corp.investorShares), `(${formatPercent(corp.investorShares)})`],
+                [
+                  "Owned Stock Shares:",
+                  <>&nbsp;{formatShares(corp.numShares)}&nbsp;</>,
+                  <>({formatPercent(corp.numShares / corp.totalShares)})</>,
+                ],
+                [
+                  "Outstanding Shares:",
+                  <>&nbsp;{formatShares(corp.issuedShares)}&nbsp;</>,
+                  <>({formatPercent(corp.issuedShares / corp.totalShares)})</>,
+                ],
+                [
+                  "Private Shares:",
+                  <>&nbsp;{formatShares(corp.investorShares)}&nbsp;</>,
+                  <>({formatPercent(corp.investorShares / corp.totalShares)})</>,
+                ],
               ]}
             />
           }
@@ -96,8 +108,8 @@ export function Overview({ rerender }: IProps): React.ReactElement {
         <ButtonWithTooltip
           normalTooltip={
             <>
-              Get a copy of and read 'The Complete Handbook for Creating a Successful Corporation.' This is a .lit file
-              that guides you through the beginning of setting up a Corporation and provides some tips/pointers for
+              Get a copy of and read <i>The Complete Handbook for Creating a Successful Corporation</i>. This is a .lit
+              file that guides you through the beginning of setting up a Corporation and provides some tips/pointers for
               helping you get started with managing it.
             </>
           }
@@ -213,29 +225,27 @@ function PublicButtons({ rerender }: IPublicButtonsProps): React.ReactElement {
   const [issueDividendsOpen, setIssueDividendsOpen] = useState(false);
 
   const sellSharesOnCd = corp.shareSaleCooldown > 0;
-  const sellSharesTooltip = sellSharesOnCd
-    ? "Cannot sell shares for " + corp.convertCooldownToString(corp.shareSaleCooldown)
-    : "Sell your shares in the company. The money earned from selling your " +
-      "shares goes into your personal account, not the Corporation's. " +
-      "This is one of the only ways to profit from your business venture.";
+  const sellSharesTooltip =
+    "Sell your shares in the company. The money earned from selling your " +
+    "shares goes into your personal account, not the Corporation's. " +
+    "This is one of the only ways to profit from your business venture.";
 
   const issueNewSharesOnCd = corp.issueNewSharesCooldown > 0;
-  const issueNewSharesTooltip = issueNewSharesOnCd
-    ? "Cannot issue new shares for " + corp.convertCooldownToString(corp.issueNewSharesCooldown)
-    : "Issue new equity shares to raise capital.";
 
   return (
     <>
       <ButtonWithTooltip
         normalTooltip={sellSharesTooltip}
-        disabledTooltip={sellSharesOnCd ? "On cooldown" : ""}
+        disabledTooltip={
+          sellSharesOnCd ? "Cannot sell shares for " + corp.convertCooldownToString(corp.shareSaleCooldown) : ""
+        }
         onClick={() => setSellSharesOpen(true)}
       >
         Sell Shares
       </ButtonWithTooltip>
       <SellSharesModal open={sellSharesOpen} onClose={() => setSellSharesOpen(false)} rerender={rerender} />
       <ButtonWithTooltip
-        normalTooltip={"Buy back shares you that previously issued or sold at market price."}
+        normalTooltip={"Buy back shares you that previously issued or sold at market price"}
         disabledTooltip={corp.issuedShares < 1 ? "No shares available to buy back" : ""}
         onClick={() => setBuybackSharesOpen(true)}
       >
@@ -243,8 +253,10 @@ function PublicButtons({ rerender }: IPublicButtonsProps): React.ReactElement {
       </ButtonWithTooltip>
       <BuybackSharesModal open={buybackSharesOpen} onClose={() => setBuybackSharesOpen(false)} rerender={rerender} />
       <ButtonWithTooltip
-        normalTooltip={issueNewSharesTooltip}
-        disabledTooltip={issueNewSharesOnCd ? "On cooldown" : ""}
+        normalTooltip={"Issue new equity shares to raise capital"}
+        disabledTooltip={
+          issueNewSharesOnCd ? `On cooldown for ${corp.convertCooldownToString(corp.issueNewSharesCooldown)}` : ""
+        }
         onClick={() => setIssueNewSharesOpen(true)}
       >
         Issue New Shares

@@ -32,14 +32,14 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        An investment firm has offered you <Money money={funds} /> in funding in exchange for a{" "}
-        {formatPercent(percShares, 3)} stake in the company ({formatShares(shares)} shares).
+        An investment firm has offered <b>{corporation.name}</b> <Money money={funds} /> in funding in exchange for a{" "}
+        {formatPercent(percShares, 0)} stake in the company ({formatShares(shares)} shares).
         <br />
         <br />
         Do you accept or reject this offer?
         <br />
         <br />
-        Hint: Investment firms will offer more money if your corporation is turning a profit
+        Hint: Investment firms will offer more money if your Corporation is turning a profit.
       </Typography>
       <Button onClick={findInvestors}>Accept</Button>
     </Modal>

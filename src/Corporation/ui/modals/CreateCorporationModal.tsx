@@ -54,11 +54,14 @@ export function CreateCorporationModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Would you like to start a corporation? This will require $150b for registration and initial funding.{" "}
-        {Player.bitNodeN === 3 &&
-          `This $150b
-        can either be self-funded, or you can obtain the seed money from the government in exchange for 500 million
-        shares`}
+        Would you like to start a corporation? This will require <Money money={150e9} forPurchase={true} /> for
+        registration and initial funding.{" "}
+        {Player.bitNodeN === 3 && (
+          <>
+            This <Money money={150e9} /> can either be self-funded, or you can obtain the seed money from the government
+            in exchange for 500 million shares.
+          </>
+        )}
         <br />
         <br />
         If you would like to start one, please enter a name for your corporation below:

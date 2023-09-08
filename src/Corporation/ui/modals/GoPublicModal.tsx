@@ -51,7 +51,7 @@ export function GoPublicModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>
+      <Typography component="div">
         Enter the number of shares you would like to issue for your IPO.
         <ul>
           <li>These shares will be publicly sold and you will no longer own them.</li>
@@ -64,7 +64,7 @@ export function GoPublicModal(props: IProps): React.ReactElement {
       </Typography>
       <Box display="flex" alignItems="center">
         <NumberInput
-          defaultValue={shares}
+          defaultValue={shares || ""}
           onChange={setShares}
           autoFocus
           placeholder="Shares to issue"

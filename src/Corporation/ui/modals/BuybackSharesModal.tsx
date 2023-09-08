@@ -24,7 +24,7 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(corp.issuedShares);
 
-  const ceoOwnership = (corp.numShares + shares) / corp.totalShares;
+  const ceoOwnership = (corp.numShares + (shares || 0)) / corp.totalShares;
   const buybackPrice = corp.getTargetSharePrice(ceoOwnership);
   const disabledText = !isPositiveInteger(shares)
     ? "Number of shares must be a positive integer"
@@ -38,6 +38,7 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
     if (disabledText) return;
     try {
       BuyBackShares(corp, shares);
+      setShares(0);
     } catch (err) {
       dialogBoxCreate(err + "");
     }
@@ -46,21 +47,25 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
   }
 
   function CostIndicator(): React.ReactElement {
-    if (shares === null) return <></>;
-    if (isNaN(shares) || shares <= 0) {
-      return <>ERROR: Invalid value entered for number of shares to buyback</>;
+    if (shares === null || isNaN(shares)) return <></>;
+    if (shares < 0) {
+      return <Typography>Cannot buy back a negative number of shares.</Typography>;
     } else if (shares > corp.issuedShares) {
       return (
-        <>
-          There are not this many shares available to buy back. There are only {formatShares(corp.issuedShares)}{" "}
-          outstanding shares.
-        </>
+        <Typography>
+          There are not this many shares available to buy back.
+          <br />
+          There are only {formatShares(corp.issuedShares)} outstanding shares.
+        </Typography>
       );
     } else {
       return (
-        <>
-          Purchase {shares} shares for a total of <Money money={shares * buybackPrice} forPurchase={true} />
-        </>
+        <Typography>
+          Purchase {formatShares(shares)} shares for a total of{" "}
+          <Money money={shares * buybackPrice} forPurchase={true} />?
+          <br />
+          <b>{corp.name}</b>'s stock price will rise to <Money money={buybackPrice} /> per share.
+        </Typography>
       );
     }
   }
@@ -71,7 +76,7 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>
+      <Typography component="div">
         Enter the number of outstanding shares you would like to buy back.
         <ul>
           <li>
@@ -80,13 +85,12 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
           <li>All of these shares must be bought at the higher price.</li>
           <li>You purchase these shares with your own money (NOT your Corporation's funds).</li>
         </ul>
-        The current buyback price of <b>{corp.name}</b>'s stock is <Money money={buybackPrice} forPurchase={true} />.
-        <b>{corp.name}</b> currently has {formatShares(corp.issuedShares)} outstanding stock shares.
+        <b>{corp.name}</b> currently has {formatShares(corp.issuedShares)} outstanding stock shares, valued at{" "}
+        <Money money={corp.sharePrice} /> per share.
       </Typography>
-      <CostIndicator />
       <br />
       <NumberInput
-        defaultValue={shares}
+        defaultValue={shares || ""}
         autoFocus={true}
         placeholder="Shares to buyback"
         onChange={setShares}
@@ -95,6 +99,9 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
       <ButtonWithTooltip disabledTooltip={disabledText} onClick={buy}>
         Buy shares
       </ButtonWithTooltip>
+      <br />
+      <br />
+      <CostIndicator />
     </Modal>
   );
 }

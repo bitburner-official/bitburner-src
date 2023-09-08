@@ -18,7 +18,7 @@ interface IEffectTextProps {
 function EffectText(props: IEffectTextProps): React.ReactElement {
   const corp = useCorporation();
   if (props.shares === null) return <></>;
-  const ceoOwnership = corp.numShares / (corp.totalShares + props.shares);
+  const ceoOwnership = corp.numShares / (corp.totalShares + (props.shares || 0));
   const newSharePrice = corp.getTargetSharePrice(ceoOwnership);
   const maxNewShares = corp.calculateMaxNewShares();
   let newShares = props.shares;
@@ -40,6 +40,8 @@ function EffectText(props: IEffectTextProps): React.ReactElement {
   return (
     <Typography>
       Issue {formatShares(newShares)} new shares for <Money money={newShares * newSharePrice} />?
+      <br />
+      <b>{corp.name}</b>'s stock price will fall to <Money money={newSharePrice} />.
     </Typography>
   );
 }
@@ -56,10 +58,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
   const maxNewShares = corp.calculateMaxNewShares();
   const [shares, setShares] = useState<number>(maxNewShares);
 
-  const ceoOwnership = corp.numShares / (corp.totalShares + shares);
-  const newSharePrice = corp.getTargetSharePrice(ceoOwnership);
-
-  const newShares = Math.round((shares || 0) / 10e6) * 10e6;
+  const newShares = Math.round(shares / 10e6) * 10e6;
   const disabled = isNaN(shares) || isNaN(newShares) || newShares < 10e6 || newShares > maxNewShares;
 
   function issueNewShares(): void {
@@ -71,13 +70,13 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
 
     const dialogContents = (
       <Typography>
-        Issued {formatShares(newShares)} new share and raised <Money money={profit} />.
+        Issued {formatShares(newShares)} new shares and raised <Money money={profit} />.
         {privateShares > 0
           ? "\n" + formatShares(privateShares) + " of these shares were bought by private investors."
           : ""}
         <br />
         <br />
-        <b>{corp.name}</b>'s stock price decreased to <Money money={corp.sharePrice} />;
+        <b>{corp.name}</b>'s stock price decreased to <Money money={corp.sharePrice} />.
       </Typography>
     );
     dialogBoxCreate(dialogContents);
@@ -87,34 +86,33 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
     if (event.key === KEY.ENTER) issueNewShares();
   }
 
-  const nextCooldownInHours =
-    ((corp.totalShares / corpConstants.initialShares) * corpConstants.issueNewSharesCooldown) / 18e3;
+  const nextCooldown = corpConstants.issueNewSharesCooldown * (corp.totalShares / corpConstants.initialShares);
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>
+      <Typography component="div">
         You can issue new equity shares (i.e. stocks) in order to raise capital.
         <ul>
           <li>The number of new shares issued must be a multiple of 10 million.</li>
           <li>You can issue at most {formatShares(maxNewShares)} new shares.</li>
           <li>
-            Issuing {formatShares(shares)} new shares will cause dilution, reducing <b>{corp.name}</b>'s stock price to{" "}
-            <Money money={newSharePrice} /> and reducing dividends per share.
+            Issuing new shares will cause dilution, reducing dividends per share and lowering <b>{corp.name}</b>'s stock
+            price.
           </li>
           <li>All new shares are sold at the lower price.</li>
           <li>The money from issuing new shares will be deposited directly into your Corporation's funds.</li>
           <li>
             You will not be able to issue new shares again (or dissolve the corporation) for{" "}
-            {nextCooldownInHours.toFixed()} hours.
+            {corp.convertCooldownToString(nextCooldown)}.
           </li>
         </ul>
         When you choose to issue new equity, private shareholders have first priority for up to 0.5n% of the new shares,
         where n is the percentage of the company currently owned by private shareholders. If they choose to exercise
         this option, these newly issued shares become private, restricted shares, which means you cannot buy them back.
       </Typography>
-      <EffectText shares={shares} />
+      <br />
       <NumberInput
-        defaultValue={shares}
+        defaultValue={shares || ""}
         autoFocus
         placeholder="# New Shares"
         onChange={setShares}
@@ -123,6 +121,9 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
       <Button disabled={disabled} onClick={issueNewShares} sx={{ mx: 1 }}>
         Issue New Shares
       </Button>
+      <br />
+      <br />
+      <EffectText shares={shares} />
     </Modal>
   );
 }
