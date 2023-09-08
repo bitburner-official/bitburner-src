@@ -4,9 +4,7 @@ import { BonusType, bonuses, getCurrentBonusPower, numberIsBonusValue } from '..
 import { formatPercent } from '../../ui/formatNumber';
 
 interface IProps {
-	fitness: number;
-	insight: number;
-	bonusMultiplier: number;
+	completions: number;
 	bonus: BonusType;
 	setBonus(value: BonusType): void;
 }
@@ -39,9 +37,7 @@ export function BonusSelector(props: IProps) {
 				<MenuItem key={String(b.id)} value={String(b.id)}>
 					<BonusItem
 						bonus={b}
-						insight={props.insight}
-						fitness={props.fitness}
-						bonusMultiplier={props.bonusMultiplier}
+						completions={props.completions}
 					/>
 				</MenuItem>
 			))}
@@ -51,17 +47,15 @@ export function BonusSelector(props: IProps) {
 
 interface ItemProps {
 	bonus: BonusType,
-	insight: number;
-	fitness: number,
-	bonusMultiplier: number
+	completions: number;
 }
 
-export function BonusItem({ bonus, insight, fitness, bonusMultiplier }: ItemProps) {
+export function BonusItem({ bonus, completions }: ItemProps) {
 	return (
 		<>
 		<Typography component="div">
 			<Box sx={{ fontWeight: "bold" }}>{bonus.id} - {bonus.name}</Box>
-			{formatMultiplier(getCurrentBonusPower(bonus, insight, fitness, bonusMultiplier), bonus)}
+			{formatMultiplier(getCurrentBonusPower(bonus, completions), bonus)}
 		</Typography>
 		</>
 	)

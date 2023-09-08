@@ -2,7 +2,6 @@ import { Player } from "@player";
 import { Multipliers, defaultMultipliers, mergeMultipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { Worm } from "./Worm";
-import { calculateFitness } from "./calculations";
 import { Growths } from "../Bladeburner/data/Growths";
 import { BladeburnerConstants } from "../Bladeburner/data/Constants";
 
@@ -98,7 +97,7 @@ export function applySpecialBonus(worm: Worm, numCycles = 1) {
 	const effect = bonusMult(0)[worm.bonus.id];
 	if (effect !== null) return;
 
-	const power = getCurrentBonusPower(worm.bonus, worm.insight, calculateFitness(worm), worm.difficulty.bonusMultiplier);
+	const power = getCurrentBonusPower(worm.bonus, worm.completions);
 
 	switch (worm.bonus.id) {
 		case Bonus.TEMPORAL_RESONATOR: {
@@ -129,17 +128,16 @@ export function applySpecialBonus(worm: Worm, numCycles = 1) {
 export const stringIsBonusKey = (s: string): s is keyof typeof Bonus => Object.keys(Bonus).indexOf(s) !== -1;
 export const numberIsBonusValue = (n: number): n is typeof Bonus[keyof typeof Bonus] => Object.values(Bonus).indexOf(n as typeof Bonus[keyof typeof Bonus]) !== -1;
 
-export function getCurrentBonusPower(data: BonusType, insight: number, fitness: number, bonusMultiplier: number) {
+export function getCurrentBonusPower(data: BonusType, completions: number) {
 	return 1 + (
-		((fitness * 0.6) + (insight * 0.4)) *
-		bonusMultiplier *
+		(Math.log10(completions + 1)) / 4 *
 		(data.power / 100)
 	);
 }
 
-export function getMultiplier(data: BonusType, insight: number, fitness: number, bonusMultiplier: number): Multipliers | null {
+export function getMultiplier(data: BonusType, completions: number): Multipliers | null {
 	const mult = defaultMultipliers();
-	const power = getCurrentBonusPower(data, insight, fitness, bonusMultiplier);
+	const power = getCurrentBonusPower(data, completions);
 	const partial = bonusMult(power)[data.id];
 
 	if (partial === null) return partial;

@@ -327,13 +327,12 @@ const stanek = {
 
 // Worm API
 const worm = {
-	setGuess: 10,
-	getLength: 0,
-	getCurrentFitness: 2,
-	getCurrentGuess: 2,
-	setDifficulty: 2,
 	setBonus: 2,
-	getCurrentInsight: 2,
+	getCompletions: 0.5,
+	guessInput: 16,
+	getGuessTime: 0.5,
+	getStates: 1,
+	getSymbols: 1,
 } as const;
 
 // UI API

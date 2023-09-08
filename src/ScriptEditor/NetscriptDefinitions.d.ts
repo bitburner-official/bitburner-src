@@ -4379,53 +4379,6 @@ interface Stanek {
  */
 interface Worm {
 	/**
-	 * Set the guess for the best worm.
-	 * The time it takes depends on the number of threads used.
-	 * @remarks
-	 * RAM cost: 10 GB
-	 * 
-	 * @param guess - The guess to set. Has to be the exact length of the worm.
-	 * @returns The fitness value for that guess.
-	 */
-	setGuess(guess: number[]): Promise<number>;
-
-	/**
-	 * Get the length of the worm.
-	 * @remarks
-	 * RAM cost: 0 GB
-	 * 
-	 * @returns The length of the worm.
-	 */
-	getLength(): number;
-
-	/**
-	 * Get the current fitness of the guess.
-	 * The fitness value is a value between 0 and 1, indicating how good a guess is.
-	 * @remarks
-	 * RAM cost: 2 GB
-	 * 
-	 * @returns The current fitness value.
-	 */
-	getCurrentFitness(): number;
-
-	/**
-	 * Get the current guess. The guess will always be the length of the worm.
-	 * @remarks
-	 * RAM cost: 2 GB
-	 * 
-	 * @returns The current guess.
-	 */
-	getCurrentGuess(): number[];
-
-	/**
-	 * Set the difficulty of the worm.
-	 * Note, this resets the worm.
-	 * @remarks
-	 * RAM cost: 2 GB
-	 */
-	setDifficulty(difficulty: number): void;
-
-	/**
 	 * Set the bonus of the worm.
 	 * Note, this resets the worm.
 	 * @remarks
@@ -4434,13 +4387,49 @@ interface Worm {
 	setBonus(bonus: number): void;
 
 	/**
-	 * Get the current insight of the worm.
+	 * Get the current completion count of the worm.
+	 * @remarks
+	 * RAM cost: 0.5 GB
+	 * 
+	 * @returns The number of completions.
+	 */
+	getCompletions(): number;
+
+	/**
+	 * Tests a given input against the current worm.
+	 * @remarks
+	 * RAM cost: 16 GB
+	 * 
+	 * @returns Returns the final state of the input.
+	 */
+	guessInput(input: string): Promise<string>;
+
+	/**
+	 * Get the current guess time.
+	 * @remarks
+	 * RAM cost: 0.5 GB
+	 * 
+	 * @returns The current guess time in milliseconds for the specified threads.
+	 */
+	getGuessTime(threads: number): number;
+
+	/**
+	 * Get the current states the worm has.
 	 * @remarks
 	 * RAM cost: 1 GB
 	 * 
-	 * @returns The current insight.
+	 * @returns All possible states.
 	 */
-	getCurrentInsight(): number;
+	getStates(): string[];
+
+	/**
+	 * Get the current symbols of the worm.
+	 * @remarks
+	 * RAM cost: 1 GB
+	 * 
+	 * @returns All possible symbols.
+	 */
+	getSymbols(): string[];
 }
 
 /** @public */
