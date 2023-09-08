@@ -201,6 +201,7 @@ export class Corporation {
       val *= Math.pow(1.1, this.divisions.size);
       val -= val % 1e6; //Round down to nearest millionth
     }
+    if (val < 10e9) val = 10e9; // Base valuation
     return val * currentNodeMults.CorporationValuation;
   }
 
@@ -208,8 +209,7 @@ export class Corporation {
     this.valuationsList.push(this.cycleValuation); //Add current valuation to the list
     if (this.valuationsList.length > corpConstants.valuationLength) this.valuationsList.shift();
     let val = this.valuationsList.reduce((a, b) => a + b); //Calculate valuations sum
-    val /= corpConstants.valuationLength; //Calculate the average
-    if (val < 10e9) val = 10e9; // Base valuation
+    val /= this.valuationsList.length; //Calculate the average
     this.valuation = val;
   }
 
