@@ -53,8 +53,11 @@ interface IProps {
 // This is created when the player clicks the "Issue New Shares" buttons in the overview panel
 export function IssueNewSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
-  const [shares, setShares] = useState<number>(NaN);
   const maxNewShares = corp.calculateMaxNewShares();
+  const [shares, setShares] = useState<number>(maxNewShares);
+
+  const ceoOwnership = corp.numShares / (corp.totalShares + shares);
+  const newSharePrice = corp.getTargetSharePrice(ceoOwnership);
 
   const newShares = Math.round((shares || 0) / 10e6) * 10e6;
   const disabled = isNaN(shares) || isNaN(newShares) || newShares < 10e6 || newShares > maxNewShares;
@@ -74,7 +77,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
           : ""}
         <br />
         <br />
-        Stock price decreased to <Money money={corp.sharePrice} />;
+        <b>{corp.name}</b>'s stock price decreased to <Money money={corp.sharePrice} />;
       </Typography>
     );
     dialogBoxCreate(dialogContents);
@@ -90,21 +93,21 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        You can issue new equity shares (i.e. stocks) in order to raise capital for your corporation.
-        <br />
-        <br />
-        &nbsp;* You can issue at most {formatShares(maxNewShares)} new shares
-        <br />
-        &nbsp;* New shares are sold at a 10% discount
-        <br />
-        &nbsp;* You will not be able to issue new shares again (or dissolve the corporation) for{" "}
-        {nextCooldownInHours.toFixed()} hours
-        <br />
-        &nbsp;* Issuing new shares causes dilution, resulting in a decrease in stock price and lower dividends per share
-        <br />
-        &nbsp;* Number of new shares issued must be a multiple of 10 million
-        <br />
-        <br />
+        You can issue new equity shares (i.e. stocks) in order to raise capital.
+        <ul>
+          <li>The number of new shares issued must be a multiple of 10 million.</li>
+          <li>You can issue at most {formatShares(maxNewShares)} new shares.</li>
+          <li>
+            Issuing {formatShares(shares)} new shares will cause dilution, reducing <b>{corp.name}</b>'s stock price to{" "}
+            <Money money={newSharePrice} /> and reducing dividends per share.
+          </li>
+          <li>All new shares are sold at the lower price.</li>
+          <li>The money from issuing new shares will be deposited directly into your Corporation's funds.</li>
+          <li>
+            You will not be able to issue new shares again (or dissolve the corporation) for{" "}
+            {nextCooldownInHours.toFixed()} hours.
+          </li>
+        </ul>
         When you choose to issue new equity, private shareholders have first priority for up to 0.5n% of the new shares,
         where n is the percentage of the company currently owned by private shareholders. If they choose to exercise
         this option, these newly issued shares become private, restricted shares, which means you cannot buy them back.

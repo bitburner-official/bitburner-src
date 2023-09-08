@@ -56,9 +56,8 @@ export function SellSharesModal(props: IProps): React.ReactElement {
       props.onClose();
       dialogBoxCreate(
         <>
-          Sold {formatShares(shares)} shares for <Money money={profit} />. The corporation's stock price fell to{" "}
-          <Money money={corp.sharePrice} />
-          as a result of dilution.
+          Sold {formatShares(shares)} shares for <Money money={profit} />. <b>{corp.name}</b>'s stock price fell to{" "}
+          <Money money={corp.sharePrice} />.
         </>,
       );
 
@@ -75,17 +74,13 @@ export function SellSharesModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Enter the number of shares you would like to sell. The money from selling your shares will go directly to you
-        (NOT your Corporation).
-        <br />
-        <br />
-        The amount sold must be an integer between 1 and 100t.
-        <br />
-        <br />
-        Selling your shares will cause your corporation's stock price to fall due to dilution. Furthermore, selling a
-        large number of shares all at once will have an immediate effect in reducing your stock price.
-        <br />
-        <br />
+        Enter the number of shares you would like to sell.
+        <ul>
+          <li>
+            Selling shares will cause <b>{corp.name}</b>'s stock price to fall due to market forces.
+          </li>
+          <li>The money from selling your shares will go directly to you (NOT your Corporation).</li>
+        </ul>
         The current price of your company's stock is <Money money={corp.sharePrice} />
       </Typography>
       <br />

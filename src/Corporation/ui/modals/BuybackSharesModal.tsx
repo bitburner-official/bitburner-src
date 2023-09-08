@@ -22,7 +22,7 @@ interface IProps {
 // This is created when the player clicks the "Buyback Shares" button in the overview panel
 export function BuybackSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
-  const [shares, setShares] = useState<number>(NaN);
+  const [shares, setShares] = useState<number>(corp.issuedShares);
 
   const ceoOwnership = (corp.numShares + shares) / corp.totalShares;
   const buybackPrice = corp.getTargetSharePrice(ceoOwnership);
@@ -72,15 +72,16 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Enter the number of outstanding shares you would like to buy back. These shares must be bought at a 10% premium.
-        However, repurchasing shares from the market tends to lead to an increase in stock price.
-        <br />
-        <br />
-        To purchase these shares, you must use your own money (NOT your Corporation's funds).
-        <br />
-        <br />
-        The current buyback price of your company's stock is <Money money={buybackPrice} forPurchase={true} />. Your
-        company currently has {formatShares(corp.issuedShares)} outstanding stock shares.
+        Enter the number of outstanding shares you would like to buy back.
+        <ul>
+          <li>
+            Repurchasing shares from the market will lead to an increase in <b>{corp.name}</b>'s stock price.
+          </li>
+          <li>All of these shares must be bought at the higher price.</li>
+          <li>You purchase these shares with your own money (NOT your Corporation's funds).</li>
+        </ul>
+        The current buyback price of <b>{corp.name}</b>'s stock is <Money money={buybackPrice} forPurchase={true} />.
+        <b>{corp.name}</b> currently has {formatShares(corp.issuedShares)} outstanding stock shares.
       </Typography>
       <CostIndicator />
       <br />

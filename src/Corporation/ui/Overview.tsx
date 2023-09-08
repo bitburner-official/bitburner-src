@@ -76,8 +76,9 @@ export function Overview({ rerender }: IProps): React.ReactElement {
           title={
             <StatsTable
               rows={[
-                ["Outstanding Shares:", formatShares(corp.issuedShares)],
-                ["Private Shares:", formatShares(corp.totalShares - corp.issuedShares - corp.numShares)],
+                ["Owned Stock Shares:", formatShares(corp.numShares), `(${formatPercent(corp.numShares)})`],
+                ["Outstanding Shares:", formatShares(corp.issuedShares), `(${formatPercent(corp.issuedShares)})`],
+                ["Private Shares:", formatShares(corp.investorShares), `(${formatPercent(corp.investorShares)})`],
               ]}
             />
           }

@@ -50,11 +50,14 @@ export function GoPublicModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Enter the number of shares you would like to issue for your IPO. These shares will be publicly sold and you will
-        no longer own them. Your Corporation will receive <Money money={initialSharePrice} /> per share (the IPO money
-        will be deposited directly into your Corporation's funds).
-        <br />
-        <br />
+        Enter the number of shares you would like to issue for your IPO.
+        <ul>
+          <li>These shares will be publicly sold and you will no longer own them.</li>
+          <li>
+            <b>{corp.name}</b> will receive <Money money={initialSharePrice} /> per share (the IPO money will be
+            deposited directly into your Corporation's funds).
+          </li>
+        </ul>
         You can issue some, but not all, of your {formatShares(corp.numShares)} shares.
       </Typography>
       <Box display="flex" alignItems="center">
