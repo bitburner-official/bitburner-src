@@ -134,7 +134,8 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
   corporation.investorShares += privateShares;
   corporation.totalShares += amount;
   corporation.addFunds(profit); // TODO: use addNonIncomeFunds()
-  corporation.immediatelyUpdateSharePrice();
+  // Set sharePrice directly because all formulas will be based on stale cycleValuation data
+  corporation.sharePrice = newSharePrice;
 
   return [profit, amount, privateShares];
 }

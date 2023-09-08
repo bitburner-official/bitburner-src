@@ -225,10 +225,6 @@ export class Corporation {
     }
   }
 
-  immediatelyUpdateSharePrice(): void {
-    this.sharePrice = this.getTargetSharePrice();
-  }
-
   calculateMaxNewShares(): number {
     const maxNewSharesUnrounded = Math.round(this.totalShares * 0.2);
     const maxNewShares = maxNewSharesUnrounded - (maxNewSharesUnrounded % 10e6);
