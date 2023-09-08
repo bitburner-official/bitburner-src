@@ -116,7 +116,8 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
     );
   }
 
-  const newSharePrice = Math.round(corporation.sharePrice * 0.8);
+  const ceoOwnership = corporation.numShares / (corporation.totalShares + amount);
+  const newSharePrice = corporation.getTargetSharePrice(ceoOwnership) * 0.9;
 
   const profit = amount * newSharePrice;
 
@@ -377,7 +378,8 @@ export function BuyBackShares(corporation: Corporation, numShares: number): bool
   if (numShares <= 0) throw new Error("Invalid value for number of shares");
   if (numShares > corporation.issuedShares) throw new Error("You don't have that many shares to buy!");
   if (!corporation.public) throw new Error("You haven't gone public!");
-  const buybackPrice = corporation.sharePrice * 1.1;
+  const ceoOwnership = (corporation.numShares + numShares) / corporation.totalShares;
+  const buybackPrice = corporation.getTargetSharePrice(ceoOwnership) * 1.1;
   if (Player.money < numShares * buybackPrice) throw new Error("You cant afford that many shares!");
   corporation.numShares += numShares;
   corporation.issuedShares -= numShares;

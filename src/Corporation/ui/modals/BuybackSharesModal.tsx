@@ -24,8 +24,8 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
 
-  const currentStockPrice = corp.sharePrice;
-  const buybackPrice = currentStockPrice * 1.1;
+  const ceoOwnership = (corp.numShares + shares) / corp.totalShares;
+  const buybackPrice = corp.getTargetSharePrice(ceoOwnership) * 1.1;
   const disabledText = !isPositiveInteger(shares)
     ? "Number of shares must be a positive integer"
     : shares > corp.issuedShares
