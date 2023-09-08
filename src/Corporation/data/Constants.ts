@@ -42,8 +42,8 @@ export const stateNames: CorpStateName[] = ["START", "PURCHASE", "PRODUCTION", "
   initialShares = 1e9,
   /** When selling large number of shares, price is dynamically updated for every batch of this amount */
   sharesPerPriceUpdate = 1e6,
-  /** Cooldown for issue new shares cooldown in game cycles. 12 hours. */
-  issueNewSharesCooldown = 216e3,
+  /** Cooldown for issue new shares cooldown in game cycles. Initially 4 hours. */
+  issueNewSharesCooldown = 72e3,
   /** Cooldown for selling shares in game cycles. 1 hour. */
   sellSharesCooldown = 18e3,
   teaCostPerEmployee = 500e3,

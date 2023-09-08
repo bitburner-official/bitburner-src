@@ -119,7 +119,9 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
   const newSharePrice = Math.round(corporation.sharePrice * 0.8);
 
   const profit = amount * newSharePrice;
-  corporation.issueNewSharesCooldown = corpConstants.issueNewSharesCooldown;
+
+  const cooldownMultiplier = corporation.totalShares / corpConstants.initialShares;
+  corporation.issueNewSharesCooldown = corpConstants.issueNewSharesCooldown * cooldownMultiplier;
 
   const privateOwnedRatio = corporation.investorShares / corporation.totalShares;
   const maxPrivateShares = Math.round((amount / 2) * privateOwnedRatio);

@@ -9,6 +9,7 @@ import { NumberInput } from "../../../ui/React/NumberInput";
 import Button from "@mui/material/Button";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { IssueNewShares } from "../../Actions";
+import * as corpConstants from "../../data/Constants";
 
 interface IEffectTextProps {
   shares: number | null;
@@ -82,6 +83,9 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
     if (event.key === KEY.ENTER) issueNewShares();
   }
 
+  const nextCooldownInHours =
+    ((corp.totalShares / corpConstants.initialShares) * corpConstants.issueNewSharesCooldown) / 18e3;
+
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
@@ -92,7 +96,8 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
         <br />
         &nbsp;* New shares are sold at a 10% discount
         <br />
-        &nbsp;* You can only issue new shares once every 12 hours
+        &nbsp;* You will not be able to issue new shares again (or dissolve the corporation) for{" "}
+        {nextCooldownInHours.toFixed()} hours
         <br />
         &nbsp;* Issuing new shares causes dilution, resulting in a decrease in stock price and lower dividends per share
         <br />
