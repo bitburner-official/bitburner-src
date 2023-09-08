@@ -688,11 +688,11 @@ export class Division {
                     (expWarehouse.materials[matName].stored + amt),
                 );
 
-                expWarehouse.materials[matName].stored += amt;
                 expWarehouse.materials[matName].averagePrice =
                   (expWarehouse.materials[matName].averagePrice * expWarehouse.materials[matName].stored +
                     expWarehouse.materials[matName].marketPrice * amt) /
                   (expWarehouse.materials[matName].stored + amt);
+                expWarehouse.materials[matName].stored += amt;
                 mat.stored -= amt;
                 mat.exportedLastCycle += amt;
                 expIndustry.updateWarehouseSizeUsed(expWarehouse);
