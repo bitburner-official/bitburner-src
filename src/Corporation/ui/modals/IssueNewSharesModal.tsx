@@ -19,7 +19,7 @@ function EffectText(props: IEffectTextProps): React.ReactElement {
   const corp = useCorporation();
   if (props.shares === null) return <></>;
   const ceoOwnership = corp.numShares / (corp.totalShares + props.shares);
-  const newSharePrice = corp.getTargetSharePrice(ceoOwnership) * 0.9;
+  const newSharePrice = corp.getTargetSharePrice(ceoOwnership);
   const maxNewShares = corp.calculateMaxNewShares();
   let newShares = props.shares;
   if (isNaN(newShares)) {
