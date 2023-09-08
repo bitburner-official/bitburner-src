@@ -106,7 +106,7 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
 
   corporation.issuedShares += amount - privateShares;
   corporation.totalShares += amount;
-  corporation.funds = corporation.funds + profit;
+  corporation.addNonIncomeFunds(profit);
   corporation.immediatelyUpdateSharePrice();
 
   return [profit, amount, privateShares];
