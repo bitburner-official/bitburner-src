@@ -113,7 +113,13 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
         this option, these newly issued shares become private, restricted shares, which means you cannot buy them back.
       </Typography>
       <EffectText shares={shares} />
-      <NumberInput autoFocus placeholder="# New Shares" onChange={setShares} onKeyDown={onKeyDown} />
+      <NumberInput
+        defaultValue={shares}
+        autoFocus
+        placeholder="# New Shares"
+        onChange={setShares}
+        onKeyDown={onKeyDown}
+      />
       <Button disabled={disabled} onClick={issueNewShares} sx={{ mx: 1 }}>
         Issue New Shares
       </Button>

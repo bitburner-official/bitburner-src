@@ -85,7 +85,13 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
       </Typography>
       <CostIndicator />
       <br />
-      <NumberInput autoFocus={true} placeholder="Shares to buyback" onChange={setShares} onKeyDown={onKeyDown} />
+      <NumberInput
+        defaultValue={shares}
+        autoFocus={true}
+        placeholder="Shares to buyback"
+        onChange={setShares}
+        onKeyDown={onKeyDown}
+      />
       <ButtonWithTooltip disabledTooltip={disabledText} onClick={buy}>
         Buy shares
       </ButtonWithTooltip>

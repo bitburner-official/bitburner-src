@@ -22,7 +22,9 @@ interface IProps {
 export function GoPublicModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
-  const initialSharePrice = corp.getTargetSharePrice();
+
+  const ceoOwnership = (corp.numShares - (shares || 0)) / corp.totalShares;
+  const initialSharePrice = corp.getTargetSharePrice(ceoOwnership);
 
   function goPublic(): void {
     GoPublic(corp, shares);
@@ -61,7 +63,13 @@ export function GoPublicModal(props: IProps): React.ReactElement {
         You can issue some, but not all, of your {formatShares(corp.numShares)} shares.
       </Typography>
       <Box display="flex" alignItems="center">
-        <NumberInput onChange={setShares} autoFocus placeholder="Shares to issue" onKeyDown={onKeyDown} />
+        <NumberInput
+          defaultValue={shares}
+          onChange={setShares}
+          autoFocus
+          placeholder="Shares to issue"
+          onKeyDown={onKeyDown}
+        />
         <ButtonWithTooltip disabledTooltip={disabledText} onClick={goPublic}>
           Go Public
         </ButtonWithTooltip>

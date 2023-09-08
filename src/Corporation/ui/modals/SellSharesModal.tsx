@@ -85,6 +85,7 @@ export function SellSharesModal(props: IProps): React.ReactElement {
       </Typography>
       <br />
       <NumberInput
+        defaultValue={shares}
         variant="standard"
         autoFocus
         placeholder="Shares to sell"

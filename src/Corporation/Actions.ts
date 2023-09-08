@@ -86,7 +86,9 @@ export function IssueDividends(corporation: Corporation, rate: number): void {
 }
 
 export function GoPublic(corporation: Corporation, numShares: number): boolean {
-  const initialSharePrice = corporation.getTargetSharePrice();
+  const ceoOwnership = (corporation.numShares - numShares) / corporation.totalShares;
+  const initialSharePrice = corporation.getTargetSharePrice(ceoOwnership);
+
   if (isNaN(numShares)) throw new Error("Invalid value for number of issued shares");
   if (numShares < 0) throw new Error("Invalid value for number of issued shares");
   if (numShares > corporation.numShares) throw new Error("You don't have that many shares to issue!");
@@ -94,7 +96,7 @@ export function GoPublic(corporation: Corporation, numShares: number): boolean {
   corporation.sharePrice = initialSharePrice;
   corporation.issuedShares += numShares;
   corporation.numShares -= numShares;
-  corporation.addFunds(numShares * initialSharePrice);
+  corporation.addFunds(numShares * initialSharePrice); // TODO: use addNonIncomeFunds()
   return true;
 }
 
@@ -131,7 +133,7 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
   corporation.issuedShares += amount - privateShares;
   corporation.investorShares += privateShares;
   corporation.totalShares += amount;
-  corporation.addFunds(profit);
+  corporation.addFunds(profit); // TODO: use addNonIncomeFunds()
   corporation.immediatelyUpdateSharePrice();
 
   return [profit, amount, privateShares];
@@ -173,7 +175,7 @@ export function AcceptInvestmentOffer(corporation: Corporation): boolean {
   const funding = val * percShares * roundMultiplier;
   const investShares = Math.floor(corpConstants.initialShares * percShares);
   corporation.fundingRound++;
-  corporation.addFunds(funding);
+  corporation.addFunds(funding); // TODO: use addNonIncomeFunds()
 
   corporation.numShares -= investShares;
   corporation.investorShares += investShares;
