@@ -55,13 +55,11 @@ export function GoPublicModal(props: IProps): React.ReactElement {
         Enter the number of shares you would like to issue for your IPO.
         <ul>
           <li>These shares will be publicly sold and you will no longer own them.</li>
-          <li>
-            <b>{corp.name}</b> will receive <Money money={initialSharePrice} /> per share (the IPO money will be
-            deposited directly into your Corporation's funds).
-          </li>
+          <li>The IPO money will be deposited directly into your Corporation's funds.</li>
         </ul>
         You can issue some, but not all, of your {formatShares(corp.numShares)} shares.
       </Typography>
+      <br />
       <Box display="flex" alignItems="center">
         <NumberInput
           defaultValue={shares || ""}
@@ -74,6 +72,12 @@ export function GoPublicModal(props: IProps): React.ReactElement {
           Go Public
         </ButtonWithTooltip>
       </Box>
+      <br />
+      <Typography>
+        Go public at <Money money={initialSharePrice} /> per share?
+        <br />
+        <b>{corp.name}</b> will receive <Money money={initialSharePrice * (shares || 0)} />.
+      </Typography>
     </Modal>
   );
 }
