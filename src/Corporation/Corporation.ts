@@ -208,7 +208,7 @@ export class Corporation {
     if (ceoOwnership === null) {
       ceoOwnership = this.numShares / this.totalShares;
     }
-    const ceoConfidence = 0.5 + Math.sqrt(ceoOwnership);
+    const ceoConfidence = 0.5 + Math.sqrt(Math.max(0, ceoOwnership));
     const marketCap = this.valuation * ceoConfidence;
     return marketCap / this.totalShares;
   }
