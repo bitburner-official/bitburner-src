@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
-import { formatShares } from "../../../ui/formatNumber";
+import { formatShares, formatPercent } from "../../../ui/formatNumber";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
 import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
@@ -75,6 +75,8 @@ export function GoPublicModal(props: IProps): React.ReactElement {
       <br />
       <Typography>
         Go public at <Money money={initialSharePrice} /> per share?
+        <br />
+        Your equity will fall to {formatPercent(ceoOwnership, 1)}.
         <br />
         <b>{corp.name}</b> will receive <Money money={initialSharePrice * (shares || 0)} />.
       </Typography>

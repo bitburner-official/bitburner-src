@@ -22,7 +22,7 @@ export function startCorporation(this: PlayerObject, corpName: string, seedFunde
   }
 
   if (seedFunded) {
-    this.corporation.investorShares += 500_000_000;
-    this.corporation.totalShares += 500_000_000;
+    this.corporation.investorShares += 500e6;
+    this.corporation.totalShares += 500e6;
   }
 }

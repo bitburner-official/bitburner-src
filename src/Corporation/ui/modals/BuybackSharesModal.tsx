@@ -61,7 +61,7 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
     } else {
       return (
         <Typography>
-          Purchase {formatShares(shares)} shares for a total of{" "}
+          Buy back {formatShares(shares)} shares for a total of{" "}
           <Money money={shares * buybackPrice} forPurchase={true} />?
           <br />
           <b>{corp.name}</b>'s stock price will rise to <Money money={buybackPrice} /> per share.
@@ -79,9 +79,7 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
       <Typography component="div">
         Enter the number of outstanding shares you would like to buy back.
         <ul>
-          <li>
-            Repurchasing shares from the market will lead to an increase in <b>{corp.name}</b>'s stock price.
-          </li>
+          <li>Repurchasing shares from the market will cause stock price to rise due to market forces.</li>
           <li>All of these shares must be bought at the higher price.</li>
           <li>You purchase these shares with your own money (NOT your Corporation's funds).</li>
         </ul>

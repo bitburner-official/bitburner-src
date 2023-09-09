@@ -1,6 +1,5 @@
 import React from "react";
 import { formatPercent, formatShares } from "../../../ui/formatNumber";
-import * as corpConstants from "../../data/Constants";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
 import { useCorporation } from "../Context";
@@ -17,31 +16,38 @@ interface IProps {
 
 // Create a popup that lets the player manage exports
 export function FindInvestorsModal(props: IProps): React.ReactElement {
-  const corporation = useCorporation();
-  const { funds, shares } = GetInvestmentOffer(corporation);
+  const corp = useCorporation();
+  const { funds, shares } = GetInvestmentOffer(corp);
   if (shares === 0) {
     return <></>;
   }
-  const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
+  const percShares = shares / corp.totalShares;
 
   function findInvestors(): void {
-    AcceptInvestmentOffer(corporation);
+    AcceptInvestmentOffer(corp);
     props.rerender();
     props.onClose();
   }
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        An investment firm has offered <b>{corporation.name}</b> <Money money={funds} /> in funding in exchange for a{" "}
-        {formatPercent(percShares, 0)} stake in the company ({formatShares(shares)} shares).
-        <br />
-        <br />
-        Do you accept or reject this offer?
+        An investment firm has offered <Money money={funds} /> in exchange for {formatShares(shares)} shares (a{" "}
+        {formatPercent(percShares, 1)} stake in the company).
         <br />
         <br />
         Hint: Investment firms will offer more money if your Corporation is turning a profit.
       </Typography>
+      <br />
       <Button onClick={findInvestors}>Accept</Button>
+      <br />
+      <br />
+      <Typography>
+        Do you accept this offer?
+        <br />
+        Your equity will fall to {formatPercent((corp.numShares - shares) / corp.totalShares, 1)}.
+        <br />
+        <b>{corp.name}</b> will receive <Money money={funds} />.
+      </Typography>
     </Modal>
   );
 }

@@ -5,6 +5,7 @@ import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
 import { useCorporation } from "../Context";
 import { Corporation } from "../../Corporation";
+import * as corpConstants from "../../data/Constants";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { SellShares } from "../../Actions";
@@ -54,8 +55,9 @@ export function SellSharesModal(props: IProps): React.ReactElement {
       props.onClose();
       dialogBoxCreate(
         <>
-          Sold {formatShares(shares)} shares for <Money money={profit} />. <b>{corp.name}</b>'s stock price fell to{" "}
-          <Money money={corp.sharePrice} />.
+          Sold {formatShares(shares)} shares for <Money money={profit} />.
+          <br />
+          <b>{corp.name}</b>'s stock price fell to <Money money={corp.sharePrice} />.
         </>,
       );
 
@@ -74,10 +76,12 @@ export function SellSharesModal(props: IProps): React.ReactElement {
       <Typography>
         Enter the number of shares you would like to sell.
         <ul>
-          <li>
-            Selling shares will cause <b>{corp.name}</b>'s stock price to fall due to market forces.
-          </li>
+          <li>Selling shares will cause stock price to fall due to market forces.</li>
           <li>The money from selling your shares will go directly to you (NOT your Corporation).</li>
+          <li>
+            You will not be able to sell shares again (or dissolve the corporation) for{" "}
+            {corp.convertCooldownToString(corpConstants.sellSharesCooldown)}.
+          </li>
         </ul>
         You currently have {formatShares(corp.numShares)} shares of <b>{corp.name}</b> stock, valued at{" "}
         <Money money={corp.sharePrice} /> per share.

@@ -39,9 +39,11 @@ function EffectText(props: IEffectTextProps): React.ReactElement {
 
   return (
     <Typography>
-      Issue {formatShares(newShares)} new shares for <Money money={newShares * newSharePrice} />?
+      Issue {formatShares(newShares)} new shares?
       <br />
-      <b>{corp.name}</b>'s stock price will fall to <Money money={newSharePrice} />.
+      <b>{corp.name}</b>'s stock price will fall to <Money money={newSharePrice} /> per share.
+      <br />
+      <b>{corp.name}</b> will receive <Money money={newShares * newSharePrice} />.
     </Typography>
   );
 }
@@ -93,22 +95,23 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
       <Typography component="div">
         You can issue new equity shares (i.e. stocks) in order to raise capital.
         <ul>
-          <li>The number of new shares issued must be a multiple of 10 million.</li>
-          <li>You can issue at most {formatShares(maxNewShares)} new shares.</li>
-          <li>
-            Issuing new shares will cause dilution, reducing dividends per share and lowering <b>{corp.name}</b>'s stock
-            price.
-          </li>
+          <li>Issuing new shares will cause dilution, lowering stock price and reducing dividends per share.</li>
           <li>All new shares are sold at the lower price.</li>
           <li>The money from issuing new shares will be deposited directly into your Corporation's funds.</li>
+          <li>
+            When you choose to issue new equity, private shareholders have first priority for up to 0.5n% of the new
+            shares, where n is the percentage of the company currently owned by private shareholders. If they choose to
+            exercise this option, these newly issued shares become private, restricted shares, which means you cannot
+            buy them back.
+          </li>
           <li>
             You will not be able to issue new shares again (or dissolve the corporation) for{" "}
             {corp.convertCooldownToString(nextCooldown)}.
           </li>
         </ul>
-        When you choose to issue new equity, private shareholders have first priority for up to 0.5n% of the new shares,
-        where n is the percentage of the company currently owned by private shareholders. If they choose to exercise
-        this option, these newly issued shares become private, restricted shares, which means you cannot buy them back.
+        You can issue at most {formatShares(maxNewShares)} new shares.
+        <br />
+        The number of new shares issued must be a multiple of 10 million.
       </Typography>
       <br />
       <NumberInput
