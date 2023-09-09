@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { formatShares } from "../../../ui/formatNumber";
+import { formatShares, formatPercent } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
@@ -23,11 +23,14 @@ function EffectText(props: IEffectTextProps): React.ReactElement {
   const maxNewShares = corp.calculateMaxNewShares();
   let newShares = props.shares;
   if (isNaN(newShares)) {
-    return <Typography>Invalid input</Typography>;
+    return <Typography>&nbsp;</Typography>;
   }
 
   // Round to nearest ten-million
   newShares = Math.round(newShares / 10e6) * 10e6;
+
+  const privateOwnedRatio = corp.investorShares / corp.totalShares;
+  const maxPrivateShares = Math.round(((newShares / 2) * privateOwnedRatio) / 10e6) * 10e6;
 
   if (newShares < 10e6) {
     return <Typography>Must issue at least 10 million new shares</Typography>;
@@ -40,6 +43,14 @@ function EffectText(props: IEffectTextProps): React.ReactElement {
   return (
     <Typography>
       Issue {formatShares(newShares)} new shares?
+      {privateOwnedRatio > 0 ? (
+        <>
+          <br />
+          Private investors may buy up to {formatShares(maxPrivateShares)} of these shares and keep them off the market.
+        </>
+      ) : (
+        <></>
+      )}
       <br />
       <b>{corp.name}</b>'s stock price will fall to <Money money={newSharePrice} /> per share.
       <br />
@@ -99,10 +110,11 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
           <li>All new shares are sold at the lower price.</li>
           <li>The money from issuing new shares will be deposited directly into your Corporation's funds.</li>
           <li>
-            When you choose to issue new equity, private shareholders have first priority for up to 0.5n% of the new
-            shares, where n is the percentage of the company currently owned by private shareholders. If they choose to
-            exercise this option, these newly issued shares become private, restricted shares, which means you cannot
-            buy them back.
+            Private shareholders have first priority for buying new shares, up to half of their existing stake in the
+            company <b>({formatPercent(corp.investorShares / 2 / corp.totalShares, 1)})</b>.
+            <br />
+            If they choose to exercise this option, these newly issued shares become private, restricted shares, which
+            means you cannot buy them back.
           </li>
           <li>
             You will not be able to issue new shares again (or dissolve the corporation) for{" "}
