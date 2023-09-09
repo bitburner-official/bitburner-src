@@ -2,6 +2,7 @@ import { isInteger } from "lodash";
 
 import { Player } from "@player";
 import { CorpResearchName, CorpSmartSupplyOption, InvestmentOffer } from "@nsdefs";
+import { formatShares } from "../ui/formatNumber";
 
 import { MaterialInfo } from "./MaterialInfo";
 import { Corporation } from "./Corporation";
@@ -358,13 +359,14 @@ export function BulkPurchase(
 }
 
 export function SellShares(corporation: Corporation, numShares: number): number {
-  if (isNaN(numShares) || !isInteger(numShares)) throw new Error("Invalid value for number of shares");
-  if (numShares <= 0) throw new Error("Invalid value for number of shares");
-  if (numShares > corporation.numShares) throw new Error("You don't have that many shares to sell!");
-  if (numShares === corporation.numShares) throw new Error("You cant't sell all your shares!");
-  if (numShares > 1e14) throw new Error("Invalid value for number of shares");
-  if (!corporation.public) throw new Error("You haven't gone public!");
-  if (corporation.shareSaleCooldown) throw new Error("Share sale on cooldown!");
+  if (isNaN(numShares) || !isInteger(numShares)) throw new Error("Invalid value for number of shares.");
+  if (numShares <= 0) throw new Error("Cannot sell a negative number of shares.");
+  if (numShares > corporation.numShares) throw new Error("You don't have that many shares to sell.");
+  if (numShares === corporation.numShares) throw new Error("You can't sell all your shares.");
+  if (numShares > 1e14) throw new Error(`Cannot sell more than ${formatShares(1e14)} shares at a time.`);
+  if (!corporation.public) throw new Error("Cannot sell shares before going public!");
+  if (corporation.shareSaleCooldown) throw new Error("Share sale on cooldown.");
+
   const [profit, newSharePrice, newSharesUntilUpdate] = corporation.calculateShareSale(numShares);
 
   corporation.numShares -= numShares;
@@ -378,16 +380,20 @@ export function SellShares(corporation: Corporation, numShares: number): number 
 
 export function BuyBackShares(corporation: Corporation, numShares: number): boolean {
   if (isNaN(numShares) || !isInteger(numShares)) throw new Error("Invalid value for number of shares");
-  if (numShares <= 0) throw new Error("Invalid value for number of shares");
-  if (numShares > corporation.issuedShares) throw new Error("You don't have that many shares to buy!");
-  if (!corporation.public) throw new Error("You haven't gone public!");
-  const ceoOwnership = (corporation.numShares + numShares) / corporation.totalShares;
-  const buybackPrice = corporation.getTargetSharePrice(ceoOwnership);
-  if (Player.money < numShares * buybackPrice) throw new Error("You cant afford that many shares!");
+  if (numShares <= 0) throw new Error("Cannot buy a negative number of shares.");
+  if (numShares > corporation.issuedShares) throw new Error("There are not that many outstanding shares to buy!");
+  if (numShares > 1e14) throw new Error(`Cannot buy more than ${formatShares(1e14)} shares at a time.`);
+  if (!corporation.public) throw new Error("Cannot buy back shares before going public!");
+
+  const [profit, newSharePrice, newSharesUntilUpdate] = corporation.calculateShareSale(-numShares);
+  const cost = -1.1 * profit;
+  if (Player.money < cost) throw new Error("You can't afford that many shares!");
+
   corporation.numShares += numShares;
   corporation.issuedShares -= numShares;
-  corporation.sharePrice = buybackPrice;
-  Player.loseMoney(numShares * buybackPrice, "corporation");
+  corporation.sharePrice = newSharePrice;
+  corporation.shareSalesUntilPriceUpdate = newSharesUntilUpdate;
+  Player.loseMoney(cost, "corporation");
   return true;
 }
 

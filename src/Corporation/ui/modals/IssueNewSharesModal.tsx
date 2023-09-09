@@ -106,7 +106,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
           </li>
           <li>
             You will not be able to issue new shares again (or dissolve the corporation) for{" "}
-            {corp.convertCooldownToString(nextCooldown)}.
+            <b>{corp.convertCooldownToString(nextCooldown)}</b>.
           </li>
         </ul>
         You can issue at most {formatShares(maxNewShares)} new shares.

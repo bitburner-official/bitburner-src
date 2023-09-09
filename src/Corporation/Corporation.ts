@@ -235,13 +235,15 @@ export class Corporation {
   // will be when the player sells his/her shares
   // @return - [Player profit, final stock price, end shareSalesUntilPriceUpdate property]
   calculateShareSale(numShares: number): [number, number, number] {
-    let sharesTracker = numShares;
+    let sharesRemaining = numShares;
     let sharesUntilUpdate = this.shareSalesUntilPriceUpdate;
     let sharePrice = this.sharePrice;
     let sharesSold = 0;
     let profit = 0;
 
-    const maxIterations = Math.ceil(numShares / corpConstants.sharesPerPriceUpdate);
+    const sharesPerStep = Math.sign(numShares) * corpConstants.sharesPerPriceUpdate;
+    const maxIterations = Math.ceil(numShares / sharesPerStep);
+
     if (isNaN(maxIterations) || maxIterations > 10e6) {
       console.error(
         `Something went wrong or unexpected when calculating share sale. Max iterations calculated to be ${maxIterations}`,
@@ -250,17 +252,16 @@ export class Corporation {
     }
 
     for (let i = 0; i < maxIterations; ++i) {
-      if (sharesTracker < sharesUntilUpdate) {
-        profit += sharePrice * sharesTracker;
-        sharesUntilUpdate -= sharesTracker;
+      if (Math.abs(sharesRemaining) < Math.abs(sharesUntilUpdate)) {
+        profit += sharePrice * sharesRemaining;
+        sharesUntilUpdate -= sharesRemaining;
         break;
       } else {
-        profit += sharePrice * sharesUntilUpdate;
-        sharesUntilUpdate = corpConstants.sharesPerPriceUpdate;
-        sharesTracker -= sharesUntilUpdate;
-        sharesSold += sharesUntilUpdate;
+        profit += sharePrice * sharesPerStep;
+        sharesRemaining -= sharesPerStep;
+        sharesSold += sharesPerStep;
 
-        // Calculate what new share price would be
+        // Update the share price
         const ceoOwnership = (this.numShares - sharesSold) / this.totalShares;
         const targetPrice = this.getTargetSharePrice(ceoOwnership);
         if (sharePrice <= targetPrice) {
@@ -268,6 +269,7 @@ export class Corporation {
         } else {
           sharePrice *= 1 - 0.5 * 0.01;
         }
+        sharesUntilUpdate = corpConstants.sharesPerPriceUpdate;
       }
     }
 

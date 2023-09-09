@@ -35,7 +35,7 @@ export function SellSharesModal(props: IProps): React.ReactElement {
     } else if (props.shares === corp.numShares) {
       return <Typography>You can not sell all your shares!</Typography>;
     } else if (props.shares > 1e14) {
-      return <Typography>You can't sell more than 100t shares at once!</Typography>;
+      return <Typography>You cannot sell more than {formatShares(1e14)} shares at once!</Typography>;
     } else {
       const [profit, sharePrice] = corp.calculateShareSale(props.shares);
       return (
@@ -80,7 +80,7 @@ export function SellSharesModal(props: IProps): React.ReactElement {
           <li>The money from selling your shares will go directly to you (NOT your Corporation).</li>
           <li>
             You will not be able to sell shares again (or dissolve the corporation) for{" "}
-            {corp.convertCooldownToString(corpConstants.sellSharesCooldown)}.
+            <b>{corp.convertCooldownToString(corpConstants.sellSharesCooldown)}</b>.
           </li>
         </ul>
         You currently have {formatShares(corp.numShares)} shares of <b>{corp.name}</b> stock, valued at{" "}
