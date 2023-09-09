@@ -74,8 +74,8 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
       <Typography component="div">
         Enter the number of outstanding shares you would like to buy back.
         <ul>
+          <li>Buying back shares will cause the stock price to rise due to market forces.</li>
           <li>These shares must be bought at a 10% premium over the market price.</li>
-          <li>The stock price will tend to rise due to market forces.</li>
           <li>You purchase these shares with your own money (NOT your Corporation's funds).</li>
         </ul>
         <b>{corp.name}</b> currently has {formatShares(corp.issuedShares)} outstanding stock shares, valued at{" "}
