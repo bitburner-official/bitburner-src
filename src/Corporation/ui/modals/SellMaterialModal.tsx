@@ -97,7 +97,9 @@ export function SellMaterialModal(props: IProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  If this is enabled, then this Material will automatically be sold at market price + markup
+                  If this is enabled, then this Material will automatically be sold at market price + markup.
+                  <br />
+                  This overrides player set pricing and gets overriden by an active TA2.
                 </Typography>
               }
             >
@@ -116,8 +118,9 @@ export function SellMaterialModal(props: IProps): React.ReactElement {
               title={
                 <Typography>
                   If this is enabled, then this Material will automatically be sold at the optimal price such that the
-                  amount sold matches the amount produced. (i.e. the highest possible price, while still ensuring that
-                  all produced materials will be sold)
+                  amount sold matches the amount specified.
+                  <br />
+                  This overrides player set pricing and TA1.
                 </Typography>
               }
             >
