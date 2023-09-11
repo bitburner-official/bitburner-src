@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
 import { formatShares } from "../../../ui/formatNumber";
@@ -20,36 +20,29 @@ interface IProps {
 // This is created when the player clicks the "Buyback Shares" button in the overview panel
 export function BuybackSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
-  const [shares, setShares] = useState<number>(corp.issuedShares);
+  const [shares, setShares] = useState<number>(NaN);
   let [canBuy, disabledText] = corp.canBuybackShares(shares);
 
-  const [cost, sharePrice] = corp.calculateShareBuyback(shares);
+  const [cost, sharePrice] = useMemo(() => corp.calculateShareBuyback(shares || 0), [shares, corp]);
 
   if (Player.money < cost) {
     canBuy = false;
     disabledText ||= "You cannot afford that many shares.";
   }
+  if (shares === 0) {
+    canBuy = false;
+  }
+  if (!props.open) {
+    disabledText = "";
+  }
 
   function buy(): void {
     if (!canBuy) return;
-    // hack to prevent re-rendering during modal close animation
-    setTimeout(() => {
-      BuyBackShares(corp, shares);
-    }, 1);
-    props.onClose();
+    BuyBackShares(corp, shares);
+    setShares(NaN);
     props.rerender();
-  }
 
-  function CostIndicator(): React.ReactElement {
-    if (shares > 0 && sharePrice != 0) {
-      return (
-        <Typography>
-          <b>{corp.name}</b>'s stock price will rise to <Money money={sharePrice} /> per share.
-        </Typography>
-      );
-    } else {
-      return <Typography>&nbsp;</Typography>;
-    }
+    props.onClose();
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
@@ -89,7 +82,13 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
       </ButtonWithTooltip>
       <br />
       <br />
-      <CostIndicator />
+      {canBuy ? (
+        <Typography>
+          <b>{corp.name}</b>'s stock price will rise to <Money money={sharePrice} /> per share.
+        </Typography>
+      ) : (
+        <Typography>&nbsp;</Typography>
+      )}
     </Modal>
   );
 }

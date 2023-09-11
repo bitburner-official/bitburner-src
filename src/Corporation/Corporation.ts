@@ -242,7 +242,7 @@ export class Corporation {
     let sharesSold = 0;
     let profit = 0;
 
-    const sharesPerStep = Math.sign(numShares) * corpConstants.sharesPerPriceUpdate;
+    const sharesPerStep = Math.sign(numShares || 1) * corpConstants.sharesPerPriceUpdate;
     const maxIterations = Math.ceil(numShares / sharesPerStep);
 
     if (isNaN(maxIterations) || maxIterations > 10e6) {
@@ -280,7 +280,7 @@ export class Corporation {
   canSellShares(numShares: number): [boolean, string] {
     if (isNaN(numShares) || !isInteger(numShares)) {
       return [false, "Invalid value for number of shares."];
-    } else if (numShares <= 0) {
+    } else if (numShares < 0) {
       return [false, "Cannot sell a negative number of shares."];
     } else if (numShares > this.numShares) {
       return [false, "You do not have that many shares to sell."];
@@ -306,7 +306,7 @@ export class Corporation {
   canBuybackShares(numShares: number): [boolean, string] {
     if (isNaN(numShares) || !isInteger(numShares)) {
       return [false, "Invalid value for number of shares."];
-    } else if (numShares <= 0) {
+    } else if (numShares < 0) {
       return [false, "Cannot buy a negative number of shares."];
     } else if (numShares > this.issuedShares) {
       return [false, "There are not that many outstanding shares to buy."];

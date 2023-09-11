@@ -105,10 +105,10 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
   amount = Math.round(amount / 10e6) * 10e6;
 
   if (!corporation.public) {
-    throw new Error(`Can't issue new shares. The corporation has not gone public yet.`);
+    throw new Error(`Cannot issue new shares. The corporation has not gone public yet.`);
   }
   if (corporation.issueNewSharesCooldown > 0) {
-    throw new Error(`Can't issue new shares, action on cooldown.`);
+    throw new Error(`Cannot issue new shares, action on cooldown.`);
   }
   if (isNaN(amount) || amount < 10e6 || amount > maxNewShares) {
     throw new Error(

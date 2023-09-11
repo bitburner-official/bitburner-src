@@ -26,9 +26,16 @@ export function GoPublicModal(props: IProps): React.ReactElement {
   const ceoOwnership = (corp.numShares - (shares || 0)) / corp.totalShares;
   const initialSharePrice = corp.getTargetSharePrice(ceoOwnership);
 
+  const disabledText =
+    shares >= corp.numShares
+      ? "Cannot issue this many shares"
+      : shares !== 0 && !isPositiveInteger(shares)
+      ? "Must issue an non-negative integer number of shares"
+      : "";
+
   function goPublic(): void {
+    if (disabledText != "") return;
     GoPublic(corp, shares);
-    if (shares >= corp.numShares || (shares !== 0 && !isPositiveInteger(shares))) return;
     props.rerender();
     dialogBoxCreate(
       <Typography>
@@ -42,12 +49,6 @@ export function GoPublicModal(props: IProps): React.ReactElement {
     if (event.key === KEY.ENTER) goPublic();
   }
 
-  const disabledText =
-    shares >= corp.numShares
-      ? "Cannot issue this many shares"
-      : shares !== 0 && !isPositiveInteger(shares)
-      ? "Must issue an non-negative integer number of shares"
-      : "";
 
   return (
     <Modal open={props.open} onClose={props.onClose}>

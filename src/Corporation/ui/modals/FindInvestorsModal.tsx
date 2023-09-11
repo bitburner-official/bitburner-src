@@ -14,7 +14,7 @@ interface IProps {
   rerender: () => void;
 }
 
-// Create a popup that lets the player manage exports
+// Create a popup that lets the player manage investment offers
 export function FindInvestorsModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const { funds, shares } = GetInvestmentOffer(corp);
@@ -41,13 +41,9 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
       <Button onClick={findInvestors}>Accept</Button>
       <br />
       <br />
-      <Typography>
-        Do you accept this offer?
-        <br />
-        Your equity will fall to {formatPercent((corp.numShares - shares) / corp.totalShares, 1)}.
-        <br />
-        <b>{corp.name}</b> will receive <Money money={funds} />.
-      </Typography>
+      <Typography>Do you accept this offer?</Typography>
+      <Typography>Your equity will fall to {formatPercent((corp.numShares - shares) / corp.totalShares, 1)}.</Typography>
+      <Typography><b>{corp.name}</b> will receive <Money money={funds} />.</Typography>
     </Modal>
   );
 }

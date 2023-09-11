@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { formatShares } from "../../../ui/formatNumber";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
 import { useCorporation } from "../Context";
 import * as corpConstants from "../../data/Constants";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { SellShares } from "../../Actions";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { NumberInput } from "../../../ui/React/NumberInput";
@@ -22,32 +22,14 @@ export function SellSharesModal(props: IProps): React.ReactElement {
   const [shares, setShares] = useState<number>(NaN);
 
   const [canSell, disabledText] = corp.canSellShares(shares);
-  const [profit, sharePrice] = corp.calculateShareSale(shares);
-
-  function ProfitIndicator(): React.ReactElement {
-    if (disabledText) {
-      return <Typography>{disabledText}</Typography>;
-    } else {
-      return (
-        <Typography>
-          Sell {formatShares(shares)} shares?
-          <br />
-          <b>{corp.name}</b>'s stock price will fall to <Money money={sharePrice} /> per share.
-          <br />
-          You will receive <Money money={profit} />.
-        </Typography>
-      );
-    }
-  }
+  const [profit, sharePrice] = useMemo(() => corp.calculateShareSale(shares || 0), [shares, corp]);
 
   function sell(): void {
     if (!canSell) return;
-    // hack to prevent re-rendering during modal close animation
-    setTimeout(() => {
-      SellShares(corp, shares);
-    }, 1);
-    props.onClose();
+    SellShares(corp, shares);
     props.rerender();
+
+    props.onClose();
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
@@ -78,12 +60,18 @@ export function SellSharesModal(props: IProps): React.ReactElement {
         onChange={setShares}
         onKeyDown={onKeyDown}
       />
-      <Button disabled={!canSell} onClick={sell} sx={{ mx: 1 }}>
+      <ButtonWithTooltip disabledTooltip={disabledText} onClick={sell}>
         Sell shares
-      </Button>
+      </ButtonWithTooltip>
       <br />
       <br />
-      <ProfitIndicator />
+      <Typography>Sell {formatShares(shares || 0)} shares?</Typography>
+      <Typography>
+        <b>{corp.name}</b>'s stock price will fall to <Money money={sharePrice} /> per share.
+      </Typography>
+      <Typography>
+        You will receive <Money money={profit} />.
+      </Typography>
     </Modal>
   );
 }

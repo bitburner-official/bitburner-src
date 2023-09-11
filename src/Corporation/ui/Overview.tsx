@@ -261,7 +261,7 @@ function PublicButtons({ rerender }: IPublicButtonsProps): React.ReactElement {
       >
         Issue New Shares
       </ButtonWithTooltip>
-      <IssueNewSharesModal open={issueNewSharesOpen} onClose={() => setIssueNewSharesOpen(false)} />
+      <IssueNewSharesModal open={issueNewSharesOpen} onClose={() => setIssueNewSharesOpen(false)} rerender={rerender} />
       <ButtonWithTooltip
         normalTooltip={"Manage the dividends that are paid out to shareholders (including yourself)"}
         onClick={() => setIssueDividendsOpen(true)}
