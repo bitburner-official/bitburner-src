@@ -209,21 +209,36 @@ function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRun
 
 /** Convert multiple arguments for tprint or print into a single string. */
 function argsToString(args: unknown[]): string {
-  let out = "";
-  for (let arg of args) {
+  // Reduce array of args into a single output string
+  return args.reduce((out, arg) => {
     if (arg === null) {
-      out += "null";
-      continue;
+      return (out += "null");
     }
     if (arg === undefined) {
-      out += "undefined";
-      continue;
+      return (out += "undefined");
     }
-    arg = toNative(arg);
-    out += typeof arg === "object" ? JSON.stringify(arg) : `${arg}`;
-  }
+    const nativeArg = toNative(arg);
 
-  return out;
+    // Handle Map formatting, since it does not JSON stringify or toString in a helpful way
+    // output is  "< Map: key1 => value1; key2 => value2 >"
+    if (nativeArg instanceof Map && [...nativeArg].length) {
+      const formattedMap = [...nativeArg]
+        .map((m) => {
+          return `${m[0]} => ${m[1]}`;
+        })
+        .join("; ");
+      return (out += `< Map: ${formattedMap} >`);
+    }
+    // Handle Set formatting, since it does not JSON stringify or toString in a helpful way
+    if (nativeArg instanceof Set) {
+      return (out += `< Set: ${[...nativeArg].join("; ")} >`);
+    }
+    if (typeof nativeArg === "object") {
+      return (out += JSON.stringify(nativeArg));
+    }
+
+    return (out += `${nativeArg}`);
+  }, "") as string;
 }
 
 /** Creates an error message string containing hostname, scriptname, and the error message msg */
