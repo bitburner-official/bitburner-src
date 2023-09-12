@@ -1,21 +1,20 @@
 # Terminal
 
-The Terminal is a console emulator program that lets you interface with all of the [Servers](servers.md) in the game.
-The Terminal can be accessed by clicking the `Terminal` tab on the navigation menu on the left-hand side of the game (you may need to expand the 'Hacking' header in order to see the `Terminal` tab).
+The Terminal is a console emulator program that lets you interface with other [Servers](servers.md) in the game.
+It can be accessed by clicking the `Terminal` tab on the navigation menu on the left-hand side of the game (you may need to expand the 'Hacking' header in order to see the `Terminal` tab).
 Alternatively, the shortcut Alt + t can be used to open the Terminal.
 
 ## Filesystem (Directories)
 
-The Terminal contains a **very** basic filesystem that allows you to store and organize your files into different directories.
-Note that this is **not** a true filesystem implementation.
-Instead, it is done almost entirely using string manipulation.
-For this reason, many of the nice & useful features you'd find in a real filesystem do not exist.
+The Terminal contains a very basic filesystem to help you organize files into different directories.
+Note that this is **not** a _true_ filesystem implementation and instead relies almost entirely on string manipulation.
+For this reason, some features found in real-world filesystems do not exist in our Terminal. For example:
 
-Here are the Terminal commands you'll commonly use when dealing with the filesystem.
+- Tab autocompletion does not work with relative paths
+- **`mv` and `rm` commands only accept full filepaths in their arguments.**
+  **They do not act on directories.**
 
-- `ls` (view all files in the current folder)
-- `cd` (change folder)
-- `mv` (rename a file)
+These features are typically in Linux filesystems and have not yet been added to the game.
 
 ## Directories
 
@@ -32,8 +31,8 @@ Files in the root directory do not need to begin with a forward slash:
 
     thisIsAFileInTheRootDirectory.txt
 
-Note that there is no way to manually create or remove directories.
-The creation and deletion of directories is automatically handled as you name/rename/delete files.
+Note that **there is no way to manually create or remove directories.**
+Creation and deletion of "directories" is automatically handled as you create, rename, or delete files in game.
 
 ## Absolute vs Relative Paths
 
@@ -56,24 +55,7 @@ Note that the Linux-style dot symbols will work for relative paths:
     $ nano ../scripts/myScript.js
     $ nano ../../helper.js
 
-## Scripts
-
-Note that in order to reference a file, `functions` require the **full** absolute file path.
-For example
-
-    ns.run("/scripts/hacking/helpers.myHelperScripts.js");
-    ns.rm("/logs/myHackingLogs.txt");
-    ns.rm("thisIsAFileInTheRootDirectory.txt");
-
-A full file path **must** begin with a forward slash (/) if that file is not in the root directory.
-
-## Missing Features
-
-These features that are typically in Linux filesystems have not yet been added to the game:
-
-- Tab autocompletion does not work with relative paths
-- `mv` only accepts full filepaths for the destination argument.
-  It does not accept directories
+For additional details about specifying paths and references in scripts, see [Scripts](scripts.md).
 
 ## Argument Parsing
 
@@ -81,8 +63,7 @@ When evaluating a terminal command, arguments are initially parsed based on whit
 Each whitespace character signifies the end of an argument, and potentially the start of new one.
 For most terminal commands, this is all you need to know.
 
-When running scripts, however, it is important to know in more detail how arguments are parsed.
-There are two main points:
+When running scripts, however, it may be important to know specific detail, especially two main points:
 
 - Quotation marks can be used to wrap a single argument and force it to be parsed as a string.
   Any whitespace inside the quotation marks will not cause a new argument to be parsed.
@@ -114,10 +95,8 @@ We'll see the following in the Terminal:
 ## Chaining Commands
 
 You can run multiple Terminal commands at once by separating each command
-with a semicolon (;).
-
-Example:
+with a semicolon (;). For example:
 
     $ run foo.js; tail foo.js
 
-This does **not** wait for commands with a delay to finish executing, so it generally doesn't work with things like `hack`, `wget`, etc.
+Chained commands do **not** wait for functions like `hack` or `wget` to finish executing, and so may not always work as expected.
