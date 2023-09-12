@@ -6,7 +6,6 @@ import { Product } from "../Product";
 import { DiscontinueProductModal } from "./modals/DiscontinueProductModal";
 import { LimitProductProductionModal } from "./modals/LimitProductProductionModal";
 import { SellProductModal } from "./modals/SellProductModal";
-import { ProductMarketTaModal } from "./modals/ProductMarketTaModal";
 import { CancelProductModal } from "./modals/CancelProductModal";
 
 import { formatBigNumber, formatMoney, formatPercent } from "../../ui/formatNumber";
@@ -29,7 +28,6 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   const [limitOpen, setLimitOpen] = useState(false);
   const [discontinueOpen, setDiscontinueOpen] = useState(false);
   const [cancelOpen, setCancelOpen] = useState(false);
-  const [marketTaOpen, setMarketTaOpen] = useState(false);
   const city = props.city;
   const product = props.product;
 
@@ -166,7 +164,13 @@ export function ProductElem(props: IProductProps): React.ReactElement {
       {(hasUpgradeDashboard || product.finished) && (
         <>
           <Button onClick={() => setSellOpen(true)}>{sellButtonText}</Button>
-          <SellProductModal product={product} city={city} open={sellOpen} onClose={() => setSellOpen(false)} />
+          <SellProductModal
+            product={product}
+            div={division}
+            city={city}
+            open={sellOpen}
+            onClose={() => setSellOpen(false)}
+          />
           <br />
           <Button onClick={() => setLimitOpen(true)}>{limitProductionButtonText}</Button>
           <LimitProductProductionModal
@@ -175,12 +179,6 @@ export function ProductElem(props: IProductProps): React.ReactElement {
             open={limitOpen}
             onClose={() => setLimitOpen(false)}
           />
-          {division.hasResearch("Market-TA.I") && (
-            <>
-              <Button onClick={() => setMarketTaOpen(true)}>Market-TA</Button>
-              <ProductMarketTaModal product={product} open={marketTaOpen} onClose={() => setMarketTaOpen(false)} />
-            </>
-          )}
         </>
       )}
     </Paper>

@@ -9,8 +9,10 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import Tooltip from "@mui/material/Tooltip";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { CityName } from "@enums";
+import { Division } from "src/Corporation/Division";
 
 function initialPrice(product: Product, city: CityName): string {
   let val = String(product.cityData[city].desiredSellPrice || "");
@@ -27,6 +29,7 @@ interface IProps {
   onClose: () => void;
   product: Product;
   city: CityName;
+  div: Division;
 }
 
 // Create a popup that let the player manage sales of a material
@@ -94,11 +97,62 @@ export function SellProductModal(props: IProps): React.ReactElement {
         onKeyDown={onKeyDown}
       />
       <TextField value={px} type="text" placeholder="Sell price" onChange={onPriceChange} onKeyDown={onKeyDown} />
-      <Button onClick={sellProduct}>Confirm</Button>
+      <Button onClick={sellProduct} style={{ marginLeft: ".5rem", marginRight: ".5rem" }}>
+        Confirm
+      </Button>
       <FormControlLabel
+        style={{ marginRight: ".5rem" }}
         control={<Switch checked={checked} onChange={onCheckedChange} />}
         label={<Typography>Set for all cities</Typography>}
       />
+      {props.div.hasResearch("Market-TA.I") && (
+        <FormControlLabel
+          style={{ marginRight: "1rem" }}
+          control={
+            <Switch
+              checked={props.product.marketTa1}
+              onChange={(event) => (props.product.marketTa1 = event.target.checked)}
+            />
+          }
+          label={
+            <Tooltip
+              title={
+                <Typography>
+                  If this is enabled, then this Material will automatically be sold at market price + markup.
+                  <br />
+                  This overrides player set pricing and gets overriden by an active TA2.
+                </Typography>
+              }
+            >
+              <Typography>Market-TA.I</Typography>
+            </Tooltip>
+          }
+        />
+      )}
+      {props.div.hasResearch("Market-TA.II") && (
+        <FormControlLabel
+          control={
+            <Switch
+              checked={props.product.marketTa2}
+              onChange={(event) => (props.product.marketTa2 = event.target.checked)}
+            />
+          }
+          label={
+            <Tooltip
+              title={
+                <Typography>
+                  If this is enabled, then this Material will automatically be sold at the optimal price such that the
+                  amount sold matches the amount specified.
+                  <br />
+                  This overrides player set pricing and TA1.
+                </Typography>
+              }
+            >
+              <Typography>Market-TA.II</Typography>
+            </Tooltip>
+          }
+        />
+      )}
     </Modal>
   );
 }
