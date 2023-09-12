@@ -9,16 +9,6 @@ import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { SellMaterial } from "../../Actions";
 import { KEY } from "../../../utils/helpers/keyCodes";
 
-function initialPrice(mat: Material): string {
-  let val = mat.desiredSellPrice ? mat.desiredSellPrice + "" : "";
-  if (mat.marketTa2) {
-    val += " (Market-TA.II)";
-  } else if (mat.marketTa1) {
-    val += " (Market-TA.I)";
-  }
-  return val;
-}
-
 interface IProps {
   open: boolean;
   onClose: () => void;
@@ -28,8 +18,8 @@ interface IProps {
 
 // Create a popup that let the player manage sales of a material
 export function SellMaterialModal(props: IProps): React.ReactElement {
-  const [amt, setAmt] = useState<string>(props.mat.desiredSellAmount + "");
-  const [price, setPrice] = useState<string>(initialPrice(props.mat));
+  const [amt, setAmt] = useState<string>(String(props.mat.desiredSellAmount));
+  const [price, setPrice] = useState<string>(String(props.mat.desiredSellPrice));
 
   function sellMaterial(): void {
     try {
