@@ -102,7 +102,7 @@ export function TerminalInput(): React.ReactElement {
     return Array(prefixLength).fill(" ");
   }
 
-  function modifyInput(mod: string): void {
+  function modifyInput(mod: Modification): void {
     const ref = terminalInput.current;
     if (!ref) return;
     const inputLength = value.length;
@@ -110,7 +110,7 @@ export function TerminalInput(): React.ReactElement {
     if (start === null) return;
     const inputText = ref.value;
 
-    switch (mod.toLowerCase()) {
+    switch (mod) {
       case "backspace":
         if (start > 0 && start <= inputLength + 1) {
           saveValue(inputText.substr(0, start - 1) + inputText.substr(start));
@@ -150,18 +150,19 @@ export function TerminalInput(): React.ReactElement {
         break;
       case "clearall": // Deletes everything in the input
         saveValue("");
+        resetSearch();
         break;
     }
   }
 
-  function moveTextCursor(loc: string): void {
+  function moveTextCursor(loc: Location): void {
     const ref = terminalInput.current;
     if (!ref) return;
     const inputLength = value.length;
     const start = ref.selectionStart;
     if (start === null) return;
 
-    switch (loc.toLowerCase()) {
+    switch (loc) {
       case "home":
         ref.setSelectionRange(0, 0);
         break;
@@ -461,3 +462,18 @@ export function TerminalInput(): React.ReactElement {
     </>
   );
 }
+
+type Modification =
+  | "clearall"
+  | "home"
+  | "end"
+  | "prevchar"
+  | "prevword"
+  | "nextword"
+  | "backspace"
+  | "deletewordbefore"
+  | "deletewordafter"
+  | "clearbefore"
+  | "clearafter";
+
+type Location = "home" | "end" | "prevchar" | "nextchar" | "prevword" | "nextword";
