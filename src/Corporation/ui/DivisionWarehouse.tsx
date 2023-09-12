@@ -58,23 +58,23 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
     props.rerender();
   }
 
-  // Current State:
+  // Next state which will be processed:
   let stateText;
   switch (division.state) {
     case "START":
-      stateText = "Current state: Preparing...";
+      stateText = "Next state: Preparing";
       break;
     case "PURCHASE":
-      stateText = "Current state: Purchasing materials...";
+      stateText = "Next state: Purchasing materials";
       break;
     case "PRODUCTION":
-      stateText = "Current state: Producing materials and/or products...";
+      stateText = "Next state: Producing materials and/or products";
       break;
     case "SALE":
-      stateText = "Current state: Selling materials and/or products...";
+      stateText = "Next state: Selling materials and/or products";
       break;
     case "EXPORT":
-      stateText = "Current state: Exporting materials and/or products...";
+      stateText = "Next state: Exporting materials and/or products";
       break;
     default:
       console.error(`Invalid state: ${division.state}`);
