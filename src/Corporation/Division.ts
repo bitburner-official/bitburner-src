@@ -33,9 +33,8 @@ export class Division {
   // Not included in save file. Just used for tracking whether research tree has been updated since game load.
   treeInitialized = false;
 
-  //An array of the name of materials being produced
+  /** An array of the name of materials being produced */
   producedMaterials: CorpMaterialName[] = [];
-  makesMaterials = !!this.producedMaterials.length;
 
   products = new JSONMap<string, Product>();
   makesProducts = false;
