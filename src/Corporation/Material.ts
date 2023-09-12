@@ -57,7 +57,7 @@ export class Material {
 
   // Player inputs for sell price and amount.
   desiredSellAmount: string | number = 0;
-  desiredSellPrice: string | number = 0;
+  desiredSellPrice: string | number = "";
 
   // Flags that signal whether automatic sale pricing through Market TA is enabled
   marketTa1 = false;

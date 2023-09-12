@@ -10,16 +10,6 @@ import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { SellProduct } from "../../Actions";
 import { KEY } from "../../../utils/helpers/keyCodes";
 
-function initialPrice(product: Product, city: CityName): string {
-  let val = String(product.cityData[city].desiredSellPrice || "");
-  if (product.marketTa2) {
-    val += " (Market-TA.II)";
-  } else if (product.marketTa1) {
-    val += " (Market-TA.I)";
-  }
-  return val;
-}
-
 interface IProps {
   open: boolean;
   onClose: () => void;
@@ -31,8 +21,8 @@ interface IProps {
 // Create a popup that let the player manage sales of a material
 export function SellProductModal(props: IProps): React.ReactElement {
   const [checked, setChecked] = useState(true);
-  const [iQty, setQty] = useState<string>((props.product.cityData[props.city].desiredSellAmount ?? "").toString());
-  const [px, setPx] = useState<string>(initialPrice(props.product, props.city));
+  const [iQty, setQty] = useState<string>(String(props.product.cityData[props.city].desiredSellAmount));
+  const [px, setPx] = useState<string>(String(props.product.cityData[props.city].desiredSellPrice));
 
   function onCheckedChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setChecked(event.target.checked);

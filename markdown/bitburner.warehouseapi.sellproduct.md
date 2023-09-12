@@ -28,7 +28,7 @@ sellProduct(
 |  productName | string | Name of the product |
 |  amt | string | Amount to sell, can be "MAX" |
 |  price | string | Price to sell, can be "MP" |
-|  all | boolean | Sell in all city |
+|  all | boolean | Set sell amount and price in all cities |
 
 **Returns:**
 
