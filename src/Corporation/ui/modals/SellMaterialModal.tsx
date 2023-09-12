@@ -1,13 +1,14 @@
+import type { Division } from "../../Division";
+import type { Material } from "../../Material";
+
 import React, { useState } from "react";
-import { dialogBoxCreate } from "../../../ui/React/DialogBox";
-import { Material } from "../../Material";
-import { SellMaterial } from "../../Actions";
+import { Button, FormControlLabel, Switch, TextField, Tooltip, Typography } from "@mui/material";
 import { Modal } from "../../../ui/React/Modal";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+
+import { SellMaterial } from "../../Actions";
 import { KEY } from "../../../utils/helpers/keyCodes";
-import { Typography, FormControlLabel, Switch, Tooltip } from "@mui/material";
-import { Division } from "src/Corporation/Division";
+
 function initialPrice(mat: Material): string {
   let val = mat.desiredSellPrice ? mat.desiredSellPrice + "" : "";
   if (mat.marketTa2) {
