@@ -53,7 +53,7 @@ export function SellSharesModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>
+      <Typography component="div">
         Enter the number of shares you would like to sell.
         <ul>
           <li>Selling shares will cause stock price to fall due to market forces.</li>
