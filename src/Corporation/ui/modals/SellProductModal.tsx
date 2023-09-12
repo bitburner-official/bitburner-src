@@ -97,7 +97,7 @@ export function SellProductModal(props: IProps): React.ReactElement {
       <Button onClick={sellProduct}>Confirm</Button>
       <FormControlLabel
         control={<Switch checked={checked} onChange={onCheckedChange} />}
-        label={<Typography>Use same 'Sell Amount' for all cities</Typography>}
+        label={<Typography>Set for all cities</Typography>}
       />
     </Modal>
   );
