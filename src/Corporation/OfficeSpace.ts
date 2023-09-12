@@ -96,7 +96,7 @@ export class OfficeSpace {
       if (this.autoParty) {
         this.avgMorale = this.maxMorale;
       } else {
-        // Each 5% multiplier gives an extra flat +1 to morale to make recovering from low morale easier.
+        // Each 10% multiplier gives an extra flat +1 to morale to make recovering from low morale easier.
         const increase = this.partyMult > 1 ? (this.partyMult - 1) * 10 : 0;
         this.avgMorale = ((this.avgMorale - reduction * Math.random()) * perfMult + increase) * this.partyMult;
       }
