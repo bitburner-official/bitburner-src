@@ -7490,7 +7490,12 @@ interface CorpIndustryData {
   aiCoreFactor?: number;
   /** Advertising factor (affects sales) */
   advertisingFactor?: number;
+  /** Array of Materials produced */
   producedMaterials?: CorpMaterialName[];
+  /** Whether the industry of this division is capable of producing materials */
+  makesMaterials: boolean;
+  /** Whether the industry of this division is capable of developing and producing products */
+  makesProducts: boolean;
 }
 
 /**
@@ -7516,6 +7521,8 @@ interface CorporationInfo {
   shareSaleCooldown: number;
   /** Amount of acquirable shares. */
   issuedShares: number;
+  /** Cooldown until new shares can be issued */
+  issueNewSharesCooldown: number;
   /** Price of the shares */
   sharePrice: number;
   /** Fraction of profits issued as dividends */
@@ -7852,7 +7859,7 @@ interface Division {
   cities: CityName[];
   /** Names of Products developed by this division */
   products: string[];
-  /** Whether the industry this division is in is capable of making products */
+  /** Whether the industry of this division is capable of developing and producing products */
   makesProducts: boolean;
   /** How many products this division can support */
   maxProducts: number;

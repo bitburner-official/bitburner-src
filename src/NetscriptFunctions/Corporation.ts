@@ -769,6 +769,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         numShares: corporation.numShares,
         shareSaleCooldown: corporation.shareSaleCooldown,
         issuedShares: corporation.issuedShares,
+        issueNewSharesCooldown: corporation.issueNewSharesCooldown,
         sharePrice: corporation.sharePrice,
         dividendRate: corporation.dividendRate,
         dividendTax: corporation.dividendTax,
