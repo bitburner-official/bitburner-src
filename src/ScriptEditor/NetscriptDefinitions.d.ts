@@ -632,6 +632,8 @@ interface BitNodeMultipliers {
   CompanyWorkExpGain: number;
   /** Influences how much money the player earns when completing working their job. */
   CompanyWorkMoney: number;
+  /** Influences the amount of divisions a corporation can have have at the same time*/
+  CorporationDivisions: number;
   /** Influences the money gain from dividends of corporations created by the player. */
   CorporationSoftcap: number;
   /** Influences the valuation of corporations created by the player. */
@@ -7136,7 +7138,7 @@ export interface WarehouseAPI {
    * @param productName - Name of the product
    * @param amt - Amount to sell, can be "MAX"
    * @param price - Price to sell, can be "MP"
-   * @param all - Sell in all city
+   * @param all - Set sell amount and price in all cities
    */
   sellProduct(
     divisionName: string,
@@ -7492,7 +7494,12 @@ interface CorpIndustryData {
   aiCoreFactor?: number;
   /** Advertising factor (affects sales) */
   advertisingFactor?: number;
+  /** Array of Materials produced */
   producedMaterials?: CorpMaterialName[];
+  /** Whether the industry of this division is capable of producing materials */
+  makesMaterials: boolean;
+  /** Whether the industry of this division is capable of developing and producing products */
+  makesProducts: boolean;
 }
 
 /**
@@ -7520,6 +7527,8 @@ interface CorporationInfo {
   investorShares: number;
   /** Amount of shares owned by public traders. Available for CEO buyback. */
   issuedShares: number;
+  /** Cooldown until new shares can be issued */
+  issueNewSharesCooldown: number;
   /** Price of the shares */
   sharePrice: number;
   /** Fraction of profits issued as dividends */
@@ -7528,7 +7537,11 @@ interface CorporationInfo {
   dividendTax: number;
   /** Your earnings as a shareholder per second this cycle */
   dividendEarnings: number;
-  /** State of the corporation. Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. */
+  /** The next state to be processed.
+   *
+   *  I.e. when the state is PURCHASE, it means purchasing will occur during the next state transition.
+   *
+   *  Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. */
   state: string;
   /** Array of all division names */
   divisions: string[];
@@ -7856,7 +7869,7 @@ interface Division {
   cities: CityName[];
   /** Names of Products developed by this division */
   products: string[];
-  /** Whether the industry this division is in is capable of making products */
+  /** Whether the industry of this division is capable of developing and producing products */
   makesProducts: boolean;
   /** How many products this division can support */
   maxProducts: number;

@@ -20,7 +20,9 @@ interface CorpIndustryData
 |  [aiCoreFactor?](./bitburner.corpindustrydata.aicorefactor.md) |  | number | _(Optional)_ AI Cores factor |
 |  [description](./bitburner.corpindustrydata.description.md) |  | string |  |
 |  [hardwareFactor?](./bitburner.corpindustrydata.hardwarefactor.md) |  | number | _(Optional)_ Hardware factor |
-|  [producedMaterials?](./bitburner.corpindustrydata.producedmaterials.md) |  | [CorpMaterialName](./bitburner.corpmaterialname.md)<!-- -->\[\] | _(Optional)_ |
+|  [makesMaterials](./bitburner.corpindustrydata.makesmaterials.md) |  | boolean | Whether the industry of this division is capable of producing materials |
+|  [makesProducts](./bitburner.corpindustrydata.makesproducts.md) |  | boolean | Whether the industry of this division is capable of developing and producing products |
+|  [producedMaterials?](./bitburner.corpindustrydata.producedmaterials.md) |  | [CorpMaterialName](./bitburner.corpmaterialname.md)<!-- -->\[\] | _(Optional)_ Array of Materials produced |
 |  [product?](./bitburner.corpindustrydata.product.md) |  | [CorpProductData](./bitburner.corpproductdata.md) | _(Optional)_ |
 |  [realEstateFactor?](./bitburner.corpindustrydata.realestatefactor.md) |  | number | _(Optional)_ Real estate factor |
 |  [recommendStarting](./bitburner.corpindustrydata.recommendstarting.md) |  | boolean |  |

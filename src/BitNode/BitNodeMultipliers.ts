@@ -157,7 +157,7 @@ export class BitNodeMultipliers {
   /** Influences profits from corporation dividends and selling shares. */
   CorporationSoftcap = 1;
 
-  /** Influences number of divisions a corporation can have. */
+  /** Influences the amount of divisions a corporation can have have at the same time*/
   CorporationDivisions = 1;
 
   constructor(a: PartialRecord<keyof BitNodeMultipliers, number> = {}) {
