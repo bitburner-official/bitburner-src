@@ -632,6 +632,8 @@ interface BitNodeMultipliers {
   CompanyWorkExpGain: number;
   /** Influences how much money the player earns when completing working their job. */
   CompanyWorkMoney: number;
+  /** Influences the amount of divisions a corporation can have have at the same time*/
+  CorporationDivisions: number;
   /** Influences the money gain from dividends of corporations created by the player. */
   CorporationSoftcap: number;
   /** Influences the valuation of corporations created by the player. */
