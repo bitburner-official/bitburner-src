@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { formatShares } from "../../../ui/formatNumber";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
@@ -26,10 +27,24 @@ export function SellSharesModal(props: IProps): React.ReactElement {
 
   function sell(): void {
     if (!canSell) return;
-    SellShares(corp, shares);
-    props.rerender();
-
+    if (!props.open) return;
     props.onClose();
+
+    setTimeout(() => {
+      SellShares(corp, shares);
+      dialogBoxCreate(
+        <>
+          <Typography>
+            You sold {formatShares(shares)} shares for <Money money={profit} />.
+          </Typography>
+          <Typography>
+            <b>{corp.name}</b>'s stock price fell to <Money money={sharePrice} /> per share.
+          </Typography>
+        </>,
+      );
+      setShares(NaN);
+      props.rerender();
+    }, 100);
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {

@@ -47,23 +47,26 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
 
   function issueNewShares(): void {
     if (disabled) return;
-
-    const [profit, newShares, privateShares] = IssueNewShares(corp, shares);
-    const dialogContents = (
-      <Typography>
-        Issued {formatShares(newShares)} new shares and raised <Money money={profit} />.
-        {privateShares > 0
-          ? "\n" + formatShares(privateShares) + " of these shares were bought by private investors."
-          : ""}
-        <br />
-        <br />
-        <b>{corp.name}</b>'s stock price fell to <Money money={corp.sharePrice} />.
-      </Typography>
-    );
-    dialogBoxCreate(dialogContents);
-    props.rerender();
-
+    if (!props.open) return;
     props.onClose();
+
+    setTimeout(() => {
+      const [profit, newShares, privateShares] = IssueNewShares(corp, shares);
+      dialogBoxCreate(
+        <>
+          <Typography>
+            Issued {formatShares(newShares)} new shares and raised <Money money={profit} />.
+          </Typography>
+          {privateShares > 0 ? (
+            <Typography>{formatShares(privateShares)} of these shares were bought by private investors.</Typography>
+          ) : null}
+          <Typography>
+            <b>{corp.name}</b>'s stock price fell to <Money money={corp.sharePrice} />.
+          </Typography>
+        </>,
+      );
+      props.rerender();
+    }, 100);
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {

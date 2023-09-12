@@ -35,20 +35,23 @@ export function GoPublicModal(props: IProps): React.ReactElement {
 
   function goPublic(): void {
     if (disabledText != "") return;
-    GoPublic(corp, shares);
-    props.rerender();
-    dialogBoxCreate(
-      <Typography>
-        You took <b>{corp.name}</b> public and earned <Money money={shares * initialSharePrice} /> in your IPO.
-      </Typography>,
-    );
+    if (!props.open) return;
     props.onClose();
+
+    setTimeout(() => {
+      GoPublic(corp, shares);
+      dialogBoxCreate(
+        <Typography>
+          <b>{corp.name}</b> went public and earned <Money money={shares * initialSharePrice} /> in its IPO.
+        </Typography>,
+      );
+      props.rerender();
+    }, 100);
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === KEY.ENTER) goPublic();
   }
-
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
