@@ -219,24 +219,30 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.4.2 dev changelog (last updated 9/5/23)
+## v2.4.2 dev changelog (last updated 9/12/23)
 
 See 2.4.1 changelog: https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
 
 ### API CHANGES:
+- ns.print and ns.tprint now handle Set and Map. (@ficocelliguy)
+- Added CorporationDivisions property to BitNodeMultipliers interface (@Caldwell-74)
+#### CORP
+- Added makesMaterials and makesProducts properties to CorpIndustryData interface. (@Caldwell-74)
+- Added issueNewSharesCooldown property to the CorporationInfo interface.
 #### GANG
 - Added ns.gang.getRecruitsAvailable: Gets the number of additional gang members that can currently be recruited (@myCatsName)
 - Added ns.gang.respectForNextRecruit: Gets the respect threshold for recruiting the next gang member (@myCatsName)
 - Added ns.gang.renameMember: Renames a gang member (@myCatsName)
 
 ### BUGFIX
-- UI: Faction augmentation page updates more reliably (@zerbosh)
-- Bladeburner UI: Fix an issue that could cause NaN success chance to display (@zerbosh)
-- Terminal: Prevent recursive aliases from being resolved (@ficocelliguy)
+- Hashnet - Buying multiple company favor upgrades at the same time will actually apply them all instead of just one. (@aschmider)
+- Terminal: Bash keybinding ctrl-C clears an ongoing terminal history search (@ncharris93)
+- Corporation: "Same sell amount in all cities" works with Products again. (@Caldwell-74)
 
-### MISC / UI / DOCS
+### DOCS AND UI
 - Tail windows now remain on the page, but hidden, when on pages like Infiltration where they should not be shown. This will impact any React content added via ns.printRaw, as the content will no longer be unmounted and remounted when navigating to/from Infiltration. (@ficocelliguy)
-- Improved error messages for ns.getPurchasedServer (@ficocelliguy)
+- Faction augmentation page updates more reliably (@zerbosh)
+- Added a text filter on the Faction Augmentations page (@ficocelliguy)
 - Improved pagination of Active Scripts page (@Ookamiko, @ficocelliguy)
 - Various UI improvements for Gang (@myCatsName)
 - Icarus message no longer shows repeatedly for players that are in the endgame. (@ficocelliguy)
@@ -246,6 +252,16 @@ See 2.4.1 changelog: https://github.com/bitburner-official/bitburner-src/blob/st
 - Updated documentation for ns.tail and ns.getScriptLogs to make it clear a PID can be used. (@myCatsName)
 - Improve documentation for FilenameOrPID functions (@VictorS)
 - Added initial ingame documentation for Bladeburner and Gang (@myCatsName)
+- Improved various existing ingame documentation pages (@myCatsName)
 - Improve API documentation for Bladeburner and Gang functions (@myCatsName)
+- Bladeburner: Fix a possible NaN display value in Bladeburner (@zerbosh)
+- Corporation: Market TA no longer has its own dialog box, it's set in the normal sell dialog (@Caldwell-74)
+- Corporation: Fix an incorrect value in the party dialog box (@aschmider)
+- Corporation: Improved the descriptions for Corporation states (@Caldwell-74)
+
+### MISC / OTHER
+- Made Bladeburner Training action available to sleeves (@Zelow79)
+- Improved handling of aliases in the Terminal (@ficocelliguy)
+- Improved error messages for ns.getPurchasedServer (@ficocelliguy)
 `,
 };
