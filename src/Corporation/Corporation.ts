@@ -80,6 +80,8 @@ export class Corporation {
     this.funds += amt;
   }
 
+  // Add or subtract funds which should not be counted for valuation; e.g. investments,
+  // upgrades, stock issuance
   addNonIncomeFunds(amt: number): void {
     if (!isFinite(amt)) {
       console.error("Trying to add invalid amount of funds. Report to a developer.");
@@ -322,7 +324,7 @@ export class Corporation {
     if (this.unlocks.has(unlockName)) return `The corporation has already unlocked ${unlockName}`;
     const price = CorpUnlocks[unlockName].price;
     if (this.funds < price) return `Insufficient funds to purchase ${unlockName}, requires ${formatMoney(price)}`;
-    this.funds -= price;
+    this.addNonIncomeFunds(-price);
     this.unlocks.add(unlockName);
 
     // Apply effects for one-time unlocks
@@ -339,7 +341,7 @@ export class Corporation {
     const upgrade = CorpUpgrades[upgradeName];
     const totalCost = calculateUpgradeCost(this, upgrade, amount);
     if (this.funds < totalCost) return `Not enough funds to purchase ${amount} of upgrade ${upgradeName}.`;
-    this.funds -= totalCost;
+    this.addNonIncomeFunds(-totalCost);
     this.upgrades[upgradeName].level += amount;
     this.upgrades[upgradeName].value += upgrade.benefit * amount;
 
