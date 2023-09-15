@@ -1,33 +1,25 @@
-import React, { useState } from "react";
-import { dialogBoxCreate } from "../../../ui/React/DialogBox";
-import { Material } from "../../Material";
-import { SellMaterial } from "../../Actions";
-import { Modal } from "../../../ui/React/Modal";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import { KEY } from "../../../utils/helpers/keyCodes";
+import type { Division } from "../../Division";
+import type { Material } from "../../Material";
 
-function initialPrice(mat: Material): string {
-  let val = mat.desiredSellPrice ? mat.desiredSellPrice + "" : "";
-  if (mat.marketTa2) {
-    val += " (Market-TA.II)";
-  } else if (mat.marketTa1) {
-    val += " (Market-TA.I)";
-  }
-  return val;
-}
+import React, { useState } from "react";
+import { Button, FormControlLabel, Switch, TextField, Tooltip, Typography } from "@mui/material";
+import { Modal } from "../../../ui/React/Modal";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+
+import { SellMaterial } from "../../Actions";
+import { KEY } from "../../../utils/helpers/keyCodes";
 
 interface IProps {
   open: boolean;
   onClose: () => void;
   mat: Material;
+  div: Division;
 }
 
 // Create a popup that let the player manage sales of a material
 export function SellMaterialModal(props: IProps): React.ReactElement {
-  const [amt, setAmt] = useState<string>(props.mat.desiredSellAmount + "");
-  const [price, setPrice] = useState<string>(initialPrice(props.mat));
+  const [amt, setAmt] = useState<string>(String(props.mat.desiredSellAmount));
+  const [price, setPrice] = useState<string>(String(props.mat.desiredSellPrice));
 
   function sellMaterial(): void {
     try {
@@ -83,7 +75,51 @@ export function SellMaterialModal(props: IProps): React.ReactElement {
         onKeyDown={onKeyDown}
       />
       <TextField value={price} type="text" placeholder="Sell price" onChange={onPriceChange} onKeyDown={onKeyDown} />
-      <Button onClick={sellMaterial}>Confirm</Button>
+      <Button onClick={sellMaterial} style={{ marginLeft: ".5rem", marginRight: ".5rem" }}>
+        Confirm
+      </Button>
+      {props.div.hasResearch("Market-TA.I") && (
+        <FormControlLabel
+          style={{ marginRight: "1rem" }}
+          control={
+            <Switch checked={props.mat.marketTa1} onChange={(event) => (props.mat.marketTa1 = event.target.checked)} />
+          }
+          label={
+            <Tooltip
+              title={
+                <Typography>
+                  If this is enabled, then this Material will automatically be sold at market price + markup.
+                  <br />
+                  This overrides player set pricing and gets overriden by an active TA2.
+                </Typography>
+              }
+            >
+              <Typography>Market-TA.I</Typography>
+            </Tooltip>
+          }
+        />
+      )}
+      {props.div.hasResearch("Market-TA.II") && (
+        <FormControlLabel
+          control={
+            <Switch checked={props.mat.marketTa2} onChange={(event) => (props.mat.marketTa2 = event.target.checked)} />
+          }
+          label={
+            <Tooltip
+              title={
+                <Typography>
+                  If this is enabled, then this Material will automatically be sold at the optimal price such that the
+                  amount sold matches the amount specified.
+                  <br />
+                  This overrides player set pricing and TA1.
+                </Typography>
+              }
+            >
+              <Typography>Market-TA.II</Typography>
+            </Tooltip>
+          }
+        />
+      )}
     </Modal>
   );
 }

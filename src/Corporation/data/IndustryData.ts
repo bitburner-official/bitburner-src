@@ -17,6 +17,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     advertisingFactor: 0.04,
     requiredMaterials: { Water: 0.5, Chemicals: 0.2 },
     producedMaterials: ["Plants", "Food"],
+    makesMaterials: true,
+    makesProducts: false,
   },
   [IndustryType.Spring]: {
     startingCost: 10e9,
@@ -30,6 +32,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     advertisingFactor: 0.03,
     requiredMaterials: {},
     producedMaterials: ["Water"],
+    makesMaterials: true,
+    makesProducts: false,
   },
   [IndustryType.Refinery]: {
     startingCost: 50e9,
@@ -43,6 +47,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     advertisingFactor: 0.04,
     requiredMaterials: { Ore: 1 },
     producedMaterials: ["Metal"],
+    makesMaterials: true,
+    makesProducts: false,
   },
   [IndustryType.Chemical]: {
     startingCost: 70e9,
@@ -56,6 +62,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     advertisingFactor: 0.07,
     requiredMaterials: { Plants: 1, Water: 0.5 },
     producedMaterials: ["Chemicals"],
+    makesMaterials: true,
+    makesProducts: false,
   },
   [IndustryType.Computers]: {
     startingCost: 500e9,
@@ -81,6 +89,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     advertisingFactor: 0.17,
     requiredMaterials: { Metal: 2 },
     producedMaterials: ["Hardware"],
+    makesMaterials: true,
+    makesProducts: true,
   },
   [IndustryType.Fishing]: {
     startingCost: 80e9,
@@ -94,6 +104,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     advertisingFactor: 0.08,
     requiredMaterials: { Plants: 0.5 },
     producedMaterials: ["Food"],
+    makesMaterials: true,
+    makesProducts: false,
   },
   [IndustryType.Restaurant]: {
     startingCost: 10e9,
@@ -116,6 +128,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     advertisingFactor: 0.25,
     realEstateFactor: 0.05,
     requiredMaterials: { Food: 0.5, Water: 0.5 },
+    makesMaterials: false,
+    makesProducts: true,
   },
   [IndustryType.Healthcare]: {
     startingCost: 750e9,
@@ -140,6 +154,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     robotFactor: 0.1,
     aiCoreFactor: 0.1,
     requiredMaterials: { Robots: 10, "AI Cores": 5, Drugs: 5, Food: 5 },
+    makesMaterials: false,
+    makesProducts: true,
   },
   [IndustryType.Mining]: {
     startingCost: 300e9,
@@ -153,6 +169,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     advertisingFactor: 0.06,
     requiredMaterials: { Hardware: 0.1 },
     producedMaterials: ["Ore", "Minerals"],
+    makesMaterials: true,
+    makesProducts: false,
   },
   [IndustryType.Pharmaceutical]: {
     startingCost: 200e9,
@@ -178,6 +196,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     advertisingFactor: 0.16,
     requiredMaterials: { Chemicals: 2, Water: 0.5 },
     producedMaterials: ["Drugs"],
+    makesMaterials: true,
+    makesProducts: true,
   },
   [IndustryType.RealEstate]: {
     startingCost: 600e9,
@@ -202,6 +222,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     hardwareFactor: 0.05,
     requiredMaterials: { Metal: 5, Plants: 1, Water: 2, Hardware: 4 },
     producedMaterials: ["Real Estate"],
+    makesMaterials: true,
+    makesProducts: true,
   },
   [IndustryType.Robotics]: {
     startingCost: 1e12,
@@ -227,6 +249,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     hardwareFactor: 0.19,
     requiredMaterials: { Hardware: 5, "AI Cores": 3 },
     producedMaterials: ["Robots"],
+    makesMaterials: true,
+    makesProducts: true,
   },
   [IndustryType.Software]: {
     startingCost: 25e9,
@@ -252,6 +276,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     robotFactor: 0.05,
     requiredMaterials: { Hardware: 0.5 },
     producedMaterials: ["AI Cores"],
+    makesMaterials: true,
+    makesProducts: true,
   },
   [IndustryType.Tobacco]: {
     startingCost: 20e9,
@@ -274,6 +300,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     aiCoreFactor: 0.15,
     advertisingFactor: 0.2,
     requiredMaterials: { Plants: 1 },
+    makesMaterials: false,
+    makesProducts: true,
   },
   [IndustryType.Water]: {
     startingCost: 150e9,
@@ -286,6 +314,8 @@ export const IndustriesData: Record<IndustryType, CorpIndustryData> = {
     advertisingFactor: 0.08,
     requiredMaterials: { Hardware: 0.1 },
     producedMaterials: ["Water"],
+    makesMaterials: true,
+    makesProducts: false,
   },
 };
 

@@ -24,6 +24,7 @@ const universitySelectorOptions: string[] = [
 const gymSelectorOptions: string[] = ["Train Strength", "Train Defense", "Train Dexterity", "Train Agility"];
 
 const bladeburnerSelectorOptions: string[] = [
+  "Training",
   "Field Analysis",
   "Recruitment",
   "Diplomacy",
