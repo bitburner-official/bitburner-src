@@ -28,6 +28,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
 
   const ceoOwnership = corp.numShares / (corp.totalShares + (newShares || 0));
   const newSharePrice = corp.getTargetSharePrice(ceoOwnership);
+  const profit = ((shares || 0) * (corp.sharePrice + newSharePrice)) / 2;
 
   const privateOwnedRatio = corp.investorShares / corp.totalShares;
   const maxPrivateShares = Math.round(((newShares / 2) * privateOwnedRatio) / 10e6) * 10e6;
@@ -81,7 +82,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
         You can issue new equity shares (i.e. stocks) in order to raise capital.
         <ul>
           <li>Issuing new shares will cause dilution, lowering stock price and reducing dividends per share.</li>
-          <li>All new shares are sold at the lower price.</li>
+          <li>New shares are sold between the current price and the updated price.</li>
           <li>The money from issuing new shares will be deposited directly into your Corporation's funds.</li>
           <li>
             Private shareholders have first priority for buying new shares, up to half of their existing stake in the
@@ -122,7 +123,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
         <b>{corp.name}</b>'s stock price will fall to <Money money={newSharePrice} /> per share.
       </Typography>
       <Typography>
-        <b>{corp.name}</b> will receive <Money money={newShares * newSharePrice} />.
+        <b>{corp.name}</b> will receive <Money money={profit} />.
       </Typography>
     </Modal>
   );

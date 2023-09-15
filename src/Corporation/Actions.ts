@@ -119,7 +119,7 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
   const ceoOwnership = corporation.numShares / (corporation.totalShares + amount);
   const newSharePrice = corporation.getTargetSharePrice(ceoOwnership);
 
-  const profit = amount * newSharePrice;
+  const profit = (amount * (corporation.sharePrice + newSharePrice)) / 2;
 
   const cooldownMultiplier = corporation.totalShares / corpConstants.initialShares;
   corporation.issueNewSharesCooldown = corpConstants.issueNewSharesCooldown * cooldownMultiplier;
