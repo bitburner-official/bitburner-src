@@ -23,12 +23,13 @@ interface CorporationInfo
 |  [expenses](./bitburner.corporationinfo.expenses.md) |  | number | Expenses per second this cycle |
 |  [funds](./bitburner.corporationinfo.funds.md) |  | number | Funds available |
 |  [issuedShares](./bitburner.corporationinfo.issuedshares.md) |  | number | Amount of acquirable shares. |
+|  [issueNewSharesCooldown](./bitburner.corporationinfo.issuenewsharescooldown.md) |  | number | Cooldown until new shares can be issued |
 |  [name](./bitburner.corporationinfo.name.md) |  | string | Name of the corporation |
 |  [numShares](./bitburner.corporationinfo.numshares.md) |  | number | Amount of share owned |
 |  [public](./bitburner.corporationinfo.public.md) |  | boolean | Indicating if the company is public |
 |  [revenue](./bitburner.corporationinfo.revenue.md) |  | number | Revenue per second this cycle |
 |  [sharePrice](./bitburner.corporationinfo.shareprice.md) |  | number | Price of the shares |
 |  [shareSaleCooldown](./bitburner.corporationinfo.sharesalecooldown.md) |  | number | Cooldown until shares can be sold again |
-|  [state](./bitburner.corporationinfo.state.md) |  | string | State of the corporation. Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. |
+|  [state](./bitburner.corporationinfo.state.md) |  | string | <p>The next state to be processed.</p><p>I.e. when the state is PURCHASE, it means purchasing will occur during the next state transition.</p><p>Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.</p> |
 |  [totalShares](./bitburner.corporationinfo.totalshares.md) |  | number | Total number of shares issues by this corporation |
 

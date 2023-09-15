@@ -37,6 +37,10 @@ on a [server](servers.md) in order to successfully NUKE it:**
 
 Once you have enough ports opened on a [server](servers.md) and have ran the NUKE virus to gain root access, you will be able to hack it.
 
+### For specific details of how Hacking work "offline"
+
+See [Offline And Bonus Time](../advanced/offlineandbonustime.md).
+
 ## General Hacking Mechanics
 
 When you execute the `hack` command, either manually through the [Terminal](terminal.md) or automatically through a script, you attempt to hack the [server](servers.md).

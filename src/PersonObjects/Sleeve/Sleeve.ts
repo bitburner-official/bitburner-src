@@ -394,6 +394,9 @@ export class Sleeve extends Person implements SleevePerson {
   bladeburner(action: string, contract: string): boolean {
     if (!Player.bladeburner) return false;
     switch (action) {
+      case "Training":
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Training" }));
+        return true;
       case "Field analysis":
       case "Field Analysis":
         this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Field Analysis" }));

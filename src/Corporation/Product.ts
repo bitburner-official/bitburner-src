@@ -81,7 +81,7 @@ export class Product {
     /** Player input sell amount e.g. "MAX" */
     desiredSellAmount: 0 as number | string,
     /** Player input sell price e.g. "MP * 5" */
-    desiredSellPrice: 0 as number | string,
+    desiredSellPrice: "" as string | number,
   }));
 
   /** How much warehouse space is occupied per unit of this product */

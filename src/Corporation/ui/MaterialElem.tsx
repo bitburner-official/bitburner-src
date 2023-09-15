@@ -6,7 +6,6 @@ import { CityName, CorpUnlockName } from "@enums";
 import { Material } from "../Material";
 import { Warehouse } from "../Warehouse";
 import { ExportModal } from "./modals/ExportModal";
-import { MaterialMarketTaModal } from "./modals/MaterialMarketTaModal";
 import { SellMaterialModal } from "./modals/SellMaterialModal";
 import { PurchaseMaterialModal } from "./modals/PurchaseMaterialModal";
 import { formatBigNumber, formatCorpStat, formatMoney, formatQuality } from "../../ui/formatNumber";
@@ -29,7 +28,6 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   const [purchaseMaterialOpen, setPurchaseMaterialOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [sellMaterialOpen, setSellMaterialOpen] = useState(false);
-  const [materialMarketTaOpen, setMaterialMarketTaOpen] = useState(false);
   const [limitProductionOpen, setLimitProductionOpen] = useState(false);
 
   const warehouse = props.warehouse;
@@ -159,18 +157,12 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
           >
             {sellButtonText}
           </Button>
-          <SellMaterialModal mat={mat} open={sellMaterialOpen} onClose={() => setSellMaterialOpen(false)} />
-          {division.hasResearch("Market-TA.I") && (
-            <>
-              <Button onClick={() => setMaterialMarketTaOpen(true)}>Market-TA</Button>
-
-              <MaterialMarketTaModal
-                mat={mat}
-                open={materialMarketTaOpen}
-                onClose={() => setMaterialMarketTaOpen(false)}
-              />
-            </>
-          )}
+          <SellMaterialModal
+            mat={mat}
+            div={division}
+            open={sellMaterialOpen}
+            onClose={() => setSellMaterialOpen(false)}
+          />
           <Button color={tutorial ? "error" : "primary"} onClick={() => setLimitProductionOpen(true)}>
             {limitMaterialButtonText}
           </Button>
