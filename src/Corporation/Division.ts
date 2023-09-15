@@ -553,7 +553,8 @@ export class Division {
               sCost = optimalPrice;
             } else if (mat.marketTa1) {
               sCost = mat.marketPrice + markupLimit;
-            } else if (isString(mat.desiredSellPrice)) {
+              // check truthyness to avoid unnecessary eval
+            } else if (isString(mat.desiredSellPrice) && mat.desiredSellPrice) {
               sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice.toString());
               sCost = eval(sCost);
             } else {
