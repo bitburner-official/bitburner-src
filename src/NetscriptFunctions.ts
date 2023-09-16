@@ -744,11 +744,11 @@ export const ns: InternalAPI<NSFull> = {
     },
   spawn:
     (ctx) =>
-    (_scriptname, _thread_or_opt = 1, ..._args) => {
+    (_scriptname, _thread_or_opt = 1, _spawndelay, ..._args) => {
       const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
+      const spawnDelay = helpers.number(ctx, "spawndelay", _spawndelay);
       const args = helpers.scriptArgs(ctx, _args);
-      const spawnDelay = 10;
       setTimeout(() => {
         const scriptServer = GetServer(ctx.workerScript.hostname);
         if (scriptServer == null) {
@@ -756,7 +756,7 @@ export const ns: InternalAPI<NSFull> = {
         }
 
         return runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
-      }, spawnDelay * 1e3);
+      }, spawnDelay);
 
       helpers.log(ctx, () => `Will execute '${path}' in ${spawnDelay} seconds`);
 

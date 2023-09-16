@@ -5494,11 +5494,11 @@ export interface NS {
   ): number;
 
   /**
-   * Terminate current script and start another in 10 seconds.
+   * Terminate current script and start another in a defined number of milliseconds.
    * @remarks
    * RAM cost: 2 GB
    *
-   * Terminates the current script, and then after a delay of about 10 seconds it will execute the
+   * Terminates the current script, and then after a defined delay it will execute the
    * newly-specified script. The purpose of this function is to execute a new script without being
    * constrained by the RAM usage of the current one. This function can only be used to run scripts
    * on the local server.
@@ -5509,14 +5509,15 @@ export interface NS {
    *
    * @example
    * ```js
-   * //The following example will execute the script ‘foo.js’ with 10 threads and the arguments ‘foodnstuff’ and 90:
-   * ns.spawn('foo.js', 10, 'foodnstuff', 90);
+   * //The following example will execute the script ‘foo.js’ with 10 threads, in 500 milliseconds and the arguments ‘foodnstuff’ and 90:
+   * ns.spawn('foo.js', 10, 500, 'foodnstuff', 90);
    * ```
    * @param script - Filename of script to execute.
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
+   * @param runDelay- A positive integer of milliseconds to delay before running the script
    * @param args - Additional arguments to pass into the new script that is being run.
    */
-  spawn(script: string, threadOrOptions?: number | RunOptions, ...args: (string | number | boolean)[]): void;
+  spawn(script: string, threadOrOptions?: number | RunOptions, number, ...args: (string | number | boolean)[]): void;
 
   /**
    * Terminate the script with the provided PID.
