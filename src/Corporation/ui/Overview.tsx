@@ -320,7 +320,6 @@ function RestartButton(): React.ReactElement {
 
   const corp = useCorporation();
   const sellSharesOnCd = corp.shareSaleCooldown > 0;
-  const issueNewSharesOnCd = corp.issueNewSharesCooldown > 0;
 
   function restart(): void {
     setOpen(true);
@@ -330,7 +329,9 @@ function RestartButton(): React.ReactElement {
     <>
       <ButtonWithTooltip
         normalTooltip={"Sell corporation and start over"}
-        disabledTooltip={sellSharesOnCd || issueNewSharesOnCd ? "On cooldown" : ""}
+        disabledTooltip={
+          sellSharesOnCd ? "Sell corporation and start over. Cannot do this while Sell Shares is on cooldown." : ""
+        }
         onClick={restart}
       >
         Sell CEO position

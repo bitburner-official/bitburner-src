@@ -8,8 +8,6 @@ import { Player } from "@player";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import * as corpConstants from "../../data/Constants";
-import { Corporation } from "src/Corporation/Corporation";
 
 interface IProps {
   open: boolean;
@@ -33,8 +31,6 @@ export function SellCorporationModal(props: IProps): React.ReactElement {
     if (name == "") return;
 
     Player.startCorporation(name, false);
-    const corp = Player.corporation as Corporation;
-    corp.shareSaleCooldown = corpConstants.sellSharesCooldown;
     Player.loseMoney(cost, "corporation");
 
     props.onClose();
@@ -47,8 +43,6 @@ export function SellCorporationModal(props: IProps): React.ReactElement {
     }
 
     Player.startCorporation(name, true);
-    const corp = Player.corporation as Corporation;
-    corp.shareSaleCooldown = corpConstants.sellSharesCooldown;
 
     props.onClose();
     Router.toPage(Page.Corporation);
