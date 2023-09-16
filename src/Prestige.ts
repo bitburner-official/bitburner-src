@@ -226,6 +226,8 @@ export function prestigeSourceFile(isFlume: boolean): void {
       "You received a copy of the Corporation Management Handbook on your home computer. " +
         "Read it if you need help getting started with Corporations!",
     );
+    //start with enough ram to use corporation functions
+    homeComp.setMaxRam(1024);
   }
 
   // BitNode 6: Bladeburners and BitNode 7: Bladeburners 2079

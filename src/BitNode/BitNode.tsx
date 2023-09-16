@@ -108,8 +108,9 @@ export function initBitNodes() {
         own community, and evict their neighbors from houses in their desperate bid to increase their wealth.
         <br />
         <br />
-        In this BitNode you can create and manage your own corporation. Running a successful corporation has the
-        potential of generating massive profits.
+        In this BitNode you can create and manage your own corporation, you have full access to the Corporation API and
+        Home starts with enough ram to use it. Running a successful corporation has the potential of generating massive
+        profits.
         <br />
         <br />
         Destroying this BitNode will give you Source-File 3, or if you already have this Source-File it will upgrade its
