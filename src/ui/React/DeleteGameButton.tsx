@@ -34,6 +34,7 @@ export function DeleteGameButton({ color = "primary" }: IProps): React.ReactElem
         open={modalOpened}
         onClose={() => setModalOpened(false)}
         confirmationText={"Really delete your game? (It's permanent!)"}
+        additionalButton={<Button onClick={() => setModalOpened(false)}>Cancel</Button>}
       />
     </>
   );
