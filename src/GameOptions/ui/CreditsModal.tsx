@@ -20,34 +20,26 @@ Olivier Gagnon
 or to participate yourself`;
 
   return (
-    <Modal open={props.open} onClose={props.onClose}>
-      <Typography align="center" alignContent={"start"} variant="h3">
+    <Modal open={props.open} onClose={props.onClose} sx={{ textAlign: "center" }}>
+      <Typography alignContent={"start"} variant="h3">
         Bitburner
       </Typography>
-      <Typography align="center" sx={{ textDecoration: "underline" }}>
-        Original Code and Concept
-      </Typography>
-      <Typography align="center">danielyxie</Typography>
+      <Typography sx={{ textDecoration: "underline" }}>Original Code and Concept</Typography>
+      <Typography>danielyxie</Typography>
       <br />
-      <Typography align="center" sx={{ textDecoration: "underline" }}>
-        Lead Developers:
-      </Typography>
-      <Typography align="center" style={{ whiteSpace: "pre-wrap" }}>
-        {leadDevs}
-      </Typography>
+      <Typography sx={{ textDecoration: "underline" }}>Lead Developers:</Typography>
+      <Typography style={{ whiteSpace: "pre-wrap" }}>{leadDevs}</Typography>
       <br />
-      <Typography align="center" sx={{ textDecoration: "underline" }}>
-        Current Maintainer
-      </Typography>
-      <Typography align="center">{currentMaintainer}</Typography>
+      <Typography sx={{ textDecoration: "underline" }}>Current Maintainer</Typography>
+      <Typography>{currentMaintainer}</Typography>
       <br />
-      <Typography align="center" style={{ whiteSpace: "pre-wrap" }}>
+      <Typography style={{ whiteSpace: "pre-wrap" }}>
         <Link href={contributorsURL} target="_blank">
           {contributorsMessage}
         </Link>
       </Typography>
       <br />
-      <Typography align="center" fontSize={"large"}>
+      <Typography fontSize={"large"}>
         <Button onClick={props.onClose} size="large">
           Thanks for Playing!
         </Button>
