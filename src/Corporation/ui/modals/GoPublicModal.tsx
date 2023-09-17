@@ -35,18 +35,21 @@ export function GoPublicModal(props: IProps): React.ReactElement {
 
   function goPublic(): void {
     if (disabledText != "") return;
-    if (!props.open) return;
-    props.onClose();
 
-    setTimeout(() => {
+    try {
       GoPublic(corp, shares);
       dialogBoxCreate(
         <Typography>
           <b>{corp.name}</b> went public and earned <Money money={shares * initialSharePrice} /> in its IPO.
         </Typography>,
       );
+      props.onClose();
       props.rerender();
-    }, 100);
+      setShares(NaN);
+    }
+    catch (err) {
+      dialogBoxCreate(`${err as Error}`);
+    }
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {

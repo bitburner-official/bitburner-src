@@ -27,10 +27,8 @@ export function SellSharesModal(props: IProps): React.ReactElement {
 
   function sell(): void {
     if (!canSell) return;
-    if (!props.open) return;
-    props.onClose();
 
-    setTimeout(() => {
+    try {
       SellShares(corp, shares);
       dialogBoxCreate(
         <>
@@ -42,9 +40,13 @@ export function SellSharesModal(props: IProps): React.ReactElement {
           </Typography>
         </>,
       );
-      setShares(NaN);
+      props.onClose();
       props.rerender();
-    }, 100);
+      setShares(NaN);
+    }
+    catch (err) {
+      dialogBoxCreate(`${err as Error}`);
+    }
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {

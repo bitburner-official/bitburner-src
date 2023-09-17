@@ -48,10 +48,8 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
 
   function issueNewShares(): void {
     if (disabled) return;
-    if (!props.open) return;
-    props.onClose();
 
-    setTimeout(() => {
+    try {
       const [profit, newShares, privateShares] = IssueNewShares(corp, shares);
       dialogBoxCreate(
         <>
@@ -66,8 +64,12 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
           </Typography>
         </>,
       );
+      props.onClose();
       props.rerender();
-    }, 100);
+    }
+    catch (err) {
+      dialogBoxCreate(`${err as Error}`);
+    }
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {

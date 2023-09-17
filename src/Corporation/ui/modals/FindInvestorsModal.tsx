@@ -25,22 +25,23 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
   const percShares = shares / corp.totalShares;
 
   function findInvestors(): void {
-    if (!props.open) return;
-    props.onClose();
-
-    setTimeout(() => {
+    try {
       AcceptInvestmentOffer(corp);
       dialogBoxCreate(
         <>
-          <Typography>You accept the investment offer.</Typography>
+          <Typography>You accepted the investment offer.</Typography>
           <Typography>
             <b>{corp.name}</b> received <Money money={funds} />.
           </Typography>
           <Typography>Your remaining equity is {formatPercent(corp.numShares / corp.totalShares, 1)}.</Typography>
         </>,
       );
+      props.onClose();
       props.rerender();
-    }, 100);
+    }
+    catch (err) {
+      dialogBoxCreate(`${err as Error}`);
+    }
   }
   return (
     <Modal open={props.open} onClose={props.onClose}>

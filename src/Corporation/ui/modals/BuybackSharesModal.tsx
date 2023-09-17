@@ -39,10 +39,8 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
 
   function buy(): void {
     if (!canBuy) return;
-    if (!props.open) return;
-    props.onClose();
 
-    setTimeout(() => {
+    try {
       BuyBackShares(corp, shares);
       dialogBoxCreate(
         <>
@@ -54,9 +52,13 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
           </Typography>
         </>,
       );
-      setShares(NaN);
+      props.onClose();
       props.rerender();
-    }, 100);
+      setShares(NaN);
+    }
+    catch (err) {
+      dialogBoxCreate(`${err as Error}`);
+    }
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
