@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { isInteger } from "lodash";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
@@ -22,23 +23,33 @@ interface IProps {
 export function BuybackSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
-  let [canBuy, disabledText] = corp.canBuybackShares(shares);
+  const [cost, sharePrice] = corp.calculateShareBuyback((props.open && shares) || 0);
 
-  const [cost, sharePrice] = useMemo(() => corp.calculateShareBuyback(shares || 0), [shares, corp]);
+  let disabledText = "";
+  if (isNaN(shares) || !isInteger(shares)) {
+    disabledText = "Invalid value for number of shares.";
+  } else if (shares < 0) {
+    disabledText = "Cannot buy a negative number of shares.";
+  } else if (shares > corp.issuedShares) {
+    disabledText = "There are not that many outstanding shares to buy.";
+  } else if (shares > 1e14) {
+    disabledText = `Cannot buy more than ${formatShares(1e14)} shares at a time.`;
+  } else if (!corp.public) {
+    disabledText = "Cannot buy back shares before going public.";
+  }
 
   if (Player.money < cost) {
-    canBuy = false;
     disabledText ||= "You cannot afford that many shares.";
   }
   if (shares === 0) {
-    canBuy = false;
+    disabledText = " ";
   }
   if (!props.open) {
     disabledText = "";
   }
 
   function buy(): void {
-    if (!canBuy) return;
+    if (disabledText != "") return;
 
     try {
       BuyBackShares(corp, shares);

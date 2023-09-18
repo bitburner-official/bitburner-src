@@ -14,10 +14,9 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { CorpStateName } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
-import { formatMoney, formatShares } from "../ui/formatNumber";
+import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
-import { isInteger } from "lodash";
 
 interface IParams {
   name?: string;
@@ -277,46 +276,10 @@ export class Corporation {
     return [profit, sharePrice, sharesUntilUpdate];
   }
 
-  canSellShares(numShares: number): [boolean, string] {
-    if (isNaN(numShares) || !isInteger(numShares)) {
-      return [false, "Invalid value for number of shares."];
-    } else if (numShares < 0) {
-      return [false, "Cannot sell a negative number of shares."];
-    } else if (numShares > this.numShares) {
-      return [false, "You do not have that many shares to sell."];
-    } else if (numShares === this.numShares) {
-      return [false, "You cannot sell all your shares."];
-    } else if (numShares > 1e14) {
-      return [false, `Cannot sell more than ${formatShares(1e14)} shares at a time.`];
-    } else if (!this.public) {
-      return [false, "Cannot sell shares before going public."];
-    } else if (this.shareSaleCooldown) {
-      return [false, `Cannot sell shares for another ${this.convertCooldownToString(this.shareSaleCooldown)}.`];
-    } else {
-      return [true, ""];
-    }
-  }
-
   calculateShareBuyback(numShares: number): [number, number, number] {
     const [profit, sharePrice, sharesUntilUpdate] = this.calculateShareSale(-numShares);
     const cost = -1.1 * profit;
     return [cost, sharePrice, sharesUntilUpdate];
-  }
-
-  canBuybackShares(numShares: number): [boolean, string] {
-    if (isNaN(numShares) || !isInteger(numShares)) {
-      return [false, "Invalid value for number of shares."];
-    } else if (numShares < 0) {
-      return [false, "Cannot buy a negative number of shares."];
-    } else if (numShares > this.issuedShares) {
-      return [false, "There are not that many outstanding shares to buy."];
-    } else if (numShares > 1e14) {
-      return [false, `Cannot buy more than ${formatShares(1e14)} shares at a time.`];
-    } else if (!this.public) {
-      return [false, "Cannot buy back shares before going public."];
-    } else {
-      return [true, ""];
-    }
   }
 
   convertCooldownToString(cd: number): string {

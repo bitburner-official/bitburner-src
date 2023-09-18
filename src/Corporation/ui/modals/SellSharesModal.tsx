@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { isInteger } from "lodash";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { formatShares } from "../../../ui/formatNumber";
 import { Modal } from "../../../ui/React/Modal";
@@ -21,12 +22,27 @@ interface IProps {
 export function SellSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
+  const [profit, sharePrice] = corp.calculateShareSale((props.open && shares) || 0);
 
-  const [canSell, disabledText] = corp.canSellShares(shares);
-  const [profit, sharePrice] = useMemo(() => corp.calculateShareSale(shares || 0), [shares, corp]);
+  let disabledText = "";
+  if (isNaN(shares) || !isInteger(shares)) {
+    disabledText = "Invalid value for number of shares.";
+  } else if (shares < 0) {
+    disabledText = "Cannot sell a negative number of shares.";
+  } else if (shares > corp.numShares) {
+    disabledText = "You do not have that many shares to sell.";
+  } else if (shares === corp.numShares) {
+    disabledText = "You cannot sell all your shares.";
+  } else if (shares > 1e14) {
+    disabledText = `Cannot sell more than ${formatShares(1e14)} shares at a time.`;
+  } else if (!corp.public) {
+    disabledText = "Cannot sell shares before going public.";
+  } else if (corp.shareSaleCooldown) {
+    disabledText = `Cannot sell shares for another ${corp.convertCooldownToString(corp.shareSaleCooldown)}.`;
+  }
 
   function sell(): void {
-    if (!canSell) return;
+    if (disabledText != "") return;
 
     try {
       SellShares(corp, shares);
