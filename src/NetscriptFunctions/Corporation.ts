@@ -23,7 +23,6 @@ import {
   IssueDividends,
   GoPublic,
   IssueNewShares,
-  GetInvestmentOffer,
   AcceptInvestmentOffer,
   SellMaterial,
   SellProduct,
@@ -748,7 +747,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     getInvestmentOffer: (ctx) => () => {
       checkAccess(ctx);
       const corporation = getCorporation();
-      return GetInvestmentOffer(corporation);
+      return corporation.getInvestmentOffer();
     },
     acceptInvestmentOffer: (ctx) => () => {
       checkAccess(ctx);
