@@ -4,7 +4,7 @@ import { formatPercent, formatShares } from "../../../ui/formatNumber";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
 import { useCorporation } from "../Context";
-import { GetInvestmentOffer, AcceptInvestmentOffer } from "../../Actions";
+import { AcceptInvestmentOffer } from "../../Actions";
 
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -18,7 +18,7 @@ interface IProps {
 // Create a popup that lets the player manage investment offers
 export function FindInvestorsModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
-  const { funds, shares } = GetInvestmentOffer(corp);
+  const { funds, shares } = corp.getInvestmentOffer();
   if (shares === 0 || !props.open) {
     return <></>;
   }

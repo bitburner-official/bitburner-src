@@ -11,7 +11,7 @@ import { showLiterature } from "../Literature/LiteratureHelpers";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { CorpStateName } from "@nsdefs";
+import { CorpStateName, InvestmentOffer } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { formatMoney } from "../ui/formatNumber";
@@ -280,6 +280,29 @@ export class Corporation {
     const [profit, sharePrice, sharesUntilUpdate] = this.calculateShareSale(-numShares);
     const cost = -1.1 * profit;
     return [cost, sharePrice, sharesUntilUpdate];
+  }
+
+  getInvestmentOffer(): InvestmentOffer {
+    if (
+      this.fundingRound >= corpConstants.fundingRoundShares.length ||
+      this.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
+      this.public
+    )
+      return {
+        funds: 0,
+        shares: 0,
+        round: this.fundingRound + 1, // Make more readable
+      }; // Don't throw an error here, no reason to have a second function to check if you can get investment.
+    const val = this.valuation;
+    const percShares = corpConstants.fundingRoundShares[this.fundingRound];
+    const roundMultiplier = corpConstants.fundingRoundMultiplier[this.fundingRound];
+    const funding = val * percShares * roundMultiplier;
+    const investShares = Math.floor(corpConstants.initialShares * percShares);
+    return {
+      funds: funding,
+      shares: investShares,
+      round: this.fundingRound + 1, // Make more readable
+    };
   }
 
   convertCooldownToString(cd: number): string {

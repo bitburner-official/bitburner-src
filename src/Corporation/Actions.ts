@@ -1,6 +1,6 @@
 import { isInteger } from "lodash";
 import { Player } from "@player";
-import { CorpResearchName, CorpSmartSupplyOption, InvestmentOffer } from "@nsdefs";
+import { CorpResearchName, CorpSmartSupplyOption } from "@nsdefs";
 
 import { MaterialInfo } from "./MaterialInfo";
 import { Corporation } from "./Corporation";
@@ -102,7 +102,10 @@ export function GoPublic(corporation: Corporation, numShares: number): void {
   corporation.addFunds(numShares * initialSharePrice); // TODO: use addNonIncomeFunds()
 }
 
-export function IssueNewShares(corporation: Corporation, amount: number): [number, number, number] {
+export function IssueNewShares(
+  corporation: Corporation,
+  amount: number,
+): [profit: number, amount: number, privateShares: number] {
   const maxNewShares = corporation.calculateMaxNewShares();
 
   // Round to nearest ten-million
@@ -140,29 +143,6 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
   corporation.sharePrice = newSharePrice;
 
   return [profit, amount, privateShares];
-}
-
-export function GetInvestmentOffer(corporation: Corporation): InvestmentOffer {
-  if (
-    corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
-    corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
-    corporation.public
-  )
-    return {
-      funds: 0,
-      shares: 0,
-      round: corporation.fundingRound + 1, // Make more readable
-    }; // Don't throw an error here, no reason to have a second function to check if you can get investment.
-  const val = corporation.valuation;
-  const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
-  const roundMultiplier = corpConstants.fundingRoundMultiplier[corporation.fundingRound];
-  const funding = val * percShares * roundMultiplier;
-  const investShares = Math.floor(corpConstants.initialShares * percShares);
-  return {
-    funds: funding,
-    shares: investShares,
-    round: corporation.fundingRound + 1, // Make more readable
-  };
 }
 
 export function AcceptInvestmentOffer(corporation: Corporation): void {
