@@ -35,9 +35,9 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "react/no-unescaped-entities": "off",
   },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  }
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
 };
