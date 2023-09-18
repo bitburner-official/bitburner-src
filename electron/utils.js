@@ -2,8 +2,8 @@
 const { dialog, shell } = require("electron");
 const log = require("electron-log");
 
-const Config = require("electron-config");
-const config = new Config();
+const Store = require("electron-store");
+const store = new Store();
 
 function reloadAndKill(window, killScripts) {
   log.info("Reloading & Killing all scripts...");
@@ -88,7 +88,7 @@ async function writeToast(window, message, type = "info", duration = 2000) {
 }
 
 function getZoomFactor() {
-  const configZoom = config.get("zoom", 1);
+  const configZoom = store.get("zoom", 1);
   return configZoom;
 }
 
@@ -96,7 +96,7 @@ function setZoomFactor(window, zoom = null) {
   if (zoom === null) {
     zoom = 1;
   } else {
-    config.set("zoom", zoom);
+    store.set("zoom", zoom);
   }
   window.webContents.setZoomFactor(zoom);
 }

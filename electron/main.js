@@ -9,13 +9,13 @@ const achievements = require("./achievements");
 const utils = require("./utils");
 const storage = require("./storage");
 const debounce = require("lodash/debounce");
-const Config = require("electron-config");
-const config = new Config();
+const Store = require("electron-store");
+const store = new Store();
 const path = require("path");
 const { fileURLToPath } = require("url");
 
-log.transports.file.level = config.get("file-log-level", "info");
-log.transports.console.level = config.get("console-log-level", "debug");
+log.transports.file.level = store.get("file-log-level", "info");
+log.transports.console.level = store.get("console-log-level", "debug");
 
 log.catchErrors();
 log.info(`Started app: ${JSON.stringify(process.argv)}`);
@@ -105,7 +105,7 @@ function setStopProcessHandler(app, window) {
     window.gameInfo = { ...arg };
     await storage.prepareSaveFolders(window);
 
-    const restoreNewest = config.get("onload-restore-newest", true);
+    const restoreNewest = store.get("onload-restore-newest", true);
     if (restoreNewest && !isRestoreDisabled) {
       try {
         await storage.restoreIfNewerExists(window);
@@ -159,7 +159,7 @@ function setStopProcessHandler(app, window) {
         utils.writeToast(window, "Could not save to Steam Cloud.", "error", 5000);
       }
     },
-    config.get("cloud-save-min-time", 1000 * 60 * 15),
+    store.get("cloud-save-min-time", 1000 * 60 * 15),
     { leading: true },
   );
 
@@ -174,7 +174,7 @@ function setStopProcessHandler(app, window) {
         utils.writeToast(window, "Could not save to disk", "error", 5000);
       }
     },
-    config.get("disk-save-min-time", 1000 * 60 * 5),
+    store.get("disk-save-min-time", 1000 * 60 * 5),
     { leading: true },
   );
 
