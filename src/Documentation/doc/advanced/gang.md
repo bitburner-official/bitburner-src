@@ -30,6 +30,6 @@ Active gang members earn stats, respect and money based on their current stats, 
 
 Your gang's "Wanted Level" can make tasks much less productive, and is affected by the tasks assigned to gang members. "Ethical Hacking" or "Vigilante Justice" tasks can lower Wanted Level.
 
-"Territory Warfare" is a special task that builds Power for your gang. If "Territory Warfare" is enabled [see the Territory subpage of your Gang page], members have a chance to win or lose territory by clashing with other gangs. The % of Territory you control affects most aspects of your gang productivity.
+"Territory Warfare" is a special task that builds Power for your gang. If "Territory Battles" is enabled [see the Territory subpage of your Gang page], members have a chance to win or lose territory by clashing with other gangs. The % of Territory you control affects most aspects of your gang productivity.
 
 Note that gang members can die during clashes, even if your gang wins.
