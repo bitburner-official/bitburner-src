@@ -234,7 +234,7 @@ export class Corporation {
   // Calculates how much money will be made and what the resulting stock price
   // will be when the player sells their shares
   // @return - [Player profit, final stock price, end shareSalesUntilPriceUpdate property]
-  calculateShareSale(numShares: number): [number, number, number] {
+  calculateShareSale(numShares: number): [profit: number, sharePrice: number, sharesUntilUpdate: number] {
     let sharesRemaining = numShares;
     let sharesUntilUpdate = this.shareSalesUntilPriceUpdate;
     let sharePrice = this.sharePrice;
@@ -276,7 +276,7 @@ export class Corporation {
     return [profit, sharePrice, sharesUntilUpdate];
   }
 
-  calculateShareBuyback(numShares: number): [number, number, number] {
+  calculateShareBuyback(numShares: number): [cost: number, sharePrice: number, sharesUntilUpdate: number] {
     const [profit, sharePrice, sharesUntilUpdate] = this.calculateShareSale(-numShares);
     const cost = -1.1 * profit;
     return [cost, sharePrice, sharesUntilUpdate];
