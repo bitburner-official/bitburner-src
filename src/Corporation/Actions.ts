@@ -85,19 +85,21 @@ export function IssueDividends(corporation: Corporation, rate: number): void {
   corporation.dividendRate = rate;
 }
 
-export function GoPublic(corporation: Corporation, numShares: number): boolean {
+export function GoPublic(corporation: Corporation, numShares: number): void {
   const ceoOwnership = (corporation.numShares - numShares) / corporation.totalShares;
   const initialSharePrice = corporation.getTargetSharePrice(ceoOwnership);
 
-  if (isNaN(numShares)) throw new Error("Invalid value for number of issued shares");
-  if (numShares < 0) throw new Error("Invalid value for number of issued shares");
-  if (numShares > corporation.numShares) throw new Error("You don't have that many shares to issue!");
+  if (isNaN(numShares) || numShares < 0) {
+    throw new Error("Invalid value for number of issued shares");
+  }
+  if (numShares > corporation.numShares) {
+    throw new Error("You don't have that many shares to issue!");
+  }
   corporation.public = true;
   corporation.sharePrice = initialSharePrice;
   corporation.issuedShares += numShares;
   corporation.numShares -= numShares;
   corporation.addFunds(numShares * initialSharePrice); // TODO: use addNonIncomeFunds()
-  return true;
 }
 
 export function IssueNewShares(corporation: Corporation, amount: number): [number, number, number] {
@@ -163,13 +165,14 @@ export function GetInvestmentOffer(corporation: Corporation): InvestmentOffer {
   };
 }
 
-export function AcceptInvestmentOffer(corporation: Corporation): boolean {
+export function AcceptInvestmentOffer(corporation: Corporation): void {
   if (
     corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
     corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
     corporation.public
-  )
-    return false;
+  ) {
+    throw new Error("No more investment offers are available.");
+  }
   const val = corporation.valuation;
   const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
   const roundMultiplier = corpConstants.fundingRoundMultiplier[corporation.fundingRound];
@@ -180,7 +183,6 @@ export function AcceptInvestmentOffer(corporation: Corporation): boolean {
 
   corporation.numShares -= investShares;
   corporation.investorShares += investShares;
-  return true;
 }
 
 export function SellMaterial(material: Material, amount: string, price: string): void {

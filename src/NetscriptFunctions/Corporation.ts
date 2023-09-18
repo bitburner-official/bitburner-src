@@ -753,14 +753,20 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     acceptInvestmentOffer: (ctx) => () => {
       checkAccess(ctx);
       const corporation = getCorporation();
-      return AcceptInvestmentOffer(corporation);
+      try {
+        AcceptInvestmentOffer(corporation);
+        return true;
+      } catch (err) {
+        return false;
+      }
     },
     goPublic: (ctx) => (_numShares) => {
       checkAccess(ctx);
       const corporation = getCorporation();
       if (corporation.public) throw helpers.makeRuntimeErrorMsg(ctx, "corporation is already public");
       const numShares = helpers.number(ctx, "numShares", _numShares);
-      return GoPublic(corporation, numShares);
+      GoPublic(corporation, numShares);
+      return true;
     },
     sellShares: (ctx) => (_numShares) => {
       checkAccess(ctx);
