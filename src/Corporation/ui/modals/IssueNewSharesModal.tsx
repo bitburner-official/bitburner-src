@@ -44,11 +44,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
     disabledText = "You cannot issue that many shares.";
   }
 
-  const disabled = disabledText !== "";
-
   function issueNewShares(): void {
-    if (disabled) return;
-
     try {
       const [profit, newShares, privateShares] = IssueNewShares(corp, shares);
       dialogBoxCreate(
@@ -66,14 +62,43 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
       );
       props.onClose();
       props.rerender();
-    }
-    catch (err) {
+    } catch (err) {
       dialogBoxCreate(`${err as Error}`);
     }
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === KEY.ENTER) issueNewShares();
+  }
+
+  interface IEffectTextProps {
+    newShares: number;
+  }
+
+  function EffectText({ newShares }: IEffectTextProps): React.ReactElement {
+    if (!newShares) {
+      return <Typography>&nbsp;</Typography>;
+    } else if (disabledText) {
+      return <Typography>{disabledText}</Typography>;
+    } else {
+      return (
+        <>
+          <Typography>Issue {formatShares(newShares)} new shares?</Typography>
+          {privateOwnedRatio > 0 ? (
+            <Typography>
+              Private investors may buy up to {formatShares(maxPrivateShares)} of these shares and keep them off the
+              market.
+            </Typography>
+          ) : null}
+          <Typography>
+            <b>{corp.name}</b> will receive <Money money={profit} />.
+          </Typography>
+          <Typography>
+            <b>{corp.name}</b>'s stock price will fall to <Money money={newSharePrice} /> per share.
+          </Typography>
+        </>
+      );
+    }
   }
 
   const nextCooldown = corpConstants.issueNewSharesCooldown * (corp.totalShares / corpConstants.initialShares);
@@ -115,18 +140,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
       </ButtonWithTooltip>
       <br />
       <br />
-      <Typography>Issue {formatShares(newShares)} new shares?</Typography>
-      {privateOwnedRatio > 0 ? (
-        <Typography>
-          Private investors may buy up to {formatShares(maxPrivateShares)} of these shares and keep them off the market.
-        </Typography>
-      ) : null}
-      <Typography>
-        <b>{corp.name}</b>'s stock price will fall to <Money money={newSharePrice} /> per share.
-      </Typography>
-      <Typography>
-        <b>{corp.name}</b> will receive <Money money={profit} />.
-      </Typography>
+      <EffectText newShares={newShares} />
     </Modal>
   );
 }

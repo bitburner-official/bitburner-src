@@ -34,8 +34,6 @@ export function GoPublicModal(props: IProps): React.ReactElement {
       : "";
 
   function goPublic(): void {
-    if (disabledText != "") return;
-
     try {
       GoPublic(corp, shares);
       dialogBoxCreate(
@@ -46,14 +44,45 @@ export function GoPublicModal(props: IProps): React.ReactElement {
       props.onClose();
       props.rerender();
       setShares(NaN);
-    }
-    catch (err) {
+    } catch (err) {
       dialogBoxCreate(`${err as Error}`);
     }
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === KEY.ENTER) goPublic();
+  }
+
+  interface IEffectTextProps {
+    shares: number;
+  }
+
+  function EffectText({ shares }: IEffectTextProps): React.ReactElement {
+    if (isNaN(shares)) {
+      return (
+        <Typography>
+          &nbsp;
+          <br />
+          &nbsp;
+        </Typography>
+      );
+    } else if (disabledText) {
+      return (
+        <Typography>
+          {disabledText}
+          <br />
+          &nbsp;
+        </Typography>
+      );
+    } else {
+      return (
+        <Typography>
+          Go public at <Money money={initialSharePrice} /> per share?
+          <br />
+          <b>{corp.name}</b> will receive <Money money={initialSharePrice * (shares || 0)} />.
+        </Typography>
+      );
+    }
   }
 
   return (
@@ -80,11 +109,7 @@ export function GoPublicModal(props: IProps): React.ReactElement {
         </ButtonWithTooltip>
       </Box>
       <br />
-      <Typography>
-        Go public at <Money money={initialSharePrice} /> per share?
-        <br />
-        <b>{corp.name}</b> will receive <Money money={initialSharePrice * (shares || 0)} />.
-      </Typography>
+      <EffectText shares={shares} />
     </Modal>
   );
 }

@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
 import { isInteger } from "lodash";
+import React, { useState } from "react";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { formatShares } from "../../../ui/formatNumber";
 import { Modal } from "../../../ui/React/Modal";
@@ -42,8 +42,6 @@ export function SellSharesModal(props: IProps): React.ReactElement {
   }
 
   function sell(): void {
-    if (disabledText != "") return;
-
     try {
       SellShares(corp, shares);
       dialogBoxCreate(
@@ -59,14 +57,45 @@ export function SellSharesModal(props: IProps): React.ReactElement {
       props.onClose();
       props.rerender();
       setShares(NaN);
-    }
-    catch (err) {
+    } catch (err) {
       dialogBoxCreate(`${err as Error}`);
     }
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === KEY.ENTER) sell();
+  }
+
+  interface IEffectTextProps {
+    shares: number;
+  }
+
+  function EffectText({ shares }: IEffectTextProps): React.ReactElement {
+    if (!shares) {
+      return (
+        <Typography>
+          &nbsp;
+          <br />
+          &nbsp;
+        </Typography>
+      );
+    } else if (disabledText) {
+      return (
+        <Typography>
+          {disabledText}
+          <br />
+          &nbsp;
+        </Typography>
+      );
+    } else {
+      return (
+        <Typography>
+          You will receive <Money money={profit} />.
+          <br />
+          <b>{corp.name}</b>'s stock price will fall to <Money money={sharePrice} /> per share.
+        </Typography>
+      );
+    }
   }
 
   return (
@@ -97,14 +126,7 @@ export function SellSharesModal(props: IProps): React.ReactElement {
         Sell shares
       </ButtonWithTooltip>
       <br />
-      <br />
-      <Typography>Sell {formatShares(shares || 0)} shares?</Typography>
-      <Typography>
-        <b>{corp.name}</b>'s stock price will fall to <Money money={sharePrice} /> per share.
-      </Typography>
-      <Typography>
-        You will receive <Money money={profit} />.
-      </Typography>
+      <EffectText shares={shares} />
     </Modal>
   );
 }

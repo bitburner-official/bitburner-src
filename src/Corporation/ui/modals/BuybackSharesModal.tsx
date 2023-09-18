@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
 import { isInteger } from "lodash";
+import React, { useState } from "react";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
@@ -44,13 +44,8 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
   if (shares === 0) {
     disabledText = " ";
   }
-  if (!props.open) {
-    disabledText = "";
-  }
 
   function buy(): void {
-    if (disabledText != "") return;
-
     try {
       BuyBackShares(corp, shares);
       dialogBoxCreate(
@@ -66,14 +61,31 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
       props.onClose();
       props.rerender();
       setShares(NaN);
-    }
-    catch (err) {
+    } catch (err) {
       dialogBoxCreate(`${err as Error}`);
     }
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === KEY.ENTER) buy();
+  }
+
+  interface IEffectTextProps {
+    shares: number;
+  }
+
+  function EffectText({ shares }: IEffectTextProps): React.ReactElement {
+    if (!shares) {
+      return <Typography>&nbsp;</Typography>;
+    } else if (disabledText) {
+      return <Typography>{disabledText}</Typography>;
+    } else {
+      return (
+        <Typography>
+          <b>{corp.name}</b>'s stock price will rise to <Money money={sharePrice} /> per share.
+        </Typography>
+      );
+    }
   }
 
   return (
@@ -108,14 +120,7 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
         )}
       </ButtonWithTooltip>
       <br />
-      <br />
-      {canBuy ? (
-        <Typography>
-          <b>{corp.name}</b>'s stock price will rise to <Money money={sharePrice} /> per share.
-        </Typography>
-      ) : (
-        <Typography>&nbsp;</Typography>
-      )}
+      <EffectText shares={shares} />
     </Modal>
   );
 }

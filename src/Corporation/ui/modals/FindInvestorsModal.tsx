@@ -19,7 +19,7 @@ interface IProps {
 export function FindInvestorsModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const { funds, shares } = GetInvestmentOffer(corp);
-  if (shares === 0) {
+  if (shares === 0 || !props.open) {
     return <></>;
   }
   const percShares = shares / corp.totalShares;
@@ -38,31 +38,30 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
       );
       props.onClose();
       props.rerender();
-    }
-    catch (err) {
+    } catch (err) {
       dialogBoxCreate(`${err as Error}`);
     }
   }
+
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        An investment firm has offered <Money money={funds} /> in exchange for {formatShares(shares)} shares (a{" "}
-        {formatPercent(percShares, 1)} stake in the company).
+        An investment firm has offered to buy {formatShares(shares)} shares of stock (a {formatPercent(percShares, 1)}{" "}
+        stake in the company).
         <br />
         <br />
-        Hint: Investment firms will offer more money if your Corporation is turning a profit.
+        <b>{corp.name}</b> will receive <Money money={funds} />.
+        <br />
+        Your equity will fall to {formatPercent((corp.numShares - shares) / corp.totalShares, 1)}.
+        <br />
+        <br />
+        <b>Hint</b>: Investment firms will offer more money if your Corporation is turning a profit.
+        <br />
+        <br />
+        Do you accept this offer?
       </Typography>
       <br />
       <Button onClick={findInvestors}>Accept</Button>
-      <br />
-      <br />
-      <Typography>Do you accept this offer?</Typography>
-      <Typography>
-        Your equity will fall to {formatPercent((corp.numShares - shares) / corp.totalShares, 1)}.
-      </Typography>
-      <Typography>
-        <b>{corp.name}</b> will receive <Money money={funds} />.
-      </Typography>
     </Modal>
   );
 }
