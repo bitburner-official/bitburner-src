@@ -119,8 +119,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
             means you cannot buy them back.
           </li>
           <li>
-            You will not be able to issue new shares again (or dissolve the corporation) for{" "}
-            <b>{corp.convertCooldownToString(nextCooldown)}</b>.
+            You will not be able to issue new shares again for <b>{corp.convertCooldownToString(nextCooldown)}</b>.
           </li>
         </ul>
         You can issue at most {formatShares(maxNewShares)} new shares.
