@@ -2804,6 +2804,18 @@ export interface Bladeburner {
   getBlackOpNames(): string[];
 
   /**
+   * Get the name of the available Bladeburner BlackOp
+   * @remarks
+   * RAM cost: 0.4 GB
+   *
+   * Returns the name of the current BlackOp, regardless of rank,
+   * or "All BlackOps Completed" if no BlackOps remain in the BitNode.
+   *
+   * @returns Name of current BlackOp as a string, or "All BlackOps Completed."
+   */
+  getBlackOp(): string;
+
+  /**
    * List all general actions.
    * @remarks
    * RAM cost: 0.4 GB

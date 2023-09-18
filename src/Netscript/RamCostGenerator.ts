@@ -242,6 +242,7 @@ const bladeburner = {
   getContractNames: RamCostConstants.BladeburnerApiBase / 10,
   getOperationNames: RamCostConstants.BladeburnerApiBase / 10,
   getBlackOpNames: RamCostConstants.BladeburnerApiBase / 10,
+  getBlackOp: RamCostConstants.BladeburnerApiBase / 10,
   getBlackOpRank: RamCostConstants.BladeburnerApiBase / 2,
   getGeneralActionNames: RamCostConstants.BladeburnerApiBase / 10,
   getSkillNames: RamCostConstants.BladeburnerApiBase / 10,

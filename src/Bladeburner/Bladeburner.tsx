@@ -116,6 +116,32 @@ export class Bladeburner {
     return Math.min(1, this.stamina / (0.5 * this.maxStamina));
   }
 
+  getNextBlackOp(): string {
+    let blackops: BlackOperation[] = [];
+    for (const blackopName of Object.keys(BlackOperations)) {
+      if (Object.hasOwn(BlackOperations, blackopName)) {
+        blackops.push(BlackOperations[blackopName]);
+      }
+    }
+    blackops.sort(function (a, b) {
+      return a.reqdRank - b.reqdRank;
+    });
+
+    blackops = blackops.filter(
+      (blackop: BlackOperation, i: number) =>
+        !(this.blackops[blackops[i].name] == null && i !== 0 && this.blackops[blackops[i - 1].name] == null),
+    );
+
+    blackops = blackops.reverse();
+    const actionID = this.getActionIdFromTypeAndName("Black Op", "Operation Daedalus");
+
+    return blackops[0].name === "Operation Daedalus" &&
+      actionID !== null &&
+      !this.canAttemptBlackOp(actionID).isAvailable
+      ? "All BlackOps Completed"
+      : blackops[0].name;
+  }
+
   canAttemptBlackOp(actionId: ActionIdentifier): BlackOpsAttempt {
     // Safety measure - don't repeat BlackOps that are already done
     if (this.blackops[actionId.name] != null) {
@@ -301,7 +327,6 @@ export class Bladeburner {
     this.storedCycles += numCycles;
   }
 
-  // working on
   getActionIdFromTypeAndName(type = "", name = ""): ActionIdentifier | null {
     if (type === "" || name === "") {
       return null;

@@ -29,6 +29,7 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [getActionRepGain(type, name, level)](./bitburner.bladeburner.getactionrepgain.md) | Get the reputation gain of an action. |
 |  [getActionSuccesses(type, name)](./bitburner.bladeburner.getactionsuccesses.md) | Get action successes. |
 |  [getActionTime(type, name)](./bitburner.bladeburner.getactiontime.md) | Get the time to complete an action. |
+|  [getBlackOp()](./bitburner.bladeburner.getblackop.md) | Get the name of the available Bladeburner BlackOp |
 |  [getBlackOpNames()](./bitburner.bladeburner.getblackopnames.md) | List all black ops. |
 |  [getBlackOpRank(name)](./bitburner.bladeburner.getblackoprank.md) | Get black op required rank. |
 |  [getBonusTime()](./bitburner.bladeburner.getbonustime.md) | Get bladeburner bonus time. |
