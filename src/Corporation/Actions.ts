@@ -1,4 +1,3 @@
-import { isInteger } from "lodash";
 import { Player } from "@player";
 import { CorpResearchName, CorpSmartSupplyOption } from "@nsdefs";
 
@@ -14,11 +13,10 @@ import { Warehouse } from "./Warehouse";
 import { IndustryType } from "@enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
-import { formatShares } from "../ui/formatNumber";
 import { CityName } from "@enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { getRecordValues } from "../Types/Record";
-import { buybackSharesFailureReason } from "./helpers";
+import { sellSharesFailureReason, buybackSharesFailureReason } from "./helpers";
 
 export function NewDivision(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.size >= corporation.maxDivisions)
@@ -334,23 +332,8 @@ export function BulkPurchase(
 }
 
 export function SellShares(corporation: Corporation, numShares: number): number {
-  if (isNaN(numShares) || !isInteger(numShares)) {
-    throw new Error("Invalid value for number of shares.");
-  } else if (numShares < 0) {
-    throw new Error("Cannot sell a negative number of shares.");
-  } else if (numShares > corporation.numShares) {
-    throw new Error("You do not have that many shares to sell.");
-  } else if (numShares === corporation.numShares) {
-    throw new Error("You cannot sell all your shares.");
-  } else if (numShares > 1e14) {
-    throw new Error(`Cannot sell more than ${formatShares(1e14)} shares at a time.`);
-  } else if (!corporation.public) {
-    throw new Error("Cannot sell shares before going public.");
-  } else if (corporation.shareSaleCooldown) {
-    throw new Error(
-      `Cannot sell shares for another ${corporation.convertCooldownToString(corporation.shareSaleCooldown)}.`,
-    );
-  }
+  const failureReason = sellSharesFailureReason(corporation, numShares);
+  if (failureReason) throw new Error(failureReason);
 
   const [profit, newSharePrice, newSharesUntilUpdate] = corporation.calculateShareSale(numShares);
 

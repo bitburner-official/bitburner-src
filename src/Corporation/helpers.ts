@@ -32,6 +32,18 @@ export function calculateMaxAffordableUpgrade(corp: Corporation, upgrade: CorpUp
   return sanitizedValue as PositiveInteger | 0;
 }
 
+/** Returns a string representing the reason a share sale should fail, or empty string if there is no issue. */
+export function sellSharesFailureReason(corp: Corporation, numShares: number): string {
+  if (!isPositiveInteger(numShares)) return "Number of shares must be a positive integer.";
+  else if (numShares > corp.numShares) return "You do not have that many shares to sell.";
+  else if (numShares === corp.numShares) return "You cannot sell all your shares.";
+  else if (numShares > 1e14) return `Cannot sell more than ${formatShares(1e14)} shares at a time.`;
+  else if (!corp.public) return "Cannot sell shares before going public.";
+  else if (corp.shareSaleCooldown)
+    return `Cannot sell shares for another ${corp.convertCooldownToString(corp.shareSaleCooldown)}.`;
+  return "";
+}
+
 /** Returns a string representing the reason a share buyback should fail, or empty string if there is no issue. */
 export function buybackSharesFailureReason(corp: Corporation, numShares: number): string {
   if (!isPositiveInteger(numShares)) return "Number of shares must be a positive integer.";
