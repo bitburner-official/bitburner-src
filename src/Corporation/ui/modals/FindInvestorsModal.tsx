@@ -63,7 +63,7 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
         Do you accept this offer?
       </Typography>
       <br />
-      <Button onClick={findInvestors}>Accept</Button>
+      <Button onClick={findInvestors}>Accept</Button> <Button onClick={props.onClose}>Ignore</Button>
     </Modal>
   );
 }
