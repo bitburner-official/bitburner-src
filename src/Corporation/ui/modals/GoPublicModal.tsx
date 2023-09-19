@@ -45,7 +45,7 @@ export function GoPublicModal(props: IProps): React.ReactElement {
       props.rerender();
       setShares(NaN);
     } catch (err) {
-      dialogBoxCreate(`${err as Error}`);
+      dialogBoxCreate(`${err}`);
     }
   }
 

@@ -41,7 +41,7 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
       props.onClose();
       props.rerender();
     } catch (err) {
-      dialogBoxCreate(`${err as Error}`);
+      dialogBoxCreate(`${err}`);
     }
   }
 
