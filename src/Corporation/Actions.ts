@@ -71,7 +71,7 @@ export function purchaseOffice(corporation: Corporation, division: Division, cit
   if (division.offices[city]) {
     throw new Error(`You have already expanded into ${city} for ${division.name}`);
   }
-  corporation.funds = corporation.funds - corpConstants.officeInitialCost;
+  corporation.addNonIncomeFunds(-corpConstants.officeInitialCost);
   division.offices[city] = new OfficeSpace({
     city: city,
     size: corpConstants.officeInitialSize,
@@ -100,7 +100,7 @@ export function GoPublic(corporation: Corporation, numShares: number): void {
   corporation.sharePrice = initialSharePrice;
   corporation.issuedShares += numShares;
   corporation.numShares -= numShares;
-  corporation.addFunds(numShares * initialSharePrice); // TODO: use addNonIncomeFunds()
+  corporation.addNonIncomeFunds(numShares * initialSharePrice);
 }
 
 export function IssueNewShares(
@@ -139,7 +139,7 @@ export function IssueNewShares(
   corporation.issuedShares += amount - privateShares;
   corporation.investorShares += privateShares;
   corporation.totalShares += amount;
-  corporation.addFunds(profit); // TODO: use addNonIncomeFunds()
+  corporation.addNonIncomeFunds(profit);
   // Set sharePrice directly because all formulas will be based on stale cycleValuation data
   corporation.sharePrice = newSharePrice;
 
@@ -160,7 +160,7 @@ export function AcceptInvestmentOffer(corporation: Corporation): void {
   const funding = val * percShares * roundMultiplier;
   const investShares = Math.floor(corpConstants.initialShares * percShares);
   corporation.fundingRound++;
-  corporation.addFunds(funding); // TODO: use addNonIncomeFunds()
+  corporation.addNonIncomeFunds(funding);
 
   corporation.numShares -= investShares;
   corporation.investorShares += investShares;
@@ -388,7 +388,7 @@ export function UpgradeOfficeSize(corp: Corporation, office: OfficeSpace, size: 
   const cost = corpConstants.officeInitialCost * mult;
   if (corp.funds < cost) return;
   office.size += size;
-  corp.funds = corp.funds - cost;
+  corp.addNonIncomeFunds(-cost);
 }
 
 export function BuyTea(corp: Corporation, office: OfficeSpace): boolean {
@@ -416,7 +416,7 @@ export function ThrowParty(corp: Corporation, office: OfficeSpace, costPerEmploy
 export function purchaseWarehouse(corp: Corporation, division: Division, city: CityName): void {
   if (corp.funds < corpConstants.warehouseInitialCost) return;
   if (division.warehouses[city]) return;
-  corp.funds = corp.funds - corpConstants.warehouseInitialCost;
+  corp.addNonIncomeFunds(-corpConstants.warehouseInitialCost);
   division.warehouses[city] = new Warehouse({
     division: division,
     loc: city,
@@ -436,7 +436,7 @@ export function UpgradeWarehouse(corp: Corporation, division: Division, warehous
   if (corp.funds < sizeUpgradeCost) return;
   warehouse.level += amt;
   warehouse.updateSize(corp, division);
-  corp.funds = corp.funds - sizeUpgradeCost;
+  corp.addNonIncomeFunds(-sizeUpgradeCost);
 }
 
 export function HireAdVert(corp: Corporation, division: Division): void {

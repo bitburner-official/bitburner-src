@@ -52,12 +52,15 @@ export class Material {
   // Cost / sec to buy this material. AKA Market Price
   marketPrice = 0;
 
+  // Average price paid for the material (accounted as marketPrice for produced/imported materials)
+  averagePrice = 0;
+
   /** null if there is no limit set on production. 0 actually limits production to 0. */
   productionLimit: number | null = null;
 
   // Player inputs for sell price and amount.
   desiredSellAmount: string | number = 0;
-  desiredSellPrice: string | number = 0;
+  desiredSellPrice: string | number = "";
 
   // Flags that signal whether automatic sale pricing through Market TA is enabled
   marketTa1 = false;
