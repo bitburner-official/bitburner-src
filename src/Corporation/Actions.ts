@@ -18,6 +18,7 @@ import { formatShares } from "../ui/formatNumber";
 import { CityName } from "@enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { getRecordValues } from "../Types/Record";
+import { buybackSharesFailureReason } from "./helpers";
 
 export function NewDivision(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.size >= corporation.maxDivisions)
@@ -363,22 +364,10 @@ export function SellShares(corporation: Corporation, numShares: number): number 
 }
 
 export function BuyBackShares(corporation: Corporation, numShares: number): boolean {
-  if (isNaN(numShares) || !isInteger(numShares)) {
-    throw new Error("Invalid value for number of shares.");
-  } else if (numShares < 0) {
-    throw new Error("Cannot buy a negative number of shares.");
-  } else if (numShares > corporation.issuedShares) {
-    throw new Error("There are not that many outstanding shares to buy.");
-  } else if (numShares > 1e14) {
-    throw new Error(`Cannot buy more than ${formatShares(1e14)} shares at a time.`);
-  } else if (!corporation.public) {
-    throw new Error("Cannot buy back shares before going public.");
-  }
+  const failureReason = buybackSharesFailureReason(corporation, numShares);
+  if (failureReason) throw new Error(failureReason);
 
   const [cost, newSharePrice, newSharesUntilUpdate] = corporation.calculateShareBuyback(numShares);
-  if (Player.money < cost) {
-    throw new Error("You cannot afford that many shares.");
-  }
 
   corporation.numShares += numShares;
   corporation.issuedShares -= numShares;

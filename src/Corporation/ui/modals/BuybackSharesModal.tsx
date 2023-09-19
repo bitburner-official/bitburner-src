@@ -1,16 +1,15 @@
-import { isInteger } from "lodash";
 import React, { useState } from "react";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
 import { formatShares } from "../../../ui/formatNumber";
-import { Player } from "@player";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
 import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { BuyBackShares } from "../../Actions";
 import { KEY } from "../../../utils/helpers/keyCodes";
+import { buybackSharesFailureReason } from "../../helpers";
 
 interface IProps {
   open: boolean;
@@ -23,27 +22,9 @@ interface IProps {
 export function BuybackSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
+
   const [cost, sharePrice] = corp.calculateShareBuyback((props.open && shares) || 0);
-
-  let disabledText = "";
-  if (isNaN(shares) || !isInteger(shares)) {
-    disabledText = "Invalid value for number of shares.";
-  } else if (shares < 0) {
-    disabledText = "Cannot buy a negative number of shares.";
-  } else if (shares > corp.issuedShares) {
-    disabledText = "There are not that many outstanding shares to buy.";
-  } else if (shares > 1e14) {
-    disabledText = `Cannot buy more than ${formatShares(1e14)} shares at a time.`;
-  } else if (!corp.public) {
-    disabledText = "Cannot buy back shares before going public.";
-  }
-
-  if (Player.money < cost) {
-    disabledText ||= "You cannot afford that many shares.";
-  }
-  if (shares === 0) {
-    disabledText = " ";
-  }
+  const disabledText = buybackSharesFailureReason(corp, shares);
 
   function buy(): void {
     try {
@@ -62,7 +43,7 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
       props.rerender();
       setShares(NaN);
     } catch (err) {
-      dialogBoxCreate(`${err as Error}`);
+      dialogBoxCreate(`${err}`);
     }
   }
 

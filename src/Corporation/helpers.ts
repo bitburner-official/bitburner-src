@@ -1,4 +1,6 @@
-import { PositiveInteger } from "../types";
+import { Player } from "@player";
+import { PositiveInteger, isPositiveInteger } from "../types";
+import { formatShares } from "../ui/formatNumber";
 import { Corporation } from "./Corporation";
 import { CorpUpgrade } from "./data/CorporationUpgrades";
 
@@ -28,4 +30,17 @@ export function calculateMaxAffordableUpgrade(corp: Corporation, upgrade: CorpUp
 
   const sanitizedValue = maxAffordableUpgrades >= 0 ? maxAffordableUpgrades : 0;
   return sanitizedValue as PositiveInteger | 0;
+}
+
+/** Returns a string representing the reason a share buyback should fail, or empty string if there is no issue. */
+export function buybackSharesFailureReason(corp: Corporation, numShares: number): string {
+  if (!isPositiveInteger(numShares)) return "Number of shares must be a positive integer.";
+  if (numShares > corp.issuedShares) return "Not enough shares are available for buyback.";
+  if (numShares > 1e14) return `Cannot buy more than ${formatShares(1e14)} shares at a time.`;
+  if (!corp.public) return "Cannot buy back shares before going public.";
+
+  const [cost] = corp.calculateShareBuyback(numShares);
+  if (Player.money < cost) return "You cannot afford that many shares.";
+
+  return "";
 }
