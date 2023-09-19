@@ -1,7 +1,7 @@
 import React from "react";
 
 import { staneksGift } from "../../CotMG/Helper";
-import { Player } from "@Player";
+import { Player } from "@player";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
