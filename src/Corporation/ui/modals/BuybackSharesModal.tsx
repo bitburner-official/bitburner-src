@@ -22,6 +22,9 @@ interface IProps {
 export function BuybackSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
+  if (!props.open) {
+    return <></>;
+  }
 
   const [cost, sharePrice] = corp.calculateShareBuyback((props.open && shares) || 0);
   const disabledText = buybackSharesFailureReason(corp, shares);

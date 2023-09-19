@@ -22,6 +22,9 @@ interface IProps {
 export function IssueNewSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
+  if (!props.open) {
+    return <></>;
+  }
 
   const maxNewShares = corp.calculateMaxNewShares();
   const newShares = Math.round((shares || 0) / 10e6) * 10e6;
