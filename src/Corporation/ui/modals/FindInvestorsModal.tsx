@@ -29,7 +29,7 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
 
   function findInvestors(): void {
     corporation.fundingRound++;
-    corporation.addFunds(funding);
+    corporation.addNonIncomeFunds(funding);
     corporation.numShares -= investShares;
     props.rerender();
     props.onClose();

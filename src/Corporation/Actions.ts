@@ -70,7 +70,7 @@ export function purchaseOffice(corporation: Corporation, division: Division, cit
   if (division.offices[city]) {
     throw new Error(`You have already expanded into ${city} for ${division.name}`);
   }
-  corporation.funds = corporation.funds - corpConstants.officeInitialCost;
+  corporation.addNonIncomeFunds(-corpConstants.officeInitialCost);
   division.offices[city] = new OfficeSpace({
     city: city,
     size: corpConstants.officeInitialSize,
@@ -106,7 +106,7 @@ export function IssueNewShares(corporation: Corporation, amount: number): [numbe
 
   corporation.issuedShares += amount - privateShares;
   corporation.totalShares += amount;
-  corporation.funds = corporation.funds + profit;
+  corporation.addNonIncomeFunds(profit);
   corporation.immediatelyUpdateSharePrice();
 
   return [profit, amount, privateShares];
@@ -325,7 +325,7 @@ export function UpgradeOfficeSize(corp: Corporation, office: OfficeSpace, size: 
   const cost = corpConstants.officeInitialCost * mult;
   if (corp.funds < cost) return;
   office.size += size;
-  corp.funds = corp.funds - cost;
+  corp.addNonIncomeFunds(-cost);
 }
 
 export function BuyTea(corp: Corporation, office: OfficeSpace): boolean {
@@ -353,7 +353,7 @@ export function ThrowParty(corp: Corporation, office: OfficeSpace, costPerEmploy
 export function purchaseWarehouse(corp: Corporation, division: Division, city: CityName): void {
   if (corp.funds < corpConstants.warehouseInitialCost) return;
   if (division.warehouses[city]) return;
-  corp.funds = corp.funds - corpConstants.warehouseInitialCost;
+  corp.addNonIncomeFunds(-corpConstants.warehouseInitialCost);
   division.warehouses[city] = new Warehouse({
     division: division,
     loc: city,
@@ -373,7 +373,7 @@ export function UpgradeWarehouse(corp: Corporation, division: Division, warehous
   if (corp.funds < sizeUpgradeCost) return;
   warehouse.level += amt;
   warehouse.updateSize(corp, division);
-  corp.funds = corp.funds - sizeUpgradeCost;
+  corp.addNonIncomeFunds(-sizeUpgradeCost);
 }
 
 export function HireAdVert(corp: Corporation, division: Division): void {

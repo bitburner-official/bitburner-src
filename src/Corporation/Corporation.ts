@@ -4,6 +4,7 @@ import { CorporationState } from "./CorporationState";
 import { CorpUnlocks } from "./data/CorporationUnlocks";
 import { CorpUpgrades } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
+import { IndustriesData } from "./data/IndustryData";
 import { Division } from "./Division";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
@@ -56,6 +57,8 @@ export class Corporation {
     value: name === CorpUpgradeName.DreamSense ? 0 : 1,
   }));
 
+  previousTotalAssets = 150e9;
+  totalAssets = 150e9;
   cycleValuation = 0;
   valuationsList = [0];
   valuation = 0;
@@ -74,6 +77,17 @@ export class Corporation {
       console.error("Trying to add invalid amount of funds. Report to a developer.");
       return;
     }
+    this.funds += amt;
+  }
+
+  // Add or subtract funds which should not be counted for valuation; e.g. investments,
+  // upgrades, stock issuance
+  addNonIncomeFunds(amt: number): void {
+    if (!isFinite(amt)) {
+      console.error("Trying to add invalid amount of funds. Report to a developer.");
+      return;
+    }
+    this.totalAssets += amt;
     this.funds += amt;
   }
 
@@ -126,8 +140,6 @@ export class Corporation {
           this.expenses = this.expenses + ind.lastCycleExpenses;
         });
         const profit = this.revenue - this.expenses;
-        this.cycleValuation = this.determineCycleValuation();
-        this.determineValuation();
         const cycleProfit = profit * (marketCycles * corpConstants.secondsPerMarketCycle);
         if (isNaN(this.funds) || this.funds === Infinity || this.funds === -Infinity) {
           dialogBoxCreate(
@@ -137,7 +149,6 @@ export class Corporation {
           );
           this.funds = 150e9;
         }
-
         if (this.dividendRate > 0 && cycleProfit > 0) {
           // Validate input again, just to be safe
           if (isNaN(this.dividendRate) || this.dividendRate < 0 || this.dividendRate > corpConstants.dividendMaxRate) {
@@ -151,7 +162,9 @@ export class Corporation {
         } else {
           this.addFunds(cycleProfit);
         }
-
+        this.updateTotalAssets();
+        this.cycleValuation = this.determineCycleValuation();
+        this.determineValuation();
         this.updateSharePrice();
       }
 
@@ -170,24 +183,27 @@ export class Corporation {
 
   determineCycleValuation(): number {
     let val,
-      profit = this.revenue - this.expenses;
+      assetDelta = (this.totalAssets - this.previousTotalAssets) / corpConstants.secondsPerMarketCycle;
+    // Handle pre-totalAssets saves
+    assetDelta ??= this.revenue - this.expenses;
     if (this.public) {
       // Account for dividends
       if (this.dividendRate > 0) {
-        profit *= 1 - this.dividendRate;
+        assetDelta *= 1 - this.dividendRate;
       }
 
-      val = this.funds + profit * 85e3;
+      val = this.funds + assetDelta * 85e3;
       val *= Math.pow(1.1, this.divisions.size);
       val = Math.max(val, 0);
     } else {
-      val = 10e9 + Math.max(this.funds, 0) / 3; //Base valuation
-      if (profit > 0) {
-        val += profit * 315e3;
+      val = 10e9 + this.funds / 3;
+      if (assetDelta > 0) {
+        val += assetDelta * 315e3;
       }
       val *= Math.pow(1.1, this.divisions.size);
       val -= val % 1e6; //Round down to nearest millionth
     }
+    if (val < 10e9) val = 10e9; // Base valuation
     return val * currentNodeMults.CorporationValuation;
   }
 
@@ -195,8 +211,25 @@ export class Corporation {
     this.valuationsList.push(this.cycleValuation); //Add current valuation to the list
     if (this.valuationsList.length > corpConstants.valuationLength) this.valuationsList.shift();
     let val = this.valuationsList.reduce((a, b) => a + b); //Calculate valuations sum
-    val /= corpConstants.valuationLength; //Calculate the average
+    val /= this.valuationsList.length; //Calculate the average
     this.valuation = val;
+  }
+
+  updateTotalAssets(): void {
+    let assets = this.funds;
+    this.divisions.forEach((ind) => {
+      assets += IndustriesData[ind.type].startingCost;
+      for (const warehouse of getRecordValues(ind.warehouses)) {
+        for (const mat of getRecordValues(warehouse.materials)) {
+          assets += mat.stored * mat.averagePrice;
+        }
+        for (const prod of ind.products.values()) {
+          assets += prod.cityData[warehouse.city].stored * prod.productionCost;
+        }
+      }
+    });
+    this.previousTotalAssets = this.totalAssets;
+    this.totalAssets = assets;
   }
 
   getTargetSharePrice(): number {
@@ -291,7 +324,7 @@ export class Corporation {
     if (this.unlocks.has(unlockName)) return `The corporation has already unlocked ${unlockName}`;
     const price = CorpUnlocks[unlockName].price;
     if (this.funds < price) return `Insufficient funds to purchase ${unlockName}, requires ${formatMoney(price)}`;
-    this.funds -= price;
+    this.addNonIncomeFunds(-price);
     this.unlocks.add(unlockName);
 
     // Apply effects for one-time unlocks
@@ -308,7 +341,7 @@ export class Corporation {
     const upgrade = CorpUpgrades[upgradeName];
     const totalCost = calculateUpgradeCost(this, upgrade, amount);
     if (this.funds < totalCost) return `Not enough funds to purchase ${amount} of upgrade ${upgradeName}.`;
-    this.funds -= totalCost;
+    this.addNonIncomeFunds(-totalCost);
     this.upgrades[upgradeName].level += amount;
     this.upgrades[upgradeName].value += upgrade.benefit * amount;
 

@@ -479,7 +479,7 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
           Player.hashManager.refundUpgrade(upgName, count);
           return false;
         }
-        corp.funds = corp.funds + upg.value * count;
+        corp.addNonIncomeFunds(upg.value * count);
         break;
       }
       case "Reduce Minimum Security": {

@@ -311,6 +311,7 @@ export class Division {
               buyAmt = Math.min(buyAmt, maxAmt);
               if (buyAmt > 0) {
                 mat.quality = Math.max(0.1, (mat.quality * mat.stored + 1 * buyAmt) / (mat.stored + buyAmt));
+                mat.averagePrice = (mat.stored * mat.averagePrice + buyAmt * mat.marketPrice) / (mat.stored + buyAmt);
                 mat.stored += buyAmt;
                 expenses += buyAmt * mat.marketPrice;
               }
@@ -364,8 +365,13 @@ export class Division {
           // buy them
           for (const [matName, [buyAmt]] of getRecordEntries(smartBuy)) {
             const mat = warehouse.materials[matName];
-            if (mat.stored + buyAmt != 0) mat.quality = (mat.quality * mat.stored + 1 * buyAmt) / (mat.stored + buyAmt);
-            else mat.quality = 1;
+            if (mat.stored + buyAmt != 0) {
+              mat.quality = (mat.quality * mat.stored + 1 * buyAmt) / (mat.stored + buyAmt);
+              mat.averagePrice = (mat.averagePrice * mat.stored + mat.marketPrice * buyAmt) / (mat.stored + buyAmt);
+            } else {
+              mat.quality = 1;
+              mat.averagePrice = mat.marketPrice;
+            }
             mat.stored += buyAmt;
             mat.buyAmount = buyAmt / (corpConstants.secondsPerMarketCycle * marketCycles);
             expenses += buyAmt * mat.marketPrice;
@@ -460,6 +466,11 @@ export class Division {
                     tempQlt * prod * producableFrac) /
                     (warehouse.materials[this.producedMaterials[j]].stored + prod * producableFrac),
                 );
+                warehouse.materials[this.producedMaterials[j]].averagePrice =
+                  (warehouse.materials[this.producedMaterials[j]].averagePrice *
+                    warehouse.materials[this.producedMaterials[j]].stored +
+                    warehouse.materials[this.producedMaterials[j]].marketPrice * prod * producableFrac) /
+                  (warehouse.materials[this.producedMaterials[j]].stored + prod * producableFrac);
                 warehouse.materials[this.producedMaterials[j]].stored += prod * producableFrac;
               }
             } else {
@@ -678,6 +689,10 @@ export class Division {
                     (expWarehouse.materials[matName].stored + amt),
                 );
 
+                expWarehouse.materials[matName].averagePrice =
+                  (expWarehouse.materials[matName].averagePrice * expWarehouse.materials[matName].stored +
+                    expWarehouse.materials[matName].marketPrice * amt) /
+                  (expWarehouse.materials[matName].stored + amt);
                 expWarehouse.materials[matName].stored += amt;
                 mat.stored -= amt;
                 mat.exportedLastCycle += amt;
