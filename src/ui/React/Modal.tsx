@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Theme } from "@mui/material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -50,6 +50,12 @@ interface ModalProps {
 
 export const Modal = ({ open, onClose, children, sx }: ModalProps): React.ReactElement => {
   const classes = useStyles();
+  const [content, setContent] = useState(children);
+  useEffect(() => {
+    if (!open) return;
+    setContent(children);
+  }, [children, open]);
+
   return (
     <M
       disableRestoreFocus
@@ -67,7 +73,7 @@ export const Modal = ({ open, onClose, children, sx }: ModalProps): React.ReactE
           <IconButton className={classes.closeButton} onClick={onClose}>
             <CloseIcon />
           </IconButton>
-          <Box sx={{ m: 2 }}>{children}</Box>
+          <Box sx={{ m: 2 }}>{content}</Box>
         </div>
       </Fade>
     </M>
