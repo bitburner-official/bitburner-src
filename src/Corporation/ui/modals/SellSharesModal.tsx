@@ -23,8 +23,8 @@ interface IProps {
 export function SellSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
-  const [profit, sharePrice] = corp.calculateShareSale((props.open && shares) || 0);
 
+  const [profit, sharePrice] = corp.calculateShareSale((props.open && shares) || 0);
   const disabledText = sellSharesFailureReason(corp, shares);
 
   function sell(): void {
@@ -50,38 +50,6 @@ export function SellSharesModal(props: IProps): React.ReactElement {
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === KEY.ENTER) sell();
-  }
-
-  interface IEffectTextProps {
-    shares: number;
-  }
-
-  function EffectText({ shares }: IEffectTextProps): React.ReactElement {
-    if (!shares) {
-      return (
-        <Typography>
-          &nbsp;
-          <br />
-          &nbsp;
-        </Typography>
-      );
-    } else if (disabledText) {
-      return (
-        <Typography>
-          {disabledText}
-          <br />
-          &nbsp;
-        </Typography>
-      );
-    } else {
-      return (
-        <Typography>
-          You will receive <Money money={profit} />.
-          <br />
-          <b>{corp.name}</b>'s stock price will fall to <Money money={sharePrice} /> per share.
-        </Typography>
-      );
-    }
   }
 
   return (
@@ -112,7 +80,17 @@ export function SellSharesModal(props: IProps): React.ReactElement {
         Sell shares
       </ButtonWithTooltip>
       <br />
-      <EffectText shares={shares} />
+      <Typography sx={{ minHeight: "3em" }}>
+        {!shares ? null : disabledText ? (
+          disabledText
+        ) : (
+          <>
+            You will receive <Money money={profit} />.
+            <br />
+            <b>{corp.name}</b>'s stock price will fall to <Money money={sharePrice} /> per share.
+          </>
+        )}
+      </Typography>
     </Modal>
   );
 }

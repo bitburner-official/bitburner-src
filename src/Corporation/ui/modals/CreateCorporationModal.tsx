@@ -60,7 +60,7 @@ export function CreateCorporationModal(props: IProps): React.ReactElement {
         {Player.bitNodeN === 3 && (
           <>
             This <Money money={150e9} /> can either be self-funded, or you can obtain the seed money from the government
-            in exchange for {formatShares(500e6)} shares (a 33.3% stake in the company).
+            in exchange for {formatShares(500e6)} shares (a <b>33.3%</b> stake in the company).
           </>
         )}
         <br />

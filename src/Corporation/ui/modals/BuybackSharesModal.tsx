@@ -51,24 +51,6 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
     if (event.key === KEY.ENTER) buy();
   }
 
-  interface IEffectTextProps {
-    shares: number;
-  }
-
-  function EffectText({ shares }: IEffectTextProps): React.ReactElement {
-    if (!shares) {
-      return <Typography>&nbsp;</Typography>;
-    } else if (disabledText) {
-      return <Typography>{disabledText}</Typography>;
-    } else {
-      return (
-        <Typography>
-          <b>{corp.name}</b>'s stock price will rise to <Money money={sharePrice} /> per share.
-        </Typography>
-      );
-    }
-  }
-
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography component="div">
@@ -101,7 +83,15 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
         )}
       </ButtonWithTooltip>
       <br />
-      <EffectText shares={shares} />
+      <Typography sx={{ minHeight: "1.5em" }}>
+        {!shares ? null : disabledText ? (
+          disabledText
+        ) : (
+          <>
+            <b>{corp.name}</b>'s stock price will rise to <Money money={sharePrice} /> per share.
+          </>
+        )}
+      </Typography>
     </Modal>
   );
 }

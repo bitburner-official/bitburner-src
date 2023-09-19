@@ -21,9 +21,9 @@ interface IProps {
 // This is created when the player clicks the "Issue New Shares" buttons in the overview panel
 export function IssueNewSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
-  const maxNewShares = corp.calculateMaxNewShares();
   const [shares, setShares] = useState<number>(NaN);
 
+  const maxNewShares = corp.calculateMaxNewShares();
   const newShares = Math.round((shares || 0) / 10e6) * 10e6;
 
   const ceoOwnership = corp.numShares / (corp.totalShares + (newShares || 0));
@@ -71,36 +71,6 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
     if (event.key === KEY.ENTER) issueNewShares();
   }
 
-  interface IEffectTextProps {
-    newShares: number;
-  }
-
-  function EffectText({ newShares }: IEffectTextProps): React.ReactElement {
-    if (!newShares) {
-      return <Typography>&nbsp;</Typography>;
-    } else if (disabledText) {
-      return <Typography>{disabledText}</Typography>;
-    } else {
-      return (
-        <>
-          <Typography>Issue {formatShares(newShares)} new shares?</Typography>
-          {privateOwnedRatio > 0 ? (
-            <Typography>
-              Private investors may buy up to {formatShares(maxPrivateShares)} of these shares and keep them off the
-              market.
-            </Typography>
-          ) : null}
-          <Typography>
-            <b>{corp.name}</b> will receive <Money money={profit} />.
-          </Typography>
-          <Typography>
-            <b>{corp.name}</b>'s stock price will fall to <Money money={newSharePrice} /> per share.
-          </Typography>
-        </>
-      );
-    }
-  }
-
   const nextCooldown = corpConstants.issueNewSharesCooldown * (corp.totalShares / corpConstants.initialShares);
 
   return (
@@ -138,8 +108,25 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
         Issue New Shares
       </ButtonWithTooltip>
       <br />
-      <br />
-      <EffectText newShares={newShares} />
+      <Typography sx={{ minHeight: "6em" }}>
+        {disabledText ? (
+          disabledText
+        ) : (
+          <>
+            Issue {formatShares(newShares)} new shares?
+            <br />
+            {maxPrivateShares > 0
+              ? `Private investors may buy up to ${formatShares(
+                  maxPrivateShares,
+                )} of these shares and keep them off the market.`
+              : null}
+            <br />
+            <b>{corp.name}</b> will receive <Money money={profit} />.
+            <br />
+            <b>{corp.name}</b>'s stock price will fall to <Money money={newSharePrice} /> per share.
+          </>
+        )}
+      </Typography>
     </Modal>
   );
 }

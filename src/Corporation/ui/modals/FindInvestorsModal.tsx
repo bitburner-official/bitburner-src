@@ -33,7 +33,9 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
           <Typography>
             <b>{corp.name}</b> received <Money money={funds} />.
           </Typography>
-          <Typography>Your remaining equity is {formatPercent(corp.numShares / corp.totalShares, 1)}.</Typography>
+          <Typography>
+            Your remaining equity is <b>{formatPercent(corp.numShares / corp.totalShares, 1)}</b>.
+          </Typography>
         </>,
       );
       props.onClose();
@@ -46,13 +48,13 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        An investment firm has offered to buy {formatShares(shares)} shares of stock (a {formatPercent(percShares, 1)}{" "}
-        stake in the company).
+        An investment firm has offered to buy {formatShares(shares)} shares of stock (a{" "}
+        <b>{formatPercent(percShares, 1)}</b> stake in the company).
         <br />
         <br />
         <b>{corp.name}</b> will receive <Money money={funds} />.
         <br />
-        Your equity will fall to {formatPercent((corp.numShares - shares) / corp.totalShares, 1)}.
+        Your equity will fall to <b>{formatPercent((corp.numShares - shares) / corp.totalShares, 1)}</b>.
         <br />
         <br />
         <b>Hint</b>: Investment firms will offer more money if your Corporation is turning a profit.
