@@ -229,8 +229,6 @@ const Engine: {
     if (loadGame(saveString)) {
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
-      Player.reapplyAllAugmentations();
-      Player.reapplyAllSourceFiles();
       if (Player.hasWseAccount) {
         initSymbolToStockMap();
       }
