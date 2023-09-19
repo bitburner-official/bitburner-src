@@ -29,12 +29,14 @@ export function StanekDev(): React.ReactElement {
     staneksGift.fragments.forEach((f) => {
       f.highestCharge = 1e21;
       f.numCharge = 1e21;
+      Player.applyEntropy(Player.entropy);
     });
   }
 
   function modCharge(modify: number): (x: number) => void {
     return function (cycles: number): void {
       staneksGift.fragments.forEach((f) => (f.highestCharge += cycles * modify));
+      Player.applyEntropy(Player.entropy);
     };
   }
 
