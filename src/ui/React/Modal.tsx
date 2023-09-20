@@ -69,7 +69,11 @@ export const Modal = ({ open, onClose, children, sx }: ModalProps): React.ReactE
       sx={sx}
     >
       <Fade in={open}>
-        <div className={classes.paper} style={{ pointerEvents: open ? "auto" : "none" }}>
+        <div
+          className={classes.paper}
+          //@ts-expect-error inert is not supported by react types yet, this is a workaround until then. https://github.com/facebook/react/pull/24730
+          inert={open ? null : ""}
+        >
           <IconButton className={classes.closeButton} onClick={onClose}>
             <CloseIcon />
           </IconButton>
