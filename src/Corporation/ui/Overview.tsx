@@ -138,7 +138,7 @@ function PrivateButtons({ rerender }: IPrivateButtonsProps): React.ReactElement 
   const [findInvestorsopen, setFindInvestorsopen] = useState(false);
   const [goPublicopen, setGoPublicopen] = useState(false);
 
-  const fundingAvailable = corp.fundingRound < 4;
+  const fundingAvailable = corp.fundingRound < corpConstants.fundingRoundShares.length;
   const findInvestorsTooltip = fundingAvailable
     ? "Search for private investors who will give you startup funding in exchange for equity (stock shares) in your company"
     : "";
