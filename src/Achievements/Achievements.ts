@@ -322,7 +322,7 @@ export const achievements: Record<string, Achievement> = {
   WORKOUT: {
     ...achievementData.WORKOUT,
     Icon: "WORKOUT",
-    Condition: () => isClassWork(Player.currentWork),
+    Condition: () => isClassWork(Player.currentWork) && Player.currentWork.isGym(),
   },
   TOR: {
     ...achievementData.TOR,
