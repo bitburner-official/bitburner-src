@@ -56,3 +56,18 @@ export function buybackSharesFailureReason(corp: Corporation, numShares: number)
 
   return "";
 }
+
+/** Returns a string representing the reason issuing new shares should fail, or empty string if there is no issue. */
+export function issueNewSharesFailureReason(corp: Corporation, numShares: number): string {
+  if (!isPositiveInteger(numShares)) return "Number of shares must be a positive integer.";
+  if (numShares % 10e6 !== 0) return "Number of shares must be a multiple of 10 million.";
+  if (!corp.public) return "Cannot issue new shares before going public.";
+
+  const maxNewShares = corp.calculateMaxNewShares();
+  if (numShares > maxNewShares) return `Number of shares cannot exceed ${maxNewShares} (20% of total shares).`;
+
+  const cooldown = corp.issueNewSharesCooldown;
+  if (cooldown > 0) return `Cannot issue new shares for another ${corp.convertCooldownToString(cooldown)}.`;
+
+  return "";
+}

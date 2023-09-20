@@ -10,6 +10,7 @@ import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { IssueNewShares } from "../../Actions";
 import * as corpConstants from "../../data/Constants";
+import { issueNewSharesFailureReason } from "../../helpers";
 
 interface IProps {
   open: boolean;
@@ -33,16 +34,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
   const privateOwnedRatio = corp.investorShares / corp.totalShares;
   const maxPrivateShares = Math.round(((newShares / 2) * privateOwnedRatio) / 10e6) * 10e6;
 
-  let disabledText = "";
-  if (isNaN(shares) || isNaN(newShares)) {
-    disabledText = "Invalid number of shares.";
-  }
-  if (newShares < 10e6) {
-    disabledText = "Must issue at least 10 million new shares.";
-  }
-  if (newShares > maxNewShares) {
-    disabledText = "You cannot issue that many shares.";
-  }
+  const disabledText = issueNewSharesFailureReason(corp, shares);
 
   function issueNewShares(): void {
     if (disabledText) return;

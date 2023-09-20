@@ -16,7 +16,7 @@ import { isRelevantMaterial } from "./ui/Helpers";
 import { CityName } from "@enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { getRecordValues } from "../Types/Record";
-import { sellSharesFailureReason, buybackSharesFailureReason } from "./helpers";
+import { sellSharesFailureReason, buybackSharesFailureReason, issueNewSharesFailureReason } from "./helpers";
 
 export function NewDivision(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.size >= corporation.maxDivisions)
@@ -105,22 +105,8 @@ export function IssueNewShares(
   corporation: Corporation,
   amount: number,
 ): [profit: number, amount: number, privateShares: number] {
-  const maxNewShares = corporation.calculateMaxNewShares();
-
-  // Round to nearest ten-million
-  amount = Math.round(amount / 10e6) * 10e6;
-
-  if (!corporation.public) {
-    throw new Error(`Cannot issue new shares. The corporation has not gone public yet.`);
-  }
-  if (corporation.issueNewSharesCooldown > 0) {
-    throw new Error(`Cannot issue new shares, action on cooldown.`);
-  }
-  if (isNaN(amount) || amount < 10e6 || amount > maxNewShares) {
-    throw new Error(
-      `Invalid amount of shares. Must be an number between 10m and ${maxNewShares} (20% of total shares)`,
-    );
-  }
+  const failureReason = issueNewSharesFailureReason(corporation, amount);
+  if (failureReason) throw new Error(failureReason);
 
   const ceoOwnership = corporation.numShares / (corporation.totalShares + amount);
   const newSharePrice = corporation.getTargetSharePrice(ceoOwnership);
