@@ -9,22 +9,22 @@ interface IProps {
   onClose: () => void;
 }
 
-const enclosed = /(\([^)]*\))/gm; //grab everything between () pairs
+const enclosed = /(\([^)]+\))/gm; //grab all filled () pairs
 const recentPatchData = Array.from(new Set(CONSTANTS.LatestUpdate.match(enclosed)));
 
 const isDate = (data: string) => {
   const regex = /^\(last update/gm; //(this) isn't @name, but may be useful
   return regex.test(data);
 };
-const updateMessage = []; //store most recent update message, eg (last updated 9/12/23)
+const updateMessage = []; //store last update message, eg (last updated 9/12/23)
 if (isDate(recentPatchData[0])) updateMessage.push(recentPatchData[0]);
 
 const handle: string[] = [];
 for (let i = 0; i < recentPatchData.length; i++) {
-  const atName = /(?:\(?(@[^\s),]*)[),]?)/gm; //make an array of only unique @handles
+  const atName = /(?:^[(]?(@[^\s),]+)[),]?)/gm; //make an array of only unique @handles
   const whatWeWant = recentPatchData[i].replace(atName, "$1");
-  if (isDate(recentPatchData[i]) || !recentPatchData[i].includes(whatWeWant)) continue;
-  if (recentPatchData[i].includes(", ")) {
+  if (isDate(recentPatchData[i]) || !recentPatchData[i].includes("@")) continue;
+  if (recentPatchData[i].includes(", ")) { //if (@1, @2, ...@n)
     recentPatchData.push(...recentPatchData[i].split(", "));
     continue;
   }
