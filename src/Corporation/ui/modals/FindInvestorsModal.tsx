@@ -19,12 +19,9 @@ interface IProps {
 export function FindInvestorsModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const { funds, shares } = corp.getInvestmentOffer();
-  if (shares === 0 || !props.open) {
-    return <></>;
-  }
-  const percShares = shares / corp.totalShares;
 
   function findInvestors(): void {
+    if (shares === 0) return;
     try {
       AcceptInvestmentOffer(corp);
       dialogBoxCreate(
@@ -49,7 +46,7 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
         An investment firm has offered to buy {formatShares(shares)} shares of stock (a{" "}
-        <b>{formatPercent(percShares, 1)}</b> stake in the company).
+        <b>{formatPercent(shares / corp.totalShares, 1)}</b> stake in the company).
         <br />
         <br />
         <b>{corp.name}</b> will receive <Money money={funds} />.

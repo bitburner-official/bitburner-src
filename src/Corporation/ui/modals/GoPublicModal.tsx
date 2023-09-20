@@ -34,6 +34,7 @@ export function GoPublicModal(props: IProps): React.ReactElement {
       : "";
 
   function goPublic(): void {
+    if (disabledText) return;
     try {
       GoPublic(corp, shares);
       dialogBoxCreate(

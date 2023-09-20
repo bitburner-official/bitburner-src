@@ -23,14 +23,12 @@ interface IProps {
 export function SellSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
-  if (!props.open) {
-    return <></>;
-  }
 
   const [profit, sharePrice] = corp.calculateShareSale((props.open && shares) || 0);
   const disabledText = sellSharesFailureReason(corp, shares);
 
   function sell(): void {
+    if (disabledText) return;
     try {
       SellShares(corp, shares);
       dialogBoxCreate(
