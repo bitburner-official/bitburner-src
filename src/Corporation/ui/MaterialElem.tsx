@@ -8,7 +8,7 @@ import { Warehouse } from "../Warehouse";
 import { ExportModal } from "./modals/ExportModal";
 import { SellMaterialModal } from "./modals/SellMaterialModal";
 import { PurchaseMaterialModal } from "./modals/PurchaseMaterialModal";
-import { formatBigNumber, formatCorpStat, formatMoney, formatQuality } from "../../ui/formatNumber";
+import { formatBigNumber, formatCorpStat, formatQuality } from "../../ui/formatNumber";
 import { isString } from "../../utils/helpers/string";
 import { Money } from "../../ui/React/Money";
 import { useCorporation, useDivision } from "./Context";
@@ -118,7 +118,9 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
               </Typography>
             }
           >
-            <Typography>MP: {formatMoney(mat.marketPrice)}</Typography>
+            <Typography>
+              MP: <Money money={mat.marketPrice} />
+            </Typography>
           </Tooltip>
           <Tooltip
             title={<Typography>The quality of your material. Higher quality will lead to more sales</Typography>}

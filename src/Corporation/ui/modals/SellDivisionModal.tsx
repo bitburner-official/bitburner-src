@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { Modal } from "../../../ui/React/Modal";
+import { Money } from "../../../ui/React/Money";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
@@ -8,7 +9,6 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useCorporation } from "../../ui/Context";
 import { CityName } from "@enums";
 import * as corpConstants from "../../data/Constants";
-import { formatMoney } from "../../../ui/formatNumber";
 import { removeDivision as removeDivision } from "../../Actions";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { getRecordKeys } from "../../../Types/Record";
@@ -47,9 +47,10 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
     corp.funds += price;
     props.onClose();
     dialogBoxCreate(
-      `Sold ${divisionToSell.name} for ${formatMoney(price)}, you now have space for ${
-        corp.maxDivisions - corp.divisions.size
-      } more divisions.`,
+      <Typography>
+        Sold <b>{divisionToSell.name}</b> for <Money money={price} />, you now have space for
+        {corp.maxDivisions - corp.divisions.size} more divisions.
+      </Typography>,
     );
   }
 
@@ -70,13 +71,15 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
         </Select>
         <Typography>Division {divisionToSell.name} has:</Typography>
         <Typography>
-          Profit: {formatMoney((divisionToSell.lastCycleRevenue - divisionToSell.lastCycleExpenses) / 10)} / sec{" "}
+          Profit: <Money money={(divisionToSell.lastCycleRevenue - divisionToSell.lastCycleExpenses) / 10} /> / sec{" "}
         </Typography>
         <Typography>Cities:{getRecordKeys(divisionToSell.offices).length}</Typography>
         <Typography>Warehouses:{getRecordKeys(divisionToSell.warehouses).length}</Typography>
         {divisionToSell.makesProducts ?? <Typography>Products: {divisionToSell.products.size}</Typography>}
         <br />
-        <Typography>Sell price: {formatMoney(price)}</Typography>
+        <Typography>
+          Sell price: <Money money={price} />
+        </Typography>
         <Button onClick={sellDivision}>Sell division</Button>
       </>
     </Modal>

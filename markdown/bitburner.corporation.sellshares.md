@@ -4,7 +4,7 @@
 
 ## Corporation.sellShares() method
 
-Sell Shares
+Sell Shares. Transfer shares from the CEO to public traders to receive money in the player's wallet.
 
 **Signature:**
 

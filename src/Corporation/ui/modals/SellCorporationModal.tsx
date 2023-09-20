@@ -57,6 +57,7 @@ export function SellCorporationModal(props: IProps): React.ReactElement {
         <br />
         If you would like to start new one, please enter a name for your corporation below:
       </Typography>
+      <br />
       <TextField autoFocus={true} placeholder="Corporation Name" onChange={onChange} value={name} />
       {Player.bitNodeN === 3 && (
         <Button onClick={seed} disabled={name == ""}>

@@ -4,7 +4,7 @@
 
 ## CorporationInfo.totalShares property
 
-Total number of shares issues by this corporation
+Total number of shares issued by this corporation.
 
 **Signature:**
 
