@@ -33,9 +33,9 @@ for (let i = 0; i < recentPatchData.length; i++) {
 
 export function CreditsModal(props: IProps): React.ReactElement {
   const leadDevs = `danielyxie
-  Olivier Gagnon
-  @Snarling
-  `;
+Olivier Gagnon
+@Snarling
+`;
 
   const currentMaintainer = `@Snarling`;
 
