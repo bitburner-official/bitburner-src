@@ -70,6 +70,7 @@ export interface ImportPlayerData {
   bitNode: number;
   bitNodeLevel: number;
   sourceFiles: number;
+  exploits: number;
 }
 
 class BitburnerSaveObject {
@@ -232,6 +233,7 @@ class BitburnerSaveObject {
       bitNode: importedPlayer.bitNodeN,
       bitNodeLevel: importedPlayer.sourceFileLvl(Player.bitNodeN) + 1,
       sourceFiles: [...importedPlayer.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0),
+      exploits: importedPlayer.exploits.length,
     };
 
     data.playerData = playerData;
