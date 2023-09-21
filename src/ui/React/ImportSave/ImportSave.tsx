@@ -331,7 +331,7 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
             </TableRow>
 
             <TableRow>
-              <Tooltip title="The player's current BitNode">
+              <Tooltip title="The player's current BitNode.">
                 <TableCell>BitNode</TableCell>
               </Tooltip>
               <TableCell>
