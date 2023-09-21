@@ -127,6 +127,11 @@
       "Name": "The Recursion",
       "Description": "Acquire SF12.1"
     },
+    "ALLNODES": {
+      "ID": "ALLNODES",
+      "Name": "Bitnode Assassin",
+      "Description": "Destroy All World Daemons"
+    },
     "MONEY_1Q": {
       "ID": "MONEY_1Q",
       "Name": "Here comes the money!",
