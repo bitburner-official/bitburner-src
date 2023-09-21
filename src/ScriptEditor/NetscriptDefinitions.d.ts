@@ -1603,7 +1603,7 @@ export interface Singularity {
    * @param gymName - Name of gym. You must be in the correct city for whatever gym you specify.
    * @param stat - The stat you want to train.
    * @param focus - Acquire player focus on this gym workout. Optional. Defaults to true.
-   * @returns True if actions is successfully started, false otherwise.
+   * @returns True if action is successfully started, false otherwise.
    */
   gymWorkout(gymName: string, stat: string, focus?: boolean): boolean;
 
@@ -1844,7 +1844,7 @@ export interface Singularity {
    *
    * This function will return true if you successfully get a job/promotion,
    * and false otherwise. Note that if you are trying to use this function to
-   * apply for a promotion, and you don’t get one, it will return false.
+   * apply for a promotion and don’t get one, the function will return false.
    *
    * @param companyName - Name of company to apply to.
    * @param field - Field to which you want to apply.
@@ -2506,7 +2506,7 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of levels to purchase. Must be positive. Rounded to the nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of levels to purchase. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s level is successfully upgraded, false otherwise.
    */
   upgradeLevel(index: number, n?: number): boolean;
@@ -2526,7 +2526,7 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade RAM. Must be positive. Rounded to the nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of times to upgrade RAM. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s RAM is successfully upgraded, false otherwise.
    */
   upgradeRam(index: number, n?: number): boolean;
@@ -2544,7 +2544,7 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of cores to purchase. Must be positive. Rounded to the nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of cores to purchase. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s cores are successfully purchased, false otherwise.
    */
   upgradeCore(index: number, n?: number): boolean;
@@ -2564,7 +2564,7 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of cache levels to purchase. Must be positive. Rounded to the nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of cache levels to purchase. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s cache level is successfully upgraded, false otherwise.
    */
   upgradeCache(index: number, n?: number): boolean;
@@ -2580,7 +2580,7 @@ export interface Hacknet {
    * If the specified Hacknet Node is already at max level, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of levels to upgrade. Must be positive. Rounded to the nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of levels to upgrade. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node.
    */
   getLevelUpgradeCost(index: number, n?: number): number;
@@ -2596,7 +2596,7 @@ export interface Hacknet {
    * If the specified Hacknet Node already has max RAM, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade RAM. Must be positive. Rounded to the nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of times to upgrade RAM. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node's RAM.
    */
   getRamUpgradeCost(index: number, n?: number): number;
@@ -2612,7 +2612,7 @@ export interface Hacknet {
    * If the specified Hacknet Node is already at max level, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade cores. Must be positive. Rounded to the nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of times to upgrade cores. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node's number of cores.
    */
   getCoreUpgradeCost(index: number, n?: number): number;
@@ -2630,7 +2630,7 @@ export interface Hacknet {
    * If the specified Hacknet Node is already at max level, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade cache. Must be positive. Rounded to the nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of times to upgrade cache. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node's cache.
    */
   getCacheUpgradeCost(index: number, n?: number): number;
@@ -5272,7 +5272,7 @@ export interface NS {
    * It is possible to pass any React Node instead of a string.
    * See {@link ReactElement} and {@link ReactNode} types for additional info.
    *
-   * @param title - The new title for the tail window
+   * @param title - The new title for the tail window.
    * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
    */
   setTitle(title: string | ReactNode, pid?: number): void;
@@ -6163,7 +6163,7 @@ export interface NS {
    *
    * Write data to the given Netscript port.
    * @param portNumber - Port to write to. Must be a positive integer.
-   * @param data - the data to write to the port
+   * @param data - Data to write.
    * @returns The data popped off the queue if it was full, or null if it was not full.
    */
   writePort(portNumber: number, data: string | number): PortData | null;
