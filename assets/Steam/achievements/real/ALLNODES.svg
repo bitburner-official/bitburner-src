@@ -13,7 +13,7 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)"
-   sodipodi:docname="bitnode burner toast ff.xaml">
+   sodipodi:docname="bitnode assassin X.svg">
   <metadata
      id="metadata27">
     <rdf:RDF>
@@ -38,14 +38,14 @@
      showgrid="true"
      units="px"
      inkscape:zoom="2.326908"
-     inkscape:cx="16.975318"
+     inkscape:cx="123.6317"
      inkscape:cy="76.711242"
      inkscape:window-width="1631"
      inkscape:window-height="1304"
-     inkscape:window-x="822"
-     inkscape:window-y="130"
+     inkscape:window-x="538"
+     inkscape:window-y="119"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer1"
      inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
@@ -53,6 +53,24 @@
   </sodipodi:namedview>
   <defs
      id="defs2">
+    <rect
+       x="7.9375"
+       y="14.552083"
+       width="55.5625"
+       height="42.333333"
+       id="rect204" />
+    <rect
+       x="19.84375"
+       y="21.166667"
+       width="39.6875"
+       height="23.8125"
+       id="rect198" />
+    <rect
+       x="0"
+       y="0"
+       width="67.46875"
+       height="67.46875"
+       id="rect192" />
     <rect
        x="2.6458333"
        y="47.625"
@@ -143,43 +161,20 @@
        y="0" />
   </g>
   <g
-     inkscape:groupmode="layer"
-     id="layer3"
-     inkscape:label="toast">
-    <path
-       d="M 0,0 H 512 V 512 H 0 Z"
-       fill="#000000"
-       fill-opacity="1"
-       id="path62"
-       style="filter:url(#filter94)"
-       transform="matrix(0.04774481,0,0,0.04774481,20.797719,21.566417)" />
-    <g
-       class=""
-       style="filter:url(#filter90)"
-       id="g66"
-       transform="matrix(0.04774481,0,0,0.04774481,20.79772,21.566417)">
-      <path
-         d="M 256,16 C 121,16 16,76 16,136 c 0,30 15,45 30,60 -15,15 -30,54.417 -30,75 v 165 c 0,30 30,60 60,60 h 360 c 30,0 60,-15 60,-60 V 256 c 0,-18.957 -15,-45 -30,-60 15,-15 30,-30 30,-60 C 496,76 391,16 256,16 Z m 0,60 c 105,0 180,15 180,60 0,15 -15,45 -30,60 15,15 30,60 30,75 V 436 H 76 V 271 C 76,256 91,211 106,196 91,181 76,151 76,136 76,91 151,76 256,76 Z m -10.375,27.125 A 15,15 0 0 0 234.781,107.5 L 107.5,234.78 a 15,15 0 0 0 0,21.22 l 10.625,10.594 a 15,15 0 0 0 21.22,0 l 127.28,-127.28 a 15,15 0 0 0 0,-21.19 L 256,107.5 a 15,15 0 0 0 -10.375,-4.375 z m 100.75,37.125 a 15,15 0 0 0 -10.813,4.375 L 144.625,335.563 a 15,15 0 0 0 0,21.187 l 10.625,10.625 a 15,15 0 0 0 21.22,0 L 367.375,176.437 a 15,15 0 0 0 0,-21.187 L 356.781,144.625 A 15,15 0 0 0 346.376,140.25 Z M 383.5,241 a 15,15 0 0 0 -10.813,4.406 l -127.28,127.28 a 15,15 0 0 0 0,21.19 L 256,404.5 a 15,15 0 0 0 21.22,0 L 404.5,277.22 a 15,15 0 0 0 0,-21.22 L 393.906,245.406 A 15,15 0 0 0 383.5,241 Z"
-         fill="#ffffff"
-         fill-opacity="1"
-         id="path64" />
-    </g>
-  </g>
-  <g
      inkscape:label="main"
      inkscape:groupmode="layer"
      id="layer1">
     <text
        xml:space="preserve"
        style="font-weight:bold;font-size:11.3623px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke-width:0.152171"
-       x="8.1764565"
-       y="19.130114"
+       x="4.1682329"
+       y="13.672227"
        id="text8876"><tspan
          sodipodi:role="line"
          id="tspan8874"
          style="fill:#000000;fill-opacity:1;stroke-width:0.152171"
-         x="8.1764565"
-         y="19.130114">Bitnode</tspan></text>
+         x="4.1682329"
+         y="13.672227">BITNODE</tspan></text>
     <text
        xml:space="preserve"
        id="text29"
@@ -192,9 +187,32 @@
        xml:space="preserve"
        id="text41"
        style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect43);fill:#000000;fill-opacity:1;stroke:none;"
-       transform="translate(9.6258855,-3.4111792)"><tspan
+       transform="translate(1.0257385,2.1604121)"><tspan
          x="2.6464844"
          y="57.280465"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold'">Burner</tspan></tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold'">ASSASSIN</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       id="text190"
+       style="fill:black;fill-opacity:1;line-height:1.25;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:10.58333333px;white-space:pre;shape-inside:url(#rect192);" />
+    <text
+       xml:space="preserve"
+       id="text196"
+       style="fill:black;fill-opacity:1;line-height:1.25;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:10.58333333px;white-space:pre;shape-inside:url(#rect198);" />
+    <text
+       xml:space="preserve"
+       id="text202"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect204);fill:#000000;fill-opacity:1;stroke:none;" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:50.8px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="16.875456"
+       y="46.533146"
+       id="text210"><tspan
+         sodipodi:role="line"
+         id="tspan208"
+         x="16.875456"
+         y="46.533146"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:50.8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583">x</tspan></text>
   </g>
 </svg>
