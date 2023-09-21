@@ -19,5 +19,5 @@ void
 
 RAM cost: 1 GB \* 16/4/1
 
-This function will automatically opens the backup save prompt and claim the free faction favour if available.
+This function will automatically open the backup save prompt and claim the free faction favour if available.
 

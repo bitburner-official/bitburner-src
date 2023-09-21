@@ -29,7 +29,7 @@ True if specified file exists, and false otherwise.
 
 RAM cost: 0.1 GB
 
-Returns a boolean indicating whether the specified file exists on the target server. The filename for programs is case insensitive, other file types are case sensitive. For example, fileExists(“brutessh.exe”) will work fine, even though the actual program is named 'BruteSSH.exe'.
+Returns a boolean indicating whether the specified file exists on the target server. The filename for programs is case-insensitive, other file types are case-sensitive. For example, fileExists(“brutessh.exe”) will work fine, even though the actual program is named 'BruteSSH.exe'.
 
 ## Example
 

@@ -42,7 +42,7 @@ ns.kill("foo.js");
 // kill the script "foo.js" on the "n00dles" server with no arguments.
 ns.kill("foo.js", "n00dles");
 
-// kill the script foo.js on the current server that was ran with the arguments [1, “foodnstuff”, false]:
+// kill the script foo.js on the current server that was run with the arguments [1, “foodnstuff”, false]:
 ns.kill("foo.js", ns.getHostname(), 1, "foodnstuff", false);
 ```
 

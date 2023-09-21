@@ -17,7 +17,7 @@ setToCommitCrime(sleeveNumber: number, crimeType: CrimeType | `${CrimeType}`): b
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  sleeveNumber | number | Index of the sleeve to start committing crime. Sleeves are numbered starting from 0. |
-|  crimeType | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` |  |
+|  crimeType | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` | Name of the crime. |
 
 **Returns:**
 

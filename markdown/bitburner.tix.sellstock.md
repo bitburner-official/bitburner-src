@@ -17,7 +17,7 @@ sellStock(sym: string, shares: number): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  sym | string | Stock symbol. |
-|  shares | number | Number of shares to sell. Must be positive. Will be rounded to nearest integer. |
+|  shares | number | Number of shares to sell. Must be positive. Will be rounded to the nearest integer. |
 
 **Returns:**
 
