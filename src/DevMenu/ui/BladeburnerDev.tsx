@@ -217,16 +217,13 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
                   reset={wipeAllChaos}
                 />
               </td>
-              <Tooltip title="Wipe Active City Chaos">
-                <IconButton
-                  onClick={wipeActiveCityChaos}
-                  size="large"
-                  arial-label="clear-active-city-chaos"
-                  title="Clear Only Active City Chaos"
-                >
-                  <DeleteIcon sx={{ fontSize: 40 }} />
-                </IconButton>
-              </Tooltip>
+              <td>
+                <Tooltip title="Wipe Active City Chaos">
+                  <IconButton onClick={wipeActiveCityChaos} size="large" aria-label="clear-active-city-chaos">
+                    <DeleteIcon sx={{ fontSize: 40 }} />
+                  </IconButton>
+                </Tooltip>
+              </td>
             </tr>
             <tr>
               <td>
