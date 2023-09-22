@@ -130,7 +130,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
               {!props.joined && facInfo.enemies.length > 0 && (
                 <Tooltip
                   title={
-                    <Typography>
+                    <Typography component="div">
                       This Faction is enemies with:
                       <ul>
                         {facInfo.enemies.map((enemy) => (

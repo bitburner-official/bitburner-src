@@ -3,9 +3,10 @@ import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { MaterialInfo } from "../../MaterialInfo";
 import { Warehouse } from "../../Warehouse";
 import { Material } from "../../Material";
-import { formatMatPurchaseAmount, formatMoney } from "../../../ui/formatNumber";
+import { formatMatPurchaseAmount } from "../../../ui/formatNumber";
 import { BulkPurchase, BuyMaterial } from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
+import { Money } from "../../../ui/React/Money";
 import { useCorporation, useDivision } from "../Context";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -56,7 +57,7 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
       return (
         <>
           <Typography>
-            Purchasing {formatMatPurchaseAmount(parsedAmt)} of {props.mat.name} will cost {formatMoney(cost)}
+            Purchasing {formatMatPurchaseAmount(parsedAmt)} of {props.mat.name} will cost <Money money={cost} />
           </Typography>
         </>
       );

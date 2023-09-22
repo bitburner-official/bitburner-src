@@ -1150,6 +1150,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "expenses": 0,
         "fundingRound": 0,
         "funds": 150000000000,
+        "investorShares": 0,
         "issueNewSharesCooldown": 0,
         "issuedShares": 0,
         "maxDivisions": 20,

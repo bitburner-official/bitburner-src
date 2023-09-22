@@ -12,7 +12,7 @@ import { showLiterature } from "../Literature/LiteratureHelpers";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { CorpStateName } from "@nsdefs";
+import { CorpStateName, InvestmentOffer } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { formatMoney } from "../ui/formatNumber";
@@ -46,6 +46,7 @@ export class Corporation {
   issueNewSharesCooldown = 0; // Game cycles until player can issue shares again
   dividendRate = 0;
   dividendTax = 1 - currentNodeMults.CorporationSoftcap + 0.15;
+  investorShares = 0;
   issuedShares = 0;
   sharePrice = 0;
   storedCycles = 0;
@@ -232,10 +233,17 @@ export class Corporation {
     this.totalAssets = assets;
   }
 
-  getTargetSharePrice(): number {
-    // Note: totalShares - numShares is not the same as issuedShares because
-    // issuedShares does not account for private investors
-    return this.valuation / (2 * (this.totalShares - this.numShares) + 1);
+  getTargetSharePrice(ceoOwnership: number | null = null): number {
+    // Share price is proportional to total corporation valuation.
+    // When the CEO owns 0% of the company, market cap is 0.5x valuation.
+    // When the CEO owns 25% of the company, market cap is 1.0x valuation.
+    // When the CEO owns 100% of shares, market cap is 1.5x valuation.
+    if (ceoOwnership === null) {
+      ceoOwnership = this.numShares / this.totalShares;
+    }
+    const ceoConfidence = 0.5 + Math.sqrt(Math.max(0, ceoOwnership));
+    const marketCap = this.valuation * ceoConfidence;
+    return marketCap / this.totalShares;
   }
 
   updateSharePrice(): void {
@@ -250,10 +258,6 @@ export class Corporation {
     }
   }
 
-  immediatelyUpdateSharePrice(): void {
-    this.sharePrice = this.getTargetSharePrice();
-  }
-
   calculateMaxNewShares(): number {
     const maxNewSharesUnrounded = Math.round(this.totalShares * 0.2);
     const maxNewShares = maxNewSharesUnrounded - (maxNewSharesUnrounded % 10e6);
@@ -261,17 +265,18 @@ export class Corporation {
   }
 
   // Calculates how much money will be made and what the resulting stock price
-  // will be when the player sells his/her shares
+  // will be when the player sells their shares
   // @return - [Player profit, final stock price, end shareSalesUntilPriceUpdate property]
-  calculateShareSale(numShares: number): [number, number, number] {
-    let sharesTracker = numShares;
+  calculateShareSale(numShares: number): [profit: number, sharePrice: number, sharesUntilUpdate: number] {
+    let sharesRemaining = numShares;
     let sharesUntilUpdate = this.shareSalesUntilPriceUpdate;
     let sharePrice = this.sharePrice;
     let sharesSold = 0;
     let profit = 0;
-    let targetPrice = this.getTargetSharePrice();
 
-    const maxIterations = Math.ceil(numShares / corpConstants.sharesPerPriceUpdate);
+    const sharesPerStep = Math.sign(numShares || 1) * corpConstants.sharesPerPriceUpdate;
+    const maxIterations = Math.ceil(numShares / sharesPerStep);
+
     if (isNaN(maxIterations) || maxIterations > 10e6) {
       console.error(
         `Something went wrong or unexpected when calculating share sale. Max iterations calculated to be ${maxIterations}`,
@@ -280,26 +285,57 @@ export class Corporation {
     }
 
     for (let i = 0; i < maxIterations; ++i) {
-      if (sharesTracker < sharesUntilUpdate) {
-        profit += sharePrice * sharesTracker;
-        sharesUntilUpdate -= sharesTracker;
+      if (Math.abs(sharesRemaining) < Math.abs(sharesUntilUpdate)) {
+        profit += sharePrice * sharesRemaining;
+        sharesUntilUpdate -= sharesRemaining;
         break;
       } else {
-        profit += sharePrice * sharesUntilUpdate;
-        sharesUntilUpdate = corpConstants.sharesPerPriceUpdate;
-        sharesTracker -= sharesUntilUpdate;
-        sharesSold += sharesUntilUpdate;
-        targetPrice = this.valuation / (2 * (this.totalShares + sharesSold - this.numShares));
-        // Calculate what new share price would be
+        profit += sharePrice * sharesPerStep;
+        sharesRemaining -= sharesPerStep;
+        sharesSold += sharesPerStep;
+
+        // Update the share price
+        const ceoOwnership = (this.numShares - sharesSold) / this.totalShares;
+        const targetPrice = this.getTargetSharePrice(ceoOwnership);
         if (sharePrice <= targetPrice) {
           sharePrice *= 1 + 0.5 * 0.01;
         } else {
           sharePrice *= 1 - 0.5 * 0.01;
         }
+        sharesUntilUpdate = corpConstants.sharesPerPriceUpdate;
       }
     }
 
     return [profit, sharePrice, sharesUntilUpdate];
+  }
+
+  calculateShareBuyback(numShares: number): [cost: number, sharePrice: number, sharesUntilUpdate: number] {
+    const [profit, sharePrice, sharesUntilUpdate] = this.calculateShareSale(-numShares);
+    const cost = -1.1 * profit;
+    return [cost, sharePrice, sharesUntilUpdate];
+  }
+
+  getInvestmentOffer(): InvestmentOffer {
+    if (
+      this.fundingRound >= corpConstants.fundingRoundShares.length ||
+      this.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
+      this.public
+    )
+      return {
+        funds: 0,
+        shares: 0,
+        round: this.fundingRound + 1, // Make more readable
+      }; // Don't throw an error here, no reason to have a second function to check if you can get investment.
+    const val = this.valuation;
+    const percShares = corpConstants.fundingRoundShares[this.fundingRound];
+    const roundMultiplier = corpConstants.fundingRoundMultiplier[this.fundingRound];
+    const funding = val * percShares * roundMultiplier;
+    const investShares = Math.floor(corpConstants.initialShares * percShares);
+    return {
+      funds: funding,
+      shares: investShares,
+      round: this.fundingRound + 1, // Make more readable
+    };
   }
 
   convertCooldownToString(cd: number): string {

@@ -7437,11 +7437,13 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @returns Amount of funds generated for the corporation. */
   issueNewShares(amount?: number): number;
 
-  /** Buyback Shares
+  /** Buyback Shares.
+   * Spend money from the player's wallet to transfer shares from public traders to the CEO.
    * @param amount - Amount of shares to buy back, must be integer and larger than 0 */
   buyBackShares(amount: number): void;
 
-  /** Sell Shares
+  /** Sell Shares.
+   * Transfer shares from the CEO to public traders to receive money in the player's wallet.
    * @param amount -  Amount of shares to sell, must be integer between 1 and 100t */
   sellShares(amount: number): void;
 
@@ -7515,13 +7517,15 @@ interface CorporationInfo {
   expenses: number;
   /** Indicating if the company is public */
   public: boolean;
-  /** Total number of shares issues by this corporation */
+  /** Total number of shares issued by this corporation. */
   totalShares: number;
-  /** Amount of share owned */
+  /** Amount of shares owned by the CEO. */
   numShares: number;
   /** Cooldown until shares can be sold again */
   shareSaleCooldown: number;
-  /** Amount of acquirable shares. */
+  /** Amount of shares owned by private investors. Not available for public sale or CEO buyback. */
+  investorShares: number;
+  /** Amount of shares owned by public traders. Available for CEO buyback. */
   issuedShares: number;
   /** Cooldown until new shares can be issued */
   issueNewSharesCooldown: number;
