@@ -365,6 +365,7 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
               <br />
             </>
           }
+          additionalButton={<Button onClick={closeImportModal}>Cancel</Button>}
         />
       </Box>
     </Box>
