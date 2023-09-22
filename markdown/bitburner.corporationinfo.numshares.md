@@ -4,7 +4,7 @@
 
 ## CorporationInfo.numShares property
 
-Amount of share owned
+Amount of shares owned by the CEO.
 
 **Signature:**
 
