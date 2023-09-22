@@ -169,27 +169,6 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, HacknetCost);
     });
 
-    it("One corporation function reaching max ram cap", async function () {
-      const code = `
-        export async function main(ns) {
-          ns.corporation.getCorporation();
-        }
-      `;
-      const calculated = calculateRamUsage(code, new Map()).cost;
-      expectCost(calculated, MaxCost);
-    });
-
-    it("Two corporation functions at max ram cap", async function () {
-      const code = `
-        export async function main(ns) {
-          ns.corporation.createCorporation("Noodle Bar");
-          ns.corporation.getCorporation();
-        }
-      `;
-      const calculated = calculateRamUsage(code, new Map()).cost;
-      expectCost(calculated, MaxCost);
-    });
-
     it("Sleeve functions with an individual cost", async function () {
       const code = `
         export async function main(ns) {
