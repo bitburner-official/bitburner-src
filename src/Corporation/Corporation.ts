@@ -4,6 +4,7 @@ import { CorporationState } from "./CorporationState";
 import { CorpUnlocks } from "./data/CorporationUnlocks";
 import { CorpUpgrades } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
+import { IndustriesData } from "./data/IndustryData";
 import { Division } from "./Division";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
@@ -11,7 +12,7 @@ import { showLiterature } from "../Literature/LiteratureHelpers";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { CorpStateName } from "@nsdefs";
+import { CorpStateName, InvestmentOffer } from "@nsdefs";
 import { calculateUpgradeCost } from "./helpers";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { formatMoney } from "../ui/formatNumber";
@@ -45,6 +46,7 @@ export class Corporation {
   issueNewSharesCooldown = 0; // Game cycles until player can issue shares again
   dividendRate = 0;
   dividendTax = 1 - currentNodeMults.CorporationSoftcap + 0.15;
+  investorShares = 0;
   issuedShares = 0;
   sharePrice = 0;
   storedCycles = 0;
@@ -56,6 +58,8 @@ export class Corporation {
     value: name === CorpUpgradeName.DreamSense ? 0 : 1,
   }));
 
+  previousTotalAssets = 150e9;
+  totalAssets = 150e9;
   cycleValuation = 0;
   valuationsList = [0];
   valuation = 0;
@@ -74,6 +78,17 @@ export class Corporation {
       console.error("Trying to add invalid amount of funds. Report to a developer.");
       return;
     }
+    this.funds += amt;
+  }
+
+  // Add or subtract funds which should not be counted for valuation; e.g. investments,
+  // upgrades, stock issuance
+  addNonIncomeFunds(amt: number): void {
+    if (!isFinite(amt)) {
+      console.error("Trying to add invalid amount of funds. Report to a developer.");
+      return;
+    }
+    this.totalAssets += amt;
     this.funds += amt;
   }
 
@@ -126,8 +141,6 @@ export class Corporation {
           this.expenses = this.expenses + ind.lastCycleExpenses;
         });
         const profit = this.revenue - this.expenses;
-        this.cycleValuation = this.determineCycleValuation();
-        this.determineValuation();
         const cycleProfit = profit * (marketCycles * corpConstants.secondsPerMarketCycle);
         if (isNaN(this.funds) || this.funds === Infinity || this.funds === -Infinity) {
           dialogBoxCreate(
@@ -137,7 +150,6 @@ export class Corporation {
           );
           this.funds = 150e9;
         }
-
         if (this.dividendRate > 0 && cycleProfit > 0) {
           // Validate input again, just to be safe
           if (isNaN(this.dividendRate) || this.dividendRate < 0 || this.dividendRate > corpConstants.dividendMaxRate) {
@@ -151,7 +163,9 @@ export class Corporation {
         } else {
           this.addFunds(cycleProfit);
         }
-
+        this.updateTotalAssets();
+        this.cycleValuation = this.determineCycleValuation();
+        this.determineValuation();
         this.updateSharePrice();
       }
 
@@ -170,24 +184,27 @@ export class Corporation {
 
   determineCycleValuation(): number {
     let val,
-      profit = this.revenue - this.expenses;
+      assetDelta = (this.totalAssets - this.previousTotalAssets) / corpConstants.secondsPerMarketCycle;
+    // Handle pre-totalAssets saves
+    assetDelta ??= this.revenue - this.expenses;
     if (this.public) {
       // Account for dividends
       if (this.dividendRate > 0) {
-        profit *= 1 - this.dividendRate;
+        assetDelta *= 1 - this.dividendRate;
       }
 
-      val = this.funds + profit * 85e3;
+      val = this.funds + assetDelta * 85e3;
       val *= Math.pow(1.1, this.divisions.size);
       val = Math.max(val, 0);
     } else {
-      val = 10e9 + Math.max(this.funds, 0) / 3; //Base valuation
-      if (profit > 0) {
-        val += profit * 315e3;
+      val = 10e9 + this.funds / 3;
+      if (assetDelta > 0) {
+        val += assetDelta * 315e3;
       }
       val *= Math.pow(1.1, this.divisions.size);
       val -= val % 1e6; //Round down to nearest millionth
     }
+    if (val < 10e9) val = 10e9; // Base valuation
     return val * currentNodeMults.CorporationValuation;
   }
 
@@ -195,14 +212,38 @@ export class Corporation {
     this.valuationsList.push(this.cycleValuation); //Add current valuation to the list
     if (this.valuationsList.length > corpConstants.valuationLength) this.valuationsList.shift();
     let val = this.valuationsList.reduce((a, b) => a + b); //Calculate valuations sum
-    val /= corpConstants.valuationLength; //Calculate the average
+    val /= this.valuationsList.length; //Calculate the average
     this.valuation = val;
   }
 
-  getTargetSharePrice(): number {
-    // Note: totalShares - numShares is not the same as issuedShares because
-    // issuedShares does not account for private investors
-    return this.valuation / (2 * (this.totalShares - this.numShares) + 1);
+  updateTotalAssets(): void {
+    let assets = this.funds;
+    this.divisions.forEach((ind) => {
+      assets += IndustriesData[ind.type].startingCost;
+      for (const warehouse of getRecordValues(ind.warehouses)) {
+        for (const mat of getRecordValues(warehouse.materials)) {
+          assets += mat.stored * mat.averagePrice;
+        }
+        for (const prod of ind.products.values()) {
+          assets += prod.cityData[warehouse.city].stored * prod.productionCost;
+        }
+      }
+    });
+    this.previousTotalAssets = this.totalAssets;
+    this.totalAssets = assets;
+  }
+
+  getTargetSharePrice(ceoOwnership: number | null = null): number {
+    // Share price is proportional to total corporation valuation.
+    // When the CEO owns 0% of the company, market cap is 0.5x valuation.
+    // When the CEO owns 25% of the company, market cap is 1.0x valuation.
+    // When the CEO owns 100% of shares, market cap is 1.5x valuation.
+    if (ceoOwnership === null) {
+      ceoOwnership = this.numShares / this.totalShares;
+    }
+    const ceoConfidence = 0.5 + Math.sqrt(Math.max(0, ceoOwnership));
+    const marketCap = this.valuation * ceoConfidence;
+    return marketCap / this.totalShares;
   }
 
   updateSharePrice(): void {
@@ -217,10 +258,6 @@ export class Corporation {
     }
   }
 
-  immediatelyUpdateSharePrice(): void {
-    this.sharePrice = this.getTargetSharePrice();
-  }
-
   calculateMaxNewShares(): number {
     const maxNewSharesUnrounded = Math.round(this.totalShares * 0.2);
     const maxNewShares = maxNewSharesUnrounded - (maxNewSharesUnrounded % 10e6);
@@ -228,17 +265,18 @@ export class Corporation {
   }
 
   // Calculates how much money will be made and what the resulting stock price
-  // will be when the player sells his/her shares
+  // will be when the player sells their shares
   // @return - [Player profit, final stock price, end shareSalesUntilPriceUpdate property]
-  calculateShareSale(numShares: number): [number, number, number] {
-    let sharesTracker = numShares;
+  calculateShareSale(numShares: number): [profit: number, sharePrice: number, sharesUntilUpdate: number] {
+    let sharesRemaining = numShares;
     let sharesUntilUpdate = this.shareSalesUntilPriceUpdate;
     let sharePrice = this.sharePrice;
     let sharesSold = 0;
     let profit = 0;
-    let targetPrice = this.getTargetSharePrice();
 
-    const maxIterations = Math.ceil(numShares / corpConstants.sharesPerPriceUpdate);
+    const sharesPerStep = Math.sign(numShares || 1) * corpConstants.sharesPerPriceUpdate;
+    const maxIterations = Math.ceil(numShares / sharesPerStep);
+
     if (isNaN(maxIterations) || maxIterations > 10e6) {
       console.error(
         `Something went wrong or unexpected when calculating share sale. Max iterations calculated to be ${maxIterations}`,
@@ -247,26 +285,57 @@ export class Corporation {
     }
 
     for (let i = 0; i < maxIterations; ++i) {
-      if (sharesTracker < sharesUntilUpdate) {
-        profit += sharePrice * sharesTracker;
-        sharesUntilUpdate -= sharesTracker;
+      if (Math.abs(sharesRemaining) < Math.abs(sharesUntilUpdate)) {
+        profit += sharePrice * sharesRemaining;
+        sharesUntilUpdate -= sharesRemaining;
         break;
       } else {
-        profit += sharePrice * sharesUntilUpdate;
-        sharesUntilUpdate = corpConstants.sharesPerPriceUpdate;
-        sharesTracker -= sharesUntilUpdate;
-        sharesSold += sharesUntilUpdate;
-        targetPrice = this.valuation / (2 * (this.totalShares + sharesSold - this.numShares));
-        // Calculate what new share price would be
+        profit += sharePrice * sharesPerStep;
+        sharesRemaining -= sharesPerStep;
+        sharesSold += sharesPerStep;
+
+        // Update the share price
+        const ceoOwnership = (this.numShares - sharesSold) / this.totalShares;
+        const targetPrice = this.getTargetSharePrice(ceoOwnership);
         if (sharePrice <= targetPrice) {
           sharePrice *= 1 + 0.5 * 0.01;
         } else {
           sharePrice *= 1 - 0.5 * 0.01;
         }
+        sharesUntilUpdate = corpConstants.sharesPerPriceUpdate;
       }
     }
 
     return [profit, sharePrice, sharesUntilUpdate];
+  }
+
+  calculateShareBuyback(numShares: number): [cost: number, sharePrice: number, sharesUntilUpdate: number] {
+    const [profit, sharePrice, sharesUntilUpdate] = this.calculateShareSale(-numShares);
+    const cost = -1.1 * profit;
+    return [cost, sharePrice, sharesUntilUpdate];
+  }
+
+  getInvestmentOffer(): InvestmentOffer {
+    if (
+      this.fundingRound >= corpConstants.fundingRoundShares.length ||
+      this.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
+      this.public
+    )
+      return {
+        funds: 0,
+        shares: 0,
+        round: this.fundingRound + 1, // Make more readable
+      }; // Don't throw an error here, no reason to have a second function to check if you can get investment.
+    const val = this.valuation;
+    const percShares = corpConstants.fundingRoundShares[this.fundingRound];
+    const roundMultiplier = corpConstants.fundingRoundMultiplier[this.fundingRound];
+    const funding = val * percShares * roundMultiplier;
+    const investShares = Math.floor(corpConstants.initialShares * percShares);
+    return {
+      funds: funding,
+      shares: investShares,
+      round: this.fundingRound + 1, // Make more readable
+    };
   }
 
   convertCooldownToString(cd: number): string {
@@ -291,7 +360,7 @@ export class Corporation {
     if (this.unlocks.has(unlockName)) return `The corporation has already unlocked ${unlockName}`;
     const price = CorpUnlocks[unlockName].price;
     if (this.funds < price) return `Insufficient funds to purchase ${unlockName}, requires ${formatMoney(price)}`;
-    this.funds -= price;
+    this.addNonIncomeFunds(-price);
     this.unlocks.add(unlockName);
 
     // Apply effects for one-time unlocks
@@ -308,7 +377,7 @@ export class Corporation {
     const upgrade = CorpUpgrades[upgradeName];
     const totalCost = calculateUpgradeCost(this, upgrade, amount);
     if (this.funds < totalCost) return `Not enough funds to purchase ${amount} of upgrade ${upgradeName}.`;
-    this.funds -= totalCost;
+    this.addNonIncomeFunds(-totalCost);
     this.upgrades[upgradeName].level += amount;
     this.upgrades[upgradeName].value += upgrade.benefit * amount;
 

@@ -236,7 +236,7 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_time = 0) => {
       const time = helpers.number(ctx, "time", _time);
-      helpers.log(ctx, () => `Sleeping for ${time} milliseconds`);
+      helpers.log(ctx, () => `Sleeping for ${convertTimeMsToTimeElapsedString(time, true)}.`);
       return helpers.netscriptDelay(ctx, time).then(function () {
         return Promise.resolve(true);
       });
@@ -245,7 +245,7 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_time = 0) => {
       const time = helpers.number(ctx, "time", _time);
-      helpers.log(ctx, () => `Sleeping for ${time} milliseconds`);
+      helpers.log(ctx, () => `Sleeping for ${convertTimeMsToTimeElapsedString(time, true)}.`);
       return new Promise((resolve) => setTimeout(() => resolve(true), time));
     },
   grow:

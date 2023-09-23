@@ -52,6 +52,9 @@ export class Material {
   // Cost / sec to buy this material. AKA Market Price
   marketPrice = 0;
 
+  // Average price paid for the material (accounted as marketPrice for produced/imported materials)
+  averagePrice = 0;
+
   /** null if there is no limit set on production. 0 actually limits production to 0. */
   productionLimit: number | null = null;
 

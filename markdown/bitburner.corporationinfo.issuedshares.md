@@ -4,7 +4,7 @@
 
 ## CorporationInfo.issuedShares property
 
-Amount of acquirable shares.
+Amount of shares owned by public traders. Available for CEO buyback.
 
 **Signature:**
 

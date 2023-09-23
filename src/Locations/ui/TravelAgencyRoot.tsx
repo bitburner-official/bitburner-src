@@ -31,7 +31,7 @@ function travel(to: CityName): void {
 
   Player.loseMoney(cost, "other");
   Player.travel(to);
-  dialogBoxCreate(`You are now in ${to}!`);
+  if (!Settings.SuppressTravelConfirmation) dialogBoxCreate(`You are now in ${to}!`);
   Router.toPage(Page.City);
 }
 

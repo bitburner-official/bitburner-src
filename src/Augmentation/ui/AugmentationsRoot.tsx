@@ -163,8 +163,7 @@ export function AugmentationsRoot(props: IProps): React.ReactElement {
                 <br />- home ram and cores
                 <br />
                 <br />
-                It is recommended to install several Augmentations at once. Preferably everything from any faction of
-                your choosing.
+                It is recommended to install several Augmentations at once.
               </>
             }
           />

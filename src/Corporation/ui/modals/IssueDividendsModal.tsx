@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
+import { Money } from "../../../ui/React/Money";
+import { MoneyRate } from "../../../ui/React/MoneyRate";
 import * as corpConstants from "../../data/Constants";
 import { IssueDividends } from "../../Actions";
 import { useCorporation } from "../Context";
@@ -53,20 +55,19 @@ export function IssueDividendsModal(props: IProps): React.ReactElement {
         yourself, as well.
         <br />
         <br />
-        In order to issue dividends, simply allocate some percentage of your corporation's profits to dividends. This
-        percentage must be an integer between 0 and 100. (A percentage of 0 means no dividends will be issued)
+        Note that issuing dividends will negatively affect <b>{corp.name}</b>'s stock price.
         <br />
         <br />
-        Two important things to note:
+        In order to issue dividends, simply allocate some percentage of your Corporation's profits to dividends. This
+        percentage must be an integer between 0 and 100. (A percentage of 0 means no dividends will be issued.)
         <br />
-        * Issuing dividends will negatively affect your corporation's stock price
         <br />
-        <br />
-        Example: Assume your corporation makes $100m / sec in profit and you allocate 40% of that towards dividends.
-        That means your corporation will gain $60m / sec in funds and the remaining $40m / sec will be paid as
-        dividends. Since your corporation starts with 1 billion shares, every shareholder will be paid $0.04 per share
-        per second before taxes.
+        <b>Example:</b> Assume your corporation makes <MoneyRate money={100e6} /> in profit and you allocate 40% of that
+        towards dividends. That means your corporation will gain <MoneyRate money={60e6} /> in funds and the remaining{" "}
+        <MoneyRate money={40e6} /> will be paid as dividends. Since your corporation starts with 1 billion shares, every
+        shareholder will be paid <Money money={0.04} /> per share per second before taxes.
       </Typography>
+      <br />
       <TextField
         autoFocus
         value={percent}

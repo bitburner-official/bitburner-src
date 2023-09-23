@@ -1,8 +1,10 @@
 import React from "react";
-import { formatMoney, formatPercent, formatShares } from "../../../ui/formatNumber";
-import * as corpConstants from "../../data/Constants";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+import { formatPercent, formatShares } from "../../../ui/formatNumber";
 import { Modal } from "../../../ui/React/Modal";
+import { Money } from "../../../ui/React/Money";
 import { useCorporation } from "../Context";
+import { AcceptInvestmentOffer } from "../../Actions";
 
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -13,40 +15,52 @@ interface IProps {
   rerender: () => void;
 }
 
-// Create a popup that lets the player manage exports
+// Create a popup that lets the player manage investment offers
 export function FindInvestorsModal(props: IProps): React.ReactElement {
-  const corporation = useCorporation();
-  const val = corporation.valuation;
-  if (
-    corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
-    corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length
-  )
-    return <></>;
-  const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
-  const roundMultiplier = corpConstants.fundingRoundMultiplier[corporation.fundingRound];
-  const funding = val * percShares * roundMultiplier;
-  const investShares = Math.floor(corpConstants.initialShares * percShares);
+  const corp = useCorporation();
+  const { funds, shares } = corp.getInvestmentOffer();
 
   function findInvestors(): void {
-    corporation.fundingRound++;
-    corporation.addFunds(funding);
-    corporation.numShares -= investShares;
-    props.rerender();
-    props.onClose();
+    if (shares === 0) return;
+    try {
+      AcceptInvestmentOffer(corp);
+      dialogBoxCreate(
+        <>
+          <Typography>You accepted the investment offer.</Typography>
+          <Typography>
+            <b>{corp.name}</b> received <Money money={funds} />.
+          </Typography>
+          <Typography>
+            Your remaining equity is <b>{formatPercent(corp.numShares / corp.totalShares, 1)}</b>.
+          </Typography>
+        </>,
+      );
+      props.onClose();
+      props.rerender();
+    } catch (err) {
+      dialogBoxCreate(`${err}`);
+    }
   }
+
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        An investment firm has offered you {formatMoney(funding)} in funding in exchange for a{" "}
-        {formatPercent(percShares, 3)} stake in the company ({formatShares(investShares)} shares).
+        An investment firm has offered to buy {formatShares(shares)} shares of stock (a{" "}
+        <b>{formatPercent(shares / corp.totalShares, 1)}</b> stake in the company).
         <br />
         <br />
-        Do you accept or reject this offer?
+        <b>{corp.name}</b> will receive <Money money={funds} />.
+        <br />
+        Your equity will fall to <b>{formatPercent((corp.numShares - shares) / corp.totalShares, 1)}</b>.
         <br />
         <br />
-        Hint: Investment firms will offer more money if your corporation is turning a profit
+        <b>Hint</b>: Investment firms will offer more money if your Corporation is turning a profit.
+        <br />
+        <br />
+        Do you accept this offer?
       </Typography>
-      <Button onClick={findInvestors}>Accept</Button>
+      <br />
+      <Button onClick={findInvestors}>Accept</Button> <Button onClick={props.onClose}>Ignore</Button>
     </Modal>
   );
 }

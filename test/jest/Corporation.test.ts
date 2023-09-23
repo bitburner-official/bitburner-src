@@ -2,11 +2,22 @@ import { PositiveInteger } from "../../src/types";
 import { Corporation } from "../../src/Corporation/Corporation";
 import { CorpUpgrades } from "../../src/Corporation/data/CorporationUpgrades";
 import { calculateMaxAffordableUpgrade, calculateUpgradeCost } from "../../src/Corporation/helpers";
+import { Player, setPlayer } from "../../src/Player";
+import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
+import {
+  AcceptInvestmentOffer,
+  BuyBackShares,
+  GoPublic,
+  IssueNewShares,
+  SellShares,
+} from "../../src/Corporation/Actions";
 
 describe("Corporation", () => {
   let corporation: Corporation;
 
   beforeEach(() => {
+    setPlayer(new PlayerObject());
+    Player.init();
     corporation = new Corporation({ name: "Test" });
   });
 
@@ -55,6 +66,50 @@ describe("Corporation", () => {
           }
         });
       }
+    });
+  });
+
+  describe("Corporation totalShares", () => {
+    function expectSharesToAddUp(corp: Corporation) {
+      expect(corp.totalShares).toEqual(corp.numShares + corp.investorShares + corp.issuedShares);
+    }
+
+    it("should equal the sum of each kind of shares", () => {
+      expectSharesToAddUp(corporation);
+    });
+    it("should be preserved by seed funding", () => {
+      const seedFunded = true;
+      Player.startCorporation("TestCorp", seedFunded);
+      expectSharesToAddUp(Player.corporation!);
+    });
+    it("should be preserved by acceptInvestmentOffer", () => {
+      AcceptInvestmentOffer(corporation);
+      expectSharesToAddUp(corporation);
+    });
+    it("should be preserved by goPublic", () => {
+      const numShares = 1e8;
+      GoPublic(corporation, numShares);
+      expectSharesToAddUp(corporation);
+    });
+    it("should be preserved by IssueNewShares", () => {
+      const numShares = 1e8;
+      GoPublic(corporation, numShares);
+      corporation.issueNewSharesCooldown = 0;
+      IssueNewShares(corporation, numShares);
+      expectSharesToAddUp(corporation);
+    });
+    it("should be preserved by BuyBackShares", () => {
+      const numShares = 1e8;
+      GoPublic(corporation, numShares);
+      BuyBackShares(corporation, numShares);
+      expectSharesToAddUp(corporation);
+    });
+    it("should be preserved by SellShares", () => {
+      const numShares = 1e8;
+      GoPublic(corporation, numShares);
+      corporation.shareSaleCooldown = 0;
+      SellShares(corporation, numShares);
+      expectSharesToAddUp(corporation);
     });
   });
 });

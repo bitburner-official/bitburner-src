@@ -13,7 +13,6 @@ import {
   Division as NSDivision,
   WarehouseAPI,
   OfficeAPI,
-  InvestmentOffer,
   CorpResearchName,
   CorpMaterialName,
 } from "@nsdefs";
@@ -22,7 +21,9 @@ import {
   NewDivision,
   purchaseOffice,
   IssueDividends,
+  GoPublic,
   IssueNewShares,
+  AcceptInvestmentOffer,
   SellMaterial,
   SellProduct,
   SetSmartSupply,
@@ -102,63 +103,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     const corporation = getCorporation();
     const cost = calculateUpgradeCost(corporation, CorpUpgrades[upgradeName], 1 as PositiveInteger);
     return cost;
-  }
-
-  function getInvestmentOffer(): InvestmentOffer {
-    const corporation = getCorporation();
-    if (
-      corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
-      corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
-      corporation.public
-    )
-      return {
-        funds: 0,
-        shares: 0,
-        round: corporation.fundingRound + 1, // Make more readable
-      }; // Don't throw an error here, no reason to have a second function to check if you can get investment.
-    const val = corporation.valuation;
-    const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
-    const roundMultiplier = corpConstants.fundingRoundMultiplier[corporation.fundingRound];
-    const funding = val * percShares * roundMultiplier;
-    const investShares = Math.floor(corpConstants.initialShares * percShares);
-    return {
-      funds: funding,
-      shares: investShares,
-      round: corporation.fundingRound + 1, // Make more readable
-    };
-  }
-
-  function acceptInvestmentOffer(): boolean {
-    const corporation = getCorporation();
-    if (
-      corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
-      corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
-      corporation.public
-    )
-      return false;
-    const val = corporation.valuation;
-    const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
-    const roundMultiplier = corpConstants.fundingRoundMultiplier[corporation.fundingRound];
-    const funding = val * percShares * roundMultiplier;
-    const investShares = Math.floor(corpConstants.initialShares * percShares);
-    corporation.fundingRound++;
-    corporation.addFunds(funding);
-    corporation.numShares -= investShares;
-    return true;
-  }
-
-  function goPublic(numShares: number): boolean {
-    const corporation = getCorporation();
-    const initialSharePrice = corporation.valuation / corporation.totalShares;
-    if (isNaN(numShares)) throw new Error("Invalid value for number of issued shares");
-    if (numShares < 0) throw new Error("Invalid value for number of issued shares");
-    if (numShares > corporation.numShares) throw new Error("You don't have that many shares to issue!");
-    corporation.public = true;
-    corporation.sharePrice = initialSharePrice;
-    corporation.issuedShares = numShares;
-    corporation.numShares -= numShares;
-    corporation.addFunds(numShares * initialSharePrice);
-    return true;
   }
 
   function getResearchCost(division: Division, researchName: CorpResearchName): number {
@@ -741,12 +685,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const maxNewShares = corporation.calculateMaxNewShares();
       if (_amount == undefined) _amount = maxNewShares;
       const amount = helpers.number(ctx, "amount", _amount);
-      if (corporation.issueNewSharesCooldown > 0) throw new Error(`Can't issue new shares, action on cooldown.`);
-      if (amount < 10e6 || amount > maxNewShares)
-        throw new Error(
-          `Invalid value for amount field! Must be numeric, greater than 10m, and less than ${maxNewShares} (20% of total shares)`,
-        );
-      if (!corporation.public) throw helpers.makeRuntimeErrorMsg(ctx, `Your company has not gone public!`);
       const [funds] = IssueNewShares(corporation, amount);
       return funds;
     },
@@ -768,6 +706,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         totalShares: corporation.totalShares,
         numShares: corporation.numShares,
         shareSaleCooldown: corporation.shareSaleCooldown,
+        investorShares: corporation.investorShares,
         issuedShares: corporation.issuedShares,
         issueNewSharesCooldown: corporation.issueNewSharesCooldown,
         sharePrice: corporation.sharePrice,
@@ -807,18 +746,26 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     },
     getInvestmentOffer: (ctx) => () => {
       checkAccess(ctx);
-      return getInvestmentOffer();
+      const corporation = getCorporation();
+      return corporation.getInvestmentOffer();
     },
     acceptInvestmentOffer: (ctx) => () => {
       checkAccess(ctx);
-      return acceptInvestmentOffer();
+      const corporation = getCorporation();
+      try {
+        AcceptInvestmentOffer(corporation);
+        return true;
+      } catch (err) {
+        return false;
+      }
     },
     goPublic: (ctx) => (_numShares) => {
       checkAccess(ctx);
       const corporation = getCorporation();
       if (corporation.public) throw helpers.makeRuntimeErrorMsg(ctx, "corporation is already public");
       const numShares = helpers.number(ctx, "numShares", _numShares);
-      return goPublic(numShares);
+      GoPublic(corporation, numShares);
+      return true;
     },
     sellShares: (ctx) => (_numShares) => {
       checkAccess(ctx);
