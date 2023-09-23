@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Theme } from "@mui/material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -41,33 +41,43 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-interface IProps {
+interface ModalProps {
   open: boolean;
   onClose: () => void;
   children: React.ReactNode;
   sx?: SxProps<Theme>;
 }
 
-export const Modal = (props: IProps): React.ReactElement => {
+export const Modal = ({ open, onClose, children, sx }: ModalProps): React.ReactElement => {
   const classes = useStyles();
+  const [content, setContent] = useState(children);
+  useEffect(() => {
+    if (!open) return;
+    setContent(children);
+  }, [children, open]);
+
   return (
     <M
       disableRestoreFocus
       disableScrollLock
       disableEnforceFocus
       disableAutoFocus
-      open={props.open}
-      onClose={props.onClose}
+      open={open}
+      onClose={onClose}
       closeAfterTransition
       className={classes.modal}
-      sx={props.sx}
+      sx={sx}
     >
-      <Fade in={props.open}>
-        <div className={classes.paper}>
-          <IconButton className={classes.closeButton} onClick={props.onClose}>
+      <Fade in={open}>
+        <div
+          className={classes.paper}
+          //@ts-expect-error inert is not supported by react types yet, this is a workaround until then. https://github.com/facebook/react/pull/24730
+          inert={open ? null : ""}
+        >
+          <IconButton className={classes.closeButton} onClick={onClose}>
             <CloseIcon />
           </IconButton>
-          <Box sx={{ m: 2 }}>{props.children}</Box>
+          <Box sx={{ m: 2 }}>{content}</Box>
         </div>
       </Fade>
     </M>

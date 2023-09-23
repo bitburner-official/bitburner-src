@@ -1,15 +1,15 @@
 import React, { useState } from "react";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
-import { formatBigNumber, formatMoney } from "../../../ui/formatNumber";
-import { Player } from "@player";
+import { Money } from "../../../ui/React/Money";
+import { formatShares } from "../../../ui/formatNumber";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
 import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { BuyBackShares } from "../../Actions";
-import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { KEY } from "../../../utils/helpers/keyCodes";
-import { isPositiveInteger } from "../../../types";
+import { buybackSharesFailureReason } from "../../helpers";
 
 interface IProps {
   open: boolean;
@@ -23,44 +23,28 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
 
-  const currentStockPrice = corp.sharePrice;
-  const buybackPrice = currentStockPrice * 1.1;
-  const disabledText = !isPositiveInteger(shares)
-    ? "Number of shares must be a positive integer"
-    : shares > corp.issuedShares
-    ? "There are not enough shares available to buyback this many"
-    : shares * buybackPrice > Player.money
-    ? "Insufficient player funds"
-    : "";
+  const [cost, sharePrice] = corp.calculateShareBuyback((props.open && shares) || 0);
+  const disabledText = buybackSharesFailureReason(corp, shares);
 
   function buy(): void {
     if (disabledText) return;
     try {
       BuyBackShares(corp, shares);
+      dialogBoxCreate(
+        <>
+          <Typography>
+            You bought {formatShares(shares)} shares for <Money money={cost} />.
+          </Typography>
+          <Typography>
+            <b>{corp.name}</b>'s stock price rose to <Money money={sharePrice} /> per share.
+          </Typography>
+        </>,
+      );
+      props.onClose();
+      props.rerender();
+      setShares(NaN);
     } catch (err) {
-      dialogBoxCreate(err + "");
-    }
-    props.onClose();
-    props.rerender();
-  }
-
-  function CostIndicator(): React.ReactElement {
-    if (shares === null) return <></>;
-    if (isNaN(shares) || shares <= 0) {
-      return <>ERROR: Invalid value entered for number of shares to buyback</>;
-    } else if (shares > corp.issuedShares) {
-      return (
-        <>
-          There are not this many shares available to buy back. There are only {formatBigNumber(corp.issuedShares)}{" "}
-          outstanding shares.
-        </>
-      );
-    } else {
-      return (
-        <>
-          Purchase {shares} shares for a total of {formatMoney(shares * buybackPrice)}
-        </>
-      );
+      dialogBoxCreate(`${err}`);
     }
   }
 
@@ -70,23 +54,45 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>
-        Enter the number of outstanding shares you would like to buy back. These shares must be bought at a 10% premium.
-        However, repurchasing shares from the market tends to lead to an increase in stock price.
-        <br />
-        <br />
-        To purchase these shares, you must use your own money (NOT your Corporation's funds).
-        <br />
-        <br />
-        The current buyback price of your company's stock is {formatMoney(buybackPrice)}. Your company currently has{" "}
-        {formatBigNumber(corp.issuedShares)} outstanding stock shares.
+      <Typography component="div">
+        Enter the number of outstanding shares you would like to buy back.
+        <ul>
+          <li>Buying back shares will cause the stock price to rise due to market forces.</li>
+          <li>These shares must be bought at a 10% premium over the market price.</li>
+          <li>You purchase these shares with your own money (NOT your Corporation's funds).</li>
+        </ul>
+        <b>{corp.name}</b> currently has {formatShares(corp.issuedShares)} outstanding stock shares, valued at{" "}
+        <Money money={corp.sharePrice} /> per share.
       </Typography>
-      <CostIndicator />
       <br />
-      <NumberInput autoFocus={true} placeholder="Shares to buyback" onChange={setShares} onKeyDown={onKeyDown} />
+      <NumberInput
+        defaultValue={shares || ""}
+        autoFocus={true}
+        placeholder="Shares to buyback"
+        onChange={setShares}
+        onKeyDown={onKeyDown}
+      />
       <ButtonWithTooltip disabledTooltip={disabledText} onClick={buy}>
         Buy shares
+        {cost > 0 ? (
+          <>
+            &nbsp;-&nbsp;
+            <Money money={cost} forPurchase={true} />{" "}
+          </>
+        ) : (
+          <></>
+        )}
       </ButtonWithTooltip>
+      <br />
+      <Typography sx={{ minHeight: "1.5em" }}>
+        {!shares ? null : disabledText ? (
+          disabledText
+        ) : (
+          <>
+            <b>{corp.name}</b>'s stock price will rise to <Money money={sharePrice} /> per share.
+          </>
+        )}
+      </Typography>
     </Modal>
   );
 }

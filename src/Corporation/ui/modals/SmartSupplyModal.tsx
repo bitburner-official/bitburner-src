@@ -95,7 +95,7 @@ export function SmartSupplyModal(props: IProps): React.ReactElement {
           label={<Typography>Enable Smart Supply</Typography>}
         />
         <br />
-        <Typography>
+        <Typography component="div">
           Options:
           <ul>
             <li>

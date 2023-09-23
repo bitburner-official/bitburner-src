@@ -385,7 +385,9 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
   ws.dynamicLoadedFns[fnName] = true;
 
   ws.dynamicRamUsage = Math.min(ws.dynamicRamUsage + ramCost, RamCostConstants.Max);
-  if (ws.dynamicRamUsage > 1.01 * ws.scriptRef.ramUsage) {
+  // This constant is just a handful of ULPs, and gives protection against
+  // rounding issues without exposing rounding exploits in ramUsage.
+  if (ws.dynamicRamUsage > 1.00000000000001 * ws.scriptRef.ramUsage) {
     log(ctx, () => "Insufficient static ram available.");
     const err = makeRuntimeErrorMsg(
       ctx,

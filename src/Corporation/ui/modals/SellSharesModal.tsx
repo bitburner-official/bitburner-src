@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { formatMoney } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+import { formatShares } from "../../../ui/formatNumber";
 import { Modal } from "../../../ui/React/Modal";
-import { useCorporation } from "../Context";
-import { Corporation } from "../../Corporation";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import { Money } from "../../../ui/React/Money";
+import { useCorporation } from "../Context";
+import * as corpConstants from "../../data/Constants";
+import Typography from "@mui/material/Typography";
+import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { SellShares } from "../../Actions";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { NumberInput } from "../../../ui/React/NumberInput";
-import { isInteger } from "lodash";
+import { sellSharesFailureReason } from "../../helpers";
+
 interface IProps {
   open: boolean;
   onClose: () => void;
@@ -23,48 +24,28 @@ export function SellSharesModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const [shares, setShares] = useState<number>(NaN);
 
-  const disabled = isNaN(shares) || shares <= 0 || shares >= corp.numShares;
-
-  function ProfitIndicator(props: { shares: number | null; corp: Corporation }): React.ReactElement {
-    if (props.shares === null) return <></>;
-    let text = "";
-    if (isNaN(props.shares) || props.shares <= 0 || !isInteger(props.shares)) {
-      text = `ERROR: Invalid value entered for number of shares to sell`;
-    } else if (props.shares > corp.numShares) {
-      text = `You don't have this many shares to sell!`;
-    } else if (props.shares === corp.numShares) {
-      text = `You can not sell all your shares!`;
-    } else if (props.shares > 1e14) {
-      text = `You can't sell more than 100t shares at once!`;
-    } else {
-      const stockSaleResults = corp.calculateShareSale(props.shares);
-      const profit = stockSaleResults[0];
-      text = `Sell ${props.shares} shares for a total of ${formatMoney(profit)}`;
-    }
-
-    return (
-      <Typography>
-        <small>{text}</small>
-      </Typography>
-    );
-  }
+  const [profit, sharePrice] = corp.calculateShareSale((props.open && shares) || 0);
+  const disabledText = sellSharesFailureReason(corp, shares);
 
   function sell(): void {
-    if (disabled) return;
+    if (disabledText) return;
     try {
-      const profit = SellShares(corp, shares);
-      props.onClose();
+      SellShares(corp, shares);
       dialogBoxCreate(
         <>
-          Sold {formatMoney(shares)} shares for
-          <Money money={profit} />. The corporation's stock price fell to&nbsp; <Money money={corp.sharePrice} />
-          as a result of dilution.
+          <Typography>
+            You sold {formatShares(shares)} shares for <Money money={profit} />.
+          </Typography>
+          <Typography>
+            <b>{corp.name}</b>'s stock price fell to <Money money={sharePrice} /> per share.
+          </Typography>
         </>,
       );
-
+      props.onClose();
       props.rerender();
+      setShares(NaN);
     } catch (err) {
-      dialogBoxCreate(err + "");
+      dialogBoxCreate(`${err as Error}`);
     }
   }
 
@@ -74,32 +55,43 @@ export function SellSharesModal(props: IProps): React.ReactElement {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>
-        Enter the number of shares you would like to sell. The money from selling your shares will go directly to you
-        (NOT your Corporation).
-        <br />
-        <br />
-        The amount sold must be an integer between 1 and 100t.
-        <br />
-        <br />
-        Selling your shares will cause your corporation's stock price to fall due to dilution. Furthermore, selling a
-        large number of shares all at once will have an immediate effect in reducing your stock price.
-        <br />
-        <br />
-        The current price of your company's stock is {formatMoney(corp.sharePrice)}
+      <Typography component="div">
+        Enter the number of shares you would like to sell.
+        <ul>
+          <li>Selling shares will cause stock price to fall due to market forces.</li>
+          <li>The money from selling your shares will go directly to you (NOT your Corporation).</li>
+          <li>
+            You will not be able to sell shares again (or dissolve the corporation) for{" "}
+            <b>{corp.convertCooldownToString(corpConstants.sellSharesCooldown)}</b>.
+          </li>
+        </ul>
+        You currently have {formatShares(corp.numShares)} shares of <b>{corp.name}</b> stock, valued at{" "}
+        <Money money={corp.sharePrice} /> per share.
       </Typography>
       <br />
       <NumberInput
+        defaultValue={shares || ""}
         variant="standard"
         autoFocus
         placeholder="Shares to sell"
         onChange={setShares}
         onKeyDown={onKeyDown}
       />
-      <Button disabled={disabled} onClick={sell} sx={{ mx: 1 }}>
+      <ButtonWithTooltip disabledTooltip={disabledText} onClick={sell}>
         Sell shares
-      </Button>
-      <ProfitIndicator shares={shares} corp={corp} />
+      </ButtonWithTooltip>
+      <br />
+      <Typography sx={{ minHeight: "3em" }}>
+        {!shares ? null : disabledText ? (
+          disabledText
+        ) : (
+          <>
+            You will receive <Money money={profit} />.
+            <br />
+            <b>{corp.name}</b>'s stock price will fall to <Money money={sharePrice} /> per share.
+          </>
+        )}
+      </Typography>
     </Modal>
   );
 }

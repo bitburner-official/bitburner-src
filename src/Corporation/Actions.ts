@@ -1,5 +1,3 @@
-import { isInteger } from "lodash";
-
 import { Player } from "@player";
 import { CorpResearchName, CorpSmartSupplyOption } from "@nsdefs";
 
@@ -18,6 +16,7 @@ import { isRelevantMaterial } from "./ui/Helpers";
 import { CityName } from "@enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { getRecordValues } from "../Types/Record";
+import { sellSharesFailureReason, buybackSharesFailureReason, issueNewSharesFailureReason } from "./helpers";
 
 export function NewDivision(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.size >= corporation.maxDivisions)
@@ -70,7 +69,7 @@ export function purchaseOffice(corporation: Corporation, division: Division, cit
   if (division.offices[city]) {
     throw new Error(`You have already expanded into ${city} for ${division.name}`);
   }
-  corporation.funds = corporation.funds - corpConstants.officeInitialCost;
+  corporation.addNonIncomeFunds(-corpConstants.officeInitialCost);
   division.offices[city] = new OfficeSpace({
     city: city,
     size: corpConstants.officeInitialSize,
@@ -85,31 +84,70 @@ export function IssueDividends(corporation: Corporation, rate: number): void {
   corporation.dividendRate = rate;
 }
 
-export function IssueNewShares(corporation: Corporation, amount: number): [number, number, number] {
-  const max = corporation.calculateMaxNewShares();
+export function GoPublic(corporation: Corporation, numShares: number): void {
+  const ceoOwnership = (corporation.numShares - numShares) / corporation.totalShares;
+  const initialSharePrice = corporation.getTargetSharePrice(ceoOwnership);
 
-  // Round to nearest ten-millionth
-  amount = Math.round(amount / 10e6) * 10e6;
-
-  if (isNaN(amount) || amount < 10e6 || amount > max) {
-    throw new Error(`Invalid value. Must be an number between 10m and ${max} (20% of total shares)`);
+  if (isNaN(numShares) || numShares < 0) {
+    throw new Error("Invalid value for number of issued shares");
   }
+  if (numShares > corporation.numShares) {
+    throw new Error("You don't have that many shares to issue!");
+  }
+  corporation.public = true;
+  corporation.sharePrice = initialSharePrice;
+  corporation.issuedShares += numShares;
+  corporation.numShares -= numShares;
+  corporation.addNonIncomeFunds(numShares * initialSharePrice);
+}
 
-  const newSharePrice = Math.round(corporation.sharePrice * 0.8);
+export function IssueNewShares(
+  corporation: Corporation,
+  amount: number,
+): [profit: number, amount: number, privateShares: number] {
+  const failureReason = issueNewSharesFailureReason(corporation, amount);
+  if (failureReason) throw new Error(failureReason);
 
-  const profit = amount * newSharePrice;
-  corporation.issueNewSharesCooldown = corpConstants.issueNewSharesCooldown;
+  const ceoOwnership = corporation.numShares / (corporation.totalShares + amount);
+  const newSharePrice = corporation.getTargetSharePrice(ceoOwnership);
 
-  const privateOwnedRatio = 1 - (corporation.numShares + corporation.issuedShares) / corporation.totalShares;
+  const profit = (amount * (corporation.sharePrice + newSharePrice)) / 2;
+
+  const cooldownMultiplier = corporation.totalShares / corpConstants.initialShares;
+  corporation.issueNewSharesCooldown = corpConstants.issueNewSharesCooldown * cooldownMultiplier;
+
+  const privateOwnedRatio = corporation.investorShares / corporation.totalShares;
   const maxPrivateShares = Math.round((amount / 2) * privateOwnedRatio);
   const privateShares = Math.round(getRandomInt(0, maxPrivateShares) / 10e6) * 10e6;
 
   corporation.issuedShares += amount - privateShares;
+  corporation.investorShares += privateShares;
   corporation.totalShares += amount;
-  corporation.funds = corporation.funds + profit;
-  corporation.immediatelyUpdateSharePrice();
+  corporation.addNonIncomeFunds(profit);
+  // Set sharePrice directly because all formulas will be based on stale cycleValuation data
+  corporation.sharePrice = newSharePrice;
 
   return [profit, amount, privateShares];
+}
+
+export function AcceptInvestmentOffer(corporation: Corporation): void {
+  if (
+    corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
+    corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
+    corporation.public
+  ) {
+    throw new Error("No more investment offers are available.");
+  }
+  const val = corporation.valuation;
+  const percShares = corpConstants.fundingRoundShares[corporation.fundingRound];
+  const roundMultiplier = corpConstants.fundingRoundMultiplier[corporation.fundingRound];
+  const funding = val * percShares * roundMultiplier;
+  const investShares = Math.floor(corpConstants.initialShares * percShares);
+  corporation.fundingRound++;
+  corporation.addNonIncomeFunds(funding);
+
+  corporation.numShares -= investShares;
+  corporation.investorShares += investShares;
 }
 
 export function SellMaterial(material: Material, amount: string, price: string): void {
@@ -280,17 +318,10 @@ export function BulkPurchase(
 }
 
 export function SellShares(corporation: Corporation, numShares: number): number {
-  if (isNaN(numShares) || !isInteger(numShares)) throw new Error("Invalid value for number of shares");
-  if (numShares <= 0) throw new Error("Invalid value for number of shares");
-  if (numShares > corporation.numShares) throw new Error("You don't have that many shares to sell!");
-  if (numShares === corporation.numShares) throw new Error("You cant't sell all your shares!");
-  if (numShares > 1e14) throw new Error("Invalid value for number of shares");
-  if (!corporation.public) throw new Error("You haven't gone public!");
-  if (corporation.shareSaleCooldown) throw new Error("Share sale on cooldown!");
-  const stockSaleResults = corporation.calculateShareSale(numShares);
-  const profit = stockSaleResults[0];
-  const newSharePrice = stockSaleResults[1];
-  const newSharesUntilUpdate = stockSaleResults[2];
+  const failureReason = sellSharesFailureReason(corporation, numShares);
+  if (failureReason) throw new Error(failureReason);
+
+  const [profit, newSharePrice, newSharesUntilUpdate] = corporation.calculateShareSale(numShares);
 
   corporation.numShares -= numShares;
   corporation.issuedShares += numShares;
@@ -302,15 +333,16 @@ export function SellShares(corporation: Corporation, numShares: number): number 
 }
 
 export function BuyBackShares(corporation: Corporation, numShares: number): boolean {
-  if (isNaN(numShares) || !isInteger(numShares)) throw new Error("Invalid value for number of shares");
-  if (numShares <= 0) throw new Error("Invalid value for number of shares");
-  if (numShares > corporation.issuedShares) throw new Error("You don't have that many shares to buy!");
-  if (!corporation.public) throw new Error("You haven't gone public!");
-  const buybackPrice = corporation.sharePrice * 1.1;
-  if (Player.money < numShares * buybackPrice) throw new Error("You cant afford that many shares!");
+  const failureReason = buybackSharesFailureReason(corporation, numShares);
+  if (failureReason) throw new Error(failureReason);
+
+  const [cost, newSharePrice, newSharesUntilUpdate] = corporation.calculateShareBuyback(numShares);
+
   corporation.numShares += numShares;
   corporation.issuedShares -= numShares;
-  Player.loseMoney(numShares * buybackPrice, "corporation");
+  corporation.sharePrice = newSharePrice;
+  corporation.shareSalesUntilPriceUpdate = newSharesUntilUpdate;
+  Player.loseMoney(cost, "corporation");
   return true;
 }
 
@@ -325,7 +357,7 @@ export function UpgradeOfficeSize(corp: Corporation, office: OfficeSpace, size: 
   const cost = corpConstants.officeInitialCost * mult;
   if (corp.funds < cost) return;
   office.size += size;
-  corp.funds = corp.funds - cost;
+  corp.addNonIncomeFunds(-cost);
 }
 
 export function BuyTea(corp: Corporation, office: OfficeSpace): boolean {
@@ -353,7 +385,7 @@ export function ThrowParty(corp: Corporation, office: OfficeSpace, costPerEmploy
 export function purchaseWarehouse(corp: Corporation, division: Division, city: CityName): void {
   if (corp.funds < corpConstants.warehouseInitialCost) return;
   if (division.warehouses[city]) return;
-  corp.funds = corp.funds - corpConstants.warehouseInitialCost;
+  corp.addNonIncomeFunds(-corpConstants.warehouseInitialCost);
   division.warehouses[city] = new Warehouse({
     division: division,
     loc: city,
@@ -373,7 +405,7 @@ export function UpgradeWarehouse(corp: Corporation, division: Division, warehous
   if (corp.funds < sizeUpgradeCost) return;
   warehouse.level += amt;
   warehouse.updateSize(corp, division);
-  corp.funds = corp.funds - sizeUpgradeCost;
+  corp.addNonIncomeFunds(-sizeUpgradeCost);
 }
 
 export function HireAdVert(corp: Corporation, division: Division): void {

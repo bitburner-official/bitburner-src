@@ -3,7 +3,6 @@ import { Box, Button, List, ListItemButton, Paper, Tooltip, Typography } from "@
 import { default as React, useRef, useState } from "react";
 import { FileDiagnosticModal } from "../../Diagnostic/FileDiagnosticModal";
 import { ImportData, saveObject } from "../../SaveObject";
-import { Settings } from "../../Settings/Settings";
 import { StyleEditorButton } from "../../Themes/ui/StyleEditorButton";
 import { ThemeEditorButton } from "../../Themes/ui/ThemeEditorButton";
 import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
@@ -196,10 +195,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           </Button>
         </Tooltip>
         <Box sx={{ gridArea: "reset", "& .MuiButton-root": { height: "100%", width: "100%" } }}>
-          <SoftResetButton
-            noConfirmation={Settings.SuppressBuyAugmentationConfirmation}
-            onTriggered={props.softReset}
-          />
+          <SoftResetButton onTriggered={props.softReset} />
         </Box>
         <Tooltip
           title={
@@ -267,7 +263,8 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
         open={confirmResetOpen}
         onClose={() => setConfirmResetOpen(false)}
         onConfirm={props.reactivateTutorial}
-        confirmationText={"This will reset all your stats to 1 and money to 1k. Are you sure?"}
+        confirmationText={"Reset your stats and money to start the tutorial? Home scripts will not be reset."}
+        additionalButton={<Button onClick={() => setConfirmResetOpen(false)}>Cancel</Button>}
       />
     </Box>
   );
