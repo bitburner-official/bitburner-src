@@ -751,7 +751,6 @@ export const ns: InternalAPI<NSFull> = {
       const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
-      if (spawnDelay === undefined) spawnDelay = 1000;
       setTimeout(() => {
         const scriptServer = GetServer(ctx.workerScript.hostname);
         if (scriptServer == null) {
