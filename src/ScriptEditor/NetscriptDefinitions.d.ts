@@ -2812,7 +2812,7 @@ export interface Bladeburner {
    * Returns the name and rank requirement for the available BlackOp.
    * Returns `null` if no BlackOps remain in the BitNode.
    *
-   * @returns An oject with the `.name` and `.rank` properties of the available BlackOp, or `null`.
+   * @returns An object with the `.name` and `.rank` properties of the available BlackOp, or `null`.
    */
   getNextBlackOp(): { name: string; rank: number } | null;
 

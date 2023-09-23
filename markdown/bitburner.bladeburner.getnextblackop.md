@@ -15,7 +15,7 @@ getNextBlackOp(): { name: string; rank: number } | null;
 
 { name: string; rank: number } \| null
 
-An oject with the `.name` and `.rank` properties of the available BlackOp, or `null`<!-- -->.
+An object with the `.name` and `.rank` properties of the available BlackOp, or `null`<!-- -->.
 
 ## Remarks
 
