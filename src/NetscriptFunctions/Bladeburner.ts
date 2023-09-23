@@ -54,9 +54,13 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const bladeburner = getBladeburner(ctx);
       return bladeburner.getBlackOpNamesNetscriptFn();
     },
-    getBlackOp: (ctx) => () => {
+    getNextBlackOp: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
       return bladeburner.getNextBlackOp();
+    },
+    getAllBlackOps: (ctx) => () => {
+      const bladeburner = getBladeburner(ctx);
+      return bladeburner.getAllBlackOps();
     },
     getBlackOpRank: (ctx) => (_blackOpName) => {
       const blackOpName = helpers.string(ctx, "blackOpName", _blackOpName);

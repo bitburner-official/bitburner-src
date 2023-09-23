@@ -2804,16 +2804,29 @@ export interface Bladeburner {
   getBlackOpNames(): string[];
 
   /**
-   * Get the name of the available Bladeburner BlackOp
+   * Get an object with the name and rank requirement of the available Bladeburner BlackOp,
+   * i.e. the next BlackOp that can be completed.
    * @remarks
    * RAM cost: 0.4 GB
    *
-   * Returns the name of the current BlackOp, regardless of rank,
-   * or "All BlackOps Completed" if no BlackOps remain in the BitNode.
+   * Returns the name and rank requirement for the available BlackOp.
+   * Returns `null` if no BlackOps remain in the BitNode.
    *
-   * @returns Name of current BlackOp as a string, or "All BlackOps Completed."
+   * @returns An oject with the `.name` and `.rank` properties of the available BlackOp, or `null`.
    */
-  getBlackOp(): string;
+  getNextBlackOp(): { name: string; rank: number } | null;
+
+  /**
+   * Get an array of BlackOp objects with all name and required rank properties.
+   * @remarks
+   * RAM cost: 0.4 GB
+   *
+   * Returns an iterable array of objects, sorted by required rank.
+   * Each object contains the `.name` and `.rank` property of a Bladeburner Black Op.
+   *
+   * @returns An array of BlackOp objects.
+   */
+  getAllBlackOps(): { name: string; rank: number }[];
 
   /**
    * List all general actions.

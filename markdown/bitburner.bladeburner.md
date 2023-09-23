@@ -29,7 +29,7 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [getActionRepGain(type, name, level)](./bitburner.bladeburner.getactionrepgain.md) | Get the reputation gain of an action. |
 |  [getActionSuccesses(type, name)](./bitburner.bladeburner.getactionsuccesses.md) | Get action successes. |
 |  [getActionTime(type, name)](./bitburner.bladeburner.getactiontime.md) | Get the time to complete an action. |
-|  [getBlackOp()](./bitburner.bladeburner.getblackop.md) | Get the name of the available Bladeburner BlackOp |
+|  [getAllBlackOps()](./bitburner.bladeburner.getallblackops.md) | Get an array of BlackOp objects with all name and required rank properties. |
 |  [getBlackOpNames()](./bitburner.bladeburner.getblackopnames.md) | List all black ops. |
 |  [getBlackOpRank(name)](./bitburner.bladeburner.getblackoprank.md) | Get black op required rank. |
 |  [getBonusTime()](./bitburner.bladeburner.getbonustime.md) | Get bladeburner bonus time. |
@@ -40,6 +40,7 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [getContractNames()](./bitburner.bladeburner.getcontractnames.md) | List all contracts. |
 |  [getCurrentAction()](./bitburner.bladeburner.getcurrentaction.md) | Get current action. |
 |  [getGeneralActionNames()](./bitburner.bladeburner.getgeneralactionnames.md) | List all general actions. |
+|  [getNextBlackOp()](./bitburner.bladeburner.getnextblackop.md) | Get an object with the name and rank requirement of the available Bladeburner BlackOp, i.e. the next BlackOp that can be completed. |
 |  [getOperationNames()](./bitburner.bladeburner.getoperationnames.md) | List all operations. |
 |  [getRank()](./bitburner.bladeburner.getrank.md) | Get player bladeburner rank. |
 |  [getSkillLevel(name)](./bitburner.bladeburner.getskilllevel.md) | Get skill level. |
