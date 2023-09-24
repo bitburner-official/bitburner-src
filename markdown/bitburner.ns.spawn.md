@@ -9,12 +9,7 @@ Terminate current script and start another in a defined number of milliseconds.
 **Signature:**
 
 ```typescript
-spawn(
-    script: string,
-    threadOrOptions?: number | RunOptions,
-    runDelay?: number,
-    ...args: (string | number | boolean)[]
-  ): void;
+spawn(script: string, threadOrOptions?: number | SpawnOptions, ...args: (string | number | boolean)[]): void;
 ```
 
 ## Parameters
@@ -22,8 +17,7 @@ spawn(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  script | string | Filename of script to execute. |
-|  threadOrOptions | number \| [RunOptions](./bitburner.runoptions.md) | _(Optional)_ Either an integer number of threads for new script, or a [RunOptions](./bitburner.runoptions.md) object. Threads defaults to 1. |
-|  runDelay | number | _(Optional)_ A positive integer of milliseconds to delay before running the script. Defaults to 10 seconds |
+|  threadOrOptions | number \| [SpawnOptions](./bitburner.spawnoptions.md) | _(Optional)_ Either an integer number of threads for new script, or a [SpawnOptions](./bitburner.spawnoptions.md) object. Threads defaults to 1. |
 |  args | (string \| number \| boolean)\[\] | Additional arguments to pass into the new script that is being run. |
 
 **Returns:**

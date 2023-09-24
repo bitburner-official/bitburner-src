@@ -5544,24 +5544,10 @@ export interface NS {
    * ns.spawn('foo.js', 10, 500, 'foodnstuff', 90);
    * ```
    * @param script - Filename of script to execute.
-<<<<<<< HEAD
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link SpawnOptions} object. Threads defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run.
    */
   spawn(script: string, threadOrOptions?: number | SpawnOptions, ...args: (string | number | boolean)[]): void;
-=======
-   * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
-   * @param runDelay - A positive integer of milliseconds to delay before running the script. Defaults to 10 seconds
-   * @param args - Additional arguments to pass into the new script that is being run.
-   */
-  spawn(
-    script: string,
-    threadOrOptions?: number | RunOptions,
-    runDelay?: number,
-    ...args: (string | number | boolean)[]
-  ): void;
->>>>>>> refs/remotes/origin/dev
-
   /**
    * Terminate the script with the provided PID.
    * @remarks
