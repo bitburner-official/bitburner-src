@@ -45,6 +45,7 @@ export const helpers = {
   positiveInteger,
   scriptArgs,
   runOptions,
+  spawnOptions,
   argsToString,
   makeBasicErrorMsg,
   makeRuntimeErrorMsg,
@@ -78,6 +79,14 @@ export interface CompleteRunOptions {
   temporary: boolean;
   ramOverride?: number;
   preventDuplicates: boolean;
+}
+// RunOptions with non-optional, type-validated members, for passing between internal functions.
+export interface SpawnRunOptions {
+  threads: PositiveInteger;
+  temporary: boolean;
+  ramOverride?: number;
+  preventDuplicates: boolean;
+  spawnDelay: PositiveInteger;
 }
 
 export function assertString(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {
@@ -201,6 +210,45 @@ function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRun
       throw makeRuntimeErrorMsg(
         ctx,
         `RunOptions.ramOverride must be >= baseCost (${RamCostConstants.Base}), was ${result.ramOverride}`,
+      );
+    }
+  }
+  return result;
+}
+
+function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): SpawnRunOptions {
+  const result: SpawnRunOptions = {
+    threads: 1 as PositiveInteger,
+    temporary: false,
+    preventDuplicates: false,
+    spawnDelay: 10000 as PositiveInteger,
+  };
+  function checkThreads(threads: unknown, argName: string) {
+    if (threads !== null && threads !== undefined) {
+      result.threads = positiveInteger(ctx, argName, threads);
+    }
+  }
+  function checkSpawnDelay(spawnDelay: unknown, argName: string) {
+    if (spawnDelay !== null && spawnDelay !== undefined) {
+      result.spawnDelay = positiveInteger(ctx, argName, spawnDelay);
+    }
+  }
+  if (typeof threadOrOption !== "object" || threadOrOption === null) {
+    checkThreads(threadOrOption, "threads");
+    return result;
+  }
+  // Safe assertion since threadOrOption type has been narrowed to a non-null object
+  const options = threadOrOption as Unknownify<SpawnRunOptions>;
+  checkThreads(options.threads, "RunOptions.threads");
+  checkSpawnDelay(options.spawnDelay, "spawnDelay");
+  result.temporary = !!options.temporary;
+  result.preventDuplicates = !!options.preventDuplicates;
+  if (options.ramOverride !== undefined && options.ramOverride !== null) {
+    result.ramOverride = number(ctx, "RunOptions.ramOverride", options.ramOverride);
+    if (result.ramOverride < RamCostConstants.Base) {
+      throw makeRuntimeErrorMsg(
+        ctx,
+        `SpawnOptions.ramOverride must be >= baseCost (${RamCostConstants.Base}), was ${result.ramOverride}`,
       );
     }
   }

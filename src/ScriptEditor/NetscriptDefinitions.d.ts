@@ -282,6 +282,37 @@ interface RunOptions {
 }
 
 /** @public */
+interface SpawnOptions {
+  /** Number of threads that the script will run with, defaults to 1 */
+  threads?: number;
+  /** Whether this script is excluded from saves, defaults to false */
+  temporary?: boolean;
+  /**
+   * The RAM allocation to launch each thread of the script with.
+   *
+   * Lowering this will <i>not</i> automatically let you get away with using less RAM:
+   * the dynamic RAM check enforces that all {@link NS} functions actually called incur their cost.
+   * However, if you know that certain functions that are statically present (and thus included
+   * in the static RAM cost) will never be called in a particular circumstance, you can use
+   * this to avoid paying for them.
+   *
+   * You can also use this to <i>increase</i> the RAM if the static RAM checker has missed functions
+   * that you need to call.
+   *
+   * Must be greater-or-equal to the base RAM cost. Defaults to the statically calculated cost.
+   */
+  ramOverride?: number;
+  /**
+   * Should we fail to run if another instance is running with the exact same arguments?
+   * This used to be the default behavior, now defaults to false.
+   */
+  preventDuplicates?: boolean;
+  /**
+   * Number of milliseconds to delay before spawning script, defaults to 10000 */
+  spawnDelay?: number;
+}
+
+/** @public */
 interface RecentScript extends RunningScript {
   /** Timestamp of when the script was killed */
   timeOfDeath: Date;
@@ -5513,10 +5544,10 @@ export interface NS {
    * ns.spawn('foo.js', 10, 'foodnstuff', 90);
    * ```
    * @param script - Filename of script to execute.
-   * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
+   * @param threadOrOptions - Either an integer number of threads for new script, or a {@link SpawnOptions} object. Threads defaults to 1.
    * @param args - Additional arguments to pass into the new script that is being run.
    */
-  spawn(script: string, threadOrOptions?: number | RunOptions, ...args: (string | number | boolean)[]): void;
+  spawn(script: string, threadOrOptions?: number | SpawnOptions, ...args: (string | number | boolean)[]): void;
 
   /**
    * Terminate the script with the provided PID.

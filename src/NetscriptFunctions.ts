@@ -746,9 +746,8 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_scriptname, _thread_or_opt = 1, ..._args) => {
       const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
-      const runOpts = helpers.runOptions(ctx, _thread_or_opt);
+      const runOpts = helpers.spawnOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
-      const spawnDelay = 10;
       setTimeout(() => {
         const scriptServer = GetServer(ctx.workerScript.hostname);
         if (scriptServer == null) {
@@ -756,9 +755,9 @@ export const ns: InternalAPI<NSFull> = {
         }
 
         return runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
-      }, spawnDelay * 1e3);
+      }, runOpts.spawnDelay);
 
-      helpers.log(ctx, () => `Will execute '${path}' in ${spawnDelay} seconds`);
+      helpers.log(ctx, () => `Will execute '${path}' in ${runOpts.spawnDelay} seconds`);
 
       if (killWorkerScript(ctx.workerScript)) {
         helpers.log(ctx, () => "Exiting...");
