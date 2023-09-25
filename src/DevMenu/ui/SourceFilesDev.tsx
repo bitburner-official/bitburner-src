@@ -13,23 +13,10 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 
 // Update as additional BitNodes get implemented
 const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+const initialState = validSFN.reduce((obj, sfN) => ({ ...obj, [sfN]: "" }), { "": "" });
 
 export function SourceFilesDev(): React.ReactElement {
-  const [sfData, setSfData] = useState({
-    1: Player.sourceFileLvl(1),
-    2: Player.sourceFileLvl(2),
-    3: Player.sourceFileLvl(3),
-    4: Player.sourceFileLvl(4),
-    5: Player.sourceFileLvl(5),
-    6: Player.sourceFileLvl(6),
-    7: Player.sourceFileLvl(7),
-    8: Player.sourceFileLvl(8),
-    9: Player.sourceFileLvl(9),
-    10: Player.sourceFileLvl(10),
-    11: Player.sourceFileLvl(11),
-    12: Player.sourceFileLvl(12),
-    13: Player.sourceFileLvl(13),
-  });
+  const [sfData, setSfData] = useState(initialState);
 
   function setSF(sfN: number, sfLvl: number) {
     return function () {
