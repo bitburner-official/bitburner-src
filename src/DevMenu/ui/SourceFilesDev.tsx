@@ -51,17 +51,14 @@ export function SourceFilesDev(): React.ReactElement {
 
   const devLvls = [0, 1, 2, 3];
 
-  const buttonGroupAll = devLvls.map((lvl) => {
-    return (
-      <Button key={lvl} onClick={setAllSF(lvl)} style={setallButtonStyle}>
-        {lvl}
-      </Button>
-    );
-  });
-  const buttonGroupSF = (i: number) =>
+  const buttonGroup = (sfN?: number) =>
     devLvls.map((lvl) => {
       return (
-        <Button key={lvl} onClick={setSF(i, lvl)} style={Player.sourceFileLvl(i) >= lvl ? ownedStyle : notOwnedStyle}>
+        <Button
+          key={lvl}
+          onClick={sfN === undefined ? setAllSF(lvl) : setSF(sfN, lvl)}
+          style={sfN === undefined ? setallButtonStyle : Player.sourceFileLvl(sfN) >= lvl ? ownedStyle : notOwnedStyle}
+        >
           {lvl}
         </Button>
       );
@@ -88,16 +85,16 @@ export function SourceFilesDev(): React.ReactElement {
                 <Typography>All:</Typography>
               </td>
               <td>
-                <ButtonGroup>{buttonGroupAll}</ButtonGroup>
+                <ButtonGroup>{buttonGroup()}</ButtonGroup>
               </td>
             </tr>
-            {validSFN.map((i) => (
-              <tr key={"sf-" + i}>
+            {validSFN.map((sfN) => (
+              <tr key={"sf-" + sfN}>
                 <td>
-                  <Typography>SF-{i}:</Typography>
+                  <Typography>SF-{sfN}:</Typography>
                 </td>
                 <td>
-                  <ButtonGroup>{buttonGroupSF(i)}</ButtonGroup>
+                  <ButtonGroup>{buttonGroup(sfN)}</ButtonGroup>
                 </td>
               </tr>
             ))}
