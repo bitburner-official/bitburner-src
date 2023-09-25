@@ -16,7 +16,7 @@ getSkillLevel(skillName: string): number;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  skillName | string | Name of skill. Case-sensitive and must be an exact match |
+|  skillName | string | Name of skill. Case-sensitive and must be an exact match. |
 
 **Returns:**
 

@@ -3063,7 +3063,7 @@ export interface Bladeburner {
    *
    * The function returns -1 if an invalid skill name is passed in.
    *
-   * @param skillName - Name of skill. Case-sensitive and must be an exact match
+   * @param skillName - Name of skill. Case-sensitive and must be an exact match.
    * @returns Level in the specified skill.
    */
   getSkillLevel(skillName: string): number;
@@ -3077,7 +3077,7 @@ export interface Bladeburner {
    *
    * The function returns -1 if an invalid skill name is passed in.
    *
-   * @param skillName - Name of skill. Case-sensitive and must be an exact match
+   * @param skillName - Name of skill. Case-sensitive and must be an exact match.
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
    * @returns Number of skill points needed to upgrade the specified skill.
    */
@@ -3092,7 +3092,7 @@ export interface Bladeburner {
    *
    * Returns true if the skill is successfully upgraded, and false otherwise.
    *
-   * @param skillName - Name of skill to be upgraded. Case-sensitive and must be an exact match
+   * @param skillName - Name of skill to be upgraded. Case-sensitive and must be an exact match.
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
    * @returns true if the skill is successfully upgraded, and false otherwise.
    */

@@ -16,7 +16,7 @@ getSkillUpgradeCost(skillName: string, count?: number): number;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  skillName | string | Name of skill. Case-sensitive and must be an exact match |
+|  skillName | string | Name of skill. Case-sensitive and must be an exact match. |
 |  count | number | _(Optional)_ Number of times to upgrade the skill. Defaults to 1 if not specified. |
 
 **Returns:**
