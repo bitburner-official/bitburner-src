@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -14,6 +15,22 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 
 export function SourceFilesDev(): React.ReactElement {
+  const [sfData, setSfData] = useState({
+    1: Player.sourceFileLvl(1),
+    2: Player.sourceFileLvl(2),
+    3: Player.sourceFileLvl(3),
+    4: Player.sourceFileLvl(4),
+    5: Player.sourceFileLvl(5),
+    6: Player.sourceFileLvl(6),
+    7: Player.sourceFileLvl(7),
+    8: Player.sourceFileLvl(8),
+    9: Player.sourceFileLvl(9),
+    10: Player.sourceFileLvl(10),
+    11: Player.sourceFileLvl(11),
+    12: Player.sourceFileLvl(12),
+    13: Player.sourceFileLvl(13),
+  });
+
   function setSF(sfN: number, sfLvl: number) {
     return function () {
       if (sfN === 9) {
@@ -21,9 +38,11 @@ export function SourceFilesDev(): React.ReactElement {
       }
       if (sfLvl === 0) {
         Player.sourceFiles.delete(sfN);
+        setSfData({ ...sfData, [sfN]: sfLvl });
         return;
       }
       Player.sourceFiles.set(sfN, sfLvl);
+      setSfData({ ...sfData, [sfN]: sfLvl });
     };
   }
 
@@ -38,6 +57,9 @@ export function SourceFilesDev(): React.ReactElement {
   function clearExploits(): void {
     Player.exploits = [];
   }
+
+  const ownedStyle = { borderColor: "green", background: "" };
+  const notOwnedStyle = { borderColor: "", background: "black" };
 
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
@@ -83,10 +105,18 @@ export function SourceFilesDev(): React.ReactElement {
                 </td>
                 <td>
                   <ButtonGroup>
-                    <Button onClick={setSF(i, 0)}>0</Button>
-                    <Button onClick={setSF(i, 1)}>1</Button>
-                    <Button onClick={setSF(i, 2)}>2</Button>
-                    <Button onClick={setSF(i, 3)}>3</Button>
+                    <Button onClick={setSF(i, 0)} style={Player.sourceFileLvl(i) >= 0 ? ownedStyle : notOwnedStyle}>
+                      0
+                    </Button>
+                    <Button onClick={setSF(i, 1)} style={Player.sourceFileLvl(i) >= 1 ? ownedStyle : notOwnedStyle}>
+                      1
+                    </Button>
+                    <Button onClick={setSF(i, 2)} style={Player.sourceFileLvl(i) >= 2 ? ownedStyle : notOwnedStyle}>
+                      2
+                    </Button>
+                    <Button onClick={setSF(i, 3)} style={Player.sourceFileLvl(i) >= 3 ? ownedStyle : notOwnedStyle}>
+                      3
+                    </Button>
                   </ButtonGroup>
                 </td>
               </tr>
