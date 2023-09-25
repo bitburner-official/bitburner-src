@@ -15,7 +15,7 @@ export function IndustryProductEquation(props: IProps): React.ReactElement {
   }
   const prod = props.division.producedMaterials.map((p) => `1\\text{ ${p}}`);
   if (props.division.makesProducts) {
-    prod.push("\text{Products}");
+    prod.push("\\text{Products}");
   }
 
   return <MathJax>{"\\(" + reqs.join("+") + `\\Rightarrow ` + prod.join("+") + "\\)"}</MathJax>;
