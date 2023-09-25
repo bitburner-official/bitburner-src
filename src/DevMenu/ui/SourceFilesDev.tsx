@@ -45,8 +45,27 @@ export function SourceFilesDev(): React.ReactElement {
     Player.exploits = [];
   }
 
+  const setallButtonStyle = { borderColor: "", background: "black" };
   const ownedStyle = { borderColor: "green", background: "" };
   const notOwnedStyle = { borderColor: "", background: "black" };
+
+  const devLvls = [0, 1, 2, 3];
+
+  const buttonGroupAll = devLvls.map((lvl) => {
+    return (
+      <Button key={lvl} onClick={setAllSF(lvl)} style={setallButtonStyle}>
+        {lvl}
+      </Button>
+    );
+  });
+  const buttonGroupSF = (i: number) =>
+    devLvls.map((lvl) => {
+      return (
+        <Button key={lvl} onClick={setSF(i, lvl)} style={Player.sourceFileLvl(i) >= lvl ? ownedStyle : notOwnedStyle}>
+          {lvl}
+        </Button>
+      );
+    });
 
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
@@ -69,20 +88,7 @@ export function SourceFilesDev(): React.ReactElement {
                 <Typography>All:</Typography>
               </td>
               <td>
-                <ButtonGroup>
-                  <Button aria-label="all-sf-0" onClick={setAllSF(0)}>
-                    0
-                  </Button>
-                  <Button aria-label="all-sf-1" onClick={setAllSF(1)}>
-                    1
-                  </Button>
-                  <Button aria-label="all-sf-2" onClick={setAllSF(2)}>
-                    2
-                  </Button>
-                  <Button aria-label="all-sf-3" onClick={setAllSF(3)}>
-                    3
-                  </Button>
-                </ButtonGroup>
+                <ButtonGroup>{buttonGroupAll}</ButtonGroup>
               </td>
             </tr>
             {validSFN.map((i) => (
@@ -91,20 +97,7 @@ export function SourceFilesDev(): React.ReactElement {
                   <Typography>SF-{i}:</Typography>
                 </td>
                 <td>
-                  <ButtonGroup>
-                    <Button onClick={setSF(i, 0)} style={Player.sourceFileLvl(i) >= 0 ? ownedStyle : notOwnedStyle}>
-                      0
-                    </Button>
-                    <Button onClick={setSF(i, 1)} style={Player.sourceFileLvl(i) >= 1 ? ownedStyle : notOwnedStyle}>
-                      1
-                    </Button>
-                    <Button onClick={setSF(i, 2)} style={Player.sourceFileLvl(i) >= 2 ? ownedStyle : notOwnedStyle}>
-                      2
-                    </Button>
-                    <Button onClick={setSF(i, 3)} style={Player.sourceFileLvl(i) >= 3 ? ownedStyle : notOwnedStyle}>
-                      3
-                    </Button>
-                  </ButtonGroup>
+                  <ButtonGroup>{buttonGroupSF(i)}</ButtonGroup>
                 </td>
               </tr>
             ))}
