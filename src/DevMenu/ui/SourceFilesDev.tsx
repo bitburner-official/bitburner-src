@@ -82,7 +82,7 @@ export function SourceFilesDev(): React.ReactElement {
             </tr>
             <tr key={"sf-all"}>
               <td>
-                <Typography>All:</Typography>
+                <Typography>Set All:</Typography>
               </td>
               <td>
                 <ButtonGroup>{buttonGroup()}</ButtonGroup>
