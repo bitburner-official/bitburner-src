@@ -4368,8 +4368,8 @@ interface Stanek {
    * Charge a fragment, increasing its power.
    * @remarks
    * RAM cost: 0.4 GB
-   * @param rootX - rootX Root X against which to align the top left of the fragment.
-   * @param rootY - rootY Root Y against which to align the top left of the fragment.
+   * @param rootX - Root X against which to align the top left of the fragment.
+   * @param rootY - Root Y against which to align the top left of the fragment.
    * @returns Promise that lasts until the charge action is over.
    */
   chargeFragment(rootX: number, rootY: number): Promise<void>;
@@ -4404,10 +4404,10 @@ interface Stanek {
    * @remarks
    * RAM cost: 0.5 GB
    *
-   * @param rootX - rootX Root X against which to align the top left of the fragment.
-   * @param rootY - rootY Root Y against which to align the top left of the fragment.
-   * @param rotation - rotation A number from 0 to 3, the amount of 90-degree turns to take.
-   * @param fragmentId - fragmentId ID of the fragment to place.
+   * @param rootX - Root X against which to align the top left of the fragment.
+   * @param rootY - Root Y against which to align the top left of the fragment.
+   * @param rotation - A number from 0 to 3, the amount of 90-degree turns to take.
+   * @param fragmentId - ID of the fragment to place.
    * @returns true if the fragment can be placed at that position. false otherwise.
    */
   canPlaceFragment(rootX: number, rootY: number, rotation: number, fragmentId: number): boolean;
