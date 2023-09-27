@@ -73,20 +73,16 @@ export const helpers = {
   failOnHacknetServer,
 };
 
-// RunOptions with non-optional, type-validated members, for passing between internal functions.
+/** RunOptions with non-optional, type-validated members, for passing between internal functions. */
 export interface CompleteRunOptions {
   threads: PositiveInteger;
   temporary: boolean;
   ramOverride?: number;
   preventDuplicates: boolean;
 }
-// RunOptions with non-optional, type-validated members, for passing between internal functions.
-export interface SpawnRunOptions {
-  threads: PositiveInteger;
-  temporary: boolean;
-  ramOverride?: number;
-  preventDuplicates: boolean;
-  spawnDelayMsec: PositiveInteger;
+/** SpawnOptions with non-optional, type-validated members, for passing between internal functions. */
+export interface CompleteSpawnOptions extends CompleteRunOptions {
+  spawnDelay: PositiveInteger;
 }
 
 export function assertString(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {
@@ -216,12 +212,12 @@ function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRun
   return result;
 }
 
-function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): SpawnRunOptions {
-  const result: SpawnRunOptions = { spawnDelayMsec: 10000 as PositiveInteger, ...runOptions(ctx, threadOrOption) };
+function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteSpawnOptions {
+  const result: CompleteSpawnOptions = { spawnDelay: 10000 as PositiveInteger, ...runOptions(ctx, threadOrOption) };
   if (typeof threadOrOption !== "object" || !threadOrOption) return result;
   // Safe assertion since threadOrOption type has been narrowed to a non-null object
-  const { spawnDelayMsec } = threadOrOption as Unknownify<SpawnRunOptions>;
-  if (spawnDelayMsec !== undefined) result.spawnDelayMsec = positiveInteger(ctx, "spawnDelayMsec", spawnDelayMsec);
+  const { spawnDelay } = threadOrOption as Unknownify<CompleteSpawnOptions>;
+  if (spawnDelay !== undefined) result.spawnDelay = positiveInteger(ctx, "spawnDelayMsec", spawnDelay);
   return result;
 }
 

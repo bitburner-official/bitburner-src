@@ -284,7 +284,7 @@ interface RunOptions {
 /** @public */
 interface SpawnOptions extends RunOptions {
   /** Number of milliseconds to delay before spawning script, defaults to 10000 (10s). Must be a positive integer. */
-  spawnDelayMsec?: number;
+  spawnDelay?: number;
 }
 
 /** @public */

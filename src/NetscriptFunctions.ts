@@ -755,9 +755,9 @@ export const ns: InternalAPI<NSFull> = {
         }
 
         return runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
-      }, runOpts.spawnDelayMsec);
+      }, runOpts.spawnDelay);
 
-      helpers.log(ctx, () => `Will execute '${path}' in ${runOpts.spawnDelayMsec} seconds`);
+      helpers.log(ctx, () => `Will execute '${path}' in ${runOpts.spawnDelay} seconds`);
 
       if (killWorkerScript(ctx.workerScript)) {
         helpers.log(ctx, () => "Exiting...");
