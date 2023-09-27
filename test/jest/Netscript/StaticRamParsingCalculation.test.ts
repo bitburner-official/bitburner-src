@@ -1,4 +1,5 @@
 import { calculateRamUsage } from "../../../src/Script/RamCalculations";
+import { RamCosts } from "../../../src/Netscript/RamCostGenerator";
 import { Script } from "../../../src/Script/Script";
 
 const BaseCost = 1.6;
@@ -169,27 +170,6 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       expectCost(calculated, HacknetCost);
     });
 
-    it("One corporation function reaching max ram cap", async function () {
-      const code = `
-        export async function main(ns) {
-          ns.corporation.getCorporation();
-        }
-      `;
-      const calculated = calculateRamUsage(code, new Map()).cost;
-      expectCost(calculated, MaxCost);
-    });
-
-    it("Two corporation functions at max ram cap", async function () {
-      const code = `
-        export async function main(ns) {
-          ns.corporation.createCorporation("Noodle Bar");
-          ns.corporation.getCorporation();
-        }
-      `;
-      const calculated = calculateRamUsage(code, new Map()).cost;
-      expectCost(calculated, MaxCost);
-    });
-
     it("Sleeve functions with an individual cost", async function () {
       const code = `
         export async function main(ns) {
@@ -266,6 +246,27 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       `;
       const calculated = calculateRamUsage(code, new Map([["libTest.js", lib]])).cost;
       expectCost(calculated, HackCost + GrowCost);
+    });
+
+    it("Using every function in the API costs MaxCost", () => {
+      const lines: string[] = [];
+      for (const [key, val] of Object.entries(RamCosts)) {
+        if (typeof val === "object") {
+          const namespace = key;
+          for (const name of Object.keys(val)) {
+            lines.push(`ns.${namespace}.${name}()`);
+          }
+        } else {
+          lines.push(`ns.${key}()`);
+        }
+      }
+      const code = `
+        export async function main(ns) {
+          ${lines.join("\n")};
+        }
+      `;
+      const calculated = calculateRamUsage(code, new Map()).cost;
+      expectCost(calculated, MaxCost);
     });
 
     // TODO: once we fix static parsing this should pass
