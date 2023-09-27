@@ -30,18 +30,19 @@ export function General(): React.ReactElement {
   const [gangFaction, setGangFaction] = useState(FactionName.SlumSnakes);
   const [devMoney, setDevMoney] = useState(0);
   const [hash, setHash] = useState(Player.hashManager.hashes);
-  const [, setHomeRam] = useState(Player.getHomeComputer().maxRam);
+  const [, setHomeRam] = useState(Player.getHomeComputer().maxRam); //no state variable.
 
   // Money functions
+  const moneyValues = [1e6, 1e9, 1e12, 1e15, Infinity];
   const addCustomMoney = () => !Number.isNaN(devMoney) && Player.gainMoney(devMoney, "other");
   const addMoney = (n: number) => () => Player.gainMoney(n, "other");
   const setMoney = (n: number) => () => (Player.money = Number(n));
-  const addHashes = () => () => (Player.hashManager.hashes += hash);
+  const addHashes = () => (Player.hashManager.hashes += hash);
 
   // Ram functions
   const doubleRam = () => {
     Player.getHomeComputer().maxRam *= 2;
-    setHomeRam((prevState) => prevState * 2);
+    setHomeRam((prevState) => prevState * 2); //prevState avoids stale data
   };
   const setRam = (gb: number) => () => {
     Player.getHomeComputer().maxRam = gb;
@@ -102,7 +103,7 @@ export function General(): React.ReactElement {
     if (error) throw new ReferenceError("Manually thrown error");
   }, [error]);
 
-  // component css
+  // Component css
   const smallButtonStyle = { width: "12rem" };
   const largeButtonStyle = { width: "20rem" };
   const noArrowsNumberField = {
@@ -120,31 +121,13 @@ export function General(): React.ReactElement {
         <Typography>General</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Button onClick={addMoney(1e6)}>
-          <pre>
-            + <Money money={1e6} />
-          </pre>
-        </Button>
-        <Button onClick={addMoney(1e9)}>
-          <pre>
-            + <Money money={1e9} />
-          </pre>
-        </Button>
-        <Button onClick={addMoney(1e12)}>
-          <pre>
-            + <Money money={1e12} />
-          </pre>
-        </Button>
-        <Button onClick={addMoney(1e15)}>
-          <pre>
-            + <Money money={1000e12} />
-          </pre>
-        </Button>
-        <Button onClick={addMoney(Infinity)}>
-          <pre>
-            + <Money money={Infinity} />
-          </pre>
-        </Button>
+        {moneyValues.map((value) => (
+          <Button onClick={addMoney(value)}>
+            <pre>
+              + <Money money={value} />
+            </pre>
+          </Button>
+        ))}
         <br />
         <Typography>Add Money</Typography>
         <TextField
@@ -170,7 +153,7 @@ export function General(): React.ReactElement {
           onChange={(x) => setHash(parseFloat(x.target.value))}
           sx={noArrowsNumberField}
         />
-        <Button disabled={!Player.hashManager} style={smallButtonStyle} onClick={addHashes()}>
+        <Button disabled={!Player.hashManager} style={smallButtonStyle} onClick={addHashes}>
           Give Hashes
         </Button>
         <Button disabled={!Player.hashManager} style={smallButtonStyle} onClick={() => (Player.hashManager.hashes = 0)}>
@@ -213,7 +196,11 @@ export function General(): React.ReactElement {
         )}
         <br />
         <Typography>Gang Faction:</Typography>
-        {!Player.gang && (
+        {Player.gang ? (
+          <Button style={smallButtonStyle} onClick={stopGang}>
+            Leave Gang
+          </Button>
+        ) : (
           <>
             <Select value={gangFaction} onChange={setGangFactionDropdown}>
               {GangConstants.Names.map((factionName) => (
@@ -223,14 +210,6 @@ export function General(): React.ReactElement {
               ))}
             </Select>
             <br />
-          </>
-        )}
-        {Player.gang ? (
-          <Button style={smallButtonStyle} onClick={stopGang}>
-            Leave Gang
-          </Button>
-        ) : (
-          <>
             <Button style={smallButtonStyle} onClick={startGang}>
               Create Gang
             </Button>
