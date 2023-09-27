@@ -44,12 +44,12 @@ export function TerritorySubpage(): React.ReactElement {
             <Tooltip
               title={
                 <Typography>
-                  Engaging in Territory Warfare sets your clash chance to 100%. Disengaging will cause your clash chance
+                  Engaging in Territory Clashes sets your clash chance to 100%. Disengaging will cause your clash chance
                   to gradually decrease until it reaches 0%.
                 </Typography>
               }
             >
-              <Typography>Engage in Territory Warfare</Typography>
+              <Typography>Engage in Territory Clashes</Typography>
             </Tooltip>
           }
         />

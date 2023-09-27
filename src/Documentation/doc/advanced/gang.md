@@ -6,7 +6,7 @@ Seen by most of the population as nihilistic, murderous and vile, occassional ru
 
 ## Starting and Recruiting
 
-Outside of [BitNode-2](bitnodes.md) gangs require much more crime and heartbreak to create, but can still be a great help. Creating a Gang in other [BitNodes](bitnodes.md) will offer more [Augmentations](../basic/augmentations.md) than other [Factions](factions.md), but they will not be a way to destroy the [BitNode](bitnodes.md) alone.
+Outside of [BitNode-2](bitnodes.md) gangs require much more crime and heartbreak to create, but can still be a great help. Creating a Gang in other [BitNodes](bitnodes.md) will offer more [Augmentations](../basic/augmentations.md) than other [Factions](../basic/factions.md), but they will not be a way to destroy the [BitNode](bitnodes.md) alone.
 
 After creating a gang, you will be able to start recruiting, adding members to your gang as you gain Respect. While in a BitNode, your gang and gang member stats will not reset if you install augmentations.
 
@@ -30,6 +30,6 @@ Active gang members earn stats, respect and money based on their current stats, 
 
 Your gang's "Wanted Level" can make tasks much less productive, and is affected by the tasks assigned to gang members. "Ethical Hacking" or "Vigilante Justice" tasks can lower Wanted Level.
 
-"Territory Warfare" is a special task that builds Power for your gang. If "Territory Warfare" is enabled [see the Territory subpage of your Gang page], members have a chance to win or lose territory by clashing with other gangs. The % of Territory you control affects most aspects of your gang productivity.
+"Territory Warfare" is a special task that builds Power for your gang. If "Territory Clashes" are enabled [see the Territory subpage of your Gang page], members have a chance to win or lose territory by clashing with other gangs. The % of Territory you control affects most aspects of your gang productivity.
 
 Note that gang members can die during clashes, even if your gang wins.

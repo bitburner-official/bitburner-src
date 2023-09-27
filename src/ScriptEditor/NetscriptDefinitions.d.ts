@@ -783,7 +783,7 @@ interface GangGenInfo {
   wantedLevel: number;
   /** Wanted level gained/lost per game cycle (negative for losses) */
   wantedLevelGainRate: number;
-  /** Indicating if territory warfare is enabled */
+  /** Indicating if territory clashes are enabled */
   territoryWarfareEngaged: boolean;
   /** Number indicating the current wanted penalty */
   wantedPenalty: number;
@@ -3626,13 +3626,13 @@ export interface Gang {
   getAscensionResult(memberName: string): GangMemberAscension | undefined;
 
   /**
-   * Enable/Disable territory warfare.
+   * Enable/Disable territory clashes.
    * @remarks
    * RAM cost: 2 GB
    *
-   * Set whether or not the gang should engage in territory warfare
+   * Set whether or not the gang should engage in territory clashes
    *
-   * @param engage - Whether or not to engage in territory warfare.
+   * @param engage - Whether or not to engage in territory clashes.
    */
   setTerritoryWarfare(engage: boolean): void;
 
