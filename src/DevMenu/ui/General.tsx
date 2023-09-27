@@ -8,6 +8,7 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -28,14 +29,24 @@ export function General(): React.ReactElement {
   const [corporationName, setCorporationName] = useState("");
   const [gangFaction, setGangFaction] = useState(FactionName.SlumSnakes);
   const [devMoney, setDevMoney] = useState(0);
+  const [hash, setHash] = useState(Player.hashManager.hashes);
+  const [, setHomeRam] = useState(Player.getHomeComputer().maxRam);
 
   // Money functions
   const addCustomMoney = () => !Number.isNaN(devMoney) && Player.gainMoney(devMoney, "other");
   const addMoney = (n: number) => () => Player.gainMoney(n, "other");
   const setMoney = (n: number) => () => (Player.money = Number(n));
+  const addHashes = () => () => (Player.hashManager.hashes += hash);
 
   // Ram functions
-  const upgradeRam = () => (Player.getHomeComputer().maxRam *= 2);
+  const doubleRam = () => {
+    Player.getHomeComputer().maxRam *= 2;
+    setHomeRam((prevState) => prevState * 2);
+  };
+  const setRam = (gb: number) => () => {
+    Player.getHomeComputer().maxRam = gb;
+    setHomeRam(gb);
+  };
 
   // Node-clearing functions
   const quickB1tFlum3 = () => Router.toPage(Page.BitVerse, { flume: true, quick: true });
@@ -91,20 +102,24 @@ export function General(): React.ReactElement {
     if (error) throw new ReferenceError("Manually thrown error");
   }, [error]);
 
+  // component css
+  const smallButtonStyle = { width: "12rem" };
+  const largeButtonStyle = { width: "20rem" };
+  const noArrowsNumberField = {
+    "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
+      display: "none",
+    },
+    "& input[type=number]": {
+      MozAppearance: "textfield",
+    },
+  };
+
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>General</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Button
-          onClick={setMoney(0)}
-          title="This sets your money to $0, this means the money you had will just vanish without being accounted for where it went and may offset some metrics."
-        >
-          <pre>
-            = <Money money={0} />
-          </pre>
-        </Button>
         <Button onClick={addMoney(1e6)}>
           <pre>
             + <Money money={1e6} />
@@ -130,27 +145,76 @@ export function General(): React.ReactElement {
             + <Money money={Infinity} />
           </pre>
         </Button>
-        <Button onClick={upgradeRam}>+ RAM</Button>
         <br />
-        <Typography>Add Custom Money</Typography>
-        <TextField onChange={(x) => setDevMoney(parseFloat(x.target.value))} />
-        <Button onClick={addCustomMoney}>Give Money</Button>
+        <Typography>Add Money</Typography>
+        <TextField
+          placeholder={"$$$"}
+          onChange={(x) => setDevMoney(parseFloat(x.target.value))}
+          sx={noArrowsNumberField}
+        />
+        <Button style={smallButtonStyle} onClick={addCustomMoney}>
+          Give Money
+        </Button>
+        <Button
+          style={smallButtonStyle}
+          onClick={setMoney(0)}
+          title="This sets your money to $0, this means the money you had will just vanish without being accounted for where it went and may offset some metrics."
+        >
+          Clear Money
+        </Button>
         <br />
+        <TextField
+          disabled={!Player.hashManager}
+          type="number"
+          placeholder={"add Hacknet hashes"}
+          onChange={(x) => setHash(parseFloat(x.target.value))}
+          sx={noArrowsNumberField}
+        />
+        <Button disabled={!Player.hashManager} style={smallButtonStyle} onClick={addHashes()}>
+          Give Hashes
+        </Button>
+        <Button disabled={!Player.hashManager} style={smallButtonStyle} onClick={() => (Player.hashManager.hashes = 0)}>
+          Clear Hashes
+        </Button>
+        <br />
+        <Tooltip placement="top-start" title={`Current RAM: ${Player.getHomeComputer().maxRam} GB`}>
+          <Typography>Set Home Server RAM</Typography>
+        </Tooltip>
+        <Tooltip placement="top" title="Starting RAM">
+          <Button onClick={setRam(8)}>8 GB</Button>
+        </Tooltip>
+        <Button onClick={setRam(64)}>64 GB</Button>
+        <Button onClick={setRam(1024)}>1 TB</Button>
+        <Button onClick={setRam(1048576)}>1.05 PB</Button>
+        <Tooltip placement="top" title="Max RAM sold by Alpha Ent.">
+          <Button onClick={setRam(1073741824)}>1.07 EB</Button>
+        </Tooltip>
+        <Tooltip placement="top" title="Double Home server's current RAM">
+          <Button onClick={doubleRam}>RAM *= 2</Button>
+        </Tooltip>
+        <br />
+        <Typography>Corporation:</Typography>
         {Player.corporation ? (
-          <Button onClick={destroyCorporation}>Destroy Corporation</Button>
+          <Button style={smallButtonStyle} onClick={destroyCorporation}>
+            Destroy Corporation
+          </Button>
         ) : (
           <>
-            <Typography>Corporation Name:</Typography>
-            <TextField value={corporationName} onChange={(x) => setCorporationName(x.target.value)} />
-            <Button onClick={createCorporation}>Create Corporation</Button>
+            <TextField
+              placeholder="Enter Corp Name"
+              value={corporationName}
+              onChange={(x) => setCorporationName(x.target.value)}
+            />
+            <br />
+            <Button style={smallButtonStyle} onClick={createCorporation}>
+              Create Corporation
+            </Button>
           </>
         )}
         <br />
-        {Player.gang ? (
-          <Button onClick={stopGang}>Stop Gang</Button>
-        ) : (
+        <Typography>Gang Faction:</Typography>
+        {!Player.gang && (
           <>
-            <Typography>Gang Faction:</Typography>
             <Select value={gangFaction} onChange={setGangFactionDropdown}>
               {GangConstants.Names.map((factionName) => (
                 <MenuItem key={factionName} value={factionName}>
@@ -158,22 +222,53 @@ export function General(): React.ReactElement {
                 </MenuItem>
               ))}
             </Select>
-            <Button onClick={startGang}>Start Gang</Button>
+            <br />
+          </>
+        )}
+        {Player.gang ? (
+          <Button style={smallButtonStyle} onClick={stopGang}>
+            Leave Gang
+          </Button>
+        ) : (
+          <>
+            <Button style={smallButtonStyle} onClick={startGang}>
+              Create Gang
+            </Button>
           </>
         )}
         <br />
+        <Typography>Bladeburner:</Typography>
         {Player.bladeburner ? (
-          <Button onClick={leaveBladeburner}>Leave BladeBurner</Button>
+          <Button style={smallButtonStyle} onClick={leaveBladeburner}>
+            Leave BladeBurner
+          </Button>
         ) : (
-          <Button onClick={joinBladeburner}>Join BladeBurner</Button>
+          <Button style={smallButtonStyle} onClick={joinBladeburner}>
+            Join BladeBurner
+          </Button>
         )}
         <br />
-        <Button onClick={quickB1tFlum3}>Quick b1t_flum3.exe</Button>
-        <Button onClick={b1tflum3}>Run b1t_flum3.exe</Button>
-        <Button onClick={quickHackW0r1dD43m0n}>Quick w0rld_d34m0n</Button>
-        <Button onClick={hackW0r1dD43m0n}>Hack w0rld_d34m0n</Button>
-        <Button onClick={() => setError(true)}>Throw Error</Button>
-        <Button onClick={checkMessages}>Check Messages</Button>
+        <Typography>General:</Typography>
+        <Button style={largeButtonStyle} onClick={quickB1tFlum3}>
+          Quick b1t_flum3.exe
+        </Button>
+        <Button style={largeButtonStyle} onClick={b1tflum3}>
+          Run b1t_flum3.exe
+        </Button>
+        <br />
+        <Button style={largeButtonStyle} onClick={quickHackW0r1dD43m0n}>
+          Quick w0rld_d34m0n
+        </Button>
+        <Button style={largeButtonStyle} onClick={hackW0r1dD43m0n}>
+          Hack w0rld_d34m0n
+        </Button>
+        <br />
+        <Button style={largeButtonStyle} onClick={() => setError(true)}>
+          Throw Error
+        </Button>
+        <Button style={largeButtonStyle} onClick={checkMessages}>
+          Check Messages
+        </Button>
       </AccordionDetails>
     </Accordion>
   );
