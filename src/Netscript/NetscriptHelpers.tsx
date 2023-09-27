@@ -217,41 +217,11 @@ function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRun
 }
 
 function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): SpawnRunOptions {
-  const result: SpawnRunOptions = {
-    threads: 1 as PositiveInteger,
-    temporary: false,
-    preventDuplicates: false,
-    spawnDelayMsec: 10000 as PositiveInteger,
-  };
-  function checkThreads(threads: unknown, argName: string) {
-    if (threads !== null && threads !== undefined) {
-      result.threads = positiveInteger(ctx, argName, threads);
-    }
-  }
-  function checkSpawnDelay(spawnDelayMsec: unknown, argName: string) {
-    if (spawnDelayMsec !== null && spawnDelayMsec !== undefined) {
-      result.spawnDelayMsec = positiveInteger(ctx, argName, spawnDelayMsec);
-    }
-  }
-  if (typeof threadOrOption !== "object" || threadOrOption === null) {
-    checkThreads(threadOrOption, "threads");
-    return result;
-  }
+  const result: SpawnRunOptions = { spawnDelayMsec: 10000 as PositiveInteger, ...runOptions(ctx, threadOrOption) };
+  if (typeof threadOrOption !== "object" || !threadOrOption) return result;
   // Safe assertion since threadOrOption type has been narrowed to a non-null object
-  const options = threadOrOption as Unknownify<SpawnRunOptions>;
-  checkThreads(options.threads, "RunOptions.threads");
-  checkSpawnDelay(options.spawnDelayMsec, "spawnDelayMsec");
-  result.temporary = !!options.temporary;
-  result.preventDuplicates = !!options.preventDuplicates;
-  if (options.ramOverride !== undefined && options.ramOverride !== null) {
-    result.ramOverride = number(ctx, "RunOptions.ramOverride", options.ramOverride);
-    if (result.ramOverride < RamCostConstants.Base) {
-      throw makeRuntimeErrorMsg(
-        ctx,
-        `SpawnOptions.ramOverride must be >= baseCost (${RamCostConstants.Base}), was ${result.ramOverride}`,
-      );
-    }
-  }
+  const { spawnDelayMsec } = threadOrOption as Unknownify<SpawnRunOptions>;
+  if (spawnDelayMsec !== undefined) result.spawnDelayMsec = positiveInteger(ctx, "spawnDelayMsec", spawnDelayMsec);
   return result;
 }
 
