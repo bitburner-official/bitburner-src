@@ -132,6 +132,7 @@ export function General(): React.ReactElement {
         <Typography>Add Money</Typography>
         <TextField
           placeholder={"$$$"}
+          type="number"
           onChange={(x) => setDevMoney(parseFloat(x.target.value))}
           sx={noArrowsNumberField}
         />
