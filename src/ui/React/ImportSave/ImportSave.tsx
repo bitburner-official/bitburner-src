@@ -301,8 +301,8 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
             </TableRow>
 
             <TableRow>
-              <Tooltip title="The total SF levels owned.">
-                <TableCell>Source Files</TableCell>
+              <Tooltip title="The total SF levels owned, except for SF-1 Exploit levels.">
+                <TableCell>Source File Levels</TableCell>
               </Tooltip>
               <TableCell>{currentData.playerData?.sourceFiles}</TableCell>
               <TableCell>{importData.playerData?.sourceFiles}</TableCell>
