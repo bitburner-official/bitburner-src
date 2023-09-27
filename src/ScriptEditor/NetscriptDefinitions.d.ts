@@ -783,7 +783,7 @@ interface GangGenInfo {
   wantedLevel: number;
   /** Wanted level gained/lost per game cycle (negative for losses) */
   wantedLevelGainRate: number;
-  /** Indicating if territory clashes is enabled */
+  /** Indicating if territory clashes are enabled */
   territoryWarfareEngaged: boolean;
   /** Number indicating the current wanted penalty */
   wantedPenalty: number;
