@@ -122,7 +122,7 @@ export function General(): React.ReactElement {
       </AccordionSummary>
       <AccordionDetails>
         {moneyValues.map((value) => (
-          <Button onClick={addMoney(value)}>
+          <Button key={`add money ${value}`} onClick={addMoney(value)}>
             <pre>
               + <Money money={value} />
             </pre>
