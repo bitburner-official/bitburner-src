@@ -4,7 +4,7 @@ import { Typography, Link, Button } from "@mui/material";
 
 import { CONSTANTS } from "../../Constants";
 
-interface IProps {
+interface CreditsModalProps {
   open: boolean;
   onClose: () => void;
 }
@@ -24,14 +24,15 @@ for (let i = 0; i < recentPatchData.length; i++) {
   const atName = /(?:^[(]?(@[^\s),]+)[),]?)/gm; //make an array of only unique @handles
   const whatWeWant = recentPatchData[i].replace(atName, "$1");
   if (isDate(recentPatchData[i]) || !recentPatchData[i].includes("@")) continue;
-  if (recentPatchData[i].includes(", ")) { //if (@1, @2, ...@n)
+  if (recentPatchData[i].includes(", ")) {
+    //if (@1, @2, ...@n)
     recentPatchData.push(...recentPatchData[i].split(", "));
     continue;
   }
   if (!handle.includes(whatWeWant)) handle.push(whatWeWant);
 }
 
-export function CreditsModal(props: IProps): React.ReactElement {
+export function CreditsModal(props: CreditsModalProps): React.ReactElement {
   const leadDevs = `danielyxie
 Olivier Gagnon
 @Snarling
@@ -66,8 +67,8 @@ or to participate yourself`;
       <Typography>{currentMaintainer}</Typography>
       <br />
       <Typography sx={{ textDecoration: "underline" }}>Recent patch contributors:</Typography>
-      <Typography style={{ whiteSpace: "pre-wrap", maxWidth: maxEM + "em", textOverflow: "clip" }}>
-        {/*em unit = character px based, dynamic with font. balance contributor overflow vs longest other message*/}
+      <Typography style={{ whiteSpace: "pre-wrap", maxWidth: maxEM + "rem", textOverflow: "clip" }}>
+        {/*rem unit = character px based, dynamic with font. balance contributor overflow vs longest other message*/}
         {/*textoverflow "clip" forces very long @names to stretch a single line, it's silly*/}
         {handles}
       </Typography>
