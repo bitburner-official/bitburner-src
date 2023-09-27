@@ -72,9 +72,7 @@ export function HacknetUpgradeElem(props: IProps): React.ReactElement {
   // We'll reuse a Bladeburner css class
   return (
     <Paper sx={{ p: 1 }}>
-      <Typography>
-        <CopyableText value={upg.name} />
-      </Typography>
+      <CopyableText value={upg.name} />
       <Typography>
         Cost: <Hashes hashes={cost} />, Bought: {level} times
       </Typography>
