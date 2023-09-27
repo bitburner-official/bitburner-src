@@ -155,7 +155,7 @@ export async function main(ns) {
 |  [setTitle(title, pid)](./bitburner.ns.settitle.md) | Set the title of the tail window of a script. |
 |  [share()](./bitburner.ns.share.md) | Share the server's ram with your factions. |
 |  [sleep(millis)](./bitburner.ns.sleep.md) | Suspends the script for n milliseconds. |
-|  [spawn(script, threadOrOptions, args)](./bitburner.ns.spawn.md) | Terminate current script and start another in 10 seconds. |
+|  [spawn(script, threadOrOptions, args)](./bitburner.ns.spawn.md) | Terminate current script and start another in a defined number of milliseconds. |
 |  [sprintf(format, args)](./bitburner.ns.sprintf.md) | Format a string. |
 |  [sqlinject(host)](./bitburner.ns.sqlinject.md) | Runs SQLInject.exe on a server. |
 |  [tail(fn, host, args)](./bitburner.ns.tail.md) | Open the tail window of a script. |
