@@ -452,14 +452,14 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         return false;
       }
 
-      if (Player.money < item.price) {
-        helpers.log(ctx, () => `Not enough money to purchase '${item.program}'. Need ${formatMoney(item.price)}`);
-        return false;
-      }
-
       if (Player.hasProgram(item.program)) {
         helpers.log(ctx, () => `You already have the '${item.program}' program`);
         return true;
+      }
+
+      if (Player.money < item.price) {
+        helpers.log(ctx, () => `Not enough money to purchase '${item.program}'. Need ${formatMoney(item.price)}`);
+        return false;
       }
 
       Player.getHomeComputer().pushProgram(item.program);
