@@ -114,7 +114,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
         ["Smart Factories:", formatPercent(corp.getProductionMultiplier())],
         ["Boosting Materials:", formatPercent(division.productionMult)],
         ["Production Research:", formatPercent(division.getProductionMultiplier())],
-        [<b>Total Production:</b>, <b>{formatCorpStat(totalMaterialProduction)}</b>],
+        [<b key={1}>Total Production:</b>, <b key={2}>{formatCorpStat(totalMaterialProduction)}</b>],
       ]}
     />
   );
@@ -136,7 +136,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
         ["Boosting Materials:", formatPercent(division.productionMult)],
         ["Production Research:", formatPercent(division.getProductionMultiplier())],
         ["Product Production Research:", formatPercent(division.getProductProductionMultiplier())],
-        [<b>Total Production:</b>, <b>{formatCorpStat(totalProductProduction)}</b>],
+        [<b key={1}>Total Production:</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
       ]}
     />
   );
