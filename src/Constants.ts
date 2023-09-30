@@ -219,29 +219,31 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.5.0 dev changelog (last updated 9/24/23)
+## v2.5.0 dev changelog (last updated 9/29/23)
 
 See 2.4.1 changelog: https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
 
 ### NOTES
-(Corporation) The gameplay balance of the Corporation mechanic will be significantly different this patch, due to bugfixes for both share price and valuation. Fully automated scripts and overall gameplay strategies for Corporation may need to be adjusted.
+(Corporation) Bugfixes in Corporation may cause a large balance shift for this mechanic.
 
 ### API CHANGES:
-- ns.print and ns.tprint now handle Set and Map. (@ficocelliguy)
+- ns.print and ns.tprint now handle printing Set and Map objects directly (@ficocelliguy)
+- ns.spawn can now use a configurable delay instead of always 10 seconds (@muesli4brekkies)
 - (Corporation) Added CorporationDivisions property to BitNodeMultipliers interface (@Caldwell-74)
-- (Corporation) Added makesMaterials and makesProducts properties to CorpIndustryData interface. (@Caldwell-74)
-- (Corporation) Added issueNewSharesCooldown property to the CorporationInfo interface.
+- (Corporation) Added makesMaterials and makesProducts properties to CorpIndustryData interface (@Caldwell-74)
+- (Corporation) Added issueNewSharesCooldown property to the CorporationInfo interface (@Caldwell-74)
+- (Corporation) Significantly lowered ram cost of all corporation functions (@jjclark1982)
 - (Gang) Added ns.gang.getRecruitsAvailable: Gets the number of additional gang members that can currently be recruited (@myCatsName)
 - (Gang) Added ns.gang.respectForNextRecruit: Gets the respect threshold for recruiting the next gang member (@myCatsName)
 - (Gang) Added ns.gang.renameMember: Renames a gang member (@myCatsName)
 
 ### BUGFIX
-- Taking a university class no longer gives the player an achievement for working out in a gym. (@myCatsName)
+- Taking a university class no longer gives the player an achievement for working out in a gym (@myCatsName)
 - Bash keybind ctrl-C clears an ongoing terminal history search (@ncharris93)
 - (Corporation): Fix bug in valuation calculation (@yichizhng)
 - (Corporation): Fix bug in share price calculation (@jjclark1982)
-- (Corporation) "Same sell amount in all cities" works with Products again. (@Caldwell-74)
-- (Hashnet) Buying multiple company favor upgrades at the same time will actually apply them all instead of just one. (@aschmider)
+- (Corporation) "Same sell amount in all cities" works with Products again (@Caldwell-74)
+- (Hashnet) Buying multiple company favor upgrades at the same time will actually apply them all instead of just one (@aschmider)
 
 ### OTHER CHANGES
 - MISC: Improved handling of aliases in the Terminal (@ficocelliguy)
@@ -249,11 +251,12 @@ See 2.4.1 changelog: https://github.com/bitburner-official/bitburner-src/blob/st
 - MISC: ns.sleep and ns.asleep now show a formatted time in the script log. (@ficocelliguy)
 - MISC: Fix an exploit that allowed over 100% utilization of a server's ram (@d0sboots)
 - MISC: (Bladeburner / Sleeve) Bladeburner training action is available for sleeves (@Zelow79)
-- UI: Tail windows now remain on the page, but hidden, when on pages like Infiltration where they should not be shown. This means any modifications made to the tail window directly will persist through an infiltration, and React content added via printRaw will no longer unmount and remount. Scripts that relied on the previous behavior might need to be adjusted. (@ficocelliguy)
+- MISC: (Gang) Renamed the Territory Warfare mechanic (now referred to as Territory Clashes) to deconflict with the Territory Warfare gang member task (@ficocelliguy)
+- UI: Infiltration now hides tail windows instead of temporarily removing them from the page. This means position/size will remain as they were before the infiltration, and any React content will remain active instead of being unmounted/remounted (@ficocelliguy)
 - UI: Faction augmentation page updates more reliably (@zerbosh)
 - UI: Added a text filter on the Faction Augmentations page (@ficocelliguy)
 - UI: Improved pagination of Active Scripts page (@Ookamiko, @ficocelliguy)
-- UI: Icarus message no longer shows repeatedly for players that are in the endgame. (@ficocelliguy)
+- UI: Icarus message no longer shows repeatedly for players that are in the endgame (@ficocelliguy)
 - UI: Remove work completion dialogs when performing an augmentation install (@ficocelliguy)
 - UI: Improve soft reset dialog, and always show dialog when soft resetting (@myCatsName)
 - UI: While closing, modals no longer update displayed info and become inert (@Snarling)
@@ -265,7 +268,7 @@ See 2.4.1 changelog: https://github.com/bitburner-official/bitburner-src/blob/st
 - UI: (Corporation) Improved the descriptions for Corporation states (@Caldwell-74)
 - UI: (Gang) Various UI improvements for Gang (@myCatsName)
 - DOCS: Improve documentation for ports (@muesli4brekkies)
-- DOCS: Updated documentation for ns.tail and ns.getScriptLogs to make it clear a PID can be used. (@myCatsName)
+- DOCS: Updated documentation for ns.tail and ns.getScriptLogs to make it clear a PID can be used (@myCatsName)
 - DOCS: Improve documentation for FilenameOrPID functions (@VictorS)
 - DOCS: Improved various existing ingame documentation pages (@myCatsName)
 - DOCS: (Bladeburner / Gang) Added initial ingame documentation for Bladeburner and Gang (@myCatsName)
