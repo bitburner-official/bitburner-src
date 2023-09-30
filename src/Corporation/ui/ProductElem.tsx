@@ -93,7 +93,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
                 <StatsTable
                   rows={[
                     ["Prod:", formatBigNumber(product.cityData[city].productionAmount)],
-                    ["Sell:", formatBigNumber(product.cityData[city].actualSellAmount)],
+                    ["Sell:", formatBigNumber(-product.cityData[city].actualSellAmount)],
                   ]}
                 />
               }

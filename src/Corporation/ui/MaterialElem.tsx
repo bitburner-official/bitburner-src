@@ -8,7 +8,7 @@ import { Warehouse } from "../Warehouse";
 import { ExportModal } from "./modals/ExportModal";
 import { SellMaterialModal } from "./modals/SellMaterialModal";
 import { PurchaseMaterialModal } from "./modals/PurchaseMaterialModal";
-import { formatBigNumber, formatCorpStat, formatPercent, formatQuality } from "../../ui/formatNumber";
+import { formatBigNumber, formatCorpStat, formatQuality } from "../../ui/formatNumber";
 import { isString } from "../../utils/helpers/string";
 import { Money } from "../../ui/React/Money";
 import { useCorporation, useDivision } from "./Context";
@@ -83,7 +83,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   // Material Gain details
   const gainBreakdown = [
     ["Buy:", mat.buyAmount >= 1e33 ? mat.buyAmount.toExponential(3) : formatBigNumber(mat.buyAmount)],
-    ["Production:", formatBigNumber(mat.productionAmount)],
+    ["Prod:", formatBigNumber(mat.productionAmount)],
     ["Sell:", formatBigNumber(-mat.actualSellAmount)],
     ["Export:", formatBigNumber(-mat.exportedLastCycle)],
     ["Import:", formatBigNumber(mat.importAmount)],
