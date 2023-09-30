@@ -7,7 +7,7 @@ import { CorpUnlockName, CorpEmployeeJob } from "@enums";
 import { BuyTea } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
-import { formatCorpStat } from "../../ui/formatNumber";
+import { formatBigNumber, formatCorpStat, formatPercent } from "../../ui/formatNumber";
 
 import { UpgradeOfficeSizeModal } from "./modals/UpgradeOfficeSizeModal";
 import { ThrowPartyModal } from "./modals/ThrowPartyModal";
@@ -27,6 +27,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import { TableCell } from "../../ui/React/Table";
 import { Box } from "@mui/material";
+import { StatsTable } from "../../ui/React/StatsTable";
 
 interface OfficeProps {
   office: OfficeSpace;
@@ -98,6 +99,48 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
   const currUna = props.office.employeeJobs[CorpEmployeeJob.Unassigned];
   const nextUna = props.office.employeeNextJobs[CorpEmployeeJob.Unassigned];
 
+  const totalMaterialProduction =
+    division.getOfficeProductivity(props.office) *
+    corp.getProductionMultiplier() *
+    division.productionMult *
+    division.getProductionMultiplier();
+  const materialBreakdown = (
+    <StatsTable
+      rows={[
+        [
+          "Base Production from Employees:",
+          formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: false })),
+        ],
+        ["Smart Factories:", formatPercent(corp.getProductionMultiplier())],
+        ["Boosting Materials:", formatPercent(division.productionMult)],
+        ["Production Research:", formatPercent(division.getProductionMultiplier())],
+        [<b>Total Production:</b>, <b>{formatCorpStat(totalMaterialProduction)}</b>],
+      ]}
+    />
+  );
+
+  const totalProductProduction =
+    division.getOfficeProductivity(props.office, { forProduct: true }) *
+    corp.getProductionMultiplier() *
+    division.productionMult *
+    division.getProductionMultiplier() *
+    division.getProductProductionMultiplier();
+  const productBreakdown = (
+    <StatsTable
+      rows={[
+        [
+          "Base Production from Employees:",
+          formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: true })),
+        ],
+        ["Smart Factories:", formatPercent(corp.getProductionMultiplier())],
+        ["Boosting Materials:", formatPercent(division.productionMult)],
+        ["Production Research:", formatPercent(division.getProductionMultiplier())],
+        ["Product Production Research:", formatPercent(division.getProductProductionMultiplier())],
+        [<b>Total Production:</b>, <b>{formatCorpStat(totalProductProduction)}</b>],
+      ]}
+    />
+  );
+
   return (
     <Table padding="none">
       <TableBody>
@@ -143,60 +186,69 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
             </Typography>
           </TableCell>
         </TableRow>
-        {corp.unlocks.has(CorpUnlockName.VeChain) && (
-          <>
-            <TableRow>
-              <TableCell>
-                <Tooltip
-                  title={
-                    <Typography>
-                      The base amount of material this office can produce. Does not include production multipliers from
-                      upgrades and materials. This value is based off the productivity of your Operations, Engineering,
-                      and Management employees
-                    </Typography>
-                  }
-                >
-                  <Typography>Material Production:</Typography>
-                </Tooltip>
-              </TableCell>
-              <TableCell>
-                <Typography align="right">{formatCorpStat(division.getOfficeProductivity(props.office))}</Typography>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Tooltip
-                  title={
-                    <Typography>
-                      The base amount of any given Product this office can produce. Does not include production
-                      multipliers from upgrades and materials. This value is based off the productivity of your
-                      Operations, Engineering, and Management employees
-                    </Typography>
-                  }
-                >
-                  <Typography>Product Production:</Typography>
-                </Tooltip>
-              </TableCell>
-              <TableCell>
-                <Typography align="right">
-                  {formatCorpStat(division.getOfficeProductivity(props.office, { forProduct: true }))}
-                </Typography>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Tooltip
-                  title={<Typography>The effect this office's 'Business' employees has on boosting sales</Typography>}
-                >
-                  <Typography> Business Multiplier:</Typography>
-                </Tooltip>
-              </TableCell>
-              <TableCell align="right">
-                <Typography>x{formatCorpStat(division.getBusinessFactor(props.office))}</Typography>
-              </TableCell>
-            </TableRow>
-          </>
-        )}
+        {corp.unlocks.has(CorpUnlockName.VeChain) ||
+          (true && (
+            <>
+              <TableRow>
+                <TableCell>
+                  <Tooltip
+                    title={
+                      <Typography component="div">
+                        The amount of material this office can produce.
+                        <br />
+                        This value is based off the productivity of your
+                        <br />
+                        Operations, Engineering, and Management employees.
+                        <br />
+                        <br />
+                        {materialBreakdown}
+                      </Typography>
+                    }
+                  >
+                    <Typography>Material Production:</Typography>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <Typography align="right">{formatCorpStat(totalMaterialProduction)}</Typography>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Tooltip
+                    title={
+                      <Typography component="div">
+                        The amount of any given Product this office can produce.
+                        <br />
+                        This value is based off the productivity of your
+                        <br />
+                        Operations, Engineering, and Management employees.
+                        <br />
+                        <br />
+                        {productBreakdown}
+                      </Typography>
+                    }
+                  >
+                    <Typography>Product Production:</Typography>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <Typography align="right">{formatCorpStat(totalProductProduction)}</Typography>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Tooltip
+                    title={<Typography>The effect this office's 'Business' employees has on boosting sales</Typography>}
+                  >
+                    <Typography> Business Multiplier:</Typography>
+                  </Tooltip>
+                </TableCell>
+                <TableCell align="right">
+                  <Typography>x{formatCorpStat(division.getBusinessFactor(props.office))}</Typography>
+                </TableCell>
+              </TableRow>
+            </>
+          ))}
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}

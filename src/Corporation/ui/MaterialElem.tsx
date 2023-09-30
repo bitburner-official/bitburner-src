@@ -83,24 +83,16 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   // Material Gain details
   const gainBreakdown = [
     ["Buy:", mat.buyAmount >= 1e33 ? mat.buyAmount.toExponential(3) : formatBigNumber(mat.buyAmount)],
-    ["Prod:", formatBigNumber(mat.productionAmount)],
-    ["Sell:", formatBigNumber(mat.actualSellAmount)],
-    ["Export:", formatBigNumber(mat.exportedLastCycle)],
-    ["Import:", formatBigNumber(mat.importAmount)]
+    ["Production:", formatBigNumber(mat.productionAmount)],
+    ["Sell:", formatBigNumber(-mat.actualSellAmount)],
+    ["Export:", formatBigNumber(-mat.exportedLastCycle)],
+    ["Import:", formatBigNumber(mat.importAmount)],
   ];
   if (corp.unlocks.has(CorpUnlockName.MarketResearchDemand)) {
     gainBreakdown.push(["Demand:", formatCorpStat(mat.demand)]);
   }
   if (corp.unlocks.has(CorpUnlockName.MarketDataCompetition)) {
     gainBreakdown.push(["Competition:", formatCorpStat(mat.competition)]);
-  }
-  if (division.producedMaterials.includes(mat.name)) {
-    gainBreakdown.push(
-      ["Employee Production:", formatBigNumber(division.getOfficeProductivity(office, { forProduct: true }))],
-      ["Smart Factories:", formatPercent(corp.getProductionMultiplier())],
-      ["Boosting Materials:", formatPercent(division.productionMult)],
-      ["Research:", formatPercent(division.getProductionMultiplier())],
-    );
   }
 
   return (
