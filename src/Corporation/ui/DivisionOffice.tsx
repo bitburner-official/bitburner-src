@@ -186,69 +186,68 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
             </Typography>
           </TableCell>
         </TableRow>
-        {corp.unlocks.has(CorpUnlockName.VeChain) ||
-          (true && (
-            <>
-              <TableRow>
-                <TableCell>
-                  <Tooltip
-                    title={
-                      <Typography component="div">
-                        The amount of material this office can produce.
-                        <br />
-                        This value is based off the productivity of your
-                        <br />
-                        Operations, Engineering, and Management employees.
-                        <br />
-                        <br />
-                        {materialBreakdown}
-                      </Typography>
-                    }
-                  >
-                    <Typography>Material Production:</Typography>
-                  </Tooltip>
-                </TableCell>
-                <TableCell>
-                  <Typography align="right">{formatCorpStat(totalMaterialProduction)}</Typography>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  <Tooltip
-                    title={
-                      <Typography component="div">
-                        The amount of any given Product this office can produce.
-                        <br />
-                        This value is based off the productivity of your
-                        <br />
-                        Operations, Engineering, and Management employees.
-                        <br />
-                        <br />
-                        {productBreakdown}
-                      </Typography>
-                    }
-                  >
-                    <Typography>Product Production:</Typography>
-                  </Tooltip>
-                </TableCell>
-                <TableCell>
-                  <Typography align="right">{formatCorpStat(totalProductProduction)}</Typography>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  <Tooltip
-                    title={<Typography>The effect this office's 'Business' employees has on boosting sales</Typography>}
-                  >
-                    <Typography> Business Multiplier:</Typography>
-                  </Tooltip>
-                </TableCell>
-                <TableCell align="right">
-                  <Typography>x{formatCorpStat(division.getBusinessFactor(props.office))}</Typography>
-                </TableCell>
-              </TableRow>
-            </>
-          ))}
+        {corp.unlocks.has(CorpUnlockName.VeChain) && (
+          <>
+            <TableRow>
+              <TableCell>
+                <Tooltip
+                  title={
+                    <Typography component="div">
+                      The amount of material this office can produce.
+                      <br />
+                      This value is based off the productivity of your
+                      <br />
+                      Operations, Engineering, and Management employees.
+                      <br />
+                      <br />
+                      {materialBreakdown}
+                    </Typography>
+                  }
+                >
+                  <Typography>Material Production:</Typography>
+                </Tooltip>
+              </TableCell>
+              <TableCell>
+                <Typography align="right">{formatCorpStat(totalMaterialProduction)}</Typography>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Tooltip
+                  title={
+                    <Typography component="div">
+                      The amount of any given Product this office can produce.
+                      <br />
+                      This value is based off the productivity of your
+                      <br />
+                      Operations, Engineering, and Management employees.
+                      <br />
+                      <br />
+                      {productBreakdown}
+                    </Typography>
+                  }
+                >
+                  <Typography>Product Production:</Typography>
+                </Tooltip>
+              </TableCell>
+              <TableCell>
+                <Typography align="right">{formatCorpStat(totalProductProduction)}</Typography>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Tooltip
+                  title={<Typography>The effect this office's 'Business' employees has on boosting sales</Typography>}
+                >
+                  <Typography> Business Multiplier:</Typography>
+                </Tooltip>
+              </TableCell>
+              <TableCell align="right">
+                <Typography>x{formatCorpStat(division.getBusinessFactor(props.office))}</Typography>
+              </TableCell>
+            </TableRow>
+          </>
+        )}
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}
