@@ -8,7 +8,7 @@ import { Warehouse } from "../Warehouse";
 import { ExportModal } from "./modals/ExportModal";
 import { SellMaterialModal } from "./modals/SellMaterialModal";
 import { PurchaseMaterialModal } from "./modals/PurchaseMaterialModal";
-import { formatBigNumber, formatCorpStat, formatQuality } from "../../ui/formatNumber";
+import { formatBigNumber, formatCorpStat, formatPercent, formatQuality } from "../../ui/formatNumber";
 import { isString } from "../../utils/helpers/string";
 import { Money } from "../../ui/React/Money";
 import { useCorporation, useDivision } from "./Context";
@@ -93,6 +93,14 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   }
   if (corp.unlocks.has(CorpUnlockName.MarketDataCompetition)) {
     gainBreakdown.push(["Competition:", formatCorpStat(mat.competition)]);
+  }
+  if (division.producedMaterials.includes(mat.name)) {
+    gainBreakdown.push(
+      ["Employee Production:", formatBigNumber(division.getOfficeProductivity(office, { forProduct: true }))],
+      ["Smart Factories:", formatPercent(corp.getProductionMultiplier())],
+      ["Boosting Materials:", formatPercent(division.productionMult)],
+      ["Research:", formatPercent(division.getProductionMultiplier())],
+    );
   }
 
   return (
