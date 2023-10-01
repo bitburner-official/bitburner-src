@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 import { CorpUnlockName, IndustryType } from "@enums";
 import { HireAdVert } from "../Actions";
-import { formatBigNumber } from "../../ui/formatNumber";
+import { formatBigNumber, formatCorpMultiplier } from "../../ui/formatNumber";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { MakeProductModal } from "./modals/MakeProductModal";
 import { ResearchModal } from "./modals/ResearchModal";
@@ -137,15 +137,15 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
               <Typography>Total multiplier for this industry's sales due to its awareness and popularity</Typography>
               <StatsTable
                 rows={[
-                  ["Awareness Bonus:", "x" + formatBigNumber(Math.pow(awarenessFac, 0.85))],
-                  ["Popularity Bonus:", "x" + formatBigNumber(Math.pow(popularityFac, 0.85))],
-                  ["Ratio Multiplier:", "x" + formatBigNumber(Math.pow(ratioFac, 0.85))],
+                  ["Awareness Bonus:", formatCorpMultiplier(Math.pow(awarenessFac, 0.85))],
+                  ["Popularity Bonus:", formatCorpMultiplier(Math.pow(popularityFac, 0.85))],
+                  ["Ratio Multiplier:", formatCorpMultiplier(Math.pow(ratioFac, 0.85))],
                 ]}
               />
             </>
           }
         >
-          <Typography>Advertising Multiplier: x{formatBigNumber(totalAdvertisingFac)}</Typography>
+          <Typography>Advertising Multiplier: {formatCorpMultiplier(totalAdvertisingFac)}</Typography>
         </Tooltip>
       )}
       <br />
@@ -161,12 +161,13 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
         <Tooltip
           title={
             <>
-              Production gain from owning production-boosting materials such as hardware, Robots, AI Cores, and Real
-              Estate.
+              Production gain from owning production-boosting materials such as
+              <br />
+              hardware, Robots, AI Cores, and Real Estate.
             </>
           }
         >
-          <Typography>Production Multiplier: {formatBigNumber(division.productionMult)}</Typography>
+          <Typography>Production Multiplier: {formatCorpMultiplier(division.productionMult)}</Typography>
         </Tooltip>
         <IconButton onClick={() => setHelpOpen(true)}>
           <HelpIcon />
@@ -211,7 +212,7 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
         <ButtonWithTooltip
           normalTooltip={
             <>
-              Hire AdVert.Inc to advertise your company. Each level of this upgrade grants your company a static
+              Hire <b>AdVert.Inc</b> to advertise your company. Each level of this upgrade grants your company a static
               increase of 3 and 1 to its awareness and popularity, respectively. It will then increase your company's" +
               awareness by 1%, and its popularity by a random percentage between 1% and 3%. These effects are increased
               by other upgrades that increase the power of your advertising.
