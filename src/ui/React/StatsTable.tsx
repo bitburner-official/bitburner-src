@@ -22,7 +22,7 @@ export function StatsTable({ rows, title, wide }: IProps): React.ReactElement {
           {rows.map((row: React.ReactNode[], i: number) => (
             <TableRow key={i}>
               {row.map((elem: React.ReactNode, i: number) => (
-                <TableCell key={i} align={i !== 0 ? "right" : "left"}>
+                <TableCell key={i} align={i !== 0 ? "right" : "left"} sx={i !== 0 ? { paddingLeft: "0.5em" } : {}}>
                   <Typography noWrap>{elem}</Typography>
                 </TableCell>
               ))}

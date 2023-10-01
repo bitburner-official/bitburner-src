@@ -112,7 +112,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
         ["Boosting Materials:", formatCorpMultiplier(division.productionMult)],
         ["Production Research:", formatCorpMultiplier(division.getProductionMultiplier())],
         [`${CorpUpgradeName.SmartFactories}:`, formatCorpMultiplier(corp.getProductionMultiplier())],
-        [<b key={1}>Total Material Production:&nbsp;</b>, <b key={2}>{formatCorpStat(totalMaterialProduction)}</b>],
+        [<b key={1}>Total Material Production:</b>, <b key={2}>{formatCorpStat(totalMaterialProduction)}</b>],
       ]}
     />
   );
@@ -131,7 +131,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
         ["Production Research:", formatCorpMultiplier(division.getProductionMultiplier())],
         ["Product Research:", formatCorpMultiplier(division.getProductProductionMultiplier())],
         [`${CorpUpgradeName.SmartFactories}:`, formatCorpMultiplier(corp.getProductionMultiplier())],
-        [<b key={1}>Total Product Production:&nbsp;</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
+        [<b key={1}>Total Product Production:</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
       ]}
     />
   );
@@ -150,7 +150,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
         [<>&nbsp;&nbsp;&nbsp;Awareness factor:</>, formatCorpStat(adsAwareness)],
         ["Sales Research:", formatCorpMultiplier(salesResearch)],
         [`${CorpUpgradeName.ABCSalesBots}:`, formatCorpMultiplier(corp.getSalesMult())],
-        [<b key={1}>Total Sales Multiplier:&nbsp;</b>, <b key={2}>{formatCorpMultiplier(totalSaleMultiplier)}</b>],
+        [<b key={1}>Total Sales Multiplier:</b>, <b key={2}>{formatCorpMultiplier(totalSaleMultiplier)}</b>],
       ]}
     />
   );

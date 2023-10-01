@@ -79,18 +79,18 @@ export function Overview({ rerender }: IProps): React.ReactElement {
               rows={[
                 [
                   "Owned Stock Shares:",
-                  <>&nbsp;{formatShares(corp.numShares)}&nbsp;</>,
-                  <>({formatPercent(corp.numShares / corp.totalShares)})</>,
+                  formatShares(corp.numShares),
+                  `(${formatPercent(corp.numShares / corp.totalShares)})`,
                 ],
                 [
                   "Outstanding Shares:",
-                  <>&nbsp;{formatShares(corp.issuedShares)}&nbsp;</>,
-                  <>({formatPercent(corp.issuedShares / corp.totalShares)})</>,
+                  formatShares(corp.issuedShares),
+                  `(${formatPercent(corp.issuedShares / corp.totalShares)})`,
                 ],
                 [
                   "Private Shares:",
-                  <>&nbsp;{formatShares(corp.investorShares)}&nbsp;</>,
-                  <>({formatPercent(corp.investorShares / corp.totalShares)})</>,
+                  formatShares(corp.investorShares),
+                  `(${formatPercent(corp.investorShares / corp.totalShares)})`,
                 ],
               ]}
             />
