@@ -147,17 +147,19 @@ export function ResearchModal(props: IProps): React.ReactElement {
         Research points: {props.industry.researchPoints.toFixed(3)}
         <br />
         Multipliers from research:
-        <StatsTable rows={[
-          ['Advertising Multiplier:', formatCorpMultiplier(researchTree.getAdvertisingMultiplier())],
-          ['Employee Charisma Multiplier:', formatCorpMultiplier(researchTree.getEmployeeChaMultiplier())],
-          ['Employee Creativity Multiplier:', formatCorpMultiplier(researchTree.getEmployeeCreMultiplier())],
-          ['Employee Efficiency Multiplier:', formatCorpMultiplier(researchTree.getEmployeeEffMultiplier())],
-          ['Employee Intelligence Multiplier:', formatCorpMultiplier(researchTree.getEmployeeIntMultiplier())],
-          ['Production Multiplier:', formatCorpMultiplier(researchTree.getProductionMultiplier())],
-          ['Sales Multiplier:', formatCorpMultiplier(researchTree.getSalesMultiplier())],
-          ['Scientific Research Multiplier:', formatCorpMultiplier(researchTree.getScientificResearchMultiplier())],
-          ['Storage Multiplier:', formatCorpMultiplier(researchTree.getStorageMultiplier())]
-        ]} />
+        <StatsTable
+          rows={[
+            ["Advertising Multiplier:", formatCorpMultiplier(researchTree.getAdvertisingMultiplier())],
+            ["Employee Charisma Multiplier:", formatCorpMultiplier(researchTree.getEmployeeChaMultiplier())],
+            ["Employee Creativity Multiplier:", formatCorpMultiplier(researchTree.getEmployeeCreMultiplier())],
+            ["Employee Efficiency Multiplier:", formatCorpMultiplier(researchTree.getEmployeeEffMultiplier())],
+            ["Employee Intelligence Multiplier:", formatCorpMultiplier(researchTree.getEmployeeIntMultiplier())],
+            ["Production Multiplier:", formatCorpMultiplier(researchTree.getProductionMultiplier())],
+            ["Sales Multiplier:", formatCorpMultiplier(researchTree.getSalesMultiplier())],
+            ["Scientific Research Multiplier:", formatCorpMultiplier(researchTree.getScientificResearchMultiplier())],
+            ["Storage Multiplier:", formatCorpMultiplier(researchTree.getStorageMultiplier())],
+          ]}
+        />
       </Typography>
     </Modal>
   );

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 import { OfficeSpace } from "../OfficeSpace";
-import { CorpUnlockName, CorpEmployeeJob, CorpUpgradeName } from "@enums";
+import { CorpUnlockName, CorpEmployeeJob, CorpUpgradeName, CorpProductResearchName } from "@enums";
 import { BuyTea } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
@@ -109,7 +109,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
       rows={[
         ["Employee Production:", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: false }))],
         ["Boosting Materials:", formatCorpMultiplier(division.productionMult)],
-        ["Production Research:", formatCorpMultiplier(division.getProductionMultiplier())],
+        ["Research:", formatCorpMultiplier(division.getProductionMultiplier())],
         [`${CorpUpgradeName.SmartFactories}:`, formatCorpMultiplier(corp.getProductionMultiplier())],
         [<b key={1}>Total Material Production:</b>, <b key={2}>{formatCorpStat(totalMaterialProduction)}</b>],
       ]}
@@ -127,8 +127,8 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
       rows={[
         ["Employee Production:", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: true }))],
         ["Boosting Materials:", formatCorpMultiplier(division.productionMult)],
-        ["Production Research:", formatCorpMultiplier(division.getProductionMultiplier())],
-        ["Product Production Research:", formatCorpMultiplier(division.getProductProductionMultiplier())],
+        ["Research:", formatCorpMultiplier(division.getProductionMultiplier())],
+        [`${CorpProductResearchName.Fulcrum}:`, formatCorpMultiplier(division.getProductProductionMultiplier())],
         [`${CorpUpgradeName.SmartFactories}:`, formatCorpMultiplier(corp.getProductionMultiplier())],
         [<b key={1}>Total Product Production:</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
       ]}
