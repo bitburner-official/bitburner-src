@@ -134,12 +134,17 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
         <Tooltip
           title={
             <>
-              <Typography>Total multiplier for this industry's sales due to its awareness and popularity</Typography>
+              <Typography>
+                Total multiplier for this industry's sales
+                <br />
+                due to its awareness and popularity.
+              </Typography>
               <StatsTable
                 rows={[
                   ["Awareness Bonus:", formatCorpMultiplier(Math.pow(awarenessFac, 0.85))],
                   ["Popularity Bonus:", formatCorpMultiplier(Math.pow(popularityFac, 0.85))],
                   ["Ratio Multiplier:", formatCorpMultiplier(Math.pow(ratioFac, 0.85))],
+                  [<b>Total:</b>, <b>{formatCorpMultiplier(totalAdvertisingFac)}</b>],
                 ]}
               />
             </>
