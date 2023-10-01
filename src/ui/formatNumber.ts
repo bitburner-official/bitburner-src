@@ -187,6 +187,7 @@ export const formatMatPurchaseAmount = formatMultiplier;
 export const formatSleeveShock = (n: number) => formatNumberNoSuffix(n, 3);
 export const formatSleeveSynchro = formatSleeveShock;
 export const formatCorpStat = formatSleeveShock;
+export const formatCorpMultiplier = (n: number) => "×" + formatCorpStat(n);
 
 /** Parsing numbers does not use the locale as this causes complications. */
 export function parseBigNumber(str: string): number {

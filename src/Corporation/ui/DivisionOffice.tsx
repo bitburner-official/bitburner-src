@@ -7,7 +7,7 @@ import { CorpUnlockName, CorpEmployeeJob, CorpUpgradeName } from "@enums";
 import { BuyTea } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
-import { formatBigNumber, formatCorpStat } from "../../ui/formatNumber";
+import { formatBigNumber, formatCorpStat, formatCorpMultiplier } from "../../ui/formatNumber";
 
 import { UpgradeOfficeSizeModal } from "./modals/UpgradeOfficeSizeModal";
 import { ThrowPartyModal } from "./modals/ThrowPartyModal";
@@ -28,6 +28,7 @@ import TableRow from "@mui/material/TableRow";
 import { TableCell } from "../../ui/React/Table";
 import { Box } from "@mui/material";
 import { StatsTable } from "../../ui/React/StatsTable";
+
 
 interface OfficeProps {
   office: OfficeSpace;
@@ -108,9 +109,9 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
     <StatsTable
       rows={[
         ["Employee Production:", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: false }))],
-        ["Boosting Materials:", "×" + formatCorpStat(division.productionMult)],
-        ["Production Research:", "×" + formatCorpStat(division.getProductionMultiplier())],
-        [`${CorpUpgradeName.SmartFactories}:`, "×" + formatCorpStat(corp.getProductionMultiplier())],
+        ["Boosting Materials:", formatCorpMultiplier(division.productionMult)],
+        ["Production Research:", formatCorpMultiplier(division.getProductionMultiplier())],
+        [`${CorpUpgradeName.SmartFactories}:`, formatCorpMultiplier(corp.getProductionMultiplier())],
         [<b key={1}>Total Material Production:&nbsp;</b>, <b key={2}>{formatCorpStat(totalMaterialProduction)}</b>],
       ]}
     />
@@ -126,10 +127,10 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
     <StatsTable
       rows={[
         ["Employee Production:", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: true }))],
-        ["Boosting Materials:", "×" + formatCorpStat(division.productionMult)],
-        ["Production Research:", "×" + formatCorpStat(division.getProductionMultiplier())],
-        ["Product Research:", "×" + formatCorpStat(division.getProductProductionMultiplier())],
-        [`${CorpUpgradeName.SmartFactories}:`, "×" + formatCorpStat(corp.getProductionMultiplier())],
+        ["Boosting Materials:", formatCorpMultiplier(division.productionMult)],
+        ["Production Research:", formatCorpMultiplier(division.getProductionMultiplier())],
+        ["Product Research:", formatCorpMultiplier(division.getProductProductionMultiplier())],
+        [`${CorpUpgradeName.SmartFactories}:`, formatCorpMultiplier(corp.getProductionMultiplier())],
         [<b key={1}>Total Product Production:&nbsp;</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
       ]}
     />
@@ -143,13 +144,13 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
   const salesBreakdown = (
     <StatsTable
       rows={[
-        ["Business Employees:", "×" + formatCorpStat(businessFactor)],
-        ["Advertisement:", "×" + formatCorpStat(adsTotal)],
-        [<>&nbsp;&nbsp;&nbsp;Awareness factor:</>, formatCorpStat(adsAwareness)],
+        ["Business Employees:", formatCorpMultiplier(businessFactor)],
+        ["Advertisement:", formatCorpMultiplier(adsTotal)],
         [<>&nbsp;&nbsp;&nbsp;Popularity factor:</>, formatCorpStat(adsPopularity)],
-        ["Sales Research:", "×" + formatCorpStat(salesResearch)],
-        [`${CorpUpgradeName.ABCSalesBots}:`, "×" + formatCorpStat(corp.getSalesMult())],
-        [<b key={1}>Total Sales Multiplier:&nbsp;</b>, <b key={2}>{"×" + formatCorpStat(totalSaleMultiplier)}</b>],
+        [<>&nbsp;&nbsp;&nbsp;Awareness factor:</>, formatCorpStat(adsAwareness)],
+        ["Sales Research:", formatCorpMultiplier(salesResearch)],
+        [`${CorpUpgradeName.ABCSalesBots}:`, formatCorpMultiplier(corp.getSalesMult())],
+        [<b key={1}>Total Sales Multiplier:&nbsp;</b>, <b key={2}>{formatCorpMultiplier(totalSaleMultiplier)}</b>],
       ]}
     />
   );
@@ -263,7 +264,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
               </TableCell>
               <TableCell align="right">
                 <Tooltip title={salesBreakdown}>
-                  <Typography>×{formatCorpStat(totalSaleMultiplier)}</Typography>
+                  <Typography>{formatCorpMultiplier(totalSaleMultiplier)}</Typography>
                 </Tooltip>
               </TableCell>
             </TableRow>
