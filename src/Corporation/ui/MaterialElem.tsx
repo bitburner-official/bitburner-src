@@ -85,8 +85,8 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
     ["Buy:", mat.buyAmount >= 1e33 ? mat.buyAmount.toExponential(3) : formatBigNumber(mat.buyAmount)],
     ["Prod:", formatBigNumber(mat.productionAmount)],
     ["Import:", formatBigNumber(mat.importAmount)],
-    ["Export:", formatBigNumber(-mat.exportedLastCycle)],
-    ["Sell:", formatBigNumber(-mat.actualSellAmount)],
+    ["Export:", formatBigNumber(-mat.exportedLastCycle || 0)],
+    ["Sell:", formatBigNumber(-mat.actualSellAmount || 0)],
   ];
   if (corp.unlocks.has(CorpUnlockName.MarketResearchDemand)) {
     gainBreakdown.push(["Demand:", formatCorpStat(mat.demand)]);
