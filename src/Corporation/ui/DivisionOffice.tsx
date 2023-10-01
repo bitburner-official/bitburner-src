@@ -128,7 +128,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
         ["Employee Production:", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: true }))],
         ["Boosting Materials:", formatCorpMultiplier(division.productionMult)],
         ["Production Research:", formatCorpMultiplier(division.getProductionMultiplier())],
-        ["Product Research:", formatCorpMultiplier(division.getProductProductionMultiplier())],
+        ["Product Production Research:", formatCorpMultiplier(division.getProductProductionMultiplier())],
         [`${CorpUpgradeName.SmartFactories}:`, formatCorpMultiplier(corp.getProductionMultiplier())],
         [<b key={1}>Total Product Production:</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
       ]}
@@ -144,7 +144,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
     <StatsTable
       rows={[
         ["Business Employees:", formatCorpMultiplier(businessFactor)],
-        ["Advertisement:", formatCorpMultiplier(adsTotal)],
+        ["Advertising:", formatCorpMultiplier(adsTotal)],
         ["Sales Research:", formatCorpMultiplier(salesResearch)],
         [`${CorpUpgradeName.ABCSalesBots}:`, formatCorpMultiplier(corp.getSalesMult())],
         [<b key={1}>Total Sales Multiplier:</b>, <b key={2}>{formatCorpMultiplier(totalSaleMultiplier)}</b>],
