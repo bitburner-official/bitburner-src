@@ -29,7 +29,6 @@ import { TableCell } from "../../ui/React/Table";
 import { Box } from "@mui/material";
 import { StatsTable } from "../../ui/React/StatsTable";
 
-
 interface OfficeProps {
   office: OfficeSpace;
   rerender: () => void;
@@ -138,7 +137,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
 
   // Sale multipliers
   const businessFactor = division.getBusinessFactor(props.office); //Business employee productivity
-  const [adsTotal, adsAwareness, adsPopularity] = division.getAdvertisingFactors(); //Awareness + popularity
+  const [adsTotal] = division.getAdvertisingFactors(); //Awareness + popularity
   const salesResearch = division.getSalesMultiplier();
   const totalSaleMultiplier = businessFactor * adsTotal * salesResearch * corp.getSalesMult();
   const salesBreakdown = (
@@ -146,8 +145,6 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
       rows={[
         ["Business Employees:", formatCorpMultiplier(businessFactor)],
         ["Advertisement:", formatCorpMultiplier(adsTotal)],
-        [<>&nbsp;&nbsp;&nbsp;Popularity factor:</>, formatCorpStat(adsPopularity)],
-        [<>&nbsp;&nbsp;&nbsp;Awareness factor:</>, formatCorpStat(adsAwareness)],
         ["Sales Research:", formatCorpMultiplier(salesResearch)],
         [`${CorpUpgradeName.ABCSalesBots}:`, formatCorpMultiplier(corp.getSalesMult())],
         [<b key={1}>Total Sales Multiplier:</b>, <b key={2}>{formatCorpMultiplier(totalSaleMultiplier)}</b>],
@@ -255,7 +252,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
                       <br />
                       It is based on your Business employees and your advertising.
                       <br />
-                      This will be further modified by demand and competition for each product.
+                      This will be further modified by demand and competition for each item.
                     </Typography>
                   }
                 >
