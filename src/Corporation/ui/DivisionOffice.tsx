@@ -107,14 +107,11 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
   const materialBreakdown = (
     <StatsTable
       rows={[
-        [
-          "Base Production from Employees:",
-          formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: false })),
-        ],
+        ["Employee Production:", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: false }))],
         ["Boosting Materials:", formatPercent(division.productionMult)],
         ["Production Research:", formatPercent(division.getProductionMultiplier())],
         [`${CorpUpgradeName.SmartFactories}:`, formatPercent(corp.getProductionMultiplier())],
-        [<b key={1}>Total Production:&nbsp;</b>, <b key={2}>{formatCorpStat(totalMaterialProduction)}</b>],
+        [<b key={1}>Total Material Production:&nbsp;</b>, <b key={2}>{formatCorpStat(totalMaterialProduction)}</b>],
       ]}
     />
   );
@@ -128,15 +125,12 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
   const productBreakdown = (
     <StatsTable
       rows={[
-        [
-          "Base Production from Employees:",
-          formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: true })),
-        ],
+        ["Employee Production:", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: true }))],
         ["Boosting Materials:", formatPercent(division.productionMult)],
         ["Production Research:", formatPercent(division.getProductionMultiplier())],
-        ["Product Production Research:", formatPercent(division.getProductProductionMultiplier())],
+        ["Product Research:", formatPercent(division.getProductProductionMultiplier())],
         [`${CorpUpgradeName.SmartFactories}:`, formatPercent(corp.getProductionMultiplier())],
-        [<b key={1}>Total Production:&nbsp;</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
+        [<b key={1}>Total Product Production:&nbsp;</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
       ]}
     />
   );
@@ -217,9 +211,6 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
                       This value is based off the productivity of your
                       <br />
                       Operations, Engineering, and Management employees.
-                      <br />
-                      <br />
-                      {materialBreakdown}
                     </Typography>
                   }
                 >
@@ -227,7 +218,9 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
                 </Tooltip>
               </TableCell>
               <TableCell>
-                <Typography align="right">{formatCorpStat(totalMaterialProduction)}</Typography>
+                <Tooltip title={materialBreakdown}>
+                  <Typography align="right">{formatCorpStat(totalMaterialProduction)}</Typography>
+                </Tooltip>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -240,9 +233,6 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
                       This value is based off the productivity of your
                       <br />
                       Operations, Engineering, and Management employees.
-                      <br />
-                      <br />
-                      {productBreakdown}
                     </Typography>
                   }
                 >
@@ -250,7 +240,9 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
                 </Tooltip>
               </TableCell>
               <TableCell>
-                <Typography align="right">{formatCorpStat(totalProductProduction)}</Typography>
+                <Tooltip title={productBreakdown}>
+                  <Typography align="right">{formatCorpStat(totalProductProduction)}</Typography>
+                </Tooltip>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -263,9 +255,6 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
                       It is based on your Business employees and your advertising.
                       <br />
                       This will be further modified by demand and competition for each product.
-                      <br />
-                      <br />
-                      {salesBreakdown}
                     </Typography>
                   }
                 >
@@ -273,7 +262,9 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
                 </Tooltip>
               </TableCell>
               <TableCell align="right">
-                <Typography>{formatPercent(totalSaleMultiplier)}</Typography>
+                <Tooltip title={salesBreakdown}>
+                  <Typography>{formatPercent(totalSaleMultiplier)}</Typography>
+                </Tooltip>
               </TableCell>
             </TableRow>
           </>
