@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 import { OfficeSpace } from "../OfficeSpace";
-import { CorpUnlockName, CorpEmployeeJob } from "@enums";
+import { CorpUnlockName, CorpEmployeeJob, CorpUpgradeName } from "@enums";
 import { BuyTea } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
@@ -111,10 +111,10 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           "Base Production from Employees:",
           formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: false })),
         ],
-        ["Smart Factories:", formatPercent(corp.getProductionMultiplier())],
         ["Boosting Materials:", formatPercent(division.productionMult)],
         ["Production Research:", formatPercent(division.getProductionMultiplier())],
-        [<b key={1}>Total Production:</b>, <b key={2}>{formatCorpStat(totalMaterialProduction)}</b>],
+        [`${CorpUpgradeName.SmartFactories}:`, formatPercent(corp.getProductionMultiplier())],
+        [<b key={1}>Total Production:&nbsp;</b>, <b key={2}>{formatCorpStat(totalMaterialProduction)}</b>],
       ]}
     />
   );
@@ -132,11 +132,30 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           "Base Production from Employees:",
           formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: true })),
         ],
-        ["Smart Factories:", formatPercent(corp.getProductionMultiplier())],
         ["Boosting Materials:", formatPercent(division.productionMult)],
         ["Production Research:", formatPercent(division.getProductionMultiplier())],
         ["Product Production Research:", formatPercent(division.getProductProductionMultiplier())],
-        [<b key={1}>Total Production:</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
+        [`${CorpUpgradeName.SmartFactories}:`, formatPercent(corp.getProductionMultiplier())],
+        [<b key={1}>Total Production:&nbsp;</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
+      ]}
+    />
+  );
+
+  // Sale multipliers
+  const businessFactor = division.getBusinessFactor(props.office); //Business employee productivity
+  const [adsTotal, adsAwareness, adsPopularity] = division.getAdvertisingFactors(); //Awareness + popularity
+  const salesResearch = division.getSalesMultiplier();
+  const totalSaleMultiplier = businessFactor * adsTotal * salesResearch * corp.getSalesMult();
+  const salesBreakdown = (
+    <StatsTable
+      rows={[
+        ["Business Employees:", formatPercent(businessFactor)],
+        ["Advertisement:", formatPercent(adsTotal)],
+        [<>&nbsp;&nbsp;&nbsp;Awareness factor:</>, formatCorpStat(adsAwareness)],
+        [<>&nbsp;&nbsp;&nbsp;Popularity factor:</>, formatCorpStat(adsPopularity)],
+        ["Sales Research:", formatPercent(salesResearch)],
+        [`${CorpUpgradeName.ABCSalesBots}:`, formatPercent(corp.getSalesMult())],
+        [<b key={1}>Total Sales Multiplier:&nbsp;</b>, <b key={2}>{formatPercent(totalSaleMultiplier)}</b>],
       ]}
     />
   );
@@ -237,13 +256,24 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
             <TableRow>
               <TableCell>
                 <Tooltip
-                  title={<Typography>The effect this office's 'Business' employees has on boosting sales</Typography>}
+                  title={
+                    <Typography>
+                      This office's sales effectivity for all materials and products.
+                      <br />
+                      It is based on your Business employees and your advertising.
+                      <br />
+                      This will be further modified by demand and competition for each product.
+                      <br />
+                      <br />
+                      {salesBreakdown}
+                    </Typography>
+                  }
                 >
-                  <Typography> Business Multiplier:</Typography>
+                  <Typography>Sales Multiplier:</Typography>
                 </Tooltip>
               </TableCell>
               <TableCell align="right">
-                <Typography>x{formatCorpStat(division.getBusinessFactor(props.office))}</Typography>
+                <Typography>{formatPercent(totalSaleMultiplier)}</Typography>
               </TableCell>
             </TableRow>
           </>
