@@ -138,15 +138,16 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
   // Sale multipliers
   const businessFactor = division.getBusinessFactor(props.office); //Business employee productivity
   const [adsTotal] = division.getAdvertisingFactors(); //Awareness + popularity
-  const salesResearch = division.getSalesMultiplier();
-  const totalSaleMultiplier = businessFactor * adsTotal * salesResearch * corp.getSalesMult();
+  const researchMult = division.getSalesMultiplier();
+  const upgradeMult = corp.getSalesMult();
+  const totalSaleMultiplier = businessFactor * adsTotal * researchMult * upgradeMult;
   const salesBreakdown = (
     <StatsTable
       rows={[
         ["Business Employees:", formatCorpMultiplier(businessFactor)],
         ["Advertising:", formatCorpMultiplier(adsTotal)],
-        ["Sales Research:", formatCorpMultiplier(salesResearch)],
-        [`${CorpUpgradeName.ABCSalesBots}:`, formatCorpMultiplier(corp.getSalesMult())],
+        researchMult !== 1 ? ["Research:", formatCorpMultiplier(researchMult)] : [],
+        [`${CorpUpgradeName.ABCSalesBots}:`, formatCorpMultiplier(upgradeMult)],
         [<b key={1}>Total Sales Multiplier:</b>, <b key={2}>{formatCorpMultiplier(totalSaleMultiplier)}</b>],
       ]}
     />
