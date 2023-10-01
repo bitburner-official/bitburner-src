@@ -8,16 +8,17 @@ import Typography from "@mui/material/Typography";
 
 interface IProps {
   rows: React.ReactNode[][];
-  title?: string;
+  title?: React.ReactNode;
   wide?: boolean;
+  centered?: boolean;
 }
 
-export function StatsTable({ rows, title, wide }: IProps): React.ReactElement {
+export function StatsTable({ rows, title, wide, centered }: IProps): React.ReactElement {
   const T = wide ? MuiTable : Table;
   return (
     <>
       {title && <Typography>{title}</Typography>}
-      <T size="small" padding="none">
+      <T size="small" padding="none" sx={centered ? { margin: "auto" } : {}}>
         <TableBody>
           {rows.map((row: React.ReactNode[], i: number) => (
             <TableRow key={i}>
