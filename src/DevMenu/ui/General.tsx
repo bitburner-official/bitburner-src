@@ -30,7 +30,7 @@ export function General(): React.ReactElement {
   const [gangFaction, setGangFaction] = useState(FactionName.SlumSnakes);
   const [devMoney, setDevMoney] = useState(0);
   const [hash, setHash] = useState(Player.hashManager.hashes);
-  const [, setHomeRam] = useState(Player.getHomeComputer().maxRam); //no state variable.
+  const [homeRam, setHomeRam] = useState(Player.getHomeComputer().maxRam);
 
   // Money functions
   const moneyValues = [1e6, 1e9, 1e12, 1e15, Infinity];
@@ -42,7 +42,7 @@ export function General(): React.ReactElement {
   // Ram functions
   const doubleRam = () => {
     Player.getHomeComputer().maxRam *= 2;
-    setHomeRam((prevState) => prevState * 2); //prevState avoids stale data
+    setHomeRam(homeRam * 2);
   };
   const setRam = (gb: number) => () => {
     Player.getHomeComputer().maxRam = gb;
