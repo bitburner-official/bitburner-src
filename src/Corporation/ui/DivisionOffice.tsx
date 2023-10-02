@@ -222,28 +222,30 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
                 </Tooltip>
               </TableCell>
             </TableRow>
-            <TableRow>
-              <TableCell>
-                <Tooltip
-                  title={
-                    <Typography component="div">
-                      The amount of any given Product this office can produce.
-                      <br />
-                      This value is based off the productivity of your
-                      <br />
-                      Operations, Engineering, and Management employees.
-                    </Typography>
-                  }
-                >
-                  <Typography>Product Production:</Typography>
-                </Tooltip>
-              </TableCell>
-              <TableCell>
-                <Tooltip title={productBreakdown}>
-                  <Typography align="right">{formatCorpStat(totalProductProduction)}</Typography>
-                </Tooltip>
-              </TableCell>
-            </TableRow>
+            {division.makesProducts ? (
+              <TableRow>
+                <TableCell>
+                  <Tooltip
+                    title={
+                      <Typography component="div">
+                        The amount of any given Product this office can produce.
+                        <br />
+                        This value is based off the productivity of your
+                        <br />
+                        Operations, Engineering, and Management employees.
+                      </Typography>
+                    }
+                  >
+                    <Typography>Product Production:</Typography>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <Tooltip title={productBreakdown}>
+                    <Typography align="right">{formatCorpStat(totalProductProduction)}</Typography>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            ) : null}
             <TableRow>
               <TableCell>
                 <Tooltip
