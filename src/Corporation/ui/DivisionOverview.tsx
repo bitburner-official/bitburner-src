@@ -135,9 +135,7 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
         <Tooltip
           title={
             <>
-              <Typography>
-                Multiplier for this industry's sales due to its awareness and popularity.
-              </Typography>
+              <Typography>Multiplier for this industry's sales due to its awareness and popularity.</Typography>
               <MathJax>{`\\(\\text{${division.type} Industry: }\\alpha = ${division.advertisingFactor}\\)`}</MathJax>
               <MathJax>{`\\(\\text{multiplier} = \\left((\\text{awareness}+1)^{\\alpha} \\times (\\text{popularity}+1)^{\\alpha} \\times \\frac{\\text{popularity}+0.001}{\\text{awareness}}\\right)^{0.85}\\)`}</MathJax>
               <br />
