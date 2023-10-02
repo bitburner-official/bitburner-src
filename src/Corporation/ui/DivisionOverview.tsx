@@ -1,6 +1,7 @@
 // React Component for displaying an Division's overview information
 // (top-left panel in the Division UI)
 import React, { useState } from "react";
+import { MathJax } from "better-react-mathjax";
 
 import { CorpUnlockName, IndustryType } from "@enums";
 import { HireAdVert } from "../Actions";
@@ -135,10 +136,11 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
           title={
             <>
               <Typography>
-                Multiplier for this industry's sales
-                <br />
-                due to its awareness and popularity.
+                Multiplier for this industry's sales due to its awareness and popularity.
               </Typography>
+              <MathJax>{`\\(\\text{${division.type} Industry: }\\alpha = ${division.advertisingFactor}\\)`}</MathJax>
+              <MathJax>{`\\(\\text{multiplier} = \\left((\\text{awareness}+1)^{\\alpha} \\times (\\text{popularity}+1)^{\\alpha} \\times \\frac{\\text{popularity}+0.001}{\\text{awareness}}\\right)^{0.85}\\)`}</MathJax>
+              <br />
               <StatsTable
                 rows={[
                   ["Awareness Bonus:", formatCorpMultiplier(Math.pow(awarenessFac, 0.85))],
