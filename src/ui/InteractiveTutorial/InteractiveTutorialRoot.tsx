@@ -258,7 +258,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
 
           <Typography>
             {" "}
-            shows that there do not need to be any open ports on this machine for the NUKE virus to work, so go ahead
+            shows that there does not need to be any open ports on this machine for the NUKE virus to work, so go ahead
             and run the virus using{" "}
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[n00dles ~/]> run NUKE.exe"}</Typography>
