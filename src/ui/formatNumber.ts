@@ -151,6 +151,7 @@ export const formatPopulation = formatBigNumber;
 export const formatSecurity = formatBigNumber;
 export const formatStamina = formatBigNumber;
 export const formatStaneksGiftCharge = formatBigNumber;
+export const formatCorpMultiplier = (n: number) => "×" + formatBigNumber(n);
 
 /** Format a number with suffixes starting at 1000 and 2 fractional digits */
 export const formatQuality = (n: number) => formatNumber(n, 2);
@@ -187,7 +188,6 @@ export const formatMatPurchaseAmount = formatMultiplier;
 export const formatSleeveShock = (n: number) => formatNumberNoSuffix(n, 3);
 export const formatSleeveSynchro = formatSleeveShock;
 export const formatCorpStat = formatSleeveShock;
-export const formatCorpMultiplier = (n: number) => "×" + formatCorpStat(n);
 
 /** Parsing numbers does not use the locale as this causes complications. */
 export function parseBigNumber(str: string): number {
