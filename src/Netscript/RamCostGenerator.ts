@@ -80,6 +80,8 @@ export const RamCostConstants = {
   InfiltrationGetLocations: 5,
   InfiltrationGetInfiltrations: 15,
   StanekAcceptGift: 2,
+
+  CycleTiming: 1,
 };
 
 function SF4Cost(cost: number): () => number {
