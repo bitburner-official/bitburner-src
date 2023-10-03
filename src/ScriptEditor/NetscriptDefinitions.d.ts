@@ -7459,6 +7459,19 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * “Bonus time” makes the game progress faster.
    * @returns Bonus time for the Corporation mechanic in milliseconds. */
   getBonusTime(): number;
+
+  /**
+   * Sleep until the start of the next Corporation cycle.
+   * @remarks
+   * RAM cost: 1 GB
+   * 
+   * The amount of real time spent asleep between cycles can vary due to "bonus time".
+   * 
+   * @returns {Promise<CorpStateName>} Resolves to the name of the next state to be processed.
+   *  I.e. when the state is PURCHASE, it means purchasing will occur during the next state transition.
+   *  Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
+   */
+  nextCycle(): Promise<CorpStateName>;
 }
 
 /** Product rating information

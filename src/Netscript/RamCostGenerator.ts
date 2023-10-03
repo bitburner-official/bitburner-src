@@ -357,6 +357,8 @@ const grafting = {
 const corporation = {
   hasCorporation: 0, // This one is free
   getConstants: 0,
+  getBonusTime: 0,
+  nextCycle: RamCostConstants.CycleTiming,
   getIndustryData: RamCostConstants.CorporationInfo,
   getMaterialData: RamCostConstants.CorporationInfo,
   issueNewShares: RamCostConstants.CorporationAction,
@@ -378,7 +380,6 @@ const corporation = {
   issueDividends: RamCostConstants.CorporationAction,
   buyBackShares: RamCostConstants.CorporationAction,
   sellShares: RamCostConstants.CorporationAction,
-  getBonusTime: 0,
   sellMaterial: RamCostConstants.CorporationAction,
   sellProduct: RamCostConstants.CorporationAction,
   discontinueProduct: RamCostConstants.CorporationAction,

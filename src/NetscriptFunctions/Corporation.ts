@@ -15,6 +15,7 @@ import {
   OfficeAPI,
   CorpResearchName,
   CorpMaterialName,
+  CorpStateName
 } from "@nsdefs";
 
 import {
@@ -786,6 +787,11 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     getBonusTime: (ctx) => () => {
       checkAccess(ctx);
       return Math.round(getCorporation().storedCycles / 5) * 1000;
+    },
+    nextCycle: (ctx) => async () => {
+      checkAccess(ctx);
+      const corporation = getCorporation();
+      return new Promise<CorpStateName>((res) => corporation.resolvers.push(res));
     },
   };
 

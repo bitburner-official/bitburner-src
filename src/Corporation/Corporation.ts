@@ -68,6 +68,8 @@ export class Corporation {
 
   state = new CorporationState();
 
+  resolvers: ((state: CorpStateName) => void)[] = [];
+
   constructor(params: IParams = {}) {
     this.name = params.name || "The Corporation";
     this.seedFunded = params.seedFunded ?? false;
@@ -108,6 +110,11 @@ export class Corporation {
       const marketCycles = 1;
       const gameCycles = marketCycles * corpConstants.gameCyclesPerCorpStateCycle;
       this.storedCycles -= gameCycles;
+
+      // Handle "nextCycle" resolvers at the start of this cycle
+      while (this.resolvers.length > 0) {
+        this.resolvers.shift()?.(state);
+      }
 
       // Can't combine these loops, imports must be completely cleared before
       // we start processing exports of any division.
