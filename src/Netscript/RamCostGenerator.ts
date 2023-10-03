@@ -126,6 +126,8 @@ const stock = {
   hasTIXAPIAccess: 0.05,
   has4SData: 0.05,
   has4SDataTIXAPI: 0.05,
+  getBonusTime: 0,
+  nextCycle: RamCostConstants.CycleTiming,
   getSymbols: RamCostConstants.GetStock,
   getPrice: RamCostConstants.GetStock,
   getOrganization: RamCostConstants.GetStock,

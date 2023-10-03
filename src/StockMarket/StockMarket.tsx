@@ -24,6 +24,8 @@ export let StockMarket: IStockMarket = {
 // Gross type, needs to be addressed
 export const SymbolToStockMap: Record<string, Stock> = {}; // Maps symbol -> Stock object
 
+export const StockMarketResolvers: (() => void)[] = [];
+
 export function placeOrder(
   stock: Stock,
   shares: number,
@@ -213,6 +215,11 @@ export function processStockPrices(numCycles = 1): void {
 
   StockMarket.lastUpdate = timeNow;
   StockMarket.storedCycles -= cyclesPerStockUpdate;
+
+  // Handle "nextCycle" resolvers at the start of this cycle
+  while (StockMarketResolvers.length > 0) {
+    StockMarketResolvers.shift()?.();
+  }
 
   // Cycle
   if (StockMarket.ticksUntilCycle == null || typeof StockMarket.ticksUntilCycle !== "number") {

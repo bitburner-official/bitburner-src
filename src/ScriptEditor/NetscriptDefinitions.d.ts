@@ -1537,6 +1537,28 @@ export interface TIX {
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchaseTixApi(): boolean;
+
+  /**
+   * Get Stock Market bonus time.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * “Bonus time” is accumulated when the game is offline or if the game is inactive in the browser.
+   *
+   * Stock Market prices update more frequently during “bonus time”.
+   *
+   * @returns Amount of accumulated “bonus time” (milliseconds) for the Stock Market mechanic.
+   */
+  getBonusTime(): number;
+
+  /**
+   * Sleep until the next Stock Market price update.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @returns {Promise<void>}
+   */
+  nextCycle(): Promise<void>;
 }
 
 /**
