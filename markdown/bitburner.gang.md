@@ -38,6 +38,7 @@ If you are not in BitNode-2, then you must have Source-File 2 in order to use th
 |  [getTaskNames()](./bitburner.gang.gettasknames.md) | List member task names. |
 |  [getTaskStats(name)](./bitburner.gang.gettaskstats.md) | Get stats of a task. |
 |  [inGang()](./bitburner.gang.ingang.md) | Check if you're in a gang. |
+|  [nextCycle()](./bitburner.gang.nextcycle.md) | Sleeps until the start of the next Gang cycle. |
 |  [purchaseEquipment(memberName, equipName)](./bitburner.gang.purchaseequipment.md) | Purchase an equipment for a gang member. |
 |  [recruitMember(name)](./bitburner.gang.recruitmember.md) | Recruit a new gang member. |
 |  [renameMember(memberName, newName)](./bitburner.gang.renamemember.md) | Rename a Gang member to a new unique name. |

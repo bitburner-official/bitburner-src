@@ -39,6 +39,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI
 |  [issueDividends(rate)](./bitburner.corporation.issuedividends.md) | Issue dividends |
 |  [issueNewShares(amount)](./bitburner.corporation.issuenewshares.md) | Issue new shares |
 |  [levelUpgrade(upgradeName)](./bitburner.corporation.levelupgrade.md) | Level an upgrade. |
+|  [nextCycle()](./bitburner.corporation.nextcycle.md) | Sleep until the start of the next Corporation cycle. |
 |  [purchaseUnlock(upgradeName)](./bitburner.corporation.purchaseunlock.md) | Unlock an upgrade |
 |  [sellShares(amount)](./bitburner.corporation.sellshares.md) | Sell Shares. Transfer shares from the CEO to public traders to receive money in the player's wallet. |
 

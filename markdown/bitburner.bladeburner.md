@@ -50,6 +50,7 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [inBladeburner()](./bitburner.bladeburner.inbladeburner.md) | Returns whether player is a member of bladeburner division. Does not require API access. |
 |  [joinBladeburnerDivision()](./bitburner.bladeburner.joinbladeburnerdivision.md) | Join the bladeburner division. |
 |  [joinBladeburnerFaction()](./bitburner.bladeburner.joinbladeburnerfaction.md) | Join the bladeburner faction. |
+|  [nextCycle()](./bitburner.bladeburner.nextcycle.md) | Sleep until the start of the next bladeburner cycle. |
 |  [setActionAutolevel(type, name, autoLevel)](./bitburner.bladeburner.setactionautolevel.md) | Set an action autolevel. |
 |  [setActionLevel(type, name, level)](./bitburner.bladeburner.setactionlevel.md) | Set the level of an action. |
 |  [setTeamSize(type, name, size)](./bitburner.bladeburner.setteamsize.md) | Set team size. |
