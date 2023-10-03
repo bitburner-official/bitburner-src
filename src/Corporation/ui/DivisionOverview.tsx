@@ -136,6 +136,7 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
           title={
             <>
               <Typography>Multiplier for this industry's sales due to its awareness and popularity.</Typography>
+              <br />
               <MathJax>{`\\(\\text{${division.type} Industry: }\\alpha = ${division.advertisingFactor}\\)`}</MathJax>
               <MathJax>{`\\(\\text{multiplier} = \\left((\\text{awareness}+1)^{\\alpha} \\times (\\text{popularity}+1)^{\\alpha} \\times \\frac{\\text{popularity}+0.001}{\\text{awareness}}\\right)^{0.85}\\)`}</MathJax>
               <br />
@@ -218,8 +219,8 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
           normalTooltip={
             <>
               Hire <b>AdVert.Inc</b> to advertise your company. Each level of this upgrade grants your company a static
-              increase of 3 and 1 to its awareness and popularity, respectively. It will then increase your company's" +
-              awareness by 1%, and its popularity by a random percentage between 1% and 3%. These effects are increased
+              increase of 3 and 1 to its awareness and popularity, respectively. It will then increase your company's
+              awareness by 0.5%, and its popularity by a random percentage between 0.5% and 1.5%. These effects are increased
               by other upgrades that increase the power of your advertising.
             </>
           }
