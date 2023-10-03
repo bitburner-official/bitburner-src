@@ -220,8 +220,8 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
             <>
               Hire <b>AdVert.Inc</b> to advertise your company. Each level of this upgrade grants your company a static
               increase of 3 and 1 to its awareness and popularity, respectively. It will then increase your company's
-              awareness by 0.5%, and its popularity by a random percentage between 0.5% and 1.5%. These effects are increased
-              by other upgrades that increase the power of your advertising.
+              awareness by 0.5%, and its popularity by a random percentage between 0.5% and 1.5%. These effects are
+              increased by other upgrades that increase the power of your advertising.
             </>
           }
           disabledTooltip={division.getAdVertCost() > corp.funds ? "Insufficient corporation funds" : ""}
