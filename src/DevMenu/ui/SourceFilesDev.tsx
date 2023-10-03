@@ -1,67 +1,76 @@
-import React, { useState } from "react";
+import React, { useCallback } from "react";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+import { Accordion, AccordionSummary, AccordionDetails, Button, ButtonGroup, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { makeStyles } from "@mui/styles";
 
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import { Player } from "@player";
-import ButtonGroup from "@mui/material/ButtonGroup";
+import { useRerender } from "../../ui/React/hooks";
 
 // Update as additional BitNodes get implemented
 const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
-const initialState = validSFN.reduce((obj, sfN) => ({ ...obj, [sfN]: "" }), { "": "" });
+const useStyles = makeStyles({
+  group: {
+    display: "inline-flex",
+    placeItems: "center",
+  },
+  extraInfo: {
+    marginLeft: "0.5em",
+  },
+});
 
 export function SourceFilesDev(): React.ReactElement {
-  const [sfData, setSfData] = useState(initialState);
+  const rerender = useRerender();
+  const classes = useStyles();
 
-  function setSF(sfN: number, sfLvl: number) {
-    return function () {
+  const setSF = useCallback(
+    (sfN: number, sfLvl: number) => () => {
       if (sfN === 9) {
         Player.hacknetNodes = [];
       }
       if (sfLvl === 0) {
         Player.sourceFiles.delete(sfN);
-        setSfData({ ...sfData, [sfN]: sfLvl });
+        rerender();
         return;
       }
       Player.sourceFiles.set(sfN, sfLvl);
-      setSfData({ ...sfData, [sfN]: sfLvl });
-    };
-  }
+      rerender();
+    },
+    [rerender],
+  );
 
-  function setAllSF(sfLvl: number) {
-    return () => {
-      for (let i = 0; i < validSFN.length; i++) {
-        setSF(validSFN[i], sfLvl)();
-      }
-    };
-  }
-
-  function clearExploits(): void {
-    Player.exploits = [];
-  }
-
-  const setallButtonStyle = { borderColor: "", background: "black" };
-  const ownedStyle = { borderColor: "green", background: "" };
-  const notOwnedStyle = { borderColor: "", background: "black" };
+  const setAllSF = useCallback((sfLvl: number) => () => validSFN.forEach((sfN) => setSF(sfN, sfLvl)()), [setSF]);
+  const clearExploits = () => (Player.exploits = []);
 
   const devLvls = [0, 1, 2, 3];
 
-  const buttonGroup = (sfN?: number) =>
-    devLvls.map((lvl) => {
-      return (
-        <Button
-          key={lvl}
-          onClick={sfN === undefined ? setAllSF(lvl) : setSF(sfN, lvl)}
-          style={sfN === undefined ? setallButtonStyle : Player.sourceFileLvl(sfN) >= lvl ? ownedStyle : notOwnedStyle}
-        >
-          {lvl}
-        </Button>
-      );
-    });
+  const buttonRow = (sfN?: number) => {
+    const title = sfN ? `SF-${sfN}` : "Set All";
+    const level = sfN ? Player.sourceFileLvl(sfN) : 0;
+    return (
+      <tr key={title}>
+        <td>
+          <Typography>{title}</Typography>
+        </td>
+        <td>
+          <ButtonGroup className={classes.group}>
+            {devLvls.map((lvl) => (
+              <Button key={lvl} onClick={sfN === undefined ? setAllSF(lvl) : setSF(sfN, lvl)}>
+                {lvl}
+              </Button>
+            ))}
+            {sfN === 12 &&
+              [1, 10, 100].map((numLevels) => (
+                <Button key={numLevels} onClick={setSF(12, level + numLevels)}>
+                  +{numLevels}
+                </Button>
+              ))}
+            {sfN && <Typography className={classes.extraInfo}>{`Level: ${level}`}</Typography>}
+          </ButtonGroup>
+        </td>
+      </tr>
+    );
+  };
 
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
@@ -79,24 +88,7 @@ export function SourceFilesDev(): React.ReactElement {
                 <Button onClick={clearExploits}>Clear</Button>
               </td>
             </tr>
-            <tr key={"sf-all"}>
-              <td>
-                <Typography>Set All:</Typography>
-              </td>
-              <td>
-                <ButtonGroup>{buttonGroup()}</ButtonGroup>
-              </td>
-            </tr>
-            {validSFN.map((sfN) => (
-              <tr key={"sf-" + sfN}>
-                <td>
-                  <Typography>SF-{sfN}:</Typography>
-                </td>
-                <td>
-                  <ButtonGroup>{buttonGroup(sfN)}</ButtonGroup>
-                </td>
-              </tr>
-            ))}
+            {[undefined, ...validSFN].map((sfN) => buttonRow(sfN))}
           </tbody>
         </table>
       </AccordionDetails>
