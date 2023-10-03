@@ -3261,6 +3261,16 @@ export interface Bladeburner {
    */
   getBonusTime(): number;
 
+  /**
+   * Sleep until the start of the next bladeburner cycle.
+   * @remarks
+   * RAM cost: 1 GB
+   * 
+   * @returns {Promise<number>} Resolves to the number of seconds being processed
+   * in this bladeburner cycle, which can vary due to accumulated "bonus time".
+   */
+  nextCycle(): Promise<number>;
+
   /** Returns whether player is a member of bladeburner division. Does not require API access.
    * @remarks
    * RAM cost: 1 GB

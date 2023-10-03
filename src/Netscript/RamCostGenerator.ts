@@ -279,6 +279,7 @@ const bladeburner = {
   joinBladeburnerFaction: RamCostConstants.BladeburnerApiBase,
   joinBladeburnerDivision: RamCostConstants.BladeburnerApiBase,
   getBonusTime: 0,
+  nextCycle: RamCostConstants.CycleTiming,
 } as const;
 
 const infiltration = {
