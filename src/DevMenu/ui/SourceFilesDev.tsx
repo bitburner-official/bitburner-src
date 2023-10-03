@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -12,8 +12,11 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 
 // Update as additional BitNodes get implemented
 const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+const initialState = validSFN.reduce((obj, sfN) => ({ ...obj, [sfN]: "" }), { "": "" });
 
 export function SourceFilesDev(): React.ReactElement {
+  const [sfData, setSfData] = useState(initialState);
+
   function setSF(sfN: number, sfLvl: number) {
     return function () {
       if (sfN === 9) {
@@ -21,9 +24,11 @@ export function SourceFilesDev(): React.ReactElement {
       }
       if (sfLvl === 0) {
         Player.sourceFiles.delete(sfN);
+        setSfData({ ...sfData, [sfN]: sfLvl });
         return;
       }
       Player.sourceFiles.set(sfN, sfLvl);
+      setSfData({ ...sfData, [sfN]: sfLvl });
     };
   }
 
@@ -38,6 +43,25 @@ export function SourceFilesDev(): React.ReactElement {
   function clearExploits(): void {
     Player.exploits = [];
   }
+
+  const setallButtonStyle = { borderColor: "", background: "black" };
+  const ownedStyle = { borderColor: "green", background: "" };
+  const notOwnedStyle = { borderColor: "", background: "black" };
+
+  const devLvls = [0, 1, 2, 3];
+
+  const buttonGroup = (sfN?: number) =>
+    devLvls.map((lvl) => {
+      return (
+        <Button
+          key={lvl}
+          onClick={sfN === undefined ? setAllSF(lvl) : setSF(sfN, lvl)}
+          style={sfN === undefined ? setallButtonStyle : Player.sourceFileLvl(sfN) >= lvl ? ownedStyle : notOwnedStyle}
+        >
+          {lvl}
+        </Button>
+      );
+    });
 
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
@@ -57,37 +81,19 @@ export function SourceFilesDev(): React.ReactElement {
             </tr>
             <tr key={"sf-all"}>
               <td>
-                <Typography>All:</Typography>
+                <Typography>Set All:</Typography>
               </td>
               <td>
-                <ButtonGroup>
-                  <Button aria-label="all-sf-0" onClick={setAllSF(0)}>
-                    0
-                  </Button>
-                  <Button aria-label="all-sf-1" onClick={setAllSF(1)}>
-                    1
-                  </Button>
-                  <Button aria-label="all-sf-2" onClick={setAllSF(2)}>
-                    2
-                  </Button>
-                  <Button aria-label="all-sf-3" onClick={setAllSF(3)}>
-                    3
-                  </Button>
-                </ButtonGroup>
+                <ButtonGroup>{buttonGroup()}</ButtonGroup>
               </td>
             </tr>
-            {validSFN.map((i) => (
-              <tr key={"sf-" + i}>
+            {validSFN.map((sfN) => (
+              <tr key={"sf-" + sfN}>
                 <td>
-                  <Typography>SF-{i}:</Typography>
+                  <Typography>SF-{sfN}:</Typography>
                 </td>
                 <td>
-                  <ButtonGroup>
-                    <Button onClick={setSF(i, 0)}>0</Button>
-                    <Button onClick={setSF(i, 1)}>1</Button>
-                    <Button onClick={setSF(i, 2)}>2</Button>
-                    <Button onClick={setSF(i, 3)}>3</Button>
-                  </ButtonGroup>
+                  <ButtonGroup>{buttonGroup(sfN)}</ButtonGroup>
                 </td>
               </tr>
             ))}
