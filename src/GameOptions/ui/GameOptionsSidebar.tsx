@@ -1,4 +1,14 @@
-import { BugReport, Chat, Download, LibraryBooks, Palette, Reddit, Save, Upload } from "@mui/icons-material";
+import {
+  BugReport,
+  Chat,
+  Download,
+  LibraryBooks,
+  Palette,
+  Fingerprint,
+  Reddit,
+  Save,
+  Upload,
+} from "@mui/icons-material";
 import { Box, Button, List, ListItemButton, Paper, Tooltip, Typography } from "@mui/material";
 import { default as React, useRef, useState } from "react";
 import { FileDiagnosticModal } from "../../Diagnostic/FileDiagnosticModal";
@@ -6,6 +16,7 @@ import { ImportData, saveObject } from "../../SaveObject";
 import { StyleEditorButton } from "../../Themes/ui/StyleEditorButton";
 import { ThemeEditorButton } from "../../Themes/ui/ThemeEditorButton";
 import { ConfirmationModal } from "../../ui/React/ConfirmationModal";
+import { CreditsModal } from "./CreditsModal";
 import { DeleteGameButton } from "../../ui/React/DeleteGameButton";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
@@ -49,6 +60,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
   const [importData, setImportData] = useState<ImportData | null>(null);
 
   const [confirmResetOpen, setConfirmResetOpen] = useState(false);
+  const [creditsOpen, setCreditsOpen] = useState(false);
 
   function startImport(): void {
     if (!window.File || !window.FileReader || !window.FileList || !window.Blob) return;
@@ -225,7 +237,8 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           sx={{
             gridArea: "links",
             display: "grid",
-            gridTemplateAreas: `"bug bug"
+            gridTemplateAreas: `"credits credits"
+            "bug bug"
         "discord reddit"
         "tut tut"
         "plaza plaza"`,
@@ -233,14 +246,20 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
             my: 1,
           }}
         >
-          <Button
-            startIcon={<BugReport />}
-            href="https://github.com/bitburner-official/bitburner-src/issues/new"
-            target="_blank"
-            sx={{ gridArea: "bug" }}
-          >
-            Report Bug
+          <Tooltip title={<Typography>Start a GitHub issue to help the devs find bugs!</Typography>}>
+            <Button
+              startIcon={<BugReport />}
+              href="https://github.com/bitburner-official/bitburner-src/issues/new"
+              target="_blank"
+              sx={{ gridArea: "bug" }}
+            >
+              Report Bug
+            </Button>
+          </Tooltip>
+          <Button startIcon={<Fingerprint />} onClick={() => setCreditsOpen(true)} sx={{ gridArea: "credits" }}>
+            Credits
           </Button>
+          <CreditsModal open={creditsOpen} onClose={() => setCreditsOpen(false)} />
           <Button startIcon={<LibraryBooks />} onClick={() => setConfirmResetOpen(true)} sx={{ gridArea: "tut" }}>
             Reset tutorial
           </Button>
