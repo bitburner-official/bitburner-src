@@ -3265,7 +3265,7 @@ export interface Bladeburner {
    * Sleep until the start of the next bladeburner cycle.
    * @remarks
    * RAM cost: 1 GB
-   * 
+   *
    * @returns {Promise<number>} Resolves to the number of seconds being processed
    * in this bladeburner cycle, which can vary due to accumulated "bonus time".
    */
@@ -3683,7 +3683,7 @@ export interface Gang {
    * Sleeps until the start of the next Gang cycle.
    * @remarks
    * RAM cost: 1 GB
-   * 
+   *
    * @returns {Promise<number>} Resolves to the number of gang cycles
    * ready to be processed, which can vary due to "bonus time".
    */
@@ -7484,9 +7484,9 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * Sleep until the start of the next Corporation cycle.
    * @remarks
    * RAM cost: 1 GB
-   * 
+   *
    * The amount of real time spent asleep between cycles can vary due to "bonus time".
-   * 
+   *
    * @returns {Promise<CorpStateName>} Resolves to the name of the next state to be processed.
    *  I.e. when the state is PURCHASE, it means purchasing will occur during the next state transition.
    *  Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.

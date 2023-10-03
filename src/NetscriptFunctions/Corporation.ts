@@ -15,7 +15,7 @@ import {
   OfficeAPI,
   CorpResearchName,
   CorpMaterialName,
-  CorpStateName
+  CorpStateName,
 } from "@nsdefs";
 
 import {

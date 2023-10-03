@@ -237,7 +237,7 @@ const gang = {
   setTerritoryWarfare: RamCostConstants.GangApiBase / 2,
   getChanceToWinClash: RamCostConstants.GangApiBase,
   getBonusTime: 0,
-  nextCycle: RamCostConstants.CycleTiming
+  nextCycle: RamCostConstants.CycleTiming,
 } as const;
 
 // Bladeburner API

@@ -99,7 +99,7 @@ export class Bladeburner {
   consoleHistory: string[] = [];
   consoleLogs: string[] = ["Bladeburner Console", "Type 'help' to see console commands"];
 
-  resolvers: ((numSeconds: number)=>void)[] = [];
+  resolvers: ((numSeconds: number) => void)[] = [];
 
   constructor() {
     this.updateSkillMultipliers(); // Calls resetSkillMultipliers()
@@ -1979,7 +1979,7 @@ export class Bladeburner {
       let seconds = Math.floor(this.storedCycles / BladeburnerConstants.CyclesPerSecond);
       seconds = Math.min(seconds, 5); // Max of 5 'ticks'
       this.storedCycles -= seconds * BladeburnerConstants.CyclesPerSecond;
-      
+
       // Handle "nextCycle" resolvers at the start of this cycle
       while (this.resolvers.length > 0) {
         this.resolvers.shift()?.(seconds);
