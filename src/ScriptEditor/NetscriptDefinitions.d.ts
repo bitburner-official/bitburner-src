@@ -3668,6 +3668,16 @@ export interface Gang {
    * @returns Bonus time for the Gang mechanic in milliseconds.
    */
   getBonusTime(): number;
+
+  /**
+   * Sleeps until the start of the next Gang cycle.
+   * @remarks
+   * RAM cost: 1 GB
+   * 
+   * @returns {Promise<number>} Resolves to the number of gang cycles
+   * ready to be processed, which can vary due to "bonus time".
+   */
+  nextCycle(): Promise<number>;
 }
 
 /**

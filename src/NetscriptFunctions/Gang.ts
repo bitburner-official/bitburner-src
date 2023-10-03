@@ -323,5 +323,9 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return Math.round(gang.storedCycles / 5) * 1000;
     },
+    nextCycle: (ctx) => async () => {
+      const gang = getGang(ctx);
+      return new Promise<number>((res) => gang.resolvers.push(res));
+    },
   };
 }

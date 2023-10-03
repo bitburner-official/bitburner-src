@@ -49,6 +49,8 @@ export class Gang {
 
   notifyMemberDeath: boolean;
 
+  resolvers: ((numCycles: number) => void)[] = [];
+
   constructor(facName = FactionName.SlumSnakes, hacking = false) {
     this.facName = facName;
     this.members = [];
@@ -93,6 +95,11 @@ export class Gang {
 
     // Calculate how many cycles to actually process.
     const cycles = Math.min(this.storedCycles, GangConstants.maxCyclesToProcess);
+
+    // Handle "nextCycle" resolvers at the start of this cycle
+    while (this.resolvers.length > 0) {
+      this.resolvers.shift()?.(cycles);
+    }
 
     try {
       this.processGains(cycles);
