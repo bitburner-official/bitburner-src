@@ -14,7 +14,7 @@ const style = {
 export function BBCabinetRoot(): React.ReactElement {
   useEffect(() => {
     window.addEventListener("message", function (this: Window, ev: MessageEvent<boolean>) {
-      if (ev.isTrusted && ev.origin == "https://bitburner-official.github.io" && ev.data) {
+      if (ev.isTrusted && ev.origin == "https://bitburner-official.github.io" && ev.data === true) {
         Player.giveExploit(Exploit.TrueRecursion);
       }
     });
