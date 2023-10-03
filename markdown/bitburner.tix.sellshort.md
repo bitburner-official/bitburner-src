@@ -17,7 +17,7 @@ sellShort(sym: string, shares: number): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  sym | string | Stock symbol. |
-|  shares | number | Number of shares to sell. Must be positive. Will be rounded to nearest integer. |
+|  shares | number | Number of shares to sell. Must be positive. Will be rounded to the nearest integer. |
 
 **Returns:**
 
@@ -33,5 +33,5 @@ The ability to short a stock is \*\*not\*\* immediately available to the player 
 
 If the specified number of shares exceeds the amount that the player actually owns, then this function will sell all owned shares. Remember that every transaction on the stock exchange costs a certain commission fee.
 
-If the sale is successful, this function will return the stock price at which each share was sold. Otherwise it will return 0.
+If the sale is successful, this function will return the stock price at which each share was sold. Otherwise, it will return 0.
 

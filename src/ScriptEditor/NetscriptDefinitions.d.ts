@@ -638,7 +638,7 @@ interface BitNodeMultipliers {
   CompanyWorkExpGain: number;
   /** Influences how much money the player earns when completing working their job. */
   CompanyWorkMoney: number;
-  /** Influences the amount of divisions a corporation can have have at the same time*/
+  /** Influences the amount of divisions a corporation can have at the same time*/
   CorporationDivisions: number;
   /** Influences the money gain from dividends of corporations created by the player. */
   CorporationSoftcap: number;
@@ -1302,7 +1302,7 @@ export interface TIX {
    * each share was purchased. Otherwise, it will return 0.
    *
    * @param sym - Stock symbol.
-   * @param shares - Number of shares to purchased. Must be positive. Will be rounded to nearest integer.
+   * @param shares - Number of shares to purchase. Must be positive. Will be rounded to the nearest integer.
    * @returns The stock price at which each share was purchased, otherwise 0 if the shares weren't purchased.
    */
   buyStock(sym: string, shares: number): number;
@@ -1326,7 +1326,7 @@ export interface TIX {
    * which each share was sold. Otherwise, it will return 0.
    *
    * @param sym - Stock symbol.
-   * @param shares - Number of shares to sell. Must be positive. Will be rounded to nearest integer.
+   * @param shares - Number of shares to sell. Must be positive. Will be rounded to the nearest integer.
    * @returns The stock price at which each share was sold, otherwise 0 if the shares weren't sold.
    */
   sellStock(sym: string, shares: number): number;
@@ -1348,7 +1348,7 @@ export interface TIX {
    * share was purchased. Otherwise, it will return 0.
    *
    * @param sym - Stock symbol.
-   * @param shares - Number of shares to short. Must be positive. Will be rounded to nearest integer.
+   * @param shares - Number of shares to short. Must be positive. Will be rounded to the nearest integer.
    * @returns The stock price at which each share was purchased, otherwise 0 if the shares weren't purchased.
    */
   buyShort(sym: string, shares: number): number;
@@ -1367,10 +1367,10 @@ export interface TIX {
    * the stock exchange costs a certain commission fee.
    *
    * If the sale is successful, this function will return the stock price at which each
-   * share was sold. Otherwise it will return 0.
+   * share was sold. Otherwise, it will return 0.
    *
    * @param sym - Stock symbol.
-   * @param shares - Number of shares to sell. Must be positive. Will be rounded to nearest integer.
+   * @param shares - Number of shares to sell. Must be positive. Will be rounded to the nearest integer.
    * @returns The stock price at which each share was sold, otherwise 0 if the shares weren't sold.
    */
   sellShort(sym: string, shares: number): number;
@@ -1387,7 +1387,7 @@ export interface TIX {
    * Returns true if the order is successfully placed, and false otherwise.
    *
    * @param sym - Stock symbol.
-   * @param shares - Number of shares for order. Must be positive. Will be rounded to nearest integer.
+   * @param shares - Number of shares for order. Must be positive. Will be rounded to the nearest integer.
    * @param price - Execution price for the order.
    * @param type - Type of order.
    * @param pos - Specifies whether the order is a “Long” or “Short” position.
@@ -1405,7 +1405,7 @@ export interface TIX {
    * must be unlocked later on in the game.
    *
    * @param sym - Stock symbol.
-   * @param shares - Number of shares for order. Must be positive. Will be rounded to nearest integer.
+   * @param shares - Number of shares for order. Must be positive. Will be rounded to the nearest integer.
    * @param price - Execution price for the order.
    * @param type - Type of order.
    * @param pos - Specifies whether the order is a “Long” or “Short” position.
@@ -1553,7 +1553,7 @@ export interface Singularity {
    * RAM cost: 1 GB * 16/4/1
    *
    *
-   * This function will automatically opens the backup save prompt and claim the free faction favour if available.
+   * This function will automatically open the backup save prompt and claim the free faction favour if available.
    *
    */
   exportGame(): void;
@@ -1609,7 +1609,7 @@ export interface Singularity {
    * @param gymName - Name of gym. You must be in the correct city for whatever gym you specify.
    * @param stat - The stat you want to train.
    * @param focus - Acquire player focus on this gym workout. Optional. Defaults to true.
-   * @returns True if actions is successfully started, false otherwise.
+   * @returns True if action is successfully started, false otherwise.
    */
   gymWorkout(gymName: string, stat: string, focus?: boolean): boolean;
 
@@ -1637,7 +1637,7 @@ export interface Singularity {
    * purchasing a TOR router using this function is the same as if you were to
    * manually purchase one.
    *
-   * @returns True if actions is successful or you already own TOR router, false otherwise.
+   * @returns True if action is successful or if you already own TOR router, false otherwise.
    */
   purchaseTor(): boolean;
 
@@ -1850,7 +1850,7 @@ export interface Singularity {
    *
    * This function will return true if you successfully get a job/promotion,
    * and false otherwise. Note that if you are trying to use this function to
-   * apply for a promotion and you don’t get one, it will return false.
+   * apply for a promotion and don’t get one, the function will return false.
    *
    * @param companyName - Name of company to apply to.
    * @param field - Field to which you want to apply.
@@ -2060,7 +2060,7 @@ export interface Singularity {
    * earnings.
    *
    * This function returns the number of milliseconds it takes to attempt the
-   * specified crime (e.g It takes 60 seconds to attempt the ‘Rob Store’ crime,
+   * specified crime (e.g. It takes 60 seconds to attempt the ‘Rob Store’ crime,
    * so running `commitCrime('Rob Store')` will return 60,000).
    *
    * @param crime - Name of crime to attempt.
@@ -2463,7 +2463,7 @@ export interface Hacknet {
    *
    * Purchases a new Hacknet Node. Returns a number with the index of the
    * Hacknet Node. This index is equivalent to the number at the end of
-   * the Hacknet Node’s name (e.g The Hacknet Node named `hacknet-node-4`
+   * the Hacknet Node’s name (e.g. The Hacknet Node named `hacknet-node-4`
    * will have an index of 4).
    *
    * If the player cannot afford to purchase a new Hacknet Node then the function will return -1.
@@ -2512,7 +2512,7 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of levels to purchase. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of levels to purchase. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s level is successfully upgraded, false otherwise.
    */
   upgradeLevel(index: number, n?: number): boolean;
@@ -2532,7 +2532,7 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade RAM. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of times to upgrade RAM. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s RAM is successfully upgraded, false otherwise.
    */
   upgradeRam(index: number, n?: number): boolean;
@@ -2550,7 +2550,7 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of cores to purchase. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of cores to purchase. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s cores are successfully purchased, false otherwise.
    */
   upgradeCore(index: number, n?: number): boolean;
@@ -2570,7 +2570,7 @@ export interface Hacknet {
    * Returns false otherwise.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of cache levels to purchase. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of cache levels to purchase. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns True if the Hacknet Node’s cache level is successfully upgraded, false otherwise.
    */
   upgradeCache(index: number, n?: number): boolean;
@@ -2586,7 +2586,7 @@ export interface Hacknet {
    * If the specified Hacknet Node is already at max level, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of levels to upgrade. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of levels to upgrade. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node.
    */
   getLevelUpgradeCost(index: number, n?: number): number;
@@ -2602,7 +2602,7 @@ export interface Hacknet {
    * If the specified Hacknet Node already has max RAM, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade RAM. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of times to upgrade RAM. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node's RAM.
    */
   getRamUpgradeCost(index: number, n?: number): number;
@@ -2618,7 +2618,7 @@ export interface Hacknet {
    * If the specified Hacknet Node is already at max level, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade cores. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of times to upgrade cores. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node's number of cores.
    */
   getCoreUpgradeCost(index: number, n?: number): number;
@@ -2636,7 +2636,7 @@ export interface Hacknet {
    * If the specified Hacknet Node is already at max level, then Infinity is returned.
    *
    * @param index - Index/Identifier of Hacknet Node.
-   * @param n - Number of times to upgrade cache. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified.
+   * @param n - Number of times to upgrade cache. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified.
    * @returns Cost of upgrading the specified Hacknet Node's cache.
    */
   getCacheUpgradeCost(index: number, n?: number): number;
@@ -3069,10 +3069,10 @@ export interface Bladeburner {
    *
    * The function returns -1 if an invalid skill name is passed in.
    *
-   * @param skillName - Name of skill. Case-sensitive and must be an exact match
+   * @param skillName - Name of skill. Case-sensitive and must be an exact match.
    * @returns Level in the specified skill.
    */
-  getSkillLevel(name: string): number;
+  getSkillLevel(skillName: string): number;
 
   /**
    * Get cost to upgrade skill.
@@ -3083,11 +3083,11 @@ export interface Bladeburner {
    *
    * The function returns -1 if an invalid skill name is passed in.
    *
-   * @param skillName - Name of skill. Case-sensitive and must be an exact match
+   * @param skillName - Name of skill. Case-sensitive and must be an exact match.
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
    * @returns Number of skill points needed to upgrade the specified skill.
    */
-  getSkillUpgradeCost(name: string, count?: number): number;
+  getSkillUpgradeCost(skillName: string, count?: number): number;
 
   /**
    * Upgrade skill.
@@ -3098,11 +3098,11 @@ export interface Bladeburner {
    *
    * Returns true if the skill is successfully upgraded, and false otherwise.
    *
-   * @param skillName - Name of skill to be upgraded. Case-sensitive and must be an exact match
+   * @param skillName - Name of skill to be upgraded. Case-sensitive and must be an exact match.
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
    * @returns true if the skill is successfully upgraded, and false otherwise.
    */
-  upgradeSkill(name: string, count?: number): boolean;
+  upgradeSkill(skillName: string, count?: number): boolean;
 
   /**
    * Get team size.
@@ -3254,7 +3254,7 @@ export interface Bladeburner {
    * “Bonus time” is accumulated when the game is offline or if the game is inactive in the browser.
    *
    * “Bonus time” makes the game progress faster, up to 5x the normal speed.
-   * For example, if an action takes 30 seconds to complete but you’ve accumulated over
+   * For example, if an action takes 30 seconds to complete, but you’ve accumulated over
    * 30 seconds in bonus time, then the action will only take 6 seconds in real life to complete.
    *
    * @returns Amount of accumulated “bonus time” (milliseconds) for the Bladeburner mechanic.
@@ -3766,7 +3766,7 @@ export interface Sleeve {
    * ```
    *
    * @param sleeveNumber - Index of the sleeve to start committing crime. Sleeves are numbered starting from 0.
-   * @param name - Name of the crime.
+   * @param crimeType - Name of the crime.
    * @returns True if this action was set successfully, false otherwise.
    */
   setToCommitCrime(sleeveNumber: number, crimeType: CrimeType | `${CrimeType}`): boolean;
@@ -4095,7 +4095,7 @@ interface HackingFormulas {
   /**
    * Calculate the percent a server would grow to.
    * Not exact due to limitations of mathematics.
-   * (Ex: 3.0 would would grow the server to 300% of its current value.)
+   * (Ex: 3.0 would grow the server to 300% of its current value.)
    * @param server - Server info, typically from {@link NS.getServer | getServer}
    * @param threads - Amount of thread.
    * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
@@ -4374,8 +4374,8 @@ interface Stanek {
    * Charge a fragment, increasing its power.
    * @remarks
    * RAM cost: 0.4 GB
-   * @param rootX - rootX Root X against which to align the top left of the fragment.
-   * @param rootY - rootY Root Y against which to align the top left of the fragment.
+   * @param rootX - Root X against which to align the top left of the fragment.
+   * @param rootY - Root Y against which to align the top left of the fragment.
    * @returns Promise that lasts until the charge action is over.
    */
   chargeFragment(rootX: number, rootY: number): Promise<void>;
@@ -4410,10 +4410,10 @@ interface Stanek {
    * @remarks
    * RAM cost: 0.5 GB
    *
-   * @param rootX - rootX Root X against which to align the top left of the fragment.
-   * @param rootY - rootY Root Y against which to align the top left of the fragment.
-   * @param rotation - rotation A number from 0 to 3, the mount of 90 degree turn to take.
-   * @param fragmentId - fragmentId ID of the fragment to place.
+   * @param rootX - Root X against which to align the top left of the fragment.
+   * @param rootY - Root Y against which to align the top left of the fragment.
+   * @param rotation - A number from 0 to 3, the amount of 90-degree turns to take.
+   * @param fragmentId - ID of the fragment to place.
    * @returns true if the fragment can be placed at that position. false otherwise.
    */
   canPlaceFragment(rootX: number, rootY: number, rotation: number, fragmentId: number): boolean;
@@ -5033,7 +5033,7 @@ export interface NS {
    *
    * See {@link ReactNode} type for the acceptable values.
    *
-   * @param node - The react node to be printed. */
+   * @param node - The React node to be printed. */
   printRaw(node: ReactNode): void;
 
   /**
@@ -5080,7 +5080,7 @@ export interface NS {
    *
    * See {@link ReactNode} type for the acceptable values.
    *
-   * @param node - The react node to be printed. */
+   * @param node - The React node to be printed. */
   tprintRaw(node: ReactNode): void;
 
   /**
@@ -5278,6 +5278,7 @@ export interface NS {
    * It is possible to pass any React Node instead of a string.
    * See {@link ReactElement} and {@link ReactNode} types for additional info.
    *
+   * @param title - The new title for the tail window.
    * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
    */
   setTitle(title: string | ReactNode, pid?: number): void;
@@ -5558,7 +5559,7 @@ export interface NS {
    * // kill the script "foo.js" on the "n00dles" server with no arguments.
    * ns.kill("foo.js", "n00dles");
    *
-   * // kill the script foo.js on the current server that was ran with the arguments [1, “foodnstuff”, false]:
+   * // kill the script foo.js on the current server that was run with the arguments [1, “foodnstuff”, false]:
    * ns.kill("foo.js", ns.getHostname(), 1, "foodnstuff", false);
    * ```
    * @param filename - Filename of the script to kill.
@@ -5873,7 +5874,7 @@ export interface NS {
    * RAM cost: 0.1 GB
    *
    * Returns a boolean indicating whether the specified file exists on the target server.
-   * The filename for programs is case insensitive, other file types are case sensitive.
+   * The filename for programs is case-insensitive, other file types are case-sensitive.
    * For example, fileExists(“brutessh.exe”) will work fine, even though the actual program
    * is named 'BruteSSH.exe'.
    *
@@ -6103,7 +6104,7 @@ export interface NS {
    * If the port is full, the data will not be written.
    * Otherwise, the data will be written normally.
    *
-   * @param portNumber - Port to attempt to write to to. Must be a positive integer.
+   * @param portNumber - Port to attempt to write to. Must be a positive integer.
    * @param data - Data to write.
    * @returns True if the data is successfully written to the port, and false otherwise.
    */
@@ -6167,6 +6168,7 @@ export interface NS {
    *
    * Write data to the given Netscript port.
    * @param portNumber - Port to write to. Must be a positive integer.
+   * @param data - Data to write.
    * @returns The data popped off the queue if it was full, or null if it was not full.
    */
   writePort(portNumber: number, data: string | number): PortData | null;
@@ -6453,7 +6455,7 @@ export interface NS {
    * @param suffixStart - When to switch the percentage to a multiplier. Default is 1e6 or x1.00m.
    * @returns Formatted percentage.
    */
-  formatPercent(n: number, fractionalDigits?: number, multStart?: number): string;
+  formatPercent(n: number, fractionalDigits?: number, suffixStart?: number): string;
 
   /**
    * Format a number using the numeral library. This function is deprecated and will be removed in 2.4.
@@ -7111,7 +7113,7 @@ export interface OfficeAPI {
    * @param size - Amount of positions to open
    * @returns Cost of upgrading the office
    */
-  getOfficeSizeUpgradeCost(divisionName: string, city: CityName | `${CityName}`, asize: number): number;
+  getOfficeSizeUpgradeCost(divisionName: string, city: CityName | `${CityName}`, size: number): number;
 }
 
 /**
@@ -7204,7 +7206,7 @@ export interface WarehouseAPI {
 
   /** Get product data
    * @param divisionName - Name of the division
-   * @param city - Name of the city
+   * @param cityName - Name of the city
    * @param productName - Name of the product
    * @returns product data */
   getProduct(divisionName: string, cityName: CityName | `${CityName}`, productName: string): Product;

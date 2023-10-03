@@ -41,10 +41,10 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [getGeneralActionNames()](./bitburner.bladeburner.getgeneralactionnames.md) | List all general actions. |
 |  [getOperationNames()](./bitburner.bladeburner.getoperationnames.md) | List all operations. |
 |  [getRank()](./bitburner.bladeburner.getrank.md) | Get player bladeburner rank. |
-|  [getSkillLevel(name)](./bitburner.bladeburner.getskilllevel.md) | Get skill level. |
+|  [getSkillLevel(skillName)](./bitburner.bladeburner.getskilllevel.md) | Get skill level. |
 |  [getSkillNames()](./bitburner.bladeburner.getskillnames.md) | List all skills. |
 |  [getSkillPoints()](./bitburner.bladeburner.getskillpoints.md) | Get bladeburner skill points. |
-|  [getSkillUpgradeCost(name, count)](./bitburner.bladeburner.getskillupgradecost.md) | Get cost to upgrade skill. |
+|  [getSkillUpgradeCost(skillName, count)](./bitburner.bladeburner.getskillupgradecost.md) | Get cost to upgrade skill. |
 |  [getStamina()](./bitburner.bladeburner.getstamina.md) | Get bladeburner stamina. |
 |  [getTeamSize(type, name)](./bitburner.bladeburner.getteamsize.md) | Get team size. |
 |  [inBladeburner()](./bitburner.bladeburner.inbladeburner.md) | Returns whether player is a member of bladeburner division. Does not require API access. |
@@ -56,5 +56,5 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [startAction(type, name)](./bitburner.bladeburner.startaction.md) | Start an action. |
 |  [stopBladeburnerAction()](./bitburner.bladeburner.stopbladeburneraction.md) | Stop current action. |
 |  [switchCity(city)](./bitburner.bladeburner.switchcity.md) | Travel to another city in bladeburner. |
-|  [upgradeSkill(name, count)](./bitburner.bladeburner.upgradeskill.md) | Upgrade skill. |
+|  [upgradeSkill(skillName, count)](./bitburner.bladeburner.upgradeskill.md) | Upgrade skill. |
 

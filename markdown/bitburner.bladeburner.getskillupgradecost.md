@@ -9,14 +9,14 @@ Get cost to upgrade skill.
 **Signature:**
 
 ```typescript
-getSkillUpgradeCost(name: string, count?: number): number;
+getSkillUpgradeCost(skillName: string, count?: number): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  name | string |  |
+|  skillName | string | Name of skill. Case-sensitive and must be an exact match. |
 |  count | number | _(Optional)_ Number of times to upgrade the skill. Defaults to 1 if not specified. |
 
 **Returns:**

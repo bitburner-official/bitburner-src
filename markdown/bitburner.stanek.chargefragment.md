@@ -16,8 +16,8 @@ chargeFragment(rootX: number, rootY: number): Promise<void>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  rootX | number | rootX Root X against which to align the top left of the fragment. |
-|  rootY | number | rootY Root Y against which to align the top left of the fragment. |
+|  rootX | number | Root X against which to align the top left of the fragment. |
+|  rootY | number | Root Y against which to align the top left of the fragment. |
 
 **Returns:**
 

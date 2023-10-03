@@ -9,14 +9,14 @@ Upgrade skill.
 **Signature:**
 
 ```typescript
-upgradeSkill(name: string, count?: number): boolean;
+upgradeSkill(skillName: string, count?: number): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  name | string |  |
+|  skillName | string | Name of skill to be upgraded. Case-sensitive and must be an exact match. |
 |  count | number | _(Optional)_ Number of times to upgrade the skill. Defaults to 1 if not specified. |
 
 **Returns:**

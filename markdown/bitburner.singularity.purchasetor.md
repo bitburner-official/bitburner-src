@@ -15,7 +15,7 @@ purchaseTor(): boolean;
 
 boolean
 
-True if actions is successful or you already own TOR router, false otherwise.
+True if action is successful or if you already own TOR router, false otherwise.
 
 ## Remarks
 

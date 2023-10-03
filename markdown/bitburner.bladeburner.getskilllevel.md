@@ -9,14 +9,14 @@ Get skill level.
 **Signature:**
 
 ```typescript
-getSkillLevel(name: string): number;
+getSkillLevel(skillName: string): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  name | string |  |
+|  skillName | string | Name of skill. Case-sensitive and must be an exact match. |
 
 **Returns:**
 

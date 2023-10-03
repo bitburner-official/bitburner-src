@@ -24,7 +24,7 @@ requires the Office API upgrade from your corporation.
 |  [getHireAdVertCost(divisionName)](./bitburner.officeapi.gethireadvertcost.md) | Get the cost to hire AdVert. |
 |  [getHireAdVertCount(divisionName)](./bitburner.officeapi.gethireadvertcount.md) | Get the number of times you have hired AdVert. |
 |  [getOffice(divisionName, city)](./bitburner.officeapi.getoffice.md) | Get data about an office |
-|  [getOfficeSizeUpgradeCost(divisionName, city, asize)](./bitburner.officeapi.getofficesizeupgradecost.md) | Cost to Upgrade office size. |
+|  [getOfficeSizeUpgradeCost(divisionName, city, size)](./bitburner.officeapi.getofficesizeupgradecost.md) | Cost to Upgrade office size. |
 |  [getResearchCost(divisionName, researchName)](./bitburner.officeapi.getresearchcost.md) | Get the cost to unlock research |
 |  [hasResearched(divisionName, researchName)](./bitburner.officeapi.hasresearched.md) | Gets if you have unlocked a research |
 |  [hireAdVert(divisionName)](./bitburner.officeapi.hireadvert.md) | Hire AdVert. |

@@ -17,7 +17,7 @@ writePort(portNumber: number, data: string | number): PortData | null;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  portNumber | number | Port to write to. Must be a positive integer. |
-|  data | string \| number |  |
+|  data | string \| number | Data to write. |
 
 **Returns:**
 

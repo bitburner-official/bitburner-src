@@ -17,7 +17,7 @@ placeOrder(sym: string, shares: number, price: number, type: string, pos: string
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  sym | string | Stock symbol. |
-|  shares | number | Number of shares for order. Must be positive. Will be rounded to nearest integer. |
+|  shares | number | Number of shares for order. Must be positive. Will be rounded to the nearest integer. |
 |  price | number | Execution price for the order. |
 |  type | string | Type of order. |
 |  pos | string | Specifies whether the order is a “Long” or “Short” position. |

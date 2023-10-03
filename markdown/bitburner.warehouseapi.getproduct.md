@@ -17,7 +17,7 @@ getProduct(divisionName: string, cityName: CityName | `${CityName}`, productName
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  cityName | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` |  |
+|  cityName | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
 |  productName | string | Name of the product |
 
 **Returns:**

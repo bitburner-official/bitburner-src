@@ -24,7 +24,7 @@ gymWorkout(gymName: string, stat: string, focus?: boolean): boolean;
 
 boolean
 
-True if actions is successfully started, false otherwise.
+True if action is successfully started, false otherwise.
 
 ## Remarks
 

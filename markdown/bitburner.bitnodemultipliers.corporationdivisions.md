@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CorporationDivisions property
 
-Influences the amount of divisions a corporation can have have at the same time
+Influences the amount of divisions a corporation can have at the same time
 
 **Signature:**
 

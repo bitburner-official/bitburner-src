@@ -17,7 +17,7 @@ getLevelUpgradeCost(index: number, n?: number): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  index | number | Index/Identifier of Hacknet Node. |
-|  n | number | _(Optional)_ Number of levels to upgrade. Must be positive. Rounded to nearest integer. Defaults to 1 if not specified. |
+|  n | number | _(Optional)_ Number of levels to upgrade. Must be positive. Will be rounded to the nearest integer. Defaults to 1 if not specified. |
 
 **Returns:**
 

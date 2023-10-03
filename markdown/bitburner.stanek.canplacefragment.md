@@ -16,10 +16,10 @@ canPlaceFragment(rootX: number, rootY: number, rotation: number, fragmentId: num
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  rootX | number | rootX Root X against which to align the top left of the fragment. |
-|  rootY | number | rootY Root Y against which to align the top left of the fragment. |
-|  rotation | number | rotation A number from 0 to 3, the mount of 90 degree turn to take. |
-|  fragmentId | number | fragmentId ID of the fragment to place. |
+|  rootX | number | Root X against which to align the top left of the fragment. |
+|  rootY | number | Root Y against which to align the top left of the fragment. |
+|  rotation | number | A number from 0 to 3, the amount of 90-degree turns to take. |
+|  fragmentId | number | ID of the fragment to place. |
 
 **Returns:**
 
