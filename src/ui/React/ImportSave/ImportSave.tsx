@@ -301,7 +301,9 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
             </TableRow>
 
             <TableRow>
-              <TableCell>Source Files</TableCell>
+              <Tooltip title="The total SF levels owned, except for SF-1 Exploit levels.">
+                <TableCell>Source File Levels</TableCell>
+              </Tooltip>
               <TableCell>{currentData.playerData?.sourceFiles}</TableCell>
               <TableCell>{importData.playerData?.sourceFiles}</TableCell>
               <TableCell>
@@ -314,7 +316,24 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
             </TableRow>
 
             <TableRow>
-              <TableCell>BitNode</TableCell>
+              <Tooltip title="Number of exploits owned.">
+                <TableCell>Exploits</TableCell>
+              </Tooltip>
+              <TableCell>{currentData.playerData?.exploits}</TableCell>
+              <TableCell>{importData.playerData?.exploits}</TableCell>
+              <TableCell>
+                {importData.playerData?.exploits !== currentData.playerData?.exploits && (
+                  <ComparisonIcon
+                    isBetter={(importData.playerData?.exploits ?? 0) > (currentData.playerData?.exploits ?? 0)}
+                  />
+                )}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <Tooltip title="The player's current BitNode.">
+                <TableCell>BitNode</TableCell>
+              </Tooltip>
               <TableCell>
                 {currentData.playerData?.bitNode}-{currentData.playerData?.bitNodeLevel}
               </TableCell>
@@ -346,6 +365,7 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
               <br />
             </>
           }
+          additionalButton={<Button onClick={closeImportModal}>Cancel</Button>}
         />
       </Box>
     </Box>

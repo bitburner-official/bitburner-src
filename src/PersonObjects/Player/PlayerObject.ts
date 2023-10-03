@@ -178,7 +178,7 @@ export class PlayerObject extends Person implements IPlayer {
       isMember("AugmentationName", ownedAug.name),
     );
     player.updateSkillLevels();
-    // Converstion code for Player.sourceFiles is here instead of normal save conversion area because it needs
+    // Conversion code for Player.sourceFiles is here instead of normal save conversion area because it needs
     // to happen earlier for use in the savegame comparison tool.
     if (Array.isArray(player.sourceFiles)) {
       // Expect pre-2.3 sourcefile format here.

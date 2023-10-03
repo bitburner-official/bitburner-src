@@ -80,11 +80,17 @@ export function initSourceFiles() {
         <br />
         <ul>
           <li>
-            The <code>getBitNodeMultipliers()</code> Netscript function
+            <span>
+              The <code>getBitNodeMultipliers()</code> Netscript function
+            </span>
           </li>
-          <li>Permanent access to Formulas.exe</li>
           <li>
-            Access to BitNode multiplier information on the <b>Stats</b> page
+            <span>Permanent access to Formulas.exe</span>
+          </li>
+          <li>
+            <span>
+              Access to BitNode multiplier information on the <b>Stats</b> page
+            </span>
           </li>
         </ul>
         It will also raise all of your hacking-related multipliers by:
