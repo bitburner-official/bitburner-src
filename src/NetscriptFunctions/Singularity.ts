@@ -92,10 +92,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
       return res;
     },
-    getOwnedSourceFiles: () => () => {
-      const sortedSF = [...Player.sourceFiles].map(([n, lvl]) => ({ n, lvl })).sort((a, b) => a.n - b.n);
-      return Player.exploits.length === 0 ? sortedSF : [{ n: -1, lvl: Player.exploits.length }].concat(sortedSF);
-    },
+    getOwnedSourceFiles: () => () => [...Player.sourceFiles].map(([n, lvl]) => ({ n, lvl })),
     getAugmentationFactions: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
