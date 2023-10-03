@@ -218,7 +218,7 @@ export function processStockPrices(numCycles = 1): void {
 
   // Handle "nextCycle" resolvers at the start of this cycle
   while (StockMarketResolvers.length > 0) {
-    StockMarketResolvers.shift()?.();
+    StockMarketResolvers.pop()?.();
   }
 
   // Cycle

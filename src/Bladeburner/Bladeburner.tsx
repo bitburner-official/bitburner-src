@@ -1982,7 +1982,7 @@ export class Bladeburner {
 
       // Handle "nextCycle" resolvers at the start of this cycle
       while (this.resolvers.length > 0) {
-        this.resolvers.shift()?.(seconds);
+        this.resolvers.pop()?.(seconds);
       }
 
       // Stamina

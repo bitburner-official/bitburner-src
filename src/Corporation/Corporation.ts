@@ -113,7 +113,7 @@ export class Corporation {
 
       // Handle "nextCycle" resolvers at the start of this cycle
       while (this.resolvers.length > 0) {
-        this.resolvers.shift()?.(state);
+        this.resolvers.pop()?.(state);
       }
 
       // Can't combine these loops, imports must be completely cleared before
