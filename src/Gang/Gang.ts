@@ -8,6 +8,7 @@ import { Factions } from "../Faction/Factions";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
+import { getKeyList } from "../utils/helpers/getKeyList";
 
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
@@ -414,9 +415,11 @@ export class Gang {
     return upg.cost / this.getDiscount();
   }
 
+  static includedKeys = getKeyList(Gang, { removedKeys: ["resolvers"] });
+
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Gang", this);
+    return Generic_toJSON("Gang", this, Gang.includedKeys);
   }
 
   /** Initializes a Gang object from a JSON save state. */

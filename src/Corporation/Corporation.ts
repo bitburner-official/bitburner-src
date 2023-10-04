@@ -6,6 +6,7 @@ import { CorpUpgrades } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
 import { IndustriesData } from "./data/IndustryData";
 import { Division } from "./Division";
+import { getKeyList } from "../utils/helpers/getKeyList";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { showLiterature } from "../Literature/LiteratureHelpers";
@@ -451,9 +452,11 @@ export class Corporation {
     return;
   }
 
+  static includedKeys = getKeyList(Corporation, { removedKeys: ["resolvers"] });
+
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Corporation", this);
+    return Generic_toJSON("Corporation", this, Corporation.includedKeys);
   }
 
   /** Initializes a Corporation object from a JSON save state. */

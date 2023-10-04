@@ -36,6 +36,8 @@ import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportW
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { createEnumKeyedRecord } from "../Types/Record";
+import { getKeyList } from "../utils/helpers/getKeyList";
+
 
 export interface BlackOpsAttempt {
   error?: string;
@@ -2377,9 +2379,11 @@ export class Bladeburner {
     }
   }
 
+  static includedKeys = getKeyList(Bladeburner, { removedKeys: ["resolvers"] });
+
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Bladeburner", this);
+    return Generic_toJSON("Bladeburner", this, Bladeburner.includedKeys);
   }
 
   /** Initializes a Bladeburner object from a JSON save state. */
