@@ -28,7 +28,7 @@ export function InvitationModal({ hidden }: { hidden: boolean }): React.ReactEle
     <Modal open={!hidden && faction !== null} onClose={() => setFaction(null)}>
       <Typography variant="h4">You have received a faction invitation.</Typography>
       <Typography>
-        Would you like to join {(faction || { name: "" }).name}? <br />
+        Would you like to join {faction?.name}? <br />
         <br />
         Warning: Joining this faction may prevent you from joining other factions during this run!
       </Typography>
