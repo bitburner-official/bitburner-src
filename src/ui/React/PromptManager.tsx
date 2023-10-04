@@ -16,17 +16,13 @@ interface Prompt {
   resolve: (result: boolean | string) => void;
 }
 
-export function PromptManager(): React.ReactElement {
+export function PromptManager({ hidden }: { hidden: boolean }): React.ReactElement {
   const [prompt, setPrompt] = useState<Prompt | null>(null);
   useEffect(() => {
     return PromptEvent.subscribe((p: Prompt) => {
       setPrompt(p);
     });
   }, []);
-
-  if (prompt === null) {
-    return <></>;
-  }
 
   function close(): void {
     if (prompt === null) return;
@@ -44,19 +40,23 @@ export function PromptManager(): React.ReactElement {
   };
 
   let PromptContent = PromptMenuBoolean;
-  if (prompt.options?.type && ["text", "select"].includes(prompt.options.type))
+  if (prompt?.options?.type && ["text", "select"].includes(prompt.options.type))
     PromptContent = types[prompt.options.type];
   const resolve = (value: boolean | string): void => {
-    prompt.resolve(value);
+    prompt?.resolve(value);
     setPrompt(null);
   };
 
   return (
-    <Modal open={true} onClose={close}>
-      <pre>
-        <Typography>{prompt.txt}</Typography>
-      </pre>
-      <PromptContent prompt={prompt} resolve={resolve} />
+    <Modal open={!hidden && prompt !== null} onClose={close}>
+      {prompt && (
+        <>
+          <pre>
+            <Typography>{prompt.txt}</Typography>
+          </pre>
+          <PromptContent prompt={prompt} resolve={resolve} />
+        </>
+      )}
     </Modal>
   );
 }

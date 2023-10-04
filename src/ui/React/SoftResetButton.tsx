@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
+import { Button, Tooltip } from "@mui/material";
 import { ConfirmationModal } from "./ConfirmationModal";
-import Button from "@mui/material/Button";
-import { Tooltip, Typography } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 interface IProps {
@@ -50,7 +49,7 @@ Are you sure?
         onConfirm={onTriggered}
         open={modalOpened}
         onClose={() => setModalOpened(false)}
-        confirmationText={<Typography style={{ whiteSpace: "pre-wrap" }}>{confirmationMessage}</Typography>}
+        confirmationText={<span style={{ whiteSpace: "pre-wrap" }}>{confirmationMessage}</span>}
         additionalButton={<Button onClick={() => setModalOpened(false)}>Cancel</Button>}
       />
     </>

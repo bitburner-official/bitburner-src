@@ -398,13 +398,11 @@ export function GameRoot(): React.ReactElement {
                 <Box className={classes.root}>{mainPage}</Box>
               )}
               <Unclickable />
-              <div style={{ display: withPopups ? "inherit" : "none", position: "absolute" }}>
-                <LogBoxManager />
-                <AlertManager />
-                <PromptManager />
-                <InvitationModal />
-                <Snackbar />
-              </div>
+              <LogBoxManager hidden={!withPopups} />
+              <AlertManager hidden={!withPopups} />
+              <PromptManager hidden={!withPopups} />
+              <InvitationModal hidden={!withPopups} />
+              <Snackbar hidden={!withPopups} />
               <Apr1 />
             </SnackbarProvider>
           </HistoryProvider>
