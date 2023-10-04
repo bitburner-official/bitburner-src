@@ -219,9 +219,28 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.5.1 dev changelog (last updated 10/2/2023)
+## v2.5.1 dev changelog (last updated 10/4/2023)
 
 ### NOTES
-No changes yet from 2.5.0. See 2.5.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
+See 2.5.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
+
+### API
+
+- ns.singularity.purchaseProgram now returns true for programs that are already owned even if the player doesn't have enough money to re-buy the program (@ncharris93)
+
+### BUGFIX
+
+- Fix an issue where the "True Recursion" achievement could be granted incorrectly (@jjclark1982)
+- (Stanek) Multipliers from Stanek are now calculated correctly even if the player has Entropy (@yichizhng)
+
+### MISC
+
+- Various spelling and grammar fixes for technical API documentation (@ficocelliguy)
+
+### UI
+
+- Added number of exploits to import savegame comparison (@myCatsName)
+- Dev menu improvements (@myCatsName)
+- Added a credits button on the options page (@myCatsName)
 `,
 };
