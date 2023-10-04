@@ -14,7 +14,7 @@ interface Alert {
 }
 
 let i = 0;
-export function AlertManager(): React.ReactElement {
+export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElement {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   useEffect(
     () =>
@@ -61,14 +61,10 @@ export function AlertManager(): React.ReactElement {
   }
 
   return (
-    <>
-      {alerts.length > 0 && (
-        <Modal open={true} onClose={close}>
-          <Box overflow="scroll" sx={{ overflowWrap: "break-word", whiteSpace: "pre-line" }}>
-            <Typography component={"span"}>{alerts[0].text}</Typography>
-          </Box>
-        </Modal>
-      )}
-    </>
+    <Modal open={!hidden && alerts.length > 0} onClose={close}>
+      <Box overflow="scroll" sx={{ overflowWrap: "break-word", whiteSpace: "pre-line" }}>
+        <Typography component={"span"}>{alerts[0].text}</Typography>
+      </Box>
+    </Modal>
   );
 }

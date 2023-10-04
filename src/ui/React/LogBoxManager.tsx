@@ -78,7 +78,7 @@ interface Log {
 
 let logs: Log[] = [];
 
-export function LogBoxManager(): React.ReactElement {
+export function LogBoxManager({ hidden }: { hidden: boolean }): React.ReactElement {
   const rerender = useRerender();
 
   //Close tail windows by their pid.
@@ -130,7 +130,7 @@ export function LogBoxManager(): React.ReactElement {
   return (
     <>
       {logs.map((log) => (
-        <LogWindow key={log.id} script={log.script} onClose={() => close(log.id)} />
+        <LogWindow hidden={hidden} key={log.id} script={log.script} onClose={() => close(log.id)} />
       ))}
     </>
   );
@@ -139,6 +139,7 @@ export function LogBoxManager(): React.ReactElement {
 interface LogWindowProps {
   script: RunningScript;
   onClose: () => void;
+  hidden: boolean;
 }
 
 const useStyles = makeStyles(() =>
@@ -164,10 +165,9 @@ const useStyles = makeStyles(() =>
 
 export const logBoxBaseZIndex = 1500;
 
-function LogWindow(props: LogWindowProps): React.ReactElement {
+function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElement {
   const draggableRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<Draggable>(null);
-  const script = props.script;
   const classes = useStyles();
   const container = useRef<HTMLDivElement>(null);
   const textArea = useRef<HTMLDivElement>(null);
@@ -316,7 +316,7 @@ function LogWindow(props: LogWindowProps): React.ReactElement {
   return (
     <Draggable handle=".drag" onDrag={onDrag} ref={rootRef} onMouseDown={updateLayer}>
       <Box
-        display="flex"
+        display={hidden ? "none" : "flex"}
         sx={{
           flexFlow: "column",
           position: "fixed",
@@ -377,12 +377,7 @@ function LogWindow(props: LogWindowProps): React.ReactElement {
                 >
                   {minimized ? <ExpandMoreIcon /> : <ExpandLessIcon />}
                 </IconButton>
-                <IconButton
-                  title="Close window"
-                  className={classes.titleButton}
-                  onClick={props.onClose}
-                  onTouchEnd={props.onClose}
-                >
+                <IconButton title="Close window" className={classes.titleButton} onClick={onClose} onTouchEnd={onClose}>
                   <CloseIcon />
                 </IconButton>
               </span>

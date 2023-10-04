@@ -16,7 +16,7 @@ interface Prompt {
   resolve: (result: boolean | string) => void;
 }
 
-export function PromptManager(): React.ReactElement {
+export function PromptManager({ hidden }: { hidden: boolean }): React.ReactElement {
   const [prompt, setPrompt] = useState<Prompt | null>(null);
   useEffect(() => {
     return PromptEvent.subscribe((p: Prompt) => {
@@ -52,7 +52,7 @@ export function PromptManager(): React.ReactElement {
   };
 
   return (
-    <Modal open={true} onClose={close}>
+    <Modal open={!hidden} onClose={close}>
       <pre>
         <Typography>{prompt.txt}</Typography>
       </pre>

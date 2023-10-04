@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 
 export const InvitationEvent = new EventEmitter<[Faction]>();
 
-export function InvitationModal(): React.ReactElement {
+export function InvitationModal({ hidden }: { hidden: boolean }): React.ReactElement {
   const [faction, setFaction] = useState<Faction | null>(null);
   function join(): void {
     if (faction === null) return;
@@ -25,7 +25,7 @@ export function InvitationModal(): React.ReactElement {
   useEffect(() => InvitationEvent.subscribe((faction) => setFaction(faction)), []);
 
   return (
-    <Modal open={faction !== null} onClose={() => setFaction(null)}>
+    <Modal open={!hidden && faction !== null} onClose={() => setFaction(null)}>
       <Typography variant="h4">You have received a faction invitation.</Typography>
       <Typography>
         Would you like to join {(faction || { name: "" }).name}? <br />

@@ -40,18 +40,19 @@ export function SnackbarProvider(props: IProps): React.ReactElement {
 
 export const SnackbarEvents = new EventEmitter<[string | React.ReactNode, ToastVariant, number | null]>();
 
-export function Snackbar(): React.ReactElement {
+export function Snackbar({ hidden }: { hidden: boolean }): React.ReactElement {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  useEffect(() =>
-    SnackbarEvents.subscribe((s, variant, duration) => {
+  useEffect(() => {
+    if (hidden) return;
+    return SnackbarEvents.subscribe((s, variant, duration) => {
       const id = enqueueSnackbar(<Alert severity={variant}>{s}</Alert>, {
         content: (k, m) => <Paper key={k}>{m}</Paper>,
         variant: variant,
         autoHideDuration: duration,
         onClick: () => closeSnackbar(id),
       });
-    }),
-  );
+    });
+  }, [closeSnackbar, enqueueSnackbar, hidden]);
   return <></>;
 }
