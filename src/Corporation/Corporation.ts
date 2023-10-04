@@ -6,7 +6,6 @@ import { CorpUpgrades } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
 import { IndustriesData } from "./data/IndustryData";
 import { Division } from "./Division";
-import { getKeyList } from "../utils/helpers/getKeyList";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { showLiterature } from "../Literature/LiteratureHelpers";
@@ -19,6 +18,8 @@ import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
+
+export const CorporationResolvers: ((state: CorpStateName) => void)[] = [];
 
 interface IParams {
   name?: string;
@@ -69,8 +70,6 @@ export class Corporation {
 
   state = new CorporationState();
 
-  resolvers: ((state: CorpStateName) => void)[] = [];
-
   constructor(params: IParams = {}) {
     this.name = params.name || "The Corporation";
     this.seedFunded = params.seedFunded ?? false;
@@ -113,10 +112,10 @@ export class Corporation {
       this.storedCycles -= gameCycles;
 
       // Handle "nextCycle" resolvers at the start of this cycle
-      for (const resolver of this.resolvers) {
+      for (const resolver of CorporationResolvers) {
         resolver(state);
       }
-      this.resolvers.length = 0;
+      CorporationResolvers.length = 0;
 
       // Can't combine these loops, imports must be completely cleared before
       // we start processing exports of any division.
@@ -452,11 +451,9 @@ export class Corporation {
     return;
   }
 
-  static includedKeys = getKeyList(Corporation, { removedKeys: ["resolvers"] });
-
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Corporation", this, Corporation.includedKeys);
+    return Generic_toJSON("Corporation", this);
   }
 
   /** Initializes a Corporation object from a JSON save state. */

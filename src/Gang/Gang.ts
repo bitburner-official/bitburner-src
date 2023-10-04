@@ -8,7 +8,6 @@ import { Factions } from "../Faction/Factions";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { getKeyList } from "../utils/helpers/getKeyList";
 
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
@@ -25,6 +24,8 @@ import { WorkerScript } from "../Netscript/WorkerScript";
 import { Player } from "@player";
 import { PowerMultiplier } from "./data/power";
 import { FactionName } from "@enums";
+
+export const GangResolvers: ((numCycles: number) => void)[] = [];
 
 export class Gang {
   facName: FactionName;
@@ -49,8 +50,6 @@ export class Gang {
   territoryWarfareEngaged: boolean;
 
   notifyMemberDeath: boolean;
-
-  resolvers: ((numCycles: number) => void)[] = [];
 
   constructor(facName = FactionName.SlumSnakes, hacking = false) {
     this.facName = facName;
@@ -99,10 +98,10 @@ export class Gang {
 
     // Handle "nextCycle" resolvers at the start of this cycle
 
-    for (const resolver of this.resolvers) {
+    for (const resolver of GangResolvers) {
       resolver(cycles);
     }
-    this.resolvers.length = 0;
+    GangResolvers.length = 0;
 
     try {
       this.processGains(cycles);
@@ -415,11 +414,9 @@ export class Gang {
     return upg.cost / this.getDiscount();
   }
 
-  static includedKeys = getKeyList(Gang, { removedKeys: ["resolvers"] });
-
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Gang", this, Gang.includedKeys);
+    return Generic_toJSON("Gang", this);
   }
 
   /** Initializes a Gang object from a JSON save state. */

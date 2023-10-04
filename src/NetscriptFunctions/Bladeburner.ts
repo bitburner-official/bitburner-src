@@ -3,7 +3,7 @@ import type { Action } from "../Bladeburner/Action";
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { Player } from "@player";
-import { Bladeburner } from "../Bladeburner/Bladeburner";
+import { Bladeburner, BladeburnerResolvers } from "../Bladeburner/Bladeburner";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BlackOperation } from "../Bladeburner/BlackOperation";
 import { helpers } from "../Netscript/NetscriptHelpers";
@@ -325,9 +325,8 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const bladeburner = getBladeburner(ctx);
       return Math.round(bladeburner.storedCycles / 5) * 1000;
     },
-    nextCycle: (ctx) => async () => {
-      const bladeburner = getBladeburner(ctx);
-      return new Promise<number>((res) => bladeburner.resolvers.push(res));
+    nextCycle: () => async () => {
+      return new Promise<number>((res) => BladeburnerResolvers.push(res));
     },
   };
 }

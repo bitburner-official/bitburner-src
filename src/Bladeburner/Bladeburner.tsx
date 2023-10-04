@@ -36,14 +36,14 @@ import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportW
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { createEnumKeyedRecord } from "../Types/Record";
-import { getKeyList } from "../utils/helpers/getKeyList";
-
 
 export interface BlackOpsAttempt {
   error?: string;
   isAvailable?: boolean;
   action?: BlackOperation;
 }
+
+export const BladeburnerResolvers: ((numSeconds: number) => void)[] = [];
 
 export class Bladeburner {
   numHosp = 0;
@@ -100,8 +100,6 @@ export class Bladeburner {
   automateThreshLow = 0;
   consoleHistory: string[] = [];
   consoleLogs: string[] = ["Bladeburner Console", "Type 'help' to see console commands"];
-
-  resolvers: ((numSeconds: number) => void)[] = [];
 
   constructor() {
     this.updateSkillMultipliers(); // Calls resetSkillMultipliers()
@@ -1983,10 +1981,10 @@ export class Bladeburner {
       this.storedCycles -= seconds * BladeburnerConstants.CyclesPerSecond;
 
       // Handle "nextCycle" resolvers at the start of this cycle
-      for (const resolver of this.resolvers) {
+      for (const resolver of BladeburnerResolvers) {
         resolver(seconds);
       }
-      this.resolvers.length = 0;
+      BladeburnerResolvers.length = 0;
 
       // Stamina
       this.calculateMaxStamina();
@@ -2379,11 +2377,9 @@ export class Bladeburner {
     }
   }
 
-  static includedKeys = getKeyList(Bladeburner, { removedKeys: ["resolvers"] });
-
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Bladeburner", this, Bladeburner.includedKeys);
+    return Generic_toJSON("Bladeburner", this);
   }
 
   /** Initializes a Bladeburner object from a JSON save state. */

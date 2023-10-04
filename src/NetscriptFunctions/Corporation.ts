@@ -5,7 +5,7 @@ import { Product } from "../Corporation/Product";
 import { Material } from "../Corporation/Material";
 import { Warehouse } from "../Corporation/Warehouse";
 import { Division } from "../Corporation/Division";
-import { Corporation } from "../Corporation/Corporation";
+import { Corporation, CorporationResolvers } from "../Corporation/Corporation";
 import { cloneDeep, omit } from "lodash";
 
 import {
@@ -790,8 +790,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     },
     nextCycle: (ctx) => async () => {
       checkAccess(ctx);
-      const corporation = getCorporation();
-      return new Promise<CorpStateName>((res) => corporation.resolvers.push(res));
+      return new Promise<CorpStateName>((res) => CorporationResolvers.push(res));
     },
   };
 
