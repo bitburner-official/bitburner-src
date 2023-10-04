@@ -23,6 +23,7 @@ import { getAugCost } from "../Augmentation/AugmentationHelpers";
 import { createEnumKeyedRecord, getRecordKeys } from "../Types/Record";
 
 export function inviteToFaction(faction: Faction): void {
+  if (faction.alreadyInvited || faction.isMember) return;
   Player.receiveInvite(faction.name);
   faction.alreadyInvited = true;
   if (!Settings.SuppressFactionInvites) {
