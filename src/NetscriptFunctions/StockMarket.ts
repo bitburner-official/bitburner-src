@@ -414,7 +414,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       checkTixApiAccess(ctx);
       return Math.round(StockMarket.storedCycles / 5) * 1000;
     },
-    nextCycle: (ctx) => async () => {
+    nextCycle: (ctx) => () => {
       checkTixApiAccess(ctx);
       return new Promise<void>((res) => StockMarketResolvers.push(res));
     },

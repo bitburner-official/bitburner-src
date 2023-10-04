@@ -788,7 +788,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx);
       return Math.round(getCorporation().storedCycles / 5) * 1000;
     },
-    nextCycle: (ctx) => async () => {
+    nextCycle: (ctx) => () => {
       checkAccess(ctx);
       return new Promise<CorpStateName>((res) => CorporationResolvers.push(res));
     },
