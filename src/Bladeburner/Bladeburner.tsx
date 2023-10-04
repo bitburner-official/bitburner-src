@@ -1981,9 +1981,10 @@ export class Bladeburner {
       this.storedCycles -= seconds * BladeburnerConstants.CyclesPerSecond;
 
       // Handle "nextCycle" resolvers at the start of this cycle
-      while (this.resolvers.length > 0) {
-        this.resolvers.pop()?.(seconds);
+      for (const resolver of this.resolvers) {
+        resolver(seconds);
       }
+      this.resolvers.length = 0;
 
       // Stamina
       this.calculateMaxStamina();

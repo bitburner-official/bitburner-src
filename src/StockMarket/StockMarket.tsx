@@ -217,9 +217,10 @@ export function processStockPrices(numCycles = 1): void {
   StockMarket.storedCycles -= cyclesPerStockUpdate;
 
   // Handle "nextCycle" resolvers at the start of this cycle
-  while (StockMarketResolvers.length > 0) {
-    StockMarketResolvers.pop()?.();
+  for (const resolver of StockMarketResolvers) {
+    resolver();
   }
+  StockMarketResolvers.length = 0;
 
   // Cycle
   if (StockMarket.ticksUntilCycle == null || typeof StockMarket.ticksUntilCycle !== "number") {

@@ -97,9 +97,11 @@ export class Gang {
     const cycles = Math.min(this.storedCycles, GangConstants.maxCyclesToProcess);
 
     // Handle "nextCycle" resolvers at the start of this cycle
-    while (this.resolvers.length > 0) {
-      this.resolvers.pop()?.(cycles);
+
+    for (const resolver of this.resolvers) {
+      resolver(cycles);
     }
+    this.resolvers.length = 0;
 
     try {
       this.processGains(cycles);

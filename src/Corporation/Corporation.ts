@@ -112,9 +112,10 @@ export class Corporation {
       this.storedCycles -= gameCycles;
 
       // Handle "nextCycle" resolvers at the start of this cycle
-      while (this.resolvers.length > 0) {
-        this.resolvers.pop()?.(state);
+      for (const resolver of this.resolvers) {
+        resolver(state);
       }
+      this.resolvers.length = 0;
 
       // Can't combine these loops, imports must be completely cleared before
       // we start processing exports of any division.
