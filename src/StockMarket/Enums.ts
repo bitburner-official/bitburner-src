@@ -53,4 +53,4 @@ export const StockSymbol = {
   ["Microdyne Technologies"]: "MDYN",
   ["Titan Laboratories"]: "TITN",
 } as const;
-export type StockSymbol = typeof StockSymbol[keyof typeof StockSymbol];
+export type StockSymbol = (typeof StockSymbol)[keyof typeof StockSymbol];
