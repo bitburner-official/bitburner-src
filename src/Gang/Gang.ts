@@ -96,13 +96,6 @@ export class Gang {
     // Calculate how many cycles to actually process.
     const cycles = Math.min(this.storedCycles, GangConstants.maxCyclesToProcess);
 
-    // Handle "nextCycle" resolvers at the start of this cycle
-
-    for (const resolver of GangResolvers) {
-      resolver(cycles);
-    }
-    GangResolvers.length = 0;
-
     try {
       this.processGains(cycles);
       this.processExperienceGains(cycles);
@@ -110,6 +103,11 @@ export class Gang {
       this.storedCycles -= cycles;
     } catch (e: unknown) {
       console.error(`Exception caught when processing Gang: ${e}`);
+    }
+
+    // Handle "nextCycle" resolvers after this update
+    for (const resolve of GangResolvers.splice(0)) {
+      resolve(cycles);
     }
   }
 

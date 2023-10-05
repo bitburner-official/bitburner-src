@@ -216,12 +216,6 @@ export function processStockPrices(numCycles = 1): void {
   StockMarket.lastUpdate = timeNow;
   StockMarket.storedCycles -= cyclesPerStockUpdate;
 
-  // Handle "nextCycle" resolvers at the start of this cycle
-  for (const resolver of StockMarketResolvers) {
-    resolver();
-  }
-  StockMarketResolvers.length = 0;
-
   // Cycle
   if (StockMarket.ticksUntilCycle == null || typeof StockMarket.ticksUntilCycle !== "number") {
     StockMarket.ticksUntilCycle = StockMarketConstants.TicksPerCycle;
@@ -284,5 +278,10 @@ export function processStockPrices(numCycles = 1): void {
 
     // Shares required for price movement gradually approaches max over time
     stock.shareTxUntilMovement = Math.min(stock.shareTxUntilMovement + 10, stock.shareTxForMovement);
+  }
+
+  // Handle "nextCycle" resolvers after this update
+  for (const resolve of StockMarketResolvers.splice(0)) {
+    resolve();
   }
 }

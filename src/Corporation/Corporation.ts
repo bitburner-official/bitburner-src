@@ -111,12 +111,6 @@ export class Corporation {
       const gameCycles = marketCycles * corpConstants.gameCyclesPerCorpStateCycle;
       this.storedCycles -= gameCycles;
 
-      // Handle "nextCycle" resolvers at the start of this cycle
-      for (const resolver of CorporationResolvers) {
-        resolver(state);
-      }
-      CorporationResolvers.length = 0;
-
       // Can't combine these loops, imports must be completely cleared before
       // we start processing exports of any division.
       for (const ind of this.divisions.values()) {
@@ -178,6 +172,11 @@ export class Corporation {
       }
 
       this.state.nextState();
+
+      // Handle "nextCycle" resolvers after this update
+      for (const resolve of CorporationResolvers.splice(0)) {
+        resolve(this.getState());
+      }
     }
   }
 

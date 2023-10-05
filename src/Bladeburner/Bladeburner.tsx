@@ -1980,12 +1980,6 @@ export class Bladeburner {
       seconds = Math.min(seconds, 5); // Max of 5 'ticks'
       this.storedCycles -= seconds * BladeburnerConstants.CyclesPerSecond;
 
-      // Handle "nextCycle" resolvers at the start of this cycle
-      for (const resolver of BladeburnerResolvers) {
-        resolver(seconds);
-      }
-      BladeburnerResolvers.length = 0;
-
       // Stamina
       this.calculateMaxStamina();
       this.stamina += this.calculateStaminaGainPerSecond() * seconds;
@@ -2043,6 +2037,11 @@ export class Bladeburner {
             this.startAction(this.action);
           }
         }
+      }
+
+      // Handle "nextCycle" resolvers after this update
+      for (const resolve of BladeburnerResolvers.splice(0)) {
+        resolve(seconds);
       }
     }
   }
