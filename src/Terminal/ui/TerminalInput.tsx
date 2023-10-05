@@ -444,8 +444,7 @@ export function TerminalInput(): React.ReactElement {
         open={possibilities.length > 0}
         anchorEl={terminalInput.current}
         placement={"top"}
-        sx={{ maxWidth: "75%" }}
-      >
+        sx={{ maxWidth: "75%" }} onResize={undefined} onResizeCapture={undefined}      >
         <Paper sx={{ m: 1, p: 2 }}>
           <Typography classes={{ root: classes.preformatted }} color={"primary"} paragraph={false}>
             Possible autocomplete candidates:
