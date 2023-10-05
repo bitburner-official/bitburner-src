@@ -325,7 +325,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const bladeburner = getBladeburner(ctx);
       return Math.round(bladeburner.storedCycles / 5) * 1000;
     },
-    nextCycle: () => () => {
+    nextUpdate: () => () => {
       return new Promise<number>((res) => BladeburnerResolvers.push(res));
     },
   };

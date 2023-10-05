@@ -2039,9 +2039,9 @@ export class Bladeburner {
         }
       }
 
-      // Handle "nextCycle" resolvers after this update
+      // Handle "nextUpdate" resolvers after this update
       for (const resolve of BladeburnerResolvers.splice(0)) {
-        resolve(seconds);
+        resolve(seconds * 1000);
       }
     }
   }

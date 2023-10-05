@@ -127,7 +127,7 @@ const stock = {
   has4SData: 0.05,
   has4SDataTIXAPI: 0.05,
   getBonusTime: 0,
-  nextCycle: RamCostConstants.CycleTiming,
+  nextUpdate: RamCostConstants.CycleTiming,
   getSymbols: RamCostConstants.GetStock,
   getPrice: RamCostConstants.GetStock,
   getOrganization: RamCostConstants.GetStock,
@@ -239,7 +239,7 @@ const gang = {
   setTerritoryWarfare: RamCostConstants.GangApiBase / 2,
   getChanceToWinClash: RamCostConstants.GangApiBase,
   getBonusTime: 0,
-  nextCycle: RamCostConstants.CycleTiming,
+  nextUpdate: RamCostConstants.CycleTiming,
 } as const;
 
 // Bladeburner API
@@ -281,7 +281,7 @@ const bladeburner = {
   joinBladeburnerFaction: RamCostConstants.BladeburnerApiBase,
   joinBladeburnerDivision: RamCostConstants.BladeburnerApiBase,
   getBonusTime: 0,
-  nextCycle: RamCostConstants.CycleTiming,
+  nextUpdate: RamCostConstants.CycleTiming,
 } as const;
 
 const infiltration = {
@@ -362,7 +362,7 @@ const corporation = {
   hasCorporation: 0, // This one is free
   getConstants: 0,
   getBonusTime: 0,
-  nextCycle: RamCostConstants.CycleTiming,
+  nextUpdate: RamCostConstants.CycleTiming,
   getIndustryData: RamCostConstants.CorporationInfo,
   getMaterialData: RamCostConstants.CorporationInfo,
   issueNewShares: RamCostConstants.CorporationAction,

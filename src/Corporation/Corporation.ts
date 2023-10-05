@@ -173,9 +173,9 @@ export class Corporation {
 
       this.state.nextState();
 
-      // Handle "nextCycle" resolvers after this update
+      // Handle "nextUpdate" resolvers after this update
       for (const resolve of CorporationResolvers.splice(0)) {
-        resolve(this.getState());
+        resolve(state);
       }
     }
   }

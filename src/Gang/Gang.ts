@@ -105,7 +105,7 @@ export class Gang {
       console.error(`Exception caught when processing Gang: ${e}`);
     }
 
-    // Handle "nextCycle" resolvers after this update
+    // Handle "nextUpdate" resolvers after this update
     for (const resolve of GangResolvers.splice(0)) {
       resolve(cycles);
     }

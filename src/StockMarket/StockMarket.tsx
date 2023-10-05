@@ -280,7 +280,7 @@ export function processStockPrices(numCycles = 1): void {
     stock.shareTxUntilMovement = Math.min(stock.shareTxUntilMovement + 10, stock.shareTxForMovement);
   }
 
-  // Handle "nextCycle" resolvers after this update
+  // Handle "nextUpdate" resolvers after this update
   for (const resolve of StockMarketResolvers.splice(0)) {
     resolve();
   }
