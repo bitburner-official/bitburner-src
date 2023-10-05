@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import Typography from "@mui/material/Typography";
 import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
-import TextField from "@mui/material/TextField";
+import { createStyles, makeStyles } from "@mui/styles";
+import { Paper, Popper, TextField, Typography } from "@mui/material";
 
 import { KEY, KEYCODE } from "../../utils/helpers/keyCodes";
 import { Terminal } from "../../Terminal";
@@ -445,8 +441,6 @@ export function TerminalInput(): React.ReactElement {
         anchorEl={terminalInput.current}
         placement={"top"}
         sx={{ maxWidth: "75%" }}
-        onResize={undefined}
-        onResizeCapture={undefined}
       >
         <Paper sx={{ m: 1, p: 2 }}>
           <Typography classes={{ root: classes.preformatted }} color={"primary"} paragraph={false}>
