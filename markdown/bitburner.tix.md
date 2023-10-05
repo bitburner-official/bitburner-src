@@ -37,7 +37,7 @@ export interface TIX
 |  [has4SDataTIXAPI()](./bitburner.tix.has4sdatatixapi.md) | Returns true if the player has access to the 4SData TIX API |
 |  [hasTIXAPIAccess()](./bitburner.tix.hastixapiaccess.md) | Returns true if the player has access to the TIX API |
 |  [hasWSEAccount()](./bitburner.tix.haswseaccount.md) | Returns true if the player has access to a WSE Account |
-|  [nextCycle()](./bitburner.tix.nextcycle.md) | Sleep until the next Stock Market price update. |
+|  [nextUpdate()](./bitburner.tix.nextupdate.md) | Sleep until the next Stock Market price update has happened. |
 |  [placeOrder(sym, shares, price, type, pos)](./bitburner.tix.placeorder.md) | Place order for stocks. |
 |  [purchase4SMarketData()](./bitburner.tix.purchase4smarketdata.md) | Purchase 4S Market Data Access. |
 |  [purchase4SMarketDataTixApi()](./bitburner.tix.purchase4smarketdatatixapi.md) | Purchase 4S Market Data TIX API Access. |

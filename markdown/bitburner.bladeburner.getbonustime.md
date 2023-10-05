@@ -4,7 +4,7 @@
 
 ## Bladeburner.getBonusTime() method
 
-Get bladeburner bonus time.
+Get Bladeburner bonus time.
 
 **Signature:**
 

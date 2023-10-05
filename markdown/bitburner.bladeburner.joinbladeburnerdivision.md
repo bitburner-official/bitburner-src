@@ -4,7 +4,7 @@
 
 ## Bladeburner.joinBladeburnerDivision() method
 
-Join the bladeburner division.
+Join the Bladeburner division.
 
 **Signature:**
 

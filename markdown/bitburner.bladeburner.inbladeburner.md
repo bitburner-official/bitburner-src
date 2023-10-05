@@ -4,7 +4,7 @@
 
 ## Bladeburner.inBladeburner() method
 
-Returns whether player is a member of bladeburner division. Does not require API access.
+Returns whether player is a member of Bladeburner division. Does not require API access.
 
 **Signature:**
 
@@ -15,7 +15,7 @@ inBladeburner(): boolean;
 
 boolean
 
-whether player is a member of bladeburner division.
+whether player is a member of Bladeburner division.
 
 ## Remarks
 

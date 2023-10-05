@@ -1556,7 +1556,9 @@ export interface TIX {
    * @remarks
    * RAM cost: 1 GB
    *
-   * @returns {Promise<void>}
+   * The amount of real time spent asleep between updates can vary due to "bonus time".
+   *
+   * @returns Promise that resolves when the next Stock Market price update has happened.
    */
   nextUpdate(): Promise<void>;
 }
@@ -3208,7 +3210,7 @@ export interface Bladeburner {
   getCity(): CityName;
 
   /**
-   * Travel to another city in bladeburner.
+   * Travel to another city in Bladeburner.
    * @remarks
    * RAM cost: 4 GB
    * Attempts to switch to the specified city (for Bladeburner only).
@@ -3221,7 +3223,7 @@ export interface Bladeburner {
   switchCity(city: CityName | `${CityName}`): boolean;
 
   /**
-   * Get bladeburner stamina.
+   * Get Bladeburner stamina.
    * @remarks
    * RAM cost: 4 GB
    * Returns an array with two elements:
@@ -3238,7 +3240,7 @@ export interface Bladeburner {
   getStamina(): [number, number];
 
   /**
-   * Join the bladeburner faction.
+   * Join the Bladeburner faction.
    * @remarks
    * RAM cost: 4 GB
    * Attempts to join the Bladeburner faction.
@@ -3252,7 +3254,7 @@ export interface Bladeburner {
   joinBladeburnerFaction(): boolean;
 
   /**
-   * Join the bladeburner division.
+   * Join the Bladeburner division.
    * @remarks
    * RAM cost: 4 GB
    *
@@ -3267,7 +3269,7 @@ export interface Bladeburner {
   joinBladeburnerDivision(): boolean;
 
   /**
-   * Get bladeburner bonus time.
+   * Get Bladeburner bonus time.
    * @remarks
    * RAM cost: 0 GB
    *
@@ -3284,20 +3286,20 @@ export interface Bladeburner {
   getBonusTime(): number;
 
   /**
-   * Sleep until the next bladeburner update has happened.
+   * Sleep until the next Bladeburner update has happened.
    * @remarks
    * RAM cost: 1 GB
    *
-   * @returns {Promise<number>} Resolves to the number of milliseconds that were processed
+   * @returns Promise that resolves to the number of milliseconds that were processed
    * in the previous Bladeburner update, which can vary due to accumulated "bonus time".
    */
   nextUpdate(): Promise<number>;
 
-  /** Returns whether player is a member of bladeburner division. Does not require API access.
+  /** Returns whether player is a member of Bladeburner division. Does not require API access.
    * @remarks
    * RAM cost: 1 GB
    *
-   * @returns whether player is a member of bladeburner division. */
+   * @returns whether player is a member of Bladeburner division. */
   inBladeburner(): boolean;
 }
 
@@ -3706,7 +3708,7 @@ export interface Gang {
    * @remarks
    * RAM cost: 1 GB
    *
-   * @returns {Promise<number>} Resolves to the number of gang cycles that were processed
+   * @returns Promise that resolves to the number of gang cycles that were processed
    * in the previous update, which can vary due to "bonus time".
    */
   nextUpdate(): Promise<number>;
@@ -7509,9 +7511,10 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    *
    * The amount of real time spent asleep between updates can vary due to "bonus time".
    *
-   * @returns {Promise<CorpStateName>} Resolves to the name of the state that was just processed.
-   * 
+   * @returns Promise that resolves to the name of the state that was just processed.
+   *
    *  I.e. when the state is PURCHASE, it means purchasing has just happened.
+   *  Note that this is the state just before getCorporation().state.
    *
    *  Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. */
   nextUpdate(): Promise<CorpStateName>;

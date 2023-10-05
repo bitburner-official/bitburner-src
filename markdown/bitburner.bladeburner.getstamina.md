@@ -4,7 +4,7 @@
 
 ## Bladeburner.getStamina() method
 
-Get bladeburner stamina.
+Get Bladeburner stamina.
 
 **Signature:**
 

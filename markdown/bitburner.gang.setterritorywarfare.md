@@ -4,7 +4,7 @@
 
 ## Gang.setTerritoryWarfare() method
 
-Enable/Disable territory warfare.
+Enable/Disable territory clashes.
 
 **Signature:**
 
@@ -16,7 +16,7 @@ setTerritoryWarfare(engage: boolean): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  engage | boolean | Whether or not to engage in territory warfare. |
+|  engage | boolean | Whether or not to engage in territory clashes. |
 
 **Returns:**
 
@@ -26,5 +26,5 @@ void
 
 RAM cost: 2 GB
 
-Set whether or not the gang should engage in territory warfare
+Set whether or not the gang should engage in territory clashes
 
