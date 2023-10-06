@@ -59,7 +59,7 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
   }
 
   // Next state which will be processed:
-  const state = corp.state.getState()
+  const state = corp.state.getState();
   let stateText;
   switch (state) {
     case "START":
