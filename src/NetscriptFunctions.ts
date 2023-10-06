@@ -637,7 +637,7 @@ export const ns: InternalAPI<NSFull> = {
     if (!Player.hasProgram(CompletedProgramName.bruteSsh)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the BruteSSH.exe program!");
     }
-    if (server.serversOnNetwork.length==0) {
+    if (server.serversOnNetwork.length == 0) {
       helpers.log(ctx, () => "Host not found");
       return false;
     }
