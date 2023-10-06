@@ -312,6 +312,7 @@ export function BulkPurchase(
   if (corp.funds >= cost) {
     corp.funds = corp.funds - cost;
     material.stored += amt;
+    warehouse.sizeUsed = warehouse.sizeUsed + amt * matSize;
   } else {
     throw new Error(`You cannot afford this purchase.`);
   }
