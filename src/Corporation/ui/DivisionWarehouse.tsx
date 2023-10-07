@@ -58,29 +58,9 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
     props.rerender();
   }
 
-  // Next state which will be processed:
-  const state = corp.state.getState();
-  let stateText;
-  switch (state) {
-    case "START":
-      stateText = "Next state: Preparing";
-      break;
-    case "PURCHASE":
-      stateText = "Next state: Purchasing materials";
-      break;
-    case "PRODUCTION":
-      stateText = "Next state: Producing materials and/or products";
-      break;
-    case "SALE":
-      stateText = "Next state: Selling materials and/or products";
-      break;
-    case "EXPORT":
-      stateText = "Next state: Exporting materials and/or products";
-      break;
-    default:
-      console.error(`Invalid state: ${state}`);
-      break;
-  }
+  const nextState = corp.state.getNextState();
+  const prevState = corp.state.getPrevState().padStart(11);
+  const stateBar = `[${"|".repeat(Math.min(corp.storedCycles * 2, 20)).padEnd(20, "-")}]`;
 
   // Create React components for materials
   const mats = [];
@@ -160,9 +140,9 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
         divisions.
       </Typography>
       <br />
-
-      <Typography className={classes.retainHeight}>{stateText}</Typography>
-
+      <Typography style={{ whiteSpace: "pre-wrap" }} className={classes.retainHeight}>
+        {prevState} {stateBar} {nextState}
+      </Typography>
       {corp.unlocks.has(CorpUnlockName.SmartSupply) && (
         <>
           <Button onClick={() => setSmartSupplyOpen(true)}>Configure Smart Supply</Button>

@@ -713,7 +713,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         dividendRate: corporation.dividendRate,
         dividendTax: corporation.dividendTax,
         dividendEarnings: corporation.getCycleDividends() / corpConstants.secondsPerMarketCycle,
-        state: corporation.state.getState(),
+        state: corporation.state.getNextState(),
         divisions: [...corporation.divisions.keys()],
       };
     },
