@@ -4,7 +4,7 @@
 
 Useful to analyze a player's save game for anomalies.
 
-It decodes the save and prettifies the output. Canno be used to modify a save game directly since it drops some properties.
+It decodes the save and prettifies the output. Cannot be used to modify a save game directly since it drops some properties.
 
 **Usage**
 
