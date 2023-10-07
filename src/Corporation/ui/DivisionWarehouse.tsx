@@ -60,7 +60,7 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
 
   const nextState = corp.state.getNextState();
   const prevState = corp.state.getPrevState().padStart(11);
-  const stateBar = `[${"|".repeat(Math.min(corp.storedCycles * 2, 20)).padEnd(20, "-")}]`;
+  const stateBar = `[${"|".repeat(Math.min(corp.storedCycles * 2, 18)).padEnd(18, "-")}]`;
 
   // Create React components for materials
   const mats = [];
