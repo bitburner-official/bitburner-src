@@ -15,9 +15,18 @@ nextUpdate(): Promise<number>;
 
 Promise&lt;number&gt;
 
-Promise that resolves to the number of gang cycles that were processed in the previous update, which can vary due to "bonus time".
+Promise that resolves to the number of Gang cycles that were processed in the previous update, which can vary due to "bonus time".
 
 ## Remarks
 
 RAM cost: 1 GB
+
+## Example
+
+
+```js
+while (await ns.gang.nextUpdate()) {
+  // Manage the Gang
+}
+```
 

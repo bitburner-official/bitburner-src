@@ -21,3 +21,12 @@ Promise that resolves to the number of milliseconds that were processed in the p
 
 RAM cost: 1 GB
 
+## Example
+
+
+```js
+while (await ns.bladeburner.nextUpdate()) {
+  // Manage the Bladeburner division
+}
+```
+

@@ -23,3 +23,12 @@ RAM cost: 1 GB
 
 The amount of real time spent asleep between updates can vary due to "bonus time".
 
+## Example
+
+
+```js
+while (await ns.stock.nextUpdate()) {
+  // Manage your stock portfolio
+}
+```
+

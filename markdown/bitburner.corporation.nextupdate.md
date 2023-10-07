@@ -17,7 +17,7 @@ Promise&lt;[CorpStateName](./bitburner.corpstatename.md)<!-- -->&gt;
 
 Promise that resolves to the name of the state that was just processed.
 
-I.e. when the state is PURCHASE, it means purchasing has just happened. Note that this is the state just before getCorporation().state.
+I.e. when the state is PURCHASE, it means purchasing has just happened. Note that this is the state just before `getCorporation().state`<!-- -->.
 
 Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
 
@@ -26,4 +26,16 @@ Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
 RAM cost: 1 GB
 
 The amount of real time spent asleep between updates can vary due to "bonus time".
+
+## Example
+
+
+```js
+while (true) {
+  const prevState = await ns.corporation.nextUpdate();
+  const nextState = ns.corporation.getCorporation().state;
+  ns.print(`I'm done with ${prevState}, next will be ${nextState}.`);
+  // Manage the Corporation
+}
+```
 

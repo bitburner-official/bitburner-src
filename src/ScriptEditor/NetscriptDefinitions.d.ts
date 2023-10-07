@@ -1559,6 +1559,13 @@ export interface TIX {
    * The amount of real time spent asleep between updates can vary due to "bonus time".
    *
    * @returns Promise that resolves when the next Stock Market price update has happened.
+   *
+   * @example
+   * ```js
+   * while (await ns.stock.nextUpdate()) {
+   *   // Manage your stock portfolio
+   * }
+   * ```
    */
   nextUpdate(): Promise<void>;
 }
@@ -3292,6 +3299,13 @@ export interface Bladeburner {
    *
    * @returns Promise that resolves to the number of milliseconds that were processed
    * in the previous Bladeburner update, which can vary due to accumulated "bonus time".
+   *
+   * @example
+   * ```js
+   * while (await ns.bladeburner.nextUpdate()) {
+   *   // Manage the Bladeburner division
+   * }
+   * ```
    */
   nextUpdate(): Promise<number>;
 
@@ -3708,8 +3722,15 @@ export interface Gang {
    * @remarks
    * RAM cost: 1 GB
    *
-   * @returns Promise that resolves to the number of gang cycles that were processed
+   * @returns Promise that resolves to the number of Gang cycles that were processed
    * in the previous update, which can vary due to "bonus time".
+   *
+   * @example
+   * ```js
+   * while (await ns.gang.nextUpdate()) {
+   *   // Manage the Gang
+   * }
+   * ```
    */
   nextUpdate(): Promise<number>;
 }
@@ -7514,9 +7535,20 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @returns Promise that resolves to the name of the state that was just processed.
    *
    *  I.e. when the state is PURCHASE, it means purchasing has just happened.
-   *  Note that this is the state just before getCorporation().state.
+   *  Note that this is the state just before `getCorporation().state`.
    *
-   *  Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. */
+   *  Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
+   *
+   * @example
+   * ```js
+   * while (true) {
+   *   const prevState = await ns.corporation.nextUpdate();
+   *   const nextState = ns.corporation.getCorporation().state;
+   *   ns.print(`I'm done with ${prevState}, next will be ${nextState}.`);
+   *   // Manage the Corporation
+   * }
+   * ```
+   */
   nextUpdate(): Promise<CorpStateName>;
 }
 
