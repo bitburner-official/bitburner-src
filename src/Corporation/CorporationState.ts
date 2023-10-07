@@ -29,8 +29,8 @@ export class CorporationState {
   // Initializes a CorporationState object from a JSON save state.
   static fromJSON(value: IReviverValue): CorporationState {
     const state = Generic_fromJSON(CorporationState, value.data);
-    if(!state.prevState)state.prevState = 0
-    return state
+    if (!state.prevState) state.prevState = 0;
+    return state;
   }
 }
 
