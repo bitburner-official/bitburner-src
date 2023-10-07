@@ -8,7 +8,7 @@ import { RunningScript } from "../../../src/Script/RunningScript";
 import { AddToAllServers, DeleteServer } from "../../../src/Server/AllServers";
 import { AlertEvents } from "../../../src/ui/React/AlertManager";
 
-declare const importActual: typeof EvaluatorConfig["doImport"];
+declare const importActual: (typeof EvaluatorConfig)["doImport"];
 
 // Replace Blob/ObjectURL functions, because they don't work natively in Jest
 global.Blob = class extends Blob {
