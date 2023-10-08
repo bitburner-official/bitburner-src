@@ -115,7 +115,7 @@ export class Corporation {
         ind.resetImports(state);
       }
       for (const ind of this.divisions.values()) {
-        ind.process(marketCycles, state, this);
+        ind.process(marketCycles, this);
       }
 
       // Process cooldowns
