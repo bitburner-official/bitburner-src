@@ -746,6 +746,7 @@ export class Division {
 
   //Processes FINISHED products
   processProduct(marketCycles = 1, product: Product, corporation: Corporation): number {
+    const state = corporation.state.nextState;
     let totalProfit = 0;
     for (const [city, office] of getRecordEntries(this.offices)) {
       const warehouse = this.warehouses[city];
