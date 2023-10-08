@@ -13,6 +13,7 @@ import { formatBigNumber, formatPercent } from "../../ui/formatNumber";
 import { isString } from "../../utils/helpers/string";
 import { Money } from "../../ui/React/Money";
 import { useCorporation, useDivision } from "./Context";
+import { StatsTable } from "../../ui/React/StatsTable";
 
 interface IProductProps {
   city: CityName;
@@ -89,11 +90,12 @@ export function ProductElem(props: IProductProps): React.ReactElement {
           <Box display="flex">
             <Tooltip
               title={
-                <Typography>
-                  Prod: {formatBigNumber(product.cityData[city].productionAmount)}/s
-                  <br />
-                  Sell: {formatBigNumber(product.cityData[city].actualSellAmount)} /s
-                </Typography>
+                <StatsTable
+                  rows={[
+                    ["Prod:", formatBigNumber(product.cityData[city].productionAmount)],
+                    ["Sell:", formatBigNumber(-product.cityData[city].actualSellAmount || 0)],
+                  ]}
+                />
               }
             >
               <Typography>

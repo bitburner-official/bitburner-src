@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Modal } from "../../../ui/React/Modal";
+import { StatsTable } from "../../../ui/React/StatsTable";
+import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+import { formatCorpMultiplier } from "../../../ui/formatNumber";
 import { IndustryResearchTrees } from "../../data/IndustryData";
 import * as corpConstants from "../../data/Constants";
 import { Division } from "../../Division";
@@ -7,7 +10,7 @@ import { Research } from "../../Actions";
 import { Node } from "../../ResearchTree";
 import { ResearchMap } from "../../ResearchMap";
 import { Settings } from "../../../Settings/Settings";
-import { dialogBoxCreate } from "../../../ui/React/DialogBox";
+
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
@@ -144,15 +147,19 @@ export function ResearchModal(props: IProps): React.ReactElement {
         Research points: {props.industry.researchPoints.toFixed(3)}
         <br />
         Multipliers from research:
-        <br />* Advertising Multiplier: x{researchTree.getAdvertisingMultiplier()}
-        <br />* Employee Charisma Multiplier: x{researchTree.getEmployeeChaMultiplier()}
-        <br />* Employee Creativity Multiplier: x{researchTree.getEmployeeCreMultiplier()}
-        <br />* Employee Efficiency Multiplier: x{researchTree.getEmployeeEffMultiplier()}
-        <br />* Employee Intelligence Multiplier: x{researchTree.getEmployeeIntMultiplier()}
-        <br />* Production Multiplier: x{researchTree.getProductionMultiplier()}
-        <br />* Sales Multiplier: x{researchTree.getSalesMultiplier()}
-        <br />* Scientific Research Multiplier: x{researchTree.getScientificResearchMultiplier()}
-        <br />* Storage Multiplier: x{researchTree.getStorageMultiplier()}
+        <StatsTable
+          rows={[
+            ["Advertising Multiplier:", formatCorpMultiplier(researchTree.getAdvertisingMultiplier())],
+            ["Employee Charisma Multiplier:", formatCorpMultiplier(researchTree.getEmployeeChaMultiplier())],
+            ["Employee Creativity Multiplier:", formatCorpMultiplier(researchTree.getEmployeeCreMultiplier())],
+            ["Employee Efficiency Multiplier:", formatCorpMultiplier(researchTree.getEmployeeEffMultiplier())],
+            ["Employee Intelligence Multiplier:", formatCorpMultiplier(researchTree.getEmployeeIntMultiplier())],
+            ["Production Multiplier:", formatCorpMultiplier(researchTree.getProductionMultiplier())],
+            ["Sales Multiplier:", formatCorpMultiplier(researchTree.getSalesMultiplier())],
+            ["Scientific Research Multiplier:", formatCorpMultiplier(researchTree.getScientificResearchMultiplier())],
+            ["Storage Multiplier:", formatCorpMultiplier(researchTree.getStorageMultiplier())],
+          ]}
+        />
       </Typography>
     </Modal>
   );

@@ -13,6 +13,7 @@ import { isString } from "../../utils/helpers/string";
 import { Money } from "../../ui/React/Money";
 import { useCorporation, useDivision } from "./Context";
 import { LimitMaterialProductionModal } from "./modals/LimitMaterialProductionModal";
+import { StatsTable } from "../../ui/React/StatsTable";
 
 interface IMaterialProps {
   warehouse: Warehouse;
@@ -79,33 +80,26 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
     limitMaterialButtonText += " (" + formatCorpStat(mat.productionLimit) + ")";
   }
 
+  // Material Gain details
+  const gainBreakdown = [
+    ["Buy:", mat.buyAmount >= 1e33 ? mat.buyAmount.toExponential(3) : formatBigNumber(mat.buyAmount)],
+    ["Prod:", formatBigNumber(mat.productionAmount)],
+    ["Import:", formatBigNumber(mat.importAmount)],
+    ["Export:", formatBigNumber(-mat.exportedLastCycle || 0)],
+    ["Sell:", formatBigNumber(-mat.actualSellAmount || 0)],
+  ];
+  if (corp.unlocks.has(CorpUnlockName.MarketResearchDemand)) {
+    gainBreakdown.push(["Demand:", formatCorpStat(mat.demand)]);
+  }
+  if (corp.unlocks.has(CorpUnlockName.MarketDataCompetition)) {
+    gainBreakdown.push(["Competition:", formatCorpStat(mat.competition)]);
+  }
+
   return (
     <Paper>
       <Box sx={{ display: "grid", gridTemplateColumns: "2fr 1fr", m: "5px" }}>
         <Box>
-          <Tooltip
-            title={
-              <Typography>
-                Buy: {mat.buyAmount >= 1e33 ? mat.buyAmount.toExponential(3) : formatBigNumber(mat.buyAmount)} <br />
-                Prod: {formatBigNumber(mat.productionAmount)} <br />
-                Sell: {formatBigNumber(mat.actualSellAmount)} <br />
-                Export: {formatBigNumber(mat.exportedLastCycle)} <br />
-                Import: {formatBigNumber(mat.importAmount)}
-                {corp.unlocks.has(CorpUnlockName.MarketResearchDemand) && (
-                  <>
-                    <br />
-                    Demand: {formatCorpStat(mat.demand)}
-                  </>
-                )}
-                {corp.unlocks.has(CorpUnlockName.MarketDataCompetition) && (
-                  <>
-                    <br />
-                    Competition: {formatCorpStat(mat.competition)}
-                  </>
-                )}
-              </Typography>
-            }
-          >
+          <Tooltip title={<StatsTable rows={gainBreakdown} />}>
             <Typography>
               {mat.name}: {formatBigNumber(mat.stored)} (
               {totalGain >= 1e33 ? totalGain.toExponential(3) : formatBigNumber(totalGain)}/s)
