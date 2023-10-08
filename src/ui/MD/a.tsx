@@ -10,7 +10,7 @@ export const A = (props: React.PropsWithChildren<{ href?: string }>): React.Reac
   const navigator = useNavigator();
   const ref = props.href ?? "";
 
-  const onClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     navigator.navigate(ref, event.ctrlKey);
   };
   if (ref.startsWith("http"))

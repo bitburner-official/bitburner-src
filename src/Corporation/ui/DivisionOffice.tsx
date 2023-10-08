@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 
 import { OfficeSpace } from "../OfficeSpace";
-import { CorpUnlockName, CorpEmployeeJob } from "@enums";
+import { CorpUnlockName, CorpEmployeeJob, CorpUpgradeName, CorpProductResearchName } from "@enums";
 import { BuyTea } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
-import { formatCorpStat } from "../../ui/formatNumber";
+import { formatBigNumber, formatCorpStat, formatCorpMultiplier } from "../../ui/formatNumber";
 
 import { UpgradeOfficeSizeModal } from "./modals/UpgradeOfficeSizeModal";
 import { ThrowPartyModal } from "./modals/ThrowPartyModal";
@@ -27,6 +27,7 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import { TableCell } from "../../ui/React/Table";
 import { Box } from "@mui/material";
+import { StatsTable } from "../../ui/React/StatsTable";
 
 interface OfficeProps {
   office: OfficeSpace;
@@ -98,6 +99,60 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
   const currUna = props.office.employeeJobs[CorpEmployeeJob.Unassigned];
   const nextUna = props.office.employeeNextJobs[CorpEmployeeJob.Unassigned];
 
+  const totalMaterialProduction =
+    division.getOfficeProductivity(props.office) *
+    corp.getProductionMultiplier() *
+    division.productionMult *
+    division.getProductionMultiplier();
+  const materialBreakdown = (
+    <StatsTable
+      rows={[
+        ["Employee Production:", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: false }))],
+        ["Boosting Materials:", formatCorpMultiplier(division.productionMult)],
+        ["Research:", formatCorpMultiplier(division.getProductionMultiplier())],
+        [`${CorpUpgradeName.SmartFactories}:`, formatCorpMultiplier(corp.getProductionMultiplier())],
+        [<b key={1}>Total Material Production:</b>, <b key={2}>{formatCorpStat(totalMaterialProduction)}</b>],
+      ]}
+    />
+  );
+
+  const totalProductProduction =
+    division.getOfficeProductivity(props.office, { forProduct: true }) *
+    corp.getProductionMultiplier() *
+    division.productionMult *
+    division.getProductionMultiplier() *
+    division.getProductProductionMultiplier();
+  const productBreakdown = (
+    <StatsTable
+      rows={[
+        ["Employee Production:", formatBigNumber(division.getOfficeProductivity(props.office, { forProduct: true }))],
+        ["Boosting Materials:", formatCorpMultiplier(division.productionMult)],
+        ["Research:", formatCorpMultiplier(division.getProductionMultiplier())],
+        [`${CorpProductResearchName.Fulcrum}:`, formatCorpMultiplier(division.getProductProductionMultiplier())],
+        [`${CorpUpgradeName.SmartFactories}:`, formatCorpMultiplier(corp.getProductionMultiplier())],
+        [<b key={1}>Total Product Production:</b>, <b key={2}>{formatCorpStat(totalProductProduction)}</b>],
+      ]}
+    />
+  );
+
+  // Sale multipliers
+  const businessFactor = division.getBusinessFactor(props.office); //Business employee productivity
+  const [adsTotal] = division.getAdvertisingFactors(); //Awareness + popularity
+  const researchMult = division.getSalesMultiplier();
+  const upgradeMult = corp.getSalesMult();
+  const totalSaleMultiplier = businessFactor * adsTotal * researchMult * upgradeMult;
+  const salesBreakdown = (
+    <StatsTable
+      rows={[
+        ["Business Employees:", formatCorpMultiplier(businessFactor)],
+        ["Advertising:", formatCorpMultiplier(adsTotal)],
+        researchMult !== 1 ? ["Research:", formatCorpMultiplier(researchMult)] : [],
+        [`${CorpUpgradeName.ABCSalesBots}:`, formatCorpMultiplier(upgradeMult)],
+        [<b key={1}>Total Sales Multiplier:</b>, <b key={2}>{formatCorpMultiplier(totalSaleMultiplier)}</b>],
+      ]}
+    />
+  );
+
   return (
     <Table padding="none">
       <TableBody>
@@ -149,10 +204,12 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
               <TableCell>
                 <Tooltip
                   title={
-                    <Typography>
-                      The base amount of material this office can produce. Does not include production multipliers from
-                      upgrades and materials. This value is based off the productivity of your Operations, Engineering,
-                      and Management employees
+                    <Typography component="div">
+                      The amount of material this office can produce.
+                      <br />
+                      This value is based off the productivity of your
+                      <br />
+                      Operations, Engineering, and Management employees.
                     </Typography>
                   }
                 >
@@ -160,39 +217,55 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
                 </Tooltip>
               </TableCell>
               <TableCell>
-                <Typography align="right">{formatCorpStat(division.getOfficeProductivity(props.office))}</Typography>
+                <Tooltip title={materialBreakdown}>
+                  <Typography align="right">{formatCorpStat(totalMaterialProduction)}</Typography>
+                </Tooltip>
               </TableCell>
             </TableRow>
+            {division.makesProducts ? (
+              <TableRow>
+                <TableCell>
+                  <Tooltip
+                    title={
+                      <Typography component="div">
+                        The amount of any given Product this office can produce.
+                        <br />
+                        This value is based off the productivity of your
+                        <br />
+                        Operations, Engineering, and Management employees.
+                      </Typography>
+                    }
+                  >
+                    <Typography>Product Production:</Typography>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <Tooltip title={productBreakdown}>
+                    <Typography align="right">{formatCorpStat(totalProductProduction)}</Typography>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            ) : null}
             <TableRow>
               <TableCell>
                 <Tooltip
                   title={
                     <Typography>
-                      The base amount of any given Product this office can produce. Does not include production
-                      multipliers from upgrades and materials. This value is based off the productivity of your
-                      Operations, Engineering, and Management employees
+                      This office's sales effectivity for all materials and products.
+                      <br />
+                      It is based on your Business employees and your advertising.
+                      <br />
+                      This will be further modified by demand and competition for each item.
                     </Typography>
                   }
                 >
-                  <Typography>Product Production:</Typography>
-                </Tooltip>
-              </TableCell>
-              <TableCell>
-                <Typography align="right">
-                  {formatCorpStat(division.getOfficeProductivity(props.office, { forProduct: true }))}
-                </Typography>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Tooltip
-                  title={<Typography>The effect this office's 'Business' employees has on boosting sales</Typography>}
-                >
-                  <Typography> Business Multiplier:</Typography>
+                  <Typography>Sales Multiplier:</Typography>
                 </Tooltip>
               </TableCell>
               <TableCell align="right">
-                <Typography>x{formatCorpStat(division.getBusinessFactor(props.office))}</Typography>
+                <Tooltip title={salesBreakdown}>
+                  <Typography>{formatCorpMultiplier(totalSaleMultiplier)}</Typography>
+                </Tooltip>
               </TableCell>
             </TableRow>
           </>

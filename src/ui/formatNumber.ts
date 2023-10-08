@@ -151,6 +151,7 @@ export const formatPopulation = formatBigNumber;
 export const formatSecurity = formatBigNumber;
 export const formatStamina = formatBigNumber;
 export const formatStaneksGiftCharge = formatBigNumber;
+export const formatCorpMultiplier = (n: number) => "×" + formatBigNumber(n);
 
 /** Format a number with suffixes starting at 1000 and 2 fractional digits */
 export const formatQuality = (n: number) => formatNumber(n, 2);

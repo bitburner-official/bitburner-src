@@ -15,7 +15,7 @@ import * as corpConstants from "../data/Constants";
 import { CorpUnlocks } from "../data/CorporationUnlocks";
 
 import { CONSTANTS } from "../../Constants";
-import { formatCorpStat, formatPercent, formatShares } from "../../ui/formatNumber";
+import { formatCorpMultiplier, formatPercent, formatShares } from "../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { Money } from "../../ui/React/Money";
 import { MoneyRate } from "../../ui/React/MoneyRate";
@@ -45,7 +45,7 @@ export function Overview({ rerender }: IProps): React.ReactElement {
   const multRows: string[][] = [];
   function appendMult(name: string, value: number): void {
     if (value === 1) return;
-    multRows.push([name, formatCorpStat(value)]);
+    multRows.push([name, formatCorpMultiplier(value)]);
   }
   appendMult("Production Multiplier: ", corp.getProductionMultiplier());
   appendMult("Storage Multiplier: ", corp.getStorageMultiplier());
@@ -79,18 +79,18 @@ export function Overview({ rerender }: IProps): React.ReactElement {
               rows={[
                 [
                   "Owned Stock Shares:",
-                  <>&nbsp;{formatShares(corp.numShares)}&nbsp;</>,
-                  <>({formatPercent(corp.numShares / corp.totalShares)})</>,
+                  formatShares(corp.numShares),
+                  `(${formatPercent(corp.numShares / corp.totalShares)})`,
                 ],
                 [
                   "Outstanding Shares:",
-                  <>&nbsp;{formatShares(corp.issuedShares)}&nbsp;</>,
-                  <>({formatPercent(corp.issuedShares / corp.totalShares)})</>,
+                  formatShares(corp.issuedShares),
+                  `(${formatPercent(corp.issuedShares / corp.totalShares)})`,
                 ],
                 [
                   "Private Shares:",
-                  <>&nbsp;{formatShares(corp.investorShares)}&nbsp;</>,
-                  <>({formatPercent(corp.investorShares / corp.totalShares)})</>,
+                  formatShares(corp.investorShares),
+                  `(${formatPercent(corp.investorShares / corp.totalShares)})`,
                 ],
               ]}
             />
