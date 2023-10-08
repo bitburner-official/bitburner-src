@@ -142,7 +142,7 @@ export class Division {
   }
 
   process(marketCycles = 1, corporation: Corporation): void {
-    const state = corporation.state.getNextState();
+    const state = corporation.state.nextState;
     //At the start of a cycle, store and reset revenue/expenses
     //Then calculate salaries and process the markets
     if (state === "START") {
@@ -264,7 +264,7 @@ export class Division {
 
   //Process production, purchase, and import/export of materials
   processMaterials(marketCycles = 1, corporation: Corporation): [number, number] {
-    const state = corporation.state.getNextState();
+    const state = corporation.state.nextState;
     let revenue = 0;
     let expenses = 0;
     this.calculateProductionFactors();
@@ -717,7 +717,7 @@ export class Division {
 
   /** Process product development and production/sale */
   processProducts(marketCycles = 1, corporation: Corporation): [number, number] {
-    const state = corporation.state.getNextState();
+    const state = corporation.state.nextState;
     let revenue = 0;
     const expenses = 0;
 
@@ -746,7 +746,7 @@ export class Division {
 
   //Processes FINISHED products
   processProduct(marketCycles = 1, product: Product, corporation: Corporation): number {
-    const state = corporation.state.getNextState();
+    const state = corporation.state.nextState;
     let totalProfit = 0;
     for (const [city, office] of getRecordEntries(this.offices)) {
       const warehouse = this.warehouses[city];

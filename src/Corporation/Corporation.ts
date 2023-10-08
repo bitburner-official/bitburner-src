@@ -93,7 +93,7 @@ export class Corporation {
   }
 
   getNextState(): CorpStateName {
-    return this.state.getNextState();
+    return this.state.nextState;
   }
 
   storeCycles(numCycles: number): void {
@@ -169,7 +169,7 @@ export class Corporation {
         this.updateSharePrice();
       }
 
-      this.state.nextState();
+      this.state.incrementState();
     }
   }
 
