@@ -9,10 +9,10 @@ export class CorporationState {
   // Get the name of the current state
   // NOTE: This does NOT return the number stored in the 'state' property,
   // which is just an index for the array of all possible Corporation States.
-  get nextState(): CorpStateName {
+  get nextName(): CorpStateName {
     return stateNames[this.state];
   }
-  get prevState(): CorpStateName {
+  get prevName(): CorpStateName {
     return stateNames[(this.state + (stateNames.length - 1)) % stateNames.length];
   }
   // Transition to the next state

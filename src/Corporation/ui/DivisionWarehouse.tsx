@@ -10,7 +10,7 @@ import { SmartSupplyModal } from "./modals/SmartSupplyModal";
 import { ProductElem } from "./ProductElem";
 import { MaterialElem } from "./MaterialElem";
 import { MaterialInfo } from "../MaterialInfo";
-
+import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { formatBigNumber, formatMaterialSize } from "../../ui/formatNumber";
 
 import { Corporation } from "../Corporation";
@@ -20,8 +20,9 @@ import { isRelevantMaterial } from "./Helpers";
 import { IndustryProductEquation } from "./IndustryProductEquation";
 import { purchaseWarehouse } from "../Actions";
 import { useCorporation, useDivision } from "./Context";
-
+import { gameCyclesPerCorpStateCycle} from "../data/Constants"
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
+
 
 interface WarehouseProps {
   corp: Corporation;
@@ -57,10 +58,11 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
     corp.funds = corp.funds - sizeUpgradeCost;
     props.rerender();
   }
-
-  const nextState = corp.state.nextState;
-  const prevState = corp.state.prevState.padStart(11);
-  const stateBar = `[${"|".repeat(Math.min(corp.storedCycles * 2, 18)).padEnd(18, "-")}]`;
+  // -1 because as soon as it hits "full" it processes and resets to 0, *2 to double the size of the bar
+  const ticks = (gameCyclesPerCorpStateCycle - 1)*2
+  const nextState = corp.state.nextName;
+  const prevState = corp.state.prevName.padStart(11);
+  const stateBar = createProgressBarText({progress:Math.min(corp.storedCycles * 2, ticks)/ticks,totalTicks:ticks })
 
   // Create React components for materials
   const mats = [];
