@@ -9,17 +9,13 @@ Sleep until the next Corporation update has happened.
 **Signature:**
 
 ```typescript
-nextUpdate(): Promise<CorpStateName>;
+nextUpdate(): Promise<number>;
 ```
 **Returns:**
 
-Promise&lt;[CorpStateName](./bitburner.corpstatename.md)<!-- -->&gt;
+Promise&lt;number&gt;
 
-Promise that resolves to the name of the state that was just processed.
-
-I.e. when the state is PURCHASE, it means purchasing has just happened. Note that this is the state just before `getCorporation().state`<!-- -->.
-
-Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
+Promise that resolves to the number of milliseconds of Corporation time that were processed in the previous update.
 
 ## Remarks
 
@@ -31,10 +27,7 @@ The amount of real time spent asleep between updates can vary due to "bonus time
 
 
 ```js
-while (true) {
-  const prevState = await ns.corporation.nextUpdate();
-  const nextState = ns.corporation.getCorporation().state;
-  ns.print(`I'm done with ${prevState}, next will be ${nextState}.`);
+while (await ns.corporation.nextUpdate()) {
   // Manage the Corporation
 }
 ```

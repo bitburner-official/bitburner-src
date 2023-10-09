@@ -7537,24 +7537,17 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    *
    * The amount of real time spent asleep between updates can vary due to "bonus time".
    *
-   * @returns Promise that resolves to the name of the state that was just processed.
-   *
-   *  I.e. when the state is PURCHASE, it means purchasing has just happened.
-   *  Note that this is the state just before `getCorporation().state`.
-   *
-   *  Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
+   * @returns Promise that resolves to the number of milliseconds of Corporation time
+   * that were processed in the previous update.
    *
    * @example
    * ```js
-   * while (true) {
-   *   const prevState = await ns.corporation.nextUpdate();
-   *   const nextState = ns.corporation.getCorporation().state;
-   *   ns.print(`I'm done with ${prevState}, next will be ${nextState}.`);
+   * while (await ns.corporation.nextUpdate()) {
    *   // Manage the Corporation
    * }
    * ```
    */
-  nextUpdate(): Promise<CorpStateName>;
+  nextUpdate(): Promise<number>;
 }
 
 /** Product rating information
