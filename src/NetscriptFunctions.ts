@@ -102,7 +102,7 @@ import { ContentFilePath } from "./Paths/ContentFile";
 import { hasContractExtension } from "./Paths/ContractFilePath";
 import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
-import { setDeprecatedProperties, deprecationWarning } from "./utils/deprecatedProps";
+import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
 
 export const enums: NSEnums = {
   CityName,

@@ -7,7 +7,7 @@ import { Warehouse } from "../Corporation/Warehouse";
 import { Division } from "../Corporation/Division";
 import { Corporation } from "../Corporation/Corporation";
 import { cloneDeep, omit } from "lodash";
-import { setDeprecatedProperties } from "../utils/deprecatedProps";
+import { setDeprecatedProperties } from "../utils/DeprecationHelper";
 import {
   Corporation as NSCorporation,
   Division as NSDivision,
