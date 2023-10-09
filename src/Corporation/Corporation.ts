@@ -18,9 +18,8 @@ import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
-import { CONSTANTS } from "../Constants";
 
-export const CorporationResolvers: ((msProcessed: number) => void)[] = [];
+export const CorporationResolvers: ((prevState: CorpStateName) => void)[] = [];
 
 interface IParams {
   name?: string;
@@ -176,7 +175,7 @@ export class Corporation {
 
       // Handle "nextUpdate" resolvers after this update
       for (const resolve of CorporationResolvers.splice(0)) {
-        resolve(gameCycles * CONSTANTS.MilliPerCycle);
+        resolve(state);
       }
     }
   }

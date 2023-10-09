@@ -15,6 +15,7 @@ import {
   OfficeAPI,
   CorpResearchName,
   CorpMaterialName,
+  CorpStateName,
 } from "@nsdefs";
 
 import {
@@ -789,7 +790,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     },
     nextUpdate: (ctx) => () => {
       checkAccess(ctx);
-      return new Promise<number>((res) => CorporationResolvers.push(res));
+      return new Promise<CorpStateName>((res) => CorporationResolvers.push(res));
     },
   };
 
