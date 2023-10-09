@@ -416,7 +416,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     nextUpdate: (ctx) => () => {
       checkTixApiAccess(ctx);
-      return new Promise<void>((res) => StockMarketResolvers.push(res));
+      return new Promise<number>((res) => StockMarketResolvers.push(res));
     },
   };
 }

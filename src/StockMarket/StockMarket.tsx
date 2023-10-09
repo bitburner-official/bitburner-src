@@ -24,7 +24,7 @@ export let StockMarket: IStockMarket = {
 // Gross type, needs to be addressed
 export const SymbolToStockMap: Record<string, Stock> = {}; // Maps symbol -> Stock object
 
-export const StockMarketResolvers: (() => void)[] = [];
+export const StockMarketResolvers: ((msProcessed: number) => void)[] = [];
 
 export function placeOrder(
   stock: Stock,
@@ -282,6 +282,6 @@ export function processStockPrices(numCycles = 1): void {
 
   // Handle "nextUpdate" resolvers after this update
   for (const resolve of StockMarketResolvers.splice(0)) {
-    resolve();
+    resolve(StockMarketConstants.msPerStockUpdate);
   }
 }

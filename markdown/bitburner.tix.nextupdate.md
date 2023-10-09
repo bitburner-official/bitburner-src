@@ -9,13 +9,13 @@ Sleep until the next Stock Market price update has happened.
 **Signature:**
 
 ```typescript
-nextUpdate(): Promise<void>;
+nextUpdate(): Promise<number>;
 ```
 **Returns:**
 
-Promise&lt;void&gt;
+Promise&lt;number&gt;
 
-Promise that resolves when the next Stock Market price update has happened.
+Promise that resolves to the number of milliseconds of Stock Market time that were processed in the previous update.
 
 ## Remarks
 

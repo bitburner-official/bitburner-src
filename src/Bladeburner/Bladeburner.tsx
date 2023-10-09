@@ -43,7 +43,7 @@ export interface BlackOpsAttempt {
   action?: BlackOperation;
 }
 
-export const BladeburnerResolvers: ((numSeconds: number) => void)[] = [];
+export const BladeburnerResolvers: ((msProcessed: number) => void)[] = [];
 
 export class Bladeburner {
   numHosp = 0;

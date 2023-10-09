@@ -15,11 +15,13 @@ nextUpdate(): Promise<number>;
 
 Promise&lt;number&gt;
 
-Promise that resolves to the number of Gang cycles that were processed in the previous update, which can vary due to "bonus time".
+Promise that resolves to the number of milliseconds of Gang time that were processed in the previous update.
 
 ## Remarks
 
 RAM cost: 1 GB
+
+The amount of real time spent asleep between updates can vary due to "bonus time".
 
 ## Example
 

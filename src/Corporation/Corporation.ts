@@ -19,7 +19,7 @@ import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 
-export const CorporationResolvers: ((state: CorpStateName) => void)[] = [];
+export const CorporationResolvers: ((prevState: CorpStateName) => void)[] = [];
 
 interface IParams {
   name?: string;

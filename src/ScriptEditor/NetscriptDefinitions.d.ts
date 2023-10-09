@@ -1558,7 +1558,8 @@ export interface TIX {
    *
    * The amount of real time spent asleep between updates can vary due to "bonus time".
    *
-   * @returns Promise that resolves when the next Stock Market price update has happened.
+   * @returns Promise that resolves to the number of milliseconds of Stock Market time
+   * that were processed in the previous update.
    *
    * @example
    * ```js
@@ -1567,7 +1568,7 @@ export interface TIX {
    * }
    * ```
    */
-  nextUpdate(): Promise<void>;
+  nextUpdate(): Promise<number>;
 }
 
 /**
@@ -3297,8 +3298,10 @@ export interface Bladeburner {
    * @remarks
    * RAM cost: 1 GB
    *
-   * @returns Promise that resolves to the number of milliseconds that were processed
-   * in the previous Bladeburner update, which can vary due to accumulated "bonus time".
+   * The amount of real time spent asleep between updates can vary due to "bonus time".
+   *
+   * @returns Promise that resolves to the number of milliseconds of Bladeburner time
+   * that were processed in the previous update.
    *
    * @example
    * ```js
@@ -3722,8 +3725,10 @@ export interface Gang {
    * @remarks
    * RAM cost: 1 GB
    *
-   * @returns Promise that resolves to the number of Gang cycles that were processed
-   * in the previous update, which can vary due to "bonus time".
+   * The amount of real time spent asleep between updates can vary due to "bonus time".
+   *
+   * @returns Promise that resolves to the number of milliseconds of Gang time
+   * that were processed in the previous update.
    *
    * @example
    * ```js

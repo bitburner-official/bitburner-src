@@ -24,8 +24,9 @@ import { WorkerScript } from "../Netscript/WorkerScript";
 import { Player } from "@player";
 import { PowerMultiplier } from "./data/power";
 import { FactionName } from "@enums";
+import { CONSTANTS } from "../Constants";
 
-export const GangResolvers: ((numCycles: number) => void)[] = [];
+export const GangResolvers: ((msProcessed: number) => void)[] = [];
 
 export class Gang {
   facName: FactionName;
@@ -107,7 +108,7 @@ export class Gang {
 
     // Handle "nextUpdate" resolvers after this update
     for (const resolve of GangResolvers.splice(0)) {
-      resolve(cycles);
+      resolve(cycles * CONSTANTS.MilliPerCycle);
     }
   }
 
