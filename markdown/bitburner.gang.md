@@ -43,5 +43,5 @@ If you are not in BitNode-2, then you must have Source-File 2 in order to use th
 |  [renameMember(memberName, newName)](./bitburner.gang.renamemember.md) | Rename a Gang member to a new unique name. |
 |  [respectForNextRecruit()](./bitburner.gang.respectfornextrecruit.md) | Check the amount of Respect needed for your next gang recruit. |
 |  [setMemberTask(memberName, taskName)](./bitburner.gang.setmembertask.md) | Set gang member to task. |
-|  [setTerritoryWarfare(engage)](./bitburner.gang.setterritorywarfare.md) | Enable/Disable territory warfare. |
+|  [setTerritoryWarfare(engage)](./bitburner.gang.setterritorywarfare.md) | Enable/Disable territory clashes. |
 

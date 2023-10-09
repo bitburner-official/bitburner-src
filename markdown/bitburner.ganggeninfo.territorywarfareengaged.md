@@ -4,7 +4,7 @@
 
 ## GangGenInfo.territoryWarfareEngaged property
 
-Indicating if territory warfare is enabled
+Indicating if territory clashes are enabled
 
 **Signature:**
 

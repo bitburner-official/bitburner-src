@@ -20,9 +20,8 @@ import { isRelevantMaterial } from "./Helpers";
 import { IndustryProductEquation } from "./IndustryProductEquation";
 import { purchaseWarehouse } from "../Actions";
 import { useCorporation, useDivision } from "./Context";
-import { gameCyclesPerCorpStateCycle} from "../data/Constants"
+import { gameCyclesPerCorpStateCycle } from "../data/Constants";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
-
 
 interface WarehouseProps {
   corp: Corporation;
@@ -59,10 +58,13 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
     props.rerender();
   }
   // -1 because as soon as it hits "full" it processes and resets to 0, *2 to double the size of the bar
-  const ticks = (gameCyclesPerCorpStateCycle - 1)*2
+  const ticks = (gameCyclesPerCorpStateCycle - 1) * 2;
   const nextState = corp.state.nextName;
   const prevState = corp.state.prevName.padStart(11);
-  const stateBar = createProgressBarText({progress:Math.min(corp.storedCycles * 2, ticks)/ticks,totalTicks:ticks })
+  const stateBar = createProgressBarText({
+    progress: Math.min(corp.storedCycles * 2, ticks) / ticks,
+    totalTicks: ticks,
+  });
 
   // Create React components for materials
   const mats = [];
