@@ -7549,7 +7549,13 @@ interface CorporationInfo {
    *  I.e. when the state is PURCHASE, it means purchasing will occur during the next state transition.
    *
    *  Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. */
-  state: string;
+  nextState: CorpStateName;
+  /** The last state that got processed.
+   *
+   *  I.e. when that state is PURCHASE, it means purchasing just happened.
+   *
+   *  Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE. */
+  prevState: CorpStateName;
   /** Array of all division names */
   divisions: string[];
 }
