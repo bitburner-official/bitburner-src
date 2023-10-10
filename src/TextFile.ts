@@ -1,4 +1,3 @@
-import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { BaseServer } from "./Server/BaseServer";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
 import { TextFilePath } from "./Paths/TextFilePath";
@@ -25,11 +24,6 @@ export class TextFile implements ContentFile {
     this.text = txt;
   }
 
-  /** Concatenates the raw values to the end of current content. */
-  append(txt: string): void {
-    this.text += txt;
-  }
-
   /** Serves the file to the user as a downloadable resource through the browser. */
   download(): void {
     const file: Blob = new Blob([this.text], { type: "text/plain" });
@@ -41,28 +35,13 @@ export class TextFile implements ContentFile {
     a.click();
     setTimeout(() => {
       document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+      URL.revokeObjectURL(url);
     }, 0);
-  }
-
-  /** Retrieve the content of the file. */
-  read(): string {
-    return this.text;
-  }
-
-  /** Shows the content to the user via the game's dialog box. */
-  show(): void {
-    dialogBoxCreate(`${this.filename}\n\n${this.text}`);
   }
 
   /** Serialize the current file to a JSON save state. */
   toJSON(): IReviverValue {
     return Generic_toJSON("TextFile", this);
-  }
-
-  /** Replaces the current content with the text provided. */
-  write(txt: string): void {
-    this.text = txt;
   }
 
   deleteFromServer(server: BaseServer): boolean {
