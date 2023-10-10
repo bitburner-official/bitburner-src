@@ -1,6 +1,5 @@
-import type { editor, Position } from "monaco-editor";
-
 import type { ContentFilePath } from "../../Paths/ContentFile";
+import { editor, Position } from "monaco-editor";
 
 type ITextModel = editor.ITextModel;
 
@@ -12,6 +11,7 @@ export class OpenScript {
   lastPosition: Position;
   model: ITextModel;
   isTxt: boolean;
+  hasExternalUpdate = false;
 
   constructor(path: ContentFilePath, code: string, hostname: string, lastPosition: Position, model: ITextModel) {
     this.path = path;
@@ -20,5 +20,9 @@ export class OpenScript {
     this.lastPosition = lastPosition;
     this.model = model;
     this.isTxt = path.endsWith(".txt");
+  }
+
+  regenerateModel(): void {
+    this.model = editor.createModel(this.code, this.isTxt ? "plaintext" : "javascript");
   }
 }

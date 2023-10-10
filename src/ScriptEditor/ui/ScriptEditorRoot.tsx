@@ -1,3 +1,5 @@
+import type { ContentFilePath } from "../../Paths/ContentFile";
+
 import React, { useEffect, useRef } from "react";
 import * as monaco from "monaco-editor";
 
@@ -8,7 +10,6 @@ type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { ScriptFilePath } from "../../Paths/ScriptFilePath";
 import { checkInfiniteLoop } from "../../Script/RamCalculations";
 
 import { ns, enums } from "../../NetscriptFunctions";
@@ -24,7 +25,6 @@ import { PromptEvent } from "../../ui/React/PromptManager";
 import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
 import { useRerender } from "../../ui/React/hooks";
 import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
-import { TextFilePath } from "../../Paths/TextFilePath";
 
 import { dirty, getServerCode } from "./utils";
 import { OpenScript } from "./OpenScript";
@@ -36,7 +36,7 @@ import { useVimEditor } from "./useVimEditor";
 
 interface IProps {
   // Map of filename -> code
-  files: Map<ScriptFilePath | TextFilePath, string>;
+  files: Map<ContentFilePath, string>;
   hostname: string;
   vim: boolean;
 }
@@ -96,11 +96,6 @@ function Root(props: IProps): React.ReactElement {
     document.addEventListener("keydown", keydown);
     return () => document.removeEventListener("keydown", keydown);
   });
-
-  // Generates a new model for the script
-  function regenerateModel(script: OpenScript): void {
-    script.model = monaco.editor.createModel(script.code, script.isTxt ? "plaintext" : "javascript");
-  }
 
   function infLoop(newCode: string): void {
     if (editorRef.current === null || currentScript === null) return;
@@ -191,7 +186,7 @@ function Root(props: IProps): React.ReactElement {
 
     if (!props.files && currentScript !== null) {
       // Open currentscript
-      regenerateModel(currentScript);
+      currentScript.regenerateModel();
       editorRef.current.setModel(currentScript.model);
       editorRef.current.setPosition(currentScript.lastPosition);
       editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
@@ -213,7 +208,7 @@ function Root(props: IProps): React.ReactElement {
         if (openScript) {
           // Script is already opened
           if (openScript.model === undefined || openScript.model === null || openScript.model.isDisposed()) {
-            regenerateModel(openScript);
+            openScript.regenerateModel();
           }
 
           currentScript = openScript;
@@ -316,8 +311,8 @@ function Root(props: IProps): React.ReactElement {
     currentScript = openScripts[index];
 
     if (editorRef.current !== null && openScripts[index] !== null) {
-      if (currentScript.model === undefined || currentScript.model.isDisposed()) {
-        regenerateModel(currentScript);
+      if (!currentScript.model || currentScript.model.isDisposed()) {
+        currentScript.regenerateModel();
       }
       editorRef.current.setModel(currentScript.model);
       editorRef.current.setPosition(currentScript.lastPosition);
@@ -361,7 +356,7 @@ function Root(props: IProps): React.ReactElement {
       currentScript = openScripts[index + indexOffset];
       if (editorRef.current !== null) {
         if (currentScript.model.isDisposed() || !currentScript.model) {
-          regenerateModel(currentScript);
+          currentScript.regenerateModel();
         }
         editorRef.current.setModel(currentScript.model);
         editorRef.current.setPosition(currentScript.lastPosition);
@@ -393,7 +388,7 @@ function Root(props: IProps): React.ReactElement {
 
             if (editorRef.current !== null && openScript !== null) {
               if (openScript.model === undefined || openScript.model.isDisposed()) {
-                regenerateModel(openScript);
+                openScript.regenerateModel();
               }
               editorRef.current.setModel(openScript.model);
 
