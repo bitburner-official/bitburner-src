@@ -29,6 +29,7 @@ import { Toolbar } from "./Toolbar";
 import { NoOpenScripts } from "./NoOpenScripts";
 import { ScriptEditorContextProvider, useScriptEditorContext } from "./ScriptEditorContext";
 import { useVimEditor } from "./useVimEditor";
+import { useCallback } from "react";
 
 interface IProps {
   // Map of filename -> code
@@ -55,6 +56,42 @@ function Root(props: IProps): React.ReactElement {
     currentScript = openScripts[0] ?? null;
   }
 
+  const save = useCallback(() => {
+    if (currentScript === null) {
+      console.error("currentScript is null when it shouldn't be. Unable to save script");
+      return;
+    }
+    // this is duplicate code with saving later.
+    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalTypeScript) {
+      //Make sure filename + code properly follow tutorial
+      if (currentScript.path !== "n00dles.script" && currentScript.path !== "n00dles.js") {
+        dialogBoxCreate("Don't change the script name for now.");
+        return;
+      }
+      const cleanCode = currentScript.code.replace(/\s/g, "");
+      const ns1 = "while(true){hack('n00dles');}";
+      const ns2 = `exportasyncfunctionmain(ns){while(true){awaitns.hack('n00dles');}}`;
+      if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
+        dialogBoxCreate("Please copy and paste the code from the tutorial!");
+        return;
+      }
+
+      //Save the script
+      saveScript(currentScript);
+      Router.toPage(Page.Terminal);
+
+      iTutorialNextStep();
+
+      return;
+    }
+
+    const server = GetServer(currentScript.hostname);
+    if (server === null) throw new Error("Server should not be null but it is.");
+    server.writeToContentFile(currentScript.path, currentScript.code);
+    if (Settings.SaveGameOnFileSave) saveObject.saveGame();
+    rerender();
+  }, [rerender]);
+
   useEffect(() => {
     function keydown(event: KeyboardEvent): void {
       if (Settings.DisableHotkeys) return;
@@ -73,7 +110,7 @@ function Root(props: IProps): React.ReactElement {
     }
     document.addEventListener("keydown", keydown);
     return () => document.removeEventListener("keydown", keydown);
-  });
+  }, [save]);
 
   function infLoop(newCode: string): void {
     if (editorRef.current === null || currentScript === null) return;
@@ -121,7 +158,7 @@ function Root(props: IProps): React.ReactElement {
     // the `useEffect()` for vim mode is called before editor is mounted.
     editorRef.current = editor;
 
-    if (!props.files && currentScript !== null) {
+    if (props.files.size === 0 && currentScript !== null) {
       // Open currentscript
       currentScript.regenerateModel();
       editorRef.current.setModel(currentScript.model);
@@ -131,42 +168,35 @@ function Root(props: IProps): React.ReactElement {
       editorRef.current.focus();
       return;
     }
-    if (props.files) {
-      const files = props.files;
-
-      if (!files.size) {
-        editorRef.current.focus();
-        return;
-      }
-
-      for (const [filename, code] of files) {
-        // Check if file is already opened
-        const openScript = openScripts.find((script) => script.path === filename && script.hostname === props.hostname);
-        if (openScript) {
-          // Script is already opened
-          if (openScript.model === undefined || openScript.model === null || openScript.model.isDisposed()) {
-            openScript.regenerateModel();
-          }
-
-          currentScript = openScript;
-          editorRef.current.setModel(openScript.model);
-          editorRef.current.setPosition(openScript.lastPosition);
-          editorRef.current.revealLineInCenter(openScript.lastPosition.lineNumber);
-          parseCode(openScript.code);
-        } else {
-          // Open script
-          const newScript = new OpenScript(
-            filename,
-            code,
-            props.hostname,
-            new monaco.Position(0, 0),
-            monaco.editor.createModel(code, filename.endsWith(".txt") ? "plaintext" : "javascript"),
-          );
-          openScripts.push(newScript);
-          currentScript = newScript;
-          editorRef.current.setModel(newScript.model);
-          parseCode(newScript.code);
+    const files = props.files;
+    
+    for (const [filename, code] of files) {
+      // Check if file is already opened
+      const openScript = openScripts.find((script) => script.path === filename && script.hostname === props.hostname);
+      if (openScript) {
+        // Script is already opened
+        if (openScript.model === undefined || openScript.model === null || openScript.model.isDisposed()) {
+          openScript.regenerateModel();
         }
+
+        currentScript = openScript;
+        editorRef.current.setModel(openScript.model);
+        editorRef.current.setPosition(openScript.lastPosition);
+        editorRef.current.revealLineInCenter(openScript.lastPosition.lineNumber);
+        parseCode(openScript.code);
+      } else {
+        // Open script
+        const newScript = new OpenScript(
+          filename,
+          code,
+          props.hostname,
+          new monaco.Position(0, 0),
+          monaco.editor.createModel(code, filename.endsWith(".txt") ? "plaintext" : "javascript"),
+        );
+        openScripts.push(newScript);
+        currentScript = newScript;
+        editorRef.current.setModel(newScript.model);
+        parseCode(newScript.code);
       }
     }
 
@@ -193,42 +223,6 @@ function Root(props: IProps): React.ReactElement {
     // This server helper already handles overwriting, etc.
     server.writeToContentFile(scriptToSave.path, scriptToSave.code);
     if (Settings.SaveGameOnFileSave) saveObject.saveGame();
-  }
-
-  function save(): void {
-    if (currentScript === null) {
-      console.error("currentScript is null when it shouldn't be. Unable to save script");
-      return;
-    }
-    // this is duplicate code with saving later.
-    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalTypeScript) {
-      //Make sure filename + code properly follow tutorial
-      if (currentScript.path !== "n00dles.script" && currentScript.path !== "n00dles.js") {
-        dialogBoxCreate("Don't change the script name for now.");
-        return;
-      }
-      const cleanCode = currentScript.code.replace(/\s/g, "");
-      const ns1 = "while(true){hack('n00dles');}";
-      const ns2 = `exportasyncfunctionmain(ns){while(true){awaitns.hack('n00dles');}}`;
-      if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
-        dialogBoxCreate("Please copy and paste the code from the tutorial!");
-        return;
-      }
-
-      //Save the script
-      saveScript(currentScript);
-      Router.toPage(Page.Terminal);
-
-      iTutorialNextStep();
-
-      return;
-    }
-
-    const server = GetServer(currentScript.hostname);
-    if (server === null) throw new Error("Server should not be null but it is.");
-    server.writeToContentFile(currentScript.path, currentScript.code);
-    if (Settings.SaveGameOnFileSave) saveObject.saveGame();
-    rerender();
   }
 
   function currentTabIndex(): number | undefined {
