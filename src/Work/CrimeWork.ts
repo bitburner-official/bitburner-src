@@ -98,7 +98,7 @@ export class CrimeWork extends Work {
   /** Initializes a CrimeWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): CrimeWork {
     const crimeWork = Generic_fromJSON(CrimeWork, value.data);
-    crimeWork.crimeType = getEnumHelper("CrimeType").fuzzyGetMember(crimeWork.crimeType, true);
+    crimeWork.crimeType = getEnumHelper("CrimeType").getMember(crimeWork.crimeType, { alwaysMatch: true });
     return crimeWork;
   }
 }

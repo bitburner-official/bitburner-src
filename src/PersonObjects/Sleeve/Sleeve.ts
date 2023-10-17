@@ -300,7 +300,7 @@ export class Sleeve extends Person implements SleevePerson {
     };
     if (workTypeConversion[_workType]) _workType = workTypeConversion[_workType];
     const faction = Factions[factionName];
-    const workType = getEnumHelper("FactionWorkType").fuzzyGetMember(_workType);
+    const workType = getEnumHelper("FactionWorkType").getMember(_workType, { fuzzy: true });
     if (!workType) return false;
     const factionInfo = faction.getInfo();
 

@@ -67,8 +67,10 @@ export class SleeveFactionWork extends SleeveWorkClass {
   /** Initializes a FactionWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveFactionWork {
     const factionWork = Generic_fromJSON(SleeveFactionWork, value.data);
-    factionWork.factionWorkType = getEnumHelper("FactionWorkType").fuzzyGetMember(factionWork.factionWorkType, true);
-    factionWork.factionName = getEnumHelper("FactionName").fuzzyGetMember(factionWork.factionName, true);
+    factionWork.factionWorkType = getEnumHelper("FactionWorkType").getMember(factionWork.factionWorkType, {
+      alwaysMatch: true,
+    });
+    factionWork.factionName = getEnumHelper("FactionName").getMember(factionWork.factionName, { alwaysMatch: true });
     return factionWork;
   }
 }

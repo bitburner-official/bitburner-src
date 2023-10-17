@@ -271,7 +271,7 @@ function getABC(sleeve: Sleeve): [string, string, string] {
       return ["Workout at Gym", gymNames[work.classType as GymType], work.location];
     }
     case SleeveWorkType.CRIME:
-      return ["Commit Crime", getEnumHelper("CrimeType").fuzzyGetMember(work.crimeType, true), "------"];
+      return ["Commit Crime", getEnumHelper("CrimeType").getMember(work.crimeType, { alwaysMatch: true }), "------"];
     case SleeveWorkType.SUPPORT:
       return ["Perform Bladeburner Actions", "Support main sleeve", "------"];
     case SleeveWorkType.INFILTRATE:
