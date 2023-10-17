@@ -219,7 +219,7 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.5.1 dev changelog (last updated 10/4/2023)
+## v2.5.1 dev changelog (last updated 10/17/2023)
 
 ### NOTES
 See 2.5.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
