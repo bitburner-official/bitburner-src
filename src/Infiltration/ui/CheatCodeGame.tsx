@@ -1,16 +1,9 @@
 import { Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { AugmentationName } from "@enums";
+import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
-import {
-  downArrowSymbol,
-  getArrow,
-  getInverseArrow,
-  leftArrowSymbol,
-  random,
-  rightArrowSymbol,
-  upArrowSymbol,
-} from "../utils";
+import { downArrowSymbol, getArrow, leftArrowSymbol, random, rightArrowSymbol, upArrowSymbol } from "../utils";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
@@ -43,9 +36,12 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
   const [index, setIndex] = useState(0);
   const hasAugment = Player.hasAugmentation(AugmentationName.TrickeryOfHermes, true);
 
+  const focusColor = Settings.theme.primary;
+  const hintColor = Settings.theme.disabled;
+
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();
-    if (code[index] !== getArrow(event) && (!hasAugment || code[index] !== getInverseArrow(event))) {
+    if (code[index] !== getArrow(event)) {
       props.onFailure();
       return;
     }
@@ -58,7 +54,18 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
       <GameTimer millis={timer} onExpire={props.onFailure} />
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
         <Typography variant="h4">Enter the Code!</Typography>
-        <Typography variant="h4">{code[index]}</Typography>
+        <Typography variant="h4">
+          {hasAugment && (
+            <>
+              <span style={{ color: hintColor }}>{index > 1 ? code[index - 2] : "\u00a0"}&nbsp;</span>
+              <span style={{ color: hintColor }}>{index > 0 ? code[index - 1] : "\u00a0"}&nbsp;</span>
+              <span style={{ color: focusColor }}>{code[index]}</span>
+              <span style={{ color: hintColor }}>&nbsp;{index < code.length - 1 ? code[index + 1] : "\u00a0"}</span>
+              <span style={{ color: hintColor }}>&nbsp;{index < code.length - 2 ? code[index + 2] : "\u00a0"}</span>
+            </>
+          )}
+          {!hasAugment && <span style={{ color: focusColor }}>{code[index]}</span>}
+        </Typography>
         <KeyHandler onKeyDown={press} onFailure={props.onFailure} />
       </Paper>
     </>
