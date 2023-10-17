@@ -89,7 +89,7 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
           disabledText
         ) : (
           <>
-            <b>{corp.name}</b>'s stock price will rise to <Money money={sharePrice} /> per share.
+            <b>{corp.name}</b>'s stock price will settle at <Money money={sharePrice} /> per share.
           </>
         )}
       </Typography>
