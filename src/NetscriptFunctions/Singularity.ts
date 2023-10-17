@@ -738,8 +738,21 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     applyToCompany: (ctx) => (_companyName, _field) => {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
-      assertString(ctx, "field", _field)
-      const field = getEnumHelper("JobField").nsGetMember(ctx, (_field as string).toLowerCase(), "field");
+      assertString(ctx, "field", _field);
+
+      // capitalize each word, except for "part-time"
+      function capitalizeJobField(field: string) {
+        return field
+          .toLowerCase()
+          .split(" ")
+          .map((s) => {
+            if (s.length == 0 || s == "part-time") return s;
+            return s[0].toUpperCase() + s.slice(1);
+          })
+          .join(" ");
+      }
+
+      const field = getEnumHelper("JobField").nsGetMember(ctx, capitalizeJobField(_field as string), "field");
 
       Player.location = companyNameAsLocationName(companyName);
       let res;

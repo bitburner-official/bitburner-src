@@ -6851,19 +6851,19 @@ declare enum JobName {
 
 /** @public */
 declare enum JobField {
-  software = "software",
-  softwareConsultant = "software consultant",
-  it = "it",
-  securityEngineer = "security engineer",
-  networkEngineer = "network engineer",
-  business = "business",
-  businessConsultant = "business consultant",
-  security = "security",
-  agent = "agent",
-  employee = "employee",
-  partTimeEmployee = "part-time employee",
-  waiter = "waiter",
-  partTimeWaiter = "part-time waiter",
+  software = "Software",
+  softwareConsultant = "Software Consultant",
+  it = "IT",
+  securityEngineer = "Security Engineer",
+  networkEngineer = "Network Engineer",
+  business = "Business",
+  businessConsultant = "Business Consultant",
+  security = "Security",
+  agent = "Agent",
+  employee = "Employee",
+  partTimeEmployee = "part-time Employee",
+  waiter = "Waiter",
+  partTimeWaiter = "part-time Waiter",
 }
 
 // CORP ENUMS - Changed to types
