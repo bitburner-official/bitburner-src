@@ -32,7 +32,7 @@ import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Companies } from "../Company/Companies";
 import { Factions } from "../Faction/Factions";
-import { helpers } from "../Netscript/NetscriptHelpers";
+import { helpers, assertString } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { getServerOnNetwork } from "../Server/ServerHelpers";
 import { Terminal } from "../Terminal";
@@ -738,11 +738,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     applyToCompany: (ctx) => (_companyName, _field) => {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
-      const field = getEnumHelper("JobField").nsGetMember(ctx, _field, "field");
+      assertString(ctx, "field", _field)
+      const field = getEnumHelper("JobField").nsGetMember(ctx, (_field as string).toLowerCase(), "field");
 
       Player.location = companyNameAsLocationName(companyName);
       let res;
-      switch (field.toLowerCase()) {
+      switch (field) {
         case JobField.software:
           res = Player.applyForSoftwareJob(true);
           break;
