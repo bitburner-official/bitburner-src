@@ -15,17 +15,17 @@ declare enum JobField
 
 |  Member | Value | Description |
 |  --- | --- | --- |
-|  agent | <code>&quot;agent&quot;</code> |  |
-|  business | <code>&quot;business&quot;</code> |  |
-|  businessConsultant | <code>&quot;business consultant&quot;</code> |  |
-|  employee | <code>&quot;employee&quot;</code> |  |
-|  it | <code>&quot;it&quot;</code> |  |
-|  networkEngineer | <code>&quot;network engineer&quot;</code> |  |
-|  partTimeEmployee | <code>&quot;part-time employee&quot;</code> |  |
-|  partTimeWaiter | <code>&quot;part-time waiter&quot;</code> |  |
-|  security | <code>&quot;security&quot;</code> |  |
-|  securityEngineer | <code>&quot;security engineer&quot;</code> |  |
-|  software | <code>&quot;software&quot;</code> |  |
-|  softwareConsultant | <code>&quot;software consultant&quot;</code> |  |
-|  waiter | <code>&quot;waiter&quot;</code> |  |
+|  agent | <code>&quot;Agent&quot;</code> |  |
+|  business | <code>&quot;Business&quot;</code> |  |
+|  businessConsultant | <code>&quot;Business Consultant&quot;</code> |  |
+|  employee | <code>&quot;Employee&quot;</code> |  |
+|  it | <code>&quot;IT&quot;</code> |  |
+|  networkEngineer | <code>&quot;Network Engineer&quot;</code> |  |
+|  partTimeEmployee | <code>&quot;part-time Employee&quot;</code> |  |
+|  partTimeWaiter | <code>&quot;part-time Waiter&quot;</code> |  |
+|  security | <code>&quot;Security&quot;</code> |  |
+|  securityEngineer | <code>&quot;Security Engineer&quot;</code> |  |
+|  software | <code>&quot;Software&quot;</code> |  |
+|  softwareConsultant | <code>&quot;Software Consultant&quot;</code> |  |
+|  waiter | <code>&quot;Waiter&quot;</code> |  |
 
