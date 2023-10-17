@@ -16,6 +16,7 @@ export interface CompanyPositionInfo
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [field](./bitburner.companypositioninfo.field.md) |  | [JobField](./bitburner.jobfield.md) |  |
 |  [name](./bitburner.companypositioninfo.name.md) |  | [JobName](./bitburner.jobname.md) |  |
 |  [nextPosition](./bitburner.companypositioninfo.nextposition.md) |  | [JobName](./bitburner.jobname.md) \| null |  |
 |  [requiredReputation](./bitburner.companypositioninfo.requiredreputation.md) |  | number |  |

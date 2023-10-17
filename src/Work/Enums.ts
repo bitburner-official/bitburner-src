@@ -63,3 +63,19 @@ export enum JobName {
   businessConsult0 = "Business Consultant",
   businessConsult1 = "Senior Business Consultant",
 }
+
+export enum JobField {
+  software = "Software",
+  softwareConsultant = "Software Consultant",
+  it = "IT",
+  securityEngineer = "Security Engineer",
+  networkEngineer = "Network Engineer",
+  business = "Business",
+  businessConsultant = "Business Consultant",
+  security = "Security",
+  agent = "Agent",
+  employee = "Employee",
+  partTimeEmployee = "part-time Employee",
+  waiter = "Waiter",
+  partTimeWaiter = "part-time Waiter",
+}

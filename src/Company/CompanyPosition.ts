@@ -1,6 +1,6 @@
 import { Person as IPerson } from "@nsdefs";
 import { CONSTANTS } from "../Constants";
-import { JobName } from "@enums";
+import { JobName, JobField } from "@enums";
 import {
   agentJobs,
   businessConsultJobs,
@@ -14,6 +14,7 @@ import {
 
 export interface CompanyPositionCtorParams {
   nextPosition: JobName | null;
+  field: JobField;
   baseSalary: number;
   repMultiplier: number;
 
@@ -43,6 +44,9 @@ export interface CompanyPositionCtorParams {
 export class CompanyPosition {
   /** Position title */
   name: JobName;
+
+  /** Field type of the position (software, it, business, etc) */
+  field: JobField;
 
   /** Title of next position to be promoted to */
   nextPosition: JobName | null;
@@ -85,6 +89,7 @@ export class CompanyPosition {
 
   constructor(name: JobName, p: CompanyPositionCtorParams) {
     this.name = name;
+    this.field = p.field;
     this.nextPosition = p.nextPosition;
     this.baseSalary = p.baseSalary;
     this.repMultiplier = p.repMultiplier;

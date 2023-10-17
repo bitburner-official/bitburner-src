@@ -8,6 +8,7 @@ import {
   FactionName,
   FactionWorkType,
   GymType,
+  JobField,
   LocationName,
   UniversityClassType,
 } from "@enums";
@@ -31,7 +32,7 @@ import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Companies } from "../Company/Companies";
 import { Factions } from "../Faction/Factions";
-import { helpers } from "../Netscript/NetscriptHelpers";
+import { helpers, assertString } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { getServerOnNetwork } from "../Server/ServerHelpers";
 import { Terminal } from "../Terminal";
@@ -687,6 +688,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const job = CompanyPositions[positionName];
       const res = {
         name: CompanyPositions[positionName].name,
+        field: CompanyPositions[positionName].field,
         nextPosition: CompanyPositions[positionName].nextPosition,
         salary: CompanyPositions[positionName].baseSalary * company.salaryMultiplier,
         requiredReputation: CompanyPositions[positionName].requiredReputation,
@@ -736,48 +738,63 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     applyToCompany: (ctx) => (_companyName, _field) => {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
-      const field = helpers.string(ctx, "field", _field);
+      assertString(ctx, "field", _field);
+
+      // capitalize each word, except for "part-time"
+      function capitalizeJobField(field: string) {
+        return field
+          .toLowerCase()
+          .split(" ")
+          .map((s) => {
+            if (s.length == 0 || s == "part-time") return s;
+            if (s.length == 2) return s.toUpperCase(); // Probably an acronym
+            return s[0].toUpperCase() + s.slice(1);
+          })
+          .join(" ");
+      }
+
+      const field = getEnumHelper("JobField").nsGetMember(ctx, capitalizeJobField(_field as string), "field");
 
       Player.location = companyNameAsLocationName(companyName);
       let res;
-      switch (field.toLowerCase()) {
-        case "software":
+      switch (field) {
+        case JobField.software:
           res = Player.applyForSoftwareJob(true);
           break;
-        case "software consultant":
+        case JobField.softwareConsultant:
           res = Player.applyForSoftwareConsultantJob(true);
           break;
-        case "it":
+        case JobField.it:
           res = Player.applyForItJob(true);
           break;
-        case "security engineer":
+        case JobField.securityEngineer:
           res = Player.applyForSecurityEngineerJob(true);
           break;
-        case "network engineer":
+        case JobField.networkEngineer:
           res = Player.applyForNetworkEngineerJob(true);
           break;
-        case "business":
+        case JobField.business:
           res = Player.applyForBusinessJob(true);
           break;
-        case "business consultant":
+        case JobField.businessConsultant:
           res = Player.applyForBusinessConsultantJob(true);
           break;
-        case "security":
+        case JobField.security:
           res = Player.applyForSecurityJob(true);
           break;
-        case "agent":
+        case JobField.agent:
           res = Player.applyForAgentJob(true);
           break;
-        case "employee":
+        case JobField.employee:
           res = Player.applyForEmployeeJob(true);
           break;
-        case "part-time employee":
+        case JobField.partTimeEmployee:
           res = Player.applyForPartTimeEmployeeJob(true);
           break;
-        case "waiter":
+        case JobField.waiter:
           res = Player.applyForWaiterJob(true);
           break;
-        case "part-time waiter":
+        case JobField.partTimeWaiter:
           res = Player.applyForPartTimeWaiterJob(true);
           break;
         default:
