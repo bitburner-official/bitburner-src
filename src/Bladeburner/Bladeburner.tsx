@@ -116,6 +116,7 @@ export class Bladeburner {
     return Math.min(1, this.stamina / (0.5 * this.maxStamina));
   }
 
+  // Todo, deduplicate this functionality
   getNextBlackOp(): { name: string; rank: number } | null {
     let blackops: BlackOperation[] = [];
     for (const blackopName of Object.keys(BlackOperations)) {
@@ -140,16 +141,6 @@ export class Bladeburner {
       !this.canAttemptBlackOp(actionID).isAvailable
       ? null
       : { name: blackops[0].name, rank: blackops[0].reqdRank };
-  }
-
-  getAllBlackOps(): { name: string; rank: number }[] {
-    const allBlackOps: { name: string; rank: number }[] = [];
-    for (const blackopName of Object.keys(BlackOperations)) {
-      if (Object.hasOwn(BlackOperations, blackopName)) {
-        allBlackOps.push({ name: blackopName, rank: BlackOperations[blackopName].reqdRank });
-      }
-    }
-    return allBlackOps;
   }
 
   canAttemptBlackOp(actionId: ActionIdentifier): BlackOpsAttempt {

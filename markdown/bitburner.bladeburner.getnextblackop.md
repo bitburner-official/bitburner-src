@@ -4,7 +4,7 @@
 
 ## Bladeburner.getNextBlackOp() method
 
-Get an object with the name and rank requirement of the available Bladeburner BlackOp, i.e. the next BlackOp that can be completed.
+Get an object with the name and rank requirement of the next BlackOp that can be completed.
 
 **Signature:**
 
@@ -19,7 +19,7 @@ An object with the `.name` and `.rank` properties of the available BlackOp, or `
 
 ## Remarks
 
-RAM cost: 0.4 GB
+RAM cost: 2 GB
 
 Returns the name and rank requirement for the available BlackOp. Returns `null` if no BlackOps remain in the BitNode.
 
