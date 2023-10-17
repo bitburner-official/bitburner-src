@@ -75,7 +75,7 @@ export enum JobField {
   security = "Security",
   agent = "Agent",
   employee = "Employee",
-  partTimeEmployee = "part-time Employee",
+  partTimeEmployee = "Part-time Employee",
   waiter = "Waiter",
-  partTimeWaiter = "part-time Waiter",
+  partTimeWaiter = "Part-time Waiter",
 }
