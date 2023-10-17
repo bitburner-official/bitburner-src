@@ -637,13 +637,6 @@ export const ns: InternalAPI<NSFull> = {
     if (!Player.hasProgram(CompletedProgramName.bruteSsh)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the BruteSSH.exe program!");
     }
-<<<<<<< HEAD
-    if (server.serversOnNetwork.length == 0) {
-      helpers.log(ctx, () => "Host not found");
-      return false;
-    }
-=======
->>>>>>> parent of 832cf5eeb (Update NetscriptFunctions.ts)
     if (!server.sshPortOpen) {
       helpers.log(ctx, () => `Executed BruteSSH.exe on '${server.hostname}' to open SSH port (22).`);
       server.sshPortOpen = true;
