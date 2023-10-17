@@ -1856,7 +1856,7 @@ export interface Singularity {
    * @param field - Field to which you want to apply.
    * @returns True if the player successfully get a job/promotion, and false otherwise.
    */
-  applyToCompany(companyName: CompanyName | `${CompanyName}`, field: string): boolean;
+  applyToCompany(companyName: CompanyName | `${CompanyName}`, field: JobField | `${JobField}`): boolean;
 
   /**
    * Get company reputation.
@@ -2423,6 +2423,7 @@ export interface Singularity {
  */
 export interface CompanyPositionInfo {
   name: JobName;
+  field: JobField;
   nextPosition: JobName | null;
   salary: number;
   requiredReputation: number;
@@ -6848,6 +6849,23 @@ declare enum JobName {
   employeePT = "Part-time Employee",
 }
 
+/** @public */
+declare enum JobField {
+  software = "software",
+  softwareConsultant = "software consultant",
+  it = "it",
+  securityEngineer = "security engineer",
+  networkEngineer = "network engineer",
+  business = "business",
+  businessConsultant = "business consultant",
+  security = "security",
+  agent = "agent",
+  employee = "employee",
+  partTimeEmployee = "part-time employee",
+  waiter = "waiter",
+  partTimeWaiter = "part-time waiter",
+}
+
 // CORP ENUMS - Changed to types
 /** @public */
 type CorpEmployeePosition =
@@ -7009,6 +7027,7 @@ export type NSEnums = {
   FactionWorkType: typeof FactionWorkType;
   GymType: typeof GymType;
   JobName: typeof JobName;
+  JobField: typeof JobField;
   LocationName: typeof LocationName;
   ToastVariant: typeof ToastVariant;
   UniversityClassType: typeof UniversityClassType;

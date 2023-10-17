@@ -1,11 +1,12 @@
 // Metadata used for constructing Company Positions
-import { JobName } from "@enums";
+import { JobName, JobField } from "@enums";
 import { CompanyPositionCtorParams } from "../CompanyPosition";
 
 export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCtorParams> {
   return {
     [JobName.software0]: {
       nextPosition: JobName.software1, // Junior Software Engineer
+      field: JobField.software,
       baseSalary: 33,
       charismaEffectiveness: 15,
       charismaExpGain: 0.02,
@@ -16,6 +17,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.software1]: {
       nextPosition: JobName.software2, // Senior Software Engineer
+      field: JobField.software,
       baseSalary: 80,
       charismaEffectiveness: 15,
       charismaExpGain: 0.05,
@@ -27,6 +29,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.software2]: {
       nextPosition: JobName.software3, // Lead Software Developer
+      field: JobField.software,
       baseSalary: 165,
       charismaEffectiveness: 20,
       charismaExpGain: 0.08,
@@ -39,6 +42,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.software3]: {
       nextPosition: JobName.software4, // Head of Software
+      field: JobField.software,
       baseSalary: 500,
       charismaEffectiveness: 25,
       charismaExpGain: 0.1,
@@ -51,6 +55,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.software4]: {
       nextPosition: JobName.software5, // Head of Engineering
+      field: JobField.software,
       baseSalary: 800,
       charismaEffectiveness: 25,
       charismaExpGain: 0.5,
@@ -63,6 +68,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.software5]: {
       nextPosition: JobName.software6, // Vice President of Technology
+      field: JobField.software,
       baseSalary: 1650,
       charismaEffectiveness: 25,
       charismaExpGain: 0.5,
@@ -75,6 +81,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.software6]: {
       nextPosition: JobName.software7, // Chief Technology Officer
+      field: JobField.software,
       baseSalary: 2310,
       charismaEffectiveness: 30,
       charismaExpGain: 0.6,
@@ -87,6 +94,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.software7]: {
       nextPosition: null,
+      field: JobField.software,
       baseSalary: 2640,
       charismaEffectiveness: 35,
       charismaExpGain: 1,
@@ -99,6 +107,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.IT0]: {
       nextPosition: JobName.IT1, // IT Analyst
+      field: JobField.it,
       baseSalary: 26,
       charismaEffectiveness: 10,
       charismaExpGain: 0.01,
@@ -109,6 +118,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.IT1]: {
       nextPosition: JobName.IT2, // IT Manager
+      field: JobField.it,
       baseSalary: 66,
       charismaEffectiveness: 15,
       charismaExpGain: 0.02,
@@ -120,6 +130,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.IT2]: {
       nextPosition: JobName.IT3, // Systems Administrator
+      field: JobField.it,
       baseSalary: 132,
       charismaEffectiveness: 20,
       charismaExpGain: 0.1,
@@ -132,6 +143,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.IT3]: {
       nextPosition: JobName.software5, // Head of Engineering
+      field: JobField.it,
       baseSalary: 410,
       charismaEffectiveness: 20,
       charismaExpGain: 0.2,
@@ -144,6 +156,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.securityEng]: {
       nextPosition: JobName.software5, // Head of Engineering
+      field: JobField.securityEngineer,
       baseSalary: 121,
       charismaEffectiveness: 15,
       charismaExpGain: 0.05,
@@ -156,6 +169,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.networkEng0]: {
       nextPosition: JobName.networkEng1, // Network Administrator
+      field: JobField.networkEngineer,
       baseSalary: 121,
       charismaEffectiveness: 15,
       charismaExpGain: 0.05,
@@ -168,6 +182,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.networkEng1]: {
       nextPosition: JobName.software5, // Head of Engineering
+      field: JobField.networkEngineer,
       baseSalary: 410,
       charismaEffectiveness: 20,
       charismaExpGain: 0.1,
@@ -180,6 +195,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.business0]: {
       nextPosition: JobName.business1, // Business Analyst
+      field: JobField.business,
       baseSalary: 46,
       charismaEffectiveness: 90,
       charismaExpGain: 0.08,
@@ -191,6 +207,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.business1]: {
       nextPosition: JobName.business2, // Business Manager
+      field: JobField.business,
       baseSalary: 100,
       charismaEffectiveness: 85,
       charismaExpGain: 0.15,
@@ -203,6 +220,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.business2]: {
       nextPosition: JobName.business3, // Operations Manager
+      field: JobField.business,
       baseSalary: 200,
       charismaEffectiveness: 85,
       charismaExpGain: 0.3,
@@ -215,6 +233,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.business3]: {
       nextPosition: JobName.business4, // Chief Financial Officer
+      field: JobField.business,
       baseSalary: 660,
       charismaEffectiveness: 85,
       charismaExpGain: 0.4,
@@ -227,6 +246,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.business4]: {
       nextPosition: JobName.business5, // Chief Executive Officer
+      field: JobField.business,
       baseSalary: 1950,
       charismaEffectiveness: 90,
       charismaExpGain: 1,
@@ -239,6 +259,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.business5]: {
       nextPosition: null,
+      field: JobField.business,
       baseSalary: 3900,
       charismaEffectiveness: 90,
       charismaExpGain: 1.5,
@@ -251,6 +272,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.security0]: {
       nextPosition: JobName.security1, // Security Officer
+      field: JobField.security,
       baseSalary: 50,
       hackingEffectiveness: 5,
       strengthEffectiveness: 20,
@@ -273,6 +295,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.security1]: {
       nextPosition: JobName.security2, // Security Supervisor
+      field: JobField.security,
       baseSalary: 195,
       hackingEffectiveness: 10,
       strengthEffectiveness: 20,
@@ -297,6 +320,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.security2]: {
       nextPosition: JobName.security3, // Head of Security
+      field: JobField.security,
       baseSalary: 660,
       hackingEffectiveness: 10,
       strengthEffectiveness: 15,
@@ -321,6 +345,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.security3]: {
       nextPosition: null,
+      field: JobField.security,
       baseSalary: 1320,
       hackingEffectiveness: 10,
       strengthEffectiveness: 15,
@@ -345,6 +370,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.agent0]: {
       nextPosition: JobName.agent1, // Secret Agent
+      field: JobField.agent,
       baseSalary: 330,
       hackingEffectiveness: 10,
       strengthEffectiveness: 15,
@@ -369,6 +395,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.agent1]: {
       nextPosition: JobName.agent2, // Special Operative
+      field: JobField.agent,
       baseSalary: 990,
       hackingEffectiveness: 15,
       strengthEffectiveness: 15,
@@ -393,6 +420,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.agent2]: {
       nextPosition: null,
+      field: JobField.agent,
       baseSalary: 2000,
       hackingEffectiveness: 15,
       strengthEffectiveness: 15,
@@ -417,6 +445,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.waiter]: {
       nextPosition: null,
+      field: JobField.waiter,
       baseSalary: 22,
       strengthEffectiveness: 10,
       dexterityEffectiveness: 10,
@@ -431,6 +460,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.employee]: {
       nextPosition: null,
+      field: JobField.employee,
       baseSalary: 22,
       strengthEffectiveness: 10,
       dexterityEffectiveness: 10,
@@ -445,6 +475,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.softwareConsult0]: {
       nextPosition: JobName.softwareConsult1, // Senior Software Consultant
+      field: JobField.softwareConsultant,
       baseSalary: 66,
       hackingEffectiveness: 80,
       charismaEffectiveness: 20,
@@ -455,6 +486,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.softwareConsult1]: {
       nextPosition: null,
+      field: JobField.softwareConsultant,
       baseSalary: 132,
       hackingEffectiveness: 75,
       charismaEffectiveness: 25,
@@ -466,6 +498,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.businessConsult0]: {
       nextPosition: JobName.businessConsult1, // Senior Business Consultant
+      field: JobField.businessConsultant,
       baseSalary: 66,
       hackingEffectiveness: 20,
       charismaEffectiveness: 80,
@@ -477,6 +510,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.businessConsult1]: {
       nextPosition: null,
+      field: JobField.businessConsultant,
       baseSalary: 525,
       hackingEffectiveness: 15,
       charismaEffectiveness: 85,
@@ -488,6 +522,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.waiterPT]: {
       nextPosition: null,
+      field: JobField.partTimeWaiter,
       baseSalary: 20,
       strengthEffectiveness: 10,
       dexterityEffectiveness: 10,
@@ -502,6 +537,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.employeePT]: {
       nextPosition: null,
+      field: JobField.partTimeEmployee,
       baseSalary: 20,
       strengthEffectiveness: 10,
       dexterityEffectiveness: 10,
