@@ -24,10 +24,18 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
     return (this.valueSet.has as (value: unknown) => boolean)(toValidate);
   }
   /** Take an unknown input from a player script, either return an enum member or throw */
-  nsGetMember(ctx: NetscriptContext, toValidate: unknown, argName = this.defaultArgName): EnumMember {
+  nsGetMember(
+    ctx: NetscriptContext,
+    toValidate: unknown,
+    argName = this.defaultArgName,
+    options?: { fuzzy?: boolean },
+  ): EnumMember {
     if (this.isMember(toValidate)) return toValidate;
-    // assertString is just called so if the user didn't even pass in a string, they get a different error message
     assertString(ctx, argName, toValidate);
+    if (options?.fuzzy) {
+      const fuzzMatch = this.fuzzyGetMember(toValidate);
+      if (fuzzMatch) return fuzzMatch;
+    }
     // Don't display all possibilities for large enums
     let allowableValues = `Allowable values: ${this.valueArray.map((val) => `"${val}"`).join(", ")}`;
     if (this.valueArray.length > 10) {
@@ -72,11 +80,11 @@ Object.entries(allEnums).forEach(([enumName, enumObj]) => {
 });
 
 // This function is just adding types to enumHelpers.get, and is all that gets exposed for use in other files.
-export const getEnumHelper: <Name extends EnumName, Enum extends (typeof allEnums)[Name]>(
+export const getEnumHelper: <Name extends EnumName, Enum extends typeof allEnums[Name]>(
   name: Name,
 ) => EnumHelper<Enum, Member<Enum>> = enumHelpers.get.bind(enumHelpers);
 
-export const isMember = <Name extends EnumName, Enum extends (typeof allEnums)[Name]>(
+export const isMember = <Name extends EnumName, Enum extends typeof allEnums[Name]>(
   name: Name,
   value: unknown,
 ): value is Member<Enum> => getEnumHelper(name).isMember(value);

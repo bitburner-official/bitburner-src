@@ -32,7 +32,7 @@ import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Companies } from "../Company/Companies";
 import { Factions } from "../Faction/Factions";
-import { helpers, assertString } from "../Netscript/NetscriptHelpers";
+import { helpers } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { getServerOnNetwork } from "../Server/ServerHelpers";
 import { Terminal } from "../Terminal";
@@ -738,22 +738,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     applyToCompany: (ctx) => (_companyName, _field) => {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
-      assertString(ctx, "field", _field);
-
-      // capitalize each word, except for "part-time"
-      function capitalizeJobField(field: string) {
-        return field
-          .toLowerCase()
-          .split(" ")
-          .map((s) => {
-            if (s.length == 0 || s == "part-time") return s;
-            if (s.length == 2) return s.toUpperCase(); // Probably an acronym
-            return s[0].toUpperCase() + s.slice(1);
-          })
-          .join(" ");
-      }
-
-      const field = getEnumHelper("JobField").nsGetMember(ctx, capitalizeJobField(_field as string), "field");
+      const field = getEnumHelper("JobField").nsGetMember(ctx, _field, "field", { fuzzy: true });
 
       Player.location = companyNameAsLocationName(companyName);
       let res;
