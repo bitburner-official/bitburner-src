@@ -15,7 +15,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es2022"
+    "target": "ESNext"
   },
   "include": ["src/**/*", "electron/**/*", "node_modules/monaco-editor/monaco.d.ts"]
 }
