@@ -747,6 +747,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           .split(" ")
           .map((s) => {
             if (s.length == 0 || s == "part-time") return s;
+            if (s.length == 2) return s.toUpperCase(); // Probably an acronym
             return s[0].toUpperCase() + s.slice(1);
           })
           .join(" ");
