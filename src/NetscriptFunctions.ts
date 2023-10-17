@@ -637,10 +637,13 @@ export const ns: InternalAPI<NSFull> = {
     if (!Player.hasProgram(CompletedProgramName.bruteSsh)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the BruteSSH.exe program!");
     }
+<<<<<<< HEAD
     if (server.serversOnNetwork.length == 0) {
       helpers.log(ctx, () => "Host not found");
       return false;
     }
+=======
+>>>>>>> parent of 832cf5eeb (Update NetscriptFunctions.ts)
     if (!server.sshPortOpen) {
       helpers.log(ctx, () => `Executed BruteSSH.exe on '${server.hostname}' to open SSH port (22).`);
       server.sshPortOpen = true;
@@ -659,10 +662,6 @@ export const ns: InternalAPI<NSFull> = {
     }
     if (!Player.hasProgram(CompletedProgramName.ftpCrack)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the FTPCrack.exe program!");
-    }
-    if (server.serversOnNetwork.length == 0) {
-      helpers.log(ctx, () => "Host not found");
-      return false;
     }
     if (!server.ftpPortOpen) {
       helpers.log(ctx, () => `Executed FTPCrack.exe on '${server.hostname}' to open FTP port (21).`);
@@ -683,10 +682,6 @@ export const ns: InternalAPI<NSFull> = {
     if (!Player.hasProgram(CompletedProgramName.relaySmtp)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the relaySMTP.exe program!");
     }
-    if (server.serversOnNetwork.length == 0) {
-      helpers.log(ctx, () => "Host not found");
-      return false;
-    }
     if (!server.smtpPortOpen) {
       helpers.log(ctx, () => `Executed relaySMTP.exe on '${server.hostname}' to open SMTP port (25).`);
       server.smtpPortOpen = true;
@@ -706,10 +701,6 @@ export const ns: InternalAPI<NSFull> = {
     if (!Player.hasProgram(CompletedProgramName.httpWorm)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the HTTPWorm.exe program!");
     }
-    if (server.serversOnNetwork.length == 0) {
-      helpers.log(ctx, () => "Host not found");
-      return false;
-    }
     if (!server.httpPortOpen) {
       helpers.log(ctx, () => `Executed HTTPWorm.exe on '${server.hostname}' to open HTTP port (80).`);
       server.httpPortOpen = true;
@@ -728,10 +719,6 @@ export const ns: InternalAPI<NSFull> = {
     }
     if (!Player.hasProgram(CompletedProgramName.sqlInject)) {
       throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the SQLInject.exe program!");
-    }
-    if (server.serversOnNetwork.length == 0) {
-      helpers.log(ctx, () => "Host not found");
-      return false;
     }
     if (!server.sqlPortOpen) {
       helpers.log(ctx, () => `Executed SQLInject.exe on '${server.hostname}' to open SQL port (1433).`);
