@@ -39,6 +39,7 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [getContractNames()](./bitburner.bladeburner.getcontractnames.md) | List all contracts. |
 |  [getCurrentAction()](./bitburner.bladeburner.getcurrentaction.md) | Get current action. |
 |  [getGeneralActionNames()](./bitburner.bladeburner.getgeneralactionnames.md) | List all general actions. |
+|  [getNextBlackOp()](./bitburner.bladeburner.getnextblackop.md) | Get an object with the name and rank requirement of the next BlackOp that can be completed. |
 |  [getOperationNames()](./bitburner.bladeburner.getoperationnames.md) | List all operations. |
 |  [getRank()](./bitburner.bladeburner.getrank.md) | Get player bladeburner rank. |
 |  [getSkillLevel(skillName)](./bitburner.bladeburner.getskilllevel.md) | Get skill level. |

@@ -2810,6 +2810,18 @@ export interface Bladeburner {
   getBlackOpNames(): string[];
 
   /**
+   * Get an object with the name and rank requirement of the next BlackOp that can be completed.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Returns the name and rank requirement for the available BlackOp.
+   * Returns `null` if no BlackOps remain in the BitNode.
+   *
+   * @returns An object with the `.name` and `.rank` properties of the available BlackOp, or `null`.
+   */
+  getNextBlackOp(): { name: string; rank: number } | null;
+
+  /**
    * List all general actions.
    * @remarks
    * RAM cost: 0.4 GB
