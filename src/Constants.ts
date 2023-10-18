@@ -9,6 +9,7 @@ export const CONSTANTS: {
   VersionNumber: number;
   MaxSkillLevel: number;
   MilliPerCycle: number;
+  OfflineHackingIncome: number;
   CorpFactionRepRequirement: number;
   BaseFocusBonus: number;
   BaseCostFor1GBOfRamHome: number;
@@ -95,6 +96,9 @@ export const CONSTANTS: {
 
   // Milliseconds per game cycle
   MilliPerCycle: 200,
+
+  // Multiplier for hacking income earned from offline scripts
+  OfflineHackingIncome: 0.75,
 
   // How much reputation is needed to join a megacorporation's faction
   CorpFactionRepRequirement: 400e3,

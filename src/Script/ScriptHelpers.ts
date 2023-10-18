@@ -54,9 +54,15 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
   const expGain = confidence * (runningScript.onlineExpGained / runningScript.onlineRunningTime) * timePassed;
   Player.gainHackingExp(expGain);
 
+  const moneyGain =
+    (runningScript.onlineMoneyMade / runningScript.onlineRunningTime) * timePassed * CONSTANTS.OfflineHackingIncome;
+  // money is given to player during engine load
+  Player.scriptProdSinceLastAug += moneyGain;
+
   // Update script stats
   runningScript.offlineRunningTime += timePassed;
   runningScript.offlineExpGained += expGain;
+  runningScript.offlineMoneyMade += moneyGain;
 
   // Weaken
   for (const hostname of Object.keys(runningScript.dataMap)) {
