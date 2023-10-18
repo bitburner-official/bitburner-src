@@ -25,14 +25,15 @@ export function validateObject<Type extends Record<string, unknown>, Key extends
       } else if (paramValidator.func !== undefined) {
         paramValidator.func(obj, validator, key);
       } else {
-        if (typeof obj[key] !== typeof paramValidator.default) {
+        const objVal = obj[key];
+        if (typeof objVal !== typeof paramValidator.default) {
           obj[key] = paramValidator.default as Type[Key];
         }
-        if (typeof obj[key] === "number" && paramValidator.min !== undefined) {
-          if (obj[key] < paramValidator.min) obj[key] = paramValidator.min as Type[Key];
+        if (typeof objVal === "number" && paramValidator.min !== undefined && objVal < paramValidator.min) {
+          obj[key] = paramValidator.min as Type[Key];
         }
-        if (typeof obj[key] === "number" && paramValidator.max !== undefined) {
-          if (obj[key] > paramValidator.max) obj[key] = paramValidator.max as Type[Key];
+        if (typeof objVal === "number" && paramValidator.max !== undefined && objVal > paramValidator.max) {
+          obj[key] = paramValidator.max as Type[Key];
         }
       }
     }
