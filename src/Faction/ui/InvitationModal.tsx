@@ -7,7 +7,7 @@ import { EventEmitter } from "../../utils/EventEmitter";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-export const InvitationEvent = new EventEmitter<[Faction]>();
+export const InvitationEvent = new EventEmitter<[Faction | null]>();
 
 export function InvitationModal({ hidden }: { hidden: boolean }): React.ReactElement {
   const [faction, setFaction] = useState<Faction | null>(null);
@@ -17,8 +17,9 @@ export function InvitationModal({ hidden }: { hidden: boolean }): React.ReactEle
     const i = Player.factionInvitations.findIndex((facName) => facName === faction.name);
     if (i === -1) {
       console.error("Could not find faction in Player.factionInvitations");
+    } else {
+      joinFaction(faction);
     }
-    joinFaction(faction);
     setFaction(null);
   }
 
