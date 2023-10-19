@@ -1887,7 +1887,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "Zoë's Omnicerebrum Ënhancer for sleeves inserts an omnicerebrum into your sleeve. " +
         "An omnicerebrum is a near perfect simulation of the human brain, allowing it to take advantage of a larger variety of augments. " +
-        "But you should know about this, BitRunner, since you have one of these yourself!",
+        "But you should know about this BitRunner, since you have one of these yourself!",
       stats: "Allows sleeves to benefit from Stanek's Gift, but is less powerful if several are installed.",
       factions: [
         /*Technically in FactionNames.ChurchOfTheMachineGod but not really for display reasons */
