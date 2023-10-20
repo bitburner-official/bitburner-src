@@ -38,7 +38,7 @@ export class SleeveCrimeWork extends SleeveWorkClass {
     this.cyclesWorked += cycles;
     if (this.cyclesWorked < this.cyclesNeeded()) return;
 
-     while (this.cyclesWorked > this.cyclesNeeded()) {
+    while (this.cyclesWorked > this.cyclesNeeded()) {
       const crime = this.getCrime();
       const gains = this.getExp(sleeve);
       const success = Math.random() < crime.successRate(sleeve);
