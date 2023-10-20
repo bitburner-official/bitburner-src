@@ -116,7 +116,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       }
 
       if (Player.corporation) {
-        Player.corporation.funds += Player.corporation.revenue * 0.01;
+        Player.corporation.addNonIncomeFunds(Player.corporation.revenue * 0.01);
       }
     }
 
