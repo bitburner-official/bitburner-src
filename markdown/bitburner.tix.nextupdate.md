@@ -15,19 +15,20 @@ nextUpdate(): Promise<number>;
 
 Promise&lt;number&gt;
 
-Promise that resolves to the number of milliseconds of Stock Market time that were processed in the previous update.
+Promise that resolves to the number of milliseconds of Stock Market time that were processed in the previous update (always 6000 ms).
 
 ## Remarks
 
 RAM cost: 1 GB
 
-The amount of real time spent asleep between updates can vary due to "bonus time".
+The amount of real time spent asleep between updates can vary due to "bonus time" (usually 4 seconds - 6 seconds).
 
 ## Example
 
 
 ```js
-while (await ns.stock.nextUpdate()) {
+while (true) {
+  await ns.stock.nextUpdate();
   // Manage your stock portfolio
 }
 ```

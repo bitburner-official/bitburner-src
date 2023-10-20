@@ -1556,14 +1556,16 @@ export interface TIX {
    * @remarks
    * RAM cost: 1 GB
    *
-   * The amount of real time spent asleep between updates can vary due to "bonus time".
+   * The amount of real time spent asleep between updates can vary due to "bonus time"
+   * (usually 4 seconds - 6 seconds).
    *
    * @returns Promise that resolves to the number of milliseconds of Stock Market time
-   * that were processed in the previous update.
+   * that were processed in the previous update (always 6000 ms).
    *
    * @example
    * ```js
-   * while (await ns.stock.nextUpdate()) {
+   * while (true) {
+   *   await ns.stock.nextUpdate();
    *   // Manage your stock portfolio
    * }
    * ```
@@ -3298,14 +3300,18 @@ export interface Bladeburner {
    * @remarks
    * RAM cost: 1 GB
    *
-   * The amount of real time spent asleep between updates can vary due to "bonus time".
+   * The amount of real time spent asleep between updates can vary due to "bonus time"
+   * (usually 1 second).
    *
    * @returns Promise that resolves to the number of milliseconds of Bladeburner time
-   * that were processed in the previous update.
+   * that were processed in the previous update (1000 - 5000 ms).
    *
    * @example
    * ```js
-   * while (await ns.bladeburner.nextUpdate()) {
+   * while (true) {
+   *   const duration = await ns.bladeburner.nextUpdate();
+   *   ns.print(`Bladeburner Division completed ${ns.tFormat(duration)} of actions.`);
+   *   ns.print(`Bonus time remaining: ${ns.tFormat(ns.bladeburner.getBonusTime())}`);
    *   // Manage the Bladeburner division
    * }
    * ```
@@ -3728,11 +3734,14 @@ export interface Gang {
    * The amount of real time spent asleep between updates can vary due to "bonus time".
    *
    * @returns Promise that resolves to the number of milliseconds of Gang time
-   * that were processed in the previous update.
+   * that were processed in the previous update (2000 - 5000 ms).
    *
    * @example
    * ```js
-   * while (await ns.gang.nextUpdate()) {
+   * while (true) {
+   *   const duration = await ns.gang.nextUpdate();
+   *   ns.print(`Gang completed ${ns.tFormat(duration)} of activity.`);
+   *   ns.print(`Bonus time remaining: ${ns.tFormat(ns.gang.getBonusTime())}`);
    *   // Manage the Gang
    * }
    * ```
@@ -7535,7 +7544,8 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @remarks
    * RAM cost: 1 GB
    *
-   * The amount of real time spent asleep between updates can vary due to "bonus time".
+   * The amount of real time spent asleep between updates can vary due to "bonus time"
+   * (usually 200 milliseconds - 2 seconds).
    *
    * @returns Promise that resolves to the name of the state that was just processed.
    *
@@ -7549,7 +7559,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * while (true) {
    *   const prevState = await ns.corporation.nextUpdate();
    *   const nextState = ns.corporation.getCorporation().state;
-   *   ns.print(`I'm done with ${prevState}, next will be ${nextState}.`);
+   *   ns.print(`Corporation finished with ${prevState}, next will be ${nextState}.`);
    *   // Manage the Corporation
    * }
    * ```

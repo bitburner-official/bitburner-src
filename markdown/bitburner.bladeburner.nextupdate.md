@@ -15,19 +15,22 @@ nextUpdate(): Promise<number>;
 
 Promise&lt;number&gt;
 
-Promise that resolves to the number of milliseconds of Bladeburner time that were processed in the previous update.
+Promise that resolves to the number of milliseconds of Bladeburner time that were processed in the previous update (1000 - 5000 ms).
 
 ## Remarks
 
 RAM cost: 1 GB
 
-The amount of real time spent asleep between updates can vary due to "bonus time".
+The amount of real time spent asleep between updates can vary due to "bonus time" (usually 1 second).
 
 ## Example
 
 
 ```js
-while (await ns.bladeburner.nextUpdate()) {
+while (true) {
+  const duration = await ns.bladeburner.nextUpdate();
+  ns.print(`Bladeburner Division completed ${ns.tFormat(duration)} of actions.`);
+  ns.print(`Bonus time remaining: ${ns.tFormat(ns.bladeburner.getBonusTime())}`);
   // Manage the Bladeburner division
 }
 ```

@@ -25,7 +25,7 @@ Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
 
 RAM cost: 1 GB
 
-The amount of real time spent asleep between updates can vary due to "bonus time".
+The amount of real time spent asleep between updates can vary due to "bonus time" (usually 200 milliseconds - 2 seconds).
 
 ## Example
 
@@ -34,7 +34,7 @@ The amount of real time spent asleep between updates can vary due to "bonus time
 while (true) {
   const prevState = await ns.corporation.nextUpdate();
   const nextState = ns.corporation.getCorporation().state;
-  ns.print(`I'm done with ${prevState}, next will be ${nextState}.`);
+  ns.print(`Corporation finished with ${prevState}, next will be ${nextState}.`);
   // Manage the Corporation
 }
 ```

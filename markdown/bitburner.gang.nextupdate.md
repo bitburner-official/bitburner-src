@@ -15,7 +15,7 @@ nextUpdate(): Promise<number>;
 
 Promise&lt;number&gt;
 
-Promise that resolves to the number of milliseconds of Gang time that were processed in the previous update.
+Promise that resolves to the number of milliseconds of Gang time that were processed in the previous update (2000 - 5000 ms).
 
 ## Remarks
 
@@ -27,7 +27,10 @@ The amount of real time spent asleep between updates can vary due to "bonus time
 
 
 ```js
-while (await ns.gang.nextUpdate()) {
+while (true) {
+  const duration = await ns.gang.nextUpdate();
+  ns.print(`Gang completed ${ns.tFormat(duration)} of activity.`);
+  ns.print(`Bonus time remaining: ${ns.tFormat(ns.gang.getBonusTime())}`);
   // Manage the Gang
 }
 ```
