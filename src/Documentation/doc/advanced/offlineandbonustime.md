@@ -22,6 +22,6 @@ Also, note that because of the way the JavaScript engine works, whenever you rel
 
 # Bonus Time
 
-Because of the above details, some activities in Bitburner accumulate "Bonus Time" while the game is closed or in an inactive browser tab . For mechanics that have a Bonus Time effect, the rate of the associated activity or task is significantly increased.
+Because of the above details, some activities in Bitburner accumulate "Bonus Time" while the game is closed or in an inactive browser tab. For mechanics that have a Bonus Time effect, the rate of the associated activity or task is significantly increased.
 
-For example if a certain [Bladeburner](bladeburners.md) contract requires 15 seconds to complete under normal conditions, the same task will be finished instead in 3 seconds if the Bonus Time effect is 5x. The specific details and effects of Bonus Time vary by mechanic.
+For example, if a certain [Bladeburner](bladeburners.md) contract requires 15 seconds to complete under normal conditions, the same task will be finished instead in 3 seconds if the Bonus Time effect is 5x. The specific details and effects of Bonus Time vary by mechanic.
