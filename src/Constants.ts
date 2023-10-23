@@ -223,36 +223,52 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.5.1 dev changelog (last updated 10/17/2023)
+## v2.5.1 dev changelog (last updated 10/23/2023)
 
 ### NOTES
+For the Steam version, this update includes a change that may result in your menu options reverting to default settings. If you experience issues with the correct savegame not loading, or you need to use Steam Cloud integration, check these menu settings after starting the game.
+
 See 2.5.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
 
 ### API
 
-- (Bladeburner) Added ns.bladeburner.getNextBlackOp (@myCatsName)
-- (Singularity) Added a JobField enum, and used this for the ns.singularity.applyToCompany function.
+- (Bladeburner) Added ns.bladeburner.nextUpdate, which allows waiting for the next update of the bladeburner mechanic (@jjclark1982)
+- (Bladeburner) Added ns.bladeburner.getNextBlackOp, which provides name and rank info for the next Black Operation that can be completed (@myCatsName)
+- (Corporation) Added ns.corporation.nextUpdate, which allows waiting for the next update of the corporation mechanic (@jjclark1982)
+- (Corporation) ns.corporation.getCorporation return value: 'state' property is deprecated. Added 'prevState' and 'nextState' properties. (@Caldwell-74)
+- (Gang) Added ns.gang.nextUpdate, which allows waiting for the next update of the gang mechanic (@jjclark1982)
+- (Singularity) Added a JobField enum, and used this for the ns.singularity.applyToCompany function (@alutman)
 - (Singularity) ns.singularity.purchaseProgram now returns true for programs that are already owned even if the player doesn't have enough money to re-buy the program (@ncharris93)
+- (Stock) Added ns.stock.nextUpdate, which allows waiting for the next update of the stock mechanic (@jjclark1982)
 
 ### BUGFIX
 
 - (Corporation) Fix an incorrect calculation when adding more employees to an office (@Caldwell-74)
-- Fix an issue where the "True Recursion" achievement could be granted incorrectly (@jjclark1982)
+- (Corporation) Bulk purchase can no longer be used to exceed maximum warehouse capacity (@TheAimMan)
+- (Sleeve) Sleeve crime work can no longer cause an overflow of %completion when performing quick crimes during bonus time (@TheAimMan)
 - (Stanek) Multipliers from Stanek are now calculated correctly even if the player has Entropy (@yichizhng)
+- Fix a bug that could cause the wrong coding contract to be deleted when using rm (@TheAimMan)
+- Scripts no longer show $0 for offline money income (@alutman)
+- Faction invitations are now cleared properly when performing a reset (@alutman)
+- API functions that work on a hostname no longer work on servers that have not been added to the network. (@TheAimMan)
+- Fix an issue where the "True Recursion" achievement could be granted incorrectly (@jjclark1982)
 
 ### MISC
 
 - Updated lots of dependencies (@Caldwell-74)
 - Updated electron to the latest version (Steam version only) (@Snarling)
-- Various spelling and grammar fixes for technical API documentation (@ficocelliguy)
-- Some grammar / wording fixes in github Readme + Contributing docs (@Warrobot10)
+- Various spelling / grammar / wording fixes (@ficocelliguy, @Squirlll, @Warrobot10)
+- Minor reorganization and streamlining in Script Editor code (@Snarling)
+- Tweaked the .lit file referencing Illuminati to give a better idea about joining requirements (@d0sboots)
+- (Steam version) Replaced outdated electron-config with electron-store (@tiziodcaio)
 
 ### UI
 
-- (Corporation) Improved various Corporation displays (@jjclark1982)
-- (Gang) Removed the territory warfare toggle from the main Gang screen
+- (Corporation) Improved the display of corporation state. (@Caldwell-74)
+- (Corporation) Improved various Corporation UIs (@jjclark1982)
+- (Gang) Removed the territory warfare toggle from the main Gang screen (@Tyasuh)
 - Added number of exploits to import savegame comparison (@myCatsName)
-- Dev menu improvements (@myCatsName)
+- Dev menu improvements (@myCatsName, @Snarling)
 - Added a credits button on the options page (@myCatsName)
 `,
 };
