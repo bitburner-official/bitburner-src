@@ -19,7 +19,7 @@ export interface IConstructorParams {
 /** Class representing a visitable location in the world */
 export class Location {
   /**
-   * Name of city this location is in. If this property is null, it means this i
+   * Name of city this location is in. If this property is null, it means this
    * is a generic location that is available in all cities
    */
   city: CityName | null = null;

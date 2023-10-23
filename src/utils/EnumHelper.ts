@@ -14,7 +14,7 @@ interface GetMemberOptions {
 
 class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & string> {
   name: string; // Name, for including in error text
-  defaultArgName: string; // Used as default for for validating ns arg name
+  defaultArgName: string; // Used as default for validating ns arg name
   valueArray: Array<EnumMember>;
   valueSet: Set<EnumMember>; // For quick isMember typecheck
   fuzzMap: Map<string, EnumMember>; // For fuzzy lookup
