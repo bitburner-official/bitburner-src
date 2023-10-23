@@ -1,4 +1,4 @@
-import { AugmentationName, CityName, CompletedProgramName, FactionName, LiteratureName } from "@enums";
+import { AugmentationName, CityName, CompletedProgramName, FactionName, LiteratureName, CompanyName } from "@enums";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { Companies } from "./Company/Companies";
 import { resetIndustryResearchTrees } from "./Corporation/data/IndustryData";
@@ -234,7 +234,8 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // BitNode 6: Bladeburners and BitNode 7: Bladeburners 2079
   if (Player.bitNodeN === 6 || Player.bitNodeN === 7) {
-    delayedDialog("NSA would like to have a word with you once you're ready.");
+    delayedDialog(`${CompanyName.NSA} would like to have a word with you once you're ready.`);
+    Player.receiveRumor(FactionName.Bladeburners);
   }
 
   // BitNode 8: Ghost of Wall Street
@@ -249,8 +250,9 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // BitNode 10: Digital Carbon
   if (Player.bitNodeN === 10) {
     delayedDialog(
-      "Seek out The Covenant if you'd like to purchase a new sleeve or two! And see what VitaLife in New Tokyo has to offer for you",
+      `Seek out ${FactionName.TheCovenant} if you'd like to purchase a new sleeve or two! And see what ${CompanyName.VitaLife} in ${CityName.NewTokyo} has to offer for you`,
     );
+    Player.receiveRumor(FactionName.TheCovenant);
   }
 
   // BitNode 12: Digital Carbon
@@ -260,6 +262,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   if (Player.bitNodeN === 13) {
     delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
+    Player.receiveRumor(FactionName.ChurchOfTheMachineGod);
   }
 
   // Reset Stock market, gang, and corporation
