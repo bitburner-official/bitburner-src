@@ -3,17 +3,16 @@ import React, { useEffect, useRef } from "react";
 import * as monaco from "monaco-editor";
 
 import { useScriptEditorContext } from "./ScriptEditorContext";
+import { scriptEditor } from "../ScriptEditor";
 
 interface EditorProps {
-  /** Function to be ran prior to mounting editor */
-  beforeMount: () => void;
   /** Function to be ran after mounting editor */
   onMount: (editor: monaco.editor.IStandaloneCodeEditor) => void;
   /** Function to be ran every time the code is updated */
   onChange: (newCode?: string) => void;
 }
 
-export function Editor({ beforeMount, onMount, onChange }: EditorProps) {
+export function Editor({ onMount, onChange }: EditorProps) {
   const containerDiv = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const subscription = useRef<monaco.IDisposable | null>(null);
@@ -23,7 +22,7 @@ export function Editor({ beforeMount, onMount, onChange }: EditorProps) {
   useEffect(() => {
     if (!containerDiv.current) return;
     // Before initializing monaco editor
-    beforeMount();
+    scriptEditor.initialize();
 
     // Initialize monaco editor
     editorRef.current = monaco.editor.create(containerDiv.current, {

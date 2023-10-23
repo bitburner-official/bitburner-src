@@ -1,3 +1,5 @@
+import type { ContentFilePath } from "../../Paths/ContentFile";
+
 import React, { useEffect, useRef } from "react";
 import * as monaco from "monaco-editor";
 
@@ -8,23 +10,17 @@ type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { ScriptFilePath } from "../../Paths/ScriptFilePath";
 import { checkInfiniteLoop } from "../../Script/RamCalculations";
 
-import { ns, enums } from "../../NetscriptFunctions";
 import { Settings } from "../../Settings/Settings";
 import { iTutorialNextStep, ITutorial, iTutorialSteps } from "../../InteractiveTutorial";
 import { debounce } from "lodash";
 import { saveObject } from "../../SaveObject";
-import { loadThemes, makeTheme, sanitizeTheme } from "./themes";
 import { GetServer } from "../../Server/AllServers";
 
 import { PromptEvent } from "../../ui/React/PromptManager";
 
-import libSource from "!!raw-loader!../NetscriptDefinitions.d.ts";
 import { useRerender } from "../../ui/React/hooks";
-import { NetscriptExtra } from "../../NetscriptFunctions/Extra";
-import { TextFilePath } from "../../Paths/TextFilePath";
 
 import { dirty, getServerCode } from "./utils";
 import { OpenScript } from "./OpenScript";
@@ -33,31 +29,14 @@ import { Toolbar } from "./Toolbar";
 import { NoOpenScripts } from "./NoOpenScripts";
 import { ScriptEditorContextProvider, useScriptEditorContext } from "./ScriptEditorContext";
 import { useVimEditor } from "./useVimEditor";
+import { useCallback } from "react";
 
 interface IProps {
   // Map of filename -> code
-  files: Map<ScriptFilePath | TextFilePath, string>;
+  files: Map<ContentFilePath, string>;
   hostname: string;
   vim: boolean;
 }
-
-// TODO: try to remove global symbols
-let symbolsLoaded = false;
-const apiKeys: string[] = [];
-export function SetupTextEditor(): void {
-  // Function for populating apiKeys using a given layer of the API.
-  const api = { args: [], pid: 1, enums, ...ns };
-  const hiddenAPI = NetscriptExtra();
-  function populate(apiLayer: object = api) {
-    for (const [apiKey, apiValue] of Object.entries(apiLayer)) {
-      if (apiLayer === api && apiKey in hiddenAPI) continue;
-      apiKeys.push(apiKey);
-      if (typeof apiValue === "object") populate(apiValue);
-    }
-  }
-  populate();
-}
-
 const openScripts: OpenScript[] = [];
 let currentScript: OpenScript | null = null;
 
@@ -77,6 +56,42 @@ function Root(props: IProps): React.ReactElement {
     currentScript = openScripts[0] ?? null;
   }
 
+  const save = useCallback(() => {
+    if (currentScript === null) {
+      console.error("currentScript is null when it shouldn't be. Unable to save script");
+      return;
+    }
+    // this is duplicate code with saving later.
+    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalTypeScript) {
+      //Make sure filename + code properly follow tutorial
+      if (currentScript.path !== "n00dles.script" && currentScript.path !== "n00dles.js") {
+        dialogBoxCreate("Don't change the script name for now.");
+        return;
+      }
+      const cleanCode = currentScript.code.replace(/\s/g, "");
+      const ns1 = "while(true){hack('n00dles');}";
+      const ns2 = `exportasyncfunctionmain(ns){while(true){awaitns.hack('n00dles');}}`;
+      if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
+        dialogBoxCreate("Please copy and paste the code from the tutorial!");
+        return;
+      }
+
+      //Save the script
+      saveScript(currentScript);
+      Router.toPage(Page.Terminal);
+
+      iTutorialNextStep();
+
+      return;
+    }
+
+    const server = GetServer(currentScript.hostname);
+    if (server === null) throw new Error("Server should not be null but it is.");
+    server.writeToContentFile(currentScript.path, currentScript.code);
+    if (Settings.SaveGameOnFileSave) saveObject.saveGame();
+    rerender();
+  }, [rerender]);
+
   useEffect(() => {
     function keydown(event: KeyboardEvent): void {
       if (Settings.DisableHotkeys) return;
@@ -95,12 +110,7 @@ function Root(props: IProps): React.ReactElement {
     }
     document.addEventListener("keydown", keydown);
     return () => document.removeEventListener("keydown", keydown);
-  });
-
-  // Generates a new model for the script
-  function regenerateModel(script: OpenScript): void {
-    script.model = monaco.editor.createModel(script.code, script.isTxt ? "plaintext" : "javascript");
-  }
+  }, [save]);
 
   function infLoop(newCode: string): void {
     if (editorRef.current === null || currentScript === null) return;
@@ -142,56 +152,15 @@ function Root(props: IProps): React.ReactElement {
     debouncedCodeParsing(newCode);
   };
 
-  // How to load function definition in monaco
-  // https://github.com/Microsoft/monaco-editor/issues/1415
-  // https://microsoft.github.io/monaco-editor/api/modules/monaco.languages.html
-  // https://www.npmjs.com/package/@monaco-editor/react#development-playground
-  // https://microsoft.github.io/monaco-editor/playground.html#extending-language-services-custom-languages
-  // https://github.com/threehams/typescript-error-guide/blob/master/stories/components/Editor.tsx#L11-L39
-  // https://blog.checklyhq.com/customizing-monaco/
-  // Before the editor is mounted
-  function beforeMount(): void {
-    if (symbolsLoaded) return;
-    // Setup monaco auto completion
-    symbolsLoaded = true;
-    (async function () {
-      // We have to improve the default js language otherwise theme sucks
-      const jsLanguage = monaco.languages.getLanguages().find((l) => l.id === "javascript");
-      // Unsupported function is not exposed in monaco public API.
-      const l = await (jsLanguage as any).loader();
-      // replaced the bare tokens with regexes surrounded by \b, e.g. \b{token}\b which matches a word-break on either side
-      // this prevents the highlighter from highlighting pieces of variables that start with a reserved token name
-      l.language.tokenizer.root.unshift([new RegExp("\\bns\\b"), { token: "ns" }]);
-      for (const symbol of apiKeys)
-        l.language.tokenizer.root.unshift([new RegExp(`\\b${symbol}\\b`), { token: "netscriptfunction" }]);
-      const otherKeywords = ["let", "const", "var", "function"];
-      const otherKeyvars = ["true", "false", "null", "undefined"];
-      otherKeywords.forEach((k) =>
-        l.language.tokenizer.root.unshift([new RegExp(`\\b${k}\\b`), { token: "otherkeywords" }]),
-      );
-      otherKeyvars.forEach((k) =>
-        l.language.tokenizer.root.unshift([new RegExp(`\\b${k}\\b`), { token: "otherkeyvars" }]),
-      );
-      l.language.tokenizer.root.unshift([new RegExp("\\bthis\\b"), { token: "this" }]);
-    })();
-
-    const source = (libSource + "").replace(/export /g, "");
-    monaco.languages.typescript.javascriptDefaults.addExtraLib(source, "netscript.d.ts");
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(source, "netscript.d.ts");
-    loadThemes(monaco.editor.defineTheme);
-    sanitizeTheme(Settings.EditorTheme);
-    monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
-  }
-
   // When the editor is mounted
   function onMount(editor: IStandaloneCodeEditor): void {
     // Required when switching between site navigation (e.g. from Script Editor -> Terminal and back)
     // the `useEffect()` for vim mode is called before editor is mounted.
     editorRef.current = editor;
 
-    if (!props.files && currentScript !== null) {
+    if (props.files.size === 0 && currentScript !== null) {
       // Open currentscript
-      regenerateModel(currentScript);
+      currentScript.regenerateModel();
       editorRef.current.setModel(currentScript.model);
       editorRef.current.setPosition(currentScript.lastPosition);
       editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
@@ -199,42 +168,35 @@ function Root(props: IProps): React.ReactElement {
       editorRef.current.focus();
       return;
     }
-    if (props.files) {
-      const files = props.files;
+    const files = props.files;
 
-      if (!files.size) {
-        editorRef.current.focus();
-        return;
-      }
-
-      for (const [filename, code] of files) {
-        // Check if file is already opened
-        const openScript = openScripts.find((script) => script.path === filename && script.hostname === props.hostname);
-        if (openScript) {
-          // Script is already opened
-          if (openScript.model === undefined || openScript.model === null || openScript.model.isDisposed()) {
-            regenerateModel(openScript);
-          }
-
-          currentScript = openScript;
-          editorRef.current.setModel(openScript.model);
-          editorRef.current.setPosition(openScript.lastPosition);
-          editorRef.current.revealLineInCenter(openScript.lastPosition.lineNumber);
-          parseCode(openScript.code);
-        } else {
-          // Open script
-          const newScript = new OpenScript(
-            filename,
-            code,
-            props.hostname,
-            new monaco.Position(0, 0),
-            monaco.editor.createModel(code, filename.endsWith(".txt") ? "plaintext" : "javascript"),
-          );
-          openScripts.push(newScript);
-          currentScript = newScript;
-          editorRef.current.setModel(newScript.model);
-          parseCode(newScript.code);
+    for (const [filename, code] of files) {
+      // Check if file is already opened
+      const openScript = openScripts.find((script) => script.path === filename && script.hostname === props.hostname);
+      if (openScript) {
+        // Script is already opened
+        if (openScript.model === undefined || openScript.model === null || openScript.model.isDisposed()) {
+          openScript.regenerateModel();
         }
+
+        currentScript = openScript;
+        editorRef.current.setModel(openScript.model);
+        editorRef.current.setPosition(openScript.lastPosition);
+        editorRef.current.revealLineInCenter(openScript.lastPosition.lineNumber);
+        parseCode(openScript.code);
+      } else {
+        // Open script
+        const newScript = new OpenScript(
+          filename,
+          code,
+          props.hostname,
+          new monaco.Position(0, 0),
+          monaco.editor.createModel(code, filename.endsWith(".txt") ? "plaintext" : "javascript"),
+        );
+        openScripts.push(newScript);
+        currentScript = newScript;
+        editorRef.current.setModel(newScript.model);
+        parseCode(newScript.code);
       }
     }
 
@@ -263,42 +225,6 @@ function Root(props: IProps): React.ReactElement {
     if (Settings.SaveGameOnFileSave) saveObject.saveGame();
   }
 
-  function save(): void {
-    if (currentScript === null) {
-      console.error("currentScript is null when it shouldn't be. Unable to save script");
-      return;
-    }
-    // this is duplicate code with saving later.
-    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalTypeScript) {
-      //Make sure filename + code properly follow tutorial
-      if (currentScript.path !== "n00dles.script" && currentScript.path !== "n00dles.js") {
-        dialogBoxCreate("Don't change the script name for now.");
-        return;
-      }
-      const cleanCode = currentScript.code.replace(/\s/g, "");
-      const ns1 = "while(true){hack('n00dles');}";
-      const ns2 = `exportasyncfunctionmain(ns){while(true){awaitns.hack('n00dles');}}`;
-      if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
-        dialogBoxCreate("Please copy and paste the code from the tutorial!");
-        return;
-      }
-
-      //Save the script
-      saveScript(currentScript);
-      Router.toPage(Page.Terminal);
-
-      iTutorialNextStep();
-
-      return;
-    }
-
-    const server = GetServer(currentScript.hostname);
-    if (server === null) throw new Error("Server should not be null but it is.");
-    server.writeToContentFile(currentScript.path, currentScript.code);
-    if (Settings.SaveGameOnFileSave) saveObject.saveGame();
-    rerender();
-  }
-
   function currentTabIndex(): number | undefined {
     if (currentScript) return openScripts.findIndex((openScript) => currentScript === openScript);
     return undefined;
@@ -316,8 +242,8 @@ function Root(props: IProps): React.ReactElement {
     currentScript = openScripts[index];
 
     if (editorRef.current !== null && openScripts[index] !== null) {
-      if (currentScript.model === undefined || currentScript.model.isDisposed()) {
-        regenerateModel(currentScript);
+      if (!currentScript.model || currentScript.model.isDisposed()) {
+        currentScript.regenerateModel();
       }
       editorRef.current.setModel(currentScript.model);
       editorRef.current.setPosition(currentScript.lastPosition);
@@ -361,7 +287,7 @@ function Root(props: IProps): React.ReactElement {
       currentScript = openScripts[index + indexOffset];
       if (editorRef.current !== null) {
         if (currentScript.model.isDisposed() || !currentScript.model) {
-          regenerateModel(currentScript);
+          currentScript.regenerateModel();
         }
         editorRef.current.setModel(currentScript.model);
         editorRef.current.setPosition(currentScript.lastPosition);
@@ -393,7 +319,7 @@ function Root(props: IProps): React.ReactElement {
 
             if (editorRef.current !== null && openScript !== null) {
               if (openScript.model === undefined || openScript.model.isDisposed()) {
-                regenerateModel(openScript);
+                openScript.regenerateModel();
               }
               editorRef.current.setModel(openScript.model);
 
@@ -464,7 +390,7 @@ function Root(props: IProps): React.ReactElement {
           onTabUpdate={onTabUpdate}
         />
         <div style={{ flex: "0 0 5px" }} />
-        <Editor beforeMount={beforeMount} onMount={onMount} onChange={updateCode} />
+        <Editor onMount={onMount} onChange={updateCode} />
 
         {VimStatus}
 
