@@ -77,6 +77,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.HistoryOfSynthoids]: new Literature({
     title: "A Brief History of Synthoids",
     filename: LiteratureName.HistoryOfSynthoids,
+    rumorForFaction: [FactionName.OmniTekIncorporated, FactionName.Bladeburners],
     text:
       "Synthetic androids, or Synthoids for short, are genetically engineered robots and, short of Augmentations, " +
       "are composed entirely of organic substances. For this reason, Synthoids are virtually identical to " +
@@ -195,6 +196,12 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.BrighterThanTheSun]: new Literature({
     title: "Brighter than the Sun",
     filename: LiteratureName.BrighterThanTheSun,
+    rumorForFaction: [
+      FactionName.KuaiGongInternational,
+      FactionName.OmniTekIncorporated,
+      FactionName.ECorp,
+      FactionName.MegaCorp,
+    ],
     text:
       `When people think about the corporations that dominate the East, they typically think of ${FactionName.KuaiGongInternational}, which ` +
       "holds a complete monopoly for manufacturing and commerce in Asia, or Global Pharmaceuticals, the world's largest " +
@@ -233,6 +240,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.Sector12Crime]: new Literature({
     title: `Figures Show Rising Crime Rates in ${CityName.Sector12}`,
     filename: LiteratureName.Sector12Crime,
+    rumorForFaction: [FactionName.TheSyndicate, FactionName.SlumSnakes],
     text:
       "A recent study by analytics company Wilson Inc. shows a significant rise " +
       `in criminal activity in ${CityName.Sector12}. Perhaps the most alarming part of the statistic ` +
@@ -267,6 +275,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.SecretSocieties]: new Literature({
     title: "Secret Societies",
     filename: LiteratureName.SecretSocieties,
+    rumorForFaction: [FactionName.Illuminati, FactionName.TheBlackHand, FactionName.NiteSec, FactionName.BitRunners],
     text:
       "The idea of secret societies has long intrigued the general public by inspiring curiosity, fascination, and " +
       "distrust. People have long wondered about who these secret society members are and what they do, with the " +
@@ -304,6 +313,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.CodedIntelligence]: new Literature({
     title: "Coded Intelligence: Myth or Reality?",
     filename: LiteratureName.CodedIntelligence,
+    rumorForFaction: [FactionName.OmniTekIncorporated],
     text:
       "Tremendous progress has been made in the field of Artificial Intelligence over the past few decades. " +
       "Our autonomous vehicles and transportation systems. The electronic personal assistants that control our everyday lives. " +
@@ -335,6 +345,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.TensionsInTechRace]: new Literature({
     title: "Tensions rise in global tech race",
     filename: LiteratureName.TensionsInTechRace,
+    rumorForFaction: [FactionName.OmniTekIncorporated, FactionName.MegaCorp, FactionName.ECorp],
     text:
       "Have we entered a new Cold War? Is WWIII just beyond the horizon?<br><br>" +
       `After rumors came out that ${FactionName.OmniTekIncorporated} had begun developing advanced robotic supersoldiers, ` +
@@ -375,6 +386,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.TheHiddenWorld]: new Literature({
     title: "The Hidden World",
     filename: LiteratureName.TheHiddenWorld,
+    rumorForFaction: [FactionName.Illuminati],
     text:
       "WAKE UP SHEEPLE<br><br>" +
       "THE GOVERNMENT DOES NOT EXIST. CORPORATIONS DO NOT RUN SOCIETY<br><br>" +
@@ -394,6 +406,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.TheNewGod]: new Literature({
     title: "The New God",
     filename: LiteratureName.TheNewGod,
+    rumorForFaction: [FactionName.ChurchOfTheMachineGod],
     text:
       "Everyone has a moment in their life when they wonder about the bigger questions.<br><br>" +
       "What's the point of all this? What is my purpose?<br><br>" +
@@ -408,6 +421,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.NewTriads]: new Literature({
     title: "The New Triads",
     filename: LiteratureName.NewTriads,
+    rumorForFaction: [FactionName.Tetrads],
     text:
       "The Triads were an ancient transnational crime syndicate based in China, Hong Kong, and other Asian " +
       "territories. They were often considered one of the first and biggest criminal secret societies. " +
