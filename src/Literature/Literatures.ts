@@ -380,8 +380,8 @@ export const Literatures: Record<LiteratureName, Literature> = {
       "THE GOVERNMENT DOES NOT EXIST. CORPORATIONS DO NOT RUN SOCIETY<br><br>" +
       `THE ${FactionName.Illuminati.toUpperCase()} ARE THE SECRET RULERS OF THE WORLD!<br><br>` +
       `Yes, the ${FactionName.Illuminati} of legends. The ancient secret society that controls the entire ` +
-      "world from the shadows with their invisible hand. The group of the rich and wealthy " +
-      "that have penetrated every major government, financial agency, and corporation in the last " +
+      "world from the shadows with their invisible hand. With their personal wealth and skills " +
+      "they have penetrated every major government, financial agency, and corporation in the last " +
       "three hundred years.<br><br>" +
       "OPEN YOUR EYES<br><br>" +
       `It was the ${FactionName.Illuminati} that brought an end to democracy in the world. They are the driving force ` +
