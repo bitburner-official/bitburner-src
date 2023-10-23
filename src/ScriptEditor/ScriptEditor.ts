@@ -1,5 +1,4 @@
 import type { ContentFilePath } from "../Paths/ContentFile";
-import type { OpenScript } from "./ui/OpenScript";
 
 import { EventEmitter } from "../utils/EventEmitter";
 import * as monaco from "monaco-editor";
@@ -14,10 +13,11 @@ import { ns } from "../NetscriptFunctions";
 export const fileEditEvents = new EventEmitter<[hostname: string, filename: ContentFilePath]>();
 
 export class ScriptEditor {
-  /** Array of scripts that are open. */
-  openScripts: OpenScript[] = [];
-  /** Index of the currently open script */
-  currentScriptIndex?: number = undefined;
+  // TODO: This will store info about currently open scripts.
+  // Among other things, this will allow informing the script editor of changes made elsewhere, even if the script editor is not being rendered.
+  // openScripts: OpenScript[] = [];
+
+  // Currently, this object is only used for initialization.
   isInitialized = false;
   initialize() {
     if (this.isInitialized) return;

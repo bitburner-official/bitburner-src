@@ -11,7 +11,8 @@ export class OpenScript {
   lastPosition: Position;
   model: ITextModel;
   isTxt: boolean;
-  hasExternalUpdate = false;
+  // TODO: Adding actual external update notifications for the OpenScript class
+  // hasExternalUpdate = false;
 
   constructor(path: ContentFilePath, code: string, hostname: string, lastPosition: Position, model: ITextModel) {
     this.path = path;
