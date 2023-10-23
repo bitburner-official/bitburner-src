@@ -68,7 +68,7 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
         <Typography variant="h4">Enter the Code!</Typography>
         <Typography variant="h4">
           {hasAugment && (
-            <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(7, 1fr)", textAlign: "center" }}>
+            <div style={{ display: "grid", gap: "2rem", gridTemplateColumns: "repeat(7, 1fr)", textAlign: "center" }}>
               <span style={{ visibility: "hidden" }}>{leftDashedArrowSymbol}</span>
               <span style={{ color: hintColor }}>{index > 1 && toDashedArrow(code[index - 2])}</span>
               <span style={{ color: hintColor }}>{index > 0 && toDashedArrow(code[index - 1])}</span>
