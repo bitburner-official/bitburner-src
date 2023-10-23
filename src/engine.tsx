@@ -262,7 +262,8 @@ const Engine: {
       }
 
       let offlineReputation = 0;
-      const offlineHackingIncome = (Player.moneySourceA.hacking / Player.playtimeSinceLastAug) * timeOffline * 0.75;
+      const offlineHackingIncome =
+        (Player.moneySourceA.hacking / Player.playtimeSinceLastAug) * timeOffline * CONSTANTS.OfflineHackingIncome;
       Player.gainMoney(offlineHackingIncome, "hacking");
       // Process offline progress
 
