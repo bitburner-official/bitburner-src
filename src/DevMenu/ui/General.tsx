@@ -8,14 +8,16 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { Player } from "@player";
 import { FactionName } from "@enums";
+import { useRerender } from "../../ui/React/hooks";
 import { Money } from "../../ui/React/Money";
+import { NumberInput } from "../../ui/React/NumberInput";
+import { Hashes } from "../../ui/React/Hashes";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
@@ -23,30 +25,34 @@ import { GangConstants } from "../../Gang/data/Constants";
 import { checkForMessagesToSend } from "../../Message/MessageHelpers";
 import { ThemeEvents } from "../../Themes/ui/Theme";
 import { getEnumHelper } from "../../utils/EnumHelper";
+import { formatRam } from "../../ui/formatNumber";
 
 export function General(): React.ReactElement {
+  const rerender = useRerender(400);
   const [error, setError] = useState(false);
   const [corporationName, setCorporationName] = useState("");
   const [gangFaction, setGangFaction] = useState(FactionName.SlumSnakes);
   const [devMoney, setDevMoney] = useState(0);
   const [hash, setHash] = useState(Player.hashManager.hashes);
-  const [homeRam, setHomeRam] = useState(Player.getHomeComputer().maxRam);
 
   // Money functions
-  const moneyValues = [1e6, 1e9, 1e12, 1e15, Infinity];
   const addCustomMoney = () => !Number.isNaN(devMoney) && Player.gainMoney(devMoney, "other");
-  const addMoney = (n: number) => () => Player.gainMoney(n, "other");
-  const setMoney = (n: number) => () => (Player.money = Number(n));
-  const addHashes = () => (Player.hashManager.hashes += hash);
+  const addMoney = (n: number) => () => n && Player.gainMoney(n, "other");
+  const setMoney = (n: number) => () => {
+    if (!isNaN(n)) Player.money = n;
+  };
+  const addHashes = () => hash && Player.hashManager.storeHashes(hash);
+
+  const homeComputer = Player.getHomeComputer();
 
   // Ram functions
   const doubleRam = () => {
-    Player.getHomeComputer().maxRam *= 2;
-    setHomeRam(homeRam * 2);
+    homeComputer.maxRam *= 2;
+    rerender();
   };
-  const setRam = (gb: number) => () => {
-    Player.getHomeComputer().maxRam = gb;
-    setHomeRam(gb);
+  const ramSetter = (gb: number) => () => {
+    homeComputer.maxRam = gb;
+    rerender();
   };
 
   // Node-clearing functions
@@ -103,17 +109,8 @@ export function General(): React.ReactElement {
     if (error) throw new ReferenceError("Manually thrown error");
   }, [error]);
 
-  // Component css
-  const smallButtonStyle = { width: "12rem" };
-  const largeButtonStyle = { width: "20rem" };
-  const noArrowsNumberField = {
-    "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
-      display: "none",
-    },
-    "& input[type=number]": {
-      MozAppearance: "textfield",
-    },
-  };
+  const moneyValues = [1e6, 1e9, 1e12, 1e15, Infinity];
+  const ramValues = [8, 64, 1024, 1048576, 1073741824];
 
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
@@ -121,67 +118,50 @@ export function General(): React.ReactElement {
         <Typography>General</Typography>
       </AccordionSummary>
       <AccordionDetails>
+        <Typography>
+          Money (current: <Money money={Player.money} />)
+        </Typography>
         {moneyValues.map((value) => (
           <Button key={`add money ${value}`} onClick={addMoney(value)}>
-            <pre>
-              + <Money money={value} />
-            </pre>
+            +&nbsp;
+            <Money money={value} />
           </Button>
         ))}
         <br />
-        <Typography>Add Money</Typography>
-        <TextField
-          placeholder={"$$$"}
-          type="number"
-          onChange={(x) => setDevMoney(parseFloat(x.target.value))}
-          sx={noArrowsNumberField}
-        />
-        <Button style={smallButtonStyle} onClick={addCustomMoney}>
-          Give Money
-        </Button>
-        <Button
-          style={smallButtonStyle}
-          onClick={setMoney(0)}
-          title="This sets your money to $0, this means the money you had will just vanish without being accounted for where it went and may offset some metrics."
-        >
-          Clear Money
-        </Button>
+        <NumberInput placeholder={"$$$"} onChange={setDevMoney} />
+        <Button onClick={addCustomMoney}>Give Money</Button>
+        <Button onClick={setMoney(0)}>Clear Money</Button>
         <br />
-        <TextField
-          disabled={!Player.hashManager}
-          type="number"
-          placeholder={"add Hacknet hashes"}
-          onChange={(x) => setHash(parseFloat(x.target.value))}
-          sx={noArrowsNumberField}
-        />
-        <Button disabled={!Player.hashManager} style={smallButtonStyle} onClick={addHashes}>
-          Give Hashes
-        </Button>
-        <Button disabled={!Player.hashManager} style={smallButtonStyle} onClick={() => (Player.hashManager.hashes = 0)}>
-          Clear Hashes
-        </Button>
         <br />
-        <Tooltip placement="top-start" title={`Current RAM: ${Player.getHomeComputer().maxRam} GB`}>
-          <Typography>Set Home Server RAM</Typography>
-        </Tooltip>
-        <Tooltip placement="top" title="Starting RAM">
-          <Button onClick={setRam(8)}>8 GB</Button>
-        </Tooltip>
-        <Button onClick={setRam(64)}>64 GB</Button>
-        <Button onClick={setRam(1024)}>1 TB</Button>
-        <Button onClick={setRam(1048576)}>1.05 PB</Button>
-        <Tooltip placement="top" title="Max RAM sold by Alpha Ent.">
-          <Button onClick={setRam(1073741824)}>1.07 EB</Button>
-        </Tooltip>
-        <Tooltip placement="top" title="Double Home server's current RAM">
-          <Button onClick={doubleRam}>RAM *= 2</Button>
-        </Tooltip>
+        {Player.hashManager.capacity > 0 && (
+          <>
+            <Typography>
+              Hashes (current: <Hashes hashes={Player.hashManager.hashes} /> /&nbsp;
+              <Hashes hashes={Player.hashManager.capacity} />)
+            </Typography>
+            <NumberInput disabled={!Player.hashManager} placeholder={"hashes"} onChange={setHash} />
+            <Button disabled={!Player.hashManager} onClick={addHashes}>
+              Give Hashes
+            </Button>
+            <Button disabled={!Player.hashManager} onClick={() => (Player.hashManager.hashes = 0)}>
+              Clear Hashes
+            </Button>
+          </>
+        )}
+        <br />
+        <br />
+        <Typography>Max Home RAM (current: {formatRam(homeComputer.maxRam)})</Typography>
+        {ramValues.map((gb) => (
+          <Button key={gb} onClick={ramSetter(gb)}>
+            {formatRam(gb)}
+          </Button>
+        ))}
+        <Button onClick={doubleRam}>RAM *= 2</Button>
+        <br />
         <br />
         <Typography>Corporation:</Typography>
         {Player.corporation ? (
-          <Button style={smallButtonStyle} onClick={destroyCorporation}>
-            Destroy Corporation
-          </Button>
+          <Button onClick={destroyCorporation}>Destroy Corporation</Button>
         ) : (
           <>
             <TextField
@@ -189,18 +169,14 @@ export function General(): React.ReactElement {
               value={corporationName}
               onChange={(x) => setCorporationName(x.target.value)}
             />
-            <br />
-            <Button style={smallButtonStyle} onClick={createCorporation}>
-              Create Corporation
-            </Button>
+            <Button onClick={createCorporation}>Create Corporation</Button>
           </>
         )}
         <br />
-        <Typography>Gang Faction:</Typography>
+        <br />
+        <Typography>Gang:</Typography>
         {Player.gang ? (
-          <Button style={smallButtonStyle} onClick={stopGang}>
-            Leave Gang
-          </Button>
+          <Button onClick={stopGang}>Leave Gang</Button>
         ) : (
           <>
             <Select value={gangFaction} onChange={setGangFactionDropdown}>
@@ -210,45 +186,28 @@ export function General(): React.ReactElement {
                 </MenuItem>
               ))}
             </Select>
-            <br />
-            <Button style={smallButtonStyle} onClick={startGang}>
-              Create Gang
-            </Button>
+            <Button onClick={startGang}>Create Gang</Button>
           </>
         )}
         <br />
+        <br />
         <Typography>Bladeburner:</Typography>
         {Player.bladeburner ? (
-          <Button style={smallButtonStyle} onClick={leaveBladeburner}>
-            Leave BladeBurner
-          </Button>
+          <Button onClick={leaveBladeburner}>Leave BladeBurner</Button>
         ) : (
-          <Button style={smallButtonStyle} onClick={joinBladeburner}>
-            Join BladeBurner
-          </Button>
+          <Button onClick={joinBladeburner}>Join BladeBurner</Button>
         )}
         <br />
-        <Typography>General:</Typography>
-        <Button style={largeButtonStyle} onClick={quickB1tFlum3}>
-          Quick b1t_flum3.exe
-        </Button>
-        <Button style={largeButtonStyle} onClick={b1tflum3}>
-          Run b1t_flum3.exe
-        </Button>
         <br />
-        <Button style={largeButtonStyle} onClick={quickHackW0r1dD43m0n}>
-          Quick w0rld_d34m0n
-        </Button>
-        <Button style={largeButtonStyle} onClick={hackW0r1dD43m0n}>
-          Hack w0rld_d34m0n
-        </Button>
+        <Typography>Misc:</Typography>
+        <Button onClick={quickB1tFlum3}>Quick b1t_flum3.exe</Button>
+        <Button onClick={b1tflum3}>Run b1t_flum3.exe</Button>
         <br />
-        <Button style={largeButtonStyle} onClick={() => setError(true)}>
-          Throw Error
-        </Button>
-        <Button style={largeButtonStyle} onClick={checkMessages}>
-          Check Messages
-        </Button>
+        <Button onClick={quickHackW0r1dD43m0n}>Quick w0rld_d34m0n</Button>
+        <Button onClick={hackW0r1dD43m0n}>Hack w0rld_d34m0n</Button>
+        <br />
+        <Button onClick={() => setError(true)}>Throw Error</Button>
+        <Button onClick={checkMessages}>Check Messages</Button>
       </AccordionDetails>
     </Accordion>
   );
