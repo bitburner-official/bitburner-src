@@ -9,6 +9,11 @@ export const downArrowSymbol = "↓";
 export const leftArrowSymbol = "←";
 export const rightArrowSymbol = "→";
 
+export const leftDashedArrowSymbol = "\u21e0";
+export const upDashedArrowSymbol = "\u21e1";
+export const rightDashedArrowSymbol = "\u21e2";
+export const downDashedArrowSymbol = "\u21e3";
+
 export function getArrow(event: KeyboardEvent): string {
   switch (event.key) {
     case KEY.UP_ARROW:
@@ -41,6 +46,20 @@ export function getInverseArrow(event: KeyboardEvent): string {
     case KEY.LEFT_ARROW:
     case KEY.A:
       return rightArrowSymbol;
+  }
+  return "";
+}
+
+export function toDashedArrow(arrow: string): string {
+  switch (arrow) {
+    case downArrowSymbol:
+      return downDashedArrowSymbol;
+    case rightArrowSymbol:
+      return rightDashedArrowSymbol;
+    case upArrowSymbol:
+      return upDashedArrowSymbol;
+    case leftArrowSymbol:
+      return leftDashedArrowSymbol;
   }
   return "";
 }

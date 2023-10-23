@@ -3,7 +3,17 @@ import React, { useState } from "react";
 import { AugmentationName } from "@enums";
 import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
-import { downArrowSymbol, getArrow, leftArrowSymbol, random, rightArrowSymbol, upArrowSymbol } from "../utils";
+import {
+  downArrowSymbol,
+  getArrow,
+  leftArrowSymbol,
+  random,
+  rightArrowSymbol,
+  upArrowSymbol,
+  leftDashedArrowSymbol,
+  rightDashedArrowSymbol,
+  toDashedArrow,
+} from "../utils";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
@@ -49,6 +59,8 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
     if (index + 1 >= code.length) props.onSuccess();
   }
 
+  // Hidden arrows are to force a consistent column width for the grid layout,
+  // based on the widest character (left and right dashed arrows)
   return (
     <>
       <GameTimer millis={timer} onExpire={props.onFailure} />
@@ -56,13 +68,15 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
         <Typography variant="h4">Enter the Code!</Typography>
         <Typography variant="h4">
           {hasAugment && (
-            <>
-              <span style={{ color: hintColor }}>{index > 1 ? code[index - 2] : "\u00a0"}&nbsp;</span>
-              <span style={{ color: hintColor }}>{index > 0 ? code[index - 1] : "\u00a0"}&nbsp;</span>
+            <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(7, 1fr)", textAlign: "center" }}>
+              <span style={{ visibility: "hidden" }}>{leftDashedArrowSymbol}</span>
+              <span style={{ color: hintColor }}>{index > 1 && toDashedArrow(code[index - 2])}</span>
+              <span style={{ color: hintColor }}>{index > 0 && toDashedArrow(code[index - 1])}</span>
               <span style={{ color: focusColor }}>{code[index]}</span>
-              <span style={{ color: hintColor }}>&nbsp;{index < code.length - 1 ? code[index + 1] : "\u00a0"}</span>
-              <span style={{ color: hintColor }}>&nbsp;{index < code.length - 2 ? code[index + 2] : "\u00a0"}</span>
-            </>
+              <span style={{ color: hintColor }}>{index < code.length - 1 && toDashedArrow(code[index + 1])}</span>
+              <span style={{ color: hintColor }}>{index < code.length - 2 && toDashedArrow(code[index + 2])}</span>
+              <span style={{ visibility: "hidden" }}>{rightDashedArrowSymbol}</span>
+            </div>
           )}
           {!hasAugment && <span style={{ color: focusColor }}>{code[index]}</span>}
         </Typography>
