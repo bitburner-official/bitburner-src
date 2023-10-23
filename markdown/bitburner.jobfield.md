@@ -21,8 +21,8 @@ declare enum JobField
 |  employee | <code>&quot;Employee&quot;</code> |  |
 |  it | <code>&quot;IT&quot;</code> |  |
 |  networkEngineer | <code>&quot;Network Engineer&quot;</code> |  |
-|  partTimeEmployee | <code>&quot;part-time Employee&quot;</code> |  |
-|  partTimeWaiter | <code>&quot;part-time Waiter&quot;</code> |  |
+|  partTimeEmployee | <code>&quot;Part-time Employee&quot;</code> |  |
+|  partTimeWaiter | <code>&quot;Part-time Waiter&quot;</code> |  |
 |  security | <code>&quot;Security&quot;</code> |  |
 |  securityEngineer | <code>&quot;Security Engineer&quot;</code> |  |
 |  software | <code>&quot;Software&quot;</code> |  |
