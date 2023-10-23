@@ -38,15 +38,17 @@ export class SleeveCrimeWork extends SleeveWorkClass {
     this.cyclesWorked += cycles;
     if (this.cyclesWorked < this.cyclesNeeded()) return;
 
-    const crime = this.getCrime();
-    const gains = this.getExp(sleeve);
-    const success = Math.random() < crime.successRate(sleeve);
-    if (success) {
-      Player.karma -= crime.karma * sleeve.syncBonus();
-      Player.numPeopleKilled += crime.kills;
-    } else gains.money = 0;
-    applySleeveGains(sleeve, gains, success ? 1 : 0.25);
-    this.cyclesWorked -= this.cyclesNeeded();
+    while (this.cyclesWorked > this.cyclesNeeded()) {
+      const crime = this.getCrime();
+      const gains = this.getExp(sleeve);
+      const success = Math.random() < crime.successRate(sleeve);
+      if (success) {
+        Player.karma -= crime.karma * sleeve.syncBonus();
+        Player.numPeopleKilled += crime.kills;
+      } else gains.money = 0;
+      applySleeveGains(sleeve, gains, success ? 1 : 0.25);
+      this.cyclesWorked -= this.cyclesNeeded();
+    }
   }
 
   APICopy() {
