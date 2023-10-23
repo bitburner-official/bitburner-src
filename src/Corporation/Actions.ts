@@ -463,7 +463,14 @@ export function Research(researchingDivision: Division, researchName: CorpResear
   const researchTree = IndustryResearchTrees[researchingDivision.type];
   if (researchTree === undefined) throw new Error(`No research tree for industry '${researchingDivision.type}'`);
   const research = ResearchMap[researchName];
-
+  const child = researchTree.findNode(researchName);
+  //Check to see if the research request has any pre-reqs that need to be researched first.
+  if (child !== null && child.parent !== null && child.parent.researchName !== null) {
+    const parent = child.parent.researchName;
+    if (!researchingDivision.researched.has(parent)) {
+      throw new Error(`You need ${parent} before you can research ${research.name}`);
+    }
+  }
   if (researchingDivision.researched.has(researchName)) return;
   if (researchingDivision.researchPoints < research.cost) {
     throw new Error(`You do not have enough Scientific Research for ${research.name}`);
