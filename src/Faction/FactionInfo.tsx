@@ -1,5 +1,5 @@
 import React from "react";
-import { FactionName } from "@enums";
+import { FactionName, CompanyName, CityName } from "@enums";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { Option } from "./ui/Option";
@@ -7,6 +7,7 @@ import { Typography } from "@mui/material";
 
 interface FactionInfoParams {
   infoText?: JSX.Element;
+  rumorText?: JSX.Element;
   enemies?: FactionName[];
   offerHackingWork?: boolean;
   offerFieldWork?: boolean;
@@ -23,6 +24,9 @@ export class FactionInfo {
 
   /** The descriptive text to show on the faction's page. */
   infoText: JSX.Element;
+
+  /** The hint to show about how to get invited to this faction. */
+  rumorText: JSX.Element;
 
   /** A flag indicating if the faction supports field work to earn reputation. */
   offerFieldWork: boolean;
@@ -44,6 +48,7 @@ export class FactionInfo {
 
   constructor(params: FactionInfoParams) {
     this.infoText = params.infoText ?? <></>;
+    this.rumorText = params.rumorText ?? <></>;
     this.enemies = params.enemies ?? [];
     this.offerHackingWork = params.offerHackingWork ?? false;
     this.offerFieldWork = params.offerFieldWork ?? false;
@@ -69,12 +74,20 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         from this chaos, we are the invisible hand that guides them to order.{" "}
       </>
     ),
+    rumorText: (
+      <>
+        The ancient secret society that controls the entire world from the shadows with their invisible hand. With their
+        personal wealth and skills they have penetrated every major government, financial agency, and corporation in the
+        last three hundred years.
+      </>
+    ),
     offerHackingWork: true,
     offerFieldWork: true,
   }),
 
   [FactionName.Daedalus]: new FactionInfo({
     infoText: <>Yesterday we obeyed kings and bent our necks to emperors. Today we kneel only to truth.</>,
+    rumorText: <>Follow the thread.</>,
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -89,6 +102,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         Only then can you discover immortality.
       </>
     ),
+    rumorText: <>{FactionName.TheCovenant} offers an exclusive service to those who have reached the limits of individual fitness and wish to go further.</>,
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -102,6 +116,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         information universally accessible.
       </>
     ),
+    rumorText: <>High-ranking employees of {CompanyName.ECorp} can gain access to proprietary hacking augmentations.</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -120,6 +135,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         the world.
       </>
     ),
+    rumorText: <>High-ranking employees of {CompanyName.MegaCorp} can gain access to proprietary biotech augmentations.</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -135,6 +151,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         Legal Insight - Business Instinct - Innovative Experience.
       </>
     ),
+    rumorText: (
+      <>
+        High-ranking employees of {CompanyName.BachmanAndAssociates} can gain access to proprietary negotiation
+        augmentations.
+      </>
+    ),
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -143,6 +165,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.BladeIndustries]: new FactionInfo({
     infoText: <>Augmentation is Salvation.</>,
+    rumorText: (
+      <>
+        High-ranking employees of {CompanyName.BladeIndustries} can gain access to proprietary bionic
+        augmentations.
+      </>
+    ),
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -157,6 +185,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         because of willingness, but because of a need to be incorporated into higher orders of structure and meaning.
       </>
     ),
+    rumorText: (
+      <>
+        High-ranking employees of {CompanyName.NWO} can gain access to proprietary nanotech
+        augmentations.
+      </>
+    ),
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -165,6 +199,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.ClarkeIncorporated]: new FactionInfo({
     infoText: <>The Power of the Genome - Unlocked.</>,
+    rumorText: (
+      <>
+        High-ranking employees of {CompanyName.ClarkeIncorporated} can gain access to proprietary neurotech
+        augmentations.
+      </>
+    ),
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -173,6 +213,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.OmniTekIncorporated]: new FactionInfo({
     infoText: <>Simply put, our mission is to design and build robots that make a difference.</>,
+    rumorText: <>High-ranking employees of {CompanyName.OmniTekIncorporated} can gain access to proprietary data-processing augmentations.</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -186,6 +227,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         deep learning and innovative ideas. And improved by iteration. That's {FactionName.FourSigma}.
       </>
     ),
+    rumorText: <>High-ranking employees of {CompanyName.FourSigma} can gain access to a range of versatile augmentations.</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -194,6 +236,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.KuaiGongInternational]: new FactionInfo({
     infoText: <>Dream big. Work hard. Make history.</>,
+    rumorText: <>High-ranking employees of {CompanyName.KuaiGongInternational} can gain access to proprietary dermatech augmentations.</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -208,6 +251,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         would be necessary to create them. And now we can.
       </>
     ),
+    rumorText: <>High-ranking employees of {CompanyName.FulcrumTechnologies} may discover a company system with access to proprietary neural network augmentations.</>,
     offerHackingWork: true,
     offerSecurityWork: true,
     keepOnInstall: true,
@@ -227,6 +271,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         Those who run the bits, run the world.
       </>
     ),
+    rumorText: <>Run for the hills.</>,
     offerHackingWork: true,
   }),
 
@@ -241,13 +286,14 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         So much pain. So many lives. Their darkness must end.
       </>
     ),
+    rumorText: <>I.I.I.I</>,
     offerHackingWork: true,
     offerFieldWork: true,
   }),
 
   // prettier-ignore
   [FactionName.NiteSec]: new FactionInfo({
-  infoText:(<>
+    infoText:(<>
     {"                  __..__               "}<br />
     {"                _.nITESECNIt.            "}<br />
     {"             .-'NITESECNITESEc.          "}<br />
@@ -283,16 +329,18 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     {"        d      .dNITESEC          $   |  "}<br />
     {"       :bp.__.gNITESEC/$         :$   ;  "}<br />
     {"       NITESECNITESECNIT         /$b :   "}<br /></>),
-  offerHackingWork:  true,
-  offerFieldWork:  false,
-  offerSecurityWork:  false,
-  special:  false,
-  keepOnInstall:  false,
+    rumorText: <>A hacking group known as {FactionName.NiteSec} will invite you to join them if you demonstrate your hacking skills on their server.</>,
+    offerHackingWork: true,
+    offerFieldWork: false,
+    offerSecurityWork: false,
+    special: false,
+    keepOnInstall: false,
   }),
 
   // City factions, essentially governments
   [FactionName.Aevum]: new FactionInfo({
     infoText: <>The Silicon City.</>,
+    rumorText: <>Wealthy residents of {CityName.Aevum} may be invited to work for the Silicon City.</>,
     enemies: [FactionName.Chongqing, FactionName.NewTokyo, FactionName.Ishima, FactionName.Volhaven],
     offerHackingWork: true,
     offerFieldWork: true,
@@ -300,6 +348,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
   [FactionName.Chongqing]: new FactionInfo({
     infoText: <>Serve the People.</>,
+    rumorText: <>Wealthy residents of {CityName.Chongqing} may be invited to serve the people.</>,
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     offerHackingWork: true,
     offerFieldWork: true,
@@ -307,6 +356,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
   [FactionName.Ishima]: new FactionInfo({
     infoText: <>The East Asian Order of the Future.</>,
+    rumorText: <>Wealthy residents of {CityName.Ishima} may be invited to work for the East Asian Order of the Future.</>,
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     offerHackingWork: true,
     offerFieldWork: true,
@@ -314,6 +364,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
   [FactionName.NewTokyo]: new FactionInfo({
     infoText: <>Asia's World City.</>,
+    rumorText: <>Wealthy residents of {CityName.NewTokyo} may be invited to work for Asia's World City.</>,
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     offerHackingWork: true,
     offerFieldWork: true,
@@ -321,6 +372,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
   [FactionName.Sector12]: new FactionInfo({
     infoText: <>The City of the Future.</>,
+    rumorText: <>Wealthy residents of {CityName.Sector12} may be invited to work for the City of the Future.</>,
     enemies: [FactionName.Chongqing, FactionName.NewTokyo, FactionName.Ishima, FactionName.Volhaven],
     offerHackingWork: true,
     offerFieldWork: true,
@@ -328,6 +380,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
   [FactionName.Volhaven]: new FactionInfo({
     infoText: <>Benefit, Honor, and Glory.</>,
+    rumorText: <>Wealthy residents of {CityName.Volhaven} may be invited to work for the city's Benefit, Honor, and Glory.</>,
     enemies: [FactionName.Chongqing, FactionName.Sector12, FactionName.NewTokyo, FactionName.Aevum, FactionName.Ishima],
     offerHackingWork: true,
     offerFieldWork: true,
@@ -337,6 +390,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   // Criminal Organizations/Gangs
   [FactionName.SpeakersForTheDead]: new FactionInfo({
     infoText: <>It is better to reign in Hell than to serve in Heaven.</>,
+    rumorText: <>We know.</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -344,12 +398,14 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.TheDarkArmy]: new FactionInfo({
     infoText: <>The World doesn't care about right or wrong. It only cares about power.</>,
+    rumorText: <>A ruthless criminal organization based in {CityName.Chongqing}</>,
     offerHackingWork: true,
     offerFieldWork: true,
   }),
 
   [FactionName.TheSyndicate]: new FactionInfo({
     infoText: <>Honor holds you back.</>,
+    rumorText: <>A criminal organization that operates in the western hemisphere.</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -366,20 +422,21 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         That's terror. Terror, fear, and corruption. All born into the system, all propagated by the system.
       </>
     ),
+    rumorText: <>Corporate executives with the right moral flexiblity may be invited to find out who they are truly working for.</>,
     offerHackingWork: true,
     offerFieldWork: true,
   }),
 
   [FactionName.Tetrads]: new FactionInfo({
     infoText: <>Following the mandate of Heaven and carrying out the way.</>,
-
+    rumorText: <>A notorious East Asian criminal organization.</>,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
 
   [FactionName.SlumSnakes]: new FactionInfo({
     infoText: <>{FactionName.SlumSnakes} rule!</>,
-
+    rumorText: <>{FactionName.SlumSnakes} rule!</>,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
@@ -387,13 +444,14 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   // Early game factions - factions the player will prestige with early on that don't belong in other categories.
   [FactionName.Netburners]: new FactionInfo({
     infoText: <>{"~~//*>H4CK||3T 8URN3R5**>?>\\~~"}</>,
+    rumorText: <>{"~~//*>H4CK||3T 8URN3R5**>?>\\~~"}</>,
     offerHackingWork: true,
   }),
 
   [FactionName.TianDiHui]: new FactionInfo({
     infoText: <>Obey Heaven and work righteously.</>,
+    rumorText: <>Obey Heaven and work righteously.</>,
     offerHackingWork: true,
-
     offerSecurityWork: true,
   }),
 
@@ -405,6 +463,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         total chaos. We serve only to protect society, to protect humanity, to protect the world from imminent collapse.
       </>
     ),
+    rumorText: <>A hacking group known as {FactionName.CyberSec} will invite you to join them if you demonstrate your hacking skills on their server.</>,
     offerHackingWork: true,
   }),
 
@@ -419,6 +478,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         {FactionName.Bladeburners} contracts/operations will increase your reputation.
       </>
     ),
+    rumorText: <>{CompanyName.NSA} would like to have a word with you once you're ready.</>,
 
     special: true,
     assignment: (): React.ReactElement => {
@@ -465,6 +525,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     {"        `..`                 "}<br /><br />
     Many cultures predict an end to humanity in the near future, a final
     Armageddon that will end the world; but we disagree.</>),
+    rumorText: <>Trouble is brewing in {CityName.Chongqing}.</>,
     offerHackingWork: false,
     offerFieldWork: false,
     offerSecurityWork: false,
@@ -490,6 +551,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         shackles, the gods grant us their strength.
       </>
     ),
+    rumorText: <>Your infiltration activity has attracted attention.</>,
     special: true,
     keepOnInstall: true,
     assignment: (): React.ReactElement => {
