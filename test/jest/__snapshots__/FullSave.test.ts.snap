@@ -1238,6 +1238,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     },
     "exploits": [],
     "factionInvitations": [],
+    "factionRumors": [],
     "factions": [
       "Slum Snakes",
       "CyberSec",

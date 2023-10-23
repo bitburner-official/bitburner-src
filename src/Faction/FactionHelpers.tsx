@@ -50,6 +50,12 @@ export function joinFaction(faction: Faction): void {
       i--;
     }
   }
+  for (let i = 0; i < Player.factionRumors.length; ++i) {
+    if (Player.factionRumors[i] == faction.name || Factions[Player.factionRumors[i]].isBanned) {
+      Player.factionRumors.splice(i, 1);
+      i--;
+    }
+  }
 }
 
 //Returns a boolean indicating whether the player has the prerequisites for the

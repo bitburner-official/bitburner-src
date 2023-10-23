@@ -835,13 +835,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const fac = Factions[facName];
       joinFaction(fac);
 
-      // Update Faction Invitation list to account for joined + banned factions
-      for (let i = 0; i < Player.factionInvitations.length; ++i) {
-        if (Player.factionInvitations[i] == facName || Factions[Player.factionInvitations[i]].isBanned) {
-          Player.factionInvitations.splice(i, 1);
-          i--;
-        }
-      }
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 5);
       helpers.log(ctx, () => `Joined the '${facName}' faction.`);
       return true;

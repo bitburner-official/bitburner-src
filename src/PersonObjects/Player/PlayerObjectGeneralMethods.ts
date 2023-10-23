@@ -105,6 +105,7 @@ export function prestigeAugmentation(this: PlayerObject): void {
 
   this.factions = [];
   this.factionInvitations = [];
+  this.factionRumors = [];
   // Clear any pending invitation modals
   InvitationEvent.emit(null);
 
@@ -171,10 +172,25 @@ export function prestigeSourceFile(this: PlayerObject): void {
 }
 
 export function receiveInvite(this: PlayerObject, factionName: FactionName): void {
-  if (this.factionInvitations.includes(factionName) || this.factions.includes(factionName)) {
+  if (this.factionInvitations.includes(factionName) || Factions[factionName].isMember || Factions[factionName].isBanned) {
     return;
   }
   this.factionInvitations.push(factionName);
+  if (this.factionRumors.includes(factionName)) {
+    this.factionRumors.splice(this.factionRumors.indexOf(factionName), 1);
+  }
+}
+
+export function receiveRumor(this: PlayerObject, factionName: FactionName): void {
+  if (
+    this.factionRumors.includes(factionName) ||
+    this.factionInvitations.includes(factionName) ||
+    Factions[factionName].isMember ||
+    Factions[factionName].isBanned
+  ) {
+    return;
+  }
+  this.factionRumors.push(factionName);
 }
 
 //Calculates skill level progress based on experience. The same formula will be used for every skill
