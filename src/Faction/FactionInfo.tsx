@@ -102,7 +102,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         Only then can you discover immortality.
       </>
     ),
-    rumorText: <>{FactionName.TheCovenant} offers an exclusive service to those who have reached the limits of individual fitness and wish to go further.</>,
+    rumorText: (
+      <>
+        {FactionName.TheCovenant} offers an exclusive service to those who have reached the limits of individual fitness
+        and wish to go further.
+      </>
+    ),
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -135,7 +140,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         the world.
       </>
     ),
-    rumorText: <>High-ranking employees of {CompanyName.MegaCorp} can gain access to proprietary biotech augmentations.</>,
+    rumorText: (
+      <>High-ranking employees of {CompanyName.MegaCorp} can gain access to proprietary biotech augmentations.</>
+    ),
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -166,10 +173,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.BladeIndustries]: new FactionInfo({
     infoText: <>Augmentation is Salvation.</>,
     rumorText: (
-      <>
-        High-ranking employees of {CompanyName.BladeIndustries} can gain access to proprietary bionic
-        augmentations.
-      </>
+      <>High-ranking employees of {CompanyName.BladeIndustries} can gain access to proprietary bionic augmentations.</>
     ),
     offerHackingWork: true,
     offerFieldWork: true,
@@ -185,12 +189,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         because of willingness, but because of a need to be incorporated into higher orders of structure and meaning.
       </>
     ),
-    rumorText: (
-      <>
-        High-ranking employees of {CompanyName.NWO} can gain access to proprietary nanotech
-        augmentations.
-      </>
-    ),
+    rumorText: <>High-ranking employees of {CompanyName.NWO} can gain access to proprietary nanotech augmentations.</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -213,7 +212,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.OmniTekIncorporated]: new FactionInfo({
     infoText: <>Simply put, our mission is to design and build robots that make a difference.</>,
-    rumorText: <>High-ranking employees of {CompanyName.OmniTekIncorporated} can gain access to proprietary data-processing augmentations.</>,
+    rumorText: (
+      <>
+        High-ranking employees of {CompanyName.OmniTekIncorporated} can gain access to proprietary data-processing
+        augmentations.
+      </>
+    ),
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -227,7 +231,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         deep learning and innovative ideas. And improved by iteration. That's {FactionName.FourSigma}.
       </>
     ),
-    rumorText: <>High-ranking employees of {CompanyName.FourSigma} can gain access to a range of versatile augmentations.</>,
+    rumorText: (
+      <>High-ranking employees of {CompanyName.FourSigma} can gain access to a range of versatile augmentations.</>
+    ),
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -236,7 +242,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.KuaiGongInternational]: new FactionInfo({
     infoText: <>Dream big. Work hard. Make history.</>,
-    rumorText: <>High-ranking employees of {CompanyName.KuaiGongInternational} can gain access to proprietary dermatech augmentations.</>,
+    rumorText: (
+      <>
+        High-ranking employees of {CompanyName.KuaiGongInternational} can gain access to proprietary dermatech
+        augmentations.
+      </>
+    ),
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -251,7 +262,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         would be necessary to create them. And now we can.
       </>
     ),
-    rumorText: <>High-ranking employees of {CompanyName.FulcrumTechnologies} may discover a company system with access to proprietary neural network augmentations.</>,
+    rumorText: (
+      <>
+        High-ranking employees of {CompanyName.FulcrumTechnologies} may discover a company system with access to
+        proprietary neural network augmentations.
+      </>
+    ),
     offerHackingWork: true,
     offerSecurityWork: true,
     keepOnInstall: true,
@@ -356,7 +372,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
   [FactionName.Ishima]: new FactionInfo({
     infoText: <>The East Asian Order of the Future.</>,
-    rumorText: <>Wealthy residents of {CityName.Ishima} may be invited to work for the East Asian Order of the Future.</>,
+    rumorText: (
+      <>Wealthy residents of {CityName.Ishima} may be invited to work for the East Asian Order of the Future.</>
+    ),
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     offerHackingWork: true,
     offerFieldWork: true,
@@ -380,7 +398,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   }),
   [FactionName.Volhaven]: new FactionInfo({
     infoText: <>Benefit, Honor, and Glory.</>,
-    rumorText: <>Wealthy residents of {CityName.Volhaven} may be invited to work for the city's Benefit, Honor, and Glory.</>,
+    rumorText: (
+      <>Wealthy residents of {CityName.Volhaven} may be invited to work for the city's Benefit, Honor, and Glory.</>
+    ),
     enemies: [FactionName.Chongqing, FactionName.Sector12, FactionName.NewTokyo, FactionName.Aevum, FactionName.Ishima],
     offerHackingWork: true,
     offerFieldWork: true,
@@ -422,7 +442,11 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         That's terror. Terror, fear, and corruption. All born into the system, all propagated by the system.
       </>
     ),
-    rumorText: <>Corporate executives with the right moral flexiblity may be invited to find out who they are truly working for.</>,
+    rumorText: (
+      <>
+        Corporate executives with the right moral flexiblity may be invited to find out who they are truly working for.
+      </>
+    ),
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -463,7 +487,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         total chaos. We serve only to protect society, to protect humanity, to protect the world from imminent collapse.
       </>
     ),
-    rumorText: <>A hacking group known as {FactionName.CyberSec} will invite you to join them if you demonstrate your hacking skills on their server.</>,
+    rumorText: (
+      <>
+        A hacking group known as {FactionName.CyberSec} will invite you to join them if you demonstrate your hacking
+        skills on their server.
+      </>
+    ),
     offerHackingWork: true,
   }),
 

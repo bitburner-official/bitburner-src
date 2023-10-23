@@ -83,11 +83,11 @@ Object.entries(allEnums).forEach(([enumName, enumObj]) => {
 });
 
 // This function is just adding types to enumHelpers.get, and is all that gets exposed for use in other files.
-export const getEnumHelper: <Name extends EnumName, Enum extends (typeof allEnums)[Name]>(
+export const getEnumHelper: <Name extends EnumName, Enum extends typeof allEnums[Name]>(
   name: Name,
 ) => EnumHelper<Enum, Member<Enum>> = enumHelpers.get.bind(enumHelpers);
 
-export const isMember = <Name extends EnumName, Enum extends (typeof allEnums)[Name]>(
+export const isMember = <Name extends EnumName, Enum extends typeof allEnums[Name]>(
   name: Name,
   value: unknown,
 ): value is Member<Enum> => getEnumHelper(name).isMember(value);

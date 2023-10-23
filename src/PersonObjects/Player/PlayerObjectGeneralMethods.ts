@@ -172,7 +172,11 @@ export function prestigeSourceFile(this: PlayerObject): void {
 }
 
 export function receiveInvite(this: PlayerObject, factionName: FactionName): void {
-  if (this.factionInvitations.includes(factionName) || Factions[factionName].isMember || Factions[factionName].isBanned) {
+  if (
+    this.factionInvitations.includes(factionName) ||
+    Factions[factionName].isMember ||
+    Factions[factionName].isBanned
+  ) {
     return;
   }
   this.factionInvitations.push(factionName);
@@ -958,8 +962,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
       this.numPeopleKilled >= 30
     ) {
       invitedFactions.push(speakersforthedeadFac);
-    }
-    else if (this.numPeopleKilled >= 5) {
+    } else if (this.numPeopleKilled >= 5) {
       this.receiveRumor(FactionName.SpeakersForTheDead);
     }
   }
@@ -984,8 +987,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
       this.numPeopleKilled >= 5
     ) {
       invitedFactions.push(thedarkarmyFac);
-    }
-    else if (this.numPeopleKilled >= 1) {
+    } else if (this.numPeopleKilled >= 1) {
       this.receiveRumor(FactionName.TheDarkArmy);
     }
   }
@@ -1010,8 +1012,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
       this.skills.agility >= 200
     ) {
       invitedFactions.push(thesyndicateFac);
-    }
-    else {
+    } else {
       this.receiveRumor(FactionName.TheSyndicate);
     }
   }
@@ -1039,7 +1040,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !tetradsFac.alreadyInvited &&
     this.karma <= -18 &&
     (this.city == CityName.Chongqing || this.city == CityName.NewTokyo || this.city == CityName.Ishima)
-   ) {
+  ) {
     if (
       this.skills.strength >= 75 &&
       this.skills.defense >= 75 &&
@@ -1047,30 +1048,23 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
       this.skills.agility >= 75
     ) {
       invitedFactions.push(tetradsFac);
-    }
-    else {
+    } else {
       this.receiveRumor(FactionName.Tetrads);
     }
   }
 
   //SlumSnakes
   const slumsnakesFac = Factions[FactionName.SlumSnakes];
-  if (
-    !slumsnakesFac.isBanned &&
-    !slumsnakesFac.isMember &&
-    !slumsnakesFac.alreadyInvited &&
-    this.karma <= -9
-    ) {
+  if (!slumsnakesFac.isBanned && !slumsnakesFac.isMember && !slumsnakesFac.alreadyInvited && this.karma <= -9) {
     if (
       this.skills.strength >= 30 &&
       this.skills.defense >= 30 &&
       this.skills.dexterity >= 30 &&
       this.skills.agility >= 30 &&
-      this.money >= 1000000      
+      this.money >= 1000000
     ) {
       invitedFactions.push(slumsnakesFac);
-    }
-    else {
+    } else {
       this.receiveRumor(FactionName.SlumSnakes);
     }
   }
@@ -1095,20 +1089,10 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
       totalHacknetCores += v.cores;
     }
   }
-  if (
-    !netburnersFac.isBanned &&
-    !netburnersFac.isMember &&
-    !netburnersFac.alreadyInvited
-  ) {
-    if (
-      this.skills.hacking >= 80 &&
-      totalHacknetRam >= 8 &&
-      totalHacknetCores >= 4 &&
-      totalHacknetLevels >= 100
-    ) {
+  if (!netburnersFac.isBanned && !netburnersFac.isMember && !netburnersFac.alreadyInvited) {
+    if (this.skills.hacking >= 80 && totalHacknetRam >= 8 && totalHacknetCores >= 4 && totalHacknetLevels >= 100) {
       invitedFactions.push(netburnersFac);
-    }
-    else if (totalHacknetLevels > 10) {
+    } else if (totalHacknetLevels > 10) {
       this.receiveRumor(FactionName.Netburners);
     }
   }
@@ -1121,14 +1105,10 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !tiandihuiFac.alreadyInvited &&
     (this.city == CityName.Chongqing || this.city == CityName.NewTokyo || this.city == CityName.Ishima)
   ) {
-    if (
-      this.money >= 1000000 &&
-      this.skills.hacking >= 50
-    ) {
+    if (this.money >= 1000000 && this.skills.hacking >= 50) {
       invitedFactions.push(tiandihuiFac);
-    }
-    else if (this.money >= 500000) {
-      this.receiveRumor(FactionName.TianDiHui)
+    } else if (this.money >= 500000) {
+      this.receiveRumor(FactionName.TianDiHui);
     }
   }
 
