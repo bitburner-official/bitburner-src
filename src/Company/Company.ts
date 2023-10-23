@@ -12,7 +12,7 @@ export interface CompanyCtorParams {
   expMultiplier: number;
   salaryMultiplier: number;
   jobStatReqOffset: number;
-  relatedFaction?: FactionName;
+  relatedFaction?: FactionName | undefined;
 }
 
 export class Company {
