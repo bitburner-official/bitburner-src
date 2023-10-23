@@ -131,10 +131,10 @@ export function General(): React.ReactElement {
         <NumberInput placeholder={"$$$"} onChange={setDevMoney} />
         <Button onClick={addCustomMoney}>Give Money</Button>
         <Button onClick={setMoney(0)}>Clear Money</Button>
-        <br />
-        <br />
         {Player.hashManager.capacity > 0 && (
           <>
+            <br />
+            <br />
             <Typography>
               Hashes (current: <Hashes hashes={Player.hashManager.hashes} /> /&nbsp;
               <Hashes hashes={Player.hashManager.capacity} />)
