@@ -103,6 +103,7 @@ import { ContentFilePath } from "./Paths/ContentFile";
 import { hasContractExtension } from "./Paths/ContractFilePath";
 import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
+import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
 
 export const enums: NSEnums = {
   CityName,
@@ -1806,31 +1807,4 @@ function getFunctionNames(obj: object, prefix: string): string[] {
     }
   }
   return functionNames;
-}
-
-const deprecatedWarningsGiven = new Set();
-function setDeprecatedProperties(
-  obj: object,
-  properties: Record<string, { identifier: string; message: string; value: any }>,
-) {
-  for (const [name, info] of Object.entries(properties)) {
-    Object.defineProperty(obj, name, {
-      get: () => {
-        deprecationWarning(info.identifier, info.message);
-        return info.value;
-      },
-      set: (value: any) => (info.value = value),
-      enumerable: true,
-    });
-  }
-}
-function deprecationWarning(identifier: string, message: string) {
-  if (!deprecatedWarningsGiven.has(identifier)) {
-    deprecatedWarningsGiven.add(identifier);
-    Terminal.warn(`Accessed deprecated function or property: ${identifier}`);
-    Terminal.warn(`This is no longer supported usage and will be removed in a later version.`);
-    Terminal.warn(message);
-    Terminal.info(`This message can also appear for object properties when the object's values are iterated.`);
-    Terminal.info(`This message will only be shown once per game session for each deprecated item accessed.`);
-  }
 }

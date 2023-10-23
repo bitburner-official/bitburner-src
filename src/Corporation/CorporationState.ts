@@ -9,12 +9,14 @@ export class CorporationState {
   // Get the name of the current state
   // NOTE: This does NOT return the number stored in the 'state' property,
   // which is just an index for the array of all possible Corporation States.
-  getState(): CorpStateName {
+  get nextName(): CorpStateName {
     return stateNames[this.state];
   }
-
+  get prevName(): CorpStateName {
+    return stateNames[(this.state + (stateNames.length - 1)) % stateNames.length];
+  }
   // Transition to the next state
-  nextState(): void {
+  incrementState(): void {
     this.state = (this.state + 1) % stateNames.length;
   }
 
@@ -22,7 +24,6 @@ export class CorporationState {
   toJSON(): IReviverValue {
     return Generic_toJSON("CorporationState", this);
   }
-
   // Initializes a CorporationState object from a JSON save state.
   static fromJSON(value: IReviverValue): CorporationState {
     return Generic_fromJSON(CorporationState, value.data);
