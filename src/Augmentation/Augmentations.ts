@@ -87,7 +87,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "A chip containing the psyche of the greatest BitRunner to ever exists. " +
         "Installing this relic significantly increases ALL of your stats. " +
-        "However it may have unintended consequence on the users mental well-being.",
+        "However, it may have unintended consequence on the users mental well-being.",
       stats: "Grants access to unimaginable power.",
       hacking: 2,
       strength: 2,
@@ -257,7 +257,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 1.65e10,
       info:
         "Upgrades the BLADE-51b Tesla Armor with a concentrated deuterium-fluoride laser " +
-        "weapon. It's precision and accuracy makes it useful for quickly neutralizing " +
+        "weapon. Its precision and accuracy makes it useful for quickly neutralizing " +
         "threats while keeping casualties to a minimum.",
       prereqs: [AugmentationName.BladeArmor],
       bladeburner_success_chance: 1.08,
@@ -524,7 +524,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "A DNA recombination of the EMS-4 Gene. This genetic engineering " +
         "technique was originally used on Bladeburners during the Synthoid uprising " +
         "to induce wakefulness and concentration, suppress fear, reduce empathy, " +
-        "improve reflexes, and improve memory among other things.",
+        "improve reflexes, and improve memory, among other things.",
       bladeburner_success_chance: 1.03,
       bladeburner_analysis: 1.05,
       bladeburner_stamina_gain: 1.02,
@@ -802,7 +802,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 2.5e9,
       info:
         "An upgrade to the BrachiBlades augmentation. It infuses " +
-        "the retractable blades with an advanced graphene material " +
+        "the retractable blades with an advanced graphene material, " +
         "making them stronger and lighter.",
       prereqs: [AugmentationName.BrachiBlades],
       strength: 1.4,
@@ -817,7 +817,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 1.1e7,
       info:
         "Uploads the architecture and design details of a Hacknet Node's CPU into " +
-        "the brain. This allows the user to engineer custom hardware and software  " +
+        "the brain. This allows the user to engineer custom hardware and software " +
         "for the Hacknet Node that provides better performance.",
       hacknet_node_money: 1.15,
       hacknet_node_purchase_cost: 0.85,
@@ -828,7 +828,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 5.5e6,
       info:
         "Uploads the architecture and design details of a Hacknet Node's main-memory cache " +
-        "into the brain. This allows the user to engineer custom cache hardware for the  " +
+        "into the brain. This allows the user to engineer custom cache hardware for the " +
         "Hacknet Node that offers better performance.",
       hacknet_node_money: 1.1,
       hacknet_node_level_cost: 0.85,
@@ -889,7 +889,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.HuntOfArtemis]: {
       repCost: 1e4,
       moneyCost: 1e6,
-      info: "magneto-turboencabulator based on technology by Micha Eike Siemon, increases the user's electro-magnetic sensitivity.",
+      info: "Magneto-turboencabulator based on technology by Micha Eike Siemon, increases the user's electro-magnetic sensitivity.",
       stats:
         "This augmentation makes the Minesweeper minigame easier by showing the location of all mines and keeping their position.",
       isSpecial: true,
@@ -959,9 +959,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.5e4,
       moneyCost: 5.5e9,
       info:
-        "The DNA is genetically modified to enhance the human's body " +
-        "extracellular matrix (ECM). This improves the ECM's ability to " +
-        "structurally support the body and grants heightened strength and " +
+        "A drug which incites a DNA modification to the body's extracellular " +
+        "matrix (ECM). This improves the ECM's ability to structurally " +
+        "support the body, granting heightened strength and " +
         "durability.",
       strength_exp: 1.05,
       defense_exp: 1.05,
@@ -1015,7 +1015,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Extra-ocular neurons taken from old martial art master. Injecting them gives the user the ability to " +
         "predict the enemy's attack before they even know it themselves.",
       stats:
-        "This augmentation makes the Slash minigame easier by showing you via an indicator when the slash in coming.",
+        "This augmentation makes the Slash minigame easier by showing you via an indicator when the slash is coming.",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -1096,9 +1096,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 3.75e4,
       moneyCost: 3.75e8,
       info:
-        "A drug that genetically modifies the neurons in the brain " +
-        "resulting in neurons that never die, continuously " +
-        "regenerate, and strengthen themselves.",
+        "A drug that genetically modifies the neurons in the brain, " +
+        "resulting in neurons that continuously " +
+        "regenerate and strengthen themselves.",
       hacking_exp: 1.4,
       factions: [FactionName.Chongqing],
     },
@@ -1106,9 +1106,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 500,
       moneyCost: 750e3,
       info:
-        "Undetectable adamantium nanobots injected in the users bloodstream. The NeuroFlux Governor " +
+        "Undetectable adamantium nanobots injected in the user's bloodstream. The NeuroFlux Governor " +
         "monitors and regulates all aspects of the human body, essentially 'governing' the body. " +
-        "By doing so, it improves the users performance for most actions.",
+        "By doing so, it improves the user's performance for most actions.",
       stats: `This special augmentation can be leveled up infinitely. Each level of this augmentation increases MOST multipliers by 1% (+${(
         donationBonus * 100
       ).toFixed(6)}%), stacking multiplicatively.`,
@@ -1253,7 +1253,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 2.5e6,
       info:
         "A thermo-powered artificial nutrition generator. Endogenously " +
-        "synthesizes glucose, amino acids, and vitamins and redistributes them " +
+        "synthesizes glucose, amino acids, and vitamins, and redistributes them " +
         "across the body. The device is powered by the body's naturally wasted " +
         "energy in the form of heat.",
       strength_exp: 1.2,
@@ -1547,16 +1547,16 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       hacknet_node_core_cost: 1.1,
       hacknet_node_level_cost: 1.1,
       work_money: 0.9,
-      stats: "Its unstable nature decreases all your stats by 10%",
+      stats: "Its unstable nature decreases all your stats by 10%.",
       factions: [FactionName.ChurchOfTheMachineGod],
     },
     [AugmentationName.StaneksGift2]: {
       repCost: 1e6,
       moneyCost: 0,
       info:
-        "The next evolution is near, a coming together of man and machine. A synthesis greater than the birth of the human " +
+        "The next evolution is near, a union of man and machine. A synthesis greater than the birth of the human " +
         "organism. Time spent with the gift has allowed for acclimatization of the invasive augment and the toll it takes upon " +
-        "your frame granting a 5% reduced penalty to all stats.",
+        "your frame, granting a 5% reduced penalty to all stats.",
       prereqs: [AugmentationName.StaneksGift1],
       isSpecial: true,
       hacking_chance: 0.95 / 0.9,
@@ -1585,7 +1585,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       hacknet_node_core_cost: 1.05 / 1.1,
       hacknet_node_level_cost: 1.05 / 1.1,
       work_money: 0.95 / 0.9,
-      stats: "The penalty for the gift is reduced to 5%",
+      stats: "The penalty for the gift is reduced to 5%.",
       factions: [FactionName.ChurchOfTheMachineGod],
     },
     [AugmentationName.StaneksGift3]: {
@@ -1594,7 +1594,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "The synthesis of human and machine is nothing to fear. It is our destiny. " +
         "You will become greater than the sum of our parts. As One. Embrace your gift " +
-        "fully and wholly free of it's accursed toll. Serenity brings tranquility in the form " +
+        "fully and wholly free of its accursed toll. Serenity brings tranquility in the form " +
         "of no longer suffering a stat penalty. ",
       prereqs: [AugmentationName.StaneksGift2, AugmentationName.StaneksGift1],
       isSpecial: true,
@@ -1759,7 +1759,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 5.5e8,
       info:
         "A highly advanced bionic hand. This prosthetic not only " +
-        "enhances strength and dexterity but it is also embedded " +
+        "enhances strength and dexterity, but is also embedded " +
         "with hardware and firmware that lets the user connect to, access, and hack " +
         "devices and machines by just touching them.",
       strength: 1.15,
@@ -1793,7 +1793,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 2.75e9,
       info:
         "A synthetic symbiotic virus that is injected into human brain tissue. The Vangelis virus " +
-        "heightens the senses and focus of its host, and also enhances its intuition.",
+        "heightens the senses and focus of its host while also enhancing their intuition.",
       dexterity_exp: 1.1,
       bladeburner_analysis: 1.1,
       bladeburner_success_chance: 1.04,
@@ -1824,7 +1824,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         `A copy of the WKS harmonizer from the MIA leader of the ${FactionName.ShadowsOfAnarchy} ` +
         "injects *Γ-based cells that provides general enhancement to the body.",
       stats:
-        "This augmentation makes many aspects of infiltration easier and more productive, via increased timer and rewards, reduced damage taken, etc.",
+        "This augmentation makes many aspects of infiltration easier and more productive via increased timer and rewards, reduced damage taken, etc.",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -1888,7 +1888,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Zoë's Omnicerebrum Ënhancer for sleeves inserts an omnicerebrum into your sleeve. " +
         "An omnicerebrum is a near perfect simulation of the human brain, allowing it to take advantage of a larger variety of augments. " +
         "But you should know about this BitRunner, since you have one of these yourself!",
-      stats: "Allows sleeves to benefit from Stanek's Gift but it is less powerful if several are installed.",
+      stats: "Allows sleeves to benefit from Stanek's Gift, but is less powerful if several are installed.",
       factions: [
         /*Technically in FactionNames.ChurchOfTheMachineGod but not really for display reasons */
       ],
