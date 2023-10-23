@@ -1,6 +1,6 @@
 import { Button, Container, Paper, Typography } from "@mui/material";
 import React, { useCallback, useState } from "react";
-import { AugmentationName } from "@enums";
+import { AugmentationName, FactionName } from "@enums";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { Player } from "@player";
@@ -89,6 +89,7 @@ export function Game(props: GameProps): React.ReactElement {
     (options?: { automated: boolean }) => {
       setStage(Stage.Countdown);
       pushResult(false);
+      Player.receiveRumor(FactionName.ShadowsOfAnarchy);
       // Kill the player immediately if they use automation, so
       // it's clear they're not meant to
       const damage = options?.automated

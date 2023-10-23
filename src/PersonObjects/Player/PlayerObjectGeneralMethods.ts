@@ -331,6 +331,10 @@ export function applyForJob(this: PlayerObject, entryPosType: CompanyPosition, s
   if (company.relatedFaction) {
     this.receiveRumor(company.relatedFaction);
   }
+  if (pos.name in [JobName.software7, JobName.business4, JobName.business5]) {
+    this.receiveInvite(FactionName.Silhouette);
+  }
+
   this.jobs[company.name] = pos.name;
 
   if (!sing) {
@@ -941,17 +945,23 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !speakersforthedeadFac.isBanned &&
     !speakersforthedeadFac.isMember &&
     !speakersforthedeadFac.alreadyInvited &&
-    this.skills.hacking >= 100 &&
-    this.skills.strength >= 300 &&
-    this.skills.defense >= 300 &&
-    this.skills.dexterity >= 300 &&
-    this.skills.agility >= 300 &&
-    this.numPeopleKilled >= 30 &&
-    this.karma <= -45 &&
-    !allCompanies.includes(LocationName.Sector12CIA) &&
-    !allCompanies.includes(LocationName.Sector12NSA)
+    !allCompanies.includes(CompanyName.CIA) &&
+    !allCompanies.includes(CompanyName.NSA) &&
+    this.karma <= -45
   ) {
-    invitedFactions.push(speakersforthedeadFac);
+    if (
+      this.skills.hacking >= 100 &&
+      this.skills.strength >= 300 &&
+      this.skills.defense >= 300 &&
+      this.skills.dexterity >= 300 &&
+      this.skills.agility >= 300 &&
+      this.numPeopleKilled >= 30
+    ) {
+      invitedFactions.push(speakersforthedeadFac);
+    }
+    else if (this.numPeopleKilled >= 5) {
+      this.receiveRumor(FactionName.SpeakersForTheDead);
+    }
   }
 
   //The Dark Army
@@ -960,18 +970,24 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !thedarkarmyFac.isBanned &&
     !thedarkarmyFac.isMember &&
     !thedarkarmyFac.alreadyInvited &&
-    this.skills.hacking >= 300 &&
-    this.skills.strength >= 300 &&
-    this.skills.defense >= 300 &&
-    this.skills.dexterity >= 300 &&
-    this.skills.agility >= 300 &&
     this.city == CityName.Chongqing &&
-    this.numPeopleKilled >= 5 &&
-    this.karma <= -45 &&
-    !allCompanies.includes(LocationName.Sector12CIA) &&
-    !allCompanies.includes(LocationName.Sector12NSA)
+    !allCompanies.includes(CompanyName.CIA) &&
+    !allCompanies.includes(CompanyName.NSA) &&
+    this.karma <= -45
   ) {
-    invitedFactions.push(thedarkarmyFac);
+    if (
+      this.skills.hacking >= 300 &&
+      this.skills.strength >= 300 &&
+      this.skills.defense >= 300 &&
+      this.skills.dexterity >= 300 &&
+      this.skills.agility >= 300 &&
+      this.numPeopleKilled >= 5
+    ) {
+      invitedFactions.push(thedarkarmyFac);
+    }
+    else if (this.numPeopleKilled >= 1) {
+      this.receiveRumor(FactionName.TheDarkArmy);
+    }
   }
 
   //The Syndicate
@@ -980,18 +996,24 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !thesyndicateFac.isBanned &&
     !thesyndicateFac.isMember &&
     !thesyndicateFac.alreadyInvited &&
-    this.skills.hacking >= 200 &&
-    this.skills.strength >= 200 &&
-    this.skills.defense >= 200 &&
-    this.skills.dexterity >= 200 &&
-    this.skills.agility >= 200 &&
     (this.city == CityName.Aevum || this.city == CityName.Sector12) &&
-    this.money >= 10000000 &&
-    this.karma <= -90 &&
-    !allCompanies.includes(LocationName.Sector12CIA) &&
-    !allCompanies.includes(LocationName.Sector12NSA)
+    !allCompanies.includes(CompanyName.CIA) &&
+    !allCompanies.includes(CompanyName.NSA) &&
+    this.karma <= -90
   ) {
-    invitedFactions.push(thesyndicateFac);
+    if (
+      this.money >= 10000000 &&
+      this.skills.hacking >= 200 &&
+      this.skills.strength >= 200 &&
+      this.skills.defense >= 200 &&
+      this.skills.dexterity >= 200 &&
+      this.skills.agility >= 200
+    ) {
+      invitedFactions.push(thesyndicateFac);
+    }
+    else {
+      this.receiveRumor(FactionName.TheSyndicate);
+    }
   }
 
   //Silhouette
@@ -1015,14 +1037,20 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !tetradsFac.isBanned &&
     !tetradsFac.isMember &&
     !tetradsFac.alreadyInvited &&
-    (this.city == CityName.Chongqing || this.city == CityName.NewTokyo || this.city == CityName.Ishima) &&
-    this.skills.strength >= 75 &&
-    this.skills.defense >= 75 &&
-    this.skills.dexterity >= 75 &&
-    this.skills.agility >= 75 &&
-    this.karma <= -18
-  ) {
-    invitedFactions.push(tetradsFac);
+    this.karma <= -18 &&
+    (this.city == CityName.Chongqing || this.city == CityName.NewTokyo || this.city == CityName.Ishima)
+   ) {
+    if (
+      this.skills.strength >= 75 &&
+      this.skills.defense >= 75 &&
+      this.skills.dexterity >= 75 &&
+      this.skills.agility >= 75
+    ) {
+      invitedFactions.push(tetradsFac);
+    }
+    else {
+      this.receiveRumor(FactionName.Tetrads);
+    }
   }
 
   //SlumSnakes
@@ -1031,14 +1059,20 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !slumsnakesFac.isBanned &&
     !slumsnakesFac.isMember &&
     !slumsnakesFac.alreadyInvited &&
-    this.skills.strength >= 30 &&
-    this.skills.defense >= 30 &&
-    this.skills.dexterity >= 30 &&
-    this.skills.agility >= 30 &&
-    this.karma <= -9 &&
-    this.money >= 1000000
-  ) {
-    invitedFactions.push(slumsnakesFac);
+    this.karma <= -9
+    ) {
+    if (
+      this.skills.strength >= 30 &&
+      this.skills.defense >= 30 &&
+      this.skills.dexterity >= 30 &&
+      this.skills.agility >= 30 &&
+      this.money >= 1000000      
+    ) {
+      invitedFactions.push(slumsnakesFac);
+    }
+    else {
+      this.receiveRumor(FactionName.SlumSnakes);
+    }
   }
 
   //Netburners
@@ -1064,13 +1098,19 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   if (
     !netburnersFac.isBanned &&
     !netburnersFac.isMember &&
-    !netburnersFac.alreadyInvited &&
-    this.skills.hacking >= 80 &&
-    totalHacknetRam >= 8 &&
-    totalHacknetCores >= 4 &&
-    totalHacknetLevels >= 100
+    !netburnersFac.alreadyInvited
   ) {
-    invitedFactions.push(netburnersFac);
+    if (
+      this.skills.hacking >= 80 &&
+      totalHacknetRam >= 8 &&
+      totalHacknetCores >= 4 &&
+      totalHacknetLevels >= 100
+    ) {
+      invitedFactions.push(netburnersFac);
+    }
+    else if (totalHacknetLevels > 10) {
+      this.receiveRumor(FactionName.Netburners);
+    }
   }
 
   //Tian Di Hui
@@ -1079,11 +1119,17 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !tiandihuiFac.isBanned &&
     !tiandihuiFac.isMember &&
     !tiandihuiFac.alreadyInvited &&
-    this.money >= 1000000 &&
-    this.skills.hacking >= 50 &&
     (this.city == CityName.Chongqing || this.city == CityName.NewTokyo || this.city == CityName.Ishima)
   ) {
-    invitedFactions.push(tiandihuiFac);
+    if (
+      this.money >= 1000000 &&
+      this.skills.hacking >= 50
+    ) {
+      invitedFactions.push(tiandihuiFac);
+    }
+    else if (this.money >= 500000) {
+      this.receiveRumor(FactionName.TianDiHui)
+    }
   }
 
   //CyberSec
