@@ -202,7 +202,7 @@ export abstract class BaseServer implements IServer {
       return { res: true };
     }
     if (path.endsWith(".cct")) {
-      const contractIndex = this.contracts.findIndex((program) => program);
+      const contractIndex = this.contracts.findIndex((contracts) => contracts.fn === path);
       if (contractIndex === -1) return { res: false, msg: `Contract file ${path} does not exist` };
       this.contracts.splice(contractIndex, 1);
       return { res: true };
