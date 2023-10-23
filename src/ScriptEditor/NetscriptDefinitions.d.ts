@@ -1537,6 +1537,40 @@ export interface TIX {
    * @returns True if you successfully purchased it or if you already have access, false otherwise.
    */
   purchaseTixApi(): boolean;
+
+  /**
+   * Get Stock Market bonus time.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * “Bonus time” is accumulated when the game is offline or if the game is inactive in the browser.
+   *
+   * Stock Market prices update more frequently during “bonus time”.
+   *
+   * @returns Amount of accumulated “bonus time” (milliseconds) for the Stock Market mechanic.
+   */
+  getBonusTime(): number;
+
+  /**
+   * Sleep until the next Stock Market price update has happened.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * The amount of real time spent asleep between updates can vary due to "bonus time"
+   * (usually 4 seconds - 6 seconds).
+   *
+   * @returns Promise that resolves to the number of milliseconds of Stock Market time
+   * that were processed in the previous update (always 6000 ms).
+   *
+   * @example
+   * ```js
+   * while (true) {
+   *   await ns.stock.nextUpdate();
+   *   // Manage your stock portfolio
+   * }
+   * ```
+   */
+  nextUpdate(): Promise<number>;
 }
 
 /**
@@ -1856,7 +1890,7 @@ export interface Singularity {
    * @param field - Field to which you want to apply.
    * @returns True if the player successfully get a job/promotion, and false otherwise.
    */
-  applyToCompany(companyName: CompanyName | `${CompanyName}`, field: string): boolean;
+  applyToCompany(companyName: CompanyName | `${CompanyName}`, field: JobField | `${JobField}`): boolean;
 
   /**
    * Get company reputation.
@@ -2423,6 +2457,7 @@ export interface Singularity {
  */
 export interface CompanyPositionInfo {
   name: JobName;
+  field: JobField;
   nextPosition: JobName | null;
   salary: number;
   requiredReputation: number;
@@ -2810,6 +2845,18 @@ export interface Bladeburner {
   getBlackOpNames(): string[];
 
   /**
+   * Get an object with the name and rank requirement of the next BlackOp that can be completed.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Returns the name and rank requirement for the available BlackOp.
+   * Returns `null` if no BlackOps remain in the BitNode.
+   *
+   * @returns An object with the `.name` and `.rank` properties of the available BlackOp, or `null`.
+   */
+  getNextBlackOp(): { name: string; rank: number } | null;
+
+  /**
    * List all general actions.
    * @remarks
    * RAM cost: 0.4 GB
@@ -3186,7 +3233,7 @@ export interface Bladeburner {
   getCity(): CityName;
 
   /**
-   * Travel to another city in bladeburner.
+   * Travel to another city in Bladeburner.
    * @remarks
    * RAM cost: 4 GB
    * Attempts to switch to the specified city (for Bladeburner only).
@@ -3199,7 +3246,7 @@ export interface Bladeburner {
   switchCity(city: CityName | `${CityName}`): boolean;
 
   /**
-   * Get bladeburner stamina.
+   * Get Bladeburner stamina.
    * @remarks
    * RAM cost: 4 GB
    * Returns an array with two elements:
@@ -3216,7 +3263,7 @@ export interface Bladeburner {
   getStamina(): [number, number];
 
   /**
-   * Join the bladeburner faction.
+   * Join the Bladeburner faction.
    * @remarks
    * RAM cost: 4 GB
    * Attempts to join the Bladeburner faction.
@@ -3230,7 +3277,7 @@ export interface Bladeburner {
   joinBladeburnerFaction(): boolean;
 
   /**
-   * Join the bladeburner division.
+   * Join the Bladeburner division.
    * @remarks
    * RAM cost: 4 GB
    *
@@ -3245,7 +3292,7 @@ export interface Bladeburner {
   joinBladeburnerDivision(): boolean;
 
   /**
-   * Get bladeburner bonus time.
+   * Get Bladeburner bonus time.
    * @remarks
    * RAM cost: 0 GB
    *
@@ -3261,11 +3308,34 @@ export interface Bladeburner {
    */
   getBonusTime(): number;
 
-  /** Returns whether player is a member of bladeburner division. Does not require API access.
+  /**
+   * Sleep until the next Bladeburner update has happened.
    * @remarks
    * RAM cost: 1 GB
    *
-   * @returns whether player is a member of bladeburner division. */
+   * The amount of real time spent asleep between updates can vary due to "bonus time"
+   * (usually 1 second).
+   *
+   * @returns Promise that resolves to the number of milliseconds of Bladeburner time
+   * that were processed in the previous update (1000 - 5000 ms).
+   *
+   * @example
+   * ```js
+   * while (true) {
+   *   const duration = await ns.bladeburner.nextUpdate();
+   *   ns.print(`Bladeburner Division completed ${ns.tFormat(duration)} of actions.`);
+   *   ns.print(`Bonus time remaining: ${ns.tFormat(ns.bladeburner.getBonusTime())}`);
+   *   // Manage the Bladeburner division
+   * }
+   * ```
+   */
+  nextUpdate(): Promise<number>;
+
+  /** Returns whether player is a member of Bladeburner division. Does not require API access.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @returns whether player is a member of Bladeburner division. */
   inBladeburner(): boolean;
 }
 
@@ -3668,6 +3738,28 @@ export interface Gang {
    * @returns Bonus time for the Gang mechanic in milliseconds.
    */
   getBonusTime(): number;
+
+  /**
+   * Sleeps until the next Gang update has happened.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * The amount of real time spent asleep between updates can vary due to "bonus time".
+   *
+   * @returns Promise that resolves to the number of milliseconds of Gang time
+   * that were processed in the previous update (2000 - 5000 ms).
+   *
+   * @example
+   * ```js
+   * while (true) {
+   *   const duration = await ns.gang.nextUpdate();
+   *   ns.print(`Gang completed ${ns.tFormat(duration)} of activity.`);
+   *   ns.print(`Bonus time remaining: ${ns.tFormat(ns.gang.getBonusTime())}`);
+   *   // Manage the Gang
+   * }
+   * ```
+   */
+  nextUpdate(): Promise<number>;
 }
 
 /**
@@ -6848,6 +6940,23 @@ declare enum JobName {
   employeePT = "Part-time Employee",
 }
 
+/** @public */
+declare enum JobField {
+  software = "Software",
+  softwareConsultant = "Software Consultant",
+  it = "IT",
+  securityEngineer = "Security Engineer",
+  networkEngineer = "Network Engineer",
+  business = "Business",
+  businessConsultant = "Business Consultant",
+  security = "Security",
+  agent = "Agent",
+  employee = "Employee",
+  partTimeEmployee = "Part-time Employee",
+  waiter = "Waiter",
+  partTimeWaiter = "Part-time Waiter",
+}
+
 // CORP ENUMS - Changed to types
 /** @public */
 type CorpEmployeePosition =
@@ -7009,6 +7118,7 @@ export type NSEnums = {
   FactionWorkType: typeof FactionWorkType;
   GymType: typeof GymType;
   JobName: typeof JobName;
+  JobField: typeof JobField;
   LocationName: typeof LocationName;
   ToastVariant: typeof ToastVariant;
   UniversityClassType: typeof UniversityClassType;
@@ -7459,6 +7569,33 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * “Bonus time” makes the game progress faster.
    * @returns Bonus time for the Corporation mechanic in milliseconds. */
   getBonusTime(): number;
+
+  /**
+   * Sleep until the next Corporation update has happened.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * The amount of real time spent asleep between updates can vary due to "bonus time"
+   * (usually 200 milliseconds - 2 seconds).
+   *
+   * @returns Promise that resolves to the name of the state that was just processed.
+   *
+   *  I.e. when the state is PURCHASE, it means purchasing has just happened.
+   *  Note that this is the state just before `getCorporation().state`.
+   *
+   *  Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
+   *
+   * @example
+   * ```js
+   * while (true) {
+   *   const prevState = await ns.corporation.nextUpdate();
+   *   const nextState = ns.corporation.getCorporation().state;
+   *   ns.print(`Corporation finished with ${prevState}, next will be ${nextState}.`);
+   *   // Manage the Corporation
+   * }
+   * ```
+   */
+  nextUpdate(): Promise<CorpStateName>;
 }
 
 /** Product rating information

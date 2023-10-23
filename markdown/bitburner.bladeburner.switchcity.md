@@ -4,7 +4,7 @@
 
 ## Bladeburner.switchCity() method
 
-Travel to another city in bladeburner.
+Travel to another city in Bladeburner.
 
 **Signature:**
 

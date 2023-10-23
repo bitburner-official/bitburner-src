@@ -2,8 +2,8 @@
 const http = require("http");
 const crypto = require("crypto");
 const log = require("electron-log");
-const Config = require("electron-config");
-const config = new Config();
+const Store = require("electron-store");
+const store = new Store();
 
 let server;
 let window;
@@ -100,7 +100,7 @@ async function initialize(win) {
     });
   });
 
-  const autostart = config.get("autostart", false);
+  const autostart = store.get("autostart", false);
   if (autostart) {
     try {
       await enable();
@@ -118,8 +118,8 @@ function enable() {
     return Promise.resolve();
   }
 
-  const port = config.get("port", 9990);
-  const host = config.get("host", "127.0.0.1");
+  const port = store.get("port", 9990);
+  const host = store.get("host", "127.0.0.1");
   log.log(`Starting http server on port ${port} - listening on ${host}`);
 
   // https://stackoverflow.com/a/62289870
@@ -165,20 +165,20 @@ function isListening() {
 
 function toggleAutostart() {
   const newValue = !isAutostart();
-  config.set("autostart", newValue);
+  store.set("autostart", newValue);
   log.log(`New autostart value is '${newValue}'`);
 }
 
 function isAutostart() {
-  return config.get("autostart");
+  return store.get("autostart");
 }
 
 function getAuthenticationToken() {
-  const token = config.get("token");
+  const token = store.get("token");
   if (token) return token;
 
   const newToken = generateToken();
-  config.set("token", newToken);
+  store.set("token", newToken);
   return newToken;
 }
 

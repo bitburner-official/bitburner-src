@@ -5,7 +5,7 @@ import { Product } from "../Corporation/Product";
 import { Material } from "../Corporation/Material";
 import { Warehouse } from "../Corporation/Warehouse";
 import { Division } from "../Corporation/Division";
-import { Corporation } from "../Corporation/Corporation";
+import { Corporation, CorporationResolvers } from "../Corporation/Corporation";
 import { cloneDeep, omit } from "lodash";
 import { setDeprecatedProperties } from "../utils/DeprecationHelper";
 import {
@@ -15,6 +15,7 @@ import {
   OfficeAPI,
   CorpResearchName,
   CorpMaterialName,
+  CorpStateName,
 } from "@nsdefs";
 
 import {
@@ -795,6 +796,10 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     getBonusTime: (ctx) => () => {
       checkAccess(ctx);
       return Math.round(getCorporation().storedCycles / 5) * 1000;
+    },
+    nextUpdate: (ctx) => () => {
+      checkAccess(ctx);
+      return new Promise<CorpStateName>((res) => CorporationResolvers.push(res));
     },
   };
 

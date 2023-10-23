@@ -5,9 +5,16 @@ import * as allEnums from "../Enums";
 import { assertString, helpers } from "../Netscript/NetscriptHelpers";
 import { getRandomInt } from "./helpers/getRandomInt";
 
+interface GetMemberOptions {
+  /** Whether to use fuzzy matching on the input (case insensitive, ignore spaces and dashes) */
+  fuzzy?: boolean;
+  /** Whether to always return an enum member, even if there was no match. Will attempt fuzzy match before returning a default match. */
+  alwaysMatch?: boolean;
+}
+
 class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & string> {
   name: string; // Name, for including in error text
-  defaultArgName: string; // Used as default for for validating ns arg name
+  defaultArgName: string; // Used as default for validating ns arg name
   valueArray: Array<EnumMember>;
   valueSet: Set<EnumMember>; // For quick isMember typecheck
   fuzzMap: Map<string, EnumMember>; // For fuzzy lookup
@@ -24,12 +31,19 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
     return (this.valueSet.has as (value: unknown) => boolean)(toValidate);
   }
   /** Take an unknown input from a player script, either return an enum member or throw */
-  nsGetMember(ctx: NetscriptContext, toValidate: unknown, argName = this.defaultArgName): EnumMember {
-    if (this.isMember(toValidate)) return toValidate;
-    // assertString is just called so if the user didn't even pass in a string, they get a different error message
+  nsGetMember(
+    ctx: NetscriptContext,
+    toValidate: unknown,
+    argName = this.defaultArgName,
+    options?: GetMemberOptions,
+  ): EnumMember {
+    const match = this.getMember(toValidate, options);
+    if (match) return match;
+
+    // No match found, create error message
     assertString(ctx, argName, toValidate);
-    // Don't display all possibilities for large enums
     let allowableValues = `Allowable values: ${this.valueArray.map((val) => `"${val}"`).join(", ")}`;
+    // Don't display all possibilities for large enums
     if (this.valueArray.length > 10) {
       console.warn(
         `Provided value ${toValidate} was not a valid option for enum type ${this.name}.\n${allowableValues}`,
@@ -41,19 +55,16 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
       `Argument ${argName} should be a ${this.name} enum member.\nProvided value: "${toValidate}".\n${allowableValues}`,
     );
   }
-  /** Provides case insensitivty and ignores spaces and dashes, and can always match the input */
-  fuzzyGetMember(input: string): EnumMember | undefined;
-  fuzzyGetMember(input: string, alwaysMatch: true): EnumMember;
-  fuzzyGetMember(input: string, alwaysMatch = false) {
-    const matchedValue = this.fuzzMap.get(input.toLowerCase().replace(/[ -]+/g, ""));
-    if (matchedValue) {
-      return matchedValue;
+  getMember(input: unknown, options: { alwaysMatch: true }): EnumMember;
+  getMember(input: unknown, options?: GetMemberOptions): EnumMember | undefined;
+  getMember(input: unknown, options?: GetMemberOptions): EnumMember | undefined {
+    if (this.isMember(input)) return input;
+    if (typeof input !== "string") return options?.alwaysMatch ? this.valueArray[0] : undefined;
+    if (options?.fuzzy || options?.alwaysMatch) {
+      const fuzzMatch = this.fuzzMap.get(input.toLowerCase().replace(/[ -]+/g, ""));
+      if (fuzzMatch) return fuzzMatch;
     }
-    return alwaysMatch ? this.valueArray[0] : undefined;
-  }
-  /** Provide a case sensitive match, or undefined if */
-  getMember(input: unknown): EnumMember | undefined {
-    return this.isMember(input) ? input : undefined;
+    return undefined;
   }
   // Get a random enum member
   random() {

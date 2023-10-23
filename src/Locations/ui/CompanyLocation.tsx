@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import { ApplyToJobButton } from "./ApplyToJobButton";
 
 import { Locations } from "../Locations";
-import { CompanyName, JobName } from "@enums";
+import { CompanyName, JobName, JobField } from "@enums";
 
 import { Companies } from "../../Company/Companies";
 import { CompanyPositions } from "../../Company/CompanyPositions";
@@ -238,7 +238,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             company={company}
             entryPosType={CompanyPositions[JobName.agent0]}
             onClick={applyForAgentJob}
-            text={"Apply for Agent Job"}
+            text={"Apply for " + JobField.agent + " Job"}
           />
         )}
         {company.hasBusinessConsultantPositions() && (
@@ -246,7 +246,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             company={company}
             entryPosType={CompanyPositions[JobName.businessConsult0]}
             onClick={applyForBusinessConsultantJob}
-            text={"Apply for Business Consultant Job"}
+            text={"Apply for " + JobField.businessConsultant + " Job"}
           />
         )}
         {company.hasBusinessPositions() && (
@@ -254,7 +254,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             company={company}
             entryPosType={CompanyPositions[JobName.business0]}
             onClick={applyForBusinessJob}
-            text={"Apply for Business Job"}
+            text={"Apply for " + JobField.business + " Job"}
           />
         )}
         {company.hasEmployeePositions() && (
@@ -262,7 +262,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             company={company}
             entryPosType={CompanyPositions[JobName.employee]}
             onClick={applyForEmployeeJob}
-            text={"Apply to be an Employee"}
+            text={"Apply to be an " + JobField.employee}
           />
         )}
         {company.hasEmployeePositions() && (
@@ -270,7 +270,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             company={company}
             entryPosType={CompanyPositions[JobName.employeePT]}
             onClick={applyForPartTimeEmployeeJob}
-            text={"Apply to be a part-time Employee"}
+            text={"Apply to be a " + JobField.partTimeEmployee}
           />
         )}
         {company.hasITPositions() && (
@@ -278,7 +278,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             company={company}
             entryPosType={CompanyPositions[JobName.IT0]}
             onClick={applyForItJob}
-            text={"Apply for IT Job"}
+            text={"Apply for " + JobField.it + " Job"}
           />
         )}
         {company.hasSecurityPositions() && (
@@ -286,7 +286,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             company={company}
             entryPosType={CompanyPositions[JobName.security0]}
             onClick={applyForSecurityJob}
-            text={"Apply for Security Job"}
+            text={"Apply for " + JobField.security + " Job"}
           />
         )}
         {company.hasSoftwareConsultantPositions() && (
@@ -294,7 +294,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             company={company}
             entryPosType={CompanyPositions[JobName.softwareConsult0]}
             onClick={applyForSoftwareConsultantJob}
-            text={"Apply for Software Consultant Job"}
+            text={"Apply for " + JobField.softwareConsultant + " Job"}
           />
         )}
         {company.hasSoftwarePositions() && (
@@ -302,7 +302,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             company={company}
             entryPosType={CompanyPositions[JobName.software0]}
             onClick={applyForSoftwareJob}
-            text={"Apply for Software Job"}
+            text={"Apply for " + JobField.software + " Job"}
           />
         )}
         {company.hasWaiterPositions() && (
@@ -310,7 +310,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             company={company}
             entryPosType={CompanyPositions[JobName.waiter]}
             onClick={applyForWaiterJob}
-            text={"Apply to be a Waiter"}
+            text={"Apply to be a " + JobField.waiter}
           />
         )}
         {company.hasWaiterPositions() && (
@@ -318,7 +318,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             company={company}
             entryPosType={CompanyPositions[JobName.waiterPT]}
             onClick={applyForPartTimeWaiterJob}
-            text={"Apply to be a part-time Waiter"}
+            text={"Apply to be a " + JobField.partTimeWaiter}
           />
         )}
         {location.infiltrationData != null && <Button onClick={startInfiltration}>Infiltrate Company</Button>}

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { app, Menu, clipboard, dialog, shell } = require("electron");
 const log = require("electron-log");
-const Config = require("electron-config");
+const Store = require("electron-store");
 const api = require("./api-server");
 const utils = require("./utils");
 const storage = require("./storage");
-const config = new Config();
+const store = new Store();
 
 function getMenu(window) {
   const canZoomIn = utils.getZoomFactor() <= 2;
@@ -153,9 +153,9 @@ function getMenu(window) {
         {
           label: "Restore Newest on Load",
           type: "checkbox",
-          checked: config.get("onload-restore-newest", true),
+          checked: store.get("onload-restore-newest", true),
           click: (menuItem) => {
-            config.set("onload-restore-newest", menuItem.checked);
+            store.set("onload-restore-newest", menuItem.checked);
             utils.writeToast(
               window,
               `${menuItem.checked ? "Enabled" : "Disabled"} Restore Newest on Load`,

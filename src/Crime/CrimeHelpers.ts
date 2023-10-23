@@ -13,10 +13,8 @@ export function determineCrimeSuccess(type: CrimeType): boolean {
 }
 
 export function findCrime(roughName: string): Crime | null {
-  const helper = getEnumHelper("CrimeType");
-  if (helper.isMember(roughName)) return Crimes[roughName];
-  const fuzzMatch = getEnumHelper("CrimeType").fuzzyGetMember(roughName);
-  if (fuzzMatch) return Crimes[fuzzMatch];
+  const matchedName = getEnumHelper("CrimeType").getMember(roughName, { fuzzy: true });
+  if (matchedName) return Crimes[matchedName];
   // This can probably all be removed
   roughName = roughName.toLowerCase();
   if (roughName.includes("shoplift")) return Crimes[CrimeType.shoplift];

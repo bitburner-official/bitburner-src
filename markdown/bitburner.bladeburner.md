@@ -31,7 +31,7 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [getActionTime(type, name)](./bitburner.bladeburner.getactiontime.md) | Get the time to complete an action. |
 |  [getBlackOpNames()](./bitburner.bladeburner.getblackopnames.md) | List all black ops. |
 |  [getBlackOpRank(name)](./bitburner.bladeburner.getblackoprank.md) | Get black op required rank. |
-|  [getBonusTime()](./bitburner.bladeburner.getbonustime.md) | Get bladeburner bonus time. |
+|  [getBonusTime()](./bitburner.bladeburner.getbonustime.md) | Get Bladeburner bonus time. |
 |  [getCity()](./bitburner.bladeburner.getcity.md) | Get current city. |
 |  [getCityChaos(city)](./bitburner.bladeburner.getcitychaos.md) | Get chaos of a city. |
 |  [getCityCommunities(city)](./bitburner.bladeburner.getcitycommunities.md) | Get number of communities in a city. |
@@ -39,22 +39,24 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [getContractNames()](./bitburner.bladeburner.getcontractnames.md) | List all contracts. |
 |  [getCurrentAction()](./bitburner.bladeburner.getcurrentaction.md) | Get current action. |
 |  [getGeneralActionNames()](./bitburner.bladeburner.getgeneralactionnames.md) | List all general actions. |
+|  [getNextBlackOp()](./bitburner.bladeburner.getnextblackop.md) | Get an object with the name and rank requirement of the next BlackOp that can be completed. |
 |  [getOperationNames()](./bitburner.bladeburner.getoperationnames.md) | List all operations. |
 |  [getRank()](./bitburner.bladeburner.getrank.md) | Get player bladeburner rank. |
 |  [getSkillLevel(skillName)](./bitburner.bladeburner.getskilllevel.md) | Get skill level. |
 |  [getSkillNames()](./bitburner.bladeburner.getskillnames.md) | List all skills. |
 |  [getSkillPoints()](./bitburner.bladeburner.getskillpoints.md) | Get bladeburner skill points. |
 |  [getSkillUpgradeCost(skillName, count)](./bitburner.bladeburner.getskillupgradecost.md) | Get cost to upgrade skill. |
-|  [getStamina()](./bitburner.bladeburner.getstamina.md) | Get bladeburner stamina. |
+|  [getStamina()](./bitburner.bladeburner.getstamina.md) | Get Bladeburner stamina. |
 |  [getTeamSize(type, name)](./bitburner.bladeburner.getteamsize.md) | Get team size. |
-|  [inBladeburner()](./bitburner.bladeburner.inbladeburner.md) | Returns whether player is a member of bladeburner division. Does not require API access. |
-|  [joinBladeburnerDivision()](./bitburner.bladeburner.joinbladeburnerdivision.md) | Join the bladeburner division. |
-|  [joinBladeburnerFaction()](./bitburner.bladeburner.joinbladeburnerfaction.md) | Join the bladeburner faction. |
+|  [inBladeburner()](./bitburner.bladeburner.inbladeburner.md) | Returns whether player is a member of Bladeburner division. Does not require API access. |
+|  [joinBladeburnerDivision()](./bitburner.bladeburner.joinbladeburnerdivision.md) | Join the Bladeburner division. |
+|  [joinBladeburnerFaction()](./bitburner.bladeburner.joinbladeburnerfaction.md) | Join the Bladeburner faction. |
+|  [nextUpdate()](./bitburner.bladeburner.nextupdate.md) | Sleep until the next Bladeburner update has happened. |
 |  [setActionAutolevel(type, name, autoLevel)](./bitburner.bladeburner.setactionautolevel.md) | Set an action autolevel. |
 |  [setActionLevel(type, name, level)](./bitburner.bladeburner.setactionlevel.md) | Set the level of an action. |
 |  [setTeamSize(type, name, size)](./bitburner.bladeburner.setteamsize.md) | Set team size. |
 |  [startAction(type, name)](./bitburner.bladeburner.startaction.md) | Start an action. |
 |  [stopBladeburnerAction()](./bitburner.bladeburner.stopbladeburneraction.md) | Stop current action. |
-|  [switchCity(city)](./bitburner.bladeburner.switchcity.md) | Travel to another city in bladeburner. |
+|  [switchCity(city)](./bitburner.bladeburner.switchcity.md) | Travel to another city in Bladeburner. |
 |  [upgradeSkill(skillName, count)](./bitburner.bladeburner.upgradeskill.md) | Upgrade skill. |
 

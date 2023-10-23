@@ -2,8 +2,8 @@
 const { screen } = require("electron");
 const log = require("electron-log");
 const debounce = require("lodash/debounce");
-const Config = require("electron-config");
-const config = new Config();
+const Store = require("electron-store");
+const store = new Store();
 
 // https://stackoverflow.com/a/68627253
 const windowTracker = (windowName) => {
@@ -11,8 +11,8 @@ const windowTracker = (windowName) => {
 
   const setBounds = () => {
     // Restore from appConfig
-    if (config.has(`window.${windowName}`)) {
-      windowState = config.get(`window.${windowName}`);
+    if (store.has(`window.${windowName}`)) {
+      windowState = store.get(`window.${windowName}`);
       return;
     }
 
@@ -40,7 +40,7 @@ const windowTracker = (windowName) => {
 
     windowState.isMaximized = window.isMaximized();
     log.silly(`Saving window.${windowName} to configs`);
-    config.set(`window.${windowName}`, windowState);
+    store.set(`window.${windowName}`, windowState);
     log.silly(windowState);
   }, 1000);
 

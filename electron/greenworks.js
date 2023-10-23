@@ -7,9 +7,11 @@ var fs = require("fs");
 
 var greenworks;
 
-if (process.platform === "darwin") greenworks = require("./lib/greenworks-osx64");
-else if (process.platform === "win32") greenworks = require("./lib/greenworks-win64");
-else if (process.platform === "linux") greenworks = require("./lib/greenworks-linux64");
+if (process.arch === "x64") {
+  if (process.platform === "darwin") greenworks = require("./lib/greenworks-osx64");
+  else if (process.platform === "win32") greenworks = require("./lib/greenworks-win64");
+  else if (process.platform === "linux") greenworks = require("./lib/greenworks-linux64");
+}
 
 function error_process(err, error_callback) {
   if (err && error_callback) error_callback(err);

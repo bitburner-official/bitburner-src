@@ -60,7 +60,7 @@ called `npm` is installed as well.
 
 Not all code contributions will be accepted. The safest way to ensure
 that you don't waste time working on something that gets rejected is to
-run your idea(s)/plan(s) past the developpers first.
+run your idea(s)/plan(s) past the developers first.
 You can contact him through Discord.
 
 Otherwise, here are some general guidelines for determining what types of
@@ -232,7 +232,7 @@ rules:
 
 ## Deploying a new version
 
-Update the following
+Update the following:
 
 - `src/Constants.ts` `Version` and `LatestUpdate`
 - `package.json` `version`

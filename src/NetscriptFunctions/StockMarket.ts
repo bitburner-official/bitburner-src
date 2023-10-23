@@ -1,6 +1,13 @@
 import { Player } from "../Player";
 import { buyStock, sellStock, shortStock, sellShort } from "../StockMarket/BuyingAndSelling";
-import { StockMarket, SymbolToStockMap, placeOrder, cancelOrder, initStockMarket } from "../StockMarket/StockMarket";
+import {
+  StockMarket,
+  SymbolToStockMap,
+  placeOrder,
+  cancelOrder,
+  initStockMarket,
+  StockMarketResolvers,
+} from "../StockMarket/StockMarket";
 import { getBuyTransactionCost, getSellTransactionGain } from "../StockMarket/StockMarketHelpers";
 import { PositionType, OrderType, StockSymbol } from "@enums";
 import {
@@ -402,6 +409,14 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       Player.loseMoney(getStockMarketTixApiCost(), "stock");
       helpers.log(ctx, () => "Purchased TIX API");
       return true;
+    },
+    getBonusTime: (ctx) => () => {
+      checkTixApiAccess(ctx);
+      return Math.round(StockMarket.storedCycles / 5) * 1000;
+    },
+    nextUpdate: (ctx) => () => {
+      checkTixApiAccess(ctx);
+      return new Promise<number>((res) => StockMarketResolvers.push(res));
     },
   };
 }

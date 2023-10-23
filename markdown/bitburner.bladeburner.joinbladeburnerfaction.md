@@ -4,7 +4,7 @@
 
 ## Bladeburner.joinBladeburnerFaction() method
 
-Join the bladeburner faction.
+Join the Bladeburner faction.
 
 **Signature:**
 

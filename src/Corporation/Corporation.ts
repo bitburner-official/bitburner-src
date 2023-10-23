@@ -19,6 +19,8 @@ import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 
+export const CorporationResolvers: ((prevState: CorpStateName) => void)[] = [];
+
 interface IParams {
   name?: string;
   seedFunded?: boolean;
@@ -170,6 +172,11 @@ export class Corporation {
       }
 
       this.state.incrementState();
+
+      // Handle "nextUpdate" resolvers after this update
+      for (const resolve of CorporationResolvers.splice(0)) {
+        resolve(state);
+      }
     }
   }
 

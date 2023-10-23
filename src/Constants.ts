@@ -219,26 +219,34 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.5.1 dev changelog (last updated 10/4/2023)
+## v2.5.1 dev changelog (last updated 10/17/2023)
 
 ### NOTES
 See 2.5.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
 
 ### API
 
-- ns.singularity.purchaseProgram now returns true for programs that are already owned even if the player doesn't have enough money to re-buy the program (@ncharris93)
+- (Bladeburner) Added ns.bladeburner.getNextBlackOp (@myCatsName)
+- (Singularity) Added a JobField enum, and used this for the ns.singularity.applyToCompany function.
+- (Singularity) ns.singularity.purchaseProgram now returns true for programs that are already owned even if the player doesn't have enough money to re-buy the program (@ncharris93)
 
 ### BUGFIX
 
+- (Corporation) Fix an incorrect calculation when adding more employees to an office (@Caldwell-74)
 - Fix an issue where the "True Recursion" achievement could be granted incorrectly (@jjclark1982)
 - (Stanek) Multipliers from Stanek are now calculated correctly even if the player has Entropy (@yichizhng)
 
 ### MISC
 
+- Updated lots of dependencies (@Caldwell-74)
+- Updated electron to the latest version (Steam version only) (@Snarling)
 - Various spelling and grammar fixes for technical API documentation (@ficocelliguy)
+- Some grammar / wording fixes in github Readme + Contributing docs (@Warrobot10)
 
 ### UI
 
+- (Corporation) Improved various Corporation displays (@jjclark1982)
+- (Gang) Removed the territory warfare toggle from the main Gang screen
 - Added number of exploits to import savegame comparison (@myCatsName)
 - Dev menu improvements (@myCatsName)
 - Added a credits button on the options page (@myCatsName)

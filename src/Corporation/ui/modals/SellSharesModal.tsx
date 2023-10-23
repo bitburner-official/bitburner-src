@@ -88,7 +88,7 @@ export function SellSharesModal(props: IProps): React.ReactElement {
           <>
             You will receive <Money money={profit} />.
             <br />
-            <b>{corp.name}</b>'s stock price will fall to <Money money={sharePrice} /> per share.
+            <b>{corp.name}</b>'s stock price will settle at <Money money={sharePrice} /> per share.
           </>
         )}
       </Typography>
