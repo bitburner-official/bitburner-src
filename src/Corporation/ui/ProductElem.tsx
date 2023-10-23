@@ -137,7 +137,8 @@ export function ProductElem(props: IProductProps): React.ReactElement {
           <Box display="flex">
             <Tooltip title={<Typography>An estimate of the material cost it takes to create this Product.</Typography>}>
               <Typography>
-                Est. Production Cost: <Money money={product.productionCost / corpConstants.baseProductProfitMult} />
+                Est. Production Cost:{" "}
+                <Money money={product.cityData[city].productionCost / corpConstants.baseProductProfitMult} />
               </Typography>
             </Tooltip>
           </Box>
@@ -151,7 +152,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
               }
             >
               <Typography>
-                Est. Market Price: <Money money={product.productionCost} />
+                Est. Market Price: <Money money={product.cityData[city].productionCost} />
               </Typography>
             </Tooltip>
           </Box>
