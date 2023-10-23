@@ -1,5 +1,5 @@
 import { FilePath, asFilePath } from "../Paths/FilePath";
-import { MessageFilename } from "@enums";
+import { MessageFilename, FactionName } from "@enums";
 
 export class Message {
   // Name of Message file
@@ -8,8 +8,12 @@ export class Message {
   // The text contains in the Message
   msg: string;
 
-  constructor(filename: MessageFilename, msg: string) {
+  // Faction hinted at by the message
+  rumorForFaction: FactionName | undefined;
+
+  constructor(filename: MessageFilename, msg: string, rumorForFaction?: FactionName) {
     this.filename = asFilePath(filename);
     this.msg = msg;
+    if (rumorForFaction) this.rumorForFaction = rumorForFaction;
   }
 }
