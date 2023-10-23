@@ -10,8 +10,8 @@ const gunzip = promisify(zlib.gunzip);
 const greenworks = require("./greenworks");
 const log = require("electron-log");
 const flatten = require("lodash/flatten");
-const Config = require("electron-config");
-const config = new Config();
+const Store = require("electron-store");
+const store = new Store();
 
 // https://stackoverflow.com/a/69418940
 const dirSize = async (directory) => {
@@ -79,23 +79,23 @@ async function getFolderSizeInBytes(saveFolder) {
 }
 
 function setAutosaveConfig(value) {
-  config.set("autosave-enabled", value);
+  store.set("autosave-enabled", value);
 }
 
 function isAutosaveEnabled() {
-  return config.get("autosave-enabled", true);
+  return store.get("autosave-enabled", true);
 }
 
 function setSaveCompressionConfig(value) {
-  config.set("save-compression-enabled", value);
+  store.set("save-compression-enabled", value);
 }
 
 function isSaveCompressionEnabled() {
-  return config.get("save-compression-enabled", true);
+  return store.get("save-compression-enabled", true);
 }
 
 function setCloudEnabledConfig(value) {
-  config.set("cloud-enabled", value);
+  store.set("cloud-enabled", value);
 }
 
 async function getSaveFolder(window, root = false) {
@@ -112,7 +112,7 @@ function isCloudEnabled() {
   if (!greenworks.isCloudEnabledForUser()) return false;
 
   // Let's check the config file to see if it's been overriden
-  const enabledInConf = config.get("cloud-enabled", true);
+  const enabledInConf = store.get("cloud-enabled", true);
   if (!enabledInConf) return false;
 
   const isAppEnabled = greenworks.isCloudEnabled();
@@ -214,7 +214,7 @@ async function getSteamCloudSaveString() {
 async function saveGameToDisk(window, saveData) {
   const currentFolder = await getSaveFolder(window);
   let saveFolderSizeBytes = await getFolderSizeInBytes(currentFolder);
-  const maxFolderSizeBytes = config.get("autosave-quota", 1e8); // 100Mb per playerIndentifier
+  const maxFolderSizeBytes = store.get("autosave-quota", 1e8); // 100Mb per playerIndentifier
   const remainingSpaceBytes = maxFolderSizeBytes - saveFolderSizeBytes;
   log.debug(`Folder Usage: ${saveFolderSizeBytes} bytes`);
   log.debug(`Folder Capacity: ${maxFolderSizeBytes} bytes`);
