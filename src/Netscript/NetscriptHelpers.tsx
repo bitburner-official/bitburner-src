@@ -460,7 +460,7 @@ function scriptIdentifier(
  */
 function getServer(ctx: NetscriptContext, hostname: string) {
   const server = GetServer(hostname);
-  if (server == null) {
+  if (server == null || (server.serversOnNetwork.length == 0 && server.hostname != "home")) {
     const str = hostname === "" ? "'' (empty string)" : "'" + hostname + "'";
     throw makeRuntimeErrorMsg(ctx, `Invalid hostname: ${str}`);
   }
