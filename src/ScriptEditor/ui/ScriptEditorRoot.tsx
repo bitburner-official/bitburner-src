@@ -169,7 +169,7 @@ function Root(props: IProps): React.ReactElement {
       return;
     }
     const files = props.files;
-    
+
     for (const [filename, code] of files) {
       // Check if file is already opened
       const openScript = openScripts.find((script) => script.path === filename && script.hostname === props.hostname);
