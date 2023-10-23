@@ -34,9 +34,12 @@ function delayedDialog(message: string) {
 export function prestigeAugmentation(): void {
   initBitNodeMultipliers();
 
-  const maintainMembership = Player.factions.concat(Player.factionInvitations).filter(function (faction) {
+  // Maintain invites to factions with the 'keepOnInstall' flag
+  const maintainInvites = Player.factions.concat(Player.factionInvitations).filter(function (faction) {
     return Factions[faction].getInfo().keep;
   });
+  // Maintain rumors about any faction you have joined or been invited to in this augmentation
+  const maintainRumors = Player.factions.concat(Player.factionInvitations);
   Player.prestigeAugmentation();
 
   // Delete all Worker Scripts objects
@@ -84,8 +87,9 @@ export function prestigeAugmentation(): void {
   // Recalculate the bonus for circadian modulator aug
   initCircadianModulator();
 
-  Player.factionInvitations = Player.factionInvitations.concat(maintainMembership);
-  for (const factionName of maintainMembership) Factions[factionName].alreadyInvited = true;
+  Player.factionInvitations = Player.factionInvitations.concat(maintainInvites);
+  for (const factionName of maintainInvites) Factions[factionName].alreadyInvited = true;
+  for (const factionName of maintainRumors) Player.receiveRumor(factionName);
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
   Player.hp.current = Player.hp.max;
