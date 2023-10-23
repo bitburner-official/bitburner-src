@@ -43,6 +43,8 @@ export interface BlackOpsAttempt {
   action?: BlackOperation;
 }
 
+export const BladeburnerResolvers: ((msProcessed: number) => void)[] = [];
+
 export class Bladeburner {
   numHosp = 0;
   moneyLost = 0;
@@ -2061,6 +2063,11 @@ export class Bladeburner {
             this.startAction(this.action);
           }
         }
+      }
+
+      // Handle "nextUpdate" resolvers after this update
+      for (const resolve of BladeburnerResolvers.splice(0)) {
+        resolve(seconds * 1000);
       }
     }
   }

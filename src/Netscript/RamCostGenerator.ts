@@ -80,6 +80,8 @@ export const RamCostConstants = {
   InfiltrationGetLocations: 5,
   InfiltrationGetInfiltrations: 15,
   StanekAcceptGift: 2,
+
+  CycleTiming: 1,
 };
 
 function SF4Cost(cost: number): () => number {
@@ -124,6 +126,8 @@ const stock = {
   hasTIXAPIAccess: 0.05,
   has4SData: 0.05,
   has4SDataTIXAPI: 0.05,
+  getBonusTime: 0,
+  nextUpdate: RamCostConstants.CycleTiming,
   getSymbols: RamCostConstants.GetStock,
   getPrice: RamCostConstants.GetStock,
   getOrganization: RamCostConstants.GetStock,
@@ -235,6 +239,7 @@ const gang = {
   setTerritoryWarfare: RamCostConstants.GangApiBase / 2,
   getChanceToWinClash: RamCostConstants.GangApiBase,
   getBonusTime: 0,
+  nextUpdate: RamCostConstants.CycleTiming,
 } as const;
 
 // Bladeburner API
@@ -277,6 +282,7 @@ const bladeburner = {
   joinBladeburnerFaction: RamCostConstants.BladeburnerApiBase,
   joinBladeburnerDivision: RamCostConstants.BladeburnerApiBase,
   getBonusTime: 0,
+  nextUpdate: RamCostConstants.CycleTiming,
 } as const;
 
 const infiltration = {
@@ -356,6 +362,8 @@ const grafting = {
 const corporation = {
   hasCorporation: 0, // This one is free
   getConstants: 0,
+  getBonusTime: 0,
+  nextUpdate: RamCostConstants.CycleTiming,
   getIndustryData: RamCostConstants.CorporationInfo,
   getMaterialData: RamCostConstants.CorporationInfo,
   issueNewShares: RamCostConstants.CorporationAction,
@@ -377,7 +385,6 @@ const corporation = {
   issueDividends: RamCostConstants.CorporationAction,
   buyBackShares: RamCostConstants.CorporationAction,
   sellShares: RamCostConstants.CorporationAction,
-  getBonusTime: 0,
   sellMaterial: RamCostConstants.CorporationAction,
   sellProduct: RamCostConstants.CorporationAction,
   discontinueProduct: RamCostConstants.CorporationAction,

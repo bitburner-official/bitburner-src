@@ -24,6 +24,8 @@ export let StockMarket: IStockMarket = {
 // Gross type, needs to be addressed
 export const SymbolToStockMap: Record<string, Stock> = {}; // Maps symbol -> Stock object
 
+export const StockMarketResolvers: ((msProcessed: number) => void)[] = [];
+
 export function placeOrder(
   stock: Stock,
   shares: number,
@@ -276,5 +278,10 @@ export function processStockPrices(numCycles = 1): void {
 
     // Shares required for price movement gradually approaches max over time
     stock.shareTxUntilMovement = Math.min(stock.shareTxUntilMovement + 10, stock.shareTxForMovement);
+  }
+
+  // Handle "nextUpdate" resolvers after this update
+  for (const resolve of StockMarketResolvers.splice(0)) {
+    resolve(StockMarketConstants.msPerStockUpdate);
   }
 }

@@ -21,6 +21,7 @@ export interface TIX
 |  [cancelOrder(sym, shares, price, type, pos)](./bitburner.tix.cancelorder.md) | Cancel order for stocks. |
 |  [getAskPrice(sym)](./bitburner.tix.getaskprice.md) | Returns the ask price of that stock. |
 |  [getBidPrice(sym)](./bitburner.tix.getbidprice.md) | Returns the bid price of that stock. |
+|  [getBonusTime()](./bitburner.tix.getbonustime.md) | Get Stock Market bonus time. |
 |  [getConstants()](./bitburner.tix.getconstants.md) | Get game constants for the stock market mechanic. |
 |  [getForecast(sym)](./bitburner.tix.getforecast.md) | Returns the probability that the specified stock’s price will increase (as opposed to decrease) during the next tick. |
 |  [getMaxShares(sym)](./bitburner.tix.getmaxshares.md) | Returns the maximum number of shares of a stock. |
@@ -36,6 +37,7 @@ export interface TIX
 |  [has4SDataTIXAPI()](./bitburner.tix.has4sdatatixapi.md) | Returns true if the player has access to the 4SData TIX API |
 |  [hasTIXAPIAccess()](./bitburner.tix.hastixapiaccess.md) | Returns true if the player has access to the TIX API |
 |  [hasWSEAccount()](./bitburner.tix.haswseaccount.md) | Returns true if the player has access to a WSE Account |
+|  [nextUpdate()](./bitburner.tix.nextupdate.md) | Sleep until the next Stock Market price update has happened. |
 |  [placeOrder(sym, shares, price, type, pos)](./bitburner.tix.placeorder.md) | Place order for stocks. |
 |  [purchase4SMarketData()](./bitburner.tix.purchase4smarketdata.md) | Purchase 4S Market Data Access. |
 |  [purchase4SMarketDataTixApi()](./bitburner.tix.purchase4smarketdatatixapi.md) | Purchase 4S Market Data TIX API Access. |
