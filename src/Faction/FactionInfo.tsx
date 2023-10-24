@@ -76,9 +76,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ),
     rumorText: (
       <>
-        The ancient secret society that controls the entire world from the shadows with their invisible hand. With their
-        personal wealth and skills they have penetrated every major government, financial agency, and corporation in the
-        last three hundred years.
+        “…the ancient secret society that controls the entire world from the shadows with their invisible hand. With their
+        personal wealth and skills they have penetrated every major government, financial agency, and corporation…”
       </>
     ),
     offerHackingWork: true,
@@ -345,7 +344,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     {"        d      .dNITESEC          $   |  "}<br />
     {"       :bp.__.gNITESEC/$         :$   ;  "}<br />
     {"       NITESECNITESECNIT         /$b :   "}<br /></>),
-    rumorText: <>A hacking group known as {FactionName.NiteSec} will invite you to join them if you demonstrate your hacking skills on their server.</>,
+    rumorText: <>A hacking group known as {FactionName.NiteSec} may recruit you if you impress them with your hacking skills.</>,
     offerHackingWork: true,
     offerFieldWork: false,
     offerSecurityWork: false,
@@ -410,7 +409,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   // Criminal Organizations/Gangs
   [FactionName.SpeakersForTheDead]: new FactionInfo({
     infoText: <>It is better to reign in Hell than to serve in Heaven.</>,
-    rumorText: <>We know.</>,
+    rumorText: <>“We know.”</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -425,7 +424,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.TheSyndicate]: new FactionInfo({
     infoText: <>Honor holds you back.</>,
-    rumorText: <>A criminal organization that operates in the western hemisphere.</>,
+    rumorText: <>A criminal organization that operates in the western hemisphere</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -453,28 +452,28 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.Tetrads]: new FactionInfo({
     infoText: <>Following the mandate of Heaven and carrying out the way.</>,
-    rumorText: <>A notorious East Asian criminal organization.</>,
+    rumorText: <>A notorious East Asian criminal organization</>,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
 
   [FactionName.SlumSnakes]: new FactionInfo({
     infoText: <>{FactionName.SlumSnakes} rule!</>,
-    rumorText: <>{FactionName.SlumSnakes} rule!</>,
+    rumorText: <>Graffiti seen in the slums: “{FactionName.SlumSnakes} rule!”</>,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
 
   // Early game factions - factions the player will prestige with early on that don't belong in other categories.
   [FactionName.Netburners]: new FactionInfo({
-    infoText: <>{"~~//*>H4CK||3T 8URN3R5**>?>\\~~"}</>,
-    rumorText: <>{"~~//*>H4CK||3T 8URN3R5**>?>\\~~"}</>,
+    infoText: <>{"~~//*>H4CK|\\|3T 8URN3R5**>?>\\~~"}</>,
+    rumorText: <>{"~~//*>H4CK|\\|3T 8URN3R5**>?>\\~~"}</>,
     offerHackingWork: true,
   }),
 
   [FactionName.TianDiHui]: new FactionInfo({
     infoText: <>Obey Heaven and work righteously.</>,
-    rumorText: <>Obey Heaven and work righteously.</>,
+    rumorText: <>“Obey Heaven and work righteously.”</>,
     offerHackingWork: true,
     offerSecurityWork: true,
   }),
@@ -489,8 +488,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ),
     rumorText: (
       <>
-        A hacking group known as {FactionName.CyberSec} will invite you to join them if you demonstrate your hacking
-        skills on their server.
+        A hacking group known as {FactionName.CyberSec} will invite you to join them if you demonstrate your hacking skills on their server.
       </>
     ),
     offerHackingWork: true,

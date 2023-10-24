@@ -160,7 +160,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
           <span style={{ display: "flex", alignItems: "center" }}>
             {props.isSpoiler ? (
               <Typography variant="body2" sx={{ display: "flex" }}>
-                &ldquo;{props.faction.getInfo().rumorText}&rdquo;
+                <i>{props.faction.getInfo().rumorText}</i>
               </Typography>
             ) : (
               <>
