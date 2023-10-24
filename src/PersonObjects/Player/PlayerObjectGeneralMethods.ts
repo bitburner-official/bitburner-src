@@ -342,7 +342,7 @@ export function applyForJob(this: PlayerObject, entryPosType: CompanyPosition, s
 
   // Hear a rumor about a company's faction when you start any job there
   if (company.relatedFaction) {
-    this.receiveRumor(company.relatedFaction, FactionDiscovery.known);
+    this.receiveRumor(company.relatedFaction);
   }
   if (pos.name in [JobName.software7, JobName.business4, JobName.business5]) {
     this.receiveRumor(FactionName.Silhouette);

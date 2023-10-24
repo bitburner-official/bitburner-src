@@ -243,7 +243,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // BitNode 6: Bladeburners and BitNode 7: Bladeburners 2079
   if (Player.bitNodeN === 6 || Player.bitNodeN === 7) {
     delayedDialog(`${CompanyName.NSA} would like to have a word with you once you're ready.`);
-    Player.receiveRumor(FactionName.Bladeburners, FactionDiscovery.known);
+    Player.receiveRumor(FactionName.Bladeburners);
   }
 
   // BitNode 8: Ghost of Wall Street
@@ -260,7 +260,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
     delayedDialog(
       `Seek out ${FactionName.TheCovenant} if you'd like to purchase a new sleeve or two! And see what ${CompanyName.VitaLife} in ${CityName.NewTokyo} has to offer for you`,
     );
-    Player.receiveRumor(FactionName.TheCovenant, FactionDiscovery.known);
+    Player.receiveRumor(FactionName.TheCovenant);
   }
 
   // BitNode 12: Digital Carbon
@@ -270,7 +270,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   if (Player.bitNodeN === 13) {
     delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
-    Player.receiveRumor(FactionName.ChurchOfTheMachineGod, FactionDiscovery.known);
+    Player.receiveRumor(FactionName.ChurchOfTheMachineGod);
   }
 
   // Reset Stock market, gang, and corporation
