@@ -1,11 +1,4 @@
-import {
-  AugmentationName,
-  CityName,
-  CompletedProgramName,
-  FactionName,
-  LiteratureName,
-  CompanyName,
-} from "@enums";
+import { AugmentationName, CityName, CompletedProgramName, FactionName, LiteratureName, CompanyName } from "@enums";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { Companies } from "./Company/Companies";
 import { resetIndustryResearchTrees } from "./Corporation/data/IndustryData";
