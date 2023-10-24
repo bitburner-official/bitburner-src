@@ -3,7 +3,6 @@ import {
   CityName,
   CompletedProgramName,
   FactionName,
-  FactionDiscovery,
   LiteratureName,
   CompanyName,
 } from "@enums";

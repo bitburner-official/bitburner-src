@@ -63,6 +63,7 @@ export function FactionsDev(): React.ReactElement {
       faction.discovery = FactionDiscovery.unknown;
     });
     Player.factionRumors.length = 0;
+    setFactionDiscovery(Factions[factionName].discovery);
   }
 
   function modifyFactionRep(modifier: number): (x: number) => void {
