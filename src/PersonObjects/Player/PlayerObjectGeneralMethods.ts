@@ -342,10 +342,10 @@ export function applyForJob(this: PlayerObject, entryPosType: CompanyPosition, s
 
   // Hear a rumor about a company's faction when you start any job there
   if (company.relatedFaction) {
-    this.receiveRumor(company.relatedFaction);
+    this.receiveRumor(company.relatedFaction, FactionDiscovery.known);
   }
   if (pos.name in [JobName.software7, JobName.business4, JobName.business5]) {
-    this.receiveInvite(FactionName.Silhouette);
+    this.receiveRumor(FactionName.Silhouette);
   }
 
   this.jobs[company.name] = pos.name;
@@ -886,70 +886,63 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     !chongqingFac.isBanned &&
     !chongqingFac.isMember &&
     !chongqingFac.alreadyInvited &&
-    this.money >= 20000000 &&
     this.city == CityName.Chongqing
   ) {
-    invitedFactions.push(chongqingFac);
+    if (this.money >= 20000000) {
+      invitedFactions.push(chongqingFac);
+    } else if (this.money >= 10000000) {
+      this.receiveRumor(FactionName.Chongqing, FactionDiscovery.known);
+    }
   }
 
   //Sector-12
   const sector12Fac = Factions[FactionName.Sector12];
-  if (
-    !sector12Fac.isBanned &&
-    !sector12Fac.isMember &&
-    !sector12Fac.alreadyInvited &&
-    this.money >= 15000000 &&
-    this.city == CityName.Sector12
-  ) {
-    invitedFactions.push(sector12Fac);
+  if (!sector12Fac.isBanned && !sector12Fac.isMember && !sector12Fac.alreadyInvited && this.city == CityName.Sector12) {
+    if (this.money >= 15000000) {
+      invitedFactions.push(sector12Fac);
+    } else if (this.money >= 7500000) {
+      this.receiveRumor(FactionName.Sector12, FactionDiscovery.known);
+    }
   }
 
   //New Tokyo
   const newtokyoFac = Factions[FactionName.NewTokyo];
-  if (
-    !newtokyoFac.isBanned &&
-    !newtokyoFac.isMember &&
-    !newtokyoFac.alreadyInvited &&
-    this.money >= 20000000 &&
-    this.city == CityName.NewTokyo
-  ) {
-    invitedFactions.push(newtokyoFac);
+  if (!newtokyoFac.isBanned && !newtokyoFac.isMember && !newtokyoFac.alreadyInvited && this.city == CityName.NewTokyo) {
+    if (this.money >= 20000000) {
+      invitedFactions.push(newtokyoFac);
+    } else if (this.money >= 10000000) {
+      this.receiveRumor(FactionName.NewTokyo, FactionDiscovery.known);
+    }
   }
 
   //Aevum
   const aevumFac = Factions[FactionName.Aevum];
-  if (
-    !aevumFac.isBanned &&
-    !aevumFac.isMember &&
-    !aevumFac.alreadyInvited &&
-    this.money >= 40000000 &&
-    this.city == CityName.Aevum
-  ) {
-    invitedFactions.push(aevumFac);
+  if (!aevumFac.isBanned && !aevumFac.isMember && !aevumFac.alreadyInvited && this.city == CityName.Aevum) {
+    if (this.money >= 40000000) {
+      invitedFactions.push(aevumFac);
+    } else if (this.money >= 20000000) {
+      this.receiveRumor(FactionName.Aevum, FactionDiscovery.known);
+    }
   }
 
   //Ishima
   const ishimaFac = Factions[FactionName.Ishima];
-  if (
-    !ishimaFac.isBanned &&
-    !ishimaFac.isMember &&
-    !ishimaFac.alreadyInvited &&
-    this.money >= 30000000 &&
-    this.city == CityName.Ishima
-  ) {
-    invitedFactions.push(ishimaFac);
+  if (!ishimaFac.isBanned && !ishimaFac.isMember && !ishimaFac.alreadyInvited && this.city == CityName.Ishima) {
+    if (this.money >= 30000000) {
+      invitedFactions.push(ishimaFac);
+    } else if (this.money >= 15000000) {
+      this.receiveRumor(FactionName.Ishima, FactionDiscovery.known);
+    }
   }
 
   //Volhaven
   const volhavenFac = Factions[FactionName.Volhaven];
-  if (
-    !volhavenFac.isBanned &&
-    !volhavenFac.isMember &&
-    !volhavenFac.alreadyInvited &&
-    this.money >= 50000000 &&
-    this.city == CityName.Volhaven
-  ) {
-    invitedFactions.push(volhavenFac);
+  if (!volhavenFac.isBanned && !volhavenFac.isMember && !volhavenFac.alreadyInvited && this.city == CityName.Volhaven) {
+    if (this.money >= 50000000) {
+      invitedFactions.push(volhavenFac);
+    } else if (this.money >= 25000000) {
+      this.receiveRumor(FactionName.Volhaven, FactionDiscovery.known);
+    }
   }
 
   //Speakers for the Dead
