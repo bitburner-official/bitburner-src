@@ -3,7 +3,7 @@ import { Explore, Info, LastPage, LocalPolice, NewReleases, Report, SportsMma } 
 import { Box, Button, Container, Paper, Tooltip, Typography, useTheme } from "@mui/material";
 
 import { Player } from "@player";
-import { FactionName } from "@enums";
+import { FactionName, FactionDiscovery } from "@enums";
 
 import { Settings } from "../../Settings/Settings";
 import { formatFavor, formatReputation } from "../../ui/formatNumber";
@@ -47,10 +47,6 @@ const WorkTypesOffered = (props: { faction: Faction }): React.ReactElement => {
 
 interface FactionElementProps {
   faction: Faction;
-  /** Whether the player is a member of this faction already */
-  joined: boolean;
-  /** Whether the faction name should be hidden */
-  isSpoiler?: boolean;
   /** Rerender function to force the entire FactionsRoot to rerender */
   rerender: () => void;
 }
@@ -78,7 +74,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
         display: "grid",
         p: 1,
         alignItems: "center",
-        gridTemplateColumns: "minmax(0, 4fr)" + (props.joined ? " 1fr" : ""),
+        gridTemplateColumns: "minmax(0, 4fr)" + (props.faction.isMember ? " 1fr" : ""),
       }}
     >
       <Box display="flex" sx={{ alignItems: "center" }}>
@@ -102,7 +98,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
           </Button>
         ) : null}
 
-        <span style={{ maxWidth: props.faction.isMember ? "70%" : "95%" }}>
+        <span style={{ maxWidth: props.faction.isMember ? "70%" : "95%", overflow: "hidden" }}>
           <Typography
             variant="h6"
             sx={{
@@ -112,14 +108,16 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
               alignItems: "center",
             }}
           >
-            {props.isSpoiler ? (
-              <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
-                <CorruptableText content={props.faction.name} />
-              </span>
-            ) : (
+            {props.faction.discovery == FactionDiscovery.known ? (
               <Tooltip title={props.faction.name}>
                 <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
                   {props.faction.name}
+                </span>
+              </Tooltip>
+            ) : (
+              <Tooltip title={"Rumored Faction"}>
+                <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
+                  <CorruptableText content={props.faction.name} />
                 </span>
               </Tooltip>
             )}
@@ -158,17 +156,17 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
           </Typography>
 
           <span style={{ display: "flex", alignItems: "center" }}>
-            {props.isSpoiler ? (
-              <Typography variant="body2" sx={{ display: "flex" }}>
-                <i>{props.faction.getInfo().rumorText}</i>
-              </Typography>
-            ) : (
+            {props.faction.isMember || props.faction.alreadyInvited ? (
               <>
                 {!Player.hasGangWith(props.faction.name) && <WorkTypesOffered faction={props.faction} />}
-                <Typography variant="body2" sx={{ display: "flex" }}>{`${
+                <Typography variant="body2" sx={{ display: "flex", whiteSpace: "nowrap" }}>{`${
                   augsLeft || "No"
                 } Augmentations left`}</Typography>
               </>
+            ) : (
+              <Typography variant="body2" sx={{ display: "flex" }}>
+                <i>{props.faction.getInfo().rumorText}</i>
+              </Typography>
             )}
           </span>
         </span>
@@ -198,10 +196,12 @@ export function FactionsRoot(): React.ReactElement {
   }, []);
 
   const allFactions = Object.values(FactionName).map((faction) => faction as string);
-  const allJoinedFactions = [...Player.factions];
-  allJoinedFactions.sort((a, b) => allFactions.indexOf(a) - allFactions.indexOf(b));
-  const invitations = Player.factionInvitations;
-  const rumors = [...Player.factionRumors];
+  const allJoinedFactions = [...Player.factions].map((facName) => Factions[facName]).filter((faction) => !!faction);
+  allJoinedFactions.sort((a, b) => allFactions.indexOf(a.name) - allFactions.indexOf(b.name));
+
+  const invitations = Player.factionInvitations.map((facName) => Factions[facName]).filter((faction) => !!faction);
+
+  const rumors = Player.factionRumors.map((facName) => Factions[facName]).filter((faction) => !!faction);
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0, mb: 10 }}>
@@ -241,34 +241,23 @@ export function FactionsRoot(): React.ReactElement {
                 Faction Invitations
               </Typography>
               <Box>
-                {invitations.map((facName) => {
-                  if (!Object.hasOwn(Factions, facName)) return null;
-                  return (
-                    <FactionElement key={facName} faction={Factions[facName]} joined={false} rerender={rerender} />
-                  );
-                })}
+                {invitations.map((faction) => (
+                  <FactionElement key={faction.name} faction={faction} rerender={rerender} />
+                ))}
               </Box>
             </>
           )}
+
           {rumors.length > 0 && (
             <>
               <Typography variant="h5" color="primary">
                 Rumors
               </Typography>
-              <Box sx={{ gridAutoRows: "minmax(70px, auto)" }}>
-                {rumors.map((facName) => {
-                  if (!Object.hasOwn(Factions, facName)) return null;
-                  return (
-                    <FactionElement
-                      key={facName}
-                      faction={Factions[facName]}
-                      joined={false}
-                      isSpoiler={true}
-                      rerender={rerender}
-                    />
-                  );
-                })}
-              </Box>
+              <div style={{ display: "grid", gap: 1, gridAutoRows: "minmax(70px, auto)" }}>
+                {rumors.map((faction) => (
+                  <FactionElement key={faction.name} faction={faction} rerender={rerender} />
+                ))}
+              </div>
             </>
           )}
         </span>
@@ -280,12 +269,7 @@ export function FactionsRoot(): React.ReactElement {
                 Your Gang
               </Typography>
               <Box>
-                <FactionElement
-                  key={Player.getGangName()}
-                  faction={Player.getGangFaction()}
-                  joined={true}
-                  rerender={rerender}
-                />
+                <FactionElement key={Player.getGangName()} faction={Player.getGangFaction()} rerender={rerender} />
               </Box>
             </>
           )}
@@ -294,9 +278,9 @@ export function FactionsRoot(): React.ReactElement {
           </Typography>
           <Box>
             {allJoinedFactions.length > 0 ? (
-              allJoinedFactions.map((facName) => {
-                if (!Object.hasOwn(Factions, facName) || Player.getGangName() === facName) return null;
-                return <FactionElement key={facName} faction={Factions[facName]} joined={true} rerender={rerender} />;
+              allJoinedFactions.map((faction) => {
+                if (Player.getGangName() === faction.name) return null;
+                return <FactionElement key={faction.name} faction={faction} rerender={rerender} />;
               })
             ) : (
               <Typography>You have not yet joined any Factions.</Typography>

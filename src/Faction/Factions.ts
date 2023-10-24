@@ -2,7 +2,7 @@
  * Initialization and manipulation of the Factions object, which stores data
  * about all Factions in the game
  */
-import { FactionName } from "@enums";
+import { FactionName, FactionDiscovery } from "@enums";
 import { Faction } from "./Faction";
 
 import { Reviver, assertLoadingType } from "../utils/JSONReviver";
@@ -38,5 +38,6 @@ export function loadFactions(saveString: string): void {
     if (loadedFaction.alreadyInvited) faction.alreadyInvited = true;
     if (loadedFaction.isBanned) faction.isBanned = true;
     if (loadedFaction.isMember) faction.isMember = true;
+    if (faction.alreadyInvited || faction.isMember) faction.discovery = FactionDiscovery.known;
   }
 }
