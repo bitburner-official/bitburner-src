@@ -474,7 +474,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.TianDiHui]: new FactionInfo({
     infoText: <>Obey Heaven and work righteously.</>,
-    rumorText: <>“Obey Heaven and work righteously.”</>,
+    rumorText: <>A Chinese honor society with the motto: “Obey Heaven and work righteously.”</>,
     offerHackingWork: true,
     offerSecurityWork: true,
   }),
