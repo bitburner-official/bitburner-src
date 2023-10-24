@@ -229,7 +229,7 @@ export function FactionsRoot(): React.ReactElement {
           gridTemplateRows: "minmax(0, 1fr)",
           "& > span > .MuiBox-root": {
             display: "grid",
-            gridAutoRows: "minmax(70px, auto)",
+            gridAutoRows: "70px",
             gap: 1,
           },
         }}
@@ -255,7 +255,7 @@ export function FactionsRoot(): React.ReactElement {
               <Typography variant="h5" color="primary">
                 Rumors
               </Typography>
-              <Box>
+              <Box sx={{ gridAutoRows: "minmax(70px, auto)" }}>
                 {rumors.map((facName) => {
                   if (!Object.hasOwn(Factions, facName)) return null;
                   return (
@@ -275,19 +275,19 @@ export function FactionsRoot(): React.ReactElement {
 
         <span>
           {Player.inGang() && (
-            <Typography variant="h5" color="primary">
-              Your Gang
-            </Typography>
-          )}
-          {Player.inGang() && (
-            <Box>
-              <FactionElement
-                key={Player.getGangName()}
-                faction={Player.getGangFaction()}
-                joined={true}
-                rerender={rerender}
-              />
-            </Box>
+            <>
+              <Typography variant="h5" color="primary">
+                Your Gang
+              </Typography>
+              <Box>
+                <FactionElement
+                  key={Player.getGangName()}
+                  faction={Player.getGangFaction()}
+                  joined={true}
+                  rerender={rerender}
+                />
+              </Box>
+            </>
           )}
           <Typography variant="h5" color="primary">
             Your Factions
