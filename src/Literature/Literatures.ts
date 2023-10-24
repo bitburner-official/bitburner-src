@@ -1,4 +1,4 @@
-import { CityName, FactionName, LiteratureName } from "@enums";
+import { CityName, FactionName, CompanyName, LiteratureName } from "@enums";
 import { Literature } from "./Literature";
 
 export const Literatures: Record<LiteratureName, Literature> = {
@@ -196,16 +196,11 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.BrighterThanTheSun]: new Literature({
     title: "Brighter than the Sun",
     filename: LiteratureName.BrighterThanTheSun,
-    rumorForFaction: [
-      FactionName.KuaiGongInternational,
-      FactionName.OmniTekIncorporated,
-      FactionName.ECorp,
-      FactionName.MegaCorp,
-    ],
+    rumorForFaction: [FactionName.KuaiGongInternational],
     text:
-      `When people think about the corporations that dominate the East, they typically think of ${FactionName.KuaiGongInternational}, which ` +
-      "holds a complete monopoly for manufacturing and commerce in Asia, or Global Pharmaceuticals, the world's largest " +
-      `drug company, or ${FactionName.OmniTekIncorporated}, the global leader in intelligent and autonomous robots. But there's one company ` +
+      `When people think about the corporations that dominate the East, they typically think of ${CompanyName.KuaiGongInternational}, which ` +
+      `holds a complete monopoly for manufacturing and commerce in Asia, or ${CompanyName.GlobalPharmaceuticals}, the world's largest ` +
+      `drug company, or ${CompanyName.OmniTekIncorporated}, the global leader in intelligent and autonomous robots. But there's one company ` +
       "that has seen a rapid rise in the last year and is poised to dominate not only the East, but the entire world: TaiYang Digital.<br><br>" +
       "TaiYang Digital is a Chinese internet-technology corporation that provides services such as " +
       "online advertising, search engines, gaming, media, entertainment, and cloud computing/storage. Its name TaiYang comes from the Chinese word " +
@@ -217,7 +212,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
       "TaiYang Digital's meteoric rise is extremely surprising in modern society. This sort of growth is " +
       "something you'd commonly see in the first half of the century, especially for tech companies. However in " +
       "the last two decades the number of corporations has significantly declined as the largest entities " +
-      `quickly took over the economy. Corporations such as ${FactionName.ECorp}, ${FactionName.MegaCorp}, and ${FactionName.KuaiGongInternational} have established ` +
+      `quickly took over the economy. Corporations such as ${CompanyName.ECorp}, ${CompanyName.MegaCorp}, and ${CompanyName.KuaiGongInternational} have established ` +
       "such strong monopolies in their market sectors that they have effectively killed off all " +
       "of the smaller and new corporations that have tried to start up over the years. This is what makes " +
       "the rise of TaiYang Digital so impressive. And if TaiYang continues down this path, then they have " +
@@ -275,7 +270,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.SecretSocieties]: new Literature({
     title: "Secret Societies",
     filename: LiteratureName.SecretSocieties,
-    rumorForFaction: [FactionName.Illuminati, FactionName.TheBlackHand, FactionName.NiteSec, FactionName.BitRunners],
+    rumorForFaction: [FactionName.TheBlackHand, FactionName.NiteSec, FactionName.BitRunners],
     text:
       "The idea of secret societies has long intrigued the general public by inspiring curiosity, fascination, and " +
       "distrust. People have long wondered about who these secret society members are and what they do, with the " +

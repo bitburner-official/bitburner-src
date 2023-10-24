@@ -425,7 +425,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.TheSyndicate]: new FactionInfo({
     infoText: <>Honor holds you back.</>,
-    rumorText: <>A criminal organization that operates in the western hemisphere</>,
+    rumorText: <>An elite criminal organization that operates in the western hemisphere</>,
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
