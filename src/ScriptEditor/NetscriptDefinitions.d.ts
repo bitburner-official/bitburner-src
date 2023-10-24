@@ -4373,6 +4373,9 @@ interface Stanek {
   acceptGift(): boolean;
 }
 
+/**@public */
+type WormInputArray = [boolean, string, number, number];
+
 /**
  * Worm API.
  * @public
@@ -4402,7 +4405,17 @@ interface Worm {
 	 * 
 	 * @returns Returns the final state of the input.
 	 */
-	guessInput(input: string): Promise<string>;
+	testInput(input: string): Promise<string>;
+
+	/**
+	 * Attempts to solve the worm using the provided properties.
+	 * This does not reset the worm, if some properties are not correct.
+	 * @remarks
+	 * RAM cost: 64 GB
+	 * 
+	 * @returns Returns wether or not the properties are correct.
+	 */
+	attemptSolve(properties: WormInputArray): boolean;
 
 	/**
 	 * Get the current guess time.
@@ -4430,6 +4443,20 @@ interface Worm {
 	 * @returns All possible symbols.
 	 */
 	getSymbols(): string[];
+
+	/**
+	 * Get the chosen node for the indegree property.
+	 * @remarks
+	 * RAM cost: 0.5 GB
+	 */
+	getChosenNodeIndegree(): string;
+
+	/**
+	 * Get the chosen node for the value property.
+	 * @remarks
+	 * RAM cost: 0.5 GB
+	 */
+	getChosenNodeValue(): string;
 }
 
 /** @public */

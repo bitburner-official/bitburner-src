@@ -329,10 +329,13 @@ const stanek = {
 const worm = {
 	setBonus: 2,
 	getCompletions: 0.5,
-	guessInput: 16,
+	testInput: 16,
+	attemptSolve: 64,
 	getGuessTime: 0.5,
 	getStates: 1,
 	getSymbols: 1,
+	getChosenNodeValue: 0.5,
+	getChosenNodeIndegree: 0.5
 } as const;
 
 // UI API

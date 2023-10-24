@@ -1,17 +1,28 @@
 import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { isBipartite, nodeIndegree, nodeValue, shortestInput } from "./calculations";
 
 export interface AutomataData {
 	states: string[];
 	symbols: string[];
-	targetStates: string[];
+	targetState: string;
 	startState: string;
 	transitions: Record<string, Record<string, string>>;
+	properties: AutomataProperties;
+}
+
+export interface AutomataProperties {
+	isBipartite: boolean;
+	shortestInput: string;
+	nodeValues: Record<string, number>;
+	nodeIndegrees: Record<string, number>;
 }
 
 export const base64Characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-export function AutomataFactory(completions: number): AutomataData {
-	const numStates = getRandomInt(2, 5) * 5 + completions;
+const chooseRandomState = (states: string[]) => states[Math.floor(Math.random() * states.length)];
+
+export function AutomataFactory(completions: number): [AutomataData, [string, string]] {
+	const numStates = getRandomInt(2, 5) * 5 + Math.floor(completions);
 	const numSymbols = 2 + Math.floor(Math.log(numStates + 1));
 
 	const states = Array.from({ length: numStates }, (_, i) => "s" + i.toString().padStart(4, "0"));
@@ -19,13 +30,39 @@ export function AutomataFactory(completions: number): AutomataData {
 
 	const transitions = generateTransitions(states, symbols);
 
-	return {
+	const data: Omit<AutomataData, "properties"> = {
 		states,
-		targetStates: [states[states.length - 1]],
+		targetState: states[states.length - 1],
 		startState: states[0],
 		symbols,
 		transitions
 	};
+
+	const properties = calculateProperties(data);
+
+	return [{
+		...data,
+		properties
+	}, [chooseRandomState(states), chooseRandomState(states)]];
+}
+
+export function calculateProperties(data: Omit<AutomataData, "properties">): AutomataProperties {
+	const bipartite = isBipartite(data.transitions);
+	const input = shortestInput(data.transitions, data.startState, data.targetState);
+
+	const values: Record<string, number> = {};
+	const degrees: Record<string, number> = {};
+	data.states.forEach(state => {
+		values[state] = nodeValue(data.transitions, state, data.states);
+		degrees[state] = nodeIndegree(data.transitions, state);
+	});
+
+	return {
+		isBipartite: bipartite,
+		shortestInput: input,
+		nodeValues: values,
+		nodeIndegrees: degrees
+	}
 }
 
 export function generateTransitions(states: string[], symbols: string[]): Record<string, Record<string, string>> {
@@ -57,13 +94,6 @@ export function evaluateInput(data: AutomataData, input: string) {
 	for (let i = 0; i < input.length; i++) currentState = data.transitions[currentState][input[i]];
 
 	return currentState;
-}
-
-/**Checks wether or not the input leads to the desired final state */
-export function isCorrectInput(data: AutomataData, input: string) {
-	const finalState = evaluateInput(data, input);
-
-	return data.targetStates.includes(finalState);
 }
 
 /**Checks wether or not the input uses valid symbols */

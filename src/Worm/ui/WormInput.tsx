@@ -13,7 +13,7 @@ export function WormInput({ worm }: IProps) {
 
 	function handleSubmit() {
 		if (!isValidInput(worm.data, input)) return;
-		const result = worm.guessInput(input);
+		const result = worm.evaluate(input);
 		if (result === null) setState("INVALID");
 		else setState(result);
 	}

@@ -45,16 +45,29 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 			const threads = helpers.number(ctx, "threads", _threads);
 			return getGuessTime(threads);
 		},
-		guessInput: (ctx) => (_input) => {
+		getChosenNodeValue: (ctx) => () => {
+			checkWormAPIAccess(ctx);
+			return getWorm().chosenNodes[0];
+		},
+		getChosenNodeIndegree: (ctx) => () => {
+			checkWormAPIAccess(ctx);
+			return getWorm().chosenNodes[1];
+		},
+		testInput: (ctx) => (_input) => {
 			checkWormAPIAccess(ctx);
 			const input = helpers.string(ctx, "input", _input);
 			if (!isValidInput(getWorm().data, input)) throw new Error(`input "${input} uses invalid symbols."`);
 			return helpers.netscriptDelay(ctx, getGuessTime(ctx.workerScript.scriptRef.threads)).then(() => {
-				const finalState = getWorm().guessInput(input);
+				const finalState = getWorm().evaluate(input);
 				if (finalState === null) throw new Error(`Error while computing input "${input}", got null.`);
-				helpers.log(ctx, () => `Given input is ${getWorm().data.targetStates.includes(finalState) ? "correct" : "wrong"}.`);
 				return Promise.resolve(finalState);
 			});
+		},
+		attemptSolve: (ctx) => (_properties) => {
+			checkWormAPIAccess(ctx);
+			const properties = helpers.wormInputArray(ctx, "properties", _properties);
+			const result = getWorm().solve(properties);
+			return result;
 		}
   }
 }
