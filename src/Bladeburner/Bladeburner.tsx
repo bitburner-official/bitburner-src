@@ -1663,10 +1663,12 @@ export class Bladeburner {
     if (!this.action) {
       throw new Error("Bladeburner.action is not an ActionIdentifier Object");
     }
-
-    const remainingActions = this.contracts[this.action.name].count;
-    if (remainingActions < 1) {
-      return this.resetAction();
+    //Check to see if action is a contract, and then to verify a sleeve didn't finish it first
+    if (this.action.type === 2) {
+      const remainingActions = this.contracts[this.action.name].count;
+      if (remainingActions < 1) {
+        return this.resetAction();
+      }
     }
     // If the previous action went past its completion time, add to the next action
     // This is not added immediately in case the automation changes the action
