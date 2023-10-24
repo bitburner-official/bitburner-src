@@ -51,6 +51,7 @@ export function FactionsDev(): React.ReactElement {
 
   function receiveRumor(): void {
     Player.receiveRumor(factionName);
+    setFactionDiscovery(Factions[factionName].discovery);
   }
 
   function receiveAllRumors(): void {
@@ -61,6 +62,7 @@ export function FactionsDev(): React.ReactElement {
     Object.values(Factions).forEach((faction) => {
       faction.discovery = FactionDiscovery.unknown;
     });
+    Player.factionRumors.length = 0;
   }
 
   function modifyFactionRep(modifier: number): (x: number) => void {
@@ -116,9 +118,9 @@ export function FactionsDev(): React.ReactElement {
   }
 
   function setDiscovery(event: React.ChangeEvent<HTMLInputElement>, value: string): void {
-    console.log(event, value);
-    Factions[factionName].discovery = value as FactionDiscovery;
-    setFactionDiscovery(value as FactionDiscovery);
+    const disco = value as FactionDiscovery;
+    Factions[factionName].discovery = disco;
+    setFactionDiscovery(disco);
   }
 
   return (
@@ -173,7 +175,7 @@ export function FactionsDev(): React.ReactElement {
                 <FormControl>
                   <RadioGroup onChange={setDiscovery} value={factionDiscovery} row>
                     {Object.entries(FactionDiscovery).map(([discoveryLabel, discovery]) => (
-                      <FormControlLabel value={discovery} label={discoveryLabel} control={<Radio />} />
+                      <FormControlLabel key={discovery} value={discovery} label={discoveryLabel} control={<Radio />} />
                     ))}
                   </RadioGroup>
                 </FormControl>

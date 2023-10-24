@@ -190,8 +190,11 @@ export function receiveInvite(this: PlayerObject, factionName: FactionName): voi
 export function receiveRumor(
   this: PlayerObject,
   factionName: FactionName,
-  discovery: FactionDiscovery | undefined = FactionDiscovery.rumored,
+  discovery?: FactionDiscovery | undefined,
 ): void {
+  if (Factions[factionName].discovery == FactionDiscovery.unknown) {
+    Factions[factionName].discovery = discovery || FactionDiscovery.rumored;
+  }
   if (
     this.factionRumors.includes(factionName) ||
     this.factionInvitations.includes(factionName) ||
@@ -201,9 +204,6 @@ export function receiveRumor(
     return;
   }
   this.factionRumors.push(factionName);
-  if (Factions[factionName].discovery == FactionDiscovery.unknown) {
-    Factions[factionName].discovery = discovery;
-  }
 }
 
 //Calculates skill level progress based on experience. The same formula will be used for every skill
