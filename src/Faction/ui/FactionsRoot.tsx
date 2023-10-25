@@ -15,6 +15,8 @@ import { CorruptableText } from "../../ui/React/CorruptableText";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 
 export const InvitationsSeen = new Set<FactionName>();
 
@@ -164,8 +166,17 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                 } Augmentations left`}</Typography>
               </>
             ) : (
-              <Typography variant="body2" sx={{ display: "flex" }}>
+              <Typography variant="body2" component="div">
                 <i>{props.faction.getInfo().rumorText}</i>
+                {props.faction.discovery == FactionDiscovery.known &&
+                  props.faction.getInfo().inviteReqs.map((condition, i) => (
+                    <div key={i} style={{ paddingLeft: "1em" }}>
+                      <span style={{ marginLeft: "-1em", paddingRight: "0.25em" }}>
+                        {condition.isSatisfied(Player) ? <TaskAltIcon /> : <RadioButtonUncheckedIcon />}
+                      </span>
+                      {condition.toString()}
+                    </div>
+                  ))}
               </Typography>
             )}
           </span>

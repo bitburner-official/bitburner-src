@@ -4,10 +4,29 @@ import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { Option } from "./ui/Option";
 import { Typography } from "@mui/material";
+import {
+  JoinCondition,
+  haveBackdooredServer,
+  highRankingEmployee,
+  executiveEmployee,
+  notEmployee,
+  haveAugmentations,
+  haveMoney,
+  haveSkill,
+  haveCombatSkills,
+  haveKarma,
+  haveKilledPeople,
+  locatedInCity,
+  totalHacknetRam,
+  totalHacknetCores,
+  totalHacknetLevels,
+} from "./FactionJoinCondition";
+import { SpecialServers } from "../Server/data/SpecialServers";
 
 interface FactionInfoParams {
   infoText?: JSX.Element;
   rumorText?: JSX.Element;
+  inviteReqs?: JoinCondition[];
   enemies?: FactionName[];
   offerHackingWork?: boolean;
   offerFieldWork?: boolean;
@@ -27,6 +46,8 @@ export class FactionInfo {
 
   /** The hint to show about how to get invited to this faction. */
   rumorText: JSX.Element;
+
+  inviteReqs: JoinCondition[];
 
   /** A flag indicating if the faction supports field work to earn reputation. */
   offerFieldWork: boolean;
@@ -49,6 +70,7 @@ export class FactionInfo {
   constructor(params: FactionInfoParams) {
     this.infoText = params.infoText ?? <></>;
     this.rumorText = params.rumorText ?? <></>;
+    this.inviteReqs = params.inviteReqs ?? [];
     this.enemies = params.enemies ?? [];
     this.offerHackingWork = params.offerHackingWork ?? false;
     this.offerFieldWork = params.offerFieldWork ?? false;
@@ -77,10 +99,11 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: (
       <>
         “… the ancient secret society that controls the entire world from the shadows with their invisible hand. With
-        their personal wealth and skills they have penetrated every major government, financial agency, and
-        corporation …”
+        their personal wealth and skills they have penetrated every major government, financial agency, and corporation
+        …”
       </>
     ),
+    inviteReqs: [haveAugmentations(30), haveMoney(150e9), haveSkill("hacking", 1500), haveCombatSkills(1200)],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -108,6 +131,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         and wish to go further.
       </>
     ),
+    inviteReqs: [haveAugmentations(20), haveMoney(75e9), haveSkill("hacking", 850), haveCombatSkills(850)],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -122,6 +146,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     rumorText: <>High-ranking employees of {CompanyName.ECorp} can gain access to proprietary hacking augmentations.</>,
+    inviteReqs: [highRankingEmployee(CompanyName.ECorp)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -164,6 +189,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         augmentations.
       </>
     ),
+    inviteReqs: [highRankingEmployee(CompanyName.BachmanAndAssociates)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -175,6 +201,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: (
       <>High-ranking employees of {CompanyName.BladeIndustries} can gain access to proprietary bionic augmentations.</>
     ),
+    inviteReqs: [highRankingEmployee(CompanyName.BladeIndustries)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -190,6 +217,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     rumorText: <>High-ranking employees of {CompanyName.NWO} can gain access to proprietary nanotech augmentations.</>,
+    inviteReqs: [highRankingEmployee(CompanyName.NWO)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -204,6 +232,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         augmentations.
       </>
     ),
+    inviteReqs: [highRankingEmployee(CompanyName.ClarkeIncorporated)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -218,6 +247,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         augmentations.
       </>
     ),
+    inviteReqs: [highRankingEmployee(CompanyName.OmniTekIncorporated)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -234,6 +264,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: (
       <>High-ranking employees of {CompanyName.FourSigma} can gain access to a range of versatile augmentations.</>
     ),
+    inviteReqs: [highRankingEmployee(CompanyName.FourSigma)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -248,6 +279,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         augmentations.
       </>
     ),
+    inviteReqs: [highRankingEmployee(CompanyName.KuaiGongInternational)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -268,6 +300,10 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         proprietary neural network augmentations.
       </>
     ),
+    inviteReqs: [
+      highRankingEmployee(CompanyName.FulcrumTechnologies),
+      haveBackdooredServer(SpecialServers.FulcrumSecretTechnologies),
+    ],
     offerHackingWork: true,
     offerSecurityWork: true,
     keepOnInstall: true,
@@ -288,6 +324,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     rumorText: <>Run for the hills.</>,
+    inviteReqs: [haveBackdooredServer(SpecialServers.BitRunnersServer)],
     offerHackingWork: true,
   }),
 
@@ -303,6 +340,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     rumorText: <>I.I.I.I</>,
+    inviteReqs: [haveBackdooredServer(SpecialServers.TheBlackHandServer)],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -346,6 +384,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     {"       :bp.__.gNITESEC/$         :$   ;  "}<br />
     {"       NITESECNITESECNIT         /$b :   "}<br /></>),
     rumorText: <>A hacking group known as {FactionName.NiteSec} may recruit you if you impress them with your hacking skills.</>,
+    inviteReqs: [
+      haveBackdooredServer(SpecialServers.NiteSecServer)
+    ],
     offerHackingWork: true,
     offerFieldWork: false,
     offerSecurityWork: false,
@@ -358,6 +399,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>The Silicon City.</>,
     rumorText: <>Wealthy residents of {CityName.Aevum} may be invited to work for the Silicon City.</>,
     enemies: [FactionName.Chongqing, FactionName.NewTokyo, FactionName.Ishima, FactionName.Volhaven],
+    inviteReqs: [locatedInCity(CityName.Aevum), haveMoney(40e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -366,6 +408,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>Serve the People.</>,
     rumorText: <>Wealthy residents of {CityName.Chongqing} may be invited to serve the people.</>,
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
+    inviteReqs: [locatedInCity(CityName.Chongqing), haveMoney(20e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -376,6 +419,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       <>Wealthy residents of {CityName.Ishima} may be invited to work for the East Asian Order of the Future.</>
     ),
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
+    inviteReqs: [locatedInCity(CityName.Ishima), haveMoney(30e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -384,6 +428,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>Asia's World City.</>,
     rumorText: <>Wealthy residents of {CityName.NewTokyo} may be invited to work for Asia's World City.</>,
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
+    inviteReqs: [locatedInCity(CityName.NewTokyo), haveMoney(20e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -392,6 +437,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>The City of the Future.</>,
     rumorText: <>Wealthy residents of {CityName.Sector12} may be invited to work for the City of the Future.</>,
     enemies: [FactionName.Chongqing, FactionName.NewTokyo, FactionName.Ishima, FactionName.Volhaven],
+    inviteReqs: [locatedInCity(CityName.Sector12), haveMoney(15e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -402,6 +448,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       <>Wealthy residents of {CityName.Volhaven} may be invited to work for the city's Benefit, Honor, and Glory.</>
     ),
     enemies: [FactionName.Chongqing, FactionName.Sector12, FactionName.NewTokyo, FactionName.Aevum, FactionName.Ishima],
+    inviteReqs: [locatedInCity(CityName.Volhaven), haveMoney(50e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -411,6 +458,13 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.SpeakersForTheDead]: new FactionInfo({
     infoText: <>It is better to reign in Hell than to serve in Heaven.</>,
     rumorText: <>“We know.”</>,
+    inviteReqs: [
+      notEmployee(CompanyName.CIA, CompanyName.NSA),
+      haveKarma(-45),
+      haveSkill("hacking", 100),
+      haveCombatSkills(300),
+      haveKilledPeople(30),
+    ],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -419,6 +473,14 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.TheDarkArmy]: new FactionInfo({
     infoText: <>The World doesn't care about right or wrong. It only cares about power.</>,
     rumorText: <>A ruthless criminal organization based in {CityName.Chongqing}</>,
+    inviteReqs: [
+      notEmployee(CompanyName.CIA, CompanyName.NSA),
+      locatedInCity(CityName.Chongqing),
+      haveKarma(-45),
+      haveSkill("hacking", 300),
+      haveCombatSkills(300),
+      haveKilledPeople(5),
+    ],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -426,6 +488,14 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.TheSyndicate]: new FactionInfo({
     infoText: <>Honor holds you back.</>,
     rumorText: <>An elite criminal organization that operates in the western hemisphere</>,
+    inviteReqs: [
+      notEmployee(CompanyName.CIA, CompanyName.NSA),
+      locatedInCity(CityName.Aevum, CityName.Sector12),
+      haveKarma(-90),
+      haveMoney(10e6),
+      haveSkill("hacking", 200),
+      haveCombatSkills(200),
+    ],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -447,6 +517,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         Corporate executives with the right moral flexiblity may be invited to find out who they are truly working for.
       </>
     ),
+    inviteReqs: [executiveEmployee(), haveMoney(15e6), haveKarma(-22)],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -454,6 +525,11 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.Tetrads]: new FactionInfo({
     infoText: <>Following the mandate of Heaven and carrying out the way.</>,
     rumorText: <>A notorious East Asian criminal organization</>,
+    inviteReqs: [
+      locatedInCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      haveKarma(-18),
+      haveCombatSkills(75),
+    ],
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
@@ -461,6 +537,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.SlumSnakes]: new FactionInfo({
     infoText: <>{FactionName.SlumSnakes} rule!</>,
     rumorText: <>Graffiti seen in the slums: “{FactionName.SlumSnakes} rule!”</>,
+    inviteReqs: [haveCombatSkills(30), haveMoney(1e6)],
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
@@ -469,12 +546,18 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.Netburners]: new FactionInfo({
     infoText: <>{"~~//*>H4CK|\\|3T 8URN3R5**>?>\\~~"}</>,
     rumorText: <>{"~~//*>H4CK|\\|3T 8URN3R5**>?>\\~~"}</>,
+    inviteReqs: [haveSkill("hacking", 80), totalHacknetRam(8), totalHacknetCores(4), totalHacknetLevels(100)],
     offerHackingWork: true,
   }),
 
   [FactionName.TianDiHui]: new FactionInfo({
     infoText: <>Obey Heaven and work righteously.</>,
     rumorText: <>A Chinese honor society with the motto: “Obey Heaven and work righteously.”</>,
+    inviteReqs: [
+      locatedInCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      haveSkill("hacking", 50),
+      haveMoney(1e6),
+    ],
     offerHackingWork: true,
     offerSecurityWork: true,
   }),
@@ -493,6 +576,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         skills on their server.
       </>
     ),
+    inviteReqs: [haveBackdooredServer(SpecialServers.CyberSecServer)],
     offerHackingWork: true,
   }),
 
@@ -508,7 +592,14 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     rumorText: <>The {CompanyName.NSA} would like to have a word with you once you're ready.</>,
-
+    inviteReqs: [
+      {
+        toString: () => `Be recruited by the ${CompanyName.NSA}`,
+        isSatisfied: () => {
+          return false;
+        },
+      },
+    ],
     special: true,
     assignment: (): React.ReactElement => {
       return (
@@ -555,6 +646,14 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     Many cultures predict an end to humanity in the near future, a final
     Armageddon that will end the world; but we disagree.</>),
     rumorText: <>Trouble is brewing in {CityName.Chongqing}.</>,
+    inviteReqs: [
+      {
+        toString: () => `Investigate the ${FactionName.ChurchOfTheMachineGod} in ${CityName.Chongqing}`,
+        isSatisfied: () => {
+          return false;
+        },
+      },
+    ],
     offerHackingWork: false,
     offerFieldWork: false,
     offerSecurityWork: false,
@@ -581,6 +680,14 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     rumorText: <>Your infiltration activity has attracted attention.</>,
+    inviteReqs: [
+      {
+        toString: () => `Complete an infiltration`,
+        isSatisfied: () => {
+          return false;
+        },
+      },
+    ],
     special: true,
     keepOnInstall: true,
     assignment: (): React.ReactElement => {
