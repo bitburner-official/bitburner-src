@@ -287,6 +287,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         developmentProgress: product.developmentProgress,
         advertisingInvestment: product.advertisingInvestment,
         designInvestment: product.designInvestment,
+        size: product.size,
       };
     },
     purchaseWarehouse: (ctx) => (_divisionName, _cityName) => {
