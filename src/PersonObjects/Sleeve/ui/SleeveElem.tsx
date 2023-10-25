@@ -74,6 +74,7 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
   function setTask(): void {
     switch (abc[0]) {
       case "------":
+        props.sleeve.stopWork();
         break;
       case "Work for Company":
         if (getEnumHelper("CompanyName").isMember(abc[1])) props.sleeve.workForCompany(abc[1]);
