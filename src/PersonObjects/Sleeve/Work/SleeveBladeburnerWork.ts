@@ -60,6 +60,10 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
         applySleeveGains(sleeve, scaleWorkStats(retValue, sleeve.shockBonus(), false));
       }
       this.cyclesWorked -= this.cyclesNeeded(sleeve);
+      if (sleeve.singleAction) {
+        sleeve.singleAction = false;
+        return sleeve.stopWork();
+      }
     }
   }
 

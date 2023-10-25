@@ -60,6 +60,9 @@ export class Sleeve extends Person implements SleevePerson {
    */
   shock = 100;
 
+  /* Whether or not we are performing a single action */
+  singleAction = false;
+
   /** Stored number of game "loop" cycles */
   storedCycles = 0;
 
@@ -393,6 +396,42 @@ export class Sleeve extends Person implements SleevePerson {
   /** Begin a bladeburner task */
   bladeburner(action: string, contract: string): boolean {
     if (!Player.bladeburner) return false;
+    switch (action) {
+      case "Training":
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Training" }));
+        return true;
+      case "Field analysis":
+      case "Field Analysis":
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Field Analysis" }));
+        return true;
+      case "Recruitment":
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Recruitment" }));
+        return true;
+      case "Diplomacy":
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Diplomacy" }));
+        return true;
+      case "Hyperbolic Regeneration Chamber":
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Hyperbolic Regeneration Chamber" }));
+        return true;
+      case "Infiltrate synthoids":
+      case "Infiltrate Synthoids":
+        this.startWork(new SleeveInfiltrateWork());
+        return true;
+      case "Support main sleeve":
+        this.startWork(new SleeveSupportWork());
+        return true;
+      case "Take on contracts":
+        if (!Contracts[contract]) return false;
+        this.startWork(new SleeveBladeburnerWork({ type: "Contracts", name: contract }));
+        return true;
+    }
+    return false;
+  }
+
+  /** Begin a Single bladeburner task */
+  bladeburnersingle(action: string, contract: string): boolean {
+    if (!Player.bladeburner) return false;
+     this.singleAction = true;
     switch (action) {
       case "Training":
         this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Training" }));

@@ -1655,7 +1655,7 @@ export class Bladeburner {
     }
   }
 
-  processAction(seconds: number): void {
+  processAction(seconds: number, person: Person): void {
     if (this.action.type === ActionTypes.Idle) return;
     if (this.actionTimeToComplete <= 0) {
       throw new Error(`Invalid actionTimeToComplete value: ${this.actionTimeToComplete}, type; ${this.action.type}`);
@@ -1678,7 +1678,7 @@ export class Bladeburner {
       if (action == null) {
         throw new Error("Failed to get BlackOperation Object for: " + this.action.name);
       } else if (this.action.type != ActionTypes.BlackOperation && this.action.type != ActionTypes.BlackOp) {
-        this.startAction(this.action); // Repeat action
+          this.startAction(this.action); // Repeat action
       }
     }
   }
@@ -2041,7 +2041,7 @@ export class Bladeburner {
         this.randomEventCounter += getRandomInt(240, 600);
       }
 
-      this.processAction(seconds);
+      this.processAction(seconds, Player);
 
       // Automation
       if (this.automateEnabled) {

@@ -23,6 +23,10 @@ export class SleeveInfiltrateWork extends SleeveWorkClass {
     if (this.cyclesWorked > this.cyclesNeeded()) {
       this.cyclesWorked -= this.cyclesNeeded();
       Player.bladeburner.infiltrateSynthoidCommunities();
+      if (sleeve.singleAction) {
+        sleeve.singleAction = false;
+        return sleeve.stopWork();
+      }
     }
   }
 
