@@ -76,9 +76,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ),
     rumorText: (
       <>
-        “…the ancient secret society that controls the entire world from the shadows with their invisible hand. With
+        “… the ancient secret society that controls the entire world from the shadows with their invisible hand. With
         their personal wealth and skills they have penetrated every major government, financial agency, and
-        corporation…”
+        corporation …”
       </>
     ),
     offerHackingWork: true,
@@ -507,7 +507,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         {FactionName.Bladeburners} contracts/operations will increase your reputation.
       </>
     ),
-    rumorText: <>{CompanyName.NSA} would like to have a word with you once you're ready.</>,
+    rumorText: <>The {CompanyName.NSA} would like to have a word with you once you're ready.</>,
 
     special: true,
     assignment: (): React.ReactElement => {

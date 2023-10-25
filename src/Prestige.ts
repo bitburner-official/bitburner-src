@@ -234,7 +234,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // BitNode 6: Bladeburners and BitNode 7: Bladeburners 2079
   if (Player.bitNodeN === 6 || Player.bitNodeN === 7) {
-    delayedDialog(`${CompanyName.NSA} would like to have a word with you once you're ready.`);
+    delayedDialog(`The ${CompanyName.NSA} would like to have a word with you once you're ready.`);
     Player.receiveRumor(FactionName.Bladeburners);
   }
 
