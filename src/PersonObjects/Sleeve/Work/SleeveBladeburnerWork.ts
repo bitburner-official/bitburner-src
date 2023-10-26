@@ -9,6 +9,7 @@ import { scaleWorkStats } from "../../../Work/WorkStats";
 interface SleeveBladeburnerWorkParams {
   type: "General" | "Contracts";
   name: string;
+  singleAction: boolean;
 }
 
 export const isSleeveBladeburnerWork = (w: SleeveWorkClass | null): w is SleeveBladeburnerWork =>
@@ -19,11 +20,13 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
   cyclesWorked = 0;
   actionType: "General" | "Contracts";
   actionName: string;
+  actionSingleAction: boolean;
 
   constructor(params?: SleeveBladeburnerWorkParams) {
     super();
     this.actionType = params?.type ?? "General";
     this.actionName = params?.name ?? "Field Analysis";
+    this.actionSingleAction = params?.singleAction ?? false;
   }
 
   cyclesNeeded(sleeve: Sleeve): number {
@@ -60,8 +63,7 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
         applySleeveGains(sleeve, scaleWorkStats(retValue, sleeve.shockBonus(), false));
       }
       this.cyclesWorked -= this.cyclesNeeded(sleeve);
-      if (sleeve.singleAction) {
-        sleeve.singleAction = false;
+      if (this.actionSingleAction) {
         return sleeve.stopWork();
       }
     }

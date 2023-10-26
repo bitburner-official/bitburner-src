@@ -60,9 +60,6 @@ export class Sleeve extends Person implements SleevePerson {
    */
   shock = 100;
 
-  /* Whether or not we are performing a single action */
-  singleAction = false;
-
   /** Stored number of game "loop" cycles */
   storedCycles = 0;
 
@@ -398,31 +395,33 @@ export class Sleeve extends Person implements SleevePerson {
     if (!Player.bladeburner) return false;
     switch (action) {
       case "Training":
-        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Training" }));
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Training", singleAction: false }));
         return true;
       case "Field analysis":
       case "Field Analysis":
-        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Field Analysis" }));
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Field Analysis", singleAction: false }));
         return true;
       case "Recruitment":
-        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Recruitment" }));
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Recruitment", singleAction: false }));
         return true;
       case "Diplomacy":
-        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Diplomacy" }));
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Diplomacy", singleAction: false }));
         return true;
       case "Hyperbolic Regeneration Chamber":
-        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Hyperbolic Regeneration Chamber" }));
+        this.startWork(
+          new SleeveBladeburnerWork({ type: "General", name: "Hyperbolic Regeneration Chamber", singleAction: false }),
+        );
         return true;
       case "Infiltrate synthoids":
       case "Infiltrate Synthoids":
-        this.startWork(new SleeveInfiltrateWork());
+        this.startWork(new SleeveInfiltrateWork({ singleAction: false }));
         return true;
       case "Support main sleeve":
         this.startWork(new SleeveSupportWork());
         return true;
       case "Take on contracts":
         if (!Contracts[contract]) return false;
-        this.startWork(new SleeveBladeburnerWork({ type: "Contracts", name: contract }));
+        this.startWork(new SleeveBladeburnerWork({ type: "Contracts", name: contract, singleAction: false }));
         return true;
     }
     return false;
@@ -431,34 +430,35 @@ export class Sleeve extends Person implements SleevePerson {
   /** Begin a Single bladeburner task */
   bladeburnersingle(action: string, contract: string): boolean {
     if (!Player.bladeburner) return false;
-    this.singleAction = true;
     switch (action) {
       case "Training":
-        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Training" }));
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Training", singleAction: true }));
         return true;
       case "Field analysis":
       case "Field Analysis":
-        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Field Analysis" }));
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Field Analysis", singleAction: true }));
         return true;
       case "Recruitment":
-        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Recruitment" }));
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Recruitment", singleAction: true }));
         return true;
       case "Diplomacy":
-        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Diplomacy" }));
+        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Diplomacy", singleAction: true }));
         return true;
       case "Hyperbolic Regeneration Chamber":
-        this.startWork(new SleeveBladeburnerWork({ type: "General", name: "Hyperbolic Regeneration Chamber" }));
+        this.startWork(
+          new SleeveBladeburnerWork({ type: "General", name: "Hyperbolic Regeneration Chamber", singleAction: true }),
+        );
         return true;
       case "Infiltrate synthoids":
       case "Infiltrate Synthoids":
-        this.startWork(new SleeveInfiltrateWork());
+        this.startWork(new SleeveInfiltrateWork({ singleAction: true }));
         return true;
       case "Support main sleeve":
         this.startWork(new SleeveSupportWork());
         return true;
       case "Take on contracts":
         if (!Contracts[contract]) return false;
-        this.startWork(new SleeveBladeburnerWork({ type: "Contracts", name: contract }));
+        this.startWork(new SleeveBladeburnerWork({ type: "Contracts", name: contract, singleAction: true }));
         return true;
     }
     return false;

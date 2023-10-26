@@ -9,9 +9,18 @@ const infiltrateCycles = 60000 / CONSTANTS.MilliPerCycle;
 export const isSleeveInfiltrateWork = (w: SleeveWorkClass | null): w is SleeveInfiltrateWork =>
   w !== null && w.type === SleeveWorkType.INFILTRATE;
 
+interface SleeveInfiltrateWorkParams {
+  singleAction: boolean;
+}
+
 export class SleeveInfiltrateWork extends SleeveWorkClass {
   type: SleeveWorkType.INFILTRATE = SleeveWorkType.INFILTRATE;
   cyclesWorked = 0;
+  singleAction: boolean;
+  constructor(params?: SleeveInfiltrateWorkParams) {
+    super();
+    this.singleAction = params?.singleAction ?? false;
+  }
 
   cyclesNeeded(): number {
     return infiltrateCycles;
@@ -23,8 +32,7 @@ export class SleeveInfiltrateWork extends SleeveWorkClass {
     if (this.cyclesWorked > this.cyclesNeeded()) {
       this.cyclesWorked -= this.cyclesNeeded();
       Player.bladeburner.infiltrateSynthoidCommunities();
-      if (sleeve.singleAction) {
-        sleeve.singleAction = false;
+      if (this.singleAction) {
         return sleeve.stopWork();
       }
     }
