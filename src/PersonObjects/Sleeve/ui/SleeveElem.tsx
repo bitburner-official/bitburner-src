@@ -73,7 +73,7 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
 
   function setTask(): void {
     switch (abc[0]) {
-      case "------":
+      case "Idle":
         props.sleeve.stopWork();
         break;
       case "Work for Company":
