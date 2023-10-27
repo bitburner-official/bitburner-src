@@ -99,7 +99,7 @@ export const haveCombatSkills = (n: number): JoinCondition => ({
     return `All combat skills level ${n}`;
   },
   isSatisfied(p: PlayerObject): boolean {
-    return p.skills.strength < n && p.skills.defense < n && p.skills.dexterity < n && p.skills.agility < n;
+    return p.skills.strength >= n && p.skills.defense >= n && p.skills.dexterity >= n && p.skills.agility >= n;
   },
 });
 
