@@ -69,7 +69,7 @@ export const notEmployee = (...companyNames: CompanyName[]): JoinCondition => ({
 
 export const haveAugmentations = (n: number): JoinCondition => ({
   toString(): string {
-    return `Installed ${n} augmentations`;
+    return `${n} augmentations installed`;
   },
   isSatisfied(p: PlayerObject): boolean {
     return p.augmentations.length >= n;
@@ -114,7 +114,7 @@ export const haveKarma = (n: number): JoinCondition => ({
 
 export const haveKilledPeople = (n: number): JoinCondition => ({
   toString(): string {
-    return `Killed ${n} people`;
+    return `${n} people killed`;
   },
   isSatisfied(p: PlayerObject): boolean {
     return p.numPeopleKilled >= n;
