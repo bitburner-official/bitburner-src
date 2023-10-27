@@ -341,9 +341,6 @@ export function applyForJob(this: PlayerObject, entryPosType: CompanyPosition, s
   if (company.relatedFaction) {
     this.receiveRumor(company.relatedFaction);
   }
-  if (pos.name in [JobName.software7, JobName.business4, JobName.business5]) {
-    this.receiveRumor(FactionName.Silhouette);
-  }
 
   this.jobs[company.name] = pos.name;
 
@@ -643,10 +640,11 @@ export function reapplyAllSourceFiles(this: PlayerObject): void {
 //those requirements and will return an array of all factions that the Player should
 //receive an invitation to
 export function checkForFactionInvitations(this: PlayerObject): Faction[] {
-  const invitedFactions = Object.values(Factions).filter((faction: Faction) => {
-    return faction.checkForInvite(this);
-  });
-
+  const invitedFactions = [];
+  for (const faction of Object.values(Factions)) {
+    if (faction.checkForInvite(this)) invitedFactions.push(faction);
+    if (faction.checkForRumor(this)) this.receiveRumor(faction.name);
+  }
   return invitedFactions;
 }
 

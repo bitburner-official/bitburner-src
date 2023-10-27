@@ -90,6 +90,15 @@ export class Faction {
     }
     return true;
   }
+
+  checkForRumor(p: PlayerObject): boolean {
+    if (this.isBanned) return false;
+    if (this.isMember) return false;
+    if (this.alreadyInvited) return false;
+    const conditions = this.getInfo().rumorReqs;
+    if (conditions.length == 0) return false;
+    for (const condition of conditions) {
+      if (!condition.isSatisfied(p)) return false;
     }
     return true;
   }

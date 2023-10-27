@@ -30,6 +30,7 @@ interface FactionInfoParams {
   infoText?: JSX.Element;
   rumorText?: JSX.Element;
   inviteReqs?: JoinCondition[];
+  rumorReqs?: JoinCondition[];
   enemies?: FactionName[];
   offerHackingWork?: boolean;
   offerFieldWork?: boolean;
@@ -53,6 +54,9 @@ export class FactionInfo {
   /** Conditions for being automatically inivited to this facton. */
   inviteReqs: JoinCondition[];
 
+  /** Conditions for automatically hearing a rumor about this facton. */
+  rumorReqs: JoinCondition[];
+
   /** A flag indicating if the faction supports field work to earn reputation. */
   offerFieldWork: boolean;
 
@@ -75,6 +79,7 @@ export class FactionInfo {
     this.infoText = params.infoText ?? <></>;
     this.rumorText = params.rumorText ?? <></>;
     this.inviteReqs = params.inviteReqs ?? [];
+    this.rumorReqs = params.rumorReqs ?? [];
     this.enemies = params.enemies ?? [];
     this.offerHackingWork = params.offerHackingWork ?? false;
     this.offerFieldWork = params.offerFieldWork ?? false;
@@ -410,6 +415,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: <>Wealthy residents of {CityName.Aevum} may be invited to work for the Silicon City.</>,
     enemies: [FactionName.Chongqing, FactionName.NewTokyo, FactionName.Ishima, FactionName.Volhaven],
     inviteReqs: [locatedInCity(CityName.Aevum), haveMoney(40e6)],
+    rumorReqs: [locatedInCity(CityName.Aevum), haveMoney(20e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -419,6 +425,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: <>Wealthy residents of {CityName.Chongqing} may be invited to serve the people.</>,
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     inviteReqs: [locatedInCity(CityName.Chongqing), haveMoney(20e6)],
+    rumorReqs: [locatedInCity(CityName.Chongqing), haveMoney(10e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -430,6 +437,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ),
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     inviteReqs: [locatedInCity(CityName.Ishima), haveMoney(30e6)],
+    rumorReqs: [locatedInCity(CityName.Ishima), haveMoney(15e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -439,6 +447,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: <>Wealthy residents of {CityName.NewTokyo} may be invited to work for Asia's World City.</>,
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
     inviteReqs: [locatedInCity(CityName.NewTokyo), haveMoney(20e6)],
+    rumorReqs: [locatedInCity(CityName.NewTokyo), haveMoney(10e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -448,6 +457,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: <>Wealthy residents of {CityName.Sector12} may be invited to work for the City of the Future.</>,
     enemies: [FactionName.Chongqing, FactionName.NewTokyo, FactionName.Ishima, FactionName.Volhaven],
     inviteReqs: [locatedInCity(CityName.Sector12), haveMoney(15e6)],
+    rumorReqs: [locatedInCity(CityName.Sector12), haveMoney(7.5e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -459,6 +469,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ),
     enemies: [FactionName.Chongqing, FactionName.Sector12, FactionName.NewTokyo, FactionName.Aevum, FactionName.Ishima],
     inviteReqs: [locatedInCity(CityName.Volhaven), haveMoney(50e6)],
+    rumorReqs: [locatedInCity(CityName.Volhaven), haveMoney(25e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -475,6 +486,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       haveCombatSkills(300),
       haveKilledPeople(30),
     ],
+    rumorReqs: [notEmployee(CompanyName.CIA, CompanyName.NSA), haveKilledPeople(5)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -491,6 +503,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       haveCombatSkills(300),
       haveKilledPeople(5),
     ],
+    rumorReqs: [locatedInCity(CityName.Chongqing), notEmployee(CompanyName.CIA, CompanyName.NSA), haveKilledPeople(1)],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -505,6 +518,11 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       haveMoney(10e6),
       haveSkill("hacking", 200),
       haveCombatSkills(200),
+    ],
+    rumorReqs: [
+      locatedInCity(CityName.Aevum, CityName.Sector12),
+      notEmployee(CompanyName.CIA, CompanyName.NSA),
+      haveKilledPeople(1),
     ],
     offerHackingWork: true,
     offerFieldWork: true,
@@ -528,6 +546,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     inviteReqs: [executiveEmployee(), haveMoney(15e6), haveKarma(-22)],
+    rumorReqs: [executiveEmployee()],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -540,6 +559,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       haveKarma(-18),
       haveCombatSkills(75),
     ],
+    rumorReqs: [locatedInCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima), haveKarma(-18)],
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
@@ -548,6 +568,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>{FactionName.SlumSnakes} rule!</>,
     rumorText: <>Graffiti seen in the slums: “{FactionName.SlumSnakes} rule!”</>,
     inviteReqs: [haveCombatSkills(30), haveMoney(1e6)],
+    rumorReqs: [haveKarma(-1)],
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
@@ -567,6 +588,11 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       locatedInCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
       haveSkill("hacking", 50),
       haveMoney(1e6),
+    ],
+    rumorReqs: [
+      locatedInCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      haveSkill("hacking", 25),
+      haveMoney(0.5e6),
     ],
     offerHackingWork: true,
     offerSecurityWork: true,
