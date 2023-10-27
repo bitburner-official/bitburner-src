@@ -1,5 +1,15 @@
 import React, { useEffect } from "react";
-import { Explore, Info, LastPage, LocalPolice, NewReleases, Report, SportsMma } from "@mui/icons-material";
+import {
+  Explore,
+  Info,
+  LastPage,
+  LocalPolice,
+  NewReleases,
+  Report,
+  SportsMma,
+  RadioButtonUnchecked,
+  TaskAlt,
+} from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography, useTheme } from "@mui/material";
 
 import { Player } from "@player";
@@ -15,8 +25,6 @@ import { CorruptableText } from "../../ui/React/CorruptableText";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import TaskAltIcon from "@mui/icons-material/TaskAlt";
 
 export const InvitationsSeen = new Set<FactionName>();
 
@@ -50,16 +58,20 @@ const WorkTypesOffered = (props: { faction: Faction }): React.ReactElement => {
 const JoinConditions = (props: { faction: Faction }): React.ReactElement => {
   const info = props.faction.getInfo();
   return (
-    <>
+    <ul style={{ listStyleType: "none" }}>
       {info.inviteReqs.map((condition, i) => (
-        <Typography key={i} style={{ paddingLeft: "1.25em", display: "flex", alignItems: "center" }}>
-          <span style={{ marginLeft: "-1.25em" }}>
-            {condition.isSatisfied(Player) ? <TaskAltIcon /> : <RadioButtonUncheckedIcon />}
+        <Typography component="li" key={i} display="flex" sx={{ alignItems: "center" }}>
+          <span style={{ display: "inline-block", marginLeft: "-2em", marginRight: "0.5em", height: "1.3em" }}>
+            {condition.isSatisfied(Player) ? (
+              <TaskAlt fontSize={fontSize} />
+            ) : (
+              <RadioButtonUnchecked fontSize={fontSize} />
+            )}
           </span>
           {condition.toString()}
         </Typography>
       ))}
-    </>
+    </ul>
   );
 };
 
