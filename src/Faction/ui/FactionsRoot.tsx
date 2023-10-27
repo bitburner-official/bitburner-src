@@ -55,7 +55,7 @@ const WorkTypesOffered = (props: { faction: Faction }): React.ReactElement => {
   );
 };
 
-const JoinConditions = (props: { faction: Faction }): React.ReactElement => {
+const JoinChecklist = (props: { faction: Faction }): React.ReactElement => {
   const info = props.faction.getInfo();
   return (
     <ul style={{ listStyleType: "none" }}>
@@ -142,8 +142,8 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
               <Tooltip
                 title={
                   <>
-                    <Typography>{props.faction.name}</Typography>
-                    <JoinConditions faction={props.faction} />
+                    <Typography sx={{ textAlign: "center" }}>{props.faction.name}</Typography>
+                    <JoinChecklist faction={props.faction} />
                   </>
                 }
               >
