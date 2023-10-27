@@ -43,10 +43,14 @@ export function FactionsDev(): React.ReactElement {
 
   function receiveInvite(): void {
     Player.receiveInvite(factionName);
+    Factions[factionName].alreadyInvited = true;
   }
 
   function receiveAllInvites(): void {
-    Object.values(FactionName).forEach((faction) => Player.receiveInvite(faction));
+    Object.values(FactionName).forEach((faction) => {
+      Player.receiveInvite(faction);
+      Factions[factionName].alreadyInvited = true;
+    });
   }
 
   function receiveRumor(): void {
