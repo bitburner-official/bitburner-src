@@ -47,6 +47,22 @@ const WorkTypesOffered = (props: { faction: Faction }): React.ReactElement => {
   );
 };
 
+const JoinConditions = (props: { faction: Faction }): React.ReactElement => {
+  const info = props.faction.getInfo();
+  return (
+    <>
+      {info.inviteReqs.map((condition, i) => (
+        <Typography key={i} style={{ paddingLeft: "1.25em", display: "flex", alignItems: "center" }}>
+          <span style={{ marginLeft: "-1.25em" }}>
+            {condition.isSatisfied(Player) ? <TaskAltIcon /> : <RadioButtonUncheckedIcon />}
+          </span>
+          {condition.toString()}
+        </Typography>
+      ))}
+    </>
+  );
+};
+
 interface FactionElementProps {
   faction: Faction;
   /** Rerender function to force the entire FactionsRoot to rerender */
@@ -111,7 +127,14 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
             }}
           >
             {props.faction.discovery == FactionDiscovery.known ? (
-              <Tooltip title={props.faction.name}>
+              <Tooltip
+                title={
+                  <>
+                    <Typography>{props.faction.name}</Typography>
+                    <JoinConditions faction={props.faction} />
+                  </>
+                }
+              >
                 <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
                   {props.faction.name}
                 </span>
@@ -168,15 +191,6 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
             ) : (
               <Typography variant="body2" component="div">
                 <i>{props.faction.getInfo().rumorText}</i>
-                {props.faction.discovery == FactionDiscovery.known &&
-                  props.faction.getInfo().inviteReqs.map((condition, i) => (
-                    <div key={i} style={{ paddingLeft: "1em" }}>
-                      <span style={{ marginLeft: "-1em", paddingRight: "0.25em" }}>
-                        {condition.isSatisfied(Player) ? <TaskAltIcon /> : <RadioButtonUncheckedIcon />}
-                      </span>
-                      {condition.toString()}
-                    </div>
-                  ))}
               </Typography>
             )}
           </span>
