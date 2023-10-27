@@ -1,5 +1,6 @@
 import React from "react";
 import { FactionName, CompanyName, CityName } from "@enums";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { Option } from "./ui/Option";
@@ -20,8 +21,10 @@ import {
   totalHacknetRam,
   totalHacknetCores,
   totalHacknetLevels,
+  anyOf,
 } from "./FactionJoinCondition";
 import { SpecialServers } from "../Server/data/SpecialServers";
+import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 
 interface FactionInfoParams {
   infoText?: JSX.Element;
@@ -47,6 +50,7 @@ export class FactionInfo {
   /** The hint to show about how to get invited to this faction. */
   rumorText: JSX.Element;
 
+  /** Conditions for being automatically inivited to this facton. */
   inviteReqs: JoinCondition[];
 
   /** A flag indicating if the faction supports field work to earn reputation. */
@@ -111,6 +115,11 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.Daedalus]: new FactionInfo({
     infoText: <>Yesterday we obeyed kings and bent our necks to emperors. Today we kneel only to truth.</>,
     rumorText: <>Follow the thread.</>,
+    inviteReqs: [
+      haveAugmentations(currentNodeMults.DaedalusAugsRequirement),
+      haveMoney(100e9),
+      anyOf(haveSkill("hacking", 2500), haveCombatSkills(1500)),
+    ],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -168,6 +177,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: (
       <>High-ranking employees of {CompanyName.MegaCorp} can gain access to proprietary biotech augmentations.</>
     ),
+    inviteReqs: [highRankingEmployee(CompanyName.MegaCorp)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -474,8 +484,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>The World doesn't care about right or wrong. It only cares about power.</>,
     rumorText: <>A ruthless criminal organization based in {CityName.Chongqing}</>,
     inviteReqs: [
-      notEmployee(CompanyName.CIA, CompanyName.NSA),
       locatedInCity(CityName.Chongqing),
+      notEmployee(CompanyName.CIA, CompanyName.NSA),
       haveKarma(-45),
       haveSkill("hacking", 300),
       haveCombatSkills(300),
@@ -489,8 +499,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>Honor holds you back.</>,
     rumorText: <>An elite criminal organization that operates in the western hemisphere</>,
     inviteReqs: [
-      notEmployee(CompanyName.CIA, CompanyName.NSA),
       locatedInCity(CityName.Aevum, CityName.Sector12),
+      notEmployee(CompanyName.CIA, CompanyName.NSA),
       haveKarma(-90),
       haveMoney(10e6),
       haveSkill("hacking", 200),
@@ -595,8 +605,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     inviteReqs: [
       {
         toString: () => `Be recruited by the ${CompanyName.NSA}`,
-        isSatisfied: () => {
-          return false;
+        isSatisfied: (p: PlayerObject) => {
+          return [...p.factions, ...p.factionInvitations].includes(FactionName.Bladeburners);
         },
       },
     ],
@@ -649,8 +659,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     inviteReqs: [
       {
         toString: () => `Investigate the ${FactionName.ChurchOfTheMachineGod} in ${CityName.Chongqing}`,
-        isSatisfied: () => {
-          return false;
+        isSatisfied: (p: PlayerObject) => {
+          return [...p.factions, ...p.factionInvitations].includes(FactionName.ChurchOfTheMachineGod);
         },
       },
     ],
@@ -683,8 +693,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     inviteReqs: [
       {
         toString: () => `Complete an infiltration`,
-        isSatisfied: () => {
-          return false;
+        isSatisfied: (p: PlayerObject) => {
+          return [...p.factions, ...p.factionInvitations].includes(FactionName.ShadowsOfAnarchy);
         },
       },
     ],

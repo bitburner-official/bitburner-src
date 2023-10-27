@@ -175,6 +175,18 @@ export const totalHacknetLevels = (n: number): JoinCondition => ({
   },
 });
 
+export const anyOf = (...conditions: JoinCondition[]): JoinCondition => ({
+  toString(): string {
+    return joinList(conditions.map((c) => c.toString()));
+  },
+  isSatisfied(p: PlayerObject): boolean {
+    for (const condition of conditions) {
+      if (condition.isSatisfied(p)) return true;
+    }
+    return false;
+  },
+});
+
 /* helpers */
 
 function capitalize(s: string) {
