@@ -98,9 +98,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ),
     rumorText: (
       <>
-        “… the ancient secret society that controls the entire world from the shadows with their invisible hand. With
-        their personal wealth and skills they have penetrated every major government, financial agency, and corporation
-        …”
+        “...the ancient secret society that controls the entire world from the shadows with their invisible hand. With
+        their personal wealth and skills they have penetrated every major government, financial agency, and
+        corporation...”
       </>
     ),
     inviteReqs: [haveAugmentations(30), haveMoney(150e9), haveSkill("hacking", 1500), haveCombatSkills(1200)],

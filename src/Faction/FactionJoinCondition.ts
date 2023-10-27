@@ -1,13 +1,13 @@
 import { CompanyName, JobName, CityName } from "@enums";
-import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
-import type { Skills } from "../PersonObjects/Skills";
 import { Server } from "../Server/Server";
 import { GetServer } from "../Server/AllServers";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { serverMetadata } from "../Server/data/servers";
 import { Companies } from "../Company/Companies";
 import { CONSTANTS } from "../Constants";
-import { formatBigNumber, formatMoney, formatRam } from "../ui/formatNumber";
+import { formatReputation, formatMoney, formatRam } from "../ui/formatNumber";
+import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
+import type { Skills } from "../PersonObjects/Skills";
 
 export interface JoinCondition {
   toString(): string;
@@ -16,7 +16,7 @@ export interface JoinCondition {
 
 export const haveBackdooredServer = (hostname: string): JoinCondition => ({
   toString(): string {
-    return `Backdoor access to ${hostname}`;
+    return `Backdoor access to ${hostname} server`;
   },
   isSatisfied(): boolean {
     const server = GetServer(hostname);
@@ -29,7 +29,7 @@ export const haveBackdooredServer = (hostname: string): JoinCondition => ({
 
 export const highRankingEmployee = (companyName: CompanyName): JoinCondition => ({
   toString(): string {
-    return `Employed at ${companyName} with ${formatBigNumber(CONSTANTS.CorpFactionRepRequirement)} reputation`;
+    return `Employed at ${companyName} with ${formatReputation(CONSTANTS.CorpFactionRepRequirement)} reputation`;
   },
   isSatisfied(p: PlayerObject): boolean {
     const company = Companies[companyName];
@@ -69,7 +69,7 @@ export const notEmployee = (...companyNames: CompanyName[]): JoinCondition => ({
 
 export const haveAugmentations = (n: number): JoinCondition => ({
   toString(): string {
-    return `Installed at least ${n} augmentations`;
+    return `Installed ${n} augmentations`;
   },
   isSatisfied(p: PlayerObject): boolean {
     return p.augmentations.length >= n;
@@ -78,7 +78,7 @@ export const haveAugmentations = (n: number): JoinCondition => ({
 
 export const haveMoney = (n: number): JoinCondition => ({
   toString(): string {
-    return `Have at least ${formatMoney(n)}`;
+    return `Have ${formatMoney(n)}`;
   },
   isSatisfied(p: PlayerObject): boolean {
     return p.money >= n;
@@ -105,7 +105,7 @@ export const haveCombatSkills = (n: number): JoinCondition => ({
 
 export const haveKarma = (n: number): JoinCondition => ({
   toString(): string {
-    return `Have ${n} karma`;
+    return `${n} karma`;
   },
   isSatisfied(p: PlayerObject): boolean {
     return p.karma <= n;
@@ -114,7 +114,7 @@ export const haveKarma = (n: number): JoinCondition => ({
 
 export const haveKilledPeople = (n: number): JoinCondition => ({
   toString(): string {
-    return `Have killed ${n} people`;
+    return `Killed ${n} people`;
   },
   isSatisfied(p: PlayerObject): boolean {
     return p.numPeopleKilled >= n;
