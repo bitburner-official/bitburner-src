@@ -83,8 +83,13 @@ export class Faction {
     if (this.isBanned) return false;
     if (this.isMember) return false;
     if (this.alreadyInvited) return false;
-    for (const req of this.getInfo().inviteReqs) {
-      if (!req.isSatisfied(p)) return false;
+    const conditions = this.getInfo().inviteReqs;
+    if (conditions.length == 0) return false;
+    for (const condition of conditions) {
+      if (!condition.isSatisfied(p)) return false;
+    }
+    return true;
+  }
     }
     return true;
   }
