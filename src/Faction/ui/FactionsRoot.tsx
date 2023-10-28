@@ -1,15 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Explore,
-  Info,
-  LastPage,
-  LocalPolice,
-  NewReleases,
-  Report,
-  SportsMma,
-  RadioButtonUnchecked,
-  TaskAlt,
-} from "@mui/icons-material";
+import { Explore, Info, LastPage, LocalPolice, NewReleases, Report, SportsMma } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography, useTheme } from "@mui/material";
 
 import { Player } from "@player";
@@ -21,6 +11,7 @@ import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { useRerender } from "../../ui/React/hooks";
 import { CorruptableText } from "../../ui/React/CorruptableText";
+import { Requirement } from "../../ui/Components/Requirement";
 
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
@@ -58,20 +49,17 @@ const WorkTypesOffered = (props: { faction: Faction }): React.ReactElement => {
 const JoinChecklist = (props: { faction: Faction }): React.ReactElement => {
   const info = props.faction.getInfo();
   return (
-    <ul style={{ listStyleType: "none" }}>
+    <>
       {info.inviteReqs.map((condition, i) => (
-        <Typography component="li" key={i} display="flex" sx={{ alignItems: "center" }}>
-          <span style={{ display: "inline-block", marginLeft: "-2em", marginRight: "0.5em", height: "1.3em" }}>
-            {condition.isSatisfied(Player) ? (
-              <TaskAlt fontSize={fontSize} />
-            ) : (
-              <RadioButtonUnchecked fontSize={fontSize} />
-            )}
-          </span>
-          {condition.toString()}
-        </Typography>
+        <Requirement
+          key={i}
+          fulfilled={condition.isSatisfied(Player)}
+          value={condition.toString()}
+          color={Settings.theme.primary}
+          incompleteColor={Settings.theme.primarydark}
+        />
       ))}
-    </ul>
+    </>
   );
 };
 
