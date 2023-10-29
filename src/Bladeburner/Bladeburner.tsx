@@ -958,7 +958,7 @@ export class Bladeburner {
         const count = Math.round(sourceCity.pop * percentage);
         sourceCity.pop -= count;
         destCity.pop += count;
-        if (destCity.pop > BladeburnerConstants.PopGrowthCeiling) {
+        if (destCity.pop < BladeburnerConstants.PopGrowthCeiling) {
           destCity.pop += BladeburnerConstants.BasePopGrowth;
         }
         if (this.logging.events) {
