@@ -57,7 +57,7 @@ export const executiveEmployee = (): JoinCondition => ({
 
 export const notEmployee = (...companyNames: CompanyName[]): JoinCondition => ({
   toString(): string {
-    return `Not a member of ${joinList(companyNames)}`;
+    return `Not working for the ${joinList(companyNames)}`;
   },
   isSatisfied(p: PlayerObject): boolean {
     for (const companyName of companyNames) {

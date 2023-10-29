@@ -480,7 +480,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>It is better to reign in Hell than to serve in Heaven.</>,
     rumorText: <>“We know.”</>,
     inviteReqs: [
-      notEmployee(CompanyName.CIA, CompanyName.NSA),
+      notEmployee(CompanyName.CIA),
+      notEmployee(CompanyName.NSA),
       haveKarma(-45),
       haveSkill("hacking", 100),
       haveCombatSkills(300),
@@ -497,7 +498,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: <>A ruthless criminal organization based in {CityName.Chongqing}</>,
     inviteReqs: [
       locatedInCity(CityName.Chongqing),
-      notEmployee(CompanyName.CIA, CompanyName.NSA),
+      notEmployee(CompanyName.CIA),
+      notEmployee(CompanyName.NSA),
       haveKarma(-45),
       haveSkill("hacking", 300),
       haveCombatSkills(300),
@@ -519,7 +521,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: <>An elite criminal organization that operates in the western hemisphere</>,
     inviteReqs: [
       locatedInCity(CityName.Aevum, CityName.Sector12),
-      notEmployee(CompanyName.CIA, CompanyName.NSA),
+      notEmployee(CompanyName.CIA),
+      notEmployee(CompanyName.NSA),
       haveKarma(-90),
       haveMoney(10e6),
       haveSkill("hacking", 200),
