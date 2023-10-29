@@ -319,6 +319,7 @@ const sleeve = {
   getSleevePurchasableAugs: RamCostConstants.SleeveBase,
   purchaseSleeveAug: RamCostConstants.SleeveBase,
   setToBladeburnerAction: RamCostConstants.SleeveBase,
+  setToBladeburnerSingleAction: RamCostConstants.SleeveBase,
   getSleeveAugmentationPrice: RamCostConstants.SleeveBase,
   getSleeveAugmentationRepReq: RamCostConstants.SleeveBase,
 } as const;

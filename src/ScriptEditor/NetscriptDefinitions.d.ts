@@ -4007,6 +4007,20 @@ export interface Sleeve {
    * @returns True if the sleeve started the given Bladeburner action, false otherwise.
    */
   setToBladeburnerAction(sleeveNumber: number, action: string, contract?: string): boolean;
+
+  /**
+   * Set a sleeve to perform a single Bladeburner action.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Return a boolean indicating whether or not the sleeve started a Bladeburner action.
+   *
+   * @param sleeveNumber - Index of the sleeve to perform a Bladeburner action.
+   * @param action - Name of the action to be performed.
+   * @param contract - Name of the contract if applicable.
+   * @returns True if the sleeve started the given Bladeburner action, false otherwise.
+   */
+  setToBladeburnerSingleAction(sleeveNumber: number, action: string, contract?: string): boolean;
 }
 
 /**
