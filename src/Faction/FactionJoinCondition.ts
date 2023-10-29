@@ -5,6 +5,7 @@ import { HacknetServer } from "../Hacknet/HacknetServer";
 import { serverMetadata } from "../Server/data/servers";
 import { Companies } from "../Company/Companies";
 import { CONSTANTS } from "../Constants";
+import { BladeburnerConstants } from "../Bladeburner/data/Constants";
 import { formatReputation, formatMoney, formatRam } from "../ui/formatNumber";
 import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import type { Skills } from "../PersonObjects/Skills";
@@ -27,9 +28,9 @@ export const haveBackdooredServer = (hostname: string): JoinCondition => ({
   },
 });
 
-export const highRankingEmployee = (companyName: CompanyName): JoinCondition => ({
+export const highRankingEmployee = (companyName: CompanyName, rep: number = CONSTANTS.CorpFactionRepRequirement): JoinCondition => ({
   toString(): string {
-    return `Employed at ${companyName} with ${formatReputation(CONSTANTS.CorpFactionRepRequirement)} reputation`;
+    return `Employed at ${companyName} with ${formatReputation(rep)} reputation`;
   },
   isSatisfied(p: PlayerObject): boolean {
     const company = Companies[companyName];
@@ -37,7 +38,7 @@ export const highRankingEmployee = (companyName: CompanyName): JoinCondition => 
     const serverMeta = serverMetadata.find((s) => s.specialName === companyName);
     const server = GetServer(serverMeta ? serverMeta.hostname : "");
     const bonus = (server as Server).backdoorInstalled ? -100e3 : 0;
-    return Object.hasOwn(p.jobs, companyName) && company.playerReputation > CONSTANTS.CorpFactionRepRequirement + bonus;
+    return Object.hasOwn(p.jobs, companyName) && company.playerReputation > rep + bonus;
   },
 });
 
@@ -175,6 +176,28 @@ export const totalHacknetLevels = (n: number): JoinCondition => ({
   },
 });
 
+export const haveBladeburnerRank = (n: number = BladeburnerConstants.RankNeededForFaction): JoinCondition => ({
+  toString(): string {
+    return `Rank ${n} in the Bladeburner Division`;
+  },
+  isSatisfied(p: PlayerObject): boolean {
+    const rank = p.bladeburner?.rank || 0;
+    return (rank >= n);
+  },
+});
+
+export const inBitnode = (...nodeNums: number[]): JoinCondition => ({
+  toString(): string {
+    return `In BitNode ${joinList(nodeNums)} or have SourceFile ${joinList(nodeNums)}`;
+  },
+  isSatisfied(p: PlayerObject): boolean {
+    for (const n of nodeNums) {
+      if (p.bitNodeN === n || p.sourceFileLvl(n) > 0) return true;
+    }
+    return false;
+  },
+});
+
 export const anyOf = (...conditions: JoinCondition[]): JoinCondition => ({
   toString(): string {
     return joinList(conditions.map((c) => c.toString()));
@@ -193,7 +216,7 @@ function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-function joinList(list: string[], conjunction = "or", separator = ", ") {
+function joinList(list: (string | number)[], conjunction = "or", separator = ", ") {
   if (list.length < 3) {
     return list.join(` ${conjunction} `);
   }

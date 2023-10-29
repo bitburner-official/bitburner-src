@@ -21,6 +21,8 @@ import {
   totalHacknetRam,
   totalHacknetCores,
   totalHacknetLevels,
+  haveBladeburnerRank,
+  inBitnode,
   anyOf,
 } from "./FactionJoinCondition";
 import { SpecialServers } from "../Server/data/SpecialServers";
@@ -639,12 +641,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ),
     rumorText: <>The {CompanyName.NSA} would like to have a word with you once you're ready.</>,
     inviteReqs: [
-      {
-        toString: () => `Be recruited by the ${CompanyName.NSA}`,
-        isSatisfied: (p: PlayerObject) => {
-          return [...p.factions, ...p.factionInvitations].includes(FactionName.Bladeburners);
-        },
-      },
+      inBitnode(6,7),
+      haveBladeburnerRank()
     ],
     special: true,
     assignment: (): React.ReactElement => {
@@ -693,8 +691,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     Armageddon that will end the world; but we disagree.</>),
     rumorText: <>Trouble is brewing in {CityName.Chongqing}.</>,
     inviteReqs: [
+      inBitnode(13),
       {
-        toString: () => `Investigate the ${FactionName.ChurchOfTheMachineGod} in ${CityName.Chongqing}`,
+        toString: () => `Investigate the dilapidated church in ${CityName.Chongqing}`,
         isSatisfied: (p: PlayerObject) => {
           return [...p.factions, ...p.factionInvitations].includes(FactionName.ChurchOfTheMachineGod);
         },
