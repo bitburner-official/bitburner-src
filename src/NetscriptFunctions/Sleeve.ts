@@ -261,6 +261,36 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
 
       return Player.sleeves[sleeveNumber].bladeburner(action, contract);
     },
+    setToBladeburnerSingleAction: (ctx) => (_sleeveNumber, _action, _contract?) => {
+      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const action = helpers.string(ctx, "action", _action);
+      let contract: string;
+      if (typeof _contract === "undefined") {
+        contract = "------";
+      } else {
+        contract = helpers.string(ctx, "contract", _contract);
+      }
+      checkSleeveAPIAccess(ctx);
+      checkSleeveNumber(ctx, sleeveNumber);
+
+      // Cannot Take on Contracts if another sleeve is performing that action
+      if (action === "Take on contracts") {
+        for (let i = 0; i < Player.sleeves.length; ++i) {
+          if (i === sleeveNumber) {
+            continue;
+          }
+          const other = Player.sleeves[i];
+          if (isSleeveBladeburnerWork(other.currentWork) && other.currentWork.actionName === contract) {
+            throw helpers.makeRuntimeErrorMsg(
+              ctx,
+              `Sleeve ${sleeveNumber} cannot take on contracts because Sleeve ${i} is already performing that action.`,
+            );
+          }
+        }
+      }
+
+      return Player.sleeves[sleeveNumber].bladeburnersingle(action, contract);
+    },
   };
 
   // Removed functions
