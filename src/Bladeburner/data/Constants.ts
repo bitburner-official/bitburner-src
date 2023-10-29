@@ -33,6 +33,9 @@ export const BladeburnerConstants = {
   BaseStatGain: 1, // Base stat gain per second
   BaseIntGain: 0.003, // Base intelligence stat gain
 
+  BasePopGrowth: 100, // Base amount a population will grow by
+  PopGrowthCeiling: 1.5e9, // Amount of population a city can have before BasePopGrowth does not apply
+
   ActionCountGrowthPeriod: 480, // Time (s) it takes for action count to grow by its specified value
 
   RankToFactionRepFactor: 2, // Delta Faction Rep = this * Delta Rank
