@@ -277,12 +277,18 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       return possibilities;
 
     default:
+      if (!onCommand) {
+        const options = await scriptAutocomplete();
+        if (options) {
+          addGeneric({ iterable: options, usePathing: false });
+        }
+      }
       return possibilities;
   }
 
   async function scriptAutocomplete(): Promise<string[] | undefined> {
     let inputCopy = commandArray.join(" ");
-    if (commandLength === 1) inputCopy = "run " + inputCopy;
+    if (commandLength >= 1 && commandArray[0] !== "run") inputCopy = "run " + inputCopy;
     const commands = parseCommands(inputCopy);
     if (commands.length === 0) return;
     const command = parseCommand(commands[commands.length - 1]);
