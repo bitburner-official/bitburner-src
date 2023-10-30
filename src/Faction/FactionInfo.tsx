@@ -22,7 +22,7 @@ import {
   totalHacknetCores,
   totalHacknetLevels,
   haveBladeburnerRank,
-  inBitnode,
+  haveSourceFile,
   anyOf,
 } from "./FactionJoinCondition";
 import { SpecialServers } from "../Server/data/SpecialServers";
@@ -640,7 +640,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     rumorText: <>The {CompanyName.NSA} would like to have a word with you once you're ready.</>,
-    inviteReqs: [inBitnode(6, 7), haveBladeburnerRank()],
+    inviteReqs: [haveSourceFile(6, 7), haveBladeburnerRank()],
     special: true,
     assignment: (): React.ReactElement => {
       return (
@@ -688,7 +688,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     Armageddon that will end the world; but we disagree.</>),
     rumorText: <>Trouble is brewing in {CityName.Chongqing}.</>,
     inviteReqs: [
-      inBitnode(13),
+      haveSourceFile(13),
       {
         toString: () => `Investigate the dilapidated church in ${CityName.Chongqing}`,
         isSatisfied: (p: PlayerObject) => {

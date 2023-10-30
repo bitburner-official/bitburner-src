@@ -189,7 +189,7 @@ export const haveBladeburnerRank = (n: number = BladeburnerConstants.RankNeededF
   },
 });
 
-export const inBitnode = (...nodeNums: number[]): JoinCondition => ({
+export const haveSourceFile = (...nodeNums: number[]): JoinCondition => ({
   toString(): string {
     return `In BitNode ${joinList(nodeNums)} or have SourceFile ${joinList(nodeNums)}`;
   },
