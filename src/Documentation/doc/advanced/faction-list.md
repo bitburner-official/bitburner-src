@@ -55,7 +55,7 @@
 | The Dark Army         | \* Hacking Level 300<br />\* All Combat Stats of 300<br />\* Be in Chongqing<br />\* 5 People Killed<br />\* -45 Karma<br />\* Not working for CIA or NSA |
 | The Syndicate         | \* Hacking Level 200<br />\* All Combat Stats of 200<br />\* Be in Aevum or Sector-12<br />\* $10m<br />\* -90 Karma<br />\* Not working for CIA or NSA   |
 
-### Midgame Factions
+### Lategame Factions
 
 | Faction Name | Requirements                                                                                         |
 | ------------ | ---------------------------------------------------------------------------------------------------- |
