@@ -4430,6 +4430,7 @@ interface Fragment {
   type: number;
   power: number;
   limit: number;
+  effect: string;
 }
 
 /** @public */
