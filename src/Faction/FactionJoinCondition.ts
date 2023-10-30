@@ -28,7 +28,10 @@ export const haveBackdooredServer = (hostname: string): JoinCondition => ({
   },
 });
 
-export const highRankingEmployee = (companyName: CompanyName, rep: number = CONSTANTS.CorpFactionRepRequirement): JoinCondition => ({
+export const highRankingEmployee = (
+  companyName: CompanyName,
+  rep: number = CONSTANTS.CorpFactionRepRequirement,
+): JoinCondition => ({
   toString(): string {
     return `Employed at ${companyName} with ${formatReputation(rep)} reputation`;
   },
@@ -182,7 +185,7 @@ export const haveBladeburnerRank = (n: number = BladeburnerConstants.RankNeededF
   },
   isSatisfied(p: PlayerObject): boolean {
     const rank = p.bladeburner?.rank || 0;
-    return (rank >= n);
+    return rank >= n;
   },
 });
 

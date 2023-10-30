@@ -640,10 +640,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     rumorText: <>The {CompanyName.NSA} would like to have a word with you once you're ready.</>,
-    inviteReqs: [
-      inBitnode(6,7),
-      haveBladeburnerRank()
-    ],
+    inviteReqs: [inBitnode(6, 7), haveBladeburnerRank()],
     special: true,
     assignment: (): React.ReactElement => {
       return (
