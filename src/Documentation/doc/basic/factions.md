@@ -19,4 +19,4 @@ Earning [Reputation](reputation.md) for a Faction unlocks powerful [Augmentation
 Purchasing and installing these [Augmentations](augmentations.md) will upgrade your abilities.
 The [Augmentations](augmentations.md) that are available to unlock vary from Faction to Faction.
 
-See also the complete [List of Factions and their Requirements](../advanced/factions.md) (contains spoilers).
+See also the complete [List of Factions and their Requirements](../advanced/faction-list.md) (contains spoilers).

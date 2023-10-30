@@ -2,7 +2,7 @@
 import file0 from "!!raw-loader!./doc/advanced/bitnodes.md";
 import file1 from "!!raw-loader!./doc/advanced/bladeburners.md";
 import file2 from "!!raw-loader!./doc/advanced/corporations.md";
-import file3 from "!!raw-loader!./doc/advanced/factions-list.md";
+import file3 from "!!raw-loader!./doc/advanced/faction-list.md";
 import file4 from "!!raw-loader!./doc/advanced/gang.md";
 import file5 from "!!raw-loader!./doc/advanced/grafting.md";
 import file6 from "!!raw-loader!./doc/advanced/hacknetservers.md";
@@ -47,7 +47,7 @@ export const AllPages: Record<string, Document> = {};
 AllPages["advanced/bitnodes.md"] = file0;
 AllPages["advanced/bladeburners.md"] = file1;
 AllPages["advanced/corporations.md"] = file2;
-AllPages["advanced/factions-list.md"] = file3;
+AllPages["advanced/faction-list.md"] = file3;
 AllPages["advanced/gang.md"] = file4;
 AllPages["advanced/grafting.md"] = file5;
 AllPages["advanced/hacknetservers.md"] = file6;
