@@ -232,7 +232,7 @@ export class Corporation {
           assets += mat.stored * mat.averagePrice;
         }
         for (const prod of ind.products.values()) {
-          assets += prod.cityData[warehouse.city].stored * prod.productionCost;
+          assets += prod.cityData[warehouse.city].stored * prod.cityData[warehouse.city].productionCost;
         }
       }
     });

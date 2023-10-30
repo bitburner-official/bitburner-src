@@ -823,13 +823,13 @@ export class Division {
         }
         case "SALE": {
           //Process sale of Products
-          product.productionCost = 0; //Estimated production cost
+          product.cityData[city].productionCost = 0; //Estimated production cost
           for (const [reqMatName, reqQty] of getRecordEntries(product.requiredMaterials)) {
-            product.productionCost += reqQty * warehouse.materials[reqMatName].marketPrice;
+            product.cityData[city].productionCost += reqQty * warehouse.materials[reqMatName].marketPrice;
           }
 
           // Since its a product, its production cost is increased for labor
-          product.productionCost *= corpConstants.baseProductProfitMult;
+          product.cityData[city].productionCost *= corpConstants.baseProductProfitMult;
 
           // Sale multipliers
           const businessFactor = this.getBusinessFactor(office); //Business employee productivity
@@ -887,33 +887,33 @@ export class Division {
               if (sqrtNumerator === 0) {
                 optimalPrice = 0; // Nothing to sell
               } else {
-                optimalPrice = product.productionCost + markupLimit;
+                optimalPrice = product.cityData[city].productionCost + markupLimit;
                 console.warn(`In Corporation, found illegal 0s when trying to calculate MarketTA2 sale cost`);
               }
             } else {
-              optimalPrice = numerator / denominator + product.productionCost;
+              optimalPrice = numerator / denominator + product.cityData[city].productionCost;
             }
 
             // Store this "optimal Price" in a property so we don't have to re-calculate for UI
             sCost = optimalPrice;
           } else if (product.marketTa1) {
-            sCost = product.productionCost + markupLimit;
+            sCost = product.cityData[city].productionCost + markupLimit;
           } else if (isString(sellPrice)) {
             let sCostString = sellPrice;
             if (product.markup === 0) {
               console.error(`mku is zero, reverting to 1 to avoid Infinity`);
               product.markup = 1;
             }
-            sCostString = sCostString.replace(/MP/g, product.productionCost.toString());
-            sCost = Math.max(product.productionCost, eval(sCostString));
+            sCostString = sCostString.replace(/MP/g, product.cityData[city].productionCost.toString());
+            sCost = Math.max(product.cityData[city].productionCost, eval(sCostString));
           } else {
             sCost = sellPrice;
           }
           product.uiMarketPrice[city] = sCost;
           let markup = 1;
-          if (sCost > product.productionCost) {
-            if (sCost - product.productionCost > markupLimit) {
-              markup = markupLimit / (sCost - product.productionCost);
+          if (sCost > product.cityData[city].productionCost) {
+            if (sCost - product.cityData[city].productionCost > markupLimit) {
+              markup = markupLimit / (sCost - product.cityData[city].productionCost);
             }
           }
 
