@@ -38,8 +38,8 @@ export function prestigeAugmentation(): void {
   const maintainInvites = Player.factions.concat(Player.factionInvitations).filter(function (faction) {
     return Factions[faction].getInfo().keep;
   });
-  // Maintain rumors about any faction you have joined or been invited to in this augmentation
-  const maintainRumors = Player.factions.concat(Player.factionInvitations);
+  // Maintain rumors about any faction you have joined in this augmentation
+  const maintainRumors = [...Player.factions];
   Player.prestigeAugmentation();
 
   // Delete all Worker Scripts objects
