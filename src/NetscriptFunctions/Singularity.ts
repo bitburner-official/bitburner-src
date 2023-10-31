@@ -93,6 +93,24 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
       return res;
     },
+    getOwnedNFGAugmentations: (ctx) => (_purchased) => {
+      helpers.checkSingularityAccess(ctx);
+      const purchased = !!_purchased;
+      let res = 0;
+      for (let i = 0; i < Player.augmentations.length; ++i) {
+        if (Player.augmentations[i].name === "NeuroFlux Governor") {
+          res += Player.augmentations[i].level;
+        }
+      }
+      if (purchased) {
+        for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
+          if (Player.queuedAugmentations[i].name === "NeuroFlux Governor") {
+            res++;
+          }
+        }
+      }
+      return res;
+    },
     getOwnedSourceFiles: () => () => [...Player.sourceFiles].map(([n, lvl]) => ({ n, lvl })),
     getAugmentationFactions: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);

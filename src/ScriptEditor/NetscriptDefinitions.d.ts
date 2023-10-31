@@ -2145,6 +2145,21 @@ export interface Singularity {
   getOwnedAugmentations(purchased?: boolean): string[];
 
   /**
+   * Get a list of owned NFG augmentations.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   *
+   * This function returns the number of NFG augmentations you have.
+   *
+   * @param purchased - Specifies whether the returned number should include Augmentations you have purchased but not
+   *   yet installed. By default, this argument is false which means that the return value will NOT have the purchased
+   *   Augmentations.
+   * @returns Array containing the number of all NFG Augmentations you have.
+   */
+  getOwnedNFGAugmentations(purchased?: boolean): number;
+
+  /**
    * Get a list of acquired Source-Files.
    * @remarks
    * RAM cost: 5 GB

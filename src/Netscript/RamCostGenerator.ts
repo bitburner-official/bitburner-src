@@ -193,6 +193,7 @@ const singularity = {
   getCrimeChance: SF4Cost(RamCostConstants.SingularityFn3),
   getCrimeStats: SF4Cost(RamCostConstants.SingularityFn3),
   getOwnedAugmentations: SF4Cost(RamCostConstants.SingularityFn3),
+  getOwnedNFGAugmentations: SF4Cost(RamCostConstants.SingularityFn3),
   getOwnedSourceFiles: SF4Cost(RamCostConstants.SingularityFn3),
   getAugmentationFactions: SF4Cost(RamCostConstants.SingularityFn3),
   getAugmentationsFromFaction: SF4Cost(RamCostConstants.SingularityFn3),
