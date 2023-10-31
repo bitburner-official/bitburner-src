@@ -90,6 +90,8 @@ export function prestigeAugmentation(): void {
   Player.reapplyAllSourceFiles();
   Player.hp.current = Player.hp.max;
 
+  staneksGift.prestigeAugmentation();
+
   // Apply entropy from grafting
   Player.applyEntropy(Player.entropy);
 
@@ -147,8 +149,6 @@ export function prestigeAugmentation(): void {
   if (Player.hasAugmentation(AugmentationName.StaneksGift1, true)) {
     joinFaction(Factions[FactionName.ChurchOfTheMachineGod]);
   }
-
-  staneksGift.prestigeAugmentation();
 
   resetPidCounter();
   ProgramsSeen.clear();
