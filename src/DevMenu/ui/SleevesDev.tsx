@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Player } from "@player";
 import { Adjuster } from "./Adjuster";
+import { Sleeve } from "../../PersonObjects/Sleeve/Sleeve";
 
 export function SleevesDev(): React.ReactElement {
   function sleeveMaxAllShock(): void {
@@ -41,6 +42,14 @@ export function SleevesDev(): React.ReactElement {
     }
   }
 
+  function sleeveAddOne(): void {
+    Player.sleeves.push(new Sleeve());
+  }
+
+  function sleeveRemoveOne(): void {
+    Player.sleeves.pop();
+  }
+
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -69,6 +78,17 @@ export function SleevesDev(): React.ReactElement {
               </td>
               <td>
                 <Button onClick={sleeveSyncClearAll}>Clear all</Button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Typography>Total:</Typography>
+              </td>
+              <td>
+                <Button onClick={sleeveAddOne}>+ 1</Button>
+              </td>
+              <td>
+                <Button onClick={sleeveRemoveOne}>- 1</Button>
               </td>
             </tr>
             <tr>
