@@ -94,7 +94,6 @@ export function prestigeAugmentation(): void {
 
   Player.factionInvitations = Player.factionInvitations.concat(maintainInvites);
   for (const factionName of maintainInvites) Factions[factionName].alreadyInvited = true;
-  Player.factionRumors = Player.factionRumors.concat(maintainRumors);
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
   Player.hp.current = Player.hp.max;
@@ -153,11 +152,18 @@ export function prestigeAugmentation(): void {
     }
   }
 
+  // Bitnode 13: Church of the Machine God
   if (Player.hasAugmentation(AugmentationName.StaneksGift1, true)) {
     joinFaction(Factions[FactionName.ChurchOfTheMachineGod]);
+  } else if (Player.bitNodeN != 13) {
+    if (Player.augmentations.some((a) => a.name !== AugmentationName.NeuroFluxGovernor)) {
+      Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
+    }
   }
-
   staneksGift.prestigeAugmentation();
+
+  // Hear rumors after all invites/bans
+  for (const factionName of maintainRumors) Player.receiveRumor(factionName);
 
   resetPidCounter();
   ProgramsSeen.clear();
