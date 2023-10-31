@@ -8,7 +8,7 @@ import { Typography } from "@mui/material";
 import {
   JoinCondition,
   haveBackdooredServer,
-  highRankingEmployee,
+  employedBy,
   executiveEmployee,
   notEmployee,
   haveAugmentations,
@@ -26,6 +26,8 @@ import {
   anyOf,
 } from "./FactionJoinCondition";
 import { SpecialServers } from "../Server/data/SpecialServers";
+import { CONSTANTS } from "../Constants";
+import { BladeburnerConstants } from "../Bladeburner/data/Constants";
 import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 
 interface FactionInfoParams {
@@ -148,6 +150,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     inviteReqs: [haveAugmentations(20), haveMoney(75e9), haveSkill("hacking", 850), haveCombatSkills(850)],
+    rumorReqs: [haveSourceFile(10)],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -162,7 +165,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     rumorText: <>High-ranking employees of {CompanyName.ECorp} can gain access to proprietary hacking augmentations.</>,
-    inviteReqs: [highRankingEmployee(CompanyName.ECorp)],
+    inviteReqs: [employedBy(CompanyName.ECorp, { withRep: CONSTANTS.CorpFactionRepRequirement })],
+    rumorReqs: [employedBy(CompanyName.ECorp)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -184,7 +188,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: (
       <>High-ranking employees of {CompanyName.MegaCorp} can gain access to proprietary biotech augmentations.</>
     ),
-    inviteReqs: [highRankingEmployee(CompanyName.MegaCorp)],
+    inviteReqs: [employedBy(CompanyName.MegaCorp, { withRep: CONSTANTS.CorpFactionRepRequirement })],
+    rumorReqs: [employedBy(CompanyName.MegaCorp)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -206,7 +211,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         augmentations.
       </>
     ),
-    inviteReqs: [highRankingEmployee(CompanyName.BachmanAndAssociates)],
+    inviteReqs: [employedBy(CompanyName.BachmanAndAssociates, { withRep: CONSTANTS.CorpFactionRepRequirement })],
+    rumorReqs: [employedBy(CompanyName.BachmanAndAssociates)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -218,7 +224,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: (
       <>High-ranking employees of {CompanyName.BladeIndustries} can gain access to proprietary bionic augmentations.</>
     ),
-    inviteReqs: [highRankingEmployee(CompanyName.BladeIndustries)],
+    inviteReqs: [employedBy(CompanyName.BladeIndustries, { withRep: CONSTANTS.CorpFactionRepRequirement })],
+    rumorReqs: [employedBy(CompanyName.BladeIndustries)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -234,7 +241,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     rumorText: <>High-ranking employees of {CompanyName.NWO} can gain access to proprietary nanotech augmentations.</>,
-    inviteReqs: [highRankingEmployee(CompanyName.NWO)],
+    inviteReqs: [employedBy(CompanyName.NWO, { withRep: CONSTANTS.CorpFactionRepRequirement })],
+    rumorReqs: [employedBy(CompanyName.NWO)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -249,7 +257,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         augmentations.
       </>
     ),
-    inviteReqs: [highRankingEmployee(CompanyName.ClarkeIncorporated)],
+    inviteReqs: [employedBy(CompanyName.ClarkeIncorporated, { withRep: CONSTANTS.CorpFactionRepRequirement })],
+    rumorReqs: [employedBy(CompanyName.ClarkeIncorporated)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -264,7 +273,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         augmentations.
       </>
     ),
-    inviteReqs: [highRankingEmployee(CompanyName.OmniTekIncorporated)],
+    inviteReqs: [employedBy(CompanyName.OmniTekIncorporated, { withRep: CONSTANTS.CorpFactionRepRequirement })],
+    rumorReqs: [employedBy(CompanyName.OmniTekIncorporated)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -281,7 +291,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: (
       <>High-ranking employees of {CompanyName.FourSigma} can gain access to a range of versatile augmentations.</>
     ),
-    inviteReqs: [highRankingEmployee(CompanyName.FourSigma)],
+    inviteReqs: [employedBy(CompanyName.FourSigma, { withRep: CONSTANTS.CorpFactionRepRequirement })],
+    rumorReqs: [employedBy(CompanyName.FourSigma)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -296,7 +307,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         augmentations.
       </>
     ),
-    inviteReqs: [highRankingEmployee(CompanyName.KuaiGongInternational)],
+    inviteReqs: [employedBy(CompanyName.KuaiGongInternational, { withRep: CONSTANTS.CorpFactionRepRequirement })],
+    rumorReqs: [employedBy(CompanyName.KuaiGongInternational)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -318,9 +330,10 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     inviteReqs: [
-      highRankingEmployee(CompanyName.FulcrumTechnologies),
+      employedBy(CompanyName.FulcrumTechnologies, { withRep: CONSTANTS.CorpFactionRepRequirement }),
       haveBackdooredServer(SpecialServers.FulcrumSecretTechnologies),
     ],
+    rumorReqs: [employedBy(CompanyName.FulcrumTechnologies)],
     offerHackingWork: true,
     offerSecurityWork: true,
     keepOnInstall: true,
@@ -640,7 +653,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     rumorText: <>The {CompanyName.NSA} would like to have a word with you once you're ready.</>,
-    inviteReqs: [haveSourceFile(6, 7), haveBladeburnerRank()],
+    inviteReqs: [haveSourceFile(6, 7), haveBladeburnerRank(BladeburnerConstants.RankNeededForFaction)],
+    rumorReqs: [haveSourceFile(6, 7)],
     special: true,
     assignment: (): React.ReactElement => {
       return (
@@ -689,6 +703,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: <>Trouble is brewing in {CityName.Chongqing}.</>,
     inviteReqs: [
       haveSourceFile(13),
+      haveAugmentations(0),
       {
         toString: () => `Investigate the dilapidated church in ${CityName.Chongqing}`,
         isSatisfied: (p: PlayerObject) => {
@@ -696,6 +711,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         },
       },
     ],
+    rumorReqs: [haveSourceFile(13), haveAugmentations(0)],
     offerHackingWork: false,
     offerFieldWork: false,
     offerSecurityWork: false,

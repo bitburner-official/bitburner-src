@@ -1,11 +1,9 @@
-import { CompanyName, JobName, CityName } from "@enums";
+import { CompanyName, JobName, CityName, AugmentationName } from "@enums";
 import { Server } from "../Server/Server";
 import { GetServer } from "../Server/AllServers";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { serverMetadata } from "../Server/data/servers";
 import { Companies } from "../Company/Companies";
-import { CONSTANTS } from "../Constants";
-import { BladeburnerConstants } from "../Bladeburner/data/Constants";
 import { formatReputation, formatMoney, formatRam } from "../ui/formatNumber";
 import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import type { Skills } from "../PersonObjects/Skills";
@@ -28,12 +26,12 @@ export const haveBackdooredServer = (hostname: string): JoinCondition => ({
   },
 });
 
-export const highRankingEmployee = (
+export const employedBy = (
   companyName: CompanyName,
-  rep: number = CONSTANTS.CorpFactionRepRequirement,
+  { withRep }: { withRep: number } = { withRep: 0 },
 ): JoinCondition => ({
   toString(): string {
-    return `Employed at ${companyName} with ${formatReputation(rep)} reputation`;
+    return `Employed at ${companyName} with ${formatReputation(withRep)} reputation`;
   },
   isSatisfied(p: PlayerObject): boolean {
     const company = Companies[companyName];
@@ -41,7 +39,7 @@ export const highRankingEmployee = (
     const serverMeta = serverMetadata.find((s) => s.specialName === companyName);
     const server = GetServer(serverMeta ? serverMeta.hostname : "");
     const bonus = (server as Server).backdoorInstalled ? -100e3 : 0;
-    return Object.hasOwn(p.jobs, companyName) && company.playerReputation > rep + bonus;
+    return Object.hasOwn(p.jobs, companyName) && company.playerReputation > withRep + bonus;
   },
 });
 
@@ -73,9 +71,15 @@ export const notEmployee = (...companyNames: CompanyName[]): JoinCondition => ({
 
 export const haveAugmentations = (n: number): JoinCondition => ({
   toString(): string {
-    return `${n} augmentations installed`;
+    return `${n || "No"} augmentations installed`;
   },
   isSatisfied(p: PlayerObject): boolean {
+    if (n == 0) {
+      const augs = [...p.augmentations, ...p.queuedAugmentations].filter(
+        (a) => a.name !== AugmentationName.NeuroFluxGovernor,
+      );
+      return augs.length == 0;
+    }
     return p.augmentations.length >= n;
   },
 });
@@ -179,7 +183,7 @@ export const totalHacknetLevels = (n: number): JoinCondition => ({
   },
 });
 
-export const haveBladeburnerRank = (n: number = BladeburnerConstants.RankNeededForFaction): JoinCondition => ({
+export const haveBladeburnerRank = (n: number): JoinCondition => ({
   toString(): string {
     return `Rank ${n} in the Bladeburner Division`;
   },

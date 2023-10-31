@@ -337,11 +337,6 @@ export function applyForJob(this: PlayerObject, entryPosType: CompanyPosition, s
     return false;
   }
 
-  // Hear a rumor about a company's faction when you start any job there
-  if (company.relatedFaction) {
-    this.receiveRumor(company.relatedFaction);
-  }
-
   this.jobs[company.name] = pos.name;
 
   if (!sing) {

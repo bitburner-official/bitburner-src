@@ -34,12 +34,17 @@ function delayedDialog(message: string) {
 export function prestigeAugmentation(): void {
   initBitNodeMultipliers();
 
-  // Maintain invites to factions with the 'keepOnInstall' flag
-  const maintainInvites = Player.factions.concat(Player.factionInvitations).filter(function (faction) {
-    return Factions[faction].getInfo().keep;
-  });
-  // Maintain rumors about any faction you have joined in this augmentation
-  const maintainRumors = [...Player.factions];
+  // Maintain invites to factions with the 'keepOnInstall' flag, and rumors about others
+  const maintainInvites = [];
+  const maintainRumors = [];
+  for (const facName of [...Player.factions, ...Player.factionInvitations]) {
+    if (Factions[facName].getInfo().keep) {
+      maintainInvites.push(facName);
+    } else {
+      maintainRumors.push(facName);
+    }
+  }
+
   Player.prestigeAugmentation();
 
   // Delete all Worker Scripts objects
@@ -89,7 +94,7 @@ export function prestigeAugmentation(): void {
 
   Player.factionInvitations = Player.factionInvitations.concat(maintainInvites);
   for (const factionName of maintainInvites) Factions[factionName].alreadyInvited = true;
-  for (const factionName of maintainRumors) Player.receiveRumor(factionName);
+  Player.factionRumors = Player.factionRumors.concat(maintainRumors);
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
   Player.hp.current = Player.hp.max;
@@ -235,7 +240,6 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // BitNode 6: Bladeburners and BitNode 7: Bladeburners 2079
   if (Player.bitNodeN === 6 || Player.bitNodeN === 7) {
     delayedDialog(`The ${CompanyName.NSA} would like to have a word with you once you're ready.`);
-    Player.receiveRumor(FactionName.Bladeburners);
   }
 
   // BitNode 8: Ghost of Wall Street
@@ -252,7 +256,6 @@ export function prestigeSourceFile(isFlume: boolean): void {
     delayedDialog(
       `Seek out ${FactionName.TheCovenant} if you'd like to purchase a new sleeve or two! And see what ${CompanyName.VitaLife} in ${CityName.NewTokyo} has to offer for you`,
     );
-    Player.receiveRumor(FactionName.TheCovenant);
   }
 
   // BitNode 12: Digital Carbon
@@ -262,7 +265,6 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   if (Player.bitNodeN === 13) {
     delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
-    Player.receiveRumor(FactionName.ChurchOfTheMachineGod);
   }
 
   // Reset Stock market, gang, and corporation
