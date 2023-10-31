@@ -29,5 +29,5 @@ True if the action was started successfully, and false otherwise.
 
 RAM cost: 4 GB
 
-Attempts to start the specified Bladeburner action. Returns true if the action was started successfully, and false otherwise.
+Attempts to start the specified Bladeburner action. Returns true if the action was started successfully, and false otherwise. Example: ns.bladeburner.startAction("Contracts", "Tracking")
 

@@ -29,5 +29,5 @@ Estimated success chance for the specified action.
 
 RAM cost: 4 GB
 
-Returns the estimated success chance for the specified action. This chance is returned as a decimal value, NOT a percentage (e.g. if you have an estimated success chance of 80%, then this function will return 0.80, NOT 80).
+Returns the estimated success chance for the specified action. This chance is returned as a decimal value, NOT a percentage (e.g. if you have an estimated success chance of 80%, then this function will return 0.80, NOT 80). Returns 2 values, value\[0\] - MIN Chance, value\[1\] - MAX Chance
 
