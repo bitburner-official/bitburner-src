@@ -1,6 +1,8 @@
 # Documentation
 
-## [Beginners guide](help/getting_started.md)
+## Guides
+
+- [Beginners guide](help/getting_started.md)
 
 ## Basic Mechanics
 
