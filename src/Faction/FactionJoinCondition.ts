@@ -1,4 +1,4 @@
-import { CompanyName, JobName, CityName, AugmentationName } from "@enums";
+import { CompanyName, JobName, CityName, AugmentationName, LiteratureName, MessageFilename } from "@enums";
 import { Server } from "../Server/Server";
 import { GetServer } from "../Server/AllServers";
 import { HacknetServer } from "../Hacknet/HacknetServer";
@@ -31,7 +31,11 @@ export const employedBy = (
   { withRep }: { withRep: number } = { withRep: 0 },
 ): JoinCondition => ({
   toString(): string {
-    return `Employed at ${companyName} with ${formatReputation(withRep)} reputation`;
+    if (withRep == 0) {
+      return `Employed at ${companyName}`;
+    } else {
+      return `Employed at ${companyName} with ${formatReputation(withRep)} reputation`;
+    }
   },
   isSatisfied(p: PlayerObject): boolean {
     const company = Companies[companyName];
@@ -205,7 +209,17 @@ export const haveSourceFile = (...nodeNums: number[]): JoinCondition => ({
   },
 });
 
-export const anyOf = (...conditions: JoinCondition[]): JoinCondition => ({
+export const haveFile = (fileName: LiteratureName | MessageFilename): JoinCondition => ({
+  toString(): string {
+    return `Have the file '${fileName}'`;
+  },
+  isSatisfied(p: PlayerObject): boolean {
+    const homeComputer = p.getHomeComputer();
+    return homeComputer.messages.includes(fileName);
+  },
+});
+
+export const someCondition = (...conditions: JoinCondition[]): JoinCondition => ({
   toString(): string {
     return joinList(conditions.map((c) => c.toString()));
   },

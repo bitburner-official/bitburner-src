@@ -196,7 +196,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.BrighterThanTheSun]: new Literature({
     title: "Brighter than the Sun",
     filename: LiteratureName.BrighterThanTheSun,
-    factionRumors: [FactionName.KuaiGongInternational],
+    factionRumors: [FactionName.KuaiGongInternational, FactionName.OmniTekIncorporated],
     text:
       `When people think about the corporations that dominate the East, they typically think of ${CompanyName.KuaiGongInternational}, which ` +
       `holds a complete monopoly for manufacturing and commerce in Asia, or ${CompanyName.GlobalPharmaceuticals}, the world's largest ` +
@@ -315,7 +315,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
       "Medical, service, and manufacturing robots. All of these are examples of how far AI has come and how much it has " +
       "improved our daily lives. However, the question still remains of whether AI will ever be advanced enough to re-create " +
       "human intelligence.<br><br>" +
-      `We've certainly come close to artificial intelligence that is similar to humans. For example ${FactionName.OmniTekIncorporated}'s ` +
+      `We've certainly come close to artificial intelligence that is similar to humans. For example ${CompanyName.OmniTekIncorporated}'s ` +
       "CompanionBot, a robot meant to act as a comforting friend for lonely and grieving people, is eerily human-like " +
       "in its appearance, speech, mannerisms, and even movement. However its artificial intelligence isn't the same as " +
       "that of humans. Not yet. It doesn't have sentience or self-awareness or consciousness.<br><br>" +
@@ -343,12 +343,12 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.OmniTekIncorporated, FactionName.MegaCorp, FactionName.ECorp],
     text:
       "Have we entered a new Cold War? Is WWIII just beyond the horizon?<br><br>" +
-      `After rumors came out that ${FactionName.OmniTekIncorporated} had begun developing advanced robotic supersoldiers, ` +
+      `After rumors came out that ${CompanyName.OmniTekIncorporated} had begun developing advanced robotic supersoldiers, ` +
       "geopolitical tensions quickly flared between the USA, Russia, and several Asian superpowers. " +
-      `In a rare show of cooperation between corporations, ${FactionName.MegaCorp} and ${FactionName.ECorp} have ` +
+      `In a rare show of cooperation between corporations, ${CompanyName.MegaCorp} and ${CompanyName.ECorp} have ` +
       "reportedly launched hundreds of new surveillance and espionage satellites. " +
       "Defense contractors such as " +
-      "DeltaOne and AeroCorp have been working with the CIA and NSA to prepare " +
+      `${CompanyName.DeltaOne} and ${CompanyName.AeroCorp} have been working with the CIA and NSA to prepare ` +
       "for conflict. Meanwhile, the rest of the world sits in earnest " +
       "hoping that it never reaches full-scale war. With today's technology " +
       "and firepower, a World War would assuredly mean the end of human civilization.",

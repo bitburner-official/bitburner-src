@@ -1,5 +1,5 @@
 import React from "react";
-import { FactionName, CompanyName, CityName } from "@enums";
+import { FactionName, CompanyName, CityName, LiteratureName, MessageFilename } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
@@ -23,7 +23,8 @@ import {
   totalHacknetLevels,
   haveBladeburnerRank,
   haveSourceFile,
-  anyOf,
+  haveFile,
+  someCondition,
 } from "./FactionJoinCondition";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { CONSTANTS } from "../Constants";
@@ -117,6 +118,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     inviteReqs: [haveAugmentations(30), haveMoney(150e9), haveSkill("hacking", 1500), haveCombatSkills(1200)],
+    rumorReqs: [haveFile(LiteratureName.TheHiddenWorld)],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -127,8 +129,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     inviteReqs: [
       haveAugmentations(currentNodeMults.DaedalusAugsRequirement),
       haveMoney(100e9),
-      anyOf(haveSkill("hacking", 2500), haveCombatSkills(1500)),
+      someCondition(haveSkill("hacking", 2500), haveCombatSkills(1500)),
     ],
+    rumorReqs: [haveFile(MessageFilename.TruthGazer)],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -355,6 +358,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ),
     rumorText: <>Run for the hills.</>,
     inviteReqs: [haveBackdooredServer(SpecialServers.BitRunnersServer)],
+    rumorReqs: [haveFile(MessageFilename.BitRunnersTest)],
     offerHackingWork: true,
   }),
 
@@ -371,6 +375,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ),
     rumorText: <>I.I.I.I</>,
     inviteReqs: [haveBackdooredServer(SpecialServers.TheBlackHandServer)],
+    rumorReqs: [haveFile(MessageFilename.Jumper3)],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -417,6 +422,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     inviteReqs: [
       haveBackdooredServer(SpecialServers.NiteSecServer)
     ],
+    rumorReqs: [haveFile(MessageFilename.NiteSecTest)],
     offerHackingWork: true,
     offerFieldWork: false,
     offerSecurityWork: false,
@@ -545,9 +551,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ],
     rumorReqs: [
       locatedInCity(CityName.Aevum, CityName.Sector12),
-      haveKarma(-90),
-      haveSkill("hacking", 100),
-      haveCombatSkills(100),
+      someCondition(haveKarma(-90), haveFile(LiteratureName.Sector12Crime)),
     ],
     offerHackingWork: true,
     offerFieldWork: true,
@@ -584,7 +588,10 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       haveKarma(-18),
       haveCombatSkills(75),
     ],
-    rumorReqs: [locatedInCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima), haveKarma(-18)],
+    rumorReqs: [
+      locatedInCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      someCondition(haveKarma(-18), haveFile(LiteratureName.NewTriads)),
+    ],
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
@@ -603,6 +610,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>{"~~//*>H4CK|\\|3T 8URN3R5**>?>\\~~"}</>,
     rumorText: <>{"~~//*>H4CK|\\|3T 8URN3R5**>?>\\~~"}</>,
     inviteReqs: [haveSkill("hacking", 80), totalHacknetRam(8), totalHacknetCores(4), totalHacknetLevels(100)],
+    rumorReqs: [totalHacknetLevels(50)],
     offerHackingWork: true,
   }),
 
@@ -638,6 +646,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     inviteReqs: [haveBackdooredServer(SpecialServers.CyberSecServer)],
+    rumorReqs: [haveFile(MessageFilename.CyberSecTest)],
     offerHackingWork: true,
   }),
 
