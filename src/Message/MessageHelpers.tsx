@@ -17,7 +17,9 @@ function sendMessage(name: MessageFilename, forced = false): void {
     showMessage(name);
   }
   addMessageToServer(name);
-  if (msg.rumorForFaction) Player.receiveRumor(msg.rumorForFaction);
+  for (const factionName of msg.factionRumors) {
+    Player.receiveRumor(factionName);
+  }
 }
 
 function showMessage(name: MessageFilename): void {

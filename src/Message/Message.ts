@@ -9,11 +9,11 @@ export class Message {
   msg: string;
 
   // Faction hinted at by the message
-  rumorForFaction: FactionName | undefined;
+  factionRumors: FactionName[];
 
-  constructor(filename: MessageFilename, msg: string, rumorForFaction?: FactionName) {
+  constructor(filename: MessageFilename, msg: string, factionRumor?: FactionName) {
     this.filename = asFilePath(filename);
     this.msg = msg;
-    if (rumorForFaction) this.rumorForFaction = rumorForFaction;
+    this.factionRumors = factionRumor ? [factionRumor] : [];
   }
 }

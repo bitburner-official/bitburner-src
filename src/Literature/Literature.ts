@@ -4,7 +4,7 @@ import type { LiteratureName, FactionName } from "@enums";
 interface LiteratureConstructorParams {
   title: string;
   filename: LiteratureName;
-  rumorForFaction?: FactionName[];
+  factionRumors?: FactionName[];
   text: string;
 }
 /**
@@ -14,13 +14,13 @@ interface LiteratureConstructorParams {
 export class Literature {
   title: string;
   filename: LiteratureName & FilePath;
-  rumorForFaction: FactionName[];
+  factionRumors: FactionName[];
   text: string;
 
-  constructor({ title, filename, rumorForFaction, text }: LiteratureConstructorParams) {
+  constructor({ title, filename, factionRumors, text }: LiteratureConstructorParams) {
     this.title = title;
     this.filename = asFilePath(filename);
-    this.rumorForFaction = rumorForFaction || [];
+    this.factionRumors = factionRumors || [];
     this.text = text;
   }
 }

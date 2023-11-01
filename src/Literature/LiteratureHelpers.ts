@@ -8,7 +8,7 @@ export function showLiterature(fn: LiteratureName): void {
   if (litObj == null) {
     return;
   }
-  for (const factionName of litObj.rumorForFaction) {
+  for (const factionName of litObj.factionRumors) {
     Player.receiveRumor(factionName);
   }
   const txt = `<i>${litObj.title}</i><br><br>${litObj.text}`;
