@@ -33,7 +33,6 @@ export function loadFactions(saveString: string, player: PlayerObject): void {
     if (typeof loadedRep === "number" && loadedRep > 0) faction.playerReputation = loadedRep;
     if (typeof loadedFavor === "number" && loadedFavor > 0) faction.favor = loadedFavor;
     if (getEnumHelper("FactionDiscovery").isMember(loadedDiscovery)) faction.discovery = loadedDiscovery;
-    if (faction.alreadyInvited || faction.isMember) faction.discovery = FactionDiscovery.known;
   }
   // Load joined factions from player save
   for (const joinedFacName of player.factions) {

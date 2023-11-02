@@ -179,6 +179,7 @@ export function receiveInvite(this: PlayerObject, factionName: FactionName): voi
 
 export function receiveRumor(this: PlayerObject, factionName: FactionName): void {
   const faction = Factions[factionName];
+  if (faction.discovery === FactionDiscovery.unknown) faction.discovery = FactionDiscovery.rumored;
   if (this.factionRumors.has(factionName) || faction.isMember || faction.isBanned || faction.alreadyInvited) return;
   this.factionRumors.add(factionName);
 }
@@ -624,7 +625,7 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     const { inviteReqs, rumorReqs } = faction.getInfo();
     if (inviteReqs.every((req) => req.isSatisfied(this))) invitedFactions.push(faction);
     // Handle rumors
-    if (faction.discovery !== FactionDiscovery.unknown) continue;
+    if (this.factionRumors.has(faction.name)) continue;
     if (rumorReqs.every((req) => req.isSatisfied(this))) this.receiveRumor(faction.name);
   }
   return invitedFactions;
