@@ -3,7 +3,6 @@ import { FactionInfo, FactionInfos } from "./FactionInfo";
 import { favorToRep, repToFavor } from "./formulas/favor";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { getKeyList } from "../utils/helpers/getKeyList";
-import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 
 export class Faction {
   /**
@@ -77,30 +76,6 @@ export class Faction {
     const totalRep = storedRep + this.playerReputation;
     const newFavor = repToFavor(totalRep);
     return newFavor - this.favor;
-  }
-
-  checkForInvite(p: PlayerObject): boolean {
-    if (this.isBanned) return false;
-    if (this.isMember) return false;
-    if (this.alreadyInvited) return false;
-    const conditions = this.getInfo().inviteReqs;
-    if (conditions.length == 0) return false;
-    for (const condition of conditions) {
-      if (!condition.isSatisfied(p)) return false;
-    }
-    return true;
-  }
-
-  checkForRumor(p: PlayerObject): boolean {
-    if (this.isBanned) return false;
-    if (this.isMember) return false;
-    if (this.alreadyInvited) return false;
-    const conditions = this.getInfo().rumorReqs;
-    if (conditions.length == 0) return false;
-    for (const condition of conditions) {
-      if (!condition.isSatisfied(p)) return false;
-    }
-    return true;
   }
 
   static savedKeys = getKeyList(Faction, { removedKeys: ["augmentations", "name"] });

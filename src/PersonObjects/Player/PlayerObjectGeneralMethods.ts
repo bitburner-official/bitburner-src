@@ -630,15 +630,22 @@ export function reapplyAllSourceFiles(this: PlayerObject): void {
   this.updateSkillLevels();
 }
 
-/*************** Check for Faction Invitations *************/
-//This function sets the requirements to join a Faction. It checks whether the Player meets
-//those requirements and will return an array of all factions that the Player should
-//receive an invitation to
+/**
+ * Checks whether a player meets the requirements for joining each faction, and returns an array of all invitations the player should receive.
+ * Also handles receiving rumors for factions if the rumor requirements are met.
+ */
 export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   const invitedFactions = [];
   for (const faction of Object.values(Factions)) {
-    if (faction.checkForInvite(this)) invitedFactions.push(faction);
-    if (faction.checkForRumor(this)) this.receiveRumor(faction.name);
+    if (faction.isBanned) continue;
+    if (faction.isMember) continue;
+    if (faction.alreadyInvited) continue;
+    // Handle invites
+    const { inviteReqs, rumorReqs } = faction.getInfo();
+    if (inviteReqs.every((req) => req.isSatisfied(this))) invitedFactions.push(faction);
+    // Handle rumors
+    if (faction.discovery !== FactionDiscovery.unknown) continue;
+    if (rumorReqs.every((req) => req.isSatisfied(this))) this.receiveRumor(faction.name);
   }
   return invitedFactions;
 }
