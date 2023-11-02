@@ -103,7 +103,7 @@ export function prestigeAugmentation(this: PlayerObject): void {
 
   this.factions = [];
   this.factionInvitations = [];
-  this.factionRumors = [];
+  this.factionRumors.clear();
   // Clear any pending invitation modals
   InvitationEvent.emit(null);
 
@@ -170,37 +170,17 @@ export function prestigeSourceFile(this: PlayerObject): void {
 }
 
 export function receiveInvite(this: PlayerObject, factionName: FactionName): void {
-  if (
-    this.factionInvitations.includes(factionName) ||
-    Factions[factionName].isMember ||
-    Factions[factionName].isBanned
-  ) {
-    return;
-  }
+  const faction = Factions[factionName];
+  if (faction.alreadyInvited || faction.isMember || faction.isBanned) return;
   this.factionInvitations.push(factionName);
-  if (this.factionRumors.includes(factionName)) {
-    this.factionRumors.splice(this.factionRumors.indexOf(factionName), 1);
-  }
-  Factions[factionName].discovery = FactionDiscovery.known;
+  this.factionRumors.delete(factionName);
+  faction.discovery = FactionDiscovery.known;
 }
 
-export function receiveRumor(
-  this: PlayerObject,
-  factionName: FactionName,
-  discovery?: FactionDiscovery | undefined,
-): void {
-  if (Factions[factionName].discovery == FactionDiscovery.unknown) {
-    Factions[factionName].discovery = discovery || FactionDiscovery.rumored;
-  }
-  if (
-    this.factionRumors.includes(factionName) ||
-    this.factionInvitations.includes(factionName) ||
-    Factions[factionName].isMember ||
-    Factions[factionName].isBanned
-  ) {
-    return;
-  }
-  this.factionRumors.push(factionName);
+export function receiveRumor(this: PlayerObject, factionName: FactionName): void {
+  const faction = Factions[factionName];
+  if (this.factionRumors.has(factionName) || faction.isMember || faction.isBanned || faction.alreadyInvited) return;
+  this.factionRumors.add(factionName);
 }
 
 //Calculates skill level progress based on experience. The same formula will be used for every skill
@@ -630,15 +610,22 @@ export function reapplyAllSourceFiles(this: PlayerObject): void {
   this.updateSkillLevels();
 }
 
-/*************** Check for Faction Invitations *************/
-//This function sets the requirements to join a Faction. It checks whether the Player meets
-//those requirements and will return an array of all factions that the Player should
-//receive an invitation to
+/**
+ * Checks whether a player meets the requirements for joining each faction, and returns an array of all invitations the player should receive.
+ * Also handles receiving rumors for factions if the rumor requirements are met.
+ */
 export function checkForFactionInvitations(this: PlayerObject): Faction[] {
   const invitedFactions = [];
   for (const faction of Object.values(Factions)) {
-    if (faction.checkForInvite(this)) invitedFactions.push(faction);
-    if (faction.checkForRumor(this)) this.receiveRumor(faction.name);
+    if (faction.isBanned) continue;
+    if (faction.isMember) continue;
+    if (faction.alreadyInvited) continue;
+    // Handle invites
+    const { inviteReqs, rumorReqs } = faction.getInfo();
+    if (inviteReqs.every((req) => req.isSatisfied(this))) invitedFactions.push(faction);
+    // Handle rumors
+    if (faction.discovery !== FactionDiscovery.unknown) continue;
+    if (rumorReqs.every((req) => req.isSatisfied(this))) this.receiveRumor(faction.name);
   }
   return invitedFactions;
 }

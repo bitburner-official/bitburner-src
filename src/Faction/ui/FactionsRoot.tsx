@@ -51,13 +51,7 @@ const JoinChecklist = (props: { faction: Faction }): React.ReactElement => {
   return (
     <>
       {info.inviteReqs.map((condition, i) => (
-        <Requirement
-          key={i}
-          fulfilled={condition.isSatisfied(Player)}
-          value={condition.toString()}
-          color={Settings.theme.primary}
-          incompleteColor={Settings.theme.primarydark}
-        />
+        <Requirement key={i} fulfilled={condition.isSatisfied(Player)} value={condition.toString()} />
       ))}
     </>
   );
@@ -226,8 +220,6 @@ export function FactionsRoot(): React.ReactElement {
 
   const invitations = Player.factionInvitations.map((facName) => Factions[facName]).filter((faction) => !!faction);
 
-  const rumors = Player.factionRumors.map((facName) => Factions[facName]).filter((faction) => !!faction);
-
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0, mb: 10 }}>
       <Typography variant="h4">
@@ -273,14 +265,14 @@ export function FactionsRoot(): React.ReactElement {
             </>
           )}
 
-          {rumors.length > 0 && (
+          {Player.factionRumors.size > 0 && (
             <>
               <Typography variant="h5" color="primary">
                 Rumors
               </Typography>
               <div style={{ display: "grid", gap: 1, gridAutoRows: "minmax(70px, auto)" }}>
-                {rumors.map((faction) => (
-                  <FactionElement key={faction.name} faction={faction} rerender={rerender} />
+                {[...Player.factionRumors].map((factionName) => (
+                  <FactionElement key={factionName} faction={Factions[factionName]} rerender={rerender} />
                 ))}
               </div>
             </>
