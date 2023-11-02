@@ -51,8 +51,8 @@
 | Slum Snakes           | \* All Combat Stats of 30<br />\* -9 Karma<br />\* $1m                                                                 |                                           |
 | Tetrads               | \* Be in Chongqing, New Tokyo, or Ishima<br />\* All Combat Stats of 75<br />\* -18 Karma                              |                                           |
 | Silhouette            | \* CTO, CFO, or CEO of a company<br />\* $15m<br />\* -22 Karma                                                        |                                           |
-| Speakers for the Dead | \* Hacking Level 100<br />\* All Combat Stats of 300<br />\* 30 People Killed<br />\* -45 Karma                        | _ CIA<br />_ NSA                          |
-| The Dark Army         | \* Hacking Level 300<br />\* All Combat Stats of 300<br />\* Be in Chongqing<br />\* 5 People Killed<br />\* -45 Karma | _ CIA<br />_ NSA                          |
+| Speakers for the Dead | \* Hacking Level 100<br />\* All Combat Stats of 300<br />\* 30 People Killed<br />\* -45 Karma                        | \* CIA<br />\* NSA                          |
+| The Dark Army         | \* Hacking Level 300<br />\* All Combat Stats of 300<br />\* Be in Chongqing<br />\* 5 People Killed<br />\* -45 Karma | \* CIA<br />\* NSA                          |
 | The Syndicate         | \* Hacking Level 200<br />\* All Combat Stats of 200<br />\* Be in Aevum or Sector-12<br />\* $10m<br />\* -90 Karma   | \* CIA<br />\* NSA                          |
 
 ### Lategame Factions
