@@ -11,13 +11,13 @@
 
 ### City Factions
 
-| Faction Name | Requirements                    | Joining this Faction prevents you from joining:                               |
-| ------------ | ------------------------------- | ----------------------------------------------------------------------------- |
-| Sector-12    | \* Be in Sector-12<br />\* $15m | \* Chongqing<br />\* New Tokyo<br />\* Ishima<br />\* Volhaven                |
-| Chongqing    | \* Be in Chongqing<br />\* $20m | \* Sector-12<br />\* Aevum<br />\* Volhaven                                   |
-| New Tokyo    | \* Be in New Tokyo<br />\* $20m | \* Sector-12<br />\* Aevum<br />\* Volhaven                                   |
-| Ishima       | \* Be in Ishima<br />\* $30m    | \* Sector-12<br />\* Aevum<br />\* Volhaven                                   |
-| Aevum        | \* Be in Aevum<br />\* $40m     | \* Chongqing<br />\* New Tokyo<br />\* Ishima<br />\* Volhaven                |
+| Faction Name | Requirements                    | Cannot join if <br />you are working for:                    |
+| ------------ | ------------------------------- | ------------------------------------------------------------ |
+| Sector-12    | \* Be in Sector-12<br />\* $15m | \* Chongqing<br />\* New Tokyo<br />\* Ishima<br />\* Volhaven |
+| Chongqing    | \* Be in Chongqing<br />\* $20m | \* Sector-12<br />\* Aevum<br />\* Volhaven                  |
+| New Tokyo    | \* Be in New Tokyo<br />\* $20m | \* Sector-12<br />\* Aevum<br />\* Volhaven                  |
+| Ishima       | \* Be in Ishima<br />\* $30m    | \* Sector-12<br />\* Aevum<br />\* Volhaven                  |
+| Aevum        | \* Be in Aevum<br />\* $40m     | \* Chongqing<br />\* New Tokyo<br />\* Ishima<br />\* Volhaven |
 | Volhaven     | \* Be in Volhaven<br />\* $50m  | \* Sector-12<br />\* Aevum<br />\* Chongqing<br />\* New Tokyo<br />\* Ishima |
 
 ### Hacking Groups
@@ -46,14 +46,14 @@
 
 ### Criminal Organizations
 
-| Faction Name          | Requirements                                                                                                                                              |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Slum Snakes           | \* All Combat Stats of 30<br />\* -9 Karma<br />\* $1m                                                                                                    |
-| Tetrads               | \* Be in Chongqing, New Tokyo, or Ishima<br />\* All Combat Stats of 75<br />\* -18 Karma                                                                 |
-| Silhouette            | \* CTO, CFO, or CEO of a company<br />\* $15m<br />\* -22 Karma                                                                                           |
-| Speakers for the Dead | \* Hacking Level 100<br />\* All Combat Stats of 300<br />\* 30 People Killed<br />\* -45 Karma<br />\* Not working for CIA or NSA                        |
-| The Dark Army         | \* Hacking Level 300<br />\* All Combat Stats of 300<br />\* Be in Chongqing<br />\* 5 People Killed<br />\* -45 Karma<br />\* Not working for CIA or NSA |
-| The Syndicate         | \* Hacking Level 200<br />\* All Combat Stats of 200<br />\* Be in Aevum or Sector-12<br />\* $10m<br />\* -90 Karma<br />\* Not working for CIA or NSA   |
+| Faction Name          | Requirements                                                 | Cannot join if <br />you are working for: |
+| --------------------- | ------------------------------------------------------------ | ----------------------------------------- |
+| Slum Snakes           | \* All Combat Stats of 30<br />\* -9 Karma<br />\* $1m       |                                           |
+| Tetrads               | \* Be in Chongqing, New Tokyo, or Ishima<br />\* All Combat Stats of 75<br />\* -18 Karma |                                           |
+| Silhouette            | \* CTO, CFO, or CEO of a company<br />\* $15m<br />\* -22 Karma |                                           |
+| Speakers for the Dead | \* Hacking Level 100<br />\* All Combat Stats of 300<br />\* 30 People Killed<br />\* -45 Karma | * CIA<br />* NSA                          |
+| The Dark Army         | \* Hacking Level 300<br />\* All Combat Stats of 300<br />\* Be in Chongqing<br />\* 5 People Killed<br />\* -45 Karma | * CIA<br />* NSA                          |
+| The Syndicate         | \* Hacking Level 200<br />\* All Combat Stats of 200<br />\* Be in Aevum or Sector-12<br />\* $10m<br />\* -90 Karma | * CIA<br />* NSA                          |
 
 ### Lategame Factions
 
