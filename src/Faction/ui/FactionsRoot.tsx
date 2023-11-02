@@ -51,11 +51,7 @@ const JoinChecklist = (props: { faction: Faction }): React.ReactElement => {
   return (
     <>
       {info.inviteReqs.map((condition, i) => (
-        <Requirement
-          key={i}
-          fulfilled={condition.isSatisfied(Player)}
-          value={condition.toString()}
-        />
+        <Requirement key={i} fulfilled={condition.isSatisfied(Player)} value={condition.toString()} />
       ))}
     </>
   );
