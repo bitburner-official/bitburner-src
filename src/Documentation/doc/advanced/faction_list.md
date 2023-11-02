@@ -11,7 +11,7 @@
 
 ### City Factions
 
-| Faction Name | Requirements                    | Cannot join if <br />you are working for:                                     |
+| Faction Name | Requirements                    | Cannot join if you are working for:                                           |
 | ------------ | ------------------------------- | ----------------------------------------------------------------------------- |
 | Sector-12    | \* Be in Sector-12<br />\* $15m | \* Chongqing<br />\* New Tokyo<br />\* Ishima<br />\* Volhaven                |
 | Chongqing    | \* Be in Chongqing<br />\* $20m | \* Sector-12<br />\* Aevum<br />\* Volhaven                                   |
@@ -46,14 +46,14 @@
 
 ### Criminal Organizations
 
-| Faction Name          | Requirements                                                                                                           | Cannot join if <br />you are working for: |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| Slum Snakes           | \* All Combat Stats of 30<br />\* -9 Karma<br />\* $1m                                                                 |                                           |
-| Tetrads               | \* Be in Chongqing, New Tokyo, or Ishima<br />\* All Combat Stats of 75<br />\* -18 Karma                              |                                           |
-| Silhouette            | \* CTO, CFO, or CEO of a company<br />\* $15m<br />\* -22 Karma                                                        |                                           |
-| Speakers for the Dead | \* Hacking Level 100<br />\* All Combat Stats of 300<br />\* 30 People Killed<br />\* -45 Karma                        | \* CIA<br />\* NSA                          |
-| The Dark Army         | \* Hacking Level 300<br />\* All Combat Stats of 300<br />\* Be in Chongqing<br />\* 5 People Killed<br />\* -45 Karma | \* CIA<br />\* NSA                          |
-| The Syndicate         | \* Hacking Level 200<br />\* All Combat Stats of 200<br />\* Be in Aevum or Sector-12<br />\* $10m<br />\* -90 Karma   | \* CIA<br />\* NSA                          |
+| Faction Name          | Requirements                                                                                                           | Cannot join if you are working for: |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| Slum Snakes           | \* All Combat Stats of 30<br />\* $1m<br />\* -9 Karma                                                                 |                                     |
+| Tetrads               | \* Be in Chongqing, New Tokyo, or Ishima<br />\* All Combat Stats of 75<br />\* -18 Karma                              |                                     |
+| Silhouette            | \* CTO, CFO, or CEO of a company<br />\* $15m<br />\* -22 Karma                                                        |                                     |
+| Speakers for the Dead | \* Hacking Level 100<br />\* All Combat Stats of 300<br />\* 30 People Killed<br />\* -45 Karma                        | \* CIA<br />\* NSA                  |
+| The Dark Army         | \* Hacking Level 300<br />\* All Combat Stats of 300<br />\* Be in Chongqing<br />\* 5 People Killed<br />\* -45 Karma | \* CIA<br />\* NSA                  |
+| The Syndicate         | \* Hacking Level 200<br />\* All Combat Stats of 200<br />\* Be in Aevum or Sector-12<br />\* $10m<br />\* -90 Karma   | \* CIA<br />\* NSA                  |
 
 ### Lategame Factions
 
@@ -65,7 +65,7 @@
 
 ### Endgame Factions
 
-| Faction Name              | Requirements                                                                                                           |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Faction Name              | Requirements                                                                                                   |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | Bladeburners              | \* Be in BitNode 6 or 7 or have Source-File 6 or 7<br />\* Join Bladeburner Division<br />\* Have 25 Rank      |
 | Church of the Machine God | \* Be in BitNode 13 or have Source-File 13<br />\* Have not installed any augmentations in the current BitNode |
