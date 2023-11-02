@@ -38,6 +38,7 @@ export class PlayerObject extends Person implements IPlayer {
   currentServer = "";
   factions: FactionName[] = [];
   factionInvitations: FactionName[] = [];
+  factionRumors: FactionName[] = [];
   hacknetNodes: (HacknetNode | string)[] = []; // HacknetNode object or hostname of Hacknet Server
   has4SData = false;
   has4SDataTixApi = false;
@@ -131,6 +132,7 @@ export class PlayerObject extends Person implements IPlayer {
   createHacknetServer = serverMethods.createHacknetServer;
   queueAugmentation = generalMethods.queueAugmentation;
   receiveInvite = generalMethods.receiveInvite;
+  receiveRumor = generalMethods.receiveRumor;
   gainCodingContractReward = generalMethods.gainCodingContractReward;
   stopFocusing = generalMethods.stopFocusing;
   prestigeAugmentation = generalMethods.prestigeAugmentation;

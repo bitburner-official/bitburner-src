@@ -2,7 +2,7 @@
  * React component for displaying a single augmentation for purchase through
  * the faction UI
  */
-import { CheckBox, CheckBoxOutlineBlank, CheckCircle, NewReleases, Report } from "@mui/icons-material";
+import { CheckCircle, NewReleases, Report } from "@mui/icons-material";
 import { Box, Button, Container, Paper, Tooltip, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Faction } from "../../Faction/Faction";
@@ -15,6 +15,7 @@ import { Augmentations } from "../Augmentations";
 import { PurchaseAugmentationModal } from "./PurchaseAugmentationModal";
 import { getAugCost } from "../AugmentationHelpers";
 import { useRerender } from "../../ui/React/hooks";
+import { Requirement } from "../../ui/Components/Requirement";
 
 interface IPreReqsProps {
   aug: Augmentation;
@@ -36,6 +37,7 @@ const PreReqs = (props: IPreReqsProps): React.ReactElement => {
               fulfilled={Player.hasAugmentation(preAug)}
               value={preAug}
               color={Settings.theme.money}
+              incompleteColor={Settings.theme.error}
               key={preAug}
             />
           ))}
@@ -107,23 +109,6 @@ const Exclusive = (props: IExclusiveProps): React.ReactElement => {
         sx={{ ml: 1, color: Settings.theme.money, transform: "rotate(180deg)", gridArea: "exclusive" }}
       />
     </Tooltip>
-  );
-};
-
-interface IReqProps {
-  value: string;
-  color: string;
-  fulfilled: boolean;
-}
-
-const Requirement = (props: IReqProps): React.ReactElement => {
-  return (
-    <Typography
-      sx={{ display: "flex", alignItems: "center", color: props.fulfilled ? props.color : Settings.theme.error }}
-    >
-      {props.fulfilled ? <CheckBox sx={{ mr: 1 }} /> : <CheckBoxOutlineBlank sx={{ mr: 1 }} />}
-      {props.value}
-    </Typography>
   );
 };
 
@@ -254,12 +239,14 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
               fulfilled={cost === 0 || Player.money > cost}
               value={formatMoney(cost)}
               color={Settings.theme.money}
+              incompleteColor={Settings.theme.error}
             />
             {props.parent.rep !== undefined && (
               <Requirement
                 fulfilled={props.parent.rep >= repCost}
                 value={`${formatReputation(repCost)} rep`}
                 color={Settings.theme.rep}
+                incompleteColor={Settings.theme.error}
               />
             )}
           </Box>

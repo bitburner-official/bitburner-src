@@ -2,7 +2,7 @@
  * Initialization and manipulation of the Factions object, which stores data
  * about all Factions in the game
  */
-import { FactionName } from "@enums";
+import { FactionName, FactionDiscovery } from "@enums";
 import { Faction } from "./Faction";
 
 import { Reviver, assertLoadingType } from "../utils/JSONReviver";
@@ -31,12 +31,15 @@ export function loadFactions(saveString: string): void {
     const faction = Factions[loadedFactionName];
     if (typeof loadedFaction !== "object") continue;
     assertLoadingType<Faction>(loadedFaction);
-    const { playerReputation: loadedRep, favor: loadedFavor } = loadedFaction;
+    const { playerReputation: loadedRep, favor: loadedFavor, discovery: loadedDiscovery } = loadedFaction;
     if (typeof loadedRep === "number" && loadedRep > 0) faction.playerReputation = loadedRep;
     if (typeof loadedFavor === "number" && loadedFavor > 0) faction.favor = loadedFavor;
+    if (getEnumHelper("FactionDiscovery").isMember(loadedDiscovery)) faction.discovery = loadedDiscovery;
     // Todo, these 3 will be removed from Faction object and savedata after a separate PR changes some data structures on Player to make this unnecessary info to save
     if (loadedFaction.alreadyInvited) faction.alreadyInvited = true;
     if (loadedFaction.isBanned) faction.isBanned = true;
     if (loadedFaction.isMember) faction.isMember = true;
+    // Fill in knowledge of currently-joined factions from pre-discovery saves
+    if (faction.alreadyInvited || faction.isMember) faction.discovery = FactionDiscovery.known;
   }
 }

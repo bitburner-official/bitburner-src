@@ -816,6 +816,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       return Companies[companyName].getFavorGain();
     },
+    getFactionInviteRequirements: (ctx) => (_facName) => {
+      helpers.checkSingularityAccess(ctx);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      const fac = Factions[facName];
+      return fac.getInfo().inviteReqs.map((condition) => condition.toString());
+    },
     checkFactionInvitations: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       // Manually trigger a check for faction invites
@@ -835,13 +841,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const fac = Factions[facName];
       joinFaction(fac);
 
-      // Update Faction Invitation list to account for joined + banned factions
-      for (let i = 0; i < Player.factionInvitations.length; ++i) {
-        if (Player.factionInvitations[i] == facName || Factions[Player.factionInvitations[i]].isBanned) {
-          Player.factionInvitations.splice(i, 1);
-          i--;
-        }
-      }
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 5);
       helpers.log(ctx, () => `Joined the '${facName}' faction.`);
       return true;

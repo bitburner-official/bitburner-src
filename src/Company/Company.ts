@@ -1,6 +1,6 @@
 import type { CompanyPosition } from "./CompanyPosition";
 
-import { CompanyName, JobName } from "@enums";
+import { CompanyName, JobName, FactionName } from "@enums";
 import { favorToRep, repToFavor } from "../Faction/formulas/favor";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
@@ -12,7 +12,7 @@ export interface CompanyCtorParams {
   expMultiplier: number;
   salaryMultiplier: number;
   jobStatReqOffset: number;
-  hasFaction?: boolean;
+  relatedFaction?: FactionName | undefined;
 }
 
 export class Company {
@@ -20,7 +20,7 @@ export class Company {
 
   name = CompanyName.NoodleBar;
   info = "";
-  hasFaction = false;
+  relatedFaction: FactionName | undefined;
 
   companyPositions = new Set<JobName>();
 
@@ -49,7 +49,7 @@ export class Company {
     this.expMultiplier = p.expMultiplier;
     this.salaryMultiplier = p.salaryMultiplier;
     this.jobStatReqOffset = p.jobStatReqOffset;
-    if (p.hasFaction) this.hasFaction = true;
+    if (p.relatedFaction) this.relatedFaction = p.relatedFaction;
   }
 
   hasPosition(pos: CompanyPosition | JobName): boolean {
