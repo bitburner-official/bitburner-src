@@ -53,7 +53,7 @@
 | Silhouette            | \* CTO, CFO, or CEO of a company<br />\* $15m<br />\* -22 Karma                                                        |                                           |
 | Speakers for the Dead | \* Hacking Level 100<br />\* All Combat Stats of 300<br />\* 30 People Killed<br />\* -45 Karma                        | _ CIA<br />_ NSA                          |
 | The Dark Army         | \* Hacking Level 300<br />\* All Combat Stats of 300<br />\* Be in Chongqing<br />\* 5 People Killed<br />\* -45 Karma | _ CIA<br />_ NSA                          |
-| The Syndicate         | \* Hacking Level 200<br />\* All Combat Stats of 200<br />\* Be in Aevum or Sector-12<br />\* $10m<br />\* -90 Karma   | _ CIA<br />_ NSA                          |
+| The Syndicate         | \* Hacking Level 200<br />\* All Combat Stats of 200<br />\* Be in Aevum or Sector-12<br />\* $10m<br />\* -90 Karma   | \* CIA<br />\* NSA                          |
 
 ### Lategame Factions
 
