@@ -60,12 +60,12 @@
 | Faction Name | Requirements                                                                                         |
 | ------------ | ---------------------------------------------------------------------------------------------------- |
 | The Covenant | \* 20 Augmentations<br />\* $75b<br />\* Hacking Level of 850<br />\* All Combat Stats of 850        |
-| Daedalus     | \* 30 Augmentations (varies)<br />\* $100b<br />\* Hacking Level of 2500 OR All Combat Stats of 1500 |
 | Illuminati   | \* 30 Augmentations<br />\* $150b<br />\* Hacking Level of 1500<br />\* All Combat Stats of 1200     |
+| Daedalus     | \* 30 Augmentations (varies)<br />\* $100b<br />\* Hacking Level of 2500 OR All Combat Stats of 1500 |
 
 ### Endgame Factions
 
 | Faction Name              | Requirements                                                                                                           |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Bladeburners              | \* Join Bladeburner Division<br />\* Have 25 Rank<br />\* Be in BitNode 6 or 7<br />\* or have Source-File 6 or 7      |
-| Church of the Machine God | \* Have not installed any augmentations in the current BitNode<br />\* Be in BitNode 13<br />\* or have Source-File 13 |
+| Bladeburners              | \* Be in BitNode 6 or 7 or have Source-File 6 or 7<br />\* Join Bladeburner Division<br />\* Have 25 Rank      |
+| Church of the Machine God | \* Be in BitNode 13 or have Source-File 13<br />\* Have not installed any augmentations in the current BitNode |
