@@ -78,7 +78,9 @@ export class Faction {
     return newFavor - this.favor;
   }
 
-  static savedKeys = getKeyList(Faction, { removedKeys: ["augmentations", "name"] });
+  static savedKeys = getKeyList(Faction, {
+    removedKeys: ["augmentations", "name", "alreadyInvited", "isBanned", "isMember"],
+  });
 
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
