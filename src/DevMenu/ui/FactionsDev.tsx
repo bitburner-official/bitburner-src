@@ -66,7 +66,7 @@ export function FactionsDev(): React.ReactElement {
     Object.values(Factions).forEach((faction) => {
       faction.discovery = FactionDiscovery.unknown;
     });
-    Player.factionRumors.length = 0;
+    Player.factionRumors.clear();
     setFactionDiscovery(Factions[factionName].discovery);
   }
 

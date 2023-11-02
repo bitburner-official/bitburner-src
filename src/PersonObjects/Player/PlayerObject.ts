@@ -21,7 +21,7 @@ import { CompanyName, FactionName, JobName, LocationName } from "@enums";
 import { HashManager } from "../../Hacknet/HashManager";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
-import { JSONMap } from "../../Types/Jsonable";
+import { JSONMap, JSONSet } from "../../Types/Jsonable";
 import { cyrb53 } from "../../utils/StringHelperFunctions";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { CONSTANTS } from "../../Constants";
@@ -38,7 +38,7 @@ export class PlayerObject extends Person implements IPlayer {
   currentServer = "";
   factions: FactionName[] = [];
   factionInvitations: FactionName[] = [];
-  factionRumors: FactionName[] = [];
+  factionRumors = new JSONSet<FactionName>();
   hacknetNodes: (HacknetNode | string)[] = []; // HacknetNode object or hostname of Hacknet Server
   has4SData = false;
   has4SDataTixApi = false;

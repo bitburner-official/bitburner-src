@@ -103,7 +103,7 @@ export function prestigeAugmentation(this: PlayerObject): void {
 
   this.factions = [];
   this.factionInvitations = [];
-  this.factionRumors = [];
+  this.factionRumors.clear();
   // Clear any pending invitation modals
   InvitationEvent.emit(null);
 
@@ -178,29 +178,14 @@ export function receiveInvite(this: PlayerObject, factionName: FactionName): voi
     return;
   }
   this.factionInvitations.push(factionName);
-  if (this.factionRumors.includes(factionName)) {
-    this.factionRumors.splice(this.factionRumors.indexOf(factionName), 1);
-  }
+  this.factionRumors.delete(factionName);
   Factions[factionName].discovery = FactionDiscovery.known;
 }
 
-export function receiveRumor(
-  this: PlayerObject,
-  factionName: FactionName,
-  discovery?: FactionDiscovery | undefined,
-): void {
-  if (Factions[factionName].discovery == FactionDiscovery.unknown) {
-    Factions[factionName].discovery = discovery || FactionDiscovery.rumored;
-  }
-  if (
-    this.factionRumors.includes(factionName) ||
-    this.factionInvitations.includes(factionName) ||
-    Factions[factionName].isMember ||
-    Factions[factionName].isBanned
-  ) {
-    return;
-  }
-  this.factionRumors.push(factionName);
+export function receiveRumor(this: PlayerObject, factionName: FactionName): void {
+  const faction = Factions[factionName];
+  if (this.factionRumors.has(factionName) || faction.isMember || faction.isBanned || faction.alreadyInvited) return;
+  this.factionRumors.add(factionName);
 }
 
 //Calculates skill level progress based on experience. The same formula will be used for every skill
