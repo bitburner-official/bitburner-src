@@ -55,8 +55,6 @@ const JoinChecklist = (props: { faction: Faction }): React.ReactElement => {
           key={i}
           fulfilled={condition.isSatisfied(Player)}
           value={condition.toString()}
-          color={Settings.theme.primary}
-          incompleteColor={Settings.theme.primarydark}
         />
       ))}
     </>
