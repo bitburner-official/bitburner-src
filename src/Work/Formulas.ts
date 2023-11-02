@@ -85,7 +85,7 @@ export function calculateFactionExp(person: IPerson, type: FactionWorkType): Wor
 export function calculateCost(classs: Class, location: Location): number {
   const serverMeta = serverMetadata.find((s) => s.specialName === location.name);
   const server = GetServer(serverMeta ? serverMeta.hostname : "");
-  const discount = (server as Server).backdoorInstalled ? 0.9 : 1;
+  const discount = (server as Server)?.backdoorInstalled ? 0.9 : 1;
   return classs.earnings.money * location.costMult * discount;
 }
 
