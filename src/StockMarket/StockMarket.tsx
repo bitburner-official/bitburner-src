@@ -14,6 +14,7 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reviver } from "../utils/JSONReviver";
 import { NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
+import { getRandomInt } from "../utils/helpers/getRandomInt";
 
 export let StockMarket: IStockMarket = {
   lastUpdate: 0,
@@ -167,7 +168,7 @@ export function initStockMarket(): void {
 
   StockMarket.storedCycles = 0;
   StockMarket.lastUpdate = 0;
-  StockMarket.ticksUntilCycle = StockMarketConstants.TicksPerCycle;
+  StockMarket.ticksUntilCycle = getRandomInt(0, StockMarketConstants.TicksPerCycle);
   initSymbolToStockMap();
 }
 
