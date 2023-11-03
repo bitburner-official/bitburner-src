@@ -168,7 +168,7 @@ export function initStockMarket(): void {
 
   StockMarket.storedCycles = 0;
   StockMarket.lastUpdate = 0;
-  StockMarket.ticksUntilCycle = getRandomInt(0, StockMarketConstants.TicksPerCycle);
+  StockMarket.ticksUntilCycle = getRandomInt(1, StockMarketConstants.TicksPerCycle);
   initSymbolToStockMap();
 }
 
