@@ -31,3 +31,12 @@ RAM cost: 4 GB
 
 Attempts to start the specified Bladeburner action. Returns true if the action was started successfully, and false otherwise.
 
+## Example
+
+
+```js
+ns.bladeburner.startAction("Contracts", "Tracking")
+
+// This will start the Bladeburner Contracts action of Tracking
+```
+
