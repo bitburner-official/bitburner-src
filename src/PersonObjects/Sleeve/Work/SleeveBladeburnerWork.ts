@@ -19,9 +19,14 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
   cyclesWorked = 0;
   actionType: "General" | "Contracts";
   actionName: string;
+  signalCompletion = () => {
+    // Intentionally empty function, this is just an initial value and will never be used.
+  };
+  nextCompletion: Promise<void>;
 
   constructor(params?: SleeveBladeburnerWorkParams) {
     super();
+    this.nextCompletion = new Promise((r) => (this.signalCompletion = r));
     this.actionType = params?.type ?? "General";
     this.actionName = params?.name ?? "Field Analysis";
   }
@@ -44,6 +49,10 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
     }
 
     while (this.cyclesWorked > this.cyclesNeeded(sleeve)) {
+      // Resolve and reset the completion promise
+      this.signalCompletion();
+      this.nextCompletion = new Promise((r) => (this.signalCompletion = r));
+
       if (this.actionType === "Contracts") {
         const action = Player.bladeburner.getActionObject(actionIdent);
         if (!action) throw new Error(`Error getting ${this.actionName} action object`);
@@ -70,6 +79,7 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
       actionName: this.actionName,
       cyclesWorked: this.cyclesWorked,
       cyclesNeeded: this.cyclesNeeded(sleeve),
+      nextCompletion: this.nextCompletion,
     };
   }
 
