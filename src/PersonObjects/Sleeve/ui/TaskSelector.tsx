@@ -113,7 +113,7 @@ function possibleContracts(sleeve: Sleeve): string[] {
 
 const tasks: {
   [key: string]: undefined | ((sleeve: Sleeve) => ITaskDetails);
-  ["------"]: (sleeve: Sleeve) => ITaskDetails;
+  ["Idle"]: (sleeve: Sleeve) => ITaskDetails;
   ["Work for Company"]: (sleeve: Sleeve) => ITaskDetails;
   ["Work for Faction"]: (sleeve: Sleeve) => ITaskDetails;
   ["Commit Crime"]: (sleeve: Sleeve) => ITaskDetails;
@@ -123,7 +123,7 @@ const tasks: {
   ["Shock Recovery"]: (sleeve: Sleeve) => ITaskDetails;
   ["Synchronize"]: (sleeve: Sleeve) => ITaskDetails;
 } = {
-  "------": (): ITaskDetails => {
+  Idle: (): ITaskDetails => {
     return { first: ["------"], second: () => ["------"] };
   },
   "Work for Company": (sleeve: Sleeve): ITaskDetails => {
@@ -219,7 +219,7 @@ const tasks: {
 
 const canDo: {
   [key: string]: undefined | ((sleeve: Sleeve) => boolean);
-  ["------"]: (sleeve: Sleeve) => boolean;
+  ["Idle"]: (sleeve: Sleeve) => boolean;
   ["Work for Company"]: (sleeve: Sleeve) => boolean;
   ["Work for Faction"]: (sleeve: Sleeve) => boolean;
   ["Commit Crime"]: (sleeve: Sleeve) => boolean;
@@ -229,7 +229,7 @@ const canDo: {
   ["Shock Recovery"]: (sleeve: Sleeve) => boolean;
   ["Synchronize"]: (sleeve: Sleeve) => boolean;
 } = {
-  "------": () => true,
+  Idle: () => true,
   "Work for Company": (sleeve: Sleeve) => possibleJobs(sleeve).length > 0,
   "Work for Faction": (sleeve: Sleeve) => possibleFactions(sleeve).length > 0,
   "Commit Crime": () => true,
@@ -243,7 +243,7 @@ const canDo: {
 
 function getABC(sleeve: Sleeve): [string, string, string] {
   const work = sleeve.currentWork;
-  if (work === null) return ["------", "------", "------"];
+  if (work === null) return ["Idle", "------", "------"];
   switch (work.type) {
     case SleeveWorkType.COMPANY:
       return ["Work for Company", work.companyName, "------"];
