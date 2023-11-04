@@ -716,7 +716,7 @@ function loadGame(saveString: string): boolean {
   setPlayer(loadPlayer(saveObj.PlayerSave));
   loadAllServers(saveObj.AllServersSave);
   loadCompanies(saveObj.CompaniesSave);
-  loadFactions(saveObj.FactionsSave);
+  loadFactions(saveObj.FactionsSave, Player);
 
   if (Object.hasOwn(saveObj, "StaneksGiftSave")) {
     loadStaneksGift(saveObj.StaneksGiftSave);

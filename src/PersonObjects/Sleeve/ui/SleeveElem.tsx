@@ -69,11 +69,12 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
   const [travelOpen, setTravelOpen] = useState(false);
   const [augmentationsOpen, setAugmentationsOpen] = useState(false);
 
-  const [abc, setABC] = useState(["------", "------", "------"]);
+  const [abc, setABC] = useState(["Idle", "------", "------"]);
 
   function setTask(): void {
     switch (abc[0]) {
-      case "------":
+      case "Idle":
+        props.sleeve.stopWork();
         break;
       case "Work for Company":
         if (getEnumHelper("CompanyName").isMember(abc[1])) props.sleeve.workForCompany(abc[1]);

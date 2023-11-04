@@ -1,4 +1,4 @@
-import { CityName, FactionName, LiteratureName } from "@enums";
+import { CityName, FactionName, CompanyName, LiteratureName } from "@enums";
 import { Literature } from "./Literature";
 
 export const Literatures: Record<LiteratureName, Literature> = {
@@ -77,6 +77,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.HistoryOfSynthoids]: new Literature({
     title: "A Brief History of Synthoids",
     filename: LiteratureName.HistoryOfSynthoids,
+    factionRumors: [FactionName.OmniTekIncorporated, FactionName.Bladeburners],
     text:
       "Synthetic androids, or Synthoids for short, are genetically engineered robots and, short of Augmentations, " +
       "are composed entirely of organic substances. For this reason, Synthoids are virtually identical to " +
@@ -195,10 +196,11 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.BrighterThanTheSun]: new Literature({
     title: "Brighter than the Sun",
     filename: LiteratureName.BrighterThanTheSun,
+    factionRumors: [FactionName.KuaiGongInternational, FactionName.OmniTekIncorporated],
     text:
-      `When people think about the corporations that dominate the East, they typically think of ${FactionName.KuaiGongInternational}, which ` +
-      "holds a complete monopoly for manufacturing and commerce in Asia, or Global Pharmaceuticals, the world's largest " +
-      `drug company, or ${FactionName.OmniTekIncorporated}, the global leader in intelligent and autonomous robots. But there's one company ` +
+      `When people think about the corporations that dominate the East, they typically think of ${CompanyName.KuaiGongInternational}, which ` +
+      `holds a complete monopoly for manufacturing and commerce in Asia, or ${CompanyName.GlobalPharmaceuticals}, the world's largest ` +
+      `drug company, or ${CompanyName.OmniTekIncorporated}, the global leader in intelligent and autonomous robots. But there's one company ` +
       "that has seen a rapid rise in the last year and is poised to dominate not only the East, but the entire world: TaiYang Digital.<br><br>" +
       "TaiYang Digital is a Chinese internet-technology corporation that provides services such as " +
       "online advertising, search engines, gaming, media, entertainment, and cloud computing/storage. Its name TaiYang comes from the Chinese word " +
@@ -210,7 +212,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
       "TaiYang Digital's meteoric rise is extremely surprising in modern society. This sort of growth is " +
       "something you'd commonly see in the first half of the century, especially for tech companies. However in " +
       "the last two decades the number of corporations has significantly declined as the largest entities " +
-      `quickly took over the economy. Corporations such as ${FactionName.ECorp}, ${FactionName.MegaCorp}, and ${FactionName.KuaiGongInternational} have established ` +
+      `quickly took over the economy. Corporations such as ${CompanyName.ECorp}, ${CompanyName.MegaCorp}, and ${CompanyName.KuaiGongInternational} have established ` +
       "such strong monopolies in their market sectors that they have effectively killed off all " +
       "of the smaller and new corporations that have tried to start up over the years. This is what makes " +
       "the rise of TaiYang Digital so impressive. And if TaiYang continues down this path, then they have " +
@@ -233,6 +235,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.Sector12Crime]: new Literature({
     title: `Figures Show Rising Crime Rates in ${CityName.Sector12}`,
     filename: LiteratureName.Sector12Crime,
+    factionRumors: [FactionName.TheSyndicate, FactionName.SlumSnakes],
     text:
       "A recent study by analytics company Wilson Inc. shows a significant rise " +
       `in criminal activity in ${CityName.Sector12}. Perhaps the most alarming part of the statistic ` +
@@ -267,6 +270,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.SecretSocieties]: new Literature({
     title: "Secret Societies",
     filename: LiteratureName.SecretSocieties,
+    factionRumors: [FactionName.TheBlackHand, FactionName.NiteSec, FactionName.BitRunners],
     text:
       "The idea of secret societies has long intrigued the general public by inspiring curiosity, fascination, and " +
       "distrust. People have long wondered about who these secret society members are and what they do, with the " +
@@ -304,13 +308,14 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.CodedIntelligence]: new Literature({
     title: "Coded Intelligence: Myth or Reality?",
     filename: LiteratureName.CodedIntelligence,
+    factionRumors: [FactionName.OmniTekIncorporated],
     text:
       "Tremendous progress has been made in the field of Artificial Intelligence over the past few decades. " +
       "Our autonomous vehicles and transportation systems. The electronic personal assistants that control our everyday lives. " +
       "Medical, service, and manufacturing robots. All of these are examples of how far AI has come and how much it has " +
       "improved our daily lives. However, the question still remains of whether AI will ever be advanced enough to re-create " +
       "human intelligence.<br><br>" +
-      `We've certainly come close to artificial intelligence that is similar to humans. For example ${FactionName.OmniTekIncorporated}'s ` +
+      `We've certainly come close to artificial intelligence that is similar to humans. For example ${CompanyName.OmniTekIncorporated}'s ` +
       "CompanionBot, a robot meant to act as a comforting friend for lonely and grieving people, is eerily human-like " +
       "in its appearance, speech, mannerisms, and even movement. However its artificial intelligence isn't the same as " +
       "that of humans. Not yet. It doesn't have sentience or self-awareness or consciousness.<br><br>" +
@@ -335,14 +340,15 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.TensionsInTechRace]: new Literature({
     title: "Tensions rise in global tech race",
     filename: LiteratureName.TensionsInTechRace,
+    factionRumors: [FactionName.OmniTekIncorporated, FactionName.MegaCorp, FactionName.ECorp],
     text:
       "Have we entered a new Cold War? Is WWIII just beyond the horizon?<br><br>" +
-      `After rumors came out that ${FactionName.OmniTekIncorporated} had begun developing advanced robotic supersoldiers, ` +
+      `After rumors came out that ${CompanyName.OmniTekIncorporated} had begun developing advanced robotic supersoldiers, ` +
       "geopolitical tensions quickly flared between the USA, Russia, and several Asian superpowers. " +
-      `In a rare show of cooperation between corporations, ${FactionName.MegaCorp} and ${FactionName.ECorp} have ` +
+      `In a rare show of cooperation between corporations, ${CompanyName.MegaCorp} and ${CompanyName.ECorp} have ` +
       "reportedly launched hundreds of new surveillance and espionage satellites. " +
       "Defense contractors such as " +
-      "DeltaOne and AeroCorp have been working with the CIA and NSA to prepare " +
+      `${CompanyName.DeltaOne} and ${CompanyName.AeroCorp} have been working with the CIA and NSA to prepare ` +
       "for conflict. Meanwhile, the rest of the world sits in earnest " +
       "hoping that it never reaches full-scale war. With today's technology " +
       "and firepower, a World War would assuredly mean the end of human civilization.",
@@ -375,6 +381,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.TheHiddenWorld]: new Literature({
     title: "The Hidden World",
     filename: LiteratureName.TheHiddenWorld,
+    factionRumors: [FactionName.Illuminati],
     text:
       "WAKE UP SHEEPLE<br><br>" +
       "THE GOVERNMENT DOES NOT EXIST. CORPORATIONS DO NOT RUN SOCIETY<br><br>" +
@@ -394,6 +401,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.TheNewGod]: new Literature({
     title: "The New God",
     filename: LiteratureName.TheNewGod,
+    factionRumors: [FactionName.ChurchOfTheMachineGod],
     text:
       "Everyone has a moment in their life when they wonder about the bigger questions.<br><br>" +
       "What's the point of all this? What is my purpose?<br><br>" +
@@ -408,6 +416,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.NewTriads]: new Literature({
     title: "The New Triads",
     filename: LiteratureName.NewTriads,
+    factionRumors: [FactionName.Tetrads],
     text:
       "The Triads were an ancient transnational crime syndicate based in China, Hong Kong, and other Asian " +
       "territories. They were often considered one of the first and biggest criminal secret societies. " +

@@ -34,3 +34,9 @@ export enum FactionName {
   ChurchOfTheMachineGod = "Church of the Machine God",
   ShadowsOfAnarchy = "Shadows of Anarchy",
 }
+
+export enum FactionDiscovery {
+  unknown = "unknown",
+  rumored = "rumored",
+  known = "known",
+}

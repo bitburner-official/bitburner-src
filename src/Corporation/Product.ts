@@ -31,9 +31,6 @@ export class Product {
   without suffering a loss in the # of sales */
   markup = 0;
 
-  /** Cost of producing this product if buying its component materials at market price */
-  productionCost = 0;
-
   /** Whether the development for this product is finished yet */
   finished = false;
   developmentProgress = 0; // Creation progress - A number between 0-100 representing percentage
@@ -82,6 +79,8 @@ export class Product {
     desiredSellAmount: 0 as number | string,
     /** Player input sell price e.g. "MP * 5" */
     desiredSellPrice: "" as string | number,
+    /** Cost of producing this product if buying its component materials at market price */
+    productionCost: 0,
   }));
 
   /** How much warehouse space is occupied per unit of this product */

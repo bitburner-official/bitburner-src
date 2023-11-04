@@ -1,4 +1,4 @@
-import { AugmentationName, FactionName } from "@enums";
+import { AugmentationName, FactionName, FactionDiscovery } from "@enums";
 import { FactionInfo, FactionInfos } from "./FactionInfo";
 import { favorToRep, repToFavor } from "./formulas/favor";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
@@ -22,6 +22,9 @@ export class Faction {
 
   /** Flag signalling whether player is a member of this faction */
   isMember = false;
+
+  /** Level of player knowledge about this faction (unknown, rumored, known) */
+  discovery: FactionDiscovery = FactionDiscovery.unknown;
 
   /** Name of faction */
   name: FactionName;
@@ -75,7 +78,9 @@ export class Faction {
     return newFavor - this.favor;
   }
 
-  static savedKeys = getKeyList(Faction, { removedKeys: ["augmentations", "name"] });
+  static savedKeys = getKeyList(Faction, {
+    removedKeys: ["augmentations", "name", "alreadyInvited", "isBanned", "isMember"],
+  });
 
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {

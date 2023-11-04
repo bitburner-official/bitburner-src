@@ -15,6 +15,7 @@ interface Fragment
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [effect](./bitburner.fragment.effect.md) |  | string |  |
 |  [id](./bitburner.fragment.id.md) |  | number |  |
 |  [limit](./bitburner.fragment.limit.md) |  | number |  |
 |  [power](./bitburner.fragment.power.md) |  | number |  |

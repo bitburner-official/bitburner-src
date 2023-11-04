@@ -43,6 +43,7 @@ export function joinFaction(faction: Faction): void {
   //Determine what factions you are banned from now that you have joined this faction
   for (const enemy of factionInfo.enemies) {
     if (Factions[enemy]) Factions[enemy].isBanned = true;
+    Player.factionRumors.delete(enemy);
   }
   for (let i = 0; i < Player.factionInvitations.length; ++i) {
     if (Player.factionInvitations[i] == faction.name || Factions[Player.factionInvitations[i]].isBanned) {
@@ -50,6 +51,7 @@ export function joinFaction(faction: Faction): void {
       i--;
     }
   }
+  Player.factionRumors.delete(faction.name);
 }
 
 //Returns a boolean indicating whether the player has the prerequisites for the

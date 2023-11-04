@@ -12,10 +12,14 @@ import { Server } from "../Server/Server";
 
 //Sends message to player, including a pop up
 function sendMessage(name: MessageFilename, forced = false): void {
+  const msg = Messages[name];
   if (forced || !Settings.SuppressMessages) {
     showMessage(name);
   }
   addMessageToServer(name);
+  for (const factionName of msg.factionRumors) {
+    Player.receiveRumor(factionName);
+  }
 }
 
 function showMessage(name: MessageFilename): void {
@@ -113,6 +117,7 @@ const Messages: Record<MessageFilename, Message> = {
       "exploit them for their Augmentations. But do not trust them. " +
       "They are not what they seem. No one is.\n\n" +
       "-jump3R",
+    FactionName.CyberSec,
   ),
 
   [MessageFilename.Jumper2]: new Message(
@@ -121,6 +126,7 @@ const Messages: Record<MessageFilename, Message> = {
       "you want to find the truth, worry only about yourself. Ethics and " +
       `morals will get you killed. \n\nWatch out for a hacking group known as ${FactionName.NiteSec}.` +
       "\n\n-jump3R",
+    FactionName.NiteSec,
   ),
 
   [MessageFilename.Jumper3]: new Message(
@@ -128,6 +134,7 @@ const Messages: Record<MessageFilename, Message> = {
     "You must learn to walk before you can run. And you must " +
       `run before you can fly. Look for ${FactionName.TheBlackHand}. \n\n` +
       "I.I.I.I \n\n-jump3R",
+    FactionName.TheBlackHand,
   ),
 
   [MessageFilename.Jumper4]: new Message(
@@ -135,6 +142,7 @@ const Messages: Record<MessageFilename, Message> = {
     "To find what you are searching for, you must understand the bits. " +
       "The bits are all around us. The runners will help you.\n\n" +
       "-jump3R",
+    FactionName.BitRunners,
   ),
 
   //Messages from hacking factions
@@ -145,6 +153,7 @@ const Messages: Record<MessageFilename, Message> = {
       "the world for the better. If you join us, we can unlock your full potential. \n\n" +
       "But first, you must pass our test. Find and install the backdoor on our server. \n\n" +
       `-${FactionName.CyberSec}`,
+    FactionName.CyberSec,
   ),
 
   [MessageFilename.NiteSecTest]: new Message(
@@ -156,6 +165,7 @@ const Messages: Record<MessageFilename, Message> = {
       "Join us, and people will fear you, too. \n\n" +
       "Find and install the backdoor on our server, avmnite-02h. Then, we will contact you again." +
       `\n\n-${FactionName.NiteSec}`,
+    FactionName.NiteSec,
   ),
 
   [MessageFilename.BitRunnersTest]: new Message(
@@ -164,6 +174,7 @@ const Messages: Record<MessageFilename, Message> = {
       "what you are looking for. \n\n " +
       "We can help you find the answers.\n\n" +
       "run4theh111z",
+    FactionName.BitRunners,
   ),
 
   //Messages to guide players to the daemon
@@ -174,6 +185,7 @@ const Messages: Record<MessageFilename, Message> = {
       "%@*$^$()@&$)$*@__CAN__()(@^#)@&@)#__N0__(#@&#)@&@&(\n" +
       "*(__LON6ER__^#)@)(()*#@)@__ESCAP3__)#(@(#@*@()@(#*$\n" +
       "()@)#$*%)$#()$#__Y0UR__(*)$#()%(&(%)*!)($__GAZ3__#(",
+    FactionName.Daedalus,
   ),
 
   [MessageFilename.RedPill]: new Message(
@@ -183,6 +195,7 @@ const Messages: Record<MessageFilename, Message> = {
       ")@B(*#%)@)M#B*%V)____FIND___#$@)#%(B*)@#(*%B)\n" +
       "@_#(%_@#M(BDSPOMB__THE-CAVE_#)$(*@#$)@#BNBEGB\n" +
       "DFLSMFVMV)#@($*)@#*$MV)@#(*$V)M#(*$)M@(#*VM$)",
+    FactionName.Daedalus,
   ),
 };
 

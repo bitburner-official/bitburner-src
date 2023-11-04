@@ -1,8 +1,6 @@
-/**
- * Initialization and manipulation of the Factions object, which stores data
- * about all Factions in the game
- */
-import { FactionName } from "@enums";
+import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
+
+import { FactionName, FactionDiscovery } from "@enums";
 import { Faction } from "./Faction";
 
 import { Reviver, assertLoadingType } from "../utils/JSONReviver";
@@ -20,7 +18,7 @@ for (const aug of getRecordValues(Augmentations)) {
   }
 }
 
-export function loadFactions(saveString: string): void {
+export function loadFactions(saveString: string, player: PlayerObject): void {
   const loadedFactions = JSON.parse(saveString, Reviver) as unknown;
   // This loading method allows invalid data in player save, but just ignores anything invalid
   if (!loadedFactions) return;
@@ -31,12 +29,30 @@ export function loadFactions(saveString: string): void {
     const faction = Factions[loadedFactionName];
     if (typeof loadedFaction !== "object") continue;
     assertLoadingType<Faction>(loadedFaction);
-    const { playerReputation: loadedRep, favor: loadedFavor } = loadedFaction;
+    const { playerReputation: loadedRep, favor: loadedFavor, discovery: loadedDiscovery } = loadedFaction;
     if (typeof loadedRep === "number" && loadedRep > 0) faction.playerReputation = loadedRep;
     if (typeof loadedFavor === "number" && loadedFavor > 0) faction.favor = loadedFavor;
-    // Todo, these 3 will be removed from Faction object and savedata after a separate PR changes some data structures on Player to make this unnecessary info to save
-    if (loadedFaction.alreadyInvited) faction.alreadyInvited = true;
-    if (loadedFaction.isBanned) faction.isBanned = true;
-    if (loadedFaction.isMember) faction.isMember = true;
+    if (getEnumHelper("FactionDiscovery").isMember(loadedDiscovery)) faction.discovery = loadedDiscovery;
+  }
+  // Load joined factions from player save
+  for (const joinedFacName of player.factions) {
+    if (!getEnumHelper("FactionName").isMember(joinedFacName)) {
+      console.error(`Invalid faction in player save factions array: ${joinedFacName}`);
+      continue;
+    }
+    const faction = Factions[joinedFacName];
+    faction.isMember = true;
+    faction.alreadyInvited = true;
+    faction.discovery = FactionDiscovery.known;
+    for (const enemyFacName of faction.getInfo().enemies) Factions[enemyFacName].isBanned = true;
+  }
+  // Load invited factions from player save
+  for (const invitedFaction of player.factionInvitations) {
+    if (!getEnumHelper("FactionName").isMember(invitedFaction)) {
+      console.error(`Invalid faction in player save factionInvitations array: ${invitedFaction}`);
+      continue;
+    }
+    Factions[invitedFaction].alreadyInvited = true;
+    Factions[invitedFaction].discovery = FactionDiscovery.known;
   }
 }

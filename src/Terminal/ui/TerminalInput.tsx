@@ -233,6 +233,9 @@ export function TerminalInput(): React.ReactElement {
 
     // Autocomplete
     if (event.key === KEY.TAB) {
+      if (event.altKey || event.ctrlKey) {
+        return;
+      }
       event.preventDefault();
       if (searchResults.length) {
         saveValue(searchResults[searchResultsIndex]);

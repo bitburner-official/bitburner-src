@@ -278,7 +278,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         rating: product.rating,
         effectiveRating: cityData.effectiveRating,
         stats: cloneDeep(product.stats),
-        productionCost: product.productionCost,
+        productionCost: cityData.productionCost,
         desiredSellPrice: cityData.desiredSellPrice,
         desiredSellAmount: cityData.desiredSellAmount,
         stored: cityData.stored,
@@ -287,6 +287,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         developmentProgress: product.developmentProgress,
         advertisingInvestment: product.advertisingInvestment,
         designInvestment: product.designInvestment,
+        size: product.size,
       };
     },
     purchaseWarehouse: (ctx) => (_divisionName, _cityName) => {

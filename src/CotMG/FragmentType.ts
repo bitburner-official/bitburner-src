@@ -76,6 +76,9 @@ export function Effect(tpe: FragmentType): string {
     case FragmentType.Bladeburner: {
       return "+x% all bladeburner stats";
     }
+    case FragmentType.Booster: {
+      return "1.1x adjacent fragment power";
+    }
   }
   throw new Error("Calling effect for fragment type that doesn't have an effect " + tpe);
 }

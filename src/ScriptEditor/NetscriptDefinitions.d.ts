@@ -1935,6 +1935,31 @@ export interface Singularity {
   getCompanyFavorGain(companyName: CompanyName | `${CompanyName}`): number;
 
   /**
+   * List conditions for being invited to a faction.
+   * @remarks
+   * RAM cost: 3 GB * 16/4/1
+   *
+   *
+   * @param faction - Name of the faction.
+   * @returns Array of strings describing conditions for receiving an invitation to the faction.
+   *
+   * @example
+   * ```js
+   * ns.singularity.getFactionInviteRequirements("The Syndicate")
+   * [
+   *   "Located in Aevum or Sector-12",
+   *   "Not working for the Central Intelligence Agency",
+   *   "Not working for the National Security Agency",
+   *   "-90 karma",
+   *   "Have $10.000m",
+   *   "Hacking level 200",
+   *   "All combat skills level 200"
+   * ]
+   * ```
+   */
+  getFactionInviteRequirements(faction: string): string[];
+
+  /**
    * List all current faction invitations.
    * @remarks
    * RAM cost: 3 GB * 16/4/1
@@ -4430,6 +4455,7 @@ interface Fragment {
   type: number;
   power: number;
   limit: number;
+  effect: string;
 }
 
 /** @public */
@@ -7900,6 +7926,8 @@ interface Product {
   advertisingInvestment: number;
   /** Funds that were spent on designing the product */
   designInvestment: number;
+  /** How much warehouse space is occupied per unit of this product */
+  size: number;
 }
 
 /**

@@ -40,14 +40,14 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
     if (this.actionType === "Contracts") {
       const action = Player.bladeburner.getActionObject(actionIdent);
       if (!action) throw new Error(`Error getting ${this.actionName} action object`);
-      if (action.count <= 0) return sleeve.stopWork();
+      if (action.count < 1) return sleeve.stopWork();
     }
 
     while (this.cyclesWorked > this.cyclesNeeded(sleeve)) {
       if (this.actionType === "Contracts") {
         const action = Player.bladeburner.getActionObject(actionIdent);
         if (!action) throw new Error(`Error getting ${this.actionName} action object`);
-        if (action.count <= 0) return sleeve.stopWork();
+        if (action.count < 1) return sleeve.stopWork();
       }
       const retValue = Player.bladeburner.completeAction(sleeve, actionIdent, false);
       if (this.actionType === "General") {
