@@ -6,6 +6,10 @@ export function alias(args: (string | number | boolean)[]): void {
     printAliases();
     return;
   }
+  if (args[0] === "-all") {
+    Terminal.print(`-all is reserved for removal`);
+    return;
+  }
   if (args.length === 1) {
     if (parseAliasDeclaration(args[0] + "")) {
       Terminal.print(`Set alias ${args[0]}`);
