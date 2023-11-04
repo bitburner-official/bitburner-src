@@ -98,6 +98,8 @@ export function prestigeAugmentation(): void {
   Player.reapplyAllSourceFiles();
   Player.hp.current = Player.hp.max;
 
+  staneksGift.prestigeAugmentation();
+
   // Apply entropy from grafting
   Player.applyEntropy(Player.entropy);
 
@@ -160,7 +162,6 @@ export function prestigeAugmentation(): void {
       Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
     }
   }
-  staneksGift.prestigeAugmentation();
 
   // Hear rumors after all invites/bans
   for (const factionName of maintainRumors) Player.receiveRumor(factionName);
