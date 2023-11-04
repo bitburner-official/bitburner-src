@@ -3,7 +3,7 @@ import { removeAlias, Aliases, GlobalAliases } from "../../Alias";
 
 export function unalias(args: (string | number | boolean)[]): void {
   if (args.length !== 1) {
-    Terminal.error("Incorrect usage of unalias name. Usage: unalias [alias] or unalias -all");
+    Terminal.error("Incorrect usage of unalias name. Usage: unalias [alias] or unalias --all");
     return;
   } else if (args[0] === "--all") {
     for (const alias of Aliases) {
