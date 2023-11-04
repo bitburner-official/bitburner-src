@@ -5,7 +5,7 @@ export function unalias(args: (string | number | boolean)[]): void {
   if (args.length !== 1) {
     Terminal.error("Incorrect usage of unalias name. Usage: unalias [alias] or unalias -all");
     return;
-  } else if (args[0] === "-all") {
+  } else if (args[0] === "--all") {
     for (const alias of Aliases) {
       if (removeAlias(alias[0] + "")) {
         Terminal.print(`Removed alias ${alias[0]}`);
