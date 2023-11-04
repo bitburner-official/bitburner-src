@@ -424,9 +424,14 @@ export const ns: InternalAPI<NSFull> = {
       return CONSTANTS.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
     },
   share: (ctx) => () => {
+    const cores = GetServer(ctx.workerScript.hostname)?.cpuCores;
+    let coreBonus = 1;
+    if (cores) {
+      coreBonus = 1 + (cores - 1) / 16;
+    }
     helpers.log(ctx, () => "Sharing this computer.");
     const end = StartSharing(
-      ctx.workerScript.scriptRef.threads * calculateIntelligenceBonus(Player.skills.intelligence, 2),
+      ctx.workerScript.scriptRef.threads * calculateIntelligenceBonus(Player.skills.intelligence, 2) * coreBonus,
     );
     return helpers.netscriptDelay(ctx, 10000).finally(function () {
       helpers.log(ctx, () => "Finished sharing this computer.");

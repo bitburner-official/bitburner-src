@@ -43,11 +43,16 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
         );
       }
       //Charge the fragment
+      const cores = helpers.getServer(ctx, ctx.workerScript.hostname)?.cpuCores;
+      let coreBonus = 1;
+      if (cores) {
+        coreBonus = 1 + (cores - 1) / 16;
+      }
       const inBonus = staneksGift.inBonus();
       const time = inBonus ? 200 : 1000;
       if (inBonus) staneksGift.isBonusCharging = true;
       return helpers.netscriptDelay(ctx, time).then(function () {
-        staneksGift.charge(fragment, ctx.workerScript.scriptRef.threads);
+        staneksGift.charge(fragment, ctx.workerScript.scriptRef.threads * coreBonus);
         helpers.log(ctx, () => `Charged fragment with ${ctx.workerScript.scriptRef.threads} threads.`);
         return Promise.resolve();
       });
