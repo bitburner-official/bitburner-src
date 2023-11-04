@@ -599,7 +599,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.SlumSnakes]: new FactionInfo({
     infoText: <>{FactionName.SlumSnakes} rule!</>,
     rumorText: <>Graffiti seen in the slums: “{FactionName.SlumSnakes} rule!”</>,
-    inviteReqs: [haveCombatSkills(30), haveMoney(1e6)],
+    inviteReqs: [haveCombatSkills(30), haveMoney(1e6), haveKarma(-9)],
     rumorReqs: [haveKarma(-1)],
     offerFieldWork: true,
     offerSecurityWork: true,
