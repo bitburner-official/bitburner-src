@@ -125,7 +125,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.Daedalus]: new FactionInfo({
     infoText: <>Yesterday we obeyed kings and bent our necks to emperors. Today we kneel only to truth.</>,
-    rumorText: <>Follow the thread.</>,
+    rumorText: <>Follow the thread. Take fl1ght.</>,
     inviteReqs: [
       haveAugmentations(currentNodeMults.DaedalusAugsRequirement),
       haveMoney(100e9),
