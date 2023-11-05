@@ -28,74 +28,67 @@ import { Adjuster } from "./Adjuster";
 import { Factions } from "../../Faction/Factions";
 import { getRecordValues } from "../../Types/Record";
 import { getEnumHelper } from "../../utils/EnumHelper";
+import { useRerender } from "../../ui/React/hooks";
 
 const bigNumber = 1e12;
 
 export function FactionsDev(): React.ReactElement {
-  const [factionName, setFactionName] = useState(FactionName.Illuminati);
-  const [factionDiscovery, setFactionDiscovery] = useState(Factions[FactionName.Illuminati].discovery);
+  const [selectedFaction, setSelectedFaction] = useState(Factions[FactionName.Illuminati]);
+  const rerender = useRerender();
 
   function setFactionDropdown(event: SelectChangeEvent): void {
     if (!getEnumHelper("FactionName").isMember(event.target.value)) return;
-    setFactionName(event.target.value);
-    setFactionDiscovery(Factions[event.target.value].discovery);
+    setSelectedFaction(Factions[event.target.value]);
   }
 
   function receiveInvite(): void {
-    Player.receiveInvite(factionName);
-    Factions[factionName].alreadyInvited = true;
+    Player.receiveInvite(selectedFaction.name);
+    selectedFaction.alreadyInvited = true;
+    rerender();
   }
 
   function receiveAllInvites(): void {
-    Object.values(FactionName).forEach((faction) => {
-      Player.receiveInvite(faction);
-      Factions[factionName].alreadyInvited = true;
+    getRecordValues(Factions).forEach((faction) => {
+      Player.receiveInvite(faction.name);
+      faction.alreadyInvited = true;
     });
+    rerender();
   }
 
   function receiveRumor(): void {
-    Player.receiveRumor(factionName);
-    setFactionDiscovery(Factions[factionName].discovery);
+    Player.receiveRumor(selectedFaction.name);
+    rerender();
   }
 
   function receiveAllRumors(): void {
-    Object.values(FactionName).forEach((faction) => Player.receiveRumor(faction));
+    getRecordValues(FactionName).forEach((factionName) => Player.receiveRumor(factionName));
+    rerender();
   }
 
   function resetAllDiscovery(): void {
-    Object.values(Factions).forEach((faction) => {
-      faction.discovery = FactionDiscovery.unknown;
-    });
+    getRecordValues(Factions).forEach((faction) => (faction.discovery = FactionDiscovery.unknown));
     Player.factionRumors.clear();
-    setFactionDiscovery(Factions[factionName].discovery);
+    rerender();
   }
 
   function modifyFactionRep(modifier: number): (x: number) => void {
     return function (reputation: number): void {
-      const fac = Factions[factionName];
-      if (!isNaN(reputation)) {
-        fac.playerReputation += reputation * modifier;
-      }
+      if (!isNaN(reputation)) selectedFaction.playerReputation += reputation * modifier;
     };
   }
 
   function resetFactionRep(): void {
-    const fac = Factions[factionName];
-    fac.playerReputation = 0;
+    selectedFaction.playerReputation = 0;
   }
 
   function modifyFactionFavor(modifier: number): (x: number) => void {
     return function (favor: number): void {
-      const fac = Factions[factionName];
-      if (!isNaN(favor)) {
-        fac.favor += favor * modifier;
-      }
+      if (!isNaN(favor)) selectedFaction.favor += favor * modifier;
     };
   }
 
   function resetFactionFavor(): void {
-    const fac = Factions[factionName];
-    fac.favor = 0;
+    selectedFaction.favor = 0;
   }
 
   function tonsOfRep(): void {
@@ -123,9 +116,9 @@ export function FactionsDev(): React.ReactElement {
   }
 
   function setDiscovery(event: React.ChangeEvent<HTMLInputElement>, value: string): void {
-    const disco = value as FactionDiscovery;
-    Factions[factionName].discovery = disco;
-    setFactionDiscovery(disco);
+    if (!getEnumHelper("FactionDiscovery").isMember(value)) return;
+    selectedFaction.discovery = value;
+    rerender();
   }
 
   return (
@@ -147,15 +140,15 @@ export function FactionsDev(): React.ReactElement {
                     labelId="factions-select"
                     id="factions-dropdown"
                     onChange={setFactionDropdown}
-                    value={factionName}
+                    value={selectedFaction.name}
                     startAdornment={
                       <>
-                        <Tooltip title={`Hear rumor about ${factionName}`}>
+                        <Tooltip title={`Hear rumor about ${selectedFaction}`}>
                           <IconButton onClick={receiveRumor} size="large">
                             <ChatIcon />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title={`Receive invitation to ${factionName}`}>
+                        <Tooltip title={`Receive invitation to ${selectedFaction}`}>
                           <IconButton onClick={receiveInvite} size="large">
                             <ReplyIcon />
                           </IconButton>
@@ -163,7 +156,7 @@ export function FactionsDev(): React.ReactElement {
                       </>
                     }
                   >
-                    {Object.values(Factions).map((faction) => (
+                    {getRecordValues(Factions).map((faction) => (
                       <MenuItem key={faction.name} value={faction.name}>
                         {faction.name}
                       </MenuItem>
@@ -178,9 +171,9 @@ export function FactionsDev(): React.ReactElement {
               </td>
               <td>
                 <FormControl>
-                  <RadioGroup onChange={setDiscovery} value={factionDiscovery} row>
-                    {Object.entries(FactionDiscovery).map(([discoveryLabel, discovery]) => (
-                      <FormControlLabel key={discovery} value={discovery} label={discoveryLabel} control={<Radio />} />
+                  <RadioGroup onChange={setDiscovery} value={selectedFaction.discovery} row>
+                    {getRecordValues(FactionDiscovery).map((discovery) => (
+                      <FormControlLabel key={discovery} value={discovery} label={discovery} control={<Radio />} />
                     ))}
                   </RadioGroup>
                 </FormControl>
