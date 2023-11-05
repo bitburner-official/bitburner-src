@@ -5,6 +5,7 @@ import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
 import { CONSTANTS } from "../../../Constants";
 import { GeneralActions } from "../../../Bladeburner/data/GeneralActions";
 import { scaleWorkStats } from "../../../Work/WorkStats";
+import { getKeyList } from "../../../utils/helpers/getKeyList";
 
 interface SleeveBladeburnerWorkParams {
   type: "General" | "Contracts";
@@ -87,14 +88,16 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
     };
   }
 
+  static savedKeys = getKeyList(SleeveBladeburnerWork, { removedKeys: ["signalCompletion", "nextCompletion"] });
+
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("SleeveBladeburnerWork", this);
+    return Generic_toJSON("SleeveBladeburnerWork", this, SleeveBladeburnerWork.savedKeys);
   }
 
   /** Initializes a BladeburnerWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveBladeburnerWork {
-    return Generic_fromJSON(SleeveBladeburnerWork, value.data);
+    return Generic_fromJSON(SleeveBladeburnerWork, value.data, SleeveBladeburnerWork.savedKeys);
   }
 }
 
