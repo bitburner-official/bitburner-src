@@ -37,6 +37,10 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
     return ret / CONSTANTS.MilliPerCycle;
   }
 
+  finish() {
+    this.signalCompletion();
+  }
+
   process(sleeve: Sleeve, cycles: number) {
     if (!Player.bladeburner) return sleeve.stopWork();
     this.cyclesWorked += cycles;
@@ -49,10 +53,6 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
     }
 
     while (this.cyclesWorked > this.cyclesNeeded(sleeve)) {
-      // Resolve and reset the completion promise
-      this.signalCompletion();
-      this.nextCompletion = new Promise((r) => (this.signalCompletion = r));
-
       if (this.actionType === "Contracts") {
         const action = Player.bladeburner.getActionObject(actionIdent);
         if (!action) throw new Error(`Error getting ${this.actionName} action object`);
@@ -69,6 +69,10 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
         applySleeveGains(sleeve, scaleWorkStats(retValue, sleeve.shockBonus(), false));
       }
       this.cyclesWorked -= this.cyclesNeeded(sleeve);
+      // Resolve and reset nextCompletion promise
+      const resolver = this.signalCompletion;
+      this.nextCompletion = new Promise((r) => (this.signalCompletion = r));
+      resolver();
     }
   }
 
