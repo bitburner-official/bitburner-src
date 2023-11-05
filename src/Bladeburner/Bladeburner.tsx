@@ -894,6 +894,9 @@ export class Bladeburner {
     const count = Math.round(sourceCity.pop * percentage);
     sourceCity.pop -= count;
     destCity.pop += count;
+    if (destCity.pop < BladeburnerConstants.PopGrowthCeiling) {
+      destCity.pop += BladeburnerConstants.BasePopGrowth;
+    }
   }
 
   triggerPotentialMigration(sourceCityName: CityName, chance: number): void {
@@ -926,6 +929,9 @@ export class Bladeburner {
       const percentage = getRandomInt(10, 20) / 100;
       const count = Math.round(sourceCity.pop * percentage);
       sourceCity.pop += count;
+      if (sourceCity.pop < BladeburnerConstants.PopGrowthCeiling) {
+        sourceCity.pop += BladeburnerConstants.BasePopGrowth;
+      }
       if (this.logging.events) {
         this.log("Intelligence indicates that a new Synthoid community was formed in a city");
       }
@@ -937,6 +943,9 @@ export class Bladeburner {
         const percentage = getRandomInt(10, 20) / 100;
         const count = Math.round(sourceCity.pop * percentage);
         sourceCity.pop += count;
+        if (sourceCity.pop < BladeburnerConstants.PopGrowthCeiling) {
+          sourceCity.pop += BladeburnerConstants.BasePopGrowth;
+        }
         if (this.logging.events) {
           this.log("Intelligence indicates that a new Synthoid community was formed in a city");
         }
@@ -949,7 +958,9 @@ export class Bladeburner {
         const count = Math.round(sourceCity.pop * percentage);
         sourceCity.pop -= count;
         destCity.pop += count;
-
+        if (destCity.pop < BladeburnerConstants.PopGrowthCeiling) {
+          destCity.pop += BladeburnerConstants.BasePopGrowth;
+        }
         if (this.logging.events) {
           this.log(
             "Intelligence indicates that a Synthoid community migrated from " + sourceCityName + " to some other city",
@@ -961,6 +972,9 @@ export class Bladeburner {
       const percentage = getRandomInt(8, 24) / 100;
       const count = Math.round(sourceCity.pop * percentage);
       sourceCity.pop += count;
+      if (sourceCity.pop < BladeburnerConstants.PopGrowthCeiling) {
+        sourceCity.pop += BladeburnerConstants.BasePopGrowth;
+      }
       if (this.logging.events) {
         this.log(
           "Intelligence indicates that the Synthoid population of " + sourceCityName + " just changed significantly",
