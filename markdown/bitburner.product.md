@@ -29,6 +29,7 @@ interface Product
 |  [productionAmount](./bitburner.product.productionamount.md) |  | number | Amount of product produced last cycle |
 |  [productionCost](./bitburner.product.productioncost.md) |  | number | Production cost |
 |  [rating](./bitburner.product.rating.md) |  | number | Rating based on stats |
+|  [size](./bitburner.product.size.md) |  | number | How much warehouse space is occupied per unit of this product |
 |  [stats](./bitburner.product.stats.md) |  | { quality: number; performance: number; durability: number; reliability: number; aesthetics: number; features: number; } | Product stats |
 |  [stored](./bitburner.product.stored.md) |  | number | Amount of product stored in warehouse |
 
