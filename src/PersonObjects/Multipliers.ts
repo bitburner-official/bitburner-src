@@ -25,6 +25,8 @@ export interface Multipliers {
   work_money: number;
   crime_success: number;
   crime_money: number;
+  charity_success: number;
+  charity_money: number;
   bladeburner_max_stamina: number;
   bladeburner_stamina_gain: number;
   bladeburner_analysis: number;
@@ -59,6 +61,8 @@ export const defaultMultipliers = (): Multipliers => {
     work_money: 1,
     crime_success: 1,
     crime_money: 1,
+    charity_success: 1,
+    charity_money: 1,
     bladeburner_max_stamina: 1,
     bladeburner_stamina_gain: 1,
     bladeburner_analysis: 1,
@@ -94,6 +98,8 @@ export const mergeMultipliers = (m0: Multipliers, m1: Multipliers): Multipliers 
     work_money: m0.work_money * m1.work_money,
     crime_success: m0.crime_success * m1.crime_success,
     crime_money: m0.crime_money * m1.crime_money,
+    charity_success: m0.charity_success * m1.charity_success,
+    charity_money: m0.charity_money * m1.charity_money,
     bladeburner_max_stamina: m0.bladeburner_max_stamina * m1.bladeburner_max_stamina,
     bladeburner_stamina_gain: m0.bladeburner_stamina_gain * m1.bladeburner_stamina_gain,
     bladeburner_analysis: m0.bladeburner_analysis * m1.bladeburner_analysis,
@@ -129,6 +135,8 @@ export const scaleMultipliers = (m0: Multipliers, v: number): Multipliers => {
     work_money: (m0.work_money - 1) * v + 1,
     crime_success: (m0.crime_success - 1) * v + 1,
     crime_money: (m0.crime_money - 1) * v + 1,
+    charity_success: (m0.charity_success - 1) * v + 1,
+    charity_money: (m0.charity_money - 1) * v + 1,
     bladeburner_max_stamina: (m0.bladeburner_max_stamina - 1) * v + 1,
     bladeburner_stamina_gain: (m0.bladeburner_stamina_gain - 1) * v + 1,
     bladeburner_analysis: (m0.bladeburner_analysis - 1) * v + 1,

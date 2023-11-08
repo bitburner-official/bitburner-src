@@ -33,6 +33,7 @@ export enum FactionName {
   Bladeburners = "Bladeburners",
   ChurchOfTheMachineGod = "Church of the Machine God",
   ShadowsOfAnarchy = "Shadows of Anarchy",
+  Charity = "Charity",
 }
 
 export enum FactionDiscovery {

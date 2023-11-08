@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Sleeve } from "../Sleeve";
 import { Player } from "@player";
 import { Crimes } from "../../../Crime/Crimes";
+import { Charities } from "../../../Charity/Charities";
 import { CityName, FactionName, FactionWorkType, GymType, LocationName } from "@enums";
 import { Factions } from "../../../Faction/Factions";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -117,6 +118,7 @@ const tasks: {
   ["Work for Company"]: (sleeve: Sleeve) => ITaskDetails;
   ["Work for Faction"]: (sleeve: Sleeve) => ITaskDetails;
   ["Commit Crime"]: (sleeve: Sleeve) => ITaskDetails;
+  ["Perform Charity"]: (sleeve: Sleeve) => ITaskDetails;
   ["Take University Course"]: (sleeve: Sleeve) => ITaskDetails;
   ["Workout at Gym"]: (sleeve: Sleeve) => ITaskDetails;
   ["Perform Bladeburner Actions"]: (sleeve: Sleeve) => ITaskDetails;
@@ -158,6 +160,9 @@ const tasks: {
   },
   "Commit Crime": (): ITaskDetails => {
     return { first: Object.keys(Crimes), second: () => ["------"] };
+  },
+  "Perform Charity": (): ITaskDetails => {
+    return { first: Object.keys(Charities), second: () => ["------"] };
   },
   "Take University Course": (sleeve: Sleeve): ITaskDetails => {
     let universities: string[] = [];
@@ -223,6 +228,7 @@ const canDo: {
   ["Work for Company"]: (sleeve: Sleeve) => boolean;
   ["Work for Faction"]: (sleeve: Sleeve) => boolean;
   ["Commit Crime"]: (sleeve: Sleeve) => boolean;
+  ["Perform Charity"]: (sleeve: Sleeve) => boolean;
   ["Take University Course"]: (sleeve: Sleeve) => boolean;
   ["Workout at Gym"]: (sleeve: Sleeve) => boolean;
   ["Perform Bladeburner Actions"]: (sleeve: Sleeve) => boolean;
@@ -233,6 +239,7 @@ const canDo: {
   "Work for Company": (sleeve: Sleeve) => possibleJobs(sleeve).length > 0,
   "Work for Faction": (sleeve: Sleeve) => possibleFactions(sleeve).length > 0,
   "Commit Crime": () => true,
+  "Perform Charity": () => true,
   "Take University Course": (sleeve: Sleeve) =>
     [CityName.Aevum, CityName.Sector12, CityName.Volhaven].includes(sleeve.city),
   "Workout at Gym": (sleeve: Sleeve) => [CityName.Aevum, CityName.Sector12, CityName.Volhaven].includes(sleeve.city),
@@ -272,6 +279,8 @@ function getABC(sleeve: Sleeve): [string, string, string] {
     }
     case SleeveWorkType.CRIME:
       return ["Commit Crime", getEnumHelper("CrimeType").getMember(work.crimeType, { alwaysMatch: true }), "------"];
+    case SleeveWorkType.CHARITY:
+      return ["Perform Charity", getEnumHelper("CharityType").getMember(work.charityType, { alwaysMatch: true }), "------"];
     case SleeveWorkType.SUPPORT:
       return ["Perform Bladeburner Actions", "Support main sleeve", "------"];
     case SleeveWorkType.INFILTRATE:

@@ -11,6 +11,7 @@ export class MoneySourceTracker {
   codingcontract = 0;
   corporation = 0;
   crime = 0;
+  charity = 0;
   gang = 0;
   hacking = 0;
   hacknet = 0;

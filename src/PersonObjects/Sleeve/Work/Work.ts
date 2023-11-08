@@ -6,6 +6,7 @@ import { SleeveTask } from "@nsdefs";
 import { SleeveCompanyWork } from "./SleeveCompanyWork";
 import { SleeveFactionWork } from "./SleeveFactionWork";
 import { SleeveCrimeWork } from "./SleeveCrimeWork";
+import { SleeveCharityWork } from "./SleeveCharityWork";
 import { SleeveClassWork } from "./SleeveClassWork";
 import { SleeveRecoveryWork } from "./SleeveRecoveryWork";
 import { SleeveSynchroWork } from "./SleeveSynchroWork";
@@ -37,6 +38,7 @@ export enum SleeveWorkType {
   COMPANY = "COMPANY",
   FACTION = "FACTION",
   CRIME = "CRIME",
+  CHARITY = "CHARITY",
   CLASS = "CLASS",
   RECOVERY = "RECOVERY",
   SYNCHRO = "SYNCHRO",
@@ -49,6 +51,7 @@ export type SleeveWork =
   | SleeveCompanyWork
   | SleeveFactionWork
   | SleeveCrimeWork
+  | SleeveCharityWork
   | SleeveClassWork
   | SleeveRecoveryWork
   | SleeveSynchroWork

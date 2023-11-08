@@ -45,6 +45,12 @@ export class BitNodeMultipliers {
   /** Influences the base money gained when the player commits a crime. */
   CrimeMoney = 1;
 
+  /** Influences the base experience gained for each ability when the player commits a charity. */
+  CharityExpGain = 1;
+
+  /** Influences the base money gained when the player commits a charity. */
+  CharityMoney = 1;
+
   /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
   DaedalusAugsRequirement = 30;
 

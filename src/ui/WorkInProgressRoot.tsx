@@ -20,6 +20,7 @@ import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions
 import { filterTruthy } from "../utils/helpers/ArrayHelpers";
 
 import { isCrimeWork } from "../Work/CrimeWork";
+import { isCharityWork } from "../Work/CharityWork";
 import { isClassWork } from "../Work/ClassWork";
 import { WorkStats } from "../Work/WorkStats";
 import { isCreateProgramWork } from "../Work/CreateProgramWork";
@@ -181,6 +182,70 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
     ),
   ]);
 }
+function CharityExpRows(rate: WorkStats): React.ReactElement[] {
+  return filterTruthy([
+    rate.hackExp > 0 && (
+      <StatsRow
+        key="hack"
+        name="Hacking Exp"
+        color={Settings.theme.hack}
+        data={{
+          content: `${formatExp(rate.hackExp)}`,
+        }}
+      />
+    ),
+    rate.strExp > 0 && (
+      <StatsRow
+        key="str"
+        name="Strength Exp"
+        color={Settings.theme.combat}
+        data={{
+          content: `${formatExp(rate.strExp)}`,
+        }}
+      />
+    ),
+    rate.defExp > 0 && (
+      <StatsRow
+        key="def"
+        name="Defense Exp"
+        color={Settings.theme.combat}
+        data={{
+          content: `${formatExp(rate.defExp)}`,
+        }}
+      />
+    ),
+    rate.dexExp > 0 && (
+      <StatsRow
+        key="dex"
+        name="Dexterity Exp"
+        color={Settings.theme.combat}
+        data={{
+          content: `${formatExp(rate.dexExp)}`,
+        }}
+      />
+    ),
+    rate.agiExp > 0 && (
+      <StatsRow
+        key="agi"
+        name="Agility Exp"
+        color={Settings.theme.combat}
+        data={{
+          content: `${formatExp(rate.agiExp)}`,
+        }}
+      />
+    ),
+    rate.chaExp > 0 && (
+      <StatsRow
+        key="cha"
+        name="Charisma Exp"
+        color={Settings.theme.cha}
+        data={{
+          content: `${formatExp(rate.chaExp)}`,
+        }}
+      />
+    ),
+  ]);
+}
 
 export function WorkInProgressRoot(): React.ReactElement {
   useRerender(CONSTANTS.MilliPerCycle);
@@ -236,6 +301,47 @@ export function WorkInProgressRoot(): React.ReactElement {
       },
 
       stopText: "Stop committing crime",
+    };
+  }
+
+  if (isCharityWork(Player.currentWork)) {
+    const charity = Player.currentWork.getCharity();
+    const completion = (Player.currentWork.unitCompleted / charity.time) * 100;
+    const gains = Player.currentWork.earnings();
+    const successChance = charity.successRate(Player);
+    workInfo = {
+      buttons: {
+        cancel: () => {
+          Router.toPage(Page.Location, { location: Locations[LocationName.Slums] });
+          Player.finishWork(true);
+        },
+        unfocus: () => {
+          Router.toPage(Page.City);
+          Player.stopFocusing();
+        },
+      },
+      title: `You are attempting ${charity.workName}`,
+
+      gains: [
+        <tr key="header">
+          <td>
+            <Typography>Success chance: {formatPercent(successChance)}</Typography>
+            <Typography>Gains (on success)</Typography>
+          </td>
+        </tr>,
+        <StatsRow key="money" name="Money:" color={Settings.theme.money}>
+          <Typography>
+            <Money money={gains.money} />
+          </Typography>
+        </StatsRow>,
+        ...CharityExpRows(gains),
+      ],
+      progress: {
+        remaining: charity.time - Player.currentWork.unitCompleted,
+        percentage: completion,
+      },
+
+      stopText: "Stop committing charitable acts",
     };
   }
 

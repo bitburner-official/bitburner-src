@@ -8,7 +8,7 @@ import { Player } from "@player";
 import { useRerender } from "../../ui/React/hooks";
 
 // Update as additional BitNodes get implemented
-const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15];
 const useStyles = makeStyles({
   group: {
     display: "inline-flex",

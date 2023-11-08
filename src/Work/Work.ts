@@ -19,6 +19,7 @@ export abstract class Work {
 
 export enum WorkType {
   CRIME = "CRIME",
+  CHARITY = "CHARITY",
   CLASS = "CLASS",
   CREATE_PROGRAM = "CREATE_PROGRAM",
   GRAFTING = "GRAFTING",

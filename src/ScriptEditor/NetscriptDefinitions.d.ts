@@ -46,6 +46,7 @@ interface Person {
 interface Player extends Person {
   money: number;
   numPeopleKilled: number;
+  numPeopleSaved: number;
   entropy: number;
   jobs: Partial<Record<CompanyName, JobName>>;
   factions: string[];
@@ -88,6 +89,7 @@ interface MoneySource {
   codingcontract: number;
   corporation: number;
   crime: number;
+  charity: number;
   gang: number;
   hacking: number;
   hacknet: number;
@@ -151,6 +153,10 @@ interface Multipliers {
   crime_money: number;
   /** Multiplier to crime success rate */
   crime_success: number;
+  /** Multiplier to amount of money gained from charities */
+  charity_money: number;
+  /** Multiplier to charity success rate */
+  charity_success: number;
   /** Multiplier to amount of money gained from working */
   work_money: number;
   /** Multiplier to amount of money produced by Hacknet Nodes */
@@ -335,6 +341,51 @@ interface CrimeStats {
   /** charisma exp gained from crime */
   charisma_exp: number;
   /** intelligence exp gained from crime */
+  intelligence_exp: number;
+}
+
+/**
+ * Data representing the internal values of a charity.
+ * @public
+ */
+interface CharityStats {
+  /** Number representing the difficulty of the charity. Used for success chance calculations */
+  difficulty: number;
+  /** Amount of karma gained for successfully committing this charity */
+  karma: number;
+  /** How many people die as a result of this charity */
+  saves: number;
+  /** How much money is given */
+  money: number;
+  /** Milliseconds it takes to attempt the charity */
+  time: number;
+  /** Description of the charity activity */
+  type: string;
+  /** hacking level impact on success change of the charity */
+  hacking_success_weight: number;
+  /** strength level impact on success change of the charity */
+  strength_success_weight: number;
+  /** defense level impact on success change of the charity */
+  defense_success_weight: number;
+  /** dexterity level impact on success change of the charity */
+  dexterity_success_weight: number;
+  /** agility level impact on success change of the charity */
+  agility_success_weight: number;
+  /** charisma level impact on success change of the charity */
+  charisma_success_weight: number;
+  /** hacking exp gained from charity */
+  hacking_exp: number;
+  /** strength exp gained from charity */
+  strength_exp: number;
+  /** defense exp gained from charity */
+  defense_exp: number;
+  /** dexterity exp gained from charity */
+  dexterity_exp: number;
+  /** agility exp gained from charity */
+  agility_exp: number;
+  /** charisma exp gained from charity */
+  charisma_exp: number;
+  /** intelligence exp gained from charity */
   intelligence_exp: number;
 }
 
@@ -648,6 +699,10 @@ interface BitNodeMultipliers {
   CrimeExpGain: number;
   /** Influences the base money gained when the player commits a crime. */
   CrimeMoney: number;
+  /** Influences the base experience gained for each ability when the player commits a charity. */
+  CharityExpGain: number;
+  /** Influences the base money gained when the player commits a charity. */
+  CharityMoney: number;
   /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
   DaedalusAugsRequirement: number;
   /** Influences how quickly the player's defense level (not exp) scales */
@@ -1007,6 +1062,14 @@ type SleeveCrimeTask = {
 };
 
 /** @public */
+type SleeveCharityTask = {
+  type: "CHARITY";
+  charityType: CharityType | `${CharityType}`;
+  cyclesWorked: number;
+  cyclesNeeded: number;
+};
+
+/** @public */
 type SleeveFactionTask = {
   type: "FACTION";
   factionWorkType: FactionWorkType | `${FactionWorkType}`;
@@ -1032,6 +1095,7 @@ export type SleeveTask =
   | SleeveClassTask
   | SleeveCompanyTask
   | SleeveCrimeTask
+  | SleeveCharityTask
   | SleeveFactionTask
   | SleeveInfiltrateTask
   | SleeveRecoveryTask
@@ -2153,6 +2217,55 @@ export interface Singularity {
    * @returns The stats of the crime.
    */
   getCrimeStats(crime: CrimeType | `${CrimeType}`): CrimeStats;
+
+  /**
+   * Commit a charitable act.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   *
+   * This function is used to automatically attempt to commit charitable acts.
+   * If you are already in the middle of some ‘working’ action (such
+   * as working for a company or training at a gym), then running this
+   * function will automatically cancel that action and give you your
+   * earnings.
+   *
+   * This function returns the number of milliseconds it takes to attempt the
+   * specified charity (e.g. It takes 60 seconds to attempt the ‘Stop a Robery’ charity,
+   * so running `commitCharity('Stop a Robery')` will return 60,000).
+   *
+   * @param charity - Name of charity to attempt.
+   * @param focus - Acquire player focus on this charity. Optional. Defaults to true.
+   * @returns The number of milliseconds it takes to attempt the specified charity.
+   */
+  commitCharity(charity: CharityType | `${CharityType}`, focus?: boolean): number;
+
+  /**
+   * Get chance to successfully commit a charitable action.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   *
+   * This function returns your chance of success at committing the specified charitable action.
+   *
+   * @param charity - Name of charity.
+   * @returns Chance of success at committing the specified charity.
+   */
+  getCharityChance(charity: CharityType | `${CharityType}`): number;
+
+  /**
+   * Get stats related to a charity.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   *
+   * Returns the stats of the charity.
+   *
+   * @param charity - Name of charity.
+   * @returns The stats of the charity.
+   */
+  getCharityStats(charity: CharityType | `${CharityType}`): CharityStats;
+
 
   /**
    * Get a list of owned augmentation.
@@ -3896,6 +4009,29 @@ export interface Sleeve {
   setToCommitCrime(sleeveNumber: number, crimeType: CrimeType | `${CrimeType}`): boolean;
 
   /**
+   * Set a sleeve to commit a charitable act.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Return a boolean indicating whether or not this action was set successfully (false if an invalid action is specified).
+   *
+   * @example
+   * ```ts
+   * // Assigns the first sleeve to Homicide.
+   * ns.sleeve.setToCommitCharity(0, "help police");
+   *
+   * // Assigns the second sleeve to Give Back, using enum
+   * const charities = ns.enums.CharityType;
+   * ns.sleeve.setToCommitCharity(1, charities.giveBack)
+   * ```
+   *
+   * @param sleeveNumber - Index of the sleeve to start committing a charitable act. Sleeves are numbered starting from 0.
+   * @param charityType - Name of the charity.
+   * @returns True if this action was set successfully, false otherwise.
+   */
+  setToCommitCharity(sleeveNumber: number, charityType: CharityType | `${CharityType}`): boolean;
+
+  /**
    * Set a sleeve to work for a faction.
    * @remarks
    * RAM cost: 4 GB
@@ -4138,6 +4274,9 @@ interface WorkFormulas {
   crimeSuccessChance(person: Person, crimeType: CrimeType | `${CrimeType}`): number;
   /** @returns The WorkStats gained when completing one instance of the specified crime. */
   crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
+  charitySuccessChance(person: Person, charityType: CharityType | `${CharityType}`): number;
+  /** @returns The WorkStats gained when completing one instance of the specified charity. */
+  charityGains(person: Person, charityType: CharityType | `${CharityType}`): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by taking the specified gym class. */
   gymGains(person: Person, gymType: GymType | `${GymType}`, locationName: string): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by taking the specified university class. */
@@ -6909,6 +7048,20 @@ declare enum CrimeType {
 }
 
 /** @public */
+declare enum CharityType {
+  stopRobery = "Stop a Robery",
+  hugSomeoneInNeed = "Hug someone in need",
+  helpPolice = "Help Police",
+  workAtSoupKitchen = "Work at a soup kitchen",
+  reportDrugDeal = "Report drug deal",
+  payItForward = "Pay it forward",
+  patroleTheStreets = "Patrole the streets",
+  giveBack = "Give back",
+  takeKnife = "Take a knife",
+  holdFundRaiser = "Hold a fund raiser",
+}
+
+/** @public */
 declare enum FactionWorkType {
   hacking = "hacking",
   field = "field",
@@ -7071,6 +7224,7 @@ declare enum LocationName {
   Sector12PowerhouseGym = "Powerhouse Gym",
   Sector12RothmanUniversity = "Rothman University",
   Sector12UniversalEnergy = "Universal Energy",
+  Sector12LotteryStore = "Lottery Store",
 
   NewTokyoDefComm = "DefComm",
   NewTokyoGlobalPharmaceuticals = "Global Pharmaceuticals",
@@ -7148,6 +7302,7 @@ declare enum CompanyName {
 export type NSEnums = {
   CityName: typeof CityName;
   CrimeType: typeof CrimeType;
+  CharityType: typeof CharityType;
   FactionWorkType: typeof FactionWorkType;
   GymType: typeof GymType;
   JobName: typeof JobName;

@@ -110,6 +110,15 @@ function getRandomBonus(): CircadianBonus {
         "Increases the player's crime success rate by 100%.\n" +
         "Increases the amount of money the player gains from crimes by 100%.",
     },
+    {
+      bonuses: {
+        charity_success: 2,
+        charity_money: 2,
+      },
+      description:
+        "Increases the player's charity success rate by 100%.\n" +
+        "Increases the amount of money the player gains from charity by 100%.",
+    },
   ];
 
   const randomNumber = new WHRNG(Math.floor(Date.now() / 3600000));

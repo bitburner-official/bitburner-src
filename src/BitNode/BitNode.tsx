@@ -445,6 +445,29 @@ export function initBitNodes() {
       </>
     ),
   );
+  BitNodes.BitNode15 = new BitNode(
+    15,
+    2,
+    "Please help us!",
+    "The downfall of greed",
+    (
+      <>
+        Test blurb{" "}
+        {FactionName.ChurchOfTheMachineGod} has rallied far more support than anyone would have hoped.
+        <br />
+        <br />
+        More blurb {CityName.Chongqing} and gain her trust.
+        <br />
+        <br />
+        Destroying this BitNode will give you Source-File 15, or if you already have this Source-File it will upgrade
+        its level up to a maximum of 3. This Source-File lets the {FactionName.ChurchOfTheMachineGod} appear in other
+        BitNodes.
+        <br />
+        <br />
+        Each level of this Source-File increases the size of Stanek's Gift.
+      </>
+    ),
+  );
 }
 
 export const defaultMultipliers = new BitNodeMultipliers();
@@ -863,6 +886,53 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
       });
     }
     case 13: {
+      return new BitNodeMultipliers({
+        HackingLevelMultiplier: 0.25,
+        StrengthLevelMultiplier: 0.7,
+        DefenseLevelMultiplier: 0.7,
+        DexterityLevelMultiplier: 0.7,
+        AgilityLevelMultiplier: 0.7,
+
+        PurchasedServerSoftcap: 1.6,
+
+        ServerMaxMoney: 0.3375,
+        ServerStartingMoney: 0.75,
+        ServerStartingSecurity: 3,
+
+        CompanyWorkMoney: 0.4,
+        CrimeMoney: 0.4,
+        HacknetNodeMoney: 0.4,
+        ScriptHackMoney: 0.2,
+        CodingContractMoney: 0.4,
+
+        ClassGymExpGain: 0.5,
+        CompanyWorkExpGain: 0.5,
+        CrimeExpGain: 0.5,
+        FactionWorkExpGain: 0.5,
+        HackExpGain: 0.1,
+
+        FactionWorkRepGain: 0.6,
+
+        FourSigmaMarketDataCost: 10,
+        FourSigmaMarketDataApiCost: 10,
+
+        CorporationValuation: 0.001,
+        CorporationSoftcap: 0.4,
+        CorporationDivisions: 0.4,
+
+        BladeburnerRank: 0.45,
+        BladeburnerSkillCost: 2,
+
+        GangSoftcap: 0.3,
+        GangUniqueAugs: 0.1,
+
+        StaneksGiftPowerMultiplier: 2,
+        StaneksGiftExtraSize: 1,
+
+        WorldDaemonDifficulty: 3,
+      });
+    }
+    case 15: {
       return new BitNodeMultipliers({
         HackingLevelMultiplier: 0.25,
         StrengthLevelMultiplier: 0.7,

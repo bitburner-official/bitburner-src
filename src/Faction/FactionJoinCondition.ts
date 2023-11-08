@@ -88,12 +88,23 @@ export const haveAugmentations = (n: number): JoinCondition => ({
   },
 });
 
+
+
 export const haveMoney = (n: number): JoinCondition => ({
   toString(): string {
     return `Have ${formatMoney(n)}`;
   },
   isSatisfied(p: PlayerObject): boolean {
     return p.money >= n;
+  },
+});
+
+export const haveCharity = (): JoinCondition => ({
+  toString(): string {
+    return `Have a Charity`;
+  },
+  isSatisfied(p: PlayerObject): boolean {
+    return p.charityORG ? true : false;
   },
 });
 
