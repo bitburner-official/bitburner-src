@@ -2,6 +2,7 @@ import type { Player as IPlayer } from "@nsdefs";
 import type { PlayerAchievement } from "../../Achievements/Achievements";
 import type { Bladeburner } from "../../Bladeburner/Bladeburner";
 import type { Corporation } from "../../Corporation/Corporation";
+import type { CharityORG } from "../../CharityORG/CharityORG";
 import type { Exploit } from "../../Exploits/Exploit";
 import type { Gang } from "../../Gang/Gang";
 import type { HacknetNode } from "../../Hacknet/HacknetNode";
@@ -11,6 +12,7 @@ import type { Work } from "../../Work/Work";
 import * as augmentationMethods from "./PlayerObjectAugmentationMethods";
 import * as bladeburnerMethods from "./PlayerObjectBladeburnerMethods";
 import * as corporationMethods from "./PlayerObjectCorporationMethods";
+import * as charityMethods from "./PlayerObjectCharityMethods";
 import * as gangMethods from "./PlayerObjectGangMethods";
 import * as generalMethods from "./PlayerObjectGeneralMethods";
 import * as serverMethods from "./PlayerObjectServerMethods";
@@ -33,6 +35,7 @@ export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
   bitNodeN = 1; //current bitnode
   corporation: Corporation | null = null;
+  charityORG: CharityORG | null = null;
   gang: Gang | null = null;
   bladeburner: Bladeburner | null = null;
   currentServer = "";
@@ -48,6 +51,7 @@ export class PlayerObject extends Person implements IPlayer {
   jobs: PartialRecord<CompanyName, JobName> = {};
   karma = 0;
   numPeopleKilled = 0;
+  numPeopleSaved = 0;
   location = LocationName.TravelAgency;
   money = 1000 + CONSTANTS.Donations;
   moneySourceA = new MoneySourceTracker();
@@ -82,6 +86,7 @@ export class PlayerObject extends Person implements IPlayer {
   applyForJob = generalMethods.applyForJob;
   canAccessBladeburner = bladeburnerMethods.canAccessBladeburner;
   canAccessCorporation = corporationMethods.canAccessCorporation;
+  canAccessCharity = charityMethods.canAccessCharity;
   canAccessGang = gangMethods.canAccessGang;
   canAccessGrafting = generalMethods.canAccessGrafting;
   canAfford = generalMethods.canAfford;
@@ -107,6 +112,7 @@ export class PlayerObject extends Person implements IPlayer {
   setMoney = generalMethods.setMoney;
   startBladeburner = bladeburnerMethods.startBladeburner;
   startCorporation = corporationMethods.startCorporation;
+  startCharity = charityMethods.startCharity;
   startFocusing = generalMethods.startFocusing;
   startGang = gangMethods.startGang;
   takeDamage = generalMethods.takeDamage;

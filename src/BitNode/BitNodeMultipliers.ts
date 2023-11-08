@@ -36,9 +36,6 @@ export class BitNodeMultipliers {
   /** Influences how much money the player earns when completing working their job. */
   CompanyWorkMoney = 1;
 
-  /** Influences how much rep the player gains when performing work for a company. */
-  CompanyWorkRepGain = 1;
-
   /** Influences the valuation of corporations created by the player. */
   CorporationValuation = 1;
 
@@ -48,8 +45,11 @@ export class BitNodeMultipliers {
   /** Influences the base money gained when the player commits a crime. */
   CrimeMoney = 1;
 
-  /** influences the success chance of committing crimes */
-  CrimeSuccessRate = 1;
+  /** Influences the base experience gained for each ability when the player commits a charity. */
+  CharityExpGain = 1;
+
+  /** Influences the base money gained when the player commits a charity. */
+  CharityMoney = 1;
 
   /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
   DaedalusAugsRequirement = 30;
@@ -81,17 +81,11 @@ export class BitNodeMultipliers {
   /** Percentage of unique augs that the gang has. */
   GangUniqueAugs = 1;
 
-  /** Percentage multiplier on the effect of the IPvGO rewards  **/
-  GoPower = 1;
-
   /** Influences the experienced gained when hacking a server. */
   HackExpGain = 1;
 
   /** Influences how quickly the player's hacking level (not experience) scales */
   HackingLevelMultiplier = 1;
-
-  /** Influences how quickly the player's hack(), grow() and weaken() calls run */
-  HackingSpeedMultiplier = 1;
 
   /**
    * Influences how much money is produced by Hacknet Nodes.

@@ -165,7 +165,7 @@ Cities[CityName.Sector12].asciiArt = `
           |                                 /                                   
           B [blade industries]             H                                    
           |                               / [four sigma]                        
-          |      [joe's guns]            /                                      
+          |      [joe's guns]            /                [lotto store] U                      
           |                             /                                       
        85 o--G--------K--------S-------o 88                [the slums] R        
                                                                                 

@@ -20,6 +20,7 @@ import {
   ClassType,
   CityName,
   CrimeType,
+  CharityType,
   FactionWorkType,
   GymType,
   LocationName,
@@ -41,6 +42,7 @@ import { SleeveInfiltrateWork } from "./Work/SleeveInfiltrateWork";
 import { SleeveSupportWork } from "./Work/SleeveSupportWork";
 import { SleeveBladeburnerWork } from "./Work/SleeveBladeburnerWork";
 import { SleeveCrimeWork } from "./Work/SleeveCrimeWork";
+import { SleeveCharityWork } from "./Work/SleeveCharityWork";
 import * as sleeveMethods from "./SleeveMethods";
 import { calculateIntelligenceBonus } from "../formulas/intelligence";
 import { getEnumHelper } from "../../utils/EnumHelper";
@@ -99,6 +101,12 @@ export class Sleeve extends Person implements SleevePerson {
   /** Commit crimes */
   commitCrime(type: CrimeType) {
     this.startWork(new SleeveCrimeWork(type));
+    return true;
+  }
+
+  /** Commit charitable acts */
+  commitCharity(type: CharityType) {
+    this.startWork(new SleeveCharityWork(type));
     return true;
   }
 

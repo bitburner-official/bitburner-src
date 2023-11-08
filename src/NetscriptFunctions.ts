@@ -17,6 +17,7 @@ import {
   CityName,
   CompletedProgramName,
   CrimeType,
+  CharityType,
   FactionWorkType,
   GymType,
   JobName,
@@ -113,6 +114,7 @@ import { assertFunction } from "./Netscript/TypeAssertion";
 export const enums: NSEnums = {
   CityName,
   CrimeType,
+  CharityType,
   FactionWorkType,
   GymType,
   JobName,
@@ -1678,6 +1680,7 @@ export const ns: InternalAPI<NSFull> = {
       city: Player.city,
       // Player-specific
       numPeopleKilled: Player.numPeopleKilled,
+      numPeopleSaved: Player.numPeopleSaved,
       money: Player.money,
       location: Player.location,
       totalPlaytime: Player.totalPlaytime,

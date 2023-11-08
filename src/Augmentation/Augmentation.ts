@@ -40,6 +40,8 @@ export interface AugmentationCtorParams {
   faction_rep?: number;
   crime_money?: number;
   crime_success?: number;
+  charity_money?: number;
+  charity_success?: number;
   work_money?: number;
   hacknet_node_money?: number;
   hacknet_node_purchase_cost?: number;
@@ -136,6 +138,8 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
 
   if (mults.crime_money !== 1) desc += `\n+${f(mults.crime_money - 1)} crime money`;
   if (mults.crime_success !== 1) desc += `\n+${f(mults.crime_success - 1)} crime success rate`;
+  if (mults.charity_money !== 1) desc += `\n+${f(mults.charity_money - 1)} charity money`;
+  if (mults.charity_success !== 1) desc += `\n+${f(mults.charity_success - 1)} charity success rate`;
   if (mults.work_money !== 1) desc += `\n+${f(mults.work_money - 1)} work money`;
 
   // Hacknet: costs are negative

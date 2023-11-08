@@ -49,6 +49,7 @@ import { repFromDonation } from "../Faction/formulas/donation";
 import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
+import { calculateCharityWorkStats } from "../Work/Formulas";
 import { calculateCompanyWorkStats } from "../Work/Formulas";
 import { Companies } from "../Company/Companies";
 import { calculateClassEarnings } from "../Work/Formulas";
@@ -59,6 +60,7 @@ import { findEnumMember } from "../utils/helpers/enum";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { findCrime } from "../Crime/CrimeHelpers";
+import { findCharity } from "../Charity/CharityHelpers";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
@@ -102,6 +104,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       city: CityName.Sector12,
       // Player-specific
       numPeopleKilled: 0,
+      numPeopleSaved: 0,
       money: 0,
       location: LocationName.TravelAgency,
       totalPlaytime: 0,
@@ -386,6 +389,20 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const crime = findCrime(helpers.string(ctx, "crimeType", _crimeType));
         if (!crime) throw new Error(`Invalid crime type: ${_crimeType}`);
         return calculateCrimeWorkStats(person, crime);
+      },
+      charitySuccessChance: (ctx) => (_person, _charityType) => {
+        checkFormulasAccess(ctx);
+        const person = helpers.person(ctx, _person);
+        const charity = findCharity(helpers.string(ctx, "charityType", _charityType));
+        if (!charity) throw new Error(`Invalid charity type: ${_charityType}`);
+        return charity.successRate(person);
+      },
+      charityGains: (ctx) => (_person, _charityType) => {
+        checkFormulasAccess(ctx);
+        const person = helpers.person(ctx, _person);
+        const charity = findCharity(helpers.string(ctx, "charityType", _charityType));
+        if (!charity) throw new Error(`Invalid charity type: ${_charityType}`);
+        return calculateCharityWorkStats(person, charity);
       },
       gymGains: (ctx) => (_person, _classType, _locationName) => {
         checkFormulasAccess(ctx);

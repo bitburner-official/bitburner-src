@@ -95,7 +95,7 @@ export function initBitNodes() {
   );
   BitNodes.BitNode3 = new BitNode(
     3,
-    2,
+    0,
     "Corporatocracy",
     "The Price of Civilization",
     (
@@ -445,38 +445,26 @@ export function initBitNodes() {
       </>
     ),
   );
-  BitNodes.BitNode14 = new BitNode(
-    14,
-    1,
-    "IPvGO Subnet Takeover",
-    "Territory exists only in the 'net",
+  BitNodes.BitNode15 = new BitNode(
+    15,
+    2,
+    "Please help us!",
+    "The downfall of greed",
     (
       <>
-        In late 2070, the .org bubble burst, and most of the newly-implemented IPvGO 'net collapsed overnight. Since
-        then, various factions have been fighting over small subnets to control their computational power. These subnets
-        are very valuable in the right hands, if you can wrest them from their current owners. You will be opposed by
-        the other factions, but you can overcome them with careful choices. Prevent their attempts to destroy your
-        networks by controlling the open space in the 'net!
+        Test blurb{" "}
+        {FactionName.ChurchOfTheMachineGod} has rallied far more support than anyone would have hoped.
         <br />
         <br />
-        Destroying this BitNode will give you Source-File 14, or if you already have this Source-File it will upgrade
-        its level up to a maximum of 3. This Source-File grants the following benefits:
+        More blurb {CityName.Chongqing} and gain her trust.
         <br />
         <br />
-        Level 1: 25% increased stat multipliers from Node Power
-        <br />
-        Level 2: Permanently unlocks the go.cheat API
-        <br />
-        Level 3: 25% increased success rate for the go.cheat API
+        Destroying this BitNode will give you Source-File 15, or if you already have this Source-File it will upgrade
+        its level up to a maximum of 3. This Source-File lets the {FactionName.ChurchOfTheMachineGod} appear in other
+        BitNodes.
         <br />
         <br />
-        This Source-File also increases the maximum favor you can gain for each faction from IPvGO by:
-        <br />
-        Level 1: +10
-        <br />
-        Level 2: +20
-        <br />
-        Level 3: +40
+        Each level of this Source-File increases the size of Stanek's Gift.
       </>
     ),
   );
@@ -944,47 +932,51 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         WorldDaemonDifficulty: 3,
       });
     }
-    case 14: {
+    case 15: {
       return new BitNodeMultipliers({
-        GoPower: 4,
+        HackingLevelMultiplier: 0.25,
+        StrengthLevelMultiplier: 0.7,
+        DefenseLevelMultiplier: 0.7,
+        DexterityLevelMultiplier: 0.7,
+        AgilityLevelMultiplier: 0.7,
 
-        HackingLevelMultiplier: 0.4,
-        HackingSpeedMultiplier: 0.3,
+        PurchasedServerSoftcap: 1.6,
 
-        ServerMaxMoney: 0.7,
-        ServerStartingMoney: 0.5,
-        ServerStartingSecurity: 1.5,
+        ServerMaxMoney: 0.3375,
+        ServerStartingMoney: 0.75,
+        ServerStartingSecurity: 3,
 
-        CrimeMoney: 0.75,
-        CrimeSuccessRate: 0.4,
-        HacknetNodeMoney: 0.25,
-        ScriptHackMoney: 0.3,
+        CompanyWorkMoney: 0.4,
+        CrimeMoney: 0.4,
+        HacknetNodeMoney: 0.4,
+        ScriptHackMoney: 0.2,
+        CodingContractMoney: 0.4,
 
-        StrengthLevelMultiplier: 0.5,
-        DexterityLevelMultiplier: 0.5,
-        AgilityLevelMultiplier: 0.5,
+        ClassGymExpGain: 0.5,
+        CompanyWorkExpGain: 0.5,
+        CrimeExpGain: 0.5,
+        FactionWorkExpGain: 0.5,
+        HackExpGain: 0.1,
 
-        AugmentationMoneyCost: 1.5,
+        FactionWorkRepGain: 0.6,
 
-        InfiltrationMoney: 0.75,
+        FourSigmaMarketDataCost: 10,
+        FourSigmaMarketDataApiCost: 10,
 
-        FactionWorkRepGain: 0.2,
-        CompanyWorkRepGain: 0.2,
+        CorporationValuation: 0.001,
+        CorporationSoftcap: 0.4,
+        CorporationDivisions: 0.4,
 
-        CorporationValuation: 0.4,
-        CorporationSoftcap: 0.9,
-        CorporationDivisions: 0.8,
-
-        BladeburnerRank: 0.6,
+        BladeburnerRank: 0.45,
         BladeburnerSkillCost: 2,
 
-        GangSoftcap: 0.7,
-        GangUniqueAugs: 0.4,
+        GangSoftcap: 0.3,
+        GangUniqueAugs: 0.1,
 
-        StaneksGiftPowerMultiplier: 0.5,
-        StaneksGiftExtraSize: -1,
+        StaneksGiftPowerMultiplier: 2,
+        StaneksGiftExtraSize: 1,
 
-        WorldDaemonDifficulty: 5,
+        WorldDaemonDifficulty: 3,
       });
     }
     default: {

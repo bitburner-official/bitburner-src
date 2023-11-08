@@ -148,6 +148,9 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
     if (src.crime) {
       parts.push([`Crimes:`, <Money key="crime" money={src.crime} />]);
     }
+    if (src.charity) {
+      parts.push([`Charities:`, <Money key="charity" money={src.charity} />]);
+    }
     if (src.gang) {
       parts.push([`Gang:`, <Money key="gang" money={src.gang} />]);
     }
@@ -529,6 +532,21 @@ export function CharacterStats(): React.ReactElement {
                   mult: "Crime Money",
                   value: Player.mults.crime_money,
                   effValue: Player.mults.crime_money * currentNodeMults.CrimeMoney,
+                  color: Settings.theme.money,
+                },
+              ]}
+              color={Settings.theme.combat}
+            />
+            <MultiplierTable
+              rows={[
+                {
+                  mult: "Charity Success Chance",
+                  value: Player.mults.charity_success,
+                },
+                {
+                  mult: "Charity Money",
+                  value: Player.mults.charity_money,
+                  effValue: Player.mults.charity_money * currentNodeMults.CharityMoney,
                   color: Settings.theme.money,
                 },
               ]}

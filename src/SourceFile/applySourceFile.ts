@@ -39,6 +39,8 @@ export function applySourceFile(bn: number, lvl: number): void {
       Player.mults.faction_rep *= incMult;
       Player.mults.crime_money *= incMult;
       Player.mults.crime_success *= incMult;
+      Player.mults.charity_money *= incMult;
+      Player.mults.charity_success *= incMult;
       Player.mults.hacknet_node_money *= incMult;
       Player.mults.hacknet_node_purchase_cost *= decMult;
       Player.mults.hacknet_node_ram_cost *= decMult;

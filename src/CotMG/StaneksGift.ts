@@ -198,6 +198,10 @@ export class StaneksGift extends BaseGift {
           mults.crime_success *= power;
           mults.crime_money *= power;
           break;
+        case FragmentType.Charity:
+          mults.charity_success *= power;
+          mults.charity_money *= power;
+          break;
         case FragmentType.Bladeburner:
           mults.bladeburner_max_stamina *= power;
           mults.bladeburner_stamina_gain *= power;

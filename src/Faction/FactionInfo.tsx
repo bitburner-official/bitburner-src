@@ -15,6 +15,7 @@ import {
   notEmployedBy,
   haveAugmentations,
   haveMoney,
+  haveCharity,
   haveSkill,
   haveCombatSkills,
   haveKarma,
@@ -702,6 +703,31 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
           buttonText={"Open Bladeburner headquarters"}
           infoText={"You can gain reputation with bladeburner by completing contracts and operations."}
           onClick={() => Router.toPage(Page.Bladeburner)}
+        />
+      );
+    },
+  }),
+
+  [FactionName.Charity]: new FactionInfo({
+    infoText: (
+      <>
+        To help those in need - that is our motto.
+        <br />
+        <br />
+        Note that for this faction, reputation can only be gained through charitable actions.
+        Visit City Hall in Sector-12 for more information.
+      </>
+    ),
+    rumorText: <>Sector-12 City hall has need of your talents.</>,
+    inviteReqs: [haveSourceFile(15), haveCharity()],
+    rumorReqs: [haveSourceFile(15)],
+    special: true,
+    assignment: (): React.ReactElement => {
+      return (
+        <Option
+          buttonText={"Open Charity"}
+          infoText={"You can gain reputation with charity by completing charitable actions through your charity."}
+          onClick={() => Router.toPage(Page.CharityORG)}
         />
       );
     },
