@@ -12,6 +12,7 @@ export function startCorporation(this: PlayerObject, corpName: string, seedFunde
   this.corporation = new Corporation({
     name: corpName,
     seedFunded: seedFunded,
+    shareSaleCooldown: this.corporation?.shareSaleCooldown,
   });
   //reset the research tree in case the corporation was restarted
   resetIndustryResearchTrees();
