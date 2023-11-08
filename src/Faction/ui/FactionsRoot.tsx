@@ -251,7 +251,7 @@ export function FactionsRoot(): React.ReactElement {
           },
         }}
       >
-        <span>
+        <span className="factions-invites">
           {invitations.length > 0 && (
             <>
               <Typography variant="h5" color="primary">
@@ -264,22 +264,9 @@ export function FactionsRoot(): React.ReactElement {
               </Box>
             </>
           )}
-
-          {Player.factionRumors.size > 0 && (
-            <>
-              <Typography variant="h5" color="primary">
-                Rumors
-              </Typography>
-              <div style={{ display: "grid", gap: 1, gridAutoRows: "minmax(70px, auto)" }}>
-                {[...Player.factionRumors].map((factionName) => (
-                  <FactionElement key={factionName} faction={Factions[factionName]} rerender={rerender} />
-                ))}
-              </div>
-            </>
-          )}
         </span>
 
-        <span>
+        <span className="factions-joined">
           {Player.inGang() && (
             <>
               <Typography variant="h5" color="primary">
@@ -305,6 +292,20 @@ export function FactionsRoot(): React.ReactElement {
           </Box>
         </span>
       </Box>
+      <span className="factions-rumors">
+        {Player.factionRumors.size > 0 && (
+          <>
+            <Typography variant="h5" color="primary">
+              Rumors
+            </Typography>
+            <Box style={{ display: "grid", gap: 1, gridAutoRows: "minmax(70px, auto)" }}>
+              {[...Player.factionRumors].map((factionName) => (
+                <FactionElement key={factionName} faction={Factions[factionName]} rerender={rerender} />
+              ))}
+            </Box>
+          </>
+        )}
+      </span>
     </Container>
   );
 }
