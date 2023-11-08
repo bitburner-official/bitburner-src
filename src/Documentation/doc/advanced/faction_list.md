@@ -4,7 +4,7 @@
 
 | Faction Name       | Requirements                                                                                                            |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| CyberSec           | \* Install a backdoor on the CSEC server                                                                                |
+| CyberSec           | \* Install a backdoor on the `CSEC` server                                                                              |
 | Tian Di Hui        | \* $1m<br />\* Hacking Level 50<br />\* Be in Chongqing, New Tokyo, or Ishima                                           |
 | Netburners         | \* Hacking Level 80<br />\* Total Hacknet Levels of 100<br />\* Total Hacknet RAM of 8<br />\* Total Hacknet Cores of 4 |
 | Shadows of Anarchy | \* Successfully infiltrate a company                                                                                    |
@@ -22,12 +22,12 @@
 
 ### Hacking Groups
 
-| Faction Name   | Requirements                                       |
-| -------------- | -------------------------------------------------- |
-| CyberSec       | \* Install a backdoor on the `CSEC` server         |
-| NiteSec        | \* Install a backdoor on the `avmnite-02h` server  |
-| The Black Hand | \* Install a backdoor on the `I.I.I.I` server      |
-| BitRunners     | \* Install a backdoor on the `run4theh111z` server |
+| Faction Name   | Requirements                                                            |
+| -------------- | ----------------------------------------------------------------------- |
+| CyberSec       | \* Install a backdoor on the `CSEC` server (Hacking Level 51+)          |
+| NiteSec        | \* Install a backdoor on the `avmnite-02h` server (Hacking Level 202+)  |
+| The Black Hand | \* Install a backdoor on the `I.I.I.I` server (Hacking Level 340+)      |
+| BitRunners     | \* Install a backdoor on the `run4theh111z` server (Hacking Level 505+) |
 
 ### Megacorporations
 
@@ -57,11 +57,11 @@
 
 ### Lategame Factions
 
-| Faction Name | Requirements                                                                                         |
-| ------------ | ---------------------------------------------------------------------------------------------------- |
-| The Covenant | \* 20 Augmentations<br />\* $75b<br />\* Hacking Level of 850<br />\* All Combat Stats of 850        |
-| Illuminati   | \* 30 Augmentations<br />\* $150b<br />\* Hacking Level of 1500<br />\* All Combat Stats of 1200     |
-| Daedalus     | \* 30 Augmentations (varies)<br />\* $100b<br />\* Hacking Level of 2500 OR All Combat Stats of 1500 |
+| Faction Name | Requirements                                                                                     |
+| ------------ | ------------------------------------------------------------------------------------------------ |
+| The Covenant | \* 20 Augmentations<br />\* $75b<br />\* Hacking Level of 850<br />\* All Combat Stats of 850    |
+| Illuminati   | \* 30 Augmentations<br />\* $150b<br />\* Hacking Level of 1500<br />\* All Combat Stats of 1200 |
+| Daedalus     | \* 30+ Augmentations<br />\* $100b<br />\* Hacking Level of 2500 OR All Combat Stats of 1500     |
 
 ### Endgame Factions
 
