@@ -425,27 +425,19 @@ export class Sleeve extends Person implements SleevePerson {
     return false;
   }
 
-  recruitmentSuccessChance(): number {
-    return Math.max(0, Math.min(1, Player.bladeburner?.getRecruitmentSuccessChance(this) ?? 0));
-  }
-
-  contractSuccessChance(type: string, name: string): string {
+  bladeburnerSuccessChance(type: string, name: string): number[] {
     const bb = Player.bladeburner;
     if (bb === null) {
       const errorLogText = `bladeburner is null`;
-      console.error(`Function: sleeves.contractSuccessChance; Message: '${errorLogText}'`);
-      return "0%";
+      console.error(`Function: sleeves.bladeburnerSuccessChance; Message: '${errorLogText}'`);
+      return [0, 0];
     }
     const chances = bb.getActionEstimatedSuccessChanceNetscriptFn(this, type, name);
     if (typeof chances === "string") {
-      console.error(`Function: sleeves.contractSuccessChance; Message: '${chances}'`);
-      return "0%";
+      console.error(`Function: sleeves.bladeburnerSuccessChance; Message: '${chances}'`);
+      return [0, 0];
     }
-    if (chances[0] >= 1) {
-      return "100%";
-    } else {
-      return `${formatPercent(chances[0])} - ${formatPercent(chances[1])}`;
-    }
+    return chances;
   }
 
   takeDamage(amt: number): boolean {
