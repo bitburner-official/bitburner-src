@@ -128,7 +128,7 @@ function getRandomReward(): ICodingContractReward {
   // Don't offer money reward by default if BN multiplier is 0 (e.g. BN8)
   const rewardTypeUpperBound =
     currentNodeMults.CodingContractMoney === 0 ? CodingContractRewardType.Money - 1 : CodingContractRewardType.Money;
-  const rewardType = sanitizeRewardType(getRandomInt(0, CodingContractRewardType.Money));
+  const rewardType = sanitizeRewardType(getRandomInt(0, rewardTypeUpperBound));
 
   // Add additional information based on the reward type
   const factionsThatAllowHacking = Player.factions.filter((fac) => Factions[fac].getInfo().offerHackingWork);
