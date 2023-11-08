@@ -4,6 +4,7 @@ import {
   CodingContractTypes,
   ICodingContractReward,
 } from "./CodingContracts";
+import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { Factions } from "./Faction/Factions";
 import { Player } from "@player";
 import { GetServer, GetAllServers } from "./Server/AllServers";
@@ -124,6 +125,9 @@ function getRandomProblemType(): string {
 }
 
 function getRandomReward(): ICodingContractReward {
+  // Don't offer money reward by default if BN multiplier is 0 (e.g. BN8)
+  const rewardTypeUpperBound =
+    currentNodeMults.CodingContractMoney === 0 ? CodingContractRewardType.Money - 1 : CodingContractRewardType.Money;
   const rewardType = sanitizeRewardType(getRandomInt(0, CodingContractRewardType.Money));
 
   // Add additional information based on the reward type
