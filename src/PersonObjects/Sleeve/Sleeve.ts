@@ -31,7 +31,6 @@ import {
 import { Factions } from "../../Faction/Factions";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
-import { formatPercent } from "../../ui/formatNumber";
 import { SleeveClassWork } from "./Work/SleeveClassWork";
 import { SleeveSynchroWork } from "./Work/SleeveSynchroWork";
 import { SleeveRecoveryWork } from "./Work/SleeveRecoveryWork";

@@ -25,6 +25,8 @@ If you are not in BitNode-10, then you must have Source-File 10 in order to use 
 |  [getSleeveAugmentationPrice(augName)](./bitburner.sleeve.getsleeveaugmentationprice.md) | Get price of an augmentation. |
 |  [getSleeveAugmentationRepReq(augName)](./bitburner.sleeve.getsleeveaugmentationrepreq.md) | Get reputation requirement of an augmentation. |
 |  [getSleeveAugmentations(sleeveNumber)](./bitburner.sleeve.getsleeveaugmentations.md) | Get augmentations installed on a sleeve. |
+|  [getSleeveBladeburnerEstimatedSuccessChance(sleeveNumber, action, contract)](./bitburner.sleeve.getsleevebladeburnerestimatedsuccesschance.md) | Get estimate success chance of a Bladeburner action for the sleeve. |
+|  [getSleeveCrimeChance(sleeveNumber, crimeType)](./bitburner.sleeve.getsleevecrimechance.md) | Get chance to successfully commit a crime for a sleeve. |
 |  [getSleevePurchasableAugs(sleeveNumber)](./bitburner.sleeve.getsleevepurchasableaugs.md) | List purchasable augs for a sleeve. |
 |  [getTask(sleeveNumber)](./bitburner.sleeve.gettask.md) | Get task of a sleeve. |
 |  [purchaseSleeveAug(sleeveNumber, augName)](./bitburner.sleeve.purchasesleeveaug.md) | Purchase an aug for a sleeve. |

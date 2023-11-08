@@ -249,7 +249,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       if (typeof _contract === "undefined") {
         return Player.sleeves[sleeveNumber].bladeburnerSuccessChance("General", action);
       } else {
-        let contract = helpers.string(ctx, "contract", _contract);
+        const contract = helpers.string(ctx, "contract", _contract);
         return Player.sleeves[sleeveNumber].bladeburnerSuccessChance(action, contract);
       }
     },

@@ -4054,7 +4054,7 @@ export interface Sleeve {
    */
   getSleeveBladeburnerEstimatedSuccessChance(sleeveNumber: number, action: string, contract?: string): number[];
 
-   /**
+  /**
    * Set a sleeve to perform Bladeburner actions.
    * @remarks
    * RAM cost: 4 GB
