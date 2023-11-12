@@ -13,6 +13,7 @@ import * as augmentationMethods from "./PlayerObjectAugmentationMethods";
 import * as bladeburnerMethods from "./PlayerObjectBladeburnerMethods";
 import * as corporationMethods from "./PlayerObjectCorporationMethods";
 import * as charityMethods from "./PlayerObjectCharityMethods";
+import { TicketRecord } from "../../Lottery/LotteryStoreLocationInside";
 import * as gangMethods from "./PlayerObjectGangMethods";
 import * as generalMethods from "./PlayerObjectGeneralMethods";
 import * as serverMethods from "./PlayerObjectServerMethods";
@@ -72,7 +73,7 @@ export class PlayerObject extends Person implements IPlayer {
   lastUpdate = 0;
   lastSave = 0;
   totalPlaytime = 0;
-
+  lotteryTickets: TicketRecord[] = [];
   currentWork: Work | null = null;
   focus = false;
 
@@ -120,6 +121,7 @@ export class PlayerObject extends Person implements IPlayer {
   giveExploit = generalMethods.giveExploit;
   giveAchievement = generalMethods.giveAchievement;
   getCasinoWinnings = generalMethods.getCasinoWinnings;
+  getLotteryWinnings = generalMethods.getLotteryWinnings;
   quitJob = generalMethods.quitJob;
   hasJob = generalMethods.hasJob;
   createHacknetServer = serverMethods.createHacknetServer;

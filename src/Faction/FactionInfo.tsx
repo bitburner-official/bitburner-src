@@ -722,6 +722,10 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     inviteReqs: [haveSourceFile(15), haveCharity()],
     rumorReqs: [haveSourceFile(15)],
     special: true,
+    keepOnInstall: true,
+    offerHackingWork: false,
+    offerFieldWork: false,
+    offerSecurityWork: false,
     assignment: (): React.ReactElement => {
       return (
         <Option

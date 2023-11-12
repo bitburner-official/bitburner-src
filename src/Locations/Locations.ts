@@ -147,7 +147,7 @@ Cities[CityName.Sector12].asciiArt = `
     1     |                   |                               /                 
     o-----+---x----o 4        A [alpha ent.]     o-------o   /                  
           |   3     \\         |                           \\ /                 
-          |          \\        |     [iron gym]             x 95                
+          |          \\        |     [iron gym]     [lotto] U 95                
      (79) x           \\       |                           / \\                 
           |            o-E----+----x----J--o 10          /   o----T--o          
           |                   |    8        \\        94 x                      
@@ -165,7 +165,7 @@ Cities[CityName.Sector12].asciiArt = `
           |                                 /                                   
           B [blade industries]             H                                    
           |                               / [four sigma]                        
-          |      [joe's guns]            /                [lotto store] U                      
+          |      [joe's guns]            /                                                     
           |                             /                                       
        85 o--G--------K--------S-------o 88                [the slums] R        
                                                                                 

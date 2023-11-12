@@ -51,6 +51,12 @@ export class BitNodeMultipliers {
   /** Influences the base money gained when the player commits a charity. */
   CharityMoney = 1;
 
+  /** Percentage of unique augs that the gang has. */
+  CharityORGUniqueAugs = 1;
+
+  /** Reduces charity earning. */
+  CharityORGSoftcap = 1;
+
   /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
   DaedalusAugsRequirement = 30;
 

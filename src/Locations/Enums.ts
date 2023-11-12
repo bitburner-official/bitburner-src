@@ -87,4 +87,5 @@ export enum LocationType {
   TravelAgency = "Travel Agency",
   University = "University",
   Casino = "Casino",
+  LotteryStore = "Lottery Store",
 }

@@ -280,6 +280,11 @@ export function prestigeSourceFile(isFlume: boolean): void {
     delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
   }
 
+  // BitNode 15: Charity
+  if (Player.bitNodeN === 15) {
+    delayedDialog(`Sector-12 city hall needs your help.`);
+  }
+
   // Reset Stock market, gang, and corporation
   if (Player.hasWseAccount) {
     initStockMarket();

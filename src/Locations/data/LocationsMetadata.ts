@@ -456,6 +456,6 @@ export const LocationsMetadata: IConstructorParams[] = [
   {
     city: CityName.Sector12,
     name: LocationName.Sector12LotteryStore,
-    types: [LocationType.Special],
+    types: [LocationType.LotteryStore],
   },
 ];

@@ -146,6 +146,7 @@ export function prestigeSourceFile(this: PlayerObject): void {
 
   this.gang = null;
   resetGangs();
+  this.charityORG = null;
   this.corporation = null;
   this.bladeburner = null;
 
@@ -571,6 +572,10 @@ export function giveAchievement(this: PlayerObject, achievementId: string): void
 
 export function getCasinoWinnings(this: PlayerObject): number {
   return this.moneySourceA.casino;
+}
+
+export function getLotteryWinnings(this: PlayerObject): number {
+  return this.moneySourceA.lottery;
 }
 
 export function canAccessCotMG(this: PlayerObject): boolean {

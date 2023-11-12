@@ -973,6 +973,9 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         GangSoftcap: 0.3,
         GangUniqueAugs: 0.1,
 
+        CharityORGSoftcap: 1.0,
+        CharityORGUniqueAugs: 1.0,
+
         StaneksGiftPowerMultiplier: 2,
         StaneksGiftExtraSize: 1,
 

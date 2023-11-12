@@ -169,6 +169,9 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
     if (src.hospitalization) {
       parts.push([`Hospitalization:`, <Money key="hospital" money={src.hospitalization} />]);
     }
+    if (src.lottery) {
+      parts.push([`Lottery:`, <Money key="lottery" money={src.lottery} />]);
+    }
     if (src.infiltration) {
       parts.push([`Infiltration:`, <Money key="infiltration" money={src.infiltration} />]);
     }
