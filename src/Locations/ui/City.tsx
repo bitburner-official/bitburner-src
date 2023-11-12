@@ -59,6 +59,7 @@ function LocationLetter(location: Location, className: string): React.ReactEleme
   if (location.types.includes(LocationType.University)) L = "U";
   if (location.types.includes(LocationType.Casino)) L = "¢";
   if (location.types.includes(LocationType.Special)) L = "?";
+  if (location.types.includes(LocationType.LotteryStore)) L = "Y";
   if (!location) return <span>*</span>;
   return (
     <span aria-label={location.name} key={location.name} className={className} onClick={() => toLocation(location)}>

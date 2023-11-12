@@ -154,6 +154,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
 
   const canCorporation = !!Player.corporation;
   const canGang = !!Player.gang;
+  const canCharityORG = !!Player.charityORG;
   const canJob = Object.values(Player.jobs).length > 0;
   const canStockMarket = Player.hasWseAccount;
   const canBladeburner = !!Player.bladeburner;
@@ -350,6 +351,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canBladeburner && { key_: Page.Bladeburner, icon: FormatBoldIcon },
             canCorporation && { key_: Page.Corporation, icon: BusinessIcon },
             canGang && { key_: Page.Gang, icon: SportsMmaIcon },
+            canCharityORG && { key_: Page.CharityORG, icon: SportsMmaIcon },
           ]}
         />
         <Divider />

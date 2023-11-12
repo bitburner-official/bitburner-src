@@ -64,7 +64,7 @@ export class CharityORG {
   /** Main process function called by the engine loop every game cycle */
   process(numCycles = 1): void {
     if (isNaN(numCycles)) {
-      console.error(`NaN passed into Gang.process(): ${numCycles}`);
+      console.error(`NaN passed into charityORG.process(): ${numCycles}`);
     }
     this.storedCycles += numCycles;
     if (this.storedCycles < CharityConstants.minCyclesToProcess) return;

@@ -97,6 +97,9 @@ const Engine: {
     // Gang
     if (Player.gang) Player.gang.process(numCycles);
 
+    // Charity
+    //if (Player.charityORG) Player.charityORG.process(numCycles);
+
     // Staneks gift
     staneksGift.process(numCycles);
 

@@ -1143,7 +1143,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       work_money: 1.01 + donationBonus,
       factions: Object.values(FactionName).filter(
         (factionName) =>
-          ![FactionName.ShadowsOfAnarchy, FactionName.Bladeburners, FactionName.ChurchOfTheMachineGod].includes(
+          ![FactionName.ShadowsOfAnarchy, FactionName.Bladeburners, FactionName.Charity, FactionName.ChurchOfTheMachineGod].includes(
             factionName,
           ),
       ),

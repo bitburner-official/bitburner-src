@@ -357,44 +357,6 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     );
   }
 
-  function renderLotteryStore(): React.ReactElement {
-    const BuyTickets = <Button onClick={() => Router.toPage(Page.BuyLotteryTickets)}>Enter Store</Button>;
-    // prettier-ignore
-    const symbol = <Typography sx={{ lineHeight: '1em', whiteSpace: 'pre' }}>
-      {"                                                     ___"}<br />
-      {"                                             ___..--'  .`."}<br />
-      {"                                    ___...--'     -  .` `.`."}<br />
-      {"                           ___...--' _      -  _   .` -   `.`."}<br />
-      {"                  ___...--'  -       _   -       .`  `. - _ `.`."}<br />
-      {"           __..--'_______________ -         _  .`  _   `.   - `.`."}<br />
-      {"        .`    _ /\    -        .`      _     .`__________`. _  -`.`."}<br />
-      {"      .` -   _ /  \_     -   .`  _         .` |CONVENIENCE|`.   - `.`."}<br />
-      {"    .`-    _  /   /\   -   .`        _   .`   |___________|  `. _   `.`."}<br />
-      {"  .`________ /__ /_ \____.`____________.`     ___       ___  - `._____`|"}<br />
-      {"    |   -  __  -|    | - |  ____  |   | | _  |   |  _  |   |  _ |"}<br />
-      {"    | _   |  |  | -  |   | |.--.| |___| |    |___|     |___|    |"}<br />
-      {"    |     |--|  |    | _ | |'--'| |---| |   _|---|     |---|_   |"}<br />
-      {"    |   - |__| _|  - |   | |.--.| |   | |    |   |_  _ |   |    |"}<br />
-      {" ---``--._      |    |   |=|'--'|=|___|=|====|___|=====|___|====|"}<br />
-      {" -- . ''  ``--._| _  |  -|_|.--.|_______|_______________________|"}<br />
-      {"`--._           '--- |_  |:|'--'|:::::::|:::::::::::::::::::::::|"}<br />
-      {"_____`--._ ''      . '---'``--._|:::::::|:::::::::::::::::::::::|"}<br />
-      {"----------`--._          ''      ``--.._|:::::::::::::::::::::::|"}<br />
-      {"`--._ _________`--._'        --     .   ''-----.................'"}</Typography>
-
-    return (
-      <>
-        <Typography>
-          <i>
-            A friendly woman beckons you through the door.  "Come on in!".
-          </i>
-        </Typography>
-        {BuyTickets}
-        {symbol}
-      </>
-    );
-  }
-
   function renderGlitch(): React.ReactElement {
     return (
       <>
@@ -415,9 +377,6 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     }
     case LocationName.Sector12NSA: {
       return renderBladeburner();
-    }
-    case LocationName.Sector12LotteryStore: {
-      return renderLotteryStore();
     }
     case LocationName.NewTokyoNoodleBar: {
       return renderNoodleBar();

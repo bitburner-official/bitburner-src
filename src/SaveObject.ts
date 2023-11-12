@@ -2,6 +2,7 @@ import { Skills } from "@nsdefs";
 
 import { loadAliases, loadGlobalAliases, Aliases, GlobalAliases } from "./Alias";
 import { Companies, loadCompanies } from "./Company/Companies";
+import { CharityORG } from "./CharityORG/CharityORG";
 import { CONSTANTS } from "./Constants";
 import { Factions, loadFactions } from "./Faction/Factions";
 import { loadAllGangs, AllGangs } from "./Gang/AllGangs";
@@ -84,6 +85,7 @@ class BitburnerSaveObject {
   SettingsSave = "";
   VersionSave = "";
   AllGangsSave = "";
+  CharityORGSave = "";
   LastExportBonus = "0";
   StaneksGiftSave = "";
 
@@ -107,6 +109,8 @@ class BitburnerSaveObject {
     this.StaneksGiftSave = JSON.stringify(staneksGift);
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
+
+    if (Player.charityORG) this.CharityORGSave = JSON.stringify(CharityORG);
 
     const saveString = btoa(unescape(encodeURIComponent(JSON.stringify(this))));
     return saveString;
@@ -788,6 +792,15 @@ function loadGame(saveString: string): boolean {
       console.error("ERROR: Failed to parse AllGangsSave: " + e);
     }
   }
+
+  if (Player.charityORG && Object.hasOwn(saveObj, "CharityORGSave")) {
+    try {
+      Player.charityORG = JSON.parse(saveObj, Reviver)
+    } catch (e) {
+      console.error("ERROR: Failed to parse CharityORGSave: " + e);
+    }
+  }
+
   if (Object.hasOwn(saveObj, "VersionSave")) {
     try {
       const ver = JSON.parse(saveObj.VersionSave, Reviver);

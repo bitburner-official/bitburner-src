@@ -50,6 +50,7 @@ import { StaneksGiftRoot } from "../CotMG/ui/StaneksGiftRoot";
 import { staneksGift } from "../CotMG/Helper";
 import { CharacterOverview } from "./React/CharacterOverview";
 import { BladeburnerCinematic } from "../Bladeburner/ui/BladeburnerCinematic";
+import { LotteryStoreLocationInside } from "../Lottery/LotteryStoreLocationInside";
 import { workerScripts } from "../Netscript/WorkerScripts";
 import { Unclickable } from "../Exploits/Unclickable";
 import { Snackbar, SnackbarProvider } from "./React/Snackbar";
@@ -234,6 +235,10 @@ export function GameRoot(): React.ReactElement {
     }
     case Page.StaneksGift: {
       mainPage = <StaneksGiftRoot staneksGift={staneksGift} />;
+      break;
+    }
+    case Page.LotteryStoreLocationInside: {
+      mainPage = <LotteryStoreLocationInside/>;
       break;
     }
     case Page.Stats: {
