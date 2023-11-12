@@ -2,10 +2,12 @@ import * as React from "react";
 
 import { Company } from "../../Company/Company";
 import { CompanyPosition } from "../../Company/CompanyPosition";
-import { getJobRequirementText } from "../../Company/GetJobRequirementText";
+import { getJobRequirements } from "../../Company/GetJobRequirementText";
 
 import { Player } from "@player";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
+import { Requirement } from "../../ui/Components/Requirement";
+import { Typography } from "@mui/material";
 
 interface IProps {
   company: Company;
@@ -18,7 +20,7 @@ interface IProps {
 export function ApplyToJobButton(props: IProps): React.ReactElement {
   const pos = Player.getNextCompanyPosition(props.company, props.entryPosType);
   let disabledText;
-  let reqs;
+  let tooltip;
 
   if (pos == null) {
     disabledText = "You are already at the highest position for your field! No promotion available.";
@@ -26,18 +28,23 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
     if (!props.company.hasPosition(pos as CompanyPosition)) {
       disabledText = `You are already at the highest position available at ${props.company.name}. No promotion available.`;
     } else {
-      reqs = (
+      const reqs = getJobRequirements(props.company, pos);
+
+      tooltip = (
         <>
-          <b>{pos.name}</b>
-          <br />
-          <span dangerouslySetInnerHTML={{ __html: getJobRequirementText(props.company, pos, true) }}></span>
+          <Typography sx={{ textAlign: "center" }}>
+            <b>{pos.name}</b>
+          </Typography>
+          {reqs.map((req, i) => (
+            <Requirement key={i} fulfilled={req.isSatisfied(Player)} value={req.toString()} />
+          ))}
         </>
       );
     }
   }
 
   return (
-    <ButtonWithTooltip normalTooltip={reqs} disabledTooltip={disabledText} onClick={props.onClick}>
+    <ButtonWithTooltip normalTooltip={tooltip} disabledTooltip={disabledText} onClick={props.onClick}>
       {props.text}
     </ButtonWithTooltip>
   );
