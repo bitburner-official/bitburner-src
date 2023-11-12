@@ -20,7 +20,7 @@ import { CodingContractRewardType, ICodingContractReward } from "../../CodingCon
 import { Company } from "../../Company/Company";
 import { Companies } from "../../Company/Companies";
 import { getNextCompanyPositionHelper } from "../../Company/GetNextCompanyPosition";
-import { getJobRequirementText } from "../../Company/GetJobRequirementText";
+import { getJobRequirements, getJobRequirementText } from "../../Company/GetJobRequirementText";
 import { CompanyPositions } from "../../Company/CompanyPositions";
 import { CompanyPosition } from "../../Company/CompanyPosition";
 import { CONSTANTS } from "../../Constants";
@@ -551,23 +551,8 @@ export function applyForPartTimeWaiterJob(this: PlayerObject, sing = false): boo
 
 //Checks if the Player is qualified for a certain position
 export function isQualified(this: PlayerObject, company: Company, position: CompanyPosition): boolean {
-  const offset = company.jobStatReqOffset;
-  const reqHacking = position.requiredHacking > 0 ? position.requiredHacking + offset : 0;
-  const reqStrength = position.requiredStrength > 0 ? position.requiredStrength + offset : 0;
-  const reqDefense = position.requiredDefense > 0 ? position.requiredDefense + offset : 0;
-  const reqDexterity = position.requiredDexterity > 0 ? position.requiredDexterity + offset : 0;
-  const reqAgility = position.requiredDexterity > 0 ? position.requiredDexterity + offset : 0;
-  const reqCharisma = position.requiredCharisma > 0 ? position.requiredCharisma + offset : 0;
-
-  return (
-    this.skills.hacking >= reqHacking &&
-    this.skills.strength >= reqStrength &&
-    this.skills.defense >= reqDefense &&
-    this.skills.dexterity >= reqDexterity &&
-    this.skills.agility >= reqAgility &&
-    this.skills.charisma >= reqCharisma &&
-    company.playerReputation >= position.requiredReputation
-  );
+  const reqs = getJobRequirements(company, position);
+  return reqs.every((req) => req.isSatisfied(this));
 }
 
 /********** Reapplying Augmentations and Source File ***********/
