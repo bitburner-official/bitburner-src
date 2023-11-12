@@ -20,7 +20,7 @@ import { CodingContractRewardType, ICodingContractReward } from "../../CodingCon
 import { Company } from "../../Company/Company";
 import { Companies } from "../../Company/Companies";
 import { getNextCompanyPositionHelper } from "../../Company/GetNextCompanyPosition";
-import { getJobRequirements, getJobRequirementText } from "../../Company/GetJobRequirementText";
+import { getJobRequirements, getJobRequirementText } from "../../Company/GetJobRequirements";
 import { CompanyPositions } from "../../Company/CompanyPositions";
 import { CompanyPosition } from "../../Company/CompanyPosition";
 import { CONSTANTS } from "../../Constants";

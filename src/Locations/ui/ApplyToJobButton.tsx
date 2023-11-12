@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Company } from "../../Company/Company";
 import { CompanyPosition } from "../../Company/CompanyPosition";
-import { getJobRequirements } from "../../Company/GetJobRequirementText";
+import { getJobRequirements } from "../../Company/GetJobRequirements";
 
 import { Player } from "@player";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
