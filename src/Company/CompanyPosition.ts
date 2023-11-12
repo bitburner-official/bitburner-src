@@ -11,6 +11,7 @@ import {
   softwareConsultJobs,
   softwareJobs,
 } from "./data/JobTracks";
+import type { Skills } from "../PersonObjects/Skills";
 
 export interface CompanyPositionCtorParams {
   nextPosition: JobName | null;
@@ -128,6 +129,18 @@ export class CompanyPosition {
     this.dexterityExpGain = p.dexterityExpGain != null ? p.dexterityExpGain : 0;
     this.agilityExpGain = p.agilityExpGain != null ? p.agilityExpGain : 0;
     this.charismaExpGain = p.charismaExpGain != null ? p.charismaExpGain : 0;
+  }
+
+  requiredSkills(jobStatReqOffset: number): Skills {
+    return {
+      hacking: this.requiredHacking > 0 ? this.requiredHacking + jobStatReqOffset : 0,
+      strength: this.requiredStrength > 0 ? this.requiredStrength + jobStatReqOffset : 0,
+      defense: this.requiredDefense > 0 ? this.requiredDefense + jobStatReqOffset : 0,
+      dexterity: this.requiredDexterity > 0 ? this.requiredDexterity + jobStatReqOffset : 0,
+      agility: this.requiredAgility > 0 ? this.requiredAgility + jobStatReqOffset : 0,
+      charisma: this.requiredCharisma > 0 ? this.requiredCharisma + jobStatReqOffset : 0,
+      intelligence: 0,
+    };
   }
 
   calculateJobPerformance(worker: IPerson): number {

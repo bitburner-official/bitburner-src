@@ -687,20 +687,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       const job = CompanyPositions[positionName];
       const res = {
-        name: CompanyPositions[positionName].name,
-        field: CompanyPositions[positionName].field,
-        nextPosition: CompanyPositions[positionName].nextPosition,
-        salary: CompanyPositions[positionName].baseSalary * company.salaryMultiplier,
-        requiredReputation: CompanyPositions[positionName].requiredReputation,
-        requiredSkills: {
-          hacking: job.requiredHacking > 0 ? job.requiredHacking + company.jobStatReqOffset : 0,
-          strength: job.requiredStrength > 0 ? job.requiredStrength + company.jobStatReqOffset : 0,
-          defense: job.requiredDefense > 0 ? job.requiredDefense + company.jobStatReqOffset : 0,
-          dexterity: job.requiredDexterity > 0 ? job.requiredDexterity + company.jobStatReqOffset : 0,
-          agility: job.requiredAgility > 0 ? job.requiredAgility + company.jobStatReqOffset : 0,
-          charisma: job.requiredCharisma > 0 ? job.requiredCharisma + company.jobStatReqOffset : 0,
-          intelligence: 0,
-        },
+        name: job.name,
+        field: job.field,
+        nextPosition: job.nextPosition,
+        salary: job.baseSalary * company.salaryMultiplier,
+        requiredReputation: job.requiredReputation,
+        requiredSkills: job.requiredSkills(company.jobStatReqOffset),
       };
       return res;
     },
