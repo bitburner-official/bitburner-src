@@ -1,6 +1,5 @@
 import { CONSTANTS } from "../../Constants";
 
-
 export const CharityConstants = {
   /** Number of members that can be recruited with 0 respect. */
   numFreeMembers: 3,
@@ -13,7 +12,7 @@ export const CharityConstants = {
 
   // Portion of upgrade multiplier that is kept after ascending
   AscensionMultiplierRatio: 0.15,
-  
+
   CharityKarmaRequirement: 5400,
   /** Normal number of game cycles processed at once (2 seconds) */
   minCyclesToProcess: 2000 / CONSTANTS.MilliPerCycle,

@@ -452,8 +452,7 @@ export function initBitNodes() {
     "The downfall of greed",
     (
       <>
-        Test blurb{" "}
-        {FactionName.ChurchOfTheMachineGod} has rallied far more support than anyone would have hoped.
+        Test blurb {FactionName.ChurchOfTheMachineGod} has rallied far more support than anyone would have hoped.
         <br />
         <br />
         More blurb {CityName.Chongqing} and gain her trust.

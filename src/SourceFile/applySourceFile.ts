@@ -169,6 +169,13 @@ export function applySourceFile(bn: number, lvl: number): void {
     case 13: // They're Lunatics
       // Grants more space on Stanek's Gift.
       break;
+    case 15: {
+      // Charity
+      const incMult = 1 + (lvl * 0.06 + 0.12) / 100;
+      Player.mults.charity_money *= incMult;
+      Player.mults.charity_success *= incMult;
+      break;
+    }
     default:
       console.error(`Invalid source file number: ${bn}`);
       break;

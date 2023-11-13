@@ -11,7 +11,7 @@ import { Pick4 } from "./Pick4";
 import { L649 } from "./L649";
 import { Keno } from "./Keno";
 import { CashIn } from "./CashIn";
-import { LotteryConstants } from "./data/LotteryConstants"
+import { LotteryConstants } from "./data/LotteryConstants";
 import { Box } from "@mui/material";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 
@@ -24,7 +24,7 @@ export enum GameType {
   Pick3 = "pick 3",
   Pick4 = "pick 4",
   Keno = "keno",
-  CashIn = "cash in"
+  CashIn = "cash in",
 }
 
 export enum GameOptions {
@@ -35,9 +35,9 @@ export enum GameOptions {
 }
 
 export class TicketRecord {
-  Type: string = "unknown";
+  Type = "unknown";
   Numbers: number[] = [];
-  Wager: number = 0;
+  Wager = 0;
   Option: GameOptions;
 
   constructor(Type: string, Numbers: number[], Wager: number, Option: GameOptions) {
@@ -64,17 +64,22 @@ export function LotteryStoreLocationInside(): React.ReactElement {
   }
   function buyIceCream(): void {
     hasicecream = true;
-    let type = Math.floor((LottoBadRNG.random() * 5));
-    switch(type) {
-      case 0: dialogBoxCreate("Here you go, a scoop of Vanilla!");
+    const type = Math.floor(LottoBadRNG.random() * 5);
+    switch (type) {
+      case 0:
+        dialogBoxCreate("Here you go, a scoop of Vanilla!");
         break;
-      case 1: dialogBoxCreate("Here you go, a scoop of Chocolate!");
+      case 1:
+        dialogBoxCreate("Here you go, a scoop of Chocolate!");
         break;
-      case 2: dialogBoxCreate("Here you go, a scoop of Tiger Tiger!");
+      case 2:
+        dialogBoxCreate("Here you go, a scoop of Tiger Tiger!");
         break;
-      case 3: dialogBoxCreate("Here you go, a scoop of Chocolate Mint!");
+      case 3:
+        dialogBoxCreate("Here you go, a scoop of Chocolate Mint!");
         break;
-      case 4: dialogBoxCreate("Here you go, a scoop of Cherry Swirl!");
+      case 4:
+        dialogBoxCreate("Here you go, a scoop of Cherry Swirl!");
         break;
     }
   }
@@ -90,20 +95,23 @@ export function LotteryStoreLocationInside(): React.ReactElement {
           <br />
           <Typography>"What do you mean the lottery is canceled until further notice??"</Typography>
           <br />
-          <Typography>"I'm sorry ma'am, but there's been a glitch in our systems.  We have to close down for now."</Typography>
+          <Typography>
+            "I'm sorry ma'am, but there's been a glitch in our systems. We have to close down for now."
+          </Typography>
           <br />
           <Typography>"What will I do for my lottery customers then?"</Typography>
           <br />
           <Typography>"Don't you sell other things?"</Typography>
           <br />
           <br />
-          <Typography>"Puts down the phone, smiles at you and asks "Would you like some Ice Cream dear?  It's on the house!"</Typography>
+          <Typography>
+            "Puts down the phone, smiles at you and asks "Would you like some Ice Cream dear? It's on the house!"
+          </Typography>
           <Button onClick={() => buyIceCream()}>Buy Ice cream</Button>
         </Box>
       </>
     );
-  }
-  else {
+  } else {
     return (
       <>
         {game === GameType.None && (
@@ -118,13 +126,18 @@ export function LotteryStoreLocationInside(): React.ReactElement {
             <Button onClick={() => updateGame(GameType.Pick4)}>Play pick 4</Button>
             <br />
             <br />
-            <Button disabled={Player.lotteryTickets.length === 0} onClick={() => updateGame(GameType.CashIn)}>Cash In Tickets</Button>
-            <br /><br />
-            <Typography>Tickets#  6/46:{Player.lotteryTickets.filter(x => x.Type === GameType.L649).length},
-              Keno:{Player.lotteryTickets.filter(x => x.Type === GameType.Keno).length},
-              Pick2:{Player.lotteryTickets.filter(x => x.Type === GameType.Pick2).length},
-              Pick3:{Player.lotteryTickets.filter(x => x.Type === GameType.Pick3).length},
-              Pick4:{Player.lotteryTickets.filter(x => x.Type === GameType.Pick4).length}</Typography>
+            <Button disabled={Player.lotteryTickets.length === 0} onClick={() => updateGame(GameType.CashIn)}>
+              Cash In Tickets
+            </Button>
+            <br />
+            <br />
+            <Typography>
+              Tickets# 6/46:{Player.lotteryTickets.filter((x) => x.Type === GameType.L649).length}, Keno:
+              {Player.lotteryTickets.filter((x) => x.Type === GameType.Keno).length}, Pick2:
+              {Player.lotteryTickets.filter((x) => x.Type === GameType.Pick2).length}, Pick3:
+              {Player.lotteryTickets.filter((x) => x.Type === GameType.Pick3).length}, Pick4:
+              {Player.lotteryTickets.filter((x) => x.Type === GameType.Pick4).length}
+            </Typography>
           </Box>
         )}
         {game !== GameType.None && (

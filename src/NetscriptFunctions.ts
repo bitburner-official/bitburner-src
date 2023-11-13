@@ -78,6 +78,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
+import { NetscriptLottery } from "./NetscriptFunctions/Lottery";
 import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
@@ -138,6 +139,7 @@ export const ns: InternalAPI<NSFull> = {
   stock: NetscriptStockMarket(),
   grafting: NetscriptGrafting(),
   hacknet: NetscriptHacknet(),
+  lottery: NetscriptLottery(),
   sprintf: () => sprintf,
   vsprintf: () => vsprintf,
   scan: (ctx) => (_hostname) => {

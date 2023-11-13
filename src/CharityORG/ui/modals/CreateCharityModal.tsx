@@ -55,12 +55,10 @@ export function CreateCharityModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Would you like to start a charity? This will require <Money money={250e6} forPurchase={true} /> for
-        registration and initial funding and will leave your charity with {formatMoney(50e6)}.{" "}
+        Would you like to start a charity? This will require <Money money={250e6} forPurchase={true} /> for registration
+        and initial funding and will leave your charity with {formatMoney(50e6)}.{" "}
         {Player.bitNodeN === 15 && (
-          <>
-            OR you can take over an existing, failing charity for free but have it start with {formatNumber(5e6)}.
-          </>
+          <>OR you can take over an existing, failing charity for free but have it start with {formatNumber(5e6)}.</>
         )}
         <br />
         <br />

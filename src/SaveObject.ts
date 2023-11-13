@@ -795,7 +795,7 @@ function loadGame(saveString: string): boolean {
 
   if (Player.charityORG && Object.hasOwn(saveObj, "CharityORGSave")) {
     try {
-      Player.charityORG = JSON.parse(saveObj, Reviver)
+      Player.charityORG = JSON.parse(saveObj, Reviver);
     } catch (e) {
       console.error("ERROR: Failed to parse CharityORGSave: " + e);
     }

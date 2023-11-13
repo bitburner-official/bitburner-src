@@ -11,8 +11,7 @@ export function startCharity(this: PlayerObject, charityName: string, seedFunded
 
   if (seedFunded) {
     this.charityORG.bank = 5e6;
-  }
-  else {
+  } else {
     this.charityORG.bank = 50e6;
   }
 }

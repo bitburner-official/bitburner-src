@@ -88,8 +88,6 @@ export const haveAugmentations = (n: number): JoinCondition => ({
   },
 });
 
-
-
 export const haveMoney = (n: number): JoinCondition => ({
   toString(): string {
     return `Have ${formatMoney(n)}`;

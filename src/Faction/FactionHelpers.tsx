@@ -199,6 +199,5 @@ export const getFactionAugmentationsFiltered = (faction: Faction): AugmentationN
     return augs.map((a) => a.name);
   }
 
-
   return faction.augmentations.slice();
 };

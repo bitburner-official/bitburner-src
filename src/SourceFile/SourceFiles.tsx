@@ -232,4 +232,21 @@ export function initSourceFiles() {
     13,
     <>Each level of this Source-File increases the size of Stanek's Gift.</>,
   );
+  SourceFiles.SourceFile15 = new SourceFile(
+    15,
+    (
+      <>
+        This Source-File increases both Charity Success chance and Charity Money gain.
+        <br />
+        <br />
+        Level 1: 18%
+        <br />
+        Level 2: 24%
+        <br />
+        Level 3: 30%
+        <br />
+        <br />
+      </>
+    ),
+  );
 }

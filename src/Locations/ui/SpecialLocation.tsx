@@ -129,7 +129,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     );
   }
 
-  function renderSector12CityHall(): React.ReactElement {
+  function RenderSector12CityHall(): React.ReactElement {
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
     if (!Player.canAccessCorporation() && !Player.canAccessCharity()) {
@@ -160,8 +160,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
           </Button>
           <CreateCorporationModal open={open} onClose={() => setOpen(false)} />
         </>
-
-      )
+      );
     }
 
     if (!Player.canAccessCorporation() && Player.canAccessCharity()) {
@@ -180,8 +179,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
           </Button>
           <CreateCharityModal open={open2} onClose={() => setOpen2(false)} />
         </>
-
-      )
+      );
     }
     return (
       <>
@@ -203,7 +201,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
         </Button>
         <CreateCorporationModal open={open} onClose={() => setOpen(false)} />
         <CreateCharityModal open={open2} onClose={() => setOpen2(false)} />
-        </>
+      </>
     );
   }
 
@@ -372,7 +370,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       return renderGrafting();
     }
     case LocationName.Sector12CityHall: {
-      return renderSector12CityHall();
+      return RenderSector12CityHall();
       //return (currentNodeMults.CorporationSoftcap < 0.15 && <></>) || <CreateCorporation />;
     }
     case LocationName.Sector12NSA: {

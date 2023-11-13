@@ -238,7 +238,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.LotteryStoreLocationInside: {
-      mainPage = <LotteryStoreLocationInside/>;
+      mainPage = <LotteryStoreLocationInside />;
       break;
     }
     case Page.Stats: {

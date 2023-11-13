@@ -129,7 +129,7 @@ export class Charity {
     chance /= this.difficulty;
     chance *= p.mults.charity_success;
     chance *= calculateIntelligenceBonus(p.skills.intelligence, 1);
-    
+
     return Math.min(chance, 1);
   }
 }

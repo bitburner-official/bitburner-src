@@ -45,7 +45,8 @@ export function SlumsLocation(): React.ReactElement {
             {crime.type} ({formatPercent(crime.successRate(Player))} chance of success)
           </Button>
         </Tooltip>
-      ))},
+      ))}
+      ,
       {charities.map((charity) => (
         <Tooltip key={charity.workName} title={charity.tooltipText}>
           <Button onClick={(e) => doCharity(e, charity)}>

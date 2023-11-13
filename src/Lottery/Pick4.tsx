@@ -3,7 +3,7 @@ import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { Player } from "@player";
 import { ToastVariant } from "@enums";
 import { TicketRecord, GameType, GameOptions } from "./LotteryStoreLocationInside";
-import { LotteryConstants } from "./data/LotteryConstants"
+import { LotteryConstants } from "./data/LotteryConstants";
 import { SnackbarEvents } from "../ui/React/Snackbar";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import Typography from "@mui/material/Typography";
@@ -11,14 +11,13 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-
 let wager = -1;
 let numbers = -1;
 let option: GameOptions;
 
 export function Pick4(): React.ReactElement {
-  const [result, setBet] = useState(1000);
-  const [betnumber, setBetNumberResult] = useState(1000);
+  const [, setBet] = useState(1000);
+  const [, setBetNumberResult] = useState(1000);
 
   function updateBet(e: React.ChangeEvent<HTMLInputElement>): void {
     let bet: number = parseInt(e.currentTarget.value);
@@ -36,16 +35,14 @@ export function Pick4(): React.ReactElement {
     e.currentTarget.value = bet > 0 ? bet.toString() : "";
   }
   function updateNumbersPick4(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       numbers = -1;
-    }
-    else if (e.currentTarget.value.length > 4) {
+    } else if (e.currentTarget.value.length > 4) {
       e.currentTarget.value = "";
       numbers = -1;
-    }
-    else {
+    } else {
       setBetNumberResult(chosen);
       numbers = chosen;
     }
@@ -72,46 +69,38 @@ export function Pick4(): React.ReactElement {
       dialogBoxCreate("Invalid numbers selected for a Box bet");
       return;
     }
-    let numstring = String(numbers);
-    let numarray: number[] = [];
+    const numstring = String(numbers);
+    const numarray: number[] = [];
     if (numstring.length === 0) {
       numarray.push(0);
       numarray.push(0);
       numarray.push(0);
       numarray.push(0);
-    }
-    else if (numstring.length === 1) {
+    } else if (numstring.length === 1) {
       numarray.push(0);
       numarray.push(0);
       numarray.push(0);
-    }
-    else if (numstring.length === 2) {
+    } else if (numstring.length === 2) {
       numarray.push(0);
       numarray.push(0);
-    }
-    else if (numstring.length === 3) {
+    } else if (numstring.length === 3) {
       numarray.push(0);
     }
     for (let i = 0; i < numstring.length; i++) {
       numarray.push(parseInt(numstring[i]));
     }
-    let betrecord = new TicketRecord(
-      GameType.Pick4,
-      numarray,
-      wager,
-      option,
-    )
+    const betrecord = new TicketRecord(GameType.Pick4, numarray, wager, option);
     Player.loseMoney(wager, "lottery");
-    Player.lotteryTickets.push(betrecord)
+    Player.lotteryTickets.push(betrecord);
 
     const PurchaseToast = (
       <>
-        Purchased a ticket! Type:{betrecord.Type}  Bet:{betrecord.Wager}  Numbers:{numarray[0]},{numarray[1]},{numarray[2]},{numarray[3]}  Options:{betrecord.Option}
+        Purchased a ticket! Type:{betrecord.Type} Bet:{betrecord.Wager} Numbers:{numarray[0]},{numarray[1]},
+        {numarray[2]},{numarray[3]} Options:{betrecord.Option}
       </>
     );
     SnackbarEvents.emit(PurchaseToast, ToastVariant.INFO, 2000);
   }
-  
 
   function buyRandomTicket(): void {
     if (wager <= 0) {
@@ -132,52 +121,44 @@ export function Pick4(): React.ReactElement {
       while (!canBuyBox()) {
         numbers = getRandomInt(0, 9999);
       }
-    }
-    else {
+    } else {
       numbers = getRandomInt(0, 9999);
     }
 
-    let numstring = String(numbers);
-    let numarray = [];
+    const numstring = String(numbers);
+    const numarray = [];
     if (numstring.length === 0) {
       numarray.push(0);
       numarray.push(0);
       numarray.push(0);
       numarray.push(0);
-    }
-    else if (numstring.length === 1) {
+    } else if (numstring.length === 1) {
       numarray.push(0);
       numarray.push(0);
       numarray.push(0);
-    }
-    else if (numstring.length === 2) {
+    } else if (numstring.length === 2) {
       numarray.push(0);
       numarray.push(0);
-    }
-    else if (numstring.length === 3) {
+    } else if (numstring.length === 3) {
       numarray.push(0);
     }
     for (let i = 0; i < numstring.length; i++) {
       numarray.push(parseInt(numstring[i]));
     }
-    let betrecord = new TicketRecord(
-      GameType.Pick4,
-      numarray,
-      wager,
-      option,
-    )
+    const betrecord = new TicketRecord(GameType.Pick4, numarray, wager, option);
     Player.loseMoney(wager, "lottery");
-    Player.lotteryTickets.push(betrecord)
+    Player.lotteryTickets.push(betrecord);
 
     const PurchaseToast = (
       <>
-        Purchased a ticket! Type:{betrecord.Type}  Bet:{betrecord.Wager}  Numbers:{numarray[0]},{numarray[1]},{numarray[2]},{numarray[3]}  Options:{betrecord.Option}
+        Purchased a ticket! Type:{betrecord.Type} Bet:{betrecord.Wager} Numbers:{numarray[0]},{numarray[1]},
+        {numarray[2]},{numarray[3]} Options:{betrecord.Option}
       </>
     );
     SnackbarEvents.emit(PurchaseToast, ToastVariant.INFO, 2000);
     setBetNumberResult(numbers);
   }
-  
+
   function canBuyBox(): boolean {
     const numstring = String(numbers);
     const numarray: number[] = [];
@@ -187,17 +168,14 @@ export function Pick4(): React.ReactElement {
       numarray.push(0);
       numarray.push(0);
       numarray.push(0);
-    }
-    else if (numstring.length === 1) {
+    } else if (numstring.length === 1) {
       numarray.push(0);
       numarray.push(0);
       numarray.push(0);
-    }
-    else if (numstring.length === 2) {
+    } else if (numstring.length === 2) {
       numarray.push(0);
       numarray.push(0);
-    }
-    else if (numstring.length === 3) {
+    } else if (numstring.length === 3) {
       numarray.push(0);
     }
     for (let i = 0; i < numstring.length; i++) {
@@ -205,16 +183,15 @@ export function Pick4(): React.ReactElement {
     }
     //Box play requires 2 of 3 unique digits, so 223 and 234 are good, but 444 is not.
     let highest = 1;
-    for (let num of numarray) {
-      if (numarray.filter(x => x === num).length > highest) {
-        highest = numarray.filter(x => x === num).length;
+    for (const num of numarray) {
+      if (numarray.filter((x) => x === num).length > highest) {
+        highest = numarray.filter((x) => x === num).length;
       }
     }
 
     if (highest === 4) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
@@ -228,11 +205,23 @@ export function Pick4(): React.ReactElement {
       option = GameOptions.Straight;
     }
   }
-  
+
+  function showOdds(): void {
+    dialogBoxCreate(
+      "Pick 4 Winnings.\n" +
+        "Based on a $1 bet\n" +
+        "Straight : $5,000    12-way Box: $400\n" +
+        "4-way Box: $1,250    24-way Box: $200\n" +
+        "6-way Box: $800\n",
+    );
+  }
+
   return (
     <>
       <Typography>Pick 4</Typography>
-      <Typography><br /></Typography>
+      <Typography>
+        <br />
+      </Typography>
       <Typography>Bet:</Typography>
       <Box display="flex" alignItems="center">
         <TextField
@@ -256,7 +245,9 @@ export function Pick4(): React.ReactElement {
           onChange={updateNumbersPick4}
           placeholder={String(numbers)}
         />
-        <Typography>Numbers Chosen - 1, 2, 3 or 4 numbers. 1 will cause a leading 0. EX: 45 = 0045, 4 = 0004, Nothing is 0000</Typography>
+        <Typography>
+          Numbers Chosen - 1, 2, 3 or 4 numbers. 1 will cause a leading 0. EX: 45 = 0045, 4 = 0004, Nothing is 0000
+        </Typography>
       </Box>
       <br />
       <Typography>Option chosen:</Typography>
@@ -265,12 +256,26 @@ export function Pick4(): React.ReactElement {
           <Typography>Straight:</Typography>
           <input type="radio" name="optionp3" id={GameOptions.Straight} onChange={updateOptionStraight}></input>
           <Typography>&nbsp;&nbsp;Box:</Typography>
-          <input type="radio" name="optionp3" id={GameOptions.Box} onChange={updateOptionBox}></input> 
+          <input type="radio" name="optionp3" id={GameOptions.Box} onChange={updateOptionBox}></input>
         </Box>
       </div>
       <br />
-      <Button onClick={() => buyTicket()}>Buy ticket</Button>, <Button onClick={() => buyRandomTicket()}>Buy random ticket</Button>
+      <Button onClick={() => buyTicket()}>Buy ticket</Button>,{" "}
+      <Button onClick={() => buyRandomTicket()}>Buy random ticket</Button>
+      <Box display="-ms-grid" alignItems="left" whiteSpace="pre">
+        <Typography>----------------------------</Typography>
+        <br />
+        <Typography>Rules:</Typography>
+        <br />
+        <Typography>Pick 4 numbers, between 0 - 9.</Typography>
+        <Typography>These will be paddded with leading 0's Ex: 1234, 456(0456) or even 0(0000)</Typography>
+        <br />
+        <Typography>Play Types:</Typography>
+        <Typography>-----------</Typography>
+        <Typography>-Straight: Requires that the numbers be in the correct order.</Typography>
+        <Typography>-Box : Numbers can be in any order. Must have 2 unique numbers</Typography>
+        <Button onClick={() => showOdds()}>Show Winnings Chart</Button>
+      </Box>
     </>
   );
- 
 }
