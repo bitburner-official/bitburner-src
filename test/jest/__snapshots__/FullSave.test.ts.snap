@@ -2,50 +2,557 @@
 
 exports[`Check Save File Continuity CompaniesSave continuity 1`] = `
 {
+  "AeroCorp": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Aevum Police Headquarters": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Alpha Enterprises": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Bachman & Associates": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Blade Industries": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Carmichael Security": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Central Intelligence Agency": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Clarke Incorporated": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "CompuTek": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "DefComm": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "DeltaOne": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "ECorp": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "FoodNStuff": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Four Sigma": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Fulcrum Technologies": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Galactic Cybersystems": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Global Pharmaceuticals": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Helios Labs": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Icarus Microsystems": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Joe's Guns": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "KuaiGong International": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "LexoCorp": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "MegaCorp": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "NWO": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "National Security Agency": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "NetLink Technologies": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
   "Noodle Bar": {
-    "favor": 100,
-    "playerReputation": 100000,
+    "ctor": "Company",
+    "data": {
+      "favor": 100,
+      "playerReputation": 100000,
+    },
+  },
+  "Nova Medical": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Omega Software": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "OmniTek Incorporated": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Omnia Cybersystems": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Rho Construction": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Solaris Space Systems": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Storm Technologies": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "SysCore Securities": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Universal Energy": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "VitaLife": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Watchdog Security": {
+    "ctor": "Company",
+    "data": {
+      "favor": 0,
+      "playerReputation": 0,
+    },
   },
 }
 `;
 
 exports[`Check Save File Continuity FactionsSave continuity 1`] = `
 {
+  "Aevum": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Bachman & Associates": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "BitRunners": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Blade Industries": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
   "Bladeburners": {
-    "discovery": "known",
-    "playerReputation": 4000,
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 4000,
+    },
+  },
+  "Charity": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Chongqing": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Church of the Machine God": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Clarke Incorporated": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
   },
   "CyberSec": {
-    "discovery": "known",
-    "favor": 20,
-    "playerReputation": 1000000,
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 20,
+      "playerReputation": 1000000,
+    },
+  },
+  "Daedalus": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "ECorp": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Four Sigma": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Fulcrum Secret Technologies": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Illuminati": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Ishima": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "KuaiGong International": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "MegaCorp": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "NWO": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Netburners": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "New Tokyo": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "NiteSec": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "OmniTek Incorporated": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Sector-12": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Shadows of Anarchy": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Silhouette": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
   },
   "Slum Snakes": {
-    "discovery": "known",
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
   },
-}
-`;
-
-exports[`Check Save File Continuity GoSave continuity 1`] = `
-{
-  "currentGame": {
-    "ai": "Netburners",
-    "board": [
-      ".......",
-      ".......",
-      ".......",
-      ".......",
-      ".......",
-      ".......",
-      ".......",
-    ],
-    "cheatCount": 0,
-    "passCount": 0,
-    "previousBoard": null,
-    "previousPlayer": "White",
+  "Speakers for the Dead": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
   },
-  "previousGame": null,
-  "stats": {},
+  "Tetrads": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "The Black Hand": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "The Covenant": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "The Dark Army": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "The Syndicate": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Tian Di Hui": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
+  "Volhaven": {
+    "ctor": "Faction",
+    "data": {
+      "discovery": "unknown",
+      "favor": 0,
+      "playerReputation": 0,
+    },
+  },
 }
 `;
 
@@ -569,6 +1076,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "totalSkillPoints": 666,
       },
     },
+    "charityORG": null,
     "city": "Sector-12",
     "corporation": {
       "ctor": "Corporation",
@@ -736,24 +1244,26 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "lastSave": 0,
     "lastUpdate": 1687611703623,
     "location": "Travel Agency",
-    "money": 1151,
+    "lotteryTickets": [],
+    "money": 1113,
     "moneySourceA": {
       "ctor": "MoneySourceTracker",
       "data": {
         "augmentations": 0,
         "bladeburner": 0,
         "casino": 0,
+        "charity": 0,
         "class": 0,
         "codingcontract": 0,
         "corporation": 0,
         "crime": 0,
         "gang": 0,
-        "gang_expenses": 0,
         "hacking": 0,
         "hacknet": 0,
         "hacknet_expenses": 0,
         "hospitalization": 0,
         "infiltration": 0,
+        "lottery": 0,
         "other": 0,
         "servers": 0,
         "sleeves": 0,
@@ -768,17 +1278,18 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "augmentations": 0,
         "bladeburner": 0,
         "casino": 0,
+        "charity": 0,
         "class": 0,
         "codingcontract": 0,
         "corporation": 0,
         "crime": 0,
         "gang": 0,
-        "gang_expenses": 0,
         "hacking": 0,
         "hacknet": 0,
         "hacknet_expenses": 0,
         "hospitalization": 0,
         "infiltration": 0,
+        "lottery": 0,
         "other": 0,
         "servers": 0,
         "sleeves": 0,
@@ -796,6 +1307,8 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
       "bladeburner_success_chance": 1,
       "charisma": 1,
       "charisma_exp": 1,
+      "charity_money": 1,
+      "charity_success": 1,
       "company_rep": 1,
       "crime_money": 1,
       "crime_success": 1,
@@ -820,6 +1333,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
       "work_money": 1,
     },
     "numPeopleKilled": 0,
+    "numPeopleSaved": 0,
     "playtimeSinceLastAug": 0,
     "playtimeSinceLastBitnode": 0,
     "purchasedServers": [],
@@ -850,7 +1364,6 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "data": {
               "crimeType": "Homicide",
               "cyclesWorked": 0,
-              "tasksCompleted": 0,
               "type": "CRIME",
             },
           },
@@ -877,6 +1390,8 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "bladeburner_success_chance": 1,
             "charisma": 1,
             "charisma_exp": 1,
+            "charity_money": 1,
+            "charity_success": 1,
             "company_rep": 1,
             "crime_money": 1,
             "crime_success": 1,
@@ -949,6 +1464,8 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "bladeburner_success_chance": 1,
             "charisma": 1,
             "charisma_exp": 1,
+            "charity_money": 1,
+            "charity_success": 1,
             "company_rep": 1,
             "crime_money": 1,
             "crime_success": 1,
