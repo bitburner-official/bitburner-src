@@ -387,6 +387,17 @@ const grafting = {
   graftAugmentation: 7.5,
 } as const;
 
+// Grafting API
+const lottery = {
+  getTickets: 0.1,
+  buyPick2Ticket: 0.1,
+  buyPick3Ticket: 0.1,
+  buyPick4Ticket: 0.1,
+  buyL649Ticket: 0.1,
+  buyKenoTicket: 0.1,
+  buyRandomTicket: 0.1,
+} as const;
+
 const corporation = {
   hasCorporation: 0, // This one is free
   getConstants: 0,
@@ -469,7 +480,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   stanek,
   ui,
   grafting,
-
+  lottery,
   sprintf: 0,
   vsprintf: 0,
   scan: RamCostConstants.Scan,

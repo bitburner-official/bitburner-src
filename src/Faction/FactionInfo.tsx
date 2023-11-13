@@ -714,8 +714,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
         To help those in need - that is our motto.
         <br />
         <br />
-        Note that for this faction, reputation can only be gained through charitable actions.
-        Visit City Hall in Sector-12 for more information.
+        Note that for this faction, reputation can only be gained through charitable actions. Visit City Hall in
+        Sector-12 for more information.
       </>
     ),
     rumorText: <>Sector-12 City hall has need of your talents.</>,

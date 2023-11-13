@@ -1,5 +1,5 @@
 //Casino's RNG, duplicated for a new badRNG generator for Lottery
-import { Player } from "@player";
+
 interface RNG {
   random(): number;
 }
@@ -63,7 +63,6 @@ export class WHRNG implements RNG {
     return (this.s1 / 30269.0 + this.s2 / 30307.0 + this.s3 / 30323.0) % 1.0;
   }
 }
-
 
 export function SFC32RNG(seed: string): () => number {
   let h = 1779033703 ^ seed.length;

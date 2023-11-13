@@ -1,20 +1,20 @@
 import { CONSTANTS } from "../Constants";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Player } from "@player";
-import { Person as IPerson } from "@nsdefs";
-import { WorkerScript } from "../Netscript/WorkerScript";
+//import { Person as IPerson } from "@nsdefs";
+//import { WorkerScript } from "../Netscript/WorkerScript";
 import { Factions } from "../Faction/Factions";
 import { CharityConstants } from "./data/Constants";
-import { CharityVolunteer } from "./CharityVolunteer"
-import { CharityVolunteerUpgrade } from "./CharityVolunteerUpgrade"
+import { CharityVolunteer } from "./CharityVolunteer";
+import { CharityVolunteerUpgrade } from "./CharityVolunteerUpgrade";
 //import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
 
 export const CharityResolvers: ((msProcessed: number) => void)[] = [];
 
-interface IConstructorParams {
+/*interface IConstructorParams {
   name?: string;
   seedfunded?: boolean;
-}
+}*/
 
 export class CharityORG {
   name: string;
@@ -28,21 +28,16 @@ export class CharityORG {
   moneyGainRate: number;
   moneySpendRate: number;
   karmaGainRate: number;
-  prestigeGainRate: number
+  prestigeGainRate: number;
   visibilityGainRate: number;
   terrorGainRate: number;
   storedCycles: number;
 
-
-  
-  constructor(
-    name: string,
-    seedFunded: boolean,
-  ) {
+  constructor(name: string, seedFunded: boolean) {
     this.name = name;
     this.seedFunded = seedFunded;
     this.bank = 0;
-    this.spent = 0
+    this.spent = 0;
     this.volunteers = [];
     this.visibility = 0;
     this.terror = 50;
@@ -54,7 +49,6 @@ export class CharityORG {
     this.karmaGainRate = 0;
     this.prestigeGainRate = 0;
     this.storedCycles = 0;
-
   }
 
   getBank(): number {
@@ -87,23 +81,22 @@ export class CharityORG {
   }
 
   /** Process donations, terror, visibility, etc.
-  * @param numCycles The number of cycles to process. */
+   * @param numCycles The number of cycles to process. */
   processGains(numCycles: number): void {
     let moneyGainPerCycle = 0;
-    let moneySpendPerCycle = 0
+    let moneySpendPerCycle = 0;
     let karmaGainPerCycle = 0;
     let visibilityGainPerCycle = 0;
     let terrorGainPerCycle = 0;
-    let prestigeGainPerCycle = 0
-    
+    let prestigeGainPerCycle = 0;
 
     for (const volunteer of this.volunteers) {
-      karmaGainPerCycle += volunteer.calculateKarmaGain(this);
-      moneyGainPerCycle += volunteer.calculateMoneyGain(this);
-      moneySpendPerCycle += volunteer.calculateMoneySpend(this);
-      visibilityGainPerCycle += volunteer.calculateVisibilityGain(this);
-      terrorGainPerCycle += volunteer.calculateTerrorGain(this);
-      prestigeGainPerCycle += volunteer.calculatePrestigeGain(this);
+      karmaGainPerCycle += volunteer.calculateKarmaGain(this) * numCycles;
+      moneyGainPerCycle += volunteer.calculateMoneyGain(this) * numCycles;
+      moneySpendPerCycle += volunteer.calculateMoneySpend(this) * numCycles;
+      visibilityGainPerCycle += volunteer.calculateVisibilityGain(this) * numCycles;
+      terrorGainPerCycle += volunteer.calculateTerrorGain(this) * numCycles;
+      prestigeGainPerCycle += volunteer.calculatePrestigeGain(this) * numCycles;
     }
 
     this.moneyGainRate = moneyGainPerCycle;
@@ -116,7 +109,8 @@ export class CharityORG {
     this.terror += terrorGainPerCycle;
     this.terror = Math.min(this.terror, 1);
     this.prestigeGainRate = prestigeGainPerCycle; //  / numCycles;?
-    this.prestige += prestigeGainPerCycle
+    this.prestige += prestigeGainPerCycle;
+    Player.karma += karmaGainPerCycle * numCycles;
 
     // Faction reputation gains is respect gain divided by some constant
     const charityFaction = Factions["Charity"];

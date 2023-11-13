@@ -3,14 +3,13 @@ import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { Player } from "@player";
 import { ToastVariant } from "@enums";
 import { TicketRecord, GameType, GameOptions } from "./LotteryStoreLocationInside";
-import { LotteryConstants } from "./data/LotteryConstants"
+import { LotteryConstants } from "./data/LotteryConstants";
 import { SnackbarEvents } from "../ui/React/Snackbar";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-
 
 let wager = -1;
 let num1 = -1;
@@ -21,13 +20,13 @@ let num5 = -1;
 let num6 = -1;
 
 export function L649(): React.ReactElement {
-  const [result, setBet] = useState(1000);
-  const [betnum1, setBetNum1Result] = useState(1000);
-  const [betnum2, setBetNum2Result] = useState(1000);
-  const [betnum3, setBetNum3Result] = useState(1000);
-  const [betnum4, setBetNum4Result] = useState(1000);
-  const [betnum5, setBetNum5Result] = useState(1000);
-  const [betnum6, setBetNum6Result] = useState(1000);
+  const [, setBet] = useState(1000);
+  const [, setBetNum1Result] = useState(1000);
+  const [, setBetNum2Result] = useState(1000);
+  const [, setBetNum3Result] = useState(1000);
+  const [, setBetNum4Result] = useState(1000);
+  const [, setBetNum5Result] = useState(1000);
+  const [, setBetNum6Result] = useState(1000);
 
   function resetBet(): void {
     setBetNum1Result(-1);
@@ -42,7 +41,7 @@ export function L649(): React.ReactElement {
     num4 = -1;
     num5 = -1;
     num6 = -1;
-    let elems = document.getElementsByTagName('input');
+    const elems = document.getElementsByTagName("input");
     for (const elem of elems) {
       if (elem.name === "betnum") {
         elem.value = "";
@@ -65,97 +64,86 @@ export function L649(): React.ReactElement {
     e.currentTarget.value = bet > 0 ? bet.toString() : "";
   }
   function updateNum1(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num1 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num1 = -1;
-    }
-    else {
+    } else {
       setBetNum1Result(chosen);
       num1 = chosen;
     }
   }
   function updateNum2(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num2 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num2 = -1;
-    }
-    else {
+    } else {
       setBetNum2Result(chosen);
       num2 = chosen;
     }
   }
   function updateNum3(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num3 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num3 = -1;
-    }
-    else {
+    } else {
       setBetNum3Result(chosen);
       num3 = chosen;
     }
   }
   function updateNum4(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num4 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num4 = -1;
-    }
-    else {
+    } else {
       setBetNum4Result(chosen);
       num4 = chosen;
     }
   }
   function updateNum5(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num5 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num5 = -1;
-    }
-    else {
+    } else {
       setBetNum5Result(chosen);
       num5 = chosen;
     }
   }
   function updateNum6(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num6 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num6 = -1;
-    }
-    else {
+    } else {
       setBetNum6Result(chosen);
       num6 = chosen;
     }
   }
-  function canBuy(): boolean { // Used for checking the buy condition
-    let numcollection: number[] = [];
+  function canBuy(): boolean {
+    // Used for checking the buy condition
+    const numcollection: number[] = [];
     if (num1 > 0) {
       numcollection.push(num1);
     }
@@ -178,9 +166,8 @@ export function L649(): React.ReactElement {
       return false;
     }
 
-    for (let num of numcollection) {
-      if (numcollection.filter(x => x === num).length > 1)
-        return false;
+    for (const num of numcollection) {
+      if (numcollection.filter((x) => x === num).length > 1) return false;
     }
     return true;
   }
@@ -198,36 +185,30 @@ export function L649(): React.ReactElement {
       dialogBoxCreate("You cannot hold any more tickets.");
       return;
     }
-   
 
-    let numarray: number[] = [];
+    const numarray: number[] = [];
     numarray.push(num1);
     numarray.push(num2);
     numarray.push(num3);
     numarray.push(num4);
     numarray.push(num5);
     numarray.push(num6);
-    let option = GameOptions.None;
+    const option = GameOptions.None;
 
-   
-    let betrecord = new TicketRecord(
-      GameType.L649,
-      numarray,
-      wager,
-      option,
-    )
+    const betrecord = new TicketRecord(GameType.L649, numarray, wager, option);
     Player.loseMoney(wager, "lottery");
-    Player.lotteryTickets.push(betrecord)
+    Player.lotteryTickets.push(betrecord);
 
     const PurchaseToast = (
       <>
-        Purchased a ticket! Type:{betrecord.Type}  Bet:{betrecord.Wager}  Numbers:{numarray[0]},{numarray[1]},{numarray[2]},{numarray[3]},{numarray[4]},{numarray[5]},{numarray[6]}  Options:{betrecord.Option}
+        Purchased a ticket! Type:{betrecord.Type} Bet:{betrecord.Wager} Numbers:{numarray[0]},{numarray[1]},
+        {numarray[2]},{numarray[3]},{numarray[4]},{numarray[5]},{numarray[6]} Options:{betrecord.Option}
       </>
     );
     SnackbarEvents.emit(PurchaseToast, ToastVariant.INFO, 2000);
     resetBet();
   }
-  
+
   function buyRandomTicket(): void {
     if (wager <= 0) {
       dialogBoxCreate("You must wager something");
@@ -237,9 +218,8 @@ export function L649(): React.ReactElement {
       dialogBoxCreate("You cannot hold any more tickets.");
       return;
     }
-    
 
-    let numarray: number[] = [];
+    const numarray: number[] = [];
     let z = -1;
     num1 = getRandomInt(1, 49);
     z = num1;
@@ -270,31 +250,38 @@ export function L649(): React.ReactElement {
     num6 = z;
     numarray.push(num6);
 
-    let option = GameOptions.None;
+    const option = GameOptions.None;
 
-    let betrecord = new TicketRecord(
-      GameType.L649,
-      numarray,
-      wager,
-      option,
-    )
+    const betrecord = new TicketRecord(GameType.L649, numarray, wager, option);
     Player.loseMoney(wager, "lottery");
-    Player.lotteryTickets.push(betrecord)
+    Player.lotteryTickets.push(betrecord);
 
     const PurchaseToast = (
       <>
-        Purchased a ticket! Type:{betrecord.Type}  Bet:{betrecord.Wager}  Numbers:{numarray[0]},{numarray[1]},{numarray[2]},{numarray[3]},{numarray[4]},{numarray[5]},{numarray[6]}  Options:{betrecord.Option}
+        Purchased a ticket! Type:{betrecord.Type} Bet:{betrecord.Wager} Numbers:{numarray[0]},{numarray[1]},
+        {numarray[2]},{numarray[3]},{numarray[4]},{numarray[5]},{numarray[6]} Options:{betrecord.Option}
       </>
     );
     SnackbarEvents.emit(PurchaseToast, ToastVariant.INFO, 2000);
     resetBet();
   }
-  
- 
+  function showOdds(): void {
+    dialogBoxCreate(
+      "Lotto 6/49 Winnings.\n" +
+        "Based on a $1 bet\n\n" +
+        "6 of 6        : $1,666,666  3 of 6         : $3.33\n" +
+        "5 of 6 + Bonus:   $533,333  2 of 6 + bonus : $1.67\n" +
+        "5 of 6        :   $225,000  2 of 6         : $1.00\n" +
+        "4 of 6        :    $66,666",
+    );
+  }
+
   return (
     <>
       <Typography>Lotto 6/49</Typography>
-      <Typography><br /></Typography>
+      <Typography>
+        <br />
+      </Typography>
       <Typography>Bet:</Typography>
       <Box display="flex" alignItems="center">
         <TextField
@@ -309,7 +296,7 @@ export function L649(): React.ReactElement {
       </Box>
       <br />
       <Box display="flex" alignItems="center">
-      <Typography>1st:</Typography>
+        <Typography>1st:</Typography>
         <TextField
           type="number"
           name="betnum"
@@ -317,63 +304,65 @@ export function L649(): React.ReactElement {
             width: "50px",
           }}
           onChange={updateNum1}
-          placeholder={String(num1)}
         />
         <Typography>&nbsp;2nd:</Typography>
-          <TextField
+        <TextField
           type="number"
           name="betnum"
-            style={{
-              width: "50px",
-            }}
-            onChange={updateNum2}
-            placeholder={String(num2)}
+          style={{
+            width: "50px",
+          }}
+          onChange={updateNum2}
         />
         <Typography>&nbsp;3rd:</Typography>
-          <TextField
+        <TextField
           type="number"
           name="betnum"
-            style={{
-              width: "50px",
-            }}
-            onChange={updateNum3}
-            placeholder={String(num3)}
+          style={{
+            width: "50px",
+          }}
+          onChange={updateNum3}
         />
         <Typography>&nbsp;4th:</Typography>
-          <TextField
+        <TextField
           type="number"
           name="betnum"
-            style={{
-              width: "50px",
-            }}
-            onChange={updateNum4}
-            placeholder={String(num4)}
+          style={{
+            width: "50px",
+          }}
+          onChange={updateNum4}
         />
         <Typography>&nbsp;5th:</Typography>
-          <TextField
+        <TextField
           type="number"
           name="betnum"
-            style={{
-              width: "50px",
-            }}
-            onChange={updateNum5}
-            placeholder={String(num5)}
+          style={{
+            width: "50px",
+          }}
+          onChange={updateNum5}
         />
         <Typography>&nbsp;6th:</Typography>
-          <TextField
+        <TextField
           type="number"
           name="betnum"
-            style={{
-              width: "50px",
-            }}
-            onChange={updateNum6}
-            placeholder={String(num6)}
-          />
+          style={{
+            width: "50px",
+          }}
+          onChange={updateNum6}
+        />
       </Box>
       <br />
       <br />
-      <Button onClick={() => buyTicket()}>Buy ticket</Button>, <Button onClick={() => buyRandomTicket()}>Buy random ticket</Button>
+      <Button onClick={() => buyTicket()}>Buy ticket</Button>,{" "}
+      <Button onClick={() => buyRandomTicket()}>Buy random ticket</Button>
+      <Box display="-ms-grid" alignItems="left" whiteSpace="pre">
+        <Typography>----------------------------</Typography>
+        <br />
+        <Typography>Rules:</Typography>
+        <br />
+        <Typography>Pick 6 unique numbers, between 1 and 49</Typography>
+        <Button onClick={() => showOdds()}>Show Winnings Chart</Button>
+      </Box>
     </>
   );
- 
 }

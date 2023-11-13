@@ -3,14 +3,13 @@ import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { Player } from "@player";
 import { ToastVariant } from "@enums";
 import { TicketRecord, GameType, GameOptions } from "./LotteryStoreLocationInside";
-import { LotteryConstants } from "./data/LotteryConstants"
+import { LotteryConstants } from "./data/LotteryConstants";
 import { SnackbarEvents } from "../ui/React/Snackbar";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-
 
 let wager = -1;
 let numstobet = 10;
@@ -26,18 +25,18 @@ let num9 = -1;
 let num10 = -1;
 
 export function Keno(): React.ReactElement {
-  const [result, setBet] = useState(1000);
-  const [betnums, setNumsToBet] = useState(1000);
-  const [betnum1, setBetNum1Result] = useState(1000);
-  const [betnum2, setBetNum2Result] = useState(1000);
-  const [betnum3, setBetNum3Result] = useState(1000);
-  const [betnum4, setBetNum4Result] = useState(1000);
-  const [betnum5, setBetNum5Result] = useState(1000);
-  const [betnum6, setBetNum6Result] = useState(1000);
-  const [betnum7, setBetNum7Result] = useState(1000);
-  const [betnum8, setBetNum8Result] = useState(1000);
-  const [betnum9, setBetNum9Result] = useState(1000);
-  const [betnum10, setBetNum10Result] = useState(1000);
+  const [, setBet] = useState(1000);
+  const [, setNumsToBet] = useState(1000);
+  const [, setBetNum1Result] = useState(1000);
+  const [, setBetNum2Result] = useState(1000);
+  const [, setBetNum3Result] = useState(1000);
+  const [, setBetNum4Result] = useState(1000);
+  const [, setBetNum5Result] = useState(1000);
+  const [, setBetNum6Result] = useState(1000);
+  const [, setBetNum7Result] = useState(1000);
+  const [, setBetNum8Result] = useState(1000);
+  const [, setBetNum9Result] = useState(1000);
+  const [, setBetNum10Result] = useState(1000);
 
   function updateBet(e: React.ChangeEvent<HTMLInputElement>): void {
     let bet: number = parseInt(e.currentTarget.value);
@@ -70,157 +69,138 @@ export function Keno(): React.ReactElement {
     e.currentTarget.value = numstouse > 0 ? numstouse.toString() : "";
   }
   function updateNum1(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num1 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num1 = -1;
-    }
-    else {
+    } else {
       setBetNum1Result(chosen);
       num1 = chosen;
     }
   }
   function updateNum2(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num2 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num2 = -1;
-    }
-    else {
+    } else {
       setBetNum2Result(chosen);
       num2 = chosen;
     }
   }
   function updateNum3(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num3 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num3 = -1;
-    }
-    else {
+    } else {
       setBetNum3Result(chosen);
       num3 = chosen;
     }
   }
   function updateNum4(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num4 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num4 = -1;
-    }
-    else {
+    } else {
       setBetNum4Result(chosen);
       num4 = chosen;
     }
   }
   function updateNum5(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num5 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num5 = -1;
-    }
-    else {
+    } else {
       setBetNum5Result(chosen);
       num5 = chosen;
     }
   }
   function updateNum6(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num6 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num6 = -1;
-    }
-    else {
+    } else {
       setBetNum6Result(chosen);
       num6 = chosen;
     }
   }
   function updateNum7(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num7 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num7 = -1;
-    }
-    else {
+    } else {
       setBetNum7Result(chosen);
       num7 = chosen;
     }
   }
   function updateNum8(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num8 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num8 = -1;
-    }
-    else {
+    } else {
       setBetNum8Result(chosen);
       num8 = chosen;
     }
   }
   function updateNum9(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num9 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num9 = -1;
-    }
-    else {
+    } else {
       setBetNum9Result(chosen);
       num9 = chosen;
     }
   }
   function updateNum10(e: React.ChangeEvent<HTMLInputElement>): void {
-    let chosen: number = parseInt(e.currentTarget.value);
+    const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
       num10 = -1;
-    }
-    else if (chosen > 49) {
+    } else if (chosen > 49) {
       e.currentTarget.value = "";
       num10 = -1;
-    }
-    else {
+    } else {
       setBetNum10Result(chosen);
       num10 = chosen;
     }
   }
-  function canBuy(): boolean { // Used for checking the buy condition
-    let numcollection: number[] = [];
+  function canBuy(): boolean {
+    // Used for checking the buy condition
+    const numcollection: number[] = [];
     if (num1 > 0) {
       numcollection.push(num1);
     }
@@ -254,14 +234,14 @@ export function Keno(): React.ReactElement {
     if (numcollection.length !== numstobet) {
       return false;
     }
-    for (let num of numcollection) {
-      if (numcollection.filter(x => x === num).length > 1)
-        return false;
+    for (const num of numcollection) {
+      if (numcollection.filter((x) => x === num).length > 1) return false;
     }
     return true;
   }
-  function numsSelected(): number { // Used for checking the buy condition
-    let numcollection: number[] = [];
+  function numsSelected(): number {
+    // Used for checking the buy condition
+    const numcollection: number[] = [];
     if (num1 > 0) {
       numcollection.push(num1);
     }
@@ -317,8 +297,7 @@ export function Keno(): React.ReactElement {
       return;
     }
 
-
-    let numarray: number[] = [];
+    const numarray: number[] = [];
     if (num1 > 0) numarray.push(num1);
     if (num2 > 0) numarray.push(num2);
     if (num3 > 0) numarray.push(num3);
@@ -329,15 +308,9 @@ export function Keno(): React.ReactElement {
     if (num8 > 0) numarray.push(num8);
     if (num9 > 0) numarray.push(num9);
     if (num10 > 0) numarray.push(num10);
-    let option = GameOptions.None;
+    const option = GameOptions.None;
 
-
-    let betrecord = new TicketRecord(
-      GameType.Keno,
-      numarray,
-      wager,
-      option,
-    )
+    const betrecord = new TicketRecord(GameType.Keno, numarray, wager, option);
     Player.loseMoney(wager, "lottery");
     Player.lotteryTickets.push(betrecord);
     let numberstring = String(numarray[0]);
@@ -347,7 +320,8 @@ export function Keno(): React.ReactElement {
 
     const PurchaseToast = (
       <>
-        Purchased a ticket! Type:{betrecord.Type}  Bet:{betrecord.Wager}  Numbers:{numberstring}  Options:{betrecord.Option}
+        Purchased a ticket! Type:{betrecord.Type} Bet:{betrecord.Wager} Numbers:{numberstring} Options:
+        {betrecord.Option}
       </>
     );
     SnackbarEvents.emit(PurchaseToast, ToastVariant.INFO, 2000);
@@ -366,9 +340,8 @@ export function Keno(): React.ReactElement {
       dialogBoxCreate("You must bet on at least 1 number");
       return;
     }
-    
 
-    let numarray: number[] = [];
+    const numarray: number[] = [];
     let z = -1;
     num1 = getRandomInt(1, 49);
     z = num1;
@@ -436,16 +409,11 @@ export function Keno(): React.ReactElement {
       num10 = z;
       numarray.push(num10);
     }
-    let option = GameOptions.None;
+    const option = GameOptions.None;
 
-    let betrecord = new TicketRecord(
-      GameType.Keno,
-      numarray,
-      wager,
-      option,
-    )
+    const betrecord = new TicketRecord(GameType.Keno, numarray, wager, option);
     Player.loseMoney(wager, "lottery");
-    Player.lotteryTickets.push(betrecord)
+    Player.lotteryTickets.push(betrecord);
 
     let numberstring = String(numarray[0]);
     for (let nums = 1; nums < numarray.length; nums++) {
@@ -454,8 +422,9 @@ export function Keno(): React.ReactElement {
 
     const PurchaseToast = (
       <>
-        Purchased a ticket! Type:{betrecord.Type}  Bet:{betrecord.Wager}  Numbers:{numberstring}  Options:{betrecord.Option}
-     </>
+        Purchased a ticket! Type:{betrecord.Type} Bet:{betrecord.Wager} Numbers:{numberstring} Options:
+        {betrecord.Option}
+      </>
     );
     SnackbarEvents.emit(PurchaseToast, ToastVariant.INFO, 2000);
     resetBet();
@@ -482,18 +451,34 @@ export function Keno(): React.ReactElement {
     num8 = -1;
     num9 = -1;
     num10 = -1;
-    let elems = document.getElementsByTagName('input');
+    const elems = document.getElementsByTagName("input");
     for (const elem of elems) {
       if (elem.name === "betnum") {
         elem.value = "";
       }
     }
   }
- 
+  function showOdds(): void {
+    dialogBoxCreate(
+      "Lotto Keno Winnings.\n" +
+        "Based on a $1 bet\n\n" +
+        "Chart shows #'s picked / #'s matched\n" +
+        "1/1:  $2  5/5:   $400  7/7: $5,000  8/8: $10,000  9/9: $25,000  10/10: $100,000\n" +
+        "2/2: $10  5/4:    $15  7/6:   $100  8/7:    $400  9/8:  $2,500  10/9 :   $5,000\n" +
+        "3/3: $30  5/3:     $2  7/5:    $15  8/6:     $50  9/7:    $200  10/8 :     $500\n" +
+        "3/2:  $2  6/6: $1,500  7/4:     $2  8/5:     $10  9/6:     $25  10/7 :      $50\n" +
+        "4/4: $50  6/5:    $50  7/3:     $1  8/4:      $2  9/5:      $4  10/6 :      $10\n" +
+        "4/3:  $5  6/4:     $5                             9/4:      $1  10/5 :       $3\n" +
+        "4/2:  $1  6/3:     $1                                           10/0 :       $1",
+    );
+  }
+
   return (
     <>
       <Typography>Lotto Keno</Typography>
-      <Typography><br /></Typography>
+      <Typography>
+        <br />
+      </Typography>
       <Typography>Bet:</Typography>
       <Box display="flex" alignItems="center">
         <TextField
@@ -520,7 +505,7 @@ export function Keno(): React.ReactElement {
       </Box>
       <br />
       <Box display="flex" alignItems="center">
-      <Typography>1st:</Typography>
+        <Typography>1st:</Typography>
         <TextField
           type="number"
           name="betnum"
@@ -528,59 +513,53 @@ export function Keno(): React.ReactElement {
             width: "50px",
           }}
           onChange={updateNum1}
-          placeholder={String(num1)}
         />
         <Typography>&nbsp;2nd:</Typography>
-          <TextField
+        <TextField
           type="number"
           name="betnum"
-            style={{
-              width: "50px",
-            }}
-            onChange={updateNum2}
-            placeholder={String(num2)}
+          style={{
+            width: "50px",
+          }}
+          onChange={updateNum2}
         />
         <Typography>&nbsp;3rd:</Typography>
-          <TextField
+        <TextField
           type="number"
           name="betnum"
-            style={{
-              width: "50px",
-            }}
-            onChange={updateNum3}
-            placeholder={String(num3)}
+          style={{
+            width: "50px",
+          }}
+          onChange={updateNum3}
         />
         <Typography>&nbsp;4th:</Typography>
-          <TextField
+        <TextField
           type="number"
           name="betnum"
-            style={{
-              width: "50px",
-            }}
-            onChange={updateNum4}
-            placeholder={String(num4)}
+          style={{
+            width: "50px",
+          }}
+          onChange={updateNum4}
         />
         <Typography>&nbsp;5th:</Typography>
-          <TextField
+        <TextField
           type="number"
           name="betnum"
-            style={{
-              width: "50px",
-            }}
-            onChange={updateNum5}
-            placeholder={String(num5)}
+          style={{
+            width: "50px",
+          }}
+          onChange={updateNum5}
         />
       </Box>
       <Box display="flex" alignItems="center">
         <Typography>6th:</Typography>
-          <TextField
+        <TextField
           type="number"
           name="betnum"
-            style={{
-              width: "50px",
-            }}
-            onChange={updateNum6}
-            placeholder={String(num6)}
+          style={{
+            width: "50px",
+          }}
+          onChange={updateNum6}
         />
         <Typography>&nbsp;7th:</Typography>
         <TextField
@@ -590,7 +569,6 @@ export function Keno(): React.ReactElement {
             width: "50px",
           }}
           onChange={updateNum7}
-          placeholder={String(num7)}
         />
         <Typography>&nbsp;8th:</Typography>
         <TextField
@@ -600,7 +578,6 @@ export function Keno(): React.ReactElement {
             width: "50px",
           }}
           onChange={updateNum8}
-          placeholder={String(num8)}
         />
         <Typography>&nbsp;9th:</Typography>
         <TextField
@@ -610,7 +587,6 @@ export function Keno(): React.ReactElement {
             width: "50px",
           }}
           onChange={updateNum9}
-          placeholder={String(num9)}
         />
         <Typography>&nbsp;10th:</Typography>
         <TextField
@@ -620,13 +596,21 @@ export function Keno(): React.ReactElement {
             width: "50px",
           }}
           onChange={updateNum10}
-          placeholder={String(num10)}
         />
       </Box>
       <br />
       <br />
-      <Button onClick={() => buyTicket()}>Buy ticket</Button>, <Button onClick={() => buyRandomTicket()}>Buy random ticket</Button>
+      <Button onClick={() => buyTicket()}>Buy ticket</Button>,{" "}
+      <Button onClick={() => buyRandomTicket()}>Buy random ticket</Button>
+      <Box display="-ms-grid" alignItems="left" whiteSpace="pre">
+        <Typography>----------------------------</Typography>
+        <br />
+        <Typography>Rules:</Typography>
+        <br />
+        <Typography>Pick between 1 and 10 unique numbers, between 1 and 80.</Typography>
+        <Typography>Draw is for 20 numbers.</Typography>
+        <Button onClick={() => showOdds()}>Show Winnings Chart</Button>
+      </Box>
     </>
   );
- 
 }

@@ -2382,7 +2382,6 @@ export interface Singularity {
    */
   getCharityStats(charity: CharityType | `${CharityType}`): CharityStats;
 
-
   /**
    * Get a list of owned augmentation.
    * @remarks
@@ -4667,6 +4666,168 @@ export interface Grafting {
    */
   graftAugmentation(augName: string, focus?: boolean): boolean;
 }
+/** @public */
+/*interface TicketRecord {
+  Type: string;
+  Numbers: number[];
+  Wager: number;
+  Option: GameOptions;
+}
+/** @public */
+/*interface GameOptions {
+  None: string = "none";
+  Straight: string = "straight";
+  Box: string = "box";
+  StraightBox: string = "straightbox";
+}
+*/
+/**
+ * Lottery API
+ * @remarks
+ * Interact with the lottery store by API
+ * @public
+ */
+export interface Lottery {
+  /**
+   * Retrieves your tickets.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   *
+   * @returns An array of your current tickets
+   */
+  getTickets(): TicketRecord[];
+
+  /**
+   * Buy a Pick 2 ticket
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param wager - The bet you will be placing.  Between 1-500
+   * @param numbers - An array of numbers that you are selecting.
+   *
+   * @example
+   * ```ts
+   * // Buy a Pick 2 ticket.
+   * ns.lotto.buyPick2Ticket(500, [0,3]);
+   *
+   * // Purchase a pick2 ticket that you specify, and one with a random number selection
+   * ```
+   *
+   * @returns True if the ticket was purchased, or false if it was not.
+   */
+  buyPick2Ticket(wager: number, numbers: number[]): boolean;
+
+  /**
+   * Buy a Pick 3 ticket
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param wager - The bet you will be placing.  Between 1-500
+   * @param option - Option for the bet. box, straight or straight/box
+   * @param numbers - An array of numbers that you are selecting.
+   *
+   * @example
+   * ```ts
+   * // Buy a Pick 3 ticket.
+   * ns.lotto.buyPick3Ticket(500, "box", [0,3,0]);
+   * ns.lotto.buyPick3Ticket(500, "straight", [1,1,1]);
+   * ns.lotto.buyPick3Ticket(500, "straight/box", [1,2,3]);
+   *
+   * // Purchase a pick3 ticket as box, straight and straight/box, and one at random.
+   * ```
+   *
+   * @returns True if the ticket was purchased, or false if it was not.
+   */
+  buyPick3Ticket(wager: number, options: string, numbers: number[]): boolean;
+
+  /**
+   * Buy a Pick 4 ticket
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param wager - The bet you will be placing.  Between 1-500
+   * @param option - Option for the bet. box or straight
+   * @param numbers - An array of numbers that you are selecting.
+   *
+   * @example
+   * ```ts
+   * // Buy a Pick 3 ticket.
+   * ns.lotto.buyPick4Ticket(500, "box", [0,3,0,3]);
+   * ns.lotto.buyPick4Ticket(500, "straight", [1,1,1,2]);
+   *
+   * // Purchase a pick4 ticket as box, straight, and one at random.
+   * ```
+   *
+   * @returns True if the ticket was purchased, or false if it was not.
+   */
+  buyPick4Ticket(wager: number, options: string, numbers: number[]): boolean;
+
+  /**
+   * Buy a Lotto 6/49 ticket
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param wager - The bet you will be placing.  Between 1-500
+   * @param numbers - An array of numbers that you are selecting.
+   *
+   * @example
+   * ```ts
+   * // Buy a Lotto 6/49 ticket.
+   * ns.lotto.buyL649Ticket(500, [2,12,15,22,27,42]);
+   *
+   * // Purchase a lotto 6/49 ticket and one at random.
+   * ```
+   *
+   * @returns True if the ticket was purchased, or false if it was not.
+   */
+  buyL649Ticket(wager: number, numbers: number[]): boolean;
+
+  /**
+   * Buy a Keno ticket
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param wager - The bet you will be placing.  Between 1-500
+   * @param numbers - An array of numbers that you are selecting.
+   *
+   * @example
+   * ```ts
+   * // Buy a Keno ticket.
+   * ns.lotto.buyKenoTicket(500, [2,12,15,22,27,42,45,8,55,66]);
+   * ns.lotto.buyKenoTicket(500, [2,12,15,22,27]);
+   *
+   * // Purchase a lotto 6/49 ticket and one at random.
+   * ```
+   *
+   * @returns True if the ticket was purchased, or false if it was not.
+   */
+  buyKenoTicket(wager: number, numbers: number[]): boolean;
+
+  /**
+   * Buy's a Random ticket
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param wager - The bet you will be placing.  Between 1-500
+   *
+   * @example
+   * ```ts
+   * // Buy a Random ticket.
+   * ns.lotto.buyRandomTicket(Wager, ?Type, ?Option)
+   * ns.lotto.buyRandomTicket(500);
+   * ns.lotto.buyRandomTicket(500, "l649");
+   * ns.lotto.buyRandomTicket(500, "pick3", "box");
+   *
+   * // Purchase a completely random ticket, selected from all available types and options.
+   * // Types are pick2, pick3, pick4, l649, keno
+   * // Options are: pick2 = straight,  pick3 = straight, box, straightbox,  pick4 = straight, box
+   * ```
+   *
+   * @returns True if the ticket was purchased, or false if it was not.
+   */
+  buyRandomTicket(wager: number, type?: string, option?: string): boolean;
+}
 
 /**
  * Skills formulas
@@ -5394,6 +5555,12 @@ export interface NS {
    * @remarks RAM cost: 0 GB
    */
   readonly grafting: Grafting;
+
+  /**
+   * Namespace for lottery functions.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly lottery: Lottery;
 
   /**
    * Arguments passed into the script.

@@ -280,7 +280,11 @@ function getABC(sleeve: Sleeve): [string, string, string] {
     case SleeveWorkType.CRIME:
       return ["Commit Crime", getEnumHelper("CrimeType").getMember(work.crimeType, { alwaysMatch: true }), "------"];
     case SleeveWorkType.CHARITY:
-      return ["Perform Charity", getEnumHelper("CharityType").getMember(work.charityType, { alwaysMatch: true }), "------"];
+      return [
+        "Perform Charity",
+        getEnumHelper("CharityType").getMember(work.charityType, { alwaysMatch: true }),
+        "------",
+      ];
     case SleeveWorkType.SUPPORT:
       return ["Perform Bladeburner Actions", "Support main sleeve", "------"];
     case SleeveWorkType.INFILTRATE:

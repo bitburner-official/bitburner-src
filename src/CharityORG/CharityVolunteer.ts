@@ -1,7 +1,7 @@
 import { CharityVolunteerTask } from "./CharityVolunteerTask";
 import { CharityVolunteerTasks } from "./CharityVolunteerTasks";
 import { CharityVolunteerUpgrade } from "./CharityVolunteerUpgrade";
-import { CharityVolunteerUpgrades } from "./CharityVolunteerUpgrades";
+//import { CharityVolunteerUpgrades } from "./CharityVolunteerUpgrades";
 import { IAscensionResult } from "./IAscensionResult";
 import { Player } from "@player";
 import { CharityORG } from "./CharityORG";
@@ -60,7 +60,7 @@ export class CharityVolunteer {
   cha_asc_points = 0;
 
   upgrades: string[] = []; // Names of upgrades
-  
+
   constructor(name = "") {
     this.name = name;
   }
@@ -167,7 +167,7 @@ export class CharityVolunteer {
     // Figure our an amount and mult it by terror
     const currentTerror = charityORG.terror;
 
-    return .001 + (.01 * (1 - currentTerror))
+    return 0.001 + 0.01 * (1 - currentTerror);
   }
 
   expMult(): IMults {
@@ -298,8 +298,8 @@ export class CharityVolunteer {
     this.agi_mult = 1;
     this.cha_mult = 1;
     //for (let i = 0; i < this.augmentations.length; ++i) {
-     // const aug = CharityVolunteerUpgrades[this.augmentations[i]];
-     // this.applyUpgrade(aug);
+    // const aug = CharityVolunteerUpgrades[this.augmentations[i]];
+    // this.applyUpgrade(aug);
     //}
 
     // Clear exp and recalculate stats
