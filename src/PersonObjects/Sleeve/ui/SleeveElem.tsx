@@ -31,16 +31,16 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
       return "This sleeve is currently set to synchronize with the original consciousness. This causes the Sleeve's synchronization to increase.";
     case SleeveWorkType.BLADEBURNER:
       return (
-        `This sleeve is currently attempting to perform ${work.actionName}.\nTasks Completed: ${formatNumber(
+        `This sleeve is currently attempting to perform ${work.actionName}.\n\nTasks Completed: ${formatNumber(
           work.tasksCompleted,
-        )} \n` + `Progress: ${formatPercent(progress)}`
+        )}\n \n` + `Progress: ${formatPercent(progress)}`
       );
     case SleeveWorkType.CRIME: {
       const crime = work.getCrime();
       return (
         `This sleeve is currently attempting ${crime.workName} (Success Rate: ${formatPercent(
           crime.successRate(sleeve),
-        )}).\nTasks Completed: ${formatNumber(work.tasksCompleted)} 
+        )}).\n\nTasks Completed: ${formatNumber(work.tasksCompleted)} 
 		\n` + `Progress: ${formatPercent(progress)}`
       );
     }
