@@ -12,7 +12,7 @@ export interface AutomataData {
 
 export interface AutomataProperties {
 	isBipartite: boolean;
-	shortestInput: string;
+	shortestInput: number;
 	nodeValues: Record<string, number>;
 	nodeIndegrees: Record<string, number>;
 }
@@ -25,7 +25,7 @@ export function AutomataFactory(completions: number): [AutomataData, [string, st
 	const numStates = getRandomInt(2, 5) * 5 + Math.floor(completions);
 	const numSymbols = 2 + Math.floor(Math.log(numStates + 1));
 
-	const states = Array.from({ length: numStates }, (_, i) => "s" + i.toString().padStart(4, "0"));
+	const states = Array.from({ length: numStates }, (_, i) => "s" + i.toString().padStart(Math.ceil(Math.log10(numStates)), "0"));
 	const symbols = base64Characters.split("", numSymbols);
 
 	const transitions = generateTransitions(states, symbols);
@@ -59,7 +59,7 @@ export function calculateProperties(data: Omit<AutomataData, "properties">): Aut
 
 	return {
 		isBipartite: bipartite,
-		shortestInput: input,
+		shortestInput: input.length,
 		nodeValues: values,
 		nodeIndegrees: degrees
 	}

@@ -39,7 +39,8 @@ export class Worm {
 	solve(providedProperties: WormInputArray)  {
 		const comparisons = [
 			providedProperties[0] === this.data.properties.isBipartite,
-			providedProperties[1] === this.data.properties.shortestInput,
+			providedProperties[1].length === this.data.properties.shortestInput
+			&& evaluateInput(this.data, providedProperties[1]) === this.data.states[this.data.states.length - 1],
 			providedProperties[2] === this.data.properties.nodeValues[this.chosenNodes[0]],
 			providedProperties[3] === this.data.properties.nodeIndegrees[this.chosenNodes[1]]
 		];
@@ -48,7 +49,9 @@ export class Worm {
 
 		if (amountCorrect < comparisons.length * 0.7) return false;
 
-		this.completions += amountCorrect / comparisons.length;
+		const rewardValue = amountCorrect / comparisons.length;
+		this.completions += rewardValue;
+
 		[this.data, this.chosenNodes] = AutomataFactory(this.completions);
 
 		return true;
