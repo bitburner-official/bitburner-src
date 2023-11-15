@@ -9,6 +9,8 @@ import { Player } from "@player";
 import Typography from "@mui/material/Typography";
 import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import TextField from "@mui/material/TextField";
+import { joinFaction } from "../../../Faction/FactionHelpers";
+import { Factions } from "../../../Faction/Factions";
 
 interface IProps {
   open: boolean;
@@ -36,7 +38,7 @@ export function CreateCharityModal(props: IProps): React.ReactElement {
 
     Player.startCharity(name, false);
     Player.loseMoney(250e6, "charity");
-
+    joinFaction(Factions.Charity);
     props.onClose();
     Router.toPage(Page.CharityORG);
   }
@@ -47,7 +49,7 @@ export function CreateCharityModal(props: IProps): React.ReactElement {
     }
 
     Player.startCharity(name, true);
-
+    joinFaction(Factions.Charity);
     props.onClose();
     Router.toPage(Page.CharityORG);
   }

@@ -8,7 +8,6 @@ export function canAccessCharity(this: PlayerObject): boolean {
 
 export function startCharity(this: PlayerObject, charityName: string, seedFunded: boolean): void {
   this.charityORG = new CharityORG(charityName, seedFunded);
-
   if (seedFunded) {
     this.charityORG.bank = 5e6;
   } else {

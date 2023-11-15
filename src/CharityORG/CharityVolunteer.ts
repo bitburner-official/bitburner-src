@@ -12,6 +12,7 @@ import {
   calculateMoneySpend,
   calculateKarmaGain,
   calculateVisibilityGain,
+  calculateTerrorGain,
   calculateAscensionMult,
   calculateAscensionPointsGain,
 } from "./formulas/formulas";
@@ -163,11 +164,14 @@ export class CharityVolunteer {
   }
 
   calculateTerrorGain(charityORG: CharityORG): number {
-    // currentTerror is between 0 - 1  Lots of terror is added when it's low, less when it's high
-    // Figure our an amount and mult it by terror
-    const currentTerror = charityORG.terror;
+    const task = this.getTask();
+    const c = {
+      prestige: charityORG.prestige,
+      visibility: charityORG.visibility,
+      terror: charityORG.terror,
+    };
 
-    return 0.001 + 0.01 * (1 - currentTerror);
+    return calculateTerrorGain(c, this, task);
   }
 
   expMult(): IMults {
@@ -182,6 +186,7 @@ export class CharityVolunteer {
   }
 
   gainExperience(numCycles = 1): void {
+    numCycles /= 10;
     const task = this.getTask();
     if (task === CharityVolunteerTasks.Unassigned) return;
     const difficultyMult = Math.pow(task.difficulty, 0.9);
@@ -220,10 +225,9 @@ export class CharityVolunteer {
       this.calculateAscensionMult(this.cha_asc_points);
   }
 
-  earnPrestige(numCycles = 1, charityORG: CharityORG): number {
+  earnPrestige(numCycles = 1, charityORG: CharityORG): void {
     const earnedPrestige = this.calculatePrestigeGain(charityORG) * numCycles;
     this.earnedPrestige += earnedPrestige;
-    return earnedPrestige;
   }
 
   getGainedAscensionPoints(): IMults {

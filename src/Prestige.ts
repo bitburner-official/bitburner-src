@@ -123,6 +123,11 @@ export function prestigeAugmentation(): void {
     }
   }
 
+  // Charities
+  if (Player.charityORG) {
+    joinFaction(Factions.Charity);
+  }
+
   // BitNode 3: Corporatocracy
   if (Player.bitNodeN === 3) {
     // Easiest way to comply with type constraint, instead of revalidating the enum member's file path

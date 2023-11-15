@@ -25,6 +25,7 @@ import { AugmentationsRoot } from "../Augmentation/ui/AugmentationsRoot";
 import { DevMenuRoot } from "../DevMenu";
 import { BladeburnerRoot } from "../Bladeburner/ui/BladeburnerRoot";
 import { GangRoot } from "../Gang/ui/GangRoot";
+import { CharityORGRoot } from "../CharityORG/ui/CharityORGRoot";
 import { CorporationRoot } from "../Corporation/ui/CorporationRoot";
 import { InfiltrationRoot } from "../Infiltration/ui/InfiltrationRoot";
 import { GraftingRoot } from "../PersonObjects/Grafting/ui/GraftingRoot";
@@ -290,6 +291,10 @@ export function GameRoot(): React.ReactElement {
     }
     case Page.Gang: {
       mainPage = <GangRoot />;
+      break;
+    }
+    case Page.CharityORG: {
+      mainPage = <CharityORGRoot />;
       break;
     }
     case Page.Corporation: {

@@ -99,7 +99,7 @@ const Engine: {
     if (Player.gang) Player.gang.process(numCycles);
 
     // Charity
-    //if (Player.charityORG) Player.charityORG.process(numCycles);
+    if (Player.charityORG) Player.charityORG.process(numCycles);
 
     // Staneks gift
     staneksGift.process(numCycles);
@@ -319,6 +319,9 @@ const Engine: {
 
       // Gang progress for BitNode 2
       if (Player.gang) Player.gang.process(numCyclesOffline);
+
+      // Charity progress for BitNode 15
+      if (Player.charityORG) Player.charityORG.process(numCyclesOffline);
 
       // Corporation offline progress
       if (Player.corporation) Player.corporation.storeCycles(numCyclesOffline);
