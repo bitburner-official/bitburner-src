@@ -1347,6 +1347,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "data": {
               "crimeType": "Homicide",
               "cyclesWorked": 0,
+              "tasksCompleted": 0,
               "type": "CRIME",
             },
           },
