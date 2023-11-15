@@ -51,6 +51,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
 
   /** Name of company position that player holds, if applicable */
   const jobTitle = Player.jobs[props.companyName] ? Player.jobs[props.companyName] : null;
+  const hasMoreJobs = Object.keys(Player.jobs).length > 1;
 
   /**
    * CompanyPosition object for the job that the player holds at this company
@@ -176,11 +177,32 @@ export function CompanyLocation(props: IProps): React.ReactElement {
     }
   }
 
+  function switchLoc(num: number): void {
+    let targetNum = Object.keys(Player.jobs).findIndex((x) => x == props.companyName);
+    if (targetNum === -1) return;
+    targetNum += num;
+    if (targetNum >= Object.keys(Player.jobs).length) {
+      targetNum = 0;
+    } else if (targetNum < 0) {
+      targetNum = Object.keys(Player.jobs).length - 1;
+    }
+    Router.toPage(Page.Job, { location: Locations[Object.keys(Player.jobs)[targetNum]] });
+  }
+
   const isEmployedHere = jobTitle != null;
   const favorGain = company.getFavorGain();
 
   return (
     <>
+      {isEmployedHere && hasMoreJobs && (
+        <>
+          <Box>
+            <Button onClick={() => switchLoc(-1)}>Previous</Button>
+            <Button onClick={() => switchLoc(1)}>Next</Button>
+          </Box>
+          <br />
+        </>
+      )}
       {isEmployedHere && (
         <>
           <Typography>Job Title: {jobTitle}</Typography>
