@@ -25,7 +25,7 @@ export function ServerAccordionContent(props: IProps): React.ReactElement {
 
   return (
     <>
-      {props.workerScripts.length > 10 ? (
+      {props.workerScripts.length > 0 ? (
         <TablePagination
           rowsPerPageOptions={[10, 15, 20, 100]}
           component="div"
