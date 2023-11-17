@@ -22,8 +22,8 @@ export const base64Characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstu
 const chooseRandomState = (states: string[]) => states[Math.floor(Math.random() * states.length)];
 
 export function AutomataFactory(completions: number): [AutomataData, [string, string]] {
-	const numStates = getRandomInt(2, 5) * 5 + Math.floor(completions);
-	const numSymbols = 2 + Math.floor(Math.log(numStates + 1));
+	const numStates = getRandomInt(2, 5) * 3 + Math.floor(completions);
+	const numSymbols = 2 + Math.floor(Math.log10(numStates + 1));
 
 	const states = Array.from({ length: numStates }, (_, i) => "s" + i.toString().padStart(Math.ceil(Math.log10(numStates)), "0"));
 	const symbols = base64Characters.split("", numSymbols);
@@ -79,7 +79,7 @@ export function generateTransitions(states: string[], symbols: string[]): Record
 		for (const symbol of symbols) {
 			if (transitions[states[i]][symbol] !== undefined) continue;
 
-			// the target of of the symbol from the current state is limited to a state in a certain range
+			// the target of the symbol from the current state is limited to a state in a certain range
 			const target = Math.min(states.length - 1, Math.max(0, i + Math.round((Math.random() - 0.5) * 2 * symbols.length)));
 			transitions[states[i]][symbol] = states[target];
 		}

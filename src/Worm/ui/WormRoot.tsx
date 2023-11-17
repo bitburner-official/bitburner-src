@@ -54,10 +54,12 @@ export function WormRoot({ worm }: IProps): React.ReactElement {
 								<Box sx={{ fontWeight: "bold" }}>Solving a network</Box>
 								Once you have gathered enough data about the network and you computed all of the neccessary properties<br/>
 								you can solve the network by submitting you properties using the worm API.<br/>
-								Your attempt will only be successful, if you have at least 70% of the properties correct.<br/>
-								In the case of 4 properties you need at least 3 correct values.<br/>
+								Your attempt will only be successful, when your shortest path property is correct.<br/>
+								If you only get the shortest path correct, you will recieve the minimum reward amount.<br/>
 								If you do successfully solve a network, you will recieve the percentage of properties you got right as a reward.<br/>
-								If you submitted 3 out of 4 correct properties, you will recieve 0.75 completions.<br/><br/>
+								Be careful though, the network resets every time you attempt to solve it.<br/>
+								If you submitted 3 out of 4 correct properties, you will recieve 0.75 completions.<br/>
+								If you got all properties correct, you will recieve the maximum reward amount of 1.<br/><br/>
 								
 								<Box sx={{ fontWeight: "bold" }}>Completions</Box>
 								The completions metric is a value that will increase with successful attempts.<br/>
@@ -79,6 +81,7 @@ export function WormRoot({ worm }: IProps): React.ReactElement {
 				Simulating the behaviour of the virus gives you access to a small portion of this wealth.<br/>
 				Though the program is not easily decieved, emulating the way it calculates the networks properties allows you to bypass most of its security measures.<br/>
 				It is your task to develop a program that can solve the networks properties as efficient as possible.<br/>
+				For a detailed description of the problem at hand click the I at the top of the page.<br/>
 			</Typography>
 			<BonusSelector // might want to pass entire worm
 				bonus={worm.bonus}

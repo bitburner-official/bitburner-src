@@ -3,13 +3,13 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { BonusType, applySpecialBonus, bonuses } from "./BonusType";
 import { WormEvents } from "./WormEvents";
 import { AutomataData, AutomataFactory, evaluateInput, isValidInput } from "./Automata";
-import { WormInputArray } from "@nsdefs";
+import { WormChosenNodesArray, WormInputArray } from "@nsdefs";
 
 export class Worm {
 	bonus: BonusType;
 	data: AutomataData;
 	/**[0] = values, [1] = indegrees */
-	chosenNodes: [string, string];
+	chosenNodes: WormChosenNodesArray;
 
 	completions = 0;
 
@@ -37,24 +37,24 @@ export class Worm {
 	}
 
 	solve(providedProperties: WormInputArray)  {
+		const isCorrectShortestInput = providedProperties[1].length === this.data.properties.shortestInput
+		&& evaluateInput(this.data, providedProperties[1]) === this.data.states[this.data.states.length - 1];
 		const comparisons = [
 			providedProperties[0] === this.data.properties.isBipartite,
-			providedProperties[1].length === this.data.properties.shortestInput
-			&& evaluateInput(this.data, providedProperties[1]) === this.data.states[this.data.states.length - 1],
+			isCorrectShortestInput,
 			providedProperties[2] === this.data.properties.nodeValues[this.chosenNodes[0]],
 			providedProperties[3] === this.data.properties.nodeIndegrees[this.chosenNodes[1]]
 		];
 
-		const amountCorrect = comparisons.filter(b => b).length;
+		[this.data, this.chosenNodes] = AutomataFactory(this.completions);
+		if (!isCorrectShortestInput) return 0;
 
-		if (amountCorrect < comparisons.length * 0.7) return false;
+		const amountCorrect = comparisons.filter(b => b).length;
 
 		const rewardValue = amountCorrect / comparisons.length;
 		this.completions += rewardValue;
 
-		[this.data, this.chosenNodes] = AutomataFactory(this.completions);
-
-		return true;
+		return rewardValue;
 	}
 
 	updateMults() {

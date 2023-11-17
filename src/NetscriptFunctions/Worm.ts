@@ -11,7 +11,7 @@ import { isValidInput } from "../Worm/Automata";
 export function NetscriptWorm(): InternalAPI<IWorm> {
   function checkWormAPIAccess(ctx: NetscriptContext): void {
     if (Player.worm === null) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "No access to worm api");
+      throw helpers.makeRuntimeErrorMsg(ctx, "You have no access to the Worm API", "API ACCESS");
     }
   }
 
@@ -32,26 +32,22 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 			checkWormAPIAccess(ctx);
 			return getWorm().completions;
 		},
-		getStates: (ctx) => () => {
+		getWormStates: (ctx) => () => {
 			checkWormAPIAccess(ctx);
 			return [...getWorm().data.states];
 		},
-		getSymbols: (ctx) => () => {
+		getWormSymbols: (ctx) => () => {
 			checkWormAPIAccess(ctx);
 			return [...getWorm().data.symbols];
+		},
+		getChosenNodes: (ctx) => () => {
+			checkWormAPIAccess(ctx);
+			return [...getWorm().chosenNodes];
 		},
 		getGuessTime: (ctx) => (_threads) => {
 			checkWormAPIAccess(ctx);
 			const threads = helpers.number(ctx, "threads", _threads);
 			return getGuessTime(threads);
-		},
-		getChosenNodeValue: (ctx) => () => {
-			checkWormAPIAccess(ctx);
-			return getWorm().chosenNodes[0];
-		},
-		getChosenNodeIndegree: (ctx) => () => {
-			checkWormAPIAccess(ctx);
-			return getWorm().chosenNodes[1];
 		},
 		testInput: (ctx) => (_input) => {
 			checkWormAPIAccess(ctx);
