@@ -332,10 +332,9 @@ const worm = {
 	testInput: 16,
 	attemptSolve: 64,
 	getGuessTime: 0.5,
-	getStates: 1,
-	getSymbols: 1,
-	getChosenNodeValue: 0.5,
-	getChosenNodeIndegree: 0.5
+	getWormStates: 1,
+	getWormSymbols: 1,
+	getChosenNodes: 1,
 } as const;
 
 // UI API
