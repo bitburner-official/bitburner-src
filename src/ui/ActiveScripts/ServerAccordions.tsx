@@ -101,7 +101,7 @@ export function ServerAccordions(props: IProps): React.ReactElement {
             }}
             style={{
               paddingTop: "8px",
-			  paddingBottom: "14px"
+              paddingBottom: "14px",
             }}
           />
         </Grid>
@@ -122,7 +122,7 @@ export function ServerAccordions(props: IProps): React.ReactElement {
           )}
         </Grid>
       </Grid>
-	  
+
       <List dense={true}>
         {filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((data) => {
           return (
