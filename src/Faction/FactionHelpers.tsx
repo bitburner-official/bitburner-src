@@ -19,7 +19,7 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { InvitationEvent } from "./ui/InvitationModal";
 import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
-import { getAugCost } from "../Augmentation/AugmentationHelpers";
+import { getAugCost, hasSpecialPrereq } from "../Augmentation/AugmentationHelpers";
 import { createEnumKeyedRecord, getRecordKeys } from "../Types/Record";
 
 export function inviteToFaction(faction: Faction): void {
@@ -56,14 +56,24 @@ export function joinFaction(faction: Faction): void {
 
 //Returns a boolean indicating whether the player has the prerequisites for the
 //specified Augmentation
-export function hasAugmentationPrereqs(aug: Augmentation): boolean {
-  return aug.prereqs.every((aug) => Player.hasAugmentation(aug));
+export function hasAugmentationPrereqs(augment: Augmentation): boolean {
+  return (
+    augment.prereqs.every((aug) => Player.hasAugmentation(aug)) && hasSpecialPrereq(augment.name)?.fulfilled !== false
+  );
 }
 
 export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = false): string {
   const hasPrereqs = hasAugmentationPrereqs(aug);
+  const specialPrereqs = hasSpecialPrereq(aug.name);
   const augCosts = getAugCost(aug);
-  if (!hasPrereqs) {
+  if (specialPrereqs && !specialPrereqs?.fulfilled) {
+    const txt = `You must first complete this prerequisite: ${specialPrereqs.description}.`;
+    if (sing) {
+      return txt;
+    } else {
+      dialogBoxCreate(txt);
+    }
+  } else if (!hasPrereqs) {
     const txt = `You must first purchase or install ${aug.prereqs
       .filter((req) => !Player.hasAugmentation(req))
       .join(",")} before you can purchase this one.`;

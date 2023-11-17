@@ -13,7 +13,7 @@ import { Augmentation } from "../Augmentation";
 import { AugmentationName, FactionName } from "@enums";
 import { Augmentations } from "../Augmentations";
 import { PurchaseAugmentationModal } from "./PurchaseAugmentationModal";
-import { getAugCost } from "../AugmentationHelpers";
+import { getAugCost, hasSpecialPrereq } from "../AugmentationHelpers";
 import { useRerender } from "../../ui/React/hooks";
 import { Requirement } from "../../ui/Components/Requirement";
 
@@ -23,7 +23,24 @@ interface IPreReqsProps {
 
 const PreReqs = (props: IPreReqsProps): React.ReactElement => {
   const ownedPreReqs = props.aug.prereqs.filter((aug) => Player.hasAugmentation(aug));
-  const hasPreReqs = props.aug.prereqs.length > 0 && ownedPreReqs.length === props.aug.prereqs.length;
+  const specialPreReqs = hasSpecialPrereq(props.aug.name);
+  const fulfilledSpecialPrereqs = specialPreReqs?.fulfilled === true || !specialPreReqs;
+  const hasPreReqs = ownedPreReqs.length === props.aug.prereqs.length && fulfilledSpecialPrereqs;
+
+  const specialPrereqReport =
+    specialPreReqs?.fulfilled === false ? (
+      <>
+        <Report fontSize="small" sx={{ mr: 1 }} />
+        Pre-requisite: {specialPreReqs?.description}
+      </>
+    ) : specialPreReqs?.fulfilled === true ? (
+      <>
+        <CheckCircle fontSize="small" sx={{ mr: 1 }} />
+        {specialPreReqs?.description}
+      </>
+    ) : (
+      ""
+    );
 
   return (
     <Tooltip
@@ -41,6 +58,17 @@ const PreReqs = (props: IPreReqsProps): React.ReactElement => {
               key={preAug}
             />
           ))}
+          {specialPreReqs ? (
+            <Requirement
+              fulfilled={specialPreReqs.fulfilled}
+              value={specialPreReqs.description}
+              color={Settings.theme.money}
+              incompleteColor={Settings.theme.error}
+              key={specialPreReqs.description}
+            />
+          ) : (
+            ""
+          )}
         </>
       }
     >
@@ -54,7 +82,9 @@ const PreReqs = (props: IPreReqsProps): React.ReactElement => {
           gridArea: "prereqs",
         }}
       >
-        {hasPreReqs ? (
+        {specialPreReqs ? (
+          specialPrereqReport
+        ) : hasPreReqs ? (
           <>
             <CheckCircle fontSize="small" sx={{ mr: 1 }} />
             Pre-requisites Owned
@@ -228,7 +258,9 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
               </Tooltip>
 
               {aug.factions.length === 1 && !props.parent.sleeveAugs && <Exclusive aug={aug} />}
-              {aug.prereqs.length > 0 && !props.parent.sleeveAugs && <PreReqs aug={aug} />}
+              {(aug.prereqs.length > 0 || hasSpecialPrereq(aug.name)) && !props.parent.sleeveAugs && (
+                <PreReqs aug={aug} />
+              )}
             </Box>
           </Box>
         </Box>

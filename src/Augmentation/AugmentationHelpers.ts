@@ -147,3 +147,14 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
   }
   return { moneyCost, repCost };
 }
+
+export function hasSpecialPrereq(name: AugmentationName) {
+  if (name === AugmentationName.TheRedPill && Player.bitNodeN === 14) {
+    return {
+      fulfilled: Player.go.status.Daedalus.wins > 0,
+      description: "Must defeat Daedalus in IPvGO at least once",
+    };
+  }
+
+  return null;
+}
