@@ -3,6 +3,8 @@ import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
 import { getMultiplier } from "./BonusType";
 import { Worm } from "./Worm";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
+import { WormInputArray } from "@nsdefs";
+import { isValidInput } from "./Automata";
 
 export const getGuessTime = (threads: number) => 60 * 1000 / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1));
 
@@ -16,6 +18,19 @@ export function calculateWormMults(worm: Worm | null): Multipliers {
 	} else {
 		return effect;
 	}
+}
+
+export function parseWormInputArray(worm: Worm, v: string): WormInputArray | null {
+	const parsedArray = v.split(",").map(s => s.trim());
+	if (parsedArray.length !== 4) return null;
+	const values: [boolean | null, string | null, number, number] = [
+		parsedArray[0].toLowerCase() === "true" ? true : parsedArray[0].toLowerCase() === "false" ? false : null,
+		isValidInput(worm.data, parsedArray[1]) ? parsedArray[1] : null,
+		Number.parseInt(parsedArray[2]),
+		Number.parseInt(parsedArray[3]),
+	];
+	if (values[0] === null || values[1] === null || Number.isNaN(values[2]) || Number.isNaN(values[3])) return null;
+	return values as WormInputArray;
 }
 
 export function isBipartite(graph: Record<string, Record<string, string>>) {
