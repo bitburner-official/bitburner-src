@@ -35,9 +35,10 @@ import file32 from "!!raw-loader!./doc/index.md";
 import file33 from "!!raw-loader!./doc/migrations/v1.md";
 import file34 from "!!raw-loader!./doc/migrations/v2.md";
 import file35 from "!!raw-loader!./doc/programming/game_frozen.md";
-import file36 from "!!raw-loader!./doc/programming/hackingalgorithms.md";
-import file37 from "!!raw-loader!./doc/programming/learn.md";
-import file38 from "!!raw-loader!./doc/programming/remote_api.md";
+import file36 from "!!raw-loader!./doc/programming/go_algorithms.md";
+import file37 from "!!raw-loader!./doc/programming/hackingalgorithms.md";
+import file38 from "!!raw-loader!./doc/programming/learn.md";
+import file39 from "!!raw-loader!./doc/programming/remote_api.md";
 
 interface Document {
   default: string;
@@ -79,6 +80,7 @@ AllPages["index.md"] = file32;
 AllPages["migrations/v1.md"] = file33;
 AllPages["migrations/v2.md"] = file34;
 AllPages["programming/game_frozen.md"] = file35;
-AllPages["programming/hackingalgorithms.md"] = file36;
-AllPages["programming/learn.md"] = file37;
-AllPages["programming/remote_api.md"] = file38;
+AllPages["programming/go_algorithms.md"] = file36;
+AllPages["programming/hackingalgorithms.md"] = file37;
+AllPages["programming/learn.md"] = file38;
+AllPages["programming/remote_api.md"] = file39;
