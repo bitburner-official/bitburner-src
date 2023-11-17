@@ -16,7 +16,7 @@ import * as generalMethods from "./PlayerObjectGeneralMethods";
 import * as serverMethods from "./PlayerObjectServerMethods";
 import * as workMethods from "./PlayerObjectWorkMethods";
 
-import { setPlayer } from "../../Player";
+import { setPlayer } from "@player";
 import { CompanyName, FactionName, JobName, LocationName } from "@enums";
 import { HashManager } from "../../Hacknet/HashManager";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
@@ -28,6 +28,7 @@ import { CONSTANTS } from "../../Constants";
 import { Person } from "../Person";
 import { isMember } from "../../utils/EnumHelper";
 import { PartialRecord } from "../../Types/Record";
+import { getGoPlayerStartingState } from "../../Go/boardState/goConstants";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -36,6 +37,7 @@ export class PlayerObject extends Person implements IPlayer {
   gang: Gang | null = null;
   bladeburner: Bladeburner | null = null;
   currentServer = "";
+  go = getGoPlayerStartingState();
   factions: FactionName[] = [];
   factionInvitations: FactionName[] = [];
   factionRumors = new JSONSet<FactionName>();

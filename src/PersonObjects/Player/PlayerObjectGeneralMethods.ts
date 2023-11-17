@@ -52,6 +52,8 @@ import { achievements } from "../../Achievements/Achievements";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { getEnumHelper, isMember } from "../../utils/EnumHelper";
+import { getGoPlayerStartingState } from "../../Go/boardState/goConstants";
+import { resetGoNodePower } from "../../Go/effects/effect";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -117,6 +119,8 @@ export function prestigeAugmentation(this: PlayerObject): void {
 
   this.sleeves.forEach((sleeve) => (sleeve.shock <= 0 ? sleeve.synchronize() : sleeve.shockRecovery()));
 
+  resetGoNodePower(this);
+
   this.lastUpdate = new Date().getTime();
 
   // Statistics Trackers
@@ -153,6 +157,7 @@ export function prestigeSourceFile(this: PlayerObject): void {
   resetGangs();
   this.corporation = null;
   this.bladeburner = null;
+  this.go = getGoPlayerStartingState();
 
   // Reset Stock market
   this.hasWseAccount = false;

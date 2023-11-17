@@ -28,6 +28,8 @@ export const Settings = {
   EnableBashHotkeys: false,
   /** Whether to enable terminal history search */
   EnableHistorySearch: false,
+  /** Whether to show IPvGO in a traditional stone-and-shell-on-wood style, or the cyberpunk style */
+  GoTraditionalStyle: false,
   /** Timestamps format string */
   TimestampsFormat: "",
   /** Locale used for display numbers. */
