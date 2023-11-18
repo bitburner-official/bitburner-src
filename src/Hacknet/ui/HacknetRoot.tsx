@@ -102,13 +102,15 @@ export function HacknetRoot(): React.ReactElement {
       <Typography variant="h4">Hacknet {hasHacknetServers() ? "Servers" : "Nodes"}</Typography>
       <GeneralInfo hasHacknetServers={hasHacknetServers()} />
 
-      <PurchaseButton cost={purchaseCost} multiplier={purchaseMultiplier} onClick={handlePurchaseButtonClick} />
+      <br />
+
+      <PlayerInfo totalProduction={totalProduction} />
 
       <br />
 
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <PlayerInfo totalProduction={totalProduction} />
+          <PurchaseButton cost={purchaseCost} multiplier={purchaseMultiplier} onClick={handlePurchaseButtonClick} />
         </Grid>
         <Grid item xs={6}>
           <MultiplierButtons onClicks={purchaseMultiplierOnClicks} purchaseMultiplier={purchaseMultiplier} />
