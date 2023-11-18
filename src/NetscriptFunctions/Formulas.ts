@@ -44,6 +44,16 @@ import {
   calculateAscensionMult,
   calculateAscensionPointsGain,
 } from "../Gang/formulas/formulas";
+import {
+  calculatePrestigeGain,
+  calculateKarmaGain,
+  calculateTerrorGain,
+  calculateVisibilityGain,
+  calculateMoneyGainCharity,
+  calculateMoneySpendCharity,
+  calculateAscensionMultCharity,
+  calculateAscensionPointsGainCharity,
+} from "../CharityORG/formulas/formulas";
 import { favorToRep as calculateFavorToRep, repToFavor as calculateRepToFavor } from "../Faction/formulas/favor";
 import { repFromDonation } from "../Faction/formulas/donation";
 import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
@@ -373,6 +383,60 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const points = helpers.number(ctx, "points", _points);
         checkFormulasAccess(ctx);
         return calculateAscensionMult(points);
+      },
+    },
+    charityORG: {
+      prestigeGain: (ctx) => (_charityORG, _volunteer, _task) => {
+        const charityORG = helpers.charityORG(ctx, _charityORG);
+        const volunteer = helpers.charityVolunteer(ctx, _volunteer);
+        const task = helpers.charityTask(ctx, _task);
+        checkFormulasAccess(ctx);
+        return calculatePrestigeGain(charityORG, volunteer, task);
+      },
+      karmaGain: (ctx) => (_charityORG, _volunteer, _task) => {
+        const charityORG = helpers.charityORG(ctx, _charityORG);
+        const volunteer = helpers.charityVolunteer(ctx, _volunteer);
+        const task = helpers.charityTask(ctx, _task);
+        checkFormulasAccess(ctx);
+        return calculateKarmaGain(charityORG, volunteer, task);
+      },
+      moneyGain: (ctx) => (_charityORG, _volunteer, _task) => {
+        const charityORG = helpers.charityORG(ctx, _charityORG);
+        const volunteer = helpers.charityVolunteer(ctx, _volunteer);
+        const task = helpers.charityTask(ctx, _task);
+        checkFormulasAccess(ctx);
+        return calculateMoneyGainCharity(charityORG, volunteer, task);
+      },
+      moneySpend: (ctx) => (_charityORG, _volunteer, _task) => {
+        const charityORG = helpers.charityORG(ctx, _charityORG);
+        const volunteer = helpers.charityVolunteer(ctx, _volunteer);
+        const task = helpers.charityTask(ctx, _task);
+        checkFormulasAccess(ctx);
+        return calculateMoneySpendCharity(charityORG, volunteer, task);
+      },
+      visibilityGain: (ctx) => (_charityORG, _volunteer, _task) => {
+        const charityORG = helpers.charityORG(ctx, _charityORG);
+        const volunteer = helpers.charityVolunteer(ctx, _volunteer);
+        const task = helpers.charityTask(ctx, _task);
+        checkFormulasAccess(ctx);
+        return calculateVisibilityGain(charityORG, volunteer, task);
+      },
+      terrorGain: (ctx) => (_charityORG, _volunteer, _task) => {
+        const charityORG = helpers.charityORG(ctx, _charityORG);
+        const volunteer = helpers.charityVolunteer(ctx, _volunteer);
+        const task = helpers.charityTask(ctx, _task);
+        checkFormulasAccess(ctx);
+        return calculateTerrorGain(charityORG, volunteer, task);
+      },
+      ascensionPointsGainCharity: (ctx) => (_exp) => {
+        const exp = helpers.number(ctx, "exp", _exp);
+        checkFormulasAccess(ctx);
+        return calculateAscensionPointsGainCharity(exp);
+      },
+      ascensionMultiplierCharity: (ctx) => (_points) => {
+        const points = helpers.number(ctx, "points", _points);
+        checkFormulasAccess(ctx);
+        return calculateAscensionMultCharity(points);
       },
     },
     work: {

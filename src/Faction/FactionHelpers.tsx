@@ -175,7 +175,7 @@ export const getFactionAugmentationsFiltered = (faction: Faction): AugmentationN
     augs = augs.filter((a) => !a.isSpecial && a.name !== AugmentationName.CongruityImplant);
 
     if (Player.bitNodeN === 15) {
-      // TRP is not available outside of BN2 for Gangs
+      // TRP is available by default for Charities in BN 15
       augs.push(Augmentations[AugmentationName.TheRedPill]);
     }
 

@@ -36,6 +36,10 @@ export class CharityORG {
   visibilityGainRate: number;
   terrorGainRate: number;
   storedCycles: number;
+  visibilityBooster: number;
+  terrorBooster: number;
+  completed: boolean;
+  completionCycles: number;
 
   constructor(name = "My Charity", seedFunded = false) {
     this.name = name;
@@ -53,6 +57,10 @@ export class CharityORG {
     this.karmaGainRate = 0;
     this.prestigeGainRate = 0;
     this.storedCycles = 0;
+    this.visibilityBooster = 0;
+    this.terrorBooster = 0;
+    this.completed = false;
+    this.completionCycles = 0;
   }
 
   getBank(): number {
@@ -107,20 +115,34 @@ export class CharityORG {
     }
     //dialogBoxCreate("Terror: " + calculateTerrorMult({ prestige: this.prestige, terror: this.terror, visibility: this.visibility }) + "\n"
     //  + "Visibility: " + calculateVisibilityMult({ prestige: this.prestige, terror: this.terror, visibility: this.visibility }));
+    const terrorbooster = this.terrorBooster > 0 ? 0.9 : 1;
+    const visbooster = this.visibilityBooster > 0 ? 0.9 : 1;
     this.moneyGainRate = moneyGainPerCycle;
     this.moneySpendRate = moneySpendPerCycle;
     this.spent -= moneySpendPerCycle;
     this.bank += moneyGainPerCycle - moneySpendPerCycle;
-    this.visibilityGainRate = visibilityGainPerCycle - this.visibilityPerCycle() * numCycles;
-    this.visibility += visibilityGainPerCycle - this.visibilityPerCycle() * numCycles;
+    this.visibilityGainRate = visibilityGainPerCycle - this.visibilityPerCycle() * numCycles * visbooster;
+    this.visibility += visibilityGainPerCycle - this.visibilityPerCycle() * numCycles * visbooster;
     this.visibility = Math.max(Math.min(this.visibility, 100), 0);
-    this.terrorGainRate = terrorGainPerCycle + this.terrorPerCycle() * numCycles;
-    this.terror += terrorGainPerCycle + this.terrorPerCycle() * numCycles;
+    this.terrorGainRate = terrorGainPerCycle + this.terrorPerCycle() * numCycles * terrorbooster;
+    this.terror += terrorGainPerCycle + this.terrorPerCycle() * numCycles * terrorbooster;
     this.terror = Math.max(Math.min(this.terror, 100), 0);
     this.prestigeGainRate = prestigeGainPerCycle;
     this.prestige += prestigeGainPerCycle;
     this.karmaGainRate = karmaGainPerCycle;
     Player.karma += karmaGainPerCycle;
+    this.terrorBooster -= numCycles;
+    this.terrorBooster = Math.max(this.terrorBooster, 0);
+    this.visibilityBooster -= numCycles;
+    this.visibilityBooster = Math.max(this.visibilityBooster, 0);
+    if (this.terror === 0 && this.visibility === 100) {
+      this.completionCycles += numCycles * 200;
+    } else {
+      this.completionCycles = 0;
+    }
+    if (this.completionCycles > 5 * 60 * 10) {
+      this.completed = true;
+    }
 
     // Faction reputation gains is respect gain divided by some constant
     const charityFaction = Factions["Charity"];
@@ -142,12 +164,12 @@ export class CharityORG {
   }
   visibilityPerCycle(): number {
     //If visibility is high, it's gain is increased.  If it's low, it's decreased.
-    return 0.000014 * this.visibility * this.visibility * this.visibility;
+    return 0.00000033 * Math.pow(this.visibility, 4); // * this.visibility * this.visibility;
   }
   terrorPerCycle(): number {
     //If terror is low, it's gain is increased.  If it's high, it's decreased.
-    const mod = 100 - this.terror; // 1x at max terror, 10x at 0 terror.
-    return 0.000014 * mod * mod * mod;
+    const mod = 100 - this.terror; // 1x at max terror, 1000000x at 0 terror.
+    return 0.00000033 * Math.pow(mod, 4); // * mod * mod;
   }
   processNoBank(): void {
     for (const volunteer of this.volunteers) {
@@ -187,7 +209,7 @@ export class CharityORG {
       const res = member.ascend();
       this.prestige = Math.max(1, this.prestige - res.prestige);
       if (workerScript) {
-        workerScript.log("charity.ascendMember", () => `Ascended Charity volunteer ${member.name}`);
+        workerScript.log("charityORG.ascendMember", () => `Ascended Charity volunteer ${member.name}`);
       }
       return res;
     } catch (e: unknown) {
