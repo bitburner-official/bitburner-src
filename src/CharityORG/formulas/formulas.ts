@@ -45,8 +45,8 @@ export function calculateKarmaGain(
     (task.chaWeight / 100) * volunteer.cha;
   statWeight -= 4 * task.difficulty;
   if (statWeight <= 0) return 0;
- 
-  return ((5 * task.baseKarmaGain * statWeight * 0.25) / 10);
+
+  return (5 * task.baseKarmaGain * statWeight * 0.25) / 10;
 }
 
 export function calculateMoneyGainCharity(

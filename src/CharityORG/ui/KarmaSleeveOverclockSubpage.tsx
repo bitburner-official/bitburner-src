@@ -28,7 +28,7 @@ export function KarmaSleeveOverclockSubpage(): React.ReactElement {
     return Player.charityORG;
   })();
   const rerender = useRerender();
-  const [ , setValue] = React.useState(0);
+  const [, setValue] = React.useState(0);
   const [currentCategory, setCurrentCategory] = useState("0");
   const onChange = (event: SelectChangeEvent): void => {
     setCurrentCategory(event.target.value);
@@ -70,7 +70,7 @@ export function KarmaSleeveOverclockSubpage(): React.ReactElement {
   const categories: Record<string, string[][]> = {
     Sleeves: [sleeves],
   };
-  
+
   return (
     <Context.CharityORG.Provider value={charityORG}>
       <Box display="flex">
