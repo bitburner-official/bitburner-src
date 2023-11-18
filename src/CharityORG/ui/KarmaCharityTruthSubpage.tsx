@@ -13,7 +13,7 @@ let spend = 0;
 
 /** React Component for the popup that manages Karma spending */
 export function KarmaCharityTruthSubpage(): React.ReactElement {
-   const [, setValue] = React.useState(0);
+  const [, setValue] = React.useState(0);
 
   function updateSpend(e: React.ChangeEvent<HTMLInputElement>): void {
     spend = parseInt(e.currentTarget.value);
