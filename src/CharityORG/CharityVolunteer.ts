@@ -8,13 +8,13 @@ import { CharityORG } from "./CharityORG";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import {
   calculatePrestigeGain,
-  calculateMoneyGain,
-  calculateMoneySpend,
+  calculateMoneyGainCharity,
+  calculateMoneySpendCharity,
   calculateKarmaGain,
   calculateVisibilityGain,
   calculateTerrorGain,
-  calculateAscensionMult,
-  calculateAscensionPointsGain,
+  calculateAscensionMultCharity,
+  calculateAscensionPointsGainCharity,
 } from "./formulas/formulas";
 
 interface IMults {
@@ -71,7 +71,7 @@ export class CharityVolunteer {
   }
 
   calculateAscensionMult(points: number): number {
-    return calculateAscensionMult(points);
+    return calculateAscensionMultCharity(points);
   }
 
   updateSkillLevels(): void {
@@ -140,7 +140,7 @@ export class CharityVolunteer {
       visibility: charityORG.visibility,
       terror: charityORG.terror,
     };
-    return calculateMoneyGain(c, this, task);
+    return calculateMoneyGainCharity(c, this, task);
   }
 
   calculateMoneySpend(charityORG: CharityORG): number {
@@ -150,7 +150,7 @@ export class CharityVolunteer {
       visibility: charityORG.visibility,
       terror: charityORG.terror,
     };
-    return calculateMoneySpend(c, this, task);
+    return calculateMoneySpendCharity(c, this, task);
   }
 
   calculateVisibilityGain(charityORG: CharityORG): number {
@@ -232,12 +232,12 @@ export class CharityVolunteer {
 
   getGainedAscensionPoints(): IMults {
     return {
-      hack: calculateAscensionPointsGain(this.hack_exp),
-      str: calculateAscensionPointsGain(this.str_exp),
-      def: calculateAscensionPointsGain(this.def_exp),
-      dex: calculateAscensionPointsGain(this.dex_exp),
-      agi: calculateAscensionPointsGain(this.agi_exp),
-      cha: calculateAscensionPointsGain(this.cha_exp),
+      hack: calculateAscensionPointsGainCharity(this.hack_exp),
+      str: calculateAscensionPointsGainCharity(this.str_exp),
+      def: calculateAscensionPointsGainCharity(this.def_exp),
+      dex: calculateAscensionPointsGainCharity(this.dex_exp),
+      agi: calculateAscensionPointsGainCharity(this.agi_exp),
+      cha: calculateAscensionPointsGainCharity(this.cha_exp),
     };
   }
 

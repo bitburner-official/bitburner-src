@@ -66,6 +66,7 @@ import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions"
 import { LogBoxEvents, LogBoxCloserEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { NetscriptGang } from "./NetscriptFunctions/Gang";
+import { NetscriptCharityORG } from "./NetscriptFunctions/CharityORG";
 import { NetscriptSleeve } from "./NetscriptFunctions/Sleeve";
 import { NetscriptExtra } from "./NetscriptFunctions/Extra";
 import { NetscriptHacknet } from "./NetscriptFunctions/Hacknet";
@@ -128,6 +129,7 @@ export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums
 export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
   gang: NetscriptGang(),
+  charityORG: NetscriptCharityORG(),
   bladeburner: NetscriptBladeburner(),
   codingcontract: NetscriptCodingContract(),
   sleeve: NetscriptSleeve(),

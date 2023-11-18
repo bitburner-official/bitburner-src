@@ -1,6 +1,6 @@
 import React from "react";
 import { ManagementSubpage } from "./ManagementSubpage";
-//import { TerritorySubpage } from "./TerritorySubpage";
+import { KarmaSubpage } from "./KarmaSubpage";
 import { EquipmentsSubpage } from "./EquipmentsSubpage";
 //import Typography from "@mui/material/Typography";
 //import TextField from "@mui/material/TextField";
@@ -33,9 +33,11 @@ export function CharityORGRoot(): React.ReactElement {
       <Tabs variant="fullWidth" value={value} onChange={handleChange} sx={{ minWidth: "fit-content", maxWidth: "45%" }}>
         <Tab label="Management" />
         <Tab label="Equipment" />
+        <Tab label="Spend Karma" />
       </Tabs>
       {value === 0 && <ManagementSubpage />}
       {value === 1 && <EquipmentsSubpage />}
+      {value === 2 && <KarmaSubpage />}
     </Context.CharityORG.Provider>
   );
   /*

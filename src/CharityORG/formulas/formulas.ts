@@ -1,5 +1,3 @@
-//import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-//import { CharityORG } from "../CharityORG";
 import { CharityVolunteer } from "../CharityVolunteer";
 import { CharityVolunteerTask } from "../CharityVolunteerTask";
 
@@ -47,17 +45,11 @@ export function calculateKarmaGain(
     (task.chaWeight / 100) * volunteer.cha;
   statWeight -= 4 * task.difficulty;
   if (statWeight <= 0) return 0;
-  const terrorMult = calculateTerrorMult(cform);
-  const visibilityMult = calculateVisibilityMult(cform);
-  return (
-    Math.pow(
-      11 * task.baseKarmaGain * statWeight * terrorMult * visibilityMult,
-      (1 + terrorMult + visibilityMult) / 2,
-    ) / 10
-  );
+ 
+  return ((5 * task.baseKarmaGain * statWeight * 0.25) / 10);
 }
 
-export function calculateMoneyGain(
+export function calculateMoneyGainCharity(
   cform: FormulaCharity,
   volunteer: CharityVolunteer,
   task: CharityVolunteerTask,
@@ -79,7 +71,7 @@ export function calculateMoneyGain(
     10
   );
 }
-export function calculateMoneySpend(
+export function calculateMoneySpendCharity(
   cform: FormulaCharity,
   volunteer: CharityVolunteer,
   task: CharityVolunteerTask,
@@ -187,10 +179,10 @@ export function calculateVisibilityMult(cform: FormulaCharity): number {
   }
 }
 
-export function calculateAscensionPointsGain(exp: number): number {
+export function calculateAscensionPointsGainCharity(exp: number): number {
   return Math.max(exp - 1000, 0);
 }
 
-export function calculateAscensionMult(points: number): number {
+export function calculateAscensionMultCharity(points: number): number {
   return Math.max(Math.pow(points / 2000, 0.5), 1);
 }

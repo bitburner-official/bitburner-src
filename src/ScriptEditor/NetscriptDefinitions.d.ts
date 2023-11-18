@@ -901,7 +901,67 @@ interface GangTaskStats {
 }
 
 /**
- * Object representing data representing a gang member equipment.
+ * Charity General Info.
+ * @public
+ */
+interface CharityGenInfo {
+  name: string;
+  seedFunded: boolean;
+  bank: number;
+  spent: number;
+  visibility: number;
+  terror: number;
+  prestige: number;
+  moneyGainRate: number;
+  moneySpendRate: number;
+  karmaGainRate: number;
+  prestigeGainRate: number;
+  visibilityGainRate: number;
+  terrorGainRate: number;
+  visibilityBooster: number;
+  terrorBooster: number;
+}
+/**
+ * Charity Task Info.
+ * @public
+ */
+interface CharityTaskStats {
+  /** Task name */
+  name: string;
+  /** Task Description */
+  desc: string;
+  /** Is a task of a hacking gang */
+  isSpending: boolean;
+  /** Base Prestige earned */
+  basePrestige: number;
+  /** Base Terror earned */
+  baseTerror: number;
+  /** Base Visibility earned */
+  baseVisibility: number;
+  /** Base money earned */
+  baseMoneyGain: number;
+  /** Base money spend */
+  baseMoneySpend: number;
+  /** Base karma earned */
+  baseKarmaGain: number;
+  /** Hacking skill impact on task scaling */
+  hackWeight: number;
+  /** Strength skill impact on task scaling */
+  strWeight: number;
+  /** Defense skill impact on task scaling */
+  defWeight: number;
+  /** Dexterity skill impact on task scaling */
+  dexWeight: number;
+  /** Agility skill impact on task scaling */
+  agiWeight: number;
+  /** Charisma skill impact on task scaling */
+  chaWeight: number;
+  /** Number representing the difficulty of the task */
+  difficulty: number;
+}
+
+/**
+ * Object representing data representing a gang/charity member equipment.
  * @public
  */
 interface EquipmentStats {
@@ -1020,6 +1080,109 @@ interface GangMemberInfo {
 interface GangMemberAscension {
   /** Amount of respect lost from ascending */
   respect: number;
+  /** Factor by which the hacking ascension multiplier was increased (newMult / oldMult) */
+  hack: number;
+  /** Factor by which the strength ascension multiplier was increased (newMult / oldMult) */
+  str: number;
+  /** Factor by which the defense ascension multiplier was increased (newMult / oldMult) */
+  def: number;
+  /** Factor by which the dexterity ascension multiplier was increased (newMult / oldMult) */
+  dex: number;
+  /** Factor by which the agility ascension multiplier was increased (newMult / oldMult) */
+  agi: number;
+  /** Factor by which the charisma ascension multiplier was increased (newMult / oldMult) */
+  cha: number;
+}
+
+/** @public */
+interface CharityVolunteerInfo {
+  /** Name of the gang member */
+  name: string;
+  /** Currently assigned task */
+  task: string;
+  /** Amount of Respect earned by member since they last Ascended */
+  earnedPrestige: number;
+
+  /** Hack skill level */
+  hack: number;
+  /** Strength skill level */
+  str: number;
+  /** Defense skill level */
+  def: number;
+  /** Dexterity skill level */
+  dex: number;
+  /** Agility skill level */
+  agi: number;
+  /** Charisma skill level */
+  cha: number;
+
+  /** Current hack experience */
+  hack_exp: number;
+  /** Current strength experience */
+  str_exp: number;
+  /** Current defense experience */
+  def_exp: number;
+  /** Current dexterity experience */
+  dex_exp: number;
+  /** Current agility experience */
+  agi_exp: number;
+  /** Current charisma experience */
+  cha_exp: number;
+
+  /** Hack multiplier from equipment */
+  hack_mult: number;
+  /** Strength multiplier from equipment */
+  str_mult: number;
+  /** Defense multiplier from equipment */
+  def_mult: number;
+  /** Dexterity multiplier from equipment */
+  dex_mult: number;
+  /** Agility multiplier from equipment */
+  agi_mult: number;
+  /** Charisma multiplier from equipment */
+  cha_mult: number;
+
+  /** Hack multiplier from ascensions */
+  hack_asc_mult: number;
+  /** Strength multiplier from ascensions */
+  str_asc_mult: number;
+  /** Defense multiplier from ascensions */
+  def_asc_mult: number;
+  /** Dexterity multiplier from ascensions */
+  dex_asc_mult: number;
+  /** Agility multiplier from ascensions */
+  agi_asc_mult: number;
+  /** Charisma multiplier from ascensions */
+  cha_asc_mult: number;
+
+  /** Total Hack Ascension points accumulated */
+  hack_asc_points: number;
+  /** Total Strength Ascension points accumulated */
+  str_asc_points: number;
+  /** Total Defense Ascension points accumulated */
+  def_asc_points: number;
+  /** Total Dexterity Ascension points accumulated */
+  dex_asc_points: number;
+  /** Total Agility Ascension points accumulated */
+  agi_asc_points: number;
+  /** Total Charisma Ascension points accumulated */
+  cha_asc_points: number;
+
+  /** List of all non-Augmentation Equipment owned by gang member */
+  upgrades: string[];
+
+  prestigeGain: number;
+  karmaGain: number;
+  moneyGain: number;
+  moneySpend: number;
+  visibilityGain: number;
+  terrorGain: number;
+}
+
+/** @public */
+interface CharityVolunteerAscension {
+  /** Amount of respect lost from ascending */
+  prestige: number;
   /** Factor by which the hacking ascension multiplier was increased (newMult / oldMult) */
   hack: number;
   /** Factor by which the strength ascension multiplier was increased (newMult / oldMult) */
@@ -3907,6 +4070,283 @@ export interface Gang {
 }
 
 /**
+ * CharityORG API
+ * @remarks
+ * If you are not in BitNode-16, then you must have Source-File 16 in order to use this API.
+ * @public
+ */
+export interface CharityORG {
+  /**
+   * Create a charityORG.
+   * @remarks
+   * RAM cost: 1GB
+   *
+   * Create a charityORG with the specified Name.
+   * @returns True if the charity was created, false otherwise.
+   */
+  createCharity(name: string, seed: boolean): boolean;
+
+  /**
+   * Check if you're in a gang.
+   * @remarks
+   * RAM cost: 1GB
+   * @returns True if you're in a gang, false otherwise.
+   */
+  hasCharity(): boolean;
+
+  /**
+   * List all gang members.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Get the names of all Gang members
+   *
+   * @returns Names of all Gang members.
+   */
+  getVolunteerNames(): string[];
+
+  /**
+   * Rename a Gang member to a new unique name.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Rename a Gang Member if none already has the new name.
+   * @param memberName - Name of the member to change.
+   * @param newName - New name for that gang member.
+   * @returns True if successful, and false if not.
+   */
+  renameVolunteer(memberName: string, newName: string): boolean;
+
+  /**
+   * Get information about your gang.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get general information about the gang.
+   *
+   * @returns Object containing general information about the gang.
+   */
+  getCharityInformation(): CharityGenInfo;
+
+  /**
+   * Get information about a specific gang member.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get stat and equipment-related information about a Gang Member
+   *
+   * @param name - Name of member.
+   * @returns Object containing stat and equipment-related information about a Gang Member.
+   */
+  getVolunteerInformation(name: string): CharityVolunteerInfo;
+
+  /**
+   * Check if you can recruit a new gang member.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Returns a boolean indicating whether a member can currently be recruited.
+   *
+   * Once you have successfully created a gang by using the function
+   * {@link Gang.createGang | createGang}, you can immediately recruit a small
+   * number of members to your gang. After you have recruited the founding
+   * members, to recruit another member you must increase your respect. The
+   * more members you want to recruit, the more respect you require. If your
+   * gang has the maximum number of members, then this function would return
+   * false.
+   *
+   * @returns True if a member can currently be recruited, false otherwise.
+   */
+  canRecruitVolunteer(): boolean;
+
+  /**
+   * Check the amount of Prestige needed for your next charity volunteer.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @returns The static number value of Respect needed for the next
+   * recruit, with consideration to your current gang size.
+   * Returns `Infinity` if you have reached the gang size limit.
+   */
+  prestigeForNextRecruit(): number;
+  /**
+   * Recruit a new gang member.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Attempt to recruit a new gang member.
+   *
+   * Possible reasons for failure:
+   * * Cannot currently recruit a new member
+   * * There already exists a member with the specified name
+   *
+   * @param name - Name of member to recruit.
+   * @returns True if the member was successfully recruited, false otherwise.
+   */
+  recruitVolunteer(name: string): boolean;
+
+  /**
+   * List member task names.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Get the name of all valid tasks that Gang members can be assigned to.
+   *
+   * @returns All valid tasks that Gang members can be assigned to.
+   */
+  getTaskNames(): string[];
+
+  /**
+   * Set gang member to task.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Attempts to assign the specified Gang Member to the specified task.
+   * If an invalid task is specified, the Gang member will be set to idle (“Unassigned”).
+   *
+   * @param memberName - Name of Gang member to assign.
+   * @param taskName - Task to assign.
+   * @returns True if the Gang Member was successfully assigned to the task, false otherwise.
+   */
+  setMemberTask(memberName: string, taskName: string): boolean;
+
+  /**
+   * Get stats of a task.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Get the stats of a gang task stats. This is typically used to evaluate which action should be executed next.
+   *
+   * @param name -  Name of the task.
+   * @returns Detailed stats of a task.
+   */
+  getTaskStats(name: string): CharityTaskStats;
+
+  /**
+   * List equipment names.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Get the name of all possible equipment/upgrades you can purchase for your Gang Members.
+   * This includes Augmentations.
+   *
+   * @returns Names of all Equipments/Augmentations.
+   */
+  getEquipmentNames(): string[];
+
+  /**
+   * Get cost of equipment.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get the amount of money it takes to purchase a piece of Equipment or an Augmentation.
+   * If an invalid Equipment/Augmentation is specified, this function will return Infinity.
+   *
+   * @param equipName - Name of equipment.
+   * @returns Cost to purchase the specified Equipment/Augmentation (number). Infinity for invalid arguments
+   */
+  getEquipmentCost(equipName: string): number;
+
+  /**
+   * Get type of an equipment.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get the specified equipment type.
+   *
+   * @param equipName - Name of equipment.
+   * @returns Type of the equipment.
+   */
+  getEquipmentType(equipName: string): string;
+
+  /**
+   * Get stats of an equipment.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get the specified equipment stats.
+   *
+   * @param equipName - Name of equipment.
+   * @returns A dictionary containing the stats of the equipment.
+   */
+  getEquipmentStats(equipName: string): EquipmentStats;
+
+  /**
+   * Purchase an equipment for a gang member.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Attempt to purchase the specified Equipment/Augmentation for the specified Gang member.
+   *
+   * @param memberName - Name of Gang member to purchase the equipment for.
+   * @param equipName - Name of Equipment/Augmentation to purchase.
+   * @returns True if the equipment was successfully purchased. False otherwise
+   */
+  purchaseEquipment(memberName: string, equipName: string): boolean;
+
+  /**
+   * Ascend a gang member.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Ascend the specified Gang Member.
+   *
+   * @param memberName - Name of member to ascend.
+   * @returns Object with info about the ascension results, or undefined if ascension did not occur.
+   */
+  ascendMember(memberName: string): CharityVolunteerAscension | undefined;
+
+  /**
+   * Get the result of an ascension without ascending.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get a {@link GangMemberAscension} result for ascending a gang member without performing the ascension.
+   *
+   * @param memberName - Name of member.
+   * @returns Object with info about the ascension results, or undefined if ascension is not possible.
+   */
+  getAscensionResult(memberName: string): CharityVolunteerAscension | undefined;
+
+  /**
+   * Get bonus time.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Returns the amount of accumulated “bonus time” (milliseconds) for the Gang mechanic.
+   *
+   * “Bonus time” is accumulated when the game is offline or if the game is inactive in the browser.
+   *
+   * “Bonus time” makes the game progress faster, up to 25x the normal speed.
+   *
+   * @returns Bonus time for the Gang mechanic in milliseconds.
+   */
+  getBonusTime(): number;
+
+  /**
+   * Sleeps until the next Gang update has happened.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * The amount of real time spent asleep between updates can vary due to "bonus time".
+   *
+   * @returns Promise that resolves to the number of milliseconds of Gang time
+   * that were processed in the previous update (2000 - 5000 ms).
+   *
+   * @example
+   * ```js
+   * while (true) {
+   *   const duration = await ns.gang.nextUpdate();
+   *   ns.print(`Gang completed ${ns.tFormat(duration)} of activity.`);
+   *   ns.print(`Bonus time remaining: ${ns.tFormat(ns.gang.getBonusTime())}`);
+   *   // Manage the Gang
+   * }
+   * ```
+   */
+  nextUpdate(): Promise<number>;
+}
+
+/**
  * Sleeve API
  * @remarks
  * If you are not in BitNode-10, then you must have Source-File 10 in order to use this API.
@@ -4231,20 +4671,20 @@ export interface Grafting {
   graftAugmentation(augName: string, focus?: boolean): boolean;
 }
 /** @public */
-/*interface TicketRecord {
+interface TicketRecord {
   Type: string;
   Numbers: number[];
   Wager: number;
   Option: GameOptions;
 }
 /** @public */
-/*interface GameOptions {
-  None: string = "none";
-  Straight: string = "straight";
-  Box: string = "box";
-  StraightBox: string = "straightbox";
+enum GameOptions {
+  None = "none",
+  Straight = "straight",
+  Box = "box",
+  StraightBox = "straightbox",
 }
-*/
+
 /**
  * Lottery API
  * @remarks
@@ -4730,6 +5170,80 @@ interface GangFormulas {
 }
 
 /**
+ * Gang formulas
+ * @public
+ */
+interface CharityFormulas {
+  /**
+   * Calculate prestige per tick.
+   * @param charity - Charity info
+   * @param member - Volunteer info
+   * @param task - Task info
+   * @returns The calculated prestige gain.
+   */
+  prestigeGain(charity: CharityGenInfo, member: CharityVolunteerInfo, task: CharityTaskStats): number;
+
+  /**
+   * Calculate karma per tick.
+   * @param charity - Charity info
+   * @param member - Volunteer info
+   * @param task - Task info
+   * @returns The calculated karma gain.
+   */
+  karmaGain(charity: CharityGenInfo, member: CharityVolunteerInfo, task: CharityTaskStats): number;
+
+  /**
+   * Calculate money gained per tick.
+   * @param charity - Charity info
+   * @param member - Volunteer info
+   * @param task - Task info
+   * @returns The calculated money gained.
+   */
+  moneyGain(charity: CharityGenInfo, member: CharityVolunteerInfo, task: CharityTaskStats): number;
+
+  /**
+   * Calculate money spent per tick.
+   * @param charity - Charity info
+   * @param member - Volunteer info
+   * @param task - Task info
+   * @returns The calculated money spent.
+   */
+  moneySpend(charity: CharityGenInfo, member: CharityVolunteerInfo, task: CharityTaskStats): number;
+
+  /**
+   * Calculate visibility gained per tick.
+   * @param charity - Charity info
+   * @param member - Volunteer info
+   * @param task - Task info
+   * @returns The calculated money gained.
+   */
+  visibilityGain(charity: CharityGenInfo, member: CharityVolunteerInfo, task: CharityTaskStats): number;
+
+  /**
+   * Calculate terror gained per tick.
+   * @param charity - Charity info
+   * @param member - Volunteer info
+   * @param task - Task info
+   * @returns The calculated money gained.
+   */
+  terrorGain(charity: CharityGenInfo, member: CharityVolunteerInfo, task: CharityTaskStats): number;
+
+  /**
+   * Calculate ascension point gain.
+   * @param exp - Experience point before ascension.
+   * @returns The calculated ascension point gain.
+   */
+  ascensionPointsGainCharity(exp: number): number;
+
+  /**
+   * Calculate ascension mult.
+   * @param points - Amount of ascension points.
+   * @returns The calculated ascension mult.
+   */
+  ascensionMultiplierCharity(points: number): number;
+}
+
+/**
  * Formulas API
  * @remarks
  * You need Formulas.exe on your home computer to use this API.
@@ -4751,6 +5265,8 @@ export interface Formulas {
   hacknetServers: HacknetServersFormulas;
   /** Gang formulas */
   gang: GangFormulas;
+  /** Gang formulas */
+  charityORG: CharityFormulas;
   /** Work formulas */
   work: WorkFormulas;
 }
@@ -5059,6 +5575,12 @@ export interface NS {
    * @remarks RAM cost: 0 GB
    */
   readonly gang: Gang;
+
+  /**
+   * Namespace for gang functions. Contains spoilers.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly charityORG: CharityORG;
 
   /**
    * Namespace for sleeve functions. Contains spoilers.

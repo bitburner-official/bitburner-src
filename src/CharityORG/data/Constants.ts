@@ -7,8 +7,8 @@ export const CharityORGConstants = {
   recruitThresholdBase: 4.2,
 
   // Respect is divided by this to get rep gain
-  CharityPrestigeToReputationRatio: 75,
-  MaximumCharityMembers: 14,
+  CharityPrestigeToReputationRatio: 45,
+  MaximumCharityMembers: 12,
 
   // Portion of upgrade multiplier that is kept after ascending
   AscensionMultiplierRatio: 0.15,
@@ -17,5 +17,5 @@ export const CharityORGConstants = {
   /** Normal number of game cycles processed at once (2 seconds) */
   minCyclesToProcess: 200 / CONSTANTS.MilliPerCycle,
   /** Maximum number of cycles to process at once during bonus time (5 seconds) */
-  maxCyclesToProcess: 5000 / CONSTANTS.MilliPerCycle,
+  maxCyclesToProcess: 600 / CONSTANTS.MilliPerCycle,
 };

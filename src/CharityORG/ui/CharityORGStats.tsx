@@ -5,6 +5,9 @@
 import React from "react";
 import { formatNumber, formatMoney } from "../../ui/formatNumber";
 import { BonusTime } from "./BonusTime";
+import { BonusVisibility } from "./BonusVisibility";
+import { BonusTerror } from "./BonusTerror";
+import { BonusCompletion } from "./BonusCompletion";
 import { useCharityORG } from "./Context";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
@@ -31,7 +34,7 @@ export function CharityORGStats(): React.ReactElement {
         </Tooltip>
       </Box>
 
-      <Box display="flex">
+      <Box display="flex" whiteSpace="pre">
         <Tooltip
           title={
             <Typography>
@@ -40,12 +43,12 @@ export function CharityORGStats(): React.ReactElement {
           }
         >
           <Typography>
-            Prestige: {formatNumber(charityORG.prestige)} ({formatNumber(charityORG.prestigeGainRate * 5)} / sec)
+            Prestige : {formatNumber(charityORG.prestige)} ({formatNumber(charityORG.prestigeGainRate * 5)} / sec)
           </Typography>
         </Tooltip>
       </Box>
 
-      <Box display="flex">
+      <Box display="flex" whiteSpace="pre">
         <Tooltip
           title={
             <Typography>
@@ -60,7 +63,7 @@ export function CharityORGStats(): React.ReactElement {
         </Tooltip>
       </Box>
 
-      <Box display="flex">
+      <Box display="flex" whiteSpace="pre">
         <Tooltip
           title={
             <Typography>
@@ -70,12 +73,15 @@ export function CharityORGStats(): React.ReactElement {
           }
         >
           <Typography>
-            Terror: {formatNumber(charityORG.terror)} ({formatNumber(charityORG.terrorGainRate * 5)} / sec)
+            Terror : {formatNumber(charityORG.terror)} ({formatNumber(charityORG.terrorGainRate * 5)} / sec)
           </Typography>
         </Tooltip>
       </Box>
 
       <BonusTime charityORG={charityORG} />
+      <BonusVisibility charityORG={charityORG} />
+      <BonusTerror charityORG={charityORG} />
+      <BonusCompletion charityORG={charityORG} />
     </>
   );
 }

@@ -24,6 +24,9 @@ import { PortNumber } from "../NetscriptPort";
 import { FormulaGang } from "../Gang/formulas/formulas";
 import { GangMember } from "../Gang/GangMember";
 import { GangMemberTask } from "../Gang/GangMemberTask";
+import { FormulaCharity } from "../CharityORG/formulas/formulas";
+import { CharityVolunteer } from "../CharityORG/CharityVolunteer";
+import { CharityVolunteerTask } from "../CharityORG/CharityVolunteerTask";
 import { RunningScript } from "../Script/RunningScript";
 import { toNative } from "../NetscriptFunctions/toNative";
 import { ScriptIdentifier } from "./ScriptIdentifier";
@@ -63,6 +66,9 @@ export const helpers = {
   gang,
   gangMember,
   gangTask,
+  charityORG,
+  charityVolunteer,
+  charityTask,
   log,
   filePath,
   scriptPath,
@@ -656,6 +662,21 @@ function gangTask(ctx: NetscriptContext, t: unknown): GangMemberTask {
   return t as GangMemberTask;
 }
 
+function charityORG(ctx: NetscriptContext, g: unknown): FormulaCharity {
+  const error = missingKey({ prestige: 0, bank: 0, spent: 0 }, g);
+  if (error) throw makeRuntimeErrorMsg(ctx, `charityORG should be a CharityORG.\n${error}`, "TYPE");
+  return g as FormulaCharity;
+}
+function charityVolunteer(ctx: NetscriptContext, m: unknown): CharityVolunteer {
+  const error = missingKey(new CharityVolunteer(), m);
+  if (error) throw makeRuntimeErrorMsg(ctx, `member should be a CharityVolunteer.\n${error}`, "TYPE");
+  return m as CharityVolunteer;
+}
+function charityTask(ctx: NetscriptContext, t: unknown): CharityVolunteerTask {
+  const error = missingKey(new CharityVolunteerTask("", "", false, { hackWeight: 100 }), t);
+  if (error) throw makeRuntimeErrorMsg(ctx, `task should be a GangMemberTask.\n${error}`, "TYPE");
+  return t as CharityVolunteerTask;
+}
 function log(ctx: NetscriptContext, message: () => string) {
   ctx.workerScript.log(ctx.functionPath, message);
 }

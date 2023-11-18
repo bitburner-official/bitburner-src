@@ -12,7 +12,6 @@ import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { formatMultiplier, formatNumber } from "../../ui/formatNumber";
 import { CharityVolunteer } from "../CharityVolunteer";
 import { Settings } from "../../Settings/Settings";
-import { MoneyRate } from "../../ui/React/MoneyRate";
 import { StatsRow } from "../../ui/React/StatsRow";
 import { useStyles } from "../../ui/React/CharacterOverview";
 
@@ -34,8 +33,10 @@ export function CharityORGMemberStats(props: IProps): React.ReactElement {
 
   const charityORG = useCharityORG();
   const data = [
-    [`Money Gain:`, <MoneyRate key="money" money={props.member.calculateMoneyGain(charityORG) * 5} />],
-    [`Money Spend:`, <MoneyRate key="money" money={props.member.calculateMoneySpend(charityORG) * 5} />],
+    //[`Money Gain:`, <MoneyRate key="money" money={props.member.calculateMoneyGain(charityORG) * 5} />],
+    //[`Money Spend:`, <MoneyRate key="money" money={props.member.calculateMoneySpend(charityORG) * 5} />],
+    [`Money Gain:`, `$${formatNumber(props.member.calculateMoneyGain(charityORG) * 5)} / sec`],
+    [`Money Spend:`, `$${formatNumber(props.member.calculateMoneySpend(charityORG) * 5)} / sec`],
     [`Karma:`, `${formatNumber(props.member.calculateKarmaGain(charityORG) * 5)} / sec`],
     [`Prestige:`, `${formatNumber(props.member.calculatePrestigeGain(charityORG) * 5)} / sec`],
     [`Visibility Level:`, `${formatNumber(props.member.calculateVisibilityGain(charityORG) * 5)} / sec`],

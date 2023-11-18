@@ -63,6 +63,8 @@ export const RamCostConstants = {
 
   GangApiBase: 4,
 
+  CharityApiBase: 4,
+
   BladeburnerApiBase: 4,
 
   StanekWidth: 0.4,
@@ -242,6 +244,31 @@ const gang = {
   getAscensionResult: RamCostConstants.GangApiBase / 2,
   setTerritoryWarfare: RamCostConstants.GangApiBase / 2,
   getChanceToWinClash: RamCostConstants.GangApiBase,
+  getBonusTime: 0,
+  nextUpdate: RamCostConstants.CycleTiming,
+} as const;
+
+// Charity API
+const charityORG = {
+  createCharity: RamCostConstants.CharityApiBase / 4,
+  hasCharity: RamCostConstants.CharityApiBase / 4,
+  getVolunteerNames: RamCostConstants.CharityApiBase / 4,
+  renameVolunteer: 0,
+  getCharityInformation: RamCostConstants.CharityApiBase / 2,
+  getVolunteerInformation: RamCostConstants.CharityApiBase / 2,
+  canRecruitVolunteer: RamCostConstants.CharityApiBase / 4,
+  prestigeForNextRecruit: RamCostConstants.CharityApiBase / 4,
+  recruitVolunteer: RamCostConstants.CharityApiBase / 2,
+  getTaskNames: RamCostConstants.CharityApiBase / 4,
+  getTaskStats: RamCostConstants.CharityApiBase / 4,
+  setMemberTask: RamCostConstants.CharityApiBase / 2,
+  getEquipmentNames: RamCostConstants.CharityApiBase / 4,
+  getEquipmentCost: RamCostConstants.CharityApiBase / 2,
+  getEquipmentType: RamCostConstants.CharityApiBase / 2,
+  getEquipmentStats: RamCostConstants.CharityApiBase / 2,
+  purchaseEquipment: RamCostConstants.CharityApiBase,
+  ascendMember: RamCostConstants.CharityApiBase,
+  getAscensionResult: RamCostConstants.CharityApiBase / 2,
   getBonusTime: 0,
   nextUpdate: RamCostConstants.CycleTiming,
 } as const;
@@ -449,6 +476,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   stock,
   singularity,
   gang,
+  charityORG,
   bladeburner,
   infiltration,
   codingcontract,
@@ -631,6 +659,16 @@ export const RamCosts: RamCostTree<NSFull> = {
       moneyGain: 0,
       ascensionPointsGain: 0,
       ascensionMultiplier: 0,
+    },
+    charityORG: {
+      prestigeGain: 0,
+      karmaGain: 0,
+      moneyGain: 0,
+      moneySpend: 0,
+      visibilityGain: 0,
+      terrorGain: 0,
+      ascensionPointsGainCharity: 0,
+      ascensionMultiplierCharity: 0,
     },
     work: {
       crimeSuccessChance: 0,
