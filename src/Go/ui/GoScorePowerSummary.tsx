@@ -15,12 +15,13 @@ interface IProps {
 export const GoScorePowerSummary = ({ finalScore, opponent }: IProps) => {
   const classes = boardStyles();
   const winStreak = Player.go.status[opponent].winStreak;
+  const oldWinStreak = Player.go.status[opponent].winStreak;
   const nodePower = formatNumber(Player.go.status[opponent].nodePower, 2);
   const blackScore = finalScore[playerColors.black];
   const whiteScore = finalScore[playerColors.white];
 
   const difficultyMultiplier = getDifficultyMultiplier(whiteScore.komi);
-  const winstreakMultiplier = getWinstreakMultiplier(winStreak);
+  const winstreakMultiplier = getWinstreakMultiplier(winStreak, oldWinStreak);
   const nodePowerIncrease = formatNumber(blackScore.sum * difficultyMultiplier * winstreakMultiplier, 2);
 
   return (

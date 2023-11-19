@@ -135,8 +135,17 @@ export function getEffectTypeForFaction(opponent: opponents) {
   return opponentDetails[opponent].bonusDescription;
 }
 
-export function getWinstreakMultiplier(winStreak: number) {
-  return winStreak ? 1.2 ** (winStreak - 1) : 0.5;
+export function getWinstreakMultiplier(winStreak: number, previousWinStreak: number) {
+  if (winStreak < 0) {
+    return 0.5;
+  }
+  // If you break a dry streak, gain extra bonus based on the length of the dry streak (up to 5x bonus)
+  if (previousWinStreak < 0 && winStreak > 0) {
+    const dryStreakBroken = -1 * previousWinStreak;
+    return 1 + 0.5 * Math.min(dryStreakBroken, 8);
+  }
+  // Win streak bonus caps at x3
+  return 1 + 0.25 * Math.min(winStreak, 8);
 }
 
 export function getDifficultyMultiplier(komi: number) {

@@ -113,7 +113,7 @@ function validateRowAndColumn(ctx: NetscriptContext, x: number, y: number) {
 function resetBoardState() {
   const oldBoardState = Player.go.boardState;
   if (oldBoardState.previousPlayer !== null && oldBoardState.history.length) {
-    resetWinstreak(oldBoardState.ai);
+    resetWinstreak(oldBoardState.ai, false);
   }
 
   Player.go.boardState = getNewBoardState(oldBoardState.board[0].length, oldBoardState.ai);

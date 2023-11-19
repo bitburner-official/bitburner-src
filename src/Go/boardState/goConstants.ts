@@ -165,6 +165,7 @@ type opponentHistory = {
   nodes: number;
   nodePower: number;
   winStreak: number;
+  oldWinStreak: number;
   highestWinStreak: number;
   favor: number;
 };
@@ -184,6 +185,7 @@ export function getGoPlayerStartingState(): {
         nodes: 0,
         nodePower: 0,
         winStreak: 0,
+        oldWinStreak: 0,
         highestWinStreak: 0,
         favor: 0,
       },
@@ -193,6 +195,7 @@ export function getGoPlayerStartingState(): {
         nodes: 0,
         nodePower: 0,
         winStreak: 0,
+        oldWinStreak: 0,
         highestWinStreak: 0,
         favor: 0,
       },
@@ -202,6 +205,7 @@ export function getGoPlayerStartingState(): {
         nodes: 0,
         nodePower: 0,
         winStreak: 0,
+        oldWinStreak: 0,
         highestWinStreak: 0,
         favor: 0,
       },
@@ -211,6 +215,7 @@ export function getGoPlayerStartingState(): {
         nodes: 0,
         nodePower: 0,
         winStreak: 0,
+        oldWinStreak: 0,
         highestWinStreak: 0,
         favor: 0,
       },
@@ -220,6 +225,7 @@ export function getGoPlayerStartingState(): {
         nodes: 0,
         nodePower: 0,
         winStreak: 0,
+        oldWinStreak: 0,
         highestWinStreak: 0,
         favor: 0,
       },
@@ -229,6 +235,7 @@ export function getGoPlayerStartingState(): {
         nodes: 0,
         nodePower: 0,
         winStreak: 0,
+        oldWinStreak: 0,
         highestWinStreak: 0,
         favor: 0,
       },

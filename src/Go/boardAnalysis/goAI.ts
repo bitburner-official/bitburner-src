@@ -600,10 +600,9 @@ async function getMoveOptions(
   await sleep(80);
   const pattern = endGameAvailable ? null : await findAnyMatchedPatterns(boardState, player, availableSpaces, smart);
 
-  // Only offer a random move if there are some good potential options.
+  // Only offer a random move if there are some contested spaces on the board.
   // (Random move should not be picked if the AI would otherwise pass turn.)
-  const someMovesFound = [growthMove, expansionMove, surroundMove, eyeMove, pattern].filter(isNotNull).length;
-  const random = someMovesFound ? availableSpaces[floor(rng * availableSpaces.length)] : null;
+  const random = contestedPoints.length ? availableSpaces[floor(rng * availableSpaces.length)] : null;
 
   const captureMove = surroundMove && surroundMove?.newLibertyCount === 0 ? surroundMove : null;
   const defendCaptureMove =

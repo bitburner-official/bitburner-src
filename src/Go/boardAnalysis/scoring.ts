@@ -48,7 +48,7 @@ export function endGoGame(boardState: BoardState) {
   const score = getScore(boardState);
 
   if (score[playerColors.black].sum < score[playerColors.white].sum) {
-    resetWinstreak(boardState.ai);
+    resetWinstreak(boardState.ai, true);
     statusToUpdate.nodePower += floor(score[playerColors.black].sum * 0.25);
   } else {
     statusToUpdate.wins++;
@@ -72,7 +72,7 @@ export function endGoGame(boardState: BoardState) {
   statusToUpdate.nodePower +=
     score[playerColors.black].sum *
     getDifficultyMultiplier(score[playerColors.white].komi) *
-    getWinstreakMultiplier(statusToUpdate.winStreak);
+    getWinstreakMultiplier(statusToUpdate.winStreak, statusToUpdate.oldWinStreak);
 
   statusToUpdate.nodes += score[playerColors.black].sum;
   Player.go.previousGameFinalBoardState = boardState;
@@ -84,10 +84,16 @@ export function endGoGame(boardState: BoardState) {
 /**
  * Sets the winstreak to zero for the given opponent, and adds a loss
  */
-export function resetWinstreak(opponent: opponents) {
+export function resetWinstreak(opponent: opponents, gameComplete: boolean) {
   const statusToUpdate = Player.go.status[opponent];
   statusToUpdate.losses++;
-  statusToUpdate.winStreak = 0;
+  statusToUpdate.oldWinStreak = statusToUpdate.winStreak;
+  if (statusToUpdate.winStreak >= 0) {
+    statusToUpdate.winStreak = -1;
+  } else if (gameComplete) {
+    // Only increase the "dry streak" count if the game actually finished
+    statusToUpdate.winStreak--;
+  }
 }
 
 /**
