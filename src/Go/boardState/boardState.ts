@@ -22,11 +22,11 @@ import { cloneDeep } from "lodash";
 /**
  * Generates a new BoardState object with the given opponent and size
  */
-export function getNewBoardState(boardSize: number, ai?: opponents, boardToCopy?: Board): BoardState {
+export function getNewBoardState(boardSize: number, ai = opponents.Netburners, boardToCopy?: Board): BoardState {
   const newBoardState = {
     history: [],
     previousPlayer: playerColors.white,
-    ai: ai ?? opponents.Netburners,
+    ai: ai,
     passCount: 0,
     board: Array.from({ length: boardSize }, (_, x) =>
       Array.from({ length: boardSize }, (_, y) => ({
@@ -39,12 +39,24 @@ export function getNewBoardState(boardSize: number, ai?: opponents, boardToCopy?
     ),
   };
 
-  // Illuminati get a few starting routers
-  if (ai === opponents.Illuminati) {
-    applyHandicap(newBoardState, ceil(boardSize * 0.35));
+  const handicap = getHandicap(newBoardState.board[0].length, ai);
+  if (handicap) {
+    applyHandicap(newBoardState, handicap);
   }
   return newBoardState;
 }
+
+/**
+ * Determines how many starting pieces the opponent has on the board
+ */
+export function getHandicap(boardSize: number, opponent: opponents) {
+  // Illuminati get a few starting routers
+  if (opponent === opponents.Illuminati) {
+    return ceil(boardSize * 0.35);
+  }
+  return 0;
+}
+
 /**
  * Make a new move on the given board, and update the board state accordingly
  */

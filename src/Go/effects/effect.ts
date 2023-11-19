@@ -1,9 +1,9 @@
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { getGoPlayerStartingState, opponentDetails, opponents } from "../boardState/goConstants";
-import { floor } from "../boardState/boardState";
 import { Player } from "@player";
 import { defaultMultipliers, mergeMultipliers, Multipliers } from "../../PersonObjects/Multipliers";
 import { PlayerObject } from "../../PersonObjects/Player/PlayerObject";
+import { formatPercent } from "../../ui/formatNumber";
 
 /**
  * Calculates the effect size of the given player boost, based on the node power (points based on number of subnet
@@ -13,8 +13,7 @@ export function CalculateEffect(nodes: number, faction: opponents): number {
   const power = getEffectPowerForFaction(faction);
   const sourceFileBonus = Player.sourceFileLvl(14) ? 1.25 : 1;
   return (
-    1 +
-    (Math.log(nodes + 1) / 140) * Math.pow((nodes + 1) / 3, 0.3) * power * currentNodeMults.GoPower * sourceFileBonus
+    1 + Math.log(nodes + 1) * Math.pow(nodes + 1, 0.3) * 0.005 * power * currentNodeMults.GoPower * sourceFileBonus
   );
 }
 
@@ -39,9 +38,9 @@ export function getMaxFavor() {
  */
 export function getBonusText(opponent: opponents) {
   const nodePower = Player.go.status[opponent].nodePower;
-  const effectSize = formatPercent(CalculateEffect(nodePower, opponent));
+  const effectPercent = formatPercent(CalculateEffect(nodePower, opponent) - 1);
   const effectDescription = getEffectTypeForFaction(opponent);
-  return `${effectSize > 0 ? "+" : ""}${effectSize}% ${effectDescription}`;
+  return `${effectPercent} ${effectDescription}`;
 }
 
 /**
@@ -78,7 +77,7 @@ function calculateMults(): Multipliers {
         mults.crime_success *= effect;
         break;
       case opponents.TheBlackHand:
-        mults.hacking_exp *= effect;
+        mults.hacking *= effect;
         break;
       case opponents.Daedalus:
         mults.company_rep *= effect;
@@ -121,10 +120,6 @@ export function playerHasDiscoveredGo() {
   const isInTesting = true;
 
   return !!(playedGame || hasRecords || isInBn14 || isInTesting);
-}
-
-function formatPercent(n: number) {
-  return floor((n - 1) * 10000) / 100;
 }
 
 function getEffectPowerForFaction(opponent: opponents) {

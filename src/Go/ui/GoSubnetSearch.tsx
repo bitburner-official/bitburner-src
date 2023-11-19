@@ -1,9 +1,10 @@
-import { Box, Button, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+import { Box, Button, MenuItem, Select, SelectChangeEvent, Typography, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import { boardSizes, opponentDetails, opponents } from "../boardState/goConstants";
 import { Player } from "@player";
 import { boardStyles } from "../boardState/goStyles";
 import { Modal } from "../../ui/React/Modal";
+import { getHandicap } from "../boardState/boardState";
 
 interface IProps {
   open: boolean;
@@ -25,6 +26,8 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
     opponents.Daedalus,
     opponents.Illuminati,
   ];
+
+  const handicap = getHandicap(boardSize, opponent);
 
   function changeOpponent(event: SelectChangeEvent): void {
     const newOpponent = event.target.value as opponents;
@@ -71,6 +74,25 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
               </MenuItem>
             ))}
           </Select>
+        </Box>
+        <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
+          <Tooltip
+            title={
+              <>
+                This faction will also get a few points as a home-field advantage in the subnet, and to balance the
+                player's advantage of having the first move.
+              </>
+            }
+          >
+            <Typography className={classes.opponentLabel}>Komi: {opponentDetails[opponent].komi}</Typography>
+          </Tooltip>
+          {handicap ? (
+            <Tooltip title={<>This faction has placed a few routers to defend their subnet already.</>}>
+              <Typography className={classes.opponentLabel}>Handicap: {handicap}</Typography>
+            </Tooltip>
+          ) : (
+            ""
+          )}
         </Box>
         <br />
         <br />
