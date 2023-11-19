@@ -8,7 +8,8 @@ export enum playerColors {
 }
 
 export enum validityReason {
-  pointNotEmpty = "That point is already occupied by a piece",
+  pointBroken = "That node is offline; a piece cannot be placed there",
+  pointNotEmpty = "That node is already occupied by a piece",
   boardRepeated = "It is illegal to repeat prior board states",
   noSuicide = "It is illegal to cause your own pieces to be captured",
   notYourTurn = "It is not your turn to play",
@@ -80,7 +81,7 @@ export const boardSizes = [5, 7, 9, 13];
 
 export type PlayerColor = playerColors.white | playerColors.black | playerColors.empty;
 
-export type Board = PointState[][];
+export type Board = (PointState | null)[][];
 
 export type MoveOptions = {
   capture: Move | null;

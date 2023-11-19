@@ -116,7 +116,7 @@ function resetBoardState() {
     resetWinstreak(oldBoardState.ai, false);
   }
 
-  Player.go.boardState = getNewBoardState(oldBoardState.board[0].length, oldBoardState.ai);
+  Player.go.boardState = getNewBoardState(oldBoardState.board[0].length, oldBoardState.ai, true);
   return getSimplifiedBoardState(Player.go.boardState.board);
 }
 
@@ -248,6 +248,9 @@ export function NetscriptGo(): InternalAPI<Go> {
         // Turn the internal chain IDs into nice consecutive numbers for display to the player
         return Player.go.boardState.board.map((column) =>
           column.reduce((chainIdArray: number[], point) => {
+            if (!point) {
+              return chainIdArray;
+            }
             if (!chains.includes(point.chain)) {
               chains.push(point.chain);
             }
@@ -259,7 +262,7 @@ export function NetscriptGo(): InternalAPI<Go> {
       getLiberties: () => () => {
         return Player.go.boardState.board.map((column) =>
           column.reduce((libertyArray: number[], point) => {
-            libertyArray.push(point.liberties?.length ?? -1);
+            point && libertyArray.push(point.liberties?.length ?? -1);
             return libertyArray;
           }, []),
         );
@@ -275,10 +278,13 @@ export function NetscriptGo(): InternalAPI<Go> {
             if (owner === playerColors.black) {
               return ownedPoints + "X";
             }
-            if (boardState.board[x][y].player === playerColors.empty) {
-              return "?";
+            if (!boardState.board[x][y]) {
+              return ownedPoints + "#";
             }
-            return ".";
+            if (boardState.board[x][y]?.player === playerColors.empty) {
+              return ownedPoints + "?";
+            }
+            return ownedPoints + ".";
           }, ""),
         );
       },
@@ -297,6 +303,13 @@ export function NetscriptGo(): InternalAPI<Go> {
           validateRowAndColumn(ctx, x, y);
 
           const point = Player.go.boardState.board[x][y];
+          if (!point) {
+            helpers.log(
+              ctx,
+              () => `The node ${x},${y} is offline, so you cannot clear this point with removeOpponentRouter().`,
+            );
+            return invalidMoveResponse;
+          }
           if (point.player !== playerColors.white) {
             helpers.log(
               ctx,
@@ -319,6 +332,13 @@ export function NetscriptGo(): InternalAPI<Go> {
           const y = helpers.number(ctx, "y", _y);
           validateRowAndColumn(ctx, x, y);
           const point = Player.go.boardState.board[x][y];
+          if (!point) {
+            helpers.log(
+              ctx,
+              () => `The node ${x},${y} is offline, so you cannot clear this point with removeAllyRouter().`,
+            );
+            return invalidMoveResponse;
+          }
           if (point.player !== playerColors.black) {
             helpers.log(
               ctx,
@@ -345,11 +365,19 @@ export function NetscriptGo(): InternalAPI<Go> {
           validateRowAndColumn(ctx, x2, y2);
 
           const point1 = Player.go.boardState.board[x1][y1];
+          if (!point1) {
+            helpers.log(ctx, () => `The node ${x1},${y1} is offline, so you cannot place a router there.`);
+            return invalidMoveResponse;
+          }
           if (point1.player !== playerColors.black) {
             helpers.log(ctx, () => `The point ${x1},${y1} is not empty, so you cannot place a router there.`);
             return invalidMoveResponse;
           }
           const point2 = Player.go.boardState.board[x2][y2];
+          if (!point2) {
+            helpers.log(ctx, () => `The node ${x2},${y2} is offline, so you cannot place a router there.`);
+            return invalidMoveResponse;
+          }
           if (point2.player !== playerColors.black) {
             helpers.log(ctx, () => `The point ${x2},${y2} is not empty, so you cannot place a router there.`);
             return invalidMoveResponse;

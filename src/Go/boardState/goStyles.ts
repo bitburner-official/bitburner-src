@@ -29,10 +29,42 @@ export const pointStyle = makeStyles((theme: Theme) =>
       "&$hover:hover $coordinates": {
         display: "block",
       },
+      "&:hover $broken": {
+        opacity: "0.4",
+      },
+    },
+    broken: {
+      backgroundImage: "repeating-radial-gradient(circle at 17% 32%, white, black 0.00085px)",
+      backgroundPosition: "center",
+      animation: `$static 5s linear infinite`,
+      opacity: "0",
+      margin: "8px",
+      borderRadius: "4px",
+      width: "83%",
+      height: "83%",
+      transition: "all 0.3s",
+      "& $coordinates": {
+        fontSize: "10px",
+      },
+    },
+    "@keyframes static": {
+      from: {
+        backgroundSize: "100% 100%",
+      },
+      to: {
+        backgroundSize: "200% 200%",
+      },
+    },
+    hideOverflow: {
+      overflow: "hidden",
     },
     traditional: {
       "& $innerPoint": {
         display: "none",
+      },
+      "& $broken": {
+        backgroundImage: "none",
+        backgroundColor: "black",
       },
       "& $tradStone": {
         display: "block",

@@ -22,7 +22,12 @@ import { cloneDeep } from "lodash";
 /**
  * Generates a new BoardState object with the given opponent and size
  */
-export function getNewBoardState(boardSize: number, ai = opponents.Netburners, boardToCopy?: Board): BoardState {
+export function getNewBoardState(
+  boardSize: number,
+  ai = opponents.Netburners,
+  applyObstacles = false,
+  boardToCopy?: Board,
+): BoardState {
   const newBoardState = {
     history: [],
     previousPlayer: playerColors.white,
@@ -38,6 +43,10 @@ export function getNewBoardState(boardSize: number, ai = opponents.Netburners, b
       })),
     ),
   };
+
+  if (applyObstacles) {
+    addObstacles(newBoardState);
+  }
 
   const handicap = getHandicap(newBoardState.board[0].length, ai);
   if (handicap) {
@@ -63,14 +72,18 @@ export function getHandicap(boardSize: number, opponent: opponents) {
 export function makeMove(boardState: BoardState, x: number, y: number, player: PlayerColor) {
   // Do not update on invalid moves
   const validity = evaluateIfMoveIsValid(boardState, x, y, player, false);
-  if (validity !== validityReason.valid) {
+  if (validity !== validityReason.valid || !boardState.board[x][y]?.player) {
     console.warn(`Invalid move attempted! ${x} ${y} ${player} : ${validity}`);
     return false;
   }
 
   boardState.history.push(getBoardCopy(boardState).board);
   boardState.history = boardState.history.slice(-4);
-  boardState.board[x][y].player = player;
+  const point = boardState.board[x][y];
+  if (!point) {
+    return false;
+  }
+  point.player = player;
   boardState.previousPlayer = player;
   boardState.passCount = 0;
 
@@ -109,10 +122,24 @@ export function applyHandicap(boardState: BoardState, handicap: number) {
     handicapMoveOptions.splice(index, 1);
   }
 
-  handicapMoves.forEach(
-    (move: Move) => move.point && (boardState.board[move.point.x][move.point.y].player = playerColors.white),
-  );
+  handicapMoves.forEach((move: Move) => {
+    const point = boardState.board[move.point.x][move.point.y];
+    return move.point && point && (point.player = playerColors.white);
+  });
   return updateChains(boardState);
+}
+
+export function addObstacles(boardState: BoardState) {
+  const size = boardState.board[0].length;
+  const obstacleCount = Math.ceil(Math.random() * size * 0.5);
+
+  for (let i = 0; i < obstacleCount; i++) {
+    const x = Math.floor(Math.random() * size);
+    const y = Math.floor(Math.random() * size);
+    boardState.board[x][y] = null;
+    boardState.board[x + 1]?.[y] && (boardState.board[x + 1][y] = null);
+    boardState.board[x + 2]?.[y] && (boardState.board[x + 2][y] = null);
+  }
 }
 
 /**
@@ -126,7 +153,7 @@ export function updateChains(boardState: BoardState, resetChains = true) {
     for (let y = 0; y < boardState.board[x].length; y++) {
       const point = boardState.board[x][y];
       // If the current point is already analyzed, skip it
-      if (point.chain !== "") {
+      if (!point || point.chain !== "") {
         continue;
       }
 
@@ -180,8 +207,11 @@ function captureChain(chain: PointState[]) {
 function clearChains(boardState: BoardState): BoardState {
   for (const x in boardState.board) {
     for (const y in boardState.board[x]) {
-      boardState.board[x][y].chain = "";
-      boardState.board[x][y].liberties = null;
+      const point = boardState.board[x][y];
+      if (point && point.chain && point.liberties) {
+        point.chain = "";
+        point.liberties = null;
+      }
     }
   }
   return boardState;
@@ -194,9 +224,13 @@ function clearChains(boardState: BoardState): BoardState {
  * which are the pieces connected directly via a path consisting only of only up/down/left/right
  */
 export function findAdjacentPointsInChain(boardState: BoardState, x: number, y: number) {
+  const point = boardState.board[x][y];
+  if (!point) {
+    return [];
+  }
   const checkedPoints: PointState[] = [];
-  const adjacentPoints: PointState[] = [boardState.board[x][y]];
-  const pointsToCheckNeighbors: PointState[] = [boardState.board[x][y]];
+  const adjacentPoints: PointState[] = [point];
+  const pointsToCheckNeighbors: PointState[] = [point];
 
   while (pointsToCheckNeighbors.length) {
     const currentPoint = pointsToCheckNeighbors.pop();
@@ -226,11 +260,17 @@ export function findAdjacentPointsInChain(boardState: BoardState, x: number, y: 
  * Finds all empty spaces on the board.
  */
 export function getEmptySpaces(boardState: BoardState): PointState[] {
-  return boardState.board.reduce(
-    (emptySpaces, _, x) =>
-      emptySpaces.concat(boardState.board[x].filter((_, y) => boardState.board[x][y].player === playerColors.empty)),
-    [],
-  );
+  const emptySpaces: PointState[] = [];
+
+  boardState.board.forEach((column) => {
+    column.forEach((point) => {
+      if (point && point.player === playerColors.empty) {
+        emptySpaces.push(point);
+      }
+    });
+  });
+
+  return emptySpaces;
 }
 
 /**
@@ -256,7 +296,13 @@ export function getBoardCopy(boardState: BoardState) {
 
   for (let x = 0; x < board.length; x++) {
     for (let y = 0; y < board[x].length; y++) {
-      boardCopy.board[x][y].player = board[x][y].player;
+      const pointToEdit = boardCopy.board[x][y];
+      const point = board[x][y];
+      if (!point || !pointToEdit) {
+        boardCopy.board[x][y] = null;
+      } else {
+        pointToEdit.player = point.player;
+      }
     }
   }
 

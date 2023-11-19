@@ -106,7 +106,7 @@ export async function findAnyMatchedPatterns(
 /**
   Returns false if any point does not match the pattern, and true if it matches fully.
  */
-function checkMatch(neighborhood: PointState[][], pattern: string[], player: PlayerColor) {
+function checkMatch(neighborhood: (PointState | null)[][], pattern: string[], player: PlayerColor) {
   const patternArr = pattern.join("").split("");
   const neighborhoodArray = neighborhood.flat();
   return patternArr.every((str, index) => matches(str, neighborhoodArray[index], player));

@@ -59,7 +59,7 @@ export function GoGameboard({ boardState, traditional, clickHandler, hover }: IP
                       traditional={traditional}
                       hover={hover}
                       valid={pointIsValid(xIndex, yIndex)}
-                      emptyPointOwner={ownedEmptyNodes[xIndex][yIndex]}
+                      emptyPointOwner={ownedEmptyNodes[xIndex]?.[yIndex]}
                     />
                   </Grid>
                 );

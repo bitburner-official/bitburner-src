@@ -20,9 +20,10 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
   const classes = pointStyle();
 
   const currentPoint = state.board[x][y];
-  const player = currentPoint.player;
+  const player = currentPoint?.player;
 
-  const isInAtari = currentPoint.liberties?.length === 1 && player !== playerColors.empty && !traditional;
+  const isInAtari =
+    currentPoint && currentPoint.liberties?.length === 1 && player !== playerColors.empty && !traditional;
   const liberties = player !== playerColors.empty ? findAdjacentLibertiesAndAlliesForPoint(state, x, y) : null;
   const neighbors = findNeighbors(state, x, y);
 
@@ -60,23 +61,33 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
       ${isInAtari ? classes.fadeLoopAnimation : ""}`;
 
   return (
-    <div className={mainClassName}>
-      <div className={hasNorthLiberty ? `${classes.northLiberty} ${colorLiberty}` : classes.liberty}></div>
-      <div className={hasEastLiberty ? `${classes.eastLiberty} ${colorLiberty}` : classes.liberty}></div>
-      <div className={hasSouthLiberty ? `${classes.southLiberty} ${colorLiberty}` : classes.liberty}></div>
-      <div className={hasWestLiberty ? `${classes.westLiberty} ${colorLiberty}` : classes.liberty}></div>
-      <div className={`${classes.innerPoint} `}>
-        <div
-          className={`${pointClass} ${player !== playerColors.empty ? classes.filledPoint : emptyPointColorClass}`}
-        ></div>
-      </div>
-      <div className={`${pointClass} ${classes.tradStone}`} />
-      {traditional ? <div className={`${pointClass} ${classes.priorStoneTrad}`}></div> : ""}
-      <div className={classes.coordinates}>
-        {columnIndexes[x]}
-        {traditional ? "" : "."}
-        {y + 1}
-      </div>
+    <div className={`${mainClassName} ${currentPoint ? "" : classes.hideOverflow}`}>
+      {currentPoint ? (
+        <>
+          <div className={hasNorthLiberty ? `${classes.northLiberty} ${colorLiberty}` : classes.liberty}></div>
+          <div className={hasEastLiberty ? `${classes.eastLiberty} ${colorLiberty}` : classes.liberty}></div>
+          <div className={hasSouthLiberty ? `${classes.southLiberty} ${colorLiberty}` : classes.liberty}></div>
+          <div className={hasWestLiberty ? `${classes.westLiberty} ${colorLiberty}` : classes.liberty}></div>
+          <div className={`${classes.innerPoint} `}>
+            <div
+              className={`${pointClass} ${player !== playerColors.empty ? classes.filledPoint : emptyPointColorClass}`}
+            ></div>
+          </div>
+          <div className={`${pointClass} ${classes.tradStone}`} />
+          {traditional ? <div className={`${pointClass} ${classes.priorStoneTrad}`}></div> : ""}
+          <div className={classes.coordinates}>
+            {columnIndexes[x]}
+            {traditional ? "" : "."}
+            {y + 1}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className={classes.broken}>
+            <div className={classes.coordinates}>no signal</div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

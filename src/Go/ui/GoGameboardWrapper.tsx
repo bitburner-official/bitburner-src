@@ -18,6 +18,9 @@ import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 
+// TODO: offline node documentation in netscript api docs
+// TODO: offline node docs in instructions page
+
 interface IProps {
   showInstructions: () => void;
 }
@@ -138,7 +141,7 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
       resetWinstreak(boardState.ai, false);
     }
 
-    const newBoardState = getNewBoardState(newBoardSize, newOpponent);
+    const newBoardState = getNewBoardState(newBoardSize, newOpponent, true);
     updateBoard(newBoardState);
   }
 

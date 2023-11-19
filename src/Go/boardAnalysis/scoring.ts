@@ -3,7 +3,7 @@ import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
 import { getKomi } from "./goAI";
 import { Player } from "@player";
 import { getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "../effects/effect";
-import { floor } from "../boardState/boardState";
+import { floor, isNotNull } from "../boardState/boardState";
 import { Factions } from "../../Faction/Factions";
 import { FactionName } from "@enums";
 
@@ -100,7 +100,10 @@ export function resetWinstreak(opponent: opponents, gameComplete: boolean) {
  * Gets the number pieces of a given color on the board
  */
 function getColoredPieceCount(boardState: BoardState, color: PlayerColor) {
-  return boardState.board.reduce((sum, row) => sum + row.filter((point) => point.player === color).length, 0);
+  return boardState.board.reduce(
+    (sum, row) => sum + row.filter(isNotNull).filter((point) => point.player === color).length,
+    0,
+  );
 }
 
 /**

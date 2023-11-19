@@ -50,12 +50,15 @@ export function evaluateIfMoveIsValid(
   if (boardState.previousPlayer === player) {
     return validityReason.notYourTurn;
   }
-  if (!point || point.player !== playerColors.empty) {
+  if (!point) {
+    return validityReason.pointBroken;
+  }
+  if (point.player !== playerColors.empty) {
     return validityReason.pointNotEmpty;
   }
 
   // Detect if the current player has ever previously played this move. Used to detect potential repeated board states
-  const moveHasBeenPlayedBefore = !!boardState.history.find((board) => board[x][y].player === player);
+  const moveHasBeenPlayedBefore = !!boardState.history.find((board) => board[x]?.[y]?.player === player);
 
   if (shortcut) {
     // If the current point has some adjacent open spaces, it is not suicide. If the move is not repeated, it is legal
@@ -93,7 +96,7 @@ export function evaluateIfMoveIsValid(
   // If the move has been played before and is not obviously illegal, we have to actually play it out to determine
   // if it is a repeated move, or if it is a valid move
   const evaluationBoard = evaluateMoveResult(boardState, x, y, player);
-  if (evaluationBoard.board[x][y].player !== player) {
+  if (evaluationBoard.board[x]?.[y]?.player !== player) {
     return validityReason.noSuicide;
   }
   if (moveHasBeenPlayedBefore && checkIfBoardStateIsRepeated(evaluationBoard)) {
@@ -109,12 +112,16 @@ export function evaluateIfMoveIsValid(
 export function evaluateMoveResult(initialBoardState: BoardState, x: number, y: number, player: playerColors) {
   const boardState = getStateCopy(initialBoardState);
   boardState.history.push(getBoardCopy(boardState).board);
+  const point = boardState.board[x]?.[y];
+  if (!point) {
+    return initialBoardState;
+  }
 
-  boardState.board[x][y].player = player;
+  point.player = player;
   boardState.previousPlayer = player;
 
   const neighbors = getArrayFromNeighbor(findNeighbors(boardState, x, y));
-  const chainIdsToUpdate = [boardState.board[x][y].chain, ...neighbors.map((point) => point.chain)];
+  const chainIdsToUpdate = [point.chain, ...neighbors.map((point) => point.chain)];
   resetChainsById(boardState, chainIdsToUpdate);
 
   return updateCaptures(boardState, player, false);
@@ -145,7 +152,11 @@ export function getControlledSpace(boardState: BoardState) {
   Clear the chain and liberty data of all points in the given chains
  */
 const resetChainsById = (boardState: BoardState, chainIds: string[]) => {
-  const pointsToUpdate = boardState.board.flat().filter((point) => chainIds.includes(point.chain));
+  const pointsToUpdate = boardState.board
+    .flat()
+    .filter(isDefined)
+    .filter(isNotNull)
+    .filter((point) => chainIds.includes(point.chain));
   pointsToUpdate.forEach((point) => {
     point.chain = "";
     point.liberties = [];
@@ -367,11 +378,19 @@ function findNeighboringChainsThatFullyEncircleEmptySpace(
 
     const evaluationBoard = getStateCopy(boardState);
     const examplePoint = candidateChain[0];
-    const otherChainNeighborPoints = removePointAtIndex(neighborChainList, index).flat();
-    otherChainNeighborPoints.forEach((point) => (evaluationBoard.board[point.x][point.y].player = playerColors.empty));
+    const otherChainNeighborPoints = removePointAtIndex(neighborChainList, index)
+      .flat()
+      .filter(isNotNull)
+      .filter(isDefined);
+    otherChainNeighborPoints.forEach((point) => {
+      const pointToEdit = evaluationBoard.board[point.x][point.y];
+      if (pointToEdit) {
+        pointToEdit.player = playerColors.empty;
+      }
+    });
     const updatedBoard = updateChains(evaluationBoard);
     const newChains = getAllChains(updatedBoard);
-    const newChainID = updatedBoard.board[examplePoint.x][examplePoint.y].chain;
+    const newChainID = updatedBoard.board[examplePoint.x][examplePoint.y]?.chain;
     const chain = newChains.find((chain) => chain[0].chain === newChainID) || [];
     const newNeighborChains = getAllNeighboringChains(boardState, chain, allChains);
 
@@ -469,7 +488,7 @@ function checkIfBoardStateIsRepeated(boardState: BoardState) {
   return boardState.history.slice(-5).find((state) => {
     for (let x = 0; x < state.length; x++) {
       for (let y = 0; y < state[x].length; y++) {
-        if (currentBoard[x][y].player !== state[x][y].player) {
+        if (currentBoard[x]?.[y]?.player && currentBoard[x]?.[y]?.player !== state[x]?.[y]?.player) {
           return false;
         }
       }
@@ -488,7 +507,7 @@ export function getAllChains(boardState: BoardState): PointState[][] {
     for (let y = 0; y < boardState.board[x].length; y++) {
       const point = boardState.board[x][y];
       // If the current chain is already analyzed, skip it
-      if (point.chain === "" || chains[point.chain]) {
+      if (!point || point.chain === "" || chains[point.chain]) {
         continue;
       }
 
@@ -566,7 +585,8 @@ export function findAdjacentLibertiesAndAlliesForPoint(
   _player?: PlayerColor,
 ): Neighbor {
   const currentPoint = boardState.board[x][y];
-  const player = _player || (currentPoint.player === playerColors.empty ? undefined : currentPoint.player);
+  const player =
+    _player || (!currentPoint || currentPoint.player === playerColors.empty ? undefined : currentPoint.player);
   const adjacentLiberties = findAdjacentLibertiesForPoint(boardState, x, y);
   const neighbors = findNeighbors(boardState, x, y);
 
@@ -604,9 +624,16 @@ export function findAdjacentLibertiesAndAlliesForPoint(
 export function getSimplifiedBoardState(board: Board): string[] {
   return board.map((column) =>
     column.reduce((str, point) => {
-      const currentPointState =
-        point.player === playerColors.black ? "X" : point.player === playerColors.white ? "O" : ".";
-      return str + currentPointState;
+      if (!point) {
+        return str + "#";
+      }
+      if (point.player === playerColors.black) {
+        return str + "X";
+      }
+      if (point.player === playerColors.white) {
+        return str + "O";
+      }
+      return str + ".";
     }, ""),
   );
 }
@@ -622,11 +649,15 @@ export function getBoardFromSimplifiedBoardState(
   for (let x = 0; x < boardStrings[0].length; x++) {
     for (let y = 0; y < boardStrings[0].length; y++) {
       const boardStringPoint = boardStrings[x][y];
-      if (boardStringPoint === "X") {
-        newBoardState.board[x][y].player = playerColors.black;
+      const newBoardPoint = newBoardState.board[x][y];
+      if (boardStringPoint === "#") {
+        newBoardState.board[x][y] = null;
       }
-      if (boardStringPoint === "O") {
-        newBoardState.board[x][y].player = playerColors.white;
+      if (boardStringPoint === "X" && newBoardPoint?.player) {
+        newBoardPoint.player = playerColors.black;
+      }
+      if (boardStringPoint === "O" && newBoardPoint?.player) {
+        newBoardPoint.player = playerColors.white;
       }
     }
   }
