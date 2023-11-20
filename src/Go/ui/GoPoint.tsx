@@ -19,7 +19,7 @@ interface IProps {
 export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwner }: IProps): React.ReactElement {
   const classes = pointStyle();
 
-  const currentPoint = state.board[x][y];
+  const currentPoint = state.board[x]?.[y];
   const player = currentPoint?.player;
 
   const isInAtari =

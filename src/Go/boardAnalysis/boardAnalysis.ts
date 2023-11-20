@@ -95,7 +95,7 @@ export function evaluateIfMoveIsValid(
 
   // If the move has been played before and is not obviously illegal, we have to actually play it out to determine
   // if it is a repeated move, or if it is a valid move
-  const evaluationBoard = evaluateMoveResult(boardState, x, y, player);
+  const evaluationBoard = evaluateMoveResult(boardState, x, y, player, true);
   if (evaluationBoard.board[x]?.[y]?.player !== player) {
     return validityReason.noSuicide;
   }
@@ -109,7 +109,13 @@ export function evaluateIfMoveIsValid(
 /**
  * Create a new evaluation board and play out the results of the given move on the new board
  */
-export function evaluateMoveResult(initialBoardState: BoardState, x: number, y: number, player: playerColors) {
+export function evaluateMoveResult(
+  initialBoardState: BoardState,
+  x: number,
+  y: number,
+  player: playerColors,
+  resetChains = false,
+) {
   const boardState = getStateCopy(initialBoardState);
   boardState.history.push(getBoardCopy(boardState).board);
   const point = boardState.board[x]?.[y];
@@ -124,7 +130,7 @@ export function evaluateMoveResult(initialBoardState: BoardState, x: number, y: 
   const chainIdsToUpdate = [point.chain, ...neighbors.map((point) => point.chain)];
   resetChainsById(boardState, chainIdsToUpdate);
 
-  return updateCaptures(boardState, player, false);
+  return updateCaptures(boardState, player, resetChains);
 }
 
 export function getControlledSpace(boardState: BoardState) {
@@ -383,14 +389,14 @@ function findNeighboringChainsThatFullyEncircleEmptySpace(
       .filter(isNotNull)
       .filter(isDefined);
     otherChainNeighborPoints.forEach((point) => {
-      const pointToEdit = evaluationBoard.board[point.x][point.y];
+      const pointToEdit = evaluationBoard.board[point.x]?.[point.y];
       if (pointToEdit) {
         pointToEdit.player = playerColors.empty;
       }
     });
     const updatedBoard = updateChains(evaluationBoard);
     const newChains = getAllChains(updatedBoard);
-    const newChainID = updatedBoard.board[examplePoint.x][examplePoint.y]?.chain;
+    const newChainID = updatedBoard.board[examplePoint.x]?.[examplePoint.y]?.chain;
     const chain = newChains.find((chain) => chain[0].chain === newChainID) || [];
     const newNeighborChains = getAllNeighboringChains(boardState, chain, allChains);
 
@@ -505,7 +511,7 @@ export function getAllChains(boardState: BoardState): PointState[][] {
 
   for (let x = 0; x < boardState.board.length; x++) {
     for (let y = 0; y < boardState.board[x].length; y++) {
-      const point = boardState.board[x][y];
+      const point = boardState.board[x]?.[y];
       // If the current chain is already analyzed, skip it
       if (!point || point.chain === "" || chains[point.chain]) {
         continue;
@@ -584,7 +590,7 @@ export function findAdjacentLibertiesAndAlliesForPoint(
   y: number,
   _player?: PlayerColor,
 ): Neighbor {
-  const currentPoint = boardState.board[x][y];
+  const currentPoint = boardState.board[x]?.[y];
   const player =
     _player || (!currentPoint || currentPoint.player === playerColors.empty ? undefined : currentPoint.player);
   const adjacentLiberties = findAdjacentLibertiesForPoint(boardState, x, y);
@@ -648,8 +654,8 @@ export function getBoardFromSimplifiedBoardState(
 
   for (let x = 0; x < boardStrings[0].length; x++) {
     for (let y = 0; y < boardStrings[0].length; y++) {
-      const boardStringPoint = boardStrings[x][y];
-      const newBoardPoint = newBoardState.board[x][y];
+      const boardStringPoint = boardStrings[x]?.[y];
+      const newBoardPoint = newBoardState.board[x]?.[y];
       if (boardStringPoint === "#") {
         newBoardState.board[x][y] = null;
       }

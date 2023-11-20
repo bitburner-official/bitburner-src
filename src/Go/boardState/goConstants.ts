@@ -49,7 +49,7 @@ export const opponentDetails = {
     flavorText:
       "The Slum Snakes faction are a small-time street gang who turned to organized crime using their subnets. They are known to use long router chains snaking across the subnet to encircle territory.",
     bonusDescription: "crime success rate",
-    bonusPower: 0.9,
+    bonusPower: 1,
   },
   [opponents.TheBlackHand]: {
     komi: 3.5,
@@ -57,7 +57,7 @@ export const opponentDetails = {
     flavorText:
       "The Black Hand faction is a black-hat hacking group who uses their subnets to launch targeted DDOS attacks. They are famous for their unrelenting aggression, surrounding and strangling any foothold their opponents try to establish.",
     bonusDescription: "hacking level",
-    bonusPower: 0.6,
+    bonusPower: 0.9,
   },
   [opponents.Daedalus]: {
     komi: 5.5,
@@ -65,7 +65,7 @@ export const opponentDetails = {
     flavorText:
       "Not much is known about this shadowy faction. They do not easily let go of subnets that they control, and are known to lease IPvGO cycles in exchange for reputation among other factions.",
     bonusDescription: "reputation gain",
-    bonusPower: 0.9,
+    bonusPower: 1.1,
   },
   [opponents.Illuminati]: {
     komi: 7.5,
@@ -73,7 +73,7 @@ export const opponentDetails = {
     flavorText:
       "The Illuminati are thought to only exist in myth. Said to always have prepared defenses in their IPvGO subnets. Provoke them at your own risk.",
     bonusDescription: "faster hack(), grow(), and weaken()",
-    bonusPower: 0.6,
+    bonusPower: 0.9,
   },
 };
 

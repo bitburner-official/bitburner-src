@@ -3,7 +3,7 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { Box, Button, Typography } from "@mui/material";
 
-import { BoardState, goScore, opponents, playerColors, playTypes, validityReason } from "../boardState/goConstants";
+import { BoardState, opponents, playerColors, playTypes, validityReason } from "../boardState/goConstants";
 import { getNewBoardState, getStateCopy, makeMove, passTurn } from "../boardState/boardState";
 import { getMove } from "../boardAnalysis/goAI";
 import { weiArt } from "../boardState/asciiArt";
@@ -34,12 +34,12 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
   const [opponent, setOpponent] = useState<opponents>(boardState.ai);
   const [scoreOpen, setScoreOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [score, setScore] = useState<goScore>(getScore(boardState));
   const [waitingOnAI, setWaitingOnAI] = useState(false);
 
   const classes = boardStyles();
   const boardSize = boardState.board[0].length;
   const currentPlayer = boardState.previousPlayer === playerColors.white ? playerColors.black : playerColors.white;
+  const score = getScore(boardState);
 
   // Only run this once on first component mount, to handle scenarios where the game was saved or closed while waiting on the AI to make a move
   useEffect(() => {
@@ -146,16 +146,12 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
   }
 
   function updateBoard(initialBoardState: BoardState) {
-    const boardState = getStateCopy(initialBoardState);
-    Player.go.boardState = boardState;
-    setScore(getScore(boardState));
+    Player.go.boardState = getStateCopy(initialBoardState);
     rerender();
   }
 
   function endGame() {
     endGoGame(boardState);
-    const finalScore = getScore(boardState);
-    setScore(finalScore);
     setScoreOpen(true);
     updateBoard(boardState);
   }

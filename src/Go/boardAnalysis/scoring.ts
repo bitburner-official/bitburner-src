@@ -52,7 +52,8 @@ export function endGoGame(boardState: BoardState) {
     statusToUpdate.nodePower += floor(score[playerColors.black].sum * 0.25);
   } else {
     statusToUpdate.wins++;
-    statusToUpdate.winStreak++;
+    statusToUpdate.oldWinStreak = statusToUpdate.winStreak;
+    statusToUpdate.winStreak = statusToUpdate.oldWinStreak < 0 ? 1 : statusToUpdate.winStreak + 1;
 
     if (statusToUpdate.winStreak > statusToUpdate.highestWinStreak) {
       statusToUpdate.highestWinStreak = statusToUpdate.winStreak;

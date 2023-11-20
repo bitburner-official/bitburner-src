@@ -18,6 +18,7 @@ import {
 } from "../boardAnalysis/boardAnalysis";
 import { endGoGame } from "../boardAnalysis/scoring";
 import { cloneDeep } from "lodash";
+import { addObstacles } from "./offlineNodes";
 
 /**
  * Generates a new BoardState object with the given opponent and size
@@ -127,19 +128,6 @@ export function applyHandicap(boardState: BoardState, handicap: number) {
     return move.point && point && (point.player = playerColors.white);
   });
   return updateChains(boardState);
-}
-
-export function addObstacles(boardState: BoardState) {
-  const size = boardState.board[0].length;
-  const obstacleCount = Math.ceil(Math.random() * size * 0.5);
-
-  for (let i = 0; i < obstacleCount; i++) {
-    const x = Math.floor(Math.random() * size);
-    const y = Math.floor(Math.random() * size);
-    boardState.board[x][y] = null;
-    boardState.board[x + 1]?.[y] && (boardState.board[x + 1][y] = null);
-    boardState.board[x + 2]?.[y] && (boardState.board[x + 2][y] = null);
-  }
 }
 
 /**

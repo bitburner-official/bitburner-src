@@ -946,7 +946,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
     }
     case 14: {
       return new BitNodeMultipliers({
-        GoPower: 5,
+        GoPower: 8,
 
         HackingLevelMultiplier: 0.35,
 
