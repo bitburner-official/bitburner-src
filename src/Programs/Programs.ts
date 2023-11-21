@@ -290,9 +290,21 @@ export const Programs: Record<CompletedProgramName, Program> = {
       const fulfilled =
         Player.augmentations.length >= numAugReq && Player.money > 1e11 && Player.skills.hacking >= 2500;
       if (!fulfilled) {
-        Terminal.print(`Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
-        Terminal.print(`Money: ${formatMoney(Player.money)} / $100b`);
-        Terminal.print(`Hacking skill: ${Player.skills.hacking} / 2500`);
+        if (Player.augmentations.length >= numAugReq) {
+          Terminal.print(`Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
+        } else {
+          Terminal.warn(`Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
+        }
+        if (Player.money > 1e11) {
+          Terminal.print(`Money: ${formatMoney(Player.money)} / $100b`);
+        } else {
+          Terminal.warn(`Money: ${formatMoney(Player.money)} / $100b`);
+        }
+        if (Player.skills.hacking >= 2500) {
+          Terminal.print(`Hacking skill: ${Player.skills.hacking} / 2500`);
+        } else {
+          Terminal.warn(`Hacking skill: ${Player.skills.hacking} / 2500`);
+        }
         return;
       }
 
