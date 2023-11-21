@@ -12,7 +12,7 @@ Tools to analyze the IPvGO subnet.
 analysis: {
     getValidMoves(): boolean[][];
 
-    getChains(): number[][];
+    getChains(): (number | null)[][];
 
     getLiberties(): number[][];
 

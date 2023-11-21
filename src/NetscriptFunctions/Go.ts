@@ -247,8 +247,9 @@ export function NetscriptGo(): InternalAPI<Go> {
         const chains: string[] = [];
         // Turn the internal chain IDs into nice consecutive numbers for display to the player
         return Player.go.boardState.board.map((column) =>
-          column.reduce((chainIdArray: number[], point) => {
+          column.reduce((chainIdArray: (number | null)[], point) => {
             if (!point) {
+              chainIdArray.push(null);
               return chainIdArray;
             }
             if (!chains.includes(point.chain)) {
@@ -262,7 +263,7 @@ export function NetscriptGo(): InternalAPI<Go> {
       getLiberties: () => () => {
         return Player.go.boardState.board.map((column) =>
           column.reduce((libertyArray: number[], point) => {
-            point && libertyArray.push(point.liberties?.length ?? -1);
+            libertyArray.push(point?.liberties?.length ?? -1);
             return libertyArray;
           }, []),
         );

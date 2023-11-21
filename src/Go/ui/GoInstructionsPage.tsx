@@ -29,7 +29,7 @@ const captureChallenge = (
 const saveTheNetworkChallenge = (
   <GoTutorialChallenge
     state={getBoardFromSimplifiedBoardState(
-      ["OO...", "XO...", "XX...", "XO...", "XO..."],
+      ["OO.##", "XO..#", "XX..#", "XO...", "XO..."],
       opponents.none,
       playerColors.white,
     )}
@@ -165,8 +165,12 @@ export const GoInstructionsPage = (): React.ReactElement => {
           <Grid item className={classes.instructionsBlurb}>
             <Typography variant="h5">Special Rule Details</Typography>
             <br />
-            <br />
             <Typography>
+              * Because these subnets have fallen into disrepair, they are not always perfectly square. Dead areas, such
+              as the top-left corner in the example above, are not part of the subnet. They do not count as territory,
+              and do not provide open ports to adjacent routers.
+              <br />
+              <br />
               * You cannot suicide your own routers by cutting off access to their last remaining open node. You also
               cannot suicide a router by placing it in a node that is completely surrounded by your opponent's routers.
               <br />

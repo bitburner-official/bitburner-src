@@ -18,8 +18,7 @@ import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 
-// TODO: offline node documentation in netscript api docs
-// TODO: offline node docs in instructions page
+// TODO: unit tests for netscript api
 
 interface IProps {
   showInstructions: () => void;

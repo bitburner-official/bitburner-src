@@ -4,7 +4,7 @@
 
 ## Go.getBoardState() method
 
-Retrieves a simplified version of the board state. "X" represents black pieces, "O" white, and "." empty points.
+Retrieves a simplified version of the board state. "X" represents black pieces, "O" white, and "." empty points. "\#" are dead nodes that are not part of the subnet. (They are not territory nor open nodes.)
 
 For example, a 5x5 board might look like this:
 
@@ -13,8 +13,8 @@ For example, a 5x5 board might look like this:
       "XX.O.",
       "X..OO",
       ".XO..",
-      "XXO..",
-      ".XOO.",
+      "XXO.#",
+      ".XO.#",
    ]
 ```
 Each string represents a vertical column on the board, and each character in the string represents a point.

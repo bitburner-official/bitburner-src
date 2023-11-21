@@ -3841,6 +3841,7 @@ export interface Go {
 
   /**
    * Retrieves a simplified version of the board state. "X" represents black pieces, "O" white, and "." empty points.
+   * "#" are dead nodes that are not part of the subnet. (They are not territory nor open nodes.)
    *
    * For example, a 5x5 board might look like this:
 ```
@@ -3848,8 +3849,8 @@ export interface Go {
       "XX.O.",
       "X..OO",
       ".XO..",
-      "XXO..",
-      ".XOO.",
+      "XXO.#",
+      ".XO.#",
    ]
 ```
    *
@@ -3910,7 +3911,7 @@ export interface Go {
 
     /**
      * Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points
-     * are also given chain IDs to represent continuous empty space.
+     * are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null.`
      *
      * The data from getChains() can be used with the data from getBoardState() to see which player (or empty) each chain is
      *
@@ -3919,11 +3920,11 @@ export interface Go {
      *
 ```
       [
-        [0,0,0,3,4],
-        [1,0,0,3,3],
-        [1,1,0,0,0],
-        [1,1,0,2,2],
-        [1,1,0,2,5],
+        [   0,0,0,3,4],
+        [   1,0,0,3,3],
+        [   1,1,0,0,0],
+        [null,1,0,2,2],
+        [null,1,0,2,5],
       ]
 ```
      * @remarks
@@ -3931,11 +3932,11 @@ export interface Go {
      * (This is intentionally expensive; you can derive this info from just getBoardState() )
      *
      */
-    getChains(): number[][];
+    getChains(): (number | null)[][];
 
     /**
      * Returns a number for each point, representing how many open nodes its network/chain is connected to.
-     * Empty nodes are shown as -1 liberties.
+     * Empty nodes and dead nodes are shown as -1 liberties.
      *
      * For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one
      * in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!
@@ -3958,7 +3959,8 @@ export interface Go {
 
     /**
      * Returns 'X', 'O', or '?' for each empty point to indicate which player controls that empty point.
-     * If no single player fully encircles the empty space, it is shown as contested with '?'
+     * If no single player fully encircles the empty space, it is shown as contested with '?'.
+     * "#" are dead nodes that are not part of the subnet.
      *
      * Filled points of any color are indicated with '.'
      *
@@ -3969,7 +3971,7 @@ export interface Go {
      "OO.?.",
      "O.?.X",
      ".?.XX",
-     "?..XX",
+     "?..X#",
   ]
 ```
      *

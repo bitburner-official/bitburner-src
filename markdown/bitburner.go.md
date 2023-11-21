@@ -16,21 +16,21 @@ export interface Go
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [analysis](./bitburner.go.analysis.md) |  | { getValidMoves(): boolean\[\]\[\]; getChains(): number\[\]\[\]; getLiberties(): number\[\]\[\]; getControlledEmptyNodes(): string\[\]; } | Tools to analyze the IPvGO subnet. |
+|  [analysis](./bitburner.go.analysis.md) |  | { getValidMoves(): boolean\[\]\[\]; getChains(): (number \| null)\[\]\[\]; getLiberties(): number\[\]\[\]; getControlledEmptyNodes(): string\[\]; } | Tools to analyze the IPvGO subnet. |
 |  [cheat](./bitburner.go.cheat.md) |  | { getCheatSuccessChance(): number; removeOpponentRouter( x: number, y: number, ): Promise&lt;{ type: "invalid" \| "move" \| "pass" \| "gameOver"; x: number; y: number; success: boolean; }&gt;; removeAllyRouter( x: number, y: number, ): Promise&lt;{ type: "invalid" \| "move" \| "pass" \| "gameOver"; x: number; y: number; success: boolean; }&gt;; playTwoMoves( x1: number, y1: number, x2: number, x2: number, ): Promise&lt;{ type: "invalid" \| "move" \| "pass" \| "gameOver"; x: number; y: number; success: boolean; }&gt;; } | Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Bitnode 14.2 to use. |
 
 ## Methods
 
 |  Method | Description |
 |  --- | --- |
-|  [getBoardState()](./bitburner.go.getboardstate.md) | <p>Retrieves a simplified version of the board state. "X" represents black pieces, "O" white, and "." empty points.</p><p>For example, a 5x5 board might look like this:</p>
+|  [getBoardState()](./bitburner.go.getboardstate.md) | <p>Retrieves a simplified version of the board state. "X" represents black pieces, "O" white, and "." empty points. "\#" are dead nodes that are not part of the subnet. (They are not territory nor open nodes.)</p><p>For example, a 5x5 board might look like this:</p>
 ```
    [
       "XX.O.",
       "X..OO",
       ".XO..",
-      "XXO..",
-      ".XOO.",
+      "XXO.#",
+      ".XO.#",
    ]
 ```
 <p>Each string represents a vertical column on the board, and each character in the string represents a point.</p><p>Traditional notation for Go is e.g. "B,1" referring to second ("B") column, first rank. This is the equivalent of index \[1\]\[0\].</p><p>Note that the \[0\]\[0\] point is shown on the bottom-left on the visual board (as is traditional), and each string represents a vertical column on the board. In other words, the printed example above can be understood to be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.</p> |
