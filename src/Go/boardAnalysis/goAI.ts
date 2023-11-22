@@ -595,7 +595,9 @@ async function getMoveOptions(
   await sleep(80);
   const eyeBlock = endGameAvailable ? null : getEyeBlockingMove(boardState, player, availableSpaces);
   await sleep(80);
-  const pattern = endGameAvailable ? null : await findAnyMatchedPatterns(boardState, player, availableSpaces, smart);
+  const pattern = endGameAvailable
+    ? null
+    : await findAnyMatchedPatterns(boardState, player, availableSpaces, smart, rng);
 
   // Only offer a random move if there are some contested spaces on the board.
   // (Random move should not be picked if the AI would otherwise pass turn.)
@@ -615,7 +617,7 @@ async function getMoveOptions(
   console.debug("defend: ", defendMove?.point?.x, defendMove?.point?.y);
   console.debug("Growth: ", growthMove?.point?.x, growthMove?.point?.y);
   console.debug("Expansion: ", expansionMove?.point?.x, expansionMove?.point?.y);
-  console.debug("Random: ", expansionMove?.point?.x, expansionMove?.point?.y);
+  console.debug("Random: ", random?.x, random?.y);
 
   return {
     capture: captureMove,

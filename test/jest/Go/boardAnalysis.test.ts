@@ -15,8 +15,8 @@ describe("Go board analysis tests", () => {
     const board = ["XOO..", ".....", ".....", ".....", "....."];
     const boardState = getBoardFromSimplifiedBoardState(board);
 
-    expect(boardState.board[0][0].liberties?.length).toEqual(1);
-    expect(boardState.board[0][1].liberties?.length).toEqual(3);
+    expect(boardState.board[0]?.[0]?.liberties?.length).toEqual(1);
+    expect(boardState.board[0]?.[1]?.liberties?.length).toEqual(3);
   });
 
   it("identifies all points that are part of 'eyes' on the board", async () => {
@@ -37,6 +37,8 @@ describe("Go board analysis tests", () => {
       boardState,
       playerColors.white,
       getAllValidMoves(boardState, playerColors.white),
+      true,
+      0,
     );
 
     expect(point?.x).toEqual(3);

@@ -2,6 +2,7 @@
 import { BoardState, PlayerColor, playerColors, PointState } from "../boardState/goConstants";
 import { sleep } from "./goAI";
 import { findEffectiveLibertiesOfNewMove } from "./boardAnalysis";
+import { floor } from "../boardState/boardState";
 
 export const threeByThreePatterns = [
   // 3x3 piece patterns; X,O are color pieces; x,o are any state except the opposite color piece;
@@ -81,10 +82,12 @@ export async function findAnyMatchedPatterns(
   player: PlayerColor,
   availableSpaces: PointState[],
   smart = true,
+  rng: number,
 ) {
   const board = boardState.board;
   const boardSize = board[0].length;
   const patterns = expandAllThreeByThreePatterns();
+  const moves = [];
   for (let x = 0; x < boardSize; x++) {
     for (let y = 0; y < boardSize; y++) {
       const neighborhood = getNeighborhood(boardState, x, y);
@@ -95,12 +98,12 @@ export async function findAnyMatchedPatterns(
         availableSpaces.find((availablePoint) => availablePoint.x === x && availablePoint.y === y) &&
         (!smart || findEffectiveLibertiesOfNewMove(boardState, x, y, player).length > 1)
       ) {
-        return board[x][y];
+        moves.push(board[x][y]);
       }
     }
     await sleep(10);
   }
-  return null;
+  return moves[floor(rng * moves.length)] || null;
 }
 
 /**
