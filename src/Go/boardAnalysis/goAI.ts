@@ -144,13 +144,10 @@ function isSmart(faction: opponents, rng: number) {
     return false;
   }
   if (faction === opponents.SlumSnakes) {
-    return rng < 0.6;
-  }
-  if (faction === opponents.TheBlackHand) {
     return rng < 0.3;
   }
-  if (faction === opponents.Daedalus) {
-    return rng < 0.1;
+  if (faction === opponents.TheBlackHand) {
+    return rng < 0.8;
   }
 
   return true;
