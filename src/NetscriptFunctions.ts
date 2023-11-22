@@ -78,7 +78,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
-import { NS, RecentScript, BasicHGWOptions, ProcessInfo, NSEnums } from "@nsdefs";
+import { NS, RecentScript, ProcessInfo, NSEnums } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
@@ -154,15 +154,10 @@ export const ns: InternalAPI<NSFull> = {
     return out;
   },
   hasTorRouter: () => () => Player.hasTorRouter(),
-  hack:
-    (ctx) =>
-    (_hostname, opts = {}) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      // TODO 2.2: better type safety rework for functions using assertObjectType, then remove function.
-      const optsValidator: BasicHGWOptions = {};
-      assertObjectType(ctx, "opts", opts, optsValidator);
-      return helpers.hack(ctx, hostname, false, opts);
-    },
+  hack: (ctx) => (_hostname, opts?) => {
+    const hostname = helpers.string(ctx, "hostname", _hostname);
+    return helpers.hack(ctx, hostname, false, opts);
+  },
   hackAnalyzeThreads: (ctx) => (_hostname, _hackAmount) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const hackAmount = helpers.number(ctx, "hackAmount", _hackAmount);
@@ -252,66 +247,58 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => `Sleeping for ${convertTimeMsToTimeElapsedString(time, true)}.`);
       return new Promise((resolve) => setTimeout(() => resolve(true), time));
     },
-  grow:
-    (ctx) =>
-    (_hostname, opts = {}) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const optsValidator: BasicHGWOptions = {};
-      assertObjectType(ctx, "opts", opts, optsValidator);
-      const threads = helpers.resolveNetscriptRequestedThreads(ctx, opts.threads);
-      const additionalMsec = helpers.number(ctx, "opts.additionalMsec", opts.additionalMsec ?? 0);
-      if (additionalMsec < 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `additionalMsec must be non-negative, got ${additionalMsec}`);
-      }
+  grow: (ctx) => (_hostname, opts?) => {
+    const hostname = helpers.string(ctx, "hostname", _hostname);
+    const { threads, stock, additionalMsec } = helpers.validateHGWOptions(ctx, opts);
 
-      const server = helpers.getServer(ctx, hostname);
-      if (!(server instanceof Server)) {
-        helpers.log(ctx, () => "Cannot be executed on this server.");
-        return Promise.resolve(0);
-      }
+    const server = helpers.getServer(ctx, hostname);
+    if (!(server instanceof Server)) {
+      helpers.log(ctx, () => "Cannot be executed on this server.");
+      return Promise.resolve(0);
+    }
 
-      const host = GetServer(ctx.workerScript.hostname);
-      if (host === null) {
-        throw new Error("Workerscript host is null");
-      }
+    const host = GetServer(ctx.workerScript.hostname);
+    if (host === null) {
+      throw new Error("Workerscript host is null");
+    }
 
-      // No root access or skill level too low
-      const canHack = netscriptCanGrow(server);
-      if (!canHack.res) {
-        throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
-      }
+    // No root access or skill level too low
+    const canHack = netscriptCanGrow(server);
+    if (!canHack.res) {
+      throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
+    }
 
-      const growTime = calculateGrowTime(server, Player) + additionalMsec / 1000.0;
+    const growTime = calculateGrowTime(server, Player) + additionalMsec / 1000.0;
+    helpers.log(
+      ctx,
+      () =>
+        `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
+          growTime * 1000,
+          true,
+        )} (t=${formatThreads(threads)}).`,
+    );
+    return helpers.netscriptDelay(ctx, growTime * 1000).then(function () {
+      const moneyBefore = server.moneyAvailable <= 0 ? 1 : server.moneyAvailable;
+      processSingleServerGrowth(server, threads, host.cpuCores);
+      const moneyAfter = server.moneyAvailable;
+      ctx.workerScript.scriptRef.recordGrow(server.hostname, threads);
+      const expGain = calculateHackingExpGain(server, Player) * threads;
+      const logGrowPercent = moneyAfter / moneyBefore - 1;
       helpers.log(
         ctx,
         () =>
-          `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
-            growTime * 1000,
-            true,
-          )} (t=${formatThreads(threads)}).`,
+          `Available money on '${server.hostname}' grown by ${formatPercent(logGrowPercent, 6)}. Gained ${formatExp(
+            expGain,
+          )} hacking exp (t=${formatThreads(threads)}).`,
       );
-      return helpers.netscriptDelay(ctx, growTime * 1000).then(function () {
-        const moneyBefore = server.moneyAvailable <= 0 ? 1 : server.moneyAvailable;
-        processSingleServerGrowth(server, threads, host.cpuCores);
-        const moneyAfter = server.moneyAvailable;
-        ctx.workerScript.scriptRef.recordGrow(server.hostname, threads);
-        const expGain = calculateHackingExpGain(server, Player) * threads;
-        const logGrowPercent = moneyAfter / moneyBefore - 1;
-        helpers.log(
-          ctx,
-          () =>
-            `Available money on '${server.hostname}' grown by ${formatPercent(logGrowPercent, 6)}. Gained ${formatExp(
-              expGain,
-            )} hacking exp (t=${formatThreads(threads)}).`,
-        );
-        ctx.workerScript.scriptRef.onlineExpGained += expGain;
-        Player.gainHackingExp(expGain);
-        if (opts.stock) {
-          influenceStockThroughServerGrow(server, moneyAfter - moneyBefore);
-        }
-        return Promise.resolve(moneyAfter / moneyBefore);
-      });
-    },
+      ctx.workerScript.scriptRef.onlineExpGained += expGain;
+      Player.gainHackingExp(expGain);
+      if (stock) {
+        influenceStockThroughServerGrow(server, moneyAfter - moneyBefore);
+      }
+      return Promise.resolve(moneyAfter / moneyBefore);
+    });
+  },
   growthAnalyze:
     (ctx) =>
     (_host, _multiplier, _cores = 1) => {
@@ -359,64 +346,56 @@ export const ns: InternalAPI<NSFull> = {
 
       return 2 * CONSTANTS.ServerFortifyAmount * threads;
     },
-  weaken:
-    (ctx) =>
-    async (_hostname, opts = {}) => {
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      const optsValidator: BasicHGWOptions = {};
-      assertObjectType(ctx, "opts", opts, optsValidator);
-      const threads = helpers.resolveNetscriptRequestedThreads(ctx, opts.threads);
-      const additionalMsec = helpers.number(ctx, "opts.additionalMsec", opts.additionalMsec ?? 0);
-      if (additionalMsec < 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `additionalMsec must be non-negative, got ${additionalMsec}`);
-      }
+  weaken: (ctx) => async (_hostname, opts?) => {
+    const hostname = helpers.string(ctx, "hostname", _hostname);
+    const { threads, additionalMsec } = helpers.validateHGWOptions(ctx, opts);
 
-      const server = helpers.getServer(ctx, hostname);
-      if (!(server instanceof Server)) {
-        helpers.log(ctx, () => "Cannot be executed on this server.");
+    const server = helpers.getServer(ctx, hostname);
+    if (!(server instanceof Server)) {
+      helpers.log(ctx, () => "Cannot be executed on this server.");
+      return Promise.resolve(0);
+    }
+
+    // No root access or skill level too low
+    const canHack = netscriptCanWeaken(server);
+    if (!canHack.res) {
+      throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
+    }
+
+    const weakenTime = calculateWeakenTime(server, Player) + additionalMsec / 1000.0;
+    helpers.log(
+      ctx,
+      () =>
+        `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
+          weakenTime * 1000,
+          true,
+        )} (t=${formatThreads(threads)})`,
+    );
+    return helpers.netscriptDelay(ctx, weakenTime * 1000).then(function () {
+      const host = GetServer(ctx.workerScript.hostname);
+      if (host === null) {
+        helpers.log(ctx, () => "Server is null, did it die?");
         return Promise.resolve(0);
       }
-
-      // No root access or skill level too low
-      const canHack = netscriptCanWeaken(server);
-      if (!canHack.res) {
-        throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
-      }
-
-      const weakenTime = calculateWeakenTime(server, Player) + additionalMsec / 1000.0;
+      const cores = host.cpuCores;
+      const coreBonus = getCoreBonus(cores);
+      const weakenAmt = CONSTANTS.ServerWeakenAmount * threads * coreBonus;
+      server.weaken(weakenAmt);
+      ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
+      const expGain = calculateHackingExpGain(server, Player) * threads;
       helpers.log(
         ctx,
         () =>
-          `Executing on '${server.hostname}' in ${convertTimeMsToTimeElapsedString(
-            weakenTime * 1000,
-            true,
-          )} (t=${formatThreads(threads)})`,
+          `'${server.hostname}' security level weakened to ${server.hackDifficulty}. Gained ${formatExp(
+            expGain,
+          )} hacking exp (t=${formatThreads(threads)})`,
       );
-      return helpers.netscriptDelay(ctx, weakenTime * 1000).then(function () {
-        const host = GetServer(ctx.workerScript.hostname);
-        if (host === null) {
-          helpers.log(ctx, () => "Server is null, did it die?");
-          return Promise.resolve(0);
-        }
-        const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
-        const coreBonus = getCoreBonus(cores);
-        const weakenAmt = CONSTANTS.ServerWeakenAmount * threads * coreBonus;
-        server.weaken(weakenAmt);
-        ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
-        const expGain = calculateHackingExpGain(server, Player) * threads;
-        helpers.log(
-          ctx,
-          () =>
-            `'${server.hostname}' security level weakened to ${server.hackDifficulty}. Gained ${formatExp(
-              expGain,
-            )} hacking exp (t=${formatThreads(threads)})`,
-        );
-        ctx.workerScript.scriptRef.onlineExpGained += expGain;
-        Player.gainHackingExp(expGain);
-        // Account for hidden multiplier in Server.weaken()
-        return Promise.resolve(weakenAmt * currentNodeMults.ServerWeakenRate);
-      });
-    },
+      ctx.workerScript.scriptRef.onlineExpGained += expGain;
+      Player.gainHackingExp(expGain);
+      // Account for hidden multiplier in Server.weaken()
+      return Promise.resolve(weakenAmt * currentNodeMults.ServerWeakenRate);
+    });
+  },
   weakenAnalyze:
     (ctx) =>
     (_threads, _cores = 1) => {
