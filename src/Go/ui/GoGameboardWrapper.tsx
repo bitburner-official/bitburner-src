@@ -18,8 +18,6 @@ import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 
-// TODO: unit tests for netscript api
-
 interface IProps {
   showInstructions: () => void;
 }

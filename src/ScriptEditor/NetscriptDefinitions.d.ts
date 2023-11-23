@@ -3884,7 +3884,7 @@ export interface Go {
   resetBoardState(
     opponent: "Netburners" | "Slum Snakes" | "The Black Hand" | "Daedalus" | "Illuminati",
     boardSize: 5 | 7 | 9 | 13,
-  ): string[];
+  ): string[] | undefined;
 
   /**
    * Tools to analyze the IPvGO subnet.
@@ -3999,7 +3999,7 @@ export interface Go {
      */
     getCheatSuccessChance(): number;
     /**
-     * Attempts to remove an opponent's router, leaving an empty node behind.
+     * Attempts to remove an existing router, leaving an empty node behind.
      *
      * Success chance can be seen via ns.go.getCheatSuccessChance()
      *
@@ -4012,30 +4012,7 @@ export interface Go {
      *
      * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
      */
-    removeOpponentRouter(
-      x: number,
-      y: number,
-    ): Promise<{
-      type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
-      success: boolean;
-    }>;
-    /**
-     * Attempts to remove one of your own routers, leaving an empty node behind.
-     *
-     * Success chance can be seen via ns.go.getCheatSuccessChance()
-     *
-     * Warning: if you fail to play a cheat move, your turn will be skipped. In addition, if you fail, there is a
-     * small (~10%) chance you will instantly be ejected from the subnet.
-     *
-     * @remarks
-     * RAM cost: 4 GB
-     * Requires Bitnode 14.2 to use
-     *
-     * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
-     */
-    removeAllyRouter(
+    removeRouter(
       x: number,
       y: number,
     ): Promise<{

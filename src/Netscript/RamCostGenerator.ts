@@ -257,8 +257,7 @@ const go = {
   },
   cheat: {
     getCheatSuccessChance: 1,
-    removeOpponentRouter: 4,
-    removeAllyRouter: 4,
+    removeRouter: 4,
     playTwoMoves: 4,
   },
 } as const;
