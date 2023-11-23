@@ -104,7 +104,7 @@ function addCenterBreak(board: Board, random: rand) {
   const size = board[0].length;
   const maxOffset = getScale(board);
   const xIndex = random(0, maxOffset * 2) - maxOffset + floor(size / 2);
-  const length = random(1, size / 2);
+  const length = random(1, floor(size / 2 - 1));
 
   board[xIndex] = board[xIndex].map((point, index) => (index < length ? null : point));
 

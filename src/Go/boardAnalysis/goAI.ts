@@ -133,7 +133,7 @@ function getFactionMove(moves: MoveOptions, faction: opponents, rng: number): Po
     return getDaedalusPriorityMove(moves, rng);
   }
 
-  return getIlluminatiPriorityMove(moves);
+  return getIlluminatiPriorityMove(moves, rng);
 }
 
 /**
@@ -158,7 +158,7 @@ function isSmart(faction: opponents, rng: number) {
  */
 function getNetburnersPriorityMove(moves: MoveOptions, rng: number): PointState | null {
   if (rng < 0.2) {
-    return getIlluminatiPriorityMove(moves);
+    return getIlluminatiPriorityMove(moves, rng);
   } else if (rng < 0.4 && moves.expansion) {
     return moves.expansion.point;
   } else if (rng < 0.6 && moves.growth) {
@@ -180,7 +180,7 @@ function getSlumSnakesPriorityMove(moves: MoveOptions, rng: number): PointState 
   }
 
   if (rng < 0.2) {
-    return getIlluminatiPriorityMove(moves);
+    return getIlluminatiPriorityMove(moves, rng);
   } else if (rng < 0.6 && moves.growth) {
     return moves.growth.point;
   } else if (rng < 0.65) {
@@ -210,7 +210,7 @@ function getBlackHandPriorityMove(moves: MoveOptions, rng: number): PointState |
   }
 
   if (rng < 0.3) {
-    return getIlluminatiPriorityMove(moves);
+    return getIlluminatiPriorityMove(moves, rng);
   } else if (rng < 0.75 && moves.surround) {
     return moves.surround.point;
   } else if (rng < 0.8) {
@@ -225,7 +225,7 @@ function getBlackHandPriorityMove(moves: MoveOptions, rng: number): PointState |
  */
 function getDaedalusPriorityMove(moves: MoveOptions, rng: number): PointState | null {
   if (rng < 0.9) {
-    return getIlluminatiPriorityMove(moves);
+    return getIlluminatiPriorityMove(moves, rng);
   }
 
   return null;
@@ -239,7 +239,7 @@ function getDaedalusPriorityMove(moves: MoveOptions, rng: number): PointState | 
  * Then, blocking the opponent's attempts to create eyes
  * Finally, will match any of the predefined local patterns indicating a strong move.
  */
-function getIlluminatiPriorityMove(moves: MoveOptions): PointState | null {
+function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): PointState | null {
   if (moves.capture) {
     console.debug("capture: capture move chosen");
     return moves.capture.point;
@@ -265,7 +265,10 @@ function getIlluminatiPriorityMove(moves: MoveOptions): PointState | null {
     return moves.eyeBlock.point;
   }
 
-  if (moves.pattern) {
+  const hasMoves = [moves.eyeMove, moves.eyeBlock, moves.growth, moves.defend, moves.surround].filter((m) => m).length;
+  const usePattern = rng > 0.25 || !hasMoves;
+
+  if (moves.pattern && usePattern) {
     console.debug("pattern match move chosen");
     return moves.pattern;
   }
