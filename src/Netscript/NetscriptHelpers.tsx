@@ -96,40 +96,6 @@ export function assertString(ctx: NetscriptContext, argName: string, v: unknown)
     throw makeRuntimeErrorMsg(ctx, `${argName} expected to be a string. ${debugType(v)}`, "TYPE");
 }
 
-/** Will probably remove the below function in favor of a different approach to object type assertion.
- *  This method cannot be used to handle optional properties. */
-export function assertObjectType<T extends object>(
-  ctx: NetscriptContext,
-  name: string,
-  obj: unknown,
-  desiredObject: T,
-): asserts obj is T {
-  if (typeof obj !== "object" || obj === null) {
-    throw makeRuntimeErrorMsg(
-      ctx,
-      `Type ${obj === null ? "null" : typeof obj} provided for ${name}. Must be an object.`,
-      "TYPE",
-    );
-  }
-  for (const [key, val] of Object.entries(desiredObject)) {
-    if (!Object.hasOwn(obj, key)) {
-      throw makeRuntimeErrorMsg(
-        ctx,
-        `Object provided for argument ${name} is missing required property ${key}.`,
-        "TYPE",
-      );
-    }
-    const objVal = (obj as Record<string, unknown>)[key];
-    if (typeof val !== typeof objVal) {
-      throw makeRuntimeErrorMsg(
-        ctx,
-        `Incorrect type ${typeof objVal} provided for property ${key} on ${name} argument. Should be type ${typeof val}.`,
-        "TYPE",
-      );
-    }
-  }
-}
-
 const userFriendlyString = (v: unknown): string => {
   const clip = (s: string): string => {
     if (s.length > 15) return s.slice(0, 12) + "...";
@@ -272,7 +238,7 @@ function makeBasicErrorMsg(ws: WorkerScript | ScriptDeath, msg: string, type = "
 }
 
 /** Creates an error message string with a stack trace. */
-function makeRuntimeErrorMsg(ctx: NetscriptContext, msg: string, type = "RUNTIME"): string {
+export function makeRuntimeErrorMsg(ctx: NetscriptContext, msg: string, type = "RUNTIME"): string {
   const errstack = new Error().stack;
   if (errstack === undefined) throw new Error("how did we not throw an error?");
   const stack = errstack.split("\n").slice(1);
