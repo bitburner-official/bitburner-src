@@ -6,7 +6,7 @@ import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligen
 import { WormInputArray } from "@nsdefs";
 import { isValidInput } from "./Automata";
 
-export const getGuessTime = (threads: number) => 60 * 1000 / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1));
+export const getGuessTime = (threads: number) => (60 * 1000 / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1))) * (1 - (0.1 + 0.05 * Player.sourceFileLvl(16)));
 
 export function calculateWormMults(worm: Worm | null): Multipliers {
 	if (worm === null) return defaultMultipliers();

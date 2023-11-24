@@ -459,7 +459,14 @@ export function initBitNodes() {
 			its level up to a maximum of 3. This Source-File lets the Worm appear in other BitNodes.
 			<br />
 			<br />
-			Each level of this Source-File increases the time between changes to the Worm.
+			Each level of this Source-File decreases the processing time of the worm by:
+			<br />
+      <br />
+      Level 1: 10%
+      <br />
+      Level 2: 15%
+      <br />
+      Level 3: 20%
 		</>
 	);
 }
@@ -947,7 +954,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 				CorporationSoftcap: 0.9,
 				CorporationDivisions: 0.8,
 
-				BladeburnerRank: 0.4,
+				BladeburnerRank: 0.7,
 				BladeburnerSkillCost: 1.2,
 
 				StaneksGiftPowerMultiplier: 0.5,
