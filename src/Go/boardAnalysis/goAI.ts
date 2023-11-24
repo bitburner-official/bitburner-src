@@ -497,6 +497,7 @@ async function getSurroundMove(
       move.y,
       player === playerColors.black ? playerColors.white : playerColors.black,
     );
+    const weakestEnemyChainLength = weakestEnemyChain?.length ?? 99;
 
     const enemyChainLibertyCount = weakestEnemyChain?.[0]?.liberties?.length ?? 99;
 
@@ -523,7 +524,10 @@ async function getSurroundMove(
 
     // If the move puts the enemy chain in threat of capture, it forces the opponent to respond.
     // Only do this if your piece cannot be captured, or if the enemy group is surrounded and vulnerable to losing its only interior space
-    else if (enemyChainLibertyCount === 2 && (newLibertyCount >= 2 || enemyLibertyGroups.length === 1 || !smart)) {
+    else if (
+      enemyChainLibertyCount === 2 &&
+      (newLibertyCount >= 2 || (enemyLibertyGroups.length === 1 && weakestEnemyChainLength > 2) || !smart)
+    ) {
       atariMoves.push({
         point: move,
         oldLibertyCount: enemyChainLibertyCount,
