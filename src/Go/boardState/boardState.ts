@@ -147,7 +147,7 @@ export function updateChains(boardState: BoardState, resetChains = true) {
 
       const chainMembers = findAdjacentPointsInChain(boardState, x, y);
       const libertiesForChain = findLibertiesForChain(boardState, chainMembers);
-      const id = `${point.x}${point.y}`;
+      const id = `${point.x},${point.y}`;
 
       chainMembers.forEach((member) => {
         member.chain = id;
