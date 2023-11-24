@@ -28,7 +28,7 @@ export function AutomataFactory(completions: number): [AutomataData, [string, st
 	const states = Array.from({ length: numStates }, (_, i) => "s" + i.toString().padStart(Math.ceil(Math.log10(numStates)), "0"));
 	const symbols = base64Characters.split("", numSymbols);
 
-	const transitions = generateTransitions(states, symbols);
+	const transitions = generateGraph(states, symbols);
 
 	const data: Omit<AutomataData, "properties"> = {
 		states,
@@ -44,6 +44,52 @@ export function AutomataFactory(completions: number): [AutomataData, [string, st
 		...data,
 		properties
 	}, [chooseRandomState(states), chooseRandomState(states)]];
+}
+
+export function generateGraph(states: string[], symbols: string[]): Record<string, Record<string, string>> {
+	const isBipartite = Math.random() > 0.5;
+
+	const connectionRange = symbols.length;
+
+	const transitions: Record<string, Record<string, string>> = {};
+
+	// creates a path that goes through all states
+	for (let i = 0; i < states.length - 1; i++) transitions[states[i]] = {
+		[symbols[Math.floor(Math.random() * symbols.length)]]: states[i + 1]
+	};
+	// the last state loops back to the first (or second if graph should be bipartite and states count is odd)
+	transitions[states[states.length - 1]] = {
+		[symbols[Math.floor(Math.random() * symbols.length)]]: states[isBipartite ? states.length % 2 : 0]
+	};
+
+	for (let i = 0; i < states.length; i++) {
+		const possibleTargets = [];
+
+		// sets the lower/upper bound to the next possible state that is also odd/even.
+		const lowerBound = Math.max(
+			isBipartite ? (i + 1) % 2 : 0,
+			(i - connectionRange) + (isBipartite ? ((i - connectionRange) % 2) ^ ((i + 1) % 2) : 0)
+		);
+		const upperBound = Math.min(
+			isBipartite ? states.length - ((states.length % 2) ^ ((i + 1) % 2)) : states.length,
+			((i + connectionRange) - (isBipartite ? ((i + connectionRange) % 2) ^ ((i + 1) % 2) : 0)) + 1
+		);
+		for (
+			let j = lowerBound;
+			j < upperBound;
+			isBipartite ? j += 2 : j++
+		) {
+			if (j !== i) possibleTargets.push(states[j]);
+		}
+
+		for (const symbol of symbols) {
+			if (transitions[states[i]][symbol] !== undefined) continue;
+
+			transitions[states[i]][symbol] = possibleTargets[Math.floor(Math.random() * possibleTargets.length)];
+		}
+	}
+
+	return transitions;
 }
 
 export function calculateProperties(data: Omit<AutomataData, "properties">): AutomataProperties {
@@ -63,29 +109,6 @@ export function calculateProperties(data: Omit<AutomataData, "properties">): Aut
 		nodeValues: values,
 		nodeIndegrees: degrees
 	}
-}
-
-export function generateTransitions(states: string[], symbols: string[]): Record<string, Record<string, string>> {
-	const transitions: Record<string, Record<string, string>> = {};
-
-	// Creates a transition to every state
-	for (let i = 0; i < states.length - 1; i++) transitions[states[i]] = {
-		[symbols[Math.floor(Math.random() * symbols.length)]]: states[i + 1]
-	};
-	transitions[states[states.length - 1]] = { [symbols[Math.floor(Math.random() * symbols.length)]]: states[0] };
-
-	// Creates a transition for every symbol on every possible state that hasn't been mapped yet
-	for (let i = 0; i < states.length; i++) {
-		for (const symbol of symbols) {
-			if (transitions[states[i]][symbol] !== undefined) continue;
-
-			// the target of the symbol from the current state is limited to a state in a certain range
-			const target = Math.min(states.length - 1, Math.max(0, i + Math.round((Math.random() - 0.5) * 2 * symbols.length)));
-			transitions[states[i]][symbol] = states[target];
-		}
-	}
-
-	return transitions;
 }
 
 export function evaluateInput(data: AutomataData, input: string) {
