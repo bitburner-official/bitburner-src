@@ -265,6 +265,11 @@ function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): PointState 
     return moves.eyeBlock.point;
   }
 
+  if (moves.corner) {
+    console.debug("Corner move chosen");
+    return moves.corner;
+  }
+
   const hasMoves = [moves.eyeMove, moves.eyeBlock, moves.growth, moves.defend, moves.surround].filter((m) => m).length;
   const usePattern = rng > 0.25 || !hasMoves;
 
@@ -274,6 +279,46 @@ function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): PointState 
   }
 
   return null;
+}
+
+function getCornerMove(boardState: BoardState) {
+  const boardEdge = boardState.board[0].length - 1; //4
+  const cornerMax = boardEdge - 2; // 2
+  const topRightPieceCount = findPlayerPiecesInArea(boardState, cornerMax, cornerMax, boardEdge, boardEdge).length;
+  if (!topRightPieceCount) {
+    return boardState.board[cornerMax][cornerMax];
+  }
+  const topLeftPieceCount = findPlayerPiecesInArea(boardState, 0, cornerMax, cornerMax, boardEdge).length;
+  if (!topLeftPieceCount) {
+    return boardState.board[2][cornerMax];
+  }
+  const bottomLeftPieceCount = findPlayerPiecesInArea(boardState, 0, 0, 2, 2).length;
+  if (!bottomLeftPieceCount) {
+    return boardState.board[2][2];
+  }
+  const bottomRightPieceCount = findPlayerPiecesInArea(boardState, cornerMax, 0, boardEdge, 2).length;
+  if (!bottomRightPieceCount) {
+    return boardState.board[cornerMax][2];
+  }
+
+  return null;
+}
+
+function findPlayerPiecesInArea(boardState: BoardState, x1: number, y1: number, x2: number, y2: number) {
+  const foundPieces: PointState[] = [];
+  boardState.board.forEach((column) =>
+    column.forEach(
+      (point) =>
+        point &&
+        point.player !== playerColors.empty &&
+        point.x >= x1 &&
+        point.x <= x2 &&
+        point.y >= y1 &&
+        point.y <= y2 &&
+        foundPieces.push(point),
+    ),
+  );
+  return foundPieces;
 }
 
 function getExpansionMove(boardState: BoardState, player: PlayerColor, availableSpaces: PointState[], rng: number) {
@@ -598,6 +643,7 @@ async function getMoveOptions(
   await sleep(80);
   const eyeBlock = endGameAvailable ? null : getEyeBlockingMove(boardState, player, availableSpaces);
   await sleep(80);
+  const cornerMove = getCornerMove(boardState);
   const pattern = endGameAvailable
     ? null
     : await findAnyMatchedPatterns(boardState, player, availableSpaces, smart, rng);
@@ -620,6 +666,7 @@ async function getMoveOptions(
   console.debug("defend: ", defendMove?.point?.x, defendMove?.point?.y);
   console.debug("Growth: ", growthMove?.point?.x, growthMove?.point?.y);
   console.debug("Expansion: ", expansionMove?.point?.x, expansionMove?.point?.y);
+  console.debug("Corner: ", cornerMove?.x, cornerMove?.y);
   console.debug("Random: ", random?.x, random?.y);
 
   return {
@@ -632,6 +679,7 @@ async function getMoveOptions(
     expansion: expansionMove,
     defend: defendMove,
     surround: surroundMove,
+    corner: cornerMove,
     random: random,
   };
 }
