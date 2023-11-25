@@ -37,7 +37,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
       <Tooltip
         title={
           <Typography>
-            This address is used to connect to a Remote API port, please ensure that it matches with your Remote API
+            This address is used to connect to a Remote API, please ensure that it matches with your Remote API
             address. Default localhost.
           </Typography>
         }
@@ -50,13 +50,14 @@ export const RemoteAPIPage = (): React.ReactElement => {
           value={remoteFileApiAddress}
           onChange={handleRemoteFileApiAddressChange}
           placeholder="localhost"
+          size={"medium"}
         />
       </Tooltip>
       <br />
       <Tooltip
         title={
           <Typography>
-            This port number is used to connect to a Remote API port, please ensure that it matches with your Remote API
+            This port number is used to connect to a Remote API, please ensure that it matches with your Remote API
             server port. Set to 0 to disable the feature.
           </Typography>
         }
@@ -73,6 +74,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
           value={remoteFileApiPort}
           onChange={handleRemoteFileApiPortChange}
           placeholder="12525"
+          size={"medium"}
         />
       </Tooltip>
       <br />
