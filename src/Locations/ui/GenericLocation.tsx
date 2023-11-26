@@ -21,8 +21,6 @@ import { CasinoLocation } from "./CasinoLocation";
 import { Location } from "../Location";
 import { LocationType } from "@enums";
 
-import { Settings } from "../../Settings/Settings";
-
 import { isBackdoorInstalled } from "../../Server/ServerHelpers";
 import { GetServer } from "../../Server/AllServers";
 
@@ -97,10 +95,10 @@ export function GenericLocation({ loc }: IProps): React.ReactElement {
     <>
       <Button onClick={() => Router.toPage(Page.City)}>Return to World</Button>
       <Typography variant="h4" sx={{ mt: 1 }}>
-        {backdoorInstalled && !Settings.DisableTextEffects ? (
+        {backdoorInstalled ? (
           <Tooltip title={`Backdoor installed on ${loc.name}.`}>
             <span>
-              <CorruptableText content={loc.name} />
+              <CorruptableText content={loc.name} spoiler={false} />
             </span>
           </Tooltip>
         ) : (

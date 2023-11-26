@@ -118,7 +118,7 @@ export function AchievementList({ achievements, playerAchievements }: IProps): J
               <Typography color="secondary" sx={{ mt: 1 }}>
                 {secret.map((item) => (
                   <span key={`secret_${item.achievement.ID}`}>
-                    <CorruptableText content={item.achievement.ID}></CorruptableText>
+                    <CorruptableText content={item.achievement.ID} spoiler={true}></CorruptableText>
                     <br />
                   </span>
                 ))}
