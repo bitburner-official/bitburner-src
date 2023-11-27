@@ -323,7 +323,13 @@ export function applyForJob(this: PlayerObject, entryPosType: CompanyPosition, s
   return true;
 }
 
-//Returns your next position at a company given the field (software, business, etc.)
+/**
+ * Get a job position that the player can apply for.
+ * @param this The player instance
+ * @param company The Company being applied to
+ * @param entryPosType Job field (Software, Business, etc)
+ * @returns The highest job the player can apply for at this company, if any
+ */
 export function getNextCompanyPosition(
   this: PlayerObject,
   company: Company,
@@ -331,33 +337,18 @@ export function getNextCompanyPosition(
 ): CompanyPosition | null {
   const currCompany = Companies[company.name];
 
-  //Not employed at this company, so return the entry position
-  if (currCompany == null || currCompany.name != company.name) {
-    return entryPosType;
+  let pos: CompanyPosition | null = entryPosType;
+  let nextPos = getNextCompanyPositionHelper(pos);
+  while (nextPos && company.hasPosition(nextPos) && this.isQualified(company, nextPos)) {
+    pos = nextPos;
+    nextPos = getNextCompanyPositionHelper(pos);
   }
-
-  //If the entry pos type and the player's current position have the same type,
-  //return the player's "nextCompanyPosition". Otherwise return the entryposType
-  //Employed at this company, so just return the next position if it exists.
-  const currentPositionName = this.jobs[company.name];
-  if (!currentPositionName) return entryPosType;
-  const currentPosition = CompanyPositions[currentPositionName];
-  if (
-    (currentPosition.isSoftwareJob() && entryPosType.isSoftwareJob()) ||
-    (currentPosition.isITJob() && entryPosType.isITJob()) ||
-    (currentPosition.isBusinessJob() && entryPosType.isBusinessJob()) ||
-    (currentPosition.isSecurityEngineerJob() && entryPosType.isSecurityEngineerJob()) ||
-    (currentPosition.isNetworkEngineerJob() && entryPosType.isNetworkEngineerJob()) ||
-    (currentPosition.isSecurityJob() && entryPosType.isSecurityJob()) ||
-    (currentPosition.isAgentJob() && entryPosType.isAgentJob()) ||
-    (currentPosition.isSoftwareConsultantJob() && entryPosType.isSoftwareConsultantJob()) ||
-    (currentPosition.isBusinessConsultantJob() && entryPosType.isBusinessConsultantJob()) ||
-    (currentPosition.isPartTimeJob() && entryPosType.isPartTimeJob())
-  ) {
-    return getNextCompanyPositionHelper(currentPosition);
+  // Now `pos` is the highest job the player is currently able to apply for.
+  // If the player already has this position, return the one after that (if any).
+  if (this.jobs[company.name] == pos.name) {
+    pos = nextPos;
   }
-
-  return entryPosType;
+  return pos;
 }
 
 export function quitJob(this: PlayerObject, company: CompanyName): void {
