@@ -335,15 +335,13 @@ export function getNextCompanyPosition(
   company: Company,
   entryPosType: CompanyPosition,
 ): CompanyPosition | null {
-  const currCompany = Companies[company.name];
-
   let pos: CompanyPosition | null = entryPosType;
   let nextPos = getNextCompanyPositionHelper(pos);
+  // Find the highest-level job in this category that the player is currently able to apply for.
   while (nextPos && company.hasPosition(nextPos) && this.isQualified(company, nextPos)) {
     pos = nextPos;
     nextPos = getNextCompanyPositionHelper(pos);
   }
-  // Now `pos` is the highest job the player is currently able to apply for.
   // If the player already has this position, return the one after that (if any).
   if (this.jobs[company.name] == pos.name) {
     pos = nextPos;
