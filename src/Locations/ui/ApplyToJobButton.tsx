@@ -35,7 +35,7 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
           <Typography sx={{ textAlign: "center" }}>
             <b>{pos.name}</b>
           </Typography>
-          {reqs.map((req, i) => (
+          {reqs.length == 0 ? "Accepting all applicants" : reqs.map((req, i) => (
             <Requirement key={i} fulfilled={req.isSatisfied(Player)} value={req.toString()} />
           ))}
         </>
