@@ -1,7 +1,7 @@
 import { Company } from "./Company";
 import { CompanyPosition } from "./CompanyPosition";
 
-import { JoinCondition, haveSkill, employedBy } from "../Faction/FactionJoinCondition";
+import { JoinCondition, haveSkill, haveCompanyRep } from "../Faction/FactionJoinCondition";
 import type { Skills } from "../PersonObjects/Skills";
 
 export function getJobRequirements(company: Company, pos: CompanyPosition): JoinCondition[] {
@@ -11,7 +11,7 @@ export function getJobRequirements(company: Company, pos: CompanyPosition): Join
     if (value > 0) reqs.push(haveSkill(skillName as keyof Skills, value));
   }
   if (pos.requiredReputation > 0) {
-    reqs.push(employedBy(company.name, { withRep: pos.requiredReputation }));
+    reqs.push(haveCompanyRep(company.name, pos.requiredReputation));
   }
   return reqs;
 }
