@@ -23,24 +23,25 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
   let tooltip;
 
   if (pos == null) {
-    disabledText = "You are already at the highest position for your field! No promotion available.";
-  } else {
-    if (!props.company.hasPosition(pos as CompanyPosition)) {
-      disabledText = `You are already at the highest position available at ${props.company.name}. No promotion available.`;
+    if (Player.jobs[props.company.name] == props.entryPosType.name) {
+      disabledText = "No promotion available.";
     } else {
-      const reqs = getJobRequirements(props.company, pos);
-
-      tooltip = (
-        <>
-          <Typography sx={{ textAlign: "center" }}>
-            <b>{pos.name}</b>
-          </Typography>
-          {reqs.length == 0
-            ? "Accepting all applicants"
-            : reqs.map((req, i) => <Requirement key={i} fulfilled={req.isSatisfied(Player)} value={req.toString()} />)}
-        </>
-      );
+      disabledText = `You are already ${Player.jobs[props.company.name]}! No promotion available.`;
     }
+  } else if (!props.company.hasPosition(pos)) {
+    disabledText = `You are already at the highest position available at ${props.company.name}. No promotion available.`;
+  } else {
+    const reqs = getJobRequirements(props.company, pos);
+    tooltip = (
+      <>
+        <Typography sx={{ textAlign: "center" }}>
+          <b>{pos.name}</b>
+        </Typography>
+        {reqs.length == 0
+          ? "Accepting all applicants"
+          : reqs.map((req, i) => <Requirement key={i} fulfilled={req.isSatisfied(Player)} value={req.toString()} />)}
+      </>
+    );
   }
 
   return (
