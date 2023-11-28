@@ -8,7 +8,6 @@ import {
   FactionName,
   FactionWorkType,
   GymType,
-  JobField,
   LocationName,
   UniversityClassType,
 } from "@enums";
@@ -55,8 +54,8 @@ import { Engine } from "../engine";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
-import { companyNameAsLocationName } from "../Company/utils";
 import { getRecordEntries } from "../Types/Record";
+import { JobFieldMetadata } from "../Company/data/JobFieldMetadata";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -731,62 +730,16 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       const field = getEnumHelper("JobField").nsGetMember(ctx, _field, "field", { fuzzy: true });
+      const company = Companies[companyName];
+      const entryPos = CompanyPositions[JobFieldMetadata[field].entryPosName];
 
-      Player.location = companyNameAsLocationName(companyName);
-      let res;
-      switch (field) {
-        case JobField.software:
-          res = Player.applyForSoftwareJob(true);
-          break;
-        case JobField.softwareConsultant:
-          res = Player.applyForSoftwareConsultantJob(true);
-          break;
-        case JobField.it:
-          res = Player.applyForItJob(true);
-          break;
-        case JobField.securityEngineer:
-          res = Player.applyForSecurityEngineerJob(true);
-          break;
-        case JobField.networkEngineer:
-          res = Player.applyForNetworkEngineerJob(true);
-          break;
-        case JobField.business:
-          res = Player.applyForBusinessJob(true);
-          break;
-        case JobField.businessConsultant:
-          res = Player.applyForBusinessConsultantJob(true);
-          break;
-        case JobField.security:
-          res = Player.applyForSecurityJob(true);
-          break;
-        case JobField.agent:
-          res = Player.applyForAgentJob(true);
-          break;
-        case JobField.employee:
-          res = Player.applyForEmployeeJob(true);
-          break;
-        case JobField.partTimeEmployee:
-          res = Player.applyForPartTimeEmployeeJob(true);
-          break;
-        case JobField.waiter:
-          res = Player.applyForWaiterJob(true);
-          break;
-        case JobField.partTimeWaiter:
-          res = Player.applyForPartTimeWaiterJob(true);
-          break;
-        default:
-          helpers.log(ctx, () => `Invalid job: '${field}'.`);
-          return false;
-      }
-      if (res) {
-        helpers.log(
-          ctx,
-          () => `You were offered a new job at '${companyName}' with position '${Player.jobs[companyName]}'`,
-        );
+      const jobName = Player.applyForJob(company, entryPos, true);
+      if (jobName) {
+        helpers.log(ctx, () => `You were offered a new job at '${companyName}' with position '${jobName}'`);
       } else {
         helpers.log(ctx, () => `You failed to get a new job/promotion at '${companyName}' in the '${field}' field.`);
       }
-      return res;
+      return jobName;
     },
     quitJob: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);

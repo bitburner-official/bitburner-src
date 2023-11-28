@@ -3,50 +3,59 @@ import * as React from "react";
 import { Company } from "../../Company/Company";
 import { CompanyPosition } from "../../Company/CompanyPosition";
 import { getJobRequirements } from "../../Company/GetJobRequirements";
+import { Settings } from "../../Settings/Settings";
 
 import { Player } from "@player";
-import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { Requirement } from "../../ui/Components/Requirement";
-import { Typography } from "@mui/material";
+import { Button, Tooltip, Typography } from "@mui/material";
 
 interface IProps {
   company: Company;
-  entryPosType: CompanyPosition;
-  onClick: (e: React.MouseEvent<HTMLElement>) => void;
-  text: string;
+  position: CompanyPosition;
+  currentPosition: CompanyPosition | null;
 }
 
 /** React Component for a button that's used to apply for a job */
 export function ApplyToJobButton(props: IProps): React.ReactElement {
-  const pos = Player.getNextCompanyPosition(props.company, props.entryPosType);
-  let disabledText;
-  let tooltip;
+  const reqs = getJobRequirements(props.company, props.position);
+  const positionReqs = (
+    <>
+      <Typography sx={{ textAlign: "center" }}>{props.position.name}</Typography>
+      {reqs.length == 0
+        ? "Accepting all applicants"
+        : reqs.map((req, i) => <Requirement key={i} fulfilled={req.isSatisfied(Player)} value={req.toString()} />)}
+    </>
+  );
 
-  if (pos == null) {
-    if (Player.jobs[props.company.name] == props.entryPosType.name) {
-      disabledText = "No promotion available.";
-    } else {
-      disabledText = `You are already ${Player.jobs[props.company.name]}! No promotion available.`;
-    }
-  } else if (!props.company.hasPosition(pos)) {
-    disabledText = `You are already at the highest position available at ${props.company.name}. No promotion available.`;
-  } else {
-    const reqs = getJobRequirements(props.company, pos);
-    tooltip = (
-      <>
-        <Typography sx={{ textAlign: "center" }}>
-          <b>{pos.name}</b>
-        </Typography>
-        {reqs.length == 0
-          ? "Accepting all applicants"
-          : reqs.map((req, i) => <Requirement key={i} fulfilled={req.isSatisfied(Player)} value={req.toString()} />)}
-      </>
-    );
+  const underqualified = !Player.isQualified(props.company, props.position);
+  const overqualified =
+    props.currentPosition?.field == props.position.field && props.currentPosition.rank > props.position.rank;
+  const isCurrentPosition = props.position == props.currentPosition;
+
+  function applyForJob(): void {
+    Player.applyForJob(props.company, props.position);
   }
 
   return (
-    <ButtonWithTooltip normalTooltip={tooltip} disabledTooltip={disabledText} onClick={props.onClick}>
-      {props.text}
-    </ButtonWithTooltip>
+    <Tooltip title={positionReqs}>
+      <Typography
+        style={{
+          color: isCurrentPosition
+            ? Settings.theme.primarylight
+            : overqualified
+            ? Settings.theme.primarydark
+            : Settings.theme.primary,
+        }}
+      >
+        <Button disabled={underqualified} onClick={applyForJob}>
+          Apply
+        </Button>
+        &nbsp;
+        <span>
+          {props.position.name}
+          {props.position == props.currentPosition && " (Your current position)"}
+        </span>
+      </Typography>
+    </Tooltip>
   );
 }

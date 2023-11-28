@@ -5,6 +5,7 @@ import { CompanyPositionCtorParams } from "../CompanyPosition";
 export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCtorParams> {
   return {
     [JobName.software0]: {
+      rank: 0,
       nextPosition: JobName.software1, // Junior Software Engineer
       field: JobField.software,
       baseSalary: 33,
@@ -16,6 +17,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 0.9,
     },
     [JobName.software1]: {
+      rank: 1,
       nextPosition: JobName.software2, // Senior Software Engineer
       field: JobField.software,
       baseSalary: 80,
@@ -28,6 +30,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.1,
     },
     [JobName.software2]: {
+      rank: 2,
       nextPosition: JobName.software3, // Lead Software Developer
       field: JobField.software,
       baseSalary: 165,
@@ -41,6 +44,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.3,
     },
     [JobName.software3]: {
+      rank: 3,
       nextPosition: JobName.software4, // Head of Software
       field: JobField.software,
       baseSalary: 500,
@@ -54,6 +58,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.5,
     },
     [JobName.software4]: {
+      rank: 4,
       nextPosition: JobName.software5, // Head of Engineering
       field: JobField.software,
       baseSalary: 800,
@@ -65,8 +70,10 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 501,
       reqdReputation: 400e3,
       repMultiplier: 1.6,
+      hiredText: `Congratulations, you are now ${JobName.software4}`,
     },
     [JobName.software5]: {
+      rank: 5,
       nextPosition: JobName.software6, // Vice President of Technology
       field: JobField.software,
       baseSalary: 1650,
@@ -78,8 +85,10 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 501,
       reqdReputation: 800e3,
       repMultiplier: 1.6,
+      hiredText: `Congratulations, you are now ${JobName.software5}`,
     },
     [JobName.software6]: {
+      rank: 6,
       nextPosition: JobName.software7, // Chief Technology Officer
       field: JobField.software,
       baseSalary: 2310,
@@ -91,8 +100,10 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 601,
       reqdReputation: 1.6e6,
       repMultiplier: 1.75,
+      hiredText: `Congratulations, you are now ${JobName.software6}`,
     },
     [JobName.software7]: {
+      rank: 7,
       nextPosition: null,
       field: JobField.software,
       baseSalary: 2640,
@@ -104,8 +115,10 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 751,
       reqdReputation: 3.2e6,
       repMultiplier: 2,
+      hiredText: `Congratulations, you are now ${JobName.software7}`,
     },
     [JobName.IT0]: {
+      rank: 0,
       nextPosition: JobName.IT1, // IT Analyst
       field: JobField.it,
       baseSalary: 26,
@@ -117,6 +130,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 0.9,
     },
     [JobName.IT1]: {
+      rank: 1,
       nextPosition: JobName.IT2, // IT Manager
       field: JobField.it,
       baseSalary: 66,
@@ -129,6 +143,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.1,
     },
     [JobName.IT2]: {
+      rank: 2,
       nextPosition: JobName.IT3, // Systems Administrator
       field: JobField.it,
       baseSalary: 132,
@@ -142,6 +157,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.3,
     },
     [JobName.IT3]: {
+      rank: 3,
       nextPosition: JobName.software5, // Head of Engineering
       field: JobField.it,
       baseSalary: 410,
@@ -155,6 +171,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.4,
     },
     [JobName.securityEng]: {
+      rank: 0,
       nextPosition: JobName.software5, // Head of Engineering
       field: JobField.securityEngineer,
       baseSalary: 121,
@@ -168,6 +185,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.2,
     },
     [JobName.networkEng0]: {
+      rank: 0,
       nextPosition: JobName.networkEng1, // Network Administrator
       field: JobField.networkEngineer,
       baseSalary: 121,
@@ -181,6 +199,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.2,
     },
     [JobName.networkEng1]: {
+      rank: 1,
       nextPosition: JobName.software5, // Head of Engineering
       field: JobField.networkEngineer,
       baseSalary: 410,
@@ -194,6 +213,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.3,
     },
     [JobName.business0]: {
+      rank: 0,
       nextPosition: JobName.business1, // Business Analyst
       field: JobField.business,
       baseSalary: 46,
@@ -206,6 +226,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 0.9,
     },
     [JobName.business1]: {
+      rank: 1,
       nextPosition: JobName.business2, // Business Manager
       field: JobField.business,
       baseSalary: 100,
@@ -219,6 +240,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.1,
     },
     [JobName.business2]: {
+      rank: 2,
       nextPosition: JobName.business3, // Operations Manager
       field: JobField.business,
       baseSalary: 200,
@@ -232,6 +254,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.3,
     },
     [JobName.business3]: {
+      rank: 3,
       nextPosition: JobName.business4, // Chief Financial Officer
       field: JobField.business,
       baseSalary: 660,
@@ -245,6 +268,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.5,
     },
     [JobName.business4]: {
+      rank: 4,
       nextPosition: JobName.business5, // Chief Executive Officer
       field: JobField.business,
       baseSalary: 1950,
@@ -256,8 +280,10 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 76,
       reqdReputation: 800e3,
       repMultiplier: 1.6,
+      hiredText: `Congratulations, you are now ${JobName.business4}`,
     },
     [JobName.business5]: {
+      rank: 5,
       nextPosition: null,
       field: JobField.business,
       baseSalary: 3900,
@@ -269,8 +295,10 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 101,
       reqdReputation: 3.2e6,
       repMultiplier: 1.75,
+      hiredText: `Congratulations, you are now ${JobName.business5}`,
     },
     [JobName.security0]: {
+      rank: 0,
       nextPosition: JobName.security1, // Security Officer
       field: JobField.security,
       baseSalary: 50,
@@ -294,6 +322,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1,
     },
     [JobName.security1]: {
+      rank: 1,
       nextPosition: JobName.security2, // Security Supervisor
       field: JobField.security,
       baseSalary: 195,
@@ -319,6 +348,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.1,
     },
     [JobName.security2]: {
+      rank: 2,
       nextPosition: JobName.security3, // Head of Security
       field: JobField.security,
       baseSalary: 660,
@@ -344,6 +374,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.25,
     },
     [JobName.security3]: {
+      rank: 3,
       nextPosition: null,
       field: JobField.security,
       baseSalary: 1320,
@@ -369,6 +400,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.4,
     },
     [JobName.agent0]: {
+      rank: 0,
       nextPosition: JobName.agent1, // Secret Agent
       field: JobField.agent,
       baseSalary: 330,
@@ -394,6 +426,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1,
     },
     [JobName.agent1]: {
+      rank: 1,
       nextPosition: JobName.agent2, // Special Operative
       field: JobField.agent,
       baseSalary: 990,
@@ -419,6 +452,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       repMultiplier: 1.25,
     },
     [JobName.agent2]: {
+      rank: 2,
       nextPosition: null,
       field: JobField.agent,
       baseSalary: 2000,
@@ -457,6 +491,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       agilityExpGain: 0.02,
       charismaExpGain: 0.05,
       repMultiplier: 1,
+      applyText: `Apply to be a ${JobName.waiter}`,
+      hiredText: `Congratulations, you are now employed as a ${JobName.waiter}`,
     },
     [JobName.employee]: {
       nextPosition: null,
@@ -472,8 +508,11 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       agilityExpGain: 0.02,
       charismaExpGain: 0.04,
       repMultiplier: 1,
+      applyText: `Apply to be an ${JobName.employee}`,
+      hiredText: "Congratulations, you are now employed",
     },
     [JobName.softwareConsult0]: {
+      rank: 0,
       nextPosition: JobName.softwareConsult1, // Senior Software Consultant
       field: JobField.softwareConsultant,
       baseSalary: 66,
@@ -483,8 +522,11 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       charismaExpGain: 0.03,
       reqdHacking: 51,
       repMultiplier: 1,
+      applyText: `Pitch a Software Consulting contract`,
+      hiredText: `Congratulations, you got a contract as a ${JobName.softwareConsult0}`,
     },
     [JobName.softwareConsult1]: {
+      rank: 1,
       nextPosition: null,
       field: JobField.softwareConsultant,
       baseSalary: 132,
@@ -495,8 +537,11 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 251,
       reqdCharisma: 51,
       repMultiplier: 1.2,
+      applyText: `Pitch a Software Consulting contract`,
+      hiredText: `Congratulations, you got a contract as a ${JobName.softwareConsult1}`,
     },
     [JobName.businessConsult0]: {
+      rank: 0,
       nextPosition: JobName.businessConsult1, // Senior Business Consultant
       field: JobField.businessConsultant,
       baseSalary: 66,
@@ -507,8 +552,11 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 6,
       reqdCharisma: 51,
       repMultiplier: 1,
+      applyText: `Pitch a Business Consulting contract`,
+      hiredText: `Congratulations, you got a contract as a ${JobName.businessConsult0}`,
     },
     [JobName.businessConsult1]: {
+      rank: 1,
       nextPosition: null,
       field: JobField.businessConsultant,
       baseSalary: 525,
@@ -519,6 +567,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       reqdHacking: 51,
       reqdCharisma: 226,
       repMultiplier: 1.2,
+      applyText: `Pitch a Business Consulting contract`,
+      hiredText: `Congratulations, you got a contract as a ${JobName.businessConsult1}`,
     },
     [JobName.waiterPT]: {
       nextPosition: null,
@@ -534,6 +584,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       agilityExpGain: 0.0075,
       charismaExpGain: 0.04,
       repMultiplier: 1,
+      applyText: `Apply to be a ${JobField.partTimeWaiter}`,
+      hiredText: `Congratulations, you are now employed as a ${JobName.waiterPT}`,
     },
     [JobName.employeePT]: {
       nextPosition: null,
@@ -549,6 +601,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       agilityExpGain: 0.0075,
       charismaExpGain: 0.03,
       repMultiplier: 1,
+      applyText: `Apply to be a ${JobField.partTimeEmployee}`,
+      hiredText: "Congratulations, you are now employed part-time",
     },
   };
 }

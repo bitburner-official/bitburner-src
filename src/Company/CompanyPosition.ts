@@ -14,10 +14,13 @@ import {
 import type { Skills } from "../PersonObjects/Skills";
 
 export interface CompanyPositionCtorParams {
+  rank?: number;
   nextPosition: JobName | null;
   field: JobField;
   baseSalary: number;
   repMultiplier: number;
+  applyText?: string;
+  hiredText?: string;
 
   reqdHacking?: number;
   reqdStrength?: number;
@@ -49,6 +52,9 @@ export class CompanyPosition {
   /** Field type of the position (software, it, business, etc) */
   field: JobField;
 
+  /** Numeric rank of the position, used to compare the order of jobs in a promotion track */
+  rank: number;
+
   /** Title of next position to be promoted to */
   nextPosition: JobName | null;
 
@@ -60,6 +66,12 @@ export class CompanyPosition {
 
   /** Reputation multiplier */
   repMultiplier: number;
+
+  /** Text to display when applying for this job */
+  applyText: string;
+
+  /** Text to display when receiving this job */
+  hiredText: string;
 
   /** Required stats to earn this position */
   requiredAgility: number;
@@ -91,9 +103,12 @@ export class CompanyPosition {
   constructor(name: JobName, p: CompanyPositionCtorParams) {
     this.name = name;
     this.field = p.field;
+    this.rank = p.rank ?? 0;
     this.nextPosition = p.nextPosition;
     this.baseSalary = p.baseSalary;
     this.repMultiplier = p.repMultiplier;
+    this.applyText = p.applyText ?? `Apply for ${this.field} Job`;
+    this.hiredText = p.hiredText ?? `Congratulations, you are now employed as a ${this.name}`;
 
     this.requiredHacking = p.reqdHacking != null ? p.reqdHacking : 0;
     this.requiredStrength = p.reqdStrength != null ? p.reqdStrength : 0;
