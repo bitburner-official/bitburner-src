@@ -106,10 +106,12 @@ export function CompanyLocation(props: IProps): React.ReactElement {
   const jobFields: Map<JobField, CompanyPosition[]> = new Map();
   for (const jobName of company.companyPositions) {
     const offeredPos = CompanyPositions[jobName];
-    if (!jobFields.has(offeredPos.field)) {
-      jobFields.set(offeredPos.field, []);
+    let track = jobFields.get(offeredPos.field);
+    if (!track) {
+      track = [];
+      jobFields.set(offeredPos.field, track);
     }
-    jobFields.get(offeredPos.field)!.push(offeredPos);
+    track.push(offeredPos);
   }
 
   return (
@@ -180,11 +182,11 @@ export function CompanyLocation(props: IProps): React.ReactElement {
           <>
             <Typography variant="h5">Job Listings</Typography>
             <Typography component="ul" style={{ listStyle: "none" }}>
-              {Array.from(jobFields.keys()).map((jobField) => (
+              {Array.from(jobFields.entries()).map(([jobField, positions]) => (
                 <li key={jobField}>
                   <Typography variant="h6">{jobField}</Typography>
                   <Typography component="ul" style={{ listStyle: "none" }}>
-                    {jobFields.get(jobField)!.map((position) => (
+                    {positions.map((position) => (
                       <li key={position.name}>
                         <ApplyToJobButton company={company} position={position} currentPosition={currentPosition} />
                       </li>
