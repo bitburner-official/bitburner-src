@@ -9,10 +9,10 @@ import {
   securityJobs,
   softwareConsultJobs,
   softwareJobs,
+  allTechJobs,
 } from "./JobTracks";
 
 export function getCompaniesMetadata(): Record<CompanyName, CompanyCtorParams> {
-  const allTechJobs: JobName[] = [...softwareJobs, ...itJobs, ...netEngJobs, JobName.securityEng];
   const softwareJobsToHeadOfEng: JobName[] = softwareJobs.slice(0, 6);
   const softwareJobsToLeadDev: JobName[] = softwareJobs.slice(0, 4);
   const businessJobToOpsManager: JobName[] = businessJobs.slice(0, 4);

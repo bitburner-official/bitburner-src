@@ -1,16 +1,6 @@
 import { Person as IPerson } from "@nsdefs";
 import { CONSTANTS } from "../Constants";
 import { JobName, JobField } from "@enums";
-import {
-  agentJobs,
-  businessConsultJobs,
-  businessJobs,
-  itJobs,
-  netEngJobs,
-  securityJobs,
-  softwareConsultJobs,
-  softwareJobs,
-} from "./data/JobTracks";
 import type { Skills } from "../PersonObjects/Skills";
 
 export interface CompanyPositionCtorParams {
@@ -21,6 +11,7 @@ export interface CompanyPositionCtorParams {
   repMultiplier: number;
   applyText?: string;
   hiredText?: string;
+  partTime?: boolean;
 
   reqdHacking?: number;
   reqdStrength?: number;
@@ -73,6 +64,9 @@ export class CompanyPosition {
   /** Text to display when receiving this job */
   hiredText: string;
 
+  /** Whether this position is part-time */
+  partTime: boolean;
+
   /** Required stats to earn this position */
   requiredAgility: number;
   requiredCharisma: number;
@@ -107,6 +101,7 @@ export class CompanyPosition {
     this.nextPosition = p.nextPosition;
     this.baseSalary = p.baseSalary;
     this.repMultiplier = p.repMultiplier;
+    this.partTime = p.partTime ?? false;
     this.applyText = p.applyText ?? `Apply for ${this.field} Job`;
     this.hiredText = p.hiredText ?? `Congratulations, you are now employed as a ${this.name}`;
 
@@ -174,45 +169,5 @@ export class CompanyPosition {
     }
     reputationGain += worker.skills.intelligence / CONSTANTS.MaxSkillLevel;
     return reputationGain;
-  }
-
-  isSoftwareJob(): boolean {
-    return softwareJobs.includes(this.name);
-  }
-
-  isITJob(): boolean {
-    return itJobs.includes(this.name);
-  }
-
-  isSecurityEngineerJob(): boolean {
-    return this.name === JobName.securityEng;
-  }
-
-  isNetworkEngineerJob(): boolean {
-    return netEngJobs.includes(this.name);
-  }
-
-  isBusinessJob(): boolean {
-    return businessJobs.includes(this.name);
-  }
-
-  isSecurityJob(): boolean {
-    return securityJobs.includes(this.name);
-  }
-
-  isAgentJob(): boolean {
-    return agentJobs.includes(this.name);
-  }
-
-  isSoftwareConsultantJob(): boolean {
-    return softwareConsultJobs.includes(this.name);
-  }
-
-  isBusinessConsultantJob(): boolean {
-    return businessConsultJobs.includes(this.name);
-  }
-
-  isPartTimeJob(): boolean {
-    return [JobName.employeePT, JobName.waiterPT].includes(this.name);
   }
 }

@@ -55,7 +55,7 @@ import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
 import { getRecordEntries } from "../Types/Record";
-import { JobFieldMetadata } from "../Company/data/JobFieldMetadata";
+import { JobTracks } from "../Company/data/JobTracks";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -731,7 +731,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       const field = getEnumHelper("JobField").nsGetMember(ctx, _field, "field", { fuzzy: true });
       const company = Companies[companyName];
-      const entryPos = CompanyPositions[JobFieldMetadata[field].entryPosName];
+      const entryPos = CompanyPositions[JobTracks[field].entryPosName];
 
       const jobName = Player.applyForJob(company, entryPos, true);
       if (jobName) {

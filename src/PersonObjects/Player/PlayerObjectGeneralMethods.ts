@@ -52,7 +52,7 @@ import { achievements } from "../../Achievements/Achievements";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isMember } from "../../utils/EnumHelper";
-import { JobFieldMetadata } from "../../Company/data/JobFieldMetadata";
+import { JobTracks } from "../../Company/data/JobTracks";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -291,7 +291,7 @@ export function applyForJob(
   if (!company) return null;
 
   // For compatibility with older behavior, start searching at the entry-level position of this job track.
-  const entryPos = CompanyPositions[JobFieldMetadata[position.field].entryPosName];
+  const entryPos = CompanyPositions[JobTracks[position.field].entryPosName];
   let pos = entryPos;
   if (!this.isQualified(company, pos)) {
     if (!sing) {
