@@ -4,7 +4,6 @@ import { JobName, JobField } from "@enums";
 import type { Skills } from "../PersonObjects/Skills";
 
 export interface CompanyPositionCtorParams {
-  rank?: number;
   nextPosition: JobName | null;
   field: JobField;
   baseSalary: number;
@@ -42,9 +41,6 @@ export class CompanyPosition {
 
   /** Field type of the position (software, it, business, etc) */
   field: JobField;
-
-  /** Numeric rank of the position, used to compare the order of jobs in a promotion track */
-  rank: number;
 
   /** Title of next position to be promoted to */
   nextPosition: JobName | null;
@@ -97,7 +93,6 @@ export class CompanyPosition {
   constructor(name: JobName, p: CompanyPositionCtorParams) {
     this.name = name;
     this.field = p.field;
-    this.rank = p.rank ?? 0;
     this.nextPosition = p.nextPosition;
     this.baseSalary = p.baseSalary;
     this.repMultiplier = p.repMultiplier;
