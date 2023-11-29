@@ -24,6 +24,11 @@ interface IProps {
 
 /** React Component for a button that's used to apply for a job */
 export function ApplyToJobButton(props: IProps): React.ReactElement {
+  const underqualified = !Player.isQualified(props.company, props.position);
+  const isCurrentPosition = props.position == props.currentPosition;
+  const nextPos = props.position.nextPosition && CompanyPositions[props.position.nextPosition];
+  const overqualified = nextPos && Player.isQualified(props.company, nextPos);
+
   const reqs = getJobRequirements(props.company, props.position);
   const workStats = calculateCompanyWorkStats(Player, props.company, props.position, props.company.favor);
   const positionRequirements =
@@ -50,13 +55,14 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
       </Typography>
       <br />
       {positionRequirements}
+      {overqualified && (
+        <Typography>
+          <br />
+          You are overqualified for this position.
+        </Typography>
+      )}
     </>
   );
-
-  const underqualified = !Player.isQualified(props.company, props.position);
-  const isCurrentPosition = props.position == props.currentPosition;
-  const nextPos = props.position.nextPosition && CompanyPositions[props.position.nextPosition];
-  const overqualified = nextPos && Player.isQualified(props.company, nextPos);
 
   function applyForJob(): void {
     Player.applyForJob(props.company, props.position);
