@@ -46,13 +46,13 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
     <>
       <Typography>
         <u>{props.position.name}</u>
-        <StatsTable
-          rows={[
-            ["Wages:", <MoneyRate key="money" money={workStats.money} />],
-            ["Reputation:", <ReputationRate key="rep" reputation={workStats.reputation} />],
-          ]}
-        />
       </Typography>
+      <StatsTable
+        rows={[
+          ["Wages:", <MoneyRate key="money" money={workStats.money} />],
+          ["Reputation:", <ReputationRate key="rep" reputation={workStats.reputation} />],
+        ]}
+      />
       <br />
       {positionRequirements}
       {overqualified && (
