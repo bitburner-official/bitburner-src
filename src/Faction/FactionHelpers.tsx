@@ -3,7 +3,7 @@ import type { Faction } from "./Faction";
 
 import { Augmentations } from "../Augmentation/Augmentations";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
-import { AugmentationName, FactionName } from "@enums";
+import { AugmentationName } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 import { Player } from "@player";
@@ -35,7 +35,7 @@ export function joinFaction(faction: Faction): void {
   if (faction.isMember) return;
   faction.isMember = true;
   // Add this faction to player's faction list, keeping it in standard order
-  Player.factions = getRecordKeys(Factions).filter((facName)=>(Factions[facName].isMember));
+  Player.factions = getRecordKeys(Factions).filter((facName) => Factions[facName].isMember);
 
   // Ban player from this faction's enemies
   for (const enemy of faction.getInfo().enemies) {
@@ -43,9 +43,9 @@ export function joinFaction(faction: Faction): void {
     Player.factionRumors.delete(enemy);
   }
   // Remove invalid invites and rumors
-  Player.factionInvitations = Player.factionInvitations.filter((factionName)=>{
+  Player.factionInvitations = Player.factionInvitations.filter((factionName) => {
     return !Factions[factionName].isMember && !Factions[factionName].isBanned;
-  })
+  });
   Player.factionRumors.delete(faction.name);
 }
 

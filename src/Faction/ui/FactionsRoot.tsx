@@ -215,7 +215,7 @@ export function FactionsRoot(): React.ReactElement {
   }, []);
 
   // Display joined factions in the standard order
-  const joinedFactions = Object.values(Factions).filter((faction)=>faction.isMember);
+  const joinedFactions = Object.values(Factions).filter((faction) => faction.isMember);
   // Display invitations and rumors in the order they were received
   const invitedFactions = Player.factionInvitations.map((facName) => Factions[facName]).filter((faction) => !!faction);
   const rumoredFactions = [...Player.factionRumors].map((facName) => Factions[facName]).filter((faction) => !!faction);
