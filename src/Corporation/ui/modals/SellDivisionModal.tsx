@@ -9,7 +9,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useCorporation } from "../../ui/Context";
 import { CityName } from "@enums";
 import * as corpConstants from "../../data/Constants";
-import { removeDivision as removeDivision } from "../../Actions";
+import { removeDivision } from "../../Actions";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { getRecordKeys } from "../../../Types/Record";
 
@@ -44,7 +44,7 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
 
   function sellDivision() {
     removeDivision(corp, divisionToSell.name);
-    corp.funds += price;
+    corp.gainFunds(price, "division");
     props.onClose();
     dialogBoxCreate(
       <Typography>
