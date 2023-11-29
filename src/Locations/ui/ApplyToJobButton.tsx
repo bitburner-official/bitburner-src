@@ -31,9 +31,7 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
       <Typography>Accepting all applicants</Typography>
     ) : (
       <>
-        <Typography>
-          <u>Requirements</u>
-        </Typography>
+        <Typography>Requirements:</Typography>
         {reqs.map((req, i) => (
           <Requirement key={i} fulfilled={req.isSatisfied(Player)} value={req.toString()} />
         ))}
@@ -49,8 +47,8 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
             ["Reputation:", <ReputationRate key="rep" reputation={workStats.reputation} />],
           ]}
         />
-        <br />
       </Typography>
+      <br />
       {positionRequirements}
     </>
   );
@@ -93,16 +91,17 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
       display="grid"
       sx={{
         alignItems: "center",
-        gridTemplateColumns: "80px 1fr",
+        gridTemplateColumns: "1fr 80px",
         minWidth: "fit-content",
         minHeight: "2em",
         gap: 0.5,
+        pl: 4,
       }}
     >
-      <div style={{ color, display: "flex", justifyContent: "center" }}>{control}</div>
       <Tooltip title={positionDetails}>
         <Typography sx={{ color }}>{props.position.name}</Typography>
       </Tooltip>
+      <div style={{ color, display: "flex", justifyContent: "center" }}>{control}</div>
     </Box>
   );
 }

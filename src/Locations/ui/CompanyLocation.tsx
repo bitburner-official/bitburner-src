@@ -183,7 +183,9 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             <Typography variant="h5">Job Listings</Typography>
             {Array.from(jobFields.entries()).map(([jobField, positions]) => (
               <div key={jobField}>
-                <Typography variant="h6">{jobField}</Typography>
+                <Typography variant="h6" sx={{ mt: 1 }}>
+                  {jobField}
+                </Typography>
                 {positions.map((position) => (
                   <ApplyToJobButton
                     key={position.name}
