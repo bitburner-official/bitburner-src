@@ -7,7 +7,14 @@ import { Settings } from "../../Settings/Settings";
 
 import { Player } from "@player";
 import { Requirement } from "../../ui/Components/Requirement";
-import { Button, Tooltip, Typography } from "@mui/material";
+import { Tooltip, Typography, Box } from "@mui/material";
+import { calculateCompanyWorkStats } from "../../Work/Formulas";
+import { MoneyRate } from "../../ui/React/MoneyRate";
+import { ReputationRate } from "../../ui/React/ReputationRate";
+import { StatsTable } from "../../ui/React/StatsTable";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
+import { CompanyPositions } from "../../Company/CompanyPositions";
+import { Work } from "@mui/icons-material";
 
 interface IProps {
   company: Company;
@@ -18,44 +25,84 @@ interface IProps {
 /** React Component for a button that's used to apply for a job */
 export function ApplyToJobButton(props: IProps): React.ReactElement {
   const reqs = getJobRequirements(props.company, props.position);
-  const positionReqs = (
+  const workStats = calculateCompanyWorkStats(Player, props.company, props.position, props.company.favor);
+  const positionRequirements =
+    reqs.length == 0 ? (
+      <Typography>Accepting all applicants</Typography>
+    ) : (
+      <>
+        <Typography>
+          <u>Requirements</u>
+        </Typography>
+        {reqs.map((req, i) => (
+          <Requirement key={i} fulfilled={req.isSatisfied(Player)} value={req.toString()} />
+        ))}
+      </>
+    );
+  const positionDetails = (
     <>
-      <Typography sx={{ textAlign: "center" }}>{props.position.name}</Typography>
-      {reqs.length == 0
-        ? "Accepting all applicants"
-        : reqs.map((req, i) => <Requirement key={i} fulfilled={req.isSatisfied(Player)} value={req.toString()} />)}
+      <Typography>
+        <u>{props.position.name}</u>
+        <StatsTable
+          rows={[
+            ["Wages:", <MoneyRate key="money" money={workStats.money} />],
+            ["Reputation:", <ReputationRate key="rep" reputation={workStats.reputation} />],
+          ]}
+        />
+        <br />
+      </Typography>
+      {positionRequirements}
     </>
   );
 
   const underqualified = !Player.isQualified(props.company, props.position);
-  const overqualified =
-    props.currentPosition?.field == props.position.field && props.currentPosition.rank > props.position.rank;
   const isCurrentPosition = props.position == props.currentPosition;
+  const nextPos = props.position.nextPosition && CompanyPositions[props.position.nextPosition];
+  const overqualified = nextPos && Player.isQualified(props.company, nextPos);
 
   function applyForJob(): void {
     Player.applyForJob(props.company, props.position);
   }
 
-  return (
-    <Tooltip title={positionReqs}>
-      <Typography
-        style={{
-          color: isCurrentPosition
-            ? Settings.theme.primarylight
-            : overqualified
-            ? Settings.theme.primarydark
-            : Settings.theme.primary,
-        }}
+  let color = Settings.theme.primary;
+  let control = null;
+
+  if (isCurrentPosition) {
+    color = Settings.theme.primarylight;
+    control = (
+      <Tooltip title={"This is your current position"}>
+        <Work />
+      </Tooltip>
+    );
+  } else if (overqualified) {
+    color = Settings.theme.primarydark;
+  } else if (!underqualified) {
+    control = (
+      <ButtonWithTooltip
+        disabledTooltip={underqualified && "You do not meet the requirements"}
+        normalTooltip={props.position.applyText}
+        onClick={applyForJob}
       >
-        <Button disabled={underqualified} onClick={applyForJob}>
-          Apply
-        </Button>
-        &nbsp;
-        <span>
-          {props.position.name}
-          {props.position == props.currentPosition && " (Your current position)"}
-        </span>
-      </Typography>
-    </Tooltip>
+        Apply
+      </ButtonWithTooltip>
+    );
+  }
+
+  return (
+    <Box
+      display="grid"
+      sx={{
+        alignItems: "center",
+        gridTemplateColumns: "80px 1fr",
+        minWidth: "fit-content",
+        minHeight: "2em",
+        gap: 0.5,
+      }}
+    >
+      <div style={{ color, display: "flex", justifyContent: "center" }}>{control}</div>
+      <Tooltip title={positionDetails}>
+        <Typography sx={{ color }}>{props.position.name}</Typography>
+      </Tooltip>
+    </Box>
   );
 }

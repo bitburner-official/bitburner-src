@@ -181,20 +181,19 @@ export function CompanyLocation(props: IProps): React.ReactElement {
         {jobFields.size > 0 && (
           <>
             <Typography variant="h5">Job Listings</Typography>
-            <Typography component="ul" style={{ listStyle: "none" }}>
-              {Array.from(jobFields.entries()).map(([jobField, positions]) => (
-                <li key={jobField}>
-                  <Typography variant="h6">{jobField}</Typography>
-                  <Typography component="ul" style={{ listStyle: "none" }}>
-                    {positions.map((position) => (
-                      <li key={position.name}>
-                        <ApplyToJobButton company={company} position={position} currentPosition={currentPosition} />
-                      </li>
-                    ))}
-                  </Typography>
-                </li>
-              ))}
-            </Typography>
+            {Array.from(jobFields.entries()).map(([jobField, positions]) => (
+              <div key={jobField}>
+                <Typography variant="h6">{jobField}</Typography>
+                {positions.map((position) => (
+                  <ApplyToJobButton
+                    key={position.name}
+                    company={company}
+                    position={position}
+                    currentPosition={currentPosition}
+                  />
+                ))}
+              </div>
+            ))}
           </>
         )}
       </Box>
