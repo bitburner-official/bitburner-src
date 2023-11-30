@@ -46,9 +46,12 @@ export function NewDivision(corporation: Corporation, industry: IndustryType, na
   }
 }
 
-export function removeDivision(corporation: Corporation, name: string) {
-  if (!corporation.divisions.has(name)) throw new Error("There is no division called " + name);
+export function removeDivision(corporation: Corporation, name: string): number {
+  const division = corporation.divisions.get(name);
+  if (!division) throw new Error("There is no division called " + name);
+  const price = division.calculateRecoupableValue();
   corporation.divisions.delete(name);
+
   // We also need to remove any exports that were pointing to the old division
   for (const otherDivision of corporation.divisions.values()) {
     for (const warehouse of getRecordValues(otherDivision.warehouses)) {
@@ -60,6 +63,8 @@ export function removeDivision(corporation: Corporation, name: string) {
       }
     }
   }
+  corporation.gainFunds(price, "division");
+  return price;
 }
 
 export function purchaseOffice(corporation: Corporation, division: Division, city: CityName): void {

@@ -78,7 +78,7 @@ export class Corporation {
 
   gainFunds(amt: number, source: FundsSource): void {
     if (!isFinite(amt)) {
-      console.error("Trying to add invalid amount of funds. Please report this bug.");
+      console.error("Trying to add invalid amount of funds. Please report to game developer.");
       return;
     }
     if ((FundsSourceCapEx as readonly FundsSource[]).includes(source)) {
@@ -139,9 +139,6 @@ export class Corporation {
           this.revenue = this.revenue + ind.lastCycleRevenue;
           this.expenses = this.expenses + ind.lastCycleExpenses;
         });
-        const cycleRevenue = this.revenue * (marketCycles * corpConstants.secondsPerMarketCycle);
-        const cycleExpenses = this.expenses * (marketCycles * corpConstants.secondsPerMarketCycle);
-        const cycleProfit = cycleRevenue - cycleExpenses;
         if (isNaN(this.funds) || this.funds === Infinity || this.funds === -Infinity) {
           dialogBoxCreate(
             "There was an error calculating your Corporations funds and they got reset to 0. " +
@@ -150,8 +147,11 @@ export class Corporation {
           );
           this.funds = 150e9;
         }
-        this.loseFunds(cycleExpenses, "operating expenses");
+        const cycleRevenue = this.revenue * (marketCycles * corpConstants.secondsPerMarketCycle);
+        const cycleExpenses = this.expenses * (marketCycles * corpConstants.secondsPerMarketCycle);
+        const cycleProfit = cycleRevenue - cycleExpenses;
         this.gainFunds(cycleRevenue, "operating revenue");
+        this.loseFunds(cycleExpenses, "operating expenses");
         if (this.dividendRate > 0 && cycleProfit > 0) {
           // Validate input again, just to be safe
           if (isNaN(this.dividendRate) || this.dividendRate < 0 || this.dividendRate > corpConstants.dividendMaxRate) {

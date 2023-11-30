@@ -133,6 +133,17 @@ export class Division {
     multSum < 1 ? (this.productionMult = 1) : (this.productionMult = multSum);
   }
 
+  calculateRecoupableValue(): number {
+    let price = this.startingCost;
+    for (const city of getRecordKeys(this.offices)) {
+      if (city === CityName.Sector12) continue;
+      price += corpConstants.officeInitialCost;
+      if (this.warehouses[city]) price += corpConstants.warehouseInitialCost;
+    }
+    price /= 2;
+    return price;
+  }
+
   updateWarehouseSizeUsed(warehouse: Warehouse): void {
     warehouse.updateMaterialSizeUsed();
 
