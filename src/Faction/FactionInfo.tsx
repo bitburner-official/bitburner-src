@@ -1,5 +1,5 @@
 import React from "react";
-import { FactionName, CompanyName, CityName, LiteratureName, MessageFilename } from "@enums";
+import { FactionName, CompanyName, CityName, LiteratureName, MessageFilename, LocationName } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
@@ -10,7 +10,7 @@ import {
   haveBackdooredServer,
   employedBy,
   executiveEmployee,
-  notEmployee,
+  notEmployedBy,
   haveAugmentations,
   haveMoney,
   haveSkill,
@@ -18,11 +18,13 @@ import {
   haveKarma,
   haveKilledPeople,
   locatedInCity,
+  locatedInSomeCity,
   totalHacknetRam,
   totalHacknetCores,
   totalHacknetLevels,
   haveBladeburnerRank,
   haveSourceFile,
+  haveSomeSourceFile,
   haveFile,
   someCondition,
 } from "./FactionJoinCondition";
@@ -129,7 +131,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     inviteReqs: [
       haveAugmentations(currentNodeMults.DaedalusAugsRequirement),
       haveMoney(100e9),
-      someCondition(haveSkill("hacking", 2500), haveCombatSkills(1500)),
+      someCondition([haveSkill("hacking", 2500), haveCombatSkills(1500)]),
     ],
     rumorReqs: [haveFile(MessageFilename.TruthGazer)],
     offerHackingWork: true,
@@ -501,8 +503,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>It is better to reign in Hell than to serve in Heaven.</>,
     rumorText: <>“We know.”</>,
     inviteReqs: [
-      notEmployee(CompanyName.CIA),
-      notEmployee(CompanyName.NSA),
+      notEmployedBy(CompanyName.CIA),
+      notEmployedBy(CompanyName.NSA),
       haveKarma(-45),
       haveSkill("hacking", 100),
       haveCombatSkills(300),
@@ -519,8 +521,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     rumorText: <>A ruthless criminal organization based in {CityName.Chongqing}</>,
     inviteReqs: [
       locatedInCity(CityName.Chongqing),
-      notEmployee(CompanyName.CIA),
-      notEmployee(CompanyName.NSA),
+      notEmployedBy(CompanyName.CIA),
+      notEmployedBy(CompanyName.NSA),
       haveKarma(-45),
       haveSkill("hacking", 300),
       haveCombatSkills(300),
@@ -541,17 +543,17 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>Honor holds you back.</>,
     rumorText: <>An elite criminal organization that operates in the western hemisphere</>,
     inviteReqs: [
-      locatedInCity(CityName.Aevum, CityName.Sector12),
-      notEmployee(CompanyName.CIA),
-      notEmployee(CompanyName.NSA),
+      locatedInSomeCity(CityName.Aevum, CityName.Sector12),
+      notEmployedBy(CompanyName.CIA),
+      notEmployedBy(CompanyName.NSA),
       haveKarma(-90),
       haveMoney(10e6),
       haveSkill("hacking", 200),
       haveCombatSkills(200),
     ],
     rumorReqs: [
-      locatedInCity(CityName.Aevum, CityName.Sector12),
-      someCondition(haveKarma(-90), haveFile(LiteratureName.Sector12Crime)),
+      locatedInSomeCity(CityName.Aevum, CityName.Sector12),
+      someCondition([haveKarma(-90), haveFile(LiteratureName.Sector12Crime)]),
     ],
     offerHackingWork: true,
     offerFieldWork: true,
@@ -584,13 +586,13 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>Following the mandate of Heaven and carrying out the way.</>,
     rumorText: <>A notorious East Asian criminal organization</>,
     inviteReqs: [
-      locatedInCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      locatedInSomeCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
       haveKarma(-18),
       haveCombatSkills(75),
     ],
     rumorReqs: [
-      locatedInCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
-      someCondition(haveKarma(-18), haveFile(LiteratureName.NewTriads)),
+      locatedInSomeCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      someCondition([haveKarma(-18), haveFile(LiteratureName.NewTriads)]),
     ],
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -618,12 +620,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>Obey Heaven and work righteously.</>,
     rumorText: <>A Chinese honor society with the motto: “Obey Heaven and work righteously.”</>,
     inviteReqs: [
-      locatedInCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      locatedInSomeCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
       haveSkill("hacking", 50),
       haveMoney(1e6),
     ],
     rumorReqs: [
-      locatedInCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      locatedInSomeCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
       haveSkill("hacking", 25),
       haveMoney(0.5e6),
     ],
@@ -662,8 +664,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     rumorText: <>The {CompanyName.NSA} would like to have a word with you once you're ready.</>,
-    inviteReqs: [haveSourceFile(6, 7), haveBladeburnerRank(BladeburnerConstants.RankNeededForFaction)],
-    rumorReqs: [haveSourceFile(6, 7)],
+    inviteReqs: [haveSomeSourceFile(6, 7), haveBladeburnerRank(BladeburnerConstants.RankNeededForFaction)],
+    rumorReqs: [haveSomeSourceFile(6, 7)],
     special: true,
     assignment: (): React.ReactElement => {
       return (
@@ -715,6 +717,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       haveAugmentations(0),
       {
         toString: () => `Investigate the dilapidated church in ${CityName.Chongqing}`,
+        toJSON: () => ({ location: LocationName.ChongqingChurchOfTheMachineGod }),
         isSatisfied: (p: PlayerObject) => {
           return [...p.factions, ...p.factionInvitations].includes(FactionName.ChurchOfTheMachineGod);
         },
@@ -750,6 +753,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     inviteReqs: [
       {
         toString: () => `Complete an infiltration`,
+        toJSON: () => ({ numInfiltrations: 1 }),
         isSatisfied: (p: PlayerObject) => {
           return [...p.factions, ...p.factionInvitations].includes(FactionName.ShadowsOfAnarchy);
         },

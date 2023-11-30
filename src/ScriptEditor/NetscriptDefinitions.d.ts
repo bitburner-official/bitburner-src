@@ -1935,29 +1935,34 @@ export interface Singularity {
    */
   getCompanyFavorGain(companyName: CompanyName | `${CompanyName}`): number;
 
-  /* Experimental function temporarily removed, likely to undergo changes in next patch to make return value more programming-friendly
+  /**
    * List conditions for being invited to a faction.
    * @remarks
    * RAM cost: 3 GB * 16/4/1
    *
-   * @param faction - Name of the faction.
-   * @returns Array of strings describing conditions for receiving an invitation to the faction.
+   * @param faction - Name of the faction
+   * @returns Array of RequirementInfo objects which must all be fulfilled to receive an invitation.
    *
    * @example
    * ```js
    * ns.singularity.getFactionInviteRequirements("The Syndicate")
    * [
-   *   "Located in Aevum or Sector-12",
-   *   "Not working for the Central Intelligence Agency",
-   *   "Not working for the National Security Agency",
-   *   "-90 karma",
-   *   "Have $10.000m",
-   *   "Hacking level 200",
-   *   "All combat skills level 200"
+   *   {"someCondition": [{"city": "Aevum"}, {"city": "Sector-12"}]},
+   *   {"not": {"employedBy": "Central Intelligence Agency"}},
+   *   {"not": {"employedBy": "National Security Agency"}},
+   *   {"karma": -90},
+   *   {"money": 10000000},
+   *   {"skills": {
+   *      "hacking": 200,
+   *      "strength": 200,
+   *      "defense": 200,
+   *      "dexterity": 200,
+   *      "agility": 200
+   *   }}
    * ]
    * ```
-  getFactionInviteRequirements(faction: string): string[];
-  */
+   */
+  getFactionInviteRequirements(faction: string): RequirementInfo[];
 
   /**
    * List all current faction invitations.
@@ -8142,4 +8147,36 @@ interface AutocompleteData {
   scripts: string[];
   txts: string[];
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
+}
+
+/**
+ * Structured interface to requirements for joining a faction or company.
+ * For fields with numerical value > 0, the player must have at least this value.
+ * For fields with numerical value <= 0, the player must have at most this value.
+ * For "not", the sub-condition must be failed instead of passed.
+ * For "someCondition", at least one sub-condition must be passed.
+ * @public
+ * @returns - An object representing one requirement.
+ */
+export interface RequirementInfo {
+  money?: number;
+  skills?: Partial<Skills>;
+  karma?: number;
+  numPeopleKilled?: number;
+  file?: LiteratureName | MessageFilename;
+  numAugmentations?: number;
+  employedBy?: CompanyName;
+  jobTitle?: JobName;
+  city?: CityName;
+  location?: LocationName;
+  backdoorInstalled?: ServerName;
+  hacknetRAM?: number;
+  hacknetCores?: number;
+  hacknetLevels?: number;
+  bitNodeN?: number;
+  sourceFile?: number;
+  bladeburnerRank?: number;
+  numInfiltrations?: number;
+  not?: RequirementInfo;
+  someCondition?: RequirementInfo[];
 }
