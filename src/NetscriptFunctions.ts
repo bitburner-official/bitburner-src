@@ -514,7 +514,9 @@ export const ns: InternalAPI<NSFull> = {
         for (const fn of Object.keys(possibleLogs)) {
           ctx.workerScript.disableLogs[fn] = true;
         }
-        helpers.log(ctx, () => `Disabled logging for all functions`);
+        if (suppress == false) {
+          helpers.log(ctx, () => `Disabled logging for all functions`);
+        }
       } else if (possibleLogs[fn] === undefined) {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: ${fn}.`);
       } else {
