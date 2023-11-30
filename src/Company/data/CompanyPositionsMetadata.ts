@@ -552,8 +552,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       agilityExpGain: 0.0075,
       charismaExpGain: 0.04,
       repMultiplier: 1,
-      partTime: true,
-      applyText: `Apply to be a ${JobField.partTimeWaiter}`,
+      isPartTime: true,
+      applyText: `Apply to be a ${JobName.waiterPT}`,
       hiredText: `Congratulations, you are now employed as a ${JobName.waiterPT}`,
     },
     [JobName.employeePT]: {
@@ -570,8 +570,8 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
       agilityExpGain: 0.0075,
       charismaExpGain: 0.03,
       repMultiplier: 1,
-      partTime: true,
-      applyText: `Apply to be a ${JobField.partTimeEmployee}`,
+      isPartTime: true,
+      applyText: `Apply to be a ${JobName.employeePT}`,
       hiredText: "Congratulations, you are now employed part-time",
     },
   };
