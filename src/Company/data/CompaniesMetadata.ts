@@ -1,18 +1,19 @@
 import { CompanyCtorParams } from "../Company";
 
-import { CompanyName, JobName, FactionName } from "@enums";
+import { CompanyName, FactionName, JobName } from "@enums";
 import {
-  agentJobs,
+  softwareJobs,
   businessJobs,
-  itJobs,
-  netEngJobs,
   securityJobs,
   softwareConsultJobs,
-  softwareJobs,
-  allTechJobs,
+  netEngJobs,
+  itJobs,
+  agentJobs,
+  businessConsultJobs,
 } from "./JobTracks";
 
 export function getCompaniesMetadata(): Record<CompanyName, CompanyCtorParams> {
+  const allTechJobs: JobName[] = [...softwareJobs, ...itJobs, ...netEngJobs, JobName.securityEng];
   const softwareJobsToHeadOfEng: JobName[] = softwareJobs.slice(0, 6);
   const softwareJobsToLeadDev: JobName[] = softwareJobs.slice(0, 4);
   const businessJobToOpsManager: JobName[] = businessJobs.slice(0, 4);

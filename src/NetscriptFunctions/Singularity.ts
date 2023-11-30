@@ -731,7 +731,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       const field = getEnumHelper("JobField").nsGetMember(ctx, _field, "field", { fuzzy: true });
       const company = Companies[companyName];
-      const entryPos = CompanyPositions[JobTracks[field].entryPosName];
+      const entryPos = CompanyPositions[JobTracks[field][0]];
 
       const jobName = Player.applyForJob(company, entryPos, true);
       if (jobName) {
