@@ -281,46 +281,52 @@ function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): PointState 
   return null;
 }
 
+/**
+ * Get a move that places a piece to influence (and later control) a corner
+ */
 function getCornerMove(boardState: BoardState) {
-  const boardEdge = boardState.board[0].length - 1; //4
-  const cornerMax = boardEdge - 2; // 2
-  const topRightPieceCount = findPlayerPiecesInArea(boardState, cornerMax, cornerMax, boardEdge, boardEdge).length;
-  if (!topRightPieceCount) {
+  const boardEdge = boardState.board[0].length - 1;
+  const cornerMax = boardEdge - 2;
+  if (isCornerAvailableForMove(boardState, cornerMax, cornerMax, boardEdge, boardEdge)) {
     return boardState.board[cornerMax][cornerMax];
   }
-  const topLeftPieceCount = findPlayerPiecesInArea(boardState, 0, cornerMax, cornerMax, boardEdge).length;
-  if (!topLeftPieceCount) {
+  if (isCornerAvailableForMove(boardState, 0, cornerMax, cornerMax, boardEdge)) {
     return boardState.board[2][cornerMax];
   }
-  const bottomLeftPieceCount = findPlayerPiecesInArea(boardState, 0, 0, 2, 2).length;
-  if (!bottomLeftPieceCount) {
+  if (isCornerAvailableForMove(boardState, 0, 0, 2, 2)) {
     return boardState.board[2][2];
   }
-  const bottomRightPieceCount = findPlayerPiecesInArea(boardState, cornerMax, 0, boardEdge, 2).length;
-  if (!bottomRightPieceCount) {
+  if (isCornerAvailableForMove(boardState, cornerMax, 0, boardEdge, 2)) {
     return boardState.board[cornerMax][2];
   }
-
   return null;
 }
 
-function findPlayerPiecesInArea(boardState: BoardState, x1: number, y1: number, x2: number, y2: number) {
-  const foundPieces: PointState[] = [];
+/**
+ * Find all non-offline nodes in a given area
+ */
+function findLiveNodesInArea(boardState: BoardState, x1: number, y1: number, x2: number, y2: number) {
+  const foundPoints: PointState[] = [];
   boardState.board.forEach((column) =>
     column.forEach(
-      (point) =>
-        point &&
-        point.player !== playerColors.empty &&
-        point.x >= x1 &&
-        point.x <= x2 &&
-        point.y >= y1 &&
-        point.y <= y2 &&
-        foundPieces.push(point),
+      (point) => point && point.x >= x1 && point.x <= x2 && point.y >= y1 && point.y <= y2 && foundPoints.push(point),
     ),
   );
-  return foundPieces;
+  return foundPoints;
 }
 
+/**
+ * Determine if a corner is largely intact and currently empty, and thus a good target for corner takeover moves
+ */
+function isCornerAvailableForMove(boardState: BoardState, x1: number, y1: number, x2: number, y2: number) {
+  const foundPoints = findLiveNodesInArea(boardState, x1, y1, x2, y2);
+  const foundPieces = foundPoints.filter((point) => point.player !== playerColors.empty);
+  return foundPoints.length >= 7 ? foundPieces.length === 0 : false;
+}
+
+/**
+ * Select a move from the list of open-area moves
+ */
 function getExpansionMove(boardState: BoardState, player: PlayerColor, availableSpaces: PointState[], rng: number) {
   const moveOptions = getExpansionMoveArray(boardState, player, availableSpaces);
   const randomIndex = floor(rng * moveOptions.length);
@@ -526,7 +532,7 @@ async function getSurroundMove(
     // Only do this if your piece cannot be captured, or if the enemy group is surrounded and vulnerable to losing its only interior space
     else if (
       enemyChainLibertyCount === 2 &&
-      (newLibertyCount >= 2 || (enemyLibertyGroups.length === 1 && weakestEnemyChainLength > 2) || !smart)
+      (newLibertyCount >= 2 || (enemyLibertyGroups.length === 1 && weakestEnemyChainLength > 3) || !smart)
     ) {
       atariMoves.push({
         point: move,

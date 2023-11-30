@@ -44,7 +44,7 @@ export function endGoGame(boardState: BoardState) {
   }
   boardState.previousPlayer = null;
   const statusToUpdate = Player.go.status[boardState.ai];
-  statusToUpdate.favor = statusToUpdate.favor ?? 0; // TODO: remove once no longer needed
+  statusToUpdate.favor = statusToUpdate.favor ?? 0;
   const score = getScore(boardState);
 
   if (score[playerColors.black].sum < score[playerColors.white].sum) {
