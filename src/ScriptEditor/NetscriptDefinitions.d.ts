@@ -1935,8 +1935,7 @@ export interface Singularity {
    */
   getCompanyFavorGain(companyName: CompanyName | `${CompanyName}`): number;
 
-
-   /* Experimental function temporarily removed, likely to undergo changes in next patch to make return value more programming-friendly
+  /* Experimental function temporarily removed, likely to undergo changes in next patch to make return value more programming-friendly
    * List conditions for being invited to a faction.
    * @remarks
    * RAM cost: 3 GB * 16/4/1
