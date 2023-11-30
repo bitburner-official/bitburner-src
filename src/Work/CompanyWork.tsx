@@ -40,7 +40,7 @@ export class CompanyWork extends Work {
     } else if (Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
       focusBonus = 1;
     } else if (CompanyPositions[job].isPartTime) {
-      focusBonus = (1 + focusBonus) / 2;
+      focusBonus = 1;
     }
     const company = this.getCompany();
     return scaleWorkStats(calculateCompanyWorkStats(Player, company, CompanyPositions[job], company.favor), focusBonus);

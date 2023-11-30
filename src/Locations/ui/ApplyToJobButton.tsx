@@ -53,6 +53,13 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
           ["Reputation:", <ReputationRate key="rep" reputation={workStats.reputation} />],
         ]}
       />
+      {props.position.isPartTime && (
+        <Typography>
+          <br />
+          Part-time jobs have no penalty for
+          <br /> doing something else simultaneously.
+        </Typography>
+      )}
       <br />
       {positionRequirements}
       {overqualified && (
