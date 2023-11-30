@@ -84,8 +84,8 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.5.1dev",
-  isDevBranch: true,
+  VersionString: "2.5.1",
+  isDevBranch: false,
   VersionNumber: 35,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
@@ -223,12 +223,11 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.5.1 dev changelog (last updated 11/7/2023)
+## v2.5.1 - 30 November 2023 Update
 
 ### NOTES
-For the Steam version, this update includes a change that may result in your menu options reverting to default settings. If you experience issues with the correct savegame not loading, or you need to use Steam Cloud integration, check these menu settings after starting the game.
 
-See 2.5.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md
+For the Steam version, any special options you have enabled in the File menu may need to be reselected after this update, due to a change in how these settings are stored.
 
 ### MAJOR ADDITIONS
 
