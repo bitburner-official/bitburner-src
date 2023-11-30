@@ -3,14 +3,13 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { Player } from "@player";
 import { Work, WorkType } from "./Work";
 import { influenceStockThroughCompanyWork } from "../StockMarket/PlayerInfluencing";
-import { AugmentationName, CompanyName, JobName } from "@enums";
+import { CompanyName, JobName } from "@enums";
 import { calculateCompanyWorkStats } from "./Formulas";
 import { Companies } from "../Company/Companies";
 import { applyWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
 import { Company } from "../Company/Company";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reputation } from "../ui/React/Reputation";
-import { CONSTANTS } from "../Constants";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { isMember } from "../utils/EnumHelper";
 import { invalidWork } from "./InvalidWork";
@@ -34,14 +33,7 @@ export class CompanyWork extends Work {
   }
 
   getGainRates(job: JobName): WorkStats {
-    let focusBonus = CONSTANTS.BaseFocusBonus;
-    if (Player.focus) {
-      focusBonus = 1;
-    } else if (Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
-      focusBonus = 1;
-    } else if (CompanyPositions[job].isPartTime) {
-      focusBonus = 1;
-    }
+    const focusBonus = CompanyPositions[job].isPartTime ? 1 : Player.focusPenalty();
     const company = this.getCompany();
     return scaleWorkStats(calculateCompanyWorkStats(Player, company, CompanyPositions[job], company.favor), focusBonus);
   }
