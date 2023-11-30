@@ -1935,11 +1935,11 @@ export interface Singularity {
    */
   getCompanyFavorGain(companyName: CompanyName | `${CompanyName}`): number;
 
-  /**
+
+   /* Experimental function temporarily removed, likely to undergo changes in next patch to make return value more programming-friendly
    * List conditions for being invited to a faction.
    * @remarks
    * RAM cost: 3 GB * 16/4/1
-   *
    *
    * @param faction - Name of the faction.
    * @returns Array of strings describing conditions for receiving an invitation to the faction.
@@ -1957,8 +1957,8 @@ export interface Singularity {
    *   "All combat skills level 200"
    * ]
    * ```
-   */
   getFactionInviteRequirements(faction: string): string[];
+  */
 
   /**
    * List all current faction invitations.
