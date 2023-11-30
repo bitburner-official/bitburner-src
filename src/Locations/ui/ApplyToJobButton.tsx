@@ -15,6 +15,9 @@ import { StatsTable } from "../../ui/React/StatsTable";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { CompanyPositions } from "../../Company/CompanyPositions";
 import { Work } from "@mui/icons-material";
+import { CONSTANTS } from "../../Constants";
+
+const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
 
 interface IProps {
   company: Company;
@@ -49,8 +52,8 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
       </Typography>
       <StatsTable
         rows={[
-          ["Wages:", <MoneyRate key="money" money={workStats.money} />],
-          ["Reputation:", <ReputationRate key="rep" reputation={workStats.reputation} />],
+          ["Wages:", <MoneyRate key="money" money={workStats.money * CYCLES_PER_SEC} />],
+          ["Reputation:", <ReputationRate key="rep" reputation={workStats.reputation * CYCLES_PER_SEC} />],
         ]}
       />
       {props.position.isPartTime && (
