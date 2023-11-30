@@ -505,20 +505,25 @@ export const ns: InternalAPI<NSFull> = {
   clearLog: (ctx) => () => {
     ctx.workerScript.scriptRef.clearLog();
   },
-  disableLog: (ctx) => (_fn) => {
-    const fn = helpers.string(ctx, "fn", _fn);
-    if (fn === "ALL") {
-      for (const fn of Object.keys(possibleLogs)) {
+  disableLog:
+    (ctx) =>
+    (_fn, _suppress = false) => {
+      const fn = helpers.string(ctx, "fn", _fn);
+      const suppress = _suppress;
+      if (fn === "ALL") {
+        for (const fn of Object.keys(possibleLogs)) {
+          ctx.workerScript.disableLogs[fn] = true;
+        }
+        helpers.log(ctx, () => `Disabled logging for all functions`);
+      } else if (possibleLogs[fn] === undefined) {
+        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: ${fn}.`);
+      } else {
         ctx.workerScript.disableLogs[fn] = true;
+        if (suppress == false) {
+          helpers.log(ctx, () => `Disabled logging for ${fn}`);
+        }
       }
-      helpers.log(ctx, () => `Disabled logging for all functions`);
-    } else if (possibleLogs[fn] === undefined) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: ${fn}.`);
-    } else {
-      ctx.workerScript.disableLogs[fn] = true;
-      helpers.log(ctx, () => `Disabled logging for ${fn}`);
-    }
-  },
+    },
   enableLog: (ctx) => (_fn) => {
     const fn = helpers.string(ctx, "fn", _fn);
     if (fn === "ALL") {

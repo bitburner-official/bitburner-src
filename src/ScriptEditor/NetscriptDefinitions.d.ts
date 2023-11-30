@@ -5240,8 +5240,9 @@ export interface NS {
    * Logging can be disabled for all functions by passing `ALL` as the argument.
    *
    * @param fn - Name of function for which to disable logging.
+   * @param suppress - If true, disables the log message declaring function logging was disabled. Defaults to false.
    */
-  disableLog(fn: string): void;
+  disableLog(fn: string, suppress: boolean): void;
 
   /**
    * Enable logging for a certain function.
@@ -5252,6 +5253,7 @@ export interface NS {
    * function as an argument, then it will revert the effects of disableLog(`ALL`).
    *
    * @param fn - Name of function for which to enable logging.
+   
    */
   enableLog(fn: string): void;
 
