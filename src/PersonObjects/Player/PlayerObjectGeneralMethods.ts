@@ -21,7 +21,6 @@ import { Company } from "../../Company/Company";
 import { Companies } from "../../Company/Companies";
 import { getNextCompanyPositionHelper } from "../../Company/GetNextCompanyPosition";
 import { getJobRequirements, getJobRequirementText } from "../../Company/GetJobRequirements";
-import { CompanyPositions } from "../../Company/CompanyPositions";
 import { CompanyPosition } from "../../Company/CompanyPosition";
 import { CONSTANTS } from "../../Constants";
 import { Exploit } from "../../Exploits/Exploit";
@@ -52,7 +51,6 @@ import { achievements } from "../../Achievements/Achievements";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isMember } from "../../utils/EnumHelper";
-import { JobTracks } from "../../Company/data/JobTracks";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -290,9 +288,8 @@ export function applyForJob(
 ): JobName | null {
   if (!company) return null;
 
-  // For compatibility with older behavior, start searching at the entry-level position of this job track.
-  const entryPos = CompanyPositions[JobTracks[position.field].entryPosName];
-  let pos = entryPos;
+  // Start searching the job track from the provided point (which may not be the entry position)
+  let pos = position;
   if (!this.isQualified(company, pos)) {
     if (!sing) {
       dialogBoxCreate(`Unfortunately, you do not qualify for this position.\n${getJobRequirementText(company, pos)}`);

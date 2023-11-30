@@ -540,7 +540,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.waiterPT]: {
       nextPosition: null,
-      field: JobField.partTimeWaiter,
+      field: JobField.waiter,
       baseSalary: 20,
       strengthEffectiveness: 10,
       dexterityEffectiveness: 10,
@@ -558,7 +558,7 @@ export function getCompanyPositionMetadata(): Record<JobName, CompanyPositionCto
     },
     [JobName.employeePT]: {
       nextPosition: null,
-      field: JobField.partTimeEmployee,
+      field: JobField.employee,
       baseSalary: 20,
       strengthEffectiveness: 10,
       dexterityEffectiveness: 10,
