@@ -84,8 +84,8 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.5.1",
-  isDevBranch: false,
+  VersionString: "2.5.2dev",
+  isDevBranch: true,
   VersionNumber: 36,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
@@ -223,65 +223,30 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.5.1 - 30 November 2023 Update
+## v2.5.2dev changelog - Last updated 30 November 2023
 
 ### NOTES
 
-For the Steam version, any special options you have enabled in the File menu may need to be reselected after this update, due to a change in how these settings are stored.
+See the 2.5.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.5.1/src/Documentation/doc/changelog.md
 
 ### MAJOR ADDITIONS
 
-- Added a faction rumors system, to learn the requirements for joining factions ingame (@jjclark1982)
+- No changes since 2.5.1
 
 ### API
 
-- (Bladeburner) Added ns.bladeburner.nextUpdate, which allows waiting for the next update of the bladeburner mechanic (@jjclark1982)
-- (Bladeburner) Added ns.bladeburner.getNextBlackOp, which provides name and rank info for the next Black Operation that can be completed (@myCatsName)
-- (Corporation) Added ns.corporation.nextUpdate, which allows waiting for the next update of the corporation mechanic (@jjclark1982)
-- (Corporation) Added a size property to the return value of getProduct (@Caldwell-74)
-- (Corporation) ns.corporation.getCorporation return value: 'state' property is deprecated. Added 'prevState' and 'nextState' properties. (@Caldwell-74)
-- (Gang) Added ns.gang.nextUpdate, which allows waiting for the next update of the gang mechanic (@jjclark1982)
-- (Singularity) Added a JobField enum, and used this for the ns.singularity.applyToCompany function (@alutman)
-- (Singularity) ns.singularity.purchaseProgram now returns true for programs that are already owned even if the player doesn't have enough money to re-buy the program (@ncharris93)
-- (Sleeve) Added nextCompletion promise as a property of sleeve bladeburner work tasks (@Snarling)
-- (Stanek) Added an effect property to getFragment (@TheAimMan)
-- (Stock) Added ns.stock.nextUpdate, which allows waiting for the next update of the stock mechanic (@jjclark1982)
+- No changes since 2.5.1
 
 ### BUGFIX
 
-- (Bladeburner) Fixed a bug that could allow reaching -1 contracts available (@TheAimMan)
-- (Corporation) Fix an incorrect calculation when adding more employees to an office (@Caldwell-74)
-- (Corporation) Bulk purchase can no longer be used to exceed maximum warehouse capacity (@TheAimMan)
-- (Corporation) Fixed a bug that allowed out-of-order research (@TheAimMan)
-- (Corporation) Product production cost is stored separately for each city (@Caldwell-74)
-- (Sleeve) Sleeve crime work can no longer cause an overflow of %completion when performing quick crimes during bonus time (@TheAimMan)
-- (Stanek) Multipliers from Stanek are now calculated correctly even if the player has Entropy (@yichizhng)
-- (Stanek) Fix a bug where Stanek bonuses were not being removed correctly after a reset (@TheAimMan)
-- Fix an error that would occur in some cases when using gymGains or universityGains (@cigarmemr)
-- Fix tab autocompletion when running a sceript without the run command (@mytskine)
-- Fix a bug that could cause the wrong coding contract to be deleted when using rm (@TheAimMan)
-- Scripts no longer show $0 for offline money income (@alutman)
-- Faction invitations are now cleared properly when performing a reset (@alutman)
-- API functions that work on a hostname no longer work on servers that have not been added to the network. (@TheAimMan)
-- Fix an issue where the "True Recursion" achievement could be granted incorrectly (@jjclark1982)
+- No changes since 2.5.1
 
 ### MISC
 
-- (Sleeve) Added ability to set a sleeve to idle through the UI (@Sphyxis)
-- Updated lots of dependencies (@Caldwell-74)
-- Updated electron to the latest version (Steam version only) (@Snarling)
-- Various spelling / grammar / wording fixes (@ficocelliguy, @Squirlll, @Warrobot10)
-- Minor reorganization and streamlining in Script Editor code (@Snarling)
-- Tweaked the .lit file referencing Illuminati to give a better idea about joining requirements (@d0sboots)
-- (Steam version) Replaced outdated electron-config with electron-store (@tiziodcaio)
+- Nerf noodle bar (various contributors)
 
 ### UI
 
-- (Corporation) Improved the display of corporation state. (@Caldwell-74)
-- (Corporation) Improved various Corporation UIs (@jjclark1982)
-- (Gang) Removed the territory warfare toggle from the main Gang screen (@Tyasuh)
-- Added number of exploits to import savegame comparison (@myCatsName)
-- Dev menu improvements (@myCatsName, @Snarling)
-- Added a credits button on the options page (@myCatsName)
+- No changes since 2.5.1
 `,
 };
