@@ -21,6 +21,7 @@ export const FundsSourceOpEx = [
   "parties",
   "advert",
   "materials",
+  "glitch in reality",
 ] as const;
 
 export type FundsSource = (typeof FundsSourceOpEx)[number] | (typeof FundsSourceCapEx)[number];
