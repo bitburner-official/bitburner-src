@@ -35,27 +35,32 @@ export const haveBackdooredServer = (hostname: ServerName): JoinCondition => ({
   },
 });
 
-export const employedBy = (
-  companyName: CompanyName,
-  { withRep }: { withRep: number } = { withRep: 0 },
-): JoinCondition => ({
+export const employedBy = (companyName: CompanyName): JoinCondition => ({
   toString(): string {
-    if (withRep == 0) {
-      return `Employed at ${companyName}`;
-    } else {
-      return `Employed at ${companyName} with ${formatReputation(withRep)} reputation`;
-    }
+    return `Employed at ${companyName}`;
   },
   toJSON(): RequirementInfo {
     return { employedBy: companyName };
   },
   isSatisfied(p: PlayerObject): boolean {
+    return Object.hasOwn(p.jobs, companyName);
+  },
+});
+
+export const haveCompanyRep = (companyName: CompanyName, rep: number): JoinCondition => ({
+  toString(): string {
+    return `${formatReputation(rep)} reputation with ${companyName}`;
+  },
+  toJSON(): RequirementInfo {
+    return { companyReputation: [companyName, rep] };
+  },
+  isSatisfied(): boolean {
     const company = Companies[companyName];
     if (!company) return false;
     const serverMeta = serverMetadata.find((s) => s.specialName === companyName);
     const server = GetServer(serverMeta ? serverMeta.hostname : "");
-    const bonus = server?.backdoorInstalled ? -100e3 : 0;
-    return Object.hasOwn(p.jobs, companyName) && company.playerReputation > withRep + bonus;
+    const bonus = server?.backdoorInstalled ? 100e3 : 0;
+    return company.playerReputation + bonus >= rep;
   },
 });
 

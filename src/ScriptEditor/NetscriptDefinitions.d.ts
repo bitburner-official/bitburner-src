@@ -8166,6 +8166,7 @@ export interface RequirementInfo {
   file?: LiteratureName | MessageFilename;
   numAugmentations?: number;
   employedBy?: CompanyName;
+  companyReputation?: [CompanyName, number];
   jobTitle?: JobName;
   city?: CityName;
   location?: LocationName;
