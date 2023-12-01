@@ -29,6 +29,7 @@ import {
   haveFile,
   someCondition,
   delayedCondition,
+  unsatisfiable,
 } from "./FactionJoinCondition";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { CONSTANTS } from "../Constants";
@@ -87,8 +88,8 @@ export class FactionInfo {
   constructor(params: FactionInfoParams) {
     this.infoText = params.infoText ?? <></>;
     this.rumorText = params.rumorText ?? <></>;
-    this.inviteReqs = params.inviteReqs ?? [];
-    this.rumorReqs = params.rumorReqs ?? [];
+    this.inviteReqs = params.inviteReqs ?? [unsatisfiable];
+    this.rumorReqs = params.rumorReqs ?? [unsatisfiable];
     this.enemies = params.enemies ?? [];
     this.offerHackingWork = params.offerHackingWork ?? false;
     this.offerFieldWork = params.offerFieldWork ?? false;

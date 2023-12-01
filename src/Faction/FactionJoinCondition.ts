@@ -284,6 +284,18 @@ export const haveFile = (fileName: LiteratureName | MessageFilename): JoinCondit
   },
 });
 
+export const unsatisfiable: JoinCondition = {
+  toString(): string {
+    return "(unsatisfiable)";
+  },
+  toJSON(): RequirementInfo {
+    return {};
+  },
+  isSatisfied(): boolean {
+    return false;
+  },
+};
+
 /* higher-order conditions */
 
 export const notCondition = (condition: JoinCondition): JoinCondition => ({
