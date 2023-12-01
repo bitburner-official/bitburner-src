@@ -86,6 +86,14 @@ export function ServerAccordions(props: IProps): React.ReactElement {
     }
     return false;
   });
+  // Pushing a script from home to the start of the array to always display on top
+  if (filtered.find((x) => x?.server?.hostname === "home")) {
+    const index = filtered.findIndex((x) => x?.server?.hostname === "home");
+    if (index != 0) {
+      filtered.unshift(filtered[index]);
+      filtered.splice(index + 1);
+    }
+  }
 
   return (
     <>
