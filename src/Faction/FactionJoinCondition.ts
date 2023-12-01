@@ -310,6 +310,12 @@ export const someCondition = (conditions: JoinCondition[]): JoinCondition => ({
   },
 });
 
+export const delayedCondition = (arg: () => JoinCondition): JoinCondition => ({
+  toString: () => arg().toString(),
+  toJSON: () => arg().toJSON(),
+  isSatisfied: (p: PlayerObject) => arg().isSatisfied(p),
+});
+
 /* helpers */
 
 function capitalize(s: string) {

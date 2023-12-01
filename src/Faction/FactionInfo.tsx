@@ -28,6 +28,7 @@ import {
   haveSomeSourceFile,
   haveFile,
   someCondition,
+  delayedCondition,
 } from "./FactionJoinCondition";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { CONSTANTS } from "../Constants";
@@ -130,7 +131,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>Yesterday we obeyed kings and bent our necks to emperors. Today we kneel only to truth.</>,
     rumorText: <>Follow the thread. Take fl1ght.</>,
     inviteReqs: [
-      haveAugmentations(currentNodeMults.DaedalusAugsRequirement),
+      delayedCondition(() => haveAugmentations(currentNodeMults.DaedalusAugsRequirement)),
       haveMoney(100e9),
       someCondition([haveSkill("hacking", 2500), haveCombatSkills(1500)]),
     ],
