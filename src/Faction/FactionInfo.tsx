@@ -578,6 +578,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ],
     rumorReqs: [
       locatedInSomeCity(CityName.Aevum, CityName.Sector12),
+      haveCombatSkills(100),
       someCondition([haveKarma(-90), haveFile(LiteratureName.Sector12Crime)]),
     ],
     offerHackingWork: true,
@@ -617,6 +618,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ],
     rumorReqs: [
       locatedInSomeCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      haveCombatSkills(50),
       someCondition([haveKarma(-18), haveFile(LiteratureName.NewTriads)]),
     ],
     offerFieldWork: true,
@@ -627,7 +629,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>{FactionName.SlumSnakes} rule!</>,
     rumorText: <>Graffiti seen in the slums: “{FactionName.SlumSnakes} rule!”</>,
     inviteReqs: [haveCombatSkills(30), haveMoney(1e6), haveKarma(-9)],
-    rumorReqs: [haveKarma(-1)],
+    rumorReqs: [haveCombatSkills(10), someCondition([haveKarma(-1), haveFile(LiteratureName.Sector12Crime)])],
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
