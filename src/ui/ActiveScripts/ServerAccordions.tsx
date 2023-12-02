@@ -78,7 +78,7 @@ export function ServerAccordions(props: IProps): React.ReactElement {
 
   // Match filter in the scriptname part of the key
   const pattern = matchScriptPathUnanchored(lodash.escapeRegExp(filter));
-  const filtered = Object.values(serverToScriptMap).filter((data) => {
+  const filtered = Object.values(serverToScriptMap).filter((data): data is IServerData => {
     if (!data) return false;
     if (data.server.hostname.includes(filter)) return true;
     for (const k of data.server.runningScriptMap.keys()) {
@@ -86,15 +86,14 @@ export function ServerAccordions(props: IProps): React.ReactElement {
     }
     return false;
   });
-  // Pushing a script from home to the start of the array to always display on top
-  if (filtered.find((x) => x?.server?.hostname === "home")) {
-    const index = filtered.findIndex((x) => x?.server?.hostname === "home");
-    if (index != 0) {
-      filtered.unshift(filtered[index]);
-      filtered.splice(index + 1);
-    }
-  }
-
+  // Ordering scripts: Home, Purchased/Hacknet (alphabetically), All Other Servers
+  let finalResponse = [];
+  const homeScripts = filtered.filter((x) => x?.server?.hostname == "home" && x?.server?.purchasedByPlayer == true);
+  let purchasedScripts = filtered.filter((x) => x?.server?.hostname != "home" && x?.server?.purchasedByPlayer == true);
+  const other = filtered.filter((x) => x?.server?.hostname != "home" && x?.server?.purchasedByPlayer == false);
+  purchasedScripts = purchasedScripts.sort((a, b) => a?.server.hostname.localeCompare(b?.server.hostname));
+  const tempResponse = homeScripts.concat(purchasedScripts);
+  finalResponse = tempResponse.concat(other);
   return (
     <>
       <Grid container>
@@ -130,7 +129,7 @@ export function ServerAccordions(props: IProps): React.ReactElement {
         </Grid>
       </Grid>
       <List dense={true}>
-        {filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((data) => {
+        {finalResponse.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((data) => {
           return (
             data && (
               <ServerAccordion key={data.server.hostname} server={data.server} workerScripts={data.workerScripts} />
