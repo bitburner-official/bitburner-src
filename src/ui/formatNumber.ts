@@ -114,8 +114,8 @@ export function formatNumber(n: number, fractionalDigits = 3, suffixStart = 1000
   // Special handling for Infinities
   if (nAbs === Infinity) return n < 0 ? "-∞" : "∞";
 
-  // Early return for non-suffix
-  if (nAbs < suffixStart) {
+  // Early return for non-suffix or if number and suffix are 0
+  if (nAbs < suffixStart || (nAbs == 0 && suffixStart == 0)) {
     if (isInteger) return basicFormatter.format(n);
     return getFormatter(fractionalDigits).format(n);
   }
