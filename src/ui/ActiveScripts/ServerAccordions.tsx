@@ -5,7 +5,7 @@
 import React, { useState } from "react";
 
 import { ServerAccordion } from "./ServerAccordion";
-
+import {SpecialServers} from "../../Server/data/SpecialServers"
 import TextField from "@mui/material/TextField";
 import List from "@mui/material/List";
 import TablePagination from "@mui/material/TablePagination";
@@ -88,9 +88,10 @@ export function ServerAccordions(props: IProps): React.ReactElement {
   });
   // Ordering scripts: Home, Purchased/Hacknet (alphabetically), All Other Servers
   let finalResponse = [];
-  const homeScripts = filtered.filter((x) => x?.server?.hostname == "home" && x?.server?.purchasedByPlayer == true);
-  let purchasedScripts = filtered.filter((x) => x?.server?.hostname != "home" && x?.server?.purchasedByPlayer == true);
-  const other = filtered.filter((x) => x?.server?.hostname != "home" && x?.server?.purchasedByPlayer == false);
+  const home = SpecialServers.Home
+  const homeScripts = filtered.filter((x) => x?.server?.hostname == home && x?.server?.purchasedByPlayer == true);
+  let purchasedScripts = filtered.filter((x) => x?.server?.hostname != home && x?.server?.purchasedByPlayer == true);
+  const other = filtered.filter((x) => x?.server?.hostname != home && x?.server?.purchasedByPlayer == false);
   purchasedScripts = purchasedScripts.sort((a, b) => a?.server.hostname.localeCompare(b?.server.hostname));
   const tempResponse = homeScripts.concat(purchasedScripts);
   finalResponse = tempResponse.concat(other);
