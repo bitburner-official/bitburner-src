@@ -93,8 +93,8 @@ export function ServerAccordions(props: IProps): React.ReactElement {
   let purchasedScripts = filtered.filter((x) => x?.server?.hostname != home && x?.server?.purchasedByPlayer == true);
   const other = filtered.filter((x) => x?.server?.hostname != home && x?.server?.purchasedByPlayer == false);
   purchasedScripts = purchasedScripts.sort((a, b) => a?.server.hostname.localeCompare(b?.server.hostname));
-  const tempResponse = homeScripts.concat(purchasedScripts);
-  finalResponse = tempResponse.concat(other);
+  //const tempResponse = homeScripts.concat(purchasedScripts,other);
+  finalResponse = homeScripts.concat(purchasedScripts, other); //tempResponse.concat(other);
   return (
     <>
       <Grid container>
