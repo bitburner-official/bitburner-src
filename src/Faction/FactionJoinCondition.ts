@@ -147,7 +147,11 @@ export const haveCombatSkills = (n: number): JoinCondition => ({
 
 export const haveKarma = (n: number): JoinCondition => ({
   toString(): string {
-    return `${n} karma`;
+    if (n < -1000) return "An extensive criminal record";
+    else if (n < -40) return "A criminal reputation";
+    else if (n < -20) return "A disregard for the law";
+    else if (n < -10) return "A history of violence";
+    else return "Street cred";
   },
   toJSON(): RequirementInfo {
     return { karma: n };
