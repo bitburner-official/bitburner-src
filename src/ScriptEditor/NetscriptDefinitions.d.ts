@@ -8154,96 +8154,180 @@ interface AutocompleteData {
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
 }
 
+/**
+ * Player must have at least this much money.
+ * @public
+ */
 interface MoneyRequirement {
   type: "money";
   money: number;
 }
+/**
+ * Player must have each listed skill at least this level.
+ * @public
+ */
 interface SkillRequirement {
   type: "skills";
   skills: Partial<Skills>;
 }
+/**
+ * Player must have less than this much karma.
+ * @public
+ */
 interface KarmaRequiremennt {
   type: "karma";
   karma: number;
 }
+/**
+ * Player must have killed at least this many people.
+ * @public
+ */
 interface PeopleKilledRequirement {
   type: "numPeopleKilled";
   numPeopleKilled: number;
 }
+/**
+ * Player must have a specific Literature or Message file on their home computer.
+ * @public
+ */
 interface FileRequirement {
   type: "file";
   file: string;
 }
+/**
+ * Player must have at least this many augmentations installed (if positive).  
+ * Player must have no augmentations installed (if zero).
+ * @public
+ */
 interface NumAugmentationsRequirement {
   type: "numAugmentations";
   numAugmentations: number;
 }
+/**
+ * Player must be working for this company.
+ * @public
+ */
 interface EmployedByRequirement {
   type: "employedBy";
   company: CompanyName;
 }
+/**
+ * Player must have at least this much reputation with this company.
+ * @public
+ */
 interface CompanyReputationRequirement {
   type: "companyReputation";
   company: CompanyName;
   reputation: number;
 }
+/**
+ * Player must have this job title at some company.
+ * @public
+ */
 interface JobTitleRequirement {
   type: "jobTitle";
   jobTitle: JobName;
 }
-interface FactionReputationRequirement {
-  type: "factionReputation";
-  faction: FactionName;
-  reputation: number;
-}
+/**
+ * Player must be located in this city.
+ * @public
+ */
 interface CityRequirement {
   type: "city";
   city: CityName;
 }
+/**
+ * Player must be at this location within a city.
+ * @public
+ */
 interface LocationRequirement {
   type: "location";
   location: LocationName;
 }
+/**
+ * Player must have installed a backdoor on this server.
+ * @public
+ */
 interface BackdoorRequirement {
   type: "backdoorInstalled";
-  backdoorInstalled: ServerName;
+  server: string;
 }
+/**
+ * Player's Hacknet devices must have at least this much total RAM.
+ * @public
+ */
 interface HacknetRAMRequirement {
   type: "hacknetRAM";
   hacknetRAM: number;
 }
+/**
+ * Player's Hacknet devices must have at least this many total cores.
+ * @public
+ */
 interface HacknetCoresRequirement {
   type: "hacknetCores";
   hacknetCores: number;
 }
+/**
+ * Player's Hacknet devices must have at least this many total levels.
+ * @public
+ */
 interface HacknetLevelsRequirement {
   type: "hacknetLevels";
   hacknetLevels: number;
 }
+/**
+ * Player must be located in this BitNode.
+ * @public
+ */
 interface BitNodeRequirement {
   type: "bitNodeN";
   bitNodeN: number;
 }
+/**
+ * Player must have this Source File.
+ * @public
+ */
 interface SourceFileRequirement {
   type: "sourceFile";
   sourceFile: number;
 }
+/**
+ * Player must have at least this rank in the Bladeburner Division.
+ * @public
+ */
 interface BladeburnerRankRequirement {
   type: "bladeburnerRank";
   bladeburnerRank: number;
 }
+/**
+ * Player must have completed this many infiltrations.
+ * @public
+ */
 interface NumInfiltrationsRequirement {
   type: "numInfiltrations";
   numInfiltrations: number;
 }
+/**
+ * The sub-condition must not be satisfied.
+ * @public
+ */
 interface NotRequirement {
   type: "not";
   condition: PlayerRequirement;
 }
+/**
+ * At least one sub-condition must be satisfied.
+ * @public
+ */
 interface SomeRequirement {
   type: "someCondition";
   conditions: PlayerRequirement[];
 }
+/**
+ * All sub-conditions must be satisfied.
+ * @public
+ */
 interface EveryRequirement {
   type: "everyCondition";
   conditions: PlayerRequirement[];
@@ -8251,8 +8335,8 @@ interface EveryRequirement {
 
 /**
  * Structured interface to requirements for joining a faction or company.
- * For fields with numerical value > 0, the player must have at least this value.
- * For fields with numerical value <= 0, the player must have at most this value.
+ * For fields with numerical value \> 0, the player must have at least this value.
+ * For fields with numerical value \<= 0, the player must have at most this value.
  * For "not", the sub-condition must be failed instead of passed.
  * For "someCondition", at least one sub-condition must be passed.
  * @public
@@ -8268,7 +8352,6 @@ export type PlayerRequirement =
   | EmployedByRequirement
   | CompanyReputationRequirement
   | JobTitleRequirement
-  | FactionReputationRequirement
   | CityRequirement
   | LocationRequirement
   | BackdoorRequirement

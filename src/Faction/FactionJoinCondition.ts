@@ -44,7 +44,7 @@ export const haveBackdooredServer = (hostname: ServerName): JoinCondition => ({
     return `Backdoor access to ${hostname} server`;
   },
   toJSON(): BackdoorRequirement {
-    return { type: "backdoorInstalled", backdoorInstalled: hostname };
+    return { type: "backdoorInstalled", server: hostname };
   },
   isSatisfied(): boolean {
     const server = GetServer(hostname);
