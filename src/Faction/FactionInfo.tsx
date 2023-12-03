@@ -430,6 +430,25 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     keepOnInstall: false,
   }),
 
+  [FactionName.CyberSec]: new FactionInfo({
+    infoText: (
+      <>
+        The Internet is the first thing that was built that we don't fully understand, the largest experiment in anarchy
+        that we have ever had. And as the world becomes increasingly dominated by it, society approaches the brink of
+        total chaos. We serve only to protect society, to protect humanity, to protect the world from imminent collapse.
+      </>
+    ),
+    rumorText: (
+      <>
+        A hacking group known as {FactionName.CyberSec} will invite you to join them if you demonstrate your hacking
+        skills on their server.
+      </>
+    ),
+    inviteReqs: [haveBackdooredServer(SpecialServers.CyberSecServer)],
+    rumorReqs: [haveFile(MessageFilename.CyberSecTest)],
+    offerHackingWork: true,
+  }),
+
   // City factions, essentially governments
   [FactionName.Aevum]: new FactionInfo({
     infoText: <>The Silicon City.</>,
@@ -629,25 +648,6 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ],
     offerHackingWork: true,
     offerSecurityWork: true,
-  }),
-
-  [FactionName.CyberSec]: new FactionInfo({
-    infoText: (
-      <>
-        The Internet is the first thing that was built that we don't fully understand, the largest experiment in anarchy
-        that we have ever had. And as the world becomes increasingly dominated by it, society approaches the brink of
-        total chaos. We serve only to protect society, to protect humanity, to protect the world from imminent collapse.
-      </>
-    ),
-    rumorText: (
-      <>
-        A hacking group known as {FactionName.CyberSec} will invite you to join them if you demonstrate your hacking
-        skills on their server.
-      </>
-    ),
-    inviteReqs: [haveBackdooredServer(SpecialServers.CyberSecServer)],
-    rumorReqs: [haveFile(MessageFilename.CyberSecTest)],
-    offerHackingWork: true,
   }),
 
   // Special Factions

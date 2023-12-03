@@ -209,16 +209,16 @@ export function FactionsRoot(): React.ReactElement {
   const theme = useTheme();
   const rerender = useRerender(200);
   useEffect(() => {
-    Player.factionInvitations.forEach((faction) => {
-      InvitationsSeen.add(faction);
+    Player.factionInvitations.forEach((factionName) => {
+      InvitationsSeen.add(factionName);
     });
   }, []);
 
-  const allFactions = Object.values(FactionName).map((faction) => faction as string);
-  const allJoinedFactions = [...Player.factions].map((facName) => Factions[facName]).filter((faction) => !!faction);
-  allJoinedFactions.sort((a, b) => allFactions.indexOf(a.name) - allFactions.indexOf(b.name));
-
-  const invitations = Player.factionInvitations.map((facName) => Factions[facName]).filter((faction) => !!faction);
+  // Display joined factions in the standard order
+  const joinedFactions = Object.values(Factions).filter((faction) => faction.isMember);
+  // Display invitations and rumors in the order they were received
+  const invitedFactions = Player.factionInvitations.map((facName) => Factions[facName]).filter((faction) => !!faction);
+  const rumoredFactions = [...Player.factionRumors].map((facName) => Factions[facName]).filter((faction) => !!faction);
 
   return (
     <Container disableGutters maxWidth="lg" sx={{ mx: 0, mb: 10 }}>
@@ -241,7 +241,7 @@ export function FactionsRoot(): React.ReactElement {
         display="grid"
         sx={{
           gap: 1,
-          gridTemplateColumns: (invitations.length > 0 ? "1fr " : "") + "2fr",
+          gridTemplateColumns: (invitedFactions.length > 0 ? "1fr " : "") + "2fr",
           [theme.breakpoints.down("lg")]: { gridTemplateColumns: "1fr", "& > span:nth-of-type(1)": { order: 1 } },
           gridTemplateRows: "minmax(0, 1fr)",
           "& > span > .MuiBox-root": {
@@ -251,35 +251,22 @@ export function FactionsRoot(): React.ReactElement {
           },
         }}
       >
-        <span>
-          {invitations.length > 0 && (
+        <span className="factions-invites">
+          {invitedFactions.length > 0 && (
             <>
               <Typography variant="h5" color="primary">
                 Faction Invitations
               </Typography>
               <Box>
-                {invitations.map((faction) => (
+                {invitedFactions.map((faction) => (
                   <FactionElement key={faction.name} faction={faction} rerender={rerender} />
                 ))}
               </Box>
             </>
           )}
-
-          {Player.factionRumors.size > 0 && (
-            <>
-              <Typography variant="h5" color="primary">
-                Rumors
-              </Typography>
-              <div style={{ display: "grid", gap: 1, gridAutoRows: "minmax(70px, auto)" }}>
-                {[...Player.factionRumors].map((factionName) => (
-                  <FactionElement key={factionName} faction={Factions[factionName]} rerender={rerender} />
-                ))}
-              </div>
-            </>
-          )}
         </span>
 
-        <span>
+        <span className="factions-joined">
           {Player.inGang() && (
             <>
               <Typography variant="h5" color="primary">
@@ -294,8 +281,8 @@ export function FactionsRoot(): React.ReactElement {
             Your Factions
           </Typography>
           <Box>
-            {allJoinedFactions.length > 0 ? (
-              allJoinedFactions.map((faction) => {
+            {joinedFactions.length > 0 ? (
+              joinedFactions.map((faction) => {
                 if (Player.getGangName() === faction.name) return null;
                 return <FactionElement key={faction.name} faction={faction} rerender={rerender} />;
               })
@@ -305,6 +292,20 @@ export function FactionsRoot(): React.ReactElement {
           </Box>
         </span>
       </Box>
+      <span className="factions-rumors">
+        {rumoredFactions.length > 0 && (
+          <>
+            <Typography variant="h5" color="primary">
+              Rumors
+            </Typography>
+            <Box style={{ display: "grid", gap: 1, gridAutoRows: "minmax(70px, auto)" }}>
+              {rumoredFactions.map((faction) => (
+                <FactionElement key={faction.name} faction={faction} rerender={rerender} />
+              ))}
+            </Box>
+          </>
+        )}
+      </span>
     </Container>
   );
 }

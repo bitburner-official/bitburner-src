@@ -3,7 +3,7 @@ import type { Faction } from "./Faction";
 
 import { Augmentations } from "../Augmentation/Augmentations";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
-import { AugmentationName, FactionName } from "@enums";
+import { AugmentationName } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 import { Player } from "@player";
@@ -20,7 +20,7 @@ import { InvitationEvent } from "./ui/InvitationModal";
 import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
 import { getAugCost } from "../Augmentation/AugmentationHelpers";
-import { createEnumKeyedRecord, getRecordKeys } from "../Types/Record";
+import { getRecordKeys } from "../Types/Record";
 
 export function inviteToFaction(faction: Faction): void {
   if (faction.alreadyInvited || faction.isMember) return;
@@ -34,23 +34,18 @@ export function inviteToFaction(faction: Faction): void {
 export function joinFaction(faction: Faction): void {
   if (faction.isMember) return;
   faction.isMember = true;
-  Player.factions.push(faction.name);
-  let i = 0;
-  const factionIndexes = createEnumKeyedRecord(FactionName, (__) => i++);
-  Player.factions.sort((a, b) => factionIndexes[a] - factionIndexes[b]);
-  const factionInfo = faction.getInfo();
+  // Add this faction to player's faction list, keeping it in standard order
+  Player.factions = getRecordKeys(Factions).filter((facName) => Factions[facName].isMember);
 
-  //Determine what factions you are banned from now that you have joined this faction
-  for (const enemy of factionInfo.enemies) {
+  // Ban player from this faction's enemies
+  for (const enemy of faction.getInfo().enemies) {
     if (Factions[enemy]) Factions[enemy].isBanned = true;
     Player.factionRumors.delete(enemy);
   }
-  for (let i = 0; i < Player.factionInvitations.length; ++i) {
-    if (Player.factionInvitations[i] == faction.name || Factions[Player.factionInvitations[i]].isBanned) {
-      Player.factionInvitations.splice(i, 1);
-      i--;
-    }
-  }
+  // Remove invalid invites and rumors
+  Player.factionInvitations = Player.factionInvitations.filter((factionName) => {
+    return !Factions[factionName].isMember && !Factions[factionName].isBanned;
+  });
   Player.factionRumors.delete(faction.name);
 }
 

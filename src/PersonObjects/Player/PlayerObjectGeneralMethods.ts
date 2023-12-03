@@ -171,7 +171,8 @@ export function prestigeSourceFile(this: PlayerObject): void {
 
 export function receiveInvite(this: PlayerObject, factionName: FactionName): void {
   const faction = Factions[factionName];
-  if (faction.alreadyInvited || faction.isMember || faction.isBanned) return;
+  if (this.factionInvitations.includes(factionName) || faction.alreadyInvited || faction.isMember || faction.isBanned)
+    return;
   this.factionInvitations.push(factionName);
   this.factionRumors.delete(factionName);
   faction.discovery = FactionDiscovery.known;
