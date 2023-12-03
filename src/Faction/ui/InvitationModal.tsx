@@ -2,24 +2,23 @@ import React, { useState, useEffect } from "react";
 import { joinFaction } from "../FactionHelpers";
 import { Faction } from "../Faction";
 import { Modal } from "../../ui/React/Modal";
-import { Player } from "@player";
 import { EventEmitter } from "../../utils/EventEmitter";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { Report } from "@mui/icons-material";
+import { Settings } from "../../Settings/Settings";
 
 export const InvitationEvent = new EventEmitter<[Faction | null]>();
 
 export function InvitationModal({ hidden }: { hidden: boolean }): React.ReactElement {
   const [faction, setFaction] = useState<Faction | null>(null);
+
+  const enemies = faction?.getInfo().enemies ?? [];
+
   function join(): void {
     if (faction === null) return;
-    //Remove from invited factions
-    const i = Player.factionInvitations.findIndex((facName) => facName === faction.name);
-    if (i === -1) {
-      console.error("Could not find faction in Player.factionInvitations");
-    } else {
-      joinFaction(faction);
-    }
+    if (!faction.alreadyInvited) return;
+    joinFaction(faction);
     setFaction(null);
   }
 
@@ -29,10 +28,23 @@ export function InvitationModal({ hidden }: { hidden: boolean }): React.ReactEle
     <Modal open={!hidden && faction !== null} onClose={() => setFaction(null)}>
       <Typography variant="h4">You have received a faction invitation.</Typography>
       <Typography>
-        Would you like to join {faction?.name}? <br />
-        <br />
-        Warning: Joining this faction may prevent you from joining other factions during this run!
+        Would you like to join <b>{faction?.name}</b>?
       </Typography>
+      {enemies.length > 0 && (
+        <Typography component="div">
+          <br />
+          Joining this Faction will prevent you from joining its enemies until your next augmentation.
+          <br />
+          {faction?.name} is enemies with:
+          {enemies.map((enemy) => (
+            <Typography key={enemy} sx={{ display: "flex", alignItems: "center" }}>
+              <Report sx={{ ml: 2, mr: 1, color: Settings.theme.error }} />
+              {enemy}
+            </Typography>
+          ))}
+        </Typography>
+      )}
+      <br />
       <Button onClick={join}>Join!</Button>
       <Button onClick={() => setFaction(null)}>Decide later</Button>
     </Modal>
