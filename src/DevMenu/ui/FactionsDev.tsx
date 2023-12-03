@@ -143,12 +143,12 @@ export function FactionsDev(): React.ReactElement {
                     value={selectedFaction.name}
                     startAdornment={
                       <>
-                        <Tooltip title={`Hear rumor about ${selectedFaction}`}>
+                        <Tooltip title={`Hear rumor about ${selectedFaction.name}`}>
                           <IconButton onClick={receiveRumor} size="large">
                             <ChatIcon />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title={`Receive invitation to ${selectedFaction}`}>
+                        <Tooltip title={`Receive invitation to ${selectedFaction.name}`}>
                           <IconButton onClick={receiveInvite} size="large">
                             <ReplyIcon />
                           </IconButton>

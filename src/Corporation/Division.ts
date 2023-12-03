@@ -946,6 +946,7 @@ export class Division {
           console.error(`Invalid State: ${state}`);
           break;
       } //End switch(this.state)
+      this.updateWarehouseSizeUsed(warehouse);
     }
     return totalProfit;
   }

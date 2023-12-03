@@ -95,7 +95,7 @@ export function initBitNodes() {
   );
   BitNodes.BitNode3 = new BitNode(
     3,
-    0,
+    2,
     "Corporatocracy",
     "The Price of Civilization",
     (

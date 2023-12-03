@@ -35,13 +35,13 @@ export function prestigeAugmentation(): void {
   initBitNodeMultipliers();
 
   // Maintain invites to factions with the 'keepOnInstall' flag, and rumors about others
-  const maintainInvites = [];
-  const maintainRumors = [];
+  const maintainInvites = new Set<FactionName>();
+  const maintainRumors = new Set<FactionName>();
   for (const facName of [...Player.factions, ...Player.factionInvitations]) {
     if (Factions[facName].getInfo().keep) {
-      maintainInvites.push(facName);
+      maintainInvites.add(facName);
     } else {
-      maintainRumors.push(facName);
+      maintainRumors.add(facName);
     }
   }
 
@@ -92,8 +92,10 @@ export function prestigeAugmentation(): void {
   // Recalculate the bonus for circadian modulator aug
   initCircadianModulator();
 
-  Player.factionInvitations = Player.factionInvitations.concat(maintainInvites);
-  for (const factionName of maintainInvites) Factions[factionName].alreadyInvited = true;
+  Player.factionInvitations = Player.factionInvitations.concat([...maintainInvites]);
+  for (const factionName of maintainInvites) {
+    Factions[factionName].alreadyInvited = true;
+  }
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
   Player.hp.current = Player.hp.max;
@@ -290,6 +292,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
     hserver.level = 100;
     hserver.cores = 10;
+    hserver.cpuCores = 10;
     hserver.cache = 5;
     hserver.updateHashRate(Player.mults.hacknet_node_money);
     hserver.updateHashCapacity();

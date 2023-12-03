@@ -21,9 +21,10 @@ import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 
 export const CorporationResolvers: ((prevState: CorpStateName) => void)[] = [];
 
-interface IParams {
+interface ICorporationParams {
   name?: string;
   seedFunded?: boolean;
+  shareSaleCooldown?: number;
 }
 
 export class Corporation {
@@ -70,9 +71,10 @@ export class Corporation {
 
   state = new CorporationState();
 
-  constructor(params: IParams = {}) {
+  constructor(params: ICorporationParams = {}) {
     this.name = params.name || "The Corporation";
     this.seedFunded = params.seedFunded ?? false;
+    this.shareSaleCooldown = params.shareSaleCooldown ?? 0;
   }
 
   addFunds(amt: number): void {
