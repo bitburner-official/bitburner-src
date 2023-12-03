@@ -46,13 +46,30 @@ export function Grid(props: IProps): React.ReactElement {
     return "";
   }
 
+  function borderWidth(worldX1: number, worldY1: number, worldX2: number, worldY2: number): number {
+    const fragment1 = props.gift.fragmentAt(worldX1, worldY1);
+    const fragment2 = props.gift.fragmentAt(worldX2, worldY2);
+    if (fragment1 === undefined) return 1;
+    if (fragment1 === fragment2) return 0;
+    return 1;
+  }
+
   // switch the width/length to make axis consistent.
   const elems = [];
   for (let j = 0; j < props.height; j++) {
     const cells = [];
     for (let i = 0; i < props.width; i++) {
       cells.push(
-        <Cell key={i} onMouseEnter={() => props.enter(i, j)} onClick={() => props.click(i, j)} color={color(i, j)} />,
+        <Cell
+          key={i}
+          onMouseEnter={() => props.enter(i, j)}
+          onClick={() => props.click(i, j)}
+          color={color(i, j)}
+          borderBottom={borderWidth(i, j, i, j + 1)}
+          borderRight={borderWidth(i, j, i + 1, j)}
+          borderTop={borderWidth(i, j, i, j - 1)}
+          borderLeft={borderWidth(i, j, i - 1, j)}
+        />,
       );
     }
     elems.push(<TableRow key={j}>{cells}</TableRow>);
