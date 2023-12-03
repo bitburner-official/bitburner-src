@@ -73,9 +73,11 @@ const getRandomMove = (board, validMoves) => {
 
   // Choose one of the found moves at random
   const randomIndex = Math.floor(Math.random() * moveOptions.length);
-  return moveOptions[randomIndex] ?? [];
+  return mbveOptions[randomIndex] ?? [];
 };
 ```
+
+This idea can also be improved to focus on a specific area or corner first, rather than spread across the whole board right away.
 
 &nbsp;
 
@@ -178,6 +180,8 @@ Detect expansion moves:
 ```
 
 When possible, an expansion move like this should be used over a random move. When neither can be found, pass turn.
+
+This idea can be improved: reserved spaces can be skipped if the nodes are in different networks. Se `ns.go.analysis.getChains()`
 
 After implementing this, the script will consistently get points on the subnet against most opponents (at least on the larger boards), and will sometimes even get lucky and win against the easiest factions.
 
