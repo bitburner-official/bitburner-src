@@ -744,7 +744,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       haveAugmentations(0),
       {
         toString: () => `Investigate the dilapidated church in ${CityName.Chongqing}`,
-        toJSON: () => ({ location: LocationName.ChongqingChurchOfTheMachineGod }),
+        toJSON: () => ({ type: "location", location: LocationName.ChongqingChurchOfTheMachineGod }),
         isSatisfied: (p: PlayerObject) => {
           return [...p.factions, ...p.factionInvitations].includes(FactionName.ChurchOfTheMachineGod);
         },
@@ -780,7 +780,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     inviteReqs: [
       {
         toString: () => `Complete an infiltration`,
-        toJSON: () => ({ numInfiltrations: 1 }),
+        toJSON: () => ({ type: "numInfiltrations", numInfiltrations: 1 }),
         isSatisfied: (p: PlayerObject) => {
           return [...p.factions, ...p.factionInvitations].includes(FactionName.ShadowsOfAnarchy);
         },

@@ -1947,22 +1947,27 @@ export interface Singularity {
    * ```js
    * ns.singularity.getFactionInviteRequirements("The Syndicate")
    * [
-   *   {"someCondition": [{"city": "Aevum"}, {"city": "Sector-12"}]},
-   *   {"not": {"employedBy": "Central Intelligence Agency"}},
-   *   {"not": {"employedBy": "National Security Agency"}},
-   *   {"karma": -90},
-   *   {"money": 10000000},
-   *   {"skills": {
-   *      "hacking": 200,
-   *      "strength": 200,
-   *      "defense": 200,
-   *      "dexterity": 200,
-   *      "agility": 200
-   *   }}
+   *   { "type": "someCondition", "conditions": [
+   *       { "type": "city", "city": "Aevum" },
+   *       { "type": "city", "city": "Sector-12" }
+   *     ]
+   *   },
+   *   { "type": "not", "condition": {
+   *       "type": "employedBy", "company": "Central Intelligence Agency"
+   *     }
+   *   },
+   *   { "type": "not", "condition": {
+   *       "type": "employedBy", "company": "National Security Agency"
+   *     }
+   *   },
+   *   { "type": "money", "money": 10000000 },
+   *   { "type": "skills", "skills": { "hacking": 200 } },
+   *   { "type": "skills", "skills": { "strength": 200, "defense": 200, "dexterity": 200, "agility": 200 } },
+   *   { "type": "karma", "karma": -90 }
    * ]
    * ```
    */
-  getFactionInviteRequirements(faction: string): RequirementInfo[];
+  getFactionInviteRequirements(faction: string): PlayerRequirement[];
 
   /**
    * List all current faction invitations.
@@ -8149,6 +8154,101 @@ interface AutocompleteData {
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
 }
 
+interface MoneyRequirement {
+  type: "money";
+  money: number;
+}
+interface SkillRequirement {
+  type: "skills";
+  skills: Partial<Skills>;
+}
+interface KarmaRequiremennt {
+  type: "karma";
+  karma: number;
+}
+interface PeopleKilledRequirement {
+  type: "numPeopleKilled";
+  numPeopleKilled: number;
+}
+interface FileRequirement {
+  type: "file";
+  file: string;
+}
+interface NumAugmentationsRequirement {
+  type: "numAugmentations";
+  numAugmentations: number;
+}
+interface EmployedByRequirement {
+  type: "employedBy";
+  company: CompanyName;
+}
+interface CompanyReputationRequirement {
+  type: "companyReputation";
+  company: CompanyName;
+  reputation: number;
+}
+interface JobTitleRequirement {
+  type: "jobTitle";
+  jobTitle: JobName;
+}
+interface FactionReputationRequirement {
+  type: "factionReputation";
+  faction: FactionName;
+  reputation: number;
+}
+interface CityRequirement {
+  type: "city";
+  city: CityName;
+}
+interface LocationRequirement {
+  type: "location";
+  location: LocationName;
+}
+interface BackdoorRequirement {
+  type: "backdoorInstalled";
+  backdoorInstalled: ServerName;
+}
+interface HacknetRAMRequirement {
+  type: "hacknetRAM";
+  hacknetRAM: number;
+}
+interface HacknetCoresRequirement {
+  type: "hacknetCores";
+  hacknetCores: number;
+}
+interface HacknetLevelsRequirement {
+  type: "hacknetLevels";
+  hacknetLevels: number;
+}
+interface BitNodeRequirement {
+  type: "bitNodeN";
+  bitNodeN: number;
+}
+interface SourceFileRequirement {
+  type: "sourceFile";
+  sourceFile: number;
+}
+interface BladeburnerRankRequirement {
+  type: "bladeburnerRank";
+  bladeburnerRank: number;
+}
+interface NumInfiltrationsRequirement {
+  type: "numInfiltrations";
+  numInfiltrations: number;
+}
+interface NotRequirement {
+  type: "not";
+  condition: PlayerRequirement;
+}
+interface SomeRequirement {
+  type: "someCondition";
+  conditions: PlayerRequirement[];
+}
+interface EveryRequirement {
+  type: "everyCondition";
+  conditions: PlayerRequirement[];
+}
+
 /**
  * Structured interface to requirements for joining a faction or company.
  * For fields with numerical value > 0, the player must have at least this value.
@@ -8158,26 +8258,27 @@ interface AutocompleteData {
  * @public
  * @returns - An object representing one requirement.
  */
-export interface RequirementInfo {
-  money?: number;
-  skills?: Partial<Skills>;
-  karma?: number;
-  numPeopleKilled?: number;
-  file?: LiteratureName | MessageFilename;
-  numAugmentations?: number;
-  employedBy?: CompanyName;
-  companyReputation?: [CompanyName, number];
-  jobTitle?: JobName;
-  city?: CityName;
-  location?: LocationName;
-  backdoorInstalled?: ServerName;
-  hacknetRAM?: number;
-  hacknetCores?: number;
-  hacknetLevels?: number;
-  bitNodeN?: number;
-  sourceFile?: number;
-  bladeburnerRank?: number;
-  numInfiltrations?: number;
-  not?: RequirementInfo;
-  someCondition?: RequirementInfo[];
-}
+export type PlayerRequirement =
+  | MoneyRequirement
+  | SkillRequirement
+  | KarmaRequiremennt
+  | PeopleKilledRequirement
+  | FileRequirement
+  | NumAugmentationsRequirement
+  | EmployedByRequirement
+  | CompanyReputationRequirement
+  | JobTitleRequirement
+  | FactionReputationRequirement
+  | CityRequirement
+  | LocationRequirement
+  | BackdoorRequirement
+  | HacknetRAMRequirement
+  | HacknetCoresRequirement
+  | HacknetLevelsRequirement
+  | BitNodeRequirement
+  | SourceFileRequirement
+  | BladeburnerRankRequirement
+  | NumInfiltrationsRequirement
+  | NotRequirement
+  | SomeRequirement
+  | EveryRequirement;
