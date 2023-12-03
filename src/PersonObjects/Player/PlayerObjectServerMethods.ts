@@ -45,7 +45,7 @@ export function getUpgradeHomeCoresCost(this: PlayerObject): number {
 
 export function createHacknetServer(this: PlayerObject): HacknetServer {
   const numOwned = this.hacknetNodes.length;
-  const name = hasHacknetServers() ? `hacknet-server-${numOwned}` : `hacknet-node-${numOwned}`;
+  const name = hasHacknetServers() ? `hacknet-server-${String(numOwned).padStart(2,'0')}` : `hacknet-node-${String(numOwned).padStart(2,'0')}`;
   const server = new HacknetServer({
     adminRights: true,
     hostname: name,
