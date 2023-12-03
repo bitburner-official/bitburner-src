@@ -31,7 +31,7 @@ export function safelyCreateUniqueServer(params: IConstructorParams): Server {
 
     // Use a for loop to ensure that we don't get suck in an infinite loop somehow
     for (let i = 0; i < 200; ++i) {
-      hostname = hostname.replace(/-[0-9]+$/, `-${String(i).padStart(2,'0')}`);
+      hostname = hostname.replace(/-[0-9]+$/, `-${String(i).padStart(2, "0")}`);
       if (GetServer(hostname) == null) {
         break;
       }
