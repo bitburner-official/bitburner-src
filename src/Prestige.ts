@@ -292,6 +292,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
     hserver.level = 100;
     hserver.cores = 10;
+    hserver.cpuCores = 10;
     hserver.cache = 5;
     hserver.updateHashRate(Player.mults.hacknet_node_money);
     hserver.updateHashCapacity();
