@@ -41,7 +41,7 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
   // Only run this once on first component mount, to handle scenarios where the game was saved or closed while waiting on the AI to make a move
   useEffect(() => {
     if (boardState.previousPlayer === playerColors.black && !waitingOnAI) {
-      takeAiTurn(boardState);
+      takeAiTurn(Player.go.boardState);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -111,7 +111,7 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
     }
 
     if (move.type === playTypes.gameOver || move.x === null || move.y === null) {
-      endGame();
+      endGame(initialState);
       return;
     }
 
@@ -147,9 +147,9 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
     rerender();
   }
 
-  function endGame() {
+  function endGame(state = boardState) {
     setScoreOpen(true);
-    updateBoard(boardState);
+    updateBoard(state);
   }
 
   function getPriorMove() {

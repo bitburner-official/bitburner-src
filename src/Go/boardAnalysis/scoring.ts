@@ -77,6 +77,7 @@ export function endGoGame(boardState: BoardState) {
     getWinstreakMultiplier(statusToUpdate.winStreak, statusToUpdate.oldWinStreak);
 
   statusToUpdate.nodes += score[playerColors.black].sum;
+  Player.go.boardState = boardState;
   Player.go.previousGameFinalBoardState = boardState;
 
   // Update multipliers with new bonuses, once at the end of the game
