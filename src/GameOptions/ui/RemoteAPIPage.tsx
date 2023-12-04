@@ -37,8 +37,8 @@ export const RemoteAPIPage = (): React.ReactElement => {
       <Tooltip
         title={
           <Typography>
-            This address is used to connect to a Remote API, please ensure that it matches with your Remote API
-            address. Default localhost.
+            This address is used to connect to a Remote API, please ensure that it matches with your Remote API address.
+            Default localhost.
           </Typography>
         }
       >
