@@ -8195,7 +8195,7 @@ interface FileRequirement {
   file: string;
 }
 /**
- * Player must have at least this many augmentations installed (if positive).  
+ * Player must have at least this many augmentations installed (if positive).
  * Player must have no augmentations installed (if zero).
  * @public
  */

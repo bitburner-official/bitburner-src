@@ -6,7 +6,8 @@ import { Page } from "../ui/Router";
 import { Option } from "./ui/Option";
 import { Typography } from "@mui/material";
 import {
-  JoinCondition,
+  PlayerCondition,
+  CompoundPlayerCondition,
   haveBackdooredServer,
   employedBy,
   haveCompanyRep,
@@ -28,10 +29,9 @@ import {
   haveSomeSourceFile,
   haveFile,
   someCondition,
+  everyCondition,
   delayedCondition,
   unsatisfiable,
-  everyCondition,
-  CompoundJoinCondition,
 } from "./FactionJoinCondition";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { CONSTANTS } from "../Constants";
@@ -41,8 +41,8 @@ import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 interface FactionInfoParams {
   infoText?: JSX.Element;
   rumorText?: JSX.Element;
-  inviteReqs?: JoinCondition[];
-  rumorReqs?: JoinCondition[];
+  inviteReqs?: PlayerCondition[];
+  rumorReqs?: PlayerCondition[];
   enemies?: FactionName[];
   offerHackingWork?: boolean;
   offerFieldWork?: boolean;
@@ -64,10 +64,10 @@ export class FactionInfo {
   rumorText: JSX.Element;
 
   /** Conditions for being automatically inivited to this facton. */
-  inviteReqs: CompoundJoinCondition;
+  inviteReqs: CompoundPlayerCondition;
 
   /** Conditions for automatically hearing a rumor about this facton. */
-  rumorReqs: CompoundJoinCondition;
+  rumorReqs: CompoundPlayerCondition;
 
   /** A flag indicating if the faction supports field work to earn reputation. */
   offerFieldWork: boolean;
