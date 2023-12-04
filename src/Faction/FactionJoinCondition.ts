@@ -153,15 +153,13 @@ export const haveSkill = (skill: keyof Skills, n: number): JoinCondition => ({
   },
 });
 
-export const haveCombatSkills = (n: number): JoinCondition => ({
+export const haveCombatSkills = (n: number): CompoundJoinCondition => ({
+  ...everyCondition(["strength", "defense", "dexterity", "agility"].map((s) => haveSkill(s as keyof Skills, n))),
   toString(): string {
     return `All combat skills level ${n}`;
   },
   toJSON(): SkillRequirement {
     return { type: "skills", skills: { strength: n, defense: n, dexterity: n, agility: n } };
-  },
-  isSatisfied(p: PlayerObject): boolean {
-    return p.skills.strength >= n && p.skills.defense >= n && p.skills.dexterity >= n && p.skills.agility >= n;
   },
 });
 
@@ -316,6 +314,11 @@ export const haveFile = (fileName: LiteratureName | MessageFilename): JoinCondit
 
 /* higher-order conditions */
 
+export interface CompoundJoinCondition extends JoinCondition, Iterable<JoinCondition> {
+  type: "someCondition" | "everyCondition";
+  [Symbol.iterator]: () => IterableIterator<JoinCondition>;
+}
+
 export const unsatisfiable: JoinCondition = {
   toString(): string {
     return "(unsatisfiable)";
@@ -340,7 +343,8 @@ export const notCondition = (condition: JoinCondition): JoinCondition => ({
   },
 });
 
-export const someCondition = (conditions: JoinCondition[]): JoinCondition => ({
+export const someCondition = (conditions: JoinCondition[]): CompoundJoinCondition => ({
+  type: "someCondition",
   toString(): string {
     return joinList(conditions.map((c) => c.toString()));
   },
@@ -350,9 +354,19 @@ export const someCondition = (conditions: JoinCondition[]): JoinCondition => ({
   isSatisfied(p: PlayerObject): boolean {
     return conditions.some((c) => c.isSatisfied(p));
   },
+  *[Symbol.iterator](): IterableIterator<JoinCondition> {
+    for (const cond of conditions) {
+      if ("type" in cond && cond.type == "someCondition") {
+        yield* cond as CompoundJoinCondition;
+      } else {
+        yield cond;
+      }
+    }
+  },
 });
 
-export const everyCondition = (conditions: JoinCondition[]): JoinCondition => ({
+export const everyCondition = (conditions: JoinCondition[]): CompoundJoinCondition => ({
+  type: "everyCondition",
   toString(): string {
     return joinList(
       conditions.map((c) => c.toString()),
@@ -364,6 +378,15 @@ export const everyCondition = (conditions: JoinCondition[]): JoinCondition => ({
   },
   isSatisfied(p: PlayerObject): boolean {
     return conditions.every((c) => c.isSatisfied(p));
+  },
+  *[Symbol.iterator](): IterableIterator<JoinCondition> {
+    for (const cond of conditions) {
+      if ("type" in cond && cond.type == "everyCondition") {
+        yield* cond as CompoundJoinCondition;
+      } else {
+        yield cond;
+      }
+    }
   },
 });
 

@@ -30,6 +30,8 @@ import {
   someCondition,
   delayedCondition,
   unsatisfiable,
+  everyCondition,
+  CompoundJoinCondition,
 } from "./FactionJoinCondition";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { CONSTANTS } from "../Constants";
@@ -62,10 +64,10 @@ export class FactionInfo {
   rumorText: JSX.Element;
 
   /** Conditions for being automatically inivited to this facton. */
-  inviteReqs: JoinCondition[];
+  inviteReqs: CompoundJoinCondition;
 
   /** Conditions for automatically hearing a rumor about this facton. */
-  rumorReqs: JoinCondition[];
+  rumorReqs: CompoundJoinCondition;
 
   /** A flag indicating if the faction supports field work to earn reputation. */
   offerFieldWork: boolean;
@@ -88,8 +90,8 @@ export class FactionInfo {
   constructor(params: FactionInfoParams) {
     this.infoText = params.infoText ?? <></>;
     this.rumorText = params.rumorText ?? <></>;
-    this.inviteReqs = params.inviteReqs ?? [unsatisfiable];
-    this.rumorReqs = params.rumorReqs ?? [unsatisfiable];
+    this.inviteReqs = everyCondition(params.inviteReqs ?? [unsatisfiable]);
+    this.rumorReqs = everyCondition(params.rumorReqs ?? [unsatisfiable]);
     this.enemies = params.enemies ?? [];
     this.offerHackingWork = params.offerHackingWork ?? false;
     this.offerFieldWork = params.offerFieldWork ?? false;

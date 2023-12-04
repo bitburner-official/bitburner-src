@@ -820,7 +820,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const fac = Factions[facName];
-      return fac.getInfo().inviteReqs.map((condition) => condition.toJSON());
+      return [...fac.getInfo().inviteReqs].map((condition) => condition.toJSON());
     },
     checkFactionInvitations: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);

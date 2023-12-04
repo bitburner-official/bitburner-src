@@ -623,10 +623,10 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     if (faction.alreadyInvited) continue;
     // Handle invites
     const { inviteReqs, rumorReqs } = faction.getInfo();
-    if (inviteReqs.every((req) => req.isSatisfied(this))) invitedFactions.push(faction);
+    if (inviteReqs.isSatisfied(this)) invitedFactions.push(faction);
     // Handle rumors
     if (this.factionRumors.has(faction.name)) continue;
-    if (rumorReqs.every((req) => req.isSatisfied(this))) this.receiveRumor(faction.name);
+    if (rumorReqs.isSatisfied(this)) this.receiveRumor(faction.name);
   }
   return invitedFactions;
 }
