@@ -465,7 +465,7 @@ export function initBitNodes() {
         <br />
         Level 1: 25% increased stat multipliers from Node Power
         <br />
-        Level 2: Permanently unlocks the go.cheat API in other BitNodes
+        Level 2: Permanently unlocks the go.cheat API
         <br />
         Level 3: 25% increased success rate for the go.cheat API
         <br />

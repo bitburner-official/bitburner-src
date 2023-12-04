@@ -40,8 +40,8 @@ export const opponentDetails = {
     description: "Easy AI",
     flavorText:
       "The Netburners faction are a mysterious group with only the most tenuous control over their subnets. Concentrating mainly on their hacknet server business, IPvGO is not their main strength.",
-    bonusDescription: "hacknet cost",
-    bonusPower: -1.5,
+    bonusDescription: "cheaper hacknet cost",
+    bonusPower: 1.3,
   },
   [opponents.SlumSnakes]: {
     komi: 3.5,
