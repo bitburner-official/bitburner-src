@@ -7,7 +7,7 @@ import { BoardState, opponents, playerColors, playTypes, validityReason } from "
 import { getNewBoardState, getStateCopy, makeMove, passTurn } from "../boardState/boardState";
 import { getMove } from "../boardAnalysis/goAI";
 import { weiArt } from "../boardState/asciiArt";
-import { endGoGame, getScore, resetWinstreak } from "../boardAnalysis/scoring";
+import { getScore, resetWinstreak } from "../boardAnalysis/scoring";
 import { evaluateIfMoveIsValid, getAllValidMoves } from "../boardAnalysis/boardAnalysis";
 import { useRerender } from "../../ui/React/hooks";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
@@ -148,7 +148,6 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
   }
 
   function endGame() {
-    endGoGame(boardState);
     setScoreOpen(true);
     updateBoard(boardState);
   }

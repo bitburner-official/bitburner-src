@@ -549,7 +549,7 @@ export function CharacterStats(): React.ReactElement {
                   },
                 ]}
                 color={Settings.theme.primary}
-                noMargin
+                noMargin={!Player.sourceFileLvl(14) && Player.bitNodeN !== 14}
               />
             )}
             {(Player.sourceFileLvl(14) || Player.bitNodeN === 14) && (
@@ -566,6 +566,7 @@ export function CharacterStats(): React.ReactElement {
                   },
                 ]}
                 color={Settings.theme.combat}
+                noMargin
               />
             )}
           </Box>

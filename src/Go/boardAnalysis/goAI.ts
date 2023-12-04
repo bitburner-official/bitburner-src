@@ -11,7 +11,6 @@ import {
   PointState,
 } from "../boardState/goConstants";
 import { findNeighbors, floor, isDefined, isNotNull, passTurn } from "../boardState/boardState";
-import { endGoGame } from "./scoring";
 import {
   evaluateIfMoveIsValid,
   evaluateMoveResult,
@@ -107,7 +106,6 @@ function handleNoMoveFound(boardState: BoardState, player: playerColors) {
       y: -1,
     };
   } else {
-    endGoGame(boardState);
     return {
       type: playTypes.gameOver,
       x: -1,

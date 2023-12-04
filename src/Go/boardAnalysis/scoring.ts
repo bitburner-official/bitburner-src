@@ -63,9 +63,10 @@ export function endGoGame(boardState: BoardState) {
     if (
       statusToUpdate.winStreak % 2 === 0 &&
       Player.factions.includes(factionName) &&
-      statusToUpdate.favor < getMaxFavor()
+      statusToUpdate.favor < getMaxFavor() &&
+      Factions?.[factionName]
     ) {
-      Factions?.[factionName]?.favor && Factions[factionName].favor++;
+      Factions[factionName].favor++;
       statusToUpdate.favor++;
     }
   }
