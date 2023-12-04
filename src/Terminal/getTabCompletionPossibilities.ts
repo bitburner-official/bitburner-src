@@ -292,10 +292,14 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     const commands = parseCommands(inputCopy);
     if (commands.length === 0) return;
     const command = parseCommand(commands[commands.length - 1]);
-    const filename = resolveScriptFilePath(String(command[1]), baseDir);
-    if (!filename) return; // Not a script path.
-    if (filename.endsWith(".script")) return; // Doesn't work with ns1.
-    const script = currServ.scripts.get(filename);
+    let filename = String(command[1]);
+    if (!filename.startsWith("/")) {
+      filename = "./" + filename;
+    }
+    const filepath = resolveScriptFilePath(filename, baseDir);
+    if (!filepath) return; // Not a script path.
+    if (filepath.endsWith(".script")) return; // Doesn't work with ns1.
+    const script = currServ.scripts.get(filepath);
     if (!script) return; // Doesn't exist.
 
     let loadedModule;
