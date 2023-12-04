@@ -23,11 +23,10 @@ import { Page } from "../../ui/Router";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { GangConstants } from "../../Gang/data/Constants";
 import { checkForMessagesToSend } from "../../Message/MessageHelpers";
-import { ThemeEvents } from "../../Themes/ui/Theme";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { formatRam } from "../../ui/formatNumber";
 
-export function General(): React.ReactElement {
+export function General({ parentRerender }: { parentRerender: () => void }): React.ReactElement {
   const rerender = useRerender(400);
   const [error, setError] = useState(false);
   const [corporationName, setCorporationName] = useState("");
@@ -64,38 +63,32 @@ export function General(): React.ReactElement {
   // Corp functions
   const createCorporation = () => {
     Player.startCorporation(corporationName, false);
-    // Rerender so the corp menu option will show up immediately on the devmenu page selection
-    ThemeEvents.emit();
+    parentRerender();
   };
   const destroyCorporation = () => {
     Player.corporation = null;
-    // Rerender so the corp menu option will be removed immediately on the devmenu page selection
-    ThemeEvents.emit();
+    parentRerender();
   };
 
   // Blade functions
   const joinBladeburner = () => {
     Player.bladeburner = new Bladeburner();
-    // Rerender so the blade menu option will show up immediately on the devmenu page selection
-    ThemeEvents.emit();
+    parentRerender();
   };
   const leaveBladeburner = () => {
     Player.bladeburner = null;
-    // Rerender so the blade menu option will be removed immediately on the devmenu page selection
-    ThemeEvents.emit();
+    parentRerender();
   };
 
   // Gang functions
   const startGang = () => {
     const isHacking = gangFaction === FactionName.NiteSec || gangFaction === FactionName.TheBlackHand;
     Player.startGang(gangFaction, isHacking);
-    // Rerender so the gang menu option will show up immediately on the devmenu page selection
-    ThemeEvents.emit();
+    parentRerender();
   };
   const stopGang = () => {
     Player.gang = null;
-    // Rerender so the gang menu option will be removed immediately on the devmenu page selection
-    ThemeEvents.emit();
+    parentRerender();
   };
   const setGangFactionDropdown = (event: SelectChangeEvent) => {
     // Todo: Make this a more specific check when a GangName enumlike is added

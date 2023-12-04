@@ -464,6 +464,19 @@ export class Sleeve extends Person implements SleevePerson {
     }
   }
 
+  static recalculateNumOwned() {
+    const numSleeves =
+      Math.min(3, Player.sourceFileLvl(10) + (Player.bitNodeN === 10 ? 1 : 0)) + Player.sleevesFromCovenant;
+    while (Player.sleeves.length > numSleeves) {
+      const destroyedSleeve = Player.sleeves.pop();
+      // This should not happen, but avoid an infinite loop in case sleevesFromCovenent or sf10 level are somehow negative
+      if (!destroyedSleeve) return;
+      // Stop work, to prevent destroyed sleeves from continuing their tasks in the void
+      destroyedSleeve.stopWork();
+    }
+    while (Player.sleeves.length < numSleeves) Player.sleeves.push(new Sleeve());
+  }
+
   whoAmI(): string {
     return "Sleeve";
   }

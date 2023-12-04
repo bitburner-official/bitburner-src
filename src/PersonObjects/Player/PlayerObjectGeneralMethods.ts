@@ -31,7 +31,7 @@ import { resetGangs } from "../../Gang/AllGangs";
 import { Cities } from "../../Locations/Cities";
 import { Locations } from "../../Locations/Locations";
 import { Sleeve } from "../Sleeve/Sleeve";
-import { isSleeveCompanyWork } from "../Sleeve/Work/SleeveCompanyWork";
+import { SleeveWorkType } from "../Sleeve/Work/Work";
 import { calculateSkillProgress as calculateSkillProgressF, ISkillProgress } from "../formulas/skill";
 import { GetServer, AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
@@ -110,11 +110,7 @@ export function prestigeAugmentation(this: PlayerObject): void {
 
   this.queuedAugmentations = [];
 
-  const numSleeves = Math.min(3, this.sourceFileLvl(10) + (this.bitNodeN === 10 ? 1 : 0)) + this.sleevesFromCovenant;
-  if (this.sleeves.length > numSleeves) this.sleeves.length = numSleeves;
-  for (let i = this.sleeves.length; i < numSleeves; i++) {
-    this.sleeves.push(new Sleeve());
-  }
+  Sleeve.recalculateNumOwned();
 
   this.sleeves.forEach((sleeve) => (sleeve.shock <= 0 ? sleeve.synchronize() : sleeve.shockRecovery()));
 
@@ -361,7 +357,7 @@ export function quitJob(this: PlayerObject, company: CompanyName): void {
     this.finishWork(true);
   }
   for (const sleeve of this.sleeves) {
-    if (isSleeveCompanyWork(sleeve.currentWork) && sleeve.currentWork.companyName === company) {
+    if (sleeve.currentWork?.type === SleeveWorkType.COMPANY && sleeve.currentWork.companyName === company) {
       sleeve.stopWork();
       dialogBoxCreate(`You quit ${company} while one of your sleeves was working there. The sleeve is now idle.`);
     }
