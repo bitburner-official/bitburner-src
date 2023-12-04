@@ -27,19 +27,23 @@ import { AchievementsDev } from "./DevMenu/ui/AchievementsDev";
 import { EntropyDev } from "./DevMenu/ui/EntropyDev";
 
 import { Exploit } from "./Exploits/Exploit";
+import { useRerender } from "./ui/React/hooks";
 
 export function DevMenuRoot(): React.ReactElement {
   useEffect(() => {
     Player.giveExploit(Exploit.YoureNotMeantToAccessThis);
   }, []);
+  // Pass rerender to certain subpages in case certain tabs are now valid/invalid due to changes made on those pages
+  // Rerender periodically in case game state changes (e.g. player starts gang or buys wse account through a script)
+  const rerender = useRerender(400);
   return (
     <>
       <Typography>Development Menu - Only meant to be used for testing/debugging</Typography>
-      <General />
+      <General parentRerender={rerender} />
       <StatsDev />
       <FactionsDev />
       <AugmentationsDev />
-      <SourceFilesDev />
+      <SourceFilesDev parentRerender={rerender} />
       <ProgramsDev />
       <ServersDev />
       <CompaniesDev />
