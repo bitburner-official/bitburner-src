@@ -63,7 +63,7 @@ async function getAIMove(logger: (s: string) => void, boardState: BoardState, su
     }
     if (result.type !== playTypes.move) {
       Player.go.boardState = boardState;
-      resolve({ ...result, success });
+      return resolve({ ...result, success });
     }
 
     const aiUpdatedBoard = makeMove(boardState, result.x, result.y, playerColors.white);
