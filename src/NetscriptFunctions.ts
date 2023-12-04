@@ -975,7 +975,7 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.makeRuntimeErrorMsg(ctx, "Requires Source-File 5 to run.");
       const n = Math.round(helpers.number(ctx, "n", _n));
       const lvl = Math.round(helpers.number(ctx, "lvl", _lvl));
-      if (n < 1 || n > 13) throw new Error("n must be between 1 and 13");
+      if (n < 1 || n > 14) throw new Error("n must be between 1 and 14");
       if (lvl < 1) throw new Error("lvl must be >= 1");
 
       return Object.assign({}, getBitNodeMultipliers(n, lvl));
