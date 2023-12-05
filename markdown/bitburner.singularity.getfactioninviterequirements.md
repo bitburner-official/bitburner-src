@@ -22,7 +22,7 @@ getFactionInviteRequirements(faction: string): PlayerRequirement[];
 
 [PlayerRequirement](./bitburner.playerrequirement.md)<!-- -->\[\]
 
-Array of RequirementInfo objects which must all be fulfilled to receive an invitation.
+Array of PlayerRequirement objects which must all be fulfilled to receive an invitation.
 
 ## Remarks
 

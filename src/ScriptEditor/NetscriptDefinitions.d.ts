@@ -1941,7 +1941,7 @@ export interface Singularity {
    * RAM cost: 3 GB * 16/4/1
    *
    * @param faction - Name of the faction
-   * @returns Array of RequirementInfo objects which must all be fulfilled to receive an invitation.
+   * @returns Array of PlayerRequirement objects which must all be fulfilled to receive an invitation.
    *
    * @example
    * ```js
