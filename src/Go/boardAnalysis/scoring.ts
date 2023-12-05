@@ -73,7 +73,7 @@ export function endGoGame(boardState: BoardState) {
 
   statusToUpdate.nodePower +=
     score[playerColors.black].sum *
-    getDifficultyMultiplier(score[playerColors.white].komi) *
+    getDifficultyMultiplier(score[playerColors.white].komi, boardState.board[0].length) *
     getWinstreakMultiplier(statusToUpdate.winStreak, statusToUpdate.oldWinStreak);
 
   statusToUpdate.nodes += score[playerColors.black].sum;

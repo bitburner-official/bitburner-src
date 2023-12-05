@@ -73,7 +73,7 @@ const getRandomMove = (board, validMoves) => {
 
   // Choose one of the found moves at random
   const randomIndex = Math.floor(Math.random() * moveOptions.length);
-  return mbveOptions[randomIndex] ?? [];
+  return moveOptions[randomIndex] ?? [];
 };
 ```
 
@@ -172,7 +172,7 @@ In order to expand the area that is controlled by the player's networks, connect
 ```
 Detect expansion moves:
    For each point on the board:
-      * If the emtpy point is a valid move, and
+      * If the empty point is a valid move, and
       * If the point is not an open space reserved to protect the network [see getRandomMove()], and
       * If a point to the north, south, east, or west is a friendly router
 
@@ -197,19 +197,7 @@ In addition, the script only knows about a few types of moves, and does not yet 
 
 #### Killing duplicate scripts
 
-Because there is only one subnet active at any time, you do not want multiple copies of your scripts running and competing with each other.
-
-This snippet can be added to any script, and will kill any other scripts with the same file name on the current server. Put this code into your script and call it at the top of main() using `killDuplicates(ns)`
-
-```js
-/** @param {NS} ns */
-function killDuplicates(ns) {
-  const scriptInfo = ns.getRunningScript();
-  ns.ps()
-    .filter((script) => script.filename === scriptInfo.filename && script.pid !== scriptInfo.pid)
-    .forEach((script) => ns.kill(script.pid));
-}
-```
+Because there is only one subnet active at any time, you do not want multiple copies of your scripts running and competing with each other. It may be helpful to kill any other scripts with the same name as your IPvGO script on startup. This can be done using `ns.getRunningScript()` to get the script details and `ns.kill()` to remove old copies of the script.
 
 &nbsp;
 
@@ -222,7 +210,7 @@ To find out what networks are in danger of capture, `ns.go.analysis.getLiberties
 ```
 Detect moves to capture the opponent's routers:
    For each point on the board:
-      * If the emtpy point is a valid move, and
+      * If the empty point is a valid move, and
       * If a point to the north, south, east, or west is a router with exactly 1 liberty [via its coordinates in getLiberties()], and
       * That point is controlled by the opponent [it is a "O" via getBoardState()]
 
@@ -238,7 +226,7 @@ Detect moves to capture the opponent's routers:
 ```
 Detect moves to defend a threatened network:
    For each point on the board:
-      * If the emtpy point is a valid move, and
+      * If the empty point is a valid move, and
       * If a point to the north, south, east, or west is a router with exactly 1 liberty [via its coordinates in getLiberties()], and
       * That point is controlled by the player [it is a "X" via getBoardState()]
 

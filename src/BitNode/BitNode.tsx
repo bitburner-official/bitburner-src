@@ -946,27 +946,25 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
     }
     case 14: {
       return new BitNodeMultipliers({
-        GoPower: 8,
+        GoPower: 4,
 
-        HackingLevelMultiplier: 0.35,
+        HackingLevelMultiplier: 0.25,
 
         ServerMaxMoney: 0.7,
         ServerStartingMoney: 0.5,
         ServerStartingSecurity: 1.5,
 
         CrimeMoney: 0.75,
-        CrimeSuccessRate: 0.15,
-        HacknetNodeMoney: 0.5,
+        CrimeSuccessRate: 0.25,
+        HacknetNodeMoney: 0.25,
         ScriptHackMoney: 0.7,
-
-        HackExpGain: 0.15,
 
         AugmentationMoneyCost: 1.5,
 
         InfiltrationMoney: 0.75,
 
-        FactionWorkRepGain: 0.15,
-        CompanyWorkRepGain: 0.15,
+        FactionWorkRepGain: 0.2,
+        CompanyWorkRepGain: 0.2,
 
         CorporationValuation: 0.4,
         CorporationSoftcap: 0.9,

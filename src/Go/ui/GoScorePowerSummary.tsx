@@ -20,7 +20,7 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: IProps) => {
   const blackScore = finalScore[playerColors.black];
   const whiteScore = finalScore[playerColors.white];
 
-  const difficultyMultiplier = getDifficultyMultiplier(whiteScore.komi);
+  const difficultyMultiplier = getDifficultyMultiplier(whiteScore.komi, Player.go.boardState.board[0].length);
   const winstreakMultiplier = getWinstreakMultiplier(winStreak, oldWinStreak);
   const nodePowerIncrease = formatNumber(blackScore.sum * difficultyMultiplier * winstreakMultiplier, 2);
 
@@ -45,13 +45,20 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: IProps) => {
             </TableRow>
           </Tooltip>
           <TableRow>
-            <TableCell className={classes.cellNone}>Win Streak:</TableCell>
+            <TableCell className={classes.cellNone}>{winStreak >= 0 ? "Win" : "Loss"} Streak:</TableCell>
             <TableCell className={classes.cellNone}>{winStreak}</TableCell>
           </TableRow>
-          <Tooltip title={<>Consecutive wins award progressively higher multipliers for node power</>}>
+          <Tooltip
+            title={
+              <>
+                Consecutive wins award progressively higher multipliers for node power. Coming back from a loss streak
+                also gives an extra bonus.
+              </>
+            }
+          >
             <TableRow>
               <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>
-                Win Streak Multiplier:
+                {winStreak >= 0 ? "Win Streak" : "Loss"} Multiplier:
               </TableCell>
               <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>
                 {formatNumber(winstreakMultiplier, 2)}x

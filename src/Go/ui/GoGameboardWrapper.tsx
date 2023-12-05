@@ -22,6 +22,23 @@ interface IProps {
   showInstructions: () => void;
 }
 
+// TODO: Implement hack speed bitnode multi and fix BN 14 hack speed base level
+// TODO: add effective value of crime success chance and company rep gain
+// TODO: add effective value of crime success chance and company rep gain// TODO: hacknet -> production instead of cost
+// TODO: get current opponent API
+//  if the player passes, and the AI is already winning, and there is no contested territory, just end game?
+// TODO: Cheat success rate decreases per cheat, risk being kicked out after 3? failed cheats
+
+// TODO: bonus time?
+// TODO: Combat stat focused AI?
+
+/*
+// TODO: add AI cheating.
+* unlikely unless player cheats first
+* more common on some factions
+* play two moves that don't capture
+ */
+
 export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactElement {
   const rerender = useRerender(400);
 
@@ -103,6 +120,11 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
     setWaitingOnAI(true);
     const initialState = getStateCopy(board);
     const move = await getMove(initialState, playerColors.white, opponent);
+
+    // If a new game has started while this async code ran, just drop it
+    if (boardState.history.length > Player.go.boardState.history.length) {
+      return;
+    }
 
     if (move.type === playTypes.pass) {
       SnackbarEvents.emit(`The opponent passes their turn; It is now your turn to move.`, ToastVariant.WARNING, 4000);

@@ -54,10 +54,17 @@ export async function makePlayerMove(logger: (s: string) => void, x: number, y: 
  * Retrieves a move from the current faction in response to the player's move
  */
 async function getAIMove(logger: (s: string) => void, boardState: BoardState, success = true): Promise<Play> {
-  let resolve: (value: Play) => void;
-  const aiMoveResult = new Promise<Play>((res) => (resolve = res));
+  let resolve: (value: Play) => void, reject: () => void;
+  const aiMoveResult = new Promise<Play>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
 
   getMove(boardState, playerColors.white, Player.go.boardState.ai).then(async (result) => {
+    // If a new game has started while this async code ran, just drop it
+    if (boardState.history.length > Player.go.boardState.history.length) {
+      return reject();
+    }
     if (result.type === "gameOver") {
       logEndGame(logger);
     }

@@ -146,6 +146,7 @@ export function getWinstreakMultiplier(winStreak: number, previousWinStreak: num
   return 1 + 0.25 * Math.min(winStreak, 8);
 }
 
-export function getDifficultyMultiplier(komi: number) {
-  return (komi + 0.5) * 0.25;
+export function getDifficultyMultiplier(komi: number, boardSize: number) {
+  const isTinyBoardVsIlluminati = boardSize === 5 && komi === opponentDetails[opponents.Illuminati].komi;
+  return isTinyBoardVsIlluminati ? 8 : (komi + 0.5) * 0.25;
 }
