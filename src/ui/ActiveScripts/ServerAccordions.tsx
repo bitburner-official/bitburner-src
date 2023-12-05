@@ -86,14 +86,34 @@ export function ServerAccordions(props: IProps): React.ReactElement {
     }
     return false;
   });
-  // Ordering scripts: Home, Purchased/Hacknet (alphabetically), All Other Servers
+  // Ordering scripts: Home, Purchased (alphabetically), Hacknet(alphabetically), All Other Servers
   let finalResponse = [];
   const home = SpecialServers.Home;
-  const homeScripts = filtered.filter((x) => x?.server?.hostname == home && x?.server?.purchasedByPlayer == true);
-  let purchasedScripts = filtered.filter((x) => x?.server?.hostname != home && x?.server?.purchasedByPlayer == true);
-  const other = filtered.filter((x) => x?.server?.hostname != home && x?.server?.purchasedByPlayer == false);
-  purchasedScripts = purchasedScripts.sort((a, b) => a?.server.hostname.localeCompare(b?.server.hostname));
-  finalResponse = homeScripts.concat(purchasedScripts, other);
+  const homeScripts = filtered.filter((x) => x.server.hostname == home && x.server.purchasedByPlayer == true);
+  let hacknetScripts0_9 = filtered.filter(
+    (x) =>
+      x.server.hostname != home &&
+      x.server.purchasedByPlayer == true &&
+      x.server.hostname.substring(0, 7) == "hacknet" &&
+      x.server.hostname.length == 16,
+  );
+  hacknetScripts0_9 = hacknetScripts0_9.sort((a, b) => a.server.hostname.localeCompare(b.server.hostname));
+  let hacknetScripts10_19 = filtered.filter(
+    (x) =>
+      x.server.hostname != home &&
+      x.server.purchasedByPlayer == true &&
+      x.server.hostname.substring(0, 7) == "hacknet" &&
+      x.server.hostname.length == 17,
+  );
+  hacknetScripts10_19 = hacknetScripts10_19.sort((a, b) => a.server.hostname.localeCompare(b.server.hostname));
+  let purchasedScripts = filtered.filter(
+    (x) =>
+      x.server.hostname != home && x.server.purchasedByPlayer == true && x.server.hostname.substring(0, 7) != "hacknet",
+  );
+  const other = filtered.filter((x) => x.server.hostname != home && x.server.purchasedByPlayer == false);
+  purchasedScripts = purchasedScripts.sort((a, b) => a.server.hostname.localeCompare(b.server.hostname));
+  finalResponse = homeScripts.concat(purchasedScripts, hacknetScripts0_9, hacknetScripts10_19, other);
+
   return (
     <>
       <Grid container>
