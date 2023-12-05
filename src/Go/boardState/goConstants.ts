@@ -23,9 +23,19 @@ export enum opponents {
   Netburners = FactionName.Netburners,
   SlumSnakes = FactionName.SlumSnakes,
   TheBlackHand = FactionName.TheBlackHand,
+  Tetrads = FactionName.Tetrads,
   Daedalus = FactionName.Daedalus,
   Illuminati = FactionName.Illuminati,
 }
+
+export const opponentList = [
+  opponents.Netburners,
+  opponents.SlumSnakes,
+  opponents.TheBlackHand,
+  opponents.Tetrads,
+  opponents.Daedalus,
+  opponents.Illuminati,
+];
 
 export const opponentDetails = {
   [opponents.none]: {
@@ -58,6 +68,14 @@ export const opponentDetails = {
       "The Black Hand faction is a black-hat hacking group who uses their subnets to launch targeted DDOS attacks. They are famous for their unrelenting aggression, surrounding and strangling any foothold their opponents try to establish.",
     bonusDescription: "hacking level",
     bonusPower: 0.9,
+  },
+  [opponents.Tetrads]: {
+    komi: 5.5,
+    description: "Martial AI",
+    flavorText:
+      "The faction known as Tetrads prefers to get up close and personal. Their combat style excels at circling around and cutting through their opponents, both on and off of the subnets.",
+    bonusDescription: "strength, dex, and agility levels",
+    bonusPower: 0.7,
   },
   [opponents.Daedalus]: {
     komi: 5.5,
@@ -206,6 +224,16 @@ export function getGoPlayerStartingState(): {
         favor: 0,
       },
       [opponents.TheBlackHand]: {
+        wins: 0,
+        losses: 0,
+        nodes: 0,
+        nodePower: 0,
+        winStreak: 0,
+        oldWinStreak: 0,
+        highestWinStreak: 0,
+        favor: 0,
+      },
+      [opponents.Tetrads]: {
         wins: 0,
         losses: 0,
         nodes: 0,

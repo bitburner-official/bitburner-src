@@ -1,6 +1,6 @@
 import { Box, Button, MenuItem, Select, SelectChangeEvent, Typography, Tooltip } from "@mui/material";
 import React, { useState } from "react";
-import { boardSizes, opponentDetails, opponents } from "../boardState/goConstants";
+import { boardSizes, opponentDetails, opponentList, opponents } from "../boardState/goConstants";
 import { Player } from "@player";
 import { boardStyles } from "../boardState/goStyles";
 import { Modal } from "../../ui/React/Modal";
@@ -18,14 +18,7 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
   const [opponent, setOpponent] = useState<opponents>(Player.go.boardState?.ai ?? opponents.SlumSnakes);
   const [boardSize, setBoardSize] = useState(Player.go.boardState?.board?.[0]?.length ?? 7);
 
-  const opponentFactions = [
-    opponents.none,
-    opponents.Netburners,
-    opponents.SlumSnakes,
-    opponents.TheBlackHand,
-    opponents.Daedalus,
-    opponents.Illuminati,
-  ];
+  const opponentFactions = [opponents.none, ...opponentList];
 
   const handicap = getHandicap(boardSize, opponent);
 

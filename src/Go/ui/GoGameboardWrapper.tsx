@@ -27,7 +27,6 @@ interface IProps {
 // TODO: Cheat success rate decreases per cheat, risk being kicked out after 3? failed cheats
 
 // TODO: bonus time?
-// TODO: Combat stat focused AI?
 
 /*
 // TODO: add AI cheating.

@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
-import { opponents } from "../boardState/goConstants";
+import { opponentList } from "../boardState/goConstants";
 import { getScore } from "../boardAnalysis/scoring";
 import { Player } from "@player";
 import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
@@ -16,13 +16,6 @@ export const GoStatusPage = (): React.ReactElement => {
   const classes = boardStyles();
   const score = getScore(Player.go.boardState);
   const opponent = Player.go.boardState.ai;
-  const opponentList = [
-    opponents.Netburners,
-    opponents.SlumSnakes,
-    opponents.TheBlackHand,
-    opponents.Daedalus,
-    opponents.Illuminati,
-  ];
 
   return (
     <div>

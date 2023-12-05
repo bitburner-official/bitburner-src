@@ -127,6 +127,9 @@ function getFactionMove(moves: MoveOptions, faction: opponents, rng: number): Po
   if (faction === opponents.TheBlackHand) {
     return getBlackHandPriorityMove(moves, rng);
   }
+  if (faction === opponents.Tetrads) {
+    return getTetradPriorityMove(moves, rng);
+  }
   if (faction === opponents.Daedalus) {
     return getDaedalusPriorityMove(moves, rng);
   }
@@ -207,12 +210,48 @@ function getBlackHandPriorityMove(moves: MoveOptions, rng: number): PointState |
     return moves.defendCapture.point;
   }
 
+  if (moves.surround && moves.surround.point && (moves.surround?.newLibertyCount ?? 999) <= 2) {
+    console.debug("surround move chosen");
+    return moves.surround.point;
+  }
+
   if (rng < 0.3) {
     return getIlluminatiPriorityMove(moves, rng);
   } else if (rng < 0.75 && moves.surround) {
     return moves.surround.point;
   } else if (rng < 0.8) {
     return moves.random;
+  }
+
+  return null;
+}
+
+/**
+ * Tetrads really like to be up close and personal, cutting and circling their opponent
+ */
+function getTetradPriorityMove(moves: MoveOptions, rng: number) {
+  if (moves.capture) {
+    console.debug("capture: capture move chosen");
+    return moves.capture.point;
+  }
+
+  if (moves.defendCapture) {
+    console.debug("defend capture: defend move chosen");
+    return moves.defendCapture.point;
+  }
+
+  if (moves.pattern) {
+    console.debug("pattern match move chosen");
+    return moves.pattern;
+  }
+
+  if (moves.surround && moves.surround.point && (moves.surround?.newLibertyCount ?? 9) <= 1) {
+    console.debug("surround move chosen");
+    return moves.surround.point;
+  }
+
+  if (rng < 0.4) {
+    return getIlluminatiPriorityMove(moves, rng);
   }
 
   return null;

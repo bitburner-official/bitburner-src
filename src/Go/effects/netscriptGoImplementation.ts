@@ -1,4 +1,4 @@
-import { BoardState, opponents, Play, playerColors, playTypes, validityReason } from "../boardState/goConstants";
+import { BoardState, opponentList, Play, playerColors, playTypes, validityReason } from "../boardState/goConstants";
 import { getMove, sleep } from "../boardAnalysis/goAI";
 import { Player } from "@player";
 import {
@@ -178,21 +178,14 @@ function logEndGame(logger: (s: string) => void) {
  * Clears the board, resets winstreak if applicable
  */
 export function resetBoardState(error: (s: string) => void, opponentString: string, boardSize: number) {
-  const opponentOptions = [
-    opponents.Netburners,
-    opponents.SlumSnakes,
-    opponents.TheBlackHand,
-    opponents.Daedalus,
-    opponents.Illuminati,
-  ];
-  const opponent = opponentOptions.find((faction) => faction === opponentString);
+  const opponent = opponentList.find((faction) => faction === opponentString);
 
   if (![5, 7, 9, 13].includes(boardSize)) {
     error(`Invalid subnet size requested (${boardSize}, size must be 5, 7, 9, or 13`);
     return;
   }
   if (!opponent) {
-    error(`Invalid opponent requested (${opponentString}), valid options are ${opponentOptions.join(", ")}`);
+    error(`Invalid opponent requested (${opponentString}), valid options are ${opponentList.join(", ")}`);
     return;
   }
 

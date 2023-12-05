@@ -2,7 +2,7 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import { Table, TableBody, TableCell, TableRow, Tooltip } from "@mui/material";
 
-import { opponents } from "../boardState/goConstants";
+import { opponentList } from "../boardState/goConstants";
 import { getScore } from "../boardAnalysis/scoring";
 import { Player } from "@player";
 import { Grid } from "@mui/material";
@@ -20,13 +20,6 @@ export const GoHistoryPage = (): React.ReactElement => {
   const priorBoard = Player.go.previousGameFinalBoardState ?? getNewBoardState(7);
   const score = getScore(priorBoard);
   const opponent = priorBoard.ai;
-  const opponentList = [
-    opponents.Netburners,
-    opponents.SlumSnakes,
-    opponents.TheBlackHand,
-    opponents.Daedalus,
-    opponents.Illuminati,
-  ];
 
   return (
     <div>

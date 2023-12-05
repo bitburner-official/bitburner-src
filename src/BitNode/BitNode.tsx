@@ -960,6 +960,10 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         HacknetNodeMoney: 0.25,
         ScriptHackMoney: 0.7,
 
+        StrengthLevelMultiplier: 0.5,
+        DexterityLevelMultiplier: 0.5,
+        AgilityLevelMultiplier: 0.5,
+
         AugmentationMoneyCost: 1.5,
 
         InfiltrationMoney: 0.75,

@@ -1,5 +1,5 @@
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-import { getGoPlayerStartingState, opponentDetails, opponents } from "../boardState/goConstants";
+import { getGoPlayerStartingState, opponentDetails, opponentList, opponents } from "../boardState/goConstants";
 import { Player } from "@player";
 import { defaultMultipliers, mergeMultipliers, Multipliers } from "../../PersonObjects/Multipliers";
 import { PlayerObject } from "../../PersonObjects/Player/PlayerObject";
@@ -57,13 +57,7 @@ export function updateGoMults(): void {
  */
 function calculateMults(): Multipliers {
   const mults = defaultMultipliers();
-  [
-    opponents.Netburners,
-    opponents.SlumSnakes,
-    opponents.TheBlackHand,
-    opponents.Daedalus,
-    opponents.Illuminati,
-  ].forEach((opponent) => {
+  opponentList.forEach((opponent) => {
     if (!Player.go?.status?.[opponent]) {
       Player.go = getGoPlayerStartingState();
     }
@@ -79,6 +73,11 @@ function calculateMults(): Multipliers {
       case opponents.TheBlackHand:
         mults.hacking *= effect;
         break;
+      case opponents.Tetrads:
+        mults.strength *= effect;
+        mults.dexterity *= effect;
+        mults.agility *= effect;
+        break;
       case opponents.Daedalus:
         mults.company_rep *= effect;
         mults.faction_rep *= effect;
@@ -92,13 +91,7 @@ function calculateMults(): Multipliers {
 }
 
 export function resetGoNodePower(player: PlayerObject) {
-  [
-    opponents.Netburners,
-    opponents.SlumSnakes,
-    opponents.TheBlackHand,
-    opponents.Daedalus,
-    opponents.Illuminati,
-  ].forEach((opponent) => {
+  opponentList.forEach((opponent) => {
     player.go.status[opponent].nodePower = 0;
     player.go.status[opponent].nodes = 0;
     player.go.status[opponent].winStreak = 0;
@@ -107,13 +100,9 @@ export function resetGoNodePower(player: PlayerObject) {
 
 export function playerHasDiscoveredGo() {
   const playedGame = Player.go.boardState.history.length || Player.go.previousGameFinalBoardState?.history?.length;
-  const hasRecords = [
-    opponents.Netburners,
-    opponents.SlumSnakes,
-    opponents.TheBlackHand,
-    opponents.Daedalus,
-    opponents.Illuminati,
-  ].find((opponent) => Player.go.status[opponent].wins + Player.go.status[opponent].losses);
+  const hasRecords = opponentList.find(
+    (opponent) => Player.go.status[opponent].wins + Player.go.status[opponent].losses,
+  );
   const isInBn14 = Player.bitNodeN === 14;
 
   // TODO: remove this once testing is completed
