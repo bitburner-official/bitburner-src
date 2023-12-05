@@ -40,7 +40,7 @@ export const opponentDetails = {
     description: "Easy AI",
     flavorText:
       "The Netburners faction are a mysterious group with only the most tenuous control over their subnets. Concentrating mainly on their hacknet server business, IPvGO is not their main strength.",
-    bonusDescription: "cheaper hacknet cost",
+    bonusDescription: "increased hacknet production",
     bonusPower: 1.3,
   },
   [opponents.SlumSnakes]: {
@@ -49,7 +49,7 @@ export const opponentDetails = {
     flavorText:
       "The Slum Snakes faction are a small-time street gang who turned to organized crime using their subnets. They are known to use long router chains snaking across the subnet to encircle territory.",
     bonusDescription: "crime success rate",
-    bonusPower: 1,
+    bonusPower: 1.2,
   },
   [opponents.TheBlackHand]: {
     komi: 3.5,
@@ -73,7 +73,7 @@ export const opponentDetails = {
     flavorText:
       "The Illuminati are thought to only exist in myth. Said to always have prepared defenses in their IPvGO subnets. Provoke them at your own risk.",
     bonusDescription: "faster hack(), grow(), and weaken()",
-    bonusPower: 0.9,
+    bonusPower: 0.7,
   },
 };
 

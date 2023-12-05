@@ -90,6 +90,9 @@ export class BitNodeMultipliers {
   /** Influences how quickly the player's hacking level (not experience) scales */
   HackingLevelMultiplier = 1;
 
+  /** Influences how quickly the player's hack(), grow() and weaken() calls run */
+  HackingSpeedMultiplier = 1;
+
   /**
    * Influences how much money is produced by Hacknet Nodes.
    * Influences the hash rate of Hacknet Servers (unlocked in BitNode-9)

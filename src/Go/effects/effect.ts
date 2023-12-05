@@ -71,10 +71,7 @@ function calculateMults(): Multipliers {
     const effect = CalculateEffect(Player.go.status[opponent].nodePower, opponent);
     switch (opponent) {
       case opponents.Netburners:
-        mults.hacknet_node_purchase_cost /= effect;
-        mults.hacknet_node_ram_cost /= effect;
-        mults.hacknet_node_core_cost /= effect;
-        mults.hacknet_node_level_cost /= effect;
+        mults.hacknet_node_money *= effect;
         break;
       case opponents.SlumSnakes:
         mults.crime_success *= effect;

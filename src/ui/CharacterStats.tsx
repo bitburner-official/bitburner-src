@@ -362,6 +362,7 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Hacking Speed",
                   value: Player.mults.hacking_speed,
+                  effValue: Player.mults.hacking_speed * currentNodeMults.HackingSpeedMultiplier,
                 },
                 {
                   mult: "Hacking Money",
@@ -495,7 +496,8 @@ export function CharacterStats(): React.ReactElement {
               rows={[
                 {
                   mult: "Company Reputation Gain",
-                  value: Player.mults.company_rep * currentNodeMults.CompanyWorkRepGain,
+                  value: Player.mults.company_rep,
+                  effValue: Player.mults.company_rep * currentNodeMults.CompanyWorkRepGain,
                   color: Settings.theme.rep,
                 },
                 {
@@ -517,7 +519,8 @@ export function CharacterStats(): React.ReactElement {
               rows={[
                 {
                   mult: "Crime Success Chance",
-                  value: Player.mults.crime_success * currentNodeMults.CrimeSuccessRate,
+                  value: Player.mults.crime_success,
+                  effValue: Player.mults.crime_success * currentNodeMults.CrimeSuccessRate,
                 },
                 {
                   mult: "Crime Money",

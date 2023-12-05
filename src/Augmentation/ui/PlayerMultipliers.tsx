@@ -96,6 +96,7 @@ export function PlayerMultipliers(): React.ReactElement {
         mult: "Hacking Speed",
         current: Player.mults.hacking_speed,
         augmented: Player.mults.hacking_speed * mults.hacking_speed,
+        bnMult: currentNodeMults.HackingSpeedMultiplier,
       },
       {
         mult: "Hacking Money",
@@ -220,6 +221,7 @@ export function PlayerMultipliers(): React.ReactElement {
       mult: "Company Reputation Gain",
       current: Player.mults.company_rep,
       augmented: Player.mults.company_rep * mults.company_rep,
+      bnMult: currentNodeMults.CompanyWorkRepGain,
       color: Settings.theme.combat,
     },
     {
@@ -240,6 +242,7 @@ export function PlayerMultipliers(): React.ReactElement {
       mult: "Crime Success Chance",
       current: Player.mults.crime_success,
       augmented: Player.mults.crime_success * mults.crime_success,
+      bnMult: currentNodeMults.CrimeSuccessRate,
       color: Settings.theme.combat,
     },
     {

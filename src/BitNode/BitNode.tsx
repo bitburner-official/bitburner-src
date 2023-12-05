@@ -948,7 +948,8 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
       return new BitNodeMultipliers({
         GoPower: 4,
 
-        HackingLevelMultiplier: 0.25,
+        HackingLevelMultiplier: 0.3,
+        HackingSpeedMultiplier: 0.3,
 
         ServerMaxMoney: 0.7,
         ServerStartingMoney: 0.5,

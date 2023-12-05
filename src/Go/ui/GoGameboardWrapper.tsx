@@ -22,9 +22,6 @@ interface IProps {
   showInstructions: () => void;
 }
 
-// TODO: Implement hack speed bitnode multi and fix BN 14 hack speed base level
-// TODO: add effective value of crime success chance and company rep gain
-// TODO: add effective value of crime success chance and company rep gain// TODO: hacknet -> production instead of cost
 // TODO: get current opponent API
 //  if the player passes, and the AI is already winning, and there is no contested territory, just end game?
 // TODO: Cheat success rate decreases per cheat, risk being kicked out after 3? failed cheats
