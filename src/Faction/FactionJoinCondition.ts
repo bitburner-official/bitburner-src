@@ -357,6 +357,7 @@ export const someCondition = (conditions: PlayerCondition[]): CompoundPlayerCond
   *[Symbol.iterator](): IterableIterator<PlayerCondition> {
     for (const cond of conditions) {
       if ("type" in cond && cond.type == "someCondition") {
+        // automatically flatten nested OR lists
         yield* cond as CompoundPlayerCondition;
       } else {
         yield cond;
@@ -382,6 +383,7 @@ export const everyCondition = (conditions: PlayerCondition[]): CompoundPlayerCon
   *[Symbol.iterator](): IterableIterator<PlayerCondition> {
     for (const cond of conditions) {
       if ("type" in cond && cond.type == "everyCondition") {
+        // automatically flatten nested AND lists
         yield* cond as CompoundPlayerCondition;
       } else {
         yield cond;
