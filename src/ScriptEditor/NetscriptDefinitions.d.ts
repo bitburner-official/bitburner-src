@@ -1,5 +1,7 @@
 /** All netscript definitions */
 
+import { opponents } from "../Go/boardState/goConstants";
+
 /** @public */
 interface HP {
   current: number;
@@ -3804,7 +3806,7 @@ export interface Go {
    *  x:0 y:0 represents the bottom-left corner of the board in the UI.
    *
    * @remarks
-   * RAM cost: 2 GB
+   * RAM cost: 4 GB
    *
    * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    */
@@ -3862,9 +3864,15 @@ export interface Go {
    * be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
    *
    * @remarks
-   * RAM cost: 2 GB
+   * RAM cost: 4 GB
    */
   getBoardState(): string[];
+
+  /**
+   * Returns the name of the opponent faction in the current subnet.
+   *  "Netburners" | "Slum Snakes" | "The Black Hand" | "Tetrads" | "Daedalus" | "Illuminati"
+   */
+  getOpponent(): opponents;
 
   /**
    * Gets new IPvGO subnet with the specified size owned by the listed faction, ready for the player to make a move.
@@ -3881,7 +3889,7 @@ export interface Go {
    * RAM cost: 0 GB
    */
   resetBoardState(
-    opponent: "Netburners" | "Slum Snakes" | "The Black Hand" | "Daedalus" | "Illuminati",
+    opponent: "Netburners" | "Slum Snakes" | "The Black Hand" | "Tetrads" | "Daedalus" | "Illuminati",
     boardSize: 5 | 7 | 9 | 13,
   ): string[] | undefined;
 
@@ -3904,7 +3912,8 @@ export interface Go {
      * be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
      *
      * @remarks
-     * RAM cost: 4 GB
+     * RAM cost: 8 GB
+     * (This is intentionally expensive; you can derive this info from just getBoardState() )
      */
     getValidMoves(): boolean[][];
 
@@ -3989,7 +3998,7 @@ export interface Go {
      * Returns your chance of successfully playing one of the special moves in the ns.go.cheat API.
      * Scales with your crime success rate stat. Caps at 80%.
      *
-     * Warning: if you fail to play a cheat move, your turn will be skipped. In addition, if you fail, there is a
+     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
      * small (~10%) chance you will instantly be ejected from the subnet.
      *
      * @remarks
@@ -4002,11 +4011,11 @@ export interface Go {
      *
      * Success chance can be seen via ns.go.getCheatSuccessChance()
      *
-     * Warning: if you fail to play a cheat move, your turn will be skipped. In addition, if you fail, there is a
+     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
      * small (~10%) chance you will instantly be ejected from the subnet.
      *
      * @remarks
-     * RAM cost: 4 GB
+     * RAM cost: 8 GB
      * Requires Bitnode 14.2 to use
      *
      * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
@@ -4026,11 +4035,11 @@ export interface Go {
      *
      * Success chance can be seen via ns.go.getCheatSuccessChance()
      *
-     * Warning: if you fail to play a cheat move, your turn will be skipped. In addition, if you fail, there is a
+     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
      * small (~10%) chance you will instantly be ejected from the subnet.
      *
      * @remarks
-     * RAM cost: 4 GB
+     * RAM cost: 8 GB
      * Requires Bitnode 14.2 to use
      *
      * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
@@ -4040,6 +4049,55 @@ export interface Go {
       y1: number,
       x2: number,
       x2: number,
+    ): Promise<{
+      type: "invalid" | "move" | "pass" | "gameOver";
+      x: number;
+      y: number;
+      success: boolean;
+    }>;
+
+    /**
+     * Attempts to repair an offline node, leaving an empty playable node behind.
+     *
+     * Success chance can be seen via ns.go.getCheatSuccessChance()
+     *
+     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
+     * small (~10%) chance you will instantly be ejected from the subnet.
+     *
+     * @remarks
+     * RAM cost: 8 GB
+     * Requires Bitnode 14.2 to use
+     *
+     * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+     */
+    repairOfflineNode(
+      x: number,
+      y: number,
+    ): Promise<{
+      type: "invalid" | "move" | "pass" | "gameOver";
+      x: number;
+      y: number;
+      success: boolean;
+    }>;
+
+    /**
+     * Attempts to destroy an empty node, leaving an offline dead space that does not count as territory or
+     * provide open node access to adjacent routers.
+     *
+     * Success chance can be seen via ns.go.getCheatSuccessChance()
+     *
+     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
+     * small (~10%) chance you will instantly be ejected from the subnet.
+     *
+     * @remarks
+     * RAM cost: 8 GB
+     * Requires Bitnode 14.2 to use
+     *
+     * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+     */
+    destroyNode(
+      x: number,
+      y: number,
     ): Promise<{
       type: "invalid" | "move" | "pass" | "gameOver";
       x: number;

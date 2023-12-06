@@ -956,7 +956,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         ServerStartingSecurity: 1.5,
 
         CrimeMoney: 0.75,
-        CrimeSuccessRate: 0.25,
+        CrimeSuccessRate: 0.4,
         HacknetNodeMoney: 0.25,
         ScriptHackMoney: 0.7,
 

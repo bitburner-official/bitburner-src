@@ -245,20 +245,23 @@ const gang = {
 
 // Go API
 const go = {
-  makeMove: 2,
+  makeMove: 4,
   passTurn: 0,
-  getBoardState: 2,
+  getBoardState: 4,
+  getOpponent: 0,
   resetBoardState: 0,
   analysis: {
-    getValidMoves: 4,
+    getValidMoves: 8,
     getChains: 16,
     getLiberties: 16,
     getControlledEmptyNodes: 16,
   },
   cheat: {
     getCheatSuccessChance: 1,
-    removeRouter: 4,
-    playTwoMoves: 4,
+    removeRouter: 8,
+    playTwoMoves: 8,
+    repairOfflineNode: 8,
+    destroyNode: 8,
   },
 } as const;
 

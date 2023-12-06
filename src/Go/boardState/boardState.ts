@@ -34,6 +34,7 @@ export function getNewBoardState(
     previousPlayer: playerColors.white,
     ai: ai,
     passCount: 0,
+    cheatCount: 0,
     board: Array.from({ length: boardSize }, (_, x) =>
       Array.from({ length: boardSize }, (_, y) => ({
         player: boardToCopy?.[x]?.[y]?.player ?? playerColors.empty,

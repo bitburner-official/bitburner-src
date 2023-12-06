@@ -22,10 +22,6 @@ interface IProps {
   showInstructions: () => void;
 }
 
-// TODO: get current opponent API
-//  if the player passes, and the AI is already winning, and there is no contested territory, just end game?
-// TODO: Cheat success rate decreases per cheat, risk being kicked out after 3? failed cheats
-
 // TODO: bonus time?
 
 /*

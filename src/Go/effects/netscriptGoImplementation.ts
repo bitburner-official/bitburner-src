@@ -228,31 +228,39 @@ export async function determineCheatSuccess(
   successRngOverride?: number,
   ejectRngOverride?: number,
 ): Promise<Play> {
+  const state = Player.go.boardState;
   const rng = new WHRNG(Player.totalPlaytime);
-  if ((successRngOverride ?? rng.random()) < cheatSuccessChance()) {
+  // If cheat is successful, run callback
+  if ((successRngOverride ?? rng.random()) <= cheatSuccessChance(state.cheatCount)) {
     callback();
-    return getAIMove(logger, Player.go.boardState, true);
-  } else if ((ejectRngOverride ?? rng.random()) < 0.1) {
+    state.cheatCount++;
+    return getAIMove(logger, state, true);
+  }
+  // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly losing
+  else if (state.cheatCount && (ejectRngOverride ?? rng.random()) < 0.1) {
     logger(`Cheat failed! You have been ejected from the subnet.`);
-    resetBoardState(logger, Player.go.boardState.ai, Player.go.boardState.board[0].length);
+    resetBoardState(logger, state.ai, state.board[0].length);
     return {
       type: playTypes.gameOver,
       x: -1,
       y: -1,
       success: false,
     };
-  } else {
+  }
+  // If the cheat fails, your turn is skipped
+  else {
     logger(`Cheat failed. Your turn has been skipped.`);
-    passTurn(Player.go.boardState, playerColors.black, false);
-    return getAIMove(logger, Player.go.boardState, false);
+    passTurn(state, playerColors.black, false);
+    state.cheatCount++;
+    return getAIMove(logger, state, false);
   }
 }
 
 /**
- * Cheating success rate scales with player's crime success rate.
+ * Cheating success rate scales with player's crime success rate, and decreases with prior cheat attempts.
  */
-export function cheatSuccessChance() {
-  return Math.min(0.2 * Player.mults.crime_success, 0.8);
+export function cheatSuccessChance(cheatCount: number) {
+  return Math.min(0.6 * (0.8 ^ cheatCount) * Player.mults.crime_success, 1);
 }
 
 /**
@@ -287,7 +295,7 @@ export function cheatRemoveRouter(
       point.player = playerColors.empty;
       Player.go.boardState = updateChains(Player.go.boardState);
       Player.go.boardState.previousPlayer = playerColors.black;
-      logger(`Cheat successful. The point ${point.x},${point.y} was cleared.`);
+      logger(`Cheat successful. The point ${x},${y} was cleared.`);
     },
     successRngOverride,
     ejectRngOverride,
@@ -333,7 +341,69 @@ export function cheatPlayTwoMoves(
       Player.go.boardState = updateCaptures(Player.go.boardState, playerColors.black);
       Player.go.boardState.previousPlayer = playerColors.black;
 
-      logger(`Cheat successful. Two go moves played: ${point1.x},${point1.y} and ${point2.x},${point2.y}`);
+      logger(`Cheat successful. Two go moves played: ${x1},${y1} and ${x2},${y2}`);
+    },
+    successRngOverride,
+    ejectRngOverride,
+  );
+}
+
+export function cheatRepairOfflineNode(
+  logger: (s: string) => void,
+  x: number,
+  y: number,
+  successRngOverride?: number,
+  ejectRngOverride?: number,
+) {
+  const point = Player.go.boardState.board[x][y];
+  if (point) {
+    logger(`The node ${x},${y} is not offline, so you cannot repair the node.`);
+    return invalidMoveResponse;
+  }
+
+  return determineCheatSuccess(
+    logger,
+    () => {
+      Player.go.boardState.board[x][y] = {
+        chain: "",
+        liberties: null,
+        y,
+        player: playerColors.empty,
+        x,
+      };
+      Player.go.boardState = updateChains(Player.go.boardState);
+      Player.go.boardState.previousPlayer = playerColors.black;
+      logger(`Cheat successful. The point ${x},${y} was repaired.`);
+    },
+    successRngOverride,
+    ejectRngOverride,
+  );
+}
+
+export function cheatDestroyNode(
+  logger: (s: string) => void,
+  x: number,
+  y: number,
+  successRngOverride?: number,
+  ejectRngOverride?: number,
+) {
+  const point = Player.go.boardState.board[x][y];
+  if (!point) {
+    logger(`The node ${x},${y} is already offline, so you cannot destroy the node.`);
+    return invalidMoveResponse;
+  }
+  if (point.player !== playerColors.empty) {
+    logger(`The point ${x},${y} is not empty, so you cannot destroy this node.`);
+    return invalidMoveResponse;
+  }
+
+  return determineCheatSuccess(
+    logger,
+    () => {
+      Player.go.boardState.board[x][y] = null;
+      Player.go.boardState = updateChains(Player.go.boardState);
+      Player.go.boardState.previousPlayer = playerColors.black;
+      logger(`Cheat successful. The point ${x},${y} was repaired.`);
     },
     successRngOverride,
     ejectRngOverride,

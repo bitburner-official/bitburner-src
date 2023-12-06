@@ -5,8 +5,10 @@ import { Go } from "@nsdefs";
 import { Play, playerColors } from "../Go/boardState/goConstants";
 import { getSimplifiedBoardState } from "../Go/boardAnalysis/boardAnalysis";
 import {
+  cheatDestroyNode,
   cheatPlayTwoMoves,
   cheatRemoveRouter,
+  cheatRepairOfflineNode,
   cheatSuccessChance,
   checkCheatApiAccess,
   getChains,
@@ -64,6 +66,9 @@ export function NetscriptGo(): InternalAPI<Go> {
     getBoardState: () => () => {
       return getSimplifiedBoardState(Player.go.boardState.board);
     },
+    getOpponent: () => () => {
+      return Player.go.boardState.ai;
+    },
     resetBoardState: (ctx) => (_opponent, _boardSize) => {
       const opponentString = helpers.string(ctx, "opponent", _opponent);
       const boardSize = helpers.number(ctx, "boardSize", _boardSize);
@@ -87,7 +92,7 @@ export function NetscriptGo(): InternalAPI<Go> {
     cheat: {
       getCheatSuccessChance: (ctx: NetscriptContext) => () => {
         checkCheatApiAccess(error(ctx));
-        return cheatSuccessChance();
+        return cheatSuccessChance(Player.go.boardState.cheatCount);
       },
       removeRouter:
         (ctx: NetscriptContext) =>
@@ -111,6 +116,26 @@ export function NetscriptGo(): InternalAPI<Go> {
           validateRowAndColumn(ctx, x2, y2);
 
           return cheatPlayTwoMoves(logger(ctx), x1, y1, x2, y2);
+        },
+      repairOfflineNode:
+        (ctx: NetscriptContext) =>
+        async (_x, _y): Promise<Play> => {
+          checkCheatApiAccess(error(ctx));
+          const x = helpers.number(ctx, "x", _x);
+          const y = helpers.number(ctx, "y", _y);
+          validateRowAndColumn(ctx, x, y);
+
+          return cheatRepairOfflineNode(logger(ctx), x, y);
+        },
+      destroyNode:
+        (ctx: NetscriptContext) =>
+        async (_x, _y): Promise<Play> => {
+          checkCheatApiAccess(error(ctx));
+          const x = helpers.number(ctx, "x", _x);
+          const y = helpers.number(ctx, "y", _y);
+          validateRowAndColumn(ctx, x, y);
+
+          return cheatDestroyNode(logger(ctx), x, y);
         },
     },
   };

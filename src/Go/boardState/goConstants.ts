@@ -132,6 +132,7 @@ export type BoardState = {
   history: Board[];
   ai: opponents;
   passCount: number;
+  cheatCount: number;
 };
 
 export type PointState = {
