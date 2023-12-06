@@ -136,6 +136,11 @@ export function initForeignServers(homeComputer: Server): void {
     else return getRandomInt(value.min, value.max);
   };
 
+  const toMin = (value: number | IMinMaxRange): number => {
+    if (typeof value === "number") return value;
+    else return getRandomInt(value.min, value.min);
+  };
+
   for (const metadata of serverMetadata) {
     const serverParams: IServerParams = {
       hostname: metadata.hostname,
@@ -144,16 +149,27 @@ export function initForeignServers(homeComputer: Server): void {
       organizationName: metadata.organizationName,
     };
 
-    if (metadata.maxRamExponent !== undefined) {
-      serverParams.maxRam = Math.pow(2, toNumber(metadata.maxRamExponent));
-    }
-
     if (metadata.hackDifficulty) serverParams.hackDifficulty = toNumber(metadata.hackDifficulty);
     if (metadata.moneyAvailable) serverParams.moneyAvailable = toNumber(metadata.moneyAvailable);
     if (metadata.requiredHackingSkill) serverParams.requiredHackingSkill = toNumber(metadata.requiredHackingSkill);
     if (metadata.serverGrowth) serverParams.serverGrowth = toNumber(metadata.serverGrowth);
 
     const server = new Server(serverParams);
+
+    if (metadata.networkLayer) {
+      const maxCount = Math.floor(toNumber(metadata.networkLayer) / 2);
+      const minCount = Math.ceil(toNumber(metadata.networkLayer) / 4);
+      const coreCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
+      server.cpuCores = toNumber(coreCount);
+    }
+    if (metadata.maxRamExponent !== undefined) {
+      const minRam = Math.pow(2, toMin(metadata.maxRamExponent));
+      serverParams.maxRam = Math.pow(2, toNumber(metadata.maxRamExponent));
+      if (serverParams.maxRam == minRam) {
+        server.cpuCores = server.cpuCores + 1;
+      }
+    }
+
     for (const filename of metadata.literature || []) {
       server.messages.push(filename);
     }
