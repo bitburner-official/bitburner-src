@@ -42,7 +42,7 @@ export function writePort(n: PortNumber, value: unknown): PortData | null {
       `port.write: Tried to write type ${typeof value}. Only string and number types may be written to ports.`,
     );
   }
-  let { data, resolvers } = getPort(n);
+  const { data, resolvers } = getPort(n);
   data.push(value);
   for (const res of resolvers.splice(0, resolvers.length)) res();
   if (data.length > Settings.MaxPortCapacity) return data.shift() as PortData;
@@ -55,7 +55,7 @@ export function tryWritePort(n: PortNumber, value: unknown): boolean {
       `port.write: Tried to write type ${typeof value}. Only string and number types may be written to ports.`,
     );
   }
-  let { data, resolvers } = getPort(n);
+  const { data, resolvers } = getPort(n);
   if (data.length >= Settings.MaxPortCapacity) return false;
   data.push(value);
   for (const res of resolvers.splice(0, resolvers.length)) res();
