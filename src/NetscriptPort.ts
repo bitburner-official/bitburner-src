@@ -44,8 +44,7 @@ export function writePort(n: PortNumber, value: unknown): PortData | null {
   }
   let { data, resolvers } = getPort(n);
   data.push(value);
-  for (const res of resolvers) res();
-  resolvers = [];
+  for (const res of resolvers.splice(0, resolvers.length)) res();
   if (data.length > Settings.MaxPortCapacity) return data.shift() as PortData;
   return null;
 }
@@ -59,8 +58,7 @@ export function tryWritePort(n: PortNumber, value: unknown): boolean {
   let { data, resolvers } = getPort(n);
   if (data.length >= Settings.MaxPortCapacity) return false;
   data.push(value);
-  for (const res of resolvers) res();
-  resolvers = [];
+  for (const res of resolvers.splice(0, resolvers.length)) res();
   return true;
 }
 
