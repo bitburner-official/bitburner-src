@@ -323,7 +323,7 @@ function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): PointState 
     return moves.jump.point;
   }
 
-  if (rng < 0.6 && moves.surround && moves.surround.point && (moves.surround?.newLibertyCount ?? 9) <= 2){
+  if (rng < 0.6 && moves.surround && moves.surround.point && (moves.surround?.newLibertyCount ?? 9) <= 2) {
     console.debug("surround move chosen");
     return moves.surround.point;
   }
@@ -377,7 +377,13 @@ function isCornerAvailableForMove(boardState: BoardState, x1: number, y1: number
 /**
  * Select a move from the list of open-area moves
  */
-function getExpansionMove(boardState: BoardState, player: PlayerColor, availableSpaces: PointState[], rng: number, moveArray?: Move[]) {
+function getExpansionMove(
+  boardState: BoardState,
+  player: PlayerColor,
+  availableSpaces: PointState[],
+  rng: number,
+  moveArray?: Move[],
+) {
   const moveOptions = moveArray ?? getExpansionMoveArray(boardState, player, availableSpaces);
   const randomIndex = floor(rng * moveOptions.length);
   return moveOptions[randomIndex];
@@ -386,13 +392,21 @@ function getExpansionMove(boardState: BoardState, player: PlayerColor, available
 /**
  * Get a move in open space that is nearby a friendly piece
  */
-function getJumpMove(boardState: BoardState, player: PlayerColor, availableSpaces: PointState[], rng: number, moveArray?: Move[]) {
+function getJumpMove(
+  boardState: BoardState,
+  player: PlayerColor,
+  availableSpaces: PointState[],
+  rng: number,
+  moveArray?: Move[],
+) {
   const board = boardState.board;
-  const moveOptions = (moveArray ?? getExpansionMoveArray(boardState, player, availableSpaces)).filter(({point}) =>
-          [board[point.x]?.[point.y + 2],
+  const moveOptions = (moveArray ?? getExpansionMoveArray(boardState, player, availableSpaces)).filter(({ point }) =>
+    [
+      board[point.x]?.[point.y + 2],
       board[point.x + 2]?.[point.y],
       board[point.x]?.[point.y - 2],
-      board[point.x - 2]?.[point.y]].some(point => point?.player === player)
+      board[point.x - 2]?.[point.y],
+    ].some((point) => point?.player === player),
   );
 
   const randomIndex = floor(rng * moveOptions.length);
@@ -653,6 +667,7 @@ function getEyeCreationMoves(
       availableSpaces.find((availablePoint) => availablePoint.x === point.x && availablePoint.y === point.y),
     )
     .filter((point: PointState) => {
+      console.warn("eye check ", point.x, point.y);
       const neighbors = findNeighbors(boardState, point.x, point.y);
       const neighborhood = [neighbors.north, neighbors.east, neighbors.south, neighbors.west];
       return (
@@ -714,7 +729,7 @@ async function getMoveOptions(
 ): Promise<MoveOptions> {
   const availableSpaces = findDisputedTerritory(boardState, player, smart);
   const contestedPoints = getDisputedTerritoryMoves(boardState, player, availableSpaces);
-  const expansionMoves = getExpansionMoveArray(boardState, player, availableSpaces)
+  const expansionMoves = getExpansionMoveArray(boardState, player, availableSpaces);
 
   // If the player is passing, and all territory is surrounded by a single color: do not suggest moves that
   // needlessly extend the game, unless they actually can change the score

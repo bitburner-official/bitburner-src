@@ -22,8 +22,11 @@ import { contains, isNotNull } from "../boardState/boardState";
 export function findDisputedTerritory(boardState: BoardState, player: playerColors, excludeFriendlyEyes?: boolean) {
   let validMoves = getAllValidMoves(boardState, player);
   if (excludeFriendlyEyes) {
-    const friendlyEyes = getAllEyes(boardState, player).flat().flat();
-    validMoves = validMoves.filter(point => !contains(friendlyEyes, point))
+    const friendlyEyes = getAllEyes(boardState, player)
+      .filter((eye) => eye.length >= 2)
+      .flat()
+      .flat();
+    validMoves = validMoves.filter((point) => !contains(friendlyEyes, point));
   }
   const opponent = player === playerColors.white ? playerColors.black : playerColors.white;
   const chains = getAllChains(boardState);
