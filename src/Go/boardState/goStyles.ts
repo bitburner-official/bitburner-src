@@ -211,6 +211,12 @@ export const pointStyle = makeStyles((theme: Theme) =>
         backgroundImage:
           "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
       },
+
+      "& $innerPoint": {
+        width: "70%",
+        height: "70%",
+        margin: "15%",
+      },
     },
     tradStone: {
       display: "none",
