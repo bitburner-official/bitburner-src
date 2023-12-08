@@ -987,6 +987,7 @@ type SleeveBladeburnerTask = {
   cyclesWorked: number;
   cyclesNeeded: number;
   nextCompletion: Promise<void>;
+  tasksCompleted: number;
 };
 
 /** @public */
@@ -1005,6 +1006,7 @@ type SleeveCrimeTask = {
   crimeType: CrimeType | `${CrimeType}`;
   cyclesWorked: number;
   cyclesNeeded: number;
+  tasksCompleted: number;
 };
 
 /** @public */
