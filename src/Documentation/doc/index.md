@@ -1,6 +1,8 @@
 # Documentation
 
-## [Beginners guide](help/getting_started.md)
+## Guides
+
+- [Beginners guide](help/getting_started.md)
 
 ## Basic Mechanics
 
@@ -31,6 +33,7 @@
 - [Grafting](advanced/grafting.md)
 - [Hacknet Servers](advanced/hacknetservers.md)
 - [Intelligence](advanced/intelligence.md)
+- [List of Factions and their Requirements](advanced/faction_list.md)
 - [Offline Scripts and Bonus Time](advanced/offlineandbonustime.md)
 - [Sleeves](advanced/sleeves.md)
 - [Source-Files](advanced/sourcefiles.md)
