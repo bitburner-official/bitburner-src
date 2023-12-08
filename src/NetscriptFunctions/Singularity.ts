@@ -1191,7 +1191,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       enterBitNode(false, Player.bitNodeN, nextBN);
       if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
     },
-    getCurrentWork: () => () => {
+    getCurrentWork: (ctx) => () => {
+      helpers.checkSingularityAccess(ctx);
       if (!Player.currentWork) return null;
       return Player.currentWork.APICopy();
     },
