@@ -11,6 +11,7 @@ import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
+import { getCoreBonus } from "../Server/ServerHelpers";
 
 export function NetscriptStanek(): InternalAPI<IStanek> {
   function checkStanekAPIAccess(ctx: NetscriptContext): void {
@@ -43,11 +44,13 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
         );
       }
       //Charge the fragment
+      const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
+      const coreBonus = getCoreBonus(cores);
       const inBonus = staneksGift.inBonus();
       const time = inBonus ? 200 : 1000;
       if (inBonus) staneksGift.isBonusCharging = true;
       return helpers.netscriptDelay(ctx, time).then(function () {
-        staneksGift.charge(fragment, ctx.workerScript.scriptRef.threads);
+        staneksGift.charge(fragment, ctx.workerScript.scriptRef.threads * coreBonus);
         helpers.log(ctx, () => `Charged fragment with ${ctx.workerScript.scriptRef.threads} threads.`);
         return Promise.resolve();
       });

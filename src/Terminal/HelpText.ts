@@ -99,6 +99,7 @@ export const HelpTexts: Record<string, string[]> = {
     "'alias NAME=VALUE' on the Terminal. ",
     " ",
     "The 'unalias' command can be used to remove aliases.",
+    "NOTE:  The --all alias is reserved for removal.",
     " ",
   ],
   analyze: [
@@ -443,8 +444,10 @@ export const HelpTexts: Record<string, string[]> = {
   ],
   unalias: [
     "Usage: unalias [alias name]",
+    "Usage: unalias -all",
     " ",
     "Deletes the specified alias. Note that the double quotation marks are required. ",
+    "The --all command will remove ALL aliases that you have set.",
     " ",
     "As an example, if an alias was declared using:",
     " ",

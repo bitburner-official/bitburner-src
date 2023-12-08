@@ -308,7 +308,7 @@ exports[`Check Save File Continuity FactionsSave continuity 1`] = `
   "Bladeburners": {
     "ctor": "Faction",
     "data": {
-      "discovery": "unknown",
+      "discovery": "known",
       "favor": 0,
       "playerReputation": 4000,
     },
@@ -340,7 +340,7 @@ exports[`Check Save File Continuity FactionsSave continuity 1`] = `
   "CyberSec": {
     "ctor": "Faction",
     "data": {
-      "discovery": "unknown",
+      "discovery": "known",
       "favor": 20,
       "playerReputation": 1000000,
     },
@@ -476,7 +476,7 @@ exports[`Check Save File Continuity FactionsSave continuity 1`] = `
   "Slum Snakes": {
     "ctor": "Faction",
     "data": {
-      "discovery": "unknown",
+      "discovery": "known",
       "favor": 0,
       "playerReputation": 0,
     },

@@ -530,7 +530,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     manualHack: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       const server = Player.getCurrentServer();
-      return helpers.hack(ctx, server.hostname, true);
+      return helpers.hack(ctx, server.hostname, true, null);
     },
     installBackdoor: (ctx) => async (): Promise<void> => {
       helpers.checkSingularityAccess(ctx);

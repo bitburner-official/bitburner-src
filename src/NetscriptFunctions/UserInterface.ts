@@ -5,9 +5,43 @@ import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
 import { CONSTANTS } from "../Constants";
 import { hash } from "../hash/hash";
-import { InternalAPI } from "../Netscript/APIWrapper";
+import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { Terminal } from "../../src/Terminal";
-import { helpers, assertObjectType } from "../Netscript/NetscriptHelpers";
+import { helpers, makeRuntimeErrorMsg } from "../Netscript/NetscriptHelpers";
+
+/** Will probably remove the below function in favor of a different approach to object type assertion.
+ *  This method cannot be used to handle optional properties. */
+export function assertObjectType<T extends object>(
+  ctx: NetscriptContext,
+  name: string,
+  obj: unknown,
+  desiredObject: T,
+): asserts obj is T {
+  if (typeof obj !== "object" || obj === null) {
+    throw makeRuntimeErrorMsg(
+      ctx,
+      `Type ${obj === null ? "null" : typeof obj} provided for ${name}. Must be an object.`,
+      "TYPE",
+    );
+  }
+  for (const [key, val] of Object.entries(desiredObject)) {
+    if (!Object.hasOwn(obj, key)) {
+      throw makeRuntimeErrorMsg(
+        ctx,
+        `Object provided for argument ${name} is missing required property ${key}.`,
+        "TYPE",
+      );
+    }
+    const objVal = (obj as Record<string, unknown>)[key];
+    if (typeof val !== typeof objVal) {
+      throw makeRuntimeErrorMsg(
+        ctx,
+        `Incorrect type ${typeof objVal} provided for property ${key} on ${name} argument. Should be type ${typeof val}.`,
+        "TYPE",
+      );
+    }
+  }
+}
 
 export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
   return {

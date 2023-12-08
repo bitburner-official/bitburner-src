@@ -72,6 +72,11 @@ export function SleevesDev(): React.ReactElement {
               </td>
             </tr>
             <tr>
+              <td>
+                <Typography>Total:</Typography>
+              </td>
+            </tr>
+            <tr>
               <td colSpan={3}>
                 <Adjuster
                   label="Stored Cycles"

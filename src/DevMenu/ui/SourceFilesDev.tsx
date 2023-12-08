@@ -5,7 +5,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { makeStyles } from "@mui/styles";
 
 import { Player } from "@player";
-import { useRerender } from "../../ui/React/hooks";
+import { Sleeve } from "../../PersonObjects/Sleeve/Sleeve";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
+import { MaxSleevesFromCovenant } from "../../PersonObjects/Sleeve/SleeveCovenantPurchases";
 
 // Update as additional BitNodes get implemented
 const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
@@ -16,11 +18,11 @@ const useStyles = makeStyles({
   },
   extraInfo: {
     marginLeft: "0.5em",
+    marginRight: "0.5em",
   },
 });
 
-export function SourceFilesDev(): React.ReactElement {
-  const rerender = useRerender();
+export function SourceFilesDev({ parentRerender }: { parentRerender: () => void }): React.ReactElement {
   const classes = useStyles();
 
   const setSF = useCallback(
@@ -30,17 +32,33 @@ export function SourceFilesDev(): React.ReactElement {
       }
       if (sfLvl === 0) {
         Player.sourceFiles.delete(sfN);
-        rerender();
+        if (sfN === 10) Sleeve.recalculateNumOwned();
+        parentRerender();
         return;
       }
       Player.sourceFiles.set(sfN, sfLvl);
-      rerender();
+      if (sfN === 10) Sleeve.recalculateNumOwned();
+      parentRerender();
     },
-    [rerender],
+    [parentRerender],
   );
 
   const setAllSF = useCallback((sfLvl: number) => () => validSFN.forEach((sfN) => setSF(sfN, sfLvl)()), [setSF]);
   const clearExploits = () => (Player.exploits = []);
+
+  const addSleeve = useCallback(() => {
+    if (Player.sleevesFromCovenant >= 10) return;
+    Player.sleevesFromCovenant += 1;
+    Sleeve.recalculateNumOwned();
+    parentRerender();
+  }, [parentRerender]);
+
+  const removeSleeve = useCallback(() => {
+    if (Player.sleevesFromCovenant <= 0) return;
+    Player.sleevesFromCovenant -= 1;
+    Sleeve.recalculateNumOwned();
+    parentRerender();
+  }, [parentRerender]);
 
   const devLvls = [0, 1, 2, 3];
 
@@ -66,6 +84,23 @@ export function SourceFilesDev(): React.ReactElement {
                 </Button>
               ))}
             {sfN && <Typography className={classes.extraInfo}>{`Level: ${level}`}</Typography>}
+            {sfN === 10 && (
+              <>
+                <ButtonWithTooltip
+                  disabledTooltip={Player.sleevesFromCovenant <= 0 ? "Already at minimum" : ""}
+                  onClick={removeSleeve}
+                >
+                  -1 sleeve
+                </ButtonWithTooltip>
+                <ButtonWithTooltip
+                  disabledTooltip={Player.sleevesFromCovenant >= MaxSleevesFromCovenant ? "Already at maximum" : ""}
+                  onClick={addSleeve}
+                >
+                  +1 sleeve
+                </ButtonWithTooltip>
+                <Typography className={classes.extraInfo}>Extra sleeves: {Player.sleevesFromCovenant}</Typography>
+              </>
+            )}
           </ButtonGroup>
         </td>
       </tr>

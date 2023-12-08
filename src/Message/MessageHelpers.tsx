@@ -124,7 +124,7 @@ const Messages: Record<MessageFilename, Message> = {
     MessageFilename.Jumper2,
     "Do not try to save the world. There is no world to save. If " +
       "you want to find the truth, worry only about yourself. Ethics and " +
-      `morals will get you killed. \n\nWatch out for a hacking group known as ${FactionName.NiteSec}.` +
+      `morals will get you killed. \n\nKeep an eye out for a hacking group known as ${FactionName.NiteSec}.` +
       "\n\n-jump3R",
     FactionName.NiteSec,
   ),

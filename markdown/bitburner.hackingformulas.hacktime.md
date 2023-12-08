@@ -23,5 +23,5 @@ hackTime(server: Server, player: Person): number;
 
 number
 
-The calculated hack time.
+The calculated hack time, in milliseconds.
 
