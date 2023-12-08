@@ -15,18 +15,16 @@ const FundsSourceLongTerm = [
 
 // Funds transactions which should be included in earnings projections for valuation.
 // This includes all automatic or indefinetly-repeatable income and operating expenses.
-const FundsSourceShortTerm = [
-  "operating expenses",
-  "operating revenue",
-  "dividends",
-  "tea",
-  "parties",
-  "advert",
-  "materials",
-  "glitch in reality",
-] as const;
+type FundsSourceShortTerm =
+  | "operating expenses"
+  | "operating revenue"
+  | "dividends"
+  | "tea"
+  | "parties"
+  | "advert"
+  | "materials"
+  | "glitch in reality";
 
-export type FundsSource = (typeof FundsSourceShortTerm)[number] | (typeof FundsSourceLongTerm)[number];
+export type FundsSource = (typeof FundsSourceLongTerm)[number] | FundsSourceShortTerm;
 
 export const LongTermFundsSources = new Set<FundsSource>(FundsSourceLongTerm);
-export const ShortTermFundsSources = new Set<FundsSource>(FundsSourceShortTerm);
