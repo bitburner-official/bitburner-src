@@ -35,5 +35,5 @@ a promise that contains if your move was valid and successful, the opponent move
 
 ## Remarks
 
-RAM cost: 2 GB
+RAM cost: 4 GB
 

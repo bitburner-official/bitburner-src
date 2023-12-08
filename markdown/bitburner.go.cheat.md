@@ -11,16 +11,7 @@ Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Bitnode 
 ```typescript
 cheat: {
     getCheatSuccessChance(): number;
-    removeOpponentRouter(
-      x: number,
-      y: number,
-    ): Promise<{
-      type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
-      success: boolean;
-    }>;
-    removeAllyRouter(
+    removeRouter(
       x: number,
       y: number,
     ): Promise<{
@@ -34,6 +25,26 @@ cheat: {
       y1: number,
       x2: number,
       x2: number,
+    ): Promise<{
+      type: "invalid" | "move" | "pass" | "gameOver";
+      x: number;
+      y: number;
+      success: boolean;
+    }>;
+
+    repairOfflineNode(
+      x: number,
+      y: number,
+    ): Promise<{
+      type: "invalid" | "move" | "pass" | "gameOver";
+      x: number;
+      y: number;
+      success: boolean;
+    }>;
+
+    destroyNode(
+      x: number,
+      y: number,
     ): Promise<{
       type: "invalid" | "move" | "pass" | "gameOver";
       x: number;

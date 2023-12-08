@@ -34,5 +34,5 @@ string\[\]
 
 ## Remarks
 
-RAM cost: 2 GB
+RAM cost: 4 GB
 

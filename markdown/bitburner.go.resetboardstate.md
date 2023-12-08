@@ -14,21 +14,21 @@ opponent is "Netburners" or "Slum Snakes" or "The Black Hand" or "Daedalus" or "
 
 ```typescript
 resetBoardState(
-    opponent: "Netburners" | "Slum Snakes" | "The Black Hand" | "Daedalus" | "Illuminati",
+    opponent: "Netburners" | "Slum Snakes" | "The Black Hand" | "Tetrads" | "Daedalus" | "Illuminati",
     boardSize: 5 | 7 | 9 | 13,
-  ): string[];
+  ): string[] | undefined;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  opponent | "Netburners" \| "Slum Snakes" \| "The Black Hand" \| "Daedalus" \| "Illuminati" |  |
+|  opponent | "Netburners" \| "Slum Snakes" \| "The Black Hand" \| "Tetrads" \| "Daedalus" \| "Illuminati" |  |
 |  boardSize | 5 \| 7 \| 9 \| 13 |  |
 
 **Returns:**
 
-string\[\]
+string\[\] \| undefined
 
 a simplified version of the board state as an array of strings representing the board columns. See ns.Go.getBoardState() for full details
 
