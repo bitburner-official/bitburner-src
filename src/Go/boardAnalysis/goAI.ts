@@ -318,6 +318,16 @@ function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): PointState 
     return moves.pattern;
   }
 
+  if (rng > 0.4 && moves.jump) {
+    console.debug("Jump move chosen");
+    return moves.jump.point;
+  }
+
+  if (rng < 0.6 && moves.surround && moves.surround.point && (moves.surround?.newLibertyCount ?? 9) <= 2){
+    console.debug("surround move chosen");
+    return moves.surround.point;
+  }
+
   return null;
 }
 
@@ -367,8 +377,24 @@ function isCornerAvailableForMove(boardState: BoardState, x1: number, y1: number
 /**
  * Select a move from the list of open-area moves
  */
-function getExpansionMove(boardState: BoardState, player: PlayerColor, availableSpaces: PointState[], rng: number) {
-  const moveOptions = getExpansionMoveArray(boardState, player, availableSpaces);
+function getExpansionMove(boardState: BoardState, player: PlayerColor, availableSpaces: PointState[], rng: number, moveArray?: Move[]) {
+  const moveOptions = moveArray ?? getExpansionMoveArray(boardState, player, availableSpaces);
+  const randomIndex = floor(rng * moveOptions.length);
+  return moveOptions[randomIndex];
+}
+
+/**
+ * Get a move in open space that is nearby a friendly piece
+ */
+function getJumpMove(boardState: BoardState, player: PlayerColor, availableSpaces: PointState[], rng: number, moveArray?: Move[]) {
+  const board = boardState.board;
+  const moveOptions = (moveArray ?? getExpansionMoveArray(boardState, player, availableSpaces)).filter(({point}) =>
+          [board[point.x]?.[point.y + 2],
+      board[point.x + 2]?.[point.y],
+      board[point.x]?.[point.y - 2],
+      board[point.x - 2]?.[point.y]].some(point => point?.player === player)
+  );
+
   const randomIndex = floor(rng * moveOptions.length);
   return moveOptions[randomIndex];
 }
@@ -686,8 +712,9 @@ async function getMoveOptions(
   rng: number,
   smart = true,
 ): Promise<MoveOptions> {
-  const availableSpaces = findDisputedTerritory(boardState, player);
+  const availableSpaces = findDisputedTerritory(boardState, player, smart);
   const contestedPoints = getDisputedTerritoryMoves(boardState, player, availableSpaces);
+  const expansionMoves = getExpansionMoveArray(boardState, player, availableSpaces)
 
   // If the player is passing, and all territory is surrounded by a single color: do not suggest moves that
   // needlessly extend the game, unless they actually can change the score
@@ -695,7 +722,9 @@ async function getMoveOptions(
 
   const growthMove = endGameAvailable ? null : await getGrowthMove(boardState, player, availableSpaces, rng);
   await sleep(80);
-  const expansionMove = await getExpansionMove(boardState, player, availableSpaces, rng);
+  const expansionMove = await getExpansionMove(boardState, player, availableSpaces, rng, expansionMoves);
+  await sleep(80);
+  const jumpMove = await getJumpMove(boardState, player, availableSpaces, rng, expansionMoves);
   await sleep(80);
   const defendMove = await getDefendMove(boardState, player, availableSpaces);
   await sleep(80);
@@ -728,6 +757,7 @@ async function getMoveOptions(
   console.debug("defend: ", defendMove?.point?.x, defendMove?.point?.y);
   console.debug("Growth: ", growthMove?.point?.x, growthMove?.point?.y);
   console.debug("Expansion: ", expansionMove?.point?.x, expansionMove?.point?.y);
+  console.debug("Jump: ", jumpMove?.point?.x, jumpMove?.point?.y);
   console.debug("Corner: ", cornerMove?.x, cornerMove?.y);
   console.debug("Random: ", random?.x, random?.y);
 
@@ -739,6 +769,7 @@ async function getMoveOptions(
     pattern: pattern,
     growth: growthMove,
     expansion: expansionMove,
+    jump: jumpMove,
     defend: defendMove,
     surround: surroundMove,
     corner: cornerMove,

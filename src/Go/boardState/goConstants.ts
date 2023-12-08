@@ -117,6 +117,7 @@ export type MoveOptions = {
   pattern: PointState | null;
   growth: Move | null;
   expansion: Move | null;
+  jump: Move | null;
   defend: Move | null;
   surround: Move | null;
   corner: PointState | null;

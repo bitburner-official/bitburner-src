@@ -19,8 +19,12 @@ import { contains, isNotNull } from "../boardState/boardState";
  * In which case, only the liberties of that one weak chain are worth considering. Other parts of that fully-encircled
  * enemy space, and other similar spaces, should be ignored, otherwise the game drags on too long
  */
-export function findDisputedTerritory(boardState: BoardState, player: playerColors) {
-  const validMoves = getAllValidMoves(boardState, player);
+export function findDisputedTerritory(boardState: BoardState, player: playerColors, excludeFriendlyEyes?: boolean) {
+  let validMoves = getAllValidMoves(boardState, player);
+  if (excludeFriendlyEyes) {
+    const friendlyEyes = getAllEyes(boardState, player).flat().flat();
+    validMoves = validMoves.filter(point => !contains(friendlyEyes, point))
+  }
   const opponent = player === playerColors.white ? playerColors.black : playerColors.white;
   const chains = getAllChains(boardState);
   const emptySpacesToAnalyze = getAllPotentialEyes(boardState, chains, opponent);
