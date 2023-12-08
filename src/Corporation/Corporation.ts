@@ -6,7 +6,7 @@ import { CorpUnlocks } from "./data/CorporationUnlocks";
 import { CorpUpgrades } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
 import { IndustriesData } from "./data/IndustryData";
-import { FundsSourceCapEx, FundsSource } from "./data/FundsSource";
+import { FundsSource, LongTermFundsSources } from "./data/FundsSource";
 import { Division } from "./Division";
 import { calculateUpgradeCost } from "./helpers";
 
@@ -81,7 +81,7 @@ export class Corporation {
       console.error("Trying to add invalid amount of funds. Please report to game developer.");
       return;
     }
-    if ((FundsSourceCapEx as readonly FundsSource[]).includes(source)) {
+    if (LongTermFundsSources.has(source)) {
       this.totalAssets += amt;
     }
     this.funds += amt;
