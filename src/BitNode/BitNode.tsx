@@ -948,7 +948,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
       return new BitNodeMultipliers({
         GoPower: 4,
 
-        HackingLevelMultiplier: 0.3,
+        HackingLevelMultiplier: 0.4,
         HackingSpeedMultiplier: 0.3,
 
         ServerMaxMoney: 0.7,
@@ -958,7 +958,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         CrimeMoney: 0.75,
         CrimeSuccessRate: 0.4,
         HacknetNodeMoney: 0.25,
-        ScriptHackMoney: 0.7,
+        ScriptHackMoney: 0.3,
 
         StrengthLevelMultiplier: 0.5,
         DexterityLevelMultiplier: 0.5,
@@ -984,7 +984,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         StaneksGiftPowerMultiplier: 0.5,
         StaneksGiftExtraSize: -1,
 
-        WorldDaemonDifficulty: 1.5,
+        WorldDaemonDifficulty: 5,
       });
     }
     default: {

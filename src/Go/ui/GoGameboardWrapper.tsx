@@ -6,7 +6,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { BoardState, opponents, playerColors, playTypes, validityReason } from "../boardState/goConstants";
 import { getNewBoardState, getStateCopy, makeMove, passTurn } from "../boardState/boardState";
 import { getMove } from "../boardAnalysis/goAI";
-import { weiArt } from "../boardState/asciiArt";
+import { bitverseArt, weiArt } from "../boardState/asciiArt";
 import { getScore, resetWinstreak } from "../boardAnalysis/scoring";
 import { evaluateIfMoveIsValid, getAllValidMoves } from "../boardAnalysis/boardAnalysis";
 import { useRerender } from "../../ui/React/hooks";
@@ -17,6 +17,7 @@ import { Settings } from "../../Settings/Settings";
 import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
+import { CorruptableText } from "../../ui/React/CorruptableText";
 
 interface IProps {
   showInstructions: () => void;
@@ -152,7 +153,7 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
       resetWinstreak(boardState.ai, false);
     }
 
-    const newBoardState = getNewBoardState(newBoardSize, newOpponent, true);
+    const newBoardState = getNewBoardState(newBoardSize, newOpponent, false);
     updateBoard(newBoardState);
   }
 
@@ -231,11 +232,18 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
         opponent={opponent}
       ></GoScoreModal>
       <div className={classes.boardFrame}>
-        {traditional ? "" : <div className={classes.background}>{weiArt}</div>}
+        {traditional ? (
+          ""
+        ) : (
+          <div className={`${classes.background} ${boardSize === 19 ? classes.bitverseBackground : ""}`}>
+            {boardSize === 19 ? bitverseArt : weiArt}
+          </div>
+        )}
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
           <br />
           <Typography variant={"h6"} className={classes.opponentLabel}>
-            {opponent !== opponents.none ? "Subnet owner: " : ""} {opponent}
+            {opponent !== opponents.none ? "Subnet owner: " : ""}{" "}
+            {opponent === opponents.w0r1d_d43m0n ? <CorruptableText content={opponent} /> : opponent}
           </Typography>
           <br />
         </Box>

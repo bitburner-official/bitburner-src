@@ -272,7 +272,7 @@ export function getAllValidMoves(boardState: BoardState, player: PlayerColor) {
 
   Eyes are important, because a chain of pieces cannot be captured if it fully surrounds two or more eyes.
  */
-export function getAllEyes(boardState: BoardState, player: playerColors) {
+export function getAllEyesByChainId(boardState: BoardState, player: playerColors) {
   const allChains = getAllChains(boardState);
   const eyeCandidates = getAllPotentialEyes(boardState, allChains, player);
   const eyes: { [s: string]: PointState[][] } = {};
@@ -304,6 +304,14 @@ export function getAllEyes(boardState: BoardState, player: playerColors) {
     });
   });
 
+  return eyes;
+}
+
+/**
+ * Get a list of all eyes, grouped by the chain they are adjacent to
+ */
+export function getAllEyes(boardState: BoardState, player: playerColors, eyesObject?: { [s: string]: PointState[][] }) {
+  const eyes = eyesObject ?? getAllEyesByChainId(boardState, player);
   return Object.keys(eyes).map((key) => eyes[key]);
 }
 
@@ -515,11 +523,12 @@ export function getAllChains(boardState: BoardState): PointState[][] {
     for (let y = 0; y < boardState.board[x].length; y++) {
       const point = boardState.board[x]?.[y];
       // If the current chain is already analyzed, skip it
-      if (!point || point.chain === "" || chains[point.chain]) {
+      if (!point || point.chain === "") {
         continue;
       }
 
-      chains[point.chain] = findAdjacentPointsInChain(boardState, x, y);
+      chains[point.chain] = chains[point.chain] || [];
+      chains[point.chain].push(point);
     }
   }
 

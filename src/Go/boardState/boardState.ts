@@ -1,4 +1,5 @@
 import {
+  bitverseBoardShape,
   Board,
   BoardState,
   Move,
@@ -15,10 +16,11 @@ import {
   findAllCapturedChains,
   findLibertiesForChain,
   getAllChains,
+  getBoardFromSimplifiedBoardState,
 } from "../boardAnalysis/boardAnalysis";
 import { endGoGame } from "../boardAnalysis/scoring";
 import { cloneDeep } from "lodash";
-import { addObstacles } from "./offlineNodes";
+import { addObstacles, resetCoordinates, rotate90Degrees } from "./offlineNodes";
 
 /**
  * Generates a new BoardState object with the given opponent and size
@@ -29,6 +31,10 @@ export function getNewBoardState(
   applyObstacles = false,
   boardToCopy?: Board,
 ): BoardState {
+  if (ai === opponents.w0r1d_d43m0n) {
+    boardToCopy = resetCoordinates(rotate90Degrees(getBoardFromSimplifiedBoardState(bitverseBoardShape).board));
+  }
+
   const newBoardState = {
     history: [],
     previousPlayer: playerColors.white,
@@ -36,13 +42,17 @@ export function getNewBoardState(
     passCount: 0,
     cheatCount: 0,
     board: Array.from({ length: boardSize }, (_, x) =>
-      Array.from({ length: boardSize }, (_, y) => ({
-        player: boardToCopy?.[x]?.[y]?.player ?? playerColors.empty,
-        chain: "",
-        liberties: null,
-        x,
-        y,
-      })),
+      Array.from({ length: boardSize }, (_, y) =>
+        !boardToCopy || boardToCopy?.[x]?.[y]
+          ? {
+              player: boardToCopy?.[x]?.[y]?.player ?? playerColors.empty,
+              chain: "",
+              liberties: null,
+              x,
+              y,
+            }
+          : null,
+      ),
     ),
   };
 
@@ -61,8 +71,8 @@ export function getNewBoardState(
  * Determines how many starting pieces the opponent has on the board
  */
 export function getHandicap(boardSize: number, opponent: opponents) {
-  // Illuminati get a few starting routers
-  if (opponent === opponents.Illuminati) {
+  // Illuminati and WD get a few starting routers
+  if (opponent === opponents.Illuminati || opponent === opponents.w0r1d_d43m0n) {
     return ceil(boardSize * 0.35);
   }
   return 0;

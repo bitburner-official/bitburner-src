@@ -83,6 +83,23 @@ export const pointStyle = makeStyles((theme: Theme) =>
       "& $eastLiberty, & $westLiberty": {
         height: "0.9px",
       },
+      "&$nineteenByNineteen": {
+        "& $blackPoint": {
+          "&:before": {
+            backgroundImage:
+              "linear-gradient(145deg, transparent, black 65%), radial-gradient(calc(min(30px, 5vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)",
+          },
+        },
+        "& $whitePoint": {
+          "&:before": {
+            backgroundImage:
+              "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(30px, 5vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
+          },
+        },
+        "& $coordinates": {
+          fontSize: "0.9vw",
+        },
+      },
       "&$thirteenByThirteen": {
         "& $blackPoint": {
           "&:before": {
@@ -170,6 +187,19 @@ export const pointStyle = makeStyles((theme: Theme) =>
       },
     },
     thirteenByThirteen: {
+      "& $filledPoint": {
+        boxShadow: "0px 0px 18px hsla(0, 100%, 100%, 0.48)",
+      },
+      "& $blackPoint": {
+        backgroundImage:
+          "linear-gradient(145deg, transparent, black 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)",
+      },
+      "& $whitePoint": {
+        backgroundImage:
+          "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
+      },
+    },
+    nineteenByNineteen: {
       "& $filledPoint": {
         boxShadow: "0px 0px 18px hsla(0, 100%, 100%, 0.48)",
       },
@@ -501,6 +531,13 @@ export const boardStyles = makeStyles((theme: Theme) =>
         height: "100%",
       },
     },
+    nineteenByNineteen: {
+      height: "5.2%",
+      "& $nineteenByNineteen": {
+        width: "5.2%",
+        height: "100%",
+      },
+    },
     background: {
       position: "absolute",
       opacity: 0.09,
@@ -510,6 +547,12 @@ export const boardStyles = makeStyles((theme: Theme) =>
       whiteSpace: "pre",
       pointerEvents: "none",
       paddingTop: "15px",
+    },
+    bitverseBackground: {
+      "&$background": {
+        fontSize: "calc(min(.83vh - 1px, 0.72vw, 7.856px))",
+        opacity: 0.11,
+      },
     },
     instructionScroller: {
       height: "calc(100vh - 80px)",

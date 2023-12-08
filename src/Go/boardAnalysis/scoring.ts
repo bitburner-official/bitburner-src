@@ -1,4 +1,11 @@
-import { BoardState, opponents, PlayerColor, playerColors, PointState } from "../boardState/goConstants";
+import {
+  BoardState,
+  getGoPlayerStartingState,
+  opponents,
+  PlayerColor,
+  playerColors,
+  PointState,
+} from "../boardState/goConstants";
 import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
 import { getKomi } from "./goAI";
 import { Player } from "@player";
@@ -43,7 +50,7 @@ export function endGoGame(boardState: BoardState) {
     return;
   }
   boardState.previousPlayer = null;
-  const statusToUpdate = Player.go.status[boardState.ai];
+  const statusToUpdate = getPlayerStats(boardState.ai);
   statusToUpdate.favor = statusToUpdate.favor ?? 0;
   const score = getScore(boardState);
 
@@ -88,7 +95,7 @@ export function endGoGame(boardState: BoardState) {
  * Sets the winstreak to zero for the given opponent, and adds a loss
  */
 export function resetWinstreak(opponent: opponents, gameComplete: boolean) {
-  const statusToUpdate = Player.go.status[opponent];
+  const statusToUpdate = getPlayerStats(opponent);
   statusToUpdate.losses++;
   statusToUpdate.oldWinStreak = statusToUpdate.winStreak;
   if (statusToUpdate.winStreak >= 0) {
@@ -162,4 +169,11 @@ export function logBoard(boardState: BoardState): void {
     }
     console.log(output);
   }
+}
+
+export function getPlayerStats(opponent: opponents) {
+  if (!Player.go.status[opponent]) {
+    Player.go = getGoPlayerStartingState();
+  }
+  return Player.go.status[opponent];
 }

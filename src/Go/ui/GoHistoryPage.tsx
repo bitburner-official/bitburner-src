@@ -1,11 +1,10 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
-import { Table, TableBody, TableCell, TableRow, Tooltip } from "@mui/material";
+import { Grid, Table, TableBody, TableCell, TableRow, Tooltip } from "@mui/material";
 
-import { opponentList } from "../boardState/goConstants";
-import { getScore } from "../boardAnalysis/scoring";
+import { opponentList, opponents } from "../boardState/goConstants";
+import { getPlayerStats, getScore } from "../boardAnalysis/scoring";
 import { Player } from "@player";
-import { Grid } from "@mui/material";
 import { GoGameboard } from "./GoGameboard";
 import { boardStyles } from "../boardState/goStyles";
 import { useRerender } from "../../ui/React/hooks";
@@ -13,6 +12,8 @@ import { getBonusText, getMaxFavor } from "../effects/effect";
 import { formatNumber } from "../../ui/formatNumber";
 import { GoScoreSummaryTable } from "./GoScoreSummaryTable";
 import { getNewBoardState } from "../boardState/boardState";
+import { CorruptableText } from "../../ui/React/CorruptableText";
+import { showWorldDemon } from "../boardAnalysis/goAI";
 
 export const GoHistoryPage = (): React.ReactElement => {
   useRerender(400);
@@ -20,6 +21,7 @@ export const GoHistoryPage = (): React.ReactElement => {
   const priorBoard = Player.go.previousGameFinalBoardState ?? getNewBoardState(7);
   const score = getScore(priorBoard);
   const opponent = priorBoard.ai;
+  const opponentsToShow = showWorldDemon() ? [...opponentList, opponents.w0r1d_d43m0n] : opponentList;
 
   return (
     <div>
@@ -45,13 +47,15 @@ export const GoHistoryPage = (): React.ReactElement => {
       <br />
       <Typography variant="h5">Faction Stats:</Typography>
       <Grid container style={{ maxWidth: "1020px" }}>
-        {opponentList.map((faction, index) => {
-          const data = Player.go.status[faction];
+        {opponentsToShow.map((faction, index) => {
+          const data = getPlayerStats(faction);
           return (
-            <Grid item key={opponentList[index]} className={classes.factionStatus}>
+            <Grid item key={opponentsToShow[index]} className={classes.factionStatus}>
               <Typography>
                 {" "}
-                <strong className={classes.keyText}>{faction}</strong>
+                <strong className={classes.keyText}>
+                  {faction === opponents.w0r1d_d43m0n ? <CorruptableText content="????????????" /> : faction}
+                </strong>
               </Typography>
               <Table sx={{ display: "table", mb: 1, width: "100%" }}>
                 <TableBody>

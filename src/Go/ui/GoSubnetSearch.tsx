@@ -1,10 +1,14 @@
-import { Box, Button, MenuItem, Select, SelectChangeEvent, Typography, Tooltip } from "@mui/material";
+import { Box, Button, MenuItem, Select, SelectChangeEvent, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { boardSizes, opponentDetails, opponentList, opponents } from "../boardState/goConstants";
 import { Player } from "@player";
 import { boardStyles } from "../boardState/goStyles";
 import { Modal } from "../../ui/React/Modal";
 import { getHandicap } from "../boardState/boardState";
+import { CorruptableText } from "../../ui/React/CorruptableText";
+import { Settings } from "../../Settings/Settings";
+import { getPlayerStats } from "../boardAnalysis/scoring";
+import { showWorldDemon } from "../boardAnalysis/goAI";
 
 interface IProps {
   open: boolean;
@@ -16,15 +20,30 @@ interface IProps {
 export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProps): React.ReactElement => {
   const classes = boardStyles();
   const [opponent, setOpponent] = useState<opponents>(Player.go.boardState?.ai ?? opponents.SlumSnakes);
-  const [boardSize, setBoardSize] = useState(Player.go.boardState?.board?.[0]?.length ?? 7);
+  const preselectedBoardSize =
+    opponent === opponents.w0r1d_d43m0n ? 19 : Math.min(Player.go.boardState?.board?.[0]?.length ?? 7, 13);
+  const [boardSize, setBoardSize] = useState(preselectedBoardSize);
 
   const opponentFactions = [opponents.none, ...opponentList];
+  if (showWorldDemon()) {
+    opponentFactions.push(opponents.w0r1d_d43m0n);
+  }
 
   const handicap = getHandicap(boardSize, opponent);
 
   function changeOpponent(event: SelectChangeEvent): void {
     const newOpponent = event.target.value as opponents;
     setOpponent(newOpponent);
+    if (newOpponent === opponents.w0r1d_d43m0n) {
+      setBoardSize(19);
+
+      const stats = getPlayerStats(opponents.w0r1d_d43m0n);
+      if (stats?.wins + stats?.losses === 0) {
+        Settings.GoTraditionalStyle = false;
+      }
+    } else if (boardSize > 13) {
+      setBoardSize(13);
+    }
   }
 
   function changeBoardSize(event: SelectChangeEvent) {
@@ -53,20 +72,28 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
           <Select value={opponent} onChange={changeOpponent} sx={{ mr: 1 }}>
             {opponentFactions.map((faction) => (
               <MenuItem key={faction} value={faction}>
-                {`${faction} (${opponentDetails[faction].description})`}
+                {faction === opponents.w0r1d_d43m0n ? (
+                  <CorruptableText content="???????????????" />
+                ) : (
+                  `${faction} (${opponentDetails[faction].description})`
+                )}
               </MenuItem>
             ))}
           </Select>
         </Box>
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
           <Typography className={classes.opponentLabel}>Subnet size: </Typography>
-          <Select value={`${boardSize}`} onChange={changeBoardSize} sx={{ mr: 1 }}>
-            {boardSizes.map((size) => (
-              <MenuItem key={size} value={size}>
-                {size}x{size}
-              </MenuItem>
-            ))}
-          </Select>
+          {opponent === opponents.w0r1d_d43m0n ? (
+            <Typography>????</Typography>
+          ) : (
+            <Select value={`${boardSize}`} onChange={changeBoardSize} sx={{ mr: 1 }}>
+              {boardSizes.map((size) => (
+                <MenuItem key={size} value={size}>
+                  {size}x{size}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
         </Box>
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
           <Tooltip
@@ -90,7 +117,16 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
         <br />
         <br />
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle} ${classes.flavorText}`}>
-          <Typography>{opponentDetails[opponent].flavorText}</Typography>
+          <Typography>
+            {opponent === opponents.w0r1d_d43m0n ? (
+              <>
+                <CorruptableText content={opponentDetails[opponent].flavorText.slice(0, 40)} />
+                <CorruptableText content={opponentDetails[opponent].flavorText.slice(40)} />
+              </>
+            ) : (
+              opponentDetails[opponent].flavorText
+            )}
+          </Typography>
         </Box>
         <br />
         <br />

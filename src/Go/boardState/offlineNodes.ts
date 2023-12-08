@@ -35,7 +35,7 @@ export function addObstacles(boardState: BoardState) {
   boardState.board = resetCoordinates(boardState.board);
 }
 
-function resetCoordinates(board: Board) {
+export function resetCoordinates(board: Board) {
   const size = board[0].length;
   for (let x = 0; x < size; x++) {
     for (let y = 0; y < size; y++) {
@@ -122,6 +122,6 @@ function rotateNTimes(board: Board, rotations: number) {
   return board;
 }
 
-function rotate90Degrees(board: Board) {
+export function rotate90Degrees(board: Board) {
   return board[0].map((_, index: number) => board.map((row: (PointState | null)[]) => row[index]).reverse());
 }

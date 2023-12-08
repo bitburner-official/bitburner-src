@@ -26,6 +26,7 @@ export enum opponents {
   Tetrads = FactionName.Tetrads,
   Daedalus = FactionName.Daedalus,
   Illuminati = FactionName.Illuminati,
+  w0r1d_d43m0n = "????????????",
 }
 
 export const opponentList = [
@@ -66,7 +67,7 @@ export const opponentDetails = {
     description: "Aggro AI",
     flavorText:
       "The Black Hand faction is a black-hat hacking group who uses their subnets to launch targeted DDOS attacks. They are famous for their unrelenting aggression, surrounding and strangling any foothold their opponents try to establish.",
-    bonusDescription: "hacking level",
+    bonusDescription: "hacking money",
     bonusPower: 0.9,
   },
   [opponents.Tetrads]: {
@@ -92,6 +93,13 @@ export const opponentDetails = {
       "The Illuminati are thought to only exist in myth. Said to always have prepared defenses in their IPvGO subnets. Provoke them at your own risk.",
     bonusDescription: "faster hack(), grow(), and weaken()",
     bonusPower: 0.7,
+  },
+  [opponents.w0r1d_d43m0n]: {
+    komi: 9.5,
+    description: "???",
+    flavorText: "What you have seen is only the shadow of the truth. It's time to leave the cave.",
+    bonusDescription: "hacking level",
+    bonusPower: 2,
   },
 };
 
@@ -264,7 +272,39 @@ export function getGoPlayerStartingState(): {
         highestWinStreak: 0,
         favor: 0,
       },
+      [opponents.w0r1d_d43m0n]: {
+        wins: 0,
+        losses: 0,
+        nodes: 0,
+        nodePower: 0,
+        winStreak: 0,
+        oldWinStreak: 0,
+        highestWinStreak: 0,
+        favor: 0,
+      },
     },
     previousGameFinalBoardState: previousGame,
   };
 }
+
+export const bitverseBoardShape = [
+  "########...########",
+  "######.#...#.######",
+  "###.#..#...#..#.###",
+  ".#..#..#...#..#..#.",
+  ".#.....#...#.....#.",
+  "...................",
+  "...................",
+  "...................",
+  "...................",
+  ".....##.....##.....",
+  "....###.....###....",
+  "....##.......##....",
+  "....#.........#....",
+  ".........#.........",
+  "#........#........#",
+  "##.......#.......##",
+  "##.......#.......##",
+  "###.............###",
+  "####...........####",
+];

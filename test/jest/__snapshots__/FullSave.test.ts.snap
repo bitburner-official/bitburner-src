@@ -1567,6 +1567,16 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
       },
       "previousGameFinalBoardState": null,
       "status": {
+        "????????????": {
+          "favor": 0,
+          "highestWinStreak": 0,
+          "losses": 0,
+          "nodePower": 0,
+          "nodes": 0,
+          "oldWinStreak": 0,
+          "winStreak": 0,
+          "wins": 0,
+        },
         "Daedalus": {
           "favor": 0,
           "highestWinStreak": 0,

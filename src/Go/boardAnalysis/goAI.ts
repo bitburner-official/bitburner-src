@@ -19,6 +19,7 @@ import {
   findMinLibertyCountOfAdjacentChains,
   getAllChains,
   getAllEyes,
+  getAllEyesByChainId,
   getAllNeighboringChains,
   getAllValidMoves,
 } from "./boardAnalysis";
@@ -26,6 +27,7 @@ import { findDisputedTerritory } from "./controlledTerritory";
 import { findAnyMatchedPatterns } from "./patternMatching";
 import { WHRNG } from "../../Casino/RNG";
 import { Player } from "@player";
+import { AugmentationName } from "@enums";
 
 /*
   Basic GO AIs, each with some personality and weaknesses
@@ -77,6 +79,7 @@ export async function getMove(boardState: BoardState, player: PlayerColor, oppon
   const chosenMove = moveOptions[floor(rng.random() * moveOptions.length)];
 
   if (chosenMove) {
+    await sleep(200);
     console.debug(`Non-priority move chosen: ${chosenMove.x} ${chosenMove.y}`);
     return {
       type: playTypes.move,
@@ -604,27 +607,39 @@ function getEyeCreationMoves(
   availableSpaces: PointState[],
   maxLiberties = 99,
 ) {
-  const currentEyes = getAllEyes(boardState, player);
-  const currentLivingGroupsCount = currentEyes.filter((eye) => eye.length >= 2);
-  const currentEyeCount = currentEyes.filter((eye) => eye.length);
+  const allEyes = getAllEyesByChainId(boardState, player);
+  const currentEyes = getAllEyes(boardState, player, allEyes);
+
+  const currentLivingGroupIDs = Object.keys(allEyes).filter((chainId) => allEyes[chainId].length >= 2);
+  const currentLivingGroupsCount = currentLivingGroupIDs.length;
+  const currentEyeCount = currentEyes.filter((eye) => eye.length).length;
 
   const chains = getAllChains(boardState);
   const friendlyLiberties = chains
     .filter((chain) => chain[0].player === player)
     .filter((chain) => chain.length > 1)
     .filter((chain) => chain[0].liberties && chain[0].liberties?.length <= maxLiberties)
+    .filter((chain) => !currentLivingGroupIDs.includes(chain[0].chain))
     .map((chain) => chain[0].liberties)
     .flat()
     .filter(isNotNull)
     .filter((point) =>
       availableSpaces.find((availablePoint) => availablePoint.x === point.x && availablePoint.y === point.y),
-    );
+    )
+    .filter((point: PointState) => {
+      const neighbors = findNeighbors(boardState, point.x, point.y);
+      const neighborhood = [neighbors.north, neighbors.east, neighbors.south, neighbors.west];
+      return (
+        neighborhood.filter((point) => !point || point?.player === player).length >= 2 &&
+        neighborhood.some((point) => point?.player === playerColors.empty)
+      );
+    });
 
   const eyeCreationMoves = friendlyLiberties.reduce((moveOptions: EyeMove[], point: PointState) => {
     const evaluationBoard = evaluateMoveResult(boardState, point.x, point.y, player);
     const newEyes = getAllEyes(evaluationBoard, player);
-    const newLivingGroupsCount = newEyes.filter((eye) => eye.length >= 2);
-    const newEyeCount = newEyes.filter((eye) => eye.length);
+    const newLivingGroupsCount = newEyes.filter((eye) => eye.length >= 2).length;
+    const newEyeCount = newEyes.filter((eye) => eye.length).length;
     if (
       newLivingGroupsCount > currentLivingGroupsCount ||
       (newEyeCount > currentEyeCount && newLivingGroupsCount === currentLivingGroupsCount)
@@ -743,4 +758,8 @@ export function getKomi(opponent: opponents) {
  */
 export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function showWorldDemon() {
+  return Player.augmentations.some((a) => a.name === AugmentationName.TheRedPill) && Player.sourceFileLvl(1);
 }
