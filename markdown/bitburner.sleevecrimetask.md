@@ -13,6 +13,7 @@ type SleeveCrimeTask = {
   crimeType: CrimeType | `${CrimeType}`;
   cyclesWorked: number;
   cyclesNeeded: number;
+  tasksCompleted: number;
 };
 ```
 **References:** [CrimeType](./bitburner.crimetype.md)
