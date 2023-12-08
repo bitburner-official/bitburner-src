@@ -15,21 +15,21 @@ const bigNumber = 1e27;
 export function CorporationDev(): React.ReactElement {
   function addTonsCorporationFunds(): void {
     if (Player.corporation) {
-      Player.corporation.funds = Player.corporation.funds + bigNumber;
+      Player.corporation.gainFunds(bigNumber, "force majeure");
     }
   }
 
   function modifyCorporationFunds(modify: number): (x: number) => void {
     return function (funds: number): void {
       if (Player.corporation) {
-        Player.corporation.funds += funds * modify;
+        Player.corporation.gainFunds(funds * modify, "force majeure");
       }
     };
   }
 
   function resetCorporationFunds(): void {
     if (Player.corporation) {
-      Player.corporation.funds = Player.corporation.funds - Player.corporation.funds;
+      Player.corporation.loseFunds(Player.corporation.funds, "force majeure");
     }
   }
 

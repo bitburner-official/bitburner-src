@@ -1,19 +1,20 @@
 import { Player } from "@player";
+import { CorpStateName, InvestmentOffer } from "@nsdefs";
 import { CorpUnlockName, CorpUpgradeName, LiteratureName } from "@enums";
 import { CorporationState } from "./CorporationState";
 import { CorpUnlocks } from "./data/CorporationUnlocks";
 import { CorpUpgrades } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
 import { IndustriesData } from "./data/IndustryData";
+import { FundsSource, LongTermFundsSources } from "./data/FundsSource";
 import { Division } from "./Division";
+import { calculateUpgradeCost } from "./helpers";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { showLiterature } from "../Literature/LiteratureHelpers";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { CorpStateName, InvestmentOffer } from "@nsdefs";
-import { calculateUpgradeCost } from "./helpers";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
@@ -77,23 +78,19 @@ export class Corporation {
     this.shareSaleCooldown = params.shareSaleCooldown ?? 0;
   }
 
-  addFunds(amt: number): void {
+  gainFunds(amt: number, source: FundsSource): void {
     if (!isFinite(amt)) {
-      console.error("Trying to add invalid amount of funds. Report to a developer.");
+      console.error("Trying to add invalid amount of funds. Please report to game developer.");
       return;
+    }
+    if (LongTermFundsSources.has(source)) {
+      this.totalAssets += amt;
     }
     this.funds += amt;
   }
 
-  // Add or subtract funds which should not be counted for valuation; e.g. investments,
-  // upgrades, stock issuance
-  addNonIncomeFunds(amt: number): void {
-    if (!isFinite(amt)) {
-      console.error("Trying to add invalid amount of funds. Report to a developer.");
-      return;
-    }
-    this.totalAssets += amt;
-    this.funds += amt;
+  loseFunds(amt: number, source: FundsSource): void {
+    return this.gainFunds(-amt, source);
   }
 
   getNextState(): CorpStateName {
@@ -144,8 +141,6 @@ export class Corporation {
           this.revenue = this.revenue + ind.lastCycleRevenue;
           this.expenses = this.expenses + ind.lastCycleExpenses;
         });
-        const profit = this.revenue - this.expenses;
-        const cycleProfit = profit * (marketCycles * corpConstants.secondsPerMarketCycle);
         if (isNaN(this.funds) || this.funds === Infinity || this.funds === -Infinity) {
           dialogBoxCreate(
             "There was an error calculating your Corporations funds and they got reset to 0. " +
@@ -154,18 +149,20 @@ export class Corporation {
           );
           this.funds = 150e9;
         }
+        const cycleRevenue = this.revenue * (marketCycles * corpConstants.secondsPerMarketCycle);
+        const cycleExpenses = this.expenses * (marketCycles * corpConstants.secondsPerMarketCycle);
+        const cycleProfit = cycleRevenue - cycleExpenses;
+        this.gainFunds(cycleRevenue, "operating revenue");
+        this.loseFunds(cycleExpenses, "operating expenses");
         if (this.dividendRate > 0 && cycleProfit > 0) {
           // Validate input again, just to be safe
           if (isNaN(this.dividendRate) || this.dividendRate < 0 || this.dividendRate > corpConstants.dividendMaxRate) {
             console.error(`Invalid Corporation dividend rate: ${this.dividendRate}`);
           } else {
             const totalDividends = this.dividendRate * cycleProfit;
-            const retainedEarnings = cycleProfit - totalDividends;
             Player.gainMoney(this.getCycleDividends(), "corporation");
-            this.addFunds(retainedEarnings);
+            this.loseFunds(totalDividends, "dividends");
           }
-        } else {
-          this.addFunds(cycleProfit);
         }
         this.updateTotalAssets();
         this.cycleValuation = this.determineCycleValuation();
@@ -211,7 +208,7 @@ export class Corporation {
         val += assetDelta * 315e3;
       }
       val *= Math.pow(1.1, this.divisions.size);
-      val -= val % 1e6; //Round down to nearest millionth
+      val -= val % 1e6; //Round down to nearest million
     }
     if (val < 10e9) val = 10e9; // Base valuation
     return val * currentNodeMults.CorporationValuation;
@@ -369,7 +366,7 @@ export class Corporation {
     if (this.unlocks.has(unlockName)) return `The corporation has already unlocked ${unlockName}`;
     const price = CorpUnlocks[unlockName].price;
     if (this.funds < price) return `Insufficient funds to purchase ${unlockName}, requires ${formatMoney(price)}`;
-    this.addNonIncomeFunds(-price);
+    this.loseFunds(price, "upgrades");
     this.unlocks.add(unlockName);
 
     // Apply effects for one-time unlocks
@@ -386,7 +383,7 @@ export class Corporation {
     const upgrade = CorpUpgrades[upgradeName];
     const totalCost = calculateUpgradeCost(this, upgrade, amount);
     if (this.funds < totalCost) return `Not enough funds to purchase ${amount} of upgrade ${upgradeName}.`;
-    this.addNonIncomeFunds(-totalCost);
+    this.loseFunds(totalCost, "upgrades");
     this.upgrades[upgradeName].level += amount;
     this.upgrades[upgradeName].value += upgrade.benefit * amount;
 
