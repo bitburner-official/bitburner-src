@@ -35,6 +35,7 @@ import {
   numCycleForGrowthCorrected,
   processSingleServerGrowth,
   safelyCreateUniqueServer,
+  getCoreBonus,
 } from "./Server/ServerHelpers";
 import {
   getPurchasedServerUpgradeCost,
@@ -397,7 +398,8 @@ export const ns: InternalAPI<NSFull> = {
           helpers.log(ctx, () => "Server is null, did it die?");
           return Promise.resolve(0);
         }
-        const coreBonus = 1 + (host.cpuCores - 1) / 16;
+        const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
+        const coreBonus = getCoreBonus(cores);
         const weakenAmt = CONSTANTS.ServerWeakenAmount * threads * coreBonus;
         server.weaken(weakenAmt);
         ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
@@ -420,13 +422,15 @@ export const ns: InternalAPI<NSFull> = {
     (_threads, _cores = 1) => {
       const threads = helpers.number(ctx, "threads", _threads);
       const cores = helpers.number(ctx, "cores", _cores);
-      const coreBonus = 1 + (cores - 1) / 16;
+      const coreBonus = getCoreBonus(cores);
       return CONSTANTS.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
     },
   share: (ctx) => () => {
+    const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
+    const coreBonus = getCoreBonus(cores);
     helpers.log(ctx, () => "Sharing this computer.");
     const end = StartSharing(
-      ctx.workerScript.scriptRef.threads * calculateIntelligenceBonus(Player.skills.intelligence, 2),
+      ctx.workerScript.scriptRef.threads * calculateIntelligenceBonus(Player.skills.intelligence, 2) * coreBonus,
     );
     return helpers.netscriptDelay(ctx, 10000).finally(function () {
       helpers.log(ctx, () => "Finished sharing this computer.");

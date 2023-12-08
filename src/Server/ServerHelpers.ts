@@ -60,7 +60,7 @@ export function numCycleForGrowth(server: IServer, growth: number, cores = 1): n
 
   const serverGrowthPercentage = server.serverGrowth / 100;
 
-  const coreBonus = 1 + (cores - 1) / 16;
+  const coreBonus = getCoreBonus(cores);
   const cycles =
     Math.log(growth) /
     (Math.log(ajdGrowthRate) *
@@ -103,7 +103,7 @@ export function numCycleForGrowthCorrected(
 
   // total of all grow thread multipliers
   const serverGrowthPercentage = server.serverGrowth / 100.0;
-  const coreMultiplier = 1 + (cores - 1) / 16;
+  const coreMultiplier = getCoreBonus(cores);
   const threadMultiplier =
     serverGrowthPercentage * person.mults.hacking_grow * coreMultiplier * currentNodeMults.ServerGrowthRate;
 
@@ -294,4 +294,9 @@ export function isBackdoorInstalled(server: BaseServer): boolean {
     return server.backdoorInstalled;
   }
   return false;
+}
+
+export function getCoreBonus(cores = 1): number {
+  const coreBonus = 1 + (cores - 1) / 16;
+  return coreBonus;
 }
