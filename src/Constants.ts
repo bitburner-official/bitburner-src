@@ -223,7 +223,7 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.5.2dev changelog - Last updated 7 December 2023
+## v2.5.2dev changelog - Last updated 9 December 2023
 
 ### NOTES
 
@@ -248,12 +248,14 @@ See the 2.5.1 changelog at https://github.com/bitburner-official/bitburner-src/b
 
 - (Bitverse) Changed listed difficulty for BN3 to "hard"
 - (CodingContract) Reduce incidence of $0 coding contract rewards in circumstances where the reward would be $0 (@trambelus)
+- (Corporation) Added better accounting of funds transactions (@jjclark1982)
 - (Corporation) Remove cooldown on starting over corporation, but maintain remaining cooldown for selling shares (@jjclark1982)
 - (Corporation) Removed some legacy code that was not doing anything (@catloversg)
 - (DevMenu) Added the ability to add/remove sleeves from the dev menu (@Sphyxis, @Snarling)
 - (Factions) Added a documentation page for faction join requirements (@jjclark1982)
 - (Formulas) Added clarification for the unit of time returned by hackTime, growTime, and weakenTime functions (@d0sboots)
 - (Ports) Promises from port.nextWrite resolve in the same order they were created, instead of reverse order (@LJNeon)
+- (Sleeve) Add task counters for Crime and Bladeburner tasks (@TheAimMan)
 - (Stock) Add some randomization to timing for stockmarket forecast change events (@Caldwell-74)
 - (Terminal) Added the --all option for unalias, to allow removing all aliases (@Sphyxis)
 - Nerf noodle bar (various contributors)
