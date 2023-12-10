@@ -17,6 +17,6 @@ module.exports = {
     "@nsdefs": "<rootDir>/src/ScriptEditor/NetscriptDefinitions",
     "^monaco-editor$": "<rootDir>/test/__mocks__/NullMock.js",
     "^monaco-vim$": "<rootDir>/test/__mocks__/NullMock.js",
-    "\/utils\/Protections$": "<rootDir>/test/__mocks__/NullMock.js",
+    "/utils/Protections$": "<rootDir>/test/__mocks__/NullMock.js",
   },
 };
