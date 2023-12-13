@@ -6,6 +6,8 @@ import { Bladeburner } from "../Bladeburner";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { KEY } from "../../utils/helpers/keyCodes";
+
 
 interface IProps {
   bladeburner: Bladeburner;
@@ -34,13 +36,17 @@ export function TeamSizeModal(props: IProps): React.ReactElement {
     else setTeamSize(x);
   }
 
+  function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
+    if (event.key === KEY.ENTER) confirmTeamSize();
+  }
+
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
         Enter the amount of team members you would like to take on this Op. If you do not have the specified number of
         team members, then as many as possible will be used. Note that team members may be lost during operations.
       </Typography>
-      <TextField autoFocus type="number" placeholder="Team size" value={teamSize} onChange={onTeamSize} />
+      <TextField autoFocus type="number" placeholder="Team size" value={teamSize} onChange={onTeamSize} onKeyDown={onKeyDown} />
       <Button sx={{ mx: 2 }} onClick={confirmTeamSize}>
         Confirm
       </Button>
