@@ -74,7 +74,15 @@ export class Faction {
     const storedRep = favorToRep(storedFavor, reducedBase);
     const reducedRep = Math.pow(reducedBase, repToFavor(this.playerReputation));
     const totalRep = storedRep + reducedRep;
-    return repToFavor(totalRep, reducedBase) - storedFavor;
+    if (totalRep < Number.MAX_VALUE) {
+      const newFavor = repToFavor(totalRep, reducedBase);
+      return newFavor - storedFavor;
+    }
+    else {
+      // Above effectively-infinite favor levels, support gaining up to the max amount each prestige.
+      const gainedFavor = repToFavor(this.playerReputation);
+      return gainedFavor;
+    }
   }
 
   static savedKeys = getKeyList(Faction, {
