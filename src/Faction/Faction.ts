@@ -67,15 +67,14 @@ export class Faction {
     this.isBanned = false;
   }
 
-  //Returns an array with [How much favor would be gained, how much rep would be left over]
+  /** Calculate the amount of favor that would be gained in a prestige. */
   getFavorGain(): number {
-    if (this.favor == null) {
-      this.favor = 0;
-    }
-    const storedRep = Math.max(0, favorToRep(this.favor));
-    const totalRep = storedRep + this.playerReputation;
-    const newFavor = repToFavor(totalRep);
-    return newFavor - this.favor;
+    const reducedBase = 1.00002;
+    const storedFavor = Math.max(0, this.favor || 0);
+    const storedRep = favorToRep(storedFavor, reducedBase);
+    const reducedRep = Math.pow(reducedBase, repToFavor(this.playerReputation));
+    const totalRep = storedRep + reducedRep;
+    return repToFavor(totalRep, reducedBase) - storedFavor;
   }
 
   static savedKeys = getKeyList(Faction, {
