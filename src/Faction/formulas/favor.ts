@@ -3,7 +3,7 @@
 // for information on how to calculate this
 
 export function favorToRep(f: number): number {
-  const raw = 25000 * (Math.pow(1.02, f) - 1);
+  const raw = Math.min(25000 * (Math.pow(1.02, f) - 1, Number.MAX_VALUE / 8));
   return Math.round(raw * 10000) / 10000; // round to make things easier.
 }
 
