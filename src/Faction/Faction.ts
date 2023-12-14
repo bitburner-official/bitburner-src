@@ -69,18 +69,19 @@ export class Faction {
 
   /** Calculate the amount of favor that would be gained in a prestige. */
   getFavorGain(): number {
-    const reducedBase = 1.00002;
     const storedFavor = Math.max(0, this.favor || 0);
+    const gainedFavor = repToFavor(this.playerReputation);
+
+    const reducedBase = 1.00002;
     const storedRep = favorToRep(storedFavor, reducedBase);
-    const reducedRep = Math.pow(reducedBase, repToFavor(this.playerReputation));
-    const totalRep = storedRep + reducedRep;
+    const gainedRep = favorToRep(gainedFavor, reducedBase);
+    const totalRep = storedRep + gainedRep;
     if (totalRep < Number.MAX_VALUE) {
       const newFavor = repToFavor(totalRep, reducedBase);
       return newFavor - storedFavor;
     }
     else {
       // Above effectively-infinite favor levels, support gaining up to the max amount each prestige.
-      const gainedFavor = repToFavor(this.playerReputation);
       return gainedFavor;
     }
   }
