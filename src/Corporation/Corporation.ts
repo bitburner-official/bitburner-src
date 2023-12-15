@@ -84,7 +84,11 @@ export class Corporation {
       return;
     }
     if (LongTermFundsSources.has(source)) {
-      this.totalAssets += amt;
+      // This cycle's assets include the purchase price of a capital expenditure.
+      // (It will likely depreciate in the following cycle.)
+      // Or the value of some non-accounted item (equity, hashes) that was sold for a capital gain.
+      // (It will remain as funds, with no effect on assetDelta.)
+      this.totalAssets += Math.abs(amt);
     }
     this.funds += amt;
   }
