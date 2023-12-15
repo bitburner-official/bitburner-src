@@ -2,7 +2,6 @@
 // This includes capital expenditures (which may be recoupable), time-limited actions, and transfers to/from other game mechanics.
 const FundsSourceLongTerm = [
   "product development",
-  "division",
   "office",
   "warehouse",
   "upgrades",
@@ -16,6 +15,7 @@ const FundsSourceLongTerm = [
 // Funds transactions which should be included in earnings projections for valuation.
 // This includes all automatic or indefinetly-repeatable income and operating expenses.
 type FundsSourceShortTerm =
+  | "division"
   | "operating expenses"
   | "operating revenue"
   | "dividends"

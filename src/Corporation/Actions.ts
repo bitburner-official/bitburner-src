@@ -74,7 +74,7 @@ export function purchaseOffice(corporation: Corporation, division: Division, cit
   if (division.offices[city]) {
     throw new Error(`You have already expanded into ${city} for ${division.name}`);
   }
-  corporation.loseFunds(corpConstants.officeInitialCost, "office");
+  corporation.loseFunds(corpConstants.officeInitialCost, "division");
   division.offices[city] = new OfficeSpace({
     city: city,
     size: corpConstants.officeInitialSize,
@@ -391,7 +391,7 @@ export function ThrowParty(corp: Corporation, office: OfficeSpace, costPerEmploy
 export function purchaseWarehouse(corp: Corporation, division: Division, city: CityName): void {
   if (corp.funds < corpConstants.warehouseInitialCost) return;
   if (division.warehouses[city]) return;
-  corp.loseFunds(corpConstants.warehouseInitialCost, "warehouse");
+  corp.loseFunds(corpConstants.warehouseInitialCost, "division");
   division.warehouses[city] = new Warehouse({
     division: division,
     loc: city,
