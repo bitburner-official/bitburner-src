@@ -296,7 +296,7 @@ export function makeRuntimeErrorMsg(ctx: NetscriptContext, msg: string, type = "
 
 function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOptions {
   const result: CompleteHGWOptions = {
-    threads: ctx.workerScript.scriptRef.threads as PositiveInteger,
+    threads: ctx.workerScript.scriptRef.threads,
     stock: false,
     additionalMsec: 0,
   };
