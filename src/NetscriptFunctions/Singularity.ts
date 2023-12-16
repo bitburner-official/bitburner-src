@@ -816,14 +816,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       return Companies[companyName].getFavorGain();
     },
-    /* Function temporarily removed, likely to change in next version to be more programming-friendly instead of providing human-readable string outputs for each requirement
     getFactionInviteRequirements: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const fac = Factions[facName];
-      return fac.getInfo().inviteReqs.map((condition) => condition.toString());
+      return [...fac.getInfo().inviteReqs].map((condition) => condition.toJSON());
     },
-    */
     checkFactionInvitations: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       // Manually trigger a check for faction invites
