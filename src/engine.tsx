@@ -9,6 +9,7 @@ import { staneksGift } from "./CotMG/Helper";
 import { processPassiveFactionRepGain, inviteToFaction } from "./Faction/FactionHelpers";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
+import "./utils/Protections"; // Side-effect: Protect against certain unrecoverable errors
 import "./PersonObjects/Player/PlayerObject"; // For side-effect of creating Player
 
 import {
