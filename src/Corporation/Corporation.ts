@@ -5,7 +5,6 @@ import { CorporationState } from "./CorporationState";
 import { CorpUnlocks } from "./data/CorporationUnlocks";
 import { CorpUpgrades } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
-import { IndustriesData } from "./data/IndustryData";
 import { FundsSource, LongTermFundsSources } from "./data/FundsSource";
 import { Division } from "./Division";
 import { calculateUpgradeCost } from "./helpers";
@@ -84,7 +83,11 @@ export class Corporation {
       return;
     }
     if (LongTermFundsSources.has(source)) {
-      this.totalAssets += amt;
+      // This cycle's assets include the purchase price of a capital expenditure.
+      // (It will likely depreciate in the following cycle.)
+      // Or the value of some non-accounted item (equity, hashes) that was sold for a capital gain.
+      // (It will remain as funds, with no effect on assetDelta.)
+      this.totalAssets += Math.abs(amt);
     }
     this.funds += amt;
   }
@@ -225,7 +228,7 @@ export class Corporation {
   updateTotalAssets(): void {
     let assets = this.funds;
     this.divisions.forEach((ind) => {
-      assets += IndustriesData[ind.type].startingCost;
+      assets += ind.calculateRecoupableValue();
       for (const warehouse of getRecordValues(ind.warehouses)) {
         for (const mat of getRecordValues(warehouse.materials)) {
           assets += mat.stored * mat.averagePrice;
