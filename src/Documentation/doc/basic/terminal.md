@@ -10,7 +10,7 @@ The Terminal contains a very basic filesystem to help you organize files into di
 Note that this is **not** a _true_ filesystem implementation and instead relies almost entirely on string manipulation.
 For this reason, some features found in real-world filesystems do not exist in our Terminal. For example:
 
-- Tab autocompletion does not work with relative paths
+- Tab autocomplete does not work with relative paths
 - **`mv` and `rm` commands only accept full filepaths in their arguments.**
   **They do not act on directories.**
 

@@ -1,6 +1,6 @@
 # Getting Started Guide for Beginner Programmers
 
-_Note_: The [Scripts](../basic/scripts.md) and strategies in this guide aren't necessarily optimal or comperhensive.
+_Note_: The [Scripts](../basic/scripts.md) and strategies in this guide aren't necessarily optimal or comprehensive.
 This guide is tailored to help those with minimal programming knowledge experience Bitburner during early stages of the game.
 
 If you are confused or overwhelmed by the game, especially the coding and scripting aspects, this guide is perfect for you!
@@ -13,7 +13,7 @@ After reaching certain criteria, you will receive invitations from in-game [Fact
 Joining [Factions](../basic/factions.md) and working for them will unlock various [Augmentations](../basic/augmentations.md),
 which are purchased and "installed," adding a persistent bonus to [stats](../basic/stats.md) and other abilities. Working with Factions and installing Augmentations is a basic step for progressing in Bitburner.
 
-The game has an open, minimalistic storyline that can be played in multiple ways to reach your goals.
+The game has an open, minimalist storyline that can be played in multiple ways to reach your goals.
 Since this guide is written as a basic introduction to Bitburner, it will not expose the entire scope or storyline available.
 
 ## First Steps
@@ -692,7 +692,7 @@ That's the end of the walkthrough portion of this guide!
 You should continue to explore what the game has to offer.
 There's quite a few features that aren't covered or mentioned in this guide, and even more that get unlocked as you continue to play!
 
-Also, check out the api documentation to see what it has to offer.
+Also, check out the API documentation to see what it has to offer.
 Writing [Scripts](../basic/scripts.md) to perform and automate various tasks is where most of the fun in the game comes from (in my opinion)!
 
 The following are a few things you may want to consider doing in the near future.
