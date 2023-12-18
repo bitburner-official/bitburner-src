@@ -104,22 +104,18 @@ export function CompanyLocation(props: IProps): React.ReactElement {
 
   return (
     <>
-      {isEmployedHere && hasMoreJobs && (
-        <>
-          <Box>
-            <Button onClick={() => switchLoc(-1)}>Previous</Button>
-            <Button onClick={() => switchLoc(1)}>Next</Button>
-          </Box>
-          <br />
-        </>
-      )}
       <Box sx={{ display: "grid", width: "fit-content" }}>
+        {isEmployedHere && hasMoreJobs && (
+          <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+            <Button onClick={() => switchLoc(-1)}>Previous Job</Button>
+            <Button onClick={() => switchLoc(1)}>Next Job</Button>
+          </Box>
+        )}
         {isEmployedHere && (
-          <Paper sx={{ p: "0.5em 1em", mb: 2 }}>
-            <Tooltip title={<JobSummary company={company} position={currentPosition} />}>
-              <Typography>Job Title: {jobTitle}</Typography>
-            </Tooltip>
+          <Paper sx={{ p: "0.5em 1em", mt: 2, mb: 2 }}>
+            <JobSummary company={company} position={currentPosition} />
             <StatsTable
+              wide
               rows={[
                 [
                   <Tooltip
@@ -131,7 +127,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
                       </>
                     }
                   >
-                    <Typography>Company reputation:</Typography>
+                    <Typography>Total reputation:</Typography>
                   </Tooltip>,
                   <Reputation key="rep" reputation={company.playerReputation} />,
                 ],

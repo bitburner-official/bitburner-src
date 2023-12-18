@@ -31,8 +31,10 @@ export function JobListingsModal(props: IProps): React.ReactElement {
   }
 
   return (
-    <Modal open={props.open} onClose={props.onClose}>
-      <Typography variant="h5">Job Listings</Typography>
+    <Modal open={props.open} onClose={props.onClose} sx={{ scrollbarWidth: "initial" }}>
+      <Typography variant="h5" style={{ textAlign: "center" }}>
+        Job Listings for {company.name}
+      </Typography>
       {Array.from(jobFields.entries()).map(([jobField, positions]) => (
         <div key={jobField}>
           <Typography variant="h6" sx={{ mt: 1 }}>

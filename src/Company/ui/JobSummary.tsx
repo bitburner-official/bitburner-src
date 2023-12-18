@@ -24,6 +24,7 @@ export function JobSummary(props: IJobSummaryProps): React.ReactElement {
         <u>{props.position.name}</u>
       </Typography>
       <StatsTable
+        wide
         rows={[
           ["Wages:", <MoneyRate key="money" money={workStats.money * CYCLES_PER_SEC} />],
           ["Reputation:", <ReputationRate key="rep" reputation={workStats.reputation * CYCLES_PER_SEC} />],
