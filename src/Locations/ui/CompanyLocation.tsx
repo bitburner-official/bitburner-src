@@ -9,10 +9,8 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 
-import { ApplyToJobButton } from "../../Company/ui/ApplyToJobButton";
-
 import { Locations } from "../Locations";
-import { CompanyName, JobField } from "@enums";
+import { CompanyName } from "@enums";
 
 import { Companies } from "../../Company/Companies";
 import { CompanyPositions } from "../../Company/CompanyPositions";
@@ -26,6 +24,8 @@ import { QuitJobModal } from "../../Company/ui/QuitJobModal";
 import { CompanyWork } from "../../Work/CompanyWork";
 import { useRerender } from "../../ui/React/hooks";
 import { companyNameAsLocationName } from "../../Company/utils";
+import { JobListingsModal } from "../../Company/ui/JobListingsModal";
+import type { Company } from "../../Company/Company";
 import type { CompanyPosition } from "../../Company/CompanyPosition";
 
 interface IProps {
@@ -103,17 +103,6 @@ export function CompanyLocation(props: IProps): React.ReactElement {
   const isEmployedHere = jobTitle != null;
   const favorGain = company.getFavorGain();
 
-  const jobFields: Map<JobField, CompanyPosition[]> = new Map();
-  for (const jobName of company.companyPositions) {
-    const offeredPos = CompanyPositions[jobName];
-    let track = jobFields.get(offeredPos.field);
-    if (!track) {
-      track = [];
-      jobFields.set(offeredPos.field, track);
-    }
-    track.push(offeredPos);
-  }
-
   return (
     <>
       {isEmployedHere && hasMoreJobs && (
@@ -164,7 +153,6 @@ export function CompanyLocation(props: IProps): React.ReactElement {
         </>
       )}
       <Box sx={{ display: "grid", width: "fit-content" }}>
-        {location.infiltrationData != null && <Button onClick={startInfiltration}>Infiltrate Company</Button>}
         {isEmployedHere && (
           <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
             <Button onClick={work}>Work</Button>
@@ -178,27 +166,28 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             />
           </Box>
         )}
-        {jobFields.size > 0 && (
-          <>
-            <Typography variant="h5">Job Listings</Typography>
-            {Array.from(jobFields.entries()).map(([jobField, positions]) => (
-              <div key={jobField}>
-                <Typography variant="h6" sx={{ mt: 1 }}>
-                  {jobField}
-                </Typography>
-                {positions.map((position) => (
-                  <ApplyToJobButton
-                    key={position.name}
-                    company={company}
-                    position={position}
-                    currentPosition={currentPosition}
-                  />
-                ))}
-              </div>
-            ))}
-          </>
-        )}
+
+        {company.companyPositions.size > 0 && <JobListingsButton company={company} currentPosition={currentPosition}/>}
+
+        {location.infiltrationData != null && <Button onClick={startInfiltration}>Infiltrate Company</Button>}
       </Box>
     </>
   );
+}
+
+interface IJobListingsButtonProps {
+  company: Company;
+  currentPosition: CompanyPosition | null;
+}
+
+function JobListingsButton(props: IJobListingsButtonProps): React.ReactElement {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button onClick={()=>{setOpen(true)}}>
+        Job Listings
+      </Button>
+      <JobListingsModal open={open} onClose={()=>setOpen(false)} {...props} />
+    </>
+  )
 }
