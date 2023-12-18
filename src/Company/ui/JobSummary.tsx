@@ -30,13 +30,6 @@ export function JobSummary(props: IJobSummaryProps): React.ReactElement {
           ["Reputation:", <ReputationRate key="rep" reputation={workStats.reputation * CYCLES_PER_SEC} />],
         ]}
       />
-      {props.position.isPartTime && (
-        <Typography>
-          <br />
-          Part-time jobs have no penalty for
-          <br /> doing something else simultaneously.
-        </Typography>
-      )}
     </>
   );
 }

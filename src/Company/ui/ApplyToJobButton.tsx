@@ -42,6 +42,13 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
   const positionDetails = (
     <>
       <JobSummary company={props.company} position={props.position} overqualified={overqualified} />
+      {props.position.isPartTime && (
+        <Typography>
+          <br />
+          Part-time jobs have no penalty for
+          <br /> doing something else simultaneously.
+        </Typography>
+      )}
       <br />
       {positionRequirements}
       {overqualified && (
