@@ -1,29 +1,24 @@
-import * as React from "react";
+import type { CompanyPosition } from "../CompanyPosition";
+import type { Company } from "../Company";
 
-import { Company } from "../Company";
-import { CompanyPosition } from "../CompanyPosition";
+import * as React from "react";
 
 import { Player } from "@player";
 import { Typography } from "@mui/material";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
-import { CompanyPositions } from "../CompanyPositions";
 import { JobSummary } from "./JobSummary";
 import { Requirement } from "../../ui/Components/Requirement";
 import { getJobRequirements } from "../GetJobRequirements";
 
-interface IProps {
+interface ApplyToJobProps {
   company: Company;
   position: CompanyPosition;
-  currentPosition: CompanyPosition | null;
+  qualified: boolean;
 }
 
 /** React Component for a button that's used to apply for a job */
-export function ApplyToJobButton(props: IProps): React.ReactElement {
-  const underqualified = !Player.isQualified(props.company, props.position);
-  const nextPos = props.position.nextPosition && CompanyPositions[props.position.nextPosition];
-  const overqualified = nextPos != null && Player.isQualified(props.company, nextPos);
-
-  const reqs = getJobRequirements(props.company, props.position);
+export function ApplyToJobButton({ company, position, qualified }: ApplyToJobProps): React.ReactElement {
+  const reqs = getJobRequirements(company, position);
   const positionRequirements =
     reqs.length == 0 ? (
       <Typography>Accepting all applicants</Typography>
@@ -38,8 +33,8 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
 
   const positionDetails = (
     <>
-      <JobSummary company={props.company} position={props.position} overqualified={overqualified} />
-      {props.position.isPartTime && (
+      <JobSummary company={company} position={position} />
+      {position.isPartTime && (
         <Typography>
           <br />
           Part-time jobs have no penalty for
@@ -48,27 +43,21 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
       )}
       <br />
       {positionRequirements}
-      {overqualified && (
-        <Typography>
-          <br />
-          You are overqualified for this position.
-        </Typography>
-      )}
     </>
   );
 
   function applyForJob(): void {
-    Player.applyForJob(props.company, props.position);
+    Player.applyForJob(company, position);
   }
 
   return (
     <ButtonWithTooltip
-      disabledTooltip={underqualified && positionDetails}
+      disabledTooltip={!qualified && positionDetails}
       normalTooltip={positionDetails}
       onClick={applyForJob}
       tooltipProps={{ style: { display: "grid" } }}
     >
-      {props.position.applyText}
+      {position.applyText}
     </ButtonWithTooltip>
   );
 }
