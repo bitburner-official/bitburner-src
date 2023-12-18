@@ -1,10 +1,10 @@
 import { Company } from "./Company";
 import { CompanyPosition } from "./CompanyPosition";
 
-import { JoinCondition, haveSkill, haveCompanyRep } from "../Faction/FactionJoinCondition";
+import { PlayerCondition, haveSkill, haveCompanyRep } from "../Faction/FactionJoinCondition";
 import type { Skills } from "../PersonObjects/Skills";
 
-export function getJobRequirements(company: Company, pos: CompanyPosition): JoinCondition[] {
+export function getJobRequirements(company: Company, pos: CompanyPosition): PlayerCondition[] {
   const reqSkills = pos.requiredSkills(company.jobStatReqOffset);
   const reqs = [];
   for (const [skillName, value] of Object.entries(reqSkills)) {
