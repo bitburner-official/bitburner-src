@@ -13,7 +13,7 @@ After reaching certain criteria, you will receive invitations from in-game [Fact
 Joining [Factions](../basic/factions.md) and working for them will unlock various [Augmentations](../basic/augmentations.md),
 which are purchased and "installed," adding a persistent bonus to [stats](../basic/stats.md) and other abilities. Working with Factions and installing Augmentations is a basic step for progressing in Bitburner.
 
-The game has an open, minimalist storyline that can be played in multiple ways to reach your goals.
+The game has an open, minimalistic storyline that can be played in multiple ways to reach your goals.
 Since this guide is written as a basic introduction to Bitburner, it will not expose the entire scope or storyline available.
 
 ## First Steps
