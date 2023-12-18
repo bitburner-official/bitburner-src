@@ -22,6 +22,7 @@ import { CompanyWork } from "../../Work/CompanyWork";
 import { useRerender } from "../../ui/React/hooks";
 import { companyNameAsLocationName } from "../../Company/utils";
 import { JobListingsModal } from "../../Company/ui/JobListingsModal";
+import { JobSummary } from "../../Company/ui/JobSummary";
 import { StatsTable } from "../../ui/React/StatsTable";
 import type { Company } from "../../Company/Company";
 import type { CompanyPosition } from "../../Company/CompanyPosition";
@@ -98,7 +99,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
     Router.toPage(Page.Job, { location: Locations[Object.keys(Player.jobs)[targetNum]] });
   }
 
-  const isEmployedHere = jobTitle != null;
+  const isEmployedHere = currentPosition != null;
   const favorGain = company.getFavorGain();
 
   return (
@@ -115,7 +116,9 @@ export function CompanyLocation(props: IProps): React.ReactElement {
       <Box sx={{ display: "grid", width: "fit-content" }}>
         {isEmployedHere && (
           <Paper sx={{ p: "0.5em 1em", mb: 2 }}>
-            <Typography>Job Title: {jobTitle}</Typography>
+            <Tooltip title={<JobSummary company={company} position={currentPosition} />}>
+              <Typography>Job Title: {jobTitle}</Typography>
+            </Tooltip>
             <StatsTable
               rows={[
                 [
@@ -134,6 +137,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
                 ],
                 [
                   <Tooltip
+                    key="favorLabel"
                     title={
                       <>
                         Company favor increases the rate at which you earn reputation for this company by 1% per favor.

@@ -2,22 +2,16 @@ import * as React from "react";
 
 import { Company } from "../Company";
 import { CompanyPosition } from "../CompanyPosition";
-import { getJobRequirements } from "../GetJobRequirements";
 import { Settings } from "../../Settings/Settings";
 
 import { Player } from "@player";
-import { Requirement } from "../../ui/Components/Requirement";
 import { Tooltip, Typography, Box } from "@mui/material";
-import { calculateCompanyWorkStats } from "../../Work/Formulas";
-import { MoneyRate } from "../../ui/React/MoneyRate";
-import { ReputationRate } from "../../ui/React/ReputationRate";
-import { StatsTable } from "../../ui/React/StatsTable";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { CompanyPositions } from "../CompanyPositions";
 import { Work } from "@mui/icons-material";
-import { CONSTANTS } from "../../Constants";
-
-const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
+import { JobSummary } from "./JobSummary";
+import { Requirement } from "../../ui/Components/Requirement";
+import { getJobRequirements } from "../GetJobRequirements";
 
 interface IProps {
   company: Company;
@@ -30,10 +24,9 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
   const underqualified = !Player.isQualified(props.company, props.position);
   const isCurrentPosition = props.position == props.currentPosition;
   const nextPos = props.position.nextPosition && CompanyPositions[props.position.nextPosition];
-  const overqualified = nextPos && Player.isQualified(props.company, nextPos);
-
+  const overqualified = nextPos != null && Player.isQualified(props.company, nextPos);
+  const shouldShowApplyButton = !overqualified && (!underqualified || props.position.requiredReputation == 0);
   const reqs = getJobRequirements(props.company, props.position);
-  const workStats = calculateCompanyWorkStats(Player, props.company, props.position, props.company.favor);
   const positionRequirements =
     reqs.length == 0 ? (
       <Typography>Accepting all applicants</Typography>
@@ -45,24 +38,10 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
         ))}
       </>
     );
+
   const positionDetails = (
     <>
-      <Typography>
-        <u>{props.position.name}</u>
-      </Typography>
-      <StatsTable
-        rows={[
-          ["Wages:", <MoneyRate key="money" money={workStats.money * CYCLES_PER_SEC} />],
-          ["Reputation:", <ReputationRate key="rep" reputation={workStats.reputation * CYCLES_PER_SEC} />],
-        ]}
-      />
-      {props.position.isPartTime && (
-        <Typography>
-          <br />
-          Part-time jobs have no penalty for
-          <br /> doing something else simultaneously.
-        </Typography>
-      )}
+      <JobSummary company={props.company} position={props.position} overqualified={overqualified} />
       <br />
       {positionRequirements}
       {overqualified && (
@@ -90,7 +69,7 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
     );
   } else if (overqualified) {
     color = Settings.theme.primarydark;
-  } else if (!underqualified) {
+  } else if (shouldShowApplyButton) {
     control = (
       <ButtonWithTooltip
         disabledTooltip={underqualified && "You do not meet the requirements"}
@@ -115,7 +94,7 @@ export function ApplyToJobButton(props: IProps): React.ReactElement {
       }}
     >
       <Tooltip title={positionDetails}>
-        <Typography sx={{ color }}>{props.position.name}</Typography>
+        <Typography sx={{ color, whiteSpace: "nowrap" }}>{props.position.name}</Typography>
       </Tooltip>
       <div style={{ color, display: "flex", justifyContent: "center" }}>{control}</div>
     </Box>
