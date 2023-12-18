@@ -21,11 +21,9 @@ import { QuitJobModal } from "../../Company/ui/QuitJobModal";
 import { CompanyWork } from "../../Work/CompanyWork";
 import { useRerender } from "../../ui/React/hooks";
 import { companyNameAsLocationName } from "../../Company/utils";
-import { JobListingsModal } from "../../Company/ui/JobListingsModal";
 import { JobSummary } from "../../Company/ui/JobSummary";
 import { StatsTable } from "../../ui/React/StatsTable";
-import type { Company } from "../../Company/Company";
-import type { CompanyPosition } from "../../Company/CompanyPosition";
+import { JobListings } from "../../Company/ui/JobListings";
 
 interface IProps {
   companyName: CompanyName;
@@ -104,7 +102,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
 
   return (
     <>
-      <Box sx={{ display: "grid", width: "fit-content" }}>
+      <Box sx={{ display: "grid", width: "fit-content", minWidth: "25em" }}>
         {isEmployedHere && hasMoreJobs && (
           <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
             <Button onClick={() => switchLoc(-1)}>Previous Job</Button>
@@ -165,31 +163,10 @@ export function CompanyLocation(props: IProps): React.ReactElement {
           </Box>
         )}
 
-        {company.companyPositions.size > 0 && <JobListingsButton company={company} currentPosition={currentPosition} />}
+        {company.companyPositions.size > 0 && <JobListings company={company} currentPosition={currentPosition} />}
 
         {location.infiltrationData != null && <Button onClick={startInfiltration}>Infiltrate Company</Button>}
       </Box>
-    </>
-  );
-}
-
-interface IJobListingsButtonProps {
-  company: Company;
-  currentPosition: CompanyPosition | null;
-}
-
-function JobListingsButton(props: IJobListingsButtonProps): React.ReactElement {
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <Button
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        Job Listings
-      </Button>
-      <JobListingsModal open={open} onClose={() => setOpen(false)} {...props} />
     </>
   );
 }
