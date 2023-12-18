@@ -2,7 +2,7 @@
 
 In the wake of crisis and war, Gang activity surged. Stronger than ever in a lawless world - Enhanced with fantastic technology, no longer held back by ethics and morals, 'free from the shadows'....
 
-Seen by most of the population as nihilistic, murderous and vile, occassional rumors suggest Gangs sometimes involve themselves with vigilanteism, hacktivism, perhaps even plotting against The Enders, seeking to destroy a world they cannot save.
+Seen by most of the population as nihilistic, murderous and vile, occasional rumors suggest Gangs sometimes involve themselves with vigilantism, hacktivism, perhaps even plotting against The Enders, seeking to destroy a world they cannot save.
 
 ## Starting and Recruiting
 

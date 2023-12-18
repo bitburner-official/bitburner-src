@@ -54,7 +54,7 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
     if (!canAffordUpgrade) return;
     ++props.warehouse.level;
     props.warehouse.updateSize(corp, division);
-    corp.funds = corp.funds - sizeUpgradeCost;
+    corp.loseFunds(sizeUpgradeCost, "warehouse");
     props.rerender();
   }
   // -1 because as soon as it hits "full" it processes and resets to 0, *2 to double the size of the bar

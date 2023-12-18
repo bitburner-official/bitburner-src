@@ -8,7 +8,6 @@ import {
   FactionName,
   FactionWorkType,
   GymType,
-  JobField,
   LocationName,
   UniversityClassType,
 } from "@enums";
@@ -55,8 +54,8 @@ import { Engine } from "../engine";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
-import { companyNameAsLocationName } from "../Company/utils";
 import { getRecordEntries } from "../Types/Record";
+import { JobTracks } from "../Company/data/JobTracks";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -687,20 +686,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       const job = CompanyPositions[positionName];
       const res = {
-        name: CompanyPositions[positionName].name,
-        field: CompanyPositions[positionName].field,
-        nextPosition: CompanyPositions[positionName].nextPosition,
-        salary: CompanyPositions[positionName].baseSalary * company.salaryMultiplier,
-        requiredReputation: CompanyPositions[positionName].requiredReputation,
-        requiredSkills: {
-          hacking: job.requiredHacking > 0 ? job.requiredHacking + company.jobStatReqOffset : 0,
-          strength: job.requiredStrength > 0 ? job.requiredStrength + company.jobStatReqOffset : 0,
-          defense: job.requiredDefense > 0 ? job.requiredDefense + company.jobStatReqOffset : 0,
-          dexterity: job.requiredDexterity > 0 ? job.requiredDexterity + company.jobStatReqOffset : 0,
-          agility: job.requiredAgility > 0 ? job.requiredAgility + company.jobStatReqOffset : 0,
-          charisma: job.requiredCharisma > 0 ? job.requiredCharisma + company.jobStatReqOffset : 0,
-          intelligence: 0,
-        },
+        name: job.name,
+        field: job.field,
+        nextPosition: job.nextPosition,
+        salary: job.baseSalary * company.salaryMultiplier,
+        requiredReputation: job.requiredReputation,
+        requiredSkills: job.requiredSkills(company.jobStatReqOffset),
       };
       return res;
     },
@@ -739,62 +730,16 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       const field = getEnumHelper("JobField").nsGetMember(ctx, _field, "field", { fuzzy: true });
+      const company = Companies[companyName];
+      const entryPos = CompanyPositions[JobTracks[field][0]];
 
-      Player.location = companyNameAsLocationName(companyName);
-      let res;
-      switch (field) {
-        case JobField.software:
-          res = Player.applyForSoftwareJob(true);
-          break;
-        case JobField.softwareConsultant:
-          res = Player.applyForSoftwareConsultantJob(true);
-          break;
-        case JobField.it:
-          res = Player.applyForItJob(true);
-          break;
-        case JobField.securityEngineer:
-          res = Player.applyForSecurityEngineerJob(true);
-          break;
-        case JobField.networkEngineer:
-          res = Player.applyForNetworkEngineerJob(true);
-          break;
-        case JobField.business:
-          res = Player.applyForBusinessJob(true);
-          break;
-        case JobField.businessConsultant:
-          res = Player.applyForBusinessConsultantJob(true);
-          break;
-        case JobField.security:
-          res = Player.applyForSecurityJob(true);
-          break;
-        case JobField.agent:
-          res = Player.applyForAgentJob(true);
-          break;
-        case JobField.employee:
-          res = Player.applyForEmployeeJob(true);
-          break;
-        case JobField.partTimeEmployee:
-          res = Player.applyForPartTimeEmployeeJob(true);
-          break;
-        case JobField.waiter:
-          res = Player.applyForWaiterJob(true);
-          break;
-        case JobField.partTimeWaiter:
-          res = Player.applyForPartTimeWaiterJob(true);
-          break;
-        default:
-          helpers.log(ctx, () => `Invalid job: '${field}'.`);
-          return false;
-      }
-      if (res) {
-        helpers.log(
-          ctx,
-          () => `You were offered a new job at '${companyName}' with position '${Player.jobs[companyName]}'`,
-        );
+      const jobName = Player.applyForJob(company, entryPos, true);
+      if (jobName) {
+        helpers.log(ctx, () => `You were offered a new job at '${companyName}' with position '${jobName}'`);
       } else {
         helpers.log(ctx, () => `You failed to get a new job/promotion at '${companyName}' in the '${field}' field.`);
       }
-      return res;
+      return jobName;
     },
     quitJob: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
@@ -816,14 +761,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       return Companies[companyName].getFavorGain();
     },
-    /* Function temporarily removed, likely to change in next version to be more programming-friendly instead of providing human-readable string outputs for each requirement
     getFactionInviteRequirements: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const fac = Factions[facName];
-      return fac.getInfo().inviteReqs.map((condition) => condition.toString());
+      return [...fac.getInfo().inviteReqs].map((condition) => condition.toJSON());
     },
-    */
     checkFactionInvitations: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       // Manually trigger a check for faction invites
@@ -1191,7 +1134,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       enterBitNode(false, Player.bitNodeN, nextBN);
       if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
     },
-    getCurrentWork: () => () => {
+    getCurrentWork: (ctx) => () => {
+      helpers.checkSingularityAccess(ctx);
       if (!Player.currentWork) return null;
       return Player.currentWork.APICopy();
     },

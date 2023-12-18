@@ -1,4 +1,5 @@
 import { CompanyName, JobName, CityName, AugmentationName, LiteratureName, MessageFilename } from "@enums";
+import { ServerName } from "../Types/strings";
 import { Server } from "../Server/Server";
 import { GetServer } from "../Server/AllServers";
 import { HacknetServer } from "../Hacknet/HacknetServer";
@@ -7,15 +8,43 @@ import { Companies } from "../Company/Companies";
 import { formatReputation, formatMoney, formatRam } from "../ui/formatNumber";
 import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import type { Skills } from "../PersonObjects/Skills";
+import type {
+  PlayerRequirement,
+  BackdoorRequirement,
+  CityRequirement,
+  CompanyReputationRequirement,
+  EmployedByRequirement,
+  JobTitleRequirement,
+  KarmaRequiremennt,
+  MoneyRequirement,
+  NumAugmentationsRequirement,
+  PeopleKilledRequirement,
+  SkillRequirement,
+  FileRequirement,
+  BladeburnerRankRequirement,
+  HacknetRAMRequirement,
+  HacknetCoresRequirement,
+  HacknetLevelsRequirement,
+  NotRequirement,
+  SomeRequirement,
+  EveryRequirement,
+} from "@nsdefs";
 
-export interface JoinCondition {
+/**
+ * Declarative format for checking that the player satisfies some condition, such as the requirements for being invited to a faction.
+ */
+export interface PlayerCondition {
   toString(): string;
+  toJSON(): PlayerRequirement;
   isSatisfied(p: PlayerObject): boolean;
 }
 
-export const haveBackdooredServer = (hostname: string): JoinCondition => ({
+export const haveBackdooredServer = (hostname: ServerName): PlayerCondition => ({
   toString(): string {
     return `Backdoor access to ${hostname} server`;
+  },
+  toJSON(): BackdoorRequirement {
+    return { type: "backdoorInstalled", server: hostname };
   },
   isSatisfied(): boolean {
     const server = GetServer(hostname);
@@ -26,56 +55,68 @@ export const haveBackdooredServer = (hostname: string): JoinCondition => ({
   },
 });
 
-export const employedBy = (
-  companyName: CompanyName,
-  { withRep }: { withRep: number } = { withRep: 0 },
-): JoinCondition => ({
+export const employedBy = (companyName: CompanyName): PlayerCondition => ({
   toString(): string {
-    if (withRep == 0) {
-      return `Employed at ${companyName}`;
-    } else {
-      return `Employed at ${companyName} with ${formatReputation(withRep)} reputation`;
-    }
+    return `Employed at ${companyName}`;
+  },
+  toJSON(): EmployedByRequirement {
+    return { type: "employedBy", company: companyName };
   },
   isSatisfied(p: PlayerObject): boolean {
+    return Object.hasOwn(p.jobs, companyName);
+  },
+});
+
+export const haveCompanyRep = (companyName: CompanyName, rep: number): PlayerCondition => ({
+  toString(): string {
+    return `${formatReputation(rep)} reputation with ${companyName}`;
+  },
+  toJSON(): CompanyReputationRequirement {
+    return { type: "companyReputation", company: companyName, reputation: rep };
+  },
+  isSatisfied(): boolean {
     const company = Companies[companyName];
     if (!company) return false;
     const serverMeta = serverMetadata.find((s) => s.specialName === companyName);
     const server = GetServer(serverMeta ? serverMeta.hostname : "");
-    const bonus = (server as Server).backdoorInstalled ? -100e3 : 0;
-    return Object.hasOwn(p.jobs, companyName) && company.playerReputation > withRep + bonus;
+    const bonus = server?.backdoorInstalled ? 100e3 : 0;
+    return company.playerReputation + bonus >= rep;
   },
 });
 
-export const executiveEmployee = (): JoinCondition => ({
+export const haveJobTitle = (jobTitle: JobName): PlayerCondition => ({
   toString(): string {
-    return `CTO, CFO, or CEO of a company`;
+    return `Employed as a ${jobTitle}`;
+  },
+  toJSON(): JobTitleRequirement {
+    return { type: "jobTitle", jobTitle: jobTitle };
   },
   isSatisfied(p: PlayerObject): boolean {
     const allPositions = Object.values(p.jobs);
-    return (
-      allPositions.includes(JobName.software7) || // CTO
-      allPositions.includes(JobName.business4) || // CFO
-      allPositions.includes(JobName.business5) // CEO
-    );
+    return allPositions.includes(jobTitle);
   },
 });
 
-export const notEmployee = (...companyNames: CompanyName[]): JoinCondition => ({
+export const executiveEmployee = (): PlayerCondition => ({
+  ...someCondition([JobName.software7, JobName.business4, JobName.business5].map((jobTitle) => haveJobTitle(jobTitle))),
   toString(): string {
-    return `Not working for the ${joinList(companyNames)}`;
-  },
-  isSatisfied(p: PlayerObject): boolean {
-    for (const companyName of companyNames) {
-      if (Object.hasOwn(p.jobs, companyName)) return false;
-    }
-    return true;
+    return `CTO, CFO, or CEO of a company`;
   },
 });
 
-export const haveAugmentations = (n: number): JoinCondition => ({
+export const notEmployedBy = (companyName: CompanyName): PlayerCondition => ({
+  ...notCondition(employedBy(companyName)),
+  toString(): string {
+    return `Not working for the ${companyName}`;
+  },
+});
+
+export const haveAugmentations = (n: number): PlayerCondition => ({
   toString(): string {
     return `${n || "No"} augmentations installed`;
+  },
+  toJSON(): NumAugmentationsRequirement {
+    return { type: "numAugmentations", numAugmentations: n };
   },
   isSatisfied(p: PlayerObject): boolean {
     if (n == 0) {
@@ -88,66 +129,93 @@ export const haveAugmentations = (n: number): JoinCondition => ({
   },
 });
 
-export const haveMoney = (n: number): JoinCondition => ({
+export const haveMoney = (n: number): PlayerCondition => ({
   toString(): string {
     return `Have ${formatMoney(n)}`;
+  },
+  toJSON(): MoneyRequirement {
+    return { type: "money", money: n };
   },
   isSatisfied(p: PlayerObject): boolean {
     return p.money >= n;
   },
 });
 
-export const haveSkill = (skill: keyof Skills, n: number): JoinCondition => ({
+export const haveSkill = (skill: keyof Skills, n: number): PlayerCondition => ({
   toString(): string {
     return `${capitalize(skill)} level ${n}`;
+  },
+  toJSON(): SkillRequirement {
+    return { type: "skills", skills: { [skill]: n } };
   },
   isSatisfied(p: PlayerObject): boolean {
     return p.skills[skill] >= n;
   },
 });
 
-export const haveCombatSkills = (n: number): JoinCondition => ({
+export const haveCombatSkills = (n: number): CompoundPlayerCondition => ({
+  ...everyCondition(["strength", "defense", "dexterity", "agility"].map((s) => haveSkill(s as keyof Skills, n))),
   toString(): string {
     return `All combat skills level ${n}`;
   },
-  isSatisfied(p: PlayerObject): boolean {
-    return p.skills.strength >= n && p.skills.defense >= n && p.skills.dexterity >= n && p.skills.agility >= n;
+  toJSON(): SkillRequirement {
+    return { type: "skills", skills: { strength: n, defense: n, dexterity: n, agility: n } };
   },
 });
 
-export const haveKarma = (n: number): JoinCondition => ({
+export const haveKarma = (n: number): PlayerCondition => ({
   toString(): string {
-    return `${n} karma`;
+    if (n < -1000) return "An extensive criminal record";
+    else if (n < -40) return "A criminal reputation";
+    else if (n < -20) return "A disregard for the law";
+    else if (n < -10) return "A history of violence";
+    else return "Street cred";
+  },
+  toJSON(): KarmaRequiremennt {
+    return { type: "karma", karma: n };
   },
   isSatisfied(p: PlayerObject): boolean {
     return p.karma <= n;
   },
 });
 
-export const haveKilledPeople = (n: number): JoinCondition => ({
+export const haveKilledPeople = (n: number): PlayerCondition => ({
   toString(): string {
     return `${n} people killed`;
+  },
+  toJSON(): PeopleKilledRequirement {
+    return { type: "numPeopleKilled", numPeopleKilled: n };
   },
   isSatisfied(p: PlayerObject): boolean {
     return p.numPeopleKilled >= n;
   },
 });
 
-export const locatedInCity = (...cities: CityName[]): JoinCondition => ({
+export const locatedInCity = (city: CityName): PlayerCondition => ({
   toString(): string {
-    return `Located in ${joinList(cities)}`;
+    return `Located in ${city}`;
+  },
+  toJSON(): CityRequirement {
+    return { type: "city", city: city };
   },
   isSatisfied(p: PlayerObject): boolean {
-    for (const city of cities) {
-      if (p.city == city) return true;
-    }
-    return false;
+    return p.city == city;
   },
 });
 
-export const totalHacknetRam = (n: number): JoinCondition => ({
+export const locatedInSomeCity = (...cities: CityName[]): PlayerCondition => ({
+  ...someCondition(cities.map((city) => locatedInCity(city))),
+  toString(): string {
+    return `Located in ${joinList(cities)}`;
+  },
+});
+
+export const totalHacknetRam = (n: number): PlayerCondition => ({
   toString(): string {
     return `Total Hacknet RAM of ${formatRam(n)}`;
+  },
+  toJSON(): HacknetRAMRequirement {
+    return { type: "hacknetRAM", hacknetRAM: n };
   },
   isSatisfied(p: PlayerObject): boolean {
     let total = 0;
@@ -159,9 +227,12 @@ export const totalHacknetRam = (n: number): JoinCondition => ({
   },
 });
 
-export const totalHacknetCores = (n: number): JoinCondition => ({
+export const totalHacknetCores = (n: number): PlayerCondition => ({
   toString(): string {
     return `Total Hacknet cores of ${n}`;
+  },
+  toJSON(): HacknetCoresRequirement {
+    return { type: "hacknetCores", hacknetCores: n };
   },
   isSatisfied(p: PlayerObject): boolean {
     let total = 0;
@@ -173,9 +244,12 @@ export const totalHacknetCores = (n: number): JoinCondition => ({
   },
 });
 
-export const totalHacknetLevels = (n: number): JoinCondition => ({
+export const totalHacknetLevels = (n: number): PlayerCondition => ({
   toString(): string {
     return `Total Hacknet levels of ${n}`;
+  },
+  toJSON(): HacknetLevelsRequirement {
+    return { type: "hacknetLevels", hacknetLevels: n };
   },
   isSatisfied(p: PlayerObject): boolean {
     let total = 0;
@@ -187,9 +261,12 @@ export const totalHacknetLevels = (n: number): JoinCondition => ({
   },
 });
 
-export const haveBladeburnerRank = (n: number): JoinCondition => ({
+export const haveBladeburnerRank = (n: number): PlayerCondition => ({
   toString(): string {
     return `Rank ${n} in the Bladeburner Division`;
+  },
+  toJSON(): BladeburnerRankRequirement {
+    return { type: "bladeburnerRank", bladeburnerRank: n };
   },
   isSatisfied(p: PlayerObject): boolean {
     const rank = p.bladeburner?.rank || 0;
@@ -197,21 +274,37 @@ export const haveBladeburnerRank = (n: number): JoinCondition => ({
   },
 });
 
-export const haveSourceFile = (...nodeNums: number[]): JoinCondition => ({
+export const haveSourceFile = (n: number): PlayerCondition => ({
   toString(): string {
-    return `In BitNode ${joinList(nodeNums)} or have SourceFile ${joinList(nodeNums)}`;
+    return `In BitNode ${n} or have SourceFile ${n}`;
+  },
+  toJSON(): SomeRequirement {
+    return {
+      type: "someCondition",
+      conditions: [
+        { type: "bitNodeN", bitNodeN: n },
+        { type: "sourceFile", sourceFile: n },
+      ],
+    };
   },
   isSatisfied(p: PlayerObject): boolean {
-    for (const n of nodeNums) {
-      if (p.bitNodeN === n || p.sourceFileLvl(n) > 0) return true;
-    }
-    return false;
+    return p.bitNodeN == n || p.sourceFileLvl(n) > 0;
   },
 });
 
-export const haveFile = (fileName: LiteratureName | MessageFilename): JoinCondition => ({
+export const haveSomeSourceFile = (...nodeNums: number[]): PlayerCondition => ({
+  ...someCondition(nodeNums.map((n) => haveSourceFile(n))),
+  toString(): string {
+    return `In BitNode ${joinList(nodeNums)} or have SourceFile ${joinList(nodeNums)}`;
+  },
+});
+
+export const haveFile = (fileName: LiteratureName | MessageFilename): PlayerCondition => ({
   toString(): string {
     return `Have the file '${fileName}'`;
+  },
+  toJSON(): FileRequirement {
+    return { type: "file", file: fileName };
   },
   isSatisfied(p: PlayerObject): boolean {
     const homeComputer = p.getHomeComputer();
@@ -219,16 +312,90 @@ export const haveFile = (fileName: LiteratureName | MessageFilename): JoinCondit
   },
 });
 
-export const someCondition = (...conditions: JoinCondition[]): JoinCondition => ({
+/* higher-order conditions */
+
+export interface CompoundPlayerCondition extends PlayerCondition, Iterable<PlayerCondition> {
+  type: "someCondition" | "everyCondition";
+  [Symbol.iterator]: () => IterableIterator<PlayerCondition>;
+}
+
+export const unsatisfiable: PlayerCondition = {
+  toString(): string {
+    return "(unsatisfiable)";
+  },
+  toJSON(): SomeRequirement {
+    return { type: "someCondition", conditions: [] };
+  },
+  isSatisfied(): boolean {
+    return false;
+  },
+};
+
+export const notCondition = (condition: PlayerCondition): PlayerCondition => ({
+  toString(): string {
+    return `Not ${condition.toString()}`;
+  },
+  toJSON(): NotRequirement {
+    return { type: "not", condition: condition.toJSON() };
+  },
+  isSatisfied(p: PlayerObject): boolean {
+    return !condition.isSatisfied(p);
+  },
+});
+
+export const someCondition = (conditions: PlayerCondition[]): CompoundPlayerCondition => ({
+  type: "someCondition",
   toString(): string {
     return joinList(conditions.map((c) => c.toString()));
   },
-  isSatisfied(p: PlayerObject): boolean {
-    for (const condition of conditions) {
-      if (condition.isSatisfied(p)) return true;
-    }
-    return false;
+  toJSON(): SomeRequirement {
+    return { type: "someCondition", conditions: conditions.map((c) => c.toJSON()) };
   },
+  isSatisfied(p: PlayerObject): boolean {
+    return conditions.some((c) => c.isSatisfied(p));
+  },
+  *[Symbol.iterator](): IterableIterator<PlayerCondition> {
+    for (const cond of conditions) {
+      if ("type" in cond && cond.type == "someCondition") {
+        // automatically flatten nested OR lists
+        yield* cond as CompoundPlayerCondition;
+      } else {
+        yield cond;
+      }
+    }
+  },
+});
+
+export const everyCondition = (conditions: PlayerCondition[]): CompoundPlayerCondition => ({
+  type: "everyCondition",
+  toString(): string {
+    return joinList(
+      conditions.map((c) => c.toString()),
+      "and",
+    );
+  },
+  toJSON(): EveryRequirement {
+    return { type: "everyCondition", conditions: conditions.map((c) => c.toJSON()) };
+  },
+  isSatisfied(p: PlayerObject): boolean {
+    return conditions.every((c) => c.isSatisfied(p));
+  },
+  *[Symbol.iterator](): IterableIterator<PlayerCondition> {
+    for (const cond of conditions) {
+      if ("type" in cond && cond.type == "everyCondition") {
+        // automatically flatten nested AND lists
+        yield* cond as CompoundPlayerCondition;
+      } else {
+        yield cond;
+      }
+    }
+  },
+});
+
+export const delayedCondition = (arg: () => PlayerCondition): PlayerCondition => ({
+  toString: () => arg().toString(),
+  toJSON: () => arg().toJSON(),
+  isSatisfied: (p: PlayerObject) => arg().isSatisfied(p),
 });
 
 /* helpers */

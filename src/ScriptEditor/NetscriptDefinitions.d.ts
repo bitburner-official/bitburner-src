@@ -989,6 +989,7 @@ type SleeveBladeburnerTask = {
   cyclesWorked: number;
   cyclesNeeded: number;
   nextCompletion: Promise<void>;
+  tasksCompleted: number;
 };
 
 /** @public */
@@ -1007,6 +1008,7 @@ type SleeveCrimeTask = {
   crimeType: CrimeType | `${CrimeType}`;
   cyclesWorked: number;
   cyclesNeeded: number;
+  tasksCompleted: number;
 };
 
 /** @public */
@@ -1893,7 +1895,7 @@ export interface Singularity {
    * @param field - Field to which you want to apply.
    * @returns True if the player successfully get a job/promotion, and false otherwise.
    */
-  applyToCompany(companyName: CompanyName | `${CompanyName}`, field: JobField | `${JobField}`): boolean;
+  applyToCompany(companyName: CompanyName | `${CompanyName}`, field: JobField | `${JobField}`): JobName | null;
 
   /**
    * Get company reputation.
@@ -1937,29 +1939,39 @@ export interface Singularity {
    */
   getCompanyFavorGain(companyName: CompanyName | `${CompanyName}`): number;
 
-  /* Experimental function temporarily removed, likely to undergo changes in next patch to make return value more programming-friendly
+  /**
    * List conditions for being invited to a faction.
    * @remarks
    * RAM cost: 3 GB * 16/4/1
    *
-   * @param faction - Name of the faction.
-   * @returns Array of strings describing conditions for receiving an invitation to the faction.
+   * @param faction - Name of the faction
+   * @returns Array of PlayerRequirement objects which must all be fulfilled to receive an invitation.
    *
    * @example
    * ```js
    * ns.singularity.getFactionInviteRequirements("The Syndicate")
    * [
-   *   "Located in Aevum or Sector-12",
-   *   "Not working for the Central Intelligence Agency",
-   *   "Not working for the National Security Agency",
-   *   "-90 karma",
-   *   "Have $10.000m",
-   *   "Hacking level 200",
-   *   "All combat skills level 200"
+   *   { "type": "someCondition", "conditions": [
+   *       { "type": "city", "city": "Aevum" },
+   *       { "type": "city", "city": "Sector-12" }
+   *     ]
+   *   },
+   *   { "type": "not", "condition": {
+   *       "type": "employedBy", "company": "Central Intelligence Agency"
+   *     }
+   *   },
+   *   { "type": "not", "condition": {
+   *       "type": "employedBy", "company": "National Security Agency"
+   *     }
+   *   },
+   *   { "type": "money", "money": 10000000 },
+   *   { "type": "skills", "skills": { "hacking": 200 } },
+   *   { "type": "skills", "skills": { "strength": 200, "defense": 200, "dexterity": 200, "agility": 200 } },
+   *   { "type": "karma", "karma": -90 }
    * ]
    * ```
-  getFactionInviteRequirements(faction: string): string[];
-  */
+   */
+  getFactionInviteRequirements(faction: string): PlayerRequirement[];
 
   /**
    * List all current faction invitations.
@@ -8462,3 +8474,215 @@ interface AutocompleteData {
   txts: string[];
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
 }
+
+/**
+ * Player must have at least this much money.
+ * @public
+ */
+interface MoneyRequirement {
+  type: "money";
+  money: number;
+}
+/**
+ * Player must have each listed skill at least this level.
+ * @public
+ */
+interface SkillRequirement {
+  type: "skills";
+  skills: Partial<Skills>;
+}
+/**
+ * Player must have less than this much karma.
+ * @public
+ */
+interface KarmaRequiremennt {
+  type: "karma";
+  karma: number;
+}
+/**
+ * Player must have killed at least this many people.
+ * @public
+ */
+interface PeopleKilledRequirement {
+  type: "numPeopleKilled";
+  numPeopleKilled: number;
+}
+/**
+ * Player must have a specific Literature or Message file on their home computer.
+ * @public
+ */
+interface FileRequirement {
+  type: "file";
+  file: string;
+}
+/**
+ * Player must have at least this many augmentations installed (if positive).
+ * Player must have no augmentations installed (if zero).
+ * @public
+ */
+interface NumAugmentationsRequirement {
+  type: "numAugmentations";
+  numAugmentations: number;
+}
+/**
+ * Player must be working for this company.
+ * @public
+ */
+interface EmployedByRequirement {
+  type: "employedBy";
+  company: CompanyName;
+}
+/**
+ * Player must have at least this much reputation with this company.
+ * @public
+ */
+interface CompanyReputationRequirement {
+  type: "companyReputation";
+  company: CompanyName;
+  reputation: number;
+}
+/**
+ * Player must have this job title at some company.
+ * @public
+ */
+interface JobTitleRequirement {
+  type: "jobTitle";
+  jobTitle: JobName;
+}
+/**
+ * Player must be located in this city.
+ * @public
+ */
+interface CityRequirement {
+  type: "city";
+  city: CityName;
+}
+/**
+ * Player must be at this location within a city.
+ * @public
+ */
+interface LocationRequirement {
+  type: "location";
+  location: LocationName;
+}
+/**
+ * Player must have installed a backdoor on this server.
+ * @public
+ */
+interface BackdoorRequirement {
+  type: "backdoorInstalled";
+  server: string;
+}
+/**
+ * Player's Hacknet devices must have at least this much total RAM.
+ * @public
+ */
+interface HacknetRAMRequirement {
+  type: "hacknetRAM";
+  hacknetRAM: number;
+}
+/**
+ * Player's Hacknet devices must have at least this many total cores.
+ * @public
+ */
+interface HacknetCoresRequirement {
+  type: "hacknetCores";
+  hacknetCores: number;
+}
+/**
+ * Player's Hacknet devices must have at least this many total levels.
+ * @public
+ */
+interface HacknetLevelsRequirement {
+  type: "hacknetLevels";
+  hacknetLevels: number;
+}
+/**
+ * Player must be located in this BitNode.
+ * @public
+ */
+interface BitNodeRequirement {
+  type: "bitNodeN";
+  bitNodeN: number;
+}
+/**
+ * Player must have this Source File.
+ * @public
+ */
+interface SourceFileRequirement {
+  type: "sourceFile";
+  sourceFile: number;
+}
+/**
+ * Player must have at least this rank in the Bladeburner Division.
+ * @public
+ */
+interface BladeburnerRankRequirement {
+  type: "bladeburnerRank";
+  bladeburnerRank: number;
+}
+/**
+ * Player must have completed this many infiltrations.
+ * @public
+ */
+interface NumInfiltrationsRequirement {
+  type: "numInfiltrations";
+  numInfiltrations: number;
+}
+/**
+ * The sub-condition must not be satisfied.
+ * @public
+ */
+interface NotRequirement {
+  type: "not";
+  condition: PlayerRequirement;
+}
+/**
+ * At least one sub-condition must be satisfied.
+ * @public
+ */
+interface SomeRequirement {
+  type: "someCondition";
+  conditions: PlayerRequirement[];
+}
+/**
+ * All sub-conditions must be satisfied.
+ * @public
+ */
+interface EveryRequirement {
+  type: "everyCondition";
+  conditions: PlayerRequirement[];
+}
+
+/**
+ * Structured interface to requirements for joining a faction or company.
+ * For fields with numerical value \> 0, the player must have at least this value.
+ * For fields with numerical value \<= 0, the player must have at most this value.
+ * For "not", the sub-condition must be failed instead of passed.
+ * For "someCondition", at least one sub-condition must be passed.
+ * @public
+ * @returns - An object representing one requirement.
+ */
+export type PlayerRequirement =
+  | MoneyRequirement
+  | SkillRequirement
+  | KarmaRequiremennt
+  | PeopleKilledRequirement
+  | FileRequirement
+  | NumAugmentationsRequirement
+  | EmployedByRequirement
+  | CompanyReputationRequirement
+  | JobTitleRequirement
+  | CityRequirement
+  | LocationRequirement
+  | BackdoorRequirement
+  | HacknetRAMRequirement
+  | HacknetCoresRequirement
+  | HacknetLevelsRequirement
+  | BitNodeRequirement
+  | SourceFileRequirement
+  | BladeburnerRankRequirement
+  | NumInfiltrationsRequirement
+  | NotRequirement
+  | SomeRequirement
+  | EveryRequirement;

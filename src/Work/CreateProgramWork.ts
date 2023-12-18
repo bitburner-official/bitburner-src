@@ -1,6 +1,6 @@
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { AugmentationName, CompletedProgramName } from "@enums";
+import { CompletedProgramName } from "@enums";
 import { CONSTANTS } from "../Constants";
 import { Player } from "@player";
 import { Programs } from "../Programs/Programs";
@@ -55,10 +55,7 @@ export class CreateProgramWork extends Work {
   }
 
   process(cycles: number): boolean {
-    let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
-      focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
-    }
+    const focusBonus = Player.focusPenalty();
     //Higher hacking skill will allow you to create programs faster
     const reqLvl = this.getProgram().create?.level ?? 0;
     let skillMult = (Player.skills.hacking / reqLvl) * calculateIntelligenceBonus(Player.skills.intelligence, 3); //This should always be greater than 1;

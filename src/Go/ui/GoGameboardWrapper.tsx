@@ -23,10 +23,10 @@ interface IProps {
   showInstructions: () => void;
 }
 
-// TODO: bonus time?
+// FUTURE: bonus time?
 
 /*
-// TODO: add AI cheating.
+// FUTURE: add AI cheating.
 * unlikely unless player cheats first
 * more common on some factions
 * play two moves that don't capture
