@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 
-import { ApplyToJobButton } from "./ApplyToJobButton";
+import { ApplyToJobButton } from "../../Company/ui/ApplyToJobButton";
 
 import { Locations } from "../Locations";
 import { CompanyName, JobField } from "@enums";

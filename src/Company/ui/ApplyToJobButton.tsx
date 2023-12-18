@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import { Company } from "../../Company/Company";
-import { CompanyPosition } from "../../Company/CompanyPosition";
-import { getJobRequirements } from "../../Company/GetJobRequirements";
+import { Company } from "../Company";
+import { CompanyPosition } from "../CompanyPosition";
+import { getJobRequirements } from "../GetJobRequirements";
 import { Settings } from "../../Settings/Settings";
 
 import { Player } from "@player";
@@ -13,7 +13,7 @@ import { MoneyRate } from "../../ui/React/MoneyRate";
 import { ReputationRate } from "../../ui/React/ReputationRate";
 import { StatsTable } from "../../ui/React/StatsTable";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
-import { CompanyPositions } from "../../Company/CompanyPositions";
+import { CompanyPositions } from "../CompanyPositions";
 import { Work } from "@mui/icons-material";
 import { CONSTANTS } from "../../Constants";
 
