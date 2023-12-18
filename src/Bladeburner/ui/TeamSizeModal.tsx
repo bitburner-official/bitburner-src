@@ -17,6 +17,7 @@ export function TeamSizeModal({ bladeburner, action, open, onClose }: TeamSizeMo
   const [teamSize, setTeamSize] = useState<number | undefined>();
 
   function confirmTeamSize(event: React.FormEvent): void {
+    // Prevent reloading page when submitting form
     event.preventDefault();
     if (teamSize === undefined) return;
     const num = Math.round(teamSize);
