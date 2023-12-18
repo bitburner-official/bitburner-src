@@ -4,10 +4,7 @@
  * This subcomponent renders all of the buttons for applying to jobs at a company
  */
 import React, { useState } from "react";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
+import { Paper, Box, Tooltip, Button, Typography } from "@mui/material";
 
 import { Locations } from "../Locations";
 import { CompanyName } from "@enums";
@@ -25,6 +22,7 @@ import { CompanyWork } from "../../Work/CompanyWork";
 import { useRerender } from "../../ui/React/hooks";
 import { companyNameAsLocationName } from "../../Company/utils";
 import { JobListingsModal } from "../../Company/ui/JobListingsModal";
+import { StatsTable } from "../../ui/React/StatsTable";
 import type { Company } from "../../Company/Company";
 import type { CompanyPosition } from "../../Company/CompanyPosition";
 
@@ -114,45 +112,45 @@ export function CompanyLocation(props: IProps): React.ReactElement {
           <br />
         </>
       )}
-      {isEmployedHere && (
-        <>
-          <Typography>Job Title: {jobTitle}</Typography>
-          <Typography>-------------------------</Typography>
-          <Box display="flex">
-            <Tooltip
-              title={
-                <>
-                  You will have <Favor favor={company.favor + favorGain} /> company favor upon resetting after
-                  installing Augmentations
-                </>
-              }
-            >
-              <Typography>
-                Company reputation: <Reputation reputation={company.playerReputation} />
-              </Typography>
-            </Tooltip>
-          </Box>
-          <Typography>-------------------------</Typography>
-          <Box display="flex">
-            <Tooltip
-              title={
-                <>
-                  Company favor increases the rate at which you earn reputation for this company by 1% per favor.
-                  Company favor is gained whenever you reset after installing Augmentations. The amount of favor you
-                  gain depends on how much reputation you have with the company.
-                </>
-              }
-            >
-              <Typography>
-                Company Favor: <Favor favor={company.favor} />
-              </Typography>
-            </Tooltip>
-          </Box>
-          <Typography>-------------------------</Typography>
-          <br />
-        </>
-      )}
       <Box sx={{ display: "grid", width: "fit-content" }}>
+        {isEmployedHere && (
+          <Paper sx={{ p: "0.5em 1em", mb: 2 }}>
+            <Typography>Job Title: {jobTitle}</Typography>
+            <StatsTable
+              rows={[
+                [
+                  <Tooltip
+                    key="repLabel"
+                    title={
+                      <>
+                        You will have <Favor favor={company.favor + favorGain} /> company favor upon resetting after
+                        installing Augmentations
+                      </>
+                    }
+                  >
+                    <Typography>Company reputation:</Typography>
+                  </Tooltip>,
+                  <Reputation key="rep" reputation={company.playerReputation} />,
+                ],
+                [
+                  <Tooltip
+                    title={
+                      <>
+                        Company favor increases the rate at which you earn reputation for this company by 1% per favor.
+                        Company favor is gained whenever you reset after installing Augmentations. The amount of favor
+                        you gain depends on how much reputation you have with the company.
+                      </>
+                    }
+                  >
+                    <Typography>Company favor:</Typography>
+                  </Tooltip>,
+                  <Favor key="favor" favor={company.favor} />,
+                ],
+              ]}
+            />
+          </Paper>
+        )}
+
         {isEmployedHere && (
           <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
             <Button onClick={work}>Work</Button>
@@ -167,7 +165,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
           </Box>
         )}
 
-        {company.companyPositions.size > 0 && <JobListingsButton company={company} currentPosition={currentPosition}/>}
+        {company.companyPositions.size > 0 && <JobListingsButton company={company} currentPosition={currentPosition} />}
 
         {location.infiltrationData != null && <Button onClick={startInfiltration}>Infiltrate Company</Button>}
       </Box>
@@ -184,10 +182,14 @@ function JobListingsButton(props: IJobListingsButtonProps): React.ReactElement {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={()=>{setOpen(true)}}>
+      <Button
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
         Job Listings
       </Button>
-      <JobListingsModal open={open} onClose={()=>setOpen(false)} {...props} />
+      <JobListingsModal open={open} onClose={() => setOpen(false)} {...props} />
     </>
-  )
+  );
 }
