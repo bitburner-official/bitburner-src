@@ -20,7 +20,7 @@ export function JobListings({ company, currentPosition }: JobListingsProps): Rea
     if (jobName === currentPosition?.name) continue;
     const job = CompanyPositions[jobName];
     const nextJobName = job.nextPosition;
-    // Don't show a job if we already qualify for a later job
+    // Don't show a job if we already qualify for a later job offered by this company
     if (nextJobName && qualifiedJobs.has(nextJobName)) continue;
     // Don't show a job if we don't qualify for it, unless it's a starting job or a promotion from current job
     if (!qualifiedJobs.has(jobName) && job.requiredReputation > 0 && jobName !== currentPosition?.nextPosition) {
