@@ -18,6 +18,13 @@ interface FactionWorkParams {
   faction: FactionName;
 }
 
+export interface APICopyFactionWork {
+  type: WorkType.FACTION
+  cyclesWorked: number,
+  factionWorkType: FactionWorkType,
+  factionName: FactionName
+}
+
 export const isFactionWork = (w: Work | null): w is FactionWork => w !== null && w.type === WorkType.FACTION;
 
 export class FactionWork extends Work {
@@ -67,9 +74,9 @@ export class FactionWork extends Work {
     }
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy(): APICopyFactionWork {
     return {
-      type: this.type,
+      type: WorkType.FACTION,
       cyclesWorked: this.cyclesWorked,
       factionWorkType: this.factionWorkType,
       factionName: this.factionName,

@@ -1577,6 +1577,87 @@ export interface TIX {
 }
 
 /**
+ * Study
+ * @remarks
+ * An object representing the current study task
+ * @public
+ */
+export interface StudyTask {
+  type: "CLASS"
+  cyclesWorked: number,
+  classType: string,
+  location: string,
+}
+/**
+ * Company Work
+ * @remarks
+ * An object representing the current work for a company
+ * @public
+ */
+export interface CompanyWorkTask {
+  type: "COMPANY",
+  cyclesWorked: number,
+  companyName: string,
+}
+
+/**
+ * Create Program
+ * @remarks
+ * An object representing the status of the program being created
+ * @public
+ */
+export interface CreateProgramWorkTask {
+  type: "CREATE_PROGRAM",
+  cyclesWorked: number,
+  programName: string
+}
+
+/**
+ * Crime
+ * @remarks
+ * An object representing the crime being commited
+ * @public
+ */
+export interface CrimeTask {
+  type: "CRIME",
+  cyclesWorked: number,
+  crimeType: string,
+}
+
+/**
+ * Faction Work
+ * @remarks
+ * An object representing the current work for a faction
+ * @public
+ */
+export interface FactionWorkTask {
+  type: "FACTION",
+  cyclesWorked: number,
+  factionWorkType: "hacking" | "field" | "security",
+  factionName: string
+}
+
+/**
+ * Faction Work
+ * @remarks
+ * An object representing the current grafting status
+ * @public
+ */
+export interface GraftingTask {
+  type: "GRAFTING",
+  cyclesWorked: number,
+  augmentation: string
+}
+
+/**
+ * Task
+ * @remarks
+ * Represents any task, such as studying, working for a faction etc.
+ * @public
+ */
+export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTask | FactionWorkTask | GraftingTask;
+
+/**
  * Singularity API
  * @remarks
  * This API requires Source-File 4 to use. The RAM cost of all these functions is multiplied by 16/4/1 based on
@@ -2484,7 +2565,7 @@ export interface Singularity {
    *
    * @returns - An object representing the current work. Fields depend on the kind of work.
    */
-  getCurrentWork(): any | null;
+  getCurrentWork(): Task | null;
 }
 
 /**

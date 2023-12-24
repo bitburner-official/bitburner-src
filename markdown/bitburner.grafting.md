@@ -4,7 +4,7 @@
 
 ## Grafting interface
 
-Grafting API
+Faction Work
 
 **Signature:**
 
@@ -14,7 +14,15 @@ export interface Grafting
 
 ## Remarks
 
-This API requires Source-File 10 to use.
+An object representing the current grafting status
+
+## Properties
+
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [augmentation](./bitburner.grafting.augmentation.md) |  | string |  |
+|  [cyclesWorked](./bitburner.grafting.cyclesworked.md) |  | number |  |
+|  [type](./bitburner.grafting.type.md) |  | "GRAFTING" |  |
 
 ## Methods
 

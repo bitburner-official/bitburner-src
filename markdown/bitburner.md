@@ -39,18 +39,22 @@
 |  [CodingContract](./bitburner.codingcontract.md) | Coding Contract API |
 |  [CompanyPositionInfo](./bitburner.companypositioninfo.md) | Company position requirements and salary. |
 |  [CompanyReputationRequirement](./bitburner.companyreputationrequirement.md) | Player must have at least this much reputation with this company. |
+|  [CompanyWork](./bitburner.companywork.md) | Company Work |
 |  [CorpConstants](./bitburner.corpconstants.md) | Corporation related constants |
 |  [CorpIndustryData](./bitburner.corpindustrydata.md) | Data for an individual industry |
 |  [CorpMaterialConstantData](./bitburner.corpmaterialconstantdata.md) | Corporation material information |
 |  [Corporation](./bitburner.corporation.md) | Corporation API |
 |  [CorporationInfo](./bitburner.corporationinfo.md) | General info about a corporation |
 |  [CorpProductData](./bitburner.corpproductdata.md) | Product rating information |
+|  [CreateProgramWork](./bitburner.createprogramwork.md) | Create Program |
+|  [Crime](./bitburner.crime.md) | Crime |
 |  [CrimeStats](./bitburner.crimestats.md) | Data representing the internal values of a crime. |
 |  [Division](./bitburner.division.md) | Corporation division |
 |  [EmployedByRequirement](./bitburner.employedbyrequirement.md) | Player must be working for this company. |
 |  [EquipmentStats](./bitburner.equipmentstats.md) | Object representing data representing a gang member equipment. |
 |  [EveryRequirement](./bitburner.everyrequirement.md) | All sub-conditions must be satisfied. |
 |  [Export](./bitburner.export.md) | Export order for a material |
+|  [FactionWork](./bitburner.factionwork.md) | Faction Work |
 |  [FileRequirement](./bitburner.filerequirement.md) | Player must have a specific Literature or Message file on their home computer. |
 |  [Formulas](./bitburner.formulas.md) | Formulas API |
 |  [Fragment](./bitburner.fragment.md) |  |
@@ -64,7 +68,7 @@
 |  [GangOtherInfoObject](./bitburner.gangotherinfoobject.md) |  |
 |  [GangTaskStats](./bitburner.gangtaskstats.md) | Object representing data representing a gang member task. |
 |  [GangTerritory](./bitburner.gangterritory.md) |  |
-|  [Grafting](./bitburner.grafting.md) | Grafting API |
+|  [Grafting](./bitburner.grafting.md) | Faction Work |
 |  [HackingFormulas](./bitburner.hackingformulas.md) | Hacking formulas |
 |  [HackingMultipliers](./bitburner.hackingmultipliers.md) | Hack related multipliers. |
 |  [Hacknet](./bitburner.hacknet.md) | Hacknet API |
@@ -126,6 +130,7 @@
 |  [StockMarketConstants](./bitburner.stockmarketconstants.md) | Constants used for the stockmarket game mechanic. |
 |  [StockOrder](./bitburner.stockorder.md) | <p>Return value of [getOrders](./bitburner.tix.getorders.md)</p><p>Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md)</p> |
 |  [StockOrderObject](./bitburner.stockorderobject.md) | Value in map of [StockOrder](./bitburner.stockorder.md) |
+|  [Study](./bitburner.study.md) | Study |
 |  [TailProperties](./bitburner.tailproperties.md) |  |
 |  [TIX](./bitburner.tix.md) | Stock market API |
 |  [UserInterface](./bitburner.userinterface.md) | User Interface API. |
@@ -164,4 +169,5 @@
 |  [SleeveSupportTask](./bitburner.sleevesupporttask.md) |  |
 |  [SleeveSynchroTask](./bitburner.sleevesynchrotask.md) |  |
 |  [SleeveTask](./bitburner.sleevetask.md) | Object representing a sleeve current task. |
+|  [Task](./bitburner.task.md) | Task |
 

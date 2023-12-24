@@ -78,8 +78,14 @@ interface ClassWorkParams {
   singularity: boolean;
 }
 
-export const isClassWork = (w: Work | null): w is ClassWork => w !== null && w.type === WorkType.CLASS;
+export interface APICopyClassWork {
+  type: WorkType.CLASS
+  cyclesWorked: number,
+  classType: ClassType,
+  location: LocationName,
+}
 
+export const isClassWork = (w: Work | null): w is ClassWork => w !== null && w.type === WorkType.CLASS;
 export class ClassWork extends Work {
   classType: ClassType;
   location: LocationName;
@@ -132,9 +138,9 @@ export class ClassWork extends Work {
     }
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy(): APICopyClassWork {
     return {
-      type: this.type,
+      type: WorkType.CLASS,
       cyclesWorked: this.cyclesWorked,
       classType: this.classType,
       location: this.location,

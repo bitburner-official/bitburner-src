@@ -18,6 +18,12 @@ interface GraftingWorkParams {
   singularity: boolean;
 }
 
+export interface APICopyGraftingWork {
+  type: WorkType.GRAFTING
+  cyclesWorked: number,
+  augmentation: AugmentationName
+}
+
 export class GraftingWork extends Work {
   augmentation: AugmentationName;
   unitCompleted: number;
@@ -79,9 +85,9 @@ export class GraftingWork extends Work {
     }
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy(): APICopyGraftingWork {
     return {
-      type: this.type,
+      type: WorkType.GRAFTING,
       cyclesWorked: this.cyclesWorked,
       augmentation: this.augmentation,
     };
