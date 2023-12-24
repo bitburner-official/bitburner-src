@@ -19,10 +19,10 @@ interface FactionWorkParams {
 }
 
 export interface APICopyFactionWork {
-  type: WorkType.FACTION
-  cyclesWorked: number,
-  factionWorkType: FactionWorkType,
-  factionName: FactionName
+  type: WorkType.FACTION;
+  cyclesWorked: number;
+  factionWorkType: FactionWorkType;
+  factionName: FactionName;
 }
 
 export const isFactionWork = (w: Work | null): w is FactionWork => w !== null && w.type === WorkType.FACTION;

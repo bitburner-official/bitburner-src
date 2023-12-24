@@ -6,7 +6,13 @@ import { APICopyCrimeWork } from "./CrimeWork";
 import { APICopyFactionWork } from "./FactionWork";
 import { APICopyGraftingWork } from "./GraftingWork";
 
-export type APICopyWork = APICopyClassWork | APICopyCompanyWork | APICopyCreateProgramWork | APICopyCrimeWork | APICopyFactionWork | APICopyGraftingWork;
+export type APICopyWork =
+  | APICopyClassWork
+  | APICopyCompanyWork
+  | APICopyCreateProgramWork
+  | APICopyCrimeWork
+  | APICopyFactionWork
+  | APICopyGraftingWork;
 
 export abstract class Work {
   type: WorkType;

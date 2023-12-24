@@ -19,9 +19,9 @@ interface GraftingWorkParams {
 }
 
 export interface APICopyGraftingWork {
-  type: WorkType.GRAFTING
-  cyclesWorked: number,
-  augmentation: AugmentationName
+  type: WorkType.GRAFTING;
+  cyclesWorked: number;
+  augmentation: AugmentationName;
 }
 
 export class GraftingWork extends Work {

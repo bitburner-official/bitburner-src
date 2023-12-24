@@ -20,9 +20,9 @@ interface CompanyWorkParams {
 }
 
 export interface APICopyCompanyWork {
-  type: WorkType.COMPANY
-  cyclesWorked: number,
-  companyName: CompanyName,
+  type: WorkType.COMPANY;
+  cyclesWorked: number;
+  companyName: CompanyName;
 }
 
 export const isCompanyWork = (w: Work | null): w is CompanyWork => w !== null && w.type === WorkType.COMPANY;

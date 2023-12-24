@@ -17,9 +17,9 @@ interface CrimeWorkParams {
 }
 
 export interface APICopyCrimeWork {
-  type: WorkType.CRIME
-  cyclesWorked: number,
-  crimeType: CrimeType,
+  type: WorkType.CRIME;
+  cyclesWorked: number;
+  crimeType: CrimeType;
 }
 
 export const isCrimeWork = (w: Work | null): w is CrimeWork => w !== null && w.type === WorkType.CRIME;

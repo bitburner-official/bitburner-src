@@ -1583,10 +1583,10 @@ export interface TIX {
  * @public
  */
 export interface StudyTask {
-  type: "CLASS"
-  cyclesWorked: number,
-  classType: string,
-  location: string,
+  type: "CLASS";
+  cyclesWorked: number;
+  classType: string;
+  location: string;
 }
 /**
  * Company Work
@@ -1595,9 +1595,9 @@ export interface StudyTask {
  * @public
  */
 export interface CompanyWorkTask {
-  type: "COMPANY",
-  cyclesWorked: number,
-  companyName: string,
+  type: "COMPANY";
+  cyclesWorked: number;
+  companyName: string;
 }
 
 /**
@@ -1607,9 +1607,9 @@ export interface CompanyWorkTask {
  * @public
  */
 export interface CreateProgramWorkTask {
-  type: "CREATE_PROGRAM",
-  cyclesWorked: number,
-  programName: string
+  type: "CREATE_PROGRAM";
+  cyclesWorked: number;
+  programName: string;
 }
 
 /**
@@ -1619,9 +1619,9 @@ export interface CreateProgramWorkTask {
  * @public
  */
 export interface CrimeTask {
-  type: "CRIME",
-  cyclesWorked: number,
-  crimeType: string,
+  type: "CRIME";
+  cyclesWorked: number;
+  crimeType: string;
 }
 
 /**
@@ -1631,10 +1631,10 @@ export interface CrimeTask {
  * @public
  */
 export interface FactionWorkTask {
-  type: "FACTION",
-  cyclesWorked: number,
-  factionWorkType: "hacking" | "field" | "security",
-  factionName: string
+  type: "FACTION";
+  cyclesWorked: number;
+  factionWorkType: "hacking" | "field" | "security";
+  factionName: string;
 }
 
 /**
@@ -1644,9 +1644,9 @@ export interface FactionWorkTask {
  * @public
  */
 export interface GraftingTask {
-  type: "GRAFTING",
-  cyclesWorked: number,
-  augmentation: string
+  type: "GRAFTING";
+  cyclesWorked: number;
+  augmentation: string;
 }
 
 /**

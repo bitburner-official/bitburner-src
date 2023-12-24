@@ -79,10 +79,10 @@ interface ClassWorkParams {
 }
 
 export interface APICopyClassWork {
-  type: WorkType.CLASS
-  cyclesWorked: number,
-  classType: ClassType,
-  location: LocationName,
+  type: WorkType.CLASS;
+  cyclesWorked: number;
+  classType: ClassType;
+  location: LocationName;
 }
 
 export const isClassWork = (w: Work | null): w is ClassWork => w !== null && w.type === WorkType.CLASS;

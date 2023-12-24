@@ -18,9 +18,9 @@ interface CreateProgramWorkParams {
 }
 
 export interface APICopyCreateProgramWork {
-  type: WorkType.CREATE_PROGRAM
-  cyclesWorked: number,
-  programName: CompletedProgramName
+  type: WorkType.CREATE_PROGRAM;
+  cyclesWorked: number;
+  programName: CompletedProgramName;
 }
 
 export class CreateProgramWork extends Work {
