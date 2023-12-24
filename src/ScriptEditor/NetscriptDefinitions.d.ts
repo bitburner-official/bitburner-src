@@ -1597,7 +1597,7 @@ export interface StudyTask {
 export interface CompanyWorkTask {
   type: "COMPANY";
   cyclesWorked: number;
-  companyName: string;
+  companyName: CompanyName;
 }
 
 /**
@@ -1621,7 +1621,7 @@ export interface CreateProgramWorkTask {
 export interface CrimeTask {
   type: "CRIME";
   cyclesWorked: number;
-  crimeType: string;
+  crimeType: CrimeType;
 }
 
 /**
@@ -1633,7 +1633,7 @@ export interface CrimeTask {
 export interface FactionWorkTask {
   type: "FACTION";
   cyclesWorked: number;
-  factionWorkType: "hacking" | "field" | "security";
+  factionWorkType: FactionWorkType;
   factionName: string;
 }
 
