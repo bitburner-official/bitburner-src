@@ -84,9 +84,9 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.5.2dev",
-  isDevBranch: true,
-  VersionNumber: 36,
+  VersionString: "2.5.2",
+  isDevBranch: false,
+  VersionNumber: 37,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -223,17 +223,14 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.5.2dev changelog - Last updated 9 December 2023
-
-### NOTES
-
-See the 2.5.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.5.1/src/Documentation/doc/changelog.md
+## v2.5.2 - 26 December 2023
 
 ### API
 
 - Added limit of 1e9 for additionalMsec property of HGWOptions (@d0sboots)
 - ns.share effect is now boosted by host server core count (@TheAimMan)
 - Fix a bug with HGWOptions that caused the default value to be 1 thread even for scripts running multiple threads (@DJMatch3000)
+- (Singularity) ns.singularity.applyToCompany now returns the JobName if a job was obtained, or null otherwise - previously was boolean (@jjclark1982)
 - (Singularity) ns.singularity.getCurrentWork now requires access to the singularity API (@TheAimMan)
 - (Singularity) Added ns.singularity.getFactionInviteRequirements (@jjclark1982)
 - (Stanek) ns.stanek.chargeFragment is now boosted by host server core count (@TheAimMan)
