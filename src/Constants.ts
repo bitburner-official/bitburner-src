@@ -84,9 +84,9 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.5.2dev",
-  isDevBranch: true,
-  VersionNumber: 36,
+  VersionString: "2.5.2",
+  isDevBranch: false,
+  VersionNumber: 37,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -223,11 +223,7 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.5.2dev changelog - Last updated 9 December 2023
-
-### NOTES
-
-See the 2.5.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.5.1/src/Documentation/doc/changelog.md
+## v2.5.2 - 26 December 2023
 
 ### API
 
