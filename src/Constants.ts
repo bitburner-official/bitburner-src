@@ -230,5 +230,8 @@ export const CONSTANTS: {
 - A new minigame IPvGO, based on the game Go. See the "IPvGO Subnet" option from the sidebar. Documentation is also available under "How to Play" from that screen (@ficocelliguy)
 - A new BitNode has been added which focuses on the IPvGO mechanic (@ficocelliguy)
 
+### API
+
+- Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes. (@ficocelliguy)
 `,
 };

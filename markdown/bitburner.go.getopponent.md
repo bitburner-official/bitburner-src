@@ -4,14 +4,14 @@
 
 ## Go.getOpponent() method
 
-Returns the name of the opponent faction in the current subnet. "Netburners" \| "Slum Snakes" \| "The Black Hand" \| "Tetrads" \| "Daedalus" \| "Illuminati"
+Returns the name of the opponent faction in the current subnet.
 
 **Signature:**
 
 ```typescript
-getOpponent(): opponents;
+getOpponent(): GoOpponent | "No AI" | "????????????";
 ```
 **Returns:**
 
-opponents
+[GoOpponent](./bitburner.goopponent.md) \| "No AI" \| "????????????"
 
