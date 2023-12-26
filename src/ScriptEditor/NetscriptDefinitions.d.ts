@@ -1,7 +1,5 @@
 /** All netscript definitions */
 
-import { opponents } from "../Go/boardState/goConstants";
-
 /** @public */
 interface HP {
   current: number;
@@ -1042,6 +1040,9 @@ export type SleeveTask =
   | SleeveRecoveryTask
   | SleeveSupportTask
   | SleeveSynchroTask;
+
+/** @public */
+type GoOpponent = "Netburners" | "Slum Snakes" | "The Black Hand" | "Tetrads" | "Daedalus" | "Illuminati";
 
 /** Object representing a port. A port is a serialized queue.
  * @public */
@@ -3882,9 +3883,8 @@ export interface Go {
 
   /**
    * Returns the name of the opponent faction in the current subnet.
-   *  "Netburners" | "Slum Snakes" | "The Black Hand" | "Tetrads" | "Daedalus" | "Illuminati"
    */
-  getOpponent(): opponents;
+  getOpponent(): GoOpponent | "No AI" | "????????????";
 
   /**
    * Gets new IPvGO subnet with the specified size owned by the listed faction, ready for the player to make a move.
@@ -3900,10 +3900,7 @@ export interface Go {
    * @remarks
    * RAM cost: 0 GB
    */
-  resetBoardState(
-    opponent: "Netburners" | "Slum Snakes" | "The Black Hand" | "Tetrads" | "Daedalus" | "Illuminati",
-    boardSize: 5 | 7 | 9 | 13,
-  ): string[] | undefined;
+  resetBoardState(opponent: GoOpponent, boardSize: 5 | 7 | 9 | 13): string[] | undefined;
 
   /**
    * Tools to analyze the IPvGO subnet.

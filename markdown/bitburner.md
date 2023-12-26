@@ -150,6 +150,7 @@
 |  [CorpUnlockName](./bitburner.corpunlockname.md) |  |
 |  [CorpUpgradeName](./bitburner.corpupgradename.md) |  |
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
+|  [GoOpponent](./bitburner.goopponent.md) |  |
 |  [NSEnums](./bitburner.nsenums.md) |  |
 |  [PlayerRequirement](./bitburner.playerrequirement.md) | Structured interface to requirements for joining a faction or company. For fields with numerical value &gt; 0, the player must have at least this value. For fields with numerical value &lt;<!-- -->= 0, the player must have at most this value. For "not", the sub-condition must be failed instead of passed. For "someCondition", at least one sub-condition must be passed. |
 |  [PortData](./bitburner.portdata.md) |  |
