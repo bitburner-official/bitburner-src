@@ -243,6 +243,28 @@ const gang = {
   nextUpdate: RamCostConstants.CycleTiming,
 } as const;
 
+// Go API
+const go = {
+  makeMove: 4,
+  passTurn: 0,
+  getBoardState: 4,
+  getOpponent: 0,
+  resetBoardState: 0,
+  analysis: {
+    getValidMoves: 8,
+    getChains: 16,
+    getLiberties: 16,
+    getControlledEmptyNodes: 16,
+  },
+  cheat: {
+    getCheatSuccessChance: 1,
+    removeRouter: 8,
+    playTwoMoves: 8,
+    repairOfflineNode: 8,
+    destroyNode: 8,
+  },
+} as const;
+
 // Bladeburner API
 const bladeburner = {
   inBladeburner: RamCostConstants.BladeburnerApiBase / 4,
@@ -434,6 +456,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   stock,
   singularity,
   gang,
+  go,
   bladeburner,
   infiltration,
   codingcontract,

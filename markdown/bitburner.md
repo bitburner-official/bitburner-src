@@ -64,6 +64,7 @@
 |  [GangOtherInfoObject](./bitburner.gangotherinfoobject.md) |  |
 |  [GangTaskStats](./bitburner.gangtaskstats.md) | Object representing data representing a gang member task. |
 |  [GangTerritory](./bitburner.gangterritory.md) |  |
+|  [Go](./bitburner.go.md) | IPvGO api |
 |  [Grafting](./bitburner.grafting.md) | Grafting API |
 |  [HackingFormulas](./bitburner.hackingformulas.md) | Hacking formulas |
 |  [HackingMultipliers](./bitburner.hackingmultipliers.md) | Hack related multipliers. |

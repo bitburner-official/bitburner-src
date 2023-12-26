@@ -10,12 +10,13 @@ import { Settings } from "../Settings/Settings";
 import { MoneySourceTracker } from "../utils/MoneySourceTracker";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { Player } from "@player";
-import { formatPercent } from "./formatNumber";
+import { formatPercent, formatNumber } from "./formatNumber";
 import { Modal } from "./React/Modal";
 import { Money } from "./React/Money";
 import { StatsRow } from "./React/StatsRow";
 import { StatsTable } from "./React/StatsTable";
 import { useRerender } from "./React/hooks";
+import { getMaxFavor } from "../Go/effects/effect";
 
 interface EmployersModalProps {
   open: boolean;
@@ -49,6 +50,9 @@ interface IMultRow {
 
   // The text color for the row
   color?: string;
+
+  // Whether to format as percent or scalar
+  isNumber?: boolean;
 }
 
 interface MultTableProps {
@@ -69,13 +73,26 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
               <StatsRow key={mult} name={mult} color={color} data={{}}>
                 <>
                   <Typography color={color}>
-                    <span style={{ opacity: 0.5 }}>{formatPercent(value)}</span> {formatPercent(effValue)}
+                    {data.isNumber ? (
+                      formatNumber(value, 0)
+                    ) : (
+                      <>
+                        <span style={{ opacity: 0.5 }}>{formatPercent(value)}</span> {formatPercent(effValue)}
+                      </>
+                    )}
                   </Typography>
                 </>
               </StatsRow>
             );
           }
-          return <StatsRow key={mult} name={mult} color={color} data={{ content: formatPercent(value) }} />;
+          return (
+            <StatsRow
+              key={mult}
+              name={mult}
+              color={color}
+              data={{ content: data.isNumber ? formatNumber(value, 0) : formatPercent(value) }}
+            />
+          );
         })}
       </TableBody>
     </Table>
@@ -345,6 +362,7 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Hacking Speed",
                   value: Player.mults.hacking_speed,
+                  effValue: Player.mults.hacking_speed * currentNodeMults.HackingSpeedMultiplier,
                 },
                 {
                   mult: "Hacking Money",
@@ -479,6 +497,7 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Company Reputation Gain",
                   value: Player.mults.company_rep,
+                  effValue: Player.mults.company_rep * currentNodeMults.CompanyWorkRepGain,
                   color: Settings.theme.rep,
                 },
                 {
@@ -501,6 +520,7 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Crime Success Chance",
                   value: Player.mults.crime_success,
+                  effValue: Player.mults.crime_success * currentNodeMults.CrimeSuccessRate,
                 },
                 {
                   mult: "Crime Money",
@@ -532,6 +552,23 @@ export function CharacterStats(): React.ReactElement {
                   },
                 ]}
                 color={Settings.theme.primary}
+                noMargin={!Player.sourceFileLvl(14) && Player.bitNodeN !== 14}
+              />
+            )}
+            {(Player.sourceFileLvl(14) || Player.bitNodeN === 14) && (
+              <MultiplierTable
+                rows={[
+                  {
+                    mult: "IPvGO Node Power bonus",
+                    value: Player.sourceFileLvl(14) ? 1.25 * currentNodeMults.GoPower : currentNodeMults.GoPower,
+                  },
+                  {
+                    mult: "IPvGO Max Favor",
+                    value: getMaxFavor(),
+                    isNumber: true,
+                  },
+                ]}
+                color={Settings.theme.combat}
                 noMargin
               />
             )}

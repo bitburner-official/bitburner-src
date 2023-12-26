@@ -38,6 +38,7 @@ export async function main(ns) {
 |  [enums](./bitburner.ns.enums.md) |  | [NSEnums](./bitburner.nsenums.md) |  |
 |  [formulas](./bitburner.ns.formulas.md) | <code>readonly</code> | [Formulas](./bitburner.formulas.md) | Namespace for formulas functions. |
 |  [gang](./bitburner.ns.gang.md) | <code>readonly</code> | [Gang](./bitburner.gang.md) | Namespace for gang functions. Contains spoilers. |
+|  [go](./bitburner.ns.go.md) | <code>readonly</code> | [Go](./bitburner.go.md) | Namespace for Go functions. |
 |  [grafting](./bitburner.ns.grafting.md) | <code>readonly</code> | [Grafting](./bitburner.grafting.md) | Namespace for grafting functions. Contains spoilers. |
 |  [hacknet](./bitburner.ns.hacknet.md) | <code>readonly</code> | [Hacknet](./bitburner.hacknet.md) | Namespace for hacknet functions. Some of this API contains spoilers. |
 |  [infiltration](./bitburner.ns.infiltration.md) | <code>readonly</code> | [Infiltration](./bitburner.infiltration.md) | Namespace for infiltration functions. |

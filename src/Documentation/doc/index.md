@@ -26,6 +26,8 @@
 
 ## Advanced Mechanics
 
+- [Hacking Algorithms](programming/hackingalgorithms.md)
+- [IPvGO](programming/go_algorithms.md)
 - [BitNodes](advanced/bitnodes.md)
 - [BladeBurners](advanced/bladeburners.md)
 - [Corporations](advanced/corporations.md)
