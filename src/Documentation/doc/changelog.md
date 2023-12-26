@@ -7,6 +7,7 @@
 - Added limit of 1e9 for additionalMsec property of HGWOptions (@d0sboots)
 - ns.share effect is now boosted by host server core count (@TheAimMan)
 - Fix a bug with HGWOptions that caused the default value to be 1 thread even for scripts running multiple threads (@DJMatch3000)
+- (Singularity) ns.singularity.applyToCompany now returns the JobName if a job was obtained, or null otherwise - previously was boolean (@jjclark1982)
 - (Singularity) ns.singularity.getCurrentWork now requires access to the singularity API (@TheAimMan)
 - (Singularity) Added ns.singularity.getFactionInviteRequirements (@jjclark1982)
 - (Stanek) ns.stanek.chargeFragment is now boosted by host server core count (@TheAimMan)
