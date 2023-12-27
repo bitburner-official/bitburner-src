@@ -46,11 +46,12 @@ export function Game(props: GameProps): React.ReactElement {
   const [results, setResults] = useState("");
   const [gameIds, setGameIds] = useState({
     lastGames: [-1, -1],
-    id: Math.floor(Math.random() * minigames.length),
+    id: 4, //Math.floor(Math.random() * minigames.length),
   });
 
   const setupNextGame = useCallback(() => {
     const nextGameId = () => {
+      return 4;
       let id = gameIds.lastGames[0];
       const ids = [gameIds.lastGames[0], gameIds.lastGames[1], gameIds.id];
       while (ids.includes(id)) {
