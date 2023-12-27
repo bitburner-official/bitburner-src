@@ -2,15 +2,7 @@ import { Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
-import {
-  downArrowSymbol,
-  getArrow,
-  getInverseArrow,
-  leftArrowSymbol,
-  random,
-  rightArrowSymbol,
-  upArrowSymbol,
-} from "../utils";
+import { Arrow, downArrowSymbol, getArrow, leftArrowSymbol, random, rightArrowSymbol, upArrowSymbol } from "../utils";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
@@ -45,7 +37,7 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();
-    if (code[index] !== getArrow(event) && (!hasAugment || code[index] !== getInverseArrow(event))) {
+    if (code[index] !== getArrow(event)) {
       props.onFailure();
       return;
     }
@@ -58,21 +50,37 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
       <GameTimer millis={timer} onExpire={props.onFailure} />
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
         <Typography variant="h4">Enter the Code!</Typography>
-        <Typography variant="h4">{code[index]}</Typography>
+        <Typography variant="h4">
+          <div
+            style={{
+              display: "grid",
+              gap: "2rem",
+              gridTemplateColumns: `repeat(${code.length}, 1fr)`,
+              textAlign: "center",
+            }}
+          >
+            {code.map((arrow, i) => {
+              return (
+                <span key={i} style={i !== index ? { opacity: 0.4 } : {}}>
+                  {i > index && !hasAugment ? "?" : arrow}
+                </span>
+              );
+            })}
+          </div>
+        </Typography>
         <KeyHandler onKeyDown={press} onFailure={props.onFailure} />
       </Paper>
     </>
   );
 }
 
-function generateCode(difficulty: Difficulty): string {
-  const arrows = [leftArrowSymbol, rightArrowSymbol, upArrowSymbol, downArrowSymbol];
-  let code = "";
+function generateCode(difficulty: Difficulty): Arrow[] {
+  const arrows: Arrow[] = [leftArrowSymbol, rightArrowSymbol, upArrowSymbol, downArrowSymbol];
+  const code: Arrow[] = [];
   for (let i = 0; i < random(difficulty.min, difficulty.max); i++) {
     let arrow = arrows[Math.floor(4 * Math.random())];
     while (arrow === code[code.length - 1]) arrow = arrows[Math.floor(4 * Math.random())];
-    code += arrow;
+    code.push(arrow);
   }
-
   return code;
 }
