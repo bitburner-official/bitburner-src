@@ -82,9 +82,9 @@ export class CrimeWork extends Work {
     /** nothing to do */
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy() {
     return {
-      type: this.type,
+      type: WorkType.CRIME as const,
       cyclesWorked: this.cyclesWorked,
       crimeType: this.crimeType,
     };

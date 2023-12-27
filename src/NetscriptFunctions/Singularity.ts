@@ -1,4 +1,4 @@
-import type { Singularity as ISingularity } from "@nsdefs";
+import type { Singularity as ISingularity, Task as ITask } from "@nsdefs";
 
 import { Player } from "@player";
 import {
@@ -1137,7 +1137,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     getCurrentWork: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       if (!Player.currentWork) return null;
-      return Player.currentWork.APICopy();
+      return Player.currentWork.APICopy() as ITask;
     },
     exportGame: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);

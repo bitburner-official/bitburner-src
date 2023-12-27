@@ -67,9 +67,9 @@ export class FactionWork extends Work {
     }
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy() {
     return {
-      type: this.type,
+      type: WorkType.FACTION as const,
       cyclesWorked: this.cyclesWorked,
       factionWorkType: this.factionWorkType,
       factionName: this.factionName,

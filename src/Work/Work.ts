@@ -1,4 +1,5 @@
-import { IReviverValue } from "../utils/JSONReviver";
+import type { IReviverValue } from "../utils/JSONReviver";
+import type { Task } from "@nsdefs";
 
 export abstract class Work {
   type: WorkType;
@@ -13,7 +14,7 @@ export abstract class Work {
 
   abstract process(cycles: number): boolean;
   abstract finish(cancelled: boolean, suppressDialog?: boolean): void;
-  abstract APICopy(): Record<string, unknown>;
+  abstract APICopy(): Task;
   abstract toJSON(): IReviverValue;
 }
 

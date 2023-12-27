@@ -96,9 +96,9 @@ export class CreateProgramWork extends Work {
     }
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy() {
     return {
-      type: this.type,
+      type: WorkType.CREATE_PROGRAM as const,
       cyclesWorked: this.cyclesWorked,
       programName: this.programName,
     };

@@ -61,9 +61,9 @@ export class CompanyWork extends Work {
     }
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy() {
     return {
-      type: this.type,
+      type: WorkType.COMPANY as const,
       cyclesWorked: this.cyclesWorked,
       companyName: this.companyName,
     };
