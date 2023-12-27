@@ -53,7 +53,7 @@ export class SleeveFactionWork extends SleeveWorkClass {
 
   APICopy() {
     return {
-      type: SleeveWorkType.FACTION as "FACTION",
+      type: SleeveWorkType.FACTION as const,
       factionWorkType: this.factionWorkType,
       factionName: this.factionName,
     };

@@ -81,7 +81,7 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
 
   APICopy(sleeve: Sleeve) {
     return {
-      type: SleeveWorkType.BLADEBURNER as "BLADEBURNER",
+      type: SleeveWorkType.BLADEBURNER as const,
       actionType: this.actionType,
       actionName: this.actionName,
       tasksCompleted: this.tasksCompleted,

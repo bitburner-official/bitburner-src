@@ -42,7 +42,7 @@ export class SleeveClassWork extends SleeveWorkClass {
 
   APICopy() {
     return {
-      type: SleeveWorkType.CLASS as "CLASS",
+      type: SleeveWorkType.CLASS as const,
       classType: this.classType,
       location: this.location,
     };

@@ -49,7 +49,7 @@ export class SleeveCompanyWork extends SleeveWorkClass {
 
   APICopy() {
     return {
-      type: SleeveWorkType.COMPANY as "COMPANY",
+      type: SleeveWorkType.COMPANY as const,
       companyName: this.companyName,
     };
   }
