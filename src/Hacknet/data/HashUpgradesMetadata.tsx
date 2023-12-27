@@ -1,14 +1,18 @@
 // Metadata used to construct all Hash Upgrades
 import React from "react";
-import { IConstructorParams } from "../HashUpgrade";
+import { HashUpgradeParams } from "../HashUpgrade";
 import { formatInt } from "../../ui/formatNumber";
 import { Money } from "../../ui/React/Money";
 
-export const HashUpgradesMetadata: IConstructorParams[] = [
+export const HashUpgradesMetadata: HashUpgradeParams[] = [
   {
     cost: 4,
     costPerLevel: 4,
-    desc: "Sell hashes for $1m",
+    desc: (
+      <>
+        Sell hashes for <Money money={1e6} />
+      </>
+    ),
     name: "Sell for Money",
     effectText: (level: number): JSX.Element | null => (
       <>
@@ -19,7 +23,11 @@ export const HashUpgradesMetadata: IConstructorParams[] = [
   },
   {
     costPerLevel: 100,
-    desc: "Sell hashes for $1b in Corporation funds",
+    desc: (
+      <>
+        Sell hashes for <Money money={1e9} /> in Corporation funds
+      </>
+    ),
     name: "Sell for Corporation Funds",
     effectText: (level: number): JSX.Element | null => (
       <>
@@ -33,18 +41,20 @@ export const HashUpgradesMetadata: IConstructorParams[] = [
     desc:
       "Use hashes to decrease the minimum security of a single server by 2%. " +
       "Note that a server's minimum security cannot go below 1. This effect persists " +
-      "until you install Augmentations (since servers are reset at that time).",
+      "until you install Augmentations (since servers are reset at that time)",
     hasTargetServer: true,
     name: "Reduce Minimum Security",
     value: 0.98,
   },
   {
     costPerLevel: 50,
-    desc:
-      "Use hashes to increase the maximum amount of money on a single server by 2%. " +
-      "Note that a server's maximum money is soft capped above $10t. " +
-      "This effect persists until you install Augmentations (since servers " +
-      "are reset at that time).",
+    desc: (
+      <>
+        Use hashes to increase the maximum amount of money on a single server by 2%. This effect persists until you
+        install Augmentations (since servers are reset at that time). Note that a server's maximum money is soft capped
+        above <Money money={10e12} />
+      </>
+    ),
     hasTargetServer: true,
     name: "Increase Maximum Money",
     value: 1.02,
