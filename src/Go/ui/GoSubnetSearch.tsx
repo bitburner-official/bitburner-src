@@ -73,7 +73,7 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
             {opponentFactions.map((faction) => (
               <MenuItem key={faction} value={faction}>
                 {faction === opponents.w0r1d_d43m0n ? (
-                  <CorruptableText content="???????????????" />
+                  <CorruptableText content="???????????????" spoiler={false} />
                 ) : (
                   `${faction} (${opponentDetails[faction].description})`
                 )}
@@ -120,8 +120,8 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
           <Typography>
             {opponent === opponents.w0r1d_d43m0n ? (
               <>
-                <CorruptableText content={opponentDetails[opponent].flavorText.slice(0, 40)} />
-                <CorruptableText content={opponentDetails[opponent].flavorText.slice(40)} />
+                <CorruptableText content={opponentDetails[opponent].flavorText.slice(0, 40)} spoiler={false} />
+                <CorruptableText content={opponentDetails[opponent].flavorText.slice(40)} spoiler={false} />
               </>
             ) : (
               opponentDetails[opponent].flavorText

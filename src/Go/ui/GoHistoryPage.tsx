@@ -54,7 +54,11 @@ export const GoHistoryPage = (): React.ReactElement => {
               <Typography>
                 {" "}
                 <strong className={classes.keyText}>
-                  {faction === opponents.w0r1d_d43m0n ? <CorruptableText content="????????????" /> : faction}
+                  {faction === opponents.w0r1d_d43m0n ? (
+                    <CorruptableText content="????????????" spoiler={false} />
+                  ) : (
+                    faction
+                  )}
                 </strong>
               </Typography>
               <Table sx={{ display: "table", mb: 1, width: "100%" }}>

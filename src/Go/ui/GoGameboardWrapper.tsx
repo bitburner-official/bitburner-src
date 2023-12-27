@@ -243,7 +243,7 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
           <br />
           <Typography variant={"h6"} className={classes.opponentLabel}>
             {opponent !== opponents.none ? "Subnet owner: " : ""}{" "}
-            {opponent === opponents.w0r1d_d43m0n ? <CorruptableText content={opponent} /> : opponent}
+            {opponent === opponents.w0r1d_d43m0n ? <CorruptableText content={opponent} spoiler={false} /> : opponent}
           </Typography>
           <br />
         </Box>

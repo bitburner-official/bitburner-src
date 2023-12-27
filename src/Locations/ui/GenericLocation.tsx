@@ -95,7 +95,7 @@ export function GenericLocation({ loc }: IProps): React.ReactElement {
     <>
       <Button onClick={() => Router.toPage(Page.City)}>Return to World</Button>
       <Typography variant="h4" sx={{ mt: 1 }}>
-        {backdoorInstalled ? (
+        {backdoorInstalled && serverMeta ? (
           <Tooltip title={`Backdoor installed on ${serverMeta.hostname}.`}>
             <span>
               <CorruptableText content={loc.name} spoiler={false} />
