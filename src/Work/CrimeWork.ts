@@ -16,12 +16,6 @@ interface CrimeWorkParams {
   singularity: boolean;
 }
 
-export interface APICopyCrimeWork {
-  type: WorkType.CRIME;
-  cyclesWorked: number;
-  crimeType: CrimeType;
-}
-
 export const isCrimeWork = (w: Work | null): w is CrimeWork => w !== null && w.type === WorkType.CRIME;
 
 export class CrimeWork extends Work {
@@ -88,9 +82,9 @@ export class CrimeWork extends Work {
     /** nothing to do */
   }
 
-  APICopy(): APICopyCrimeWork {
+  APICopy() {
     return {
-      type: WorkType.CRIME,
+      type: WorkType.CRIME as const,
       cyclesWorked: this.cyclesWorked,
       crimeType: this.crimeType,
     };

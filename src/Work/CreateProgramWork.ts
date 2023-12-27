@@ -17,12 +17,6 @@ interface CreateProgramWorkParams {
   singularity: boolean;
 }
 
-export interface APICopyCreateProgramWork {
-  type: WorkType.CREATE_PROGRAM;
-  cyclesWorked: number;
-  programName: CompletedProgramName;
-}
-
 export class CreateProgramWork extends Work {
   programName: CompletedProgramName;
   // amount of effective work completed on the program (time boosted by skills).
@@ -102,9 +96,9 @@ export class CreateProgramWork extends Work {
     }
   }
 
-  APICopy(): APICopyCreateProgramWork {
+  APICopy() {
     return {
-      type: WorkType.CREATE_PROGRAM,
+      type: WorkType.CREATE_PROGRAM as const,
       cyclesWorked: this.cyclesWorked,
       programName: this.programName,
     };

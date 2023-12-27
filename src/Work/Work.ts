@@ -1,18 +1,5 @@
-import { IReviverValue } from "../utils/JSONReviver";
-import { APICopyClassWork } from "./ClassWork";
-import { APICopyCompanyWork } from "./CompanyWork";
-import { APICopyCreateProgramWork } from "./CreateProgramWork";
-import { APICopyCrimeWork } from "./CrimeWork";
-import { APICopyFactionWork } from "./FactionWork";
-import { APICopyGraftingWork } from "./GraftingWork";
-
-export type APICopyWork =
-  | APICopyClassWork
-  | APICopyCompanyWork
-  | APICopyCreateProgramWork
-  | APICopyCrimeWork
-  | APICopyFactionWork
-  | APICopyGraftingWork;
+import type { IReviverValue } from "../utils/JSONReviver";
+import type { Task } from "@nsdefs";
 
 export abstract class Work {
   type: WorkType;
@@ -27,7 +14,7 @@ export abstract class Work {
 
   abstract process(cycles: number): boolean;
   abstract finish(cancelled: boolean, suppressDialog?: boolean): void;
-  abstract APICopy(): APICopyWork;
+  abstract APICopy(): Task;
   abstract toJSON(): IReviverValue;
 }
 

@@ -78,13 +78,6 @@ interface ClassWorkParams {
   singularity: boolean;
 }
 
-export interface APICopyClassWork {
-  type: WorkType.CLASS;
-  cyclesWorked: number;
-  classType: ClassType;
-  location: LocationName;
-}
-
 export const isClassWork = (w: Work | null): w is ClassWork => w !== null && w.type === WorkType.CLASS;
 export class ClassWork extends Work {
   classType: ClassType;
@@ -138,9 +131,9 @@ export class ClassWork extends Work {
     }
   }
 
-  APICopy(): APICopyClassWork {
+  APICopy() {
     return {
-      type: WorkType.CLASS,
+      type: WorkType.CLASS as const,
       cyclesWorked: this.cyclesWorked,
       classType: this.classType,
       location: this.location,

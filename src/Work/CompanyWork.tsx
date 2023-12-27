@@ -19,12 +19,6 @@ interface CompanyWorkParams {
   singularity: boolean;
 }
 
-export interface APICopyCompanyWork {
-  type: WorkType.COMPANY;
-  cyclesWorked: number;
-  companyName: CompanyName;
-}
-
 export const isCompanyWork = (w: Work | null): w is CompanyWork => w !== null && w.type === WorkType.COMPANY;
 
 export class CompanyWork extends Work {
@@ -67,9 +61,9 @@ export class CompanyWork extends Work {
     }
   }
 
-  APICopy(): APICopyCompanyWork {
+  APICopy() {
     return {
-      type: WorkType.COMPANY,
+      type: WorkType.COMPANY as const,
       cyclesWorked: this.cyclesWorked,
       companyName: this.companyName,
     };
