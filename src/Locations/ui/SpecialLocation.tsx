@@ -303,7 +303,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     return (
       <>
         <Typography>
-          <CorruptableText content={"An eerie aura surrounds this area. You feel you should leave."} />
+          <CorruptableText content={"An eerie aura surrounds this area. You feel you should leave."} spoiler={false} />
         </Typography>
       </>
     );

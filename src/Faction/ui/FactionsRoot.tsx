@@ -136,7 +136,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
             ) : (
               <Tooltip title={"Rumored Faction"}>
                 <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
-                  <CorruptableText content={props.faction.name} />
+                  <CorruptableText content={props.faction.name} spoiler={false} />
                 </span>
               </Tooltip>
             )}
