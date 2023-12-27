@@ -80,10 +80,14 @@ const fixAlign = (align: React.CSSProperties["textAlign"]): TableCellProps["alig
 export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.ReactElement => {
   const classes = useStyles();
   const align = fixAlign(props.style?.textAlign);
+  const content = props.children?.map((child, i) => {
+    if (child === "<br />") return <br key={i} />;
+    return child;
+  });
   return (
     <TableCell align={align}>
       <Typography align={align} classes={{ root: classes.td }}>
-        {props.children}
+        {content}
       </Typography>
     </TableCell>
   );
@@ -92,6 +96,7 @@ export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.Re
 export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.ReactElement => {
   const classes = useStyles();
   const align = fixAlign(props.style?.textAlign);
+
   return (
     <TableCell align={align}>
       <Typography align={align} classes={{ root: classes.th }}>
