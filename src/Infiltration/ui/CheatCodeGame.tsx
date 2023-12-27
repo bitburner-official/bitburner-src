@@ -1,19 +1,8 @@
 import { Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { AugmentationName } from "@enums";
-import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
-import {
-  downArrowSymbol,
-  getArrow,
-  leftArrowSymbol,
-  random,
-  rightArrowSymbol,
-  upArrowSymbol,
-  leftDashedArrowSymbol,
-  rightDashedArrowSymbol,
-  toDashedArrow,
-} from "../utils";
+import { Arrow, downArrowSymbol, getArrow, leftArrowSymbol, random, rightArrowSymbol, upArrowSymbol } from "../utils";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
@@ -46,9 +35,6 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
   const [index, setIndex] = useState(0);
   const hasAugment = Player.hasAugmentation(AugmentationName.TrickeryOfHermes, true);
 
-  const focusColor = Settings.theme.primary;
-  const hintColor = Settings.theme.disabled;
-
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();
     if (code[index] !== getArrow(event)) {
@@ -59,26 +45,28 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
     if (index + 1 >= code.length) props.onSuccess();
   }
 
-  // Hidden arrows are to force a consistent column width for the grid layout,
-  // based on the widest character (left and right dashed arrows)
   return (
     <>
       <GameTimer millis={timer} onExpire={props.onFailure} />
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
         <Typography variant="h4">Enter the Code!</Typography>
         <Typography variant="h4">
-          {hasAugment && (
-            <div style={{ display: "grid", gap: "2rem", gridTemplateColumns: "repeat(7, 1fr)", textAlign: "center" }}>
-              <span style={{ visibility: "hidden" }}>{leftDashedArrowSymbol}</span>
-              <span style={{ color: hintColor }}>{index > 1 && toDashedArrow(code[index - 2])}</span>
-              <span style={{ color: hintColor }}>{index > 0 && toDashedArrow(code[index - 1])}</span>
-              <span style={{ color: focusColor }}>{code[index]}</span>
-              <span style={{ color: hintColor }}>{index < code.length - 1 && toDashedArrow(code[index + 1])}</span>
-              <span style={{ color: hintColor }}>{index < code.length - 2 && toDashedArrow(code[index + 2])}</span>
-              <span style={{ visibility: "hidden" }}>{rightDashedArrowSymbol}</span>
-            </div>
-          )}
-          {!hasAugment && <span style={{ color: focusColor }}>{code[index]}</span>}
+          <div
+            style={{
+              display: "grid",
+              gap: "2rem",
+              gridTemplateColumns: `repeat(${code.length}, 1fr)`,
+              textAlign: "center",
+            }}
+          >
+            {code.map((arrow, i) => {
+              return (
+                <span key={i} style={i !== index ? { opacity: 0.4 } : {}}>
+                  {i > index && !hasAugment ? "?" : arrow}
+                </span>
+              );
+            })}
+          </div>
         </Typography>
         <KeyHandler onKeyDown={press} onFailure={props.onFailure} />
       </Paper>
@@ -86,14 +74,13 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
   );
 }
 
-function generateCode(difficulty: Difficulty): string {
-  const arrows = [leftArrowSymbol, rightArrowSymbol, upArrowSymbol, downArrowSymbol];
-  let code = "";
+function generateCode(difficulty: Difficulty): Arrow[] {
+  const arrows: Arrow[] = [leftArrowSymbol, rightArrowSymbol, upArrowSymbol, downArrowSymbol];
+  const code: Arrow[] = [];
   for (let i = 0; i < random(difficulty.min, difficulty.max); i++) {
     let arrow = arrows[Math.floor(4 * Math.random())];
     while (arrow === code[code.length - 1]) arrow = arrows[Math.floor(4 * Math.random())];
-    code += arrow;
+    code.push(arrow);
   }
-
   return code;
 }
