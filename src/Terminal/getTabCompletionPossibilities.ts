@@ -7,7 +7,7 @@ import { HelpTexts } from "./HelpText";
 import { compile } from "../NetscriptJSEvaluator";
 import { Flags } from "../NetscriptFunctions/Flags";
 import { AutocompleteData } from "@nsdefs";
-import * as libarg from "arg";
+import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
 
