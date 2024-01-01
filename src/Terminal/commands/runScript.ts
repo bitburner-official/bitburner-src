@@ -52,6 +52,12 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   const success = startWorkerScript(runningScript, server);
   if (!success) return Terminal.error(`Failed to start script`);
 
+  if (path.endsWith(".script")) {
+    Terminal.warn(
+      "NOTICE: NS1 (.script) scripts are deprecated and will be removed in a future update." +
+      " Migrate to NS2 (.js) scripts instead."
+    );
+  }
   Terminal.print(
     `Running script with ${numThreads} thread(s), pid ${runningScript.pid} and args: ${JSON.stringify(args)}.`,
   );
