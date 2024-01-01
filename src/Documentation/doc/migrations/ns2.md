@@ -1,6 +1,6 @@
 # Netscript 2 Migration Guide
 
-With the deprecation of Netscript 1 there are required changes to migrate over.
+With the deprecation of NS1 (`.script`) there are required changes to migrate scripts over to NS2 (`.js`).
 
 ## Basic Steps
 1. You need to wrap the entire script inside of an exported main function, like so:
