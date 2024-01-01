@@ -57,7 +57,7 @@ export function commonEditor(
   }
   if (hasNs1) {
     Terminal.warn(
-      "NS1 (.script) scripts are deprecated and will be removed in a future update." +
+      "NOTICE: NS1 (.script) scripts are deprecated and will be removed in a future update." +
       " Migrate to NS2 (.js) scripts instead."
     );
   }
