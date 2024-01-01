@@ -30,12 +30,14 @@ export function commonEditor(
 ): void {
   if (args.length < 1) return Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`);
   const files = new Map<ScriptFilePath | TextFilePath, string>();
+  let hasNs1 = false;
   for (const arg of args) {
     const pattern = String(arg);
 
     // Glob of existing files
     if (pattern.includes("*") || pattern.includes("?")) {
       for (const [path, file] of getGlobbedFileMap(pattern, server, Terminal.currDir)) {
+        if (path.endsWith(".script")) hasNs1 = true;
         files.set(path, file.content);
       }
       continue;
@@ -47,10 +49,17 @@ export function commonEditor(
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
       return Terminal.error(`${command}: Only scripts or text files can be edited. Invalid file type: ${arg}`);
     }
+    if (path.endsWith(".script")) hasNs1 = true;
     const file = server.getContentFile(path);
     const content = file ? file.content : isNs2(path) ? newNs2Template : "";
     files.set(path, content);
     if (content === newNs2Template) CursorPositions.saveCursor(path, { row: 3, column: 5 });
+  }
+  if (hasNs1) {
+    Terminal.warn(
+      "NS1 (.script) scripts are deprecated and will be removed in a future update." +
+      " Migrate to NS2 (.js) scripts instead."
+    );
   }
   Router.toPage(Page.ScriptEditor, { files, options });
 }
