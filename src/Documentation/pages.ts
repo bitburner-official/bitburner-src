@@ -40,7 +40,7 @@ import file37 from "!!raw-loader!./doc/programming/go_algorithms.md";
 import file38 from "!!raw-loader!./doc/programming/hackingalgorithms.md";
 import file39 from "!!raw-loader!./doc/programming/learn.md";
 import file40 from "!!raw-loader!./doc/programming/remote_api.md";
-import file41 from "!!raw-loader!./doc/migrations/ns2.md"
+import file41 from "!!raw-loader!./doc/migrations/ns2.md";
 
 interface Document {
   default: string;
