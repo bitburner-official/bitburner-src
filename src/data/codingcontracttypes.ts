@@ -1162,7 +1162,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       const sanitizedPlayerAns: string = removeBracketsFromArrayString(ans);
       const sanitizedPlayerAnsArr: string[] = sanitizedPlayerAns.split(",");
       for (let i = 0; i < sanitizedPlayerAnsArr.length; ++i) {
-        sanitizedPlayerAnsArr[i] = removeQuotesFromString(sanitizedPlayerAnsArr[i]).replace(/\s/g, "");
+        sanitizedPlayerAnsArr[i] = removeQuotesFromString(sanitizedPlayerAnsArr[i].replace(/\s/g, ""));
       }
 
       if (sanitizedPlayerAnsArr.length !== res.length) {
@@ -1264,7 +1264,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       // Don't include any "" entries in the parsed array
       const sanitizedPlayerAnsArr: string[] = filterTruthy(sanitizedPlayerAns.split(","));
       for (let i = 0; i < sanitizedPlayerAnsArr.length; ++i) {
-        sanitizedPlayerAnsArr[i] = removeQuotesFromString(sanitizedPlayerAnsArr[i]).replace(/\s/g, "");
+        sanitizedPlayerAnsArr[i] = removeQuotesFromString(sanitizedPlayerAnsArr[i].replace(/\s/g, ""));
       }
 
       if (num == null || num.length === 0) {
