@@ -41,6 +41,11 @@ export async function makePlayerMove(logger: (s: string) => void, x: number, y: 
   if (validity !== validityReason.valid || !result) {
     await sleep(500);
     logger(`ERROR: Invalid move: ${validity}`);
+
+    if (validity === validityReason.notYourTurn) {
+      logger("Do you have multiple scripts running, or did you forget to await makeMove() ?");
+    }
+
     return Promise.resolve(invalidMoveResponse);
   }
 
