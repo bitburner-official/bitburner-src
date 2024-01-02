@@ -280,7 +280,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.Documentation: {
-      mainPage = <DocumentationRoot />;
+      mainPage = <DocumentationRoot docPage={pageWithContext.docPage} />;
       break;
     }
     case Page.DevMenu: {
