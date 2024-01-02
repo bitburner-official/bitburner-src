@@ -6,6 +6,7 @@ import { CursorPositions } from "../../../ScriptEditor/CursorPositions";
 import { ScriptFilePath, hasScriptExtension } from "../../../Paths/ScriptFilePath";
 import { TextFilePath, hasTextExtension } from "../../../Paths/TextFilePath";
 import { getGlobbedFileMap } from "../../../Paths/GlobbedFiles";
+import { sendDeprecationNotice } from "./deprecation.ts";
 
 // 2.3: Globbing implementation was removed from this file. Globbing will be reintroduced as broader functionality and integrated here.
 
@@ -56,10 +57,7 @@ export function commonEditor(
     if (content === newNs2Template) CursorPositions.saveCursor(path, { row: 3, column: 5 });
   }
   if (hasNs1) {
-    Terminal.warn(
-      "NOTICE: NS1 (.script) scripts are deprecated and will be removed in a future update." +
-      " Migrate to NS2 (.js) scripts instead."
-    );
+    sendDeprecationNotice();
   }
   Router.toPage(Page.ScriptEditor, { files, options });
 }
