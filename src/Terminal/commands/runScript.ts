@@ -8,6 +8,7 @@ import { formatRam } from "../../ui/formatNumber";
 import { ScriptArg } from "@nsdefs";
 import { isPositiveInteger } from "../../types";
 import { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { sendDeprecationNotice } from "./common/deprecation.ts";
 
 export function runScript(path: ScriptFilePath, commandArgs: (string | number | boolean)[], server: BaseServer): void {
   // This takes in the absolute filepath, see "run.ts"
@@ -53,10 +54,7 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   if (!success) return Terminal.error(`Failed to start script`);
 
   if (path.endsWith(".script")) {
-    Terminal.warn(
-      "NOTICE: NS1 (.script) scripts are deprecated and will be removed in a future update." +
-      " Migrate to NS2 (.js) scripts instead."
-    );
+    sendDeprecationNotice();
   }
   Terminal.print(
     `Running script with ${numThreads} thread(s), pid ${runningScript.pid} and args: ${JSON.stringify(args)}.`,
