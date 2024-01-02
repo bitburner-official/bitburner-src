@@ -110,11 +110,14 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
     acceptGift: (ctx) => () => {
       const cotmgFaction = Factions[FactionName.ChurchOfTheMachineGod];
       // Check if the player is eligible to join the church
-      if (cotmgFaction.getInfo().inviteReqs.isSatisfied(Player)) {
-        // Attempt to join CotMG
-        joinFaction(cotmgFaction);
-        // Attempt to install the first Stanek aug (unless it is already queued)
-        if (!Player.hasAugmentation(AugmentationName.StaneksGift1, false)) {
+      if (Player.canAccessCotMG()) {
+        const augs = [...Player.augmentations, ...Player.queuedAugmentations].filter(
+          (a) => a.name !== AugmentationName.NeuroFluxGovernor,
+        );
+        if (augs.length == 0) {
+          // Join the CotMG factionn
+          joinFaction(cotmgFaction);
+          // Install the first Stanek aug
           applyAugmentation({ name: AugmentationName.StaneksGift1, level: 1 });
           helpers.log(
             ctx,
