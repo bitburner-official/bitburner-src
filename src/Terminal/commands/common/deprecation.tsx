@@ -8,7 +8,7 @@ import { Page } from "../../../ui/Router";
 export function sendDeprecationNotice() {
   return Terminal.printRaw(
     <Typography sx={{ color: Settings.theme.warning }}>
-      NOTICE: NS1 (.script) scripts are deprecated and will be removed in a future update.{" "}
+      NOTICE: Accessing the Netscript API via .script files is deprecated and will be removed in a future update.{" "}
       <Link
         style={{ cursor: "pointer" }}
         color="inherit"
@@ -16,7 +16,7 @@ export function sendDeprecationNotice() {
       >
         Here are instructions
       </Link>{" "}
-      to migrate to NS2 (.js) scripts.
+      to migrate your scripts to .js files instead.
     </Typography>,
   );
 }
