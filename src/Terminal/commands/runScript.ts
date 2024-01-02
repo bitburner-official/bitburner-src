@@ -8,7 +8,7 @@ import { formatRam } from "../../ui/formatNumber";
 import { ScriptArg } from "@nsdefs";
 import { isPositiveInteger } from "../../types";
 import { ScriptFilePath } from "../../Paths/ScriptFilePath";
-import { sendDeprecationNotice } from "./common/deprecation.ts";
+import { sendDeprecationNotice } from "./common/deprecation";
 
 export function runScript(path: ScriptFilePath, commandArgs: (string | number | boolean)[], server: BaseServer): void {
   // This takes in the absolute filepath, see "run.ts"
