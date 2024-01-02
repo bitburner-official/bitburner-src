@@ -205,7 +205,10 @@ export const GoInstructionsPage = (): React.ReactElement => {
             <Typography>
               * You can place routers and look at the board state via the "ns.go" api. For more details, go to the IPvGO
               page in the{" "}
-              <Link style={{ cursor: "pointer" }} onClick={() => Router.toPage(Page.Documentation)}>
+              <Link
+                style={{ cursor: "pointer" }}
+                onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/go_algorithms.md" })}
+              >
                 Bitburner Documentation
               </Link>
               <br />

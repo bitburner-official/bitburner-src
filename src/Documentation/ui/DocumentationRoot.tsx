@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Button from "@mui/material/Button";
 import { MD } from "../../ui/MD/MD";
@@ -6,10 +6,15 @@ import { MD } from "../../ui/MD/MD";
 import { getPage } from "../root";
 import { Navigator, useHistory } from "../../ui/React/Documentation";
 import { CONSTANTS } from "../../Constants";
-import { resolveFilePath } from "../../Paths/FilePath";
+import { asFilePath, resolveFilePath } from "../../Paths/FilePath";
 
-export function DocumentationRoot(): React.ReactElement {
+export function DocumentationRoot({ docPage }: { docPage?: string }): React.ReactElement {
   const history = useHistory();
+  const [deepLink, setDeepLink] = useState(docPage);
+  if (deepLink !== undefined) {
+    history.push(asFilePath(deepLink));
+    setDeepLink(undefined);
+  }
   const page = getPage(history.page);
   const navigator = {
     navigate(relPath: string, external: boolean) {
