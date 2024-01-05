@@ -24,6 +24,13 @@ export class OpenScript {
   }
 
   regenerateModel(): void {
-    this.model = editor.createModel(this.code, this.isTxt ? "plaintext" : "javascript");
+    this.model = editor.createModel(
+      this.code,
+      this.isTxt ? "plaintext" : "javascript",
+      monaco.Uri.from({
+        scheme: "file",
+        path: `${this.hostname}/${this.path}`,
+      }),
+    );
   }
 }
