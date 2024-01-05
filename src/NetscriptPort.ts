@@ -4,6 +4,7 @@ import { NetscriptPorts } from "./NetscriptWorker";
 import { PositiveInteger } from "./types";
 import { NetscriptContext } from "./Netscript/APIWrapper";
 import { helpers } from "./Netscript/NetscriptHelpers";
+import { ScriptDeath } from "./Netscript/ScriptDeath";
 
 type PortData = string | number;
 type Resolver = () => void;
@@ -81,7 +82,10 @@ export function peekPort(n: PortNumber): PortData {
 function nextWritePort(n: PortNumber, ctx: NetscriptContext) {
   const { resolvers } = getPort(n);
   return new Promise<void>((res, rej) => resolvers.push(() => (ctx.workerScript.env.stopFlag ? rej() : res()))).catch(
-    () => helpers.log(ctx, () => `nextWrite was rejected on port ${n}`),
+    () => {
+      helpers.log(ctx, () => `nextWrite was rejected on port ${n}`);
+      throw new ScriptDeath(ctx.workerScript);
+    },
   );
 }
 
