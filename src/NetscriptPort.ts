@@ -2,6 +2,8 @@ import { Settings } from "./Settings/Settings";
 import { NetscriptPort } from "@nsdefs";
 import { NetscriptPorts } from "./NetscriptWorker";
 import { PositiveInteger } from "./types";
+import { NetscriptContext } from "./Netscript/APIWrapper";
+import { helpers } from "./Netscript/NetscriptHelpers";
 
 type PortData = string | number;
 type Resolver = () => void;
@@ -23,13 +25,13 @@ export class Port {
   data: PortData[] = [];
   resolvers: Resolver[] = [];
 }
-export function portHandle(n: PortNumber): NetscriptPort {
+export function portHandle(n: PortNumber, ctx: NetscriptContext): NetscriptPort {
   return {
     write: (value: unknown) => writePort(n, value),
     tryWrite: (value: unknown) => tryWritePort(n, value),
     read: () => readPort(n),
     peek: () => peekPort(n),
-    nextWrite: () => nextWritePort(n),
+    nextWrite: () => nextWritePort(n, ctx),
     full: () => isFullPort(n),
     empty: () => isEmptyPort(n),
     clear: () => clearPort(n),
@@ -76,9 +78,11 @@ export function peekPort(n: PortNumber): PortData {
   return port.data[0];
 }
 
-function nextWritePort(n: PortNumber) {
+function nextWritePort(n: PortNumber, ctx: NetscriptContext) {
   const { resolvers } = getPort(n);
-  return new Promise<void>((res) => resolvers.push(res as Resolver));
+  return new Promise<void>((res, rej) => resolvers.push(() => (ctx.workerScript.env.stopFlag ? rej() : res()))).catch(
+    () => helpers.log(ctx, () => `nextWrite was rejected on port ${n}`),
+  );
 }
 
 function isFullPort(n: PortNumber) {

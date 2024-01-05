@@ -1403,7 +1403,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   getPortHandle: (ctx) => (_portNumber) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
-    return portHandle(portNumber);
+    return portHandle(portNumber, ctx);
   },
   rm: (ctx) => (_fn, _hostname) => {
     const filepath = helpers.filePath(ctx, "fn", _fn);
