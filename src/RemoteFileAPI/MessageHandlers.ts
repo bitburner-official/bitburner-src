@@ -113,12 +113,11 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => void | R
   },
 
   getAllServers: function (msg: RFAMessage): RFAMessage {
-    const servers = GetAllServers()
-      .map(server => ({
-        hostname: server.hostname,
-        hasAdminRights: server.hasAdminRights
-      }));
+    const servers = GetAllServers().map((server) => ({
+      hostname: server.hostname,
+      hasAdminRights: server.hasAdminRights,
+    }));
 
     return new RFAMessage({ result: JSON.stringify(servers), id: msg.id });
-  }
+  },
 };
