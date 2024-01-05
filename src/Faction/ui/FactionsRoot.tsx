@@ -50,7 +50,7 @@ const JoinChecklist = (props: { faction: Faction }): React.ReactElement => {
   const info = props.faction.getInfo();
   return (
     <>
-      {info.inviteReqs.map((condition, i) => (
+      {[...info.inviteReqs].map((condition, i) => (
         <Requirement key={i} fulfilled={condition.isSatisfied(Player)} value={condition.toString()} />
       ))}
     </>
@@ -136,7 +136,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
             ) : (
               <Tooltip title={"Rumored Faction"}>
                 <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
-                  <CorruptableText content={props.faction.name} />
+                  <CorruptableText content={props.faction.name} spoiler={false} />
                 </span>
               </Tooltip>
             )}

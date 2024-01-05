@@ -59,7 +59,7 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
     const rep = repGain(money);
     dialogBoxCreate(`You gained ${formatReputation(rep)} reputation with ${fac.name} by bribing them.`);
     fac.playerReputation += rep;
-    corp.funds = corp.funds - money;
+    corp.loseFunds(money, "bribery");
     props.onClose();
   }
 

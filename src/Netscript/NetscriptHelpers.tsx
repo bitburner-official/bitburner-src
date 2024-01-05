@@ -7,7 +7,7 @@ import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
 import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
 import { ScriptArg } from "./ScriptArg";
-import { BasicHGWOptions, RunningScript as IRunningScript, Person as IPerson, Server as IServer } from "@nsdefs";
+import { RunningScript as IRunningScript, Person as IPerson, Server as IServer } from "@nsdefs";
 import { Server } from "../Server/Server";
 import {
   calculateHackingChance,
@@ -49,7 +49,7 @@ export const helpers = {
   argsToString,
   makeBasicErrorMsg,
   makeRuntimeErrorMsg,
-  resolveNetscriptRequestedThreads,
+  validateHGWOptions,
   checkEnvFlags,
   checkSingularityAccess,
   netscriptDelay,
@@ -84,44 +84,16 @@ export interface CompleteRunOptions {
 export interface CompleteSpawnOptions extends CompleteRunOptions {
   spawnDelay: PositiveInteger;
 }
+/** HGWOptions with non-optional, type-validated members, for passing between internal functions. */
+export interface CompleteHGWOptions {
+  threads: PositiveInteger;
+  stock: boolean;
+  additionalMsec: number;
+}
 
 export function assertString(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {
   if (typeof v !== "string")
     throw makeRuntimeErrorMsg(ctx, `${argName} expected to be a string. ${debugType(v)}`, "TYPE");
-}
-
-/** Will probably remove the below function in favor of a different approach to object type assertion.
- *  This method cannot be used to handle optional properties. */
-export function assertObjectType<T extends object>(
-  ctx: NetscriptContext,
-  name: string,
-  obj: unknown,
-  desiredObject: T,
-): asserts obj is T {
-  if (typeof obj !== "object" || obj === null) {
-    throw makeRuntimeErrorMsg(
-      ctx,
-      `Type ${obj === null ? "null" : typeof obj} provided for ${name}. Must be an object.`,
-      "TYPE",
-    );
-  }
-  for (const [key, val] of Object.entries(desiredObject)) {
-    if (!Object.hasOwn(obj, key)) {
-      throw makeRuntimeErrorMsg(
-        ctx,
-        `Object provided for argument ${name} is missing required property ${key}.`,
-        "TYPE",
-      );
-    }
-    const objVal = (obj as Record<string, unknown>)[key];
-    if (typeof val !== typeof objVal) {
-      throw makeRuntimeErrorMsg(
-        ctx,
-        `Incorrect type ${typeof objVal} provided for property ${key} on ${name} argument. Should be type ${typeof val}.`,
-        "TYPE",
-      );
-    }
-  }
 }
 
 const userFriendlyString = (v: unknown): string => {
@@ -266,7 +238,7 @@ function makeBasicErrorMsg(ws: WorkerScript | ScriptDeath, msg: string, type = "
 }
 
 /** Creates an error message string with a stack trace. */
-function makeRuntimeErrorMsg(ctx: NetscriptContext, msg: string, type = "RUNTIME"): string {
+export function makeRuntimeErrorMsg(ctx: NetscriptContext, msg: string, type = "RUNTIME"): string {
   const errstack = new Error().stack;
   if (errstack === undefined) throw new Error("how did we not throw an error?");
   const stack = errstack.split("\n").slice(1);
@@ -322,23 +294,44 @@ function makeRuntimeErrorMsg(ctx: NetscriptContext, msg: string, type = "RUNTIME
   }
 }
 
-/** Validate requested number of threads for h/g/w options */
-function resolveNetscriptRequestedThreads(ctx: NetscriptContext, requestedThreads?: number): number {
+function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOptions {
+  const result: CompleteHGWOptions = {
+    threads: ctx.workerScript.scriptRef.threads,
+    stock: false,
+    additionalMsec: 0,
+  };
+  if (opts == null) {
+    return result;
+  }
+  if (typeof opts !== "object") {
+    throw makeRuntimeErrorMsg(ctx, `BasicHGWOptions must be an object if specified, was ${opts}`);
+  }
+  // Safe assertion since threadOrOption type has been narrowed to a non-null object
+  const options = opts as Unknownify<CompleteHGWOptions>;
+  result.stock = !!options.stock;
+  result.additionalMsec = number(ctx, "opts.additionalMsec", options.additionalMsec ?? 0);
+  if (result.additionalMsec < 0) {
+    throw makeRuntimeErrorMsg(ctx, `additionalMsec must be non-negative, got ${options.additionalMsec}`);
+  }
+  if (result.additionalMsec > 1e9) {
+    throw makeRuntimeErrorMsg(ctx, `additionalMsec too large (>1e9), got ${options.additionalMsec}`);
+  }
+  const requestedThreads = options.threads;
   const threads = ctx.workerScript.scriptRef.threads;
   if (!requestedThreads) {
-    return isNaN(threads) || threads < 1 ? 1 : threads;
+    result.threads = (isNaN(threads) || threads < 1 ? 1 : threads) as PositiveInteger;
+  } else {
+    const positiveThreads = positiveInteger(ctx, "opts.threads", requestedThreads);
+    if (positiveThreads > threads) {
+      throw makeRuntimeErrorMsg(
+        ctx,
+        `Too many threads requested by ${ctx.function}. Requested: ${positiveThreads}. Has: ${threads}.`,
+      );
+    }
+    result.threads = positiveThreads;
   }
-  const requestedThreadsAsInt = requestedThreads | 0;
-  if (isNaN(requestedThreads) || requestedThreadsAsInt < 1) {
-    throw makeRuntimeErrorMsg(ctx, `Invalid thread count: ${requestedThreads}. Threads must be a positive number.`);
-  }
-  if (requestedThreadsAsInt > threads) {
-    throw makeRuntimeErrorMsg(
-      ctx,
-      `Too many threads requested by ${ctx.function}. Requested: ${requestedThreads}. Has: ${threads}.`,
-    );
-  }
-  return requestedThreadsAsInt;
+
+  return result;
 }
 
 /** Validate singularity access by throwing an error if the player does not have access. */
@@ -472,18 +465,9 @@ function isScriptArgs(args: unknown): args is ScriptArg[] {
   return Array.isArray(args) && args.every(isScriptArg);
 }
 
-function hack(
-  ctx: NetscriptContext,
-  hostname: string,
-  manual: boolean,
-  { threads: requestedThreads, stock, additionalMsec: requestedSec }: BasicHGWOptions = {},
-): Promise<number> {
+function hack(ctx: NetscriptContext, hostname: string, manual: boolean, opts: unknown): Promise<number> {
   const ws = ctx.workerScript;
-  const threads = helpers.resolveNetscriptRequestedThreads(ctx, requestedThreads);
-  const additionalMsec = number(ctx, "opts.additionalMsec", requestedSec ?? 0);
-  if (additionalMsec < 0) {
-    throw makeRuntimeErrorMsg(ctx, `additionalMsec must be non-negative, got ${additionalMsec}`);
-  }
+  const { threads, stock, additionalMsec } = validateHGWOptions(ctx, opts);
   const server = getServer(ctx, hostname);
   if (!(server instanceof Server)) {
     throw makeRuntimeErrorMsg(ctx, "Cannot be executed on this server.");

@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import { Settings } from "../../Settings/Settings";
 import Button from "@mui/material/Button";
+import { CompletedProgramName } from "@enums";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -121,33 +122,52 @@ export function BitverseRoot(props: IProps): React.ReactElement {
   const [destroySequence, setDestroySequence] = useState(!props.quick);
 
   if (destroySequence) {
-    return (
-      <CinematicText
-        lines={[
-          "[ERROR] SEMPOOL INVALID",
-          "[ERROR] Segmentation Fault",
-          "[ERROR] SIGKILL RECVD",
-          "Dumping core...",
-          "0000 000016FA 174FEE40 29AC8239 384FEA88",
-          "0010 745F696E 2BBBE394 390E3940 248BEC23",
-          "0020 7124696B 0000FF69 74652E6F FFFF1111",
-          "----------------------------------------",
-          "Failsafe initiated...",
-          `Restarting BitNode-${destroyed}...`,
-          "...........",
-          "...........",
-          "[ERROR] FAILED TO AUTOMATICALLY REBOOT BITNODE",
-          "..............................................",
-          "..............................................",
-          "..............................................",
-          "..............................................",
-          "..............................................",
-          "..............................................",
-        ]}
-        onDone={() => setDestroySequence(false)}
-        auto={true}
-      />
-    );
+    let cinematicLines;
+    if (props.flume) {
+      cinematicLines = [
+        `Running ${CompletedProgramName.bitFlume}...`,
+        "...........",
+        "...........",
+        "counter dq 0x0",
+        "mov [counter], EXC",
+        "dec [counter]",
+        "mov EXC, [counter]",
+        "...........",
+        "...........",
+        `[WARN] BitNode-${destroyed} assertion error:`,
+        "Expected inputs to be strictly equal:",
+        "<Number of incoming connections>, <Number of outgoing connections>",
+        "Running full scan...",
+        "..............................................",
+        "..............................................",
+        "Hanging connection located, disconnecting...",
+        "..............................................",
+        "..............................................",
+      ];
+    } else {
+      cinematicLines = [
+        "[ERROR] SEMPOOL INVALID",
+        "[ERROR] Segmentation Fault",
+        "[ERROR] SIGKILL RECVD",
+        "Dumping core...",
+        "0000 000016FA 174FEE40 29AC8239 384FEA88",
+        "0010 745F696E 2BBBE394 390E3940 248BEC23",
+        "0020 7124696B 0000FF69 74652E6F FFFF1111",
+        "----------------------------------------",
+        "Failsafe initiated...",
+        `Restarting BitNode-${destroyed}...`,
+        "...........",
+        "...........",
+        "[ERROR] FAILED TO AUTOMATICALLY REBOOT BITNODE",
+        "..............................................",
+        "..............................................",
+        "..............................................",
+        "..............................................",
+        "..............................................",
+        "..............................................",
+      ];
+    }
+    return <CinematicText lines={cinematicLines} onDone={() => setDestroySequence(false)} auto={true} />;
   }
 
   const nextSourceFileLvl = (n: number): number => {
@@ -221,7 +241,7 @@ export function BitverseRoot(props: IProps): React.ReactElement {
       <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>        O    |  | /     __|       \ |  |    O        </Typography>
       <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>      O |    O  | |  O /  |  O    | |  O    | O      </Typography>
       <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>    | | |    |  |_/  |/   |   \_  \_|  |    | | |    </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>  O | | | O  |  | O__/    |   / \__ |  |  O | | | O  </Typography>
+      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>  O | | | <BitNodePortal n={14} level={n(4)} flume={props.flume} destroyedBitNode={destroyed} />  |  | O__/    |   / \__ |  |  O | | | O  </Typography>
       <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>  | | | | |  |  |   /    /|  O  /  \|  |  | | | | |  </Typography>
       <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>O | | |  \|  |  O  /   _/ |    /    O  |  |/  | | | O</Typography>
       <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>| | | |O  /  |  | O   /   |   O   O |  |  \  O| | | |</Typography>

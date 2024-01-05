@@ -132,7 +132,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
 
     const repGain = amountCash / corpConstants.bribeAmountPerReputation;
     faction.playerReputation += repGain;
-    corporation.funds = corporation.funds - amountCash;
+    corporation.loseFunds(amountCash, "bribery");
 
     return true;
   }

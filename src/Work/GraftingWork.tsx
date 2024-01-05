@@ -35,11 +35,7 @@ export class GraftingWork extends Work {
   }
 
   process(cycles: number): boolean {
-    let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
-      focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
-    }
-
+    const focusBonus = Player.focusPenalty();
     this.cyclesWorked += cycles;
     this.unitCompleted += CONSTANTS.MilliPerCycle * cycles * graftingIntBonus() * focusBonus;
 
@@ -83,9 +79,9 @@ export class GraftingWork extends Work {
     }
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy() {
     return {
-      type: this.type,
+      type: WorkType.GRAFTING as const,
       cyclesWorked: this.cyclesWorked,
       augmentation: this.augmentation,
     };

@@ -23,5 +23,5 @@ weakenTime(server: Server, player: Person): number;
 
 number
 
-The calculated weaken time.
+The calculated weaken time, in milliseconds.
 

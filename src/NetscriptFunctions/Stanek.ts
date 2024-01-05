@@ -11,6 +11,7 @@ import { applyAugmentation } from "../Augmentation/AugmentationHelpers";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
+import { getCoreBonus } from "../Server/ServerHelpers";
 
 export function NetscriptStanek(): InternalAPI<IStanek> {
   function checkStanekAPIAccess(ctx: NetscriptContext): void {
@@ -43,11 +44,13 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
         );
       }
       //Charge the fragment
+      const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
+      const coreBonus = getCoreBonus(cores);
       const inBonus = staneksGift.inBonus();
       const time = inBonus ? 200 : 1000;
       if (inBonus) staneksGift.isBonusCharging = true;
       return helpers.netscriptDelay(ctx, time).then(function () {
-        staneksGift.charge(fragment, ctx.workerScript.scriptRef.threads);
+        staneksGift.charge(fragment, ctx.workerScript.scriptRef.threads * coreBonus);
         helpers.log(ctx, () => `Charged fragment with ${ctx.workerScript.scriptRef.threads} threads.`);
         return Promise.resolve();
       });
@@ -105,19 +108,16 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       return staneksGift.delete(rootX, rootY);
     },
     acceptGift: (ctx) => () => {
-      //Check if the player is eligible to join the church
-      if (
-        Player.canAccessCotMG() &&
-        Player.augmentations.filter((a) => a.name !== AugmentationName.NeuroFluxGovernor).length == 0 &&
-        Player.queuedAugmentations.filter((a) => a.name !== AugmentationName.NeuroFluxGovernor).length == 0
-      ) {
-        //Attempt to join CotMG
-        joinFaction(Factions[FactionName.ChurchOfTheMachineGod]);
-        //Attempt to install the first Stanek aug
-        if (
-          !Player.hasAugmentation(AugmentationName.StaneksGift1) &&
-          !Player.queuedAugmentations.some((a) => a.name === AugmentationName.StaneksGift1)
-        ) {
+      const cotmgFaction = Factions[FactionName.ChurchOfTheMachineGod];
+      // Check if the player is eligible to join the church
+      if (Player.canAccessCotMG()) {
+        const augs = [...Player.augmentations, ...Player.queuedAugmentations].filter(
+          (a) => a.name !== AugmentationName.NeuroFluxGovernor,
+        );
+        if (augs.length == 0) {
+          // Join the CotMG factionn
+          joinFaction(cotmgFaction);
+          // Install the first Stanek aug
           applyAugmentation({ name: AugmentationName.StaneksGift1, level: 1 });
           helpers.log(
             ctx,
@@ -125,11 +125,8 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
           );
         }
       }
-      //Return true iff the player is in CotMG and has the first Stanek aug installed
-      return (
-        Factions[FactionName.ChurchOfTheMachineGod].isMember &&
-        Player.hasAugmentation(AugmentationName.StaneksGift1, true)
-      );
+      // Return true iff the player is in CotMG and has the first Stanek aug installed
+      return cotmgFaction.isMember && Player.hasAugmentation(AugmentationName.StaneksGift1, true);
     },
   };
 }

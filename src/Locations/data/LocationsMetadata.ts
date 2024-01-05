@@ -184,7 +184,7 @@ export const LocationsMetadata: IConstructorParams[] = [
       startingSecurityLevel: 7.18,
     },
     name: LocationName.NewTokyoDefComm,
-    types: [LocationType.Company],
+    types: [LocationType.Company, LocationType.Special],
   },
   {
     city: CityName.NewTokyo,
@@ -241,7 +241,7 @@ export const LocationsMetadata: IConstructorParams[] = [
   {
     city: CityName.Sector12,
     name: LocationName.Sector12CIA,
-    types: [LocationType.Company],
+    types: [LocationType.Company, LocationType.Special],
   },
   {
     city: CityName.Sector12,

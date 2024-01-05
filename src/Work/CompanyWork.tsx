@@ -3,14 +3,13 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { Player } from "@player";
 import { Work, WorkType } from "./Work";
 import { influenceStockThroughCompanyWork } from "../StockMarket/PlayerInfluencing";
-import { AugmentationName, CompanyName, JobName } from "@enums";
+import { CompanyName, JobName } from "@enums";
 import { calculateCompanyWorkStats } from "./Formulas";
 import { Companies } from "../Company/Companies";
 import { applyWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
 import { Company } from "../Company/Company";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reputation } from "../ui/React/Reputation";
-import { CONSTANTS } from "../Constants";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { isMember } from "../utils/EnumHelper";
 import { invalidWork } from "./InvalidWork";
@@ -34,10 +33,7 @@ export class CompanyWork extends Work {
   }
 
   getGainRates(job: JobName): WorkStats {
-    let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
-      focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
-    }
+    const focusBonus = CompanyPositions[job].isPartTime ? 1 : Player.focusPenalty();
     const company = this.getCompany();
     return scaleWorkStats(calculateCompanyWorkStats(Player, company, CompanyPositions[job], company.favor), focusBonus);
   }
@@ -65,9 +61,9 @@ export class CompanyWork extends Work {
     }
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy() {
     return {
-      type: this.type,
+      type: WorkType.COMPANY as const,
       cyclesWorked: this.cyclesWorked,
       companyName: this.companyName,
     };

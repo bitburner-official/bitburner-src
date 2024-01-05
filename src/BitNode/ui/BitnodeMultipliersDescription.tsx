@@ -58,6 +58,7 @@ export const BitNodeMultipliersDisplay = ({ n, level }: IProps): React.ReactElem
       <CorporationMults n={n} mults={mults} />
       <BladeburnerMults n={n} mults={mults} />
       <StanekMults n={n} mults={mults} />
+      <GoMults n={n} mults={mults} />
     </Box>
   );
 };
@@ -350,4 +351,12 @@ function CorporationMults({ mults }: IMultsProps): React.ReactElement {
   };
 
   return <BNMultTable sectionName="Corporation" rowData={rows} mults={mults} />;
+}
+
+function GoMults({ mults }: IMultsProps): React.ReactElement {
+  const rows: IBNMultRows = {
+    GoPower: { name: "IPvGO Node Power bonus" },
+  };
+
+  return <BNMultTable sectionName="IPvGO Subnet Takeover" rowData={rows} mults={mults} />;
 }

@@ -30,7 +30,7 @@ export function BlackOpPage(props: IProps): React.ReactElement {
       </Typography>
       {props.bladeburner.blackops[BlackOperationName.OperationDaedalus] ? (
         <Button sx={{ my: 1, p: 1 }} onClick={() => Router.toPage(Page.BitVerse, { flume: false, quick: false })}>
-          <CorruptableText content="Destroy w0rld_d34mon"></CorruptableText>
+          <CorruptableText content="Destroy w0rld_d34mon" spoiler={false}></CorruptableText>
         </Button>
       ) : (
         <BlackOpList bladeburner={props.bladeburner} />

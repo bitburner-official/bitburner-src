@@ -47,7 +47,7 @@ export function CovenantPurchasesRoot(props: IProps): React.ReactElement {
     if (Player.canAfford(purchaseCost())) {
       Player.loseMoney(purchaseCost(), "sleeves");
       Player.sleevesFromCovenant += 1;
-      Player.sleeves.push(new Sleeve());
+      Sleeve.recalculateNumOwned();
       rerender();
     } else {
       dialogBoxCreate(`You cannot afford to purchase a Duplicate Sleeve`);

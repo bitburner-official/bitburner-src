@@ -3,7 +3,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { LogBoxEvents } from "../../ui/React/LogBoxManager";
 import { startWorkerScript } from "../../NetscriptWorker";
 import { RunningScript } from "../../Script/RunningScript";
-import * as libarg from "arg";
+import libarg from "arg";
 import { formatRam } from "../../ui/formatNumber";
 import { ScriptArg } from "@nsdefs";
 import { isPositiveInteger } from "../../types";

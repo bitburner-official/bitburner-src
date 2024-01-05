@@ -1,5 +1,54 @@
 # Changelog
 
+## v2.5.2 - 26 December 2023
+
+### API
+
+- Added limit of 1e9 for additionalMsec property of HGWOptions (@d0sboots)
+- ns.share effect is now boosted by host server core count (@TheAimMan)
+- Fix a bug with HGWOptions that caused the default value to be 1 thread even for scripts running multiple threads (@DJMatch3000)
+- (Singularity) ns.singularity.applyToCompany now returns the JobName if a job was obtained, or null otherwise - previously was boolean (@jjclark1982)
+- (Singularity) ns.singularity.getCurrentWork now requires access to the singularity API (@TheAimMan)
+- (Singularity) Added ns.singularity.getFactionInviteRequirements (@jjclark1982)
+- (Stanek) ns.stanek.chargeFragment is now boosted by host server core count (@TheAimMan)
+
+### BUGFIX
+
+- (Bladeburner) Operation team size modal now handles keyboard submission correctly (@Snarling)
+- (Corporation) Fixed an issue with Warehouse size being out of sync following prduct sale (@Kelenius)
+- (Factions) Fixed some display order issues, and possible multiple entries for a faction (@jjclark1982)
+- (Factions) Fixed an issue with certain factions not becoming "known" when joining them (@jjclark1982)
+- (Grafting) Entropy now has the correct negative effect on hacknet multipliers (@TheAimMan)
+- (Hashnet) Fixed an issue where the SF9.3 reward server had an incorrect number of cores (@cigarmemr)
+- (Terminal) Fixed a bug with script autocompletion when the script is inside a subdirectory (@draughtnyan)
+
+### MISC
+
+- Added basic protection for certain global values that could cause a recovery screen if reassigned (@Snarling)
+- Fixed conditions for an easter egg message (@cigarmemr)
+- (Bitverse) Changed listed difficulty for BN3 to "hard"
+- (CodingContract) Reduce incidence of $0 coding contract rewards in circumstances where the reward would be $0 (@trambelus)
+- (Corporation) Added better accounting of funds transactions (@jjclark1982)
+- (Corporation) Remove cooldown on starting over corporation, but maintain remaining cooldown for selling shares (@jjclark1982)
+- (Corporation) Removed some legacy code that was not doing anything (@catloversg)
+- (DevMenu) Added the ability to add/remove sleeves from the dev menu (@Sphyxis, @Snarling)
+- (Docs) Fixed various typos in documentation (@tdpeuter)
+- (Factions) Added a documentation page for faction join requirements (@jjclark1982)
+- (Formulas) Added clarification for the unit of time returned by hackTime, growTime, and weakenTime functions (@d0sboots)
+- (Ports) Promises from port.nextWrite resolve in the same order they were created, instead of reverse order (@LJNeon)
+- (Sleeve) Add task counters for Crime and Bladeburner tasks (@TheAimMan)
+- (Stock) Add some randomization to timing for stockmarket forecast change events (@Caldwell-74)
+- (Terminal) Added the --all option for unalias, to allow removing all aliases (@Sphyxis)
+- Nerf noodle bar (various contributors)
+
+### UI
+
+- Message for buying TOR router no longer implies the need to connect to darkweb (@Kelenius)
+- (Company) Rework of the job location details (@jjclark1982)
+- (Company) Added previous/next buttons for job location if the player has multiple jobs (@Kelenius)
+- (Factions) Only show warning about enemy factions for factions with enemies (@jjclark1982)
+- (Stanek) Improved the display of the Stanek grid (@Kelenius)
+
 ## v2.5.1 - 30 November 2023 Update
 
 ### NOTES

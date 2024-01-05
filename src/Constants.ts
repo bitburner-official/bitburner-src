@@ -84,9 +84,9 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.5.2dev",
+  VersionString: "2.6.0dev",
   isDevBranch: true,
-  VersionNumber: 36,
+  VersionNumber: 37,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -223,30 +223,15 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.5.2dev changelog - Last updated 30 November 2023
-
-### NOTES
-
-See the 2.5.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.5.1/src/Documentation/doc/changelog.md
+## v2.6.0 dev - Changelog last updated 26 December 2023
 
 ### MAJOR ADDITIONS
 
-- No changes since 2.5.1
+- A new minigame IPvGO, based on the game Go. See the "IPvGO Subnet" option from the sidebar. Documentation is also available under "How to Play" from that screen (@ficocelliguy)
+- A new BitNode has been added which focuses on the IPvGO mechanic (@ficocelliguy)
 
 ### API
 
-- No changes since 2.5.1
-
-### BUGFIX
-
-- No changes since 2.5.1
-
-### MISC
-
-- Nerf noodle bar (various contributors)
-
-### UI
-
-- No changes since 2.5.1
+- Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes. (@ficocelliguy)
 `,
 };

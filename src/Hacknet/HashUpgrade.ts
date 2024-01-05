@@ -1,8 +1,10 @@
+import type { ReactNode } from "react";
+
 /** Object representing an upgrade that can be purchased with hashes */
-export interface IConstructorParams {
+export interface HashUpgradeParams {
   cost?: number;
   costPerLevel: number;
-  desc: string;
+  desc: ReactNode;
   hasTargetServer?: boolean;
   hasTargetCompany?: boolean;
   name: string;
@@ -26,7 +28,7 @@ export class HashUpgrade {
   costPerLevel = 0;
 
   /** Description of what the upgrade does */
-  desc = "";
+  desc: ReactNode = "";
 
   /**
    * Boolean indicating that this upgrade's effect affects a single server,
@@ -47,7 +49,7 @@ export class HashUpgrade {
   // The meaning varies between different upgrades
   value = 0;
 
-  constructor(p: IConstructorParams) {
+  constructor(p: HashUpgradeParams) {
     if (p.cost != null) {
       this.cost = p.cost;
     }

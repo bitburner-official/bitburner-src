@@ -17,6 +17,7 @@ export const isSleeveBladeburnerWork = (w: SleeveWorkClass | null): w is SleeveB
 
 export class SleeveBladeburnerWork extends SleeveWorkClass {
   type: SleeveWorkType.BLADEBURNER = SleeveWorkType.BLADEBURNER;
+  tasksCompleted = 0;
   cyclesWorked = 0;
   actionType: "General" | "Contracts";
   actionName: string;
@@ -69,6 +70,7 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
       if (this.actionType === "Contracts") {
         applySleeveGains(sleeve, scaleWorkStats(retValue, sleeve.shockBonus(), false));
       }
+      this.tasksCompleted++;
       this.cyclesWorked -= this.cyclesNeeded(sleeve);
       // Resolve and reset nextCompletion promise
       const resolver = this.signalCompletion;
@@ -79,9 +81,10 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
 
   APICopy(sleeve: Sleeve) {
     return {
-      type: SleeveWorkType.BLADEBURNER as "BLADEBURNER",
+      type: SleeveWorkType.BLADEBURNER as const,
       actionType: this.actionType,
       actionName: this.actionName,
+      tasksCompleted: this.tasksCompleted,
       cyclesWorked: this.cyclesWorked,
       cyclesNeeded: this.cyclesNeeded(sleeve),
       nextCompletion: this.nextCompletion,
