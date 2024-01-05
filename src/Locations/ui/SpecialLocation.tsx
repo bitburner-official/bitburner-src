@@ -116,7 +116,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       }
 
       if (Player.corporation) {
-        Player.corporation.gainFunds(Player.corporation.revenue * 0.01, "glitch in reality");
+        Player.corporation.gainFunds(Player.corporation.revenue * 0.000001, "glitch in reality");
       }
     }
 
