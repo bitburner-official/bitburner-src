@@ -1,5 +1,5 @@
 import type { ContentFilePath } from "../../Paths/ContentFile";
-import { editor, Position } from "monaco-editor";
+import monaco, { editor, Position } from "monaco-editor";
 
 type ITextModel = editor.ITextModel;
 
