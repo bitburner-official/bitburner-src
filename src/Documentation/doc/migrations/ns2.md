@@ -2,7 +2,7 @@
 
 The game allows two script formats:
 
-- `.script` (also sometimes called "Netscript 1" or "NS1") files are ran through an interpreter that is based on a version of Javascript from 2009 (ES5). These files are no longer actively supported and should be converted to the newer `.js` format. 
+- `.script` (also sometimes called "Netscript 1" or "NS1") files are ran through an interpreter that is based on a version of Javascript from 2009 (ES5). These files are no longer actively supported and should be converted to the newer `.js` format.
 
 - `.js` (also sometimes called "Netscript 2" or "NS2") files are native javascript that is ran directly by the web browser. Modern features of javascript that are supported by your web browser are supported in `.js` files, because they are run as native js.
 
