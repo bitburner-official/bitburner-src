@@ -14,7 +14,7 @@ export function CalculateEffect(nodes: number, faction: opponents): number {
   const power = getEffectPowerForFaction(faction);
   const sourceFileBonus = Player.sourceFileLvl(14) ? 1.25 : 1;
   return (
-    1 + Math.log(nodes + 1) * Math.pow(nodes + 1, 0.33) * 0.005 * power * currentNodeMults.GoPower * sourceFileBonus
+    1 + Math.log(nodes + 1) * Math.pow(nodes + 1, 0.3) * 0.004 * power * currentNodeMults.GoPower * sourceFileBonus
   );
 }
 

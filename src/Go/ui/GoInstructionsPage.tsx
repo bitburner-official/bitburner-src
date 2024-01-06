@@ -212,8 +212,8 @@ export const GoInstructionsPage = (): React.ReactElement => {
               <br />
               * If a network surrounds a single empty node, the opponent can eventually capture it by filling in that
               node. However, if your network has two separate empty nodes inside of it, the suicide rule prevents the
-              opponent from filling up either of them. This means your network cannot be captured! Try to place your
-              networks surround several different empty nodes, and avoid filling in your network's empty nodes when
+              opponent from filling up either of them. This means your network cannot be captured! Try to build your
+              networks to surround several different empty nodes, and avoid filling in your network's empty nodes when
               possible.
               <br />
               <br />

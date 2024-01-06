@@ -576,8 +576,8 @@ export const boardStyles = makeStyles((theme: Theme) =>
     },
     instructionsBlurb: {
       width: "60%",
-      minWidth: "500px",
-      marginRight: "20px",
+      minWidth: "300px",
+      marginRight: "15px",
     },
     translucent: {
       opacity: 0.6,
