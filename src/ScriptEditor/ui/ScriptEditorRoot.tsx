@@ -191,7 +191,14 @@ function Root(props: IProps): React.ReactElement {
           code,
           props.hostname,
           new monaco.Position(0, 0),
-          monaco.editor.createModel(code, filename.endsWith(".txt") ? "plaintext" : "javascript"),
+          monaco.editor.createModel(
+            code,
+            filename.endsWith(".txt") ? "plaintext" : "javascript",
+            monaco.Uri.from({
+              scheme: "file",
+              path: `${props.hostname}/${filename}`,
+            }),
+          ),
         );
         openScripts.push(newScript);
         currentScript = newScript;
