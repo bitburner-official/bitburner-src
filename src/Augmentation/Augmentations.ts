@@ -538,7 +538,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Toggleable cerebral drug packet that floods the nervous system with feel-" +
         "nothing medication whenever a non-zero level of oxytocin is detected.",
       isSpecial: true,
-      factions: [FactionName.Silhouette]
+      factions: [FactionName.Silhouette],
     },
     [AugmentationName.ENM]: {
       repCost: 1.5e4,

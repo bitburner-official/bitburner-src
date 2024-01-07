@@ -120,7 +120,18 @@ export const calculateCompanyWorkStats = (
   const gains = scaleWorkStats(
     multWorkStats(
       {
-        money: companyPosition.baseSalary * company.salaryMultiplier * bn11Mult * currentNodeMults.CompanyWorkMoney * ((Player.augmentations.map((aug:PlayerOwnedAugmentation)=>{return aug.name}).filter(aug=>aug==AugmentationName.EmpathySuppressor).length==1) ? Math.pow(10, Object.values(Player.jobs).filter((job:string)=>job=="Chief Executive Officer").length) : 1),
+        money:
+          companyPosition.baseSalary *
+          company.salaryMultiplier *
+          bn11Mult *
+          currentNodeMults.CompanyWorkMoney *
+          (Player.augmentations
+            .map((aug: PlayerOwnedAugmentation) => {
+              return aug.name;
+            })
+            .filter((aug) => aug == AugmentationName.EmpathySuppressor).length == 1
+            ? Math.pow(10, Object.values(Player.jobs).filter((job: string) => job == "Chief Executive Officer").length)
+            : 1),
         hackExp: companyPosition.hackingExpGain,
         strExp: companyPosition.strengthExpGain,
         defExp: companyPosition.defenseExpGain,
