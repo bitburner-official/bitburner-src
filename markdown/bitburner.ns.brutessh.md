@@ -9,7 +9,7 @@ Runs BruteSSH.exe on a server.
 **Signature:**
 
 ```typescript
-brutessh(host: string): void;
+brutessh(host: string): boolean;
 ```
 
 ## Parameters
@@ -20,7 +20,9 @@ brutessh(host: string): void;
 
 **Returns:**
 
-void
+boolean
+
+Returns a boolean based on the success of BruteSSH.exe
 
 ## Remarks
 

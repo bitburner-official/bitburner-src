@@ -9,7 +9,7 @@ Runs FTPCrack.exe on a server.
 **Signature:**
 
 ```typescript
-ftpcrack(host: string): void;
+ftpcrack(host: string): boolean;
 ```
 
 ## Parameters
@@ -20,7 +20,9 @@ ftpcrack(host: string): void;
 
 **Returns:**
 
-void
+boolean
+
+Returns a boolean based on the success of FTPCrack.exe
 
 ## Remarks
 
