@@ -40,6 +40,7 @@ import file37 from "!!raw-loader!./doc/programming/go_algorithms.md";
 import file38 from "!!raw-loader!./doc/programming/hackingalgorithms.md";
 import file39 from "!!raw-loader!./doc/programming/learn.md";
 import file40 from "!!raw-loader!./doc/programming/remote_api.md";
+import file41 from "!!raw-loader!./doc/migrations/ns2.md";
 
 interface Document {
   default: string;
@@ -86,3 +87,4 @@ AllPages["programming/go_algorithms.md"] = file37;
 AllPages["programming/hackingalgorithms.md"] = file38;
 AllPages["programming/learn.md"] = file39;
 AllPages["programming/remote_api.md"] = file40;
+AllPages["migrations/ns2.md"] = file41;

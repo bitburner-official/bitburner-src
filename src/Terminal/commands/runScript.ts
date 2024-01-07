@@ -8,6 +8,7 @@ import { formatRam } from "../../ui/formatNumber";
 import { ScriptArg } from "@nsdefs";
 import { isPositiveInteger } from "../../types";
 import { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { sendDeprecationNotice } from "./common/deprecation";
 
 export function runScript(path: ScriptFilePath, commandArgs: (string | number | boolean)[], server: BaseServer): void {
   // This takes in the absolute filepath, see "run.ts"
@@ -52,6 +53,9 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   const success = startWorkerScript(runningScript, server);
   if (!success) return Terminal.error(`Failed to start script`);
 
+  if (path.endsWith(".script")) {
+    sendDeprecationNotice();
+  }
   Terminal.print(
     `Running script with ${numThreads} thread(s), pid ${runningScript.pid} and args: ${JSON.stringify(args)}.`,
   );
