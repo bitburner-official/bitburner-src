@@ -21,7 +21,15 @@ export function getPort(n: PortNumber) {
 
 export class Port {
   data: PortData[] = [];
-  resolvers: Resolver[] = [];
+  resolver: Resolver | null = null;
+  promise: Promise<void> | null = null;
+  resolve() {
+    if (!this.resolver) return;
+    const resolver = this.resolver;
+    this.resolver = null;
+    this.promise = null;
+    resolver();
+  }
 }
 export function portHandle(n: PortNumber): NetscriptPort {
   return {
@@ -42,9 +50,9 @@ export function writePort(n: PortNumber, value: unknown): PortData | null {
       `port.write: Tried to write type ${typeof value}. Only string and number types may be written to ports.`,
     );
   }
-  const { data, resolvers } = getPort(n);
+  const { data, resolve } = getPort(n);
   data.push(value);
-  for (const res of resolvers.splice(0, resolvers.length)) res();
+  resolve();
   if (data.length > Settings.MaxPortCapacity) return data.shift() as PortData;
   return null;
 }
@@ -55,10 +63,10 @@ export function tryWritePort(n: PortNumber, value: unknown): boolean {
       `port.write: Tried to write type ${typeof value}. Only string and number types may be written to ports.`,
     );
   }
-  const { data, resolvers } = getPort(n);
+  const { data, resolve } = getPort(n);
   if (data.length >= Settings.MaxPortCapacity) return false;
   data.push(value);
-  for (const res of resolvers.splice(0, resolvers.length)) res();
+  resolve();
   return true;
 }
 
@@ -66,7 +74,7 @@ export function readPort(n: PortNumber): PortData {
   const port = NetscriptPorts.get(n);
   if (!port || !port.data.length) return emptyPortData;
   const returnVal = port.data.shift() as PortData;
-  if (!port.data.length && !port.resolvers.length) NetscriptPorts.delete(n);
+  if (!port.data.length && !port.resolver) NetscriptPorts.delete(n);
   return returnVal;
 }
 
@@ -77,8 +85,10 @@ export function peekPort(n: PortNumber): PortData {
 }
 
 function nextWritePort(n: PortNumber) {
-  const { resolvers } = getPort(n);
-  return new Promise<void>((res) => resolvers.push(res as Resolver));
+  const port = getPort(n);
+  if (port.promise) return port.promise;
+  port.promise = new Promise<void>((res) => (port.resolver = res));
+  return port.promise;
 }
 
 function isFullPort(n: PortNumber) {
@@ -96,6 +106,6 @@ function isEmptyPort(n: PortNumber) {
 export function clearPort(n: PortNumber) {
   const port = NetscriptPorts.get(n);
   if (!port) return;
-  if (!port.resolvers.length) NetscriptPorts.delete(n);
+  if (!port.resolver) NetscriptPorts.delete(n);
   port.data.length = 0;
 }
