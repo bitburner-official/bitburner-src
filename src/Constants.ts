@@ -223,15 +223,37 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.0 dev - Changelog last updated 26 December 2023
+## v2.6.0 dev - Changelog last updated 7 Jan 2024
 
 ### MAJOR ADDITIONS
 
-- A new minigame IPvGO, based on the game Go. See the "IPvGO Subnet" option from the sidebar. Documentation is also available under "How to Play" from that screen (@ficocelliguy)
+- A new minigame IPvGO, based on the game Go. For testing, the "IPvGO Subnet" option is permanently enabled right now in the sidebar. Documentation is also available under "How to Play" from that screen. (@ficocelliguy)
 - A new BitNode has been added which focuses on the IPvGO mechanic (@ficocelliguy)
 
 ### API
 
-- Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes. (@ficocelliguy)
+- (Go) Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes. (@ficocelliguy)
+- (Singularity) Add type information for getCurrentWork return value (@Semanual)
+- (Stanek) Fix acceptGift which was not working in 2.5.2 (@jjclark1982)
+- formatNumber now throws an error if specifying a suffixStart less than 1000 (@TheAimMan)
+
+### UI
+
+- (Corporation) Align columns correctly in warehouse breakdown table (@jjclark1982)
+- (Documentation) Ingame documentation now displays line breaks inside tables correctly (@Snarling)
+- (Documentation) Added a documentation page for converting .script to .js (@LJNeon, @jjclark1982, @Snarling)
+- (Hashnet) Hash upgrade descriptions use proper number formatting options (@Snarling)
+- (Infiltration) Changed how the CheatCodeGame is displayed (@alutman, @Snarling)
+- "Disable Text Effects" option also disables the corrupted text display (@draughtnyan)
+- The "flight" program now displays the related requirements in a more readable way (@TheAimMan)
+- Miscellaneous wording fixes (@cigarmemr)
+
+### MISC
+
+- (CodingContract) Improve parsing of player input for arrays (@rocket3989)
+- (RemoteAPI) Remote API can be targeted to a remote device instead of the default of localhost (@Specker)
+- (ScriptEditor) When importing from other files that are also open in the editor, type information is now available in the IDE (@shyguy1412)
+- Fix inconsistent importing of the arg library (@catloversg)
+- Nerf noodle bar (various)
 `,
 };
