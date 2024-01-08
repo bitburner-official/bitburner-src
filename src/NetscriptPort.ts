@@ -25,10 +25,9 @@ export class Port {
   promise: Promise<void> | null = null;
   resolve() {
     if (!this.resolver) return;
-    const resolver = this.resolver;
+    this.resolver();
     this.resolver = null;
     this.promise = null;
-    resolver();
   }
 }
 export function portHandle(n: PortNumber): NetscriptPort {
