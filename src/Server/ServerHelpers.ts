@@ -296,7 +296,6 @@ export function isBackdoorInstalled(server: BaseServer): boolean {
   return false;
 }
 
-export function getCoreBonus(cores = 1): number {
-  const coreBonus = 1 + (cores - 1) / 16;
-  return coreBonus;
+export function getCoreBonus(cores = 1, weaken = false): number {
+  return (weaken ? 0 : 1) + (cores - 1) / 16;
 }
