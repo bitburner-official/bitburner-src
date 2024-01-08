@@ -4,7 +4,7 @@ import { BaseServer } from "./BaseServer";
 import { calculateServerGrowth } from "./formulas/grow";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { CONSTANTS } from "../Constants";
+import { ServerConstants } from "./data/Constants";
 import { Player } from "@player";
 import { CompletedProgramName, LiteratureName } from "@enums";
 import { Person as IPerson } from "@nsdefs";
@@ -53,9 +53,9 @@ export function safelyCreateUniqueServer(params: IConstructorParams): Server {
 export function numCycleForGrowth(server: IServer, growth: number, cores = 1): number {
   if (!server.serverGrowth) return Infinity;
   const hackDifficulty = server.hackDifficulty ?? 100;
-  let ajdGrowthRate = 1 + (CONSTANTS.ServerBaseGrowthRate - 1) / hackDifficulty;
-  if (ajdGrowthRate > CONSTANTS.ServerMaxGrowthRate) {
-    ajdGrowthRate = CONSTANTS.ServerMaxGrowthRate;
+  let ajdGrowthRate = 1 + (ServerConstants.ServerBaseGrowthRate - 1) / hackDifficulty;
+  if (ajdGrowthRate > ServerConstants.ServerMaxGrowthRate) {
+    ajdGrowthRate = ServerConstants.ServerMaxGrowthRate;
   }
 
   const serverGrowthPercentage = server.serverGrowth / 100;
@@ -98,8 +98,8 @@ export function numCycleForGrowthCorrected(
   if (targetMoney <= startMoney) return 0; // no growth --> no threads
 
   // exponential base adjusted by security
-  const adjGrowthRate = 1 + (CONSTANTS.ServerBaseGrowthRate - 1) / hackDifficulty;
-  const exponentialBase = Math.min(adjGrowthRate, CONSTANTS.ServerMaxGrowthRate); // cap growth rate
+  const adjGrowthRate = 1 + (ServerConstants.ServerBaseGrowthRate - 1) / hackDifficulty;
+  const exponentialBase = Math.min(adjGrowthRate, ServerConstants.ServerMaxGrowthRate); // cap growth rate
 
   // total of all grow thread multipliers
   const serverGrowthPercentage = server.serverGrowth / 100.0;
@@ -244,7 +244,7 @@ export function processSingleServerGrowth(server: Server, threads: number, cores
     let usedCycles = numCycleForGrowthCorrected(server, server.moneyAvailable, oldMoneyAvailable, cores);
     // Growing increases server security twice as much as hacking
     usedCycles = Math.min(Math.max(0, Math.ceil(usedCycles)), threads);
-    server.fortify(2 * CONSTANTS.ServerFortifyAmount * usedCycles);
+    server.fortify(2 * ServerConstants.ServerFortifyAmount * usedCycles);
   }
   return server.moneyAvailable / oldMoneyAvailable;
 }

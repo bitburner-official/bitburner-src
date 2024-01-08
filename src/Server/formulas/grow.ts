@@ -1,6 +1,6 @@
-import { CONSTANTS } from "../../Constants";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { Person as IPerson, Server as IServer } from "@nsdefs";
+import { ServerConstants } from "../data/Constants";
 
 export function calculateServerGrowth(server: IServer, threads: number, p: IPerson, cores = 1): number {
   if (!server.serverGrowth) return 0;
@@ -8,10 +8,10 @@ export function calculateServerGrowth(server: IServer, threads: number, p: IPers
   const numServerGrowthCycles = Math.max(Math.floor(threads), 0);
 
   //Get adjusted growth rate, which accounts for server security
-  const growthRate = CONSTANTS.ServerBaseGrowthRate;
+  const growthRate = ServerConstants.ServerBaseGrowthRate;
   let adjGrowthRate = 1 + (growthRate - 1) / hackDifficulty;
-  if (adjGrowthRate > CONSTANTS.ServerMaxGrowthRate) {
-    adjGrowthRate = CONSTANTS.ServerMaxGrowthRate;
+  if (adjGrowthRate > ServerConstants.ServerMaxGrowthRate) {
+    adjGrowthRate = ServerConstants.ServerMaxGrowthRate;
   }
 
   //Calculate adjusted server growth rate based on parameters
