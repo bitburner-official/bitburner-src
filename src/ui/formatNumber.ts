@@ -101,7 +101,7 @@ export function formatPercent(n: number, fractionalDigits = 2, multStart = 1e6) 
   if (nAbs * 100 === Infinity) return n < 0 ? "-∞%" : "∞%";
 
   // Mult form. There are probably some areas in the game this wouldn't make sense, but they hopefully won't ever have huge %.
-  if (nAbs >= multStart) return "x" + formatNumber(n, fractionalDigits, 0);
+  if (nAbs >= multStart) return "x" + formatNumber(n, fractionalDigits);
 
   return getFormatter(fractionalDigits, percentFormats, { style: "percent" }).format(n);
 }
