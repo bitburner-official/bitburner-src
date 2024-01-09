@@ -52,6 +52,18 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
       return graftableAugs;
     },
 
+    isGrafting: (ctx) => () => {
+      checkGraftingAPIAccess(ctx);
+      let grafting = false;
+      const work = Player.currentWork;
+      if (work) {
+        if (work.type == "GRAFTING") {
+          grafting = true;
+        }
+      }
+      return grafting;
+    },
+
     graftAugmentation:
       (ctx) =>
       (_augName, _focus = true) => {
