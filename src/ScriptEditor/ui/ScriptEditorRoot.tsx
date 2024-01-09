@@ -185,20 +185,19 @@ function Root(props: IProps): React.ReactElement {
         editorRef.current.revealLineInCenter(openScript.lastPosition.lineNumber);
         parseCode(openScript.code);
       } else {
+        const uri = monaco.Uri.from({
+          scheme: "file",
+          path: `${props.hostname}/${filename}`,
+        });
         // Open script
         const newScript = new OpenScript(
           filename,
           code,
           props.hostname,
           new monaco.Position(0, 0),
-          monaco.editor.createModel(
-            code,
-            filename.endsWith(".txt") ? "plaintext" : "javascript",
-            monaco.Uri.from({
-              scheme: "file",
-              path: `${props.hostname}/${filename}`,
-            }),
-          ),
+          //if we somehow messed up and didnt dispose the model just a safety measure
+          monaco.editor.getModel(uri) ??
+            monaco.editor.createModel(code, filename.endsWith(".txt") ? "plaintext" : "javascript", uri),
         );
         openScripts.push(newScript);
         currentScript = newScript;
@@ -265,7 +264,7 @@ function Root(props: IProps): React.ReactElement {
     const closingScript = openScripts[index];
     const savedScriptCode = closingScript.code;
     const wasCurrentScript = openScripts[index] === currentScript;
-
+    //closingScript.model.dispose()
     if (dirty(openScripts, index)) {
       PromptEvent.emit({
         txt: `Do you want to save changes to ${closingScript.path} on ${closingScript.hostname}?`,
@@ -274,7 +273,6 @@ function Root(props: IProps): React.ReactElement {
             // Save changes
             closingScript.code = savedScriptCode;
             saveScript(closingScript);
-            Router.toPage(Page.Terminal);
           }
         },
       });

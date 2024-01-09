@@ -24,13 +24,12 @@ export class OpenScript {
   }
 
   regenerateModel(): void {
-    this.model = editor.createModel(
-      this.code,
-      this.isTxt ? "plaintext" : "javascript",
-      monaco.Uri.from({
-        scheme: "file",
-        path: `${this.hostname}/${this.path}`,
-      }),
-    );
+    const uri = monaco.Uri.from({
+      scheme: "file",
+      path: `${this.hostname}/${this.path}`,
+    });
+    //regenerate an existing model or create a new one, just a safety check again we should have disposed it
+    this.model =
+      monaco.editor.getModel(uri) ?? editor.createModel(this.code, this.isTxt ? "plaintext" : "javascript", uri);
   }
 }
