@@ -28,7 +28,7 @@ export class OpenScript {
       scheme: "file",
       path: `${this.hostname}/${this.path}`,
     });
-    //regenerate an existing model or create a new one, just a safety check again we should have disposed it
+    //regenerate an existing model or create a new one, just a safety check we should have disposed it
     this.model =
       monaco.editor.getModel(uri) ?? editor.createModel(this.code, this.isTxt ? "plaintext" : "javascript", uri);
   }
