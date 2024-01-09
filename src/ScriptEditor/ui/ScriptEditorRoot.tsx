@@ -264,7 +264,7 @@ function Root(props: IProps): React.ReactElement {
     const closingScript = openScripts[index];
     const savedScriptCode = closingScript.code;
     const wasCurrentScript = openScripts[index] === currentScript;
-    //closingScript.model.dispose()
+
     if (dirty(openScripts, index)) {
       PromptEvent.emit({
         txt: `Do you want to save changes to ${closingScript.path} on ${closingScript.hostname}?`,
@@ -277,7 +277,8 @@ function Root(props: IProps): React.ReactElement {
         },
       });
     }
-
+    //unmounting the editor will dispose all, doesnt hurt to dipose on close aswell
+    closingScript.model.dispose();
     openScripts.splice(index, 1);
     if (openScripts.length === 0) {
       currentScript = null;
