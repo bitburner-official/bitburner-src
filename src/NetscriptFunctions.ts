@@ -1144,10 +1144,11 @@ export const ns: InternalAPI<NSFull> = {
   getPurchasedServerMaxRam: () => () => {
     return getPurchaseServerMaxRam();
   },
-  getPurchasedServerCost: (ctx) => (_ram) => {
+  getPurchasedServerCost: (ctx) => (_ram, _cores = 1) => {
     const ram = helpers.number(ctx, "ram", _ram);
-
-    const cost = getPurchaseServerCost(ram);
+    const cores = helpers.number(ctx,"cores",_cores)
+    
+    const cost = getPurchaseServerCost(ram,cores);
     if (cost === Infinity) {
       if (ram > getPurchaseServerMaxRam()) {
         helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than getPurchaseServerMaxRam`);
@@ -1159,9 +1160,10 @@ export const ns: InternalAPI<NSFull> = {
 
     return cost;
   },
-  purchaseServer: (ctx) => (_name, _ram) => {
+  purchaseServer: (ctx) => (_name, _ram,_cores = 1) => {
     const name = helpers.string(ctx, "name", _name);
     const ram = helpers.number(ctx, "ram", _ram);
+    const cores = helpers.number(ctx,"cores",_cores)
     let hostnameStr = String(name);
     hostnameStr = hostnameStr.replace(/\s+/g, "");
     if (hostnameStr == "") {
@@ -1178,7 +1180,7 @@ export const ns: InternalAPI<NSFull> = {
       return "";
     }
 
-    const cost = getPurchaseServerCost(ram);
+    const cost = getPurchaseServerCost(ram,cores);
     if (cost === Infinity) {
       if (ram > getPurchaseServerMaxRam()) {
         helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than getPurchaseServerMaxRam`);
@@ -1213,22 +1215,24 @@ export const ns: InternalAPI<NSFull> = {
     return newServ.hostname;
   },
 
-  getPurchasedServerUpgradeCost: (ctx) => (_hostname, _ram) => {
+  getPurchasedServerUpgradeCost: (ctx) => (_hostname, _ram,_cores = 1) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const ram = helpers.number(ctx, "ram", _ram);
+    const cores = helpers.number(ctx,"cores",_cores)
     try {
-      return getPurchasedServerUpgradeCost(hostname, ram);
+      return getPurchasedServerUpgradeCost(hostname, ram,cores);
     } catch (err) {
       helpers.log(ctx, () => String(err));
       return -1;
     }
   },
 
-  upgradePurchasedServer: (ctx) => (_hostname, _ram) => {
+  upgradePurchasedServer: (ctx) => (_hostname, _ram,_cores=1) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const ram = helpers.number(ctx, "ram", _ram);
+    const cores = helpers.number(ctx,"cores",_cores)
     try {
-      upgradePurchasedServer(hostname, ram);
+      upgradePurchasedServer(hostname, ram,cores);
       return true;
     } catch (err) {
       helpers.log(ctx, () => String(err));
