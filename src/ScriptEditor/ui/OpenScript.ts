@@ -1,5 +1,6 @@
 import type { ContentFilePath } from "../../Paths/ContentFile";
-import monaco, { editor, Position } from "monaco-editor";
+import { editor, Position } from "monaco-editor";
+import { makeModel } from "./utils";
 
 type ITextModel = editor.ITextModel;
 
@@ -24,12 +25,6 @@ export class OpenScript {
   }
 
   regenerateModel(): void {
-    const uri = monaco.Uri.from({
-      scheme: "file",
-      path: `${this.hostname}/${this.path}`,
-    });
-    //regenerate an existing model or create a new one, just a safety check we should have disposed it
-    this.model =
-      monaco.editor.getModel(uri) ?? editor.createModel(this.code, this.isTxt ? "plaintext" : "javascript", uri);
+    this.model = makeModel(this.hostname, this.path, this.code);
   }
 }
