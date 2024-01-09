@@ -52,7 +52,9 @@ export async function makePlayerMove(logger: (s: string) => void, x: number, y: 
   logger(`Go move played: ${x}, ${y}`);
 
   const playerUpdatedBoard = getStateCopy(result);
-  return getAIMove(logger, playerUpdatedBoard);
+  const response = getAIMove(logger, playerUpdatedBoard);
+  await sleep(300);
+  return response;
 }
 
 /**
@@ -87,7 +89,7 @@ async function getAIMove(logger: (s: string) => void, boardState: BoardState, su
       logger(`Opponent played move: ${result.x}, ${result.y}`);
     }
 
-    await sleep(200);
+    await sleep(400);
     resolve({ ...result, success });
   });
   return aiMoveResult;
