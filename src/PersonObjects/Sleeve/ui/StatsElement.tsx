@@ -76,6 +76,13 @@ export function StatsElement(props: IProps): React.ReactElement {
           color={Settings.theme.cha}
           data={{ level: props.sleeve.skills.charisma, exp: props.sleeve.exp.charisma }}
         />
+        {(Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) && (
+          <StatsRow
+            name="Intelligence"
+            color={Settings.theme.int}
+            data={{ level: props.sleeve.skills.intelligence, exp: props.sleeve.exp.intelligence }}
+          />
+        )}
         <TableRow>
           <TableCell classes={{ root: classes.cellNone }}>
             <br />
