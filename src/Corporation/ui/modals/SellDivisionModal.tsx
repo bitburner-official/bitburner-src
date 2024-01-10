@@ -34,8 +34,7 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
     props.onClose();
     dialogBoxCreate(
       <Typography>
-        Sold <b>{divisionToSell.name}</b> for <Money money={soldPrice} />, you now have space for
-        {corp.maxDivisions - corp.divisions.size} more divisions.
+        Sold <b>{divisionToSell.name}</b> for <Money money={soldPrice} />, you now have space for {corp.maxDivisions - corp.divisions.size} more divisions.
       </Typography>,
     );
   }
@@ -59,8 +58,8 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
         <Typography>
           Profit: <Money money={(divisionToSell.lastCycleRevenue - divisionToSell.lastCycleExpenses) / 10} /> / sec{" "}
         </Typography>
-        <Typography>Cities:{getRecordKeys(divisionToSell.offices).length}</Typography>
-        <Typography>Warehouses:{getRecordKeys(divisionToSell.warehouses).length}</Typography>
+        <Typography>Cities: {getRecordKeys(divisionToSell.offices).length}</Typography>
+        <Typography>Warehouses: {getRecordKeys(divisionToSell.warehouses).length}</Typography>
         {divisionToSell.makesProducts ?? <Typography>Products: {divisionToSell.products.size}</Typography>}
         <br />
         <Typography>
