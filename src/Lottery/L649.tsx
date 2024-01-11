@@ -11,22 +11,14 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-let wager = -1;
-let num1 = -1;
-let num2 = -1;
-let num3 = -1;
-let num4 = -1;
-let num5 = -1;
-let num6 = -1;
-
 export function L649(): React.ReactElement {
-  const [, setBet] = useState(1000);
-  const [, setBetNum1Result] = useState(1000);
-  const [, setBetNum2Result] = useState(1000);
-  const [, setBetNum3Result] = useState(1000);
-  const [, setBetNum4Result] = useState(1000);
-  const [, setBetNum5Result] = useState(1000);
-  const [, setBetNum6Result] = useState(1000);
+  const [wager, setBet] = useState(0);
+  const [num1, setBetNum1Result] = useState(-1);
+  const [num2, setBetNum2Result] = useState(-1);
+  const [num3, setBetNum3Result] = useState(-1);
+  const [num4, setBetNum4Result] = useState(-1);
+  const [num5, setBetNum5Result] = useState(-1);
+  const [num6, setBetNum6Result] = useState(-1);
 
   function resetBet(): void {
     setBetNum1Result(-1);
@@ -35,12 +27,6 @@ export function L649(): React.ReactElement {
     setBetNum4Result(-1);
     setBetNum5Result(-1);
     setBetNum6Result(-1);
-    num1 = -1;
-    num2 = -1;
-    num3 = -1;
-    num4 = -1;
-    num5 = -1;
-    num6 = -1;
     const elems = document.getElementsByTagName("input");
     for (const elem of elems) {
       if (elem.name === "betnum") {
@@ -60,85 +46,78 @@ export function L649(): React.ReactElement {
       bet = -1;
     }
     setBet(bet);
-    wager = bet;
     e.currentTarget.value = bet > 0 ? bet.toString() : "";
   }
   function updateNum1(e: React.ChangeEvent<HTMLInputElement>): void {
     const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
-      num1 = -1;
+      setBetNum1Result(-1);
     } else if (chosen > 49) {
       e.currentTarget.value = "";
-      num1 = -1;
+      setBetNum1Result(-1);
     } else {
       setBetNum1Result(chosen);
-      num1 = chosen;
     }
   }
   function updateNum2(e: React.ChangeEvent<HTMLInputElement>): void {
     const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
-      num2 = -1;
+      setBetNum2Result(-1);
     } else if (chosen > 49) {
       e.currentTarget.value = "";
-      num2 = -1;
+      setBetNum2Result(-1);
     } else {
       setBetNum2Result(chosen);
-      num2 = chosen;
     }
   }
   function updateNum3(e: React.ChangeEvent<HTMLInputElement>): void {
     const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
-      num3 = -1;
+      setBetNum3Result(-1);
     } else if (chosen > 49) {
       e.currentTarget.value = "";
-      num3 = -1;
+      setBetNum3Result(-1);
     } else {
       setBetNum3Result(chosen);
-      num3 = chosen;
     }
   }
   function updateNum4(e: React.ChangeEvent<HTMLInputElement>): void {
     const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
-      num4 = -1;
+      setBetNum4Result(-1);
     } else if (chosen > 49) {
       e.currentTarget.value = "";
-      num4 = -1;
+      setBetNum4Result(-1);
     } else {
       setBetNum4Result(chosen);
-      num4 = chosen;
     }
   }
   function updateNum5(e: React.ChangeEvent<HTMLInputElement>): void {
     const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
-      num5 = -1;
+      setBetNum5Result(-1);
     } else if (chosen > 49) {
       e.currentTarget.value = "";
-      num5 = -1;
+      setBetNum5Result(-1);
     } else {
       setBetNum5Result(chosen);
-      num5 = chosen;
     }
   }
   function updateNum6(e: React.ChangeEvent<HTMLInputElement>): void {
     const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
-      num6 = -1;
+      setBetNum6Result(-1);
     } else if (chosen > 49) {
       e.currentTarget.value = "";
-      num6 = -1;
+      setBetNum6Result(-1);
     } else {
       setBetNum6Result(chosen);
-      num6 = chosen;
     }
   }
   function canBuy(): boolean {
@@ -220,35 +199,34 @@ export function L649(): React.ReactElement {
     }
 
     const numarray: number[] = [];
-    let z = -1;
-    num1 = getRandomInt(1, 49);
-    z = num1;
-    numarray.push(num1);
+    let z = getRandomInt(1, 49);
+    setBetNum1Result(z);
+    numarray.push(z);
     while (numarray.includes(z)) {
       z = getRandomInt(1, 49);
     }
-    num2 = z;
-    numarray.push(num2);
+    setBetNum2Result(z);
+    numarray.push(z);
     while (numarray.includes(z)) {
       z = getRandomInt(1, 49);
     }
-    num3 = z;
-    numarray.push(num3);
+    setBetNum3Result(z);
+    numarray.push(z);
     while (numarray.includes(z)) {
       z = getRandomInt(1, 49);
     }
-    num4 = z;
-    numarray.push(num4);
+    setBetNum4Result(z);
+    numarray.push(z);
     while (numarray.includes(z)) {
       z = getRandomInt(1, 49);
     }
-    num5 = z;
-    numarray.push(num5);
+    setBetNum5Result(z);
+    numarray.push(z);
     while (numarray.includes(z)) {
       z = getRandomInt(1, 49);
     }
-    num6 = z;
-    numarray.push(num6);
+    setBetNum6Result(z);
+    numarray.push(z);
 
     const option = GameOptions.None;
 

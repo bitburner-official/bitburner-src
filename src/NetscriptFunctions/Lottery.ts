@@ -4,7 +4,7 @@ import { Player } from "@player";
 import { Lottery as ILottery } from "@nsdefs";
 import { TicketRecord, GameType, GameOptions } from "../Lottery/LotteryStoreLocationInside";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { isNumber } from "lodash";
+import { isNumber, cloneDeep } from "lodash";
 
 export function NetscriptLottery(): InternalAPI<ILottery> {
   const isValidNumbers = function (numbers: any[]): boolean {
@@ -32,7 +32,7 @@ export function NetscriptLottery(): InternalAPI<ILottery> {
   };
 
   return {
-    getTickets: () => () => Player?.lotteryTickets,
+    getTickets: () => () => cloneDeep(Player?.lotteryTickets),
     buyPick2Ticket: () => (_wager, _numbers) => {
       const wagerthere = !!_wager;
       const numbersthere = !!_numbers;
@@ -70,6 +70,7 @@ export function NetscriptLottery(): InternalAPI<ILottery> {
 
       const ticket = new TicketRecord(GameType.Pick2, numbers, wager, GameOptions.Straight);
       Player.lotteryTickets.push(ticket);
+      Player.loseMoney(wager, "lottery");
       return true;
     },
     buyPick3Ticket: () => (_wager, _option, _numbers) => {
@@ -117,6 +118,7 @@ export function NetscriptLottery(): InternalAPI<ILottery> {
       if (_option === "straight") {
         const ticket = new TicketRecord(GameType.Pick3, numbers, wager, GameOptions.Straight);
         Player.lotteryTickets.push(ticket);
+        Player.loseMoney(wager, "lottery");
         return true;
       }
       //We have a box or straight/box.  Check it for unique numbers.
@@ -131,10 +133,12 @@ export function NetscriptLottery(): InternalAPI<ILottery> {
       } else if (_option === "box") {
         const ticket = new TicketRecord(GameType.Pick3, numbers, wager, GameOptions.Box);
         Player.lotteryTickets.push(ticket);
+        Player.loseMoney(wager, "lottery");
         return true;
       } else if (_option === "straightbox" || _option === "straight/box") {
         const ticket = new TicketRecord(GameType.Pick3, numbers, wager, GameOptions.StraightBox);
         Player.lotteryTickets.push(ticket);
+        Player.loseMoney(wager, "lottery");
         return true;
       }
       //?????  Must have gotten the boxtype wrong or something.
@@ -193,6 +197,7 @@ export function NetscriptLottery(): InternalAPI<ILottery> {
       if (_option === "straight") {
         const ticket = new TicketRecord(GameType.Pick4, numbers, wager, GameOptions.Straight);
         Player.lotteryTickets.push(ticket);
+        Player.loseMoney(wager, "lottery");
         return true;
       }
       //We have a box or straight/box.  Check it for unique numbers.
@@ -207,6 +212,7 @@ export function NetscriptLottery(): InternalAPI<ILottery> {
       } else if (_option === "box") {
         const ticket = new TicketRecord(GameType.Pick4, numbers, wager, GameOptions.Box);
         Player.lotteryTickets.push(ticket);
+        Player.loseMoney(wager, "lottery");
         return true;
       }
       //?????  Must have gotten the boxtype wrong or something.
@@ -239,6 +245,7 @@ export function NetscriptLottery(): InternalAPI<ILottery> {
       // We have our numbers.  Check against options.  Straight, anything goes.  Box, 2/4 must be unique.
       const ticket = new TicketRecord(GameType.Keno, _numbers, wager, GameOptions.None);
       Player.lotteryTickets.push(ticket);
+      Player.loseMoney(wager, "lottery");
       return true;
     },
     buyL649Ticket: () => (_wager, _numbers) => {
@@ -273,6 +280,7 @@ export function NetscriptLottery(): InternalAPI<ILottery> {
       // We have our numbers.  Check against options.  Straight, anything goes.  Box, 2/4 must be unique.
       const ticket = new TicketRecord(GameType.L649, _numbers, wager, GameOptions.None);
       Player.lotteryTickets.push(ticket);
+      Player.loseMoney(wager, "lottery");
       return true;
     },
     buyRandomTicket: () => (_wager, _type, _option) => {
@@ -458,6 +466,7 @@ export function NetscriptLottery(): InternalAPI<ILottery> {
       // We have our numbers.  Check against options.  Straight, anything goes.  Box, 2/4 must be unique.
       const ticket = new TicketRecord(gtype, numbers, wager, opt);
       Player.lotteryTickets.push(ticket);
+      Player.loseMoney(wager, "lottery");
       return true;
     },
   };

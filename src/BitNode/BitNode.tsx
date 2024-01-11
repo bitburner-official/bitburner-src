@@ -452,18 +452,44 @@ export function initBitNodes() {
     "The downfall of greed",
     (
       <>
-        Test blurb {FactionName.ChurchOfTheMachineGod} has rallied far more support than anyone would have hoped.
+        Greed has taken it's tole. Countless Corporations have come and gone - stripping the people of their wealth.
+        Gangs, once sparce and powerful, are now plentiful but fractured. Information, once horded and protected, has
+        been found and is now easily accessible. The people are in need and flock to mother Stanek is droves. This is a
+        desperate time in which change is innevitable.
         <br />
         <br />
-        More blurb {CityName.Chongqing} and gain her trust.
+        The people have had enough and are starting to fight back. Many have started to establish their own charity or
+        are volunteering their time to work at one. These are teamed by the worlds top experts on sleeves and some of
+        the best scientific researchers of our time. Even getting your hands on their leftover tech would be a major
+        boon.
+        <br />
+        Sector-12 City Hall currently has a list of abandoned charities that are ready for you to take over.
         <br />
         <br />
         Destroying this BitNode will give you Source-File 15, or if you already have this Source-File it will upgrade
-        its level up to a maximum of 3. This Source-File lets the {FactionName.ChurchOfTheMachineGod} appear in other
-        BitNodes.
+        its level up to a maximum of 3. Source-File also increases the player's charity money gains and success rates.
+        Money Gains:
         <br />
         <br />
-        Each level of this Source-File increases the size of Stanek's Gift.
+        Level 1: 100%
+        <br />
+        Level 2: 1000%
+        <br />
+        Level 3: 10000%
+        <br />
+        <br />
+        Success Rates:
+        <br />
+        <br />
+        Level 1: 6%
+        <br />
+        Level 2: 12%
+        <br />
+        Level 3: 18%
+        <br />
+        <br />
+        Level 3 will permanently unlock the ability to get charity event rarity in all bitnodes.
+        <br />
       </>
     ),
   );
@@ -933,52 +959,116 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
     }
     case 15: {
       return new BitNodeMultipliers({
-        HackingLevelMultiplier: 0.25,
-        StrengthLevelMultiplier: 0.7,
-        DefenseLevelMultiplier: 0.7,
-        DexterityLevelMultiplier: 0.7,
-        AgilityLevelMultiplier: 0.7,
+        /** Influences the base cost to purchase an augmentation. */
+        AugmentationMoneyCost: 2,
 
-        PurchasedServerSoftcap: 1.6,
+        /** Influences the base rep the player must have with a faction to purchase an augmentation. */
+        AugmentationRepCost: 2.5,
 
-        ServerMaxMoney: 0.3375,
-        ServerStartingMoney: 0.75,
-        ServerStartingSecurity: 3,
+        /** Influences how quickly the player can gain rank within Bladeburner. */
+        BladeburnerRank: 0.3,
 
-        CompanyWorkMoney: 0.4,
-        CrimeMoney: 0.4,
-        HacknetNodeMoney: 0.4,
-        ScriptHackMoney: 0.2,
-        CodingContractMoney: 0.4,
+        /**Influences the amount of money gained from completing Coding Contracts. */
+        CodingContractMoney: 2,
 
-        ClassGymExpGain: 0.5,
-        CompanyWorkExpGain: 0.5,
-        CrimeExpGain: 0.5,
-        FactionWorkExpGain: 0.5,
+        /** Influences how much money the player earns when completing working their job. */
+        CompanyWorkMoney: 2,
+
+        /** Influences the valuation of corporations created by the player. */
+        CorporationValuation: 0.1,
+
+        /** Influences the base money gained when the player commits a crime. */
+        CrimeMoney: 0.5,
+
+        /** Influences the base money gained when the player commits a charity. */
+        CharityMoney: 5,
+
+        /** Percentage of unique augs that the charity has. */
+        CharityORGUniqueAugs: 1,
+
+        /** Reduces charity earning. */
+        CharityORGSoftcap: 1,
+
+        /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
+        DaedalusAugsRequirement: 40,
+
+        /** Influences how much it costs to unlock the stock market's 4S Market Data API */
+        FourSigmaMarketDataApiCost: 2,
+
+        /** Influences how much it costs to unlock the stock market's 4S Market Data (NOT API) */
+        FourSigmaMarketDataCost: 2,
+
+        /** Reduces gangs earning. */
+        GangSoftcap: 0.3,
+
+        /** Percentage of unique augs that the gang has. */
+        GangUniqueAugs: 0.4,
+
+        /** Influences how much money is gained when the player infiltrates a company. */
+        InfiltrationMoney: 0,
+
+        /** Influences how much rep the player can gain from factions when selling stolen documents and secrets */
+        InfiltrationRep: 0,
+
+        /**
+         * Influences how much money can be stolen from a server when the player performs a hack against it through
+         * the Terminal.
+         */
+        ManualHackMoney: 0.1,
+
+        /** Influence how much it costs to purchase a server */
+        PurchasedServerCost: 2,
+
+        /** Influence how much it costs to purchase a server */
+        PurchasedServerSoftcap: 2,
+
+        /** Influences the maximum number of purchased servers you can have */
+        PurchasedServerLimit: 0.3,
+
+        /** Influences the maximum allowed RAM for a purchased server */
+        PurchasedServerMaxRam: 0.5,
+
+        /** Influences how much money can be stolen from a server when a script performs a hack against it. */
+        ScriptHackMoney: 0.1,
+
+        /**
+         * The amount of money actually gained when script hack a server. This is
+         * different than the above because you can reduce the amount of money but
+         * not gain that same amount.
+         */
+        ScriptHackMoneyGain: 0.1,
+
+        /** Influences the growth percentage per cycle against a server. */
+        ServerGrowthRate: 0.5,
+
         HackExpGain: 0.1,
 
-        FactionWorkRepGain: 0.6,
+        /** Influences the maximum money that a server can grow to. */
+        ServerMaxMoney: 0.3,
 
-        FourSigmaMarketDataCost: 10,
-        FourSigmaMarketDataApiCost: 10,
+        /** Influences the initial money that a server starts with. */
+        ServerStartingMoney: 0.2,
 
-        CorporationValuation: 0.001,
-        CorporationSoftcap: 0.4,
-        CorporationDivisions: 0.4,
+        /** Influences the initial security level (hackDifficulty) of a server. */
+        ServerStartingSecurity: 0.8,
 
-        BladeburnerRank: 0.45,
-        BladeburnerSkillCost: 2,
+        /** Influences the weaken amount per invocation against a server. */
+        ServerWeakenRate: 1.5,
 
-        GangSoftcap: 0.3,
-        GangUniqueAugs: 0.1,
+        /** Influences the power of the gift. */
+        StaneksGiftPowerMultiplier: 0.8,
 
-        CharityORGSoftcap: 1.0,
-        CharityORGUniqueAugs: 1.0,
+        /** Influences the size of the gift. */
+        StaneksGiftExtraSize: 2,
 
-        StaneksGiftPowerMultiplier: 2,
-        StaneksGiftExtraSize: 1,
+        /** Influences the hacking skill required to backdoor the world daemon. */
+        WorldDaemonDifficulty: 5,
 
-        WorldDaemonDifficulty: 3,
+        /** Influences profits from corporation dividends and selling shares. */
+        CorporationSoftcap: 0.1,
+
+        /** Influences the amount of divisions a corporation can have have at the same time*/
+        CorporationDivisions: 0.1,
       });
     }
     default: {

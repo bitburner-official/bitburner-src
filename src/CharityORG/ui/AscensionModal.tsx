@@ -29,6 +29,9 @@ export function AscensionModal({ open, onClose, member, onAscend }: AscensionMod
   useEffect(() => onClose, [onClose]);
 
   function confirm(): void {
+    if (charityORG.ascensionToken < 1) return;
+    charityORG.ascensionToken--;
+
     onAscend();
     const res = charityORG.ascendMember(member);
     dialogBoxCreate(

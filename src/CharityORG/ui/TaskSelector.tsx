@@ -9,7 +9,8 @@ import { TaskDescription } from "./TaskDescription";
 import { Box } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-
+import { CharityVolunteerTasks } from "../CharityVolunteerTasks";
+import { CharityEventTasks } from "../CharityORG";
 import { CharityVolunteer } from "../CharityVolunteer";
 
 interface IProps {
@@ -43,7 +44,8 @@ export function TaskSelector(props: IProps): React.ReactElement {
         </MenuItem>
         {tasks.map((task: string, i: number) => (
           <MenuItem key={i + 1} value={task}>
-            {task}
+            {CharityVolunteerTasks[task]?.short_name.substring(0, 40)}
+            {CharityEventTasks[task]?.short_name.substring(0, 40)}
           </MenuItem>
         ))}
       </Select>

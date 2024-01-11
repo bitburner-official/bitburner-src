@@ -11,6 +11,7 @@ import {
 } from "@enums";
 
 import type { PlayerObject } from "./PlayerObject";
+import { mergeMultipliers } from "../../PersonObjects/Multipliers";
 import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
@@ -406,6 +407,10 @@ export function reapplyAllAugmentations(this: PlayerObject, resetMultipliers = t
       continue;
     }
     applyAugmentation(playerAug, true);
+  }
+  //Do we have a charityORG?  If so, apply it's multipliers.
+  if (this.charityORG !== null) {
+    this.mults = mergeMultipliers(this.mults, this.charityORG.charityAugment.mults);
   }
 
   this.updateSkillLevels();

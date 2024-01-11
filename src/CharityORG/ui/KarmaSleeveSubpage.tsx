@@ -6,6 +6,9 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Player } from "@player";
 import { KarmaSleeveOverclockSubpage } from "./KarmaSleeveOverclockSubpage";
+import { KarmaSleeveReduceShockSubpage } from "./KarmaSleeveReduceShockSubpage";
+import { KarmaSleeveSyncSubpage } from "./KarmaSleeveSyncSubpage";
+import { KarmaSleeveAugmentsSubpage } from "./KarmaSleeveAugmentsSubpage";
 
 /** React Component for the popup that manages Karma spending */
 export function KarmaSleeveSubpage(): React.ReactElement {
@@ -19,6 +22,10 @@ export function KarmaSleeveSubpage(): React.ReactElement {
     setValue(tab);
   }
 
+  if (Player.sleeves.length <= 0) {
+    return <Typography>The entineers are busy away tinkering on Sleeves. Come back when you have some!</Typography>;
+  }
+
   return (
     <Context.CharityORG.Provider value={charityORG}>
       <Box display="flex">
@@ -30,10 +37,12 @@ export function KarmaSleeveSubpage(): React.ReactElement {
         <Tab label="Overclock" />
         <Tab label="Reduce Shock" />
         <Tab label="Sync Up" />
-        <Tab label="Level Up" />
         <Tab label="Augments" />
       </Tabs>
       {value === 0 && <KarmaSleeveOverclockSubpage />}
+      {value === 1 && <KarmaSleeveReduceShockSubpage />}
+      {value === 2 && <KarmaSleeveSyncSubpage />}
+      {value === 3 && <KarmaSleeveAugmentsSubpage />}
     </Context.CharityORG.Provider>
   );
 

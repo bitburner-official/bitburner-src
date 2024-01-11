@@ -1076,6 +1076,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "totalSkillPoints": 666,
       },
     },
+    "charityNodes": [],
     "charityORG": null,
     "city": "Sector-12",
     "corporation": {
@@ -1253,6 +1254,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "bladeburner": 0,
         "casino": 0,
         "charity": 0,
+        "charityORG": 0,
         "class": 0,
         "codingcontract": 0,
         "corporation": 0,
@@ -1279,6 +1281,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "bladeburner": 0,
         "casino": 0,
         "charity": 0,
+        "charityORG": 0,
         "class": 0,
         "codingcontract": 0,
         "corporation": 0,
@@ -1337,6 +1340,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "playtimeSinceLastAug": 0,
     "playtimeSinceLastBitnode": 0,
     "purchasedServers": [],
+    "quantomTickets": 0,
     "queuedAugmentations": [],
     "scriptProdSinceLastAug": 0,
     "skills": {

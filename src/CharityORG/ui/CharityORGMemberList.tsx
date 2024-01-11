@@ -55,3 +55,4 @@ export function CharityORGMemberList(): React.ReactElement {
     </>
   );
 }
+// <Box display="grid" sx={{ gridTemplateColumns: "repeat(2, 1fr)" }}>

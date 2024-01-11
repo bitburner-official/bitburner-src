@@ -5,6 +5,8 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import { KarmaCharitySubpage } from "./KarmaCharitySubpage";
 import { KarmaSleeveSubpage } from "./KarmaSleeveSubpage";
+import { KarmaTimeSubpage } from "./KarmaTimeSubpage";
+import { KarmaSpecialSubpage } from "./KarmaSpecialSubpage";
 import Box from "@mui/material/Box";
 import { Player } from "@player";
 
@@ -33,22 +35,13 @@ export function KarmaSubpage(): React.ReactElement {
         <Tab label="None" />
         <Tab label="Boost Charity" />
         <Tab label="Sleeves" />
-        <Tab label="Factions" />
         <Tab label="Time" />
+        <Tab label="Special" />
       </Tabs>
       {value === 1 && <KarmaCharitySubpage />}
       {value === 2 && <KarmaSleeveSubpage />}
+      {value === 3 && <KarmaTimeSubpage />}
+      {value === 4 && <KarmaSpecialSubpage />}
     </Context.CharityORG.Provider>
   );
-
-  //<>
-  //  <Box display="flex">
-  //    <Typography>Charties have the ability to spend their Karma on various things.  This is your entry point into that realm.  Purchases are not cheap, but they can be powerful.<br></br>
-  //    Select what you would like to spend your Karma on:</Typography>
-  // </Box>
-  // {value === 0 && <ManagementSubpage />}
-  // {value === 1 && <EquipmentsSubpage />}
-  // {value === 2 && <KarmaSubpage />}
-  //</>
-  //);
 }

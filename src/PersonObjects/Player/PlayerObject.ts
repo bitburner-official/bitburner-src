@@ -31,6 +31,7 @@ import { CONSTANTS } from "../../Constants";
 import { Person } from "../Person";
 import { isMember } from "../../utils/EnumHelper";
 import { PartialRecord } from "../../Types/Record";
+import { Server } from "../../Server/Server";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -44,6 +45,7 @@ export class PlayerObject extends Person implements IPlayer {
   factionInvitations: FactionName[] = [];
   factionRumors = new JSONSet<FactionName>();
   hacknetNodes: (HacknetNode | string)[] = []; // HacknetNode object or hostname of Hacknet Server
+  charityNodes: Server[] = []; // Charity server objects, to be rechecked on every load and prestige.
   has4SData = false;
   has4SDataTixApi = false;
   hashManager = new HashManager();
@@ -74,6 +76,7 @@ export class PlayerObject extends Person implements IPlayer {
   lastSave = 0;
   totalPlaytime = 0;
   lotteryTickets: TicketRecord[] = [];
+  quantomTickets = 0;
   currentWork: Work | null = null;
   focus = false;
 

@@ -2,6 +2,7 @@ import { ITaskParams } from "./ITaskParams";
 
 export class CharityVolunteerTask {
   name: string;
+  short_name: string;
   desc: string;
 
   isSpending: boolean;
@@ -22,9 +23,10 @@ export class CharityVolunteerTask {
 
   difficulty: number;
 
-  // Defines tasks that Gang Members can work on
+  // Defines tasks that Charity Volunteers can work on
   constructor(name: string, desc: string, isSpending: boolean, params: ITaskParams) {
     this.name = name;
+    this.short_name = name;
     this.desc = desc;
     this.isSpending = isSpending;
 

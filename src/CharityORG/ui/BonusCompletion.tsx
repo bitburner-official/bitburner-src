@@ -11,9 +11,8 @@ interface IProps {
 
 /** React Component for displaying the bonus time remaining. */
 export function BonusCompletion(props: IProps): React.ReactElement {
-  if (props.charityORG.completionCycles <= 0) return <></>;
-  const bonusMillis = props.charityORG.completionCycles;
-  if (!props.charityORG.completed) {
+  const bonusMillis = props.charityORG.completionCycles * 200;
+  if (!props.charityORG.completed && bonusMillis > 0) {
     return (
       <Box display="flex">
         <Tooltip
@@ -28,7 +27,7 @@ export function BonusCompletion(props: IProps): React.ReactElement {
         </Tooltip>
       </Box>
     );
-  } else {
+  } else if (props.charityORG.completed) {
     return (
       <Box display="flex">
         <Tooltip title={<Typography>You have broken the gangs!</Typography>}>
@@ -36,5 +35,5 @@ export function BonusCompletion(props: IProps): React.ReactElement {
         </Tooltip>
       </Box>
     );
-  }
+  } else return <></>;
 }

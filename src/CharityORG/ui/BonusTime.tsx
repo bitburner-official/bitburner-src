@@ -13,7 +13,7 @@ interface IProps {
 /** React Component for displaying the bonus time remaining. */
 export function BonusTime(props: IProps): React.ReactElement {
   const CyclerPerSecond = 1000 / CONSTANTS.MilliPerCycle;
-  if ((props.charityORG.storedCycles / CyclerPerSecond) * 1000 <= 5000) return <></>;
+  if ((props.charityORG.storedCycles / CyclerPerSecond) * 1000 <= 1000) return <></>;
   const bonusMillis = (props.charityORG.storedCycles / CyclerPerSecond) * 1000;
   return (
     <Box display="flex">
@@ -21,7 +21,7 @@ export function BonusTime(props: IProps): React.ReactElement {
         title={
           <Typography>
             You gain bonus time while offline or when the game is inactive (e.g. when the tab is throttled by the
-            browser). Bonus time makes the Charity mechanic progress faster, up to 25x the normal speed.
+            browser). Bonus time makes the Charity mechanic progress faster, up to 5x the normal speed.
           </Typography>
         }
       >

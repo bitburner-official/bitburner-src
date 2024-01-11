@@ -45,8 +45,9 @@ export function calculateKarmaGain(
     (task.chaWeight / 100) * volunteer.cha;
   statWeight -= 4 * task.difficulty;
   if (statWeight <= 0) return 0;
-
-  return (5 * task.baseKarmaGain * statWeight * 0.25) / 10;
+  const terrorMult = calculateTerrorMult(cform);
+  const visibilityMult = calculateVisibilityMult(cform);
+  return (5 * task.baseKarmaGain * statWeight * 0.25 * Math.sqrt((terrorMult + visibilityMult) / 2)) / 10;
 }
 
 export function calculateMoneyGainCharity(
@@ -148,35 +149,13 @@ export function calculateTerrorGain(
 }
 
 export function calculateTerrorMult(cform: FormulaCharity): number {
-  //Terror ranges from 0 - 100%, or 0 - 100.000...
-  //Values retured are: at 50% returns 1(no change), at 100% returns .5, at 0 returns 2
-  //Formula takes into account 2 -- 1 -- .5
-  if (cform.terror === 50) {
-    // Returns 1 at 50%
-    return 1;
-  } else if (cform.terror > 50) {
-    // Range 50.1 - 100%.  Returns .5 at 100% and .999 at near 50%
-    return 50 / cform.terror;
-  } else {
-    // < 50  Range 49.9% - 0.01  Returns near 2 at near 0 and just over 1 at near 50%
-    return Math.sqrt((200 - cform.terror * 2) / 100); // sqrt of (1 - 2), = 1 - 1.45
-  }
+  //Terror 0: actually 1: 33.333  100: 0.3333...  1 is too high, so we / by 10000 and + .0005
+  return ((50 / Math.max(cform.terror, 1)) * 2) / 3 / 10000 + 0.0005;
 }
 
 export function calculateVisibilityMult(cform: FormulaCharity): number {
-  //Visibility ranges from 0 - 100%, or 1 - 0.000...
-  //Values retured are: at 50% returns 1(no change), at 100% returns 2, at 0 returns .5
-  //Formula takes into account 2 -- 1 -- .5
-  if (cform.visibility === 50) {
-    // Returns 1 at 50%
-    return 1;
-  } else if (cform.visibility > 50) {
-    // Range 50.1 - 100%.  Returns 2 at 100% and just over 1 at near 50%
-    return Math.sqrt(cform.visibility / 50); //100% 1 / .5 = 2   50.1%  .501 / .5 = 1.002
-  } else {
-    // < .5  Range 49.9% - 0.01  Returns .5 at 0 and just below 1 at near 50%
-    return (cform.visibility + 50) / 100;
-  }
+  //Vis 0: = 0.3333... -> 100: = Actually 99: 33.333  1 is too high, so we / by 10000 and + .0005, 0.333 - 33.33 / 10000 -> 0.0000333 - .003333 + .0005
+  return ((50 / (100 - Math.min(cform.visibility, 99))) * 2) / 3 / 10000 + 0.0005;
 }
 
 export function calculateAscensionPointsGainCharity(exp: number): number {

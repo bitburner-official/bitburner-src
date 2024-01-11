@@ -239,7 +239,7 @@ const canDo: {
   "Work for Company": (sleeve: Sleeve) => possibleJobs(sleeve).length > 0,
   "Work for Faction": (sleeve: Sleeve) => possibleFactions(sleeve).length > 0,
   "Commit Crime": () => true,
-  "Perform Charity": () => true,
+  "Perform Charity": () => (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15 ? false : true),
   "Take University Course": (sleeve: Sleeve) =>
     [CityName.Aevum, CityName.Sector12, CityName.Volhaven].includes(sleeve.city),
   "Workout at Gym": (sleeve: Sleeve) => [CityName.Aevum, CityName.Sector12, CityName.Volhaven].includes(sleeve.city),

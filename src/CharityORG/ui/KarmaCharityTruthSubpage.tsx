@@ -7,43 +7,37 @@ import { TextField } from "@mui/material";
 import { Player } from "@player";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { AugmentationName } from "@enums";
-//import { Faction } from "../../Faction/Faction";
-
-let spend = 0;
 
 /** React Component for the popup that manages Karma spending */
 export function KarmaCharityTruthSubpage(): React.ReactElement {
-  const [, setValue] = React.useState(0);
+  const [spend, setSpend] = React.useState(0);
 
   function updateSpend(e: React.ChangeEvent<HTMLInputElement>): void {
-    spend = parseInt(e.currentTarget.value);
-    if (isNaN(spend)) {
-      spend = 0;
+    const spendVal = Number.parseInt(e.currentTarget.value);
+    if (spendVal > Player.karma || spendVal < 0) {
+      setSpend(0);
+      e.currentTarget.value = "";
+      return;
     }
-    if (spend > Player.karma) {
-      spend = 0;
-    }
-    if (spend < 0) {
-      spend = 0;
-    }
-    setValue(spend);
-    e.currentTarget.value = spend > 0 ? spend.toString() : "";
+    setSpend(spendVal);
   }
   function purchaseTruth(): void {
+    if (spend > Player.karma) return;
     if (Player.hasAugmentation(AugmentationName.TheRedPill, false)) {
       dialogBoxCreate("You can already learn the truth...");
-    } else if (spend < 500000) {
+    } else if (spend < 5000000000000) {
       dialogBoxCreate("You need to spend more to learn the truth...");
     } else {
       dialogBoxCreate("You may now learn the truth...");
-      Player.karma -= 500000;
+      Player.karma -= 5000000000000;
       Player.queueAugmentation(AugmentationName.TheRedPill);
+      setSpend(spend);
     }
   }
   return (
     <>
       <Typography>Karma:</Typography>
-      <Box display="flex" alignItems="center">
+      <Box display="grid" alignItems="center">
         <TextField
           type="number"
           style={{

@@ -11,14 +11,10 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-let wager = -1;
-let numbers = -1;
-let option: GameOptions;
-
 export function Pick4(): React.ReactElement {
-  const [, setBet] = useState(1000);
-  const [, setBetNumberResult] = useState(1000);
-
+  const [wager, setWager] = useState(-1);
+  const [numbers, setBetNumberResult] = useState(-1);
+  const [option, setOption] = useState(GameOptions.None);
   function updateBet(e: React.ChangeEvent<HTMLInputElement>): void {
     let bet: number = parseInt(e.currentTarget.value);
     if (isNaN(bet)) {
@@ -30,21 +26,19 @@ export function Pick4(): React.ReactElement {
     if (bet < LotteryConstants.MinPlay) {
       bet = -1;
     }
-    setBet(bet);
-    wager = bet;
+    setWager(bet);
     e.currentTarget.value = bet > 0 ? bet.toString() : "";
   }
   function updateNumbersPick4(e: React.ChangeEvent<HTMLInputElement>): void {
     const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
-      numbers = -1;
+      setBetNumberResult(-1);
     } else if (e.currentTarget.value.length > 4) {
       e.currentTarget.value = "";
-      numbers = -1;
+      setBetNumberResult(-1);
     } else {
       setBetNumberResult(chosen);
-      numbers = chosen;
     }
   }
 
@@ -61,11 +55,11 @@ export function Pick4(): React.ReactElement {
       dialogBoxCreate("You cannot hold any more tickets.");
       return;
     }
-    if (!option || (option !== GameOptions.Straight && option !== GameOptions.Box)) {
+    if (option === GameOptions.None || (option !== GameOptions.Straight && option !== GameOptions.Box)) {
       dialogBoxCreate("No Game Option selected");
       return;
     }
-    if (option === GameOptions.Box && !canBuyBox()) {
+    if (option === GameOptions.Box && !canBuyBox(numbers)) {
       dialogBoxCreate("Invalid numbers selected for a Box bet");
       return;
     }
@@ -115,17 +109,17 @@ export function Pick4(): React.ReactElement {
       dialogBoxCreate("No Game Option selected");
       return;
     }
-    numbers = 0;
+    let nums = getRandomInt(0, 9999);
 
     if (option === GameOptions.Box || option === GameOptions.StraightBox) {
-      while (!canBuyBox()) {
-        numbers = getRandomInt(0, 9999);
+      while (!canBuyBox(nums)) {
+        nums = getRandomInt(0, 9999);
       }
     } else {
-      numbers = getRandomInt(0, 9999);
+      nums = getRandomInt(0, 9999);
     }
 
-    const numstring = String(numbers);
+    const numstring = String(nums);
     const numarray = [];
     if (numstring.length === 0) {
       numarray.push(0);
@@ -156,11 +150,11 @@ export function Pick4(): React.ReactElement {
       </>
     );
     SnackbarEvents.emit(PurchaseToast, ToastVariant.INFO, 2000);
-    setBetNumberResult(numbers);
+    setBetNumberResult(nums);
   }
 
-  function canBuyBox(): boolean {
-    const numstring = String(numbers);
+  function canBuyBox(nums: number): boolean {
+    const numstring = String(nums);
     const numarray: number[] = [];
 
     if (numstring.length === 0) {
@@ -197,12 +191,12 @@ export function Pick4(): React.ReactElement {
   }
   function updateOptionBox(e: React.ChangeEvent<HTMLInputElement>): void {
     if (e.currentTarget.checked) {
-      option = GameOptions.Box;
+      setOption(GameOptions.Box);
     }
   }
   function updateOptionStraight(e: React.ChangeEvent<HTMLInputElement>): void {
     if (e.currentTarget.checked) {
-      option = GameOptions.Straight;
+      setOption(GameOptions.Straight);
     }
   }
 

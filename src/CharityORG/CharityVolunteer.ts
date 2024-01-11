@@ -1,5 +1,6 @@
 import { CharityVolunteerTask } from "./CharityVolunteerTask";
 import { CharityVolunteerTasks } from "./CharityVolunteerTasks";
+import { CharityEventTasks } from "./CharityORG";
 import { CharityVolunteerUpgrade } from "./CharityVolunteerUpgrade";
 //import { CharityVolunteerUpgrades } from "./CharityVolunteerUpgrades";
 import { IAscensionResult } from "./IAscensionResult";
@@ -88,7 +89,18 @@ export class CharityVolunteer {
   //}
 
   assignToTask(taskName: string): boolean {
-    if (!Object.hasOwn(CharityVolunteerTasks, taskName)) {
+    const charityORG = Player.charityORG;
+    if (charityORG === null) {
+      this.task = "Unassigned";
+      return false;
+    }
+    if (!Object.hasOwn(CharityVolunteerTasks, taskName) && !Object.hasOwn(CharityEventTasks, taskName)) {
+      this.task = "Unassigned";
+      return false;
+    } else if (
+      (CharityVolunteerTasks[taskName]?.isSpending || CharityEventTasks[taskName]?.isSpending) &&
+      charityORG.bank <= 0
+    ) {
       this.task = "Unassigned";
       return false;
     }
@@ -109,6 +121,8 @@ export class CharityVolunteer {
 
     if (Object.hasOwn(CharityVolunteerTasks, this.task)) {
       return CharityVolunteerTasks[this.task];
+    } else if (Object.hasOwn(CharityEventTasks, this.task)) {
+      return CharityEventTasks[this.task];
     }
     return CharityVolunteerTasks.Unassigned;
   }
@@ -189,44 +203,71 @@ export class CharityVolunteer {
     numCycles /= 10;
     const task = this.getTask();
     if (task === CharityVolunteerTasks.Unassigned) return;
-    const difficultyMult = Math.pow(task.difficulty, 0.9);
+    const modifiedDifficulty =
+      task.name === "Train Primary" || task.name === "Train Mind"
+        ? Math.max(task.difficulty, this.getHighestDifficulty())
+        : task.difficulty;
+    const difficultyMult = Math.pow(modifiedDifficulty, 0.9);
     const difficultyPerCycles = difficultyMult * numCycles;
-    const weightDivisor = 1500;
+    const diffModHigh =
+      modifiedDifficulty <= 1000 ? 1 : Math.max(1, Math.pow(10, Math.log10(modifiedDifficulty) - 2) / 100); //Used to increase the difficulty mod at higher levels., degraded to /100 to allow for slight increase in xp gain at higher levels.
+    const weightDivisor = 200;
     const expMult = this.expMult();
     this.hack_exp +=
-      (task.hackWeight / weightDivisor) *
-      difficultyPerCycles *
-      expMult.hack *
-      this.calculateAscensionMult(this.hack_asc_points);
+      ((task.hackWeight / weightDivisor) *
+        difficultyPerCycles *
+        expMult.hack *
+        this.calculateAscensionMult(this.hack_asc_points)) /
+      diffModHigh;
     this.str_exp +=
-      (task.strWeight / weightDivisor) *
-      difficultyPerCycles *
-      expMult.str *
-      this.calculateAscensionMult(this.str_asc_points);
+      ((task.strWeight / weightDivisor) *
+        difficultyPerCycles *
+        expMult.str *
+        this.calculateAscensionMult(this.str_asc_points)) /
+      diffModHigh;
     this.def_exp +=
-      (task.defWeight / weightDivisor) *
-      difficultyPerCycles *
-      expMult.def *
-      this.calculateAscensionMult(this.def_asc_points);
+      ((task.defWeight / weightDivisor) *
+        difficultyPerCycles *
+        expMult.def *
+        this.calculateAscensionMult(this.def_asc_points)) /
+      diffModHigh;
     this.dex_exp +=
-      (task.dexWeight / weightDivisor) *
-      difficultyPerCycles *
-      expMult.dex *
-      this.calculateAscensionMult(this.dex_asc_points);
+      ((task.dexWeight / weightDivisor) *
+        difficultyPerCycles *
+        expMult.dex *
+        this.calculateAscensionMult(this.dex_asc_points)) /
+      diffModHigh;
     this.agi_exp +=
-      (task.agiWeight / weightDivisor) *
-      difficultyPerCycles *
-      expMult.agi *
-      this.calculateAscensionMult(this.agi_asc_points);
+      ((task.agiWeight / weightDivisor) *
+        difficultyPerCycles *
+        expMult.agi *
+        this.calculateAscensionMult(this.agi_asc_points)) /
+      diffModHigh;
     this.cha_exp +=
-      (task.chaWeight / weightDivisor) *
-      difficultyPerCycles *
-      expMult.cha *
-      this.calculateAscensionMult(this.cha_asc_points);
+      ((task.chaWeight / weightDivisor) *
+        difficultyPerCycles *
+        expMult.cha *
+        this.calculateAscensionMult(this.cha_asc_points)) /
+      diffModHigh;
   }
 
-  earnPrestige(numCycles = 1, charityORG: CharityORG): void {
-    const earnedPrestige = this.calculatePrestigeGain(charityORG) * numCycles;
+  getHighestDifficulty(): number {
+    let dif = 0;
+    const charityORG = (function () {
+      if (Player.charityORG === null) throw new Error("Charity should not be null");
+      return Player.charityORG;
+    })();
+    for (const volunteer of charityORG.volunteers) {
+      const ave = (volunteer.agi + volunteer.cha + volunteer.def + volunteer.dex + volunteer.hack + volunteer.str) / 6;
+      if (ave / 5.1 > dif) {
+        dif = ave / 5.1;
+      }
+    }
+    return dif;
+  }
+
+  earnPrestige(numCycles = 1, mod = 1, charityORG: CharityORG): void {
+    const earnedPrestige = this.calculatePrestigeGain(charityORG) * numCycles * mod;
     this.earnedPrestige += earnedPrestige;
   }
 
@@ -345,7 +386,7 @@ export class CharityVolunteer {
     if (Player.charityORG.bank < Player.charityORG.getUpgradeCost(upg)) return false;
 
     Player.charityORG.bank -= Player.charityORG.getUpgradeCost(upg);
-    Player.charityORG.spent += Player.charityORG.getUpgradeCost(upg);
+    Player.charityORG.spent -= Player.charityORG.getUpgradeCost(upg);
 
     this.upgrades.push(upg.name);
     this.applyUpgrade(upg);

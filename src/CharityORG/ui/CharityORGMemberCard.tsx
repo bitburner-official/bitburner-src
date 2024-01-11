@@ -14,7 +14,7 @@ interface IProps {
 /** React Component for a gang member on the management subpage. */
 export function CharityORGMemberCard(props: IProps): React.ReactElement {
   return (
-    <Box component={Paper} sx={{ width: "auto" }}>
+    <Box component={Paper} sx={{ width: "fit-content(100%)" }}>
       <Box sx={{ m: 1 }}>
         <ListItemText primary={<b>{props.member.name}</b>} />
         <CharityORGMemberCardContent member={props.member} />

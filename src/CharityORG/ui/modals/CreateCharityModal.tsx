@@ -37,8 +37,9 @@ export function CreateCharityModal(props: IProps): React.ReactElement {
     if (name == "") return;
 
     Player.startCharity(name, false);
-    Player.loseMoney(250e6, "charity");
+    Player.loseMoney(250e6, "charityORG");
     joinFaction(Factions.Charity);
+    if (Player.charityORG !== null) Player.charityORG.ascensionToken += 50;
     props.onClose();
     Router.toPage(Page.CharityORG);
   }
@@ -50,6 +51,7 @@ export function CreateCharityModal(props: IProps): React.ReactElement {
 
     Player.startCharity(name, true);
     joinFaction(Factions.Charity);
+    if (Player.charityORG !== null) Player.charityORG.ascensionToken += 20;
     props.onClose();
     Router.toPage(Page.CharityORG);
   }

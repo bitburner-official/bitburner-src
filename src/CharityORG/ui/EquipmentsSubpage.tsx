@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { useCharityORG } from "./Context";
-
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { MenuItem, Table, TableBody, TextField } from "@mui/material";
+import { MenuItem, Table, TableBody, TableCell, TextField, TableRow } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-
-import { formatMultiplier } from "../../ui/formatNumber";
+import { formatMultiplier, formatSkill, formatNumber } from "../../ui/formatNumber";
 import { CharityVolunteerUpgrades } from "../CharityVolunteerUpgrades";
 import { CharityVolunteerUpgrade } from "../CharityVolunteerUpgrade";
 import { Money } from "../../ui/React/Money";
@@ -18,8 +16,8 @@ import { CharityVolunteer } from "../CharityVolunteer";
 import { UpgradeType } from "../data/upgrades";
 //import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { StatsRow } from "../../ui/React/StatsRow";
 import { useRerender } from "../../ui/React/hooks";
+import { useStyles } from "../../ui/React/CharacterOverview";
 
 interface INextRevealProps {
   upgrades: string[];
@@ -89,6 +87,7 @@ function CharityVolunteerUpgradePanel(props: IPanelProps): React.ReactElement {
   const charity = useCharityORG();
   const rerender = useRerender();
   const [currentCategory, setCurrentCategory] = useState("Tools");
+  const classes = useStyles();
 
   function filterUpgrades(list: string[], type: UpgradeType): CharityVolunteerUpgrade[] {
     return Object.keys(CharityVolunteerUpgrades)
@@ -131,71 +130,119 @@ function CharityVolunteerUpgradePanel(props: IPanelProps): React.ReactElement {
     agi: props.member.calculateAscensionMult(props.member.agi_asc_points),
     cha: props.member.calculateAscensionMult(props.member.cha_asc_points),
   };
+
+  function exportStat(name: string, num: number, xp: number, color: string): React.ReactElement {
+    return (
+      <>
+        <TableCell classes={{ root: classes.cellNone }}>
+          <Typography align="left" sx={{ color: color }}>
+            {name}
+          </Typography>
+        </TableCell>
+        <TableCell classes={{ root: classes.cellNone }}>
+          <Typography align="right" sx={{ color: color }}>
+            {formatSkill(num)}
+          </Typography>
+        </TableCell>
+        <TableCell classes={{ root: classes.cellNone }}>
+          <Typography align="right" sx={{ color: color }}>
+            {"(" + formatNumber(xp) + ")"}
+          </Typography>
+        </TableCell>
+        <TableCell classes={{ root: classes.cellNone }}>
+          <Typography align="right" sx={{ color: color }}>
+            {"exp"}
+          </Typography>
+        </TableCell>
+      </>
+    );
+  }
+
   return (
     <Paper>
       <Box display="grid" sx={{ gridTemplateColumns: "1fr 1fr", m: 1, gap: 1 }}>
         <span>
-          <Typography variant="h5" color="primary">
-            {props.member.name} ({props.member.task})
-          </Typography>
-          <Tooltip
-            title={
-              <Typography>
-                Hk: x{formatMultiplier(props.member.hack_mult * asc.hack)}(x
-                {formatMultiplier(props.member.hack_mult)} Eq, x{formatMultiplier(asc.hack)} Asc)
-                <br />
-                St: x{formatMultiplier(props.member.str_mult * asc.str)}
-                (x{formatMultiplier(props.member.str_mult)} Eq, x{formatMultiplier(asc.str)} Asc)
-                <br />
-                Df: x{formatMultiplier(props.member.def_mult * asc.def)}
-                (x{formatMultiplier(props.member.def_mult)} Eq, x{formatMultiplier(asc.def)} Asc)
-                <br />
-                Dx: x{formatMultiplier(props.member.dex_mult * asc.dex)}
-                (x{formatMultiplier(props.member.dex_mult)} Eq, x{formatMultiplier(asc.dex)} Asc)
-                <br />
-                Ag: x{formatMultiplier(props.member.agi_mult * asc.agi)}
-                (x{formatMultiplier(props.member.agi_mult)} Eq, x{formatMultiplier(asc.agi)} Asc)
-                <br />
-                Ch: x{formatMultiplier(props.member.cha_mult * asc.cha)}
-                (x{formatMultiplier(props.member.cha_mult)} Eq, x{formatMultiplier(asc.cha)} Asc)
-              </Typography>
-            }
-          >
-            <Table>
-              <TableBody>
-                <StatsRow
-                  name="Hacking"
-                  color={Settings.theme.hack}
-                  data={{ level: props.member.hack, exp: props.member.hack_exp }}
-                />
-                <StatsRow
-                  name="Strength"
-                  color={Settings.theme.combat}
-                  data={{ level: props.member.str, exp: props.member.str_exp }}
-                />
-                <StatsRow
-                  name="Defense"
-                  color={Settings.theme.combat}
-                  data={{ level: props.member.def, exp: props.member.def_exp }}
-                />
-                <StatsRow
-                  name="Dexterity"
-                  color={Settings.theme.combat}
-                  data={{ level: props.member.dex, exp: props.member.dex_exp }}
-                />
-                <StatsRow
-                  name="Agility"
-                  color={Settings.theme.combat}
-                  data={{ level: props.member.agi, exp: props.member.agi_exp }}
-                />
-                <StatsRow
-                  name="Charisma"
-                  color={Settings.theme.cha}
-                  data={{ level: props.member.cha, exp: props.member.cha_exp }}
-                />
-              </TableBody>
-            </Table>
-          </Tooltip>
+          <Table sx={{ style: "flex", display: "table", width: "100%", gridTemplateColumns: "1fr 1fr 1fr 1fr" }}>
+            <TableBody>
+              <Tooltip
+                title={
+                  <Typography>
+                    Hk: x{formatMultiplier(props.member.hack_mult * asc.hack)}(x
+                    {formatMultiplier(props.member.hack_mult)} Eq, x{formatMultiplier(asc.hack)} Asc)
+                  </Typography>
+                }
+              >
+                <TableRow>
+                  {exportStat("Hacking", props.member.hack, props.member.hack_exp, Settings.theme.hack)}
+                </TableRow>
+              </Tooltip>
+
+              <Tooltip
+                title={
+                  <Typography>
+                    St: x{formatMultiplier(props.member.str_mult * asc.str)}
+                    (x{formatMultiplier(props.member.str_mult)} Eq, x{formatMultiplier(asc.str)} Asc)
+                  </Typography>
+                }
+              >
+                <TableRow>
+                  {exportStat("Strength", props.member.str, props.member.str_exp, Settings.theme.combat)}
+                </TableRow>
+              </Tooltip>
+
+              <Tooltip
+                title={
+                  <Typography>
+                    Df: x{formatMultiplier(props.member.def_mult * asc.def)}
+                    (x{formatMultiplier(props.member.def_mult)} Eq, x{formatMultiplier(asc.def)} Asc)
+                  </Typography>
+                }
+              >
+                <TableRow>
+                  {exportStat("Defence", props.member.def, props.member.def_exp, Settings.theme.combat)}
+                </TableRow>
+              </Tooltip>
+
+              <Tooltip
+                title={
+                  <Typography>
+                    Dx: x{formatMultiplier(props.member.dex_mult * asc.dex)}
+                    (x{formatMultiplier(props.member.dex_mult)} Eq, x{formatMultiplier(asc.dex)} Asc)
+                  </Typography>
+                }
+              >
+                <TableRow>
+                  {exportStat("Dexterity", props.member.dex, props.member.dex_exp, Settings.theme.combat)}
+                </TableRow>
+              </Tooltip>
+
+              <Tooltip
+                title={
+                  <Typography>
+                    Ag: x{formatMultiplier(props.member.agi_mult * asc.agi)}
+                    (x{formatMultiplier(props.member.agi_mult)} Eq, x{formatMultiplier(asc.agi)} Asc)
+                  </Typography>
+                }
+              >
+                <TableRow>
+                  {exportStat("Agility", props.member.agi, props.member.agi_exp, Settings.theme.combat)}
+                </TableRow>
+              </Tooltip>
+
+              <Tooltip
+                title={
+                  <Typography>
+                    Ch: x{formatMultiplier(props.member.cha_mult * asc.cha)}
+                    (x{formatMultiplier(props.member.cha_mult)} Eq, x{formatMultiplier(asc.cha)} Asc)
+                  </Typography>
+                }
+              >
+                <TableRow>
+                  {exportStat("Charisma", props.member.cha, props.member.cha_exp, Settings.theme.cha)}
+                </TableRow>
+              </Tooltip>
+            </TableBody>
+          </Table>
         </span>
 
         <span>

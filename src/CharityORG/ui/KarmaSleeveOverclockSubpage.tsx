@@ -8,18 +8,6 @@ import { MenuItem, TextField } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useRerender } from "../../ui/React/hooks";
 import { formatNumber } from "../../ui/formatNumber";
-//import { KarmaCharityBankSubpage } from "./KarmaCharityBankSubpage";
-
-let spend = 0;
-
-//interface ISleeveSelectProps {
-//  sleeve: number;
-// rerender: () => void;
-//}
-
-//interface IPanelProps {
-//  sleeve: Sleeve;
-//}
 
 /** React Component for the popup that manages Karma spending */
 export function KarmaSleeveOverclockSubpage(): React.ReactElement {
@@ -28,7 +16,7 @@ export function KarmaSleeveOverclockSubpage(): React.ReactElement {
     return Player.charityORG;
   })();
   const rerender = useRerender();
-  const [, setValue] = React.useState(0);
+  const [spend, setSpend] = React.useState(0);
   const [currentCategory, setCurrentCategory] = useState("0");
   const onChange = (event: SelectChangeEvent): void => {
     setCurrentCategory(event.target.value);
@@ -41,30 +29,38 @@ export function KarmaSleeveOverclockSubpage(): React.ReactElement {
   sleeves.push("All");
 
   function updateSpend(e: React.ChangeEvent<HTMLInputElement>): void {
-    spend = parseInt(e.currentTarget.value);
-    if (isNaN(spend)) {
-      spend = 0;
+    const spendVal = Number.parseInt(e.currentTarget.value);
+    if (spendVal > Player.karma || spendVal < 0) {
+      setSpend(0);
+      e.currentTarget.value = "";
+      return;
     }
-    if (spend > Player.karma) {
-      spend = 0;
-    }
-    if (spend < 0) {
-      spend = 0;
-    }
-    setValue(spend);
-    e.currentTarget.value = spend > 0 ? spend.toString() : "";
+    setSpend(spendVal);
   }
   function purchaseOverclock(): void {
+    if (spend > Player.karma) return;
     if (currentCategory === String(Player.sleeves.length)) {
       // All is triggered
       const divided = (spend * 2.5) / Player.sleeves.length;
       for (let slv = 0; slv < Player.sleeves.length; slv++) {
         Player.sleeves[slv].storedCycles += divided;
       }
+      charityORG.addKarmaMessage(
+        "Spent " + formatNumber(spend, 0) + " on " + formatNumber(spend * 2.5, 0) + " overclock for All sleeves",
+      );
     } else {
       Player.sleeves[Number(currentCategory)].storedCycles += spend * 2.5;
+      charityORG.addKarmaMessage(
+        "Spent " +
+          formatNumber(spend, 0) +
+          " on " +
+          formatNumber(spend * 2.5, 0) +
+          " overclock for sleeve #" +
+          currentCategory,
+      );
     }
     Player.karma -= spend;
+    setSpend(0);
   }
 
   const categories: Record<string, string[][]> = {
@@ -79,10 +75,10 @@ export function KarmaSleeveOverclockSubpage(): React.ReactElement {
         </Typography>
       </Box>
       <span>
-        <Select onChange={onChange} value={currentCategory} sx={{ width: "25%", mb: 1 }}>
+        <Select onChange={onChange} value={currentCategory} sx={{ width: "15%", mb: 1 }}>
           {Object.keys(categories.Sleeves[0]).map((k, i) => (
             <MenuItem key={i + 1} value={k}>
-              <Typography variant="h6">{Player.sleeves.length === i ? "All" : k}</Typography>
+              <Typography variant="h6">{Player.sleeves.length === i ? "All" : "Sleeve: " + k}</Typography>
             </MenuItem>
           ))}
         </Select>

@@ -151,6 +151,9 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
     if (src.charity) {
       parts.push([`Charities:`, <Money key="charity" money={src.charity} />]);
     }
+    if (src.charityORG) {
+      parts.push([`CharityORG:`, <Money key="charityORG" money={src.charityORG} />]);
+    }
     if (src.gang) {
       parts.push([`Gang:`, <Money key="gang" money={src.gang} />]);
     }

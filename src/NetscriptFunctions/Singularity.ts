@@ -1054,6 +1054,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     commitCharity: (ctx) => (_charityType, _focus) => {
       helpers.checkSingularityAccess(ctx);
+      if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
+        throw helpers.makeRuntimeErrorMsg(
+          ctx,
+          `You do not have access to Charitable Acts yet!  Get SF 15.1 in order to unlock outside of BN 15.`,
+        );
+      }
       const charityType = helpers.string(ctx, "charityType", _charityType);
       const focus = _focus === undefined ? true : !!_focus;
       const wasFocusing = Player.focus;
@@ -1078,6 +1084,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     getCharityChance: (ctx) => (_charityType) => {
       helpers.checkSingularityAccess(ctx);
+      if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
+        throw helpers.makeRuntimeErrorMsg(
+          ctx,
+          `You do not have access to Charitable Acts yet!  Get SF 15.1 in order to unlock outside of BN 15.`,
+        );
+      }
       const charityType = helpers.string(ctx, "charityType", _charityType);
 
       // If input isn't a charityType, use search using roughname.
@@ -1088,6 +1100,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     getCharityStats: (ctx) => (_charityType) => {
       helpers.checkSingularityAccess(ctx);
+      if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
+        throw helpers.makeRuntimeErrorMsg(
+          ctx,
+          `You do not have access to Charitable Acts yet!  Get SF 15.1 in order to unlock outside of BN 15.`,
+        );
+      }
       const charityType = helpers.string(ctx, "charityType", _charityType);
 
       // If input isn't a charityType, use search using roughname.

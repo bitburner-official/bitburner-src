@@ -12,7 +12,9 @@ export function startCharity(this: PlayerObject, charityName: string, seedFunded
   this.charityORG = new CharityORG(charityName, seedFunded);
   if (seedFunded) {
     this.charityORG.bank = 5e6;
+    this.charityORG.addMessage("Took over a failing Charity: " + charityName);
   } else {
     this.charityORG.bank = 50e6;
+    this.charityORG.addMessage("Started a new Charity: " + charityName);
   }
 }

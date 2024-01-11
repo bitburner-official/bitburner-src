@@ -38,14 +38,14 @@ export function CharityORGMemberCardContent(props: IProps): React.ReactElement {
           <StaticModal open={helpOpen} onClose={closeHelpModal}>
             <Typography>
               Ascending a Charity Volunteer resets that volunteer's progress and stats in exchange for a permanent boost
-              to their stat multipliers.
+              to their stat multipliers and costs 1 ascension token.
               <br />
               <br />
               The stat boost a Charity Volunteer gains upon ascension is based on the amount of exp they have, and will
               be shown before you choose to ascend them.
               <br />
               <br />
-              Upon ascension, your Charity will lose prestige equal to the total prestige earned by that vp;imteer.
+              Upon ascension, your Charity will lose prestige equal to the total prestige earned by that volunteer.
             </Typography>
           </StaticModal>
         </Box>

@@ -6,8 +6,8 @@ export const LotteryConstants: {
   GainLimits: number;
   MaxTickets: number;
 } = {
-  MaxPlay: 500,
+  MaxPlay: 1000,
   MinPlay: 1,
   GainLimits: 20e9,
-  MaxTickets: 2000,
+  MaxTickets: 4000,
 };

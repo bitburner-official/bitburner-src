@@ -8,9 +8,9 @@ export const Charities: Record<CharityType, Charity> = {
     "Attempt to stop an armed robbery on a high-end store",
     CharityType.stopRobery,
     60e3, // Time
-    400e3, // Money
+    400e1, // Money
     1 / 5, // Difficulty
-    -0.5, // Karma
+    -0.05, // Karma
     {
       hacking_exp: 30,
       dexterity_exp: 45,
@@ -29,9 +29,9 @@ export const Charities: Record<CharityType, Charity> = {
     "Attempt to hug a random person that looks down",
     CharityType.hugSomeoneInNeed,
     4e3,
-    36e3,
+    36,
     1 / 5,
-    -0.25,
+    -0.025,
     {
       strength_exp: 3,
       defense_exp: 3,
@@ -50,9 +50,9 @@ export const Charities: Record<CharityType, Charity> = {
     "Attempt to help a police officer being overpowered",
     CharityType.helpPolice,
     90e3,
-    800e3,
+    800,
     1 / 3,
-    -1.5,
+    -0.15,
     {
       hacking_exp: 45,
       dexterity_exp: 60,
@@ -71,9 +71,9 @@ export const Charities: Record<CharityType, Charity> = {
     "Find a soup kitchen to work at",
     CharityType.workAtSoupKitchen,
     10e3,
-    120e3,
+    120,
     1,
-    -0.5,
+    -0.05,
     {
       dexterity_exp: 5,
       agility_exp: 5,
@@ -90,9 +90,9 @@ export const Charities: Record<CharityType, Charity> = {
     "Attempt to report a drug deal",
     CharityType.reportDrugDeal,
     300e3,
-    4.5e6,
+    4.5e3,
     1 / 2,
-    -0.1,
+    -0.01,
     {
       hacking_exp: 100,
       dexterity_exp: 150,
@@ -110,9 +110,9 @@ export const Charities: Record<CharityType, Charity> = {
     "Attempt to stop the stabbing of someone",
     CharityType.takeKnife,
     3e3,
-    45e3,
+    45,
     1,
-    -3,
+    -0.2,
     {
       strength_exp: 2,
       defense_exp: 2,
@@ -133,9 +133,9 @@ export const Charities: Record<CharityType, Charity> = {
     "Attempt to pay forward a favor done to you earlier",
     CharityType.payItForward,
     80e3,
-    1.6e6,
+    1.6e3,
     8,
-    -5,
+    -0.5,
     {
       strength_exp: 20,
       defense_exp: 20,
@@ -158,9 +158,9 @@ export const Charities: Record<CharityType, Charity> = {
     "Attempt to patrol the streets to stop anything unwarranted from happening",
     CharityType.patroleTheStreets,
     120e3,
-    3.6e6,
+    3.6e3,
     5,
-    -6,
+    -0.6,
     {
       strength_exp: 80,
       defense_exp: 80,
@@ -182,9 +182,9 @@ export const Charities: Record<CharityType, Charity> = {
     "Attempt to give back to the community",
     CharityType.giveBack,
     300e3,
-    12e6,
+    12e3,
     8,
-    -10,
+    -0.1,
     {
       strength_exp: 300,
       defense_exp: 300,
@@ -206,9 +206,9 @@ export const Charities: Record<CharityType, Charity> = {
     "Attempt to pull off a fund raiser",
     CharityType.holdFundRaiser,
     600e3,
-    120e6,
+    120e3,
     18,
-    -15,
+    -0.15,
     {
       hacking_exp: 450,
       strength_exp: 450,

@@ -11,12 +11,9 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-let wager = -1;
-let numbers = -1;
-
 export function Pick2(): React.ReactElement {
-  const [, setBet] = useState(1000);
-  const [, setBetNumberResult] = useState(1000);
+  const [wager, setWager] = useState(-1);
+  const [numbers, setBetNumberResult] = useState(-1);
 
   function updateBet(e: React.ChangeEvent<HTMLInputElement>): void {
     let bet: number = parseInt(e.currentTarget.value);
@@ -29,21 +26,19 @@ export function Pick2(): React.ReactElement {
     if (bet < LotteryConstants.MinPlay) {
       bet = -1;
     }
-    setBet(bet);
-    wager = bet;
+    setWager(bet);
     e.currentTarget.value = bet > 0 ? bet.toString() : "";
   }
   function updateNumbersPick2(e: React.ChangeEvent<HTMLInputElement>): void {
     const chosen: number = parseInt(e.currentTarget.value);
     if (isNaN(chosen)) {
       e.currentTarget.value = "";
-      numbers = -1;
+      setBetNumberResult(-1);
     } else if (e.currentTarget.value.length > 2) {
       e.currentTarget.value = "";
-      numbers = -1;
+      setBetNumberResult(-1);
     } else {
       setBetNumberResult(chosen);
-      numbers = chosen;
     }
   }
 
