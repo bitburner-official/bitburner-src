@@ -97,15 +97,7 @@ import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
 import { cloneDeep, escapeRegExp } from "lodash";
 import numeral from "numeral";
-import {
-  clearPort,
-  peekPort,
-  portHandle,
-  readPort,
-  tryWritePort,
-  writePort,
-  nextPortWrite,
-} from "./NetscriptPort";
+import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
 import { FilePath, resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
