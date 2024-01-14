@@ -4,7 +4,6 @@ import { Player } from "@player";
 import { WorkerScript } from "../Netscript/WorkerScript";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { Factions } from "../Faction/Factions";
-import { FactionName } from "../Faction/Enums";
 import { CharityORGConstants } from "./data/Constants";
 import { CharityVolunteer } from "./CharityVolunteer";
 import { CharityVolunteerTask } from "./CharityVolunteerTask";
@@ -15,8 +14,7 @@ import { IAscensionResult } from "./IAscensionResult";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { isNull } from "lodash";
 import { Modifier } from "./CharityEvent";
-import { Augmentation } from "../Augmentation/Augmentation";
-import { AugmentationName } from "../Enums";
+import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
 
 export const CharityResolvers: ((msProcessed: number) => void)[] = [];
 export const CharityEventTasks: Record<string, CharityVolunteerTask> = {};
@@ -83,7 +81,7 @@ export class CharityORG {
   randomDice: number;
   javaJuice: number;
   ticketStub: number;
-  charityAugment: Augmentation;
+  charityAugment: Multipliers;
   bannerPieces: BannerPiece[];
   bannerPiecesStore: BannerPiece[];
   bannerPower: number;
@@ -133,45 +131,7 @@ export class CharityORG {
     this.randomDice = 0;
     this.javaJuice = 0;
     this.ticketStub = 0;
-    this.charityAugment = new Augmentation({
-      info: "Special",
-      name: AugmentationName.Charity,
-      moneyCost: 0,
-      repCost: 0,
-      factions: [FactionName.Charity],
-      hacking: 1,
-      strength: 1,
-      defense: 1,
-      dexterity: 1,
-      agility: 1,
-      charisma: 1,
-      hacking_exp: 1,
-      strength_exp: 1,
-      defense_exp: 1,
-      dexterity_exp: 1,
-      agility_exp: 1,
-      charisma_exp: 1,
-      hacking_chance: 1,
-      hacking_speed: 1,
-      hacking_money: 1,
-      hacking_grow: 1,
-      company_rep: 1,
-      faction_rep: 1,
-      crime_money: 1,
-      crime_success: 1,
-      charity_money: 1,
-      charity_success: 1,
-      work_money: 1,
-      hacknet_node_money: 1,
-      hacknet_node_purchase_cost: 1,
-      hacknet_node_ram_cost: 1,
-      hacknet_node_core_cost: 1,
-      hacknet_node_level_cost: 1,
-      bladeburner_max_stamina: 1,
-      bladeburner_stamina_gain: 1,
-      bladeburner_analysis: 1,
-      bladeburner_success_chance: 1,
-    });
+    this.charityAugment = defaultMultipliers();
     this.bannerPieces = [];
     this.bannerPiecesStore = [];
     this.bannerPower = 0;
@@ -209,13 +169,13 @@ export class CharityORG {
 
   /** Main process function called by the engine loop every game cycle */
   process(numCycles = 1): void {
-    //Default numCycles from system is 10, 1000 is 1 second
+    //Default numCycles from system is 1, 5 is 1 second, 1 = 200 ms
     if (isNaN(numCycles)) {
       console.error(`NaN passed into charityORG.process(): ${numCycles}`);
     }
     this.storedCycles += numCycles;
     if (this.storedCycles < CharityORGConstants.minCyclesToProcess) return;
-    // 10 is the number of cycles we are processing.  10 = 200ms
+    // 1 is the number of cycles we are processing.  1 = 200ms
 
     // Calculate how many cycles to actually process.
     const cycles = Math.min(this.storedCycles, CharityORGConstants.maxCyclesToProcess);
@@ -599,40 +559,7 @@ export class CharityORG {
     // Non-Augment bonuses
     this.luck = 0;
     this.bannerPower = 0;
-
-    // Augment Bonuses
-    this.charityAugment.mults.hacking = 1;
-    this.charityAugment.mults.strength = 1;
-    this.charityAugment.mults.defense = 1;
-    this.charityAugment.mults.dexterity = 1;
-    this.charityAugment.mults.agility = 1;
-    this.charityAugment.mults.charisma = 1;
-    this.charityAugment.mults.hacking_exp = 1;
-    this.charityAugment.mults.strength_exp = 1;
-    this.charityAugment.mults.defense_exp = 1;
-    this.charityAugment.mults.dexterity_exp = 1;
-    this.charityAugment.mults.agility_exp = 1;
-    this.charityAugment.mults.charisma_exp = 1;
-    this.charityAugment.mults.hacking_chance = 1;
-    this.charityAugment.mults.hacking_speed = 1;
-    this.charityAugment.mults.hacking_money = 1;
-    this.charityAugment.mults.hacking_grow = 1;
-    this.charityAugment.mults.company_rep = 1;
-    this.charityAugment.mults.faction_rep = 1;
-    this.charityAugment.mults.crime_money = 1;
-    this.charityAugment.mults.crime_success = 1;
-    this.charityAugment.mults.charity_money = 1;
-    this.charityAugment.mults.charity_success = 1;
-    this.charityAugment.mults.work_money = 1;
-    this.charityAugment.mults.hacknet_node_money = 1;
-    this.charityAugment.mults.hacknet_node_purchase_cost = 1;
-    this.charityAugment.mults.hacknet_node_ram_cost = 1;
-    this.charityAugment.mults.hacknet_node_core_cost = 1;
-    this.charityAugment.mults.hacknet_node_level_cost = 1;
-    this.charityAugment.mults.bladeburner_max_stamina = 1;
-    this.charityAugment.mults.bladeburner_stamina_gain = 1;
-    this.charityAugment.mults.bladeburner_analysis = 1;
-    this.charityAugment.mults.bladeburner_success_chance = 1;
+    this.charityAugment = defaultMultipliers();
 
     for (const piece of this.bannerPieces) {
       this.bannerPower += piece.totalPower;
@@ -643,100 +570,106 @@ export class CharityORG {
             this.luck += effect.strength;
             break;
           case AugmentationAreas.hacking:
-            this.charityAugment.mults.hacking += effect.strength;
+            this.charityAugment.hacking += effect.strength;
             break;
           case AugmentationAreas.strength:
-            this.charityAugment.mults.strength += effect.strength;
+            this.charityAugment.strength += effect.strength;
             break;
           case AugmentationAreas.defense:
-            this.charityAugment.mults.defense += effect.strength;
+            this.charityAugment.defense += effect.strength;
             break;
           case AugmentationAreas.dexterity:
-            this.charityAugment.mults.dexterity += effect.strength;
+            this.charityAugment.dexterity += effect.strength;
             break;
           case AugmentationAreas.agility:
-            this.charityAugment.mults.agility += effect.strength;
+            this.charityAugment.agility += effect.strength;
             break;
           case AugmentationAreas.charisma:
-            this.charityAugment.mults.charisma += effect.strength;
+            this.charityAugment.charisma += effect.strength;
             break;
           case AugmentationAreas.hacking_exp:
-            this.charityAugment.mults.hacking_exp += effect.strength;
+            this.charityAugment.hacking_exp += effect.strength;
             break;
           case AugmentationAreas.strength_exp:
-            this.charityAugment.mults.strength_exp += effect.strength;
+            this.charityAugment.strength_exp += effect.strength;
             break;
           case AugmentationAreas.defense_exp:
-            this.charityAugment.mults.defense_exp += effect.strength;
+            this.charityAugment.defense_exp += effect.strength;
             break;
           case AugmentationAreas.dexterity_exp:
-            this.charityAugment.mults.dexterity_exp += effect.strength;
+            this.charityAugment.dexterity_exp += effect.strength;
             break;
           case AugmentationAreas.agility_exp:
-            this.charityAugment.mults.agility_exp += effect.strength;
+            this.charityAugment.agility_exp += effect.strength;
             break;
           case AugmentationAreas.charisma_exp:
-            this.charityAugment.mults.charisma_exp += effect.strength;
+            this.charityAugment.charisma_exp += effect.strength;
             break;
           case AugmentationAreas.hacking_chance:
-            this.charityAugment.mults.hacking_chance += effect.strength;
+            this.charityAugment.hacking_chance += effect.strength;
             break;
           case AugmentationAreas.hacking_speed:
-            this.charityAugment.mults.hacking_speed += effect.strength;
+            this.charityAugment.hacking_speed += effect.strength;
             break;
           case AugmentationAreas.hacking_money:
-            this.charityAugment.mults.hacking_money += effect.strength;
+            this.charityAugment.hacking_money += effect.strength;
             break;
           case AugmentationAreas.hacking_grow:
-            this.charityAugment.mults.hacking_grow += effect.strength;
+            this.charityAugment.hacking_grow += effect.strength;
             break;
           case AugmentationAreas.company_rep:
-            this.charityAugment.mults.company_rep += effect.strength;
+            this.charityAugment.company_rep += effect.strength;
             break;
           case AugmentationAreas.faction_rep:
-            this.charityAugment.mults.faction_rep += effect.strength;
+            this.charityAugment.faction_rep += effect.strength;
             break;
           case AugmentationAreas.crime_money:
-            this.charityAugment.mults.crime_money += effect.strength;
+            this.charityAugment.crime_money += effect.strength;
             break;
           case AugmentationAreas.crime_success:
-            this.charityAugment.mults.crime_success += effect.strength;
+            this.charityAugment.crime_success += effect.strength;
             break;
           case AugmentationAreas.charity_money:
-            this.charityAugment.mults.charity_money += effect.strength;
+            this.charityAugment.charity_money += effect.strength;
             break;
           case AugmentationAreas.charity_success:
-            this.charityAugment.mults.charity_success += effect.strength;
+            this.charityAugment.charity_success += effect.strength;
             break;
           case AugmentationAreas.work_money:
-            this.charityAugment.mults.work_money += effect.strength;
+            this.charityAugment.work_money += effect.strength;
             break;
           case AugmentationAreas.hacknet_node_money:
-            this.charityAugment.mults.hacknet_node_money += effect.strength;
+            this.charityAugment.hacknet_node_money += effect.strength;
             break;
           case AugmentationAreas.hacknet_node_purchase_cost:
-            this.charityAugment.mults.hacknet_node_purchase_cost += Math.max(effect.strength, -0.9999);
+            this.charityAugment.hacknet_node_purchase_cost += Math.max(effect.strength, -0.9999);
             break;
           case AugmentationAreas.hacknet_node_ram_cost:
-            this.charityAugment.mults.hacknet_node_ram_cost += Math.max(effect.strength, -0.9999);
+            this.charityAugment.hacknet_node_ram_cost += Math.max(effect.strength, -0.9999);
             break;
           case AugmentationAreas.hacknet_node_core_cost:
-            this.charityAugment.mults.hacknet_node_core_cost += Math.max(effect.strength, -0.9999);
+            this.charityAugment.hacknet_node_core_cost += Math.max(effect.strength, -0.9999);
             break;
           case AugmentationAreas.hacknet_node_level_cost:
-            this.charityAugment.mults.hacknet_node_level_cost += Math.max(effect.strength, -0.9999);
+            this.charityAugment.hacknet_node_level_cost += Math.max(effect.strength, -0.9999);
             break;
           case AugmentationAreas.bladeburner_max_stamina:
-            this.charityAugment.mults.bladeburner_max_stamina += effect.strength;
+            this.charityAugment.bladeburner_max_stamina += effect.strength;
             break;
           case AugmentationAreas.bladeburner_stamina_gain:
-            this.charityAugment.mults.bladeburner_stamina_gain += effect.strength;
+            this.charityAugment.bladeburner_stamina_gain += effect.strength;
             break;
           case AugmentationAreas.bladeburner_analysis:
-            this.charityAugment.mults.bladeburner_analysis += effect.strength;
+            this.charityAugment.bladeburner_analysis += effect.strength;
             break;
           case AugmentationAreas.bladeburner_success_chance:
-            this.charityAugment.mults.bladeburner_success_chance += effect.strength;
+            this.charityAugment.bladeburner_success_chance += effect.strength;
+            break;
+          case AugmentationAreas.augmentation_money_cost:
+            this.charityAugment.augmentation_money += Math.max(effect.strength, -0.9999);
+            break;
+          case AugmentationAreas.augmentation_rep_cost:
+            this.charityAugment.augmentation_rep += Math.max(effect.strength, -0.9999);
             break;
         }
       }

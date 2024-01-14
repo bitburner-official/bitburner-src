@@ -19,10 +19,10 @@ export function KarmaSpecialBuySubpage(): React.ReactElement {
   const costForUpgrade =
     Player.charityNodes.length >= CharityORGConstants.CharityNodeNumberMax
       ? Number.POSITIVE_INFINITY
-      : Math.pow(CharityORGConstants.CharityNodeRamUpgradePower, CharityORGConstants.CharityNodeRamUpgradePower) *
+      : Math.pow(CharityORGConstants.CharityNewNodePower, CharityORGConstants.CharityNewNodePower) *
         (Player.charityNodes?.length + 1);
   function purchaseCharityServer(): void {
-    if (Player.karma < 0) return;
+    if (Player.karma < costForUpgrade) return;
 
     const cServer = safelyCreateUniqueServer({
       //ip: createUniqueRandomIp(),
@@ -46,7 +46,7 @@ export function KarmaSpecialBuySubpage(): React.ReactElement {
       const node = Player.charityNodes.pop();
       if (node !== null && node !== undefined) DeleteServer(node.hostname);
     }*/
-    //Player.karma -= costForUpgrade;
+    Player.karma -= costForUpgrade;
     rerender();
   }
 

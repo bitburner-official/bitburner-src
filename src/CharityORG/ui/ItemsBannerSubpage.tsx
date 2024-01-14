@@ -80,7 +80,6 @@ export function ItemsBannerSubpage(): React.ReactElement {
     charityORG.bannerPiecesStore.splice(index, 1);
     charityORG.bannerPieces.push(piece);
     charityORG.addItemUseMessage("Activated banner piece: " + piece.short_name);
-    charityORG.luckyCoin--;
     setPendingBanner("");
     charityORG.resetBanner();
   }
@@ -163,7 +162,7 @@ export function ItemsBannerSubpage(): React.ReactElement {
 
           <br></br>
           {charityORG.luck !== 0 && <Typography variant="body1">lucky: {formatNumber(charityORG.luck)}</Typography>}
-          {Object.entries(charityORG.charityAugment.mults)
+          {Object.entries(charityORG.charityAugment)
             .filter((fl) => fl[1] !== 1)
             .map((k, i) => (
               <Typography variant="body1" key={i + 1}>

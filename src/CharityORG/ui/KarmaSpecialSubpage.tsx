@@ -7,11 +7,6 @@ import Box from "@mui/material/Box";
 import { Player } from "@player";
 import { KarmaSpecialBuySubpage } from "./KarmaSpecialBuySubpage";
 import { KarmaSpecialManageSubpage } from "./KarmaSpecialManageSubpage";
-//import { KarmaSleeveOverclockSubpage } from "./KarmaSleeveOverclockSubpage";
-//import { KarmaSleeveReduceShockSubpage } from "./KarmaSleeveReduceShockSubpage";
-//import { KarmaSleeveSyncSubpage } from "./KarmaSleeveSyncSubpage";
-//import { KarmaSleeveAugmentsSubpage } from "./KarmaSleeveAugmentsSubpage";
-//import { Server, IConstructorParams } from "../Server/Server";
 
 /** React Component for the popup that manages Karma spending */
 export function KarmaSpecialSubpage(): React.ReactElement {
@@ -25,11 +20,21 @@ export function KarmaSpecialSubpage(): React.ReactElement {
     setValue(tab);
   }
 
-  /*if (!charityORG.completed) {
+  if (!charityORG.completed) {
     return (
-      <Typography>Finish defeating the gangs!</Typography>
+      <Typography>
+        Techs and Admins are scurrying about, trying to keep their networks up. Come back once the gangs have been
+        broken and they may have something special for you!
+      </Typography>
     );
-  }*/
+  } else if (Player.bitNodeN !== 15) {
+    return (
+      <Typography>
+        These techs cannot work on your systems. Please return to BitNode 15 in order to buy/upgrade your Charity
+        Servers.
+      </Typography>
+    );
+  }
 
   return (
     <Context.CharityORG.Provider value={charityORG}>

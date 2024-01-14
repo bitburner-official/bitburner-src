@@ -5,8 +5,7 @@ import { CharityORGConstants } from "./data/Constants";
 import { CharityVolunteerTask } from "./CharityVolunteerTask";
 import { formatNumber } from "../ui/formatNumber";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-//import { Augmentation } from "../Augmentation/Augmentation";
-//import { AugmentationName } from "../Enums";
+import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 
 export enum ModifyAreas {
   money_gain = "money_gain",
@@ -61,6 +60,8 @@ export enum AugmentationAreas {
   bladeburner_analysis = "bladeburner_analysis",
   bladeburner_success_chance = "bladeburner_success_chance",
   lucky = "lucky",
+  augmentation_money_cost = "augmentation_money_cost",
+  augmentation_rep_cost = "augmentaion_rep_cost",
 }
 
 class BannerFragment {
@@ -193,11 +194,11 @@ export class CharityEvent {
               const remainingTime = visBoostTime - charityORG.visibilityDrain;
               charityORG.visibilityDrain = 0;
               charityORG.visibilityBooster += remainingTime;
-              deathMsg += " Vis booster: " + remainingTime;
+              deathMsg += " Vis booster: " + convertTimeMsToTimeElapsedString(remainingTime * 200);
             }
           } else {
             charityORG.visibilityBooster += visBoostTime;
-            deathMsg += " Vis booster: " + visBoostTime;
+            deathMsg += " Vis booster: " + convertTimeMsToTimeElapsedString(visBoostTime * 200);
           }
           break;
         }
@@ -209,11 +210,11 @@ export class CharityEvent {
               const remainingTime = visDrainTime - charityORG.visibilityBooster;
               charityORG.visibilityBooster = 0;
               charityORG.visibilityDrain += remainingTime;
-              deathMsg += " Vis drain: " + remainingTime;
+              deathMsg += " Vis drain: " + convertTimeMsToTimeElapsedString(remainingTime * 200);
             }
           } else {
             charityORG.visibilityDrain += visDrainTime;
-            deathMsg += " Vis drain: " + visDrainTime;
+            deathMsg += " Vis drain: " + convertTimeMsToTimeElapsedString(visDrainTime * 200);
           }
           break;
         }
@@ -225,11 +226,11 @@ export class CharityEvent {
               const remainingTime = terrorBoostTime - charityORG.terrorDrain;
               charityORG.terrorDrain = 0;
               charityORG.terrorBooster += remainingTime;
-              deathMsg += " Terror boost: " + remainingTime;
+              deathMsg += " Terror boost: " + convertTimeMsToTimeElapsedString(remainingTime * 200);
             }
           } else {
             charityORG.terrorBooster += terrorBoostTime;
-            deathMsg += " Terror boost: " + terrorBoostTime;
+            deathMsg += " Terror boost: " + convertTimeMsToTimeElapsedString(terrorBoostTime * 200);
           }
           break;
         }
@@ -241,11 +242,11 @@ export class CharityEvent {
               const remainingTime = terrorDrainTime - charityORG.terrorBooster;
               charityORG.terrorBooster = 0;
               charityORG.terrorDrain += remainingTime;
-              deathMsg += " Terror drain: " + remainingTime;
+              deathMsg += " Terror drain: " + convertTimeMsToTimeElapsedString(remainingTime * 200);
             }
           } else {
             charityORG.terrorDrain += terrorDrainTime;
-            deathMsg += " Terror drain: " + terrorDrainTime;
+            deathMsg += " Terror drain: " + convertTimeMsToTimeElapsedString(terrorDrainTime * 200);
           }
           break;
         }
@@ -257,11 +258,11 @@ export class CharityEvent {
               const remainingTime = atkBoostTime - charityORG.stopAttacks;
               charityORG.stopAttacks = 0;
               charityORG.fastAttacks += remainingTime;
-              deathMsg += " Atk boost: " + remainingTime;
+              deathMsg += " Atk boost: " + convertTimeMsToTimeElapsedString(remainingTime * 200);
             }
           } else {
             charityORG.fastAttacks += atkBoostTime;
-            deathMsg += " Atk boost: " + atkBoostTime;
+            deathMsg += " Atk boost: " + convertTimeMsToTimeElapsedString(atkBoostTime * 200);
           }
           break;
         }
@@ -273,11 +274,11 @@ export class CharityEvent {
               const remainingTime = atkStopTime - charityORG.fastAttacks;
               charityORG.fastAttacks = 0;
               charityORG.stopAttacks += remainingTime;
-              deathMsg += " Atk stop: " + remainingTime;
+              deathMsg += " Atk stop: " + convertTimeMsToTimeElapsedString(remainingTime * 200);
             }
           } else {
             charityORG.stopAttacks += atkStopTime;
-            deathMsg += " Atk stop: " + atkStopTime;
+            deathMsg += " Atk stop: " + convertTimeMsToTimeElapsedString(atkStopTime * 200);
           }
           break;
         }
@@ -289,11 +290,11 @@ export class CharityEvent {
               const remainingTime = taskBoostTime - charityORG.slowTasks;
               charityORG.slowTasks = 0;
               charityORG.fastTasks += remainingTime;
-              deathMsg += " Task boost: " + remainingTime;
+              deathMsg += " Task boost: " + convertTimeMsToTimeElapsedString(remainingTime * 200);
             }
           } else {
             charityORG.fastTasks += taskBoostTime;
-            deathMsg += " Task boost: " + taskBoostTime;
+            deathMsg += " Task boost: " + convertTimeMsToTimeElapsedString(taskBoostTime * 200);
           }
           break;
         }
@@ -305,11 +306,11 @@ export class CharityEvent {
               const remainingTime = taskDrainTime - charityORG.fastTasks;
               charityORG.fastTasks = 0;
               charityORG.slowTasks += remainingTime;
-              deathMsg += " Task drain: " + remainingTime;
+              deathMsg += " Task drain: " + convertTimeMsToTimeElapsedString(remainingTime * 200);
             }
           } else {
             charityORG.slowTasks += taskDrainTime;
-            deathMsg += " Task drain: " + taskDrainTime;
+            deathMsg += " Task drain: " + convertTimeMsToTimeElapsedString(taskDrainTime * 200);
           }
           break;
         }
@@ -347,7 +348,7 @@ export class CharityEvent {
           const bonusTime = Math.floor(effect.strength * 5 * 20 * 10);
           charityORG.storedCycles += bonusTime;
           charityORG.storedCycles = Math.max(0, charityORG.storedCycles);
-          deathMsg += " Bonus time: " + bonusTime;
+          deathMsg += " Bonus time: " + convertTimeMsToTimeElapsedString(bonusTime * 200);
           break;
         }
         case DeathEffectTypes.money: {
@@ -415,7 +416,9 @@ export class CharityEvent {
           // Reputation * modstr / 1000 on all factions
           let msg = "Rep: ";
           for (const faction of Player.factions) {
-            const repgain = ((Factions[faction].playerReputation * modstr) / 10) * currentNodeMults.CharityORGSoftcap;
+            const repgain =
+              (((Factions[faction].playerReputation * modstr) / 10) * currentNodeMults.CharityORGSoftcap) /
+              Player.factions.length;
             Factions[faction].playerReputation += repgain;
             msg += " " + Factions[faction].name + " " + formatNumber(repgain);
           }
@@ -427,7 +430,7 @@ export class CharityEvent {
           const bonusTime = Math.floor(modstr * 5 * 20);
           charityORG.storedCycles += bonusTime;
           // Msg about time
-          charityORG.addItemMessage("Received " + bonusTime + " in bonus time");
+          charityORG.addItemMessage("Received " + convertTimeMsToTimeElapsedString(bonusTime * 200) + " in bonus time");
           break;
         }
         case 5: {
@@ -459,7 +462,7 @@ export class CharityEvent {
         }
         case 9: {
           // karma
-          const karmaChange = ((Player.karma * modstr) / 100) * currentNodeMults.CharityORGSoftcap;
+          const karmaChange = ((Player.karma * modstr) / 1000) * currentNodeMults.CharityORGSoftcap;
           Player.karma += karmaChange;
           charityORG.addItemMessage("Karma + " + formatNumber(karmaChange));
           break;
@@ -1012,7 +1015,6 @@ export class CharityEvent {
       default:
         return;
     }
-    //["TheOne", "TroiAmis", "DoubleHelix", "Clover"];
     bannerPiece.short_name = type + ":" + formatNumber(bannerPiece.totalPower);
     charityORG.bannerPiecesStore.push(bannerPiece);
     charityORG.addItemMessage("Found a Banner Piece: " + bannerPiece.short_name);
@@ -1048,7 +1050,7 @@ export class CharityEvent {
       case AugmentationAreas.crime_money:
       case AugmentationAreas.work_money:
       case AugmentationAreas.charity_money:
-        return str * 10 * fuzzy;
+        return str * 15 * fuzzy;
       case AugmentationAreas.crime_success:
       case AugmentationAreas.charity_success:
         return str * 5 * fuzzy;
@@ -1065,6 +1067,9 @@ export class CharityEvent {
         return str * 10 * fuzzy;
       case AugmentationAreas.bladeburner_success_chance:
         return str * fuzzy;
+      case AugmentationAreas.augmentation_money_cost:
+      case AugmentationAreas.augmentation_rep_cost:
+        return (str / 5) * -1 * fuzzy;
       default:
         return str * fuzzy;
     }

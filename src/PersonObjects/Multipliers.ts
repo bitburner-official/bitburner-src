@@ -31,6 +31,8 @@ export interface Multipliers {
   bladeburner_stamina_gain: number;
   bladeburner_analysis: number;
   bladeburner_success_chance: number;
+  augmentation_money: number;
+  augmentation_rep: number;
 }
 
 export const defaultMultipliers = (): Multipliers => {
@@ -67,6 +69,8 @@ export const defaultMultipliers = (): Multipliers => {
     bladeburner_stamina_gain: 1,
     bladeburner_analysis: 1,
     bladeburner_success_chance: 1,
+    augmentation_money: 1,
+    augmentation_rep: 1,
   };
 };
 
@@ -104,6 +108,8 @@ export const mergeMultipliers = (m0: Multipliers, m1: Multipliers): Multipliers 
     bladeburner_stamina_gain: m0.bladeburner_stamina_gain * m1.bladeburner_stamina_gain,
     bladeburner_analysis: m0.bladeburner_analysis * m1.bladeburner_analysis,
     bladeburner_success_chance: m0.bladeburner_success_chance * m1.bladeburner_success_chance,
+    augmentation_money: m0.augmentation_money * m1.augmentation_money,
+    augmentation_rep: m0.augmentation_rep * m1.augmentation_rep,
   };
 };
 
@@ -141,5 +147,7 @@ export const scaleMultipliers = (m0: Multipliers, v: number): Multipliers => {
     bladeburner_stamina_gain: (m0.bladeburner_stamina_gain - 1) * v + 1,
     bladeburner_analysis: (m0.bladeburner_analysis - 1) * v + 1,
     bladeburner_success_chance: (m0.bladeburner_success_chance - 1) * v + 1,
+    augmentation_money: (m0.augmentation_money - 1) * v + 1,
+    augmentation_rep: (m0.augmentation_rep - 1) * v + 1,
   };
 };

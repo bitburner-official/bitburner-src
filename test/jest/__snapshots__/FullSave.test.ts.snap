@@ -1304,6 +1304,8 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "mults": {
       "agility": 1,
       "agility_exp": 1,
+      "augmentation_money": 1,
+      "augmentation_rep": 1,
       "bladeburner_analysis": 1,
       "bladeburner_max_stamina": 1,
       "bladeburner_stamina_gain": 1,
@@ -1388,6 +1390,8 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
           "mults": {
             "agility": 1,
             "agility_exp": 1,
+            "augmentation_money": 1,
+            "augmentation_rep": 1,
             "bladeburner_analysis": 1,
             "bladeburner_max_stamina": 1,
             "bladeburner_stamina_gain": 1,
@@ -1462,6 +1466,8 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
           "mults": {
             "agility": 1,
             "agility_exp": 1,
+            "augmentation_money": 1,
+            "augmentation_rep": 1,
             "bladeburner_analysis": 1,
             "bladeburner_max_stamina": 1,
             "bladeburner_stamina_gain": 1,

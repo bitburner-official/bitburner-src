@@ -82,9 +82,9 @@ export class CharityWork extends Work {
     /** nothing to do */
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy() {
     return {
-      type: this.type,
+      type: WorkType.CHARITY as const,
       cyclesWorked: this.cyclesWorked,
       charityType: this.charityType,
     };

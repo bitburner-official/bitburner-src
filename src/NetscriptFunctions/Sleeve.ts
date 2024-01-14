@@ -64,7 +64,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       if (crime == null) return false;
       return Player.sleeves[sleeveNumber].commitCrime(crime.type);
     },
-    setToCommitCharity: (ctx) => (_sleeveNumber, _charityType) => {
+    setToPerformCharity: (ctx) => (_sleeveNumber, _charityType) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
       const charityType = helpers.string(ctx, "charityType", _charityType);
       if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
@@ -77,7 +77,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       checkSleeveNumber(ctx, sleeveNumber);
       const charity = findCharity(charityType);
       if (charity == null) return false;
-      return Player.sleeves[sleeveNumber].commitCharity(charity.type);
+      return Player.sleeves[sleeveNumber].performCharity(charity.type);
     },
     setToUniversityCourse: (ctx) => (_sleeveNumber, _universityName, _className) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);

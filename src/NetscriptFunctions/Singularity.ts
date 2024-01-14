@@ -1052,7 +1052,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         intelligence_exp: crimeStatsWithMultipliers.intExp,
       });
     },
-    commitCharity: (ctx) => (_charityType, _focus) => {
+    performCharity: (ctx) => (_charityType, _focus) => {
       helpers.checkSingularityAccess(ctx);
       if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
         throw helpers.makeRuntimeErrorMsg(

@@ -424,11 +424,12 @@ export function CashIn(): React.ReactElement {
       }
     }
 
-    if (highest === 1 || highest == 3) {
+    if (highest === 1) {
       return 6;
     } else if (highest === 2) {
       return 3;
     } else {
+      dialogBoxCreate("Error with calculating P3 box type");
       return 0;
     }
   }
@@ -438,10 +439,10 @@ export function CashIn(): React.ReactElement {
     let count = 0;
     for (const num of numarray) {
       if (numarray.filter((x) => x === num).length > highest) {
-        highest = numarray.filter((x) => x === num).length;
-        count++;
+        highest = numarray.filter((x) => x === num).length; // Highest Count of a single number
+        count++; // How many numbers are at this count level
       } else if ((numarray.filter((x) => x === num).length = highest)) {
-        count++;
+        count++; // How many numbers are at this count level
       }
     }
 
@@ -454,10 +455,10 @@ export function CashIn(): React.ReactElement {
     } else if (highest === 3) {
       return 4;
     } else if (highest === 4) {
-      dialogBoxCreate("Error with calculating box type");
+      dialogBoxCreate("Error with calculating P4 box type");
       return 0;
     }
-    dialogBoxCreate("Error with calculating box type");
+    dialogBoxCreate("Error with calculating P4 box type - Fall Through");
     return 0;
   }
   function isP3BoxWinner(numarray: number[], way: number): boolean {

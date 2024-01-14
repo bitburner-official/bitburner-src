@@ -410,7 +410,7 @@ export function reapplyAllAugmentations(this: PlayerObject, resetMultipliers = t
   }
   //Do we have a charityORG?  If so, apply it's multipliers.
   if (this.charityORG !== null) {
-    this.mults = mergeMultipliers(this.mults, this.charityORG.charityAugment.mults);
+    this.mults = mergeMultipliers(this.mults, this.charityORG.charityAugment);
   }
 
   this.updateSkillLevels();

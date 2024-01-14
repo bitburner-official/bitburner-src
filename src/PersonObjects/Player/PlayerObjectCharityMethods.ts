@@ -11,10 +11,10 @@ export function canAccessCharity(this: PlayerObject): boolean {
 export function startCharity(this: PlayerObject, charityName: string, seedFunded: boolean): void {
   this.charityORG = new CharityORG(charityName, seedFunded);
   if (seedFunded) {
-    this.charityORG.bank = 5e6;
+    this.charityORG.bank = CharityORGConstants.CharityMoneySeedFund;
     this.charityORG.addMessage("Took over a failing Charity: " + charityName);
   } else {
-    this.charityORG.bank = 50e6;
+    this.charityORG.bank = CharityORGConstants.CharityMoneySelfFund;
     this.charityORG.addMessage("Started a new Charity: " + charityName);
   }
 }

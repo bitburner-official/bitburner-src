@@ -149,11 +149,12 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
 
       if (!Player.canAccessCharity()) return false;
       if (Player.charityORG) return false;
+      if (!seed && Player.money < CharityORGConstants.CharityMoneyRequirement) return false;
 
       Player.startCharity(name, seed);
       const charityORG = getCharity(ctx);
       if (!seed) {
-        Player.loseMoney(250e6, "charityORG");
+        Player.loseMoney(CharityORGConstants.CharityMoneyRequirement, "charityORG");
         charityORG.ascensionToken += 50;
       } else charityORG.ascensionToken += 20;
 

@@ -106,7 +106,7 @@ export const charityVolunteerUpgradesMetadata: ICharityVolunteerUpgradeMetadata[
     upgType: UpgradeType.Underground,
   },
   {
-    cost: 1e8,
+    cost: 1e7,
     mults: { str: 1.06 },
     name: "Shovel",
     upgType: UpgradeType.Tools,

@@ -55,8 +55,8 @@ export function KarmaSpecialManageSubpage(): React.ReactElement {
       ? upgradeCostCore
       : 0;
   function purchaseUpgrade(): void {
-    //if (upgradeCost === 0 || upgradeCost > Player.karma) return;
-
+    if (upgradeCost === 0 || upgradeCost > Player.karma) return;
+    Player.karma -= upgradeCost;
     /* charityServer delete code
     import { DeleteServer } from "../../Server/AllServers";
     while (Player.charityNodes.length > 0) {
@@ -81,7 +81,7 @@ export function KarmaSpecialManageSubpage(): React.ReactElement {
   function deleteNodes(): void {
     while (Player.charityNodes.length > 0) {
       const node = Player.charityNodes.pop();
-      if (node !== null && node !== undefined) DeleteServer(node.hostname);
+      if (node !== undefined) DeleteServer(node.hostname);
     }
     return;
   }

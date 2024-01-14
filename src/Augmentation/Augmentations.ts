@@ -330,14 +330,6 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
-    [AugmentationName.Charity]: {
-      repCost: 0,
-      moneyCost: 0,
-      info: "Charities come with their own configurable augmentation.",
-      stats: "While random, the 10 pieces that make this up can combine to form something powerful",
-      isSpecial: true,
-      factions: [FactionName.Charity],
-    },
     [AugmentationName.CombatRib1]: {
       repCost: 7.5e3,
       moneyCost: 2.375e7,

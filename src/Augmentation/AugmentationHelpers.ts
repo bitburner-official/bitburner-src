@@ -14,7 +14,7 @@ import { mergeMultipliers } from "../PersonObjects/Multipliers";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 export function getBaseAugmentationPriceMultiplier(): number {
-  return CONSTANTS.MultipleAugMultiplier * [1, 0.96, 0.94, 0.93][Player.sourceFileLvl(11)];
+  return CONSTANTS.MultipleAugMultiplier * Player.mults.augmentation_money; // * [1, 0.96, 0.94, 0.93][Player.sourceFileLvl(11)];
 }
 export function getGenericAugmentationPriceMultiplier(): number {
   return Math.pow(getBaseAugmentationPriceMultiplier(), Player.queuedAugmentations.length);
@@ -145,5 +145,8 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
       moneyCost = aug.baseCost * getGenericAugmentationPriceMultiplier() * currentNodeMults.AugmentationMoneyCost;
       repCost = aug.baseRepRequirement * currentNodeMults.AugmentationRepCost;
   }
+  moneyCost *= Player.mults.augmentation_money;
+  repCost *= Player.mults.augmentation_rep;
+
   return { moneyCost, repCost };
 }

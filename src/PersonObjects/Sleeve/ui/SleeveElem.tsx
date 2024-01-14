@@ -99,7 +99,7 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
         props.sleeve.commitCrime(findCrime(abc[1])?.type ?? CrimeType.shoplift);
         break;
       case "Perform Charity":
-        props.sleeve.commitCharity(findCharity(abc[1])?.type ?? CharityType.stopRobery);
+        props.sleeve.performCharity(findCharity(abc[1])?.type ?? CharityType.stopRobery);
         break;
       case "Take University Course":
         props.sleeve.takeUniversityCourse(abc[2], abc[1]);

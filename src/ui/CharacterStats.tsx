@@ -558,6 +558,22 @@ export function CharacterStats(): React.ReactElement {
               ]}
               color={Settings.theme.combat}
             />
+            <MultiplierTable
+              rows={[
+                {
+                  mult: "Augmentation Reputation Cost",
+                  value: Player.mults.augmentation_rep,
+                  effValue: Player.mults.augmentation_rep * currentNodeMults.AugmentationRepCost,
+                },
+                {
+                  mult: "Augmentation Money Cost",
+                  value: Player.mults.augmentation_money,
+                  effValue: Player.mults.augmentation_money * currentNodeMults.AugmentationMoneyCost,
+                  color: Settings.theme.money,
+                },
+              ]}
+              color={Settings.theme.primary}
+            />
             {Player.canAccessBladeburner() && currentNodeMults.BladeburnerRank > 0 && (
               <MultiplierTable
                 rows={[

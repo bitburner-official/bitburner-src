@@ -104,8 +104,8 @@ export class Sleeve extends Person implements SleevePerson {
     return true;
   }
 
-  /** Commit charitable acts */
-  commitCharity(type: CharityType) {
+  /** Perform charitable acts */
+  performCharity(type: CharityType) {
     this.startWork(new SleeveCharityWork(type));
     return true;
   }

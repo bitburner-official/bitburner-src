@@ -62,15 +62,49 @@ export function buyRandomTicket(): void {
       numbers.push(getRandomInt(0, 9));
       break;
     case GameType.Pick3:
-      numbers.push(getRandomInt(0, 9));
-      numbers.push(getRandomInt(0, 9));
-      numbers.push(getRandomInt(0, 9));
+      switch (opt) {
+        case GameOptions.Straight:
+          numbers.push(getRandomInt(0, 9));
+          numbers.push(getRandomInt(0, 9));
+          numbers.push(getRandomInt(0, 9));
+          break;
+        case GameOptions.StraightBox:
+        case GameOptions.Box: {
+          while (!canBuyP3Box(numbers)) {
+            numbers.length = 0;
+            numbers.push(getRandomInt(0, 9));
+            numbers.push(getRandomInt(0, 9));
+            numbers.push(getRandomInt(0, 9));
+          }
+          break;
+        }
+        default:
+          break;
+      }
       break;
     case GameType.Pick4:
-      numbers.push(getRandomInt(0, 9));
-      numbers.push(getRandomInt(0, 9));
-      numbers.push(getRandomInt(0, 9));
-      numbers.push(getRandomInt(0, 9));
+      {
+        switch (opt) {
+          case GameOptions.Straight:
+            numbers.push(getRandomInt(0, 9));
+            numbers.push(getRandomInt(0, 9));
+            numbers.push(getRandomInt(0, 9));
+            numbers.push(getRandomInt(0, 9));
+            break;
+          case GameOptions.Box: {
+            while (!canBuyP4Box(numbers)) {
+              numbers.length = 0;
+              numbers.push(getRandomInt(0, 9));
+              numbers.push(getRandomInt(0, 9));
+              numbers.push(getRandomInt(0, 9));
+              numbers.push(getRandomInt(0, 9));
+            }
+            break;
+          }
+          default:
+            break;
+        }
+      }
       break;
     case GameType.L649:
       numbers.push(getRandomInt(1, 49));
@@ -92,6 +126,32 @@ export function buyRandomTicket(): void {
       }
       break;
     }
+  }
+
+  function canBuyP3Box(numarray: number[]): boolean {
+    //Box play requires 2 of 3 unique digits, so 223 and 234 are good, but 444 is not.
+    let highest = 1;
+    for (const num of numarray) {
+      if (numarray.filter((x) => x === num).length > highest) {
+        highest = numarray.filter((x) => x === num).length;
+      }
+    }
+
+    if (highest === 3) return false;
+    else return true;
+  }
+
+  function canBuyP4Box(numarray: number[]): boolean {
+    //Box play requires 2 of 4 unique digits, so 2223 and 234 are good, but 4444 is not.
+    let highest = 1;
+    for (const num of numarray) {
+      if (numarray.filter((x) => x === num).length > highest) {
+        highest = numarray.filter((x) => x === num).length; // Highest Count of a single number
+      }
+    }
+
+    if (highest === 4) return false;
+    else return true;
   }
 
   // We have our numbers.  Check against options.  Straight, anything goes.  Box, 2/4 must be unique.

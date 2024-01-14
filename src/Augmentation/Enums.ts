@@ -129,7 +129,4 @@ export enum AugmentationName {
   HuntOfArtemis = "SoA - Hunt of Artemis", // mine
   KnowledgeOfApollo = "SoA - Knowledge of Apollo", // wire
   WKSharmonizer = "SoA - phyzical WKS harmonizer",
-
-  // Charity
-  Charity = "Charity",
 }
