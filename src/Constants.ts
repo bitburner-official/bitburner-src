@@ -223,7 +223,7 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.0 dev - Changelog last updated 7 Jan 2024
+## v2.6.0 dev - Changelog last updated 14 Jan 2024
 
 ### MAJOR ADDITIONS
 
@@ -233,26 +233,32 @@ export const CONSTANTS: {
 ### API
 
 - (Go) Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes. (@ficocelliguy)
-- (Singularity) Add type information for getCurrentWork return value (@Semanual)
-- (Stanek) Fix acceptGift which was not working in 2.5.2 (@jjclark1982)
-- formatNumber now throws an error if specifying a suffixStart less than 1000 (@TheAimMan)
+- (Singularity) Add type information for ns.singularity.getCurrentWork return value (@Semanual)
+- (Stanek) Fix ns.stanek.acceptGift which was not working in 2.5.2 (@jjclark1982)
+- ns.formatNumber now throws an error if specifying a suffixStart less than 1000 (@TheAimMan)
+- Fixed ns.serverExists returning incorrect value for an endgame server (@cigarmemr)
 
 ### UI
 
+- (Augmentations) Fixed some missing description text for Hacknet multipliers (@jjclark1982)
 - (Corporation) Align columns correctly in warehouse breakdown table (@jjclark1982)
+- (Corporation) Several typo fixes in Corporation modals (@cigarmemr)
 - (Documentation) Ingame documentation now displays line breaks inside tables correctly (@Snarling)
 - (Documentation) Added a documentation page for converting .script to .js (@LJNeon, @jjclark1982, @Snarling)
 - (Hashnet) Hash upgrade descriptions use proper number formatting options (@Snarling)
 - (Infiltration) Changed how the CheatCodeGame is displayed (@alutman, @Snarling)
+- (Sleeve) If intelligence is unlocked, sleeve intelligence is shown in the UI (@Caldwell-74)
 - "Disable Text Effects" option also disables the corrupted text display (@draughtnyan)
-- The "flight" program now displays the related requirements in a more readable way (@TheAimMan)
+- fl1ght.exe now displays the related requirements in a more readable way (@TheAimMan)
 - Miscellaneous wording fixes (@cigarmemr)
 
 ### MISC
 
 - (CodingContract) Improve parsing of player input for arrays (@rocket3989)
+- (Ports) Port objects no longer track a separate promise for every use of nextWrite (@Snarling)
 - (RemoteAPI) Remote API can be targeted to a remote device instead of the default of localhost (@Specker)
 - (ScriptEditor) When importing from other files that are also open in the editor, type information is now available in the IDE (@shyguy1412)
+- (ScriptEditor) Script "models" in the script editor are now properly disposed (@Caldwell-74)
 - Fix inconsistent importing of the arg library (@catloversg)
 - Nerf noodle bar (various)
 `,
