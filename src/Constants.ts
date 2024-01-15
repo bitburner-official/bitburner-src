@@ -223,7 +223,7 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.0 dev - Changelog last updated 14 Jan 2024
+## v2.6.0 dev - Changelog last updated 15 Jan 2024
 
 ### MAJOR ADDITIONS
 
@@ -233,6 +233,7 @@ export const CONSTANTS: {
 ### API
 
 - (Go) Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes. (@ficocelliguy)
+- (Ports) Added ns.nextPortWrite, which allows waiting for the next write to a port without creating a port handle object (@LJNeon)
 - (Singularity) Add type information for ns.singularity.getCurrentWork return value (@Semanual)
 - (Stanek) Fix ns.stanek.acceptGift which was not working in 2.5.2 (@jjclark1982)
 - ns.formatNumber now throws an error if specifying a suffixStart less than 1000 (@TheAimMan)
@@ -256,6 +257,7 @@ export const CONSTANTS: {
 
 - (CodingContract) Improve parsing of player input for arrays (@rocket3989)
 - (Ports) Port objects no longer track a separate promise for every use of nextWrite (@Snarling)
+- (Ports) Fixed a crashing bug related to the changes above (@Jman420)
 - (RemoteAPI) Remote API can be targeted to a remote device instead of the default of localhost (@Specker)
 - (ScriptEditor) When importing from other files that are also open in the editor, type information is now available in the IDE (@shyguy1412)
 - (ScriptEditor) Script "models" in the script editor are now properly disposed (@Caldwell-74)
