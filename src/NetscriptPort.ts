@@ -49,10 +49,10 @@ export function writePort(n: PortNumber, value: unknown): PortData | null {
       `port.write: Tried to write type ${typeof value}. Only string and number types may be written to ports.`,
     );
   }
-  const { data, resolve } = getPort(n);
-  data.push(value);
-  resolve();
-  if (data.length > Settings.MaxPortCapacity) return data.shift() as PortData;
+  const port = getPort(n);
+  port.data.push(value);
+  port.resolve();
+  if (port.data.length > Settings.MaxPortCapacity) return port.data.shift() as PortData;
   return null;
 }
 
@@ -62,10 +62,10 @@ export function tryWritePort(n: PortNumber, value: unknown): boolean {
       `port.write: Tried to write type ${typeof value}. Only string and number types may be written to ports.`,
     );
   }
-  const { data, resolve } = getPort(n);
-  if (data.length >= Settings.MaxPortCapacity) return false;
-  data.push(value);
-  resolve();
+  const port = getPort(n);
+  if (port.data.length >= Settings.MaxPortCapacity) return false;
+  port.data.push(value);
+  port.resolve();
   return true;
 }
 
