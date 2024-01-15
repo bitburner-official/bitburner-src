@@ -36,7 +36,7 @@ export function portHandle(n: PortNumber): NetscriptPort {
     tryWrite: (value: unknown) => tryWritePort(n, value),
     read: () => readPort(n),
     peek: () => peekPort(n),
-    nextWrite: () => nextWritePort(n),
+    nextWrite: () => nextPortWrite(n),
     full: () => isFullPort(n),
     empty: () => isEmptyPort(n),
     clear: () => clearPort(n),
@@ -83,10 +83,9 @@ export function peekPort(n: PortNumber): PortData {
   return port.data[0];
 }
 
-function nextWritePort(n: PortNumber) {
+export function nextPortWrite(n: PortNumber) {
   const port = getPort(n);
-  if (port.promise) return port.promise;
-  port.promise = new Promise<void>((res) => (port.resolver = res));
+  if (!port.promise) port.promise = new Promise<void>((res) => (port.resolver = res));
   return port.promise;
 }
 
