@@ -5,7 +5,7 @@ import { Person as IPerson, Server as IServer } from "@nsdefs";
 export function calculateServerGrowth(server: IServer, threads: number, p: IPerson, cores = 1): number {
   if (!server.serverGrowth) return 0;
   const hackDifficulty = server.hackDifficulty ?? 100;
-  const numServerGrowthCycles = Math.max(Math.floor(threads), 0);
+  const numServerGrowthCycles = Math.max(threads, 0);
 
   //Get adjusted growth rate, which accounts for server security
   const growthRate = CONSTANTS.ServerBaseGrowthRate;
