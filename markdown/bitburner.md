@@ -8,10 +8,13 @@
 
 |  Enumeration | Description |
 |  --- | --- |
+|  [CharityType](./bitburner.charitytype.md) |  |
 |  [CityName](./bitburner.cityname.md) | Names of all cities |
 |  [CompanyName](./bitburner.companyname.md) | Names of all companies |
 |  [CrimeType](./bitburner.crimetype.md) |  |
+|  [DeathEffectTypes](./bitburner.deatheffecttypes.md) | Charity death effects. |
 |  [FactionWorkType](./bitburner.factionworktype.md) |  |
+|  [GameOptions](./bitburner.gameoptions.md) |  |
 |  [GymType](./bitburner.gymtype.md) |  |
 |  [JobField](./bitburner.jobfield.md) |  |
 |  [JobName](./bitburner.jobname.md) |  |
@@ -35,6 +38,23 @@
 |  [Bladeburner](./bitburner.bladeburner.md) | Bladeburner API |
 |  [BladeburnerCurAction](./bitburner.bladeburnercuraction.md) | Bladeburner current action. |
 |  [BladeburnerRankRequirement](./bitburner.bladeburnerrankrequirement.md) | Player must have at least this rank in the Bladeburner Division. |
+|  [CharityBannerFragmentInfo](./bitburner.charitybannerfragmentinfo.md) | Charity Banner Fragment. |
+|  [CharityBannerPieceInfo](./bitburner.charitybannerpieceinfo.md) | Charity Banner Piece. |
+|  [CharityEffectModifier](./bitburner.charityeffectmodifier.md) | Charity Effects Modifier Info. |
+|  [CharityEventGenData](./bitburner.charityeventgendata.md) | Charity Event General Data. |
+|  [CharityFormulas](./bitburner.charityformulas.md) | Charity formulas |
+|  [CharityGenBannerInfo](./bitburner.charitygenbannerinfo.md) | Charity Banner Info. |
+|  [CharityGenEffectsInfo](./bitburner.charitygeneffectsinfo.md) | Charity Effects Info. |
+|  [CharityGenInfo](./bitburner.charitygeninfo.md) | Charity General Info. |
+|  [CharityGenItemInfo](./bitburner.charitygeniteminfo.md) | Charity Item data. |
+|  [CharityGenMessage](./bitburner.charitygenmessage.md) | Charity Messages. |
+|  [CharityGenMessageInfo](./bitburner.charitygenmessageinfo.md) | Charity Message Info. |
+|  [CharityORG](./bitburner.charityorg.md) | CharityORG API |
+|  [CharityStats](./bitburner.charitystats.md) | Data representing the internal values of a charity. |
+|  [CharityTask](./bitburner.charitytask.md) | Charity |
+|  [CharityTaskStats](./bitburner.charitytaskstats.md) | Charity Task Info. |
+|  [CharityVolunteerAscension](./bitburner.charityvolunteerascension.md) |  |
+|  [CharityVolunteerInfo](./bitburner.charityvolunteerinfo.md) |  |
 |  [CityRequirement](./bitburner.cityrequirement.md) | Player must be located in this city. |
 |  [CodingContract](./bitburner.codingcontract.md) | Coding Contract API |
 |  [CompanyPositionInfo](./bitburner.companypositioninfo.md) | Company position requirements and salary. |
@@ -49,8 +69,10 @@
 |  [CreateProgramWorkTask](./bitburner.createprogramworktask.md) | Create Program |
 |  [CrimeStats](./bitburner.crimestats.md) | Data representing the internal values of a crime. |
 |  [CrimeTask](./bitburner.crimetask.md) | Crime |
+|  [deathEffect](./bitburner.deatheffect.md) | Charity death effect data. |
 |  [Division](./bitburner.division.md) | Corporation division |
 |  [EmployedByRequirement](./bitburner.employedbyrequirement.md) | Player must be working for this company. |
+|  [EqStats](./bitburner.eqstats.md) | Object representing data representing a charity volunteers equipment. |
 |  [EquipmentStats](./bitburner.equipmentstats.md) | Object representing data representing a gang member equipment. |
 |  [EveryRequirement](./bitburner.everyrequirement.md) | All sub-conditions must be satisfied. |
 |  [Export](./bitburner.export.md) | Export order for a material |
@@ -94,7 +116,9 @@
 |  [JobTitleRequirement](./bitburner.jobtitlerequirement.md) | Player must have this job title at some company. |
 |  [KarmaRequiremennt](./bitburner.karmarequiremennt.md) | Player must have less than this much karma. |
 |  [LocationRequirement](./bitburner.locationrequirement.md) | Player must be at this location within a city. |
+|  [Lottery](./bitburner.lottery.md) | Lottery API |
 |  [Material](./bitburner.material.md) | Material in a warehouse |
+|  [modifiers](./bitburner.modifiers.md) | Charity modifiers data. |
 |  [MoneyRequirement](./bitburner.moneyrequirement.md) | Player must have at least this much money. |
 |  [MoneySource](./bitburner.moneysource.md) |  |
 |  [MoneySources](./bitburner.moneysources.md) |  |
@@ -135,6 +159,7 @@
 |  [StockOrderObject](./bitburner.stockorderobject.md) | Value in map of [StockOrder](./bitburner.stockorder.md) |
 |  [StudyTask](./bitburner.studytask.md) | Study |
 |  [TailProperties](./bitburner.tailproperties.md) |  |
+|  [TicketRecord](./bitburner.ticketrecord.md) |  |
 |  [TIX](./bitburner.tix.md) | Stock market API |
 |  [UserInterface](./bitburner.userinterface.md) | User Interface API. |
 |  [UserInterfaceTheme](./bitburner.userinterfacetheme.md) | Interface Theme |
@@ -147,6 +172,8 @@
 
 |  Type Alias | Description |
 |  --- | --- |
+|  [CharityAugmentationAreas](./bitburner.charityaugmentationareas.md) | Charity Augmentation Areas. |
+|  [CharityModifyAreas](./bitburner.charitymodifyareas.md) |  |
 |  [CodingContractData](./bitburner.codingcontractdata.md) | Coding contract data will differ depending on coding contract. |
 |  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |
 |  [CorpIndustryName](./bitburner.corpindustryname.md) |  |
@@ -163,6 +190,7 @@
 |  [ReactNode](./bitburner.reactnode.md) | <p>A stand-in for the real React.ReactNode. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. number and string are displayed directly. boolean, null, and undefined are ignored and not rendered. An array of ReactNodes will display all members of that array sequentially.</p><p>Use React.createElement to make the ReactElement type, see [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.</p> |
 |  [ScriptArg](./bitburner.scriptarg.md) |  |
 |  [SleeveBladeburnerTask](./bitburner.sleevebladeburnertask.md) |  |
+|  [SleeveCharityTask](./bitburner.sleevecharitytask.md) |  |
 |  [SleeveClassTask](./bitburner.sleeveclasstask.md) |  |
 |  [SleeveCompanyTask](./bitburner.sleevecompanytask.md) |  |
 |  [SleeveCrimeTask](./bitburner.sleevecrimetask.md) |  |

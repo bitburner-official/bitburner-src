@@ -34,6 +34,7 @@ If you are not in BitNode-10, then you must have Source-File 10 in order to use 
 |  [setToFactionWork(sleeveNumber, factionName, factionWorkType)](./bitburner.sleeve.settofactionwork.md) | Set a sleeve to work for a faction. |
 |  [setToGymWorkout(sleeveNumber, gymName, stat)](./bitburner.sleeve.settogymworkout.md) | Set a sleeve to workout at the gym. |
 |  [setToIdle(sleeveNumber)](./bitburner.sleeve.settoidle.md) | Set a sleeve to idle. |
+|  [setToPerformCharity(sleeveNumber, charityType)](./bitburner.sleeve.settoperformcharity.md) | Set a sleeve to commit a charitable act. |
 |  [setToShockRecovery(sleeveNumber)](./bitburner.sleeve.settoshockrecovery.md) | Set a sleeve to shock recovery. |
 |  [setToSynchronize(sleeveNumber)](./bitburner.sleeve.settosynchronize.md) | Set a sleeve to synchronize. |
 |  [setToUniversityCourse(sleeveNumber, university, className)](./bitburner.sleeve.settouniversitycourse.md) | Set a sleeve to take a class at a university. |

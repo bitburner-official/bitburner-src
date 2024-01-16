@@ -12,7 +12,6 @@ import { CharityVolunteerUpgrade } from "./CharityVolunteerUpgrade";
 import { CharityVolunteerTasks } from "./CharityVolunteerTasks";
 import { IAscensionResult } from "./IAscensionResult";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
-import { isNull } from "lodash";
 import { Modifier } from "./CharityEvent";
 import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
 
@@ -140,25 +139,21 @@ export class CharityORG {
 
   addMessage(message: string): void {
     const msg = message;
-    if (isNull(msg)) return;
     this.messages.unshift(new CharityMessage(msg));
     while (this.messages.length > CharityORGConstants.CharityMaxMessages) this.messages.pop();
   }
   addItemMessage(message: string): void {
     const msg = message;
-    if (isNull(msg)) return;
     this.itemMessages.unshift(new CharityMessage(msg));
     while (this.itemMessages.length > CharityORGConstants.CharityMaxMessages) this.itemMessages.pop();
   }
   addKarmaMessage(message: string): void {
     const msg = message;
-    if (isNull(msg)) return;
     this.karmaMessages.unshift(new CharityMessage(msg));
     while (this.karmaMessages.length > CharityORGConstants.CharityMaxMessages) this.karmaMessages.pop();
   }
   addItemUseMessage(message: string): void {
     const msg = message;
-    if (isNull(msg)) return;
     this.itemUseMessages.unshift(new CharityMessage(msg));
     while (this.itemUseMessages.length > CharityORGConstants.CharityMaxMessages) this.itemUseMessages.pop();
   }

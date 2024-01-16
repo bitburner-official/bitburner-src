@@ -33,6 +33,7 @@ export async function main(ns) {
 |  --- | --- | --- | --- |
 |  [args](./bitburner.ns.args.md) | <code>readonly</code> | (string \| number \| boolean)\[\] | Arguments passed into the script. |
 |  [bladeburner](./bitburner.ns.bladeburner.md) | <code>readonly</code> | [Bladeburner](./bitburner.bladeburner.md) | Namespace for bladeburner functions. Contains spoilers. |
+|  [charityORG](./bitburner.ns.charityorg.md) | <code>readonly</code> | [CharityORG](./bitburner.charityorg.md) | Namespace for charityORG functions. Contains spoilers. |
 |  [codingcontract](./bitburner.ns.codingcontract.md) | <code>readonly</code> | [CodingContract](./bitburner.codingcontract.md) | Namespace for codingcontract functions. |
 |  [corporation](./bitburner.ns.corporation.md) | <code>readonly</code> | [Corporation](./bitburner.corporation.md) | Namespace for corporation functions. Contains spoilers. |
 |  [enums](./bitburner.ns.enums.md) |  | [NSEnums](./bitburner.nsenums.md) |  |
@@ -43,6 +44,7 @@ export async function main(ns) {
 |  [hacknet](./bitburner.ns.hacknet.md) | <code>readonly</code> | [Hacknet](./bitburner.hacknet.md) | Namespace for hacknet functions. Some of this API contains spoilers. |
 |  [heart](./bitburner.ns.heart.md) | <code>readonly</code> | { break(): number; } |  |
 |  [infiltration](./bitburner.ns.infiltration.md) | <code>readonly</code> | [Infiltration](./bitburner.infiltration.md) | Namespace for infiltration functions. |
+|  [lottery](./bitburner.ns.lottery.md) | <code>readonly</code> | [Lottery](./bitburner.lottery.md) | Namespace for lottery functions. |
 |  [pid](./bitburner.ns.pid.md) | <code>readonly</code> | number | The current script's PID |
 |  [singularity](./bitburner.ns.singularity.md) | <code>readonly</code> | [Singularity](./bitburner.singularity.md) | Namespace for singularity functions. Contains spoilers. |
 |  [sleeve](./bitburner.ns.sleeve.md) | <code>readonly</code> | [Sleeve](./bitburner.sleeve.md) | Namespace for sleeve functions. Contains spoilers. |

@@ -10,7 +10,6 @@ import { CharityVolunteer } from "../CharityORG/CharityVolunteer";
 import { CharityVolunteerUpgrades } from "../CharityORG/CharityVolunteerUpgrades";
 import { CharityORGConstants } from "../CharityORG/data/Constants";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { isBoolean, isNumber, cloneDeep } from "lodash";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { Factions } from "../Faction/Factions";
 import { isString } from "../utils/helpers/string";
@@ -25,6 +24,7 @@ import { formatNumber, formatMoney } from "../ui/formatNumber";
 import { CharityEvent } from "../CharityORG/CharityEvent";
 import { LotteryConstants } from "../Lottery/data/LotteryConstants";
 import { buyRandomTicket } from "../Lottery/Lotto";
+import { cloneDeep } from "lodash";
 
 export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
   /** Functions as an API check and also returns the charityORG object */
@@ -50,6 +50,26 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
   };
 
   return {
+    createCharity: (ctx) => (_name, _seed) => {
+      const name = String(_name);
+      let seed = false;
+      if (_seed === true || _seed === false) seed = _seed;
+      else return false;
+
+      if (!Player.canAccessCharity()) return false;
+      if (Player.charityORG) return false;
+      if (!seed && Player.money < CharityORGConstants.CharityMoneyRequirement) return false;
+
+      Player.startCharity(name, seed);
+      const charityORG = getCharity(ctx);
+      if (!seed) {
+        Player.loseMoney(CharityORGConstants.CharityMoneyRequirement, "charityORG");
+        charityORG.ascensionToken += 50;
+      } else charityORG.ascensionToken += 20;
+
+      joinFaction(Factions.Charity);
+      return true;
+    },
     getPendingEvents: (ctx) => () => {
       const charityORG = getCharity(ctx);
       const list: CharityEventGenData[] = [];
@@ -139,26 +159,6 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       charityORG.addMessage("Abandoned: " + event.short_name);
       charityORG.processNewEvents(0);
       event.processDeath();
-      return true;
-    },
-    createCharity: (ctx) => (_name, _seed) => {
-      const name = String(_name);
-      let seed = false;
-      if (isBoolean(_seed)) seed = _seed;
-      else return false;
-
-      if (!Player.canAccessCharity()) return false;
-      if (Player.charityORG) return false;
-      if (!seed && Player.money < CharityORGConstants.CharityMoneyRequirement) return false;
-
-      Player.startCharity(name, seed);
-      const charityORG = getCharity(ctx);
-      if (!seed) {
-        Player.loseMoney(CharityORGConstants.CharityMoneyRequirement, "charityORG");
-        charityORG.ascensionToken += 50;
-      } else charityORG.ascensionToken += 20;
-
-      joinFaction(Factions.Charity);
       return true;
     },
     hasCharity: () => () => {
@@ -417,7 +417,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       const charityORG = getCharity(ctx);
       const item = helpers.string(ctx, "item", _item).toLowerCase();
       const spend = Math.floor(helpers.number(ctx, "spend", _spend));
-      const convert = isBoolean(_convert) ? _convert : false;
+      const convert = _convert === true || _convert === false ? _convert : false;
       if (spend === 0) return false;
 
       switch (item) {
@@ -719,15 +719,15 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
     //The big one
     spendKarma: (ctx) => (_opt1, _opt2, _spendOn, _opt3) => {
       const charityORG = getCharity(ctx);
-      const spend = isNumber(_spendOn) ? Math.floor(helpers.number(ctx, "spendOn", _spendOn)) : 0;
+      const spend = Math.max(Math.floor(helpers.number(ctx, "spendOn", _spendOn)), 0);
       const aug = isString(_spendOn) ? helpers.string(ctx, "spendOn", _spendOn) : null;
       const opt1 = helpers.string(ctx, "opt1", _opt1).toLowerCase();
       const opt2 = helpers.string(ctx, "opt1", _opt2).toLowerCase();
-      const opt3 = isNumber(_opt3)
-        ? helpers.number(ctx, "opt3", _opt3)
-        : isString(_opt3)
+      const opt3 = isString(_opt3)
         ? helpers.string(ctx, "opt3", _opt3).toLowerCase()
-        : null;
+        : _opt3 === null
+        ? null
+        : helpers.number(ctx, "opt3", _opt3);
 
       if (Player.karma < spend || spend === 0) {
         return false;
@@ -881,11 +881,12 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
           return false;
         }
         case "sleeves": {
+          if (opt3 === null) return false; // Need opt3 for sleeve action
           switch (opt2) {
             //aug should be either an augment or "list" and opt3 will be either a sleeve number or "all"
             case "overclock": {
-              if (isNumber(opt3) && Player.sleeves.length > opt3) {
-                Player.sleeves[opt3].storedCycles += spend * 2.5;
+              if (!isString(opt3) && Player.sleeves.length <= Number(opt3)) {
+                Player.sleeves[Number(opt3)].storedCycles += spend * 2.5;
                 Player.karma -= spend;
                 charityORG.addKarmaMessage(
                   "Spent " +
@@ -915,8 +916,8 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
               }
             }
             case "reduce shock": {
-              if (isNumber(opt3) && Player.sleeves.length > opt3) {
-                Player.sleeves[opt3].shock -= spend * 0.01;
+              if (!isString(opt3) && Player.sleeves.length <= Number(opt3)) {
+                Player.sleeves[Number(opt3)].shock -= spend * 0.01;
                 Player.karma -= spend;
                 charityORG.addKarmaMessage(
                   "Spent " +
@@ -946,8 +947,8 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
               }
             }
             case "sync up": {
-              if (isNumber(opt3) && Player.sleeves.length > opt3) {
-                Player.sleeves[opt3].sync += spend * 0.01;
+              if (!isString(opt3) && Player.sleeves.length <= Number(opt3)) {
+                Player.sleeves[Number(opt3)].sync += spend * 0.01;
                 Player.karma -= spend;
                 charityORG.addKarmaMessage(
                   "Spent " +
@@ -973,14 +974,15 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
               }
             }
             case "augments": {
-              if (aug === "list" && isNumber(opt3)) return findAugs(Player.sleeves[opt3]).map((a) => a.name.toString());
+              if (aug === "list" && !isString(opt3))
+                return findAugs(Player.sleeves[opt3]).map((a) => a.name.toString());
               else if (aug != null && !Augmentations[aug as AugmentationName]) return false;
-              else if (isNumber(opt3) && aug != null && opt3 < Player.sleeves.length) {
-                const augs = findAugs(Player.sleeves[opt3]).map((a) => a.name.toString());
-                if (Player.sleeves[opt3].hasAugmentation(aug)) return false;
+              else if (!isString(opt3) && aug != null && Number(opt3) < Player.sleeves.length) {
+                const augs = findAugs(Player.sleeves[Number(opt3)]).map((a) => a.name.toString());
+                if (Player.sleeves[Number(opt3)].hasAugmentation(aug)) return false;
                 if (!augs.includes(aug)) return false;
                 if (Player.karma < Math.sqrt(Augmentations[aug as AugmentationName].baseCost * 2)) return false;
-                Player.sleeves[opt3].installAugmentation(Augmentations[aug as AugmentationName]);
+                Player.sleeves[Number(opt3)].installAugmentation(Augmentations[aug as AugmentationName]);
                 Player.karma -= Math.sqrt(Augmentations[aug as AugmentationName].baseCost * 2);
                 charityORG.addKarmaMessage(
                   "Spent " +

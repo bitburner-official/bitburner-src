@@ -18,6 +18,8 @@ interface MoneySource
 |  [augmentations](./bitburner.moneysource.augmentations.md) |  | number |  |
 |  [bladeburner](./bitburner.moneysource.bladeburner.md) |  | number |  |
 |  [casino](./bitburner.moneysource.casino.md) |  | number |  |
+|  [charity](./bitburner.moneysource.charity.md) |  | number |  |
+|  [charityORG](./bitburner.moneysource.charityorg.md) |  | number |  |
 |  [class](./bitburner.moneysource.class.md) |  | number |  |
 |  [codingcontract](./bitburner.moneysource.codingcontract.md) |  | number |  |
 |  [corporation](./bitburner.moneysource.corporation.md) |  | number |  |
