@@ -1223,8 +1223,8 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_hostname, _ram, _cores = 1) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
-      const ram = helpers.number(ctx, "ram", _ram);
-      const cores = helpers.number(ctx, "cores", _cores);
+      const ram = helpers.positiveInteger(ctx, "ram", _ram);
+      const cores = helpers.positiveInteger(ctx, "cores", _cores);
       try {
         return getPurchasedServerUpgradeCost(hostname, ram, cores);
       } catch (err) {
@@ -1237,8 +1237,8 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_hostname, _ram, _cores = 1) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
-      const ram = helpers.number(ctx, "ram", _ram);
-      const cores = helpers.number(ctx, "cores", _cores);
+      const ram = helpers.positiveInteger(ctx, "ram", _ram);
+      const cores = helpers.positiveInteger(ctx, "cores", _cores);
       try {
         upgradePurchasedServer(hostname, ram, cores);
         return true;
