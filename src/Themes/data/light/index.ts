@@ -29,7 +29,7 @@ export const Theme: IPredefinedTheme = {
     welllight: "#f9f9f9",
     well: "#eaeaea",
     white: "#F7F7F7",
-    black: "#F7F7F7",
+    black: "#000000",
     hp: "#BF5C41",
     money: "#E1B121",
     hack: "#47BC38",
