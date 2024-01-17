@@ -544,6 +544,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   peek: 0,
   clear: 0,
   writePort: 0,
+  nextPortWrite: 0,
   readPort: 0,
   getPortHandle: 0,
   rm: RamCostConstants.ReadWrite,

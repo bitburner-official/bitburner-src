@@ -59,6 +59,7 @@ export function NetscriptGo(): InternalAPI<Go> {
     passTurn: (ctx: NetscriptContext) => async (): Promise<Play> => {
       if (Player.go.boardState.previousPlayer === playerColors.black) {
         helpers.log(ctx, () => `It is not your turn; you cannot pass.`);
+        helpers.log(ctx, () => `Do you have multiple scripts running, or did you forget to await makeMove() ?`);
         return Promise.resolve(invalidMoveResponse);
       }
       return handlePassTurn(logger(ctx));
