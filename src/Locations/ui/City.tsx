@@ -29,7 +29,8 @@ interface IProps {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     location: {
-      color: rgbToHsl(hexStringToRgb(Settings.theme.backgroundprimary))[2] < 50 ? theme.colors.white : theme.colors.black,
+      color:
+        rgbToHsl(hexStringToRgb(Settings.theme.backgroundprimary))[2] < 50 ? theme.colors.white : theme.colors.black,
       whiteSpace: "nowrap",
       margin: "0px",
       padding: "0px",
