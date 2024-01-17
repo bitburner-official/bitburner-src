@@ -6608,7 +6608,13 @@ export interface NS {
    * @returns Returns the maximum RAM (in GB) that a purchased server can have.
    */
   getPurchasedServerMaxRam(): number;
-
+  /**
+   * Returns the maximum Cores that a purchased server can have.
+   *
+   * @remarks RAM cost: 0.05 GB
+   * @returns Returns the maximum Cores that a purchased server can have.
+   */
+  getPurchasedServerMaxCores(): number;
   /**
    * Write data to a file.
    * @remarks

@@ -21,20 +21,22 @@ import { workerScripts } from "../Netscript/WorkerScripts";
  * @returns Cost of purchasing the given server. Returns infinity for invalid arguments
  */
 export function getPurchaseServerCost(ram: number, cores: number): number {
-  const sanitizedRam = Math.round(ram);
-  if (isNaN(sanitizedRam) || !isPowerOfTwo(sanitizedRam) || !(Math.sign(sanitizedRam) === 1)) {
-    return Infinity;
+  if (!isPowerOfTwo(ram)) {
+    throw new Error(`Invalid argument: ram='${ram}' must be a positive power of 2`);
   }
-  if (sanitizedRam > getPurchaseServerMaxRam()) {
-    return Infinity;
+  if (ram > getPurchaseServerMaxRam()) {
+    throw new Error(`Invalid argument: ram='${ram}' must not be greater than getPurchaseServerMaxRam`);
+  }
+  if (cores > getPurchasedServerMaxCores()) {
+    throw new Error(`Invalid argument: cores='${cores}' must not be greater than getPurchasedServerMaxCores`);
   }
 
-  const upg = Math.max(0, Math.log(sanitizedRam) / Math.log(2) - 6);
+  const upg = Math.max(0, Math.log(ram) / Math.log(2) - 6);
   const coreCost =
     CONSTANTS.PurchasedServerCoreBaseCost * (cores === 1 ? 0 : CONSTANTS.PurchasedServerCoreCostGrowth ** cores);
   return (
     coreCost +
-    sanitizedRam *
+    ram *
       CONSTANTS.BaseCostFor1GBOfRamServer *
       currentNodeMults.PurchasedServerCost *
       Math.pow(currentNodeMults.PurchasedServerSoftcap, upg)
@@ -99,7 +101,9 @@ export function getPurchaseServerMaxRam(): number {
   // Round this to the nearest power of 2
   return 1 << (31 - Math.clz32(ram));
 }
-
+export function getPurchasedServerMaxCores(): number {
+  return CONSTANTS.PurchasedServerMaxCores;
+}
 // Manually purchase a server (NOT through Netscript)
 export function purchaseServer(hostname: string, ram: number, cost: number): void {
   //Check if player has enough money
