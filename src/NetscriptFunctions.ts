@@ -1144,101 +1144,109 @@ export const ns: InternalAPI<NSFull> = {
   getPurchasedServerMaxRam: () => () => {
     return getPurchaseServerMaxRam();
   },
-  getPurchasedServerCost: (ctx) => (_ram, _cores = 1) => {
-    const ram = helpers.number(ctx, "ram", _ram);
-    const cores = helpers.number(ctx,"cores",_cores)
-    
-    const cost = getPurchaseServerCost(ram,cores);
-    if (cost === Infinity) {
-      if (ram > getPurchaseServerMaxRam()) {
-        helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than getPurchaseServerMaxRam`);
-      } else {
-        helpers.log(ctx, () => `Invalid argument: ram='${ram}' must be a positive power of 2`);
-      }
-      return Infinity;
-    }
+  getPurchasedServerCost:
+    (ctx) =>
+    (_ram, _cores = 1) => {
+      const ram = helpers.number(ctx, "ram", _ram);
+      const cores = helpers.number(ctx, "cores", _cores);
 
-    return cost;
-  },
-  purchaseServer: (ctx) => (_name, _ram,_cores = 1) => {
-    const name = helpers.string(ctx, "name", _name);
-    const ram = helpers.number(ctx, "ram", _ram);
-    const cores = helpers.number(ctx,"cores",_cores)
-    let hostnameStr = String(name);
-    hostnameStr = hostnameStr.replace(/\s+/g, "");
-    if (hostnameStr == "") {
-      helpers.log(ctx, () => `Invalid argument: hostname='${hostnameStr}'`);
-      return "";
-    }
-
-    if (Player.purchasedServers.length >= getPurchaseServerLimit()) {
-      helpers.log(
-        ctx,
-        () =>
-          `You have reached the maximum limit of ${getPurchaseServerLimit()} servers. You cannot purchase any more.`,
-      );
-      return "";
-    }
-
-    const cost = getPurchaseServerCost(ram,cores);
-    if (cost === Infinity) {
-      if (ram > getPurchaseServerMaxRam()) {
-        helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than getPurchaseServerMaxRam`);
-      } else {
-        helpers.log(ctx, () => `Invalid argument: ram='${ram}' must be a positive power of 2`);
+      const cost = getPurchaseServerCost(ram, cores);
+      if (cost === Infinity) {
+        if (ram > getPurchaseServerMaxRam()) {
+          helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than getPurchaseServerMaxRam`);
+        } else {
+          helpers.log(ctx, () => `Invalid argument: ram='${ram}' must be a positive power of 2`);
+        }
+        return Infinity;
       }
 
-      return "";
-    }
+      return cost;
+    },
+  purchaseServer:
+    (ctx) =>
+    (_name, _ram, _cores = 1) => {
+      const name = helpers.string(ctx, "name", _name);
+      const ram = helpers.number(ctx, "ram", _ram);
+      const cores = helpers.number(ctx, "cores", _cores);
+      let hostnameStr = String(name);
+      hostnameStr = hostnameStr.replace(/\s+/g, "");
+      if (hostnameStr == "") {
+        helpers.log(ctx, () => `Invalid argument: hostname='${hostnameStr}'`);
+        return "";
+      }
 
-    if (Player.money < cost) {
-      helpers.log(ctx, () => `Not enough money to purchase server. Need ${formatMoney(cost)}`);
-      return "";
-    }
-    const newServ = safelyCreateUniqueServer({
-      ip: createUniqueRandomIp(),
-      hostname: hostnameStr,
-      organizationName: "",
-      isConnectedTo: false,
-      adminRights: true,
-      purchasedByPlayer: true,
-      maxRam: ram,
-    });
-    AddToAllServers(newServ);
+      if (Player.purchasedServers.length >= getPurchaseServerLimit()) {
+        helpers.log(
+          ctx,
+          () =>
+            `You have reached the maximum limit of ${getPurchaseServerLimit()} servers. You cannot purchase any more.`,
+        );
+        return "";
+      }
 
-    Player.purchasedServers.push(newServ.hostname);
-    const homeComputer = Player.getHomeComputer();
-    homeComputer.serversOnNetwork.push(newServ.hostname);
-    newServ.serversOnNetwork.push(homeComputer.hostname);
-    Player.loseMoney(cost, "servers");
-    helpers.log(ctx, () => `Purchased new server with hostname '${newServ.hostname}' for ${formatMoney(cost)}`);
-    return newServ.hostname;
-  },
+      const cost = getPurchaseServerCost(ram, cores);
+      if (cost === Infinity) {
+        if (ram > getPurchaseServerMaxRam()) {
+          helpers.log(ctx, () => `Invalid argument: ram='${ram}' must not be greater than getPurchaseServerMaxRam`);
+        } else {
+          helpers.log(ctx, () => `Invalid argument: ram='${ram}' must be a positive power of 2`);
+        }
 
-  getPurchasedServerUpgradeCost: (ctx) => (_hostname, _ram,_cores = 1) => {
-    const hostname = helpers.string(ctx, "hostname", _hostname);
-    const ram = helpers.number(ctx, "ram", _ram);
-    const cores = helpers.number(ctx,"cores",_cores)
-    try {
-      return getPurchasedServerUpgradeCost(hostname, ram,cores);
-    } catch (err) {
-      helpers.log(ctx, () => String(err));
-      return -1;
-    }
-  },
+        return "";
+      }
 
-  upgradePurchasedServer: (ctx) => (_hostname, _ram,_cores=1) => {
-    const hostname = helpers.string(ctx, "hostname", _hostname);
-    const ram = helpers.number(ctx, "ram", _ram);
-    const cores = helpers.number(ctx,"cores",_cores)
-    try {
-      upgradePurchasedServer(hostname, ram,cores);
-      return true;
-    } catch (err) {
-      helpers.log(ctx, () => String(err));
-      return false;
-    }
-  },
+      if (Player.money < cost) {
+        helpers.log(ctx, () => `Not enough money to purchase server. Need ${formatMoney(cost)}`);
+        return "";
+      }
+      const newServ = safelyCreateUniqueServer({
+        ip: createUniqueRandomIp(),
+        hostname: hostnameStr,
+        organizationName: "",
+        isConnectedTo: false,
+        adminRights: true,
+        purchasedByPlayer: true,
+        maxRam: ram,
+      });
+      AddToAllServers(newServ);
+
+      Player.purchasedServers.push(newServ.hostname);
+      const homeComputer = Player.getHomeComputer();
+      homeComputer.serversOnNetwork.push(newServ.hostname);
+      newServ.serversOnNetwork.push(homeComputer.hostname);
+      Player.loseMoney(cost, "servers");
+      helpers.log(ctx, () => `Purchased new server with hostname '${newServ.hostname}' for ${formatMoney(cost)}`);
+      return newServ.hostname;
+    },
+
+  getPurchasedServerUpgradeCost:
+    (ctx) =>
+    (_hostname, _ram, _cores = 1) => {
+      const hostname = helpers.string(ctx, "hostname", _hostname);
+      const ram = helpers.number(ctx, "ram", _ram);
+      const cores = helpers.number(ctx, "cores", _cores);
+      try {
+        return getPurchasedServerUpgradeCost(hostname, ram, cores);
+      } catch (err) {
+        helpers.log(ctx, () => String(err));
+        return -1;
+      }
+    },
+
+  upgradePurchasedServer:
+    (ctx) =>
+    (_hostname, _ram, _cores = 1) => {
+      const hostname = helpers.string(ctx, "hostname", _hostname);
+      const ram = helpers.number(ctx, "ram", _ram);
+      const cores = helpers.number(ctx, "cores", _cores);
+      try {
+        upgradePurchasedServer(hostname, ram, cores);
+        return true;
+      } catch (err) {
+        helpers.log(ctx, () => String(err));
+        return false;
+      }
+    },
 
   renamePurchasedServer: (ctx) => (_hostname, _newName) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
