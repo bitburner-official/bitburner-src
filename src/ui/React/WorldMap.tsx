@@ -1,7 +1,9 @@
 import React from "react";
+import { Settings } from "../../Settings/Settings";
 import { createStyles, makeStyles } from "@mui/styles";
 import { Tooltip, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
+import { hexStringToRgb, rgbToHsl } from "../../utils/helpers/colorTools";
 
 import { CityName } from "@enums";
 
@@ -14,7 +16,8 @@ interface ICityProps {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     travel: {
-      color: theme.colors.white,
+      color:
+        rgbToHsl(hexStringToRgb(Settings.theme.backgroundprimary))[2] < 50 ? theme.colors.white : theme.colors.black,
       lineHeight: "1em",
       whiteSpace: "pre",
       cursor: "pointer",
