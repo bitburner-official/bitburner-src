@@ -53,10 +53,9 @@ export const getPurchasedServerUpgradeCost = (hostname: string, ram: number, _co
   return getPurchaseServerCost(ram, cores) - getPurchaseServerCost(server.maxRam, server.cpuCores);
 };
 
-export const upgradePurchasedServer = (hostname: string, ram: number, _cores: number): void => {
+export const upgradePurchasedServer = (hostname: string, ram: number, cores: number): void => {
   const server = GetServer(hostname);
   if (!server) throw new Error(`Server '${hostname}' not found.`);
-  const cores = Math.max(_cores, server.cpuCores);
   const cost = getPurchasedServerUpgradeCost(hostname, ram, cores);
   if (!Player.canAfford(cost)) throw new Error(`You don't have enough money to upgrade '${hostname}'.`);
   Player.loseMoney(cost, "servers");
