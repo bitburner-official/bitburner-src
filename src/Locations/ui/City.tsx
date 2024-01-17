@@ -20,6 +20,7 @@ import Button from "@mui/material/Button";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
+import { hexStringToRgb, rgbToHsl } from "../../utils/helpers/colorTools";
 
 interface IProps {
   city: City;
@@ -28,7 +29,7 @@ interface IProps {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     location: {
-      color: theme.colors.white,
+      color: rgbToHsl(hexStringToRgb(Settings.theme.backgroundprimary))[2] < 50 ? theme.colors.white : theme.colors.black,
       whiteSpace: "nowrap",
       margin: "0px",
       padding: "0px",
