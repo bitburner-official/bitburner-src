@@ -68,6 +68,7 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
  *                                  its index in the global workerScripts array
  */
 function removeWorkerScript(workerScript: WorkerScript): void {
+	debugger
   const ip = workerScript.hostname;
 
   // Get the server on which the script runs
@@ -93,5 +94,6 @@ function removeWorkerScript(workerScript: WorkerScript): void {
   server.updateRamUsed(roundToTwo(server.ramUsed - rs.ramUsage * rs.threads));
 
   workerScripts.delete(workerScript.pid);
-  AddRecentScript(workerScript);
+  if (rs.temporary===false)
+  {AddRecentScript(workerScript);}
 }
