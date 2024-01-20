@@ -5,6 +5,7 @@ import { WorkerScript } from "../Netscript/WorkerScript";
 import { CharityType } from "@enums";
 import { CharityWork } from "../Work/CharityWork";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 interface IConstructorParams {
   hacking_success_weight?: number;
@@ -128,6 +129,7 @@ export class Charity {
     chance /= CONSTANTS.MaxSkillLevel;
     chance /= this.difficulty;
     chance *= p.mults.charity_success;
+    chance *= currentNodeMults.CharitySuccessRate;
     chance *= calculateIntelligenceBonus(p.skills.intelligence, 1);
 
     return Math.min(chance, 1);

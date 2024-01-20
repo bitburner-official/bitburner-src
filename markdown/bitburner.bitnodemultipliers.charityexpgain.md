@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CharityExpGain property
 
-Influences the base experience gained for each ability when the player commits a charity.
+Influences the base experience gained for each ability when the player performs a charity.
 
 **Signature:**
 

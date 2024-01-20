@@ -484,8 +484,8 @@ export class CharityEvent {
         }
         case 12: {
           // ticket stub
-          charityORG.ticketStub++;
-          charityORG.addItemMessage("Found a Ticket Stub!");
+          charityORG.ticketStub += Math.floor(Math.random() * 5) + 1;
+          charityORG.addItemMessage("Found some Ticket Stubs!");
           break;
         }
         case 13: {
@@ -594,10 +594,10 @@ export class CharityEvent {
 
     //Get the best values, and randomize them a bit.
     //this.taskObject.baseMoneySpend = dif * 8 * ((Math.random() * .4) + .8);
-    if (fundraising !== undefined && fundraising) {
+    if (fundraising) {
       this.taskObject.baseMoneyGain = dif * 7000000 * (Math.random() * 0.2 + 0.95);
       this.taskObject.baseMoneyGain *= random ? Math.random() * 0.4 + 0.8 : 1;
-      this.taskObject.basePrestige = dif * 0.01125 * (Math.random() * 0.4 + 0.8);
+      this.taskObject.basePrestige = dif * 0.1125 * (Math.random() * 0.4 + 0.8);
       this.taskObject.basePrestige *= random ? Math.random() * 0.4 + 0.8 : 1;
       this.taskObject.isSpending = false;
     } else {
@@ -605,7 +605,7 @@ export class CharityEvent {
       this.taskObject.baseMoneySpend *= random ? Math.random() * 0.4 + 0.8 : 1;
       this.taskObject.baseVisibility = dif * 0.00000014056 * (Math.random() * 0.2 + 0.9);
       this.taskObject.baseVisibility *= random ? Math.random() * 0.4 + 0.8 : 1;
-      this.taskObject.basePrestige = dif * 0.01125 * (Math.random() * 0.4 + 0.8);
+      this.taskObject.basePrestige = dif * 0.1125 * (Math.random() * 0.4 + 0.8);
       this.taskObject.basePrestige *= random ? Math.random() * 0.4 + 0.8 : 1;
       this.taskObject.baseKarmaGain = dif * 0.0000000001875 * (Math.random() * 0.2 + 0.9);
       this.taskObject.baseKarmaGain *= random ? Math.random() * 0.4 + 0.8 : 1;
@@ -728,7 +728,7 @@ export class CharityEvent {
   }
   randomizeDeathEffects(fundraising: boolean, random: boolean): void {
     // Recreate death effects
-    if (this.taskObject.difficulty <= 10 || this.rarity <= 10) return;
+    if (this.taskObject.difficulty <= 10 || this.rarity <= 10 || !this.hasTimer) return;
     const entries = Object.values(DeathEffectTypes);
 
     if (fundraising) {

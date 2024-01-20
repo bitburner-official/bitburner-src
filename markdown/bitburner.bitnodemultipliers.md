@@ -22,8 +22,8 @@ interface BitNodeMultipliers
 |  [BladeburnerRank](./bitburner.bitnodemultipliers.bladeburnerrank.md) |  | number | Influences how quickly the player can gain rank within Bladeburner. |
 |  [BladeburnerSkillCost](./bitburner.bitnodemultipliers.bladeburnerskillcost.md) |  | number | Influences the cost of skill levels from Bladeburner. |
 |  [CharismaLevelMultiplier](./bitburner.bitnodemultipliers.charismalevelmultiplier.md) |  | number | Influences how quickly the player's charisma level (not exp) scales |
-|  [CharityExpGain](./bitburner.bitnodemultipliers.charityexpgain.md) |  | number | Influences the base experience gained for each ability when the player commits a charity. |
-|  [CharityMoney](./bitburner.bitnodemultipliers.charitymoney.md) |  | number | Influences the base money gained when the player commits a charity. |
+|  [CharityExpGain](./bitburner.bitnodemultipliers.charityexpgain.md) |  | number | Influences the base experience gained for each ability when the player performs a charity. |
+|  [CharityMoney](./bitburner.bitnodemultipliers.charitymoney.md) |  | number | Influences the base money gained when the player performs a charity. |
 |  [CharityORGEventStrength](./bitburner.bitnodemultipliers.charityorgeventstrength.md) |  | number | Reduces charity event power, reduces the strength of all completed events and their associated rewards (Banners, Money, Bank, etc). Lowers all effects included in Softcap as well. |
 |  [CharityORGSoftcap](./bitburner.bitnodemultipliers.charityorgsoftcap.md) |  | number | Reduces charity earning. |
 |  [CharityORGUniqueAugs](./bitburner.bitnodemultipliers.charityorguniqueaugs.md) |  | number | Percentage of unique augs that the charityORG has. |

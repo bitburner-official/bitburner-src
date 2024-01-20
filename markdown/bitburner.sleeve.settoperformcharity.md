@@ -4,7 +4,7 @@
 
 ## Sleeve.setToPerformCharity() method
 
-Set a sleeve to commit a charitable act.
+Set a sleeve to perform a charitable act.
 
 **Signature:**
 
@@ -16,7 +16,7 @@ setToPerformCharity(sleeveNumber: number, charityType: CharityType | `${CharityT
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  sleeveNumber | number | Index of the sleeve to start committing a charitable act. Sleeves are numbered starting from 0. |
+|  sleeveNumber | number | Index of the sleeve to start performing a charitable act. Sleeves are numbered starting from 0. |
 |  charityType | [CharityType](./bitburner.charitytype.md) \| \`${[CharityType](./bitburner.charitytype.md)<!-- -->}\` | Name of the charity. |
 
 **Returns:**
@@ -35,11 +35,11 @@ Return a boolean indicating whether or not this action was set successfully (fal
 
 
 ```ts
-// Assigns the first sleeve to Homicide.
-ns.sleeve.setToCommitCharity(0, "help police");
+// Assigns the first sleeve to Help Police.
+ns.sleeve.setToPerformCharity(0, "help police");
 
 // Assigns the second sleeve to Give Back, using enum
 const charities = ns.enums.CharityType;
-ns.sleeve.setToCommitCharity(1, charities.giveBack)
+ns.sleeve.setToPerformCharity(1, charities.giveBack)
 ```
 

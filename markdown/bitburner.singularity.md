@@ -37,7 +37,7 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [getAugmentationRepReq(augName)](./bitburner.singularity.getaugmentationrepreq.md) | Get reputation requirement of an augmentation. |
 |  [getAugmentationsFromFaction(faction)](./bitburner.singularity.getaugmentationsfromfaction.md) | Get a list of augmentation available from a faction. |
 |  [getAugmentationStats(name)](./bitburner.singularity.getaugmentationstats.md) | Get the stats of an augmentation. |
-|  [getCharityChance(charity)](./bitburner.singularity.getcharitychance.md) | Get chance to successfully commit a charitable action. |
+|  [getCharityChance(charity)](./bitburner.singularity.getcharitychance.md) | Get chance to successfully perform a charitable action. |
 |  [getCharityStats(charity)](./bitburner.singularity.getcharitystats.md) | Get stats related to a charity. |
 |  [getCompanyFavor(companyName)](./bitburner.singularity.getcompanyfavor.md) | Get company favor. |
 |  [getCompanyFavorGain(companyName)](./bitburner.singularity.getcompanyfavorgain.md) | Get company favor gain. |

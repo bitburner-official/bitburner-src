@@ -423,6 +423,12 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       switch (item) {
         case "lucky coins": {
           //Cannot convert a lucky coin
+          if (Player.sourceFileLvl(15) < 2 && Player.bitNodeN !== 15) {
+            throw helpers.makeRuntimeErrorMsg(
+              ctx,
+              `You do not have access to buying quantom tickets!  Get SF 15.2 in order to unlock outside of BN 15.`,
+            );
+          }
           if (convert || spend < 0) return false;
           const quantomCost =
             Player.quantomTickets >= LotteryConstants.MaxTickets
@@ -725,8 +731,8 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       const opt2 = helpers.string(ctx, "opt1", _opt2).toLowerCase();
       const opt3 = isString(_opt3)
         ? helpers.string(ctx, "opt3", _opt3).toLowerCase()
-        : _opt3 === null
-        ? null
+        : _opt3 === undefined
+        ? undefined
         : helpers.number(ctx, "opt3", _opt3);
 
       if (Player.karma < spend || spend === 0) {
@@ -881,11 +887,11 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
           return false;
         }
         case "sleeves": {
-          if (opt3 === null) return false; // Need opt3 for sleeve action
+          if (opt3 === undefined) return false; // Need opt3 for sleeve action
           switch (opt2) {
             //aug should be either an augment or "list" and opt3 will be either a sleeve number or "all"
             case "overclock": {
-              if (!isString(opt3) && Player.sleeves.length <= Number(opt3)) {
+              if (!isString(opt3) && Player.sleeves.length < Number(opt3)) {
                 Player.sleeves[Number(opt3)].storedCycles += spend * 2.5;
                 Player.karma -= spend;
                 charityORG.addKarmaMessage(
@@ -916,7 +922,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
               }
             }
             case "reduce shock": {
-              if (!isString(opt3) && Player.sleeves.length <= Number(opt3)) {
+              if (!isString(opt3) && Player.sleeves.length < Number(opt3)) {
                 Player.sleeves[Number(opt3)].shock -= spend * 0.01;
                 Player.karma -= spend;
                 charityORG.addKarmaMessage(
@@ -947,7 +953,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
               }
             }
             case "sync up": {
-              if (!isString(opt3) && Player.sleeves.length <= Number(opt3)) {
+              if (!isString(opt3) && Player.sleeves.length < Number(opt3)) {
                 Player.sleeves[Number(opt3)].sync += spend * 0.01;
                 Player.karma -= spend;
                 charityORG.addKarmaMessage(
@@ -976,8 +982,8 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
             case "augments": {
               if (aug === "list" && !isString(opt3))
                 return findAugs(Player.sleeves[opt3]).map((a) => a.name.toString());
-              else if (aug != null && !Augmentations[aug as AugmentationName]) return false;
-              else if (!isString(opt3) && aug != null && Number(opt3) < Player.sleeves.length) {
+              else if (aug !== null && !Augmentations[aug as AugmentationName]) return false;
+              else if (!isString(opt3) && aug !== null && Number(opt3) < Player.sleeves.length) {
                 const augs = findAugs(Player.sleeves[Number(opt3)]).map((a) => a.name.toString());
                 if (Player.sleeves[Number(opt3)].hasAugmentation(aug)) return false;
                 if (!augs.includes(aug)) return false;

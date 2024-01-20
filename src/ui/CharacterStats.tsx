@@ -548,6 +548,7 @@ export function CharacterStats(): React.ReactElement {
                 {
                   mult: "Charity Success Chance",
                   value: Player.mults.charity_success,
+                  effValue: Player.mults.charity_success * currentNodeMults.CharitySuccessRate,
                 },
                 {
                   mult: "Charity Money",

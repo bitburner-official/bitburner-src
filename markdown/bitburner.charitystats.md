@@ -28,7 +28,7 @@ interface CharityStats
 |  [hacking\_exp](./bitburner.charitystats.hacking_exp.md) |  | number | hacking exp gained from charity |
 |  [hacking\_success\_weight](./bitburner.charitystats.hacking_success_weight.md) |  | number | hacking level impact on success change of the charity |
 |  [intelligence\_exp](./bitburner.charitystats.intelligence_exp.md) |  | number | intelligence exp gained from charity |
-|  [karma](./bitburner.charitystats.karma.md) |  | number | Amount of karma gained for successfully committing this charity |
+|  [karma](./bitburner.charitystats.karma.md) |  | number | Amount of karma gained for successfully performing this charity |
 |  [money](./bitburner.charitystats.money.md) |  | number | How much money is given |
 |  [saves](./bitburner.charitystats.saves.md) |  | number | How many people die as a result of this charity |
 |  [strength\_exp](./bitburner.charitystats.strength_exp.md) |  | number | strength exp gained from charity |

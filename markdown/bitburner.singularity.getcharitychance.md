@@ -4,7 +4,7 @@
 
 ## Singularity.getCharityChance() method
 
-Get chance to successfully commit a charitable action.
+Get chance to successfully perform a charitable action.
 
 **Signature:**
 
@@ -22,11 +22,11 @@ getCharityChance(charity: CharityType | `${CharityType}`): number;
 
 number
 
-Chance of success at committing the specified charity.
+Chance of success at performing the specified charity.
 
 ## Remarks
 
 RAM cost: 5 GB \* 16/4/1
 
-This function returns your chance of success at committing the specified charitable action.
+This function returns your chance of success at performing the specified charitable action.
 

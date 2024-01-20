@@ -4,7 +4,7 @@
 
 ## CharityStats.karma property
 
-Amount of karma gained for successfully committing this charity
+Amount of karma gained for successfully performing this charity
 
 **Signature:**
 

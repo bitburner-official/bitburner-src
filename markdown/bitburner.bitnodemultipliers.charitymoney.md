@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CharityMoney property
 
-Influences the base money gained when the player commits a charity.
+Influences the base money gained when the player performs a charity.
 
 **Signature:**
 

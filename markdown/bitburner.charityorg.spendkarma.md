@@ -9,7 +9,7 @@ Spend Karma.
 **Signature:**
 
 ```typescript
-spendKarma(opt1: string, opt2: string, spendOn: number | string, opt3: string | number): boolean | string[];
+spendKarma(opt1: string, opt2: string, spendOn: number | string, opt3?: string | number): boolean | string[];
 ```
 
 ## Parameters
@@ -19,7 +19,7 @@ spendKarma(opt1: string, opt2: string, spendOn: number | string, opt3: string | 
 |  opt1 | string | Type of boost - 'boost charity', 'sleeves', 'time' |
 |  opt2 | string | Name of Secondary option - 'bank', 'overclock', etc |
 |  spendOn | number \| string | Amount of karma to spend, name of Augment or "list" to get a list back of available augments |
-|  opt3 | string \| number | Optional unless needed. Chosen sleeve. Can be 'all' for all sleeves |
+|  opt3 | string \| number | _(Optional)_ Optional unless needed. Chosen sleeve. Can be 'all' for all sleeves |
 
 **Returns:**
 

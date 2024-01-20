@@ -48,7 +48,7 @@ export function ItemsItemsSubpage(): React.ReactElement {
   const ticket =
     "A random lottery ticket voucher given to you by a client.  Redeem it at any time and then cash it in to see if it's a winner!  Note:  You can only have 4000 lottery tickets at any given time.";
   const qTicket =
-    "A Quantom Ticket!  These special tickets regenerate after each install and when you enter a new BitNode.  You will wake up with tickets in your pocket.  Redeem them at any time and then cash it in to see if it's a winner! NOTE: You may only have 4000 at any given time.";
+    "A Quantom Ticket!  These special tickets regenerate after each install and when you enter a new BitNode.  You will wake up with tickets in your pocket.  Redeem them at any time and then cash it in to see if it's a winner! NOTE: You may only have 4000 at any given time.  Simply click Covert and it will covert the correct number of Lucky Coins into a ticket if you are able to.";
 
   let quantomCost =
     Player.quantomTickets >= LotteryConstants.MaxTickets ? Number.POSITIVE_INFINITY : Player.quantomTickets * 2 + 1;
@@ -81,7 +81,7 @@ export function ItemsItemsSubpage(): React.ReactElement {
   const randomConvert = "Convert 1 Lucky to 5 Random Dice";
   const javaConvert = "Convert 1 Lucky to 5 Java Juice";
   const ticketConvert = "Convert 1 Lucky to 100 tickets";
-  const qTicketConvert = "Convert in Lucky Coin";
+  const qTicketConvert = "Convert 1 from " + quantomCost + " Lucky Coins";
 
   function onBoostChange(event: SelectChangeEvent): void {
     setBoost(event.target.value);
@@ -145,7 +145,7 @@ export function ItemsItemsSubpage(): React.ReactElement {
   }
 
   function purchaseConvert(): void {
-    if (spend <= 0 || spend > charityORG.luckyCoin) return;
+    if (spend < 0 || spend > charityORG.luckyCoin) return;
 
     switch (boost) {
       case "Lucky Coins":
@@ -182,7 +182,27 @@ export function ItemsItemsSubpage(): React.ReactElement {
         charityORG.addItemUseMessage("Converted " + spend + " lucky coins into " + spend * 100 + " ticket stubs");
         break;
       case "Quantom Tickets":
-        dialogBoxCreate("Cannot Convert.  Use Lucky Coins to buy instead.");
+        if (Player.sourceFileLvl(15) < 2 && Player.bitNodeN !== 15) {
+          dialogBoxCreate(
+            "You do not have access to buying quantom tickets!  Get SF 15.2 in order to unlock outside of BN 15.",
+          );
+          return;
+        }
+        if (charityORG.luckyCoin < quantomCost || Player.quantomTickets >= LotteryConstants.MaxTickets) {
+          dialogBoxCreate("Cannot Convert.  " + quantomCost + " coins are needed.");
+          return;
+        }
+        Player.quantomTickets++;
+        charityORG.luckyCoin -= quantomCost;
+        charityORG.addItemUseMessage("Purchased a Quantom Ticket!");
+        quantomCost =
+          Player.quantomTickets >= LotteryConstants.MaxTickets
+            ? Number.POSITIVE_INFINITY
+            : Player.quantomTickets * 2 + 1;
+        luckyBuy =
+          "Current cost: (" +
+          quantomCost +
+          ") -  Lucky Coins can purchase Quantom Tickets, but their cost goes up with each one purchased.";
         break;
       default:
         return;
@@ -196,6 +216,12 @@ export function ItemsItemsSubpage(): React.ReactElement {
 
     switch (boost) {
       case "Lucky Coins": {
+        if (Player.sourceFileLvl(15) < 2 && Player.bitNodeN !== 15) {
+          dialogBoxCreate(
+            "You do not have access to buying quantom tickets!  Get SF 15.2 in order to unlock outside of BN 15.",
+          );
+          return;
+        }
         if (spend > charityORG.luckyCoin || spend < quantomCost || Player.quantomTickets >= LotteryConstants.MaxTickets)
           return;
         Player.quantomTickets++;

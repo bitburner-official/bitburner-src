@@ -62,7 +62,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
     short_name: "Beg",
     isSpending: false,
     params: {
-      basePrestige: 0.1125,
+      basePrestige: 1.125,
       //baseVisibility: 0.00000021112,
       baseMoneyGain: 8000000,
       //baseKarmaGain: 0.0005,
@@ -82,7 +82,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
     isSpending: true,
     params: {
       baseMoneySpend: 4000000,
-      basePrestige: 1.7,
+      basePrestige: 17,
       baseVisibility: 0.000010556,
       baseKarmaGain: 0.0000000375,
       hackWeight: 20,
@@ -102,7 +102,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
     params: {
       baseMoneySpend: 4000000,
       baseVisibility: 0.000010556,
-      basePrestige: 0.1125,
+      basePrestige: 1.125,
       baseKarmaGain: 0.00000375,
       hackWeight: 20,
       strWeight: 15,
@@ -119,7 +119,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
     short_name: "Fundraise",
     isSpending: false,
     params: {
-      basePrestige: 0.5625,
+      basePrestige: 5.625,
       //baseVisibility: 0.000001,
       baseMoneyGain: 425000000,
       //baseKarmaGain: 0.0005,
@@ -138,7 +138,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
     short_name: "Door to Door",
     isSpending: false,
     params: {
-      basePrestige: 2.25,
+      basePrestige: 22.5,
       //baseVisibility: 0.00004,
       baseMoneyGain: 1800000000,
       //baseKarmaGain: 0.00053,
@@ -157,7 +157,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
     short_name: "Organize Telethon",
     isSpending: false,
     params: {
-      basePrestige: 4.5,
+      basePrestige: 45,
       //baseVisibility: 0.00008,
       baseMoneyGain: 4000000000,
       //baseKarmaGain: 0.00053,
