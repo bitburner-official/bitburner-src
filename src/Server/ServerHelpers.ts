@@ -96,11 +96,11 @@ export function numCycleForGrowthCorrected(
    * The idea of this method is to take the horizontal position at which the horizontal axis
    * intersects with of the tangent of the function's curve as the next approximation.
    * It is equivalent to treating the curve as a line (it is called a first order approximation)
-   * If the current approximation is t then the new approximated value is x - f(x)/f'(x)
+   * If the current approximation is x then the new approximated value is x - f(x)/f'(x)
    * (where f' is the derivative of f).
    *
    * In our case f(x) = log((o+x)/n) + k*x, f'(x) = d(log((o+x)/n) + k*x)/dx
-   * = 1/(o + x) + k
+   *                                              = 1/(o + x) + k
    * And the update step is x[new] = x - (log((o+x)/n) + k*x)/(1/(o+x) + k)
    * We can simplify this by bringing the first term up into the fraction:
    * = (x * (1/(o+x) + k) - log((o+x)/n) - k*x) / (1/(o+x) + k)
