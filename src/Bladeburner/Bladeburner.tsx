@@ -42,8 +42,12 @@ export interface BlackOpsAttempt {
   isAvailable?: boolean;
   action?: BlackOperation;
 }
-
-export const BladeburnerResolvers: ((msProcessed: number) => void)[] = [];
+type BladeburnerResolver = (msProcessed: number) => void;
+type BladeburnerPromise = {
+  promise: Promise<number> | null;
+  resolve: BladeburnerResolver | null;
+};
+export const BladeburnerPromise: BladeburnerPromise = { promise: null, resolve: null };
 
 export class Bladeburner {
   numHosp = 0;
@@ -2085,9 +2089,11 @@ export class Bladeburner {
         }
       }
 
-      // Handle "nextUpdate" resolvers after this update
-      for (const resolve of BladeburnerResolvers.splice(0)) {
-        resolve(seconds * 1000);
+      // Handle "nextUpdate" resolver after this update
+      if (BladeburnerPromise.resolve) {
+        BladeburnerPromise.resolve(seconds * 1000);
+        BladeburnerPromise.resolve = null;
+        BladeburnerPromise.promise = null;
       }
     }
   }

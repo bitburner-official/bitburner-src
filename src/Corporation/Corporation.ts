@@ -19,7 +19,12 @@ import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 
-export const CorporationResolvers: ((prevState: CorpStateName) => void)[] = [];
+type CorporationResolver = (prevState: CorpStateName) => void;
+type CorporationPromise = {
+  promise: Promise<CorpStateName> | null;
+  resolve: CorporationResolver | null;
+};
+export const CorporationPromise: CorporationPromise = { promise: null, resolve: null };
 
 interface ICorporationParams {
   name?: string;
@@ -175,9 +180,11 @@ export class Corporation {
 
       this.state.incrementState();
 
-      // Handle "nextUpdate" resolvers after this update
-      for (const resolve of CorporationResolvers.splice(0)) {
-        resolve(state);
+      // Handle "nextUpdate" resolver after this update
+      if (CorporationPromise.resolve) {
+        CorporationPromise.resolve(state);
+        CorporationPromise.resolve = null;
+        CorporationPromise.promise = null;
       }
     }
   }
