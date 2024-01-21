@@ -214,10 +214,10 @@ the following rules:
 - Do not check in any bundled files (`dist\*.bundle.js`) or the `index.html`
   in the root of the repository. These will be updated as part of official
   releases.
-- The title of your Pull Request will need to be formatted like 
+- The title of your Pull Request will need to be formatted like
   `MISC: Reticulated the splines`, where the first word must be capitalised
-  and relate to the kind of change being implemented.  Possible examples
-  are UI, BUGFIX, SERVERS, NETSCRIPT...  You get the idea.
+  and relate to the kind of change being implemented. Possible examples
+  are UI, BUGFIX, SERVERS, NETSCRIPT... You get the idea.
 
 ## As a Documenter
 
