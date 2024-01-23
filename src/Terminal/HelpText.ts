@@ -11,7 +11,7 @@ export const TerminalHelpText: string[] = [
   "    clear                            Clear all text on the terminal ",
   "    cls                              See 'clear' command ",
   "    connect [hostname]               Connects to a remote server",
-  "    cp [src] [dest]                   Copy a file",
+  "    cp [src] [dest]                  Copy a file",
   "    download [script/text file]      Downloads scripts or text files to your computer",
   "    expr [math expression]           Evaluate a mathematical expression",
   "    free                             Check the machine's memory (RAM) usage",
