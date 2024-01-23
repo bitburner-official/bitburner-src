@@ -312,7 +312,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     }
     if (!loadedModule || !loadedModule.autocomplete) return; // Doesn't have an autocomplete function.
 
-    const runArgs = { "--tail": Boolean, "-t": Number };
+    const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
     const flags = libarg(runArgs, {
       permissive: true,
       argv: command.slice(2),
