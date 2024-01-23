@@ -115,50 +115,29 @@ export function numCycleForGrowthCorrected(
    * closer approximations that are still smaller than the final value.
    *
    * Of great importance for reducing the number of iterations is starting with a good initial
-   * guess. Through a derivation involving Lambert W (I lied, it wasn't completely useless), we can
-   * find that the following is a good initial guess: x = log(n*k/(o*k + log(n*k)))/k. It's easier
-   * to show why this is a good guess than to go through the derivation:
-   * (o+x)*e^(k*x) = (o+log(stuff)/k) * e^(log(stuff)/k * k)
-   * = ((o*k + log(stuff)) / k) * stuff
-   * = ((o*k + log(n*k/(o*k + log(n*k)))) / k) * (n*k/(o*k + log(n*k)))
-   * = n * (o*k + log(n*k/(o*k + log(n*k)))) / (o*k + log(n*k))
-   *
-   * If o*k > log(stuff), the o*k term dominates and the ratio will strongly go towards 1.
-   * If o*k <= log(stuff), the denominator inside the inner log won't amount to much, and the ratio
-   * will still be close to 1. In all cases, the ratio is less than 1, meaning this guess
-   * undershoots the true value (and future guesses will too).
-   *
-   * To avoid calculating 2 logs, we replace the inner log(n*k) with the hardcoded constant 20,
-   * which is roughly log(n*k) for average values of n and k. This means the ratio can drift a bit
-   * farther, and possibly start out overshooting, but the gain of skipping a log (which is ~1
-   * Newton iteration) is worth it.
-   *
-   * There is one case where this initial guess fails catastrophically: If n*k < 1, then log(n*k) < 0
-   * and (assuming o=0) we will get NaN in the next step when we try to take a log with negative
-   * threads. To cover this case, we use an alternate starting condition: x_0 = n - o. We *know*
-   * this will always overshot the target, usually by a vast amount. But we can run it manually
-   * through one Newton iteration to get a better start with nice properties:
+   * guess. We use a very simple starting condition: x_0 = n - o. We *know* this will always overshot
+   * the target, usually by a vast amount. But we can run it manually through one Newton iteration
+   * to get a better start with nice properties:
    * x_1 = ((n - o) - (n - o + o)*log((n-o+o)/n)) / (1 + (n-o+o)*k)
    *     = ((n - o) - n * log(n/n)) / (1 + n*k)
    *     = ((n - o) - n * 0) / (1 + n*k)
    *     = (n - o) / (1 + n*k)
-   * This is usually a pretty big underestimate, but it is quite accurate when n*k < 1. So we use
-   * the larger of the two guesses.
+   * This is an underestimate, sometimes by a large factor, but it is quite accurate when n*k < 1.
+   * There are other, better initial guesses we could try to make, but it turns out they are more
+   * expensive to calculate than just doing an extra Newton iteration sometimes.
    *
-   * The accuracy of the initial guess is *very* good for almost all inputs - usually one iteration
-   * is sufficient. This means the overall cost is three logs (counting the one in calculateServerGrowthLog),
-   * possibly one exp, 7 divisions, and a handful of basic arithmetic.
+   * The accuracy of the initial guess is good for many inputs - often one iteration
+   * is sufficient. This means the overall cost is two logs (counting the one in calculateServerGrowthLog),
+   * possibly one exp, 5 divisions, and a handful of basic arithmetic.
    */
-  const ok = startMoney * k;
   const nk = targetMoney * k;
-  const guess1 = Math.log(nk / (ok + 20)) / k;
-  const guess2 = (targetMoney - startMoney) / (1 + nk);
-  let x = Math.max(guess1, guess2);
+  const guess = (targetMoney - startMoney) / (1 + nk);
+  let x = guess;
   let diff;
   do {
     const ox = startMoney + x;
     // Have to use division instead of multiplication by inverse, because
-    // inverting MIN_VALUE gives Infinity
+    // if targetMoney is MIN_VALUE then inverting gives Infinity
     const newx = (x - ox * Math.log(ox / targetMoney)) / (1 + ox * k);
     diff = newx - x;
     x = newx;
