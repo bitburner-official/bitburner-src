@@ -122,16 +122,19 @@ export function numCycleForGrowthCorrected(
    *     = ((n - o) - n * log(n/n)) / (1 + n*k)
    *     = ((n - o) - n * 0) / (1 + n*k)
    *     = (n - o) / (1 + n*k)
-   * This is an underestimate, sometimes by a large factor, but it is quite accurate when n*k < 1.
-   * There are other, better initial guesses we could try to make, but it turns out they are more
-   * expensive to calculate than just doing an extra Newton iteration sometimes.
+   * We can do the same procedure with the exponential form of Newton's method, starting from x_0 = 0.
+   * This gives x_1 = (n - o) / (1 + o*k), (full derivation omitted) which will be an overestimate.
+   * Averaging the denominators gives the final guess:
+   *   x = (n - o) / (1 + (n + o)*k/2)
+   * This guess is highly accurate under a wide variety of conditions, making it likely that the
+   * we start within 1 thread of correct.
    *
    * The accuracy of the initial guess is good for many inputs - often one iteration
    * is sufficient. This means the overall cost is two logs (counting the one in calculateServerGrowthLog),
    * possibly one exp, 5 divisions, and a handful of basic arithmetic.
    */
-  const nk = targetMoney * k;
-  const guess = (targetMoney - startMoney) / (1 + nk);
+  const half_k = 0.5 * k;
+  const guess = (targetMoney - startMoney) / (1 + half_k * (targetMoney + startMoney));
   let x = guess;
   let diff;
   do {
@@ -141,11 +144,11 @@ export function numCycleForGrowthCorrected(
     const newx = (x - ox * Math.log(ox / targetMoney)) / (1 + ox * k);
     diff = newx - x;
     x = newx;
-  } while (diff < 0 || diff > 1);
-  /* To avoid annoying edge cases, we completely ignore any first loops where we are undershooting.
-   * Once we are in the normal mode, if we see a diff of 1 or less we know all future diffs will be
-   * smaller. Except for edge cases involving precision/rounding issues, we know the true value
-   * will be larger than our current guess.
+  } while (diff < -1 || diff > 1);
+  /* If we see a diff of 1 or less we know all future diffs will be smaller, and the rate of
+   * convergence means the *sum* of the diffs will be less than 1.
+
+   * In most cases, our result here will be ceil(x).
    */
   const ccycle = Math.ceil(x);
   if (ccycle - x > 0.999999) {
@@ -158,8 +161,8 @@ export function numCycleForGrowthCorrected(
       return fcycle;
     }
   }
-  if (ccycle >= diff + x + 0.000001) {
-    // Fast-path: We know the true value is somewhere in the range [x, x + diff] but the next
+  if (ccycle >= x + ((diff <= 0 ? -diff : diff) + 0.000001)) {
+    // Fast-path: We know the true value is somewhere in the range [x, x + |diff|] but the next
     // greatest integer is past this. Since we have to round up grows anyway, we can return this
     // with no more calculation. We need some slop due to rounding errors - we can't fast-path
     // a value that is too small.

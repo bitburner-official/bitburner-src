@@ -34,7 +34,7 @@ describe("numCycleForGrowthCorrected reverses calculateServerGrowth", () => {
   // This is an arbitrary transcedental constant.
   const multiplier = Math.exp(1.4);
   const server = new Server({ hostname: "foo", hackDifficulty: 10 * multiplier, serverGrowth: 100 });
-  server.moneyMax = 1e50; // Not available as a constructor param
+  server.moneyMax = 1e308; // Not available as a constructor param
   const player = new PlayerObject();
   const tests = [];
   while (server.moneyAvailable < 5e49) {
@@ -55,6 +55,22 @@ describe("numCycleForGrowthCorrected reverses calculateServerGrowth", () => {
         );
         expect(value).toBe(threads + 1);
       }
+    }
+  });
+  const tests2 = [];
+  for (let t = 0; t <= 900000; t += 2000) {
+    tests2.push([t, t * calculateServerGrowth(server, t, player)]);
+  }
+  test.each(tests2)("threads: %f newMoney: %f", (threads: number, newMoney: number) => {
+    const eps = newMoney ? 2 ** (Math.floor(Math.log2(newMoney)) - 52) : Number.MIN_VALUE;
+    expect(numCycleForGrowthCorrected(server, newMoney, 0, 1, player)).toBe(threads);
+    const value = numCycleForGrowthCorrected(server, newMoney + eps, 0, 1, player);
+    // Write our own check because Jest is a goblin that can't provide context
+    if (value !== threads + 1) {
+      console.log(
+        `newMoney: ${newMoney} eps: ${eps} newMoney+eps: ${newMoney + eps} value: ${value} threads: ${threads}`,
+      );
+      expect(value).toBe(threads + 1);
     }
   });
 });
