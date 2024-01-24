@@ -78,8 +78,8 @@ export class WorkerScript {
   /** hostname on which this script is running */
   hostname: string;
 
-  /** Function called when the script ends. */
-  atExit: (() => void) | undefined = undefined;
+  /**Array of functions called when the script ends. */
+  atExit: (() => void)[] = [];
 
   constructor(runningScriptObj: RunningScript, pid: number, nsFuncsGenerator?: (ws: WorkerScript) => NSFull) {
     this.name = runningScriptObj.filename;

@@ -43,10 +43,8 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   ws.delayReject?.(new ScriptDeath(ws));
   ws.env.runningFn = "";
 
-  if (typeof ws.atExit === "function") {
+  ws.atExit.forEach((atExit) => {
     try {
-      const atExit = ws.atExit;
-      ws.atExit = undefined;
       atExit();
     } catch (e: unknown) {
       handleUnknownError(e, ws, "Error running atExit function.\n\n");
@@ -55,7 +53,12 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
       // If atExit() kills the script, we'll already be stopped, don't stop again.
       return;
     }
-  }
+  });
+
+  //ws.atExit was previously set to undefined after being called
+  //so empty to queue to stay consistent
+  ws.atExit = [];
+
   ws.env.stopFlag = true;
   removeWorkerScript(ws);
 }

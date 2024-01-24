@@ -1712,9 +1712,9 @@ export const ns: InternalAPI<NSFull> = {
     if (typeof f !== "function") {
       throw helpers.errorMessage(ctx, "argument should be function");
     }
-    ctx.workerScript.atExit = () => {
+    ctx.workerScript.atExit.push(() => {
       f();
-    }; // Wrap the user function to prevent WorkerScript leaking as 'this'
+    }); // Wrap the user function to prevent WorkerScript leaking as 'this'
   },
   mv: (ctx) => (_host, _source, _destination) => {
     const hostname = helpers.string(ctx, "host", _host);
