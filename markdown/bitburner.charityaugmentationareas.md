@@ -43,6 +43,6 @@ type CharityAugmentationAreas =
   | "bladeburner_analysis"
   | "bladeburner_success_chance"
   | "lucky"
-  | "augmentation_money_cost"
-  | "augmentaion_rep_cost";
+  | "augmentation_money"
+  | "augmentaion_rep";
 ```

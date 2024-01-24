@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { useRerender } from "../../ui/React/hooks";
 import Typography from "@mui/material/Typography";
-import { MenuItem } from "@mui/material";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { ListItemButton } from "@mui/material";
 import Box from "@mui/material/Box";
 import { Player } from "@player";
 import { BannerCard } from "./BannerCard";
@@ -17,17 +15,8 @@ export function ItemsBannerSubpage(): React.ReactElement {
     return Player.charityORG;
   })();
   const f = (x: number) => formatPercent(x, x - 1 < 0.1 ? 2 : 1);
-  const rerender = useRerender();
   const [currentBanner, setCurrentBanner] = useState("");
-  const onCurrentChange = (event: SelectChangeEvent): void => {
-    setCurrentBanner(event.target.value);
-    rerender();
-  };
   const [pendingBanner, setPendingBanner] = useState("");
-  const onPendingChange = (event: SelectChangeEvent): void => {
-    setPendingBanner(event.target.value);
-    rerender();
-  };
 
   if (currentBanner !== "" && !charityORG.bannerPieces.find((f) => f.name === currentBanner)) setCurrentBanner("");
   if (pendingBanner !== "" && !charityORG.bannerPiecesStore.find((f) => f.name === pendingBanner)) setPendingBanner("");
@@ -90,7 +79,7 @@ export function ItemsBannerSubpage(): React.ReactElement {
         <Typography>
           The Charity Banner has been helping charities around the world to do their work. Created from the combined
           donations of bits and pieces of augmentations, they have turned these left over pieces into something truely
-          amazing.<br></br>
+          amazing. Scroll up/down if the list is full.<br></br>
           <br></br>
         </Typography>
       </Box>
@@ -101,20 +90,18 @@ export function ItemsBannerSubpage(): React.ReactElement {
             ):
           </Typography>
           <Box sx={{ height: 240, width: "99%", overflow: "scroll", border: "1px solid", borderBlockColor: "yellow" }}>
-            {charityORG.bannerPieces.map((n, i) => (
-              <Typography key={i}>{n.short_name}</Typography>
+            {charityORG.bannerPieces.map((k, i) => (
+              <ListItemButton
+                sx={{ height: 0, marginTop: 0.9, marginBottom: 0.9 }}
+                key={i + 1}
+                onClick={() => setCurrentBanner(k.name)}
+                selected={currentBanner === k.name}
+              >
+                <Typography>{k.short_name}</Typography>
+              </ListItemButton>
             ))}
           </Box>
           <br></br>
-          <Select onChange={onCurrentChange} value={currentBanner} sx={{ width: "99%", mb: 1 }}>
-            {charityORG.bannerPieces.map((k, i) => (
-              <MenuItem key={i + 1} value={k.name}>
-                <Typography variant="h6" height="min-content">
-                  {k.short_name}
-                </Typography>
-              </MenuItem>
-            ))}
-          </Select>
           <Button title="Permanently removes the banner piece" onClick={() => destroyPiece()}>
             Destroy Piece
           </Button>{" "}
@@ -131,20 +118,21 @@ export function ItemsBannerSubpage(): React.ReactElement {
             Stored Pieces ({charityORG.bannerPiecesStore.length}/{CharityORGConstants.CharityMaxBannerPieces}):
           </Typography>
           <Box sx={{ height: 240, width: "99%", overflow: "scroll", border: "1px solid", borderBlockColor: "yellow" }}>
-            {charityORG.bannerPiecesStore.map((n, i) => (
-              <Typography key={i}>{n.short_name}</Typography>
+            {charityORG.bannerPiecesStore.map((k, i) => (
+              <ListItemButton
+                sx={{ height: 0, marginTop: 0.9, marginBottom: 0.9 }}
+                key={i + 1}
+                onClick={() => setPendingBanner(k.name)}
+                selected={pendingBanner === k.name}
+              >
+                <Typography>
+                  {i + 1 + "-"}
+                  {k.short_name}
+                </Typography>
+              </ListItemButton>
             ))}
           </Box>
           <br></br>
-          <Select onChange={onPendingChange} value={pendingBanner} sx={{ width: "99%", mb: 1 }}>
-            {charityORG.bannerPiecesStore.map((k, i) => (
-              <MenuItem key={i + 1} value={k.name}>
-                <Typography variant="h6" height="min-content">
-                  {k.short_name}
-                </Typography>
-              </MenuItem>
-            ))}
-          </Select>
           <Button title="Activates the banner piece and moves it into the Current bin." onClick={() => activatePiece()}>
             Activate Piece
           </Button>{" "}
@@ -174,11 +162,3 @@ export function ItemsBannerSubpage(): React.ReactElement {
     </span>
   );
 }
-//    </Context.CharityORG.Provider>
-// {value === 0 && <EventStatusSubpage />}
-
-//<Box sx={{ height: 220, overflow: "scroll", border: "1px solid", borderBlockColor: "yellow" }}>
-//  {forEach(charityORG.messages).map((n) => (
-//    <Typography>{n.message}</Typography>
-//  ))}
-//</Box>

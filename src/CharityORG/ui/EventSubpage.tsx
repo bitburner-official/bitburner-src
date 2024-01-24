@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { useRerender } from "../../ui/React/hooks";
 import Typography from "@mui/material/Typography";
 import { EventCard } from "./EventCard";
-import { MenuItem } from "@mui/material";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { ListItemButton } from "@mui/material";
 import Box from "@mui/material/Box";
 import { Player } from "@player";
 import Button from "@mui/material/Button";
@@ -15,22 +13,9 @@ export function EventSubpage(): React.ReactElement {
     if (Player.charityORG === null) throw new Error("Charity should not be null");
     return Player.charityORG;
   })();
-  const rerender = useRerender();
   const [currentCategory, setCurrentCategory] = useState("");
-  const onCurrentChange = (event: SelectChangeEvent): void => {
-    setCurrentCategory(event.target.value);
-    rerender();
-  };
   const [pendingCategory, setPendingCategory] = useState("");
-  const onPendingChange = (event: SelectChangeEvent): void => {
-    setPendingCategory(event.target.value);
-    rerender();
-  };
   const [attackCategory, setAttackCategory] = useState("");
-  const onAttackChange = (event: SelectChangeEvent): void => {
-    setAttackCategory(event.target.value);
-    rerender();
-  };
 
   if (currentCategory !== "" && !charityORG.currentEvents.find((f) => f.name === currentCategory))
     setCurrentCategory("");
@@ -112,7 +97,7 @@ export function EventSubpage(): React.ReactElement {
       <Box display="flex">
         <Typography>
           Charities help those in need. Here you can see those requests. Alongside of them, you can also see any attacks
-          that are being made against you.<br></br>
+          that are being made against you. Scroll up/down if the list is full.<br></br>
           <br></br>
         </Typography>
       </Box>
@@ -123,43 +108,21 @@ export function EventSubpage(): React.ReactElement {
           <Box sx={{ height: 220, overflow: "scroll", border: "1px solid", borderBlockColor: "yellow" }}>
             {charityORG.currentEvents
               .filter((n) => n.isBeneficial === true)
-              .map((n, i) => (
-                <Typography key={i}>{n.short_name}</Typography>
+              .map((k, i) => (
+                <ListItemButton
+                  sx={{ height: 0, marginTop: 0.9, marginBottom: 0.9 }}
+                  key={i + 1}
+                  onClick={() => setCurrentCategory(k.name)}
+                  selected={currentCategory === k.name}
+                >
+                  <Typography>
+                    {i + 1 + "-"}
+                    {k.short_name.substring(0, 50)}
+                  </Typography>
+                </ListItemButton>
               ))}
           </Box>
           <br></br>
-        </span>
-        <span>
-          <Typography>Pending Actions:</Typography>
-          <Typography>{charityORG.waitingEvents.length}</Typography>
-          <Box sx={{ height: 220, overflow: "scroll", border: "1px solid", borderBlockColor: "yellow" }}>
-            {charityORG.waitingEvents.map((n, i) => (
-              <Typography key={i}>{n.short_name}</Typography>
-            ))}
-          </Box>
-          <br></br>
-        </span>
-        <span>
-          <Typography>Attacks!</Typography>
-          <Typography>{charityORG.currentEvents.filter((e) => e.isBeneficial === false).length}</Typography>
-          <Box sx={{ height: 220, overflow: "scroll", border: "1px solid", borderBlockColor: "yellow" }}>
-            {charityORG.currentEvents
-              .filter((n) => n.isBeneficial === false)
-              .map((n, i) => (
-                <Typography key={i}>{n.short_name}</Typography>
-              ))}
-          </Box>
-          <br></br>
-        </span>
-
-        <span>
-          <Select onChange={onCurrentChange} value={currentCategory} sx={{ width: "99%", mb: 1 }}>
-            {Object.entries(charityORG.currentEvents.filter((f) => f.isBeneficial)).map((k, i) => (
-              <MenuItem key={i + 1} value={k[1].name}>
-                <Typography variant="h6">{k[1].short_name}</Typography>
-              </MenuItem>
-            ))}
-          </Select>
           <Button title="Triggers death effects" onClick={() => abandonEvent()}>
             Abandon Event
           </Button>{" "}
@@ -171,15 +134,25 @@ export function EventSubpage(): React.ReactElement {
             false,
           )}
         </span>
-
         <span>
-          <Select onChange={onPendingChange} value={pendingCategory} sx={{ width: "99%", mb: 1 }}>
-            {Object.entries(charityORG.waitingEvents).map((k, i) => (
-              <MenuItem key={i + 1} value={k[1].name}>
-                <Typography variant="h6">{k[1].short_name}</Typography>
-              </MenuItem>
+          <Typography>Pending Actions:</Typography>
+          <Typography>{charityORG.waitingEvents.length}</Typography>
+          <Box sx={{ height: 220, overflow: "scroll", border: "1px solid", borderBlockColor: "yellow" }}>
+            {charityORG.waitingEvents.map((k, i) => (
+              <ListItemButton
+                sx={{ height: 0, marginTop: 0.9, marginBottom: 0.9 }}
+                key={i + 1}
+                onClick={() => setPendingCategory(k.name)}
+                selected={pendingCategory === k.name}
+              >
+                <Typography>
+                  {i + 1 + "-"}
+                  {k.short_name.substring(0, 50)}
+                </Typography>
+              </ListItemButton>
             ))}
-          </Select>
+          </Box>
+          <br></br>
           <Button onClick={() => acceptEvent()}>Accept Event</Button>{" "}
           <Button title="Must not have any active events" onClick={() => luckyReset()}>
             Lucky Reset
@@ -189,15 +162,27 @@ export function EventSubpage(): React.ReactElement {
             true,
           )}
         </span>
-
         <span>
-          <Select onChange={onAttackChange} value={attackCategory} sx={{ width: "99%", mb: 1 }}>
-            {Object.entries(charityORG.currentEvents.filter((f) => !f.isBeneficial)).map((k, i) => (
-              <MenuItem key={i + 1} value={k[1].name}>
-                <Typography variant="h6">{k[1].short_name}</Typography>
-              </MenuItem>
-            ))}
-          </Select>
+          <Typography>Attacks!</Typography>
+          <Typography>{charityORG.currentEvents.filter((e) => e.isBeneficial === false).length}</Typography>
+          <Box sx={{ height: 220, overflow: "scroll", border: "1px solid", borderBlockColor: "yellow" }}>
+            {charityORG.currentEvents
+              .filter((n) => n.isBeneficial === false)
+              .map((k, i) => (
+                <ListItemButton
+                  sx={{ height: 0, marginTop: 0.9, marginBottom: 0.9 }}
+                  key={i + 1}
+                  onClick={() => setAttackCategory(k.name)}
+                  selected={attackCategory === k.name}
+                >
+                  <Typography>
+                    {i + 1 + "-"}
+                    {k.short_name.substring(0, 50)}
+                  </Typography>
+                </ListItemButton>
+              ))}
+          </Box>
+          <br></br>
           <Button title="Costs 1 lucky coin" onClick={() => luckyCancelAttack()}>
             Lucky Cancel
           </Button>
@@ -218,3 +203,10 @@ export function EventSubpage(): React.ReactElement {
 //    <Typography>{n.message}</Typography>
 //  ))}
 //</Box>
+/*
+              {charityORG.currentEvents
+              .filter((n) => n.isBeneficial === true)
+              .map((n, i) => (
+                <Typography key={i}>{n.short_name}</Typography>
+              ))}
+              */

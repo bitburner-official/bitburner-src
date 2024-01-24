@@ -660,10 +660,10 @@ export class CharityORG {
           case AugmentationAreas.bladeburner_success_chance:
             this.charityAugment.bladeburner_success_chance += effect.strength;
             break;
-          case AugmentationAreas.augmentation_money_cost:
+          case AugmentationAreas.augmentation_money:
             this.charityAugment.augmentation_money += Math.max(effect.strength, -0.9999);
             break;
-          case AugmentationAreas.augmentation_rep_cost:
+          case AugmentationAreas.augmentation_rep:
             this.charityAugment.augmentation_rep += Math.max(effect.strength, -0.9999);
             break;
         }

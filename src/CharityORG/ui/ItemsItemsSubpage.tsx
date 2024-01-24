@@ -11,6 +11,8 @@ import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { LotteryConstants } from "../../../src/Lottery/data/LotteryConstants";
 import { buyRandomTicket } from "../../../src/Lottery/Lotto";
 
+const f = (x: number) => formatNumber(x, x >= 1000 ? 3 : 0);
+
 /** React Component for the popup that manages Karma spending */
 export function ItemsItemsSubpage(): React.ReactElement {
   const charityORG = (function () {
@@ -54,7 +56,7 @@ export function ItemsItemsSubpage(): React.ReactElement {
     Player.quantomTickets >= LotteryConstants.MaxTickets ? Number.POSITIVE_INFINITY : Player.quantomTickets * 2 + 1;
   let luckyBuy =
     "Current cost: (" +
-    quantomCost +
+    f(quantomCost) +
     ") -  Lucky Coins can purchase Quantom Tickets, but their cost goes up with each one purchased.";
   const ascensionBuy =
     "Ascension Tokens are used in the Management page directly.  You can convert a Lucky Token to 5 Ascension Tokens.";
@@ -81,7 +83,7 @@ export function ItemsItemsSubpage(): React.ReactElement {
   const randomConvert = "Convert 1 Lucky to 5 Random Dice";
   const javaConvert = "Convert 1 Lucky to 5 Java Juice";
   const ticketConvert = "Convert 1 Lucky to 100 tickets";
-  const qTicketConvert = "Convert 1 from " + quantomCost + " Lucky Coins";
+  const qTicketConvert = "Convert 1 from " + f(quantomCost) + " Lucky Coins";
 
   function onBoostChange(event: SelectChangeEvent): void {
     setBoost(event.target.value);
@@ -323,13 +325,13 @@ export function ItemsItemsSubpage(): React.ReactElement {
           <span>&nbsp&nbsp</span>
           <div>
             <Typography variant="h6">Items:</Typography>
-            <Typography variant="body1">Lucky Coins: {formatNumber(charityORG.luckyCoin, 2)}</Typography>
-            <Typography variant="body1">Ascension Tokens: {formatNumber(charityORG.ascensionToken, 2)}</Typography>
-            <Typography variant="body1">Decoy Juice: {formatNumber(charityORG.decoyJuice, 2)}</Typography>
-            <Typography variant="body1">Random Dice: {formatNumber(charityORG.randomDice, 2)}</Typography>
-            <Typography variant="body1">Java Juice: {formatNumber(charityORG.javaJuice, 2)}</Typography>
-            <Typography variant="body1">Ticket Stub: {formatNumber(charityORG.ticketStub, 2)}</Typography>
-            <Typography variant="body1">Quantom Tickets: {formatNumber(Player.quantomTickets, 2)}</Typography>
+            <Typography variant="body1">Lucky Coins: {f(charityORG.luckyCoin)}</Typography>
+            <Typography variant="body1">Ascension Tokens: {f(charityORG.ascensionToken)}</Typography>
+            <Typography variant="body1">Decoy Juice: {f(charityORG.decoyJuice)}</Typography>
+            <Typography variant="body1">Random Dice: {f(charityORG.randomDice)}</Typography>
+            <Typography variant="body1">Java Juice: {f(charityORG.javaJuice)}</Typography>
+            <Typography variant="body1">Ticket Stub: {f(charityORG.ticketStub)}</Typography>
+            <Typography variant="body1">Quantom Tickets: {f(Player.quantomTickets)}</Typography>
           </div>
         </Box>
       </span>

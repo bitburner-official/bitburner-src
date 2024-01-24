@@ -60,8 +60,8 @@ export enum AugmentationAreas {
   bladeburner_analysis = "bladeburner_analysis",
   bladeburner_success_chance = "bladeburner_success_chance",
   lucky = "lucky",
-  augmentation_money_cost = "augmentation_money_cost",
-  augmentation_rep_cost = "augmentaion_rep_cost",
+  augmentation_money = "augmentation_money",
+  augmentation_rep = "augmentaion_rep",
 }
 
 class BannerFragment {
@@ -384,8 +384,9 @@ export class CharityEvent {
     //Process prize winnings and add messages for them
     if (this.rarity <= 10 || this.prizeLevel <= 10) return;
 
-    const modBase =
+    const base =
       (Math.log10(this.rarity) / 4) * (Math.log10(this.prizeLevel) / 5) * currentNodeMults.CharityORGEventStrength;
+    const modBase = base * 1.25;
     const spins = this.rarity > 9900 ? 5 : this.rarity > 9700 ? 4 : this.rarity > 9500 ? 3 : this.rarity > 9000 ? 2 : 1;
 
     for (let spin = 0; spin < spins; spin++) {
@@ -1024,38 +1025,38 @@ export class CharityEvent {
     str /= 100;
     switch (eff) {
       case AugmentationAreas.lucky:
-        return str * 7500 * fuzzy;
+        return str * 6000 * fuzzy;
       case AugmentationAreas.hacking:
       case AugmentationAreas.strength:
       case AugmentationAreas.defense:
       case AugmentationAreas.dexterity:
       case AugmentationAreas.agility:
       case AugmentationAreas.charisma:
-        return str * 1.5 * fuzzy;
+        return str * 3 * fuzzy;
       case AugmentationAreas.hacking_exp:
       case AugmentationAreas.strength_exp:
       case AugmentationAreas.defense_exp:
       case AugmentationAreas.dexterity_exp:
       case AugmentationAreas.agility_exp:
       case AugmentationAreas.charisma_exp:
-        return str * 10 * fuzzy;
+        return str * 30 * fuzzy;
       case AugmentationAreas.hacking_chance:
       case AugmentationAreas.hacking_speed:
       case AugmentationAreas.hacking_money:
       case AugmentationAreas.hacking_grow:
-        return str * fuzzy;
+        return str * 2 * fuzzy;
       case AugmentationAreas.company_rep:
       case AugmentationAreas.faction_rep:
-        return str * 10 * fuzzy;
+        return str * 25 * fuzzy;
       case AugmentationAreas.crime_money:
       case AugmentationAreas.work_money:
       case AugmentationAreas.charity_money:
-        return str * 15 * fuzzy;
+        return str * 30 * fuzzy;
       case AugmentationAreas.crime_success:
       case AugmentationAreas.charity_success:
-        return str * 5 * fuzzy;
-      case AugmentationAreas.hacknet_node_money:
         return str * 10 * fuzzy;
+      case AugmentationAreas.hacknet_node_money:
+        return str * 30 * fuzzy;
       case AugmentationAreas.hacknet_node_purchase_cost:
       case AugmentationAreas.hacknet_node_ram_cost:
       case AugmentationAreas.hacknet_node_core_cost:
@@ -1064,12 +1065,12 @@ export class CharityEvent {
       case AugmentationAreas.bladeburner_max_stamina:
       case AugmentationAreas.bladeburner_stamina_gain:
       case AugmentationAreas.bladeburner_analysis:
-        return str * 10 * fuzzy;
+        return str * 15 * fuzzy;
       case AugmentationAreas.bladeburner_success_chance:
-        return str * fuzzy;
-      case AugmentationAreas.augmentation_money_cost:
-      case AugmentationAreas.augmentation_rep_cost:
-        return (str / 5) * -1 * fuzzy;
+        return str * 1.5 * fuzzy;
+      case AugmentationAreas.augmentation_money:
+      case AugmentationAreas.augmentation_rep:
+        return str * -1.5 * fuzzy;
       default:
         return str * fuzzy;
     }
