@@ -7246,7 +7246,7 @@ export interface NS {
    *
    * Add callback to be executed when the script dies.
    */
-  atExit(f: () => void): void;
+  atExit(f: () => void, id?: string): void;
 
   /**
    * Move a file on the target server.

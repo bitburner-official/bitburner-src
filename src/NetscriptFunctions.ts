@@ -1708,14 +1708,21 @@ export const ns: InternalAPI<NSFull> = {
     sinceInstall: Object.assign({}, Player.moneySourceA),
     sinceStart: Object.assign({}, Player.moneySourceB),
   }),
-  atExit: (ctx) => (f) => {
-    if (typeof f !== "function") {
-      throw helpers.errorMessage(ctx, "argument should be function");
-    }
-    ctx.workerScript.atExit.push(() => {
-      f();
-    }); // Wrap the user function to prevent WorkerScript leaking as 'this'
-  },
+  atExit:
+    (ctx) =>
+    (f, id = "default") => {
+      if (typeof f !== "function") {
+        throw helpers.errorMessage(ctx, "argument should be function");
+      }
+
+      if (typeof id !== "string") {
+        throw helpers.errorMessage(ctx, "id should be a string");
+      }
+
+      ctx.workerScript.atExit[id] = () => {
+        f();
+      }; // Wrap the user function to prevent WorkerScript leaking as 'this'
+    },
   mv: (ctx) => (_host, _source, _destination) => {
     const hostname = helpers.string(ctx, "host", _host);
     const server = helpers.getServer(ctx, hostname);
