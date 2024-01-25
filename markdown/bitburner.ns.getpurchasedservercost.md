@@ -9,7 +9,7 @@ Get cost of purchasing a server.
 **Signature:**
 
 ```typescript
-getPurchasedServerCost(ram: number): number;
+getPurchasedServerCost(ram: number, cores?: number): number;
 ```
 
 ## Parameters
@@ -17,6 +17,7 @@ getPurchasedServerCost(ram: number): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  ram | number | Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20). |
+|  cores | number | _(Optional)_ Amount of Cores of the purchased server. Must be a positive Integer. Maximum value of 6. Defaults to 1 |
 
 **Returns:**
 

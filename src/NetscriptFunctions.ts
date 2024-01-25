@@ -1151,8 +1151,8 @@ export const ns: InternalAPI<NSFull> = {
   getPurchasedServerCost:
     (ctx) =>
     (_ram, _cores = 1) => {
-      const ram = helpers.number(ctx, "ram", _ram);
-      const cores = helpers.number(ctx, "cores", _cores);
+      const ram = helpers.positiveInteger(ctx, "ram", _ram);
+      const cores = helpers.positiveInteger(ctx, "cores", _cores);
       try {
         const cost = getPurchaseServerCost(ram, cores);
         return cost;

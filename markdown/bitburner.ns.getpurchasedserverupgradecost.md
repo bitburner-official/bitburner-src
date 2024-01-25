@@ -9,7 +9,7 @@ Get cost of upgrading a purchased server to the given ram.
 **Signature:**
 
 ```typescript
-getPurchasedServerUpgradeCost(hostname: string, ram: number): number;
+getPurchasedServerUpgradeCost(hostname: string, ram: number, cores?: number): number;
 ```
 
 ## Parameters
@@ -18,6 +18,7 @@ getPurchasedServerUpgradeCost(hostname: string, ram: number): number;
 |  --- | --- | --- |
 |  hostname | string | Hostname of the server to upgrade. |
 |  ram | number | Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20). |
+|  cores | number | _(Optional)_ Amount of Cores of the purchased server. Must be a positive Integer. Maximum value of 6. Defaults to the current amount of cores |
 
 **Returns:**
 
