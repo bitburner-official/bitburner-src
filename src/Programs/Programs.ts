@@ -295,7 +295,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
         } else {
           Terminal.print(`[ ] Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
         }
-        if (Player.money > 1e11) {
+        if (Player.money >= 1e11) {
           Terminal.print(`[x] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`);
         } else {
           Terminal.print(`[ ] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`);
