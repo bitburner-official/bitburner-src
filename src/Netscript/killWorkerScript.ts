@@ -56,8 +56,8 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   }
 
   //ws.atExit was previously set to undefined after being called
-  //so empty to queue to stay consistent
-  ws.atExit = [];
+  //so empty the map to stay consistent
+  ws.atExit = {};
 
   ws.env.stopFlag = true;
   removeWorkerScript(ws);
