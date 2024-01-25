@@ -288,7 +288,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (): void => {
       const numAugReq = currentNodeMults.DaedalusAugsRequirement;
       const fulfilled =
-        Player.augmentations.length >= numAugReq && Player.money > 1e11 && Player.skills.hacking >= 2500;
+        Player.augmentations.length >= numAugReq && Player.money >= 1e11 && Player.skills.hacking >= 2500;
       if (!fulfilled) {
         if (Player.augmentations.length >= numAugReq) {
           Terminal.print(`[x] Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
