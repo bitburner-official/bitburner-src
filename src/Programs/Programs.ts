@@ -296,9 +296,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
           Terminal.print(`[ ] Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
         }
         if (Player.money > 1e11) {
-          Terminal.print(`[x] Money: ${formatMoney(Player.money)} / $100b`);
+          Terminal.print(`[x] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`);
         } else {
-          Terminal.print(`[ ] Money: ${formatMoney(Player.money)} / $100b`);
+          Terminal.print(`[ ] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`);
         }
         if (Player.skills.hacking >= 2500) {
           Terminal.print(`[x] Hacking skill: ${Player.skills.hacking} / 2500`);
