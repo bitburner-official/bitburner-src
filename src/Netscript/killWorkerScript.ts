@@ -45,7 +45,9 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
 
   for (const key in ws.atExit) {
     try {
-      ws.atExit[key]();
+      const atExit = ws.atExit[key];
+      delete ws.atExit[key];
+      atExit();
     } catch (e: unknown) {
       handleUnknownError(e, ws, "Error running atExit function.\n\n");
     }
@@ -54,10 +56,6 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
       return;
     }
   }
-
-  //ws.atExit was previously set to undefined after being called
-  //so empty the map to stay consistent
-  ws.atExit = {};
 
   ws.env.stopFlag = true;
   removeWorkerScript(ws);
