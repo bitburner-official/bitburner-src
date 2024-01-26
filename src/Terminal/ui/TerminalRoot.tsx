@@ -21,6 +21,17 @@ import { TerminalActionTimer } from "./TerminalActionTimer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      height: "calc(100vh - 16px)",
+    },
+    entries: {
+      padding: 0,
+      overflow: "scroll",
+      flex: "0 1 auto",
+      marginTop: "auto",
+    },
     nopadding: {
       padding: theme.spacing(0),
     },
@@ -34,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export function TerminalRoot(): React.ReactElement {
-  const scrollHook = useRef<HTMLDivElement>(null);
+  const scrollHook = useRef<HTMLUListElement>(null);
   const rerender = useRerender();
   const [key, setKey] = useState(0);
 
@@ -79,33 +90,31 @@ export function TerminalRoot(): React.ReactElement {
 
   const classes = useStyles();
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 16px)" }}>
-      <div style={{ overflow: "scroll", flex: "0 1 auto", marginTop: "auto" }} ref={scrollHook}>
-        <List key={key} id="terminal" classes={{ root: classes.nopadding }}>
-          {Terminal.outputHistory.map((item, i) => (
-            <ListItem key={i} classes={{ root: classes.nopadding }}>
-              {item instanceof Output && <ANSIITypography text={item.text} color={item.color} />}
-              {item instanceof RawOutput && (
-                <Typography classes={{ root: classes.preformatted }} paragraph={false}>
-                  {item.raw}
-                </Typography>
-              )}
-              {item instanceof Link && (
-                <Typography classes={{ root: classes.preformatted }}>
-                  {item.dashes}
-                  <MuiLink onClick={() => Terminal.connectToServer(item.hostname)}>{item.hostname}</MuiLink>
-                </Typography>
-              )}
-            </ListItem>
-          ))}
+    <div className={classes.container}>
+      <List key={key} id="terminal" classes={{ root: classes.entries }} ref={scrollHook}>
+        {Terminal.outputHistory.map((item, i) => (
+          <ListItem key={i} classes={{ root: classes.nopadding }}>
+            {item instanceof Output && <ANSIITypography text={item.text} color={item.color} />}
+            {item instanceof RawOutput && (
+              <Typography classes={{ root: classes.preformatted }} paragraph={false}>
+                {item.raw}
+              </Typography>
+            )}
+            {item instanceof Link && (
+              <Typography classes={{ root: classes.preformatted }}>
+                {item.dashes}
+                <MuiLink onClick={() => Terminal.connectToServer(item.hostname)}>{item.hostname}</MuiLink>
+              </Typography>
+            )}
+          </ListItem>
+        ))}
 
-          {Terminal.action !== null && (
-            <ListItem classes={{ root: classes.nopadding }}>
-              <TerminalActionTimer />{" "}
-            </ListItem>
-          )}
-        </List>
-      </div>
+        {Terminal.action !== null && (
+          <ListItem classes={{ root: classes.nopadding }}>
+            <TerminalActionTimer />{" "}
+          </ListItem>
+        )}
+      </List>
       <TerminalInput />
       <BitFlumeModal />
       <CodingContractModal />
