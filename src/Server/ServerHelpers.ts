@@ -124,17 +124,18 @@ export function numCycleForGrowthCorrected(
    *     = (n - o) / (1 + n*k)
    * We can do the same procedure with the exponential form of Newton's method, starting from x_0 = 0.
    * This gives x_1 = (n - o) / (1 + o*k), (full derivation omitted) which will be an overestimate.
-   * Averaging the denominators gives the final guess:
-   *   x = (n - o) / (1 + (n + o)*k/2)
-   * This guess is highly accurate under a wide variety of conditions, making it likely that the
-   * we start within 1 thread of correct.
+   * We use a weighted average of the denominators to get the final guess:
+   *   x = (n - o) / (1 + (1/16*n + 15/16*o)*k)
+   * The reason for this particular weighting is subtle; it is exactly representable and holds up
+   * well under a wide variety of conditions, making it likely that the we start within 1 thread of
+   * correct. It particularly bounds the worst-case to 3 iterations, and gives a very wide swatch
+   * where 2 iterations is good enough.
    *
    * The accuracy of the initial guess is good for many inputs - often one iteration
    * is sufficient. This means the overall cost is two logs (counting the one in calculateServerGrowthLog),
    * possibly one exp, 5 divisions, and a handful of basic arithmetic.
    */
-  const half_k = 0.5 * k;
-  const guess = (targetMoney - startMoney) / (1 + half_k * (targetMoney + startMoney));
+  const guess = (targetMoney - startMoney) / (1 + (targetMoney * (1 / 16) + startMoney * (15 / 16)) * k);
   let x = guess;
   let diff;
   do {
