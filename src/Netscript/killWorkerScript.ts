@@ -43,11 +43,13 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   ws.delayReject?.(new ScriptDeath(ws));
   ws.env.runningFn = "";
 
-  for (const key in ws.atExit) {
+  for (const key of ws.atExit.keys()) {
     try {
-      const atExit = ws.atExit[key];
-      delete ws.atExit[key];
-      atExit();
+      const atExit = ws.atExit.get(key);
+      //Calling ns.exit inside ns.atExit can lead to recursion
+      //so the handler must be removed immediatly
+      ws.atExit.set(key, undefined);
+      if (typeof atExit == "function") atExit();
     } catch (e: unknown) {
       handleUnknownError(e, ws, "Error running atExit function.\n\n");
     }

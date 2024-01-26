@@ -1719,9 +1719,9 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.errorMessage(ctx, "id should be a string");
       }
 
-      ctx.workerScript.atExit[id] = () => {
+      ctx.workerScript.atExit.set(id, () => {
         f();
-      }; // Wrap the user function to prevent WorkerScript leaking as 'this'
+      }); // Wrap the user function to prevent WorkerScript leaking as 'this'
     },
   mv: (ctx) => (_host, _source, _destination) => {
     const hostname = helpers.string(ctx, "host", _host);
