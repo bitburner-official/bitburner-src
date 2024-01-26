@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Typography from "@mui/material/Typography";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import { Link as MuiLink } from "@mui/material";
+import { Link as MuiLink, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
@@ -30,10 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: 0,
       overflow: "scroll",
       flex: "0 1 auto",
-      marginTop: "auto",
-    },
-    nopadding: {
-      padding: theme.spacing(0),
+      margin: "auto 0 0",
     },
     preformatted: {
       whiteSpace: "pre-wrap",
@@ -91,9 +85,9 @@ export function TerminalRoot(): React.ReactElement {
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      <List key={key} id="terminal" classes={{ root: classes.entries }} ref={scrollHook}>
+      <ul key={key} id="terminal" className={classes.entries} ref={scrollHook}>
         {Terminal.outputHistory.map((item, i) => (
-          <ListItem key={i} classes={{ root: classes.nopadding }}>
+          <li key={i}>
             {item instanceof Output && <ANSIITypography text={item.text} color={item.color} />}
             {item instanceof RawOutput && (
               <Typography classes={{ root: classes.preformatted }} paragraph={false}>
@@ -106,15 +100,15 @@ export function TerminalRoot(): React.ReactElement {
                 <MuiLink onClick={() => Terminal.connectToServer(item.hostname)}>{item.hostname}</MuiLink>
               </Typography>
             )}
-          </ListItem>
+          </li>
         ))}
 
         {Terminal.action !== null && (
-          <ListItem classes={{ root: classes.nopadding }}>
+          <li>
             <TerminalActionTimer />{" "}
-          </ListItem>
+          </li>
         )}
-      </List>
+      </ul>
       <TerminalInput />
       <BitFlumeModal />
       <CodingContractModal />
