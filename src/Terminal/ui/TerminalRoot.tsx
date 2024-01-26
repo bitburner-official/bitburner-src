@@ -80,8 +80,7 @@ export function TerminalRoot(): React.ReactElement {
   const classes = useStyles();
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 16px)" }}>
-      <div style={{ flex: "1 0 0px" }}></div>
-      <div style={{ overflow: "scroll", flex: "0 1 auto" }} ref={scrollHook}>
+      <div style={{ overflow: "scroll", flex: "0 1 auto", marginTop: "auto" }} ref={scrollHook}>
         <List key={key} id="terminal" classes={{ root: classes.nopadding }}>
           {Terminal.outputHistory.map((item, i) => (
             <ListItem key={i} classes={{ root: classes.nopadding }}>
