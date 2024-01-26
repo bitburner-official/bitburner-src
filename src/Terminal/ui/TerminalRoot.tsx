@@ -6,7 +6,6 @@ import { Link as MuiLink } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
-import Box from "@mui/material/Box";
 import _ from "lodash";
 
 import { Output, Link, RawOutput } from "../OutputTypes";
@@ -29,11 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
       whiteSpace: "pre-wrap",
       overflowWrap: "anywhere",
       margin: theme.spacing(0),
-      width: "100%",
-    },
-    list: {
-      padding: theme.spacing(0),
-      height: "100%",
       width: "100%",
     },
   }),
@@ -66,7 +60,7 @@ export function TerminalRoot(): React.ReactElement {
   function doScroll(): number | undefined {
     const hook = scrollHook.current;
     if (hook !== null) {
-      return window.setTimeout(() => hook.scrollIntoView(true), 50);
+      return window.setTimeout(() => (hook.scrollTop = hook.scrollHeight), 50);
     }
   }
 
@@ -85,9 +79,10 @@ export function TerminalRoot(): React.ReactElement {
 
   const classes = useStyles();
   return (
-    <>
-      <Box width="100%" minHeight="100vh" display={"flex"} alignItems={"flex-end"}>
-        <List key={key} id="terminal" classes={{ root: classes.list }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 16px)" }}>
+      <div style={{ flex: "1 0 0px" }}></div>
+      <div style={{ overflow: "scroll", flex: "0 1 auto" }} ref={scrollHook}>
+        <List key={key} id="terminal" classes={{ root: classes.nopadding }}>
           {Terminal.outputHistory.map((item, i) => (
             <ListItem key={i} classes={{ root: classes.nopadding }}>
               {item instanceof Output && <ANSIITypography text={item.text} color={item.color} />}
@@ -111,13 +106,10 @@ export function TerminalRoot(): React.ReactElement {
             </ListItem>
           )}
         </List>
-        <div ref={scrollHook}></div>
-      </Box>
-      <Box position="sticky" bottom={0} width="100%" px={0}>
-        <TerminalInput />
-      </Box>
+      </div>
+      <TerminalInput />
       <BitFlumeModal />
       <CodingContractModal />
-    </>
+    </div>
   );
 }
