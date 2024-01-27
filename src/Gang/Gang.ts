@@ -26,7 +26,7 @@ import { PowerMultiplier } from "./data/power";
 import { FactionName } from "@enums";
 import { CONSTANTS } from "../Constants";
 
-type NextUpdateData = { resolver: ((msProcessed: number) => void) | null; promise: Promise<void> | null };
+type NextUpdateData = { resolver: ((msProcessed: number) => void) | null; promise: Promise<number> | null };
 export const GangNextUpdate: NextUpdateData = { resolver: null, promise: null };
 
 export class Gang {
