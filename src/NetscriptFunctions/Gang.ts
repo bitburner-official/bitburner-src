@@ -4,7 +4,7 @@ import type { GangMember } from "../Gang/GangMember";
 import type { GangMemberTask } from "../Gang/GangMemberTask";
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
-import { GangResolvers } from "../Gang/Gang";
+import { GangNextUpdate } from "../Gang/Gang";
 import { Player } from "@player";
 import { FactionName } from "@enums";
 import { GangConstants } from "../Gang/data/Constants";
@@ -325,7 +325,10 @@ export function NetscriptGang(): InternalAPI<IGang> {
       return Math.round(gang.storedCycles / 5) * 1000;
     },
     nextUpdate: () => () => {
-      return new Promise<number>((res) => GangResolvers.push(res));
+      if (!GangNextUpdate.promise) {
+        GangNextUpdate.promise = new Promise<number>((res) => (GangNextUpdate.resolver = res));
+      }
+      return GangNextUpdate.promise;
     },
   };
 }
