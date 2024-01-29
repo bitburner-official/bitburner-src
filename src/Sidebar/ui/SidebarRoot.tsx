@@ -131,6 +131,9 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       flash = Page.City;
       break;
     case iTutorialSteps.WorldDescription:
+      flash = Page.Options;
+      break;
+    case iTutorialSteps.OptionsIntroduction:
       flash = Page.Documentation;
       break;
   }

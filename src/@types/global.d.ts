@@ -11,3 +11,8 @@ declare module "*.png" {
 declare interface Document {
   achievements: string[];
 }
+
+declare module "*.svg" {
+  const value: string;
+  export default value;
+}

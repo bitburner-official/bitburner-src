@@ -3,7 +3,9 @@ import Typography from "@mui/material/Typography";
 
 interface IProps {
   text: string;
+  onChange?: () => void;
   onDone?: () => void;
+  style?: React.CSSProperties;
 }
 
 function sleep(ms: number): Promise<void> {
@@ -18,6 +20,9 @@ export function CinematicLine(props: IProps): React.ReactElement {
     const newLength = length + 1;
     setLength(newLength);
     setDone(newLength >= props.text.length);
+    if (props.onChange) {
+      props.onChange();
+    }
   }
 
   useEffect(() => {
@@ -35,7 +40,7 @@ export function CinematicLine(props: IProps): React.ReactElement {
   });
   return (
     <>
-      <Typography>
+      <Typography style={props.style}>
         {props.text.slice(0, length)}
         {!done && <span>&#9608;</span>}
       </Typography>
