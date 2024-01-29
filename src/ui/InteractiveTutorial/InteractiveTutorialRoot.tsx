@@ -533,8 +533,8 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>
-            Here you can change stuff such as changing your theme, disabling ascii art and enabling visual effects.
-            Take your time to explore all the functions here!
+            Here you can change stuff such as changing your theme, disabling ascii art and enabling visual effects. Take
+            your time to explore all the functions here!
             <br />
             <br />
             Lastly, click on
@@ -595,9 +595,12 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         )}
         <br />
         <br />
-        <Button style={{
-          marginRight: "10px"
-        }} onClick={iTutorialEnd}>
+        <Button
+          style={{
+            marginRight: "10px",
+          }}
+          onClick={iTutorialEnd}
+        >
           {step !== iTutorialSteps.DocumentationPageInfo ? "SKIP TUTORIAL" : "FINISH TUTORIAL"}
         </Button>
       </Paper>

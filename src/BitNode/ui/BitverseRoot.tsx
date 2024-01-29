@@ -167,14 +167,16 @@ export function BitverseRoot(props: IProps): React.ReactElement {
         "..............................................",
       ];
     }
-    return <CinematicText 
-      chromaticAberration={true} 
-      fadeOutMs={0} 
-      delayToDone={2000} 
-      lines={cinematicLines} 
-      onDone={() => setDestroySequence(false)} 
-      auto={true} 
-      />;
+    return (
+      <CinematicText
+        chromaticAberration={true}
+        fadeOutMs={0}
+        delayToDone={2000}
+        lines={cinematicLines}
+        onDone={() => setDestroySequence(false)}
+        auto={true}
+      />
+    );
   }
 
   const nextSourceFileLvl = (n: number): number => {
