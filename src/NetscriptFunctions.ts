@@ -381,10 +381,8 @@ export const ns: InternalAPI<NSFull> = {
         return Promise.resolve(0);
       }
       const cores = host.cpuCores;
-      const coreBonus = getCoreBonus(cores, true);
-      const weakenAmt =
-        ServerConstants.ServerWeakenAmount * threads * currentNodeMults.ServerWeakenRate +
-        ServerConstants.ServerWeakenAmount * coreBonus;
+      const coreBonus = getCoreBonus(cores);
+      const weakenAmt = ServerConstants.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
       server.weaken(weakenAmt);
       ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
@@ -406,11 +404,8 @@ export const ns: InternalAPI<NSFull> = {
     (_threads, _cores = 1) => {
       const threads = helpers.number(ctx, "threads", _threads);
       const cores = helpers.number(ctx, "cores", _cores);
-      const coreBonus = getCoreBonus(cores, true);
-      return (
-        ServerConstants.ServerWeakenAmount * threads * currentNodeMults.ServerWeakenRate +
-        ServerConstants.ServerWeakenAmount * coreBonus
-      );
+      const coreBonus = getCoreBonus(cores);
+      return ServerConstants.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
     },
   share: (ctx) => () => {
     const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
