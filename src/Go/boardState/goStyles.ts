@@ -34,7 +34,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
       },
     },
     broken: {
-      backgroundImage: "repeating-radial-gradient(circle at 17% 32%, white, black 0.00085px)",
+      backgroundImage: `repeating-radial-gradient(circle at 17% 32%, ${theme.colors.white}, black 0.00085px)`,
       backgroundPosition: "center",
       animation: `$static 5s linear infinite`,
       opacity: "0",
@@ -64,13 +64,13 @@ export const pointStyle = makeStyles((theme: Theme) =>
       },
       "& $broken": {
         backgroundImage: "none",
-        backgroundColor: "black",
+        backgroundColor: theme.colors.black,
       },
       "& $tradStone": {
         display: "block",
       },
       "& $liberty": {
-        backgroundColor: "black",
+        backgroundColor: theme.colors.black,
         transition: "none",
         "&:not($northLiberty):not($southLiberty):not($eastLiberty):not($westLiberty)": {
           width: 0,
@@ -86,14 +86,12 @@ export const pointStyle = makeStyles((theme: Theme) =>
       "&$nineteenByNineteen": {
         "& $blackPoint": {
           "&:before": {
-            backgroundImage:
-              "linear-gradient(145deg, transparent, black 65%), radial-gradient(calc(min(30px, 5vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)",
+            backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(30px, 5vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
           },
         },
         "& $whitePoint": {
           "&:before": {
-            backgroundImage:
-              "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(30px, 5vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
+            backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(30px, 5vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
           },
         },
         "& $coordinates": {
@@ -103,14 +101,12 @@ export const pointStyle = makeStyles((theme: Theme) =>
       "&$thirteenByThirteen": {
         "& $blackPoint": {
           "&:before": {
-            backgroundImage:
-              "linear-gradient(145deg, transparent, black 65%), radial-gradient(calc(min(40px, 6vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)",
+            backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(40px, 6vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
           },
         },
         "& $whitePoint": {
           "&:before": {
-            backgroundImage:
-              "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(40px, 6vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
+            backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(40px, 6vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
           },
         },
         "& $coordinates": {
@@ -120,28 +116,24 @@ export const pointStyle = makeStyles((theme: Theme) =>
       "&$nineByNine": {
         "& $blackPoint": {
           "&:before": {
-            backgroundImage:
-              "linear-gradient(145deg, transparent, black 65%), radial-gradient(calc(min(60px, 7vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)",
+            backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(60px, 7vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
           },
         },
         "& $whitePoint": {
           "&:before": {
-            backgroundImage:
-              "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(60px, 7vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
+            backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(60px, 7vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
           },
         },
       },
       "&$sevenBySeven": {
         "& $blackPoint": {
           "&:before": {
-            backgroundImage:
-              "linear-gradient(145deg, transparent, black 65%), radial-gradient(calc(min(80px, 8vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)",
+            backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(80px, 8vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
           },
         },
         "& $whitePoint": {
           "&:before": {
-            backgroundImage:
-              "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(80px, 8vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
+            backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(80px, 8vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
           },
         },
       },
@@ -150,27 +142,23 @@ export const pointStyle = makeStyles((theme: Theme) =>
         left: "15%",
       },
       "& $blackPoint ~ $coordinates": {
-        color: "white",
+        color: theme.colors.white,
       },
     },
     fiveByFive: {
       "& $blackPoint": {
-        backgroundImage:
-          "linear-gradient(145deg, transparent, black 65%), radial-gradient(calc(min(35px, 4vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)",
+        backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(35px, 4vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
       },
       "& $whitePoint": {
-        backgroundImage:
-          "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(35px, 4vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
+        backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(35px, 4vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
       },
     },
     sevenBySeven: {
       "& $blackPoint": {
-        backgroundImage:
-          "linear-gradient(145deg, transparent, black 65%), radial-gradient(calc(min(23px, 3vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)",
+        backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(23px, 3vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
       },
       "& $whitePoint": {
-        backgroundImage:
-          "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(25px, 3vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
+        backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(25px, 3vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
       },
     },
     nineByNine: {
@@ -178,12 +166,10 @@ export const pointStyle = makeStyles((theme: Theme) =>
         boxShadow: "0px 0px 30px hsla(0, 100%, 100%, 0.48)",
       },
       "& $blackPoint": {
-        backgroundImage:
-          "linear-gradient(145deg, transparent, black 65%), radial-gradient(calc(min(15px, 2vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)",
+        backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(15px, 2vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
       },
       "& $whitePoint": {
-        backgroundImage:
-          "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(15px, 2vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
+        backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(15px, 2vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
       },
     },
     thirteenByThirteen: {
@@ -191,12 +177,10 @@ export const pointStyle = makeStyles((theme: Theme) =>
         boxShadow: "0px 0px 18px hsla(0, 100%, 100%, 0.48)",
       },
       "& $blackPoint": {
-        backgroundImage:
-          "linear-gradient(145deg, transparent, black 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)",
+        backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
       },
       "& $whitePoint": {
-        backgroundImage:
-          "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
+        backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
       },
     },
     nineteenByNineteen: {
@@ -204,12 +188,10 @@ export const pointStyle = makeStyles((theme: Theme) =>
         boxShadow: "0px 0px 18px hsla(0, 100%, 100%, 0.48)",
       },
       "& $blackPoint": {
-        backgroundImage:
-          "linear-gradient(145deg, transparent, black 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)",
+        backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
       },
       "& $whitePoint": {
-        backgroundImage:
-          "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
+        backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
       },
 
       "& $innerPoint": {
@@ -255,9 +237,8 @@ export const pointStyle = makeStyles((theme: Theme) =>
         margin: 0,
 
         "&:before": {
-          backgroundColor: "black",
-          backgroundImage:
-            "linear-gradient(145deg, transparent, black 65%), radial-gradient(calc(min(150px, 11vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)",
+          backgroundColor: theme.colors.black,
+          backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(150px, 11vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
         },
       },
       "&$whitePoint": {
@@ -268,8 +249,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
 
         "&:before": {
           backgroundColor: "hsla(0, 0%, 90%, 1)",
-          backgroundImage:
-            "linear-gradient(145deg, transparent, white 65%), radial-gradient(calc(min(150px, 11vw)) at 42% 38%, white 0%, white 35%, transparent 36%)",
+          backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(150px, 11vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
         },
       },
       "&$emptyPoint": {
@@ -300,7 +280,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
       width: "10%",
       height: "10%",
       margin: "45%",
-      backgroundColor: "white",
+      backgroundColor: theme.colors.white,
       position: "relative",
     },
     filledPoint: {
@@ -321,8 +301,8 @@ export const pointStyle = makeStyles((theme: Theme) =>
       width: "70%",
       height: "70%",
       margin: "15%",
-      backgroundColor: "black",
-      outlineColor: "white",
+      backgroundColor: theme.colors.black,
+      outlineColor: theme.colors.white,
     },
     fadeLoopAnimation: {
       animation: `$fadeLoop 800ms ${theme.transitions.easing.easeInOut} infinite alternate`,
@@ -375,7 +355,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
       left: "0",
     },
     coordinates: {
-      color: "white",
+      color: theme.colors.white,
       fontFamily: `"Lucida Console", "Lucida Sans Unicode", "Fira Mono", Consolas, "Courier New", Courier, monospace, "Times New Roman"`,
       fontSize: "calc(min(1.3vw, 12px))",
       display: "none",
