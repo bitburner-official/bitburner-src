@@ -81,7 +81,7 @@ import { Directory, resolveDirectory, root } from "../Paths/Directory";
 import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
-import { getWeakenEffect } from "src/Netscript/NetscriptHelpers";
+import { getWeakenEffect } from "../Netscript/NetscriptHelpers";
 
 export class Terminal {
   // Flags to determine whether the player is currently running a hack or an analyze
