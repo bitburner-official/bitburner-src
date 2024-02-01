@@ -93,5 +93,7 @@ function removeWorkerScript(workerScript: WorkerScript): void {
   server.updateRamUsed(roundToTwo(server.ramUsed - rs.ramUsage * rs.threads));
 
   workerScripts.delete(workerScript.pid);
-  AddRecentScript(workerScript);
+  if (rs.temporary === false) {
+    AddRecentScript(workerScript);
+  }
 }

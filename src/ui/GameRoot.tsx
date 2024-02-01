@@ -13,6 +13,7 @@ import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutori
 import { ITutorialEvents } from "./InteractiveTutorial/ITutorialEvents";
 
 import { prestigeAugmentation } from "../Prestige";
+import { prestigeWorkerScripts } from "../NetscriptWorker";
 import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
@@ -168,6 +169,7 @@ export function GameRoot(): React.ReactElement {
           Player.gotoLocation(LocationName.TravelAgency);
           break;
         case Page.BitVerse:
+          prestigeWorkerScripts();
           calculateAchievements();
           break;
       }
