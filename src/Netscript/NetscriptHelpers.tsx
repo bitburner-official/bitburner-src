@@ -38,6 +38,7 @@ import { Engine } from "../engine";
 import { resolveFilePath, FilePath } from "../Paths/FilePath";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
+import { getCoreBonus } from "../Server/ServerHelpers";
 
 export const helpers = {
   string,
@@ -817,4 +818,9 @@ let customElementKey = 0;
  */
 export function wrapUserNode(value: unknown) {
   return <CustomBoundary key={`PlayerContent${customElementKey++}`}>{value}</CustomBoundary>;
+}
+
+export function getWeakenEffect(threads: number, cores: number): number {
+  const coreBonus = getCoreBonus(cores);
+  return CONSTANTS.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
 }

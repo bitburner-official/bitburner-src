@@ -51,7 +51,7 @@ import { runScriptFromScript } from "./NetscriptWorker";
 import { killWorkerScript, killWorkerScriptByPid } from "./Netscript/killWorkerScript";
 import { workerScripts } from "./Netscript/WorkerScripts";
 import { WorkerScript } from "./Netscript/WorkerScript";
-import { helpers, wrapUserNode } from "./Netscript/NetscriptHelpers";
+import { helpers, wrapUserNode, getWeakenEffect } from "./Netscript/NetscriptHelpers";
 import {
   formatExp,
   formatNumberNoSuffix,
@@ -379,9 +379,7 @@ export const ns: InternalAPI<NSFull> = {
         helpers.log(ctx, () => "Server is null, did it die?");
         return Promise.resolve(0);
       }
-      const cores = host.cpuCores;
-      const coreBonus = getCoreBonus(cores);
-      const weakenAmt = CONSTANTS.ServerWeakenAmount * threads * coreBonus;
+      const weakenAmt = getWeakenEffect(threads, host.cpuCores);
       server.weaken(weakenAmt);
       ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
@@ -395,7 +393,7 @@ export const ns: InternalAPI<NSFull> = {
       ctx.workerScript.scriptRef.onlineExpGained += expGain;
       Player.gainHackingExp(expGain);
       // Account for hidden multiplier in Server.weaken()
-      return Promise.resolve(weakenAmt * currentNodeMults.ServerWeakenRate);
+      return Promise.resolve(weakenAmt);
     });
   },
   weakenAnalyze:
@@ -403,8 +401,7 @@ export const ns: InternalAPI<NSFull> = {
     (_threads, _cores = 1) => {
       const threads = helpers.number(ctx, "threads", _threads);
       const cores = helpers.number(ctx, "cores", _cores);
-      const coreBonus = getCoreBonus(cores);
-      return CONSTANTS.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
+      return getWeakenEffect(threads, cores);
     },
   share: (ctx) => () => {
     const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
