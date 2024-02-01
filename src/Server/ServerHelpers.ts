@@ -3,7 +3,6 @@ import { Server, IConstructorParams } from "./Server";
 import { BaseServer } from "./BaseServer";
 import { calculateServerGrowth, calculateServerGrowthLog } from "./formulas/grow";
 
-import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { ServerConstants } from "./data/Constants";
 import { Player } from "@player";
 import { CompletedProgramName, LiteratureName } from "@enums";

@@ -10,9 +10,9 @@ export function calculateServerGrowthLog(server: IServer, threads: number, p: IP
 
   //Get adjusted growth log, which accounts for server security
   //log1p computes log(1+p), it is far more accurate for small values.
-  let adjGrowthLog = Math.log1p(CONSTANTS.ServerBaseGrowthIncr / hackDifficulty);
-  if (adjGrowthLog >= CONSTANTS.ServerMaxGrowthLog) {
-    adjGrowthLog = CONSTANTS.ServerMaxGrowthLog;
+  let adjGrowthLog = Math.log1p(ServerConstants.ServerBaseGrowthIncr / hackDifficulty);
+  if (adjGrowthLog >= ServerConstants.ServerMaxGrowthLog) {
+    adjGrowthLog = ServerConstants.ServerMaxGrowthLog;
   }
 
   //Calculate adjusted server growth rate based on parameters

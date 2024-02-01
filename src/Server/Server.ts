@@ -135,7 +135,7 @@ export class Server extends BaseServer {
 
   /** Strengthens a server's security level (difficulty) by the specified amount */
   fortify(amt: number): void {
-    this.hackDifficulty += amt;
+    this.hackDifficulty += amt * currentNodeMults.ServerWeakenRate;
     this.capDifficulty();
   }
 
