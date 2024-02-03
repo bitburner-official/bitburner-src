@@ -29,7 +29,7 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
     const reward = calculateReward(startingSecurityLevel);
     const maxLevel = location.infiltrationData.maxClearanceLevel;
     return {
-      location: JSON.parse(JSON.stringify(location)),
+      location: structuredClone(location),
       reward: {
         tradeRep: calculateTradeInformationRepReward(reward, maxLevel, startingSecurityLevel),
         sellCash: calculateSellInformationCashReward(reward, maxLevel, startingSecurityLevel),
