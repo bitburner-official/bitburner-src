@@ -431,9 +431,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
           }
           if (convert || spend < 0) return false;
           const quantomCost =
-            Player.quantomTickets >= LotteryConstants.MaxTickets
-              ? Number.POSITIVE_INFINITY
-              : Player.quantomTickets * 2 + 1;
+            Player.quantomTickets >= LotteryConstants.MaxTickets ? Number.POSITIVE_INFINITY : Player.quantomTickets + 1;
           if (
             spend > charityORG.luckyCoin ||
             spend < quantomCost ||

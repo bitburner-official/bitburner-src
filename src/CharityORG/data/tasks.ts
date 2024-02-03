@@ -57,7 +57,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
     params: { hackWeight: 50, chaWeight: 50, difficulty: 1000 },
   },
   {
-    desc: "Assign this volunteer to beg for money on the street<br><br>Earns prestige, visibility - Raises money",
+    desc: "Assign this volunteer to beg for money on the street<br><br>Earns prestige, raises money",
     name: "Beg",
     short_name: "Beg",
     isSpending: false,
@@ -76,7 +76,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
     },
   },
   {
-    desc: "Assign this volunteer to spead the word of the charity, though all means at their disposal.<br><br>Earns visibility and prestige - Spends money",
+    desc: "Assign this volunteer to spead the word of the charity, though all means at their disposal.<br><br>Raises visibility, earnes prestige and karma - Spends money",
     name: "Spead the Word",
     short_name: "Spead the Word",
     isSpending: true,
@@ -95,7 +95,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
     },
   },
   {
-    desc: "Their mission, to earn you Karma.<br><br>Earns karma, visibility",
+    desc: "Their mission, to earn you Karma.<br><br>Raises visibility, earnes prestige and karma - Spends money",
     name: "Basic Charity Work",
     short_name: "Basic Charity Work",
     isSpending: true,
@@ -114,7 +114,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
     },
   },
   {
-    desc: "Assign this volunteer to fundraise<br><br>Earns prestige, visibility - Raises money",
+    desc: "Assign this volunteer to fundraise<br><br>Earns prestige - raises money",
     name: "Fundraise",
     short_name: "Fundraise",
     isSpending: false,
@@ -133,7 +133,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
     },
   },
   {
-    desc: "Assign this volunteer to go door to door, raising donations<br><br>Earns prestige, visibility - Raises money",
+    desc: "Assign this volunteer to go door to door, raising donations<br><br>Earns prestige - raises money",
     name: "Door to Door",
     short_name: "Door to Door",
     isSpending: false,
@@ -152,7 +152,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
     },
   },
   {
-    desc: "Volunteer will organize and run a world telethon<br><br>Earns prestige, visibility - Raises money",
+    desc: "Volunteer will organize and run a world telethon<br><br>Earns prestige - raises money",
     name: "Organize Telethon",
     short_name: "Organize Telethon",
     isSpending: false,

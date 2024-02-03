@@ -53,7 +53,7 @@ export function ItemsItemsSubpage(): React.ReactElement {
     "A Quantom Ticket!  These special tickets regenerate after each install and when you enter a new BitNode.  You will wake up with tickets in your pocket.  Redeem them at any time and then cash it in to see if it's a winner! NOTE: You may only have 4000 at any given time.  Simply click Covert and it will covert the correct number of Lucky Coins into a ticket if you are able to.";
 
   let quantomCost =
-    Player.quantomTickets >= LotteryConstants.MaxTickets ? Number.POSITIVE_INFINITY : Player.quantomTickets * 2 + 1;
+    Player.quantomTickets >= LotteryConstants.MaxTickets ? Number.POSITIVE_INFINITY : Player.quantomTickets + 1;
   let luckyBuy =
     "Current cost: (" +
     f(quantomCost) +
@@ -83,7 +83,7 @@ export function ItemsItemsSubpage(): React.ReactElement {
   const randomConvert = "Convert 1 Lucky to 5 Random Dice";
   const javaConvert = "Convert 1 Lucky to 5 Java Juice";
   const ticketConvert = "Convert 1 Lucky to 100 tickets";
-  const qTicketConvert = "Convert 1 from " + f(quantomCost) + " Lucky Coins";
+  let qTicketConvert = "Convert 1 from " + f(quantomCost) + " Lucky Coins";
 
   function onBoostChange(event: SelectChangeEvent): void {
     setBoost(event.target.value);
@@ -198,13 +198,9 @@ export function ItemsItemsSubpage(): React.ReactElement {
         charityORG.luckyCoin -= quantomCost;
         charityORG.addItemUseMessage("Purchased a Quantom Ticket!");
         quantomCost =
-          Player.quantomTickets >= LotteryConstants.MaxTickets
-            ? Number.POSITIVE_INFINITY
-            : Player.quantomTickets * 2 + 1;
-        luckyBuy =
-          "Current cost: (" +
-          quantomCost +
-          ") -  Lucky Coins can purchase Quantom Tickets, but their cost goes up with each one purchased.";
+          Player.quantomTickets >= LotteryConstants.MaxTickets ? Number.POSITIVE_INFINITY : Player.quantomTickets + 1;
+        qTicketConvert = "Convert 1 from " + f(quantomCost) + " Lucky Coins";
+        setBoostConvert(qTicketConvert);
         break;
       default:
         return;
@@ -230,9 +226,7 @@ export function ItemsItemsSubpage(): React.ReactElement {
         charityORG.luckyCoin -= quantomCost;
         charityORG.addItemUseMessage("Purchased a Quantom Ticket!");
         quantomCost =
-          Player.quantomTickets >= LotteryConstants.MaxTickets
-            ? Number.POSITIVE_INFINITY
-            : Player.quantomTickets * 2 + 1;
+          Player.quantomTickets >= LotteryConstants.MaxTickets ? Number.POSITIVE_INFINITY : Player.quantomTickets + 1;
         luckyBuy =
           "Current cost: (" +
           quantomCost +
