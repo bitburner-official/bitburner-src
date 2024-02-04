@@ -40,7 +40,7 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
   }
 
   finish() {
-    if (this.signalCompletion) this.signalCompletion();
+    if (this.nextCompletionPromise) this.signalCompletion();
   }
 
   process(sleeve: Sleeve, cycles: number) {
@@ -73,7 +73,7 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
       this.tasksCompleted++;
       this.cyclesWorked -= this.cyclesNeeded(sleeve);
       // Resolve and reset nextCompletion promise
-      if (this.signalCompletion) this.signalCompletion();
+      if (this.nextCompletionPromise) this.signalCompletion();
     }
   }
   get nextCompletion(): Promise<void> {
