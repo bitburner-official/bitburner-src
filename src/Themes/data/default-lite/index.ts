@@ -41,5 +41,10 @@ export const Theme: IPredefinedTheme = {
     backgroundprimary: "#0C0D0E",
     backgroundsecondary: "#121415",
     button: "#252829",
+    maplocation: "#ffffff",
+    bnlvl0: "#ffff00",
+    bnlvl1: "#ff0000",
+    bnlvl2: "#48d1cc",
+    bnlvl3: "#0000ff",
   },
 };
