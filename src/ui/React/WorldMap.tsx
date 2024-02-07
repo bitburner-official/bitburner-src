@@ -19,6 +19,11 @@ const useStyles = makeStyles((theme: Theme) =>
       whiteSpace: "pre",
       cursor: "pointer",
     },
+    currentCity: {
+      color: theme.colors.currentcity,
+      lineHeight: "1em",
+      whiteSpace: "pre",
+    },
   }),
 );
 
@@ -33,7 +38,7 @@ function City(props: ICityProps): React.ReactElement {
       </Tooltip>
     );
   }
-  return <span>{props.city[0]}</span>;
+  return <span className={classes.currentCity}>{props.city[0]}</span>;
 }
 
 interface IProps {
