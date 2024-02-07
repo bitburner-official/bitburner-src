@@ -14,7 +14,7 @@ interface ICityProps {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     travel: {
-      color: theme.colors.white,
+      color: theme.colors.maplocation,
       lineHeight: "1em",
       whiteSpace: "pre",
       cursor: "pointer",
