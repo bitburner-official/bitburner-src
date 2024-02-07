@@ -35,6 +35,7 @@ export interface ITheme {
   backgroundprimary: string;
   backgroundsecondary: string;
   button: string;
+  mapstatic: string;
   maplocation: string;
   currentcity: string;
   bnlvl0: string;
