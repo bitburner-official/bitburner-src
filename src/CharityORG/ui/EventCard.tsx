@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import { CharityEvent } from "../CharityEvent";
 import { formatNumber } from "../../ui/formatNumber";
 import { forEach } from "lodash";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 
 /** React Component for the popup that manages gang members upgrades */
 export function EventCard(event: CharityEvent | undefined, queue: boolean): React.ReactElement {
@@ -24,10 +25,10 @@ export function EventCard(event: CharityEvent | undefined, queue: boolean): Reac
           {!event.hasTimer
             ? "N/A"
             : queue
-            ? event.cyclesTillRemoved - event.cyclesElapsed
-            : event.cyclesTillDeath - event.cyclesElapsed}
+              ? convertTimeMsToTimeElapsedString((event.cyclesTillRemoved - event.cyclesElapsed) * 200)
+              : convertTimeMsToTimeElapsedString((event.cyclesTillDeath - event.cyclesElapsed) * 200)}
           <br></br>
-          Cycles until completed: {event.cyclesNeeded - event.cyclesCompleted}
+          Cycles until completed: {convertTimeMsToTimeElapsedString((event.cyclesNeeded - event.cyclesCompleted) * 200)}
           <br></br>
           <Box display="grid" whiteSpace="pre">
             Base Gain :{" "}

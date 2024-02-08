@@ -54,7 +54,7 @@ export class BitNodeMultipliers {
   /** Percentage of unique augs that the charityORG has. */
   CharityORGUniqueAugs = 1;
 
-  /** Reduces charity earning. */
+  /** Charity earning. */
   CharityORGSoftcap = 1;
 
   /** Reduces charity event power, reduces the strength of all completed events and their associated rewards (Banners, Money, Bank, etc). Lowers all effects included in Softcap as well. */

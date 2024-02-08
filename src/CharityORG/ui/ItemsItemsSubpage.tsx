@@ -235,7 +235,8 @@ export function ItemsItemsSubpage(): React.ReactElement {
         break;
       }
       case "Ascension Tokens": {
-        dialogBoxCreate("Spend Ascension Tokens in the Management section.");
+        dialogBoxCreate("Spend Ascension Tokens in the Management section.\n" +
+        "Ascending become available when a volunteer gets enough experience.");
         return;
       }
       case "Decoy Juice": {
