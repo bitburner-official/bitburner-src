@@ -1,135 +1,65 @@
-/**
- * React Component for rendering the Accordion elements for all servers
- * on which scripts are running
- */
+import type { WorkerScript } from "../../Netscript/WorkerScript";
+
 import React, { useState } from "react";
 
 import { ServerAccordion } from "./ServerAccordion";
 
-import TextField from "@mui/material/TextField";
-import List from "@mui/material/List";
-import TablePagination from "@mui/material/TablePagination";
-import Grid from "@mui/material/Grid";
-import { WorkerScript } from "../../Netscript/WorkerScript";
-import { GetServer } from "../../Server/AllServers";
-import { BaseServer } from "../../Server/BaseServer";
+import { IconButton, List, Typography } from "@mui/material/";
+import { FirstPage, KeyboardArrowLeft, KeyboardArrowRight, LastPage } from "@mui/icons-material";
 import { Settings } from "../../Settings/Settings";
-import { TablePaginationActionsAll } from "../React/TablePaginationActionsAll";
-import SearchIcon from "@mui/icons-material/Search";
-import { matchScriptPathUnanchored } from "../../utils/helpers/scriptKey";
-import lodash from "lodash";
+import { workerScripts } from "../../Netscript/WorkerScripts";
+import { getRecordEntries } from "../../Types/Record";
 
-// Map of server hostname -> all workerscripts on that server for all active scripts
-interface IServerData {
-  server: BaseServer;
-  workerScripts: WorkerScript[];
-}
-
-type IServerToScriptsMap = Record<string, IServerData | undefined>;
-
-interface IProps {
-  workerScripts: Map<number, WorkerScript>;
-}
-
-export function ServerAccordions(props: IProps): React.ReactElement {
-  const [filter, setFilter] = useState("");
+export function ServerAccordions({ filter }: { filter: string }): React.ReactElement {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(Settings.ActiveScriptsServerPageSize);
 
-  const handleChangePage = (event: unknown, newPage: number): void => {
-    setPage(newPage);
-  };
+  const serversPerPage = Settings.ActiveScriptsServerPageSize;
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    Settings.ActiveScriptsServerPageSize = parseInt(event.target.value, 10);
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  const serverData: [string, WorkerScript[]][] = (() => {
+    const tempData: Record<string, WorkerScript[]> = {};
+    for (const ws of workerScripts.values()) {
+      if (!ws.hostname.includes(filter) && !ws.scriptRef.filename.includes(filter)) continue;
+      const hostname = ws.hostname;
+      if (tempData[hostname]) tempData[hostname].push(ws);
+      else tempData[hostname] = [ws];
+    }
+    return getRecordEntries(tempData);
+  })();
 
-  function handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setFilter(event.target.value);
-    setPage(0);
+  const lastPage = Math.max(Math.ceil(serverData.length / serversPerPage) - 1, 0);
+  function changePage(n: number) {
+    if (!Number.isInteger(n) || n > lastPage || n < 0) return;
+    setPage(n);
   }
+  if (page > lastPage) changePage(lastPage);
 
-  const serverToScriptMap: IServerToScriptsMap = {};
-  for (const ws of props.workerScripts.values()) {
-    const server = GetServer(ws.hostname);
-    if (server == null) {
-      console.warn(`WorkerScript has invalid hostname: ${ws.hostname}`);
-      continue;
-    }
-
-    let data = serverToScriptMap[server.hostname];
-
-    if (data === undefined) {
-      serverToScriptMap[server.hostname] = {
-        server: server,
-        workerScripts: [],
-      };
-      data = serverToScriptMap[server.hostname];
-    }
-    if (data !== undefined) {
-      // Add only scripts that correspond to the filter
-      if (ws.hostname.includes(filter) || ws.name.includes(filter)) {
-        data.workerScripts.push(ws);
-      }
-    }
-  }
-
-  // Match filter in the scriptname part of the key
-  const pattern = matchScriptPathUnanchored(lodash.escapeRegExp(filter));
-  const filtered = Object.values(serverToScriptMap).filter((data) => {
-    if (!data) return false;
-    if (data.server.hostname.includes(filter)) return true;
-    for (const k of data.server.runningScriptMap.keys()) {
-      if (pattern.test(k)) return true;
-    }
-    return false;
-  });
+  const adjustedIndex = page * serversPerPage;
+  const dataToShow = serverData.slice(adjustedIndex, adjustedIndex + serversPerPage);
+  const lastServerNumber = (serverData.length === 0 ? 0 : adjustedIndex + dataToShow.length).toString();
+  const firstServerNumber = (serverData.length === 0 ? 0 : adjustedIndex + 1)
+    .toString()
+    .padStart(lastServerNumber.length, "\xa0");
 
   return (
     <>
-      <Grid container>
-        <Grid item xs={4}>
-          <TextField
-            value={filter}
-            onChange={handleFilterChange}
-            autoFocus
-            InputProps={{
-              startAdornment: <SearchIcon />,
-              spellCheck: false,
-            }}
-            style={{
-              paddingTop: "8px",
-              paddingBottom: "14px",
-            }}
-          />
-        </Grid>
-        <Grid item xs={8}>
-          {filtered.length > 10 ? (
-            <TablePagination
-              rowsPerPageOptions={[10, 15, 20, 100]}
-              component="div"
-              count={filtered.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActionsAll}
-            />
-          ) : (
-            ""
-          )}
-        </Grid>
-      </Grid>
-
+      <IconButton onClick={() => changePage(0)} disabled={page === 0}>
+        <FirstPage />
+      </IconButton>
+      <IconButton onClick={() => changePage(page - 1)} disabled={page === 0}>
+        <KeyboardArrowLeft />
+      </IconButton>
+      <Typography component="span">
+        {`servers ${firstServerNumber}-${lastServerNumber} of ${serverData.length}`}
+      </Typography>
+      <IconButton onClick={() => changePage(page + 1)} disabled={page === lastPage}>
+        <KeyboardArrowRight />
+      </IconButton>
+      <IconButton onClick={() => changePage(lastPage)} disabled={page === lastPage}>
+        <LastPage />
+      </IconButton>
       <List dense={true}>
-        {filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((data) => {
-          return (
-            data && (
-              <ServerAccordion key={data.server.hostname} server={data.server} workerScripts={data.workerScripts} />
-            )
-          );
+        {serverData.slice(page * serversPerPage, page * serversPerPage + serversPerPage).map(([hostname, scripts]) => {
+          return <ServerAccordion key={hostname} hostname={hostname} scripts={scripts} />;
         })}
       </List>
     </>
