@@ -38,6 +38,7 @@ import { Engine } from "../engine";
 import { resolveFilePath, FilePath } from "../Paths/FilePath";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
+import { ServerConstants } from "../Server/data/Constants";
 
 export const helpers = {
   string,
@@ -547,7 +548,7 @@ function hack(ctx: NetscriptContext, hostname: string, manual: boolean, opts: un
             expGainedOnSuccess,
           )} exp (t=${formatThreads(threads)})`,
       );
-      server.fortify(CONSTANTS.ServerFortifyAmount * Math.min(threads, maxThreadNeeded));
+      server.fortify(ServerConstants.ServerFortifyAmount * Math.min(threads, maxThreadNeeded));
       if (stock) {
         influenceStockThroughServerHack(server, moneyDrained);
       }

@@ -95,7 +95,7 @@ import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
-import { cloneDeep, escapeRegExp } from "lodash";
+import { escapeRegExp } from "lodash";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
 import { FilePath, resolveFilePath } from "./Paths/FilePath";
@@ -106,6 +106,7 @@ import { hasContractExtension } from "./Paths/ContractFilePath";
 import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
+import { ServerConstants } from "./Server/data/Constants";
 
 export const enums: NSEnums = {
   CityName,
@@ -220,7 +221,7 @@ export const ns: InternalAPI<NSFull> = {
       }
     }
 
-    return CONSTANTS.ServerFortifyAmount * threads;
+    return ServerConstants.ServerFortifyAmount * threads;
   },
   hackAnalyzeChance: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -346,7 +347,7 @@ export const ns: InternalAPI<NSFull> = {
         threads = Math.min(threads, maxThreadsNeeded);
       }
 
-      return 2 * CONSTANTS.ServerFortifyAmount * threads;
+      return 2 * ServerConstants.ServerFortifyAmount * threads;
     },
   weaken: (ctx) => async (_hostname, opts?) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -381,7 +382,7 @@ export const ns: InternalAPI<NSFull> = {
       }
       const cores = host.cpuCores;
       const coreBonus = getCoreBonus(cores);
-      const weakenAmt = CONSTANTS.ServerWeakenAmount * threads * coreBonus;
+      const weakenAmt = ServerConstants.ServerWeakenAmount * threads * coreBonus;
       server.weaken(weakenAmt);
       ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
@@ -404,7 +405,7 @@ export const ns: InternalAPI<NSFull> = {
       const threads = helpers.number(ctx, "threads", _threads);
       const cores = helpers.number(ctx, "cores", _cores);
       const coreBonus = getCoreBonus(cores);
-      return CONSTANTS.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
+      return ServerConstants.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
     },
   share: (ctx) => () => {
     const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
@@ -1679,17 +1680,17 @@ export const ns: InternalAPI<NSFull> = {
   getPlayer: () => () => {
     const data = {
       // Person
-      hp: cloneDeep(Player.hp),
-      skills: cloneDeep(Player.skills),
-      exp: cloneDeep(Player.exp),
-      mults: cloneDeep(Player.mults),
+      hp: structuredClone(Player.hp),
+      skills: structuredClone(Player.skills),
+      exp: structuredClone(Player.exp),
+      mults: structuredClone(Player.mults),
       city: Player.city,
       // Player-specific
       numPeopleKilled: Player.numPeopleKilled,
       money: Player.money,
       location: Player.location,
       totalPlaytime: Player.totalPlaytime,
-      jobs: cloneDeep(Player.jobs),
+      jobs: structuredClone(Player.jobs),
       factions: Player.factions.slice(),
       entropy: Player.entropy,
     };

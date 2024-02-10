@@ -1,5 +1,5 @@
 // Server and HacknetServer-related methods for the Player class (PlayerObject)
-import { CONSTANTS } from "../../Constants";
+import { ServerConstants } from "../../Server/data/Constants";
 
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { Server } from "../../Server/Server";
@@ -35,7 +35,7 @@ export function getUpgradeHomeRamCost(this: PlayerObject): number {
   //Calculate cost
   //Have cost increase by some percentage each time RAM has been upgraded
   const mult = Math.pow(1.58, numUpgrades);
-  const cost = currentRam * CONSTANTS.BaseCostFor1GBOfRamHome * mult * currentNodeMults.HomeComputerRamCost;
+  const cost = currentRam * ServerConstants.BaseCostFor1GBOfRamHome * mult * currentNodeMults.HomeComputerRamCost;
   return cost;
 }
 

@@ -16,26 +16,30 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import { ServerAccordionContent } from "./ServerAccordionContent";
 
-import { BaseServer } from "../../Server/BaseServer";
 import { WorkerScript } from "../../Netscript/WorkerScript";
 
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
+import { GetServer } from "../../Server/AllServers";
 
-interface IProps {
-  server: BaseServer;
-  workerScripts: WorkerScript[];
+interface ServerAccordionProps {
+  hostname: string;
+  scripts: WorkerScript[];
 }
 
-export function ServerAccordion(props: IProps): React.ReactElement {
+export function ServerAccordion({ hostname, scripts }: ServerAccordionProps): React.ReactElement {
   const [open, setOpen] = React.useState(false);
-  const server = props.server;
+  const server = GetServer(hostname);
+  if (!server) {
+    console.error(`Invalid server ${hostname} while displaying active scripts`);
+    return <></>;
+  }
 
   // Accordion's header text
   // TODO: calculate the longest hostname length rather than hard coding it
   const longestHostnameLength = 18;
-  const paddedName = `${server.hostname}${" ".repeat(longestHostnameLength)}`.slice(
+  const paddedName = `${hostname}${" ".repeat(longestHostnameLength)}`.slice(
     0,
-    Math.max(server.hostname.length, longestHostnameLength),
+    Math.max(hostname.length, longestHostnameLength),
   );
   const barOptions = {
     progress: server.ramUsed / server.maxRam,
@@ -44,16 +48,16 @@ export function ServerAccordion(props: IProps): React.ReactElement {
   const headerTxt = `${paddedName} ${createProgressBarText(barOptions)}`;
 
   return (
-    <Box component={Paper}>
+    <Paper>
       <ListItemButton onClick={() => setOpen((old) => !old)}>
         <ListItemText primary={<Typography style={{ whiteSpace: "pre-wrap" }}>{headerTxt}</Typography>} />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
       <Box mx={2}>
         <Collapse in={open} timeout={0} unmountOnExit>
-          <ServerAccordionContent workerScripts={props.workerScripts} />
+          <ServerAccordionContent scripts={scripts} />
         </Collapse>
       </Box>
-    </Box>
+    </Paper>
   );
 }
