@@ -25,26 +25,29 @@ export function ServerAccordionContent({ scripts }: ServerActiveScriptsProps): R
   }
   if (page > lastPage) changePage(lastPage);
 
-  const lastScriptNumber = Math.min((page + 1) * scriptsPerPage, scripts.length).toString();
-  const firstScriptNumber = (page * scriptsPerPage + 1).toString().padStart(lastScriptNumber.length, "\xa0");
+  const firstScriptNumber = page * scriptsPerPage + 1;
+  const lastScriptNumber = Math.min((page + 1) * scriptsPerPage, scripts.length);
 
   return (
     <>
-      <IconButton onClick={() => changePage(0)} disabled={page === 0}>
-        <FirstPage />
-      </IconButton>
-      <IconButton onClick={() => changePage(page - 1)} disabled={page === 0}>
-        <KeyboardArrowLeft />
-      </IconButton>
-      <Typography component="span">
-        {`scripts ${firstScriptNumber}-${lastScriptNumber} of ${scripts.length}`}
-      </Typography>
-      <IconButton onClick={() => changePage(page + 1)} disabled={page === lastPage}>
-        <KeyboardArrowRight />
-      </IconButton>
-      <IconButton onClick={() => changePage(lastPage)} disabled={page === lastPage}>
-        <LastPage />
-      </IconButton>
+      <div style={{ width: "100%", display: "flex", alignItems: "center" }}>
+        <Typography
+          component="span"
+          marginRight="auto"
+        >{`Displaying scripts ${firstScriptNumber}-${lastScriptNumber} of ${scripts.length}`}</Typography>
+        <IconButton onClick={() => changePage(0)} disabled={page === 0}>
+          <FirstPage />
+        </IconButton>
+        <IconButton onClick={() => changePage(page - 1)} disabled={page === 0}>
+          <KeyboardArrowLeft />
+        </IconButton>
+        <IconButton onClick={() => changePage(page + 1)} disabled={page === lastPage}>
+          <KeyboardArrowRight />
+        </IconButton>
+        <IconButton onClick={() => changePage(lastPage)} disabled={page === lastPage}>
+          <LastPage />
+        </IconButton>
+      </div>
       <List dense disablePadding>
         {scripts.slice(page * scriptsPerPage, page * scriptsPerPage + scriptsPerPage).map((ws) => (
           <WorkerScriptAccordion key={ws.pid} workerScript={ws} />
