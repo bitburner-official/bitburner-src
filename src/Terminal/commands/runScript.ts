@@ -28,7 +28,9 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
     return Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
   }
   if (ramOverride != null && (isNaN(ramOverride) || ramOverride < RamCostConstants.Base)) {
-    return Terminal.error(`Invalid ram override specified. Ram override must be a number greater than ${RamCostConstants.Base}`);
+    return Terminal.error(
+      `Invalid ram override specified. Ram override must be a number greater than ${RamCostConstants.Base}`,
+    );
   }
   if (!server.hasAdminRights) return Terminal.error("Need root access to run script");
 
