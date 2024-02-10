@@ -1,3 +1,4 @@
+import type { PromisePair } from "../../../Types/Promises";
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
@@ -12,6 +13,7 @@ export const isSleeveInfiltrateWork = (w: SleeveWorkClass | null): w is SleeveIn
 export class SleeveInfiltrateWork extends SleeveWorkClass {
   type: SleeveWorkType.INFILTRATE = SleeveWorkType.INFILTRATE;
   cyclesWorked = 0;
+  nextCompletionPair: PromisePair<void> = { promise: null, resolve: null };
 
   cyclesNeeded(): number {
     return infiltrateCycles;
@@ -23,7 +25,17 @@ export class SleeveInfiltrateWork extends SleeveWorkClass {
     if (this.cyclesWorked > this.cyclesNeeded()) {
       this.cyclesWorked -= this.cyclesNeeded();
       Player.bladeburner.infiltrateSynthoidCommunities();
+      if (this.nextCompletionPair.resolve) {
+        this.nextCompletionPair.resolve();
+        this.nextCompletionPair.resolve = null;
+        this.nextCompletionPair.promise = null;
+      }
     }
+  }
+  get nextCompletion(): Promise<void> {
+    if (!this.nextCompletionPair.promise)
+      this.nextCompletionPair.promise = new Promise((r) => (this.nextCompletionPair.resolve = r));
+    return this.nextCompletionPair.promise;
   }
 
   APICopy() {
@@ -31,6 +43,7 @@ export class SleeveInfiltrateWork extends SleeveWorkClass {
       type: SleeveWorkType.INFILTRATE as const,
       cyclesWorked: this.cyclesWorked,
       cyclesNeeded: this.cyclesNeeded(),
+      nextCompletion: this.nextCompletion,
     };
   }
 
