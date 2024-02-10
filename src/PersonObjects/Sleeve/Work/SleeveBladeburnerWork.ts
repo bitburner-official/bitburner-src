@@ -24,11 +24,11 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
   signalCompletion = () => {
     // Intentionally empty function, this is just an initial value and will never be used.
   };
-  nextCompletion: Promise<void>;
+  nextCompletionPromise: Promise<void> | null;
 
   constructor(params?: SleeveBladeburnerWorkParams) {
     super();
-    this.nextCompletion = new Promise((r) => (this.signalCompletion = r));
+    this.nextCompletionPromise = null;
     this.actionType = params?.type ?? "General";
     this.actionName = params?.name ?? "Field Analysis";
   }
@@ -40,7 +40,7 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
   }
 
   finish() {
-    this.signalCompletion();
+    if (this.nextCompletionPromise) this.signalCompletion();
   }
 
   process(sleeve: Sleeve, cycles: number) {
@@ -73,10 +73,12 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
       this.tasksCompleted++;
       this.cyclesWorked -= this.cyclesNeeded(sleeve);
       // Resolve and reset nextCompletion promise
-      const resolver = this.signalCompletion;
-      this.nextCompletion = new Promise((r) => (this.signalCompletion = r));
-      resolver();
+      if (this.nextCompletionPromise) this.signalCompletion();
     }
+  }
+  get nextCompletion(): Promise<void> {
+    if (!this.nextCompletionPromise) this.nextCompletionPromise = new Promise((r) => (this.signalCompletion = r));
+    return this.nextCompletionPromise;
   }
 
   APICopy(sleeve: Sleeve) {

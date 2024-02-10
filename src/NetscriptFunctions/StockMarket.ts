@@ -6,7 +6,7 @@ import {
   placeOrder,
   cancelOrder,
   initStockMarket,
-  StockMarketResolvers,
+  StockMarketPromise,
 } from "../StockMarket/StockMarket";
 import { getBuyTransactionCost, getSellTransactionGain } from "../StockMarket/StockMarketHelpers";
 import { PositionType, OrderType, StockSymbol } from "@enums";
@@ -415,7 +415,9 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     nextUpdate: (ctx) => () => {
       checkTixApiAccess(ctx);
-      return new Promise<number>((res) => StockMarketResolvers.push(res));
+      if (!StockMarketPromise.promise)
+        StockMarketPromise.promise = new Promise<number>((res) => (StockMarketPromise.resolve = res));
+      return StockMarketPromise.promise;
     },
   };
 }
