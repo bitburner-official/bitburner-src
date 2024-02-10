@@ -40,10 +40,8 @@ export function CinematicLine(props: IProps): React.ReactElement {
   });
   return (
     <>
-      <Typography style={props.style}>
-        {props.text.slice(0, length)}
-        {!done && <span>&#9608;</span>}
-      </Typography>
+      {props.text.slice(0, length)}
+      {!done && <span>&#9608;</span>}
     </>
   );
 }

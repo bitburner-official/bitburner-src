@@ -134,7 +134,7 @@ export function CinematicText({
         <>
           {lines.slice(0, i).flatMap((element, i) => [element, <br key={"br_" + i} />])}
           {lines.length > i && (
-            <CinematicLine style={style} onChange={onChange} key={i} text={lines[i]} onDone={advance} />
+            <CinematicLine onChange={onChange} key={i} text={lines[i]} onDone={advance} />
           )}
         </>
       </GlitchyTypography>
