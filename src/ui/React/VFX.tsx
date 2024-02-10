@@ -124,7 +124,7 @@ export type BlackScreenProps = {
   fadeInMs?: number;
   fadeOutMs?: number;
   isFadingIn: boolean;
-  onDone?: () => any;
+  onDone?: () => void;
 };
 
 function clamp01(x: number) {
@@ -205,9 +205,9 @@ export function BlackScreen({ fadeInMs = undefined, fadeOutMs = undefined, isFad
   );
 }
 
-// For anyone reading this: yes, I tried to do a union between [0-9a-fA-F]
-// and use each character as such in Hexcolor, it times out. If you can do
-// a better typing than just `#${string}`, please do
+// For anyone reading this: yes, I tried to do a union between [0-9A-Fa-f]
+// and use each character as such in Hexcolor, it times out typescript's 
+// compiler. If you can do a better typing than just `#${string}`, please do
 export type HexColor = `#${string}`;
 export type GlitchyTypographyProps = {
   maxOffset: number;
@@ -227,42 +227,36 @@ export function GlitchyTypography({
   style,
 }: GlitchyTypographyProps) {
   const [lastOffsets, setLastOffsets] = useState<{ x: number; y: number }[]>(colors.map(() => ({ x: 0, y: 0 })));
-  const [timer, setTimer] = useState<NodeJS.Timeout | undefined>(undefined);
+  const timer = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
-    clearTimeout(timer);
+    clearTimeout(timer.current);
     if (maxOffset === 0) {
-      setTimer(undefined);
+      timer.current = undefined;
 
       return () => {
-        clearTimeout(timer);
-        setTimer(undefined);
+        clearTimeout(timer.current);
+        timer.current = undefined;
       };
     }
 
-    setTimer(
-      setInterval(() => {
-        if (Math.random() > probability) {
-          return;
-        }
+    timer.current = setInterval(() => {
+      if (Math.random() > probability) {
+        return;
+      }
 
-        const offsets = colors.map(() => {
-          const a = {
-            x: Math.random() * 2 * maxOffset - maxOffset,
-            y: Math.random() * 2 * maxOffset - maxOffset,
-          };
-          console.log(`${Math.random()} * ${2} * ${maxOffset} - ${maxOffset}`);
-          return a;
-        });
-        setLastOffsets(offsets);
-      }, intervalMs),
-    );
+      const offsets = colors.map(() => ({
+        x: Math.random() * 2 * maxOffset - maxOffset,
+        y: Math.random() * 2 * maxOffset - maxOffset,
+      }));
+      setLastOffsets(offsets);
+    }, intervalMs);
 
     return () => {
-      clearTimeout(timer);
-      setTimer(undefined);
+      clearTimeout(timer.current);
+      timer.current = undefined;
     };
-  }, [probability, intervalMs, maxOffset, timer, colors]);
+  }, [probability, intervalMs, maxOffset, colors]);
 
   function getColor(color: HexColor, x: number, y: number) {
     return color + Math.floor((Math.sqrt(x * x + y * y) / maxOffset) * 0xff).toString(16);
