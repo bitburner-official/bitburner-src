@@ -1051,7 +1051,7 @@ export interface NetscriptPort {
    * @remarks
    * RAM cost: 0 GB
    *
-   * @param value Data to write, it's cloned with structuredClone().
+   * @param value - Data to write, it's cloned with structuredClone().
    * @returns The data popped off the queue if it was full.
    */
   write(value: any): any;
@@ -1061,7 +1061,7 @@ export interface NetscriptPort {
    * @remarks
    * RAM cost: 0 GB
    *
-   * @param value Data to write, it's cloned with structuredClone().
+   * @param value - Data to write, it's cloned with structuredClone().
    * @returns True if the data was added to the port, false if the port was full
    */
   tryWrite(value: any): boolean;
