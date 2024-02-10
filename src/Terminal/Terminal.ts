@@ -17,7 +17,7 @@ import { GetServer } from "../Server/AllServers";
 
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
-import { processSingleServerGrowth } from "../Server/ServerHelpers";
+import { processSingleServerGrowth, getWeakenEffect } from "../Server/ServerHelpers";
 import { parseCommand, parseCommands } from "./Parser";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
@@ -81,7 +81,6 @@ import { Directory, resolveDirectory, root } from "../Paths/Directory";
 import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
-import { getWeakenEffect } from "../Netscript/NetscriptHelpers";
 import { ServerConstants } from "../Server/data/Constants";
 
 export class Terminal {

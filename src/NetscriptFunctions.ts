@@ -36,6 +36,7 @@ import {
   processSingleServerGrowth,
   safelyCreateUniqueServer,
   getCoreBonus,
+  getWeakenEffect,
 } from "./Server/ServerHelpers";
 import {
   getPurchasedServerUpgradeCost,
@@ -51,7 +52,7 @@ import { runScriptFromScript } from "./NetscriptWorker";
 import { killWorkerScript, killWorkerScriptByPid } from "./Netscript/killWorkerScript";
 import { workerScripts } from "./Netscript/WorkerScripts";
 import { WorkerScript } from "./Netscript/WorkerScript";
-import { helpers, wrapUserNode, getWeakenEffect } from "./Netscript/NetscriptHelpers";
+import { helpers, wrapUserNode } from "./Netscript/NetscriptHelpers";
 import {
   formatExp,
   formatNumberNoSuffix,
