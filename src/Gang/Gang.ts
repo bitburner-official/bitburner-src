@@ -26,7 +26,8 @@ import { PowerMultiplier } from "./data/power";
 import { FactionName } from "@enums";
 import { CONSTANTS } from "../Constants";
 
-export const GangResolvers: ((msProcessed: number) => void)[] = [];
+type NextUpdateData = { resolver: ((msProcessed: number) => void) | null; promise: Promise<number> | null };
+export const GangNextUpdate: NextUpdateData = { resolver: null, promise: null };
 
 export class Gang {
   facName: FactionName;
@@ -106,9 +107,11 @@ export class Gang {
       console.error(`Exception caught when processing Gang: ${e}`);
     }
 
-    // Handle "nextUpdate" resolvers after this update
-    for (const resolve of GangResolvers.splice(0)) {
-      resolve(cycles * CONSTANTS.MilliPerCycle);
+    // Handle "nextUpdate" resolver after this update
+    if (GangNextUpdate.resolver) {
+      GangNextUpdate.resolver(cycles * CONSTANTS.MilliPerCycle);
+      GangNextUpdate.resolver = null;
+      GangNextUpdate.promise = null;
     }
   }
 

@@ -13,6 +13,7 @@ import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutori
 import { ITutorialEvents } from "./InteractiveTutorial/ITutorialEvents";
 
 import { prestigeAugmentation } from "../Prestige";
+import { prestigeWorkerScripts } from "../NetscriptWorker";
 import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
@@ -50,7 +51,6 @@ import { StaneksGiftRoot } from "../CotMG/ui/StaneksGiftRoot";
 import { staneksGift } from "../CotMG/Helper";
 import { CharacterOverview } from "./React/CharacterOverview";
 import { BladeburnerCinematic } from "../Bladeburner/ui/BladeburnerCinematic";
-import { workerScripts } from "../Netscript/WorkerScripts";
 import { Unclickable } from "../Exploits/Unclickable";
 import { Snackbar, SnackbarProvider } from "./React/Snackbar";
 import { LogBoxManager } from "./React/LogBoxManager";
@@ -168,6 +168,7 @@ export function GameRoot(): React.ReactElement {
           Player.gotoLocation(LocationName.TravelAgency);
           break;
         case Page.BitVerse:
+          prestigeWorkerScripts();
           calculateAchievements();
           break;
       }
@@ -252,7 +253,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.ActiveScripts: {
-      mainPage = <ActiveScriptsRoot workerScripts={workerScripts} />;
+      mainPage = <ActiveScriptsRoot />;
       break;
     }
     case Page.Hacknet: {

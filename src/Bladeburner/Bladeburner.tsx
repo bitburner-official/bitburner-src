@@ -2299,11 +2299,13 @@ export class Bladeburner {
     }
 
     const skill = Skills[skillName];
-    if (this.skills[skillName] == null) {
-      return skill.calculateCost(0, count);
-    } else {
-      return skill.calculateCost(this.skills[skillName], count);
+    const currentLevel = this.skills[skillName] ?? 0;
+
+    if (skill.maxLvl !== 0 && currentLevel + count > skill.maxLvl) {
+      return Infinity;
     }
+
+    return skill.calculateCost(currentLevel, count);
   }
 
   upgradeSkillNetscriptFn(skillName: string, count: number, workerScript: WorkerScript): boolean {

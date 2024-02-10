@@ -6,7 +6,7 @@ import { AddToAllServers, createUniqueRandomIp, GetServer, renameServer } from "
 import { safelyCreateUniqueServer } from "./ServerHelpers";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { CONSTANTS } from "../Constants";
+import { ServerConstants } from "./data/Constants";
 import { Player } from "@player";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
@@ -33,11 +33,12 @@ export function getPurchaseServerCost(ram: number, cores: number): number {
 
   const upg = Math.max(0, Math.log(ram) / Math.log(2) - 6);
   const coreCost =
-    CONSTANTS.PurchasedServerCoreBaseCost * (cores === 1 ? 0 : CONSTANTS.PurchasedServerCoreCostGrowth ** cores);
+    ServerConstants.PurchasedServerCoreBaseCost *
+    (cores === 1 ? 0 : ServerConstants.PurchasedServerCoreCostGrowth ** cores);
   return (
     coreCost +
     ram *
-      CONSTANTS.BaseCostFor1GBOfRamServer *
+      ServerConstants.BaseCostFor1GBOfRamServer *
       currentNodeMults.PurchasedServerCost *
       Math.pow(currentNodeMults.PurchasedServerSoftcap, upg)
   );
@@ -92,17 +93,17 @@ export const renamePurchasedServer = (hostname: string, newName: string): void =
 };
 
 export function getPurchaseServerLimit(): number {
-  return Math.round(CONSTANTS.PurchasedServerLimit * currentNodeMults.PurchasedServerLimit);
+  return Math.round(ServerConstants.PurchasedServerLimit * currentNodeMults.PurchasedServerLimit);
 }
 
 export function getPurchaseServerMaxRam(): number {
-  const ram = Math.round(CONSTANTS.PurchasedServerMaxRam * currentNodeMults.PurchasedServerMaxRam);
+  const ram = Math.round(ServerConstants.PurchasedServerMaxRam * currentNodeMults.PurchasedServerMaxRam);
 
   // Round this to the nearest power of 2
   return 1 << (31 - Math.clz32(ram));
 }
 export function getPurchasedServerMaxCores(): number {
-  return CONSTANTS.PurchasedServerMaxCores;
+  return ServerConstants.PurchasedServerMaxCores;
 }
 // Manually purchase a server (NOT through Netscript)
 export function purchaseServer(hostname: string, ram: number, cost: number): void {
@@ -163,7 +164,7 @@ export function purchaseRamForHomeComputer(): void {
   }
 
   const homeComputer = Player.getHomeComputer();
-  if (homeComputer.maxRam >= CONSTANTS.HomeComputerMaxRam) {
+  if (homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam) {
     dialogBoxCreate(`You cannot upgrade your home computer RAM because it is at its maximum possible value`);
     return;
   }

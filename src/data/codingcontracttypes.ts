@@ -1198,9 +1198,9 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         `"1+01" is not a valid expression`,
         "Examples:\n\n",
         `Input: digits = "123", target = 6\n`,
-        `Output: [1+2+3, 1*2*3]\n\n`,
+        `Output: ["1+2+3", "1*2*3"]\n\n`,
         `Input: digits = "105", target = 5\n`,
-        `Output: [1*0+5, 10-5]`,
+        `Output: ["1*0+5", "10-5"]`,
       ].join(" ");
     },
     difficulty: 10,
