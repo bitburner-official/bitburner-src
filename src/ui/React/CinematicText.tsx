@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 
 import { CinematicLine } from "./CinematicLine";
 import { DeadPixels, DeadPixelProps, BlackScreen, GlitchyTypography, HexColor } from "./VFX";
@@ -19,26 +19,22 @@ interface IProps {
 const FLICKER_CHANCE = 0.1;
 const FULLY_OPAQUE_SF_LENGTH = 30;
 
-function rand(offset: number) {
-  return Math.random() * 2 * offset - offset;
-}
-
 async function waitForMs(millis: number) {
   return await new Promise((resolve) => setTimeout(() => resolve(true), millis));
 }
 
-function getRandomFlicker(hex: string, offset: number = 20) {
-  const x = rand(offset);
-  const y = rand(offset);
-  const distance = Math.sqrt(x * x + y * y);
-  const opacity = Math.round((distance / offset) * 0xff);
-  return `${x}px ${y}px 0px ${hex}${opacity.toString(16).padStart(2, "0")}`;
-}
-
-export function CinematicText({lines, auto = false, onDone = undefined, chromaticAberration = false, fadeOutMs = undefined, fadeInMs = undefined, delayToDone = 0}: IProps): React.ReactElement {
+export function CinematicText({
+  lines,
+  auto = false,
+  onDone = undefined,
+  chromaticAberration = false,
+  fadeOutMs = undefined,
+  fadeInMs = undefined,
+  delayToDone = 0,
+}: IProps): React.ReactElement {
   const [i, setI] = useState(0);
   const [done, setDone] = useState(false);
-  const [deadPixels, _] = useState<DeadPixelProps["pixels"]>(new Map());
+  const [deadPixels, __setDeadPixels] = useState<DeadPixelProps["pixels"]>(new Map());
 
   const DEAD_PIXELS_RES: DeadPixelProps["size"] = 300;
   const colors: HexColor[] = ["#FF0000", "#00FF00", "#0000FF"];
@@ -69,7 +65,7 @@ export function CinematicText({lines, auto = false, onDone = undefined, chromati
   const opacity = Math.min(Math.round((glitchLevel / FULLY_OPAQUE_SF_LENGTH) * 0xff), 0xff);
   const style: React.CSSProperties = {
     color: Settings.theme.primary + opacity.toString(16).padStart(2, "0"),
-  }
+  };
 
   const glitchAttenuator = i / lines.length;
   const glitchEffect = glitchAttenuator * glitchLevel * 0.5;
@@ -114,7 +110,7 @@ export function CinematicText({lines, auto = false, onDone = undefined, chromati
 
   const shouldFadeOut = fadeOutMs !== undefined && auto && onDone;
   const shouldFadeIn = fadeInMs !== undefined;
-  console.log(`${glitchEffect} * Number(${Settings.EnableVFX} && ${chromaticAberration})}`)
+
   return (
     <>
       {Settings.EnableVFX && (shouldFadeOut || shouldFadeIn) && (
@@ -128,9 +124,15 @@ export function CinematicText({lines, auto = false, onDone = undefined, chromati
 
       {Settings.EnableVFX && chromaticAberration && <DeadPixels pixels={deadPixels} size={DEAD_PIXELS_RES} />}
 
-      <GlitchyTypography maxOffset={glitchEffect * Number(Settings.EnableVFX && chromaticAberration)} colors={colors} intervalMs={10} probability={0.05} style={style}>
+      <GlitchyTypography
+        maxOffset={glitchEffect * Number(Settings.EnableVFX && chromaticAberration)}
+        colors={colors}
+        intervalMs={10}
+        probability={0.05}
+        style={style}
+      >
         <>
-          {lines.slice(0, i).flatMap((element, i) => [element, <br key={"br_" + i}/>])}
+          {lines.slice(0, i).flatMap((element, i) => [element, <br key={"br_" + i} />])}
           {lines.length > i && (
             <CinematicLine style={style} onChange={onChange} key={i} text={lines[i]} onDone={advance} />
           )}

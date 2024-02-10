@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import mask from "../../../assets/Steam/logo_transparent.svg";
 import { Typography } from "@mui/material";
 import { ReactElement } from "react-markdown/lib/react-markdown";
@@ -10,14 +10,87 @@ export type DeadPixelProps = {
   pixels: DeadPixels;
 };
 
+type LogoData = {
+  size: number;
+  center: {
+    x: number;
+    y: number;
+  };
+};
+
 export function DeadPixels({ pixels, size }: DeadPixelProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [logo, _] = useState<HTMLImageElement>(document.createElement("img"));
-  let logoSize = 0;
-  let center = {
-    x: 0,
-    y: 0,
-  };
+  const [logo, __setLogo] = useState<HTMLImageElement>(document.createElement("img"));
+  const logoData = useRef<LogoData>({
+    size: 0,
+    center: {
+      x: 0,
+      y: 0,
+    },
+  });
+
+  function getHue(offset: number, periodMillis: number) {
+    const MAX_HUE = 360;
+    const HUE_STEPS = 120;
+    return (
+      Math.floor((((performance.now() * MAX_HUE) / periodMillis + offset * MAX_HUE) % MAX_HUE) / HUE_STEPS) * HUE_STEPS
+    );
+  }
+
+  const setup = useCallback(
+    (ctx: CanvasRenderingContext2D) => {
+      logo.src = mask;
+
+      logoData.current.size = Math.min(ctx.canvas.width, ctx.canvas.height);
+      logoData.current.center = {
+        x: ctx.canvas.width * 0.5,
+        y: ctx.canvas.height * 0.5,
+      };
+
+      logo.onload = () => {
+        // Change composite mode to use that shape
+        ctx.globalCompositeOperation = "source-atop";
+
+        // Turn off smoothing
+        ctx.canvas.style.imageRendering = "pixelated";
+      };
+    },
+    [logo],
+  );
+
+  const draw = useCallback(
+    (ctx: CanvasRenderingContext2D) => {
+      const pixel_w = Math.ceil(ctx.canvas.width / size);
+      const pixel_h = Math.ceil(ctx.canvas.height / size);
+      ctx.globalCompositeOperation = "source-over";
+
+      for (const [i, offset] of pixels) {
+        const x = i % size;
+        const y = Math.floor(i / size);
+
+        ctx.beginPath();
+        ctx.fillStyle = `HSL(${getHue(offset, 500)}deg, 100%, 50%)`;
+        ctx.rect(x * pixel_w, y * pixel_h, pixel_w, pixel_h);
+        ctx.fill();
+      }
+
+      // To fill everything but the logo
+      //ctx.globalCompositeOperation = 'destination-out';
+
+      // To fill the logo
+      ctx.globalCompositeOperation = "destination-in";
+
+      // Draw the shape we want to use for masking (Bitburner logo)
+      const topLeft = {
+        x: logoData.current.center.x - logoData.current.size * 0.5,
+        y: logoData.current.center.y - logoData.current.size * 0.5,
+      };
+      ctx.drawImage(logo, topLeft.x, topLeft.y, logoData.current.size, logoData.current.size);
+
+      ctx.globalCompositeOperation = "source-over";
+    },
+    [logo, pixels, size],
+  );
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -30,60 +103,7 @@ export function DeadPixels({ pixels, size }: DeadPixelProps) {
     };
 
     animation();
-  }, [canvasRef]);
-
-  function getHue(offset: number, periodMillis: number) {
-    const MAX_HUE = 360;
-    const HUE_STEPS = 120;
-    return (
-      Math.floor((((performance.now() * MAX_HUE) / periodMillis + offset * MAX_HUE) % MAX_HUE) / HUE_STEPS) * HUE_STEPS
-    );
-  }
-
-  function setup(ctx: CanvasRenderingContext2D) {
-    logo.src = mask;
-
-    logoSize = Math.min(ctx.canvas.width, ctx.canvas.height);
-    center = {
-      x: ctx.canvas.width * 0.5,
-      y: ctx.canvas.height * 0.5,
-    };
-
-    logo.onload = () => {
-      // Change composite mode to use that shape
-      ctx.globalCompositeOperation = "source-atop";
-
-      // Turn off smoothing
-      ctx.canvas.style.imageRendering = "pixelated";
-    };
-  }
-
-  function draw(ctx: CanvasRenderingContext2D) {
-    const pixel_w = Math.ceil(ctx.canvas.width / size);
-    const pixel_h = Math.ceil(ctx.canvas.height / size);
-    ctx.globalCompositeOperation = "source-over";
-
-    for (const [i, offset] of pixels) {
-      const x = i % size;
-      const y = Math.floor(i / size);
-
-      ctx.beginPath();
-      ctx.fillStyle = `HSL(${getHue(offset, 500)}deg, 100%, 50%)`;
-      ctx.rect(x * pixel_w, y * pixel_h, pixel_w, pixel_h);
-      ctx.fill();
-    }
-
-    // To fill everything but the logo
-    //ctx.globalCompositeOperation = 'destination-out';
-
-    // To fill the logo
-    ctx.globalCompositeOperation = "destination-in";
-
-    // Draw the shape we want to use for masking (Bitburner logo)
-    ctx.drawImage(logo, center.x - logoSize * 0.5, center.y - logoSize * 0.5, logoSize, logoSize);
-
-    ctx.globalCompositeOperation = "source-over";
-  }
+  }, [canvasRef, draw, setup]);
 
   return (
     <canvas
@@ -208,34 +228,33 @@ export function GlitchyTypography({
 }: GlitchyTypographyProps) {
   const [lastOffsets, setLastOffsets] = useState<{ x: number; y: number }[]>(colors.map(() => ({ x: 0, y: 0 })));
   const [timer, setTimer] = useState<NodeJS.Timeout | undefined>(undefined);
-  console.log("maxOffset:", maxOffset);
 
   useEffect(() => {
     clearTimeout(timer);
     if (maxOffset === 0) {
-        setTimer(undefined);
+      setTimer(undefined);
 
-        return () => {
-            clearTimeout(timer);
-            setTimer(undefined);
-        }
+      return () => {
+        clearTimeout(timer);
+        setTimer(undefined);
+      };
     }
 
     setTimer(
       setInterval(() => {
-        console.log("rodou")
         if (Math.random() > probability) {
           return;
         }
-        console.log("rolou")
 
-        const offsets = colors.map(() => {const a = {
-          x: Math.random() * 2 * maxOffset - maxOffset,
-          y: Math.random() * 2 * maxOffset - maxOffset,
-        }; console.log(`${Math.random()} * ${2} * ${maxOffset} - ${maxOffset}`); return a;});
+        const offsets = colors.map(() => {
+          const a = {
+            x: Math.random() * 2 * maxOffset - maxOffset,
+            y: Math.random() * 2 * maxOffset - maxOffset,
+          };
+          console.log(`${Math.random()} * ${2} * ${maxOffset} - ${maxOffset}`);
+          return a;
+        });
         setLastOffsets(offsets);
-        console.log("setou:")
-        console.log(offsets)
       }, intervalMs),
     );
 
@@ -243,20 +262,16 @@ export function GlitchyTypography({
       clearTimeout(timer);
       setTimer(undefined);
     };
-  }, [probability, intervalMs, maxOffset]);
+  }, [probability, intervalMs, maxOffset, timer, colors]);
 
   function getColor(color: HexColor, x: number, y: number) {
-    return color + Math.floor(Math.sqrt(x * x + y * y) / maxOffset * 0xFF).toString(16)
+    return color + Math.floor((Math.sqrt(x * x + y * y) / maxOffset) * 0xff).toString(16);
   }
-  
-  console.log("li:")
-  console.log(lastOffsets)
+
   const newStyle = Object.assign({}, style ?? {});
-  newStyle.textShadow = `${lastOffsets.map(({ x, y }, i) => `${x}px ${y}px 0 ${getColor(colors[i], x, y)}`).join(", ")}`;
-  console.log(newStyle)
-  return (
-    <Typography style={newStyle}>
-      {children}
-    </Typography>
-  );
+  newStyle.textShadow = `${lastOffsets
+    .map(({ x, y }, i) => `${x}px ${y}px 0 ${getColor(colors[i], x, y)}`)
+    .join(", ")}`;
+
+  return <Typography style={newStyle}>{children}</Typography>;
 }

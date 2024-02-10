@@ -29,8 +29,6 @@ import {
   iTutorialEnd,
 } from "../../InteractiveTutorial";
 import { useRerender } from "../React/hooks";
-import { Settings } from "../../Settings/Settings";
-import { OptionSwitch } from "../React/OptionSwitch";
 
 interface IContent {
   content: React.ReactElement;
