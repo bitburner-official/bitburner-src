@@ -1,3 +1,4 @@
+import type { PromisePair } from "../Types/Promises";
 import { Player } from "@player";
 import { CorpStateName, InvestmentOffer } from "@nsdefs";
 import { CorpUnlockName, CorpUpgradeName, LiteratureName } from "@enums";
@@ -19,12 +20,7 @@ import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 
-type CorporationResolver = (prevState: CorpStateName) => void;
-type CorporationPromise = {
-  promise: Promise<CorpStateName> | null;
-  resolve: CorporationResolver | null;
-};
-export const CorporationPromise: CorporationPromise = { promise: null, resolve: null };
+export const CorporationPromise: PromisePair<CorpStateName> = { promise: null, resolve: null };
 
 interface ICorporationParams {
   name?: string;

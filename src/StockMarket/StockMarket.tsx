@@ -1,3 +1,4 @@
+import type { PromisePair } from "../Types/Promises";
 import type { IOrderBook } from "./IOrderBook";
 import type { IStockMarket } from "./IStockMarket";
 import { Order } from "./Order";
@@ -15,11 +16,6 @@ import { Reviver } from "../utils/JSONReviver";
 import { NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-type StockMarketResolver = (msProcessed: number) => void;
-type StockMarettPromise = {
-  promise: Promise<number> | null;
-  resolve: StockMarketResolver | null;
-};
 
 export let StockMarket: IStockMarket = {
   lastUpdate: 0,
@@ -30,7 +26,7 @@ export let StockMarket: IStockMarket = {
 // Gross type, needs to be addressed
 export const SymbolToStockMap: Record<string, Stock> = {}; // Maps symbol -> Stock object
 
-export const StockMarketPromise: StockMarettPromise = { promise: null, resolve: null };
+export const StockMarketPromise: PromisePair<number> = { promise: null, resolve: null };
 
 export function placeOrder(
   stock: Stock,

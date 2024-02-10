@@ -1,3 +1,4 @@
+import type { PromisePair } from "../Types/Promises";
 import { AugmentationName, CityName, FactionName } from "@enums";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { ActionIdentifier } from "./ActionIdentifier";
@@ -42,12 +43,7 @@ export interface BlackOpsAttempt {
   isAvailable?: boolean;
   action?: BlackOperation;
 }
-type BladeburnerResolver = (msProcessed: number) => void;
-type BladeburnerPromise = {
-  promise: Promise<number> | null;
-  resolve: BladeburnerResolver | null;
-};
-export const BladeburnerPromise: BladeburnerPromise = { promise: null, resolve: null };
+export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
 export class Bladeburner {
   numHosp = 0;
