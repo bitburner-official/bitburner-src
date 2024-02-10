@@ -1,7 +1,6 @@
 import type { editor } from "monaco-editor";
 import { getRecordKeys } from "../../Types/Record";
 import { Settings } from "../../Settings/Settings";
-import { cloneDeep } from "lodash";
 type DefineThemeFn = typeof editor.defineTheme;
 
 export interface IScriptEditorTheme {
@@ -76,7 +75,7 @@ const colorRegExp = /^#?([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?$/;
 // Invalid data will be replaced with FF0000 (bright red)
 export const sanitizeTheme = (theme: IScriptEditorTheme): void => {
   if (typeof theme !== "object") {
-    Settings.EditorTheme = cloneDeep(defaultMonacoTheme);
+    Settings.EditorTheme = structuredClone(defaultMonacoTheme);
     return;
   }
   for (const themeKey of getRecordKeys(theme)) {
