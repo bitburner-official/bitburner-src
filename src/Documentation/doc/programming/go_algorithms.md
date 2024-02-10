@@ -169,7 +169,7 @@ That info can be used to make decisions about where to place routers.
 
 In order to expand the area that is controlled by the player's networks, connecting to friendly routers (when possible) is a strong move. This can be done with a very similar implementation to `getRandomMove()`, with the additional check of looking for a neighboring friendly router. For each point on the board:
 
-```
+```text
 Detect expansion moves:
    For each point on the board:
       * If the empty point is a valid move, and
@@ -207,7 +207,7 @@ If the opposing faction's network is down to its last open port, placing a route
 
 To find out what networks are in danger of capture, `ns.go.analysis.getLiberties()` shows how many empty nodes / open ports each network has. As with `getBoardState()` and `getValidMoves()` , the number of liberties (open ports) for a given point's network can be retrieved via its coordinates `[x][y]` on the grid returned by `getLiberties()`
 
-```
+```text
 Detect moves to capture the opponent's routers:
    For each point on the board:
       * If the empty point is a valid move, and
@@ -223,7 +223,7 @@ Detect moves to capture the opponent's routers:
 
 `getLiberties()` can also be used to detect your own networks that are in danger of being captured, and look for moves to try and save it.
 
-```
+```text
 Detect moves to defend a threatened network:
    For each point on the board:
       * If the empty point is a valid move, and
@@ -264,6 +264,15 @@ This is similar to the logic for defending your networks from immediate capture.
 
 ### Move option: Encircling space to control empty nodes
 
+A key part of the strategy of Go is fully encircling groups of empty nodes. The examples at the start of this doc simply leave out specific nodes and hope they stay empty, but this can be done in much better ways.
+
+As a simple approach, look for possible moves that are:
+
+- adjacent to two separate empty nodes (open areas it will divide up)
+- adjacent a friendly piece and the edge of a board (or a second friendly piece from a different chain than the first)
+
+This will find moves which are connecting your chains together, or connecting to the edge of the board, and dividing up empty space in the process. This allows you to control space, making it harder to capture your chains in the process.
+
 &nbsp;
 
 ### Choosing a good move option
@@ -301,3 +310,13 @@ There are a lot of strong shapes in Go, that are worth attempting to re-create. 
 If a single network fully encloses two different disconnected empty nodes, it can never be taken. (If it only had one inner airspace, the opponent could eventually surround and then fill it to capture the network. If there is two, however, the suicide rule prevents them from filling either inner empty space.) Detecting moves that make figure-8 type shapes, or split an encircled empty node chain into two smaller ones, are very strong.
 
 In addition, if the opponent has only a single such move, playing there first to block it is often extremely disruptive, and can even lead to their network being captured.
+
+&nbsp;
+
+A deeper dive into this idea will involve making your own code to identify chains of pieces (and continuous empty nodes).
+
+- Find all moves that divide up empty space and connect two chains or a chain and the edge as in the 'encircling empty space' idea above
+- Apply the move on a sample board in memory, one at a time
+- Identify all chains and continuous groups of empty nodes in the resulting board, and which color pieces surround the new empty node groups
+- Prioritize the move that makes the most empty node groups fully surrounded by your player color.
+- Alternatively, count how many empty node groups each friendly chain is touching, and prioritize moves that create a second of these "eyes" for friendly chains

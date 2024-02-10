@@ -205,15 +205,18 @@ export const GoInstructionsPage = (): React.ReactElement => {
             <Typography>
               * You can place routers and look at the board state via the "ns.go" api. For more details, go to the IPvGO
               page in the{" "}
-              <Link style={{ cursor: "pointer" }} onClick={() => Router.toPage(Page.Documentation)}>
+              <Link
+                style={{ cursor: "pointer" }}
+                onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/go_algorithms.md" })}
+              >
                 Bitburner Documentation
               </Link>
               <br />
               <br />
               * If a network surrounds a single empty node, the opponent can eventually capture it by filling in that
               node. However, if your network has two separate empty nodes inside of it, the suicide rule prevents the
-              opponent from filling up either of them. This means your network cannot be captured! Try to place your
-              networks surround several different empty nodes, and avoid filling in your network's empty nodes when
+              opponent from filling up either of them. This means your network cannot be captured! Try to build your
+              networks to surround several different empty nodes, and avoid filling in your network's empty nodes when
               possible.
               <br />
               <br />

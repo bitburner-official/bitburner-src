@@ -110,24 +110,25 @@ export type PlayerColor = playerColors.white | playerColors.black | playerColors
 export type Board = (PointState | null)[][];
 
 export type MoveOptions = {
-  capture: Move | null;
-  defendCapture: Move | null;
-  eyeMove: EyeMove | null;
-  eyeBlock: EyeMove | null;
-  pattern: PointState | null;
-  growth: Move | null;
-  expansion: Move | null;
-  jump: Move | null;
-  defend: Move | null;
-  surround: Move | null;
-  corner: PointState | null;
-  random: PointState | null;
+  capture: () => Promise<Move | null>;
+  defendCapture: () => Promise<Move | null>;
+  eyeMove: () => Promise<Move | null>;
+  eyeBlock: () => Promise<Move | null>;
+  pattern: () => Promise<Move | null>;
+  growth: () => Promise<Move | null>;
+  expansion: () => Promise<Move | null>;
+  jump: () => Promise<Move | null>;
+  defend: () => Promise<Move | null>;
+  surround: () => Promise<Move | null>;
+  corner: () => Promise<Move | null>;
+  random: () => Promise<Move | null>;
 };
 
 export type Move = {
   point: PointState;
-  oldLibertyCount: number | null;
-  newLibertyCount: number | null;
+  oldLibertyCount?: number | null;
+  newLibertyCount?: number | null;
+  createsLife?: boolean;
 };
 
 export type EyeMove = {

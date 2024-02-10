@@ -41,13 +41,20 @@ export async function makePlayerMove(logger: (s: string) => void, x: number, y: 
   if (validity !== validityReason.valid || !result) {
     await sleep(500);
     logger(`ERROR: Invalid move: ${validity}`);
+
+    if (validity === validityReason.notYourTurn) {
+      logger("Do you have multiple scripts running, or did you forget to await makeMove() ?");
+    }
+
     return Promise.resolve(invalidMoveResponse);
   }
 
   logger(`Go move played: ${x}, ${y}`);
 
   const playerUpdatedBoard = getStateCopy(result);
-  return getAIMove(logger, playerUpdatedBoard);
+  const response = getAIMove(logger, playerUpdatedBoard);
+  await sleep(300);
+  return response;
 }
 
 /**
@@ -82,7 +89,7 @@ async function getAIMove(logger: (s: string) => void, boardState: BoardState, su
       logger(`Opponent played move: ${result.x}, ${result.y}`);
     }
 
-    await sleep(200);
+    await sleep(400);
     resolve({ ...result, success });
   });
   return aiMoveResult;

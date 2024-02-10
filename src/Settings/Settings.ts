@@ -42,6 +42,8 @@ export const Settings = {
   MaxPortCapacity: 50,
   /** Limit the number of entries in the terminal. */
   MaxTerminalCapacity: 500,
+  /** IP address the Remote File API client will try to connect to. Default localhost . */
+  RemoteFileApiAddress: "localhost",
   /** Port the Remote File API client will try to connect to. 0 to disable. */
   RemoteFileApiPort: 0,
   /** Whether to save the game when the player saves any file. */

@@ -1,5 +1,6 @@
 import type { ContentFilePath } from "../../Paths/ContentFile";
 import { editor, Position } from "monaco-editor";
+import { makeModel } from "./utils";
 
 type ITextModel = editor.ITextModel;
 
@@ -24,6 +25,6 @@ export class OpenScript {
   }
 
   regenerateModel(): void {
-    this.model = editor.createModel(this.code, this.isTxt ? "plaintext" : "javascript");
+    this.model = makeModel(this.hostname, this.path, this.code);
   }
 }

@@ -89,6 +89,7 @@ interface MoneySource {
   corporation: number;
   crime: number;
   gang: number;
+  gang_expenses: number;
   hacking: number;
   hacknet: number;
   hacknet_expenses: number;
@@ -3256,7 +3257,7 @@ export interface Bladeburner {
    *
    * This function returns the number of skill points needed to upgrade the specified skill the specified number of times.
    *
-   * The function returns -1 if an invalid skill name is passed in.
+   * The function returns -1 if an invalid skill name is passed in, and Infinity if the count overflows the maximum level.
    *
    * @param skillName - Name of skill. Case-sensitive and must be an exact match.
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
@@ -4138,7 +4139,7 @@ export interface Go {
       x1: number,
       y1: number,
       x2: number,
-      x2: number,
+      y2: number,
     ): Promise<{
       type: "invalid" | "move" | "pass" | "gameOver";
       x: number;
@@ -6643,6 +6644,17 @@ export interface NS {
    * @returns True if the data is successfully written to the port, and false otherwise.
    */
   tryWritePort(portNumber: number, data: string | number): boolean;
+
+  /**
+   * Listen for a port write.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Sleeps until the port is written to.
+   *
+   * @param port - Port to listen for a write on. Must be a positive integer.
+   */
+  nextPortWrite(port: number): Promise<void>;
 
   /**
    * Read content of a file.
