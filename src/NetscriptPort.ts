@@ -79,11 +79,12 @@ export function readPort(n: PortNumber): any {
 export function peekPort(n: PortNumber): any {
   const port = NetscriptPorts.get(n);
   if (!port || !port.data.length) return emptyPortData;
+  const value = port.data[0];
   // Needed to avoid exposing internal objects.
   if ((typeof value === "object" || typeof value === "function") && value !== null) {
-    return structuredClone(port.data[0]);
+    return structuredClone(value);
   }
-  return port.data[0];
+  return value;
 }
 
 export function nextPortWrite(n: PortNumber) {
