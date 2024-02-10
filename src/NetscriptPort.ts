@@ -63,7 +63,7 @@ export function tryWritePort(n: PortNumber, value: unknown): boolean {
   }
   const port = getPort(n);
   if (port.data.length >= Settings.MaxPortCapacity) return false;
-  port.data.push(value);
+  port.data.push(data);
   port.resolve();
   return true;
 }
