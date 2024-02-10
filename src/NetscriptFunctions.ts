@@ -106,6 +106,7 @@ import { hasContractExtension } from "./Paths/ContractFilePath";
 import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
+import { ServerConstants } from "./Server/data/Constants";
 
 export const enums: NSEnums = {
   CityName,
@@ -220,7 +221,7 @@ export const ns: InternalAPI<NSFull> = {
       }
     }
 
-    return CONSTANTS.ServerFortifyAmount * threads;
+    return ServerConstants.ServerFortifyAmount * threads;
   },
   hackAnalyzeChance: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -346,7 +347,7 @@ export const ns: InternalAPI<NSFull> = {
         threads = Math.min(threads, maxThreadsNeeded);
       }
 
-      return 2 * CONSTANTS.ServerFortifyAmount * threads;
+      return 2 * ServerConstants.ServerFortifyAmount * threads;
     },
   weaken: (ctx) => async (_hostname, opts?) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -381,7 +382,7 @@ export const ns: InternalAPI<NSFull> = {
       }
       const cores = host.cpuCores;
       const coreBonus = getCoreBonus(cores);
-      const weakenAmt = CONSTANTS.ServerWeakenAmount * threads * coreBonus;
+      const weakenAmt = ServerConstants.ServerWeakenAmount * threads * coreBonus;
       server.weaken(weakenAmt);
       ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
@@ -404,7 +405,7 @@ export const ns: InternalAPI<NSFull> = {
       const threads = helpers.number(ctx, "threads", _threads);
       const cores = helpers.number(ctx, "cores", _cores);
       const coreBonus = getCoreBonus(cores);
-      return CONSTANTS.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
+      return ServerConstants.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
     },
   share: (ctx) => () => {
     const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
