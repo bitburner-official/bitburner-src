@@ -206,7 +206,7 @@ export function BlackScreen({ fadeInMs = undefined, fadeOutMs = undefined, isFad
 }
 
 // For anyone reading this: yes, I tried to do a union between [0-9A-Fa-f]
-// and use each character as such in Hexcolor, it times out typescript's 
+// and use each character as such in Hexcolor, it times out typescript's
 // compiler. If you can do a better typing than just `#${string}`, please do
 export type HexColor = `#${string}`;
 export type GlitchyTypographyProps = {
