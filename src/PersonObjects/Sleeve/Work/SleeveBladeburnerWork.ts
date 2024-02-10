@@ -74,11 +74,7 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
       this.tasksCompleted++;
       this.cyclesWorked -= this.cyclesNeeded(sleeve);
       // Resolve and reset nextCompletion promise
-      if (this.nextCompletionPair.resolve) {
-        this.nextCompletionPair.resolve();
-        this.nextCompletionPair.resolve = null;
-        this.nextCompletionPair.promise = null;
-      }
+      this.finish();
     }
   }
   get nextCompletion(): Promise<void> {

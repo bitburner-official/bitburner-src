@@ -25,11 +25,7 @@ export class SleeveInfiltrateWork extends SleeveWorkClass {
     if (this.cyclesWorked > this.cyclesNeeded()) {
       this.cyclesWorked -= this.cyclesNeeded();
       Player.bladeburner.infiltrateSynthoidCommunities();
-      if (this.nextCompletionPair.resolve) {
-        this.nextCompletionPair.resolve();
-        this.nextCompletionPair.resolve = null;
-        this.nextCompletionPair.promise = null;
-      }
+      this.finish();
     }
   }
   get nextCompletion(): Promise<void> {
