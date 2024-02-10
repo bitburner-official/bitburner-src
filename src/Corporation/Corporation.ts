@@ -1,3 +1,4 @@
+import type { PromisePair } from "../Types/Promises";
 import { Player } from "@player";
 import { CorpStateName, InvestmentOffer } from "@nsdefs";
 import { CorpUnlockName, CorpUpgradeName, LiteratureName } from "@enums";
@@ -19,7 +20,7 @@ import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 
-export const CorporationResolvers: ((prevState: CorpStateName) => void)[] = [];
+export const CorporationPromise: PromisePair<CorpStateName> = { promise: null, resolve: null };
 
 interface ICorporationParams {
   name?: string;
@@ -175,9 +176,11 @@ export class Corporation {
 
       this.state.incrementState();
 
-      // Handle "nextUpdate" resolvers after this update
-      for (const resolve of CorporationResolvers.splice(0)) {
-        resolve(state);
+      // Handle "nextUpdate" resolver after this update
+      if (CorporationPromise.resolve) {
+        CorporationPromise.resolve(state);
+        CorporationPromise.resolve = null;
+        CorporationPromise.promise = null;
       }
     }
   }

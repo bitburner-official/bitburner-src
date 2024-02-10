@@ -5,7 +5,7 @@ import { Product } from "../Corporation/Product";
 import { Material } from "../Corporation/Material";
 import { Warehouse } from "../Corporation/Warehouse";
 import { Division } from "../Corporation/Division";
-import { Corporation, CorporationResolvers } from "../Corporation/Corporation";
+import { Corporation, CorporationPromise } from "../Corporation/Corporation";
 import { omit } from "lodash";
 import { setDeprecatedProperties } from "../utils/DeprecationHelper";
 import {
@@ -800,7 +800,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     },
     nextUpdate: (ctx) => () => {
       checkAccess(ctx);
-      return new Promise<CorpStateName>((res) => CorporationResolvers.push(res));
+      if (!CorporationPromise.promise)
+        CorporationPromise.promise = new Promise<CorpStateName>((res) => (CorporationPromise.resolve = res));
+      return CorporationPromise.promise;
     },
   };
 
