@@ -823,5 +823,5 @@ export function wrapUserNode(value: unknown) {
 
 export function getWeakenEffect(threads: number, cores: number): number {
   const coreBonus = getCoreBonus(cores);
-  return CONSTANTS.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
+  return ServerConstants.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
 }
