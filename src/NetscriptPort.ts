@@ -3,7 +3,6 @@ import { NetscriptPort } from "@nsdefs";
 import { NetscriptPorts } from "./NetscriptWorker";
 import { PositiveInteger } from "./types";
 
-type PortData = string | number;
 type Resolver = () => void;
 const emptyPortData = "NULL PORT DATA";
 /** The object property is for typechecking and is not present at runtime */
@@ -20,7 +19,7 @@ export function getPort(n: PortNumber) {
 }
 
 export class Port {
-  data: PortData[] = [];
+  data: any[] = [];
   resolver: Resolver | null = null;
   promise: Promise<void> | null = null;
   resolve() {
@@ -43,24 +42,24 @@ export function portHandle(n: PortNumber): NetscriptPort {
   };
 }
 
-export function writePort(n: PortNumber, value: unknown): PortData | null {
-  if (typeof value !== "number" && typeof value !== "string") {
-    throw new Error(
-      `port.write: Tried to write type ${typeof value}. Only string and number types may be written to ports.`,
-    );
+export function writePort(n: PortNumber, value: unknown): any {
+  let data = value;
+  // Primitives don't need to be cloned.
+  if ((typeof value === "object" || typeof value === "function") && value !== null) {
+    data = structuredClone(data);
   }
   const port = getPort(n);
-  port.data.push(value);
+  port.data.push(data);
   port.resolve();
-  if (port.data.length > Settings.MaxPortCapacity) return port.data.shift() as PortData;
+  if (port.data.length > Settings.MaxPortCapacity) return port.data.shift();
   return null;
 }
 
 export function tryWritePort(n: PortNumber, value: unknown): boolean {
-  if (typeof value != "number" && typeof value != "string") {
-    throw new Error(
-      `port.write: Tried to write type ${typeof value}. Only string and number types may be written to ports.`,
-    );
+  let data = value;
+  // Primitves don't need to be cloned.
+  if ((typeof value === "object" || typeof value === "function") && value !== null) {
+    data = structuredClone(data);
   }
   const port = getPort(n);
   if (port.data.length >= Settings.MaxPortCapacity) return false;
@@ -69,17 +68,21 @@ export function tryWritePort(n: PortNumber, value: unknown): boolean {
   return true;
 }
 
-export function readPort(n: PortNumber): PortData {
+export function readPort(n: PortNumber): any {
   const port = NetscriptPorts.get(n);
   if (!port || !port.data.length) return emptyPortData;
-  const returnVal = port.data.shift() as PortData;
+  const returnVal = port.data.shift();
   if (!port.data.length && !port.resolver) NetscriptPorts.delete(n);
   return returnVal;
 }
 
-export function peekPort(n: PortNumber): PortData {
+export function peekPort(n: PortNumber): any {
   const port = NetscriptPorts.get(n);
   if (!port || !port.data.length) return emptyPortData;
+  // Needed to avoid exposing internal objects.
+  if ((typeof value === "object" || typeof value === "function") && value !== null) {
+    return structuredClone(port.data[0]);
+  }
   return port.data[0];
 }
 
