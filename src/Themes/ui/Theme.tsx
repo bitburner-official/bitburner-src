@@ -239,9 +239,12 @@ export function refreshTheme(): void {
       },
       MuiIconButton: {
         styleOverrides: {
-          root: {
+          root: ({ ownerState }) => ({
             color: Settings.theme.primary,
-          },
+            ...(ownerState.disableRipple && {
+              p: 0,
+            }),
+          }),
         },
       },
       MuiTooltip: {

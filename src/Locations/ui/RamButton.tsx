@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import { CONSTANTS } from "../../Constants";
 import { Player } from "@player";
 import { purchaseRamForHomeComputer } from "../../Server/ServerPurchases";
 
@@ -12,6 +11,7 @@ import { formatRam } from "../../ui/formatNumber";
 
 import { MathJax } from "better-react-mathjax";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
+import { ServerConstants } from "../../Server/data/Constants";
 
 interface IProps {
   rerender: () => void;
@@ -19,7 +19,7 @@ interface IProps {
 
 export function RamButton(props: IProps): React.ReactElement {
   const homeComputer = Player.getHomeComputer();
-  if (homeComputer.maxRam >= CONSTANTS.HomeComputerMaxRam) {
+  if (homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam) {
     return <Button>Upgrade 'home' RAM - MAX</Button>;
   }
 

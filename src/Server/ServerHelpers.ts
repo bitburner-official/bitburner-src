@@ -3,7 +3,7 @@ import { Server, IConstructorParams } from "./Server";
 import { BaseServer } from "./BaseServer";
 import { calculateServerGrowth, calculateServerGrowthLog } from "./formulas/grow";
 
-import { CONSTANTS } from "../Constants";
+import { ServerConstants } from "./data/Constants";
 import { Player } from "@player";
 import { CompletedProgramName, LiteratureName } from "@enums";
 import { Person as IPerson } from "@nsdefs";
@@ -202,7 +202,7 @@ export function processSingleServerGrowth(server: Server, threads: number, cores
     let usedCycles = numCycleForGrowthCorrected(server, server.moneyAvailable, oldMoneyAvailable, cores);
     // Growing increases server security twice as much as hacking
     usedCycles = Math.min(Math.max(0, Math.ceil(usedCycles)), threads);
-    server.fortify(2 * CONSTANTS.ServerFortifyAmount * usedCycles);
+    server.fortify(2 * ServerConstants.ServerFortifyAmount * usedCycles);
   }
   return server.moneyAvailable / oldMoneyAvailable;
 }

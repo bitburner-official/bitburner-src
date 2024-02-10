@@ -82,6 +82,7 @@ import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
 import { getWeakenEffect } from "../Netscript/NetscriptHelpers";
+import { ServerConstants } from "../Server/data/Constants";
 
 export class Terminal {
   // Flags to determine whether the player is currently running a hack or an analyze
@@ -228,7 +229,7 @@ export class Terminal {
       Player.gainIntelligenceExp(expGainedOnSuccess / CONSTANTS.IntelligenceTerminalHackBaseExpGain);
 
       const oldSec = server.hackDifficulty;
-      server.fortify(CONSTANTS.ServerFortifyAmount);
+      server.fortify(ServerConstants.ServerFortifyAmount);
       const newSec = server.hackDifficulty;
 
       this.print(
