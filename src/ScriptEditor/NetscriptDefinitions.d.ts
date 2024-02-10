@@ -1051,7 +1051,9 @@ export interface NetscriptPort {
    * @remarks
    * RAM cost: 0 GB
    *
-   * @returns The data popped off the queue if it was full. */
+   * @param value Data to write, it's cloned with structuredClone().
+   * @returns The data popped off the queue if it was full.
+   */
   write(value: any): any;
 
   /**
@@ -1059,12 +1061,13 @@ export interface NetscriptPort {
    * @remarks
    * RAM cost: 0 GB
    *
+   * @param value Data to write, it's cloned with structuredClone().
    * @returns True if the data was added to the port, false if the port was full
    */
   tryWrite(value: any): boolean;
 
   /**
-   * Sleeps until the port is written to.
+   * Waits until the port is written to.
    * @remarks
    * RAM cost: 0 GB
    */
@@ -6639,7 +6642,7 @@ export interface NS {
    * Otherwise, the data will be written normally.
    *
    * @param portNumber - Port to attempt to write to. Must be a positive integer.
-   * @param data - Data to write.
+   * @param data - Data to write, it's cloned with structuredClone().
    * @returns True if the data is successfully written to the port, and false otherwise.
    */
   tryWritePort(portNumber: number, data: any): boolean;
@@ -6713,7 +6716,7 @@ export interface NS {
    *
    * Write data to the given Netscript port.
    * @param portNumber - Port to write to. Must be a positive integer.
-   * @param data - Data to write.
+   * @param data - Data to write, it's cloned with structuredClone().
    * @returns The data popped off the queue if it was full, or null if it was not full.
    */
   writePort(portNumber: number, data: any): any;
