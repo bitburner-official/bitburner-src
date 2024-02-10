@@ -2301,10 +2301,9 @@ export class Bladeburner {
     }
 
     const skill = Skills[skillName];
-    const currentLevel = this.skills[skillName];
-    if (currentLevel == null) {
-      return skill.calculateCost(0, count);
-    } else if (currentLevel + count > skill.maxLvl) {
+    const currentLevel = this.skills[skillName] ?? 0;
+
+    if (skill.maxLvl !== 0 && currentLevel + count > skill.maxLvl) {
       return Infinity;
     }
 
