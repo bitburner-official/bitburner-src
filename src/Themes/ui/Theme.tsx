@@ -23,7 +23,6 @@ declare module "@mui/material/styles" {
       successdark: React.CSSProperties["color"];
       white: React.CSSProperties["color"];
       black: React.CSSProperties["color"];
-      mapstatic: React.CSSProperties["color"];
       maplocation: React.CSSProperties["color"];
       currentcity: React.CSSProperties["color"];
     };
@@ -45,7 +44,6 @@ declare module "@mui/material/styles" {
       successdark: React.CSSProperties["color"];
       white: React.CSSProperties["color"];
       black: React.CSSProperties["color"];
-      mapstatic: React.CSSProperties["color"];
       maplocation: React.CSSProperties["color"];
       currentcity: React.CSSProperties["color"];
     };
@@ -72,7 +70,6 @@ export function refreshTheme(): void {
       successdark: Settings.theme.successdark,
       white: Settings.theme.white,
       black: Settings.theme.black,
-      mapstatic: Settings.theme.currentcity,
       maplocation: Settings.theme.maplocation,
       currentcity: Settings.theme.currentcity,
     },

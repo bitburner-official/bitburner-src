@@ -342,12 +342,6 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
 
         <br />
         <ColorEditor
-          name="mapstatic"
-          onColorChange={onColorChange}
-          color={customTheme.mapstatic}
-          defaultColor={defaultTheme.mapstatic}
-        />
-        <ColorEditor
           name="maplocation"
           onColorChange={onColorChange}
           color={customTheme.maplocation}

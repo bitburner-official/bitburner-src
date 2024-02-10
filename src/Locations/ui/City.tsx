@@ -127,7 +127,7 @@ function ASCIICity(props: IProps): React.ReactElement {
   let i = 0;
   for (const line of lines) {
     elems.push(
-      <Typography color={Settings.theme.mapstatic} key={i} sx={{ lineHeight: "1em", whiteSpace: "pre" }}>
+      <Typography key={i} sx={{ lineHeight: "1em", whiteSpace: "pre" }}>
         {lineElems(line)}
       </Typography>,
     );
