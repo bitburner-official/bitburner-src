@@ -1,5 +1,5 @@
 import { Player as player } from "../Player";
-import { calculateServerGrowth } from "../Server/formulas/grow";
+import { calculateServerGrowth, calculateGrowMoney } from "../Server/formulas/grow";
 import { numCycleForGrowthCorrected } from "../Server/ServerHelpers";
 import {
   calculateMoneyGainRate,
@@ -195,6 +195,16 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
           const cores = helpers.number(ctx, "cores", _cores);
           checkFormulasAccess(ctx);
           return numCycleForGrowthCorrected(server, targetMoney, startMoney, cores, player);
+        },
+      growAmount:
+        (ctx) =>
+        (_server, _player, _threads, _cores = 1) => {
+          const server = helpers.server(ctx, _server);
+          const person = helpers.person(ctx, _player);
+          const threads = helpers.number(ctx, "threads", _threads);
+          const cores = helpers.number(ctx, "cores", _cores);
+          checkFormulasAccess(ctx);
+          return calculateGrowMoney(server, threads, person, cores);
         },
       hackTime: (ctx) => (_server, _player) => {
         const server = helpers.server(ctx, _server);

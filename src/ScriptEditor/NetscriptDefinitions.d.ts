@@ -4684,11 +4684,19 @@ interface HackingFormulas {
    */
   hackPercent(server: Server, player: Person): number;
   /**
-   * Calculate the percent a server would grow to.
-   * Not exact due to limitations of mathematics.
-   * (Ex: 3.0 would grow the server to 300% of its current value.)
+   * Calculate the growth multiplier constant for a given server and threads.
+   *
+   * The actual amount of money grown depends both linearly *and* exponentially on threads;
+   * this is only giving the exponential part that is used for the multiplier.
+   * See {@link NS.grow | grow} for more details.
+   *
+   * As a result of the above, this multiplier does *not* depend on the amount of money on the server.
+   * Changing server.moneyAvailable and server.moneyMax will have no effect.
+   *
+   * For the most common use-cases, you probably want either {@link growThreads | formulas.hacking.growThreads}
+   * or {@link growAmount | formulas.hacking.growAmount} instead.
    * @param server - Server info, typically from {@link NS.getServer | getServer}
-   * @param threads - Amount of thread.
+   * @param threads - Amount of threads. Can be fractional.
    * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    * @param cores - Number of cores on the computer that will execute grow.
    * @returns The calculated grow percent.
@@ -4696,6 +4704,11 @@ interface HackingFormulas {
   growPercent(server: Server, threads: number, player: Person, cores?: number): number;
   /**
    * Calculate how many threads it will take to grow server to targetMoney. Starting money is server.moneyAvailable.
+   *
+   * The growth amount depends both linearly *and* exponentially on threads; see {@link NS.grow | grow} for more details.
+   *
+   * The inverse of this function is {@link growAmount | formulas.hacking.growAmount},
+   * although it can work with fractional threads.
    * @param server - Server info, typically from {@link NS.getServer | getServer}
    * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    * @param targetMoney - Desired final money, capped to server's moneyMax
@@ -4703,6 +4716,20 @@ interface HackingFormulas {
    * @returns The calculated grow threads as an integer, rounded up.
    */
   growThreads(server: Server, player: Person, targetMoney: number, cores?: number): number;
+  /**
+   * Calculate the amount of money a grow action will leave a server with. Starting money is server.moneyAvailable.
+   *
+   * The growth amount depends both linearly *and* exponentially on threads; see {@link NS.grow | grow} for more details.
+   *
+   * The inverse of this function is {@link growThreads | formulas.hacking.growThreads},
+   * although it rounds up to integer threads.
+   * @param server - Server info, typically from {@link NS.getServer | getServer}
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
+   * @param threads - Number of threads to grow with. Can be fractional.
+   * @param cores - Number of cores on the computer that will execute grow.
+   * @returns The amount of money after the calculated grow.
+   */
+  growAmount(server: Server, player: Person, threads: number, cores?: number): number;
   /**
    * Calculate hack time.
    * @param server - Server info, typically from {@link NS.getServer | getServer}
@@ -5365,7 +5392,11 @@ export interface NS {
    * multiplicative portion of server growth.
    *
    * To determine the effect of a single grow, obtain access to the Formulas API and use
-   * {@link HackingFormulas.growPercent | formulas.hacking.growPercent}, or invert {@link NS.growthAnalyze | growthAnalyze}.
+   * {@link HackingFormulas.growAmount | formulas.hacking.growPercent}, or invert {@link NS.growthAnalyze | growthAnalyze}.
+   *
+   * To determine how many threads are needed to return a server to max money, obtain access to the Formulas API and use
+   * {@link HackingFormulas.growThreads | formulas.hacking.growThreads}, or {@link NS.growthAnalyze} *if* the server will
+   * be at the same security in the future.
    *
    * Like {@link NS.hack | hack}, `grow` can be called on any hackable server, regardless of where the script is
    * running. Hackable servers are any servers not owned by the player.
