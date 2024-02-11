@@ -4693,8 +4693,9 @@ interface HackingFormulas {
    * As a result of the above, this multiplier does *not* depend on the amount of money on the server.
    * Changing server.moneyAvailable and server.moneyMax will have no effect.
    *
-   * For the most common use-cases, you probably want either {@link growThreads | formulas.hacking.growThreads}
-   * or {@link growAmount | formulas.hacking.growAmount} instead.
+   * For the most common use-cases, you probably want
+   * either {@link HackingFormulas.growThreads | formulas.hacking.growThreads}
+   * or {@link HackingFormulas.growAmount | formulas.hacking.growAmount} instead.
    * @param server - Server info, typically from {@link NS.getServer | getServer}
    * @param threads - Amount of threads. Can be fractional.
    * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
@@ -4707,7 +4708,7 @@ interface HackingFormulas {
    *
    * The growth amount depends both linearly *and* exponentially on threads; see {@link NS.grow | grow} for more details.
    *
-   * The inverse of this function is {@link growAmount | formulas.hacking.growAmount},
+   * The inverse of this function is {@link HackingFormulas.growAmount | formulas.hacking.growAmount},
    * although it can work with fractional threads.
    * @param server - Server info, typically from {@link NS.getServer | getServer}
    * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
@@ -4721,7 +4722,7 @@ interface HackingFormulas {
    *
    * The growth amount depends both linearly *and* exponentially on threads; see {@link NS.grow | grow} for more details.
    *
-   * The inverse of this function is {@link growThreads | formulas.hacking.growThreads},
+   * The inverse of this function is {@link HackingFormulas.growThreads | formulas.hacking.growThreads},
    * although it rounds up to integer threads.
    * @param server - Server info, typically from {@link NS.getServer | getServer}
    * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}

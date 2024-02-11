@@ -41,7 +41,9 @@ The multiplier scales exponentially with thread count, and its base depends on t
 
 [growthAnalyze](./bitburner.ns.growthanalyze.md) can be used to determine the number of threads needed for a specified multiplicative portion of server growth.
 
-To determine the effect of a single grow, obtain access to the Formulas API and use [formulas.hacking.growPercent](./bitburner.hackingformulas.growpercent.md)<!-- -->, or invert [growthAnalyze](./bitburner.ns.growthanalyze.md)<!-- -->.
+To determine the effect of a single grow, obtain access to the Formulas API and use [formulas.hacking.growPercent](./bitburner.hackingformulas.growamount.md)<!-- -->, or invert [growthAnalyze](./bitburner.ns.growthanalyze.md)<!-- -->.
+
+To determine how many threads are needed to return a server to max money, obtain access to the Formulas API and use [formulas.hacking.growThreads](./bitburner.hackingformulas.growthreads.md)<!-- -->, or [NS.growthAnalyze()](./bitburner.ns.growthanalyze.md) \*if\* the server will be at the same security in the future.
 
 Like [hack](./bitburner.ns.hack.md)<!-- -->, `grow` can be called on any hackable server, regardless of where the script is running. Hackable servers are any servers not owned by the player.
 
