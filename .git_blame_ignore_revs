@@ -121,6 +121,24 @@ a18bdd6afc77752bded2f0794bf35ad9d6455fa1
 # Author: Olivier Gagnon
 # Date:   Sat Sep 4 19:09:30 2021 -0400
 
+# from a search for "lint"; many more of these had significant code changes than
+# Prettier, so I'm only vetting the largest for inclusion
+
+48f80f25d6fb90edc292481905814c0d5593b5a9
+# Author: Olivier Gagnon
+# Date:   Wed Apr 6 19:30:08 2022 -0400
+
+b0f20c8c8f4859f01cfc79bc3945a8e7272d6592
+# Author: Olivier Gagnon
+# Date:   Sat Sep 25 01:26:03 2021 -0400
+
+d745150c45979ab251b51447a0847e28966346a6
+# Author: Olivier Gagnon
+# Date:   Sat May 1 03:17:31 2021 -0400
+
+3fad5050961a3259b0158763f48016174a2a690e
+# Author: Olivier Gagnon
+# Date:   Thu Apr 29 23:52:56 2021 -0400
 
 #
 # The commits listed below showed up on a search for "[Pp]rettier", but
