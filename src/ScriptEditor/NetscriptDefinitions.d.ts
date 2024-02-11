@@ -4705,6 +4705,8 @@ interface HackingFormulas {
   growPercent(server: Server, threads: number, player: Person, cores?: number): number;
   /**
    * Calculate how many threads it will take to grow server to targetMoney. Starting money is server.moneyAvailable.
+   * Note that when simulating the effect of {@link NS.grow | grow}, what matters is the state of the server and player
+   * when the grow *finishes*, not when it is started.
    *
    * The growth amount depends both linearly *and* exponentially on threads; see {@link NS.grow | grow} for more details.
    *
@@ -4719,6 +4721,8 @@ interface HackingFormulas {
   growThreads(server: Server, player: Person, targetMoney: number, cores?: number): number;
   /**
    * Calculate the amount of money a grow action will leave a server with. Starting money is server.moneyAvailable.
+   * Note that when simulating the effect of {@link NS.grow | grow}, what matters is the state of the server and player
+   * when the grow *finishes*, not when it is started.
    *
    * The growth amount depends both linearly *and* exponentially on threads; see {@link NS.grow | grow} for more details.
    *

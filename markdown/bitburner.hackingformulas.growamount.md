@@ -4,7 +4,7 @@
 
 ## HackingFormulas.growAmount() method
 
-Calculate the amount of money a grow action will leave a server with. Starting money is server.moneyAvailable.
+Calculate the amount of money a grow action will leave a server with. Starting money is server.moneyAvailable. Note that when simulating the effect of [grow](./bitburner.ns.grow.md)<!-- -->, what matters is the state of the server and player when the grow \*finishes\*, not when it is started.
 
 The growth amount depends both linearly \*and\* exponentially on threads; see [grow](./bitburner.ns.grow.md) for more details.
 
