@@ -471,13 +471,13 @@ export class Corporation {
 
   /** Initializes a Corporation object from a JSON save state. */
   static fromJSON(value: IReviverValue): Corporation {
-    // numberOfOfficesAndWarehouses is excluded from JSON save state, so we need to calculate it here.
-    value.data.numberOfOfficesAndWarehouses = 0;
-    for (const division of value.data.divisions.values()) {
-      value.data.numberOfOfficesAndWarehouses += getRecordValues(division.offices).length;
-      value.data.numberOfOfficesAndWarehouses += getRecordValues(division.warehouses).length;
+    const corporation = Generic_fromJSON(Corporation, value.data, Corporation.includedProperties);
+    // numberOfOfficesAndWarehouses is not in the included properties and must be calculated
+    for (const division of corporation.divisions.values()) {
+      corporation.numberOfOfficesAndWarehouses += getRecordValues(division.offices).length;
+      corporation.numberOfOfficesAndWarehouses += getRecordValues(division.warehouses).length;
     }
-    return Generic_fromJSON(Corporation, value.data);
+    return corporation;
   }
 }
 
