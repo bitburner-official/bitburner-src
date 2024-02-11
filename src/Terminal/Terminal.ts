@@ -81,6 +81,7 @@ import { Directory, resolveDirectory, root } from "../Paths/Directory";
 import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
+import { ServerConstants } from "../Server/data/Constants";
 
 export class Terminal {
   // Flags to determine whether the player is currently running a hack or an analyze
@@ -227,7 +228,7 @@ export class Terminal {
       Player.gainIntelligenceExp(expGainedOnSuccess / CONSTANTS.IntelligenceTerminalHackBaseExpGain);
 
       const oldSec = server.hackDifficulty;
-      server.fortify(CONSTANTS.ServerFortifyAmount);
+      server.fortify(ServerConstants.ServerFortifyAmount);
       const newSec = server.hackDifficulty;
 
       this.print(
@@ -279,7 +280,7 @@ export class Terminal {
     if (!(server instanceof Server)) throw new Error("server should be normal server");
     const expGain = calculateHackingExpGain(server, Player);
     const oldSec = server.hackDifficulty;
-    server.weaken(CONSTANTS.ServerWeakenAmount);
+    server.weaken(ServerConstants.ServerWeakenAmount);
     const newSec = server.hackDifficulty;
 
     Player.gainHackingExp(expGain);

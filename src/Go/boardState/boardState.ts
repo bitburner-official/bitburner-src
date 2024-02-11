@@ -19,7 +19,6 @@ import {
   getBoardFromSimplifiedBoardState,
 } from "../boardAnalysis/boardAnalysis";
 import { endGoGame } from "../boardAnalysis/scoring";
-import { cloneDeep } from "lodash";
 import { addObstacles, resetCoordinates, rotate90Degrees } from "./offlineNodes";
 
 /**
@@ -276,7 +275,7 @@ export function getEmptySpaces(boardState: BoardState): PointState[] {
  * Makes a deep copy of the given board state
  */
 export function getStateCopy(initialState: BoardState) {
-  const boardState = cloneDeep(initialState);
+  const boardState = structuredClone(initialState);
 
   boardState.history = [...initialState.history];
   boardState.previousPlayer = initialState.previousPlayer;

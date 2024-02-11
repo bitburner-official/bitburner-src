@@ -10,6 +10,7 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 import { scriptKey } from "../utils/helpers/scriptKey";
 
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
+import { ServerConstants } from "../Server/data/Constants";
 
 export function scriptCalculateOfflineProduction(runningScript: RunningScript): void {
   //The Player object stores the last update time from when we were online
@@ -55,7 +56,7 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
   Player.gainHackingExp(expGain);
 
   const moneyGain =
-    (runningScript.onlineMoneyMade / runningScript.onlineRunningTime) * timePassed * CONSTANTS.OfflineHackingIncome;
+    (runningScript.onlineMoneyMade / Player.playtimeSinceLastAug) * timePassed * CONSTANTS.OfflineHackingIncome;
   // money is given to player during engine load
   Player.scriptProdSinceLastAug += moneyGain;
 
@@ -83,7 +84,7 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
       );
       runningScript.log(`Called weaken() on ${serv.hostname} ${timesWeakened} times while offline`);
       const coreBonus = 1 + (host.cpuCores - 1) / 16;
-      serv.weaken(CONSTANTS.ServerWeakenAmount * timesWeakened * coreBonus);
+      serv.weaken(ServerConstants.ServerWeakenAmount * timesWeakened * coreBonus);
     }
   }
 }

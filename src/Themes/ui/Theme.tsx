@@ -239,9 +239,7 @@ export function refreshTheme(): void {
       },
       MuiIconButton: {
         styleOverrides: {
-          root: {
-            color: Settings.theme.primary,
-          },
+          root: { color: Settings.theme.primary },
         },
       },
       MuiTooltip: {

@@ -10,7 +10,6 @@ import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBlad
 import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { cloneDeep } from "lodash";
 import { getAugCost } from "../Augmentation/AugmentationHelpers";
 import { Factions } from "../Faction/Factions";
 
@@ -161,10 +160,10 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       const sl = Player.sleeves[sleeveNumber];
 
       const data = {
-        hp: cloneDeep(sl.hp),
-        skills: cloneDeep(sl.skills),
-        exp: cloneDeep(sl.exp),
-        mults: cloneDeep(sl.mults),
+        hp: structuredClone(sl.hp),
+        skills: structuredClone(sl.skills),
+        exp: structuredClone(sl.exp),
+        mults: structuredClone(sl.mults),
         city: sl.city,
         shock: sl.shock,
         sync: sl.sync,

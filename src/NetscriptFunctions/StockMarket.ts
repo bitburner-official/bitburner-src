@@ -6,7 +6,7 @@ import {
   placeOrder,
   cancelOrder,
   initStockMarket,
-  StockMarketResolvers,
+  StockMarketPromise,
 } from "../StockMarket/StockMarket";
 import { getBuyTransactionCost, getSellTransactionGain } from "../StockMarket/StockMarketHelpers";
 import { PositionType, OrderType, StockSymbol } from "@enums";
@@ -20,7 +20,6 @@ import { Stock } from "../StockMarket/Stock";
 import { StockOrder, TIX } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { cloneDeep } from "lodash";
 import { StockMarketConstants } from "../StockMarket/data/Constants";
 
 export function NetscriptStockMarket(): InternalAPI<TIX> {
@@ -44,7 +43,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
   };
 
   return {
-    getConstants: () => () => cloneDeep(StockMarketConstants),
+    getConstants: () => () => structuredClone(StockMarketConstants),
     hasWSEAccount: () => () => Player.hasWseAccount,
     hasTIXAPIAccess: () => () => Player.hasTixApiAccess,
     has4SData: () => () => Player.has4SData,
@@ -416,7 +415,9 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     nextUpdate: (ctx) => () => {
       checkTixApiAccess(ctx);
-      return new Promise<number>((res) => StockMarketResolvers.push(res));
+      if (!StockMarketPromise.promise)
+        StockMarketPromise.promise = new Promise<number>((res) => (StockMarketPromise.resolve = res));
+      return StockMarketPromise.promise;
     },
   };
 }

@@ -56,6 +56,7 @@ import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
 import { getRecordEntries } from "../Types/Record";
 import { JobTracks } from "../Company/data/JobTracks";
+import { ServerConstants } from "../Server/data/Constants";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -640,7 +641,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // Check if we're at max RAM
       const homeComputer = Player.getHomeComputer();
-      if (homeComputer.maxRam >= CONSTANTS.HomeComputerMaxRam) {
+      if (homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam) {
         helpers.log(ctx, () => `Your home computer is at max RAM.`);
         return false;
       }

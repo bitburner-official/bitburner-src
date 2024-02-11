@@ -5,8 +5,8 @@ import { Product } from "../Corporation/Product";
 import { Material } from "../Corporation/Material";
 import { Warehouse } from "../Corporation/Warehouse";
 import { Division } from "../Corporation/Division";
-import { Corporation, CorporationResolvers } from "../Corporation/Corporation";
-import { cloneDeep, omit } from "lodash";
+import { Corporation, CorporationPromise } from "../Corporation/Corporation";
+import { omit } from "lodash";
 import { setDeprecatedProperties } from "../utils/DeprecationHelper";
 import {
   Corporation as NSCorporation,
@@ -248,7 +248,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const material = getMaterial(divisionName, cityName, materialName);
       const corporation = getCorporation();
-      const exports = cloneDeep(material.exports);
+      const exports = structuredClone(material.exports);
       return {
         marketPrice: material.marketPrice,
         desiredSellPrice: material.desiredSellPrice,
@@ -277,7 +277,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         competition: corporation.unlocks.has(CorpUnlockName.MarketDataCompetition) ? product.competition : undefined,
         rating: product.rating,
         effectiveRating: cityData.effectiveRating,
-        stats: cloneDeep(product.stats),
+        stats: structuredClone(product.stats),
         productionCost: cityData.productionCost,
         desiredSellPrice: cityData.desiredSellPrice,
         desiredSellAmount: cityData.desiredSellAmount,
@@ -626,21 +626,21 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     hasCorporation: () => () => !!Player.corporation,
     getConstants: (ctx) => () => {
       checkAccess(ctx);
-      /* TODO 2.2: possibly just rework the whole corp constants structure to be more readable, and just use cloneDeep
-       *           to provide it directly to player.
+      /* TODO 2.2: possibly just rework the whole corp constants structure to be more readable, and just use
+       *           structuredClone to provide it directly to player.
        * TODO 2.2: Roll product information into industriesData, there's no reason to look up a product separately */
       // TODO: add functions for getting materialInfo and research info
-      return cloneDeep(omit(corpConstants, "fundingRoundShares", "fundingRoundMultiplier", "valuationLength"));
+      return structuredClone(omit(corpConstants, "fundingRoundShares", "fundingRoundMultiplier", "valuationLength"));
     },
     getIndustryData: (ctx) => (_industryName) => {
       checkAccess(ctx);
       const industryName = getEnumHelper("IndustryType").nsGetMember(ctx, _industryName, "industryName");
-      return cloneDeep(IndustriesData[industryName]);
+      return structuredClone(IndustriesData[industryName]);
     },
     getMaterialData: (ctx) => (_materialName) => {
       checkAccess(ctx);
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
-      return cloneDeep(MaterialInfo[materialName]);
+      return structuredClone(MaterialInfo[materialName]);
     },
     expandIndustry: (ctx) => (_industryName, _divisionName) => {
       checkAccess(ctx);
@@ -800,7 +800,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     },
     nextUpdate: (ctx) => () => {
       checkAccess(ctx);
-      return new Promise<CorpStateName>((res) => CorporationResolvers.push(res));
+      if (!CorporationPromise.promise)
+        CorporationPromise.promise = new Promise<CorpStateName>((res) => (CorporationPromise.resolve = res));
+      return CorporationPromise.promise;
     },
   };
 

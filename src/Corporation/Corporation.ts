@@ -1,3 +1,4 @@
+import type { PromisePair } from "../Types/Promises";
 import { Player } from "@player";
 import { CorpStateName, InvestmentOffer } from "@nsdefs";
 import { CorpUnlockName, CorpUpgradeName, LiteratureName } from "@enums";
@@ -19,7 +20,7 @@ import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 
-export const CorporationResolvers: ((prevState: CorpStateName) => void)[] = [];
+export const CorporationPromise: PromisePair<CorpStateName> = { promise: null, resolve: null };
 
 interface ICorporationParams {
   name?: string;
@@ -175,9 +176,11 @@ export class Corporation {
 
       this.state.incrementState();
 
-      // Handle "nextUpdate" resolvers after this update
-      for (const resolve of CorporationResolvers.splice(0)) {
-        resolve(state);
+      // Handle "nextUpdate" resolver after this update
+      if (CorporationPromise.resolve) {
+        CorporationPromise.resolve(state);
+        CorporationPromise.resolve = null;
+        CorporationPromise.promise = null;
       }
     }
   }
@@ -196,6 +199,11 @@ export class Corporation {
       assetDelta = (this.totalAssets - this.previousTotalAssets) / corpConstants.secondsPerMarketCycle;
     // Handle pre-totalAssets saves
     assetDelta ??= this.revenue - this.expenses;
+    const numberOfOfficesAndWarehouses = [...this.divisions.values()]
+      .map(
+        (division: Division) => getRecordValues(division.offices).length + getRecordValues(division.warehouses).length,
+      )
+      .reduce((sum: number, currentValue: number) => sum + currentValue, 0);
     if (this.public) {
       // Account for dividends
       if (this.dividendRate > 0) {
@@ -203,14 +211,14 @@ export class Corporation {
       }
 
       val = this.funds + assetDelta * 85e3;
-      val *= Math.pow(1.1, this.divisions.size);
+      val *= Math.pow(Math.pow(1.1, 1 / 12), numberOfOfficesAndWarehouses);
       val = Math.max(val, 0);
     } else {
       val = 10e9 + this.funds / 3;
       if (assetDelta > 0) {
         val += assetDelta * 315e3;
       }
-      val *= Math.pow(1.1, this.divisions.size);
+      val *= Math.pow(Math.pow(1.1, 1 / 12), numberOfOfficesAndWarehouses);
       val -= val % 1e6; //Round down to nearest million
     }
     if (val < 10e9) val = 10e9; // Base valuation

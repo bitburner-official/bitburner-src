@@ -1,12 +1,17 @@
 // The object properties on these numeric types are for typechecking only and do not exist at runtime. They're just a way to require a typechecking function.
 export type Integer = number & { __Integer: true };
+export type SafeInteger = Integer & { __isSafe: true };
 export type PositiveNumber = number & { __Positive: true };
 export type PositiveInteger = Integer & PositiveNumber;
+export type PositiveSafeInteger = PositiveInteger & SafeInteger;
 
 // Numeric typechecking functions - these should be moved somewhere else
+export const isNumber = (n: unknown): n is number => !Number.isNaN(Number(n));
 export const isInteger = (n: unknown): n is Integer => Number.isInteger(n);
+export const isSafeInteger = (n: unknown): n is SafeInteger => Number.isSafeInteger(n);
 export const isPositiveInteger = (n: unknown): n is PositiveInteger => isInteger(n) && n > 0;
-
+export const isPositiveNumber = (n: unknown): n is PositiveNumber => isNumber(n) && n > 0;
+export const isPositiveSafeInteger = (n: unknown): n is PositiveSafeInteger => isSafeInteger(n) && isPositiveInteger(n);
 /** Utility type for typechecking objects. Makes all keys optional and sets values to unknown,
  * making it safe to assert a shape for the variable once it's known to be a non-null object */
 export type Unknownify<T> = {
