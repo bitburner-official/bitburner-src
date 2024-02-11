@@ -1,6 +1,13 @@
 ## Cleaned up and filtered from the output of the command line:
 ## git log --grep "[Pp]rettier"
 
+## Tell git to use this file with:
+## git config --local blame.ignoreRevsFile .git_blame_ignore_revs
+
+## All that's really needed here are the actual 40-digit hashes of
+## the commits.  I left the author/date info in as it helped when I
+## was filtering this list to just formatting changes.
+
 4c9ca4990450740785a4dc95a75de53aeac724df
 # Author: omuretsu
 # Date:   Fri Jun 23 10:14:18 2023 -0400
