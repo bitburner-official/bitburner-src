@@ -2180,6 +2180,7 @@ export class Bladeburner {
 
     try {
       this.startAction(actionId);
+      if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
       workerScript.log(
         "bladeburner.startAction",
         () => `Starting bladeburner action with type '${type}' and name '${name}'`,
