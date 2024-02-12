@@ -109,6 +109,18 @@ export class Bladeburner {
     this.stamina = this.maxStamina;
     this.create();
   }
+  /*
+    just a quick fix for the broken implementation
+    the BlackOperations are only initialized on game load with a count of 1
+    and not reset on BitNode change or dev menu reset
+    this disables the start button for manual play
+    if the game wasnt reloaded since last completion of the Blop
+  */
+  resetBlackOps(): void {
+    for (const [blackopName, blackop] of Object.entries(BlackOperations)) {
+      blackop.count = Number(!this.blackops[blackopName]);
+    }
+  }
 
   getCurrentCity(): City {
     return this.cities[this.city];
@@ -1998,6 +2010,8 @@ export class Bladeburner {
   process(): void {
     // Edge race condition when the engine checks the processing counters and attempts to route before the router is initialized.
     if (!Router.isInitialized) return;
+    //safety measure this needs to be removed in a bigger refactor
+    this.resetBlackOps();
 
     // If the Player starts doing some other actions, set action to idle and alert
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true) && Player.currentWork) {
@@ -2166,7 +2180,6 @@ export class Bladeburner {
 
     try {
       this.startAction(actionId);
-      if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
       workerScript.log(
         "bladeburner.startAction",
         () => `Starting bladeburner action with type '${type}' and name '${name}'`,
