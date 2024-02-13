@@ -111,10 +111,8 @@ export class Bladeburner {
   }
   /*
     just a quick fix for the broken implementation
-    the BlackOperations are only initialized on game load with a count of 1
-    and not reset on BitNode change or dev menu reset
-    this disables the start button for manual play
-    if the game wasnt reloaded since last completion of the Blop
+    BlackOperations are only initialized on game load with a count of 1
+    and are not reset on BitNode change or dev menu reset of bladeburner
   */
   resetBlackOps(): void {
     for (const [blackopName, blackop] of Object.entries(BlackOperations)) {
@@ -127,6 +125,7 @@ export class Bladeburner {
   }
 
   calculateStaminaPenalty(): number {
+    if (this.stamina === this.maxStamina) return 1;
     return Math.min(1, this.stamina / (0.5 * this.maxStamina));
   }
 
