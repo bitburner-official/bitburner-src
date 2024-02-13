@@ -25,8 +25,8 @@ export function EventCard(event: CharityEvent | undefined, queue: boolean): Reac
           {!event.hasTimer
             ? "N/A"
             : queue
-              ? convertTimeMsToTimeElapsedString((event.cyclesTillRemoved - event.cyclesElapsed) * 200)
-              : convertTimeMsToTimeElapsedString((event.cyclesTillDeath - event.cyclesElapsed) * 200)}
+            ? convertTimeMsToTimeElapsedString((event.cyclesTillRemoved - event.cyclesElapsed) * 200)
+            : convertTimeMsToTimeElapsedString((event.cyclesTillDeath - event.cyclesElapsed) * 200)}
           <br></br>
           Cycles until completed: {convertTimeMsToTimeElapsedString((event.cyclesNeeded - event.cyclesCompleted) * 200)}
           <br></br>
