@@ -70,6 +70,13 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       joinFaction(Factions.Charity);
       return true;
     },
+    embezzlements: (ctx) => (_state) => {
+      const state = _state === false ? false : _state === true ? true : null;
+      const charityORG = getCharity(ctx);
+      if (state === null) return charityORG.embezzle;
+      charityORG.embezzle = state;
+      return charityORG.embezzle;
+    },
     getPendingEvents: (ctx) => () => {
       const charityORG = getCharity(ctx);
       const list: CharityEventGenData[] = [];

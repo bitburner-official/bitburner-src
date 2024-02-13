@@ -48,6 +48,9 @@ export function CharityORGStats(): React.ReactElement {
             <Tooltip title={<Typography>The money you are spending per second.</Typography>}>
               <Typography>Spend: {formatMoney(charityORG.moneySpendRate * 5)} / sec</Typography>
             </Tooltip>
+            <Tooltip title={<Typography>The money you are embezzling per second.</Typography>}>
+              <Typography>Embez: {formatMoney(charityORG.embezzleGainRate * 5)} / sec</Typography>
+            </Tooltip>
             <Tooltip title={<Typography>The karma you are gaining per second.</Typography>}>
               <Typography>
                 Karma: {formatNumber(Player.karma)} ({formatNumber(charityORG.karmaGainRate * 5)} / sec)
@@ -145,4 +148,3 @@ export function CharityORGStats(): React.ReactElement {
     </>
   );
 }
-//<Box sx={{ height: 220, overflow: "scroll", border: "1px solid", borderBlockColor: "yellow" }}>

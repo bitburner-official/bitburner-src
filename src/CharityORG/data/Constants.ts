@@ -22,8 +22,13 @@ export const CharityORGConstants = {
   CharityMaxMessages: 100,
 
   //Banner info
-  CharityMaxBannerPieces: 20000,
+  CharityMaxBannerPieces: 1000,
   CharityMaxActivePieces: 10,
+
+  //Embezzlement info
+  CharityEmbezzleMoneyLeft: 0.8,
+  charityEmbezzleMoneyTaken: 0.1,
+  CharityEmbezzleKarmaLeft: 0.2,
 
   //Charity Servers:
   //Max number of servers

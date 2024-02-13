@@ -27,6 +27,7 @@ If you are not in BitNode-15, then you must have Source-File 15 in order to use 
 |  [canRecruitVolunteer()](./bitburner.charityorg.canrecruitvolunteer.md) | Check if you can recruit a new charity volunteer. |
 |  [createCharity(name, seed)](./bitburner.charityorg.createcharity.md) | Create a charityORG. |
 |  [destroyPiece(name)](./bitburner.charityorg.destroypiece.md) | Destroys an active piece |
+|  [embezzlements(state)](./bitburner.charityorg.embezzlements.md) | Check or enable/dissable embezzlements. |
 |  [getActivePieces()](./bitburner.charityorg.getactivepieces.md) | Get active pieces. |
 |  [getAscResult(memberName)](./bitburner.charityorg.getascresult.md) | Get the result of an ascension without ascending. |
 |  [getAttackEvents()](./bitburner.charityorg.getattackevents.md) | Get all attack events. |

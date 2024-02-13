@@ -2,7 +2,7 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { CharityEvent } from "../CharityEvent";
-import { formatNumber } from "../../ui/formatNumber";
+import { formatNumber, formatMoney } from "../../ui/formatNumber";
 import { forEach } from "lodash";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 
@@ -31,29 +31,17 @@ export function EventCard(event: CharityEvent | undefined, queue: boolean): Reac
           Cycles until completed: {convertTimeMsToTimeElapsedString((event.cyclesNeeded - event.cyclesCompleted) * 200)}
           <br></br>
           <Box display="grid" whiteSpace="pre">
-            Base Gain :{" "}
-            {(event.taskObject.baseMoneyGain < 10 ? "  $" : event.taskObject.baseMoneyGain < 100 ? " $" : "$") +
-              formatNumber(event.taskObject.baseMoneyGain, 3)}
+            Base Gain : {formatMoney(event.taskObject.baseMoneyGain)}
             <br></br>
-            Base Spend :{" "}
-            {(event.taskObject.baseMoneySpend < 10 ? "  $" : event.taskObject.baseMoneySpend < 100 ? " $" : "$") +
-              formatNumber(event.taskObject.baseMoneySpend, 3)}
+            Base Spend : {formatMoney(event.taskObject.baseMoneySpend)}
             <br></br>
-            Base Karma :{" "}
-            {(event.taskObject.baseKarmaGain < 10 ? "   " : event.taskObject.baseKarmaGain < 100 ? "  " : " ") +
-              formatNumber(event.taskObject.baseKarmaGain, 3)}
+            Base Karma : {formatNumber(event.taskObject.baseKarmaGain, 6)}
             <br></br>
-            Base Prestige :{" "}
-            {(event.taskObject.basePrestige < 10 ? "   " : event.taskObject.basePrestige < 100 ? "  " : " ") +
-              formatNumber(event.taskObject.basePrestige, 3)}
+            Base Prestige : {formatNumber(event.taskObject.basePrestige, 6)}
             <br></br>
-            Base Terror :{" "}
-            {(event.taskObject.baseTerror < 10 ? "   " : event.taskObject.baseTerror < 100 ? "  " : " ") +
-              formatNumber(event.taskObject.baseTerror, 3)}
+            Base Terror : {formatNumber(event.taskObject.baseTerror, 6)}
             <br></br>
-            Base Visibility:{" "}
-            {(event.taskObject.baseVisibility < 10 ? "   " : event.taskObject.baseVisibility < 100 ? "  " : " ") +
-              formatNumber(event.taskObject.baseVisibility, 3)}
+            Base Visibility: {formatNumber(event.taskObject.baseVisibility, 6)}
             <br></br>
           </Box>
           Weights:<br></br>

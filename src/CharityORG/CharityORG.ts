@@ -14,6 +14,7 @@ import { IAscensionResult } from "./IAscensionResult";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { Modifier } from "./CharityEvent";
 import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 export const CharityResolvers: ((msProcessed: number) => void)[] = [];
 export const CharityEventTasks: Record<string, CharityVolunteerTask> = {};
@@ -51,6 +52,7 @@ export class CharityORG {
   prestigeGainRate: number;
   visibilityGainRate: number;
   terrorGainRate: number;
+  embezzleGainRate: number;
   storedCycles: number;
   visibilityBooster: number;
   terrorBooster: number;
@@ -85,6 +87,7 @@ export class CharityORG {
   bannerPiecesStore: BannerPiece[];
   bannerPower: number;
   luck: number;
+  embezzle: boolean;
 
   constructor(name = "My Charity", seedFunded = false) {
     this.name = name;
@@ -101,6 +104,7 @@ export class CharityORG {
     this.terrorGainRate = 0;
     this.karmaGainRate = 0;
     this.prestigeGainRate = 0;
+    this.embezzleGainRate = 0;
     this.storedCycles = 0;
     this.visibilityBooster = 0;
     this.terrorBooster = 0;
@@ -135,6 +139,7 @@ export class CharityORG {
     this.bannerPiecesStore = [];
     this.bannerPower = 0;
     this.luck = 0;
+    this.embezzle = false;
   }
 
   addMessage(message: string): void {
@@ -276,14 +281,24 @@ export class CharityORG {
     this.waitingEvents = this.waitingEvents.filter((e) => !tempList.includes(e)); // Filter out the ones that are done
     this.updateMasterMods();
 
-    //dialogBoxCreate("Terror: " + calculateTerrorMult({ prestige: this.prestige, terror: this.terror, visibility: this.visibility }) + "\n"
-    //  + "Visibility: " + calculateVisibilityMult({ prestige: this.prestige, terror: this.terror, visibility: this.visibility }));
     const terrorMod = this.terrorBooster > 0 ? 0.9 : this.terrorDrain > 0 ? 1.1 : 1;
     const visMod = this.visibilityBooster > 0 ? 1.1 : this.visibilityDrain > 0 ? 0.9 : 1;
-    this.moneyGainRate = moneyGainPerCycle;
+    this.moneyGainRate = this.embezzle
+      ? moneyGainPerCycle * CharityORGConstants.CharityEmbezzleMoneyLeft
+      : moneyGainPerCycle;
+    if (this.embezzle) {
+      Player.gainMoney(
+        moneyGainPerCycle * CharityORGConstants.charityEmbezzleMoneyTaken * currentNodeMults.CharityORGEmbezzleStrength,
+        "charityORG",
+      );
+      this.embezzleGainRate =
+        moneyGainPerCycle * CharityORGConstants.charityEmbezzleMoneyTaken * currentNodeMults.CharityORGEmbezzleStrength;
+    } else this.embezzleGainRate = 0;
     this.moneySpendRate = moneySpendPerCycle;
     this.spent -= moneySpendPerCycle;
-    this.bank += moneyGainPerCycle - moneySpendPerCycle;
+    this.bank += this.embezzle
+      ? moneyGainPerCycle * CharityORGConstants.CharityEmbezzleMoneyLeft - moneySpendPerCycle
+      : moneyGainPerCycle - moneySpendPerCycle;
     this.visibilityGainRate = visibilityGainPerCycle - this.visibilityPerCycle() * numCycles * visMod;
     this.visibility += Math.min(
       Math.max(visibilityGainPerCycle - this.visibilityPerCycle() * numCycles * visMod, -1),
@@ -295,8 +310,12 @@ export class CharityORG {
     this.terror = Math.max(Math.min(this.terror, 100), 0);
     this.prestigeGainRate = prestigeGainPerCycle;
     this.prestige += prestigeGainPerCycle;
-    this.karmaGainRate = karmaGainPerCycle;
-    Player.karma += karmaGainPerCycle;
+    this.karmaGainRate = this.embezzle
+      ? karmaGainPerCycle * CharityORGConstants.CharityEmbezzleKarmaLeft
+      : karmaGainPerCycle;
+    Player.karma += this.embezzle
+      ? karmaGainPerCycle * CharityORGConstants.CharityEmbezzleKarmaLeft
+      : karmaGainPerCycle;
     this.terrorBooster = this.processBooster(this.terrorBooster, numCycles);
     this.visibilityBooster = this.processBooster(this.visibilityBooster, numCycles);
     this.terrorDrain = this.processBooster(this.terrorDrain, numCycles);

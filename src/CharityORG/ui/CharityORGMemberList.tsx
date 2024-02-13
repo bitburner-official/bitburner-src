@@ -29,6 +29,14 @@ export function CharityORGMemberList(): React.ReactElement {
 
   return (
     <>
+      <OptionSwitch
+        checked={charityORG.embezzle}
+        onChange={(newValue) => (charityORG.embezzle = newValue)}
+        text="Enable Embezzlement"
+        tooltip={
+          <>Enables Embezzlement - decreases money and karma gains but converts some of that loss into actual Money.</>
+        }
+      />
       <RecruitButton onRecruit={() => setRerender((old) => !old)} />
       <TextField
         value={filter}
