@@ -8,7 +8,7 @@ const emptyPortData = "NULL PORT DATA";
 /** The object property is for typechecking and is not present at runtime */
 export type PortNumber = PositiveInteger & { __PortNumber: true };
 
-function isObject(value: unknown): value is Object {
+function isObject(value: unknown): value is object {
   return (typeof value === "object" && value !== null) || typeof value === "function";
 }
 
@@ -26,7 +26,7 @@ export class Port {
   data: any[] = [];
   resolver: Resolver | null = null;
   promise: Promise<void> | null = null;
-  add(data: any): any {
+  add(data: any) {
     this.data.push(data);
     if (!this.resolver) return;
     this.resolver();
