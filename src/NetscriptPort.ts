@@ -8,6 +8,10 @@ const emptyPortData = "NULL PORT DATA";
 /** The object property is for typechecking and is not present at runtime */
 export type PortNumber = PositiveInteger & { __PortNumber: true };
 
+function isObject(value: unknown): value is Object {
+  return (typeof value === "object" && value !== null) || typeof value === "function";
+}
+
 /** Gets the numbered port, initializing it if it doesn't already exist.
  * Only using for functions that write data/resolvers. Use NetscriptPorts.get(n) for */
 export function getPort(n: PortNumber) {
@@ -22,7 +26,8 @@ export class Port {
   data: any[] = [];
   resolver: Resolver | null = null;
   promise: Promise<void> | null = null;
-  resolve() {
+  add(data: any): any {
+    this.data.push(data);
     if (!this.resolver) return;
     this.resolver();
     this.resolver = null;
@@ -43,28 +48,18 @@ export function portHandle(n: PortNumber): NetscriptPort {
 }
 
 export function writePort(n: PortNumber, value: unknown): any {
-  let data = value;
-  // Primitives don't need to be cloned.
-  if ((typeof value === "object" || typeof value === "function") && value !== null) {
-    data = structuredClone(data);
-  }
   const port = getPort(n);
-  port.data.push(data);
-  port.resolve();
+  // Primitives don't need to be cloned.
+  port.add(isObject(value) ? structuredClone(value) : value);
   if (port.data.length > Settings.MaxPortCapacity) return port.data.shift();
   return null;
 }
 
 export function tryWritePort(n: PortNumber, value: unknown): boolean {
-  let data = value;
-  // Primitves don't need to be cloned.
-  if ((typeof value === "object" || typeof value === "function") && value !== null) {
-    data = structuredClone(data);
-  }
   const port = getPort(n);
   if (port.data.length >= Settings.MaxPortCapacity) return false;
-  port.data.push(data);
-  port.resolve();
+  // Primitives don't need to be cloned.
+  port.add(isObject(value) ? structuredClone(value) : value);
   return true;
 }
 
@@ -79,12 +74,8 @@ export function readPort(n: PortNumber): any {
 export function peekPort(n: PortNumber): any {
   const port = NetscriptPorts.get(n);
   if (!port || !port.data.length) return emptyPortData;
-  const value = port.data[0];
   // Needed to avoid exposing internal objects.
-  if ((typeof value === "object" || typeof value === "function") && value !== null) {
-    return structuredClone(value);
-  }
-  return value;
+  return isObject(port.data[0]) ? structuredClone(port.data[0]) : port.data[0];
 }
 
 export function nextPortWrite(n: PortNumber) {
