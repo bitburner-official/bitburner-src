@@ -257,7 +257,7 @@ export function refreshTheme(): void {
             color: Settings.theme.primary,
             backgroundColor: Settings.theme.well,
             borderRadius: 0,
-            border: "2px solid " + Settings.theme.welllight,
+            border: "2px solid " + Settings.theme.white,
             maxWidth: "100vh",
           },
         },
