@@ -45,11 +45,11 @@ export function StockTickerHeaderText(props: IProps): React.ReactElement {
     // hdrText += ` - ${stock.getAbsoluteForecast()} / ${stock.otlkMagForecast}`;
   }
 
-  let color = "primary";
+  let color = Settings.theme.success;
   if (stock.lastPrice === stock.price) {
-    color = "secondary";
+    color = Settings.theme.secondary;
   } else if (stock.lastPrice > stock.price) {
-    color = "error";
+    color = Settings.theme.error;
   }
 
   return (

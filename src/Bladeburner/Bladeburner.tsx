@@ -1,3 +1,4 @@
+import type { PromisePair } from "../Types/Promises";
 import { AugmentationName, CityName, FactionName } from "@enums";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { ActionIdentifier } from "./ActionIdentifier";
@@ -42,8 +43,7 @@ export interface BlackOpsAttempt {
   isAvailable?: boolean;
   action?: BlackOperation;
 }
-
-export const BladeburnerResolvers: ((msProcessed: number) => void)[] = [];
+export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
 export class Bladeburner {
   numHosp = 0;
@@ -2085,9 +2085,11 @@ export class Bladeburner {
         }
       }
 
-      // Handle "nextUpdate" resolvers after this update
-      for (const resolve of BladeburnerResolvers.splice(0)) {
-        resolve(seconds * 1000);
+      // Handle "nextUpdate" resolver after this update
+      if (BladeburnerPromise.resolve) {
+        BladeburnerPromise.resolve(seconds * 1000);
+        BladeburnerPromise.resolve = null;
+        BladeburnerPromise.promise = null;
       }
     }
   }
@@ -2299,14 +2301,13 @@ export class Bladeburner {
     }
 
     const skill = Skills[skillName];
-    const currentLevel = this.skills[skillName];
-    if (currentLevel == null) {
-      return skill.calculateCost(0, count);
-    } else if (currentLevel + count > skill.maxLvl) {
+    const currentLevel = this.skills[skillName] ?? 0;
+
+    if (skill.maxLvl !== 0 && currentLevel + count > skill.maxLvl) {
       return Infinity;
-    } else {
-      return skill.calculateCost(currentLevel, count);
     }
+
+    return skill.calculateCost(currentLevel, count);
   }
 
   upgradeSkillNetscriptFn(skillName: string, count: number, workerScript: WorkerScript): boolean {

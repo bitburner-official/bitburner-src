@@ -65,11 +65,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       const filename = helpers.string(ctx, "filename", _filename);
       const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
       const contract = getCodingContract(ctx, hostname, filename);
-      const data = contract.getData();
-      if (Array.isArray(data)) {
-        // For multi-dimensional arrays, we have to copy the internal arrays as well
-        return JSON.parse(JSON.stringify(data));
-      } else return data;
+      return structuredClone(contract.getData());
     },
     getDescription: (ctx) => (_filename, _hostname?) => {
       const filename = helpers.string(ctx, "filename", _filename);

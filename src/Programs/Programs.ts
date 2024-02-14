@@ -11,6 +11,8 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BitFlumeEvent } from "../BitNode/ui/BitFlumeModal";
 import { calculateHackingTime, calculateGrowTime, calculateWeakenTime } from "../Hacking";
 import { CompletedProgramName, FactionName } from "@enums";
+import { Router } from "../ui/GameRoot";
+import { Page } from "../ui/Router";
 
 function requireHackingLevel(lvl: number) {
   return function () {
@@ -278,8 +280,14 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: bitFlumeRequirements(),
       time: CONSTANTS.MillisecondsPerFiveMinutes / 20,
     },
-    run: (): void => {
-      BitFlumeEvent.emit();
+    run: (args: string[]): void => {
+      if (args.length == 1) {
+        if (args[0] == "-q") {
+          Router.toPage(Page.BitVerse, { flume: true, quick: true });
+        }
+      } else {
+        BitFlumeEvent.emit();
+      }
     },
   }),
   [CompletedProgramName.flight]: new Program({

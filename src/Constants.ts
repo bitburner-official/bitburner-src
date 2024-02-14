@@ -12,8 +12,6 @@ export const CONSTANTS: {
   OfflineHackingIncome: number;
   CorpFactionRepRequirement: number;
   BaseFocusBonus: number;
-  BaseCostFor1GBOfRamHome: number;
-  BaseCostFor1GBOfRamServer: number;
   TravelCost: number;
   BaseFavorToDonate: number;
   DonateMoneyToRepDivisor: number;
@@ -23,13 +21,6 @@ export const CONSTANTS: {
   CompanyReputationToFavorMult: number;
   NeuroFluxGovernorLevelMult: number;
   NumNetscriptPorts: number;
-  HomeComputerMaxRam: number;
-  ServerBaseGrowthIncr: number;
-  ServerMaxGrowthLog: number;
-  ServerFortifyAmount: number;
-  ServerWeakenAmount: number;
-  PurchasedServerLimit: number;
-  PurchasedServerMaxRam: number;
   MultipleAugMultiplier: number;
   TorRouterCost: number;
   HospitalCostPerHp: number;
@@ -103,10 +94,6 @@ export const CONSTANTS: {
   // How much reputation is needed to join a megacorporation's faction
   CorpFactionRepRequirement: 400e3,
 
-  // Base RAM costs
-  BaseCostFor1GBOfRamHome: 32000,
-  BaseCostFor1GBOfRamServer: 55000, //1 GB of RAM
-
   // Cost to travel to another city
   TravelCost: 200e3,
 
@@ -122,16 +109,6 @@ export const CONSTANTS: {
   NeuroFluxGovernorLevelMult: 1.14,
 
   NumNetscriptPorts: Number.MAX_SAFE_INTEGER,
-
-  // Server-related constants
-  HomeComputerMaxRam: 1073741824, // 2 ^ 30
-  ServerBaseGrowthIncr: 0.03, // Unadjusted growth increment (growth rate is this * adjustment + 1)
-  ServerMaxGrowthLog: 0.00349388925425578, // Maximum possible growth rate accounting for server security, precomputed as log1p(.0035)
-  ServerFortifyAmount: 0.002, // Amount by which server's security increases when its hacked/grown
-  ServerWeakenAmount: 0.05, // Amount by which server's security decreases when weakened
-
-  PurchasedServerLimit: 25,
-  PurchasedServerMaxRam: 1048576, // 2^20
 
   // Augmentation Constants
   MultipleAugMultiplier: 1.9,
@@ -223,16 +200,16 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.0 dev - Changelog last updated 1 Feb 2024
+## v2.6.0 dev - Changelog last updated 10 Feb 2024
 
 ### MAJOR ADDITIONS
 
-- A new minigame IPvGO, based on the game Go. For testing, the "IPvGO Subnet" option is permanently enabled right now in the sidebar, normally it will be available through DefComm in New Tokyo or the CIA in Sector-12. Documentation for the mechanic is available under "How to Play" from that screen. (@ficocelliguy)
+- A new minigame IPvGO, based on the game Go. Visit DefComm in New Tokyo or the CIA in Sector-12 for access. Documentation for the mechanic is available ingame under "How to Play" once the mechanic is available. (@ficocelliguy)
 - A new BitNode has been added which focuses on the IPvGO mechanic (@ficocelliguy)
 
 ### API
 
-- (Bladeburner) ns.bladeburner.getSkillUpgradeCost now returns infinity if requesting a cost above the maximum skill level ()
+- (Bladeburner) ns.bladeburner.getSkillUpgradeCost now returns infinity if requesting a cost above the maximum skill level (@Semanual)
 - (CodingContract) Fixed an issue where ns.codingcontract.getData was leaking internal arrays when contract data was a 2-d array (@LJNeon)
 - (Go) Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes (@ficocelliguy)
 - (Ports) Added ns.nextPortWrite, which allows waiting for the next write to a port without creating a port handle object (@LJNeon)
@@ -240,6 +217,7 @@ export const CONSTANTS: {
 - (Stanek) Fix ns.stanek.acceptGift which was not working in 2.5.2 (@jjclark1982)
 - Improved the efficiency and accuracy of growth formulas (@d0sboots)
 - ns.formatNumber now throws an error if specifying a suffixStart less than 1000 (@TheAimMan)
+- HGWOptions now accepts a non-integer number of threads (@Caldwell-74)
 - Fixed ns.serverExists returning incorrect value for an endgame server (@cigarmemr)
 
 ### UI
@@ -250,9 +228,12 @@ export const CONSTANTS: {
 - (Documentation) Ingame documentation now displays line breaks inside tables correctly (@Snarling)
 - (Documentation) Added a documentation page for converting .script to .js (@LJNeon, @jjclark1982, @Snarling)
 - (Hashnet) Hash upgrade descriptions use proper number formatting options (@Snarling)
+- (Hacknet) Hacknet display shows a dynamic amount of columns based on screen width (@shyguy1412)
 - (Infiltration) Changed how the CheatCodeGame is displayed (@alutman, @Snarling)
 - (Sleeve) If intelligence is unlocked, sleeve intelligence is shown in the UI (@Caldwell-74)
+- (Stockmarket) Changed color of stocks increasing in value (@Semanual)
 - (Terminal) Improved scroll behavior on the Terminal (@Snarling)
+- Reorganization of some content on the Active Scripts page (@Snarling) 
 - "Disable Text Effects" option also disables the corrupted text display (@draughtnyan)
 - fl1ght.exe now displays the related requirements in a more readable way (@TheAimMan, @LJNeon)
 - Miscellaneous wording fixes (@cigarmemr)
@@ -261,17 +242,23 @@ export const CONSTANTS: {
 
 - (CodingContract) Improve parsing of player input for arrays in coding contracts (@rocket3989)
 - (Corporation) Fix an incorrect demand range for Minerals (@catloversg)
+- (Corporation) Divisions impact on corporation valuation is now based on number of offices and warehouses (@catloversg)
 - (Gang) Add separate money tracking for gang expenses (@deansvendsen)
 - (Ports) Port objects no longer track a separate promise for every use of nextWrite (@Snarling)
 - (Ports) Fixed a crashing bug related to the changes above (@Jman420)
 - (RemoteAPI) Remote API can be targeted to a remote device instead of the default of localhost (@Specker)
+- (RemoteAPI) Added a getAllServers method (@shyguy1412)
 - (ScriptEditor) When importing from other files that are also open in the editor, type information is now available in the IDE (@shyguy1412)
 - (ScriptEditor) Script "models" in the script editor are now properly disposed (@Caldwell-74)
 - All running scripts are killed upon entering the BitVerse (@LJNeon)
 - Scripts with the "temporary" flag set do not populate the Recently Killed script list on script death (@TheAimMan)
-- Various "nextUpdate" promises are not tracked internally as a single promise instead of an array of promises (@LJNeon)
+ - Fix an issue with offline income for scripts (@Caldwell-74)
+- Various "nextUpdate" promises are not tracked internally as a single promise instead of an array of promises (@Caldwell-74, @LJNeon)
 - Fix inconsistent importing of the arg library (@catloversg)
 - Clarify some information in the CONTRIBUTING.md file (@deansvendsen)
+- Internal changes to method used for cloning objects (@LJNeon)
+- Rearrange some internal constants (@Caldwell-74)
+- b1t_flum3.exe can be ran in "quick" mode (@TheAimMan)
 - Nerf noodle bar (various)
 `,
 };

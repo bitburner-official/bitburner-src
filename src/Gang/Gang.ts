@@ -3,6 +3,7 @@
  * Add police clashes
  * balance point to keep them from running out of control
  */
+import type { PromisePair } from "../Types/Promises";
 
 import { Factions } from "../Faction/Factions";
 
@@ -26,8 +27,7 @@ import { PowerMultiplier } from "./data/power";
 import { FactionName } from "@enums";
 import { CONSTANTS } from "../Constants";
 
-type NextUpdateData = { resolver: ((msProcessed: number) => void) | null; promise: Promise<number> | null };
-export const GangNextUpdate: NextUpdateData = { resolver: null, promise: null };
+export const GangPromise: PromisePair<number> = { promise: null, resolve: null };
 
 export class Gang {
   facName: FactionName;
@@ -108,10 +108,10 @@ export class Gang {
     }
 
     // Handle "nextUpdate" resolver after this update
-    if (GangNextUpdate.resolver) {
-      GangNextUpdate.resolver(cycles * CONSTANTS.MilliPerCycle);
-      GangNextUpdate.resolver = null;
-      GangNextUpdate.promise = null;
+    if (GangPromise.resolve) {
+      GangPromise.resolve(cycles * CONSTANTS.MilliPerCycle);
+      GangPromise.resolve = null;
+      GangPromise.promise = null;
     }
   }
 
