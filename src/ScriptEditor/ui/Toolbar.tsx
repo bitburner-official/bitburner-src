@@ -14,7 +14,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 import { makeTheme, sanitizeTheme } from "./themes";
 
-import { CONSTANTS } from "../../constants";
+import { CONSTANTS } from "../../../constants";
 import { Modal } from "../../ui/React/Modal";
 import { Page } from "../../ui/Router";
 import { Router } from "../../ui/GameRoot";
@@ -23,8 +23,10 @@ import { Settings } from "../../Settings/Settings";
 import { OptionsModal, OptionsModalProps } from "./OptionsModal";
 import { useScriptEditorContext } from "./ScriptEditorContext";
 
-const docUrl = "https://github.com/bitburner-official/bitburner-src/blob/"
-  + (CONSTANTS.isDevBranch ? "dev" : "stable") + "/markdown/bitburner.ns.md";
+const docUrl =
+  "https://github.com/bitburner-official/bitburner-src/blob/" +
+  (CONSTANTS.isDevBranch ? "dev" : "stable") +
+  "/markdown/bitburner.ns.md";
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
 interface IProps {
