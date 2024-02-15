@@ -13,4 +13,4 @@ resetMultipliers, takeDamage, whoAmI (returns string representation of person), 
 
 PersonMethods.ts
 A Person has the following methods:
-gain___Exp (one method for each skill), regenerateHp, queryStatsFromString, gainStats (all stats gain same amount), updateSkillLevels, hasAugmentation
+gain___Exp (one method for each skill), regenerateHp, queryStatsFromString, gainStats (all stats gain same amount), updateSkillLevels, hasAugmentation.
