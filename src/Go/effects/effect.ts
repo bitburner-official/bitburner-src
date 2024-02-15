@@ -107,10 +107,7 @@ export function playerHasDiscoveredGo() {
   const hasRecords = opponentList.find((opponent) => getPlayerStats(opponent).wins + getPlayerStats(opponent).losses);
   const isInBn14 = Player.bitNodeN === 14;
 
-  // TODO: remove this once testing is completed
-  const isInTesting = true;
-
-  return !!(playedGame || hasRecords || isInBn14 || isInTesting);
+  return !!(playedGame || hasRecords || isInBn14);
 }
 
 function getEffectPowerForFaction(opponent: opponents) {

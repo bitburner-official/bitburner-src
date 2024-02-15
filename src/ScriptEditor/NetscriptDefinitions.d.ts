@@ -345,7 +345,9 @@ interface CrimeStats {
  */
 interface BasicHGWOptions {
   /** Number of threads to use for this function.
-   * Must be less than or equal to the number of threads the script is running with. */
+   * Must be less than or equal to the number of threads the script is running with.
+   * Accepts positive non integer values.
+   */
   threads?: number;
   /** Set to true this action will affect the stock market. */
   stock?: boolean;

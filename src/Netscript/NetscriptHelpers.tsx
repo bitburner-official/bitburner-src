@@ -33,7 +33,7 @@ import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { RamCostConstants } from "./RamCostGenerator";
-import { isPositiveInteger, PositiveInteger, Unknownify } from "../types";
+import { isPositiveInteger, PositiveInteger, Unknownify, isPositiveNumber, PositiveNumber } from "../types";
 import { Engine } from "../engine";
 import { resolveFilePath, FilePath } from "../Paths/FilePath";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
@@ -87,7 +87,7 @@ export interface CompleteSpawnOptions extends CompleteRunOptions {
 }
 /** HGWOptions with non-optional, type-validated members, for passing between internal functions. */
 export interface CompleteHGWOptions {
-  threads: PositiveInteger;
+  threads: PositiveNumber;
   stock: boolean;
   additionalMsec: number;
 }
@@ -146,7 +146,14 @@ function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): Po
   }
   return n;
 }
-
+/** Convert provided value v for argument argName to a positive number, throwing if it looks like something else. */
+function positiveNumber(ctx: NetscriptContext, argName: string, v: unknown): PositiveNumber {
+  const n = number(ctx, argName, v);
+  if (!isPositiveNumber(n)) {
+    throw makeRuntimeErrorMsg(ctx, `${argName} should be a positive number, was ${n}`, "TYPE");
+  }
+  return n;
+}
 /** Returns args back if it is a ScriptArg[]. Throws an error if it is not. */
 function scriptArgs(ctx: NetscriptContext, args: unknown) {
   if (!isScriptArgs(args)) throw makeRuntimeErrorMsg(ctx, "'args' is not an array of script args", "TYPE");
@@ -322,7 +329,7 @@ function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOp
   if (!requestedThreads) {
     result.threads = (isNaN(threads) || threads < 1 ? 1 : threads) as PositiveInteger;
   } else {
-    const positiveThreads = positiveInteger(ctx, "opts.threads", requestedThreads);
+    const positiveThreads = positiveNumber(ctx, "opts.threads", requestedThreads);
     if (positiveThreads > threads) {
       throw makeRuntimeErrorMsg(
         ctx,
