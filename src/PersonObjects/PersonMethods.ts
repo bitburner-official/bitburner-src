@@ -1,8 +1,12 @@
-import { Person } from "./Person";
-import { calculateSkill } from "./formulas/skill";
-import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { Player } from "@player";
-import { WorkStats } from "@nsdefs";
+import { Person } from "./Person"; // Importing the Person class
+import { calculateSkill } from "./formulas/skill"; // Importing function for calculating skill levels
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers"; // Importing current node multipliers
+import { Player } from "@player"; // Importing Player class
+import { WorkStats } from "@nsdefs"; // Importing WorkStats interface from namespace @nsdefs
+
+// The following 7 methods increment specific experience types for a Person object, incrementing by number.
+// If a number is not input a concole error is thrown. If the experience goes below 0 it is reset to 0.
+// Then skills are recalculated based on the change.
 
 export function gainHackingExp(this: Person, exp: number): void {
   if (isNaN(exp)) {
@@ -104,6 +108,9 @@ export function gainIntelligenceExp(this: Person, exp: number): void {
     this.skills.intelligence = Math.floor(this.calculateSkill(this.exp.intelligence, 1));
   }
 }
+
+// Increases all skills' experience based on the given WorkStats and updates the corresponding skill levels.
+// @param retValue - The WorkStats object containing experience gains for each skill. 
 export function gainStats(this: Person, retValue: WorkStats): void {
   this.gainHackingExp(retValue.hackExp * this.mults.hacking_exp);
   this.gainStrengthExp(retValue.strExp * this.mults.strength_exp);
@@ -141,6 +148,7 @@ export function queryStatFromString(this: Person, str: string): number {
   return 0;
 }
 
+// Regenerates the person's hit points by the specified amount.
 export function regenerateHp(this: Person, amt: number): void {
   if (typeof amt !== "number") {
     console.warn(`Player.regenerateHp() called without a numeric argument: ${amt}`);
@@ -152,6 +160,7 @@ export function regenerateHp(this: Person, amt: number): void {
   }
 }
 
+// Updates all skill levels of the person based on experience points and multipliers.
 export function updateSkillLevels(this: Person): void {
   this.skills.hacking = Math.max(
     1,
@@ -185,6 +194,7 @@ export function updateSkillLevels(this: Person): void {
   this.hp.current = Math.round(this.hp.max * ratio);
 }
 
+// Checks if Person has augmentation augName. ignoredQueue dictates whether augmentations queued for install are ignored.
 export function hasAugmentation(this: Person, augName: string, ignoreQueued = false) {
   if (this.augmentations.some((a) => a.name === augName)) {
     return true;
