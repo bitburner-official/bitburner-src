@@ -14,7 +14,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 import { makeTheme, sanitizeTheme } from "./themes";
 
-import { CONSTANTS } from "../../../constants";
+import { CONSTANTS } from "../../Constants";
 import { Modal } from "../../ui/React/Modal";
 import { Page } from "../../ui/Router";
 import { Router } from "../../ui/GameRoot";
