@@ -23,6 +23,8 @@ declare module "@mui/material/styles" {
       successdark: React.CSSProperties["color"];
       white: React.CSSProperties["color"];
       black: React.CSSProperties["color"];
+      maplocation: React.CSSProperties["color"];
+      disabled: React.CSSProperties["color"];
     };
   }
   interface ThemeOptions {
@@ -42,6 +44,8 @@ declare module "@mui/material/styles" {
       successdark: React.CSSProperties["color"];
       white: React.CSSProperties["color"];
       black: React.CSSProperties["color"];
+      maplocation: React.CSSProperties["color"];
+      disabled: React.CSSProperties["color"];
     };
   }
 }
@@ -66,6 +70,8 @@ export function refreshTheme(): void {
       successdark: Settings.theme.successdark,
       white: Settings.theme.white,
       black: Settings.theme.black,
+      maplocation: Settings.theme.maplocation,
+      disabled: Settings.theme.disabled,
     },
     palette: {
       primary: {
@@ -132,7 +138,7 @@ export function refreshTheme(): void {
         styleOverrides: {
           root: {
             backgroundColor: Settings.theme.well,
-            borderBottomColor: "#fff",
+            borderBottomColor: Settings.theme.white,
           },
           underline: {
             "&:hover": {
@@ -226,7 +232,7 @@ export function refreshTheme(): void {
       MuiAccordionSummary: {
         styleOverrides: {
           root: {
-            backgroundColor: "#111",
+            backgroundColor: Settings.theme.backgroundprimary,
           },
         },
       },
@@ -249,7 +255,7 @@ export function refreshTheme(): void {
             color: Settings.theme.primary,
             backgroundColor: Settings.theme.well,
             borderRadius: 0,
-            border: "2px solid white",
+            border: "2px solid " + Settings.theme.white,
             maxWidth: "100vh",
           },
         },
@@ -370,7 +376,7 @@ export function refreshTheme(): void {
       MuiAlert: {
         styleOverrides: {
           root: {
-            backgroundColor: Settings.theme.black,
+            backgroundColor: Settings.theme.backgroundsecondary,
             borderRadius: 0,
             border: "1px solid " + Settings.theme.well,
           },
