@@ -1,4 +1,4 @@
-import clampNumber from "../../utils/helpers/capNumber"
+import clampNumber from "../../utils/helpers/clampNumbers"
 
 /**
  * Given an experience amount and stat multiplier, calculates the
@@ -22,9 +22,10 @@ export function calculateSkillProgress(exp: number, mult = 1): ISkillProgress {
   const nextExperience = calculateExp(nextSkill, mult);
   
   const normalize = (value: number): number => ((value - baseExperience) * 100) / (nextExperience - baseExperience);
-  const rawProgress = nextExperience - baseExperience !== 0 ? normalize(exp) : 99.99
   
+  const rawProgress = nextExperience - baseExperience !== 0 ? normalize(exp) : 99.99
   const progress = clampNumber(rawProgress, 0, 100)
+  
   const currentExperience = clampNumber(exp - baseExperience , 0);
   const remainingExperience = clampNumber(nextExperience - exp, 0);
 
