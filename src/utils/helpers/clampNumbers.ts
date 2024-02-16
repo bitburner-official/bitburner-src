@@ -5,7 +5,7 @@
  * @param {number} max upper bound
  * @returns {number} capped value
  */
-function clampNumber(value:number,min=Number.MIN_VALUE,max= Number.MAX_VALUE){
-    return Math.max(Math.min(value,max),min)
+function clampNumber(value: number, min = Number.MIN_VALUE, max = Number.MAX_VALUE) {
+  return Math.max(Math.min(value, max), min);
 }
-export default clampNumber
+export default clampNumber;
