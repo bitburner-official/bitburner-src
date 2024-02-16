@@ -1,4 +1,6 @@
 import type { WorkerScript } from "../../Netscript/WorkerScript";
+import type { BaseServer } from "../../Server/BaseServer";
+
 import React, { useState } from "react";
 
 import { MenuItem, Typography, Select, SelectChangeEvent, TextField, IconButton, List } from "@mui/material";
@@ -8,9 +10,9 @@ import { ScriptProduction } from "./ScriptProduction";
 import { ServerAccordion } from "./ServerAccordion";
 
 import { workerScripts } from "../../Netscript/WorkerScripts";
-import { getRecordEntries } from "../../Types/Record";
 import { Settings } from "../../Settings/Settings";
 import { isPositiveInteger } from "../../types";
+import { SpecialServers } from "../../Server/data/SpecialServers";
 
 export function ActiveScriptsPage(): React.ReactElement {
   const [scriptsPerPage, setScriptsPerPage] = useState(Settings.ActiveScriptsScriptPageSize);
@@ -31,24 +33,55 @@ export function ActiveScriptsPage(): React.ReactElement {
     setServersPerPage(n);
   }
 
-  const serverData: [string, WorkerScript[]][] = (() => {
-    const tempData: Record<string, WorkerScript[]> = {};
+  // Creating and sorting the server data array is done here
+  const serverData: [BaseServer, WorkerScript[]][] = (() => {
+    const tempData: Map<BaseServer, WorkerScript[]> = new Map();
     if (filter) {
       // Only check filtering if a filter exists (performance)
       for (const ws of workerScripts.values()) {
         if (!ws.hostname.includes(filter) && !ws.scriptRef.filename.includes(filter)) continue;
-        const hostname = ws.hostname;
-        if (tempData[hostname]) tempData[hostname].push(ws);
-        else tempData[hostname] = [ws];
+        const server = ws.getServer();
+        const serverScripts = tempData.get(server);
+        if (serverScripts) serverScripts.push(ws);
+        else tempData.set(server, [ws]);
       }
     } else {
       for (const ws of workerScripts.values()) {
-        const hostname = ws.hostname;
-        if (tempData[hostname]) tempData[hostname].push(ws);
-        else tempData[hostname] = [ws];
+        const server = ws.getServer();
+        const serverScripts = tempData.get(server);
+        if (serverScripts) serverScripts.push(ws);
+        else tempData.set(server, [ws]);
       }
     }
-    return getRecordEntries(tempData);
+    // serverData will be based on a sorted array from the temporary Map
+    return [...tempData].sort(([serverA], [serverB]) => {
+      // Servers not owned by the player are equal for sorting. Earliest return because it is the most common comparison.
+      if (!serverA.purchasedByPlayer && !serverB.purchasedByPlayer) return 0;
+      // Servers owned by the player come earlier in the sorting
+      if (serverA.purchasedByPlayer && !serverB.purchasedByPlayer) return -1;
+      if (!serverA.purchasedByPlayer && serverB.purchasedByPlayer) return 1;
+      // If we have reached this point, then both servers are player owned
+      // Home is at the top
+      if (serverA.hostname === SpecialServers.Home) return -1;
+      if (serverB.hostname === SpecialServers.Home) return 1;
+      // Hacknet servers shown after home
+      if (serverA.isHacknetServer && !serverB.isHacknetServer) return -1;
+      if (!serverA.isHacknetServer && serverB.isHacknetServer) return 1;
+      // Sorting for hacknet servers is based on the numbered suffix
+      if (serverA.isHacknetServer) {
+        if (serverA.hostname.length < serverB.hostname.length) return -1;
+        if (serverA.hostname.length > serverB.hostname.length) return 1;
+        // Get the numbered suffix from the end of the server names
+        const numA = Math.abs(parseInt(serverA.hostname.slice(-2)));
+        const numB = Math.abs(parseInt(serverB.hostname.slice(-2)));
+        if (numA < numB) return -1;
+        return 1;
+      }
+      // Sorting for other purchased servers is alphabetical. There's probably a better way to do this.
+      const fakeArray = [serverA.hostname, serverB.hostname].sort();
+      if (serverA.hostname === fakeArray[0]) return -1;
+      return 1;
+    });
   })();
 
   const lastPage = Math.max(Math.ceil(serverData.length / serversPerPage) - 1, 0);
@@ -112,8 +145,8 @@ export function ActiveScriptsPage(): React.ReactElement {
         </IconButton>
       </div>
       <List dense={true}>
-        {dataToShow.map(([hostname, scripts]) => (
-          <ServerAccordion key={hostname} hostname={hostname} scripts={scripts} />
+        {dataToShow.map(([server, scripts]) => (
+          <ServerAccordion key={server.hostname} server={server} scripts={scripts} />
         ))}
       </List>
     </>
