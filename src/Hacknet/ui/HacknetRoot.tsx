@@ -117,7 +117,7 @@ export function HacknetRoot(): React.ReactElement {
 
       {hasHacknetServers() && <Button onClick={() => setOpen(true)}>Spend Hashes on Upgrades</Button>}
 
-      <Box sx={{ display: "grid", width: "100%", gridTemplateColumns: "repeat(auto-fit, 380px)" }}>{nodes}</Box>
+      <Box sx={{ display: "grid", width: "100%", gridTemplateColumns: "repeat(auto-fit, 30em)" }}>{nodes}</Box>
       <HashUpgradeModal open={open} onClose={() => setOpen(false)} />
     </>
   );
