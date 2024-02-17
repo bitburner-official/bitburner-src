@@ -40,7 +40,7 @@ export interface FileServer {
   server: string;
 }
 
-export type RFAServerData = Pick<BaseServer, "hostname" | "hasAdminRights">;
+export type RFAServerData = Pick<BaseServer, "hostname" | "hasAdminRights" | "purchasedByPlayer">;
 
 export function isFileData(p: unknown): p is FileData {
   const pf = p as FileData;
