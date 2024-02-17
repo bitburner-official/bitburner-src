@@ -180,7 +180,7 @@ export function updateSkillLevels(this: Person): void {
     Math.floor(this.calculateSkill(this.exp.charisma, this.mults.charisma * currentNodeMults.CharismaLevelMultiplier)),
   );
 
-  const ratio: number = Math.min(this.hp.current / this.hp.max, 1);
+  const ratio: number = Math.min(this.hp.current / this.hp.max, 1) || 1;
   this.hp.max = Math.floor(10 + this.skills.defense / 10);
   this.hp.current = Math.round(this.hp.max * ratio);
 }
