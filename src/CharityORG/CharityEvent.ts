@@ -62,6 +62,7 @@ export enum AugmentationAreas {
   lucky = "lucky",
   augmentation_money = "augmentation_money",
   augmentation_rep = "augmentaion_rep",
+  embezzlement = "embezzlement",
 }
 
 class BannerFragment {
@@ -1026,6 +1027,8 @@ export class CharityEvent {
     switch (eff) {
       case AugmentationAreas.lucky:
         return str * 6000 * fuzzy;
+      case AugmentationAreas.embezzlement:
+        return str * 6000 * Math.max(Math.log2(str * 100), 1) * (1 + Math.max(Math.log10(str * 100), 0)) * fuzzy;
       case AugmentationAreas.hacking:
       case AugmentationAreas.strength:
       case AugmentationAreas.defense:

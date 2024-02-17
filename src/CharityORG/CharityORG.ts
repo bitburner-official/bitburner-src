@@ -88,6 +88,7 @@ export class CharityORG {
   bannerPower: number;
   luck: number;
   embezzle: boolean;
+  embezzle_aug: number;
 
   constructor(name = "My Charity", seedFunded = false) {
     this.name = name;
@@ -140,6 +141,7 @@ export class CharityORG {
     this.bannerPower = 0;
     this.luck = 0;
     this.embezzle = false;
+    this.embezzle_aug = 1;
   }
 
   addMessage(message: string): void {
@@ -288,11 +290,17 @@ export class CharityORG {
       : moneyGainPerCycle;
     if (this.embezzle) {
       Player.gainMoney(
-        moneyGainPerCycle * CharityORGConstants.charityEmbezzleMoneyTaken * currentNodeMults.CharityORGEmbezzleStrength,
+        moneyGainPerCycle *
+          CharityORGConstants.charityEmbezzleMoneyTaken *
+          currentNodeMults.CharityORGEmbezzleStrength *
+          this.embezzle_aug,
         "charityORG",
       );
       this.embezzleGainRate =
-        moneyGainPerCycle * CharityORGConstants.charityEmbezzleMoneyTaken * currentNodeMults.CharityORGEmbezzleStrength;
+        moneyGainPerCycle *
+        CharityORGConstants.charityEmbezzleMoneyTaken *
+        currentNodeMults.CharityORGEmbezzleStrength *
+        this.embezzle_aug;
     } else this.embezzleGainRate = 0;
     this.moneySpendRate = moneySpendPerCycle;
     this.spent -= moneySpendPerCycle;
@@ -572,6 +580,7 @@ export class CharityORG {
   resetBanner(): void {
     // Non-Augment bonuses
     this.luck = 0;
+    this.embezzle_aug = 1;
     this.bannerPower = 0;
     this.charityAugment = defaultMultipliers();
 
@@ -582,6 +591,9 @@ export class CharityORG {
         switch (effect.effect) {
           case AugmentationAreas.lucky:
             this.luck += effect.strength;
+            break;
+          case AugmentationAreas.embezzlement:
+            this.embezzle_aug += effect.strength;
             break;
           case AugmentationAreas.hacking:
             this.charityAugment.hacking += effect.strength;
@@ -656,16 +668,23 @@ export class CharityORG {
             this.charityAugment.hacknet_node_money += effect.strength;
             break;
           case AugmentationAreas.hacknet_node_purchase_cost:
-            this.charityAugment.hacknet_node_purchase_cost += Math.max(effect.strength, -0.9999);
+            this.charityAugment.hacknet_node_purchase_cost += effect.strength;
+            this.charityAugment.hacknet_node_purchase_cost = Math.max(
+              this.charityAugment.hacknet_node_purchase_cost,
+              0.0005,
+            );
             break;
           case AugmentationAreas.hacknet_node_ram_cost:
-            this.charityAugment.hacknet_node_ram_cost += Math.max(effect.strength, -0.9999);
+            this.charityAugment.hacknet_node_ram_cost += effect.strength;
+            this.charityAugment.hacknet_node_ram_cost = Math.max(this.charityAugment.hacknet_node_ram_cost, 0.0005);
             break;
           case AugmentationAreas.hacknet_node_core_cost:
-            this.charityAugment.hacknet_node_core_cost += Math.max(effect.strength, -0.9999);
+            this.charityAugment.hacknet_node_core_cost += effect.strength;
+            this.charityAugment.hacknet_node_core_cost = Math.max(this.charityAugment.hacknet_node_core_cost, 0.0005);
             break;
           case AugmentationAreas.hacknet_node_level_cost:
-            this.charityAugment.hacknet_node_level_cost += Math.max(effect.strength, -0.9999);
+            this.charityAugment.hacknet_node_level_cost += effect.strength;
+            this.charityAugment.hacknet_node_level_cost = Math.max(this.charityAugment.hacknet_node_level_cost, 0.0005);
             break;
           case AugmentationAreas.bladeburner_max_stamina:
             this.charityAugment.bladeburner_max_stamina += effect.strength;
@@ -680,10 +699,12 @@ export class CharityORG {
             this.charityAugment.bladeburner_success_chance += effect.strength;
             break;
           case AugmentationAreas.augmentation_money:
-            this.charityAugment.augmentation_money += Math.max(effect.strength, -0.9999);
+            this.charityAugment.augmentation_money += effect.strength;
+            this.charityAugment.augmentation_money = Math.max(this.charityAugment.augmentation_money, 0.0005);
             break;
           case AugmentationAreas.augmentation_rep:
-            this.charityAugment.augmentation_rep += Math.max(effect.strength, -0.9999);
+            this.charityAugment.augmentation_rep += effect.strength;
+            this.charityAugment.augmentation_rep = Math.max(this.charityAugment.augmentation_rep, 0.0005);
             break;
         }
       }

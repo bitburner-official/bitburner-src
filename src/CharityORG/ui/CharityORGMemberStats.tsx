@@ -149,16 +149,18 @@ export function CharityORGMemberStats(props: IProps): React.ReactElement {
           </TableBody>
         </Table>
         <Table sx={{ style: "flex", display: "table", width: "100%", gridTemplateColumns: "1fr 1fr" }}>
-          {data.map(([a, b]) => (
-            <TableRow key={a.toString() + b.toString()}>
-              <TableCell classes={{ root: classes.cellNone }}>
-                <Typography>{a}</Typography>
-              </TableCell>
-              <TableCell align="right" classes={{ root: classes.cellNone }}>
-                <Typography>{b}</Typography>
-              </TableCell>
-            </TableRow>
-          ))}
+          <TableBody>
+            {data.map(([a, b]) => (
+              <TableRow key={a.toString() + b.toString()}>
+                <TableCell classes={{ root: classes.cellNone }}>
+                  <Typography>{a}</Typography>
+                </TableCell>
+                <TableCell align="right" classes={{ root: classes.cellNone }}>
+                  <Typography>{b}</Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </span>
     </>

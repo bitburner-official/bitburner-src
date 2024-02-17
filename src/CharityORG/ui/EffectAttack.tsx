@@ -22,8 +22,7 @@ export function EffectAttack(props: IProps): React.ReactElement {
         <Tooltip
           title={
             <Typography>
-              A positive effect. Completely stops the natural progression and accumulation of new attacks. Does not stop
-              Random attacks.
+              A positive effect. Completely stops the timer for new attacks. Does not stop Random attacks.
             </Typography>
           }
         >

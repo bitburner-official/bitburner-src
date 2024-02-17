@@ -77,10 +77,6 @@ export function KarmaCharityMultiSubpage(): React.ReactElement {
     rerender();
   }
 
-  function showBoostDesc(): React.ReactElement {
-    return <Typography>{boostDesc}</Typography>;
-  }
-
   function updateSpend(e: React.ChangeEvent<HTMLInputElement>): void {
     const spendVal = Number.parseInt(e.currentTarget.value);
     if (spendVal > Player.karma || spendVal < 0) {
@@ -197,26 +193,26 @@ export function KarmaCharityMultiSubpage(): React.ReactElement {
               </MenuItem>
             ))}
           </Select>
-          <Typography>{showBoostDesc()}</Typography>
+          <Typography>{boostDesc}</Typography>
         </Box>
+        <Typography>Karma:</Typography>
+        <Box display="grid" alignItems="center">
+          <TextField
+            type="number"
+            style={{
+              width: "100px",
+            }}
+            onChange={updateSpend}
+            placeholder={String(spend)}
+          />
+          <Typography>
+            {boostDescBuy}
+            <br></br>
+            Available: {formatNumber(Player.karma)}
+          </Typography>
+        </Box>
+        <Button onClick={() => purchaseBoost()}>{boostButton}</Button>
       </span>
-      <Typography>Karma:</Typography>
-      <Box display="grid" alignItems="center">
-        <TextField
-          type="number"
-          style={{
-            width: "100px",
-          }}
-          onChange={updateSpend}
-          placeholder={String(spend)}
-        />
-        <Typography>
-          {boostDescBuy}
-          <br></br>
-          Available: {formatNumber(Player.karma)}
-        </Typography>
-      </Box>
-      <Button onClick={() => purchaseBoost()}>{boostButton}</Button>
     </>
   );
 }

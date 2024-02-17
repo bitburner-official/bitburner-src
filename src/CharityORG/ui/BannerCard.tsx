@@ -17,7 +17,7 @@ export function BannerCard(banner: BannerPiece | undefined): React.ReactElement 
         <Typography>
           {banner.effects.map((n, i) => (
             <Typography key={i}>
-              {n.effect === "lucky"
+              {n.effect === "lucky" || n.effect === "embezzlement"
                 ? n.effect + ": " + formatNumber(n.strength)
                 : n.effect.replaceAll("_", " ") + ": " + f(n.strength)}
             </Typography>

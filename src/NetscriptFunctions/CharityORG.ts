@@ -670,6 +670,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       const charityORG = getCharity(ctx);
       return {
         lucky: charityORG.luck,
+        embezzlement: charityORG.embezzle_aug,
         totalPower: charityORG.bannerPower,
         banner: cloneDeep(charityORG.charityAugment),
       };

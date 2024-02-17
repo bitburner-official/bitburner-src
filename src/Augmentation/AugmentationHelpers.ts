@@ -110,7 +110,7 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
     case AugmentationName.NeuroFluxGovernor: {
       const multiplier = Math.pow(CONSTANTS.NeuroFluxGovernorLevelMult, aug.getLevel());
       repCost = aug.baseRepRequirement * multiplier * currentNodeMults.AugmentationRepCost;
-      moneyCost = aug.baseCost * multiplier * currentNodeMults.AugmentationMoneyCost;
+      moneyCost = aug.baseCost * Player.mults.augmentation_money * multiplier * currentNodeMults.AugmentationMoneyCost;
       moneyCost *= getBaseAugmentationPriceMultiplier() ** Player.queuedAugmentations.length;
       break;
     }
@@ -136,16 +136,19 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
         AugmentationName.WisdomOfAthena,
       ];
       const soaAugCount = soaAugmentationNames.filter((augName) => Player.hasAugmentation(augName)).length;
-      moneyCost = aug.baseCost * Math.pow(CONSTANTS.SoACostMult, soaAugCount);
+      moneyCost = aug.baseCost * Player.mults.augmentation_money * Math.pow(CONSTANTS.SoACostMult, soaAugCount);
       repCost = aug.baseRepRequirement * Math.pow(CONSTANTS.SoARepMult, soaAugCount);
       break;
     }
     // Standard cost
     default:
-      moneyCost = aug.baseCost * getGenericAugmentationPriceMultiplier() * currentNodeMults.AugmentationMoneyCost;
+      moneyCost =
+        aug.baseCost *
+        Player.mults.augmentation_money *
+        getGenericAugmentationPriceMultiplier() *
+        currentNodeMults.AugmentationMoneyCost;
       repCost = aug.baseRepRequirement * currentNodeMults.AugmentationRepCost;
   }
-  moneyCost *= Player.mults.augmentation_money;
   repCost *= Player.mults.augmentation_rep;
 
   return { moneyCost, repCost };
