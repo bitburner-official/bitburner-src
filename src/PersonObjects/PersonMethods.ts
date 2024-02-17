@@ -44,7 +44,8 @@ export function gainDefenseExp(this: Person, exp: number): void {
   }
 
   this.skills.defense = calculateSkill(this.exp.defense, this.mults.defense * currentNodeMults.DefenseLevelMultiplier);
-  const ratio = this.hp.current / this.hp.max;
+  //In case MaxHP is Infinite, setting ratio to 1
+  const ratio = this.hp.current / this.hp.max || 1;
   this.hp.max = Math.floor(10 + this.skills.defense / 10);
   this.hp.current = Math.round(this.hp.max * ratio);
 }
@@ -179,7 +180,7 @@ export function updateSkillLevels(this: Person): void {
     1,
     Math.floor(this.calculateSkill(this.exp.charisma, this.mults.charisma * currentNodeMults.CharismaLevelMultiplier)),
   );
-
+  //In case MaxHP is Infinite, setting ratio to 1
   const ratio: number = Math.min(this.hp.current / this.hp.max, 1) || 1;
   this.hp.max = Math.floor(10 + this.skills.defense / 10);
   this.hp.current = Math.round(this.hp.max * ratio);
