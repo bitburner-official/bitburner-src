@@ -2,7 +2,7 @@ import { GetServer, createUniqueRandomIp, ipExists } from "./AllServers";
 import { Server, IConstructorParams } from "./Server";
 import { BaseServer } from "./BaseServer";
 import { calculateServerGrowth, calculateServerGrowthLog } from "./formulas/grow";
-
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { ServerConstants } from "./data/Constants";
 import { Player } from "@player";
 import { CompletedProgramName, LiteratureName } from "@enums";
@@ -257,4 +257,9 @@ export function isBackdoorInstalled(server: BaseServer): boolean {
 export function getCoreBonus(cores = 1): number {
   const coreBonus = 1 + (cores - 1) / 16;
   return coreBonus;
+}
+
+export function getWeakenEffect(threads: number, cores: number): number {
+  const coreBonus = getCoreBonus(cores);
+  return ServerConstants.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
 }
