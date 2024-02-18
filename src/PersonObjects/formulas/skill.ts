@@ -6,12 +6,12 @@ import { clampNumber } from "../../utils/helpers/clampNumber";
  */
 export function calculateSkill(exp: number, mult = 1): number {
   const value = Math.floor(mult * (32 * Math.log(exp + 534.6) - 200));
-  return clampNumber(value, 1, Number.MAX_VALUE);
+  return clampNumber(value, 1);
 }
 
 export function calculateExp(skill: number, mult = 1): number {
   const value = Math.exp((skill / mult + 200) / 32) - 534.6;
-  return clampNumber(value, 0, Number.MAX_VALUE);
+  return clampNumber(value, 0);
 }
 
 export function calculateSkillProgress(exp: number, mult = 1): ISkillProgress {

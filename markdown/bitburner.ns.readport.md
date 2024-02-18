@@ -9,7 +9,7 @@ Read data from a port.
 **Signature:**
 
 ```typescript
-readPort(portNumber: number): PortData;
+readPort(portNumber: number): any;
 ```
 
 ## Parameters
@@ -20,7 +20,7 @@ readPort(portNumber: number): PortData;
 
 **Returns:**
 
-[PortData](./bitburner.portdata.md)
+any
 
 The data read.
 
