@@ -3,11 +3,14 @@ import { NetscriptPort } from "@nsdefs";
 import { NetscriptPorts } from "./NetscriptWorker";
 import { PositiveInteger } from "./types";
 
-type PortData = string | number;
 type Resolver = () => void;
 const emptyPortData = "NULL PORT DATA";
 /** The object property is for typechecking and is not present at runtime */
 export type PortNumber = PositiveInteger & { __PortNumber: true };
+
+function isObjectLike(value: unknown): value is object {
+  return (typeof value === "object" && value !== null) || typeof value === "function";
+}
 
 /** Gets the numbered port, initializing it if it doesn't already exist.
  * Only using for functions that write data/resolvers. Use NetscriptPorts.get(n) for */
@@ -20,10 +23,11 @@ export function getPort(n: PortNumber) {
 }
 
 export class Port {
-  data: PortData[] = [];
+  data: any[] = [];
   resolver: Resolver | null = null;
   promise: Promise<void> | null = null;
-  resolve() {
+  add(data: any) {
+    this.data.push(data);
     if (!this.resolver) return;
     this.resolver();
     this.resolver = null;
@@ -43,44 +47,35 @@ export function portHandle(n: PortNumber): NetscriptPort {
   };
 }
 
-export function writePort(n: PortNumber, value: unknown): PortData | null {
-  if (typeof value !== "number" && typeof value !== "string") {
-    throw new Error(
-      `port.write: Tried to write type ${typeof value}. Only string and number types may be written to ports.`,
-    );
-  }
+export function writePort(n: PortNumber, value: unknown): any {
   const port = getPort(n);
-  port.data.push(value);
-  port.resolve();
-  if (port.data.length > Settings.MaxPortCapacity) return port.data.shift() as PortData;
+  // Primitives don't need to be cloned.
+  port.add(isObjectLike(value) ? structuredClone(value) : value);
+  if (port.data.length > Settings.MaxPortCapacity) return port.data.shift();
   return null;
 }
 
 export function tryWritePort(n: PortNumber, value: unknown): boolean {
-  if (typeof value != "number" && typeof value != "string") {
-    throw new Error(
-      `port.write: Tried to write type ${typeof value}. Only string and number types may be written to ports.`,
-    );
-  }
   const port = getPort(n);
   if (port.data.length >= Settings.MaxPortCapacity) return false;
-  port.data.push(value);
-  port.resolve();
+  // Primitives don't need to be cloned.
+  port.add(isObjectLike(value) ? structuredClone(value) : value);
   return true;
 }
 
-export function readPort(n: PortNumber): PortData {
+export function readPort(n: PortNumber): any {
   const port = NetscriptPorts.get(n);
   if (!port || !port.data.length) return emptyPortData;
-  const returnVal = port.data.shift() as PortData;
+  const returnVal = port.data.shift();
   if (!port.data.length && !port.resolver) NetscriptPorts.delete(n);
   return returnVal;
 }
 
-export function peekPort(n: PortNumber): PortData {
+export function peekPort(n: PortNumber): any {
   const port = NetscriptPorts.get(n);
   if (!port || !port.data.length) return emptyPortData;
-  return port.data[0];
+  // Needed to avoid exposing internal objects.
+  return isObjectLike(port.data[0]) ? structuredClone(port.data[0]) : port.data[0];
 }
 
 export function nextPortWrite(n: PortNumber) {

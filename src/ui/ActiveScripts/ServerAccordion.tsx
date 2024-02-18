@@ -1,45 +1,29 @@
-/**
- * React Component for rendering the Accordion element for a single
- * server in the 'Active Scripts' UI page
- */
+import type { WorkerScript } from "../../Netscript/WorkerScript";
+import type { BaseServer } from "../../Server/BaseServer";
+
 import * as React from "react";
 
-import Typography from "@mui/material/Typography";
+import { Box, Collapse, ListItemText, ListItemButton, Paper, Typography } from "@mui/material";
+import { ExpandMore, ExpandLess } from "@mui/icons-material";
 
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import ExpandLess from "@mui/icons-material/ExpandLess";
 import { ServerAccordionContent } from "./ServerAccordionContent";
 
-import { WorkerScript } from "../../Netscript/WorkerScript";
-
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
-import { GetServer } from "../../Server/AllServers";
 
 interface ServerAccordionProps {
-  hostname: string;
+  server: BaseServer;
   scripts: WorkerScript[];
 }
 
-export function ServerAccordion({ hostname, scripts }: ServerAccordionProps): React.ReactElement {
+export function ServerAccordion({ server, scripts }: ServerAccordionProps): React.ReactElement {
   const [open, setOpen] = React.useState(false);
-  const server = GetServer(hostname);
-  if (!server) {
-    console.error(`Invalid server ${hostname} while displaying active scripts`);
-    return <></>;
-  }
 
   // Accordion's header text
   // TODO: calculate the longest hostname length rather than hard coding it
   const longestHostnameLength = 18;
-  const paddedName = `${hostname}${" ".repeat(longestHostnameLength)}`.slice(
+  const paddedName = `${server.hostname}${" ".repeat(longestHostnameLength)}`.slice(
     0,
-    Math.max(hostname.length, longestHostnameLength),
+    Math.max(server.hostname.length, longestHostnameLength),
   );
   const barOptions = {
     progress: server.ramUsed / server.maxRam,
