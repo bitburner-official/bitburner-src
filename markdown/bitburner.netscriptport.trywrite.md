@@ -9,14 +9,14 @@ Attempt to write data to the port.
 **Signature:**
 
 ```typescript
-tryWrite(value: string | number): boolean;
+tryWrite(value: any): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  value | string \| number |  |
+|  value | any | Data to write, it's cloned with structuredClone(). |
 
 **Returns:**
 

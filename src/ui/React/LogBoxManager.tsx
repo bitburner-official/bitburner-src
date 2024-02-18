@@ -171,7 +171,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   const classes = useStyles();
   const container = useRef<HTMLDivElement>(null);
   const textArea = useRef<HTMLDivElement>(null);
-  const rerender = useRerender(1000);
+  const rerender = useRerender(Settings.TailRenderIntervall);
   const propsRef = useRef(new LogBoxProperties(rerender, rootRef));
   script.tailProps = propsRef.current;
   const [minimized, setMinimized] = useState(false);
