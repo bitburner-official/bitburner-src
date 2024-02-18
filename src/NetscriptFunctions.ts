@@ -1326,12 +1326,6 @@ export const ns: InternalAPI<NSFull> = {
   },
   writePort: (ctx) => (_portNumber, data) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
-    if (typeof data !== "string" && typeof data !== "number") {
-      throw helpers.makeRuntimeErrorMsg(
-        ctx,
-        `Trying to write invalid data to a port: only strings and numbers are valid.`,
-      );
-    }
     return writePort(portNumber, data);
   },
   write: (ctx) => (_filename, _data, _mode) => {
@@ -1364,12 +1358,6 @@ export const ns: InternalAPI<NSFull> = {
   },
   tryWritePort: (ctx) => (_portNumber, data) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
-    if (typeof data !== "string" && typeof data !== "number") {
-      throw helpers.makeRuntimeErrorMsg(
-        ctx,
-        `Trying to write invalid data to a port: only strings and numbers are valid.`,
-      );
-    }
     return tryWritePort(portNumber, data);
   },
   nextPortWrite: (ctx) => (_portNumber) => {
