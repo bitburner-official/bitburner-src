@@ -28,6 +28,7 @@ export const SystemPage = (): React.ReactElement => {
     setExecTime(newValue as number);
     Settings.CodeInstructionRunTime = newValue as number;
   }
+
   function handleTailIntervalChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setTailRenderInterval(newValue as number);
     Settings.TailRenderIntervall = newValue as number;
@@ -143,7 +144,7 @@ export const SystemPage = (): React.ReactElement => {
           callback={handleTailIntervalChange}
           step={200}
           min={200}
-          max={10000}
+          max={5 * 1000}
           tooltip={
             <>
               The minimum number of milliseconds between two tail rerender. Setting this too low can result in poor
