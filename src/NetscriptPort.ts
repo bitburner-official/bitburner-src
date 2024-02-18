@@ -8,7 +8,7 @@ const emptyPortData = "NULL PORT DATA";
 /** The object property is for typechecking and is not present at runtime */
 export type PortNumber = PositiveInteger & { __PortNumber: true };
 
-function isObject(value: unknown): value is object {
+function isObjectLike(value: unknown): value is object {
   return (typeof value === "object" && value !== null) || typeof value === "function";
 }
 
@@ -50,7 +50,7 @@ export function portHandle(n: PortNumber): NetscriptPort {
 export function writePort(n: PortNumber, value: unknown): any {
   const port = getPort(n);
   // Primitives don't need to be cloned.
-  port.add(isObject(value) ? structuredClone(value) : value);
+  port.add(isObjectLike(value) ? structuredClone(value) : value);
   if (port.data.length > Settings.MaxPortCapacity) return port.data.shift();
   return null;
 }
@@ -59,7 +59,7 @@ export function tryWritePort(n: PortNumber, value: unknown): boolean {
   const port = getPort(n);
   if (port.data.length >= Settings.MaxPortCapacity) return false;
   // Primitives don't need to be cloned.
-  port.add(isObject(value) ? structuredClone(value) : value);
+  port.add(isObjectLike(value) ? structuredClone(value) : value);
   return true;
 }
 
@@ -75,7 +75,7 @@ export function peekPort(n: PortNumber): any {
   const port = NetscriptPorts.get(n);
   if (!port || !port.data.length) return emptyPortData;
   // Needed to avoid exposing internal objects.
-  return isObject(port.data[0]) ? structuredClone(port.data[0]) : port.data[0];
+  return isObjectLike(port.data[0]) ? structuredClone(port.data[0]) : port.data[0];
 }
 
 export function nextPortWrite(n: PortNumber) {
