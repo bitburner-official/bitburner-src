@@ -1,4 +1,4 @@
-import clampNumber from "../../utils/helpers/clampNumbers";
+import { clampNumber } from "../../utils/helpers/clampNumber";
 
 /**
  * Given an experience amount and stat multiplier, calculates the
