@@ -30,7 +30,9 @@ export function EventCard(event: CharityEvent | undefined, queue: boolean): Reac
           <br></br>
           Cycles until completed: {convertTimeMsToTimeElapsedString((event.cyclesNeeded - event.cyclesCompleted) * 200)}
           <br></br>
-          <Box display="grid" whiteSpace="pre">
+        </Typography>
+        <Box display="grid" whiteSpace="pre">
+          <Typography>
             Base Gain : {formatMoney(event.taskObject.baseMoneyGain)}
             <br></br>
             Base Spend : {formatMoney(event.taskObject.baseMoneySpend)}
@@ -43,9 +45,12 @@ export function EventCard(event: CharityEvent | undefined, queue: boolean): Reac
             <br></br>
             Base Visibility: {formatNumber(event.taskObject.baseVisibility, 6)}
             <br></br>
-          </Box>
-          Weights:<br></br>
-          <Box display="grid" whiteSpace="pre" sx={{ gridTemplateColumns: "1fr 1fr 1fr" }}>
+          </Typography>
+        </Box>
+        <br></br>
+        <Typography>Weights:</Typography>
+        <Box display="grid" whiteSpace="pre" sx={{ gridTemplateColumns: "1fr 1fr 1fr" }}>
+          <Typography>
             {"Hack: "}
             {(event.taskObject.hackWeight < 10 ? "0" : "") + formatNumber(event.taskObject.hackWeight, 2)} {"  "}
             {"Str : "}
@@ -60,27 +65,30 @@ export function EventCard(event: CharityEvent | undefined, queue: boolean): Reac
             {"Cha : "}
             {(event.taskObject.chaWeight < 10 ? "0" : "") + formatNumber(event.taskObject.chaWeight, 2)}
             <br></br>
-          </Box>
+          </Typography>
+        </Box>
+        <br></br>
+        <Typography>
           Effects:<br></br>
-          <Box display="grid" sx={{ gridTemplateColumns: "1fr 1fr" }}>
-            {forEach(event.modifiers).map((n, i) => (
-              <Typography key={i}>
-                {n.area}: {formatNumber(n.strength, 2)}
-                <br></br>
-              </Typography>
-            ))}
-          </Box>
-          <br></br>
-          Death Effects:<br></br>
-          <Box display="grid" sx={{ gridTemplateColumns: "1fr 1fr" }}>
-            {forEach(event.deathEffects).map((n, i) => (
-              <Typography key={i}>
-                {n.type.replaceAll("_", " ")}: {formatNumber(n.strength, 2)}
-                <br></br>
-              </Typography>
-            ))}
-          </Box>
         </Typography>
+        <Box display="grid" sx={{ gridTemplateColumns: "1fr 1fr" }}>
+          {forEach(event.modifiers).map((n, i) => (
+            <Typography key={i}>
+              {n.area}: {formatNumber(n.strength, 2)}
+              <br></br>
+            </Typography>
+          ))}
+        </Box>
+        <br></br>
+        {event.deathEffects.length > 0 ? <Typography>Death Effects:</Typography> : <></>}
+        <Box display="grid" sx={{ gridTemplateColumns: "1fr 1fr" }}>
+          {forEach(event.deathEffects).map((n, i) => (
+            <Typography key={i}>
+              {n.type.replaceAll("_", " ")}: {formatNumber(n.strength, 2)}
+              <br></br>
+            </Typography>
+          ))}
+        </Box>
       </Box>
     </>
   );

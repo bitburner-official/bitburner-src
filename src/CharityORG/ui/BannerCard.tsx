@@ -14,15 +14,13 @@ export function BannerCard(banner: BannerPiece | undefined): React.ReactElement 
       <Box display="grid" width="99%">
         <Typography>{banner.short_name}</Typography>
         <Typography>Total Power: {formatNumber(banner.totalPower)}</Typography>
-        <Typography>
-          {banner.effects.map((n, i) => (
-            <Typography key={i}>
-              {n.effect === "lucky" || n.effect === "embezzlement"
-                ? n.effect + ": " + formatNumber(n.strength)
-                : n.effect.replaceAll("_", " ") + ": " + f(n.strength)}
-            </Typography>
-          ))}
-        </Typography>
+        {banner.effects.map((n, i) =>
+          n.effect === "lucky" || n.effect === "embezzlement" ? (
+            <Typography key={i}> {n.effect + ": " + formatNumber(n.strength)} </Typography>
+          ) : (
+            <Typography key={i}> {n.effect.replaceAll("_", " ") + ": " + f(n.strength)} </Typography>
+          ),
+        )}
       </Box>
     </>
   );

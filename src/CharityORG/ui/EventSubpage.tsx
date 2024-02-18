@@ -93,7 +93,7 @@ export function EventSubpage(): React.ReactElement {
 
   // <Context.CharityORG.Provider value={charityORG}>
   return (
-    <span>
+    <>
       <Box display="flex">
         <Typography>
           Charities help those in need. Here you can see those requests. Alongside of them, you can also see any attacks
@@ -192,21 +192,20 @@ export function EventSubpage(): React.ReactElement {
           )}
         </span>
       </Box>
-    </span>
+    </>
   );
 }
-//    </Context.CharityORG.Provider>
-// {value === 0 && <EventStatusSubpage />}
-
-//<Box sx={{ height: 220, overflow: "scroll", border: "1px solid", borderBlockColor: "yellow" }}>
-//  {forEach(charityORG.messages).map((n) => (
-//    <Typography>{n.message}</Typography>
-//  ))}
-//</Box>
 /*
-              {charityORG.currentEvents
-              .filter((n) => n.isBeneficial === true)
-              .map((n, i) => (
-                <Typography key={i}>{n.short_name}</Typography>
-              ))}
-              */
+<div>
+            
+          </div>
+
+           <div>
+            
+          </div>
+
+          <div>
+            
+          </div>
+
+*/

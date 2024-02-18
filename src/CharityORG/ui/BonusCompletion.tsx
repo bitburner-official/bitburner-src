@@ -31,7 +31,7 @@ export function BonusCompletion(props: IProps): React.ReactElement {
     return (
       <Box display="flex">
         <Tooltip title={<Typography>You have broken the gangs!</Typography>}>
-          <Typography>Record Time Held: {convertTimeMsToTimeElapsedString(bonusMillis)}</Typography>
+          <Typography>Time Held: {convertTimeMsToTimeElapsedString(bonusMillis)}</Typography>
         </Tooltip>
       </Box>
     );
