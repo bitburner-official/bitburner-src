@@ -12,7 +12,7 @@ export const SystemPage = (): React.ReactElement => {
   const [portSize, setPortSize] = useState(Settings.MaxPortCapacity);
   const [terminalSize, setTerminalSize] = useState(Settings.MaxTerminalCapacity);
   const [autosaveInterval, setAutosaveInterval] = useState(Settings.AutosaveInterval);
-  const [tailrenderInterval, setTailRenderInterval] = useState(Settings.TailRenderIntervall);
+  const [tailrenderInterval, setTailRenderInterval] = useState(Settings.TailRenderInterval);
 
   function handlePortSizeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setPortSize(newValue as number);
@@ -31,7 +31,7 @@ export const SystemPage = (): React.ReactElement => {
 
   function handleTailIntervalChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setTailRenderInterval(newValue as number);
-    Settings.TailRenderIntervall = newValue as number;
+    Settings.TailRenderInterval = newValue as number;
   }
 
   function handleRecentScriptsSizeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
@@ -139,16 +139,16 @@ export const SystemPage = (): React.ReactElement => {
           marks
         />
         <OptionsSlider
-          label="Tail render intervall (ms)"
+          label="Tail render interval (ms)"
           initialValue={tailrenderInterval}
           callback={handleTailIntervalChange}
           step={200}
-          min={200}
+          min={50}
           max={5 * 1000}
           tooltip={
             <>
-              The minimum number of milliseconds between two tail rerender. Setting this too low can result in poor
-              performance if you have many Tail windows open.
+              The minimum number of milliseconds between tail rerenders. Setting this too low can result in poor
+              performance if you have many tail windows open.
             </>
           }
         />
