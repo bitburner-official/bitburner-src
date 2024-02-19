@@ -9,7 +9,7 @@ Write data to a port.
 **Signature:**
 
 ```typescript
-writePort(portNumber: number, data: string | number): PortData | null;
+writePort(portNumber: number, data: any): any;
 ```
 
 ## Parameters
@@ -17,11 +17,11 @@ writePort(portNumber: number, data: string | number): PortData | null;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  portNumber | number | Port to write to. Must be a positive integer. |
-|  data | string \| number | Data to write. |
+|  data | any | Data to write, it's cloned with structuredClone(). |
 
 **Returns:**
 
-[PortData](./bitburner.portdata.md) \| null
+any
 
 The data popped off the queue if it was full, or null if it was not full.
 

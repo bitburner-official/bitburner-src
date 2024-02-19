@@ -72,6 +72,8 @@ export const Settings = {
   ExcludeRunningScriptsFromSave: false,
   /**  Whether the game's sidebar is opened. */
   IsSidebarOpened: true,
+  /** Tail rendering intervall in ms */
+  TailRenderInterval: 1000,
   /** Theme colors. */
   theme: { ...defaultTheme },
   /** Interface styles. */
