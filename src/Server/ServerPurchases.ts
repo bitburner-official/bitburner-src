@@ -125,7 +125,7 @@ export function purchaseServer(hostname: string, ram: number, cost: number): voi
     return;
   }
 
-  if ((hostname.startsWith("hacknet-node-") || hostname.startsWith("hacknet-server-")) {
+  if (hostname.startsWith("hacknet-node-") || hostname.startsWith("hacknet-server-")) {
     dialogBoxCreate(`'${hostname}' is a reserved hostname, please try again.`);
     return;
   }
