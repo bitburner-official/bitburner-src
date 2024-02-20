@@ -11,6 +11,7 @@ import { Reviver } from "../utils/JSONReviver";
 import { SpecialServers } from "./data/SpecialServers";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { IPAddress, isIPAddress } from "../Types/strings";
+import { closeDeletedScripts } from "../ScriptEditor/ui/ScriptEditorRoot";
 
 import "../Script/RunningScript"; // For reviver side-effect
 
@@ -193,6 +194,7 @@ export function prestigeAllServers(): void {
     delete AllServers[member];
   }
   AllServers = {};
+  closeDeletedScripts(true);
 }
 
 export function loadAllServers(saveString: string): void {
