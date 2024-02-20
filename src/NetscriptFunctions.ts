@@ -1167,6 +1167,10 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => `Invalid argument: hostname='${hostnameStr}'`);
       return "";
     }
+    if (hostnameStr.startsWith("hacknet-node-") || hostnameStr.startsWith("hacknet-server-")) {
+      helpers.log(ctx, () => `Invalid argument: hostname='${hostnameStr}' is a reserved hostname.`);
+      return "";
+    }
 
     if (Player.purchasedServers.length >= getPurchaseServerLimit()) {
       helpers.log(
