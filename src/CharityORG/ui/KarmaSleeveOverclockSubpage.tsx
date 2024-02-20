@@ -8,6 +8,7 @@ import { MenuItem, TextField } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useRerender } from "../../ui/React/hooks";
 import { formatNumber } from "../../ui/formatNumber";
+import { KarmaAvailable } from "./KarmaAvailable";
 
 /** React Component for the popup that manages Karma spending */
 export function KarmaSleeveOverclockSubpage(): React.ReactElement {
@@ -60,7 +61,6 @@ export function KarmaSleeveOverclockSubpage(): React.ReactElement {
       );
     }
     Player.karma -= spend;
-    setSpend(0);
   }
 
   const categories: Record<string, string[][]> = {
@@ -87,6 +87,7 @@ export function KarmaSleeveOverclockSubpage(): React.ReactElement {
       <Typography>Karma:</Typography>
       <Box display="flex" alignItems="center">
         <TextField
+          id="KarmaSpend"
           type="number"
           style={{
             width: "100px",
@@ -96,7 +97,7 @@ export function KarmaSleeveOverclockSubpage(): React.ReactElement {
         />
         <Typography>
           Every 1 karma gives .5 seconds of overclock to a sleeve. If all is selected, will divide it evenly<br></br>
-          Available:{formatNumber(Player.karma)}
+          <KarmaAvailable />
         </Typography>
       </Box>
       <Button onClick={() => purchaseOverclock()}>Purchase Sleeve Overclock</Button>

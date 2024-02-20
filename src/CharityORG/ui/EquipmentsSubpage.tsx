@@ -88,6 +88,7 @@ function CharityVolunteerUpgradePanel(props: IPanelProps): React.ReactElement {
   const rerender = useRerender();
   const [currentCategory, setCurrentCategory] = useState("Tools");
   const classes = useStyles();
+  useRerender(200);
 
   function filterUpgrades(list: string[], type: UpgradeType): CharityVolunteerUpgrade[] {
     return Object.keys(CharityVolunteerUpgrades)
@@ -278,7 +279,7 @@ function CharityVolunteerUpgradePanel(props: IPanelProps): React.ReactElement {
   );
 }
 
-/** React Component for the popup that manages gang members upgrades */
+/** React Component for the popup that manages charity volunteer upgrades */
 export function EquipmentsSubpage(): React.ReactElement {
   const charity = useCharityORG();
   const [filter, setFilter] = useState("");

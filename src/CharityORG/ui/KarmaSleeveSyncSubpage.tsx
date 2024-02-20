@@ -8,6 +8,7 @@ import { MenuItem, TextField } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useRerender } from "../../ui/React/hooks";
 import { formatNumber } from "../../ui/formatNumber";
+import { KarmaAvailable } from "./KarmaAvailable";
 
 /** React Component for the popup that manages Karma spending */
 export function KarmaSleeveSyncSubpage(): React.ReactElement {
@@ -62,7 +63,6 @@ export function KarmaSleeveSyncSubpage(): React.ReactElement {
       );
     }
     Player.karma -= spend;
-    setSpend(0);
   }
 
   const categories: Record<string, string[][]> = {
@@ -98,7 +98,7 @@ export function KarmaSleeveSyncSubpage(): React.ReactElement {
         />
         <Typography>
           Every 1 karma gives .01 sync to a sleeve. If all is selected, will divide it evenly<br></br>
-          Available:{formatNumber(Player.karma)}
+          <KarmaAvailable />
         </Typography>
       </Box>
       <Button onClick={() => purchaseSync()}>Purchase Sync</Button>

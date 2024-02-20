@@ -7,6 +7,7 @@ import { BannerCard } from "./BannerCard";
 import Button from "@mui/material/Button";
 import { CharityORGConstants } from "../data/Constants";
 import { formatPercent, formatNumber } from "../../ui/formatNumber";
+import { useRerender } from "../../ui/React/hooks";
 
 /** React Component for the popup that manages Karma spending */
 export function ItemsBannerSubpage(): React.ReactElement {
@@ -17,7 +18,7 @@ export function ItemsBannerSubpage(): React.ReactElement {
   const f = (x: number) => formatPercent(x, x - 1 < 0.1 ? 2 : 1);
   const [currentBanner, setCurrentBanner] = useState("");
   const [pendingBanner, setPendingBanner] = useState("");
-
+  const rerender = useRerender();
   if (currentBanner !== "" && !charityORG.bannerPieces.find((f) => f.name === currentBanner)) setCurrentBanner("");
   if (pendingBanner !== "" && !charityORG.bannerPiecesStore.find((f) => f.name === pendingBanner)) setPendingBanner("");
 
@@ -29,12 +30,14 @@ export function ItemsBannerSubpage(): React.ReactElement {
     charityORG.addItemUseMessage("Destroyed banner piece: " + piece.short_name);
     setCurrentBanner("");
     charityORG.resetBanner();
+    rerender();
   }
   function destroyAllPieces(): void {
     charityORG.bannerPieces.length = 0;
     charityORG.addItemUseMessage("Destroyed all current banner pieces!");
     setCurrentBanner("");
     charityORG.resetBanner();
+    rerender();
   }
   function destroyStoredPiece(): void {
     const piece = charityORG.bannerPiecesStore.find((f) => f.name === pendingBanner);
@@ -43,11 +46,13 @@ export function ItemsBannerSubpage(): React.ReactElement {
     charityORG.bannerPiecesStore.splice(index, 1);
     charityORG.addItemUseMessage("Destroyed stored banner piece: " + piece.short_name);
     setPendingBanner("");
+    rerender();
   }
   function destroyAllStoredPieces(): void {
     charityORG.bannerPiecesStore.length = 0;
     charityORG.addItemUseMessage("Destroyed all stored banner pieces!");
     setPendingBanner("");
+    rerender();
   }
   function luckyRemove(): void {
     if (charityORG.luckyCoin < 1) return;
@@ -60,6 +65,7 @@ export function ItemsBannerSubpage(): React.ReactElement {
     charityORG.luckyCoin--;
     setCurrentBanner("");
     charityORG.resetBanner();
+    rerender();
   }
   function activatePiece(): void {
     if (charityORG.bannerPieces.length >= CharityORGConstants.CharityMaxActivePieces) return;
@@ -71,6 +77,7 @@ export function ItemsBannerSubpage(): React.ReactElement {
     charityORG.addItemUseMessage("Activated banner piece: " + piece.short_name);
     setPendingBanner("");
     charityORG.resetBanner();
+    rerender();
   }
 
   return (

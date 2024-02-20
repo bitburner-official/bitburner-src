@@ -7,6 +7,7 @@ import { MenuItem, TextField } from "@mui/material";
 import { Player } from "@player";
 import { useRerender } from "../../ui/React/hooks";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { KarmaAvailable } from "./KarmaAvailable";
 
 /** React Component for the popup that manages Karma spending */
 export function KarmaCharityMultiSubpage(): React.ReactElement {
@@ -178,7 +179,6 @@ export function KarmaCharityMultiSubpage(): React.ReactElement {
       default:
         return;
     }
-    setSpend(0);
     rerender();
   }
   return (
@@ -208,7 +208,7 @@ export function KarmaCharityMultiSubpage(): React.ReactElement {
           <Typography>
             {boostDescBuy}
             <br></br>
-            Available: {formatNumber(Player.karma)}
+            <KarmaAvailable />
           </Typography>
         </Box>
         <Button onClick={() => purchaseBoost()}>{boostButton}</Button>

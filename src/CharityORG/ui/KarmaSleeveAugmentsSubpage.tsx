@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { Context } from "./Context";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import { Sleeve } from "../../PersonObjects/Sleeve/Sleeve";
 import { Money } from "../../ui/React/Money";
 import { Augmentation } from "../../Augmentation/Augmentation";
@@ -16,6 +14,8 @@ import { Multipliers } from "../../PersonObjects/Multipliers";
 import { Factions } from "../../Faction/Factions";
 import { AugmentationName, FactionName } from "@enums";
 import { formatNumber } from "../../ui/formatNumber";
+import Tooltip from "@mui/material/Tooltip";
+import { KarmaAvailable } from "./KarmaAvailable";
 
 export function findAugs(sleeve: Sleeve): Augmentation[] {
   if (sleeve.shock > 0) return [];
@@ -91,14 +91,15 @@ export function KarmaSleeveAugmentsSubpage(): React.ReactElement {
   })();
   const rerender = useRerender();
   const [currentCategory, setCurrentCategory] = useState("0");
-  //upgrades has all upgrades, regarless of cost.
   const upgrades = findAugs(Player.sleeves[Number(currentCategory)]);
   const upgFiltered = upgrades.filter((aug) => {
     return Math.sqrt(aug.baseCost * 2) > Player.karma ? false : true;
   });
-  const nextupgrades = upgrades.filter((aug) => {
+  upgFiltered.sort((a, b) => a.baseCost - b.baseCost);
+  const nextUpgrades = upgrades.filter((aug) => {
     return Math.sqrt(aug.baseCost * 2) > Player.karma ? true : false;
   });
+  nextUpgrades.sort((a, b) => a.baseCost - b.baseCost);
   const onChange = (event: SelectChangeEvent): void => {
     setCurrentCategory(event.target.value);
     rerender();
@@ -139,7 +140,7 @@ export function KarmaSleeveAugmentsSubpage(): React.ReactElement {
         .filter((mult) => {
           return mult[1] > 1 || mult[1] < 1 ? true : false;
         })
-        .map((m) => "\n" + m),
+        .map((m) => m[0] + ": " + m[1]),
     );
     const unlocks = String(
       Object.entries(Augmentations)
@@ -149,19 +150,27 @@ export function KarmaSleeveAugmentsSubpage(): React.ReactElement {
         .map((aug) => "\n" + aug[0]),
     );
     const unlocksstr = unlocks.length > 0 ? "\nUnlocks: " + unlocks : "";
+
     return (
-      <>
-        <Button
-          title={mults + unlocksstr}
-          onClick={onClick}
-          sx={{ backgroundColor: "inherit", display: "grid", flexDirection: "column", width: "100%", height: "100%" }}
+      <span>
+        <Tooltip
+          title={
+            <Typography variant="body1">
+              Gives: {mults}
+              <br></br>
+              {unlocksstr}
+            </Typography>
+          }
         >
-          <Typography>{props.upg.name}</Typography>
-          <Money money={Math.sqrt(props.upg.baseCost * 2)} />
-        </Button>
-      </>
+          <Button onClick={onClick} sx={{ display: "flex", flexDirection: "column", width: "100%", height: "100%" }}>
+            <Typography>{props.upg.name}</Typography>
+            <Money money={Math.sqrt(props.upg.baseCost * 2)} />
+          </Button>
+        </Tooltip>
+      </span>
     );
   }
+  //backgroundColor: "inherit",
   function NextReveal(props: INextRevealProps): React.ReactElement {
     const upgrades = props.upgrades.sort((a, b) => {
       return a.baseCost - b.baseCost;
@@ -175,7 +184,7 @@ export function KarmaSleeveAugmentsSubpage(): React.ReactElement {
   }
 
   return (
-    <Context.CharityORG.Provider value={charityORG}>
+    <>
       <Box display="flex">
         <Typography>
           <br></br>Choose your Sleeve:
@@ -189,28 +198,17 @@ export function KarmaSleeveAugmentsSubpage(): React.ReactElement {
             </MenuItem>
           ))}
         </Select>
-      </span>
-
-      <Paper>
-        <Box display="grid">
-          <span>
-            <Box sx={{ width: "100%" }}>
-              {upgFiltered.length === 0 && <Typography>All upgrades owned!</Typography>}
-              <Box display="grid" sx={{ gridTemplateColumns: "1fr 1fr 1fr 1fr" }}>
-                {(upgFiltered as Augmentation[]).map((upg) => (
-                  <UpgradeButton
-                    key={upg.name}
-                    rerender={rerender}
-                    sleeve={Player.sleeves[Number(currentCategory)]}
-                    upg={upg}
-                  />
-                ))}
-              </Box>
-              <NextReveal sleeve={Player.sleeves[Number(currentCategory)] as Sleeve} upgrades={nextupgrades} />
-            </Box>
-          </span>
+        <Box sx={{ width: "100%" }}>
+          {upgFiltered.length === 0 && <Typography>No upgrades available!</Typography>}
+          <Box display="grid" sx={{ gridTemplateColumns: "1fr 1fr 1fr 1fr", width: "100%" }}>
+            {(upgFiltered as Augmentation[]).map((upg, i) => (
+              <UpgradeButton key={i} rerender={rerender} sleeve={Player.sleeves[Number(currentCategory)]} upg={upg} />
+            ))}
+          </Box>
+          <NextReveal sleeve={Player.sleeves[Number(currentCategory)] as Sleeve} upgrades={nextUpgrades} />
+          <KarmaAvailable />
         </Box>
-      </Paper>
-    </Context.CharityORG.Provider>
+      </span>
+    </>
   );
 }

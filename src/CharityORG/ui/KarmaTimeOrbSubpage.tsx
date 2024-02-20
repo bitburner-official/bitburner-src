@@ -10,6 +10,7 @@ import { saveObject } from "../../SaveObject";
 import { Engine } from "../../engine";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { KarmaAvailable } from "./KarmaAvailable";
 
 /** React Component for the popup that manages Karma spending */
 export function KarmaTimeOrbSubpage(): React.ReactElement {
@@ -86,7 +87,7 @@ export function KarmaTimeOrbSubpage(): React.ReactElement {
             <Typography>
               Every 10 karma gives up to 1 second of time warp. <br></br>
               Effect Drain Off will be between 0-90%<br></br>
-              Available:{formatNumber(Player.karma)}
+              <KarmaAvailable />
             </Typography>
           </Box>
           <Button onClick={() => purchaseTimeOrb()}>Purchase Time Orb</Button>

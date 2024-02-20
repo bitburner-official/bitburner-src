@@ -30,6 +30,10 @@ export const CharityORGConstants = {
   charityEmbezzleMoneyTaken: 0.1,
   CharityEmbezzleKarmaLeft: 0.2,
 
+  //Cost of learning the truth
+  //10m karma is the base, mult by this
+  CharityLearnTruthCost: 10e6,
+
   //Charity Servers:
   //Max number of servers
   CharityNodeNumberMax: 10,

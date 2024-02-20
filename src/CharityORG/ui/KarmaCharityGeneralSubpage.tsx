@@ -8,6 +8,7 @@ import { Player } from "@player";
 import { useRerender } from "../../ui/React/hooks";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Factions } from "../../Faction/Factions";
+import { KarmaAvailable } from "./KarmaAvailable";
 
 /** React Component for the popup that manages Karma spending */
 export function KarmaCharityGeneralSubpage(): React.ReactElement {
@@ -130,8 +131,6 @@ export function KarmaCharityGeneralSubpage(): React.ReactElement {
       default:
         return;
     }
-
-    setSpend(0);
     rerender();
   }
   return (
@@ -161,7 +160,7 @@ export function KarmaCharityGeneralSubpage(): React.ReactElement {
           <Typography>
             {boostDescBuy}
             <br></br>
-            Available: {formatNumber(Player.karma)}
+            <KarmaAvailable />
           </Typography>
         </Box>
         <Button onClick={() => purchaseBoost()}>{boostButton}</Button>

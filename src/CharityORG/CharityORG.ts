@@ -676,15 +676,15 @@ export class CharityORG {
             break;
           case AugmentationAreas.hacknet_node_ram_cost:
             this.charityAugment.hacknet_node_ram_cost += effect.strength;
-            this.charityAugment.hacknet_node_ram_cost = Math.max(this.charityAugment.hacknet_node_ram_cost, 0.0005);
+            this.charityAugment.hacknet_node_ram_cost = Math.max(this.charityAugment.hacknet_node_ram_cost, 0.5);
             break;
           case AugmentationAreas.hacknet_node_core_cost:
             this.charityAugment.hacknet_node_core_cost += effect.strength;
-            this.charityAugment.hacknet_node_core_cost = Math.max(this.charityAugment.hacknet_node_core_cost, 0.0005);
+            this.charityAugment.hacknet_node_core_cost = Math.max(this.charityAugment.hacknet_node_core_cost, 0.5);
             break;
           case AugmentationAreas.hacknet_node_level_cost:
             this.charityAugment.hacknet_node_level_cost += effect.strength;
-            this.charityAugment.hacknet_node_level_cost = Math.max(this.charityAugment.hacknet_node_level_cost, 0.0005);
+            this.charityAugment.hacknet_node_level_cost = Math.max(this.charityAugment.hacknet_node_level_cost, 0.5);
             break;
           case AugmentationAreas.bladeburner_max_stamina:
             this.charityAugment.bladeburner_max_stamina += effect.strength;
@@ -700,11 +700,11 @@ export class CharityORG {
             break;
           case AugmentationAreas.augmentation_money:
             this.charityAugment.augmentation_money += effect.strength;
-            this.charityAugment.augmentation_money = Math.max(this.charityAugment.augmentation_money, 0.0005);
+            this.charityAugment.augmentation_money = Math.max(this.charityAugment.augmentation_money, 0.5);
             break;
           case AugmentationAreas.augmentation_rep:
             this.charityAugment.augmentation_rep += effect.strength;
-            this.charityAugment.augmentation_rep = Math.max(this.charityAugment.augmentation_rep, 0.0005);
+            this.charityAugment.augmentation_rep = Math.max(this.charityAugment.augmentation_rep, 0.5);
             break;
         }
       }

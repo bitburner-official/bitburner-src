@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import { Player } from "@player";
 import Button from "@mui/material/Button";
 import { CharityEvent } from "../CharityEvent";
+import { useRerender } from "../../ui/React/hooks";
 
 /** React Component for the popup that manages Karma spending */
 export function EventSubpage(): React.ReactElement {
@@ -16,6 +17,7 @@ export function EventSubpage(): React.ReactElement {
   const [currentCategory, setCurrentCategory] = useState("");
   const [pendingCategory, setPendingCategory] = useState("");
   const [attackCategory, setAttackCategory] = useState("");
+  useRerender(200);
 
   if (currentCategory !== "" && !charityORG.currentEvents.find((f) => f.name === currentCategory))
     setCurrentCategory("");

@@ -26,6 +26,7 @@ export function ItemsItemsSubpage(): React.ReactElement {
   const [boostButton, setBoostButton] = React.useState("None Selected");
   const [boostConvert, setBoostConvert] = React.useState("None Selected");
   const rerender = useRerender();
+  useRerender(200);
 
   const list = [
     "Lucky Coins",

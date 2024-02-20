@@ -1,5 +1,4 @@
 import React from "react";
-import { Context } from "./Context";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
@@ -12,10 +11,6 @@ import { KarmaSleeveAugmentsSubpage } from "./KarmaSleeveAugmentsSubpage";
 
 /** React Component for the popup that manages Karma spending */
 export function KarmaSleeveSubpage(): React.ReactElement {
-  const charityORG = (function () {
-    if (Player.charityORG === null) throw new Error("Charity should not be null");
-    return Player.charityORG;
-  })();
   const [value, setValue] = React.useState(0);
 
   function handleChange(event: React.SyntheticEvent, tab: number): void {
@@ -27,7 +22,7 @@ export function KarmaSleeveSubpage(): React.ReactElement {
   }
 
   return (
-    <Context.CharityORG.Provider value={charityORG}>
+    <span>
       <Box display="flex">
         <Typography>
           <br></br>Have your charities engineers give your sleeves a once over. Possibly an overclock?:
@@ -43,17 +38,6 @@ export function KarmaSleeveSubpage(): React.ReactElement {
       {value === 1 && <KarmaSleeveReduceShockSubpage />}
       {value === 2 && <KarmaSleeveSyncSubpage />}
       {value === 3 && <KarmaSleeveAugmentsSubpage />}
-    </Context.CharityORG.Provider>
+    </span>
   );
-
-  //<>
-  //  <Box display="flex">
-  //    <Typography>Charties have the ability to spend their Karma on various things.  This is your entry point into that realm.  Purchases are not cheap, but they can be powerful.<br></br>
-  //    Select what you would like to spend your Karma on:</Typography>
-  // </Box>
-  // {value === 0 && <ManagementSubpage />}
-  // {value === 1 && <EquipmentsSubpage />}
-  // {value === 2 && <KarmaSubpage />}
-  //</>
-  //);
 }
