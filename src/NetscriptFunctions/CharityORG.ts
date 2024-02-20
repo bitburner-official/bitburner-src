@@ -25,6 +25,7 @@ import { CharityEvent } from "../CharityORG/CharityEvent";
 import { LotteryConstants } from "../Lottery/data/LotteryConstants";
 import { buyRandomTicket } from "../Lottery/Lotto";
 import { cloneDeep } from "lodash";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
   /** Functions as an API check and also returns the charityORG object */
@@ -877,13 +878,14 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
             }
             case "see the truth": {
               // Not sure if this will stay
+              const cost = CharityORGConstants.CharityLearnTruthCost * currentNodeMults.CharityORGLearnTruth;
               if (Player.hasAugmentation(AugmentationName.TheRedPill, false)) {
                 return false;
-              } else if (spend < 5000000000000) {
+              } else if (spend < cost) {
                 return false;
               } else {
                 Player.queueAugmentation(AugmentationName.TheRedPill);
-                Player.karma -= 5000000000000;
+                Player.karma -= cost;
                 return true;
               }
             }
