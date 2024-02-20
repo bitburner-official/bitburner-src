@@ -25,6 +25,8 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: IProps) => {
   const difficultyMultiplier = getDifficultyMultiplier(whiteScore.komi, Player.go.boardState.board[0].length);
   const winstreakMultiplier = getWinstreakMultiplier(winStreak, oldWinStreak);
   const nodePowerIncrease = formatNumber(blackScore.sum * difficultyMultiplier * winstreakMultiplier, 2);
+  const showFavorGain =
+    winStreak > 0 && winStreak % 2 === 0 && Player.factions.includes(opponent as unknown as FactionName);
 
   return (
     <>
@@ -89,7 +91,7 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: IProps) => {
           </Tooltip>
         </TableBody>
       </Table>
-      {winStreak && winStreak % 2 === 0 && Player.factions.includes(opponent as unknown as FactionName) ? (
+      {showFavorGain ? (
         <Tooltip
           title={
             <>
