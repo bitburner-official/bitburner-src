@@ -65,6 +65,9 @@ export const renamePurchasedServer = (hostname: string, newName: string): void =
   if (!server) throw new Error(`Server '${hostname}' doesn't exists.`);
   if (GetServer(newName)) throw new Error(`Server '${newName}' already exists.`);
   if (!Player.purchasedServers.includes(hostname)) throw new Error(`Server '${hostname}' is not a player server.`);
+  if (newName.startsWith("hacknet-node-") || newName.startsWith("hacknet-server-")) {
+    throw new Error(`'${newName}' is a reserved hostname.`);
+  }
   const replace = (arr: string[], old: string, next: string): string[] => {
     return arr.map((v) => (v === old ? next : v));
   };
@@ -119,6 +122,11 @@ export function purchaseServer(hostname: string, ram: number, cost: number): voi
 
   if (hostname == "") {
     dialogBoxCreate("You must enter a hostname for your new server!");
+    return;
+  }
+
+  if (hostname.startsWith("hacknet-node-") || hostname.startsWith("hacknet-server-")) {
+    dialogBoxCreate(`'${hostname}' is a reserved hostname, please try again.`);
     return;
   }
 
