@@ -196,7 +196,7 @@ export const CONSTANTS: {
 
   InfiniteLoopLimit: 2000,
 
-  Donations: 113,
+  Donations: 151,
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
