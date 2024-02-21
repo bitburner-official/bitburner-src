@@ -2,15 +2,15 @@ import React from "react";
 import { Table, TableBody, TableCell, TableRow, Typography, Tooltip } from "@mui/material";
 import { Player } from "@player";
 import { getBonusText, getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "../effects/effect";
-import { goScore, opponents, playerColors } from "../boardState/goConstants";
+import { GoScore, GoOpponent, GoColor } from "../boardState/goConstants";
 import { boardStyles } from "../boardState/goStyles";
 import { formatNumber } from "../../ui/formatNumber";
 import { FactionName } from "@enums";
 import { getPlayerStats } from "../boardAnalysis/scoring";
 
 interface IProps {
-  finalScore: goScore;
-  opponent: opponents;
+  finalScore: GoScore;
+  opponent: GoOpponent;
 }
 
 export const GoScorePowerSummary = ({ finalScore, opponent }: IProps) => {
@@ -19,8 +19,8 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: IProps) => {
   const winStreak = status.winStreak;
   const oldWinStreak = status.winStreak;
   const nodePower = formatNumber(status.nodePower, 2);
-  const blackScore = finalScore[playerColors.black];
-  const whiteScore = finalScore[playerColors.white];
+  const blackScore = finalScore[GoColor.black];
+  const whiteScore = finalScore[GoColor.white];
 
   const difficultyMultiplier = getDifficultyMultiplier(whiteScore.komi, Player.go.boardState.board[0].length);
   const winstreakMultiplier = getWinstreakMultiplier(winStreak, oldWinStreak);

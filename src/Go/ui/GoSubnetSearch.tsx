@@ -1,6 +1,6 @@
 import { Box, Button, MenuItem, Select, SelectChangeEvent, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { boardSizes, opponentDetails, opponentList, opponents } from "../boardState/goConstants";
+import { boardSizes, opponentDetails, opponentsNonSpoiler, GoOpponent } from "../boardState/goConstants";
 import { Player } from "@player";
 import { boardStyles } from "../boardState/goStyles";
 import { Modal } from "../../ui/React/Modal";
@@ -12,32 +12,32 @@ import { showWorldDemon } from "../boardAnalysis/goAI";
 
 interface IProps {
   open: boolean;
-  search: (size: number, opponent: opponents) => void;
+  search: (size: number, opponent: GoOpponent) => void;
   cancel: () => void;
   showInstructions: () => void;
 }
 
 export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProps): React.ReactElement => {
   const classes = boardStyles();
-  const [opponent, setOpponent] = useState<opponents>(Player.go.boardState?.ai ?? opponents.SlumSnakes);
+  const [opponent, setOpponent] = useState<GoOpponent>(Player.go.boardState?.ai ?? GoOpponent.SlumSnakes);
   const preselectedBoardSize =
-    opponent === opponents.w0r1d_d43m0n ? 19 : Math.min(Player.go.boardState?.board?.[0]?.length ?? 7, 13);
+    opponent === GoOpponent.w0r1d_d43m0n ? 19 : Math.min(Player.go.boardState?.board?.[0]?.length ?? 7, 13);
   const [boardSize, setBoardSize] = useState(preselectedBoardSize);
 
-  const opponentFactions = [opponents.none, ...opponentList];
+  const opponentFactions = [GoOpponent.none, ...opponentsNonSpoiler];
   if (showWorldDemon()) {
-    opponentFactions.push(opponents.w0r1d_d43m0n);
+    opponentFactions.push(GoOpponent.w0r1d_d43m0n);
   }
 
   const handicap = getHandicap(boardSize, opponent);
 
   function changeOpponent(event: SelectChangeEvent): void {
-    const newOpponent = event.target.value as opponents;
+    const newOpponent = event.target.value as GoOpponent;
     setOpponent(newOpponent);
-    if (newOpponent === opponents.w0r1d_d43m0n) {
+    if (newOpponent === GoOpponent.w0r1d_d43m0n) {
       setBoardSize(19);
 
-      const stats = getPlayerStats(opponents.w0r1d_d43m0n);
+      const stats = getPlayerStats(GoOpponent.w0r1d_d43m0n);
       if (stats?.wins + stats?.losses === 0) {
         Settings.GoTraditionalStyle = false;
       }
@@ -67,12 +67,12 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
         <br />
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
           <Typography className={classes.opponentLabel}>
-            {opponent !== opponents.none ? "Opponent Faction: " : ""}
+            {opponent !== GoOpponent.none ? "Opponent Faction: " : ""}
           </Typography>
           <Select value={opponent} onChange={changeOpponent} sx={{ mr: 1 }}>
             {opponentFactions.map((faction) => (
               <MenuItem key={faction} value={faction}>
-                {faction === opponents.w0r1d_d43m0n ? (
+                {faction === GoOpponent.w0r1d_d43m0n ? (
                   <CorruptableText content="???????????????" spoiler={false} />
                 ) : (
                   `${faction} (${opponentDetails[faction].description})`
@@ -83,7 +83,7 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
         </Box>
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
           <Typography className={classes.opponentLabel}>Subnet size: </Typography>
-          {opponent === opponents.w0r1d_d43m0n ? (
+          {opponent === GoOpponent.w0r1d_d43m0n ? (
             <Typography>????</Typography>
           ) : (
             <Select value={`${boardSize}`} onChange={changeBoardSize} sx={{ mr: 1 }}>
@@ -118,7 +118,7 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
         <br />
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle} ${classes.flavorText}`}>
           <Typography>
-            {opponent === opponents.w0r1d_d43m0n ? (
+            {opponent === GoOpponent.w0r1d_d43m0n ? (
               <>
                 <CorruptableText content={opponentDetails[opponent].flavorText.slice(0, 40)} spoiler={false} />
                 <CorruptableText content={opponentDetails[opponent].flavorText.slice(40)} spoiler={false} />
@@ -132,7 +132,7 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
         <br />
         <Box className={`${classes.inlineFlexBox} ${classes.opponentTitle}`}>
           <Typography>
-            {opponent !== opponents.none ? "Faction subnet bonus:" : ""} {opponentDetails[opponent].bonusDescription}
+            {opponent !== GoOpponent.none ? "Faction subnet bonus:" : ""} {opponentDetails[opponent].bonusDescription}
           </Typography>
         </Box>
         <br />

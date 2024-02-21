@@ -4,10 +4,9 @@ import {
   Move,
   MoveOptions,
   opponentDetails,
-  opponents,
-  PlayerColor,
-  playerColors,
-  playTypes,
+  GoOpponent,
+  GoColor,
+  GoPlayType,
   PointState,
 } from "../boardState/goConstants";
 import { findNeighbors, floor, isDefined, isNotNull, passTurn } from "../boardState/boardState";
@@ -47,7 +46,7 @@ import { AugmentationName } from "@enums";
  *
  * @returns a promise that will resolve with a move (or pass) from the designated AI opponent.
  */
-export async function getMove(boardState: BoardState, player: PlayerColor, opponent: opponents, rngOverride?: number) {
+export async function getMove(boardState: BoardState, player: GoColor, opponent: GoOpponent, rngOverride?: number) {
   await sleep(300);
   const rng = new WHRNG(rngOverride || Player.totalPlaytime);
   const smart = isSmart(opponent, rng.random());
@@ -56,7 +55,7 @@ export async function getMove(boardState: BoardState, player: PlayerColor, oppon
   const priorityMove = await getFactionMove(moves, opponent, rng.random());
   if (priorityMove) {
     return {
-      type: playTypes.move,
+      type: GoPlayType.move,
       x: priorityMove.x,
       y: priorityMove.y,
     };
@@ -82,7 +81,7 @@ export async function getMove(boardState: BoardState, player: PlayerColor, oppon
     await sleep(200);
     console.debug(`Non-priority move chosen: ${chosenMove.x} ${chosenMove.y}`);
     return {
-      type: playTypes.move,
+      type: GoPlayType.move,
       x: chosenMove.x,
       y: chosenMove.y,
     };
@@ -98,19 +97,19 @@ export async function getMove(boardState: BoardState, player: PlayerColor, oppon
  * Ends the game if the player passed on the previous turn before the AI passes,
  *   or if the player will be forced to pass their next turn after the AI passes.
  */
-function handleNoMoveFound(boardState: BoardState, player: playerColors) {
+function handleNoMoveFound(boardState: BoardState, player: GoColor) {
   passTurn(boardState, player);
-  const opposingPlayer = player === playerColors.white ? playerColors.black : playerColors.white;
+  const opposingPlayer = player === GoColor.white ? GoColor.black : GoColor.white;
   const remainingTerritory = getAllValidMoves(boardState, opposingPlayer).length;
   if (remainingTerritory > 0 && boardState.passCount < 2) {
     return {
-      type: playTypes.pass,
+      type: GoPlayType.pass,
       x: -1,
       y: -1,
     };
   } else {
     return {
-      type: playTypes.gameOver,
+      type: GoPlayType.gameOver,
       x: -1,
       y: -1,
     };
@@ -120,20 +119,20 @@ function handleNoMoveFound(boardState: BoardState, player: playerColors) {
 /**
  * Given a group of move options, chooses one based on the given opponent's personality (if any fit their priorities)
  */
-async function getFactionMove(moves: MoveOptions, faction: opponents, rng: number): Promise<PointState | null> {
-  if (faction === opponents.Netburners) {
+async function getFactionMove(moves: MoveOptions, faction: GoOpponent, rng: number): Promise<PointState | null> {
+  if (faction === GoOpponent.Netburners) {
     return getNetburnersPriorityMove(moves, rng);
   }
-  if (faction === opponents.SlumSnakes) {
+  if (faction === GoOpponent.SlumSnakes) {
     return getSlumSnakesPriorityMove(moves, rng);
   }
-  if (faction === opponents.TheBlackHand) {
+  if (faction === GoOpponent.TheBlackHand) {
     return getBlackHandPriorityMove(moves, rng);
   }
-  if (faction === opponents.Tetrads) {
+  if (faction === GoOpponent.Tetrads) {
     return getTetradPriorityMove(moves, rng);
   }
-  if (faction === opponents.Daedalus) {
+  if (faction === GoOpponent.Daedalus) {
     return getDaedalusPriorityMove(moves, rng);
   }
 
@@ -143,14 +142,14 @@ async function getFactionMove(moves: MoveOptions, faction: opponents, rng: numbe
 /**
  * Determines if certain failsafes and mistake avoidance are enabled for the given move
  */
-function isSmart(faction: opponents, rng: number) {
-  if (faction === opponents.Netburners) {
+function isSmart(faction: GoOpponent, rng: number) {
+  if (faction === GoOpponent.Netburners) {
     return false;
   }
-  if (faction === opponents.SlumSnakes) {
+  if (faction === GoOpponent.SlumSnakes) {
     return rng < 0.3;
   }
-  if (faction === opponents.TheBlackHand) {
+  if (faction === GoOpponent.TheBlackHand) {
     return rng < 0.8;
   }
 
@@ -375,7 +374,7 @@ function findLiveNodesInArea(boardState: BoardState, x1: number, y1: number, x2:
  */
 function isCornerAvailableForMove(boardState: BoardState, x1: number, y1: number, x2: number, y2: number) {
   const foundPoints = findLiveNodesInArea(boardState, x1, y1, x2, y2);
-  const foundPieces = foundPoints.filter((point) => point.player !== playerColors.empty);
+  const foundPieces = foundPoints.filter((point) => point.player !== GoColor.empty);
   return foundPoints.length >= 7 ? foundPieces.length === 0 : false;
 }
 
@@ -384,7 +383,7 @@ function isCornerAvailableForMove(boardState: BoardState, x1: number, y1: number
  */
 function getExpansionMove(
   boardState: BoardState,
-  player: PlayerColor,
+  player: GoColor,
   availableSpaces: PointState[],
   rng: number,
   moveArray?: Move[],
@@ -399,7 +398,7 @@ function getExpansionMove(
  */
 function getJumpMove(
   boardState: BoardState,
-  player: PlayerColor,
+  player: GoColor,
   availableSpaces: PointState[],
   rng: number,
   moveArray?: Move[],
@@ -423,7 +422,7 @@ function getJumpMove(
  */
 export function getExpansionMoveArray(
   boardState: BoardState,
-  player: PlayerColor,
+  player: GoColor,
   availableSpaces: PointState[],
 ): Move[] {
   // Look for any empty spaces fully surrounded by empty spaces to expand into
@@ -431,7 +430,7 @@ export function getExpansionMoveArray(
     const neighbors = findNeighbors(boardState, space.x, space.y);
     return (
       [neighbors.north, neighbors.east, neighbors.south, neighbors.west].filter(
-        (point) => point && point.player === playerColors.empty,
+        (point) => point && point.player === GoColor.empty,
       ).length === 4
     );
   });
@@ -453,7 +452,7 @@ export function getExpansionMoveArray(
 
 function getDisputedTerritoryMoves(
   boardState: BoardState,
-  player: PlayerColor,
+  player: GoColor,
   availableSpaces: PointState[],
   maxChainSize = 99,
 ) {
@@ -463,10 +462,10 @@ function getDisputedTerritoryMoves(
     const chain = chains.find((chain) => chain[0].chain === space.chain) ?? [];
     const playerNeighbors = getAllNeighboringChains(boardState, chain, chains);
     const hasWhitePieceNeighbor = playerNeighbors.find(
-      (neighborChain) => neighborChain[0]?.player === playerColors.white,
+      (neighborChain) => neighborChain[0]?.player === GoColor.white,
     );
     const hasBlackPieceNeighbor = playerNeighbors.find(
-      (neighborChain) => neighborChain[0]?.player === playerColors.black,
+      (neighborChain) => neighborChain[0]?.player === GoColor.black,
     );
 
     return hasWhitePieceNeighbor && hasBlackPieceNeighbor;
@@ -476,7 +475,7 @@ function getDisputedTerritoryMoves(
 /**
  * Finds all moves that increases the liberties of the player's pieces, making them harder to capture and occupy more space on the board.
  */
-async function getLibertyGrowthMoves(boardState: BoardState, player: PlayerColor, availableSpaces: PointState[]) {
+async function getLibertyGrowthMoves(boardState: BoardState, player: GoColor, availableSpaces: PointState[]) {
   const friendlyChains = getAllChains(boardState).filter((chain) => chain[0].player === player);
 
   if (!friendlyChains.length) {
@@ -522,7 +521,7 @@ async function getLibertyGrowthMoves(boardState: BoardState, player: PlayerColor
  */
 async function getGrowthMove(
   initialState: BoardState,
-  player: PlayerColor,
+  player: GoColor,
   availableSpaces: PointState[],
   rng: number,
 ) {
@@ -537,7 +536,7 @@ async function getGrowthMove(
 /**
  * Find a move that specifically increases a chain's liberties from 1 to more than 1, preventing capture
  */
-async function getDefendMove(initialState: BoardState, player: PlayerColor, availableSpaces: PointState[]) {
+async function getDefendMove(initialState: BoardState, player: GoColor, availableSpaces: PointState[]) {
   const growthMoves = await getLibertyGrowthMoves(initialState, player, availableSpaces);
   const libertyIncreases =
     growthMoves?.filter((move) => move.oldLibertyCount <= 1 && move.newLibertyCount > move.oldLibertyCount) ?? [];
@@ -558,11 +557,11 @@ async function getDefendMove(initialState: BoardState, player: PlayerColor, avai
  */
 async function getSurroundMove(
   boardState: BoardState,
-  player: PlayerColor,
+  player: GoColor,
   availableSpaces: PointState[],
   smart = true,
 ) {
-  const opposingPlayer = player === playerColors.black ? playerColors.white : playerColors.black;
+  const opposingPlayer = player === GoColor.black ? GoColor.white : GoColor.black;
   const enemyChains = getAllChains(boardState).filter((chain) => chain[0].player === opposingPlayer);
 
   if (!enemyChains.length || !availableSpaces.length) {
@@ -586,7 +585,7 @@ async function getSurroundMove(
       boardState,
       move.x,
       move.y,
-      player === playerColors.black ? playerColors.white : playerColors.black,
+      player === GoColor.black ? GoColor.white : GoColor.black,
     );
     const weakestEnemyChainLength = weakestEnemyChain?.length ?? 99;
 
@@ -648,7 +647,7 @@ async function getSurroundMove(
  */
 function getEyeCreationMoves(
   boardState: BoardState,
-  player: PlayerColor,
+  player: GoColor,
   availableSpaces: PointState[],
   maxLiberties = 99,
 ) {
@@ -676,7 +675,7 @@ function getEyeCreationMoves(
       const neighborhood = [neighbors.north, neighbors.east, neighbors.south, neighbors.west];
       return (
         neighborhood.filter((point) => !point || point?.player === player).length >= 2 &&
-        neighborhood.some((point) => point?.player === playerColors.empty)
+        neighborhood.some((point) => point?.player === GoColor.empty)
       );
     });
 
@@ -700,15 +699,15 @@ function getEyeCreationMoves(
   return eyeCreationMoves.sort((moveA, moveB) => +moveB.createsLife - +moveA.createsLife);
 }
 
-function getEyeCreationMove(boardState: BoardState, player: PlayerColor, availableSpaces: PointState[]) {
+function getEyeCreationMove(boardState: BoardState, player: GoColor, availableSpaces: PointState[]) {
   return getEyeCreationMoves(boardState, player, availableSpaces)[0];
 }
 
 /**
  * If there is only one move that would create two eyes for the opponent, it should be blocked if possible
  */
-function getEyeBlockingMove(boardState: BoardState, player: PlayerColor, availablePoints: PointState[]) {
-  const opposingPlayer = player === playerColors.white ? playerColors.black : playerColors.white;
+function getEyeBlockingMove(boardState: BoardState, player: GoColor, availablePoints: PointState[]) {
+  const opposingPlayer = player === GoColor.white ? GoColor.black : GoColor.white;
   const opponentEyeMoves = getEyeCreationMoves(boardState, opposingPlayer, availablePoints, 5);
   const twoEyeMoves = opponentEyeMoves.filter((move) => move.createsLife);
   const oneEyeMoves = opponentEyeMoves.filter((move) => !move.createsLife);
@@ -727,7 +726,7 @@ function getEyeBlockingMove(boardState: BoardState, player: PlayerColor, availab
  */
 function getMoveOptions(
   boardState: BoardState,
-  player: PlayerColor,
+  player: GoColor,
   rng: number,
   smart = true,
 ): { [s in keyof MoveOptions]: () => Promise<Move | null> } {
@@ -811,7 +810,7 @@ function getMoveOptions(
 /**
  * Gets the starting score for white.
  */
-export function getKomi(opponent: opponents) {
+export function getKomi(opponent: GoOpponent) {
   return opponentDetails[opponent].komi;
 }
 

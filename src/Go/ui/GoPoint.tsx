@@ -1,7 +1,7 @@
 import React from "react";
 import { ClassNameMap } from "@mui/styles";
 
-import { BoardState, columnIndexes, playerColors } from "../boardState/goConstants";
+import { BoardState, columnIndexes, GoColor } from "../boardState/goConstants";
 import { findNeighbors } from "../boardState/boardState";
 import { pointStyle } from "../boardState/goStyles";
 import { findAdjacentLibertiesAndAlliesForPoint } from "../boardAnalysis/boardAnalysis";
@@ -13,7 +13,7 @@ interface IProps {
   traditional: boolean;
   hover: boolean;
   valid: boolean;
-  emptyPointOwner: playerColors;
+  emptyPointOwner: GoColor;
 }
 
 export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwner }: IProps): React.ReactElement {
@@ -23,8 +23,8 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
   const player = currentPoint?.player;
 
   const isInAtari =
-    currentPoint && currentPoint.liberties?.length === 1 && player !== playerColors.empty && !traditional;
-  const liberties = player !== playerColors.empty ? findAdjacentLibertiesAndAlliesForPoint(state, x, y) : null;
+    currentPoint && currentPoint.liberties?.length === 1 && player !== GoColor.empty && !traditional;
+  const liberties = player !== GoColor.empty ? findAdjacentLibertiesAndAlliesForPoint(state, x, y) : null;
   const neighbors = findNeighbors(state, x, y);
 
   const hasNorthLiberty = traditional ? neighbors.north : liberties?.north;
@@ -33,25 +33,25 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
   const hasWestLiberty = traditional ? neighbors.west : liberties?.west;
 
   const pointClass =
-    player === playerColors.white
+    player === GoColor.white
       ? classes.whitePoint
-      : player === playerColors.black
+      : player === GoColor.black
       ? classes.blackPoint
       : classes.emptyPoint;
 
-  const colorLiberty = `${player === playerColors.white ? classes.libertyWhite : classes.libertyBlack} ${
+  const colorLiberty = `${player === GoColor.white ? classes.libertyWhite : classes.libertyBlack} ${
     classes.liberty
   }`;
 
   const sizeClass = getSizeClass(state.board[0].length, classes);
 
-  const isNewStone = state.history?.[state.history?.length - 1]?.[x]?.[y]?.player === playerColors.empty;
+  const isNewStone = state.history?.[state.history?.length - 1]?.[x]?.[y]?.player === GoColor.empty;
   const isPriorMove = player === state.previousPlayer && isNewStone;
 
   const emptyPointColorClass =
-    emptyPointOwner === playerColors.white
+    emptyPointOwner === GoColor.white
       ? classes.libertyWhite
-      : emptyPointOwner === playerColors.black
+      : emptyPointOwner === GoColor.black
       ? classes.libertyBlack
       : "";
 
@@ -70,7 +70,7 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
           <div className={hasWestLiberty ? `${classes.westLiberty} ${colorLiberty}` : classes.liberty}></div>
           <div className={`${classes.innerPoint} `}>
             <div
-              className={`${pointClass} ${player !== playerColors.empty ? classes.filledPoint : emptyPointColorClass}`}
+              className={`${pointClass} ${player !== GoColor.empty ? classes.filledPoint : emptyPointColorClass}`}
             ></div>
           </div>
           <div className={`${pointClass} ${classes.tradStone}`} />

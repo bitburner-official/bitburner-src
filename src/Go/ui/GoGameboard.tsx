@@ -5,7 +5,7 @@ import { getSizeClass, GoPoint } from "./GoPoint";
 import { useRerender } from "../../ui/React/hooks";
 import { boardStyles } from "../boardState/goStyles";
 import { getAllValidMoves, getControlledSpace } from "../boardAnalysis/boardAnalysis";
-import { BoardState, opponents, playerColors } from "../boardState/goConstants";
+import { BoardState, GoOpponent, GoColor } from "../boardState/goConstants";
 
 interface IProps {
   boardState: BoardState;
@@ -18,9 +18,9 @@ export function GoGameboard({ boardState, traditional, clickHandler, hover }: IP
   useRerender(400);
 
   const currentPlayer =
-    boardState.ai !== opponents.none || boardState.previousPlayer === playerColors.white
-      ? playerColors.black
-      : playerColors.white;
+    boardState.ai !== GoOpponent.none || boardState.previousPlayer === GoColor.white
+      ? GoColor.black
+      : GoColor.white;
 
   const availablePoints = useMemo(
     () => (hover ? getAllValidMoves(boardState, currentPlayer) : []),

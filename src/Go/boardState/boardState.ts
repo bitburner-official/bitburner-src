@@ -4,11 +4,10 @@ import {
   BoardState,
   Move,
   Neighbor,
-  opponents,
-  PlayerColor,
-  playerColors,
+  GoOpponent,
+  GoColor,
   PointState,
-  validityReason,
+  GoValidity,
 } from "./goConstants";
 import { getExpansionMoveArray } from "../boardAnalysis/goAI";
 import {
@@ -26,17 +25,17 @@ import { addObstacles, resetCoordinates, rotate90Degrees } from "./offlineNodes"
  */
 export function getNewBoardState(
   boardSize: number,
-  ai = opponents.Netburners,
+  ai = GoOpponent.Netburners,
   applyObstacles = false,
   boardToCopy?: Board,
 ): BoardState {
-  if (ai === opponents.w0r1d_d43m0n) {
+  if (ai === GoOpponent.w0r1d_d43m0n) {
     boardToCopy = resetCoordinates(rotate90Degrees(getBoardFromSimplifiedBoardState(bitverseBoardShape).board));
   }
 
   const newBoardState = {
     history: [],
-    previousPlayer: playerColors.white,
+    previousPlayer: GoColor.white,
     ai: ai,
     passCount: 0,
     cheatCount: 0,
@@ -44,7 +43,7 @@ export function getNewBoardState(
       Array.from({ length: boardSize }, (_, y) =>
         !boardToCopy || boardToCopy?.[x]?.[y]
           ? {
-              player: boardToCopy?.[x]?.[y]?.player ?? playerColors.empty,
+              player: boardToCopy?.[x]?.[y]?.player ?? GoColor.empty,
               chain: "",
               liberties: null,
               x,
@@ -69,9 +68,9 @@ export function getNewBoardState(
 /**
  * Determines how many starting pieces the opponent has on the board
  */
-export function getHandicap(boardSize: number, opponent: opponents) {
+export function getHandicap(boardSize: number, opponent: GoOpponent) {
   // Illuminati and WD get a few starting routers
-  if (opponent === opponents.Illuminati || opponent === opponents.w0r1d_d43m0n) {
+  if (opponent === GoOpponent.Illuminati || opponent === GoOpponent.w0r1d_d43m0n) {
     return ceil(boardSize * 0.35);
   }
   return 0;
@@ -80,10 +79,10 @@ export function getHandicap(boardSize: number, opponent: opponents) {
 /**
  * Make a new move on the given board, and update the board state accordingly
  */
-export function makeMove(boardState: BoardState, x: number, y: number, player: PlayerColor) {
+export function makeMove(boardState: BoardState, x: number, y: number, player: GoColor) {
   // Do not update on invalid moves
   const validity = evaluateIfMoveIsValid(boardState, x, y, player, false);
-  if (validity !== validityReason.valid || !boardState.board[x][y]?.player) {
+  if (validity !== GoValidity.valid || !boardState.board[x][y]?.player) {
     console.debug(`Invalid move attempted! ${x} ${y} ${player} : ${validity}`);
     return false;
   }
@@ -105,12 +104,12 @@ export function makeMove(boardState: BoardState, x: number, y: number, player: P
  * Pass the current player's turn without making a move.
  * Ends the game if this is the second pass in a row.
  */
-export function passTurn(boardState: BoardState, player: playerColors, allowEndGame = true) {
+export function passTurn(boardState: BoardState, player: GoColor, allowEndGame = true) {
   if (boardState.previousPlayer === null || boardState.previousPlayer === player) {
     return;
   }
   boardState.previousPlayer =
-    boardState.previousPlayer === playerColors.black ? playerColors.white : playerColors.black;
+    boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
   boardState.passCount++;
 
   if (boardState.passCount >= 2 && allowEndGame) {
@@ -123,7 +122,7 @@ export function passTurn(boardState: BoardState, player: playerColors, allowEndG
  */
 export function applyHandicap(boardState: BoardState, handicap: number) {
   const availableMoves = getEmptySpaces(boardState);
-  const handicapMoveOptions = getExpansionMoveArray(boardState, playerColors.black, availableMoves);
+  const handicapMoveOptions = getExpansionMoveArray(boardState, GoColor.black, availableMoves);
   const handicapMoves: Move[] = [];
 
   // select random distinct moves from the move options list up to the specified handicap amount
@@ -135,7 +134,7 @@ export function applyHandicap(boardState: BoardState, handicap: number) {
 
   handicapMoves.forEach((move: Move) => {
     const point = boardState.board[move.point.x][move.point.y];
-    return move.point && point && (point.player = playerColors.white);
+    return move.point && point && (point.player = GoColor.white);
   });
   return updateChains(boardState);
 }
@@ -175,7 +174,7 @@ export function updateChains(boardState: BoardState, resetChains = true) {
  *
  * Then, remove any chains with no liberties.
  */
-export function updateCaptures(initialState: BoardState, playerWhoMoved: PlayerColor, resetChains = true): BoardState {
+export function updateCaptures(initialState: BoardState, playerWhoMoved: GoColor, resetChains = true): BoardState {
   const boardState = updateChains(initialState, resetChains);
   const chains = getAllChains(boardState);
 
@@ -193,7 +192,7 @@ export function updateCaptures(initialState: BoardState, playerWhoMoved: PlayerC
  */
 function captureChain(chain: PointState[]) {
   chain.forEach((point) => {
-    point.player = playerColors.empty;
+    point.player = GoColor.empty;
     point.chain = "";
     point.liberties = [];
   });
@@ -262,7 +261,7 @@ export function getEmptySpaces(boardState: BoardState): PointState[] {
 
   boardState.board.forEach((column) => {
     column.forEach((point) => {
-      if (point && point.player === playerColors.empty) {
+      if (point && point.player === GoColor.empty) {
         emptySpaces.push(point);
       }
     });

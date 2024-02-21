@@ -2,7 +2,7 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import { Grid, Table, TableBody, TableCell, TableRow, Tooltip } from "@mui/material";
 
-import { opponentList, opponents } from "../boardState/goConstants";
+import { opponentsNonSpoiler, GoOpponent } from "../boardState/goConstants";
 import { getPlayerStats, getScore } from "../boardAnalysis/scoring";
 import { Player } from "@player";
 import { GoGameboard } from "./GoGameboard";
@@ -21,7 +21,7 @@ export const GoHistoryPage = (): React.ReactElement => {
   const priorBoard = Player.go.previousGameFinalBoardState ?? getNewBoardState(7);
   const score = getScore(priorBoard);
   const opponent = priorBoard.ai;
-  const opponentsToShow = showWorldDemon() ? [...opponentList, opponents.w0r1d_d43m0n] : opponentList;
+  const opponentsToShow = showWorldDemon() ? [...opponentsNonSpoiler, GoOpponent.w0r1d_d43m0n] : opponentsNonSpoiler;
 
   return (
     <div>
@@ -54,7 +54,7 @@ export const GoHistoryPage = (): React.ReactElement => {
               <Typography>
                 {" "}
                 <strong className={classes.keyText}>
-                  {faction === opponents.w0r1d_d43m0n ? (
+                  {faction === GoOpponent.w0r1d_d43m0n ? (
                     <CorruptableText content="????????????" spoiler={false} />
                   ) : (
                     faction

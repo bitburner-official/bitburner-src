@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Typography, Button } from "@mui/material";
 
-import { BoardState, playerColors, validityReason } from "../boardState/goConstants";
+import { BoardState, GoColor, GoValidity } from "../boardState/goConstants";
 import { GoGameboard } from "./GoGameboard";
 import { evaluateIfMoveIsValid } from "../boardAnalysis/boardAnalysis";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
@@ -44,15 +44,15 @@ export function GoTutorialChallenge({
     }
     setShowReset(true);
 
-    const validity = evaluateIfMoveIsValid(currentState, x, y, playerColors.black);
-    if (validity != validityReason.valid) {
+    const validity = evaluateIfMoveIsValid(currentState, x, y, GoColor.black);
+    if (validity != GoValidity.valid) {
       setDisplayText(
         "Invalid move: You cannot suicide your routers by placing them with no access to any empty ports.",
       );
       return;
     }
 
-    const updatedBoard = makeMove(currentState, x, y, playerColors.black);
+    const updatedBoard = makeMove(currentState, x, y, GoColor.black);
 
     if (updatedBoard) {
       setCurrentState(getStateCopy(updatedBoard));

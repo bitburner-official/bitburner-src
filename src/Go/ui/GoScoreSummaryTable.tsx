@@ -1,19 +1,19 @@
 import React from "react";
 import { Table, TableBody, TableCell, TableRow, Tooltip } from "@mui/material";
 import { boardStyles } from "../boardState/goStyles";
-import { goScore, opponents, playerColors } from "../boardState/goConstants";
+import { GoScore, GoOpponent, GoColor } from "../boardState/goConstants";
 
 interface IProps {
-  score: goScore;
-  opponent: opponents;
+  score: GoScore;
+  opponent: GoOpponent;
 }
 
 export const GoScoreSummaryTable = ({ score, opponent }: IProps) => {
   const classes = boardStyles();
-  const blackScore = score[playerColors.black];
-  const whiteScore = score[playerColors.white];
-  const blackPlayerName = opponent === opponents.none ? "Black" : "You";
-  const whitePlayerName = opponent === opponents.none ? "White" : opponent;
+  const blackScore = score[GoColor.black];
+  const whiteScore = score[GoColor.white];
+  const blackPlayerName = opponent === GoOpponent.none ? "Black" : "You";
+  const whitePlayerName = opponent === GoOpponent.none ? "White" : opponent;
 
   return (
     <>

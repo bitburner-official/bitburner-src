@@ -1,13 +1,13 @@
 import { getNewBoardState } from "./boardState";
 import { FactionName } from "@enums";
 
-export enum playerColors {
+export enum GoColor {
   white = "White",
   black = "Black",
   empty = "Empty",
 }
 
-export enum validityReason {
+export enum GoValidity {
   pointBroken = "That node is offline; a piece cannot be placed there",
   pointNotEmpty = "That node is already occupied by a piece",
   boardRepeated = "It is illegal to repeat prior board states",
@@ -18,7 +18,7 @@ export enum validityReason {
   valid = "Valid move",
 }
 
-export enum opponents {
+export enum GoOpponent {
   none = "No AI",
   Netburners = FactionName.Netburners,
   SlumSnakes = FactionName.SlumSnakes,
@@ -29,24 +29,25 @@ export enum opponents {
   w0r1d_d43m0n = "????????????",
 }
 
-export const opponentList = [
-  opponents.Netburners,
-  opponents.SlumSnakes,
-  opponents.TheBlackHand,
-  opponents.Tetrads,
-  opponents.Daedalus,
-  opponents.Illuminati,
+export const allOpponents = Object.valuies(GoOpponent).filter((name) => name !== GoOpponent.none);
+export const opponentsNonSpoiler = [
+  GoOpponent.Netburners,
+  GoOpponent.SlumSnakes,
+  GoOpponent.TheBlackHand,
+  GoOpponent.Tetrads,
+  GoOpponent.Daedalus,
+  GoOpponent.Illuminati,
 ];
 
 export const opponentDetails = {
-  [opponents.none]: {
+  [GoOpponent.none]: {
     komi: 5.5,
     description: "Practice Board",
     flavorText: "Practice on a subnet where you place both colors of routers.",
     bonusDescription: "",
     bonusPower: 0,
   },
-  [opponents.Netburners]: {
+  [GoOpponent.Netburners]: {
     komi: 1.5,
     description: "Easy AI",
     flavorText:
@@ -54,7 +55,7 @@ export const opponentDetails = {
     bonusDescription: "increased hacknet production",
     bonusPower: 1.3,
   },
-  [opponents.SlumSnakes]: {
+  [GoOpponent.SlumSnakes]: {
     komi: 3.5,
     description: "Spread AI",
     flavorText:
@@ -62,7 +63,7 @@ export const opponentDetails = {
     bonusDescription: "crime success rate",
     bonusPower: 1.2,
   },
-  [opponents.TheBlackHand]: {
+  [GoOpponent.TheBlackHand]: {
     komi: 3.5,
     description: "Aggro AI",
     flavorText:
@@ -70,7 +71,7 @@ export const opponentDetails = {
     bonusDescription: "hacking money",
     bonusPower: 0.9,
   },
-  [opponents.Tetrads]: {
+  [GoOpponent.Tetrads]: {
     komi: 5.5,
     description: "Martial AI",
     flavorText:
@@ -78,7 +79,7 @@ export const opponentDetails = {
     bonusDescription: "strength, dex, and agility levels",
     bonusPower: 0.7,
   },
-  [opponents.Daedalus]: {
+  [GoOpponent.Daedalus]: {
     komi: 5.5,
     description: "Mid AI",
     flavorText:
@@ -86,7 +87,7 @@ export const opponentDetails = {
     bonusDescription: "reputation gain",
     bonusPower: 1.1,
   },
-  [opponents.Illuminati]: {
+  [GoOpponent.Illuminati]: {
     komi: 7.5,
     description: "Hard AI",
     flavorText:
@@ -94,7 +95,7 @@ export const opponentDetails = {
     bonusDescription: "faster hack(), grow(), and weaken()",
     bonusPower: 0.7,
   },
-  [opponents.w0r1d_d43m0n]: {
+  [GoOpponent.w0r1d_d43m0n]: {
     komi: 9.5,
     description: "???",
     flavorText: "What you have seen is only the shadow of the truth. It's time to leave the cave.",
@@ -105,24 +106,7 @@ export const opponentDetails = {
 
 export const boardSizes = [5, 7, 9, 13];
 
-export type PlayerColor = playerColors.white | playerColors.black | playerColors.empty;
-
 export type Board = (PointState | null)[][];
-
-export type MoveOptions = {
-  capture: () => Promise<Move | null>;
-  defendCapture: () => Promise<Move | null>;
-  eyeMove: () => Promise<Move | null>;
-  eyeBlock: () => Promise<Move | null>;
-  pattern: () => Promise<Move | null>;
-  growth: () => Promise<Move | null>;
-  expansion: () => Promise<Move | null>;
-  jump: () => Promise<Move | null>;
-  defend: () => Promise<Move | null>;
-  surround: () => Promise<Move | null>;
-  corner: () => Promise<Move | null>;
-  random: () => Promise<Move | null>;
-};
 
 export type Move = {
   point: PointState;
@@ -131,6 +115,23 @@ export type Move = {
   createsLife?: boolean;
 };
 
+type MoveType =
+  | "capture"
+  | "defendCapture"
+  | "eyeMove"
+  | "eyeBlock"
+  | "pattern"
+  | "growth"
+  | "expansion"
+  | "jump"
+  | "defend"
+  | "surround"
+  | "corner"
+  | "random";
+
+type MoveFunction = () => Promise<Move | null>;
+export type MoveOptions = Record<MoveType, MoveFunction>;
+
 export type EyeMove = {
   point: PointState;
   createsLife: boolean;
@@ -138,15 +139,15 @@ export type EyeMove = {
 
 export type BoardState = {
   board: Board;
-  previousPlayer: PlayerColor | null;
+  previousPlayer: GoColor | null;
   history: Board[];
-  ai: opponents;
+  ai: GoOpponent;
   passCount: number;
   cheatCount: number;
 };
 
 export type PointState = {
-  player: PlayerColor;
+  player: GoColor;
   chain: string;
   liberties: (PointState | null)[] | null;
   x: number;
@@ -156,7 +157,7 @@ export type PointState = {
 /**
  * "invalid" or "move" or "pass" or "gameOver"
  */
-export enum playTypes {
+export enum GoPlayType {
   invalid = "invalid",
   move = "move",
   pass = "pass",
@@ -165,7 +166,7 @@ export enum playTypes {
 
 export type Play = {
   success: boolean;
-  type: playTypes;
+  type: GoPlayType;
   x: number;
   y: number;
 };
@@ -177,7 +178,7 @@ export type Neighbor = {
   west: PointState | null;
 };
 
-export type goScore = {
+export type GoScore = {
   White: { pieces: number; territory: number; komi: number; sum: number };
   Black: { pieces: number; territory: number; komi: number; sum: number };
 };
@@ -198,13 +199,13 @@ type opponentHistory = {
 export function getGoPlayerStartingState(): {
   previousGameFinalBoardState: BoardState | null;
   boardState: BoardState;
-  status: { [o in opponents]: opponentHistory };
+  status: { [o in GoOpponent]: opponentHistory };
 } {
   const previousGame: BoardState | null = null;
   return {
     boardState: getNewBoardState(7),
     status: {
-      [opponents.none]: {
+      [GoOpponent.none]: {
         wins: 0,
         losses: 0,
         nodes: 0,
@@ -214,7 +215,7 @@ export function getGoPlayerStartingState(): {
         highestWinStreak: 0,
         favor: 0,
       },
-      [opponents.Netburners]: {
+      [GoOpponent.Netburners]: {
         wins: 0,
         losses: 0,
         nodes: 0,
@@ -224,7 +225,7 @@ export function getGoPlayerStartingState(): {
         highestWinStreak: 0,
         favor: 0,
       },
-      [opponents.SlumSnakes]: {
+      [GoOpponent.SlumSnakes]: {
         wins: 0,
         losses: 0,
         nodes: 0,
@@ -234,7 +235,7 @@ export function getGoPlayerStartingState(): {
         highestWinStreak: 0,
         favor: 0,
       },
-      [opponents.TheBlackHand]: {
+      [GoOpponent.TheBlackHand]: {
         wins: 0,
         losses: 0,
         nodes: 0,
@@ -244,7 +245,7 @@ export function getGoPlayerStartingState(): {
         highestWinStreak: 0,
         favor: 0,
       },
-      [opponents.Tetrads]: {
+      [GoOpponent.Tetrads]: {
         wins: 0,
         losses: 0,
         nodes: 0,
@@ -254,7 +255,7 @@ export function getGoPlayerStartingState(): {
         highestWinStreak: 0,
         favor: 0,
       },
-      [opponents.Daedalus]: {
+      [GoOpponent.Daedalus]: {
         wins: 0,
         losses: 0,
         nodes: 0,
@@ -264,7 +265,7 @@ export function getGoPlayerStartingState(): {
         highestWinStreak: 0,
         favor: 0,
       },
-      [opponents.Illuminati]: {
+      [GoOpponent.Illuminati]: {
         wins: 0,
         losses: 0,
         nodes: 0,
@@ -274,7 +275,7 @@ export function getGoPlayerStartingState(): {
         highestWinStreak: 0,
         favor: 0,
       },
-      [opponents.w0r1d_d43m0n]: {
+      [GoOpponent.w0r1d_d43m0n]: {
         wins: 0,
         losses: 0,
         nodes: 0,

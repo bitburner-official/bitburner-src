@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
-import { opponentList } from "../boardState/goConstants";
+import { opponentsNonSpoiler } from "../boardState/goConstants";
 import { getScore } from "../boardAnalysis/scoring";
 import { Player } from "@player";
 import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
@@ -50,7 +50,7 @@ export const GoStatusPage = (): React.ReactElement => {
               <strong>Effect:</strong>
             </TableCell>
           </TableRow>
-          {opponentList.map((faction, index) => {
+          {opponentsNonSpoiler.map((faction, index) => {
             return (
               <TableRow key={index}>
                 <TableCell className={classes.cellNone}>

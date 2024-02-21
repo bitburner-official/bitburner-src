@@ -1,5 +1,5 @@
 // Inspired by https://github.com/pasky/michi/blob/master/michi.py
-import { BoardState, PlayerColor, playerColors, PointState } from "../boardState/goConstants";
+import { BoardState, GoColor, PointState } from "../boardState/goConstants";
 import { sleep } from "./goAI";
 import { findEffectiveLibertiesOfNewMove } from "./boardAnalysis";
 import { floor } from "../boardState/boardState";
@@ -79,7 +79,7 @@ export const threeByThreePatterns = [
  */
 export async function findAnyMatchedPatterns(
   boardState: BoardState,
-  player: PlayerColor,
+  player: GoColor,
   availableSpaces: PointState[],
   smart = true,
   rng: number,
@@ -109,7 +109,7 @@ export async function findAnyMatchedPatterns(
 /**
   Returns false if any point does not match the pattern, and true if it matches fully.
  */
-function checkMatch(neighborhood: (PointState | null)[][], pattern: string[], player: PlayerColor) {
+function checkMatch(neighborhood: (PointState | null)[][], pattern: string[], player: GoColor) {
   const patternArr = pattern.join("").split("");
   const neighborhoodArray = neighborhood.flat();
   return patternArr.every((str, index) => matches(str, neighborhoodArray[index], player));
@@ -136,8 +136,8 @@ function getNeighborhood(boardState: BoardState, x: number, y: number) {
  * A space " " only matches the edge of the board
  * question mark "?" matches anything
  */
-function matches(stringPoint: string, point: PointState | null, player: PlayerColor) {
-  const opponent = player === playerColors.white ? playerColors.black : playerColors.white;
+function matches(stringPoint: string, point: PointState | null, player: GoColor) {
+  const opponent = player === GoColor.white ? GoColor.black : GoColor.white;
   switch (stringPoint) {
     case "X": {
       return point?.player === player;
@@ -152,7 +152,7 @@ function matches(stringPoint: string, point: PointState | null, player: PlayerCo
       return point?.player !== player;
     }
     case ".": {
-      return point?.player === playerColors.empty;
+      return point?.player === GoColor.empty;
     }
     case " ": {
       return point === null;

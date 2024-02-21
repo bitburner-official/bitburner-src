@@ -1,5 +1,5 @@
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-import { getGoPlayerStartingState, opponentDetails, opponentList, opponents } from "../boardState/goConstants";
+import { getGoPlayerStartingState, opponentDetails, opponentsNonSpoiler, GoOpponent } from "../boardState/goConstants";
 import { Player } from "@player";
 import { defaultMultipliers, mergeMultipliers, Multipliers } from "../../PersonObjects/Multipliers";
 import { PlayerObject } from "../../PersonObjects/Player/PlayerObject";
@@ -10,7 +10,7 @@ import { getPlayerStats } from "../boardAnalysis/scoring";
  * Calculates the effect size of the given player boost, based on the node power (points based on number of subnet
  * nodes captured and player wins) and effect power (scalar for individual boosts)
  */
-export function CalculateEffect(nodes: number, faction: opponents): number {
+export function CalculateEffect(nodes: number, faction: GoOpponent): number {
   const power = getEffectPowerForFaction(faction);
   const sourceFileBonus = Player.sourceFileLvl(14) ? 1.25 : 1;
   return (
@@ -37,7 +37,7 @@ export function getMaxFavor() {
 /**
  * Gets a formatted description of the current bonus from this faction
  */
-export function getBonusText(opponent: opponents) {
+export function getBonusText(opponent: GoOpponent) {
   const nodePower = getPlayerStats(opponent).nodePower;
   const effectPercent = formatPercent(CalculateEffect(nodePower, opponent) - 1);
   const effectDescription = getEffectTypeForFaction(opponent);
@@ -58,35 +58,35 @@ export function updateGoMults(): void {
  */
 function calculateMults(): Multipliers {
   const mults = defaultMultipliers();
-  [...opponentList, opponents.w0r1d_d43m0n].forEach((opponent) => {
+  [...opponentsNonSpoiler, GoOpponent.w0r1d_d43m0n].forEach((opponent) => {
     if (!Player.go?.status?.[opponent]) {
       Player.go = getGoPlayerStartingState();
     }
 
     const effect = CalculateEffect(getPlayerStats(opponent).nodePower, opponent);
     switch (opponent) {
-      case opponents.Netburners:
+      case GoOpponent.Netburners:
         mults.hacknet_node_money *= effect;
         break;
-      case opponents.SlumSnakes:
+      case GoOpponent.SlumSnakes:
         mults.crime_success *= effect;
         break;
-      case opponents.TheBlackHand:
+      case GoOpponent.TheBlackHand:
         mults.hacking_money *= effect;
         break;
-      case opponents.Tetrads:
+      case GoOpponent.Tetrads:
         mults.strength *= effect;
         mults.dexterity *= effect;
         mults.agility *= effect;
         break;
-      case opponents.Daedalus:
+      case GoOpponent.Daedalus:
         mults.company_rep *= effect;
         mults.faction_rep *= effect;
         break;
-      case opponents.Illuminati:
+      case GoOpponent.Illuminati:
         mults.hacking_speed *= effect;
         break;
-      case opponents.w0r1d_d43m0n:
+      case GoOpponent.w0r1d_d43m0n:
         mults.hacking *= effect;
         break;
     }
@@ -95,7 +95,7 @@ function calculateMults(): Multipliers {
 }
 
 export function resetGoNodePower(player: PlayerObject) {
-  opponentList.forEach((opponent) => {
+  opponentsNonSpoiler.forEach((opponent) => {
     player.go.status[opponent].nodePower = 0;
     player.go.status[opponent].nodes = 0;
     player.go.status[opponent].winStreak = 0;
@@ -104,17 +104,17 @@ export function resetGoNodePower(player: PlayerObject) {
 
 export function playerHasDiscoveredGo() {
   const playedGame = Player.go.boardState.history.length || Player.go.previousGameFinalBoardState?.history?.length;
-  const hasRecords = opponentList.find((opponent) => getPlayerStats(opponent).wins + getPlayerStats(opponent).losses);
+  const hasRecords = opponentsNonSpoiler.some((opponent) => getPlayerStats(opponent).wins + getPlayerStats(opponent).losses);
   const isInBn14 = Player.bitNodeN === 14;
 
   return !!(playedGame || hasRecords || isInBn14);
 }
 
-function getEffectPowerForFaction(opponent: opponents) {
+function getEffectPowerForFaction(opponent: GoOpponent) {
   return opponentDetails[opponent].bonusPower;
 }
 
-export function getEffectTypeForFaction(opponent: opponents) {
+export function getEffectTypeForFaction(opponent: GoOpponent) {
   return opponentDetails[opponent].bonusDescription;
 }
 
@@ -132,6 +132,6 @@ export function getWinstreakMultiplier(winStreak: number, previousWinStreak: num
 }
 
 export function getDifficultyMultiplier(komi: number, boardSize: number) {
-  const isTinyBoardVsIlluminati = boardSize === 5 && komi === opponentDetails[opponents.Illuminati].komi;
+  const isTinyBoardVsIlluminati = boardSize === 5 && komi === opponentDetails[GoOpponent.Illuminati].komi;
   return isTinyBoardVsIlluminati ? 8 : (komi + 0.5) * 0.25;
 }

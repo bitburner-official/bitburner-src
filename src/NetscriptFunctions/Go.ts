@@ -2,7 +2,7 @@ import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Player } from "@player";
 import { Go } from "@nsdefs";
-import { Play, playerColors } from "../Go/boardState/goConstants";
+import { Play, GoPlayerColor } from "../Go/boardState/goConstants";
 import { getSimplifiedBoardState } from "../Go/boardAnalysis/boardAnalysis";
 import {
   cheatDestroyNode,
@@ -57,7 +57,7 @@ export function NetscriptGo(): InternalAPI<Go> {
         return makePlayerMove(logger(ctx), x, y);
       },
     passTurn: (ctx: NetscriptContext) => async (): Promise<Play> => {
-      if (Player.go.boardState.previousPlayer === playerColors.black) {
+      if (Player.go.boardState.previousPlayer === GoPlayerColor.black) {
         helpers.log(ctx, () => `It is not your turn; you cannot pass.`);
         helpers.log(ctx, () => `Do you have multiple scripts running, or did you forget to await makeMove() ?`);
         return Promise.resolve(invalidMoveResponse);
