@@ -42,16 +42,15 @@ export const opponentList = [
 export const getOpponentList = (includeWorldDemon = false, includeNoOpponent = false) => {
   let editedOpponents = [...opponentList];
   if (!includeWorldDemon) {
-    editedOpponents = editedOpponents.filter(o => o !== opponents.w0r1d_d43m0n)
+    editedOpponents = editedOpponents.filter((o) => o !== opponents.w0r1d_d43m0n);
   }
 
   if (includeNoOpponent) {
-    editedOpponents.push(opponents.none)
+    editedOpponents.push(opponents.none);
   }
 
   return editedOpponents;
-}
-
+};
 
 export const opponentDetails = {
   [opponents.none]: {

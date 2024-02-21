@@ -1,7 +1,7 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
-import {getOpponentList} from "../boardState/goConstants";
+import { getOpponentList } from "../boardState/goConstants";
 import { getScore } from "../boardAnalysis/scoring";
 import { Player } from "@player";
 import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";

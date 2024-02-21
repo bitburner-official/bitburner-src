@@ -1,6 +1,6 @@
 import { Box, Button, MenuItem, Select, SelectChangeEvent, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
-import {boardSizes, getOpponentList, opponentDetails, opponents} from "../boardState/goConstants";
+import { boardSizes, getOpponentList, opponentDetails, opponents } from "../boardState/goConstants";
 import { Player } from "@player";
 import { boardStyles } from "../boardState/goStyles";
 import { Modal } from "../../ui/React/Modal";
