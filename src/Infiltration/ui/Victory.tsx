@@ -27,7 +27,7 @@ interface IProps {
 }
 
 export function Victory(props: IProps): React.ReactElement {
-  const defaultFaction = isFactionWork(Player.currentWork) ? Player.currentWork.getFaction() : "none";
+  const defaultFaction = isFactionWork(Player.currentWork) ? Player.currentWork.factionName : "none";
   const [factionName, setFactionName] = useState(defaultFaction);
 
   function quitInfiltration(): void {
