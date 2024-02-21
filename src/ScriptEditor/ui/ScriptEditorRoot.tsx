@@ -40,13 +40,15 @@ interface IProps {
 const openScripts: OpenScript[] = [];
 let currentScript: OpenScript | null = null;
 
-export function closeDeletedScripts(onlyHome: boolean): void {
-  for (let i = openScripts.length - 1; i >= 0; i--) {
-    const {hostname} = openScripts[i];
-    if (GetServer(hostname) === null || (onlyHome && hostname !== "home")) {
-      openScripts.splice(i, 1);
+export function closeDeletedScripts(allServers: boolean): void {
+  let idx = 0;
+  for (const script of openScripts) {
+    openScripts[idx] = script;
+    if (GetServer(script.hostname) !== null && (allServers || script.hostname === "home")) {
+      ++idx;
     }
   }
+  openScripts.length = idx;
   if (currentScript && GetServer(currentScript.hostname) === null) {
     currentScript = openScripts[0] ?? null;
   }
@@ -61,7 +63,7 @@ function Root(props: IProps): React.ReactElement {
   let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
 
   // Prevent Crash if script is open on deleted server
-  closeDeletedScripts(false);
+  closeDeletedScripts(true);
 
   const save = useCallback(() => {
     if (currentScript === null) {
