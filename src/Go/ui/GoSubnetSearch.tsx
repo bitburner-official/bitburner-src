@@ -1,6 +1,6 @@
 import { Box, Button, MenuItem, Select, SelectChangeEvent, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { boardSizes, opponentDetails, opponentList, opponents } from "../boardState/goConstants";
+import {boardSizes, getOpponentList, opponentDetails, opponents} from "../boardState/goConstants";
 import { Player } from "@player";
 import { boardStyles } from "../boardState/goStyles";
 import { Modal } from "../../ui/React/Modal";
@@ -24,16 +24,15 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
     opponent === opponents.w0r1d_d43m0n ? 19 : Math.min(Player.go.boardState?.board?.[0]?.length ?? 7, 13);
   const [boardSize, setBoardSize] = useState(preselectedBoardSize);
 
-  const opponentFactions = [opponents.none, ...opponentList];
-  if (showWorldDemon()) {
-    opponentFactions.push(opponents.w0r1d_d43m0n);
-  }
+  const opponentFactions = getOpponentList(showWorldDemon(), true);
 
   const handicap = getHandicap(boardSize, opponent);
 
   function changeOpponent(event: SelectChangeEvent): void {
     const newOpponent = event.target.value as opponents;
     setOpponent(newOpponent);
+
+    // The first time you fight the world demon, reset the go style to see the custom game background
     if (newOpponent === opponents.w0r1d_d43m0n) {
       setBoardSize(19);
 

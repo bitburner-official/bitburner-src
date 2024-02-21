@@ -1,5 +1,13 @@
-import { BoardState, opponentList, Play, playerColors, playTypes, validityReason } from "../boardState/goConstants";
-import { getMove, sleep } from "../boardAnalysis/goAI";
+import {
+  BoardState,
+  opponentList,
+  opponents,
+  Play,
+  playerColors,
+  playTypes,
+  validityReason,
+} from "../boardState/goConstants";
+import { getMove, showWorldDemon, sleep } from "../boardAnalysis/goAI";
 import { Player } from "@player";
 import {
   getNewBoardState,
@@ -185,14 +193,19 @@ function logEndGame(logger: (s: string) => void) {
  * Clears the board, resets winstreak if applicable
  */
 export function resetBoardState(error: (s: string) => void, opponentString: string, boardSize: number) {
-  const opponent = opponentList.find((faction) => faction === opponentString);
+  const editedOpponentString = opponentString === "w0r1d_d43m0n" ? opponents.w0r1d_d43m0n : opponentString;
+  const opponent = opponentList.find((faction) => faction === editedOpponentString);
 
   if (![5, 7, 9, 13].includes(boardSize)) {
     error(`Invalid subnet size requested (${boardSize}, size must be 5, 7, 9, or 13`);
     return;
   }
   if (!opponent) {
-    error(`Invalid opponent requested (${opponentString}), valid options are ${opponentList.join(", ")}`);
+    error(`Invalid opponent requested (${editedOpponentString}), valid options are ${opponentList.join(", ")}`);
+    return;
+  }
+  if (opponent === opponents.w0r1d_d43m0n && !showWorldDemon()) {
+    error(`Invalid opponent requested (${editedOpponentString}), you have not yet discovered this opponent`);
     return;
   }
 

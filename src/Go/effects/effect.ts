@@ -58,7 +58,7 @@ export function updateGoMults(): void {
  */
 function calculateMults(): Multipliers {
   const mults = defaultMultipliers();
-  [...opponentList, opponents.w0r1d_d43m0n].forEach((opponent) => {
+  opponentList.forEach((opponent) => {
     if (!Player.go?.status?.[opponent]) {
       Player.go = getGoPlayerStartingState();
     }

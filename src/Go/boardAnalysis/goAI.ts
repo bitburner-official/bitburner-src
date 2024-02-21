@@ -823,5 +823,5 @@ export function sleep(ms: number): Promise<void> {
 }
 
 export function showWorldDemon() {
-  return Player.augmentations.some((a) => a.name === AugmentationName.TheRedPill) && Player.sourceFileLvl(1);
+  return Player.augmentations.some((a) => a.name === AugmentationName.TheRedPill) && Player.sourceFileLvl(1) > 0;
 }

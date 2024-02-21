@@ -93,7 +93,7 @@ describe("Netscript Go API unit tests", () => {
       resetBoardState(mockError, "fake opponent", 9);
 
       expect(mockError).toHaveBeenCalledWith(
-        "Invalid opponent requested (fake opponent), valid options are Netburners, Slum Snakes, The Black Hand, Tetrads, Daedalus, Illuminati",
+        "Invalid opponent requested (fake opponent), valid options are Netburners, Slum Snakes, The Black Hand, Tetrads, Daedalus, Illuminati, ????????????",
       );
     });
 

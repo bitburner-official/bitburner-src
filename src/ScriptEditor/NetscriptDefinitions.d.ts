@@ -1042,7 +1042,14 @@ export type SleeveTask =
   | SleeveSynchroTask;
 
 /** @public */
-type GoOpponent = "Netburners" | "Slum Snakes" | "The Black Hand" | "Tetrads" | "Daedalus" | "Illuminati";
+type GoOpponent =
+  | "Netburners"
+  | "Slum Snakes"
+  | "The Black Hand"
+  | "Tetrads"
+  | "Daedalus"
+  | "Illuminati"
+  | "????????????";
 
 /** Object representing a port. A port is a serialized queue.
  * @public */
@@ -3968,7 +3975,7 @@ export interface Go {
   /**
    * Returns the name of the opponent faction in the current subnet.
    */
-  getOpponent(): GoOpponent | "No AI" | "????????????";
+  getOpponent(): GoOpponent | "No AI";
 
   /**
    * Gets new IPvGO subnet with the specified size owned by the listed faction, ready for the player to make a move.
