@@ -17,6 +17,7 @@ import {
   calculateTradeInformationRepReward,
 } from "../formulas/victory";
 import { getEnumHelper } from "../../utils/EnumHelper";
+import { isFactionWork } from "../../Work/FactionWork";
 
 interface IProps {
   StartingDifficulty: number;
@@ -26,7 +27,8 @@ interface IProps {
 }
 
 export function Victory(props: IProps): React.ReactElement {
-  const [factionName, setFactionName] = useState("none");
+  const defaultFaction = isFactionWork(Player.currentWork) ? Player.currentWork.getFaction() : "none";
+  const [factionName, setFactionName] = useState(defaultFaction);
 
   function quitInfiltration(): void {
     handleInfiltrators();
@@ -79,9 +81,13 @@ export function Victory(props: IProps): React.ReactElement {
       <Box sx={{ width: "fit-content" }}>
         <Box sx={{ width: "100%" }}>
           <Select value={factionName} onChange={changeDropdown} sx={{ mr: 1 }}>
-            <MenuItem key={"none"} value={"none"}>
-              {"none"}
-            </MenuItem>
+            {defaultFaction === "none" ? (
+              <MenuItem key={"none"} value={"none"}>
+                {"none"}
+              </MenuItem>
+            ) : (
+              <></>
+            )}
             {Player.factions
               .filter((f) => Factions[f].getInfo().offersWork())
               .map((f) => (
