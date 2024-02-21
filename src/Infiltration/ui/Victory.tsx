@@ -81,12 +81,10 @@ export function Victory(props: IProps): React.ReactElement {
       <Box sx={{ width: "fit-content" }}>
         <Box sx={{ width: "100%" }}>
           <Select value={factionName} onChange={changeDropdown} sx={{ mr: 1 }}>
-            {defaultFaction === "none" ? (
+            {defaultFaction === "none" && (
               <MenuItem key={"none"} value={"none"}>
                 {"none"}
               </MenuItem>
-            ) : (
-              <></>
             )}
             {Player.factions
               .filter((f) => Factions[f].getInfo().offersWork())
