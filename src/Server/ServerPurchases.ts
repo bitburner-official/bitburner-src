@@ -17,47 +17,53 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 // Returns Infinity for invalid 'ram' arguments
 /**
  * @param ram Amount of RAM on purchased server (GB)
+ * @param cores Amount of cores on purchased Server
  * @returns Cost of purchasing the given server. Returns infinity for invalid arguments
  */
-export function getPurchaseServerCost(ram: number): number {
-  // TODO shift checks into
-  const sanitizedRam = Math.round(ram);
-  if (isNaN(sanitizedRam) || !isPowerOfTwo(sanitizedRam) || !(Math.sign(sanitizedRam) === 1)) {
-    return Infinity;
+export function getPurchaseServerCost(ram: number, cores: number): number {
+  if (!isPowerOfTwo(ram)) {
+    throw new Error(`Invalid argument: ram='${ram}' must be a positive power of 2`);
+  }
+  if (ram > getPurchaseServerMaxRam()) {
+    throw new Error(`Invalid argument: ram='${ram}' must not be greater than getPurchaseServerMaxRam`);
+  }
+  if (cores > getPurchasedServerMaxCores()) {
+    throw new Error(`Invalid argument: cores='${cores}' must not be greater than getPurchasedServerMaxCores`);
   }
 
-  if (sanitizedRam > getPurchaseServerMaxRam()) {
-    return Infinity;
-  }
-
-  const upg = Math.max(0, Math.log(sanitizedRam) / Math.log(2) - 6);
-
+  const upg = Math.max(0, Math.log(ram) / Math.log(2) - 6);
+  const coreCost =
+    ServerConstants.PurchasedServerCoreBaseCost *
+    (cores === 1 ? 0 : ServerConstants.PurchasedServerCoreCostGrowth ** cores);
   return (
-    sanitizedRam *
-    ServerConstants.BaseCostFor1GBOfRamServer *
-    currentNodeMults.PurchasedServerCost *
-    Math.pow(currentNodeMults.PurchasedServerSoftcap, upg)
+    coreCost +
+    ram *
+      ServerConstants.BaseCostFor1GBOfRamServer *
+      currentNodeMults.PurchasedServerCost *
+      Math.pow(currentNodeMults.PurchasedServerSoftcap, upg)
   );
 }
 
-export const getPurchasedServerUpgradeCost = (hostname: string, ram: number): number => {
+export const getPurchasedServerUpgradeCost = (hostname: string, ram: number, _cores: number): number => {
   const server = GetServer(hostname);
   if (!server) throw new Error(`Server '${hostname}' not found.`);
   if (!Player.purchasedServers.includes(hostname)) throw new Error(`Server '${hostname}' not a purchased server.`);
   if (isNaN(ram) || !isPowerOfTwo(ram) || !(Math.sign(ram) === 1))
     throw new Error(`${ram} is not a positive power of 2`);
-  if (server.maxRam >= ram)
-    throw new Error(`'${hostname}' current ram (${server.maxRam}) is not bigger than new ram (${ram})`);
-  return getPurchaseServerCost(ram) - getPurchaseServerCost(server.maxRam);
+  const cores = Math.max(_cores, server.cpuCores);
+  if (server.maxRam >= ram && cores === server.cpuCores)
+    throw new Error(`'${hostname}' current ram (${server.maxRam}) is bigger or equal than new ram (${ram})`);
+  return getPurchaseServerCost(ram, cores) - getPurchaseServerCost(server.maxRam, server.cpuCores);
 };
 
-export const upgradePurchasedServer = (hostname: string, ram: number): void => {
+export const upgradePurchasedServer = (hostname: string, ram: number, cores: number): void => {
   const server = GetServer(hostname);
   if (!server) throw new Error(`Server '${hostname}' not found.`);
-  const cost = getPurchasedServerUpgradeCost(hostname, ram);
+  const cost = getPurchasedServerUpgradeCost(hostname, ram, cores);
   if (!Player.canAfford(cost)) throw new Error(`You don't have enough money to upgrade '${hostname}'.`);
   Player.loseMoney(cost, "servers");
   server.maxRam = ram;
+  server.cpuCores = cores;
 };
 
 export const renamePurchasedServer = (hostname: string, newName: string): void => {
@@ -96,7 +102,9 @@ export function getPurchaseServerMaxRam(): number {
   // Round this to the nearest power of 2
   return 1 << (31 - Math.clz32(ram));
 }
-
+export function getPurchasedServerMaxCores(): number {
+  return ServerConstants.PurchasedServerMaxCores;
+}
 // Manually purchase a server (NOT through Netscript)
 export function purchaseServer(hostname: string, ram: number, cost: number): void {
   //Check if player has enough money

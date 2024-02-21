@@ -6496,9 +6496,10 @@ export interface NS {
    * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs ${ns.formatMoney(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+   * @param cores - Amount of Cores of the purchased server. Must be a positive Integer. Maximum value of 6. Defaults to 1
    * @returns The cost to purchase a server with the specified amount of ram.
    */
-  getPurchasedServerCost(ram: number): number;
+  getPurchasedServerCost(ram: number, cores?: number): number;
 
   /**
    * Purchase a server.
@@ -6535,9 +6536,10 @@ export interface NS {
    * ```
    * @param hostname - Hostname of the purchased server.
    * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+   * @param cores - Amount of Cores of the purchased server. Must be a positive Integer. Maximum value of 6. Defaults to 1
    * @returns The hostname of the newly purchased server.
    */
-  purchaseServer(hostname: string, ram: number): string;
+  purchaseServer(hostname: string, ram: number, cores?: number): string;
 
   /**
    * Get cost of upgrading a purchased server to the given ram.
@@ -6546,9 +6548,10 @@ export interface NS {
    *
    * @param hostname - Hostname of the server to upgrade.
    * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+   * @param cores - Amount of Cores of the purchased server. Must be a positive Integer. Maximum value of 6. Defaults to the current amount of cores
    * @returns The price to upgrade.
    */
-  getPurchasedServerUpgradeCost(hostname: string, ram: number): number;
+  getPurchasedServerUpgradeCost(hostname: string, ram: number, cores?: number): number;
 
   /**
    * Upgrade a purchased server's RAM.
@@ -6557,9 +6560,10 @@ export interface NS {
    *
    * @param hostname - Hostname of the server to upgrade.
    * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+   * @param cores - Amount of Cores of the purchased server. Must be a positive Integer. Maximum value of 6. Defaults to the current core count
    * @returns True if the upgrade succeeded, and false otherwise.
    */
-  upgradePurchasedServer(hostname: string, ram: number): boolean;
+  upgradePurchasedServer(hostname: string, ram: number, cores?: number): boolean;
 
   /**
    * Rename a purchased server.
@@ -6611,7 +6615,13 @@ export interface NS {
    * @returns Returns the maximum RAM (in GB) that a purchased server can have.
    */
   getPurchasedServerMaxRam(): number;
-
+  /**
+   * Returns the maximum Cores that a purchased server can have.
+   *
+   * @remarks RAM cost: 0.05 GB
+   * @returns Returns the maximum Cores that a purchased server can have.
+   */
+  getPurchasedServerMaxCores(): number;
   /**
    * Write data to a file.
    * @remarks

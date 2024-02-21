@@ -9,7 +9,7 @@ Purchase a server.
 **Signature:**
 
 ```typescript
-purchaseServer(hostname: string, ram: number): string;
+purchaseServer(hostname: string, ram: number, cores?: number): string;
 ```
 
 ## Parameters
@@ -18,6 +18,7 @@ purchaseServer(hostname: string, ram: number): string;
 |  --- | --- | --- |
 |  hostname | string | Hostname of the purchased server. |
 |  ram | number | Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20). |
+|  cores | number | _(Optional)_ Amount of Cores of the purchased server. Must be a positive Integer. Maximum value of 6. Defaults to 1 |
 
 **Returns:**
 

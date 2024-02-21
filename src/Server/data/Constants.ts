@@ -8,6 +8,9 @@ export const ServerConstants: {
   ServerWeakenAmount: number;
   PurchasedServerLimit: number;
   PurchasedServerMaxRam: number;
+  PurchasedServerMaxCores: number;
+  PurchasedServerCoreBaseCost: number;
+  PurchasedServerCoreCostGrowth: number;
 } = {
   // Base RAM costs
   BaseCostFor1GBOfRamHome: 32000,
@@ -21,4 +24,7 @@ export const ServerConstants: {
 
   PurchasedServerLimit: 25,
   PurchasedServerMaxRam: 1048576, // 2^20
+  PurchasedServerMaxCores: 6,
+  PurchasedServerCoreBaseCost: 10000000,
+  PurchasedServerCoreCostGrowth: 6.5,
 };

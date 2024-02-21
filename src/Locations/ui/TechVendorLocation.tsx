@@ -23,7 +23,7 @@ import { useRerender } from "../../ui/React/hooks";
 
 function ServerButton(props: { ram: number }): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const cost = getPurchaseServerCost(props.ram);
+  const cost = getPurchaseServerCost(props.ram, 1);
   return (
     <>
       <Button onClick={() => setOpen(true)} disabled={!Player.canAfford(cost)}>
