@@ -305,12 +305,12 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const preInstall = member.getCurrentAscensionMults();
       const postInstall = member.getInstallResults();
       return {
-        hack: member.calculateAscensionMultiplier(postInstall.hack) / preInstall.hack,
-        str: member.calculateAscensionMultiplier(postInstall.str) / preInstall.str,
-        def: member.calculateAscensionMultiplier(postInstall.def) / preInstall.def,
-        dex: member.calculateAscensionMultiplier(postInstall.dex) / preInstall.dex,
-        agi: member.calculateAscensionMultiplier(postInstall.agi) / preInstall.agi,
-        cha: member.calculateAscensionMultiplier(postInstall.cha) / preInstall.cha
+        hack: member.calculateAscensionMult(postInstall.hack) / preInstall.hack,
+        str: member.calculateAscensionMult(postInstall.str) / preInstall.str,
+        def: member.calculateAscensionMult(postInstall.def) / preInstall.def,
+        dex: member.calculateAscensionMult(postInstall.dex) / preInstall.dex,
+        agi: member.calculateAscensionMult(postInstall.agi) / preInstall.agi,
+        cha: member.calculateAscensionMult(postInstall.cha) / preInstall.cha
       };
     },
     setTerritoryWarfare: (ctx) => (_engage) => {
