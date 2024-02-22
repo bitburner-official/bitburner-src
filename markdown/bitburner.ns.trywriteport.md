@@ -9,7 +9,7 @@ Attempt to write to a port.
 **Signature:**
 
 ```typescript
-tryWritePort(portNumber: number, data: string | number): boolean;
+tryWritePort(portNumber: number, data: any): boolean;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ tryWritePort(portNumber: number, data: string | number): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  portNumber | number | Port to attempt to write to. Must be a positive integer. |
-|  data | string \| number | Data to write. |
+|  data | any | Data to write, it's cloned with structuredClone(). |
 
 **Returns:**
 

@@ -31,10 +31,11 @@ export function StartButton(props: IProps): React.ReactElement {
   }
   function onStart(): void {
     if (disabled) return;
-    props.bladeburner.action.type = props.type;
-    props.bladeburner.action.name = props.name;
+    const action = new ActionIdentifier();
+    action.type = props.type;
+    action.name = props.name;
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
-    props.bladeburner.startAction(props.bladeburner.action);
+    props.bladeburner.startAction(action);
     props.rerender();
   }
 

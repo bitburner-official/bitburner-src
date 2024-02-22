@@ -3,14 +3,13 @@ import { Player } from "@player";
 import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
 import { RunningScript } from "./RunningScript";
-import { processSingleServerGrowth } from "../Server/ServerHelpers";
+import { getWeakenEffect, processSingleServerGrowth } from "../Server/ServerHelpers";
 import { GetServer } from "../Server/AllServers";
 import { formatPercent } from "../ui/formatNumber";
 import { workerScripts } from "../Netscript/WorkerScripts";
 import { scriptKey } from "../utils/helpers/scriptKey";
 
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
-import { ServerConstants } from "../Server/data/Constants";
 
 export function scriptCalculateOfflineProduction(runningScript: RunningScript): void {
   //The Player object stores the last update time from when we were online
@@ -83,8 +82,8 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
         ((0.5 * runningScript.dataMap[hostname][3]) / runningScript.onlineRunningTime) * timePassed,
       );
       runningScript.log(`Called weaken() on ${serv.hostname} ${timesWeakened} times while offline`);
-      const coreBonus = 1 + (host.cpuCores - 1) / 16;
-      serv.weaken(ServerConstants.ServerWeakenAmount * timesWeakened * coreBonus);
+      const weakenAmount = getWeakenEffect(runningScript.threads, host.cpuCores);
+      serv.weaken(weakenAmount * timesWeakened);
     }
   }
 }

@@ -200,7 +200,7 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.0 dev - Changelog last updated 10 Feb 2024
+## v2.6.0 dev - Changelog last updated 17 Feb 2024
 
 ### MAJOR ADDITIONS
 
@@ -213,12 +213,15 @@ export const CONSTANTS: {
 - (CodingContract) Fixed an issue where ns.codingcontract.getData was leaking internal arrays when contract data was a 2-d array (@LJNeon)
 - (Go) Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes (@ficocelliguy)
 - (Ports) Added ns.nextPortWrite, which allows waiting for the next write to a port without creating a port handle object (@LJNeon)
+- (Ports) Ports now support all clonable data (@LJNeon)
 - (Singularity) Add type information for ns.singularity.getCurrentWork return value (@Semanual)
 - (Stanek) Fix ns.stanek.acceptGift which was not working in 2.5.2 (@jjclark1982)
 - Improved the efficiency and accuracy of growth formulas (@d0sboots)
 - ns.formatNumber now throws an error if specifying a suffixStart less than 1000 (@TheAimMan)
 - HGWOptions now accepts a non-integer number of threads (@Caldwell-74)
+- Fixed outdated docs for ns.spawn() (adeilt)
 - Fixed ns.serverExists returning incorrect value for an endgame server (@cigarmemr)
+- Refactored weaken effect calculation (@Caldwell-74)
 
 ### UI
 
@@ -227,13 +230,15 @@ export const CONSTANTS: {
 - (Corporation) Several typo fixes in Corporation modals (@cigarmemr)
 - (Documentation) Ingame documentation now displays line breaks inside tables correctly (@Snarling)
 - (Documentation) Added a documentation page for converting .script to .js (@LJNeon, @jjclark1982, @Snarling)
+- (Documentation) Script editor doc button points to correct docs (@LJNeon)
 - (Hashnet) Hash upgrade descriptions use proper number formatting options (@Snarling)
 - (Hacknet) Hacknet display shows a dynamic amount of columns based on screen width (@shyguy1412)
 - (Infiltration) Changed how the CheatCodeGame is displayed (@alutman, @Snarling)
 - (Sleeve) If intelligence is unlocked, sleeve intelligence is shown in the UI (@Caldwell-74)
 - (Stockmarket) Changed color of stocks increasing in value (@Semanual)
 - (Terminal) Improved scroll behavior on the Terminal (@Snarling)
-- Reorganization of some content on the Active Scripts page (@Snarling) 
+- (Theme) Added 3 new theme elements to properly support light themes (@adeilt)
+- Reorganization of some content and sorting of scripts on the Active Scripts page (@Snarling, @TheAimMan)
 - "Disable Text Effects" option also disables the corrupted text display (@draughtnyan)
 - fl1ght.exe now displays the related requirements in a more readable way (@TheAimMan, @LJNeon)
 - Miscellaneous wording fixes (@cigarmemr)
@@ -243,13 +248,17 @@ export const CONSTANTS: {
 - (CodingContract) Improve parsing of player input for arrays in coding contracts (@rocket3989)
 - (Corporation) Fix an incorrect demand range for Minerals (@catloversg)
 - (Corporation) Divisions impact on corporation valuation is now based on number of offices and warehouses (@catloversg)
+- (Corporation) Improve performance of calculations (@catloversg)
+- (Bladeburner) Band-aid fix Blops count and action stopping (@Caldwell-74)
 - (Gang) Add separate money tracking for gang expenses (@deansvendsen)
 - (Ports) Port objects no longer track a separate promise for every use of nextWrite (@Snarling)
 - (Ports) Fixed a crashing bug related to the changes above (@Jman420)
 - (RemoteAPI) Remote API can be targeted to a remote device instead of the default of localhost (@Specker)
 - (RemoteAPI) Added a getAllServers method (@shyguy1412)
 - (ScriptEditor) When importing from other files that are also open in the editor, type information is now available in the IDE (@shyguy1412)
+- (ScriptEditor) Links from "ls" are now tied to that host, instead of your connected machine (@LJNeon)
 - (ScriptEditor) Script "models" in the script editor are now properly disposed (@Caldwell-74)
+- (Terminal) Add --ram-override flag to the run command (@LJNeon)
 - All running scripts are killed upon entering the BitVerse (@LJNeon)
 - Scripts with the "temporary" flag set do not populate the Recently Killed script list on script death (@TheAimMan)
  - Fix an issue with offline income for scripts (@Caldwell-74)
@@ -260,5 +269,6 @@ export const CONSTANTS: {
 - Rearrange some internal constants (@Caldwell-74)
 - b1t_flum3.exe can be ran in "quick" mode (@TheAimMan)
 - Nerf noodle bar (various)
+- Nerf noodle bar moar (@Caldwell-74)
 `,
 };

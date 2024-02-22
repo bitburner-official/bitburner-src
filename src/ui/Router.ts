@@ -88,7 +88,8 @@ export type PageWithContext =
   | { page: SimplePage };
 
 export interface ScriptEditorRouteOptions {
-  vim: boolean;
+  vim?: boolean;
+  hostname?: string;
 }
 
 /** The router keeps track of player navigation/routing within the game. */

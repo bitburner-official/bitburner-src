@@ -17,7 +17,7 @@ spawn(script: string, threadOrOptions?: number | SpawnOptions, ...args: (string 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  script | string | Filename of script to execute. |
-|  threadOrOptions | number \| [SpawnOptions](./bitburner.spawnoptions.md) | _(Optional)_ Either an integer number of threads for new script, or a [SpawnOptions](./bitburner.spawnoptions.md) object. Threads defaults to 1. |
+|  threadOrOptions | number \| [SpawnOptions](./bitburner.spawnoptions.md) | _(Optional)_ Either an integer number of threads for new script, or a [SpawnOptions](./bitburner.spawnoptions.md) object. Threads defaults to 1 and spawnDelay defaults to 10,000 ms. |
 |  args | (string \| number \| boolean)\[\] | Additional arguments to pass into the new script that is being run. |
 
 **Returns:**
@@ -39,6 +39,6 @@ Running this function with 0 or fewer threads will cause a runtime error.
 
 ```js
 //The following example will execute the script ‘foo.js’ with 10 threads, in 500 milliseconds and the arguments ‘foodnstuff’ and 90:
-ns.spawn('foo.js', 10, 500, 'foodnstuff', 90);
+ns.spawn('foo.js', {threads: 10, spawnDelay: 500}, 'foodnstuff', 90);
 ```
 

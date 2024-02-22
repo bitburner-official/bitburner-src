@@ -19,6 +19,7 @@ import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
+import { getKeyList } from "../utils/helpers/getKeyList";
 
 export const CorporationPromise: PromisePair<CorpStateName> = { promise: null, resolve: null };
 
@@ -71,6 +72,9 @@ export class Corporation {
   seedFunded: boolean;
 
   state = new CorporationState();
+
+  // This is used for calculating cycle valuation.
+  numberOfOfficesAndWarehouses = 0;
 
   constructor(params: ICorporationParams = {}) {
     this.name = params.name || "The Corporation";
@@ -199,11 +203,6 @@ export class Corporation {
       assetDelta = (this.totalAssets - this.previousTotalAssets) / corpConstants.secondsPerMarketCycle;
     // Handle pre-totalAssets saves
     assetDelta ??= this.revenue - this.expenses;
-    const numberOfOfficesAndWarehouses = [...this.divisions.values()]
-      .map(
-        (division: Division) => getRecordValues(division.offices).length + getRecordValues(division.warehouses).length,
-      )
-      .reduce((sum: number, currentValue: number) => sum + currentValue, 0);
     if (this.public) {
       // Account for dividends
       if (this.dividendRate > 0) {
@@ -211,14 +210,16 @@ export class Corporation {
       }
 
       val = this.funds + assetDelta * 85e3;
-      val *= Math.pow(Math.pow(1.1, 1 / 12), numberOfOfficesAndWarehouses);
+      // Math.pow(1.1, 1 / 12) = 1.0079741404289038
+      val *= Math.pow(1.0079741404289038, this.numberOfOfficesAndWarehouses);
       val = Math.max(val, 0);
     } else {
       val = 10e9 + this.funds / 3;
       if (assetDelta > 0) {
         val += assetDelta * 315e3;
       }
-      val *= Math.pow(Math.pow(1.1, 1 / 12), numberOfOfficesAndWarehouses);
+      // Math.pow(1.1, 1 / 12) = 1.0079741404289038
+      val *= Math.pow(1.0079741404289038, this.numberOfOfficesAndWarehouses);
       val -= val % 1e6; //Round down to nearest million
     }
     if (val < 10e9) val = 10e9; // Base valuation
@@ -460,14 +461,23 @@ export class Corporation {
     return;
   }
 
+  // Exclude numberOfOfficesAndWarehouses
+  static includedProperties = getKeyList(Corporation, { removedKeys: ["numberOfOfficesAndWarehouses"] });
+
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Corporation", this);
+    return Generic_toJSON("Corporation", this, Corporation.includedProperties);
   }
 
   /** Initializes a Corporation object from a JSON save state. */
   static fromJSON(value: IReviverValue): Corporation {
-    return Generic_fromJSON(Corporation, value.data);
+    const corporation = Generic_fromJSON(Corporation, value.data, Corporation.includedProperties);
+    // numberOfOfficesAndWarehouses is not in the included properties and must be calculated
+    for (const division of corporation.divisions.values()) {
+      corporation.numberOfOfficesAndWarehouses += getRecordValues(division.offices).length;
+      corporation.numberOfOfficesAndWarehouses += getRecordValues(division.warehouses).length;
+    }
+    return corporation;
   }
 }
 

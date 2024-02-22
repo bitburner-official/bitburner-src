@@ -1,3 +1,5 @@
+import type { BaseServer } from "src/Server/BaseServer";
+
 export class RFAMessage {
   jsonrpc = "2.0"; // Transmits version of JSON-RPC. Compliance maybe allows some funky interaction with external tools?
   public method?: string; // Is defined when it's a request/notification, otherwise undefined
@@ -15,7 +17,7 @@ export class RFAMessage {
   }
 }
 
-type ResultType = string | number | string[] | FileContent[];
+type ResultType = string | number | string[] | FileContent[] | RFAServerData[];
 type FileMetadata = FileData | FileContent | FileLocation | FileServer;
 
 export interface FileData {
@@ -37,6 +39,8 @@ export interface FileLocation {
 export interface FileServer {
   server: string;
 }
+
+export type RFAServerData = Pick<BaseServer, "hostname" | "hasAdminRights" | "purchasedByPlayer">;
 
 export function isFileData(p: unknown): p is FileData {
   const pf = p as FileData;

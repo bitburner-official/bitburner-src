@@ -246,7 +246,7 @@ export function GameRoot(): React.ReactElement {
       mainPage = (
         <ScriptEditorRoot
           files={pageWithContext.files ?? new Map()}
-          hostname={Player.getCurrentServer().hostname}
+          hostname={pageWithContext.options?.hostname ?? Player.getCurrentServer().hostname}
           vim={!!pageWithContext.options?.vim}
         />
       );

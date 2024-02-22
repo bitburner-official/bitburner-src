@@ -26,16 +26,16 @@ const useStyles = makeStyles(() =>
       },
     },
     level0: {
-      color: "red",
+      color: Settings.theme.bnlvl0,
     },
     level1: {
-      color: "yellow",
+      color: Settings.theme.bnlvl1,
     },
     level2: {
-      color: "#48d1cc",
+      color: Settings.theme.bnlvl2,
     },
     level3: {
-      color: "blue",
+      color: Settings.theme.bnlvl3,
     },
   }),
 );
