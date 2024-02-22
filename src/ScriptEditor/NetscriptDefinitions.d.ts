@@ -3849,14 +3849,14 @@ export interface Gang {
   getAscensionResult(memberName: string): GangMemberAscension | undefined;
 
   /**
-   * Get the result of an install without installing.
+   * Get the effect of an install on ascension multipliers without installing.
    * @remarks
    * RAM cost: 2 GB
    *
-   * Get a {@link GangMemberInstall} result for a gang member after installing without performing the install.
+   * Get {@link GangMemberInstall} effects on ascension multipliers for a gang member after installing without performing the install.
    *
    * @param memberName - Name of member.
-   * @returns Object with info about the install results, or undefined if ascension is not possible.
+   * @returns Object with info about the install results on ascension multipliers, or undefined if ascension is not possible.
    */
   getInstallResult(memberName: string): GangMemberInstall | undefined;
 
