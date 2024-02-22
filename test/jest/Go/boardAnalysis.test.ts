@@ -5,7 +5,7 @@ import {
   getAllValidMoves,
   getBoardFromSimplifiedBoardState,
 } from "../../../src/Go/boardAnalysis/boardAnalysis";
-import { playerColors } from "../../../src/Go/boardState/goConstants";
+import { GoColor } from "../../../src/Go/Enums";
 import { findAnyMatchedPatterns } from "../../../src/Go/boardAnalysis/patternMatching";
 
 setPlayer(new PlayerObject());
@@ -23,8 +23,8 @@ describe("Go board analysis tests", () => {
     const board = ["..O..", "OOOOO", "..XXX", "..XX.", "..X.X"];
     const boardState = getBoardFromSimplifiedBoardState(board);
 
-    const whitePlayerEyes = getAllEyes(boardState, playerColors.white).flat().flat();
-    const blackPlayerEyes = getAllEyes(boardState, playerColors.black).flat().flat();
+    const whitePlayerEyes = getAllEyes(boardState, GoColor.white).flat().flat();
+    const blackPlayerEyes = getAllEyes(boardState, GoColor.black).flat().flat();
 
     expect(whitePlayerEyes?.length).toEqual(4);
     expect(blackPlayerEyes?.length).toEqual(2);
@@ -35,8 +35,8 @@ describe("Go board analysis tests", () => {
     const boardState = getBoardFromSimplifiedBoardState(board);
     const point = await findAnyMatchedPatterns(
       boardState,
-      playerColors.white,
-      getAllValidMoves(boardState, playerColors.white),
+      GoColor.white,
+      getAllValidMoves(boardState, GoColor.white),
       true,
       0,
     );
