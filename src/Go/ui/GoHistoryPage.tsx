@@ -2,7 +2,7 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import { Grid, Table, TableBody, TableCell, TableRow, Tooltip } from "@mui/material";
 
-import { getOpponentList, opponents } from "../boardState/goConstants";
+import { opponents } from "../boardState/goConstants";
 import { getPlayerStats, getScore } from "../boardAnalysis/scoring";
 import { Player } from "@player";
 import { GoGameboard } from "./GoGameboard";
@@ -13,7 +13,7 @@ import { formatNumber } from "../../ui/formatNumber";
 import { GoScoreSummaryTable } from "./GoScoreSummaryTable";
 import { getNewBoardState } from "../boardState/boardState";
 import { CorruptableText } from "../../ui/React/CorruptableText";
-import { showWorldDemon } from "../boardAnalysis/goAI";
+import { getOpponentList } from "../boardAnalysis/goAI";
 
 export const GoHistoryPage = (): React.ReactElement => {
   useRerender(400);
@@ -21,7 +21,7 @@ export const GoHistoryPage = (): React.ReactElement => {
   const priorBoard = Player.go.previousGameFinalBoardState ?? getNewBoardState(7);
   const score = getScore(priorBoard);
   const opponent = priorBoard.ai;
-  const opponentsToShow = getOpponentList(showWorldDemon());
+  const opponentsToShow = getOpponentList();
 
   return (
     <div>

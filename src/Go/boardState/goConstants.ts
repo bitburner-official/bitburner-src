@@ -39,19 +39,6 @@ export const opponentList = [
   opponents.w0r1d_d43m0n,
 ];
 
-export const getOpponentList = (includeWorldDemon = false, includeNoOpponent = false) => {
-  let editedOpponents = [...opponentList];
-  if (!includeWorldDemon) {
-    editedOpponents = editedOpponents.filter((o) => o !== opponents.w0r1d_d43m0n);
-  }
-
-  if (includeNoOpponent) {
-    editedOpponents.push(opponents.none);
-  }
-
-  return editedOpponents;
-};
-
 export const opponentDetails = {
   [opponents.none]: {
     komi: 5.5,

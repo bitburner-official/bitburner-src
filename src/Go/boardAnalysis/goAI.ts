@@ -4,6 +4,7 @@ import {
   Move,
   MoveOptions,
   opponentDetails,
+  opponentList,
   opponents,
   PlayerColor,
   playerColors,
@@ -825,3 +826,7 @@ export function sleep(ms: number): Promise<void> {
 export function showWorldDemon() {
   return Player.augmentations.some((a) => a.name === AugmentationName.TheRedPill) && Player.sourceFileLvl(1) > 0;
 }
+
+export const getOpponentList = () => {
+  return opponentList.filter((o) => (showWorldDemon() ? true : o !== opponents.w0r1d_d43m0n));
+};

@@ -1,7 +1,6 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
-import { getOpponentList } from "../boardState/goConstants";
 import { getScore } from "../boardAnalysis/scoring";
 import { Player } from "@player";
 import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
@@ -10,14 +9,14 @@ import { boardStyles } from "../boardState/goStyles";
 import { useRerender } from "../../ui/React/hooks";
 import { getBonusText } from "../effects/effect";
 import { GoScoreSummaryTable } from "./GoScoreSummaryTable";
-import { showWorldDemon } from "../boardAnalysis/goAI";
+import { getOpponentList } from "../boardAnalysis/goAI";
 
 export const GoStatusPage = (): React.ReactElement => {
   useRerender(400);
   const classes = boardStyles();
   const score = getScore(Player.go.boardState);
   const opponent = Player.go.boardState.ai;
-  const opponentsToShow = getOpponentList(showWorldDemon());
+  const opponentsToShow = getOpponentList();
 
   return (
     <div>
