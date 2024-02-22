@@ -2,8 +2,8 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import { Grid, Table, TableBody, TableCell, TableRow, Tooltip } from "@mui/material";
 
-import { opponentsNonSpoiler, GoOpponent } from "../boardState/goConstants";
-import { getPlayerStats, getScore } from "../boardAnalysis/scoring";
+import { GoOpponent } from "../boardState/goConstants";
+import { getOpponentStats, getScore } from "../boardAnalysis/scoring";
 import { Player } from "@player";
 import { GoGameboard } from "./GoGameboard";
 import { boardStyles } from "../boardState/goStyles";
@@ -13,7 +13,7 @@ import { formatNumber } from "../../ui/formatNumber";
 import { GoScoreSummaryTable } from "./GoScoreSummaryTable";
 import { getNewBoardState } from "../boardState/boardState";
 import { CorruptableText } from "../../ui/React/CorruptableText";
-import { showWorldDemon } from "../boardAnalysis/goAI";
+import { getRecordKeys } from "../../Types/Record";
 
 export const GoHistoryPage = (): React.ReactElement => {
   useRerender(400);
@@ -21,7 +21,7 @@ export const GoHistoryPage = (): React.ReactElement => {
   const priorBoard = Player.go.previousGameFinalBoardState ?? getNewBoardState(7);
   const score = getScore(priorBoard);
   const opponent = priorBoard.ai;
-  const opponentsToShow = showWorldDemon() ? [...opponentsNonSpoiler, GoOpponent.w0r1d_d43m0n] : opponentsNonSpoiler;
+  const opponentsToShow = getRecordKeys(Player.go.status);
 
   return (
     <div>
@@ -48,7 +48,7 @@ export const GoHistoryPage = (): React.ReactElement => {
       <Typography variant="h5">Faction Stats:</Typography>
       <Grid container style={{ maxWidth: "1020px" }}>
         {opponentsToShow.map((faction, index) => {
-          const data = getPlayerStats(faction);
+          const data = getOpponentStats(faction);
           return (
             <Grid item key={opponentsToShow[index]} className={classes.factionStatus}>
               <Typography>

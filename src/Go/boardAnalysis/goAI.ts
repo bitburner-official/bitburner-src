@@ -420,11 +420,7 @@ function getJumpMove(
 /**
  * Finds a move in an open area to expand influence and later build on
  */
-export function getExpansionMoveArray(
-  boardState: BoardState,
-  player: GoColor,
-  availableSpaces: PointState[],
-): Move[] {
+export function getExpansionMoveArray(boardState: BoardState, player: GoColor, availableSpaces: PointState[]): Move[] {
   // Look for any empty spaces fully surrounded by empty spaces to expand into
   const emptySpaces = availableSpaces.filter((space) => {
     const neighbors = findNeighbors(boardState, space.x, space.y);
@@ -461,12 +457,8 @@ function getDisputedTerritoryMoves(
   return availableSpaces.filter((space) => {
     const chain = chains.find((chain) => chain[0].chain === space.chain) ?? [];
     const playerNeighbors = getAllNeighboringChains(boardState, chain, chains);
-    const hasWhitePieceNeighbor = playerNeighbors.find(
-      (neighborChain) => neighborChain[0]?.player === GoColor.white,
-    );
-    const hasBlackPieceNeighbor = playerNeighbors.find(
-      (neighborChain) => neighborChain[0]?.player === GoColor.black,
-    );
+    const hasWhitePieceNeighbor = playerNeighbors.find((neighborChain) => neighborChain[0]?.player === GoColor.white);
+    const hasBlackPieceNeighbor = playerNeighbors.find((neighborChain) => neighborChain[0]?.player === GoColor.black);
 
     return hasWhitePieceNeighbor && hasBlackPieceNeighbor;
   });
@@ -519,12 +511,7 @@ async function getLibertyGrowthMoves(boardState: BoardState, player: GoColor, av
 /**
  * Find a move that increases the player's liberties by the maximum amount
  */
-async function getGrowthMove(
-  initialState: BoardState,
-  player: GoColor,
-  availableSpaces: PointState[],
-  rng: number,
-) {
+async function getGrowthMove(initialState: BoardState, player: GoColor, availableSpaces: PointState[], rng: number) {
   const growthMoves = await getLibertyGrowthMoves(initialState, player, availableSpaces);
 
   const maxLibertyCount = Math.max(...growthMoves.map((l) => l.newLibertyCount - l.oldLibertyCount));
@@ -555,12 +542,7 @@ async function getDefendMove(initialState: BoardState, player: GoColor, availabl
  * Find a move that reduces the opponent's liberties as much as possible,
  *   capturing (or making it easier to capture) their pieces
  */
-async function getSurroundMove(
-  boardState: BoardState,
-  player: GoColor,
-  availableSpaces: PointState[],
-  smart = true,
-) {
+async function getSurroundMove(boardState: BoardState, player: GoColor, availableSpaces: PointState[], smart = true) {
   const opposingPlayer = player === GoColor.black ? GoColor.white : GoColor.black;
   const enemyChains = getAllChains(boardState).filter((chain) => chain[0].player === opposingPlayer);
 

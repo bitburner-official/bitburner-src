@@ -1,10 +1,4 @@
-import {
-  BoardState,
-  getGoPlayerStartingState,
-  GoOpponent,
-  GoColor,
-  PointState,
-} from "../boardState/goConstants";
+import { BoardState, GoOpponent, GoColor, PointState, newOpponentStats } from "../boardState/goConstants";
 import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
 import { getKomi } from "./goAI";
 import { Player } from "@player";
@@ -49,7 +43,7 @@ export function endGoGame(boardState: BoardState) {
     return;
   }
   boardState.previousPlayer = null;
-  const statusToUpdate = getPlayerStats(boardState.ai);
+  const statusToUpdate = getOpponentStats(boardState.ai);
   statusToUpdate.favor = statusToUpdate.favor ?? 0;
   const score = getScore(boardState);
 
@@ -94,7 +88,7 @@ export function endGoGame(boardState: BoardState) {
  * Sets the winstreak to zero for the given opponent, and adds a loss
  */
 export function resetWinstreak(opponent: GoOpponent, gameComplete: boolean) {
-  const statusToUpdate = getPlayerStats(opponent);
+  const statusToUpdate = getOpponentStats(opponent);
   statusToUpdate.losses++;
   statusToUpdate.oldWinStreak = statusToUpdate.winStreak;
   if (statusToUpdate.winStreak >= 0) {
@@ -125,10 +119,8 @@ function getTerritoryScores(boardState: BoardState) {
     (scores, currentChain) => {
       const chainColor = checkTerritoryOwnership(boardState, currentChain);
       return {
-        [GoColor.white]:
-          scores[GoColor.white] + (chainColor === GoColor.white ? currentChain.length : 0),
-        [GoColor.black]:
-          scores[GoColor.black] + (chainColor === GoColor.black ? currentChain.length : 0),
+        [GoColor.white]: scores[GoColor.white] + (chainColor === GoColor.white ? currentChain.length : 0),
+        [GoColor.black]: scores[GoColor.black] + (chainColor === GoColor.black ? currentChain.length : 0),
       };
     },
     {
@@ -170,9 +162,6 @@ export function logBoard(boardState: BoardState): void {
   }
 }
 
-export function getPlayerStats(opponent: GoOpponent) {
-  if (!Player.go.status[opponent]) {
-    Player.go = getGoPlayerStartingState();
-  }
-  return Player.go.status[opponent];
+export function getOpponentStats(opponent: GoOpponent) {
+  return Player.go.status[opponent] ?? (Player.go.status[opponent] = newOpponentStats());
 }

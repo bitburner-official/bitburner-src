@@ -1,7 +1,6 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
-import { opponentsNonSpoiler } from "../boardState/goConstants";
 import { getScore } from "../boardAnalysis/scoring";
 import { Player } from "@player";
 import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
@@ -10,6 +9,7 @@ import { boardStyles } from "../boardState/goStyles";
 import { useRerender } from "../../ui/React/hooks";
 import { getBonusText } from "../effects/effect";
 import { GoScoreSummaryTable } from "./GoScoreSummaryTable";
+import { getRecordKeys } from "../../Types/Record";
 
 export const GoStatusPage = (): React.ReactElement => {
   useRerender(400);
@@ -50,7 +50,7 @@ export const GoStatusPage = (): React.ReactElement => {
               <strong>Effect:</strong>
             </TableCell>
           </TableRow>
-          {opponentsNonSpoiler.map((faction, index) => {
+          {getRecordKeys(Player.go.status).map((faction, index) => {
             return (
               <TableRow key={index}>
                 <TableCell className={classes.cellNone}>

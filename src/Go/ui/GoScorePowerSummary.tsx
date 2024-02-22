@@ -6,7 +6,7 @@ import { GoScore, GoOpponent, GoColor } from "../boardState/goConstants";
 import { boardStyles } from "../boardState/goStyles";
 import { formatNumber } from "../../ui/formatNumber";
 import { FactionName } from "@enums";
-import { getPlayerStats } from "../boardAnalysis/scoring";
+import { getOpponentStats } from "../boardAnalysis/scoring";
 
 interface IProps {
   finalScore: GoScore;
@@ -15,7 +15,7 @@ interface IProps {
 
 export const GoScorePowerSummary = ({ finalScore, opponent }: IProps) => {
   const classes = boardStyles();
-  const status = getPlayerStats(opponent);
+  const status = getOpponentStats(opponent);
   const winStreak = status.winStreak;
   const oldWinStreak = status.winStreak;
   const nodePower = formatNumber(status.nodePower, 2);

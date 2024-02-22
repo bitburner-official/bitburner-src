@@ -7,7 +7,7 @@ import { Modal } from "../../ui/React/Modal";
 import { getHandicap } from "../boardState/boardState";
 import { CorruptableText } from "../../ui/React/CorruptableText";
 import { Settings } from "../../Settings/Settings";
-import { getPlayerStats } from "../boardAnalysis/scoring";
+import { getOpponentStats } from "../boardAnalysis/scoring";
 import { showWorldDemon } from "../boardAnalysis/goAI";
 
 interface IProps {
@@ -37,7 +37,7 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
     if (newOpponent === GoOpponent.w0r1d_d43m0n) {
       setBoardSize(19);
 
-      const stats = getPlayerStats(GoOpponent.w0r1d_d43m0n);
+      const stats = getOpponentStats(GoOpponent.w0r1d_d43m0n);
       if (stats?.wins + stats?.losses === 0) {
         Settings.GoTraditionalStyle = false;
       }

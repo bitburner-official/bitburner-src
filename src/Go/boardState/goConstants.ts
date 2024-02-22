@@ -1,5 +1,6 @@
-import { getNewBoardState } from "./boardState";
 import { FactionName } from "@enums";
+import { PartialRecord } from "../../Types/Record";
+import { getNewBoardState } from "./boardState";
 
 export enum GoColor {
   white = "White",
@@ -29,7 +30,7 @@ export enum GoOpponent {
   w0r1d_d43m0n = "????????????",
 }
 
-export const allOpponents = Object.valuies(GoOpponent).filter((name) => name !== GoOpponent.none);
+export const allOpponents = Object.values(GoOpponent).filter((name) => name !== GoOpponent.none);
 export const opponentsNonSpoiler = [
   GoOpponent.Netburners,
   GoOpponent.SlumSnakes,
@@ -183,9 +184,7 @@ export type GoScore = {
   Black: { pieces: number; territory: number; komi: number; sum: number };
 };
 
-export const columnIndexes = "ABCDEFGHJKLMNOPQRSTUVWXYZ";
-
-type opponentHistory = {
+type OpponentStats = {
   wins: number;
   losses: number;
   nodes: number;
@@ -196,97 +195,32 @@ type opponentHistory = {
   favor: number;
 };
 
-export function getGoPlayerStartingState(): {
+export const columnIndexes = "ABCDEFGHJKLMNOPQRSTUVWXYZ";
+
+type GoState = {
   previousGameFinalBoardState: BoardState | null;
   boardState: BoardState;
-  status: { [o in GoOpponent]: opponentHistory };
-} {
-  const previousGame: BoardState | null = null;
+  status: PartialRecord<GoOpponent, OpponentStats>;
+};
+
+export function newOpponentStats(): OpponentStats {
+  return {
+    wins: 0,
+    losses: 0,
+    nodes: 0,
+    nodePower: 0,
+    winStreak: 0,
+    oldWinStreak: 0,
+    highestWinStreak: 0,
+    favor: 0,
+  };
+}
+
+export function getGoPlayerStartingState(): GoState {
   return {
     boardState: getNewBoardState(7),
-    status: {
-      [GoOpponent.none]: {
-        wins: 0,
-        losses: 0,
-        nodes: 0,
-        nodePower: 0,
-        winStreak: 0,
-        oldWinStreak: 0,
-        highestWinStreak: 0,
-        favor: 0,
-      },
-      [GoOpponent.Netburners]: {
-        wins: 0,
-        losses: 0,
-        nodes: 0,
-        nodePower: 0,
-        winStreak: 0,
-        oldWinStreak: 0,
-        highestWinStreak: 0,
-        favor: 0,
-      },
-      [GoOpponent.SlumSnakes]: {
-        wins: 0,
-        losses: 0,
-        nodes: 0,
-        nodePower: 0,
-        winStreak: 0,
-        oldWinStreak: 0,
-        highestWinStreak: 0,
-        favor: 0,
-      },
-      [GoOpponent.TheBlackHand]: {
-        wins: 0,
-        losses: 0,
-        nodes: 0,
-        nodePower: 0,
-        winStreak: 0,
-        oldWinStreak: 0,
-        highestWinStreak: 0,
-        favor: 0,
-      },
-      [GoOpponent.Tetrads]: {
-        wins: 0,
-        losses: 0,
-        nodes: 0,
-        nodePower: 0,
-        winStreak: 0,
-        oldWinStreak: 0,
-        highestWinStreak: 0,
-        favor: 0,
-      },
-      [GoOpponent.Daedalus]: {
-        wins: 0,
-        losses: 0,
-        nodes: 0,
-        nodePower: 0,
-        winStreak: 0,
-        oldWinStreak: 0,
-        highestWinStreak: 0,
-        favor: 0,
-      },
-      [GoOpponent.Illuminati]: {
-        wins: 0,
-        losses: 0,
-        nodes: 0,
-        nodePower: 0,
-        winStreak: 0,
-        oldWinStreak: 0,
-        highestWinStreak: 0,
-        favor: 0,
-      },
-      [GoOpponent.w0r1d_d43m0n]: {
-        wins: 0,
-        losses: 0,
-        nodes: 0,
-        nodePower: 0,
-        winStreak: 0,
-        oldWinStreak: 0,
-        highestWinStreak: 0,
-        favor: 0,
-      },
-    },
-    previousGameFinalBoardState: previousGame,
+    status: {},
+    previousGameFinalBoardState: null,
   };
 }
 

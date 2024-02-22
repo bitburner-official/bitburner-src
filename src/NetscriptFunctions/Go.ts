@@ -2,7 +2,7 @@ import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Player } from "@player";
 import { Go } from "@nsdefs";
-import { Play, GoPlayerColor } from "../Go/boardState/goConstants";
+import { Play, GoColor } from "../Go/boardState/goConstants";
 import { getSimplifiedBoardState } from "../Go/boardAnalysis/boardAnalysis";
 import {
   cheatDestroyNode,
@@ -21,6 +21,7 @@ import {
   resetBoardState,
   throwError,
 } from "../Go/effects/netscriptGoImplementation";
+import { getEnumHelper } from "../utils/EnumHelper";
 
 const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
 const error = (ctx: NetscriptContext) => (message: string) => throwError(ctx.workerScript, message);
@@ -57,7 +58,7 @@ export function NetscriptGo(): InternalAPI<Go> {
         return makePlayerMove(logger(ctx), x, y);
       },
     passTurn: (ctx: NetscriptContext) => async (): Promise<Play> => {
-      if (Player.go.boardState.previousPlayer === GoPlayerColor.black) {
+      if (Player.go.boardState.previousPlayer === GoColor.black) {
         helpers.log(ctx, () => `It is not your turn; you cannot pass.`);
         helpers.log(ctx, () => `Do you have multiple scripts running, or did you forget to await makeMove() ?`);
         return Promise.resolve(invalidMoveResponse);
@@ -71,10 +72,10 @@ export function NetscriptGo(): InternalAPI<Go> {
       return Player.go.boardState.ai;
     },
     resetBoardState: (ctx) => (_opponent, _boardSize) => {
-      const opponentString = helpers.string(ctx, "opponent", _opponent);
+      const opponent = getEnumHelper("GoOpponent").nsGetMember(ctx, _opponent);
       const boardSize = helpers.number(ctx, "boardSize", _boardSize);
 
-      return resetBoardState(error(ctx), opponentString, boardSize);
+      return resetBoardState(error(ctx), opponent, boardSize);
     },
     analysis: {
       getValidMoves: () => () => {

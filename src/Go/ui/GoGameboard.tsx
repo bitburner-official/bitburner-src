@@ -18,9 +18,7 @@ export function GoGameboard({ boardState, traditional, clickHandler, hover }: IP
   useRerender(400);
 
   const currentPlayer =
-    boardState.ai !== GoOpponent.none || boardState.previousPlayer === GoColor.white
-      ? GoColor.black
-      : GoColor.white;
+    boardState.ai !== GoOpponent.none || boardState.previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
 
   const availablePoints = useMemo(
     () => (hover ? getAllValidMoves(boardState, currentPlayer) : []),

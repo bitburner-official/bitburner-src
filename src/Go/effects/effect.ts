@@ -4,7 +4,8 @@ import { Player } from "@player";
 import { defaultMultipliers, mergeMultipliers, Multipliers } from "../../PersonObjects/Multipliers";
 import { PlayerObject } from "../../PersonObjects/Player/PlayerObject";
 import { formatPercent } from "../../ui/formatNumber";
-import { getPlayerStats } from "../boardAnalysis/scoring";
+import { getOpponentStats } from "../boardAnalysis/scoring";
+import { getRecordValues } from "../../Types/Record";
 
 /**
  * Calculates the effect size of the given player boost, based on the node power (points based on number of subnet
@@ -38,7 +39,7 @@ export function getMaxFavor() {
  * Gets a formatted description of the current bonus from this faction
  */
 export function getBonusText(opponent: GoOpponent) {
-  const nodePower = getPlayerStats(opponent).nodePower;
+  const nodePower = getOpponentStats(opponent).nodePower;
   const effectPercent = formatPercent(CalculateEffect(nodePower, opponent) - 1);
   const effectDescription = getEffectTypeForFaction(opponent);
   return `${effectPercent} ${effectDescription}`;
@@ -63,7 +64,7 @@ function calculateMults(): Multipliers {
       Player.go = getGoPlayerStartingState();
     }
 
-    const effect = CalculateEffect(getPlayerStats(opponent).nodePower, opponent);
+    const effect = CalculateEffect(getOpponentStats(opponent).nodePower, opponent);
     switch (opponent) {
       case GoOpponent.Netburners:
         mults.hacknet_node_money *= effect;
@@ -95,16 +96,18 @@ function calculateMults(): Multipliers {
 }
 
 export function resetGoNodePower(player: PlayerObject) {
-  opponentsNonSpoiler.forEach((opponent) => {
-    player.go.status[opponent].nodePower = 0;
-    player.go.status[opponent].nodes = 0;
-    player.go.status[opponent].winStreak = 0;
-  });
+  for (const stats of getRecordValues(player.go.status)) {
+    stats.nodePower = 0;
+    stats.nodes = 0;
+    stats.winStreak = 0;
+  }
 }
 
 export function playerHasDiscoveredGo() {
   const playedGame = Player.go.boardState.history.length || Player.go.previousGameFinalBoardState?.history?.length;
-  const hasRecords = opponentsNonSpoiler.some((opponent) => getPlayerStats(opponent).wins + getPlayerStats(opponent).losses);
+  const hasRecords = opponentsNonSpoiler.some(
+    (opponent) => getOpponentStats(opponent).wins + getOpponentStats(opponent).losses,
+  );
   const isInBn14 = Player.bitNodeN === 14;
 
   return !!(playedGame || hasRecords || isInBn14);

@@ -1,12 +1,4 @@
-import {
-  Board,
-  BoardState,
-  Neighbor,
-  GoOpponent,
-  GoColor,
-  PointState,
-  GoValidity,
-} from "../boardState/goConstants";
+import { Board, BoardState, Neighbor, GoOpponent, GoColor, PointState, GoValidity } from "../boardState/goConstants";
 import {
   findAdjacentPointsInChain,
   findNeighbors,
@@ -34,13 +26,7 @@ import {
  *
  * @returns a validity explanation for if the move is legal or not
  */
-export function evaluateIfMoveIsValid(
-  boardState: BoardState,
-  x: number,
-  y: number,
-  player: GoColor,
-  shortcut = true,
-) {
+export function evaluateIfMoveIsValid(boardState: BoardState, x: number, y: number, player: GoColor, shortcut = true) {
   const point = boardState.board?.[x]?.[y];
 
   if (boardState.previousPlayer === null) {
@@ -205,12 +191,7 @@ export function findEffectiveLibertiesOfNewMove(boardState: BoardState, x: numbe
 /**
  * Find the number of open spaces that are connected to chains adjacent to a given point, and return the maximum
  */
-export function findMaxLibertyCountOfAdjacentChains(
-  boardState: BoardState,
-  x: number,
-  y: number,
-  player: GoColor,
-) {
+export function findMaxLibertyCountOfAdjacentChains(boardState: BoardState, x: number, y: number, player: GoColor) {
   const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState, x, y, player);
   const friendlyNeighbors = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
     .filter(isNotNull)
@@ -223,12 +204,7 @@ export function findMaxLibertyCountOfAdjacentChains(
 /**
  * Find the number of open spaces that are connected to chains adjacent to a given point, and return the minimum
  */
-export function findMinLibertyCountOfAdjacentChains(
-  boardState: BoardState,
-  x: number,
-  y: number,
-  player: GoColor,
-) {
+export function findMinLibertyCountOfAdjacentChains(boardState: BoardState, x: number, y: number, player: GoColor) {
   const chain = findEnemyNeighborChainWithFewestLiberties(boardState, x, y, player);
   return chain?.[0]?.liberties?.length ?? 99;
 }
@@ -601,8 +577,7 @@ export function findAdjacentLibertiesAndAlliesForPoint(
   _player?: GoColor,
 ): Neighbor {
   const currentPoint = boardState.board[x]?.[y];
-  const player =
-    _player || (!currentPoint || currentPoint.player === GoColor.empty ? undefined : currentPoint.player);
+  const player = _player || (!currentPoint || currentPoint.player === GoColor.empty ? undefined : currentPoint.player);
   const adjacentLiberties = findAdjacentLibertiesForPoint(boardState, x, y);
   const neighbors = findNeighbors(boardState, x, y);
 

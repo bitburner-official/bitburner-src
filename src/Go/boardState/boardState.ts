@@ -108,8 +108,7 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
   if (boardState.previousPlayer === null || boardState.previousPlayer === player) {
     return;
   }
-  boardState.previousPlayer =
-    boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
+  boardState.previousPlayer = boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
   boardState.passCount++;
 
   if (boardState.passCount >= 2 && allowEndGame) {

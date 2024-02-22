@@ -22,8 +22,7 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
   const currentPoint = state.board[x]?.[y];
   const player = currentPoint?.player;
 
-  const isInAtari =
-    currentPoint && currentPoint.liberties?.length === 1 && player !== GoColor.empty && !traditional;
+  const isInAtari = currentPoint && currentPoint.liberties?.length === 1 && player !== GoColor.empty && !traditional;
   const liberties = player !== GoColor.empty ? findAdjacentLibertiesAndAlliesForPoint(state, x, y) : null;
   const neighbors = findNeighbors(state, x, y);
 
@@ -33,15 +32,9 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
   const hasWestLiberty = traditional ? neighbors.west : liberties?.west;
 
   const pointClass =
-    player === GoColor.white
-      ? classes.whitePoint
-      : player === GoColor.black
-      ? classes.blackPoint
-      : classes.emptyPoint;
+    player === GoColor.white ? classes.whitePoint : player === GoColor.black ? classes.blackPoint : classes.emptyPoint;
 
-  const colorLiberty = `${player === GoColor.white ? classes.libertyWhite : classes.libertyBlack} ${
-    classes.liberty
-  }`;
+  const colorLiberty = `${player === GoColor.white ? classes.libertyWhite : classes.libertyBlack} ${classes.liberty}`;
 
   const sizeClass = getSizeClass(state.board[0].length, classes);
 

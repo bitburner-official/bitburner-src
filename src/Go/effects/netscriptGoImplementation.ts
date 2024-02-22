@@ -1,4 +1,4 @@
-import { BoardState, opponentsNonSpoiler, Play, GoColor, GoPlayType, GoValidity } from "../boardState/goConstants";
+import { BoardState, Play, GoColor, GoPlayType, GoValidity, GoOpponent } from "../boardState/goConstants";
 import { getMove, sleep } from "../boardAnalysis/goAI";
 import { Player } from "@player";
 import {
@@ -175,24 +175,16 @@ function logEndGame(logger: (s: string) => void) {
   const boardState = Player.go.boardState;
   const score = getScore(boardState);
   logger(
-    `Subnet complete! Final score: ${boardState.ai}: ${score[GoColor.white].sum},  Player: ${
-      score[GoColor.black].sum
-    }`,
+    `Subnet complete! Final score: ${boardState.ai}: ${score[GoColor.white].sum},  Player: ${score[GoColor.black].sum}`,
   );
 }
 
 /**
  * Clears the board, resets winstreak if applicable
  */
-export function resetBoardState(error: (s: string) => void, opponentString: string, boardSize: number) {
-  const opponent = opponentsNonSpoiler.find((faction) => faction === opponentString);
-
+export function resetBoardState(error: (s: string) => void, opponent: GoOpponent, boardSize: number) {
   if (![5, 7, 9, 13].includes(boardSize)) {
     error(`Invalid subnet size requested (${boardSize}, size must be 5, 7, 9, or 13`);
-    return;
-  }
-  if (!opponent) {
-    error(`Invalid opponent requested (${opponentString}), valid options are ${opponentsNonSpoiler.join(", ")}`);
     return;
   }
 

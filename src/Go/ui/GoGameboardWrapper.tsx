@@ -174,8 +174,7 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
     const priorBoard = boardState.history.slice(-1)[0];
     const updatedState = getStateCopy(boardState);
     updatedState.board = priorBoard;
-    updatedState.previousPlayer =
-      boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
+    updatedState.previousPlayer = boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
 
     return updatedState;
   }
@@ -195,8 +194,7 @@ export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactEle
     () => boardState.previousPlayer === GoColor.white && !getAllValidMoves(boardState, GoColor.black).length,
     [boardState],
   );
-  const disablePassButton =
-    opponent !== GoOpponent.none && boardState.previousPlayer === GoColor.black && waitingOnAI;
+  const disablePassButton = opponent !== GoOpponent.none && boardState.previousPlayer === GoColor.black && waitingOnAI;
 
   const scoreBoxText = boardState.history.length
     ? `Score: Black: ${score[GoColor.black].sum} White: ${score[GoColor.white].sum}`
