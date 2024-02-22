@@ -5,6 +5,7 @@ import { GangMemberUpgrades } from "./GangMemberUpgrades";
 import { IAscensionResult } from "./IAscensionResult";
 import { Player } from "@player";
 import { Gang } from "./Gang";
+import { GangConstants } from "./data/Constants";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import {
   calculateRespectGain,
@@ -247,6 +248,17 @@ export class GangMember {
       dex: postAscend.dex / preAscend.dex,
       agi: postAscend.agi / preAscend.agi,
       cha: postAscend.cha / preAscend.cha,
+    };
+  }
+
+  getInstallResults(): IMults {
+    return {
+      hack: this.hack_asc_points * GangConstants.InstallAscensionPenalty,
+      str: this.str_asc_points * GangConstants.InstallAscensionPenalty,
+      def: this.def_asc_points * GangConstants.InstallAscensionPenalty,
+      dex: this.dex_asc_points * GangConstants.InstallAscensionPenalty,
+      agi: this.agi_asc_points * GangConstants.InstallAscensionPenalty,
+      cha: this.cha_asc_points * GangConstants.InstallAscensionPenalty
     };
   }
 
