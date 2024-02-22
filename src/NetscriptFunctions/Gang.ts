@@ -297,6 +297,22 @@ export function NetscriptGang(): InternalAPI<IGang> {
         ...member.getAscensionResults(),
       };
     },
+    getInstallResult: (ctx) => (_memberName) => {
+      const memberName = helpers.string(ctx, "memberName", _memberName);
+      getGang(ctx);
+      const member = getGangMember(ctx, memberName);
+      if (!member.canAscend()) return;
+      const preInstall = member.getCurrentAscensionMults();
+      const postInstall = member.getInstallResults();
+      return {
+        hack: member.calculateAscensionMultiplier(postInstall.hack) / preInstall.hack,
+        str: member.calculateAscensionMultiplier(postInstall.str) / preInstall.str,
+        def: member.calculateAscensionMultiplier(postInstall.def) / preInstall.def,
+        dex: member.calculateAscensionMultiplier(postInstall.dex) / preInstall.dex,
+        agi: member.calculateAscensionMultiplier(postInstall.agi) / preInstall.agi,
+        cha: member.calculateAscensionMultiplier(postInstall.chs) / preInstall.cha
+      };
+    },
     setTerritoryWarfare: (ctx) => (_engage) => {
       const engage = !!_engage;
       const gang = getGang(ctx);
