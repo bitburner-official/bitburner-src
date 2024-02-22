@@ -5,10 +5,12 @@
 Employee's stats are kept track as average value. There are 6 average values: `AvgEnergy`, `AvgMorale`, `AvgIntelligence`, `AvgCharisma`, `AvgCreativity`, `AvgEfficiency`. Every time you hire a new employee, these average values are recalculated, they are modified by a randomized number from 50 to 100:
 
 ```typescript
-this.avgMorale = (this.avgMorale * this.numEmployees + getRandomInt(averageStat, averageStat)) / (this.numEmployees + 1);
+this.avgMorale =
+  (this.avgMorale * this.numEmployees + getRandomInt(averageStat, averageStat)) / (this.numEmployees + 1);
 ```
 
 Job assignment:
+
 - Each office has 2 records: `employeeJobs` and `employeeNextJobs`. Data in `employeeJobs` (number of employees in each job) is used for calculations of other relevant data like `EmployeeProductionByJob`, `AvgEnergy`, `AvgMorale`, `TotalExperience`. When you call `setAutoJobAssignment`, its parameter is calculated and assigned to `employeeNextJobs`. In next cycle's START state, data in `employeeNextJobs` will be copied to `employeeJobs`.
 - Behavior of `setAutoJobAssignment` may be confused at first glance. Let's say you call it like this: `ns.corporation.setAutoJobAssignment("Agriculture","Sector-12","Operations", 5)`
   - If you have 5 \"Operations\" employees, it does nothing.
@@ -19,6 +21,7 @@ Job assignment:
   - Use it to set all jobs to your requirements.
 
 Total experience is increased in these cases:
+
 - Hire new employee. Each new employee increases total experience by `getRandomInt(50, 100)`.
 - In START state. Gain per cycle:
 
@@ -61,6 +64,7 @@ They are calculated in START state.
 They start dropping when your office's number of employees is greater than or equal to 9. The minimum value is 10.
 
 PerfMult is a multiplier that increases/decreases energy/morale.
+
 - $InternMultiplier = 0.002*Min\left( \frac{1}{9},\frac{InternEmployees}{TotalEmployees} - \frac{1}{9} \right)*9$
 - If $(CorpFunds > 0) \vee (DivisionLastCycleRevenue > DivisionLastCycleExpenses)$, then: $PenaltyMultiplier = 0$
 - If $(CorpFunds < 0) \land (DivisionLastCycleRevenue < DivisionLastCycleExpenses)$, then: $PenaltyMultiplier = 0.001$
@@ -93,6 +97,7 @@ this.avgMorale = ((this.avgMorale - reduction * Math.random()) * perfMult + incr
 ```
 
 There are 3 ways to counter the drop of energy/morale:
+
 - Buy tea and throw party. You should always use this option. Writing script to automate them is very easy.
 - Assign Intern. Many people throw around the ratio 1/9 as the way to counter the drop of energy/morale. You can only use that ratio when your corporation/division works fine. If it does not, there is a penalty multiplier (0.001). In this case, you need to use 1/6.
 - Buy 2 researches: AutoBrew and AutoPartyManager. They keep energy/morale at maximum value. However, you should never buy them. It's always better to spend your RP on other useful researches or just stock up on RP.
@@ -105,6 +110,7 @@ this.avgEnergy = (this.avgEnergy * this.numEmployees + getRandomInt(50, 100)) / 
 ```
 
 Optimal `PartyCostPerEmployee`:
+
 - The flat randomized reduction is tiny, so we can ignore it.
 - We want to increase `AvgMorale` from `CurrentMorale` to `MaxMorale`:
 
@@ -135,6 +141,7 @@ $$x_{2} = 500000*\left( \sqrt{(a*k - 10)^{2} + 40*b} - a*k - 10 \right)$$
 One big party is less cost-effective than multiple small parties. For example: throwing 1 big party for 70→100 morale costs more than throwing 3 small parties: 70→80, 80→90, 90→100.
 
 Don't be a cheapskate when it comes to tea/party. Energy and morale are vital to efficient office. Check the next part for the formulas.
+
 - It's fine to spend 500e3 per employee when throwing party. You can spend more if you want.
 - Try to maintain maximum energy/morale at all times. Personally, I always buy tea / throw party when energy/morale decreases to 99.5 (109.5, if I bought the relevant researches).
 - In round 1 and 2, the office's size is small, it's usually smaller than 9, so energy/morale is not a problem. In round 3+, you should buy tea / throw party every cycle.
@@ -142,6 +149,7 @@ Don't be a cheapskate when it comes to tea/party. Energy and morale are vital to
 ## Employee production by job
 
 In each cycle's START state, all stats are used for calculating "production" values, these values are saved in `office.employeeProductionByJob`. These values can be used later for calculating:
+
 - RP.
 - Material's quality.
 - Product's stats.
@@ -149,6 +157,7 @@ In each cycle's START state, all stats are used for calculating "production" val
 - Material/product's MaxSalesVolume.
 
 Formulas:
+
 - Calculate multipliers of Intelligence, Charisma, Creativity, and Efficiency. They are the product of average value, upgrade benefit and research benefit.
 - Production base:
 

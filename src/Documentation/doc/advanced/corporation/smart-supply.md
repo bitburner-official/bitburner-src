@@ -3,6 +3,7 @@
 ## Logic
 
 Create a function called `getLimitedRawProduction`:
+
 - Calculate `RawProduction`.
 - Multiply `RawProduction` by 10.
 - Calculate `RequiredStorageSpaceOfEachOutputUnit`. It is the net change in warehouse's storage space when producing an output unit.
@@ -13,6 +14,7 @@ Create a function called `getLimitedRawProduction`:
 Create a map called `SmartSupplyData`. Its key is `${divisionName}|${city}`. Its value is the `TotalRawProduction` that will be calculated later.
 
 After PURCHASE state:
+
 - Initialize `TotalRawProduction` with 0.
 - If division produces materials: call `getLimitedRawProduction`, then add the returned value to `TotalRawProduction`.
 - If division produces products:
@@ -21,6 +23,7 @@ After PURCHASE state:
 - Set `TotalRawProduction` to `SmartSupplyData`.
 
 Before PURCHASE state:
+
 - Check if warehouse is congested. If it is, alert player and try to mitigate the situation.
 - Find required quantity of each input material to produce material/product:
   - Get `TotalRawProduction` from `SmartSupplyData`.
@@ -37,6 +40,7 @@ Before PURCHASE state:
 Warehouse can be congested due to multiple reasons. One common case is when the logic of calculating required quantity of input materials does not take into account of free space and stored input materials units in warehouse. When it happens, warehouse is filled with excessive input materials and the production process is halted completely due to no free space for produced units.
 
 For each case, we need to find way(s) to detect congestion and mitigate it. In the case above, we can use this simple heuristic:
+
 - Create a map called `WarehouseCongestionData`. Its key is `${divisionName}|${city}`. Its value is the number of times that we suspect the warehouse is congested.
 - In each cycle, check `material.productionAmount` and `product.productionAmount` of output material/product.
   - If `productionAmount` is 0, increase the entry's value of this warehouse in the map by 1. If not, set the entry's value to 0.

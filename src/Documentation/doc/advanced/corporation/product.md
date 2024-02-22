@@ -3,7 +3,7 @@
 ## Overview
 
 Product industry is much better than material industry in late phases because you can sell product at ridiculously high price.
- 
+
 You need to continuously develop new product. New product is almost always better than old products and generate much more profit.
 
 Product's markup and effective rating are extremely important because they are part of [MaxSalesVolume](./optimal-selling-price-market-ta2.md)'s calculation.
@@ -11,6 +11,7 @@ Product's markup and effective rating are extremely important because they are p
 Product's effective rating is based on product's rating and input material's quality. Check this [section](./quality.md) to see how input material's quality affects product's rating and effective rating. This is why you need a support division that produces high-quality material for the product division.
 
 Product's markup and rating are based on:
+
 - `CreationJobFactors[JobName]`. More about this in the next part.
 - RP. This is why you should stock up on RP.
 - `ResearchFactor`. It is industry's `scienceFactor`.
@@ -19,6 +20,7 @@ Product's markup and rating are based on:
 ## Formula
 
 `CreationJobFactors[JobName]` are values accumulated over the time that product was developed. `DevelopmentProgress` starts at 0. In each cycle:
+
 - Total employee production:
 
 $$TotalEmployeeProd = OperationsProd + EngineerProd + ManagementProd$$
@@ -150,6 +152,7 @@ $$ProductSize = \sum_{i = 1}^{NumberOfInputMaterials}{{InputMaterialSize}_{i}*{I
 ## Approximation value of product markup
 
 In order to calculate product markup, we need:
+
 - `CreationJobFactors[JobName]`
 - `RP`
 - `ResearchFactor`
@@ -157,5 +160,6 @@ In order to calculate product markup, we need:
 - `AdvertisingInvestment`
 
 Product markup is calculated when product is finished. At that time, there is one thing that we cannot get: `CreationJobFactors[JobName]`, because there is not any NS API to query it. There are 2 approaches for this problem:
+
 - Manually record them. This means that we simulate `product.creationJobFactors`. This approach is simple, but it has a big problem: if we miss any cycle, the data is invalid.
 - Calculate them directly. Product's stats are public data, so with above formulas, we have a system of 6 functions with only 5 variables. We can use [Ceres Solver](./miscellany.md) to find its solution.

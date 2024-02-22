@@ -5,6 +5,7 @@
 Corporation continuously transitions between 5 states: START → PURCHASE → PRODUCTION → EXPORT → SALE → START. 1 cycle of these transitions takes 10 seconds. If you have enough bonus time, it takes 1 second.
 
 START:
+
 - Division:
   - Office:
     - Calculate: energy, morale, total experience, salary, employee production by jobs.
@@ -14,16 +15,19 @@ START:
 - Calculate corporation's financial statements: revenue, expenses, profit, dividend, total assets, valuation, share price.
 
 PURCHASE:
+
 - Buy input materials.
 - If we have unlocked "Smart Supply", it's used for calculating optimal quantity of input material units.
 
 PRODUCTION:
+
 - Produce output materials and products.
 - If new product's `developmentProgress` is greater than or equal to 100, it's finished. New finished product's stats are calculated in this state.
 
 EXPORT: export output materials.
 
 SALE:
+
 - Sell output materials and product.
 - If we have unlocked "Market-TA1" / "Market-TA2", it's used for calculating selling price.
 
@@ -37,7 +41,8 @@ EXPORT state is before SALE state. It means you sell the material units remained
 
 Export string can use "MAX", "EINV", "IINV", "EPROD" and "IPROD". Read the description in export popup for the meaning of these values.
 
-Optimal value for export string: (IPROD+IINV/10)*(-1). For example: export "Chemicals" from Chemical division to Agriculture division:
+Optimal value for export string: (IPROD+IINV/10)\*(-1). For example: export "Chemicals" from Chemical division to Agriculture division:
+
 - Agriculture division needs 100 Chemicals/s and has 700 Chemicals in warehouse.
   - IPROD = -100 ("Consumption is negative production")
   - IINV = 700
@@ -64,12 +69,14 @@ Quote from <http://ceres-solver.org/>
 JavaScript port: <https://github.com/Pterodactylus/Ceres.js>
 
 We can use it to solve the non-linear systems in these cases:
+
 - Case 1: Find the optimal quantities of boost materials.
 - Case 2: Find `CreationJobFactors[JobName]` when calculating product markup.
 
 The accuracy and performance are acceptable, so we employ it case 2. We don't use it in case 1 because there is another optimal solution, it's better in both accuracy and performance.
 
 Quick test for case 2 shows that the accuracy is pretty good:
+
 - `creationJobFactors`:
   - Business: 420.103620358641
   - Engineer: 29666.47672073447
@@ -86,6 +93,7 @@ Quick test for case 2 shows that the accuracy is pretty good:
 Quote from <https://www.alglib.net/>
 
 > ALGLIB is a cross-platform numerical analysis and data processing library. It supports five programming languages (C++, C#, Java, Python, Delphi) and several operating systems (Windows and POSIX, including Linux). ALGLIB features include:
+>
 > - Data analysis (classification/regression, statistics)
 > - Optimization and nonlinear solvers
 > - Interpolation and linear/nonlinear least-squares fitting
@@ -99,6 +107,7 @@ We can use it to find the approximation of optimal quantities of boost materials
 The solution that we get when using this library is not really good. It has lower accuracy and run much slower than Ceres Solver.
 
 Run them with S = 5250:
+
 - Optimal solution:
   - [10518.092105263155, 11742.32456140351, 528368.4210526316, 1703.6184210526312]
 - Ceres Solver:
@@ -107,6 +116,7 @@ Run them with S = 5250:
   - [10517.862063548288, 11740.824106170172, 528402.7972848249, 1703.500721701672]
 
 Run them 200 times:
+
 - Optimal solution:0.3-0.5 ms
 - Ceres Solver: 380-400 ms
 - ALGLIB: 32000-34000 ms

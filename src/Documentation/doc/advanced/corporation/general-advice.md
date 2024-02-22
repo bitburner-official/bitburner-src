@@ -9,11 +9,13 @@ Make sure that your employees' energy and morale are at maximum value.
 Write custom "Smart Supply" script. If you skip this step, buy "Smart Supply" feature. "Smart Supply" costs 25b, and 25b is huge in round 1.
 
 There are not many things else to do in this round. The budget is too low, so you can skip all these things:
+
 - Expand into other industries.
 - Upgrade office.
 - Buy corporation's upgrades (except Smart Storage).
 
 Use remaining funds to buy these upgrades:
+
 - Only focus on Smart Storage and warehouse upgrade.
 - Only buy 1 or 2 Advert level(s).
 
@@ -26,10 +28,12 @@ RP is at least ~30 after buying tea and throwing party. Waiting for RP is option
 Buy "Export".
 
 Upgrade Agriculture division:
+
 - Find a good number for office size. 6 is the optimal size. In this round, office upgrade is still too expensive and has bad ROI. Instead, you should invest in upgrades that increase division production multiplier, e.g., Smart Storage and warehouse upgrade (more storage space for boost materials), Smart Factories.
 - Buy a couple of Advert levels. Advert level 8 is enough for most cases.
 
 Create Chemical division:
+
 - Expanding into Chemical industry is mandatory. I tried skipping Chemical and focus budget to Agriculture. It's futile, low-quality materials cannot be sold well.
 - Chemical division is a support division, so don't invest much funds on it. Don't waste funds on its Office/Advert upgrades.
 - Chemical industry has low boost materials' coefficients, so you should only buy very small number of warehouse upgrade for it. On the other hand, you should not skip Chemical's warehouse upgrade entirely. You still need Chemical division produces an acceptable amount of high-quality Chemical; otherwise, the quality of Chemical used in PRODUCTION state of Agriculture division is reduced too much due to "dilution" in PURCHASE state. For this purpose, 1 warehouse upgrade is enough.
@@ -37,6 +41,7 @@ Create Chemical division:
 Focus on Smart Storage, Smart Factories, warehouse upgrade (Agriculture).
 
 Waiting for RP is mandatory in this round. It serves 2 purposes:
+
 - Raising RP in Chemical. High RP means high-quality Chemicals (material).
 - Raising RP in Agriculture. High RP means high-quality Plants.
   - High-quality Plants can be exported to Chemical to create a loop of quality-enhancing process.
@@ -49,6 +54,7 @@ Waiting for 460RP/300RP in Agriculture/Chemical division respectively is enough.
 Create Tobacco division in round 3 and set up export route for Plants from Agriculture to Tobacco. This is the optimal product division in this phase.
 
 The basic game loop that you need to do in round 3+ is simple:
+
 - Buy research.
 - Buy Wilson and Advert.
 - Continuously develop new product.
@@ -56,6 +62,7 @@ The basic game loop that you need to do in round 3+ is simple:
 - Upgrade support divisions.
 
 These are the most important things that you need to focus on:
+
 - Buy Wilson and Advert.
 - Continuously develop new product.
 - Get high-quality input materials from support division(s).
@@ -63,6 +70,7 @@ These are the most important things that you need to focus on:
 - Get Market-TA2 as soon as possible.
 
 Wilson and Advert are extremely important, they are the main factors that make product extremely profitable.
+
 - Check this [section](./wilson-analytics-advert.md) for details about the mechanism of Wilson and Advert.
 - When you continuously improve the product division and buy the upgrades with small budget (profit of a few cycles):
   - Buy Wilson if you can afford it.
@@ -78,6 +86,7 @@ RP is important for product's rating. Do not deplete RP pool, especially right b
 Check this [section](./unlocks-upgrade-research.md) for more advices about researches.
 
 Office setup is important to efficiently develop new product. There are multiple setups for different purposes:
+
 - Raw production: This setup prioritizes production capability. For support divisions, you should "combine" the prioritization of "Engineer" job with this setup.
 - Progress: This setup prioritizes development speed of new product. It's best for product division in round 3 and round 4. The product's development speed is very low in these 2 rounds (especially in round 3). By focusing on development speed and get better product sooner, you can reach the point that you can get an adequate offer faster.
 - Profit. This setup prioritizes profit. It's best at the end of a round, before accepting offer.
@@ -90,6 +99,7 @@ There are 2 types of office: main office and support office. Main office is wher
 The purpose of investment offer is to get large funds and quickly grow the corporation. Better product brings more profit, and higher profit means higher offer. However, it takes a long time to develop early product(s). Sometimes, spending more time to develop better product before accepting offer can harm your overall growth. You must find a good number of products to develop before accepting offer.
 
 Miscellaneous advices:
+
 - Buy tea / throw party every cycle.
 - `DesignInvestment` and `AdvertisingInvestment` scale very badly (the exponent is 0.1). It's fine to spend 1% of your current funds for them.
 - Create [dummy divisions](./miscellany.md) to get higher offer.

@@ -17,6 +17,7 @@ Upgrade cost for buying from level a to level b:
 $$(UpgradeCost)_{From\ a\ to\ b} = BasePrice*\left( \frac{{1.07}^{b + 1} - {1.07}^{a + 1}}{0.07} \right)$$
 
 Warehouse size:
+
 - Upgrade multiplier: multiplier from Smart Storage.
 - Research multiplier: multiplier from researches.
 

@@ -3,10 +3,12 @@
 ## Basic term
 
 Industry consumes input materials and produces output materials/products. Most industry produces either materials or products, some industries produce both of them.
+
 - Material industries are simple to bootstrap. We use them as starting/support industries.
 - Product industries are hard to bootstrap, but they generate massive profit.
 
 Each industry has different values of "factor":
+
 - `AICoreFactor`, `HardwareFactor`, `RealEstateFactor`, `RobotFactor`: boost material's coefficient. They are used for calculating [division production multiplier](./boost-material.md).
 - `ScienceFactor`:
   - With material industry: affect the output material's [quality](./quality.md).
@@ -18,6 +20,7 @@ Each industry has different values of "factor":
 ## Criterion
 
 In order to choose good industries for our supply chain, we must consider many criteria:
+
 - Good synergy between industries. Industries must be able to support each other with "Export" feature. After rework in 2.3, quality of input material becomes crucial, importing high-quality materials from other industries is mandatory.
 - Must have an easy to start material industry for early rounds. This industry must have good combinations of boost materials' coefficients and boost materials' sizes. This ensures high division product multiplier that is the most crucial factor in early rounds. In 4 boost materials, Real Estate (material, not industry) should be noticed because of its tiny size.
 - Support industry is the industry that provide high-quality input material for other industries. High `ScienceFactor` is a bonus for support industry because its output material's quality can be boosted without much investment in early rounds.
@@ -36,6 +39,7 @@ Chemical is the best support industry if we choose Agriculture as starting indus
 Agriculture and Chemical have great synergy. Agriculture needs Chemicals, produces Plants. Chemical needs Plants, produces Chemicals.
 
 Tobacco is an excellent product industry:
+
 - It requires only Plants, and Plants come from Agriculture. Therefore, quality of input material is not a problem with this industry if we choose Agriculture as starting industry.
 - High `ScienceFactor` (0.75), only below Pharmaceutical.
 - High `AdvertisingFactor` (0.2), only below Restaurant and Real Estate.

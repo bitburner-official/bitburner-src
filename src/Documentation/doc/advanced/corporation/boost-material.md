@@ -3,6 +3,7 @@
 ## Division production multiplier
 
 Each industry has a different set of boost material's coefficient. For example:
+
 - Agriculture:
   - AI Cores: 0.3
   - Hardware: 0.2
@@ -52,6 +53,7 @@ In order to increase `this.productionMult`, we need to buy boost materials. The 
 Each boost material has a coefficient ("factor" in source code) and a base size (size for 1 unit in storage).
 
 Let's define:
+
 - 4 coefficients: ${c_{1}}$, ${c_{2}}$, ${c_{3}}$, ${c_{4}}$
 - 4 base sizes: ${s_{1}}$, ${s_{2}}$, ${s_{3}}$, ${s_{4}}$
 - Quantities of each boost materials: x, y, z, w
@@ -75,6 +77,7 @@ Problem: Find maximum point of function $F(x,y,z,w)$ with constraint $G(x,y,z,w)
 ### Non-linear constrained optimization library
 
 Use [ALGLIB](./miscellany.md). Using this library for solving our problem is not recommended because there is another optimal solution. This library also has 2 disadvantages:
+
 - Only return approximation.
 - Run much slower than our optimal solution below.
 
@@ -95,6 +98,7 @@ $$\frac{\partial F}{\partial w} = \lambda\frac{\partial G}{\partial w}$$
 $$G(x,y,z,w) = S$$
 
 In order to solve this system, we have 2 choices:
+
 - Solve that system with [Ceres Solver](./miscellany.md).
 - Do the hard work with basic calculus and algebra. This is the optimal way in both accuracy and performance, so we'll focus on it. In following sections, I'll show the proof and sample code for this solution.
 

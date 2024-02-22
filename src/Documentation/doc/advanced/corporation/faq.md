@@ -30,13 +30,14 @@ Go public and set dividend.
 
 0
 
-> Why is my "earnings as a shareholder" lower than my calculation ("Dividends per share" * "Owned Stock Shares")?
+> Why is my "earnings as a shareholder" lower than my calculation ("Dividends per share" \* "Owned Stock Shares")?
 
 You need to pay tax. ShadyAccounting and GovernmentPartnership reduce tax. Check this [section](./financial-statement.md) for details.
 
 > All corporation's API requires too much RAM. How to deal with it?
 
 Earn money by any normal ways: hacking, committing crimes, cheating in casino, ... There is also another way:
+
 - Follow guide on round 1, at the end, do not accept investment offer.
 - Go public immediately.
 - Sell all your shares immediately.
@@ -65,6 +66,7 @@ In BN3, it's 20.
 > Why does my division not produce anything?
 
 Check these things:
+
 - Have at least 1 employee in Operations or Engineer
 - Have enough storage space. Warehouse congestion is a common problem.
 
@@ -91,6 +93,7 @@ Check this [section](./unlocks-upgrade-research.md).
 > I unlocked "Smart Supply", but it does not work or its behavior is weird.
 
 Check these things:
+
 - You have to enable it if you unlock it after purchasing warehouse.
 - Always choose "Use leftovers". "Use imported" is only useful in special case.
 

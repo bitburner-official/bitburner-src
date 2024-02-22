@@ -3,7 +3,7 @@
 ## Unlocks
 
 | **Name**                  | **Price** | **Description**                                                                                                                                          |
-|---------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Export                    | 20e9      | Allow exporting material between different divisions. Extremely important. Buy it at the start of round 2.                                               |
 | Smart Supply              | 25e9      | Enable "Smart Supply" feature. Only buy it if you don't implement your custom [Smart Supply](./smart-supply.md) script.                                  |
 | Market Research - Demand  | 5e9       | Grant access to [Demand](./demand-competition.md) data. You need it to implement custom [Market-TA2](./optimal-selling-price-market-ta2.md) script.      |
@@ -12,7 +12,8 @@
 | Shady Accounting          | 500e12    | Reduce [DividendTax](./financial-statement.md) by 0.05                                                                                                   |
 | Government Partnership    | 2e15      | Reduce [DividendTax](./financial-statement.md) by 0.1                                                                                                    |
 
-&nbsp;  
+&nbsp;
+
 ## Upgrade
 
 Each upgrade has different `BasePrice`, `PriceMult`, `Benefit.
@@ -20,11 +21,13 @@ Each upgrade has different `BasePrice`, `PriceMult`, `Benefit.
 Most upgrades affect all divisions.
 
 There are 3 special upgrades. These upgrades only affect its division and have different formulas for cost/benefits.
+
 - Warehouse. Check this [part](./warehouse.md).
 - Office. Check this [part](./office.md).
 - Advert. Check this [part](./wilson-analytics-advert.md).
 
 Normal upgrade's formulas:
+
 - Upgrade cost:
 
 $$UpgradeCost = BasePrice*{PriceMult}^{UpgradeCurrentLevel}$$
@@ -67,7 +70,7 @@ $$Benefit = BaseBenefit + Benefit*CurrentLevel$$
 Normal upgrades:
 
 | **Name**                           | **Base price** | **Price multiplier** | **Benefit** | **Type**                |
-|------------------------------------|----------------|----------------------|-------------|-------------------------|
+| ---------------------------------- | -------------- | -------------------- | ----------- | ----------------------- |
 | SmartFactories                     | 2e9            | 1.06                 | 0.03        | Production              |
 | SmartStorage                       | 2e9            | 1.06                 | 0.1         | Storage                 |
 | DreamSense                         | 4e9            | 1.1                  | 0.001       | Awareness/Popularity    |
@@ -83,13 +86,14 @@ Normal upgrades:
 Special upgrades:
 
 | **Name**  | **Base price** | **Price multiplier** | **Type**             |
-|-----------|----------------|----------------------|----------------------|
+| --------- | -------------- | -------------------- | -------------------- |
 | Warehouse | 1e9            | 1.07                 | Storage              |
 | Office    | 4e9            | 1.09                 | Office's size        |
 | Advert    | 1e9            | 1.06                 | Awareness/Popularity |
 
 &nbsp;  
 Advices:
+
 - DreamSense is useless. Never buy it.
 - Round 1:
   - SmartStorage and Warehouse are the most important upgrades in this round.
@@ -107,13 +111,13 @@ Each research has a set of multipliers. For example: `sciResearchMult`, `product
 Benefit of research type is the product of all research's multiplier of the same type.
 
 | **Type**              | **Research**                                  | **Multiplier** | **Effect**              |
-|-----------------------|-----------------------------------------------|----------------|-------------------------|
+| --------------------- | --------------------------------------------- | -------------- | ----------------------- |
 | advertisingMult       | No research                                   | 1              | Advert's benefits       |
 | employeeChaMult       | CPH4 Injections                               | 1.1            | Employee's charisma     |
 | employeeCreMult       | CPH4 Injections                               | 1.1            | Employee's creativity   |
-| employeeEffMult       | CPH4 Injections, Overclock                    | 1.1*1.25       | Employee's efficiency   |
-| employeeIntMult       | CPH4 Injections, Overclock                    | 1.1*1.25       | Employee's intelligence |
-| productionMult        | Drones -- Assembly Self-Correcting Assemblers | 1.2*1.1        | Production              |
+| employeeEffMult       | CPH4 Injections, Overclock                    | 1.1\*1.25      | Employee's efficiency   |
+| employeeIntMult       | CPH4 Injections, Overclock                    | 1.1\*1.25      | Employee's intelligence |
+| productionMult        | Drones -- Assembly Self-Correcting Assemblers | 1.2\*1.1       | Production              |
 | productProductionMult | uPgrade: Fulcrum                              | 1.05           | Product's production    |
 | salesMult             | No research                                   | 1              | Sales                   |
 | sciResearchMult       | Hi-Tech R&D Laboratory                        | 1.1            | RP                      |
@@ -123,7 +127,7 @@ Benefit of research type is the product of all research's multiplier of the same
 Research list:
 
 | **Name**                      | **Cost** | **Description**                                                                                                                               |
-|-------------------------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Hi-Tech R&D Laboratory        | 5000     | Top priority. Increase RP gain rate. It is the prerequisite of all other researches.                                                          |
 | Market-TA.I                   | 20000    | Useless. It is the prerequisite of Market-TA.II.                                                                                              |
 | Market-TA.II                  | 50000    | Top priority if you don't write custom script. Check this [section](./optimal-selling-price-market-ta2.md) to see how to write custom script. |
@@ -147,6 +151,7 @@ Research list:
 
 &nbsp;  
 Advices:
+
 - Do not deplete entire RP pool to buy research. You should only buy research if it costs less than half of the RP pool. Personally, my conditions for buying researches are:
   - For energy/morale and employee's stats: if it costs less than 20% of RP pool.
   - For production: if it costs less than 10% of RP pool.
@@ -164,6 +169,7 @@ Advices:
 You can exchange hashes for RP if you have SF9. This number of RP is added to all divisions.
 
 RP gain rate:
+
 - RP is increased in 4 states: PURCHASE, PRODUCTION, EXPORT and SALE.
 - RP gain per city per state:
 

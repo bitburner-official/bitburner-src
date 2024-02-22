@@ -3,6 +3,7 @@
 ## Total assets
 
 `TotalAssets` is the sum of:
+
 - Funds.
 - With each division:
   - Division's `RecoupableValue`. It's half of the sum of:
@@ -29,6 +30,7 @@ this.funds += amt;
 ## Valuation
 
 Cycle's valuation:
+
 - AssetDelta:
 
 $$AssetDelta = \frac{TotalAssets - PreviousTotalAssets}{10}$$
@@ -55,6 +57,7 @@ Bribing faction for reputation is unlocked when corporation's valuation is great
 There are 4 investment rounds.
 
 Each round has its own `FundingRoundShares` and `FundingRoundMultiplier`.
+
 - $FundingRoundShares = [0.1, 0.35, 0.25, 0.2]$
 - $FundingRoundMultiplier = [3, 2, 2, 1.5]$
 
@@ -63,6 +66,7 @@ Formula:
 $$Offer = CorporationValuation*FundingRoundShares*FundingRoundMultiplier$$
 
 Analyses:
+
 - Offer depends on `Funds`, `AssetDelta` and `NumberOfOfficesAndWarehouses`.
   - `Funds` are usually depleted to improve divisions.
   - `NumberOfOfficesAndWarehouses` is the exponent of the multiplier, it can be increased by creating [dummy division](./miscellany.md). It is an easy way to get higher offer in round 3+, when we have enough funds to do that.
@@ -94,11 +98,13 @@ Dividend is added to player's money. Retained earning is added to corporation's 
 ## Shares
 
 Self-fund:
+
 - Cost 150b.
 - Total shares: 1b.
 - Initial owned shares: 1b.
 
 Use seed money:
+
 - Does not cost money.
 - Total shares: 1.5b.
 - Initial owned shares: 1b.
@@ -114,12 +120,14 @@ $$TargetSharePrice = \frac{CorporationValuation*\left( 0.5 + \sqrt{\frac{OwnedSh
 When corporation goes public, the initial share price is `TargetSharePrice`.
 
 Share price is updated in START state.
+
 - If $SharePrice \leq TargetSharePrice$, then $SharePrice=SharePrice*(1 + Math.random()*0.01)$
 - If $SharePrice > TargetSharePrice$, then $SharePrice=SharePrice*(1 - Math.random()*0.01)$
 
 Minimum share price is 0.01.
 
 Issue new shares:
+
 - Maximum number of new shares is 20% of total shares.
 - The number of new shares issued must be a multiple of 10 million.
 - New share price: $NewSharePrice = \frac{CorporationValuation*\left( 0.5 + \sqrt{\frac{OwnedShares}{TotalShares + NewShares}} \right)}{TotalShares}$
@@ -134,18 +142,21 @@ Issue new shares:
   - `IssuedShares`: $IssuedShares = IssuedShares + NewShares - PrivateShares$
 
 Sell shares:
+
 - We cannot sell all our shares.
 - We cannot sell more than $10^{14}$ shares at a time.
 - Cooldown is 1 hour.
 - Sold shares are added to `IssuedShares`.
 
 Buy back shares:
+
 - We can only buy back shares that were issued. The shares that were owned by government (when we use seed money) and investors cannot be bought back.
 - Shares must be bought back at a 10% premium over the market price.
 - We cannot use corporation's funds to buy back shares. They must be bought with our money.
 - We cannot buy back more than $10^{14}$ shares at a time.
 
 Sold/bought back shares are processed in multiple "iterations".
+
 - Number of shares processed each iteration is shareSalesUntilPriceUpdate. Default value is $10^6$.
 - Share price is recalculated each iteration.
   - $TargetSharePrice = \frac{CorporationValuation*\left( 0.5 + \sqrt{\frac{OwnedShares - ProcessedShares}{TotalShares}} \right)}{TotalShares}$

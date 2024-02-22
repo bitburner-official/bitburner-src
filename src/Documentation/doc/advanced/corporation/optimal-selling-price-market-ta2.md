@@ -3,6 +3,7 @@
 ## Market price and markup limit
 
 Market price:
+
 - Material: `material.marketPrice`.
 - Product: `product.productionCost`. This value is based on `ProductMarketPriceMult`, input materials' `MarketPrice` and `Coefficient`.
   - $n = {Number\ of\ input\ materials}$
@@ -10,6 +11,7 @@ Market price:
   - $ProductMarketPrice = ProductMarketPriceMult*\sum_{i = 1}^{n}{MaterialMarketPrice_{i}*MaterialCoefficient_{i}}$
 
 Markup limit:
+
 - Material:
 
 $$MaterialMarkupLimit = \frac{MaterialQuality}{MaterialMarkup}$$
@@ -31,6 +33,7 @@ In cycle's SALE state, game calculates `MaxSalesVolume` of material/product. If 
 Calculation of material and product is pretty similar, so I'll call them "item" and use 1 formula.
 
 `MaxSalesVolume` is the product of 7 multipliers:
+
 - Item multiplier:
   - Material: $ItemMultiplier = MaterialQuality + 0.001$
   - Product: $ItemMultiplier = 0.5*(ProductEffectiveRating)^{0.65}$
@@ -91,6 +94,7 @@ $$\frac{MarkupLimit}{SellingPrice - MarketPrice} = \sqrt{\left( \frac{ExpectedSa
 $$SellingPrice = \frac{MarkupLimit}{\sqrt{\frac{ExpectedSalesVolume}{M}}} + MarketPrice$$
 
 In order to use this formula, we need `MarkupLimit`. With product, we need `ProductMarkup` to calculate `MarkupLimit`, but `ProductMarkup` is inaccessible via NS API. We have two solutions:
+
 - Calculate approximation value. Check previous section to see how to do this.
 - Calculate `MarkupLimit` directly:
   - Set `SellingPrice` to a very high value, it must be so high that we cannot sell all produced units (`MaxSalesVolume < ExpectedSalesVolume`). This forces the game applies the penalty modifier that contains `MarkupLimit`.

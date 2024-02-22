@@ -3,6 +3,7 @@
 ## Basic term
 
 Let's define some terms:
+
 - `AvgInputQuality`: average quality of input materials.
 - `MaxOutputQuality`: maximum value of output material's quality.
 - `OutputQuality`: final value of output material's quality. This value is always less than or equal to `MaxOutputQuality`.
@@ -14,6 +15,7 @@ Each industry has a set of input materials and their coefficients, for example, 
 Purchased material is low-quality. Its quality is always 1.
 
 When you import/export your materials between different divisions, you can see quality of some input materials constantly change. Quality is high after EXPORT state, but it reduces after PURCHASE state. Qualities of the materials in warehouse are recalculated in these 2 states.
+
 - Formulas:
   - In PURCHASE state: $Quality = \frac{Quality*CurrentQuantity + BuyAmount}{CurrentQuantity + BuyAmount}$
     - Our material's quality is "diluted" by low-quality purchased material (quality 1).
@@ -25,6 +27,7 @@ PRODUCTION state uses the "diluted" quality value to calculate `AvgInputQuality`
 ## Material
 
 `MaxOutputQuality` is sum of 3 values:
+
 - Engineer summand:
   - $EngineerProduction = office.employeeProductionByJob["Engineer"]$
   - $EngineerSummand = \frac{EngineerProduction}{90}$
