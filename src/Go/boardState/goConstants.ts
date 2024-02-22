@@ -30,16 +30,6 @@ export enum GoOpponent {
   w0r1d_d43m0n = "????????????",
 }
 
-export const allOpponents = Object.values(GoOpponent).filter((name) => name !== GoOpponent.none);
-export const opponentsNonSpoiler = [
-  GoOpponent.Netburners,
-  GoOpponent.SlumSnakes,
-  GoOpponent.TheBlackHand,
-  GoOpponent.Tetrads,
-  GoOpponent.Daedalus,
-  GoOpponent.Illuminati,
-];
-
 export const opponentDetails = {
   [GoOpponent.none]: {
     komi: 5.5,

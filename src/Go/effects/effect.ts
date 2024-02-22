@@ -1,11 +1,11 @@
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-import { getGoPlayerStartingState, opponentDetails, opponentsNonSpoiler, GoOpponent } from "../boardState/goConstants";
+import { opponentDetails, GoOpponent } from "../boardState/goConstants";
 import { Player } from "@player";
 import { defaultMultipliers, mergeMultipliers, Multipliers } from "../../PersonObjects/Multipliers";
 import { PlayerObject } from "../../PersonObjects/Player/PlayerObject";
 import { formatPercent } from "../../ui/formatNumber";
 import { getOpponentStats } from "../boardAnalysis/scoring";
-import { getRecordValues } from "../../Types/Record";
+import { getRecordEntries, getRecordValues } from "../../Types/Record";
 
 /**
  * Calculates the effect size of the given player boost, based on the node power (points based on number of subnet
@@ -59,12 +59,8 @@ export function updateGoMults(): void {
  */
 function calculateMults(): Multipliers {
   const mults = defaultMultipliers();
-  [...opponentsNonSpoiler, GoOpponent.w0r1d_d43m0n].forEach((opponent) => {
-    if (!Player.go?.status?.[opponent]) {
-      Player.go = getGoPlayerStartingState();
-    }
-
-    const effect = CalculateEffect(getOpponentStats(opponent).nodePower, opponent);
+  getRecordEntries(Player.go.status).forEach(([opponent, stats]) => {
+    const effect = CalculateEffect(stats.nodePower, opponent);
     switch (opponent) {
       case GoOpponent.Netburners:
         mults.hacknet_node_money *= effect;
@@ -105,9 +101,7 @@ export function resetGoNodePower(player: PlayerObject) {
 
 export function playerHasDiscoveredGo() {
   const playedGame = Player.go.boardState.history.length || Player.go.previousGameFinalBoardState?.history?.length;
-  const hasRecords = opponentsNonSpoiler.some(
-    (opponent) => getOpponentStats(opponent).wins + getOpponentStats(opponent).losses,
-  );
+  const hasRecords = getRecordValues(Player.go.status).some((stats) => stats.wins + stats.losses);
   const isInBn14 = Player.bitNodeN === 14;
 
   return !!(playedGame || hasRecords || isInBn14);

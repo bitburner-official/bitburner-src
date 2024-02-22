@@ -1,6 +1,6 @@
 import { Box, Button, MenuItem, Select, SelectChangeEvent, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { boardSizes, opponentDetails, opponentsNonSpoiler, GoOpponent } from "../boardState/goConstants";
+import { boardSizes, opponentDetails, GoOpponent } from "../boardState/goConstants";
 import { Player } from "@player";
 import { boardStyles } from "../boardState/goStyles";
 import { Modal } from "../../ui/React/Modal";
@@ -24,10 +24,9 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
     opponent === GoOpponent.w0r1d_d43m0n ? 19 : Math.min(Player.go.boardState?.board?.[0]?.length ?? 7, 13);
   const [boardSize, setBoardSize] = useState(preselectedBoardSize);
 
-  const opponentFactions = [GoOpponent.none, ...opponentsNonSpoiler];
-  if (showWorldDemon()) {
-    opponentFactions.push(GoOpponent.w0r1d_d43m0n);
-  }
+  const opponentFactions = Object.values(GoOpponent).filter(
+    (opponent) => opponent !== GoOpponent.w0r1d_d43m0n || showWorldDemon(),
+  );
 
   const handicap = getHandicap(boardSize, opponent);
 
@@ -38,7 +37,7 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
       setBoardSize(19);
 
       const stats = getOpponentStats(GoOpponent.w0r1d_d43m0n);
-      if (stats?.wins + stats?.losses === 0) {
+      if (stats.wins + stats.losses === 0) {
         Settings.GoTraditionalStyle = false;
       }
     } else if (boardSize > 13) {
