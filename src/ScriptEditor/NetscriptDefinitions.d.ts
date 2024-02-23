@@ -962,6 +962,22 @@ interface GangMemberInfo {
 }
 
 /** @public */
+interface GangMemberInstall {
+  /** Factor by which the hacking ascension multiplier was decreased (newMult / oldMult) */
+  hack: number;
+  /** Factor by which the strength ascension multiplier was decreased (newMult / oldMult) */
+  str: number;
+  /** Factor by which the defense ascension multiplier was decreased (newMult / oldMult) */
+  def: number;
+  /** Factor by which the dexterity ascension multiplier was decreased (newMult / oldMult) */
+  dex: number;
+  /** Factor by which the agility ascension multiplier was decreased (newMult / oldMult) */
+  agi: number;
+  /** Factor by which the charisma ascension multiplier was decreased (newMult / oldMult) */
+  cha: number;
+}
+
+/** @public */
 interface GangMemberAscension {
   /** Amount of respect lost from ascending */
   respect: number;
@@ -3831,6 +3847,18 @@ export interface Gang {
    * @returns Object with info about the ascension results, or undefined if ascension is not possible.
    */
   getAscensionResult(memberName: string): GangMemberAscension | undefined;
+
+  /**
+   * Get the effect of an install on ascension multipliers without installing.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get {@link GangMemberInstall} effects on ascension multipliers for a gang member after installing without performing the install.
+   *
+   * @param memberName - Name of member.
+   * @returns Object with info about the install results on ascension multipliers, or undefined if ascension is not possible.
+   */
+  getInstallResult(memberName: string): GangMemberInstall | undefined;
 
   /**
    * Enable/Disable territory clashes.

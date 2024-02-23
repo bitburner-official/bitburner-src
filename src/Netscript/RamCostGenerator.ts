@@ -237,6 +237,7 @@ const gang = {
   purchaseEquipment: RamCostConstants.GangApiBase,
   ascendMember: RamCostConstants.GangApiBase,
   getAscensionResult: RamCostConstants.GangApiBase / 2,
+  getInstallResult: RamCostConstants.GangApiBase / 2,
   setTerritoryWarfare: RamCostConstants.GangApiBase / 2,
   getChanceToWinClash: RamCostConstants.GangApiBase,
   getBonusTime: 0,
