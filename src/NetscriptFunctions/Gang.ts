@@ -303,7 +303,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const member = getGangMember(ctx, memberName);
       if (!member.canAscend()) return;
       const preInstall = member.getCurrentAscensionMults();
-      const postInstall = member.getInstallResults();
+      const postInstall = member.getPostInstallPoints();
       return {
         hack: member.calculateAscensionMult(postInstall.hack) / preInstall.hack,
         str: member.calculateAscensionMult(postInstall.str) / preInstall.str,
