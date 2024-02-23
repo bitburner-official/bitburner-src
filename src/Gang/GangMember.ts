@@ -251,7 +251,7 @@ export class GangMember {
     };
   }
 
-  getInstallResults(): IMults {
+  getPostInstallPoints(): IMults {
     return {
       hack: this.hack_asc_points * GangConstants.InstallAscensionPenalty,
       str: this.str_asc_points * GangConstants.InstallAscensionPenalty,
