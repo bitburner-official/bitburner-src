@@ -22,8 +22,8 @@ export function ManagementSubpage(): React.ReactElement {
         <br />
         <br />
         Installing Augmentations does NOT reset progress with your Gang, however ascension multipliers will decrease
-        slightly. Furthermore, after installing Augmentations, you will automatically join whatever Faction you
-        created your gang with.
+        slightly. Furthermore, after installing Augmentations, you will automatically join whatever Faction you created
+        your gang with.
         <br />
         <br />
         You can also manage your gang programmatically through Netscript using the Gang API.

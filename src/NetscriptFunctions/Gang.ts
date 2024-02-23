@@ -310,7 +310,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
         def: member.calculateAscensionMult(postInstall.def) / preInstall.def,
         dex: member.calculateAscensionMult(postInstall.dex) / preInstall.dex,
         agi: member.calculateAscensionMult(postInstall.agi) / preInstall.agi,
-        cha: member.calculateAscensionMult(postInstall.cha) / preInstall.cha
+        cha: member.calculateAscensionMult(postInstall.cha) / preInstall.cha,
       };
     },
     setTerritoryWarfare: (ctx) => (_engage) => {

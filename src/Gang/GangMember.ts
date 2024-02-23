@@ -258,7 +258,7 @@ export class GangMember {
       def: this.def_asc_points * GangConstants.InstallAscensionPenalty,
       dex: this.dex_asc_points * GangConstants.InstallAscensionPenalty,
       agi: this.agi_asc_points * GangConstants.InstallAscensionPenalty,
-      cha: this.cha_asc_points * GangConstants.InstallAscensionPenalty
+      cha: this.cha_asc_points * GangConstants.InstallAscensionPenalty,
     };
   }
 
