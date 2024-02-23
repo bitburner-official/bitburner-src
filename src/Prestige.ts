@@ -111,7 +111,7 @@ export function prestigeAugmentation(): void {
     const faction = Factions[gang.facName];
     if (faction) joinFaction(faction);
     for (const m of gang.members) {
-      const results = m.getInstallResults();
+      const results = m.getPostInstallPoints();
       m.hack_asc_points = results.hack;
       m.str_asc_points = results.str;
       m.def_asc_points = results.def;
