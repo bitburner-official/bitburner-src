@@ -1,14 +1,11 @@
-// Importing directly from Factions file instead of from @enums to avoid circular import
-import { FactionName } from "../Faction/Enums";
-
 export enum GoOpponent {
   none = "No AI",
-  Netburners = FactionName.Netburners,
-  SlumSnakes = FactionName.SlumSnakes,
-  TheBlackHand = FactionName.TheBlackHand,
-  Tetrads = FactionName.Tetrads,
-  Daedalus = FactionName.Daedalus,
-  Illuminati = FactionName.Illuminati,
+  Netburners = "Netburners",
+  SlumSnakes = "Slum Snakes",
+  TheBlackHand = "The Black Hand",
+  Tetrads = "Tetrads",
+  Daedalus = "Daedalus",
+  Illuminati = "Illuminati",
   w0r1d_d43m0n = "????????????",
 }
 
