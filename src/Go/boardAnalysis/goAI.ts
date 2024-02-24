@@ -619,12 +619,7 @@ async function getSurroundMove(boardState: GameState, player: GoColor, available
  * If a chain has multiple eyes, it cannot be captured by the opponent (since they can only fill one eye at a time,
  *  and suiciding your own pieces is not legal unless it captures the opponents' first)
  */
-function getEyeCreationMoves(
-  boardState: GameState,
-  player: GoColor,
-  availableSpaces: PointState[],
-  maxLiberties = 99,
-) {
+function getEyeCreationMoves(boardState: GameState, player: GoColor, availableSpaces: PointState[], maxLiberties = 99) {
   const allEyes = getAllEyesByChainId(boardState, player);
   const currentEyes = getAllEyes(boardState, player, allEyes);
 
