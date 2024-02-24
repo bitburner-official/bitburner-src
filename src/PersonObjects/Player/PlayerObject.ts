@@ -28,7 +28,6 @@ import { CONSTANTS } from "../../Constants";
 import { Person } from "../Person";
 import { isMember } from "../../utils/EnumHelper";
 import { PartialRecord } from "../../Types/Record";
-import { newGoState } from "../../Go/boardState/boardState";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -37,7 +36,6 @@ export class PlayerObject extends Person implements IPlayer {
   gang: Gang | null = null;
   bladeburner: Bladeburner | null = null;
   currentServer = "";
-  go = newGoState();
   factions: FactionName[] = [];
   factionInvitations: FactionName[] = [];
   factionRumors = new JSONSet<FactionName>();

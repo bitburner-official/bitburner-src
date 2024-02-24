@@ -1,4 +1,4 @@
-import type { BoardState, PointState } from "../Types";
+import type { GameState, PointState } from "../Types";
 import { GoColor } from "@enums";
 import {
   getAllChains,
@@ -20,7 +20,7 @@ import { contains, isNotNull } from "../boardState/boardState";
  * In which case, only the liberties of that one weak chain are worth considering. Other parts of that fully-encircled
  * enemy space, and other similar spaces, should be ignored, otherwise the game drags on too long
  */
-export function findDisputedTerritory(boardState: BoardState, player: GoColor, excludeFriendlyEyes?: boolean) {
+export function findDisputedTerritory(boardState: GameState, player: GoColor, excludeFriendlyEyes?: boolean) {
   let validMoves = getAllValidMoves(boardState, player);
   if (excludeFriendlyEyes) {
     const friendlyEyes = getAllEyes(boardState, player)
@@ -88,7 +88,7 @@ export function findDisputedTerritory(boardState: BoardState, player: GoColor, e
 
  Note that this does not detect mutual eyes formed by two chains making an eye together, or eyes via seki, or some other edge cases.
  */
-export function findClaimedTerritory(boardState: BoardState) {
+export function findClaimedTerritory(boardState: GameState) {
   const whiteClaimedTerritory = getAllEyes(boardState, GoColor.white).filter(
     (eyesForChainN) => eyesForChainN.length >= 2,
   );

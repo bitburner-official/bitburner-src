@@ -2,8 +2,8 @@ import React from "react";
 import { Grid, Table, TableBody, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
 
 import { GoOpponent } from "@enums";
+import { Go } from "../Go";
 import { getOpponentStats, getScore } from "../boardAnalysis/scoring";
-import { Player } from "@player";
 import { GoGameboard } from "./GoGameboard";
 import { boardStyles } from "../boardState/goStyles";
 import { useRerender } from "../../ui/React/hooks";
@@ -17,10 +17,10 @@ import { getRecordKeys } from "../../Types/Record";
 export const GoHistoryPage = (): React.ReactElement => {
   useRerender(400);
   const classes = boardStyles();
-  const priorBoard = Player.go.previousGameFinalBoardState ?? getNewBoardState(7);
+  const priorBoard = Go.previousGame ?? getNewBoardState(7);
   const score = getScore(priorBoard);
   const opponent = priorBoard.ai;
-  const opponentsToShow = getRecordKeys(Player.go.status);
+  const opponentsToShow = getRecordKeys(Go.stats);
 
   return (
     <div>

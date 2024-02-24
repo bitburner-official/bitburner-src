@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Box, Button, MenuItem, Select, SelectChangeEvent, Tooltip, Typography } from "@mui/material";
 
-import { Player } from "@player";
 import { GoOpponent } from "@enums";
+import { Go } from "../Go";
 import { boardSizes, opponentDetails } from "../Constants";
 import { boardStyles } from "../boardState/goStyles";
 import { Modal } from "../../ui/React/Modal";
@@ -21,9 +21,9 @@ interface IProps {
 
 export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProps): React.ReactElement => {
   const classes = boardStyles();
-  const [opponent, setOpponent] = useState<GoOpponent>(Player.go.boardState?.ai ?? GoOpponent.SlumSnakes);
+  const [opponent, setOpponent] = useState<GoOpponent>(Go.currentGame?.ai ?? GoOpponent.SlumSnakes);
   const preselectedBoardSize =
-    opponent === GoOpponent.w0r1d_d43m0n ? 19 : Math.min(Player.go.boardState?.board?.[0]?.length ?? 7, 13);
+    opponent === GoOpponent.w0r1d_d43m0n ? 19 : Math.min(Go.currentGame?.board?.[0]?.length ?? 7, 13);
   const [boardSize, setBoardSize] = useState(preselectedBoardSize);
 
   const opponentFactions = Object.values(GoOpponent).filter(

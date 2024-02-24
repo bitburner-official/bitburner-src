@@ -1,4 +1,4 @@
-import type { BoardState, PointState } from "../Types";
+import type { GameState, PointState } from "../Types";
 
 import { Player } from "@player";
 import { GoOpponent, GoColor } from "@enums";
@@ -9,13 +9,14 @@ import { getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "..
 import { floor, isNotNull } from "../boardState/boardState";
 import { Factions } from "../../Faction/Factions";
 import { getEnumHelper } from "../../utils/EnumHelper";
+import { Go } from "../Go";
 
 /**
  * Returns the score of the current board.
  * Each player gets one point for each piece on the board, and one point for any empty node
  *  fully surrounded by their pieces
  */
-export function getScore(boardState: BoardState) {
+export function getScore(boardState: GameState) {
   const komi = getKomi(boardState.ai) ?? 6.5;
   const whitePieces = getColoredPieceCount(boardState, GoColor.white);
   const blackPieces = getColoredPieceCount(boardState, GoColor.black);
@@ -41,7 +42,7 @@ export function getScore(boardState: BoardState) {
  * Handles ending the game. Sets the previous player to null to prevent further moves, calculates score, and updates
  * player node count and power, and game history
  */
-export function endGoGame(boardState: BoardState) {
+export function endGoGame(boardState: GameState) {
   if (boardState.previousPlayer === null) {
     return;
   }
@@ -80,8 +81,8 @@ export function endGoGame(boardState: BoardState) {
     getWinstreakMultiplier(statusToUpdate.winStreak, statusToUpdate.oldWinStreak);
 
   statusToUpdate.nodes += score[GoColor.black].sum;
-  Player.go.boardState = boardState;
-  Player.go.previousGameFinalBoardState = boardState;
+  Go.currentGame = boardState;
+  Go.previousGame = boardState;
 
   // Update multipliers with new bonuses, once at the end of the game
   Player.applyEntropy(Player.entropy);
@@ -105,7 +106,7 @@ export function resetWinstreak(opponent: GoOpponent, gameComplete: boolean) {
 /**
  * Gets the number pieces of a given color on the board
  */
-function getColoredPieceCount(boardState: BoardState, color: GoColor) {
+function getColoredPieceCount(boardState: GameState, color: GoColor) {
   return boardState.board.reduce(
     (sum, row) => sum + row.filter(isNotNull).filter((point) => point.player === color).length,
     0,
@@ -115,7 +116,7 @@ function getColoredPieceCount(boardState: BoardState, color: GoColor) {
 /**
  * Finds all empty spaces fully surrounded by a single player's stones
  */
-function getTerritoryScores(boardState: BoardState) {
+function getTerritoryScores(boardState: GameState) {
   const emptyTerritoryChains = getAllChains(boardState).filter((chain) => chain?.[0]?.player === GoColor.empty);
 
   return emptyTerritoryChains.reduce(
@@ -136,7 +137,7 @@ function getTerritoryScores(boardState: BoardState) {
 /**
  * Finds all neighbors of the empty points in question. If they are all one color, that player controls that space
  */
-function checkTerritoryOwnership(boardState: BoardState, emptyPointChain: PointState[]) {
+function checkTerritoryOwnership(boardState: GameState, emptyPointChain: PointState[]) {
   if (emptyPointChain.length > boardState.board[0].length ** 2 - 3) {
     return null;
   }
@@ -152,7 +153,7 @@ function checkTerritoryOwnership(boardState: BoardState, emptyPointChain: PointS
 /**
  * prints the board state to the console
  */
-export function logBoard(boardState: BoardState): void {
+export function logBoard(boardState: GameState): void {
   const state = boardState.board;
   console.log("--------------");
   for (let x = 0; x < state.length; x++) {
@@ -166,5 +167,5 @@ export function logBoard(boardState: BoardState): void {
 }
 
 export function getOpponentStats(opponent: GoOpponent) {
-  return Player.go.status[opponent] ?? (Player.go.status[opponent] = newOpponentStats());
+  return Go.stats[opponent] ?? (Go.stats[opponent] = newOpponentStats());
 }

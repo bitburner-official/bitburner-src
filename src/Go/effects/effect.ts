@@ -1,10 +1,10 @@
 import { Player } from "@player";
 
 import { GoOpponent } from "@enums";
+import { Go } from "../Go";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { opponentDetails } from "../Constants";
 import { defaultMultipliers, mergeMultipliers, Multipliers } from "../../PersonObjects/Multipliers";
-import { PlayerObject } from "../../PersonObjects/Player/PlayerObject";
 import { formatPercent } from "../../ui/formatNumber";
 import { getOpponentStats } from "../boardAnalysis/scoring";
 import { getRecordEntries, getRecordValues } from "../../Types/Record";
@@ -61,7 +61,7 @@ export function updateGoMults(): void {
  */
 function calculateMults(): Multipliers {
   const mults = defaultMultipliers();
-  getRecordEntries(Player.go.status).forEach(([opponent, stats]) => {
+  getRecordEntries(Go.stats).forEach(([opponent, stats]) => {
     const effect = CalculateEffect(stats.nodePower, opponent);
     switch (opponent) {
       case GoOpponent.Netburners:
@@ -93,17 +93,9 @@ function calculateMults(): Multipliers {
   return mults;
 }
 
-export function resetGoNodePower(player: PlayerObject) {
-  for (const stats of getRecordValues(player.go.status)) {
-    stats.nodePower = 0;
-    stats.nodes = 0;
-    stats.winStreak = 0;
-  }
-}
-
 export function playerHasDiscoveredGo() {
-  const playedGame = Player.go.boardState.history.length || Player.go.previousGameFinalBoardState?.history?.length;
-  const hasRecords = getRecordValues(Player.go.status).some((stats) => stats.wins + stats.losses);
+  const playedGame = Go.currentGame.history.length || Go.previousGame?.history?.length;
+  const hasRecords = getRecordValues(Go.stats).some((stats) => stats.wins + stats.losses);
   const isInBn14 = Player.bitNodeN === 14;
 
   return !!(playedGame || hasRecords || isInBn14);

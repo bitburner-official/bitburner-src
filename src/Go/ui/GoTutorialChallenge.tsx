@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Typography, Button } from "@mui/material";
 
 import { GoColor, GoValidity, ToastVariant } from "@enums";
-import { BoardState } from "../Types";
+import { GameState } from "../Types";
 import { GoGameboard } from "./GoGameboard";
 import { evaluateIfMoveIsValid } from "../boardAnalysis/boardAnalysis";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
@@ -10,7 +10,7 @@ import { getStateCopy, makeMove } from "../boardState/boardState";
 import { boardStyles } from "../boardState/goStyles";
 
 interface IProps {
-  state: BoardState;
+  state: GameState;
   description: string;
   correctMoves: [{ x: number; y: number }];
   correctText: string;

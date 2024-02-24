@@ -1,5 +1,4 @@
 import type { GoColor, GoOpponent, GoPlayType } from "@enums";
-import type { PartialRecord } from "../Types/Record";
 
 export type Board = (PointState | null)[][];
 
@@ -32,7 +31,7 @@ export type EyeMove = {
   createsLife: boolean;
 };
 
-export type BoardState = {
+export type GameState = {
   board: Board;
   previousPlayer: GoColor | null;
   history: Board[];
@@ -77,10 +76,4 @@ export type OpponentStats = {
   oldWinStreak: number;
   highestWinStreak: number;
   favor: number;
-};
-
-export type GoState = {
-  previousGameFinalBoardState: BoardState | null;
-  boardState: BoardState;
-  status: PartialRecord<GoOpponent, OpponentStats>;
 };

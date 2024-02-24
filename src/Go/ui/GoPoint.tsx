@@ -1,4 +1,4 @@
-import type { BoardState } from "../Types";
+import type { GameState } from "../Types";
 
 import React from "react";
 import { ClassNameMap } from "@mui/styles";
@@ -10,7 +10,7 @@ import { pointStyle } from "../boardState/goStyles";
 import { findAdjacentLibertiesAndAlliesForPoint } from "../boardAnalysis/boardAnalysis";
 
 interface GoPointProps {
-  state: BoardState;
+  state: GameState;
   x: number;
   y: number;
   traditional: boolean;

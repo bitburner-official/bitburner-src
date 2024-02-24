@@ -1,7 +1,8 @@
-import type { BoardState, Play } from "../Types";
+import type { GameState, Play } from "../Types";
 
 import { Player } from "@player";
 import { GoColor, GoPlayType, GoValidity, GoOpponent } from "@enums";
+import { Go } from "../Go";
 import { getMove, sleep } from "../boardAnalysis/goAI";
 import {
   getNewBoardState,
@@ -20,8 +21,8 @@ import { WHRNG } from "../../Casino/RNG";
  * Pass player's turn and await the opponent's response (or logs the end of the game if both players pass)
  */
 export async function handlePassTurn(logger: (s: string) => void) {
-  passTurn(Player.go.boardState, GoColor.black);
-  if (Player.go.boardState.previousPlayer === null) {
+  passTurn(Go.currentGame, GoColor.black);
+  if (Go.currentGame.previousPlayer === null) {
     logEndGame(logger);
     return Promise.resolve({
       type: GoPlayType.gameOver,
@@ -30,15 +31,15 @@ export async function handlePassTurn(logger: (s: string) => void) {
       success: true,
     });
   }
-  return getAIMove(logger, Player.go.boardState);
+  return getAIMove(logger, Go.currentGame);
 }
 
 /**
  * Validates and applies the player's router placement
  */
 export async function makePlayerMove(logger: (s: string) => void, x: number, y: number) {
-  const validity = evaluateIfMoveIsValid(Player.go.boardState, x, y, GoColor.black);
-  const result = makeMove(Player.go.boardState, x, y, GoColor.black);
+  const validity = evaluateIfMoveIsValid(Go.currentGame, x, y, GoColor.black);
+  const result = makeMove(Go.currentGame, x, y, GoColor.black);
 
   if (validity !== GoValidity.valid || !result) {
     await sleep(500);
@@ -62,32 +63,32 @@ export async function makePlayerMove(logger: (s: string) => void, x: number, y: 
 /**
  * Retrieves a move from the current faction in response to the player's move
  */
-async function getAIMove(logger: (s: string) => void, boardState: BoardState, success = true): Promise<Play> {
+async function getAIMove(logger: (s: string) => void, boardState: GameState, success = true): Promise<Play> {
   let resolve: (value: Play) => void;
   const aiMoveResult = new Promise<Play>((res) => {
     resolve = res;
   });
 
-  getMove(boardState, GoColor.white, Player.go.boardState.ai).then(async (result) => {
+  getMove(boardState, GoColor.white, Go.currentGame.ai).then(async (result) => {
     // If a new game has started while this async code ran, drop it
-    if (boardState.history.length > Player.go.boardState.history.length) {
+    if (boardState.history.length > Go.currentGame.history.length) {
       return resolve({ ...result, success: false });
     }
     if (result.type === "gameOver") {
       logEndGame(logger);
     }
     if (result.type !== GoPlayType.move) {
-      Player.go.boardState = boardState;
+      Go.currentGame = boardState;
       return resolve({ ...result, success });
     }
 
     const aiUpdatedBoard = makeMove(boardState, result.x, result.y, GoColor.white);
     if (!aiUpdatedBoard) {
       boardState.previousPlayer = GoColor.white;
-      Player.go.boardState = boardState;
+      Go.currentGame = boardState;
       logger(`Invalid AI move attempted: ${result.x}, ${result.y}. This should not happen.`);
     } else {
-      Player.go.boardState = aiUpdatedBoard;
+      Go.currentGame = aiUpdatedBoard;
       logger(`Opponent played move: ${result.x}, ${result.y}`);
     }
 
@@ -101,7 +102,7 @@ async function getAIMove(logger: (s: string) => void, boardState: BoardState, su
  * Returns a grid of booleans indicating if the coordinates at that location are a valid move for the player (black pieces)
  */
 export function getValidMoves() {
-  const boardState = Player.go.boardState;
+  const boardState = Go.currentGame;
   // Map the board matrix into true/false values
   return boardState.board.map((column, x) =>
     column.reduce((validityArray: boolean[], point, y) => {
@@ -118,7 +119,7 @@ export function getValidMoves() {
 export function getChains() {
   const chains: string[] = [];
   // Turn the internal chain IDs into nice consecutive numbers for display to the player
-  return Player.go.boardState.board.map((column) =>
+  return Go.currentGame.board.map((column) =>
     column.reduce((chainIdArray: (number | null)[], point) => {
       if (!point) {
         chainIdArray.push(null);
@@ -137,7 +138,7 @@ export function getChains() {
  * Returns a grid of numbers representing the number of open-node connections each player-owned chain has.
  */
 export function getLiberties() {
-  return Player.go.boardState.board.map((column) =>
+  return Go.currentGame.board.map((column) =>
     column.reduce((libertyArray: number[], point) => {
       libertyArray.push(point?.liberties?.length || -1);
       return libertyArray;
@@ -149,7 +150,7 @@ export function getLiberties() {
  * Returns a grid indicating which player, if any, controls the empty nodes by fully encircling it with their routers
  */
 export function getControlledEmptyNodes() {
-  const boardState = Player.go.boardState;
+  const boardState = Go.currentGame;
   const controlled = getControlledSpace(boardState);
   return controlled.map((column, x: number) =>
     column.reduce((ownedPoints: string, owner: GoColor, y: number) => {
@@ -174,7 +175,7 @@ export function getControlledEmptyNodes() {
  * Handle post-game logging
  */
 function logEndGame(logger: (s: string) => void) {
-  const boardState = Player.go.boardState;
+  const boardState = Go.currentGame;
   const score = getScore(boardState);
   logger(
     `Subnet complete! Final score: ${boardState.ai}: ${score[GoColor.white].sum},  Player: ${score[GoColor.black].sum}`,
@@ -190,13 +191,13 @@ export function resetBoardState(error: (s: string) => void, opponent: GoOpponent
     return;
   }
 
-  const oldBoardState = Player.go.boardState;
+  const oldBoardState = Go.currentGame;
   if (oldBoardState.previousPlayer !== null && oldBoardState.history.length) {
     resetWinstreak(oldBoardState.ai, false);
   }
 
-  Player.go.boardState = getNewBoardState(boardSize, opponent, true);
-  return getSimplifiedBoardState(Player.go.boardState.board);
+  Go.currentGame = getNewBoardState(boardSize, opponent, true);
+  return getSimplifiedBoardState(Go.currentGame.board);
 }
 
 /** Validate singularity access by throwing an error if the player does not have access. */
@@ -229,7 +230,7 @@ export async function determineCheatSuccess(
   successRngOverride?: number,
   ejectRngOverride?: number,
 ): Promise<Play> {
-  const state = Player.go.boardState;
+  const state = Go.currentGame;
   const rng = new WHRNG(Player.totalPlaytime);
   // If cheat is successful, run callback
   if ((successRngOverride ?? rng.random()) <= cheatSuccessChance(state.cheatCount)) {
@@ -281,7 +282,7 @@ export function cheatRemoveRouter(
   successRngOverride?: number,
   ejectRngOverride?: number,
 ) {
-  const point = Player.go.boardState.board[x][y];
+  const point = Go.currentGame.board[x][y];
   if (!point) {
     logger(`The node ${x},${y} is offline, so you cannot clear this point with removeRouter().`);
     return invalidMoveResponse;
@@ -294,8 +295,8 @@ export function cheatRemoveRouter(
     logger,
     () => {
       point.player = GoColor.empty;
-      Player.go.boardState = updateChains(Player.go.boardState);
-      Player.go.boardState.previousPlayer = GoColor.black;
+      Go.currentGame = updateChains(Go.currentGame);
+      Go.currentGame.previousPlayer = GoColor.black;
       logger(`Cheat successful. The point ${x},${y} was cleared.`);
     },
     successRngOverride,
@@ -315,7 +316,7 @@ export function cheatPlayTwoMoves(
   successRngOverride?: number,
   ejectRngOverride?: number,
 ) {
-  const point1 = Player.go.boardState.board[x1][y1];
+  const point1 = Go.currentGame.board[x1][y1];
   if (!point1) {
     logger(`The node ${x1},${y1} is offline, so you cannot place a router there.`);
     return invalidMoveResponse;
@@ -324,7 +325,7 @@ export function cheatPlayTwoMoves(
     logger(`The point ${x1},${y1} is not empty, so you cannot place a router there.`);
     return invalidMoveResponse;
   }
-  const point2 = Player.go.boardState.board[x2][y2];
+  const point2 = Go.currentGame.board[x2][y2];
   if (!point2) {
     logger(`The node ${x2},${y2} is offline, so you cannot place a router there.`);
     return invalidMoveResponse;
@@ -339,8 +340,8 @@ export function cheatPlayTwoMoves(
     () => {
       point1.player = GoColor.black;
       point2.player = GoColor.black;
-      Player.go.boardState = updateCaptures(Player.go.boardState, GoColor.black);
-      Player.go.boardState.previousPlayer = GoColor.black;
+      Go.currentGame = updateCaptures(Go.currentGame, GoColor.black);
+      Go.currentGame.previousPlayer = GoColor.black;
 
       logger(`Cheat successful. Two go moves played: ${x1},${y1} and ${x2},${y2}`);
     },
@@ -356,7 +357,7 @@ export function cheatRepairOfflineNode(
   successRngOverride?: number,
   ejectRngOverride?: number,
 ) {
-  const point = Player.go.boardState.board[x][y];
+  const point = Go.currentGame.board[x][y];
   if (point) {
     logger(`The node ${x},${y} is not offline, so you cannot repair the node.`);
     return invalidMoveResponse;
@@ -365,15 +366,15 @@ export function cheatRepairOfflineNode(
   return determineCheatSuccess(
     logger,
     () => {
-      Player.go.boardState.board[x][y] = {
+      Go.currentGame.board[x][y] = {
         chain: "",
         liberties: null,
         y,
         player: GoColor.empty,
         x,
       };
-      Player.go.boardState = updateChains(Player.go.boardState);
-      Player.go.boardState.previousPlayer = GoColor.black;
+      Go.currentGame = updateChains(Go.currentGame);
+      Go.currentGame.previousPlayer = GoColor.black;
       logger(`Cheat successful. The point ${x},${y} was repaired.`);
     },
     successRngOverride,
@@ -388,7 +389,7 @@ export function cheatDestroyNode(
   successRngOverride?: number,
   ejectRngOverride?: number,
 ) {
-  const point = Player.go.boardState.board[x][y];
+  const point = Go.currentGame.board[x][y];
   if (!point) {
     logger(`The node ${x},${y} is already offline, so you cannot destroy the node.`);
     return invalidMoveResponse;
@@ -401,9 +402,9 @@ export function cheatDestroyNode(
   return determineCheatSuccess(
     logger,
     () => {
-      Player.go.boardState.board[x][y] = null;
-      Player.go.boardState = updateChains(Player.go.boardState);
-      Player.go.boardState.previousPlayer = GoColor.black;
+      Go.currentGame.board[x][y] = null;
+      Go.currentGame = updateChains(Go.currentGame);
+      Go.currentGame.previousPlayer = GoColor.black;
       logger(`Cheat successful. The point ${x},${y} was repaired.`);
     },
     successRngOverride,

@@ -1,4 +1,4 @@
-import type { BoardState } from "../Types";
+import type { GameState } from "../Types";
 
 import React, { useMemo } from "react";
 import { Grid } from "@mui/material";
@@ -10,7 +10,7 @@ import { boardStyles } from "../boardState/goStyles";
 import { getAllValidMoves, getControlledSpace } from "../boardAnalysis/boardAnalysis";
 
 interface GoGameboardProps {
-  boardState: BoardState;
+  boardState: GameState;
   traditional: boolean;
   clickHandler: (x: number, y: number) => any;
   hover: boolean;

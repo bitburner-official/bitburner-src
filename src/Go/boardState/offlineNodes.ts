@@ -1,4 +1,4 @@
-import type { Board, BoardState, PointState } from "../Types";
+import type { Board, GameState, PointState } from "../Types";
 
 import { Player } from "@player";
 import { boardSizes } from "../Constants";
@@ -7,7 +7,7 @@ import { floor } from "./boardState";
 
 type rand = (n1: number, n2: number) => number;
 
-export function addObstacles(boardState: BoardState) {
+export function addObstacles(boardState: GameState) {
   const rng = new WHRNG(Player.totalPlaytime);
   const random = (n1: number, n2: number) => n1 + floor((n2 - n1 + 1) * rng.random());
 

@@ -1,8 +1,9 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import type { Go } from "@nsdefs";
+import type { Go as NSGo } from "@nsdefs";
 import type { Play } from "../Go/Types";
-import { Player } from "@player";
+
 import { GoColor } from "@enums";
+import { Go } from "../Go/Go";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getSimplifiedBoardState } from "../Go/boardAnalysis/boardAnalysis";
 import {
@@ -31,7 +32,7 @@ const error = (ctx: NetscriptContext) => (message: string) => throwError(ctx.wor
  * Ensures the given coordinates are valid for the current board size
  */
 function validateRowAndColumn(ctx: NetscriptContext, x: number, y: number) {
-  const boardSize = Player.go.boardState.board.length;
+  const boardSize = Go.currentGame.board.length;
 
   if (x < 0 || x >= boardSize) {
     throwError(
@@ -47,7 +48,7 @@ function validateRowAndColumn(ctx: NetscriptContext, x: number, y: number) {
 /**
  * Go API implementation
  */
-export function NetscriptGo(): InternalAPI<Go> {
+export function NetscriptGo(): InternalAPI<NSGo> {
   return {
     makeMove:
       (ctx: NetscriptContext) =>
@@ -59,7 +60,7 @@ export function NetscriptGo(): InternalAPI<Go> {
         return makePlayerMove(logger(ctx), x, y);
       },
     passTurn: (ctx: NetscriptContext) => async (): Promise<Play> => {
-      if (Player.go.boardState.previousPlayer === GoColor.black) {
+      if (Go.currentGame.previousPlayer === GoColor.black) {
         helpers.log(ctx, () => `It is not your turn; you cannot pass.`);
         helpers.log(ctx, () => `Do you have multiple scripts running, or did you forget to await makeMove() ?`);
         return Promise.resolve(invalidMoveResponse);
@@ -67,10 +68,10 @@ export function NetscriptGo(): InternalAPI<Go> {
       return handlePassTurn(logger(ctx));
     },
     getBoardState: () => () => {
-      return getSimplifiedBoardState(Player.go.boardState.board);
+      return getSimplifiedBoardState(Go.currentGame.board);
     },
     getOpponent: () => () => {
-      return Player.go.boardState.ai;
+      return Go.currentGame.ai;
     },
     resetBoardState: (ctx) => (_opponent, _boardSize) => {
       const opponent = getEnumHelper("GoOpponent").nsGetMember(ctx, _opponent);
@@ -95,7 +96,7 @@ export function NetscriptGo(): InternalAPI<Go> {
     cheat: {
       getCheatSuccessChance: (ctx: NetscriptContext) => () => {
         checkCheatApiAccess(error(ctx));
-        return cheatSuccessChance(Player.go.boardState.cheatCount);
+        return cheatSuccessChance(Go.currentGame.cheatCount);
       },
       removeRouter:
         (ctx: NetscriptContext) =>

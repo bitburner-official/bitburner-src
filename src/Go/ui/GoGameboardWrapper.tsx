@@ -1,10 +1,10 @@
-import type { BoardState } from "../Types";
+import type { GameState } from "../Types";
 
 import React, { useEffect, useMemo, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 
-import { Player } from "@player";
 import { GoOpponent, GoColor, GoPlayType, GoValidity, ToastVariant } from "@enums";
+import { Go } from "../Go";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { getNewBoardState, getStateCopy, makeMove, passTurn } from "../boardState/boardState";
 import { getMove } from "../boardAnalysis/goAI";
@@ -36,7 +36,7 @@ interface GoGameboardWrapperProps {
 export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps): React.ReactElement {
   const rerender = useRerender(400);
 
-  const boardState = Player.go.boardState;
+  const boardState = Go.currentGame;
   const traditional = Settings.GoTraditionalStyle;
   const [showPriorMove, setShowPriorMove] = useState(false);
   const [opponent, setOpponent] = useState<GoOpponent>(boardState.ai);
@@ -52,7 +52,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   // Only run this once on first component mount, to handle scenarios where the game was saved or closed while waiting on the AI to make a move
   useEffect(() => {
     if (boardState.previousPlayer === GoColor.black && !waitingOnAI) {
-      takeAiTurn(Player.go.boardState);
+      takeAiTurn(Go.currentGame);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -107,7 +107,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     }, 100);
   }
 
-  async function takeAiTurn(board: BoardState) {
+  async function takeAiTurn(board: GameState) {
     if (board.previousPlayer === null) {
       return;
     }
@@ -116,7 +116,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     const move = await getMove(initialState, GoColor.white, opponent);
 
     // If a new game has started while this async code ran, just drop it
-    if (boardState.history.length > Player.go.boardState.history.length) {
+    if (boardState.history.length > Go.currentGame.history.length) {
       return;
     }
 
@@ -158,8 +158,8 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     updateBoard(newBoardState);
   }
 
-  function updateBoard(initialBoardState: BoardState) {
-    Player.go.boardState = getStateCopy(initialBoardState);
+  function updateBoard(initialBoardState: GameState) {
+    Go.currentGame = getStateCopy(initialBoardState);
     rerender();
   }
 

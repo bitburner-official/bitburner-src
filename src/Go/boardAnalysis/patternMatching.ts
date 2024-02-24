@@ -1,5 +1,5 @@
 // Inspired by https://github.com/pasky/michi/blob/master/michi.py
-import type { BoardState, PointState } from "../Types";
+import type { GameState, PointState } from "../Types";
 
 import { GoColor } from "@enums";
 import { sleep } from "./goAI";
@@ -80,7 +80,7 @@ export const threeByThreePatterns = [
  * Searches the board for any point that matches the expanded pattern set
  */
 export async function findAnyMatchedPatterns(
-  boardState: BoardState,
+  boardState: GameState,
   player: GoColor,
   availableSpaces: PointState[],
   smart = true,
@@ -120,7 +120,7 @@ function checkMatch(neighborhood: (PointState | null)[][], pattern: string[], pl
 /**
  * Gets the 8 points adjacent and diagonally adjacent to the given point
  */
-function getNeighborhood(boardState: BoardState, x: number, y: number) {
+function getNeighborhood(boardState: GameState, x: number, y: number) {
   const board = boardState.board;
   return [
     [board[x - 1]?.[y - 1], board[x - 1]?.[y], board[x - 1]?.[y + 1]],

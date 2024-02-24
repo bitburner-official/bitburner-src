@@ -1,4 +1,4 @@
-import type { Board, BoardState, Neighbor, PointState } from "../Types";
+import type { Board, GameState, Neighbor, PointState } from "../Types";
 
 import { GoValidity, GoOpponent, GoColor } from "@enums";
 import {
@@ -28,7 +28,7 @@ import {
  *
  * @returns a validity explanation for if the move is legal or not
  */
-export function evaluateIfMoveIsValid(boardState: BoardState, x: number, y: number, player: GoColor, shortcut = true) {
+export function evaluateIfMoveIsValid(boardState: GameState, x: number, y: number, player: GoColor, shortcut = true) {
   const point = boardState.board?.[x]?.[y];
 
   if (boardState.previousPlayer === null) {
@@ -97,7 +97,7 @@ export function evaluateIfMoveIsValid(boardState: BoardState, x: number, y: numb
  * Create a new evaluation board and play out the results of the given move on the new board
  */
 export function evaluateMoveResult(
-  initialBoardState: BoardState,
+  initialBoardState: GameState,
   x: number,
   y: number,
   player: GoColor,
@@ -120,7 +120,7 @@ export function evaluateMoveResult(
   return updateCaptures(boardState, player, resetChains);
 }
 
-export function getControlledSpace(boardState: BoardState) {
+export function getControlledSpace(boardState: GameState) {
   const chains = getAllChains(boardState);
   const length = boardState.board[0].length;
   const whiteControlledEmptyNodes = getAllPotentialEyes(boardState, chains, GoColor.white, length * 2)
@@ -144,7 +144,7 @@ export function getControlledSpace(boardState: BoardState) {
 /**
   Clear the chain and liberty data of all points in the given chains
  */
-const resetChainsById = (boardState: BoardState, chainIds: string[]) => {
+const resetChainsById = (boardState: GameState, chainIds: string[]) => {
   const pointsToUpdate = boardState.board
     .flat()
     .filter(isDefined)
@@ -160,7 +160,7 @@ const resetChainsById = (boardState: BoardState, chainIds: string[]) => {
  * For a potential move, determine what the liberty of the point would be if played, by looking at adjacent empty nodes
  * as well as the remaining liberties of neighboring friendly chains
  */
-export function findEffectiveLibertiesOfNewMove(boardState: BoardState, x: number, y: number, player: GoColor) {
+export function findEffectiveLibertiesOfNewMove(boardState: GameState, x: number, y: number, player: GoColor) {
   const friendlyChains = getAllChains(boardState).filter((chain) => chain[0].player === player);
   const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState, x, y, player);
   const neighborPoints = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
@@ -193,7 +193,7 @@ export function findEffectiveLibertiesOfNewMove(boardState: BoardState, x: numbe
 /**
  * Find the number of open spaces that are connected to chains adjacent to a given point, and return the maximum
  */
-export function findMaxLibertyCountOfAdjacentChains(boardState: BoardState, x: number, y: number, player: GoColor) {
+export function findMaxLibertyCountOfAdjacentChains(boardState: GameState, x: number, y: number, player: GoColor) {
   const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState, x, y, player);
   const friendlyNeighbors = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
     .filter(isNotNull)
@@ -206,13 +206,13 @@ export function findMaxLibertyCountOfAdjacentChains(boardState: BoardState, x: n
 /**
  * Find the number of open spaces that are connected to chains adjacent to a given point, and return the minimum
  */
-export function findMinLibertyCountOfAdjacentChains(boardState: BoardState, x: number, y: number, player: GoColor) {
+export function findMinLibertyCountOfAdjacentChains(boardState: GameState, x: number, y: number, player: GoColor) {
   const chain = findEnemyNeighborChainWithFewestLiberties(boardState, x, y, player);
   return chain?.[0]?.liberties?.length ?? 99;
 }
 
 export function findEnemyNeighborChainWithFewestLiberties(
-  boardState: BoardState,
+  boardState: GameState,
   x: number,
   y: number,
   player: GoColor,
@@ -236,7 +236,7 @@ export function findEnemyNeighborChainWithFewestLiberties(
 /**
  * Returns a list of points that are valid moves for the given player
  */
-export function getAllValidMoves(boardState: BoardState, player: GoColor) {
+export function getAllValidMoves(boardState: GameState, player: GoColor) {
   return getEmptySpaces(boardState).filter(
     (point) => evaluateIfMoveIsValid(boardState, point.x, point.y, player) === GoValidity.valid,
   );
@@ -249,7 +249,7 @@ export function getAllValidMoves(boardState: BoardState, player: GoColor) {
 
   Eyes are important, because a chain of pieces cannot be captured if it fully surrounds two or more eyes.
  */
-export function getAllEyesByChainId(boardState: BoardState, player: GoColor) {
+export function getAllEyesByChainId(boardState: GameState, player: GoColor) {
   const allChains = getAllChains(boardState);
   const eyeCandidates = getAllPotentialEyes(boardState, allChains, player);
   const eyes: { [s: string]: PointState[][] } = {};
@@ -287,7 +287,7 @@ export function getAllEyesByChainId(boardState: BoardState, player: GoColor) {
 /**
  * Get a list of all eyes, grouped by the chain they are adjacent to
  */
-export function getAllEyes(boardState: BoardState, player: GoColor, eyesObject?: { [s: string]: PointState[][] }) {
+export function getAllEyes(boardState: GameState, player: GoColor, eyesObject?: { [s: string]: PointState[][] }) {
   const eyes = eyesObject ?? getAllEyesByChainId(boardState, player);
   return Object.keys(eyes).map((key) => eyes[key]);
 }
@@ -298,7 +298,7 @@ export function getAllEyes(boardState: BoardState, player: GoColor, eyesObject?:
    an array at that chain number's index.
  */
 export function getAllPotentialEyes(
-  boardState: BoardState,
+  boardState: GameState,
   allChains: PointState[][],
   player: GoColor,
   _maxSize?: number,
@@ -343,7 +343,7 @@ export function getAllPotentialEyes(
  *       If so, the original candidate is a true eye.
  */
 function findNeighboringChainsThatFullyEncircleEmptySpace(
-  boardState: BoardState,
+  boardState: GameState,
   candidateChain: PointState[],
   neighborChainList: PointState[][],
   allChains: PointState[][],
@@ -433,7 +433,7 @@ function removePointAtIndex(arr: PointState[][], index: number) {
 /**
  * Get all player chains that are adjacent / touching the current chain
  */
-export function getAllNeighboringChains(boardState: BoardState, chain: PointState[], allChains: PointState[][]) {
+export function getAllNeighboringChains(boardState: GameState, chain: PointState[], allChains: PointState[][]) {
   const playerNeighbors = getPlayerNeighbors(boardState, chain);
 
   const neighboringChains = playerNeighbors.reduce(
@@ -448,14 +448,14 @@ export function getAllNeighboringChains(boardState: BoardState, chain: PointStat
 /**
  * Gets all points that have player pieces adjacent to the given point
  */
-export function getPlayerNeighbors(boardState: BoardState, chain: PointState[]) {
+export function getPlayerNeighbors(boardState: GameState, chain: PointState[]) {
   return getAllNeighbors(boardState, chain).filter((neighbor) => neighbor && neighbor.player !== GoColor.empty);
 }
 
 /**
  * Gets all points adjacent to the given point
  */
-export function getAllNeighbors(boardState: BoardState, chain: PointState[]) {
+export function getAllNeighbors(boardState: GameState, chain: PointState[]) {
   const allNeighbors = chain.reduce((chainNeighbors: Set<PointState>, point: PointState) => {
     getArrayFromNeighbor(findNeighbors(boardState, point.x, point.y))
       .filter((neighborPoint) => !isPointInChain(neighborPoint, chain))
@@ -476,7 +476,7 @@ export function isPointInChain(point: PointState, chain: PointState[]) {
  * Looks through the board history to see if the current state is identical to any previous state
  * Capped at 5 for calculation speed, because loops of size 6 are essentially impossible
  */
-function checkIfBoardStateIsRepeated(boardState: BoardState) {
+function checkIfBoardStateIsRepeated(boardState: GameState) {
   const currentBoard = boardState.board;
   return boardState.history.slice(-5).find((state) => {
     for (let x = 0; x < state.length; x++) {
@@ -493,7 +493,7 @@ function checkIfBoardStateIsRepeated(boardState: BoardState) {
 /**
  * Finds all groups of connected pieces, or empty space groups
  */
-export function getAllChains(boardState: BoardState): PointState[][] {
+export function getAllChains(boardState: GameState): PointState[][] {
   const chains: { [s: string]: PointState[] } = {};
 
   for (let x = 0; x < boardState.board.length; x++) {
@@ -536,14 +536,14 @@ function findCapturedChainOfColor(chainList: PointState[][], playerColor: GoColo
 /**
  * Find all empty points adjacent to any piece in a given chain
  */
-export function findLibertiesForChain(boardState: BoardState, chain: PointState[]): PointState[] {
+export function findLibertiesForChain(boardState: GameState, chain: PointState[]): PointState[] {
   return getAllNeighbors(boardState, chain).filter((neighbor) => neighbor && neighbor.player === GoColor.empty);
 }
 
 /**
  * Find all empty points adjacent to any piece in the chain that a given point belongs to
  */
-export function findChainLibertiesForPoint(boardState: BoardState, x: number, y: number): PointState[] {
+export function findChainLibertiesForPoint(boardState: GameState, x: number, y: number): PointState[] {
   const chain = findAdjacentPointsInChain(boardState, x, y);
   return findLibertiesForChain(boardState, chain);
 }
@@ -552,7 +552,7 @@ export function findChainLibertiesForPoint(boardState: BoardState, x: number, y:
  * Returns an object that includes which of the cardinal neighbors are empty
  * (adjacent 'liberties' of the current piece )
  */
-export function findAdjacentLibertiesForPoint(boardState: BoardState, x: number, y: number): Neighbor {
+export function findAdjacentLibertiesForPoint(boardState: GameState, x: number, y: number): Neighbor {
   const neighbors = findNeighbors(boardState, x, y);
 
   const hasNorthLiberty = neighbors.north && neighbors.north.player === GoColor.empty;
@@ -573,7 +573,7 @@ export function findAdjacentLibertiesForPoint(boardState: BoardState, x: number,
  * current player's pieces. Used for making the connection map on the board
  */
 export function findAdjacentLibertiesAndAlliesForPoint(
-  boardState: BoardState,
+  boardState: GameState,
   x: number,
   y: number,
   _player?: GoColor,

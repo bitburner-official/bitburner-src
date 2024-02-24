@@ -1,4 +1,4 @@
-import type { Board, BoardState, GoState, Move, Neighbor, PointState } from "../Types";
+import type { Board, GameState, Move, Neighbor, PointState } from "../Types";
 
 import { GoOpponent, GoColor, GoValidity } from "@enums";
 import { bitverseBoardShape } from "../Constants";
@@ -13,22 +13,13 @@ import {
 import { endGoGame } from "../boardAnalysis/scoring";
 import { addObstacles, resetCoordinates, rotate90Degrees } from "./offlineNodes";
 
-/** Create a new overall go state */
-export function newGoState(): GoState {
-  return {
-    boardState: getNewBoardState(7),
-    status: {},
-    previousGameFinalBoardState: null,
-  };
-}
-
 /** Generates a new BoardState object with the given opponent and size */
 export function getNewBoardState(
   boardSize: number,
   ai = GoOpponent.Netburners,
   applyObstacles = false,
   boardToCopy?: Board,
-): BoardState {
+): GameState {
   if (ai === GoOpponent.w0r1d_d43m0n) {
     boardToCopy = resetCoordinates(rotate90Degrees(getBoardFromSimplifiedBoardState(bitverseBoardShape).board));
   }
@@ -79,7 +70,7 @@ export function getHandicap(boardSize: number, opponent: GoOpponent) {
 /**
  * Make a new move on the given board, and update the board state accordingly
  */
-export function makeMove(boardState: BoardState, x: number, y: number, player: GoColor) {
+export function makeMove(boardState: GameState, x: number, y: number, player: GoColor) {
   // Do not update on invalid moves
   const validity = evaluateIfMoveIsValid(boardState, x, y, player, false);
   if (validity !== GoValidity.valid || !boardState.board[x][y]?.player) {
@@ -104,7 +95,7 @@ export function makeMove(boardState: BoardState, x: number, y: number, player: G
  * Pass the current player's turn without making a move.
  * Ends the game if this is the second pass in a row.
  */
-export function passTurn(boardState: BoardState, player: GoColor, allowEndGame = true) {
+export function passTurn(boardState: GameState, player: GoColor, allowEndGame = true) {
   if (boardState.previousPlayer === null || boardState.previousPlayer === player) {
     return;
   }
@@ -119,7 +110,7 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
 /**
  * Makes a number of random moves on the board before the game starts, to give one player an edge.
  */
-export function applyHandicap(boardState: BoardState, handicap: number) {
+export function applyHandicap(boardState: GameState, handicap: number) {
   const availableMoves = getEmptySpaces(boardState);
   const handicapMoveOptions = getExpansionMoveArray(boardState, GoColor.black, availableMoves);
   const handicapMoves: Move[] = [];
@@ -142,7 +133,7 @@ export function applyHandicap(boardState: BoardState, handicap: number) {
  * Finds all groups of connected stones on the board, and updates the points in them with their
  * chain information and liberties.
  */
-export function updateChains(boardState: BoardState, resetChains = true) {
+export function updateChains(boardState: GameState, resetChains = true) {
   resetChains && clearChains(boardState);
 
   for (let x = 0; x < boardState.board.length; x++) {
@@ -173,7 +164,7 @@ export function updateChains(boardState: BoardState, resetChains = true) {
  *
  * Then, remove any chains with no liberties.
  */
-export function updateCaptures(initialState: BoardState, playerWhoMoved: GoColor, resetChains = true): BoardState {
+export function updateCaptures(initialState: GameState, playerWhoMoved: GoColor, resetChains = true): GameState {
   const boardState = updateChains(initialState, resetChains);
   const chains = getAllChains(boardState);
 
@@ -200,7 +191,7 @@ function captureChain(chain: PointState[]) {
 /**
  * Removes the chain data from given points, in preparation for being recalculated later
  */
-function clearChains(boardState: BoardState): BoardState {
+function clearChains(boardState: GameState): GameState {
   for (const x in boardState.board) {
     for (const y in boardState.board[x]) {
       const point = boardState.board[x][y];
@@ -219,7 +210,7 @@ function clearChains(boardState: BoardState): BoardState {
  * Iteratively traverse the adjacent pieces of the same color to find all the pieces in the same chain,
  * which are the pieces connected directly via a path consisting only of only up/down/left/right
  */
-export function findAdjacentPointsInChain(boardState: BoardState, x: number, y: number) {
+export function findAdjacentPointsInChain(boardState: GameState, x: number, y: number) {
   const point = boardState.board[x][y];
   if (!point) {
     return [];
@@ -255,7 +246,7 @@ export function findAdjacentPointsInChain(boardState: BoardState, x: number, y: 
 /**
  * Finds all empty spaces on the board.
  */
-export function getEmptySpaces(boardState: BoardState): PointState[] {
+export function getEmptySpaces(boardState: GameState): PointState[] {
   const emptySpaces: PointState[] = [];
 
   boardState.board.forEach((column) => {
@@ -272,7 +263,7 @@ export function getEmptySpaces(boardState: BoardState): PointState[] {
 /**
  * Makes a deep copy of the given board state
  */
-export function getStateCopy(initialState: BoardState) {
+export function getStateCopy(initialState: GameState) {
   const boardState = structuredClone(initialState);
 
   boardState.history = [...initialState.history];
@@ -286,7 +277,7 @@ export function getStateCopy(initialState: BoardState) {
 /**
  * Makes a deep copy of the given BoardState's board
  */
-export function getBoardCopy(boardState: BoardState) {
+export function getBoardCopy(boardState: GameState) {
   const boardCopy = getNewBoardState(boardState.board[0].length);
   const board = boardState.board;
 
@@ -309,7 +300,7 @@ export function contains(arr: PointState[], point: PointState) {
   return !!arr.find((p) => p && p.x === point.x && p.y === point.y);
 }
 
-export function findNeighbors(boardState: BoardState, x: number, y: number): Neighbor {
+export function findNeighbors(boardState: GameState, x: number, y: number): Neighbor {
   const board = boardState.board;
   return {
     north: board[x]?.[y + 1],
