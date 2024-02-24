@@ -9,7 +9,7 @@ Runs HTTPWorm.exe on a server.
 **Signature:**
 
 ```typescript
-httpworm(host: string): void;
+httpworm(host: string): boolean;
 ```
 
 ## Parameters
@@ -20,7 +20,9 @@ httpworm(host: string): void;
 
 **Returns:**
 
-void
+boolean
+
+Returns a boolean based on the success of HTTPWorm.exe
 
 ## Remarks
 

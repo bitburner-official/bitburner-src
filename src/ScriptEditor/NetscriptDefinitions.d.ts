@@ -5903,8 +5903,9 @@ export interface NS {
    * ns.nuke("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns Returns a boolean based on the success of NUKE.exe
    */
-  nuke(host: string): void;
+  nuke(host: string): boolean;
 
   /**
    * Runs BruteSSH.exe on a server.
@@ -5918,8 +5919,9 @@ export interface NS {
    * ns.brutessh("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns Returns a boolean based on the success of BruteSSH.exe
    */
-  brutessh(host: string): void;
+  brutessh(host: string): boolean;
 
   /**
    * Runs FTPCrack.exe on a server.
@@ -5933,8 +5935,9 @@ export interface NS {
    * ns.ftpcrack("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns Returns a boolean based on the success of FTPCrack.exe
    */
-  ftpcrack(host: string): void;
+  ftpcrack(host: string): boolean;
 
   /**
    * Runs relaySMTP.exe on a server.
@@ -5948,8 +5951,9 @@ export interface NS {
    * ns.relaysmtp("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns Returns a boolean based on the success of relaySMTP.exe
    */
-  relaysmtp(host: string): void;
+  relaysmtp(host: string): boolean;
 
   /**
    * Runs HTTPWorm.exe on a server.
@@ -5963,8 +5967,9 @@ export interface NS {
    * ns.httpworm("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns Returns a boolean based on the success of HTTPWorm.exe
    */
-  httpworm(host: string): void;
+  httpworm(host: string): boolean;
 
   /**
    * Runs SQLInject.exe on a server.
@@ -5979,8 +5984,9 @@ export interface NS {
    * ```
    * @remarks RAM cost: 0.05 GB
    * @param host - Hostname of the target server.
+   * @returns Returns a boolean based on the success of SQLInject.exe
    */
-  sqlinject(host: string): void;
+  sqlinject(host: string): boolean;
 
   /**
    * Start another script on the current server.

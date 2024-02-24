@@ -9,7 +9,7 @@ Runs NUKE.exe on a server.
 **Signature:**
 
 ```typescript
-nuke(host: string): void;
+nuke(host: string): boolean;
 ```
 
 ## Parameters
@@ -20,7 +20,9 @@ nuke(host: string): void;
 
 **Returns:**
 
-void
+boolean
+
+Returns a boolean based on the success of NUKE.exe
 
 ## Remarks
 

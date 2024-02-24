@@ -9,7 +9,7 @@ Runs relaySMTP.exe on a server.
 **Signature:**
 
 ```typescript
-relaysmtp(host: string): void;
+relaysmtp(host: string): boolean;
 ```
 
 ## Parameters
@@ -20,7 +20,9 @@ relaysmtp(host: string): void;
 
 **Returns:**
 
-void
+boolean
+
+Returns a boolean based on the success of relaySMTP.exe
 
 ## Remarks
 
