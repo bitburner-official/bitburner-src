@@ -1,5 +1,7 @@
 // Inspired by https://github.com/pasky/michi/blob/master/michi.py
-import { BoardState, GoColor, PointState } from "../boardState/goConstants";
+import type { BoardState, PointState } from "../Types";
+
+import { GoColor } from "@enums";
 import { sleep } from "./goAI";
 import { findEffectiveLibertiesOfNewMove } from "./boardAnalysis";
 import { floor } from "../boardState/boardState";

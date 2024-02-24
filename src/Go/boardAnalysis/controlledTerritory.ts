@@ -1,4 +1,5 @@
-import { BoardState, GoColor, type PointState } from "../boardState/goConstants";
+import type { BoardState, PointState } from "../Types";
+import { GoColor } from "@enums";
 import {
   getAllChains,
   getAllEyes,

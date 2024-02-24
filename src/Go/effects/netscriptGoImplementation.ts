@@ -1,6 +1,8 @@
-import { BoardState, Play, GoColor, GoPlayType, GoValidity, GoOpponent } from "../boardState/goConstants";
-import { getMove, sleep } from "../boardAnalysis/goAI";
+import type { BoardState, Play } from "../Types";
+
 import { Player } from "@player";
+import { GoColor, GoPlayType, GoValidity, GoOpponent } from "@enums";
+import { getMove, sleep } from "../boardAnalysis/goAI";
 import {
   getNewBoardState,
   getStateCopy,

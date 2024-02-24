@@ -1,11 +1,14 @@
-import { BoardState, GoOpponent, GoColor, PointState, newOpponentStats } from "../boardState/goConstants";
+import type { BoardState, PointState } from "../Types";
+
+import { Player } from "@player";
+import { GoOpponent, GoColor } from "@enums";
+import { newOpponentStats } from "../Constants";
 import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
 import { getKomi } from "./goAI";
-import { Player } from "@player";
 import { getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "../effects/effect";
 import { floor, isNotNull } from "../boardState/boardState";
 import { Factions } from "../../Faction/Factions";
-import { FactionName } from "@enums";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 /**
  * Returns the score of the current board.
@@ -59,12 +62,12 @@ export function endGoGame(boardState: BoardState) {
       statusToUpdate.highestWinStreak = statusToUpdate.winStreak;
     }
 
-    const factionName = boardState.ai as unknown as FactionName;
+    const factionName = getEnumHelper("FactionName").getMember(boardState.ai);
     if (
+      factionName &&
       statusToUpdate.winStreak % 2 === 0 &&
       Player.factions.includes(factionName) &&
-      statusToUpdate.favor < getMaxFavor() &&
-      Factions?.[factionName]
+      statusToUpdate.favor < getMaxFavor()
     ) {
       Factions[factionName].favor++;
       statusToUpdate.favor++;

@@ -1,9 +1,8 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
+import { Grid, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 
 import { getScore } from "../boardAnalysis/scoring";
 import { Player } from "@player";
-import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { GoGameboard } from "./GoGameboard";
 import { boardStyles } from "../boardState/goStyles";
 import { useRerender } from "../../ui/React/hooks";

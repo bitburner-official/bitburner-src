@@ -1,12 +1,15 @@
+import type { BoardState } from "../Types";
+
 import React from "react";
 import { ClassNameMap } from "@mui/styles";
 
-import { BoardState, columnIndexes, GoColor } from "../boardState/goConstants";
+import { GoColor } from "@enums";
+import { columnIndexes } from "../Constants";
 import { findNeighbors } from "../boardState/boardState";
 import { pointStyle } from "../boardState/goStyles";
 import { findAdjacentLibertiesAndAlliesForPoint } from "../boardAnalysis/boardAnalysis";
 
-interface IProps {
+interface GoPointProps {
   state: BoardState;
   x: number;
   y: number;
@@ -16,7 +19,7 @@ interface IProps {
   emptyPointOwner: GoColor;
 }
 
-export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwner }: IProps): React.ReactElement {
+export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwner }: GoPointProps): React.ReactElement {
   const classes = pointStyle();
 
   const currentPoint = state.board[x]?.[y];

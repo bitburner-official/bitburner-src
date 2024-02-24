@@ -1,5 +1,6 @@
-import { Container, Tab, Tabs } from "@mui/material";
 import React from "react";
+import { Container, Tab, Tabs } from "@mui/material";
+
 import { GoInstructionsPage } from "./GoInstructionsPage";
 import { BorderInnerSharp, Help, ManageSearch, History } from "@mui/icons-material";
 import { GoStatusPage } from "./GoStatusPage";

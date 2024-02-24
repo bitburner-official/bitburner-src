@@ -1,13 +1,14 @@
+import type { GoScore } from "../Types";
 import React from "react";
 import { Button, Typography } from "@mui/material";
 
+import { GoOpponent, GoColor } from "@enums";
 import { Modal } from "../../ui/React/Modal";
-import { GoScore, GoOpponent, GoColor } from "../boardState/goConstants";
 import { boardStyles } from "../boardState/goStyles";
 import { GoScorePowerSummary } from "./GoScorePowerSummary";
 import { GoScoreSummaryTable } from "./GoScoreSummaryTable";
 
-interface IProps {
+interface Props {
   open: boolean;
   onClose: () => void;
   finalScore: GoScore;
@@ -15,7 +16,7 @@ interface IProps {
   opponent: GoOpponent;
 }
 
-export const GoScoreModal = ({ open, onClose, finalScore, newSubnet, opponent }: IProps): React.ReactElement => {
+export const GoScoreModal = ({ open, onClose, finalScore, newSubnet, opponent }: Props): React.ReactElement => {
   const classes = boardStyles();
 
   const blackScore = finalScore[GoColor.black];

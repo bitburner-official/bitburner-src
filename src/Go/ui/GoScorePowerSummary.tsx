@@ -1,19 +1,22 @@
+import type { GoScore } from "../Types";
+
 import React from "react";
 import { Table, TableBody, TableCell, TableRow, Typography, Tooltip } from "@mui/material";
+
 import { Player } from "@player";
+import { GoOpponent, GoColor } from "@enums";
 import { getBonusText, getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "../effects/effect";
-import { GoScore, GoOpponent, GoColor } from "../boardState/goConstants";
 import { boardStyles } from "../boardState/goStyles";
 import { formatNumber } from "../../ui/formatNumber";
-import { FactionName } from "@enums";
 import { getOpponentStats } from "../boardAnalysis/scoring";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
-interface IProps {
+interface Props {
   finalScore: GoScore;
   opponent: GoOpponent;
 }
 
-export const GoScorePowerSummary = ({ finalScore, opponent }: IProps) => {
+export const GoScorePowerSummary = ({ finalScore, opponent }: Props) => {
   const classes = boardStyles();
   const status = getOpponentStats(opponent);
   const winStreak = status.winStreak;
@@ -21,12 +24,12 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: IProps) => {
   const nodePower = formatNumber(status.nodePower, 2);
   const blackScore = finalScore[GoColor.black];
   const whiteScore = finalScore[GoColor.white];
+  const faction = getEnumHelper("FactionName").getMember(opponent);
 
   const difficultyMultiplier = getDifficultyMultiplier(whiteScore.komi, Player.go.boardState.board[0].length);
   const winstreakMultiplier = getWinstreakMultiplier(winStreak, oldWinStreak);
   const nodePowerIncrease = formatNumber(blackScore.sum * difficultyMultiplier * winstreakMultiplier, 2);
-  const showFavorGain =
-    winStreak > 0 && winStreak % 2 === 0 && Player.factions.includes(opponent as unknown as FactionName);
+  const showFavorGain = faction && winStreak > 0 && winStreak % 2 === 0 && Player.factions.includes(faction);
 
   return (
     <>

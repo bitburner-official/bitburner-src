@@ -1,14 +1,8 @@
-import {
-  BoardState,
-  EyeMove,
-  Move,
-  MoveOptions,
-  opponentDetails,
-  GoOpponent,
-  GoColor,
-  GoPlayType,
-  PointState,
-} from "../boardState/goConstants";
+import type { BoardState, EyeMove, Move, MoveOptions, PointState } from "../Types";
+
+import { Player } from "@player";
+import { AugmentationName, GoOpponent, GoColor, GoPlayType } from "@enums";
+import { opponentDetails } from "../Constants";
 import { findNeighbors, floor, isDefined, isNotNull, passTurn } from "../boardState/boardState";
 import {
   evaluateIfMoveIsValid,
@@ -25,8 +19,6 @@ import {
 import { findDisputedTerritory } from "./controlledTerritory";
 import { findAnyMatchedPatterns } from "./patternMatching";
 import { WHRNG } from "../../Casino/RNG";
-import { Player } from "@player";
-import { AugmentationName } from "@enums";
 
 /*
   Basic GO AIs, each with some personality and weaknesses
@@ -804,5 +796,5 @@ export function sleep(ms: number): Promise<void> {
 }
 
 export function showWorldDemon() {
-  return Player.augmentations.some((a) => a.name === AugmentationName.TheRedPill) && Player.sourceFileLvl(1);
+  return Player.hasAugmentation(AugmentationName.TheRedPill, true) && Player.sourceFileLvl(1);
 }

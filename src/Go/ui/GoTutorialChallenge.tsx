@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Typography, Button } from "@mui/material";
 
-import { BoardState, GoColor, GoValidity } from "../boardState/goConstants";
+import { GoColor, GoValidity, ToastVariant } from "@enums";
+import { BoardState } from "../Types";
 import { GoGameboard } from "./GoGameboard";
 import { evaluateIfMoveIsValid } from "../boardAnalysis/boardAnalysis";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
-import { ToastVariant } from "@enums";
 import { getStateCopy, makeMove } from "../boardState/boardState";
 import { boardStyles } from "../boardState/goStyles";
 

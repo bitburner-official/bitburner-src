@@ -1,4 +1,6 @@
-import { Board, BoardState, Neighbor, GoOpponent, GoColor, PointState, GoValidity } from "../boardState/goConstants";
+import type { Board, BoardState, Neighbor, PointState } from "../Types";
+
+import { GoValidity, GoOpponent, GoColor } from "@enums";
 import {
   findAdjacentPointsInChain,
   findNeighbors,

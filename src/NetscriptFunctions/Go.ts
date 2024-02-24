@@ -1,8 +1,9 @@
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { helpers } from "../Netscript/NetscriptHelpers";
+import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import type { Go } from "@nsdefs";
+import type { Play } from "../Go/Types";
 import { Player } from "@player";
-import { Go } from "@nsdefs";
-import { Play, GoColor } from "../Go/boardState/goConstants";
+import { GoColor } from "@enums";
+import { helpers } from "../Netscript/NetscriptHelpers";
 import { getSimplifiedBoardState } from "../Go/boardAnalysis/boardAnalysis";
 import {
   cheatDestroyNode,

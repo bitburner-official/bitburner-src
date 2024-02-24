@@ -1,6 +1,8 @@
-import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-import { opponentDetails, GoOpponent } from "../boardState/goConstants";
 import { Player } from "@player";
+
+import { GoOpponent } from "@enums";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
+import { opponentDetails } from "../Constants";
 import { defaultMultipliers, mergeMultipliers, Multipliers } from "../../PersonObjects/Multipliers";
 import { PlayerObject } from "../../PersonObjects/Player/PlayerObject";
 import { formatPercent } from "../../ui/formatNumber";

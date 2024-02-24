@@ -51,7 +51,7 @@ import { achievements } from "../../Achievements/Achievements";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isMember } from "../../utils/EnumHelper";
-import { getGoPlayerStartingState } from "../../Go/boardState/goConstants";
+import { getGoPlayerStartingState } from "../../Go/Constants";
 import { resetGoNodePower } from "../../Go/effects/effect";
 
 export function init(this: PlayerObject): void {

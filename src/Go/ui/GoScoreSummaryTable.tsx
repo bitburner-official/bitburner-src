@@ -1,14 +1,17 @@
+import type { GoScore } from "../Types";
+
 import React from "react";
 import { Table, TableBody, TableCell, TableRow, Tooltip } from "@mui/material";
-import { boardStyles } from "../boardState/goStyles";
-import { GoScore, GoOpponent, GoColor } from "../boardState/goConstants";
 
-interface IProps {
+import { GoOpponent, GoColor } from "@enums";
+import { boardStyles } from "../boardState/goStyles";
+
+interface GoScoreSummaryTableProps {
   score: GoScore;
   opponent: GoOpponent;
 }
 
-export const GoScoreSummaryTable = ({ score, opponent }: IProps) => {
+export const GoScoreSummaryTable = ({ score, opponent }: GoScoreSummaryTableProps) => {
   const classes = boardStyles();
   const blackScore = score[GoColor.black];
   const whiteScore = score[GoColor.white];

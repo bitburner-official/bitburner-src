@@ -1,8 +1,9 @@
 import React from "react";
-import { boardStyles } from "../boardState/goStyles";
 import { Grid, Link, Typography } from "@mui/material";
+
+import { GoOpponent, GoColor } from "@enums";
+import { boardStyles } from "../boardState/goStyles";
 import { getBoardFromSimplifiedBoardState } from "../boardAnalysis/boardAnalysis";
-import { GoOpponent, GoColor } from "../boardState/goConstants";
 import { GoTutorialChallenge } from "./GoTutorialChallenge";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";

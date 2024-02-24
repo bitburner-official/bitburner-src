@@ -1,9 +1,11 @@
+import type { BoardState } from "../Types";
+
 import React, { useEffect, useMemo, useState } from "react";
-import { SnackbarEvents } from "../../ui/React/Snackbar";
-import { ToastVariant } from "@enums";
 import { Box, Button, Typography } from "@mui/material";
 
-import { BoardState, GoOpponent, GoColor, GoPlayType, GoValidity } from "../boardState/goConstants";
+import { Player } from "@player";
+import { GoOpponent, GoColor, GoPlayType, GoValidity, ToastVariant } from "@enums";
+import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { getNewBoardState, getStateCopy, makeMove, passTurn } from "../boardState/boardState";
 import { getMove } from "../boardAnalysis/goAI";
 import { bitverseArt, weiArt } from "../boardState/asciiArt";
@@ -12,14 +14,13 @@ import { evaluateIfMoveIsValid, getAllValidMoves } from "../boardAnalysis/boardA
 import { useRerender } from "../../ui/React/hooks";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { boardStyles } from "../boardState/goStyles";
-import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 import { CorruptableText } from "../../ui/React/CorruptableText";
 
-interface IProps {
+interface GoGameboardWrapperProps {
   showInstructions: () => void;
 }
 
@@ -32,7 +33,7 @@ interface IProps {
 * play two moves that don't capture
  */
 
-export function GoGameboardWrapper({ showInstructions }: IProps): React.ReactElement {
+export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps): React.ReactElement {
   const rerender = useRerender(400);
 
   const boardState = Player.go.boardState;

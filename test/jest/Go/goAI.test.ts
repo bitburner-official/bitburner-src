@@ -1,7 +1,7 @@
-import { getBoardFromSimplifiedBoardState } from "../../../src/Go/boardAnalysis/boardAnalysis";
-import { GoOpponent, GoColor } from "../../../src/Go/Enums";
-import { getMove } from "../../../src/Go/boardAnalysis/goAI";
 import { setPlayer } from "@player";
+import { GoOpponent, GoColor } from "@enums";
+import { getBoardFromSimplifiedBoardState } from "../../../src/Go/boardAnalysis/boardAnalysis";
+import { getMove } from "../../../src/Go/boardAnalysis/goAI";
 import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 import "../../../src/Faction/Factions";
 

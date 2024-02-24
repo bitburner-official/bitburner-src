@@ -1,6 +1,8 @@
-import { Board, boardSizes, BoardState, PointState } from "./goConstants";
-import { WHRNG } from "../../Casino/RNG";
+import type { Board, BoardState, PointState } from "../Types";
+
 import { Player } from "@player";
+import { boardSizes } from "../Constants";
+import { WHRNG } from "../../Casino/RNG";
 import { floor } from "./boardState";
 
 type rand = (n1: number, n2: number) => number;

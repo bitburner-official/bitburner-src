@@ -1,11 +1,11 @@
 import { setPlayer } from "@player";
+import { GoColor } from "@enums";
 import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 import {
   getAllEyes,
   getAllValidMoves,
   getBoardFromSimplifiedBoardState,
 } from "../../../src/Go/boardAnalysis/boardAnalysis";
-import { GoColor } from "../../../src/Go/Enums";
 import { findAnyMatchedPatterns } from "../../../src/Go/boardAnalysis/patternMatching";
 
 setPlayer(new PlayerObject());

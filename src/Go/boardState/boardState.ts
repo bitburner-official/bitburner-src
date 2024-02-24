@@ -1,14 +1,7 @@
-import {
-  bitverseBoardShape,
-  Board,
-  BoardState,
-  Move,
-  Neighbor,
-  GoOpponent,
-  GoColor,
-  PointState,
-  GoValidity,
-} from "./goConstants";
+import type { Board, BoardState, Move, Neighbor, PointState } from "../Types";
+
+import { GoOpponent, GoColor, GoValidity } from "@enums";
+import { bitverseBoardShape } from "../Constants";
 import { getExpansionMoveArray } from "../boardAnalysis/goAI";
 import {
   evaluateIfMoveIsValid,
