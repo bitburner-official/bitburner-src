@@ -26,7 +26,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
   // Utility function to get Hacknet Node object
   const getHacknetNode = function (ctx: NetscriptContext, i: number): HacknetNode | HacknetServer {
     if (i < 0 || i >= player.hacknetNodes.length) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "Index specified for Hacknet Node is out-of-bounds: " + i);
+      throw helpers.errorMessage(ctx, "Index specified for Hacknet Node is out-of-bounds: " + i);
     }
 
     if (hasHacknetServers()) {
@@ -35,7 +35,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
       const hserver = GetServer(hi);
       if (!(hserver instanceof HacknetServer)) throw new Error("hacknet server was not actually hacknet server");
       if (hserver == null) {
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `Could not get Hacknet Server for index ${i}. This is probably a bug, please report to game dev`,
         );
@@ -217,7 +217,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
       const upgName = helpers.string(ctx, "upgName", _upgName);
       const level = player.hashManager.upgrades[upgName];
       if (level === undefined) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid Hash Upgrade: ${upgName}`);
+        throw helpers.errorMessage(ctx, `Invalid Hash Upgrade: ${upgName}`);
       }
       return level;
     },

@@ -51,7 +51,7 @@ import { achievements } from "../../Achievements/Achievements";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isMember } from "../../utils/EnumHelper";
-import { getGoPlayerStartingState } from "../../Go/Constants";
+import { newGoState } from "../../Go/boardState/boardState";
 import { resetGoNodePower } from "../../Go/effects/effect";
 
 export function init(this: PlayerObject): void {
@@ -152,7 +152,7 @@ export function prestigeSourceFile(this: PlayerObject): void {
   resetGangs();
   this.corporation = null;
   this.bladeburner = null;
-  this.go = getGoPlayerStartingState();
+  this.go = newGoState();
 
   // Reset Stock market
   this.hasWseAccount = false;

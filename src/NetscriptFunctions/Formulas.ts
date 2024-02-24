@@ -63,7 +63,7 @@ import { findCrime } from "../Crime/CrimeHelpers";
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
     if (!player.hasProgram(CompletedProgramName.formulas)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Requires Formulas.exe to run.`);
+      throw helpers.errorMessage(ctx, `Requires Formulas.exe to run.`);
     }
   };
   const formulasFunctions: InternalAPI<IFormulas> = {
@@ -316,7 +316,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         const upg = player.hashManager.getUpgrade(upgName);
         if (!upg) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `Invalid Hash Upgrade: ${upgName}`);
+          throw helpers.errorMessage(ctx, `Invalid Hash Upgrade: ${upgName}`);
         }
         return upg.getCost(level);
       },

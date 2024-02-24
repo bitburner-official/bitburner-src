@@ -1,4 +1,4 @@
-import type { Board, BoardState, Move, Neighbor, PointState } from "../Types";
+import type { Board, BoardState, GoState, Move, Neighbor, PointState } from "../Types";
 
 import { GoOpponent, GoColor, GoValidity } from "@enums";
 import { bitverseBoardShape } from "../Constants";
@@ -13,9 +13,16 @@ import {
 import { endGoGame } from "../boardAnalysis/scoring";
 import { addObstacles, resetCoordinates, rotate90Degrees } from "./offlineNodes";
 
-/**
- * Generates a new BoardState object with the given opponent and size
- */
+/** Create a new overall go state */
+export function newGoState(): GoState {
+  return {
+    boardState: getNewBoardState(7),
+    status: {},
+    previousGameFinalBoardState: null,
+  };
+}
+
+/** Generates a new BoardState object with the given opponent and size */
 export function getNewBoardState(
   boardSize: number,
   ai = GoOpponent.Netburners,

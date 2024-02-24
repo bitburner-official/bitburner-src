@@ -1,6 +1,6 @@
-import { getNewBoardState } from "./boardState/boardState";
+import type { OpponentStats } from "./Types";
+
 import { GoOpponent } from "@enums";
-import type { OpponentStats, GoState } from "./Types";
 
 export const opponentDetails = {
   [GoOpponent.none]: {
@@ -81,14 +81,6 @@ export function newOpponentStats(): OpponentStats {
     oldWinStreak: 0,
     highestWinStreak: 0,
     favor: 0,
-  };
-}
-
-export function getGoPlayerStartingState(): GoState {
-  return {
-    boardState: getNewBoardState(7),
-    status: {},
-    previousGameFinalBoardState: null,
   };
 }
 

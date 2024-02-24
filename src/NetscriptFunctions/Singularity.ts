@@ -190,7 +190,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
+      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
 
       helpers.log(ctx, () => "Soft resetting. This will cause this script to be killed");
       installAugmentations(true);
@@ -201,7 +201,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
+      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
 
       if (Player.queuedAugmentations.length === 0) {
         helpers.log(ctx, () => "You do not have any Augmentations to be installed.");
@@ -409,7 +409,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 50000);
           return true;
         default:
-          throw helpers.makeRuntimeErrorMsg(ctx, `Invalid city name: '${cityName}'.`);
+          throw helpers.errorMessage(ctx, `Invalid city name: '${cityName}'.`);
       }
     },
 
@@ -428,7 +428,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       Player.loseMoney(CONSTANTS.TorRouterCost, "other");
 
       const darkweb = GetServer(SpecialServers.DarkWeb);
-      if (!darkweb) throw helpers.makeRuntimeErrorMsg(ctx, "DarkWeb was not a server but should have been");
+      if (!darkweb) throw helpers.errorMessage(ctx, "DarkWeb was not a server but should have been");
 
       Player.getHomeComputer().serversOnNetwork.push(darkweb.hostname);
       darkweb.serversOnNetwork.push(Player.getHomeComputer().hostname);
@@ -483,12 +483,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const hostname = helpers.string(ctx, "hostname", _hostname);
       if (!hostname) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid hostname: '${hostname}'`);
+        throw helpers.errorMessage(ctx, `Invalid hostname: '${hostname}'`);
       }
 
       const target = GetServer(hostname);
       if (target == null) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid hostname: '${hostname}'`);
+        throw helpers.errorMessage(ctx, `Invalid hostname: '${hostname}'`);
       }
 
       //Home case
@@ -545,7 +545,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       // No root access or skill level too low
       const canHack = netscriptCanHack(server);
       if (!canHack.res) {
-        throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
+        throw helpers.errorMessage(ctx, canHack.msg || "");
       }
 
       helpers.log(
@@ -573,7 +573,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const focus = !!_focus;
       if (Player.currentWork === null) {
-        throw helpers.makeRuntimeErrorMsg(ctx, "Not currently working");
+        throw helpers.errorMessage(ctx, "Not currently working");
       }
 
       if (!Player.focus && focus) {
@@ -682,7 +682,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const company = Companies[companyName];
 
       if (!company.hasPosition(positionName)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Company '${companyName}' does not have position '${positionName}'`);
+        throw helpers.errorMessage(ctx, `Company '${companyName}' does not have position '${positionName}'`);
       }
 
       const job = CompanyPositions[positionName];
@@ -706,7 +706,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         const jobName = Player.jobs[companyName];
         // Make sure player is actually employed at the company
         if (!jobName) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `You do not have a job at: '${companyName}'`);
+          throw helpers.errorMessage(ctx, `You do not have a job at: '${companyName}'`);
         }
 
         const wasFocused = Player.focus;
@@ -1005,7 +1005,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // If input isn't a crimeType, use search using roughname.
       const crime = findCrime(crimeType);
-      if (crime == null) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid crime: '${crimeType}'`);
+      if (crime == null) throw helpers.errorMessage(ctx, `Invalid crime: '${crimeType}'`);
 
       helpers.log(ctx, () => `Attempting to commit ${crime.type}...`);
       const crimeTime = crime.commit(1, ctx.workerScript);
@@ -1024,7 +1024,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // If input isn't a crimeType, use search using roughname.
       const crime = findCrime(crimeType);
-      if (crime == null) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid crime: '${crimeType}'`);
+      if (crime == null) throw helpers.errorMessage(ctx, `Invalid crime: '${crimeType}'`);
 
       return crime.successRate(Player);
     },
@@ -1034,7 +1034,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // If input isn't a crimeType, use search using roughname.
       const crime = findCrime(crimeType);
-      if (crime == null) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid crime: '${crimeType}'`);
+      if (crime == null) throw helpers.errorMessage(ctx, `Invalid crime: '${crimeType}'`);
 
       const crimeStatsWithMultipliers = calculateCrimeWorkStats(Player, crime);
 
@@ -1079,7 +1079,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       // doesn't exist, it's the first time they've run the script. So throw an error to let them know
       // that they need to fix it.
       if (item == null) {
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `No such exploit ('${programName}') found on the darkweb! ` +
             `\nThis function is not case-sensitive. Did you perhaps forget .exe at the end?`,
@@ -1098,7 +1098,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
+      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
       enterBitNode(true, Player.bitNodeN, nextBN);
       if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
     },
@@ -1111,7 +1111,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
+      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
 
       const wd = GetServer(SpecialServers.WorldDaemon);
       if (!(wd instanceof Server)) throw new Error("WorldDaemon was not a normal server. This is a bug contact dev.");

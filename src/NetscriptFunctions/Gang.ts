@@ -17,20 +17,20 @@ import { getEnumHelper } from "../utils/EnumHelper";
 export function NetscriptGang(): InternalAPI<IGang> {
   /** Functions as an API check and also returns the gang object */
   const getGang = function (ctx: NetscriptContext): Gang {
-    if (!Player.gang) throw helpers.makeRuntimeErrorMsg(ctx, "Must have joined gang", "API ACCESS");
+    if (!Player.gang) throw helpers.errorMessage(ctx, "Must have joined gang", "API ACCESS");
     return Player.gang;
   };
 
   const getGangMember = function (ctx: NetscriptContext, name: string): GangMember {
     const gang = getGang(ctx);
     for (const member of gang.members) if (member.name === name) return member;
-    throw helpers.makeRuntimeErrorMsg(ctx, `Invalid gang member: '${name}'`);
+    throw helpers.errorMessage(ctx, `Invalid gang member: '${name}'`);
   };
 
   const getGangTask = function (ctx: NetscriptContext, name: string): GangMemberTask {
     const task = GangMemberTasks[name];
     if (!task) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid task: '${name}'`);
+      throw helpers.errorMessage(ctx, `Invalid task: '${name}'`);
     }
 
     return task;
@@ -60,13 +60,13 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const newName = helpers.string(ctx, "newName", _newName);
       const member = gang.members.find((m) => m.name === memberName);
       if (!memberName) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid memberName: "" (empty string)`);
+        throw helpers.errorMessage(ctx, `Invalid memberName: "" (empty string)`);
       }
       if (!newName) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid newName: "" (empty string)`);
+        throw helpers.errorMessage(ctx, `Invalid newName: "" (empty string)`);
       }
       if (newName === memberName) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `newName and memberName must be different, but both were: ${newName}`);
+        throw helpers.errorMessage(ctx, `newName and memberName must be different, but both were: ${newName}`);
       }
       if (!member) {
         helpers.log(ctx, () => `Failed to rename member: No member exists with memberName: ${memberName}`);
@@ -253,7 +253,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       getGang(ctx);
       const equipment = GangMemberUpgrades[equipName];
       if (!equipment) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid equipment: ${equipName}`);
+        throw helpers.errorMessage(ctx, `Invalid equipment: ${equipName}`);
       }
       const typecheck: EquipmentStats = equipment.mults;
       return Object.assign({}, typecheck);
@@ -312,7 +312,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const otherGang = helpers.string(ctx, "otherGang", _otherGang);
       const gang = getGang(ctx);
       if (AllGangs[otherGang] == null) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid gang: ${otherGang}`);
+        throw helpers.errorMessage(ctx, `Invalid gang: ${otherGang}`);
       }
 
       const playerPower = AllGangs[gang.facName].power;
