@@ -4,10 +4,10 @@ import type { BoardState, OpponentStats } from "./Types";
 import { getRecordValues, PartialRecord } from "../Types/Record";
 import { getNewBoardState } from "./boardState/boardState";
 
-class GoObject {
+export class GoObject {
   // Todo: Make previous game a slimmer interface
   previousGame: BoardState | null = null;
-  currentGame: BoardState = getNewBoardState(5);
+  currentGame: BoardState = getNewBoardState(7);
   stats: PartialRecord<GoOpponent, OpponentStats> = {};
 
   prestigeAugmentation() {

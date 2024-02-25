@@ -38,6 +38,7 @@ import { Corporation } from "./Corporation/Corporation";
 import { Terminal } from "./Terminal";
 import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
+import { getGoSave, loadGo } from "./Go/SaveLoad";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -86,6 +87,7 @@ class BitburnerSaveObject {
   AllGangsSave = "";
   LastExportBonus = "0";
   StaneksGiftSave = "";
+  GoSave = "";
 
   getSaveString(forceExcludeRunningScripts = false): string {
     this.PlayerSave = JSON.stringify(Player);
@@ -105,6 +107,7 @@ class BitburnerSaveObject {
     this.VersionSave = JSON.stringify(CONSTANTS.VersionNumber);
     this.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
     this.StaneksGiftSave = JSON.stringify(staneksGift);
+    this.GoSave = JSON.stringify(getGoSave());
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
 
@@ -704,6 +707,7 @@ Error: ${e}`);
       }
     }
   }
+  if (ver < 38 && "go" in Player) delete Player.go; // Remove outdated savedata
 }
 
 function loadGame(saveString: string): boolean {
@@ -717,6 +721,7 @@ function loadGame(saveString: string): boolean {
   loadAllServers(saveObj.AllServersSave);
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave, Player);
+  loadGo(saveObj.GoSave);
 
   if (Object.hasOwn(saveObj, "StaneksGiftSave")) {
     loadStaneksGift(saveObj.StaneksGiftSave);

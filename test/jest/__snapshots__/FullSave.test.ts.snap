@@ -548,6 +548,29 @@ exports[`Check Save File Continuity FactionsSave continuity 1`] = `
 }
 `;
 
+exports[`Check Save File Continuity GoSave continuity 1`] = `
+{
+  "currentGame": {
+    "ai": "Netburners",
+    "board": [
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+    ],
+    "cheatCount": 0,
+    "passCount": 0,
+    "previousBoard": null,
+    "previousPlayer": "White",
+  },
+  "previousGame": null,
+  "stats": {},
+}
+`;
+
 exports[`Check Save File Continuity PlayerSave continuity 1`] = `
 {
   "ctor": "PlayerObject",
