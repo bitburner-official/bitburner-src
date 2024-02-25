@@ -1,4 +1,4 @@
-import type { GameState, PointState } from "../Types";
+import type { BoardState, PointState } from "../Types";
 
 import { Player } from "@player";
 import { GoOpponent, GoColor } from "@enums";
@@ -16,7 +16,7 @@ import { Go } from "../Go";
  * Each player gets one point for each piece on the board, and one point for any empty node
  *  fully surrounded by their pieces
  */
-export function getScore(boardState: GameState) {
+export function getScore(boardState: BoardState) {
   const komi = getKomi(boardState.ai) ?? 6.5;
   const whitePieces = getColoredPieceCount(boardState, GoColor.white);
   const blackPieces = getColoredPieceCount(boardState, GoColor.black);
@@ -42,7 +42,7 @@ export function getScore(boardState: GameState) {
  * Handles ending the game. Sets the previous player to null to prevent further moves, calculates score, and updates
  * player node count and power, and game history
  */
-export function endGoGame(boardState: GameState) {
+export function endGoGame(boardState: BoardState) {
   if (boardState.previousPlayer === null) {
     return;
   }
@@ -106,9 +106,9 @@ export function resetWinstreak(opponent: GoOpponent, gameComplete: boolean) {
 /**
  * Gets the number pieces of a given color on the board
  */
-function getColoredPieceCount(boardState: GameState, color: GoColor) {
+function getColoredPieceCount(boardState: BoardState, color: GoColor) {
   return boardState.board.reduce(
-    (sum, row) => sum + row.filter(isNotNull).filter((point) => point.player === color).length,
+    (sum, row) => sum + row.filter(isNotNull).filter((point) => point.color === color).length,
     0,
   );
 }
@@ -116,8 +116,8 @@ function getColoredPieceCount(boardState: GameState, color: GoColor) {
 /**
  * Finds all empty spaces fully surrounded by a single player's stones
  */
-function getTerritoryScores(boardState: GameState) {
-  const emptyTerritoryChains = getAllChains(boardState).filter((chain) => chain?.[0]?.player === GoColor.empty);
+function getTerritoryScores(boardState: BoardState) {
+  const emptyTerritoryChains = getAllChains(boardState).filter((chain) => chain?.[0]?.color === GoColor.empty);
 
   return emptyTerritoryChains.reduce(
     (scores, currentChain) => {
@@ -137,14 +137,14 @@ function getTerritoryScores(boardState: GameState) {
 /**
  * Finds all neighbors of the empty points in question. If they are all one color, that player controls that space
  */
-function checkTerritoryOwnership(boardState: GameState, emptyPointChain: PointState[]) {
+function checkTerritoryOwnership(boardState: BoardState, emptyPointChain: PointState[]) {
   if (emptyPointChain.length > boardState.board[0].length ** 2 - 3) {
     return null;
   }
 
   const playerNeighbors = getPlayerNeighbors(boardState, emptyPointChain);
-  const hasWhitePieceNeighbors = playerNeighbors.find((p) => p.player === GoColor.white);
-  const hasBlackPieceNeighbors = playerNeighbors.find((p) => p.player === GoColor.black);
+  const hasWhitePieceNeighbors = playerNeighbors.find((p) => p.color === GoColor.white);
+  const hasBlackPieceNeighbors = playerNeighbors.find((p) => p.color === GoColor.black);
   const isWhiteTerritory = hasWhitePieceNeighbors && !hasBlackPieceNeighbors;
   const isBlackTerritory = hasBlackPieceNeighbors && !hasWhitePieceNeighbors;
   return isWhiteTerritory ? GoColor.white : isBlackTerritory ? GoColor.black : null;
@@ -153,7 +153,7 @@ function checkTerritoryOwnership(boardState: GameState, emptyPointChain: PointSt
 /**
  * prints the board state to the console
  */
-export function logBoard(boardState: GameState): void {
+export function logBoard(boardState: BoardState): void {
   const state = boardState.board;
   console.log("--------------");
   for (let x = 0; x < state.length; x++) {

@@ -1,7 +1,7 @@
 import { setPlayer } from "@player";
 import { GoOpponent, GoColor, GoPlayType } from "@enums";
 import { Go } from "../../../src/Go/Go";
-import { getBoardFromSimplifiedBoardState, getSimplifiedBoardState } from "../../../src/Go/boardAnalysis/boardAnalysis";
+import { boardStateFromSimpleBoard, simpleBoardFromBoard } from "../../../src/Go/boardAnalysis/boardAnalysis";
 import {
   cheatPlayTwoMoves,
   cheatRemoveRouter,
@@ -29,7 +29,7 @@ describe("Netscript Go API unit tests", () => {
   describe("makeMove() tests", () => {
     it("should handle invalid moves", async () => {
       const board = ["XOO..", ".....", ".....", ".....", "....."];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
 
       const result = await makePlayerMove(mockLogger, 0, 0);
@@ -40,15 +40,16 @@ describe("Netscript Go API unit tests", () => {
 
     it("should update the board with valid player moves", async () => {
       const board = ["OXX..", ".....", ".....", ".....", "....."];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      const boardState = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardState;
       const mockLogger = jest.fn();
 
       const result = await makePlayerMove(mockLogger, 1, 0);
 
       expect(result.success).toEqual(true);
       expect(mockLogger).toHaveBeenCalledWith("Go move played: 1, 0");
-      expect(Go.currentGame.board[1]?.[0]?.player).toEqual(GoColor.black);
-      expect(Go.currentGame.board[0]?.[0]?.player).toEqual(GoColor.empty);
+      expect(boardState.board[1]?.[0]?.color).toEqual(GoColor.black);
+      expect(boardState.board[0]?.[0]?.color).toEqual(GoColor.empty);
     });
   });
   describe("passTurn() tests", () => {
@@ -66,9 +67,9 @@ describe("Netscript Go API unit tests", () => {
   describe("getBoardState() tests", () => {
     it("should correctly return a string version of the bard state", () => {
       const board = ["OXX..", ".....", ".....", ".....", "..###"];
-      const boardState = getBoardFromSimplifiedBoardState(board);
+      const boardState = boardStateFromSimpleBoard(board);
 
-      const result = getSimplifiedBoardState(boardState.board);
+      const result = simpleBoardFromBoard(boardState.board);
 
       expect(result).toEqual(board);
     });
@@ -77,7 +78,7 @@ describe("Netscript Go API unit tests", () => {
   describe("resetBoardState() tests", () => {
     it("should set the player's board to the requested size and opponent", () => {
       const board = ["OXX..", ".....", ".....", ".....", "..###"];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board);
+      Go.currentGame = boardStateFromSimpleBoard(board);
       const mockError = jest.fn();
 
       const newBoard = resetBoardState(mockError, GoOpponent.SlumSnakes, 9);
@@ -101,7 +102,7 @@ describe("Netscript Go API unit tests", () => {
 */
     it("should throw an error if an invalid size is requested", () => {
       const board = ["OXX..", ".....", ".....", ".....", "..###"];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board);
+      Go.currentGame = boardStateFromSimpleBoard(board);
       const mockError = jest.fn();
 
       resetBoardState(mockError, GoOpponent.TheBlackHand, 31337);
@@ -113,7 +114,7 @@ describe("Netscript Go API unit tests", () => {
   describe("getValidMoves() unit tests", () => {
     it("should return all valid and invalid moves on the board", () => {
       const board = ["XXO.#", "XO.O.", ".OOOO", "XXXXX", "X.X.X"];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
 
       const result = getValidMoves();
 
@@ -130,7 +131,7 @@ describe("Netscript Go API unit tests", () => {
   describe("getChains() unit tests", () => {
     it("should assign an ID to all contiguous chains on the board", () => {
       const board = ["XXO.#", "XO.O.", ".OOOO", "XXXXX", "X.X.X"];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
 
       const result = getChains();
 
@@ -144,7 +145,7 @@ describe("Netscript Go API unit tests", () => {
   describe("getLiberties() unit tests", () => {
     it("should display the number of connected empty nodes for each chain on the board", () => {
       const board = ["XXO.#", "XO.O.", ".OOOO", "XXXXX", "X.X.X"];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
 
       const result = getLiberties();
 
@@ -160,7 +161,7 @@ describe("Netscript Go API unit tests", () => {
   describe("getControlledEmptyNodes() unit tests", () => {
     it("should show the owner of each empty node, if a single player has fully encircled it", () => {
       const board = ["XXO.#", "XO.O.", ".OOOO", "XXXXX", "X.X.X"];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
 
       const result = getControlledEmptyNodes();
 
@@ -170,7 +171,7 @@ describe("Netscript Go API unit tests", () => {
   describe("cheatPlayTwoMoves() tests", () => {
     it("should handle invalid moves", async () => {
       const board = ["XOO..", ".....", ".....", ".....", "....."];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
 
       const result = await cheatPlayTwoMoves(mockLogger, 0, 0, 1, 0, 0, 0);
@@ -181,34 +182,34 @@ describe("Netscript Go API unit tests", () => {
 
     it("should update the board with both player moves if nodes are unoccupied and cheat is successful", async () => {
       const board = ["OXX..", ".....", ".....", ".....", "....O"];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
 
       const result = await cheatPlayTwoMoves(mockLogger, 4, 3, 3, 4, 0, 0);
       expect(mockLogger).toHaveBeenCalledWith("Cheat successful. Two go moves played: 4,3 and 3,4");
       expect(result.success).toEqual(true);
-      expect(Go.currentGame.board[4]?.[3]?.player).toEqual(GoColor.black);
-      expect(Go.currentGame.board[3]?.[4]?.player).toEqual(GoColor.black);
-      expect(Go.currentGame.board[4]?.[4]?.player).toEqual(GoColor.empty);
+      expect(Go.currentGame.board[4]?.[3]?.color).toEqual(GoColor.black);
+      expect(Go.currentGame.board[3]?.[4]?.color).toEqual(GoColor.black);
+      expect(Go.currentGame.board[4]?.[4]?.color).toEqual(GoColor.empty);
     });
 
     it("should pass player turn to AI if the cheat is unsuccessful but player is not ejected", async () => {
       const board = ["OXX..", ".....", ".....", ".....", "....O"];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
 
       const result = await cheatPlayTwoMoves(mockLogger, 4, 3, 3, 4, 2, 1);
       console.log(result);
       expect(mockLogger).toHaveBeenCalledWith("Cheat failed. Your turn has been skipped.");
       expect(result.success).toEqual(false);
-      expect(Go.currentGame.board[4]?.[3]?.player).toEqual(GoColor.empty);
-      expect(Go.currentGame.board[3]?.[4]?.player).toEqual(GoColor.empty);
-      expect(Go.currentGame.board[4]?.[4]?.player).toEqual(GoColor.white);
+      expect(Go.currentGame.board[4]?.[3]?.color).toEqual(GoColor.empty);
+      expect(Go.currentGame.board[3]?.[4]?.color).toEqual(GoColor.empty);
+      expect(Go.currentGame.board[4]?.[4]?.color).toEqual(GoColor.white);
     });
 
     it("should reset the board if the cheat is unsuccessful and the player is ejected", async () => {
       const board = ["OXX..", ".....", ".....", ".....", "....O"];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       Go.currentGame.cheatCount = 1;
       const mockLogger = jest.fn();
 
@@ -216,13 +217,13 @@ describe("Netscript Go API unit tests", () => {
       console.log(result);
       expect(mockLogger).toHaveBeenCalledWith("Cheat failed! You have been ejected from the subnet.");
       expect(result.success).toEqual(false);
-      expect(Go.currentGame.history.length).toEqual(0);
+      expect(Go.currentGame.previousBoard).toEqual(null);
     });
   });
   describe("cheatRemoveRouter() tests", () => {
     it("should handle invalid moves", async () => {
       const board = ["XOO..", ".....", ".....", ".....", "....."];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
 
       const result = await cheatRemoveRouter(mockLogger, 1, 0, 0, 0);
@@ -235,19 +236,19 @@ describe("Netscript Go API unit tests", () => {
 
     it("should remove the router if the move is valid", async () => {
       const board = ["XOO..", ".....", ".....", ".....", "....."];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
 
       const result = await cheatRemoveRouter(mockLogger, 0, 0, 0, 0);
 
       expect(result.success).toEqual(true);
       expect(mockLogger).toHaveBeenCalledWith("Cheat successful. The point 0,0 was cleared.");
-      expect(Go.currentGame.board[0][0]?.player).toEqual(GoColor.empty);
+      expect(Go.currentGame.board[0][0]?.color).toEqual(GoColor.empty);
     });
 
     it("should reset the board if the cheat is unsuccessful and the player is ejected", async () => {
       const board = ["OXX..", ".....", ".....", ".....", "....O"];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       Go.currentGame.cheatCount = 1;
       const mockLogger = jest.fn();
 
@@ -255,13 +256,13 @@ describe("Netscript Go API unit tests", () => {
       console.log(result);
       expect(mockLogger).toHaveBeenCalledWith("Cheat failed! You have been ejected from the subnet.");
       expect(result.success).toEqual(false);
-      expect(Go.currentGame.history.length).toEqual(0);
+      expect(Go.currentGame.previousBoard).toEqual(null);
     });
   });
   describe("cheatRepairOfflineNode() tests", () => {
     it("should handle invalid moves", async () => {
       const board = ["XOO..", ".....", ".....", ".....", "....#"];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
 
       const result = await cheatRepairOfflineNode(mockLogger, 0, 0);
@@ -272,13 +273,13 @@ describe("Netscript Go API unit tests", () => {
 
     it("should update the board with the repaired node if the cheat is successful", async () => {
       const board = ["OXX..", ".....", ".....", ".....", "....#"];
-      Go.currentGame = getBoardFromSimplifiedBoardState(board, GoOpponent.Daedalus, GoColor.white);
+      Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
 
       const result = await cheatRepairOfflineNode(mockLogger, 4, 4, 0, 0);
       expect(mockLogger).toHaveBeenCalledWith("Cheat successful. The point 4,4 was repaired.");
       expect(result.success).toEqual(true);
-      expect(Go.currentGame.board[4]?.[4]?.player).toEqual(GoColor.empty);
+      expect(Go.currentGame.board[4]?.[4]?.color).toEqual(GoColor.empty);
     });
   });
 });

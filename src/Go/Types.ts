@@ -2,6 +2,8 @@ import type { GoColor, GoOpponent, GoPlayType } from "@enums";
 
 export type Board = (PointState | null)[][];
 
+export type SimpleBoard = string[];
+
 export type Move = {
   point: PointState;
   oldLibertyCount?: number | null;
@@ -31,17 +33,18 @@ export type EyeMove = {
   createsLife: boolean;
 };
 
-export type GameState = {
+export type BoardState = {
   board: Board;
   previousPlayer: GoColor | null;
-  history: Board[];
+  /** The previous board position as a SimpleBoard */
+  previousBoard: SimpleBoard | null;
   ai: GoOpponent;
   passCount: number;
   cheatCount: number;
 };
 
 export type PointState = {
-  player: GoColor;
+  color: GoColor;
   chain: string;
   liberties: (PointState | null)[] | null;
   x: number;

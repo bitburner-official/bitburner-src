@@ -1,4 +1,4 @@
-import type { GameState } from "../Types";
+import type { BoardState } from "../Types";
 
 import React from "react";
 import { ClassNameMap } from "@mui/styles";
@@ -7,10 +7,10 @@ import { GoColor } from "@enums";
 import { columnIndexes } from "../Constants";
 import { findNeighbors } from "../boardState/boardState";
 import { pointStyle } from "../boardState/goStyles";
-import { findAdjacentLibertiesAndAlliesForPoint } from "../boardAnalysis/boardAnalysis";
+import { findAdjacentLibertiesAndAlliesForPoint, getColorOnSimpleBoard } from "../boardAnalysis/boardAnalysis";
 
 interface GoPointProps {
-  state: GameState;
+  state: BoardState;
   x: number;
   y: number;
   traditional: boolean;
@@ -23,7 +23,7 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
   const classes = pointStyle();
 
   const currentPoint = state.board[x]?.[y];
-  const player = currentPoint?.player;
+  const player = currentPoint?.color;
 
   const isInAtari = currentPoint && currentPoint.liberties?.length === 1 && player !== GoColor.empty && !traditional;
   const liberties = player !== GoColor.empty ? findAdjacentLibertiesAndAlliesForPoint(state, x, y) : null;
@@ -41,7 +41,7 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
 
   const sizeClass = getSizeClass(state.board[0].length, classes);
 
-  const isNewStone = state.history?.[state.history?.length - 1]?.[x]?.[y]?.player === GoColor.empty;
+  const isNewStone = state.previousBoard && getColorOnSimpleBoard(state.previousBoard, x, y) === GoColor.empty;
   const isPriorMove = player === state.previousPlayer && isNewStone;
 
   const emptyPointColorClass =

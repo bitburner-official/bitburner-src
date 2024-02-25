@@ -1,4 +1,4 @@
-import type { Board, GameState, PointState } from "../Types";
+import type { Board, BoardState, PointState } from "../Types";
 
 import { Player } from "@player";
 import { boardSizes } from "../Constants";
@@ -7,7 +7,7 @@ import { floor } from "./boardState";
 
 type rand = (n1: number, n2: number) => number;
 
-export function addObstacles(boardState: GameState) {
+export function addObstacles(boardState: BoardState) {
   const rng = new WHRNG(Player.totalPlaytime);
   const random = (n1: number, n2: number) => n1 + floor((n2 - n1 + 1) * rng.random());
 
@@ -124,6 +124,6 @@ function rotateNTimes(board: Board, rotations: number) {
   return board;
 }
 
-export function rotate90Degrees(board: Board) {
+export function rotate90Degrees(board: Board): Board {
   return board[0].map((_, index: number) => board.map((row: (PointState | null)[]) => row[index]).reverse());
 }

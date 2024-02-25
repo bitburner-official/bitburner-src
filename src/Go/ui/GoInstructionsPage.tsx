@@ -3,7 +3,7 @@ import { Grid, Link, Typography } from "@mui/material";
 
 import { GoOpponent, GoColor } from "@enums";
 import { boardStyles } from "../boardState/goStyles";
-import { getBoardFromSimplifiedBoardState } from "../boardAnalysis/boardAnalysis";
+import { boardStateFromSimpleBoard } from "../boardAnalysis/boardAnalysis";
 import { GoTutorialChallenge } from "./GoTutorialChallenge";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
@@ -11,11 +11,7 @@ import { getMaxFavor } from "../effects/effect";
 
 const captureChallenge = (
   <GoTutorialChallenge
-    state={getBoardFromSimplifiedBoardState(
-      [".....", "OX...", "OXX..", "OOX.O", "OOX.."],
-      GoOpponent.none,
-      GoColor.white,
-    )}
+    state={boardStateFromSimpleBoard([".....", "OX...", "OXX..", "OOX.O", "OOX.."], GoOpponent.none, GoColor.white)}
     description={
       "CHALLENGE: This white network on the bottom is vulnerable! Click on the board to place a router. Capture some white pieces by cutting off their access to any empty nodes."
     }
@@ -29,11 +25,7 @@ const captureChallenge = (
 
 const saveTheNetworkChallenge = (
   <GoTutorialChallenge
-    state={getBoardFromSimplifiedBoardState(
-      ["OO.##", "XO..#", "XX..#", "XO...", "XO..."],
-      GoOpponent.none,
-      GoColor.white,
-    )}
+    state={boardStateFromSimpleBoard(["OO.##", "XO..#", "XX..#", "XO...", "XO..."], GoOpponent.none, GoColor.white)}
     description={
       "CHALLENGE: Your routers are in trouble! They only have one open port. Save the black network by connecting them to more empty nodes."
     }
@@ -49,11 +41,7 @@ const saveTheNetworkChallenge = (
 
 const onlyGoodMoveChallenge = (
   <GoTutorialChallenge
-    state={getBoardFromSimplifiedBoardState(
-      ["XXO.O", "XO.O.", ".OOOO", "XXXXX", "X.X.X"],
-      GoOpponent.none,
-      GoColor.white,
-    )}
+    state={boardStateFromSimpleBoard(["XXO.O", "XO.O.", ".OOOO", "XXXXX", "X.X.X"], GoOpponent.none, GoColor.white)}
     description={"CHALLENGE: Save the black network on the left! Connect the network to more than one empty node."}
     correctMoves={[{ x: 2, y: 0 }]}
     correctText={
@@ -67,11 +55,7 @@ const onlyGoodMoveChallenge = (
 
 const makeTwoEyesChallenge = (
   <GoTutorialChallenge
-    state={getBoardFromSimplifiedBoardState(
-      ["XXOO.", ".XXOO", ".XXO.", ".XXOO", "XXOO."],
-      GoOpponent.none,
-      GoColor.white,
-    )}
+    state={boardStateFromSimpleBoard(["XXOO.", ".XXOO", ".XXO.", ".XXOO", "XXOO."], GoOpponent.none, GoColor.white)}
     description={
       "CHALLENGE: The black routers are only connected to one empty-node group. Place a router such that they are connected to TWO empty node groups instead."
     }

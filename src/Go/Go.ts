@@ -1,12 +1,13 @@
 import type { GoOpponent } from "./Enums";
-import type { GameState, OpponentStats } from "./Types";
+import type { BoardState, OpponentStats } from "./Types";
 
 import { getRecordValues, PartialRecord } from "../Types/Record";
 import { getNewBoardState } from "./boardState/boardState";
 
 class GoObject {
-  previousGame: GameState | null = null;
-  currentGame: GameState = getNewBoardState(5);
+  // Todo: Make previous game a slimmer interface
+  previousGame: BoardState | null = null;
+  currentGame: BoardState = getNewBoardState(5);
   stats: PartialRecord<GoOpponent, OpponentStats> = {};
 
   prestigeAugmentation() {
@@ -18,7 +19,7 @@ class GoObject {
   }
   prestigeSourceFile() {
     this.previousGame = null;
-    this.currentGame = getNewBoardState(5);
+    this.currentGame = getNewBoardState(7);
     this.stats = {};
   }
 }

@@ -5,7 +5,7 @@ import type { Play } from "../Go/Types";
 import { GoColor } from "@enums";
 import { Go } from "../Go/Go";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { getSimplifiedBoardState } from "../Go/boardAnalysis/boardAnalysis";
+import { simpleBoardFromBoard } from "../Go/boardAnalysis/boardAnalysis";
 import {
   cheatDestroyNode,
   cheatPlayTwoMoves,
@@ -68,7 +68,7 @@ export function NetscriptGo(): InternalAPI<NSGo> {
       return handlePassTurn(logger(ctx));
     },
     getBoardState: () => () => {
-      return getSimplifiedBoardState(Go.currentGame.board);
+      return simpleBoardFromBoard(Go.currentGame.board);
     },
     getOpponent: () => () => {
       return Go.currentGame.ai;

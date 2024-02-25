@@ -1,4 +1,4 @@
-import type { Board, GameState, Neighbor, PointState } from "../Types";
+import type { Board, BoardState, Neighbor, PointState, SimpleBoard } from "../Types";
 
 import { GoValidity, GoOpponent, GoColor } from "@enums";
 import {
@@ -28,8 +28,8 @@ import {
  *
  * @returns a validity explanation for if the move is legal or not
  */
-export function evaluateIfMoveIsValid(boardState: GameState, x: number, y: number, player: GoColor, shortcut = true) {
-  const point = boardState.board?.[x]?.[y];
+export function evaluateIfMoveIsValid(boardState: BoardState, x: number, y: number, player: GoColor, shortcut = true) {
+  const point = boardState.board[x]?.[y];
 
   if (boardState.previousPlayer === null) {
     return GoValidity.gameOver;
@@ -40,24 +40,24 @@ export function evaluateIfMoveIsValid(boardState: GameState, x: number, y: numbe
   if (!point) {
     return GoValidity.pointBroken;
   }
-  if (point.player !== GoColor.empty) {
+  if (point.color !== GoColor.empty) {
     return GoValidity.pointNotEmpty;
   }
 
-  // Detect if the current player has ever previously played this move. Used to detect potential repeated board states
-  const moveHasBeenPlayedBefore = !!boardState.history.find((board) => board[x]?.[y]?.player === player);
+  // Detect if the move might be an immediate repeat (only one board of history is saved to check)
+  const possibleRepeat = boardState.previousBoard && getColorOnSimpleBoard(boardState.previousBoard, x, y) === player;
 
   if (shortcut) {
     // If the current point has some adjacent open spaces, it is not suicide. If the move is not repeated, it is legal
     const liberties = findAdjacentLibertiesForPoint(boardState, x, y);
     const hasLiberty = liberties.north || liberties.east || liberties.south || liberties.west;
-    if (!moveHasBeenPlayedBefore && hasLiberty) {
+    if (!possibleRepeat && hasLiberty) {
       return GoValidity.valid;
     }
 
     // If a connected friendly chain has more than one liberty, the move is not suicide. If the move is not repeated, it is legal
     const neighborChainLibertyCount = findMaxLibertyCountOfAdjacentChains(boardState, x, y, player);
-    if (!moveHasBeenPlayedBefore && neighborChainLibertyCount > 1) {
+    if (!possibleRepeat && neighborChainLibertyCount > 1) {
       return GoValidity.valid;
     }
 
@@ -69,7 +69,7 @@ export function evaluateIfMoveIsValid(boardState: GameState, x: number, y: numbe
       y,
       player === GoColor.black ? GoColor.white : GoColor.black,
     );
-    if (!moveHasBeenPlayedBefore && potentialCaptureChainLibertyCount < 2) {
+    if (!possibleRepeat && potentialCaptureChainLibertyCount < 2) {
       return GoValidity.valid;
     }
 
@@ -83,10 +83,10 @@ export function evaluateIfMoveIsValid(boardState: GameState, x: number, y: numbe
   // If the move has been played before and is not obviously illegal, we have to actually play it out to determine
   // if it is a repeated move, or if it is a valid move
   const evaluationBoard = evaluateMoveResult(boardState, x, y, player, true);
-  if (evaluationBoard.board[x]?.[y]?.player !== player) {
+  if (evaluationBoard.board[x]?.[y]?.color !== player) {
     return GoValidity.noSuicide;
   }
-  if (moveHasBeenPlayedBefore && checkIfBoardStateIsRepeated(evaluationBoard)) {
+  if (possibleRepeat && checkIfBoardStateIsRepeated(evaluationBoard)) {
     return GoValidity.boardRepeated;
   }
 
@@ -97,20 +97,20 @@ export function evaluateIfMoveIsValid(boardState: GameState, x: number, y: numbe
  * Create a new evaluation board and play out the results of the given move on the new board
  */
 export function evaluateMoveResult(
-  initialBoardState: GameState,
+  initialBoardState: BoardState,
   x: number,
   y: number,
   player: GoColor,
   resetChains = false,
 ) {
   const boardState = getStateCopy(initialBoardState);
-  boardState.history.push(getBoardCopy(boardState).board);
+  boardState.previousBoard = simpleBoardFromBoard(getBoardCopy(boardState).board);
   const point = boardState.board[x]?.[y];
   if (!point) {
     return initialBoardState;
   }
 
-  point.player = player;
+  point.color = player;
   boardState.previousPlayer = player;
 
   const neighbors = getArrayFromNeighbor(findNeighbors(boardState, x, y));
@@ -120,7 +120,7 @@ export function evaluateMoveResult(
   return updateCaptures(boardState, player, resetChains);
 }
 
-export function getControlledSpace(boardState: GameState) {
+export function getControlledSpace(boardState: BoardState) {
   const chains = getAllChains(boardState);
   const length = boardState.board[0].length;
   const whiteControlledEmptyNodes = getAllPotentialEyes(boardState, chains, GoColor.white, length * 2)
@@ -144,7 +144,7 @@ export function getControlledSpace(boardState: GameState) {
 /**
   Clear the chain and liberty data of all points in the given chains
  */
-const resetChainsById = (boardState: GameState, chainIds: string[]) => {
+const resetChainsById = (boardState: BoardState, chainIds: string[]) => {
   const pointsToUpdate = boardState.board
     .flat()
     .filter(isDefined)
@@ -160,14 +160,14 @@ const resetChainsById = (boardState: GameState, chainIds: string[]) => {
  * For a potential move, determine what the liberty of the point would be if played, by looking at adjacent empty nodes
  * as well as the remaining liberties of neighboring friendly chains
  */
-export function findEffectiveLibertiesOfNewMove(boardState: GameState, x: number, y: number, player: GoColor) {
-  const friendlyChains = getAllChains(boardState).filter((chain) => chain[0].player === player);
+export function findEffectiveLibertiesOfNewMove(boardState: BoardState, x: number, y: number, player: GoColor) {
+  const friendlyChains = getAllChains(boardState).filter((chain) => chain[0].color === player);
   const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState, x, y, player);
   const neighborPoints = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
     .filter(isNotNull)
     .filter(isDefined);
   // Get all chains that the new move will connect to
-  const allyNeighbors = neighborPoints.filter((neighbor) => neighbor.player === player);
+  const allyNeighbors = neighborPoints.filter((neighbor) => neighbor.color === player);
   const allyNeighborChainLiberties = allyNeighbors
     .map((neighbor) => {
       const chain = friendlyChains.find((chain) => chain[0].chain === neighbor.chain);
@@ -177,7 +177,7 @@ export function findEffectiveLibertiesOfNewMove(boardState: GameState, x: number
     .filter(isNotNull);
 
   // Get all empty spaces that the new move connects to that aren't already part of friendly liberties
-  const directLiberties = neighborPoints.filter((neighbor) => neighbor.player === GoColor.empty);
+  const directLiberties = neighborPoints.filter((neighbor) => neighbor.color === GoColor.empty);
 
   const allLiberties = [...directLiberties, ...allyNeighborChainLiberties];
 
@@ -193,12 +193,12 @@ export function findEffectiveLibertiesOfNewMove(boardState: GameState, x: number
 /**
  * Find the number of open spaces that are connected to chains adjacent to a given point, and return the maximum
  */
-export function findMaxLibertyCountOfAdjacentChains(boardState: GameState, x: number, y: number, player: GoColor) {
+export function findMaxLibertyCountOfAdjacentChains(boardState: BoardState, x: number, y: number, player: GoColor) {
   const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState, x, y, player);
   const friendlyNeighbors = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
     .filter(isNotNull)
     .filter(isDefined)
-    .filter((neighbor) => neighbor.player === player);
+    .filter((neighbor) => neighbor.color === player);
 
   return friendlyNeighbors.reduce((max, neighbor) => Math.max(max, neighbor?.liberties?.length ?? 0), 0);
 }
@@ -206,13 +206,13 @@ export function findMaxLibertyCountOfAdjacentChains(boardState: GameState, x: nu
 /**
  * Find the number of open spaces that are connected to chains adjacent to a given point, and return the minimum
  */
-export function findMinLibertyCountOfAdjacentChains(boardState: GameState, x: number, y: number, player: GoColor) {
+export function findMinLibertyCountOfAdjacentChains(boardState: BoardState, x: number, y: number, player: GoColor) {
   const chain = findEnemyNeighborChainWithFewestLiberties(boardState, x, y, player);
   return chain?.[0]?.liberties?.length ?? 99;
 }
 
 export function findEnemyNeighborChainWithFewestLiberties(
-  boardState: GameState,
+  boardState: BoardState,
   x: number,
   y: number,
   player: GoColor,
@@ -222,7 +222,7 @@ export function findEnemyNeighborChainWithFewestLiberties(
   const friendlyNeighbors = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
     .filter(isNotNull)
     .filter(isDefined)
-    .filter((neighbor) => neighbor.player === player);
+    .filter((neighbor) => neighbor.color === player);
 
   const minimumLiberties = friendlyNeighbors.reduce(
     (min, neighbor) => Math.min(min, neighbor?.liberties?.length ?? 0),
@@ -236,7 +236,7 @@ export function findEnemyNeighborChainWithFewestLiberties(
 /**
  * Returns a list of points that are valid moves for the given player
  */
-export function getAllValidMoves(boardState: GameState, player: GoColor) {
+export function getAllValidMoves(boardState: BoardState, player: GoColor) {
   return getEmptySpaces(boardState).filter(
     (point) => evaluateIfMoveIsValid(boardState, point.x, point.y, player) === GoValidity.valid,
   );
@@ -249,7 +249,7 @@ export function getAllValidMoves(boardState: GameState, player: GoColor) {
 
   Eyes are important, because a chain of pieces cannot be captured if it fully surrounds two or more eyes.
  */
-export function getAllEyesByChainId(boardState: GameState, player: GoColor) {
+export function getAllEyesByChainId(boardState: BoardState, player: GoColor) {
   const allChains = getAllChains(boardState);
   const eyeCandidates = getAllPotentialEyes(boardState, allChains, player);
   const eyes: { [s: string]: PointState[][] } = {};
@@ -287,7 +287,7 @@ export function getAllEyesByChainId(boardState: GameState, player: GoColor) {
 /**
  * Get a list of all eyes, grouped by the chain they are adjacent to
  */
-export function getAllEyes(boardState: GameState, player: GoColor, eyesObject?: { [s: string]: PointState[][] }) {
+export function getAllEyes(boardState: BoardState, player: GoColor, eyesObject?: { [s: string]: PointState[][] }) {
   const eyes = eyesObject ?? getAllEyesByChainId(boardState, player);
   return Object.keys(eyes).map((key) => eyes[key]);
 }
@@ -298,14 +298,14 @@ export function getAllEyes(boardState: GameState, player: GoColor, eyesObject?: 
    an array at that chain number's index.
  */
 export function getAllPotentialEyes(
-  boardState: GameState,
+  boardState: BoardState,
   allChains: PointState[][],
   player: GoColor,
   _maxSize?: number,
 ) {
   const nodeCount = boardState.board.map((row) => row.filter((p) => p)).flat().length;
   const maxSize = _maxSize ?? Math.min(nodeCount * 0.4, 11);
-  const emptyPointChains = allChains.filter((chain) => chain[0].player === GoColor.empty);
+  const emptyPointChains = allChains.filter((chain) => chain[0].color === GoColor.empty);
   const eyeCandidates: { neighbors: PointState[][]; chain: PointState[]; id: string }[] = [];
 
   emptyPointChains
@@ -314,10 +314,10 @@ export function getAllPotentialEyes(
       const neighboringChains = getAllNeighboringChains(boardState, chain, allChains);
 
       const hasWhitePieceNeighbor = neighboringChains.find(
-        (neighborChain) => neighborChain[0]?.player === GoColor.white,
+        (neighborChain) => neighborChain[0]?.color === GoColor.white,
       );
       const hasBlackPieceNeighbor = neighboringChains.find(
-        (neighborChain) => neighborChain[0]?.player === GoColor.black,
+        (neighborChain) => neighborChain[0]?.color === GoColor.black,
       );
 
       // Record the neighbor chains of the eye candidate empty chain, if all of its neighbors are the same color piece
@@ -343,7 +343,7 @@ export function getAllPotentialEyes(
  *       If so, the original candidate is a true eye.
  */
 function findNeighboringChainsThatFullyEncircleEmptySpace(
-  boardState: GameState,
+  boardState: BoardState,
   candidateChain: PointState[],
   neighborChainList: PointState[][],
   allChains: PointState[][],
@@ -378,7 +378,7 @@ function findNeighboringChainsThatFullyEncircleEmptySpace(
     otherChainNeighborPoints.forEach((point) => {
       const pointToEdit = evaluationBoard.board[point.x]?.[point.y];
       if (pointToEdit) {
-        pointToEdit.player = GoColor.empty;
+        pointToEdit.color = GoColor.empty;
       }
     });
     const updatedBoard = updateChains(evaluationBoard);
@@ -433,7 +433,7 @@ function removePointAtIndex(arr: PointState[][], index: number) {
 /**
  * Get all player chains that are adjacent / touching the current chain
  */
-export function getAllNeighboringChains(boardState: GameState, chain: PointState[], allChains: PointState[][]) {
+export function getAllNeighboringChains(boardState: BoardState, chain: PointState[], allChains: PointState[][]) {
   const playerNeighbors = getPlayerNeighbors(boardState, chain);
 
   const neighboringChains = playerNeighbors.reduce(
@@ -448,14 +448,14 @@ export function getAllNeighboringChains(boardState: GameState, chain: PointState
 /**
  * Gets all points that have player pieces adjacent to the given point
  */
-export function getPlayerNeighbors(boardState: GameState, chain: PointState[]) {
-  return getAllNeighbors(boardState, chain).filter((neighbor) => neighbor && neighbor.player !== GoColor.empty);
+export function getPlayerNeighbors(boardState: BoardState, chain: PointState[]) {
+  return getAllNeighbors(boardState, chain).filter((neighbor) => neighbor && neighbor.color !== GoColor.empty);
 }
 
 /**
  * Gets all points adjacent to the given point
  */
-export function getAllNeighbors(boardState: GameState, chain: PointState[]) {
+export function getAllNeighbors(boardState: BoardState, chain: PointState[]) {
   const allNeighbors = chain.reduce((chainNeighbors: Set<PointState>, point: PointState) => {
     getArrayFromNeighbor(findNeighbors(boardState, point.x, point.y))
       .filter((neighborPoint) => !isPointInChain(neighborPoint, chain))
@@ -473,27 +473,19 @@ export function isPointInChain(point: PointState, chain: PointState[]) {
 }
 
 /**
- * Looks through the board history to see if the current state is identical to any previous state
- * Capped at 5 for calculation speed, because loops of size 6 are essentially impossible
+ * Looks at the previous board to see if the current state is identical
+ * Only one board of history is saved, we cannot detect repeats over multiple moves
  */
-function checkIfBoardStateIsRepeated(boardState: GameState) {
-  const currentBoard = boardState.board;
-  return boardState.history.slice(-5).find((state) => {
-    for (let x = 0; x < state.length; x++) {
-      for (let y = 0; y < state[x].length; y++) {
-        if (currentBoard[x]?.[y]?.player && currentBoard[x]?.[y]?.player !== state[x]?.[y]?.player) {
-          return false;
-        }
-      }
-    }
-    return true;
-  });
+function checkIfBoardStateIsRepeated(boardState: BoardState) {
+  if (!boardState.previousBoard) return false;
+  const currentSimpleBoard = simpleBoardFromBoard(boardState.board);
+  return areSimpleBoardsIdentical(currentSimpleBoard, boardState.previousBoard);
 }
 
 /**
  * Finds all groups of connected pieces, or empty space groups
  */
-export function getAllChains(boardState: GameState): PointState[][] {
+export function getAllChains(boardState: BoardState): PointState[][] {
   const chains: { [s: string]: PointState[] } = {};
 
   for (let x = 0; x < boardState.board.length; x++) {
@@ -530,20 +522,20 @@ export function findAllCapturedChains(chainList: PointState[][], playerWhoMoved:
 }
 
 function findCapturedChainOfColor(chainList: PointState[][], playerColor: GoColor) {
-  return chainList.filter((chain) => chain?.[0].player === playerColor && chain?.[0].liberties?.length === 0);
+  return chainList.filter((chain) => chain?.[0].color === playerColor && chain?.[0].liberties?.length === 0);
 }
 
 /**
  * Find all empty points adjacent to any piece in a given chain
  */
-export function findLibertiesForChain(boardState: GameState, chain: PointState[]): PointState[] {
-  return getAllNeighbors(boardState, chain).filter((neighbor) => neighbor && neighbor.player === GoColor.empty);
+export function findLibertiesForChain(boardState: BoardState, chain: PointState[]): PointState[] {
+  return getAllNeighbors(boardState, chain).filter((neighbor) => neighbor && neighbor.color === GoColor.empty);
 }
 
 /**
  * Find all empty points adjacent to any piece in the chain that a given point belongs to
  */
-export function findChainLibertiesForPoint(boardState: GameState, x: number, y: number): PointState[] {
+export function findChainLibertiesForPoint(boardState: BoardState, x: number, y: number): PointState[] {
   const chain = findAdjacentPointsInChain(boardState, x, y);
   return findLibertiesForChain(boardState, chain);
 }
@@ -552,13 +544,13 @@ export function findChainLibertiesForPoint(boardState: GameState, x: number, y: 
  * Returns an object that includes which of the cardinal neighbors are empty
  * (adjacent 'liberties' of the current piece )
  */
-export function findAdjacentLibertiesForPoint(boardState: GameState, x: number, y: number): Neighbor {
+export function findAdjacentLibertiesForPoint(boardState: BoardState, x: number, y: number): Neighbor {
   const neighbors = findNeighbors(boardState, x, y);
 
-  const hasNorthLiberty = neighbors.north && neighbors.north.player === GoColor.empty;
-  const hasEastLiberty = neighbors.east && neighbors.east.player === GoColor.empty;
-  const hasSouthLiberty = neighbors.south && neighbors.south.player === GoColor.empty;
-  const hasWestLiberty = neighbors.west && neighbors.west.player === GoColor.empty;
+  const hasNorthLiberty = neighbors.north && neighbors.north.color === GoColor.empty;
+  const hasEastLiberty = neighbors.east && neighbors.east.color === GoColor.empty;
+  const hasSouthLiberty = neighbors.south && neighbors.south.color === GoColor.empty;
+  const hasWestLiberty = neighbors.west && neighbors.west.color === GoColor.empty;
 
   return {
     north: hasNorthLiberty ? neighbors.north : null,
@@ -573,21 +565,21 @@ export function findAdjacentLibertiesForPoint(boardState: GameState, x: number, 
  * current player's pieces. Used for making the connection map on the board
  */
 export function findAdjacentLibertiesAndAlliesForPoint(
-  boardState: GameState,
+  boardState: BoardState,
   x: number,
   y: number,
   _player?: GoColor,
 ): Neighbor {
   const currentPoint = boardState.board[x]?.[y];
-  const player = _player || (!currentPoint || currentPoint.player === GoColor.empty ? undefined : currentPoint.player);
+  const player = _player || (!currentPoint || currentPoint.color === GoColor.empty ? undefined : currentPoint.color);
   const adjacentLiberties = findAdjacentLibertiesForPoint(boardState, x, y);
   const neighbors = findNeighbors(boardState, x, y);
 
   return {
-    north: adjacentLiberties.north || neighbors.north?.player === player ? neighbors.north : null,
-    east: adjacentLiberties.east || neighbors.east?.player === player ? neighbors.east : null,
-    south: adjacentLiberties.south || neighbors.south?.player === player ? neighbors.south : null,
-    west: adjacentLiberties.west || neighbors.west?.player === player ? neighbors.west : null,
+    north: adjacentLiberties.north || neighbors.north?.color === player ? neighbors.north : null,
+    east: adjacentLiberties.east || neighbors.east?.color === player ? neighbors.east : null,
+    south: adjacentLiberties.south || neighbors.south?.color === player ? neighbors.south : null,
+    west: adjacentLiberties.west || neighbors.west?.color === player ? neighbors.west : null,
   };
 }
 
@@ -614,16 +606,16 @@ export function findAdjacentLibertiesAndAlliesForPoint(
  * be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO game.
  *
  */
-export function getSimplifiedBoardState(board: Board): string[] {
+export function simpleBoardFromBoard(board: Board): string[] {
   return board.map((column) =>
     column.reduce((str, point) => {
       if (!point) {
         return str + "#";
       }
-      if (point.player === GoColor.black) {
+      if (point.color === GoColor.black) {
         return str + "X";
       }
-      if (point.player === GoColor.white) {
+      if (point.color === GoColor.white) {
         return str + "O";
       }
       return str + ".";
@@ -631,29 +623,47 @@ export function getSimplifiedBoardState(board: Board): string[] {
   );
 }
 
-export function getBoardFromSimplifiedBoardState(
-  boardStrings: string[],
+/** Creates a board object from a simple board. The resulting board has no analytics (liberties/chains) */
+export function boardFromSimpleBoard(simpleBoard: SimpleBoard): Board {
+  return simpleBoard.map((column, x) =>
+    column.split("").map((char, y) => {
+      if (char === "#") return null;
+      if (char === "X") return blankPointState(GoColor.black, x, y);
+      if (char === "O") return blankPointState(GoColor.white, x, y);
+      return blankPointState(GoColor.empty, x, y);
+    }),
+  );
+}
+
+export function boardStateFromSimpleBoard(
+  simpleBoard: SimpleBoard,
   ai = GoOpponent.Daedalus,
   lastPlayer = GoColor.black,
 ) {
-  const newBoardState = getNewBoardState(boardStrings[0].length, ai);
+  const board = boardFromSimpleBoard(simpleBoard);
+  const newBoardState = getNewBoardState(simpleBoard[0].length, ai, false, board);
   newBoardState.previousPlayer = lastPlayer;
-
-  for (let x = 0; x < boardStrings[0].length; x++) {
-    for (let y = 0; y < boardStrings[0].length; y++) {
-      const boardStringPoint = boardStrings[x]?.[y];
-      const newBoardPoint = newBoardState.board[x]?.[y];
-      if (boardStringPoint === "#") {
-        newBoardState.board[x][y] = null;
-      }
-      if (boardStringPoint === "X" && newBoardPoint?.player) {
-        newBoardPoint.player = GoColor.black;
-      }
-      if (boardStringPoint === "O" && newBoardPoint?.player) {
-        newBoardPoint.player = GoColor.white;
-      }
-    }
-  }
-
   return updateCaptures(newBoardState, lastPlayer);
+}
+
+export function blankPointState(color: GoColor, x: number, y: number): PointState {
+  return {
+    color: color,
+    y,
+    x,
+    chain: "",
+    liberties: null,
+  };
+}
+
+export function areSimpleBoardsIdentical(simpleBoard1: SimpleBoard, simpleBoard2: SimpleBoard) {
+  return simpleBoard1.every((column, x) => column === simpleBoard2[x]);
+}
+
+export function getColorOnSimpleBoard(simpleBoard: SimpleBoard, x: number, y: number): GoColor | null {
+  const char = simpleBoard[x]?.[y];
+  if (char === "X") return GoColor.black;
+  if (char === "O") return GoColor.white;
+  if (char === ".") return GoColor.empty;
+  return null;
 }

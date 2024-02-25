@@ -1,18 +1,11 @@
-import type { GameState, Play } from "../Types";
+import type { BoardState, Play } from "../Types";
 
 import { Player } from "@player";
 import { GoColor, GoPlayType, GoValidity, GoOpponent } from "@enums";
 import { Go } from "../Go";
 import { getMove, sleep } from "../boardAnalysis/goAI";
-import {
-  getNewBoardState,
-  getStateCopy,
-  makeMove,
-  passTurn,
-  updateCaptures,
-  updateChains,
-} from "../boardState/boardState";
-import { evaluateIfMoveIsValid, getControlledSpace, getSimplifiedBoardState } from "../boardAnalysis/boardAnalysis";
+import { getNewBoardState, makeMove, passTurn, updateCaptures, updateChains } from "../boardState/boardState";
+import { evaluateIfMoveIsValid, getControlledSpace, simpleBoardFromBoard } from "../boardAnalysis/boardAnalysis";
 import { getScore, resetWinstreak } from "../boardAnalysis/scoring";
 import { WorkerScript } from "../../Netscript/WorkerScript";
 import { WHRNG } from "../../Casino/RNG";
@@ -38,8 +31,9 @@ export async function handlePassTurn(logger: (s: string) => void) {
  * Validates and applies the player's router placement
  */
 export async function makePlayerMove(logger: (s: string) => void, x: number, y: number) {
-  const validity = evaluateIfMoveIsValid(Go.currentGame, x, y, GoColor.black);
-  const result = makeMove(Go.currentGame, x, y, GoColor.black);
+  const boardState = Go.currentGame;
+  const validity = evaluateIfMoveIsValid(boardState, x, y, GoColor.black);
+  const result = makeMove(boardState, x, y, GoColor.black);
 
   if (validity !== GoValidity.valid || !result) {
     await sleep(500);
@@ -54,8 +48,7 @@ export async function makePlayerMove(logger: (s: string) => void, x: number, y: 
 
   logger(`Go move played: ${x}, ${y}`);
 
-  const playerUpdatedBoard = getStateCopy(result);
-  const response = getAIMove(logger, playerUpdatedBoard);
+  const response = getAIMove(logger, boardState);
   await sleep(300);
   return response;
 }
@@ -63,7 +56,7 @@ export async function makePlayerMove(logger: (s: string) => void, x: number, y: 
 /**
  * Retrieves a move from the current faction in response to the player's move
  */
-async function getAIMove(logger: (s: string) => void, boardState: GameState, success = true): Promise<Play> {
+async function getAIMove(logger: (s: string) => void, boardState: BoardState, success = true): Promise<Play> {
   let resolve: (value: Play) => void;
   const aiMoveResult = new Promise<Play>((res) => {
     resolve = res;
@@ -71,24 +64,21 @@ async function getAIMove(logger: (s: string) => void, boardState: GameState, suc
 
   getMove(boardState, GoColor.white, Go.currentGame.ai).then(async (result) => {
     // If a new game has started while this async code ran, drop it
-    if (boardState.history.length > Go.currentGame.history.length) {
+    if (boardState !== Go.currentGame) {
       return resolve({ ...result, success: false });
     }
     if (result.type === "gameOver") {
       logEndGame(logger);
     }
     if (result.type !== GoPlayType.move) {
-      Go.currentGame = boardState;
       return resolve({ ...result, success });
     }
 
     const aiUpdatedBoard = makeMove(boardState, result.x, result.y, GoColor.white);
     if (!aiUpdatedBoard) {
       boardState.previousPlayer = GoColor.white;
-      Go.currentGame = boardState;
       logger(`Invalid AI move attempted: ${result.x}, ${result.y}. This should not happen.`);
     } else {
-      Go.currentGame = aiUpdatedBoard;
       logger(`Opponent played move: ${result.x}, ${result.y}`);
     }
 
@@ -163,7 +153,7 @@ export function getControlledEmptyNodes() {
       if (!boardState.board[x][y]) {
         return ownedPoints + "#";
       }
-      if (boardState.board[x][y]?.player === GoColor.empty) {
+      if (boardState.board[x][y]?.color === GoColor.empty) {
         return ownedPoints + "?";
       }
       return ownedPoints + ".";
@@ -192,12 +182,12 @@ export function resetBoardState(error: (s: string) => void, opponent: GoOpponent
   }
 
   const oldBoardState = Go.currentGame;
-  if (oldBoardState.previousPlayer !== null && oldBoardState.history.length) {
+  if (oldBoardState.previousPlayer !== null && oldBoardState.previousBoard) {
     resetWinstreak(oldBoardState.ai, false);
   }
 
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
-  return getSimplifiedBoardState(Go.currentGame.board);
+  return simpleBoardFromBoard(Go.currentGame.board);
 }
 
 /** Validate singularity access by throwing an error if the player does not have access. */
@@ -287,14 +277,14 @@ export function cheatRemoveRouter(
     logger(`The node ${x},${y} is offline, so you cannot clear this point with removeRouter().`);
     return invalidMoveResponse;
   }
-  if (point.player === GoColor.empty) {
+  if (point.color === GoColor.empty) {
     logger(`The point ${x},${y} does not have a router on it, so you cannot clear this point with removeRouter().`);
     return invalidMoveResponse;
   }
   return determineCheatSuccess(
     logger,
     () => {
-      point.player = GoColor.empty;
+      point.color = GoColor.empty;
       Go.currentGame = updateChains(Go.currentGame);
       Go.currentGame.previousPlayer = GoColor.black;
       logger(`Cheat successful. The point ${x},${y} was cleared.`);
@@ -321,7 +311,7 @@ export function cheatPlayTwoMoves(
     logger(`The node ${x1},${y1} is offline, so you cannot place a router there.`);
     return invalidMoveResponse;
   }
-  if (point1.player !== GoColor.empty) {
+  if (point1.color !== GoColor.empty) {
     logger(`The point ${x1},${y1} is not empty, so you cannot place a router there.`);
     return invalidMoveResponse;
   }
@@ -330,7 +320,7 @@ export function cheatPlayTwoMoves(
     logger(`The node ${x2},${y2} is offline, so you cannot place a router there.`);
     return invalidMoveResponse;
   }
-  if (point2.player !== GoColor.empty) {
+  if (point2.color !== GoColor.empty) {
     logger(`The point ${x2},${y2} is not empty, so you cannot place a router there.`);
     return invalidMoveResponse;
   }
@@ -338,8 +328,8 @@ export function cheatPlayTwoMoves(
   return determineCheatSuccess(
     logger,
     () => {
-      point1.player = GoColor.black;
-      point2.player = GoColor.black;
+      point1.color = GoColor.black;
+      point2.color = GoColor.black;
       Go.currentGame = updateCaptures(Go.currentGame, GoColor.black);
       Go.currentGame.previousPlayer = GoColor.black;
 
@@ -370,10 +360,10 @@ export function cheatRepairOfflineNode(
         chain: "",
         liberties: null,
         y,
-        player: GoColor.empty,
+        color: GoColor.empty,
         x,
       };
-      Go.currentGame = updateChains(Go.currentGame);
+      updateChains(Go.currentGame);
       Go.currentGame.previousPlayer = GoColor.black;
       logger(`Cheat successful. The point ${x},${y} was repaired.`);
     },
@@ -394,7 +384,7 @@ export function cheatDestroyNode(
     logger(`The node ${x},${y} is already offline, so you cannot destroy the node.`);
     return invalidMoveResponse;
   }
-  if (point.player !== GoColor.empty) {
+  if (point.color !== GoColor.empty) {
     logger(`The point ${x},${y} is not empty, so you cannot destroy this node.`);
     return invalidMoveResponse;
   }

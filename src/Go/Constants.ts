@@ -1,4 +1,4 @@
-import type { OpponentStats } from "./Types";
+import type { OpponentStats, SimpleBoard } from "./Types";
 
 import { GoOpponent } from "@enums";
 
@@ -84,7 +84,7 @@ export function newOpponentStats(): OpponentStats {
   };
 }
 
-export const bitverseBoardShape = [
+export const bitverseBoardShape: SimpleBoard = [
   "########...########",
   "######.#...#.######",
   "###.#..#...#..#.###",
