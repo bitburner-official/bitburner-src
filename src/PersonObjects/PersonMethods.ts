@@ -181,7 +181,7 @@ export function updateSkillLevels(this: Person): void {
     Math.floor(this.calculateSkill(this.exp.charisma, this.mults.charisma * currentNodeMults.CharismaLevelMultiplier)),
   );
   //In case MaxHP is Infinite, setting ratio to 1
-  const ratio = Number.isFinite(this.hp.current) ? this.hp.current / this.hp.max : 1;
+  const ratio = Math.min(Number.isFinite(this.hp.current) ? this.hp.current / this.hp.max : 1);
   this.hp.max = Math.floor(10 + this.skills.defense / 10);
   this.hp.current = Math.round(this.hp.max * ratio);
 }
