@@ -55,7 +55,7 @@ No.
 
 > Can I transfer my (personal) money to the corporation's funds?
 
-No. However, with SF9, you can sell hashes for corporation's funds or RP.
+No. However, with SF9, you can sell hashes for corporation funds or RP.
 
 > Why can I not bribe factions for reputations? What's the exchange rate?
 
@@ -181,7 +181,7 @@ They are not too important. It's fine to spend 1% of your current funds for them
 
 > Should I buy Market-TA1?
 
-No, wait for Market-TA2. Market-TA1 is useless.
+No, wait for Market-TA2. Market-TA1 is useless on its own.
 
 > When should I buy Market-TA2?
 
@@ -200,9 +200,9 @@ You have to enable it.
 
 Yes, you can reimplement Market-TA2. Implementing a custom Market-TA2 script is the best optimization in round 3+. Check this [section](./optimal-selling-price-market-ta2.md) to see how to do it.
 
-> How do I discard material/product?
+> How do I discard materials/products?
 
-Set selling price to 0.
+Set the selling price to 0 (or anything small enough).
 
 > What is a dummy division?
 

@@ -20,7 +20,7 @@ Each industry has a different set of boost material coefficients. For example:
   - Real Estate: 0.15
   - Robots: 0.25
 
-Division production multiplier is used for calculating [division raw production](./division-raw-production.md) in PRODUCTION state. It's sum of each city's `cityMult`, and `cityMult` is calculated by quantity of boost materials in warehouse and boost material's coefficient of industry.
+The division production multiplier is used for calculating [division raw production](./division-raw-production.md) in the PRODUCTION state. It's sum of each warehouse's `cityMult`, and `cityMult` is calculated by combining the quantity of each boost material with the boost material's coefficient.
 
 This multiplier is `this.productionMult` in `Division.ts`.
 
@@ -44,7 +44,7 @@ calculateProductionFactors(): void {
 
 This is the reason we must expand to all 6 cities. More cities → Higher `this.productionMult` → Higher raw production → More produced materials/products → Higher profit per city → Higher total profit.
 
-Expanding to 6 cities means `this.productionMult` is multiplied by 6, and we have 6 cities, so you can think that production capability of division is multiplied by 36. This is not exactly true because there are more things that affect raw production value of each city, but x36 can be seen as a rough estimate of benefit, especially in early rounds. In those rounds, division production multiplier is the most important thing.
+Expanding to 6 cities means `this.productionMult` is multiplied by 6, and we have 6 cities, so effectively production is multiplied by 36. This is not exactly true because there are more things that affect the raw production value of each city, but x36 can be seen as a rough estimate of benefit, especially in early rounds. In those rounds, division production multiplier is the most important thing.
 
 ## Optimizer
 
