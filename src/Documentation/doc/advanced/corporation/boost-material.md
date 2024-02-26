@@ -2,7 +2,7 @@
 
 ## Division production multiplier
 
-Each industry has a different set of boost material's coefficient. For example:
+Each industry has a different set of boost material coefficients. For example:
 
 - Agriculture:
   - AI Cores: 0.3
@@ -48,7 +48,7 @@ Expanding to 6 cities means `this.productionMult` is multiplied by 6, and we hav
 
 ## Optimizer
 
-In order to increase `this.productionMult`, we need to buy boost materials. The problem is how much we should buy each material with a specific constraint of storage space.
+In order to increase `this.productionMult`, we need to buy boost materials. The problem is how much we should buy each material, given a specific constraint on storage space.
 
 Each boost material has a coefficient ("factor" in source code) and a base size (size for 1 unit in storage).
 
@@ -58,11 +58,11 @@ Let's define:
 - 4 base sizes: ${s_{1}}$, ${s_{2}}$, ${s_{3}}$, ${s_{4}}$
 - Quantities of each boost materials: x, y, z, w
 
-Assume same warehouse setup in all cities: Division production multiplier is:
+Assuming the same warehouse setup in all cities, the division production multiplier is:
 
 $$F(x,y,z,w) = \sum_{i = 1}^{6}\left( (1 + 0.002*x)^{c_{1}}*(1 + 0.002*y)^{c_{2}}{*(1 + 0.002*z)}^{c_{3}}{*(1 + 0.002*w)}^{c_{4}} \right)^{0.73}$$
 
-In order to find maximum point of function above, we can find maximum point of this function:
+In order to find the maximum of the function above, we can find the maximum of this function:
 
 $$F(x,y,z,w) = (1 + 0.002*x)^{c_{1}}*(1 + 0.002*y)^{c_{2}}{*(1 + 0.002*z)}^{c_{3}}{*(1 + 0.002*w)}^{c_{4}}$$
 
@@ -85,7 +85,7 @@ Use [ALGLIB](./miscellany.md). Using this library for solving our problem is not
 
 Disclaimer: This is based on discussion between \@Jesus and \@yichizhng on Discord. All credit goes to them.
 
-By using [Lagrange multiplier](https://en.wikipedia.org/wiki/Lagrange_multiplier) method, we have this system:
+By using the [Lagrange multiplier](https://en.wikipedia.org/wiki/Lagrange_multiplier) method, we have this system:
 
 $$\frac{\partial F}{\partial x} = \lambda\frac{\partial G}{\partial x}$$
 
@@ -100,7 +100,7 @@ $$G(x,y,z,w) = S$$
 In order to solve this system, we have 2 choices:
 
 - Solve that system with [Ceres Solver](./miscellany.md).
-- Do the hard work with basic calculus and algebra. This is the optimal way in both accuracy and performance, so we'll focus on it. In following sections, I'll show the proof and sample code for this solution.
+- Do the hard work with basic calculus and algebra. This is the optimal way in both accuracy and performance, so we'll focus on it. In the following sections, I'll show the proof and sample code for this solution.
 
 $$x*s_{1} = \frac{S - 500*\left( \frac{s_{1}}{c_{1}}*\left( c_{2} + c_{3} + c_{4} \right) - \left( s_{2} + s_{3} + s_{4} \right) \right)}{\frac{c_{1} + c_{2} + c_{3} + c_{4}}{c_{1}}}$$
 
@@ -150,13 +150,13 @@ $$y*s_{2} = \frac{c_{2}}{c_{1}}*x*s_{1} + \frac{1}{k}*\frac{c_{2}*s_{1} - c_{1}*
 
 $$y*s_{2} = \frac{c_{2}}{c_{1}}*x*s_{1} + 500*\frac{c_{2}*s_{1} - c_{1}*s_{2}}{c_{1}}$$
 
-Repeat above steps, we have:
+Repeating the above steps, we have:
 
 $$z*s_{3} = \frac{c_{3}}{c_{1}}*x*s_{1} + 500*\frac{c_{3}*s_{1} - c_{1}*s_{3}}{c_{1}}$$
 
 $$w*s_{4} = \frac{c_{4}}{c_{1}}*x*s_{1} + 500*\frac{c_{4}*s_{1} - c_{1}*s_{4}}{c_{1}}$$
 
-Substitute them into constraint function:
+Substituting into the constraint function:
 
 $$x*s_{1} + y*s_{2} + z*s_{3} + w*s_{4} = S$$
 
@@ -184,4 +184,4 @@ We can do the same steps for y,z,w.
 
 ## Handle low storage space
 
-With small S, any variable (x,y,z,w) can be negative. In that case, we remove the variable that ends up being negative and then redo exactly the same steps. When implementing this solution, we can use recursive function to handle those cases.
+With small S, any variable (x,y,z,w) can be negative. In that case, we remove the variable that ends up being negative and then redo the steps above. When implementing this solution, we can use a recursive function to handle those cases.

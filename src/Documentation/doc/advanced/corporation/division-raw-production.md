@@ -2,7 +2,7 @@
 
 ## Definition
 
-Each industry requires different input materials. Each required material has its own coefficient. This value is not the same as boost material's coefficient. They are different things. For example:
+Each industry requires different input materials. Each required material has its own coefficient. This value is not the same as the boost material coefficient; they are different things. For example:
 
 - Agriculture: { Water: 0.5, Chemicals: 0.2 }
 - Chemical: { Plants: 1, Water: 0.5 }
@@ -10,8 +10,8 @@ Each industry requires different input materials. Each required material has its
 
 Each division has a number that I call "Division raw production". This raw value is the division's production capability. Let's call it `RawProduction`. It's used for:
 
-- Calculate how much input material that we need. It's multiplied by input material's coefficient to find the required quantity of that input material.
-- Calculate how much material/product that division can produce. It's multiplied by `ProducibleFrac`. `ProducibleFrac` starts at 1 and is reduced if there are not enough input materials.
+- Calculating how much input material that we need. It's multiplied by the input material's coefficient to find the required quantity of that input material.
+- Calculating how much material/product that division can produce. It's multiplied by `ProducibleFrac`. `ProducibleFrac` starts at 1 and is reduced if there are not enough input materials.
 
 For example, with Agriculture, if `RawProduction` is 1000, we need 500 units of Water and 200 units of Chemicals. With these input materials, we can produce 1000 units of Plants and 1000 units of Food.
 
@@ -20,7 +20,7 @@ For example, with Agriculture, if `RawProduction` is 1000, we need 500 units of 
 `RawProduction` is the product of 4 multipliers:
 
 - Office multiplier:
-  - 3 employee's productions in 3 jobs (Operations, Engineer, Management) and their sum:
+  - Employee production in 3 jobs (Operations, Engineer, Management) and their sum:
     - $OperationsProd = office.employeeProductionByJob.Operations$
     - $EngineerProd = office.employeeProductionByJob.Engineer$
     - $ManagementProd = office.employeeProductionByJob.Management$

@@ -2,7 +2,7 @@
 
 ## Usage
 
-They are used for calculating `MaxSalesVolume` of material and product.
+They are used for calculating `MaxSalesVolume` of materials and products.
 
 `Market Research - Demand` grants access to `Demand` data.
 
@@ -10,11 +10,11 @@ They are used for calculating `MaxSalesVolume` of material and product.
 
 ## Material
 
-Each material has its own `demandBase`, `demandRange`, `competitionBase`, `competitionRange`, `maxVolatility`. `Demand` and `competition` start at their bases and always be in their ranges respectively.
+Each material has its own `demandBase`, `demandRange`, `competitionBase`, `competitionRange`, and `maxVolatility`. Both `demand` and `competition` start at their bases and are always in their respective ranges.
 
-This is non-intuitive: `demand` and `competition` are not used for calculating `marketPrice`.
+This is non-intuitive: `demand` and `competition` are _not_ used for calculating `marketPrice`.
 
-In cycle's START state, game calculates 6 variables:
+During the START state, the game calculates 6 variables:
 
 ```typescript
 const priceVolatility: number = (Math.random() * this.maxVolatility) / 300;
@@ -25,7 +25,7 @@ const dmdVolatility: number = (Math.random() * this.maxVolatility) / 100;
 const dmdChange: number = 1 + dmdVolatility;
 ```
 
-`priceChange`, `compChange` and `dmdChange` are the amount of `marketPrice`, `competition` and `demand` changed in next steps.
+`priceChange`, `compChange` and `dmdChange` are the amount of `marketPrice`, `competition` and `demand` changed in the next steps.
 
 After that, it randomizes twice:
 
@@ -34,9 +34,9 @@ After that, it randomizes twice:
 
 ## Product
 
-Their initial values are set when product is finished. Check the next [section](./product.md) for the formulas.
+Initial values are set when the product is finished. Check the next [section](./product.md) for the formulas.
 
-In cycle's START state, game decreases `demand` and increases `competition` of product
+During the START state, the game decreases `demand` and increases `competition` of the product.
 
 - Amount of change:
 
