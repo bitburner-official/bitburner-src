@@ -1,3 +1,5 @@
+import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
+
 import { calculateRamUsage } from "../../../src/Script/RamCalculations";
 import { RamCosts } from "../../../src/Netscript/RamCostGenerator";
 import { Script } from "../../../src/Script/Script";
@@ -8,10 +10,10 @@ const GrowCost = 0.15;
 const SleeveGetTaskCost = 4;
 const HacknetCost = 4;
 const MaxCost = 1024;
-
 describe("Parsing NetScript code to work out static RAM costs", function () {
+  jest.spyOn(console, "error").mockImplementation(() => {});
   /** Tests numeric equality, allowing for floating point imprecision - and includes script base cost */
-  function expectCost(val: number, expected: number) {
+  function expectCost(val: number | undefined, expected: number) {
     const expectedWithBase = Math.min(expected + BaseCost, MaxCost);
     expect(val).toBeGreaterThanOrEqual(expectedWithBase - 100 * Number.EPSILON);
     expect(val).toBeLessThanOrEqual(expectedWithBase + 100 * Number.EPSILON);
@@ -186,7 +188,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const libCode = `
         export function dummy() { return 0; }
       `;
-      const lib = new Script("libTest.js", libCode);
+      const lib = new Script("libTest.js" as ScriptFilePath, libCode);
 
       const code = `
         import { dummy } from "libTest";
@@ -194,7 +196,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           dummy();
         }
       `;
-      const calculated = calculateRamUsage(code, new Map([["libTest.js", lib]])).cost;
+      const calculated = calculateRamUsage(code, new Map([["libTest.js" as ScriptFilePath, lib]])).cost;
       expectCost(calculated, 0);
     });
 
@@ -202,7 +204,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const libCode = `
         export async function doHack(ns) { return await ns.hack("joesguns"); }
       `;
-      const lib = new Script("libTest.js", libCode);
+      const lib = new Script("libTest.js" as ScriptFilePath, libCode);
 
       const code = `
         import { doHack } from "libTest";
@@ -210,7 +212,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           await doHack(ns);
         }
       `;
-      const calculated = calculateRamUsage(code, new Map([["libTest.js", lib]])).cost;
+      const calculated = calculateRamUsage(code, new Map([["libTest.js" as ScriptFilePath, lib]])).cost;
       expectCost(calculated, HackCost);
     });
 
@@ -219,7 +221,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
         export async function doHack(ns) { return await ns.hack("joesguns"); }
         export async function doGrow(ns) { return await ns.grow("joesguns"); }
       `;
-      const lib = new Script("libTest.js", libCode);
+      const lib = new Script("libTest.js" as ScriptFilePath, libCode);
 
       const code = `
         import { doHack } from "libTest";
@@ -227,7 +229,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           await doHack(ns);
         }
       `;
-      const calculated = calculateRamUsage(code, new Map([["libTest.js", lib]])).cost;
+      const calculated = calculateRamUsage(code, new Map([["libTest.js" as ScriptFilePath, lib]])).cost;
       expectCost(calculated, HackCost);
     });
 
@@ -236,7 +238,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
         export async function doHack(ns) { return await ns.hack("joesguns"); }
         export async function doGrow(ns) { return await ns.grow("joesguns"); }
       `;
-      const lib = new Script("libTest.js", libCode);
+      const lib = new Script("libTest.js" as ScriptFilePath, libCode);
 
       const code = `
         import * as test from "libTest";
@@ -244,7 +246,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           await test.doHack(ns);
         }
       `;
-      const calculated = calculateRamUsage(code, new Map([["libTest.js", lib]])).cost;
+      const calculated = calculateRamUsage(code, new Map([["libTest.js" as ScriptFilePath, lib]])).cost;
       expectCost(calculated, HackCost + GrowCost);
     });
 
@@ -279,7 +281,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           async doGrow() { return await this.ns.grow("joesguns"); }
         }
       `;
-      const lib = new Script("libTest.js", libCode);
+      const lib = new Script("libTest.js" as ScriptFilePath, libCode);
 
       const code = `
         import * as test from "libTest";
@@ -287,7 +289,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           await test.doHack(ns);
         }
       `;
-      const calculated = calculateRamUsage(code, new Map([["libTest.js", lib]])).cost;
+      const calculated = calculateRamUsage(code, new Map([["libTest.js" as ScriptFilePath, lib]])).cost;
       expectCost(calculated, HackCost);
     });
 
@@ -302,7 +304,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
             return Grower;
           }
         `;
-      const lib = new Script("libTest.js", libCode);
+      const lib = new Script("libTest.js" as ScriptFilePath, libCode);
 
       const code = `
           import { createClass } from "libTest";
@@ -313,7 +315,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
             await growerInstance.doGrow();
           }
         `;
-      const calculated = calculateRamUsage(code, new Map([["libTest.js", lib]])).cost;
+      const calculated = calculateRamUsage(code, new Map([["libTest.js" as ScriptFilePath, lib]])).cost;
       expectCost(calculated, GrowCost);
     });
   });
