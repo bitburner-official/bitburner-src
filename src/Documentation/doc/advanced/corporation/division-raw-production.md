@@ -2,7 +2,7 @@
 
 ## Definition
 
-Each industry requires different input materials. Each required material has its own coefficient. This value is not the same as the boost material coefficient; they are different things. For example:
+Each industry requires different input materials. Each required material has its own coefficient. This value is not the same as the boost material's coefficient; they are different things. For example:
 
 - Agriculture: { Water: 0.5, Chemicals: 0.2 }
 - Chemical: { Plants: 1, Water: 0.5 }

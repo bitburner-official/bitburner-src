@@ -2,7 +2,7 @@
 
 ## Division production multiplier
 
-Each industry has a different set of boost material coefficients. For example:
+Each industry has a different set of boost material's coefficients. For example:
 
 - Agriculture:
   - AI Cores: 0.3
@@ -70,16 +70,9 @@ Constraint function (S is storage space):
 
 $$G(x,y,z,w) = s_{1}*x + s_{2}*y + s_{3}*z + s_{4}*w = S$$
 
-Problem: Find maximum point of function $F(x,y,z,w)$ with constraint $G(x,y,z,w)$.
+Problem: Find the maximum of $F(x,y,z,w)$ with constraint $G(x,y,z,w)$.
 
 ## Solution
-
-### Non-linear constrained optimization library
-
-Use [ALGLIB](./miscellany.md). Using this library for solving our problem is not recommended because there is another optimal solution. This library also has 2 disadvantages:
-
-- Only return approximation.
-- Run much slower than our optimal solution below.
 
 ### Lagrange multiplier method
 
@@ -100,7 +93,7 @@ $$G(x,y,z,w) = S$$
 In order to solve this system, we have 2 choices:
 
 - Solve that system with [Ceres Solver](./miscellany.md).
-- Do the hard work with basic calculus and algebra. This is the optimal way in both accuracy and performance, so we'll focus on it. In the following sections, I'll show the proof and sample code for this solution.
+- Do the hard work with basic calculus and algebra. This is the optimal way in both accuracy and performance, so we'll focus on it. In the following sections, I'll show the proof for this solution.
 
 $$x*s_{1} = \frac{S - 500*\left( \frac{s_{1}}{c_{1}}*\left( c_{2} + c_{3} + c_{4} \right) - \left( s_{2} + s_{3} + s_{4} \right) \right)}{\frac{c_{1} + c_{2} + c_{3} + c_{4}}{c_{1}}}$$
 

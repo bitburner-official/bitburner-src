@@ -51,12 +51,12 @@ $${BusinessFactor = (BusinessProduction)}^{0.26} + \left( \frac{BusinessProducti
 
 $$AdvertFactor = (AwarenessFactor*PopularityFactor*RatioFactor)^{0.85}$$
 
-- Market factor
+- Market factor:
 
 $$MarketFactor = Max\left( 0.1,\frac{Demand*(100 - Competition)}{100} \right)$$
 
 - Corporation's upgrade bonus: `SalesBots` bonus.
-- Division's research bonus: this is always 1. Currently there is not any research that increases sales bonus.
+- Division's research bonus: this is always 1. Currently there is not any research that increases the sales bonus.
 - `MarkupMultiplier`: initialize with 1.
   - `SellingPrice` is the selling price that you set.
   - If `(SellingPrice > MarketPrice + MarkupLimit)`: $MarkupMultiplier = \left( \frac{MarkupLimit}{SellingPrice - MarketPrice} \right)^{2}$

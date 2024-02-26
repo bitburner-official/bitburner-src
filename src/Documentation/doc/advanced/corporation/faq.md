@@ -1,6 +1,6 @@
 # FAQ
 
-> What is a Corporation good for?
+> What is a corporation good for?
 
 Generating ridiculously massive income. With this income, you can buy whatever you want, e.g., augmentations or bribing factions for reputation.
 
@@ -38,7 +38,7 @@ You have to pay tax. ShadyAccounting and GovernmentPartnership reduce tax. Check
 
 Earn money by any normal means: hacking, committing crimes, cheating in casino, etc. There is also another way:
 
-- Follow the guide on round 1, but at the end, do not accept the investment offer.
+- Follow the [advices](./general-advice.md) on round 1, but at the end, do not accept the investment offer.
 - Go public immediately.
 - Sell all your shares immediately.
 - Sell CEO position and start a new corporation.
@@ -105,7 +105,7 @@ Check this [section](./smart-supply.md).
 
 > How do I setup the quantity of exported materials?
 
-Specify an export string. The optimal export string is: `(IPROD+IINV/10)*(-1)`. Check this [section](./miscellany.md) for details.
+Specify an export string. The optimal export string is `(IPROD+IINV/10)*(-1)`. Check this [section](./miscellany.md) for details.
 
 > Is research's benefit shared between different divisions?
 
@@ -202,7 +202,7 @@ Yes, you can reimplement Market-TA2. Implementing a custom Market-TA2 script is 
 
 > How do I discard materials/products?
 
-Set the selling price to 0 (or anything small enough).
+Set the selling price to 0.
 
 > What is a dummy division?
 

@@ -18,7 +18,7 @@ $$0.5\;\textit{Water}+0.2\;\textit{Chemicals}\Rightarrow 1\;\textit{Plants}+1\;\
 
 There is no "offline progress" in corporation. When you go offline, the corporation accumulates bonus time.
 
-A corporation continuously transitions between 5 states: START → PURCHASE → PRODUCTION → EXPORT → SALE → START. The action occurs when the state is _entered_, i.e. when the state is PURCHASE it means purchasing has just occurred. One cycle (going through one of these transitions) takes 10 seconds. If you have enough bonus time, it takes one second. Check this [section](./miscellany.md) for details.
+A corporation continuously transitions between 5 states: START → PURCHASE → PRODUCTION → EXPORT → SALE → START. The action occurs when the state is _entered_, i.e., when the state is PURCHASE, it means purchasing has just occurred. One cycle (going through one of these transitions) takes 10 seconds. If you have enough bonus time, it takes one second. Check this [section](./miscellany.md) for details.
 
 Each division has its "division product multiplier". This multiplier can be increased by buying [boost materials](./boost-material.md): AI Cores, Hardware, Real Estate, and Robots.
 
