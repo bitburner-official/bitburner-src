@@ -33,8 +33,6 @@ describe("Go AI tests", () => {
     const boardState = boardStateFromSimpleBoard(board, GoOpponent.Daedalus);
     const move = await getMove(boardState, GoColor.white, GoOpponent.Daedalus, 0);
 
-    console.log(move);
-
     expect([move.x, move.y]).toEqual([0, 1]);
   });
 });

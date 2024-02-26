@@ -50,10 +50,10 @@ describe("numCycleForGrowthCorrected reverses calculateServerGrowth", () => {
       const value = numCycleForGrowthCorrected(server, newMoney + eps, money, 1, player);
       // Write our own check because Jest is a goblin that can't provide context
       if (value !== threads + 1) {
-        console.log(
-          `newMoney: ${newMoney} eps: ${eps} newMoney+eps: ${newMoney + eps} value: ${value} threads: ${threads}`,
+        throw new Error(
+          `value (${value}) was not equal to threads+1 (${threads + 1})\n\n` +
+            `newMoney: ${newMoney} eps: ${eps} newMoney+eps: ${newMoney + eps} value: ${value} threads: ${threads}`,
         );
-        expect(value).toBe(threads + 1);
       }
     }
   });
@@ -67,10 +67,10 @@ describe("numCycleForGrowthCorrected reverses calculateServerGrowth", () => {
     const value = numCycleForGrowthCorrected(server, newMoney + eps, 0, 1, player);
     // Write our own check because Jest is a goblin that can't provide context
     if (value !== threads + 1) {
-      console.log(
-        `newMoney: ${newMoney} eps: ${eps} newMoney+eps: ${newMoney + eps} value: ${value} threads: ${threads}`,
+      throw new Error(
+        `value (${value}) was not equal to threads+1 (${threads + 1})\n\n` +
+          `newMoney: ${newMoney} eps: ${eps} newMoney+eps: ${newMoney + eps} value: ${value} threads: ${threads}`,
       );
-      expect(value).toBe(threads + 1);
     }
   });
 });

@@ -199,7 +199,6 @@ describe("Netscript Go API unit tests", () => {
       const mockLogger = jest.fn();
 
       const result = await cheatPlayTwoMoves(mockLogger, 4, 3, 3, 4, 2, 1);
-      console.log(result);
       expect(mockLogger).toHaveBeenCalledWith("Cheat failed. Your turn has been skipped.");
       expect(result.success).toEqual(false);
       expect(Go.currentGame.board[4]?.[3]?.color).toEqual(GoColor.empty);
@@ -214,7 +213,6 @@ describe("Netscript Go API unit tests", () => {
       const mockLogger = jest.fn();
 
       const result = await cheatPlayTwoMoves(mockLogger, 4, 3, 3, 4, 1, 0);
-      console.log(result);
       expect(mockLogger).toHaveBeenCalledWith("Cheat failed! You have been ejected from the subnet.");
       expect(result.success).toEqual(false);
       expect(Go.currentGame.previousBoard).toEqual(null);
@@ -253,7 +251,6 @@ describe("Netscript Go API unit tests", () => {
       const mockLogger = jest.fn();
 
       const result = await cheatRemoveRouter(mockLogger, 0, 0, 1, 0);
-      console.log(result);
       expect(mockLogger).toHaveBeenCalledWith("Cheat failed! You have been ejected from the subnet.");
       expect(result.success).toEqual(false);
       expect(Go.currentGame.previousBoard).toEqual(null);
