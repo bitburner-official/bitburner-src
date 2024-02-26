@@ -415,7 +415,7 @@ function getJumpMove(
 export function getExpansionMoveArray(boardState: BoardState, player: GoColor, availableSpaces: PointState[]): Move[] {
   // Look for any empty spaces fully surrounded by empty spaces to expand into
   const emptySpaces = availableSpaces.filter((space) => {
-    const neighbors = findNeighbors(boardState, space.x, space.y);
+    const neighbors = findNeighbors(boardState.board, space.x, space.y);
     return (
       [neighbors.north, neighbors.east, neighbors.south, neighbors.west].filter(
         (point) => point && point.color === GoColor.empty,
@@ -640,7 +640,7 @@ function getEyeCreationMoves(
       availableSpaces.find((availablePoint) => availablePoint.x === point.x && availablePoint.y === point.y),
     )
     .filter((point: PointState) => {
-      const neighbors = findNeighbors(boardState, point.x, point.y);
+      const neighbors = findNeighbors(boardState.board, point.x, point.y);
       const neighborhood = [neighbors.north, neighbors.east, neighbors.south, neighbors.west];
       return (
         neighborhood.filter((point) => !point || point?.color === player).length >= 2 &&

@@ -27,7 +27,7 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
 
   const isInAtari = currentPoint && currentPoint.liberties?.length === 1 && player !== GoColor.empty && !traditional;
   const liberties = player !== GoColor.empty ? findAdjacentLibertiesAndAlliesForPoint(state, x, y) : null;
-  const neighbors = findNeighbors(state, x, y);
+  const neighbors = findNeighbors(state.board, x, y);
 
   const hasNorthLiberty = traditional ? neighbors.north : liberties?.north;
   const hasEastLiberty = traditional ? neighbors.east : liberties?.east;

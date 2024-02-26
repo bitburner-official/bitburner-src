@@ -111,7 +111,7 @@ export function evaluateMoveResult(
   point.color = player;
   boardState.previousPlayer = player;
 
-  const neighbors = getArrayFromNeighbor(findNeighbors(boardState, x, y));
+  const neighbors = getArrayFromNeighbor(findNeighbors(boardState.board, x, y));
   const chainIdsToUpdate = [point.chain, ...neighbors.map((point) => point.chain)];
   resetChainsById(boardState, chainIdsToUpdate);
 
@@ -455,7 +455,7 @@ export function getPlayerNeighbors(boardState: BoardState, chain: PointState[]) 
  */
 export function getAllNeighbors(boardState: BoardState, chain: PointState[]) {
   const allNeighbors = chain.reduce((chainNeighbors: Set<PointState>, point: PointState) => {
-    getArrayFromNeighbor(findNeighbors(boardState, point.x, point.y))
+    getArrayFromNeighbor(findNeighbors(boardState.board, point.x, point.y))
       .filter((neighborPoint) => !isPointInChain(neighborPoint, chain))
       .forEach((neighborPoint) => chainNeighbors.add(neighborPoint));
     return chainNeighbors;
@@ -543,7 +543,7 @@ export function findChainLibertiesForPoint(boardState: BoardState, x: number, y:
  * (adjacent 'liberties' of the current piece )
  */
 export function findAdjacentLibertiesForPoint(boardState: BoardState, x: number, y: number): Neighbor {
-  const neighbors = findNeighbors(boardState, x, y);
+  const neighbors = findNeighbors(boardState.board, x, y);
 
   const hasNorthLiberty = neighbors.north && neighbors.north.color === GoColor.empty;
   const hasEastLiberty = neighbors.east && neighbors.east.color === GoColor.empty;
@@ -571,7 +571,7 @@ export function findAdjacentLibertiesAndAlliesForPoint(
   const currentPoint = boardState.board[x]?.[y];
   const player = _player || (!currentPoint || currentPoint.color === GoColor.empty ? undefined : currentPoint.color);
   const adjacentLiberties = findAdjacentLibertiesForPoint(boardState, x, y);
-  const neighbors = findNeighbors(boardState, x, y);
+  const neighbors = findNeighbors(boardState.board, x, y);
 
   return {
     north: adjacentLiberties.north || neighbors.north?.color === player ? neighbors.north : null,

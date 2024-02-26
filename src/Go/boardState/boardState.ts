@@ -225,7 +225,7 @@ export function findAdjacentPointsInChain(boardState: BoardState, x: number, y: 
     }
 
     checkedPoints.push(currentPoint);
-    const neighbors = findNeighbors(boardState, currentPoint.x, currentPoint.y);
+    const neighbors = findNeighbors(boardState.board, currentPoint.x, currentPoint.y);
 
     [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
       .filter(isNotNull)
@@ -299,8 +299,7 @@ export function contains(arr: PointState[], point: PointState) {
   return !!arr.find((p) => p && p.x === point.x && p.y === point.y);
 }
 
-export function findNeighbors(boardState: BoardState, x: number, y: number): Neighbor {
-  const board = boardState.board;
+export function findNeighbors(board: Board, x: number, y: number): Neighbor {
   return {
     north: board[x]?.[y + 1],
     east: board[x + 1]?.[y],
