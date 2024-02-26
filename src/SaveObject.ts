@@ -707,7 +707,18 @@ Error: ${e}`);
       }
     }
   }
-  if (ver < 38 && "go" in Player) delete Player.go; // Remove outdated savedata
+  v2_60: if (ver < 38 && "go" in Player) {
+    const goData = Player.go;
+    // Remove outdated savedata
+    delete Player.go;
+    // Attempt to load back in at least the stats object. The current game will not be loaded.
+    if (!goData || typeof goData !== "object") break v2_60;
+    const stats = "status" in goData ? goData.status : "stats" in goData ? goData.stats : null;
+    if (!stats || typeof stats !== "object") break v2_60;
+    const freshSaveData = getGoSave();
+    Object.assign(freshSaveData.stats, stats);
+    loadGo(JSON.stringify(freshSaveData));
+  }
 }
 
 function loadGame(saveString: string): boolean {
