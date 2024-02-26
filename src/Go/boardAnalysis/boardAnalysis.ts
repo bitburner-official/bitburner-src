@@ -5,7 +5,6 @@ import {
   findAdjacentPointsInChain,
   findNeighbors,
   getArrayFromNeighbor,
-  getBoardCopy,
   getEmptySpaces,
   getNewBoardState,
   getStateCopy,
@@ -104,7 +103,6 @@ export function evaluateMoveResult(
   resetChains = false,
 ) {
   const boardState = getStateCopy(initialBoardState);
-  boardState.previousBoard = simpleBoardFromBoard(getBoardCopy(boardState).board);
   const point = boardState.board[x]?.[y];
   if (!point) {
     return initialBoardState;
