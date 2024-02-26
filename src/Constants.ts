@@ -200,7 +200,7 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.0 dev - Changelog last updated 17 Feb 2024
+## v2.6.0 dev - Changelog last updated 26 Feb 2024
 
 ### MAJOR ADDITIONS
 
@@ -211,6 +211,7 @@ export const CONSTANTS: {
 
 - (Bladeburner) ns.bladeburner.getSkillUpgradeCost now returns infinity if requesting a cost above the maximum skill level (@Semanual)
 - (CodingContract) Fixed an issue where ns.codingcontract.getData was leaking internal arrays when contract data was a 2-d array (@LJNeon)
+- (Gang) Added ns.gang.getInstallResult for determining the effect an augmentation install will have on gang member ascension multipliers (@LJNeon)
 - (Go) Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes (@ficocelliguy)
 - (Ports) Added ns.nextPortWrite, which allows waiting for the next write to a port without creating a port handle object (@LJNeon)
 - (Ports) Ports now support all clonable data (@LJNeon)
@@ -238,6 +239,7 @@ export const CONSTANTS: {
 - (Stockmarket) Changed color of stocks increasing in value (@Semanual)
 - (Terminal) Improved scroll behavior on the Terminal (@Snarling)
 - (Theme) Added 3 new theme elements to properly support light themes (@adeilt)
+- Added a tail render interval setting, changing how frequently tail windows redraw their contents (@Caldwell-74)
 - Reorganization of some content and sorting of scripts on the Active Scripts page (@Snarling, @TheAimMan)
 - "Disable Text Effects" option also disables the corrupted text display (@draughtnyan)
 - fl1ght.exe now displays the related requirements in a more readable way (@TheAimMan, @LJNeon)
@@ -259,6 +261,7 @@ export const CONSTANTS: {
 - (ScriptEditor) Links from "ls" are now tied to that host, instead of your connected machine (@LJNeon)
 - (ScriptEditor) Script "models" in the script editor are now properly disposed (@Caldwell-74)
 - (Terminal) Add --ram-override flag to the run command (@LJNeon)
+- Protect against renaming servers to invalid names (@LJNeon)
 - All running scripts are killed upon entering the BitVerse (@LJNeon)
 - Scripts with the "temporary" flag set do not populate the Recently Killed script list on script death (@TheAimMan)
  - Fix an issue with offline income for scripts (@Caldwell-74)
