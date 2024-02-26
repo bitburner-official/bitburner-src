@@ -160,7 +160,7 @@ const resetChainsById = (boardState: BoardState, chainIds: string[]) => {
  */
 export function findEffectiveLibertiesOfNewMove(boardState: BoardState, x: number, y: number, player: GoColor) {
   const friendlyChains = getAllChains(boardState.board).filter((chain) => chain[0].color === player);
-  const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState, x, y, player);
+  const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState.board, x, y, player);
   const neighborPoints = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
     .filter(isNotNull)
     .filter(isDefined);
@@ -192,7 +192,7 @@ export function findEffectiveLibertiesOfNewMove(boardState: BoardState, x: numbe
  * Find the number of open spaces that are connected to chains adjacent to a given point, and return the maximum
  */
 export function findMaxLibertyCountOfAdjacentChains(boardState: BoardState, x: number, y: number, player: GoColor) {
-  const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState, x, y, player);
+  const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState.board, x, y, player);
   const friendlyNeighbors = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
     .filter(isNotNull)
     .filter(isDefined)
@@ -216,7 +216,7 @@ export function findEnemyNeighborChainWithFewestLiberties(
   player: GoColor,
 ) {
   const chains = getAllChains(boardState.board);
-  const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState, x, y, player);
+  const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState.board, x, y, player);
   const friendlyNeighbors = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
     .filter(isNotNull)
     .filter(isDefined)
@@ -563,15 +563,15 @@ export function findAdjacentLibertiesForPoint(board: Board, x: number, y: number
  * current player's pieces. Used for making the connection map on the board
  */
 export function findAdjacentLibertiesAndAlliesForPoint(
-  boardState: BoardState,
+  board: Board,
   x: number,
   y: number,
   _player?: GoColor,
 ): Neighbor {
-  const currentPoint = boardState.board[x]?.[y];
+  const currentPoint = board[x]?.[y];
   const player = _player || (!currentPoint || currentPoint.color === GoColor.empty ? undefined : currentPoint.color);
-  const adjacentLiberties = findAdjacentLibertiesForPoint(boardState.board, x, y);
-  const neighbors = findNeighbors(boardState.board, x, y);
+  const adjacentLiberties = findAdjacentLibertiesForPoint(board, x, y);
+  const neighbors = findNeighbors(board, x, y);
 
   return {
     north: adjacentLiberties.north || neighbors.north?.color === player ? neighbors.north : null,
