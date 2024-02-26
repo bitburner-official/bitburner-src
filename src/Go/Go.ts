@@ -29,5 +29,3 @@ export const Go = new GoObject();
 
 /** Event emitter to allow the UI to subscribe to Go gameplay updates in order to trigger rerenders properly */
 export const GoEvents = new EventEmitter();
-
-Object.assign(window, { Go });

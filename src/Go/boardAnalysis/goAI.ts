@@ -71,14 +71,14 @@ export async function getMove(boardState: BoardState, player: GoColor, opponent:
 
   if (chosenMove) {
     await sleep(200);
-    console.debug(`Non-priority move chosen: ${chosenMove.x} ${chosenMove.y}`);
+    //console.debug(`Non-priority move chosen: ${chosenMove.x} ${chosenMove.y}`);
     return {
       type: GoPlayType.move,
       x: chosenMove.x,
       y: chosenMove.y,
     };
   } else {
-    console.debug("No valid moves found");
+    //console.debug("No valid moves found");
     return handleNoMoveFound(boardState, player);
   }
 }
@@ -189,24 +189,24 @@ async function getSlumSnakesPriorityMove(moves: MoveOptions, rng: number): Promi
  */
 async function getBlackHandPriorityMove(moves: MoveOptions, rng: number): Promise<PointState | null> {
   if (await moves.capture()) {
-    console.debug("capture: capture move chosen");
+    //console.debug("capture: capture move chosen");
     return (await moves.capture())?.point ?? null;
   }
 
   const surround = await moves.surround();
 
   if (surround && surround.point && (surround.newLibertyCount ?? 999) <= 1) {
-    console.debug("surround move chosen");
+    //console.debug("surround move chosen");
     return surround.point;
   }
 
   if (await moves.defendCapture()) {
-    console.debug("defend capture: defend move chosen");
+    //console.debug("defend capture: defend move chosen");
     return (await moves.defendCapture())?.point ?? null;
   }
 
   if (surround && surround.point && (surround?.newLibertyCount ?? 999) <= 2) {
-    console.debug("surround move chosen");
+    //console.debug("surround move chosen");
     return surround.point;
   }
 
@@ -226,23 +226,23 @@ async function getBlackHandPriorityMove(moves: MoveOptions, rng: number): Promis
  */
 async function getTetradPriorityMove(moves: MoveOptions, rng: number): Promise<PointState | null> {
   if (await moves.capture()) {
-    console.debug("capture: capture move chosen");
+    //console.debug("capture: capture move chosen");
     return (await moves.capture())?.point ?? null;
   }
 
   if (await moves.defendCapture()) {
-    console.debug("defend capture: defend move chosen");
+    //console.debug("defend capture: defend move chosen");
     return (await moves.defendCapture())?.point ?? null;
   }
 
   if (await moves.pattern()) {
-    console.debug("pattern match move chosen");
+    //console.debug("pattern match move chosen");
     return (await moves.pattern())?.point ?? null;
   }
 
   const surround = await moves.surround();
   if (surround && surround.point && (surround?.newLibertyCount ?? 9) <= 1) {
-    console.debug("surround move chosen");
+    //console.debug("surround move chosen");
     return surround.point;
   }
 
@@ -274,33 +274,33 @@ async function getDaedalusPriorityMove(moves: MoveOptions, rng: number): Promise
  */
 async function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): Promise<PointState | null> {
   if (await moves.capture()) {
-    console.debug("capture: capture move chosen");
+    //console.debug("capture: capture move chosen");
     return (await moves.capture())?.point ?? null;
   }
 
   if (await moves.defendCapture()) {
-    console.debug("defend capture: defend move chosen");
+    //console.debug("defend capture: defend move chosen");
     return (await moves.defendCapture())?.point ?? null;
   }
 
   if (await moves.eyeMove()) {
-    console.debug("Create eye move chosen");
+    //console.debug("Create eye move chosen");
     return (await moves.eyeMove())?.point ?? null;
   }
 
   const surround = await moves.surround();
   if (surround && surround.point && (surround?.newLibertyCount ?? 9) <= 1) {
-    console.debug("surround move chosen");
+    //console.debug("surround move chosen");
     return surround.point;
   }
 
   if (await moves.eyeBlock()) {
-    console.debug("Block eye move chosen");
+    //console.debug("Block eye move chosen");
     return (await moves.eyeBlock())?.point ?? null;
   }
 
   if (await moves.corner()) {
-    console.debug("Corner move chosen");
+    //console.debug("Corner move chosen");
     return (await moves.corner())?.point ?? null;
   }
 
@@ -310,17 +310,17 @@ async function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): Promi
   const usePattern = rng > 0.25 || !hasMoves;
 
   if ((await moves.pattern()) && usePattern) {
-    console.debug("pattern match move chosen");
+    //console.debug("pattern match move chosen");
     return (await moves.pattern())?.point ?? null;
   }
 
   if (rng > 0.4 && (await moves.jump())) {
-    console.debug("Jump move chosen");
+    //console.debug("Jump move chosen");
     return (await moves.jump())?.point ?? null;
   }
 
   if (rng < 0.6 && surround && surround.point && (surround?.newLibertyCount ?? 9) <= 2) {
-    console.debug("surround move chosen");
+    //console.debug("surround move chosen");
     return surround.point;
   }
 

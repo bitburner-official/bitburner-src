@@ -77,7 +77,7 @@ export function makeMove(boardState: BoardState, x: number, y: number, player: G
   // Do not update on invalid moves
   const validity = evaluateIfMoveIsValid(boardState, x, y, player, false);
   if (validity !== GoValidity.valid || !boardState.board[x][y]?.color) {
-    console.debug(`Invalid move attempted! ${x} ${y} ${player} : ${validity}`);
+    //console.debug(`Invalid move attempted! ${x} ${y} ${player} : ${validity}`);
     return false;
   }
 
