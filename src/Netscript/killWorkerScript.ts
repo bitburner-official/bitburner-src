@@ -10,7 +10,7 @@ import { GetServer } from "../Server/AllServers";
 import { AddRecentScript } from "./RecentScripts";
 import { ITutorial } from "../InteractiveTutorial";
 import { AlertEvents } from "../ui/React/AlertManager";
-import { handleUnknownError } from "./NetscriptHelpers";
+import { handleUnknownError } from "./ErrorMessages";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 
 export function killWorkerScript(ws: WorkerScript): boolean {

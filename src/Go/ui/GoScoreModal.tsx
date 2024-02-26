@@ -1,28 +1,29 @@
+import type { GoScore } from "../Types";
 import React from "react";
 import { Button, Typography } from "@mui/material";
 
+import { GoOpponent, GoColor } from "@enums";
 import { Modal } from "../../ui/React/Modal";
-import { goScore, opponents, playerColors } from "../boardState/goConstants";
 import { boardStyles } from "../boardState/goStyles";
 import { GoScorePowerSummary } from "./GoScorePowerSummary";
 import { GoScoreSummaryTable } from "./GoScoreSummaryTable";
 
-interface IProps {
+interface Props {
   open: boolean;
   onClose: () => void;
-  finalScore: goScore;
+  finalScore: GoScore;
   newSubnet: () => void;
-  opponent: opponents;
+  opponent: GoOpponent;
 }
 
-export const GoScoreModal = ({ open, onClose, finalScore, newSubnet, opponent }: IProps): React.ReactElement => {
+export const GoScoreModal = ({ open, onClose, finalScore, newSubnet, opponent }: Props): React.ReactElement => {
   const classes = boardStyles();
 
-  const blackScore = finalScore[playerColors.black];
-  const whiteScore = finalScore[playerColors.white];
+  const blackScore = finalScore[GoColor.black];
+  const whiteScore = finalScore[GoColor.white];
 
-  const playerWinsText = opponent === opponents.none ? "Black wins!" : "You win!";
-  const opponentWinsText = opponent === opponents.none ? "White wins!" : `Winner: ${opponent}`;
+  const playerWinsText = opponent === GoOpponent.none ? "Black wins!" : "You win!";
+  const opponentWinsText = opponent === GoOpponent.none ? "White wins!" : `Winner: ${opponent}`;
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -37,7 +38,7 @@ export const GoScoreModal = ({ open, onClose, finalScore, newSubnet, opponent }:
             {blackScore.sum > whiteScore.sum ? playerWinsText : opponentWinsText}
           </Typography>
           <br />
-          {opponent !== opponents.none ? (
+          {opponent !== GoOpponent.none ? (
             <>
               <GoScorePowerSummary opponent={opponent} finalScore={finalScore} />
               <br />

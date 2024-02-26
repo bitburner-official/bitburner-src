@@ -1,4 +1,6 @@
-import { BoardState, playerColors, type PointState } from "../boardState/goConstants";
+import type { Board, BoardState, PointState } from "../Types";
+
+import { GoColor } from "@enums";
 import {
   getAllChains,
   getAllEyes,
@@ -19,18 +21,18 @@ import { contains, isNotNull } from "../boardState/boardState";
  * In which case, only the liberties of that one weak chain are worth considering. Other parts of that fully-encircled
  * enemy space, and other similar spaces, should be ignored, otherwise the game drags on too long
  */
-export function findDisputedTerritory(boardState: BoardState, player: playerColors, excludeFriendlyEyes?: boolean) {
+export function findDisputedTerritory(boardState: BoardState, player: GoColor, excludeFriendlyEyes?: boolean) {
   let validMoves = getAllValidMoves(boardState, player);
   if (excludeFriendlyEyes) {
-    const friendlyEyes = getAllEyes(boardState, player)
+    const friendlyEyes = getAllEyes(boardState.board, player)
       .filter((eye) => eye.length >= 2)
       .flat()
       .flat();
     validMoves = validMoves.filter((point) => !contains(friendlyEyes, point));
   }
-  const opponent = player === playerColors.white ? playerColors.black : playerColors.white;
-  const chains = getAllChains(boardState);
-  const emptySpacesToAnalyze = getAllPotentialEyes(boardState, chains, opponent);
+  const opponent = player === GoColor.white ? GoColor.black : GoColor.white;
+  const chains = getAllChains(boardState.board);
+  const emptySpacesToAnalyze = getAllPotentialEyes(boardState.board, chains, opponent);
   const nodesInsideEyeSpacesToAnalyze = emptySpacesToAnalyze.map((space) => space.chain).flat();
 
   const playableNodesInsideOfEnemySpace = emptySpacesToAnalyze.reduce((playableNodes: PointState[], space) => {
@@ -45,12 +47,12 @@ export function findDisputedTerritory(boardState: BoardState, player: playerColo
         }
 
         // Get all opponent chains that make up the border of the opponent-controlled space
-        const neighborChains = getAllNeighboringChains(boardState, neighborChain, chains);
+        const neighborChains = getAllNeighboringChains(boardState.board, neighborChain, chains);
 
         // Ignore border chains that do not touch the current player's pieces somewhere, as they are likely fully interior
         // to the empty space in question, or only share a border with the edge of the board and the space, or are not yet
         // surrounded on the exterior and ready to be attacked within
-        if (!neighborChains.find((chain) => chain?.[0]?.player === player)) {
+        if (!neighborChains.find((chain) => chain?.[0]?.color === player)) {
           return [];
         }
 
@@ -87,12 +89,8 @@ export function findDisputedTerritory(boardState: BoardState, player: playerColo
 
  Note that this does not detect mutual eyes formed by two chains making an eye together, or eyes via seki, or some other edge cases.
  */
-export function findClaimedTerritory(boardState: BoardState) {
-  const whiteClaimedTerritory = getAllEyes(boardState, playerColors.white).filter(
-    (eyesForChainN) => eyesForChainN.length >= 2,
-  );
-  const blackClaimedTerritory = getAllEyes(boardState, playerColors.black).filter(
-    (eyesForChainN) => eyesForChainN.length >= 2,
-  );
+export function findClaimedTerritory(board: Board) {
+  const whiteClaimedTerritory = getAllEyes(board, GoColor.white).filter((eyesForChainN) => eyesForChainN.length >= 2);
+  const blackClaimedTerritory = getAllEyes(board, GoColor.black).filter((eyesForChainN) => eyesForChainN.length >= 2);
   return [...blackClaimedTerritory, ...whiteClaimedTerritory].flat().flat();
 }

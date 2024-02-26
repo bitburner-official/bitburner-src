@@ -178,10 +178,10 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   }
 
   function checkAccess(ctx: NetscriptContext, api?: CorpUnlockName): void {
-    if (!player.corporation) throw helpers.makeRuntimeErrorMsg(ctx, "Must own a corporation.");
+    if (!player.corporation) throw helpers.errorMessage(ctx, "Must own a corporation.");
     if (!api) return;
     if (!player.corporation.unlocks.has(api)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "You do not have access to this API.");
+      throw helpers.errorMessage(ctx, "You do not have access to this API.");
     }
   }
 
@@ -216,7 +216,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
         const amt = helpers.number(ctx, "amount", _amt);
         if (amt < 1) {
-          throw helpers.makeRuntimeErrorMsg(ctx, "You must provide a positive number");
+          throw helpers.errorMessage(ctx, "You must provide a positive number");
         }
         const warehouse = getWarehouse(divisionName, cityName);
         return UpgradeWarehouseCost(warehouse, amt);
@@ -306,7 +306,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         const amt = helpers.number(ctx, "amount", _amt);
         const corporation = getCorporation();
         if (amt < 1) {
-          throw helpers.makeRuntimeErrorMsg(ctx, "You must provide a positive number");
+          throw helpers.errorMessage(ctx, "You must provide a positive number");
         }
         UpgradeWarehouse(corporation, getDivision(divisionName), getWarehouse(divisionName, cityName), amt);
       },
@@ -346,7 +346,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const enabled = !!_enabled;
       const warehouse = getWarehouse(divisionName, cityName);
       if (!hasUnlock(CorpUnlockName.SmartSupply))
-        throw helpers.makeRuntimeErrorMsg(ctx, `You have not purchased the Smart Supply upgrade!`);
+        throw helpers.errorMessage(ctx, `You have not purchased the Smart Supply upgrade!`);
       SetSmartSupply(warehouse, enabled);
     },
     setSmartSupplyOption: (ctx) => (_divisionName, _cityName, _materialName, _option) => {
@@ -358,14 +358,14 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const material = getMaterial(divisionName, cityName, materialName);
       const option = getEnumHelper("SmartSupplyOption").nsGetMember(ctx, _option);
       if (!hasUnlock(CorpUnlockName.SmartSupply))
-        throw helpers.makeRuntimeErrorMsg(ctx, `You have not purchased the Smart Supply upgrade!`);
+        throw helpers.errorMessage(ctx, `You have not purchased the Smart Supply upgrade!`);
       SetSmartSupplyOption(warehouse, material, option);
     },
     buyMaterial: (ctx) => (_divisionName, _cityName, _materialName, _amt) => {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const division = getCorporation().divisions.get(divisionName);
-      if (!division) throw helpers.makeRuntimeErrorMsg(ctx, `No division with provided name ${divisionName}`);
+      if (!division) throw helpers.errorMessage(ctx, `No division with provided name ${divisionName}`);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const amt = helpers.number(ctx, "amt", _amt);
@@ -378,7 +378,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const division = getCorporation().divisions.get(divisionName);
-      if (!division) throw helpers.makeRuntimeErrorMsg(ctx, `No division with provided name ${divisionName}`);
+      if (!division) throw helpers.errorMessage(ctx, `No division with provided name ${divisionName}`);
       const corporation = getCorporation();
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
@@ -446,7 +446,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const on = !!_on;
       if (!getDivision(divisionName).hasResearch("Market-TA.I"))
-        throw helpers.makeRuntimeErrorMsg(ctx, `You have not researched MarketTA.I for division: ${divisionName}`);
+        throw helpers.errorMessage(ctx, `You have not researched MarketTA.I for division: ${divisionName}`);
       SetMaterialMarketTA1(getMaterial(divisionName, cityName, materialName), on);
     },
     setMaterialMarketTA2: (ctx) => (_divisionName, _cityName, _materialName, _on) => {
@@ -456,7 +456,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const on = !!_on;
       if (!getDivision(divisionName).hasResearch("Market-TA.II"))
-        throw helpers.makeRuntimeErrorMsg(ctx, `You have not researched MarketTA.II for division: ${divisionName}`);
+        throw helpers.errorMessage(ctx, `You have not researched MarketTA.II for division: ${divisionName}`);
       SetMaterialMarketTA2(getMaterial(divisionName, cityName, materialName), on);
     },
     setProductMarketTA1: (ctx) => (_divisionName, _productName, _on) => {
@@ -465,7 +465,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const productName = helpers.string(ctx, "productName", _productName);
       const on = !!_on;
       if (!getDivision(divisionName).hasResearch("Market-TA.I"))
-        throw helpers.makeRuntimeErrorMsg(ctx, `You have not researched MarketTA.I for division: ${divisionName}`);
+        throw helpers.errorMessage(ctx, `You have not researched MarketTA.I for division: ${divisionName}`);
       SetProductMarketTA1(getProduct(divisionName, productName), on);
     },
     setProductMarketTA2: (ctx) => (_divisionName, _productName, _on) => {
@@ -474,7 +474,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const productName = helpers.string(ctx, "productName", _productName);
       const on = !!_on;
       if (!getDivision(divisionName).hasResearch("Market-TA.II"))
-        throw helpers.makeRuntimeErrorMsg(ctx, `You have not researched MarketTA.II for division: ${divisionName}`);
+        throw helpers.errorMessage(ctx, `You have not researched MarketTA.II for division: ${divisionName}`);
       SetProductMarketTA2(getProduct(divisionName, productName), on);
     },
   };
@@ -528,7 +528,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
 
       if (job === CorpEmployeeJob.Unassigned) return false;
       if (amount < 0 || !Number.isInteger(amount))
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `Invalid value for amount! Must be an integer and greater than or be 0". Amount:'${amount}'`,
         );
@@ -538,7 +538,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const totalNewEmployees = amount - office.employeeNextJobs[job];
 
       if (office.employeeNextJobs[CorpEmployeeJob.Unassigned] < totalNewEmployees)
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `Unable to bring '${job} employees to ${amount}. Requires ${totalNewEmployees} unassigned employees`,
         );
@@ -678,7 +678,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       if (rate < 0 || rate > max)
         throw new Error(`Invalid value for rate field! Must be numeric, greater than 0, and less than ${max}`);
       const corporation = getCorporation();
-      if (!corporation.public) throw helpers.makeRuntimeErrorMsg(ctx, `Your company has not gone public!`);
+      if (!corporation.public) throw helpers.errorMessage(ctx, `Your company has not gone public!`);
       IssueDividends(corporation, rate);
     },
     issueNewShares: (ctx) => (_amount) => {
@@ -773,7 +773,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     goPublic: (ctx) => (_numShares) => {
       checkAccess(ctx);
       const corporation = getCorporation();
-      if (corporation.public) throw helpers.makeRuntimeErrorMsg(ctx, "corporation is already public");
+      if (corporation.public) throw helpers.errorMessage(ctx, "corporation is already public");
       const numShares = helpers.number(ctx, "numShares", _numShares);
       GoPublic(corporation, numShares);
       return true;

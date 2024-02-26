@@ -2,7 +2,8 @@ import type { Member } from "../types";
 import type { NetscriptContext } from "../Netscript/APIWrapper";
 
 import * as allEnums from "../Enums";
-import { assertString, helpers } from "../Netscript/NetscriptHelpers";
+import { assertString } from "../Netscript/TypeAssertion";
+import { errorMessage } from "../Netscript/ErrorMessages";
 import { getRandomInt } from "./helpers/getRandomInt";
 
 interface GetMemberOptions {
@@ -50,7 +51,7 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
       );
       allowableValues = `See the developer console for allowable values.`;
     }
-    throw helpers.makeRuntimeErrorMsg(
+    throw errorMessage(
       ctx,
       `Argument ${argName} should be a ${this.name} enum member.\nProvided value: "${toValidate}".\n${allowableValues}`,
     );

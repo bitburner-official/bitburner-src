@@ -1,18 +1,15 @@
-import {
-  BoardState,
-  getGoPlayerStartingState,
-  opponents,
-  PlayerColor,
-  playerColors,
-  PointState,
-} from "../boardState/goConstants";
+import type { Board, BoardState, PointState } from "../Types";
+
+import { Player } from "@player";
+import { GoOpponent, GoColor } from "@enums";
+import { newOpponentStats } from "../Constants";
 import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
 import { getKomi } from "./goAI";
-import { Player } from "@player";
 import { getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "../effects/effect";
 import { floor, isNotNull } from "../boardState/boardState";
 import { Factions } from "../../Faction/Factions";
-import { FactionName } from "@enums";
+import { getEnumHelper } from "../../utils/EnumHelper";
+import { Go } from "../Go";
 
 /**
  * Returns the score of the current board.
@@ -21,22 +18,22 @@ import { FactionName } from "@enums";
  */
 export function getScore(boardState: BoardState) {
   const komi = getKomi(boardState.ai) ?? 6.5;
-  const whitePieces = getColoredPieceCount(boardState, playerColors.white);
-  const blackPieces = getColoredPieceCount(boardState, playerColors.black);
-  const territoryScores = getTerritoryScores(boardState);
+  const whitePieces = getColoredPieceCount(boardState, GoColor.white);
+  const blackPieces = getColoredPieceCount(boardState, GoColor.black);
+  const territoryScores = getTerritoryScores(boardState.board);
 
   return {
-    [playerColors.white]: {
+    [GoColor.white]: {
       pieces: whitePieces,
-      territory: territoryScores[playerColors.white],
+      territory: territoryScores[GoColor.white],
       komi: komi,
-      sum: whitePieces + territoryScores[playerColors.white] + komi,
+      sum: whitePieces + territoryScores[GoColor.white] + komi,
     },
-    [playerColors.black]: {
+    [GoColor.black]: {
       pieces: blackPieces,
-      territory: territoryScores[playerColors.black],
+      territory: territoryScores[GoColor.black],
       komi: 0,
-      sum: blackPieces + territoryScores[playerColors.black],
+      sum: blackPieces + territoryScores[GoColor.black],
     },
   };
 }
@@ -50,13 +47,13 @@ export function endGoGame(boardState: BoardState) {
     return;
   }
   boardState.previousPlayer = null;
-  const statusToUpdate = getPlayerStats(boardState.ai);
+  const statusToUpdate = getOpponentStats(boardState.ai);
   statusToUpdate.favor = statusToUpdate.favor ?? 0;
   const score = getScore(boardState);
 
-  if (score[playerColors.black].sum < score[playerColors.white].sum) {
+  if (score[GoColor.black].sum < score[GoColor.white].sum) {
     resetWinstreak(boardState.ai, true);
-    statusToUpdate.nodePower += floor(score[playerColors.black].sum * 0.25);
+    statusToUpdate.nodePower += floor(score[GoColor.black].sum * 0.25);
   } else {
     statusToUpdate.wins++;
     statusToUpdate.oldWinStreak = statusToUpdate.winStreak;
@@ -66,12 +63,12 @@ export function endGoGame(boardState: BoardState) {
       statusToUpdate.highestWinStreak = statusToUpdate.winStreak;
     }
 
-    const factionName = boardState.ai as unknown as FactionName;
+    const factionName = getEnumHelper("FactionName").getMember(boardState.ai);
     if (
+      factionName &&
       statusToUpdate.winStreak % 2 === 0 &&
       Player.factions.includes(factionName) &&
-      statusToUpdate.favor < getMaxFavor() &&
-      Factions?.[factionName]
+      statusToUpdate.favor < getMaxFavor()
     ) {
       Factions[factionName].favor++;
       statusToUpdate.favor++;
@@ -79,13 +76,13 @@ export function endGoGame(boardState: BoardState) {
   }
 
   statusToUpdate.nodePower +=
-    score[playerColors.black].sum *
-    getDifficultyMultiplier(score[playerColors.white].komi, boardState.board[0].length) *
+    score[GoColor.black].sum *
+    getDifficultyMultiplier(score[GoColor.white].komi, boardState.board[0].length) *
     getWinstreakMultiplier(statusToUpdate.winStreak, statusToUpdate.oldWinStreak);
 
-  statusToUpdate.nodes += score[playerColors.black].sum;
-  Player.go.boardState = boardState;
-  Player.go.previousGameFinalBoardState = boardState;
+  statusToUpdate.nodes += score[GoColor.black].sum;
+  Go.currentGame = boardState;
+  Go.previousGame = boardState;
 
   // Update multipliers with new bonuses, once at the end of the game
   Player.applyEntropy(Player.entropy);
@@ -94,8 +91,8 @@ export function endGoGame(boardState: BoardState) {
 /**
  * Sets the winstreak to zero for the given opponent, and adds a loss
  */
-export function resetWinstreak(opponent: opponents, gameComplete: boolean) {
-  const statusToUpdate = getPlayerStats(opponent);
+export function resetWinstreak(opponent: GoOpponent, gameComplete: boolean) {
+  const statusToUpdate = getOpponentStats(opponent);
   statusToUpdate.losses++;
   statusToUpdate.oldWinStreak = statusToUpdate.winStreak;
   if (statusToUpdate.winStreak >= 0) {
@@ -109,9 +106,9 @@ export function resetWinstreak(opponent: opponents, gameComplete: boolean) {
 /**
  * Gets the number pieces of a given color on the board
  */
-function getColoredPieceCount(boardState: BoardState, color: PlayerColor) {
+function getColoredPieceCount(boardState: BoardState, color: GoColor) {
   return boardState.board.reduce(
-    (sum, row) => sum + row.filter(isNotNull).filter((point) => point.player === color).length,
+    (sum, row) => sum + row.filter(isNotNull).filter((point) => point.color === color).length,
     0,
   );
 }
@@ -119,22 +116,20 @@ function getColoredPieceCount(boardState: BoardState, color: PlayerColor) {
 /**
  * Finds all empty spaces fully surrounded by a single player's stones
  */
-function getTerritoryScores(boardState: BoardState) {
-  const emptyTerritoryChains = getAllChains(boardState).filter((chain) => chain?.[0]?.player === playerColors.empty);
+function getTerritoryScores(board: Board) {
+  const emptyTerritoryChains = getAllChains(board).filter((chain) => chain?.[0]?.color === GoColor.empty);
 
   return emptyTerritoryChains.reduce(
     (scores, currentChain) => {
-      const chainColor = checkTerritoryOwnership(boardState, currentChain);
+      const chainColor = checkTerritoryOwnership(board, currentChain);
       return {
-        [playerColors.white]:
-          scores[playerColors.white] + (chainColor === playerColors.white ? currentChain.length : 0),
-        [playerColors.black]:
-          scores[playerColors.black] + (chainColor === playerColors.black ? currentChain.length : 0),
+        [GoColor.white]: scores[GoColor.white] + (chainColor === GoColor.white ? currentChain.length : 0),
+        [GoColor.black]: scores[GoColor.black] + (chainColor === GoColor.black ? currentChain.length : 0),
       };
     },
     {
-      [playerColors.white]: 0,
-      [playerColors.black]: 0,
+      [GoColor.white]: 0,
+      [GoColor.black]: 0,
     },
   );
 }
@@ -142,17 +137,17 @@ function getTerritoryScores(boardState: BoardState) {
 /**
  * Finds all neighbors of the empty points in question. If they are all one color, that player controls that space
  */
-function checkTerritoryOwnership(boardState: BoardState, emptyPointChain: PointState[]) {
-  if (emptyPointChain.length > boardState.board[0].length ** 2 - 3) {
+function checkTerritoryOwnership(board: Board, emptyPointChain: PointState[]) {
+  if (emptyPointChain.length > board[0].length ** 2 - 3) {
     return null;
   }
 
-  const playerNeighbors = getPlayerNeighbors(boardState, emptyPointChain);
-  const hasWhitePieceNeighbors = playerNeighbors.find((p) => p.player === playerColors.white);
-  const hasBlackPieceNeighbors = playerNeighbors.find((p) => p.player === playerColors.black);
+  const playerNeighbors = getPlayerNeighbors(board, emptyPointChain);
+  const hasWhitePieceNeighbors = playerNeighbors.find((p) => p.color === GoColor.white);
+  const hasBlackPieceNeighbors = playerNeighbors.find((p) => p.color === GoColor.black);
   const isWhiteTerritory = hasWhitePieceNeighbors && !hasBlackPieceNeighbors;
   const isBlackTerritory = hasBlackPieceNeighbors && !hasWhitePieceNeighbors;
-  return isWhiteTerritory ? playerColors.white : isBlackTerritory ? playerColors.black : null;
+  return isWhiteTerritory ? GoColor.white : isBlackTerritory ? GoColor.black : null;
 }
 
 /**
@@ -171,9 +166,6 @@ export function logBoard(boardState: BoardState): void {
   }
 }
 
-export function getPlayerStats(opponent: opponents) {
-  if (!Player.go.status[opponent]) {
-    Player.go = getGoPlayerStartingState();
-  }
-  return Player.go.status[opponent];
+export function getOpponentStats(opponent: GoOpponent) {
+  return Go.stats[opponent] ?? (Go.stats[opponent] = newOpponentStats());
 }

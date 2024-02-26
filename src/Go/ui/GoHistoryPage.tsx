@@ -1,10 +1,9 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
-import { Grid, Table, TableBody, TableCell, TableRow, Tooltip } from "@mui/material";
+import { Grid, Table, TableBody, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
 
-import { opponentList, opponents } from "../boardState/goConstants";
-import { getPlayerStats, getScore } from "../boardAnalysis/scoring";
-import { Player } from "@player";
+import { GoOpponent } from "@enums";
+import { Go } from "../Go";
+import { getOpponentStats, getScore } from "../boardAnalysis/scoring";
 import { GoGameboard } from "./GoGameboard";
 import { boardStyles } from "../boardState/goStyles";
 import { useRerender } from "../../ui/React/hooks";
@@ -13,15 +12,15 @@ import { formatNumber } from "../../ui/formatNumber";
 import { GoScoreSummaryTable } from "./GoScoreSummaryTable";
 import { getNewBoardState } from "../boardState/boardState";
 import { CorruptableText } from "../../ui/React/CorruptableText";
-import { showWorldDemon } from "../boardAnalysis/goAI";
+import { getRecordKeys } from "../../Types/Record";
 
 export const GoHistoryPage = (): React.ReactElement => {
   useRerender(400);
   const classes = boardStyles();
-  const priorBoard = Player.go.previousGameFinalBoardState ?? getNewBoardState(7);
+  const priorBoard = Go.previousGame ?? getNewBoardState(7);
   const score = getScore(priorBoard);
   const opponent = priorBoard.ai;
-  const opponentsToShow = showWorldDemon() ? [...opponentList, opponents.w0r1d_d43m0n] : opponentList;
+  const opponentsToShow = getRecordKeys(Go.stats);
 
   return (
     <div>
@@ -48,13 +47,13 @@ export const GoHistoryPage = (): React.ReactElement => {
       <Typography variant="h5">Faction Stats:</Typography>
       <Grid container style={{ maxWidth: "1020px" }}>
         {opponentsToShow.map((faction, index) => {
-          const data = getPlayerStats(faction);
+          const data = getOpponentStats(faction);
           return (
             <Grid item key={opponentsToShow[index]} className={classes.factionStatus}>
               <Typography>
                 {" "}
                 <strong className={classes.keyText}>
-                  {faction === opponents.w0r1d_d43m0n ? (
+                  {faction === GoOpponent.w0r1d_d43m0n ? (
                     <CorruptableText content="????????????" spoiler={false} />
                   ) : (
                     faction

@@ -24,6 +24,7 @@ import { InvitationsSeen } from "./Faction/ui/FactionsRoot";
 import { CONSTANTS } from "./Constants";
 import { LogBoxClearEvents } from "./ui/React/LogBoxManager";
 import { initCircadianModulator } from "./Augmentation/Augmentations";
+import { Go } from "./Go/Go";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string) {
@@ -46,6 +47,7 @@ export function prestigeAugmentation(): void {
   }
 
   Player.prestigeAugmentation();
+  Go.prestigeAugmentation();
 
   // Delete all Worker Scripts objects
   prestigeWorkerScripts();
@@ -178,6 +180,8 @@ export function prestigeSourceFile(isFlume: boolean): void {
   initBitNodeMultipliers();
 
   Player.prestigeSourceFile();
+  Go.prestigeSourceFile();
+
   prestigeWorkerScripts(); // Delete all Worker Scripts objects
 
   const homeComp = Player.getHomeComputer();

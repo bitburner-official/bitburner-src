@@ -1,21 +1,20 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
+import { Grid, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 
-import { opponentList } from "../boardState/goConstants";
+import { Go } from "../Go";
 import { getScore } from "../boardAnalysis/scoring";
-import { Player } from "@player";
-import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { GoGameboard } from "./GoGameboard";
 import { boardStyles } from "../boardState/goStyles";
 import { useRerender } from "../../ui/React/hooks";
 import { getBonusText } from "../effects/effect";
 import { GoScoreSummaryTable } from "./GoScoreSummaryTable";
+import { getRecordKeys } from "../../Types/Record";
 
 export const GoStatusPage = (): React.ReactElement => {
   useRerender(400);
   const classes = boardStyles();
-  const score = getScore(Player.go.boardState);
-  const opponent = Player.go.boardState.ai;
+  const score = getScore(Go.currentGame);
+  const opponent = Go.currentGame.ai;
 
   return (
     <div>
@@ -29,7 +28,7 @@ export const GoStatusPage = (): React.ReactElement => {
         <Grid item>
           <div className={classes.statusPageGameboard}>
             <GoGameboard
-              boardState={Player.go.boardState}
+              boardState={Go.currentGame}
               traditional={false}
               clickHandler={(x, y) => ({ x, y })}
               hover={false}
@@ -50,7 +49,7 @@ export const GoStatusPage = (): React.ReactElement => {
               <strong>Effect:</strong>
             </TableCell>
           </TableRow>
-          {opponentList.map((faction, index) => {
+          {getRecordKeys(Go.stats).map((faction, index) => {
             return (
               <TableRow key={index}>
                 <TableCell className={classes.cellNone}>

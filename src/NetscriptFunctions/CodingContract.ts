@@ -11,7 +11,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
     const server = helpers.getServer(ctx, hostname);
     const contract = server.getContract(filename);
     if (contract == null) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Cannot find contract '${filename}' on server '${hostname}'`);
+      throw helpers.errorMessage(ctx, `Cannot find contract '${filename}' on server '${hostname}'`);
     }
 
     return contract;

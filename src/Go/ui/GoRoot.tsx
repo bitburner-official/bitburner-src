@@ -1,11 +1,12 @@
-import { Container, Tab, Tabs } from "@mui/material";
 import React from "react";
-import { GoInstructionsPage } from "./ui/GoInstructionsPage";
+import { Container, Tab, Tabs } from "@mui/material";
+
+import { GoInstructionsPage } from "./GoInstructionsPage";
 import { BorderInnerSharp, Help, ManageSearch, History } from "@mui/icons-material";
-import { GoStatusPage } from "./ui/GoStatusPage";
-import { GoHistoryPage } from "./ui/GoHistoryPage";
-import { GoGameboardWrapper } from "./ui/GoGameboardWrapper";
-import { boardStyles } from "./boardState/goStyles";
+import { GoStatusPage } from "./GoStatusPage";
+import { GoHistoryPage } from "./GoHistoryPage";
+import { GoGameboardWrapper } from "./GoGameboardWrapper";
+import { boardStyles } from "../boardState/goStyles";
 
 export function GoRoot(): React.ReactElement {
   const classes = boardStyles();

@@ -1,9 +1,11 @@
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import type { Go as NSGo } from "@nsdefs";
+import type { Play } from "../Go/Types";
+
+import { GoColor } from "@enums";
+import { Go } from "../Go/Go";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { Player } from "@player";
-import { Go } from "@nsdefs";
-import { Play, playerColors } from "../Go/boardState/goConstants";
-import { getSimplifiedBoardState } from "../Go/boardAnalysis/boardAnalysis";
+import { simpleBoardFromBoard } from "../Go/boardAnalysis/boardAnalysis";
 import {
   cheatDestroyNode,
   cheatPlayTwoMoves,
@@ -21,6 +23,7 @@ import {
   resetBoardState,
   throwError,
 } from "../Go/effects/netscriptGoImplementation";
+import { getEnumHelper } from "../utils/EnumHelper";
 
 const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
 const error = (ctx: NetscriptContext) => (message: string) => throwError(ctx.workerScript, message);
@@ -29,7 +32,7 @@ const error = (ctx: NetscriptContext) => (message: string) => throwError(ctx.wor
  * Ensures the given coordinates are valid for the current board size
  */
 function validateRowAndColumn(ctx: NetscriptContext, x: number, y: number) {
-  const boardSize = Player.go.boardState.board.length;
+  const boardSize = Go.currentGame.board.length;
 
   if (x < 0 || x >= boardSize) {
     throwError(
@@ -45,7 +48,7 @@ function validateRowAndColumn(ctx: NetscriptContext, x: number, y: number) {
 /**
  * Go API implementation
  */
-export function NetscriptGo(): InternalAPI<Go> {
+export function NetscriptGo(): InternalAPI<NSGo> {
   return {
     makeMove:
       (ctx: NetscriptContext) =>
@@ -57,7 +60,7 @@ export function NetscriptGo(): InternalAPI<Go> {
         return makePlayerMove(logger(ctx), x, y);
       },
     passTurn: (ctx: NetscriptContext) => async (): Promise<Play> => {
-      if (Player.go.boardState.previousPlayer === playerColors.black) {
+      if (Go.currentGame.previousPlayer === GoColor.black) {
         helpers.log(ctx, () => `It is not your turn; you cannot pass.`);
         helpers.log(ctx, () => `Do you have multiple scripts running, or did you forget to await makeMove() ?`);
         return Promise.resolve(invalidMoveResponse);
@@ -65,16 +68,16 @@ export function NetscriptGo(): InternalAPI<Go> {
       return handlePassTurn(logger(ctx));
     },
     getBoardState: () => () => {
-      return getSimplifiedBoardState(Player.go.boardState.board);
+      return simpleBoardFromBoard(Go.currentGame.board);
     },
     getOpponent: () => () => {
-      return Player.go.boardState.ai;
+      return Go.currentGame.ai;
     },
     resetBoardState: (ctx) => (_opponent, _boardSize) => {
-      const opponentString = helpers.string(ctx, "opponent", _opponent);
+      const opponent = getEnumHelper("GoOpponent").nsGetMember(ctx, _opponent);
       const boardSize = helpers.number(ctx, "boardSize", _boardSize);
 
-      return resetBoardState(error(ctx), opponentString, boardSize);
+      return resetBoardState(error(ctx), opponent, boardSize);
     },
     analysis: {
       getValidMoves: () => () => {
@@ -93,7 +96,7 @@ export function NetscriptGo(): InternalAPI<Go> {
     cheat: {
       getCheatSuccessChance: (ctx: NetscriptContext) => () => {
         checkCheatApiAccess(error(ctx));
-        return cheatSuccessChance(Player.go.boardState.cheatCount);
+        return cheatSuccessChance(Go.currentGame.cheatCount);
       },
       removeRouter:
         (ctx: NetscriptContext) =>

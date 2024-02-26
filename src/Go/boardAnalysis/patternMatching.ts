@@ -1,5 +1,7 @@
 // Inspired by https://github.com/pasky/michi/blob/master/michi.py
-import { BoardState, PlayerColor, playerColors, PointState } from "../boardState/goConstants";
+import type { Board, PointState } from "../Types";
+
+import { GoColor } from "@enums";
 import { sleep } from "./goAI";
 import { findEffectiveLibertiesOfNewMove } from "./boardAnalysis";
 import { floor } from "../boardState/boardState";
@@ -78,25 +80,24 @@ export const threeByThreePatterns = [
  * Searches the board for any point that matches the expanded pattern set
  */
 export async function findAnyMatchedPatterns(
-  boardState: BoardState,
-  player: PlayerColor,
+  board: Board,
+  player: GoColor,
   availableSpaces: PointState[],
   smart = true,
   rng: number,
 ) {
-  const board = boardState.board;
   const boardSize = board[0].length;
   const patterns = expandAllThreeByThreePatterns();
   const moves = [];
   for (let x = 0; x < boardSize; x++) {
     for (let y = 0; y < boardSize; y++) {
-      const neighborhood = getNeighborhood(boardState, x, y);
+      const neighborhood = getNeighborhood(board, x, y);
       const matchedPattern = patterns.find((pattern) => checkMatch(neighborhood, pattern, player));
 
       if (
         matchedPattern &&
         availableSpaces.find((availablePoint) => availablePoint.x === x && availablePoint.y === y) &&
-        (!smart || findEffectiveLibertiesOfNewMove(boardState, x, y, player).length > 1)
+        (!smart || findEffectiveLibertiesOfNewMove(board, x, y, player).length > 1)
       ) {
         moves.push(board[x][y]);
       }
@@ -109,7 +110,7 @@ export async function findAnyMatchedPatterns(
 /**
   Returns false if any point does not match the pattern, and true if it matches fully.
  */
-function checkMatch(neighborhood: (PointState | null)[][], pattern: string[], player: PlayerColor) {
+function checkMatch(neighborhood: (PointState | null)[][], pattern: string[], player: GoColor) {
   const patternArr = pattern.join("").split("");
   const neighborhoodArray = neighborhood.flat();
   return patternArr.every((str, index) => matches(str, neighborhoodArray[index], player));
@@ -118,8 +119,7 @@ function checkMatch(neighborhood: (PointState | null)[][], pattern: string[], pl
 /**
  * Gets the 8 points adjacent and diagonally adjacent to the given point
  */
-function getNeighborhood(boardState: BoardState, x: number, y: number) {
-  const board = boardState.board;
+function getNeighborhood(board: Board, x: number, y: number) {
   return [
     [board[x - 1]?.[y - 1], board[x - 1]?.[y], board[x - 1]?.[y + 1]],
     [board[x]?.[y - 1], board[x]?.[y], board[x]?.[y + 1]],
@@ -136,23 +136,23 @@ function getNeighborhood(boardState: BoardState, x: number, y: number) {
  * A space " " only matches the edge of the board
  * question mark "?" matches anything
  */
-function matches(stringPoint: string, point: PointState | null, player: PlayerColor) {
-  const opponent = player === playerColors.white ? playerColors.black : playerColors.white;
+function matches(stringPoint: string, point: PointState | null, player: GoColor) {
+  const opponent = player === GoColor.white ? GoColor.black : GoColor.white;
   switch (stringPoint) {
     case "X": {
-      return point?.player === player;
+      return point?.color === player;
     }
     case "O": {
-      return point?.player === opponent;
+      return point?.color === opponent;
     }
     case "x": {
-      return point?.player !== opponent;
+      return point?.color !== opponent;
     }
     case "o": {
-      return point?.player !== player;
+      return point?.color !== player;
     }
     case ".": {
-      return point?.player === playerColors.empty;
+      return point?.color === GoColor.empty;
     }
     case " ": {
       return point === null;

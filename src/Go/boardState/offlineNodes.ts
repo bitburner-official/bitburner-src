@@ -1,6 +1,8 @@
-import { Board, boardSizes, BoardState, PointState } from "./goConstants";
-import { WHRNG } from "../../Casino/RNG";
+import type { Board, BoardState, PointState } from "../Types";
+
 import { Player } from "@player";
+import { boardSizes } from "../Constants";
+import { WHRNG } from "../../Casino/RNG";
 import { floor } from "./boardState";
 
 type rand = (n1: number, n2: number) => number;
@@ -122,6 +124,6 @@ function rotateNTimes(board: Board, rotations: number) {
   return board;
 }
 
-export function rotate90Degrees(board: Board) {
+export function rotate90Degrees(board: Board): Board {
   return board[0].map((_, index: number) => board.map((row: (PointState | null)[]) => row[index]).reverse());
 }

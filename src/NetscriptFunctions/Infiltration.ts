@@ -21,9 +21,9 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
 
   const calculateInfiltrationData = (ctx: NetscriptContext, locationName: LocationName): InfiltrationLocation => {
     const location = Locations[locationName];
-    if (location === undefined) throw helpers.makeRuntimeErrorMsg(ctx, `Location '${location}' does not exists.`);
+    if (location === undefined) throw helpers.errorMessage(ctx, `Location '${location}' does not exists.`);
     if (location.infiltrationData === undefined)
-      throw helpers.makeRuntimeErrorMsg(ctx, `Location '${location}' does not provide infiltrations.`);
+      throw helpers.errorMessage(ctx, `Location '${location}' does not provide infiltrations.`);
     const startingSecurityLevel = location.infiltrationData.startingSecurityLevel;
     const difficulty = calculateDifficulty(startingSecurityLevel);
     const reward = calculateReward(startingSecurityLevel);

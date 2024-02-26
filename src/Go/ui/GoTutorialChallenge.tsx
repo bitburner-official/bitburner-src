@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Typography, Button } from "@mui/material";
 
-import { BoardState, playerColors, validityReason } from "../boardState/goConstants";
+import { GoColor, GoValidity, ToastVariant } from "@enums";
+import { BoardState } from "../Types";
 import { GoGameboard } from "./GoGameboard";
 import { evaluateIfMoveIsValid } from "../boardAnalysis/boardAnalysis";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
-import { ToastVariant } from "@enums";
 import { getStateCopy, makeMove } from "../boardState/boardState";
 import { boardStyles } from "../boardState/goStyles";
 
@@ -32,31 +32,27 @@ export function GoTutorialChallenge({
   incorrectMoves2,
   incorrectText2,
 }: IProps): React.ReactElement {
+  const stateRef = useRef(getStateCopy(state));
   const classes = boardStyles();
-  const [currentState, setCurrentState] = useState(getStateCopy(state));
   const [displayText, setDisplayText] = useState(description);
   const [showReset, setShowReset] = useState(false);
 
   const handleClick = (x: number, y: number) => {
-    if (currentState.history.length) {
+    if (stateRef.current.previousBoard) {
       SnackbarEvents.emit(`Hit 'Reset' to try again`, ToastVariant.WARNING, 2000);
       return;
     }
     setShowReset(true);
 
-    const validity = evaluateIfMoveIsValid(currentState, x, y, playerColors.black);
-    if (validity != validityReason.valid) {
+    const validity = evaluateIfMoveIsValid(stateRef.current, x, y, GoColor.black);
+    if (validity != GoValidity.valid) {
       setDisplayText(
         "Invalid move: You cannot suicide your routers by placing them with no access to any empty ports.",
       );
       return;
     }
 
-    const updatedBoard = makeMove(currentState, x, y, playerColors.black);
-
-    if (updatedBoard) {
-      setCurrentState(getStateCopy(updatedBoard));
-
+    if (makeMove(stateRef.current, x, y, GoColor.black)) {
       if (correctMoves.find((move) => move.x === x && move.y === y)) {
         setDisplayText(correctText);
       } else if (incorrectMoves1?.find((move) => move.x === x && move.y === y)) {
@@ -70,7 +66,7 @@ export function GoTutorialChallenge({
   };
 
   const reset = () => {
-    setCurrentState(getStateCopy(state));
+    stateRef.current = getStateCopy(state);
     setDisplayText(description);
     setShowReset(false);
   };
@@ -78,7 +74,7 @@ export function GoTutorialChallenge({
   return (
     <div>
       <div className={classes.instructionBoard}>
-        <GoGameboard boardState={currentState} traditional={false} clickHandler={handleClick} hover={true} />
+        <GoGameboard boardState={stateRef.current} traditional={false} clickHandler={handleClick} hover={true} />
       </div>
       <Typography>{displayText}</Typography>
       {showReset ? <Button onClick={reset}>Reset</Button> : ""}
