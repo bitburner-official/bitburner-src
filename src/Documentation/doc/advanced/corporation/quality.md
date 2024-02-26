@@ -17,9 +17,9 @@ Purchased material is low-quality. Its quality is always 1.
 When you import/export your materials between different divisions, you can see quality of some input materials constantly change. Quality is high after EXPORT state, but it reduces after PURCHASE state. Qualities of the materials in warehouse are recalculated in these 2 states.
 
 - Formulas:
-  - In PURCHASE state: $Quality = \frac{Quality*CurrentQuantity + BuyAmount}{CurrentQuantity + BuyAmount}$
+  - In PURCHASE state: $Quality = \frac{Quality\ast CurrentQuantity + BuyAmount}{CurrentQuantity + BuyAmount}$
     - Our material's quality is "diluted" by low-quality purchased material (quality 1).
-  - In EXPORT state: $Quality = \frac{Quality*CurrentQuantity + ImportQuality*ImportAmount}{CurrentQuantity + ImportAmount}$
+  - In EXPORT state: $Quality = \frac{Quality\ast CurrentQuantity + ImportQuality\ast ImportAmount}{CurrentQuantity + ImportAmount}$
 - This means that the production capability of support division should be balanced. The `ImportAmount` (the number of material units that support division exports) does not need to equal the required number of input material units, but it should also not be too small.
 
 PRODUCTION state uses the "diluted" quality value to calculate `AvgInputQuality` because that state is right after PURCHASE state.
@@ -36,7 +36,7 @@ PRODUCTION state uses the "diluted" quality value to calculate `AvgInputQuality`
 
 Output quality:
 
-$$OutputQuality = \sqrt{MaxOutputQuality}*AvgInputQuality$$
+$$OutputQuality = \sqrt{MaxOutputQuality}\ast AvgInputQuality$$
 
 With formulas above, we have these conclusions:
 
@@ -55,6 +55,6 @@ Game UI shows `OutputRating` as "Effective rating"
 
 Output rating:
 
-$$OutputRating = \sqrt{MaxOutputRating}*AvgInputQuality$$
+$$OutputRating = \sqrt{MaxOutputRating}\ast AvgInputQuality$$
 
 Use same strategy as material for checking `AvgInputQuality`.

@@ -41,14 +41,14 @@ EXPORT state is before SALE state. It means you sell the material units remained
 
 Export string can use "MAX", "EINV", "IINV", "EPROD" and "IPROD". Read the description in export popup for the meaning of these values.
 
-Optimal value for export string: (IPROD+IINV/10)\*(-1). For example: export "Chemicals" from Chemical division to Agriculture division:
+The optimal export string is `(IPROD+IINV/10)\*(-1)`. For example: export "Chemicals" from Chemical division to Agriculture division:
 
 - Agriculture division needs 100 Chemicals/s and has 700 Chemicals in warehouse.
   - IPROD = -100 ("Consumption is negative production")
   - IINV = 700
 - "Export" is expressed by number of units per second, so we want to export:
 
-$$\left( 100 - \frac{700}{10} \right) \equiv \left( - 100 + \frac{700}{10} \right)*( - 1) \equiv \left( IPROD + \frac{IINV}{10} \right)*( - 1)$$
+$$\left(100-\frac{700}{10}\right)\equiv\left(-100+\frac{700}{10}\right)\ast(-1)\equiv\left(IPROD+\frac{IINV}{10}\right)\ast(-1)$$
 
 Export route is FIFO. You can remove an export route by using `cancelExportMaterial` NS API.
 

@@ -27,15 +27,15 @@ $$TotalEmployeeProd = OperationsProd + EngineerProd + ManagementProd$$
 
 - Management factor:
 
-$$ManagementFactor = 1 + \frac{ManagementProd}{1.2*TotalEmployeeProd}$$
+$$ManagementFactor = 1 + \frac{ManagementProd}{1.2\ast TotalEmployeeProd}$$
 
 - Product development multiplier:
 
-$$ProductDevelopmentMultiplier = \left( (EngineerProd)^{0.34} + (OperationsProd)^{0.2} \right)*ManagementFactor$$
+$$ProductDevelopmentMultiplier = \left( (EngineerProd)^{0.34} + (OperationsProd)^{0.2} \right)\ast ManagementFactor$$
 
 - Progress:
 
-$$Progress = 0.01*ProductDevelopmentMultiplier$$
+$$Progress = 0.01\ast ProductDevelopmentMultiplier$$
 
 - Development progress:
 
@@ -43,7 +43,7 @@ $$DevelopmentProgress = DevelopmentProgress + Progress$$
 
 - `CreationJobFactors[JobName]`:
 
-$$CreationJobFactors\lbrack JobName\rbrack = CreationJobFactors\lbrack JobName\rbrack + \frac{\left\{ EmployeeJob \right\} Prod*Progress}{100}$$
+$$CreationJobFactors\lbrack JobName\rbrack = CreationJobFactors\lbrack JobName\rbrack + \frac{\lbrace EmployeeJob\rbrace Prod\ast Progress}{100}$$
 
 &nbsp;  
 When `DevelopmentProgress` reaches 100, product is finished.
@@ -84,35 +84,35 @@ $$ScienceMult = 1 + \frac{(RP)^{ResearchFactor}}{800}$$
 
 - Balance multiplier:
 
-$$BalanceMult = 1.2*EngineerRatio + 0.9*ManagementRatio + 1.3*RnDRatio + 1.5*OperationsRatio + BusinessRatio$$
+$$BalanceMult = 1.2\ast EngineerRatio + 0.9\ast ManagementRatio + 1.3\ast RnDRatio + 1.5\ast OperationsRatio + BusinessRatio$$
 
 - Total multiplier:
 
-$$TotalMult = BalanceMult*DesignInvestMult*ScienceMult$$
+$$TotalMult = BalanceMult\ast DesignInvestMult\ast ScienceMult$$
 
 - Product's quality:
 
-$$TotalMult*(0.1*A + 0.05*B + 0.05*C + 0.02*D + 0.02*E)$$
+$$TotalMult\ast (0.1\ast A + 0.05\ast B + 0.05\ast C + 0.02\ast D + 0.02\ast E)$$
 
 - Product's performance:
 
-$$TotalMult*(0.15*A + 0.02*B + 0.02*C + 0.02*D + 0.02*E)$$
+$$TotalMult\ast (0.15\ast A + 0.02\ast B + 0.02\ast C + 0.02\ast D + 0.02\ast E)$$
 
 - Product's durability:
 
-$$TotalMult*(0.05*A + 0.02*B + 0.08*C + 0.05*D + 0.05*E)$$
+$$TotalMult\ast (0.05\ast A + 0.02\ast B + 0.08\ast C + 0.05\ast D + 0.05\ast E)$$
 
 - Product's reliability:
 
-$$TotalMult*(0.02*A + 0.08*B + 0.02*C + 0.05*D + 0.08*E)$$
+$$TotalMult\ast (0.02\ast A + 0.08\ast B + 0.02\ast C + 0.05\ast D + 0.08\ast E)$$
 
 - Product's aesthetics:
 
-$$TotalMult*(0.08*B + 0.05*C + 0.02*D + 0.1*E)$$
+$$TotalMult\ast (0.08\ast B + 0.05\ast C + 0.02\ast D + 0.1\ast E)$$
 
 - Product's features:
 
-$$TotalMult*(0.08*A + 0.05*B + 0.02*C + 0.05*D + 0.05*E)$$
+$$TotalMult\ast (0.08\ast A + 0.05\ast B + 0.02\ast C + 0.05\ast D + 0.05\ast E)$$
 
 - Product's rating:
   - If an industry produces product, it has its own `RatingWeights` for its product. `RatingWeights` contains coefficients of 6 stats: quality, performance, durability, reliability, aesthetics, features. For example: Tobacco's `RatingWeights`:
@@ -122,7 +122,7 @@ $$TotalMult*(0.08*A + 0.05*B + 0.02*C + 0.05*D + 0.05*E)$$
   - `RatingWeights` is `industryData.product.ratingWeights`.
   - Formula:
 
-$$ProductRating = \sum_{i = 1}^{6}{{ProductStat}_{i}*{StatCoefficient}_{i}}$$
+$$ProductRating = \sum_{i = 1}^{6}{{ProductStat}_{i}\ast{StatCoefficient}_{i}}$$
 
 - Advertising investment multiplier:
 
@@ -134,11 +134,12 @@ $$BusinessManagementRatio = Max\left( BusinessRatio + ManagementRatio,\ \left( \
 
 - Product's markup:
 
-$$ProductMarkup = \frac{100}{AdvertInvestMult*(ProductQuality + 0.001)^{0.65}*BusinessManagementRatio}$$
+$$ProductMarkup = \frac{100}{AdvertInvestMult\ast(ProductQuality + 0.001)^{0.65}\ast BusinessManagementRatio}$$
 
 - Product's demand:
-  - If $Awareness \neq 0$, then $Demand=Min(100,AdvertInvestMult*(100*(Popularity/Awareness)))$
-  - If $Awareness = 0$, then $Demand=20$
+
+$$Demand = \begin{cases}Min(100,AdvertInvestMult\ast(100\ast(Popularity/Awareness))), & Awareness \neq 0 \newline 20, & Awareness = 0 \end{cases}$$
+
 - Product's competition:
 
 $$Competition = Random(0,70)$$
@@ -147,7 +148,7 @@ $$Competition = Random(0,70)$$
   - It's product.size.
   - Formula:
 
-$$ProductSize = \sum_{i = 1}^{NumberOfInputMaterials}{{InputMaterialSize}_{i}*{InputMaterialCoefficient}_{i}}$$
+$$ProductSize = \sum_{i = 1}^{NumberOfInputMaterials}{{InputMaterialSize}_{i}\ast{InputMaterialCoefficient}_{i}}$$
 
 ## Approximation value of product markup
 

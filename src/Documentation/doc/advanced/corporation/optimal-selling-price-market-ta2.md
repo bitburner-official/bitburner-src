@@ -8,7 +8,7 @@ Market price:
 - Product: `product.productionCost`. This value is based on `ProductMarketPriceMult`, input materials' `MarketPrice` and `Coefficient`.
   - $n = {Number\ of\ input\ materials}$
   - $ProductMarketPriceMult = 5$
-  - $ProductMarketPrice = ProductMarketPriceMult*\sum_{i = 1}^{n}{MaterialMarketPrice_{i}*MaterialCoefficient_{i}}$
+  - $ProductMarketPrice = ProductMarketPriceMult\ast\sum_{i = 1}^{n}{MaterialMarketPrice_{i}\ast MaterialCoefficient_{i}}$
 
 Markup limit:
 
@@ -36,7 +36,7 @@ Calculation of material and product is pretty similar, so I'll call them "item" 
 
 - Item multiplier:
   - Material: $ItemMultiplier = MaterialQuality + 0.001$
-  - Product: $ItemMultiplier = 0.5*(ProductEffectiveRating)^{0.65}$
+  - Product: $ItemMultiplier = 0.5\ast(ProductEffectiveRating)^{0.65}$
 - Business factor:
 
 $$BusinessProduction = 1 + office.employeeProductionByJob["Business"]$$
@@ -46,24 +46,28 @@ $${BusinessFactor = (BusinessProduction)}^{0.26} + \left( \frac{BusinessProducti
 - Advert factor:
   - $AwarenessFactor = (Awareness + 1)^{IndustryAdvertisingFactor}$
   - $PopularityFactor = (Popularity + 1)^{IndustryAdvertisingFactor}$
-  - If $Awareness \neq 0$, then $RatioFactor=Max\left( 0.01,\left( \frac{Popularity + 0.001}{Awareness} \right) \right)$
-  - If $Awareness = 0$, then $RatioFactor=0.01$
 
-$$AdvertFactor = (AwarenessFactor*PopularityFactor*RatioFactor)^{0.85}$$
+$$RatioFactor = \begin{cases}Max(0.01,\frac{Popularity + 0.001}{Awareness}), & Awareness \neq 0 \newline 0.01, & Awareness = 0 \end{cases}$$
+
+$$AdvertFactor = (AwarenessFactor\ast PopularityFactor\ast RatioFactor)^{0.85}$$
 
 - Market factor:
 
-$$MarketFactor = Max\left( 0.1,\frac{Demand*(100 - Competition)}{100} \right)$$
+$$MarketFactor = Max\left( 0.1,\frac{Demand\ast(100 - Competition)}{100} \right)$$
 
 - Corporation's upgrade bonus: `SalesBots` bonus.
 - Division's research bonus: this is always 1. Currently there is not any research that increases the sales bonus.
 - `MarkupMultiplier`: initialize with 1.
+
   - `SellingPrice` is the selling price that you set.
-  - If `(SellingPrice > MarketPrice + MarkupLimit)`: $MarkupMultiplier = \left( \frac{MarkupLimit}{SellingPrice - MarketPrice} \right)^{2}$
+  - With materials, if we set `SellingPrice` to 0, `MarkupMultiplier` is $10^{12}$ (check the formula below). Extremely high `MarkupMultiplier` means that we can sell all units, regardless of other factors. This is the fastest way to discard materials.
+  - If `(SellingPrice > MarketPrice + MarkupLimit)`:
+
+  $$MarkupMultiplier = \left( \frac{MarkupLimit}{SellingPrice - MarketPrice} \right)^{2}$$
+
   - If item is material and `SellingPrice` is less than `MarketPrice`:
-    - If $SellingPrice > 0 \land SellingPrice < MarketPrice$, then $MarkupMultiplier=\frac{MarketPrice}{SellingPrice}$
-    - If $SellingPrice \leq 0$, then $MarkupMultiplier=10^{12}$
-      - Extremely high `MarkupMultiplier` ($10^{12}$) means that we can sell all units. This is why we set `SellingPrice` to 0 if we want to discard materials.
+
+$$MarkupMultiplier = \begin{cases}\frac{MarketPrice}{SellingPrice}, & SellingPrice > 0 \land SellingPrice < MarketPrice \newline 10^{12}, & SellingPrice \leq 0 \end{cases} $$
 
 ## Optimal selling price
 
@@ -75,7 +79,7 @@ Formula:
 
 - Define:
 
-$$M = \ ItemMultiplier*BusinessFactor*AdvertFactor*MarketFactor*SaleBotsBonus*ResearchBonus$$
+$$M = \ ItemMultiplier\ast BusinessFactor\ast AdvertFactor\ast MarketFactor\ast SaleBotsBonus\ast ResearchBonus$$
 
 - We want `MaxSalesVolume` equals `ExpectedSalesVolume`:
 
@@ -83,7 +87,7 @@ $$MaxSalesVolume = ExpectedSalesVolume$$
 
 ≡
 
-$$M*\left( \frac{MarkupLimit}{SellingPrice - MarketPrice} \right)^{2} = ExpectedSalesVolume$$
+$$M\ast\left( \frac{MarkupLimit}{SellingPrice - MarketPrice} \right)^{2} = ExpectedSalesVolume$$
 
 ≡
 
@@ -99,5 +103,5 @@ In order to use this formula, we need `MarkupLimit`. With product, we need `Prod
 - Calculate `MarkupLimit` directly:
   - Set `SellingPrice` to a very high value, it must be so high that we cannot sell all produced units (`MaxSalesVolume < ExpectedSalesVolume`). This forces the game applies the penalty modifier that contains `MarkupLimit`.
   - Wait for 1 cycle to get `ActualSalesVolume`. It's `product.actualSellAmount` and `material.actualSellAmount`.
-  - Use `ActualSalesVolume` in place of `ExpectedSalesVolume` in previous formula: $MarkupLimit = (SellingPrice - MarketPrice)*\sqrt{\frac{ActualSalesVolume}{M}}$
+  - Use `ActualSalesVolume` in place of `ExpectedSalesVolume` in previous formula: $MarkupLimit = (SellingPrice - MarketPrice)\ast\sqrt{\frac{ActualSalesVolume}{M}}$
   - Calculate `ProductMarkup` from `MarkupLimit`, save `ProductMarkup` to reuse later. `ProductMarkup` never changes.

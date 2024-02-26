@@ -14,7 +14,7 @@ Each division can expand to 6 cities.
 
 Each industry has different input materials and output materials/products. For example: Agriculture needs Water and Chemicals to produce Plants and Food. The number next to each material is its "coefficient" (You can call it "weight" or "factor" if you want).
 
-$$0.5\;\textit{Water}+0.2\;\textit{Chemicals}\Rightarrow 1\;\textit{Plants}+1\;\textit{Food}$$
+$$0.5\ \textit{Water}+0.2\ \textit{Chemicals} \Rightarrow 1\ \textit{Plants}+1\ \textit{Food}$$
 
 There is no "offline progress" in corporation. When you go offline, the corporation accumulates bonus time.
 

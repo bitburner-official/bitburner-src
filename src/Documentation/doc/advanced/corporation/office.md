@@ -25,35 +25,35 @@ Total experience is increased in these cases:
 - Hire new employee. Each new employee increases total experience by `getRandomInt(50, 100)`.
 - In START state. Gain per cycle:
 
-$$TotalExperienceGain = 0.0015*(TotalEmployees - UnassignedEmployees + InternEmployees*9)$$
+$$TotalExperienceGain = 0.0015\ast(TotalEmployees - UnassignedEmployees + InternEmployees\ast 9)$$
 
 - If an office has 100 employees and all employees are assigned to non-intern positions, it gains 0.15 experience/cycle. It's 54 experience/hour without bonus time.
 
 Salary per cycle:
 
-$$Salary = 3*TotalEmployees*\left( AvgIntelligence + AvgCharisma + AvgCreativity + AvgEfficiency + \frac{TotalExperience}{TotalEmployees} \right)$$
+$$Salary = 3\ast TotalEmployees\ast\left(AvgIntelligence+AvgCharisma+AvgCreativity+AvgEfficiency+\frac{TotalExperience}{TotalEmployees}\right)$$
 
 ## Upgrade
 
 Upgrade cost:
 
-$$UpgradeCost = BasePrice*{1.09}^{\frac{CurrentSize}{3}}$$
+$$UpgradeCost = BasePrice\ast{1.09}^{\frac{CurrentSize}{3}}$$
 
 Upgrade cost from size 3 to size n:
 
-$$(UpgradeCost)_{From\ 3\ to\ n} = \sum_{k = 0}^{\frac{n}{3} - 1}{BasePrice*1.09}^{k}$$
+$$(UpgradeCost)_{From\ 3\ to\ n} = \sum_{k = 0}^{\frac{n}{3} - 1}{BasePrice\ast 1.09}^{k}$$
 
 ≡
 
-$$(UpgradeCost)_{From\ 3\ to\ n} = BasePrice*\left( \frac{{1.09}^{\frac{n}{3}} - 1}{0.09} \right)$$
+$$(UpgradeCost)_{From\ 3\ to\ n} = BasePrice\ast\left( \frac{{1.09}^{\frac{n}{3}} - 1}{0.09} \right)$$
 
 Upgrade cost size a to size b:
 
-$$(UpgradeCost)_{From\ a\ to\ b} = BasePrice*\left( \frac{{1.09}^{\frac{b}{3}} - {1.09}^{\frac{a}{3}}}{0.09} \right)$$
+$$(UpgradeCost)_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{1.09}^{\frac{b}{3}} - {1.09}^{\frac{a}{3}}}{0.09} \right)$$
 
 Maximum size with a given `MaxCost`:
 
-$$MaxUpgradeLevel = 3*\log_{1.09}\left( MaxCost*\frac{0.09}{BasePrice} + {1.09}^{\frac{CurrentSize}{3}} \right)$$
+$$MaxUpgradeLevel = 3\ast\log_{1.09}\left( MaxCost\ast\frac{0.09}{BasePrice} + {1.09}^{\frac{CurrentSize}{3}} \right)$$
 
 When we divide office's size by 3, we need to use `Math.ceil()` to round up the value. This means upgrading from size 3 to size 4 costs the same as upgrading from size 3 to size 6. The most cost-effective size is always a multiple of 3.
 
@@ -65,7 +65,7 @@ They start dropping when your office's number of employees is greater than or eq
 
 PerfMult is a multiplier that increases/decreases energy/morale.
 
-- $InternMultiplier = 0.002*Min\left( \frac{1}{9},\frac{InternEmployees}{TotalEmployees} - \frac{1}{9} \right)*9$
+- $InternMultiplier = 0.002\ast Min\left( \frac{1}{9},\frac{InternEmployees}{TotalEmployees} - \frac{1}{9} \right)\ast 9$
 - If $(CorpFunds > 0) \vee (DivisionLastCycleRevenue > DivisionLastCycleExpenses)$, then: $PenaltyMultiplier = 0$
 - If $(CorpFunds < 0) \land (DivisionLastCycleRevenue < DivisionLastCycleExpenses)$, then: $PenaltyMultiplier = 0.001$
 - If $TotalEmployees < 9$, then: $PerfMult = 1.002$
@@ -83,7 +83,7 @@ There is a flat randomized reduction of energy/morale per cycle. It's capped at 
 
 There is a flat increase of morale if `PartyMult` is greater than 1. `PartyMult` is based on `PartyCostPerEmployee`, so this increase is based on `PartyCostPerEmployee`.
 
-$$IncreaseOfMorale = (PartyMult - 1)*10$$
+$$IncreaseOfMorale = (PartyMult - 1)\ast 10$$
 
 ≡
 
@@ -114,7 +114,7 @@ Optimal `PartyCostPerEmployee`:
 - The flat randomized reduction is tiny, so we can ignore it.
 - We want to increase `AvgMorale` from `CurrentMorale` to `MaxMorale`:
 
-$$\left( CurrentMorale*PerfMult + \frac{PartyCostPerEmployee}{10^{6}} \right)*\left( 1 + \frac{PartyCostPerEmployee}{10^{7}} \right) = MaxMorale$$
+$$\left( CurrentMorale\ast PerfMult + \frac{PartyCostPerEmployee}{10^{6}} \right)\ast\left( 1 + \frac{PartyCostPerEmployee}{10^{7}} \right) = MaxMorale$$
 
 - Define:
 
@@ -128,13 +128,13 @@ $$x = PartyCostPerEmployee$$
 
 - We have equation:
 
-$$\left( a*k + \frac{x}{10^{6}} \right)*\left( 1 + \frac{x}{10^{7}} \right) = b$$
+$$\left( a\ast k + \frac{x}{10^{6}} \right)\ast\left( 1 + \frac{x}{10^{7}} \right) = b$$
 
 ≡
 
-$$x_{1} = - 500000*\left( \sqrt{(a*k - 10)^{2} + 40*b} + a*k + 10 \right)$$
+$$x_{1} = - 500000\ast\left( \sqrt{(a\ast k - 10)^{2} + 40\ast b} + a\ast k + 10 \right)$$
 
-$$x_{2} = 500000*\left( \sqrt{(a*k - 10)^{2} + 40*b} - a*k - 10 \right)$$
+$$x_{2} = 500000\ast\left( \sqrt{(a\ast k - 10)^{2} + 40\ast b} - a\ast k - 10 \right)$$
 
 - $x_{1}$ is always negative. Therefore, $x_{2}$ is the only solution.
 
@@ -161,22 +161,22 @@ Formulas:
 - Calculate multipliers of Intelligence, Charisma, Creativity, and Efficiency. They are the product of average value, upgrade benefit and research benefit.
 - Production base:
 
-$$ProductionBase = AvgMorale*AvgEnergy*10^{- 4}$$
+$$ProductionBase = AvgMorale\ast AvgEnergy\ast 10^{-4}$$
 
 - Experience:
 
 $$Exp = \frac{TotalExperience}{TotalEmployees}$$
 
 - Production multiplier:
-  - Operations: $$ProductionMultiplier = 0.6*IntelligenceMult + 0.1*CharismaMult + Exp + 0.5*CreativityMult + EfficiencyMult$$
-  - Engineer: $$ProductionMultiplier = IntelligenceMult + 0.1*CharismaMult + 1.5*Exp + EfficiencyMult$$
-  - Business: $$ProductionMultiplier = 0.4*IntelligenceMult + CharismaMult + 0.5*Exp$$
-  - Management: $$ProductionMultiplier = 2*CharismaMult + Exp + 0.2*CreativityMult + 0.7*EfficiencyMult$$
-  - Research and Development: $$ProductionMultiplier = 1.5*IntelligenceMult + 0.8*Exp + CreativityMult + 0.5*EfficiencyMult$$
+  - Operations: $$ProductionMultiplier = 0.6\ast IntelligenceMult + 0.1\ast CharismaMult + Exp + 0.5\ast CreativityMult + EfficiencyMult$$
+  - Engineer: $$ProductionMultiplier = IntelligenceMult + 0.1\ast CharismaMult + 1.5\ast Exp + EfficiencyMult$$
+  - Business: $$ProductionMultiplier = 0.4\ast IntelligenceMult + CharismaMult + 0.5\ast Exp$$
+  - Management: $$ProductionMultiplier = 2\ast CharismaMult + Exp + 0.2\ast CreativityMult + 0.7\ast EfficiencyMult$$
+  - Research and Development: $$ProductionMultiplier = 1.5\ast IntelligenceMult + 0.8\ast Exp + CreativityMult + 0.5\ast EfficiencyMult$$
 - $EmployeesJobCount = office.employeeJobs[JobName]$
 - Employee production by job:
 
-$$EmployeeProductionByJob = EmployeesJobCount*ProductionMultiplier*ProductionBase$$
+$$EmployeeProductionByJob = EmployeesJobCount\ast ProductionMultiplier\ast ProductionBase$$
 
 ## Calculate employee's stat
 

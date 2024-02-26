@@ -37,13 +37,13 @@ $$AssetDelta = \frac{TotalAssets - PreviousTotalAssets}{10}$$
 
 - Pre-IPO:
   - If `AssetDelta` is greater than 0, it's used for calculating valuation.
-  - Formula: $Valuation = \left( 10^{10} + \frac{Funds}{3} + AssetDelta*315000 \right)*\left( \sqrt[12]{1.1} \right)^{NumberOfOfficesAndWarehouses}$
+  - Formula: $Valuation = \left( 10^{10} + \frac{Funds}{3} + AssetDelta\ast 315000 \right)\ast\left( \sqrt[12]{1.1} \right)^{NumberOfOfficesAndWarehouses}$
   - Valuation is rounded down to nearest million.
 - Post-IPO:
-  - `AssetDelta` is affected by `DividendRate`: $AssetDelta = AssetDelta*(1 - DividendRate)$
+  - `AssetDelta` is affected by `DividendRate`: $AssetDelta = AssetDelta\ast(1 - DividendRate)$
   - Formula:
 
-$$Valuation = (Funds + AssetDelta*85000)*\left( \sqrt[12]{1.1} \right)^{NumberOfOfficesAndWarehouses}$$
+$$Valuation = (Funds + AssetDelta\ast 85000)\ast\left(\sqrt[12]{1.1}\right)^{NumberOfOfficesAndWarehouses}$$
 
 - Minimum value of valuation is $10^{10}$.
 - Valuation is multiplied by `CorporationValuation`. Many BitNodes cripple Corporation via this multiplier.
@@ -63,7 +63,7 @@ Each round has its own `FundingRoundShares` and `FundingRoundMultiplier`.
 
 Formula:
 
-$$Offer = CorporationValuation*FundingRoundShares*FundingRoundMultiplier$$
+$$Offer = CorporationValuation\ast FundingRoundShares\ast FundingRoundMultiplier$$
 
 Analyses:
 
@@ -85,13 +85,13 @@ $$DividendTax = 1 - CorporationSoftcap + 0.15$$
 
 Formula:
 
-$$TotalDividends = DividendRate*(Revenue - Expenses)*10$$
+$$TotalDividends = DividendRate\ast(Revenue - Expenses)\ast 10$$
 
-$$Dividend = \left( OwnedShares*\frac{TotalDividends}{TotalShares} \right)^{1 - DividendTax}$$
+$$Dividend = \left(OwnedShares\ast\frac{TotalDividends}{TotalShares}\right)^{1 - DividendTax}$$
 
 Retained earning:
 
-$$RetainedEarning = (1 - DividendRate)*(Revenue - Expenses)*10$$
+$$RetainedEarning = (1 - DividendRate)\ast(Revenue - Expenses)\ast 10$$
 
 Dividend is added to player's money. Retained earning is added to corporation's funds. This means if we increase `DividendRate`, corporation's valuation is dwindled.
 
@@ -121,8 +121,7 @@ When corporation goes public, the initial share price is `TargetSharePrice`.
 
 Share price is updated in START state.
 
-- If $SharePrice \leq TargetSharePrice$, then $SharePrice=SharePrice*(1 + Math.random()*0.01)$
-- If $SharePrice > TargetSharePrice$, then $SharePrice=SharePrice*(1 - Math.random()*0.01)$
+$$SharePrice = \begin{cases} SharePrice\ast(1 + Math.random()\ast 0.01), & SharePrice \leq TargetSharePrice \newline SharePrice\ast(1 - Math.random()\ast 0.01), & SharePrice > TargetSharePrice\end{cases}$$
 
 Minimum share price is 0.01.
 
@@ -130,13 +129,13 @@ Issue new shares:
 
 - Maximum number of new shares is 20% of total shares.
 - The number of new shares issued must be a multiple of 10 million.
-- New share price: $NewSharePrice = \frac{CorporationValuation*\left( 0.5 + \sqrt{\frac{OwnedShares}{TotalShares + NewShares}} \right)}{TotalShares}$
-- Profit: $Profit = \frac{NewShares*(SharePrice + NewSharePrice)}{2}$
+- New share price: $NewSharePrice = \frac{CorporationValuation\ast\left(0.5 + \sqrt{\frac{OwnedShares}{TotalShares + NewShares}}\right)}{TotalShares}$
+- Profit: $Profit = \frac{NewShares\ast(SharePrice + NewSharePrice)}{2}$
 - Profit is added to corporation's funds.
 - `DefaultCooldown` is 4 hours.
-- Cooldown: $Cooldown = DefaultCooldown*\frac{TotalShares}{10^{9}}$
+- Cooldown: $Cooldown = DefaultCooldown\ast\frac{TotalShares}{10^{9}}$
 - Part of the new shares are added to `InvestorShares`. The remaining ones are added to `IssuedShares`.
-  - `MaxPrivateShares`: $MaxPrivateShares = \frac{NewShares}{2}*\frac{InvestorShares}{TotalShares}$
+  - `MaxPrivateShares`: $MaxPrivateShares = \frac{NewShares}{2}\ast\frac{InvestorShares}{TotalShares}$
   - `PrivateShares` is randomized between 0 and `MaxPrivateShares`, rounded to nearest 10 million.
   - `InvestorShares`: $InvestorShares = InvestorShares + PrivateShares$
   - `IssuedShares`: $IssuedShares = IssuedShares + NewShares - PrivateShares$
@@ -159,6 +158,6 @@ Sold/bought back shares are processed in multiple "iterations".
 
 - Number of shares processed each iteration is shareSalesUntilPriceUpdate. Default value is $10^6$.
 - Share price is recalculated each iteration.
-  - $TargetSharePrice = \frac{CorporationValuation*\left( 0.5 + \sqrt{\frac{OwnedShares - ProcessedShares}{TotalShares}} \right)}{TotalShares}$
-  - If $SharePrice \leq TargetSharePrice$, then $SharePrice=SharePrice*1.005$
-  - If $SharePrice > TargetSharePrice$, then $SharePrice=SharePrice*0.995$
+  - $TargetSharePrice = \frac{CorporationValuation\ast\left(0.5 + \sqrt{\frac{OwnedShares - ProcessedShares}{TotalShares}}\right)}{TotalShares}$
+
+$$SharePrice = \begin{cases} SharePrice\ast 1.005, SharePrice \leq TargetSharePrice \newline SharePrice\ast 0.995, SharePrice > TargetSharePrice\end{cases}$$
