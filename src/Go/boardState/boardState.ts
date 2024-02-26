@@ -273,26 +273,9 @@ export function getStateCopy(initialState: BoardState) {
   return boardState;
 }
 
-/**
- * Makes a deep copy of the given BoardState's board
- */
-export function getBoardCopy(boardState: BoardState) {
-  const boardCopy = getNewBoardState(boardState.board[0].length);
-  const board = boardState.board;
-
-  for (let x = 0; x < board.length; x++) {
-    for (let y = 0; y < board[x].length; y++) {
-      const pointToEdit = boardCopy.board[x][y];
-      const point = board[x][y];
-      if (!point || !pointToEdit) {
-        boardCopy.board[x][y] = null;
-      } else {
-        pointToEdit.color = point.color;
-      }
-    }
-  }
-
-  return boardCopy;
+/** Make a deep copy of a board */
+export function getBoardCopy(board: Board): Board {
+  return structuredClone(board);
 }
 
 export function contains(arr: PointState[], point: PointState) {
