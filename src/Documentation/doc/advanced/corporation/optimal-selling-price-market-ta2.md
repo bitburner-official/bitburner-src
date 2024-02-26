@@ -8,7 +8,8 @@ Market price:
 - Product: `product.productionCost`. This value is based on `ProductMarketPriceMult`, input materials' `MarketPrice` and `Coefficient`.
   - $n = {Number\ of\ input\ materials}$
   - $ProductMarketPriceMult = 5$
-  - $ProductMarketPrice = ProductMarketPriceMult\ast\sum_{i = 1}^{n}{MaterialMarketPrice_i\ast MaterialCoefficient_i}$
+
+$$ProductMarketPrice = ProductMarketPriceMult\ast\sum_{i = 1}^{n}{MaterialMarketPrice_i\ast MaterialCoefficient_i}$$
 
 Markup limit:
 
