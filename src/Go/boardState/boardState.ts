@@ -165,7 +165,7 @@ export function updateChains(boardState: BoardState, resetChains = true) {
  */
 export function updateCaptures(initialState: BoardState, playerWhoMoved: GoColor, resetChains = true): BoardState {
   const boardState = updateChains(initialState, resetChains);
-  const chains = getAllChains(boardState);
+  const chains = getAllChains(boardState.board);
 
   const chainsToCapture = findAllCapturedChains(chains, playerWhoMoved);
   if (!chainsToCapture?.length) {

@@ -439,7 +439,7 @@ export function getExpansionMoveArray(boardState: BoardState, player: GoColor, a
 }
 
 function getDisputedTerritoryMoves(boardState: BoardState, availableSpaces: PointState[], maxChainSize = 99) {
-  const chains = getAllChains(boardState).filter((chain) => chain.length <= maxChainSize);
+  const chains = getAllChains(boardState.board).filter((chain) => chain.length <= maxChainSize);
 
   return availableSpaces.filter((space) => {
     const chain = chains.find((chain) => chain[0].chain === space.chain) ?? [];
@@ -455,7 +455,7 @@ function getDisputedTerritoryMoves(boardState: BoardState, availableSpaces: Poin
  * Finds all moves that increases the liberties of the player's pieces, making them harder to capture and occupy more space on the board.
  */
 async function getLibertyGrowthMoves(boardState: BoardState, player: GoColor, availableSpaces: PointState[]) {
-  const friendlyChains = getAllChains(boardState).filter((chain) => chain[0].color === player);
+  const friendlyChains = getAllChains(boardState.board).filter((chain) => chain[0].color === player);
 
   if (!friendlyChains.length) {
     return [];
@@ -531,7 +531,7 @@ async function getDefendMove(initialState: BoardState, player: GoColor, availabl
  */
 async function getSurroundMove(boardState: BoardState, player: GoColor, availableSpaces: PointState[], smart = true) {
   const opposingPlayer = player === GoColor.black ? GoColor.white : GoColor.black;
-  const enemyChains = getAllChains(boardState).filter((chain) => chain[0].color === opposingPlayer);
+  const enemyChains = getAllChains(boardState.board).filter((chain) => chain[0].color === opposingPlayer);
 
   if (!enemyChains.length || !availableSpaces.length) {
     return null;
@@ -627,7 +627,7 @@ function getEyeCreationMoves(
   const currentLivingGroupsCount = currentLivingGroupIDs.length;
   const currentEyeCount = currentEyes.filter((eye) => eye.length).length;
 
-  const chains = getAllChains(boardState);
+  const chains = getAllChains(boardState.board);
   const friendlyLiberties = chains
     .filter((chain) => chain[0].color === player)
     .filter((chain) => chain.length > 1)

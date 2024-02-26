@@ -119,7 +119,7 @@ export function evaluateMoveResult(
 }
 
 export function getControlledSpace(boardState: BoardState) {
-  const chains = getAllChains(boardState);
+  const chains = getAllChains(boardState.board);
   const length = boardState.board[0].length;
   const whiteControlledEmptyNodes = getAllPotentialEyes(boardState, chains, GoColor.white, length * 2)
     .map((eye) => eye.chain)
@@ -159,7 +159,7 @@ const resetChainsById = (boardState: BoardState, chainIds: string[]) => {
  * as well as the remaining liberties of neighboring friendly chains
  */
 export function findEffectiveLibertiesOfNewMove(boardState: BoardState, x: number, y: number, player: GoColor) {
-  const friendlyChains = getAllChains(boardState).filter((chain) => chain[0].color === player);
+  const friendlyChains = getAllChains(boardState.board).filter((chain) => chain[0].color === player);
   const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState, x, y, player);
   const neighborPoints = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
     .filter(isNotNull)
@@ -215,7 +215,7 @@ export function findEnemyNeighborChainWithFewestLiberties(
   y: number,
   player: GoColor,
 ) {
-  const chains = getAllChains(boardState);
+  const chains = getAllChains(boardState.board);
   const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState, x, y, player);
   const friendlyNeighbors = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
     .filter(isNotNull)
@@ -248,7 +248,7 @@ export function getAllValidMoves(boardState: BoardState, player: GoColor) {
   Eyes are important, because a chain of pieces cannot be captured if it fully surrounds two or more eyes.
  */
 export function getAllEyesByChainId(boardState: BoardState, player: GoColor) {
-  const allChains = getAllChains(boardState);
+  const allChains = getAllChains(boardState.board);
   const eyeCandidates = getAllPotentialEyes(boardState, allChains, player);
   const eyes: { [s: string]: PointState[][] } = {};
 
@@ -380,7 +380,7 @@ function findNeighboringChainsThatFullyEncircleEmptySpace(
       }
     });
     const updatedBoard = updateChains(evaluationBoard);
-    const newChains = getAllChains(updatedBoard);
+    const newChains = getAllChains(updatedBoard.board);
     const newChainID = updatedBoard.board[examplePoint.x]?.[examplePoint.y]?.chain;
     const chain = newChains.find((chain) => chain[0].chain === newChainID) || [];
     const newNeighborChains = getAllNeighboringChains(boardState, chain, allChains);
@@ -483,12 +483,12 @@ function checkIfBoardStateIsRepeated(boardState: BoardState) {
 /**
  * Finds all groups of connected pieces, or empty space groups
  */
-export function getAllChains(boardState: BoardState): PointState[][] {
+export function getAllChains(board: Board): PointState[][] {
   const chains: { [s: string]: PointState[] } = {};
 
-  for (let x = 0; x < boardState.board.length; x++) {
-    for (let y = 0; y < boardState.board[x].length; y++) {
-      const point = boardState.board[x]?.[y];
+  for (let x = 0; x < board.length; x++) {
+    for (let y = 0; y < board[x].length; y++) {
+      const point = board[x]?.[y];
       // If the current chain is already analyzed, skip it
       if (!point || point.chain === "") {
         continue;

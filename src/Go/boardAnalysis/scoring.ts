@@ -117,7 +117,7 @@ function getColoredPieceCount(boardState: BoardState, color: GoColor) {
  * Finds all empty spaces fully surrounded by a single player's stones
  */
 function getTerritoryScores(boardState: BoardState) {
-  const emptyTerritoryChains = getAllChains(boardState).filter((chain) => chain?.[0]?.color === GoColor.empty);
+  const emptyTerritoryChains = getAllChains(boardState.board).filter((chain) => chain?.[0]?.color === GoColor.empty);
 
   return emptyTerritoryChains.reduce(
     (scores, currentChain) => {

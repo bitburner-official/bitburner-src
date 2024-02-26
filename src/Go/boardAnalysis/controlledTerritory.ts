@@ -31,7 +31,7 @@ export function findDisputedTerritory(boardState: BoardState, player: GoColor, e
     validMoves = validMoves.filter((point) => !contains(friendlyEyes, point));
   }
   const opponent = player === GoColor.white ? GoColor.black : GoColor.white;
-  const chains = getAllChains(boardState);
+  const chains = getAllChains(boardState.board);
   const emptySpacesToAnalyze = getAllPotentialEyes(boardState, chains, opponent);
   const nodesInsideEyeSpacesToAnalyze = emptySpacesToAnalyze.map((space) => space.chain).flat();
 
