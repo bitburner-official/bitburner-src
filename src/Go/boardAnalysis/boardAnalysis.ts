@@ -48,7 +48,7 @@ export function evaluateIfMoveIsValid(boardState: BoardState, x: number, y: numb
 
   if (shortcut) {
     // If the current point has some adjacent open spaces, it is not suicide. If the move is not repeated, it is legal
-    const liberties = findAdjacentLibertiesForPoint(boardState, x, y);
+    const liberties = findAdjacentLibertiesForPoint(boardState.board, x, y);
     const hasLiberty = liberties.north || liberties.east || liberties.south || liberties.west;
     if (!possibleRepeat && hasLiberty) {
       return GoValidity.valid;
@@ -542,8 +542,8 @@ export function findChainLibertiesForPoint(boardState: BoardState, x: number, y:
  * Returns an object that includes which of the cardinal neighbors are empty
  * (adjacent 'liberties' of the current piece )
  */
-export function findAdjacentLibertiesForPoint(boardState: BoardState, x: number, y: number): Neighbor {
-  const neighbors = findNeighbors(boardState.board, x, y);
+export function findAdjacentLibertiesForPoint(board: Board, x: number, y: number): Neighbor {
+  const neighbors = findNeighbors(board, x, y);
 
   const hasNorthLiberty = neighbors.north && neighbors.north.color === GoColor.empty;
   const hasEastLiberty = neighbors.east && neighbors.east.color === GoColor.empty;
@@ -570,7 +570,7 @@ export function findAdjacentLibertiesAndAlliesForPoint(
 ): Neighbor {
   const currentPoint = boardState.board[x]?.[y];
   const player = _player || (!currentPoint || currentPoint.color === GoColor.empty ? undefined : currentPoint.color);
-  const adjacentLiberties = findAdjacentLibertiesForPoint(boardState, x, y);
+  const adjacentLiberties = findAdjacentLibertiesForPoint(boardState.board, x, y);
   const neighbors = findNeighbors(boardState.board, x, y);
 
   return {
