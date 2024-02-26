@@ -99,7 +99,7 @@ import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers
 import { escapeRegExp } from "lodash";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
-import { FilePath, resolveFilePath } from "./Paths/FilePath";
+import { FilePath, resolveFilePath, getBaseDirectory } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
 import { ContentFilePath } from "./Paths/ContentFile";
@@ -108,6 +108,7 @@ import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
 import { ServerConstants } from "./Server/data/Constants";
+import { isAbsolutePath, resolveDirectory } from "./Paths/Directory";
 
 export const enums: NSEnums = {
   CityName,
@@ -883,8 +884,12 @@ export const ns: InternalAPI<NSFull> = {
   },
   ls: (ctx) => (_hostname, _substring) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
-    const substring = helpers.string(ctx, "substring", _substring ?? "");
+    const substringRaw = helpers.string(ctx, "substring", _substring ?? "");
     const server = helpers.getServer(ctx, hostname);
+    //wierd to use isAbsolutePath but there is no need to add a negation as isRelativePath
+    const substring = isAbsolutePath(substringRaw)
+      ? substringRaw
+      : resolveDirectory(substringRaw, getBaseDirectory(ctx.workerScript.name));
 
     const allFilenames = [
       ...server.contracts.map((contract) => contract.fn),

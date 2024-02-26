@@ -64,6 +64,7 @@
 |  [GangGenInfo](./bitburner.ganggeninfo.md) | Gang general info. |
 |  [GangMemberAscension](./bitburner.gangmemberascension.md) |  |
 |  [GangMemberInfo](./bitburner.gangmemberinfo.md) |  |
+|  [GangMemberInstall](./bitburner.gangmemberinstall.md) |  |
 |  [GangOtherInfo](./bitburner.gangotherinfo.md) |  |
 |  [GangOtherInfoObject](./bitburner.gangotherinfoobject.md) |  |
 |  [GangTaskStats](./bitburner.gangtaskstats.md) | Object representing data representing a gang member task. |
