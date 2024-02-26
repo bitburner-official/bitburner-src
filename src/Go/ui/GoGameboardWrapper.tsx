@@ -176,7 +176,8 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   const endGameAvailable = boardState.previousPlayer === GoColor.white && boardState.passCount;
   const noLegalMoves = useMemo(
     () => boardState.previousPlayer === GoColor.white && !getAllValidMoves(boardState, GoColor.black).length,
-    [boardState],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [boardState, boardState.previousPlayer],
   );
   const disablePassButton = opponent !== GoOpponent.none && boardState.previousPlayer === GoColor.black && waitingOnAI;
 

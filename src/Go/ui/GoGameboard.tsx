@@ -22,12 +22,19 @@ export function GoGameboard({ boardState, traditional, clickHandler, hover }: Go
   const currentPlayer =
     boardState.ai !== GoOpponent.none || boardState.previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
 
+  // "boardState.previousPlayer" is added as a useMemo dependency because useMemo only does pointer comparison for
+  // determining when objects change, so a primitive has to be used to correctly update it
   const availablePoints = useMemo(
     () => (hover ? getAllValidMoves(boardState, currentPlayer) : []),
-    [boardState, hover, currentPlayer],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [boardState, hover, currentPlayer, boardState.previousPlayer],
   );
 
-  const ownedEmptyNodes = useMemo(() => getControlledSpace(boardState), [boardState]);
+  const ownedEmptyNodes = useMemo(
+    () => getControlledSpace(boardState),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [boardState, boardState.previousPlayer],
+  );
 
   function pointIsValid(x: number, y: number) {
     return !!availablePoints.find((point) => point.x === x && point.y === y);
