@@ -122,7 +122,7 @@ $$TotalMult\ast (0.08\ast A + 0.05\ast B + 0.02\ast C + 0.05\ast D + 0.05\ast E)
   - `RatingWeights` is `industryData.product.ratingWeights`.
   - Formula:
 
-$$ProductRating = \sum_{i = 1}^{6}{{ProductStat}_{i}\ast{StatCoefficient}_{i}}$$
+$$ProductRating = \sum_{i = 1}^{6}{{ProductStat}_i\ast{StatCoefficient}_i}$$
 
 - Advertising investment multiplier:
 
@@ -148,7 +148,7 @@ $$Competition = Random(0,70)$$
   - It's product.size.
   - Formula:
 
-$$ProductSize = \sum_{i = 1}^{NumberOfInputMaterials}{{InputMaterialSize}_{i}\ast{InputMaterialCoefficient}_{i}}$$
+$$ProductSize = \sum_{i = 1}^{NumberOfInputMaterials}{{InputMaterialSize}_i\ast{InputMaterialCoefficient}_i}$$
 
 ## Approximation value of product markup
 

@@ -34,27 +34,27 @@ $$UpgradeCost = BasePrice\ast{PriceMult}^{UpgradeCurrentLevel}$$
 
 - Upgrade cost from level 0 to level n:
 
-$$(UpgradeCost)_{From\ 0\ to\ n} = \sum_{k = 0}^{n - 1}{BasePrice\ast PriceMult}^{k}$$
+$$UpgradeCost_{From\ 0\ to\ n} = \sum_{k = 0}^{n - 1}{BasePrice\ast {PriceMult}^k}$$
 
 ≡
 
-$$(UpgradeCost)_{From\ 0\ to\ n} = BasePrice\ast\left( \frac{1 - {PriceMult}^{n}}{1 - PriceMult} \right)$$
+$$UpgradeCost_{From\ 0\ to\ n} = BasePrice\ast\left( \frac{1 - {PriceMult}^{n}}{1 - PriceMult} \right)$$
 
 ≡
 
-$$(UpgradeCost)_{From\ 0\ to\ n} = BasePrice\ast\left( \frac{{PriceMult}^{n} - 1}{PriceMult - 1} \right)$$
+$$UpgradeCost_{From\ 0\ to\ n} = BasePrice\ast\left( \frac{{PriceMult}^{n} - 1}{PriceMult - 1} \right)$$
 
 - Upgrade cost level a to level b:
 
-$$(UpgradeCost)_{From\ a\ to\ b} = \sum_{k = 0}^{b - 1}{BasePrice\ast PriceMult}^{k} - \sum_{k = 0}^{a - 1}{BasePrice\ast PriceMult}^{k}$$
+$$UpgradeCost_{From\ a\ to\ b} = \sum_{k = 0}^{b - 1}{BasePrice\ast {PriceMult}^k} - \sum_{k = 0}^{a - 1}{BasePrice\ast {PriceMult}^k}$$
 
 ≡
 
-$$(UpgradeCost)_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{PriceMult}^{b} - 1}{PriceMult - 1} \right) - BasePrice\ast\left( \frac{{PriceMult}^{a} - 1}{PriceMult - 1} \right)$$
+$$UpgradeCost_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{PriceMult}^{b} - 1}{PriceMult - 1} \right) - BasePrice\ast\left( \frac{{PriceMult}^{a} - 1}{PriceMult - 1} \right)$$
 
 ≡
 
-$$(UpgradeCost)_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{PriceMult}^{b} - {PriceMult}^{a}}{PriceMult - 1} \right)$$
+$$UpgradeCost_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{PriceMult}^{b} - {PriceMult}^{a}}{PriceMult - 1} \right)$$
 
 - Maximum upgrade level with a given `MaxCost`:
 
@@ -172,8 +172,7 @@ RP gain rate:
 
 - RP is increased in 4 states: PURCHASE, PRODUCTION, EXPORT and SALE.
 - RP gain per city per state:
-
-$$RnDProduction = office.employeeProductionByJob["Research\ \&\ Development"]$$
+  - `RnDProduction = office.employeeProductionByJob["Research & Development"]`
 
 $$RPGain = 0.004\ast(RnDProduction)^{0.5}\ast UpgradeMultiplier\ast ResearchMultiplier$$
 
