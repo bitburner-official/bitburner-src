@@ -10,11 +10,11 @@ $$UpgradeCost = BasePrice\ast{1.07}^{UpgradeCurrentLevel + 1}$$
 
 Upgrade cost for buying from level 1 to level n:
 
-$$(UpgradeCost)_{From\ 1\ to\ n} = BasePrice\ast\left( \frac{{1.07}^{n + 1} - 1}{0.07} \right)$$
+$$UpgradeCost_{From\ 1\ to\ n} = BasePrice\ast\left( \frac{{1.07}^{n + 1} - 1}{0.07} \right)$$
 
 Upgrade cost for buying from level a to level b:
 
-$$(UpgradeCost)_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{1.07}^{b + 1} - {1.07}^{a + 1}}{0.07} \right)$$
+$$UpgradeCost_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{1.07}^{b + 1} - {1.07}^{a + 1}}{0.07} \right)$$
 
 Warehouse size:
 

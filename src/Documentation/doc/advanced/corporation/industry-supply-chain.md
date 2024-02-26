@@ -32,7 +32,7 @@ In order to choose good industries for our supply chain, we must consider many c
 
 ## Agriculture + Chemical + Tobacco
 
-Agriculture is inarguably the best starting industry. Its realEstateFactor is highest among all industries (0.72), and real estate's size is tiny (0.005). It means we can stock up on huge number of real estates and increase division product multiplier to extremely high value in early rounds.
+Agriculture is inarguably the best starting industry. Its `realEstateFactor` is highest among all industries (0.72), and real estate's size is tiny (0.005). It means we can stock up on huge number of real estates and increase division product multiplier to extremely high value in early rounds.
 
 Chemical is the best support industry if we choose Agriculture as starting industry. It has highest `ScienceFactor` among all material industries (0.75). As you can see in my round 2's strategy, I invest minimal budget to Chemical division and it can still adequately boost Agriculture (after waiting for some RP).
 

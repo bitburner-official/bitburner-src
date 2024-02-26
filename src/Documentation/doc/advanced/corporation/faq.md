@@ -129,7 +129,7 @@ It only takes effect in next cycle's START state.
 
 > Why does energy and morale matter?
 
-They are used for calculating employeeProductionByJob, then that property is used for calculating other things: RP, material's quality, product's stats, division raw production and material/product's MaxSalesVolume.
+They are used for calculating `employeeProductionByJob`, then that property is used for calculating other things: RP, material's quality, product's stats, division raw production and material/product's `MaxSalesVolume`.
 
 > What do Interns do?
 
