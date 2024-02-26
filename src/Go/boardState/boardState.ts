@@ -111,7 +111,7 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
  */
 export function applyHandicap(boardState: BoardState, handicap: number) {
   const availableMoves = getEmptySpaces(boardState);
-  const handicapMoveOptions = getExpansionMoveArray(boardState, GoColor.black, availableMoves);
+  const handicapMoveOptions = getExpansionMoveArray(boardState.board, availableMoves);
   const handicapMoves: Move[] = [];
 
   // select random distinct moves from the move options list up to the specified handicap amount
@@ -143,8 +143,8 @@ export function updateChains(boardState: BoardState, resetChains = true) {
         continue;
       }
 
-      const chainMembers = findAdjacentPointsInChain(boardState, x, y);
-      const libertiesForChain = findLibertiesForChain(boardState, chainMembers);
+      const chainMembers = findAdjacentPointsInChain(boardState.board, x, y);
+      const libertiesForChain = findLibertiesForChain(boardState.board, chainMembers);
       const id = `${point.x},${point.y}`;
 
       chainMembers.forEach((member) => {
@@ -209,8 +209,8 @@ function clearChains(boardState: BoardState): BoardState {
  * Iteratively traverse the adjacent pieces of the same color to find all the pieces in the same chain,
  * which are the pieces connected directly via a path consisting only of only up/down/left/right
  */
-export function findAdjacentPointsInChain(boardState: BoardState, x: number, y: number) {
-  const point = boardState.board[x][y];
+export function findAdjacentPointsInChain(board: Board, x: number, y: number) {
+  const point = board[x][y];
   if (!point) {
     return [];
   }
@@ -225,7 +225,7 @@ export function findAdjacentPointsInChain(boardState: BoardState, x: number, y: 
     }
 
     checkedPoints.push(currentPoint);
-    const neighbors = findNeighbors(boardState.board, currentPoint.x, currentPoint.y);
+    const neighbors = findNeighbors(board, currentPoint.x, currentPoint.y);
 
     [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
       .filter(isNotNull)

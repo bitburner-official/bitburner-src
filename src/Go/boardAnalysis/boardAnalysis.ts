@@ -121,10 +121,10 @@ export function evaluateMoveResult(
 export function getControlledSpace(boardState: BoardState) {
   const chains = getAllChains(boardState.board);
   const length = boardState.board[0].length;
-  const whiteControlledEmptyNodes = getAllPotentialEyes(boardState, chains, GoColor.white, length * 2)
+  const whiteControlledEmptyNodes = getAllPotentialEyes(boardState.board, chains, GoColor.white, length * 2)
     .map((eye) => eye.chain)
     .flat();
-  const blackControlledEmptyNodes = getAllPotentialEyes(boardState, chains, GoColor.black, length * 2)
+  const blackControlledEmptyNodes = getAllPotentialEyes(boardState.board, chains, GoColor.black, length * 2)
     .map((eye) => eye.chain)
     .flat();
 
@@ -249,7 +249,7 @@ export function getAllValidMoves(boardState: BoardState, player: GoColor) {
  */
 export function getAllEyesByChainId(boardState: BoardState, player: GoColor) {
   const allChains = getAllChains(boardState.board);
-  const eyeCandidates = getAllPotentialEyes(boardState, allChains, player);
+  const eyeCandidates = getAllPotentialEyes(boardState.board, allChains, player);
   const eyes: { [s: string]: PointState[][] } = {};
 
   eyeCandidates.forEach((candidate) => {
@@ -295,13 +295,8 @@ export function getAllEyes(boardState: BoardState, player: GoColor, eyesObject?:
   For each player chain number, add any empty space chains that are completely surrounded by a single player's color to
    an array at that chain number's index.
  */
-export function getAllPotentialEyes(
-  boardState: BoardState,
-  allChains: PointState[][],
-  player: GoColor,
-  _maxSize?: number,
-) {
-  const nodeCount = boardState.board.map((row) => row.filter((p) => p)).flat().length;
+export function getAllPotentialEyes(board: Board, allChains: PointState[][], player: GoColor, _maxSize?: number) {
+  const nodeCount = board.map((row) => row.filter((p) => p)).flat().length;
   const maxSize = _maxSize ?? Math.min(nodeCount * 0.4, 11);
   const emptyPointChains = allChains.filter((chain) => chain[0].color === GoColor.empty);
   const eyeCandidates: { neighbors: PointState[][]; chain: PointState[]; id: string }[] = [];
@@ -309,7 +304,7 @@ export function getAllPotentialEyes(
   emptyPointChains
     .filter((chain) => chain.length <= maxSize)
     .forEach((chain) => {
-      const neighboringChains = getAllNeighboringChains(boardState, chain, allChains);
+      const neighboringChains = getAllNeighboringChains(board, chain, allChains);
 
       const hasWhitePieceNeighbor = neighboringChains.find(
         (neighborChain) => neighborChain[0]?.color === GoColor.white,
@@ -383,7 +378,7 @@ function findNeighboringChainsThatFullyEncircleEmptySpace(
     const newChains = getAllChains(updatedBoard.board);
     const newChainID = updatedBoard.board[examplePoint.x]?.[examplePoint.y]?.chain;
     const chain = newChains.find((chain) => chain[0].chain === newChainID) || [];
-    const newNeighborChains = getAllNeighboringChains(boardState, chain, allChains);
+    const newNeighborChains = getAllNeighboringChains(boardState.board, chain, allChains);
 
     return newNeighborChains.length === 1;
   });
@@ -431,8 +426,8 @@ function removePointAtIndex(arr: PointState[][], index: number) {
 /**
  * Get all player chains that are adjacent / touching the current chain
  */
-export function getAllNeighboringChains(boardState: BoardState, chain: PointState[], allChains: PointState[][]) {
-  const playerNeighbors = getPlayerNeighbors(boardState, chain);
+export function getAllNeighboringChains(board: Board, chain: PointState[], allChains: PointState[][]) {
+  const playerNeighbors = getPlayerNeighbors(board, chain);
 
   const neighboringChains = playerNeighbors.reduce(
     (neighborChains, neighbor) =>
@@ -446,16 +441,16 @@ export function getAllNeighboringChains(boardState: BoardState, chain: PointStat
 /**
  * Gets all points that have player pieces adjacent to the given point
  */
-export function getPlayerNeighbors(boardState: BoardState, chain: PointState[]) {
-  return getAllNeighbors(boardState, chain).filter((neighbor) => neighbor && neighbor.color !== GoColor.empty);
+export function getPlayerNeighbors(board: Board, chain: PointState[]) {
+  return getAllNeighbors(board, chain).filter((neighbor) => neighbor && neighbor.color !== GoColor.empty);
 }
 
 /**
  * Gets all points adjacent to the given point
  */
-export function getAllNeighbors(boardState: BoardState, chain: PointState[]) {
+export function getAllNeighbors(board: Board, chain: PointState[]) {
   const allNeighbors = chain.reduce((chainNeighbors: Set<PointState>, point: PointState) => {
-    getArrayFromNeighbor(findNeighbors(boardState.board, point.x, point.y))
+    getArrayFromNeighbor(findNeighbors(board, point.x, point.y))
       .filter((neighborPoint) => !isPointInChain(neighborPoint, chain))
       .forEach((neighborPoint) => chainNeighbors.add(neighborPoint));
     return chainNeighbors;
@@ -526,16 +521,16 @@ function findCapturedChainOfColor(chainList: PointState[][], playerColor: GoColo
 /**
  * Find all empty points adjacent to any piece in a given chain
  */
-export function findLibertiesForChain(boardState: BoardState, chain: PointState[]): PointState[] {
-  return getAllNeighbors(boardState, chain).filter((neighbor) => neighbor && neighbor.color === GoColor.empty);
+export function findLibertiesForChain(board: Board, chain: PointState[]): PointState[] {
+  return getAllNeighbors(board, chain).filter((neighbor) => neighbor && neighbor.color === GoColor.empty);
 }
 
 /**
  * Find all empty points adjacent to any piece in the chain that a given point belongs to
  */
-export function findChainLibertiesForPoint(boardState: BoardState, x: number, y: number): PointState[] {
-  const chain = findAdjacentPointsInChain(boardState, x, y);
-  return findLibertiesForChain(boardState, chain);
+export function findChainLibertiesForPoint(board: Board, x: number, y: number): PointState[] {
+  const chain = findAdjacentPointsInChain(board, x, y);
+  return findLibertiesForChain(board, chain);
 }
 
 /**

@@ -32,7 +32,7 @@ export function findDisputedTerritory(boardState: BoardState, player: GoColor, e
   }
   const opponent = player === GoColor.white ? GoColor.black : GoColor.white;
   const chains = getAllChains(boardState.board);
-  const emptySpacesToAnalyze = getAllPotentialEyes(boardState, chains, opponent);
+  const emptySpacesToAnalyze = getAllPotentialEyes(boardState.board, chains, opponent);
   const nodesInsideEyeSpacesToAnalyze = emptySpacesToAnalyze.map((space) => space.chain).flat();
 
   const playableNodesInsideOfEnemySpace = emptySpacesToAnalyze.reduce((playableNodes: PointState[], space) => {
@@ -47,7 +47,7 @@ export function findDisputedTerritory(boardState: BoardState, player: GoColor, e
         }
 
         // Get all opponent chains that make up the border of the opponent-controlled space
-        const neighborChains = getAllNeighboringChains(boardState, neighborChain, chains);
+        const neighborChains = getAllNeighboringChains(boardState.board, neighborChain, chains);
 
         // Ignore border chains that do not touch the current player's pieces somewhere, as they are likely fully interior
         // to the empty space in question, or only share a border with the edge of the board and the space, or are not yet

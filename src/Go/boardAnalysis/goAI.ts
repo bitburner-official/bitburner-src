@@ -1,4 +1,4 @@
-import type { BoardState, EyeMove, Move, MoveOptions, PointState } from "../Types";
+import type { Board, BoardState, EyeMove, Move, MoveOptions, PointState } from "../Types";
 
 import { Player } from "@player";
 import { AugmentationName, GoOpponent, GoColor, GoPlayType } from "@enums";
@@ -380,7 +380,7 @@ function getExpansionMove(
   rng: number,
   moveArray?: Move[],
 ) {
-  const moveOptions = moveArray ?? getExpansionMoveArray(boardState, player, availableSpaces);
+  const moveOptions = moveArray ?? getExpansionMoveArray(boardState.board, availableSpaces);
   const randomIndex = floor(rng * moveOptions.length);
   return moveOptions[randomIndex];
 }
@@ -396,7 +396,7 @@ function getJumpMove(
   moveArray?: Move[],
 ) {
   const board = boardState.board;
-  const moveOptions = (moveArray ?? getExpansionMoveArray(boardState, player, availableSpaces)).filter(({ point }) =>
+  const moveOptions = (moveArray ?? getExpansionMoveArray(boardState.board, availableSpaces)).filter(({ point }) =>
     [
       board[point.x]?.[point.y + 2],
       board[point.x + 2]?.[point.y],
@@ -412,10 +412,10 @@ function getJumpMove(
 /**
  * Finds a move in an open area to expand influence and later build on
  */
-export function getExpansionMoveArray(boardState: BoardState, player: GoColor, availableSpaces: PointState[]): Move[] {
+export function getExpansionMoveArray(board: Board, availableSpaces: PointState[]): Move[] {
   // Look for any empty spaces fully surrounded by empty spaces to expand into
   const emptySpaces = availableSpaces.filter((space) => {
-    const neighbors = findNeighbors(boardState.board, space.x, space.y);
+    const neighbors = findNeighbors(board, space.x, space.y);
     return (
       [neighbors.north, neighbors.east, neighbors.south, neighbors.west].filter(
         (point) => point && point.color === GoColor.empty,
@@ -425,7 +425,7 @@ export function getExpansionMoveArray(boardState: BoardState, player: GoColor, a
 
   // Once no such empty areas exist anymore, instead expand into any disputed territory
   // to gain a few more points in endgame
-  const disputedSpaces = emptySpaces.length ? [] : getDisputedTerritoryMoves(boardState, availableSpaces, 1);
+  const disputedSpaces = emptySpaces.length ? [] : getDisputedTerritoryMoves(board, availableSpaces, 1);
 
   const moveOptions = [...emptySpaces, ...disputedSpaces];
 
@@ -438,12 +438,12 @@ export function getExpansionMoveArray(boardState: BoardState, player: GoColor, a
   });
 }
 
-function getDisputedTerritoryMoves(boardState: BoardState, availableSpaces: PointState[], maxChainSize = 99) {
-  const chains = getAllChains(boardState.board).filter((chain) => chain.length <= maxChainSize);
+function getDisputedTerritoryMoves(board: Board, availableSpaces: PointState[], maxChainSize = 99) {
+  const chains = getAllChains(board).filter((chain) => chain.length <= maxChainSize);
 
   return availableSpaces.filter((space) => {
     const chain = chains.find((chain) => chain[0].chain === space.chain) ?? [];
-    const playerNeighbors = getAllNeighboringChains(boardState, chain, chains);
+    const playerNeighbors = getAllNeighboringChains(board, chain, chains);
     const hasWhitePieceNeighbor = playerNeighbors.find((neighborChain) => neighborChain[0]?.color === GoColor.white);
     const hasBlackPieceNeighbor = playerNeighbors.find((neighborChain) => neighborChain[0]?.color === GoColor.black);
 
@@ -700,8 +700,8 @@ function getMoveOptions(
   smart = true,
 ): { [s in keyof MoveOptions]: () => Promise<Move | null> } {
   const availableSpaces = findDisputedTerritory(boardState, player, smart);
-  const contestedPoints = getDisputedTerritoryMoves(boardState, availableSpaces);
-  const expansionMoves = getExpansionMoveArray(boardState, player, availableSpaces);
+  const contestedPoints = getDisputedTerritoryMoves(boardState.board, availableSpaces);
+  const expansionMoves = getExpansionMoveArray(boardState.board, availableSpaces);
 
   // If the player is passing, and all territory is surrounded by a single color: do not suggest moves that
   // needlessly extend the game, unless they actually can change the score

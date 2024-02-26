@@ -1,4 +1,4 @@
-import type { BoardState, PointState } from "../Types";
+import type { Board, BoardState, PointState } from "../Types";
 
 import { Player } from "@player";
 import { GoOpponent, GoColor } from "@enums";
@@ -20,7 +20,7 @@ export function getScore(boardState: BoardState) {
   const komi = getKomi(boardState.ai) ?? 6.5;
   const whitePieces = getColoredPieceCount(boardState, GoColor.white);
   const blackPieces = getColoredPieceCount(boardState, GoColor.black);
-  const territoryScores = getTerritoryScores(boardState);
+  const territoryScores = getTerritoryScores(boardState.board);
 
   return {
     [GoColor.white]: {
@@ -116,12 +116,12 @@ function getColoredPieceCount(boardState: BoardState, color: GoColor) {
 /**
  * Finds all empty spaces fully surrounded by a single player's stones
  */
-function getTerritoryScores(boardState: BoardState) {
-  const emptyTerritoryChains = getAllChains(boardState.board).filter((chain) => chain?.[0]?.color === GoColor.empty);
+function getTerritoryScores(board: Board) {
+  const emptyTerritoryChains = getAllChains(board).filter((chain) => chain?.[0]?.color === GoColor.empty);
 
   return emptyTerritoryChains.reduce(
     (scores, currentChain) => {
-      const chainColor = checkTerritoryOwnership(boardState, currentChain);
+      const chainColor = checkTerritoryOwnership(board, currentChain);
       return {
         [GoColor.white]: scores[GoColor.white] + (chainColor === GoColor.white ? currentChain.length : 0),
         [GoColor.black]: scores[GoColor.black] + (chainColor === GoColor.black ? currentChain.length : 0),
@@ -137,12 +137,12 @@ function getTerritoryScores(boardState: BoardState) {
 /**
  * Finds all neighbors of the empty points in question. If they are all one color, that player controls that space
  */
-function checkTerritoryOwnership(boardState: BoardState, emptyPointChain: PointState[]) {
-  if (emptyPointChain.length > boardState.board[0].length ** 2 - 3) {
+function checkTerritoryOwnership(board: Board, emptyPointChain: PointState[]) {
+  if (emptyPointChain.length > board[0].length ** 2 - 3) {
     return null;
   }
 
-  const playerNeighbors = getPlayerNeighbors(boardState, emptyPointChain);
+  const playerNeighbors = getPlayerNeighbors(board, emptyPointChain);
   const hasWhitePieceNeighbors = playerNeighbors.find((p) => p.color === GoColor.white);
   const hasBlackPieceNeighbors = playerNeighbors.find((p) => p.color === GoColor.black);
   const isWhiteTerritory = hasWhitePieceNeighbors && !hasBlackPieceNeighbors;
