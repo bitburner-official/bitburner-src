@@ -52,7 +52,7 @@ export function getNewBoardState(
 
   const handicap = getHandicap(newBoardState.board[0].length, ai);
   if (handicap) {
-    applyHandicap(newBoardState, handicap);
+    applyHandicap(newBoardState.board, handicap);
   }
   return newBoardState;
 }
@@ -70,6 +70,8 @@ export function getHandicap(boardSize: number, opponent: GoOpponent) {
 
 /**
  * Make a new move on the given board, and update the board state accordingly
+ * Modifies the board state in place
+ * @returns a boolean representing whether the move was successful
  */
 export function makeMove(boardState: BoardState, x: number, y: number, player: GoColor) {
   // Do not update on invalid moves
@@ -87,7 +89,8 @@ export function makeMove(boardState: BoardState, x: number, y: number, player: G
   boardState.previousPlayer = player;
   boardState.passCount = 0;
 
-  return updateCaptures(boardState, player);
+  updateCaptures(boardState.board, player);
+  return true;
 }
 
 /**
@@ -108,10 +111,11 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
 
 /**
  * Makes a number of random moves on the board before the game starts, to give one player an edge.
+ * Modifies the board in place.
  */
-export function applyHandicap(boardState: BoardState, handicap: number) {
-  const availableMoves = getEmptySpaces(boardState);
-  const handicapMoveOptions = getExpansionMoveArray(boardState.board, availableMoves);
+export function applyHandicap(board: Board, handicap: number): void {
+  const availableMoves = getEmptySpaces(board);
+  const handicapMoveOptions = getExpansionMoveArray(board, availableMoves);
   const handicapMoves: Move[] = [];
 
   // select random distinct moves from the move options list up to the specified handicap amount
@@ -122,29 +126,28 @@ export function applyHandicap(boardState: BoardState, handicap: number) {
   }
 
   handicapMoves.forEach((move: Move) => {
-    const point = boardState.board[move.point.x][move.point.y];
+    const point = board[move.point.x][move.point.y];
     return move.point && point && (point.color = GoColor.white);
   });
-  return updateChains(boardState);
+  updateChains(board);
 }
 
 /**
  * Finds all groups of connected stones on the board, and updates the points in them with their
  * chain information and liberties.
+ * Updates a board in-place.
  */
-export function updateChains(boardState: BoardState, resetChains = true) {
-  resetChains && clearChains(boardState);
+export function updateChains(board: Board, resetChains = true): void {
+  resetChains && clearChains(board);
 
-  for (let x = 0; x < boardState.board.length; x++) {
-    for (let y = 0; y < boardState.board[x].length; y++) {
-      const point = boardState.board[x][y];
+  for (let x = 0; x < board.length; x++) {
+    for (let y = 0; y < board[x].length; y++) {
+      const point = board[x][y];
       // If the current point is already analyzed, skip it
-      if (!point || point.chain !== "") {
-        continue;
-      }
+      if (!point || point.chain !== "") continue;
 
-      const chainMembers = findAdjacentPointsInChain(boardState.board, x, y);
-      const libertiesForChain = findLibertiesForChain(boardState.board, chainMembers);
+      const chainMembers = findAdjacentPointsInChain(board, x, y);
+      const libertiesForChain = findLibertiesForChain(board, chainMembers);
       const id = `${point.x},${point.y}`;
 
       chainMembers.forEach((member) => {
@@ -153,8 +156,6 @@ export function updateChains(boardState: BoardState, resetChains = true) {
       });
     }
   }
-
-  return boardState;
 }
 
 /**
@@ -162,10 +163,11 @@ export function updateChains(boardState: BoardState, resetChains = true) {
  * adjacent to some point on the chain including the current point).
  *
  * Then, remove any chains with no liberties.
+ * Modifies the board in place.
  */
-export function updateCaptures(initialState: BoardState, playerWhoMoved: GoColor, resetChains = true): BoardState {
-  const boardState = updateChains(initialState, resetChains);
-  const chains = getAllChains(boardState.board);
+export function updateCaptures(board: Board, playerWhoMoved: GoColor, resetChains = true): void {
+  const boardState = updateChains(board, resetChains);
+  const chains = getAllChains(board);
 
   const chainsToCapture = findAllCapturedChains(chains, playerWhoMoved);
   if (!chainsToCapture?.length) {
@@ -173,7 +175,7 @@ export function updateCaptures(initialState: BoardState, playerWhoMoved: GoColor
   }
 
   chainsToCapture?.forEach((chain) => captureChain(chain));
-  return updateChains(boardState);
+  updateChains(board);
 }
 
 /**
@@ -188,19 +190,17 @@ function captureChain(chain: PointState[]) {
 }
 
 /**
- * Removes the chain data from given points, in preparation for being recalculated later
+ * Removes the chain data from all points on a board, in preparation for being recalculated later
+ * Updates the board in-place
  */
-function clearChains(boardState: BoardState): BoardState {
-  for (const x in boardState.board) {
-    for (const y in boardState.board[x]) {
-      const point = boardState.board[x][y];
-      if (point && point.chain && point.liberties) {
-        point.chain = "";
-        point.liberties = null;
-      }
+function clearChains(board: Board): void {
+  for (const column of board) {
+    for (const point of column) {
+      if (!point) continue;
+      point.chain = "";
+      point.liberties = null;
     }
   }
-  return boardState;
 }
 
 /**
@@ -245,10 +245,10 @@ export function findAdjacentPointsInChain(board: Board, x: number, y: number) {
 /**
  * Finds all empty spaces on the board.
  */
-export function getEmptySpaces(boardState: BoardState): PointState[] {
+export function getEmptySpaces(board: Board): PointState[] {
   const emptySpaces: PointState[] = [];
 
-  boardState.board.forEach((column) => {
+  board.forEach((column) => {
     column.forEach((point) => {
       if (point && point.color === GoColor.empty) {
         emptySpaces.push(point);

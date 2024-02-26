@@ -330,20 +330,20 @@ async function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): Promi
 /**
  * Get a move that places a piece to influence (and later control) a corner
  */
-function getCornerMove(boardState: BoardState) {
-  const boardEdge = boardState.board[0].length - 1;
+function getCornerMove(board: Board) {
+  const boardEdge = board[0].length - 1;
   const cornerMax = boardEdge - 2;
-  if (isCornerAvailableForMove(boardState, cornerMax, cornerMax, boardEdge, boardEdge)) {
-    return boardState.board[cornerMax][cornerMax];
+  if (isCornerAvailableForMove(board, cornerMax, cornerMax, boardEdge, boardEdge)) {
+    return board[cornerMax][cornerMax];
   }
-  if (isCornerAvailableForMove(boardState, 0, cornerMax, cornerMax, boardEdge)) {
-    return boardState.board[2][cornerMax];
+  if (isCornerAvailableForMove(board, 0, cornerMax, cornerMax, boardEdge)) {
+    return board[2][cornerMax];
   }
-  if (isCornerAvailableForMove(boardState, 0, 0, 2, 2)) {
-    return boardState.board[2][2];
+  if (isCornerAvailableForMove(board, 0, 0, 2, 2)) {
+    return board[2][2];
   }
-  if (isCornerAvailableForMove(boardState, cornerMax, 0, boardEdge, 2)) {
-    return boardState.board[cornerMax][2];
+  if (isCornerAvailableForMove(board, cornerMax, 0, boardEdge, 2)) {
+    return board[cornerMax][2];
   }
   return null;
 }
@@ -351,9 +351,9 @@ function getCornerMove(boardState: BoardState) {
 /**
  * Find all non-offline nodes in a given area
  */
-function findLiveNodesInArea(boardState: BoardState, x1: number, y1: number, x2: number, y2: number) {
+function findLiveNodesInArea(board: Board, x1: number, y1: number, x2: number, y2: number) {
   const foundPoints: PointState[] = [];
-  boardState.board.forEach((column) =>
+  board.forEach((column) =>
     column.forEach(
       (point) => point && point.x >= x1 && point.x <= x2 && point.y >= y1 && point.y <= y2 && foundPoints.push(point),
     ),
@@ -364,8 +364,8 @@ function findLiveNodesInArea(boardState: BoardState, x1: number, y1: number, x2:
 /**
  * Determine if a corner is largely intact and currently empty, and thus a good target for corner takeover moves
  */
-function isCornerAvailableForMove(boardState: BoardState, x1: number, y1: number, x2: number, y2: number) {
-  const foundPoints = findLiveNodesInArea(boardState, x1, y1, x2, y2);
+function isCornerAvailableForMove(board: Board, x1: number, y1: number, x2: number, y2: number) {
+  const foundPoints = findLiveNodesInArea(board, x1, y1, x2, y2);
   const foundPieces = foundPoints.filter((point) => point.color !== GoColor.empty);
   return foundPoints.length >= 7 ? foundPieces.length === 0 : false;
 }
@@ -373,14 +373,8 @@ function isCornerAvailableForMove(boardState: BoardState, x1: number, y1: number
 /**
  * Select a move from the list of open-area moves
  */
-function getExpansionMove(
-  boardState: BoardState,
-  player: GoColor,
-  availableSpaces: PointState[],
-  rng: number,
-  moveArray?: Move[],
-) {
-  const moveOptions = moveArray ?? getExpansionMoveArray(boardState.board, availableSpaces);
+function getExpansionMove(board: Board, availableSpaces: PointState[], rng: number, moveArray?: Move[]) {
+  const moveOptions = moveArray ?? getExpansionMoveArray(board, availableSpaces);
   const randomIndex = floor(rng * moveOptions.length);
   return moveOptions[randomIndex];
 }
@@ -388,15 +382,8 @@ function getExpansionMove(
 /**
  * Get a move in open space that is nearby a friendly piece
  */
-function getJumpMove(
-  boardState: BoardState,
-  player: GoColor,
-  availableSpaces: PointState[],
-  rng: number,
-  moveArray?: Move[],
-) {
-  const board = boardState.board;
-  const moveOptions = (moveArray ?? getExpansionMoveArray(boardState.board, availableSpaces)).filter(({ point }) =>
+function getJumpMove(board: Board, player: GoColor, availableSpaces: PointState[], rng: number, moveArray?: Move[]) {
+  const moveOptions = (moveArray ?? getExpansionMoveArray(board, availableSpaces)).filter(({ point }) =>
     [
       board[point.x]?.[point.y + 2],
       board[point.x + 2]?.[point.y],
@@ -454,8 +441,8 @@ function getDisputedTerritoryMoves(board: Board, availableSpaces: PointState[], 
 /**
  * Finds all moves that increases the liberties of the player's pieces, making them harder to capture and occupy more space on the board.
  */
-async function getLibertyGrowthMoves(boardState: BoardState, player: GoColor, availableSpaces: PointState[]) {
-  const friendlyChains = getAllChains(boardState.board).filter((chain) => chain[0].color === player);
+async function getLibertyGrowthMoves(board: Board, player: GoColor, availableSpaces: PointState[]) {
+  const friendlyChains = getAllChains(board).filter((chain) => chain[0].color === player);
 
   if (!friendlyChains.length) {
     return [];
@@ -481,10 +468,10 @@ async function getLibertyGrowthMoves(boardState: BoardState, player: GoColor, av
     .map((liberty) => {
       const move = liberty.libertyPoint;
 
-      const newLibertyCount = findEffectiveLibertiesOfNewMove(boardState, move.x, move.y, player).length;
+      const newLibertyCount = findEffectiveLibertiesOfNewMove(board, move.x, move.y, player).length;
 
       // Get the smallest liberty count of connected chains to represent the old state
-      const oldLibertyCount = findMinLibertyCountOfAdjacentChains(boardState, move.x, move.y, player);
+      const oldLibertyCount = findMinLibertyCountOfAdjacentChains(board, move.x, move.y, player);
 
       return {
         point: move,
@@ -498,8 +485,8 @@ async function getLibertyGrowthMoves(boardState: BoardState, player: GoColor, av
 /**
  * Find a move that increases the player's liberties by the maximum amount
  */
-async function getGrowthMove(initialState: BoardState, player: GoColor, availableSpaces: PointState[], rng: number) {
-  const growthMoves = await getLibertyGrowthMoves(initialState, player, availableSpaces);
+async function getGrowthMove(board: Board, player: GoColor, availableSpaces: PointState[], rng: number) {
+  const growthMoves = await getLibertyGrowthMoves(board, player, availableSpaces);
 
   const maxLibertyCount = Math.max(...growthMoves.map((l) => l.newLibertyCount - l.oldLibertyCount));
 
@@ -510,8 +497,8 @@ async function getGrowthMove(initialState: BoardState, player: GoColor, availabl
 /**
  * Find a move that specifically increases a chain's liberties from 1 to more than 1, preventing capture
  */
-async function getDefendMove(initialState: BoardState, player: GoColor, availableSpaces: PointState[]) {
-  const growthMoves = await getLibertyGrowthMoves(initialState, player, availableSpaces);
+async function getDefendMove(board: Board, player: GoColor, availableSpaces: PointState[]) {
+  const growthMoves = await getLibertyGrowthMoves(board, player, availableSpaces);
   const libertyIncreases =
     growthMoves?.filter((move) => move.oldLibertyCount <= 1 && move.newLibertyCount > move.oldLibertyCount) ?? [];
 
@@ -529,9 +516,9 @@ async function getDefendMove(initialState: BoardState, player: GoColor, availabl
  * Find a move that reduces the opponent's liberties as much as possible,
  *   capturing (or making it easier to capture) their pieces
  */
-async function getSurroundMove(boardState: BoardState, player: GoColor, availableSpaces: PointState[], smart = true) {
+async function getSurroundMove(board: Board, player: GoColor, availableSpaces: PointState[], smart = true) {
   const opposingPlayer = player === GoColor.black ? GoColor.white : GoColor.black;
-  const enemyChains = getAllChains(boardState.board).filter((chain) => chain[0].color === opposingPlayer);
+  const enemyChains = getAllChains(board).filter((chain) => chain[0].color === opposingPlayer);
 
   if (!enemyChains.length || !availableSpaces.length) {
     return null;
@@ -548,10 +535,10 @@ async function getSurroundMove(boardState: BoardState, player: GoColor, availabl
   const surroundMoves: Move[] = [];
 
   enemyLiberties.forEach((move) => {
-    const newLibertyCount = findEffectiveLibertiesOfNewMove(boardState, move.x, move.y, player).length;
+    const newLibertyCount = findEffectiveLibertiesOfNewMove(board, move.x, move.y, player).length;
 
     const weakestEnemyChain = findEnemyNeighborChainWithFewestLiberties(
-      boardState,
+      board,
       move.x,
       move.y,
       player === GoColor.black ? GoColor.white : GoColor.black,
@@ -614,20 +601,15 @@ async function getSurroundMove(boardState: BoardState, player: GoColor, availabl
  * If a chain has multiple eyes, it cannot be captured by the opponent (since they can only fill one eye at a time,
  *  and suiciding your own pieces is not legal unless it captures the opponents' first)
  */
-function getEyeCreationMoves(
-  boardState: BoardState,
-  player: GoColor,
-  availableSpaces: PointState[],
-  maxLiberties = 99,
-) {
-  const allEyes = getAllEyesByChainId(boardState, player);
-  const currentEyes = getAllEyes(boardState, player, allEyes);
+function getEyeCreationMoves(board: Board, player: GoColor, availableSpaces: PointState[], maxLiberties = 99) {
+  const allEyes = getAllEyesByChainId(board, player);
+  const currentEyes = getAllEyes(board, player, allEyes);
 
   const currentLivingGroupIDs = Object.keys(allEyes).filter((chainId) => allEyes[chainId].length >= 2);
   const currentLivingGroupsCount = currentLivingGroupIDs.length;
   const currentEyeCount = currentEyes.filter((eye) => eye.length).length;
 
-  const chains = getAllChains(boardState.board);
+  const chains = getAllChains(board);
   const friendlyLiberties = chains
     .filter((chain) => chain[0].color === player)
     .filter((chain) => chain.length > 1)
@@ -640,7 +622,7 @@ function getEyeCreationMoves(
       availableSpaces.find((availablePoint) => availablePoint.x === point.x && availablePoint.y === point.y),
     )
     .filter((point: PointState) => {
-      const neighbors = findNeighbors(boardState.board, point.x, point.y);
+      const neighbors = findNeighbors(board, point.x, point.y);
       const neighborhood = [neighbors.north, neighbors.east, neighbors.south, neighbors.west];
       return (
         neighborhood.filter((point) => !point || point?.color === player).length >= 2 &&
@@ -649,7 +631,7 @@ function getEyeCreationMoves(
     });
 
   const eyeCreationMoves = friendlyLiberties.reduce((moveOptions: EyeMove[], point: PointState) => {
-    const evaluationBoard = evaluateMoveResult(boardState, point.x, point.y, player);
+    const evaluationBoard = evaluateMoveResult(board, point.x, point.y, player);
     const newEyes = getAllEyes(evaluationBoard, player);
     const newLivingGroupsCount = newEyes.filter((eye) => eye.length >= 2).length;
     const newEyeCount = newEyes.filter((eye) => eye.length).length;
@@ -668,16 +650,16 @@ function getEyeCreationMoves(
   return eyeCreationMoves.sort((moveA, moveB) => +moveB.createsLife - +moveA.createsLife);
 }
 
-function getEyeCreationMove(boardState: BoardState, player: GoColor, availableSpaces: PointState[]) {
-  return getEyeCreationMoves(boardState, player, availableSpaces)[0];
+function getEyeCreationMove(board: Board, player: GoColor, availableSpaces: PointState[]) {
+  return getEyeCreationMoves(board, player, availableSpaces)[0];
 }
 
 /**
  * If there is only one move that would create two eyes for the opponent, it should be blocked if possible
  */
-function getEyeBlockingMove(boardState: BoardState, player: GoColor, availablePoints: PointState[]) {
+function getEyeBlockingMove(board: Board, player: GoColor, availablePoints: PointState[]) {
   const opposingPlayer = player === GoColor.white ? GoColor.black : GoColor.white;
-  const opponentEyeMoves = getEyeCreationMoves(boardState, opposingPlayer, availablePoints, 5);
+  const opponentEyeMoves = getEyeCreationMoves(board, opposingPlayer, availablePoints, 5);
   const twoEyeMoves = opponentEyeMoves.filter((move) => move.createsLife);
   const oneEyeMoves = opponentEyeMoves.filter((move) => !move.createsLife);
 
@@ -699,9 +681,10 @@ function getMoveOptions(
   rng: number,
   smart = true,
 ): { [s in keyof MoveOptions]: () => Promise<Move | null> } {
+  const board = boardState.board;
   const availableSpaces = findDisputedTerritory(boardState, player, smart);
-  const contestedPoints = getDisputedTerritoryMoves(boardState.board, availableSpaces);
-  const expansionMoves = getExpansionMoveArray(boardState.board, availableSpaces);
+  const contestedPoints = getDisputedTerritoryMoves(board, availableSpaces);
+  const expansionMoves = getExpansionMoveArray(board, availableSpaces);
 
   // If the player is passing, and all territory is surrounded by a single color: do not suggest moves that
   // needlessly extend the game, unless they actually can change the score
@@ -736,22 +719,19 @@ function getMoveOptions(
         ? defendMove
         : null;
     },
-    eyeMove: async () => (endGameAvailable ? null : getEyeCreationMove(boardState, player, availableSpaces) ?? null),
-    eyeBlock: async () => (endGameAvailable ? null : getEyeBlockingMove(boardState, player, availableSpaces) ?? null),
+    eyeMove: async () => (endGameAvailable ? null : getEyeCreationMove(board, player, availableSpaces) ?? null),
+    eyeBlock: async () => (endGameAvailable ? null : getEyeBlockingMove(board, player, availableSpaces) ?? null),
     pattern: async () => {
-      const point = endGameAvailable
-        ? null
-        : await findAnyMatchedPatterns(boardState, player, availableSpaces, smart, rng);
+      const point = endGameAvailable ? null : await findAnyMatchedPatterns(board, player, availableSpaces, smart, rng);
       return point ? { point } : null;
     },
-    growth: async () =>
-      endGameAvailable ? null : (await getGrowthMove(boardState, player, availableSpaces, rng)) ?? null,
-    expansion: async () => (await getExpansionMove(boardState, player, availableSpaces, rng, expansionMoves)) ?? null,
-    jump: async () => (await getJumpMove(boardState, player, availableSpaces, rng, expansionMoves)) ?? null,
-    defend: async () => (await getDefendMove(boardState, player, availableSpaces)) ?? null,
-    surround: async () => (await getSurroundMove(boardState, player, availableSpaces, smart)) ?? null,
+    growth: async () => (endGameAvailable ? null : (await getGrowthMove(board, player, availableSpaces, rng)) ?? null),
+    expansion: async () => (await getExpansionMove(board, availableSpaces, rng, expansionMoves)) ?? null,
+    jump: async () => (await getJumpMove(board, player, availableSpaces, rng, expansionMoves)) ?? null,
+    defend: async () => (await getDefendMove(board, player, availableSpaces)) ?? null,
+    surround: async () => (await getSurroundMove(board, player, availableSpaces, smart)) ?? null,
     corner: async () => {
-      const point = getCornerMove(boardState);
+      const point = getCornerMove(board);
       return point ? { point } : null;
     },
     random: async () => {

@@ -19,8 +19,8 @@ describe("Go board analysis tests", () => {
     const board = ["..O..", "OOOOO", "..XXX", "..XX.", "..X.X"];
     const boardState = boardStateFromSimpleBoard(board);
 
-    const whitePlayerEyes = getAllEyes(boardState, GoColor.white).flat().flat();
-    const blackPlayerEyes = getAllEyes(boardState, GoColor.black).flat().flat();
+    const whitePlayerEyes = getAllEyes(boardState.board, GoColor.white).flat().flat();
+    const blackPlayerEyes = getAllEyes(boardState.board, GoColor.black).flat().flat();
 
     expect(whitePlayerEyes?.length).toEqual(4);
     expect(blackPlayerEyes?.length).toEqual(2);
@@ -30,7 +30,7 @@ describe("Go board analysis tests", () => {
     const board = [".....", ".....", ".....", ".....", ".OXO."];
     const boardState = boardStateFromSimpleBoard(board);
     const point = await findAnyMatchedPatterns(
-      boardState,
+      boardState.board,
       GoColor.white,
       getAllValidMoves(boardState, GoColor.white),
       true,

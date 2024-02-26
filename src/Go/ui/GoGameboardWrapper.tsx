@@ -1,10 +1,10 @@
 import type { BoardState } from "../Types";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 
 import { GoOpponent, GoColor, GoPlayType, GoValidity, ToastVariant } from "@enums";
-import { Go } from "../Go";
+import { Go, GoEvents } from "../Go";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { getNewBoardState, getStateCopy, makeMove, passTurn, updateCaptures } from "../boardState/boardState";
 import { getMove } from "../boardAnalysis/goAI";
@@ -34,31 +34,36 @@ interface GoGameboardWrapperProps {
  */
 
 export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps): React.ReactElement {
-  const rerender = useRerender(400);
+  const rerender = useRerender();
+  useEffect(() => {
+    const unsubscribe = GoEvents.subscribe(rerender);
+    return unsubscribe;
+  }, [rerender]);
 
   const boardState = Go.currentGame;
   // Destructure boardState to allow useMemo to trigger correctly
-  const { ai, board, cheatCount, passCount, previousBoard, previousPlayer } = boardState;
   const traditional = Settings.GoTraditionalStyle;
   const [showPriorMove, setShowPriorMove] = useState(false);
-  const [opponent, setOpponent] = useState<GoOpponent>(ai);
+  const [opponent, setOpponent] = useState<GoOpponent>(boardState.ai);
   const [scoreOpen, setScoreOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [waitingOnAI, setWaitingOnAI] = useState(false);
 
   const classes = boardStyles();
-  const boardSize = board[0].length;
-  const currentPlayer = previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
+  const boardSize = boardState.board[0].length;
+  const currentPlayer = boardState.previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
   const score = getScore(boardState);
 
   // Only run this once on first component mount, to handle scenarios where the game was saved or closed while waiting on the AI to make a move
   useEffect(() => {
-    if (previousPlayer === GoColor.black && !waitingOnAI) {
+    if (boardState.previousPlayer === GoColor.black && !waitingOnAI) {
       takeAiTurn(Go.currentGame);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Do not implement useCallback for this function without ensuring GoGameboard still rerenders for every move
+  // Currently this function changing is what triggers a GoGameboard rerender, which is needed
   async function clickHandler(x: number, y: number) {
     if (showPriorMove) {
       SnackbarEvents.emit(
@@ -70,8 +75,8 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     }
 
     // Lock the board when it isn't the player's turn
-    const gameOver = previousPlayer === null;
-    const notYourTurn = previousPlayer === GoColor.black && opponent !== GoOpponent.none;
+    const gameOver = boardState.previousPlayer === null;
+    const notYourTurn = boardState.previousPlayer === GoColor.black && opponent !== GoOpponent.none;
     if (notYourTurn) {
       SnackbarEvents.emit(`It is not your turn to play.`, ToastVariant.WARNING, 2000);
       return;
@@ -87,19 +92,19 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
       return;
     }
 
-    const updatedBoard = makeMove(boardState, x, y, currentPlayer);
-    if (updatedBoard) {
+    const didUpdateBoard = makeMove(boardState, x, y, currentPlayer);
+    if (didUpdateBoard) {
       rerender();
-      opponent !== GoOpponent.none && takeAiTurn(updatedBoard);
+      opponent !== GoOpponent.none && takeAiTurn(boardState);
     }
   }
 
   function passPlayerTurn() {
-    if (previousPlayer === GoColor.white) {
+    if (boardState.previousPlayer === GoColor.white) {
       passTurn(boardState, GoColor.black);
       rerender();
     }
-    if (previousPlayer === null) {
+    if (boardState.previousPlayer === null) {
       setScoreOpen(true);
       return;
     }
@@ -110,7 +115,6 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   }
 
   async function takeAiTurn(boardState: BoardState) {
-    if (!previousPlayer === null) return;
     setWaitingOnAI(true);
     const move = await getMove(boardState, GoColor.white, opponent);
 
@@ -128,14 +132,9 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
       return;
     }
 
-    const updatedBoard = await makeMove(boardState, move.x, move.y, GoColor.white);
+    const didUpdateBoard = makeMove(boardState, move.x, move.y, GoColor.white);
 
-    if (updatedBoard) {
-      setTimeout(() => {
-        rerender();
-        setWaitingOnAI(false);
-      }, 500);
-    }
+    if (didUpdateBoard) setWaitingOnAI(false);
   }
 
   function newSubnet() {
@@ -147,8 +146,8 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     setScoreOpen(false);
     setSearchOpen(false);
     setOpponent(newOpponent);
-    if (previousPlayer !== null && previousBoard) {
-      resetWinstreak(ai, false);
+    if (boardState.previousPlayer !== null && boardState.previousBoard) {
+      resetWinstreak(boardState.ai, false);
     }
 
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, false);
@@ -156,16 +155,16 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   }
 
   function getPriorMove() {
-    if (!previousBoard) return boardState;
-    const updatedState = getStateCopy(boardState);
-    updatedState.board = boardFromSimpleBoard(previousBoard);
-    updatedState.previousPlayer = previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
-    updateCaptures(updatedState, updatedState.previousPlayer);
-    return updatedState;
+    if (!boardState.previousBoard) return boardState;
+    const priorState = getStateCopy(boardState);
+    priorState.previousPlayer = boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
+    priorState.board = boardFromSimpleBoard(boardState.previousBoard);
+    updateCaptures(priorState.board, priorState.previousPlayer);
+    return priorState;
   }
 
   function showPreviousMove(newValue: boolean) {
-    if (previousBoard) {
+    if (boardState.previousBoard) {
       setShowPriorMove(newValue);
     }
   }
@@ -174,16 +173,12 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     Settings.GoTraditionalStyle = newValue;
   }
 
-  const endGameAvailable = previousPlayer === GoColor.white && passCount;
-  const noLegalMoves = useMemo(
-    () =>
-      previousPlayer === GoColor.white &&
-      !getAllValidMoves({ ai, board, cheatCount, passCount, previousBoard, previousPlayer }, GoColor.black).length,
-    [ai, board, cheatCount, passCount, previousBoard, previousPlayer],
-  );
-  const disablePassButton = opponent !== GoOpponent.none && previousPlayer === GoColor.black && waitingOnAI;
+  const endGameAvailable = boardState.previousPlayer === GoColor.white && boardState.passCount;
+  const noLegalMoves =
+    boardState.previousPlayer === GoColor.white && !getAllValidMoves(boardState, GoColor.black).length;
+  const disablePassButton = opponent !== GoOpponent.none && boardState.previousPlayer === GoColor.black && waitingOnAI;
 
-  const scoreBoxText = previousBoard
+  const scoreBoxText = boardState.previousBoard
     ? `Score: Black: ${score[GoColor.black].sum} White: ${score[GoColor.white].sum}`
     : "Place a router to begin!";
 
@@ -191,14 +186,14 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     if (endGameAvailable) {
       return "End Game";
     }
-    if (previousPlayer === null) {
+    if (boardState.previousPlayer === null) {
       return "View Final Score";
     }
-    if (previousPlayer === GoColor.black && waitingOnAI) {
+    if (boardState.previousPlayer === GoColor.black && waitingOnAI) {
       return "Waiting for opponent";
     }
-    const currentPlayer = previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
-    return `Pass Turn${ai === GoOpponent.none ? ` (${currentPlayer})` : ""}`;
+    const currentPlayer = boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
+    return `Pass Turn${boardState.ai === GoOpponent.none ? ` (${currentPlayer})` : ""}`;
   };
 
   return (
@@ -264,7 +259,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
             />
             <OptionSwitch
               checked={showPriorMove}
-              disabled={!previousBoard}
+              disabled={!boardState.previousBoard}
               onChange={(newValue) => showPreviousMove(newValue)}
               text="Show previous move"
               tooltip={<>Show the board as it was before the last move</>}

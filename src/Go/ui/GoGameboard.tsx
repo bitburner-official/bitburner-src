@@ -1,11 +1,10 @@
 import type { BoardState } from "../Types";
 
-import React, { useMemo } from "react";
+import React from "react";
 import { Grid } from "@mui/material";
 
 import { GoOpponent, GoColor } from "@enums";
 import { getSizeClass, GoPoint } from "./GoPoint";
-import { useRerender } from "../../ui/React/hooks";
 import { boardStyles } from "../boardState/goStyles";
 import { getAllValidMoves, getControlledSpace } from "../boardAnalysis/boardAnalysis";
 
@@ -17,37 +16,26 @@ interface GoGameboardProps {
 }
 
 export function GoGameboard({ boardState, traditional, clickHandler, hover }: GoGameboardProps): React.ReactElement {
-  useRerender(400);
-  // Destructure boardState to allow useMemo to trigger correctly
-  const { ai, board, cheatCount, passCount, previousBoard, previousPlayer } = boardState;
+  const currentPlayer =
+    boardState.ai !== GoOpponent.none || boardState.previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
 
-  const currentPlayer = ai !== GoOpponent.none || previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
-
-  const availablePoints = useMemo(
-    () =>
-      hover ? getAllValidMoves({ ai, board, cheatCount, passCount, previousBoard, previousPlayer }, currentPlayer) : [],
-    [ai, board, cheatCount, currentPlayer, hover, passCount, previousBoard, previousPlayer],
-  );
-
-  const ownedEmptyNodes = useMemo(
-    () => getControlledSpace({ ai, board, cheatCount, passCount, previousBoard, previousPlayer }),
-    [ai, board, cheatCount, passCount, previousBoard, previousPlayer],
-  );
+  const availablePoints = hover ? getAllValidMoves(boardState, currentPlayer) : [];
+  const ownedEmptyNodes = getControlledSpace(boardState.board);
 
   function pointIsValid(x: number, y: number) {
     return !!availablePoints.find((point) => point.x === x && point.y === y);
   }
 
-  const boardSize = board[0].length;
+  const boardSize = boardState.board[0].length;
   const classes = boardStyles();
 
   return (
     <Grid container id="goGameboard" className={`${classes.board} ${traditional ? classes.traditional : ""}`}>
-      {board.map((row, y) => {
-        const yIndex = board[0].length - y - 1;
+      {boardState.board.map((column, y) => {
+        const yIndex = boardState.board[0].length - y - 1;
         return (
           <Grid container key={`column_${yIndex}`} item className={getSizeClass(boardSize, classes)}>
-            {row.map((point, x: number) => {
+            {column.map((point, x: number) => {
               const xIndex = x;
               return (
                 <Grid

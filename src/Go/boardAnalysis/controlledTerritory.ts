@@ -1,4 +1,4 @@
-import type { BoardState, PointState } from "../Types";
+import type { Board, BoardState, PointState } from "../Types";
 
 import { GoColor } from "@enums";
 import {
@@ -24,7 +24,7 @@ import { contains, isNotNull } from "../boardState/boardState";
 export function findDisputedTerritory(boardState: BoardState, player: GoColor, excludeFriendlyEyes?: boolean) {
   let validMoves = getAllValidMoves(boardState, player);
   if (excludeFriendlyEyes) {
-    const friendlyEyes = getAllEyes(boardState, player)
+    const friendlyEyes = getAllEyes(boardState.board, player)
       .filter((eye) => eye.length >= 2)
       .flat()
       .flat();
@@ -89,12 +89,8 @@ export function findDisputedTerritory(boardState: BoardState, player: GoColor, e
 
  Note that this does not detect mutual eyes formed by two chains making an eye together, or eyes via seki, or some other edge cases.
  */
-export function findClaimedTerritory(boardState: BoardState) {
-  const whiteClaimedTerritory = getAllEyes(boardState, GoColor.white).filter(
-    (eyesForChainN) => eyesForChainN.length >= 2,
-  );
-  const blackClaimedTerritory = getAllEyes(boardState, GoColor.black).filter(
-    (eyesForChainN) => eyesForChainN.length >= 2,
-  );
+export function findClaimedTerritory(board: Board) {
+  const whiteClaimedTerritory = getAllEyes(board, GoColor.white).filter((eyesForChainN) => eyesForChainN.length >= 2);
+  const blackClaimedTerritory = getAllEyes(board, GoColor.black).filter((eyesForChainN) => eyesForChainN.length >= 2);
   return [...blackClaimedTerritory, ...whiteClaimedTerritory].flat().flat();
 }

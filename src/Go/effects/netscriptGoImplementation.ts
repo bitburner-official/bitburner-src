@@ -2,7 +2,7 @@ import type { BoardState, Play } from "../Types";
 
 import { Player } from "@player";
 import { GoColor, GoPlayType, GoValidity, GoOpponent } from "@enums";
-import { Go } from "../Go";
+import { Go, GoEvents } from "../Go";
 import { getMove, sleep } from "../boardAnalysis/goAI";
 import { getNewBoardState, makeMove, passTurn, updateCaptures, updateChains } from "../boardState/boardState";
 import { evaluateIfMoveIsValid, getControlledSpace, simpleBoardFromBoard } from "../boardAnalysis/boardAnalysis";
@@ -33,9 +33,9 @@ export async function handlePassTurn(logger: (s: string) => void) {
 export async function makePlayerMove(logger: (s: string) => void, x: number, y: number) {
   const boardState = Go.currentGame;
   const validity = evaluateIfMoveIsValid(boardState, x, y, GoColor.black);
-  const result = makeMove(boardState, x, y, GoColor.black);
+  const moveWasMade = makeMove(boardState, x, y, GoColor.black);
 
-  if (validity !== GoValidity.valid || !result) {
+  if (validity !== GoValidity.valid || !moveWasMade) {
     await sleep(500);
     logger(`ERROR: Invalid move: ${validity}`);
 
@@ -46,8 +46,8 @@ export async function makePlayerMove(logger: (s: string) => void, x: number, y: 
     return Promise.resolve(invalidMoveResponse);
   }
 
+  GoEvents.emit();
   logger(`Go move played: ${x}, ${y}`);
-
   const response = getAIMove(logger, boardState);
   await sleep(300);
   return response;
@@ -74,6 +74,7 @@ async function getAIMove(logger: (s: string) => void, boardState: BoardState, su
       return resolve({ ...result, success });
     }
 
+    await sleep(400);
     const aiUpdatedBoard = makeMove(boardState, result.x, result.y, GoColor.white);
     if (!aiUpdatedBoard) {
       boardState.previousPlayer = GoColor.white;
@@ -81,8 +82,7 @@ async function getAIMove(logger: (s: string) => void, boardState: BoardState, su
     } else {
       logger(`Opponent played move: ${result.x}, ${result.y}`);
     }
-
-    await sleep(400);
+    GoEvents.emit();
     resolve({ ...result, success });
   });
   return aiMoveResult;
@@ -140,8 +140,8 @@ export function getLiberties() {
  * Returns a grid indicating which player, if any, controls the empty nodes by fully encircling it with their routers
  */
 export function getControlledEmptyNodes() {
-  const boardState = Go.currentGame;
-  const controlled = getControlledSpace(boardState);
+  const board = Go.currentGame.board;
+  const controlled = getControlledSpace(board);
   return controlled.map((column, x: number) =>
     column.reduce((ownedPoints: string, owner: GoColor, y: number) => {
       if (owner === GoColor.white) {
@@ -150,10 +150,10 @@ export function getControlledEmptyNodes() {
       if (owner === GoColor.black) {
         return ownedPoints + "X";
       }
-      if (!boardState.board[x][y]) {
+      if (!board[x][y]) {
         return ownedPoints + "#";
       }
-      if (boardState.board[x][y]?.color === GoColor.empty) {
+      if (board[x][y]?.color === GoColor.empty) {
         return ownedPoints + "?";
       }
       return ownedPoints + ".";
@@ -187,6 +187,7 @@ export function resetBoardState(error: (s: string) => void, opponent: GoOpponent
   }
 
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
+  GoEvents.emit(); // Trigger a Go UI rerender
   return simpleBoardFromBoard(Go.currentGame.board);
 }
 
@@ -226,6 +227,7 @@ export async function determineCheatSuccess(
   if ((successRngOverride ?? rng.random()) <= cheatSuccessChance(state.cheatCount)) {
     callback();
     state.cheatCount++;
+    GoEvents.emit();
     return getAIMove(logger, state, true);
   }
   // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly losing
@@ -285,7 +287,7 @@ export function cheatRemoveRouter(
     logger,
     () => {
       point.color = GoColor.empty;
-      Go.currentGame = updateChains(Go.currentGame);
+      updateChains(Go.currentGame.board);
       Go.currentGame.previousPlayer = GoColor.black;
       logger(`Cheat successful. The point ${x},${y} was cleared.`);
     },
@@ -330,7 +332,7 @@ export function cheatPlayTwoMoves(
     () => {
       point1.color = GoColor.black;
       point2.color = GoColor.black;
-      Go.currentGame = updateCaptures(Go.currentGame, GoColor.black);
+      updateCaptures(Go.currentGame.board, GoColor.black);
       Go.currentGame.previousPlayer = GoColor.black;
 
       logger(`Cheat successful. Two go moves played: ${x1},${y1} and ${x2},${y2}`);
@@ -363,7 +365,7 @@ export function cheatRepairOfflineNode(
         color: GoColor.empty,
         x,
       };
-      updateChains(Go.currentGame);
+      updateChains(Go.currentGame.board);
       Go.currentGame.previousPlayer = GoColor.black;
       logger(`Cheat successful. The point ${x},${y} was repaired.`);
     },
@@ -393,9 +395,9 @@ export function cheatDestroyNode(
     logger,
     () => {
       Go.currentGame.board[x][y] = null;
-      Go.currentGame = updateChains(Go.currentGame);
+      updateChains(Go.currentGame.board);
       Go.currentGame.previousPlayer = GoColor.black;
-      logger(`Cheat successful. The point ${x},${y} was repaired.`);
+      logger(`Cheat successful. The point ${x},${y} was destroyed.`);
     },
     successRngOverride,
     ejectRngOverride,

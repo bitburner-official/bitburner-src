@@ -3,6 +3,7 @@ import type { BoardState, OpponentStats } from "./Types";
 
 import { getRecordValues, PartialRecord } from "../Types/Record";
 import { getNewBoardState } from "./boardState/boardState";
+import { EventEmitter } from "../utils/EventEmitter";
 
 export class GoObject {
   // Todo: Make previous game a slimmer interface
@@ -25,3 +26,8 @@ export class GoObject {
 }
 
 export const Go = new GoObject();
+
+/** Event emitter to allow the UI to subscribe to Go gameplay updates in order to trigger rerenders properly */
+export const GoEvents = new EventEmitter();
+
+Object.assign(window, { Go });
