@@ -18,35 +18,33 @@ interface GoGameboardProps {
 
 export function GoGameboard({ boardState, traditional, clickHandler, hover }: GoGameboardProps): React.ReactElement {
   useRerender(400);
+  // Destructure boardState to allow useMemo to trigger correctly
+  const { ai, board, cheatCount, passCount, previousBoard, previousPlayer } = boardState;
 
-  const currentPlayer =
-    boardState.ai !== GoOpponent.none || boardState.previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
+  const currentPlayer = ai !== GoOpponent.none || previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
 
-  // "boardState.previousPlayer" is added as a useMemo dependency because useMemo only does pointer comparison for
-  // determining when objects change, so a primitive has to be used to correctly update it
   const availablePoints = useMemo(
-    () => (hover ? getAllValidMoves(boardState, currentPlayer) : []),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [boardState, hover, currentPlayer, boardState.previousPlayer],
+    () =>
+      hover ? getAllValidMoves({ ai, board, cheatCount, passCount, previousBoard, previousPlayer }, currentPlayer) : [],
+    [ai, board, cheatCount, currentPlayer, hover, passCount, previousBoard, previousPlayer],
   );
 
   const ownedEmptyNodes = useMemo(
-    () => getControlledSpace(boardState),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [boardState, boardState.previousPlayer],
+    () => getControlledSpace({ ai, board, cheatCount, passCount, previousBoard, previousPlayer }),
+    [ai, board, cheatCount, passCount, previousBoard, previousPlayer],
   );
 
   function pointIsValid(x: number, y: number) {
     return !!availablePoints.find((point) => point.x === x && point.y === y);
   }
 
-  const boardSize = boardState.board[0].length;
+  const boardSize = board[0].length;
   const classes = boardStyles();
 
   return (
     <Grid container id="goGameboard" className={`${classes.board} ${traditional ? classes.traditional : ""}`}>
-      {boardState.board.map((row, y) => {
-        const yIndex = boardState.board[0].length - y - 1;
+      {board.map((row, y) => {
+        const yIndex = board[0].length - y - 1;
         return (
           <Grid container key={`column_${yIndex}`} item className={getSizeClass(boardSize, classes)}>
             {row.map((point, x: number) => {
