@@ -202,8 +202,8 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
         const upgName = helpers.string(ctx, "upgName", _upgName);
         const upgTarget = helpers.string(ctx, "upgTarget", _upgTarget);
         const count = Math.floor(helpers.number(ctx, "count", _count));
-        if (!(count > 0)) {
-          throw helpers.errorMessage(ctx, 'count must be positive');
+        if (!(count >= 0)) {
+          throw helpers.errorMessage(ctx, 'count may not be negative');
         }
         if (!hasHacknetServers()) {
           return false;
