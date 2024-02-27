@@ -886,10 +886,15 @@ export const ns: InternalAPI<NSFull> = {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const substringRaw = helpers.string(ctx, "substring", _substring ?? "");
     const server = helpers.getServer(ctx, hostname);
+
     //wierd to use isAbsolutePath but there is no need to add a negation as isRelativePath
-    const substring = isAbsolutePath(substringRaw)
-      ? substringRaw
-      : resolveDirectory(substringRaw, getBaseDirectory(ctx.workerScript.name));
+    let substring = substringRaw;
+
+    if (!isAbsolutePath(substringRaw)) {
+      const relativePath = resolveDirectory(substringRaw, getBaseDirectory(ctx.workerScript.name));
+      if (!relativePath) throw new Error(`Unable to resolve relative path. substring: ${substring}`);
+      substring = relativePath;
+    }
 
     const allFilenames = [
       ...server.contracts.map((contract) => contract.fn),
