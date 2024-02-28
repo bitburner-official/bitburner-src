@@ -6422,7 +6422,7 @@ export interface NS {
    * @param host - Hostname of target server.
    * @returns The number of open ports required to successfully run NUKE.exe on the specified server.
    */
-  getServerNumPortsRequired(host: string): number;
+  getServerNumPortsRequired(host: string): number | undefined;
 
   /**
    * Returns a boolean denoting whether or not the specified server exists.
