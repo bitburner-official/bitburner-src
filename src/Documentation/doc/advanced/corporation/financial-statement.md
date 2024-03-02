@@ -37,10 +37,12 @@ $$AssetDelta = \frac{TotalAssets - PreviousTotalAssets}{10}$$
 
 - Pre-IPO:
   - If `AssetDelta` is greater than 0, it's used for calculating valuation.
-  - Formula: $Valuation = \left( 10^{10} + \frac{Funds}{3} + AssetDelta\ast 315000 \right)\ast\left( \sqrt[12]{1.1} \right)^{NumberOfOfficesAndWarehouses}$
+  - Formula:
+    $$Valuation = \left( 10^{10} + \frac{Funds}{3} + AssetDelta\ast 315000 \right)\ast\left( \sqrt[12]{1.1} \right)^{NumberOfOfficesAndWarehouses}$$
   - Valuation is rounded down to nearest million.
 - Post-IPO:
-  - `AssetDelta` is affected by `DividendRate`: $AssetDelta = AssetDelta\ast(1 - DividendRate)$
+  - `AssetDelta` is affected by `DividendRate`:
+    $$AssetDelta = AssetDelta\ast(1 - DividendRate)$$
   - Formula:
 
 $$Valuation = (Funds + AssetDelta\ast 85000)\ast\left(\sqrt[12]{1.1}\right)^{NumberOfOfficesAndWarehouses}$$
