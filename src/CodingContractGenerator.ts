@@ -47,13 +47,15 @@ export function generateRandomContractOnHome(): void {
   serv.addContract(contract);
 }
 
-export const generateDummyContract = (problemType: string): void => {
+export const generateDummyContract = (problemType: string): string => {
   if (!CodingContractTypes[problemType]) throw new Error(`Invalid problem type: '${problemType}'`);
   const serv = Player.getHomeComputer();
 
   const contractFn = getRandomFilename(serv);
   const contract = new CodingContract(contractFn, problemType, null);
   serv.addContract(contract);
+
+  return contractFn;
 };
 
 interface IGenerateContractParams {
